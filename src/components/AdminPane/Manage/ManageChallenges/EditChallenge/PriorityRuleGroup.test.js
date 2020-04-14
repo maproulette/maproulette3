@@ -8,6 +8,7 @@ describe("preparePriorityRuleGroupForSaving", () => {
   let emptyOperatorFormRule = null
   let eqOperatorFormRule = null
   let lteOperatorFormRule = null
+  let csvFormRule = null
 
   beforeEach(() => {
     equalsOperatorFormRule = {
@@ -42,6 +43,13 @@ describe("preparePriorityRuleGroupForSaving", () => {
       valueType: "integer",
       operator: "<=",
       value: "456",
+    }
+
+    csvFormRule = {
+      key: "firstTag",
+      valueType: "string",
+      operator: "equals",
+      value: "foo,baz",
     }
 
     basicFormGroup = {
@@ -118,11 +126,36 @@ describe("preparePriorityRuleGroupForSaving", () => {
 
     expect(result.rules[2].operator).toEqual("==")
   })
+
+  test("comma-separated values are split into separate rules", () => {
+    basicFormGroup.rules = [csvFormRule]
+
+    const result =
+      JSON.parse(preparePriorityRuleGroupForSaving(basicFormGroup))
+
+    expect(result.rules.length).toBe(2)
+    expect(result.rules[0].value).toEqual("firstTag.foo")
+    expect(result.rules[1].value).toEqual("firstTag.baz")
+  })
+
+  test("commas are ignored in quoted strings when splitting comma-separated values", () => {
+    csvFormRule.value = '"foo,baz"'
+    basicFormGroup.rules = [csvFormRule]
+
+    const result =
+      JSON.parse(preparePriorityRuleGroupForSaving(basicFormGroup))
+
+    expect(result.rules.length).toBe(1)
+    expect(result.rules[0].value).toEqual("firstTag.foo,baz")
+  })
 })
 
 describe("preparePriorityRuleGroupForForm", () => {
   let basicSavedGroup = null
   let equalsOperatorSavedRule = null
+  let anotherFirstTagEqualsSavedRule = null
+  let notEqualsFirstTagSavedRule = null
+  let literalCommaFirstTagSavedRule = null
   let containsOperatorSavedRule = null
   let emptyOperatorSavedRule = null
   let eqOperatorSavedRule = null
@@ -133,6 +166,24 @@ describe("preparePriorityRuleGroupForForm", () => {
       type: "string",
       operator: "equals",
       value: "firstTag.foo",
+    }
+
+    anotherFirstTagEqualsSavedRule = {
+      type: "string",
+      operator: "equals",
+      value: "firstTag.baz",
+    }
+
+    notEqualsFirstTagSavedRule = {
+      type: "string",
+      operator: "notEquals",
+      value: "firstTag.baz",
+    }
+
+    literalCommaFirstTagSavedRule = {
+      type: "string",
+      operator: "equals",
+      value: "firstTag.literal,comma",
     }
 
     containsOperatorSavedRule = {
@@ -201,5 +252,35 @@ describe("preparePriorityRuleGroupForForm", () => {
     expect(result.rules[0].value).toEqual('')
 
     expect(result).toMatchSnapshot()
+  })
+
+  test("multiple rules for same property are combined with comma-separated values", () => {
+    basicSavedGroup.rules.push(anotherFirstTagEqualsSavedRule)
+
+    const result = preparePriorityRuleGroupForForm(basicSavedGroup).ruleGroup
+
+    expect(result.rules.length).toBe(basicSavedGroup.rules.length - 1)
+    expect(result.rules[0].key).toEqual("firstTag")
+    expect(result.rules[0].value).toEqual("foo,baz")
+  })
+
+  test("literal commas appearing in values are quoted", () => {
+    basicSavedGroup.rules.push(literalCommaFirstTagSavedRule)
+
+    const result = preparePriorityRuleGroupForForm(basicSavedGroup).ruleGroup
+
+    expect(result.rules.length).toBe(basicSavedGroup.rules.length - 1)
+    expect(result.rules[0].key).toEqual("firstTag")
+    expect(result.rules[0].value).toEqual('foo,"literal,comma"')
+  })
+
+  test("multiple rules for same property with different operators aren't combined", () => {
+    basicSavedGroup.rules.push(notEqualsFirstTagSavedRule)
+
+    const result = preparePriorityRuleGroupForForm(basicSavedGroup).ruleGroup
+
+    expect(result.rules.length).toBe(basicSavedGroup.rules.length)
+    expect(result.rules[0].key).toEqual("firstTag")
+    expect(result.rules[0].value).toEqual("foo")
   })
 })

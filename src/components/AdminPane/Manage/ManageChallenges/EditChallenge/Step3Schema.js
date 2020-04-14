@@ -129,21 +129,21 @@ export const jsSchema = intl => {
         default: TaskPriority.high,
       },
       highPriorityRules: {
-        title: "High Priority Rules",
+        title: intl.formatMessage(messages.highPriorityRulesLabel),
         type: "object",
         properties: {
           ruleGroup: { "$ref": "#/definitions/priorityRuleGroup" },
         },
       },
       mediumPriorityRules: {
-        title: "Medium Priority Rules",
+        title: intl.formatMessage(messages.mediumPriorityRulesLabel),
         type: "object",
         properties: {
           ruleGroup: { "$ref": "#/definitions/priorityRuleGroup" },
         },
       },
       lowPriorityRules: {
-        title: "Low Priority Rules",
+        title: intl.formatMessage(messages.lowPriorityRulesLabel),
         type: "object",
         properties: {
           ruleGroup: { "$ref": "#/definitions/priorityRuleGroup" },
