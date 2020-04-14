@@ -42,7 +42,7 @@ const WithSearch = (WrappedComponent, searchGroup, searchFunction) => {
   // Debounce the search function so the server doesn't get hammered as a user
   // types in a query string
   const debouncedSearch = searchFunction ?
-    _debounce(props => props.performSearch(props.searchCriteria, searchFunction),
+    _debounce(props => props.performSearch(props.searchCriteria, searchFunction, props),
               1000, {leading: false}) : null
 
   return WithUserLocation(
@@ -119,8 +119,8 @@ export const mapStateToProps = (state, searchGroup) => {
 }
 
 export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
-  performSearch: (query, searchFunction) => {
-    return dispatch(performSearch(searchGroup, query, searchFunction))
+  performSearch: (query, searchFunction, props) => {
+    return dispatch(performSearch(searchGroup, query, searchFunction, props))
   },
 
   setSearch: (query, searchName) => {

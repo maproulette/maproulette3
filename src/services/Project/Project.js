@@ -82,7 +82,7 @@ export const fetchManageableProjects = function(page = null, limit = RESULTS_PER
     return new Endpoint(
       api.projects.managed, {
         schema: [ projectSchema() ],
-        params: {limit: limit, page: (pageToFetch * limit), onlyOwned, onlyEnabled}
+        params: {limit: limit, page: pageToFetch, onlyOwned, onlyEnabled}
       }
     ).execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
@@ -174,7 +174,7 @@ export const searchProjects = function(searchCriteria, limit=RESULTS_PER_PAGE) {
         params: {
           q: `%${query}%`,
           onlyEnabled: onlyEnabled ? 'true' : 'false',
-          page: page * limit,
+          page,
           limit,
         }
     }).execute().then(normalizedResults => {

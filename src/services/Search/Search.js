@@ -403,7 +403,7 @@ export const receivedResults = function(searchName, fetchId) {
 }
 
 // async action creators
-export const performSearch = function(searchName, query, asyncSearchAction) {
+export const performSearch = function(searchName, query, asyncSearchAction, props) {
   return function(dispatch) {
     const fetchId = _uniqueId()
     if (!query || query.length < 2) {
@@ -411,7 +411,7 @@ export const performSearch = function(searchName, query, asyncSearchAction) {
     }
 
     const resultsPerPage = _get(query, 'page.resultsPerPage')
-    const actionToDo = asyncSearchAction(query, resultsPerPage)
+    const actionToDo = asyncSearchAction(query, resultsPerPage, props)
 
     if (actionToDo) {
       dispatch(fetchingResults(searchName, fetchId))
