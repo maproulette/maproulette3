@@ -193,4 +193,14 @@ export default defineMessages({
     id: "Review.tableFilter.reviewByChallenge",
     defaultMessage: "Review by challenge"
   },
+
+  allChallenges: {
+    id: "Review.tableFilter.reviewByAllChallenges",
+    defaultMessage: "All Challenges"
+  },
+
+  allProjects: {
+    id: "Review.tableFilter.reviewByAllProjects",
+    defaultMessage: "All Projects"
+  }
 })

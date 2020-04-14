@@ -35,8 +35,8 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
          const loadedChallenges = _cloneDeep(this.state.reviewChallenges)
          loadedChallenges[reviewTasksType] = {
            loading: true,
-           challenges: _values(_get(challenges.entities, 'challenges')),
-           projects: _values(_get(challenges.entities, 'projects'))
+           challenges: _values(_get(challenges, 'entities.challenges')),
+           projects: _values(_get(challenges, 'entities.projects'))
          }
 
          this.setState({reviewChallenges: loadedChallenges})

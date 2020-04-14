@@ -1070,6 +1070,8 @@
   "Review.tablefilter.chooseFilter": "Choose project or challenge",
   "Review.tableFilter.reviewByProject": "Review by project",
   "Review.tableFilter.reviewByChallenge": "Review by challenge",
+  "Review.tableFilter.reviewByAllChallenges": "All Challenges",
+  "Review.tableFilter.reviewByAllProjects": "All Projects",
   "Pages.SignIn.modal.title": "Welcome Back!",
   "Pages.SignIn.modal.prompt": "Please sign in to continue",
   "Activity.action.updated": "Updated",
