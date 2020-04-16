@@ -12,6 +12,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _keys from 'lodash/keys'
 import _omit from 'lodash/omit'
 import _pull from 'lodash/pull'
+import _isObject from 'lodash/isObject'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskPriority, keysByPriority, messagesByPriority }
@@ -23,6 +24,8 @@ import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
 import ConfigureColumnsModal
        from '../../../components/ConfigureColumnsModal/ConfigureColumnsModal'
+import FilterSuggestTextBox from './FilterSuggestTextBox'
+import { FILTER_SEARCH_ALL } from './FilterSuggestTextBox'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
 import Dropdown from '../../../components/Dropdown/Dropdown'
 import IntlDatePicker from '../../../components/IntlDatePicker/IntlDatePicker'
@@ -57,6 +60,58 @@ export class TaskReviewTable extends Component {
 
     const filters = {}
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
+
+    // Determine if we can search by challenge Id or do name search
+    if (filters.challenge) {
+      if (_isObject(filters.challenge)) {
+        if (filters.challenge.id === FILTER_SEARCH_ALL) {
+          // Search all
+          filters.challengeId = null
+          filters.challenge = null
+        }
+        else {
+          if (filters.challenge.id > 0) {
+            filters.challengeId = filters.challenge.id
+          }
+          else if (_get(this.props.reviewCriteria, 'filters.challengeId') ===
+                     filters.challengeId &&
+                   _get(this.props.reviewCriteria, 'filters.challenge') !==
+                     filters.challenge) {
+            // We must be doing a partial search and can't search by id. Our
+            // prior id is invalid.
+            filters.challengeId = null
+          }
+
+          filters.challenge = filters.challenge.name
+        }
+      }
+    }
+
+    // Determine if we can search by project Id or do name search
+    if (filters.project) {
+      if (_isObject(filters.project)) {
+        if (filters.project.id === FILTER_SEARCH_ALL) {
+          // Search all
+          filters.projectId = null
+          filters.project = null
+        }
+        else {
+          if (filters.project.id > 0) {
+            filters.projectId = filters.project.id
+          }
+          else if (_get(this.props.reviewCriteria, 'filters.projectId') ===
+                     filters.projectId &&
+                   _get(this.props.reviewCriteria, 'filters.project') !==
+                     filters.project) {
+            // We must be doing a partial search and can't search by id. Our
+            // prior id is invalid.
+            filters.projectId = null
+          }
+
+          filters.project = filters.project.name
+        }
+      }
+    }
 
     this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
                                   boundingBox: this.props.reviewCriteria.boundingBox})
@@ -437,6 +492,18 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           {row._original.parent.name}
         </div>
       )
+    },
+    Filter: ({ filter, onChange }) => {
+      return (
+        <FilterSuggestTextBox
+          filterType={"challenge"}
+          filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
+          selectedItem={""}
+          onChange={onChange}
+          value={filter ? filter.value : ""}
+          itemList={props.reviewChallenges}
+        />
+      )
     }
   }
 
@@ -452,6 +519,18 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
         <div className="row-project-column">
           {row._original.parent.parent.displayName}
         </div>
+      )
+    },
+    Filter: ({ filter, onChange }) => {
+      return (
+        <FilterSuggestTextBox
+          filterType={"project"}
+          filterAllLabel={props.intl.formatMessage(messages.allProjects)}
+          selectedItem={""}
+          onChange={onChange}
+          value={filter ? filter.value : ""}
+          itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
+        />
       )
     }
   }

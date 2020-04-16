@@ -124,10 +124,18 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
   if (filters.completedBy) {
     searchParameters.m = filters.completedBy
   }
-  if (filters.challenge) {
+
+  if (filters.challengeId) {
+    searchParameters.cid = filters.challengeId
+  }
+  else if (filters.challenge) {
     searchParameters.cs = filters.challenge
   }
-  if (filters.project) {
+
+  if (filters.projectId) {
+    searchParameters.pid = filters.projectId
+  }
+  else if (filters.project) {
     searchParameters.ps = filters.project
   }
   if (filters.status && filters.status !== "all") {

@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
-import _cloneDeep from 'lodash/cloneDeep'
+import _merge from 'lodash/merge'
 import _isUndefined from 'lodash/isUndefined'
+import _cloneDeep from 'lodash/cloneDeep'
+import _filter from 'lodash/filter'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
@@ -11,7 +13,8 @@ import { fetchReviewNeededTasks }
        from '../../../services/Task/TaskReview/TaskReviewNeeded'
 import { fetchReviewedTasks }
        from '../../../services/Task/TaskReview/TaskReviewed'
-import { loadNextReviewTask } from '../../../services/Task/TaskReview/TaskReview'
+import { loadNextReviewTask, fetchReviewChallenges }
+       from '../../../services/Task/TaskReview/TaskReview'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 import { buildSearchCriteria } from '../../../services/SearchCriteria/SearchCriteria'
@@ -31,6 +34,10 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       loading: false,
       criteria: {},
       pageSize: DEFAULT_PAGE_SIZE,
+    }
+
+    buildDefaultCriteria(props) {
+      return _merge({}, DEFAULT_CRITERIA, {filters: props.defaultFilters})
     }
 
     refresh = () => {
@@ -59,6 +66,15 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       if (_isUndefined(criteria.excludeOtherReviewers)) {
         // Exclude reviews assigned to other reviewers by default
         criteria.excludeOtherReviewers = _get(this.state.criteria[this.props.reviewTasksType], "excludeOtherReviewers", true)
+      }
+
+      // We need to update our list of challenges since some challenges may
+      // have been excluded on initial fetch because the list was limited to
+      // taskStatus 'fixed' and 'excludeOtherReviewers' by default.
+      if (criteria.excludeOtherReviewers === false ||
+          criteria.filters.status !==
+            _get(this.state.criteria[this.props.reviewTasksType], "filters.status")) {
+        this.props.updateReviewChallenges(this.props.reviewTasksType)
       }
 
       const typedCriteria = _cloneDeep(this.state.criteria)
@@ -92,20 +108,22 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       const searchParams = this.props.history.location.state
       let pageSize = _get(searchParams, 'pageSize') || DEFAULT_PAGE_SIZE
 
-      const criteria = buildSearchCriteria(searchParams, DEFAULT_CRITERIA)
+      const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props))
       criteria.pageSize = pageSize
 
       const stateCriteria = this.state.criteria
       stateCriteria[this.props.reviewTasksType] = criteria
       if (this.props.reviewTasksType === ReviewTasksType.toBeReviewed) {
-        stateCriteria[this.props.reviewTasksType].filters = {status: TaskStatus.fixed}
+        stateCriteria[this.props.reviewTasksType].filters =
+          _merge({status: TaskStatus.fixed},
+                 stateCriteria[this.props.reviewTasksType].filters)
       }
       this.setState({criteria: stateCriteria})
     }
 
     componentDidUpdate(prevProps, prevState) {
       if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
-        this.update(this.props, this.state.criteria[this.props.reviewTasksType] || DEFAULT_CRITERIA)
+        this.update(this.props, this.state.criteria[this.props.reviewTasksType] || this.buildDefaultCriteria(this.props))
       }
     }
 
@@ -128,7 +146,16 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
           break
       }
 
-      const criteria = this.state.criteria[this.props.reviewTasksType] || DEFAULT_CRITERIA
+      const criteria = this.state.criteria[this.props.reviewTasksType] || this.buildDefaultCriteria(this.props)
+      const projectId = _get(this.state.criteria[this.props.reviewTasksType],
+                             'filters.projectId')
+
+      // Filter available challenges to ones in selected project if applicable
+      const reviewChallenges = !projectId ?
+        this.props.currentReviewTasks.reviewChallenges :
+        _filter(this.props.currentReviewTasks.reviewChallenges,
+          c => c.parent === projectId)
+
       return (
         <WrappedComponent reviewData={reviewData}
                           updateReviewTasks={(criteria) => this.update(this.props, criteria)}
@@ -139,6 +166,8 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
                           setFiltered={this.setFiltered}
                           startReviewing={(url) => this.props.startNextReviewTask(criteria, url, criteria.pageSize)}
                           loading={this.state.loading}
+                          reviewChallenges={reviewChallenges}
+                          reviewProjects={this.props.currentReviewTasks.reviewProjects}
                           {..._omit(this.props, ['updateReviewTasks'])} />)
     }
   }
@@ -158,6 +187,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   updateUserReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
     return dispatch(fetchReviewedTasks(userId, searchCriteria, true, false, pageSize))
+  },
+
+  updateReviewChallenges: (reviewTasksType) => {
+    return dispatch(fetchReviewChallenges(reviewTasksType, null, false))
   },
 
   startNextReviewTask: (searchCriteria={}, url, pageSize) => {
