@@ -630,11 +630,13 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
           props.reviewTasksType === ReviewTasksType.allReviewedTasks) {
         _each(TaskReviewStatus, (status) => {
-          options.push(
-            <option key={keysByReviewStatus[status]} value={status}>
-              {props.intl.formatMessage(messagesByReviewStatus[status])}
-            </option>
-          )
+          if (status !== TaskReviewStatus.unnecessary) {
+            options.push(
+              <option key={keysByReviewStatus[status]} value={status}>
+                {props.intl.formatMessage(messagesByReviewStatus[status])}
+              </option>
+            )
+          }
         })
       }
       else {
