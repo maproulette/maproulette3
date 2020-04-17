@@ -52,7 +52,7 @@ class TasksReviewChallenges extends Component {
     const challengeList = _map(filteredChallenges, challenge => {
       return (
         <div
-          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-mb-2"
           onClick={() => this.props.selectChallenge(challenge.id, challenge.name)} key={challenge.id}>
           {challenge.name}
         </div>
@@ -62,7 +62,7 @@ class TasksReviewChallenges extends Component {
     const projectList = _map(filteredProjects, project => {
       return (
         <div
-          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-mb-2"
           onClick={() => this.props.selectProject(project.id, project.displayName)} key={project.id}>
           {project.displayName}
         </div>
