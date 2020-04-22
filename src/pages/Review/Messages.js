@@ -28,4 +28,9 @@ export default defineMessages({
     id: "Review.Dashboard.volunteerAsReviewer.label",
     defaultMessage: "Volunteer as a Reviewer",
   },
+
+  goBack: {
+    id: "Review.Dashboard.goBack.label",
+    defaultMessage: "Go Back",
+  }
 })

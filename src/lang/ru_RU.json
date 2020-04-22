@@ -1016,6 +1016,7 @@
   "Review.Dashboard.myReviewTasks": "Мои проверенные задачи",
   "Review.Dashboard.allReviewedTasks": "All Review-related Tasks",
   "Review.Dashboard.volunteerAsReviewer.label": "Volunteer as a Reviewer",
+  "Review.Dashboard.goBack.label": "Go Back",
   "ReviewStatus.metrics.title": "Статус проверки",
   "ReviewStatus.metrics.awaitingReview": "Задачи, ожидающие проверки",
   "ReviewStatus.metrics.approvedReview": "Проверенные и одобренные задачи",

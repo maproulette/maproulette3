@@ -1021,6 +1021,7 @@
   "Review.Dashboard.myReviewTasks": "My Reviewed Tasks",
   "Review.Dashboard.allReviewedTasks": "All Review-related Tasks",
   "Review.Dashboard.volunteerAsReviewer.label": "Volunteer as a Reviewer",
+  "Review.Dashboard.goBack.label": "Go Back",
   "ReviewStatus.metrics.title": "Review Status",
   "ReviewStatus.metrics.awaitingReview": "Tasks awaiting review",
   "ReviewStatus.metrics.approvedReview": "Review tasks that passed",
