@@ -1016,6 +1016,7 @@
   "Review.Dashboard.myReviewTasks": "Mis tareas revisadas",
   "Review.Dashboard.allReviewedTasks": "Todas las tareas relacionadas con la revisión",
   "Review.Dashboard.volunteerAsReviewer.label": "Voluntario como revisor",
+  "Review.Dashboard.goBack.label": "Regresar",
   "ReviewStatus.metrics.title": "Revisar estado",
   "ReviewStatus.metrics.awaitingReview": "Tareas en espera de revisión",
   "ReviewStatus.metrics.approvedReview": "Revisar tareas que pasaron",
