@@ -6,7 +6,7 @@ import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _values from 'lodash/values'
 import _cloneDeep from 'lodash/cloneDeep'
-import { fetchReviewChallenges } from '../../../services/Task/TaskReview/TaskReview'
+import { fetchReviewChallenges, ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 
 /**
@@ -31,7 +31,11 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
        reviewChallenges[reviewTasksType] = {loading: true}
        this.setState({reviewChallenges})
 
-       this.props.fetchReviewChallenges(reviewTasksType, [TaskStatus.fixed], true).then(challenges => {
+       const includeStatuses =
+         reviewTasksType === ReviewTasksType.toBeReviewed ?
+           [TaskStatus.fixed] : null
+
+       this.props.fetchReviewChallenges(reviewTasksType, includeStatuses, true).then(challenges => {
          const loadedChallenges = _cloneDeep(this.state.reviewChallenges)
          loadedChallenges[reviewTasksType] = {
            loading: true,
