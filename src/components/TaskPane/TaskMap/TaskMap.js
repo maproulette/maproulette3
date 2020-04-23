@@ -40,8 +40,6 @@ import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import AsSimpleStyleableFeature
        from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
-import AsSuggestedFixFeature
-       from '../../../interactions/TaskFeature/AsSuggestedFixFeature'
 import { supportedSimplestyles }
        from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -423,15 +421,7 @@ export class TaskMap extends Component {
   }
 
   applyStyling = taskFeatures => {
-    // If this is a suggested fix task, apply SF styling
-    if (!_isEmpty(this.props.task.suggestedFix)) {
-      return _map(
-        taskFeatures,
-        feature => AsSuggestedFixFeature(feature, this.props.task.suggestedFix, this.props.task.name)
-      )
-    }
-
-    // Otherwise if the challenge has conditional styles, apply those
+    // If the challenge has conditional styles, apply those
     const conditionalStyles = _get(this.props, 'challenge.taskStyles')
     if (conditionalStyles) {
       return _map(

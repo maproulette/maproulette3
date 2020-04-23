@@ -358,6 +358,21 @@ will not be able to make sense of it.
     defaultMessage: "Default priority level for tasks in this challenge",
   },
 
+  highPriorityRulesLabel: {
+    id: 'Admin.EditChallenge.form.highPriorityRules.label',
+    defaultMessage: "High Priority Rules",
+  },
+
+  mediumPriorityRulesLabel: {
+    id: 'Admin.EditChallenge.form.mediumPriorityRules.label',
+    defaultMessage: "Medium Priority Rules",
+  },
+
+  lowPriorityRulesLabel: {
+    id: 'Admin.EditChallenge.form.lowPriorityRules.label',
+    defaultMessage: "Low Priority Rules",
+  },
+
   step4Label: {
     id: 'Admin.EditChallenge.form.step4.label',
     defaultMessage: "Extra",

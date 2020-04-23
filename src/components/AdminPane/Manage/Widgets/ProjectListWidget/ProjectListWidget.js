@@ -140,13 +140,19 @@ const Widget =
       'resultProjects'
     ),
     'adminProjectList',
-    queryCriteria => {
+    (queryCriteria, resultsPerPage, props) => {
       // We only fetch all managed projects if we are not doing a query.
       if (queryCriteria.query) {
         return null
       }
-      return fetchManageableProjects(_get(queryCriteria, 'page.currentPage'),
-                                     _get(queryCriteria, 'page.resultsPerPage'))
+
+      const filters = _get(props, 'currentConfiguration.filters.projectFilters', {})
+      return fetchManageableProjects(
+        _get(queryCriteria, 'page.currentPage'),
+        _get(queryCriteria, 'page.resultsPerPage'),
+        filters.owner,
+        filters.visible
+       )
     },
   )
 

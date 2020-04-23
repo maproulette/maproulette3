@@ -29,6 +29,7 @@ import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
+import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 import WithWebSocketSubscriptions
        from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
@@ -247,10 +248,10 @@ const BuildBundle = props => {
     )
   }
 
-  if (props.task.suggestedFix) {
+  if (AsCooperativeWork(props.task).isCooperative()) {
     return (
       <div className="mr-text-base">
-        <FormattedMessage {...messages.noSuggestedFixes} />
+        <FormattedMessage {...messages.noCooperativeWork} />
       </div>
     )
   }

@@ -24,8 +24,13 @@ export default defineMessages({
     defaultMessage: "Saved",
   },
 
-  suggestedFixLabel: {
-    id: "Taxonomy.indicators.suggestedFix.label",
-    defaultMessage: "Quick Fix",
+  tagFixLabel: {
+    id: "Taxonomy.indicators.tagFix.label",
+    defaultMessage: "Tag Fix",
+  },
+
+  cooperativeLabel: {
+    id: "Taxonomy.indicators.cooperative.label",
+    defaultMessage: "Cooperative",
   },
 })

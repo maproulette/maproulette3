@@ -100,6 +100,7 @@ export class App extends Component {
             <CachedRoute path='/user/metrics' component={Metrics} />
             <CachedRoute path='/dashboard' component={Dashboard} />
             <CachedRoute path='/leaderboard' component={Leaderboard} />
+            <CachedRoute exact path='/review/:showType' component={Review} />
             <CachedRoute path='/review' component={Review} />
             <CachedRoute path='/inbox' component={Inbox} />
             <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />

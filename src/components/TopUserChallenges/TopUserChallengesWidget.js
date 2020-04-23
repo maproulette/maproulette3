@@ -27,17 +27,31 @@ const descriptor = {
 }
 
 export class TopUserChallengesWidget extends Component {
+  updateChallenges = monthsPast => {
+    this.props.fetchTopChallenges(
+      this.props.user.id,
+      subMonths(new Date(), monthsPast)
+    )
+  }
+
+  currentMonthsPast = () => {
+    return this.props.widgetConfiguration.monthsPast || 1
+  }
+
   setMonthsPast = monthsPast => {
     if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
       this.props.updateWidgetConfiguration({monthsPast})
-      this.props.fetchTopChallenges(this.props.user.id,
-                                    subMonths(new Date(), monthsPast))
+      this.updateChallenges(monthsPast)
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.user) {
+      this.updateChallenges(this.currentMonthsPast())
     }
   }
 
   render() {
-    const monthsPast = this.props.widgetConfiguration.monthsPast || 1
-
     return (
       <QuickWidget
         {...this.props}
@@ -50,7 +64,7 @@ export class TopUserChallengesWidget extends Component {
               this.props.lightMode ? "mr-button--green" : "mr-button--green-lighter"
             )}
             pastMonthsOptions={[1, 3, 6, 12]}
-            currentMonthsPast={monthsPast}
+            currentMonthsPast={this.currentMonthsPast()}
             selectDuration={this.setMonthsPast}
           />
         }

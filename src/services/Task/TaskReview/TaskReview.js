@@ -15,6 +15,7 @@ import { RECEIVE_REVIEWED_TASKS,
 import RequestStatus from '../../Server/RequestStatus'
 import { taskSchema, taskBundleSchema, retrieveChallengeTask,
          receiveTasks, fetchTask } from '../Task'
+import { challengeSchema } from '../../Challenge/Challenge'
 import { generateSearchParametersString } from '../../Search/Search'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
@@ -38,6 +39,8 @@ export const ReviewTasksType = {
 // redux action creators
 export const RECEIVE_REVIEW_METRICS = 'RECEIVE_REVIEW_METRICS'
 export const RECEIVE_REVIEW_CLUSTERS = 'RECEIVE_REVIEW_CLUSTERS'
+export const RECEIVE_REVIEW_CHALLENGES = 'RECEIVE_REVIEW_CHALLENGES'
+export const RECEIVE_REVIEW_PROJECTS = 'RECEIVE_REVIEW_PROJECTS'
 
 /**
  * Mark the current review data as stale, meaning the app has been
@@ -70,6 +73,32 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
     type: RECEIVE_REVIEW_CLUSTERS,
     status,
     clusters,
+    receivedAt: Date.now(),
+    fetchId
+  }
+}
+
+/**
+ * Add or replace the review challenges in the redux store
+ */
+export const receiveReviewChallenges = function(reviewChallenges, status=RequestStatus.success, fetchId) {
+  return {
+    type: RECEIVE_REVIEW_CHALLENGES,
+    status,
+    reviewChallenges,
+    receivedAt: Date.now(),
+    fetchId
+  }
+}
+
+/**
+ * Add or replace the review projects in the redux store
+ */
+export const receiveReviewProjects = function(reviewProjects, status=RequestStatus.success, fetchId) {
+  return {
+    type: RECEIVE_REVIEW_PROJECTS,
+    status,
+    reviewProjects,
     receivedAt: Date.now(),
     fetchId
   }
@@ -288,6 +317,40 @@ export const completeBundleReview = function(bundleId, taskReviewStatus, comment
   }
 }
 
+/**
+ * Fetches a list of challenges which have review tasks
+ */
+export const fetchReviewChallenges = function(reviewTasksType,
+                                              includeTaskStatuses = null,
+                                              excludeOtherReviewers = true) {
+  return function(dispatch) {
+    const type = determineType(reviewTasksType)
+
+    const tStatus = includeTaskStatuses ? includeTaskStatuses.join(',') : ""
+
+    return new Endpoint(
+      api.challenges.withReviewTasks,
+      {schema: [challengeSchema()],
+       params:{reviewTasksType: type, excludeOtherReviewers, tStatus}}
+    ).execute().then(normalizedResults => {
+      dispatch(receiveReviewChallenges(normalizedResults.entities.challenges, RequestStatus.success))
+      dispatch(receiveReviewProjects(normalizedResults.entities.projects, RequestStatus.success))
+
+      return normalizedResults
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.challenge.fetchFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
 const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment, tags) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
@@ -342,6 +405,10 @@ export const currentReviewTasks = function(state={}, action) {
       return updateReduxState(state, action, "metrics")
     case RECEIVE_REVIEW_CLUSTERS:
       return updateReduxState(state, action, "clusters")
+    case RECEIVE_REVIEW_CHALLENGES:
+      return updateReduxState(state, action, "reviewChallenges")
+    case RECEIVE_REVIEW_PROJECTS:
+      return updateReduxState(state, action, "reviewProjects")
     default:
       return state
   }
@@ -366,6 +433,16 @@ const updateReduxState = function(state={}, action, listName) {
       }
     }
 
+    return mergedState
+  }
+
+  if (action.type === RECEIVE_REVIEW_CHALLENGES) {
+    mergedState[listName] = action.reviewChallenges
+    return mergedState
+  }
+
+  if (action.type === RECEIVE_REVIEW_PROJECTS) {
+    mergedState[listName] = action.reviewProjects
     return mergedState
   }
 

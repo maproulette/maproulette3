@@ -19,8 +19,8 @@ export default defineMessages({
     defaultMessage: "Inspect",
   },
 
-  suggestedFixTitle: {
-    id: "Widgets.TaskCompletionWidget.suggestedFixTitle",
+  cooperativeWorkTitle: {
+    id: "Widgets.TaskCompletionWidget.cooperativeWorkTitle",
     defaultMessage: "Proposed Changes",
   },
 

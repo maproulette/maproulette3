@@ -45,6 +45,7 @@ const apiRoutes = factory => {
       'actions': factory.get('/data/project/summary'),
       'activity': factory.get('/data/status/activity'),
       'latestActivity': factory.get('/data/status/latestActivity'),
+      'withReviewTasks': factory.get('/review/challenges'),
     },
     'challenge': {
       'single': factory.get('/challenge/:id'),
@@ -76,7 +77,6 @@ const apiRoutes = factory => {
       'create': factory.post('/virtualchallenge'),
       'edit': factory.put('/virtualchallenge/:id'),
       'randomTask': factory.get('/virtualchallenge/:id/task', {noCache: true}),
-      'clusteredTasks': factory.get('/virtualchallenge/clustered/:id'),
       'nearbyTasks': factory.get('/virtualchallenge/:challengeId/tasksNearby/:taskId'),
     },
     'tasks': {
@@ -117,9 +117,8 @@ const apiRoutes = factory => {
       'tags': factory.get('/task/:id/tags'),
       'updateTags': factory.get('/task/:id/tags/update'),
       'testTagFix': factory.post('/change/tag/test'),
-      'testSuggestedFix': factory.post('/change/test'),
+      'testCooperativeWork': factory.post('/change/test'),
       'applyTagFix': factory.post('/task/:id/fix/apply'),
-      'applySuggestedFix': factory.post('/task/:id/suggestedFix/apply'),
     },
     'keywords': {
       'find': factory.get('/keywords'),

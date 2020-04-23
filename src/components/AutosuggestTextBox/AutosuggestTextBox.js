@@ -123,7 +123,8 @@ export default class AutosuggestTextBox extends Component {
         itemToString={result => result ? this.props.resultLabel(result) : ''}
       >
         {({getInputProps, getItemProps, getMenuProps, getRootProps, isOpen, inputValue}) => {
-          const openOnFocus = _get(this.props.preferredResults, 'length', 0) > 0
+          const openOnFocus = this.props.openOnFocus ||
+                              _get(this.props.preferredResults, 'length', 0) > 0
           const resultItems = this.dropdownItems(getItemProps, inputValue)
           const show = this.state.textBoxActive || (isOpen && inputValue.length > 0)
 
@@ -132,6 +133,7 @@ export default class AutosuggestTextBox extends Component {
               className="mr-w-full mr-dropdown--flush"
               rootProps={getRootProps({}, {suppressRefError: true})}
               suppressControls
+              fixedMenu={this.props.fixedMenu}
               isVisible={show}
               toggleVisible={() => _noop}
               dropdownButton={dropdown => (

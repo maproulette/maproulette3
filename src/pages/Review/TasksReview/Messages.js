@@ -173,4 +173,34 @@ export default defineMessages({
     id: "Review.multipleTasks.tooltip",
     defaultMessage: "Multiple bundled tasks",
   },
+
+  viewAllTasks: {
+    id: "Review.tableFilter.viewAllTasks",
+    defaultMessage: "View all tasks",
+  },
+
+  chooseFilter: {
+    id: "Review.tablefilter.chooseFilter",
+    defaultMessage: "Choose project or challenge",
+  },
+
+  reviewByProject: {
+    id: "Review.tableFilter.reviewByProject",
+    defaultMessage: "Review by project"
+  },
+
+  reviewByChallenge: {
+    id: "Review.tableFilter.reviewByChallenge",
+    defaultMessage: "Review by challenge"
+  },
+
+  allChallenges: {
+    id: "Review.tableFilter.reviewByAllChallenges",
+    defaultMessage: "All Challenges"
+  },
+
+  allProjects: {
+    id: "Review.tableFilter.reviewByAllProjects",
+    defaultMessage: "All Projects"
+  }
 })

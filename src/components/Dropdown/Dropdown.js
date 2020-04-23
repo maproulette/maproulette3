@@ -37,7 +37,7 @@ class Dropdown extends Component {
         {isDropdownVisible && (
           <div className="mr-dropdown__wrapper">
             <div className="mr-dropdown__main">
-              <div className="mr-dropdown__inner">
+              <div className={classNames("mr-dropdown__inner", {"mr-fixed": this.props.fixedMenu})}>
                 {!this.props.suppressControls &&
                  <SvgSymbol
                    sym="icon-triangle"
