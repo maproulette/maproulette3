@@ -7,6 +7,24 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## [v3.6.0] - 2020-04-23
+### Added
+- Cooperative challenges
+- Revised initial setup/search workflow for Reviewers
+- Automatic expiration of review-requested status for old, unreviewed tasks
+- Comma-separated value support in priority rules for challenge managers
+
+### Fixed
+- Blank Top User Challenges widget on User Dashboard
+- Failure to display additional results when listing managed projects
+- Virtual projects losing virtual status when edited (#1207)
+- Virtual project challenges not refreshing after addition or removal (#1208)
+
+### Changed
+- Quick Fix challenges are now called Tag Fix challenges
+
+
 ## [v3.5.9] - 2020-04-09
 ### Added
 - Require interaction before loading tasks in Review Map on Review Page
