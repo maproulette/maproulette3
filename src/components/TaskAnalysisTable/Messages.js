@@ -74,6 +74,11 @@ export default defineMessages({
     defaultMessage: "Comments",
   },
 
+  tagsLabel: {
+    id: "Admin.TaskAnalysisTable.columnHeaders.tags",
+    defaultMessage: "Tags",
+  },
+
   inspectTaskLabel: {
     id: "Admin.TaskAnalysisTable.controls.inspectTask.label",
     defaultMessage: "Inspect",

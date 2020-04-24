@@ -169,6 +169,11 @@ export default defineMessages({
     defaultMessage: "Project",
   },
 
+  tagsLabel: {
+    id: "Review.fields.tags.label",
+    defaultMessage: "Tags",
+  },
+
   multipleTasksTooltip: {
     id: "Review.multipleTasks.tooltip",
     defaultMessage: "Multiple bundled tasks",

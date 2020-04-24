@@ -30,6 +30,7 @@ export const WithFilterCriteria = function(WrappedComponent) {
        criteria.sortCriteria = newCriteria.sortCriteria
        criteria.page = newCriteria.page
        criteria.filters = newCriteria.filters
+       criteria.includeTags = newCriteria.includeTags
 
        this.setState({criteria})
        if (this.props.setSearchFilters) {
