@@ -55,4 +55,9 @@ export default defineMessages({
     id: "ProjectDetails.fields.viewLeaderboard.label",
     defaultMessage: "View Leaderboard",
   },
+
+  viewReviews: {
+    id: "ProjectDetails.fields.viewReviews.label",
+    defaultMessage: "Review",
+  },
 })

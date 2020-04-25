@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import classNames from 'classnames'
 import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
@@ -124,8 +125,20 @@ export class ProjectDetail extends Component {
 
                   <ProjectProgress className="mr-my-4" {...this.props} />
 
-                  <ul className="mr-card-challenge__actions">
-                    {manageControl && <li>{manageControl}</li>}
+                  <ul className="mr-card-challenge__actions mr-mt-4 mr-leading-none mr-text-base">
+                    <li>
+                      {_get(this.props.user, 'settings.isReviewer') &&
+                        <Link
+                          className={classNames(
+                            "mr-text-green-lighter hover:mr-text-white mr-mr-4",
+                            {"mr-border-r-2 mr-border-white-10 mr-pr-4 mr-mr-4": manageControl})}
+                          to={`/review?projectId=${project.id}&projectName=${project.displayName}`}
+                        >
+                          <FormattedMessage {...messages.viewReviews} />
+                        </Link>
+                      }
+                      {manageControl}
+                    </li>
                   </ul>
                 </div>
               </div>
