@@ -31,6 +31,6 @@ export default defineMessages({
 
   goBack: {
     id: "Review.Dashboard.goBack.label",
-    defaultMessage: "Go Back",
+    defaultMessage: "Reconfigure Reviews",
   }
 })
