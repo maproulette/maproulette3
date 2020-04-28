@@ -74,19 +74,14 @@ export class ProjectsDashboard extends Component {
 
     return (
       <div className="admin__manage projects-dashboard">
-        {!this.props.loadingProjects && this.props.projects.length === 0 ?
-         <div className="projects-dashboard__no-projects">
-           <FormattedMessage {...messages.regenerateHomeProject} />
-         </div> :
-         <WidgetWorkspace
-           {...this.props}
-           lightMode={false}
-           darkMode
-           className="mr-mt-4 mr-cards-inverse"
-           workspaceEyebrow={pageHeader}
-           filterComponent={ProjectFilterGroup}
-         />
-        }
+        <WidgetWorkspace
+          {...this.props}
+          lightMode={false}
+          darkMode
+          className="mr-mt-4 mr-cards-inverse"
+          workspaceEyebrow={pageHeader}
+          filterComponent={ProjectFilterGroup}
+        />
       </div>
     )
   }

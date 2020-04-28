@@ -1,13 +1,12 @@
 import AsEndUser from './AsEndUser'
 import { GUEST_USER_ID } from '../../services/User/User'
-import { GROUP_TYPE_SUPERUSER }
-       from '../../services/Project/GroupType/GroupType'
+import { ROLE_SUPERUSER } from '../../services/Grant/Role'
 
-const superGroup = {id: -1, groupType: GROUP_TYPE_SUPERUSER}
+const superUserGrant = {id: -1, role: ROLE_SUPERUSER}
 
-const guestUser = {id: GUEST_USER_ID, groups: []}
-const simpleUser = {id: 357, groups: []}
-const superUser = {id: 135, groups: [superGroup]}
+const guestUser = {id: GUEST_USER_ID, grants: []}
+const simpleUser = {id: 357, grants: []}
+const superUser = {id: 135, grants: [superUserGrant]}
 
 describe('isLoggedIn', () => {
   it("returns false if there is no user object", () => {
@@ -42,7 +41,7 @@ describe('isSuperUser', () => {
     expect(endUser.isSuperUser()).toBe(false)
   })
 
-  it("returns false if the user is a a normal end user", () => {
+  it("returns false if the user is a normal end user", () => {
     const endUser = AsEndUser(simpleUser)
     expect(endUser.isSuperUser()).toBe(false)
   })
