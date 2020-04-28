@@ -8,6 +8,15 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [v3.6.1] - 2020-04-28
+### Added
+- Links to review tasks on Browse Challenge and Browse Project pages
+
+### Fixed
+- User metrics failing to load
+- Remove limit when fetching lists of challenges and projects for review
+
+
 ## [v3.6.0] - 2020-04-23
 ### Added
 - Cooperative challenges

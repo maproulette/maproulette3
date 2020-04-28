@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
+import classNames from 'classnames'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _findIndex from 'lodash/findIndex'
@@ -225,7 +226,19 @@ export class ChallengeDetail extends Component {
                         {unsaveControl}
                       </li>
                     )}
-                    {manageControl && <li>{manageControl}</li>}
+                    <li>
+                      {_get(this.props.user, 'settings.isReviewer') &&
+                        <Link
+                          className={classNames(
+                            "mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-leading-none",
+                            {"mr-border-r-2 mr-border-white-10 mr-pr-4 mr-mr-4": manageControl})}
+                          to={`/review?challengeId=${challenge.id}&challengeName=${challenge.name}`}
+                        >
+                          <FormattedMessage {...messages.viewReviews} />
+                        </Link>
+                      }
+                      {manageControl}
+                    </li>
                   </ul>
                 </div>
               </div>

@@ -54,4 +54,9 @@ export default defineMessages({
     defaultMessage: "View Leaderboard",
   },
 
+  viewReviews: {
+    id: "ChallengeDetails.fields.viewReviews.label",
+    defaultMessage: "Review",
+  },
+
 })

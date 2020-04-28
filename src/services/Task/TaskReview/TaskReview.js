@@ -331,7 +331,8 @@ export const fetchReviewChallenges = function(reviewTasksType,
     return new Endpoint(
       api.challenges.withReviewTasks,
       {schema: [challengeSchema()],
-       params:{reviewTasksType: type, excludeOtherReviewers, tStatus}}
+       params:{reviewTasksType: type, excludeOtherReviewers, tStatus,
+               limit: -1}}
     ).execute().then(normalizedResults => {
       dispatch(receiveReviewChallenges(normalizedResults.entities.challenges, RequestStatus.success))
       dispatch(receiveReviewProjects(normalizedResults.entities.projects, RequestStatus.success))
