@@ -1,11 +1,10 @@
 import { GUEST_USER_ID } from '../../services/User/User'
-import { GROUP_TYPE_SUPERUSER }
-       from '../../services/Project/GroupType/GroupType'
+import { ROLE_SUPERUSER } from '../../services/Grant/Role'
 import _find from 'lodash/find'
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 
-// A hand-culled subset of contrasting colors from:
+// A curated subset of contrasting colors from:
 // http://godsnotwheregodsnot.blogspot.com/2013/11/kmeans-color-quantization-seeding.html
 const CONTRASTING_COLORS = [
   "#FFFF00", "#1CE6FF", "#FF34FF", "#FFDBE5", "#63FFAC", "#B79762", "#8FB0FF",
@@ -48,7 +47,7 @@ export class AsEndUser {
    */
   isSuperUser() {
     return this.isLoggedIn() &&
-           !!_find(this.user.groups, {groupType: GROUP_TYPE_SUPERUSER})
+           !!_find(this.user.grants, {role: ROLE_SUPERUSER})
   }
 
   /**

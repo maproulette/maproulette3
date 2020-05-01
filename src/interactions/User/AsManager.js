@@ -1,8 +1,6 @@
-import { GroupType,
-         groupTypesImply,
-         GROUP_TYPE_SUPERUSER }
-       from '../../services/Project/GroupType/GroupType'
-import _some from 'lodash/some'
+import { Role, rolesImply, ROLE_SUPERUSER }
+       from '../../services/Grant/Role'
+import { TargetType } from '../../services/Grant/TargetType'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isObject from 'lodash/isObject'
@@ -32,40 +30,34 @@ export class AsManager extends AsEndUser {
   }
 
   /**
-   * Returns the user's group types (roles) for the given project.
+   * Returns the user's roles for the given project
    */
-  projectGroupTypes(project) {
+  projectRoles(project) {
     if (!this.user || !project) {
       return []
     }
 
     return _map(
-      _filter(this.user.groups, userGroup =>
-        userGroup.groupType === GROUP_TYPE_SUPERUSER ||
-        _some(project.groups, {id: userGroup.id})
+      _filter(this.user.grants, grant =>
+        grant.role === ROLE_SUPERUSER ||
+        (grant.target.objectType === TargetType.project && grant.target.objectId === project.id)
       ),
-      'groupType'
+      'role'
     )
   }
 
   /**
-   * Determines if the user's group types satisfy (meet or exceed) the given
-   * group type for the given project. Returns true if any of the following are
-   * true:
+   * Determines if the user's roles satisfy (meet or exceed) the given
+   * role for the given project. Returns true if either:
    * - The user is a superuser
-   * - The user is the project owner
-   * - The user possesses a group type for the project that implies the given group type.
+   * - The user possesses a role for the project that implies the given role
    */
-  satisfiesProjectGroupType(project, groupType) {
+  satisfiesProjectRole(project, role) {
     if (!this.isLoggedIn()) {
       return false
     }
 
-    if (this.isProjectOwner(project)) {
-      return true
-    }
-
-    return groupTypesImply(groupType, this.projectGroupTypes(project))
+    return rolesImply(role, this.projectRoles(project))
   }
 
   /**
@@ -73,12 +65,12 @@ export class AsManager extends AsEndUser {
    * is considered to have read access if any of the following are true:
    * - They are a superuser
    * - They are the project owner
-   * - They possess any of the project's group types (read, write, or admin).
+   * - They possess any of the project's roles (read, write, or admin).
    *
    * @returns true if the user has read access, false otherwise.
    */
   canReadProject(project) {
-    return this.satisfiesProjectGroupType(project, GroupType.read)
+    return this.satisfiesProjectRole(project, Role.read)
   }
 
   /**
@@ -86,13 +78,13 @@ export class AsManager extends AsEndUser {
    * is considered to have write access if any of the following are true:
    * - They are a superuser
    * - They are the project owner
-   * - They possess the project's write group type
-   * - They possess the project's admin group type
+   * - They possess the project's write role
+   * - They possess the project's admin role
    *
    * @returns true if the user has read access, false otherwise.
    */
   canWriteProject(project) {
-    return this.satisfiesProjectGroupType(project, GroupType.write)
+    return this.satisfiesProjectRole(project, Role.write)
   }
 
   /**
@@ -102,7 +94,7 @@ export class AsManager extends AsEndUser {
    * @returns true if the user can manage the project, false otherwise.
    */
   canManage(project) {
-    return this.satisfiesProjectGroupType(project, GroupType.read)
+    return this.satisfiesProjectRole(project, Role.read)
   }
 
   /**
@@ -116,7 +108,7 @@ export class AsManager extends AsEndUser {
    * @returns true if the user can administrate the project, false otherwise.
    */
   canAdministrateProject(project) {
-    return this.satisfiesProjectGroupType(project, GroupType.admin)
+    return this.satisfiesProjectRole(project, Role.admin)
   }
 
   /**

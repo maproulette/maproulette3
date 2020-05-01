@@ -31,7 +31,7 @@ const apiRoutes = factory => {
       'activity': factory.get('/data/project/activity'),
       'managers': factory.get('/user/project/:projectId'),
       'comments': factory.get('/project/:id/comments'),
-      'setManagerPermission': factory.put('/user/:userId/project/:projectId/:groupType'),
+      'setManagerPermission': factory.put('/user/:userId/project/:projectId/:role'),
       'removeManager': factory.delete('/user/:userId/project/:projectId/-1'),
       'delete': factory.delete('/project/:id'),
       'addToVirtual': factory.post('/project/:projectId/challenge/:challengeId/add'),

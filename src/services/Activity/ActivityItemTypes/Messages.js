@@ -28,8 +28,16 @@ export default defineMessages({
     id: "Activity.item.user",
     defaultMessage: "User"
   },
-  group: {
-    id: "Activity.item.group",
-    defaultMessage: "Group"
+  virtualChallenge: {
+    id: "Activity.item.virtualChallenge",
+    defaultMessage: "Virtual Challenge"
+  },
+  bundle: {
+    id: "Activity.item.bundle",
+    defaultMessage: "Bundle"
+  },
+  grant: {
+    id: "Activity.item.grant",
+    defaultMessage: "Grant"
   },
 })

@@ -12,7 +12,7 @@ import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions'
 import { RESULTS_PER_PAGE } from '../Search/Search'
-import { GroupType } from './GroupType/GroupType'
+import { Role } from '../Grant/Role'
 import { addServerError,
          addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
@@ -213,8 +213,8 @@ export const saveProject = function(projectData) {
 
       // If we just created the project, add the owner as an admin.
       if (areCreating && project) {
-        return setProjectManagerGroupType(
-          project.id, project.owner, true, GroupType.admin
+        return setProjectManagerRole(
+          project.id, project.owner, true, Role.admin
         )(dispatch).then(() => project)
       }
       else {
@@ -306,13 +306,13 @@ export const fetchProjectManagers = function(projectId) {
 }
 
 /**
- * Set group type (permissions) for user on project.
+ * Set role for user on project
  */
-export const setProjectManagerGroupType = function(projectId, userId, isOSMUserId, groupType) {
+export const setProjectManagerRole = function(projectId, userId, isOSMUserId, role) {
   return function(dispatch) {
     return new Endpoint(
       api.project.setManagerPermission, {
-        variables: {userId, projectId, groupType},
+        variables: {userId, projectId, role},
         params: {isOSMUserId: isOSMUserId ? 'true' : 'false'},
       }
     ).execute().then(rawManagers => {
@@ -341,9 +341,9 @@ export const setProjectManagerGroupType = function(projectId, userId, isOSMUserI
 
 /**
  * Add a user with the given OSM username to the given project with the given
- * group type (permissions).
+ * role
  */
-export const addProjectManager = function(projectId, username, groupType) {
+export const addProjectManager = function(projectId, username, role) {
   return function(dispatch) {
     return findUser(username).then(matchingUsers => {
       // We want an exact username match
@@ -351,7 +351,7 @@ export const addProjectManager = function(projectId, username, groupType) {
         _get(_find(matchingUsers, match => match.displayName === username), 'osmId')
 
       if (_isFinite(osmId)) {
-        return setProjectManagerGroupType(projectId, osmId, true, groupType)(dispatch)
+        return setProjectManagerRole(projectId, osmId, true, role)(dispatch)
       }
       else {
         dispatch(addError(AppErrors.user.notFound))

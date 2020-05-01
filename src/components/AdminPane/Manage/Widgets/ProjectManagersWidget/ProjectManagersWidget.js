@@ -7,10 +7,10 @@ import _map from 'lodash/map'
 import _filter from 'lodash/filter'
 import _without from 'lodash/without'
 import _isFinite from 'lodash/isFinite'
-import { GroupType,
-         mostPrivilegedGroupType,
-         messagesByGroupType }
-       from '../../../../../services/Project/GroupType/GroupType'
+import { Role,
+         mostPrivilegedRole,
+         messagesByRole }
+       from '../../../../../services/Grant/Role'
 import WithOSMUserSearch from '../../../HOCs/WithOSMUserSearch/WithOSMUserSearch'
 import AsManager from '../../../../../interactions/User/AsManager'
 import AsAvatarUser from '../../../../../interactions/User/AsAvatarUser'
@@ -45,8 +45,8 @@ export default class ProjectManagersWidget extends Component {
     )
   }
 
-  updateManagerRole = (managerOsmId, groupType) => {
-    if (groupType === 'remove') {
+  updateManagerRole = (managerOsmId, role) => {
+    if (role === 'remove') {
       this.removeManager(managerOsmId)
       return
     }
@@ -55,8 +55,8 @@ export default class ProjectManagersWidget extends Component {
       updatingManagers: this.state.updatingManagers.concat([managerOsmId])
     })
 
-    this.props.setProjectManagerGroupType(
-      this.props.project.id, managerOsmId, true, groupType
+    this.props.setProjectManagerRole(
+      this.props.project.id, managerOsmId, true, role
     ).then(() => this.setState({
       updatingManagers: _without(this.state.updatingManagers, managerOsmId)
     }))
@@ -74,15 +74,15 @@ export default class ProjectManagersWidget extends Component {
     }))
   }
 
-  addManager = groupType => {
-    if (!_isFinite(parseInt(groupType, 10))) {
+  addManager = role => {
+    if (!_isFinite(parseInt(role, 10))) {
       return
     }
 
     this.setState({addingManager: true})
 
     this.props.addProjectManager(
-      this.props.project.id, this.state.addManagerUsername, groupType
+      this.props.project.id, this.state.addManagerUsername, role
     ).then(() => this.setState({
       addManagerUsername: '',
       addManagerOSMUser: null,
@@ -97,38 +97,37 @@ export default class ProjectManagersWidget extends Component {
 
     const user = AsManager(this.props.user)
 
-    const groupTypeOptions = [
-      <option key={GroupType.read} value={GroupType.read}>
-        {this.props.intl.formatMessage(messagesByGroupType[GroupType.read])}
+    const roleOptions = [
+      <option key={Role.read} value={Role.read}>
+        {this.props.intl.formatMessage(messagesByRole[Role.read])}
       </option>,
 
-      <option key={GroupType.write} value={GroupType.write}>
-        {this.props.intl.formatMessage(messagesByGroupType[GroupType.write])}
+      <option key={Role.write} value={Role.write}>
+        {this.props.intl.formatMessage(messagesByRole[Role.write])}
       </option>,
 
-      <option key={GroupType.admin} value={GroupType.admin}>
-        {this.props.intl.formatMessage(messagesByGroupType[GroupType.admin])}
+      <option key={Role.admin} value={Role.admin}>
+        {this.props.intl.formatMessage(messagesByRole[Role.admin])}
       </option>,
     ]
 
     const adminManagers =
       _filter(this.props.project.managers,
-              manager => mostPrivilegedGroupType(manager.groupTypes) === GroupType.admin)
+              manager => mostPrivilegedRole(manager.roles) === Role.admin)
 
     let managers = _map(this.props.project.managers, manager => {
-      const managerRole = mostPrivilegedGroupType(manager.groupTypes)
-      const isProjectOwner = manager.osmId === this.props.project.owner
-      const isLastAdmin = managerRole === GroupType.admin && adminManagers.length < 2
+      const managerRole = mostPrivilegedRole(manager.roles)
+      const isLastAdmin = managerRole === Role.admin && adminManagers.length < 2
 
       // Add remove-manager option to dropdown if appropriate
       const dropdownOptions =
-        (user.canAdministrateProject(this.props.project) && !isLastAdmin && !isProjectOwner) ?
-        groupTypeOptions.concat([
+        user.canAdministrateProject(this.props.project) && !isLastAdmin ?
+        roleOptions.concat([
           <option key="remove" value="remove">
             {this.props.intl.formatMessage(messages.removeManagerLabel)}
           </option>
         ]) :
-        groupTypeOptions
+        roleOptions
 
       return (
         <div key={manager.osmId} className="mr-flex mr-items-center mr-pr-4 mr-mt-4">
@@ -153,16 +152,10 @@ export default class ProjectManagersWidget extends Component {
           <div className="mr-flex-grow-0">
             {this.state.updatingManagers.indexOf(manager.osmId) !== -1 && <BusySpinner />}
 
-            {isLastAdmin || isProjectOwner ?
-             <div>
-               {isProjectOwner ?
-                <FormattedMessage {...messages.projectOwner} /> :
-                <FormattedMessage {...messagesByGroupType[managerRole]} />
-               }
-             </div> :
+            {isLastAdmin || !user.canAdministrateProject(this.props.project) ?
+             <FormattedMessage {...messagesByRole[managerRole]} /> :
              <select
                value={managerRole}
-               disabled={!user.canAdministrateProject(this.props.project)}
                onChange={e => this.updateManagerRole(manager.osmId, e.target.value)}
                className="mr-select mr-py-1"
              >
@@ -214,7 +207,7 @@ export default class ProjectManagersWidget extends Component {
                <option key='none' value=''>
                  {this.props.intl.formatMessage(messages.chooseRole)}
                </option>
-             ].concat(groupTypeOptions)}
+             ].concat(roleOptions)}
            </select>
           }
         </div>
