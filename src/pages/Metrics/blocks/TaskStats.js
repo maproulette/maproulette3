@@ -34,6 +34,7 @@ export default class TaskStats extends Component {
            listClassName="mr-mt-3"
            taskMetrics={this.props.taskMetrics}
            prominentCounts
+           noteAvgExcludesSkip
          />
         }
       </QuickWidget>

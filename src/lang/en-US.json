@@ -344,6 +344,7 @@
   "ChallengeProgress.priority.label": "{priority} Priority Tasks",
   "ChallengeProgress.reviewStatus.label": "Review Status",
   "ChallengeProgress.metrics.averageTime.label": "Avg time per task:",
+  "ChallengeProgress.metrics.excludesSkip.label": "(excluding skipped tasks)",
   "CommentList.controls.viewTask.label": "View Task",
   "CommentList.noComments.label": "No Comments",
   "ConfigureColumnsModal.header": "Choose Columns to Display",

@@ -249,6 +249,11 @@ export class ChallengeProgress extends Component {
           <span className="mr-pl-2">
             {Math.floor(seconds / 60)}m {Math.floor(seconds) % 60}s
           </span>
+          {this.props.noteAvgExcludesSkip &&
+            <span className="mr-pl-2">
+              <FormattedMessage {...messages.excludesSkip} />
+            </span>
+          }
         </div>
     }
 
