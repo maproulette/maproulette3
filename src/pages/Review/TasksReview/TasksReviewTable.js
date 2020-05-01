@@ -22,6 +22,8 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsRe
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
+import InTableTagFilter
+       from '../../../components/KeywordAutosuggestInput/InTableTagFilter'
 import ConfigureColumnsModal
        from '../../../components/ConfigureColumnsModal/ConfigureColumnsModal'
 import FilterSuggestTextBox from './FilterSuggestTextBox'
@@ -47,7 +49,7 @@ import ReactTable from 'react-table'
 export class TaskReviewTable extends Component {
   state = {
     openComments: null,
-    showConfigureColumns: false,
+    showConfigureColumns: false
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -113,8 +115,10 @@ export class TaskReviewTable extends Component {
       }
     }
 
+    this.setState({lastTableState: _cloneDeep(tableState)})
     this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
-                                  boundingBox: this.props.reviewCriteria.boundingBox})
+      boundingBox: this.props.reviewCriteria.boundingBox,
+      includeTags: !!_get(this.props.addedColumns, 'tags')})
   }
 
   startReviewing() {
@@ -141,6 +145,14 @@ export class TaskReviewTable extends Component {
     if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
       this.setupConfigurableColumns(this.props.reviewTasksType)
     }
+
+    // If we've added the "tag" column, we need to update the table to fetch
+    // the tag data.
+    else if (!_get(prevProps.addedColumns, 'tags') &&
+        _get(this.props.addedColumns, 'tags') &&
+        this.state.lastTableState) {
+      this.updateTasks(this.state.lastTableState)
+    }
   }
 
   setupConfigurableColumns = (reviewTasksType) => {
@@ -157,7 +169,8 @@ export class TaskReviewTable extends Component {
                    "reviewCompleteControls":{permanent: true},
                    "reviewerControls":{permanent: true},
                    "mapperControls":{permanent: true},
-                   "viewComments":{}}
+                   "viewComments":{},
+                   "tags":{}}
 
     let defaultColumns = _keys(columns)
 
@@ -748,6 +761,35 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     maxWidth: 110,
     Cell: props =>
       <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
+  }
+
+  columns.tags = {
+    id: 'tags',
+    Header: props.intl.formatMessage(messages.tagsLabel),
+    accessor: 'tags',
+    filterable: true,
+    sortable: false,
+    minWidth: 120,
+    Cell: ({row}) => {
+      return (
+        <div className="row-challenge-column mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap">
+          {_map(row._original.tags, t => t.name === "" ? null : (
+            <div className="mr-inline mr-bg-white-10 mr-rounded mr-py-1 mr-px-2 mr-m-1" key={t.id}>
+              {t.name}
+            </div>
+          ))}
+        </div>
+      )
+    },
+    Filter: ({filter, onChange}) => {
+      return (
+        <InTableTagFilter
+          {...props}
+          onChange={onChange}
+          value={_get(filter, 'value')}
+        />
+      )
+    }
   }
 
   return columns

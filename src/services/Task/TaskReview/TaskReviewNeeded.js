@@ -43,6 +43,7 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
                                                           criteria.boundingBox,
                                                           _get(criteria, 'savedChallengesOnly'),
                                                           _get(criteria, 'excludeOtherReviewers'))
+  const includeTags = criteria.includeTags
 
   return function(dispatch) {
     return new Endpoint(
@@ -50,7 +51,8 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
       {
         schema: {tasks: [taskSchema()]},
         variables: {},
-        params: {limit, sort, order, page: (page * limit), ...searchParameters},
+        params: {limit, sort, order, page: (page * limit), ...searchParameters,
+                 includeTags},
       }
     ).execute().then(normalizedResults => {
       const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})

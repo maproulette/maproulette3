@@ -233,6 +233,10 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
   }
 
+  if (filters.tags) {
+    searchParameters.tt = filters.tags
+  }
+
   return searchParameters
 }
 
