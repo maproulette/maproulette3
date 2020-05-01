@@ -566,15 +566,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       )
     },
     Filter: ({filter, onChange}) => {
-      console.log("Filter ===> ")
-      console.log(filter)
-
       const preferredTags =
         _filter(_split(_get(props, 'challenge.preferredTags'), ','),
                 (result) => !_isEmpty(result))
-
-      console.log(_get(props, 'challenge.preferredTags'))
-      console.log(preferredTags)
 
       return (
         <InTableTagFilter

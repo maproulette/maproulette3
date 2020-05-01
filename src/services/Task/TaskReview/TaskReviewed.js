@@ -66,7 +66,7 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, a
       {
         schema: {tasks: [taskSchema()]},
         params: {mappers, reviewers, limit, sort, order, page: (page * limit),
-                 allowReviewNeeded: (asReviewer ? false : true), ...searchParameters,
+                 allowReviewNeeded: !asReviewer, ...searchParameters,
                  includeTags},
       }
     ).execute().then(normalizedResults => {

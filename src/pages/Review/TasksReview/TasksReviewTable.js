@@ -49,8 +49,7 @@ import ReactTable from 'react-table'
 export class TaskReviewTable extends Component {
   state = {
     openComments: null,
-    showConfigureColumns: false,
-    lastTableStatue: null
+    showConfigureColumns: false
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
