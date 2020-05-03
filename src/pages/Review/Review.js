@@ -11,6 +11,7 @@ import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _parseInt from 'lodash/parseInt'
 import _isUndefined from 'lodash/isUndefined'
+import _isEmpty from 'lodash/isEmpty'
 import AsEndUser from '../../interactions/User/AsEndUser'
 import WithCurrentUser from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import WithWebSocketSubscriptions
@@ -66,18 +67,27 @@ export class ReviewTasksDashboard extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.state.filterSelected[this.state.showType] &&
-        _get(this.props.history, 'location.search')) {
-      const urlParams = queryString.parse(_get(this.props, 'location.search'))
-      if (_isFinite(_parseInt(urlParams.challengeId))) {
-        this.setSelectedChallenge(urlParams.challengeId, urlParams.challengeName)
-        return
+    if (!this.state.filterSelected[this.state.showType]) {
+      if (_get(this.props.history, 'location.search')) {
+        const urlParams = queryString.parse(_get(this.props, 'location.search'))
+        if (_isFinite(_parseInt(urlParams.challengeId))) {
+          this.setSelectedChallenge(urlParams.challengeId, urlParams.challengeName)
+          return
+        }
+        else if (_isFinite(_parseInt(urlParams.projectId))) {
+          this.setSelectedProject(urlParams.projectId, urlParams.projectName)
+          return
+        }
       }
-      else if (_isFinite(_parseInt(urlParams.projectId))) {
-        this.setSelectedProject(urlParams.projectId, urlParams.projectName)
+
+      if (!_isEmpty(_get(this.props.history, 'location.state.filters'))) {
+        // We already have filters set in our history, so let's just move
+        // on to the table.
+        this.setSelectedProject('')
         return
       }
     }
+
 
     if (this.props.location.pathname !== prevProps.location.pathname &&
         this.props.location.search !== prevProps.location.search) {

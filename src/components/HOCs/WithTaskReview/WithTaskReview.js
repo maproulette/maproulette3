@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           visitTaskForReview(loadBy, url, nextTask))
       }).catch(error => {
         console.log(error)
-        url.push('/review')
+        url.push('/review/tasksToBeReviewed')
       })
     },
 
