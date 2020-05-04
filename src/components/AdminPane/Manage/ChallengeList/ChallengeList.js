@@ -33,6 +33,7 @@ export default class ChallengeList extends Component {
             hideTallyControl={this.props.hideTallyControl}
             showProjectName={this.props.project.isVirtual}
             link={link}
+            includeCopyURL
           />
         )
       }),

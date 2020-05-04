@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
@@ -12,6 +14,7 @@ import { ChallengeStatus, isUsableChallengeStatus }
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import RebuildTasksControl from '../RebuildTasksControl/RebuildTasksControl'
 import ProjectPickerModal from '../ProjectPickerModal/ProjectPickerModal'
+import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import messages from '../ChallengeDashboard/Messages'
 
@@ -58,12 +61,25 @@ export default class ChallengeControls extends Component {
     return (
       <div className={this.props.className}>
         {hasTasks && isUsableChallengeStatus(status, true) &&
-          <Link
-            to={`/challenge/${this.props.challenge.id}`}
-            className={this.props.controlClassName}
-          >
-            <FormattedMessage {...messages.startChallengeLabel} />
-          </Link>
+          <React.Fragment>
+            <Link
+              to={`/challenge/${this.props.challenge.id}`}
+              className={this.props.controlClassName}
+            >
+              <FormattedMessage {...messages.startChallengeLabel} />
+            </Link>
+
+            {this.props.includeCopyURL &&
+              <CopyToClipboard
+                text={`${process.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`}
+                onCopy={this.props.onControlComplete}>
+                <div
+                  className={classNames(this.props.controlClassName, "mr-text-green-lighter hover:mr-text-white")}>
+                  <FormattedMessage {...messages.copyChallengeURLLabel} />
+                </div>
+              </CopyToClipboard>
+            }
+          </React.Fragment>
         }
 
         {!inVirtualProject && manager.canWriteProject(parent) &&
