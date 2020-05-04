@@ -20,8 +20,8 @@ export default defineMessages({
   },
 
   savedLabel: {
-    id: "Taxonomy.indicators.saved.label",
-    defaultMessage: "Saved",
+    id: "Taxonomy.indicators.favorite.label",
+    defaultMessage: "Favorite",
   },
 
   tagFixLabel: {

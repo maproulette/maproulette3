@@ -75,8 +75,9 @@ export class ChallengeDetail extends Component {
               this.props.unsaveChallenge(this.props.user.id, challenge.id)
             }
             className="mr-button"
+            title={this.props.intl.formatMessage(messages.removeFromFavorites)}
           >
-            <FormattedMessage {...messages.unsave} />
+            <FormattedMessage {...messages.unfavorite} />
           </Link>
         )
       } else {
@@ -87,8 +88,9 @@ export class ChallengeDetail extends Component {
               this.props.saveChallenge(this.props.user.id, challenge.id)
             }
             className="mr-button"
+            title={this.props.intl.formatMessage(messages.saveToFavorites)}
           >
-            <FormattedMessage {...messages.save} />
+            <FormattedMessage {...messages.favorite} />
           </Link>
         )
       }
