@@ -60,27 +60,23 @@ export default class ChallengeControls extends Component {
     return (
       <div className={this.props.className}>
         {hasTasks && isUsableChallengeStatus(status, true) &&
-          <React.Fragment>
-            <Link
-              to={`/challenge/${this.props.challenge.id}`}
-              className={this.props.controlClassName}
-            >
-              <FormattedMessage {...messages.startChallengeLabel} />
-            </Link>
-
-            {this.props.includeCopyURL &&
-              <CopyToClipboard
-                text={`${process.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`}
-                onCopy={this.props.onControlComplete}>
-                <div
-                  className={classNames(this.props.controlClassName, "mr-text-green-lighter hover:mr-text-white")}>
-                  <FormattedMessage {...messages.copyChallengeURLLabel} />
-                </div>
-              </CopyToClipboard>
-            }
-          </React.Fragment>
+          <Link
+            to={`/challenge/${this.props.challenge.id}`}
+            className={this.props.controlClassName}
+          >
+            <FormattedMessage {...messages.startChallengeLabel} />
+          </Link>
         }
-
+        {this.props.includeCopyURL &&
+          <CopyToClipboard
+            text={`${process.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`}
+            onCopy={this.props.onControlComplete}>
+            <div
+              className={classNames(this.props.controlClassName, "mr-text-green-lighter hover:mr-text-white")}>
+              <FormattedMessage {...messages.copyChallengeURLLabel} />
+            </div>
+          </CopyToClipboard>
+        }
         {!inVirtualProject && manager.canWriteProject(parent) &&
           <React.Fragment>
             <Link
