@@ -9,16 +9,6 @@ export default defineMessages({
     defaultMessage: 'Go Back',
   },
 
-  unsave: {
-    id: 'ChallengeDetails.controls.unsave.label',
-    defaultMessage: 'Unsave',
-  },
-
-  save: {
-    id: 'ChallengeDetails.controls.save.label',
-    defaultMessage: 'Save',
-  },
-
   start: {
     id: 'ChallengeDetails.controls.start.label',
     defaultMessage: 'Start',
