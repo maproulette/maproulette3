@@ -412,6 +412,7 @@ module.exports = {
       '-28': '-7rem',
       '-32': '-8rem',
       '-40': '-10rem',
+      '-100': '-25rem',
     },
 
     boxShadow: {

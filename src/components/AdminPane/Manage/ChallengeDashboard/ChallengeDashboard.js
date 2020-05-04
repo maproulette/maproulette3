@@ -29,6 +29,7 @@ import TaskDeletingProgress
        from '../TaskDeletingProgress/TaskDeletingProgress'
 import ChallengeControls from '../ChallengeCard/ChallengeControls'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
+import ChallengeNameLink from '../../../ChallengeNameLink/ChallengeNameLink'
 import manageMessages from '../Messages'
 import './ChallengeDashboard.scss'
 
@@ -104,10 +105,8 @@ export class ChallengeDashboard extends Component {
             </li>
             <li className="is-active">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a aria-current="page">
-                {this.props.challenge.name}
-                {this.props.loadingChallenge && <BusySpinner inline />}
-              </a>
+              <ChallengeNameLink {...this.props} showBelow />
+              {this.props.loadingChallenge && <BusySpinner inline />}
             </li>
           </ul>
         </nav>

@@ -21,6 +21,7 @@
   "Admin.Challenge.controls.move.label": "Move Challenge",
   "Admin.Challenge.controls.move.none": "No permitted projects",
   "Admin.Challenge.controls.clone.label": "Clone Challenge",
+  "Admin.ChallengeAnalysisTable.controls.copyChallengeURL.label": "Copy URL",
   "Admin.Challenge.controls.delete.label": "Delete Challenge",
   "Admin.ChallengeList.noChallenges": "No Challenges",
   "ChallengeProgressBorder.available": "Available",
