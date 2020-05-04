@@ -4,7 +4,8 @@ import _get from 'lodash/get'
 import _find from 'lodash/find'
 import _values from 'lodash/values'
 import { fetchChallengeSnapshotList,
-         recordChallengeSnapshot } from '../../../../services/Challenge/ChallengeSnapshot'
+         recordChallengeSnapshot,
+         removeChallengeSnapshot } from '../../../../services/Challenge/ChallengeSnapshot'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
 
 const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) {
@@ -35,6 +36,15 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
       if (challengeId) {
         this.setState({loading: true})
         recordChallengeSnapshot(challengeId).then(() => {
+          this.updateSnapshots(props)
+        })
+      }
+    }
+
+    deleteSnapshot(props, snapshotId) {
+      if (snapshotId) {
+        this.setState({loading: true})
+        removeChallengeSnapshot(snapshotId).then(() => {
           this.updateSnapshots(props)
         })
       }
@@ -79,6 +89,7 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
       return <WrappedComponent
                {...this.props}
                recordSnapshot={() => this.recordSnapshot(this.props)}
+               deleteSnapshot={(snapshotId) => this.deleteSnapshot(this.props, snapshotId)}
                snapshotList={this.state.snapshotList}
                setSelectedSnapshot={this.setSelectedSnapshot}
                currentMetrics={this.props.taskMetrics}

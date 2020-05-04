@@ -32,6 +32,20 @@ export const recordChallengeSnapshot = function(challengeId) {
 }
 
 /**
+ * Removes a challenge snapshot.
+ */
+export const removeChallengeSnapshot = function(snapshotId) {
+  return new Endpoint(
+    api.challenge.removeSnapshot,
+    {
+      variables: {id: snapshotId},
+    }
+  ).execute().catch((error) => {
+    console.log(error.response || error)
+  })
+}
+
+/**
  * Fetch challenge snapshot by id.
  */
 export const fetchChallengeSnapshot = function(snapshotId) {

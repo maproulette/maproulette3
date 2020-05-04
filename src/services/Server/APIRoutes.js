@@ -70,6 +70,7 @@ const apiRoutes = factory => {
       'propertyKeys': factory.get('/data/challenge/:id/propertyKeys'),
       'snapshotList': factory.get('/snapshot/challenge/:id/list'),
       'recordSnapshot': factory.get('/snapshot/challenge/:id/record'),
+      'removeSnapshot': factory.delete('/snapshot/:id'),
       'snapshot': factory.get('/snapshot/:id'),
     },
     'virtualChallenge': {
