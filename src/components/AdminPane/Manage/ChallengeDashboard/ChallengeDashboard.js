@@ -106,9 +106,7 @@ export class ChallengeDashboard extends Component {
             <li className="is-active">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <ChallengeNameLink {...this.props} showBelow />
-              <a aria-current="page">
-                {this.props.loadingChallenge && <BusySpinner inline />}
-              </a>
+              {this.props.loadingChallenge && <BusySpinner inline />}
             </li>
           </ul>
         </nav>

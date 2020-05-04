@@ -14,7 +14,6 @@ import { ChallengeStatus, isUsableChallengeStatus }
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import RebuildTasksControl from '../RebuildTasksControl/RebuildTasksControl'
 import ProjectPickerModal from '../ProjectPickerModal/ProjectPickerModal'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import messages from '../ChallengeDashboard/Messages'
 
