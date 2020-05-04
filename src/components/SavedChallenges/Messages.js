@@ -5,13 +5,13 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   header: {
-    id: "UserProfile.savedChallenges.header",
-    defaultMessage: "Saved Challenges",
+    id: "UserProfile.favoriteChallenges.header",
+    defaultMessage: "Favorite Challenges",
   },
 
   unsave: {
     id: "Challenge.controls.unsave.tooltip",
-    defaultMessage: "Unsave Challenge",
+    defaultMessage: "Unfavorite Challenge",
   },
 
   noChallenges: {
