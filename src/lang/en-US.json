@@ -804,6 +804,7 @@
   "Task.pane.controls.retryLock.label": "Retry Lock",
   "Task.pane.lockFailedDialog.title": "Unable to Lock Task",
   "Task.pane.lockFailedDialog.prompt": "Task lock could not be acquired. A read-only preview is available.",
+  "Task.pane.controls.saveChanges.label": "Save Changes",
   "MobileTask.subheading.instructions": "Instructions",
   "Task.management.heading": "Management Options",
   "Task.management.controls.inspect.label": "Inspect",
