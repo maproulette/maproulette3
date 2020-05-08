@@ -16,22 +16,22 @@ export default defineMessages({
 
   approvedReview: {
     id: "ReviewStatus.metrics.approvedReview",
-    defaultMessage: "Review tasks that passed",
+    defaultMessage: "Reviewed tasks that passed",
   },
 
   rejectedReview: {
     id: "ReviewStatus.metrics.rejectedReview",
-    defaultMessage: "Review tasks that failed",
+    defaultMessage: "Reviewed tasks that failed",
   },
 
   assistedReview: {
     id: "ReviewStatus.metrics.assistedReview",
-    defaultMessage: "Review tasks that passed with fixes",
+    defaultMessage: "Reviewed tasks that passed with fixes",
   },
 
   disputedReview: {
     id: "ReviewStatus.metrics.disputedReview",
-    defaultMessage: "Review tasks that have been contested",
+    defaultMessage: "Reviewed tasks that have been contested",
   },
 
   fixed: {
@@ -62,6 +62,16 @@ export default defineMessages({
   priorityLabel: {
     id: "ReviewStatus.metrics.priority.label",
     defaultMessage: "{priority} Priority Tasks"
+  },
+
+  byTaskStatusToggle: {
+    id: "ReviewStatus.metrics.byTaskStatus.toggle",
+    defaultMessage: "View by Task Status"
+  },
+
+  taskStatusLabel: {
+    id: "ReviewStatus.metrics.taskStatus.label",
+    defaultMessage: "{status} Tasks"
   },
 
   avgTimeSpent: {

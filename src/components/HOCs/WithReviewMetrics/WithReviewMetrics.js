@@ -45,6 +45,7 @@ export const WithReviewMetrics = function(WrappedComponent) {
       return (
         <WrappedComponent reviewMetrics = {this.props.reviewMetrics}
                           reviewMetricsByPriority = {this.props.reviewMetricsByPriority}
+                          reviewMetricsByTaskStatus = {this.props.reviewMetricsByTaskStatus}
                           loading={this.state.loading}
                           {..._omit(this.props, ['updateReviewMetrics'])} />)
     }
@@ -53,7 +54,8 @@ export const WithReviewMetrics = function(WrappedComponent) {
 
 const mapStateToProps = state => {
   return ({ reviewMetrics: _get(state, 'currentReviewTasks.metrics.reviewActions'),
-            reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions') })
+            reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions'),
+            reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') })
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
