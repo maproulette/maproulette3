@@ -17,6 +17,8 @@ import { fetchManageableProjects,
          saveProject,
          removeProject,
          deleteProject} from '../../../../services/Project/Project'
+import { setTeamProjectRole, removeTeamFromProject }
+       from '../../../../services/Team/Team'
 import { addChallenge,
          removeChallenge } from '../../../../services/Project/VirtualProject'
 import { fetchProjectChallengeListing }
@@ -123,9 +125,11 @@ const mapDispatchToProps = dispatch => {
     fetchProjectChallengeListing,
     saveProject,
     addProjectManager,
+    setTeamProjectRole,
     fetchProjectManagers,
     setProjectManagerRole,
     removeProjectManager,
+    removeTeamFromProject,
     addChallenge,
     removeChallenge,
   }, dispatch)

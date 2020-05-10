@@ -3,7 +3,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _filter from 'lodash/filter'
 import _startsWith from 'lodash/startsWith'
 import _debounce from 'lodash/debounce'
-import { findUser } from '../../../../services/User/User'
+import { findUser } from '../../../services/User/User'
 
 /**
  * WithOSMUserSearch provides a findUser function to the wrapped component that allows

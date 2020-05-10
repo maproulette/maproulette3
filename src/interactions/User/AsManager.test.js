@@ -12,9 +12,11 @@ const writeGrant234 = {id: 234, role: Role.write, target: {objectType: TargetTyp
 const adminGrant102 = {id: 102, role: Role.admin, target: {objectType: TargetType.project, objectId: 102}}
 const writeGrant102 = {id: 1021, role: Role.write, target: {objectType: TargetType.project, objectId: 102}}
 const readGrant102 = {id: 1022, role: Role.read, target: {objectType: TargetType.project, objectId: 102}}
+const groupAdminGrant987 = {id: 9871, role: Role.admin, target: {objectType: TargetType.group, objectId: 987}}
+const groupWriteGrant987 = {id: 9872, role: Role.write, target: {objectType: TargetType.group, objectId: 987}}
 
-const powerUser = {id: 246, grants: [adminGrant123, readGrant456, adminGrant102, readGrant102]}
-const writeUser = {id: 910, grants: [writeGrant234, writeGrant102]}
+const powerUser = {id: 246, grants: [adminGrant123, readGrant456, adminGrant102, readGrant102, groupAdminGrant987]}
+const writeUser = {id: 910, grants: [writeGrant234, writeGrant102, groupWriteGrant987]}
 const superUser = {id: 135, grants: [superGrant]}
 const normalUser = {id: 790, osmProfile: {id: 987654321}, grants: []}
 
@@ -28,6 +30,8 @@ const challenge123_1 = {id: 1231, parent: 123}
 const challenge123_2 = {id: 1232, parent: 123}
 const challenge456_1 = {id: 4561, parent: 456}
 const challenge789_1 = {id: 7891, parent: 789}
+
+const group987 = {id: 987}
 
 describe('projectRoles', () => {
   it("returns the project roles possessed by the user", () => {
@@ -218,5 +222,37 @@ describe('manageableChallenges', () => {
     expect(manageable).toContain(challenge123_1)
     expect(manageable).toContain(challenge123_2)
     expect(manageable).toContain(challenge456_1)
+  })
+})
+
+describe('canAdministrateGroup', () => {
+  it("always returns true if the user is a superuser", () => {
+    const manager = AsManager(superUser)
+
+    expect(manager.canAdministrateGroup(group987)).toBe(true)
+  })
+
+  it("returns false if the user has no grants on the group", () => {
+    const manager = AsManager(normalUser)
+
+    expect(manager.canAdministrateGroup(group987)).toBe(false)
+  })
+
+  it("returns true if the user is granted admin role on the group", () => {
+    const manager = AsManager(powerUser)
+
+    expect(manager.canAdministrateGroup(group987)).toBe(true)
+  })
+
+  it("returns false if the user granted non-admin role on the group", () => {
+    const manager = AsManager(writeUser)
+
+    expect(manager.canAdministrateGroup(group987)).toBe(false)
+  })
+
+  it("returns false if the user is undefined", () => {
+    const missingUser = AsManager(undefined)
+
+    expect(missingUser.canAdministrateGroup(group987)).toBe(false)
   })
 })

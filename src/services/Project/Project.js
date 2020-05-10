@@ -3,6 +3,7 @@ import _get from 'lodash/get'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _find from 'lodash/find'
+import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
 import startOfDay from 'date-fns/start_of_day'
@@ -275,23 +276,36 @@ export const fetchProjectActivity = function(projectId, startDate, endDate) {
 }
 
 /**
- * Fetch managers of the given project.
+ * Fetch managers of the given project, both users and teams
  */
 export const fetchProjectManagers = function(projectId) {
   return function(dispatch) {
-    return new Endpoint(
-      api.project.managers, {variables: {projectId}}
-    ).execute().then(rawManagers => {
-      const normalizedResults = {
-        entities: {
-          projects: {
-            [projectId]: {id: projectId, managers: rawManagers},
-          }
+    const normalizedResults = {
+      entities: {
+        projects: {
+          [projectId]: {id: projectId},
         }
       }
+    }
 
-      return dispatch(receiveProjects(normalizedResults.entities))
-    }).catch(error => {
+    return Promise.all([
+      new Endpoint(
+        api.project.managers, {variables: {projectId}}
+      ).execute().then(rawManagers =>
+        normalizedResults.entities.projects[projectId].managers = rawManagers
+      ),
+
+      new Endpoint(
+        api.teams.projectManagers, {variables: {projectId}}
+      ).execute().then(rawManagers =>
+        normalizedResults.entities.projects[projectId].teamManagers = _map(
+          rawManagers,
+          managingTeam => Object.assign({}, managingTeam.team, {roles: _map(managingTeam.grants, 'role')})
+        )
+      ),
+    ]).then(
+      () => dispatch(receiveProjects(normalizedResults.entities))
+    ).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -436,6 +450,10 @@ const reduceProjectsFurther = function(mergedState, oldState, projectEntities) {
 
     if (_isArray(entity.managers)) {
       mergedState[entity.id].managers = entity.managers
+    }
+
+    if (_isArray(entity.teamManagers)) {
+      mergedState[entity.id].teamManagers = entity.teamManagers
     }
   })
 }

@@ -222,4 +222,8 @@ export default defineMessages({
                     "required to open them standalone in JOSM. Please choose " +
                     "another editing option."
   },
+  teamFailure: {
+    id: "Errors.team.genericFailure",
+    defaultMessage: "Failure{details}"
+  },
 })
