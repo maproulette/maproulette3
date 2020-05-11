@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
-import { isFinalStatus }
+import { isCompletionStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import WithWidgetWorkspaces
        from '../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
@@ -267,7 +267,7 @@ export class TaskPane extends Component {
             completingTask={this.state.completingTask}
             setCompletionResponse={this.setCompletionResponse}
             completionResponses={completionResponses}
-            disableTemplate={isFinalStatus(this.props.task.status)}
+            disableTemplate={isCompletionStatus(this.props.task.status)}
           />
           {this.state.completingTask && this.state.completingTask === this.props.task.id &&
            <div

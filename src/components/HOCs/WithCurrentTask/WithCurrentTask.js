@@ -19,7 +19,8 @@ import { taskDenormalizationSchema,
          addTaskBundleComment,
          completeTask,
          completeTaskBundle,
-         updateTaskTags } from '../../../services/Task/Task'
+         updateTaskTags,
+         updateCompletionResponses } from '../../../services/Task/Task'
 import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
 import { fetchChallenge, fetchParentProject }
        from '../../../services/Challenge/Challenge'
@@ -264,6 +265,10 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       else {
         dispatch(updateTaskTags(task.id, tags))
       }
+    },
+
+    saveCompletionResponses: (task, completionResponses) => {
+      dispatch(updateCompletionResponses(task.id, completionResponses))
     },
 
     fetchOSMUser,

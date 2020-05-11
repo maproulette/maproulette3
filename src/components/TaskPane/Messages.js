@@ -53,4 +53,9 @@ export default defineMessages({
     id: "Task.pane.lockFailedDialog.prompt",
     defaultMessage: "Task lock could not be acquired. A read-only preview is available."
   },
+
+  saveChangesLabel: {
+    id: "Task.pane.controls.saveChanges.label",
+    defaultMessage: "Save Changes",
+  },
 })

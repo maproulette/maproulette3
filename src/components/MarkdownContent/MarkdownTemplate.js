@@ -66,7 +66,7 @@ export default class MarkdownTemplate extends Component {
    * a select input field which can be rendered in form later.
    **/
   selectHandler = (text, options) => {
-    const propertyName = options.hash.name
+    const propertyName = options.hash.name || `select`
     const body = this.compileTemplate(text, this.props.properties)
 
     const select =
