@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Current",
   },
 
+  done: {
+    id: "Widgets.SnapshotProgressWidget.done.label",
+    defaultMessage: "Done",
+  },
+
   exportCSVLabel: {
     id: "Widgets.SnapshotProgressWidget.exportCSV.label",
     defaultMessage: "Export CSV",
@@ -27,5 +32,10 @@ export default defineMessages({
   recordSnapshot: {
     id: "Widgets.SnapshotProgressWidget.record.label",
     defaultMessage: "Record New Snapshot"
+  },
+
+  manageSnapshots: {
+    id: "Widgets.SnapshotProgressWidget.manageSnapshots.label",
+    defaultMessage: "Manage Snapshots"
   },
 })

@@ -72,7 +72,8 @@ export default class ChallengeControls extends Component {
             text={`${process.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`}
             onCopy={this.props.onControlComplete}>
             <div
-              className={classNames(this.props.controlClassName, "mr-text-green-lighter hover:mr-text-white")}>
+              className={classNames(this.props.controlClassName,
+                "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer")}>
               <FormattedMessage {...messages.copyChallengeURLLabel} />
             </div>
           </CopyToClipboard>
