@@ -123,7 +123,7 @@ export const receiveReviewProjects = function(reviewProjects, status=RequestStat
       {
         schema: null,
         params: {reviewTasksType: type, ...searchParameters, mappers, reviewers,
-                 includeByPriority: true},
+                 includeByPriority: true, includeByTaskStatus: true},
       }
     ).execute().then(normalizedResults => {
       dispatch(receiveReviewMetrics(normalizedResults, RequestStatus.success))

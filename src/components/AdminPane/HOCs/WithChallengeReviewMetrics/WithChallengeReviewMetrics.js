@@ -82,7 +82,8 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
 
 const mapStateToProps = state => (
   {reviewMetrics: _get(state, 'currentReviewTasks.metrics.reviewActions'),
-   reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions')}
+   reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions'),
+   reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') }
 )
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
