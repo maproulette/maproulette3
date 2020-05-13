@@ -19,7 +19,7 @@ import { TaskPriority, keysByPriority, messagesByPriority }
       from '../../../services/Task/TaskPriority/TaskPriority'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
-import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
+import { ReviewTasksType, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
 import InTableTagFilter
@@ -202,7 +202,7 @@ export class TaskReviewTable extends Component {
     this.props.resetColumnChoices(columns, defaultColumns)
   }
 
-  gearDropdown = () => {
+  gearDropdown = (reviewTasksType) => {
     return (
       <Dropdown className="mr-dropdown--right"
           dropdownButton={dropdown => (
@@ -212,7 +212,7 @@ export class TaskReviewTable extends Component {
                       className="mr-fill-current mr-w-5 mr-h-5" />
               </button>
           )}
-          dropdownContent={() =>
+          dropdownContent={(dropdown) =>
             <React.Fragment>
               <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
                 <li>
@@ -223,6 +223,18 @@ export class TaskReviewTable extends Component {
                     <FormattedMessage {...messages.configureColumnsLabel} />
                   </button>
                 </li>
+                {(reviewTasksType === ReviewTasksType.allReviewedTasks || reviewTasksType === ReviewTasksType.toBeReviewed) &&
+                  <li onClick={dropdown.toggleDropdownVisible}>
+                    <a target="_blank"
+                        rel="noopener noreferrer"
+                        href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
+                        className="mr-flex mr-items-center"
+                    >
+                        <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                        <FormattedMessage {...messages.exportMapperCSVLabel} />
+                    </a>
+                  </li>
+                }
               </ul>
             </React.Fragment>
           }
@@ -317,7 +329,7 @@ export class TaskReviewTable extends Component {
               >
                 <FormattedMessage {...messages.refresh} />
               </button>
-              <div className="mr-float-right mr-mt-3 mr-ml-3">{this.gearDropdown()}</div>
+              <div className="mr-float-right mr-mt-3 mr-ml-3">{this.gearDropdown(this.props.reviewTasksType)}</div>
             </div>
           </header>
           <div className="mr-mt-6">

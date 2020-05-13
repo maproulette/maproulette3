@@ -6,6 +6,7 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _snakeCase from 'lodash/snakeCase'
 import _isFinite from 'lodash/isFinite'
+import queryString from 'query-string'
 import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
 import { RECEIVE_REVIEW_NEEDED_TASKS } from './TaskReviewNeeded'
@@ -104,11 +105,17 @@ export const receiveReviewProjects = function(reviewProjects, status=RequestStat
   }
 }
 
+// utility functions
 /**
- * Retrieve metrics for a given review tasks type and filter criteria
+ * Builds a link to export CSV
  */
- export const fetchReviewMetrics = function(userId, reviewTasksType, criteria) {
-  const type = determineType(reviewTasksType)
+export const buildLinkToMapperExportCSV = function(criteria) {
+  const queryFilters = generateReviewSearch(criteria)
+
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/mappers/export?${queryString.stringify(queryFilters)}`
+}
+
+const generateReviewSearch = function(criteria, reviewTasksType = ReviewTasksType.allReviewedTasks, userId)  {
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
                                                        _get(criteria, 'savedChallengesOnly'),
@@ -117,12 +124,22 @@ export const receiveReviewProjects = function(reviewProjects, status=RequestStat
   const mappers = (reviewTasksType === ReviewTasksType.myReviewedTasks) ? [userId] : []
   const reviewers = (reviewTasksType === ReviewTasksType.reviewedByMe) ? [userId] : []
 
+  return {...searchParameters, mappers, reviewers}
+}
+
+/**
+ * Retrieve metrics for a given review tasks type and filter criteria
+ */
+ export const fetchReviewMetrics = function(userId, reviewTasksType, criteria) {
+  const type = determineType(reviewTasksType)
+  const params = generateReviewSearch(criteria, reviewTasksType, userId)
+
   return function(dispatch) {
     return new Endpoint(
       api.tasks.reviewMetrics,
       {
         schema: null,
-        params: {reviewTasksType: type, ...searchParameters, mappers, reviewers,
+        params: {reviewTasksType: type, ...params,
                  includeByPriority: true, includeByTaskStatus: true},
       }
     ).execute().then(normalizedResults => {
