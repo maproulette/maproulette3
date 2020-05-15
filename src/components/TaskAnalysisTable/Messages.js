@@ -159,6 +159,11 @@ export default defineMessages({
     defaultMessage: "Export GeoJSON",
   },
 
+  exportMapperReviewCSVLabel: {
+    id: "Admin.manageTasks.controls.exportMapperReviewCSV.label",
+    defaultMessage: "Export Mapper Review CSV",
+  },
+
   shownLabel: {
     id: "Admin.TaskAnalysisTableHeader.controls.chooseShown.label",
     defaultMessage: "Shown",
