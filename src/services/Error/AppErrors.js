@@ -101,4 +101,8 @@ export default {
     noResponse: messages.josmNoResponse,
     missingOSMIds: messages.josmMissingOSMIds,
   },
+
+  team: {
+    failure: messages.teamFailure,
+  },
 }

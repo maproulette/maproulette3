@@ -5,6 +5,8 @@
  */
 
 // Import first-party widgets shipped with MapRoulette
+export { default as MyTeamsWidget }
+       from './TeamsWidget/TeamsWidget'
 export { default as FeatureStyleLegendWidget }
        from './FeatureStyleLegendWidget/FeatureStyleLegendWidget'
 export { default as TaskBundleWidget }

@@ -152,6 +152,14 @@ const apiRoutes = factory => {
       'markNotificationsRead': factory.put('/user/:userId/notifications'),
       'deleteNotifications': factory.delete('/user/:userId/notifications'),
     },
+    'teams': {
+      'find': factory.get('/teams/find'),
+      'projectManagers': factory.get('/teams/projectManagers/:projectId'),
+    },
+    'team': {
+      'setProjectRole': factory.put('/team/:teamId/project/:projectId/:role'),
+      'removeFromProject': factory.delete('/team/:teamId/project/:projectId'),
+    }
   }
 }
 

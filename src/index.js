@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { IntlProvider } from 'react-intl'
+import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client'
 import { Router } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import PiwikReactRouter from 'piwik-react-router'
@@ -23,6 +24,15 @@ import './theme.scss'
 import './index.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+
+// Setup Apollo graphql client
+const graphqlClient = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri: process.env.REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL,
+    credentials: 'include',
+  })
+})
 
 // Setup the router history object separately so that it can be integrated
 // with 3rd-party libraries. If the user has configured Matomo/PIWIK for
@@ -83,11 +93,13 @@ store.dispatch(
 // Render the app
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedIntl>
-      <Router history={routerHistory}>
-        <App />
-      </Router>
-    </ConnectedIntl>
+    <ApolloProvider client={graphqlClient}>
+      <ConnectedIntl>
+        <Router history={routerHistory}>
+          <App />
+        </Router>
+      </ConnectedIntl>
+    </ApolloProvider>
   </Provider>,
   document.getElementById('root')
 )
