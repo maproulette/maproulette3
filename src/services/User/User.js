@@ -228,9 +228,13 @@ export const ensureUserLoggedIn = function(squelchError=false) {
     return new Endpoint(
       api.user.whoami, {schema: userSchema()}
     ).execute().then(normalizedResults => {
+      const userId = normalizedResults.result
+      if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+        localStorage.setItem('isLoggedIn', 'true')
+      }
       dispatch(receiveUsers(normalizedResults.entities))
-      dispatch(setCurrentUser(normalizedResults.result))
-      return normalizedResults.result
+      dispatch(setCurrentUser(userId))
+      return userId
     }).catch(error => {
       // a 401 (unauthorized) indicates that the user is not logged in. Logout
       // the current user locally to reflect that fact and dispatch an error
@@ -447,9 +451,12 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
       fetchSavedTasks(userId, savedTasksLimit)(dispatch)
       fetchUserActivity(userId)(dispatch)
       fetchNotificationSubscriptions(userId)(dispatch)
-    }).then(() =>
+    }).then(() => {
+      if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+        localStorage.setItem('isLoggedIn', 'true')
+      }
       dispatch(setCurrentUser(userId))
-    ).catch(error => {
+    }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -666,6 +673,7 @@ export const unsaveTask = function(userId, taskId) {
  * Logout the current user on both the client and server.
  */
 export const logoutUser = function(userId) {
+  localStorage.removeItem('isLoggedIn')
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
 
   if (_isFinite(userId) && userId !== GUEST_USER_ID) {

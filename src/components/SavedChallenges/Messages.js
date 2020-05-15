@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   header: {
     id: "UserProfile.favoriteChallenges.header",
-    defaultMessage: "Favorite Challenges",
+    defaultMessage: "Your Favorite Challenges",
   },
 
   unsave: {
@@ -17,5 +17,10 @@ export default defineMessages({
   noChallenges: {
     id: "SavedChallenges.widget.noChallenges",
     defaultMessage: "No Challenges",
+  },
+
+  startChallenge: {
+    id: "SavedChallenges.widget.startChallenge",
+    defaultMessage: "Start Challenge",
   },
 })

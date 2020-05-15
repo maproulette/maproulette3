@@ -43,3 +43,31 @@
 .mr-bg-cityscape {
   background-image: url('./static/images/bg-cityscape.svg');
 }
+
+.mr-bg-home {
+  background-image: url('./static/images/home.svg');
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mr-bg-lines {
+  background-image: url('./static/images/lines.svg');
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mr-bg-globe {
+  background-image: url('./static/images/globe.svg');
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mr-bg-skyline {
+  background-image: url('./static/images/skyline.svg');
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+}

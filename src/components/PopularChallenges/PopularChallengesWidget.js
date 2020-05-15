@@ -29,7 +29,7 @@ export default class PopularChallengesWidget extends Component {
     return (
       <QuickWidget
         {...this.props}
-        className=""
+        className="mr-bg-skyline"
         widgetTitle={<FormattedMessage {...messages.header} />}
       >
         <PopularChallengeList {...this.props} />
@@ -45,7 +45,7 @@ const PopularChallengeList = function(props) {
     )), 5)
 
   const challengeItems = _map(popularChallenges, challenge => (
-    <li key={challenge.id} className="mr-pb-1">
+    <li key={challenge.id} className="mr-py-1">
       <Link to={`/browse/challenges/${challenge.id}`}>
         {challenge.name}
       </Link>

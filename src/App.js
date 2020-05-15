@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import { withRouter } from 'react-router'
 import Home from './pages/Home/Home'
 import Profile from './pages/Profile/Profile'
@@ -48,6 +48,12 @@ const CurrentVirtualChallengeTaskPane =
   WithVirtualChallenge(WithCurrentTask(TaskPane))
 const VirtualChallengePane = WithVirtualChallenge(ChallengePane)
 const ErrorPane = WithExternalError(ChallengePane)
+const HomeOrDashboard = props => {
+  const goHome = sessionStorage.getItem('goHome')
+  const loggedIn = localStorage.getItem('isLoggedIn')
+  sessionStorage.removeItem('goHome')
+  return (loggedIn && !goHome) ? <Redirect to="/dashboard" /> : <Home />
+}
 
 /**
  * App represents the top level component of the application.  It renders a
@@ -82,7 +88,7 @@ export class App extends Component {
 
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>
-            <CachedRoute exact path='/' component={Home} />
+            <CachedRoute exact path='/' component={HomeOrDashboard} />
             <CachedRoute exact path='/browse/challenges' component={ChallengePane} />
             <CachedRoute path='/browse/challenges/:challengeId' component={ChallengeDetail} />
             <CachedRoute path='/browse/projects/:projectId' component={ProjectDetail} />
