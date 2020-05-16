@@ -20,8 +20,8 @@ const descriptor = {
   ],
   minWidth: 3,
   defaultWidth: 4,
-  minHeight: 2,
-  defaultHeight: 5,
+  minHeight: 12,
+  defaultHeight: 12,
 }
 
 export default class FeaturedChallengesWidget extends Component {
