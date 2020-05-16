@@ -179,6 +179,7 @@ export class WidgetWorkspace extends Component {
           eyebrow={this.props.workspaceEyebrow}
           title={this.props.workspaceTitle || ''}
           info={this.props.workspaceInfo}
+          subheader={this.props.subheader}
           actions={this.headerActions()}
         />
         <WidgetGrid

@@ -99,6 +99,11 @@ export class WidgetGrid extends Component {
            </React.Fragment>
           }
         </div>
+        {this.props.subHeader &&
+         <div className={classNames({"mr-mt-24": this.props.isEditing})}>
+           {this.props.subHeader}
+         </div>
+        }
 
         <GridLayout
           className="widget-grid"

@@ -67,7 +67,7 @@ export const MyTeams = function(props) {
                 dropdownButton={dropdown => (
                   <button
                     onClick={dropdown.toggleDropdownVisible}
-                    className="mr-flex mr-items-center mr-text-white"
+                    className="mr-flex mr-items-center mr-text-white-40"
                   >
                     <SvgSymbol
                       sym="navigation-more-icon"

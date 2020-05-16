@@ -18,4 +18,9 @@ export default defineMessages({
     id: "SavedTasks.widget.noTasks",
     defaultMessage: "No Tasks",
   },
+
+  viewTask: {
+    id: "SavedTasks.widget.viewTask",
+    defaultMessage: "View Task",
+  },
 })

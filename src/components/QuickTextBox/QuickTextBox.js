@@ -37,7 +37,7 @@ export default class QuickTextBox extends Component {
           <input
             autoFocus={this.props.autoFocus}
             type="text"
-            className="mr-input mr-input--green-lighter-outline mr-col-span-4"
+            className="mr-input mr-col-span-4"
             placeholder={this.props.placeholder}
             maxLength="50"
             onChange={(e) => this.props.setText(e.target.value)}

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { WidgetDataTarget, registerWidgetType }
        from '../../services/Widget/Widget'
 import QuickWidget from '../QuickWidget/QuickWidget'
+import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
@@ -51,20 +52,45 @@ const SavedTaskList = function(props) {
       }
 
       return (
-        <li key={task.id} className="mr-mb-2 mr-flex mr-items-center">
-          <button
-            className="mr-mr-2 mr-text-pink-light hover:mr-text-red"
-            onClick={() => props.unsaveTask(props.user.id, task.id)}
-          >
-            <SvgSymbol
-              sym="minus-outline-icon"
-              viewBox="0 0 32 32"
-              className="mr-fill-current mr-w-4 mr-h-4"
-            />
-          </button>
+        <li
+          key={task.id}
+          className="mr-h-5 mr-my-2 mr-flex mr-justify-between mr-items-center"
+        >
           <Link to={`/challenge/${task.parent.id}/task/${task.id}`}>
             <span className="saved-tasks__task__name">{task.name}</span> &mdash; {task.parent.name}
           </Link>
+          <div className="mr-h-5">
+            <Dropdown
+              className="mr-dropdown--right"
+              dropdownButton={dropdown => (
+                <button
+                  onClick={dropdown.toggleDropdownVisible}
+                  className="mr-flex mr-items-center mr-text-white-40"
+                >
+                  <SvgSymbol
+                    sym="navigation-more-icon"
+                    viewBox="0 0 20 20"
+                    className="mr-fill-current mr-w-5 mr-h-5"
+                  />
+                </button>
+              )}
+              dropdownContent={() =>
+                <ul className="mr-list-dropdown mr-links-green-lighter">
+                  <li>
+                    <Link to={`/challenge/${task.parent.id}/task/${task.id}`}>
+                      <FormattedMessage {...messages.viewTask} />
+                    </Link>
+                  </li>
+                  <li>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a onClick={() => props.unsaveTask(props.user.id, task.id)}>
+                      <FormattedMessage {...messages.unsave} />
+                    </a>
+                  </li>
+                </ul>
+              }
+            />
+          </div>
         </li>
       )
     }
@@ -72,7 +98,7 @@ const SavedTaskList = function(props) {
 
   return (
     taskItems.length > 0 ?
-    <ol className="mr-list-reset mr-links-green-lighter">
+    <ol className="mr-list-reset mr-links-green-lighter mr-pb-24">
       {taskItems}
     </ol> :
     <div className="mr-text-grey-lighter">
