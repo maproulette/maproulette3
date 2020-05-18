@@ -116,8 +116,16 @@ export const normalizeRuleForSaving = (rule, allowCSV=true) => {
   // If there are multiple, comma-separated values, split into separate rules
   // (ignoring commas in quoted strings)
   if (allowCSV && /,/.test(rule.value)) {
+    let condition = "OR"
+
+    // Negative conditions need to be "AND" (eg. value not 1 AND not 2)
+    if (rule.operator === "not_equal" ||
+        rule.operator === "not_contains") {
+      condition = "AND"
+    }
+
     let csvRule = {
-      condition: "OR",
+      condition,
       rules: _flatten(csvStringToArray(rule.value)).map(value =>
         normalizeRuleForSaving(Object.assign({}, rule, {value}), false)
       )
