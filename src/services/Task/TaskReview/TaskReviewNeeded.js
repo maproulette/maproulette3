@@ -42,7 +42,9 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                           criteria.boundingBox,
                                                           _get(criteria, 'savedChallengesOnly'),
-                                                          _get(criteria, 'excludeOtherReviewers'))
+                                                          _get(criteria, 'excludeOtherReviewers'),
+                                                          null,
+                                                          _get(criteria, 'invertFields', {}))
   const includeTags = criteria.includeTags
 
   return function(dispatch) {

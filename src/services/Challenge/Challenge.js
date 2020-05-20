@@ -35,7 +35,7 @@ import { RECEIVE_CHALLENGES, REMOVE_CHALLENGE }
 import { ChallengeStatus } from './ChallengeStatus/ChallengeStatus'
 import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
 import { parseQueryString, RESULTS_PER_PAGE, SortOptions,
-         generateSearchParametersString }
+         generateSearchParametersString, PARAMS_MAP }
        from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
 
@@ -87,13 +87,18 @@ const buildQueryFilters = function(criteria) {
   const taskId = filters.id
   const reviewRequestedBy = filters.reviewRequestedBy
   const reviewedBy = filters.reviewedBy
+  const completedBy = filters.completedBy
+  const invf = _map(criteria.invertFields, (v, k) => v ? PARAMS_MAP[k] : undefined)
+
   return (
     `status=${_join(filters.status, ',')}&` +
     `priority=${_join(filters.priorities, ',')}&` +
     `reviewStatus=${_join(filters.reviewStatus, ',')}` +
     `${taskId ? `&tid=${taskId}` : ""}` +
+    `${completedBy ? `&m=${completedBy}` : ""}` +
     `${reviewRequestedBy ? `&o=${reviewRequestedBy}` : ""}` +
-    `${reviewedBy ? `&r=${reviewedBy}` : ""}`)
+    `${reviewedBy ? `&r=${reviewedBy}` : ""}` +
+    `&invf=${invf.join(',')}`)
 }
 
 /**
@@ -364,7 +369,9 @@ export const fetchChallengeActions = function(challengeId = null, suppressReceiv
   let searchParameters = {}
   if (criteria) {
     searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
-                                                      criteria.boundingBox)
+                                                      criteria.boundingBox,
+                                                      false, false, null,
+                                                      _get(criteria, 'invertFields', {}))
   }
 
   return function(dispatch) {
