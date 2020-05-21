@@ -36,10 +36,18 @@ export const REVIEW_NOT_NEEDED = 0
 export const REVIEW_NEEDED = 1
 export const REVIEW_MANDATORY = 2
 
+export const FOLLOWER_STATUS_FOLLOWING = 0
+export const FOLLOWER_STATUS_BLOCKED = 1
+
 export const needsReviewType = Object.freeze({
   notNeeded: REVIEW_NOT_NEEDED,
   needed: REVIEW_NEEDED,
   mandatory: REVIEW_MANDATORY,
+})
+
+export const FollowerStatus = Object.freeze({
+  following: FOLLOWER_STATUS_FOLLOWING,
+  blocked: FOLLOWER_STATUS_BLOCKED,
 })
 
 /** normalizr schema for users */
@@ -70,6 +78,22 @@ export const unsubscribeFromUserUpdates = function(userId) {
   websocketClient.removeServerSubscription("user", userId, `newNotificationHandler_${userId}`)
 }
 
+export const subscribeToFollowUpdates = function(callback, handle) {
+  websocketClient.addServerSubscription(
+    "following",
+    null,
+    handle,
+    messageObject => callback(messageObject)
+  )
+}
+
+export const unsubscribeFromFollowUpdates = function(handle) {
+  websocketClient.removeServerSubscription("following", null, handle)
+}
+
+/**
+ * Process user notification updates received via websocket
+ */
 const onNewNotification = function(dispatch, userId, messageObject) {
   switch(messageObject.messageType) {
     case "notification-new":
@@ -416,6 +440,19 @@ export const fetchUserActivity = function(userId, limit=50) {
       return activity
     })
   }
+}
+
+/**
+ * Fetch recent activity from multiple users
+ */
+export const fetchMultipleUserActivity = function(osmUserIds, limit=50, page=0) {
+  const offset = page * limit
+  return new Endpoint(api.user.activity, {
+    params: { osmUserIds: osmUserIds.join(','), limit: limit + 1, offset },
+  }).execute().then(activity => ({
+      activity: activity.slice(0, limit),
+      hasMore: activity.length > limit,
+  }))
 }
 
 /**
