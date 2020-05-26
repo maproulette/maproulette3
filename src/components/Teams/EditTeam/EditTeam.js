@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client'
 import Form from 'react-jsonschema-form'
 import { FormattedMessage } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
+import _isEmpty from 'lodash/isEmpty'
 import AppErrors from '../../../services/Error/AppErrors'
 import { jsSchema, uiSchema } from './TeamSchema'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -49,17 +50,19 @@ export const EditTeam = props => {
            type="button"
            className="mr-button mr-button--green-lighter mr-ml-4"
            onClick={() => {
-             if (_isFinite(teamFields.id)) {
-               updateTeam({variables: teamFields})
-             }
-             else {
-              createTeam({
-                variables: teamFields,
-                refetchQueries: ['MyTeams'],
-              })
-              .catch(error => {
-                  props.addErrorWithDetails(AppErrors.team.failure, error.message)
-              })
+             if (!_isEmpty(teamFields)) {
+               if (_isFinite(teamFields.id)) {
+                 updateTeam({variables: teamFields})
+               }
+               else {
+                 createTeam({
+                   variables: teamFields,
+                   refetchQueries: ['MyTeams'],
+                 })
+                 .catch(error => {
+                     props.addErrorWithDetails(AppErrors.team.failure, error.message)
+                 })
+               }
              }
              props.finish()
            }}

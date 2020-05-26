@@ -16,7 +16,8 @@ const descriptor = {
   label: messages.title,
   targets: [WidgetDataTarget.user],
   minWidth: 3,
-  defaultWidth: 4,
+  minHeight: 3,
+  defaultWidth: 6,
   defaultHeight: 10,
 }
 

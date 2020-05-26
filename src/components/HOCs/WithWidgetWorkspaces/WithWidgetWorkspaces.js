@@ -130,6 +130,10 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
         // current minimums, fill them in from the widget descriptors
         _each(configuration.layout, (widgetLayout, index) => {
           const descriptor = widgetDescriptor(configuration.widgets[index].widgetKey)
+          if (!descriptor) {
+            return
+          }
+
           if (!_isFinite(widgetLayout.w)) {
             widgetLayout.w = descriptor.defaultWidth
           }
