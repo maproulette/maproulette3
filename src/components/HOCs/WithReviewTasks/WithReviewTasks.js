@@ -21,7 +21,8 @@ import { buildSearchCriteria } from '../../../services/SearchCriteria/SearchCrit
 
 
 const DEFAULT_PAGE_SIZE = 20
-const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mappedOn', direction: 'ASC'}, pageSize: DEFAULT_PAGE_SIZE}
+const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mappedOn', direction: 'ASC'},
+                          pageSize: DEFAULT_PAGE_SIZE, invertFields: {}}
 
 /**
  * WithReviewTasks retrieves tasks that need to be Reviewed
@@ -56,49 +57,65 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       this.setState({criteria: typedCriteria})
     }
 
+    invertField = (fieldName) => {
+      const typedCriteria = _cloneDeep(this.state.criteria)
+      typedCriteria[this.props.reviewTasksType].invertFields =
+        typedCriteria[this.props.reviewTasksType].invertFields || {}
+      typedCriteria[this.props.reviewTasksType].invertFields[fieldName] =
+        !typedCriteria[this.props.reviewTasksType].invertFields[fieldName]
+
+      this.setState({criteria: typedCriteria})
+      this.update(this.props, typedCriteria[this.props.reviewTasksType])
+    }
+
     update(props, criteria) {
+      const searchOnCriteria = _cloneDeep(criteria)
       const userId = _get(props, 'user.id')
       const pageSize = _get(this.state.criteria[props.reviewTasksType], 'pageSize') || DEFAULT_PAGE_SIZE
 
-      if (_isUndefined(criteria.savedChallengesOnly)) {
-        criteria.savedChallengesOnly = _get(this.state.criteria[this.props.reviewTasksType], "savedChallengesOnly")
+      if (!criteria.invertFields) {
+        searchOnCriteria.invertFields = this.state.criteria[props.reviewTasksType].invertFields
       }
-      if (_isUndefined(criteria.excludeOtherReviewers)) {
+
+      if (_isUndefined(searchOnCriteria.savedChallengesOnly)) {
+        searchOnCriteria.savedChallengesOnly = _get(this.state.criteria[this.props.reviewTasksType], "savedChallengesOnly")
+      }
+      if (_isUndefined(searchOnCriteria.excludeOtherReviewers)) {
         // Exclude reviews assigned to other reviewers by default
-        criteria.excludeOtherReviewers = _get(this.state.criteria[this.props.reviewTasksType], "excludeOtherReviewers", true)
+        searchOnCriteria.excludeOtherReviewers = _get(this.state.criteria[this.props.reviewTasksType], "excludeOtherReviewers", true)
       }
 
       // We need to update our list of challenges since some challenges may
       // have been excluded on initial fetch because the list was limited to
       // taskStatus 'fixed' and 'excludeOtherReviewers' by default.
-      if (criteria.excludeOtherReviewers === false ||
-          criteria.filters.status !==
+      if (searchOnCriteria.excludeOtherReviewers === false ||
+          searchOnCriteria.filters.status !==
             _get(this.state.criteria[this.props.reviewTasksType], "filters.status")) {
         this.props.updateReviewChallenges(this.props.reviewTasksType)
       }
 
       const typedCriteria = _cloneDeep(this.state.criteria)
-      typedCriteria[props.reviewTasksType] = criteria
+      typedCriteria[props.reviewTasksType] = searchOnCriteria
       typedCriteria[props.reviewTasksType].pageSize = pageSize
 
       this.setState({loading: true, criteria: typedCriteria})
 
       switch(props.reviewTasksType) {
         case ReviewTasksType.reviewedByMe:
-          return props.updateUserReviewedTasks(userId, criteria, pageSize).then(() => {
+          return props.updateUserReviewedTasks(userId, searchOnCriteria, pageSize).then(() => {
             this.setState({loading: false})
           })
         case ReviewTasksType.toBeReviewed:
-          return props.updateReviewNeededTasks(criteria, pageSize).then(() => {
+          return props.updateReviewNeededTasks(searchOnCriteria, pageSize).then(() => {
             this.setState({loading: false})
           })
         case ReviewTasksType.allReviewedTasks:
-          return props.updateReviewedTasks(userId, criteria, pageSize).then(() => {
+          return props.updateReviewedTasks(userId, searchOnCriteria, pageSize).then(() => {
             this.setState({loading: false})
           })
         case ReviewTasksType.myReviewedTasks:
         default:
-          return props.updateMapperReviewedTasks(userId, criteria, pageSize).then(() => {
+          return props.updateMapperReviewedTasks(userId, searchOnCriteria, pageSize).then(() => {
             this.setState({loading: false})
           })
       }
@@ -168,6 +185,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
                           loading={this.state.loading}
                           reviewChallenges={reviewChallenges}
                           reviewProjects={this.props.currentReviewTasks.reviewProjects}
+                          invertField={this.invertField}
                           {..._omit(this.props, ['updateReviewTasks'])} />)
     }
   }

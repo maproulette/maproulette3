@@ -119,7 +119,9 @@ const generateReviewSearch = function(criteria, reviewTasksType = ReviewTasksTyp
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
                                                        _get(criteria, 'savedChallengesOnly'),
-                                                       _get(criteria, 'excludeOtherReviewers'))
+                                                       _get(criteria, 'excludeOtherReviewers'),
+                                                       null,
+                                                       _get(criteria, 'invertFields', {}))
 
   const mappers = (reviewTasksType === ReviewTasksType.myReviewedTasks) ? [userId] : []
   const reviewers = (reviewTasksType === ReviewTasksType.reviewedByMe) ? [userId] : []
@@ -158,7 +160,9 @@ export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) 
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                           criteria.boundingBox,
                                                           _get(criteria, 'savedChallengesOnly'),
-                                                          _get(criteria, 'excludeOtherReviewers'))
+                                                          _get(criteria, 'excludeOtherReviewers'),
+                                                          null,
+                                                          _get(criteria, 'invertFields', {}))
   return function(dispatch) {
     const type = determineType(reviewTasksType)
     const fetchId = uuidv1()
@@ -208,7 +212,9 @@ export const loadNextReviewTask = function(criteria={}, lastTaskId) {
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
                                                        _get(criteria, 'savedChallengesOnly'),
-                                                       _get(criteria, 'excludeOtherReviewers'))
+                                                       _get(criteria, 'excludeOtherReviewers'),
+                                                       null,
+                                                       _get(criteria, 'invertFields', {}))
 
   return function(dispatch) {
     const params = {sort, order, ...searchParameters}
@@ -282,7 +288,8 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria = nul
                                      criteria.boundingBox,
                                      null,
                                      null,
-                                     criteria.searchQuery)
+                                     criteria.searchQuery,
+                                     criteria.invertFields)
     searchParameters.cid = challengeId
     searchParameters.ids = taskIds ? taskIds.join(',') : null
 

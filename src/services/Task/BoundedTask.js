@@ -73,7 +73,8 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
     const searchParameters = generateSearchParametersString(filters,
                                                             null,
                                                             _get(criteria, 'savedChallengesOnly'),
-                                                            null)
+                                                            null, null,
+                                                            _get(criteria, 'invertFields'))
     const includeTags = _get(criteria, 'includeTags', false)
 
     // If we don't have a challenge Id then we need to do some limiting.

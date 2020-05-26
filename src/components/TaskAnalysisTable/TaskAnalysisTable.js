@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactTable from 'react-table'
-import classNames from 'classnames'
 import { FormattedMessage, FormattedDate,
          FormattedTime, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -50,6 +49,8 @@ import messages from './Messages'
 import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
 import TaskAnalysisTableHeader from './TaskAnalysisTableHeader'
+import { ViewCommentsButton, StatusLabel, makeInvertable, makeInputFilter }
+  from './TaskTableHelpers'
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
@@ -415,7 +416,10 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.reviewRequestedBy = {
     id: 'completedBy',
-    Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewRequestedByLabel),
+                           () => props.invertField('completedBy'),
+                           _get(props.criteria, 'invertFields.completedBy')),
+
     accessor: 'completedBy',
     sortable: true,
     filterable: true,
@@ -428,7 +432,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       >
         {_get(row._original.completedBy, 'username') || row._original.completedBy}
       </div>
-    )
+    ),
+    Filter: makeInputFilter(_get(props.criteria, 'invertFields.completedBy')),
   }
 
   columns.reviewedAt = {
@@ -473,7 +478,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.reviewedBy = {
     id: 'reviewedBy',
-    Header: props.intl.formatMessage(messages.reviewedByLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewedByLabel),
+                           () => props.invertField('reviewedBy'),
+                           _get(props.criteria, 'invertFields.reviewedBy')),
     accessor: 'reviewedBy',
     filterable: true,
     sortable: true,
@@ -488,7 +495,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       >
         {row._original.reviewedBy.username || row._original.reviewedBy}
       </div>
-    )
+    ),
+    Filter: makeInputFilter(_get(props.criteria, 'invertFields.reviewedBy')),
   }
 
   columns.reviewStatus = {
@@ -582,32 +590,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   }
 
   return columns
-}
-
-const StatusLabel = props => (
-  <span
-    className={classNames('mr-inline-flex mr-items-center', props.className)}
-  >
-    <span className="mr-w-2 mr-h-2 mr-rounded-full mr-bg-current" />
-    <span className="mr-ml-2 mr-text-xs mr-uppercase mr-tracking-wide">
-      <FormattedMessage {...props.intlMessage} />
-    </span>
-  </span>
-)
-
-const ViewCommentsButton = function(props) {
-  return (
-    <button
-      onClick={props.onClick}
-      className="mr-inline-flex mr-items-center mr-transition mr-text-green-light hover:mr-text-green"
-    >
-      <SvgSymbol
-        sym="comments-icon"
-        viewBox="0 0 20 20"
-        className="mr-fill-current mr-w-4 mr-h-4"
-      />
-    </button>
-  )
 }
 
 TaskAnalysisTable.propTypes = {

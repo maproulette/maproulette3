@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import classNames from 'classnames'
 import _filter from 'lodash/filter'
 import _toLower from 'lodash/toLower'
 import _find from 'lodash/find'
@@ -41,7 +42,10 @@ export default class FilterSuggestTextBox extends Component {
 
     return (
       <AutosuggestTextBox
-        inputClassName="mr-py-2 mr-px-4 mr-border-none mr-placeholder-white-50 mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner"
+        inputClassName={classNames(
+          "mr-py-2 mr-px-4 mr-border-none mr-placeholder-white-50 ",
+          "mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner",
+          this.props.className)}
         onChange={item => item ? this.props.onChange(item) : null}
         search={searchQuery => this.setState({searchQuery})}
         searchResults={this.searchResults()}

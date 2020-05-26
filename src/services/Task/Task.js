@@ -302,7 +302,8 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria) {
                                                             criteria.boundingBox,
                                                             _get(criteria, 'savedChallengesOnly'),
                                                             null,
-                                                            criteria.searchQuery)
+                                                            criteria.searchQuery,
+                                                            _get(criteria, 'invertFields'))
     searchParameters.cid = challengeId
 
     return new Endpoint(

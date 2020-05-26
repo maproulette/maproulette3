@@ -43,7 +43,11 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, a
   const sort = sortBy ? _snakeCase(sortBy) : null
   const page = _get(criteria, 'page', 0)
 
-  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}), criteria.boundingBox)
+  const searchParameters =
+    generateSearchParametersString(_get(criteria, 'filters', {}),
+                                   criteria.boundingBox,
+                                   false, false, null,
+                                   _get(criteria, 'invertFields', {}))
   const mappers = asMapper ? [userId] : []
   const reviewers = asReviewer ? [userId] : []
 

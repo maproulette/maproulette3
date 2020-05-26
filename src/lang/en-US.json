@@ -680,6 +680,8 @@
   "TagDiffVisualization.controls.restoreFix.tooltip": "Restore initial proposed tags",
   "TagDiffVisualization.controls.tagName.placeholder": "Tag Name",
   "Admin.TaskAnalysisTable.columnHeaders.actions": "Actions",
+  "TasksTable.invert.abel": "invert",
+  "TasksTable.inverted.label": "inverted",
   "Task.fields.id.label": "Internal Id",
   "Task.fields.featureId.label": "Feature Id",
   "Task.fields.status.label": "Status",

@@ -9,6 +9,16 @@ export default defineMessages({
     defaultMessage: "Actions",
   },
 
+  invertLabel: {
+    id: "TasksTable.invert.abel",
+    defaultMessage: "invert",
+  },
+
+  invertedLabel: {
+    id: "TasksTable.inverted.label",
+    defaultMessage: "inverted",
+  },
+
   idLabel: {
     id: "Task.fields.id.label",
     defaultMessage: "Internal Id",

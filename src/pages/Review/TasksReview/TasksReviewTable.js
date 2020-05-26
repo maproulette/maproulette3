@@ -35,7 +35,8 @@ import WithConfigurableColumns from '../../../components/HOCs/WithConfigurableCo
 import WithCurrentUser from '../../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import { mapColors } from '../../../interactions/User/AsEndUser'
 import messages from './Messages'
-
+import { ViewCommentsButton, StatusLabel, makeInvertable, makeInputFilter }
+  from '../../../components/TaskAnalysisTable/TaskTableHelpers'
 import { Link } from 'react-router-dom'
 import ReactTable from 'react-table'
 
@@ -405,7 +406,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.status = {
     id: 'status',
-    Header: props.intl.formatMessage(messages.statusLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.statusLabel),
+                           () => props.invertField('status'),
+                           _get(criteria, 'invertFields.status')),
     accessor: 'status',
     sortable: true,
     filterable: true,
@@ -438,6 +441,8 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={event => onChange(event.target.value)}
           style={{ width: '100%' }}
           value={filter ? filter.value : 'all'}
+          className={classNames({"mr-line-through":
+            filter && filter.value !== 'all' && _get(criteria, 'invertFields.status')})}
         >
           {options}
         </select>
@@ -447,7 +452,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.priority = {
     id: 'priority',
-    Header: props.intl.formatMessage(messages.priorityLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.priorityLabel),
+                           () => props.invertField('priority'),
+                           _get(criteria, 'invertFields.priority')),
     accessor: 'priority',
     sortable: true,
     filterable: true,
@@ -478,6 +485,8 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={event => onChange(event.target.value)}
           style={{ width: '100%' }}
           value={filter ? filter.value : 'all'}
+          className={classNames({"mr-line-through":
+            filter && filter.value !== 'all' && _get(criteria, 'invertFields.priority')})}
         >
           {options}
         </select>
@@ -487,7 +496,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.reviewRequestedBy = {
     id: 'reviewRequestedBy',
-    Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewRequestedByLabel),
+                           () => props.invertField('reviewRequestedBy'),
+                           _get(criteria, 'invertFields.reviewRequestedBy')),
     accessor: 'reviewRequestedBy',
     filterable: true,
     sortable: false,
@@ -500,12 +511,15 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       >
         {_get(row._original.reviewRequestedBy, 'username')}
       </div>
-    )
+    ),
+    Filter: makeInputFilter(_get(criteria, 'invertFields.reviewRequestedBy')),
   }
 
   columns.challenge = {
     id: 'challenge',
-    Header: props.intl.formatMessage(messages.challengeLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.challengeLabel),
+                           () => props.invertField('challenge'),
+                           _get(criteria, 'invertFields.challenge')),
     accessor: 'parent',
     filterable: true,
     sortable: false,
@@ -527,6 +541,8 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={onChange}
           value={filter ? filter.value : ""}
           itemList={props.reviewChallenges}
+          className={classNames({"mr-line-through":
+            filter && _get(criteria, 'invertFields.challenge')})}
         />
       )
     }
@@ -534,7 +550,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.project = {
     id: 'project',
-    Header: props.intl.formatMessage(messages.projectLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.projectLabel),
+                           () => props.invertField('project'),
+                           _get(criteria, 'invertFields.project')),
     filterable: true,
     sortable: false,
     exportable: t => _get(t.parent, 'parent.displayName'),
@@ -555,6 +573,8 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={onChange}
           value={filter ? filter.value : ""}
           itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
+          className={classNames({"mr-line-through":
+            filter && _get(criteria, 'invertFields.project')})}
         />
       )
     }
@@ -615,7 +635,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.reviewedBy = {
     id: 'reviewedBy',
-    Header: props.intl.formatMessage(messages.reviewedByLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewedByLabel),
+                           () => props.invertField('reviewedBy'),
+                           _get(criteria, 'invertFields.reviewedBy')),
     accessor: 'reviewedBy',
     filterable: true,
     sortable: false,
@@ -628,12 +650,15 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       >
         {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
       </div>
-    )
+    ),
+    Filter: makeInputFilter(_get(criteria, 'invertFields.reviewedBy'))
   }
 
   columns.reviewStatus = {
     id: 'reviewStatus',
-    Header: props.intl.formatMessage(messages.reviewStatusLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewStatusLabel),
+                           () => props.invertField('reviewStatus'),
+                           _get(criteria, 'invertFields.reviewStatus')),
     accessor: 'reviewStatus',
     sortable: true,
     filterable: true,
@@ -681,6 +706,8 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={event => onChange(event.target.value)}
           style={{ width: '100%' }}
           value={filter ? filter.value : 'all'}
+          className={classNames({"mr-line-through":
+            filter && filter.value !== 'all' && _get(criteria, 'invertFields.reviewStatus')})}
         >
           {options}
         </select>
@@ -805,32 +832,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
   }
 
   return columns
-}
-
-const StatusLabel = props => (
-  <span
-    className={classNames('mr-inline-flex mr-items-center', props.className)}
-  >
-    <span className="mr-w-2 mr-h-2 mr-rounded-full mr-bg-current" />
-    <span className="mr-ml-2 mr-text-xs mr-uppercase mr-tracking-wide">
-      <FormattedMessage {...props.intlMessage} />
-    </span>
-  </span>
-)
-
-const ViewCommentsButton = function(props) {
-  return (
-    <button
-      onClick={props.onClick}
-      className="mr-inline-flex mr-items-center mr-transition mr-text-green-lighter hover:mr-text-white"
-    >
-      <SvgSymbol
-        sym="comments-icon"
-        viewBox="0 0 20 20"
-        className="mr-fill-current mr-w-4 mr-h-4"
-      />
-    </button>
-  )
 }
 
 export default WithCurrentUser(WithConfigurableColumns(
