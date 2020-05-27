@@ -35,7 +35,7 @@ import WithConfigurableColumns from '../../../components/HOCs/WithConfigurableCo
 import WithCurrentUser from '../../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import { mapColors } from '../../../interactions/User/AsEndUser'
 import messages from './Messages'
-import { ViewCommentsButton, StatusLabel, makeInvertable, makeInputFilter }
+import { ViewCommentsButton, StatusLabel, makeInvertable }
   from '../../../components/TaskAnalysisTable/TaskTableHelpers'
 import { Link } from 'react-router-dom'
 import ReactTable from 'react-table'
@@ -441,8 +441,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={event => onChange(event.target.value)}
           style={{ width: '100%' }}
           value={filter ? filter.value : 'all'}
-          className={classNames({"mr-line-through":
-            filter && filter.value !== 'all' && _get(criteria, 'invertFields.status')})}
         >
           {options}
         </select>
@@ -485,8 +483,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={event => onChange(event.target.value)}
           style={{ width: '100%' }}
           value={filter ? filter.value : 'all'}
-          className={classNames({"mr-line-through":
-            filter && filter.value !== 'all' && _get(criteria, 'invertFields.priority')})}
         >
           {options}
         </select>
@@ -512,7 +508,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
         {_get(row._original.reviewRequestedBy, 'username')}
       </div>
     ),
-    Filter: makeInputFilter(_get(criteria, 'invertFields.reviewRequestedBy')),
   }
 
   columns.challenge = {
@@ -541,8 +536,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={onChange}
           value={filter ? filter.value : ""}
           itemList={props.reviewChallenges}
-          className={classNames({"mr-line-through":
-            filter && _get(criteria, 'invertFields.challenge')})}
         />
       )
     }
@@ -573,8 +566,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={onChange}
           value={filter ? filter.value : ""}
           itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
-          className={classNames({"mr-line-through":
-            filter && _get(criteria, 'invertFields.project')})}
         />
       )
     }
@@ -651,7 +642,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
         {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
       </div>
     ),
-    Filter: makeInputFilter(_get(criteria, 'invertFields.reviewedBy'))
   }
 
   columns.reviewStatus = {
@@ -706,8 +696,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           onChange={event => onChange(event.target.value)}
           style={{ width: '100%' }}
           value={filter ? filter.value : 'all'}
-          className={classNames({"mr-line-through":
-            filter && filter.value !== 'all' && _get(criteria, 'invertFields.reviewStatus')})}
         >
           {options}
         </select>
