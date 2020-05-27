@@ -49,7 +49,7 @@ import messages from './Messages'
 import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
 import TaskAnalysisTableHeader from './TaskAnalysisTableHeader'
-import { ViewCommentsButton, StatusLabel, makeInvertable, makeInputFilter }
+import { ViewCommentsButton, StatusLabel, makeInvertable }
   from './TaskTableHelpers'
 
 // Setup child components with necessary HOCs
@@ -433,7 +433,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
         {_get(row._original.completedBy, 'username') || row._original.completedBy}
       </div>
     ),
-    Filter: makeInputFilter(_get(props.criteria, 'invertFields.completedBy')),
   }
 
   columns.reviewedAt = {
@@ -496,7 +495,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
         {row._original.reviewedBy.username || row._original.reviewedBy}
       </div>
     ),
-    Filter: makeInputFilter(_get(props.criteria, 'invertFields.reviewedBy')),
   }
 
   columns.reviewStatus = {
