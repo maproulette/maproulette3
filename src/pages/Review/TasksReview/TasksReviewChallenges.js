@@ -99,23 +99,27 @@ class TasksReviewChallenges extends Component {
         </h3>
 
         <div className="mr-flex mr-justify-left mr-p-8">
-          <div className="mr-card-widget mr-w-full mr-mr-8 mr-p-4 mr-max-h-screen50 mr-overflow-y-scroll">
-            <div className="mr-flex mr-justify-between mr-items-center">
+          <div className="mr-card-widget mr-w-full mr-mr-8 mr-p-4 mr-max-h-screen50">
+            <div className="mr-flex mr-justify-between mr-items-center mr-pb-4">
               <h2 className="mr-card-widget__title">
                 <FormattedMessage {...messages.reviewByProject} />
               </h2>
               {projectSearchBox}
             </div>
-            {projectList}
+            <div className="mr-overflow-y-scroll">
+              {projectList}
+            </div>
           </div>
-          <div className="mr-card-widget mr-w-full mr-p-4 mr-max-h-screen50 mr-overflow-y-scroll">
-            <div className="mr-flex mr-justify-between mr-items-center">
+          <div className="mr-card-widget mr-w-full mr-p-4 mr-max-h-screen50">
+            <div className="mr-flex mr-justify-between mr-items-center mr-pb-4">
               <h2 className="mr-card-widget__title">
                 <FormattedMessage {...messages.reviewByChallenge} />
               </h2>
               {challengeSearchBox}
             </div>
-            {challengeList}
+            <div className="mr-overflow-y-scroll">
+              {challengeList}
+            </div>
           </div>
         </div>
       </div>

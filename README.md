@@ -214,6 +214,10 @@ us with free service through their Open Source program. Translation files are
 pulled into the code repository from time to time and stored in the `src/lang/`
 directory.
 
+Adding support for additional locales is quick and straight-forward: edit
+`src/services/User/Locale/Locale.js` and follow the directions at the top of
+the file.
+
 By default, the en-US locale will be used for users who have not set a locale in
 their MapRoulette user settings. This default locale can be changed with the
 `REACT_APP_DEFAULT_LOCALE` .env setting. Users who have set a locale will

@@ -43,9 +43,15 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, a
   const sort = sortBy ? _snakeCase(sortBy) : null
   const page = _get(criteria, 'page', 0)
 
-  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}), criteria.boundingBox)
+  const searchParameters =
+    generateSearchParametersString(_get(criteria, 'filters', {}),
+                                   criteria.boundingBox,
+                                   false, false, null,
+                                   _get(criteria, 'invertFields', {}))
   const mappers = asMapper ? [userId] : []
   const reviewers = asReviewer ? [userId] : []
+
+  const includeTags = criteria.includeTags
 
   let dispatchType = RECEIVE_REVIEWED_TASKS
   if (asReviewer) {
@@ -64,7 +70,8 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, a
       {
         schema: {tasks: [taskSchema()]},
         params: {mappers, reviewers, limit, sort, order, page: (page * limit),
-                 allowReviewNeeded: (asReviewer ? false : true), ...searchParameters},
+                 allowReviewNeeded: !asReviewer, ...searchParameters,
+                 includeTags},
       }
     ).execute().then(normalizedResults => {
       const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})

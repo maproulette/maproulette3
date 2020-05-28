@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactTable from 'react-table'
-import classNames from 'classnames'
 import { FormattedMessage, FormattedDate,
          FormattedTime, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -21,6 +20,9 @@ import _keys from 'lodash/keys'
 import _concat from 'lodash/concat'
 import _filter from 'lodash/filter'
 import _find from 'lodash/find'
+import _cloneDeep from 'lodash/cloneDeep'
+import _split from 'lodash/split'
+import _isEmpty from 'lodash/isEmpty'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
@@ -41,10 +43,14 @@ import TaskCommentsModal
        from '../../components/TaskCommentsModal/TaskCommentsModal'
 import ConfigureColumnsModal
        from '../../components/ConfigureColumnsModal/ConfigureColumnsModal'
+import InTableTagFilter
+      from '../../components/KeywordAutosuggestInput/InTableTagFilter'
 import messages from './Messages'
 import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
 import TaskAnalysisTableHeader from './TaskAnalysisTableHeader'
+import { ViewCommentsButton, StatusLabel, makeInvertable }
+  from './TaskTableHelpers'
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
@@ -55,7 +61,7 @@ const ALL_COLUMNS = {featureId:{}, id:{}, status:{}, priority:{},
                  reviewStatus:{group:"review"}, reviewRequestedBy:{group:"review"},
                  reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
                  reviewDuration:{group:"review"}, controls:{permanent: true},
-                 comments:{}}
+                 comments:{}, tags:{}}
 
 const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments"]
 
@@ -88,7 +94,10 @@ export class TaskAnalysisTable extends Component {
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
 
     this.props.updateCriteria({sortCriteria, filters, page: tableState.page,
-                            boundingBox: this.props.boundingBox})
+      boundingBox: this.props.boundingBox,
+      includeTags: !!_get(this.props.addedColumns, 'tags')})
+
+    this.setState({lastTableState: _cloneDeep(tableState)})
   }
 
   configureColumns() {
@@ -128,6 +137,16 @@ export class TaskAnalysisTable extends Component {
       return _concat([columnTypes.selected],
               _filter(_map(_keys(this.props.addedColumns), findColumn),
                       c => !_isUndefined(c)))
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    // If we've added the "tag" column, we need to update the table to fetch
+    // the tag data.
+    if (!_get(prevProps.addedColumns, 'tags') &&
+        _get(this.props.addedColumns, 'tags') &&
+        this.state.lastTableState) {
+      this.updateTasks(this.state.lastTableState)
     }
   }
 
@@ -397,7 +416,10 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.reviewRequestedBy = {
     id: 'completedBy',
-    Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewRequestedByLabel),
+                           () => props.invertField('completedBy'),
+                           _get(props.criteria, 'invertFields.completedBy')),
+
     accessor: 'completedBy',
     sortable: true,
     filterable: true,
@@ -410,7 +432,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       >
         {_get(row._original.completedBy, 'username') || row._original.completedBy}
       </div>
-    )
+    ),
   }
 
   columns.reviewedAt = {
@@ -455,7 +477,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.reviewedBy = {
     id: 'reviewedBy',
-    Header: props.intl.formatMessage(messages.reviewedByLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewedByLabel),
+                           () => props.invertField('reviewedBy'),
+                           _get(props.criteria, 'invertFields.reviewedBy')),
     accessor: 'reviewedBy',
     filterable: true,
     sortable: true,
@@ -470,7 +494,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       >
         {row._original.reviewedBy.username || row._original.reviewedBy}
       </div>
-    )
+    ),
   }
 
   columns.reviewStatus = {
@@ -529,33 +553,41 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
   }
 
+  columns.tags = {
+    id: 'tags',
+    Header: props.intl.formatMessage(messages.tagsLabel),
+    accessor: 'tags',
+    filterable: true,
+    sortable: false,
+    minWidth: 120,
+    Cell: ({row}) => {
+      return (
+        <div className="row-challenge-column mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap">
+          {_map(row._original.tags, t => t.name === "" ? null : (
+            <div className="mr-inline mr-bg-white-10 mr-rounded mr-py-1 mr-px-2 mr-m-1" key={t.id}>
+              {t.name}
+            </div>
+          ))}
+        </div>
+      )
+    },
+    Filter: ({filter, onChange}) => {
+      const preferredTags =
+        _filter(_split(_get(props, 'challenge.preferredTags'), ','),
+                (result) => !_isEmpty(result))
+
+      return (
+        <InTableTagFilter
+          {...props}
+          preferredTags={preferredTags}
+          onChange={onChange}
+          value={_get(filter, 'value')}
+        />
+      )
+    }
+  }
+
   return columns
-}
-
-const StatusLabel = props => (
-  <span
-    className={classNames('mr-inline-flex mr-items-center', props.className)}
-  >
-    <span className="mr-w-2 mr-h-2 mr-rounded-full mr-bg-current" />
-    <span className="mr-ml-2 mr-text-xs mr-uppercase mr-tracking-wide">
-      <FormattedMessage {...props.intlMessage} />
-    </span>
-  </span>
-)
-
-const ViewCommentsButton = function(props) {
-  return (
-    <button
-      onClick={props.onClick}
-      className="mr-inline-flex mr-items-center mr-transition mr-text-green-light hover:mr-text-green"
-    >
-      <SvgSymbol
-        sym="comments-icon"
-        viewBox="0 0 20 20"
-        className="mr-fill-current mr-w-4 mr-h-4"
-      />
-    </button>
-  )
 }
 
 TaskAnalysisTable.propTypes = {

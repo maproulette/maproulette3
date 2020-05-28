@@ -26,11 +26,12 @@ class Modal extends Component {
             "md:mr-w-4/5 md:mr-top-5 md:mr-left-16": this.props.extraWide,
             "md:mr-w-2/3 md:mr-top-5 md:mr-left-16": this.props.wide,
             "md:mr-min-w-1/3 md:mr-w-1/3 md:mr-top-5 md:mr-left-33": this.props.narrow,
+            "md:mr-min-w-1/3 md:mr-w-1/3 md:mr-top-5 md:mr-left-16": this.props.narrowColumn,
             "mr-w-full md:mr-w-1/4 md:mr-top-5 md:mr-left-37": this.props.extraNarrow,
             "md:mr-min-w-2/5 md:mr-w-2/5 md:mr-top-15 md:mr-left-30": this.props.medium,
             "md:mr-min-w-1/2 lg:mr-max-w-screen60 mr-w-full lg:mr-top-50 lg:mr-left-50 lg:mr--translate-1/2":
               !this.props.extraWide && !this.props.wide && !this.props.narrow &&
-              !this.props.extraNarrow && !this.props.medium
+              !this.props.narrowColumn && !this.props.extraNarrow && !this.props.medium
           })}
         >
           <div

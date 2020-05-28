@@ -40,6 +40,17 @@ export default class Navbar extends Component {
     this.setState({mobileMenuOpen: !this.state.mobileMenuOpen})
   }
 
+  showHomePage = () => {
+    // Record in session storage that the user really does want to see the home
+    // page so that we don't redirect them to the Dashboard (if they're signed
+    // in) like we usually would
+    try {
+      sessionStorage.setItem('goHome', 'true')
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   signout = () => {
     this.props.logoutUser(_get(this.props, 'user.id'))
     this.closeMobileMenu()
@@ -49,7 +60,12 @@ export default class Navbar extends Component {
     return (
       <header className="mr-relative mr-bg-gradient-r-green-blue mr-shadow mr-p-6 mr-flex mr-items-center mr-justify-between">
         <nav className="mr-flex mr-items-center">
-          <Link to='/' rel="home" className="mr-text-white hover:mr-text-current">
+          <Link
+            to='/'
+            rel="home"
+            className="mr-text-white hover:mr-text-current"
+            onClick={this.showHomePage}
+          >
             <SvgSymbol sym="mr-logo"
                        viewBox="0 0 174 40"
                        className="mr-block mr-fill-current mr-w-48 mr-h-auto"

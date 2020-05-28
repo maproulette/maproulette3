@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
@@ -65,7 +67,17 @@ export default class ChallengeControls extends Component {
             <FormattedMessage {...messages.startChallengeLabel} />
           </Link>
         }
-
+        {this.props.includeCopyURL &&
+          <CopyToClipboard
+            text={`${process.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`}
+            onCopy={this.props.onControlComplete}>
+            <div
+              className={classNames(this.props.controlClassName,
+                "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer")}>
+              <FormattedMessage {...messages.copyChallengeURLLabel} />
+            </div>
+          </CopyToClipboard>
+        }
         {!inVirtualProject && manager.canWriteProject(parent) &&
           <React.Fragment>
             <Link

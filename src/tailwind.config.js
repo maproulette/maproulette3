@@ -16,6 +16,7 @@ module.exports = {
       'black-5': 'rgba(0, 0, 0, .05)',
       'black-10': 'rgba(0, 0, 0, .1)',
       'black-15': 'rgba(0, 0, 0, .15)',
+      'black-25': 'rgba(0, 0, 0, .25)',
       'black-40': 'rgba(0, 0, 0, .4)',
       'black-50': 'rgba(0, 0, 0, .5)',
       'black-75': 'rgba(0, 0, 0, .75)',
@@ -262,6 +263,7 @@ module.exports = {
       full: '100%',
       half: '50%',
       '2/5': '40%',
+      '3/4': '75%',
       screen50: '50vh',
       screen: '100vh',
       content: 'calc(100vh - 102px)',
@@ -337,6 +339,7 @@ module.exports = {
     maxHeight: {
       full: '100%',
       screen: '100vh',
+      '40': '10rem',
       '48': '12rem',
       '100': '25rem',
       '112': '28rem',
@@ -366,6 +369,7 @@ module.exports = {
       '24': '6rem',
       '32': '8rem',
       '36': '9rem',
+      '1/2': '50%',
     },
 
     margin: {
@@ -386,6 +390,7 @@ module.exports = {
       '8': '2rem',
       '10': '2.5rem',
       '12': '3rem',
+      '14': '3.5rem',
       '16': '4rem',
       '20': '5rem',
       '24': '6rem',
@@ -412,6 +417,7 @@ module.exports = {
       '-28': '-7rem',
       '-32': '-8rem',
       '-40': '-10rem',
+      '-100': '-25rem',
     },
 
     boxShadow: {

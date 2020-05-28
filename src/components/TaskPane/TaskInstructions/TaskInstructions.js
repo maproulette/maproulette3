@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
+import Button from '../../Button/Button'
 import MarkdownTemplate from '../../MarkdownContent/MarkdownTemplate'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
+import messages from '../Messages'
 
 
 /**
@@ -14,6 +17,10 @@ import AsMappableTask from '../../../interactions/Task/AsMappableTask'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskInstructions extends Component {
+  state = {
+    responsesChanged: false
+  }
+
   render() {
     const taskInstructions =
         !_isEmpty(this.props.task.instruction) ?
@@ -30,8 +37,21 @@ export default class TaskInstructions extends Component {
         <MarkdownTemplate content={taskInstructions}
                           properties={taskProperties}
                           completionResponses={this.props.completionResponses}
-                          setCompletionResponse={this.props.setCompletionResponse}
-                          disableTemplate={this.props.disableTemplate}/>
+                          setCompletionResponse={(propName, value) => {
+                            this.props.setCompletionResponse(propName, value)
+                            this.setState({responsesChanged: true})
+                          }} />
+        {this.props.disableTemplate && this.state.responsesChanged &&
+          <Button
+            className="mr-button--blue-fill mr-button--small"
+            onClick={() => {
+              this.props.saveCompletionResponses(this.props.task, this.props.completionResponses)
+              this.setState({responsesChanged: false})
+            }}
+          >
+            <FormattedMessage {...messages.saveChangesLabel} />
+          </Button>
+        }
       </div>
     )
   }

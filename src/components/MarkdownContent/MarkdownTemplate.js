@@ -66,8 +66,15 @@ export default class MarkdownTemplate extends Component {
    * a select input field which can be rendered in form later.
    **/
   selectHandler = (text, options) => {
-    const propertyName = options.hash.name
+    const propertyName = options.hash.name || `select`
     const body = this.compileTemplate(text, this.props.properties)
+
+    // Quotes get turned into html entities by markdown compiler
+    const quoted_entities = {
+      '&#039;': "'",
+      '&#x27;': "'",
+      '&quot;': '"'
+    };
 
     const select =
       <li key={_uniqueId(propertyName)} className="mr-pb-1">
@@ -78,10 +85,12 @@ export default class MarkdownTemplate extends Component {
           <option key="0" value=""></option>
           {
             _map(_split(options.hash.values, ','), (value, index) =>
-              <option key={index} value={value}>{value}</option>)
+              <option key={index} value={value}>
+                {value.replace(/&#?\w+;/, match => quoted_entities[match])}
+              </option>)
           }
         </select>
-        <label className="mr-pl-2">{body}</label>
+        <label className="mr-pl-2" dangerouslySetInnerHTML={{__html:body}} />
       </li>
 
     const questions = this.state.questions

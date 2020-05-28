@@ -39,8 +39,28 @@ export default defineMessages({
     defaultMessage: "Choose Role"
   },
 
-  osmUsername: {
+  osmUsernamePlaceholder: {
     id: "Admin.ProjectManagers.controls.chooseOSMUser.placeholder",
     defaultMessage: "OpenStreetMap username"
+  },
+
+  teamNamePlaceholder: {
+    id: "Admin.ProjectManagers.controls.chooseTeam.placeholder",
+    defaultMessage: "Team name"
+  },
+
+  teamOption: {
+    id: "Admin.ProjectManagers.options.teams.label",
+    defaultMessage: "Team"
+  },
+
+  userOption: {
+    id: "Admin.ProjectManagers.options.users.label",
+    defaultMessage: "User"
+  },
+
+  teamIndicator: {
+    id: "Admin.ProjectManagers.team.indicator",
+    defaultMessage: "Team"
   },
 })

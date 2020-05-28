@@ -58,7 +58,7 @@
   }
 
   &__description {
-    @apply mr-text-base mr-my-4 mr-max-h-48 mr-overflow-auto mr-scrolling-touch mr-break-words;
+    @apply mr-text-base mr-my-4 mr-max-h-40 mr-overflow-auto mr-scrolling-touch mr-break-words;
     word-break: break-word;
   }
 

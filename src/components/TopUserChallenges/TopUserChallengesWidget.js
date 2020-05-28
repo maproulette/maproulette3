@@ -87,7 +87,7 @@ const TopChallengeList = function(props) {
       }
 
       return (
-        <li key={challenge.id} className="mr-pb-1">
+        <li key={challenge.id} className="mr-py-1">
           <Link to={`/browse/challenges/${challenge.id}`}>
             {challenge.name}
           </Link>

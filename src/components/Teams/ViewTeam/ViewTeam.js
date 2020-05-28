@@ -1,0 +1,103 @@
+import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { useQuery } from '@apollo/client'
+import { FormattedMessage } from 'react-intl'
+import _find from 'lodash/find'
+import _filter from 'lodash/filter'
+import { subscribeToTeamUpdates, unsubscribeFromTeamUpdates }
+       from '../../../services/Team/Team'
+import AsTeamMember from '../../../interactions/TeamMember/AsTeamMember'
+import BusySpinner from '../../BusySpinner/BusySpinner'
+import AddTeamMember from '../AddTeamMember/AddTeamMember'
+import MemberItem from '../MemberItem/MemberItem'
+import { TEAM_USERS } from '../TeamQueries'
+import messages from './Messages'
+
+export const ViewTeam = props => {
+  const { loading, error, data, refetch } = useQuery(TEAM_USERS, {
+    variables: { teamId: props.team.id }
+  })
+
+  useEffect(() => {
+    subscribeToTeamUpdates(message => {
+      if (message.data.userId === props.user.id ||
+          message.data.teamId === props.team.id) {
+        refetch()
+      }
+    }, "ViewTeam")
+
+    return () => unsubscribeFromTeamUpdates("ViewTeam")
+  })
+
+  if (error) {
+    throw error
+  }
+
+  if (loading) {
+    return <BusySpinner />
+  }
+
+  const userTeamMember = AsTeamMember(
+    _find(data.teamUsers, teamUser => AsTeamMember(teamUser).isUser(props.user))
+  )
+
+  const activeMembers =
+    _filter(data.teamUsers, teamUser => AsTeamMember(teamUser).isActive())
+
+  const invitedMembers = 
+    _filter(data.teamUsers, teamUser => AsTeamMember(teamUser).isInvited())
+
+  return (
+    <div>
+      <div className="mr-text-lg mr-text-mango">{props.team.name}</div>
+      <div className="mr-mt-2 mr-mb-4 mr-text-sm">{props.team.description}</div>
+
+      <h5 className="mr-mt-6 mr-mb-2 mr-text-xs mr-uppercase mr-text-pink">
+        <FormattedMessage {...messages.activeMembersHeader} />
+      </h5>
+      <ul className="mr-links-green-lighter">
+        {activeMembers.map(member =>
+           <MemberItem
+             key={member.id}
+             {...props}
+             teamUser={member}
+             userTeamMember={userTeamMember}
+           />
+        )}
+      </ul>
+
+      {invitedMembers.length > 0 &&
+       <React.Fragment>
+        <h5 className="mr-mt-6 mr-mb-2 mr-text-xs mr-uppercase mr-text-pink">
+          <FormattedMessage {...messages.invitedMembersHeader} />
+        </h5>
+        <ul className="mr-links-green-lighter">
+          {invitedMembers.map(member =>
+             <MemberItem
+               key={member.id}
+               {...props}
+               teamUser={member}
+               userTeamMember={userTeamMember}
+             />
+          )}
+        </ul>
+       </React.Fragment>
+      }
+
+      {userTeamMember.isTeamAdmin() &&
+       <React.Fragment>
+         <h5 className="mr-mt-6 mr-mb-2 mr-text-base mr-text-yellow">
+           <FormattedMessage {...messages.addMembersHeader} />
+         </h5>
+         <AddTeamMember {...props} />
+       </React.Fragment>
+      }
+    </div>
+  )
+}
+
+ViewTeam.propTypes = {
+  team: PropTypes.object.isRequired,
+}
+
+export default ViewTeam

@@ -42,7 +42,10 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                           criteria.boundingBox,
                                                           _get(criteria, 'savedChallengesOnly'),
-                                                          _get(criteria, 'excludeOtherReviewers'))
+                                                          _get(criteria, 'excludeOtherReviewers'),
+                                                          null,
+                                                          _get(criteria, 'invertFields', {}))
+  const includeTags = criteria.includeTags
 
   return function(dispatch) {
     return new Endpoint(
@@ -50,7 +53,8 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
       {
         schema: {tasks: [taskSchema()]},
         variables: {},
-        params: {limit, sort, order, page: (page * limit), ...searchParameters},
+        params: {limit, sort, order, page: (page * limit), ...searchParameters,
+                 includeTags},
       }
     ).execute().then(normalizedResults => {
       const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})

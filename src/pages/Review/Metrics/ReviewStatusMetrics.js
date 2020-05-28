@@ -7,6 +7,8 @@ import messages from './Messages'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import { TaskPriority, keysByPriority, taskPriorityLabels }
        from '../../../services/Task/TaskPriority/TaskPriority'
+import { TaskStatus, keysByStatus, statusLabels }
+      from '../../../services/Task/TaskStatus/TaskStatus'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
 
 
@@ -92,6 +94,7 @@ export default class ReviewStatusMetrics extends Component {
   render() {
     const metrics = this.props.reviewMetrics
     const reviewMetricsByPriority = this.props.reviewMetricsByPriority
+    const reviewMetricsByTaskStatus = this.props.reviewMetricsByTaskStatus
 
     const type = this.props.reviewTasksType || ReviewTasksType.allReviewedTasks
 
@@ -100,7 +103,7 @@ export default class ReviewStatusMetrics extends Component {
         const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
 
         return (
-          <div className="mr-mt-6" key={priority}>
+          <div className="mr-mt-6 mr-mb-6" key={priority}>
             <div
               className={classNames(
                 "mr-text-md mr-mb-4",
@@ -114,6 +117,30 @@ export default class ReviewStatusMetrics extends Component {
               />
             </div>
             {this.buildReviewStats(type, reviewMetricsByPriority[priority])}
+          </div>
+        )
+      }
+    })
+
+    const byStatusReviewStats = _map(TaskStatus, (status, key) => {
+      if (reviewMetricsByTaskStatus && reviewMetricsByTaskStatus[status]) {
+        const localizedStatusLabels = statusLabels(this.props.intl)
+
+        return (
+          <div className="mr-mt-6" key={status}>
+            <div
+              className={classNames(
+                "mr-text-md mr-mb-4",
+                this.props.lightMode ? "mr-text-matisse-blue mr-font-medium" :
+                                       "mr-text-yellow mr-font-normal"
+              )}
+            >
+              <FormattedMessage
+                {...messages.taskStatusLabel}
+                values={{status: localizedStatusLabels[keysByStatus[status]]}}
+              />
+            </div>
+            {this.buildReviewStats(type, reviewMetricsByTaskStatus[status])}
           </div>
         )
       }
@@ -157,6 +184,29 @@ export default class ReviewStatusMetrics extends Component {
           </div>
         }
         {this.props.showByPriority && prioritizedReviewStats}
+
+        {reviewMetricsByTaskStatus && this.props.setShowByTaskStatus &&
+          <div
+            className={classNames(
+              "mr-cursor-pointer mr-flex mr-items-center mr-mt-2",
+              this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"
+            )}
+            onClick={(e) => this.props.setShowByTaskStatus(!this.props.showByTaskStatus)}
+          >
+            <span className="mr-align-top">
+              <FormattedMessage {...messages.byTaskStatusToggle} />
+            </span>
+            <span>
+              <SvgSymbol
+                sym="icon-cheveron-down"
+                viewBox="0 0 20 20"
+                className={classNames("mr-fill-current mr-w-5 mr-h-5 mr-transition",
+                                      {"mr-expand-available": !this.props.showByTaskStatus})}
+              />
+            </span>
+          </div>
+        }
+        {this.props.showByTaskStatus && byStatusReviewStats}
       </div>
     )
   }

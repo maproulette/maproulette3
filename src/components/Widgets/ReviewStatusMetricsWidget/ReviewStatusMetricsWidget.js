@@ -25,6 +25,10 @@ export default class ReviewStatusMetricsWidget extends Component {
     this.props.updateWidgetConfiguration({showByPriority: !!showByPriority})
   }
 
+  setShowByTaskStatus = showByTaskStatus => {
+    this.props.updateWidgetConfiguration({showByTaskStatus: !!showByTaskStatus})
+  }
+
   render() {
     return (
       <QuickWidget
@@ -39,6 +43,8 @@ export default class ReviewStatusMetricsWidget extends Component {
           {...this.props}
           showByPriority={this.props.widgetConfiguration.showByPriority}
           setShowByPriority={this.setShowByPriority}
+          showByTaskStatus={this.props.widgetConfiguration.showByTaskStatus}
+          setShowByTaskStatus={this.setShowByTaskStatus}
         />
       </QuickWidget>
     )

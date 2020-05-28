@@ -13,7 +13,7 @@ import { CUSTOM_RANGE, ALL_TIME }
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithUserMetrics = function(WrappedComponent) {
+export const WithUserMetrics = function(WrappedComponent, userProp) {
   return class extends Component {
     state = {
       loading: false,
@@ -28,10 +28,10 @@ export const WithUserMetrics = function(WrappedComponent) {
     updateAllMetrics(props) {
       this.setState({loading: true})
 
-      if ( this.props.targetUser &&
-          (!_get(this.props.targetUser, 'settings.leaderboardOptOut') ||
-           _get(this.props.targetUser, 'id') === _get(this.props.currentUser, 'userId'))) {
-        fetchLeaderboardForUser(this.props.targetUser.id, 0, -1).then(userLeaderboard => {
+      if ( this.props[userProp] &&
+          (!_get(this.props[userProp], 'settings.leaderboardOptOut') ||
+           _get(this.props[userProp], 'id') === _get(this.props.currentUser, 'userId'))) {
+        fetchLeaderboardForUser(this.props[userProp].id, 0, -1).then(userLeaderboard => {
           this.setState({loading: false, leaderboardMetrics: userLeaderboard[0]})
         })
 
@@ -40,8 +40,8 @@ export const WithUserMetrics = function(WrappedComponent) {
     }
 
     updateUserMetrics(props) {
-      if (!_get(this.props.targetUser, 'settings.leaderboardOptOut') ||
-           _get(this.props.targetUser, 'id') === _get(this.props.currentUser, 'userId')) {
+      if (!_get(this.props[userProp], 'settings.leaderboardOptOut') ||
+           _get(this.props[userProp], 'id') === _get(this.props.currentUser, 'userId')) {
 
         const startDate = _get(this.state.tasksCompletedDateRange, 'length', 0) === 2 ?
           format(this.state.tasksCompletedDateRange[0], 'YYYY-MM-DD') : null
@@ -61,7 +61,7 @@ export const WithUserMetrics = function(WrappedComponent) {
         const reviewerEnd = _get(this.state.tasksReviewerDateRange, 'length', 0) === 2 ?
           format(this.state.tasksReviewerDateRange[1], 'YYYY-MM-DD') : null
 
-        fetchUserMetrics(this.props.targetUser.id,
+        fetchUserMetrics(this.props[userProp].id,
            this.state.tasksCompletedMonthsPast,
            this.state.tasksReviewedMonthsPast,
            this.state.tasksReviewerMonthsPast,
@@ -125,13 +125,13 @@ export const WithUserMetrics = function(WrappedComponent) {
     }
 
     componentDidMount() {
-      if (this.props.targetUser) {
+      if (this.props[userProp]) {
         this.updateAllMetrics(this.props)
       }
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if (prevProps.targetUser !== this.props.targetUser) {
+      if (prevProps[userProp] !== this.props[userProp]) {
         this.updateAllMetrics(this.props)
       }
 
@@ -192,5 +192,5 @@ const mapStateToProps = state => ({})
 const mapDispatchToProps = (dispatch, ownProps) => ({
 })
 
-export default WrappedComponent =>
-  connect(mapStateToProps, mapDispatchToProps)(WithUserMetrics(WrappedComponent))
+export default (WrappedComponent, userProp="targetUser") =>
+  connect(mapStateToProps, mapDispatchToProps)(WithUserMetrics(WrappedComponent, userProp))

@@ -9,7 +9,8 @@ import { fromLatLngBounds, GLOBAL_MAPBOUNDS } from '../../../services/MapBounds/
 
 const DEFAULT_PAGE_SIZE = 20
 const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
-                          pageSize: DEFAULT_PAGE_SIZE, filters:{}}
+                          pageSize: DEFAULT_PAGE_SIZE, filters:{},
+                          invertFields: {}}
 
 /**
  * WithFilterCriteria keeps track of the current criteria being used
@@ -30,6 +31,7 @@ export const WithFilterCriteria = function(WrappedComponent) {
        criteria.sortCriteria = newCriteria.sortCriteria
        criteria.page = newCriteria.page
        criteria.filters = newCriteria.filters
+       criteria.includeTags = newCriteria.includeTags
 
        this.setState({criteria})
        if (this.props.setSearchFilters) {
@@ -58,6 +60,15 @@ export const WithFilterCriteria = function(WrappedComponent) {
        const criteria = _cloneDeep(this.state.criteria)
        criteria.filters.taskPropertySearch = propertySearch
        this.setState({criteria})
+     }
+
+     invertField = (fieldName) => {
+       const criteria = _cloneDeep(this.state.criteria)
+       criteria.invertFields[fieldName] = !criteria.invertFields[fieldName]
+       this.setState({criteria})
+       if (this.props.setSearchFilters) {
+         this.props.setSearchFilters(criteria)
+       }
      }
 
      clearTaskPropertyCriteria = () => {
@@ -181,6 +192,7 @@ export const WithFilterCriteria = function(WrappedComponent) {
                            updateReviewTasks={(criteria) => this.update(this.props, criteria)}
                            updateTaskPropertyCriteria={this.updateTaskPropertyCriteria}
                            clearTaskPropertyCriteria={this.clearTaskPropertyCriteria}
+                           invertField={this.invertField}
                            refresh={this.refresh}
                            criteria={criteria}
                            pageSize={criteria.pageSize}

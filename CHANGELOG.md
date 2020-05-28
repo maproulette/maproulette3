@@ -8,6 +8,31 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [v3.6.2] - 2020-05-28
+### Added
+- Revised Dashboard page
+- Teams widget on Dashboard page
+- Option to invert searches in various task tables
+- Column for MR Tags on various task tables
+- CSV export of mapper metrics for challenge owners and reviewers
+- Bypass picker step when returning to Review as part of normal workflow
+- Ability to edit task form responses when reworking a task
+- Clarifying note about average time to complete challenge tasks
+- Control to copy public challenge URL to clipboard when managing challenges
+- Management tools for challenge snapshots for challenge managers
+- Task Review metrics broken down by task status in Review Metrics widget
+- Updated translations and new Ukrainian locale
+
+### Fixed
+- Join comma-separated priority-rule values based on rule (not group) operator
+- Broken rendering of mustache tags in task forms (#1239)
+- Minor visual fixes
+
+### Changed
+- Make the Dashboard page the landing page for users who are already signed-in
+- Rename "Saved" challenges to "Favorite" challenges
+
+
 ## [v3.6.1] - 2020-04-28
 ### Added
 - Links to review tasks on Browse Challenge and Browse Project pages

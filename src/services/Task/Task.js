@@ -302,7 +302,8 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria) {
                                                             criteria.boundingBox,
                                                             _get(criteria, 'savedChallengesOnly'),
                                                             null,
-                                                            criteria.searchQuery)
+                                                            criteria.searchQuery,
+                                                            _get(criteria, 'invertFields'))
     searchParameters.cid = challengeId
 
     return new Endpoint(
@@ -311,6 +312,32 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria) {
         json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute().catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Updates the completion responses on a task.
+ */
+export const updateCompletionResponses = function(taskId, completionResponses) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.task.updateCompletionResponses,
+      {variables: {id: taskId},
+       json: completionResponses
+      }
+    ).execute().then(() => {
+      fetchTask(taskId)(dispatch) // Refresh task data
+    }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))

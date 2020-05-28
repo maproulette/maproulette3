@@ -69,6 +69,11 @@ export default defineMessages({
     defaultMessage: "Configure columns"
   },
 
+  exportMapperCSVLabel: {
+    id: "Review.TaskAnalysisTable.exportMapperCSVLabel",
+    defaultMessage: "Export mapper CSV"
+  },
+
   actionsColumnHeader: {
     id: "Review.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
@@ -167,6 +172,11 @@ export default defineMessages({
   projectLabel: {
     id: "Review.fields.project.label",
     defaultMessage: "Project",
+  },
+
+  tagsLabel: {
+    id: "Review.fields.tags.label",
+    defaultMessage: "Tags",
   },
 
   multipleTasksTooltip: {

@@ -61,6 +61,24 @@ export const SortOptions = {
   default: SORT_DEFAULT,
 }
 
+// Map for the search parameters expected by server
+export const PARAMS_MAP = {
+  reviewRequestedBy: 'o',
+  reviewedBy: 'r',
+  completedBy: 'm',
+  challengeId: 'cid',
+  challenge: 'cs',
+  projectId: 'pid',
+  project: 'ps',
+  status: 'tStatus',
+  priority: 'tp',
+  priorities: 'priorities',
+  reviewStatus: 'trStatus',
+  id: 'tid',
+  difficulty: 'cd',
+  tags: 'tt'
+}
+
 
 /** Returns object containing localized labels  */
 export const sortLabels = intl => _fromPairs(
@@ -113,77 +131,108 @@ export const parseQueryString = function(rawQueryText) {
  * server accepts for various API endpoints
  */
 export const generateSearchParametersString = (filters, boundingBox, savedChallengesOnly,
-                                               excludeOtherReviewers, queryString) => {
+                                               excludeOtherReviewers, queryString,
+                                               invertFields = {}) => {
   const searchParameters = {}
+  const invf = []
+
   if (filters.reviewRequestedBy) {
-    searchParameters.o = filters.reviewRequestedBy
+    searchParameters[PARAMS_MAP.reviewRequestedBy] = filters.reviewRequestedBy
+    if (invertFields.reviewRequestedBy) {
+      invf.push(PARAMS_MAP.reviewRequestedBy)
+    }
   }
   if (filters.reviewedBy) {
-    searchParameters.r = filters.reviewedBy
+    searchParameters[PARAMS_MAP.reviewedBy] = filters.reviewedBy
+    if (invertFields.reviewedBy) {
+      invf.push(PARAMS_MAP.reviewedBy)
+    }
   }
   if (filters.completedBy) {
-    searchParameters.m = filters.completedBy
+    searchParameters[PARAMS_MAP.completedBy] = filters.completedBy
+    if (invertFields.completedBy) {
+      invf.push(PARAMS_MAP.completedBy)
+    }
   }
 
   if (filters.challengeId) {
-    searchParameters.cid = filters.challengeId
+    searchParameters.cid = !_isArray(filters.challengeId) ?
+      filters.challengeId :
+      searchParameters[PARAMS_MAP.challengeId] = filters.challengeId.join(',')
+
+    if (invertFields.challenge) {
+      invf.push(PARAMS_MAP.challengeId)
+    }
   }
   else if (filters.challenge) {
-    searchParameters.cs = filters.challenge
+    searchParameters[PARAMS_MAP.challenge] = filters.challenge
+    if (invertFields.challenge) {
+      invf.push(PARAMS_MAP.challenge)
+    }
   }
 
   if (filters.projectId) {
-    searchParameters.pid = filters.projectId
+    searchParameters[PARAMS_MAP.projectId] = filters.projectId
+    if (invertFields.project) {
+      invf.push(PARAMS_MAP.projectId)
+    }
   }
   else if (filters.project) {
-    searchParameters.ps = filters.project
+    searchParameters[PARAMS_MAP.project] = filters.project
+    if (invertFields.project) {
+      invf.push(PARAMS_MAP.project)
+    }
   }
   if (filters.status && filters.status !== "all") {
     if (Array.isArray(filters.status)){
-      searchParameters.tStatus = filters.status.join(',')
+      searchParameters[PARAMS_MAP.status] = filters.status.join(',')
     }
     else {
-      searchParameters.tStatus = filters.status
+      searchParameters[PARAMS_MAP.status] = filters.status
+    }
+    if (invertFields.status) {
+      invf.push(PARAMS_MAP.status)
     }
   }
   if (filters.priority && filters.priority !== "all") {
-    searchParameters.tp = filters.priority
+    searchParameters[PARAMS_MAP.priority] = filters.priority
+    if (invertFields.priority) {
+      invf.push(PARAMS_MAP.priority)
+    }
   }
   if (filters.priorities && filters.priorities !== "all") {
     if (Array.isArray(filters.priorities)){
-      searchParameters.priorities = filters.priorities.join(',')
+      searchParameters[PARAMS_MAP.priorities] = filters.priorities.join(',')
     }
     else {
-      searchParameters.priorities = filters.priorities
+      searchParameters[PARAMS_MAP.priorities] = filters.priorities
+    }
+    if (invertFields.priorities) {
+      invf.push(PARAMS_MAP.priorities)
     }
   }
   if (filters.reviewStatus && filters.reviewStatus !== "all") {
     if (Array.isArray(filters.reviewStatus)){
-      searchParameters.trStatus = filters.reviewStatus.join(',')
+      searchParameters[PARAMS_MAP.reviewStatus] = filters.reviewStatus.join(',')
     }
     else {
-      searchParameters.trStatus = filters.reviewStatus
+      searchParameters[PARAMS_MAP.reviewStatus] = filters.reviewStatus
+    }
+    if (invertFields.reviewStatus) {
+      invf.push(PARAMS_MAP.reviewStatus)
     }
   }
   if (filters.reviewedAt) {
     searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
     searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
   }
-  if (filters.challengeId) {
-    if (!_isArray(filters.challengeId)) {
-      searchParameters.cid = filters.challengeId
-    }
-    else {
-      searchParameters.cid = filters.challengeId.join(',')
-    }
-  }
 
   if (filters.id) {
-    searchParameters.tid = filters.id
+    searchParameters[PARAMS_MAP.id] = filters.id
   }
 
   if (_isFinite(filters.difficulty)) {
-    searchParameters.cd = filters.difficulty
+    searchParameters[PARAMS_MAP.difficulty] = filters.difficulty
   }
 
   if (boundingBox) {
@@ -229,10 +278,15 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
 
     if (queryParts.query.length > 0) {
-      searchParameters.cs = queryParts.query
+      searchParameters[PARAMS_MAP.challenge] = queryParts.query
     }
   }
 
+  if (filters.tags) {
+    searchParameters[PARAMS_MAP.tags] = filters.tags
+  }
+
+  searchParameters.invf = invf.join(',')
   return searchParameters
 }
 

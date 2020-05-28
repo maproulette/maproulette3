@@ -9,19 +9,29 @@ export default defineMessages({
     defaultMessage: 'Go Back',
   },
 
-  unsave: {
-    id: 'ChallengeDetails.controls.unsave.label',
-    defaultMessage: 'Unsave',
-  },
-
-  save: {
-    id: 'ChallengeDetails.controls.save.label',
-    defaultMessage: 'Save',
-  },
-
   start: {
     id: 'ChallengeDetails.controls.start.label',
     defaultMessage: 'Start',
+  },
+
+  favorite: {
+    id: 'ChallengeDetails.controls.favorite.label',
+    defaultMessage: 'Favorite',
+  },
+
+  saveToFavorites: {
+    id: 'ChallengeDetails.controls.favorite.tooltip',
+    defaultMessage: 'Save to favorites',
+  },
+
+  unfavorite: {
+    id: 'ChallengeDetails.controls.unfavorite.label',
+    defaultMessage: 'Unfavorite',
+  },
+
+  removeFromFavorites: {
+    id: 'ChallengeDetails.controls.unfavorite.tooltip',
+    defaultMessage: 'Remove from favorites',
   },
 
   manageLabel: {

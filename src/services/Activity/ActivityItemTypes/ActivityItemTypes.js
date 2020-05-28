@@ -11,6 +11,9 @@ export const ITEM_TYPE_TAG = 3
 export const ITEM_TYPE_SURVEY = 4
 export const ITEM_TYPE_USER = 5
 export const ITEM_TYPE_GROUP = 6
+export const ITEM_TYPE_VIRTUAL_CHALLENGE = 7
+export const ITEM_TYPE_BUNDLE = 8
+export const ITEM_TYPE_GRANT = 9
 
 export const ActivityItemType = Object.freeze({
   project: ITEM_TYPE_PROJECT,
@@ -20,6 +23,9 @@ export const ActivityItemType = Object.freeze({
   survey: ITEM_TYPE_SURVEY,
   user: ITEM_TYPE_USER,
   group: ITEM_TYPE_GROUP,
+  virtualChallenge: ITEM_TYPE_VIRTUAL_CHALLENGE,
+  bundle: ITEM_TYPE_BUNDLE,
+  grant: ITEM_TYPE_GRANT,
 })
 
 export const keysByType = Object.freeze(_invert(ActivityItemType))

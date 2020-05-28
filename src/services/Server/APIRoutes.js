@@ -31,7 +31,7 @@ const apiRoutes = factory => {
       'activity': factory.get('/data/project/activity'),
       'managers': factory.get('/user/project/:projectId'),
       'comments': factory.get('/project/:id/comments'),
-      'setManagerPermission': factory.put('/user/:userId/project/:projectId/:groupType'),
+      'setManagerPermission': factory.put('/user/:userId/project/:projectId/:role'),
       'removeManager': factory.delete('/user/:userId/project/:projectId/-1'),
       'delete': factory.delete('/project/:id'),
       'addToVirtual': factory.post('/project/:projectId/challenge/:challengeId/add'),
@@ -70,6 +70,7 @@ const apiRoutes = factory => {
       'propertyKeys': factory.get('/data/challenge/:id/propertyKeys'),
       'snapshotList': factory.get('/snapshot/challenge/:id/list'),
       'recordSnapshot': factory.get('/snapshot/challenge/:id/record'),
+      'removeSnapshot': factory.delete('/snapshot/:id'),
       'snapshot': factory.get('/snapshot/:id'),
     },
     'virtualChallenge': {
@@ -119,6 +120,7 @@ const apiRoutes = factory => {
       'testTagFix': factory.post('/change/tag/test'),
       'testCooperativeWork': factory.post('/change/test'),
       'applyTagFix': factory.post('/task/:id/fix/apply'),
+      'updateCompletionResponses': factory.put('/task/:id/responses'),
     },
     'keywords': {
       'find': factory.get('/keywords'),
@@ -150,6 +152,14 @@ const apiRoutes = factory => {
       'markNotificationsRead': factory.put('/user/:userId/notifications'),
       'deleteNotifications': factory.delete('/user/:userId/notifications'),
     },
+    'teams': {
+      'find': factory.get('/teams/find'),
+      'projectManagers': factory.get('/teams/projectManagers/:projectId'),
+    },
+    'team': {
+      'setProjectRole': factory.put('/team/:teamId/project/:projectId/:role'),
+      'removeFromProject': factory.delete('/team/:teamId/project/:projectId'),
+    }
   }
 }
 

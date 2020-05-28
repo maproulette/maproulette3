@@ -16,6 +16,7 @@ import {
   exportWorkspaceConfiguration,
   importWorkspaceConfiguration,
   ensurePermanentWidgetsAdded,
+  widgetDescriptor,
 } from '../../../services/Widget/Widget'
 import SignIn from '../../../pages/SignIn/SignIn'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
@@ -125,15 +126,26 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
         })
       }
       else {
-        // A layout was provided. If heights and/or widths were omitted, fill
-        // them in using component defaults.
+        // A layout was provided. If heights and/or widths were omitted or don't meet
+        // current minimums, fill them in from the widget descriptors
         _each(configuration.layout, (widgetLayout, index) => {
+          const descriptor = widgetDescriptor(configuration.widgets[index].widgetKey)
+          if (!descriptor) {
+            return
+          }
+
           if (!_isFinite(widgetLayout.w)) {
-            widgetLayout.w = configuration.widgets[index].defaultWidth
+            widgetLayout.w = descriptor.defaultWidth
+          }
+          else if ((_isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth)) {
+            widgetLayout.w = descriptor.minWidth
           }
 
           if (!_isFinite(widgetLayout.h)) {
-            widgetLayout.h = configuration.widgets[index].defaultHeight
+            widgetLayout.h = descriptor.defaultHeight
+          }
+          else if ((_isFinite(descriptor.minHeight) && widgetLayout.h < descriptor.minHeight)) {
+            widgetLayout.h = descriptor.minHeight
           }
         })
       }

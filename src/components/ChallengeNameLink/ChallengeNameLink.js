@@ -12,14 +12,15 @@ import ShareLink from '../ShareLink/ShareLink'
  */
 export default class ChallengeNameLink extends Component {
   render() {
+    const challenge = _get(this.props.task, 'parent') || this.props.challenge || {}
     const challengeBrowseRoute =
-      `/browse/challenges/${_get(this.props.task, 'parent.id', '')}`
+      `/browse/challenges/${challenge.id}`
 
     return (
-      <span className="mr-flex mr-items-center">
+      <span className="mr-flex mr-items-center mr-relative">
         <Link to={challengeBrowseRoute}>
           <span className="mr-mr-2">
-            {_get(this.props.task, 'parent.name')}
+            {challenge.name}
           </span>
         </Link>
         <ShareLink link={challengeBrowseRoute} {...this.props} />

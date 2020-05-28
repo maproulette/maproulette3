@@ -9,6 +9,16 @@ export default defineMessages({
     defaultMessage: "Actions",
   },
 
+  invertLabel: {
+    id: "TasksTable.invert.abel",
+    defaultMessage: "invert",
+  },
+
+  invertedLabel: {
+    id: "TasksTable.inverted.label",
+    defaultMessage: "inverted",
+  },
+
   idLabel: {
     id: "Task.fields.id.label",
     defaultMessage: "Internal Id",
@@ -72,6 +82,11 @@ export default defineMessages({
   commentsLabel: {
     id: "Admin.TaskAnalysisTable.columnHeaders.comments",
     defaultMessage: "Comments",
+  },
+
+  tagsLabel: {
+    id: "Admin.TaskAnalysisTable.columnHeaders.tags",
+    defaultMessage: "Tags",
   },
 
   inspectTaskLabel: {
@@ -152,6 +167,11 @@ export default defineMessages({
   exportGeoJSONLabel: {
     id: "Admin.manageTasks.controls.exportGeoJSON.label",
     defaultMessage: "Export GeoJSON",
+  },
+
+  exportMapperReviewCSVLabel: {
+    id: "Admin.manageTasks.controls.exportMapperReviewCSV.label",
+    defaultMessage: "Export Mapper Review CSV",
   },
 
   shownLabel: {

@@ -60,7 +60,7 @@ export default class ConfirmAction extends Component {
         {ControlWithConfirmation}
 
         <Modal
-          narrow
+          narrowColumn
           fullBleed
           onClose={this.cancel}
           isActive={this.state.confirming}

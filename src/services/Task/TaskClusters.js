@@ -59,7 +59,8 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25) {
                                                             criteria.boundingBox,
                                                             _get(criteria, 'savedChallengesOnly'),
                                                             null,
-                                                            criteria.searchQuery)
+                                                            criteria.searchQuery,
+                                                            _get(criteria, 'invertFields'))
     searchParameters.cid = challengeId
 
     // If we don't have a challenge Id then we need to do some limiting.

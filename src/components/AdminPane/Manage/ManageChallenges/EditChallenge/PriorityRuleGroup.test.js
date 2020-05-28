@@ -133,9 +133,11 @@ describe("preparePriorityRuleGroupForSaving", () => {
     const result =
       JSON.parse(preparePriorityRuleGroupForSaving(basicFormGroup))
 
-    expect(result.rules.length).toBe(2)
-    expect(result.rules[0].value).toEqual("firstTag.foo")
-    expect(result.rules[1].value).toEqual("firstTag.baz")
+    expect(result.rules.length).toBe(1)
+    expect(result.rules[0].rules.length).toBe(2)
+    expect(result.rules[0].condition).toEqual("OR")
+    expect(result.rules[0].rules[0].value).toEqual("firstTag.foo")
+    expect(result.rules[0].rules[1].value).toEqual("firstTag.baz")
   })
 
   test("commas are ignored in quoted strings when splitting comma-separated values", () => {
@@ -146,7 +148,8 @@ describe("preparePriorityRuleGroupForSaving", () => {
       JSON.parse(preparePriorityRuleGroupForSaving(basicFormGroup))
 
     expect(result.rules.length).toBe(1)
-    expect(result.rules[0].value).toEqual("firstTag.foo,baz")
+    expect(result.rules[0].condition).toEqual("OR")
+    expect(result.rules[0].rules[0].value).toEqual("firstTag.foo,baz")
   })
 })
 

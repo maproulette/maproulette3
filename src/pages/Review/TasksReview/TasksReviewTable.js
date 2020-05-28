@@ -19,9 +19,11 @@ import { TaskPriority, keysByPriority, messagesByPriority }
       from '../../../services/Task/TaskPriority/TaskPriority'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
-import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
+import { ReviewTasksType, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
+import InTableTagFilter
+       from '../../../components/KeywordAutosuggestInput/InTableTagFilter'
 import ConfigureColumnsModal
        from '../../../components/ConfigureColumnsModal/ConfigureColumnsModal'
 import FilterSuggestTextBox from './FilterSuggestTextBox'
@@ -33,7 +35,8 @@ import WithConfigurableColumns from '../../../components/HOCs/WithConfigurableCo
 import WithCurrentUser from '../../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import { mapColors } from '../../../interactions/User/AsEndUser'
 import messages from './Messages'
-
+import { ViewCommentsButton, StatusLabel, makeInvertable }
+  from '../../../components/TaskAnalysisTable/TaskTableHelpers'
 import { Link } from 'react-router-dom'
 import ReactTable from 'react-table'
 
@@ -47,7 +50,7 @@ import ReactTable from 'react-table'
 export class TaskReviewTable extends Component {
   state = {
     openComments: null,
-    showConfigureColumns: false,
+    showConfigureColumns: false
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -113,8 +116,10 @@ export class TaskReviewTable extends Component {
       }
     }
 
+    this.setState({lastTableState: _cloneDeep(tableState)})
     this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
-                                  boundingBox: this.props.reviewCriteria.boundingBox})
+      boundingBox: this.props.reviewCriteria.boundingBox,
+      includeTags: !!_get(this.props.addedColumns, 'tags')})
   }
 
   startReviewing() {
@@ -141,6 +146,14 @@ export class TaskReviewTable extends Component {
     if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
       this.setupConfigurableColumns(this.props.reviewTasksType)
     }
+
+    // If we've added the "tag" column, we need to update the table to fetch
+    // the tag data.
+    else if (!_get(prevProps.addedColumns, 'tags') &&
+        _get(this.props.addedColumns, 'tags') &&
+        this.state.lastTableState) {
+      this.updateTasks(this.state.lastTableState)
+    }
   }
 
   setupConfigurableColumns = (reviewTasksType) => {
@@ -157,7 +170,8 @@ export class TaskReviewTable extends Component {
                    "reviewCompleteControls":{permanent: true},
                    "reviewerControls":{permanent: true},
                    "mapperControls":{permanent: true},
-                   "viewComments":{}}
+                   "viewComments":{},
+                   "tags":{}}
 
     let defaultColumns = _keys(columns)
 
@@ -189,7 +203,7 @@ export class TaskReviewTable extends Component {
     this.props.resetColumnChoices(columns, defaultColumns)
   }
 
-  gearDropdown = () => {
+  gearDropdown = (reviewTasksType) => {
     return (
       <Dropdown className="mr-dropdown--right"
           dropdownButton={dropdown => (
@@ -199,7 +213,7 @@ export class TaskReviewTable extends Component {
                       className="mr-fill-current mr-w-5 mr-h-5" />
               </button>
           )}
-          dropdownContent={() =>
+          dropdownContent={(dropdown) =>
             <React.Fragment>
               <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
                 <li>
@@ -210,6 +224,18 @@ export class TaskReviewTable extends Component {
                     <FormattedMessage {...messages.configureColumnsLabel} />
                   </button>
                 </li>
+                {(reviewTasksType === ReviewTasksType.allReviewedTasks || reviewTasksType === ReviewTasksType.toBeReviewed) &&
+                  <li onClick={dropdown.toggleDropdownVisible}>
+                    <a target="_blank"
+                        rel="noopener noreferrer"
+                        href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
+                        className="mr-flex mr-items-center"
+                    >
+                        <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                        <FormattedMessage {...messages.exportMapperCSVLabel} />
+                    </a>
+                  </li>
+                }
               </ul>
             </React.Fragment>
           }
@@ -304,7 +330,7 @@ export class TaskReviewTable extends Component {
               >
                 <FormattedMessage {...messages.refresh} />
               </button>
-              <div className="mr-float-right mr-mt-3 mr-ml-3">{this.gearDropdown()}</div>
+              <div className="mr-float-right mr-mt-3 mr-ml-3">{this.gearDropdown(this.props.reviewTasksType)}</div>
             </div>
           </header>
           <div className="mr-mt-6">
@@ -380,7 +406,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.status = {
     id: 'status',
-    Header: props.intl.formatMessage(messages.statusLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.statusLabel),
+                           () => props.invertField('status'),
+                           _get(criteria, 'invertFields.status')),
     accessor: 'status',
     sortable: true,
     filterable: true,
@@ -422,7 +450,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.priority = {
     id: 'priority',
-    Header: props.intl.formatMessage(messages.priorityLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.priorityLabel),
+                           () => props.invertField('priority'),
+                           _get(criteria, 'invertFields.priority')),
     accessor: 'priority',
     sortable: true,
     filterable: true,
@@ -462,7 +492,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.reviewRequestedBy = {
     id: 'reviewRequestedBy',
-    Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewRequestedByLabel),
+                           () => props.invertField('reviewRequestedBy'),
+                           _get(criteria, 'invertFields.reviewRequestedBy')),
     accessor: 'reviewRequestedBy',
     filterable: true,
     sortable: false,
@@ -475,12 +507,14 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       >
         {_get(row._original.reviewRequestedBy, 'username')}
       </div>
-    )
+    ),
   }
 
   columns.challenge = {
     id: 'challenge',
-    Header: props.intl.formatMessage(messages.challengeLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.challengeLabel),
+                           () => props.invertField('challenge'),
+                           _get(criteria, 'invertFields.challenge')),
     accessor: 'parent',
     filterable: true,
     sortable: false,
@@ -509,7 +543,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.project = {
     id: 'project',
-    Header: props.intl.formatMessage(messages.projectLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.projectLabel),
+                           () => props.invertField('project'),
+                           _get(criteria, 'invertFields.project')),
     filterable: true,
     sortable: false,
     exportable: t => _get(t.parent, 'parent.displayName'),
@@ -590,7 +626,9 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.reviewedBy = {
     id: 'reviewedBy',
-    Header: props.intl.formatMessage(messages.reviewedByLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewedByLabel),
+                           () => props.invertField('reviewedBy'),
+                           _get(criteria, 'invertFields.reviewedBy')),
     accessor: 'reviewedBy',
     filterable: true,
     sortable: false,
@@ -603,12 +641,14 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       >
         {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
       </div>
-    )
+    ),
   }
 
   columns.reviewStatus = {
     id: 'reviewStatus',
-    Header: props.intl.formatMessage(messages.reviewStatusLabel),
+    Header: makeInvertable(props.intl.formatMessage(messages.reviewStatusLabel),
+                           () => props.invertField('reviewStatus'),
+                           _get(criteria, 'invertFields.reviewStatus')),
     accessor: 'reviewStatus',
     sortable: true,
     filterable: true,
@@ -750,33 +790,36 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
   }
 
+  columns.tags = {
+    id: 'tags',
+    Header: props.intl.formatMessage(messages.tagsLabel),
+    accessor: 'tags',
+    filterable: true,
+    sortable: false,
+    minWidth: 120,
+    Cell: ({row}) => {
+      return (
+        <div className="row-challenge-column mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap">
+          {_map(row._original.tags, t => t.name === "" ? null : (
+            <div className="mr-inline mr-bg-white-10 mr-rounded mr-py-1 mr-px-2 mr-m-1" key={t.id}>
+              {t.name}
+            </div>
+          ))}
+        </div>
+      )
+    },
+    Filter: ({filter, onChange}) => {
+      return (
+        <InTableTagFilter
+          {...props}
+          onChange={onChange}
+          value={_get(filter, 'value')}
+        />
+      )
+    }
+  }
+
   return columns
-}
-
-const StatusLabel = props => (
-  <span
-    className={classNames('mr-inline-flex mr-items-center', props.className)}
-  >
-    <span className="mr-w-2 mr-h-2 mr-rounded-full mr-bg-current" />
-    <span className="mr-ml-2 mr-text-xs mr-uppercase mr-tracking-wide">
-      <FormattedMessage {...props.intlMessage} />
-    </span>
-  </span>
-)
-
-const ViewCommentsButton = function(props) {
-  return (
-    <button
-      onClick={props.onClick}
-      className="mr-inline-flex mr-items-center mr-transition mr-text-green-lighter hover:mr-text-white"
-    >
-      <SvgSymbol
-        sym="comments-icon"
-        viewBox="0 0 20 20"
-        className="mr-fill-current mr-w-4 mr-h-4"
-      />
-    </button>
-  )
 }
 
 export default WithCurrentUser(WithConfigurableColumns(

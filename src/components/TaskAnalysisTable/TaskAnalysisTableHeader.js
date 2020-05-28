@@ -17,6 +17,7 @@ import DropdownButton from '../Bulma/DropdownButton'
 import WithDeactivateOnOutsideClick from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import { TaskStatus, statusLabels, keysByStatus } from '../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatusWithUnset, reviewStatusLabels, keysByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
+import { buildLinkToMapperExportCSV } from '../../services/Task/TaskReview/TaskReview'
 import { TaskPriority, taskPriorityLabels, keysByPriority } from '../../services/Task/TaskPriority/TaskPriority'
 import { buildLinkToExportCSV, buildLinkToExportGeoJSON } from '../../services/Challenge/Challenge'
 import messages from './Messages'
@@ -262,6 +263,18 @@ export class TaskAnalysisTableHeader extends Component {
                                     <FormattedMessage {...messages.exportGeoJSONLabel} />
                                   </button>
                                 </form>
+                              </li>
+                            </ul>
+                            <ul className="mr-list-dropdown">
+                              <li className="mr-mt-2">
+                                <a target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={`${buildLinkToMapperExportCSV(this.props.criteria)}&cid=${_get(this.props, 'challenge.id')}`}
+                                    className="mr-flex mr-items-center"
+                                >
+                                    <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                                    <FormattedMessage {...messages.exportMapperReviewCSVLabel} />
+                                </a>
                               </li>
                             </ul>
                         </React.Fragment>

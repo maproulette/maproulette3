@@ -73,7 +73,9 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
     const searchParameters = generateSearchParametersString(filters,
                                                             null,
                                                             _get(criteria, 'savedChallengesOnly'),
-                                                            null)
+                                                            null, null,
+                                                            _get(criteria, 'invertFields'))
+    const includeTags = _get(criteria, 'includeTags', false)
 
     // If we don't have a challenge Id then we need to do some limiting.
     if (!filters.challengeId) {
@@ -120,7 +122,8 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
           top: normalizedBounds.getNorth(),
         },
         params: {limit, page: (page * limit), sort: sortBy, order: direction,
-                 includeTotal: true, excludeLocked, ...searchParameters, includeGeometries},
+                 includeTotal: true, excludeLocked, ...searchParameters, includeGeometries,
+                 includeTags},
         json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute().then(normalizedResults => {

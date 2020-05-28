@@ -43,4 +43,9 @@ export default defineMessages({
     id: "ChallengeProgress.metrics.averageTime.label",
     defaultMessage: "Avg time per task:"
   },
+
+  excludesSkip: {
+    id: "ChallengeProgress.metrics.excludesSkip.label",
+    defaultMessage: "(excluding skipped tasks)"
+  },
 })

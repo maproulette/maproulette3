@@ -41,6 +41,7 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
       if (challengeId && props.fetchChallengeActions) {
         this.setState({loading: true})
         const criteria = {filters: _get(props.searchFilters, 'filters')}
+        criteria.invertFields = _get(props.searchCriteria, 'filters.invertFields')
 
         if (props.includeTaskStatuses && this.isFiltering(props.includeTaskStatuses)) {
           criteria.status = _keys(_pickBy(props.includeTaskStatuses)).join(',')
@@ -80,24 +81,29 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
 
       if (challengeId) {
         if (challengeId !== _get(this.props.challenge, 'id')) {
-          this.updateMetrics(this.props)
+          return this.updateMetrics(this.props)
         }
 
         if (this.props.includeTaskStatuses !== prevProps.includeTaskStatuses) {
-          this.updateMetrics(this.props)
+          return this.updateMetrics(this.props)
         }
 
         if (this.props.includeTaskReviewStatuses !== prevProps.includeTaskReviewStatuses) {
-          this.updateMetrics(this.props)
+          return this.updateMetrics(this.props)
         }
 
         if (this.props.includeTaskPriorities !== prevProps.includeTaskPriorities) {
-          this.updateMetrics(this.props)
+          return this.updateMetrics(this.props)
         }
 
         if (!_isEqual(_get(this.props.searchFilters, 'filters'),
                       _get(prevProps.searchFilters, 'filters'))) {
-          this.updateMetrics(this.props)
+          return this.updateMetrics(this.props)
+        }
+
+        if (!_isEqual(_get(this.props.searchCriteria, 'filters.invertFields'),
+                      _get(prevProps.searchCriteria, 'filters.invertFields'))) {
+          return this.updateMetrics(this.props)
         }
       }
     }

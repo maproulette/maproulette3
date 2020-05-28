@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   header: {
     id: "FeaturedChallenges.header",
-    defaultMessage: "Featured",
+    defaultMessage: "Challenge Highlights",
   },
 
   nothingFeatured: {
@@ -17,5 +17,10 @@ export default defineMessages({
   projectIndicatorLabel: {
     id: "FeaturedChallenges.projectIndicator.label",
     defaultMessage: "Project"
+  },
+
+  browseFeaturedLabel: {
+    id: "FeaturedChallenges.browse",
+    defaultMessage: "Explore",
   },
 })

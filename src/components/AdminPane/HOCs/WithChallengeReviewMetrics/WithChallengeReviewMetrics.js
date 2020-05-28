@@ -27,6 +27,7 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
        _merge(filters, _get(props.searchFilters, 'filters'))
 
       const criteria = {filters}
+      criteria.invertFields = _get(props.searchCriteria, 'filters.invertFields')
 
       if (props.includeTaskStatuses) {
         criteria.filters.status = _keys(_pickBy(props.includeTaskStatuses)).join(',')
@@ -50,23 +51,23 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
 
     componentDidUpdate(prevProps) {
       if (_get(prevProps.challenge, 'id') !== _get(this.props.challenge, 'id')) {
-        this.updateMetrics(this.props)
+        return this.updateMetrics(this.props)
       }
 
       if (this.props.includeTaskStatuses !== prevProps.includeTaskStatuses) {
-        this.updateMetrics(this.props)
+        return this.updateMetrics(this.props)
       }
 
       if (this.props.includeTaskReviewStatuses !== prevProps.includeTaskReviewStatuses) {
-        this.updateMetrics(this.props)
+        return this.updateMetrics(this.props)
       }
 
       if (this.props.includeTaskPriorities !== prevProps.includeTaskPriorities) {
-        this.updateMetrics(this.props)
+        return this.updateMetrics(this.props)
       }
 
       if (_get(this.props.searchFilters, 'filters') !== _get(prevProps.searchFilters, 'filters')) {
-        this.updateMetrics(this.props)
+        return this.updateMetrics(this.props)
       }
     }
 
@@ -82,7 +83,8 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
 
 const mapStateToProps = state => (
   {reviewMetrics: _get(state, 'currentReviewTasks.metrics.reviewActions'),
-   reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions')}
+   reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions'),
+   reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') }
 )
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
