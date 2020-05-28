@@ -52,4 +52,8 @@ export default defineMessages({
     id: "Locale.ru-RU.label",
     defaultMessage: "ru-RU (Russian - Russia)",
   },
+  'uk': {
+    id: "Locale.uk.label",
+    defaultMessage: "uk (Ukrainian)",
+  },
 })
