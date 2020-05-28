@@ -4,7 +4,11 @@ import _isString from 'lodash/isString'
 import _fromPairs from 'lodash/fromPairs'
 import messages from './Messages'
 
-// Supported locales.
+// To add support for a new locale, add it to both `Locale` and `LocaleImports`
+// in this file, and then add a description of the new locale to the
+// `Messages.js` file in this directory
+
+// Supported locales
 export const Locale = Object.freeze({
   enUS: 'en-US',
   es: 'es',
@@ -18,6 +22,7 @@ export const Locale = Object.freeze({
   'cs-CZ': 'cs-CZ',
   'fa-IR': 'fa-IR',
   'ru-RU': 'ru-RU',
+  uk: 'uk',
 })
 
 // Dynamic imports to load locale data and translation files
@@ -92,6 +97,12 @@ const LocaleImports = {
     return import('react-intl/locale-data/ru').then(ru => {
       addLocaleData([...ru.default])
       return import('../../../lang/ru_RU.json')
+    })
+  },
+  [Locale.uk]: () => {
+    return import('react-intl/locale-data/uk').then(uk => {
+      addLocaleData([...uk.default])
+      return import('../../../lang/uk.json')
     })
   },
 }
