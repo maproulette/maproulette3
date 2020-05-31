@@ -16,6 +16,12 @@
       content: '';
       @apply absolute mr-top-0 mr-left-0 mr--ml-8 mr-w-4 mr-h-4 mr-bg-blue-light mr-rounded-full;
     }
+
+    &--vcentered {
+      &:before {
+        @apply mr-mt-2px;
+      }
+    }
   }
 
   &__header {

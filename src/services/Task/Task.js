@@ -75,6 +75,20 @@ export const unsubscribeFromReviewMessages = function() {
   websocketClient.removeServerSubscription("reviews", null, "reviewMessageHandler")
 }
 
+export const subscribeToAllTasks = function(callback, handle) {
+  websocketClient.addServerSubscription(
+    "tasks",
+    null,
+    handle,
+    messageObject => callback(messageObject)
+  )
+}
+
+export const unsubscribeFromAllTasks = function(handle) {
+  websocketClient.removeServerSubscription("tasks", null, handle)
+}
+
+
 const onReviewMessage = function(dispatch, messageObject) {
   switch(messageObject.messageType) {
     case "review-new":

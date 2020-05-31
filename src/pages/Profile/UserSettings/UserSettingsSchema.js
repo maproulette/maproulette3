@@ -72,6 +72,11 @@ export const jsSchema = (intl, user, editor) => {
         type: "boolean",
         default: false,
       },
+      allowFollowing: {
+        title: intl.formatMessage(messages.allowFollowingLabel),
+        type: "boolean",
+        default: false,
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -164,8 +169,12 @@ export const uiSchema = (intl, user, editor) => {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.isReviewerDescription),
     },
+    allowFollowing: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.allowFollowingDescription),
+    },
     "ui:order": [
-      "defaultEditor", "locale", "defaultBasemap", "leaderboardOptOut", "customBasemap", "isReviewer",
+      "defaultEditor", "locale", "defaultBasemap", "leaderboardOptOut", "customBasemap", "isReviewer","allowFollowing"
     ],
   }
 
