@@ -37,13 +37,17 @@ export class ReviewTaskControls extends Component {
   setComment = comment => this.setState({comment})
   setTags = tags => this.setState({tags})
 
-  onConfirm = (alternateFilters) => {
+  onConfirm = (alternateCriteria) => {
     const history = _cloneDeep(this.props.history)
-    _merge(_get(history, 'location.state.filters', {}), alternateFilters)
+    _merge(_get(history, 'location.state', {}), alternateCriteria)
+
+    const requestedNextTask = !this.state.requestedNextTask ? null :
+      {id: this.state.requestedNextTask, parent: this.state.requestedNextTaskParent}
+
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, this.state.tags,
                                      this.state.loadBy, history,
-                                     this.props.taskBundle)
+                                     this.props.taskBundle, requestedNextTask)
     this.setState({confirmingTask: false, comment: ""})
   }
 
@@ -53,6 +57,15 @@ export class ReviewTaskControls extends Component {
 
   chooseLoadBy = (loadBy) => {
     this.setState({loadBy})
+  }
+
+  chooseNextTask = (challengeId, isVirtual, taskId) => {
+    this.setState({requestedNextTask: taskId,
+                   requestedNextTaskParent: challengeId})
+  }
+
+  clearNextTask = () => {
+    this.setState({requestedNextTask: null})
   }
 
   /** Save Review Status */
@@ -212,6 +225,9 @@ export class ReviewTaskControls extends Component {
             loadBy={this.state.loadBy}
             inReview={true}
             fromInbox={fromInbox}
+            chooseNextTask={this.chooseNextTask}
+            clearNextTask={this.clearNextTask}
+            requestedNextTask={this.state.requestedNextTask}
           />
         }
       </div>

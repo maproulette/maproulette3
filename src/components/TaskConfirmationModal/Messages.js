@@ -54,6 +54,16 @@ export default defineMessages({
     defaultMessage: "Submit",
   },
 
+  invertLabel: {
+    id: 'TaskConfirmationModal.invert.label',
+    defaultMessage: "invert",
+  },
+
+  invertedLabel: {
+    id: 'TaskConfirmationModal.inverted.label',
+    defaultMessage: "inverted",
+  },
+
   osmUploadNotice: {
     id: 'TaskConfirmationModal.osmUploadNotice',
     defaultMessage: "These changes will be uploaded to OpenStreetMap on your behalf",

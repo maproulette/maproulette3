@@ -44,6 +44,11 @@ export default defineMessages({
     defaultMessage: "Next Filtered Task",
   },
 
+  nearby: {
+    id: 'Task.review.loadByMethod.nearby',
+    defaultMessage: "Nearby Task",
+  },
+
   all: {
     id: 'Task.review.loadByMethod.all',
     defaultMessage: "Back to Review All",

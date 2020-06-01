@@ -6,6 +6,8 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _snakeCase from 'lodash/snakeCase'
 import _isFinite from 'lodash/isFinite'
+import _map from 'lodash/map'
+import _values from 'lodash/values'
 import queryString from 'query-string'
 import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
@@ -198,6 +200,45 @@ const determineType = (reviewTasksType) => {
     case ReviewTasksType.allReviewedTasks:
     default:
       return 4
+  }
+}
+
+/*
+ * Retrieve review tasks geographically closest to the given task (up to the given
+ * limit). Returns an object in clusteredTasks format with the tasks and meta data.
+ * Note that this does not add the results to the redux store, but simply returns them
+ */
+export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5) {
+  return function(dispatch) {
+    const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                         criteria.boundingBox,
+                                                         _get(criteria, 'savedChallengesOnly'),
+                                                         _get(criteria, 'excludeOtherReviewers'),
+                                                         null,
+                                                         _get(criteria, 'invertFields', {}))
+
+    const params = {limit, ...searchParameters}
+
+    return new Endpoint(
+      api.tasks.nearbyReviewTasks,
+      {
+        schema: [ taskSchema() ],
+        variables: {taskId},
+        params,
+      }
+    ).execute().then(normalizedResults => ({
+      loading: false,
+      tasks: _map(_values(_get(normalizedResults, 'entities.tasks', {})), task => {
+        if (task.location) {
+          // match clusteredTasks response, which returns a point with lat/lng fields
+          task.point = {
+            lng: task.location.coordinates[0],
+            lat: task.location.coordinates[1]
+          }
+        }
+        return task
+      })
+    }))
   }
 }
 

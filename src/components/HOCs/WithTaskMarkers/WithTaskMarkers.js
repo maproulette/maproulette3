@@ -22,8 +22,10 @@ export default function WithTaskMarkers(WrappedComponent,
     render() {
       const challengeTasks = _get(this.props, tasksProp)
 
-      // Only create markers for created, skipped, or too-hard tasks
-      const allowedStatuses = [TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard]
+      // Only create markers for allowed statuses OR [created, skipped, or too-hard tasks]
+      const allowedStatuses = this.props.allowedStatuses ||
+        [TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard]
+
       const markers = []
       if (_isObject(challengeTasks)) {
         if (_isArray(challengeTasks.tasks) && challengeTasks.tasks.length > 0) {
@@ -37,12 +39,13 @@ export default function WithTaskMarkers(WrappedComponent,
               position: [nearestToCenter.geometry.coordinates[1], nearestToCenter.geometry.coordinates[0]],
               options: {
                 challengeId: _isFinite(challengeTasks.challengeId) ?
-                              challengeTasks.challengeId : (task.challengeId || task.parentId),
+                              challengeTasks.challengeId : (task.challengeId || task.parentId || task.parent),
                 isVirtualChallenge: challengeTasks.isVirtualChallenge,
                 challengeName: task.parentName,
                 taskId: task.id,
                 status: task.status,
                 priority: task.priority,
+                reviewStatus: task.reviewStatus,
               },
             })
           })

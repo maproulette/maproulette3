@@ -9,7 +9,7 @@ import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _isEmpty from 'lodash/isEmpty'
 import _merge from 'lodash/merge'
-import _clone from 'lodash/clone'
+import _cloneDeep from 'lodash/cloneDeep'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { needsReviewType } from '../../services/User/User'
@@ -22,6 +22,7 @@ import { TaskReviewLoadMethod, messagesByReviewLoadMethod }
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import AsCooperativeWork from '../../interactions/Task/AsCooperativeWork'
 import TaskNearbyList from '../TaskPane/TaskNearbyList/TaskNearbyList'
+import TaskReviewNearbyList from '../TaskPane/TaskNearbyList/TaskReviewNearbyList'
 import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import KeywordAutosuggestInput
        from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
@@ -34,7 +35,7 @@ const shortcutGroup = 'taskConfirmation'
 
 export class TaskConfirmationModal extends Component {
   state = {
-    filters: {}
+    criteria: {}
   }
 
   commentInputRef = React.createRef()
@@ -48,9 +49,7 @@ export class TaskConfirmationModal extends Component {
     if (event.key ===
         this.props.keyboardShortcutGroups.taskConfirmation.confirmSubmit.key &&
         event.shiftKey) {
-      this.props.onConfirm(
-        _merge({}, _get(this.props.history, 'location.state.filters', {}),
-               this.state.filters))
+      this.props.onConfirm(this.currentFilters())
       event.preventDefault()
     }
     else if (event.key === this.props.keyboardShortcutGroups.taskConfirmation.cancel.key) {
@@ -84,15 +83,25 @@ export class TaskConfirmationModal extends Component {
     this.props.setTags(value)
   }
 
-  filterChange = (key, value) => {
-    const filters = _clone(this.state.filters)
-    filters[key] = value
-    this.setState({filters})
+  filterChange = (key, value, invert=false) => {
+    const criteria = _cloneDeep(this.state.criteria)
+    criteria.filters = criteria.filters || {}
+    criteria.filters[key] = value
+
+    criteria.invertFields = criteria.invertFields || {}
+    criteria.invertFields[key] = invert
+    this.setState({criteria})
+  }
+
+  currentFilters = () => {
+    return _merge({}, _get(this.props.history, 'location.state', {}),
+                  this.state.criteria)
   }
 
   render() {
     const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised)
-    const loadingNearby = this.props.loadBy === TaskLoadMethod.proximity
+    const loadingNearby = this.props.loadBy === TaskLoadMethod.proximity ||
+                          this.props.loadBy === TaskReviewLoadMethod.nearby
     const applyingTagChanges = AsCooperativeWork(this.props.task).isTagType() &&
                              this.props.status === TaskStatus.fixed
     const preferredTags =
@@ -101,13 +110,15 @@ export class TaskConfirmationModal extends Component {
         (result) => !_isEmpty(result)
       )
 
+    const TasksNearby = reviewConfirmation ? TaskReviewNearbyList : TaskNearbyList
+
     return (
       <External>
         <Modal
           contentClassName="mr-pb-6"
-          wide={loadingNearby && !reviewConfirmation}
-          narrow={!loadingNearby && !reviewConfirmation}
-          medium={reviewConfirmation}
+          wide={loadingNearby}
+          narrow={!loadingNearby}
+          medium={reviewConfirmation && !loadingNearby}
           isActive
           onClose={this.props.onCancel}
         >
@@ -115,7 +126,7 @@ export class TaskConfirmationModal extends Component {
             <div className={classNames("mr-flex mr-justify-center",
                                        {"mr-pr-12": loadingNearby})}>
               <div className={classNames("mr-flex mr-flex-col mr-items-center",
-                                         {"mr-max-w-88": !reviewConfirmation})}>
+                                         {"mr-max-w-88": (!reviewConfirmation || loadingNearby)})}>
                 <div className="mr-w-full">
                   <h2 className="mr-text-grey-light-more mr-text-4xl mr-mt-4">
                     {this.props.inReview ?
@@ -238,9 +249,7 @@ export class TaskConfirmationModal extends Component {
 
                     <button
                       className="mr-button mr-px-8"
-                      onClick={() => this.props.onConfirm(
-                        _merge({}, _get(this.props.history, 'location.state.filters', {}),
-                               this.state.filters))}
+                      onClick={() => this.props.onConfirm(this.currentFilters())}
                     >
                       <FormattedMessage {...messages.submitLabel} />
                     </button>
@@ -281,23 +290,39 @@ export class TaskConfirmationModal extends Component {
 
                   { reviewConfirmation && _isUndefined(this.props.needsRevised) &&
                     <React.Fragment>
-                      <div className="form mr-mt-8 mr-text-sm">
-                          <span className="mr-mr-4">
-                            <FormattedMessage {...messages.loadNextReviewLabel} />
-                          </span>
-                          <input
-                            type="radio"
-                            name="loadReviewPreference"
-                            className="mr-mr-2"
-                            checked={this.props.loadBy === TaskReviewLoadMethod.next}
-                            onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
-                            onChange={_noop}
-                          />
-                          <label className="mr-mr-4">
-                            <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
-                          </label>
+                      <div className="mr-mt-8 mr-text-sm">
+                        <div className="mr-mr-4">
+                          <FormattedMessage {...messages.loadNextReviewLabel} />
+                        </div>
+                        <div className="mr-flex mr-flex-wrap mr-mt-2">
+                          <div className="mr-mr-4">
+                            <input
+                              type="radio"
+                              name="loadReviewPreference"
+                              className="mr-mr-2"
+                              checked={this.props.loadBy === TaskReviewLoadMethod.next}
+                              onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
+                              onChange={_noop}
+                            />
+                            <label>
+                              <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
+                            </label>
+                          </div>
+                          <div className="mr-mr-4">
+                            <input
+                              type="radio"
+                              name="loadReviewPreference"
+                              className="mr-mr-2"
+                              checked={this.props.loadBy === TaskReviewLoadMethod.nearby}
+                              onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.nearby)}
+                              onChange={_noop}
+                            />
+                            <label>
+                              <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.nearby]} />
+                            </label>
+                          </div>
                           { this.props.fromInbox &&
-                            <React.Fragment>
+                            <div className="mr-mr-4">
                               <input
                                 type="radio"
                                 name="loadReviewPreference"
@@ -306,22 +331,25 @@ export class TaskConfirmationModal extends Component {
                                 onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
                                 onChange={_noop}
                               />
-                              <label className="mr-mr-4">
+                              <label>
                                 <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
                               </label>
-                            </React.Fragment>
+                            </div>
                           }
-                          <input
-                            type="radio"
-                            name="loadReviewPreference"
-                            className="mr-mr-2"
-                            checked={this.props.loadBy === TaskReviewLoadMethod.all}
-                            onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
-                            onChange={_noop}
-                          />
-                          <label>
-                            <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
-                          </label>
+                          <div>
+                            <input
+                              type="radio"
+                              name="loadReviewPreference"
+                              className="mr-mr-2"
+                              checked={this.props.loadBy === TaskReviewLoadMethod.all}
+                              onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                              onChange={_noop}
+                            />
+                            <label>
+                              <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
+                            </label>
+                          </div>
+                        </div>
                       </div>
                       <div className="mr-text-green-lighter mr-text-center mr-mt-4 hover:mr-text-white mr-cursor-pointer">
                         <div onClick={() => this.setState({showReviewFilters: true})}>
@@ -370,10 +398,11 @@ export class TaskConfirmationModal extends Component {
                 </h4>
                 <div className="mr-border-l-2 mr-border-grey-lighter-10 mr-pl-12">
                   <div className="mr-h-112 mr-w-88">
-                    <TaskNearbyList
+                    <TasksNearby
                       {...this.props}
                       onTaskClick={this.props.chooseNextTask}
                       onMapClick={this.props.clearNextTask}
+                      currentFilters={this.currentFilters()}
                       excludeSelfLockedTasks
                     />
                   </div>
@@ -386,10 +415,7 @@ export class TaskConfirmationModal extends Component {
               {...this.props}
               close={() => this.setState({showReviewFilters: false})}
               filterChange={this.filterChange}
-              currentFilters={
-                _merge({}, _get(this.props.history, 'location.state.filters', {}),
-                       this.state.filters)
-              }
+              currentFilters={this.currentFilters()}
             />
           }
         </Modal>
