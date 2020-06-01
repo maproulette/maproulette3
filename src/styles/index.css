@@ -33,6 +33,7 @@
 @import 'pages/leaderboard-row';
 @import 'components/timeline';
 @import 'components/badges';
+@import 'components/bounds';
 
 /**
  * Vendor styles
@@ -40,6 +41,7 @@
 @import 'vendor/react-burger-menu';
 @import 'vendor/react-table';
 @import 'vendor/react-datepicker';
+@import 'vendor/leaflet-areaselect';
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your

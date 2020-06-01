@@ -15,7 +15,6 @@ import AreaSelect from '../AreaSelect/AreaSelect'
 import { defaultLayerSource }
        from '../../services/VisibleLayer/LayerSources'
 import messages from './Messages'
-import './BoundsSelectorMap.scss'
 
 /**
  * BoundsSelectorModal presents a modal that displays a
@@ -42,9 +41,6 @@ export default class BoundsSelectorModal extends Component {
     }
   }
 
-  componentDidUpdate(prevPrps, prevState) {
-
-  }
   render() {
     const boundingBox = this.props.value ?
       toLatLngBounds(_split(this.props.value, ',')) :
@@ -54,8 +50,6 @@ export default class BoundsSelectorModal extends Component {
       <React.Fragment>
         <button className="mr-button mr-button mr-button--small mr-ml-4"
           onClick={(e) => {
-            console.log(e)
-            console.log("Button click.")
             e.stopPropagation()
             e.preventDefault()
             this.setState({active: true})
@@ -79,7 +73,7 @@ export default class BoundsSelectorModal extends Component {
                     </div>
 
                   </div>
-                  <div className={classNames("boundsSelector-map", this.props.className)}>
+                  <div className={classNames("mr-bounds-selector-map", this.props.className)}>
                     <MapPane>
                       <Map bounds={boundingBox}
                            zoomControl={false}>

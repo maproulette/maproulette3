@@ -2,7 +2,6 @@ import L from 'leaflet'
 import './leaflet-areaselect'
 import { injectIntl } from 'react-intl'
 import { MapControl, withLeaflet } from 'react-leaflet'
-import './AreaSelect.scss'
 
 /**
  * Leaflet AreaSelect that allows selection of a bounding box.
