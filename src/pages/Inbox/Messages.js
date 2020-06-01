@@ -109,6 +109,16 @@ export default defineMessages({
     defaultMessage: "A challenge you manage has been completed.",
   },
 
+  teamInviteNotificationLead: {
+    id: "Inbox.teamNotification.invited.lead",
+    defaultMessage: "You've been invited to join a team!",
+  },
+
+  followedNotificationLead: {
+    id: "Inbox.followNotification.followed.lead",
+    defaultMessage: "You have a new follower!",
+  },
+
   deleteNotificationLabel: {
     id: "Inbox.notification.controls.deleteNotification.label",
     defaultMessage: "Delete",

@@ -32,4 +32,12 @@ export default defineMessages({
     id: "Notification.type.challengeCompletedLong",
     defaultMessage: "Challenge Completed"
   },
+  team: {
+    id: "Notification.type.team",
+    defaultMessage: "Team"
+  },
+  follow: {
+    id: "Notification.type.follow",
+    defaultMessage: "Follow"
+  },
 })
