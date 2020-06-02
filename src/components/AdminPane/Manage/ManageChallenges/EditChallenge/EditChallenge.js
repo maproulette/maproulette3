@@ -666,9 +666,10 @@ export class EditChallenge extends Component {
                     noHtml5Validate
                     showErrorList={false}
                     formData={challengeData}
-                    formContext={_merge({bounding: _get(challengeData, 'bounding'),
-                                         buttonAction: BoundsSelectorModal},
-                                        this.state.formContext)}
+                    formContext={_merge(this.state.formContext,
+                                   {bounding: _get(challengeData, 'bounding'),
+                                    buttonAction: BoundsSelectorModal,
+                                   })}
                     onChange={this.changeHandler}
                     onSubmit={this.asyncSubmit}
                     onError={this.errorHandler}

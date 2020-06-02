@@ -14,6 +14,7 @@ import MapPane from '../EnhancedMap/MapPane/MapPane'
 import AreaSelect from '../AreaSelect/AreaSelect'
 import { defaultLayerSource }
        from '../../services/VisibleLayer/LayerSources'
+import { DEFAULT_MAP_BOUNDS } from '../../services/MapBounds/MapBounds'
 import messages from './Messages'
 
 /**
@@ -42,9 +43,12 @@ export default class BoundsSelectorModal extends Component {
   }
 
   render() {
-    const boundingBox = this.props.value ?
-      toLatLngBounds(_split(this.props.value, ',')) :
-        this.props.bounding ? toLatLngBounds(bbox(this.props.bounding)) : null
+    const boundingBox =
+      toLatLngBounds(
+        this.props.value ?
+          _split(this.props.value, ',') :
+          this.props.bounding ? bbox(this.props.bounding) : DEFAULT_MAP_BOUNDS
+      )
 
     return (
       <React.Fragment>
