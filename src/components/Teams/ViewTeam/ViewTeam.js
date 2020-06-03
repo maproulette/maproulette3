@@ -49,8 +49,11 @@ export const ViewTeam = props => {
 
   return (
     <div>
-      <div className="mr-text-lg mr-text-mango">{props.team.name}</div>
-      <div className="mr-mt-2 mr-mb-4 mr-text-sm">{props.team.description}</div>
+      <div className="mr-flex mr-justify-between">
+        <div className="mr-text-lg mr-text-mango">{props.team.name}</div>
+        {props.teamControls}
+      </div>
+      <div className="mr-mt-2 mr-mb-4 mr-text-sm mr-text-white">{props.team.description}</div>
 
       <h5 className="mr-mt-6 mr-mb-2 mr-text-xs mr-uppercase mr-text-pink">
         <FormattedMessage {...messages.activeMembersHeader} />

@@ -138,4 +138,9 @@ export default defineMessages({
     id: "Inbox.notification.controls.manageChallenge.label",
     defaultMessage: "Manage Challenge",
   },
+
+  viewTeamsLabel: {
+    id: "Inbox.notification.controls.viewTeams.label",
+    defaultMessage: "View Teams",
+  },
 })

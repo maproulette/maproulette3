@@ -49,6 +49,11 @@ export default defineMessages({
     defaultMessage: "User Metrics",
   },
 
+  teams: {
+    id: 'Navbar.links.teams',
+    defaultMessage: "Teams",
+  },
+
   signout: {
     id: 'Navbar.links.signout',
     defaultMessage: "Sign out",

@@ -71,3 +71,10 @@
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+.mr-bg-teams {
+  background-image: url('./static/images/teams.svg');
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}

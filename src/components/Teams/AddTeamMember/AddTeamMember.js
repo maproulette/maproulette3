@@ -46,7 +46,6 @@ const AddTeamMember = props => {
           onInputValueChange={username => setUsername(username)}
           onChange={osmUser => setSelectedUser(osmUser)}
           placeholder={props.intl.formatMessage(messages.osmUsername)}
-          fixedMenu
         />
       </div>
       {selectedUser && <RolePicker {...props} pickRole={inviteSelectedUser} />}
