@@ -11,6 +11,7 @@ import Dropdown from '../../Dropdown/Dropdown'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import TeamControls from '../TeamControls/TeamControls'
+import ViewTeam from '../ViewTeam/ViewTeam'
 import { MY_TEAMS } from '../TeamQueries'
 import messages from './Messages'
 
@@ -46,7 +47,64 @@ export const MyTeams = function(props) {
     return <BusySpinner />
   }
 
-  const teamItems = data.userTeams.map(teamUser => {
+  const TeamView = props.showCards ? TeamCards : TeamList
+  return <TeamView {...props} userTeams={data.userTeams} />
+}
+
+// Render teams as cards
+const TeamCards = props => {
+  if (props.userTeams.length === 0) {
+    return (
+      <span className="mr-text-white">
+        <FormattedMessage {...messages.noTeams} />
+      </span>
+    )
+  }
+
+  const cards = props.userTeams.map(teamUser => {
+    return (
+      <div
+        key={teamUser.team.id}
+        className="mr-w-1/3 mr-min-w-120 mr-bg-black-10 mr-mx-2 mr-mb-8 mr-p-4 mr-rounded mr-max-h-screen50 mr-overflow-y-auto"
+      >
+        <ViewTeam
+          {...props}
+          team={teamUser.team}
+          teamControls={
+            <Dropdown
+              className="mr-dropdown--right"
+              dropdownButton={dropdown => (
+                <button
+                  onClick={dropdown.toggleDropdownVisible}
+                  className="mr-text-green-lighter"
+                >
+                  <SvgSymbol
+                    sym="cog-icon"
+                    viewBox="0 0 20 20"
+                    className="mr-fill-current mr-w-4 mr-h-4"
+                  />
+                </button>
+              )}
+              dropdownContent={dropdown =>
+                <TeamControls {...props} teamMember={AsTeamMember(teamUser)} suppressView />
+              }
+            />
+          }
+        />
+      </div>
+    )
+  })
+
+  return (
+    <div className="mr-flex mr-justify-between mr-flex-wrap">
+      {cards}
+    </div>
+  )
+}
+
+// Render teams as list
+const TeamList = props => {
+  const teamItems = props.userTeams.map(teamUser => {
     const teamMember = AsTeamMember(teamUser)
     return (
       <li key={teamMember.team.id} className="mr-h-5 mr-my-2">
@@ -57,7 +115,7 @@ export const MyTeams = function(props) {
           </a>
 
           <div className="mr-flex mr-justify-end mr-items-center">
-            <div className="mr-mr-4">
+            <div className="mr-mr-4 mr-text-white">
               <FormattedMessage {...teamMember.roleDescription()} />
             </div>
 
@@ -90,7 +148,9 @@ export const MyTeams = function(props) {
   return (
     <div className="mr-flex mr-flex-col mr-justify-between">
       {teamItems.length === 0 ?
-       <FormattedMessage {...messages.noTeams} /> :
+       <span className="mr-text-white">
+         <FormattedMessage {...messages.noTeams} />
+       </span> :
        <ul className="mr-links-green-lighter">
          {teamItems}
        </ul>

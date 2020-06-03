@@ -187,6 +187,12 @@ const TeamBody = function(props) {
       </p>
 
       <p className="mr-text-md mr-text-yellow">{props.notification.extra}</p>
+
+      <div className="mr-mt-8 mr-links-green-lighter">
+        <Link to='/teams'>
+          <FormattedMessage {...messages.viewTeamsLabel} />
+        </Link>
+      </div>
     </React.Fragment>
   )
 }

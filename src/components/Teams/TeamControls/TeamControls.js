@@ -25,10 +25,12 @@ export const TeamControls = props => {
   const isAdmin = props.teamMember.isUser(props.user) && props.teamMember.isTeamAdmin()
   return (
     <ul className="mr-links-green-lighter">
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a onClick={() => props.viewTeam(props.teamMember.team)}>
-        <FormattedMessage {...messages.viewTeamLabel} />
-      </a>
+      {!props.suppressView &&
+       /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
+       <a onClick={() => props.viewTeam(props.teamMember.team)}>
+         <FormattedMessage {...messages.viewTeamLabel} />
+       </a>
+      }
       {isAdmin &&
        <React.Fragment>
          <li key="edit-team" className="mr-my-1">
@@ -86,6 +88,7 @@ TeamControls.propTypes = {
   teamMember: PropTypes.object.isRequired,
   viewTeam: PropTypes.func.isRequired,
   editTeam: PropTypes.func.isRequired,
+  suppressView: PropTypes.bool,
 }
 
 export default TeamControls
