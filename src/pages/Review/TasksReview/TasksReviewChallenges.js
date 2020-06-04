@@ -35,7 +35,7 @@ class TasksReviewChallenges extends Component {
     const searchString = _get(this.state.searchQuery,
                               `${this.props.reviewTasksType}.${queryType}`,
                               "")
-    return _toLower(value).includes(searchString)
+    return _toLower(value).includes(_toLower(searchString))
   }
 
   render() {
