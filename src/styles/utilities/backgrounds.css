@@ -14,18 +14,6 @@
   }
 }
 
-.mr-bg-road {
-  background-image: url('./static/images/bg-road.jpg');
-
-  @screen retina {
-    background-image: url('./static/images/bg-road@2x.jpg');
-  }
-}
-
-.mr-bg-featured-challenges {
-  background-image: url('./static/images/bg-featured-challenges.svg');
-}
-
 .mr-bg-fireworks {
   background-image: url('./static/images/bg-fireworks-left.svg'), url('./static/images/bg-fireworks-right.svg');
   background-position: left top, right top;
@@ -68,7 +56,6 @@
 .mr-bg-skyline {
   background-image: url('./static/images/skyline.svg');
   background-position: center bottom;
-  background-repeat: no-repeat;
   background-size: contain;
 }
 
@@ -77,4 +64,47 @@
   background-position: left center;
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.mr-bg-map {
+  background-image: url('./static/images/bg-map.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mr-bg-space {
+  background-image: url('./static/images/bg-space.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @screen retina {
+    background-image: url('./static/images/bg-space@2x.jpg');
+  }
+}
+
+.mr-bg-expert {
+  background-image: url('./static/images/expert.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mr-bg-find {
+  background-image: url('./static/images/find.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mr-bg-highway {
+  background-image: url('./static/images/bg-highway.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @screen retina {
+    background-image: url('./static/images/bg-highway@2x.jpg');
+  }
 }

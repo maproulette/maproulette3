@@ -11,6 +11,6 @@ export default defineMessages({
 
   featuredHeader: {
     id: "Home.Featured.header",
-    defaultMessage: "Featured",
+    defaultMessage: "Featured Challenges",
   },
 })
