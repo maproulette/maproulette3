@@ -13,6 +13,7 @@ import _keys from 'lodash/keys'
 import _omit from 'lodash/omit'
 import _pull from 'lodash/pull'
 import _isObject from 'lodash/isObject'
+import _pick from 'lodash/pick'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskPriority, keysByPriority, messagesByPriority }
@@ -116,7 +117,7 @@ export class TaskReviewTable extends Component {
       }
     }
 
-    this.setState({lastTableState: _cloneDeep(tableState)})
+    this.setState({lastTableState: _pick(tableState, ["sorted", "filtered"])})
     this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
       boundingBox: this.props.reviewCriteria.boundingBox,
       includeTags: !!_get(this.props.addedColumns, 'tags')})
