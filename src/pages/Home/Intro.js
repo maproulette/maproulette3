@@ -3,32 +3,14 @@ import React, { Component } from 'react'
 class Intro extends Component {
   render() {
     return (
-      <section className="mr-px-4 mr-py-12 md:mr-py-24">
-        <div className="mr-max-w-3xl mr-mx-auto md:mr-grid md:mr-grid-columns-12 md:mr-grid-gap-8 lg:mr-grid-gap-12">
-          <div className="mr-mb-8 md:mr-mb-0 md:mr-col-span-5 mr-flex mr-items-center">
-            <div className="mr-pb-12 mr-pt-6 mr-px-16 mr-bg-blue mr-text-white mr-rounded-sm mr-shadow mr-text-center">
-              <div className="mr-text-yellow mr-uppercase mr-text-3xl lg:mr-text-3xl mr-text-center mr-pb-2">
-                Over
-              </div>
-              <span className="mr-ticker mr-text-4xl lg:mr-text-5xl">
-                <span>5</span>
-                <span>0</span>
-                <span>0</span>
-                <span>0</span>
-                <span>0</span>
-                <span>0</span>
-              </span>
-              <h3 className="mr-mt-8 mr-leading-normal">
-                Mapping Tasks Solved
-                <br /> via MapRoulette
-              </h3>
-            </div>
-          </div>
-          <div className="mr-text-center md:mr-text-left md:mr-col-span-7">
-            <h2 className="mr-text-blue-light mr-my-6 mr-font-medium">
+      <section className="mr-px-4 mr-py-12 md:mr-py-24 mr-bg-space">
+        <div className="mr-flex mr-justify-center">
+          <div className="mr-text-center mr-w-1/2">
+            <h2 className="mr-text-yellow mr-mb-12 mr-font-light md:mr-text-5xl">
               Thousands of people just like you edit OpenStreetMap every day
             </h2>
-            <p className="md:mr-text-md mr-mb-6">
+
+            <p className="mr-text-white mr-mb-20">
               That’s why OSM is the most up to date and complete map you can
               find anywhere, and it’s why Facebook, Snapchat and many others use
               OSM to power their own maps. If you look at the richness of
@@ -37,6 +19,25 @@ class Intro extends Component {
               account, find a task that is right for you, and be an instant
               contributor to the world’s maps!
             </p>
+          </div>
+        </div>
+
+        <div className="mr-flex mr-justify-center">
+          <div className="mr-flex mr-justify-between mr-text-white mr-font-light mr-w-3/4">
+            <div className="mr-w-52 mr-mx-4">
+              <div className="mr-bg-expert mr-w-full mr-h-40"></div>
+              <h3 className="mr-font-light">Work at your own level, from novice to expert</h3>
+            </div>
+
+            <div className="mr-w-52 mr-mx-4">
+              <div className="mr-bg-find mr-w-full mr-h-40"></div>
+              <h3 className="mr-font-light">Find mapping tasks that are important to you</h3>
+            </div>
+
+            <div className="mr-w-52 mr-mx-4">
+              <div className="mr-bg-teams mr-w-full mr-h-40"></div>
+              <h3 className="mr-font-light">Create tasks for others to improve OSM together</h3>
+            </div>
           </div>
         </div>
       </section>

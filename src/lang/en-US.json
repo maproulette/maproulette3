@@ -1030,7 +1030,7 @@
   "Dashboard.header.somethingNew": "something new",
   "Dashboard.header.controls.findChallenge.label": "Discover new Challenges",
   "Home.Featured.browse": "Explore",
-  "Home.Featured.header": "Featured",
+  "Home.Featured.header": "Featured Challenges",
   "Inbox.header": "Notifications",
   "Inbox.controls.refreshNotifications.label": "Refresh",
   "Inbox.controls.groupByTask.label": "Group by Task",
