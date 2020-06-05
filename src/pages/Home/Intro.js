@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { ReactComponent as ExpertImage } from '../../static/images/expert.svg'
+import { ReactComponent as FindImage } from '../../static/images/find.svg'
+import { ReactComponent as TeamsImage } from '../../static/images/teams.svg'
 
 class Intro extends Component {
   render() {
@@ -25,18 +28,30 @@ class Intro extends Component {
         <div className="mr-flex mr-justify-center">
           <div className="mr-flex mr-justify-between mr-text-white mr-font-light mr-w-3/4">
             <div className="mr-w-52 mr-mx-4">
-              <div className="mr-bg-expert mr-w-full mr-h-40"></div>
-              <h3 className="mr-font-light">Work at your own level, from novice to expert</h3>
+              <div className="mr-w-full mr-h-40">
+                <ExpertImage viewBox="0 0 236 172" className="mr-w-full mr-h-full" />
+              </div>
+              <h3 className="mr-font-light mr-mt-4">
+                Work at your own level, from novice to expert
+              </h3>
             </div>
 
             <div className="mr-w-52 mr-mx-4">
-              <div className="mr-bg-find mr-w-full mr-h-40"></div>
-              <h3 className="mr-font-light">Find mapping tasks that are important to you</h3>
+              <div className="mr-w-full mr-h-40">
+                <FindImage viewBox="0 0 277 162" className="mr-w-full mr-h-full" />
+              </div>
+              <h3 className="mr-font-light mr-mt-4">
+                Find mapping tasks that are important to you
+              </h3>
             </div>
 
             <div className="mr-w-52 mr-mx-4">
-              <div className="mr-bg-teams mr-w-full mr-h-40"></div>
-              <h3 className="mr-font-light">Create tasks for others to improve OSM together</h3>
+              <div className="mr-w-full mr-h-40 mr-relative">
+                <TeamsImage viewBox="0 0 687 350" className="mr-w-full mr-h-full" />
+              </div>
+              <h3 className="mr-font-light mr-mt-4">
+                Create tasks for others to improve OSM together
+              </h3>
             </div>
           </div>
         </div>
