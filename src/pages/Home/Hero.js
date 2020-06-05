@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { ReactComponent as WorldMapImage }
+       from '../../static/images/bg-map.svg'
 
 export default class Hero extends Component {
   render() {
@@ -17,7 +19,9 @@ export default class Hero extends Component {
             </Link>
           </div>
         </div>
-        <div className="mr-bg-map mr-w-1/2 mr-h-64"></div>
+        <div className="mr-w-1/2 mr-h-64">
+          <WorldMapImage viewBox="0 0 687 350" className="mr-w-auto mr-h-64" />
+        </div>
       </div>
     )
   }
