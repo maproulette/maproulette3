@@ -1,12 +1,14 @@
 import { Role, rolesImply, ROLE_SUPERUSER }
        from '../../services/Grant/Role'
 import { TargetType } from '../../services/Grant/TargetType'
+import { GranteeType } from '../../services/Grant/GranteeType'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isObject from 'lodash/isObject'
 import _filter from 'lodash/filter'
 import _isFinite from 'lodash/isFinite'
 import _each from 'lodash/each'
+import _uniq from 'lodash/uniq'
 import { AsEndUser } from './AsEndUser'
 
 /**
@@ -37,13 +39,25 @@ export class AsManager extends AsEndUser {
       return []
     }
 
-    return _map(
-      _filter(this.user.grants, grant =>
-        grant.role === ROLE_SUPERUSER ||
-        (grant.target.objectType === TargetType.project && grant.target.objectId === project.id)
-      ),
-      'role'
+    // Combine the grants on the user with those on the project. This is
+    // potentially more lenient, but helps prevent erroneous security errors in
+    // the event of stale data (and the server will stop anything if the user
+    // actually lacks permission)
+    const userGrants = _filter(this.user.grants, grant =>
+      grant.role === ROLE_SUPERUSER || (
+        grant.target &&
+        grant.target.objectType === TargetType.project &&
+        grant.target.objectId === project.id
+      )
     )
+
+    const projectGrants = _filter(project.grants, grant =>
+      grant.grantee &&
+      grant.grantee.granteeType === GranteeType.user &&
+      grant.grantee.granteeId === this.user.id
+    )
+
+    return _uniq(_map(userGrants.concat(projectGrants), 'role'))
   }
 
   /**

@@ -1,7 +1,9 @@
 import AsManager from './AsManager'
+import _cloneDeep from 'lodash/cloneDeep'
 import { GUEST_USER_ID } from '../../services/User/User'
 import { Role, ROLE_SUPERUSER } from '../../services/Grant/Role'
 import { TargetType } from '../../services/Grant/TargetType'
+import { GranteeType } from '../../services/Grant/GranteeType'
 
 const superGrant = {id: -1, role: ROLE_SUPERUSER}
 const adminGrant123 = {id: 123, role: Role.admin, target: {objectType: TargetType.project, objectId: 123}}
@@ -9,9 +11,9 @@ const readGrant456 = {id: 456, role: Role.read, target: {objectType: TargetType.
 const adminGrant789 = {id: 789, role: Role.admin, target: {objectType: TargetType.project, objectId: 789}}
 const adminGrant101 = {id: 101, role: Role.admin, target: {objectType: TargetType.project, objectId: 101}}
 const writeGrant234 = {id: 234, role: Role.write, target: {objectType: TargetType.project, objectId: 234}}
-const adminGrant102 = {id: 102, role: Role.admin, target: {objectType: TargetType.project, objectId: 102}}
-const writeGrant102 = {id: 1021, role: Role.write, target: {objectType: TargetType.project, objectId: 102}}
-const readGrant102 = {id: 1022, role: Role.read, target: {objectType: TargetType.project, objectId: 102}}
+const adminGrant102 = {id: 102, role: Role.admin, target: {objectType: TargetType.project, objectId: 102}, grantee: {granteeType: GranteeType.user, granteeId: 246}}
+const writeGrant102 = {id: 1021, role: Role.write, target: {objectType: TargetType.project, objectId: 102}, grantee: {granteeType: GranteeType.user, granteeId: 246}}
+const readGrant102 = {id: 1022, role: Role.read, target: {objectType: TargetType.project, objectId: 102}, grantee: {granteeType: GranteeType.user, granteeId: 246}}
 const groupAdminGrant987 = {id: 9871, role: Role.admin, target: {objectType: TargetType.group, objectId: 987}}
 const groupWriteGrant987 = {id: 9872, role: Role.write, target: {objectType: TargetType.group, objectId: 987}}
 
@@ -25,6 +27,7 @@ const project456 = {id: 456, grants: [readGrant456]}
 const project789 = {id: 789, grants: [adminGrant789]}
 const project101 = {id: 101, grants: [adminGrant101], owner: 987654321}
 const project102 = {id: 102, grants: [adminGrant102, writeGrant102, readGrant102]}
+const project103 = {id: 103, grants: []}
 
 const challenge123_1 = {id: 1231, parent: 123}
 const challenge123_2 = {id: 1232, parent: 123}
@@ -35,9 +38,11 @@ const group987 = {id: 987}
 
 describe('projectRoles', () => {
   it("returns the project roles possessed by the user", () => {
+    const project = _cloneDeep(project102)
+    project.grants = []
     const manager = AsManager(powerUser)
 
-    const roles = manager.projectRoles(project102)
+    const roles = manager.projectRoles(project)
     expect(roles).toContain(Role.admin)
     expect(roles).toContain(Role.read)
     expect(roles).not.toContain(Role.write)
@@ -48,6 +53,17 @@ describe('projectRoles', () => {
 
     const roles = manager.projectRoles(project102)
     expect(roles).toContain(ROLE_SUPERUSER)
+  })
+
+  it("includes the user's granted roles from the project", () => {
+    const user = _cloneDeep(powerUser)
+    user.grants = []
+    const manager = AsManager(user)
+
+    const roles = manager.projectRoles(project102)
+    expect(roles).toContain(Role.admin)
+    expect(roles).toContain(Role.read)
+    expect(roles).toContain(Role.write)
   })
 
   it("returns an empty list for a user possessing none of the project's roles", () => {

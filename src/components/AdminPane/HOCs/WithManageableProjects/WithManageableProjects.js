@@ -117,7 +117,7 @@ const mapStateToProps = state => ({
   entities: state.entities
 })
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   const actions = bindActionCreators({
     fetchManageableProjects,
     fetchProject,
@@ -142,7 +142,7 @@ const mapDispatchToProps = dispatch => {
 
   actions.toggleProjectEnabled = project => {
     const updatedProject = Object.assign({}, project, {enabled: !project.enabled})
-    return dispatch(saveProject(updatedProject))
+    return dispatch(saveProject(updatedProject, ownProps.user))
   }
 
   return actions
