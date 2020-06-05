@@ -50,7 +50,7 @@ export class EditProject extends Component {
         formData.name = _snakeCase(formData.displayName).replace(/^home_/, 'project_')
       }
 
-      this.props.saveProject(formData).then(project => {
+      this.props.saveProject(formData, this.props.user).then(project => {
         if (project) {
           this.props.history.push(`/admin/project/${project.id}`)
         }

@@ -13,11 +13,9 @@ import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions'
 import { RESULTS_PER_PAGE } from '../Search/Search'
-import { Role } from '../Grant/Role'
-import { addServerError,
-         addError } from '../Error/Error'
+import { addServerError, addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
-import { findUser, ensureUserLoggedIn } from '../User/User'
+import { findUser, ensureUserLoggedIn, fetchUser } from '../User/User'
 
 /** normalizr schema for projects */
 export const projectSchema = function() {
@@ -193,7 +191,7 @@ export const searchProjects = function(searchCriteria, limit=RESULTS_PER_PAGE) {
  * whether it already has an id) and update the redux store with the latest
  * version from the server.
  */
-export const saveProject = function(projectData) {
+export const saveProject = function(projectData, user) {
   return function(dispatch) {
     // Setup the save endpoint to either edit or create the project depending
     // on whether it has an id.
@@ -212,11 +210,10 @@ export const saveProject = function(projectData) {
       dispatch(receiveProjects(normalizedResults.entities))
       const project = _get(normalizedResults, `entities.projects.${normalizedResults.result}`)
 
-      // If we just created the project, add the owner as an admin.
+      // If we just created the project, we should refresh the user as they
+      // almost certainly have new grants
       if (areCreating && project) {
-        return setProjectManagerRole(
-          project.id, project.owner, true, Role.admin
-        )(dispatch).then(() => project)
+        return fetchUser(user.id)(dispatch).then(() => project)
       }
       else {
         return project
