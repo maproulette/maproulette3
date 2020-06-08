@@ -35,7 +35,8 @@ export const jsSchema = intl => {
           valueType: {
             title: "Property Type",
             type: "string",
-            enum: ["string", "integer", "double", "long", "nested rule"],
+            enum: ["string", "integer", "double", "long", "nested rule", "bounds"],
+            enumNames: ["string", "integer", "double", "long", "nested rule", "location rule"],
           },
         },
         required: [ "valueType" ],
@@ -95,6 +96,25 @@ export const jsSchema = intl => {
                   value: {
                     title: "Property Value",
                     type: "string",
+                  },
+                },
+              },
+              { // bounds values
+                properties: {
+                  valueType: {
+                    enum: ["bounds"],
+                  },
+                  operator: {
+                    title: "Operator",
+                    type: "string",
+                    enum: ["contains", "not_contains"],
+                    enumNames: ["inside bounds", "outside bounds"],
+                    default: "inside bounds",
+                  },
+                  value: {
+                    title: "Bounds Value",
+                    type: "string",
+                    withButton: "map"
                   },
                 },
               }

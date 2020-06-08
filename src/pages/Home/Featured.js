@@ -50,7 +50,7 @@ export class Featured extends Component {
     )
 
     return (
-      <section className="mr-px-4 mr-py-12 md:mr-py-24 mr-bg-no-repeat mr-bg-center mr-bg-cover mr-bg-featured-challenges">
+      <section className="mr-px-4 mr-py-12 md:mr-py-24 mr-bg-highway">
         <header className="mr-text-center mr-mb-12 md:mr-mb-20">
           <h2 className="md:mr-text-5xl mr-text-white mr-font-normal">
             <FormattedMessage {...messages.featuredHeader} />

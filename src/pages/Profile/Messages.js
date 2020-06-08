@@ -77,6 +77,17 @@ export default defineMessages({
     defaultMessage: "If yes, you will **not** appear on the public leaderboard.",
   },
 
+  allowFollowingLabel: {
+    id: "Profile.form.allowFollowing.label",
+    defaultMessage: "Allow Following",
+  },
+
+  allowFollowingDescription: {
+    id: "Profile.form.allowFollowing.description",
+    defaultMessage:
+    "If no, users will not be able to follow your MapRoulette activity."
+  },
+
   apiKey: {
     id: "Profile.apiKey.header",
     defaultMessage: "API Key",

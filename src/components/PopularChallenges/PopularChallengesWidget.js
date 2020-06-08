@@ -29,7 +29,7 @@ export default class PopularChallengesWidget extends Component {
     return (
       <QuickWidget
         {...this.props}
-        className="mr-bg-skyline"
+        className="mr-bg-skyline mr-bg-no-repeat"
         widgetTitle={<FormattedMessage {...messages.header} />}
       >
         <PopularChallengeList {...this.props} />

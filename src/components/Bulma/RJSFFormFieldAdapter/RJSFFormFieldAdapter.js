@@ -9,6 +9,8 @@ import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
        from 'react-jsonschema-form/lib/components/widgets/SelectWidget'
+import OriginalTextWidget
+      from 'react-jsonschema-form/lib/components/widgets/TextWidget'
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import MarkdownTemplate from '../../MarkdownContent/MarkdownTemplate'
@@ -107,6 +109,26 @@ export const CustomSelectWidget = function(props) {
           className="mr-fill-current mr-w-4 mr-h-4"
         />
       </div>
+    </div>
+  )
+}
+
+
+/**
+ * A custom text widget with the new-ui styling (not Bulma)
+ */
+export const CustomTextWidget = function(props) {
+  const ButtonAction = props.formContext.buttonAction
+
+  return (
+    <div>
+      <OriginalTextWidget {...props} />
+      {props.schema.withButton &&
+        <ButtonAction buttonName={props.schema.withButton}
+                      onChange={props.onChange}
+                      value={props.value}
+                      {...props.formContext} />
+      }
     </div>
   )
 }

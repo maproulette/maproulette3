@@ -1,3 +1,4 @@
+import _get from 'lodash/get'
 import defaultPic from '../../static/images/user_no_image.png'
 
 /**
@@ -8,9 +9,13 @@ export class AsAvatarUser {
     Object.assign(this, user)
   }
 
+  rawAvatarURL() {
+    return this.avatarURL || _get(this.osmProfile, 'avatarURL')
+  }
+
   profilePic(size) {
-    const urlParts = this.avatarURL.replace(/\?s=\d+/, '?').split('?')
-    return /user_no_image/.test(this.avatarURL) ? defaultPic :
+    const urlParts = this.rawAvatarURL().replace(/\?s=\d+/, '?').split('?')
+    return /user_no_image/.test(this.rawAvatarURL()) ? defaultPic :
            `${urlParts[0]}?s=${size}&${urlParts.slice(1).join('?')}`
   }
 }

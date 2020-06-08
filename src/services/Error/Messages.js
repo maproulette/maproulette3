@@ -32,6 +32,10 @@ export default defineMessages({
     id: "Errors.user.notFound",
     defaultMessage: "No user found with that username."
   },
+  userFollowFailure: {
+    id: "Errors.user.genericFollowFailure",
+    defaultMessage: "Failure{details}"
+  },
 
   leaderboardFetchFailure: {
     id: "Errors.leaderboard.fetchFailure",

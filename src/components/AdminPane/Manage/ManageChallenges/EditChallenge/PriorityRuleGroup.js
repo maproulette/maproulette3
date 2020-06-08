@@ -109,13 +109,17 @@ export const normalizeRuleForSaving = (rule, allowCSV=true) => {
     return normalizeRuleGroupForSaving(rule.ruleGroup)
   }
 
+  if (rule.valueType === "bounds") {
+    rule.key = "location"
+  }
+
   if (_isEmpty(rule.key)) {
     return null
   }
 
   // If there are multiple, comma-separated values, split into separate rules
   // (ignoring commas in quoted strings)
-  if (allowCSV && /,/.test(rule.value)) {
+  if (allowCSV && /,/.test(rule.value) && rule.valueType !== "bounds") {
     let condition = "OR"
 
     // Negative conditions need to be "AND" (eg. value not 1 AND not 2)
@@ -139,6 +143,9 @@ export const normalizeRuleForSaving = (rule, allowCSV=true) => {
   if (!rule.operator && rule.valueType) {
     if (rule.valueType === "string") {
       rule.operator = "equal" // default string operator
+    }
+    else if (rule.valueType === "bounds") {
+      rule.operator = "contains" // default bounds operator
     }
     else {
       rule.operator = "==" // default numeric operator

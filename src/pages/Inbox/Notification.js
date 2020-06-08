@@ -30,6 +30,10 @@ class Notification extends Component {
         return <ReviewBody notification={notification} />
       case NotificationType.challengeCompleted:
         return <ChallengeCompletionBody notification={notification} />
+      case NotificationType.team:
+        return <TeamBody notification={notification} />
+      case NotificationType.follow:
+        return <FollowBody notification={notification} />
       default:
         return null
     }
@@ -167,6 +171,48 @@ const ChallengeCompletionBody = function(props) {
       <p className="mr-text-md mr-text-yellow">{props.notification.extra}</p>
 
       <ViewChallengeAdmin notification={props.notification} />
+    </React.Fragment>
+  )
+}
+
+const TeamBody = function(props) {
+  if (props.notification.description !== "invited") {
+    return null
+  }
+
+  return (
+    <React.Fragment>
+      <p className="mr-mb-8 mr-text-base">
+        <FormattedMessage {...messages.teamInviteNotificationLead} />
+      </p>
+
+      <p className="mr-text-md mr-text-yellow">{props.notification.extra}</p>
+
+      <div className="mr-mt-8 mr-links-green-lighter">
+        <Link to='/teams'>
+          <FormattedMessage {...messages.viewTeamsLabel} />
+        </Link>
+      </div>
+    </React.Fragment>
+  )
+}
+
+const FollowBody = function(props) {
+  if (props.notification.description !== "followed") {
+    return null
+  }
+
+  return (
+    <React.Fragment>
+      <p className="mr-mb-8 mr-text-base">
+        <FormattedMessage {...messages.followedNotificationLead} />
+      </p>
+
+      <p className="mr-links-green-lighter mr-text-md">
+        <Link to={`/user/metrics/${props.notification.fromUsername}`}>
+          {props.notification.fromUsername}
+        </Link>
+      </p>
     </React.Fragment>
   )
 }

@@ -13,6 +13,7 @@ import _difference from 'lodash/difference'
 import _get from 'lodash/get'
 import _remove from 'lodash/remove'
 import _isEqual from 'lodash/isEqual'
+import _merge from 'lodash/merge'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import External from '../../../../External/External'
@@ -24,11 +25,14 @@ import StepNavigation
        from '../../StepNavigation/StepNavigation'
 import { CustomArrayFieldTemplate,
          CustomSelectWidget,
+         CustomTextWidget,
          MarkdownDescriptionField,
          MarkdownEditField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import KeywordAutosuggestInput
        from '../../../../KeywordAutosuggestInput/KeywordAutosuggestInput'
+import BoundsSelectorModal
+       from '../../../../BoundsSelectorModal/BoundsSelectorModal'
 import WithCurrentProject
        from '../../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge
@@ -655,14 +659,17 @@ export class EditChallenge extends Component {
                     className="form"
                     onAsyncValidate={this.validateGeoJSONSource}
                     uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
-                    widgets={{SelectWidget: CustomSelectWidget}}
+                    widgets={{SelectWidget: CustomSelectWidget, TextWidget: CustomTextWidget}}
                     ArrayFieldTemplate={CustomArrayFieldTemplate}
                     fields={customFields}
                     tagType={"challenges"}
                     noHtml5Validate
                     showErrorList={false}
                     formData={challengeData}
-                    formContext={this.state.formContext}
+                    formContext={_merge(this.state.formContext,
+                                   {bounding: _get(challengeData, 'bounding'),
+                                    buttonAction: BoundsSelectorModal,
+                                   })}
                     onChange={this.changeHandler}
                     onSubmit={this.asyncSubmit}
                     onError={this.errorHandler}

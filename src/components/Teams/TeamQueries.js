@@ -1,5 +1,18 @@
 import { gql } from '@apollo/client'
 
+const TEAM_USER_FIELDS = gql`
+  fragment TeamUserFields on TeamUser {
+    id
+    userId
+    name
+    status
+    teamGrants {
+      id
+      role
+    }
+  }
+`
+
 export const MY_TEAMS = gql`
   query MyTeams($userId: Long!) {
     userTeams(id: $userId) {
@@ -14,27 +27,25 @@ export const MY_TEAMS = gql`
         id
         name
         description
+        teamUsers { ...TeamUserFields }
       }
     }
   }
+
+  ${TEAM_USER_FIELDS}
 `
 
 export const TEAM_USERS = gql`
   query TeamUsers($teamId: Long!) {
     teamUsers(id: $teamId) {
-      id
-      userId
-      name
+      ...TeamUserFields
       team {
         id
       }
-      teamGrants {
-        id
-        role
-      }
-      status
     }
   }
+
+  ${TEAM_USER_FIELDS}
 `
 
 export const CREATE_TEAM = gql`
