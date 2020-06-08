@@ -77,6 +77,22 @@ export class LayerToggle extends Component {
              <hr className="mr-h-px mr-my-4 mr-bg-white-15" />
             }
             {overlayToggles}
+            {this.props.togglePriorityBounds && this.props.priorityBounds.length > 0 &&
+             <div
+               className="mr-my-4 mr-flex mr-items-center mr-leading-none"
+               onClick={this.props.togglePriorityBounds}
+             >
+               <input
+                 type="checkbox"
+                 className="mr-checkbox-toggle"
+                 checked={this.props.showPriorityBounds}
+                 onChange={_noop}
+               />
+               <label className="mr-ml-3 mr-text-orange">
+                 <FormattedMessage {...messages.showPriorityBoundsLabel} />
+               </label>
+             </div>
+            }
             {this.props.toggleTaskFeatures &&
              <div
                className="mr-my-4 mr-flex mr-items-center mr-leading-none"

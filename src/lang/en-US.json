@@ -547,6 +547,7 @@
   "CountryName.ZW": "Zimbabwe",
   "FitBoundsControl.tooltip": "Fit map to task features",
   "LayerToggle.controls.showTaskFeatures.label": "Task Features",
+  "LayerToggle.controls.showPriorityBounds.label": "Priority Bounds",
   "LayerToggle.controls.showOSMData.label": "OSM Data",
   "LayerToggle.controls.showMapillary.label": "Mapillary",
   "LayerToggle.controls.more.label": "More",
