@@ -8,6 +8,20 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [v3.6.3] - 2020-06-08
+### Added
+- Following of other users' MapRoulette activity
+- Refreshed home page
+- Teams page
+- Notification when invited to join a Team
+- Task prioritization by location for challenge managers
+
+### Fixed
+- Review page search boxes not allowing case-insensitive search
+- Erroneous security errors immediately following creation of new project
+- Long challenge names not wrapping properly in Challenge Highlights widget
+
+
 ## [v3.6.2] - 2020-05-28
 ### Added
 - Revised Dashboard page
