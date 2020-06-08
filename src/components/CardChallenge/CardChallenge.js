@@ -60,7 +60,7 @@ export class CardChallenge extends Component {
         )}
       >
         <header className="mr-card-challenge__header" onClick={this.props.cardClicked}>
-          <div>
+          <div className="mr-max-w-full">
             <Taxonomy {...this.props} {...this.props.challenge} />
             <h3 className="mr-card-challenge__title">
               <Link
