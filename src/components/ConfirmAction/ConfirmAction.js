@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _cloneDeep from 'lodash/cloneDeep'
 import Modal from '../Modal/Modal'
+import External from '../External/External'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './ConfirmAction.scss'
@@ -48,22 +49,16 @@ export default class ConfirmAction extends Component {
     }
   }
 
-  render() {
-    const action = this.props.action ? this.props.action : 'onClick'
-    this.originalAction = _get(this.props.children, `props.${action}`)
-
-    const ControlWithConfirmation =
-      React.cloneElement(this.props.children, {[action]: this.initiateConfirmation})
-
+  modal = () => {
     return (
-      <React.Fragment>
-        {ControlWithConfirmation}
-
+      <External>
         <Modal
-          narrowColumn
+          narrow
           fullBleed
           onClose={this.cancel}
           isActive={this.state.confirming}
+          key={this.props.modalName}
+          contentClassName="mr-mt-20"
         >
           <article>
             <div className="mr-top-0 mr-absolute">
@@ -106,6 +101,21 @@ export default class ConfirmAction extends Component {
             </div>
           </article>
         </Modal>
+      </External>
+    )
+  }
+
+  render() {
+    const action = this.props.action ? this.props.action : 'onClick'
+    this.originalAction = _get(this.props.children, `props.${action}`)
+
+    const ControlWithConfirmation =
+      React.cloneElement(this.props.children, {[action]: this.initiateConfirmation})
+
+    return (
+      <React.Fragment>
+        {ControlWithConfirmation}
+        {this.modal()}
       </React.Fragment>
     )
   }
