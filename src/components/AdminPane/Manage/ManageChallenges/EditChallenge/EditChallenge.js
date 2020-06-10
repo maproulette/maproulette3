@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Form from 'react-jsonschema-form-async';
+import Form from '@rjsf/core';
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
@@ -14,6 +14,7 @@ import _get from 'lodash/get'
 import _remove from 'lodash/remove'
 import _isEqual from 'lodash/isEqual'
 import _merge from 'lodash/merge'
+import _map from 'lodash/map'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import External from '../../../../External/External'
@@ -124,9 +125,11 @@ export class EditChallenge extends Component {
     activeStep: 0,
     formData: {},
     formContext: {},
+    extraErrors: {},
     isSaving: false,
   }
 
+  validationPromise = null
   isFinishing = false
 
   componentDidMount() {
@@ -161,7 +164,9 @@ export class EditChallenge extends Component {
       jsonFileField.validated = true
     }
     else {
-      response.errors = {localGeoJSON: _first(lintErrors).message}
+      response.errors = {
+        localGeoJSON: {__errors: _map(lintErrors, e => `GeoJSON error: ${e.message}`)}
+      }
     }
 
     return response
@@ -180,6 +185,25 @@ export class EditChallenge extends Component {
     }
 
     return response
+  }
+
+  /**
+   * Perform additional validation, including async validation that will set
+   * the extraErrors state field to a value as needed
+   */
+  validate = (formData, errors) => {
+    this.validationPromise = this.validateGeoJSONSource(formData)
+    this.validationPromise.then(() => {
+      if (!_isEmpty(this.state.extraErrors)) {
+        this.setState({extraErrors: {}})
+      }
+    }).catch(errors => {
+      this.setState({extraErrors: errors})
+    }).finally(() => {
+      this.validationPromise = null
+    })
+
+    return errors
   }
 
   /**
@@ -207,14 +231,22 @@ export class EditChallenge extends Component {
     }
 
     if (response.errors) {
-      throw response
+      throw response.errors
     }
 
     return response
   }
 
-  asyncSubmit = (formData, result) => {
-    return this.isFinishing ? this.finish() : this.nextStep()
+  /**
+   * Process submit event at each step, waiting until any pending validation is
+   * complete before deciding how to proceed
+   */
+  handleSubmit = (formData) => {
+    (this.validationPromise || Promise.resolve()).then(() => {
+      return this.isFinishing ? this.finish() : this.nextStep()
+    }).catch(() => null) // Stay on current step if validation fails
+
+    return false
   }
 
   /** Back up to the previous step in the workflow */
@@ -655,24 +687,26 @@ export class EditChallenge extends Component {
                   </Modal>
                 </External>
               }
-              <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
-                    className="form"
-                    onAsyncValidate={this.validateGeoJSONSource}
-                    uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
-                    widgets={{SelectWidget: CustomSelectWidget, TextWidget: CustomTextWidget}}
-                    ArrayFieldTemplate={CustomArrayFieldTemplate}
-                    fields={customFields}
-                    tagType={"challenges"}
-                    noHtml5Validate
-                    showErrorList={false}
-                    formData={challengeData}
-                    formContext={_merge(this.state.formContext,
-                                   {bounding: _get(challengeData, 'bounding'),
-                                    buttonAction: BoundsSelectorModal,
-                                   })}
-                    onChange={this.changeHandler}
-                    onSubmit={this.asyncSubmit}
-                    onError={this.errorHandler}
+              <Form
+                schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
+                className="form"
+                validate={this.validate}
+                uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
+                widgets={{SelectWidget: CustomSelectWidget, TextWidget: CustomTextWidget}}
+                ArrayFieldTemplate={CustomArrayFieldTemplate}
+                fields={customFields}
+                tagType={"challenges"}
+                noHtml5Validate
+                showErrorList={false}
+                formData={challengeData}
+                formContext={_merge(this.state.formContext, {
+                  bounding: _get(challengeData, 'bounding'),
+                  buttonAction: BoundsSelectorModal,
+                })}
+                onChange={this.changeHandler}
+                onSubmit={this.handleSubmit}
+                onError={this.errorHandler}
+                extraErrors={this.state.extraErrors}
               >
                 {this.hasTaskStyleRuleErrors() &&
                  challengeSteps[this.state.activeStep].name === "Extra" &&

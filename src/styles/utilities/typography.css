@@ -43,7 +43,7 @@ h4,
 }
 
 .text-danger {
-  @apply mr-text-red;
+  @apply mr-text-red-light;
 }
 
 .mr-links-inverse a {

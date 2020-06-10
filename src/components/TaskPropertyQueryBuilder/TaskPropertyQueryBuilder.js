@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import Form from 'react-jsonschema-form-async'
+import Form from '@rjsf/core'
 import { CustomSelectWidget }
        from '../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import _get from 'lodash/get'
@@ -175,18 +175,18 @@ export class TaskPropertyQueryBuilder extends Component {
 
     return (
       <div className="task-properties-form mr-w-full mr-pt-4">
-        <Form schema={jsSchema(this.props.intl, this.props.taskPropertyKeys)}
-              className="mr-bg-black-15 mr-p-2"
-              onAsyncValidate={this.validateGeoJSONSource}
-              uiSchema={uiSchema(this.props.intl, this.props.taskPropertyKeys)}
-              ArrayFieldTemplate={ArrayFieldTemplate}
-              tagType={"taskProperties"}
-              widgets={{SelectWidget: CustomSelectWidget}}
-              noHtml5Validate
-              showErrorList={false}
-              formData={data}
-              onChange={this.changeHandler}
-              onError={this.errorHandler}
+        <Form
+          schema={jsSchema(this.props.intl, this.props.taskPropertyKeys)}
+          className="mr-bg-black-15 mr-p-2"
+          uiSchema={uiSchema(this.props.intl, this.props.taskPropertyKeys)}
+          ArrayFieldTemplate={ArrayFieldTemplate}
+          tagType={"taskProperties"}
+          widgets={{SelectWidget: CustomSelectWidget}}
+          noHtml5Validate
+          showErrorList={false}
+          formData={data}
+          onChange={this.changeHandler}
+          onError={this.errorHandler}
         >
           {this.state.errors &&
             <div className="mr-ml-4 mr-mb-4 mr-text-red-light">
