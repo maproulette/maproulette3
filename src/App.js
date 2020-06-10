@@ -19,6 +19,7 @@ import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
 import Review from './pages/Review/Review'
 import Inbox from './pages/Inbox/Inbox'
 import Teams from './pages/Teams/Teams'
+import GlobalActivity from './pages/GlobalActivity/GlobalActivity'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 import { resetCache } from './services/Server/RequestCache'
 import WithCurrentUser from './components/HOCs/WithCurrentUser/WithCurrentUser'
@@ -111,6 +112,7 @@ export class App extends Component {
             <CachedRoute path='/review' component={Review} />
             <CachedRoute path='/inbox' component={Inbox} />
             <CachedRoute path='/teams' component={Teams} />
+            <CachedRoute path='/activity' component={GlobalActivity} />
             <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
             <CachedRoute path='/project/:projectId/leaderboard' component={ProjectLeaderboard} />
             <CachedRoute path='/country/:countryCode/leaderboard' component={CountryLeaderboard} />

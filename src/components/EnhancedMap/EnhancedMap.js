@@ -181,6 +181,10 @@ export default class EnhancedMap extends Map {
   componentDidMount() {
     super.componentDidMount()
 
+    if (this.props.noAttributionPrefix) {
+      this.leafletElement.attributionControl.setPrefix(false)
+    }
+
     // If there are geojson features, add them to the leaflet map and then
     // fit the map to the bounds of those features.
     if (this.props.features) {

@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "No Recent Activity",
   },
 
+  groupLabel: {
+    id: "Following.Activity.controls.group.label",
+    defaultMessage: "Group",
+  },
+
   statusTo: {
     id: "Following.Activity.statusTo",
     defaultMessage: "as",

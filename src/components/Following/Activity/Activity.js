@@ -95,7 +95,7 @@ export const Activity = props => {
            onClick={() => props.updateWidgetConfiguration({activityIsGrouped: !isGrouped})}
            onChange={() => null}
          />
-         <label> Group</label>
+         <label className="mr-ml-2"><FormattedMessage {...messages.groupLabel} /></label>
         <div className="mr-timeline mr-links-green-lighter">
           {_map(groupedActivity, entry =>
             <ActivityDescription

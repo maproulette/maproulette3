@@ -5,6 +5,10 @@
  */
 
 // Import first-party widgets shipped with MapRoulette
+export { default as ActivityListingWidget }
+       from './ActivityListingWidget/ActivityListingWidget'
+export { default as ActivityMapWidget }
+       from './ActivityMapWidget/ActivityMapWidget'
 export { default as FollowingWidget }
        from './FollowingWidget/FollowingWidget'
 export { default as MyTeamsWidget }
