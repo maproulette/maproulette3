@@ -69,6 +69,10 @@ export const groupActivity = (activity, group) => {
   const groups = []
   let currentGroup = Object.assign({}, activity[0], {count: 1})
   for (let i = 1; i < activity.length; i++) {
+    if (!activity[i].parentId) {
+      continue
+    }
+
     if (activity[i].osmUserId !== currentGroup.osmUserId ||
         activity[i].action !== currentGroup.action ||
         activity[i].typeId !== currentGroup.typeId ||
