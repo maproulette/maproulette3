@@ -24,18 +24,24 @@ const WithTaskReview = WrappedComponent =>
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateTaskReviewStatus: (task, status, comment, tags, loadBy, url, taskBundle) => {
-      const doReview = taskBundle ?
-        completeBundleReview(taskBundle.bundleId, status, comment, tags) :
-        completeReview(task.id, status, comment, tags)
+    updateTaskReviewStatus: (task, status, comment, tags, loadBy, url,
+      taskBundle, requestedNextTask) => {
+        const doReview = taskBundle ?
+          completeBundleReview(taskBundle.bundleId, status, comment, tags) :
+          completeReview(task.id, status, comment, tags)
 
-      dispatch(doReview).then(() => {
-        loadNextTaskForReview(dispatch, url, task.id).then(nextTask =>
-          visitTaskForReview(loadBy, url, nextTask))
-      }).catch(error => {
-        console.log(error)
-        url.push('/review/tasksToBeReviewed')
-      })
+        dispatch(doReview).then(() => {
+          if (loadBy === TaskReviewLoadMethod.nearby && requestedNextTask) {
+            visitTaskForReview(loadBy, url, requestedNextTask)
+          }
+          else {
+            loadNextTaskForReview(dispatch, url, task.id).then(nextTask =>
+              visitTaskForReview(loadBy, url, nextTask))
+          }
+        }).catch(error => {
+          console.log(error)
+          url.push('/review/tasksToBeReviewed')
+        })
     },
 
     skipTaskReview: (task, loadBy, url) => {
@@ -70,6 +76,7 @@ export const parseSearchCriteria = url => {
   const boundingBox = searchParams.boundingBox
   const savedChallengesOnly = searchParams.savedChallengesOnly
   const excludeOtherReviewers = searchParams.excludeOtherReviewers
+  const invertFields = searchParams.invertFields
 
   if (_isString(filters)) {
     filters = JSON.parse(searchParams.filters)
@@ -82,15 +89,17 @@ export const parseSearchCriteria = url => {
 
   return {
     searchCriteria: {sortCriteria: {sortBy, direction}, filters, boundingBox,
-                                    savedChallengesOnly, excludeOtherReviewers},
+                                    savedChallengesOnly, excludeOtherReviewers,
+                                    invertFields},
     newState: {sortBy, direction, filters, boundingBox, savedChallengesOnly,
-               excludeOtherReviewers}
+               excludeOtherReviewers, invertFields}
   }
 }
 
 export const visitTaskForReview = (loadBy, url, task) => {
   const newState = parseSearchCriteria(url).newState
-  if (task && loadBy === TaskReviewLoadMethod.next) {
+  if (task && (loadBy === TaskReviewLoadMethod.next ||
+               loadBy === TaskReviewLoadMethod.nearby)) {
     url.push({
       pathname:`/challenge/${_get(task, 'parent.id', task.parent)}/task/${task.id}/review`,
       state: newState

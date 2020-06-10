@@ -5,6 +5,9 @@ import messages from './Messages'
 /** Load next review task */
 export const NEXT_LOAD_METHOD = 'next'
 
+/** Load nearby review task */
+export const NEARBY_LOAD_METHOD = 'nearby'
+
 /** Load review page with all review tasks */
 export const ALL_LOAD_METHOD = 'all'
 
@@ -15,6 +18,7 @@ export const TaskReviewLoadMethod = Object.freeze({
   next: NEXT_LOAD_METHOD,
   all: ALL_LOAD_METHOD,
   inbox: LOAD_INBOX_METHOD,
+  nearby: NEARBY_LOAD_METHOD,
 })
 
 /**
