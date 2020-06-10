@@ -73,7 +73,7 @@ const FeaturedList = props => {
     <CardChallenge
       {...props}
       key={challenge.id}
-      className="mr-card-challenge--featured mr-bg-transparent"
+      className="mr-card-challenge--featured mr-bg-transparent mr-w-full"
       challenge={challenge}
       isExpanded
       permanentlyExpanded

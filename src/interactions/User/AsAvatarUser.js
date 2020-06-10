@@ -1,4 +1,5 @@
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 import defaultPic from '../../static/images/user_no_image.png'
 
 /**
@@ -14,9 +15,13 @@ export class AsAvatarUser {
   }
 
   profilePic(size) {
-    const urlParts = this.rawAvatarURL().replace(/\?s=\d+/, '?').split('?')
-    return /user_no_image/.test(this.rawAvatarURL()) ? defaultPic :
-           `${urlParts[0]}?s=${size}&${urlParts.slice(1).join('?')}`
+    const rawURL = this.rawAvatarURL()
+    if (_isEmpty(rawURL) || /user_no_image/.test(rawURL)) {
+      return defaultPic
+    }
+
+    const urlParts = rawURL.replace(/\?s=\d+/, '?').split('?')
+    return `${urlParts[0]}?s=${size}&${urlParts.slice(1).join('?')}`
   }
 }
 

@@ -7,6 +7,13 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.6.4] - 2020-06-09
+### Added
+- Updated community translations
+
+### Fixed
+- Error during display of certain users with missing avatars
+
 
 ## [v3.6.3] - 2020-06-08
 ### Added
