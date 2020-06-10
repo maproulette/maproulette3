@@ -5,6 +5,8 @@ import _map from 'lodash/map'
 import _trim from 'lodash/trim'
 import AsLineReadableFile from '../File/AsLineReadableFile'
 
+const RS = String.fromCharCode(0x1E) // RS (record separator) control char
+
 /**
  * Provides methods related to validating and linting GeoJSON.
  *
@@ -36,15 +38,32 @@ export class AsValidatableGeoJSON {
     }
 
     // Our detection approach here is pretty rudimentary, basically looking for
-    // open-brace at start of line and close-brace at end of line (optionally
-    // followed by a newline), and then checking the first two lines to see if
-    // they match
+    // either RFC 7464 compliance or an open-brace at start of line and
+    // close-brace at end of line (optionally followed by a newline) on the
+    // first two lines
     this.geoJSONFile.rewind()
     const lines = await this.geoJSONFile.readLines(2)
     this.geoJSONFile.rewind()
 
     const re = /^\{[^\n]+\}(\r?\n|$)/
-    return lines.length > 1 && re.test(lines[0]) && re.test(lines[1])
+    return this.isRFC7464Sequence(lines[0]) ||
+           (re.test(lines[0]) && re.test(lines[1]))
+  }
+
+  /**
+   * Performs basic check to see if this is RFC 7464 compliant, which is to say
+   * each line begins with a RS (record separator) control character
+   */
+  isRFC7464Sequence(line) {
+    return line && line.length > 1 && line[0] === RS
+  }
+
+  /**
+   * Normalize a RFC 7464 sequence by stripping any RS characters from the beginning
+   * of the line. This is safe to run on strings containing ordinary JSON as well
+   */
+  normalizeRFC7464Sequence(line) {
+    return line.replace(new RegExp(`^${RS}+`, 'g'), '')
   }
 
   /**
@@ -57,7 +76,7 @@ export class AsValidatableGeoJSON {
 
     this.geoJSONFile.rewind()
     this.geoJSONFile.forEach(1, rawLine => {
-      const line = _trim(rawLine)
+      const line = this.normalizeRFC7464Sequence(_trim(rawLine))
       if (line.length > 0) { // Skip blank lines or pure whitespace
         try {
           const geoJSONObject = JSON.parse(line)
