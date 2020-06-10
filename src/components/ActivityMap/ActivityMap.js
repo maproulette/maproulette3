@@ -33,6 +33,10 @@ export const ActivityMap = props => {
   let coloredMarkers = null
   if (hasTaskMarkers) {
     coloredMarkers = _map(props.activity, entry => {
+      if (!entry.task) {
+        return null
+      }
+
       const geojson =
         _isString(entry.task.location) ?
         JSON.parse(entry.task.location) :
