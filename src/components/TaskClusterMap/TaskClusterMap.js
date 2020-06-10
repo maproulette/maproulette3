@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, Marker} from 'react-leaflet'
+import { ZoomControl, Marker, Rectangle} from 'react-leaflet'
 import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
 import bboxPolygon from '@turf/bbox-polygon'
@@ -20,6 +20,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'
 import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
+import { TaskPriorityColors } from '../../services/Task/TaskPriority/TaskPriority'
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
@@ -97,6 +98,11 @@ export class TaskClusterMap extends Component {
 
     // the task markers have changed
     if (!_isEqual(nextProps.taskMarkers, this.props.taskMarkers)) {
+      return true
+    }
+
+    // the task markers have changed
+    if (!_isEqual(nextProps.showPriorityBounds, this.props.showPriorityBounds)) {
       return true
     }
 
@@ -379,6 +385,14 @@ export class TaskClusterMap extends Component {
       this.currentBounds = this.props.initialBounds
     }
 
+    const priorityBounds = !this.props.showPriorityBounds ? null :
+      this.props.priorityBounds.map((bounds, index) =>
+        <Rectangle key={index}
+          bounds={toLatLngBounds(bounds.boundingBox)}
+          color={TaskPriorityColors[bounds.priorityLevel]}/>
+      )
+
+
     const map =
       <EnhancedMap className="mr-z-0"
                    center={latLng(0, 0)}
@@ -398,6 +412,7 @@ export class TaskClusterMap extends Component {
         {!this.props.mapZoomedOut &&
           <span key={_uniqueId()}>{this.state.mapMarkers}</span>
         }
+        {priorityBounds}
       </EnhancedMap>
 
     return (

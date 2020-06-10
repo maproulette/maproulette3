@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Task Features"
   },
 
+  showPriorityBoundsLabel: {
+    id: "LayerToggle.controls.showPriorityBounds.label",
+    defaultMessage: "Priority Bounds"
+  },
+
   showOSMDataLabel: {
     id: "LayerToggle.controls.showOSMData.label",
     defaultMessage: "OSM Data",

@@ -9,7 +9,7 @@ import { ChallengeStatus }
 import { TaskStatus,
          messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
-import { messagesByPriority }
+import { messagesByPriority, TaskPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
 import { toLatLngBounds } from '../../../../services/MapBounds/MapBounds'
 import AsManager from '../../../../interactions/User/AsManager'
@@ -52,6 +52,7 @@ export class ViewChallengeTasks extends Component {
   state = {
     bulkUpdating: false,
     boundsReset: false,
+    showPriorityBounds: false,
   }
 
   takeTaskSelectionAction = action => {
@@ -134,6 +135,27 @@ export class ViewChallengeTasks extends Component {
     )
   }
 
+  // Finds all the 'bounds' type rules on the challenge to show as
+  // bounding box overlays on the map.
+  findPriorityBounds = challenge => {
+    const parseBoundsRule = (rule, priorityLevel, priorityBounds) => {
+      if (rule.rules) {
+        return rule.rules.map((r) => parseBoundsRule(r, priorityLevel, priorityBounds))
+      }
+      if (rule.type === "bounds") {
+        return priorityBounds.push(
+          {boundingBox: rule.value.replace("location.", ""), priorityLevel})
+      }
+    }
+
+    let priorityBounds = []
+    parseBoundsRule(challenge.highPriorityRule, TaskPriority.high, priorityBounds)
+    parseBoundsRule(challenge.mediumPriorityRule, TaskPriority.medium, priorityBounds)
+    parseBoundsRule(challenge.lowPriorityRule, TaskPriority.low, priorityBounds)
+
+    return priorityBounds
+  }
+
   render() {
     if (this.props.challenge.status === ChallengeStatus.building) {
       return <IntervalRender><TaskBuildProgress {...this.props} /></IntervalRender>
@@ -189,6 +211,9 @@ export class ViewChallengeTasks extends Component {
           updateBounds={this.mapBoundsUpdated}
           loadingTasks={this.props.loadingTasks}
           showMarkerPopup={this.showMarkerPopup}
+          togglePriorityBounds={() => this.setState({showPriorityBounds: !this.state.showPriorityBounds})}
+          showPriorityBounds={this.state.showPriorityBounds}
+          priorityBounds={this.findPriorityBounds(this.props.challenge)}
           allowClusterToggle
           initialBounds={this.state.boundsReset ?
             toLatLngBounds(_get(this.props, 'criteria.boundingBox')) : null}
