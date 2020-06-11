@@ -6,6 +6,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import Modal from '../Modal/Modal'
 import External from '../External/External'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import { ExternalContext } from '../External/External'
 import messages from './Messages'
 import './ConfirmAction.scss'
 
@@ -21,6 +22,8 @@ import './ConfirmAction.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class ConfirmAction extends Component {
+  static contextType = ExternalContext
+
   originalAction = null
 
   state = {
@@ -34,15 +37,21 @@ export default class ConfirmAction extends Component {
       }
     }
     else {
+      // Suspend clickout so that users can interact with our modal
+      this.context.suspendClickout(true)
       this.setState({confirming: true, originalEvent: _cloneDeep(e)})
     }
   }
 
-  cancel = () => this.setState({confirming: false})
+  cancel = () => {
+    this.context.suspendClickout(false)
+    this.setState({confirming: false})
+  }
 
   proceed = () => {
     const event = this.state.originalEvent
 
+    this.context.suspendClickout(false)
     this.setState({confirming: false, originalEvent: null})
     if (this.originalAction) {
       this.originalAction(event)
@@ -115,7 +124,7 @@ export default class ConfirmAction extends Component {
     return (
       <React.Fragment>
         {ControlWithConfirmation}
-        {this.modal()}
+        {this.state.confirming && this.modal()}
       </React.Fragment>
     )
   }
