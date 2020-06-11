@@ -20,7 +20,8 @@ import messages from './Messages'
  */
 export const MyTeams = function(props) {
   const { loading, error, data, refetch } = useQuery(MY_TEAMS, {
-    variables: { userId: props.user.id }
+    variables: { userId: props.user.id },
+    partialRefetch: true,
   })
 
   // Refresh the teams when this component updates to avoid stale data. It's

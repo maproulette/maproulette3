@@ -39,7 +39,7 @@ export const EditTeam = props => {
         <button
           type="button"
           className="mr-button mr-button--white"
-          onClick={props.finish}
+          onClick={() => props.finish(false)}
         >
           <FormattedMessage {...messages.cancelLabel} />
         </button>
@@ -64,7 +64,7 @@ export const EditTeam = props => {
                  })
                }
              }
-             props.finish()
+             props.finish(true)
            }}
          >
            <FormattedMessage {...messages.saveLabel} />
