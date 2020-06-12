@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _isFinite from 'lodash/isFinite'
+import _get from 'lodash/get'
 import { ActivityItemType, messagesByType }
        from '../../services/Activity/ActivityItemTypes/ActivityItemTypes'
 import { ActivityActionType, messagesByAction }
@@ -48,15 +49,25 @@ export const ActivityDescription = props => {
           {challengeName}
         </Link>
       </div>
+      {_get(props.entry, 'challenge.general.parent.id') &&
+        <div className="mr-break-words mr-links-grey-light mr-mb-4">
+          <Link
+            to={`/browse/projects/${props.entry.challenge.general.parent.id}`}
+            className={props.simplified ? "mr-text-xs" : "mr-text-sm"}
+          >
+            {props.entry.challenge.general.parent.displayName || props.entry.challenge.general.parent.name}
+          </Link>
+        </div>
+      }
       <div>
         {_isFinite(props.entry.count) &&
          <span className="mr-badge mr-mr-2 mr-mt-1">{props.entry.count}</span>
         }
         <span>
           <FormattedMessage {...messagesByAction[props.entry.action]} />
-        </span> <span>
+        </span> <Link to={`/challenge/${props.entry.parentId}/task/${props.entry.itemId}`}>
           <FormattedMessage {...messagesByType[props.entry.typeId]} />
-        </span> {
+        </Link> {
           props.entry.action === ActivityActionType.taskStatusSet &&
           _isFinite(props.entry.status) && 
           <React.Fragment>
