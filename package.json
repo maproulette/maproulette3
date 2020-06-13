@@ -3,7 +3,7 @@
   "version": "3.6.4",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.0.0-beta.44",
+    "@apollo/client": "3.0.0-rc.4",
     "@mapbox/geo-viewport": "^0.4.0",
     "@mapbox/geojsonhint": "^2.0.1",
     "@nivo/bar": "^0.61.1",
@@ -28,7 +28,7 @@
     "downshift": "^2.0.3",
     "file-saver": "^2.0.2",
     "fuse.js": "^3.1.0",
-    "graphql": "^15.0.0",
+    "graphql": "^15.1.0",
     "handlebars": "^4.2.0",
     "leaflet": "^1.5.1",
     "leaflet-lasso": "^2.0.4",
