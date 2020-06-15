@@ -68,6 +68,15 @@ h4,
   @apply mr-block mr-mb-2;
 }
 
+.mr-links-grey-light a {
+  @apply mr-text-grey-light;
+
+  &:hover,
+  &.active {
+    @apply mr-text-white;
+  }
+}
+
 .mr-overflow-ellipsis {
   text-overflow: ellipsis;
 }

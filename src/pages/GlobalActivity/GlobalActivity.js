@@ -46,6 +46,17 @@ const RECENT_ACTIVITY = gql`
         id
         location
       }
+      challenge {
+        id
+        name
+        general {
+          parent {
+            id
+            name
+            displayName
+          }
+        }
+      }
     }
   }
 `
