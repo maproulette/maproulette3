@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/client'
-import Form from 'react-jsonschema-form'
+import Form from '@rjsf/core'
 import { FormattedMessage } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
 import _isEmpty from 'lodash/isEmpty'
