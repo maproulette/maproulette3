@@ -5,6 +5,8 @@ import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
 import _groupBy from 'lodash/groupBy'
 import _trim from 'lodash/trim'
+import _remove from 'lodash/remove'
+import _clone from 'lodash/clone'
 
 /**
  * Prepares a group of priority rules from the server to the representation
@@ -62,7 +64,10 @@ export const preparePriorityRuleForForm = rule => {
  * property and operator into a single rule with comma-separated values
  */
 export const combineRulesForForm = rules => {
-  const rulesByProperty = _groupBy(rules, rule => `${rule.key}:::${rule.operator}`)
+  const allRules = _clone(rules)
+  const locationRules = _remove(allRules, (rule) => rule.valueType === "bounds")
+  const rulesByProperty = _groupBy(allRules, rule => `${rule.key}:::${rule.operator}`)
+
   return _map(rulesByProperty, groupedRules =>
     groupedRules.length === 1 ?
     groupedRules[0] :
@@ -70,7 +75,7 @@ export const combineRulesForForm = rules => {
       // Quote any strings with literal commas prior to combining, and then join together
       value: _map(groupedRules, rule => /,/.test(rule.value) ? `"${rule.value}"` : rule.value).join(','),
     })
-  )
+  ).concat(locationRules)
 }
 
 /**
