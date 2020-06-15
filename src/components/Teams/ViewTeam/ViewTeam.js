@@ -15,7 +15,8 @@ import messages from './Messages'
 
 export const ViewTeam = props => {
   const { loading, error, data, refetch } = useQuery(TEAM_USERS, {
-    variables: { teamId: props.team.id }
+    variables: { teamId: props.team.id },
+    partialRefetch: true,
   })
 
   useEffect(() => {
