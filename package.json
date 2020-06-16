@@ -56,7 +56,7 @@
     "react-dom": "^16.8.0",
     "react-dom-confetti": "^0.0.10",
     "react-dropzone": "^10.1.5",
-    "react-elastic-carousel": "^0.4.1",
+    "react-elastic-carousel": "^0.6.4",
     "react-grid-layout": "^0.16.6",
     "react-intl": "^2.9.0",
     "react-intl-formatted-duration": "^3.0.0",

@@ -12146,10 +12146,12 @@ react-dropzone@^10.1.5:
     file-selector "^0.1.11"
     prop-types "^15.7.2"
 
-react-elastic-carousel@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/react-elastic-carousel/-/react-elastic-carousel-0.4.1.tgz#6486fa7514f50fdc2af95277a6cfe860b0702020"
-  integrity sha512-lsaj7JD4ags55caRx8UlPpP+BvHEHbdT0RbawyzAJV/Aixsw6S3QkSBKi2v/utbtaVVRcr/euRr9UQOaK1wJXg==
+react-elastic-carousel@^0.6.4:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/react-elastic-carousel/-/react-elastic-carousel-0.6.4.tgz#2856235b7427a4dc93a657d77c32b20a4284fbe4"
+  integrity sha512-tygNLU9f8LBOFTASTD3p6dPxC180vyJ/UcpQmrt+TUdl00X9jECg6J3NywPIqjsmz39NnY1CzM9tz86C+/05qg==
+  dependencies:
+    react-swipeable "^5.5.1"
 
 react-error-overlay@^6.0.7:
   version "6.0.7"
@@ -12380,6 +12382,13 @@ react-share@^1.16.0:
     classnames "^2.2.5"
     jsonp "^0.2.1"
     prop-types "^15.5.8"
+
+react-swipeable@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-5.5.1.tgz#48ae6182deaf62f21d4b87469b60281dbd7c4a76"
+  integrity sha512-EQObuU3Qg3JdX3WxOn5reZvOSCpU4fwpUAs+NlXSN3y+qtsO2r8VGkVnOQzmByt3BSYj9EWYdUOUfi7vaMdZZw==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-syntax-highlighter@^10.3.0:
   version "10.3.5"
