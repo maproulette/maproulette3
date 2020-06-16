@@ -1,4 +1,4 @@
-import uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import FileSaver from 'file-saver'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
