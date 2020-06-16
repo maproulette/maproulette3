@@ -45,7 +45,7 @@ export default defineMessages({
       "other users (subject to project visibility). Unless you are really " +
       "confident in creating new Challenges, we would recommend leaving this set " +
       "to No at first, especially if the parent Project had been made visible. " +
-      "Setting your Challenge's visibility to Yes will make it appear on the home " +
+      "Setting your Challenge’s visibility to Yes will make it appear on the home " +
       "page, in the Challenge search, and in metrics - but only if the parent " +
       "Project is also visible.",
   },
@@ -91,9 +91,6 @@ export default defineMessages({
     defaultMessage: "Instructions",
   },
 
-  // Note: dummy variable included to workaround react-intl
-  // [bug 1158](https://github.com/yahoo/react-intl/issues/1158)
-  // Just pass in an empty string for its value
   instructionDescription: {
     id: 'Admin.EditChallenge.form.instruction.description',
     defaultMessage: "The instruction tells a mapper how to resolve a Task in " +
@@ -102,9 +99,9 @@ export default defineMessages({
       "about how to solve the task, so think about this field carefully. You can " +
       "include links to the OSM wiki or any other hyperlink if you want, because " +
       "this field supports Markdown. You can also reference feature properties " +
-      "from your GeoJSON with simple mustache tags: e.g. `\\{\\{address\\}\\}` would be " +
+      "from your GeoJSON with simple mustache tags: e.g. `'{{address}}'` would be " +
       "replaced with the value of the `address` property, allowing for basic " +
-      "customization of instructions for each task. This field is required. {dummy}",
+      "customization of instructions for each task. This field is required.",
   },
 
   checkinCommentLabel: {
@@ -340,11 +337,11 @@ will not be able to make sense of it.
       "The priority of tasks can be defined as High, Medium and Low. All " +
       "high priority tasks will be offered to users first when working " +
       "through a challenge, followed by medium and finally low priority " +
-      "tasks. Each task's priority is assigned automatically based on " +
+      "tasks. Each task’s priority is assigned automatically based on " +
       "the rules you specify below, each of which is evaluated against the " +
-      "task's feature properties (OSM tags if you are using an Overpass " +
-      "query, otherwise whatever properties you've chosen to include in " +
-      "your GeoJSON). Tasks that don't pass any rules will be assigned " +
+      "task’s feature properties (OSM tags if you are using an Overpass " +
+      "query, otherwise whatever properties you’ve chosen to include in " +
+      "your GeoJSON). Tasks that don’t pass any rules will be assigned " +
       "the default priority.",
   },
 
@@ -409,7 +406,7 @@ will not be able to make sense of it.
     id: 'Admin.EditChallenge.form.defaultZoom.description',
     defaultMessage: "When a user begins work on a task, MapRoulette will " +
       "attempt to automatically use a zoom level that fits the bounds of the " +
-      "task's feature. But if that's not possible, then this default zoom level " +
+      "task’s feature. But if that’s not possible, then this default zoom level " +
       "will be used. It should be set to a level is generally suitable for " +
       "working on most tasks in your challenge.",
   },
@@ -424,7 +421,7 @@ will not be able to make sense of it.
     defaultMessage: "The minimum allowed zoom level for your challenge. " +
       "This should be set to a level that allows the user to sufficiently " +
       "zoom out to work on tasks while keeping them from zooming out to " +
-      "a level that isn't useful.",
+      "a level that isn’t useful.",
   },
 
   maxZoomLabel: {
@@ -437,7 +434,7 @@ will not be able to make sense of it.
     defaultMessage: "The maximum allowed zoom level for your challenge. " +
       "This should be set to a level that allows the user to sufficiently " +
       "zoom in to work on the tasks while keeping them from zooming in " +
-      "to a level that isn't useful or exceeds the available resolution " +
+      "to a level that isn’t useful or exceeds the available resolution " +
       "of the map/imagery in the geographic region.",
   },
 
@@ -458,12 +455,9 @@ will not be able to make sense of it.
     defaultMessage: "Custom Basemap",
   },
 
-  // Note: dummy variable included to workaround react-intl
-  // [bug 1158](https://github.com/yahoo/react-intl/issues/1158)
-  // Just pass in an empty string for its value
   customBasemapDescription: {
     id: "Admin.EditChallenge.form.customBasemap.description",
-    defaultMessage: "Insert a custom base map URL here. E.g. `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png` {dummy}",
+    defaultMessage: "Insert a custom base map URL here. E.g. `https://'{s}'.tile.openstreetmap.org/'{z}'/'{x}'/'{y}'.png`",
   },
 
   exportablePropertiesLabel: {
@@ -544,6 +538,6 @@ will not be able to make sense of it.
   requiesLocalDescription: {
     id: "Admin.EditChallenge.form.requiresLocal.description",
     defaultMessage: "Tasks require local or on-the-ground knowledge to complete." +
-      " Note: challenge will not appear in the 'Find challenges' list."
+      " Note: challenge will not appear in the Find Challenges list."
   }
 })

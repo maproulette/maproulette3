@@ -160,7 +160,7 @@ export const uiSchema = (intl, user, challengeData) => {
     },
     instruction: {
       "ui:field": "markdown",
-      "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.instructionDescription, {dummy: ''})} />,
+      "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.instructionDescription)} />,
       "ui:lightMode": true,
     },
     difficulty: {

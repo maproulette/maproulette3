@@ -21,7 +21,7 @@ export default defineMessages({
 
   remote: {
     id: "RebuildTasksControl.modal.intro.remote",
-    defaultMessage: "Rebuilding will re-download the GeoJSON data from the challenge's remote URL and rebuild the challenge tasks with the latest data:"
+    defaultMessage: "Rebuilding will re-download the GeoJSON data from the challenge’s remote URL and rebuild the challenge tasks with the latest data:"
   },
 
   local: {

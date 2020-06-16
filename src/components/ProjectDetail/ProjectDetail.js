@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
-import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
+import { FormattedMessage, FormattedRelativeTime, injectIntl }
+       from 'react-intl'
+import { selectUnit } from '@formatjs/intl-utils'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import parse from 'date-fns/parse'
@@ -90,9 +92,7 @@ export class ProjectDetail extends Component {
                         />
                         :
                       </strong>{' '}
-                      <FormattedRelative
-                        value={parse(project.created)}
-                      />
+                      <FormattedRelativeTime {...selectUnit(parse(project.created))} />
                     </li>
                     <li>
                       <strong className="mr-text-yellow">
@@ -101,9 +101,7 @@ export class ProjectDetail extends Component {
                         />
                         :
                       </strong>{' '}
-                      <FormattedRelative
-                        value={parse(project.modified)}
-                      />
+                      <FormattedRelativeTime {...selectUnit(parse(project.modified))} />
                     </li>
                     {_get(this.props, 'challenges.length', 0) > 0 &&
                       <li>

@@ -222,7 +222,7 @@ export default defineMessages({
   },
   josmMissingOSMIds: {
     id: 'Errors.josm.missingFeatureIds',
-    defaultMessage: "This task's features do not include the OSM identifiers " +
+    defaultMessage: "This task’s features do not include the OSM identifiers " +
                     "required to open them standalone in JOSM. Please choose " +
                     "another editing option."
   },

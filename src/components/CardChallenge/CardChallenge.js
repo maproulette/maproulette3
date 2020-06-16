@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage, FormattedRelative } from 'react-intl'
+import { FormattedMessage, FormattedRelativeTime } from 'react-intl'
+import { selectUnit } from '@formatjs/intl-utils'
 import { Link } from 'react-router-dom'
 import AnimateHeight from 'react-animate-height'
 import classNames from 'classnames'
@@ -48,7 +49,6 @@ export class CardChallenge extends Component {
         }
       }
     }
-
 
     return (
       <article
@@ -111,8 +111,8 @@ export class CardChallenge extends Component {
                <li>
                  <strong className="mr-text-yellow">
                    <FormattedMessage {...messages.lastTaskRefreshLabel} />:
-                 </strong> <FormattedRelative
-                   value={parse(this.props.challenge.dataOriginDate)}
+                 </strong> <FormattedRelativeTime
+                   {...selectUnit(parse(this.props.challenge.dataOriginDate))}
                  />
                </li>
                <li>
