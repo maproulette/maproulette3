@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { ZoomControl, CircleMarker, Tooltip } from 'react-leaflet'
+import { ZoomControl, CircleMarker, Popup } from 'react-leaflet'
 import { getCoord } from '@turf/invariant'
 import centroid from '@turf/centroid'
 import parse from 'date-fns/parse'
@@ -55,9 +55,11 @@ export const ActivityMap = props => {
           stroke={false}
           options={{ title: `Task ${entry.task.id}` }}
         >
-          <Tooltip>
-            <ActivityDescription {...props} entry={entry} simplified />
-          </Tooltip>
+          <Popup>
+            <div className="mr-p-4 mr-pt-6 mr-lightmode">
+              <ActivityDescription {...props} entry={entry} simplified />
+            </div>
+          </Popup>
         </CircleMarker>
       )
     })
