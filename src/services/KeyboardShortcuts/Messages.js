@@ -81,7 +81,7 @@ export default defineMessages({
 
   tooHard: {
     id: "KeyMapping.taskCompletion.tooHard",
-    defaultMessage: "Too difficult / Couldn't see",
+    defaultMessage: "Too difficult / Couldn’t see",
   },
 
   alreadyFixed: {

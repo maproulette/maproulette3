@@ -151,7 +151,7 @@ export const uiSchema = (intl, user, editor) => {
     },
     customBasemap: {
       "ui:emptyValue": "",
-      "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.customBasemapDescription, {dummy: ''})} />,
+      "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.customBasemapDescription)} />,
     },
     locale: {
       "ui:widget": "select",

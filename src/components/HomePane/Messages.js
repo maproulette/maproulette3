@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   header: {
     id: 'HomePane.header',
-    defaultMessage: "Be an instant contributor to the world's maps",
+    defaultMessage: "Be an instant contributor to the world’s maps",
   },
 
   feedbackHeader: {

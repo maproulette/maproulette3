@@ -55,7 +55,12 @@ if (!_isEmpty(process.env.REACT_APP_MATOMO_URL) &&
 
 // Attach user's current locale to react-intl IntlProvider
 const ConnectedIntl = WithUserLocale(props => (
-  <IntlProvider key={props.locale} locale={props.locale} messages={props.messages}>
+  <IntlProvider
+    key={props.locale}
+    locale={props.locale}
+    messages={props.messages}
+    textComponent="span"
+  >
     {props.children}
   </IntlProvider>
 ))

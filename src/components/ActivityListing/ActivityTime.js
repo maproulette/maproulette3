@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {
   injectIntl,
-  FormattedRelative,
+  FormattedRelativeTime,
   FormattedDate,
   FormattedTime
 } from 'react-intl'
+import { selectUnit } from '@formatjs/intl-utils'
 import parse from 'date-fns/parse'
 
 /**
@@ -30,7 +31,7 @@ export const ActivityTime = props => {
        <span>
          <FormattedDate value={props.entry.created} /> <FormattedTime value={props.entry.created} />
        </span> :
-       <FormattedRelative value={props.entry.created} />
+       <FormattedRelativeTime {...selectUnit(timestamp)} />
       }
     </div>
   )
