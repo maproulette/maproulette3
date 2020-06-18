@@ -75,6 +75,13 @@ h4,
   &.active {
     @apply mr-text-white;
   }
+
+  .mr-lightmode & {
+    &:hover,
+    &:active {
+      @apply mr-text-blue-light;
+    }
+  }
 }
 
 .mr-overflow-ellipsis {
