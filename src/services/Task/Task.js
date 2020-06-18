@@ -1,5 +1,5 @@
 import { schema } from 'normalizr'
-import uuidv1 from 'uuid/v1'
+import { v1 as uuidv1 } from 'uuid'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'

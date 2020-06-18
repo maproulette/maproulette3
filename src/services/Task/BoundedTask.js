@@ -1,4 +1,4 @@
-import uuidv1 from 'uuid/v1'
+import { v1 as uuidv1 } from 'uuid'
 import uuidTime from 'uuid-time'
 import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'

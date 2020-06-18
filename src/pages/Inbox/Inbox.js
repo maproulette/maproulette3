@@ -437,7 +437,7 @@ const threaded = function(sortedNotifications) {
 // Intended to be used as filterMethod on a column using filterAll
 const fuzzySearch = function(filter, rows) {
   const fuzzySetup = new Fuse(rows, {keys: [filter.id]})
-  return fuzzySetup.search(filter.value)
+  return _map(fuzzySetup.search(filter.value), 'item')
 }
 
 export default WithCurrentUser(WithUserNotifications(injectIntl(Inbox)))

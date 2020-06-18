@@ -73,11 +73,10 @@ export const WithSearchResults = function(WrappedComponent, searchName,
 
         if (items.length > 0 && queryParts.query.length > 0) {
           const fuzzySearch = new Fuse(items, fuzzySearchOptions)
-          searchResults = _map(fuzzySearch.search(queryParts.query),
-                            (result) => {
-                              result.item.score = result.score
-                              return result.item
-                            })
+          searchResults = _map(
+            fuzzySearch.search(queryParts.query),
+            result => Object.assign({}, result.item, {score: result.score})
+          )
           searchActive = true
         }
         else {

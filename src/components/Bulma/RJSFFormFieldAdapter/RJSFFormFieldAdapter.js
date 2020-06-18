@@ -153,12 +153,12 @@ export class MarkdownEditField extends Component {
             value={this.props.formData}
           />
           <React.Fragment>
-            {showMustacheNote &&
-              <div className="mr-italic mr-text-xs">
-                <FormattedMessage {...messages.addMustachePreviewNote} />
-              </div>
-            }
             <MarkdownTemplate
+              header={showMustacheNote &&
+                <div className="mr-italic mr-text-xs">
+                  <FormattedMessage {...messages.addMustachePreviewNote} />
+                </div>
+              }
               content={this.props.formData || ""}
               properties={{}}
               completionResponses={{}}

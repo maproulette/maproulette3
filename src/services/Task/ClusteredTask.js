@@ -1,4 +1,4 @@
-import uuidv1 from 'uuid/v1'
+import { v1 as uuidv1 } from 'uuid'
 import uuidTime from 'uuid-time'
 import RequestStatus from '../Server/RequestStatus'
 import _each from 'lodash/each'
