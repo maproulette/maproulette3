@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ReactTable from 'react-table'
+import ReactTable from 'react-table-6'
 import { FormattedMessage, FormattedDate,
          FormattedTime, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -46,7 +46,6 @@ import ConfigureColumnsModal
 import InTableTagFilter
       from '../../components/KeywordAutosuggestInput/InTableTagFilter'
 import messages from './Messages'
-import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
 import TaskAnalysisTableHeader from './TaskAnalysisTableHeader'
 import { ViewCommentsButton, StatusLabel, makeInvertable }

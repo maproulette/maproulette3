@@ -39,7 +39,7 @@ import messages from './Messages'
 import { ViewCommentsButton, StatusLabel, makeInvertable }
   from '../../../components/TaskAnalysisTable/TaskTableHelpers'
 import { Link } from 'react-router-dom'
-import ReactTable from 'react-table'
+import ReactTable from 'react-table-6'
 
 
 /**

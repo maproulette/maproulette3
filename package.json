@@ -69,7 +69,7 @@
     "react-scripts": "3.4.1",
     "react-share": "^4.2.0",
     "react-syntax-highlighter": "^12.2.1",
-    "react-table": "^6.7.6",
+    "react-table-6": "^6.11.0",
     "react-tagsinput": "^3.19.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.2.0",

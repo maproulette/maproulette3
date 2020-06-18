@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ReactTable from 'react-table'
+import ReactTable from 'react-table-6'
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _isEmpty from 'lodash/isEmpty'

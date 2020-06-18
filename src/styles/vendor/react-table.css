@@ -1,4 +1,4 @@
-@import 'react-table/react-table';
+@import 'react-table-6/react-table';
 
 .ReactTable {
   @apply mr-border-none mr-text-white;
