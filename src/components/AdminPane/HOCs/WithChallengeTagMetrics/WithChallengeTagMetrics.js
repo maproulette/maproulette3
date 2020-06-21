@@ -5,16 +5,16 @@ import _get from 'lodash/get'
 import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
 import _merge from 'lodash/merge'
-import { fetchReviewMetrics, ReviewTasksType }
-       from '../../../../services/Task/TaskReview/TaskReview'
+import { fetchTagMetrics }
+       from '../../../../services/Challenge/Challenge'
 import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
 
 /**
- * WithChallengeReviewMetrics retrieves review metrics for the challenge tasks
+ * WithChallengeTagMetrics retrieves tag metrics for the challenge tasks
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithChallengeReviewMetrics = function(WrappedComponent) {
+export const WithChallengeTagMetrics = function(WrappedComponent) {
   return class extends Component {
     state = {
       loading: false
@@ -39,9 +39,8 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
         criteria.filters.priorities =_keys(_pickBy(props.includeTaskPriorities, v => v)).join(',')
       }
 
-      props.updateReviewMetrics(_get(props.user, 'id'), criteria).then((entity) => {
-        const reviewMetrics = entity
-        this.setState({loading: false, reviewMetrics: reviewMetrics})
+      props.updateTagMetrics(_get(props.user, 'id'), criteria).then((entity) => {
+        this.setState({loading: false, tagMetrics: entity})
       })
     }
 
@@ -73,25 +72,19 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
 
     render() {
       return (
-        <WrappedComponent reviewMetrics = {this.state.reviewMetrics ||
-                                           this.props.allReviewMetrics}
+        <WrappedComponent tagMetrics = {this.state.tagMetrics}
+                          totalTasks = {_get(this.props, 'filteredClusteredTasks.totalCount')}
                           loading={this.state.loading}
-                          {..._omit(this.props, ['updateReviewMetrics'])} />)
+                          {..._omit(this.props, ['updateTagMetrics'])} />)
     }
   }
 }
 
-const mapStateToProps = state => (
-  {reviewMetrics: _get(state, 'currentReviewTasks.metrics.reviewActions'),
-   reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions'),
-   reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') }
-)
-
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateReviewMetrics: (userId, criteria) => {
-    return dispatch(fetchReviewMetrics(userId, ReviewTasksType.allReviewedTasks, criteria))
+const mapDispatchToProps = (dispatch) => ({
+  updateTagMetrics: (userId, criteria) => {
+    return dispatch(fetchTagMetrics(userId, criteria))
   },
 })
 
 export default WrappedComponent =>
-  connect(mapStateToProps, mapDispatchToProps)(WithCurrentUser(WithChallengeReviewMetrics(WrappedComponent)))
+  connect(null, mapDispatchToProps)(WithCurrentUser(WithChallengeTagMetrics(WrappedComponent)))

@@ -26,14 +26,13 @@ import WithWidgetWorkspaces
 import WidgetWorkspace from '../../components/WidgetWorkspace/WidgetWorkspace'
 import { ReviewTasksType } from '../../services/Task/TaskReview/TaskReview'
 import WithReviewTasks from '../../components/HOCs/WithReviewTasks/WithReviewTasks'
-import WithReviewMetrics from '../../components/HOCs/WithReviewMetrics/WithReviewMetrics'
 import TasksReviewChallenges from './TasksReview/TasksReviewChallenges'
 import messages from './Messages'
 
 
 const WIDGET_WORKSPACE_NAME = "reviewOverview"
 
-const ReviewWidgetWorkspace = WithReviewTasks(WithReviewMetrics(WidgetWorkspace))
+const ReviewWidgetWorkspace = WithReviewTasks(WidgetWorkspace)
 
 export const defaultWorkspaceSetup = function() {
   return {

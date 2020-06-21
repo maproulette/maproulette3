@@ -441,6 +441,39 @@ export const fetchProjectChallengeActions = function(projectId, onlyEnabled=fals
 }
 
 /**
+ * Fetch tag metrics for the given challenge
+ */
+export const fetchTagMetrics = function(userId, criteria) {
+  let searchParameters = {}
+
+  if (criteria) {
+    searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                      criteria.boundingBox,
+                                                      false, false, null,
+                                                      _get(criteria, 'invertFields', {}))
+  }
+
+  return function(dispatch) {
+    return new Endpoint(
+      api.challenges.tagMetrics,
+      {params: {...searchParameters}}
+    ).execute().then(normalizedResults => {
+      return normalizedResults
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.challenge.fetchFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
  * Fetch activity timeline for the given challenge
  */
 export const fetchChallengeActivity = function(challengeId, startDate, endDate) {
