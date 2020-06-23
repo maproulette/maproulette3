@@ -32,24 +32,24 @@ const WithProject = function(WrappedComponent, options={}) {
     currentProjectId = props =>
       parseInt(_get(props, 'match.params.projectId'), 10)
 
-      challengeProjects = (projectId, props) => {
-        const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
-        return _filter(allChallenges, (challenge) => {
-            const matchingVP =
-              _find(challenge.virtualParents, (vp) => {
-                return (_isObject(vp) ? vp.id === projectId : vp === projectId)
-              })
+    challengeProjects = (projectId, props) => {
+      const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
+      return _filter(allChallenges, (challenge) => {
+          const matchingVP =
+            _find(challenge.virtualParents, (vp) => {
+              return (_isObject(vp) ? vp.id === projectId : vp === projectId)
+            })
 
-            return ((challenge.parent === projectId || matchingVP)
-                    && challenge.enabled
-                    && isUsableChallengeStatus(challenge.status))
-          })
-      }
+          return ((challenge.parent === projectId || matchingVP)
+                  && challenge.enabled
+                  && isUsableChallengeStatus(challenge.status))
+        })
+    }
 
     loadProject = props => {
       const projectId = this.currentProjectId(props)
 
-      if (_isFinite(projectId) && !this.state.project) {
+      if (_isFinite(projectId)) {
         this.setState({
           loadingChallenges: options.includeChallenges,
         })
@@ -78,8 +78,10 @@ const WithProject = function(WrappedComponent, options={}) {
       this.loadProject(this.props)
     }
 
-    componentDidUpdate() {
-      this.loadProject(this.props)
+    componentDidUpdate(prevProps) {
+      if (this.currentProjectId(this.props) !== this.currentProjectId(prevProps)) {
+        this.loadProject(this.props)
+      }
     }
 
     render() {

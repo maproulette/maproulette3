@@ -54,21 +54,24 @@ export class ProjectDetail extends Component {
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
         {!this.props.loadingChallenges &&
           <div className="mr-pt-8 mr-pl-8">
-            <div
-              className="mr-card-challenge__owner mr-text-sm mr-text-yellow mr-uppercase mr-mb-4">
-              <FormattedMessage {...messages.challengeCount}
-                  values={{count:_get(this.props, 'challenges.length', 0),
-                           isVirtual: this.props.project.isVirtual}} />
+            <div className="mr-text-sm mr-text-yellow mr-uppercase mr-mb-4">
+              <FormattedMessage
+                {...messages.challengeCount}
+                values={{
+                  count:_get(this.props, 'challenges.length', 0),
+                  isVirtual: this.props.project.isVirtual
+                }}
+              />
             </div>
             <ChallengeResultList
-               unfilteredChallenges={this.props.challenges}
-               excludeProjectId={this.props.project.id}
-               {...this.props} />
+              unfilteredChallenges={this.props.challenges}
+              excludeProjectResults
+              excludeProjectId={this.props.project.id}
+              {...this.props}
+            />
           </div>
         }
-        {this.props.loadingChallenges &&
-          <BusySpinner />
-        }
+        {this.props.loadingChallenges && <BusySpinner />}
         <div className="mr-flex-1">
           <div className="mr-h-content mr-overflow-auto">
             <div className="mr-max-w-md mr-mx-auto">
