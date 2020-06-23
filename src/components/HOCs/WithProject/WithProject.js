@@ -74,12 +74,12 @@ const WithProject = function(WrappedComponent, options={}) {
       }
     }
 
-    componentWillMount() {
+    componentDidMount() {
       this.loadProject(this.props)
     }
 
-    componentWillReceiveProps(nextProps) {
-      this.loadProject(nextProps)
+    componentDidUpdate() {
+      this.loadProject(this.props)
     }
 
     render() {

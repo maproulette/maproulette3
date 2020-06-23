@@ -3,7 +3,7 @@
   "version": "3.6.4",
   "private": true,
   "dependencies": {
-    "@apollo/client": "3.0.0-rc.6",
+    "@apollo/client": "3.0.0-rc.7",
     "@mapbox/geo-viewport": "^0.4.0",
     "@mapbox/geojsonhint": "^3.0.0",
     "@nivo/bar": "^0.62.0",

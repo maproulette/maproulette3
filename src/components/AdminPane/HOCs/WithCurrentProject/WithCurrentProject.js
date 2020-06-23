@@ -189,17 +189,16 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       this.loadProject(this.props)
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (this.props.loadingProjects && !nextProps.loadingProjects) {
-        this.loadProject(nextProps)
+    componentDidUpdate(prevProps) {
+      if (prevProps.loadingProjects && !this.props.loadingProjects) {
+        this.loadProject(this.props)
         return
       }
 
-      const nextProjectId = this.currentProjectId(nextProps)
-
+      const nextProjectId = this.currentProjectId(this.props)
       if ( _isFinite(nextProjectId) &&
-           nextProjectId !== this.currentProjectId(this.props)) {
-        this.loadProject(nextProps)
+           nextProjectId !== this.currentProjectId(prevProps)) {
+        this.loadProject(this.props)
       }
     }
 

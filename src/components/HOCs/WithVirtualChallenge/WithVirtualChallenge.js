@@ -32,9 +32,9 @@ const WithLoadedVirtualChallenge = function(WrappedComponent) {
       this.loadNeededVirtualChallenge(this.props)
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (nextProps.virtualChallengeId !== this.props.virtualChallengeId) {
-        this.loadNeededVirtualChallenge(nextProps)
+    componentDidUpdate(prevProps) {
+      if (this.props.virtualChallengeId !== prevProps.virtualChallengeId) {
+        this.loadNeededVirtualChallenge(this.props)
       }
     }
 

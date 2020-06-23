@@ -120,16 +120,15 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
                                             _get(ownProps, 'mapBounds'),
                                             ownProps.clusteredTasks)
       if (visibleTask) {
-        openTask(dispatch, challenge, visibleTask, ownProps.history)
         ownProps.setActive(false)
+        openTask(dispatch, challenge, visibleTask, ownProps.history)
         window.scrollTo(0, 0)
       }
       else {
         dispatch(loadRandomTaskFromChallenge(challenge.id)).then(task => {
-          openTask(dispatch, challenge, task, ownProps.history)
-        }).then(() => {
-          window.scrollTo(0, 0)
           ownProps.setActive(false)
+          openTask(dispatch, challenge, task, ownProps.history)
+          window.scrollTo(0, 0)
         }).catch(() => {
           dispatch(addError(AppErrors.task.fetchFailure))
           ownProps.setActive(false)
