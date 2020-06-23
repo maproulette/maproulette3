@@ -24,7 +24,7 @@ export default function(WrappedComponent, defaultAllColumns, defaultShowColumns=
       addedColumns: null,       // Columns to be shown.
     }
 
-    componentWillMount() {
+    componentDidMount() {
       this.resetColumnChoices(defaultAllColumns, defaultShowColumns)
     }
 

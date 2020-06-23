@@ -41,9 +41,9 @@ const WithLoadedTask = function(WrappedComponent) {
       this.retrieveTask(this.props)
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (this.parseTaskId(nextProps) !== this.parseTaskId(this.props)) {
-        this.retrieveTask(nextProps)
+    componentDidUpdate(prevProps) {
+      if (this.parseTaskId(this.props) !== this.parseTaskId(prevProps)) {
+        this.retrieveTask(this.props)
       }
     }
 
