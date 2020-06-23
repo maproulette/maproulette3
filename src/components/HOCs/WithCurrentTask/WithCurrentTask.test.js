@@ -10,7 +10,10 @@ import { taskDenormalizationSchema,
          completeTask } from '../../../services/Task/Task'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
-import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
+import { fetchChallengeActions, fetchChallenge }
+       from '../../../services/Challenge/Challenge'
+import { CHALLENGE_STATUS_READY, CHALLENGE_STATUS_FINISHED }
+       from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 
 jest.mock('normalizr')
 jest.mock('../../../services/Task/Task')
@@ -194,6 +197,17 @@ test("completeTask routes the user to challenge page if the next task isn't new"
 
   completeTask.mockReturnValueOnce(Promise.resolve())
   loadRandomTaskFromChallenge.mockReturnValueOnce(Promise.resolve(nextTask))
+  fetchChallenge.mockReturnValueOnce(Promise.resolve({
+    entities: {
+      challenges: {
+        "123": {
+          id: 123,
+          status: CHALLENGE_STATUS_READY,
+        }
+      },
+    },
+    result: "123",
+  }))
   const dispatch = jest.fn(value => value)
   const history = {
     push: jest.fn(),
@@ -202,12 +216,23 @@ test("completeTask routes the user to challenge page if the next task isn't new"
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
   await mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
-  expect(history.push).toBeCalledWith(`/browse/challenges/${challenge.id}`)
+  expect(history.push).toHaveBeenCalledWith('/browse/challenges', {warn: true, congratulate: false})
 })
 
 test("completeTask routes the user to challenge page if there is no next task", async () => {
   completeTask.mockReturnValueOnce(Promise.resolve())
   loadRandomTaskFromChallenge.mockReturnValueOnce(Promise.resolve(null))
+  fetchChallenge.mockReturnValueOnce(Promise.resolve({
+    entities: {
+      challenges: {
+        "123": {
+          id: 123,
+          status: CHALLENGE_STATUS_READY,
+        }
+      },
+    },
+    result: "123",
+  }))
   const dispatch = jest.fn(value => value)
   const history = {
     push: jest.fn(),
@@ -216,5 +241,5 @@ test("completeTask routes the user to challenge page if there is no next task", 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
   await mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
-  expect(history.push).toBeCalledWith(`/browse/challenges/${challenge.id}`)
+  expect(history.push).toHaveBeenCalledWith('/browse/challenges', {warn: true, congratulate: false})
 })
