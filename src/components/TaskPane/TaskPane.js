@@ -18,6 +18,7 @@ import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import WithCooperativeWork from '../HOCs/WithCooperativeWork/WithCooperativeWork'
 import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
 import WithLockedTask from '../HOCs/WithLockedTask/WithLockedTask'
+import SignIn from '../../pages/SignIn/SignIn'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import VirtualChallengeNameLink
@@ -173,6 +174,16 @@ export class TaskPane extends Component {
   }
 
   render() {
+    if (!this.props.user) {
+      return (
+        this.props.checkingLoginStatus ?
+        <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+          <BusySpinner />
+        </div> :
+        <SignIn {...this.props} />
+      )
+    }
+
     if (!_get(this.props, 'task.parent.parent')) {
       return (
         <div className="pane-loading full-screen-height">
