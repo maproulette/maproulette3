@@ -14,7 +14,7 @@ not use the production server for development purposes.**
 
 ### Basic Dependencies:
 
-* [Node 10 LTS](https://nodejs.org/)
+* [Node 12 LTS](https://nodejs.org/)
 * [yarn](https://yarnpkg.com/)
 * [jq](https://stedolan.github.io/jq/)
 * [curl](https://curl.haxx.se/)
