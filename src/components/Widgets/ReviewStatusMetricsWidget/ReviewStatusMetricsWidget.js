@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import ReviewStatusMetrics from '../../../pages/Review/Metrics/ReviewStatusMetrics'
+import WithReviewMetrics from '../../HOCs/WithReviewMetrics/WithReviewMetrics'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
 
@@ -51,4 +52,4 @@ export default class ReviewStatusMetricsWidget extends Component {
   }
 }
 
-registerWidgetType(ReviewStatusMetricsWidget, descriptor)
+registerWidgetType(WithReviewMetrics(ReviewStatusMetricsWidget), descriptor)

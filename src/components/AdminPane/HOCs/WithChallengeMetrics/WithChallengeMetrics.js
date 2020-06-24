@@ -44,13 +44,13 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
         criteria.invertFields = _get(props.searchCriteria, 'filters.invertFields')
 
         if (props.includeTaskStatuses && this.isFiltering(props.includeTaskStatuses)) {
-          criteria.status = _keys(_pickBy(props.includeTaskStatuses)).join(',')
+          criteria.status = _keys(_pickBy(props.includeTaskStatuses, v => v)).join(',')
         }
         if (props.includeTaskReviewStatuses && this.isFiltering(props.includeTaskReviewStatuses)) {
-          criteria.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses)).join(',')
+          criteria.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses, v => v)).join(',')
         }
         if (props.includeTaskPriorities && this.isFiltering(props.includeTaskPriorities)) {
-          criteria.priorities =_keys(_pickBy(props.includeTaskPriorities)).join(',')
+          criteria.priorities =_keys(_pickBy(props.includeTaskPriorities, v => v)).join(',')
         }
 
         props.fetchChallengeActions(challengeId, true, criteria).then((normalizedResults) => {

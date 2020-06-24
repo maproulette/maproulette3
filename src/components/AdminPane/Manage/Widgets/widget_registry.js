@@ -18,6 +18,7 @@ export { default as CalendarHeatmapWidget } from './CalendarHeatmapWidget/Calend
 export { default as LeaderboardWidget } from './LeaderboardWidget/LeaderboardWidget'
 export { default as RecentActivityWidget } from './RecentActivityWidget/RecentActivityWidget'
 export { default as StatusRadarWidget } from './StatusRadarWidget/StatusRadarWidget'
+export { default as TagMetricsWidget } from './TagMetricsWidget/TagMetricsWidget'
 
 
 // Import (optional) contributed widgets specific to local installation.

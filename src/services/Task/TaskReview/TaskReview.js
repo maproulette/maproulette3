@@ -41,6 +41,7 @@ export const ReviewTasksType = {
 
 // redux action creators
 export const RECEIVE_REVIEW_METRICS = 'RECEIVE_REVIEW_METRICS'
+export const RECEIVE_REVIEW_TAG_METRICS = 'RECEIVE_REVIEW_TAG_METRICS'
 export const RECEIVE_REVIEW_CLUSTERS = 'RECEIVE_REVIEW_CLUSTERS'
 export const RECEIVE_REVIEW_CHALLENGES = 'RECEIVE_REVIEW_CHALLENGES'
 export const RECEIVE_REVIEW_PROJECTS = 'RECEIVE_REVIEW_PROJECTS'
@@ -64,6 +65,18 @@ export const receiveReviewMetrics = function(metrics, status=RequestStatus.succe
     type: RECEIVE_REVIEW_METRICS,
     status,
     metrics,
+    receivedAt: Date.now(),
+  }
+}
+
+/**
+ * Add or replace the review metrics in the redux store
+ */
+export const receiveReviewTagMetrics = function(tagMetrics, status=RequestStatus.success) {
+  return {
+    type: RECEIVE_REVIEW_TAG_METRICS,
+    status,
+    tagMetrics,
     receivedAt: Date.now(),
   }
 }
@@ -142,12 +155,34 @@ const generateReviewSearch = function(criteria, reviewTasksType = ReviewTasksTyp
     return new Endpoint(
       api.tasks.reviewMetrics,
       {
-        schema: null,
         params: {reviewTasksType: type, ...params,
                  includeByPriority: true, includeByTaskStatus: true},
       }
     ).execute().then(normalizedResults => {
       dispatch(receiveReviewMetrics(normalizedResults, RequestStatus.success))
+      return normalizedResults
+    }).catch((error) => {
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
+ * Retrieve metrics for a given review tasks type and filter criteria
+ */
+ export const fetchReviewTagMetrics = function(userId, reviewTasksType, criteria) {
+  const type = determineType(reviewTasksType)
+  const params = generateReviewSearch(criteria, reviewTasksType, userId)
+
+  return function(dispatch) {
+    return new Endpoint(
+      api.tasks.reviewTagMetrics,
+      {
+        schema: null,
+        params: {reviewTasksType: type, ...params},
+      }
+    ).execute().then(normalizedResults => {
+      dispatch(receiveReviewTagMetrics(normalizedResults, RequestStatus.success))
       return normalizedResults
     }).catch((error) => {
       console.log(error.response || error)
@@ -469,6 +504,8 @@ export const currentReviewTasks = function(state={}, action) {
       return updateReduxState(state, action, "reviewNeeded")
     case RECEIVE_REVIEW_METRICS:
       return updateReduxState(state, action, "metrics")
+    case RECEIVE_REVIEW_TAG_METRICS:
+      return updateReduxState(state, action, "tagMetrics")
     case RECEIVE_REVIEW_CLUSTERS:
       return updateReduxState(state, action, "clusters")
     case RECEIVE_REVIEW_CHALLENGES:
@@ -485,6 +522,11 @@ const updateReduxState = function(state={}, action, listName) {
 
   if (action.type === RECEIVE_REVIEW_METRICS) {
     mergedState[listName] = action.metrics
+    return mergedState
+  }
+
+  if (action.type === RECEIVE_REVIEW_TAG_METRICS) {
+    mergedState[listName] = action.tagMetrics
     return mergedState
   }
 
