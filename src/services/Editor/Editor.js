@@ -3,10 +3,12 @@ import _compact from 'lodash/compact'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
 import _find from 'lodash/find'
+import _filter from 'lodash/filter'
 import _invert from 'lodash/invert'
 import _get from 'lodash/get'
 import _isArray from 'lodash/isArray'
 import _isEmpty from 'lodash/isEmpty'
+import _snakeCase from 'lodash/snakeCase'
 import RequestStatus from '../Server/RequestStatus'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import AsMappableBundle from '../../interactions/TaskBundle/AsMappableBundle'
@@ -112,12 +114,24 @@ export const editTask = function(editor, task, mapBounds, options, taskBundle) {
             }
           ),
           () => sendJOSMCommand(
-            josmImportURI(dispatch, editor, task, mapBounds, taskBundle)
+            josmImportCooperative(dispatch, editor, task, mapBounds, taskBundle)
           )
         ])
       }
       else {
-        openJOSM(dispatch, editor, task, mapBounds, josmLoadAndZoomURI, taskBundle)
+        let josmCommands = [
+          () => openJOSM(dispatch, editor, task, mapBounds, josmLoadAndZoomURI, taskBundle),
+        ]
+
+        const loadReferenceLayerCommands = _map(
+          josmImportReferenceLayers(dispatch, editor, task, mapBounds, taskBundle),
+          command => (() => sendJOSMCommand(command))
+        )
+        if (loadReferenceLayerCommands.length > 0) {
+          josmCommands = josmCommands.concat(loadReferenceLayerCommands)
+        }
+
+        executeJOSMBatch(josmCommands)
       }
     }
   }
@@ -410,12 +424,55 @@ export const josmLoadObjectURI = function(dispatch, editor, task, mapBounds, tas
  *
  * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#import
  */
-export const josmImportURI = function(dispatch, editor, task, mapBounds, taskBundle, options) {
+export const josmImportURI = function(dispatch, editor, task, mapBounds, taskBundle, uri, options={}) {
   return josmHost() + 'import?' + [
-    `new_layer=${editor === JOSM_LAYER ? 'true' : 'false'}`,
-    `layer_name=${encodeURIComponent("MR Task " + task.id + " Changes")}`,
-    `url=${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/cooperative/change/task_${task.id}_change.osc`
+    `new_layer=${editor === JOSM_LAYER || options.asNewLayer ? 'true' : 'false'}`,
+    `layer_name=${encodeURIComponent(options.layerName ? options.layerName : "MR Task " + task.id)}`,
+    `layer_locked=${options.layerLocked ? 'true' : 'false'}`,
+    `download_policy=${options.downloadPolicy || ''}`,
+    `upload_policy=${options.uploadPolicy || ''}`,
+    `url=${uri}`
   ].join('&')
+}
+
+/*
+ * Builds a JOSM import URI suitable for pulling in cooperative work
+ */
+export const josmImportCooperative = function(dispatch, editor, task, mapBounds, taskBundle) {
+  return josmImportURI(
+    dispatch, editor, task, mapBounds, taskBundle,
+    `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/cooperative/change/task_${task.id}_change.osc`,
+    {layerName: `MR Task ${task.id} Changes`}
+  )
+}
+
+/*
+ * Builds and returns JOSM import URIs for each reference layer attached to the given task
+ */
+export const josmImportReferenceLayers = function(dispatch, editor, task, mapBounds, taskBundle) {
+  const referenceLayers = _filter(
+    _get(task, 'geometries.attachments', []),
+    attachment => attachment.kind === 'referenceLayer'
+  )
+
+  return _map(referenceLayers, layer => {
+    const filename = (
+      layer.name ?
+      `${_snakeCase(layer.name)}_${task.id}` :
+      `task_attachment_${task.id}_${layer.id}`
+    ) + `.${layer.type}`
+
+    return josmImportURI(
+      dispatch, editor, task, mapBounds, taskBundle,
+      `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/attachment/${layer.id}/data/${filename}`,
+      {
+        layerName: layer.name || `MR Task ${task.id} Reference`,
+        layerLocked: _get(layer, 'settings.layerLocked', true),
+        uploadPolicy: _get(layer, 'settings.uploadPolicy', 'never'),
+        downloadPolicy: _get(layer, 'settings.downloadPolicy', 'never'),
+      }
+    )
+  })
 }
 
 /**
