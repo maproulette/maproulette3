@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import _isArray from 'lodash/isArray'
 import _isBoolean from 'lodash/isBoolean'
 import _map from 'lodash/map'
-import _isEqual from 'lodash/isEqual'
+import _isEqualWith from 'lodash/isEqualWith'
 import _clone from 'lodash/clone'
 import _get from 'lodash/get'
 import _merge from 'lodash/merge'
 import _uniqueId from 'lodash/uniqueId'
 import queryString from 'query-string'
 import { fetchLeaderboard, fetchLeaderboardForUser,
-         DEFAULT_LEADERBOARD_COUNT } from '../../../services/Leaderboard/Leaderboard'
+         DEFAULT_LEADERBOARD_COUNT, CUSTOM_RANGE } from '../../../services/Leaderboard/Leaderboard'
 
 /**
  * WithLeaderboard provides leaderboard and leaderboardLoading props containing
@@ -37,7 +37,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       }
     }
 
-    leaderboardParams = (numberMonths, countryCode) => {
+    leaderboardParams = (numberMonths, countryCode, startDate, endDate) => {
       const params = new Map([['numberMonths', numberMonths],
                               ['onlyEnabled', true],
                               ['forProjects', null],
@@ -68,7 +68,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       return params.values()
     }
 
-    updateLeaderboard = (numberMonths, countryCode, loadMore = false) => {
+    updateLeaderboard = (numberMonths, countryCode, loadMore = false, startDate, endDate) => {
       let showingCount = this.state.showingCount
 
       if (loadMore) {
@@ -86,29 +86,32 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       const currentFetch = _uniqueId()
       this.setState({leaderboardLoading: true, showingCount, fetchId: currentFetch})
 
-      fetchLeaderboard(...this.leaderboardParams(numberMonths, countryCode), showingCount).then(leaderboard => {
-        if (currentFetch >= this.state.fetchId) {
-          this.setState({leaderboard})
+      fetchLeaderboard(...this.leaderboardParams(numberMonths, countryCode),
+        showingCount, startDate, endDate).then(leaderboard => {
+          if (currentFetch >= this.state.fetchId) {
+            this.setState({leaderboard})
 
-          const userId = _get(this.props, 'user.id')
-          if (userId && !options.ignoreUser) {
-            fetchLeaderboardForUser(userId, 1, ...this.leaderboardParams(numberMonths, countryCode)).then(userLeaderboard => {
-              this.mergeInUserLeaderboard(userLeaderboard)
+            const userId = _get(this.props, 'user.id')
+            if (userId && !options.ignoreUser) {
+              fetchLeaderboardForUser(userId, 1,
+                ...this.leaderboardParams(numberMonths, countryCode),
+                startDate, endDate).then(userLeaderboard => {
+                  this.mergeInUserLeaderboard(userLeaderboard)
+                  this.setState({leaderboardLoading: false})
+                })
+            }
+            else {
               this.setState({leaderboardLoading: false})
-            })
+            }
           }
           else {
             this.setState({leaderboardLoading: false})
           }
-        }
-        else {
-          this.setState({leaderboardLoading: false})
-        }
-      })
+        })
     }
 
     setMonthsPast = (monthsPast, skipHistory=false) => {
-      if (monthsPast !== this.monthsPast()) {
+      if (monthsPast !== this.monthsPast() && monthsPast !== CUSTOM_RANGE) {
         const countryCode = this.props.countryCode
         this.updateLeaderboard(monthsPast, countryCode)
 
@@ -118,17 +121,29 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       }
     }
 
+    setDateRange = (startDate, endDate, skipHistory=false) => {
+      const countryCode = this.props.countryCode
+      this.updateLeaderboard(CUSTOM_RANGE, countryCode, false, startDate, endDate)
+
+      if (!skipHistory) {
+        this.props.history.push(`${this.props.location.pathname}?monthsPast=${CUSTOM_RANGE}&startDate=${startDate}&endDate=${endDate}`)
+      }
+    }
+
     setCountryCode = countryCode => {
+      let dates = this.monthsPast() !== CUSTOM_RANGE ? "" :
+        `&startDate=${this.startDate()}&endDate=${this.endDate()}`
+
       if (countryCode === "ALL") {
-        this.props.history.push(`/leaderboard?monthsPast=${this.monthsPast()}` )
+        this.props.history.push(`/leaderboard?monthsPast=${this.monthsPast()}${dates}` )
       }
       else {
-        this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${this.monthsPast()}` )
+        this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${this.monthsPast()}${dates}` )
       }
     }
 
     loadMore = () => {
-      this.updateLeaderboard(this.monthsPast(), this.props.countryCode, true)
+      this.updateLeaderboard(this.monthsPast(), this.props.countryCode, true, this.startDate(), this.endDate())
     }
 
     monthsPast = () => {
@@ -140,8 +155,30 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
 
     }
 
+    startDate = () => {
+      if (this.monthsPast() === CUSTOM_RANGE) {
+        const urlParams = queryString.parse(_get(this.props, 'location.search'))
+        if (urlParams.startDate)
+          return urlParams.startDate
+        else
+          return this.props.startDate
+      }
+    }
+
+    endDate = () => {
+      if (this.monthsPast() === CUSTOM_RANGE) {
+        const urlParams = queryString.parse(_get(this.props, 'location.search'))
+        if (urlParams.endDate)
+          return urlParams.endDate
+        else
+          return this.props.endDate
+      }
+    }
+
     componentDidMount() {
-      this.updateLeaderboard(this.monthsPast(), this.props.countryCode)
+      if (!initialOptions.isWidget) {
+        this.updateLeaderboard(this.monthsPast(), this.props.countryCode, false, this.startDate(), this.endDate())
+      }
     }
 
     componentDidUpdate(prevProps) {
@@ -149,9 +186,11 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       // worry about fetching if we're controlled and props change.
       if (this.props.monthsPast !== prevProps.monthsPast ||
           this.props.countryCode !== prevProps.countryCode ||
-          !_isEqual(this.props.challenges, prevProps.challenges) ||
-          !_isEqual(this.props.projects, prevProps.projects)) {
-        this.updateLeaderboard(this.monthsPast(), this.props.countryCode)
+          !_isEqualWith(this.props.challenges, prevProps.challenges,
+                        (a, b) => _get(a, 'id') === _get(b, 'id')) ||
+          !_isEqualWith(this.props.projects, prevProps.projects,
+                        (a, b) => _get(a, 'id') === _get(b, 'id'))) {
+        this.updateLeaderboard(this.monthsPast(), this.props.countryCode, false, this.startDate(), this.endDate())
       }
     }
 
@@ -161,8 +200,11 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       return <WrappedComponent leaderboard={this.state.leaderboard}
                                leaderboardLoading={this.state.leaderboardLoading}
                                monthsPast={this.monthsPast()}
+                               startDate={this.startDate()}
+                               endDate={this.endDate()}
                                countryCode={this.props.countryCode}
                                setMonthsPast={this.setMonthsPast}
+                               setDateRange={this.setDateRange}
                                setCountryCode={this.setCountryCode}
                                loadMore={this.loadMore}
                                hasMoreResults={moreResults}

@@ -72,7 +72,8 @@ export const defaultDashboardSetup = function() {
  */
 export class ChallengeDashboard extends Component {
   render() {
-    if (!this.props.challenge) {
+    // We need to wait for our challenge and for it to be populated
+    if (!this.props.challenge || !this.props.challenge.id) {
       return <BusySpinner />
     }
 
@@ -128,6 +129,7 @@ export class ChallengeDashboard extends Component {
           darkMode
           className="mr-cards-inverse"
           workspaceEyebrow={pageHeader}
+          challenges={[this.props.challenge]}
         />
       </div>
     )
