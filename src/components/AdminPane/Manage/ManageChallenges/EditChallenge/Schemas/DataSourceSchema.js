@@ -1,42 +1,46 @@
 import { DropzoneTextUpload }
-       from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+       from '../../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import AsEditableChallenge
-       from '../../../../../interactions/Challenge/AsEditableChallenge'
+       from '../../../../../../interactions/Challenge/AsEditableChallenge'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
-import messages from './Messages'
+import messages from '../Messages'
 
 /**
- * Generates a JSON Schema describing Step 2 (GeoJSON) of Edit Challenge
- * workflow intended for consumption by react-jsonschema-form.
+ * Generates a JSON Schema describing datasource fields of Edit Challenge
+ * workflow intended for consumption by react-jsonschema-form
  *
  * > Note that react-jsonschema-form only presents values for checkbox fields
  * > if they are checked, so it's best to specify radio buttons in the uiSchema
- * > for boolean fields if additional post-processing is to be avoided.
- *
- * @param intl - intl instance from react-intl
+ * > for boolean fields if additional post-processing is to be avoided
  *
  * @see See http://json-schema.org
  * @see See https://github.com/mozilla-services/react-jsonschema-form
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData) => {
+export const jsSchema = (intl, user, challengeData, extraErrors) => {
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly()
 
   const schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    title: intl.formatMessage(messages.step2Label),
-    description: intl.formatMessage(messages.step2Description),
     type: "object",
-    properties: {}
+    properties: {
+      name: {
+        title: intl.formatMessage(messages.nameLabel),
+        type: "string",
+        minLength: 3,
+      },
+    },
+    required: ["name"],
   }
 
   const overpass = {
     properties: {
       source: { enum: ["Overpass Query"] },
       overpassQL: {
-        title: intl.formatMessage(messages.overpassQLLabel),
+        title: " ",
+        description: intl.formatMessage(messages.overpassQLDescription),
         type: "string",
       },
     },
@@ -46,7 +50,7 @@ export const jsSchema = (intl, user, challengeData) => {
     properties: {
       source: { enum: ["Local File"] },
       localGeoJSON: {
-        title: intl.formatMessage(messages.localGeoJsonLabel),
+        title: " ",
         type: "string",
       },
       dataOriginDate: {
@@ -62,7 +66,7 @@ export const jsSchema = (intl, user, challengeData) => {
     properties: {
       source: { enum: ["Remote URL"] },
       remoteGeoJson: {
-        title: intl.formatMessage(messages.remoteGeoJsonLabel),
+        title: " ",
         type: "string",
       },
       dataOriginDate: {
@@ -83,13 +87,20 @@ export const jsSchema = (intl, user, challengeData) => {
         "Local File",
         "Remote URL",
       ],
+      enumNames: [
+        intl.formatMessage(messages.overpassQLLabel),
+        intl.formatMessage(messages.localGeoJsonLabel),
+        intl.formatMessage(messages.remoteGeoJsonLabel),
+      ],
       default: "Overpass Query",
     }
 
-    schema.properties.ignoreSourceErrors = {
-      title: intl.formatMessage(messages.ignoreSourceErrorsLabel),
-      type: "boolean",
-      default: false,
+    if (extraErrors && extraErrors.localGeoJSON) {
+      schema.properties.ignoreSourceErrors = {
+        title: intl.formatMessage(messages.ignoreSourceErrorsLabel),
+        type: "boolean",
+        default: false,
+      }
     }
 
     schema.dependencies = {
@@ -118,26 +129,29 @@ export const jsSchema = (intl, user, challengeData) => {
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
- * how to render the schema fields.
+ * how to render the schema fields
  *
  * @see See https://github.com/mozilla-services/react-jsonschema-form
  *
  * > Note: for anything other than text inputs, specifying the ui:widget type in
- * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
- * > proper Bulma-compliant markup.
+ * > the form configuration will help the RJSFFormFieldAdapter generate the
+ * > proper markup
  */
 export const uiSchema = (intl, user, challengeData) => {
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly()
 
   return {
+    name: {
+      "ui:help": intl.formatMessage(messages.nameDescription),
+    },
     source: {
-      "ui:widget": "radio",
+      "ui:field": "columnRadio",
+      "ui:help": intl.formatMessage(messages.dataSourceDescription),
     },
     overpassQL: {
       "ui:widget": "textarea",
       "ui:placeholder": intl.formatMessage(messages.overpassQLPlaceholder),
       "ui:readonly": sourceReadOnly,
-      "ui:help": intl.formatMessage(messages.overpassQLDescription),
     },
     localGeoJSON: {
       "ui:widget": DropzoneTextUpload,
@@ -155,6 +169,9 @@ export const uiSchema = (intl, user, challengeData) => {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.ignoreSourceErrorsDescription),
     },
-    "ui:order": [ "*", "ignoreSourceErrors" ],
+    "ui:order": [
+      "name", "source", "overpassQL", "localGeoJSON", "remoteGeoJson",
+      "ignoreSourceErrors", "dataOriginDate"
+    ],
   }
 }

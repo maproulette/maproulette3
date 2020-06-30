@@ -19,8 +19,13 @@ export default defineMessages({
     defaultMessage: "Add a Rule",
   },
 
-  addMustachePreviewNote: {
-    id: "Form.controls.addMustachePreview.note",
-    defaultMessage: "Note: all mustache property tags evaluate to empty in preview."
-  }
+  writeLabel: {
+    id: 'Form.controls.markdownField.write.label',
+    defaultMessage: "Write",
+  },
+
+  previewLabel: {
+    id: 'Form.controls.markdownField.preview.label',
+    defaultMessage: "Preview",
+  },
 })
