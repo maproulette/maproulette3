@@ -77,6 +77,7 @@ export const parseSearchCriteria = url => {
   const savedChallengesOnly = searchParams.savedChallengesOnly
   const excludeOtherReviewers = searchParams.excludeOtherReviewers
   const invertFields = searchParams.invertFields
+  const pageSize = searchParams.pageSize
 
   if (_isString(filters)) {
     filters = JSON.parse(searchParams.filters)
@@ -92,7 +93,7 @@ export const parseSearchCriteria = url => {
                                     savedChallengesOnly, excludeOtherReviewers,
                                     invertFields},
     newState: {sortBy, direction, filters, boundingBox, savedChallengesOnly,
-               excludeOtherReviewers, invertFields}
+               excludeOtherReviewers, invertFields, pageSize}
   }
 }
 
