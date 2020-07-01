@@ -7,6 +7,32 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.6.5] - 2020-07-01
+### Added
+- Updated community translations (huge thanks to all the translators!)
+- Map of nearby tasks on Task Review confirmation step
+- Overlay of prioritized bounds on Challenge tasks map for challenge managers
+- Support for RFC 7464 compliant formatting of line-by-line GeoJSON
+- Include project and task link in Following activity
+- Tri-State select-all control on Inbox page
+- MR-tag metrics widget for challenge managers
+- Basic global activity page
+- Task attachments with initial support for JOSM reference layers
+- [internal] Upgrade to node v12 LTS
+- [internal] Numerous upgrades to package dependencies
+- [internal] Various updates required for upgraded package compatibility
+
+### Fixed
+- Inform user if logged out when trying to lock a task (#1233)
+- Positioning of confirmation modal
+- Unclickable controls on Teams page for some browser window sizes
+- Error when using multiple location rules
+- Display of Featured Challenges widget on Safari
+- Various display issues on Project Details page
+- Task Review table page-size reset after every task review
+- Clean up any negative timestamps left by bug maproulette/maproulette2#728
+
+
 ## [v3.6.4] - 2020-06-09
 ### Added
 - Updated community translations
