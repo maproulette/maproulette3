@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage, FormattedRelative } from 'react-intl'
+import { FormattedMessage, FormattedRelativeTime } from 'react-intl'
+import { selectUnit } from '@formatjs/intl-utils'
 import { Link } from 'react-router-dom'
-import AnimateHeight from 'react-animate-height'
 import classNames from 'classnames'
 import parse from 'date-fns/parse'
 import _isUndefined from 'lodash/isUndefined'
@@ -48,7 +48,6 @@ export class CardChallenge extends Component {
         }
       }
     }
-
 
     return (
       <article
@@ -96,66 +95,64 @@ export class CardChallenge extends Component {
           </div>
         </header>
 
-        <AnimateHeight duration={500} height={this.props.isExpanded ? 'auto' : 0}>
-          {this.props.isExpanded &&
-          <div className="mr-card-challenge__content">
-            {!this.props.challenge.isVirtual &&
-             <ol className="mr-card-challenge__meta">
-               <li>
-                 <strong className="mr-text-yellow">
-                   <FormattedMessage {...messages.difficulty} />:
-                 </strong> <FormattedMessage
-                   {...messagesByDifficulty[this.props.challenge.difficulty]}
-                 />
-               </li>
-               <li>
-                 <strong className="mr-text-yellow">
-                   <FormattedMessage {...messages.lastTaskRefreshLabel} />:
-                 </strong> <FormattedRelative
-                   value={parse(this.props.challenge.dataOriginDate)}
-                 />
-               </li>
-               <li>
-                 <Link
-                   className="mr-text-green-lighter hover:mr-text-white"
-                   to={`/challenge/${this.props.challenge.id}/leaderboard`}
-                 >
-                   <FormattedMessage {...messages.viewLeaderboard} />
-                 </Link>
-               </li>
-             </ol>
-            }
+        {this.props.isExpanded &&
+         <div className="mr-card-challenge__content">
+           {!this.props.challenge.isVirtual &&
+            <ol className="mr-card-challenge__meta">
+              <li>
+                <strong className="mr-text-yellow">
+                  <FormattedMessage {...messages.difficulty} />:
+                </strong> <FormattedMessage
+                  {...messagesByDifficulty[this.props.challenge.difficulty]}
+                />
+              </li>
+              <li>
+                <strong className="mr-text-yellow">
+                  <FormattedMessage {...messages.lastTaskRefreshLabel} />:
+                </strong> <FormattedRelativeTime
+                  {...selectUnit(parse(this.props.challenge.dataOriginDate))}
+                />
+              </li>
+              <li>
+                <Link
+                  className="mr-text-green-lighter hover:mr-text-white"
+                  to={`/challenge/${this.props.challenge.id}/leaderboard`}
+                >
+                  <FormattedMessage {...messages.viewLeaderboard} />
+                </Link>
+              </li>
+            </ol>
+           }
 
-            <div className="mr-card-challenge__description">
-              <MarkdownContent
-                markdown={this.props.challenge.description || this.props.challenge.blurb}
-              />
-            </div>
+           <div className="mr-card-challenge__description">
+             <MarkdownContent
+               markdown={this.props.challenge.description || this.props.challenge.blurb}
+             />
+           </div>
 
-            <ChallengeProgress className="mr-mt-4 mr-mb-12" challenge={this.props.challenge} />
+           <ChallengeProgress className="mr-mt-4 mr-mb-12" challenge={this.props.challenge} />
 
-            <ul className="mr-card-challenge__actions">
-              {!_isUndefined(this.props.startControl) &&
-               <li>
-                 {this.props.isLoading ?
-                  <BusySpinner inline /> :
-                  this.props.startControl
-                 }
-               </li>
-              }
-              {(!_isUndefined(this.props.saveControl) || !_isUndefined(this.props.unsaveControl)) &&
-               <li>
-                 {this.props.saveControl}
-                 {this.props.unsaveControl}
-               </li>
-              }
-              {!_isUndefined(this.props.manageControl) &&
-                <li>{this.props.manageControl}</li>
-              }
-            </ul>
-          </div>
-          }
-        </AnimateHeight>
+           <ul className="mr-card-challenge__actions">
+             {!_isUndefined(this.props.startControl) &&
+              <li>
+                {this.props.isLoading ?
+                 <BusySpinner inline /> :
+                 this.props.startControl
+                }
+              </li>
+             }
+             {(!_isUndefined(this.props.saveControl) || !_isUndefined(this.props.unsaveControl)) &&
+              <li>
+                {this.props.saveControl}
+                {this.props.unsaveControl}
+              </li>
+             }
+             {!_isUndefined(this.props.manageControl) &&
+               <li>{this.props.manageControl}</li>
+             }
+           </ul>
+         </div>
+        }
       </article>
     )
   }

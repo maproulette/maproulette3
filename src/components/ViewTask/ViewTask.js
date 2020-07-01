@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
-import jsonLang from 'react-syntax-highlighter/dist/languages/hljs/json'
-import highlightColors from 'react-syntax-highlighter/dist/styles/hljs/agate'
+import jsonLang from 'react-syntax-highlighter/dist/esm/languages/hljs/json'
+import highlightColors from 'react-syntax-highlighter/dist/esm/styles/hljs/agate'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import _get from 'lodash/get'
 

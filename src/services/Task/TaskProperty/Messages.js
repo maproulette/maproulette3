@@ -11,7 +11,7 @@ export default defineMessages({
 
   notEqual: {
     id: "Task.property.searchType.notEqual",
-    defaultMessage: "doesn't equal"
+    defaultMessage: "doesn’t equal"
   },
 
   contains: {

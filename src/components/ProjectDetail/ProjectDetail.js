@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
-import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
+import { FormattedMessage, FormattedRelativeTime, injectIntl }
+       from 'react-intl'
+import { selectUnit } from '@formatjs/intl-utils'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import parse from 'date-fns/parse'
@@ -52,21 +54,24 @@ export class ProjectDetail extends Component {
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
         {!this.props.loadingChallenges &&
           <div className="mr-pt-8 mr-pl-8">
-            <div
-              className="mr-card-challenge__owner mr-text-sm mr-text-yellow mr-uppercase mr-mb-4">
-              <FormattedMessage {...messages.challengeCount}
-                  values={{count:_get(this.props, 'challenges.length', 0),
-                           isVirtual: this.props.project.isVirtual}} />
+            <div className="mr-text-sm mr-text-yellow mr-uppercase mr-mb-4">
+              <FormattedMessage
+                {...messages.challengeCount}
+                values={{
+                  count:_get(this.props, 'challenges.length', 0),
+                  isVirtual: this.props.project.isVirtual
+                }}
+              />
             </div>
             <ChallengeResultList
-               unfilteredChallenges={this.props.challenges}
-               excludeProjectId={this.props.project.id}
-               {...this.props} />
+              unfilteredChallenges={this.props.challenges}
+              excludeProjectResults
+              excludeProjectId={this.props.project.id}
+              {...this.props}
+            />
           </div>
         }
-        {this.props.loadingChallenges &&
-          <BusySpinner />
-        }
+        {this.props.loadingChallenges && <BusySpinner />}
         <div className="mr-flex-1">
           <div className="mr-h-content mr-overflow-auto">
             <div className="mr-max-w-md mr-mx-auto">
@@ -90,9 +95,7 @@ export class ProjectDetail extends Component {
                         />
                         :
                       </strong>{' '}
-                      <FormattedRelative
-                        value={parse(project.created)}
-                      />
+                      <FormattedRelativeTime {...selectUnit(parse(project.created))} />
                     </li>
                     <li>
                       <strong className="mr-text-yellow">
@@ -101,9 +104,7 @@ export class ProjectDetail extends Component {
                         />
                         :
                       </strong>{' '}
-                      <FormattedRelative
-                        value={parse(project.modified)}
-                      />
+                      <FormattedRelativeTime {...selectUnit(parse(project.modified))} />
                     </li>
                     {_get(this.props, 'challenges.length', 0) > 0 &&
                       <li>

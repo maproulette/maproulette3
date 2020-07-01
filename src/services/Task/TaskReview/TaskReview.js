@@ -1,4 +1,4 @@
-import uuidv1 from 'uuid/v1'
+import { v1 as uuidv1 } from 'uuid'
 import uuidTime from 'uuid-time'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
@@ -6,6 +6,8 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _snakeCase from 'lodash/snakeCase'
 import _isFinite from 'lodash/isFinite'
+import _map from 'lodash/map'
+import _values from 'lodash/values'
 import queryString from 'query-string'
 import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
@@ -39,6 +41,7 @@ export const ReviewTasksType = {
 
 // redux action creators
 export const RECEIVE_REVIEW_METRICS = 'RECEIVE_REVIEW_METRICS'
+export const RECEIVE_REVIEW_TAG_METRICS = 'RECEIVE_REVIEW_TAG_METRICS'
 export const RECEIVE_REVIEW_CLUSTERS = 'RECEIVE_REVIEW_CLUSTERS'
 export const RECEIVE_REVIEW_CHALLENGES = 'RECEIVE_REVIEW_CHALLENGES'
 export const RECEIVE_REVIEW_PROJECTS = 'RECEIVE_REVIEW_PROJECTS'
@@ -62,6 +65,18 @@ export const receiveReviewMetrics = function(metrics, status=RequestStatus.succe
     type: RECEIVE_REVIEW_METRICS,
     status,
     metrics,
+    receivedAt: Date.now(),
+  }
+}
+
+/**
+ * Add or replace the review metrics in the redux store
+ */
+export const receiveReviewTagMetrics = function(tagMetrics, status=RequestStatus.success) {
+  return {
+    type: RECEIVE_REVIEW_TAG_METRICS,
+    status,
+    tagMetrics,
     receivedAt: Date.now(),
   }
 }
@@ -140,12 +155,34 @@ const generateReviewSearch = function(criteria, reviewTasksType = ReviewTasksTyp
     return new Endpoint(
       api.tasks.reviewMetrics,
       {
-        schema: null,
         params: {reviewTasksType: type, ...params,
                  includeByPriority: true, includeByTaskStatus: true},
       }
     ).execute().then(normalizedResults => {
       dispatch(receiveReviewMetrics(normalizedResults, RequestStatus.success))
+      return normalizedResults
+    }).catch((error) => {
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
+ * Retrieve metrics for a given review tasks type and filter criteria
+ */
+ export const fetchReviewTagMetrics = function(userId, reviewTasksType, criteria) {
+  const type = determineType(reviewTasksType)
+  const params = generateReviewSearch(criteria, reviewTasksType, userId)
+
+  return function(dispatch) {
+    return new Endpoint(
+      api.tasks.reviewTagMetrics,
+      {
+        schema: null,
+        params: {reviewTasksType: type, ...params},
+      }
+    ).execute().then(normalizedResults => {
+      dispatch(receiveReviewTagMetrics(normalizedResults, RequestStatus.success))
       return normalizedResults
     }).catch((error) => {
       console.log(error.response || error)
@@ -198,6 +235,45 @@ const determineType = (reviewTasksType) => {
     case ReviewTasksType.allReviewedTasks:
     default:
       return 4
+  }
+}
+
+/*
+ * Retrieve review tasks geographically closest to the given task (up to the given
+ * limit). Returns an object in clusteredTasks format with the tasks and meta data.
+ * Note that this does not add the results to the redux store, but simply returns them
+ */
+export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5) {
+  return function(dispatch) {
+    const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                         criteria.boundingBox,
+                                                         _get(criteria, 'savedChallengesOnly'),
+                                                         _get(criteria, 'excludeOtherReviewers'),
+                                                         null,
+                                                         _get(criteria, 'invertFields', {}))
+
+    const params = {limit, ...searchParameters}
+
+    return new Endpoint(
+      api.tasks.nearbyReviewTasks,
+      {
+        schema: [ taskSchema() ],
+        variables: {taskId},
+        params,
+      }
+    ).execute().then(normalizedResults => ({
+      loading: false,
+      tasks: _map(_values(_get(normalizedResults, 'entities.tasks', {})), task => {
+        if (task.location) {
+          // match clusteredTasks response, which returns a point with lat/lng fields
+          task.point = {
+            lng: task.location.coordinates[0],
+            lat: task.location.coordinates[1]
+          }
+        }
+        return task
+      })
+    }))
   }
 }
 
@@ -428,6 +504,8 @@ export const currentReviewTasks = function(state={}, action) {
       return updateReduxState(state, action, "reviewNeeded")
     case RECEIVE_REVIEW_METRICS:
       return updateReduxState(state, action, "metrics")
+    case RECEIVE_REVIEW_TAG_METRICS:
+      return updateReduxState(state, action, "tagMetrics")
     case RECEIVE_REVIEW_CLUSTERS:
       return updateReduxState(state, action, "clusters")
     case RECEIVE_REVIEW_CHALLENGES:
@@ -444,6 +522,11 @@ const updateReduxState = function(state={}, action, listName) {
 
   if (action.type === RECEIVE_REVIEW_METRICS) {
     mergedState[listName] = action.metrics
+    return mergedState
+  }
+
+  if (action.type === RECEIVE_REVIEW_TAG_METRICS) {
+    mergedState[listName] = action.tagMetrics
     return mergedState
   }
 

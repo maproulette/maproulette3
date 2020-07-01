@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _compact from 'lodash/compact'
 import _clone from 'lodash/clone'
 import _findIndex from 'lodash/findIndex'
 import _isObject from 'lodash/isObject'
@@ -139,23 +140,33 @@ export class ChallengeResultList extends Component {
         )
       }
     } else {
-      results = _map(challengeResults, result =>
-        result.parent ?
-        <ChallengeResultItem
-          key={`challenge_${result.id}`}
-          {...this.props}
-          className="mr-mb-4"
-          challenge={result}
-          listRef={this.listRef}
-        /> :
-        <ProjectResultItem
-          key={`project_${result.id}`}
-          {...this.props}
-          className="mr-mb-4"
-          project={result}
-          listRef={this.listRef}
-        />
-      )
+      results = _compact(_map(challengeResults, result => {
+        if (result.parent) {
+          return (
+            <ChallengeResultItem
+              key={`challenge_${result.id}`}
+              {...this.props}
+              className="mr-mb-4"
+              challenge={result}
+              listRef={this.listRef}
+            />
+          )
+        }
+        else if (!this.props.excludeProjectResults) {
+          return (
+            <ProjectResultItem
+              key={`project_${result.id}`}
+              {...this.props}
+              className="mr-mb-4"
+              project={result}
+              listRef={this.listRef}
+            />
+          )
+        }
+        else {
+          return null
+        }
+      }))
     }
 
     return (

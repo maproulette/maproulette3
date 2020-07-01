@@ -1,5 +1,5 @@
 import { schema } from 'normalizr'
-import uuidv1 from 'uuid/v1'
+import { v1 as uuidv1 } from 'uuid'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -224,7 +224,12 @@ export const startTask = function(taskId) {
     return new Endpoint(api.task.start, {
       schema: taskSchema(),
       variables: {id: taskId}
-    }).execute()
+    }).execute().catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).catch(err => null)
+      }
+      throw error
+    })
   }
 }
 
@@ -239,6 +244,16 @@ export const releaseTask = function(taskId) {
     }).execute().then(normalizedResults => {
       dispatch(receiveTasks(normalizedResults.entities))
       return normalizedResults
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        ).catch(err => null)
+      }
+      else {
+        dispatch(addError(AppErrors.task.lockReleaseFailure))
+        console.log(error.response || error)
+      }
     })
   }
 }

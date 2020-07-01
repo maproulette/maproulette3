@@ -26,7 +26,7 @@ export default class MarkdownContent extends Component {
 
     let parsedMarkdown =
       remark().use(externalLinks, {target: '_blank', rel: ['nofollow']})
-              .use(reactRenderer).processSync(normalizedMarkdown).contents
+              .use(reactRenderer).processSync(normalizedMarkdown).result
 
     if (this.props.allowShortCodes) {
       parsedMarkdown = expandShortCodesInJSX(parsedMarkdown)

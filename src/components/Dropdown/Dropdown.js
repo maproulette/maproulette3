@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import wrapWithClickout from 'react-clickout'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import { ExternalContext } from '../External/External'
 
 class Dropdown extends Component {
+  static contextType = ExternalContext
+
   state = {
     isVisible: false,
   }
@@ -18,7 +21,9 @@ class Dropdown extends Component {
   }
 
   handleClickout() {
-    this.closeDropdown()
+    if (!this.context.clickoutSuspended) {
+      this.closeDropdown()
+    }
   }
 
   render() {

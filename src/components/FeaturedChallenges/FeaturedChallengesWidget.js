@@ -18,8 +18,8 @@ const descriptor = {
   targets: [
     WidgetDataTarget.user,
   ],
-  minWidth: 3,
-  defaultWidth: 4,
+  minWidth: 4,
+  defaultWidth: 6,
   minHeight: 12,
   defaultHeight: 12,
 }
@@ -27,8 +27,8 @@ const descriptor = {
 export default class FeaturedChallengesWidget extends Component {
   render() {
     return (
-      <QuickWidget {...this.props} className="">
-        <div className="mr-bg-black-10 mr-absolute mr-left-0 mr-top-0 mr-rounded-tl mr-rounded-bl mr-flex mr-flex-col mr-items-center mr-p-4 mr-pt-12 mr-h-full">
+      <QuickWidget {...this.props} nomain className="">
+        <div className="mr-bg-black-10 mr-absolute mr-left-0 mr-top-0 mr-rounded-tl mr-rounded-bl mr-flex mr-flex-col mr-items-center mr-p-4 mr-pt-12 mr-h-full mr-w-56">
           <h2 className="mr-text-yellow mr-text-md mr-font-normal mr-uppercase mr-text-center mr-leading-normal mr-w-2/3">
             <FormattedMessage {...messages.header} />
           </h2>
@@ -36,8 +36,8 @@ export default class FeaturedChallengesWidget extends Component {
           </div>
         </div>
 
-        <div className="mr-flex mr-h-full">
-          <div className="mr-w-1/2 mr-mr-4"></div>
+        <div className="mr-flex mr-h-full" style={{maxHeight: `${this.props.widgetLayout.h * 42}px`}}>
+          <div className="mr-w-56 mr-min-w-52 mr-max-w-56"></div>
           <FeaturedList {...this.props} />
         </div>
       </QuickWidget>

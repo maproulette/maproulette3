@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/client'
-import Form from 'react-jsonschema-form'
+import Form from '@rjsf/core'
 import { FormattedMessage } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
 import _isEmpty from 'lodash/isEmpty'
@@ -39,7 +39,7 @@ export const EditTeam = props => {
         <button
           type="button"
           className="mr-button mr-button--white"
-          onClick={props.finish}
+          onClick={() => props.finish(false)}
         >
           <FormattedMessage {...messages.cancelLabel} />
         </button>
@@ -64,7 +64,7 @@ export const EditTeam = props => {
                  })
                }
              }
-             props.finish()
+             props.finish(true)
            }}
          >
            <FormattedMessage {...messages.saveLabel} />

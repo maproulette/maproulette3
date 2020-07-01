@@ -4,7 +4,9 @@ import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _cloneDeep from 'lodash/cloneDeep'
 import Modal from '../Modal/Modal'
+import External from '../External/External'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import { ExternalContext } from '../External/External'
 import messages from './Messages'
 import './ConfirmAction.scss'
 
@@ -20,6 +22,8 @@ import './ConfirmAction.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class ConfirmAction extends Component {
+  static contextType = ExternalContext
+
   originalAction = null
 
   state = {
@@ -33,37 +37,37 @@ export default class ConfirmAction extends Component {
       }
     }
     else {
+      // Suspend clickout so that users can interact with our modal
+      this.context.suspendClickout(true)
       this.setState({confirming: true, originalEvent: _cloneDeep(e)})
     }
   }
 
-  cancel = () => this.setState({confirming: false})
+  cancel = () => {
+    this.context.suspendClickout(false)
+    this.setState({confirming: false})
+  }
 
   proceed = () => {
     const event = this.state.originalEvent
 
+    this.context.suspendClickout(false)
     this.setState({confirming: false, originalEvent: null})
     if (this.originalAction) {
       this.originalAction(event)
     }
   }
 
-  render() {
-    const action = this.props.action ? this.props.action : 'onClick'
-    this.originalAction = _get(this.props.children, `props.${action}`)
-
-    const ControlWithConfirmation =
-      React.cloneElement(this.props.children, {[action]: this.initiateConfirmation})
-
+  modal = () => {
     return (
-      <React.Fragment>
-        {ControlWithConfirmation}
-
+      <External>
         <Modal
-          narrowColumn
+          narrow
           fullBleed
           onClose={this.cancel}
           isActive={this.state.confirming}
+          key={this.props.modalName}
+          contentClassName="mr-mt-20"
         >
           <article>
             <div className="mr-top-0 mr-absolute">
@@ -106,6 +110,21 @@ export default class ConfirmAction extends Component {
             </div>
           </article>
         </Modal>
+      </External>
+    )
+  }
+
+  render() {
+    const action = this.props.action ? this.props.action : 'onClick'
+    this.originalAction = _get(this.props.children, `props.${action}`)
+
+    const ControlWithConfirmation =
+      React.cloneElement(this.props.children, {[action]: this.initiateConfirmation})
+
+    return (
+      <React.Fragment>
+        {ControlWithConfirmation}
+        {this.state.confirming && this.modal()}
       </React.Fragment>
     )
   }

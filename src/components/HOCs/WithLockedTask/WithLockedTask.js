@@ -44,7 +44,7 @@ const WithLockedTask = function(WrappedComponent) {
         return Promise.reject("Invalid task")
       }
 
-      return this.props.releaseTask(task.id)
+      return this.props.releaseTask(task.id).catch(err => null)
     }
 
     /**

@@ -66,3 +66,36 @@ export const UNBLOCK_USER = gql`
 
   ${USER_WITH_FOLLOW_DATA}
 `
+
+export const RECENT_ACTIVITY = gql`
+  query Activity($osmIds: [Long!], $limit: Int, $page: Int) {
+    recentActions(osmIds: $osmIds, limit: $limit, offset: $page) {
+      id
+      created
+      typeId
+      parentId
+      parentName
+      itemId
+      action
+      status
+      user { ...UserIdentity }
+      task {
+        id
+        location
+      }
+      challenge {
+        id
+        name
+        general {
+          parent {
+            id
+            displayName
+            name
+          }
+        }
+      }
+    }
+  }
+
+  ${USER_IDENTITY}
+`

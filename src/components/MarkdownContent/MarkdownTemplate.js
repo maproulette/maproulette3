@@ -192,6 +192,7 @@ export default class MarkdownTemplate extends Component {
 
     return (
       <div>
+        {this.props.header}
         {this.markdownContent(content)}
         {!_isEmpty(this.state.questions) &&
           <ul className="mr-bg-black-5 mr-p-3">

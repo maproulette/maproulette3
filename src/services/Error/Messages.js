@@ -74,6 +74,10 @@ export default defineMessages({
     id: 'Errors.task.lockRefreshFailure',
     defaultMessage: "Unable to extend your task lock. Your lock may have expired. We recommend refreshing the page to try establishing a fresh lock.",
   },
+  taskLockReleaseFailure: {
+    id: 'Errors.task.lockReleaseFailure',
+    defaultMessage: "Failed to release task lock. Your lock or your session may have expired.",
+  },
   taskBundleFailure: {
     id: 'Errors.task.bundleFailure',
     defaultMessage: "Unable to bundling tasks together",
@@ -222,7 +226,7 @@ export default defineMessages({
   },
   josmMissingOSMIds: {
     id: 'Errors.josm.missingFeatureIds',
-    defaultMessage: "This task's features do not include the OSM identifiers " +
+    defaultMessage: "This task’s features do not include the OSM identifiers " +
                     "required to open them standalone in JOSM. Please choose " +
                     "another editing option."
   },

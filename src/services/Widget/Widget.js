@@ -1,4 +1,4 @@
-import uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import FileSaver from 'file-saver'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
@@ -29,6 +29,7 @@ export const WIDGET_DATA_TARGET_TASKS = 'tasks'
 export const WIDGET_DATA_TARGET_TASK = 'task'
 export const WIDGET_DATA_TARGET_USER = 'user'
 export const WIDGET_DATA_TARGET_REVIEW = 'review'
+export const WIDGET_DATA_TARGET_ACTIVITY = 'activity'
 
 export const WIDGET_USER_TARGET_ALL = 'all'
 export const WIDGET_USER_TARGET_MANAGER_READ = 'managerRead'
@@ -43,7 +44,8 @@ export const WidgetDataTarget = {
   tasks: WIDGET_DATA_TARGET_TASKS,
   task: WIDGET_DATA_TARGET_TASK,
   user: WIDGET_DATA_TARGET_USER,
-  review: WIDGET_DATA_TARGET_REVIEW
+  review: WIDGET_DATA_TARGET_REVIEW,
+  activity: WIDGET_DATA_TARGET_ACTIVITY,
 }
 
 export const WidgetUserTarget = {

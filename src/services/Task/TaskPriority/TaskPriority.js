@@ -1,7 +1,11 @@
 import _map from 'lodash/map'
 import _invert from 'lodash/invert'
 import _fromPairs from 'lodash/fromPairs'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../tailwind.config.js'
 import messages from './Messages'
+
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 /**
  * Constants defining task priority levels. These statuses are defined on the
@@ -31,3 +35,9 @@ export const messagesByPriority = _fromPairs(
 export const taskPriorityLabels = intl => _fromPairs(
   _map(messages, (message, key) => [key, intl.formatMessage(message)])
 )
+
+export const TaskPriorityColors = Object.freeze({
+  [TaskPriority.low]: colors['teal'],
+  [TaskPriority.medium]: colors['mango'],
+  [TaskPriority.high]: colors['red-light'],
+})

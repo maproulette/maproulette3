@@ -15,7 +15,11 @@ export const DEFAULT_MAP_BOUNDS = [
   22.51255695405145, // north
 ]
 
-export const GLOBAL_MAPBOUNDS = [-180, -90, 180, 90]
+/*
+ * Global bounds. Note that mercator projection doesn't extend much past 85
+ * degrees
+ */
+export const GLOBAL_MAPBOUNDS = [-180, -85, 180, 85]
 
 /**
  * Maximum allowed size, in degrees, of the bounding box for

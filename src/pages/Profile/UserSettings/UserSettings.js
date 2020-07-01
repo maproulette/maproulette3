@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage, injectIntl }
        from 'react-intl'
-import Form from 'react-jsonschema-form'
+import Form from '@rjsf/core'
 import _each from 'lodash/each'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'

@@ -30,13 +30,13 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
       criteria.invertFields = _get(props.searchCriteria, 'filters.invertFields')
 
       if (props.includeTaskStatuses) {
-        criteria.filters.status = _keys(_pickBy(props.includeTaskStatuses)).join(',')
+        criteria.filters.status = _keys(_pickBy(props.includeTaskStatuses, v => v)).join(',')
       }
       if (props.includeTaskReviewStatuses) {
-        criteria.filters.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses)).join(',')
+        criteria.filters.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses, v => v)).join(',')
       }
       if (props.includeTaskPriorities) {
-        criteria.filters.priorities =_keys(_pickBy(props.includeTaskPriorities)).join(',')
+        criteria.filters.priorities =_keys(_pickBy(props.includeTaskPriorities, v => v)).join(',')
       }
 
       props.updateReviewMetrics(_get(props.user, 'id'), criteria).then((entity) => {

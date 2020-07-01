@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import classNames from 'classnames'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import { TaskStatus, messagesByStatus, keysByStatus }
@@ -19,8 +20,9 @@ import messages from './Messages'
  */
 export default class AdjustFiltersOverlay extends Component {
   render() {
-    const currentFilters = this.props.currentFilters
+    const currentFilters = _get(this.props.currentFilters, 'filters', {})
     const challengeName = _get(this.props.challenge, 'name', '')
+    const invertFields = _get(this.props.currentFilters, 'invertFields', {})
 
     const reviewStatusFilter =
       <div className="mr-mt-4">
@@ -100,8 +102,23 @@ export default class AdjustFiltersOverlay extends Component {
         </label>
         <input type="text"
                className="mr-text-white mr-input mr-w-64"
-               value={currentFilters.challenge}
+               value={currentFilters.challenge || ""}
                onChange={event => this.props.filterChange('challenge', event.target.value)}/>
+
+        <button
+          className={classNames("mr-text-current mr-justify-center mr-ml-2 mr-text-xs",
+                               {"mr-text-white-40": !invertFields['challenge'],
+                                "mr-text-pink": invertFields['challenge']})}
+          onClick={(e) => {
+            e.stopPropagation()
+            this.props.filterChange('challenge', currentFilters.challenge, !invertFields['challenge'])
+          }}
+        >
+          {invertFields['challenge'] ?
+            <FormattedMessage {...messages.invertedLabel} /> :
+            <FormattedMessage {...messages.invertLabel} />
+          }
+        </button>
 
         {currentFilters.challenge !== challengeName &&
           <button onClick={event => this.props.filterChange('challenge', challengeName)}

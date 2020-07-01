@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
-import AnimateHeight from 'react-animate-height'
 import classNames from 'classnames'
 import _isUndefined from 'lodash/isUndefined'
 import _noop from 'lodash/noop'
@@ -42,40 +41,38 @@ export class CardProject extends Component {
           </div>
         </header>
 
-        <AnimateHeight duration={500} height={this.props.isExpanded ? 'auto' : 0}>
-          {this.props.isExpanded &&
-          <div className="mr-card-project__content">
-            <ol className="mr-card-project__meta">
+        {this.props.isExpanded &&
+         <div className="mr-card-project__content">
+           <ol className="mr-card-project__meta">
+             <li>
+               <Link
+                 className="mr-text-green-lighter hover:mr-text-white"
+                 to={`/project/${this.props.project.id}/leaderboard`}
+               >
+                 <FormattedMessage {...messages.viewLeaderboard} />
+               </Link>
+             </li>
+           </ol>
+
+           <div className="mr-card-project__description">
+             <MarkdownContent markdown={this.props.project.description} />
+           </div>
+
+           <ul className="mr-card-project__actions">
+             {!_isUndefined(this.props.startControl) &&
               <li>
-                <Link
-                  className="mr-text-green-lighter hover:mr-text-white"
-                  to={`/project/${this.props.project.id}/leaderboard`}
-                >
-                  <FormattedMessage {...messages.viewLeaderboard} />
-                </Link>
+                {this.props.isLoading ?
+                 <BusySpinner inline /> :
+                 this.props.startControl
+                }
               </li>
-            </ol>
-
-            <div className="mr-card-project__description">
-              <MarkdownContent markdown={this.props.project.description} />
-            </div>
-
-            <ul className="mr-card-project__actions">
-              {!_isUndefined(this.props.startControl) &&
-               <li>
-                 {this.props.isLoading ?
-                  <BusySpinner inline /> :
-                  this.props.startControl
-                 }
-               </li>
-              }
-              {!_isUndefined(this.props.manageControl) &&
-                <li>{this.props.manageControl}</li>
-              }
-            </ul>
-          </div>
-          }
-        </AnimateHeight>
+             }
+             {!_isUndefined(this.props.manageControl) &&
+               <li>{this.props.manageControl}</li>
+             }
+           </ul>
+         </div>
+        }
       </article>
     )
   }

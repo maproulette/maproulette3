@@ -162,7 +162,7 @@ export const uiSchema = intl => ({
   },
   customBasemap: {
     "ui:emptyValue": "",
-    "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.customBasemapDescription, {dummy: ''})} />,
+    "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.customBasemapDescription)} />,
   },
   exportableProperties: {
     "ui:emptyValue": "",

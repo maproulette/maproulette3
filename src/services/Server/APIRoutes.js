@@ -46,6 +46,7 @@ const apiRoutes = factory => {
       'activity': factory.get('/data/status/activity'),
       'latestActivity': factory.get('/data/status/latestActivity'),
       'withReviewTasks': factory.get('/review/challenges'),
+      'tagMetrics': factory.get('/data/tag/metrics'),
     },
     'challenge': {
       'single': factory.get('/challenge/:id'),
@@ -88,7 +89,9 @@ const apiRoutes = factory => {
       'review': factory.get('/tasks/review'),
       'reviewed': factory.get('/tasks/reviewed'),
       'reviewNext': factory.get('/tasks/review/next'),
+      'nearbyReviewTasks': factory.get('/tasks/review/nearby/:taskId'),
       'reviewMetrics': factory.get('/tasks/review/metrics'),
+      'reviewTagMetrics': factory.get('/tasks/review/tag/metrics'),
       'fetchReviewClusters': factory.get('/taskCluster/review'),
       'inCluster': factory.get('/tasksInCluster/:clusterId'),
       'bundle': factory.post('/taskBundle'),

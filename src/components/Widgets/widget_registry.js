@@ -5,6 +5,10 @@
  */
 
 // Import first-party widgets shipped with MapRoulette
+export { default as ActivityListingWidget }
+       from './ActivityListingWidget/ActivityListingWidget'
+export { default as ActivityMapWidget }
+       from './ActivityMapWidget/ActivityMapWidget'
 export { default as FollowingWidget }
        from './FollowingWidget/FollowingWidget'
 export { default as MyTeamsWidget }
@@ -55,8 +59,8 @@ export { default as ReviewTableWidget }
       from './ReviewTableWidget/ReviewTableWidget'
 export { default as ReviewStatusMetricsWidget }
       from './ReviewStatusMetricsWidget/ReviewStatusMetricsWidget'
-export { default as ReviewTaskMetricsWidget }
-      from './ReviewTaskMetricsWidget/ReviewTaskMetricsWidget'
+export { default as ReviewTagMetricsWidget }
+      from './ReviewTagMetricsWidget/ReviewTagMetricsWidget'
 export { default as ReviewMapWidget }
       from './ReviewMapWidget/ReviewMapWidget'
 export { default as SnapshotProgressWidget }

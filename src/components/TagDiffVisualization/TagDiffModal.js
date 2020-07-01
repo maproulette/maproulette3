@@ -15,7 +15,9 @@ const TagDiffModal = props => {
     <External>
       <Modal isActive wide onClose={props.onClose}>
         <div className="mr-overflow-y-auto mr-max-h-screen80">
-          <TagDiffVisualization {...props} tagDiff={props.tagDiffs[0]} />
+          {props.tagDiffs && props.tagDiffs.length > 0 &&
+           <TagDiffVisualization {...props} tagDiff={props.tagDiffs[0]} />
+          }
         </div>
       </Modal>
     </External>

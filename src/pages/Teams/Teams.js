@@ -38,7 +38,12 @@ export const Teams = props => {
       <EditTeam
         {...props}
         team={editingTeam}
-        finish={() => setEditingTeam(null)}
+        finish={success => {
+          setEditingTeam(null)
+          if (success) {
+            setViewingTeam(null)
+          }
+        }}
       />
     )
 
@@ -119,7 +124,7 @@ export const Teams = props => {
             </div>
           </div>
         </div>
-        <div className="mr-mt-12 mr-cards-inverse mr-bg-black-10 mr-rounded mr-p-4 mr-pb-8">
+        <div className="mr-mt-12 mr-cards-inverse mr-bg-black-10 mr-rounded mr-p-4 mr-pb-8 mr-relative mr-z-5">
           <div className="mr-flex mr-justify-between mr-items-center mr-mb-4">
             <div className="mr-text-md mr-text-yellow">
               <FormattedMessage {...subheader} />

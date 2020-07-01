@@ -8,9 +8,9 @@ import _isObject from 'lodash/isObject'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
-       from 'react-jsonschema-form/lib/components/widgets/SelectWidget'
+       from '@rjsf/core/lib/components/widgets/SelectWidget'
 import OriginalTextWidget
-      from 'react-jsonschema-form/lib/components/widgets/TextWidget'
+      from '@rjsf/core/lib/components/widgets/TextWidget'
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import MarkdownTemplate from '../../MarkdownContent/MarkdownTemplate'
@@ -153,12 +153,12 @@ export class MarkdownEditField extends Component {
             value={this.props.formData}
           />
           <React.Fragment>
-            {showMustacheNote &&
-              <div className="mr-italic mr-text-xs">
-                <FormattedMessage {...messages.addMustachePreviewNote} />
-              </div>
-            }
             <MarkdownTemplate
+              header={showMustacheNote &&
+                <div className="mr-italic mr-text-xs">
+                  <FormattedMessage {...messages.addMustachePreviewNote} />
+                </div>
+              }
               content={this.props.formData || ""}
               properties={{}}
               completionResponses={{}}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Form from 'react-jsonschema-form'
+import Form from '@rjsf/core'
 import _merge from 'lodash/merge'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
