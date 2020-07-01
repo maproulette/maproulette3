@@ -32,6 +32,7 @@ export default {
     lockRefreshFailure: messages.taskLockRefreshFailure,
     bundleFailure: messages.taskBundleFailure,
     lockReleaseFailure: messages.taskLockReleaseFailure,
+    cooperativeFailure: messages.taskCooperativeFailure,
   },
 
   osm: {

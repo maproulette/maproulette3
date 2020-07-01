@@ -82,6 +82,10 @@ export default defineMessages({
     id: 'Errors.task.bundleFailure',
     defaultMessage: "Unable to bundling tasks together",
   },
+  taskCooperativeFailure: {
+    id: 'Errors.task.cooperativeFailure',
+    defaultMessage: "Failed to load cooperative task{details}",
+  },
 
   osmRequestTooLarge: {
     id: 'Errors.osm.requestTooLarge',
