@@ -45,7 +45,7 @@ export default class BoundsSelectorModal extends Component {
   render() {
     const boundingBox =
       toLatLngBounds(
-        this.props.value ?
+        this.props.value && _split(this.props.value, ',').length === 4 ?
           _split(this.props.value, ',') :
           this.props.bounding ? bbox(this.props.bounding) : DEFAULT_MAP_BOUNDS
       )
