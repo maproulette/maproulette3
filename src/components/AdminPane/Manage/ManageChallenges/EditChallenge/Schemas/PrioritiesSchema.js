@@ -1,19 +1,17 @@
 import { TaskPriority,
          taskPriorityLabels }
-       from '../../../../../services/Task/TaskPriority/TaskPriority'
+       from '../../../../../../services/Task/TaskPriority/TaskPriority'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
-import messages from './Messages'
+import messages from '../Messages'
 
 /**
- * Generates a JSON Schema describing Step 3 (task priorities) of Edit
- * Challenge workflow intended for consumption by react-jsonschema-form.
+ * Generates a JSON Schema describing priority fields of Edit
+ * Challenge workflow intended for consumption by react-jsonschema-form
  *
  * > Note that react-jsonschema-form only presents values for checkbox fields
  * > if they are checked, so it's best to specify radio buttons in the uiSchema
- * > for boolean fields if additional post-processing is to be avoided.
- *
- * @param intl - intl instance from react-intl
+ * > for boolean fields if additional post-processing is to be avoided
  *
  * @see See http://json-schema.org
  * @see See https://github.com/mozilla-services/react-jsonschema-form
@@ -25,8 +23,6 @@ export const jsSchema = intl => {
 
   return {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    title: intl.formatMessage(messages.step3Label),
-    description: intl.formatMessage(messages.step3Description),
     type: "object",
     definitions: {
       tagRule: {
@@ -192,38 +188,47 @@ const priorityRuleGroupUISchema = {
       classNames: "priority-rule",
       keyType: {
         "ui:widget": "select",
+        "ui:displayLabel": false,
       },
       valueType: {
         "ui:widget": "select",
+        "ui:displayLabel": false,
       },
       key: {
         "ui:placeholder": "Property Name",
+        "ui:displayLabel": false,
       },
       operator: {
         "ui:widget": "select",
+        "ui:displayLabel": false,
       },
       value: {
         "ui:placeholder": "Property Value",
+        "ui:displayLabel": false,
       },
       ruleGroup: {
-        classNames: "nested-rule-group mr-border mr-border-green-light mr-p-2 mr-mt-4 mr-flex mr-w-full",
+        classNames: "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
         rules: {
           items: {
             key: {
               "ui:placeholder": "Property Name",
+              "ui:displayLabel": false,
             },
             value: {
               "ui:placeholder": "Property Value",
+              "ui:displayLabel": false,
             },
             ruleGroup: {
-              classNames: "nested-rule-group mr-border mr-border-green-light mr-p-2 mr-mt-4 mr-flex mr-w-full",
+              classNames: "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
               rules: {
                 items: {
                   key: {
                     "ui:placeholder": "Property Name",
+                    "ui:displayLabel": false,
                   },
                   value: {
                     "ui:placeholder": "Property Value",
+                    "ui:displayLabel": false,
                   },
                 },
               },
@@ -238,13 +243,13 @@ const priorityRuleGroupUISchema = {
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
- * how to render the schema fields.
+ * how to render the schema fields
  *
  * @see See https://github.com/mozilla-services/react-jsonschema-form
  *
- * > Note: for anything other than text inputs, specifying the ui:widget type in
- * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
- * > proper Bulma-compliant markup.
+ * > Note: for anything other than text inputs, specifying the ui:widget type
+ * > in the form configuration will help the RJSFFormFieldAdapter generate the
+ * > proper markup
  */
 export const uiSchema = intl => ({
   defaultPriority: {

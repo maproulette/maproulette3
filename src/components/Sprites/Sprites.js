@@ -67,6 +67,9 @@ export default function() {
         <symbol id="cards-icon" viewBox="0 0 20 20">
           <path d="M0 0h9v9H0V0zm2 2v5h5V2H2zm-2 9h9v9H0v-9zm2 2v5h5v-5H2zm9-13h9v9h-9V0zm2 2v5h5V2h-5zm-2 9h9v9h-9v-9zm2 2v5h5v-5h-5z" />
         </symbol>
+        <symbol id="carousel-icon" viewBox="0 0 20 20">
+          <path d="M16 16v2H4v-2H0V4h4V2h12v2h4v12h-4zM14 5.5V4H6v12h8V5.5zm2 .5v8h2V6h-2zM4 6H2v8h2V6z" />
+        </symbol>
         <symbol id="mixed-icon" viewBox="0 0 20 20">
           <path d="M0,0 L9,0 L9,9 L0,9 L0,0 Z M2,2 L2,7 L7,7 L7,2 L2,2 Z M11,0 L20,0 L20,9 L11,9 L11,0 Z M13,2 L13,7 L18,7 L18,2 L13,2 Z" />
           <path

@@ -14,6 +14,10 @@ $(self-dropdown) {
       $(self-dropdown)--right & {
         @apply mr-inset-auto mr-top-100 mr-right-0;
       }
+
+      $(self-dropdown)--offsetright & {
+        @apply mr-inset-auto mr-top-100 mr-right-screen20;
+      }
     }
   }
 
@@ -46,6 +50,10 @@ $(self-dropdown) {
 
     $(self-dropdown)--right & {
       @apply mr-ml-0 mr-mr-2 mr-inset-auto mr-bottom-100 mr-right-0;
+    }
+
+    $(self-dropdown)--offsetright & {
+      @apply mr-ml-0 mr-mr-2 mr-inset-auto mr-bottom-100 mr-right-screen20;
     }
   }
 
