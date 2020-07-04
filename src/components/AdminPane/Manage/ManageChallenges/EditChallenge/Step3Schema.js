@@ -109,7 +109,7 @@ export const jsSchema = intl => {
                     type: "string",
                     enum: ["contains", "not_contains"],
                     enumNames: ["inside bounds", "outside bounds"],
-                    default: "inside bounds",
+                    default: "contains",
                   },
                   value: {
                     title: "Bounds Value",
