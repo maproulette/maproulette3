@@ -99,7 +99,7 @@ export class AsCooperativeWork {
         case 'deleteElement':
           return _get(operation, 'data.id')
         default:
-          throw new Error(`Unrecognized operation type: ${operation.operationType}`)
+          throw new Error(`unrecognized operation type: ${operation.operationType}`)
       }
     }))
   }

@@ -8,7 +8,8 @@ import _values from 'lodash/values'
 import { fetchOSMElement } from '../../../services/OSM/OSM'
 import { fetchCooperativeTagFixChangeset }
        from '../../../services/Task/Task'
-import { addError } from '../../../services/Error/Error'
+import { addErrorWithDetails } from '../../../services/Error/Error'
+import AppErrors from '../../../services/Error/AppErrors'
 import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 
 /**
@@ -55,7 +56,7 @@ export const WithCooperativeWork = function(WrappedComponent) {
         }))
       }
       catch(error) {
-        this.props.addError(error)
+        this.props.addErrorWithDetails(AppErrors.task.cooperativeFailure, error.message)
         this.setState({loadingOSMData: false})
         return
       }
@@ -145,7 +146,7 @@ export const WithCooperativeWork = function(WrappedComponent) {
 }
 
 export const mapDispatchToProps = dispatch =>
-  bindActionCreators({ addError }, dispatch)
+  bindActionCreators({ addErrorWithDetails }, dispatch)
 
 export default WrappedComponent =>
   connect(null, mapDispatchToProps)(WithCooperativeWork(WrappedComponent))
