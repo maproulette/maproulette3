@@ -8,7 +8,7 @@ import ChallengeOwnerLeaderboard
        from '../../ChallengeOwnerLeaderboard/ChallengeOwnerLeaderboard'
 import PastDurationSelector
        from '../../../../PastDurationSelector/PastDurationSelector'
-import { CURRENT_MONTH }
+import { CURRENT_MONTH, CUSTOM_RANGE }
        from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import messages from './Messages'
@@ -32,23 +32,45 @@ export default class LeaderboardWidget extends Component {
     this.props.setMonthsPast(monthsPast, true)
 
     if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
-      this.props.updateWidgetConfiguration({monthsPast})
+      this.props.updateWidgetConfiguration({monthsPast, startDate: null, endDate: null})
+    }
+  }
+
+  setDateRange = (startDate, endDate) => {
+    this.props.setDateRange(startDate, endDate)
+
+    if (this.props.widgetConfiguration.startDate !== startDate ||
+        this.props.widgetConfiguration.endDate !== endDate) {
+      this.props.updateWidgetConfiguration({monthsPast: CUSTOM_RANGE,
+                                            startDate, endDate})
     }
   }
 
   componentDidMount() {
-    this.props.setMonthsPast(this.props.widgetConfiguration.monthsPast, true)
+    if (this.props.widgetConfiguration.monthsPast !== CUSTOM_RANGE) {
+      this.props.setMonthsPast(this.props.widgetConfiguration.monthsPast, true)
+    }
+    else if (this.props.widgetConfiguration.startDate &&
+             this.props.widgetConfiguration.endDate) {
+      this.props.setDateRange(this.props.widgetConfiguration.startDate,
+                              this.props.widgetConfiguration.endDate)
+    }
   }
 
   render() {
     const monthsPast = this.props.widgetConfiguration.monthsPast
+    const startDate = this.props.widgetConfiguration.startDate
+    const endDate = this.props.widgetConfiguration.endDate
 
     const selector =
       <PastDurationSelector
         className="mr-button mr-button--green-lighter mr-button--small mr-dropdown--right"
-        pastMonthsOptions={[CURRENT_MONTH, 1, 3, 6, 12]}
+        pastMonthsOptions={[CURRENT_MONTH, 1, 3, 6, 12, CUSTOM_RANGE]}
         currentMonthsPast={monthsPast}
         selectDuration={this.setMonthsPast}
+        selectCustomRange={this.setDateRange}
+        customStartDate={startDate ? new Date(startDate) : null}
+        customEndDate={endDate ? new Date(endDate) : null}
       />
 
     return (
@@ -58,11 +80,12 @@ export default class LeaderboardWidget extends Component {
         widgetTitle={<FormattedMessage {...messages.title} />}
         rightHeaderControls={<div className="mr-my-2">{selector}</div>}
       >
-        <ChallengeOwnerLeaderboard {...this.props} monthsPast={monthsPast} />
+        <ChallengeOwnerLeaderboard {...this.props} />
       </QuickWidget>
     )
   }
 }
 
 registerWidgetType(WithLeaderboard(LeaderboardWidget, INITIAL_MONTHS_PAST,
-                                   {ignoreUser: true, filterChallenges: true}), descriptor)
+                                   {ignoreUser: true, filterChallenges: true,
+                                    isWidget: true}), descriptor)
