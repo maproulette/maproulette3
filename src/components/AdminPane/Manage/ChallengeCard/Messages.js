@@ -11,6 +11,6 @@ export default defineMessages({
 
   visibilityToogleTooltip: {
     id: "ChallengeCard.controls.visibilityToggle.tooltip",
-    defaultMessage: "Toggle challenge visibility"
+    defaultMessage: "Toggle challenge discoverability"
   },
 })

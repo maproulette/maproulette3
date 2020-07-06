@@ -21,7 +21,7 @@ export default defineMessages({
 
   enabledTooltip: {
     id: "Admin.Project.fields.enabled.tooltip",
-    defaultMessage: "Enabled",
+    defaultMessage: "Discoverable",
   },
 
   disabledTooltip: {
