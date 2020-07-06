@@ -96,6 +96,7 @@ export class WidgetGrid extends Component {
              {this.props.editNameControl}
              <WidgetPicker {...this.props} isRight onWidgetSelected={this.props.addWidget} />
              {this.props.doneEditingControl}
+             {this.props.cancelEditingControl}
            </React.Fragment>
           }
         </div>
