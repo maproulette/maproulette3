@@ -171,20 +171,6 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
       // Work to be done after the status is set
       const doAfter = () => {
-        if (taskLoadBy) {
-          // Start loading the next task from the challenge.
-          const loadNextTask =
-            _isFinite(requestedNextTask) ?
-            nextRequestedTask(dispatch, ownProps, requestedNextTask) :
-            nextRandomTask(dispatch, ownProps, taskId, taskLoadBy)
-
-          return loadNextTask.then(newTask =>
-            visitNewTask(dispatch, ownProps, taskId, newTask)
-          ).catch(error => {
-            ownProps.history.push(`/browse/challenges/${challengeId}`)
-          })
-        }
-
         if (_isString(comment) && comment.length > 0) {
           if (taskBundle) {
             dispatch(addTaskBundleComment(
@@ -208,6 +194,20 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         // background
         if (_isFinite(ownProps.virtualChallengeId)) {
           setTimeout(() => dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)), 1000)
+        }
+
+        if (taskLoadBy) {
+          // Start loading the next task from the challenge.
+          const loadNextTask =
+            _isFinite(requestedNextTask) ?
+            nextRequestedTask(dispatch, ownProps, requestedNextTask) :
+            nextRandomTask(dispatch, ownProps, taskId, taskLoadBy)
+
+          return loadNextTask.then(newTask =>
+            visitNewTask(dispatch, ownProps, taskId, newTask)
+          ).catch(error => {
+            ownProps.history.push(`/browse/challenges/${challengeId}`)
+          })
         }
       }
 
