@@ -1283,6 +1283,7 @@
   "VirtualChallenge.fields.name.label": "Name your \"virtual\" challenge",
   "WidgetPicker.menuLabel": "Add Widget",
   "WidgetWorkspace.controls.addConfiguration.label": "Add New Layout",
+  "WidgetWorkspace.controls.cancelConfiguration.label": "Cancel",
   "WidgetWorkspace.controls.deleteConfiguration.label": "Delete Layout",
   "WidgetWorkspace.controls.editConfiguration.label": "Edit Layout",
   "WidgetWorkspace.controls.exportConfiguration.label": "Export Layout",

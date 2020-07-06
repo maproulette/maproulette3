@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Edit Layout",
   },
 
+  cancelConfigurationLabel: {
+    id: "WidgetWorkspace.controls.cancelConfiguration.label",
+    defaultMessage: "Cancel",
+  },
+
   saveConfigurationLabel: {
     id: "WidgetWorkspace.controls.saveConfiguration.label",
     defaultMessage: "Done Editing",
