@@ -111,7 +111,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
     }
 
     setMonthsPast = (monthsPast, skipHistory=false) => {
-      if (monthsPast !== this.monthsPast() && monthsPast !== CUSTOM_RANGE) {
+      if (monthsPast !== CUSTOM_RANGE) {
         const countryCode = this.props.countryCode
         this.updateLeaderboard(monthsPast, countryCode)
 
