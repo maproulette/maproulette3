@@ -21,7 +21,7 @@ export default defineMessages({
 
   visibleLabel: {
     id: "Admin.Project.controls.visible.label",
-    defaultMessage: "Visible:",
+    defaultMessage: "Discoverable:",
   },
 
   confirmDisablePrompt: {

@@ -52,7 +52,7 @@ export default defineMessages({
   visibleDescription: {
     id: 'Admin.EditChallenge.form.visible.description',
     defaultMessage: "Allow your challenge to be easily discoverable by " +
-    "other users via Find Challenges (subject to project visibility). " +
+    "other users via Find Challenges (subject to project discoverability). " +
     "Note that all challenges are considered public and, even when " +
     "Discoverable is off, users can still view your challenge if they " +
     "have a direct link to it.",

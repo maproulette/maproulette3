@@ -26,7 +26,7 @@ export default defineMessages({
 
   enabledLabel: {
     id: "Admin.ChallengeAnalysisTable.columnHeaders.enabled",
-    defaultMessage: "Visible",
+    defaultMessage: "Discoverable",
   },
 
   lastActivityLabel: {

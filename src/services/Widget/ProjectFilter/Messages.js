@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   visible: {
     id: "Dashboard.ProjectFilter.visible.label",
-    defaultMessage: "Visible",
+    defaultMessage: "Discoverable",
   },
 
   owner: {
