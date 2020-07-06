@@ -7,6 +7,12 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.6.6] - 2020-07-06
+### Fixed
+- Task comments provided during confirmation step not saved
+- Unable to setup location style rules in task prioritization rules
+
+
 ## [v3.6.5] - 2020-07-01
 ### Added
 - Updated community translations (huge thanks to all the translators!)
