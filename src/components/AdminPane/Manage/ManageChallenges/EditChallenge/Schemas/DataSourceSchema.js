@@ -114,14 +114,22 @@ export const jsSchema = (intl, user, challengeData, extraErrors) => {
     }
   }
   else if (!_isEmpty(challengeData.overpassQL)) {
-    schema.properties = _omit(overpass.properties, ['source'])
-    schema.properties = _omit(overpass.properties, ['dataOriginDate'])
+    schema.properties = Object.assign(
+      schema.properties,
+      _omit(overpass.properties, ['dataOriginDate'])
+    )
   }
   else if (!_isEmpty(challengeData.remoteGeoJson)) {
-    schema.properties = _omit(remoteUrl.properties, ['source'])
+    schema.properties = Object.assign(
+      schema.properties,
+      _omit(remoteUrl.properties, ['source'])
+    )
   }
   else {
-    schema.properties = _omit(localUpload.properties, ['source'])
+    schema.properties = Object.assign(
+      schema.properties,
+      _omit(localUpload.properties, ['source'])
+    )
   }
 
   return schema

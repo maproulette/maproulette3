@@ -38,6 +38,7 @@ module.exports = {
       'blue-75': 'rgba(23, 46, 81, .75)',
       'blue-light': '#496B94',
       'blue-light-25': 'rgba(73, 107, 148, 0.25)',
+      'blue-light-75': 'rgba(73, 107, 148, 0.75)',
       'blue-dark': '#182841',
       'blue-leaflet': '#2E85CB',
       'blue-dark-50': 'rgba(24, 40, 65, .5)',

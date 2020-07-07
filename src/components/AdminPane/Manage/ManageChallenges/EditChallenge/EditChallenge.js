@@ -531,29 +531,42 @@ export class EditChallenge extends Component {
               isCloningChallenge={this.isCloningChallenge}
               isNewChallenge={isNewChallenge}
             >
-              <LongFormToggle
-                {...this.props}
-                isLongForm={isLongForm}
-                setIsLongForm={setIsLongForm}
-              />
-              <StepComponent
-                {...this.props}
-                step={activeStep}
-                transitionToStep={transitionToStep}
-                challengeSteps={challengeSteps}
-              />
-              <StepNavigation
-                activeStep={activeStep}
-                prevStep={stepName => {
-                  this.isFinishing = false
-                  prevStep(stepName)
-                }}
-                finish={() => {
-                  this.isFinishing = true
-                  this.handleSubmit()
-                  return false
-                }}
-              />
+              <div className="mr-flex">
+                <div className="mr-w-54 mr-flex mr-flex-col mr-items-center mr-bg-blue-darker mr-rounded-l mr-pt-8">
+                  {activeStep.icon &&
+                  <SvgSymbol
+                    className="mr-fill-blue-light-75 mr-w-48 mr-h-48"
+                    sym={activeStep.icon}
+                    viewBox={activeStep.viewBox || '0 0 20 20'}
+                  />
+                  }
+                </div>
+                <div className="mr-p-4 md:mr-p-8 mr-w-full">
+                  <LongFormToggle
+                    {...this.props}
+                    isLongForm={isLongForm}
+                    setIsLongForm={setIsLongForm}
+                  />
+                  <StepComponent
+                    {...this.props}
+                    step={activeStep}
+                    transitionToStep={transitionToStep}
+                    challengeSteps={challengeSteps}
+                  />
+                  <StepNavigation
+                    activeStep={activeStep}
+                    prevStep={stepName => {
+                      this.isFinishing = false
+                      prevStep(stepName)
+                    }}
+                    finish={() => {
+                      this.isFinishing = true
+                      this.handleSubmit()
+                      return false
+                    }}
+                  />
+                </div>
+              </div>
             </BreadcrumbWrapper>
           )
         }
@@ -630,58 +643,71 @@ export class EditChallenge extends Component {
               </External>
             }
 
-            <LongFormToggle
-              {...this.props}
-              isLongForm={isLongForm}
-              setIsLongForm={setIsLongForm}
-            />
-            <Form
-              schema={activeStep.jsSchema(
-                this.props.intl, this.props.user, challengeData, this.state.extraErrors
-              )}
-              uiSchema={activeStep.uiSchema(
-                this.props.intl, this.props.user, challengeData, this.state.extraErrors
-              )}
-              className="form"
-              validate={(formData, errors) => this.validate(formData, errors, activeStep)}
-              widgets={{SelectWidget: CustomSelectWidget, TextWidget: CustomTextWidget}}
-              ArrayFieldTemplate={CustomArrayFieldTemplate}
-              FieldTemplate={CustomFieldTemplate}
-              fields={customFields}
-              tagType={"challenges"}
-              noHtml5Validate
-              showErrorList={false}
-              formData={challengeData}
-              formContext={_merge(this.state.formContext, {
-                bounding: _get(challengeData, 'bounding'),
-                buttonAction: BoundsSelectorModal,
-              })}
-              onChange={this.changeHandler}
-              onSubmit={formData => this.handleSubmit(formData, nextStep)}
-              onError={this.errorHandler}
-              extraErrors={this.state.extraErrors}
-            >
-              {this.hasTaskStyleRuleErrors() &&
-                activeStep.id === "Properties" &&
-                <div className="mr-text-red-light mr-mb-4">
-                  <FormattedMessage {...messages.customTaskStylesError} />
-                </div>
-              }
+            <div className="mr-flex">
+              <div className="mr-w-54 mr-flex mr-flex-col mr-items-center mr-bg-blue-darker mr-rounded-l mr-pt-8">
+                {activeStep.icon &&
+                 <SvgSymbol
+                   className="mr-fill-blue-light-75 mr-w-48 mr-h-48"
+                   sym={activeStep.icon}
+                   viewBox={activeStep.viewBox || '0 0 20 20'}
+                 />
+                }
+              </div>
+              <div className="mr-p-4 md:mr-p-8 mr-w-full">
+                <LongFormToggle
+                  {...this.props}
+                  isLongForm={isLongForm}
+                  setIsLongForm={setIsLongForm}
+                />
+                <Form
+                  schema={activeStep.jsSchema(
+                    this.props.intl, this.props.user, challengeData, this.state.extraErrors
+                  )}
+                  uiSchema={activeStep.uiSchema(
+                    this.props.intl, this.props.user, challengeData, this.state.extraErrors
+                  )}
+                  className="form"
+                  validate={(formData, errors) => this.validate(formData, errors, activeStep)}
+                  widgets={{SelectWidget: CustomSelectWidget, TextWidget: CustomTextWidget}}
+                  ArrayFieldTemplate={CustomArrayFieldTemplate}
+                  FieldTemplate={CustomFieldTemplate}
+                  fields={customFields}
+                  tagType={"challenges"}
+                  noHtml5Validate
+                  showErrorList={false}
+                  formData={challengeData}
+                  formContext={_merge(this.state.formContext, {
+                    bounding: _get(challengeData, 'bounding'),
+                    buttonAction: BoundsSelectorModal,
+                  })}
+                  onChange={this.changeHandler}
+                  onSubmit={formData => this.handleSubmit(formData, nextStep)}
+                  onError={this.errorHandler}
+                  extraErrors={this.state.extraErrors}
+                >
+                  {this.hasTaskStyleRuleErrors() &&
+                    activeStep.id === "Properties" &&
+                    <div className="mr-text-red-light mr-mb-4">
+                      <FormattedMessage {...messages.customTaskStylesError} />
+                    </div>
+                  }
 
-              {/* Note: Next button submits the form, so nextStep isn't used here */}
-              <StepNavigation
-                activeStep={activeStep}
-                prevStep={stepName => {
-                  this.isFinishing = false
-                  prevStep(stepName)
-                }}
-                finish={() => {
-                  this.isFinishing = true
-                  this.handleSubmit()
-                  return false
-                }}
-              />
-            </Form>
+                  {/* Note: Next button submits the form, so nextStep isn't used here */}
+                  <StepNavigation
+                    activeStep={activeStep}
+                    prevStep={stepName => {
+                      this.isFinishing = false
+                      prevStep(stepName)
+                    }}
+                    finish={() => {
+                      this.isFinishing = true
+                      this.handleSubmit()
+                      return false
+                    }}
+                  />
+                </Form>
+              </div>
+            </div>
           </BreadcrumbWrapper>
         )
       }}
@@ -791,7 +817,7 @@ const BreadcrumbWrapper = props => {
             </nav>
           </div>
 
-          <div className="mr-max-w-3xl mr-mx-auto mr-bg-blue-dark mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+          <div className="mr-max-w-3xl mr-mx-auto mr-bg-blue-dark mr-mt-8 mr-rounded">
             {props.children}
           </div>
         </div>
