@@ -14,6 +14,7 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import TriStateCheckbox from '../Bulma/TriStateCheckbox'
 import ConfirmAction from '../ConfirmAction/ConfirmAction'
 import DropdownButton from '../Bulma/DropdownButton'
+import TimezonePicker from '../TimezonePicker/TimezonePicker'
 import WithDeactivateOnOutsideClick from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import { TaskStatus, statusLabels, keysByStatus } from '../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatusWithUnset, reviewStatusLabels, keysByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
@@ -239,9 +240,20 @@ export class TaskAnalysisTableHeader extends Component {
                                 </li>
                             </ul>
                             <hr className="mr-rule-dropdown" />
+                            <div className="mr-text-md mr-mb-2 mr-text-yellow">
+                              <FormattedMessage {...messages.exportTitle} />
+                            </div>
+                            <div className="mr-mb-2">
+                              <span className="mr-pr-2 mr-text-orange">
+                                <FormattedMessage {...messages.timezoneLabel} />
+                              </span>
+                              <TimezonePicker
+                                changeTimezone={this.props.changeTimezone}
+                                currentTimezone={this.props.currentTimezone} />
+                            </div>
                             <ul className="mr-list-dropdown">
                               <li>
-                                <form method="post" action={buildLinkToExportCSV(_get(this.props, 'challenge.id'), this.props.criteria)}>
+                                <form method="post" action={buildLinkToExportCSV(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone)}>
                                   <input type="hidden" name="taskPropertySearch"
                                       value={JSON.stringify(_get(this.props, 'criteria.filters.taskPropertySearch', {}))}
                                   />
@@ -254,7 +266,7 @@ export class TaskAnalysisTableHeader extends Component {
                             </ul>
                             <ul className="mr-list-dropdown">
                               <li>
-                                <form method="post" action={buildLinkToExportGeoJSON(_get(this.props, 'challenge.id'), this.props.criteria)}>
+                                <form method="post" action={buildLinkToExportGeoJSON(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone)}>
                                   <input type="hidden" name="taskPropertySearch"
                                       value={JSON.stringify(_get(this.props, 'criteria.filters.taskPropertySearch', {}))}
                                   />

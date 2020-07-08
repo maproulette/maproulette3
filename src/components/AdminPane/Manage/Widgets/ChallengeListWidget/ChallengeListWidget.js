@@ -18,6 +18,8 @@ import ChallengeList from '../../ChallengeList/ChallengeList'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import Dropdown from '../../../../Dropdown/Dropdown'
+import TimezonePicker from '../../../../TimezonePicker/TimezonePicker'
+import {DEFAULT_TIMEZONE_OFFSET} from '../../../../TimezonePicker/TimezonePicker'
 import messages from './Messages'
 
 const descriptor = {
@@ -30,6 +32,7 @@ const descriptor = {
   defaultConfiguration: {
     view: 'list',
     sortBy: ['name'],
+    timezoneOffset: DEFAULT_TIMEZONE_OFFSET,
   },
 }
 
@@ -63,6 +66,12 @@ export default class ChallengeListWidget extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.challenges && !this.props.talliedChallenges(this.props.project.id)) {
       this.props.updateTallyMarks(this.props.project.id, _map(this.props.challenges, (c) => c.id))
+    }
+  }
+
+  setTimezone = timezoneOffset => {
+    if (this.props.widgetConfiguration.timezoneOffset !== timezoneOffset) {
+      this.props.updateWidgetConfiguration({timezoneOffset})
     }
   }
 
@@ -117,11 +126,26 @@ export default class ChallengeListWidget extends Component {
             )}
             dropdownContent={() =>
               <ul className="mr-list-dropdown">
+                <li className="mr-text-md mr-mb-2 mr-text-yellow">
+                  <FormattedMessage {...messages.exportTitle} />
+                </li>
+                <li className="mr-mb-2">
+                  <span className="mr-pr-1 mr-pb-2 mr-text-orange mr-text-sm">
+                    <FormattedMessage {...messages.timezoneLabel} />
+                  </span>
+                  <TimezonePicker
+                    changeTimezone={this.setTimezone}
+                    currentTimezone={this.props.widgetConfiguration.timezoneOffset}
+                  />
+                </li>
                 <li>
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/project/${_get(this.props, 'project.id')}/tasks/extract?${cId}`}
+                    href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}` +
+                          `/api/v2/project/${_get(this.props, 'project.id')}` +
+                          `/tasks/extract?${cId}&timezone=` +
+                          `${_get(this.props.widgetConfiguration, 'timezoneOffset', '')}`}
                     className="mr-flex mr-items-center"
                   >
                     <SvgSymbol

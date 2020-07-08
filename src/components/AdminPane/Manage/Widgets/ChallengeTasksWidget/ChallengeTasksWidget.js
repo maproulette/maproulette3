@@ -4,6 +4,7 @@ import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import ViewChallengeTasks from '../../ViewChallengeTasks/ViewChallengeTasks'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
+import {DEFAULT_TIMEZONE_OFFSET} from '../../../../TimezonePicker/TimezonePicker'
 import messages from './Messages'
 
 const descriptor = {
@@ -13,9 +14,18 @@ const descriptor = {
   minWidth: 4,
   defaultWidth: 8,
   defaultHeight: 49,
+  defaultConfiguration: {
+    timezoneOffset: DEFAULT_TIMEZONE_OFFSET,
+  }
 }
 
 export default class ChallengeTasksWidget extends Component {
+  setTimezone = timezoneOffset => {
+    if (this.props.widgetConfiguration.timezoneOffset !== timezoneOffset) {
+      this.props.updateWidgetConfiguration({timezoneOffset})
+    }
+  }
+
   render() {
     return (
       <QuickWidget
@@ -23,7 +33,10 @@ export default class ChallengeTasksWidget extends Component {
         className=""
         widgetTitle={<FormattedMessage {...messages.title} />}
       >
-        <ViewChallengeTasks {...this.props} />
+        <ViewChallengeTasks
+          {...this.props}
+          changeTimezone={this.setTimezone}
+          currentTimezone={this.props.widgetConfiguration.timezoneOffset} />
       </QuickWidget>
     )
   }
