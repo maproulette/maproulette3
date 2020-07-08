@@ -54,7 +54,7 @@ export class PastDurationSelector extends Component {
         dropdownContent={dropdown => {
           if (this.state.showChooseCustomDates) {
             return (
-              <div className="mr-pt-2 mr-min-w-72">
+              <div className="mr-pt-2 mr-min-w-72 mr-overflow-hidden">
                 <div className="mr-text-green-lighter mr-w-full">
                   <button className="mr-absolute mr-right-0 mr-top-0 mr-mt-2"
                     onClick={() => this.setState({showChooseCustomDates: false})}>
