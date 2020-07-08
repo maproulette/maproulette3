@@ -345,7 +345,6 @@ export const validateStepTransition = (activeStep, toStepId, allowedStep, transi
 const WorkflowSteps = props => {
   const challengeSteps = props.isNewChallenge ? newChallengeSteps : editChallengeSteps
   const [activeStep, setActiveStep] = useState(_values(challengeSteps)[0])
-  const [isLongForm, setIsLongForm] = useState(false)
 
   // Transition to a given step in the workflow
   const transitionToStep = stepId => {
@@ -378,7 +377,7 @@ const WorkflowSteps = props => {
     }
   }
 
-  const step = isLongForm ? combinedSteps(challengeSteps) : activeStep
+  const step = props.isLongForm ? combinedSteps(challengeSteps) : activeStep
   return props.renderStep({
     challengeSteps,
     activeStep: step,
@@ -386,8 +385,6 @@ const WorkflowSteps = props => {
     prevStep,
     nextStep,
     transitionToStep,
-    isLongForm,
-    setIsLongForm,
   })
 }
 

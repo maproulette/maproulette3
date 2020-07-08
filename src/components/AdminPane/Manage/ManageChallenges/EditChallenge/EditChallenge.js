@@ -116,6 +116,23 @@ export class EditChallenge extends Component {
     !!_get(this.props, 'location.state.cloneChallenge')
 
   /**
+   * Returns true if all challenge fields should be displayed as a single,
+   * long-form step based on the current user's preferences
+   */
+  isLongForm = () =>
+    !!this.props.getUserAppSetting(this.props.user, 'longFormChallenge')
+
+  /**
+   * Update the current user's preferences as to whether all challenge fields
+   * should be displayed as a single, long-form step. This will cause this
+   * component to re-render with the updated settings
+   */
+  setIsLongForm = isLongForm => this.props.updateUserAppSetting(
+    this.props.user.id,
+    {longFormChallenge: isLongForm}
+  )
+
+  /**
    * Validate GeoJSON data
    */
   async validateGeoJSON(jsonFileField) {
@@ -499,10 +516,10 @@ export class EditChallenge extends Component {
       return <TaskUploadingProgress {...this.props} />
     }
 
-    if (!this.props.project || this.state.isSaving) {
+    if (!this.props.project || this.props.loadingChallenge || this.state.isSaving) {
       return (
-        <div className="pane-loading full-screen-height">
-          <BusySpinner />
+        <div className="pane-loading full-screen-height mr-flex mr-justify-center mr-items-center">
+          <BusySpinner big />
         </div>
       )
     }
@@ -513,6 +530,7 @@ export class EditChallenge extends Component {
       {...this.props}
       isNewChallenge={isNewChallenge}
       finish={this.finish}
+      isLongForm={this.isLongForm()}
       renderStep={({
         challengeSteps,
         activeStep,
@@ -520,8 +538,6 @@ export class EditChallenge extends Component {
         prevStep,
         nextStep,
         transitionToStep,
-        isLongForm,
-        setIsLongForm,
       }) => {
         if (StepComponent) {
           return (
@@ -544,8 +560,8 @@ export class EditChallenge extends Component {
                 <div className="mr-p-4 md:mr-p-8 mr-w-full">
                   <LongFormToggle
                     {...this.props}
-                    isLongForm={isLongForm}
-                    setIsLongForm={setIsLongForm}
+                    isLongForm={this.isLongForm()}
+                    setIsLongForm={this.setIsLongForm}
                   />
                   <StepComponent
                     {...this.props}
@@ -656,8 +672,8 @@ export class EditChallenge extends Component {
               <div className="mr-p-4 md:mr-p-8 mr-w-full">
                 <LongFormToggle
                   {...this.props}
-                  isLongForm={isLongForm}
-                  setIsLongForm={setIsLongForm}
+                  isLongForm={this.isLongForm()}
+                  setIsLongForm={this.setIsLongForm}
                 />
                 <Form
                   schema={activeStep.jsSchema(
