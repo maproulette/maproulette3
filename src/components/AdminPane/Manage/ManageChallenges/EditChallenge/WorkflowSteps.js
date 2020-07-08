@@ -36,6 +36,8 @@ const dataSourceStep = {
   description: <FormattedMessage {...messages.dataSourceStepDescription} />,
   jsSchema: step1jsSchema,
   uiSchema: step1uiSchema,
+  icon: "datasource-icon",
+  viewBox: "0 0 100 125",
 }
 
 const descriptionStep = {
@@ -43,6 +45,8 @@ const descriptionStep = {
   description: <FormattedMessage {...messages.descriptionStepDescription} />,
   jsSchema: step2jsSchema,
   uiSchema: step2uiSchema,
+  icon: "description-icon",
+  viewBox: "0 0 100 125",
 }
 
 const instructionsStep = {
@@ -50,6 +54,8 @@ const instructionsStep = {
   description: <FormattedMessage {...messages.instructionsStepDescription} />,
   jsSchema: step3jsSchema,
   uiSchema: step3uiSchema,
+  icon: "instructions-icon",
+  viewBox: "0 0 100 125",
 }
 
 const discoverabilityStep = {
@@ -57,6 +63,8 @@ const discoverabilityStep = {
   description: <FormattedMessage {...messages.discoverabilityStepDescription} />,
   jsSchema: discoverabilityJsSchema,
   uiSchema: discoverabilityUiSchema,
+  icon: "discover-icon",
+  viewBox: "0 0 64 80",
 }
 
 const prioritiesStep = {
@@ -64,6 +72,8 @@ const prioritiesStep = {
   description: <FormattedMessage {...messages.prioritiesStepDescription} />,
   jsSchema: prioritiesJsSchema,
   uiSchema: prioritiesUiSchema,
+  icon: "priority-icon",
+  viewBox: "0 0 100 125",
 }
 
 const zoomStep = {
@@ -71,6 +81,8 @@ const zoomStep = {
   description: <FormattedMessage {...messages.zoomStepDescription} />,
   jsSchema: zoomJsSchema,
   uiSchema: zoomUiSchema,
+  icon: "zoom-icon",
+  viewBox: "0 0 100 125",
 }
 
 const osmCommitStep = {
@@ -78,6 +90,8 @@ const osmCommitStep = {
   description: <FormattedMessage {...messages.osmCommitStepDescription} />,
   jsSchema: osmCommitJsSchema,
   uiSchema: osmCommitUiSchema,
+  icon: "changeset-icon",
+  viewBox: "0 0 50 62.5",
 }
 
 const basemapStep = {
@@ -85,6 +99,8 @@ const basemapStep = {
   description: <FormattedMessage {...messages.basemapStepDescription} />,
   jsSchema: basemapJsSchema,
   uiSchema: basemapUiSchema,
+  icon: "basemap-icon",
+  viewBox: "0 0 30 37.5",
 }
 
 const propertiesStep = {
@@ -92,6 +108,8 @@ const propertiesStep = {
   description: <FormattedMessage {...messages.propertiesStepDescription} />,
   jsSchema: propertiesJsSchema,
   uiSchema: propertiesUiSchema,
+  icon: "configure-icon",
+  viewBox: "0 0 100 125",
 }
 
 const tagsStep = {
@@ -99,6 +117,8 @@ const tagsStep = {
   description: <FormattedMessage {...messages.tagsStepDescription} />,
   jsSchema: tagsJsSchema,
   uiSchema: tagsUiSchema,
+  icon: "tag-icon",
+  viewBox: "0 0 100 125",
 }
 
 const advancedOptionsStep = {
@@ -110,6 +130,8 @@ const advancedOptionsStep = {
       introMessage={messages.advancedOptionsStepIntro}
     />
   ),
+  icon: "vertical-navigation-more-icon",
+  viewBox: "0 0 20 20",
 }
 
 const allOptionsStep = {
@@ -120,6 +142,8 @@ const allOptionsStep = {
       headerMessage={messages.allOptionsStepDescription}
     />
   ),
+  icon: "vertical-navigation-more-icon",
+  viewBox: "0 0 20 20",
 }
 
 // String together workflow steps for creating a new challenge

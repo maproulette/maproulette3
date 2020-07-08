@@ -23,6 +23,13 @@ const MenuStep = props => {
             className="mr-flex mr-items-center mr-my-2"
             onClick={() => props.transitionToStep(stepName)}
           >
+            {props.challengeSteps[stepName].icon &&
+             <SvgSymbol
+               sym={props.challengeSteps[stepName].icon}
+               viewBox="0 0 100 125"
+               className="mr-fill-mango mr-w-auto mr-h-6 mr-mr-4"
+             />
+            }
             <div className="mr-mr-4">
               {props.challengeSteps[stepName].description || stepName}
             </div>
