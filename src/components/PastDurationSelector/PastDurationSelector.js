@@ -71,6 +71,7 @@ export class PastDurationSelector extends Component {
                     selected={this.startDate()}
                     onChange={(value) => this.setState({customStartDate: value})}
                     intl={this.props.intl}
+                    limitDate
                   />
                 </div>
                 <div className="mr-pb-2 mr-text-grey">
@@ -81,6 +82,7 @@ export class PastDurationSelector extends Component {
                     selected={this.endDate()}
                     onChange={(value) => this.setState({customEndDate: value})}
                     intl={this.props.intl}
+                    limitDate
                   />
                 </div>
                 {this.startDate() && this.endDate() &&

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
+import subYears from 'date-fns/sub_years'
 
 
 /**
@@ -25,6 +26,11 @@ export default class IntlDatePicker extends Component {
   }
 
   render() {
+    const extraProps = {}
+    if (this.props.limitDate) {
+      extraProps.minDate = subYears(new Date(), 1)
+    }
+
     return (
       <DatePicker
           dateFormat={this.extractDateFormat()}
@@ -42,6 +48,7 @@ export default class IntlDatePicker extends Component {
                 enabled: false // turn off since needs preventOverflow to be enabled
               }
           }}
+          {...extraProps}
       />
     )
   }
