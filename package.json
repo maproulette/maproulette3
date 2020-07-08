@@ -3,7 +3,7 @@
   "version": "3.6.6",
   "private": true,
   "dependencies": {
-    "@apollo/client": "3.0.0-rc.7",
+    "@apollo/client": "3.0.0-rc.10",
     "@formatjs/intl-relativetimeformat": "^6.0.2",
     "@mapbox/geo-viewport": "^0.4.0",
     "@mapbox/geojsonhint": "^3.0.0",
