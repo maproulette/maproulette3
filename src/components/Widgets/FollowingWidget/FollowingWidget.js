@@ -151,7 +151,11 @@ const FollowingWidget = props => {
         </div>
       }
     >
-      <ActiveView {...props} data={data}/>
+      <ActiveView
+        {...props}
+        showExactDates={props.widgetConfiguration.showExactDates}
+        data={data}
+      />
     </QuickWidget>
   )
 }
