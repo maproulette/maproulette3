@@ -71,6 +71,7 @@ export const Activity = props => {
     <div>
       <ActivityListing
         activity={activity}
+        showExactDates={props.showExactDates}
         isGrouped={props.widgetConfiguration.activityIsGrouped}
         toggleIsGrouped={() => props.updateWidgetConfiguration({
           activityIsGrouped: !props.widgetConfiguration.activityIsGrouped
