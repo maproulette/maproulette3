@@ -3,6 +3,7 @@ import { injectIntl, FormattedMessage } from 'react-intl'
 import { gql, useQuery } from '@apollo/client'
 import _find from 'lodash/find'
 import _reject from 'lodash/reject'
+import _take from 'lodash/take'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
 import WithWidgetWorkspaces
@@ -85,24 +86,24 @@ export const defaultWorkspaceSetup = function() {
  */
 export const GlobalActivity = props => {
   const [liveActivity, setLiveActivity] = useState([])
-  const [mounted, setMounted] = useState(false)
 
   const { loading, error, data, refetch } = useQuery(RECENT_ACTIVITY, {
     variables: { osmIds: props.osmIds, limit: PAGE_SIZE, page: 0},
+    fetchPolicy: 'no-cache',
     partialRefetch: true,
-    onCompleted: () => setMounted(true)
   })
 
   useEffect(() => {
-    if (!mounted && refetch) {
-      refetch()
-      setMounted(true)
-    }
-  }, [mounted, refetch])
-
-  useEffect(() => {
     subscribeToAllTasks(message => {
-      setLiveActivity(updateActivity(liveActivity, message))
+      // If we've accumulated a full page's worth of live results, issue a
+      // refetch to start with a clean slate. Otherwise update the live feed
+      if (liveActivity.length >= PAGE_SIZE) {
+        refetch()
+        setLiveActivity([])
+      }
+      else {
+        setLiveActivity(updateActivity(liveActivity, message))
+      }
     }, "GlobalActivity")
 
     return () => unsubscribeFromAllTasks("GlobalActivity")
@@ -135,7 +136,7 @@ export const GlobalActivity = props => {
       }
       lightMode={false}
       darkMode={true}
-      activity={liveActivity.concat(data.recentActions)}
+      activity={_take(liveActivity.concat(data.recentActions), PAGE_SIZE)}
     />
   )
 }

@@ -19,6 +19,13 @@ import parse from 'date-fns/parse'
 export const ActivityTime = props => {
   const timestamp = parse(props.entry.created)
   const created = `${props.intl.formatDate(timestamp)} ${props.intl.formatTime(timestamp)}`
+  const selectedUnit = selectUnit(timestamp)
+  if (selectedUnit.unit === "second" ||
+      selectedUnit.unit === "minute" ||
+      selectedUnit.unit === "hour") {
+    selectedUnit.updateIntervalInSeconds = 30
+  }
+
   return (
     <div
       className={classNames(
@@ -31,7 +38,7 @@ export const ActivityTime = props => {
        <span>
          <FormattedDate value={props.entry.created} /> <FormattedTime value={props.entry.created} />
        </span> :
-       <FormattedRelativeTime {...selectUnit(timestamp)} />
+       <FormattedRelativeTime {...selectedUnit} numeric="auto" />
       }
     </div>
   )
