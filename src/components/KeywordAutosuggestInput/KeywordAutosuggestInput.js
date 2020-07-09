@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { injectIntl } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
+import _indexOf from 'lodash/indexOf'
 import { TagsInputField }
        from '../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import AutosuggestTextBox from '../AutosuggestTextBox/AutosuggestTextBox'
@@ -42,11 +43,15 @@ export class KeywordAutosuggestInput extends Component {
         onInputValueChange={value => this.setState({value})}
         onChange={keyword => {
           if (keyword) {
-            if (this.props.handleAddTag) {
-              this.props.handleAddTag(keyword.name || keyword)
-            }
-            else {
-              props.addTag(keyword.name || keyword)
+            // We should not add the keyword if we are limiting tags to just preferred
+            // and the keyword is not in the preferred list.
+            if (!props.limitToPreferred || _indexOf(props.preferredResults, keyword) >= 0) {
+              if (this.props.handleAddTag) {
+                this.props.handleAddTag(keyword.name || keyword)
+              }
+              else {
+                props.addTag(keyword.name || keyword)
+              }
             }
           }
           this.setState({value: ''})

@@ -107,6 +107,12 @@ export default class AutosuggestTextBox extends Component {
   }
 
   getSearchResults = () => {
+    // If we are limiting tags to just preferred we don't need to provide
+    // any search results
+    if (this.props.limitToPreferred) {
+      return []
+    }
+
     // Filter out any of our original preferredResults tags so they don't show
     // in the list twice.
     return _filter(this.props.searchResults,

@@ -105,10 +105,20 @@ export class TaskConfirmationModal extends Component {
     const applyingTagChanges = AsCooperativeWork(this.props.task).isTagType() &&
                              this.props.status === TaskStatus.fixed
     const preferredTags =
-      _filter(
-        _split(_get(this.props.task.parent, 'preferredTags'), ','),
-        (result) => !_isEmpty(result)
-      )
+      !reviewConfirmation ?
+        _filter(
+          _split(_get(this.props.task.parent, 'preferredTags'), ','),
+          (result) => !_isEmpty(result)
+        ) :
+        _filter(
+          _split(_get(this.props.task.parent, 'preferredReviewTags'), ','),
+          (result) => !_isEmpty(result)
+        )
+
+    const limitTags =
+      !reviewConfirmation ?
+        !!_get(this.props.task.parent, 'limitTags') :
+        !!_get(this.props.task.parent, 'limitReviewTags')
 
     const TasksNearby = reviewConfirmation ? TaskReviewNearbyList : TaskNearbyList
 
@@ -208,6 +218,7 @@ export class TaskConfirmationModal extends Component {
                       formData={this.props.tags} {...this.props}
                       tagType={"tasks"}
                       preferredResults={preferredTags}
+                      limitToPreferred={limitTags}
                       placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
                     />
 

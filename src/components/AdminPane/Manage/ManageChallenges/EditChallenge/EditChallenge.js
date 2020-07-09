@@ -373,6 +373,11 @@ export class EditChallenge extends Component {
       challengeData.taskTags :
       challengeData.preferredTags
 
+    challengeData.reviewTaskTags =
+      _isString(challengeData.reviewTaskTags) ?
+      challengeData.reviewTaskTags :
+      challengeData.preferredReviewTags
+
     if (_isUndefined(challengeData.customTaskStyles)) {
       challengeData.customTaskStyles = !_isEmpty(challengeData.taskStyles)
     }
@@ -445,6 +450,13 @@ export class EditChallenge extends Component {
       // empty-string tags.
       challengeData.preferredTags =
         _filter(challengeData.taskTags.split(/,+/), tag => !_isEmpty(tag))
+    }
+
+    if (!_isEmpty(challengeData.reviewTaskTags)) {
+      // replace whitespace with commas, split on comma, and filter out any
+      // empty-string tags.
+      challengeData.preferredReviewTags =
+        _filter(challengeData.reviewTaskTags.split(/,+/), tag => !_isEmpty(tag))
     }
 
     // Note any old tags that are to be discarded. Right now a separate API
@@ -614,8 +626,43 @@ export class EditChallenge extends Component {
                   inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
                   dropdownInnerClassName="mr-bg-blue-darker"
                   placeholder={props.intl.formatMessage(messages.addMRTagsPlaceholder)}
-                  tagType="tasks"
+                  tagType={props.uiSchema.tagType}
                 />
+              </React.Fragment>
+            )
+          }),
+          limitTags: injectIntl(props => {
+            return (
+              <React.Fragment>
+                <div className="mr-mb-2">
+                  {props.uiSchema["ui:help"]}
+                </div>
+                <div className="radio">
+                  <input
+                    type="radio"
+                    name={props.name + "yes"}
+                    className="mr-mr-1.5"
+                    checked={!props.formData}
+                    onChange={(e) => props.onChange(false)}
+                  />
+                  <label className="mr-mr-2 mr-text-grey-lighter">
+                    Yes
+                  </label>
+                </div>
+                <div className="radio">
+                  <input
+                    type="radio"
+                    name={props.name + "yes"}
+                    className="mr-mr-1.5"
+                    checked={!!props.formData}
+                    onChange={(e) => {
+                      props.onChange(true)
+                    }}
+                  />
+                  <label className="mr-text-grey-lighter">
+                    No
+                  </label>
+                </div>
               </React.Fragment>
             )
           }),
