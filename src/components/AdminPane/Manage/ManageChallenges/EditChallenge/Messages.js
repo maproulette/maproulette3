@@ -656,4 +656,14 @@ will not be able to make sense of it.
     id: "Admin.EditChallenge.form.steps.allOptions.description",
     defaultMessage: "Options",
   },
+
+  yesLabel: {
+    id: "Admin.EditChallenge.form.steps.yes.label",
+    defaultMessage: "Yes",
+  },
+
+  noLabel: {
+    id: "Admin.EditChallenge.form.steps.no.label",
+    defaultMessage: "No"
+  }
 })

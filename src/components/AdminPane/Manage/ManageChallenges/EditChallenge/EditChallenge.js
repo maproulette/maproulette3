@@ -646,13 +646,13 @@ export class EditChallenge extends Component {
                     onChange={(e) => props.onChange(false)}
                   />
                   <label className="mr-mr-2 mr-text-grey-lighter">
-                    Yes
+                    <FormattedMessage {...messages.yesLabel}/>
                   </label>
                 </div>
                 <div className="radio">
                   <input
                     type="radio"
-                    name={props.name + "yes"}
+                    name={props.name + "no"}
                     className="mr-mr-1.5"
                     checked={!!props.formData}
                     onChange={(e) => {
@@ -660,7 +660,7 @@ export class EditChallenge extends Component {
                     }}
                   />
                   <label className="mr-text-grey-lighter">
-                    No
+                    <FormattedMessage {...messages.noLabel}/>
                   </label>
                 </div>
               </React.Fragment>
