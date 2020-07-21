@@ -724,10 +724,14 @@ export class EditChallenge extends Component {
                 />
                 <Form
                   schema={activeStep.jsSchema(
-                    this.props.intl, this.props.user, challengeData, this.state.extraErrors
+                    this.props.intl, this.props.user, challengeData, this.state.extraErrors, {
+                      longForm: this.isLongForm(),
+                    }
                   )}
                   uiSchema={activeStep.uiSchema(
-                    this.props.intl, this.props.user, challengeData, this.state.extraErrors
+                    this.props.intl, this.props.user, challengeData, this.state.extraErrors, {
+                      longForm: this.isLongForm(),
+                    }
                   )}
                   className="form"
                   validate={(formData, errors) => this.validate(formData, errors, activeStep)}

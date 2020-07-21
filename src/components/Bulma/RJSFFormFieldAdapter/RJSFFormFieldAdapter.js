@@ -99,9 +99,14 @@ export const CustomArrayFieldTemplate = props => {
 }
 
 export const CustomFieldTemplate = function(props) {
-  const {classNames, children, description, errors} = props
+  const {classNames, children, description, uiSchema, errors} = props
   return (
     <div className={classNames}>
+      {uiSchema && uiSchema["ui:groupHeader"] &&
+       <div className="mr-flex mr-justify-end mr-text-teal mr-text-lg mr-pt-4 mr-my-4 mr-border-t mr-border-teal-40">
+         {uiSchema["ui:groupHeader"]}
+       </div>
+      }
       <LabelWithHelp {...props} />
       {children}
       {errors}

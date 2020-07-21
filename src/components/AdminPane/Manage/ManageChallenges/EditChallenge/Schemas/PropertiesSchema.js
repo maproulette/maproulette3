@@ -13,7 +13,7 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = intl => {
+export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
   return {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -45,10 +45,11 @@ export const jsSchema = intl => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = intl => ({
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => ({
   osmIdProperty: {
     "ui:emptyValue": "",
     "ui:help": intl.formatMessage(messages.osmIdPropertyDescription),
+    "ui:groupHeader": options.longForm ? intl.formatMessage(messages.propertiesStepHeader) : undefined,
   },
   customTaskStyles: {
     "ui:field": "configureCustomTaskStyles",

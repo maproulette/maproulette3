@@ -591,9 +591,19 @@ will not be able to make sense of it.
     defaultMessage: "Show separate steps"
   },
 
+  dataSourceStepHeader: {
+    id: "Admin.EditChallenge.form.steps.dataSource.header",
+    defaultMessage: "Name and Data Source",
+  },
+
   dataSourceStepDescription: {
     id: "Admin.EditChallenge.form.steps.dataSource.description",
     defaultMessage: "Change Name or Data Source",
+  },
+
+  descriptionStepHeader: {
+    id: "Admin.EditChallenge.form.steps.description.header",
+    defaultMessage: "Description and Category",
   },
 
   descriptionStepDescription: {
@@ -601,9 +611,19 @@ will not be able to make sense of it.
     defaultMessage: "Change Description or Category",
   },
 
+  instructionsStepHeader: {
+    id: "Admin.EditChallenge.form.steps.instructions.header",
+    defaultMessage: "Instructions and Difficulty",
+  },
+
   instructionsStepDescription: {
     id: "Admin.EditChallenge.form.steps.instructions.description",
     defaultMessage: "Change Instructions or Difficulty",
+  },
+
+  discoverabilityStepHeader: {
+    id: "Admin.EditChallenge.form.steps.discoverability.header",
+    defaultMessage: "Discoverability",
   },
 
   discoverabilityStepDescription: {
@@ -611,9 +631,19 @@ will not be able to make sense of it.
     defaultMessage: "Adjust discoverability settings",
   },
 
+  prioritiesStepHeader: {
+    id: "Admin.EditChallenge.form.steps.priorities.header",
+    defaultMessage: "Task Prioritization Rules",
+  },
+
   prioritiesStepDescription: {
     id: "Admin.EditChallenge.form.steps.priorities.description",
     defaultMessage: "Setup task prioritization rules",
+  },
+
+  zoomStepHeader: {
+    id: "Admin.EditChallenge.form.steps.zoom.header",
+    defaultMessage: "Zoom Levels",
   },
 
   zoomStepDescription: {
@@ -621,9 +651,19 @@ will not be able to make sense of it.
     defaultMessage: "Configure map zoom levels",
   },
 
+  osmCommitStepHeader: {
+    id: "Admin.EditChallenge.form.steps.osmCommit.header",
+    defaultMessage: "OSM Changeset Info",
+  },
+
   osmCommitStepDescription: {
     id: "Admin.EditChallenge.form.steps.osmCommit.description",
     defaultMessage: "Customize OSM changeset info",
+  },
+
+  basemapStepHeader: {
+    id: "Admin.EditChallenge.form.steps.basemap.header",
+    defaultMessage: "Basemap",
   },
 
   basemapStepDescription: {
@@ -631,9 +671,19 @@ will not be able to make sense of it.
     defaultMessage: "Set a different basemap",
   },
 
+  propertiesStepHeader: {
+    id: "Admin.EditChallenge.form.steps.properties.header",
+    defaultMessage: "Property-based Behavior",
+  },
+
   propertiesStepDescription: {
     id: "Admin.EditChallenge.form.steps.properties.description",
     defaultMessage: "Configure property-based behavior",
+  },
+
+  tagsStepHeader: {
+    id: "Admin.EditChallenge.form.steps.tags.header",
+    defaultMessage: "Preferred MR tags",
   },
 
   tagsStepDescription: {

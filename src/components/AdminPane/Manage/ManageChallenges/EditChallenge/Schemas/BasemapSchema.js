@@ -20,7 +20,7 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = intl => {
+export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const localizedBasemapLabels = challengeOwnerBasemapLayerLabels(intl)
 
   const defaultBasemapChoices = [
@@ -80,10 +80,11 @@ export const jsSchema = intl => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = intl => ({
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => ({
   defaultBasemap: {
     "ui:widget": "select",
     "ui:help": intl.formatMessage(messages.defaultBasemapDescription),
+    "ui:groupHeader": options.longForm ? intl.formatMessage(messages.basemapStepHeader) : undefined,
   },
   customBasemap: {
     "ui:emptyValue": "",

@@ -283,10 +283,10 @@ const editChallengeSteps = {
 // Combine given workflow steps into a single longform step
 const combinedSteps = steps => ({
   id: 'AllFields',
-  jsSchema: (intl, user, challengeData, extraErrors) => {
+  jsSchema: (intl, user, challengeData, extraErrors, options) => {
     return _reduce(steps, (schema, step) => {
       if (step.jsSchema) {
-        const stepSchema = step.jsSchema(intl, user, challengeData, extraErrors)
+        const stepSchema = step.jsSchema(intl, user, challengeData, extraErrors, options)
         _merge(schema, stepSchema, {
           required: (schema.required || []).concat(stepSchema.required || []),
         })
@@ -295,10 +295,10 @@ const combinedSteps = steps => ({
     },
     {})
   },
-  uiSchema: (intl, user, challengeData, extraErrors) => {
+  uiSchema: (intl, user, challengeData, extraErrors, options) => {
     const combinedSchema = _reduce(steps, (schema, step) => {
       if (step.uiSchema) {
-        const stepSchema = step.uiSchema(intl, user, challengeData, extraErrors)
+        const stepSchema = step.uiSchema(intl, user, challengeData, extraErrors, options)
         _merge(schema, stepSchema, {
           "ui:order": (schema["ui:order"] || []).concat(stepSchema["ui:order"] || [])
         })

@@ -16,7 +16,7 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData) => {
+export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -53,13 +53,14 @@ export const jsSchema = (intl, user, challengeData) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData) => {
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const uiSchemaFields = {
     "ui:order": [ "instruction", "difficulty" ],
     instruction: {
       "ui:field": "markdown",
       "ui:help": intl.formatMessage(messages.instructionDescription),
       "ui:previewNote": intl.formatMessage(messages.addMustachePreviewNote),
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.instructionsStepHeader) : undefined,
     },
     difficulty: {
       "ui:field": "columnRadio",

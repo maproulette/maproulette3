@@ -19,7 +19,7 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData, extraErrors) => {
+export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly()
 
   const schema = {
@@ -145,12 +145,13 @@ export const jsSchema = (intl, user, challengeData, extraErrors) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData) => {
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly()
 
   return {
     name: {
       "ui:help": intl.formatMessage(messages.nameDescription),
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.dataSourceStepHeader) : undefined,
     },
     source: {
       "ui:field": "columnRadio",
