@@ -159,6 +159,11 @@ export default defineMessages({
     defaultMessage: "Configure Columns",
   },
 
+  exportTitle: {
+    id: "Admin.manageTasks.controls.export.title",
+    defaultMessage: "Export",
+  },
+
   exportCSVLabel: {
     id: "Admin.manageTasks.controls.exportCSV.label",
     defaultMessage: "Export CSV",
@@ -172,6 +177,11 @@ export default defineMessages({
   exportMapperReviewCSVLabel: {
     id: "Admin.manageTasks.controls.exportMapperReviewCSV.label",
     defaultMessage: "Export Mapper Review CSV",
+  },
+
+  timezoneLabel: {
+    id: "Admin.manageTasks.controls.timezone.label",
+    defaultMessage: "Timezone",
   },
 
   shownLabel: {

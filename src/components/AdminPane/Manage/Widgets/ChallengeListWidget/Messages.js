@@ -19,8 +19,18 @@ export default defineMessages({
     defaultMessage: "Search",
   },
 
+  exportTitle: {
+    id: "Admin.manageProjectChallenges.controls.export.title",
+    defaultMessage: "Export",
+  },
+
   exportCSVLabel: {
     id: "Admin.manageProjectChallenges.controls.exportCSV.label",
     defaultMessage: "Export CSV",
+  },
+
+  timezoneLabel: {
+    id: "Admin.manageProjectChallenges.controls.timezone.label",
+    defaultMessage: "Timezone",
   },
 })
