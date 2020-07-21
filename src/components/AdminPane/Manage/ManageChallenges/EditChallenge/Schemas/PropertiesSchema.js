@@ -1,5 +1,7 @@
 import messages from '../Messages'
 
+const STEP_ID = "Properties"
+
 /**
  * Generates a JSON Schema describing property fields of Edit Challenge
  * workflow intended for consumption by react-jsonschema-form
@@ -45,18 +47,27 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => ({
-  osmIdProperty: {
-    "ui:emptyValue": "",
-    "ui:help": intl.formatMessage(messages.osmIdPropertyDescription),
-    "ui:groupHeader": options.longForm ? intl.formatMessage(messages.propertiesStepHeader) : undefined,
-  },
-  customTaskStyles: {
-    "ui:field": "configureCustomTaskStyles",
-    "ui:help": intl.formatMessage(messages.customTaskStylesDescription),
-  },
-  exportableProperties: {
-    "ui:emptyValue": "",
-    "ui:help": intl.formatMessage(messages.exportablePropertiesDescription),
-  },
-})
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
+  const isCollapsed = (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
+  const toggleCollapsed = options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+
+  return {
+    osmIdProperty: {
+      "ui:emptyValue": "",
+      "ui:help": intl.formatMessage(messages.osmIdPropertyDescription),
+      "ui:collapsed": isCollapsed,
+      "ui:toggleCollapsed": toggleCollapsed,
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.propertiesStepHeader) : undefined,
+    },
+    customTaskStyles: {
+      "ui:field": "configureCustomTaskStyles",
+      "ui:help": intl.formatMessage(messages.customTaskStylesDescription),
+      "ui:collapsed": isCollapsed,
+    },
+    exportableProperties: {
+      "ui:emptyValue": "",
+      "ui:help": intl.formatMessage(messages.exportablePropertiesDescription),
+      "ui:collapsed": isCollapsed,
+    },
+  }
+}

@@ -7,6 +7,8 @@ import _map from 'lodash/map'
 import _filter from 'lodash/filter'
 import messages from '../Messages'
 
+const STEP_ID = "Basemap"
+
 /**
  * Generates a JSON Schema describing Basemap fields of Edit Challenge
  * workflow intended for consumption by react-jsonschema-form
@@ -80,14 +82,23 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => ({
-  defaultBasemap: {
-    "ui:widget": "select",
-    "ui:help": intl.formatMessage(messages.defaultBasemapDescription),
-    "ui:groupHeader": options.longForm ? intl.formatMessage(messages.basemapStepHeader) : undefined,
-  },
-  customBasemap: {
-    "ui:emptyValue": "",
-    "ui:help": intl.formatMessage(messages.customBasemapDescription),
-  },
-})
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
+  const isCollapsed = (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
+  const toggleCollapsed = options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+
+  return {
+    "ui:order": ["defaultBasemap", "customBasemap"],
+    defaultBasemap: {
+      "ui:widget": "select",
+      "ui:help": intl.formatMessage(messages.defaultBasemapDescription),
+      "ui:collapsed": isCollapsed,
+      "ui:toggleCollapsed": toggleCollapsed,
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.basemapStepHeader) : undefined,
+    },
+    customBasemap: {
+      "ui:emptyValue": "",
+      "ui:help": intl.formatMessage(messages.customBasemapDescription),
+      "ui:collapsed": isCollapsed,
+    },
+  }
+}
