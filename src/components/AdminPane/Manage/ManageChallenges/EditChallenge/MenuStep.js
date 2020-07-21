@@ -27,7 +27,7 @@ const MenuStep = props => {
              <SvgSymbol
                sym={props.challengeSteps[stepName].icon}
                viewBox="0 0 100 125"
-               className="mr-fill-mango mr-w-auto mr-h-6 mr-mr-4"
+               className="mr-fill-green-lighter mr-w-auto mr-h-6 mr-mr-4"
              />
             }
             <div className="mr-mr-4">
