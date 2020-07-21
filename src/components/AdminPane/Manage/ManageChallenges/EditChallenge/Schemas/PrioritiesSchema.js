@@ -18,7 +18,7 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = intl => {
+export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const localizedPriorityLabels = taskPriorityLabels(intl)
 
   return {
@@ -251,10 +251,11 @@ const priorityRuleGroupUISchema = {
  * > in the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = intl => ({
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => ({
   defaultPriority: {
     "ui:widget": "select",
     "ui:help": intl.formatMessage(messages.defaultPriorityDescription),
+    "ui:groupHeader": options.longForm ? intl.formatMessage(messages.prioritiesStepHeader) : undefined,
   },
   highPriorityRules: {
     ruleGroup: priorityRuleGroupUISchema,

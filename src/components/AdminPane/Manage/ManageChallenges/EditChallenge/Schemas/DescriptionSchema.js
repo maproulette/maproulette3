@@ -18,7 +18,7 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData) => {
+export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const localizedKeywordLabels = keywordLabels(intl)
 
   const schemaFields = {
@@ -53,13 +53,14 @@ export const jsSchema = (intl, user, challengeData) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData) => {
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const uiSchemaFields = {
     "ui:order": [ "description", "category" ],
     description: {
       "ui:field": "markdown",
       "ui:help": intl.formatMessage(messages.descriptionDescription),
       "ui:lightMode": true,
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.descriptionStepHeader) : undefined,
     },
     category: {
       "ui:widget": "select",

@@ -68,6 +68,7 @@ module.exports = {
       'red-light': '#FF5E63',
       purple: '#959DFF',
       teal: '#6FB3B8',
+      'teal-40': 'rgba(111, 179, 184, 0.40)',
       rose: '#F89294',
       'picton-blue': '#50B7E5',
       'lavender-rose': '#FF98F7',

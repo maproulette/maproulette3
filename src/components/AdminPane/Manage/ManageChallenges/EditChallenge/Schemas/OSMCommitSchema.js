@@ -15,7 +15,7 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData) => {
+export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -59,7 +59,7 @@ export const jsSchema = (intl, user, challengeData) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData) => {
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const uiSchemaFields = {
     "ui:order": [
       "checkinComment", "includeCheckinHashtag", "checkinSource",
@@ -67,6 +67,7 @@ export const uiSchema = (intl, user, challengeData) => {
     checkinComment: {
       "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.checkinCommentDescription),
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.osmCommitStepHeader) : undefined,
     },
     checkinSource: {
       "ui:help": intl.formatMessage(messages.checkinSourceDescription),
