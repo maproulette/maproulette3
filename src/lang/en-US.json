@@ -220,7 +220,7 @@
   "Admin.ManageChallenges.header": "Challenges",
   "Admin.ManageChallenges.help.info": "Challenges consist of many tasks that all help address a specific problem or shortcoming with OpenStreetMap data. Tasks are typically generated automatically from an overpassQL query you provide when creating a new challenge, but can also be loaded from a local file or remote URL containing GeoJSON features. You can create as many challenges as you'd like.",
   "Admin.ManageChallenges.search.placeholder": "Name",
-  "Admin.ManageTasks.geographicIndexingNotice": "Please note that it can take up to {delay} hours to geographically index new or modified challenges. Your challenge (and tasks) may not appear as expected in location-specific browsing or searches until indexing is complete.",
+  "Admin.ManageTasks.geographicIndexingNotice": "Please note that it can take up to {delay} hours to geographically index new or modified challenges. Your challenge (and tasks) may not appear as expected in location-specific browsing or searches until indexing is complete, nor when browsing map to choose location-based priority rules.",
   "Admin.ManageTasks.header": "Tasks",
   "Admin.Project.challengesUndiscoverable": "challenges not discoverable",
   "Admin.Project.controls.addChallenge.label": "Add Challenge",
