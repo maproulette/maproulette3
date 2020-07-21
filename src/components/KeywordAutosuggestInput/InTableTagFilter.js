@@ -43,7 +43,7 @@ export default class InTableTagFilter extends Component {
               </h3>
               <KeywordAutosuggestInput
                 {...this.props}
-                tagType={"tasks"}
+                tagType={["tasks", "review"]}
                 fixedMenu
                 openOnFocus={this.state.showTagChooser}
                 preferredResults={this.props.preferredTags}

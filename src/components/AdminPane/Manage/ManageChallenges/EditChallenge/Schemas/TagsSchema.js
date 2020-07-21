@@ -21,7 +21,19 @@ export const jsSchema = (intl, user, challengeData) => {
       taskTags: {
         title: intl.formatMessage(messages.preferredTagsLabel),
         type: "string",
-      }
+      },
+      limitTags: {
+        type: "boolean",
+        default: false,
+      },
+      reviewTaskTags: {
+        title: intl.formatMessage(messages.preferredReviewTagsLabel),
+        type: "string",
+      },
+      limitReviewTags: {
+        type: "boolean",
+        default: false,
+      },
     },
   }
 
@@ -43,6 +55,20 @@ export const uiSchema = (intl, user, challengeData) => {
     taskTags: {
       "ui:field": "taskTags",
       "ui:help": intl.formatMessage(messages.preferredTagsDescription),
+      "tagType": "tasks"
+    },
+    limitTags: {
+      "ui:field": "limitTags",
+      "ui:help": intl.formatMessage(messages.limitTagsDescription),
+    },
+    reviewTaskTags: {
+      "ui:field": "taskTags",
+      "ui:help": intl.formatMessage(messages.preferredReviewTagsDescription),
+      "tagType": "review"
+    },
+    limitReviewTags: {
+      "ui:field": "limitTags",
+      "ui:help": intl.formatMessage(messages.limitReviewTagsDescription),
     },
   }
 

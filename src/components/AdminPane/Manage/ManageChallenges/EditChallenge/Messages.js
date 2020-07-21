@@ -194,13 +194,34 @@ export default defineMessages({
 
   preferredTagsLabel: {
     id: 'Admin.EditChallenge.form.preferredTags.label',
-    defaultMessage: "Preferred Tags",
+    defaultMessage: "Preferred MR Tags",
   },
 
   preferredTagsDescription: {
     id: 'Admin.EditChallenge.form.preferredTags.description',
     defaultMessage: "You can optionally provide a list of " +
       "preferred tags that you want the user to use when completing a task.",
+  },
+
+  preferredReviewTagsLabel: {
+    id: 'Admin.EditChallenge.form.preferredReviewTags.label',
+    defaultMessage: "Preferred MR Review Tags",
+  },
+
+  preferredReviewTagsDescription: {
+    id: 'Admin.EditChallenge.form.preferredReviewTags.description',
+    defaultMessage: "You can optionally provide a list of " +
+      "preferred tags that you want the reviewer to use when reviewing a task.",
+  },
+
+  limitTagsDescription: {
+    id: "Admin.EditChallenge.form.limitTags.description",
+    defaultMessage: "Allow other tags during task completion?"
+  },
+
+  limitReviewTagsDescription: {
+    id: "Admin.EditChallenge.form.limitReviewTags.description",
+    defaultMessage: "Allow other tags during task review?"
   },
 
   featuredLabel: {
@@ -635,4 +656,14 @@ will not be able to make sense of it.
     id: "Admin.EditChallenge.form.steps.allOptions.description",
     defaultMessage: "Options",
   },
+
+  yesLabel: {
+    id: "Admin.EditChallenge.form.steps.yes.label",
+    defaultMessage: "Yes",
+  },
+
+  noLabel: {
+    id: "Admin.EditChallenge.form.steps.no.label",
+    defaultMessage: "No"
+  }
 })

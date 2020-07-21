@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
+import _filter from 'lodash/filter'
 import { TaskStatus, messagesByStatus }
       from '../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, messagesByReviewStatus }
@@ -20,7 +21,8 @@ export default class TagMetrics extends Component {
   buildTagStats = (metrics, totalTasks) => {
     const byTag = _map(_reverse(_sortBy(metrics, ['total','tagName'])), (tagMetrics) => {
       return (
-        <div className="mr-grid mr-grid-columns-1 mr-grid-gap-4" key={tagMetrics.tagName}>
+        <div className="mr-grid mr-grid-columns-1 mr-grid-gap-4"
+             key={`${tagMetrics.tagType}:${tagMetrics.tagName}`}>
         {tagMetrics.tagName !== "" &&
           buildMetric(
             tagMetrics,
@@ -42,14 +44,33 @@ export default class TagMetrics extends Component {
     const tagMetrics = this.props.tagMetrics
     const totalTasks = this.props.totalTasks
 
+    const reviewTags = _filter(tagMetrics, (t) => t.tagType === "review")
+    const taskTags = _filter(tagMetrics, (t) => t.tagType === "tasks")
+
     return (
-      <div className={classNames("tag-metrics")}>
-        {tagMetrics && totalTasks > 0 &&
-          this.buildTagStats(tagMetrics, totalTasks)}
-        {(!tagMetrics || totalTasks === 0) &&
-          <FormattedMessage {...messages.noTags} />
-        }
-      </div>
+      <React.Fragment>
+        <div className="mr-text-orange mr-my-2 heading">
+          <FormattedMessage {...messages.reviewTags} />
+        </div>
+        <div className={classNames("tag-metrics mr-mb-4")}>
+          {reviewTags && totalTasks > 0 &&
+            this.buildTagStats(reviewTags, totalTasks)}
+          {(!reviewTags || totalTasks === 0) &&
+            <FormattedMessage {...messages.noTags} />
+          }
+        </div>
+
+        <div className="mr-text-orange mr-my-2 heading">
+          <FormattedMessage {...messages.taskTags} />
+        </div>
+        <div className={classNames("tag-metrics mr-mb-2")}>
+          {taskTags && totalTasks > 0 &&
+            this.buildTagStats(taskTags, totalTasks)}
+          {(!tagMetrics || totalTasks === 0) &&
+            <FormattedMessage {...messages.noTags} />
+          }
+        </div>
+      </React.Fragment>
     )
   }
 }

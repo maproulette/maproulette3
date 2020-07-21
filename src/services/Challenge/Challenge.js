@@ -703,6 +703,10 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
       challengeData.preferredTags = challengeData.preferredTags.join(',')
     }
 
+    if (_isArray(challengeData.preferredReviewTags)) {
+      challengeData.preferredReviewTags = challengeData.preferredReviewTags.join(',')
+    }
+
     // If there is local GeoJSON content being transmitted as a string, parse
     // it into JSON first.
     if (_isString(challengeData.localGeoJSON) &&
@@ -721,7 +725,7 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
         'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
-        'taskStyles', 'requiresLocal'])
+        'preferredReviewTags', 'limitTags', 'limitReviewTags', 'taskStyles', 'requiresLocal'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
@@ -921,7 +925,8 @@ export const fetchParentProject = function(dispatch, normalizedChallengeResults)
  * results.
  */
 export const findKeyword = function(keywordPrefix, tagType = null) {
-  return new Endpoint(api.keywords.find, {params: {prefix: keywordPrefix, tagType}}).execute()
+  const tagTypes = _isArray(tagType) ? tagType.join(',') : tagType
+  return new Endpoint(api.keywords.find, {params: {prefix: keywordPrefix, tagTypes}}).execute()
 }
 
 /**
