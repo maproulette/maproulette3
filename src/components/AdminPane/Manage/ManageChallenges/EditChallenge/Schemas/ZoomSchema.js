@@ -4,6 +4,8 @@ import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import messages from '../Messages'
 
+const STEP_ID = "Zoom"
+
 /**
  * Generates a JSON Schema describing zoom fields of Edit Challenge
  * workflow intended for consumption by react-jsonschema-form
@@ -60,21 +62,30 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => ({
-  defaultZoom: {
-    "ui:widget": "select",
-    "ui:help": intl.formatMessage(messages.defaultZoomDescription),
-    "ui:groupHeader": options.longForm ? intl.formatMessage(messages.zoomStepHeader) : undefined,
-  },
-  minZoom: {
-    "ui:widget": "select",
-    "ui:help": intl.formatMessage(messages.minZoomDescription),
-  },
-  maxZoom: {
-    "ui:widget": "select",
-    "ui:help": intl.formatMessage(messages.maxZoomDescription),
-  },
-})
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
+  const isCollapsed = (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
+  const toggleCollapsed = options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+
+  return {
+    defaultZoom: {
+      "ui:widget": "select",
+      "ui:help": intl.formatMessage(messages.defaultZoomDescription),
+      "ui:collapsed": isCollapsed,
+      "ui:toggleCollapsed": toggleCollapsed,
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.zoomStepHeader) : undefined,
+    },
+    minZoom: {
+      "ui:widget": "select",
+      "ui:help": intl.formatMessage(messages.minZoomDescription),
+      "ui:collapsed": isCollapsed,
+    },
+    maxZoom: {
+      "ui:widget": "select",
+      "ui:help": intl.formatMessage(messages.maxZoomDescription),
+      "ui:collapsed": isCollapsed,
+    },
+  }
+}
 
 /**
  * Returns a numeric .env file setting as a numeric, converting from string if

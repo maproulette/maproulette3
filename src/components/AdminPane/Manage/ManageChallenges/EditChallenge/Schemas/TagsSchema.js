@@ -1,5 +1,7 @@
 import messages from '../Messages'
 
+const STEP_ID = "Tags"
+
 /**
  * Generates a JSON Schema describing MR tag fields of Edit Challenge
  * workflow intended for consumption by react-jsonschema-form
@@ -51,25 +53,33 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
  * > proper markup
  */
 export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
+  const isCollapsed = (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
+  const toggleCollapsed = options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+
   const uiSchemaFields = {
     taskTags: {
       "ui:field": "taskTags",
       "ui:help": intl.formatMessage(messages.preferredTagsDescription),
+      "ui:collapsed": isCollapsed,
+      "ui:toggleCollapsed": toggleCollapsed,
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.tagsStepHeader) : undefined,
       "tagType": "tasks",
     },
     limitTags: {
       "ui:field": "limitTags",
       "ui:help": intl.formatMessage(messages.limitTagsDescription),
+      "ui:collapsed": isCollapsed,
     },
     reviewTaskTags: {
       "ui:field": "taskTags",
       "ui:help": intl.formatMessage(messages.preferredReviewTagsDescription),
-      "tagType": "review"
+      "tagType": "review",
+      "ui:collapsed": isCollapsed,
     },
     limitReviewTags: {
       "ui:field": "limitTags",
       "ui:help": intl.formatMessage(messages.limitReviewTagsDescription),
+      "ui:collapsed": isCollapsed,
     },
   }
 

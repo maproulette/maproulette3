@@ -16,6 +16,7 @@ import _remove from 'lodash/remove'
 import _isEqual from 'lodash/isEqual'
 import _merge from 'lodash/merge'
 import _map from 'lodash/map'
+import _without from 'lodash/without'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import External from '../../../../External/External'
@@ -131,6 +132,30 @@ export class EditChallenge extends Component {
     this.props.user.id,
     {longFormChallenge: isLongForm}
   )
+
+  /**
+   * Returns the list of challenge form groups that are to be rendered as
+   * collapsed when in longform mode (does not affect stepped mode)
+   */
+  collapsedFormGroups = () =>
+    this.props.getUserAppSetting(this.props.user, 'collapsedChallengeFormGroups') || []
+
+  /**
+   * Update the current user's preferences as to which challenge form groups
+   * are expanded and collapsed when displayed in longform mode (does not
+   * affect stepped mode)
+   */
+  toggleCollapsedFormGroup = groupId => {
+    const collapsed = this.collapsedFormGroups()
+    const updated =
+      collapsed.indexOf(groupId) === -1 ?
+      collapsed.concat([groupId]) :
+      _without(collapsed, groupId)
+
+    this.props.updateUserAppSetting(this.props.user.id, {
+      collapsedChallengeFormGroups: updated,
+    })
+  }
 
   /**
    * Validate GeoJSON data
@@ -731,6 +756,8 @@ export class EditChallenge extends Component {
                   uiSchema={activeStep.uiSchema(
                     this.props.intl, this.props.user, challengeData, this.state.extraErrors, {
                       longForm: this.isLongForm(),
+                      collapsedGroups: this.collapsedFormGroups(),
+                      toggleCollapsed: this.toggleCollapsedFormGroup,
                     }
                   )}
                   className="form"

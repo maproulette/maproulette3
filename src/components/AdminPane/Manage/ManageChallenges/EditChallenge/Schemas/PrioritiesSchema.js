@@ -5,6 +5,8 @@ import _map from 'lodash/map'
 import _values from 'lodash/values'
 import messages from '../Messages'
 
+const STEP_ID = "Priorities"
+
 /**
  * Generates a JSON Schema describing priority fields of Edit
  * Challenge workflow intended for consumption by react-jsonschema-form
@@ -177,7 +179,7 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
  *
  * @private
  */
-const priorityRuleGroupUISchema = {
+const priorityRuleGroupUISchema = (isCollapsed) => ({
   classNames: "priority-rule-group",
   condition: {
     "ui:widget": "select",
@@ -189,22 +191,27 @@ const priorityRuleGroupUISchema = {
       keyType: {
         "ui:widget": "select",
         "ui:displayLabel": false,
+        "ui:collapsed": isCollapsed,
       },
       valueType: {
         "ui:widget": "select",
         "ui:displayLabel": false,
+        "ui:collapsed": isCollapsed,
       },
       key: {
         "ui:placeholder": "Property Name",
         "ui:displayLabel": false,
+        "ui:collapsed": isCollapsed,
       },
       operator: {
         "ui:widget": "select",
         "ui:displayLabel": false,
+        "ui:collapsed": isCollapsed,
       },
       value: {
         "ui:placeholder": "Property Value",
         "ui:displayLabel": false,
+        "ui:collapsed": isCollapsed,
       },
       ruleGroup: {
         classNames: "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
@@ -213,10 +220,12 @@ const priorityRuleGroupUISchema = {
             key: {
               "ui:placeholder": "Property Name",
               "ui:displayLabel": false,
+              "ui:collapsed": isCollapsed,
             },
             value: {
               "ui:placeholder": "Property Value",
               "ui:displayLabel": false,
+              "ui:collapsed": isCollapsed,
             },
             ruleGroup: {
               classNames: "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
@@ -225,10 +234,12 @@ const priorityRuleGroupUISchema = {
                   key: {
                     "ui:placeholder": "Property Name",
                     "ui:displayLabel": false,
+                    "ui:collapsed": isCollapsed,
                   },
                   value: {
                     "ui:placeholder": "Property Value",
                     "ui:displayLabel": false,
+                    "ui:collapsed": isCollapsed,
                   },
                 },
               },
@@ -239,7 +250,7 @@ const priorityRuleGroupUISchema = {
       "ui:order": [ "valueType", "key", "operator", "value", "*" ],
     },
   },
-}
+})
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -251,19 +262,29 @@ const priorityRuleGroupUISchema = {
  * > in the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => ({
-  defaultPriority: {
-    "ui:widget": "select",
-    "ui:help": intl.formatMessage(messages.defaultPriorityDescription),
-    "ui:groupHeader": options.longForm ? intl.formatMessage(messages.prioritiesStepHeader) : undefined,
-  },
-  highPriorityRules: {
-    ruleGroup: priorityRuleGroupUISchema,
-  },
-  mediumPriorityRules: {
-    ruleGroup: priorityRuleGroupUISchema,
-  },
-  lowPriorityRules: {
-    ruleGroup: priorityRuleGroupUISchema,
-  },
-})
+export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
+  const isCollapsed = (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
+  const toggleCollapsed = options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+
+  return {
+    defaultPriority: {
+      "ui:widget": "select",
+      "ui:help": intl.formatMessage(messages.defaultPriorityDescription),
+      "ui:collapsed": isCollapsed,
+      "ui:toggleCollapsed": toggleCollapsed,
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.prioritiesStepHeader) : undefined,
+    },
+    highPriorityRules: {
+      ruleGroup: priorityRuleGroupUISchema(isCollapsed),
+      "ui:collapsed": isCollapsed,
+    },
+    mediumPriorityRules: {
+      ruleGroup: priorityRuleGroupUISchema(isCollapsed),
+      "ui:collapsed": isCollapsed,
+    },
+    lowPriorityRules: {
+      ruleGroup: priorityRuleGroupUISchema(isCollapsed),
+      "ui:collapsed": isCollapsed,
+    },
+  }
+}

@@ -100,17 +100,31 @@ export const CustomArrayFieldTemplate = props => {
 
 export const CustomFieldTemplate = function(props) {
   const {classNames, children, description, uiSchema, errors} = props
+  const isCollapsed = _get(uiSchema, "ui:collapsed", false)
   return (
     <div className={classNames}>
       {uiSchema && uiSchema["ui:groupHeader"] &&
        <div className="mr-flex mr-justify-end mr-text-teal mr-text-lg mr-pt-4 mr-my-4 mr-border-t mr-border-teal-40">
-         {uiSchema["ui:groupHeader"]}
+         <span>{uiSchema["ui:groupHeader"]}</span>
+         {uiSchema && uiSchema["ui:toggleCollapsed"] &&
+           <button type="button" onClick={() => uiSchema["ui:toggleCollapsed"]()}>
+             <SvgSymbol
+               sym={isCollapsed ? "icon-cheveron-right" : "icon-cheveron-down"}
+               viewBox="0 0 20 20"
+               className="mr-fill-green-lighter mr-w-6 mr-h-6 mr-ml-2"
+             />
+           </button>
+         }
        </div>
       }
-      <LabelWithHelp {...props} />
-      {children}
-      {errors}
-      {description}
+      {!isCollapsed &&
+       <React.Fragment>
+         <LabelWithHelp {...props} />
+         {children}
+         {errors}
+         {description}
+       </React.Fragment>
+      }
     </div>
   )
 }

@@ -1,6 +1,8 @@
 import AsManager from '../../../../../../interactions/User/AsManager'
 import messages from '../Messages'
 
+const STEP_ID = "Discoverability"
+
 /**
  * Generates a JSON Schema describing discoverability fields of Edit Challenge
  * workflow intended for consumption by react-jsonschema-form
@@ -59,6 +61,9 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
  * > proper markup
  */
 export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
+  const isCollapsed = (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
+  const toggleCollapsed = options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+
   const uiSchemaFields = {
     "ui:order": [
       "featured", "enabled", "additionalKeywords", "requiresLocal",
@@ -66,19 +71,24 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
     featured: {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.featuredDescription),
+      "ui:collapsed": isCollapsed,
+      "ui:toggleCollapsed": toggleCollapsed,
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.discoverabilityStepHeader) : undefined,
     },
     enabled: {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.visibleDescription),
+      "ui:collapsed": isCollapsed,
     },
     additionalKeywords: {
       "ui:field": "tags",
       "ui:help": intl.formatMessage(messages.additionalKeywordsDescription),
+      "ui:collapsed": isCollapsed,
     },
     requiresLocal: {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.requiresLocalDescription),
+      "ui:collapsed": isCollapsed,
     }
   }
 
