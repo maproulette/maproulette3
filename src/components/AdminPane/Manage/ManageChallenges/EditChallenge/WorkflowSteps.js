@@ -130,7 +130,7 @@ const advancedOptionsStep = {
       introMessage={messages.advancedOptionsStepIntro}
     />
   ),
-  icon: "vertical-navigation-more-icon",
+  icon: "options-icon",
   viewBox: "0 0 20 20",
 }
 
@@ -142,7 +142,7 @@ const allOptionsStep = {
       headerMessage={messages.allOptionsStepDescription}
     />
   ),
-  icon: "vertical-navigation-more-icon",
+  icon: "options-icon",
   viewBox: "0 0 20 20",
 }
 
