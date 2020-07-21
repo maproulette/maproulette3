@@ -80,6 +80,7 @@
     "route-matcher": "^0.1.0",
     "stale-lru-cache": "^5.1.1",
     "styled-components": "^5.1.0",
+    "timezones.json": "^1.5.2",
     "uuid": "^8.1.0",
     "uuid-time": "^1.0.0",
     "vkbeautify": "^0.99.3",
