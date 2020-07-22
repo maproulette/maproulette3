@@ -209,6 +209,17 @@ export const fetchFeaturedChallenges = function(limit = RESULTS_PER_PAGE) {
  }
 
 /**
+ * Retrieve a listing of tweetable challenges
+ *
+ * @param {number} limit
+ */
+ export const fetchSocialChallenges = function(limit = RESULTS_PER_PAGE) {
+   return new Endpoint(api.challenges.preferred, {
+     params: {limit}
+   }).execute()
+ }
+
+/**
  * Retrieve a listing of challenges in the given projects, up to the given limit.
  *
  * @param {array} projectIds
