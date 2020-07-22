@@ -66,18 +66,18 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
 
   const uiSchemaFields = {
     "ui:order": [
-      "featured", "enabled", "additionalKeywords", "requiresLocal",
+      "enabled", "featured", "additionalKeywords", "requiresLocal",
     ],
-    featured: {
+    enabled: {
       "ui:widget": "radio",
-      "ui:help": intl.formatMessage(messages.featuredDescription),
+      "ui:help": intl.formatMessage(messages.visibleDescription),
       "ui:collapsed": isCollapsed,
       "ui:toggleCollapsed": toggleCollapsed,
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.discoverabilityStepHeader) : undefined,
     },
-    enabled: {
+    featured: {
       "ui:widget": "radio",
-      "ui:help": intl.formatMessage(messages.visibleDescription),
+      "ui:help": intl.formatMessage(messages.featuredDescription),
       "ui:collapsed": isCollapsed,
     },
     additionalKeywords: {
