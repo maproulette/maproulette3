@@ -4,6 +4,8 @@ import { FormattedNumber, FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 
+import { USER_TYPE_REVIEWER } from '../../../../services/Leaderboard/Leaderboard'
+
 import messages from './Messages'
 
 export default class ChallengeOwnerLeaderboard extends Component {
@@ -11,6 +13,8 @@ export default class ChallengeOwnerLeaderboard extends Component {
     if (!this.props.leaderboard) {
       return null
     }
+
+    const userType = this.props.userType
 
     const showNumberTasks = this.props.leaderboard.length > 0 ?
       this.props.leaderboard[0].completedTasks > 0 : false
@@ -32,7 +36,9 @@ export default class ChallengeOwnerLeaderboard extends Component {
               </Link>
             </div>
             <div className="mr-flex mr-justify-end mr-text-right mr-text-sm">
-              <div className="mr-w-16 mr-ml-2">{leader.score}</div>
+              {userType !== USER_TYPE_REVIEWER &&
+                <div className="mr-w-16 mr-ml-2">{leader.score}</div>
+              }
               {showNumberTasks &&
                 <React.Fragment>
                   <div className="mr-w-16 mr-ml-2">{leader.completedTasks}</div>
@@ -50,14 +56,20 @@ export default class ChallengeOwnerLeaderboard extends Component {
         {leaders.length > 0 &&
           <div className="mr-flex mr-justify-between mr-text-pink mr-mb-2">
             <div></div>
-            <div className="mr-flex mr-justify-end mr-text-right mr-text-sm">
-              <div className="mr-w-16 mr-ml-2">
-                <FormattedMessage {...messages.pointsLabel} />
-              </div>
+            <div className="mr-flex mr-justify-end mr-text-right mr-text-sm mr-mb-2">
+              {userType !== USER_TYPE_REVIEWER &&
+                <div className="mr-w-16 mr-ml-2">
+                  <FormattedMessage {...messages.pointsLabel} />
+                </div>
+              }
               {showNumberTasks &&
                 <React.Fragment>
                   <div className="mr-w-16 mr-ml-2">
-                    <FormattedMessage {...messages.tasksCompletedLabel}/>
+                    {userType === USER_TYPE_REVIEWER ?
+                      <FormattedMessage {...messages.reviewsCompletedLabel}/> :
+                      <FormattedMessage {...messages.tasksCompletedLabel}/>
+                    }
+
                   </div>
                   <div className="mr-w-16 mr-ml-2">
                     <FormattedMessage {...messages.averageTimeLabel}/>
