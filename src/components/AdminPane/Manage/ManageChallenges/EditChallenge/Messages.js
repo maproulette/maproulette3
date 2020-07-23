@@ -298,9 +298,10 @@ will not be able to make sense of it.
 
   overpassQLDescription: {
     id: 'Admin.EditChallenge.form.overpassQL.description',
-    defaultMessage: "Each result will become a task. Please provide a " +
-      "suitable bounding box, as this can potentially generate large " +
-      "amounts of data and bog the system down."
+    defaultMessage: "Please see the " +
+      "[wiki](https://github.com/osmlab/maproulette3/wiki/Using-Overpass-to-create-Challenges) " +
+      "for important details and common pitfalls when creating challenges " +
+      "using Overpass queries."
   },
 
   overpassQLPlaceholder: {
@@ -382,7 +383,9 @@ will not be able to make sense of it.
 
   defaultPriorityDescription: {
     id: 'Admin.EditChallenge.form.defaultPriority.description',
-    defaultMessage: "Default priority level for tasks in this challenge",
+    defaultMessage: "See the " +
+      "[wiki](https://github.com/osmlab/maproulette3/wiki/Prioritizing-Tasks-with-Priority-Rules) " +
+      "for an explanation of how to setup priority rules.",
   },
 
   highPriorityRulesLabel: {

@@ -145,6 +145,7 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
         enum: _values(TaskPriority),
         enumNames: _map(TaskPriority, (value, key) => localizedPriorityLabels[key]),
         default: TaskPriority.high,
+        description: intl.formatMessage(messages.defaultPriorityDescription),
       },
       highPriorityRules: {
         title: intl.formatMessage(messages.highPriorityRulesLabel),

@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _head from 'lodash/head'
 import _isEmpty from 'lodash/isEmpty'
+import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import TaskPropertyQueryBuilder
        from '../../../TaskPropertyQueryBuilder/TaskPropertyQueryBuilder'
@@ -135,9 +136,13 @@ export default class TaskPropertyStyleRules extends Component {
 
     return (
       <div className="">
-        <div className="mr-font-medium mr-text-yellow mr-uppercase mr-mb-8 mr-text-xl">
+        <div className="mr-font-medium mr-text-yellow mr-uppercase mr-mb-2 mr-text-xl">
           <FormattedMessage {...messages.stylesHeader} />
         </div>
+        <div className="mr-mb-6">
+          <MarkdownContent markdown={this.props.intl.formatMessage(messages.stylesTip)} />
+        </div>
+
         <div className="mr-my-4 mr-text-white">
           {styleForms}
           <div className="mr-my-4 mr-pb-8">

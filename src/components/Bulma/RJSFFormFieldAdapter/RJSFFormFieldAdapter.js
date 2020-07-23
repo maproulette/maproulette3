@@ -354,7 +354,7 @@ export const MarkdownDescriptionField = ({id, description}) => {
   }
 
   return (
-    <div id={id} className="mr-text-grey-light">
+    <div id={id} className="mr-text-grey-light mr-my-2">
       <MarkdownContent compact markdown={description} lightMode={false} />
     </div>
   )
