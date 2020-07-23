@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
+import subYears from 'date-fns/sub_years'
 
 
 /**
@@ -25,11 +26,29 @@ export default class IntlDatePicker extends Component {
   }
 
   render() {
+    const extraProps = {}
+    if (this.props.limitDate) {
+      extraProps.minDate = subYears(new Date(), 1)
+    }
+
     return (
       <DatePicker
           dateFormat={this.extractDateFormat()}
           selected={this.props.selected}
           onChange={this.props.onChange}
+          popperPlacement="bottom"
+          popperModifiers={{
+              flip: {
+                behavior: ["bottom"] // don't allow it to flip to be above
+              },
+              preventOverflow: {
+                enabled: false // tell it not to try to stay within the view (this prevents the popper from covering the element you clicked)
+              },
+              hide: {
+                enabled: false // turn off since needs preventOverflow to be enabled
+              }
+          }}
+          {...extraProps}
       />
     )
   }

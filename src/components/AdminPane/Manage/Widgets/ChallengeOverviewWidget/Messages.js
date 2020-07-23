@@ -47,7 +47,7 @@ export default defineMessages({
 
   visibleLabel: {
     id: "Widgets.ChallengeOverviewWidget.fields.enabled.label",
-    defaultMessage: "Visible:",
+    defaultMessage: "Discoverable:",
   },
 
   keywordsLabel: {
@@ -57,6 +57,6 @@ export default defineMessages({
 
   projectDisabledWarning: {
     id: "Widgets.ChallengeOverviewWidget.projectDisabledWarning",
-    defaultMessage: "project not visible",
+    defaultMessage: "project not discoverable",
   },
 })

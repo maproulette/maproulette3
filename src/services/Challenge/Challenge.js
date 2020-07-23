@@ -68,17 +68,19 @@ export const challengeDenormalizationSchema = function() {
 /**
  * Builds a link to export CSV
  */
-export const buildLinkToExportCSV = function(challengeId, criteria) {
+export const buildLinkToExportCSV = function(challengeId, criteria, timezone = null) {
   const queryFilters = buildQueryFilters(criteria)
-  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${challengeId}/tasks/extract?${queryFilters}`
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/` +
+         `${challengeId}/tasks/extract?${queryFilters}&timezone=${timezone}`
 }
 
 /**
  * Builds a link to export GeoJSON
  */
-export const buildLinkToExportGeoJSON = function(challengeId, criteria) {
+export const buildLinkToExportGeoJSON = function(challengeId, criteria, timezone = "") {
   const queryFilters = buildQueryFilters(criteria)
-  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/${challengeId}?${queryFilters}`
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/` +
+         `${challengeId}?${queryFilters}&timezone=${timezone}`
 }
 
 // Helper function to build query filters for export links
@@ -204,6 +206,17 @@ export const fetchFeaturedChallenges = function(limit = RESULTS_PER_PAGE) {
        console.log(error.response || error)
      })
    }
+ }
+
+/**
+ * Retrieve a listing of tweetable challenges
+ *
+ * @param {number} limit
+ */
+ export const fetchSocialChallenges = function(limit = RESULTS_PER_PAGE) {
+   return new Endpoint(api.challenges.preferred, {
+     params: {limit}
+   }).execute()
  }
 
 /**
@@ -703,6 +716,10 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
       challengeData.preferredTags = challengeData.preferredTags.join(',')
     }
 
+    if (_isArray(challengeData.preferredReviewTags)) {
+      challengeData.preferredReviewTags = challengeData.preferredReviewTags.join(',')
+    }
+
     // If there is local GeoJSON content being transmitted as a string, parse
     // it into JSON first.
     if (_isString(challengeData.localGeoJSON) &&
@@ -721,7 +738,7 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
         'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
-        'taskStyles', 'requiresLocal'])
+        'preferredReviewTags', 'limitTags', 'limitReviewTags', 'taskStyles', 'requiresLocal'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
@@ -921,7 +938,8 @@ export const fetchParentProject = function(dispatch, normalizedChallengeResults)
  * results.
  */
 export const findKeyword = function(keywordPrefix, tagType = null) {
-  return new Endpoint(api.keywords.find, {params: {prefix: keywordPrefix, tagType}}).execute()
+  const tagTypes = _isArray(tagType) ? tagType.join(',') : tagType
+  return new Endpoint(api.keywords.find, {params: {prefix: keywordPrefix, tagTypes}}).execute()
 }
 
 /**

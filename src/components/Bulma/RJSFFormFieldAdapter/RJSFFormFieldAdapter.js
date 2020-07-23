@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _map from 'lodash/map'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
+import _isEmpty from 'lodash/isEmpty'
+import _trim from 'lodash/trim'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
@@ -14,6 +16,7 @@ import OriginalTextWidget
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import MarkdownTemplate from '../../MarkdownContent/MarkdownTemplate'
+import Dropdown from '../../Dropdown/Dropdown'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import 'react-tagsinput/react-tagsinput.css'
@@ -95,6 +98,38 @@ export const CustomArrayFieldTemplate = props => {
   )
 }
 
+export const CustomFieldTemplate = function(props) {
+  const {classNames, children, description, uiSchema, errors} = props
+  const isCollapsed = _get(uiSchema, "ui:collapsed", false)
+  return (
+    <div className={classNames}>
+      {uiSchema && uiSchema["ui:groupHeader"] &&
+       <div className="mr-flex mr-justify-end mr-text-teal mr-text-lg mr-pt-4 mr-my-4 mr-border-t mr-border-teal-40">
+         <span>{uiSchema["ui:groupHeader"]}</span>
+         {uiSchema && uiSchema["ui:toggleCollapsed"] &&
+           <button type="button" onClick={() => uiSchema["ui:toggleCollapsed"]()}>
+             <SvgSymbol
+               sym={isCollapsed ? "icon-cheveron-right" : "icon-cheveron-down"}
+               viewBox="0 0 20 20"
+               className="mr-fill-green-lighter mr-w-6 mr-h-6 mr-ml-2"
+             />
+           </button>
+         }
+       </div>
+      }
+      {!isCollapsed &&
+       <React.Fragment>
+         <LabelWithHelp {...props} />
+         {children}
+         {errors}
+         {description}
+       </React.Fragment>
+      }
+    </div>
+  )
+}
+
+
 /**
  * A custom select widget with the new-ui styling (not Bulma)
  */
@@ -133,44 +168,106 @@ export const CustomTextWidget = function(props) {
   )
 }
 
+export const ColumnRadioField = function(props) {
+  return (
+    <React.Fragment>
+      <LabelWithHelp {...props} />
+      {props.schema.enum.map((option, index) =>
+        <div key={option} className="mr-flex mr-items-center mr-my-2">
+          <input
+            type="radio"
+            name={props.name}
+            value={option}
+            checked={props.formData === option}
+            className="mr-radio mr-mr-2"
+            onChange={() => props.onChange(option)}
+          />
+          <label onClick={() => props.onChange(option)}>
+            <MarkdownContent
+              compact
+              markdown={
+                props.schema.enumNames ?
+                props.schema.enumNames[index] :
+                props.schema.enum[index]
+              }
+            />
+          </label>
+        </div>
+      )}
+    </React.Fragment>
+  )
+}
+
 /**
  * MarkdownEditField renders a textarea and markdown preview side-by-side.
  */
-export class MarkdownEditField extends Component {
-  render() {
-    const showMustacheNote = /{{/.test(this.props.formData) // tags present
+export const MarkdownEditField = props => {
+  const [showingPreview, setShowingPreview] = useState(false)
+  const showMustacheNote = /{{/.test(props.formData) // tags present
 
-    return (
-      <React.Fragment>
-        <label className="control-label">
-          {this.props.schema.title}
-          {this.props.required && <span className="required">*</span>}
-        </label>
-        <div className="mr-grid mr-grid-columns-2 mr-grid-gap-8 mr-text-white">
-          <textarea
-            className="form-control mr-font-mono mr-text-sm"
-            onChange={e => this.props.onChange(e.target.value)}
-            value={this.props.formData}
-          />
-          <React.Fragment>
-            <MarkdownTemplate
-              header={showMustacheNote &&
-                <div className="mr-italic mr-text-xs">
-                  <FormattedMessage {...messages.addMustachePreviewNote} />
-                </div>
-              }
-              content={this.props.formData || ""}
-              properties={{}}
-              completionResponses={{}}
-              setCompletionResponse={() => {}}
-              lightMode={false}
-              disableTemplate={true}
-            />
-          </React.Fragment>
-        </div>
-      </React.Fragment>
-    )
-  }
+  return (
+    <React.Fragment>
+      <LabelWithHelp {...props} />
+      <div className="mr-flex mr-items-center mr-mb-2 mr-leading-tight mr-text-xxs">
+        <button
+          type="button"
+          className={classNames(
+            "mr-pr-2 mr-mr-2 mr-border-r mr-border-green mr-uppercase mr-font-medium",
+            showingPreview ? "mr-text-green-lighter" : "mr-text-white"
+          )}
+          onClick={() => setShowingPreview(false)}
+        >
+          <FormattedMessage {...messages.writeLabel} />
+        </button>
+        <button
+          type="button"
+          className={classNames(
+            "mr-uppercase mr-font-medium",
+            !showingPreview ? "mr-text-green-lighter" : "mr-text-white"
+          )}
+          onClick={() => setShowingPreview(true)}
+        >
+          <FormattedMessage {...messages.previewLabel} />
+        </button>
+      </div>
+
+      {showingPreview ?
+       <React.Fragment>
+         {props.uiSchema["ui:previewNote"] &&
+           <div className="mr-text-sm mr-text-grey-light mr-italic">
+             {props.uiSchema["ui:previewNote"]}
+           </div>
+         }
+         <div
+           className={
+            props.previewClassName ?
+            props.previewClassName :
+            "mr-rounded mr-bg-black-15 mr-px-2 mr-py-1 mr-min-h-8"
+           }
+         >
+           <MarkdownTemplate
+             header={showMustacheNote &&
+               <div className="mr-italic mr-text-xs">
+                 <FormattedMessage {...messages.addMustachePreviewNote} />
+               </div>
+             }
+             content={props.formData || ""}
+             properties={{}}
+             completionResponses={{}}
+             setCompletionResponse={() => {}}
+             lightMode={false}
+             disableTemplate={true}
+           />
+         </div>
+       </React.Fragment> :
+       <textarea
+         className="form-control mr-font-mono mr-text-sm"
+         onChange={e => props.onChange(e.target.value)}
+         value={props.formData}
+       />
+      }
+    </React.Fragment>
+  )
 }
 
 export const TagsInputField = props => {
@@ -257,8 +354,56 @@ export const MarkdownDescriptionField = ({id, description}) => {
   }
 
   return (
-    <div id={id} className="field-description">
-      <MarkdownContent markdown={description} lightMode={false} />
+    <div id={id} className="mr-text-grey-light mr-my-2">
+      <MarkdownContent compact markdown={description} lightMode={false} />
+    </div>
+  )
+}
+
+export const LabelWithHelp = props => {
+  const {id, displayLabel, label, required, rawHelp, schema, uiSchema} = props
+
+  if (displayLabel === false || uiSchema["ui:displayLabel"] === false) {
+    return null
+  }
+
+  const normalizedLabel = label ? _trim(label) : _trim(schema.title)
+  if (_isEmpty(normalizedLabel)) {
+    return null
+  }
+
+  const normalizedHelp = rawHelp ? rawHelp : uiSchema["ui:help"]
+
+  return (
+    <div className="mr-mb-2 mr-flex">
+      <label htmlFor={id} className="mr-text-mango mr-text-md mr-uppercase mr-mb-2">
+        {normalizedLabel}
+        {required && <span className="mr-text-red-light mr-ml-1">*</span>}
+      </label>
+      {!_isEmpty(normalizedHelp) &&
+       <Dropdown
+         className="mr-dropdown--offsetright"
+         innerClassName="mr-bg-blue-darker"
+         dropdownButton={dropdown => (
+           <button
+             type="button"
+             onClick={dropdown.toggleDropdownVisible}
+             className="mr-ml-4 mr-flex"
+           >
+             <SvgSymbol
+               sym="info-icon"
+               viewBox="0 0 20 20"
+               className="mr-fill-green-lighter mr-w-4 mr-h-4"
+             />
+           </button>
+         )}
+         dropdownContent={dropdown => (
+           <div className="mr-w-96 mr-max-w-screen60 mr-whitespace-normal">
+             <MarkdownContent markdown={normalizedHelp} lightMode={false} />
+           </div>
+         )}
+       />
+      }
     </div>
   )
 }

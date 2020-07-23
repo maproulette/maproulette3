@@ -22,8 +22,8 @@ export const CUSTOM_RANGE = -2
 export class PastDurationSelector extends Component {
   state={
     showChooseCustomDates: null,
-    customStartDate: new Date(),
-    customEndDate: new Date(),
+    customStartDate: null,
+    customEndDate: null,
   }
 
   pickDuration = (months, closeDropdown) => {
@@ -36,6 +36,9 @@ export class PastDurationSelector extends Component {
     }
   }
 
+  startDate = () => this.state.customStartDate || this.props.customStartDate || new Date()
+  endDate = () => this.state.customEndDate || this.props.customEndDate || new Date()
+
   render() {
     return (
       <Dropdown
@@ -43,15 +46,15 @@ export class PastDurationSelector extends Component {
         dropdownButton={dropdown =>
           <DurationButton
             {...this.props}
-            customStartDate={this.state.customStartDate}
-            customEndDate={this.state.customEndDate}
+            customStartDate={this.startDate()}
+            customEndDate={this.endDate()}
             toggleDropdownVisible={dropdown.toggleDropdownVisible}
           />
         }
         dropdownContent={dropdown => {
           if (this.state.showChooseCustomDates) {
             return (
-              <div className="mr-pt-2 mr-min-w-72">
+              <div className="mr-pt-2 mr-min-w-72 mr-overflow-hidden">
                 <div className="mr-text-green-lighter mr-w-full">
                   <button className="mr-absolute mr-right-0 mr-top-0 mr-mt-2"
                     onClick={() => this.setState({showChooseCustomDates: false})}>
@@ -65,9 +68,10 @@ export class PastDurationSelector extends Component {
                     <FormattedMessage {...messages.startDate} />
                   </div>
                   <IntlDatePicker
-                    selected={this.state.customStartDate}
+                    selected={this.startDate()}
                     onChange={(value) => this.setState({customStartDate: value})}
                     intl={this.props.intl}
+                    limitDate
                   />
                 </div>
                 <div className="mr-pb-2 mr-text-grey">
@@ -75,17 +79,18 @@ export class PastDurationSelector extends Component {
                     <FormattedMessage {...messages.endDate} />
                   </div>
                   <IntlDatePicker
-                    selected={this.state.customEndDate}
+                    selected={this.endDate()}
                     onChange={(value) => this.setState({customEndDate: value})}
                     intl={this.props.intl}
+                    limitDate
                   />
                 </div>
-                {this.state.customStartDate && this.state.customEndDate &&
+                {this.startDate() && this.endDate() &&
                   <button className="mr-button mr-button--small mr-button--green-lighter mr-mt-2"
                           onClick={() => {
                             this.props.selectCustomRange(
-                              this.state.customStartDate,
-                              this.state.customEndDate)                            
+                              this.startDate(),
+                              this.endDate())
                             dropdown.closeDropdown()
                           }}>
                     <FormattedMessage {...messages.searchLabel} />

@@ -23,7 +23,7 @@ challenges must belong to a project.
 You can create as many projects as needed to organize your challenges, and can
 invite other MapRoulette users to help manage them with you.
 
-Projects must be set to visible before any challenges within them will show up
-in public browsing or searching.`,
+Projects must be set to Discoverable before any challenges within them will
+show up in public browsing or searching.`,
   },
 })

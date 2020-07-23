@@ -38,6 +38,7 @@ module.exports = {
       'blue-75': 'rgba(23, 46, 81, .75)',
       'blue-light': '#496B94',
       'blue-light-25': 'rgba(73, 107, 148, 0.25)',
+      'blue-light-75': 'rgba(73, 107, 148, 0.75)',
       'blue-dark': '#182841',
       'blue-leaflet': '#2E85CB',
       'blue-dark-50': 'rgba(24, 40, 65, .5)',
@@ -67,6 +68,7 @@ module.exports = {
       'red-light': '#FF5E63',
       purple: '#959DFF',
       teal: '#6FB3B8',
+      'teal-40': 'rgba(111, 179, 184, 0.40)',
       rose: '#F89294',
       'picton-blue': '#50B7E5',
       'lavender-rose': '#FF98F7',
@@ -343,6 +345,7 @@ module.exports = {
       '9/10': '90%',
       '1/6': '16.66667%',
       '5/6': '83.33333%',
+      'screen40': '40vw',
       'screen60': '60vw',
       'screen80': '80vw',
       'screen90': '90vw',
@@ -504,6 +507,13 @@ module.exports = {
       c: '50% 50%',
       b: '50% 100%',
       l: '0% 50%',
+    },
+
+    inset: {
+      '0': 0,
+      '1/2': '50%',
+      'screen20': '-20vw',
+      'auto': 'auto',
     },
   },
 

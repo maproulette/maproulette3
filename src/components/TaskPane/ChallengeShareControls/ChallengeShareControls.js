@@ -18,7 +18,7 @@ export default class ChallengeShareControls extends Component {
     }
 
     const shareUrl = `${process.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`
-    const title = process.env.REACT_APP_TITLE
+    const title = this.props.title || process.env.REACT_APP_TITLE
     const hashtag = 'maproulette'
 
     return (

@@ -123,7 +123,10 @@ export class TaskPane extends Component {
                   needsReview, requestedNextTask, osmComment, tagEdits, taskBundle) => {
     this.setState({completingTask: task.id})
     this.props.completeTask(task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
-                            needsReview, requestedNextTask, osmComment, tagEdits, this.state.completionResponses, taskBundle)
+                            needsReview, requestedNextTask, osmComment, tagEdits,
+                            this.state.completionResponses, taskBundle).then(() => {
+      this.clearCompletingTask()
+    })
     this.props.clearActiveTaskBundle()
   }
 

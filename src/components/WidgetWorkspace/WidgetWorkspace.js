@@ -4,6 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
+import _cloneDeep from 'lodash/cloneDeep'
 import AppErrors from '../../services/Error/AppErrors'
 import WithErrors from '../HOCs/WithErrors/WithErrors'
 import WidgetGrid from '../WidgetGrid/WidgetGrid'
@@ -34,7 +35,24 @@ export class WidgetWorkspace extends Component {
   }
 
   startEditingLayout = (conf=this.props.currentConfiguration) => {
-    this.setState({isEditingId: conf.id, newConfigurationName: conf.label})
+    this.setState({
+      originalConfiguration: _cloneDeep(conf),
+      isEditingId: conf.id,
+      newConfigurationName: conf.label,
+    })
+  }
+
+  cancelEditingLayout = () => {
+    // Restore original configuration
+    if (this.state.originalConfiguration) {
+      this.props.saveWorkspaceConfiguration(this.state.originalConfiguration)
+    }
+
+    this.setState({
+      originalConfiguration: null,
+      isEditingId: null,
+      newConfigurationName: null,
+    })
   }
 
   doneEditingLayout = () => {
@@ -45,7 +63,11 @@ export class WidgetWorkspace extends Component {
                                               this.state.newConfigurationName)
     }
 
-    this.setState({isEditingId: null, newConfigurationName: null})
+    this.setState({
+      originalConfiguration: null,
+      isEditingId: null,
+      newConfigurationName: null,
+    })
   }
 
   isEditing = (conf=this.props.currentConfiguration) => {
@@ -187,8 +209,13 @@ export class WidgetWorkspace extends Component {
           isEditing={this.isEditing()}
           editNameControl={editNameBox}
           doneEditingControl={
-            <Button className="mr-button--white" onClick={this.doneEditingLayout}>
+            <Button className="mr-mr-4" onClick={this.doneEditingLayout}>
               <FormattedMessage {...messages.saveConfigurationLabel} />
+            </Button>
+          }
+          cancelEditingControl = {
+            <Button className="mr-button--white" onClick={this.cancelEditingLayout}>
+              <FormattedMessage {...messages.cancelConfigurationLabel} />
             </Button>
           }
           workspace={this.props.currentConfiguration}

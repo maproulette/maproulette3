@@ -4,11 +4,7 @@
 
     &-header,
     legend {
-      @apply mr-block mr-w-full mr-text-mango mr-uppercase mr-font-medium;
-
-      @screen md {
-        @apply mr-text-lg;
-      }
+      @apply mr-block mr-w-full mr-text-mango mr-uppercase mr-text-md mr-mb-2;
     }
 
     legend#root__title {

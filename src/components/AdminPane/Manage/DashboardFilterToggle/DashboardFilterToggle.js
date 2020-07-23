@@ -8,7 +8,7 @@ const DashboardFilterToggle = (filterType, filterName) => {
           <input
             type="checkbox"
             className="mr-checkbox-toggle mr-ml-4 mr-mr-1"
-            checked={this.props.dashboardEntityFilters[filterName]}
+            checked={this.props.dashboardEntityFilters[filterName] || false}
             onChange={() => this.props.toggleEntityFilter(filterName)}
           /> {this.props.filterToggleLabel}
         </div>

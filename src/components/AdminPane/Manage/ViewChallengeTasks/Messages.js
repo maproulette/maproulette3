@@ -45,7 +45,8 @@ export default defineMessages({
                     "to geographically index new or modified challenges. " +
                     "Your challenge (and tasks) may not appear as " +
                     "expected in location-specific browsing or " +
-                    "searches until indexing is complete."
+                    "searches until indexing is complete, nor " +
+                    "when browsing map to choose location-based priority rules."
   },
 
   changePriorityLabel: {

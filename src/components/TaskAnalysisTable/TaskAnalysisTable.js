@@ -572,7 +572,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     },
     Filter: ({filter, onChange}) => {
       const preferredTags =
-        _filter(_split(_get(props, 'challenge.preferredTags'), ','),
+        _filter(_split(_get(props, 'challenge.preferredTags'), ',').concat(
+                _split(_get(props, 'challenge.preferredReviewTags'), ',')),
                 (result) => !_isEmpty(result))
 
       return (

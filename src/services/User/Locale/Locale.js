@@ -1,3 +1,4 @@
+import '@formatjs/intl-relativetimeformat/polyfill'
 import _map from 'lodash/map'
 import _isString from 'lodash/isString'
 import _fromPairs from 'lodash/fromPairs'
@@ -26,19 +27,58 @@ export const Locale = Object.freeze({
 
 // Dynamic imports to load locale data and translation files
 const LocaleImports = {
-  [Locale.enUS]: () => import('../../../lang/en-US.json'),
-  [Locale.es]: () => import('../../../lang/es.json'),
-  [Locale.fr]: () => import('../../../lang/fr.json'),
-  [Locale.de]: () => import('../../../lang/de.json'),
-  [Locale.af]: () => import('../../../lang/af.json'),
-  [Locale.ja]: () => import('../../../lang/ja.json'),
-  [Locale.ko]: () => import('../../../lang/ko.json'),
-  [Locale.nl]: () => import('../../../lang/nl.json'),
-  [Locale.uk]: () => import('../../../lang/uk.json'),
-  [Locale["pt-BR"]]: () => import('../../../lang/pt_BR.json'),
-  [Locale["cs-CZ"]]: () => import('../../../lang/cs_CZ.json'),
-  [Locale["fa-IR"]]: () => import('../../../lang/fa_IR.json'),
-  [Locale["ru-RU"]]: () => import('../../../lang/ru_RU.json'),
+  [Locale.enUS]: () => Promise.all([
+    import('../../../lang/en-US.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/en'),
+  ]),
+  [Locale.es]: () => Promise.all([
+    import('../../../lang/es.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/es'),
+  ]),
+  [Locale.fr]: () => Promise.all([
+    import('../../../lang/fr.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/fr'),
+  ]),
+  [Locale.de]: () => Promise.all([
+    import('../../../lang/de.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/de'),
+  ]),
+  [Locale.af]: () => Promise.all([
+    import('../../../lang/af.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/af'),
+  ]),
+  [Locale.ja]: () => Promise.all([
+    import('../../../lang/ja.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/ja'),
+  ]),
+  [Locale.ko]: () => Promise.all([
+    import('../../../lang/ko.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/ko'),
+  ]),
+  [Locale.nl]: () => Promise.all([
+    import('../../../lang/nl.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/nl'),
+  ]),
+  [Locale.uk]: () => Promise.all([
+    import('../../../lang/uk.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/uk'),
+  ]),
+  [Locale["pt-BR"]]: () => Promise.all([
+    import('../../../lang/pt_BR.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/pt'),
+  ]),
+  [Locale["cs-CZ"]]: () => Promise.all([
+    import('../../../lang/cs_CZ.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/cs'),
+  ]),
+  [Locale["fa-IR"]]: () => Promise.all([
+    import('../../../lang/fa_IR.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/fa'),
+  ]),
+  [Locale["ru-RU"]]: () => Promise.all([
+    import('../../../lang/ru_RU.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/ru'),
+  ]),
 }
 
 /**
@@ -57,7 +97,7 @@ export const loadTranslatedMessages = async function(locale) {
     locale = defaultLocale()
   }
 
-  const messages = await LocaleImports[locale]()
+  const [messages] = await LocaleImports[locale]()
   return messages
 }
 

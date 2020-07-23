@@ -7,6 +7,34 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## [v3.6.7] - 2020-07-23
+### Added
+- Revised challenge creation/editing workflow
+- Ability to cancel editing of a widget workspace
+- Offer custom date-range options on all leaderboards
+- Additional informational columns on leaderboard widget
+- Ability to set preferred MR Tags for Task Review at challenge creation
+- Option to choose desired timezone when exporting challenge CSV/GeoJSON
+
+### Fixed
+- Search sometimes including extraneous results (#1297)
+- Display of relative dates in Safari
+- Crash when attempting to displaying cooperative task error
+- Error when switching priority rule types when editing a challenge
+- Leaderboard widget displaying Current Month regardless of saved setting
+- Leaderboard widget not updating properly for Past Month option
+- Occasional failure to load challenge leaderboard if server response is slow
+- Hang if browser back button used immediately following completion of a task
+- Funky scrollbar behavior when choosing custom date ranges throughout app
+- High memory consumption on Live Activity page if left open for long periods
+- exact-dates setting not honored on Follow Activity view
+
+### Changed
+- Limit leaderboard custom date ranges to past year
+- Refer to challenges and projects as Discoverable instead of Visible
+
+
 ## [v3.6.6] - 2020-07-06
 ### Fixed
 - Task comments provided during confirmation step not saved
