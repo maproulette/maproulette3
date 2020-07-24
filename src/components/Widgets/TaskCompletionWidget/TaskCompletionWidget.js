@@ -35,7 +35,10 @@ export default class TaskCompletionWidget extends Component {
     let taskControls =
       this.props.inspectTask ?
       <InspectTaskControls {...this.props} /> :
-      <ActiveTaskControls {...this.props} />
+      <ActiveTaskControls
+        challenge={_get(this.props, 'task.parent')}
+        {...this.props}
+      />
 
     let taskCount = _get(this.props, 'taskBundle.taskIds.length', 0)
 
