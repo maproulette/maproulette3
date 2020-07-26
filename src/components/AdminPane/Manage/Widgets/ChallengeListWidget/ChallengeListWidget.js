@@ -145,7 +145,9 @@ export default class ChallengeListWidget extends Component {
                     href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}` +
                           `/api/v2/project/${_get(this.props, 'project.id')}` +
                           `/tasks/extract?${cId}&timezone=` +
-                          `${_get(this.props.widgetConfiguration, 'timezoneOffset', '')}`}
+                          `${encodeURIComponent(
+                              _get(this.props.widgetConfiguration, 'timezoneOffset', '')
+                             )}`}
                     className="mr-flex mr-items-center"
                   >
                     <SvgSymbol
