@@ -71,7 +71,7 @@ export const challengeDenormalizationSchema = function() {
 export const buildLinkToExportCSV = function(challengeId, criteria, timezone = null) {
   const queryFilters = buildQueryFilters(criteria)
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/` +
-         `${challengeId}/tasks/extract?${queryFilters}&timezone=${timezone}`
+         `${challengeId}/tasks/extract?${queryFilters}&timezone=${encodeURIComponent(timezone)}`
 }
 
 /**
@@ -80,7 +80,7 @@ export const buildLinkToExportCSV = function(challengeId, criteria, timezone = n
 export const buildLinkToExportGeoJSON = function(challengeId, criteria, timezone = "") {
   const queryFilters = buildQueryFilters(criteria)
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/` +
-         `${challengeId}?${queryFilters}&timezone=${timezone}`
+         `${challengeId}?${queryFilters}&timezone=${encodeURIComponent(timezone)}`
 }
 
 // Helper function to build query filters for export links
