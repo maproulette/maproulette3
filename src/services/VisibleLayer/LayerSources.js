@@ -142,7 +142,7 @@ export const layerSourceWithId = function(id) {
 export const createDynamicLayerSource = function(layerId, url) {
   return {
     id: layerId,
-    name: 'Custom',
+    name: 'Custom Imagery',
     url,
     isDynamic: true,
   }

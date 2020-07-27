@@ -8,6 +8,7 @@ import _invert from 'lodash/invert'
 import _get from 'lodash/get'
 import _isArray from 'lodash/isArray'
 import _isEmpty from 'lodash/isEmpty'
+import _isFinite from 'lodash/isFinite'
 import _snakeCase from 'lodash/snakeCase'
 import RequestStatus from '../Server/RequestStatus'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
@@ -90,13 +91,16 @@ export const editTask = function(editor, task, mapBounds, options, taskBundle) {
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
     }
     else if (isJosmEditor(editor)) {
+      // Setup appropriate batch of JOSM remote-control commands and execute them
+      let josmCommands = []
+
       if (editor === JOSM_FEATURES) {
         // Load the features, then zoom JOSM to the task map's bounding box.
         // Otherwise if there are long features like a highway, the user could
         // end up zoomed way out by default. We have to do this as two separate
         // calls to JOSM, with a bit of a delay to give JOSM the chance to load
         // the object before we try to zoom
-        executeJOSMBatch([
+        josmCommands = josmCommands.concat([
           () => openJOSM(
             dispatch, editor, task, mapBounds, josmLoadObjectURI, taskBundle
           ),
@@ -105,7 +109,7 @@ export const editTask = function(editor, task, mapBounds, options, taskBundle) {
       }
       else if (AsCooperativeWork(task).isChangeFileType()) {
         // Cooperative fix with XML change
-        executeJOSMBatch([
+        josmCommands = josmCommands.concat([
           () => openJOSM(
             dispatch, editor, task, mapBounds, josmLoadAndZoomURI, taskBundle, {
               layerName: editor === JOSM_LAYER ?
@@ -119,9 +123,9 @@ export const editTask = function(editor, task, mapBounds, options, taskBundle) {
         ])
       }
       else {
-        let josmCommands = [
+        josmCommands = josmCommands.concat([
           () => openJOSM(dispatch, editor, task, mapBounds, josmLoadAndZoomURI, taskBundle),
-        ]
+        ])
 
         const loadReferenceLayerCommands = _map(
           josmImportReferenceLayers(dispatch, editor, task, mapBounds, taskBundle),
@@ -130,9 +134,13 @@ export const editTask = function(editor, task, mapBounds, options, taskBundle) {
         if (loadReferenceLayerCommands.length > 0) {
           josmCommands = josmCommands.concat(loadReferenceLayerCommands)
         }
-
-        executeJOSMBatch(josmCommands)
       }
+
+      if (options.imagery) {
+        josmCommands.push(() => sendJOSMCommand(josmImageryURI(options.imagery)))
+      }
+
+      executeJOSMBatch(josmCommands)
     }
   }
 }
@@ -210,6 +218,14 @@ export const constructIdURI = function(task, mapBounds, options, taskBundle) {
   const commentUriComponent = "comment=" +
                               encodeURIComponent(task.parent.checkinComment)
   const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource)
+  const imageryComponent =
+    _get(options, 'imagery') ?
+    `background=${
+      options.imagery.isDynamic ?
+      "custom:" + encodeURIComponent(options.imagery.url) :
+      options.imagery.id
+    }` :
+    null
 
   const photoOverlayComponent =
     _get(options, 'photoOverlay') ? "photo_overlay=" + options.photoOverlay : null;
@@ -219,11 +235,14 @@ export const constructIdURI = function(task, mapBounds, options, taskBundle) {
   // https://github.com/openstreetmap/iD/blob/master/API.md
   return (
     baseUriComponent +
-    (!_isEmpty(selectedEntityComponent) ? `&${selectedEntityComponent}` : '') +
-    '#' +
-    _compact(
-      [mapUriComponent, commentUriComponent, sourceComponent, photoOverlayComponent]
-    ).join('&')
+    (!_isEmpty(selectedEntityComponent) ? `&${selectedEntityComponent}` : '') + '#' +
+    _compact([
+      mapUriComponent,
+      commentUriComponent,
+      sourceComponent,
+      imageryComponent,
+      photoOverlayComponent,
+    ]).join('&')
   )
 }
 
@@ -242,13 +261,21 @@ export const constructRapidURI = function(task, mapBounds, options) {
   const commentUriComponent = "comment=" +
                               encodeURIComponent(task.parent.checkinComment)
   const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource)
+  const imageryComponent =
+    _get(options, 'imagery') ?
+    `background=${
+      options.imagery.isDynamic ?
+      "custom:" + encodeURIComponent(options.imagery.url) :
+      options.imagery.id
+    }` :
+    null
 
   const photoOverlayComponent =
     _get(options, 'photoOverlay') ? "photo_overlay=" + options.photoOverlay : null;
 
   return baseUriComponent + _compact(
     [selectedEntityComponent, commentUriComponent, sourceComponent,
-      photoOverlayComponent, mapUriComponent]
+      imageryComponent, photoOverlayComponent, mapUriComponent]
   ).join('&')
 }
 
@@ -367,6 +394,25 @@ export const josmLayerParams = function(task, asNewLayer, taskBundle, options={}
 export const josmChangesetParams = function(task, options) {
   return `changeset_comment=${encodeURIComponent(task.parent.checkinComment)}` +
          `&changeset_source=${encodeURIComponent(task.parent.checkinSource)}`
+}
+
+/*
+ * Builds a URI for the JOSM imagery remote control command
+ *
+ * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#imagery
+ */
+export const josmImageryURI = function(imagery) {
+  return josmHost() + 'imagery?' + _compact([
+    !imagery.isDynamic ? `id=${imagery.id}` : null,
+    `title=${encodeURIComponent(imagery.name)}`,
+    `type=${imagery.type || 'tms'}`,
+    imagery.category ? `category=${imagery.category}` : null,
+    imagery.icon ? `icon=${encodeURIComponent(imagery.icon)}` : null,
+    imagery.attribution ? `attribution-text=${encodeURIComponent(imagery.attribution.text)}` : null,
+    imagery.attribution ? `attribution-url=${encodeURIComponent(imagery.attribution.url)}` : null,
+    _isFinite(imagery.max_zoom) ? `max_zoom=${imagery.max_zoom}` : null,
+    `url=${encodeURIComponent(imagery.url)}`, // must come last per JOSM docs
+  ]).join('&')
 }
 
 /*
