@@ -13,6 +13,12 @@ export const CURRENT_MONTH = 0
 // Use custom dates
 export const CUSTOM_RANGE = -2
 
+// User Type 'mapper'
+export const USER_TYPE_MAPPER = "mapper"
+
+// User Type 'reviewer'
+export const USER_TYPE_REVIEWER = "reviewer"
+
 /**
  * Retrieve leaderboard data from the server for the given date range and
  * filters, returning a Promise that resolves to the leaderboard data. Note
@@ -50,6 +56,26 @@ export const fetchLeaderboardForUser = function(userId, bracket=0, numberMonths=
                               null, forCountries, startDate, endDate)
 
   return new Endpoint(api.users.userLeaderboard, {variables: {id: userId}, params}).execute()
+}
+
+/**
+ * Retrieve reviewer leaderboard data from the server for the given date range and
+ * filters, returning a Promise that resolves to the leaderboard data. Note
+ * that leaderboard data is *not* stored in the redux store.
+ */
+export const fetchReviewerLeaderboard = function(numberMonths=null, onlyEnabled=true,
+                                                 forProjects=null, forChallenges=null,
+                                                 forUsers=null, forCountries=null,
+                                                 limit=10, startDate=null, endDate=null) {
+  const params = {
+    limit,
+    onlyEnabled
+  }
+
+  initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
+                              forUsers, forCountries, startDate, endDate)
+
+  return new Endpoint(api.users.reviewerLeaderboard, {params}).execute()
 }
 
 

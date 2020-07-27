@@ -135,6 +135,7 @@ const apiRoutes = factory => {
       'publicByUsername': factory.get('/osmuser/:username/public'),
       'leaderboard': factory.get('/data/user/leaderboard'),
       'userLeaderboard': factory.get('/data/user/:id/leaderboard'),
+      'reviewerLeaderboard': factory.get('/data/reviewer/leaderboard'),
       'find': factory.get('/users/find/:username'),
     },
     'user': {

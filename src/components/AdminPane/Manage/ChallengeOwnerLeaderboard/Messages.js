@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "# Tasks",
   },
 
+  reviewsCompletedLabel: {
+    id: "ChallengeOwnerLeaderboard.reviewsCompleted.label",
+    defaultMessage: "# Reviews",
+  },
+
   averageTimeLabel: {
     id: "ChallengeOwnerLeaderboard.averageTime.label",
     defaultMessage: "Avg. Time",

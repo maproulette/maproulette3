@@ -8,8 +8,9 @@ import _get from 'lodash/get'
 import _merge from 'lodash/merge'
 import _uniqueId from 'lodash/uniqueId'
 import queryString from 'query-string'
-import { fetchLeaderboard, fetchLeaderboardForUser,
-         DEFAULT_LEADERBOARD_COUNT, CUSTOM_RANGE } from '../../../services/Leaderboard/Leaderboard'
+import { fetchLeaderboard, fetchLeaderboardForUser, fetchReviewerLeaderboard,
+         DEFAULT_LEADERBOARD_COUNT, CUSTOM_RANGE,
+         USER_TYPE_MAPPER, USER_TYPE_REVIEWER } from '../../../services/Leaderboard/Leaderboard'
 
 /**
  * WithLeaderboard provides leaderboard and leaderboardLoading props containing
@@ -68,7 +69,8 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       return params.values()
     }
 
-    updateLeaderboard = (numberMonths, countryCode, loadMore = false, startDate, endDate) => {
+    updateLeaderboard = (numberMonths, countryCode, loadMore = false, startDate,
+                         endDate, userType = USER_TYPE_MAPPER) => {
       let showingCount = this.state.showingCount
 
       if (loadMore) {
@@ -86,13 +88,16 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       const currentFetch = _uniqueId()
       this.setState({leaderboardLoading: true, showingCount, fetchId: currentFetch})
 
-      fetchLeaderboard(...this.leaderboardParams(numberMonths, countryCode),
+      const fetch = userType === USER_TYPE_REVIEWER ?
+        fetchReviewerLeaderboard : fetchLeaderboard
+
+      fetch(...this.leaderboardParams(numberMonths, countryCode),
         showingCount, startDate, endDate).then(leaderboard => {
           if (currentFetch >= this.state.fetchId) {
             this.setState({leaderboard})
 
             const userId = _get(this.props, 'user.id')
-            if (userId && !options.ignoreUser) {
+            if (userId && !options.ignoreUser && userType !== USER_TYPE_REVIEWER) {
               fetchLeaderboardForUser(userId, 1,
                 ...this.leaderboardParams(numberMonths, countryCode),
                 startDate, endDate).then(userLeaderboard => {
@@ -110,10 +115,15 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
         })
     }
 
-    setMonthsPast = (monthsPast, skipHistory=false) => {
+    setUserType = (userType, monthsPast, startDate, endDate) => {
+      this.updateLeaderboard(monthsPast, this.props.countryCode, false,
+                             startDate, endDate, userType)
+    }
+
+    setMonthsPast = (monthsPast, skipHistory=false, userType) => {
       if (monthsPast !== CUSTOM_RANGE) {
         const countryCode = this.props.countryCode
-        this.updateLeaderboard(monthsPast, countryCode)
+        this.updateLeaderboard(monthsPast, countryCode, false, null, null, userType)
 
         if (!skipHistory) {
           this.props.history.push(`${this.props.location.pathname}?monthsPast=${monthsPast}`)
@@ -121,9 +131,9 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       }
     }
 
-    setDateRange = (startDate, endDate, skipHistory=false) => {
+    setDateRange = (startDate, endDate, skipHistory=false, userType) => {
       const countryCode = this.props.countryCode
-      this.updateLeaderboard(CUSTOM_RANGE, countryCode, false, startDate, endDate)
+      this.updateLeaderboard(CUSTOM_RANGE, countryCode, false, startDate, endDate, userType)
 
       if (!skipHistory) {
         this.props.history.push(`${this.props.location.pathname}?monthsPast=${CUSTOM_RANGE}&startDate=${startDate}&endDate=${endDate}`)
@@ -206,6 +216,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
                                setMonthsPast={this.setMonthsPast}
                                setDateRange={this.setDateRange}
                                setCountryCode={this.setCountryCode}
+                               setUserType={this.setUserType}
                                loadMore={this.loadMore}
                                hasMoreResults={moreResults}
                                {...this.props} />
