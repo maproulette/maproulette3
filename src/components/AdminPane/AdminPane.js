@@ -52,46 +52,43 @@ export class AdminPane extends Component {
 
     return (
       <React.Fragment>
+        <div className="admin mr-bg-gradient-r-green-dark-blue mr-text-white">
+          <div className="admin-pane">
+            <Switch>
+              <Route exact path='/admin/project/:projectId/challenge/:challengeId'
+                      component={ChallengeDashboard} />
+              <Route
+                exact
+                path={[
+                  '/admin/projects/new',
+                  '/admin/project/:projectId/edit',
+                ]}
+                component={EditProject}
+              />
+              <Route
+                exact
+                path={[
+                  '/admin/project/:projectId/challenges/new',
+                  '/admin/project/:projectId/challenge/:challengeId/edit',
+                  '/admin/project/:projectId/challenge/:challengeId/clone',
+                ]}
+                component={EditChallenge}
+              />
+              <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/edit'
+                      component={EditTask} />
+              <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/inspect'
+                      component={InspectTask} />
+              <Route exact path='/admin/virtual/project/:projectId/challenges/manage' component={ManageChallengeList} />
+              <Route exact path='/admin/projects' component={ProjectsDashboard} />
+              <Route exact path='/admin/project/:projectId' component={ProjectDashboard} />
+              <Route component={ProjectsDashboard} />
+            </Switch>
+          </div>
+        </div>
         <MediaQuery query="(max-width: 1023px)">
           <ScreenTooNarrow />
         </MediaQuery>
-
-        <MediaQuery query="(min-width: 1024px)">
-          <div className="admin mr-bg-gradient-r-green-dark-blue mr-text-white">
-            <div className="admin-pane">
-              <Switch>
-                <Route exact path='/admin/project/:projectId/challenge/:challengeId'
-                       component={ChallengeDashboard} />
-                <Route
-                  exact
-                  path={[
-                    '/admin/projects/new',
-                    '/admin/project/:projectId/edit',
-                  ]}
-                  component={EditProject}
-                />
-                <Route
-                  exact
-                  path={[
-                    '/admin/project/:projectId/challenges/new',
-                    '/admin/project/:projectId/challenge/:challengeId/edit',
-                    '/admin/project/:projectId/challenge/:challengeId/clone',
-                  ]}
-                  component={EditChallenge}
-                />
-                <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/edit'
-                       component={EditTask} />
-                <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/inspect'
-                       component={InspectTask} />
-                <Route exact path='/admin/virtual/project/:projectId/challenges/manage' component={ManageChallengeList} />
-                <Route exact path='/admin/projects' component={ProjectsDashboard} />
-                <Route exact path='/admin/project/:projectId' component={ProjectDashboard} />
-                <Route component={ProjectsDashboard} />
-              </Switch>
-            </div>
-          </div>
-        </MediaQuery>
-      </React.Fragment>
+    </React.Fragment>
     )
   }
 }
