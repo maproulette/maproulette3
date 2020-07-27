@@ -10,6 +10,7 @@ import _isEmpty from 'lodash/isEmpty'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import { extendedFind } from '../../../../../services/Challenge/Challenge'
+import { buildLinkToMapperExportCSV } from '../../../../../services/Task/TaskReview/TaskReview'
 import WithSearchResults
        from '../../../../HOCs/WithSearchResults/WithSearchResults'
 import WithSearch from '../../../../HOCs/WithSearch/WithSearch'
@@ -91,7 +92,13 @@ export default class ChallengeListWidget extends Component {
     const someEnabled = tallied.length !== 0
 
     const selectedChallengeIds = _join(this.props.talliedChallenges(this.props.project.id), ',')
+
+    // project export CSV needs 'cId' (with capital I)
     const cId = _isEmpty(selectedChallengeIds) ? "" : `cId=${selectedChallengeIds}`
+
+    // export mapper review CSV needs 'cid'
+    const cIdReview = _isEmpty(selectedChallengeIds) ? "" : `cid=${selectedChallengeIds}`
+    const pIdReview = _isEmpty(selectedChallengeIds) ? `pid=${this.props.project.id}` : ""
 
     const rightHeaderControls = this.props.projects.length === 0 ? null : (
       <div className="mr-flex mr-justify-end mr-items-center">
@@ -156,6 +163,16 @@ export default class ChallengeListWidget extends Component {
                       sym='download-icon'
                     />
                     <FormattedMessage {...messages.exportCSVLabel} />
+                  </a>
+                </li>
+                <li className="mr-mt-2">
+                  <a target="_blank"
+                      rel="noopener noreferrer"
+                      href={`${buildLinkToMapperExportCSV(this.props.criteria)}&${cIdReview}${pIdReview}`}
+                      className="mr-flex mr-items-center"
+                  >
+                      <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                      <FormattedMessage {...messages.exportMapperReviewCSVLabel} />
                   </a>
                 </li>
               </ul>

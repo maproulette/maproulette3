@@ -10,6 +10,7 @@ import Dropdown from '../../../Dropdown/Dropdown'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import ChallengeList from '../ChallengeList/ChallengeList'
+import { buildLinkToMapperExportCSV } from '../../../../services/Task/TaskReview/TaskReview'
 import messages from './Messages'
 
 export class ProjectCard extends Component {
@@ -114,8 +115,20 @@ export class ProjectCard extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                   href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/project/${this.props.project.id}/tasks/extract`}
+                  className="mr-flex mr-items-center"
                 >
+                  <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                   <FormattedMessage {...messages.exportCSVLabel} />
+                </a>
+              </li>
+              <li className="mr-mt-2">
+                <a target="_blank"
+                    rel="noopener noreferrer"
+                    href={`${buildLinkToMapperExportCSV(this.props.criteria)}&pid=${this.props.project.id}`}
+                    className="mr-flex mr-items-center"
+                >
+                    <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                    <FormattedMessage {...messages.exportMapperReviewCSVLabel} />
                 </a>
               </li>
             </ul>
