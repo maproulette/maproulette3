@@ -225,41 +225,38 @@ export class ReviewTasksDashboard extends Component {
 
     return (
       <div className='review-pane'>
+        {!this.state.filterSelected[showType] && user.isReviewer() &&
+          <div className={classNames("mr-widget-workspace",
+            "mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse")}>
+            <Header
+              className="mr-px-8"
+              eyebrow={this.props.workspaceEyebrow}
+              title={''}
+              info={user.isReviewer()? reviewerTabs : notReviewerTabs}
+              actions={null}
+            />
+            <div>
+              <TasksReviewChallenges
+                reviewTasksType={this.state.showType}
+                selectChallenge={this.setSelectedChallenge}
+                selectProject={this.setSelectedProject}
+              />
+            </div>
+          </div>
+        }
+        {(this.state.filterSelected[showType] || !user.isReviewer()) &&
+          <ReviewWidgetWorkspace
+            {...this.props}
+            className="mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse"
+            workspaceTitle={null}
+            workspaceInfo={user.isReviewer()? reviewerTabs : notReviewerTabs}
+            reviewTasksType={showType}
+            defaultFilters={this.state.filterSelected[showType]}
+            clearSelected={this.clearSelected}
+          />
+        }
         <MediaQuery query="(max-width: 1023px)">
           <ScreenTooNarrow />
-        </MediaQuery>
-
-        <MediaQuery query="(min-width: 1024px)">
-          {!this.state.filterSelected[showType] && user.isReviewer() &&
-            <div className={classNames("mr-widget-workspace",
-              "mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse")}>
-              <Header
-                className="mr-px-8"
-                eyebrow={this.props.workspaceEyebrow}
-                title={''}
-                info={user.isReviewer()? reviewerTabs : notReviewerTabs}
-                actions={null}
-              />
-              <div>
-                <TasksReviewChallenges
-                  reviewTasksType={this.state.showType}
-                  selectChallenge={this.setSelectedChallenge}
-                  selectProject={this.setSelectedProject}
-                />
-              </div>
-            </div>
-          }
-          {(this.state.filterSelected[showType] || !user.isReviewer()) &&
-            <ReviewWidgetWorkspace
-              {...this.props}
-              className="mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse"
-              workspaceTitle={null}
-              workspaceInfo={user.isReviewer()? reviewerTabs : notReviewerTabs}
-              reviewTasksType={showType}
-              defaultFilters={this.state.filterSelected[showType]}
-              clearSelected={this.clearSelected}
-            />
-          }
         </MediaQuery>
       </div>
     )
