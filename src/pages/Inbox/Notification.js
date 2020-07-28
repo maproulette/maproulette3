@@ -30,6 +30,8 @@ class Notification extends Component {
         return <ReviewBody notification={notification} />
       case NotificationType.challengeCompleted:
         return <ChallengeCompletionBody notification={notification} />
+      case NotificationType.mapperChallengeCompleted:
+        return <MapperChallengeCompletionBody notification={notification} />
       case NotificationType.team:
         return <TeamBody notification={notification} />
       case NotificationType.follow:
@@ -171,6 +173,25 @@ const ChallengeCompletionBody = function(props) {
       <p className="mr-text-md mr-text-yellow">{props.notification.extra}</p>
 
       <ViewChallengeAdmin notification={props.notification} />
+    </React.Fragment>
+  )
+}
+
+const MapperChallengeCompletionBody = function(props) {
+  return (
+    <React.Fragment>
+      <p className="mr-mb-8 mr-text-base">
+        <FormattedMessage {...messages.mapperChallengeCompleteNotificationLead} />
+      </p>
+
+      <p className="mr-text-md mr-text-yellow">{props.notification.extra}</p>
+
+      <div className="mr-mt-8 mr-links-green-lighter">
+        <Link to={{pathname: `/browse/challenges` }}>
+          <FormattedMessage {...messages.findMoreChallengesLabel} />
+        </Link>
+      </div>
+
     </React.Fragment>
   )
 }

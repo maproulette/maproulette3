@@ -32,6 +32,10 @@ export default defineMessages({
     id: "Notification.type.challengeCompletedLong",
     defaultMessage: "Challenge Completed"
   },
+  mapperChallengeCompleted: {
+    id: "Notification.type.challengeCompleted",
+    defaultMessage: "Completed"
+  },
   team: {
     id: "Notification.type.team",
     defaultMessage: "Team"
