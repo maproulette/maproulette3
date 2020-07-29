@@ -55,7 +55,7 @@ const SavedChallengeList = function(props) {
       return (
         <li
           key={challenge.id}
-          className="mr-h-5 mr-my-2 mr-flex mr-justify-between mr-items-center"
+          className="mr-my-2 mr-flex mr-justify-between mr-items-center"
         >
           <Link to={`/browse/challenges/${challenge.id}`}>
             {challenge.name}
