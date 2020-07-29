@@ -203,7 +203,6 @@ export const ColumnRadioField = function(props) {
  */
 export const MarkdownEditField = props => {
   const [showingPreview, setShowingPreview] = useState(false)
-  const showMustacheNote = /{{/.test(props.formData) // tags present
 
   return (
     <React.Fragment>
@@ -246,11 +245,6 @@ export const MarkdownEditField = props => {
            }
          >
            <MarkdownTemplate
-             header={showMustacheNote &&
-               <div className="mr-italic mr-text-xs">
-                 <FormattedMessage {...messages.addMustachePreviewNote} />
-               </div>
-             }
              content={props.formData || ""}
              properties={{}}
              completionResponses={{}}
