@@ -70,6 +70,10 @@ export const editorOpened = function(editor, taskId, status=RequestStatus.succes
 // async action creators
 export const editTask = function(editor, task, mapBounds, options, taskBundle) {
   return function(dispatch) {
+    if (options && process.env.REACT_APP_FEATURE_EDITOR_IMAGERY !== 'enabled') {
+      delete options.imagery
+    }
+
     if (isWebEditor(editor)) {
       // For web editors, if we've already opened an editor window, close it so
       // that we don't build up a bunch of open editor tabs and potentially
