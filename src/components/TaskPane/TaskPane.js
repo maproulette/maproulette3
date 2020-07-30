@@ -91,6 +91,7 @@ export class TaskPane extends Component {
     completingTask: null,
     completionResponses: null,
     showLockFailureDialog: false,
+    needsResponses: false,
   }
 
   tryLockingTask = () => {
@@ -142,6 +143,10 @@ export class TaskPane extends Component {
       JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
     responses[propertyName] = value
     this.setState({completionResponses: responses})
+  }
+
+  setNeedsResponses = (needsResponses) => {
+    this.setState({needsResponses})
   }
 
   componentDidMount() {
@@ -280,7 +285,9 @@ export class TaskPane extends Component {
             completeTask={this.completeTask}
             completingTask={this.state.completingTask}
             setCompletionResponse={this.setCompletionResponse}
+            setNeedsResponses={this.setNeedsResponses}
             completionResponses={completionResponses}
+            needsResponses={this.state.needsResponses}
             disableTemplate={isCompletionStatus(this.props.task.status)}
           />
           {this.state.completingTask && this.state.completingTask === this.props.task.id &&

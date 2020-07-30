@@ -29,6 +29,7 @@ import KeywordAutosuggestInput
 import External from '../External/External'
 import Modal from '../Modal/Modal'
 import AdjustFiltersOverlay from './AdjustFiltersOverlay'
+import InstructionsOverlay from './InstructionsOverlay'
 import messages from './Messages'
 
 const shortcutGroup = 'taskConfirmation'
@@ -67,6 +68,10 @@ export class TaskConfirmationModal extends Component {
       this.props.keyboardShortcutGroups.taskConfirmation,
       this.handleKeyboardShortcuts
     )
+
+    if (this.props.needsResponses && _isEmpty(this.props.completionResponses)) {
+      this.setState({showInstructions: true})
+    }
   }
 
   componentWillUnmount() {
@@ -296,6 +301,11 @@ export class TaskConfirmationModal extends Component {
                           <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
                         </label>
                       </div>
+                      <div className="mr-text-green-lighter mr-text-center mr-mt-4 hover:mr-text-white mr-cursor-pointer mr-text-xs">
+                        <div onClick={() => this.setState({showInstructions: true})}>
+                          <FormattedMessage {...messages.viewInstructions} />
+                        </div>
+                      </div>
                     </div>
                   }
 
@@ -427,6 +437,12 @@ export class TaskConfirmationModal extends Component {
               close={() => this.setState({showReviewFilters: false})}
               filterChange={this.filterChange}
               currentFilters={this.currentFilters()}
+            />
+          }
+          {!this.props.inReview && this.state.showInstructions && _isUndefined(this.props.needsRevised) &&
+            <InstructionsOverlay
+              {...this.props}
+              close={() => this.setState({showInstructions: false})}
             />
           }
         </Modal>
