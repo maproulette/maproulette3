@@ -40,7 +40,9 @@ export default class TaskInstructions extends Component {
                           setCompletionResponse={(propName, value) => {
                             this.props.setCompletionResponse(propName, value)
                             this.setState({responsesChanged: true})
-                          }} />
+                          }}
+                          setNeedsResponses={this.props.setNeedsResponses}
+                          inModal={this.props.inModal} />
         {this.props.disableTemplate && this.state.responsesChanged &&
           <Button
             className="mr-button--blue-fill mr-button--small"

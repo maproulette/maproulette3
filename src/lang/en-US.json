@@ -1234,6 +1234,8 @@
   "TaskConfirmationModal.done.label": "Done",
   "TaskConfirmationModal.header": "Please Confirm",
   "TaskConfirmationModal.inReviewHeader": "Please Confirm Review",
+  "TaskConfirmationModal.instructions.header": "View Task Instructions",
+  "TaskConfirmationModal.instructions.label": "Task Instructions",
   "TaskConfirmationModal.invert.label": "invert",
   "TaskConfirmationModal.inverted.label": "inverted",
   "TaskConfirmationModal.loadBy.label": "Next task:",

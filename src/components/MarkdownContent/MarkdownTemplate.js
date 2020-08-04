@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
-import _values from 'lodash/values'
 import _keys from 'lodash/keys'
 import _map from 'lodash/map'
 import _split from 'lodash/split'
 import _isEqual from 'lodash/isEqual'
 import _uniqueId from 'lodash/uniqueId'
+import _cloneDeep from 'lodash/cloneDeep'
+import classNames from 'classnames'
 import MarkdownContent from './MarkdownContent'
 import Handlebars from 'handlebars'
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -43,19 +44,13 @@ export default class MarkdownTemplate extends Component {
     const propertyName = options.hash.name
     const body = this.compileTemplate(text, this.props.properties)
 
-    const checkbox =
-      <li key={_uniqueId(propertyName)} className="mr-pb-1">
-        <input type="checkbox" className="checkbox"
-               defaultChecked={this.props.completionResponses[propertyName]}
-               disabled={this.props.disableTemplate}
-               onChange={() => this.toggleResponse(propertyName)}/>
-        <label className="mr-pl-2">{body}</label>
-      </li>
-
     const questions = this.state.questions
     if (!questions[propertyName]) {
-      questions[propertyName] = checkbox
+      questions[propertyName] = {type: 'checkbox', options, body}
       this.setState({questions})
+      if (this.props.setNeedsResponses) {
+        this.props.setNeedsResponses(true)
+      }
     }
 
     return ""
@@ -69,34 +64,13 @@ export default class MarkdownTemplate extends Component {
     const propertyName = options.hash.name || `select`
     const body = this.compileTemplate(text, this.props.properties)
 
-    // Quotes get turned into html entities by markdown compiler
-    const quoted_entities = {
-      '&#039;': "'",
-      '&#x27;': "'",
-      '&quot;': '"'
-    };
-
-    const select =
-      <li key={_uniqueId(propertyName)} className="mr-pb-1">
-        <select onChange={(e) => this.selectResponse(propertyName, e.target.value)}
-                className="select mr-text-black mr-text-xs"
-                defaultValue={this.props.completionResponses[propertyName]}
-                disabled={this.props.disableTemplate}>
-          <option key="0" value=""></option>
-          {
-            _map(_split(options.hash.values, ','), (value, index) =>
-              <option key={index} value={value}>
-                {value.replace(/&#?\w+;/, match => quoted_entities[match])}
-              </option>)
-          }
-        </select>
-        <label className="mr-pl-2" dangerouslySetInnerHTML={{__html:body}} />
-      </li>
-
     const questions = this.state.questions
     if (!questions[propertyName]) {
-      questions[propertyName] = select
+      questions[propertyName] = {type: 'select', options, body}
       this.setState({questions})
+      if (this.props.setNeedsResponses) {
+        this.props.setNeedsResponses(true)
+      }
     }
 
     return ""
@@ -117,20 +91,10 @@ export default class MarkdownTemplate extends Component {
     const responses = this.props.completionResponses
     responses[propertyName] = !responses[propertyName]
     this.props.setCompletionResponse(propertyName, responses[propertyName])
-
-    // Clear question so it gets re-rendered
-    const questions = this.state.questions
-    questions[propertyName] = null
-    this.setState({questions})
   }
 
   selectResponse = (propertyName, value) => {
     this.props.setCompletionResponse(propertyName, value)
-
-    // Clear question so it gets re-rendered
-    const questions = this.state.questions
-    questions[propertyName] = null
-    this.setState({questions})
   }
 
   markdownContent = (content) => {
@@ -138,15 +102,13 @@ export default class MarkdownTemplate extends Component {
       <MarkdownContent markdown={content} lightMode={this.props.lightMode} />
     ).replace(/&quot;/g, '"')
 
-    return <div dangerouslySetInnerHTML={{
-        __html: this.applyTemplating(htmlContent)
-      }} />
+    this.setState({content: this.applyTemplating(htmlContent)})
   }
 
   substitutePropertyTags = (text, properties) => {
     // Handlebars does not handle @ properties (eg. @id). So we will do a
     // simple substitution first.
-    let substituted = text
+    let substituted = _cloneDeep(text)
     _keys(properties).forEach(key => {
       let safe = properties[key]
       if (safe) {
@@ -173,30 +135,81 @@ export default class MarkdownTemplate extends Component {
     return this.compileTemplate(substituted, this.props.properties)
   }
 
+  componentDidMount() {
+    this.markdownContent(this.props.content)
+  }
+
   componentDidUpdate(prevProps) {
     if (this.props.content !== prevProps.content) {
-      this.setState({questions: {}})
+      this.markdownContent(this.props.content)
     }
 
     if (!_isEqual(this.props.completionResponses, prevProps.completionResponses)) {
-      this.setState({questions: {}})
+      this.markdownContent(this.props.content)
     }
   }
 
-  render() {
-    const content = this.props.content
+  renderSelect(propertyName, options, body, props) {
+    // Quotes get turned into html entities by markdown compiler
+    const quoted_entities = {
+      '&#039;': "'",
+      '&#x27;': "'",
+      '&quot;': '"'
+    };
 
-    if (_isEmpty(content)) {
+    return (
+      <li key={_uniqueId(propertyName)} className="mr-pb-1">
+        <select onChange={(e) => this.selectResponse(propertyName, e.target.value)}
+                className="select mr-text-black mr-text-xs"
+                defaultValue={props.completionResponses[propertyName]}
+                disabled={props.disableTemplate}>
+          <option key="0" value=""></option>
+          {
+            _map(_split(options.hash.values, ','), (value, index) =>
+              <option key={index} value={value}>
+                {value.replace(/&#?\w+;/, match => quoted_entities[match])}
+              </option>)
+          }
+        </select>
+        <label className="mr-pl-2" dangerouslySetInnerHTML={{__html:body}} />
+      </li>
+    )
+  }
+
+  renderCheckbox(propertyName, options, body, props) {
+    return (
+      <li key={_uniqueId(propertyName)} className="mr-pb-1">
+        <input type="checkbox" className="checkbox"
+               defaultChecked={props.completionResponses[propertyName]}
+               disabled={props.disableTemplate}
+               onChange={() => this.toggleResponse(propertyName)}/>
+        <label className="mr-pl-2" dangerouslySetInnerHTML={{__html:body}} />
+      </li>
+    )
+  }
+
+  render() {
+    if (_isEmpty(this.state.content)) {
       return null
     }
 
     return (
       <div>
         {this.props.header}
-        {this.markdownContent(content)}
+        <div className={classNames("mr-mb-4",
+                                   {"mr-overflow-scroll mr-h-40 mr-pb-2": this.props.inModal})}
+          dangerouslySetInnerHTML={{__html: this.state.content}}
+        />
         {!_isEmpty(this.state.questions) &&
-          <ul className="mr-bg-black-5 mr-p-3">
-            {_values(this.state.questions)}
+          <ul className={classNames("mr-p-3",
+                                    {"mr-bg-black-5": !this.props.inModal,
+                                     "mr-mt-2 mr-bg-black-50 mr-h-32 mr-overflow-scroll": !!this.props.inModal})}>
+            {_map(this.state.questions, (value, key) =>
+                value.type === "select" ?
+                  this.renderSelect(key, value.options, value.body, this.props) :
+                  this.renderCheckbox(key, value.options, value.body, this.props)
+              )
+            }
           </ul>
         }
       </div>
