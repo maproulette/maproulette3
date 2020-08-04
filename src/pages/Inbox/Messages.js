@@ -109,6 +109,11 @@ export default defineMessages({
     defaultMessage: "A challenge you manage has been completed.",
   },
 
+  mapperChallengeCompleteNotificationLead: {
+    id: "Inbox.mapperChallengeCompleteNotification.lead",
+    defaultMessage: "A challenge you worked on has been completed. Thank you for contributing!",
+  },
+
   teamInviteNotificationLead: {
     id: "Inbox.teamNotification.invited.lead",
     defaultMessage: "You've been invited to join a team!",
@@ -137,6 +142,11 @@ export default defineMessages({
   manageChallengeLabel: {
     id: "Inbox.notification.controls.manageChallenge.label",
     defaultMessage: "Manage Challenge",
+  },
+
+  findMoreChallengesLabel: {
+    id: "Inbox.notification.controls.findMoreChallenge.label",
+    defaultMessage: "Find more challenges to map!",
   },
 
   viewTeamsLabel: {
