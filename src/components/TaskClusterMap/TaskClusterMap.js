@@ -458,7 +458,7 @@ export class TaskClusterMap extends Component {
           </div>
         }
         {map}
-        {(!!this.props.loading || this.state.locatingToUser || !!this.props.loadingChallenge) && <BusySpinner mapMode />}
+        {(!!this.props.loading || this.state.locatingToUser || !!this.props.loadingChallenge) && <BusySpinner mapMode xlarge />}
       </div>
     )
   }

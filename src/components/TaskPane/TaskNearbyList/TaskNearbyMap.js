@@ -184,7 +184,7 @@ export class TaskNearbyMap extends Component {
           }
         </EnhancedMap>
 
-        {!!this.props.tasksLoading && <BusySpinner mapMode />}
+        {!!this.props.tasksLoading && <BusySpinner mapMode big />}
       </div>
     )
   }
