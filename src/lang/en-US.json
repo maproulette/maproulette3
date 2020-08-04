@@ -1228,6 +1228,7 @@
   "TaskConfirmationModal.adjustFilters.label": "Adjust Filters",
   "TaskConfirmationModal.cancel.label": "Cancel",
   "TaskConfirmationModal.challenge.label": "Challenge:",
+  "TaskConfirmationModal.closeInstructions.label": "Hide Instructions",
   "TaskConfirmationModal.comment.header": "MapRoulette Comment (optional)",
   "TaskConfirmationModal.comment.label": "Leave optional comment",
   "TaskConfirmationModal.comment.placeholder": "Your comment (optional)",

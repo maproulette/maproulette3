@@ -154,4 +154,9 @@ export default defineMessages({
     defaultMessage: "View Task Instructions",
   },
 
+  closeInstructionsLabel: {
+    id: 'TaskConfirmationModal.closeInstructions.label',
+    defaultMessage: "Hide Instructions",
+  },
+
 })
