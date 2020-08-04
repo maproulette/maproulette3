@@ -24,7 +24,7 @@ export default class InstructionsOverlay extends Component {
             onClick={() => this.props.close()}
             className="mr-button mr-w-4/5 mr-mb-8"
           >
-            <FormattedMessage {...messages.doneLabel} />
+            <FormattedMessage {...messages.closeInstructionsLabel} />
           </button>
         </div>
       </div>
