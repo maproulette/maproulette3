@@ -7,8 +7,12 @@ import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import BusySpinner from '../BusySpinner/BusySpinner'
+import { OPEN_STREET_MAP } from '../../services/VisibleLayer/LayerSources'
 import AsManager from '../../interactions/User/AsManager'
 import WithSearch from '../HOCs/WithSearch/WithSearch'
+import WithChallengePreferences
+       from '../HOCs/WithChallengePreferences/WithChallengePreferences'
+import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithKeyboardShortcuts
        from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import TaskEditControl
@@ -61,7 +65,16 @@ export class InspectTaskControls extends Component {
 
   /** Open the task in an editor */
   pickEditor = ({ value }) => {
-    this.props.editTask(value, this.props.task, this.props.mapBounds)
+    this.props.editTask(
+      value,
+      this.props.task,
+      this.props.mapBounds,
+      {
+        imagery: this.props.source.id !== OPEN_STREET_MAP ? this.props.source : undefined,
+        photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null,
+      },
+      this.props.taskBundle
+    )
   }
 
   modifyTaskRoute = () => {
@@ -138,4 +151,13 @@ InspectTaskControls.propTypes = {
   nextSequentialTask: PropTypes.func.isRequired,
 }
 
-export default WithSearch(WithKeyboardShortcuts(InspectTaskControls), 'task')
+export default WithSearch(
+  WithChallengePreferences(
+    WithVisibleLayer(
+      WithKeyboardShortcuts(
+        InspectTaskControls
+      )
+    )
+  ),
+  'task'
+)
