@@ -8,6 +8,23 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [v3.6.8] - 2020-08-05
+### Added
+- Updated community translations (huge thanks to all the translators!)
+- Send active imagery layer to editors when completing task (#1151, #1230)
+- Enlarge busy spinner on maps (#1343)
+- Use overlay to display browser-too-narrow message (#1033)
+- Export of task-review CSV at the project level for project managers
+- Display of top reviewers in Leaderboard widget for challenge managers
+- Notify mappers when a challenge they worked on has been completed
+- Option to view task instructions on completion confirmation modal
+
+### Fixed
+- Broken export of challenge CSV when using timezone with positive offset
+- Minor display issues on User Dashboard page
+- Missing int'l message that could prevent previews of markdown content
+
+
 ## [v3.6.7] - 2020-07-23
 ### Added
 - Revised challenge creation/editing workflow
@@ -33,6 +50,7 @@ This project adheres to
 ### Changed
 - Limit leaderboard custom date ranges to past year
 - Refer to challenges and projects as Discoverable instead of Visible
+- New challenges are now set to Discoverable by default
 
 
 ## [v3.6.6] - 2020-07-06
