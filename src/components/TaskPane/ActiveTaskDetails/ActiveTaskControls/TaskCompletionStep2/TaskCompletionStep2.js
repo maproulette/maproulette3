@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
+import { TaskReviewStatus } from '../../../../../services/Task/TaskReview/TaskReviewStatus'
 import TaskFixedControl from '../TaskFixedControl/TaskFixedControl'
 import TaskTooHardControl from '../TaskTooHardControl/TaskTooHardControl'
 import TaskAlreadyFixedControl from '../TaskAlreadyFixedControl/TaskAlreadyFixedControl'
@@ -25,23 +26,33 @@ export default class TaskCompletionStep2 extends Component {
   }
 
   render() {
+    let complete = this.props.complete
+    if (this.props.needsRevised) {
+      complete = (status) => this.props.complete(status, TaskReviewStatus.needed)
+    }
+
     return (
       <div>
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           {this.props.allowedProgressions.has(TaskStatus.fixed) &&
-            <TaskFixedControl {...this.props} />
+            <TaskFixedControl {...this.props} complete={complete} />
           }
 
           {this.props.allowedProgressions.has(TaskStatus.tooHard) &&
-            <TaskTooHardControl {...this.props} />
+            <TaskTooHardControl {...this.props} complete={complete} />
           }
 
           {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
-            <TaskAlreadyFixedControl {...this.props} />
+            <TaskAlreadyFixedControl {...this.props} complete={complete} />
+          }
+
+          {this.props.allowedProgressions.has(TaskStatus.falsePositive) &&
+            <TaskFalsePositiveControl {...this.props} complete={complete} />
           }
 
           {(this.props.allowedProgressions.has(TaskStatus.skipped) ||
             this.props.allowedProgressions.has(TaskStatus.falsePositive)) &&
+            !this.props.needsRevised &&
            <Dropdown
              className="mr-dropdown--fixed mr-w-full"
              dropdownButton={dropdown =>

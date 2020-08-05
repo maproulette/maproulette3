@@ -391,18 +391,18 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria = nul
 /**
  *
  */
-export const completeReview = function(taskId, taskReviewStatus, comment, tags) {
+export const completeReview = function(taskId, taskReviewStatus, comment, tags, newTaskStatus) {
   return function(dispatch) {
-    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags)
+    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags, newTaskStatus)
   }
 }
 
-export const completeBundleReview = function(bundleId, taskReviewStatus, comment, tags) {
+export const completeBundleReview = function(bundleId, taskReviewStatus, comment, tags, newTaskStatus) {
   return function(dispatch) {
     return new Endpoint(api.tasks.bundled.updateReviewStatus, {
       schema: taskBundleSchema(),
       variables: {bundleId, status: taskReviewStatus},
-      params:{comment, tags},
+      params:{comment, tags, newTaskStatus},
     }).execute().catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
@@ -452,7 +452,7 @@ export const fetchReviewChallenges = function(reviewTasksType,
   }
 }
 
-const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment, tags) {
+const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment, tags, newTaskStatus) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
   dispatch(receiveTasks({
@@ -468,7 +468,7 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment, ta
     api.task.updateReviewStatus,
     {schema: taskSchema(),
      variables: {id: taskId, status: newStatus},
-     params:{comment: comment, tags: tags}}
+     params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus}}
   ).execute().catch(error => {
     if (isSecurityError(error)) {
       dispatch(ensureUserLoggedIn()).then(() =>
