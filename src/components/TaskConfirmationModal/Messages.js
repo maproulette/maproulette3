@@ -144,4 +144,19 @@ export default defineMessages({
     defaultMessage: "Mapper:",
   },
 
+  instructionsLabel: {
+    id: 'TaskConfirmationModal.instructions.label',
+    defaultMessage: "Task Instructions",
+  },
+
+  viewInstructions: {
+    id: 'TaskConfirmationModal.instructions.header',
+    defaultMessage: "View Task Instructions",
+  },
+
+  closeInstructionsLabel: {
+    id: 'TaskConfirmationModal.closeInstructions.label',
+    defaultMessage: "Hide Instructions",
+  },
+
 })

@@ -73,4 +73,9 @@ export default defineMessages({
     id: "Admin.Project.controls.export.label",
     defaultMessage: "Export CSV",
   },
+
+  exportMapperReviewCSVLabel: {
+    id: "Admin.Project.controls.exportReviewCSV.label",
+    defaultMessage: "Export Mapper Review CSV",
+  },
 })

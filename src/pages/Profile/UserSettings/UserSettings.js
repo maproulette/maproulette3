@@ -14,7 +14,7 @@ import _isFinite from 'lodash/isFinite'
 import _debounce from 'lodash/debounce'
 import { basemapLayerSources }
        from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
-import { NotificationType, keysByNotificationType }
+import { NotificationSubscriptionType, keysByNotificationType }
        from '../../../services/Notification/NotificationType/NotificationType'
 import AsEditableUser from '../../../interactions/User/AsEditableUser'
 import WithStatus from '../../../components/HOCs/WithStatus/WithStatus'
@@ -89,7 +89,7 @@ class UserSettings extends Component {
     }
 
     const subscriptionsArray = []
-    _each(NotificationType, (constantValue, key) => {
+    _each(NotificationSubscriptionType, (constantValue, key) => {
       subscriptionsArray[constantValue] = notificationsData.notificationSubscriptions[key]
     })
 

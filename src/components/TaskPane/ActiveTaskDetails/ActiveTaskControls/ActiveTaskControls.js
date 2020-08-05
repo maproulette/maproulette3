@@ -16,9 +16,13 @@ import { allowedStatusProgressions, isCompletionStatus,
 import { TaskReviewStatus } from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskReviewLoadMethod } from '../../../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { Editor } from '../../../../services/Editor/Editor'
+import { OPEN_STREET_MAP } from '../../../../services/VisibleLayer/LayerSources'
 import AsCooperativeWork from '../../../../interactions/Task/AsCooperativeWork'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
+import WithChallengePreferences
+       from '../../../HOCs/WithChallengePreferences/WithChallengePreferences'
+import WithVisibleLayer from '../../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
 import WithTaskTags from '../../../HOCs/WithTaskTags/WithTaskTags'
 import WithKeyboardShortcuts
@@ -90,7 +94,10 @@ export class ActiveTaskControls extends Component {
       value,
       this.props.task,
       this.props.mapBounds,
-      {photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null},
+      {
+        imagery: this.props.source.id !== OPEN_STREET_MAP ? this.props.source : undefined,
+        photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null,
+      },
       this.props.taskBundle
     )
   }
@@ -381,10 +388,14 @@ ActiveTaskControls.defaultProps = {
 }
 
 export default WithSearch(
-  WithTaskTags(
-    WithTaskReview(
-      WithKeyboardShortcuts(
-        injectIntl(ActiveTaskControls)
+  WithChallengePreferences(
+    WithVisibleLayer(
+      WithTaskTags(
+        WithTaskReview(
+          WithKeyboardShortcuts(
+            injectIntl(ActiveTaskControls)
+          )
+        )
       )
     )
   ),

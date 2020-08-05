@@ -130,7 +130,7 @@ export const buildLinkToMapperExportCSV = function(criteria) {
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/mappers/export?${queryString.stringify(queryFilters)}`
 }
 
-const generateReviewSearch = function(criteria, reviewTasksType = ReviewTasksType.allReviewedTasks, userId)  {
+const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTasksType.allReviewedTasks, userId)  {
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
                                                        _get(criteria, 'savedChallengesOnly'),

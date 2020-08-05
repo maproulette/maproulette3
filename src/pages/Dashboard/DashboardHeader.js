@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import AsUserActivity from '../../interactions/Activity/AsUserActivity'
+import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import messages from './Messages'
 
 const NEWBIE_POINTS_THRESHOLD = 49
@@ -26,34 +27,37 @@ const DashboardHeader = props => {
                 values={{username: props.user.osmProfile.displayName}}
               />
             </h2>
-            <p>
-              <FormattedMessage {...messages.completionPrompt} />
-              <span className="mr-ml-1 mr-font-bold mr-text-pink">
-                <FormattedMessage
-                  {...messages.completedTasks}
-                  values={{completedTasks}}
-                />
-              </span>
-              <FormattedMessage {...messages.pointsPrompt} />
-              <span className="mr-ml-1 mr-font-bold mr-text-pink">
-                <FormattedMessage
-                  {...messages.points}
-                  values={{points: userScore}}
-                />
-              </span>
-              <FormattedMessage {...messages.rankPrompt} />
-              <span className="mr-mx-1 mr-font-bold mr-text-pink">
-                <FormattedMessage
-                  {...messages.rank}
-                  values={{rank}}
-                />
-              </span>
-              <FormattedMessage
-                {...messages.globally}
-              /> <FormattedMessage
-                {...(userScore > NEWBIE_POINTS_THRESHOLD ? messages.encouragement : messages.getStarted)}
-              />
-            </p>
+            {_isFinite(userScore) ?
+             <p>
+               <FormattedMessage {...messages.completionPrompt} />
+               <span className="mr-ml-1 mr-font-bold mr-text-pink">
+                 <FormattedMessage
+                   {...messages.completedTasks}
+                   values={{completedTasks}}
+                 />
+               </span>
+               <FormattedMessage {...messages.pointsPrompt} />
+               <span className="mr-ml-1 mr-font-bold mr-text-pink">
+                 <FormattedMessage
+                   {...messages.points}
+                   values={{points: userScore}}
+                 />
+               </span>
+               <FormattedMessage {...messages.rankPrompt} />
+               <span className="mr-mx-1 mr-font-bold mr-text-pink">
+                 <FormattedMessage
+                   {...messages.rank}
+                   values={{rank}}
+                 />
+               </span>
+               <FormattedMessage
+                 {...messages.globally}
+               /> <FormattedMessage
+                 {...(userScore > NEWBIE_POINTS_THRESHOLD ? messages.encouragement : messages.getStarted)}
+               />
+             </p> :
+             <BusySpinner />
+            }
           </div>
           <div className="mr-bg-home mr-w-1/3 mr-h-64 mr-absolute mr-right-0 mr-top-0 mr--mt-16 mr-mr-24" />
         </div>

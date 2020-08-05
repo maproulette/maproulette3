@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import _noop from 'lodash/noop'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import WithLeaderboard
@@ -11,6 +12,8 @@ import PastDurationSelector
 import { CURRENT_MONTH, CUSTOM_RANGE }
        from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
+import { USER_TYPE_MAPPER, USER_TYPE_REVIEWER }
+       from '../../../../../services/Leaderboard/Leaderboard'
 import messages from './Messages'
 
 const INITIAL_MONTHS_PAST = 1
@@ -28,8 +31,19 @@ const descriptor = {
 }
 
 export default class LeaderboardWidget extends Component {
+  setUserType = userType => {
+    if (this.props.widgetConfiguration.userType !== userType) {
+      this.props.setUserType(userType,
+        this.props.widgetConfiguration.monthsPast,
+        this.props.widgetConfiguration.startDate,
+        this.props.widgetConfiguration.endDate)
+
+      this.props.updateWidgetConfiguration({userType})
+    }
+  }
+
   setMonthsPast = monthsPast => {
-    this.props.setMonthsPast(monthsPast, true)
+    this.props.setMonthsPast(monthsPast, true, this.props.widgetConfiguration.userType)
 
     if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
       this.props.updateWidgetConfiguration({monthsPast, startDate: null, endDate: null})
@@ -37,7 +51,7 @@ export default class LeaderboardWidget extends Component {
   }
 
   setDateRange = (startDate, endDate) => {
-    this.props.setDateRange(startDate, endDate)
+    this.props.setDateRange(startDate, endDate, this.props.widgetConfiguration.userType)
 
     if (this.props.widgetConfiguration.startDate !== startDate ||
         this.props.widgetConfiguration.endDate !== endDate) {
@@ -48,12 +62,16 @@ export default class LeaderboardWidget extends Component {
 
   componentDidMount() {
     if (this.props.widgetConfiguration.monthsPast !== CUSTOM_RANGE) {
-      this.props.setMonthsPast(this.props.widgetConfiguration.monthsPast, true)
+      this.props.setMonthsPast(this.props.widgetConfiguration.monthsPast,
+                               true,
+                               this.props.widgetConfiguration.userType)
     }
     else if (this.props.widgetConfiguration.startDate &&
              this.props.widgetConfiguration.endDate) {
       this.props.setDateRange(this.props.widgetConfiguration.startDate,
-                              this.props.widgetConfiguration.endDate)
+                              this.props.widgetConfiguration.endDate,
+                              true,
+                              this.props.widgetConfiguration.userType)
     }
   }
 
@@ -61,6 +79,7 @@ export default class LeaderboardWidget extends Component {
     const monthsPast = this.props.widgetConfiguration.monthsPast
     const startDate = this.props.widgetConfiguration.startDate
     const endDate = this.props.widgetConfiguration.endDate
+    const userType = this.props.widgetConfiguration.userType || USER_TYPE_MAPPER
 
     const selector =
       <PastDurationSelector
@@ -73,14 +92,45 @@ export default class LeaderboardWidget extends Component {
         customEndDate={endDate ? new Date(endDate) : null}
       />
 
+    const chooseUserType =
+      <div className="mr-text-xs mr--mb-5">
+        <span>
+          <input
+            type="radio"
+            name="showByMappers"
+            className="mr-radio mr-mr-1"
+            checked={userType === USER_TYPE_MAPPER}
+            onClick={() => this.setUserType(USER_TYPE_MAPPER)}
+            onChange={_noop}
+          />
+          <label className="mr-ml-1 mr-mr-4">
+            <FormattedMessage {...messages[USER_TYPE_MAPPER]}/>
+          </label>
+        </span>
+        <span>
+          <input
+            type="radio"
+            name="showByReviewers"
+            className="mr-radio mr-mr-1"
+            checked={userType === USER_TYPE_REVIEWER}
+            onClick={() => this.setUserType(USER_TYPE_REVIEWER)}
+            onChange={_noop}
+          />
+          <label className="mr-ml-1 mr-mr-4">
+            <FormattedMessage {...messages[USER_TYPE_REVIEWER]}/>
+          </label>
+        </span>
+      </div>
+
     return (
       <QuickWidget
         {...this.props}
         className=""
         widgetTitle={<FormattedMessage {...messages.title} />}
-        rightHeaderControls={<div className="mr-my-2">{selector}</div>}
+        rightHeaderControls={<div className="mr-my-2 mr-flex mr-justify-start">{selector}</div>}
       >
-        <ChallengeOwnerLeaderboard {...this.props} />
+        {chooseUserType}
+        <ChallengeOwnerLeaderboard {...this.props} userType={userType} />
       </QuickWidget>
     )
   }

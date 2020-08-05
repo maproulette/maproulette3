@@ -20,8 +20,10 @@ export default class BusySpinner extends Component {
         <SvgSymbol
           sym="spinner-icon"
           className={classNames(
-            this.props.big ? "mr-w-10 mr-h-10" : "mr-w-5 mr-h-5",
             {
+              "mr-w-5 mr-h-5": !this.props.big && !this.props.xlarge,
+              "mr-w-10 mr-h-10": this.props.big,
+              "mr-w-16 mr-h-16": this.props.xlarge,
               "mr-fill-green-lighter": !this.props.lightMode && !this.props.mapMode,
               "mr-fill-green-light": this.props.lightMode,
               "mr-fill-grey": this.props.mapMode,

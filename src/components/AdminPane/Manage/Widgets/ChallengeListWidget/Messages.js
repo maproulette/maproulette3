@@ -29,6 +29,11 @@ export default defineMessages({
     defaultMessage: "Export CSV",
   },
 
+  exportMapperReviewCSVLabel: {
+    id: "Admin.manageProjectChallenges.controls.exportReviewCSV.label",
+    defaultMessage: "Export Mapper Review CSV",
+  },
+
   timezoneLabel: {
     id: "Admin.manageProjectChallenges.controls.timezone.label",
     defaultMessage: "Timezone",

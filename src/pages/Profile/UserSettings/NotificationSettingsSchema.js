@@ -1,7 +1,7 @@
 import React from 'react'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
-import { NotificationType, notificationTypeLabels }
+import { NotificationSubscriptionType, notificationTypeLabels }
        from '../../../services/Notification/NotificationType/NotificationType'
 import { SubscriptionType, subscriptionTypeLabels }
        from '../../../services/Notification/NotificationSubscription/NotificationSubscription'
@@ -30,7 +30,7 @@ export const jsSchema = (intl) => {
       notificationSubscriptions: {
         title: intl.formatMessage(messages.notificationSubscriptionsLabel),
         type: "array",
-        items: _map(NotificationType, (type, name) => ({
+        items: _map(NotificationSubscriptionType, (type, name) => ({
           title: `${localizedNotificationLabels[`${name}Long`] || localizedNotificationLabels[name]} ${intl.formatMessage(messages.notificationLabel)}`,
           type: "number",
           enum: _values(SubscriptionType),
