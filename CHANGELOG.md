@@ -8,6 +8,11 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [v3.6.9] - 2020-08-06
+### Fixed
+- Tasks sometimes don't open in JOSM if editor imagery is disabled
+
+
 ## [v3.6.8] - 2020-08-05
 ### Added
 - Updated community translations (huge thanks to all the translators!)
