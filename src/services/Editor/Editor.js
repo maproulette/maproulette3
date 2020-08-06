@@ -140,7 +140,7 @@ export const editTask = function(editor, task, mapBounds, options, taskBundle) {
         }
       }
 
-      if (options.imagery) {
+      if (options && options.imagery) {
         josmCommands.push(() => sendJOSMCommand(josmImageryURI(options.imagery)))
       }
 
