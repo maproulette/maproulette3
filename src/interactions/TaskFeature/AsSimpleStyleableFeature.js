@@ -53,63 +53,19 @@ export class AsSimpleStyleableFeature {
    * present on this feature
    */
   styleLeafletLayer(layer) {
-    if (this.conditionalStyles) {
-      this.styleLeafletLayerConditionally(layer, this.conditionalStyles)
-    }
-    else if (this.properties) {
-      this.styleLeafletLayerWithStyles(layer, this.simplestyleFeatureProperties(), false)
-    }
-  }
-
-  /**
-   * Apply the given styles conditionally based on whether this feature matches
-   * the filters associated with each style. All matching styles (if any) are
-   * combined and applied together on top of any normal styling from
-   * simplestyle properties on this feature
-   */
-  styleLeafletLayerConditionally(layer, conditionalStyles) {
-    const filterableFeature = AsFilterableFeature(this)
-    const matchingStyles = _filter(conditionalStyles, style =>
-      filterableFeature.matchesPropertyFilter(style.propertySearch)
-    )
-
-    if (matchingStyles.length > 0) {
-      // flatten all matching styles into a single object
-      const styleObject = _fromPairs(_flatten(_map(matchingStyles, match =>
-        _map(match.styles, style => [style.styleName, style.styleValue])
-      )))
-
-      this.styleLeafletLayerWithStyles(layer, styleObject)
-    }
-    else {
-      this.styleLeafletLayerWithStyles(layer)
-    }
+    this.styleLeafletLayerWithStyles(layer, this.getFinalLayerStyles(layer))
   }
 
   /**
    * Styles the given Leaflet layer using the given simplestyles object of
-   * simplestyle property names and desired values. If
-   * mergeWithFeatureProperties is true (the default) then all simplestyle
-   * properties specified on the feature will also be used, but overriden by
-   * given styles where duplicated
+   * simplestyle property names and desired values
    */
-  styleLeafletLayerWithStyles(layer, simplestyles, mergeWithFeatureProperties=true) {
-    const styles =
-      mergeWithFeatureProperties ?
-      _merge({}, this.simplestyleFeatureProperties(), simplestyles) :
-      simplestyles
-
+  styleLeafletLayerWithStyles(layer, simplestyles) {
     if (getType(layer.feature) === 'Point') {
-      const supportedStyles =
-        _intersection(_keys(styles), supportedSimplestylePointProperties)
-
-      this.styleLeafletMarkerLayer(layer, _pick(styles, supportedStyles))
+      this.styleLeafletMarkerLayer(layer, simplestyles)
     }
     else {
-      const supportedStyles =
-        _intersection(_keys(styles), supportedSimplestyleLineProperties)
-
-      this.styleLeafletPathLayer(layer, _pick(styles, supportedStyles))
+      this.styleLeafletPathLayer(layer, simplestyles)
     }
   }
 
@@ -194,6 +150,67 @@ export class AsSimpleStyleableFeature {
       [simplestyleProperty, this.properties[simplestyleProperty]] :
       null
     ))))
+  }
+
+  /**
+   * Generates an object containing the final determined styles for the given
+   * layer (taking the layer type into account), or for this feature more
+   * broadly if no layer is specified
+   */
+  getFinalLayerStyles(layer) {
+    if (this.conditionalStyles) {
+      return this.getConditionalStyles(layer, this.conditionalStyles)
+    }
+    else if (this.properties) {
+      return this.getStyles(layer, this.simplestyleFeatureProperties(), false)
+    }
+    else {
+      return {}
+    }
+  }
+
+  /**
+   * Apply the given styles conditionally based on whether this feature matches
+   * the filters associated with each style. All matching styles (if any) are
+   * combined and applied together on top of any normal styling from
+   * simplestyle properties on this feature
+   */
+  getConditionalStyles(layer, conditionalStyles) {
+    const filterableFeature = AsFilterableFeature(this)
+    const matchingStyles = _filter(conditionalStyles, style =>
+      filterableFeature.matchesPropertyFilter(style.propertySearch)
+    )
+
+    if (matchingStyles.length > 0) {
+      // flatten all matching styles into a single object
+      const styleObject = _fromPairs(_flatten(_map(matchingStyles, match =>
+        _map(match.styles, style => [style.styleName, style.styleValue])
+      )))
+
+      return this.getStyles(layer, styleObject)
+    }
+    else {
+      return this.getStyles(layer)
+    }
+  }
+
+  getStyles(layer, simplestyles, mergeWithFeatureProperties=true) {
+    const styles =
+      mergeWithFeatureProperties ?
+      _merge({}, this.simplestyleFeatureProperties(), simplestyles) :
+      simplestyles
+
+    // If we have a layer, only return styles applicable to that layer's type
+    if (!layer) {
+      return styles
+    }
+
+    const supportedStyles =
+      getType(layer.feature) === 'Point' ?
+      _intersection(_keys(styles), supportedSimplestylePointProperties) :
+      _intersection(_keys(styles), supportedSimplestyleLineProperties)
+
+    return _pick(styles, supportedStyles)
   }
 }
 
