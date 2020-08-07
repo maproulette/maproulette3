@@ -144,7 +144,11 @@ export default class MarkdownTemplate extends Component {
       this.markdownContent(this.props.content)
     }
 
-    if (!_isEqual(this.props.completionResponses, prevProps.completionResponses)) {
+    else if (!_isEqual(this.props.completionResponses, prevProps.completionResponses)) {
+      this.markdownContent(this.props.content)
+    }
+
+    else if (!_isEqual(this.props.properties, prevProps.properties)) {
       this.markdownContent(this.props.content)
     }
   }
