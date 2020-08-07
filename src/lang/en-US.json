@@ -1455,6 +1455,7 @@
   "Widgets.TaskMoreOptionsWidget.title": "More Options",
   "Widgets.TaskNearbyMap.currentTaskTooltip": "Current Task",
   "Widgets.TaskNearbyMap.noTasksAvailable.label": "No nearby tasks are available.",
+  "Widgets.TaskNearbyMap.tooltip.loadMoreTasks.control": "Load More Tasks",
   "Widgets.TaskNearbyMap.tooltip.priorityLabel": "Priority: ",
   "Widgets.TaskNearbyMap.tooltip.statusLabel": "Status: ",
   "Widgets.TaskPropertiesWidget.label": "Task Properties",

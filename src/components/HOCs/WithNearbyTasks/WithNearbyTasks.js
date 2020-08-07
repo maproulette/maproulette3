@@ -18,6 +18,9 @@ export const WithNearbyTasks = function(WrappedComponent) {
   class _WithNearbyTasks extends Component {
     state = {
       nearbyTasks: null,
+      taskLimit: 5,
+      hasMoreToLoad: true,
+      lastLoadLength: 0,
     }
 
     /**
@@ -68,8 +71,11 @@ export const WithNearbyTasks = function(WrappedComponent) {
 
       if (_isFinite(challengeId)) {
         this.setState({nearbyTasks: {loading: true}})
-        props.fetchNearbyTasks(challengeId, isVirtual, props.taskId, excludeSelfLockedTasks).then(nearbyTasks => {
-          this.setState({nearbyTasks: {...nearbyTasks, nearTaskId: props.taskId, loading: false}})
+        props.fetchNearbyTasks(challengeId, isVirtual, props.taskId, excludeSelfLockedTasks, this.state.taskLimit).then(nearbyTasks => {
+          const tasksLength = nearbyTasks.tasks.length
+          this.setState({nearbyTasks: {...nearbyTasks, nearTaskId: props.taskId,
+                         loading: false}, lastLoadLength: tasksLength,
+                         hasMoreToLoad: (this.state.lastLoadLength !== tasksLength)})
         })
       }
     }
@@ -78,9 +84,12 @@ export const WithNearbyTasks = function(WrappedComponent) {
       this.updateNearbyTasks(this.props)
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
       if (this.state.nearbyTasks && !this.state.nearbyTasks.loading &&
           this.props.taskId !== this.state.nearbyTasks.nearTaskId) {
+        this.updateNearbyTasks(this.props)
+      }
+      else if (this.state.taskLimit !== prevState.taskLimit) {
         this.updateNearbyTasks(this.props)
       }
     }
@@ -90,6 +99,8 @@ export const WithNearbyTasks = function(WrappedComponent) {
         <WrappedComponent
           {..._omit(this.props, ['fetchNearbyTasks'])}
           nearbyTasks={this.state.nearbyTasks}
+          increaseTaskLimit={() => this.setState({taskLimit: (this.state.taskLimit + 5)})}
+          hasMoreToLoad={this.state.hasMoreToLoad}
         />
       )
     }
@@ -107,4 +118,3 @@ export const mapDispatchToProps =
 
 export default WrappedComponent =>
   connect(null, mapDispatchToProps)(WithNearbyTasks(WrappedComponent))
-

@@ -23,4 +23,9 @@ export default defineMessages({
     id: "Widgets.TaskNearbyMap.tooltip.statusLabel",
     defaultMessage: "Status: ",
   },
+
+  loadMoreTasks: {
+    id: "Widgets.TaskNearbyMap.tooltip.loadMoreTasks.control",
+    defaultMessage: "Load More Tasks",
+  },
 })
