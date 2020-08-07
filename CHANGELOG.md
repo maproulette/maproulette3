@@ -8,9 +8,14 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [v3.6.10] - 2020-08-07
+### Fixed
+- Mustache tags in Task Instructions showing stale values (#1354)
+
+
 ## [v3.6.9] - 2020-08-06
 ### Fixed
-- Tasks sometimes don't open in JOSM if editor imagery is disabled
+- Unable to open tasks in JOSM during task review (#1353)
 
 
 ## [v3.6.8] - 2020-08-05
