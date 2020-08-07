@@ -135,7 +135,8 @@ export class ActiveTaskControls extends Component {
       this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
                                         this.state.comment, this.state.tags,
                                         this.state.revisionLoadBy, this.props.history,
-                                        this.props.taskBundle)
+                                        this.props.taskBundle, this.state.requestedNextTask,
+                                        taskStatus)
     }
     else {
       this.props.completeTask(this.props.task, this.props.task.parent.id,
@@ -247,7 +248,7 @@ export class ActiveTaskControls extends Component {
     }
     else {
       const allowedProgressions =
-        allowedStatusProgressions(this.props.task.status)
+        allowedStatusProgressions(this.props.task.status, false, needsRevised)
       const isComplete = isCompletionStatus(this.props.task.status)
       const isFinal = isFinalStatus(this.props.task.status)
 

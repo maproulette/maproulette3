@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
+import { TaskReviewStatus } from '../../../../../services/Task/TaskReview/TaskReviewStatus'
 import UserEditorSelector
        from '../../../../UserEditorSelector/UserEditorSelector'
 import Dropdown from '../../../../Dropdown/Dropdown'
@@ -44,7 +45,6 @@ export default class TaskCompletionStep1 extends Component {
           <div className="mr-text-white mr-text-md mr-mt-4">
             <div>
               <FormattedMessage {...messages.revisionNeeded} />
-
             </div>
           </div>
         }
@@ -59,11 +59,17 @@ export default class TaskCompletionStep1 extends Component {
           }
 
           {this.props.allowedProgressions.has(TaskStatus.falsePositive) &&
+            !this.props.needsRevised &&
            <TaskFalsePositiveControl {...this.props} />
           }
 
           {this.props.allowedProgressions.has(TaskStatus.skipped) &&
+            !this.props.needsRevised &&
            <TaskSkipControl {...this.props} />
+          }
+
+          {this.props.needsRevised &&
+            <TaskRevisedControl {...this.props} className="" />
           }
 
           {(this.props.allowedProgressions.has(TaskStatus.fixed) ||
@@ -72,16 +78,16 @@ export default class TaskCompletionStep1 extends Component {
            <Dropdown
              className="mr-dropdown--fixed mr-w-full"
              dropdownButton={dropdown =>
-               <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
+               <MoreOptionsButton
+                  toggleDropdownVisible={dropdown.toggleDropdownVisible}
+                  label={this.props.needsRevised ?
+                    <FormattedMessage {...messages.changeStatusOptions} /> :
+                    <FormattedMessage {...messages.otherOptions} /> } />
              }
              dropdownContent={dropdown =>
                <ListMoreOptionsItems {...this.props} />
              }
            />
-          }
-
-          {this.props.needsRevised &&
-            <TaskRevisedControl {...this.props} className="" />
           }
         </div>
       </div>
@@ -95,27 +101,37 @@ const MoreOptionsButton = function(props) {
       className="mr-dropdown__button mr-button mr-text-green-lighter mr-w-full"
       onClick={props.toggleDropdownVisible}
     >
-      Other&hellip;
+      {props.label}&hellip;
     </button>
   )
 }
 
 const ListMoreOptionsItems = function(props) {
+  let complete = props.complete
+  if (props.needsRevised) {
+    complete = (status) => props.complete(status, TaskReviewStatus.needed)
+  }
+
   return (
     <ol className="mr-list-dropdown">
+      {props.allowedProgressions.has(TaskStatus.falsePositive) && props.needsRevised &&
+       <li>
+         <TaskFalsePositiveControl {...props} complete={complete} asLink />
+       </li>
+      }
       {props.allowedProgressions.has(TaskStatus.fixed) &&
        <li>
-         <TaskFixedControl {...props} asLink />
+         <TaskFixedControl {...props} complete={complete} asLink />
        </li>
       }
       {props.allowedProgressions.has(TaskStatus.tooHard) &&
        <li>
-         <TaskTooHardControl {...props} asLink />
+         <TaskTooHardControl {...props} complete={complete} asLink />
        </li>
       }
       {props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
        <li>
-         <TaskAlreadyFixedControl {...props} asLink />
+         <TaskAlreadyFixedControl {...props} complete={complete} asLink />
        </li>
       }
     </ol>

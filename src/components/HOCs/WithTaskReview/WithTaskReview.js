@@ -25,10 +25,10 @@ const WithTaskReview = WrappedComponent =>
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateTaskReviewStatus: (task, status, comment, tags, loadBy, url,
-      taskBundle, requestedNextTask) => {
+      taskBundle, requestedNextTask, newTaskStatus) => {
         const doReview = taskBundle ?
-          completeBundleReview(taskBundle.bundleId, status, comment, tags) :
-          completeReview(task.id, status, comment, tags)
+          completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus) :
+          completeReview(task.id, status, comment, tags, newTaskStatus)
 
         dispatch(doReview).then(() => {
           if (loadBy === TaskReviewLoadMethod.nearby && requestedNextTask) {

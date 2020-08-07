@@ -1145,6 +1145,8 @@
   "Task.controls.revised.tooltip": "Revision Complete",
   "Task.controls.skip.label": "Skip",
   "Task.controls.skip.tooltip": "Skip Task",
+  "Task.controls.step1.changeStatusOptions": "Change Status",
+  "Task.controls.step1.otherOptions": "Other",
   "Task.controls.step1.revisionNeeded": "This task needs revision. Be sure to check comments for any details.",
   "Task.controls.tooHard.label": "Too hard / Can’t see",
   "Task.controls.tooHard.tooltip": "Too hard / Can’t see",
