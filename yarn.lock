@@ -2299,12 +2299,20 @@
     "@turf/helpers" "6.x"
     "@turf/meta" "6.x"
 
-"@turf/bearing@6.x":
+"@turf/bearing@6.x", "@turf/bearing@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@turf/bearing/-/bearing-6.0.1.tgz#8da5d17092e571f170cde7bfb2e5b0d74923c92d"
   dependencies:
     "@turf/helpers" "6.x"
     "@turf/invariant" "6.x"
+
+"@turf/bearing@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/bearing/-/bearing-5.1.5.tgz#7a0b790136c4ef4797f0246305d45cbe2d27b3f7"
+  integrity sha1-egt5ATbE70eX8CRjBdRcvi0ns/c=
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+    "@turf/invariant" "^5.1.5"
 
 "@turf/boolean-disjoint@^6.0.2":
   version "6.0.2"
@@ -2344,6 +2352,14 @@
     "@turf/helpers" "6.x"
     "@turf/invariant" "6.x"
 
+"@turf/destination@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/destination/-/destination-5.1.5.tgz#ed35381bdce83bbddcbd07a2e2bce2bddffbcc26"
+  integrity sha1-7TU4G9zoO73cvQei4rzivd/7zCY=
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+    "@turf/invariant" "^5.1.5"
+
 "@turf/distance@6.x", "@turf/distance@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@turf/distance/-/distance-6.0.1.tgz#0761f28784286e7865a427c4e7e3593569c2dea8"
@@ -2351,15 +2367,35 @@
     "@turf/helpers" "6.x"
     "@turf/invariant" "6.x"
 
-"@turf/helpers@6.x":
+"@turf/distance@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/distance/-/distance-5.1.5.tgz#39cf18204bbf87587d707e609a60118909156409"
+  integrity sha1-Oc8YIEu/h1h9cH5gmmARiQkVZAk=
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+    "@turf/invariant" "^5.1.5"
+
+"@turf/helpers@6.x", "@turf/helpers@^6.1.4":
   version "6.1.4"
   resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-6.1.4.tgz#d6fd7ebe6782dd9c87dca5559bda5c48ae4c3836"
+
+"@turf/helpers@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-5.1.5.tgz#153405227ab933d004a5bb9641a9ed999fcbe0cf"
+  integrity sha1-FTQFInq5M9AEpbuWQantmZ/L4M8=
 
 "@turf/invariant@6.x", "@turf/invariant@^6.1.2":
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/@turf/invariant/-/invariant-6.1.2.tgz#6013ed6219f9ac2edada9b31e1dfa5918eb0a2f7"
   dependencies:
     "@turf/helpers" "6.x"
+
+"@turf/invariant@^5.1.5":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/invariant/-/invariant-5.2.0.tgz#f0150ff7290b38577b73d088b7932c1ee0aa90a7"
+  integrity sha1-8BUP9ykLOFd7c9CIt5MsHuCqkKc=
+  dependencies:
+    "@turf/helpers" "^5.1.5"
 
 "@turf/line-intersect@6.x":
   version "6.0.2"
@@ -2379,11 +2415,21 @@
     "@turf/invariant" "6.x"
     "@turf/meta" "6.x"
 
-"@turf/meta@6.x":
+"@turf/meta@6.x", "@turf/meta@^6.0.2":
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-6.0.2.tgz#eb92951126d24a613ac1b7b99d733fcc20fd30cf"
   dependencies:
     "@turf/helpers" "6.x"
+
+"@turf/midpoint@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/midpoint/-/midpoint-5.1.5.tgz#e261f6b2b0ea8124cceff552a262dd465c9d05f0"
+  integrity sha1-4mH2srDqgSTM7/VSomLdRlydBfA=
+  dependencies:
+    "@turf/bearing" "^5.1.5"
+    "@turf/destination" "^5.1.5"
+    "@turf/distance" "^5.1.5"
+    "@turf/helpers" "^5.1.5"
 
 "@turf/nearest-point-on-line@^6.0.2":
   version "6.0.2"
@@ -8109,9 +8155,9 @@ leaflet-lasso@^2.1.0:
   dependencies:
     "@terraformer/spatial" "^2.0.7"
 
-"leaflet-vectoricon@https://github.com/nrotstan/Leaflet.VectorIcon.git#with-viewbox":
+"leaflet-vectoricon@https://github.com/nrotstan/Leaflet.VectorIcon.git#with-transforms":
   version "0.2.0"
-  resolved "https://github.com/nrotstan/Leaflet.VectorIcon.git#d68290932dcb0fb05c04bce06d1cd3e856ce59b2"
+  resolved "https://github.com/nrotstan/Leaflet.VectorIcon.git#beaa664f96e05c115e8e50d7128be6bfaca9d055"
 
 leaflet.markercluster@^1.4.1:
   version "1.4.1"
