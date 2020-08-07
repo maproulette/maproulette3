@@ -54,6 +54,7 @@ export class ActiveTaskControls extends Component {
     comment: "",
     tags: null,
     revisionLoadBy: TaskReviewLoadMethod.all,
+    doneLoadByFromHistory: false,
   }
 
   setComment = comment => this.setState({comment})
@@ -179,6 +180,7 @@ export class ActiveTaskControls extends Component {
       confirmingStatus: null,
       requestedNextTask: null,
       comment: "", tags: null,
+      doneLoadByFromHistory: false
     })
   }
 
@@ -188,15 +190,9 @@ export class ActiveTaskControls extends Component {
                         this.state.requestedNextTask)
   }
 
-  componentDidUpdate(nextProps) {
-    // Let's set default revisionLoadBy to inbox if we are coming from inbox
-    if (_get(this.props.history, 'location.state.fromInbox') &&
-        this.state.revisionLoadBy !== TaskReviewLoadMethod.inbox) {
-      this.setState({revisionLoadBy: TaskReviewLoadMethod.inbox})
-    }
-
-    if (_get(this.props, 'task.id') !== _get(nextProps, 'task.id')) {
-      this.resetConfirmation()
+  componentDidUpdate(prevProps, prevState) {
+    if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
+      return this.resetConfirmation()
     }
 
     if (this.state.tags === null && _get(this.props, 'task.tags')) {
@@ -211,7 +207,16 @@ export class ActiveTaskControls extends Component {
       })
       const tags = _map(unfilteredTags, tag => (tag.name ? tag.name : tag)).join(', ')
 
-      this.setState({tags: tags})
+      return this.setState({tags: tags})
+    }
+
+    // Let's set default revisionLoadBy to inbox if we are coming from inbox
+    // and not changing revisionLoadBy state
+    if (_get(this.props.history, 'location.state.fromInbox') &&
+        this.state.revisionLoadBy !== TaskReviewLoadMethod.inbox &&
+        !this.state.doneLoadByFromHistory) {
+      return this.setState({revisionLoadBy: TaskReviewLoadMethod.inbox,
+                            doneLoadByFromHistory: true})
     }
   }
 
@@ -334,7 +339,7 @@ export class ActiveTaskControls extends Component {
                {...this.props}
                className="mr-mt-1"
                nextTask={this.next}
-               loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
+               loadBy={this.props.taskLoadBy}
                chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
                                         this.chooseLoadBy(load)}
                chooseNextTask={this.chooseNextTask}

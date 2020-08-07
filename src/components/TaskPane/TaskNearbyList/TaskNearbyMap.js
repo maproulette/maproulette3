@@ -163,7 +163,7 @@ export class TaskNearbyMap extends Component {
         <LayerToggle {...this.props} />
         <EnhancedMap
           onClick={this.props.clearNextTask}
-          center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
+          center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={19}
           setInitialBounds={false}
           zoomControl={false} animate={true} worldCopyJump={true}
           features={bounding}
@@ -183,6 +183,15 @@ export class TaskNearbyMap extends Component {
            </MarkerClusterGroup>
           }
         </EnhancedMap>
+        {this.props.hasMoreToLoad &&
+          <div className="mr-absolute mr-bottom-0 mr-mb-8 mr-w-full mr-text-center">
+            <button
+              className="mr-button mr-button--small mr-button--blue-fill"
+              onClick={() => this.props.increaseTaskLimit()}>
+                <FormattedMessage {...messages.loadMoreTasks} />
+            </button>
+          </div>
+        }
 
         {!!this.props.tasksLoading && <BusySpinner mapMode big />}
       </div>

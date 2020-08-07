@@ -17,6 +17,9 @@ export const WithNearbyReviewTasks = function(WrappedComponent) {
   class _WithNearbyReviewTasks extends Component {
     state = {
       nearbyTasks: null,
+      taskLimit: 5,
+      hasMoreToLoad: true,
+      lastLoadLength: 0,
     }
 
     /**
@@ -29,8 +32,11 @@ export const WithNearbyReviewTasks = function(WrappedComponent) {
      */
     updateNearbyReviewTasks = props => {
       this.setState({nearbyTasks: {loading: true}})
-      props.fetchNearbyReviewTasks(props.taskId, this.props.currentFilters).then(nearbyTasks => {
-        this.setState({nearbyTasks: {...nearbyTasks, nearTaskId: props.taskId, loading: false}})
+      props.fetchNearbyReviewTasks(props.taskId, this.props.currentFilters, this.state.taskLimit).then(nearbyTasks => {
+        const tasksLength = nearbyTasks.tasks.length
+        this.setState({nearbyTasks: {...nearbyTasks, nearTaskId: props.taskId, loading: false},
+                       lastLoadLength: tasksLength,
+                       hasMoreToLoad: (this.state.lastLoadLength !== tasksLength)})
       })
     }
 
@@ -38,13 +44,17 @@ export const WithNearbyReviewTasks = function(WrappedComponent) {
       this.updateNearbyReviewTasks(this.props)
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
       if (this.state.nearbyTasks && !this.state.nearbyTasks.loading &&
           this.props.taskId !== this.state.nearbyTasks.nearTaskId) {
         return this.updateNearbyReviewTasks(this.props)
       }
 
       if (!_isEqual(this.props.currentFilters, prevProps.currentFilters)) {
+        return this.updateNearbyReviewTasks(this.props)
+      }
+
+      if (this.state.taskLimit !== prevState.taskLimit) {
         return this.updateNearbyReviewTasks(this.props)
       }
     }
@@ -54,6 +64,8 @@ export const WithNearbyReviewTasks = function(WrappedComponent) {
         <WrappedComponent
           {..._omit(this.props, ['fetchNearbyReviewTasks'])}
           nearbyTasks={this.state.nearbyTasks}
+          increaseTaskLimit={() => this.setState({taskLimit: (this.state.taskLimit + 5)})}
+          hasMoreToLoad={this.state.hasMoreToLoad}
         />
       )
     }
