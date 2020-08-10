@@ -4,11 +4,15 @@ import { Link } from 'react-router-dom'
 import _isObject from 'lodash/isObject'
 import _findIndex from 'lodash/findIndex'
 import _isEqual from 'lodash/isEqual'
+import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import { messagesByDifficulty }
+       from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import AsManager
        from '../../../interactions/User/AsManager'
 import CardChallenge from '../../CardChallenge/CardChallenge'
+import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import messages from './Messages'
 import './ChallengeResultItem.scss'
 
@@ -128,6 +132,32 @@ export class ChallengeResultItem extends Component {
           manageControl={manageControl}
           projectQuery={_get(this.props, 'searchFilters.project')}
           excludeProjectId={this.props.excludeProjectId}
+          info={
+            <div className="mr-break-words">
+              {_isFinite(this.props.challenge.difficulty) &&
+               <div className="mr-text-sm">
+                 <strong className="mr-text-yellow mr-uppercase">
+                   <FormattedMessage {...messages.difficulty} />:
+                 </strong>{' '}
+                 <span className="mr-text-white mr-font-medium">
+                   <FormattedMessage
+                     {...messagesByDifficulty[this.props.challenge.difficulty]}
+                   />
+                 </span>
+               </div>
+              }
+              <MarkdownContent markdown={this.props.challenge.description} lightMode={false} />
+              <div>
+                <button
+                  type="button"
+                  onClick={this.browseChallenge}
+                  className="mr-button mr-button--small"
+                >
+                  <FormattedMessage {...messages.browseLabel} />
+                </button>
+              </div>
+            </div>
+          }
         />
       </div>
     )

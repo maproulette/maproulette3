@@ -406,6 +406,8 @@
   "Challenge.location.nearMe": "Near Me",
   "Challenge.location.withinMapBounds": "Within Map Bounds",
   "Challenge.management.controls.manage.label": "Manage",
+  "Challenge.result.difficulty.label": "Difficulty",
+  "Challenge.results.controls.browse.label": "More Details",
   "Challenge.results.heading": "Challenges",
   "Challenge.results.noResults": "No Results",
   "Challenge.signIn.label": "Sign in to get started",
