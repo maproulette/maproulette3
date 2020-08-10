@@ -208,7 +208,9 @@ export class ViewChallengeTasks extends Component {
 
     const map =
         <ClusterMap
+          showLasso
           updateBounds={this.mapBoundsUpdated}
+          onBulkTaskSelection={this.props.selectTasksById}
           loadingTasks={this.props.loadingTasks}
           showMarkerPopup={this.showMarkerPopup}
           togglePriorityBounds={() => this.setState({showPriorityBounds: !this.state.showPriorityBounds})}
