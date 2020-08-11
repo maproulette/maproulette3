@@ -227,12 +227,25 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     /**
      * Select multiple tasks matching the given task ids
      */
-    selectTasksById = (taskIds, allTasks) => {
+    selectTasksById = (taskIds, allTasksOrClusters) => {
       // No need to select if nothing to select, or if everything's already
       // been selected
       if (_isEmpty(taskIds) || this.state.allSelected) {
         return
       }
+
+      // If we're actually selecting from single-task clusters, we need to
+      // represent those as tasks
+      const allTasks =
+        _isArray(_get(allTasksOrClusters, '0.challengeIds')) ?
+        _map(allTasksOrClusters, cluster => ({
+          id: cluster.taskId,
+          status: cluster.taskStatus,
+          priority: cluster.taskPriority,
+          parentId: cluster.challengeIds[0],
+          geometries: cluster.geometries,
+        })) :
+        allTasksOrClusters
 
       const selected = new Map(this.state.selectedTasks)
       const tasks = _filter(allTasks,
