@@ -19,7 +19,6 @@ import _reverse from 'lodash/reverse'
 import _keys from 'lodash/keys'
 import _concat from 'lodash/concat'
 import _filter from 'lodash/filter'
-import _find from 'lodash/find'
 import _cloneDeep from 'lodash/cloneDeep'
 import _split from 'lodash/split'
 import _isEmpty from 'lodash/isEmpty'
@@ -194,18 +193,8 @@ export class TaskAnalysisTable extends Component {
       }
     }
 
-    // It's possible for the props.selectedTasks (which comes from WithFilteredClusteredTasks)
-    // to contain tasks not in our data as our data has been filtered by
-    // bounds and paging also --- so we make sure here to only include tasks
-    // visible on our current page.
-    const selectedDataTasks =
-      _filter([...this.props.selectedTasks.keys()],
-               taskId => _find(data, task => task.id === taskId))
-
-    // If this is for bundling then we really do want to the full count of
-    // selected tasks since they could have used the "lasso" tool.
-    const selectedTaskCount = this.props.forBundling ?
-      this.props.selectedTasks.size : selectedDataTasks.length
+    const selectedDataTasks = [...this.props.selectedTasks.keys()]
+    const selectedTaskCount = this.props.selectedTasks.size
 
     if (_get(this.props, 'criteria.filters')) {
       defaultFiltered = _map(this.props.criteria.filters,

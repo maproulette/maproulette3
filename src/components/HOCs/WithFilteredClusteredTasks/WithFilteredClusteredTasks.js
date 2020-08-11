@@ -228,7 +228,9 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      * Select multiple tasks matching the given task ids
      */
     selectTasksById = (taskIds, allTasks) => {
-      if (_isEmpty(taskIds)) {
+      // No need to select if nothing to select, or if everything's already
+      // been selected
+      if (_isEmpty(taskIds) || this.state.allSelected) {
         return
       }
 
