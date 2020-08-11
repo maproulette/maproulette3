@@ -49,19 +49,19 @@ const starIconSvg = L.vectorIcon({
   },
 })
 
-const markerIconSvg = (fillColor=colors['blue-leaflet'], priority) => L.vectorIcon({
+const markerIconSvg = (priority, styleOptions={}) => L.vectorIcon({
   viewBox: '0 0 20 20',
-  svgHeight: 40 - (priority * 10),
+  svgHeight: 45 - (priority * 10),
   svgWidth: 40 - (priority * 10),
   type: 'path',
   shape: { // zondicons "location" icon
     d: "M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
   },
-  style: {
-    fill: fillColor,
+  style: Object.assign({
+    fill: colors['blue-leaflet'],
     stroke: colors['grey-leaflet'],
     strokeWidth: 0.5,
-  },
+  }, styleOptions),
   iconAnchor: [5, 15], // render tip of SVG near marker location
 })
 
@@ -116,14 +116,17 @@ export class TaskNearbyMap extends Component {
         const isRequestedMarker = marker.options.taskId === this.props.requestedNextTask
         const markerData = _cloneDeep(marker)
         markerData.options.title = `Task ${marker.options.taskId}`
+        const markerStyle = {
+          fill: TaskStatusColors[_get(marker.options, 'status', 0)],
+          stroke: isRequestedMarker ? colors.yellow : colors['grey-leaflet'],
+          strokeWidth: isRequestedMarker ? 2 : 0.5,
+        }
 
         return (
           <Marker
             key={marker.options.taskId}
             {...markerData}
-            icon={markerIconSvg(isRequestedMarker ? colors.yellow :
-              TaskStatusColors[_get(marker.options, 'status', 0)],
-              _get(marker.options, 'priority', 0))}
+            icon={markerIconSvg(_get(marker.options, 'priority', 0), markerStyle)}
             zIndexOffset={isRequestedMarker ? 1000 : undefined}
             onClick={() => this.markerClicked(markerData)}
           >

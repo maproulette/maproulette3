@@ -293,7 +293,7 @@ const BuildBundle = props => {
       loadingTasks={props.loadingTasks}
       showMarkerPopup={showMarkerPopup}
       highlightPrimaryTask={props.task.id}
-      chosenTasks={selectedTasks}
+      selectedTasks={selectedTasks}
       boundingBox={_get(props, 'criteria.boundingBox')}
       onBulkTaskSelection={props.selectTasksById}
       allowClusterToggle={false}
