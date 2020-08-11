@@ -52,14 +52,14 @@ export class AsMappableCluster {
    * Generates a map marker object suitable for use with a Leaflet map, with
    * optionally customized appearance for the given map layer
    */
-  mapMarker(monochromatic, selectedTasks, highlightPrimaryTask) {
+  mapMarker(monochromatic, selectedTasks, highlightPrimaryTask, allTasksSelected) {
     return {
       position: [this.point.lat, this.point.lng],
       options: {...(_merge(this.rawData, {taskStatus: this.rawData.status,
                                           taskPriority: this.rawData.priority,
                                           name: this.rawData.title,
                                           taskId: this.rawData.id}))},
-      icon: this.leafletMarkerIcon(monochromatic, selectedTasks, highlightPrimaryTask),
+      icon: this.leafletMarkerIcon(monochromatic, selectedTasks, highlightPrimaryTask, allTasksSelected),
     }
   }
 
@@ -67,7 +67,7 @@ export class AsMappableCluster {
    * Generates a Leaflet Icon object appropriate for the given cluster based on
    * its size, including using a standard marker for a single point
    */
-  leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask) {
+  leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask=false, allTasksSelected=false) {
     const count = _isFunction(this.rawData.getChildCount) ?
                   this.rawData.getChildCount() :
                   _get(this.options, 'numberOfPoints', this.numberOfPoints)
@@ -102,9 +102,10 @@ export class AsMappableCluster {
         icon.options.style.fill = colors.yellow
         icon.options.iconAnchor = [5, 25] // adjust position of marker tip for larger size
       }
-      else if (selectedTasks && selectedTasks.has(markerData.taskId)) {
+      else if (allTasksSelected || (selectedTasks && selectedTasks.has(markerData.taskId))) {
         icon = _cloneDeep(selectedTaskStatusIcons[markerData.taskStatus])
-        icon.options.style.fill = colors.yellow
+        icon.options.style.stroke = colors.yellow
+        icon.options.style.strokeWidth = 2
       }
       icon.options.taskData = markerData
 
