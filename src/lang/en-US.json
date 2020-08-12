@@ -193,6 +193,8 @@
   "Admin.EditChallenge.form.updateTasks.label": "Remove Stale Tasks",
   "Admin.EditChallenge.form.visible.description": "Allow your challenge to be easily discoverable by other users via Find Challenges (subject to project discoverability). Note that all challenges are considered public and, even when Discoverable is off, users can still view your challenge if they have a direct link to it.",
   "Admin.EditChallenge.form.visible.label": "Discoverable",
+  "Admin.EditChallenge.geojson.errors.noNullGeometry": "MapRoulette does not support null geometries. Please remove any features with null geometries.",
+  "Admin.EditChallenge.geojson.errors.noZCoordinates": "MapRoulette does not support Z coordinates in Points. Please remove any Z coordinates.",
   "Admin.EditChallenge.lineNumber": "Line {line, number}: ",
   "Admin.EditChallenge.new.header": "New Challenge",
   "Admin.EditChallenge.overpass.errors.noTurboShortcuts": "Overpass Turbo shortcuts are not supported. If you wish to use them, please visit Overpass Turbo and test your query, then choose Export -> Query -> Standalone -> Copy and then paste that here.",

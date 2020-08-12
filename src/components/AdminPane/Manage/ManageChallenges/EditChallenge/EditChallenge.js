@@ -9,7 +9,6 @@ import _isUndefined from 'lodash/isUndefined'
 import _isFinite from 'lodash/isFinite'
 import _omit from 'lodash/omit'
 import _filter from 'lodash/filter'
-import _first from 'lodash/first'
 import _difference from 'lodash/difference'
 import _get from 'lodash/get'
 import _remove from 'lodash/remove'
@@ -171,7 +170,11 @@ export class EditChallenge extends Component {
     }
     else {
       response.errors = {
-        localGeoJSON: {__errors: _map(lintErrors, e => `GeoJSON error: ${e.message}`)}
+        localGeoJSON: {
+          __errors: _map(lintErrors, e =>
+            _isObject(e.message) ? this.props.intl.formatMessage(e.message) : `GeoJSON error: ${e.message}`
+          )
+        }
       }
     }
 
@@ -188,7 +191,7 @@ export class EditChallenge extends Component {
 
     if (lintErrors.length > 0) {
       response.errors = {
-        overpassQL: this.props.intl.formatMessage(_first(lintErrors).message)
+        overpassQL: {__errors: [this.props.intl.formatMessage(lintErrors[0].message)]}
       }
     }
 
@@ -205,8 +208,8 @@ export class EditChallenge extends Component {
       if (!_isEmpty(this.state.extraErrors)) {
         this.setState({extraErrors: {}})
       }
-    }).catch(errors => {
-      this.setState({extraErrors: errors})
+    }).catch(dataSourceErrors => {
+      this.setState({extraErrors: dataSourceErrors})
     }).finally(() => {
       this.validationPromise = null
     })
