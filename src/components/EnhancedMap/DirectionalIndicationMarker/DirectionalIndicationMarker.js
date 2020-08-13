@@ -55,7 +55,7 @@ export const createDirectionalIndicatorIcon = function(heading, styles={}) {
       d: "M7 10v8h6v-8h5l-8-8-8 8h5z",
     },
     style: {
-      fill: styles['stroke'] || colors['blue-leaflet'],
+      fill: colors.black,
       strokeWidth: 0,
       transform: `rotate(${heading} 10 10)`,
     }
