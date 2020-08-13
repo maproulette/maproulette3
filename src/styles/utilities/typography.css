@@ -231,7 +231,11 @@ h4,
 
   &--compact {
     p {
-      @apply mr-my-0;
+      @apply mr-my-0 mr-mt-4;
+    }
+
+    p:first-child {
+      @apply mr-mt-0;
     }
   }
 }
