@@ -10,6 +10,7 @@ import { TaskPriority, keysByPriority, taskPriorityLabels }
 import { TaskStatus, keysByStatus, statusLabels }
       from '../../../services/Task/TaskStatus/TaskStatus'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
+import BusySpinner from '../../../components/BusySpinner/BusySpinner'
 
 
 /**
@@ -92,6 +93,8 @@ export default class ReviewStatusMetrics extends Component {
     )
   }
   render() {
+    if (this.props.loading) return <BusySpinner />
+
     const metrics = this.props.reviewMetrics
     const reviewMetricsByPriority = this.props.reviewMetricsByPriority
     const reviewMetricsByTaskStatus = this.props.reviewMetricsByTaskStatus

@@ -15,8 +15,6 @@ import WithWidgetWorkspaces
        from '../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WithDashboardEntityFilter
        from '../../HOCs/WithDashboardEntityFilter/WithDashboardEntityFilter'
-import WithProjectReviewMetrics
-      from '../../HOCs/WithProjectReviewMetrics/WithProjectReviewMetrics'
 import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
 import ChallengeFilterGroup from '../ChallengeFilterGroup/ChallengeFilterGroup'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
@@ -159,8 +157,7 @@ WithManageableProjects(
   WithCurrentProject(
     WithWidgetWorkspaces(
       WithDashboardEntityFilter(
-        WithProjectReviewMetrics(
-          injectIntl(ProjectDashboard)),
+        injectIntl(ProjectDashboard),
         'challenge',
         'challenges',
         'pinnedChallenges',
