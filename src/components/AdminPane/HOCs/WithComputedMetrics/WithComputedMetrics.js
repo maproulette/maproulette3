@@ -25,14 +25,21 @@ export default function(WrappedComponent) {
 
     updateTotals = (actions, totalTasks, taskMetrics) => {
       _each(actions, (value, label) => {
-        taskMetrics[label] = _isNumber(taskMetrics[label]) ?
-                            taskMetrics[label] + value :
-                            value
+        if (label === "avgTimeSpent") {
+          taskMetrics.totalTimeSpent = _isNumber(taskMetrics.totalTimeSpent) ?
+            taskMetrics.totalTimeSpent + (value * actions.tasksWithTime) :
+            value * actions.tasksWithTime
+        }
+        else {
+          taskMetrics[label] = _isNumber(taskMetrics[label]) ?
+                              taskMetrics[label] + value :
+                              value
 
-        const percentage = (1.0 * value / totalTasks) * 100.0
-        taskMetrics.percentages[label] =  _isNumber(taskMetrics.percentages[label]) ?
-                                          taskMetrics.percentages[label] + percentage :
-                                          percentage
+          const percentage = (1.0 * value / totalTasks) * 100.0
+          taskMetrics.percentages[label] =  _isNumber(taskMetrics.percentages[label]) ?
+                                            taskMetrics.percentages[label] + percentage :
+                                            percentage
+        }
       })
     }
 
