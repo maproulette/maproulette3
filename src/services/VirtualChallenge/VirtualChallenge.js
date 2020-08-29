@@ -88,7 +88,7 @@ export const createVirtualChallenge = function(name, taskIds, expiration, cluste
       taskIdList: taskIds,
       expiry: expiration ? expiration :
               addHours(new Date(), DEFAULT_EXPIRATION_DURATION).getTime(),
-      searchParameters
+      searchParameters: searchParameters || {},
     }
 
     return saveVirtualChallenge(
