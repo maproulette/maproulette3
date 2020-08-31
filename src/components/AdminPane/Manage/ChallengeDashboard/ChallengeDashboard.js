@@ -19,8 +19,6 @@ import WithClusteredTasks
       from '../../../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
-import WithChallengeReviewMetrics
-      from '../../HOCs/WithChallengeReviewMetrics/WithChallengeReviewMetrics'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
 import TaskUploadingProgress
@@ -159,9 +157,7 @@ WithManageableProjects(
           WithClusteredTasks(
             WithFilteredClusteredTasks(
               WithChallengeMetrics(
-                WithChallengeReviewMetrics(
-                  injectIntl(ChallengeDashboard),
-                )
+                injectIntl(ChallengeDashboard),
               ),
               'clusteredTasks',
               'filteredClusteredTasks'
