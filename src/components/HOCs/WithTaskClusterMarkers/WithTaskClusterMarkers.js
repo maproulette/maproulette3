@@ -36,7 +36,6 @@ export const WithTaskClusterMarkers = function(WrappedComponent) {
           this.props.monochromaticClusters,
           this.props.selectedTasks,
           this.props.highlightPrimaryTask,
-          this.props.allTasksAreSelected && this.props.allTasksAreSelected(),
         )
       })
 

@@ -358,6 +358,13 @@ export class TaskClusterMap extends Component {
     }
   }
 
+  deselectTasksInLayers = layers => {
+    if (this.props.onBulkTaskDeselection) {
+      const taskIds = _compact(_map(layers, layer => _get(layer, 'options.icon.options.taskData.taskId')))
+      this.props.onBulkTaskDeselection(taskIds)
+    }
+  }
+
   render() {
     const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
@@ -405,7 +412,19 @@ export class TaskClusterMap extends Component {
         <ZoomControl className="mr-z-10" position='topright' />
         {this.props.showLasso && this.props.onBulkTaskSelection &&
           (!this.props.showAsClusters || this.props.totalTaskCount <= CLUSTER_POINTS) &&
-         <LassoSelectionControl onLassoSelection={this.selectTasksInLayers} />
+          <LassoSelectionControl
+            onLassoSelection={this.selectTasksInLayers}
+            onLassoDeselection={this.deselectTasksInLayers}
+          />
+        }
+        {!this.props.hideSearchControl &&
+          <SearchControl
+            {...this.props}
+            onResultSelected={bounds => {
+              this.currentBounds = toLatLngBounds(bounds)
+              this.props.updateBounds(bounds)
+            }}
+          />
         }
         <VisibleTileLayer {...this.props} zIndex={1} />
         {overlayLayers}
@@ -426,15 +445,6 @@ export class TaskClusterMap extends Component {
           </label>
         }
         <LayerToggle {...this.props} />
-        {!this.props.hideSearchControl &&
-          <SearchControl
-            {...this.props}
-            onResultSelected={bounds => {
-              this.currentBounds = toLatLngBounds(bounds)
-              this.props.updateBounds(bounds)
-            }}
-          />
-        }
         {!!this.props.mapZoomedOut && !this.state.locatingToUser &&
           <ZoomInMessage {...this.props} zoom={this.currentZoom}/>
         }

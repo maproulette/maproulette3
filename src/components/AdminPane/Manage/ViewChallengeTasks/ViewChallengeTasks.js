@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Popup } from 'react-leaflet'
 import _get from 'lodash/get'
-import _map from 'lodash/map'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
@@ -55,43 +54,34 @@ export class ViewChallengeTasks extends Component {
     showPriorityBounds: false,
   }
 
-  takeTaskSelectionAction = action => {
-    if (action.statusAction) {
-      this.props.selectTasksWithStatus(action.status)
+  changeStatus = (selectedTasks, newStatus = TaskStatus.created) => {
+    if (!selectedTasks.allSelected && selectedTasks.selected.size === 0) {
+      return // Nothing to do
     }
-    else if (action.priorityAction) {
-      this.props.selectTasksWithPriority(action.priority)
-    }
-  }
-
-  changeStatus = (selectedIds, newStatus = TaskStatus.created) => {
-    if (selectedIds.length === 0) {
-      return
-    }
-    const tasks = _map(selectedIds, id => this.props.selectedTasks.get(id))
 
     this.setState({bulkUpdating: true})
     // If all tasks are selected (so beyond what is being viewed on current page)
-    if (this.props.allTasksAreSelected()) {
+    if (selectedTasks.allSelected) {
       this.props.applyBulkTaskStatusChange(
-        parseInt(newStatus), this.props.challenge.id, this.props.criteria
+        parseInt(newStatus),
+        this.props.challenge.id,
+        this.props.criteria,
+        [...selectedTasks.deselected.keys()]
       ).then(() => {
         this.props.refreshChallenge()
         this.props.refreshTasks()
         this.setState({bulkUpdating: false})
       })
     }
-    // Otherwise only apply to selected tasks
-    else {
-      this.props.applyBulkTaskChanges(
-        tasks, {status: parseInt(newStatus),
-                mappedOn: null,
-                reviewStatus: null,
-                reviewRequestedBy: null,
-                reviewedBy: null,
-                reviewedAt: null}
-
-      ).then(() => {
+    else { // Otherwise only apply to selected tasks
+      this.props.applyBulkTaskChanges([...this.props.selectedTasks.selected.values()], {
+        status: parseInt(newStatus),
+        mappedOn: null,
+        reviewStatus: null,
+        reviewRequestedBy: null,
+        reviewedBy: null,
+        reviewedAt: null
+      }).then(() => {
         this.props.refreshChallenge()
         this.props.refreshTasks()
         this.setState({bulkUpdating: false})
@@ -99,14 +89,18 @@ export class ViewChallengeTasks extends Component {
     }
   }
 
-  removeReviewRequests = (selectedIds) => {
-    if (selectedIds.length === 0) {
-      return
+  removeReviewRequests = selectedTasks => {
+    if (!selectedTasks.allSelected && selectedTasks.selected.size === 0) {
+      return // Nothing to do
     }
-    const selectedTasks = this.props.allTasksAreSelected() ? null : selectedIds
 
     this.setState({bulkUpdating: true})
-    this.props.removeReviewRequest(this.props.challenge.id, selectedTasks, this.props.criteria).then(() => {
+    this.props.removeReviewRequest(
+      this.props.challenge.id,
+      selectedTasks.allSelected ? null : [...selectedTasks.selected.keys()],
+      this.props.criteria,
+      selectedTasks.allSelected ? [...selectedTasks.deselected.keys()] : null
+    ).then(() => {
       this.props.refreshChallenge()
       this.props.refreshTasks()
       this.setState({bulkUpdating: false})
@@ -210,7 +204,8 @@ export class ViewChallengeTasks extends Component {
         <ClusterMap
           showLasso
           updateBounds={this.mapBoundsUpdated}
-          onBulkTaskSelection={this.props.selectTasksById}
+          onBulkTaskSelection={this.props.selectTasks}
+          onBulkTaskDeselection={this.props.deselectTasks}
           loadingTasks={this.props.loadingTasks}
           showMarkerPopup={this.showMarkerPopup}
           togglePriorityBounds={() => this.setState({showPriorityBounds: !this.state.showPriorityBounds})}
@@ -367,10 +362,11 @@ ViewChallengeTasks.defaultProps = {
   loadingChallenge: false,
 }
 
-export default WithBoundedTasks(
-                 WithTaskPropertyKeys(
-                   WithFilterCriteria(ViewChallengeTasks)
-                 ),
-                 'filteredClusteredTasks',
-                 'taskInfo'
-               )
+export default
+WithBoundedTasks(
+  WithTaskPropertyKeys(
+    WithFilterCriteria(ViewChallengeTasks)
+  ),
+  'filteredClusteredTasks',
+  'taskInfo'
+)

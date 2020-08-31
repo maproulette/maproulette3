@@ -193,12 +193,11 @@ export class TaskAnalysisTable extends Component {
       }
     }
 
-    const selectedDataTasks = [...this.props.selectedTasks.keys()]
-    const selectedTaskCount = this.props.selectedTasks.size
-
     if (_get(this.props, 'criteria.filters')) {
-      defaultFiltered = _map(this.props.criteria.filters,
-                             (value, key) => {return {id: key, value}})
+      defaultFiltered = _map(
+        this.props.criteria.filters,
+        (value, key) => ({id: key, value})
+      )
     }
 
     const manager = AsManager(this.props.user)
@@ -213,8 +212,6 @@ export class TaskAnalysisTable extends Component {
                {...this.props}
                countShown={data.length}
                configureColumns={this.configureColumns.bind(this)}
-               selectedTasks={selectedDataTasks}
-               selectedTaskCount={selectedTaskCount}
              />
            </header>
           }
@@ -271,7 +268,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.selected = {id: 'selected',
     Header: null,
-    accessor: task => (props.selectedTasks.has(task.id) || props.allTasksAreSelected()),
+    accessor: task => props.isTaskSelected(task.id),
     Cell: ({value, original}) => (
       props.highlightPrimaryTask && original.id === props.task.id ?
       <span className="mr-text-green-lighter">✓</span> :
@@ -590,7 +587,7 @@ TaskAnalysisTable.propTypes = {
   challenge: PropTypes.object,
   /** Total tasks available (we may receive a subset) */
   totalTaskCount: PropTypes.number,
-  /** Map of currently selected tasks */
+  /** Currently selected tasks */
   selectedTasks: PropTypes.object.isRequired,
   /** Invoked to toggle selection of a task */
   toggleTaskSelection: PropTypes.func.isRequired,
