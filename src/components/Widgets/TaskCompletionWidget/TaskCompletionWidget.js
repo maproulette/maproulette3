@@ -27,7 +27,7 @@ const descriptor = {
 export default class TaskCompletionWidget extends Component {
   bundleTasks = () => {
     this.props.createTaskBundle(
-      _uniq([this.props.task.id].concat([...this.props.selectedTasks.keys()]))
+      _uniq([this.props.task.id].concat([...this.props.selectedTasks.selected.keys()]))
     )
   }
 
@@ -45,9 +45,9 @@ export default class TaskCompletionWidget extends Component {
     // If we have selected Tasks but no tasks in bundle, a bundle was started
     // but not created with server
     if (!this.props.taskReadOnly &&
-        _get(this.props, 'selectedTasks.size') > 0 && taskCount === 0) {
-      taskCount = this.props.selectedTasks.size
-      if (!this.props.selectedTasks.has(this.props.task.id)) {
+        _get(this.props, 'selectedTasks.selected.size') > 0 && taskCount === 0) {
+      taskCount = this.props.selectedTasks.selected.size
+      if (!this.props.selectedTasks.selected.has(this.props.task.id)) {
         taskCount += 1 // Count the current task if needed
       }
 

@@ -211,12 +211,12 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     return dispatch(bulkUpdateTasks(alteredTasks, true))
   },
 
-  applyBulkTaskStatusChange: (newStatus, challengeId, searchCriteria) => {
-    return dispatch(bulkTaskStatusChange(newStatus, challengeId, searchCriteria))
+  applyBulkTaskStatusChange: (newStatus, challengeId, searchCriteria, excludeTaskIds) => {
+    return dispatch(bulkTaskStatusChange(newStatus, challengeId, searchCriteria, excludeTaskIds))
   },
 
-  removeReviewRequest: (challengeId, taskIds, searchCriteria) => {
-    return dispatch(removeReviewRequest(challengeId, taskIds, searchCriteria))
+  removeReviewRequest: (challengeId, taskIds, searchCriteria, excludeTaskIds) => {
+    return dispatch(removeReviewRequest(challengeId, taskIds, searchCriteria, excludeTaskIds))
   }
 })
 

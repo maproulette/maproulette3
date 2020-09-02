@@ -728,7 +728,7 @@
   "Errors.reviewTask.fetchFailure": "Unable to fetch review needed tasks",
   "Errors.reviewTask.notClaimedByYou": "Unable to cancel review.",
   "Errors.task.alreadyLocked": "Task has already been locked by someone else.",
-  "Errors.task.bundleFailure": "Unable to bundling tasks together",
+  "Errors.task.bundleFailure": "Unable to bundle tasks together",
   "Errors.task.cooperativeFailure": "Failed to load cooperative task{details}",
   "Errors.task.deleteFailure": "Unable to delete task.",
   "Errors.task.doesNotExist": "That task does not exist.",

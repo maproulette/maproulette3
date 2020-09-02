@@ -80,7 +80,7 @@ export default defineMessages({
   },
   taskBundleFailure: {
     id: 'Errors.task.bundleFailure',
-    defaultMessage: "Unable to bundling tasks together",
+    defaultMessage: "Unable to bundle tasks together",
   },
   taskCooperativeFailure: {
     id: 'Errors.task.cooperativeFailure',

@@ -13,6 +13,8 @@ import WithCurrentChallenge
        from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithWidgetWorkspaces
        from '../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
+import WithSelectedClusteredTasks
+       from '../../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks'
 import WithFilteredClusteredTasks
        from '../../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import WithClusteredTasks
@@ -154,13 +156,15 @@ WithManageableProjects(
     WithSearch(
       WithCurrentChallenge(
         WithWidgetWorkspaces(
-          WithClusteredTasks(
-            WithFilteredClusteredTasks(
-              WithChallengeMetrics(
-                injectIntl(ChallengeDashboard),
-              ),
-              'clusteredTasks',
-              'filteredClusteredTasks'
+          WithSelectedClusteredTasks(
+            WithClusteredTasks(
+              WithFilteredClusteredTasks(
+                WithChallengeMetrics(
+                  injectIntl(ChallengeDashboard),
+                ),
+                'clusteredTasks',
+                'filteredClusteredTasks'
+              )
             )
           ),
           WidgetDataTarget.challenge,

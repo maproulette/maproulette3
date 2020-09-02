@@ -324,7 +324,7 @@ export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
 /**
  * Bulk update task status on tasks that match the given criteria.
  */
-export const bulkTaskStatusChange = function(newStatus, challengeId, criteria) {
+export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, excludeTaskIds) {
   return function(dispatch) {
     const filters = _get(criteria, 'filters', {})
     const searchParameters = generateSearchParametersString(filters,
@@ -332,7 +332,8 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria) {
                                                             _get(criteria, 'savedChallengesOnly'),
                                                             null,
                                                             criteria.searchQuery,
-                                                            _get(criteria, 'invertFields'))
+                                                            _get(criteria, 'invertFields'),
+                                                            excludeTaskIds)
     searchParameters.cid = challengeId
 
     return new Endpoint(

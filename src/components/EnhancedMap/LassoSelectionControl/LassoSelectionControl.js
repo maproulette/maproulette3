@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import classNames from 'classnames'
 import L from 'leaflet'
 import 'leaflet-lasso'
 import { injectIntl } from 'react-intl'
@@ -17,23 +18,49 @@ import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 const LassoSelectionLeafletControl = L.Control.extend({
   onAdd: function(map) {
     const lasso = L.lasso(map, {})
+    let deselecting = false
 
     map.on('lasso.finished', (event) => {
+      deselecting ?
+      this.options.onLassoDeselection(event.layers) :
       this.options.onLassoSelection(event.layers)
     })
 
     // build the control button, render it, and return it
     const controlContent = (
-      <button
-        onClick={() => lasso.toggle()}
-        className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
-      >
-        <SvgSymbol
-          sym="lasso-icon"
-          className="mr-w-4 mr-h-4 mr-fill-current"
-          viewBox="0 0 512 512"
-        />
-      </button>
+      <React.Fragment>
+        <button
+          onClick={() => {
+            deselecting = false
+            lasso.toggle()
+          }}
+          className={classNames(
+            "mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-transition-normal-in-out-quad hover:mr-text-green-lighter",
+            this.options.onLassoDeselection ? "mr-rounded-t-sm mr-border-b mr-border-white-15" : "mr-rounded-sm"
+          )}
+        >
+          <SvgSymbol
+            sym={this.options.onLassoDeselection ? "lasso-add-icon" : "lasso-icon"}
+            className="mr-w-4 mr-h-4 mr-fill-current mr-stroke-current"
+            viewBox="0 0 512 512"
+          />
+        </button>
+        {this.options.onLassoDeselection &&
+        <button
+          onClick={() => {
+            deselecting = true
+            lasso.toggle()
+          }}
+          className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-b-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
+        >
+          <SvgSymbol
+            sym="lasso-remove-icon"
+            className="mr-w-4 mr-h-4 mr-fill-current mr-stroke-current"
+            viewBox="0 0 512 512"
+          />
+        </button>
+        }
+      </React.Fragment>
     )
 
     const controlContainer = L.DomUtil.create('div')

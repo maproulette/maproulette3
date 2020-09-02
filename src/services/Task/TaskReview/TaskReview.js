@@ -356,7 +356,7 @@ export const cancelReviewClaim = function(taskId) {
   }
 }
 
-export const removeReviewRequest = function(challengeId, taskIds, criteria = null) {
+export const removeReviewRequest = function(challengeId, taskIds, criteria, excludeTaskIds) {
   return function(dispatch) {
     const filters = _get(criteria, 'filters', {})
     const searchParameters = !criteria ? {} :
@@ -365,9 +365,12 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria = nul
                                      null,
                                      null,
                                      criteria.searchQuery,
-                                     criteria.invertFields)
+                                     criteria.invertFields,
+                                     excludeTaskIds)
     searchParameters.cid = challengeId
-    searchParameters.ids = taskIds ? taskIds.join(',') : null
+    if (taskIds) {
+      searchParameters.ids = taskIds.join(',')
+    }
 
     return new Endpoint(
       api.tasks.removeReviewRequest, {

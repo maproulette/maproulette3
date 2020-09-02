@@ -6,24 +6,16 @@ import _noop from 'lodash/noop'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _omit from 'lodash/omit'
-import _isArray from 'lodash/isArray'
-import _filter from 'lodash/filter'
 import AsManager from '../../interactions/User/AsManager'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import TriStateCheckbox from '../Bulma/TriStateCheckbox'
 import ConfirmAction from '../ConfirmAction/ConfirmAction'
-import DropdownButton from '../Bulma/DropdownButton'
 import TimezonePicker from '../TimezonePicker/TimezonePicker'
-import WithDeactivateOnOutsideClick from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
-import { TaskStatus, statusLabels, keysByStatus } from '../../services/Task/TaskStatus/TaskStatus'
-import { TaskReviewStatusWithUnset, reviewStatusLabels, keysByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
+import { TaskStatus, statusLabels } from '../../services/Task/TaskStatus/TaskStatus'
 import { buildLinkToMapperExportCSV } from '../../services/Task/TaskReview/TaskReview'
-import { TaskPriority, taskPriorityLabels, keysByPriority } from '../../services/Task/TaskPriority/TaskPriority'
 import { buildLinkToExportCSV, buildLinkToExportGeoJSON } from '../../services/Challenge/Challenge'
 import messages from './Messages'
-
-const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
 /**
  * TaskAnalysisTableHeader renders a header for the task analysis table.
@@ -33,109 +25,33 @@ const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 export class TaskAnalysisTableHeader extends Component {
     state = {}
 
-    takeTaskSelectionAction = action => {
-        if (action.statusAction) {
-          this.props.selectTasksWithStatus(action.status)
-        }
-        else if (action.priorityAction) {
-          this.props.selectTasksWithPriority(action.priority)
-        }
-        else if (action.shownAction) {
-          this.props.selectTasks(this.props.taskInfo.tasks)
-        }
-    }
-
     render() {
         const {countShown, configureColumns} = this.props
 
-        const selectedCount = this.props.selectedTaskCount
         const totalTaskCount = _get(this.props, 'totalTaskCount') || countShown || 0
         const totalTasksInChallenge = _get(this.props, 'totalTasksInChallenge', 0)
-        const percentShown = Math.round(totalTaskCount / totalTasksInChallenge * 100.0)
+        const percentShown =
+          totalTasksInChallenge > 0 ?
+          Math.round(totalTaskCount / totalTasksInChallenge * 100.0) :
+          0
         const manager = AsManager(this.props.user)
         const localizedStatusLabels = statusLabels(this.props.intl)
-        const localizedReviewStatusLabels = reviewStatusLabels(this.props.intl)
-        const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
-
-        const taskSelectionStatuses = _isArray(this.props.taskSelectionStatuses) ?
-                                      this.props.taskSelectionStatuses :
-                                      TaskStatus
-
-        const taskSelectionReviewStatuses = _isArray(this.props.taskSelectionReviewStatuses) ?
-                                            this.props.taskSelectionReviewStatuses :
-                                            TaskReviewStatusWithUnset
-
-        const taskSelectionPriorities = _isArray(this.props.taskSelectionPriorities) ?
-                                        this.props.taskSelectionPriorities :
-                                        TaskPriority
-
-        const taskSelectionActions = [{
-          key: 'shown-tasks',
-          text: this.props.intl.formatMessage(messages.shownLabel),
-          shownAction: true,
-        }].concat(
-          _map(taskSelectionStatuses, status => ({
-            key: `status-${status}`,
-            text: localizedStatusLabels[keysByStatus[status]],
-            status,
-            statusAction: true,
-          }))
-        ).concat(
-          _map(taskSelectionReviewStatuses, status => ({
-            key: `review-status-${status}`,
-            text: localizedReviewStatusLabels[keysByReviewStatus[status]],
-            status,
-            statusAction: true,
-          }))
-        ).concat(
-          _map(taskSelectionPriorities, priority => ({
-            key: `priority-${priority}`,
-            text: `${localizedPriorityLabels[keysByPriority[priority]]} ${this.props.intl.formatMessage(messages.priorityLabel)}`,
-            priority,
-            priorityAction: true,
-          }))
-        )
-
-        // Determine if we have tasks that can be marked as review unnecessary
-        let hasReviewRequests = this.props.allTasksAreSelected()
-        let tasks = this.props.taskData || []
-        const selectedTasks = this.props.selectedTasks || []
-        if (!hasReviewRequests) {
-          tasks = _filter(tasks, task =>
-            task.reviewStatus === TaskReviewStatusWithUnset.needed &&
-            selectedTasks.find(id => id === task.id))
-          hasReviewRequests = tasks.length > 0
-        }
-
 
         return (
             <div className="mr-flex mr-justify-between">
                 <div className="mr-flex mr-items-center">
                     {_get(this.props, 'taskInfo.tasks.length', 0) > 0 &&
-                        <div className="mr-mr-4">
-                          <div
-                            className="mr-m-0 mr-flex mr-py-2 mr-pl-4 mr-pr-8 mr-items-center mr-bg-black-15 mr-rounded mr-relative"
-                            title={this.props.intl.formatMessage(messages.bulkSelectionTooltip)}
-                          >
-                            <TriStateCheckbox
-                                checked={this.props.allTasksAreSelected() || (selectedCount === totalTaskCount)}
-                                indeterminate={this.props.someTasksAreSelected() && (selectedCount !== totalTaskCount)}
-                                onClick={() => this.props.toggleAllTasksSelection()}
-                                onChange={_noop}
-                            />
-                            <div className="mr-absolute mr-top-0 mr-right-0 mr-mt-1 mr-mr-2">
-                              <DeactivatableDropdownButton
-                                options={taskSelectionActions}
-                                onSelect={this.takeTaskSelectionAction}
-                              >
-                                <SvgSymbol
-                                  sym="icon-cheveron-down"
-                                  viewBox="0 0 20 20"
-                                  className="mr-fill-green-lighter mr-w-5 mr-h-5"
-                                />
-                              </DeactivatableDropdownButton>
-                            </div>
-                          </div>
+                        <div className="mr-mr-4 mr-ml-12.8">
+                          {!this.props.suppressTriState &&
+                           <div title={this.props.intl.formatMessage(messages.bulkSelectionTooltip)}>
+                             <TriStateCheckbox
+                                 checked={this.props.allTasksAreSelected(totalTaskCount)}
+                                 indeterminate={this.props.someTasksAreSelected(totalTaskCount)}
+                                 onClick={() => this.props.toggleAllTasksSelection()}
+                                 onChange={_noop}
+                             />
+                           </div>
+                          }
                         </div>
                     }
 
@@ -143,7 +59,7 @@ export class TaskAnalysisTableHeader extends Component {
                         <span className="mr-mr-2">
                           <FormattedMessage
                             {...messages.taskCountSelectedStatus}
-                            values={{selectedCount: (this.props.allTasksAreSelected() ? totalTaskCount : selectedCount)}}
+                            values={{selectedCount: this.props.selectedTaskCount(totalTaskCount)}}
                           />
                         </span>
                         <span className="mr-mr-6">
@@ -218,10 +134,7 @@ export class TaskAnalysisTableHeader extends Component {
                                           skipConfirmation={e => e.target.value === ""}
                                         >
                                           <button
-                                            className={classNames("mr-text-current mr-pr-1",
-                                              !hasReviewRequests ? "mr-text-grey-light mr-cursor-default" : "mr-text-green-lighter"
-                                            )}
-                                            disabled={!hasReviewRequests}
+                                            className="mr-text-current mr-pr-1 mr-text-green-lighter"
                                             onClick={() => this.props.removeReviewRequests(this.props.selectedTasks)}
                                           >
                                             <FormattedMessage {...messages.changeReviewStatusLabel} />
