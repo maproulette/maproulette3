@@ -240,14 +240,22 @@ export class ChallengeProgress extends Component {
       return null
     }
 
+    let calculatedSeconds = null
     let averageTime = null
-    if (_get(taskActions, 'avgTimeSpent', 0) > 0) {
-      const seconds = taskActions.avgTimeSpent / 1000
+    if (_get(taskActions, 'tasksWithTime', 0) > 0 &&
+        _get(taskActions, 'totalTimeSpent', 0) > 0) {
+      calculatedSeconds = taskActions.totalTimeSpent / taskActions.tasksWithTime / 1000
+    }
+    else if (_get(taskActions, 'avgTimeSpent', 0) > 0) {
+      calculatedSeconds = taskActions.avgTimeSpent / 1000
+    }
+
+    if (calculatedSeconds) {
       averageTime =
         <div className="">
           <FormattedMessage {...messages.avgTimeSpent} />
           <span className="mr-pl-2">
-            {Math.floor(seconds / 60)}m {Math.floor(seconds) % 60}s
+            {Math.floor(calculatedSeconds / 60)}m {Math.floor(calculatedSeconds) % 60}s
           </span>
           {this.props.noteAvgExcludesSkip &&
             <span className="mr-pl-2">
