@@ -7,6 +7,31 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.6.11] - 2020-09-10
+### Added
+- Info control on challenge results to quickly view basic challenge details
+- Show directionality for one-way task features on Task Completion map
+- Support for multiple custom user basemaps and overlays
+- Allow task status to be changed when resubmitting task after a review
+- Option to load more tasks on Nearby Tasks map
+- Lasso select/deselect tools on task map when managing a challenge
+- Improved task selection behavior when managing a challenge
+- Highlight selected tasks on task map when managing a challenge
+- Error on z-coordinates in GeoJSON, noting they are unsupported (#1034)
+- Error on null GeoJSON geometries, noting they are unsupported (#551)
+- Note rebuild-tasks option when editing read-only data source (#1318, #783)
+- Make substituted URL property values clickable in task instructions (#1370)
+
+### Fixed
+- Misinterpretation of some user mentions as OSM entity short codes
+- Broken "Back to Review All" option on task revision confirmation modal
+- Unnecessary restriction on max zoom on Nearby Tasks map
+- Incorrect project-level average time spent per task
+- Stale data sometimes shown on Review-Status Metrics widget
+
+### Removed
+- Quick-selection of tasks by status, priority, etc. in challenge managment
+
 
 ## [v3.6.10] - 2020-08-07
 ### Fixed
