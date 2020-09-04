@@ -64,6 +64,21 @@ export default defineMessages({
     defaultMessage: "Delete",
   },
 
+  customBasemapNameLabel: {
+    id: "Profile.form.customBasemap.name.label",
+    defaultMessage: "Name",
+  },
+
+  customBasemapURLLabel: {
+    id: "Profile.form.customBasemap.url.label",
+    defaultMessage: "URL",
+  },
+
+  customBasemapOverlayLabel: {
+    id: "Profile.form.customBasemap.overlay.label",
+    defaultMessage: "is overlay?",
+  },
+
   uniqueCustomBasemapError: {
     id: "Profile.form.uniqueCustomBasemap.error",
     defaultMessage: "Custom Basemap names must be unique",

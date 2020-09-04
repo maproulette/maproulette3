@@ -48,15 +48,15 @@ export const jsSchema = (intl, user, editor) => {
         type: "object",
         properties: {
           name: {
-            title: "Name",
+            title: intl.formatMessage(messages.customBasemapNameLabel),
             type: "string"
           },
           url: {
-            title: "URL",
+            title: intl.formatMessage(messages.customBasemapURLLabel),
             type: "string"
           },
           overlay: {
-            title: "is overlay?",
+            title: intl.formatMessage(messages.customBasemapOverlayLabel),
             type: "boolean",
             default: false,
           },

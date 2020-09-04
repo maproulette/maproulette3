@@ -31,8 +31,7 @@ export class AsMappingUser {
 
     // Try to find a custom basemap if the user has one selected.
     if (!_isEmpty(this.settings.defaultBasemapId)) {
-      return _find(this.allLayerSources(), (source) =>
-        source.id === this.settings.defaultBasemapId)
+      return this.findLayerSource(this.settings.defaultBasemapId)
     }
 
     return basemapLayerSource(this.settings.defaultBasemap,

@@ -75,8 +75,7 @@ export const CustomArrayFieldTemplate = props => {
         {element.hasRemove &&
           <button className={classNames(
             "is-clear array-field__item__control remove-item-button",
-            {"mr-button mr-button mr-button--small": !!deleteLabel,
-             "button": !deleteLabel})}
+            !deleteLabel ? "button" : "mr-button mr-button mr-button--small")}
             onClick={element.onDropIndexClick(element.index)}>
            {deleteLabel ||
              <span className="icon is-danger">

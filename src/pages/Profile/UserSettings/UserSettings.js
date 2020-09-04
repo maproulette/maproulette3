@@ -15,8 +15,10 @@ import _debounce from 'lodash/debounce'
 import _remove from 'lodash/remove'
 import _find from 'lodash/find'
 import _cloneDeep from 'lodash/cloneDeep'
+import _uniq from 'lodash/uniq'
 import _countBy from 'lodash/countBy'
 import _findLastIndex from 'lodash/findLastIndex'
+import _trim from 'lodash/trim'
 import { basemapLayerSources }
        from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 import { LayerSources }
@@ -59,7 +61,8 @@ class UserSettings extends Component {
     // Massage customBasemaps json:
     // 1.don't send if name or url has not been completed yet
     // 2. insert id: -1 if it's a new customBasemap
-    _remove(editableUser.customBasemaps, (data) => (!data.name || !data.url))
+    _remove(editableUser.customBasemaps,
+      (data) => (_isEmpty(_trim(data.name)) || _isEmpty(_trim(data.url))))
     editableUser.customBasemaps.forEach( (data) => {
       if (!data.id) {
         data.id = -1
@@ -117,18 +120,7 @@ class UserSettings extends Component {
   }
 
   areBasemapNamesUnique = (basemaps) => {
-    let unique = true
-
-    // Validates that all custom basemap names are unique. Then skipping sending
-    // basemap data.
-    const basemapNames = _countBy(basemaps, bm => bm.name)
-    _each(basemapNames, count => {
-      if (count > 1) {
-        unique = false
-      }
-    })
-
-    return unique
+    return _uniq(_map(basemaps, 'name')).length === basemaps.length
   }
 
   validate = (formData, errors) => {
