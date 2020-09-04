@@ -17,7 +17,7 @@ import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
 import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
-import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
+import { buildLayerSources } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import DirectionalIndicationMarker
        from '../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker'
@@ -491,8 +491,10 @@ export class TaskMap extends Component {
       return <BusySpinner />
     }
 
-    const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
-      <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+    const overlayLayers = buildLayerSources(
+      this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
+      (layerId, index, layerSource) =>
+        <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
     )
 
     const mapillaryMarkers = this.props.showMapillaryLayer ?

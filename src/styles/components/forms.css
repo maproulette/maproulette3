@@ -45,6 +45,20 @@
       }
     }
   }
+
+  .custom-basemaps-item {
+    .fieldset {
+      display: block;
+
+      .field {
+        padding-bottom: 10px;
+      }
+
+      .checkbox {
+        padding-top: 10px;
+      }
+    }
+  }
 }
 
 .control-label, .form-group.field-boolean label span, .form-group.field-number label span {

@@ -12,7 +12,7 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _cloneDeep from 'lodash/cloneDeep'
 import { latLng } from 'leaflet'
-import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
+import { buildLayerSources } from '../../../services/VisibleLayer/LayerSources'
 import { TaskStatusColors, messagesByStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { messagesByPriority } from '../../../services/Task/TaskPriority/TaskPriority'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
@@ -149,8 +149,10 @@ export class TaskNearbyMap extends Component {
       })
     }
 
-    const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
-      <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+    const overlayLayers = buildLayerSources(
+      this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
+      (layerId, index, layerSource) =>
+        <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
     )
 
     if (!coloredMarkers) {

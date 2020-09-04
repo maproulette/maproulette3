@@ -12,15 +12,24 @@ import _isUndefined from 'lodash/isUndefined'
 import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
 import _debounce from 'lodash/debounce'
+import _remove from 'lodash/remove'
+import _find from 'lodash/find'
+import _cloneDeep from 'lodash/cloneDeep'
+import _uniq from 'lodash/uniq'
+import _countBy from 'lodash/countBy'
+import _findLastIndex from 'lodash/findLastIndex'
+import _trim from 'lodash/trim'
 import { basemapLayerSources }
        from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import { LayerSources }
+      from '../../../services/VisibleLayer/LayerSources'
 import { NotificationSubscriptionType, keysByNotificationType }
        from '../../../services/Notification/NotificationType/NotificationType'
 import AsEditableUser from '../../../interactions/User/AsEditableUser'
 import WithStatus from '../../../components/HOCs/WithStatus/WithStatus'
 import BusySpinner from '../../../components/BusySpinner/BusySpinner'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
-import { CustomSelectWidget, NoFieldsetObjectFieldTemplate }
+import { CustomSelectWidget, NoFieldsetObjectFieldTemplate, CustomArrayFieldTemplate }
        from '../../../components/Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import { jsSchema as settingsJsSchema, uiSchema as settingsUiSchema }
        from './UserSettingsSchema'
@@ -38,14 +47,58 @@ class UserSettings extends Component {
 
   /** Save the latest user settings modified by the user */
   saveUserSettings = _debounce((settings) => {
+    // We cannot save the user settings if the basemap names are not unique.
+    // Otherwise, this will mess up our attempts to match the server generated
+    // id with the matching custom basemap with that name.
+    if (!this.areBasemapNamesUnique(settings.customBasemaps)) {
+      return
+    }
+
     this.setState({isSaving: true, saveComplete: false})
 
-    const editableUser = AsEditableUser(settings)
-    editableUser.normalizeDefaultBasemap()
+    const editableUser = AsEditableUser(_cloneDeep(settings))
+
+    // Massage customBasemaps json:
+    // 1.don't send if name or url has not been completed yet
+    // 2. insert id: -1 if it's a new customBasemap
+    _remove(editableUser.customBasemaps,
+      (data) => (_isEmpty(_trim(data.name)) || _isEmpty(_trim(data.url))))
+    editableUser.customBasemaps.forEach( (data) => {
+      if (!data.id) {
+        data.id = -1
+      }
+    })
+
+    editableUser.normalizeDefaultBasemap(LayerSources, editableUser.customBasemaps)
 
     this.props.updateUserSettings(
       this.props.user.id, editableUser
-    ).then(() => this.setState({isSaving: false, saveComplete: true}))
+    ).then((results) => {
+      // Make sure the correct defaultBasemapId is set on the form.
+      // If a custom basemap was removed that was also set as the default,
+      // then this would be set back to None by the normalizeDefaultBasemap().
+      const updatedUser = _get(results, 'entities.users', [])[this.props.user.id]
+      const settingsFormData = _cloneDeep(this.state.settingsFormData)
+      settingsFormData.defaultBasemap = updatedUser.settings.defaultBasemapId || "-1"
+
+      // If we have new customBasemaps data in our state then we need to update any
+      // matching new mappings with the server generated id.
+      if (_get(updatedUser, 'settings.customBasemaps')) {
+        const serverBasemaps = _get(updatedUser, 'settings.customBasemaps')
+        _each(settingsFormData.customBasemaps, basemap => {
+          if (!basemap.id && !_isEmpty(basemap.url) && !_isEmpty(basemap.name) &&
+              _find(serverBasemaps, m => m.name === basemap.name)) {
+            basemap.id = _find(serverBasemaps, m => m.name === basemap.name).id
+          }
+        })
+      }
+
+       // Save the customBasemaps frmo the server in state so we we can match
+       // the newly generated
+      this.setState({isSaving: false,
+        saveComplete: true,
+        settingsFormData: settingsFormData})
+    })
   }, 750)
 
   /** Save the latest notification settings modified by the user */
@@ -66,10 +119,35 @@ class UserSettings extends Component {
     this.saveUserSettings(formData)
   }
 
+  areBasemapNamesUnique = (basemaps) => {
+    return _uniq(_map(basemaps, 'name')).length === basemaps.length
+  }
+
+  validate = (formData, errors) => {
+    // Validates that all custom basemap names are unique.
+    const basemapNames = _countBy(formData.customBasemaps, bm => bm.name)
+    _each(basemapNames, (count, name) => {
+      if (count > 1) {
+        const badIndex = _findLastIndex(formData.customBasemaps, bm => bm.name === name)
+        if (errors.customBasemaps[badIndex]) {
+          errors.customBasemaps[badIndex].addError(
+            this.props.intl.formatMessage(messages.uniqueCustomBasemapError)
+          )
+        }
+      }
+    })
+
+    return errors
+  }
+
   notificationsChangeHandler = (userSettings, {formData}) => {
     // The user's email address comes in from the notifications data even
     // though its technically a user setting
-    this.settingsChangeHandler({formData: _merge(userSettings, _pick(formData, 'email'))})
+    const toUpdateSettings = _merge({}, userSettings, _pick(formData, 'email'))
+    if (this.state.settingsFormData.customBasemaps) {
+      toUpdateSettings.customBasemaps = this.state.settingsFormData.customBasemaps
+    }
+    this.settingsChangeHandler({formData: toUpdateSettings})
 
     this.setState({
       notificationsFormData: formData,
@@ -130,7 +208,7 @@ class UserSettings extends Component {
         />
     }
 
-    const userSettings = _merge(this.props.user.settings, this.state.settingsFormData)
+    const userSettings = _merge({}, this.props.user.settings, this.state.settingsFormData)
 
     // The server uses two fields to represent the default basemap: a legacy
     // numeric identifier and a new optional string identifier for layers from
@@ -152,6 +230,13 @@ class UserSettings extends Component {
           basemapLayerSources()[userSettings.defaultBasemap] ||
           userSettings.defaultBasemap.toString()
       }
+    }
+
+    // Make sure the userSettings picks up the customBasemaps changes.
+    // If a customBasemap is removed then then merge above will still include it
+    // in the list.
+    if (this.state.settingsFormData.customBasemaps) {
+      userSettings.customBasemaps = this.state.settingsFormData.customBasemaps
     }
 
     const notificationSettings = _merge(
@@ -178,9 +263,11 @@ class UserSettings extends Component {
           liveValidate
           noHtml5Validate
           showErrorList={false}
+          validate={this.validate}
           formData={userSettings}
           onChange={this.settingsChangeHandler}
           ObjectFieldTemplate={NoFieldsetObjectFieldTemplate}
+          ArrayFieldTemplate={CustomArrayFieldTemplate}
         >
           <div className="form-controls" />
         </Form>

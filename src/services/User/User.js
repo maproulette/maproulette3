@@ -798,6 +798,11 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
       mergedState[entity.id].properties = entity.properties
     }
 
+    // Always completely replace customBasemaps
+    if (_isArray(_get(entity, 'settings.customBasemaps'))) {
+      mergedState[entity.id].settings.customBasemaps = entity.settings.customBasemaps
+    }
+
     // Normalize server's default `en` locale to `en-US`
     if (_get(entity, 'settings.locale') === 'en') {
       mergedState[entity.id].settings.locale = Locale.enUS

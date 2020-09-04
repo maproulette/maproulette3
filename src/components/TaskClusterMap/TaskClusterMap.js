@@ -19,7 +19,7 @@ import _compact from 'lodash/compact'
 import _cloneDeep from 'lodash/cloneDeep'
 import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'
-import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
+import { buildLayerSources } from '../../services/VisibleLayer/LayerSources'
 import { TaskPriorityColors } from '../../services/Task/TaskPriority/TaskPriority'
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
@@ -366,8 +366,10 @@ export class TaskClusterMap extends Component {
   }
 
   render() {
-    const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
-      <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+    const overlayLayers = buildLayerSources(
+      this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
+      (layerId, index, layerSource) =>
+        <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
     )
 
     const canClusterToggle = !!this.props.allowClusterToggle &&
