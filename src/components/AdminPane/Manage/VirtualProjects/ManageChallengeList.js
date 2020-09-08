@@ -9,6 +9,7 @@ import WithManageableProjects
 import WithCurrentProject from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithSearchResults from '../../../HOCs/WithSearchResults/WithSearchResults'
+import WithCommandInterpreter from '../../../HOCs/WithCommandInterpreter/WithCommandInterpreter'
 import WithPermittedChallenges from '../../HOCs/WithPermittedChallenges/WithPermittedChallenges'
 import WithPagedChallenges from '../../../HOCs/WithPagedChallenges/WithPagedChallenges'
 import { extendedFind } from '../../../../services/Challenge/Challenge'
@@ -24,10 +25,18 @@ import messages from './Messages'
 
 // Setup child components with needed HOCs.
 const ChallengeSearch = WithSearch(
-  SearchBox,
+  WithCommandInterpreter(SearchBox, ['p', 'i']),
   'adminChallengeList',
-  searchCriteria =>
-    extendedFind({searchQuery: searchCriteria.query, onlyEnabled: false}, 1000),
+  searchCriteria => {
+    if (_get(searchCriteria, 'filters')) {
+      return extendedFind({filters: _get(searchCriteria, 'filters', {}),
+                           onlyEnabled: false}, 1000)
+    }
+    else {
+      return extendedFind({searchQuery: searchCriteria.query,
+                           onlyEnabled: false}, 1000)
+    }
+  },
 )
 
 const ChallengeSearchResults =

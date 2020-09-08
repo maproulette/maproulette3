@@ -7,6 +7,7 @@ import _omit from 'lodash/omit'
 import _find from 'lodash/find'
 import _get from 'lodash/get'
 import _debounce from 'lodash/debounce'
+import _trim from 'lodash/trim'
 import { fetchPlaceLocation } from '../../../services/Place/Place'
 import WithErrors from '../WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
@@ -20,11 +21,12 @@ import { SEARCH_TYPE_PROJECT } from '../../SearchTypeFilter/SearchTypeFilter'
  *    m/  => Execute a map bounds search with either a bounding box or a centerpoint
  *    n/  => Execute a nominatim search and move map bounds
  *    p/  => Execute project name search
+ *    i/  => Execute a search by challenge id (exact matches only)
  *    s/ or default => Execute a standard search query
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-const WithCommandInterpreter = function(WrappedComponent) {
+const WithCommandInterpreter = function(WrappedComponent, acceptedCommands = null) {
   return class extends Component {
     state = {
       commandString: null,
@@ -35,7 +37,8 @@ const WithCommandInterpreter = function(WrappedComponent) {
     executeSearch = (commandString, searchType) => {
       // executeCommmand either runs the command or runs a standard challenge
       // search. It returns true if it ran a search, false if it ran a command
-      const wasStandardSearch = executeCommand(this.props, commandString, searchType, false, false)
+      const wasStandardSearch = executeCommand(this.props, commandString, searchType,
+                                               false, false, acceptedCommands)
       this.setState({
         commandString: wasStandardSearch ? null : commandString,
         searchType: searchType,
@@ -49,6 +52,7 @@ const WithCommandInterpreter = function(WrappedComponent) {
       this.props.removeSearchFilters(['query'])
       this.props.removeSearchFilters(['project'])
       this.props.removeSearchFilters(['searchType'])
+      this.props.removeSearchFilters(['challengeId'])
 
       this.props.clearSearch()
       this.setState({commandString: null, searchType: null, searchActive: true})
@@ -56,7 +60,8 @@ const WithCommandInterpreter = function(WrappedComponent) {
 
     deactivate = () => {
       executeCommand(this.props, this.state.commandString, this.state.searchType,
-                     (loading) => this.setState({mapLoading: loading}), true)
+                     (loading) => this.setState({mapLoading: loading}), true,
+                     acceptedCommands)
     }
 
     componentDidUpdate(prevProps) {
@@ -93,6 +98,19 @@ const WithCommandInterpreter = function(WrappedComponent) {
 }
 
 /**
+ * Tests if the short code is supported and will add an error if it is not.
+ **/
+const isCommandSupported = (code, acceptedCommands, props) => {
+  if (acceptedCommands && acceptedCommands.indexOf(code) === -1) {
+    props.addErrorWithDetails(AppErrors.search.notSupported, code + "/")
+    return false
+  }
+  else {
+    return true
+  }
+}
+
+/**
  * Executes the appropriate search type based on the start of the query string.
  * If isComplete is set to true then the user has indicated the search string is
  * complete; otherwise user may be in the middle of typing/constructing their
@@ -100,7 +118,8 @@ const WithCommandInterpreter = function(WrappedComponent) {
  *
  * @return boolean - Whether this was a typical search or a command search
  */
-export const executeCommand = (props, commandString, searchType, setLoading, isComplete=false) => {
+export const executeCommand = (props, commandString, searchType, setLoading,
+                               isComplete=false, acceptedCommands) => {
   if (searchType === SEARCH_TYPE_PROJECT) {
     props.setSearchFilters({project: commandString})
     return false
@@ -117,21 +136,47 @@ export const executeCommand = (props, commandString, searchType, setLoading, isC
 
   switch(command) {
     case 'm/':
-      props.setSearch("")  // We need to clear the initial 'm' from the query
-      if (isComplete && query.length > 0) {
-        debouncedMapSearch(props, query, setLoading)
+    props.setSearch("") // We need to clear the initial 'm' from the query
+      if (isCommandSupported('m', acceptedCommands, props)) {
+        if (isComplete && query.length > 0) {
+          debouncedMapSearch(props, query, setLoading)
+        }
+      }
+      else {
+        props.setSearchFilters({})
       }
       return false
     case 'n/':
       props.setSearch("") // We need to clear the initial 'n' from the query
-      if (isComplete && query.length > 0) {
-        debouncedPlaceSearch(props, query, setLoading)
+      if (isCommandSupported('n', acceptedCommands, props)) {
+        if (isComplete && query.length > 0) {
+          debouncedPlaceSearch(props, query, setLoading)
+        }
+      }
+      else {
+        props.setSearchFilters({})
       }
       return false
     case 'p/':
       props.setSearch("") // We need to clear the initial 'p' from the query
-      if (query.length > 0) {
-        props.setSearchFilters({project: query})
+      if (isCommandSupported('p', acceptedCommands, props)) {
+        if (query.length > 0) {
+          props.setSearchFilters({project: query})
+        }
+      }
+      else {
+        props.setSearchFilters({})
+      }
+      return false
+    case 'i/':
+      props.setSearch("") // We need to clear the initial 'i' from the query
+      if (isCommandSupported('i', acceptedCommands, props)) {
+        if (query.length > 0) {
+          props.setSearchFilters({challengeId: _trim(query)})
+        }
+      }
+      else {
+        props.setSearchFilters({})
       }
       return false
     case 's/':
@@ -247,5 +292,5 @@ WithCommandInterpreter.propTypes = {
   clearSearch: PropTypes.func.isRequired,
 }
 
-export default WrappedComponent =>
-  WithErrors(WithCommandInterpreter(WrappedComponent))
+export default (WrappedComponent, acceptedCommands) =>
+  WithErrors(WithCommandInterpreter(WrappedComponent, acceptedCommands))

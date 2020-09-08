@@ -727,6 +727,7 @@
   "Errors.reviewTask.alreadyClaimed": "This task is already being reviewed by someone else.",
   "Errors.reviewTask.fetchFailure": "Unable to fetch review needed tasks",
   "Errors.reviewTask.notClaimedByYou": "Unable to cancel review.",
+  "Errors.search.notSupported": "Short code search not supported{details}",
   "Errors.task.alreadyLocked": "Task has already been locked by someone else.",
   "Errors.task.bundleFailure": "Unable to bundle tasks together",
   "Errors.task.cooperativeFailure": "Failed to load cooperative task{details}",
