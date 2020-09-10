@@ -9,9 +9,12 @@ import _isUndefined from 'lodash/isUndefined'
 import _noop from 'lodash/noop'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
+import _isEmpty from 'lodash/isEmpty'
 import { messagesByDifficulty }
        from '../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
+import Dropdown from '../Dropdown/Dropdown'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import Taxonomy from '../Taxonomy/Taxonomy'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
@@ -58,6 +61,30 @@ export class CardChallenge extends Component {
           {'is-active': this.props.isExpanded}
         )}
       >
+        {!_isEmpty(this.props.info) &&
+         <Dropdown
+           className="mr-float-right mr-dropdown--right"
+           innerClassName="mr-bg-blue-darker"
+           dropdownButton={dropdown => (
+             <button
+               type="button"
+               onClick={dropdown.toggleDropdownVisible}
+               className="mr-ml-4 mr-flex"
+             >
+               <SvgSymbol
+                 sym="info-icon"
+                 viewBox="0 0 20 20"
+                 className="mr-fill-green-lighter mr-w-4 mr-h-4"
+               />
+             </button>
+           )}
+           dropdownContent={dropdown => (
+             <div className="mr-w-96 mr-max-w-screen60 mr-whitespace-normal">
+               {this.props.info}
+             </div>
+           )}
+         />
+        }
         <header className="mr-card-challenge__header" onClick={this.props.cardClicked}>
           <div className="mr-max-w-full">
             <Taxonomy {...this.props} {...this.props.challenge} />

@@ -52,8 +52,18 @@ export const TaskStatusColors = Object.freeze({
  *
  * @returns a Set of allowed status progressions
  */
-export const allowedStatusProgressions = function(status, includeSelf = false) {
+export const allowedStatusProgressions = function(status, includeSelf = false, forRevision = false) {
   let progressions = null
+
+  if (forRevision) {
+    progressions = new Set([TaskStatus.fixed, TaskStatus.falsePositive,
+                            TaskStatus.alreadyFixed, TaskStatus.tooHard])
+    if (!includeSelf) {
+      progressions.delete(status)
+    }
+    return progressions
+  }
+
   switch(status) {
     case TaskStatus.created:
       progressions = new Set([TaskStatus.fixed, TaskStatus.falsePositive,

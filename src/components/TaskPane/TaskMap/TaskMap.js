@@ -4,18 +4,23 @@ import classNames from 'classnames'
 import { ZoomControl, LayerGroup, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import { featureCollection } from '@turf/helpers'
+import { coordAll } from '@turf/meta'
+import { point } from '@turf/helpers'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _isEqual from 'lodash/isEqual'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
+import _each from 'lodash/each'
 import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
 import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
-import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
+import { buildLayerSources } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
+import DirectionalIndicationMarker
+       from '../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker'
 import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'
 import OpenStreetCamViewer from '../../OpenStreetCamViewer/OpenStreetCamViewer'
 import SourcedTileLayer
@@ -71,6 +76,7 @@ export class TaskMap extends Component {
     openStreetCamViewerImage: null,
     skipFit: false,
     latestZoom: null,
+    directionalityIndicators: [],
   }
 
   /** Process keyboard shortcuts for the layers */
@@ -225,6 +231,7 @@ export class TaskMap extends Component {
 
     this.loadMapillaryIfNeeded()
     this.loadOpenStreetCamIfNeeded()
+    this.generateDirectionalityMarkers()
   }
 
   componentDidUpdate(prevProps) {
@@ -234,6 +241,10 @@ export class TaskMap extends Component {
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       this.deactivateOSMDataLayer()
       this.setState({skipFit: false})
+      this.generateDirectionalityMarkers()
+    }
+    else if (!_isEqual(_get(prevProps, 'task.geometries'), _get(this.props, 'task.geometries'))) {
+      this.generateDirectionalityMarkers()
     }
   }
 
@@ -242,7 +253,8 @@ export class TaskMap extends Component {
     // task or our internal state changes. We care about changes to the task
     // id, its geometries, layer options, and a few settings on the parent
     // challenge.
-    if (nextState.showTaskFeatures !== this.state.showTaskFeatures) {
+    if (nextState.showTaskFeatures !== this.state.showTaskFeatures ||
+        nextState.directionalityIndicators !== this.state.directionalityIndicators) {
       return true
     }
 
@@ -397,6 +409,46 @@ export class TaskMap extends Component {
     return <LayerGroup key={Date.now()}>{markers}</LayerGroup>
   }
 
+  generateDirectionalityMarkers = () => {
+    const markers = []
+    const allFeatures = this.taskFeatures()
+    _each(allFeatures, (feature, featureIndex) => {
+      if (!feature.properties || !feature.properties.oneway) {
+        return
+      }
+
+      const styles =
+        AsSimpleStyleableFeature(feature, _get(this.props, 'challenge.taskStyles')).getFinalLayerStyles()
+      const coords = coordAll(feature)
+      if (["yes", "true", "1"].indexOf(feature.properties.oneway) !== -1) {
+        for (let i = 0; i < coords.length - 1; i++) {
+          markers.push(
+            <DirectionalIndicationMarker
+              key={`directional-marker-${this.props.task.id}-${featureIndex}-${i}`}
+              betweenPoints={[point(coords[i]), point(coords[i + 1])]}
+              atMidpoint
+              styles={styles}
+            />
+          )
+        }
+      }
+      else if (["-1", "reverse"].indexOf(feature.properties.oneway) !== -1) {
+        for (let i = coords.length - 1; i > 0; i--) {
+          markers.push(
+            <DirectionalIndicationMarker
+              key={`directional-marker-${this.props.task.id}-${featureIndex}-${i}`}
+              betweenPoints={[point(coords[i]), point(coords[i - 1])]}
+              atMidpoint
+              styles={styles}
+            />
+          )
+        }
+      }
+    })
+
+    this.setState({directionalityIndicators: markers})
+  }
+
   taskFeatures = () => {
     if (_get(this.props, 'taskBundle.tasks.length', 0) > 0) {
       return featureCollection(
@@ -439,8 +491,10 @@ export class TaskMap extends Component {
       return <BusySpinner />
     }
 
-    const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
-      <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+    const overlayLayers = buildLayerSources(
+      this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
+      (layerId, index, layerSource) =>
+        <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
     )
 
     const mapillaryMarkers = this.props.showMapillaryLayer ?
@@ -503,6 +557,7 @@ export class TaskMap extends Component {
           }
           {this.props.showMapillaryLayer && mapillaryMarkers}
           {this.props.showOpenStreetCamLayer && openStreetCamMarkers}
+          {this.state.showTaskFeatures && this.state.directionalityIndicators}
         </EnhancedMap>
 
         {this.state.mapillaryViewerImage &&

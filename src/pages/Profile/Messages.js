@@ -44,14 +44,44 @@ export default defineMessages({
     defaultMessage: "Select the default basemap to display on the map. Only a default challenge basemap will override the option selected here.",
   },
 
-  customBasemapLabel: {
-    id: "Profile.form.customBasemap.label",
-    defaultMessage: "Custom Basemap",
+  customBasemapsLabel: {
+    id: "Profile.form.customBasemaps.label",
+    defaultMessage: "Custom Basemaps",
   },
 
   customBasemapDescription: {
     id: "Profile.form.customBasemap.description",
     defaultMessage: "Insert a custom base map here. E.g. `https://'{s}'.tile.openstreetmap.org/'{z}'/'{x}'/'{y}'.png`",
+  },
+
+  addCustomBasemapLabel: {
+    id: "Profile.form.addCustomBasemap.label",
+    defaultMessage: "Add Custom Basemap",
+  },
+
+  deleteCustomBasemapLabel: {
+    id: "Profile.form.deleteCustomBasemap.label",
+    defaultMessage: "Delete",
+  },
+
+  customBasemapNameLabel: {
+    id: "Profile.form.customBasemap.name.label",
+    defaultMessage: "Name",
+  },
+
+  customBasemapURLLabel: {
+    id: "Profile.form.customBasemap.url.label",
+    defaultMessage: "URL",
+  },
+
+  customBasemapOverlayLabel: {
+    id: "Profile.form.customBasemap.overlay.label",
+    defaultMessage: "is overlay?",
+  },
+
+  uniqueCustomBasemapError: {
+    id: "Profile.form.uniqueCustomBasemap.error",
+    defaultMessage: "Custom Basemap names must be unique",
   },
 
   localeLabel: {

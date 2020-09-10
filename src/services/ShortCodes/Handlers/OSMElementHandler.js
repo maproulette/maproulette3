@@ -28,7 +28,8 @@ const OSMElementHandler = {
   },
 
   handlesShortCode(shortCode) {
-    return new RegExp(this.osmElementRegex).test(shortCode)
+    // Add opening short-code bracket to test to help prevent false positives
+    return new RegExp("\\[" + this.osmElementRegex).test(shortCode)
   },
 
   expandShortCode(shortCode) {

@@ -309,6 +309,12 @@ will not be able to make sense of it.
     defaultMessage: "Enter Overpass API query here...",
   },
 
+  overpassQLReadOnly: {
+    id: 'Admin.EditChallenge.form.overpassQL.readOnly',
+    defaultMessage: "Overpass queries cannot be edited, but you can choose Rebuild Tasks when " +
+      "managing your challenge to re-execute the query and freshen up your tasks."
+  },
+
   localGeoJsonLabel: {
     id: 'Admin.EditChallenge.form.localGeoJson.label',
     defaultMessage: "I want to upload a GeoJSON file",
@@ -317,6 +323,12 @@ will not be able to make sense of it.
   localGeoJsonDescription: {
     id: 'Admin.EditChallenge.form.localGeoJson.description',
     defaultMessage: "Please upload the local GeoJSON file from your computer",
+  },
+
+  localGeoJsonReadOnly: {
+    id: 'Admin.EditChallenge.form.localGeoJson.readOnly',
+    defaultMessage: "If you need to upload fresh GeoJSON, choose Rebuild Tasks " +
+      "when managing your challenge."
   },
 
   remoteGeoJsonLabel: {
@@ -332,6 +344,13 @@ will not be able to make sense of it.
   remoteGeoJsonPlaceholder: {
     id: 'Admin.EditChallenge.form.remoteGeoJson.placeholder',
     defaultMessage: "https://www.example.com/geojson.json",
+  },
+
+  remoteGeoJsonReadOnly: {
+    id: 'Admin.EditChallenge.form.remoteGeoJson.readOnly',
+    defaultMessage: "Remote URLs cannot be edited, but you can choose Rebuild Tasks " +
+      "when managing your challenge to re-download updated remote GeoJSON and freshen " +
+      "up your tasks."
   },
 
   dataOriginDateLabel: {

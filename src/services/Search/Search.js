@@ -76,7 +76,8 @@ export const PARAMS_MAP = {
   reviewStatus: 'trStatus',
   id: 'tid',
   difficulty: 'cd',
-  tags: 'tt'
+  tags: 'tt',
+  excludeTasks: 'tExcl',
 }
 
 
@@ -132,7 +133,7 @@ export const parseQueryString = function(rawQueryText) {
  */
 export const generateSearchParametersString = (filters, boundingBox, savedChallengesOnly,
                                                excludeOtherReviewers, queryString,
-                                               invertFields = {}) => {
+                                               invertFields = {}, excludeTasks) => {
   const searchParameters = {}
   const invf = []
 
@@ -286,7 +287,12 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     searchParameters[PARAMS_MAP.tags] = filters.tags
   }
 
+  if (excludeTasks && excludeTasks.length > 0) {
+    searchParameters[PARAMS_MAP.excludeTasks] = excludeTasks.join(',')
+  }
+
   searchParameters.invf = invf.join(',')
+
   return searchParameters
 }
 

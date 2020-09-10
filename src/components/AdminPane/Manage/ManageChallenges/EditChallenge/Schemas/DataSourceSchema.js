@@ -40,7 +40,9 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
       source: { enum: ["Overpass Query"] },
       overpassQL: {
         title: " ",
-        description: intl.formatMessage(messages.overpassQLDescription),
+        description:
+          (sourceReadOnly ? intl.formatMessage(messages.overpassQLReadOnly) + "\n\n" : "") +
+          intl.formatMessage(messages.overpassQLDescription),
         type: "string",
       },
     },
@@ -51,6 +53,7 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
       source: { enum: ["Local File"] },
       localGeoJSON: {
         title: " ",
+        description: sourceReadOnly ? intl.formatMessage(messages.localGeoJsonReadOnly) : undefined,
         type: "string",
       },
       dataOriginDate: {
@@ -67,6 +70,7 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
       source: { enum: ["Remote URL"] },
       remoteGeoJson: {
         title: " ",
+        description: sourceReadOnly ? intl.formatMessage(messages.remoteGeoJsonReadOnly) : undefined,
         type: "string",
       },
       dataOriginDate: {

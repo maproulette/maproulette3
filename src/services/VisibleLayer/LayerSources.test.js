@@ -11,10 +11,12 @@ import { BING,
 
 let layerId = null
 let layerUrl = null
+let layerName = null
 
 beforeEach(() => {
   layerId = "fooLayer"
   layerUrl = "http://www.example.com/foo"
+  layerName = "fooLayerName"
 })
 
 describe("layerSourceWithId", () => {
@@ -35,9 +37,10 @@ describe("layerSourceWithId", () => {
 
 describe("createDynamicLayerSource", () => {
   test("Generates layer source with the given id and url", () => {
-    const layer = createDynamicLayerSource(layerId, layerUrl)
+    const layer = createDynamicLayerSource(layerId, layerName, layerUrl)
 
     expect(layer.id).toEqual(layerId)
+    expect(layer.name).toEqual(layerName)
     expect(layer.url).toEqual(layerUrl)
     expect(layer.isDynamic).toBe(true)
   })
@@ -45,22 +48,22 @@ describe("createDynamicLayerSource", () => {
 
 describe("basemapLayerSource", () => {
   test("Returns a constant layer if defaultBasemap setting matches", () => {
-    const layer = basemapLayerSource(ChallengeBasemap.openStreetMap, null, null, layerId)
+    const layer = basemapLayerSource(ChallengeBasemap.openStreetMap, layerId)
     expect(layer.id).toEqual(OPEN_STREET_MAP)
   })
 
   test("Returns an identified layer if defaultBasemap setting matches", () => {
-    const layer = basemapLayerSource(ChallengeBasemap.identified, 'osm-mapnik-black_and_white', null, layerId)
+    const layer = basemapLayerSource(ChallengeBasemap.identified, 'osm-mapnik-black_and_white')
     expect(layer.id).toEqual('osm-mapnik-black_and_white')
   })
 
   test("Returns null if basemap set to none", () => {
-    const layer = basemapLayerSource(ChallengeBasemap.none, null, null, layerId)
+    const layer = basemapLayerSource(ChallengeBasemap.none, layerId)
     expect(layer).toBeNull()
   })
 
   test("Returns custom layer if set to custom and url provided", () => {
-    const layer = basemapLayerSource(ChallengeBasemap.custom, null, layerUrl, layerId)
+    const layer = basemapLayerSource({id: layerId, name: layerId, url: layerUrl}, layerId)
 
     expect(layer.id).toEqual(layerId)
     expect(layer.url).toEqual(layerUrl)
@@ -68,7 +71,7 @@ describe("basemapLayerSource", () => {
   })
 
   test("Returns null for custom layer if no url provided", () => {
-    const layer = basemapLayerSource(ChallengeBasemap.custom, null, null, layerId)
+    const layer = basemapLayerSource({id: layerId, name: layerId}, layerId)
 
     expect(layer).toBeNull()
   })

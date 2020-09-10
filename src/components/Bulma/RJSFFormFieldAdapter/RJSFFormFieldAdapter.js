@@ -59,6 +59,10 @@ export const NoFieldsetObjectFieldTemplate = function(props) {
 }
 
 export const CustomArrayFieldTemplate = props => {
+  const addLabel = props.uiSchema["ui:addLabel"] ||
+    <FormattedMessage {...messages.addPriorityRuleLabel} />
+  const deleteLabel = props.uiSchema["ui:deleteLabel"]
+
   const itemFields = _map(props.items, element =>
     <div
       key={element.index}
@@ -68,14 +72,17 @@ export const CustomArrayFieldTemplate = props => {
         className={classNames({"inline": _get(props, 'uiSchema.items.ui:options.inline')})}
       >
         {element.children}
-
         {element.hasRemove &&
-        <button className="button is-clear array-field__item__control remove-item-button"
-                onClick={element.onDropIndexClick(element.index)}>
-          <span className="icon is-danger">
-            <SvgSymbol sym="trash-icon" viewBox='0 0 20 20' />
-          </span>
-        </button>
+          <button className={classNames(
+            "is-clear array-field__item__control remove-item-button",
+            !deleteLabel ? "button" : "mr-button mr-button mr-button--small")}
+            onClick={element.onDropIndexClick(element.index)}>
+           {deleteLabel ||
+             <span className="icon is-danger">
+               <SvgSymbol sym="trash-icon" viewBox='0 0 20 20' className="mr-w-5 mr-h-5"/>
+             </span>
+           }
+          </button>
         }
       </div>
     </div>
@@ -83,6 +90,9 @@ export const CustomArrayFieldTemplate = props => {
 
   return (
     <div className="array-field">
+      {props.title &&
+        <label className="control-label">{props.title}</label>
+      }
       {itemFields}
       {props.canAdd &&
        <div className="array-field__block-controls">
@@ -90,7 +100,7 @@ export const CustomArrayFieldTemplate = props => {
            className="mr-button mr-button mr-button--small"
            onClick={props.onAddClick}
          >
-           <FormattedMessage {...messages.addPriorityRuleLabel} />
+           {addLabel}
          </button>
        </div>
       }

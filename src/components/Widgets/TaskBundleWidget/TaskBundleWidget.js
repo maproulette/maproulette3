@@ -4,7 +4,6 @@ import { Popup } from 'react-leaflet'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isEqual from 'lodash/isEqual'
-import _uniq from 'lodash/uniq'
 import _sum from 'lodash/sum'
 import _values from 'lodash/values'
 import _pick from 'lodash/pick'
@@ -18,6 +17,8 @@ import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 import TaskPropertyFilter from '../../TaskFilters/TaskPropertyFilter'
 import TaskPriorityFilter from '../../TaskFilters/TaskPriorityFilter'
 import TaskStatusFilter from '../../TaskFilters/TaskStatusFilter'
+import WithSelectedClusteredTasks
+       from '../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks'
 import WithBrowsedChallenge from '../../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithNearbyTasks from '../../HOCs/WithNearbyTasks/WithNearbyTasks'
 import WithTaskClusterMarkers from '../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
@@ -34,6 +35,7 @@ import WithWebSocketSubscriptions
        from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskAction } from '../../../services/Task/TaskAction/TaskAction'
+import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import TaskAnalysisTable from '../../TaskAnalysisTable/TaskAnalysisTable'
@@ -59,14 +61,18 @@ const descriptor = {
 }
 
 const ClusterMap = WithChallengeTaskClusters(
-                     WithTaskClusterMarkers(TaskClusterMap('taskBundling')))
+  WithTaskClusterMarkers(TaskClusterMap('taskBundling')),
+  false,
+  false
+)
 
 
 export default class TaskBundleWidget extends Component {
   bundleTasks = () => {
-    this.props.createTaskBundle(
-      _uniq([this.props.task.id].concat([...this.props.selectedTasks.keys()]))
-    )
+    // Because there's no way to select all tasks (TriState checkbox is
+    // suppressed on the TaskAnalysisTables), we only need to worry about
+    // explicitly selected tasks
+    this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()])
   }
 
   /**
@@ -93,6 +99,7 @@ export default class TaskBundleWidget extends Component {
   unbundleTasks = async () => {
     this.props.removeTaskBundle(this.props.taskBundle.bundleId, this.props.task.id)
     this.props.resetSelectedTasks()
+    this.setBoundsToNearbyTask()
   }
 
   updateBounds = (challengeId, bounds, zoom) => {
@@ -128,6 +135,10 @@ export default class TaskBundleWidget extends Component {
       this.initializeClusterFilters()
       this.initializeWebsocketSubscription()
     }
+
+    if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
+      this.props.selectTasks([this.props.task])
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -140,6 +151,9 @@ export default class TaskBundleWidget extends Component {
         _isFinite(_get(prevProps, 'task.id')) &&
         this.props.task.id !== prevProps.task.id) {
       this.props.resetSelectedTasks()
+    }
+    else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
+      this.props.selectTasks([this.props.task])
     }
   }
 
@@ -192,7 +206,7 @@ const ActiveBundle = props => {
   return (
     <div className="mr-p-4 mr-h-full mr-rounded">
       <div className="mr-flex mr-justify-between mr-content-center mr-mb-8">
-        <h3 className="mr-text-lg mr-text-blue">
+        <h3 className="mr-text-lg mr-text-pink-light">
           <FormattedMessage
             {...messages.simultaneousTasks}
             values={{taskCount: props.taskBundle.taskIds.length}}
@@ -226,6 +240,7 @@ const ActiveBundle = props => {
         taskSelectionReviewStatuses={[]}
         suppressHeader
         suppressManagement
+        suppressTriState
         defaultPageSize={5}
       />
     </div>
@@ -264,11 +279,8 @@ const BuildBundle = props => {
     )
   }
 
-  // Force the current task to always show as selected
-  const selectedTasks = new Map(props.selectedTasks)
-  selectedTasks.set(props.task.id, props.task)
-
-  const bundleButton = selectedTasks.size > 1 ? (
+  const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
+  const bundleButton = props.selectedTaskCount(totalTaskCount) > 1 ? (
     <button
       className="mr-button mr-button--green-lighter mr-button--small"
       onClick={props.bundleTasks}
@@ -281,8 +293,11 @@ const BuildBundle = props => {
     return (
       <Popup key={markerData.options.taskId}>
         <div className="marker-popup-content">
-          <TaskMarkerContent marker={markerData} taskId={markerData.options.taskId}
-                    selectedTasks={selectedTasks} {..._omit(props, 'selectedTasks')} />
+          <TaskMarkerContent
+            {...props}
+            marker={markerData}
+            taskId={markerData.options.taskId}
+          />
         </div>
       </Popup>
     )
@@ -293,12 +308,13 @@ const BuildBundle = props => {
       loadingTasks={props.loadingTasks}
       showMarkerPopup={showMarkerPopup}
       highlightPrimaryTask={props.task.id}
-      chosenTasks={selectedTasks}
       boundingBox={_get(props, 'criteria.boundingBox')}
-      onBulkTaskSelection={props.selectTasksById}
+      initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
+      onBulkTaskSelection={props.selectTasks}
+      onBulkTaskDeselection={props.deselectTasks}
       allowClusterToggle={false}
       hideSearchControl
-      {..._omit(props, 'selectedTasks', 'className')}
+      {..._omit(props, 'className')}
     />
 
   return (
@@ -325,9 +341,8 @@ const BuildBundle = props => {
       <div className="mr-px-4 mr-h-half mr-overflow-y-auto">
         <TaskAnalysisTable
           {...props}
-          selectedTasks={selectedTasks}
           taskData={_get(props, 'taskInfo.tasks')}
-          totalTaskCount={_get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')}
+          totalTaskCount={totalTaskCount}
           totalTasksInChallenge={ calculateTasksInChallenge(props) }
           showColumns={['selected', 'featureId', 'id', 'status', 'priority']}
           taskSelectionStatuses={[TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard]}
@@ -338,6 +353,7 @@ const BuildBundle = props => {
           highlightPrimaryTask
           defaultPageSize={5}
           forBundling
+          suppressTriState
         />
       </div>
     </div>
@@ -345,28 +361,30 @@ const BuildBundle = props => {
 }
 
 registerWidgetType(
-  WithNearbyTasks(
-    WithClusteredTasks(
-      WithFilteredClusteredTasks(
-        WithTaskPropertyKeys(
-          WithFilterCriteria(
-            WithBoundedTasks(
-              WithBrowsedChallenge(
-                WithWebSocketSubscriptions(
-                  TaskBundleWidget,
-                )
-              ),
-              'filteredClusteredTasks',
-              'taskInfo'
+  WithSelectedClusteredTasks(
+    WithNearbyTasks(
+      WithClusteredTasks(
+        WithFilteredClusteredTasks(
+          WithTaskPropertyKeys(
+            WithFilterCriteria(
+              WithBoundedTasks(
+                WithBrowsedChallenge(
+                  WithWebSocketSubscriptions(
+                    TaskBundleWidget,
+                  )
+                ),
+                'filteredClusteredTasks',
+                'taskInfo'
+              )
             )
-          )
-        ),
-        'clusteredTasks',
-        'filteredClusteredTasks',
-        {
-          statuses: VALID_STATUSES,
-          includeLocked: false,
-        }
+          ),
+          'clusteredTasks',
+          'filteredClusteredTasks',
+          {
+            statuses: VALID_STATUSES,
+            includeLocked: false,
+          }
+        )
       )
     )
   ), descriptor

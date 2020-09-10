@@ -3,7 +3,10 @@ import _isString from 'lodash/isString'
 import _flatten from 'lodash/flatten'
 import _map from 'lodash/map'
 import _trim from 'lodash/trim'
+import { featureEach } from '@turf/meta'
+import { getGeom } from '@turf/invariant'
 import AsLineReadableFile from '../File/AsLineReadableFile'
+import messages from './Messages'
 
 const RS = String.fromCharCode(0x1E) // RS (record separator) control char
 
@@ -75,18 +78,30 @@ export class AsValidatableGeoJSON {
     let lineNumber = 1
 
     this.geoJSONFile.rewind()
-    this.geoJSONFile.forEach(1, rawLine => {
+    await this.geoJSONFile.forEach(1, rawLine => {
       const line = this.normalizeRFC7464Sequence(_trim(rawLine))
       if (line.length > 0) { // Skip blank lines or pure whitespace
         try {
           const geoJSONObject = JSON.parse(line)
-          const errors = geojsonhint.hint(geoJSONObject)
-          if (errors.length > 0) {
-            // remap line numbers
-            allErrors.push(_map(errors, error => ({
-              line: lineNumber,
-              message: error.message,
-            })))
+          if (geoJSONObject) {
+            try {
+              this.flagUnsupportedGeometries(geoJSONObject)
+            }
+            catch(errorMessage) {
+              allErrors.push({
+                line: lineNumber,
+                message: errorMessage,
+              })
+            }
+
+            const errors = geojsonhint.hint(geoJSONObject)
+            if (errors.length > 0) {
+              // remap line numbers
+              allErrors.push(_map(errors, error => ({
+                line: lineNumber,
+                message: error.message,
+              })))
+            }
           }
         }
         catch(parseError) {
@@ -127,7 +142,34 @@ export class AsValidatableGeoJSON {
       return [{message: `${parseError}`}]
     }
 
+    if (geoJSONObject) {
+      try {
+        this.flagUnsupportedGeometries(geoJSONObject)
+      }
+      catch(errorMessage) {
+        return [{message: errorMessage}]
+      }
+    }
+
     return geojsonhint.hint(geoJSONObject)
+  }
+
+  /**
+   * Throw error if unsupported (even if technically legal) geometries are
+   * discovered, as otherwise these will simply result in errors or other
+   * problematic behavior on the backend
+   */
+  flagUnsupportedGeometries(geoJSONObject) {
+    featureEach(geoJSONObject, feature => {
+      const geom = getGeom(feature)
+      if (!geom) {
+        throw messages.noNullGeometry
+      }
+
+      if (geom.type === "Point" && geom.coordinates.length > 2) {
+        throw messages.noZCoordinates
+      }
+    })
   }
 }
 

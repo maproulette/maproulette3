@@ -4,6 +4,11 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with ChallengeResultItem.
  */
 export default defineMessages({
+  difficulty: {
+    id: 'Challenge.result.difficulty.label',
+    defaultMessage: 'Difficulty',
+  },
+
   unsave: {
     id: 'Challenge.controls.unsave.label',
     defaultMessage: 'Unsave',
@@ -22,6 +27,11 @@ export default defineMessages({
   manageLabel: {
     id: "Challenge.management.controls.manage.label",
     defaultMessage: "Manage",
+  },
+
+  browseLabel: {
+    id: "Challenge.results.controls.browse.label",
+    defaultMessage: "More Details",
   },
 
   signIn: {

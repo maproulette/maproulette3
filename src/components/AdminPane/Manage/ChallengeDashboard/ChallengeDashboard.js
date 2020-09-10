@@ -13,14 +13,14 @@ import WithCurrentChallenge
        from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithWidgetWorkspaces
        from '../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
+import WithSelectedClusteredTasks
+       from '../../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks'
 import WithFilteredClusteredTasks
        from '../../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import WithClusteredTasks
       from '../../../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
-import WithChallengeReviewMetrics
-      from '../../HOCs/WithChallengeReviewMetrics/WithChallengeReviewMetrics'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
 import TaskUploadingProgress
@@ -156,15 +156,15 @@ WithManageableProjects(
     WithSearch(
       WithCurrentChallenge(
         WithWidgetWorkspaces(
-          WithClusteredTasks(
-            WithFilteredClusteredTasks(
-              WithChallengeMetrics(
-                WithChallengeReviewMetrics(
+          WithSelectedClusteredTasks(
+            WithClusteredTasks(
+              WithFilteredClusteredTasks(
+                WithChallengeMetrics(
                   injectIntl(ChallengeDashboard),
-                )
-              ),
-              'clusteredTasks',
-              'filteredClusteredTasks'
+                ),
+                'clusteredTasks',
+                'filteredClusteredTasks'
+              )
             )
           ),
           WidgetDataTarget.challenge,

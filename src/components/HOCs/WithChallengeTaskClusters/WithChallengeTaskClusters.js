@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import bboxPolygon from '@turf/bbox-polygon'
+import booleanDisjoint from '@turf/boolean-disjoint'
 import _omit from 'lodash/omit'
 import _cloneDeep from 'lodash/cloneDeep'
 import _get from 'lodash/get'
@@ -8,15 +10,18 @@ import _isEqual from 'lodash/isEqual'
 import _uniqueId from 'lodash/uniqueId'
 import _sum from 'lodash/sum'
 import _map from 'lodash/map'
+import _filter from 'lodash/filter'
 import _set from 'lodash/set'
 import _debounce from 'lodash/debounce'
+import _isEmpty from 'lodash/isEmpty'
+import _isFinite from 'lodash/isFinite'
 import { fromLatLngBounds, boundsWithinAllowedMaxDegrees }
        from '../../../services/MapBounds/MapBounds'
 import { fetchTaskClusters, clearTaskClusters }
        from '../../../services/Task/TaskClusters'
 import { fetchBoundedTasks, clearBoundedTasks }
        from '../../../services/Task/BoundedTask'
-
+import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterMap'
 
 /**
@@ -25,21 +30,28 @@ import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterM
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=false) {
+export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=false, showClusters=true) {
   return class extends Component {
     state = {
       loading: false,
       fetchId: null,
       clusters: {},
-      showAsClusters: true,
+      showAsClusters: showClusters,
       taskCount: 0
     }
 
     updateBounds = (bounds, zoom, fromUserAction=false) => {
-      if (this.props.criteria.boundingBox !== fromLatLngBounds(bounds).join(',')) {
+      const arrayBounds = fromLatLngBounds(bounds)
+      if (this.props.criteria.boundingBox !== arrayBounds.join(',')) {
         const criteria = _cloneDeep(this.props.criteria)
-        criteria.boundingBox = fromLatLngBounds(bounds).join(',')
+        criteria.boundingBox = arrayBounds.join(',')
         this.props.updateTaskFilterBounds(bounds, zoom, fromUserAction)
+
+        // If task selection is active, prune any selections that no longer
+        // intersect with the new map bounds
+        this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
+          booleanDisjoint(AsMappableTask(task).normalizedGeometries(), bboxPolygon(arrayBounds))
+        )
       }
     }
 
@@ -150,8 +162,34 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       }
     }
 
+    clustersAsTasks = () => {
+      if (_isEmpty(this.state.clusters)) {
+        return this.state.clusters
+      }
+
+      // Sometimes we have tasks, sometimes single-point clusters depending on
+      // whether tasks have been unclustered. Either way, represent as tasks
+      return _isFinite(this.state.clusters[0].clusterId) ? // clusters
+             _map(this.state.clusters, cluster => ({
+               id: cluster.taskId,
+               status: cluster.taskStatus,
+               priority: cluster.taskPriority,
+               parentId: cluster.challengeIds[0],
+               geometries: cluster.geometries,
+             })) :
+             this.state.clusters // tasks
+    }
+
     onBulkTaskSelection = taskIds => {
-      this.props.onBulkTaskSelection(taskIds, this.state.clusters)
+      const tasks =
+        _filter(this.clustersAsTasks(), task => taskIds.indexOf(task.id) !== -1)
+      this.props.onBulkTaskSelection(tasks)
+    }
+
+    onBulkTaskDeselection = taskIds => {
+      const tasks =
+        _filter(this.clustersAsTasks(), task => taskIds.indexOf(task.id) !== -1)
+      this.props.onBulkTaskDeselection(tasks)
     }
 
     render() {
@@ -165,6 +203,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
           boundingBox={criteriaBounds}
           updateBounds = {this.updateBounds}
           onBulkTaskSelection = {this.onBulkTaskSelection}
+          onBulkTaskDeselection = {this.onBulkTaskDeselection}
           loading = {this.state.loading}
           toggleShowAsClusters = {this.toggleShowAsClusters}
           showAsClusters = {this.state.showAsClusters}
@@ -187,5 +226,5 @@ export const mapDispatchToProps = dispatch => Object.assign(
   }
 )
 
-export default (WrappedComponent, storeTasks) =>
-  connect(null, mapDispatchToProps)(WithChallengeTaskClusters(WrappedComponent, storeTasks))
+export default (WrappedComponent, storeTasks, showClusters) =>
+  connect(null, mapDispatchToProps)(WithChallengeTaskClusters(WrappedComponent, storeTasks, showClusters))

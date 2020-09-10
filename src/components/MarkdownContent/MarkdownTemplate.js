@@ -13,15 +13,18 @@ import Handlebars from 'handlebars'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 /**
- * MarkdownTemplate will handle converting markdown content to html.
- * It was also handle basic mustache tag replacement (eg. {{propName}}).
- * It also handles template tags which are removed from the text and
- * converted into input fields that are outputed in a list following the
- * normal textual content.
+ * MarkdownTemplate will handle converting markdown content to html, as well as
+ * basic mustache tag replacement for task properties (eg. {{propName}}).
+ * Handlebars is used in combination with custom handlers to convert input
+ * fields that are outputed in a basic form following the normal textual
+ * content.
  *
- * Current supported template tags are as follows:
- * {{checkbox "Label for checkbox" name="propertyName"}}
- * {{select "Label for select" name="propertyName" values="value1,value2,etc."}}
+ * Current supported template/form tags are as follows (note that they use
+ * three mustache tags instead of the usual two used for property
+ * substitution):
+ *
+ * {{{checkbox "Label for checkbox" name="propertyName"}}}
+ * {{{select "Label for select" name="propertyName" values="value1,value2,etc."}}}
  *
  * @author [Kelli Rotstan](https://github.com/lrotstan)
  */
@@ -106,14 +109,17 @@ export default class MarkdownTemplate extends Component {
   }
 
   substitutePropertyTags = (text, properties) => {
-    // Handlebars does not handle @ properties (eg. @id). So we will do a
-    // simple substitution first.
+    // Handlebars does not handle @ properties (eg. @id), so we handle property
+    // substitution ourselves. We also run each property through linkify to turn
+    // URLs into links since property substitution happens after Markdown parsing,
+    // so that wouldn't otherwise happen
     let substituted = _cloneDeep(text)
     _keys(properties).forEach(key => {
       let safe = properties[key]
       if (safe) {
         safe = safe.toString().replace(/</g, '&lt;')
         safe = safe.toString().replace(/>/g, '&gt;')
+        safe = this.linkify(safe)
       }
 
       substituted = substituted.replace(RegExp(`{{\\s*${key}\\s*}}`, "g"), safe)
@@ -189,6 +195,14 @@ export default class MarkdownTemplate extends Component {
                onChange={() => this.toggleResponse(propertyName)}/>
         <label className="mr-pl-2" dangerouslySetInnerHTML={{__html:body}} />
       </li>
+    )
+  }
+
+  linkify(text) {
+    const urlPattern = /(?:https?:)?\/\/(?:(?:[\w-]+\.)+[\w/#@~.-]*)(?:\?(?:[\w&=.!,;$#%-]+)?)?/gi
+
+    return (text || '').replace(urlPattern, url =>
+      '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + url + '</a>'
     )
   }
 

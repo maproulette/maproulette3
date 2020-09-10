@@ -1,6 +1,7 @@
 import L from 'leaflet'
 import 'leaflet-vectoricon'
 import _isFunction from 'lodash/isFunction'
+import _isFinite from 'lodash/isFinite'
 import _merge from 'lodash/merge'
 import _cloneDeep from 'lodash/cloneDeep'
 import _fromPairs from 'lodash/fromPairs'
@@ -67,7 +68,7 @@ export class AsMappableCluster {
    * Generates a Leaflet Icon object appropriate for the given cluster based on
    * its size, including using a standard marker for a single point
    */
-  leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask) {
+  leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask=false) {
     const count = _isFunction(this.rawData.getChildCount) ?
                   this.rawData.getChildCount() :
                   _get(this.options, 'numberOfPoints', this.numberOfPoints)
@@ -88,13 +89,20 @@ export class AsMappableCluster {
       })
     }
     else {
-      const markerData = _merge(this.rawData, {taskStatus: this.rawData.status,
-                                               taskPriority: this.rawData.priority,
-                                               taskId: this.rawData.id})
+      const markerData = _merge(this.rawData, {
+        taskStatus: this.rawData.status,
+        taskPriority: this.rawData.priority,
+        taskId: this.rawData.id
+      })
+
+      const isSelected = selectedTasks && (
+        (selectedTasks.allSelected && !selectedTasks.deselected.has(markerData.taskId)) ||
+        (!selectedTasks.allSelected && selectedTasks.selected.has(markerData.taskId))
+      )
 
       let icon = _cloneDeep(statusIcons[markerData.taskStatus] || statusIcons[0])
 
-      if (highlightPrimaryTask && highlightPrimaryTask === markerData.taskId) {
+      if (_isFinite(highlightPrimaryTask) && highlightPrimaryTask === markerData.taskId) {
         // Make marker for current task larger
         icon = _cloneDeep(primaryTaskStatusIcons[markerData.taskStatus])
         icon.options.svgHeight = 40
@@ -102,9 +110,10 @@ export class AsMappableCluster {
         icon.options.style.fill = colors.yellow
         icon.options.iconAnchor = [5, 25] // adjust position of marker tip for larger size
       }
-      else if (selectedTasks && selectedTasks.has(markerData.taskId)) {
+      else if (isSelected) {
         icon = _cloneDeep(selectedTaskStatusIcons[markerData.taskStatus])
-        icon.options.style.fill = colors.yellow
+        icon.options.style.stroke = colors.yellow
+        icon.options.style.strokeWidth = 2
       }
       icon.options.taskData = markerData
 

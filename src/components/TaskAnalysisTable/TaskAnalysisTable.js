@@ -19,7 +19,6 @@ import _reverse from 'lodash/reverse'
 import _keys from 'lodash/keys'
 import _concat from 'lodash/concat'
 import _filter from 'lodash/filter'
-import _find from 'lodash/find'
 import _cloneDeep from 'lodash/cloneDeep'
 import _split from 'lodash/split'
 import _isEmpty from 'lodash/isEmpty'
@@ -194,22 +193,11 @@ export class TaskAnalysisTable extends Component {
       }
     }
 
-    // It's possible for the props.selectedTasks (which comes from WithFilteredClusteredTasks)
-    // to contain tasks not in our data as our data has been filtered by
-    // bounds and paging also --- so we make sure here to only include tasks
-    // visible on our current page.
-    const selectedDataTasks =
-      _filter([...this.props.selectedTasks.keys()],
-               taskId => _find(data, task => task.id === taskId))
-
-    // If this is for bundling then we really do want to the full count of
-    // selected tasks since they could have used the "lasso" tool.
-    const selectedTaskCount = this.props.forBundling ?
-      this.props.selectedTasks.size : selectedDataTasks.length
-
     if (_get(this.props, 'criteria.filters')) {
-      defaultFiltered = _map(this.props.criteria.filters,
-                             (value, key) => {return {id: key, value}})
+      defaultFiltered = _map(
+        this.props.criteria.filters,
+        (value, key) => ({id: key, value})
+      )
     }
 
     const manager = AsManager(this.props.user)
@@ -224,8 +212,6 @@ export class TaskAnalysisTable extends Component {
                {...this.props}
                countShown={data.length}
                configureColumns={this.configureColumns.bind(this)}
-               selectedTasks={selectedDataTasks}
-               selectedTaskCount={selectedTaskCount}
              />
            </header>
           }
@@ -282,7 +268,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.selected = {id: 'selected',
     Header: null,
-    accessor: task => (props.selectedTasks.has(task.id) || props.allTasksAreSelected()),
+    accessor: task => props.isTaskSelected(task.id),
     Cell: ({value, original}) => (
       props.highlightPrimaryTask && original.id === props.task.id ?
       <span className="mr-text-green-lighter">✓</span> :
@@ -601,7 +587,7 @@ TaskAnalysisTable.propTypes = {
   challenge: PropTypes.object,
   /** Total tasks available (we may receive a subset) */
   totalTaskCount: PropTypes.number,
-  /** Map of currently selected tasks */
+  /** Currently selected tasks */
   selectedTasks: PropTypes.object.isRequired,
   /** Invoked to toggle selection of a task */
   toggleTaskSelection: PropTypes.func.isRequired,

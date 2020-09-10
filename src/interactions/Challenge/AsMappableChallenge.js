@@ -14,11 +14,8 @@ export class AsMappableChallenge {
     if (!_isFinite(this.id)) {
       return null
     }
-
     return basemapLayerSource(this.defaultBasemap,
-                              this.defaultBasemapId,
-                              this.customBasemap,
-                              `challenge_${this.id}`)
+                              this.defaultBasemapId)
   }
 }
 

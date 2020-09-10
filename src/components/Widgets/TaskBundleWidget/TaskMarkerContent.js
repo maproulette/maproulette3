@@ -10,11 +10,11 @@ import messages from './Messages'
  */
 class TaskMarkerContent extends Component {
   toggleSelection = () => {
-    this.props.toggleTaskSelectionById(this.props.marker.options.taskId)
+    this.props.toggleTaskSelection(this.props.marker.options)
   }
 
   render() {
-    const selected = this.props.selectedTasks.has(this.props.marker.options.taskId)
+    const selected = this.props.isTaskSelected(this.props.marker.options.taskId)
     const statusMessage = messagesByStatus[
       _isFinite(this.props.marker.options.taskStatus) ?
       this.props.marker.options.taskStatus :

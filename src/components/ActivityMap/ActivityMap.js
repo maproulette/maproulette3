@@ -11,7 +11,7 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import { latLng } from 'leaflet'
 import { toLatLngBounds, GLOBAL_MAPBOUNDS } from '../../services/MapBounds/MapBounds'
-import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
+import { buildLayerSources } from '../../services/VisibleLayer/LayerSources'
 import { TaskStatusColors } from '../../services/Task/TaskStatus/TaskStatus'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
@@ -65,8 +65,10 @@ export const ActivityMap = props => {
     })
   }
 
-  const overlayLayers = _map(props.visibleOverlays, (layerId, index) =>
-    <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+  const overlayLayers = buildLayerSources(
+    props.visibleOverlays, _get(props, 'user.settings.customBasemaps'),
+    (layerId, index, layerSource) =>
+      <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
   )
 
   if (!coloredMarkers) {
