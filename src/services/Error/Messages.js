@@ -238,4 +238,8 @@ export default defineMessages({
     id: "Errors.team.genericFailure",
     defaultMessage: "Failure{details}"
   },
+  searchNotSupported: {
+    id: "Errors.search.notSupported",
+    defaultMessage: "Short code search not supported{details}"
+  }
 })
