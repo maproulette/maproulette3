@@ -215,7 +215,9 @@ export default class MarkdownTemplate extends Component {
       <div>
         {this.props.header}
         <div className={classNames("mr-mb-4",
-                                   {"mr-overflow-scroll mr-h-40 mr-pb-2": this.props.inModal})}
+                                   {"mr-overflow-scroll mr-pb-2": this.props.inModal,
+                                    "mr-h-40": this.props.inModal && !_isEmpty(this.state.questions),
+                                    "mr-h-72": this.props.inModal && _isEmpty(this.state.questions)})}
           dangerouslySetInnerHTML={{__html: this.state.content}}
         />
         {!_isEmpty(this.state.questions) &&

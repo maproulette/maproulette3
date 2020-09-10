@@ -159,4 +159,8 @@ export default defineMessages({
     defaultMessage: "Hide Instructions",
   },
 
+  instructionsContiniueLabel: {
+    id: 'TaskConfirmationModal.instructionsContinue.label',
+    defaultMessage: "Continue",
+  },
 })

@@ -69,8 +69,9 @@ export class TaskConfirmationModal extends Component {
       this.handleKeyboardShortcuts
     )
 
-    if (this.props.needsResponses && _isEmpty(this.props.completionResponses)) {
-      this.setState({showInstructions: true})
+    if (this.props.needsResponses && _isEmpty(this.props.completionResponses) &&
+        this.props.status !== TaskStatus.skipped) {
+      this.setState({showInstructions: true, instructionsContinue: true})
     }
   }
 
@@ -302,7 +303,7 @@ export class TaskConfirmationModal extends Component {
                         </label>
                       </div>
                       <div className="mr-text-green-lighter mr-text-center mr-mt-4 hover:mr-text-white mr-cursor-pointer mr-text-xs">
-                        <div onClick={() => this.setState({showInstructions: true})}>
+                        <div onClick={() => this.setState({showInstructions: true, instructionsContinue: false})}>
                           <FormattedMessage {...messages.viewInstructions} />
                         </div>
                       </div>
@@ -442,7 +443,9 @@ export class TaskConfirmationModal extends Component {
           {!this.props.inReview && this.state.showInstructions && _isUndefined(this.props.needsRevised) &&
             <InstructionsOverlay
               {...this.props}
-              close={() => this.setState({showInstructions: false})}
+              close={() => this.setState({showInstructions: false, instructionsContinue: false})}
+              closeMessage={this.state.instructionsContinue ?
+                messages.instructionsContiniueLabel : messages.closeInstructionsLabel}
             />
           }
         </Modal>
