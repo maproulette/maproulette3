@@ -60,6 +60,7 @@ export default class ChallengeControls extends Component {
     return (
       <div className={this.props.className}>
         {hasTasks && isUsableChallengeStatus(status, true) &&
+         status !== ChallengeStatus.finished &&
           <Link
             to={`/challenge/${this.props.challenge.id}`}
             className={this.props.controlClassName}
