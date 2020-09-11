@@ -445,7 +445,7 @@ export class TaskConfirmationModal extends Component {
               {...this.props}
               close={() => this.setState({showInstructions: false, instructionsContinue: false})}
               closeMessage={this.state.instructionsContinue ?
-                messages.instructionsContiniueLabel : messages.closeInstructionsLabel}
+                messages.instructionsContinueLabel : messages.closeInstructionsLabel}
             />
           }
         </Modal>
