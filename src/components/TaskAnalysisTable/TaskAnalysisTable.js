@@ -518,7 +518,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
          </Link>
         }
         {(!_isUndefined(row._original.reviewStatus)) &&
-         <Link to={`/challenge/${props.challenge.id}/task/${row._original.id}/review`} className="mr-mr-2">
+         <Link
+           to={{
+                  pathname: `/challenge/${props.challenge.id}/task/` +
+                            `${row._original.id}/review`,
+                  state: {filters:{challengeId: props.challenge.id}}
+                }}
+           className="mr-mr-2" >
            <FormattedMessage {...messages.reviewTaskLabel} />
          </Link>
         }
