@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'
+import _isEmpty from 'lodash/isEmpty'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import WithManageableProjects
@@ -28,7 +29,7 @@ const ChallengeSearch = WithSearch(
   WithCommandInterpreter(SearchBox, ['p', 'i']),
   'adminChallengeList',
   searchCriteria => {
-    if (_get(searchCriteria, 'filters')) {
+    if (!_isEmpty(_get(searchCriteria, 'filters'))) {
       return extendedFind({filters: _get(searchCriteria, 'filters', {}),
                            onlyEnabled: false}, 1000)
     }
