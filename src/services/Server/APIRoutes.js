@@ -137,6 +137,7 @@ const apiRoutes = factory => {
       'userLeaderboard': factory.get('/data/user/:id/leaderboard'),
       'reviewerLeaderboard': factory.get('/data/reviewer/leaderboard'),
       'find': factory.get('/users/find/:username'),
+      'findPreferred': factory.get('/users/find'),
     },
     'user': {
       'whoami': factory.get('/user/whoami'),

@@ -60,7 +60,9 @@ export class TaskConfirmationModal extends Component {
   }
 
   componentDidMount(prevProps, prevState) {
-    this.commentInputRef.current.focus()
+    if (this.commentInputRef.current) {
+      this.commentInputRef.current.focus()
+    }
 
     this.props.pauseKeyboardShortcuts()
     this.props.activateKeyboardShortcut(
@@ -216,6 +218,7 @@ export class TaskConfirmationModal extends Component {
                         placeholder={applyingTagChanges ? '' : this.props.intl.formatMessage(messages.placeholder)}
                         value={this.props.comment}
                         commentChanged={this.props.setComment}
+                        taskId={this.props.task.id}
                       />
                     </div>
                     <KeywordAutosuggestInput

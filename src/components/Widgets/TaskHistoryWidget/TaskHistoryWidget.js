@@ -31,6 +31,8 @@ export default class TaskHistoryWidget extends Component {
     selectedTimestamps: [],
   }
 
+  commentInputRef = React.createRef()
+
   toggleSelection = (timestamp) => {
     const diffTimestamps = this.state.selectedTimestamps
     if (_indexOf(diffTimestamps, timestamp.toString()) !== -1) {
@@ -125,6 +127,8 @@ export default class TaskHistoryWidget extends Component {
             value={this.state.comment}
             commentChanged={this.setComment}
             submitComment={this.postComment}
+            taskId={this.props.task.id}
+            inputRef={this.commentInputRef}
           />
         </div>
 
