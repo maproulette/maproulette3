@@ -12,6 +12,7 @@ import _isFinite from 'lodash/isFinite'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
+import _remove from 'lodash/remove'
 import { defaultRoutes as api, isSecurityError, websocketClient } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -143,6 +144,7 @@ const dispatchTaskUpdateNotification = function(dispatch, task) {
 
 // redux actions
 const RECEIVE_TASKS = 'RECEIVE_TASKS'
+const CLEAR_TASKS = 'CLEAR_TASKS'
 const REMOVE_TASK = 'REMOVE_TASK'
 
 // redux action creators
@@ -155,6 +157,18 @@ export const receiveTasks = function(normalizedEntities) {
     type: RECEIVE_TASKS,
     status: RequestStatus.success,
     entities: normalizedEntities,
+    receivedAt: Date.now()
+  }
+}
+
+/**
+ * Clear task data for a given challenge from the redux store
+ */
+export const clearTasks = function(challengeId) {
+  return {
+    type: CLEAR_TASKS,
+    status: RequestStatus.success,
+    challengeId: challengeId,
     receivedAt: Date.now()
   }
 }
@@ -307,7 +321,13 @@ export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
 
     return new Endpoint(
       api.tasks.bulkUpdate, {json: taskData}
-    ).execute().catch(error => {
+    ).execute().then(results => {
+      // Clear all tasks in challenge since we don't know exactly which tasks
+      // are impacted by these changes (as bundling could be affected)
+      if (taskData.length > 0) {
+        dispatch(clearTasks(taskData[0].parentId))
+      }
+    }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -341,7 +361,9 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, e
         params: {...searchParameters, newStatus},
         json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
       }
-    ).execute().catch(error => {
+    ).execute().then( results => {
+      dispatch(clearTasks(challengeId))
+    }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -1021,6 +1043,9 @@ export const taskEntities = function(state, action) {
     const mergedState = _cloneDeep(state)
     delete mergedState[action.taskId]
     return mergedState
+  }
+  else if (action.type === CLEAR_TASKS) {
+    return _remove(_cloneDeep(state), x => (x ? x.parent === action.challengeId : false))
   }
   else {
     return genericEntityReducer(RECEIVE_TASKS, 'tasks', reduceTasksFurther)(state, action)
