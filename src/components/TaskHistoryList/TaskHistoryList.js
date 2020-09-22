@@ -172,11 +172,10 @@ export class TaskHistoryList extends Component {
     })
 
     const contributorEntries =
-      <div>
+      <ol className="mr-list-decimal mr-pl-4">
         {_map(contributors, (c, index) => (
-            <div key={c.username} className="mr-flex mr-justify-items-stretch">
-              <span className="mr-w-5 mr-inline-block mr-py-1">{index + 1}. </span>
-              <span className="mr-w-30 mr-inline-block mr-px-2 mr-py-1"
+            <li key={c.username + c.userType} className="">
+              <span className="mr-w-40 mr-inline-block mr-px-2 mr-py-1"
                     style={{color: mapColors(c.username)}} >
                 {c.username}
               </span>
@@ -186,9 +185,9 @@ export class TaskHistoryList extends Component {
                    this.props.intl.formatMessage(messages.mapperType)
                 }
               </span>
-            </div>
+            </li>
         ))}
-      </div>
+      </ol>
 
     combinedLogs = _reverse(_sortBy(combinedLogs, log => new Date(log.timestamp)))
 
