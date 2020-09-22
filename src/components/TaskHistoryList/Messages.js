@@ -17,5 +17,25 @@ export default defineMessages({
   taskUpdatedLabel: {
     id: "TaskHistory.fields.taskUpdated.label",
     defaultMessage: "Task updated by challenge manager",
+  },
+
+  listByTime: {
+    id: "TaskHistory.controls.listByTime.label",
+    defaultMessage: "Entries"
+  },
+
+  listByUser: {
+    id: "TaskHistory.controls.listByUser.label",
+    defaultMessage: "Contributors"
+  },
+
+  reviewerType: {
+    id: "TaskHistory.fields.userType.reviewer",
+    defaultMessage: "Reviewer"
+  },
+
+  mapperType: {
+    id: "TaskHistory.fields.userType.mapper",
+    defaultMessage: "Mapper"
   }
 })

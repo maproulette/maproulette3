@@ -149,6 +149,11 @@ export default defineMessages({
     defaultMessage: "Review Revision",
   },
 
+  metaReviewTaskLabel: {
+    id: "Review.TaskAnalysisTable.controls.metaReviewTask.label",
+    defaultMessage: "Review further",
+  },
+
   resolveTaskLabel: {
     id: "Review.TaskAnalysisTable.controls.resolveTask.label",
     defaultMessage: "Resolve",
