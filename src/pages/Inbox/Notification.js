@@ -28,6 +28,8 @@ class Notification extends Component {
       case NotificationType.reviewRejected:
       case NotificationType.reviewAgain:
         return <ReviewBody notification={notification} />
+      case NotificationType.reviewRevised:
+        return <ReviewRevisedBody notification={notification} />
       case NotificationType.challengeCompleted:
         return <ChallengeCompletionBody notification={notification} />
       case NotificationType.mapperChallengeCompleted:
@@ -158,6 +160,23 @@ const ReviewBody = function(props) {
       <ViewTask
         notification={props.notification}
         review={reviewStatus === TaskReviewStatus.needed}
+      />
+    </React.Fragment>
+  )
+}
+
+const ReviewRevisedBody = function(props) {
+  const lead = <FormattedMessage {...messages.reviewRevisedNotificationLead} />
+
+  return (
+    <React.Fragment>
+      <p className="mr-mb-8 mr-text-base">{lead}</p>
+
+      <AttachedComment notification={props.notification} />
+
+      <ViewTask
+        notification={props.notification}
+        review={true}
       />
     </React.Fragment>
   )

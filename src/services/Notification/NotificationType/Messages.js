@@ -24,6 +24,10 @@ export default defineMessages({
     id: "Notification.type.review.again",
     defaultMessage: "Review"
   },
+  reviewRevised: {
+    id: "Notification.type.review.revised",
+    defaultMessage: "Review Revised"
+  },
   challengeCompleted: {
     id: "Notification.type.challengeCompleted",
     defaultMessage: "Completed"

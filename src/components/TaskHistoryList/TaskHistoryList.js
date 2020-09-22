@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage,
          FormattedDate,
-         FormattedTime } from 'react-intl'
+         FormattedTime,
+         injectIntl } from 'react-intl'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _kebabCase from 'lodash/kebabCase'
@@ -12,6 +13,8 @@ import _isUndefined from 'lodash/isUndefined'
 import _indexOf from 'lodash/indexOf'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
+import _find from 'lodash/find'
+import _noop from 'lodash/noop'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import { keysByStatus, messagesByStatus, TASK_STATUS_CREATED }
@@ -24,13 +27,25 @@ import { mapColors } from '../../interactions/User/AsEndUser'
 import messages from './Messages'
 
 
+// Constants for userType
+const REVIEWER_TYPE = "reviewer"
+const MAPPER_TYPE = "mapper"
+
+// constants for toggle between time/entries and users/contributors
+const USER_TOGGLE = "user"
+const TIME_TOGGLE = "time"
+
 /**
  * TaskHistoryList renders the given history as a list with some basic formatting,
  * starting with the most recent log entry.
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export default class TaskHistoryList extends Component {
+export class TaskHistoryList extends Component {
+  state = {
+    listType: TIME_TOGGLE,
+  }
+
   render() {
     if (this.props.taskHistory.length === 0) {
       return <div className="mr-px-4 history-list none">No History</div>
@@ -44,6 +59,7 @@ export default class TaskHistoryList extends Component {
     let updatedStatus = null
     let startedAtEntry = null
     let duration = null
+    let userType = null
 
     _each(_sortBy(this.props.taskHistory, h => new Date(h.timestamp)), (log, index) => {
       // We are moving on to a new set of actions so let's push
@@ -54,7 +70,8 @@ export default class TaskHistoryList extends Component {
                            duration: duration,
                            entry: entries,
                            username: username,
-                           status: updatedStatus})
+                           status: updatedStatus,
+                           userType: userType})
         if (startedAtEntry) {
           combinedLogs.push(startedAtEntry)
           startedAtEntry = null
@@ -62,6 +79,7 @@ export default class TaskHistoryList extends Component {
         entries = []
         updatedStatus = null
         duration = null
+        userType = null
       }
       lastTimestamp = new Date(log.timestamp)
 
@@ -86,6 +104,7 @@ export default class TaskHistoryList extends Component {
                   showDot
                 />
             username = _get(log, 'reviewedBy.username')
+            userType = REVIEWER_TYPE
 
             if (log.startedAt) {
               duration = new Date(log.timestamp) - new Date(log.startedAt)
@@ -100,6 +119,7 @@ export default class TaskHistoryList extends Component {
         default:
           logEntry = null
           username = _get(log, 'user.username')
+          userType = MAPPER_TYPE
           updatedStatus = statusEntry(log, this.props, index)
           if (log.startedAt || log.oldStatus === TASK_STATUS_CREATED) {
             // Add a "Started At" entry into the history
@@ -133,12 +153,42 @@ export default class TaskHistoryList extends Component {
                          duration: duration,
                          entry: entries,
                          username: username,
-                         status: updatedStatus})
+                         status: updatedStatus,
+                         userType: userType})
       if (startedAtEntry) {
         combinedLogs.push(startedAtEntry)
         startedAtEntry = null
       }
     }
+
+    const contributors = []
+    _each(combinedLogs, (log) => {
+      // Don't add a contributor twice
+      if (log.userType &&
+          !_find(contributors, c => (c.username === log.username &&
+                                     c.userType === log.userType))) {
+        contributors.push(log)
+      }
+    })
+
+    const contributorEntries =
+      <div>
+        {_map(contributors, (c, index) => (
+            <div key={c.username} className="mr-flex mr-justify-items-stretch">
+              <span className="mr-w-5 mr-inline-block mr-py-1">{index + 1}. </span>
+              <span className="mr-w-30 mr-inline-block mr-px-2 mr-py-1"
+                    style={{color: mapColors(c.username)}} >
+                {c.username}
+              </span>
+              <span className="mr-inline-block mr-text-pink mr-py-1">
+                {c.userType === REVIEWER_TYPE ?
+                   this.props.intl.formatMessage(messages.reviewerType) :
+                   this.props.intl.formatMessage(messages.mapperType)
+                }
+              </span>
+            </div>
+        ))}
+      </div>
 
     combinedLogs = _reverse(_sortBy(combinedLogs, log => new Date(log.timestamp)))
 
@@ -198,8 +248,42 @@ export default class TaskHistoryList extends Component {
       )}
     )
 
+    const contributorToggle =
+      <div className="mr-text-right mr-text-xs mr-mb-2">
+        <span>
+          <input
+            type="radio"
+            name="showByTime"
+            className="mr-radio mr-mr-1"
+            checked={this.state.listType === TIME_TOGGLE}
+            onClick={() => this.setState({listType: TIME_TOGGLE})}
+            onChange={_noop}
+          />
+          <label className="mr-ml-1 mr-mr-4">
+            <FormattedMessage {...messages.listByTime}/>
+          </label>
+        </span>
+        <span>
+          <input
+            type="radio"
+            name="showByReviewers"
+            className="mr-radio mr-mr-1"
+            checked={this.state.listType === USER_TOGGLE}
+            onClick={() => this.setState({listType: USER_TOGGLE})}
+            onChange={_noop}
+          />
+          <label className="mr-ml-1 mr-mr-4">
+            <FormattedMessage {...messages.listByUser}/>
+          </label>
+        </span>
+      </div>
+
     return (
-      <React.Fragment>{historyEntries}</React.Fragment>
+      <React.Fragment>
+        {contributorToggle}
+        {this.state.listType === TIME_TOGGLE && historyEntries}
+        {this.state.listType === USER_TOGGLE && contributorEntries}
+      </React.Fragment>
     )
   }
 }
@@ -284,3 +368,5 @@ TaskHistoryList.propTypes = {
 TaskHistoryList.defaultProps = {
   taskHistory: [],
 }
+
+export default injectIntl(TaskHistoryList)
