@@ -49,10 +49,7 @@ const WithCommandInterpreter = function(WrappedComponent, acceptedCommands = nul
     clearSearch = () => {
       // Temporary: until we add an Advanced Search dialog where a user can
       // clear a project search filter, we need to do it explicitly here
-      this.props.removeSearchFilters(['query'])
-      this.props.removeSearchFilters(['project'])
-      this.props.removeSearchFilters(['searchType'])
-      this.props.removeSearchFilters(['challengeId'])
+      this.props.removeSearchFilters(['query', 'project', 'searchType', 'challengeId'])
 
       this.props.clearSearch()
       this.setState({commandString: null, searchType: null, searchActive: true})
@@ -128,15 +125,9 @@ export const executeCommand = (props, commandString, searchType, setLoading,
   const command = commandString && commandString.length >= 2 ? commandString.substring(0, 2) : null
   let query = commandString ? commandString.substring(2) : commandString
 
-  // Temporary: until we add an Advanced Search dialog where a user can clear a
-  // project search filter, we need to do it explicitly here if needed
-  if (command !== '/p') {
-    props.removeSearchFilters(['project'])
-  }
-
   switch(command) {
     case 'm/':
-    props.setSearch("") // We need to clear the initial 'm' from the query
+      props.setSearch("") // We need to clear the initial 'm' from the query
       if (isCommandSupported('m', acceptedCommands, props)) {
         if (isComplete && query.length > 0) {
           debouncedMapSearch(props, query, setLoading)
@@ -184,6 +175,8 @@ export const executeCommand = (props, commandString, searchType, setLoading,
       if (command !== 's/') {
         query = commandString
       }
+      // Remove any lingering search filters.
+      props.removeSearchFilters(['project', 'challengeId'])
 
       // Standard search query
       props.setSearch(query)
