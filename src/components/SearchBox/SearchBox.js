@@ -18,7 +18,6 @@ import './SearchBox.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class SearchBox extends Component {
-  inputRef = React.createRef()
 
   /**
    * Esc clears search, Enter signals completion
@@ -49,16 +48,6 @@ export default class SearchBox extends Component {
     return (props.searchGroup ?
         _get(props, `searchQueries.${props.searchGroup}.searchQuery.query`) :
         _get(props, 'searchQuery.query')) || ''
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.inputRef.current) {
-      if (this.getQuery(this.props) !== this.inputRef.current.value) {
-        // We have an uncotrolled input so our cursor can be managed as expected,
-        // so if the input isn't what we expect then we need to change it.
-        this.inputRef.current.value = this.getQuery(this.props)
-      }
-    }
   }
 
   render() {
@@ -116,7 +105,7 @@ export default class SearchBox extends Component {
           maxLength="63"
           onChange={this.queryChanged}
           onKeyDown={this.checkForSpecialKeys}
-          ref={this.inputRef}
+          value={query}
         />
 
         {doneButton}

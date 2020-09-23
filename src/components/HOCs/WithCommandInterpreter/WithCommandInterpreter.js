@@ -8,6 +8,8 @@ import _find from 'lodash/find'
 import _get from 'lodash/get'
 import _debounce from 'lodash/debounce'
 import _trim from 'lodash/trim'
+import _toNumber from 'lodash/toNumber'
+import _isNaN from 'lodash/isNaN'
 import { fetchPlaceLocation } from '../../../services/Place/Place'
 import WithErrors from '../WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
@@ -40,7 +42,7 @@ const WithCommandInterpreter = function(WrappedComponent, acceptedCommands = nul
       const wasStandardSearch = executeCommand(this.props, commandString, searchType,
                                                false, false, acceptedCommands)
       this.setState({
-        commandString: wasStandardSearch ? null : commandString,
+        commandString: commandString,
         searchType: searchType,
         searchActive: wasStandardSearch,
       })
@@ -162,7 +164,7 @@ export const executeCommand = (props, commandString, searchType, setLoading,
     case 'i/':
       props.setSearch("") // We need to clear the initial 'i' from the query
       if (isCommandSupported('i', acceptedCommands, props)) {
-        if (query.length > 0) {
+        if (query.length > 0 && !_isNaN(_toNumber(_trim(query)))) {
           props.setSearchFilters({challengeId: _trim(query)})
         }
       }
