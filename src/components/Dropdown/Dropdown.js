@@ -40,7 +40,7 @@ class Dropdown extends Component {
       <div className={classNames('mr-dropdown', this.props.className)} {...this.props.rootProps}>
         {this.props.dropdownButton(renderFuncArgs)}
         {isDropdownVisible && (
-          <div className="mr-dropdown__wrapper">
+          <div className={classNames("mr-dropdown__wrapper", this.props.wrapperClassName)}>
             <div className="mr-dropdown__main">
               <div className={classNames("mr-dropdown__inner", this.props.innerClassName, {"mr-fixed": this.props.fixedMenu})}>
                 {!this.props.suppressControls &&

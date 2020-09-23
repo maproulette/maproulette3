@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
+import AutosuggestMentionTextArea from '../AutosuggestTextBox/AutosuggestMentionTextArea'
+import WithOSMUserSearch from '../HOCs/WithOSMUserSearch/WithOSMUserSearch'
 import messages from  './Messages'
+
+const CommentBox = WithOSMUserSearch(AutosuggestMentionTextArea)
 
 /**
  * TaskCommentInput combines a textarea for commenting with an option to
@@ -14,10 +18,6 @@ import messages from  './Messages'
 export class TaskCommentInput extends Component {
   state = {
     showingPreview: false,
-  }
-
-  handleChange = e => {
-    this.props.commentChanged(e.target.value)
   }
 
   handleSubmit = () => {
@@ -58,18 +58,20 @@ export class TaskCommentInput extends Component {
          >
           <MarkdownContent allowShortCodes markdown={this.props.value} />
          </div> :
-         <textarea
-           ref={this.props.inputRef}
-           className={
+         <CommentBox
+           inputRef={this.props.inputRef}
+           rows={this.props.rows}
+           cols="1"
+           inputValue={this.props.value}
+           inputClassName={
              this.props.inputClassName ?
              this.props.inputClassName :
              "mr-appearance-none mr-outline-none mr-py-2 mr-px-4 mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner mr-w-full mr-font-mono mr-text-sm"
            }
-           rows={this.props.rows}
-           cols="1"
+           onInputValueChange={(value) => this.props.commentChanged(value)}
            placeholder={this.props.intl.formatMessage(messages.placeholder)}
-           value={this.props.value}
-           onChange={this.handleChange}
+           fixedMenu
+           taskId={this.props.taskId}
          />
         }
         {this.props.submitComment &&

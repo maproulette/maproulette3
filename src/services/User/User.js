@@ -197,6 +197,16 @@ export const findUser = function(username) {
 }
 
 /**
+ * Search for users by OSM username. Resolves with a (possibly empty) list of
+ * results. Note that each result only contains a few public OSM fields such
+ * as OSM id and avatar URL.
+ */
+export const findPreferredUsers = function(username, taskId) {
+  return new Endpoint(api.users.findPreferred,
+                      {params: {username, tid: taskId}}).execute()
+}
+
+/**
  * Fetch the user data for the given user. Note that this only fetches
  * the user data and does not fetch any accompanying data that would require
  * additional API requests to retrieve. Use `loadCompleteUser` to fully load
