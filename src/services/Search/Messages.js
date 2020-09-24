@@ -20,7 +20,7 @@ export default defineMessages({
     id: "Challenge.sort.popularity",
     defaultMessage: "Popular",
   },
-  has_cooperative_work: {
+  cooperative_type: {
     id: "Challenge.sort.cooperativeWork",
     defaultMessage: "Cooperative",
   },
