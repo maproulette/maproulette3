@@ -315,6 +315,31 @@ will not be able to make sense of it.
       "managing your challenge to re-execute the query and freshen up your tasks."
   },
 
+  overpassTargetType: {
+    id: 'Admin.EditChallenge.form.overpassQL.targetType',
+    defaultMessage: "Overpass Target Type",
+  },
+
+  overpassTargetDescription: {
+    id: 'Admin.EditChallenge.form.overpassQL.targetType.description',
+    defaultMessage: "An error will be generated if your Overpass results do not match the target type.",
+  },
+
+  targetNoneLabel: {
+    id: 'Admin.EditChallenge.form.overpassQL.target.none',
+    defaultMessage: "Any",
+  },
+
+  targetWayLabel: {
+    id: 'Admin.EditChallenge.form.overpassQL.target.way',
+    defaultMessage: "Ways",
+  },
+
+  targetNodeLabel: {
+    id: 'Admin.EditChallenge.form.overpassQL.target.node',
+    defaultMessage: "Nodes",
+  },
+
   localGeoJsonLabel: {
     id: 'Admin.EditChallenge.form.localGeoJson.label',
     defaultMessage: "I want to upload a GeoJSON file",

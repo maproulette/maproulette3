@@ -740,8 +740,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'defaultBasemap', 'defaultBasemapId', 'defaultPriority', 'defaultZoom',
         'description', 'difficulty', 'enabled', 'featured', 'highPriorityRule', 'id',
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
-        'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
-        'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
+        'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'overpassTargetType',
+        'parent', 'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
         'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
         'preferredReviewTags', 'limitTags', 'limitReviewTags', 'taskStyles', 'requiresLocal'])
 
