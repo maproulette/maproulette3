@@ -45,6 +45,22 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
           intl.formatMessage(messages.overpassQLDescription),
         type: "string",
       },
+      overpassTargetType: {
+        title: intl.formatMessage(messages.overpassTargetType),
+        description: intl.formatMessage(messages.overpassTargetDescription),
+        type: "string",
+        enum: [
+          "none",
+          "way",
+          "node",
+        ],
+        enumNames: [
+          intl.formatMessage(messages.targetNoneLabel),
+          intl.formatMessage(messages.targetWayLabel),
+          intl.formatMessage(messages.targetNodeLabel),
+        ],
+        default: "Overpass Target Type",
+      }
     },
   }
 
@@ -126,13 +142,13 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
   else if (!_isEmpty(challengeData.remoteGeoJson)) {
     schema.properties = Object.assign(
       schema.properties,
-      _omit(remoteUrl.properties, ['source'])
+      _omit(remoteUrl.properties, ['source', 'overpassTargetType'])
     )
   }
   else {
     schema.properties = Object.assign(
       schema.properties,
-      _omit(localUpload.properties, ['source'])
+      _omit(localUpload.properties, ['source', 'overpassTargetType'])
     )
   }
 
@@ -166,6 +182,11 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:placeholder": intl.formatMessage(messages.overpassQLPlaceholder),
       "ui:readonly": sourceReadOnly,
     },
+    overpassTargetType: {
+      "classNames": "",
+      "ui:widget": "select",
+      "ui:options": { inline: true },
+    },
     localGeoJSON: {
       "ui:widget": DropzoneTextUpload,
       "ui:readonly": sourceReadOnly,
@@ -184,7 +205,7 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
     },
     "ui:order": [
       "name", "source", "overpassQL", "localGeoJSON", "remoteGeoJson",
-      "ignoreSourceErrors", "dataOriginDate"
+      "ignoreSourceErrors", "dataOriginDate", "overpassTargetType"
     ],
   }
 }

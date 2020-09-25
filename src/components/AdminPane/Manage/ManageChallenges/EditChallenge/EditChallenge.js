@@ -434,6 +434,10 @@ export class EditChallenge extends Component {
       challengeData.customTaskStyles = !_isEmpty(challengeData.taskStyles)
     }
 
+    if (!_isEmpty(challengeData.overpassQL)) {
+      challengeData.source = "Overpass Query"
+    }
+
     return challengeData
   }
 
@@ -561,6 +565,14 @@ export class EditChallenge extends Component {
     }
     else {
       challengeData.taskStyles = []
+    }
+
+    // Only send across overpassTargetType if we have an overpass query
+    if (challengeData.source !== "Overpass Query") {
+      challengeData.overpassTargetType = null
+    }
+    else if (challengeData.overpassTargetType === "none") {
+      challengeData.overpassTargetType = ""
     }
 
     return challengeData
