@@ -61,13 +61,15 @@ class UserSettings extends Component {
     // Massage customBasemaps json:
     // 1.don't send if name or url has not been completed yet
     // 2. insert id: -1 if it's a new customBasemap
-    _remove(editableUser.customBasemaps,
-      (data) => (_isEmpty(_trim(data.name)) || _isEmpty(_trim(data.url))))
-    editableUser.customBasemaps.forEach( (data) => {
-      if (!data.id) {
-        data.id = -1
-      }
-    })
+    if (editableUser.customBasemaps) {
+      _remove(editableUser.customBasemaps,
+        (data) => (_isEmpty(_trim(data.name)) || _isEmpty(_trim(data.url))))
+      editableUser.customBasemaps.forEach( (data) => {
+        if (!data.id) {
+          data.id = -1
+        }
+      })
+    }
 
     editableUser.normalizeDefaultBasemap(LayerSources, editableUser.customBasemaps)
 
@@ -120,6 +122,7 @@ class UserSettings extends Component {
   }
 
   areBasemapNamesUnique = (basemaps) => {
+    if (!basemaps) return true
     return _uniq(_map(basemaps, 'name')).length === basemaps.length
   }
 
