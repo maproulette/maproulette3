@@ -44,8 +44,8 @@ export default defineMessages({
   },
 
   moreInfo: {
-    id: "RebuildTasksControl.modal.moreInfo",
-    defaultMessage: "[Learn More](https://github.com/osmlab/maproulette3/wiki/Rebuilding-(Updating)-Challenge-Task-Data)"
+    id: "RebuildTasksControl.modal.learnMore",
+    defaultMessage: "Learn More"
   },
 
   removeUnmatchedLabel: {

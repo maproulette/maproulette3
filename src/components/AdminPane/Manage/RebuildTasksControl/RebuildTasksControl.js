@@ -145,11 +145,15 @@ export class RebuildTasksControl extends Component {
                     </div>
                     <div>
                       <FormattedMessage {...messages.warning} />
-                      <MarkdownContent
-                        markdown={this.props.intl.formatMessage(
-                          messages.moreInfo
-                        )}
-                      />
+                      <div className="mr-my-4 mr-links-green-light">
+                        <a
+                          href={`${process.env.REACT_APP_DOCS_URL}/documentation/rebuilding-challenge-tasks/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FormattedMessage {...messages.moreInfo} />
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
