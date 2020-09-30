@@ -275,7 +275,7 @@ const Nav = props => (
 
     <li>
       <a
-        href="https://github.com/osmlab/maproulette3/wiki"
+        href={process.env.REACT_APP_DOCS_URL}
         target="_blank"
         rel="noopener noreferrer"
         onClick={props.closeMobileMenu}>

@@ -259,7 +259,7 @@ Overpass is a powerful querying interface for OpenStreetMap data. Using
 [Overpass QL](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide),
 the Overpass Query Language, you can retrieve matching OSM objects that you want
 to represent as tasks (each result becomes a separate task).
-[Learn more](https://github.com/osmlab/maproulette3/wiki/Using-Overpass-queries-to-create-Challenges).
+[Learn more](https://learn.maproulette.org/documentation/using-overpass-to-create-challenges/).
 
 #### Local GeoJSON File
 
@@ -273,7 +273,7 @@ lon/lat on the WGS84 datum (EPSG:4326), because this is what MapRoulette uses
 internally.
 
 > Note: for challenges with a large number of tasks, we recommend using a
-[line-by-line](https://github.com/osmlab/maproulette3/wiki/Line-by-Line-GeoJSON-Format)
+[line-by-line](https://learn.maproulette.org/documentation/line-by-line-geojson/)
 format instead, which is much more efficient to process. Some advanced features
 are only available when the line-by-line format is used.
 
@@ -299,7 +299,7 @@ will not be able to make sense of it.
   overpassQLDescription: {
     id: 'Admin.EditChallenge.form.overpassQL.description',
     defaultMessage: "Please see the " +
-      "[wiki](https://github.com/osmlab/maproulette3/wiki/Using-Overpass-to-create-Challenges) " +
+      "[docs](https://learn.maproulette.org/documentation/using-overpass-to-create-challenges/) " +
       "for important details and common pitfalls when creating challenges " +
       "using Overpass queries."
   },
@@ -428,7 +428,7 @@ will not be able to make sense of it.
   defaultPriorityDescription: {
     id: 'Admin.EditChallenge.form.defaultPriority.description',
     defaultMessage: "See the " +
-      "[wiki](https://github.com/osmlab/maproulette3/wiki/Prioritizing-Tasks-with-Priority-Rules) " +
+      "[docs](https://learn.maproulette.org/documentation/task-priority-rules/) " +
       "for an explanation of how to setup priority rules.",
   },
 
@@ -563,8 +563,8 @@ will not be able to make sense of it.
       "unique value for each feature in your data**. Tasks missing the " +
       "property will be assigned a random identifier even if the task " +
       "contains other common id properties. " +
-      "[Learn more on the wiki]" +
-      "(https://github.com/osmlab/maproulette3/wiki/Challenge-Managers:-setting-external-task-IDs-(e.g.-OSM-IDs))."
+      "[Learn more]" +
+      "(https://learn.maproulette.org/documentation/setting-external-task-identifiers/)."
   },
 
   customTaskStyleLabel: {

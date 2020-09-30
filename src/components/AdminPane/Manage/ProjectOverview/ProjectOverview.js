@@ -97,7 +97,7 @@ export default class ProjectOverview extends Component {
           {!this.props.project.enabled &&
             <div className="mr-text-red-light mr-flex mr-items-center mr-text-base mr-uppercase mr-mt-2">
               <a
-                href="https://github.com/osmlab/maproulette3/wiki/Challenge-Visibility-and-Discoverability"
+                href={`${process.env.REACT_APP_DOCS_URL}/documentation/challenge-visibility-and-discovery/`}
                 className="mr-mr-2 mr-flex mr-items-center"
                 target="_blank"
                 rel="noopener noreferrer"
