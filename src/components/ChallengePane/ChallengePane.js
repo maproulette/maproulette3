@@ -29,9 +29,15 @@ import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
-const ClusterMap = WithChallengeTaskClusters(
-                      WithTaskClusterMarkers(TaskClusterMap('challenges')),
-                      true)
+const ClusterMap =
+  WithChallengeTaskClusters(
+    WithTaskClusterMarkers(
+      WithCurrentUser(
+        TaskClusterMap('challenges')
+      )
+    ),
+    true
+  )
 const LocationFilter = WithCurrentUser(FilterByLocation)
 
 /**

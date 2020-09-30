@@ -5,6 +5,7 @@ import './Sprites.scss'
  * Most of these are from [Zondicons](http://www.zondicons.com/icons.html)
  * Puzzle-piece icon from earlier version of [Octicons](https://octicons.github.com/)
  * Lasso and outline-circle icons made by Freepik from www.flaticon.com
+ * reorder-icon made by Theo K. from the Noun Project
  */
 export default function() {
   return (
@@ -38,6 +39,9 @@ export default function() {
         </symbol>
         <symbol id="drag-handle-icon" viewBox="0 0 96 96">
           <path d="M94.2422,43.7578l-12-12a5.9994,5.9994,0,0,0-8.4844,8.4844L75.5156,42H54V20.4844l1.7578,1.7578a5.9994,5.9994,0,0,0,8.4844-8.4844l-12-12a5.9979,5.9979,0,0,0-8.4844,0l-12,12a5.9994,5.9994,0,0,0,8.4844,8.4844L42,20.4844V42H20.4844l1.7578-1.7578a5.9994,5.9994,0,0,0-8.4844-8.4844l-12,12a5.9979,5.9979,0,0,0,0,8.4844l12,12a5.9994,5.9994,0,1,0,8.4844-8.4844L20.4844,54H42V75.5156l-1.7578-1.7578a5.9994,5.9994,0,0,0-8.4844,8.4844l12,12a5.9979,5.9979,0,0,0,8.4844,0l12-12a5.9994,5.9994,0,0,0-8.4844-8.4844L54,75.5156V54H75.5156l-1.7578,1.7578a5.9994,5.9994,0,1,0,8.4844,8.4844l12-12A5.9979,5.9979,0,0,0,94.2422,43.7578Z" />
+        </symbol>
+        <symbol id="reorder-icon" viewBox="0 0 100 125">
+          <path d="M14 40h72v4H14zM50 14L34.459 31h31zM50 86l15.459-17h-31zM14 48h72v4H14zM14 56h72v4H14z" />
         </symbol>
         <symbol id="spinner-icon" viewBox="0 0 50 50">
           <path d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
