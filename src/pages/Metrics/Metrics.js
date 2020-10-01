@@ -11,6 +11,7 @@ import TaskStats from './blocks/TaskStats'
 import LeaderboardStats from './blocks/LeaderboardStats'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
+import _omit from 'lodash/omit'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 import messages from './Messages'
 import messagesAsReviewer from './MessagesAsReviewer'
@@ -140,7 +141,10 @@ class Metrics extends Component {
                 <div className="mr-mt-8">
                   <ReviewStats {...this.props}
                     asReviewer
-                    reviewMetrics={this.props.reviewerMetrics}
+                    reviewMetrics={_omit(this.props.reviewerMetrics, ['requested'])}
+                    totalReviews={(this.props.reviewerMetrics.approved +
+                                   this.props.reviewerMetrics.assisted +
+                                   this.props.reviewerMetrics.rejected)}
                     tasksMonthsPast={this.props.tasksReviewerMonthsPast}
                     setTasksMonthsPast={this.props.setTasksReviewerMonthsPast}
                     setTasksCustomRange={this.props.setTasksReviewerDateRange}

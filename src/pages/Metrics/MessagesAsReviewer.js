@@ -11,31 +11,36 @@ export default defineMessages({
 
   reviewerTitleYou: {
     id: 'Metrics.reviewedTasksTitle.asReviewer.you',
-    defaultMessage: 'Tasks Reviewed by You',
+    defaultMessage: 'Reviews Performed by You',
+  },
+
+  reviewerTasksTotal: {
+    id: 'Metrics.reviewedTasksTitle.asReviewer.totalTasks',
+    defaultMessage: 'Total tasks you reviewed',
   },
 
   approvedReview: {
     id: 'Metrics.reviewStats.asReviewer.approved.label',
-    defaultMessage: "Reviewed tasks as passed",
+    defaultMessage: "Reviews marked as passed",
   },
 
   rejectedReview: {
     id: 'Metrics.reviewStats.asReviewer.rejected.label',
-    defaultMessage: "Reviewed tasks as failed",
+    defaultMessage: "Reviews marked as failed",
   },
 
   assistedReview: {
     id: 'Metrics.reviewStats.asReviewer.assisted.label',
-    defaultMessage: "Reviewed tasks as passed with changes",
+    defaultMessage: "Reviews marked as passed with changes",
   },
 
   disputedReview: {
     id: 'Metrics.reviewStats.asReviewer.disputed.label',
-    defaultMessage: "Tasks currently in dispute",
+    defaultMessage: "Reviews that were disputed",
   },
 
-  awaitingReview: {
-    id: 'Metrics.reviewStats.asReviewer.awaiting.label',
-    defaultMessage: "Tasks that need a follow up",
-  },
+  additionalReviews: {
+    id: 'Metrics.reviewStats.asReviewer.additionalReviews.label',
+    defaultMessage: "Provided an additional review",
+  }
 })

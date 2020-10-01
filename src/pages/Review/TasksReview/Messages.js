@@ -129,6 +129,11 @@ export default defineMessages({
     defaultMessage: "Reviewer",
   },
 
+  additionalReviewersLabel: {
+    id: "Review.fields.additionalReviewers.label",
+    defaultMessage: "Additional Reviewers",
+  },
+
   mappedOnLabel: {
     id: "Review.fields.mappedOn.label",
     defaultMessage: "Mapped On",

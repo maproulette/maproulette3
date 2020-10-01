@@ -172,7 +172,8 @@ export class TaskReviewTable extends Component {
                    "reviewerControls":{permanent: true},
                    "mapperControls":{permanent: true},
                    "viewComments":{},
-                   "tags":{}}
+                   "tags":{},
+                   "additionalReviewers":{}}
 
     let defaultColumns = _keys(columns)
 
@@ -507,6 +508,30 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
         style={{color: mapColors(_get(row._original.reviewRequestedBy, 'username'))}}
       >
         {_get(row._original.reviewRequestedBy, 'username')}
+      </div>
+    ),
+  }
+
+  columns.additionalReviewers = {
+    id: 'otherReviewers',
+    Header: props.intl.formatMessage(messages.additionalReviewersLabel),
+    accessor: 'additionalReviewers',
+    sortable: false,
+    filterable: false,
+    maxWidth: 180,
+    Cell: ({row}) => (
+      <div
+        className="row-user-column"
+        style={{color: mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy)}}
+      >
+        {_map(row._original.additionalReviewers, (reviewer, index) => {
+          return (
+            <React.Fragment>
+              <span style={{color: mapColors(reviewer.username)}}>{reviewer.username}</span>
+              {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
+            </React.Fragment>
+          )
+        })}
       </div>
     ),
   }
