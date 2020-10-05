@@ -5,6 +5,7 @@ import PastDurationSelector from '../../../components/PastDurationSelector/PastD
 import {ALL_TIME, CURRENT_MONTH, CUSTOM_RANGE}
        from '../../../components/PastDurationSelector/PastDurationSelector'
 import _get from 'lodash/get'
+import _has from 'lodash/has'
 import messages from '../Messages'
 
 export default class ReviewStats extends Component {
@@ -80,11 +81,11 @@ export default class ReviewStats extends Component {
           {this.displayStat(_get(this.props.reviewMetrics, 'disputed'),
                             this.props.totalReviews || totalReviewTasks,
                             <FormattedMessage {...this.props.messages.disputedReview} />)}
-          {_get(this.props.reviewMetrics, 'requested') &&
+          {_has(this.props.reviewMetrics, 'requested') &&
            this.displayStat(_get(this.props.reviewMetrics, 'requested'),
                             totalReviewTasks,
                             <FormattedMessage {...this.props.messages.awaitingReview} />)}
-          {_get(this.props.reviewMetrics, 'additionalReviews') &&
+          {_has(this.props.reviewMetrics, 'additionalReviews') &&
            this.displayStat(_get(this.props.reviewMetrics, 'additionalReviews'),
                             this.props.totalReviews || totalReviewTasks,
                             <FormattedMessage {...this.props.messages.additionalReviews} />)}
