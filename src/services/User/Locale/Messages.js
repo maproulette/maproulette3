@@ -56,4 +56,8 @@ export default defineMessages({
     id: "Locale.uk.label",
     defaultMessage: "uk (Ukrainian)",
   },
+  'vi': {
+    id: "Locale.vi.label",
+    defaultMessage: "vi (Vietnamese)",
+  },
 })
