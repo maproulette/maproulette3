@@ -7,6 +7,31 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.6.12] - 2020-10-07
+### Added
+- Updated translations and new Vietnamese locale (thank you translators!)
+- learn.maproulette.org as the new home for MapRoulette documentation
+- Typeahead dropdown when mentioning a user in a comment
+- Ability to specify OSM element type when creating challenges from Overpass
+- Search for challenges by id when adding challenges to virtual projects
+- Allow tasks to be reviewed consecutively from Manage Challenges tasks table
+- Basic support for multiple reviews of task by different reviewers
+- Deselect-all control to Lasso map tool panel
+
+### Fixed
+- Challenge datasource could revert back to original cloned source (#1381)
+- Don't offer Start Challenge button when managing completed challenges
+- Incorrect subdomain substitution in basemap URLs
+- Inability to sort by cooperative challenges (#1395)
+- Inability to update user settings if no custom basemaps set
+- User metrics filtering on creation date instead of completion date
+- Minor visual fixes
+
+### Changed
+- false_positive column to not_an_issue in CSV exports
+- [internal] Renamed primary branch of code repository to `main`
+
+
 ## [v3.6.11] - 2020-09-10
 ### Added
 - Info control on challenge results to quickly view basic challenge details

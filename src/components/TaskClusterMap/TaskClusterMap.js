@@ -417,6 +417,7 @@ export class TaskClusterMap extends Component {
           <LassoSelectionControl
             onLassoSelection={this.selectTasksInLayers}
             onLassoDeselection={this.deselectTasksInLayers}
+            onLassoClear={this.props.resetSelectedTasks}
           />
         }
         {!this.props.hideSearchControl &&

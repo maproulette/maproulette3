@@ -51,7 +51,10 @@ const LassoSelectionLeafletControl = L.Control.extend({
             deselecting = true
             lasso.toggle()
           }}
-          className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-b-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
+          className={classNames(
+            "mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-transition-normal-in-out-quad hover:mr-text-green-lighter",
+            this.options.onLassoClear ? "mr-border-b mr-border-white-15" : "mr-rounded-b-sm mr-shadow"
+          )}
         >
           <SvgSymbol
             sym="lasso-remove-icon"
@@ -59,6 +62,18 @@ const LassoSelectionLeafletControl = L.Control.extend({
             viewBox="0 0 512 512"
           />
         </button>
+        }
+        {this.options.onLassoClear &&
+         <button
+           onClick={() => this.options.onLassoClear()}
+           className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-b-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
+         >
+           <SvgSymbol
+             sym="cross-icon"
+             className="mr-w-4 mr-h-4 mr-fill-current mr-stroke-current"
+             viewBox="0 0 20 20"
+           />
+         </button>
         }
       </React.Fragment>
     )

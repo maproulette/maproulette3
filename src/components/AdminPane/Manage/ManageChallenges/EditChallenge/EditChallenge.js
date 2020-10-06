@@ -338,8 +338,32 @@ export class EditChallenge extends Component {
         delete challengeData.dataOriginDate
       }
 
+      if (_isEmpty(this.state.formData.overpassQL)) {
+        delete challengeData.overpassQL
+      }
+
+      if (_isEmpty(this.state.formData.remoteGeoJson)) {
+        delete challengeData.remoteGeoJson
+      }
+
       challengeData.checkinComment =
         AsEditableChallenge(challengeData).checkinCommentWithoutMaprouletteHashtag()
+    }
+
+    if (this.state.formData.source === "Overpass Query") {
+      // Overpass Query so delete other options
+      delete challengeData.remoteGeoJson
+      delete challengeData.localGeoJSON
+    }
+    else if (this.state.formData.source === "Local File") {
+      // Local file so delete other options
+      delete challengeData.remoteGeoJson
+      delete challengeData.overpassQL
+    }
+    else if (this.state.formData.source === "Remote URL") {
+      // Remote Url so delete other options
+      delete challengeData.overpassQL
+      delete challengeData.localGeoJSON
     }
 
     // The server uses two fields to represent the default basemap: a legacy
@@ -408,6 +432,10 @@ export class EditChallenge extends Component {
 
     if (_isUndefined(challengeData.customTaskStyles)) {
       challengeData.customTaskStyles = !_isEmpty(challengeData.taskStyles)
+    }
+
+    if (!_isEmpty(challengeData.overpassQL)) {
+      challengeData.source = "Overpass Query"
     }
 
     return challengeData
@@ -537,6 +565,14 @@ export class EditChallenge extends Component {
     }
     else {
       challengeData.taskStyles = []
+    }
+
+    // Only send across overpassTargetType if we have an overpass query
+    if (challengeData.source !== "Overpass Query") {
+      challengeData.overpassTargetType = null
+    }
+    else if (challengeData.overpassTargetType === "none") {
+      challengeData.overpassTargetType = ""
     }
 
     return challengeData

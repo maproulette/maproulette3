@@ -91,7 +91,12 @@ export const normalizeBingLayer = function(layer) {
 
 export const normalizeTMSLayer = function(layer) {
   const normalizedLayer = Object.assign({}, layer)
-  normalizedLayer.subdomains = (normalizedLayer.url.match(/{switch:(.*?)}/) || ['',''])[1].split(',')
+
+  // Only assign subdomains if we have some.
+  if (normalizedLayer.url.match(/{switch:(.*?)}/)) {
+    normalizedLayer.subdomains = normalizedLayer.url.match(/{switch:(.*?)}/)[1].split(',')
+  }
+
   normalizedLayer.url = normalizedLayer.url.replace(/{switch:(.*?)}/, '{s}')
   normalizedLayer.url = normalizedLayer.url.replace('{zoom}', '{z}')
   normalizedLayer.maxZoom = normalizedLayer.max_zoom

@@ -104,6 +104,11 @@ export default defineMessages({
     defaultMessage: "The mapper has revised their work and is requesting an additional review.",
   },
 
+  reviewRevisedNotificationLead: {
+    id: "Inbox.reviewRevisedNotification.lead",
+    defaultMessage: "Another reviewer has revised your review.",
+  },
+
   challengeCompleteNotificationLead: {
     id: "Inbox.challengeCompleteNotification.lead",
     defaultMessage: "A challenge you manage has been completed.",

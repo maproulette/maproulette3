@@ -59,7 +59,7 @@ const ALL_COLUMNS = {featureId:{}, id:{}, status:{}, priority:{},
                  reviewStatus:{group:"review"}, reviewRequestedBy:{group:"review"},
                  reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
                  reviewDuration:{group:"review"}, controls:{permanent: true},
-                 comments:{}, tags:{}}
+                 comments:{}, tags:{}, additionalReviewers:{group:"review"}}
 
 const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments"]
 
@@ -502,6 +502,30 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     ),
   }
 
+  columns.additionalReviewers = {
+    id: 'otherReviewers',
+    Header: props.intl.formatMessage(messages.additionalReviewersLabel),
+    accessor: 'additionalReviewers',
+    sortable: false,
+    filterable: false,
+    maxWidth: 180,
+    Cell: ({row}) => (
+      <div
+        className="row-user-column"
+        style={{color: mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy)}}
+      >
+        {_map(row._original.additionalReviewers, (reviewer, index) => {
+          return (
+            <React.Fragment>
+              <span style={{color: mapColors(reviewer.username)}}>{reviewer.username}</span>
+              {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
+            </React.Fragment>
+          )
+        })}
+      </div>
+    ),
+  }
+
   columns.controls = {
     id: 'controls',
     Header: props.intl.formatMessage(messages.controlsLabel),
@@ -518,7 +542,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
          </Link>
         }
         {(!_isUndefined(row._original.reviewStatus)) &&
-         <Link to={`/challenge/${props.challenge.id}/task/${row._original.id}/review`} className="mr-mr-2">
+         <Link
+           to={{
+                  pathname: `/challenge/${props.challenge.id}/task/` +
+                            `${row._original.id}/review`,
+                  state: {filters:{challengeId: props.challenge.id}}
+                }}
+           className="mr-mr-2" >
            <FormattedMessage {...messages.reviewTaskLabel} />
          </Link>
         }

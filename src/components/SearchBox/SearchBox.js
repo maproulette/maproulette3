@@ -18,6 +18,7 @@ import './SearchBox.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class SearchBox extends Component {
+
   /**
    * Esc clears search, Enter signals completion
    *
@@ -50,9 +51,7 @@ export default class SearchBox extends Component {
   }
 
   render() {
-    const query = (this.props.searchGroup ?
-      _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`) :
-      _get(this.props, 'searchQuery.query')) || ''
+    const query = this.getQuery(this.props)
     const isLoading = _get(this.props, 'searchQuery.meta.fetchingResults')
 
     const clearButton =
@@ -71,7 +70,6 @@ export default class SearchBox extends Component {
           sym="outline-arrow-right-icon"
         />
       </button>
-
 
     return (
       <div

@@ -5,6 +5,7 @@ import PastDurationSelector from '../../../components/PastDurationSelector/PastD
 import {ALL_TIME, CURRENT_MONTH, CUSTOM_RANGE}
        from '../../../components/PastDurationSelector/PastDurationSelector'
 import _get from 'lodash/get'
+import _has from 'lodash/has'
 import messages from '../Messages'
 
 export default class ReviewStats extends Component {
@@ -69,17 +70,33 @@ export default class ReviewStats extends Component {
       >
         <ul className="mr-list-reset mr-my-3 mr-o-3 mr-text-base">
           {this.displayStat(_get(this.props.reviewMetrics, 'approved'),
-                            totalReviewTasks, <FormattedMessage {...this.props.messages.approvedReview} />)}
+                            this.props.totalReviews || totalReviewTasks,
+                            <FormattedMessage {...this.props.messages.approvedReview} />)}
           {this.displayStat(_get(this.props.reviewMetrics, 'rejected'),
-                            totalReviewTasks, <FormattedMessage {...this.props.messages.rejectedReview} />)}
+                            this.props.totalReviews || totalReviewTasks,
+                            <FormattedMessage {...this.props.messages.rejectedReview} />)}
           {this.displayStat(_get(this.props.reviewMetrics, 'assisted'),
-                            totalReviewTasks, <FormattedMessage {...this.props.messages.assistedReview} />)}
+                            this.props.totalReviews || totalReviewTasks,
+                            <FormattedMessage {...this.props.messages.assistedReview} />)}
           {this.displayStat(_get(this.props.reviewMetrics, 'disputed'),
-                            totalReviewTasks, <FormattedMessage {...this.props.messages.disputedReview} />)}
-          {this.displayStat(_get(this.props.reviewMetrics, 'requested'),
-                            totalReviewTasks, <FormattedMessage {...this.props.messages.awaitingReview} />)}
+                            this.props.totalReviews || totalReviewTasks,
+                            <FormattedMessage {...this.props.messages.disputedReview} />)}
+          {_has(this.props.reviewMetrics, 'requested') &&
+           this.displayStat(_get(this.props.reviewMetrics, 'requested'),
+                            totalReviewTasks,
+                            <FormattedMessage {...this.props.messages.awaitingReview} />)}
+          {_has(this.props.reviewMetrics, 'additionalReviews') &&
+           this.displayStat(_get(this.props.reviewMetrics, 'additionalReviews'),
+                            this.props.totalReviews || totalReviewTasks,
+                            <FormattedMessage {...this.props.messages.additionalReviews} />)}
         </ul>
 
+
+        {this.props.totalReviews &&
+          <h5 className="mr-pt-4 mr-pb-2">
+            <FormattedMessage {...this.props.messages.reviewerTasksTotal}/>: {totalReviewTasks}
+          </h5>
+        }
         {averageTime}
       </QuickWidget>
     )

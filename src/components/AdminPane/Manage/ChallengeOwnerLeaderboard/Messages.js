@@ -23,4 +23,9 @@ export default defineMessages({
     id: "ChallengeOwnerLeaderboard.averageTime.label",
     defaultMessage: "Avg. Time",
   },
+
+  additionalReviews: {
+    id: "ChallengeOwnerLeaderboard.additionalReviews.label",
+    defaultMessage: "Additional Reviews",
+  },
 })

@@ -108,4 +108,8 @@ export default {
   team: {
     failure: messages.teamFailure,
   },
+
+  search: {
+    notSupported: messages.searchNotSupported,
+  },
 }

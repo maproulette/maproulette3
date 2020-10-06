@@ -4,6 +4,8 @@ import { FormattedNumber, FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 
+import { TaskReviewStatus, messagesByReviewStatus }
+       from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import { USER_TYPE_REVIEWER } from '../../../../services/Leaderboard/Leaderboard'
 
 import messages from './Messages'
@@ -25,13 +27,24 @@ export default class ChallengeOwnerLeaderboard extends Component {
           `${Math.floor(leader.avgTimeSpent / 1000 / 60)}m ${Math.floor(leader.avgTimeSpent / 1000) % 60}s`
           : null
 
+        let tooltip = userType !== USER_TYPE_REVIEWER ? "" :
+          `${this.props.intl.formatMessage(messagesByReviewStatus[TaskReviewStatus.approved])}: ${leader.reviewsApproved} \n` +
+          `${this.props.intl.formatMessage(messagesByReviewStatus[TaskReviewStatus.approvedWithFixes])}: ${leader.reviewsAssisted} \n` +
+          `${this.props.intl.formatMessage(messagesByReviewStatus[TaskReviewStatus.rejected])}: ${leader.reviewsRejected} \n` +
+          `-------\n` +
+          `${this.props.intl.formatMessage(messagesByReviewStatus[TaskReviewStatus.disputed])}: ${leader.reviewsDisputed} \n`
+
+        if (leader.additionalReviews > 0) {
+          tooltip += `${this.props.intl.formatMessage(messages.additionalReviews)}: ${leader.additionalReviews} \n`
+        }
+
         return (
           <li key={leader.userId} className="mr-mb-2 mr-flex mr-justify-between">
             <div className="mr-text-sm">
               <span className="mr-text-pink mr-font-mono mr-mr-4">
                 <FormattedNumber value={leader.rank} />.
               </span>
-              <Link to={`/user/metrics/${leader.userId}`}>
+              <Link to={`/user/metrics/${leader.userId}`} title={tooltip}>
                 {leader.name}
               </Link>
             </div>

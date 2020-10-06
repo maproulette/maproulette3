@@ -9,11 +9,9 @@ export default defineMessages({
     defaultMessage: "Task Property Styling",
   },
 
-  stylesTip: {
-    id: 'Admin.TaskPropertyStyleRules.styles.tip',
-    defaultMessage: "See the " +
-      "[wiki](https://github.com/osmlab/maproulette3/wiki/Styling-Task-Features) " +
-      "for details on setting up styles."
+  stylesDoc: {
+    id: 'Admin.TaskPropertyStyleRules.styles.doc',
+    defaultMessage: "Learn about setting up styles"
   },
 
   deleteRule: {

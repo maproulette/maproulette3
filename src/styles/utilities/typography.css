@@ -64,6 +64,15 @@ h4,
   }
 }
 
+.mr-links-green-light a {
+  @apply mr-text-green-light;
+
+  &:hover,
+  &.active {
+    @apply mr-text-white;
+  }
+}
+
 .mr-link-list a {
   @apply mr-block mr-mb-2;
 }

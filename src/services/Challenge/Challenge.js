@@ -317,6 +317,7 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
     // cs: query string
     // cd: challenge difficulty
     // ct: keywords/tags (comma-separated string)
+    // cid: challenge id
     const queryParams = {
       limit,
       ce: onlyEnabled ? 'true' : 'false',
@@ -331,6 +332,10 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
 
     if (_isString(filters.project)) {
       queryParams.ps = filters.project
+    }
+
+    if (_isString(filters.challengeId)) {
+      queryParams.cid = filters.challengeId
     }
 
     // Keywords/tags can come from both the the query and the filter, so we need to
@@ -735,8 +740,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'defaultBasemap', 'defaultBasemapId', 'defaultPriority', 'defaultZoom',
         'description', 'difficulty', 'enabled', 'featured', 'highPriorityRule', 'id',
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
-        'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
-        'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
+        'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'overpassTargetType',
+        'parent', 'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
         'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
         'preferredReviewTags', 'limitTags', 'limitReviewTags', 'taskStyles', 'requiresLocal'])
 

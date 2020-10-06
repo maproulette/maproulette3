@@ -167,14 +167,9 @@ The project was bootstrapped with
 Branch management follows
 [GitFlow](https://datasift.github.io/gitflow/IntroducingGitFlow.html) with
 active development occurring on the `develop` branch. Pull requests should
-target the `develop` branch. The master branch always contains the latest
+target the `develop` branch. The main branch always contains the latest
 release, and the `prerelease` branch contains features and fixes promoted from
-`develop` that are candidates for the next release to `master`.
-
-It is okay for pull requests to the `develop` branch to rely on server features
-or fixes that have only been merged into the server's `dev` branch, but they
-will not be promoted to the `prelease` branch until the server-side code makes
-it into the server's `master` branch.
+`develop` that are candidates for the next release to `main`.
 
 Release versions follow [Semantic Versioning](https://semver.org/).
 
