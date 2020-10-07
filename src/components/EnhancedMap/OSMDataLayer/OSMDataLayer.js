@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { Path, withLeaflet } from 'react-leaflet'
 import L from 'leaflet'
 import _isEqual from 'lodash/isEqual'
+import _get from 'lodash/get'
 import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
@@ -40,9 +41,7 @@ export class OSMDataLayer extends Path {
 
   createLeafletElement(props) {
     this.lastZoom = props.zoom
-    const osmLayerGroup = this.generateLayer(props)
-    osmLayerGroup.on('add', () => osmLayerGroup.bringToBack())
-    return osmLayerGroup
+    return this.generateLayer(props)
   }
 
   updateLeafletElement(fromProps, toProps) {
@@ -53,7 +52,6 @@ export class OSMDataLayer extends Path {
       newLayers.eachLayer(layer => this.leafletElement.addLayer(layer))
       this.lastZoom = toProps.zoom
     }
-    this.leafletElement.bringToBack()
   }
 
   generateElementStyles(props) {
@@ -80,9 +78,13 @@ export class OSMDataLayer extends Path {
       showNodes: props.showOSMElements.nodes,
       showWays: props.showOSMElements.ways,
       showAreas: props.showOSMElements.areas,
+      pane: _get(props, 'leaflet.pane'),
     })
 
-    layerGroup.eachLayer(layer => layer.options.fill = false)
+    layerGroup.eachLayer(layer => {
+      layer.options.fill = false
+      layer.options.pane = layerGroup.options.pane
+    })
     layerGroup.bindPopup(this.popupContent)
     return layerGroup
   }

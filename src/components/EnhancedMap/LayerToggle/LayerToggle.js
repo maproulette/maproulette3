@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl'
+import classNames from 'classnames'
 import _map from 'lodash/map'
 import _noop from 'lodash/noop'
 import _filter from 'lodash/filter'
+import _sortBy from 'lodash/sortBy'
+import _clone from 'lodash/clone'
 import _get from 'lodash/get'
+import AsEndUser from '../../../interactions/User/AsEndUser'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithLayerSources from '../../HOCs/WithLayerSources/WithLayerSources'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
@@ -26,6 +31,42 @@ export class LayerToggle extends Component {
                                    this.props.addVisibleOverlay(layerId)
   }
 
+  orderedOverlays = () => {
+    let overlays = overlayToggles({
+      ...this.props,
+      overlayVisible: this.overlayVisible,
+      toggleOverlay: this.toggleOverlay
+    })
+
+    if (this.props.overlayOrder && this.props.overlayOrder.length > 0) {
+      overlays = _sortBy(overlays, layer => {
+        const position = this.props.overlayOrder.indexOf(layer.id)
+        return position === -1 ? Number.MAX_SAFE_INTEGER : position
+      })
+    }
+
+    return overlays
+  }
+
+  overlayReordered = (overlays, result) => {
+    if (!this.props.user || !this.props.updateUserAppSetting) {
+      return
+    }
+
+    // dropped outside the list or on itself
+    if (!result.destination || result.source.index === result.destination.index) {
+      return
+    }
+
+    const layers = _clone(overlays)
+    const movedLayer = layers.splice(result.source.index, 1)[0]
+    layers.splice(result.destination.index, 0, movedLayer)
+
+    this.props.updateUserAppSetting(this.props.user.id, {
+      mapOverlayOrder: _map(layers, 'id'),
+    })
+  }
+
   render() {
     const baseSources = _filter(this.props.layerSources, source => !source.overlay)
 
@@ -42,22 +83,8 @@ export class LayerToggle extends Component {
       </li>
     ))
 
-    const overlayToggles = _map(this.props.intersectingOverlays, layer => (
-      <div key={layer.id} className="mr-my-4">
-        <div
-          className="mr-flex mr-items-center mr-leading-none"
-          onClick={e => this.toggleOverlay(layer.id)}
-        >
-          <input
-            type="checkbox"
-            className="mr-checkbox-toggle"
-            checked={this.overlayVisible(layer.id)}
-            onChange={_noop}
-          />
-          <label className="mr-ml-3 mr-text-orange">{layer.name}</label>
-        </div>
-      </div>
-    ))
+    const overlays = this.orderedOverlays()
+    const canReorderLayers = AsEndUser(this.props.user).isLoggedIn() && this.props.updateUserAppSetting
 
     return (
       <Dropdown
@@ -70,153 +97,68 @@ export class LayerToggle extends Component {
         }
         dropdownContent={() =>
           <React.Fragment>
-            {layerListItems.length > 0 &&
-             <ol className="mr-o-2">{layerListItems}</ol>
-            }
-            {(overlayToggles.length > 0 || this.props.toggleTaskFeatures) && layerListItems.length > 0 &&
+            {layerListItems.length > 0 && <ol className="mr-o-2">{layerListItems}</ol>}
+            {layerListItems.length > 0 && overlays.length > 0 &&
              <hr className="mr-h-px mr-my-4 mr-bg-white-15" />
             }
-            {overlayToggles}
-            {this.props.togglePriorityBounds && this.props.priorityBounds.length > 0 &&
-             <div
-               className="mr-my-4 mr-flex mr-items-center mr-leading-none"
-               onClick={this.props.togglePriorityBounds}
-             >
-               <input
-                 type="checkbox"
-                 className="mr-checkbox-toggle"
-                 checked={this.props.showPriorityBounds}
-                 onChange={_noop}
-               />
-               <label className="mr-ml-3 mr-text-orange">
-                 <FormattedMessage {...messages.showPriorityBoundsLabel} />
-               </label>
-             </div>
-            }
-            {this.props.toggleTaskFeatures &&
-             <div
-               className="mr-my-4 mr-flex mr-items-center mr-leading-none"
-               onClick={this.props.toggleTaskFeatures}
-             >
-               <input
-                 type="checkbox"
-                 className="mr-checkbox-toggle"
-                 checked={this.props.showTaskFeatures}
-                 onChange={_noop}
-               />
-               <label className="mr-ml-3 mr-text-orange">
-                 <FormattedMessage {...messages.showTaskFeaturesLabel} />
-               </label>
-             </div>
-            }
-            {this.props.toggleOSMData &&
-             _get(process.env, 'REACT_APP_OSM_DATA_OVERLAY', 'enabled') !== 'disabled' &&
-             <React.Fragment>
-               <div
-                 className="mr-my-4 mr-flex mr-items-center mr-leading-none"
-                 onClick={this.props.toggleOSMData}
-               >
-                 <input
-                   type="checkbox"
-                   className="mr-checkbox-toggle"
-                   checked={this.props.showOSMData}
-                   onChange={_noop}
-                 />
-                 <label className="mr-ml-3 mr-text-orange">
-                   <FormattedMessage
-                     {...messages.showOSMDataLabel}
-                   /> {this.props.osmDataLoading && <FormattedMessage {...messages.loading} />}
-                 </label>
-               </div>
-               {this.props.showOSMData && !this.props.osmDataLoading && this.props.toggleOSMElements &&
-                <React.Fragment>
-                  {['nodes', 'ways', 'areas'].map(element => (
-                   <div
-                     key={element}
-                     className="mr-my-2 mr-ml-4 mr-flex mr-items-center mr-leading-none"
-                     onClick={() => this.props.toggleOSMElements(element)}
-                   >
-                     <input
-                       type="checkbox"
-                       className="mr-checkbox-toggle"
-                       checked={this.props.showOSMElements[element]}
-                       onChange={_noop}
-                     />
-                     <label className="mr-ml-3 mr-text-orange mr-capitalize">
-                       {element}
-                     </label>
-                   </div>
-                  ))}
-                </React.Fragment>
-               }
-             </React.Fragment>
-            }
-            {this.props.toggleMapillary &&
-             <div
-               className="mr-my-4 mr-flex mr-items-center mr-leading-none"
-               onClick={e => this.props.toggleMapillary()}
-             >
-               <input
-                 type="checkbox"
-                 className="mr-checkbox-toggle"
-                 checked={this.props.showMapillary || false}
-                 onChange={_noop}
-               />
-               <label className="mr-ml-3 mr-text-orange">
-                 <FormattedMessage
-                   {...messages.showMapillaryLabel}
-                 /> {(this.props.showMapillary && !this.props.mapillaryLoading) &&
-                     <FormattedMessage {...messages.imageCount}
-                                       values={{count: this.props.mapillaryCount}} />
-                 } {this.props.mapillaryLoading && <FormattedMessage {...messages.loading} />
-                 } {this.props.showMapillary && this.props.hasMoreMapillaryImagery && !this.props.mapillaryLoading &&
-                   <button
-                     className="mr-button mr-button--xsmall mr-ml-2"
-                     onClick={e => {
-                       e.stopPropagation()
-                       this.props.fetchMoreMapillaryImagery()
-                     }}
-                   >
-                     <FormattedMessage {...messages.moreLabel} />
-                   </button>
-                 }
-
-               </label>
-             </div>
-            }
-            {this.props.toggleOpenStreetCam &&
-             <div
-               className="mr-my-4 mr-flex mr-items-center mr-leading-none"
-               onClick={() => this.props.toggleOpenStreetCam()}
-             >
-               <input
-                 type="checkbox"
-                 className="mr-checkbox-toggle"
-                 checked={this.props.showOpenStreetCam || false}
-                 onChange={_noop}
-               />
-               <label className="mr-ml-3 mr-text-orange">
-                 <FormattedMessage
-                   {...messages.showOpenStreetCamLabel}
-                 /> {(this.props.showOpenStreetCam && !this.props.openStreetCamLoading) &&
-                     <FormattedMessage {...messages.imageCount}
-                                       values={{count: this.props.openStreetCamCount}} />
-                 } {this.props.openStreetCamLoading && <FormattedMessage {...messages.loading} />
-                 } {this.props.showOpenStreetCam && this.props.hasMoreOpenStreetCamImagery && !this.props.openStreetCamLoading &&
-                   <button
-                     className="mr-button mr-button--xsmall mr-ml-2"
-                     onClick={e => {
-                       e.stopPropagation()
-                       this.props.fetchMoreOpenStreetCamImagery()
-                     }}
-                   >
-                     <FormattedMessage {...messages.moreLabel} />
-                   </button>
-                 }
-
-               </label>
-             </div>
-            }
+            <div>
+              <DragDropContext onDragEnd={result => this.overlayReordered(overlays, result)}>
+                <Droppable
+                  droppableId="overlay-droppable"
+                  renderClone={(provided, snapshot, rubric) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                    >
+                      <div className="mr-relative mr-my-2 mr-flex mr-justify-between">
+                        <div>{overlays[rubric.source.index].component}</div>
+                        {canReorderLayers &&
+                         <div {...provided.dragHandleProps}>
+                           <SvgSymbol
+                             sym="reorder-icon"
+                             className="mr-mt-6px mr-w-6 mr-h-6 mr-fill-green-light"
+                             viewBox="0 0 96 96"
+                           />
+                         </div>
+                        }
+                      </div>
+                    </div>
+                  )}
+                >
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {_map(overlays, (overlay, index) => (
+                        <Draggable key={overlay.id} draggableId={overlay.id} index={index}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                            >
+                              <div className="mr-relative mr-my-2 mr-flex mr-justify-between">
+                                <div>{overlay.component}</div>
+                                {canReorderLayers &&
+                                 <div {...provided.dragHandleProps}>
+                                   <SvgSymbol
+                                     sym="reorder-icon"
+                                     className="mr-mt-6px mr-w-6 mr-h-6 mr-fill-green-light"
+                                     viewBox="0 0 96 96"
+                                   />
+                                 </div>
+                                }
+                              </div>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </div>
           </React.Fragment>
         }
       />
@@ -247,6 +189,190 @@ LayerToggle.propTypes = {
   mapillaryCount: PropTypes.number,
   /** Invoked when the user toggles visibility of Mapillary layer */
   toggleMapillary: PropTypes.func,
+}
+
+const overlayToggles = props => {
+  const toggles = _map(props.intersectingOverlays, layer => ({
+    id: layer.id,
+    label: layer.name,
+    component: (
+      <SimpleLayerToggle
+        key={layer.id}
+        toggleLayerActive={() => props.toggleOverlay(layer.id)}
+        isLayerActive={props.overlayVisible(layer.id)}
+        layerLabel={layer.name}
+      />
+    ),
+  }))
+
+  if (props.togglePriorityBounds && props.priorityBounds.length > 0) {
+    toggles.push({
+      id: "priority-bounds",
+      label: <FormattedMessage {...messages.showPriorityBoundsLabel} />,
+      component: (
+        <SimpleLayerToggle
+          key="priority-bounds"
+          toggleLayerActive={props.togglePriorityBounds}
+          isLayerActive={props.showPriorityBounds}
+          layerLabel={<FormattedMessage {...messages.showPriorityBoundsLabel} />}
+        />
+      ),
+    })
+  }
+
+  if (props.toggleTaskFeatures) {
+    toggles.push({
+      id: "task-features",
+      label: <FormattedMessage {...messages.showTaskFeaturesLabel} />,
+      component: (
+        <SimpleLayerToggle
+          key="task-features"
+          toggleLayerActive={props.toggleTaskFeatures}
+          isLayerActive={props.showTaskFeatures}
+          layerLabel={<FormattedMessage {...messages.showTaskFeaturesLabel} />}
+        />
+      ),
+    })
+  }
+
+  if (props.toggleOSMData &&
+      _get(process.env, 'REACT_APP_OSM_DATA_OVERLAY', 'enabled') !== 'disabled') {
+    toggles.push({
+      id: "osm-data",
+      label: <FormattedMessage {...messages.showOSMDataLabel} />,
+      component: <OSMDataLayerToggle key="osm-data" {...props} />,
+    })
+  }
+
+  if (props.toggleMapillary) {
+    toggles.push({
+      id: "mapillary",
+      label: <FormattedMessage {...messages.showMapillaryLabel} />,
+      component: <MapillaryLayerToggle key="mapillary" {...props} />,
+    })
+  }
+
+  if (props.toggleOpenStreetCam) {
+    toggles.push({
+      id: "openstreetcam",
+      label: <FormattedMessage {...messages.showOpenStreetCamLabel} />,
+      component: <OpenStreetCamLayerToggle key="openstreetcam" {...props} />,
+    })
+  }
+
+  return toggles
+}
+
+const SimpleLayerToggle = props => {
+  return (
+    <div
+      className={classNames(
+        "mr-my-2 mr-flex mr-items-center mr-leading-none",
+        props.toggleClassName
+      )}
+      onClick={props.toggleLayerActive}
+    >
+      <input
+        type="checkbox"
+        className="mr-checkbox-toggle"
+        checked={props.isLayerActive}
+        onChange={_noop}
+      />
+      <label className="mr-ml-3 mr-text-orange">{props.layerLabel}</label>
+    </div>
+  )
+}
+
+const OSMDataLayerToggle = props => {
+  return (
+    <React.Fragment>
+      <SimpleLayerToggle
+        toggleLayerActive={props.toggleOSMData}
+        isLayerActive={props.showOSMData}
+        layerLabel={
+          <React.Fragment>
+            <FormattedMessage
+              {...messages.showOSMDataLabel}
+            /> {props.osmDataLoading && <FormattedMessage {...messages.loading} />}
+          </React.Fragment>
+        }
+      />
+
+      {props.showOSMData && !props.osmDataLoading && props.toggleOSMElements &&
+       <React.Fragment>
+         {['nodes', 'ways', 'areas'].map(element => (
+           <SimpleLayerToggle
+             key={`osm-element-toggle-${element}`}
+             toggleClassName="mr-ml-4"
+             toggleLayerActive={() => props.toggleOSMElements(element)}
+             isLayerActive={props.showOSMElements[element]}
+             layerLabel={element}
+           />
+         ))}
+       </React.Fragment>
+      }
+    </React.Fragment>
+  )
+}
+
+const MapillaryLayerToggle = props => {
+  return (
+    <SimpleLayerToggle
+      toggleLayerActive={() => props.toggleMapillary()}
+      isLayerActive={props.showMapillary || false}
+      layerLabel={
+        <React.Fragment>
+          <FormattedMessage
+            {...messages.showMapillaryLabel}
+          /> {(props.showMapillary && !props.mapillaryLoading) &&
+              <FormattedMessage {...messages.imageCount}
+                                values={{count: props.mapillaryCount}} />
+          } {props.mapillaryLoading && <FormattedMessage {...messages.loading} />
+          } {props.showMapillary && props.hasMoreMapillaryImagery && !props.mapillaryLoading &&
+            <button
+              className="mr-button mr-button--xsmall mr-ml-2"
+              onClick={e => {
+                e.stopPropagation()
+                props.fetchMoreMapillaryImagery()
+              }}
+            >
+              <FormattedMessage {...messages.moreLabel} />
+            </button>
+          }
+        </React.Fragment>
+      }
+    />
+  )
+}
+
+const OpenStreetCamLayerToggle = props => {
+  return (
+    <SimpleLayerToggle
+      toggleLayerActive={() => props.toggleOpenStreetCam()}
+      isLayerActive={props.showOpenStreetCam || false}
+      layerLabel={
+        <React.Fragment>
+          <FormattedMessage
+            {...messages.showOpenStreetCamLabel}
+          /> {(props.showOpenStreetCam && !props.openStreetCamLoading) &&
+              <FormattedMessage {...messages.imageCount}
+                                values={{count: props.openStreetCamCount}} />
+          } {props.openStreetCamLoading && <FormattedMessage {...messages.loading} />
+          } {props.showOpenStreetCam && props.hasMoreOpenStreetCamImagery && !props.openStreetCamLoading &&
+            <button
+              className="mr-button mr-button--xsmall mr-ml-2"
+              onClick={e => {
+                e.stopPropagation()
+                props.fetchMoreOpenStreetCamImagery()
+              }}
+            >
+              <FormattedMessage {...messages.moreLabel} />
+            </button>
+          }
+        </React.Fragment>
+      }
+    />
+  )
 }
 
 export default WithVisibleLayer(WithLayerSources(LayerToggle))

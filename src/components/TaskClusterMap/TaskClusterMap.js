@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, Marker, Rectangle} from 'react-leaflet'
+import { ZoomControl, Marker, LayerGroup, Rectangle, Pane }
+       from 'react-leaflet'
 import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
 import bboxPolygon from '@turf/bbox-polygon'
@@ -18,6 +19,7 @@ import _uniqueId from 'lodash/uniqueId'
 import _compact from 'lodash/compact'
 import _cloneDeep from 'lodash/cloneDeep'
 import _isObject from 'lodash/isObject'
+import _sortBy from 'lodash/sortBy'
 import _omit from 'lodash/omit'
 import { buildLayerSources } from '../../services/VisibleLayer/LayerSources'
 import { TaskPriorityColors } from '../../services/Task/TaskPriority/TaskPriority'
@@ -118,6 +120,12 @@ export class TaskClusterMap extends Component {
 
     // the visible overlays have changed
     if (nextProps.visibleOverlays.length !== this.props.visibleOverlays.length) {
+       return true
+    }
+
+    // the ordering of overlays has changed
+    if (!_isEqual(nextProps.getUserAppSetting(nextProps.user, 'mapOverlayOrder'),
+                  this.props.getUserAppSetting(this.props.user, 'mapOverlayOrder'))) {
        return true
     }
 
@@ -366,11 +374,40 @@ export class TaskClusterMap extends Component {
   }
 
   render() {
-    const overlayLayers = buildLayerSources(
+    const renderId = _uniqueId()
+    const overlayOrder = this.props.getUserAppSetting(this.props.user, 'mapOverlayOrder')
+    let overlayLayers = buildLayerSources(
       this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
-      (layerId, index, layerSource) =>
-        <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
+      (layerId, index, layerSource) => ({
+        id: layerId,
+        component: <SourcedTileLayer key={layerId} source={layerSource} />,
+      })
     )
+
+    if (this.props.showPriorityBounds) {
+      overlayLayers.push({
+        id: "priority-bounds",
+        component: (
+          <LayerGroup key="priority-bounds">
+            {this.props.priorityBounds.map((bounds, index) =>
+              <Rectangle
+                key={index}
+                bounds={toLatLngBounds(bounds.boundingBox)}
+                color={TaskPriorityColors[bounds.priorityLevel]}
+              />
+            )}
+          </LayerGroup>
+        )
+      })
+    }
+
+    // Sort the overlays according to the user's preferences
+    if (overlayOrder && overlayOrder.length > 0) {
+      overlayLayers = _sortBy(overlayLayers, layer => {
+        const position = overlayOrder.indexOf(layer.id)
+        return position === -1 ? Number.MAX_SAFE_INTEGER : position
+      }).reverse()
+    }
 
     const canClusterToggle = !!this.props.allowClusterToggle &&
       this.props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
@@ -394,23 +431,17 @@ export class TaskClusterMap extends Component {
       this.currentBounds = this.props.initialBounds
     }
 
-    const priorityBounds = !this.props.showPriorityBounds ? null :
-      this.props.priorityBounds.map((bounds, index) =>
-        <Rectangle key={index}
-          bounds={toLatLngBounds(bounds.boundingBox)}
-          color={TaskPriorityColors[bounds.priorityLevel]}/>
-      )
-
-
     const map =
-      <EnhancedMap className="mr-z-0"
-                   center={latLng(0, 0)}
-                   zoom={this.currentZoom} minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM}
-                   setInitialBounds={false}
-                   initialBounds = {this.currentBounds}
-                   zoomControl={false} animate={false} worldCopyJump={true}
-                   onBoundsChange={this.updateBounds}
-                   justFitFeatures>
+      <EnhancedMap
+        className="mr-z-0"
+        center={latLng(0, 0)}
+        zoom={this.currentZoom} minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM}
+        setInitialBounds={false}
+        initialBounds = {this.currentBounds}
+        zoomControl={false} animate={false} worldCopyJump={true}
+        onBoundsChange={this.updateBounds}
+        justFitFeatures
+      >
         <ZoomControl className="mr-z-10" position='topright' />
         {this.props.showLasso && this.props.onBulkTaskSelection &&
           (!this.props.showAsClusters || this.props.totalTaskCount <= CLUSTER_POINTS) &&
@@ -430,11 +461,26 @@ export class TaskClusterMap extends Component {
           />
         }
         <VisibleTileLayer {...this.props} zIndex={1} />
-        {overlayLayers}
+        {_map(overlayLayers, (layer, index) => (
+          <Pane
+            key={`pane-${renderId}-${index}`}
+            name={`pane-${index}`}
+            style={{zIndex: 10 + index}}
+            className="custom-pane"
+          >
+            {layer.component}
+          </Pane>
+        ))}
         {!this.props.mapZoomedOut &&
-          <span key={_uniqueId()}>{this.state.mapMarkers}</span>
+         <Pane
+           key={`pane-${renderId}-task-markers`}
+           name={`pane-${renderId}-task-markers`}
+           style={{zIndex: 10 + overlayLayers.length}}
+           className="custom-pane"
+         >
+           {this.state.mapMarkers}
+         </Pane>
         }
-        {priorityBounds}
       </EnhancedMap>
 
     return (
@@ -447,7 +493,7 @@ export class TaskClusterMap extends Component {
             <FormattedMessage {...messages.clusterTasksLabel} />
           </label>
         }
-        <LayerToggle {...this.props} />
+        <LayerToggle {...this.props} overlayOrder={overlayOrder} />
         {!!this.props.mapZoomedOut && !this.state.locatingToUser &&
           <ZoomInMessage {...this.props} zoom={this.currentZoom}/>
         }

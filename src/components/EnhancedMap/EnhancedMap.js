@@ -1,15 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { Map } from 'react-leaflet'
-import { geoJSON, LatLngBounds, LatLng, latLng } from 'leaflet'
+import { LatLngBounds, LatLng, latLng } from 'leaflet'
+import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
-import _isFunction from 'lodash/isFunction'
 import _isFinite from 'lodash/isFinite'
-import AsSimpleStyleableFeature
-       from '../../interactions/TaskFeature/AsSimpleStyleableFeature'
-import PropertyList from './PropertyList/PropertyList'
 
 /**
  * EnhancedMap is an extension of the react-leaflet Map that provides
@@ -25,8 +20,8 @@ import PropertyList from './PropertyList/PropertyList'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class EnhancedMap extends Map {
-  currentFeatures = null
   animationHandle = null
+  mapBoundsFitToLayer = false
   mapMoved = false
 
   /**
@@ -51,17 +46,6 @@ export default class EnhancedMap extends Map {
                                   this.leafletElement.getSize())
       }
     }
-  }
-
-  /**
-   * Schedules animation of SVG paths and markers on map. If animation is
-   * already pending, it is first cancelled prior to scheduling a new one.
-   */
-  scheduleAnimation = () => {
-    if (this.animationHandle) {
-      clearTimeout(this.animationHandle)
-    }
-    this.animationHandle = setTimeout(this.animateFeatures, 250)
   }
 
   /**
@@ -120,66 +104,41 @@ export default class EnhancedMap extends Map {
     }
   }
 
-  updateFeatures = (newFeatures) => {
-    const hasExistingFeatures = !_isEmpty(this.currentFeatures)
-    if (hasExistingFeatures) {
-      this.currentFeatures.remove()
+  fitBoundsToLayer = () => {
+    if (_isEmpty(this.props.fitToLayer)) {
+      return
     }
 
-    if (!_isEmpty(newFeatures)) {
-      this.currentFeatures = geoJSON(newFeatures, {
-        onEachFeature: (feature, layer) => {
-          layer.bindPopup(() => this.propertyList(feature.properties))
-
-          // Animate features when added to map (if requested)
-          if (this.props.animateFeatures) {
-            const oldOnAdd = layer.onAdd
-            layer.onAdd = map => {
-              oldOnAdd.call(layer, map)
-              this.scheduleAnimation()
-            }
-          }
-
-          // Support custom layer styling
-          if (_isFunction(feature.styleLeafletLayer)) {
-            feature.styleLeafletLayer(layer)
-          }
-          else {
-            AsSimpleStyleableFeature(feature).styleLeafletLayer(layer)
-          }
+    // Use a timeout to give Leaflet a chance to re-render its layers
+    // after a React render
+    setTimeout(() => {
+      let layerBounds = null
+      this.leafletElement.eachLayer(layer => {
+        if (_get(layer, 'options.mrLayerId') === this.props.fitToLayer) {
+          layerBounds = layer.getBounds()
         }
       })
 
-      if (!this.props.justFitFeatures) {
-        this.currentFeatures.addTo(this.leafletElement)
-      }
-
-      // By default, we always fit the map bounds to the task features.
+      // By default, we always fit the map bounds to the fit Layer.
       // However, if we're only supposed to fit the features as necessary, then
-      // we do it for initial task (no existing features) or if the new task
+      // we do it for initial render (no updates) or if the layer
       // features wouldn't all be displayed at the present zoom level.
-      if (!this.props.skipFit &&
-          (
-            !this.props.fitFeaturesOnlyAsNecessary ||
-            !hasExistingFeatures ||
-            !this.leafletElement.getBounds().contains(this.currentFeatures.getBounds())
+      if (layerBounds && (
+            !this.props.fitBoundsOnlyAsNecessary ||
+            !this.mapBoundsFitToLayer ||
+            !this.leafletElement.getBounds().contains(layerBounds)
           )) {
-        this.leafletElement.fitBounds(this.currentFeatures.getBounds().pad(0.5))
+        this.leafletElement.fitBounds(layerBounds.pad(0.5))
       }
-    }
-  }
-
-  propertyList = featureProperties => {
-    const contentElement = document.createElement('div')
-    ReactDOM.render(
-      <PropertyList featureProperties={featureProperties} />,
-      contentElement
-    )
-    return contentElement
+    }, 0)
   }
 
   componentDidMount() {
     super.componentDidMount()
+
+    if (this.props.animator) {
+      this.props.animator.setAnimationFunction(this.animateFeatures)
+    }
 
     if (this.props.noAttributionPrefix) {
       this.leafletElement.attributionControl.setPrefix(false)
@@ -187,8 +146,8 @@ export default class EnhancedMap extends Map {
 
     // If there are geojson features, add them to the leaflet map and then
     // fit the map to the bounds of those features.
-    if (this.props.features) {
-      this.updateFeatures(this.props.features)
+    if (this.props.fitToLayer) {
+      this.fitBoundsToLayer()
     }
 
     // Setup event handlers for moveend and zoomend events if the parent
@@ -211,6 +170,10 @@ export default class EnhancedMap extends Map {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.props.animator) {
+      this.props.animator.setAnimationFunction(this.animateFeatures)
+    }
+
     if (this.props.initialBounds && _isFinite(this.props.initialBounds.getNorth())) {
       this.leafletElement.fitBounds(this.props.initialBounds)
     }
@@ -218,13 +181,16 @@ export default class EnhancedMap extends Map {
       this.leafletElement.panTo(this.props.center)
     }
 
-    if (!_isEqual(this.props.features, prevProps.features) ||
-        this.props.justFitFeatures !== prevProps.justFitFeatures) {
-      this.updateFeatures(this.props.features)
+    if (!_isEqual(this.props.fitToLayer, prevProps.fitToLayer)) {
+      this.fitBoundsToLayer()
     }
   }
 
   componentWillUnmount() {
+    if (this.props.animator) {
+      this.props.animator.reset()
+    }
+
     try {
       this.leafletElement.stop()
       this.leafletElement.off('zoomend', this.onZoomOrMoveEnd)
@@ -247,8 +213,10 @@ EnhancedMap.propTypes = {
   onBoundsChange: PropTypes.func,
   /** If false, onBoundsChange will not be invoked for initial bounding box */
   setInitialBounds: PropTypes.bool,
-  /** If true, features will only be used to fit bounds, not rendered */
-  justFitFeatures: PropTypes.bool,
+  /** If given, bounds will be fit to layer with the given mrLayerId */
+  fitToLayer: PropTypes.string,
+  /** If true, bounds will only be fit initially or if deemed necessary */
+  fitBoundsOnlyAsNecessary: PropTypes.bool,
   /** If true, features will be animated when initially added to the map */
   animateFeatures: PropTypes.bool,
 }

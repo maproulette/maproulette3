@@ -395,6 +395,7 @@ module.exports = {
       '2px': '2px',
       '3px': '3px',
       '4px': '4px',
+      '6px': '6px',
       'n2px': '-2px',
       '0': '0',
       '1': '0.25rem',
