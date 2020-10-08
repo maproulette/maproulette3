@@ -60,13 +60,6 @@ export default class AutosuggestMentionTextArea extends Component {
     }
   }
 
-  handleKeyDown = e => {
-    if (e.key === "Enter") {
-      // Don't let enter key potentially submit a form
-      e.preventDefault()
-    }
-  }
-
   regex = searchString => {
     return searchString.match(/^()@([\w]*)$/)  || // match "@..."
            searchString.match(/([^[])@([\w]*)$/) ||  // match "hi @..."
@@ -184,7 +177,6 @@ export default class AutosuggestMentionTextArea extends Component {
                     this.props.inputClassName,
                     "mr-flex-grow mr-w-full mr-h-full mr-outline-none"
                   )}
-                  onKeyDown={this.handleKeyDown}
                   onFocus={(e) => this.setState({textBoxActive: true})}
                   onBlur={(e) => this.setState({textBoxActive: false})}
                   placeholder={this.props.placeholder}
