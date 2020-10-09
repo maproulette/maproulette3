@@ -11,6 +11,7 @@ import { completeReview,
 import { TaskReviewLoadMethod }
        from '../../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { addError } from '../../../services/Error/Error'
+import { buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'
 import AppErrors from '../../../services/Error/AppErrors'
 
 /**
@@ -98,7 +99,9 @@ export const parseSearchCriteria = url => {
 }
 
 export const visitTaskForReview = (loadBy, url, task) => {
-  const newState = parseSearchCriteria(url).newState
+  const parsedCriteria = parseSearchCriteria(url)
+  const newState = parsedCriteria.newState
+
   if (task && (loadBy === TaskReviewLoadMethod.next ||
                loadBy === TaskReviewLoadMethod.nearby)) {
     url.push({
@@ -115,7 +118,7 @@ export const visitTaskForReview = (loadBy, url, task) => {
   else {
     url.push({
       pathname: '/review',
-      state: newState,
+      search: buildSearchURL(parsedCriteria.searchCriteria)
     })
   }
 }

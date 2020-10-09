@@ -1,6 +1,11 @@
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _cloneDeep from 'lodash/cloneDeep'
+import _keys from 'lodash/keys'
+import _each from 'lodash/each'
+import _isUndefined from 'lodash/isUndefined'
+import _toInteger from 'lodash/toInteger'
+import queryString from 'query-string'
 
 export function buildSearchCriteria(searchParams, defaultCriteria) {
   if (searchParams) {
@@ -25,4 +30,66 @@ export function buildSearchCriteria(searchParams, defaultCriteria) {
             savedChallengesOnly, excludeOtherReviewers}
   }
   else return _cloneDeep(defaultCriteria)
+}
+
+/**
+ * Builds a string suitable to use on a URL using the search
+ * criteria provided. If a nested objects is provided (eg. filters)
+ * then they key on th url will be dottted (eg. 'filters.projectId=')
+ * eg. ?filters.projectId=8&invert.project=true&includeTags=true
+ **/
+export function buildSearchURL(searchCriteria) {
+  const params = {}
+
+  _each(_keys(searchCriteria), (key) => {
+    if (typeof searchCriteria[key] === "object") {
+      _each(_keys(searchCriteria[key]), (subkey) => {
+        if (!_isUndefined(searchCriteria[key][subkey]) &&
+            searchCriteria[key][subkey] !== null) {
+          params[`${key}.${subkey}`] = searchCriteria[key][subkey]
+        }
+      })
+    }
+    else if (!_isUndefined(searchCriteria[key]) && searchCriteria[key] !== null) {
+      params[key] = searchCriteria[key]
+    }
+  })
+
+  return "?" + new URLSearchParams(params).toString()
+}
+
+/**
+ * Takes a search url and rebuilds the search criteria.
+ */
+export function buildSearchCriteriafromURL(searchURL) {
+  const parsedURL = queryString.parse(searchURL)
+  const searchCriteria = {}
+
+  const massageValue = value => {
+    if (value === "true") {
+      return true
+    }
+    else if (value === "false") {
+      return false
+    }
+    else if (!isNaN(value)) {
+      return _toInteger(value)
+    }
+    return value
+  }
+
+  _each(_keys(parsedURL), key => {
+    const result = key.match(/(\w+)\.(\w+)/)
+    if (result) {
+      const primaryKey = result[1]
+      const subkey = result[2]
+      searchCriteria[primaryKey] = searchCriteria[primaryKey] || {}
+      searchCriteria[primaryKey][subkey] = massageValue(parsedURL[key])
+    }
+    else {
+      searchCriteria[key] = massageValue(parsedURL[key])
+    }
+  })
+
+  return searchCriteria
 }

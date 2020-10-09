@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage, FormattedDate, FormattedTime }
        from 'react-intl'
+import parse from 'date-fns/parse'
 import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _map from 'lodash/map'
@@ -38,6 +39,9 @@ import { mapColors } from '../../../interactions/User/AsEndUser'
 import messages from './Messages'
 import { ViewCommentsButton, StatusLabel, makeInvertable }
   from '../../../components/TaskAnalysisTable/TaskTableHelpers'
+import WithSavedFilters from '../../../components/HOCs/WithSavedFilters/WithSavedFilters'
+import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
+import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
 import { Link } from 'react-router-dom'
 import ReactTable from 'react-table-6'
 
@@ -49,6 +53,8 @@ import ReactTable from 'react-table-6'
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class TaskReviewTable extends Component {
+  componentIsMounted: false
+
   state = {
     openComments: null,
     showConfigureColumns: false
@@ -117,10 +123,12 @@ export class TaskReviewTable extends Component {
       }
     }
 
-    this.setState({lastTableState: _pick(tableState, ["sorted", "filtered"])})
-    this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
-      boundingBox: this.props.reviewCriteria.boundingBox,
-      includeTags: !!_get(this.props.addedColumns, 'tags')})
+    if (this.componentIsMounted) {
+      this.setState({lastTableState: _pick(tableState, ["sorted", "filtered"])})
+      this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
+        boundingBox: this.props.reviewCriteria.boundingBox,
+        includeTags: !!_get(this.props.addedColumns, 'tags')})
+    }
   }
 
   startReviewing() {
@@ -139,7 +147,12 @@ export class TaskReviewTable extends Component {
     this.props.updateReviewTasks(reviewCriteria)
   }
 
+  componentWillUnmount() {
+    this.componentIsMounted = false
+  }
+
   componentDidMount() {
+    this.componentIsMounted = true
     this.setupConfigurableColumns(this.props.reviewTasksType)
   }
 
@@ -238,6 +251,12 @@ export class TaskReviewTable extends Component {
                     </a>
                   </li>
                 }
+                <li><hr className="mr-rule-dropdown" /></li>
+                <SavedFiltersList
+                  searchFilters={this.props.reviewCriteria}
+                  afterClick={dropdown.toggleDropdownVisible}
+                  {...this.props}
+                />
               </ul>
             </React.Fragment>
           }
@@ -333,6 +352,10 @@ export class TaskReviewTable extends Component {
                 <FormattedMessage {...messages.refresh} />
               </button>
               <div className="mr-float-right mr-mt-3 mr-ml-3">{this.gearDropdown(this.props.reviewTasksType)}</div>
+              <ManageSavedFilters
+                searchFilters={this.props.reviewCriteria}
+                {...this.props}
+              />
             </div>
           </header>
           <div className="mr-mt-6">
@@ -526,7 +549,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
-            <React.Fragment>
+            <React.Fragment key={reviewer + "-" + index}>
               <span style={{color: mapColors(reviewer.username)}}>{reviewer.username}</span>
               {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
             </React.Fragment>
@@ -638,16 +661,23 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
         </span>
       )
     },
-    Filter: ({ filter, onChange }) =>
-      <div>
-        <IntlDatePicker
-            selected={_get(criteria, 'filters.reviewedAt')}
-            onChange={(value) => {
-              props.setFiltered("reviewedAt", value)
-            }}
-            intl={props.intl}
-        />
-      </div>,
+    Filter: ({ filter, onChange }) => {
+      let reviewedAt = _get(criteria, 'filters.reviewedAt')
+      if (typeof reviewedAt === "string" && reviewedAt !== "") {
+        reviewedAt = parse(reviewedAt)
+      }
+      return (
+        <div>
+          <IntlDatePicker
+              selected={reviewedAt}
+              onChange={(value) => {
+                props.setFiltered("reviewedAt", value)
+              }}
+              intl={props.intl}
+          />
+        </div>
+      )
+    },
   }
 
   columns.reviewedBy = {
@@ -855,4 +885,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 }
 
 export default WithCurrentUser(WithConfigurableColumns(
-  TaskReviewTable, {}, [], messages, "reviewColumns", "reviewTasksType", false))
+  WithSavedFilters(TaskReviewTable, "reviewSearchFilters"),
+  {}, [], messages, "reviewColumns", "reviewTasksType", false)
+)

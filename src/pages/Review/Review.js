@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
-import queryString from 'query-string'
 import classNames from 'classnames'
 import _cloneDeep from 'lodash/cloneDeep'
 import _get from 'lodash/get'
@@ -12,6 +11,10 @@ import _isFinite from 'lodash/isFinite'
 import _parseInt from 'lodash/parseInt'
 import _isUndefined from 'lodash/isUndefined'
 import _isEmpty from 'lodash/isEmpty'
+import _merge from 'lodash/merge'
+import _omitBy from 'lodash/omitBy'
+import _omit from 'lodash/omit'
+import _isEqual from 'lodash/isEqual'
 import AsEndUser from '../../interactions/User/AsEndUser'
 import WithCurrentUser from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import WithWebSocketSubscriptions
@@ -25,6 +28,7 @@ import WithWidgetWorkspaces
        from '../../components/HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WidgetWorkspace from '../../components/WidgetWorkspace/WidgetWorkspace'
 import { ReviewTasksType } from '../../services/Task/TaskReview/TaskReview'
+import { buildSearchCriteriafromURL } from '../../services/SearchCriteria/SearchCriteria'
 import WithReviewTasks from '../../components/HOCs/WithReviewTasks/WithReviewTasks'
 import TasksReviewChallenges from './TasksReview/TasksReviewChallenges'
 import messages from './Messages'
@@ -66,33 +70,6 @@ export class ReviewTasksDashboard extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.state.filterSelected[this.state.showType]) {
-      if (_get(this.props.history, 'location.search')) {
-        const urlParams = queryString.parse(_get(this.props, 'location.search'))
-        if (_isFinite(_parseInt(urlParams.challengeId))) {
-          this.setSelectedChallenge(urlParams.challengeId, urlParams.challengeName)
-          return
-        }
-        else if (_isFinite(_parseInt(urlParams.projectId))) {
-          this.setSelectedProject(urlParams.projectId, urlParams.projectName)
-          return
-        }
-      }
-
-      if (!_isEmpty(_get(this.props.history, 'location.state.filters'))) {
-        // We already have filters set in our history, so let's just move
-        // on to the table.
-        this.setSelectedProject('')
-        return
-      }
-    }
-
-
-    if (this.props.location.pathname !== prevProps.location.pathname &&
-        this.props.location.search !== prevProps.location.search) {
-      window.scrollTo(0, 0)
-    }
-
     if (_isUndefined(_get(this.props, 'match.params.showType')) &&
         this.state.showType !== ReviewTasksType.toBeReviewed ) {
       this.setState({showType:ReviewTasksType.toBeReviewed})
@@ -102,26 +79,80 @@ export class ReviewTasksDashboard extends Component {
       this.setState({showType: _get(this.props, 'match.params.showType')})
     }
 
+    if (!this.state.filterSelected[this.state.showType]) {
+      if (_get(this.props.history, 'location.search')) {
+        this.setSelectedFilters(
+          buildSearchCriteriafromURL(this.props.history.location.search)
+        )
+        return
+      }
+
+      if (!_isEmpty(_get(this.props.history, 'location.state.filters'))) {
+        // We already have filters set in our history, so let's just move
+        // on to the table.
+        return
+      }
+    }
+
+    // If our path params have changed we need to update the default filters
+    if (!_isEqual(this.props.location.search, prevProps.location.search)) {
+      this.setSelectedFilters(
+        buildSearchCriteriafromURL(this.props.history.location.search), true
+      )
+      return
+    }
+
+    if (this.props.location.pathname !== prevProps.location.pathname &&
+        this.props.location.search !== prevProps.location.search) {
+      window.scrollTo(0, 0)
+    }
   }
 
   componentWillUnmount() {
     this.props.unsubscribeFromReviewMessages()
   }
 
-  setSelectedChallenge = (challengeId, challengeName) => {
+  setSelectedFilters = (filters, clearPrevState = false) => {
     const filterSelected = _cloneDeep(this.state.filterSelected)
-    filterSelected[this.state.showType] = filterSelected[this.state.showType] || {}
-    filterSelected[this.state.showType].challengeId = challengeId
-    filterSelected[this.state.showType].challenge = challengeName
+
+    filterSelected[this.state.showType] = clearPrevState ?
+      _merge({filters:{}}, filters) :
+      _merge({filters:{}}, filterSelected[this.state.showType], filters)
+    filterSelected[this.state.showType].filters.challenge = filters.challengeName
+    filterSelected[this.state.showType].filters.project = filters.projectName
+
+    // Remove any undefined filters
+    filterSelected[this.state.showType] = _omitBy(
+      filterSelected[this.state.showType], f => _isUndefined(f)
+    )
+
+    // Check for a valid challenge id
+    const challengeId = filterSelected[this.state.showType].filters.challengeId
+    if (challengeId) {
+      if (!_isFinite(_parseInt(challengeId))) {
+        filterSelected[this.state.showType] = _omit(
+          filterSelected[this.state.showType], ['challengeId', 'challenge', 'challengeName'])
+      }
+    }
+
+    // Check for a valid project id
+    const projectId = filterSelected[this.state.showType].filters.projectId
+    if (projectId) {
+      if (!_isFinite(_parseInt(projectId))) {
+        filterSelected[this.state.showType] = _omit(
+          filterSelected[this.state.showType], ['projectId', 'project', 'projectName'])
+      }
+    }
+
     this.setState({filterSelected})
   }
 
+  setSelectedChallenge = (challengeId, challengeName) => {
+    this.setSelectedFilters({challengeId, challengeName})
+  }
+
   setSelectedProject = (projectId, projectName) => {
-    const filterSelected = _cloneDeep(this.state.filterSelected)
-    filterSelected[this.state.showType] = filterSelected[this.state.showType] || {}
-    filterSelected[this.state.showType].projectId = projectId
-    filterSelected[this.state.showType].project = projectName
-    this.setState({filterSelected})
+    this.setSelectedFilters({projectId, projectName})
   }
 
   clearSelected = () => {
@@ -154,7 +185,7 @@ export class ReviewTasksDashboard extends Component {
 
     const reviewerTabs =
       <div>
-        {this.state.filterSelected[showType] && user.isReviewer() &&
+        {!!this.state.filterSelected[showType] && user.isReviewer() &&
           <div className="mr-mb-4">
             <button
              className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
@@ -244,7 +275,7 @@ export class ReviewTasksDashboard extends Component {
             </div>
           </div>
         }
-        {(this.state.filterSelected[showType] || !user.isReviewer()) &&
+        {(!!this.state.filterSelected[showType] || !user.isReviewer()) &&
           <ReviewWidgetWorkspace
             {...this.props}
             className="mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse"
@@ -253,6 +284,7 @@ export class ReviewTasksDashboard extends Component {
             reviewTasksType={showType}
             defaultFilters={this.state.filterSelected[showType]}
             clearSelected={this.clearSelected}
+            pageId={showType}
           />
         }
         <MediaQuery query="(max-width: 1023px)">
