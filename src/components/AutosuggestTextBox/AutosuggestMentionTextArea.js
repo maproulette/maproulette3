@@ -60,6 +60,17 @@ export default class AutosuggestMentionTextArea extends Component {
     }
   }
 
+  handleKeyDown = (e, dropdown) => {
+    if (dropdown.isDropdownVisible) {
+      if (e.key === "ArrowUp" ||
+          e.key === "ArrowDown" ||
+          e.key === "ArrowRight" ||
+          e.key === "ArrowLeft") {
+        e.preventDefault()
+      }
+    }
+  }
+
   regex = searchString => {
     return searchString.match(/^()@([\w]*)$/)  || // match "@..."
            searchString.match(/([^[])@([\w]*)$/) ||  // match "hi @..."
@@ -177,6 +188,7 @@ export default class AutosuggestMentionTextArea extends Component {
                     this.props.inputClassName,
                     "mr-flex-grow mr-w-full mr-h-full mr-outline-none"
                   )}
+                  onKeyDown={(e) => this.handleKeyDown(e, dropdown)}
                   onFocus={(e) => this.setState({textBoxActive: true})}
                   onBlur={(e) => this.setState({textBoxActive: false})}
                   placeholder={this.props.placeholder}
