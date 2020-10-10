@@ -7,6 +7,12 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## [v3.6.13] - 2020-10-12
+### Fixed
+- Comment mention dropdown interfering with adding newlines to comment
+
+
 ## [v3.6.12] - 2020-10-07
 ### Added
 - Updated translations and new Vietnamese locale (thank you translators!)
