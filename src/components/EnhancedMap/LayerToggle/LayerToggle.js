@@ -111,7 +111,7 @@ export class LayerToggle extends Component {
                       {...provided.draggableProps}
                     >
                       <div className="mr-relative mr-my-2 mr-flex mr-justify-between">
-                        <div>{overlays[rubric.source.index].component}</div>
+                        <div className="mr-text-sm">{overlays[rubric.source.index].component}</div>
                         {canReorderLayers &&
                          <div {...provided.dragHandleProps}>
                            <SvgSymbol

@@ -24,19 +24,22 @@ const colors = resolveConfig(tailwindConfig).theme.colors
 const ImageMarkerLayer = props => {
   const [imageMarkers, setImageMarkers] = useState([])
 
+  const {images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel, style} = props
   useEffect(() => {
     setImageMarkers(
       buildImageMarkers(
-        props.images,
-        props.icon ? props.icon : circleIcon(props.markerColor),
-        props.imageClicked,
-        props.imageAlt,
+        images,
+        icon ? icon : circleIcon(markerColor),
+        imageClicked,
+        imageAlt,
+        mrLayerId,
+        mrLayerLabel
       )
     )
-  }, [props.images, props.markerColor, props.imageAlt, props.imageClicked, props.icon])
+  }, [images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel])
 
   return (
-    <LayerGroup style={props.style}>
+    <LayerGroup style={style}>
       {imageMarkers}
     </LayerGroup>
   )
@@ -55,7 +58,7 @@ ImageMarkerLayer.propTypes = {
   markerColor: PropTypes.string,
 }
 
-const buildImageMarkers = (images, icon, imageClicked, imageAlt) => {
+const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerLabel) => {
   if (!images || images.length === 0) {
     return []
   }
@@ -63,6 +66,8 @@ const buildImageMarkers = (images, icon, imageClicked, imageAlt) => {
   return _map(images, imageInfo =>
     <Marker
       key={imageInfo.key}
+      mrLayerId={layerId}
+      mrLayerLabel={layerLabel}
       position={[imageInfo.lat, imageInfo.lon]}
       icon={icon}
       onMouseover={({target}) => target.openPopup()}

@@ -371,6 +371,8 @@ export class TaskMap extends Component {
     component: (
       <ImageMarkerLayer
         key="mapillary"
+        mrLayerId="mapillary"
+        mrLayerLabel="Mapillary"
         images={this.props.mapillaryImages}
         markerColor="#39AF64"
         imageClicked={imageKey => this.setState({"mapillaryViewerImage": imageKey})}
@@ -384,6 +386,8 @@ export class TaskMap extends Component {
     component: (
       <ImageMarkerLayer
         key="openstreetcam"
+        mrLayerId="openstreetcam"
+        mrLayerLabel="OpenStreetCam"
         images={this.props.openStreetCamImages}
         markerColor="#C851E0"
         imageClicked={imageKey => this.setState({"openStreetCamViewerImage": imageKey})}
@@ -490,7 +494,7 @@ export class TaskMap extends Component {
       this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
       (layerId, index, layerSource) => ({
         id: layerId,
-        component: <SourcedTileLayer key={layerId} source={layerSource} />,
+        component: <SourcedTileLayer key={layerId} source={layerSource} mrLayerId={layerId} />,
       })
     )
 
@@ -503,6 +507,7 @@ export class TaskMap extends Component {
             mrLayerId="task-features"
             features={this.applyStyling(this.taskFeatures())}
             animator={this.animator}
+            externalInteractive
           />
         )
       })
@@ -522,10 +527,12 @@ export class TaskMap extends Component {
         component: (
           <OSMDataLayer
             key="osm-data"
+            mrLayerId="osm-data"
             xmlData={this.state.osmData}
             zoom={_isFinite(this.state.latestZoom) ? this.state.latestZoom : zoom}
             showOSMElements={this.state.showOSMElements}
             animator={this.animator}
+            externalInteractive
           />
         ),
       })
@@ -573,12 +580,13 @@ export class TaskMap extends Component {
           minZoom={minZoom}
           maxZoom={maxZoom}
           worldCopyJump={true}
-          features={this.applyStyling(this.taskFeatures())}
           fitToLayer={this.state.skipFit ? null : 'task-features'}
           fitBoundsOnlyAsNecessary
           animator={this.animator}
           onBoundsChange={this.updateTaskBounds}
           conditionalStyles={_get(this.props, 'challenge.taskStyles')}
+          externalInteractive
+          overlayOrder={overlayOrder}
         >
           <ZoomControl position='topright' />
           <FitBoundsControl />

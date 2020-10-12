@@ -55,6 +55,57 @@ export class AsIdentifiableFeature {
     return (match && match.length > 1) ? match[1] : null
   }
 
+  /**
+   * Extracts the OSM element from the raw feature id (falling back to a `type`
+   * property if none is found in the id) and returns 'node', 'way', or
+   * 'relation', or null if no type is detected
+   */
+  osmType() {
+    const typeRe = /^(node|way|relation|n|r|w)/
+
+    let featureType = this.rawFeatureId()
+    if (!typeRe.test(featureType)) {
+      featureType = this.type // this.type should really be a GeoJSON type, but just in case
+      if (!typeRe.test(featureType)) {
+        featureType = this.properties.type
+      }
+    }
+
+    const match = typeRe.exec(featureType)
+    if (match) {
+      switch (match[0]) {
+        case 'node':
+        case 'n':
+          return 'node'
+        case 'way':
+        case 'w':
+          return 'way'
+        case 'relation':
+        case 'r':
+          return 'relation'
+        default:
+          return null
+      }
+    }
+
+    return null
+  }
+
+  /**
+   * Returns the type and id in the form of `type id`, or just id if no type
+   * can be found. Returns null if no id can be found
+   */
+  normalizedTypeAndId() {
+    const osmId = this.osmId()
+    if (!osmId) {
+      // We must have at least an id
+      return null
+    }
+
+    const osmType = this.osmType()
+    return (osmType ? `${osmType} ` : '') + osmId
+  }
+
   isValidId(id) {
     if (_isUndefined(id)) {
       return false

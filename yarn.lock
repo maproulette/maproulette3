@@ -2314,6 +2314,17 @@
     "@turf/helpers" "^5.1.5"
     "@turf/invariant" "^5.1.5"
 
+"@turf/boolean-contains@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-contains/-/boolean-contains-6.0.1.tgz#c3c583215fc5bda47ede51cf52d735ffdc1006a5"
+  integrity sha512-usAexEdWu7dV43paowGSFEM0PljexnlOuj09HF/VDZwO3FKelwUovF2ymetYatuG7KcIYcexeNEkQ5qQnGExlw==
+  dependencies:
+    "@turf/bbox" "6.x"
+    "@turf/boolean-point-in-polygon" "6.x"
+    "@turf/boolean-point-on-line" "6.x"
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
 "@turf/boolean-disjoint@^6.0.2":
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/@turf/boolean-disjoint/-/boolean-disjoint-6.0.2.tgz#5d6d0f4b4b8d5fe03004d74d978044c7529b294f"
@@ -2327,6 +2338,14 @@
 "@turf/boolean-point-in-polygon@6.x":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@turf/boolean-point-in-polygon/-/boolean-point-in-polygon-6.0.1.tgz#5836677afd77d2ee391af0056a0c29b660edfa32"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
+"@turf/boolean-point-on-line@6.x":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-point-on-line/-/boolean-point-on-line-6.0.1.tgz#d943c242a5fdcde03f8ad0221750fd1aacf06223"
+  integrity sha512-Vl724Tzh4CF/13kgblOAQnMcHagromCP1EfyJ9G/8SxpSoTYeY2G6FmmcpbW51GqKxC7xgM9+Pck50dun7oYkg==
   dependencies:
     "@turf/helpers" "6.x"
     "@turf/invariant" "6.x"
@@ -8156,9 +8175,9 @@ leaflet-lasso@^2.1.0:
   dependencies:
     "@terraformer/spatial" "^2.0.7"
 
-"leaflet-vectoricon@https://github.com/nrotstan/Leaflet.VectorIcon.git#with-transforms":
+"leaflet-vectoricon@https://github.com/nrotstan/Leaflet.VectorIcon.git#honor-existing-margin-styles":
   version "0.2.0"
-  resolved "https://github.com/nrotstan/Leaflet.VectorIcon.git#beaa664f96e05c115e8e50d7128be6bfaca9d055"
+  resolved "https://github.com/nrotstan/Leaflet.VectorIcon.git#a163491e71b1b03dc3bb3d123f3bde79e519297f"
 
 leaflet.markercluster@^1.4.1:
   version "1.4.1"
