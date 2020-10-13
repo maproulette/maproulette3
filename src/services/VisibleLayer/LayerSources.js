@@ -47,6 +47,10 @@ export const MAPBOX_STREETS = 'Mapbox'
 export const MAPBOX_LIGHT = 'MapboxLight'
 export const MAPBOX_SATELLITE_STREETS = 'MapboxSatellite'
 
+export const DEFAULT_OVERLAY_ORDER = Object.freeze(
+  ["priority-bounds", "task-features", "osm-data", "mapillary", "openstreetcam"]
+)
+
 /**
  * Array of available layer sources. Start with default layers from the [OSM
  * Editor Layer Index](https://github.com/osmlab/editor-layer-index) and

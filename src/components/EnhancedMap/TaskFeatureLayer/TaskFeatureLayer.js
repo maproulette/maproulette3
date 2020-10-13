@@ -40,8 +40,7 @@ const TaskFeatureLayer = props => {
         mrLayerLabel={layerLabel}
         data={features}
         pointToLayer={(point, latLng) => {
-          const marker = L.marker(latLng, {pane, mrLayerLabel: layerLabel, mrLayerId: mrLayerId})
-          return marker
+          return L.marker(latLng, {pane, mrLayerLabel: layerLabel, mrLayerId: mrLayerId})
         }}
         onEachFeature={(feature, layer) => {
           if (!externalInteractive) {
