@@ -103,8 +103,11 @@ export class AsSimpleStyleableFeature {
         fill: colors['blue-leaflet'],
         stroke: colors['grey-leaflet'],
         strokeWidth: 0.5,
+        marginTop: '0px',
+        marginLeft: '0px',
       },
-      iconAnchor: [5, 15], // render tip of SVG near marker location
+      iconSize: [40, 40],
+      iconAnchor: [20, 40], // tip of marker
     }
 
     let useCustomMarker = false
@@ -121,10 +124,14 @@ export class AsSimpleStyleableFeature {
             case 'small':
               customMarker.svgHeight = 20
               customMarker.svgWidth = 20
+              customMarker.iconAnchor = [10, 20]
+              customMarker.iconSize = [20, 20]
               break
             case 'large':
               customMarker.svgHeight = 60
               customMarker.svgWidth = 60
+              customMarker.iconAnchor = [30, 60]
+              customMarker.iconSize = [60, 60]
               break
             default:
               // medium is already the default size

@@ -5,13 +5,9 @@ import L from 'leaflet'
 import 'leaflet-vectoricon'
 import { ZoomControl, Marker, Tooltip } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { point, featureCollection } from '@turf/helpers'
-import bbox from '@turf/bbox'
-import bboxPolygon from '@turf/bbox-polygon'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _cloneDeep from 'lodash/cloneDeep'
-import { latLng } from 'leaflet'
 import { buildLayerSources } from '../../../services/VisibleLayer/LayerSources'
 import { TaskStatusColors, messagesByStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { messagesByPriority } from '../../../services/Task/TaskPriority/TaskPriority'
@@ -49,21 +45,28 @@ const starIconSvg = L.vectorIcon({
   },
 })
 
-const markerIconSvg = (priority, styleOptions={}) => L.vectorIcon({
-  viewBox: '0 0 20 20',
-  svgHeight: 45 - (priority * 10),
-  svgWidth: 40 - (priority * 10),
-  type: 'path',
-  shape: { // zondicons "location" icon
-    d: "M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
-  },
-  style: Object.assign({
-    fill: colors['blue-leaflet'],
-    stroke: colors['grey-leaflet'],
-    strokeWidth: 0.5,
-  }, styleOptions),
-  iconAnchor: [5, 15], // render tip of SVG near marker location
-})
+const markerIconSvg = (priority, styleOptions={}) => {
+  const prioritizedWidth = 40 - (priority * 10)
+  const prioritizedHeight = 45 - (priority * 10)
+  return L.vectorIcon({
+    viewBox: '0 0 20 20',
+    svgWidth: prioritizedWidth,
+    svgHeight: prioritizedHeight,
+    type: 'path',
+    shape: { // zondicons "location" icon
+      d: "M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+    },
+    style: Object.assign({
+      fill: colors['blue-leaflet'],
+      stroke: colors['grey-leaflet'],
+      strokeWidth: 0.5,
+      marginTop: '0px',
+      marginLeft: '0px',
+    }, styleOptions),
+    iconSize: [prioritizedWidth, prioritizedHeight],
+    iconAnchor: [prioritizedWidth / 2, prioritizedHeight], // tip of marker
+  })
+}
 
 /**
  * TaskNearbyMap allows the user to select a task that is geographically nearby
@@ -97,17 +100,7 @@ export class TaskNearbyMap extends Component {
       return null
     }
 
-    // Compute bounds of task markers to be displayed, including a marker for
-    // the current task to make sure it'll be shown on the map as well
     const currentCenterpoint = AsMappableTask(this.props.task).calculateCenterPoint()
-    const bounding = bboxPolygon(
-      bbox(featureCollection(
-        [point([currentCenterpoint.lng, currentCenterpoint.lat])].concat(
-          _map(this.props.taskMarkers,
-              marker => point([marker.position[1], marker.position[0]]))
-        )
-      ))
-    )
 
     const hasTaskMarkers = _get(this.props, 'taskMarkers.length', 0) > 0
     let coloredMarkers = null
@@ -168,11 +161,8 @@ export class TaskNearbyMap extends Component {
         <LayerToggle {...this.props} />
         <EnhancedMap
           onClick={this.props.clearNextTask}
-          center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={19}
-          setInitialBounds={false}
+          center={currentCenterpoint} zoom={18} minZoom={2} maxZoom={19}
           zoomControl={false} animate={true} worldCopyJump={true}
-          features={bounding}
-          justFitFeatures
         >
           <ZoomControl position='topright' />
           <VisibleTileLayer {...this.props} zIndex={1} />

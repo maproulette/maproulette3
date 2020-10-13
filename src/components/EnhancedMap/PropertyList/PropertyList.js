@@ -6,6 +6,7 @@ import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
 import _isObject from 'lodash/isObject'
 import _truncate from 'lodash/truncate'
+import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
 /**
@@ -16,13 +17,26 @@ import messages from './Messages'
 const PropertyList = props => {
   // Default is lightMode -- only do darkMode if the value is present and false
   const darkMode = props.lightMode === false
-
   const tagInfo = process.env.REACT_APP_TAGINFO_SERVER_URL
+  const header = (
+    <h3 className="mr-flex mr-items-center">
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      {props.onBack && <a onClick={props.onBack} className="mr-mr-4">
+          <SvgSymbol
+            sym="icon-cheveron-left"
+            viewBox="0 0 20 20"
+            className="mr-fill-current mr-w-6 mr-h-6"
+          />
+        </a>
+      }
+      {props.header ? props.header : <FormattedMessage {...messages.title} />}
+    </h3>
+  )
 
   if (_isEmpty(props.featureProperties)) {
     return (
       <div className="feature-properties empty">
-        <h3>{props.header ? props.header : <FormattedMessage {...messages.title} />}</h3>
+        {header}
         <span className="mr-ml-5"><FormattedMessage {...messages.noProperties} /></span>
       </div>
     )
@@ -53,7 +67,6 @@ const PropertyList = props => {
     )
   }))
 
-  const header = <h3>{props.header ? props.header : <FormattedMessage {...messages.title} />}</h3>
   return (
     <div className="feature-properties mr-ml-2">
       {!props.hideHeader && header}
