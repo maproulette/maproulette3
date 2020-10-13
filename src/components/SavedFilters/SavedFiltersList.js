@@ -23,7 +23,8 @@ export default class SavedFiltersList extends Component {
           <a onClick={() => {
               this.props.history.push({
                 pathname: this.props.history.location.pathname,
-                search: searchURL
+                search: searchURL,
+                state: {refresh: true}
               })
               this.props.afterClick()
             }

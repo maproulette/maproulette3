@@ -137,6 +137,10 @@ export class TaskClusterMap extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.taskMarkers && !this.props.delayMapLoad &&
         !_isEqual(this.props.taskMarkers, prevProps.taskMarkers)) {
+      // Since our markers have changed we need to recalculate the
+      // currentBounds if we aren't given a boundingBox
+      this.currentBounds = !this.props.boundingBox ? null :
+        toLatLngBounds(this.props.boundingBox)
       this.generateMarkers()
     }
 

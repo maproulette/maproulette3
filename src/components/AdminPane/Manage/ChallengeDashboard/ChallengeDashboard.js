@@ -130,6 +130,7 @@ export class ChallengeDashboard extends Component {
           className="mr-cards-inverse"
           workspaceEyebrow={pageHeader}
           challenges={[this.props.challenge]}
+          pageId='ChallengeDashboard'
         />
       </div>
     )

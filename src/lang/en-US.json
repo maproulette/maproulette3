@@ -899,6 +899,7 @@
   "Locale.ru-RU.label": "ru-RU (Russian - Russia)",
   "Locale.uk.label": "uk (Ukrainian)",
   "Locale.vi.label": "vi (Vietnamese)",
+  "Map.layerSelectionList.header": "Select Desired Feature",
   "Metrics.completedTasksTitle": "Completed Tasks",
   "Metrics.leaderboard.globalRank.label": "Global Rank",
   "Metrics.leaderboard.topChallenges.label": "Top Challenges",

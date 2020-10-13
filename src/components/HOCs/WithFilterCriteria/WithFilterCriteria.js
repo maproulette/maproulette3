@@ -5,7 +5,14 @@ import _isEqual from 'lodash/isEqual'
 import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
 import _omit from 'lodash/omit'
+import _merge from 'lodash/merge'
+import _isEmpty from 'lodash/isEmpty'
+import _toInteger from 'lodash/toInteger'
+import _each from 'lodash/each'
+import format from 'date-fns/format'
 import { fromLatLngBounds, GLOBAL_MAPBOUNDS } from '../../../services/MapBounds/MapBounds'
+import { buildSearchCriteriafromURL,
+         buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'
 
 const DEFAULT_PAGE_SIZE = 20
 const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
@@ -18,7 +25,7 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithFilterCriteria = function(WrappedComponent) {
+export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
    return class extends Component {
      state = {
        loading: false,
@@ -43,17 +50,7 @@ export const WithFilterCriteria = function(WrappedComponent) {
        const newCriteria = _cloneDeep(this.state.criteria)
        newCriteria.boundingBox = fromLatLngBounds(bounds)
        newCriteria.zoom = zoom
-
-       if (!this.state.initialBounds) {
-         // We need to save our first time initialBounds so that if we clear all
-         // filters we have an initial bounding box to come back to.
-         this.setState({criteria: newCriteria,
-                        initialBounds: fromLatLngBounds(bounds),
-                        initialZoom: zoom})
-       }
-       else {
-         this.setState({criteria: newCriteria})
-       }
+       this.setState({criteria: newCriteria})
      }
 
      updateTaskPropertyCriteria = (propertySearch) => {
@@ -83,17 +80,20 @@ export const WithFilterCriteria = function(WrappedComponent) {
        }
 
        const newCriteria = _cloneDeep(DEFAULT_CRITERIA)
-       newCriteria.boundingBox = this.state.initialBounds
+       newCriteria.boundingBox = null
        newCriteria.zoom = this.state.zoom
        newCriteria.filters["status"] = _keys(_pickBy(this.props.includeTaskStatuses, (s) => s))
        newCriteria.filters["reviewStatus"] = _keys(_pickBy(this.props.includeReviewStatuses, (r) => r))
        newCriteria.filters["priorities"] = _keys(_pickBy(this.props.includeTaskPriorities, (p) => p))
 
-       this.setState({criteria: newCriteria})
-     }
+       if (!ignoreURL) {
+         this.props.history.push({
+           pathname: this.props.history.location.pathname,
+           state: {refresh: true}
+         })
+       }
 
-     refresh = () => {
-       this.update(this.props, this.state.criteria)
+       this.setState({criteria: newCriteria, loading: true})
      }
 
      changePageSize = (pageSize) => {
@@ -111,8 +111,8 @@ export const WithFilterCriteria = function(WrappedComponent) {
        this.setState({criteria: typedCriteria})
      }
 
-     updateIncludedFilters(props) {
-       const typedCriteria = _cloneDeep(this.state.criteria)
+     updateIncludedFilters(props, criteria = {}) {
+       const typedCriteria = _merge({}, criteria, _cloneDeep(this.state.criteria))
        typedCriteria.filters["status"] = _keys(_pickBy(props.includeTaskStatuses, (s) => s))
        typedCriteria.filters["reviewStatus"] = _keys(_pickBy(props.includeTaskReviewStatuses, (r) => r))
        typedCriteria.filters["priorities"] = _keys(_pickBy(props.includeTaskPriorities, (p) => p))
@@ -120,17 +120,36 @@ export const WithFilterCriteria = function(WrappedComponent) {
        return typedCriteria
      }
 
-     update(props, criteria) {
-       const pageSize = _get(this.state.criteria, 'pageSize') || DEFAULT_PAGE_SIZE
+     updateURL(props, criteria) {
+       let searchCriteria = _merge({filters:{}}, criteria)
 
-       const typedCriteria = _cloneDeep(this.state.criteria)
-       typedCriteria.pageSize = pageSize
+       if (searchCriteria.filters.reviewedAt &&
+           typeof searchCriteria.filters.reviewedAt === "object") {
+         searchCriteria.filters.reviewedAt =
+           format(searchCriteria.filters.reviewedAt, 'YYYY-MM-DD')
+       }
 
-       this.setState({criteria: typedCriteria})
+       return buildSearchURL(searchCriteria)
      }
 
      refreshTasks = (typedCriteria) => {
        const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
+
+
+       if (!ignoreURL) {
+         const searchURL = this.updateURL(this.props, typedCriteria)
+         // If our search on the URL hasn't changed then don't do another
+         // update as we could receive a second update when we change the URL.
+         if (_isEqual(this.props.history.location.search, searchURL) &&
+             this.state.loading) {
+           return
+         }
+         this.props.history.push({
+           pathname: this.props.history.location.pathname,
+           search: searchURL
+         })
+       }
+
        this.setState({loading: true})
 
        const criteria = typedCriteria || _cloneDeep(this.state.criteria)
@@ -152,18 +171,59 @@ export const WithFilterCriteria = function(WrappedComponent) {
        })
      }
 
-     componentDidMount() {
-       const typedCriteria = this.updateIncludedFilters(this.props)
-       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
-       if (challengeId) {
-         this.refreshTasks(typedCriteria)
-       }
+     updateCriteriaFromURL(props) {
+       const criteria =
+          props.history.location.search ?
+          buildSearchCriteriafromURL(props.history.location.search) :
+          props.history.location.state
 
+       // These values will come in as comma-separated strings and need to be turned
+       // into number arrays
+       _each(["status", "reviewStatus", "priorities", "boundingBox"], key => {
+         if (criteria[key] && key === "boundingBox") {
+           if (typeof criteria[key] === "string") {
+             criteria[key] = criteria[key].split(',').map(x => parseFloat(x))
+           }
+         }
+         else if (_get(criteria, `filters.${key}`)) {
+           if (typeof criteria.filters[key] === "string") {
+             criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
+           }
+         }
+       })
+
+       if (!_get(criteria, 'filters.status')) {
+         this.updateIncludedFilters(props)
+       }
+       else {
+         this.setState({criteria})
+       }
+     }
+
+     componentDidMount() {
+       if (!ignoreURL &&
+           (!_isEmpty(this.props.history.location.search) ||
+            !_isEmpty(this.props.history.location.state))) {
+         this.updateCriteriaFromURL(this.props)
+       }
+       else {
+         this.updateIncludedFilters(this.props)
+       }
      }
 
      componentDidUpdate(prevProps, prevState) {
        const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
        if (!challengeId) {
+         return
+       }
+
+       if (!ignoreURL && _get(this.props.history.location, 'state.refresh')) {
+         this.props.history.push({
+           pathname: this.props.history.location.pathname,
+           search: this.props.history.location.search,
+           state: {}
+         })
+         this.updateCriteriaFromURL(this.props)
          return
        }
 
@@ -173,6 +233,7 @@ export const WithFilterCriteria = function(WrappedComponent) {
            prevProps.includeTaskReviewStatuses !== this.props.includeTaskReviewStatuses ||
            prevProps.includeTaskPriorities !== this.props.includeTaskPriorities) {
          typedCriteria = this.updateIncludedFilters(this.props)
+         return
        }
 
        if (!_isEqual(prevState.criteria, this.state.criteria) && !this.props.skipRefreshTasks) {
@@ -185,15 +246,14 @@ export const WithFilterCriteria = function(WrappedComponent) {
      }
 
      render() {
-       const criteria = this.state.criteria || DEFAULT_CRITERIA
+       const criteria = _cloneDeep(this.state.criteria) || DEFAULT_CRITERIA
+
        return (
          <WrappedComponent defaultPageSize={DEFAULT_PAGE_SIZE}
                            updateTaskFilterBounds={this.updateTaskFilterBounds}
-                           updateReviewTasks={(criteria) => this.update(this.props, criteria)}
                            updateTaskPropertyCriteria={this.updateTaskPropertyCriteria}
                            clearTaskPropertyCriteria={this.clearTaskPropertyCriteria}
                            invertField={this.invertField}
-                           refresh={this.refresh}
                            criteria={criteria}
                            pageSize={criteria.pageSize}
                            page={criteria.page}
@@ -203,10 +263,9 @@ export const WithFilterCriteria = function(WrappedComponent) {
                            updateCriteria={this.updateCriteria}
                            refreshTasks={this.refreshTasks}
                            clearAllFilters={this.clearAllFilters}
-                           setInitialBounds={bounds => this.setState({initialBounds: bounds})}
                            {..._omit(this.props, ['loadingChallenge', 'clearAllFilters'])} />)
      }
    }
  }
 
-export default WrappedComponent => WithFilterCriteria(WrappedComponent)
+export default (WrappedComponent, ignoreURL) => WithFilterCriteria(WrappedComponent, ignoreURL)

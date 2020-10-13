@@ -218,48 +218,65 @@ export class TaskReviewTable extends Component {
     this.props.resetColumnChoices(columns, defaultColumns)
   }
 
-  gearDropdown = (reviewTasksType) => {
+  filterDropdown = (reviewTasksType) => {
     return (
       <Dropdown className="mr-dropdown--right"
           dropdownButton={dropdown => (
-              <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-lighter">
-                  <SvgSymbol sym="cog-icon"
-                      viewBox="0 0 20 20"
-                      className="mr-fill-current mr-w-5 mr-h-5" />
-              </button>
+            <button onClick={dropdown.toggleDropdownVisible}
+              className="mr-text-green-lighter mr-mr-4">
+            <SvgSymbol
+              sym="filter-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-5 mr-h-5" />
+            </button>
           )}
           dropdownContent={(dropdown) =>
-            <React.Fragment>
-              <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
-                <li>
-                  <button
-                    className="mr-text-current"
-                    onClick={() => this.setState({showConfigureColumns: true})}
-                  >
-                    <FormattedMessage {...messages.configureColumnsLabel} />
-                  </button>
-                </li>
-                {(reviewTasksType === ReviewTasksType.allReviewedTasks || reviewTasksType === ReviewTasksType.toBeReviewed) &&
-                  <li onClick={dropdown.toggleDropdownVisible}>
-                    <a target="_blank"
-                        rel="noopener noreferrer"
-                        href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
-                        className="mr-flex mr-items-center"
-                    >
-                        <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
-                        <FormattedMessage {...messages.exportMapperCSVLabel} />
-                    </a>
-                  </li>
-                }
-                <li><hr className="mr-rule-dropdown" /></li>
-                <SavedFiltersList
-                  searchFilters={this.props.reviewCriteria}
-                  afterClick={dropdown.toggleDropdownVisible}
-                  {...this.props}
-                />
-              </ul>
-            </React.Fragment>
+            <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
+              <SavedFiltersList
+                searchFilters={this.props.reviewCriteria}
+                afterClick={dropdown.toggleDropdownVisible}
+                {...this.props}
+              />
+            </ul>
           }
+      />
+    )
+  }
+
+  gearDropdown = (reviewTasksType) => {
+    return (
+      <Dropdown className="mr-dropdown--right"
+        dropdownButton={dropdown => (
+          <button onClick={dropdown.toggleDropdownVisible}
+            className="mr-text-green-lighter">
+            <SvgSymbol sym="cog-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-5 mr-h-5" />
+          </button>
+        )}
+        dropdownContent={(dropdown) =>
+          <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
+            <li>
+              <button
+                className="mr-text-current"
+                onClick={() => this.setState({showConfigureColumns: true})}
+              >
+                <FormattedMessage {...messages.configureColumnsLabel} />
+              </button>
+            </li>
+            {(reviewTasksType === ReviewTasksType.allReviewedTasks || reviewTasksType === ReviewTasksType.toBeReviewed) &&
+              <li onClick={dropdown.toggleDropdownVisible}>
+                <a target="_blank"
+                   rel="noopener noreferrer"
+                   href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
+                   className="mr-flex mr-items-center">
+                  <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                  <FormattedMessage {...messages.exportMapperCSVLabel} />
+                </a>
+              </li>
+            }            
+          </ul>
+        }
       />
     )
   }
@@ -351,7 +368,12 @@ export class TaskReviewTable extends Component {
               >
                 <FormattedMessage {...messages.refresh} />
               </button>
-              <div className="mr-float-right mr-mt-3 mr-ml-3">{this.gearDropdown(this.props.reviewTasksType)}</div>
+              <div className="mr-float-right mr-mt-3 mr-ml-3">
+                <div className="mr-flex mr-justify-start mr-ml-4">
+                  {this.filterDropdown(this.props.reviewTasksType)}
+                  {this.gearDropdown(this.props.reviewTasksType)}
+                </div>
+              </div>
               <ManageSavedFilters
                 searchFilters={this.props.reviewCriteria}
                 {...this.props}

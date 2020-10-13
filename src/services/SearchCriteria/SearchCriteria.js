@@ -2,6 +2,7 @@ import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _cloneDeep from 'lodash/cloneDeep'
 import _keys from 'lodash/keys'
+import _values from 'lodash/values'
 import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
 import _toInteger from 'lodash/toInteger'
@@ -43,12 +44,17 @@ export function buildSearchURL(searchCriteria) {
 
   _each(_keys(searchCriteria), (key) => {
     if (typeof searchCriteria[key] === "object") {
-      _each(_keys(searchCriteria[key]), (subkey) => {
-        if (!_isUndefined(searchCriteria[key][subkey]) &&
-            searchCriteria[key][subkey] !== null) {
-          params[`${key}.${subkey}`] = searchCriteria[key][subkey]
-        }
-      })
+      if (key === "boundingBox") {
+        params.boundingBox = _values(searchCriteria.boundingBox).join()
+      }
+      else {
+        _each(_keys(searchCriteria[key]), (subkey) => {
+          if (!_isUndefined(searchCriteria[key][subkey]) &&
+              searchCriteria[key][subkey] !== null) {
+            params[`${key}.${subkey}`] = searchCriteria[key][subkey]
+          }
+        })
+      }
     }
     else if (!_isUndefined(searchCriteria[key]) && searchCriteria[key] !== null) {
       params[key] = searchCriteria[key]
