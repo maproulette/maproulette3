@@ -18,7 +18,8 @@ import _flatten from 'lodash/flatten'
 import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
 import _uniqueId from 'lodash/uniqueId'
-import { buildLayerSources } from '../../../services/VisibleLayer/LayerSources'
+import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
+       from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import DirectionalIndicationMarker
        from '../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker'
@@ -482,8 +483,12 @@ export class TaskMap extends Component {
     const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
     const minZoom = _get(this.props.task, "parent.minZoom", MIN_ZOOM)
     const maxZoom = _get(this.props.task, "parent.maxZoom", MAX_ZOOM)
-    const overlayOrder = this.props.getUserAppSetting(this.props.user, 'mapOverlayOrder')
     const renderId = _uniqueId()
+    let overlayOrder = this.props.getUserAppSetting(this.props.user, 'mapOverlayOrder')
+    if (_isEmpty(overlayOrder)) {
+      overlayOrder = DEFAULT_OVERLAY_ORDER
+    }
+
     this.animator.reset()
 
     if (!this.props.task || !_isObject(this.props.task.parent)) {
@@ -542,7 +547,8 @@ export class TaskMap extends Component {
       overlayLayers.push(this.state.directionalityIndicators)
     }
 
-    // Sort the overlays according to the user's preferences
+    // Sort the overlays according to the user's preferences. We then reverse
+    // that order because the layer rendered on the map last will be on top
     if (overlayOrder && overlayOrder.length > 0) {
       overlayLayers = _sortBy(overlayLayers, layer => {
         const position = overlayOrder.indexOf(layer.id)

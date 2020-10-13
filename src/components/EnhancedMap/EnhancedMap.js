@@ -131,7 +131,7 @@ export class EnhancedMap extends ReactLeafletMap {
     setTimeout(() => {
       let layerBounds = null
       this.leafletElement.eachLayer(layer => {
-        if (_get(layer, 'options.mrLayerId') === this.props.fitToLayer) {
+        if (_get(layer, 'options.mrLayerId') === this.props.fitToLayer && layer.getBounds) {
           layerBounds = layer.getBounds()
         }
       })

@@ -21,7 +21,9 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _isObject from 'lodash/isObject'
 import _sortBy from 'lodash/sortBy'
 import _omit from 'lodash/omit'
-import { buildLayerSources } from '../../services/VisibleLayer/LayerSources'
+import _isEmpty from 'lodash/isEmpty'
+import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
+       from '../../services/VisibleLayer/LayerSources'
 import { TaskPriorityColors } from '../../services/Task/TaskPriority/TaskPriority'
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
@@ -375,7 +377,10 @@ export class TaskClusterMap extends Component {
 
   render() {
     const renderId = _uniqueId()
-    const overlayOrder = this.props.getUserAppSetting(this.props.user, 'mapOverlayOrder')
+    let overlayOrder = this.props.getUserAppSetting(this.props.user, 'mapOverlayOrder')
+    if (_isEmpty(overlayOrder)) {
+      overlayOrder = DEFAULT_OVERLAY_ORDER
+    }
     let overlayLayers = buildLayerSources(
       this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
       (layerId, index, layerSource) => ({
@@ -401,7 +406,8 @@ export class TaskClusterMap extends Component {
       })
     }
 
-    // Sort the overlays according to the user's preferences
+    // Sort the overlays according to the user's preferences. We then reverse
+    // that order because the layer rendered on the map last will be on top
     if (overlayOrder && overlayOrder.length > 0) {
       overlayLayers = _sortBy(overlayLayers, layer => {
         const position = overlayOrder.indexOf(layer.id)

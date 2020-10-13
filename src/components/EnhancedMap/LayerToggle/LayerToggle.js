@@ -9,6 +9,9 @@ import _filter from 'lodash/filter'
 import _sortBy from 'lodash/sortBy'
 import _clone from 'lodash/clone'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
+import { DEFAULT_OVERLAY_ORDER }
+       from '../../../services/VisibleLayer/LayerSources'
 import AsEndUser from '../../../interactions/User/AsEndUser'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithLayerSources from '../../HOCs/WithLayerSources/WithLayerSources'
@@ -38,9 +41,14 @@ export class LayerToggle extends Component {
       toggleOverlay: this.toggleOverlay
     })
 
-    if (this.props.overlayOrder && this.props.overlayOrder.length > 0) {
+    const overlayOrder =
+      _isEmpty(this.props.overlayOrder) ?
+      DEFAULT_OVERLAY_ORDER :
+      this.props.overlayOrder
+
+    if (overlayOrder && overlayOrder.length > 0) {
       overlays = _sortBy(overlays, layer => {
-        const position = this.props.overlayOrder.indexOf(layer.id)
+        const position = overlayOrder.indexOf(layer.id)
         return position === -1 ? Number.MAX_SAFE_INTEGER : position
       })
     }
