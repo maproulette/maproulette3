@@ -67,8 +67,7 @@ export default class ManageSavedFilters extends Component {
                             this.setState({renaming: null, savedFiltersName: null})
                           }}
                           cancel={() => {
-                            this.cancelManagingFilters()
-                            this.setState({savedFiltersName: null})
+                            this.setState({renaming: null, savedFiltersName: null})
                           }}
                           placeholder={this.props.intl.formatMessage(messages.namePlaceholder)}
                         />
