@@ -274,7 +274,7 @@ export class TaskReviewTable extends Component {
                   <FormattedMessage {...messages.exportMapperCSVLabel} />
                 </a>
               </li>
-            }            
+            }
           </ul>
         }
       />
@@ -301,7 +301,27 @@ export class TaskReviewTable extends Component {
                         desc: this.props.reviewCriteria.sortCriteria.direction === "DESC"}]
     }
     if (_get(this.props, 'reviewCriteria.filters')) {
-      defaultFiltered = _map(this.props.reviewCriteria.filters,
+      const reviewFilters = _cloneDeep(this.props.reviewCriteria.filters)
+
+      // If we don't have a challenge name, make sure to populate it so
+      // that the table filter will show it.
+      if (this.props.reviewChallenges && reviewFilters.challengeId &&
+         !reviewFilters.challenge) {
+        reviewFilters.challenge =
+          _get(this.props.reviewChallenges[reviewFilters.challengeId],
+               'name')
+      }
+
+      // If we don't have a project name, make sure to populate it so
+      // that the table filter will show it.
+      if (this.props.reviewProjects && reviewFilters.projectId &&
+         !reviewFilters.project) {
+        reviewFilters.project =
+          _get(this.props.reviewProjects[reviewFilters.projectId],
+               'name')
+      }
+
+      defaultFiltered = _map(reviewFilters,
                              (value, key) => {return {id: key, value}})
     }
 
