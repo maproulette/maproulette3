@@ -17,6 +17,8 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
  */
  export const WithReviewChallenges = function(WrappedComponent) {
    class _WithReviewChallenges extends Component {
+     componentIsMounted: false
+
      state = {
        reviewChallenges: {},
      }
@@ -43,11 +45,14 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
            projects: _values(_get(challenges, 'entities.projects'))
          }
 
-         this.setState({reviewChallenges: loadedChallenges})
+         if (this.componentIsMounted) {
+           this.setState({reviewChallenges: loadedChallenges})
+         }
        })
      }
 
      componentDidMount() {
+       this.componentIsMounted = true
        this.updateReviewChallenges(this.props.reviewTasksType)
      }
 
@@ -60,6 +65,10 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
        else if (reviewTasksType !== prevProps.reviewTasksType) {
          this.updateReviewChallenges(reviewTasksType)
        }
+     }
+
+     componentWillUnmount() {
+       this.componentIsMounted = false
      }
 
      render() {

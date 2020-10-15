@@ -31,8 +31,8 @@ export const WithReviewTaskClusters = function(WrappedComponent) {
       this.props.updateReviewTasks(criteria)
     }
 
-    fetchUpdatedClusters() {
-      if (this.state.loadMap) {
+    fetchUpdatedClusters(forceLoad = false) {
+      if (this.state.loadMap || forceLoad) {
         this.setState({loading: true})
 
         this.props.fetchClusteredReviewTasks(
@@ -42,7 +42,13 @@ export const WithReviewTaskClusters = function(WrappedComponent) {
     }
 
     componentDidMount() {
-      this.fetchUpdatedClusters()
+      if (this.props.reviewCriteria.boundingBox) {
+        this.setState({loadMap: true})
+        this.fetchUpdatedClusters(true)
+      }
+      else {
+        this.fetchUpdatedClusters()
+      }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -50,7 +56,13 @@ export const WithReviewTaskClusters = function(WrappedComponent) {
         this.fetchUpdatedClusters()
       }
       else if (prevProps.reviewCriteria !== this.props.reviewCriteria) {
-        this.fetchUpdatedClusters()
+        if (this.props.reviewCriteria.boundingBox) {
+          this.setState({loadMap: true})
+          this.fetchUpdatedClusters(true)
+        }
+        else {
+          this.fetchUpdatedClusters()
+        }
       }
       else if (this.state.loadMap !== prevState.loadMap) {
         this.fetchUpdatedClusters()

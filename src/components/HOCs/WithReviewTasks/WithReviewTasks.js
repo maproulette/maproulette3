@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import format from 'date-fns/format'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _merge from 'lodash/merge'
 import _isUndefined from 'lodash/isUndefined'
 import _cloneDeep from 'lodash/cloneDeep'
 import _filter from 'lodash/filter'
+import _isEqual from 'lodash/isEqual'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
@@ -17,7 +19,7 @@ import { loadNextReviewTask, fetchReviewChallenges }
        from '../../../services/Task/TaskReview/TaskReview'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
-import { buildSearchCriteria } from '../../../services/SearchCriteria/SearchCriteria'
+import { buildSearchCriteria, buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'
 
 
 const DEFAULT_PAGE_SIZE = 20
@@ -38,7 +40,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
     }
 
     buildDefaultCriteria(props) {
-      return _merge({}, DEFAULT_CRITERIA, {filters: props.defaultFilters})
+      return _merge({}, DEFAULT_CRITERIA, props.defaultFilters)
     }
 
     refresh = () => {
@@ -68,7 +70,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       this.update(this.props, typedCriteria[this.props.reviewTasksType])
     }
 
-    update(props, criteria) {
+    update(props, criteria, skipURLUpdate = false) {
       const searchOnCriteria = _cloneDeep(criteria)
       const userId = _get(props, 'user.id')
       const pageSize = _get(this.state.criteria[props.reviewTasksType], 'pageSize') || DEFAULT_PAGE_SIZE
@@ -98,6 +100,22 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       typedCriteria[props.reviewTasksType] = searchOnCriteria
       typedCriteria[props.reviewTasksType].pageSize = pageSize
 
+      const searchURL = this.updateURL(props, searchOnCriteria)
+
+      // If our search on the URL hasn't changed then don't do another
+      // update as we receive a second update when we change the URL.
+      if (_isEqual(props.history.location.search, searchURL) &&
+          this.state.loading) {
+        return
+      }
+      else if (!skipURLUpdate) {
+        props.history.push({
+          pathname: props.history.location.pathname,
+          search: searchURL
+        })
+        return
+      }
+
       this.setState({loading: true, criteria: typedCriteria})
 
       switch(props.reviewTasksType) {
@@ -121,11 +139,35 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       }
     }
 
+    updateURL(props, criteria) {
+      let searchCriteria = _merge({filters:{}}, criteria)
+
+      if (searchCriteria.filters.reviewedAt &&
+          typeof searchCriteria.filters.reviewedAt === "object") {
+        searchCriteria.filters.reviewedAt =
+          format(searchCriteria.filters.reviewedAt, 'YYYY-MM-DD')
+      }
+
+      // The criteria filters use 'project' but on the url it can also be
+      // referenced as 'projectName'
+      if (criteria.filters.project == null) {
+        _omit(searchCriteria, 'filters.projectName')
+      }
+
+      // The criteria filters use 'challenge' but on the url it can also be
+      // referenced as 'challengeName'
+      if (criteria.filters.challenge == null) {
+        _omit(searchCriteria.filters, 'challengeName')
+      }
+
+      return buildSearchURL(searchCriteria)
+    }
+
     componentDidMount() {
       const searchParams = this.props.history.location.state
-      let pageSize = _get(searchParams, 'pageSize') || DEFAULT_PAGE_SIZE
-
       const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props))
+
+      let pageSize = _get(searchParams, 'pageSize') || criteria.pageSize || DEFAULT_PAGE_SIZE
       criteria.pageSize = pageSize
 
       const stateCriteria = this.state.criteria
@@ -136,11 +178,20 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
                  stateCriteria[this.props.reviewTasksType].filters)
       }
       this.setState({criteria: stateCriteria})
+      this.update(this.props, criteria, true)
     }
 
     componentDidUpdate(prevProps, prevState) {
       if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
-        this.update(this.props, this.state.criteria[this.props.reviewTasksType] || this.buildDefaultCriteria(this.props))
+        this.update(this.props,
+          this.state.criteria[this.props.reviewTasksType] ||
+          this.buildDefaultCriteria(this.props), true)
+        return
+      }
+
+      if (!_isEqual(this.props.defaultFilters, prevProps.defaultFilters)) {
+        this.update(this.props, this.buildDefaultCriteria(this.props), true)
+        return
       }
     }
 
