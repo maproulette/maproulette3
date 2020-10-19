@@ -59,7 +59,7 @@ export class TaskTags extends Component {
 
       return (
         <External>
-          <Modal isActive onClose={() => this.setState({edit: false})}>
+          <Modal isActive onClose={() => this.setState({edit: false})} allowOverflow>
             <div className="mr-w-full">
               <h2 className="mr-text-yellow mr-text-4xl mr-mb-4">
                 <FormattedMessage {...messages.modifyTags} />

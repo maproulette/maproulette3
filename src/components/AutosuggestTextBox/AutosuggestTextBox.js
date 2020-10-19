@@ -11,7 +11,7 @@ import _difference from 'lodash/difference'
 import _clone from 'lodash/clone'
 import _indexOf from 'lodash/indexOf'
 import _filter from 'lodash/filter'
-import _noop from 'lodash/noop'
+import _concat from 'lodash/concat'
 import Dropdown from '../Dropdown/Dropdown'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
@@ -25,7 +25,8 @@ import messages from './Messages'
  */
 export default class AutosuggestTextBox extends Component {
   state = {
-    textBoxActive: false
+    textBoxActive: false,
+    highlightResult: -1
   }
 
   inputChanged = inputText => {
@@ -51,10 +52,30 @@ export default class AutosuggestTextBox extends Component {
     }
   }
 
-  handleKeyDown = e => {
+  handleKeyDown = (e, dropdown, downshift) => {
     if (e.key === "Enter") {
       // Don't let enter key potentially submit a form
       e.preventDefault()
+    }
+
+    if (dropdown.isDropdownVisible) {
+      const items = _concat(this.getPreferredResults(), this.getSearchResults())
+      const itemsLength = _get(items, 'length', 0)
+
+      if (e.key === "Enter") {
+        downshift.selectItem(items[this.state.highlightResult])
+        this.setState({highlightResult: -1})
+      }
+      else if (e.key === "ArrowDown") {
+        if (this.state.highlightResult < (itemsLength - 1)) {
+          this.setState({highlightResult: (this.state.highlightResult + 1) })
+        }
+      }
+      else if (e.key === "ArrowUp" && this.state.highlightResult > -1) {
+        if (this.state.highlightResult > 0) {
+          this.setState({highlightResult: (this.state.highlightResult - 1) })
+        }
+      }
     }
   }
 
@@ -65,20 +86,29 @@ export default class AutosuggestTextBox extends Component {
    * @private
    */
   dropdownItems(getItemProps, inputValue) {
-    const generateResult = (result, className = "") => (
-      <a
-        {...getItemProps({
-          key: this.props.resultKey(result),
-          item: result,
-          className: classNames(
-            className ? className :
-            (this.props.resultClassName ? this.props.resultClassName(result) : null)
-          ),
-        })}
-      >
-        {this.props.resultLabel(result)}
-      </a>
-    )
+    const generateResult = (result, className = "", index) => {
+      if (this.state.highlightResult === index) {
+        className += this.props.highlightClassName
+      }
+
+      if (!_isEmpty(result)) {
+        return (
+          <a
+            {...getItemProps({
+              key: this.props.resultKey(result),
+              item: result,
+              className: classNames(
+                className,
+                (this.props.resultClassName ? this.props.resultClassName(result) : null)
+              ),
+            })}
+          >
+            {this.props.resultLabel(result)}
+          </a>
+        )
+      }
+      else return null
+    }
 
     let items = []
     const searchResults = this.getSearchResults()
@@ -92,11 +122,15 @@ export default class AutosuggestTextBox extends Component {
           if (index === preferredResults.length - 1 && searchResults.length > 0) {
             className += " mr-border-b-2 mr-border-white-50 mr-mb-2 mr-pb-2"
           }
-          return generateResult(result, className)
+
+          return generateResult(result, className, index)
         }))
     }
 
-    items = items.concat(_map(searchResults, generateResult))
+    // Now concat all other search results -- but the index will be offset by the
+    // preferred results length
+    items = items.concat(_map(searchResults,
+      (result, index) => generateResult(result, "", index + preferredResults.length)))
     return items
   }
 
@@ -128,29 +162,29 @@ export default class AutosuggestTextBox extends Component {
         onChange={this.onChange}
         itemToString={result => result ? this.props.resultLabel(result) : ''}
       >
-        {({getInputProps, getItemProps, getMenuProps, getRootProps, isOpen, inputValue}) => {
+        {downshift => {
           const openOnFocus = this.props.openOnFocus ||
                               _get(this.props.preferredResults, 'length', 0) > 0
-          const resultItems = this.dropdownItems(getItemProps, inputValue)
-          const show = this.state.textBoxActive || (isOpen && inputValue.length > 0)
+          const resultItems = this.dropdownItems(downshift.getItemProps, downshift.inputValue)
+          const show = this.state.textBoxActive || (downshift.isOpen && downshift.inputValue.length > 0)
 
           return (
             <Dropdown
               className="mr-w-full mr-dropdown--flush"
               innerClassName={this.props.dropdownInnerClassName}
-              rootProps={getRootProps({}, {suppressRefError: true})}
+              rootProps={downshift.getRootProps({}, {suppressRefError: true})}
               suppressControls
               fixedMenu={this.props.fixedMenu}
               isVisible={show}
-              toggleVisible={() => _noop}
+              toggleVisible={() => this.setState({highlightResult: -1})}
               dropdownButton={dropdown => (
                 <input
-                  {...getInputProps()}
+                  {...downshift.getInputProps()}
                   className={classNames(
                     this.props.inputClassName,
                     "mr-flex-grow mr-w-full mr-h-full mr-outline-none"
                   )}
-                  onKeyDown={this.handleKeyDown}
+                  onKeyDown={(e) => this.handleKeyDown(e, dropdown, downshift)}
                   onFocus={(e) => this.setState({textBoxActive: openOnFocus})}
                   onBlur={(e) => this.setState({textBoxActive: false})}
                   placeholder={this.props.placeholder}
@@ -160,7 +194,7 @@ export default class AutosuggestTextBox extends Component {
                 if (this.props.isSearching) {
                   return (
                     <div
-                      {...getMenuProps({
+                      {...downshift.getMenuProps({
                         className: "mr-flex mr-justify-center mr-items-center mr-my-4 mr-w-full"
                       })}
                     >
@@ -170,7 +204,7 @@ export default class AutosuggestTextBox extends Component {
                 }
 
                 return (
-                  <div {...getMenuProps({className: "mr-link-list mr-links-inverse"})}>
+                  <div {...downshift.getMenuProps({className: "mr-link-list mr-links-inverse"})}>
                     {resultItems}
                     {(resultItems.length === 0 || this.props.showNoResults) &&
                     <div className="mr-text-grey-lighter mr-p-4 mr-text-sm">
@@ -209,8 +243,11 @@ AutosuggestTextBox.propTypes = {
   allowNew: PropTypes.bool,
   /** Array of preferred matches that should be shown first */
   preferredResults: PropTypes.array,
+  /** ClassNames for highlighting on arrow keys */
+  highlightClassName: PropTypes.string,
 }
 
 AutosuggestTextBox.defaultProps = {
   allowNew: false,
+  highlightClassName: " mr-bg-blue-darker mr-font-bold",
 }
