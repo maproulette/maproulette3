@@ -92,6 +92,8 @@ export class ReviewTasksDashboard extends Component {
         // on to the table.
         return
       }
+
+      return
     }
 
     // If our path params have changed we need to update the default filters
@@ -148,11 +150,11 @@ export class ReviewTasksDashboard extends Component {
   }
 
   setSelectedChallenge = (challengeId, challengeName) => {
-    this.setSelectedFilters({challengeId, challengeName})
+    this.setSelectedFilters({filters: {challengeId, challengeName}})
   }
 
   setSelectedProject = (projectId, projectName) => {
-    this.setSelectedFilters({projectId, projectName})
+    this.setSelectedFilters({filters: {projectId, projectName}})
   }
 
   clearSelected = () => {
