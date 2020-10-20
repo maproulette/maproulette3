@@ -67,7 +67,7 @@ export default class QuickWidget extends Component {
         </header>
         {this.props.noMain ?
           <div className="mr-card-widget__content">{this.props.children}</div> :
-          <div className="mr-card-widget__main">
+          <div className="mr-card-widget__main mr-h-full">
             {this.props.intro &&
             <div className="mr-card-widget__intro">{this.props.intro}</div>
             }
@@ -88,5 +88,5 @@ QuickWidget.propTypes = {
   /** Optional controls to display in widget drop-down menu */
   menuControls: PropTypes.element,
   /** Classnames to pass into Widget */
-  className: PropTypes.string,  
+  className: PropTypes.string,
 }

@@ -25,8 +25,12 @@ export default class TaskLocationWidget extends Component {
       <QuickWidget {...this.props}
                   className="task-location-widget"
                   widgetTitle={<FormattedMessage {...messages.title} />}>
-        <div className="task-location-widget__inset-map">
-          <TaskLocationMap {...this.props} key={this.props.task.id} />
+        <div className="task-location-widget__inset-map mr-h-3/4">
+          <TaskLocationMap {...this.props}
+            key={this.props.task.id} 
+            h={this.props.widgetLayout.h}
+            w={this.props.widgetLayout.w}
+          />
         </div>
 
         <PlaceDescription place={this.props.task.place}
