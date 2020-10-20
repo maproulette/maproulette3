@@ -305,20 +305,22 @@ export class TaskReviewTable extends Component {
 
       // If we don't have a challenge name, make sure to populate it so
       // that the table filter will show it.
-      if (this.props.reviewChallenges && reviewFilters.challengeId &&
-         !reviewFilters.challenge) {
-        reviewFilters.challenge =
-          _get(this.props.reviewChallenges[reviewFilters.challengeId],
-               'name')
+      if (this.props.reviewChallenges && !reviewFilters.challenge) {
+        if (reviewFilters.challengeId || reviewFilters.challengeName) {
+          reviewFilters.challenge = reviewFilters.challengeId ?
+            _get(this.props.reviewChallenges[reviewFilters.challengeId],
+                 'name') : reviewFilters.challengeName
+        }
       }
 
       // If we don't have a project name, make sure to populate it so
       // that the table filter will show it.
-      if (this.props.reviewProjects && reviewFilters.projectId &&
-         !reviewFilters.project) {
-        reviewFilters.project =
-          _get(this.props.reviewProjects[reviewFilters.projectId],
-               'name')
+      if (this.props.reviewProjects && !reviewFilters.project) {
+        if (reviewFilters.projectId || reviewFilters.projectName) {
+          reviewFilters.project = reviewFilters.projectId ?
+            _get(this.props.reviewProjects[reviewFilters.projectId],
+                 'name') : reviewFilters.projectName
+        }
       }
 
       defaultFiltered = _map(reviewFilters,

@@ -120,8 +120,14 @@ export class ReviewTasksDashboard extends Component {
     filterSelected[this.state.showType] = clearPrevState ?
       _merge({filters:{}}, filters) :
       _merge({filters:{}}, filterSelected[this.state.showType], filters)
-    filterSelected[this.state.showType].filters.challenge = filters.challengeName
-    filterSelected[this.state.showType].filters.project = filters.projectName
+
+    if (filters.challengeName) {
+      filterSelected[this.state.showType].filters.challenge = filters.challengeName
+    }
+
+    if (filters.projectName) {
+      filterSelected[this.state.showType].filters.project = filters.projectName
+    }
 
     // Remove any undefined filters
     filterSelected[this.state.showType] = _omitBy(
