@@ -349,6 +349,8 @@ export class EnhancedMap extends ReactLeafletMap {
                     latlng: latlng,
                     onBack: () => this.popupLayerSelectionList(layers, latlng),
                   })}
+                  onMouseEnter={() => layerInfo.layer.fire("mr-external-interaction:start-preview")}
+                  onMouseLeave={() => layerInfo.layer.fire("mr-external-interaction:end-preview")}
                 >
                   {layerInfo.label || description}
                 </a>
@@ -360,7 +362,9 @@ export class EnhancedMap extends ReactLeafletMap {
       contentElement
     )
 
-    L.popup().setLatLng(latlng).setContent(contentElement).openOn(this.leafletElement)
+    L.popup({
+      closeOnEscapeKey: false, // Otherwise our links won't get a onMouseLeave event
+    }).setLatLng(latlng).setContent(contentElement).openOn(this.leafletElement)
   }
 
   componentDidUpdate(prevProps, prevState) {

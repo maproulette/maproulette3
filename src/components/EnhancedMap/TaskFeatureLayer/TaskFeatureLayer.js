@@ -11,6 +11,8 @@ import AsSimpleStyleableFeature
 import PropertyList from '../PropertyList/PropertyList'
 import layerMessages from '../LayerToggle/Messages'
 
+const HIGHLIGHT_COLOR = "gold"
+
 /**
  * TaskFeatureLayer renders a react-leaflet map layer representing the given
  * (GeoJSON) features, properly styled and with a popup for the feature
@@ -43,12 +45,49 @@ const TaskFeatureLayer = props => {
           return L.marker(latLng, {pane, mrLayerLabel: layerLabel, mrLayerId: mrLayerId})
         }}
         onEachFeature={(feature, layer) => {
+          const styleableFeature =
+            _isFunction(feature.styleLeafletLayer) ?
+            feature :
+            AsSimpleStyleableFeature(feature)
+
           if (!externalInteractive) {
             layer.bindPopup(() => propertyList(feature.properties))
           }
           else {
             layer.on('mr-external-interaction', ({map, latlng, onBack}) => {
-              L.popup({}, layer).setLatLng(latlng).setContent(propertyList(feature.properties, onBack)).openOn(map)
+              // Ensure any orphaned preview styles get cleaned up
+              styleableFeature.popLeafletLayerSimpleStyles(layer, 'mr-external-interaction:start-preview')
+              const popup = L.popup({}, layer).setLatLng(latlng).setContent(propertyList(feature.properties, onBack))
+              // Highlight selected feature, preserving existing marker size (if a marker)
+              styleableFeature.pushLeafletLayerSimpleStyles(
+                layer,
+                Object.assign(styleableFeature.markerSimplestyles(layer), {
+                  "marker-color": HIGHLIGHT_COLOR,
+                  stroke: HIGHLIGHT_COLOR,
+                  fill: HIGHLIGHT_COLOR,
+                })
+              )
+              popup.on('remove', function() {
+                // Restore original styling when popup closes
+                styleableFeature.popLeafletLayerSimpleStyles(layer)
+              })
+              popup.openOn(map)
+            })
+
+            layer.on('mr-external-interaction:start-preview', () => {
+              styleableFeature.pushLeafletLayerSimpleStyles(
+                layer,
+                Object.assign(styleableFeature.markerSimplestyles(layer), {
+                  "marker-color": HIGHLIGHT_COLOR,
+                  stroke: HIGHLIGHT_COLOR,
+                  fill: HIGHLIGHT_COLOR,
+                }),
+                'mr-external-interaction:start-preview'
+              )
+            })
+
+            layer.on('mr-external-interaction:end-preview', () => {
+              styleableFeature.popLeafletLayerSimpleStyles(layer, 'mr-external-interaction:start-preview')
             })
           }
 
@@ -61,13 +100,7 @@ const TaskFeatureLayer = props => {
             }
           }
 
-          // Support custom layer styling
-          if (_isFunction(feature.styleLeafletLayer)) {
-            feature.styleLeafletLayer(layer)
-          }
-          else {
-            AsSimpleStyleableFeature(feature).styleLeafletLayer(layer)
-          }
+          styleableFeature.styleLeafletLayer(layer) // Custom layer styling
         }}
       />
     )

@@ -6,12 +6,14 @@ import L from 'leaflet'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
+import AsStylableLayer from '../../../interactions/LeafletLayer/AsStyleableLayer'
 import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
 import layerMessages from '../LayerToggle/Messages'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
+const HIGHLIGHT_COLOR = "gold"
 
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
@@ -106,8 +108,24 @@ export class OSMDataLayer extends Path {
       }
 
       if (props.externalInteractive) {
+        const styleableLayer = AsStylableLayer(layer)
         layer.on('mr-external-interaction', ({map, latlng, onBack}) => {
-          L.popup({}, layer).setLatLng(latlng).setContent(this.popupContent(layer, onBack)).openOn(map)
+          // Ensure any orphaned preview styles get cleaned up
+          styleableLayer.popStyle('mr-external-interaction:start-preview')
+          const popup = L.popup({}, layer).setLatLng(latlng).setContent(this.popupContent(layer, onBack))
+          // Highlight selected feature
+          styleableLayer.pushStyle({color: HIGHLIGHT_COLOR, fillColor: HIGHLIGHT_COLOR})
+          popup.on('remove', () => styleableLayer.popStyle())
+          popup.openOn(map)
+        })
+        layer.on('mr-external-interaction:start-preview', () => {
+          styleableLayer.pushStyle({
+            color: HIGHLIGHT_COLOR,
+            fillColor: HIGHLIGHT_COLOR,
+          }, 'mr-external-interaction:start-preview')
+        })
+        layer.on('mr-external-interaction:end-preview', () => {
+          styleableLayer.popStyle('mr-external-interaction:start-preview')
         })
       }
     })
