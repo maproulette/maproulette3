@@ -28,6 +28,7 @@ import { TaskPriorityColors } from '../../services/Task/TaskPriority/TaskPriorit
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
+import FitBoundsControl from '../EnhancedMap/FitBoundsControl/FitBoundsControl'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
@@ -453,6 +454,9 @@ export class TaskClusterMap extends Component {
         justFitFeatures
       >
         <ZoomControl className="mr-z-10" position='topright' />
+        {this.props.taskCenter &&
+          <FitBoundsControl centerPoint={this.props.taskCenter} />
+        }
         {this.props.showLasso && this.props.onBulkTaskSelection &&
           (!this.props.showAsClusters || this.props.totalTaskCount <= CLUSTER_POINTS) &&
           <LassoSelectionControl

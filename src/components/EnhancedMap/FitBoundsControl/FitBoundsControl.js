@@ -36,6 +36,12 @@ const FitBoundsLeafletControl = Control.extend({
 
     const geoJSONFeatures = new FeatureGroup()
 
+    // If we are given a centerPoint let's move the map to it.
+    if (this.options.centerPoint) {
+      map.setView(this.options.centerPoint)
+      return
+    }
+
     map.eachLayer(layer => {
       if (layer.feature) {
         geoJSONFeatures.addLayer(layer)
