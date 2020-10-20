@@ -1,6 +1,20 @@
 import React, { Component } from 'react'
 import _unset from 'lodash/unset'
-import { buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'
+import _map from 'lodash/map'
+import _get from 'lodash/get'
+import _keys from 'lodash/keys'
+import _isFinite from 'lodash/isFinite'
+import _compact from 'lodash/compact'
+import _split from 'lodash/split'
+import { buildSearchURL,
+         buildSearchCriteriafromURL }
+       from '../../../services/SearchCriteria/SearchCriteria'
+import { messagesByPriority, TaskPriority }
+       from '../../../services/Task/TaskPriority/TaskPriority'
+import { messagesByStatus, TaskStatus }
+       from '../../../services/Task/TaskStatus/TaskStatus'
+import { messagesByReviewStatus, TaskReviewStatusWithUnset }
+       from '../../../services/Task/TaskReview/TaskReviewStatus'
 
 /**
  * WithSavedFilters manages the user's app settings and the workflow around
@@ -61,6 +75,52 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
         {[appSettingName]: settings})
     }
 
+    getBriefFilters = savedFilters => {
+      const criteria = buildSearchCriteriafromURL(savedFilters)
+      return _compact(_map(criteria.filters, (value, key) => {
+        let op = '='
+        let textValue = value
+        if (_get(criteria.invertFields, key)) {
+          op = '!='
+        }
+        if (key === "priority" && _isFinite(value)) {
+          textValue = this.props.intl.formatMessage(messagesByPriority[value])
+        }
+        else if (key === "priorities" && value.indexOf(",") > -1) {
+          const splitValues = _split(value, ",")
+          if (splitValues.length === _keys(TaskPriority).length) {
+            textValue = null
+          }
+          else {
+            textValue = _map(splitValues, v =>
+              this.props.intl.formatMessage(messagesByPriority[v])).join(',')
+          }
+        }
+        if (key === "status" && (_isFinite(value) || value.indexOf(",") > -1)) {
+          console.log(value)
+          const splitValues = _split(value, ",")
+          if (splitValues.length === _keys(TaskStatus).length) {
+            textValue = null
+          }
+          else {
+            textValue = _map(splitValues, v =>
+              this.props.intl.formatMessage(messagesByStatus[v]))
+          }
+        }
+        if (key === "reviewStatus" && (_isFinite(value) || value.indexOf(",") > -1)) {
+          const splitValues = _split(value, ",")
+          if (splitValues.length === _keys(TaskReviewStatusWithUnset).length) {
+            textValue = null
+          }
+          else {
+            textValue = _map(splitValues, v =>
+              this.props.intl.formatMessage(messagesByReviewStatus[v]))
+          }
+        }
+        return textValue ? `${key}${op}${textValue}` : null
+      }))
+    }
+
     render() {
       return <WrappedComponent {...this.props}
                                saveCurrentSearchFilters={this.saveCurrentSearchFilters}
@@ -76,7 +136,8 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
                                }
                                cancelManagingFilters={() =>
                                  this.setState({managingFilters: false})
-                               }/>
+                               }
+                               getBriefFilters={this.getBriefFilters}/>
     }
   }
 }

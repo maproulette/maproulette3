@@ -17,6 +17,8 @@ export default class SavedFiltersList extends Component {
 
     const listSearches = _map(_keys(savedFilters), (search, index) => {
       const searchURL = savedFilters[search]
+      const briefFilters = this.props.getBriefFilters(searchURL).join('\n')
+
       return (
         <li key={search + "-" + index}>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -28,7 +30,7 @@ export default class SavedFiltersList extends Component {
               })
               this.props.afterClick()
             }
-          }>
+          } title={briefFilters}>
             {search}
           </a>
         </li>

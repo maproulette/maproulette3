@@ -51,7 +51,7 @@ export default class ManageSavedFilters extends Component {
             onClose={this.props.cancelManagingFilters}>
             <div>
               <h3 className="mr-text-yellow mr-mb-4">Manage Saved Filters</h3>
-              <ul>
+              <ul className="mr-max-h-screen75 mr-overflow-y-auto">
                 {_map(_keys(savedFilters), (saved, index) => {
                   return (
                     <li className="mr-flex mr-justify-between" key={saved + "/" + index}>
@@ -74,8 +74,11 @@ export default class ManageSavedFilters extends Component {
                       }
                       {this.state.renaming !== saved &&
                         <React.Fragment>
-                          <div>{saved}</div>
-                          <div>
+                          <div className="mr-w-76 mr-mr-4 mr-mb-4 mr-text-mango">{saved}</div>
+                          <div className="mr-text-left mr-mr-4 mr-w-full mr-mb-4">
+                            {this.props.getBriefFilters(savedFilters[saved]).join(', ')}
+                          </div>
+                          <div className="mr-w-40 mr-mb-4">
                             <button className="mr-text-green-lighter mr-mr-2"
                               onClick={() => this.setState({renaming: saved})}>
                               <FormattedMessage {...messages.editLabel} />
