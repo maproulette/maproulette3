@@ -59,7 +59,7 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
           intl.formatMessage(messages.targetWayLabel),
           intl.formatMessage(messages.targetNodeLabel),
         ],
-        default: "Overpass Target Type",
+        default: "none",
       }
     },
   }
