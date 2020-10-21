@@ -514,6 +514,7 @@ module.exports = {
 
     inset: {
       '0': 0,
+      '45/100': '45%',
       '1/2': '50%',
       'screen20': '-20vw',
       'auto': 'auto',
