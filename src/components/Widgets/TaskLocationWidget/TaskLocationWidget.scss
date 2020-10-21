@@ -3,6 +3,7 @@
 .task-location-widget {
   &__inset-map {
     margin-top: 20px;
+    height: calc(100% - 6rem);
   }
 
   &__place {

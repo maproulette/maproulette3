@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
+import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import TaskLocationMap from '../../TaskPane/TaskLocationMap/TaskLocationMap'
 import PlaceDescription from '../../TaskPane/PlaceDescription/PlaceDescription'
 import TaskLatLon from '../../TaskPane/TaskLatLon/TaskLatLon'
@@ -22,11 +23,21 @@ const descriptor = {
 export default class TaskLocationWidget extends Component {
   render() {
     return (
-      <QuickWidget {...this.props}
-                  className="task-location-widget"
-                  widgetTitle={<FormattedMessage {...messages.title} />}>
+      <QuickWidget
+        {...this.props}
+        className="task-location-widget"
+        widgetTitle={<FormattedMessage {...messages.title} />}
+        noMain
+      >
         <div className="task-location-widget__inset-map">
-          <TaskLocationMap {...this.props} key={this.props.task.id} />
+          <MapPane {...this.props}>
+            <TaskLocationMap
+              key={this.props.task.id}
+              {...this.props}
+              h={this.props.widgetLayout.h}
+              w={this.props.widgetLayout.w}
+            />
+          </MapPane>
         </div>
 
         <PlaceDescription place={this.props.task.place}
