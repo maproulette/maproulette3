@@ -3,12 +3,14 @@
 .task-location-map {
   position: relative;
   margin-right: 15px;
+  height: 100%;
 
   &__primary-map {
     border-radius: $radius;
     -webkit-transform: translate3d(0, 0, 0);
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
     -webkit-backface-visibility: hidden;
+    height: 100%;
   }
 
   &__extent-map {
