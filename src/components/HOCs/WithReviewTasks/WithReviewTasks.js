@@ -91,7 +91,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       // have been excluded on initial fetch because the list was limited to
       // taskStatus 'fixed' and 'excludeOtherReviewers' by default.
       if (searchOnCriteria.excludeOtherReviewers === false ||
-          searchOnCriteria.filters.status !==
+          _get(searchOnCriteria, 'filters.status') !==
             _get(this.state.criteria[this.props.reviewTasksType], "filters.status")) {
         this.props.updateReviewChallenges(this.props.reviewTasksType)
       }
@@ -150,13 +150,13 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 
       // The criteria filters use 'project' but on the url it can also be
       // referenced as 'projectName'
-      if (criteria.filters.project == null) {
+      if (_get(criteria, 'filters.project') == null) {
         _omit(searchCriteria, 'filters.projectName')
       }
 
       // The criteria filters use 'challenge' but on the url it can also be
       // referenced as 'challengeName'
-      if (criteria.filters.challenge == null) {
+      if (_get(criteria, 'filters.challenge') == null) {
         _omit(searchCriteria.filters, 'challengeName')
       }
 
