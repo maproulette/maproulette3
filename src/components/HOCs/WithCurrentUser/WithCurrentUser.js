@@ -46,6 +46,7 @@ export const mapStateToProps = state => {
       props.user.isLoggedIn = endUser.isLoggedIn()
       props.user.isSuperUser = endUser.isSuperUser()
       props.user.hasUnreadNotifications = endUser.hasUnreadNotifications()
+      props.user.unreadNotificationCount = endUser.unreadNotificationCount()
     }
   }
 
