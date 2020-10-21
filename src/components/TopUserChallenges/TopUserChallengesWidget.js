@@ -5,6 +5,7 @@ import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import _isFinite from 'lodash/isFinite'
+import _isPlainObject from 'lodash/isPlainObject'
 import { Link } from 'react-router-dom'
 import subMonths from 'date-fns/sub_months'
 import { WidgetDataTarget, registerWidgetType }
@@ -87,10 +88,20 @@ const TopChallengeList = function(props) {
       }
 
       return (
-        <li key={challenge.id} className="mr-py-1">
+        <li key={challenge.id} className="mr-py-2">
           <Link to={`/browse/challenges/${challenge.id}`}>
             {challenge.name}
           </Link>
+          {_isPlainObject(challenge.parent) && // virtual challenges don't have projects
+            <div className="mr-links-grey-light">
+              <Link
+                onClick={e => {e.stopPropagation()}}
+                to={`/browse/projects/${challenge.parent.id}`}
+              >
+                {challenge.parent.displayName || challenge.parent.name}
+              </Link>
+            </div>
+          }
         </li>
       )
     }

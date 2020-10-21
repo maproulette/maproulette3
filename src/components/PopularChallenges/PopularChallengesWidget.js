@@ -5,6 +5,7 @@ import _isFinite from 'lodash/isFinite'
 import _take from 'lodash/take'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
+import _isPlainObject from 'lodash/isPlainObject'
 import { Link } from 'react-router-dom'
 import { WidgetDataTarget, registerWidgetType }
        from '../../services/Widget/Widget'
@@ -45,10 +46,20 @@ const PopularChallengeList = function(props) {
     )), 5)
 
   const challengeItems = _map(popularChallenges, challenge => (
-    <li key={challenge.id} className="mr-py-1">
+    <li key={challenge.id} className="mr-py-2">
       <Link to={`/browse/challenges/${challenge.id}`}>
         {challenge.name}
       </Link>
+      {_isPlainObject(challenge.parent) && // virtual challenges don't have projects
+        <div className="mr-links-grey-light">
+          <Link
+            onClick={e => {e.stopPropagation()}}
+            to={`/browse/projects/${challenge.parent.id}`}
+          >
+            {challenge.parent.displayName || challenge.parent.name}
+          </Link>
+        </div>
+      }
     </li>
   ))
 
