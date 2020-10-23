@@ -18,7 +18,7 @@ const TimezonePicker = props => {
   return (
     <select
       onChange={e => props.changeTimezone(e.target.value)}
-      defaultValue={props.currentTimezone || DEFAULT_TIMEZONE_OFFSET}
+      defaultValue={props.currentTimezone || ""}
       className="mr-w-24 mr-select mr-text-xs mr-pr-5"
     >
       {timezones}
