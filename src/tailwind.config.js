@@ -52,6 +52,7 @@ module.exports = {
       yellow: '#FFFD86',
       'yellow-75': 'rgba(255, 253, 134, .75)',
       'dark-yellow': '#F1E15B',
+      'gold': '#FFD700',
       mango: '#F7BB59',
       'mango-60': 'rgba(247,187,89, .6)',
       'mango-30': 'rgba(247,187,89, .3)',

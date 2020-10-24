@@ -84,13 +84,13 @@ describe('osmType', () => {
   test("falls back to the `type` field if no type in the id", () => {
     basicFeature.osmid = '123'
 
-    basicFeature.type = 'node'
+    basicFeature.properties = {type: 'node'}
     expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('node')
 
-    basicFeature.type = 'way'
+    basicFeature.properties.type = 'way'
     expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('way')
 
-    basicFeature.type = 'relation'
+    basicFeature.properties.type = 'relation'
     expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('relation')
   })
 
@@ -112,6 +112,17 @@ describe('normalizedTypeAndId', () => {
     expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('relation 123')
   })
 
+  test("allows the separator to be specified", () => {
+    basicFeature.osmid = 'node/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId(false, '/')).toEqual('node/123')
+
+    basicFeature.osmid = 'way/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId(false, '/')).toEqual('way/123')
+
+    basicFeature.osmid = 'relation/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId(false, '/')).toEqual('relation/123')
+  })
+
   test("normalizes the OSM element type", () => {
     basicFeature.osmid = 'n/123'
     expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('node 123')
@@ -126,19 +137,24 @@ describe('normalizedTypeAndId', () => {
   test("falls back to the `type` field if no type in the id", () => {
     basicFeature.osmid = '123'
 
-    basicFeature.type = 'node'
+    basicFeature.properties = {type: 'node'}
     expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('node 123')
 
-    basicFeature.type = 'way'
+    basicFeature.properties.type = 'way'
     expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('way 123')
 
-    basicFeature.type = 'relation'
+    basicFeature.properties.type = 'relation'
     expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('relation 123')
   })
 
   test("returns just the id if no type is detected", () => {
     basicFeature.osmid = '123'
     expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('123')
+  })
+
+  test("returns null if type is required and no type detected", () => {
+    basicFeature.osmid = '123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId(true)).toBeNull()
   })
 
   test("returns null if no id is found", () => {

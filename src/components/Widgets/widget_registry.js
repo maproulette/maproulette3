@@ -5,6 +5,8 @@
  */
 
 // Import first-party widgets shipped with MapRoulette
+export { default as OSMHistoryWidget }
+       from './OSMHistoryWidget/OSMHistoryWidget'
 export { default as ActivityListingWidget }
        from './ActivityListingWidget/ActivityListingWidget'
 export { default as ActivityMapWidget }
