@@ -121,7 +121,18 @@ export default class ChallengeControls extends Component {
             </Link>
 
             {manager.canAdministrateProject(parent) &&
-             <ConfirmAction>
+             <ConfirmAction
+              title={this.props.intl.formatMessage(messages.deleteChallengeConfirm)}
+              prompt={
+                <React.Fragment>
+                  <div className="mr-text-mango mr-mb-6 mr-text-lg">
+                    {this.props.challenge.name}
+                  </div>
+                  <div>
+                    <FormattedMessage {...messages.deleteChallengeWarn} />
+                  </div>
+                </React.Fragment>
+              }>
                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                <a
                  onClick={() => this.deleteChallenge(parent)}

@@ -38,4 +38,14 @@ export default defineMessages({
     id: "Admin.Challenge.controls.delete.label",
     defaultMessage: "Delete Challenge",
   },
+
+  deleteChallengeConfirm: {
+    id: "Admin.Challenge.controls.delete.confirm",
+    defaultMessage: "Are you sure you wish to delete this challenge?"
+  },
+
+  deleteChallengeWarn: {
+    id: "Admin.Challenge.controls.delete.warn",
+    defaultMessage: "This action cannot be undone."
+  }
 })
