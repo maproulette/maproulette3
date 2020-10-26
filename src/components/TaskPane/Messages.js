@@ -9,6 +9,16 @@ export default defineMessages({
     defaultMessage: "Inspect",
   },
 
+  favoriteLabel: {
+    id: "Task.pane.controls.favorite.label",
+    defaultMessage: "Favorite",
+  },
+
+  unfavoriteLabel: {
+    id: "Task.pane.controls.unfavorite.label",
+    defaultMessage: "Unfavorite",
+  },
+
   taskLockedLabel: {
     id: "Task.pane.indicators.locked.label",
     defaultMessage: "Task locked",

@@ -4,6 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
+import _findIndex from 'lodash/findIndex'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
 import { isCompletionStatus }
@@ -210,6 +211,43 @@ export class TaskPane extends Component {
     const completionResponses = this.state.completionResponses ||
                                 JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
 
+    // Setup favorite/unfavorite links
+    const challenge = this.props.task.parent
+    let favoriteControl = null
+    if (!challenge.isVirtual) {
+      if (
+        _findIndex(this.props.user.savedChallenges, { id: challenge.id }) !== -1
+      ) {
+        favoriteControl = (
+          <li>
+            <button
+              className="mr-transition mr-text-green-lighter hover:mr-text-current"
+              onClick={() => this.props.unsaveChallenge(
+                this.props.user.id,
+                challenge.id
+              )}
+            >
+              <FormattedMessage {...messages.unfavoriteLabel} />
+            </button>
+          </li>
+        )
+      } else {
+        favoriteControl = (
+          <li>
+            <button
+              className="mr-transition mr-text-green-lighter hover:mr-text-current"
+              onClick={() => this.props.saveChallenge(
+                this.props.user.id,
+                challenge.id
+              )}
+            >
+              <FormattedMessage {...messages.favoriteLabel} />
+            </button>
+          </li>
+        )
+      }
+    }
+
     return (
       <div className='task-pane'>
         <MediaQuery query="(min-width: 1024px)">
@@ -232,9 +270,11 @@ export class TaskPane extends Component {
                       </Link>
                     </li>
 
-                    <li>
+                    <li className="mr-mt-n1px">
                       <OwnerContactLink {...this.props} />
                     </li>
+
+                    {favoriteControl}
 
                     {isManageable && !this.props.inspectTask && (
                       <li>
