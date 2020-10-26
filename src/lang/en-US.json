@@ -953,6 +953,7 @@
   "Notification.type.system": "System",
   "Notification.type.team": "Team",
   "OSMElementHistory.controls.viewOSM.label": "View OSM",
+  "OSMElementHistory.elementFetchFailed": "Failed to fetch history for {element}",
   "OSMElementHistory.noComment": "(no changeset comment)",
   "OSMElementHistory.noOSMElements": "No OSM elements identified in task",
   "OSMElementHistory.recentChange.tooltip": "Change made after MapRoulette task was created",

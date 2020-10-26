@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "No OSM elements identified in task",
   },
 
+  elementFetchFailed: {
+    id: "OSMElementHistory.elementFetchFailed",
+    defaultMessage: "Failed to fetch history for {element}",
+  },
+
   undeterminedVersion: {
     id: "OSMElementHistory.undeterminedVersion",
     defaultMessage: "Version detection unavailable for this task",

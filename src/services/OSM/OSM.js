@@ -118,7 +118,7 @@ export const fetchOSMElementHistory = function(idString, includeChangesets=false
         resolve(history.elements)
       }
       else if (response.status === 404) {
-        resolve(null)
+        reject(AppErrors.osm.elementMissing)
       }
       else if (response.status === 400) {
         reject(AppErrors.osm.requestTooLarge)
