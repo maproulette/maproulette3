@@ -97,7 +97,6 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
           }
         }
         if (key === "status" && (_isFinite(value) || value.indexOf(",") > -1)) {
-          console.log(value)
           const splitValues = _split(value, ",")
           if (splitValues.length === _keys(TaskStatus).length) {
             textValue = null
