@@ -11,6 +11,7 @@ import _fromPairs from 'lodash/fromPairs'
 import _pick from 'lodash/pick'
 import _every from 'lodash/every'
 import _cloneDeep from 'lodash/cloneDeep'
+import _find from 'lodash/find'
 import { latLng } from 'leaflet'
 import AsIdentifiableFeature from '../TaskFeature/AsIdentifiableFeature'
 import { supportedSimplestyles } from '../TaskFeature/AsSimpleStyleableFeature'
@@ -57,6 +58,22 @@ export class AsMappableTask {
     return _every(this.geometries.features, feature =>
       allowedTypes.indexOf(getType(feature)) !== -1
     )
+  }
+
+  /**
+   * Retrieve properties for feature that matches the given OSM id (of form
+   * `type/id`), or empty object if no matching feature is found
+   */
+  propertiesForOSMFeature(osmId) {
+    if (!osmId || !this.hasGeometries()) {
+      return {}
+    }
+
+    const feature = _find(this.geometries.features, f =>
+      osmId === AsIdentifiableFeature(f).normalizedTypeAndId(true, '/')
+    )
+
+    return feature ? feature.properties : {}
   }
 
   /**

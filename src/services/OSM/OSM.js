@@ -3,6 +3,9 @@ import xmlToJSON from 'xmltojson'
 import _get from 'lodash/get'
 import _isPlainObject from 'lodash/isPlainObject'
 import _transform from 'lodash/transform'
+import _map from 'lodash/map'
+import _each from 'lodash/each'
+import _isEmpty from 'lodash/isEmpty'
 
 const API_SERVER = process.env.REACT_APP_OSM_API_SERVER
 
@@ -81,6 +84,90 @@ export const fetchOSMElement = function(idString, asXML=false) {
         console.log(error)
         reject(AppErrors.osm.fetchFailure)
       }
+    })
+  })
+}
+
+/**
+ * Retrieve the history for the given OpenStreetMap element string (e.g.
+ * `way/12345`), optionally including changeset data for each history entry as
+ * well (requiring an additional API call)
+ */
+export const fetchOSMElementHistory = function(idString, includeChangesets=false) {
+  const osmURI = `${API_SERVER}/api/0.6/${idString}/history.json`
+
+  return new Promise((resolve, reject) => {
+    if (!idString) {
+      resolve(null)
+    }
+
+    fetch(osmURI).then(async response => {
+      if (response.ok) {
+        const history = await response.json()
+        if (includeChangesets) {
+          const changesetIds = _map(history.elements, 'changeset')
+          const changesets = await fetchOSMChangesets(changesetIds)
+          const changesetMap = new Map()
+          _each(changesets, c => changesetMap.set(c.id, c))
+          _each(history.elements, historyEntry => {
+            if (changesetMap.has(historyEntry.changeset)) {
+              historyEntry.changeset = changesetMap.get(historyEntry.changeset)
+            }
+          })
+        }
+        resolve(history.elements)
+      }
+      else if (response.status === 404) {
+        resolve(null)
+      }
+      else if (response.status === 400) {
+        reject(AppErrors.osm.requestTooLarge)
+      }
+      else if (response.status === 509) {
+        reject(AppErrors.osm.bandwidthExceeded)
+      }
+    }).catch(error => {
+      if (error.id && error.defaultMessage) {
+        reject(error)
+      }
+      else {
+        console.log(error)
+        reject(AppErrors.osm.fetchFailure)
+      }
+    })
+  })
+}
+
+/**
+ * Retrieve the specified OpenStreetMap changesets
+ */
+export const fetchOSMChangesets = function(changesetIds) {
+  const osmDataURI = `${API_SERVER}/api/0.6/changesets?changesets=${changesetIds.join(',')}`
+
+  return new Promise((resolve, reject) => {
+    fetch(osmDataURI).then(response => {
+      if (response.ok) {
+        response.text().then(rawXML => {
+          const parser = new DOMParser()
+          const xmlDoc = parser.parseFromString(rawXML, "application/xml")
+          const osmJSON = normalizeAttributes(xmlToJSON.parseXML(xmlDoc))
+          if (!osmJSON || _isEmpty(osmJSON.osm)) {
+            resolve([])
+            return
+          }
+
+          resolve(osmJSON.osm[0].changeset)
+        })
+      }
+      else if (response.status === 400) {
+        reject(AppErrors.osm.requestTooLarge)
+      }
+      else if (response.status === 509) {
+        reject(AppErrors.osm.bandwidthExceeded)
+      }
+    }).catch(error => {
+      console.log(error)
+      reject(AppErrors.osm.fetchFailure)
     })
   })
 }

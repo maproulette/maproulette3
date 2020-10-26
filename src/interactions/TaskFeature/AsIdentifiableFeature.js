@@ -1,4 +1,5 @@
 import _find from 'lodash/find'
+import _get from 'lodash/get'
 import _isUndefined from 'lodash/isUndefined'
 
 /**
@@ -65,9 +66,16 @@ export class AsIdentifiableFeature {
 
     let featureType = this.rawFeatureId()
     if (!typeRe.test(featureType)) {
-      featureType = this.type // this.type should really be a GeoJSON type, but just in case
+      featureType = this.properties.type
       if (!typeRe.test(featureType)) {
-        featureType = this.properties.type
+        // No luck finding an explicit type. Try to infer from the geometry
+        const geometryType = _get(this, 'geometry.type')
+        if (geometryType === "Point") {
+          featureType = "node"
+        }
+        else if (geometryType === "LineString") {
+          featureType = "way"
+        }
       }
     }
 
@@ -95,7 +103,7 @@ export class AsIdentifiableFeature {
    * Returns the type and id in the form of `type id`, or just id if no type
    * can be found. Returns null if no id can be found
    */
-  normalizedTypeAndId() {
+  normalizedTypeAndId(requireType=false, separator=' ') {
     const osmId = this.osmId()
     if (!osmId) {
       // We must have at least an id
@@ -103,7 +111,11 @@ export class AsIdentifiableFeature {
     }
 
     const osmType = this.osmType()
-    return (osmType ? `${osmType} ` : '') + osmId
+    if (requireType && !osmType) {
+      return null
+    }
+
+    return (osmType ? `${osmType}${separator}` : '') + osmId
   }
 
   isValidId(id) {
