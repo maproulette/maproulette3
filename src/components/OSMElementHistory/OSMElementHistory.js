@@ -26,6 +26,8 @@ const OSMElementHistory = props => {
   const [selectedFeatureId, setSelectedFeatureId] = useState(null)
   const [history, setHistory] = useState(null)
   const [fetchingElement, setFetchingElement] = useState(null)
+  const [failedElement, setFailedElement] = useState(null)
+  const [fetchErr, setFetchErr] = useState(null)
 
   const { task, fetchOSMElementHistory } = props
   const taskId = task.id
@@ -38,8 +40,9 @@ const OSMElementHistory = props => {
   useEffect(() => {
     const activeFeatureId = selectedFeatureId ? selectedFeatureId : featureIds[0]
 
-    // If we're already fetching data for the active feature, nothing to do
-    if (fetchingElement === activeFeatureId) {
+    // If we're already fetching data for the active feature, or if the fetch failed,
+    // there's nothing to do
+    if (fetchingElement === activeFeatureId || failedElement === activeFeatureId) {
       return
     }
 
@@ -60,12 +63,26 @@ const OSMElementHistory = props => {
     }
 
     setFetchingElement(activeFeatureId)
+    setFailedElement(null)
+    setFetchErr(null)
     fetchOSMElementHistory(activeFeatureId, true).then(historyEntries => {
+      // If for some reason we don't get any history entries, record a failure
+      // to prevent further attempts to refetch
+      if (!historyEntries || historyEntries.length === 0) {
+        setFailedElement(activeFeatureId)
+        setFetchingElement(null)
+        return
+      }
+
       // Sort history entries by version, reversing to get descending order
       setHistory(_sortBy(historyEntries, 'version').reverse())
       setFetchingElement(null)
+    }).catch(err => {
+      setFailedElement(activeFeatureId)
+      setFetchErr(err)
+      setFetchingElement(null)
     })
-  }, [taskId, selectedFeatureId, featureIds, history, fetchingElement, fetchOSMElementHistory])
+  }, [taskId, selectedFeatureId, featureIds, history, fetchingElement, failedElement, fetchOSMElementHistory])
 
   if (fetchingElement) {
     return (
@@ -75,13 +92,21 @@ const OSMElementHistory = props => {
     )
   }
 
+  const activeFeatureId = selectedFeatureId ? selectedFeatureId : featureIds[0]
+  if (failedElement === activeFeatureId) {
+    return (
+      <div className="mr-flex mr-flex-col mr-text-red-light">
+        <FormattedMessage {...messages.elementFetchFailed} values={{element: activeFeatureId}} />
+        {fetchErr && fetchErr.defaultMessage && <FormattedMessage {...fetchErr} />}
+      </div>
+    )
+  }
+
   if (!history) {
     return (
       <FormattedMessage {...messages.noOSMElements} />
     )
   }
-
-  const activeFeatureId = selectedFeatureId ? selectedFeatureId : featureIds[0]
   const featureProperties = AsMappableTask(task).propertiesForOSMFeature(activeFeatureId)
   const featureChangeset =
     featureProperties.osmVersion || featureProperties.last_edit_changeset
@@ -105,7 +130,7 @@ const OSMElementHistory = props => {
        </div>
       }
 
-      <div class="mr-flex mr-justify-between mr-links-green-lighter mr-mb-4">
+      <div className="mr-flex mr-justify-between mr-links-green-lighter mr-mb-4">
         <FeatureSelectionDropdown
           featureIds={featureIds}
           selectedFeatureId={activeFeatureId}
