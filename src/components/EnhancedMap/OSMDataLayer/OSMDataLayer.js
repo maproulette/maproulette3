@@ -13,7 +13,11 @@ import tailwindConfig from '../../../tailwind.config.js'
 import layerMessages from '../LayerToggle/Messages'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
-const HIGHLIGHT_COLOR = "gold"
+const HIGHLIGHT_STYLE = {
+  color: colors.gold,
+  fillColor: colors.gold,
+  weight: 7,
+}
 
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
@@ -114,15 +118,15 @@ export class OSMDataLayer extends Path {
           styleableLayer.popStyle('mr-external-interaction:start-preview')
           const popup = L.popup({}, layer).setLatLng(latlng).setContent(this.popupContent(layer, onBack))
           // Highlight selected feature
-          styleableLayer.pushStyle({color: HIGHLIGHT_COLOR, fillColor: HIGHLIGHT_COLOR})
+          styleableLayer.pushStyle(Object.assign({}, HIGHLIGHT_STYLE))
           popup.on('remove', () => styleableLayer.popStyle())
           popup.openOn(map)
         })
         layer.on('mr-external-interaction:start-preview', () => {
-          styleableLayer.pushStyle({
-            color: HIGHLIGHT_COLOR,
-            fillColor: HIGHLIGHT_COLOR,
-          }, 'mr-external-interaction:start-preview')
+          styleableLayer.pushStyle(
+            Object.assign({}, HIGHLIGHT_STYLE),
+            'mr-external-interaction:start-preview'
+          )
         })
         layer.on('mr-external-interaction:end-preview', () => {
           styleableLayer.popStyle('mr-external-interaction:start-preview')
