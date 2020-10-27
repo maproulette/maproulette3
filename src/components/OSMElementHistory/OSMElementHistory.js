@@ -10,6 +10,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _sortBy from 'lodash/sortBy'
 import _find from 'lodash/find'
 import _get from 'lodash/get'
+import _flatten from 'lodash/flatten'
 import AsMappableTask
        from '../../interactions/Task/AsMappableTask'
 import AsIdentifiableFeature
@@ -29,14 +30,27 @@ const OSMElementHistory = props => {
   const [failedElement, setFailedElement] = useState(null)
   const [fetchErr, setFetchErr] = useState(null)
 
-  const { task, fetchOSMElementHistory } = props
-  const taskId = task.id
-  const geometries = AsMappableTask(task).normalizedGeometries()
-  const featureIds = geometries ? _compact(_map(
-    geometries.features,
-    f => AsIdentifiableFeature(f).normalizedTypeAndId(true, '/')
-  )) : null
+  const { fetchOSMElementHistory, taskBundle } = props
+  const primaryTask = props.task
+  const allTasks = taskBundle ? taskBundle.tasks : [primaryTask]
 
+  const featureIds = _flatten(_compact(_map(allTasks, task => {
+    const geometries = AsMappableTask(task).normalizedGeometries()
+    return geometries ? _compact(_map(
+      geometries.features,
+      f => AsIdentifiableFeature(f).normalizedTypeAndId(true, '/')
+    )) : null
+  })))
+
+  // If the selected feature is no longer available (e.g. because a task bundle
+  // was unbundled), then clear the selection
+  useEffect(() => {
+    if (selectedFeatureId && featureIds.indexOf(selectedFeatureId) === -1) {
+      setSelectedFeatureId(null)
+    }
+  }, [featureIds, selectedFeatureId])
+
+  // Fetch and process the OSM history
   useEffect(() => {
     const activeFeatureId = selectedFeatureId ? selectedFeatureId : featureIds[0]
 
@@ -82,7 +96,7 @@ const OSMElementHistory = props => {
       setFetchErr(err)
       setFetchingElement(null)
     })
-  }, [taskId, selectedFeatureId, featureIds, history, fetchingElement, failedElement, fetchOSMElementHistory])
+  }, [selectedFeatureId, featureIds, history, fetchingElement, failedElement, fetchOSMElementHistory])
 
   if (fetchingElement) {
     return (
@@ -107,10 +121,13 @@ const OSMElementHistory = props => {
       <FormattedMessage {...messages.noOSMElements} />
     )
   }
-  const featureProperties = AsMappableTask(task).propertiesForOSMFeature(activeFeatureId)
+  const featureProperties = _find(allTasks, task => {
+    const properties = AsMappableTask(task).propertiesForOSMFeature(activeFeatureId)
+    return _isEmpty(properties) ? null : properties
+  }) || {}
   const featureChangeset =
     featureProperties.osmVersion || featureProperties.last_edit_changeset
-  const sourceDate = _get(task, 'parent.dataOriginDate')
+  const sourceDate = _get(primaryTask, 'parent.dataOriginDate') // all tasks from same challenge
 
   const entries = _map(history, entry =>
     <HistoryEntry
@@ -155,6 +172,7 @@ const OSMElementHistory = props => {
 
 OSMElementHistory.propTypes = {
   task: PropTypes.object,
+  taskBundle: PropTypes.object,
   fetchOSMElementHistory: PropTypes.func.isRequired,
 }
 
