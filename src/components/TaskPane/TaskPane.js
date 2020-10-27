@@ -220,29 +220,27 @@ export class TaskPane extends Component {
       ) {
         favoriteControl = (
           <li>
-            <button
-              className="mr-transition mr-text-green-lighter hover:mr-text-current"
-              onClick={() => this.props.unsaveChallenge(
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a onClick={() => this.props.unsaveChallenge(
                 this.props.user.id,
                 challenge.id
               )}
             >
               <FormattedMessage {...messages.unfavoriteLabel} />
-            </button>
+            </a>
           </li>
         )
       } else {
         favoriteControl = (
           <li>
-            <button
-              className="mr-transition mr-text-green-lighter hover:mr-text-current"
-              onClick={() => this.props.saveChallenge(
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a onClick={() => this.props.saveChallenge(
                 this.props.user.id,
                 challenge.id
               )}
             >
               <FormattedMessage {...messages.favoriteLabel} />
-            </button>
+            </a>
           </li>
         )
       }
