@@ -9,9 +9,17 @@ import _uniqueId from 'lodash/uniqueId'
 import AsSimpleStyleableFeature
        from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import PropertyList from '../PropertyList/PropertyList'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../tailwind.config.js'
 import layerMessages from '../LayerToggle/Messages'
 
-const HIGHLIGHT_COLOR = "gold"
+const colors = resolveConfig(tailwindConfig).theme.colors
+const HIGHLIGHT_SIMPLESTYLE = {
+  "marker-color": colors.gold,
+  stroke: colors.gold,
+  "stroke-width": 7,
+  fill: colors.gold,
+}
 
 /**
  * TaskFeatureLayer renders a react-leaflet map layer representing the given
@@ -61,11 +69,7 @@ const TaskFeatureLayer = props => {
               // Highlight selected feature, preserving existing marker size (if a marker)
               styleableFeature.pushLeafletLayerSimpleStyles(
                 layer,
-                Object.assign(styleableFeature.markerSimplestyles(layer), {
-                  "marker-color": HIGHLIGHT_COLOR,
-                  stroke: HIGHLIGHT_COLOR,
-                  fill: HIGHLIGHT_COLOR,
-                })
+                Object.assign(styleableFeature.markerSimplestyles(layer), HIGHLIGHT_SIMPLESTYLE)
               )
               popup.on('remove', function() {
                 // Restore original styling when popup closes
@@ -77,11 +81,7 @@ const TaskFeatureLayer = props => {
             layer.on('mr-external-interaction:start-preview', () => {
               styleableFeature.pushLeafletLayerSimpleStyles(
                 layer,
-                Object.assign(styleableFeature.markerSimplestyles(layer), {
-                  "marker-color": HIGHLIGHT_COLOR,
-                  stroke: HIGHLIGHT_COLOR,
-                  fill: HIGHLIGHT_COLOR,
-                }),
+                Object.assign(styleableFeature.markerSimplestyles(layer), HIGHLIGHT_SIMPLESTYLE),
                 'mr-external-interaction:start-preview'
               )
             })
