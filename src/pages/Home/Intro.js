@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { ReactComponent as ExpertImage } from '../../static/images/expert.svg'
 import { ReactComponent as FindImage } from '../../static/images/find.svg'
 import { ReactComponent as TeamsImage } from '../../static/images/teams.svg'
+import messages from './Messages'
 
 class Intro extends Component {
   render() {
@@ -10,17 +12,11 @@ class Intro extends Component {
         <div className="mr-flex mr-justify-center">
           <div className="mr-text-center mr-w-1/2">
             <h2 className="mr-text-yellow mr-mb-12 mr-font-light md:mr-text-5xl">
-              Thousands of people just like you edit OpenStreetMap every day
+              <FormattedMessage {...messages.introHeader} />
             </h2>
 
             <p className="mr-text-white mr-mb-20">
-              That’s why OSM is the most up to date and complete map you can
-              find anywhere, and it’s why Facebook, Snapchat and many others use
-              OSM to power their own maps. If you look at the richness of
-              OpenStreetMap data, you may wonder what’s left to map. That is
-              where MapRoulette comes in! Just log in with your OpenStreetMap
-              account, find a task that is right for you, and be an instant
-              contributor to the world’s maps!
+              <FormattedMessage {...messages.introDetail} />
             </p>
           </div>
         </div>
@@ -32,7 +28,7 @@ class Intro extends Component {
                 <ExpertImage viewBox="0 0 236 172" className="mr-w-full mr-h-full" />
               </div>
               <h3 className="mr-font-light mr-mt-4">
-                Work at your own level, from novice to expert
+                <FormattedMessage {...messages.introFirstBullet} />
               </h3>
             </div>
 
@@ -41,7 +37,7 @@ class Intro extends Component {
                 <FindImage viewBox="0 0 277 162" className="mr-w-full mr-h-full" />
               </div>
               <h3 className="mr-font-light mr-mt-4">
-                Find mapping tasks that are important to you
+                <FormattedMessage {...messages.introSecondBullet} />
               </h3>
             </div>
 
@@ -50,7 +46,7 @@ class Intro extends Component {
                 <TeamsImage viewBox="0 0 687 350" className="mr-w-full mr-h-full" />
               </div>
               <h3 className="mr-font-light mr-mt-4">
-                Create tasks for others to improve OSM together
+                <FormattedMessage {...messages.introThirdBullet} />
               </h3>
             </div>
           </div>
