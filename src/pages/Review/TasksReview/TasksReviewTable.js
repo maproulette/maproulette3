@@ -22,6 +22,7 @@ import { TaskPriority, keysByPriority, messagesByPriority }
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { ReviewTasksType, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
+import { intlTableProps } from '../../../components/IntlTable/IntlTable'
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
 import InTableTagFilter
@@ -424,6 +425,7 @@ export class TaskReviewTable extends Component {
                           }
                         }}
                         loading={this.props.loading}
+                        {...intlTableProps(this.props.intl)}
             />
           </div>
         </div>
