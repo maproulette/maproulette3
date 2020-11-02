@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { FormattedMessage } from 'react-intl'
 import { ReactComponent as WorldMapImage }
        from '../../static/images/bg-map.svg'
+import messages from './Messages'
 
 export default class Hero extends Component {
   render() {
@@ -10,12 +12,12 @@ export default class Hero extends Component {
         <div className="mr-w-1/2 mr-flex mr-flex-col mr-items-center">
           <div className="mr-flex mr-flex-col mr-pl-4">
             <h1 className="mr-text-3xl mr-font-light md:mr-text-5xl lg:mr-text-6xl mr-flex mr-flex-col mr-justify-start">
-              <span>Be an instant</span>
-              <span>contributor to the</span>
-              <span>world’s maps</span>
+              <FormattedMessage {...messages.heroFirstLine} />
+              <FormattedMessage {...messages.heroSecondLine} />
+              <FormattedMessage {...messages.heroThirdLine} />
             </h1>
             <Link to="/browse/challenges" className="mr-button mr-mt-8 mr-w-2/3">
-              Get Started
+              <FormattedMessage {...messages.getStartedLabel} />
             </Link>
           </div>
         </div>
