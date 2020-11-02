@@ -37,6 +37,7 @@ import { mapColors } from '../../interactions/User/AsEndUser'
 import AsManager from '../../interactions/User/AsManager'
 import WithLoadedTask from '../HOCs/WithLoadedTask/WithLoadedTask'
 import WithConfigurableColumns from '../HOCs/WithConfigurableColumns/WithConfigurableColumns'
+import { intlTableProps } from '../../components/IntlTable/IntlTable'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import TaskCommentsModal
@@ -244,6 +245,7 @@ export class TaskAnalysisTable extends Component {
               }
             }}
             loading={this.props.loading}
+            {...intlTableProps(this.props.intl)}
           />
         </section>
         {_isFinite(this.state.openComments) &&
