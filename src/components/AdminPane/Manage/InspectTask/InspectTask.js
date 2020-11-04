@@ -24,6 +24,11 @@ const InspectTaskPane = WithCurrentTask(WithTaskInspect(TaskPane))
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class InspectTask extends Component {
+  challengeState = null
+
+  componentDidMount() {
+    this.challengeState = this.props.history.location.state
+  }
   render() {
     return (
       <div className="admin__manage inspect-task">
@@ -44,7 +49,10 @@ export class InspectTask extends Component {
                 </li>
                 {_isObject(this.props.challenge) &&
                   <li>
-                    <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
+                    <Link to={{
+                      pathname: `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`,
+                      state: this.challengeState
+                    }}>
                       {this.props.challenge.name}
                     </Link>
                   </li>

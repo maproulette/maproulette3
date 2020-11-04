@@ -57,3 +57,108 @@ describe('osmId', () => {
     expect(AsIdentifiableFeature(basicFeature).osmId()).toEqual('1042007773')
   })
 })
+
+describe('osmType', () => {
+  test("returns the OSM element type from the `osmid` field if it exists", () => {
+    basicFeature.osmid = 'node/123'
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('node')
+
+    basicFeature.osmid = 'way/123'
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('way')
+
+    basicFeature.osmid = 'relation/123'
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('relation')
+  })
+
+  test("normalizes the OSM element type", () => {
+    basicFeature.osmid = 'n/123'
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('node')
+
+    basicFeature.osmid = 'w/123'
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('way')
+
+    basicFeature.osmid = 'r/123'
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('relation')
+  })
+
+  test("falls back to the `type` field if no type in the id", () => {
+    basicFeature.osmid = '123'
+
+    basicFeature.properties = {type: 'node'}
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('node')
+
+    basicFeature.properties.type = 'way'
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('way')
+
+    basicFeature.properties.type = 'relation'
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toEqual('relation')
+  })
+
+  test("returns null if no element type can be found", () => {
+    basicFeature.osmid = '123'
+    expect(AsIdentifiableFeature(basicFeature).osmType()).toBeNull()
+  })
+})
+
+describe('normalizedTypeAndId', () => {
+  test("returns the type and id as a string", () => {
+    basicFeature.osmid = 'node/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('node 123')
+
+    basicFeature.osmid = 'way/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('way 123')
+
+    basicFeature.osmid = 'relation/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('relation 123')
+  })
+
+  test("allows the separator to be specified", () => {
+    basicFeature.osmid = 'node/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId(false, '/')).toEqual('node/123')
+
+    basicFeature.osmid = 'way/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId(false, '/')).toEqual('way/123')
+
+    basicFeature.osmid = 'relation/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId(false, '/')).toEqual('relation/123')
+  })
+
+  test("normalizes the OSM element type", () => {
+    basicFeature.osmid = 'n/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('node 123')
+
+    basicFeature.osmid = 'w/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('way 123')
+
+    basicFeature.osmid = 'r/123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('relation 123')
+  })
+
+  test("falls back to the `type` field if no type in the id", () => {
+    basicFeature.osmid = '123'
+
+    basicFeature.properties = {type: 'node'}
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('node 123')
+
+    basicFeature.properties.type = 'way'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('way 123')
+
+    basicFeature.properties.type = 'relation'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('relation 123')
+  })
+
+  test("returns just the id if no type is detected", () => {
+    basicFeature.osmid = '123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toEqual('123')
+  })
+
+  test("returns null if type is required and no type detected", () => {
+    basicFeature.osmid = '123'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId(true)).toBeNull()
+  })
+
+  test("returns null if no id is found", () => {
+    basicFeature.osmid = 'xyz'
+    expect(AsIdentifiableFeature(basicFeature).normalizedTypeAndId()).toBeNull()
+  })
+})

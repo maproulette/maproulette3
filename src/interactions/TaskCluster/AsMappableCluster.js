@@ -29,8 +29,11 @@ const statusIcons = _fromPairs(_map(TaskStatusColors, (color, status) => [
      fill: color,
      stroke: colors['grey-leaflet'],
      strokeWidth: 0.5,
+     marginTop: '0px',
+     marginLeft: '0px',
    },
-   iconAnchor: [5, 15], // render tip of SVG near marker location
+   iconSize: [20, 20],
+   iconAnchor: [10, 20], // tip of marker
  })
 ]))
 
@@ -108,7 +111,8 @@ export class AsMappableCluster {
         icon.options.svgHeight = 40
         icon.options.svgWidth = 40
         icon.options.style.fill = colors.yellow
-        icon.options.iconAnchor = [5, 25] // adjust position of marker tip for larger size
+        icon.options.iconSize = [40, 40]
+        icon.options.iconAnchor = [20, 40]
       }
       else if (isSelected) {
         icon = _cloneDeep(selectedTaskStatusIcons[markerData.taskStatus])

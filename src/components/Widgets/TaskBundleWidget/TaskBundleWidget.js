@@ -308,6 +308,7 @@ const BuildBundle = props => {
       loadingTasks={props.loadingTasks}
       showMarkerPopup={showMarkerPopup}
       highlightPrimaryTask={props.task.id}
+      taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
       boundingBox={_get(props, 'criteria.boundingBox')}
       initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
       onBulkTaskSelection={props.selectTasks}

@@ -8,6 +8,31 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [v3.6.14] - 2020-11-04
+### Added
+- Updated community translations (huge thank you to translators!)
+- Allow map overlays to be reordered
+- Offer choice of features when map click is ambiguous
+- Highlight selected map feature
+- Ability to save filter setups for various tables
+- Support for arrow keys on auto-suggest dropdowns
+- Control for repositioning task bundle map over primary task
+- Option to favorite/unfavorite challenge from task completion page
+- New optional OSM History widget in task completion
+- Show count of unread notifications in top navbar
+- Show projects alongside challenges on various Dashboard widgets
+- Show name of challenge on challenge-deletion confirmation dialog (#1407)
+- [internal] Various upgrades of package dependencies
+
+### Fixed
+- Task Instructions widget not expanding back to configured height
+- Location map not expanding even when its widget is expanded
+- Failure when non-reviewer visited Review page
+- Search by partial project/challenge name in review table
+- Timezone selection changing to UTC-12 when UTC was selected
+- Missing internationalizations on home page and table controls (#1262)
+
+
 ## [v3.6.13] - 2020-10-12
 ### Fixed
 - Comment mention dropdown interfering with adding newlines to comment

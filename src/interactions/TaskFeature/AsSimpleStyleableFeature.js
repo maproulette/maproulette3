@@ -12,6 +12,7 @@ import _pick from 'lodash/pick'
 import _merge from 'lodash/merge'
 import _filter from 'lodash/filter'
 import _flatten from 'lodash/flatten'
+import _get from 'lodash/get'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../tailwind.config.js'
 import AsFilterableFeature from './AsFilterableFeature'
@@ -57,6 +58,59 @@ export class AsSimpleStyleableFeature {
   }
 
   /**
+   * Add additional, explicit simple styles to the given leaflet layer. This is
+   * intended to be used for adding extra, temporary styling (such as
+   * highlighting a feature) that can be subsequently removed with
+   * popLeafletLayerSimpleStyles
+   */
+  pushLeafletLayerSimpleStyles(layer, simplestyles, identifier) {
+    if (!this.originalLeafletStyles) {
+      this.originalLeafletStyles = []
+    }
+    this.originalLeafletStyles.push({
+      identifier,
+      style: _pick(layer.options, [
+        'color', 'fillColor', 'fillOpacity', 'fillRule', 'stroke',
+        'lineCap', 'lineJoin', 'opacity', 'dashArray', 'dashOffset', 'weight',
+      ]),
+      icon: layer.options.icon,
+    })
+
+    this.styleLeafletLayerWithStyles(layer, simplestyles)
+  }
+
+  /**
+   * Restores the layer styling prior to the latest pushed styles from
+   * pushLeafletLayerSimpleStyles, or does nothing if there are no prior styles
+   * to restore
+   */
+  popLeafletLayerSimpleStyles(layer, identifier) {
+    if (!this.originalLeafletStyles ||this.originalLeafletStyles.length === 0) {
+      return
+    }
+
+    if (identifier &&
+        this.originalLeafletStyles[this.originalLeafletStyles.length - 1].identifier !== identifier) {
+      return
+    }
+
+    const priorStyle = this.originalLeafletStyles.pop()
+    if (layer.setStyle) {
+      layer.setStyle(priorStyle.style)
+    }
+    else if (_get(layer, 'options.icon.options.mrSvgMarker')) {
+      // Restore icon, either SVG or original Leaflet
+      layer._removeIcon()
+      if (_get(priorStyle.icon, 'options.mrSvgMarker')) {
+        layer.setIcon(L.vectorIcon(priorStyle.icon.options))
+      }
+      else {
+        layer.setIcon(new L.Icon.Default())
+      }
+    }
+  }
+
+  /**
    * Styles the given Leaflet layer using the given simplestyles object of
    * simplestyle property names and desired values
    */
@@ -91,6 +145,7 @@ export class AsSimpleStyleableFeature {
     }
 
     const customMarker = {
+      mrSvgMarker: true,
       className: 'location-marker-icon',
       viewBox: '0 0 20 20',
       svgHeight: 40,
@@ -103,8 +158,11 @@ export class AsSimpleStyleableFeature {
         fill: colors['blue-leaflet'],
         stroke: colors['grey-leaflet'],
         strokeWidth: 0.5,
+        marginTop: '0px',
+        marginLeft: '0px',
       },
-      iconAnchor: [5, 15], // render tip of SVG near marker location
+      iconSize: [40, 40],
+      iconAnchor: [20, 40], // tip of marker
     }
 
     let useCustomMarker = false
@@ -121,10 +179,14 @@ export class AsSimpleStyleableFeature {
             case 'small':
               customMarker.svgHeight = 20
               customMarker.svgWidth = 20
+              customMarker.iconAnchor = [10, 20]
+              customMarker.iconSize = [20, 20]
               break
             case 'large':
               customMarker.svgHeight = 60
               customMarker.svgWidth = 60
+              customMarker.iconAnchor = [30, 60]
+              customMarker.iconSize = [60, 60]
               break
             default:
               // medium is already the default size
@@ -136,9 +198,44 @@ export class AsSimpleStyleableFeature {
       }
     })
 
+    // If the layer already has one of our svg markers, make sure to clean it
+    // up or else Leaflet has a tendencey to render dup markers
+    if (_get(layer, 'options.icon.options.mrSvgMarker')) {
+      layer._removeIcon()
+
+      if (!useCustomMarker) {
+        layer.setIcon(new L.Icon.Default())
+      }
+    }
+
     if (useCustomMarker) {
       layer.setIcon(L.vectorIcon(customMarker))
     }
+  }
+
+  /**
+   * Returns active marker-specific simplestyles for the current layer, or
+   * empty object if there are none for this layer
+   */
+  markerSimplestyles(layer) {
+    const styles = {}
+    if (_get(layer, 'options.icon.options.mrSvgMarker')) {
+      styles["marker-color"] = layer.options.icon.options.style.fill
+
+      switch(layer.options.icon.options.svgHeight) {
+        case 20:
+          styles["marker-size"] = 'small'
+          break
+        case 60:
+          styles["marker-size"] = 'large'
+          break
+        default:
+          styles["marker-size"] = 'medium'
+          break
+      }
+    }
+
+    return styles
   }
 
   /**

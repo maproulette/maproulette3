@@ -94,6 +94,8 @@ import './EditChallenge.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class EditChallenge extends Component {
+  challengeState = null
+
   state = {
     formData: {},
     formContext: {},
@@ -105,6 +107,7 @@ export class EditChallenge extends Component {
   isFinishing = false
 
   componentDidMount() {
+    this.challengeState = this.props.history.location.state
     window.scrollTo(0, 0)
   }
 
@@ -276,8 +279,10 @@ export class EditChallenge extends Component {
     this.prepareFormDataForSaving().then(formData => {
       return this.props.saveChallenge(formData).then(challenge => {
         if (_isObject(challenge) && _isNumber(challenge.parent)) {
-          this.props.history.push(
-            `/admin/project/${challenge.parent}/challenge/${challenge.id}`)
+          this.props.history.push({
+            pathname: `/admin/project/${challenge.parent}/challenge/${challenge.id}`,
+            state: this.challengeState
+          })
         }
         else {
           this.finishing = false
@@ -290,8 +295,9 @@ export class EditChallenge extends Component {
   /** Cancel editing */
   cancel = () => {
     _isObject(this.props.challenge) ?
-      this.props.history.push(
-        `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`) :
+      this.props.history.push({
+        pathname: `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`,
+        state: this.challengeState }) :
       this.props.history.push(`/admin/project/${this.props.project.id}`)
   }
 
@@ -622,6 +628,7 @@ export class EditChallenge extends Component {
               cancel={this.cancel}
               isCloningChallenge={this.isCloningChallenge}
               isNewChallenge={isNewChallenge}
+              challengeState={this.challengeState}
             >
               <div className="mr-flex">
                 <div className="mr-w-54 mr-flex mr-flex-col mr-items-center mr-bg-blue-darker mr-rounded-l mr-pt-8">
@@ -742,6 +749,7 @@ export class EditChallenge extends Component {
             cancel={this.cancel}
             isCloningChallenge={this.isCloningChallenge}
             isNewChallenge={isNewChallenge}
+            challengeState={this.challengeState}
           >
             {this.state.showTaskStyleRules &&
               <External>
@@ -919,7 +927,10 @@ const BreadcrumbWrapper = props => {
                 </li>
                 {_isObject(props.challenge) &&
                   <li>
-                    <Link to={`/admin/project/${props.project.id}/challenge/${props.challenge.id}`}>
+                    <Link to={{
+                      pathname: `/admin/project/${props.project.id}/challenge/${props.challenge.id}`,
+                      state: props.challengeState
+                    }}>
                       {props.challenge.name}
                     </Link>
                   </li>

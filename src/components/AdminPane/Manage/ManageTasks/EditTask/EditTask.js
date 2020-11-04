@@ -41,6 +41,8 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class EditTask extends Component {
+  challengeState = null
+
   state = {
     formData: {},
     isSaving: false,
@@ -55,14 +57,18 @@ export class EditTask extends Component {
    */
   rerouteAfterCompletion = () => {
     if (_get(this.props, 'location.state.fromTaskInspect')) {
-      this.props.history.push(
-        `/admin/project/${this.props.projectId}/` +
-        `challenge/${this.props.challengeId}/task/${this.props.task.id}/inspect`
-      )
+      this.props.history.push({
+        pathname: `/admin/project/${this.props.projectId}/` +
+          `challenge/${this.props.challengeId}/task/${this.props.task.id}/inspect`,
+        state: this.challengeState
+      })
     }
     else {
-      this.props.history.push(`/admin/project/${this.props.projectId}/` +
-                              `challenge/${this.props.challengeId}`)
+      this.props.history.push({
+        pathname:`/admin/project/${this.props.projectId}/` +
+          `challenge/${this.props.challengeId}`,
+        state: this.challengeState
+      })
     }
   }
 
@@ -81,6 +87,7 @@ export class EditTask extends Component {
   cancel = () => this.rerouteAfterCompletion()
 
   componentDidMount() {
+    this.challengeState = this.props.history.location.state
     window.scrollTo(0, 0)
   }
 
@@ -152,7 +159,10 @@ export class EditTask extends Component {
                   </li>
                   {_isObject(this.props.challenge) &&
                     <li>
-                      <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
+                      <Link to={{
+                        pathname: `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`,
+                        state: this.challengeState
+                      }}>
                         {this.props.challenge.name}
                       </Link>
                     </li>

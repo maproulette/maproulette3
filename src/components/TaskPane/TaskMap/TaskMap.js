@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, LayerGroup, Marker, Popup } from 'react-leaflet'
-import L from 'leaflet'
+import { ZoomControl, LayerGroup, Pane } from 'react-leaflet'
 import { featureCollection } from '@turf/helpers'
 import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
@@ -13,11 +12,14 @@ import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
 import _each from 'lodash/each'
+import _sortBy from 'lodash/sortBy'
 import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
 import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
-import { buildLayerSources } from '../../../services/VisibleLayer/LayerSources'
+import _uniqueId from 'lodash/uniqueId'
+import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
+       from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import DirectionalIndicationMarker
        from '../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker'
@@ -26,9 +28,12 @@ import OpenStreetCamViewer from '../../OpenStreetCamViewer/OpenStreetCamViewer'
 import SourcedTileLayer
        from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import OSMDataLayer from '../../EnhancedMap/OSMDataLayer/OSMDataLayer'
+import ImageMarkerLayer from '../../EnhancedMap/ImageMarkerLayer/ImageMarkerLayer'
+import TaskFeatureLayer from '../../EnhancedMap/TaskFeatureLayer/TaskFeatureLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
 import FitBoundsControl
        from '../../EnhancedMap/FitBoundsControl/FitBoundsControl'
+import MapAnimator from '../../EnhancedMap/MapAnimator/MapAnimator'
 import WithTaskCenterPoint
        from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
 import WithSearch from '../../HOCs/WithSearch/WithSearch'
@@ -61,6 +66,7 @@ const shortcutGroup = 'layers'
  */
 export class TaskMap extends Component {
   latestBounds = null // track latest map bounds without causing rerender
+  animator = new MapAnimator()
 
   state = {
     showTaskFeatures: true,
@@ -76,7 +82,7 @@ export class TaskMap extends Component {
     openStreetCamViewerImage: null,
     skipFit: false,
     latestZoom: null,
-    directionalityIndicators: [],
+    directionalityIndicators: {},
   }
 
   /** Process keyboard shortcuts for the layers */
@@ -283,6 +289,11 @@ export class TaskMap extends Component {
       return true
     }
 
+    if (!_isEqual(this.props.getUserAppSetting(nextProps.user, 'mapOverlayOrder'),
+                  this.props.getUserAppSetting(this.props.user, 'mapOverlayOrder'))) {
+      return true
+    }
+
     if (!_isEqual(_get(nextProps, 'taskBundle.taskIds'),
                   _get(this.props, 'taskBundle.taskIds'))) {
       return true
@@ -356,58 +367,35 @@ export class TaskMap extends Component {
     }
   }
 
-  mapillaryImageMarkers = () => {
-    return this.streetLevelImageMarkers(
-      "Mapillary",
-      this.props.mapillaryImages,
-      'mapillaryViewerImage',
-      "#39AF64" // Mapillary green
-    )
-  }
+  mapillaryImageMarkers = () => ({
+    id: "mapillary",
+    component: (
+      <ImageMarkerLayer
+        key="mapillary"
+        mrLayerId="mapillary"
+        mrLayerLabel="Mapillary"
+        images={this.props.mapillaryImages}
+        markerColor="#39AF64"
+        imageClicked={imageKey => this.setState({"mapillaryViewerImage": imageKey})}
+        imageAlt="Mapillary"
+      />
+    ),
+  })
 
-  openStreetCamImageMarkers = () => {
-    return this.streetLevelImageMarkers(
-      "OpenStreetCam",
-      this.props.openStreetCamImages,
-      'openStreetCamViewerImage',
-      "#C851E0" // OpenStreetCam magenta
-    )
-  }
-
-  streetLevelImageMarkers = (serviceName, images, viewerName, markerColor, imageAlt) => {
-    if (!images || images.length === 0) {
-      return []
-    }
-
-    const icon = L.vectorIcon({
-      svgHeight: 12,
-      svgWidth: 12,
-      viewBox: '0 0 12 12',
-      type: 'circle',
-      shape: { r: 6, cx: 6, cy: 6 },
-      style: { fill: markerColor },
-    })
-
-    const markers = _map(images, imageInfo =>
-      <Marker
-        key={imageInfo.key}
-        position={[imageInfo.lat, imageInfo.lon]}
-        icon={icon}
-        onMouseover={({target}) => target.openPopup()}
-        onClick={() => this.setState({[viewerName]: imageInfo.key})}
-      >
-        <Popup>
-          <img
-            src={imageInfo.url}
-            alt={`From ${serviceName}`}
-            onClick={() => this.setState({[viewerName]: imageInfo.key})}
-          />
-        </Popup>
-      </Marker>
-    )
-
-    return <LayerGroup key={Date.now()}>{markers}</LayerGroup>
-  }
+  openStreetCamImageMarkers = () => ({
+    id: "openstreetcam",
+    component: (
+      <ImageMarkerLayer
+        key="openstreetcam"
+        mrLayerId="openstreetcam"
+        mrLayerLabel="OpenStreetCam"
+        images={this.props.openStreetCamImages}
+        markerColor="#C851E0"
+        imageClicked={imageKey => this.setState({"openStreetCamViewerImage": imageKey})}
+        imageAlt="OpenStreetCam"
+      />
+    ),
+  })
 
   generateDirectionalityMarkers = () => {
     const markers = []
@@ -446,7 +434,12 @@ export class TaskMap extends Component {
       }
     })
 
-    this.setState({directionalityIndicators: markers})
+    this.setState({
+      directionalityIndicators: {
+        id: "directionality-indicators",
+        component: <LayerGroup key="directionality-indicators">{markers}</LayerGroup>,
+      }
+    })
   }
 
   taskFeatures = () => {
@@ -487,25 +480,81 @@ export class TaskMap extends Component {
   }
 
   render() {
+    const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
+    const minZoom = _get(this.props.task, "parent.minZoom", MIN_ZOOM)
+    const maxZoom = _get(this.props.task, "parent.maxZoom", MAX_ZOOM)
+    const renderId = _uniqueId()
+    let overlayOrder = this.props.getUserAppSetting(this.props.user, 'mapOverlayOrder')
+    if (_isEmpty(overlayOrder)) {
+      overlayOrder = DEFAULT_OVERLAY_ORDER
+    }
+
+    this.animator.reset()
+
     if (!this.props.task || !_isObject(this.props.task.parent)) {
       return <BusySpinner />
     }
 
-    const overlayLayers = buildLayerSources(
+    let overlayLayers = buildLayerSources(
       this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
-      (layerId, index, layerSource) =>
-        <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
+      (layerId, index, layerSource) => ({
+        id: layerId,
+        component: <SourcedTileLayer key={layerId} source={layerSource} mrLayerId={layerId} />,
+      })
     )
 
-    const mapillaryMarkers = this.props.showMapillaryLayer ?
-                             this.mapillaryImageMarkers() : []
+    if (this.state.showTaskFeatures) {
+      overlayLayers.push({
+        id: "task-features",
+        component: (
+          <TaskFeatureLayer
+            key="task-features"
+            mrLayerId="task-features"
+            features={this.applyStyling(this.taskFeatures())}
+            animator={this.animator}
+            externalInteractive
+          />
+        )
+      })
+    }
 
-    const openStreetCamMarkers = this.props.showOpenStreetCamLayer ?
-                                 this.openStreetCamImageMarkers() : []
+    if (this.props.showMapillaryLayer) {
+      overlayLayers.push(this.mapillaryImageMarkers())
+    }
 
-    const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
-    const minZoom = _get(this.props.task, "parent.minZoom", MIN_ZOOM)
-    const maxZoom = _get(this.props.task, "parent.maxZoom", MAX_ZOOM)
+    if (this.props.showOpenStreetCamLayer) {
+      overlayLayers.push(this.openStreetCamImageMarkers())
+    }
+
+    if (this.state.showOSMData && this.state.osmData) {
+      overlayLayers.push({
+        id: "osm-data",
+        component: (
+          <OSMDataLayer
+            key="osm-data"
+            mrLayerId="osm-data"
+            xmlData={this.state.osmData}
+            zoom={_isFinite(this.state.latestZoom) ? this.state.latestZoom : zoom}
+            showOSMElements={this.state.showOSMElements}
+            animator={this.animator}
+            externalInteractive
+          />
+        ),
+      })
+    }
+
+    if (this.state.showTaskFeatures && !_isEmpty(this.state.directionalityIndicators)) {
+      overlayLayers.push(this.state.directionalityIndicators)
+    }
+
+    // Sort the overlays according to the user's preferences. We then reverse
+    // that order because the layer rendered on the map last will be on top
+    if (overlayOrder && overlayOrder.length > 0) {
+      overlayLayers = _sortBy(overlayLayers, layer => {
+        const position = overlayOrder.indexOf(layer.id)
+        return position === -1 ? Number.MAX_SAFE_INTEGER : position
+      }).reverse()
+    }
 
     // Note: we need to also pass maxZoom to the tile layer (in addition to the
     // map), or else leaflet won't autoscale if the zoom goes beyond the
@@ -528,6 +577,7 @@ export class TaskMap extends Component {
           toggleOpenStreetCam={this.props.isOpenStreetCamEnabled() ? this.toggleOpenStreetCamVisibility : undefined}
           showOpenStreetCam={this.props.showOpenStreetCamLayer}
           openStreetCamCount={_get(this.props, 'openStreetCamImages.length', 0)}
+          overlayOrder={overlayOrder}
         />
         <EnhancedMap
           center={this.props.centerPoint}
@@ -536,28 +586,27 @@ export class TaskMap extends Component {
           minZoom={minZoom}
           maxZoom={maxZoom}
           worldCopyJump={true}
-          features={this.applyStyling(this.taskFeatures())}
-          justFitFeatures={!this.state.showTaskFeatures}
-          skipFit={this.state.skipFit}
-          fitFeaturesOnlyAsNecessary
-          animateFeatures
+          fitToLayer={this.state.skipFit ? null : 'task-features'}
+          fitBoundsOnlyAsNecessary
+          animator={this.animator}
           onBoundsChange={this.updateTaskBounds}
           conditionalStyles={_get(this.props, 'challenge.taskStyles')}
+          externalInteractive
+          overlayOrder={overlayOrder}
         >
           <ZoomControl position='topright' />
           <FitBoundsControl />
-          <SourcedTileLayer maxZoom={maxZoom} {...this.props} zIndex={1} />
-          {overlayLayers}
-          {this.state.showOSMData && this.state.osmData &&
-           <OSMDataLayer
-             xmlData={this.state.osmData}
-             zoom={_isFinite(this.state.latestZoom) ? this.state.latestZoom : zoom}
-             showOSMElements={this.state.showOSMElements}
-           />
-          }
-          {this.props.showMapillaryLayer && mapillaryMarkers}
-          {this.props.showOpenStreetCamLayer && openStreetCamMarkers}
-          {this.state.showTaskFeatures && this.state.directionalityIndicators}
+          <SourcedTileLayer maxZoom={maxZoom} {...this.props} />
+          {_map(overlayLayers, (layer, index) => (
+            <Pane
+              key={`pane-${renderId}-${index}`}
+              name={`pane-${index}`}
+              style={{zIndex: 10 + index}}
+              className="custom-pane"
+            >
+              {layer.component}
+            </Pane>
+          ))}
         </EnhancedMap>
 
         {this.state.mapillaryViewerImage &&

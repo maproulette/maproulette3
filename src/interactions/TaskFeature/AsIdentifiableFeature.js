@@ -1,4 +1,5 @@
 import _find from 'lodash/find'
+import _get from 'lodash/get'
 import _isUndefined from 'lodash/isUndefined'
 
 /**
@@ -53,6 +54,68 @@ export class AsIdentifiableFeature {
     // numerical OSM id
     const match = /(\d+)/.exec(featureId)
     return (match && match.length > 1) ? match[1] : null
+  }
+
+  /**
+   * Extracts the OSM element from the raw feature id (falling back to a `type`
+   * property if none is found in the id) and returns 'node', 'way', or
+   * 'relation', or null if no type is detected
+   */
+  osmType() {
+    const typeRe = /^(node|way|relation|n|r|w)/
+
+    let featureType = this.rawFeatureId()
+    if (!typeRe.test(featureType)) {
+      featureType = this.properties.type
+      if (!typeRe.test(featureType)) {
+        // No luck finding an explicit type. Try to infer from the geometry
+        const geometryType = _get(this, 'geometry.type')
+        if (geometryType === "Point") {
+          featureType = "node"
+        }
+        else if (geometryType === "LineString") {
+          featureType = "way"
+        }
+      }
+    }
+
+    const match = typeRe.exec(featureType)
+    if (match) {
+      switch (match[0]) {
+        case 'node':
+        case 'n':
+          return 'node'
+        case 'way':
+        case 'w':
+          return 'way'
+        case 'relation':
+        case 'r':
+          return 'relation'
+        default:
+          return null
+      }
+    }
+
+    return null
+  }
+
+  /**
+   * Returns the type and id in the form of `type id`, or just id if no type
+   * can be found. Returns null if no id can be found
+   */
+  normalizedTypeAndId(requireType=false, separator=' ') {
+    const osmId = this.osmId()
+    if (!osmId) {
+      // We must have at least an id
+      return null
+    }
+
+    const osmType = this.osmType()
+    if (requireType && !osmType) {
+      return null
+    }
+
+    return (osmType ? `${osmType}${separator}` : '') + osmId
   }
 
   isValidId(id) {

@@ -186,11 +186,19 @@ const UnreadNotificationsIndicator = function(props) {
   }
 
   return (
-    <span
-      className={classNames("mr-rounded-full mr-bg-red-light mr-text-white", {
-                            "mr-absolute mr-top-0 mr-left-50 mr-translate-x-1/2 mr-w-3 mr-h-3": !props.inline,
-                            "mr-inline-block mr-ml-2 mr-w-2 mr-h-2": props.inline})}
-    />
+    <div
+      className={classNames(
+        "mr-rounded-full mr-bg-red-light mr-flex mr-justify-center mr-items-center",
+        {
+          "mr-absolute mr-top-0 mr-left-45/100 mr-translate-x-1/2 mr-w-5 mr-h-5": !props.inline,
+          "mr-inline-block mr-ml-2 mr-w-5 mr-h-5": props.inline,
+        }
+      )}
+    >
+      <div className="mr-text-white mr-text-xxs">
+        {props.user.unreadNotificationCount}
+      </div>
+    </div>
   )
 }
 
@@ -199,8 +207,10 @@ const ProfileMenu = function(props) {
     <ol className="mr-list-dropdown">
       <li>
         <NavLink to="/inbox" onClick={props.closeDropdown}>
-          <FormattedMessage {...messages.inbox} />
-          <UnreadNotificationsIndicator {...props} inline />
+          <div className="mr-flex">
+            <FormattedMessage {...messages.inbox} />
+            <UnreadNotificationsIndicator {...props} inline />
+          </div>
         </NavLink>
       </li>
       <li>

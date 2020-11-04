@@ -138,6 +138,7 @@ export class TaskConfirmationModal extends Component {
           narrow={!loadingNearby}
           medium={reviewConfirmation && !loadingNearby}
           isActive
+          allowOverflow
           onClose={this.props.onCancel}
         >
           <div className={loadingNearby ? "mr-flex mr-justify-center" : ''}>

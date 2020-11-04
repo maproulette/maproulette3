@@ -4,6 +4,7 @@ import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import _isFinite from 'lodash/isFinite'
+import _isPlainObject from 'lodash/isPlainObject'
 import { Link } from 'react-router-dom'
 import { WidgetDataTarget, registerWidgetType }
        from '../../services/Widget/Widget'
@@ -55,11 +56,23 @@ const SavedChallengeList = function(props) {
       return (
         <li
           key={challenge.id}
-          className="mr-my-2 mr-flex mr-justify-between mr-items-center"
+          className="mr-py-2 mr-flex mr-justify-between mr-items-center"
         >
-          <Link to={`/browse/challenges/${challenge.id}`}>
-            {challenge.name}
-          </Link>
+          <div class="mr-flex mr-flex-col">
+            <Link to={`/browse/challenges/${challenge.id}`}>
+              {challenge.name}
+            </Link>
+            {_isPlainObject(challenge.parent) && // virtual challenges don't have projects
+              <div className="mr-links-grey-light">
+                <Link
+                  onClick={e => {e.stopPropagation()}}
+                  to={`/browse/projects/${challenge.parent.id}`}
+                >
+                  {challenge.parent.displayName || challenge.parent.name}
+                </Link>
+              </div>
+            }
+          </div>
           <div className="mr-h-5">
             <Dropdown
               className="mr-dropdown--right"

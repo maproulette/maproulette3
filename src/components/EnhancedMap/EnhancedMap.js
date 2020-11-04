@@ -1,15 +1,27 @@
-import React from 'react'
+import React  from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import { Map } from 'react-leaflet'
-import { geoJSON, LatLngBounds, LatLng, latLng } from 'leaflet'
+import { injectIntl } from 'react-intl'
+import { Map as ReactLeafletMap } from 'react-leaflet'
+import { LatLngBounds, LatLng, Point, latLng } from 'leaflet'
+import L from 'leaflet'
+import bboxPolygon from '@turf/bbox-polygon'
+import booleanDisjoint from '@turf/boolean-disjoint'
+import booleanContains from '@turf/boolean-contains'
+import _get from 'lodash/get'
+import _each from 'lodash/each'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
-import _isFunction from 'lodash/isFunction'
 import _isFinite from 'lodash/isFinite'
-import AsSimpleStyleableFeature
-       from '../../interactions/TaskFeature/AsSimpleStyleableFeature'
-import PropertyList from './PropertyList/PropertyList'
+import _isArray from 'lodash/isArray'
+import _sortBy from 'lodash/sortBy'
+import _filter from 'lodash/filter'
+import _reduce from 'lodash/reduce'
+import AsIdentifiableFeature
+       from '../../interactions/TaskFeature/AsIdentifiableFeature'
+import messages from './Messages'
+
+const PIXEL_MARGIN = 10 // number of pixels on each side of a click to consider
 
 /**
  * EnhancedMap is an extension of the react-leaflet Map that provides
@@ -24,9 +36,9 @@ import PropertyList from './PropertyList/PropertyList'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class EnhancedMap extends Map {
-  currentFeatures = null
+export class EnhancedMap extends ReactLeafletMap {
   animationHandle = null
+  mapBoundsFitToLayer = false
   mapMoved = false
 
   /**
@@ -51,17 +63,6 @@ export default class EnhancedMap extends Map {
                                   this.leafletElement.getSize())
       }
     }
-  }
-
-  /**
-   * Schedules animation of SVG paths and markers on map. If animation is
-   * already pending, it is first cancelled prior to scheduling a new one.
-   */
-  scheduleAnimation = () => {
-    if (this.animationHandle) {
-      clearTimeout(this.animationHandle)
-    }
-    this.animationHandle = setTimeout(this.animateFeatures, 250)
   }
 
   /**
@@ -120,66 +121,82 @@ export default class EnhancedMap extends Map {
     }
   }
 
-  updateFeatures = (newFeatures) => {
-    const hasExistingFeatures = !_isEmpty(this.currentFeatures)
-    if (hasExistingFeatures) {
-      this.currentFeatures.remove()
+  fitBoundsToLayer = () => {
+    if (_isEmpty(this.props.fitToLayer)) {
+      return
     }
 
-    if (!_isEmpty(newFeatures)) {
-      this.currentFeatures = geoJSON(newFeatures, {
-        onEachFeature: (feature, layer) => {
-          layer.bindPopup(() => this.propertyList(feature.properties))
-
-          // Animate features when added to map (if requested)
-          if (this.props.animateFeatures) {
-            const oldOnAdd = layer.onAdd
-            layer.onAdd = map => {
-              oldOnAdd.call(layer, map)
-              this.scheduleAnimation()
-            }
-          }
-
-          // Support custom layer styling
-          if (_isFunction(feature.styleLeafletLayer)) {
-            feature.styleLeafletLayer(layer)
-          }
-          else {
-            AsSimpleStyleableFeature(feature).styleLeafletLayer(layer)
-          }
+    // Use a timeout to give Leaflet a chance to re-render its layers
+    // after a React render
+    setTimeout(() => {
+      let layerBounds = null
+      this.leafletElement.eachLayer(layer => {
+        if (_get(layer, 'options.mrLayerId') === this.props.fitToLayer && layer.getBounds) {
+          layerBounds = layer.getBounds()
         }
       })
 
-      if (!this.props.justFitFeatures) {
-        this.currentFeatures.addTo(this.leafletElement)
-      }
-
-      // By default, we always fit the map bounds to the task features.
+      // By default, we always fit the map bounds to the fit Layer.
       // However, if we're only supposed to fit the features as necessary, then
-      // we do it for initial task (no existing features) or if the new task
+      // we do it for initial render (no updates) or if the layer
       // features wouldn't all be displayed at the present zoom level.
-      if (!this.props.skipFit &&
-          (
-            !this.props.fitFeaturesOnlyAsNecessary ||
-            !hasExistingFeatures ||
-            !this.leafletElement.getBounds().contains(this.currentFeatures.getBounds())
+      if (layerBounds && (
+            !this.props.fitBoundsOnlyAsNecessary ||
+            !this.mapBoundsFitToLayer ||
+            !this.leafletElement.getBounds().contains(layerBounds)
           )) {
-        this.leafletElement.fitBounds(this.currentFeatures.getBounds().pad(0.5))
+        this.leafletElement.fitBounds(layerBounds.pad(0.5))
       }
-    }
+    }, 0)
   }
 
-  propertyList = featureProperties => {
-    const contentElement = document.createElement('div')
-    ReactDOM.render(
-      <PropertyList featureProperties={featureProperties} />,
-      contentElement
+
+  /**
+   * Return bounding polygon centered around clicked layer point, with
+   * PIXEL_MARGIN on each side of the point
+   */
+  getClickPolygon = clickEvent => {
+    const center = clickEvent.layerPoint
+    const nw = this.leafletElement.layerPointToLatLng(new Point(center.x - PIXEL_MARGIN, center.y - PIXEL_MARGIN))
+    const se = this.leafletElement.layerPointToLatLng(new Point(center.x + PIXEL_MARGIN, center.y + PIXEL_MARGIN))
+    return bboxPolygon([nw.lng, se.lat, se.lng, nw.lat])
+  }
+
+  /**
+   * Determines if a click was within a marker's icon, which could potentially
+   * extend far beyond our PIXEL_MARGIN from the marker's represened point
+   */
+  isClickOnMarker = (clickPolygon, marker) => {
+    const icon = marker.getIcon()
+    const iconOptions = Object.assign({}, Object.getPrototypeOf(icon).options, icon.options)
+    const markerPoint = this.leafletElement.containerPointToLayerPoint(
+      this.leafletElement.latLngToContainerPoint(marker.getLatLng())
     )
-    return contentElement
+
+    // We need an iconAnchor and iconSize to continue
+    if (!_isArray(iconOptions.iconAnchor) || !_isArray(iconOptions.iconSize)) {
+      return false
+    }
+
+    const nw = this.leafletElement.layerPointToLatLng(new Point(
+      markerPoint.x - iconOptions.iconAnchor[0],
+      markerPoint.y - iconOptions.iconAnchor[1]
+    ))
+    const se = this.leafletElement.layerPointToLatLng(new Point(
+      markerPoint.x + (iconOptions.iconSize[0] - iconOptions.iconAnchor[0]),
+      markerPoint.y + (iconOptions.iconSize[1] - iconOptions.iconAnchor[1])
+    ))
+    const markerPolygon = bboxPolygon([nw.lng, se.lat, se.lng, nw.lat])
+
+    return !booleanDisjoint(clickPolygon, markerPolygon)
   }
 
   componentDidMount() {
     super.componentDidMount()
+
+    if (this.props.animator) {
+      this.props.animator.setAnimationFunction(this.animateFeatures)
+    }
 
     if (this.props.noAttributionPrefix) {
       this.leafletElement.attributionControl.setPrefix(false)
@@ -187,8 +204,8 @@ export default class EnhancedMap extends Map {
 
     // If there are geojson features, add them to the leaflet map and then
     // fit the map to the bounds of those features.
-    if (this.props.features) {
-      this.updateFeatures(this.props.features)
+    if (this.props.fitToLayer) {
+      this.fitBoundsToLayer()
     }
 
     // Setup event handlers for moveend and zoomend events if the parent
@@ -208,9 +225,153 @@ export default class EnhancedMap extends Map {
     if (this.props.initialBounds && _isFinite(this.props.initialBounds.getNorth())) {
       this.leafletElement.fitBounds(this.props.initialBounds)
     }
+
+    if (this.props.externalInteractive) {
+      this.leafletElement.on('click', e => {
+        const clickBounds = this.getClickPolygon(e)
+        const candidateLayers = new Map()
+        this.leafletElement.eachLayer(layer => {
+          if (!_isEmpty(layer._layers)) {
+            // multiple features in a layer could match. Detect them and then
+            // put them into an intuitive order
+            const intraLayerMatches = []
+            _each(layer._layers, featureLayer => {
+              if (featureLayer.toGeoJSON) {
+                const featureGeojson = featureLayer.toGeoJSON()
+                // Look for an overlap between the click and the feature. However, since marker
+                // layers are represented by an icon (which could extend far beyond the feature
+                // plus our usual pixel margin), check for a click on the marker itself as well
+                if ((featureLayer.getIcon && this.isClickOnMarker(clickBounds, featureLayer)) ||
+                    !booleanDisjoint(clickBounds, featureGeojson)) {
+                  const featureId = AsIdentifiableFeature(featureGeojson).normalizedTypeAndId()
+                  const featureName = _get(featureGeojson, 'properties.name')
+                  let layerDescription =
+                    (featureLayer.options.mrLayerLabel || '') + (featureId ? `: ${featureId}` : '')
+                  if (!layerDescription) {
+                    // worst case, fall back to a layer id (ours, preferably, or leaflet's)
+                    layerDescription = `Layer ${featureLayer.mrLayerId || featureLayer._leaflet_id}`
+                  }
+
+                  const layerLabel = featureName ? (
+                    <React.Fragment>
+                      <div>{layerDescription}</div>
+                      <div className="mr-text-grey-light mr-text-xs">{featureName}</div>
+                    </React.Fragment>
+                  ) : layerDescription
+
+                  intraLayerMatches.push({
+                    mrLayerId: featureLayer.options.mrLayerId,
+                    description: layerDescription,
+                    label: layerLabel,
+                    geometry: featureGeojson,
+                    layer: featureLayer,
+                  })
+                }
+              }
+            })
+
+            if (intraLayerMatches.length > 0) {
+              this.orderedFeatureLayers(intraLayerMatches).forEach(match => {
+                candidateLayers.set(match.description, match)
+              })
+            }
+          }
+        })
+
+        if (candidateLayers.size === 1) {
+          candidateLayers.values().next().value.layer.fire('mr-external-interaction', {
+            map: this.leafletElement,
+            latlng: e.latlng,
+          })
+        }
+        else if (candidateLayers.size > 1) {
+          let layers = [...candidateLayers.entries()]
+          if (this.props.overlayOrder && this.props.overlayOrder.length > 0) {
+            layers = _sortBy(layers, layerEntry => {
+              const position = this.props.overlayOrder.indexOf(layerEntry[1].mrLayerId)
+              return position === -1 ? Number.MAX_SAFE_INTEGER : position
+            })
+          }
+
+          this.popupLayerSelectionList(layers, e.latlng)
+        }
+      })
+    }
+  }
+
+  /**
+   * Simple sorting of multiple related feature layers (such as all in a single map
+   * layer) by geometry type into order of: points, lineStrings, surrounded polygons,
+   * surrounding polygons. Each layer should be an object with a `geometry` field
+   */
+  orderedFeatureLayers(layers) {
+    if (!layers || layers.length < 2) {
+      return layers // nothing to do
+    }
+
+    // We'll process polygons separately
+    const geometryOrder = ['Point', 'MultiPoint', 'LineString', 'MultiLineString']
+    const orderedLayers = _sortBy(
+      _filter(layers, l => geometryOrder.indexOf(l.geometry.type) !== -1), // no polygons yet
+      l => geometryOrder.indexOf(l.geometry.type)
+    )
+
+    // Now order any polygons by number of enclosing polygons, so enclosed will come
+    // before enclosing
+    const polygonLayers = _filter(layers, l => l.geometry.type === 'Polygon' || l.geometry.type === 'MultiPolygon')
+    const orderedPolygons = polygonLayers.length < 2 ? polygonLayers : _sortBy(
+      polygonLayers,
+      l => _reduce(
+        polygonLayers,
+        (count, other) => {
+          return booleanContains(other.geometry, l.geometry) ? count + 1 : count
+        },
+        0
+      )
+    ).reverse()
+
+    return orderedLayers.concat(orderedPolygons)
+  }
+
+  popupLayerSelectionList = (layers, latlng) => {
+    const contentElement = document.createElement('div')
+    ReactDOM.render(
+      <div className="mr-text-base mr-px-4 mr-links-blue-light">
+        <h3>{this.props.intl.formatMessage(messages.layerSelectionHeader)}</h3>
+        <ol>
+          {layers.map(([description, layerInfo]) => {
+            return (
+              <li key={description} className="mr-my-4">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a
+                  onClick={() => layerInfo.layer.fire('mr-external-interaction', {
+                    map: this.leafletElement,
+                    latlng: latlng,
+                    onBack: () => this.popupLayerSelectionList(layers, latlng),
+                  })}
+                  onMouseEnter={() => layerInfo.layer.fire("mr-external-interaction:start-preview")}
+                  onMouseLeave={() => layerInfo.layer.fire("mr-external-interaction:end-preview")}
+                >
+                  {layerInfo.label || description}
+                </a>
+              </li>
+            )
+          })}
+        </ol>
+      </div>,
+      contentElement
+    )
+
+    L.popup({
+      closeOnEscapeKey: false, // Otherwise our links won't get a onMouseLeave event
+    }).setLatLng(latlng).setContent(contentElement).openOn(this.leafletElement)
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.props.animator) {
+      this.props.animator.setAnimationFunction(this.animateFeatures)
+    }
+
     if (this.props.initialBounds && _isFinite(this.props.initialBounds.getNorth())) {
       this.leafletElement.fitBounds(this.props.initialBounds)
     }
@@ -218,13 +379,16 @@ export default class EnhancedMap extends Map {
       this.leafletElement.panTo(this.props.center)
     }
 
-    if (!_isEqual(this.props.features, prevProps.features) ||
-        this.props.justFitFeatures !== prevProps.justFitFeatures) {
-      this.updateFeatures(this.props.features)
+    if (!_isEqual(this.props.fitToLayer, prevProps.fitToLayer)) {
+      this.fitBoundsToLayer()
     }
   }
 
   componentWillUnmount() {
+    if (this.props.animator) {
+      this.props.animator.reset()
+    }
+
     try {
       this.leafletElement.stop()
       this.leafletElement.off('zoomend', this.onZoomOrMoveEnd)
@@ -247,8 +411,10 @@ EnhancedMap.propTypes = {
   onBoundsChange: PropTypes.func,
   /** If false, onBoundsChange will not be invoked for initial bounding box */
   setInitialBounds: PropTypes.bool,
-  /** If true, features will only be used to fit bounds, not rendered */
-  justFitFeatures: PropTypes.bool,
+  /** If given, bounds will be fit to layer with the given mrLayerId */
+  fitToLayer: PropTypes.string,
+  /** If true, bounds will only be fit initially or if deemed necessary */
+  fitBoundsOnlyAsNecessary: PropTypes.bool,
   /** If true, features will be animated when initially added to the map */
   animateFeatures: PropTypes.bool,
 }
@@ -260,3 +426,5 @@ EnhancedMap.defaultProps = {
   justFitFeatures: false,
   animateFeatures: false,
 }
+
+export default injectIntl(EnhancedMap)

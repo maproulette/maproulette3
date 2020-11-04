@@ -16,6 +16,7 @@ import WithUserNotifications
        from '../../components/HOCs/WithUserNotifications/WithUserNotifications'
 import { NotificationType, keysByNotificationType, messagesByNotificationType }
        from '../../services/Notification/NotificationType/NotificationType'
+import { intlTableProps } from '../../components/IntlTable/IntlTable'
 import SignInButton from '../../components/SignInButton/SignInButton'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import TriStateCheckbox from '../../components/Bulma/TriStateCheckbox'
@@ -144,6 +145,7 @@ const Inbox = props => {
             }
             return {style: styles}
           }}
+          {...intlTableProps(props.intl)}
         >
           {(state, makeTable, instance) => {
             if (groupByTask) {

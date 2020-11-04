@@ -309,7 +309,10 @@ const TaskMarkerContent = props => {
       <div className="marker-popup-content__links">
         <div>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a onClick={() => props.history.push(`${taskBaseRoute}/inspect`)}>
+          <a onClick={() => props.history.push({
+            pathname: `${taskBaseRoute}/inspect`,
+            state: props.criteria
+          })}>
             {props.intl.formatMessage(messages.inspectTaskLabel)}
           </a>
         </div>
@@ -317,7 +320,10 @@ const TaskMarkerContent = props => {
         {manager.canWriteProject(props.challenge.parent) &&
           <div>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => props.history.push(`${taskBaseRoute}/edit`)}>
+            <a onClick={() => props.history.push({
+              pathname: `${taskBaseRoute}/edit`,
+              state: props.criteria
+            })}>
               {props.intl.formatMessage(messages.editTaskLabel)}
             </a>
           </div>
@@ -365,7 +371,7 @@ ViewChallengeTasks.defaultProps = {
 export default
 WithBoundedTasks(
   WithTaskPropertyKeys(
-    WithFilterCriteria(ViewChallengeTasks)
+    WithFilterCriteria(ViewChallengeTasks, false)
   ),
   'filteredClusteredTasks',
   'taskInfo'

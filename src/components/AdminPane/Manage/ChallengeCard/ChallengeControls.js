@@ -7,6 +7,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
+import _merge from 'lodash/merge'
 import AsManager from '../../../../interactions/User/AsManager'
 import AsManageableChallenge
        from '../../../../interactions/Challenge/AsManageableChallenge'
@@ -82,8 +83,11 @@ export default class ChallengeControls extends Component {
         {!inVirtualProject && manager.canWriteProject(parent) &&
           <React.Fragment>
             <Link
-              to={`/admin/project/${projectId}/` +
-                  `challenge/${this.props.challenge.id}/edit`}
+              to={{
+                pathname:`/admin/project/${projectId}/` +
+                  `challenge/${this.props.challenge.id}/edit`,
+                state: _get(this.props.searchCriteria, 'filters')
+              }}
               className={this.props.controlClassName}
             >
               <FormattedMessage {...messages.editChallengeLabel } />
@@ -108,7 +112,8 @@ export default class ChallengeControls extends Component {
               to={{
                 pathname: `/admin/project/${projectId}/` +
                           `challenge/${this.props.challenge.id}/clone`,
-                state: {cloneChallenge: true}
+                state: _merge({cloneChallenge: true},
+                   _get(this.props.searchCriteria, 'filters'))
               }}
               className={this.props.controlClassName}
             >
@@ -116,7 +121,18 @@ export default class ChallengeControls extends Component {
             </Link>
 
             {manager.canAdministrateProject(parent) &&
-             <ConfirmAction>
+             <ConfirmAction
+              title={this.props.intl.formatMessage(messages.deleteChallengeConfirm)}
+              prompt={
+                <React.Fragment>
+                  <div className="mr-text-mango mr-mb-6 mr-text-lg">
+                    {this.props.challenge.name}
+                  </div>
+                  <div>
+                    <FormattedMessage {...messages.deleteChallengeWarn} />
+                  </div>
+                </React.Fragment>
+              }>
                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                <a
                  onClick={() => this.deleteChallenge(parent)}

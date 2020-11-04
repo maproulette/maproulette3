@@ -22,6 +22,7 @@ import _filter from 'lodash/filter'
 import _cloneDeep from 'lodash/cloneDeep'
 import _split from 'lodash/split'
 import _isEmpty from 'lodash/isEmpty'
+import _merge from 'lodash/merge'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
@@ -36,6 +37,7 @@ import { mapColors } from '../../interactions/User/AsEndUser'
 import AsManager from '../../interactions/User/AsManager'
 import WithLoadedTask from '../HOCs/WithLoadedTask/WithLoadedTask'
 import WithConfigurableColumns from '../HOCs/WithConfigurableColumns/WithConfigurableColumns'
+import { intlTableProps } from '../../components/IntlTable/IntlTable'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import TaskCommentsModal
@@ -243,6 +245,7 @@ export class TaskAnalysisTable extends Component {
               }
             }}
             loading={this.props.loading}
+            {...intlTableProps(this.props.intl)}
           />
         </section>
         {_isFinite(this.state.openComments) &&
@@ -516,7 +519,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
-            <React.Fragment>
+            <React.Fragment key={reviewer.username + "-" + index}>
               <span style={{color: mapColors(reviewer.username)}}>{reviewer.username}</span>
               {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
             </React.Fragment>
@@ -533,11 +536,17 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     minWidth: 150,
     Cell: ({row}) =>
       <div className="row-controls-column mr-links-green-lighter">
-        <Link to={`${taskBaseRoute}/${row._original.id}/inspect`} className="mr-mr-2">
+        <Link className="mr-mr-2" to={{
+          pathname: `${taskBaseRoute}/${row._original.id}/inspect`,
+          state: props.criteria
+        }}>
           <FormattedMessage {...messages.inspectTaskLabel} />
         </Link>
         {manager.canWriteProject(props.challenge.parent) &&
-         <Link to={`${taskBaseRoute}/${row._original.id}/edit`} className="mr-mr-2">
+         <Link className="mr-mr-2" to={{
+           pathname: `${taskBaseRoute}/${row._original.id}/edit`,
+           state: props.criteria
+         }}>
            <FormattedMessage {...messages.editTaskLabel} />
          </Link>
         }
@@ -546,7 +555,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
            to={{
                   pathname: `/challenge/${props.challenge.id}/task/` +
                             `${row._original.id}/review`,
-                  state: {filters:{challengeId: props.challenge.id}}
+                  state: _merge({filters:{challengeId: props.challenge.id}},
+                                props.criteria)
                 }}
            className="mr-mr-2" >
            <FormattedMessage {...messages.reviewTaskLabel} />

@@ -73,6 +73,15 @@ h4,
   }
 }
 
+.mr-links-blue-light a {
+  @apply mr-text-blue-light;
+
+  &:hover,
+  &.active {
+    @apply mr-text-blue-leaflet;
+  }
+}
+
 .mr-link-list a {
   @apply mr-block mr-mb-2;
 }

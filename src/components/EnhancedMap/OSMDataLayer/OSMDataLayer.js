@@ -1,13 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Path, withLeaflet } from 'react-leaflet'
+import { injectIntl } from 'react-intl'
 import L from 'leaflet'
 import _isEqual from 'lodash/isEqual'
+import _get from 'lodash/get'
+import _omit from 'lodash/omit'
+import AsStylableLayer from '../../../interactions/LeafletLayer/AsStyleableLayer'
 import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
+import layerMessages from '../LayerToggle/Messages'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
+const HIGHLIGHT_STYLE = {
+  color: colors.gold,
+  fillColor: colors.gold,
+  weight: 7,
+}
 
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
@@ -15,19 +25,24 @@ const colors = resolveConfig(tailwindConfig).theme.colors
 export class OSMDataLayer extends Path {
   lastZoom = null
 
-  popupContent(layer) {
+  popupContent(layer, onBack) {
+    const properties = layer.feature.properties
     const header = (
       <a target="_blank"
          rel="noopener noreferrer"
-         href={`https://www.openstreetmap.org/${layer.feature.type}/${layer.feature.id}`}
+         href={`https://www.openstreetmap.org/${properties.type}/${properties.id}`}
       >
-        {layer.feature.type} {layer.feature.id}
+        {properties.type} {properties.id}
       </a>
     )
 
     const contentElement = document.createElement('div')
     ReactDOM.render(
-      <PropertyList header={header} featureProperties={layer.feature.tags} />,
+      <PropertyList
+        header={header}
+        featureProperties={_omit(layer.feature.properties, ['id', 'type'])}
+        onBack={onBack}
+      />,
       contentElement
     )
     return contentElement
@@ -40,9 +55,10 @@ export class OSMDataLayer extends Path {
 
   createLeafletElement(props) {
     this.lastZoom = props.zoom
-    const osmLayerGroup = this.generateLayer(props)
-    osmLayerGroup.on('add', () => osmLayerGroup.bringToBack())
-    return osmLayerGroup
+    return this.generateLayer({
+      mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
+      ...props,
+    })
   }
 
   updateLeafletElement(fromProps, toProps) {
@@ -53,7 +69,6 @@ export class OSMDataLayer extends Path {
       newLayers.eachLayer(layer => this.leafletElement.addLayer(layer))
       this.lastZoom = toProps.zoom
     }
-    this.leafletElement.bringToBack()
   }
 
   generateElementStyles(props) {
@@ -80,15 +95,54 @@ export class OSMDataLayer extends Path {
       showNodes: props.showOSMElements.nodes,
       showWays: props.showOSMElements.ways,
       showAreas: props.showOSMElements.areas,
+      pane: _get(props, 'leaflet.pane'),
     })
 
-    layerGroup.eachLayer(layer => layer.options.fill = false)
-    layerGroup.bindPopup(this.popupContent)
+    layerGroup.eachLayer(layer => {
+      layer.options.mrLayerLabel = props.mrLayerLabel
+      layer.options.fill = false
+      layer.options.pane = layerGroup.options.pane
+      layer.originalToGeoJSON = layer.toGeoJSON
+      layer.toGeoJSON = precision => {
+        const geojson = layer.originalToGeoJSON(precision)
+        return {
+          ...geojson.geometry,
+          properties: layer.feature.properties,
+        }
+      }
+
+      if (props.externalInteractive) {
+        const styleableLayer = AsStylableLayer(layer)
+        layer.on('mr-external-interaction', ({map, latlng, onBack}) => {
+          // Ensure any orphaned preview styles get cleaned up
+          styleableLayer.popStyle('mr-external-interaction:start-preview')
+          const popup = L.popup({}, layer).setLatLng(latlng).setContent(this.popupContent(layer, onBack))
+          // Highlight selected feature
+          styleableLayer.pushStyle(Object.assign({}, HIGHLIGHT_STYLE))
+          popup.on('remove', () => styleableLayer.popStyle())
+          popup.openOn(map)
+        })
+        layer.on('mr-external-interaction:start-preview', () => {
+          styleableLayer.pushStyle(
+            Object.assign({}, HIGHLIGHT_STYLE),
+            'mr-external-interaction:start-preview'
+          )
+        })
+        layer.on('mr-external-interaction:end-preview', () => {
+          styleableLayer.popStyle('mr-external-interaction:start-preview')
+        })
+      }
+    })
+
+    if (!props.externalInteractive) {
+      layerGroup.bindPopup(this.popupContent)
+    }
+
     return layerGroup
   }
 }
 
-export default withLeaflet(OSMDataLayer)
+export default withLeaflet(injectIntl(OSMDataLayer))
 
 // The below code (with a couple minor linter fixes) comes from the
 // [leaflet-osm](https://github.com/openstreetmap/leaflet-osm) project's
@@ -157,7 +211,13 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
 
       if (layer) {
         layer.addTo(this);
-        layer.feature = feature;
+        layer.feature = {
+          properties: {
+            id: feature.id,
+            type: feature.type,
+            ...feature.tags,
+          }
+        }
       }
     }
   },

@@ -1,6 +1,7 @@
 import { GUEST_USER_ID } from '../../services/User/User'
 import { ROLE_SUPERUSER } from '../../services/Grant/Role'
 import _find from 'lodash/find'
+import _filter from 'lodash/filter'
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 
@@ -71,6 +72,17 @@ export class AsEndUser {
   hasUnreadNotifications() {
     return this.isLoggedIn() &&
            !!_find(this.user.notifications, {isRead: false})
+  }
+
+  /**
+   * Returns the number of notifications not marked as read
+   */
+  unreadNotificationCount() {
+    if (!this.isLoggedIn()) {
+      return 0
+    }
+
+    return _filter(this.user.notifications, {isRead: false}).length
   }
 }
 

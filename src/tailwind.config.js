@@ -52,6 +52,7 @@ module.exports = {
       yellow: '#FFFD86',
       'yellow-75': 'rgba(255, 253, 134, .75)',
       'dark-yellow': '#F1E15B',
+      'gold': '#FFD700',
       mango: '#F7BB59',
       'mango-60': 'rgba(247,187,89, .6)',
       'mango-30': 'rgba(247,187,89, .3)',
@@ -395,6 +396,8 @@ module.exports = {
       '2px': '2px',
       '3px': '3px',
       '4px': '4px',
+      '6px': '6px',
+      'n1px': '-1px',
       'n2px': '-2px',
       '0': '0',
       '1': '0.25rem',
@@ -513,6 +516,7 @@ module.exports = {
 
     inset: {
       '0': 0,
+      '45/100': '45%',
       '1/2': '50%',
       'screen20': '-20vw',
       'auto': 'auto',

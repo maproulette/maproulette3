@@ -165,8 +165,8 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
       invf.push(PARAMS_MAP.challengeId)
     }
   }
-  else if (filters.challenge) {
-    searchParameters[PARAMS_MAP.challenge] = filters.challenge
+  else if (filters.challenge || filters.challengeName) {
+    searchParameters[PARAMS_MAP.challenge] = filters.challenge || filters.challengeName
     if (invertFields.challenge) {
       invf.push(PARAMS_MAP.challenge)
     }
@@ -284,7 +284,7 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
   }
 
   if (filters.tags) {
-    searchParameters[PARAMS_MAP.tags] = filters.tags
+    searchParameters[PARAMS_MAP.tags] = filters.tags.trim()
   }
 
   if (excludeTasks && excludeTasks.length > 0) {
