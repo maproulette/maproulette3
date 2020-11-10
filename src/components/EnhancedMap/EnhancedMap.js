@@ -17,6 +17,8 @@ import _isArray from 'lodash/isArray'
 import _sortBy from 'lodash/sortBy'
 import _filter from 'lodash/filter'
 import _reduce from 'lodash/reduce'
+import _find from 'lodash/find'
+import _size from 'lodash/size'
 import AsIdentifiableFeature
        from '../../interactions/TaskFeature/AsIdentifiableFeature'
 import messages from './Messages'
@@ -129,17 +131,31 @@ export class EnhancedMap extends ReactLeafletMap {
     // Use a timeout to give Leaflet a chance to re-render its layers
     // after a React render
     setTimeout(() => {
-      let layerBounds = null
+      const matchingLayers = []
       this.leafletElement.eachLayer(layer => {
         if (_get(layer, 'options.mrLayerId') === this.props.fitToLayer && layer.getBounds) {
-          layerBounds = layer.getBounds()
+          matchingLayers.push(layer)
         }
       })
+      if (matchingLayers.length === 0) {
+        return
+      }
+
+      // If multiple layers match, try to find the parent layer (which will
+      // contain a non-empty _layers object)
+      let fitLayer = null
+      if (matchingLayers.length > 1) {
+        fitLayer = _find(matchingLayers, l => _size(l._layers) > 0)
+      }
+      if (!fitLayer) {
+        fitLayer = matchingLayers[0]
+      }
 
       // By default, we always fit the map bounds to the fit Layer.
       // However, if we're only supposed to fit the features as necessary, then
       // we do it for initial render (no updates) or if the layer
       // features wouldn't all be displayed at the present zoom level.
+      const layerBounds = fitLayer.getBounds()
       if (layerBounds && (
             !this.props.fitBoundsOnlyAsNecessary ||
             !this.mapBoundsFitToLayer ||
