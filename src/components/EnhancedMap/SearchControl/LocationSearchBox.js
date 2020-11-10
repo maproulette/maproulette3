@@ -35,7 +35,7 @@ export class LocationSearchBox extends Component {
 
   render() {
     const resultItems = _map(this.props.nominatimResults, result => (
-      <li key={result.osmId}>
+      <li key={result.osmId || result.placeId}>
         <button
           className='mr-text-current hover:mr-text-yellow'
           onClick={() => this.props.chooseNominatimResult(result)}
@@ -98,7 +98,10 @@ export class LocationSearchBox extends Component {
                    </button>
                  </div>
                  {resultItems.length === 0 ? <FormattedMessage {...messages.noResults } /> :
-                  <ol className="mr-o-2" onClick={() => this.setState({showDropdown: false})}>
+                  <ol
+                    className="mr-o-2 mr-max-w-screen50 mr-overflow-x-scroll"
+                    onClick={() => this.setState({showDropdown: false})}
+                  >
                     {resultItems}
                   </ol>
                  }
