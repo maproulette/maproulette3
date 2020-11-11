@@ -81,7 +81,11 @@ export const fetchContent = function(url, normalizationSchema, options={}) {
           resolve(normalize(_isArray(normalizationSchema) ? [] : {}, normalizationSchema))
         }
         else {
-          reject(error)
+          // Attach any details in the response body to the error
+          parseJSON(error.response).then(jsonData => {
+            error.details = jsonData
+            reject(error)
+          }).catch(() => reject(error))
         }
       })
     })
