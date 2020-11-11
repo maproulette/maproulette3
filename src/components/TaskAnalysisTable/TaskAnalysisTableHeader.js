@@ -208,7 +208,7 @@ export class TaskAnalysisTableHeader extends Component {
                     </ul>
                     <ul className="mr-list-dropdown">
                       <li>
-                        <form method="post" action={buildLinkToExportGeoJSON(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone)}>
+                        <form method="post" action={buildLinkToExportGeoJSON(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone, `challenge_${_get(this.props, 'challenge.id')}.geojson`)}>
                           <input type="hidden" name="taskPropertySearch"
                             value={JSON.stringify(_get(this.props,
                               'criteria.filters.taskPropertySearch', {}))}
