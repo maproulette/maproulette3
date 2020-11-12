@@ -7,6 +7,7 @@ import TaskCommentInput from '../../TaskCommentInput/TaskCommentInput'
 import WithTaskHistory from '../../HOCs/WithTaskHistory/WithTaskHistory'
 import WithSearch from '../../HOCs/WithSearch/WithSearch'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
+import AsMappableBundle from '../../../interactions/TaskBundle/AsMappableBundle'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import { viewDiffOverpass, viewOSMCha } from '../../../services/Overpass/Overpass'
 import messages from './Messages'
@@ -33,6 +34,12 @@ export default class TaskHistoryWidget extends Component {
 
   commentInputRef = React.createRef()
 
+  bbox = () => {
+    return this.props.taskBundle ?
+      AsMappableBundle(this.props.taskBundle).calculateBBox() :
+      AsMappableTask(this.props.task).calculateBBox()
+  }
+
   toggleSelection = (timestamp) => {
     const diffTimestamps = this.state.selectedTimestamps
     if (_indexOf(diffTimestamps, timestamp.toString()) !== -1) {
@@ -43,8 +50,7 @@ export default class TaskHistoryWidget extends Component {
     }
 
     if (diffTimestamps.length >= 2 ) {
-      viewDiffOverpass(AsMappableTask(this.props.task).calculateBBox(),
-                       ...diffTimestamps.slice(-2))
+      viewDiffOverpass(this.bbox(), ...diffTimestamps.slice(-2))
       this.setState({selectedTimestamps: [], diffSelectionActive: false})
     }
     else {
@@ -53,8 +59,7 @@ export default class TaskHistoryWidget extends Component {
   }
 
   viewDiff = () => {
-    viewDiffOverpass(AsMappableTask(this.props.task).calculateBBox(),
-                     ...this.state.selectedTimestamps)
+    viewDiffOverpass(this.bbox(), ...this.state.selectedTimestamps)
   }
 
   viewOSMCha = () => {
@@ -72,8 +77,7 @@ export default class TaskHistoryWidget extends Component {
       }
     })
 
-    viewOSMCha(AsMappableTask(this.props.task).calculateBBox(),
-               earliestDate, usernames)
+    viewOSMCha(this.bbox(), earliestDate, usernames)
   }
 
   getEditor = () => {
@@ -145,9 +149,6 @@ export default class TaskHistoryWidget extends Component {
       </QuickWidget>
     )
   }
-}
-
-TaskHistoryWidget.propTypes = {
 }
 
 registerWidgetType(
