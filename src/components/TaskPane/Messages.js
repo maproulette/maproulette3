@@ -59,9 +59,14 @@ export default defineMessages({
     defaultMessage: "Unable to Lock Task",
   },
 
-  lockFailedPrompt: {
-    id: "Task.pane.lockFailedDialog.prompt",
-    defaultMessage: "Task lock could not be acquired. A read-only preview is available."
+  genericLockFailure: {
+    id: "Task.pane.lockFailedDialog.genericLockFailure",
+    defaultMessage: "Task lock could not be acquired"
+  },
+
+  previewAvailable: {
+    id: "Task.pane.lockFailedDialog.previewAvailable",
+    defaultMessage: ". A read-only preview is available."
   },
 
   saveChangesLabel: {
