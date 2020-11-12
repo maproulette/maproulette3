@@ -62,6 +62,7 @@ export const fetchPlaceLocation = function(placeSearch, limit=5) {
       const bounds = _map(place.boundingbox, point => parseFloat(point))
       return {
         osmId: place.osm_id,
+        placeId: place.place_id,
         name: place.display_name,
         type: place.type,
         bbox: [bounds[2], bounds[1], bounds[3], bounds[0]], // NSWE => WSEN

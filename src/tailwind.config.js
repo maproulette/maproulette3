@@ -349,6 +349,7 @@ module.exports = {
       '1/6': '16.66667%',
       '5/6': '83.33333%',
       'screen40': '40vw',
+      'screen50': '50vw',
       'screen60': '60vw',
       'screen80': '80vw',
       'screen90': '90vw',
