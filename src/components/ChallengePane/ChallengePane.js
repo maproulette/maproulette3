@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { injectIntl } from 'react-intl'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
+import _differenceBy from 'lodash/differenceBy'
 import { Popup } from 'react-leaflet'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
 import FilterByLocation from './ChallengeFilterSubnav/FilterByLocation'
@@ -26,6 +27,7 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
 import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
+import StartVirtualChallenge from './StartVirtualChallenge/StartVirtualChallenge'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
@@ -48,20 +50,24 @@ const LocationFilter = WithCurrentUser(FilterByLocation)
  * that match the current search and set of filters, and a ChallengeSearchMap for
  * finding challenges geographically.
  *
- * @see See [ChallengeFilterSubnav](#challengefiltersubnav)
- * @see See [ChallengeResultList](#challengeresultlist)
- * @see See [ChallengeSearchMap](#ChallengeSearchMap)
- *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengePane extends Component {
   state = {
-    sidebarMinimized: true,
+    selectedClusters: [],
   }
 
-  toggleSidebarMinimized = () => {
-    this.setState({sidebarMinimized: !this.state.sidebarMinimized})
+  onBulkClusterSelection = clusters => {
+    this.setState({selectedClusters: this.state.selectedClusters.concat(clusters)})
   }
+
+  onBulkClusterDeselection = clusters => {
+    this.setState({
+      selectedClusters: _differenceBy(this.state.selectedClusters, clusters, 'clusterId'),
+    })
+  }
+
+  resetSelectedClusters = () => this.setState({selectedClusters: []})
 
   componentDidUpdate(prevProps) {
     if (!_isEqual(this.state.bounds, _get(this.props, 'mapBounds.bounds'))) {
@@ -91,6 +97,14 @@ export class ChallengePane extends Component {
       )
     }
 
+    const virtualChallengeMapOverlay =
+      this.state.selectedClusters.length > 0 ?
+      <StartVirtualChallenge
+        {...this.props}
+        selectedClusters={this.state.selectedClusters}
+      /> :
+      null
+
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50">
         {_get(this.props, 'history.location.state.congratulate', false) &&
@@ -110,20 +124,29 @@ export class ChallengePane extends Component {
           </div>
           <div className="mr-flex-1">
             <MapPane>
-              <ClusterMap challenge={this.props.browsedChallenge}
-                   showMarkerPopup={showMarkerPopup}
-                   initialBounds={this.state.fromUserAction ? this.state.bounds : null}
-                   criteria={{boundingBox: fromLatLngBounds(this.state.bounds),
-                              zoom: this.state.zoom,
-                              filters: _get(this.props, 'searchCriteria.filters'),
-                              searchQuery: _get(this.props, 'searchCriteria.query'),
-                              challengeStatus}}
-                   updateTaskFilterBounds={(bounds, zoom, fromUserAction) => {
-                     this.props.updateChallengeSearchMapBounds(bounds, fromUserAction)
-                   }}
-                   allowClusterToggle
-                   showTaskCount
-                   {...this.props} />
+              <ClusterMap
+                challenge={this.props.browsedChallenge}
+                showMarkerPopup={showMarkerPopup}
+                initialBounds={this.state.fromUserAction ? this.state.bounds : null}
+                criteria={{boundingBox: fromLatLngBounds(this.state.bounds),
+                          zoom: this.state.zoom,
+                          filters: _get(this.props, 'searchCriteria.filters'),
+                          searchQuery: _get(this.props, 'searchCriteria.query'),
+                          challengeStatus}}
+                updateTaskFilterBounds={(bounds, zoom, fromUserAction) => {
+                  this.props.updateChallengeSearchMapBounds(bounds, fromUserAction)
+                  this.resetSelectedClusters()
+                }}
+                selectedClusters={this.state.selectedClusters}
+                onBulkClusterSelection={this.onBulkClusterSelection}
+                onBulkClusterDeselection={this.onBulkClusterDeselection}
+                resetSelectedClusters={this.resetSelectedClusters}
+                allowClusterToggle
+                showTaskCount
+                showClusterLasso
+                externalOverlay={virtualChallengeMapOverlay}
+                {...this.props}
+              />
             </MapPane>
           </div>
         </div>
@@ -133,17 +156,19 @@ export class ChallengePane extends Component {
 }
 
 export default
-  WithChallenges(
-    WithChallengeSearch(
-      WithClusteredTasks(
-        WithMapBoundedTasks(
-          WithFilteredChallenges(
-            WithSearchResults(
-              WithStartChallenge(
-                WithBrowsedChallenge(injectIntl(ChallengePane))
-              ),
-              'challenges',
-              'challenges'
+  WithCurrentUser(
+    WithChallenges(
+      WithChallengeSearch(
+        WithClusteredTasks(
+          WithMapBoundedTasks(
+            WithFilteredChallenges(
+              WithSearchResults(
+                WithStartChallenge(
+                  WithBrowsedChallenge(injectIntl(ChallengePane))
+                ),
+                'challenges',
+                'challenges'
+              )
             )
           )
         )
