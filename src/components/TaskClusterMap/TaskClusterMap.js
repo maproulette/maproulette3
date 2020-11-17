@@ -32,6 +32,7 @@ import FitBoundsControl from '../EnhancedMap/FitBoundsControl/FitBoundsControl'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
+import SearchContent from '../EnhancedMap/SearchControl/SearchContent'
 import LassoSelectionControl
        from '../EnhancedMap/LassoSelectionControl/LassoSelectionControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
@@ -81,6 +82,7 @@ export class TaskClusterMap extends Component {
 
   state = {
     mapMarkers: null,
+    searchOpen: false,
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -211,6 +213,10 @@ export class TaskClusterMap extends Component {
       }
     }
   }
+
+  openSearch = () => this.setState({searchOpen: true})
+
+  closeSearch = () => this.setState({searchOpen: false})
 
   debouncedUpdateBounds = _debounce(this.props.updateBounds, 400)
 
@@ -468,10 +474,7 @@ export class TaskClusterMap extends Component {
         {!this.props.hideSearchControl &&
           <SearchControl
             {...this.props}
-            onResultSelected={bounds => {
-              this.currentBounds = toLatLngBounds(bounds)
-              this.props.updateBounds(bounds)
-            }}
+            openSearch={this.openSearch}
           />
         }
         <VisibleTileLayer {...this.props} zIndex={1} />
@@ -499,7 +502,7 @@ export class TaskClusterMap extends Component {
 
     return (
       <div className={classNames('taskcluster-map', {"full-screen-map": this.props.isMobile}, this.props.className)}>
-        {canClusterToggle && !this.props.loading &&
+        {canClusterToggle && !this.state.searchOpen && !this.props.loading &&
          <label className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
             <input type="checkbox" className="mr-mr-2"
               checked={this.props.showAsClusters}
@@ -508,10 +511,20 @@ export class TaskClusterMap extends Component {
           </label>
         }
         <LayerToggle {...this.props} overlayOrder={overlayOrder} />
-        {!!this.props.mapZoomedOut && !this.state.locatingToUser &&
+        {!this.state.searchOpen && !!this.props.mapZoomedOut && !this.state.locatingToUser &&
           <ZoomInMessage {...this.props} zoom={this.currentZoom}/>
         }
-        {this.props.delayMapLoad &&
+        {this.state.searchOpen &&
+         <SearchContent
+           {...this.props}
+           onResultSelected={bounds => {
+              this.currentBounds = toLatLngBounds(bounds)
+              this.props.updateBounds(bounds)
+           }}
+           closeSearch={this.closeSearch}
+         />
+        }
+        {this.props.delayMapLoad && !this.state.searchOpen &&
           <div className="mr-absolute mr-top-0 mr-mt-3 mr-w-full mr-flex mr-justify-center"
             onClick={() => this.props.forceMapLoad()}>
             <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">

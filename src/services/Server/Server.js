@@ -75,17 +75,22 @@ export const fetchContent = function(url, normalizationSchema, options={}) {
 
         resolve(result)
       }).catch(error => {
-        // 404 is used by the scala server to indicate no results. Treat as
-        // successful response with empty data.
-        if (error.response && error.response.status === 404) {
-          resolve(normalize(_isArray(normalizationSchema) ? [] : {}, normalizationSchema))
+        if (error.response) {
+          // 404 is used by the scala server to indicate no results. Treat as
+          // successful response with empty data
+          if (error.response.status === 404) {
+            resolve(normalize(_isArray(normalizationSchema) ? [] : {}, normalizationSchema))
+          }
+          else {
+            // Attach any details in the response body to the error
+            parseJSON(error.response).then(jsonData => {
+              error.details = jsonData
+              reject(error)
+            }).catch(() => reject(error))
+          }
         }
         else {
-          // Attach any details in the response body to the error
-          parseJSON(error.response).then(jsonData => {
-            error.details = jsonData
-            reject(error)
-          }).catch(() => reject(error))
+          reject(error)
         }
       })
     })
