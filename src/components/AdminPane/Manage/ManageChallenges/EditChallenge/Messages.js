@@ -551,7 +551,7 @@ will not be able to make sense of it.
 
   osmIdPropertyLabel: {
     id: 'Admin.EditChallenge.form.osmIdProperty.label',
-    defaultMessage: "OSM Id Property"
+    defaultMessage: "OSM/External Id Property"
   },
 
   osmIdPropertyDescription: {
