@@ -13,4 +13,19 @@ export default defineMessages({
     id: "Widgets.TaskLocationWidget.title",
     defaultMessage: "Location",
   },
+
+  showPrompt: {
+    id: "Widgets.TaskLocationWidget.show",
+    defaultMessage: "Show:",
+  },
+
+  lonLatLabel: {
+    id: "Widgets.TaskLocationWidget.controls.showLonLat.label",
+    defaultMessage: "Lon/Lat",
+  },
+
+  latLonLabel: {
+    id: "Widgets.TaskLocationWidget.controls.showLatLon.label",
+    defaultMessage: "Lat/Lon",
+  },
 })
