@@ -31,9 +31,14 @@ export class SignInButton extends Component {
     }
 
     return (
-      <a className={classNames("mr-button", this.props.className)}
-         onClick={() => this.setState({clicked: true})}
-         href={`${process.env.REACT_APP_SERVER_OAUTH_URL}${this.props.history.location.pathname}`}
+      <a
+        className={classNames("mr-button", this.props.className)}
+        onClick={() => this.setState({clicked: true})}
+        href={
+          `${process.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
+            this.props.history.location.pathname + this.props.history.location.search
+          )}`
+        }
       >
         {this.props.children || (
          this.props.longForm ?
