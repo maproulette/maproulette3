@@ -142,7 +142,6 @@ export const saveVirtualChallenge = function(dispatch, endpoint) {
       )
     }
     else {
-      console.log(serverError.response || serverError)
       dispatch(addServerError(AppErrors.virtualChallenge.createFailure,
                               serverError))
     }

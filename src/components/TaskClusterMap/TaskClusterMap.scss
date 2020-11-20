@@ -35,6 +35,10 @@
       background-color: rgba($manyColor, 0.9);
     }
   }
+
+  &.selected {
+    border: 5px solid #17FFF3;
+  }
 }
 
 .taskcluster-map {
