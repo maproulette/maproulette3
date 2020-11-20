@@ -62,8 +62,15 @@ export class ChallengePane extends Component {
   }
 
   onBulkClusterDeselection = clusters => {
+    if (!clusters || clusters.length === 0) {
+      return
+    }
+
+    // Handle both clusters and individual tasks in case user declustered
     this.setState({
-      selectedClusters: _differenceBy(this.state.selectedClusters, clusters, 'clusterId'),
+      selectedClusters: _differenceBy(
+        this.state.selectedClusters, clusters, clusters[0].isTask ? 'taskId' : 'clusterId'
+      ),
     })
   }
 

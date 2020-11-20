@@ -155,10 +155,6 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
 
   createVirtualChallenge: (name, clusters) => {
     const tasks = _compact(_map(clusters, c => c.isTask ? c.taskId : null))
-    if (tasks.length > 0 && tasks.length !== clusters.length) {
-      throw new Error("Cannot create virtual challenge with mix of tasks and clusters")
-    }
-
     return dispatch(
       createVirtualChallenge(name, _isEmpty(tasks) ? null : tasks, null, _isEmpty(tasks) ? clusters : null)
     ).then(virtualChallenge => {
