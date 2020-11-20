@@ -516,7 +516,7 @@ export class TaskClusterMap extends Component {
         {this.props.taskCenter &&
           <FitBoundsControl centerPoint={this.props.taskCenter} />
         }
-        {this.props.showClusterLasso && this.props.onBulkClusterSelection &&
+        {this.props.showClusterLasso && this.props.onBulkClusterSelection && !this.props.mapZoomedOut &&
           <LassoSelectionControl
             onLassoSelection={this.selectClustersInLayers}
             onLassoDeselection={this.deselectClustersInLayers}
