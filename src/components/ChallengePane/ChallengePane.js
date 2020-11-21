@@ -151,6 +151,7 @@ export class ChallengePane extends Component {
                 allowClusterToggle
                 showTaskCount
                 showClusterLasso
+                showFitWorld
                 externalOverlay={virtualChallengeMapOverlay}
                 {...this.props}
               />

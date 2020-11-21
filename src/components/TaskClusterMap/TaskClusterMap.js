@@ -29,6 +29,7 @@ import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import FitBoundsControl from '../EnhancedMap/FitBoundsControl/FitBoundsControl'
+import FitWorldControl from '../EnhancedMap/FitWorldControl/FitWorldControl'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
@@ -513,6 +514,7 @@ export class TaskClusterMap extends Component {
         justFitFeatures
       >
         <ZoomControl className="mr-z-10" position='topright' />
+        {this.props.showFitWorld && <FitWorldControl />}
         {this.props.taskCenter &&
           <FitBoundsControl centerPoint={this.props.taskCenter} />
         }
