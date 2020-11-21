@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { injectIntl } from 'react-intl'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
+import _uniqBy from 'lodash/uniqBy'
 import _differenceBy from 'lodash/differenceBy'
 import { Popup } from 'react-leaflet'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
@@ -58,7 +59,16 @@ export class ChallengePane extends Component {
   }
 
   onBulkClusterSelection = clusters => {
-    this.setState({selectedClusters: this.state.selectedClusters.concat(clusters)})
+    if (!clusters || clusters.length === 0) {
+      return
+    }
+
+    // Handle both clusters and individual tasks in case user declustered
+    this.setState({
+      selectedClusters: _uniqBy(
+        this.state.selectedClusters.concat(clusters), clusters[0].isTask ? 'taskId' : 'clusterId'
+      ),
+    })
   }
 
   onBulkClusterDeselection = clusters => {
