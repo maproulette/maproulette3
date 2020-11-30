@@ -23,4 +23,9 @@ export default defineMessages({
     id: "SavedTasks.widget.viewTask",
     defaultMessage: "View Task",
   },
+
+  viewComments: {
+    id: "SavedTasks.widget.viewComments",
+    defaultMessage: "View Comments",
+  },
 })
