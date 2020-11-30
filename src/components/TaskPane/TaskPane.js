@@ -348,7 +348,18 @@ export class TaskPane extends Component {
         {this.state.showLockFailureDialog &&
          <BasicDialog
            title={<FormattedMessage {...messages.lockFailedTitle} />}
-           prompt={<FormattedMessage {...messages.lockFailedPrompt} />}
+            prompt={
+              <React.Fragment>
+                <span>
+                  {_get(
+                    this.props,
+                    'lockFailureDetails.message',
+                    this.props.intl.formatMessage(messages.genericLockFailure)
+                  )}
+                </span>
+                <FormattedMessage {...messages.previewAvailable} />
+              </React.Fragment>
+            }
            icon="unlocked-icon"
            onClose={() => this.clearLockFailure()}
            controls = {

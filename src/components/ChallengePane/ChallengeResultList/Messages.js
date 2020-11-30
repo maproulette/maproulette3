@@ -24,16 +24,6 @@ export default defineMessages({
     defaultMessage: 'At most {maxTasks, number} tasks can be included in a "virtual" challenge',
   },
 
-  createVirtualChallenge: {
-    id: "VirtualChallenge.controls.create.label",
-    defaultMessage: "Work on {taskCount, number} Mapped Tasks",
-  },
-
-  virtualChallengeNameLabel: {
-    id: "VirtualChallenge.fields.name.label",
-    defaultMessage: 'Name your "virtual" challenge',
-  },
-
   loadMoreLabel: {
     id: "Challenge.controls.loadMore.label",
     defaultMessage: "More Results",

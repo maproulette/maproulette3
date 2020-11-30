@@ -33,6 +33,7 @@ const LassoSelectionLeafletControl = L.Control.extend({
           onClick={() => {
             deselecting = false
             lasso.toggle()
+            this.options.onLassoInteraction && this.options.onLassoInteraction()
           }}
           className={classNames(
             "mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-transition-normal-in-out-quad hover:mr-text-green-lighter",
@@ -50,6 +51,7 @@ const LassoSelectionLeafletControl = L.Control.extend({
           onClick={() => {
             deselecting = true
             lasso.toggle()
+            this.options.onLassoInteraction && this.options.onLassoInteraction()
           }}
           className={classNames(
             "mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-transition-normal-in-out-quad hover:mr-text-green-lighter",
@@ -65,7 +67,10 @@ const LassoSelectionLeafletControl = L.Control.extend({
         }
         {this.options.onLassoClear &&
          <button
-           onClick={() => this.options.onLassoClear()}
+           onClick={() => {
+             this.options.onLassoClear()
+             this.options.onLassoInteraction && this.options.onLassoInteraction()
+           }}
            className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-b-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
          >
            <SvgSymbol

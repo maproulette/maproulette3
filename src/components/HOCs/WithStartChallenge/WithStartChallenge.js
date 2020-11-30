@@ -3,6 +3,11 @@ import { connect } from 'react-redux'
 import { LatLng } from 'leaflet'
 import _get from 'lodash/get'
 import _sample from 'lodash/sample'
+import _map from 'lodash/map'
+import _compact from 'lodash/compact'
+import _isEmpty from 'lodash/isEmpty'
+import { createVirtualChallenge }
+       from '../../../services/VirtualChallenge/VirtualChallenge'
 import { loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge }
        from '../../../services/Task/Task'
@@ -146,7 +151,30 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
       ownProps.history.push(`/challenge/${challengeId}/task/${taskId}`)
     }
     window.scrollTo(0, 0)
-  }
+  },
+
+  createVirtualChallenge: (name, clusters) => {
+    const tasks = _compact(_map(clusters, c => c.isTask ? c.taskId : null))
+    return dispatch(
+      createVirtualChallenge(name, _isEmpty(tasks) ? null : tasks, null, _isEmpty(tasks) ? clusters : null)
+    ).then(virtualChallenge => {
+      if (!virtualChallenge) {
+        // The service will have dispatched an appropriate error message
+        return
+      }
+
+      dispatch(
+        loadRandomTaskFromVirtualChallenge(virtualChallenge.id)
+      ).then(task => {
+        if (task) {
+          ownProps.history.push(`/virtual/${virtualChallenge.id}/task/${task.id}`)
+        }
+        else {
+          dispatch(addError(AppErrors.task.none))
+        }
+      })
+    })
+  },
 })
 
 export default WithStartChallenge

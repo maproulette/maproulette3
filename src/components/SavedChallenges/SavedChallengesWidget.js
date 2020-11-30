@@ -58,7 +58,7 @@ const SavedChallengeList = function(props) {
           key={challenge.id}
           className="mr-py-2 mr-flex mr-justify-between mr-items-center"
         >
-          <div class="mr-flex mr-flex-col">
+          <div className="mr-flex mr-flex-col">
             <Link to={`/browse/challenges/${challenge.id}`}>
               {challenge.name}
             </Link>

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import _get from 'lodash/get'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import AutosuggestMentionTextArea from '../AutosuggestTextBox/AutosuggestMentionTextArea'
 import WithOSMUserSearch from '../HOCs/WithOSMUserSearch/WithOSMUserSearch'
@@ -18,6 +19,7 @@ const CommentBox = WithOSMUserSearch(AutosuggestMentionTextArea)
 export class TaskCommentInput extends Component {
   state = {
     showingPreview: false,
+    characterCount: 0,
   }
 
   handleSubmit = () => {
@@ -25,28 +27,52 @@ export class TaskCommentInput extends Component {
     this.props.submitComment()
   }
 
+  handleChange = value => {
+    if (value.length <= this.props.maxCharacterCount) {
+      this.props.commentChanged(value)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    // Update our character count as needed
+    if (this.props.value !== prevProps.value) {
+      this.setState({characterCount: _get(this.props.value, 'length', 0)})
+    }
+  }
+
   render() {
     return (
       <div className="mr-mt-2">
-        <div className="mr-flex mr-items-center mr-mb-2 mr-leading-tight mr-text-xxs">
-          <button
-            className={classNames(
-              "mr-pr-2 mr-mr-2 mr-border-r mr-border-green mr-uppercase mr-font-medium",
-              this.state.showingPreview ? "mr-text-green-lighter" : "mr-text-white"
-            )}
-            onClick={() => this.setState({showingPreview: false})}
+        <div className="mr-flex mr-justify-between mr-mb-2 mr-leading-tight mr-text-xxs">
+          <div className="mr-flex mr-items-center">
+            <button
+              className={classNames(
+                "mr-pr-2 mr-mr-2 mr-border-r mr-border-green mr-uppercase mr-font-medium",
+                this.state.showingPreview ? "mr-text-green-lighter" : "mr-text-white"
+              )}
+              onClick={() => this.setState({showingPreview: false})}
+            >
+              <FormattedMessage {...messages.writeLabel} />
+            </button>
+            <button
+              className={classNames(
+                "mr-uppercase mr-font-medium",
+                !this.state.showingPreview ? "mr-text-green-lighter" : "mr-text-white"
+              )}
+              onClick={() => this.setState({showingPreview: true})}
+            >
+              <FormattedMessage {...messages.previewLabel} />
+            </button>
+          </div>
+          <div
+            className={classNames({
+              'mr-text-dark-yellow': this.state.characterCount < this.props.maxCharacterCount &&
+                                     this.state.characterCount > (this.props.maxCharacterCount * 0.9),
+              'mr-text-red-light': this.state.characterCount >= this.props.maxCharacterCount,
+            })}
           >
-            <FormattedMessage {...messages.writeLabel} />
-          </button>
-          <button
-            className={classNames(
-              "mr-uppercase mr-font-medium",
-              !this.state.showingPreview ? "mr-text-green-lighter" : "mr-text-white"
-            )}
-            onClick={() => this.setState({showingPreview: true})}
-          >
-            <FormattedMessage {...messages.previewLabel} />
-          </button>
+            {this.state.characterCount}/{this.props.maxCharacterCount}
+          </div>
         </div>
         {this.state.showingPreview ?
          <div
@@ -68,7 +94,7 @@ export class TaskCommentInput extends Component {
              this.props.inputClassName :
              "mr-appearance-none mr-outline-none mr-py-2 mr-px-4 mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner mr-w-full mr-font-mono mr-text-sm"
            }
-           onInputValueChange={(value) => this.props.commentChanged(value)}
+           onInputValueChange={this.handleChange}
            placeholder={this.props.intl.formatMessage(messages.placeholder)}
            fixedMenu
            taskId={this.props.taskId}
@@ -93,11 +119,13 @@ TaskCommentInput.propTypes = {
   value: PropTypes.string,
   commentChanged: PropTypes.func.isRequired,
   submitComment: PropTypes.func,
+  maxCharacterCount: PropTypes.number,
 }
 
 TaskCommentInput.defaultProps = {
   value: "",
   rows: 1,
+  maxCharacterCount: 1500,
 }
 
 export default injectIntl(TaskCommentInput)

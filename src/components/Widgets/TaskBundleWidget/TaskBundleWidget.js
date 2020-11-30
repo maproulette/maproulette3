@@ -320,7 +320,7 @@ const BuildBundle = props => {
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
-      <div className="mr-h-2/5 mr-max-h-100">
+      <div className="mr-h-2/5 mr-min-h-72 mr-max-h-100">
         {props.loading ?
           <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
           <MapPane showLasso>{map}</MapPane>
