@@ -24,11 +24,25 @@ export default class FilterDropdown extends Component {
           </button>
         )}
         dropdownContent={dropdown =>
-          <ul className="mr-list-dropdown">
-            {_isFunction(this.props.filters) ? 
-              this.props.filters(dropdown) : this.props.filters
+          <React.Fragment>
+            <ul className="mr-list-dropdown">
+              {_isFunction(this.props.filters) ?
+                this.props.filters(dropdown) : this.props.filters
+              }
+            </ul>
+            {this.props.secondaryFilterLabel &&
+              <React.Fragment>
+                <h5 className="mr-text-mango mr-my-4 mr-pt-2 mr-border-t mr-border-grey mr-uppercase mr-text-normal">
+                  {this.props.secondaryFilterLabel}
+                </h5>
+                <ul className="mr-list-dropdown">
+                  {_isFunction(this.props.secondaryFilters) ?
+                    this.props.secondaryFilters(dropdown) : this.props.secondaryFilters
+                  }
+                </ul>
+              </React.Fragment>
             }
-          </ul>
+          </React.Fragment>
         }
       />
     )

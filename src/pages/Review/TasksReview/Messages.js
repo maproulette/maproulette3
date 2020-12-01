@@ -59,6 +59,16 @@ export default defineMessages({
     defaultMessage: "All Review-related Tasks",
   },
 
+  metaReviewTasks: {
+    id: "Review.TaskAnalysisTable.metaReviewTasks",
+    defaultMessage: "Meta Review Tasks",
+  },
+
+  tasksToMetaReview: {
+    id: "Review.TaskAnalysisTable.tasksToMetaReview",
+    defaultMessage: "Tasks to Meta Review",
+  },
+
   totalTasks: {
     id: "Review.TaskAnalysisTable.totalTasks",
     defaultMessage: "Total: {countShown}"
@@ -94,6 +104,11 @@ export default defineMessages({
     defaultMessage: "Actions",
   },
 
+  metaReviewerControlsLabel: {
+    id: "Review.TaskAnalysisTable.metaReviewerControls.label",
+    defaultMessage: "Actions",
+  },
+
   reviewCompleteControlsLabel: {
     id: "Review.TaskAnalysisTable.reviewCompleteControls.label",
     defaultMessage: "Actions",
@@ -114,6 +129,11 @@ export default defineMessages({
     defaultMessage: "Priority",
   },
 
+  metaReviewStatusLabel: {
+    id: "Review.fields.metaReviewStatus.label",
+    defaultMessage: "Meta-Review Status",
+  },
+
   reviewStatusLabel: {
     id: "Review.fields.reviewStatus.label",
     defaultMessage: "Review Status",
@@ -127,6 +147,11 @@ export default defineMessages({
   reviewedByLabel: {
     id: "Review.fields.reviewedBy.label",
     defaultMessage: "Reviewer",
+  },
+
+  metaReviewedByLabel: {
+    id: "Review.fields.metaReviewedBy.label",
+    defaultMessage: "Meta-Reviewer",
   },
 
   additionalReviewersLabel: {
@@ -144,6 +169,11 @@ export default defineMessages({
     defaultMessage: "Reviewed On",
   },
 
+  metaReviewedAtLabel: {
+    id: "Review.fields.metaReviewedAt.label",
+    defaultMessage: "Meta-Reviewed On",
+  },
+
   reviewTaskLabel: {
     id: "Review.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
@@ -156,6 +186,11 @@ export default defineMessages({
 
   metaReviewTaskLabel: {
     id: "Review.TaskAnalysisTable.controls.metaReviewTask.label",
+    defaultMessage: "Meta Review",
+  },
+
+  reviewFurtherTaskLabel: {
+    id: "Review.TaskAnalysisTable.controls.reviewFurther.label",
     defaultMessage: "Review further",
   },
 
@@ -222,5 +257,15 @@ export default defineMessages({
   allProjects: {
     id: "Review.tableFilter.reviewByAllProjects",
     defaultMessage: "All Projects"
+  },
+
+  allNeeded: {
+    id: "Review.tableFilter.metaReviewStatus.allNeeded",
+    defaultMessage: "All Needed"
+  },
+
+  metaUnreviewed: {
+    id: "Review.tableFilter.metaReviewStatus.metaUnreviewed",
+    defaultMessage: "Unreviewed"
   }
 })

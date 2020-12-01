@@ -359,7 +359,9 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, e
     return new Endpoint(
       api.tasks.bulkStatusChange, {
         params: {...searchParameters, newStatus},
-        json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
+        json: (filters.taskPropertySearch &&
+          filters.taskPropertySearch !== "[object Object]") ?
+          {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute().then( results => {
       dispatch(clearTasks(challengeId))

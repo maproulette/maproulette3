@@ -35,6 +35,9 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
       if (props.includeTaskReviewStatuses) {
         criteria.filters.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses, v => v)).join(',')
       }
+      if (props.includeMetaReviewStatuses) {
+        criteria.filters.metaReviewStatus = _keys(_pickBy(props.includeMetaReviewStatuses, v => v)).join(',')
+      }
       if (props.includeTaskPriorities) {
         criteria.filters.priorities =_keys(_pickBy(props.includeTaskPriorities, v => v)).join(',')
       }

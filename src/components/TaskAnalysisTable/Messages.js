@@ -49,6 +49,11 @@ export default defineMessages({
     defaultMessage: "Review Status",
   },
 
+  metaReviewStatusLabel: {
+    id: "Task.fields.metaReviewStatus.label",
+    defaultMessage: "Meta-Review Status",
+  },
+
   completedByLabel: {
     id: "Task.fields.completedBy.label",
     defaultMessage: "Completed By",
@@ -69,9 +74,19 @@ export default defineMessages({
     defaultMessage: "Reviewer",
   },
 
+  metaReviewedByLabel: {
+    id: "Task.fields.metaReviewedBy.label",
+    defaultMessage: "Meta-Reviewer",
+  },
+
   reviewedAtLabel: {
     id: "Admin.fields.reviewedAt.label",
     defaultMessage: "Reviewed On",
+  },
+
+  metaReviewedAtLabel: {
+    id: "Admin.fields.metaReviewedAt.label",
+    defaultMessage: "Meta-Reviewed On",
   },
 
   reviewDurationLabel: {
@@ -149,6 +164,11 @@ export default defineMessages({
     defaultMessage: "Remove from review queue ",
   },
 
+  removeMetaReviewStatusLabel: {
+    id: "Admin.manageTasks.controls.removeMetaReviewStatus.label",
+    defaultMessage: "Remove from meta-review ",
+  },
+
   showReviewColumnsLabel: {
     id: "Admin.manageTasks.controls.showReviewColumns.label",
     defaultMessage: "Show Review Columns",
@@ -182,6 +202,11 @@ export default defineMessages({
   exportMapperReviewCSVLabel: {
     id: "Admin.manageTasks.controls.exportMapperReviewCSV.label",
     defaultMessage: "Export Mapper Review CSV",
+  },
+
+  exportReviewerMetaCSVLabel: {
+    id: "Admin.manageTasks.controls.exportReviewerMetaCSV.label",
+    defaultMessage: "Export Meta-Review Coverage CSV",
   },
 
   timezoneLabel: {

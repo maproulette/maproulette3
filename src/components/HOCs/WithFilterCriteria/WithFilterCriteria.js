@@ -9,6 +9,7 @@ import _merge from 'lodash/merge'
 import _isEmpty from 'lodash/isEmpty'
 import _toInteger from 'lodash/toInteger'
 import _each from 'lodash/each'
+import _isUndefined from 'lodash/isUndefined'
 import format from 'date-fns/format'
 import { fromLatLngBounds, GLOBAL_MAPBOUNDS } from '../../../services/MapBounds/MapBounds'
 import { buildSearchCriteriafromURL,
@@ -84,6 +85,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
        newCriteria.zoom = this.state.zoom
        newCriteria.filters["status"] = _keys(_pickBy(this.props.includeTaskStatuses, (s) => s))
        newCriteria.filters["reviewStatus"] = _keys(_pickBy(this.props.includeReviewStatuses, (r) => r))
+       newCriteria.filters["metaReviewStatus"] = _keys(_pickBy(this.props.includeMetaReviewStatuses, (r) => r))
        newCriteria.filters["priorities"] = _keys(_pickBy(this.props.includeTaskPriorities, (p) => p))
 
        if (!ignoreURL) {
@@ -115,6 +117,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
        const typedCriteria = _merge({}, criteria, _cloneDeep(this.state.criteria))
        typedCriteria.filters["status"] = _keys(_pickBy(props.includeTaskStatuses, (s) => s))
        typedCriteria.filters["reviewStatus"] = _keys(_pickBy(props.includeTaskReviewStatuses, (r) => r))
+       typedCriteria.filters["metaReviewStatus"] = _keys(_pickBy(props.includeMetaReviewStatuses, (r) => r))
        typedCriteria.filters["priorities"] = _keys(_pickBy(props.includeTaskPriorities, (p) => p))
        this.setState({criteria: typedCriteria})
        return typedCriteria
@@ -179,13 +182,13 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
 
        // These values will come in as comma-separated strings and need to be turned
        // into number arrays
-       _each(["status", "reviewStatus", "priorities", "boundingBox"], key => {
-         if (criteria[key] && key === "boundingBox") {
+       _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], key => {
+         if (!_isUndefined(criteria[key]) && key === "boundingBox") {
            if (typeof criteria[key] === "string") {
              criteria[key] = criteria[key].split(',').map(x => parseFloat(x))
            }
          }
-         else if (_get(criteria, `filters.${key}`)) {
+         else if (!_isUndefined(_get(criteria, `filters.${key}`))) {
            if (typeof criteria.filters[key] === "string") {
              criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
            }
@@ -231,6 +234,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
 
        if (prevProps.includeTaskStatuses !== this.props.includeTaskStatuses ||
            prevProps.includeTaskReviewStatuses !== this.props.includeTaskReviewStatuses ||
+           prevProps.includeMetaReviewStatuses !== this.props.includeMetaReviewStatuses ||
            prevProps.includeTaskPriorities !== this.props.includeTaskPriorities) {
          typedCriteria = this.updateIncludedFilters(this.props)
          return

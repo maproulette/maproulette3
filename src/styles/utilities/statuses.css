@@ -65,3 +65,7 @@
 .mr-notification-type-review-rejected {
   @apply mr-text-red;
 }
+
+.mr-notification-type-meta-review {
+  @apply mr-text-mango;
+}

@@ -34,6 +34,11 @@ export default defineMessages({
     defaultMessage: "Reviewer"
   },
 
+  metaReviewerType: {
+    id: "TaskHistory.fields.userType.metaReviewer",
+    defaultMessage: "Meta-Reviewer"
+  },
+
   mapperType: {
     id: "TaskHistory.fields.userType.mapper",
     defaultMessage: "Mapper"

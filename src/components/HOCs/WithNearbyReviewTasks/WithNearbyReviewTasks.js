@@ -32,7 +32,8 @@ export const WithNearbyReviewTasks = function(WrappedComponent) {
      */
     updateNearbyReviewTasks = props => {
       this.setState({nearbyTasks: {loading: true}})
-      props.fetchNearbyReviewTasks(props.taskId, this.props.currentFilters, this.state.taskLimit).then(nearbyTasks => {
+      props.fetchNearbyReviewTasks(props.taskId, this.props.currentFilters, this.state.taskLimit,
+                                   this.props.asMetaReview).then(nearbyTasks => {
         const tasksLength = nearbyTasks.tasks.length
         this.setState({nearbyTasks: {...nearbyTasks, nearTaskId: props.taskId, loading: false},
                        lastLoadLength: tasksLength,

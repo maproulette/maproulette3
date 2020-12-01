@@ -124,7 +124,9 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
         params: {limit, page: (page * limit), sort: sortBy, order: direction,
                  includeTotal: true, excludeLocked, ...searchParameters, includeGeometries,
                  includeTags},
-        json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
+        json: (filters.taskPropertySearch &&
+          filters.taskPropertySearch !== "[object Object]") ?
+          {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute().then(normalizedResults => {
       const totalCount = normalizedResults.result.total

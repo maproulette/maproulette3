@@ -5,6 +5,7 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _merge from 'lodash/merge'
 import _cloneDeep from 'lodash/cloneDeep'
+import _isUndefined from 'lodash/isUndefined'
 import { FormattedMessage } from 'react-intl'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskStatus, messagesByStatus }
@@ -176,6 +177,18 @@ export class ReviewTaskControls extends Component {
           />
         </div>
 
+        {this.props.metaReviewEnabled &&
+          <div className="mr-text-sm mr-text-white mr-whitespace-no-wrap">
+            <FormattedMessage
+              {...messages.currentMetaReviewStatus}
+            /> { _isUndefined(this.props.task.metaReviewStatus) ?
+              <span/> :
+              <FormattedMessage
+                {...messagesByReviewStatus[this.props.task.metaReviewStatus]}
+              />
+            }
+          </div>
+        }
         {tags.length > 0 &&
           <div className="mr-text-sm mr-text-white">
             <FormattedMessage
@@ -188,8 +201,20 @@ export class ReviewTaskControls extends Component {
           <UserEditorSelector {...this.props} />
           <div className="mr-mt-4 mr-mb-12 mr-grid mr-grid-columns-2 mr-grid-gap-4">
             <TaskEditControl {...this.props} pickEditor={this.pickEditor} />
+            {this.props.task.metaReviewStatus === TaskReviewStatus.rejected &&
+              <button className="mr-button mr-button--blue-fill"
+                      onClick={() => this.updateReviewStatus(TaskReviewStatus.needed)}>
+                <FormattedMessage {...messages.requestMetaReReview} />
+              </button>
+            }
           </div>
         </div>
+
+        {this.props.task.metaReviewStatus === TaskReviewStatus.rejected &&
+          <div className="mr-my-4 mr-text-yellow mr-text-mango mr-text-lg">
+            <FormattedMessage {...messages.changeReview} />
+          </div>
+        }
 
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           <button className="mr-button mr-button--blue-fill"
@@ -206,7 +231,10 @@ export class ReviewTaskControls extends Component {
           </button>
           <button className="mr-button mr-button--white"
                   onClick={() => this.skipReview()}>
-            <FormattedMessage {...messages.skipReview} />
+            {this.props.asMetaReview ?
+              <FormattedMessage {...messages.skipMetaReview} /> :
+              <FormattedMessage {...messages.skipReview} />
+            }
           </button>
         </div>
 

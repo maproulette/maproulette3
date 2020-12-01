@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Please Confirm Review",
   },
 
+  inMetaReviewHeader: {
+    id: 'TaskConfirmationModal.inMetaReviewHeader',
+    defaultMessage: "Please Confirm Meta-Review",
+  },
+
   commentLabel: {
     id: 'TaskConfirmationModal.comment.label',
     defaultMessage: "Leave optional comment",
@@ -163,4 +168,9 @@ export default defineMessages({
     id: 'TaskConfirmationModal.instructionsContinue.label',
     defaultMessage: "Continue",
   },
+
+  metaReviewRequestedLabel: {
+    id: 'TaskConfirmationModal.metaReviewRequested.label',
+    defaultMessage: "Meta-Review Requested",
+  }
 })

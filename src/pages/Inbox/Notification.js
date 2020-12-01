@@ -30,6 +30,9 @@ class Notification extends Component {
         return <ReviewBody notification={notification} />
       case NotificationType.reviewRevised:
         return <ReviewRevisedBody notification={notification} />
+      case NotificationType.metaReview:
+      case NotificationType.metaReviewAgain:
+        return <MetaReviewBody notification={notification} />
       case NotificationType.challengeCompleted:
         return <ChallengeCompletionBody notification={notification} />
       case NotificationType.mapperChallengeCompleted:
@@ -182,6 +185,41 @@ const ReviewRevisedBody = function(props) {
   )
 }
 
+const MetaReviewBody = function(props) {
+  let lead = null
+  const reviewStatus = parseInt(props.notification.description, 10)
+
+  switch(reviewStatus) {
+    case TaskReviewStatus.approved:
+      lead = <FormattedMessage {...messages.metaReviewApprovedNotificationLead} />
+      break
+    case TaskReviewStatus.approvedWithFixes:
+      lead = <FormattedMessage {...messages.metaReviewApprovedWithFixesNotificationLead} />
+      break
+    case TaskReviewStatus.rejected:
+      lead = <FormattedMessage {...messages.metaReviewRejectedNotificationLead} />
+      break
+    case TaskReviewStatus.needed:
+      lead = <FormattedMessage {...messages.metaReviewAgainNotificationLead} />
+      break
+    default:
+      lead = null
+  }
+
+  return (
+    <React.Fragment>
+      <p className="mr-mb-8 mr-text-base">{lead}</p>
+
+      <AttachedComment notification={props.notification} />
+
+      <ViewTask
+        notification={props.notification}
+        review={reviewStatus === TaskReviewStatus.needed}
+      />
+    </React.Fragment>
+  )
+}
+
 const ChallengeCompletionBody = function(props) {
   return (
     <React.Fragment>
@@ -283,6 +321,12 @@ const ViewTask = function(props) {
   const path =
     `challenge/${props.notification.challengeId}/task/${props.notification.taskId}`
 
+  const isMetaReReview =
+    props.notification.notificationType === NotificationType.metaReviewAgain
+  const needsReReview =
+    props.notification.notificationType === NotificationType.metaReview &&
+    parseInt(props.notification.description, 10) === TaskReviewStatus.rejected
+
   return (
     <div className="mr-mt-8 mr-links-green-lighter">
       <div className="mr-flex mr-leading-tight">
@@ -290,9 +334,10 @@ const ViewTask = function(props) {
           <FormattedMessage {...messages.viewTaskLabel} />
         </Link>
 
-        {props.review &&
+        {(props.review || needsReReview) &&
          <Link
-           to={{ pathname: `${path}/review`, state: {fromInbox: true} }}
+           to={{pathname: `${path}/${isMetaReReview ? 'meta-review' : 'review'}`,
+                state: {fromInbox: true} }}
            className="mr-pl-4 mr-ml-4 mr-border-l mr-border-white-10"
          >
            <FormattedMessage {...messages.reviewTaskLabel} />
