@@ -42,6 +42,7 @@
     .leaflet-control-container {
       .leaflet-top.leaflet-right, .leaflet-top.leaflet-left,
       .leaflet-bottom.leaflet-right, .leaflet-bottom.leaflet-left {
+        -webkit-transform: translate3d(0,0,0); // hack to get Safari to honor z-index
         z-index: $layer-map-control;
 
         .leaflet-control, .leaflet-bar  {
