@@ -140,14 +140,19 @@ export class TaskPane extends Component {
   }
 
   setCompletionResponse = (propertyName, value) => {
-    const responses = this.state.completionResponses ||
-      JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
+    const responses =
+      this.state.completionResponses ?
+      Object.assign({}, this.state.completionResponses) :
+      JSON.parse(_get(this.props, 'task.completionResponses', '{}'))
+
     responses[propertyName] = value
     this.setState({completionResponses: responses})
   }
 
   setNeedsResponses = (needsResponses) => {
-    this.setState({needsResponses})
+    if (needsResponses !== this.state.needsResponses) {
+      this.setState({needsResponses})
+    }
   }
 
   componentDidMount() {
@@ -326,7 +331,7 @@ export class TaskPane extends Component {
             setNeedsResponses={this.setNeedsResponses}
             completionResponses={completionResponses}
             needsResponses={this.state.needsResponses}
-            disableTemplate={isCompletionStatus(this.props.task.status)}
+            templateRevision={isCompletionStatus(this.props.task.status)}
           />
           {this.state.completingTask && this.state.completingTask === this.props.task.id &&
            <div

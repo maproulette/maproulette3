@@ -36,7 +36,6 @@
     "file-saver": "^2.0.2",
     "fuse.js": "^6.2.0",
     "graphql": "^15.1.0",
-    "handlebars": "^4.7.6",
     "leaflet": "^1.6.0",
     "leaflet-lasso": "^2.1.0",
     "leaflet-vectoricon": "https://github.com/nrotstan/Leaflet.VectorIcon.git#honor-existing-margin-styles",
