@@ -77,8 +77,11 @@ export class ReviewTaskPane extends Component {
   }
 
   setCompletionResponse = (propertyName, value) => {
-    const responses = this.state.completionResponses ||
-      JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
+    const responses =
+      this.state.completionResponses ?
+      Object.assign({}, this.state.completionResponses) :
+      JSON.parse(_get(this.props, 'task.completionResponses', '{}'))
+
     responses[propertyName] = value
     this.setState({completionResponses: responses})
   }
@@ -145,7 +148,7 @@ export class ReviewTaskPane extends Component {
             }
             setCompletionResponse={this.setCompletionResponse}
             completionResponses={completionResponses}
-            disableTemplate={true}
+            templateRevision={true}
             disallowBundleChanges={true}
         />
         </MediaQuery>

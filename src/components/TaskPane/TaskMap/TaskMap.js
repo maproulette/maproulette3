@@ -364,6 +364,13 @@ export class TaskMap extends Component {
     // unloaded.
     if (this.props.task.id !== this.props.completingTask) {
       this.props.setTaskMapBounds(this.props.task.id, bounds, zoom, false)
+      if (this.props.setWorkspaceContext) {
+        this.props.setWorkspaceContext({
+          taskMapTask: this.props.task,
+          taskMapBounds: bounds,
+          taskMapZoom: zoom
+        })
+      }
     }
   }
 

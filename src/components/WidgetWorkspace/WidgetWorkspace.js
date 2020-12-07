@@ -32,6 +32,7 @@ export class WidgetWorkspace extends Component {
     isEditingId: null,
     isExportingLayout: false,
     isImportingLayout: false,
+    workspaceContext: {},
   }
 
   startEditingLayout = (conf=this.props.currentConfiguration) => {
@@ -116,6 +117,12 @@ export class WidgetWorkspace extends Component {
   switchConfiguration = (configurationId, closeDropdown) => {
     this.props.switchWorkspaceConfiguration(configurationId)
     closeDropdown()
+  }
+
+  setWorkspaceContext = updatedContext => {
+    this.setState({
+      workspaceContext: Object.assign({}, this.state.workspaceContext, updatedContext),
+    })
   }
 
   componentDidCatch(error, info) {
@@ -219,6 +226,8 @@ export class WidgetWorkspace extends Component {
             </Button>
           }
           workspace={this.props.currentConfiguration}
+          workspaceContext={this.state.workspaceContext}
+          setWorkspaceContext={this.setWorkspaceContext}
         />
         {this.state.isExportingLayout &&
          <ExportLayoutModal

@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import Button from '../../Button/Button'
-import MarkdownTemplate from '../../MarkdownContent/MarkdownTemplate'
+import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
+import useMRProperties from '../../../hooks/UseMRProperties/UseMRProperties'
 import messages from '../Messages'
-
 
 /**
  * TaskInstructions displays, as Markdown, the instructions for the given task
@@ -16,49 +16,64 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class TaskInstructions extends Component {
-  state = {
-    responsesChanged: false
+const TaskInstructions = props => {
+  const [responsesChanged, setResponsesChanged] = useState(false)
+  const [allFeatureProperties, setAllFeatureProperties] = useState({})
+  const [instructions, setInstructions] = useState(null)
+  const [substitutionProperties, setSubstitutionProperties] = useState({})
+  const mrProperties = useMRProperties(props.workspaceContext)
+
+  const { task } = props
+  const challenge = _get(props, 'task.parent', {})
+
+  useEffect(() => {
+    setInstructions(!_isEmpty(task.instruction) ? task.instruction : challenge.instruction)
+  }, [task, challenge])
+
+  useEffect(() => {
+    setAllFeatureProperties(AsMappableTask(task).allFeatureProperties())
+  }, [task])
+
+  useEffect(() => {
+    setSubstitutionProperties(Object.assign({}, mrProperties, allFeatureProperties))
+  }, [mrProperties, allFeatureProperties])
+
+  if (_isEmpty(instructions)) {
+    return null
   }
 
-  render() {
-    const taskInstructions =
-        !_isEmpty(this.props.task.instruction) ?
-           this.props.task.instruction :
-           _get(this.props.task, 'parent.instruction')
-
-    if (_isEmpty(taskInstructions)) {
-      return null
-    }
-
-    const taskProperties = AsMappableTask(this.props.task).allFeatureProperties()
-    return (
-      <div className="task-instructions">
-        <MarkdownTemplate content={taskInstructions}
-                          properties={taskProperties}
-                          completionResponses={this.props.completionResponses}
-                          setCompletionResponse={(propName, value) => {
-                            this.props.setCompletionResponse(propName, value)
-                            this.setState({responsesChanged: true})
-                          }}
-                          setNeedsResponses={this.props.setNeedsResponses}
-                          inModal={this.props.inModal} />
-        {this.props.disableTemplate && this.state.responsesChanged &&
-          <Button
-            className="mr-button--blue-fill mr-button--small"
-            onClick={() => {
-              this.props.saveCompletionResponses(this.props.task, this.props.completionResponses)
-              this.setState({responsesChanged: false})
-            }}
-          >
-            <FormattedMessage {...messages.saveChangesLabel} />
-          </Button>
-        }
-      </div>
-    )
-  }
+  return (
+    <div>
+      <MarkdownContent
+        {...props}
+        className=""
+        markdown={instructions}
+        properties={substitutionProperties}
+        setCompletionResponse={(name, value) => {
+          props.setCompletionResponse(name, value)
+          setResponsesChanged(true)
+        }}
+        allowPropertyReplacement
+        allowShortCodes
+        allowFormFields
+      />
+      {props.templateRevision && responsesChanged &&
+        <Button
+          className="mr-button--blue-fill mr-button--small"
+          onClick={() => {
+            props.saveCompletionResponses(task, props.completionResponses)
+            setResponsesChanged(false)
+          }}
+        >
+          <FormattedMessage {...messages.saveChangesLabel} />
+        </Button>
+      }
+    </div>
+  )
 }
 
 TaskInstructions.propTypes = {
   task: PropTypes.object.isRequired,
 }
+
+export default TaskInstructions
