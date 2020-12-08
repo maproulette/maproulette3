@@ -241,5 +241,9 @@ export default defineMessages({
   searchNotSupported: {
     id: "Errors.search.notSupported",
     defaultMessage: "Short code search not supported{details}"
-  }
+  },
+  fileFormatIncorrect: {
+    id: "Errors.file.formatIncorrect",
+    defaultMessage: "File format is unrecognized or unsupported for this operation"
+  },
 })

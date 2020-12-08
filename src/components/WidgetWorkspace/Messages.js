@@ -83,9 +83,4 @@ export default defineMessages({
     id: "WidgetWorkspace.importModal.header",
     defaultMessage: "Import a Layout",
   },
-
-  importModalUploadLabel: {
-    id: "WidgetWorkspace.importModal.controls.upload.label",
-    defaultMessage: "Click to Upload File",
-  },
 })
