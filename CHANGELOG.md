@@ -8,6 +8,27 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [v3.6.15] - 2020-12-02
+### Added
+- New lasso-based workflow for creation of virtual challenges
+- Fit-world control to Find Challenges map for quickly zooming back out
+- Configuration option in Location widget to show Lat/Lon vs Lon/Lat
+- Additional details for each task shown on Tracked Tasks widget
+- Display of current owner of task lock if attempt to lock a task fails
+- Limit of 1500 characters in task comments
+
+### Fixed
+- Multi-task Work Widget map could be shrunk until controls unusable
+- Inability to horizontally scroll nominatum search results with long names
+- Task bbox ignoring bundled tasks (fit-to-bounds control, OSMCha link)
+- Misleading label for OSM/External id field during challenge creation
+- URL query parameters lost during sign-in process redirection
+- Map controls occasionally disappearing in Safari
+
+### Changed
+- Name of challenge GeoJSON export filename for improved JOSM compatibility
+
+
 ## [v3.6.14] - 2020-11-04
 ### Added
 - Updated community translations (huge thank you to translators!)

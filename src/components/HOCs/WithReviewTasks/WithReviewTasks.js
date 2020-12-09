@@ -44,7 +44,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
     }
 
     refresh = () => {
-      this.update(this.props, this.state.criteria[this.props.reviewTasksType])
+      this.update(this.props, this.state.criteria[this.props.reviewTasksType], true)
     }
 
     changePageSize = (pageSize) => {

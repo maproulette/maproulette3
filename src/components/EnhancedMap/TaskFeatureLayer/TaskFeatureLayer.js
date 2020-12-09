@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { GeoJSON, withLeaflet } from 'react-leaflet'
 import L from 'leaflet'
 import { injectIntl } from 'react-intl'
+import { featureCollection } from '@turf/helpers'
 import _isFunction from 'lodash/isFunction'
 import _get from 'lodash/get'
 import _uniqueId from 'lodash/uniqueId'
@@ -48,7 +49,7 @@ const TaskFeatureLayer = props => {
         key={_uniqueId()}
         mrLayerId={mrLayerId}
         mrLayerLabel={layerLabel}
-        data={features}
+        data={featureCollection(features)}
         pointToLayer={(point, latLng) => {
           return L.marker(latLng, {pane, mrLayerLabel: layerLabel, mrLayerId: mrLayerId})
         }}

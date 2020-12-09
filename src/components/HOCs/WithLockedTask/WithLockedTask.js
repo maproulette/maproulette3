@@ -18,6 +18,7 @@ const WithLockedTask = function(WrappedComponent) {
     state = {
       readOnly: false,
       tryingLock: false,
+      failureDetails: null,
     }
 
     lockTask = task => {
@@ -25,7 +26,7 @@ const WithLockedTask = function(WrappedComponent) {
         return Promise.reject("Invalid task")
       }
 
-      this.setState({tryingLock: true})
+      this.setState({tryingLock: true, failureDetails: null})
       return this.props.startTask(task.id).then(() => {
         if (this.state.readOnly) {
           this.setState({readOnly: false})
@@ -34,7 +35,7 @@ const WithLockedTask = function(WrappedComponent) {
         this.setState({tryingLock: false})
         return true
       }).catch(err => {
-        this.setState({readOnly: true, tryingLock: false})
+        this.setState({readOnly: true, tryingLock: false, failureDetails: err.details})
         return false
       })
     }
@@ -57,12 +58,12 @@ const WithLockedTask = function(WrappedComponent) {
 
       return this.props.refreshTaskLock(task.id).then(() => {
         if (this.state.readOnly) {
-          this.setState({readOnly: false})
+          this.setState({readOnly: false, failureDetails: null})
         }
 
         return true
       }).catch(err => {
-        this.setState({readOnly: true})
+        this.setState({readOnly: true, failureDetails: err.details})
         return false
       })
     }
@@ -97,6 +98,7 @@ const WithLockedTask = function(WrappedComponent) {
           {..._omit(this.props, ['startTask', 'releaseTask'])}
           taskReadOnly={this.state.readOnly}
           tryingLock={this.state.tryingLock}
+          lockFailureDetails={this.state.failureDetails}
           tryLocking={this.lockTask}
           refreshTaskLock={this.refreshTaskLock}
         />

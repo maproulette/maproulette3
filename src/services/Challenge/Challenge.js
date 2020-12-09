@@ -77,10 +77,10 @@ export const buildLinkToExportCSV = function(challengeId, criteria, timezone = n
 /**
  * Builds a link to export GeoJSON
  */
-export const buildLinkToExportGeoJSON = function(challengeId, criteria, timezone = "") {
+export const buildLinkToExportGeoJSON = function(challengeId, criteria, timezone = "", filename) {
   const queryFilters = buildQueryFilters(criteria)
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/` +
-         `${challengeId}?${queryFilters}&timezone=${encodeURIComponent(timezone)}`
+         `${challengeId}?${queryFilters}&timezone=${encodeURIComponent(timezone)}&filename=${encodeURIComponent(filename)}`
 }
 
 // Helper function to build query filters for export links

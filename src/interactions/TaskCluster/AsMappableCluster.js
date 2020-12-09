@@ -2,11 +2,13 @@ import L from 'leaflet'
 import 'leaflet-vectoricon'
 import _isFunction from 'lodash/isFunction'
 import _isFinite from 'lodash/isFinite'
+import _isEmpty from 'lodash/isEmpty'
 import _merge from 'lodash/merge'
 import _cloneDeep from 'lodash/cloneDeep'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
+import _find from 'lodash/find'
 import { TaskStatusColors }
       from '../../services/Task/TaskStatus/TaskStatus'
 import resolveConfig from 'tailwindcss/resolveConfig'
@@ -56,14 +58,14 @@ export class AsMappableCluster {
    * Generates a map marker object suitable for use with a Leaflet map, with
    * optionally customized appearance for the given map layer
    */
-  mapMarker(monochromatic, selectedTasks, highlightPrimaryTask) {
+  mapMarker(monochromatic, selectedTasks, highlightPrimaryTask, selectedClusters=null) {
     return {
       position: [this.point.lat, this.point.lng],
       options: {...(_merge(this.rawData, {taskStatus: this.rawData.status,
                                           taskPriority: this.rawData.priority,
                                           name: this.rawData.title,
                                           taskId: this.rawData.id}))},
-      icon: this.leafletMarkerIcon(monochromatic, selectedTasks, highlightPrimaryTask),
+      icon: this.leafletMarkerIcon(monochromatic, selectedTasks, highlightPrimaryTask, selectedClusters),
     }
   }
 
@@ -71,11 +73,13 @@ export class AsMappableCluster {
    * Generates a Leaflet Icon object appropriate for the given cluster based on
    * its size, including using a standard marker for a single point
    */
-  leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask=false) {
+  leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask=false, selectedClusters=null) {
     const count = _isFunction(this.rawData.getChildCount) ?
                   this.rawData.getChildCount() :
                   _get(this.options, 'numberOfPoints', this.numberOfPoints)
     if (count > 1) {
+      const clusterData = !_isEmpty(this.rawData.options) ? this.rawData.options : this.rawData
+      const isSelected = !!selectedClusters && !!_find(selectedClusters, {clusterId: clusterData.clusterId})
       const colorScheme = monochromatic ? 'greyscale-cluster' : 'multicolor-cluster'
       let clusterSizeClass = ''
       if (count < 10) {
@@ -87,8 +91,16 @@ export class AsMappableCluster {
 
       return L.divIcon({
         html: `<span class="count">${count}</span>`,
-        className: `${colorScheme} ${clusterSizeClass}`,
+        className: `${colorScheme} ${clusterSizeClass} ${isSelected ? 'selected' : ''}`,
         iconSize: L.point(40, 40),
+        clusterData: {
+          clusterId: clusterData.clusterId,
+          bounding: clusterData.bounding,
+          challengeIds: clusterData.challengeIds,
+          numberOfPoints: clusterData.numberOfPoints,
+          point: clusterData.point,
+          params: clusterData.params,
+        },
       })
     }
     else {
@@ -98,10 +110,22 @@ export class AsMappableCluster {
         taskId: this.rawData.id
       })
 
-      const isSelected = selectedTasks && (
-        (selectedTasks.allSelected && !selectedTasks.deselected.has(markerData.taskId)) ||
-        (!selectedTasks.allSelected && selectedTasks.selected.has(markerData.taskId))
-      )
+      // Check to see if task was selected via single-item cluster
+      let isFromCluster = false
+      let isSelected = false
+      if (!!selectedClusters) {
+        isSelected = !!_find(selectedClusters, {taskId: markerData.taskId})
+        if (isSelected) {
+          isFromCluster = true
+        }
+      }
+
+      if (!isSelected) {
+        isSelected = selectedTasks && (
+          (selectedTasks.allSelected && !selectedTasks.deselected.has(markerData.taskId)) ||
+          (!selectedTasks.allSelected && selectedTasks.selected.has(markerData.taskId))
+        )
+      }
 
       let icon = _cloneDeep(statusIcons[markerData.taskStatus] || statusIcons[0])
 
@@ -116,7 +140,7 @@ export class AsMappableCluster {
       }
       else if (isSelected) {
         icon = _cloneDeep(selectedTaskStatusIcons[markerData.taskStatus])
-        icon.options.style.stroke = colors.yellow
+        icon.options.style.stroke = isFromCluster ? colors.turquoise : colors.yellow
         icon.options.style.strokeWidth = 2
       }
       icon.options.taskData = markerData
