@@ -8,6 +8,52 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [v3.6.15] - 2020-12-02
+### Added
+- New lasso-based workflow for creation of virtual challenges
+- Fit-world control to Find Challenges map for quickly zooming back out
+- Configuration option in Location widget to show Lat/Lon vs Lon/Lat
+- Additional details for each task shown on Tracked Tasks widget
+- Display of current owner of task lock if attempt to lock a task fails
+- Limit of 1500 characters in task comments
+
+### Fixed
+- Multi-task Work Widget map could be shrunk until controls unusable
+- Inability to horizontally scroll nominatum search results with long names
+- Task bbox ignoring bundled tasks (fit-to-bounds control, OSMCha link)
+- Misleading label for OSM/External id field during challenge creation
+- URL query parameters lost during sign-in process redirection
+- Map controls occasionally disappearing in Safari
+
+### Changed
+- Name of challenge GeoJSON export filename for improved JOSM compatibility
+
+
+## [v3.6.14] - 2020-11-04
+### Added
+- Updated community translations (huge thank you to translators!)
+- Allow map overlays to be reordered
+- Offer choice of features when map click is ambiguous
+- Highlight selected map feature
+- Ability to save filter setups for various tables
+- Support for arrow keys on auto-suggest dropdowns
+- Control for repositioning task bundle map over primary task
+- Option to favorite/unfavorite challenge from task completion page
+- New optional OSM History widget in task completion
+- Show count of unread notifications in top navbar
+- Show projects alongside challenges on various Dashboard widgets
+- Show name of challenge on challenge-deletion confirmation dialog (#1407)
+- [internal] Various upgrades of package dependencies
+
+### Fixed
+- Task Instructions widget not expanding back to configured height
+- Location map not expanding even when its widget is expanded
+- Failure when non-reviewer visited Review page
+- Search by partial project/challenge name in review table
+- Timezone selection changing to UTC-12 when UTC was selected
+- Missing internationalizations on home page and table controls (#1262)
+
+
 ## [v3.6.13] - 2020-10-12
 ### Fixed
 - Comment mention dropdown interfering with adding newlines to comment
