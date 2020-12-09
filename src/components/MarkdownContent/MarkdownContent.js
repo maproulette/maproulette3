@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import remark from 'remark'
 import externalLinks from 'remark-external-links'
 import reactRenderer from 'remark-react'
-import _get from 'lodash/get'
 import { expandTemplatingInJSX } from '../../services/Templating/Templating'
+import usePropertyReplacement
+       from '../../hooks/UsePropertyReplacement/UsePropertyReplacement'
 
 /**
  * MarkdownContent normalizes and renders the content of the given markdown
@@ -13,47 +14,60 @@ import { expandTemplatingInJSX } from '../../services/Templating/Templating'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class MarkdownContent extends Component {
-  render() {
-    if (!this.props.markdown) {
-      return null
-    }
+const MarkdownContent = props => {
+  const [normalizedMarkdown, setNormalizedMarkdown] = useState(null)
+  const [parsedMarkdown, setParsedMarkdown] = useState(null)
+  const [expandedMarkdown, setExpandedMarkdown] = useState(null)
+  const { markdown, properties, allowPropertyReplacement, allowShortCodes } = props
 
-    // Replace any occurrences of \r\n with newlines, and since we don't
-    // support <br> tags replace `  \n` with `\n\n` to generate a new paragraph
-    // instead
-    let normalizedMarkdown =
-      this.props.markdown.replace(/\r\n/mg, "\n\n").replace(/\s{2}\n/mg, "\n\n")
-
-    // If property replacement is active, replace mustache tags (e.g.
-    // `{{foo}}`) with given property values prior to parsing markdown
-    if (this.props.allowPropertyReplacement) {
-      normalizedMarkdown = normalizedMarkdown.replace(
-        /(^|[^{])\{\{([^{][^}]*)}}/g,
-        (matched, firstChar, tagName) => firstChar + _get(this.props, `properties.${tagName}`, '')
+  useEffect(() => {
+    if (markdown) {
+      // Normalize. Replace any occurrences of \r\n with newlines, and since we
+      // don't support <br> tags replace `  \n` with `\n\n` to generate a new
+      // paragraph instead
+      setNormalizedMarkdown(
+        markdown.replace(/\r\n/mg, "\n\n").replace(/\s{2}\n/mg, "\n\n")
       )
     }
+  }, [markdown])
 
-    let parsedMarkdown =
-      remark().use(externalLinks, {target: '_blank', rel: ['nofollow']})
-              .use(reactRenderer).processSync(normalizedMarkdown).result
+  const replacedMarkdown =
+    usePropertyReplacement(normalizedMarkdown, properties, allowPropertyReplacement)
 
-    if (this.props.allowShortCodes) {
-      parsedMarkdown = expandTemplatingInJSX(parsedMarkdown, this.props)
+  useEffect(() => {
+    if (replacedMarkdown) {
+      setParsedMarkdown(
+        remark().use(externalLinks, {target: '_blank', rel: ['nofollow']})
+                .use(reactRenderer).processSync(replacedMarkdown).result
+      )
     }
+  }, [replacedMarkdown])
 
-    return (
-      <div
-        className={classNames(
-          'mr-markdown',
-          {'mr-markdown--compact': this.props.compact},
-          this.props.className
-        )}
-      >
-        {parsedMarkdown}
-      </div>
-    )
+  useEffect(() => {
+    if (parsedMarkdown) {
+      setExpandedMarkdown(
+        allowShortCodes ?
+        expandTemplatingInJSX(parsedMarkdown, props) :
+        parsedMarkdown
+      )
+    }
+  }, [parsedMarkdown, allowShortCodes, props])
+
+  if (!expandedMarkdown) {
+    return null
   }
+
+  return (
+    <div
+      className={classNames(
+        'mr-markdown',
+        {'mr-markdown--compact': props.compact},
+        props.className
+      )}
+    >
+      {expandedMarkdown}
+    </div>
+  )
 }
 
 MarkdownContent.propTypes = {
@@ -69,3 +83,5 @@ MarkdownContent.defaultProps = {
   allowPropertyReplacement: false,
   allowFormFields: false,
 }
+
+export default MarkdownContent

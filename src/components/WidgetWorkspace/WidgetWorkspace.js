@@ -16,7 +16,7 @@ import Header from '../Header/Header'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import ExportLayoutModal from './ExportLayoutModal'
-import ImportLayoutModal from './ImportLayoutModal'
+import ImportFileModal from '../ImportFileModal/ImportFileModal'
 import messages from './Messages'
 import './WidgetWorkspace.scss'
 
@@ -237,7 +237,8 @@ export class WidgetWorkspace extends Component {
          />
         }
         {this.state.isImportingLayout &&
-         <ImportLayoutModal
+         <ImportFileModal
+           header={<FormattedMessage {...messages.importModalHeader} />}
            onCancel={() => this.setState({isImportingLayout: false})}
            onUpload={file => this.props.importWorkspaceConfiguration(file)}
          />

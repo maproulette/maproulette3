@@ -112,4 +112,8 @@ export default {
   search: {
     notSupported: messages.searchNotSupported,
   },
+
+  file: {
+    formatIncorrect: messages.fileFormatIncorrect,
+  }
 }
