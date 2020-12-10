@@ -528,7 +528,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       return (
         <select
           onChange={event => onChange(event.target.value)}
-          style={{ width: '100%' }}
+          className={"mr-w-full"}
           value={filter ? filter.value : 'all'}
         >
           {options}
@@ -570,7 +570,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       return (
         <select
           onChange={event => onChange(event.target.value)}
-          style={{ width: '100%' }}
+          className={"mr-w-full"}
           value={filter ? filter.value : 'all'}
         >
           {options}
@@ -847,7 +847,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       return (
         <select
           onChange={event => onChange(event.target.value)}
-          style={{ width: '100%' }}
+          className={"mr-w-full"}
           value={filter ? filter.value : 'all'}
         >
           {options}
@@ -905,7 +905,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       return (
         <select
           onChange={event => onChange(event.target.value)}
-          style={{ width: '100%' }}
+          className={"mr-w-full"}
           value={filter ? filter.value : 'all'}
         >
           {options}

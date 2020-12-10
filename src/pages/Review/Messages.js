@@ -26,7 +26,7 @@ export default defineMessages({
 
   metaReviewTasks: {
     id: "Review.Dashboard.metaReviewTasks",
-    defaultMessage: "Meta Review Tasks",
+    defaultMessage: "Meta-Review Tasks",
   },
 
   volunteerAsReviewer: {

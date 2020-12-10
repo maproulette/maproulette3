@@ -360,7 +360,9 @@ const TaskStatusLabel = props => (
 const ReviewStatusLabel = props => (
   <span className='mr-inline-flex mr-items-center'>
     {props.isMetaReview &&
-      <span className="mr-text-xs mr-text-grey mr-text-italic mr-mr-2">Meta-Review</span>
+      <span className="mr-text-xs mr-text-grey mr-text-italic mr-mr-2">
+        <FormattedMessage {...messages.metaReviewLabel} />
+      </span>
     }
     {props.showDot &&
       <span className={classNames("mr-w-2 mr-h-2 mr-rounded-full mr-bg-current",

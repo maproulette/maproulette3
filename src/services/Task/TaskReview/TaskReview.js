@@ -386,8 +386,7 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria, excl
     return new Endpoint(
       api.tasks.removeReviewRequest, {
         params: {...searchParameters, asMetaReview},
-        json: (filters.taskPropertySearch &&
-          filters.taskPropertySearch !== "[object Object]") ?
+        json: filters.taskPropertySearch ?
           {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute().catch(error => {

@@ -51,12 +51,12 @@ export default defineMessages({
 
   metaApprovedReview: {
     id: "ReviewStatus.metrics.metaApprovedReview",
-    defaultMessage: "Reviewed tasks that passed meta review",
+    defaultMessage: "Reviewed tasks that passed meta-review",
   },
 
   metaRejectedReview: {
     id: "ReviewStatus.metrics.metaRejectedReview",
-    defaultMessage: "Reviewed tasks that have failed meta review",
+    defaultMessage: "Reviewed tasks that have failed meta-review",
   },
 
   metaAssistedReview: {

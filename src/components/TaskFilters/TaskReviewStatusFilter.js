@@ -20,7 +20,8 @@ export default class TaskReviewStatusFilter extends Component {
 
     const metaReviewStatusFilter =
       !this.props.metaReviewEnabled ? {} : {
-        secondaryFilterLabel: "Meta-Review Statuses",
+        secondaryFilterLabel:
+          this.props.intl.formatMessage(messages.filterByReviewStatusLabel),
         secondaryFilters:
           _map(TaskMetaReviewStatusWithUnset, status => (
             <li key={`meta-${status}`}>

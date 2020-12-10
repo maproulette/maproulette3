@@ -42,5 +42,11 @@ export default defineMessages({
   mapperType: {
     id: "TaskHistory.fields.userType.mapper",
     defaultMessage: "Mapper"
-  }
+  },
+
+  metaReviewLabel: {
+    id: "TaskHistory.metaReview.label",
+    defaultMessage: "Meta-Review"
+  },
+
 })
