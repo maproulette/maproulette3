@@ -108,3 +108,10 @@
     background-image: url('./static/images/bg-highway@2x.jpg');
   }
 }
+
+.mr-bg-achievements {
+  background-image: url('./static/images/trophy.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}

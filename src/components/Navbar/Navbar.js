@@ -3,6 +3,7 @@ import MediaQuery from 'react-responsive'
 import MobileMenu from 'react-burger-menu/lib/menus/slide'
 import classNames from 'classnames'
 import _get from 'lodash/get'
+import _last from 'lodash/last'
 import { Link, NavLink } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
@@ -10,6 +11,7 @@ import SignInButton from '../SignInButton/SignInButton'
 import PointsTicker from '../PointsTicker/PointsTicker'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import Dropdown from '../Dropdown/Dropdown'
+import AchievementBadge from '../AchievementBadge/AchievementBadge'
 import messages from './Messages'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../tailwind.config.js'
@@ -82,6 +84,17 @@ export default class Navbar extends Component {
         <MediaQuery minWidth={screens.lg}>
           <LoggedInUser {...this.props}>
             <div className="mr-flex mr-items-center">
+              {_get(this.props, 'user.achievements.length', 0) > 0 &&
+               <Link className="mr-mx-4 mr-w-16" to="/user/achievements">
+                 <div className="mr-relative mr-w-12">
+                   <AchievementBadge
+                     size="small"
+                     achievement={_last(this.props.user.achievements)}
+                     stackDepth={Math.min(3, this.props.user.achievements.length - 1)}
+                   />
+                 </div>
+               </Link>
+              }
               <a href="/leaderboard">
                 <PointsTicker user={this.props.user} className="mr-mr-8" />
               </a>
@@ -234,6 +247,11 @@ const ProfileMenu = function(props) {
         </NavLink>
       </li>
       <li>
+        <NavLink to="/user/achievements" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.achievements} />
+        </NavLink>
+      </li>
+      <li>
         <NavLink to="/teams" onClick={props.closeDropdown}>
           <FormattedMessage {...messages.teams} />
         </NavLink>
@@ -264,26 +282,26 @@ const ProfileImage = props => (
 const Nav = props => (
   <React.Fragment>
     <LoggedInUser {...props}>
-      <li>
+      <li className="mr-flex mr-flex-col mr-justify-center">
         <NavLink to="/dashboard" onClick={props.closeMobileMenu}>
           <FormattedMessage {...messages.dashboard} />
         </NavLink>
       </li>
     </LoggedInUser>
 
-    <li>
+    <li className="mr-flex mr-flex-col mr-justify-center">
       <NavLink to='/browse/challenges' onClick={props.closeMobileMenu}>
         <FormattedMessage {...messages.results} />
       </NavLink>
     </li>
 
-    <li>
+    <li className="mr-flex mr-flex-col mr-justify-center">
       <NavLink to='/leaderboard' onClick={props.closeMobileMenu}>
         <FormattedMessage {...messages.leaderboard} />
       </NavLink>
     </li>
 
-    <li>
+    <li className="mr-flex mr-flex-col mr-justify-center">
       <a
         href={process.env.REACT_APP_DOCS_URL}
         target="_blank"
@@ -327,9 +345,26 @@ const MobileNav = props => (
           </NavLink>
         </li>
         <li>
+          <NavLink to="/user/metrics" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.metrics} />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/user/achievements" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.achievements} />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/teams" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.teams} />
+          </NavLink>
+        </li>
+        <li>
           <NavLink to="/inbox" onClick={props.closeMobileMenu}>
-            <FormattedMessage {...messages.inbox} />
-            <UnreadNotificationsIndicator {...props} inline />
+            <div className="mr-flex">
+              <FormattedMessage {...messages.inbox} />
+              <UnreadNotificationsIndicator {...props} inline />
+            </div>
           </NavLink>
         </li>
         <li>

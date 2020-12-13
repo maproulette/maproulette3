@@ -49,6 +49,7 @@ module.exports = {
       'blue-firefly-75': 'rgba(8, 20, 37, .75)',
       'blue-cloudburst': '#1D304D',
       'blue-rhino': '#2A415C',
+      'blue-sttropaz': '#264E90',
       yellow: '#FFFD86',
       'yellow-75': 'rgba(255, 253, 134, .75)',
       'dark-yellow': '#F1E15B',
@@ -59,6 +60,7 @@ module.exports = {
       turquoise: '#17FFF3',
       pink: '#E87CE0',
       'pink-light': '#FFB2F0',
+      cerise: '#DA3ACB',
       rosebud: '#FFA8A8',
       'pink-light-10': 'rgba(255,178,240,0.1)',
       'pink-light-50': 'rgba(255,178,240,0.5)',
@@ -72,6 +74,7 @@ module.exports = {
       'teal-40': 'rgba(111, 179, 184, 0.40)',
       rose: '#F89294',
       'picton-blue': '#50B7E5',
+      'picton-blue-light': '#43D5FA',
       'lavender-rose': '#FF98F7',
       'matisse-blue': '#6FB3B8',
       'blue-viking': '#65D2DA',
@@ -117,6 +120,9 @@ module.exports = {
         'Courier New',
         'monospace',
       ],
+      bungee: 'Bungee',
+      bungeeshade: 'Bungee Shade',
+      bungeeinline: 'Bungee Inline',
     },
 
     fontSize: {
@@ -132,6 +138,7 @@ module.exports = {
       '4xl': '2rem', // 32px
       '5xl': '2.5rem', // 40px
       '6xl': '3.75rem', // 60px
+      '8xl': '4rem', // 64px
     },
 
     fontWeight: {
@@ -417,10 +424,13 @@ module.exports = {
       '16': '4rem',
       '20': '5rem',
       '24': '6rem',
+      '26': '6.5rem',
+      '28': '7rem',
       '31': '7.75rem',
       '32': '8rem',
       '41': '10.25rem',
       '48': '12rem',
+      '1/3': '33%',
       '-px': '-1px',
       '-0': '-0',
       '-1': '-0.25rem',
@@ -457,6 +467,7 @@ module.exports = {
       '0': 0,
       '5': 5,
       '10': 10,
+      '15': 15,
       '20': 20,
       '30': 30,
       '40': 40,
