@@ -129,6 +129,10 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
         // A layout was provided. If heights and/or widths were omitted or don't meet
         // current minimums, fill them in from the widget descriptors
         _each(configuration.layout, (widgetLayout, index) => {
+          if (!configuration.widgets || !configuration.widgets[index]) {
+            return
+          }
+
           const descriptor = widgetDescriptor(configuration.widgets[index].widgetKey)
           if (!descriptor) {
             return
