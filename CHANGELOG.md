@@ -8,7 +8,13 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-## [v3.6.15] - 2020-12-02
+## [v3.6.16] - 2020-12-16
+### Fixed
+- Inability to recover from certain forms of workspace corruption
+- Challenge filters not honored when moving to next task for review
+
+
+## [v3.6.15] - 2020-12-09
 ### Added
 - New lasso-based workflow for creation of virtual challenges
 - Fit-world control to Find Challenges map for quickly zooming back out

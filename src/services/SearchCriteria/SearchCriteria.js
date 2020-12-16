@@ -51,7 +51,14 @@ export function buildSearchURL(searchCriteria) {
         _each(_keys(searchCriteria[key]), (subkey) => {
           if (!_isUndefined(searchCriteria[key][subkey]) &&
               searchCriteria[key][subkey] !== null) {
-            params[`${key}.${subkey}`] = searchCriteria[key][subkey]
+            // taskPropertySearch is a json object
+            if (subkey === "taskPropertySearch") {
+              params[`${key}.${subkey}`] =
+                JSON.stringify(searchCriteria[key][subkey])
+            }
+            else {
+              params[`${key}.${subkey}`] = searchCriteria[key][subkey]
+            }
           }
         })
       }
@@ -90,7 +97,13 @@ export function buildSearchCriteriafromURL(searchURL) {
       const primaryKey = result[1]
       const subkey = result[2]
       searchCriteria[primaryKey] = searchCriteria[primaryKey] || {}
-      searchCriteria[primaryKey][subkey] = massageValue(parsedURL[key])
+
+      if (subkey === "taskPropertySearch") {
+        searchCriteria[primaryKey][subkey] = JSON.parse(parsedURL[key])
+      }
+      else {
+        searchCriteria[primaryKey][subkey] = massageValue(parsedURL[key])
+      }
     }
     else {
       searchCriteria[key] = massageValue(parsedURL[key])

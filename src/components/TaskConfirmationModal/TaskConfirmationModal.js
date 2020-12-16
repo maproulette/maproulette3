@@ -92,9 +92,15 @@ export class TaskConfirmationModal extends Component {
   }
 
   filterChange = (key, value, invert=false) => {
-    const criteria = _cloneDeep(this.state.criteria)
+    const criteria = _cloneDeep(this.currentFilters())
     criteria.filters = criteria.filters || {}
     criteria.filters[key] = value
+
+    if (key === "challenge") {
+      // If we are using a challenge filter then we need to cleanup
+      // the challengeId filter as it gets priority.
+      criteria.filters.challengeId = null
+    }
 
     criteria.invertFields = criteria.invertFields || {}
     criteria.invertFields[key] = invert
