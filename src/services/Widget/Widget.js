@@ -199,7 +199,7 @@ export const decommissionedWidgets = gridConfiguration => {
  */
 export const pruneDecommissionedWidgets = originalGridConfiguration => {
   let gridConfiguration = originalGridConfiguration
-  if (_findIndex(gridConfiguration.widgets, w => _isEmpty(w)) != -1) {
+  if (_findIndex(gridConfiguration.widgets, w => _isEmpty(w)) !== -1) {
     gridConfiguration = _cloneDeep(gridConfiguration)
     gridConfiguration.widgets = _compact(gridConfiguration.widgets)
   }
