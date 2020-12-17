@@ -109,6 +109,26 @@ export default defineMessages({
     defaultMessage: "Another reviewer has revised your review.",
   },
 
+  metaReviewApprovedNotificationLead: {
+    id: "Inbox.metaReviewApprovedNotification.lead",
+    defaultMessage: "Good news! Your task review has been meta-reviewed and approved.",
+  },
+
+  metaReviewApprovedWithFixesNotificationLead: {
+    id: "Inbox.metaReviewApprovedWithFixesNotification.lead",
+    defaultMessage: "Your task review been approved (with some fixes made for you by the meta-reviewer).",
+  },
+
+  metaReviewRejectedNotificationLead: {
+    id: "Inbox.metaReviewRejectedNotification.lead",
+    defaultMessage: "Following a meta-review of your task review, the meta-reviewer has determined that it needs some additional work.",
+  },
+
+  metaReviewAgainNotificationLead: {
+    id: "Inbox.metaReviewAgainNotification.lead",
+    defaultMessage: "The reviewer has revised their review and is requesting an additional meta-review.",
+  },
+
   challengeCompleteNotificationLead: {
     id: "Inbox.challengeCompleteNotification.lead",
     defaultMessage: "A challenge you manage has been completed.",

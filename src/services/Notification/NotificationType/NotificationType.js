@@ -14,6 +14,8 @@ export const NOTIFICATION_TYPE_TEAM = 6
 export const NOTIFICATION_TYPE_FOLLOW = 7
 export const NOTIFICATION_TYPE_MAPPER_CHALLENGE_COMPLETED = 8
 export const NOTIFICATION_TYPE_REVIEW_REVISED = 9
+export const NOTIFICATION_TYPE_META_REVIEW = 10
+export const NOTIFICATION_TYPE_META_REVIEW_AGAIN = 11
 
 export const NotificationType = Object.freeze({
   system: NOTIFICATION_TYPE_SYSTEM,
@@ -26,6 +28,8 @@ export const NotificationType = Object.freeze({
   mapperChallengeCompleted: NOTIFICATION_TYPE_MAPPER_CHALLENGE_COMPLETED,
   team: NOTIFICATION_TYPE_TEAM,
   follow: NOTIFICATION_TYPE_FOLLOW,
+  metaReview: NOTIFICATION_TYPE_META_REVIEW,
+  metaReviewAgain: NOTIFICATION_TYPE_META_REVIEW_AGAIN,
 })
 
 export const NotificationSubscriptionType = Object.freeze({
@@ -37,6 +41,7 @@ export const NotificationSubscriptionType = Object.freeze({
   challengeCompleted: NOTIFICATION_TYPE_CHALLENGE_COMPLETED,
   team: NOTIFICATION_TYPE_TEAM,
   follow: NOTIFICATION_TYPE_FOLLOW,
+  metaReview: NOTIFICATION_TYPE_META_REVIEW,
 })
 
 export const keysByNotificationType = Object.freeze(_invert(NotificationType))

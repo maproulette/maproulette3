@@ -19,7 +19,8 @@ import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import { keysByStatus, messagesByStatus, TASK_STATUS_CREATED }
       from '../../services/Task/TaskStatus/TaskStatus'
-import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
+import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
+      messagesByMetaReviewStatus }
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskHistoryAction } from '../../services/Task/TaskHistory/TaskHistory'
 import { viewAtticOverpass } from '../../services/Overpass/Overpass'
@@ -29,6 +30,7 @@ import messages from './Messages'
 
 // Constants for userType
 const REVIEWER_TYPE = "reviewer"
+const META_REVIEWER_TYPE = "meta-reviewer"
 const MAPPER_TYPE = "mapper"
 
 // constants for toggle between time/entries and users/contributors
@@ -90,6 +92,7 @@ export class TaskHistoryList extends Component {
           username = _get(log, 'user.username')
           break
         case TaskHistoryAction.review:
+        case TaskHistoryAction.metaReview:
           if (log.reviewStatus === TaskReviewStatus.needed) {
             username = _get(log, 'reviewRequestedBy.username')
             logEntry = reviewEntry(log, this.props, index)
@@ -99,12 +102,13 @@ export class TaskHistoryList extends Component {
             updatedStatus =
                 <ReviewStatusLabel
                   {...this.props}
-                  intlMessage={messagesByReviewStatus[log.reviewStatus]}
+                  isMetaReview={log.actionType === TaskHistoryAction.metaReview}
+                  intlMessage={messagesByMetaReviewStatus[log.reviewStatus]}
                   className={`mr-review-${_kebabCase(keysByReviewStatus[log.reviewStatus])}`}
                   showDot
                 />
             username = _get(log, 'reviewedBy.username')
-            userType = REVIEWER_TYPE
+            userType = log.actionType === TaskHistoryAction.metaReview ? META_REVIEWER_TYPE : REVIEWER_TYPE
 
             if (log.startedAt) {
               duration = new Date(log.timestamp) - new Date(log.startedAt)
@@ -173,20 +177,31 @@ export class TaskHistoryList extends Component {
 
     const contributorEntries =
       <ol className="mr-list-decimal mr-pl-4">
-        {_map(contributors, (c, index) => (
+        {_map(contributors, (c, index) => {
+          let userType = ""
+          switch(c.userType) {
+            case REVIEWER_TYPE:
+              userType = this.props.intl.formatMessage(messages.reviewerType)
+              break
+            case META_REVIEWER_TYPE:
+              userType = this.props.intl.formatMessage(messages.metaReviewerType)
+              break
+            default:
+              userType = this.props.intl.formatMessage(messages.mapperType)
+              break
+          }
+
+          return (
             <li key={c.username + c.userType} className="">
               <span className="mr-w-40 mr-inline-block mr-px-2 mr-py-1"
                     style={{color: mapColors(c.username)}} >
                 {c.username}
               </span>
               <span className="mr-inline-block mr-text-pink mr-py-1">
-                {c.userType === REVIEWER_TYPE ?
-                   this.props.intl.formatMessage(messages.reviewerType) :
-                   this.props.intl.formatMessage(messages.mapperType)
-                }
+              {userType}
               </span>
             </li>
-        ))}
+        )})}
       </ol>
 
     combinedLogs = _reverse(_sortBy(combinedLogs, log => new Date(log.timestamp)))
@@ -293,6 +308,7 @@ const reviewEntry = (entry, props, index) => {
       {!_isUndefined(entry.reviewStatus) &&
         <ReviewStatusLabel
           {...props}
+          isMetaReview={entry.actionType === TaskHistoryAction.metaReview}
           intlMessage={messagesByReviewStatus[entry.reviewStatus]}
           className={`mr-review-${_kebabCase(keysByReviewStatus[entry.reviewStatus])}`}
         />
@@ -343,6 +359,11 @@ const TaskStatusLabel = props => (
 
 const ReviewStatusLabel = props => (
   <span className='mr-inline-flex mr-items-center'>
+    {props.isMetaReview &&
+      <span className="mr-text-xs mr-text-grey mr-text-italic mr-mr-2">
+        <FormattedMessage {...messages.metaReviewLabel} />
+      </span>
+    }
     {props.showDot &&
       <span className={classNames("mr-w-2 mr-h-2 mr-rounded-full mr-bg-current",
                        props.className)} />}

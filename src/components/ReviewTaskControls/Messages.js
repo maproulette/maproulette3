@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Review Status:",
   },
 
+  currentMetaReviewStatus: {
+    id: "Admin.TaskReview.controls.currentMetaReviewStatus.label",
+    defaultMessage: "Meta Review Status:",
+  },
+
   taskTags: {
     id: "Admin.TaskReview.controls.taskTags.label",
     defaultMessage: "Tags:",
@@ -75,9 +80,23 @@ export default defineMessages({
     defaultMessage: "Skip Review",
   },
 
+  skipMetaReview: {
+    id: "Admin.TaskReview.controls.skipMetaReview",
+    defaultMessage: "Skip Meta-Review",
+  },
+
   resubmit: {
     id: "Admin.TaskReview.controls.resubmit",
     defaultMessage: "Submit for Review Again",
   },
 
+  requestMetaReReview: {
+    id: "Admin.TaskReview.controls.resubmitMetaReReview",
+    defaultMessage: "Request Meta-Review Again"
+  },
+
+  changeReview: {
+    id: "Admin.TaskReview.controls.changeReview",
+    defaultMessage: "Or change your review"
+  },
 })

@@ -86,7 +86,8 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25) {
     return new Endpoint(
       api.challenge.taskClusters, {
         params: {points, ...searchParameters},
-        json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
+        json: filters.taskPropertySearch ? 
+          {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute()
     .then(results => {

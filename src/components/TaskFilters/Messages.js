@@ -23,4 +23,10 @@ export default defineMessages({
     id: "TaskReviewStatusFilter.label",
     defaultMessage: "Filter by Review Status",
   },
+
+  filterByMetaReviewStatusLabel: {
+    id: "TaskReviewStatusFilter.metaReviewStatuses.label",
+    defaultMessage: "Meta-Review Statuses",
+  },
+
 })

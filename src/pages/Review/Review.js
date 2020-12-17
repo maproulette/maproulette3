@@ -46,6 +46,9 @@ export const defaultWorkspaceSetup = function() {
     widgets: [
       widgetDescriptor('ReviewTableWidget'),
     ],
+    conditionalWidgets: [ // conditionally displayed
+      'MetaReviewStatusMetricsWidget',
+    ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 12, h: 18},
     ],
@@ -189,6 +192,8 @@ export class ReviewTasksDashboard extends Component {
       )
     }
 
+    const metaReviewEnabled = process.env.REACT_APP_FEATURE_META_QC === 'enabled'
+
     const showType = !user.isReviewer() ? ReviewTasksType.myReviewedTasks : this.state.showType
 
     const reviewerTabs =
@@ -244,6 +249,18 @@ export class ReviewTasksDashboard extends Component {
               {this.props.intl.formatMessage(messages.allReviewedTasks)}
             </button>
           </li>
+          {metaReviewEnabled &&
+            <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
+              <button
+                className={classNames(
+                  this.state.showType === ReviewTasksType.metaReviewTasks ? "mr-text-current" : "mr-text-green-lighter"
+                )}
+                onClick={() => this.changeTab(ReviewTasksType.metaReviewTasks)}
+              >
+                {this.props.intl.formatMessage(messages.metaReviewTasks)}
+              </button>
+            </li>
+          }
         </ol>
       </div>
 
@@ -293,6 +310,7 @@ export class ReviewTasksDashboard extends Component {
             defaultFilters={this.state.filterSelected[showType]}
             clearSelected={this.clearSelected}
             pageId={showType}
+            metaReviewEnabled
           />
         }
         <MediaQuery query="(max-width: 1023px)">

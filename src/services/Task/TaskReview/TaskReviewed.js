@@ -37,7 +37,8 @@ export const receiveReviewedTasks = function(tasks,
  * Retrieve all tasks (up to the given limit) that have been reviewed
  * by user or requested by user
  */
-export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, asMapper=false, limit=50) {
+export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
+  asMapper=false, limit=50, asMetaReview=false) {
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? _snakeCase(sortBy) : null
@@ -70,8 +71,8 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, a
       {
         schema: {tasks: [taskSchema()]},
         params: {mappers, reviewers, limit, sort, order, page: (page * limit),
-                 allowReviewNeeded: !asReviewer, ...searchParameters,
-                 includeTags},
+                 ...searchParameters, includeTags, asMetaReview,
+                 allowReviewNeeded: (!asReviewer && !asMetaReview)},
       }
     ).execute().then(normalizedResults => {
       const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})

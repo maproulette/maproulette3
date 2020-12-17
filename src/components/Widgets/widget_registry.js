@@ -63,6 +63,8 @@ export { default as ReviewTableWidget }
       from './ReviewTableWidget/ReviewTableWidget'
 export { default as ReviewStatusMetricsWidget }
       from './ReviewStatusMetricsWidget/ReviewStatusMetricsWidget'
+export { default as MetaReviewStatusMetricsWidget }
+      from './ReviewStatusMetricsWidget/MetaReviewStatusMetricsWidget'
 export { default as ReviewTagMetricsWidget }
       from './ReviewTagMetricsWidget/ReviewTagMetricsWidget'
 export { default as ReviewMapWidget }

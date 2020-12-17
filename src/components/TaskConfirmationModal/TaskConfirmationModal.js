@@ -155,7 +155,10 @@ export class TaskConfirmationModal extends Component {
                 <div className="mr-w-full">
                   <h2 className="mr-text-grey-light-more mr-text-4xl mr-mt-4">
                     {this.props.inReview ?
-                      <FormattedMessage {...messages.inReviewHeader} /> :
+                      (this.props.asMetaReview ?
+                        <FormattedMessage {...messages.inMetaReviewHeader} /> :
+                        <FormattedMessage {...messages.inReviewHeader} />
+                      ) :
                       _isUndefined(this.props.needsRevised) ?
                         <FormattedMessage {...messages.header} /> :
                         (this.props.needsRevised === TaskReviewStatus.needed ?
@@ -171,8 +174,11 @@ export class TaskConfirmationModal extends Component {
                         "mr-uppercase mr-tracking-wide",
                         `mr-status-${_kebabCase(keysByReviewStatus[this.props.status])}`
                       )}
-                    >
-                      <FormattedMessage {...messagesByReviewStatus[this.props.status]} />
+                    > 
+                      {this.props.status === TaskReviewStatus.needed ?
+                        <FormattedMessage {...messages.metaReviewRequestedLabel} /> :
+                        <FormattedMessage {...messagesByReviewStatus[this.props.status]} />
+                      }
                     </div>
                   }
                   {!this.props.inReview && !applyingTagChanges &&

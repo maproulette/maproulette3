@@ -61,6 +61,10 @@ export const WithChallengeTagMetrics = function(WrappedComponent) {
         return this.updateMetrics(this.props)
       }
 
+      if (this.props.includeMetaReviewStatuses !== prevProps.includeMetaReviewStatuses) {
+        return this.updateMetrics(this.props)
+      }
+
       if (this.props.includeTaskPriorities !== prevProps.includeTaskPriorities) {
         return this.updateMetrics(this.props)
       }

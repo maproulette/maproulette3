@@ -1,3 +1,4 @@
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _merge from 'lodash/merge'
 import _isString from 'lodash/isString'
@@ -20,24 +21,35 @@ import AppErrors from '../../../services/Error/AppErrors'
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-const WithTaskReview = WrappedComponent =>
-  connect(null, mapDispatchToProps)(WrappedComponent)
+ export const WithTaskReview = WrappedComponent => {
+   return class extends Component {
+     render() {
+       return <WrappedComponent
+        metaReviewEnabled={process.env.REACT_APP_FEATURE_META_QC === 'enabled'}
+        asMetaReview={asMetaReview(this.props)} {...this.props} />
+     }
+   }
+ }
+
+function asMetaReview(props) {
+ return props.history.location.pathname.endsWith("meta-review")
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateTaskReviewStatus: (task, status, comment, tags, loadBy, url,
       taskBundle, requestedNextTask, newTaskStatus) => {
         const doReview = taskBundle ?
-          completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus) :
-          completeReview(task.id, status, comment, tags, newTaskStatus)
+          completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, asMetaReview(ownProps)) :
+          completeReview(task.id, status, comment, tags, newTaskStatus, asMetaReview(ownProps))
 
         dispatch(doReview).then(() => {
           if (loadBy === TaskReviewLoadMethod.nearby && requestedNextTask) {
-            visitTaskForReview(loadBy, url, requestedNextTask)
+            visitTaskForReview(loadBy, url, requestedNextTask, asMetaReview(ownProps))
           }
           else {
-            loadNextTaskForReview(dispatch, url, task.id).then(nextTask =>
-              visitTaskForReview(loadBy, url, nextTask))
+            loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
+              nextTask => visitTaskForReview(loadBy, url, nextTask, asMetaReview(ownProps)))
           }
         }).catch(error => {
           console.log(error)
@@ -47,7 +59,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
     skipTaskReview: (task, loadBy, url) => {
       dispatch(cancelReviewClaim(task.id))
-      loadNextTaskForReview(dispatch, url, task.id).then(nextTask => visitTaskForReview(loadBy, url, nextTask))
+      loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
+        nextTask => visitTaskForReview(loadBy, url, nextTask, asMetaReview(ownProps)))
     },
 
     stopReviewing: (task, url) => {
@@ -98,14 +111,15 @@ export const parseSearchCriteria = url => {
   }
 }
 
-export const visitTaskForReview = (loadBy, url, task) => {
+export const visitTaskForReview = (loadBy, url, task, asMetaReview) => {
   const parsedCriteria = parseSearchCriteria(url)
   const newState = parsedCriteria.newState
 
   if (task && (loadBy === TaskReviewLoadMethod.next ||
                loadBy === TaskReviewLoadMethod.nearby)) {
     url.push({
-      pathname:`/challenge/${_get(task, 'parent.id', task.parent)}/task/${task.id}/review`,
+      pathname:`/challenge/${_get(task, 'parent.id', task.parent)}/task/${task.id}/` +
+               (asMetaReview ? "meta-review" : "review"),
       state: newState
     })
   }
@@ -117,14 +131,15 @@ export const visitTaskForReview = (loadBy, url, task) => {
   }
   else {
     url.push({
-      pathname: '/review',
+      pathname: '/review' + (asMetaReview ? "/metaReviewTasks" : ""),
       search: buildSearchURL(parsedCriteria.searchCriteria)
     })
   }
 }
 
-export const loadNextTaskForReview = (dispatch, url, lastTaskId) => {
-  return dispatch(loadNextReviewTask(parseSearchCriteria(url).searchCriteria, lastTaskId))
+export const loadNextTaskForReview = (dispatch, url, lastTaskId, asMetaReview) => {
+  return dispatch(loadNextReviewTask(parseSearchCriteria(url).searchCriteria, lastTaskId, asMetaReview))
 }
 
-export default WithTaskReview
+export default WrappedComponent =>
+  connect(null, mapDispatchToProps)(WithTaskReview(WrappedComponent))

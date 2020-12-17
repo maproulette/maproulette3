@@ -49,6 +49,9 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
         if (props.includeTaskReviewStatuses && this.isFiltering(props.includeTaskReviewStatuses)) {
           criteria.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses, v => v)).join(',')
         }
+        if (props.includeMetaReviewStatuses && this.isFiltering(props.includeMetaReviewStatuses)) {
+          criteria.metaReviewStatus = _keys(_pickBy(props.includeMetaReviewStatuses, v => v)).join(',')
+        }
         if (props.includeTaskPriorities && this.isFiltering(props.includeTaskPriorities)) {
           criteria.priorities =_keys(_pickBy(props.includeTaskPriorities, v => v)).join(',')
         }

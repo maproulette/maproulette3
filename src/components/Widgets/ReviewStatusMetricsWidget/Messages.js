@@ -11,5 +11,9 @@ export default defineMessages({
   title: {
     id: "Widgets.ReviewStatusMetricsWidget.title",
     defaultMessage: "Review Status",
+  },
+  metaReviewStatusTitle: {
+    id: "Widgets.ReviewStatusMetricsWidget.metaReviewStatusTitle",
+    defaultMessage: "Meta-Review Status",
   }
 })

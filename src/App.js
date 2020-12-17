@@ -47,6 +47,7 @@ import './App.scss'
 const TopNav = withRouter(WithCurrentUser(Navbar))
 const CurrentTaskPane = WithCurrentTask(TaskPane)
 const CurrentReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
+const CurrentMetaReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentVirtualChallengeTaskPane =
   WithVirtualChallenge(WithCurrentTask(TaskPane))
 const VirtualChallengePane = WithVirtualChallenge(ChallengePane)
@@ -120,6 +121,7 @@ export class App extends Component {
             <CachedRoute path='/country/:countryCode/leaderboard' component={CountryLeaderboard} />
             <CachedRoute path='/challenge/:challengeId/task/:taskId/inspect' component={InspectTask} />
             <CachedRoute path='/challenge/:challengeId/task/:taskId/review' component={CurrentReviewTaskPane} />
+            <CachedRoute path='/challenge/:challengeId/task/:taskId/meta-review' component={CurrentMetaReviewTaskPane}/>
             <CachedRoute path='/admin' component={AdminPane} />
             <CachedRoute path='/error' component={ErrorPane} />
             <Route component={PageNotFound} />

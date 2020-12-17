@@ -16,7 +16,8 @@ import WithSavedFilters from '../HOCs/WithSavedFilters/WithSavedFilters'
 import SavedFiltersList from '../SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../SavedFilters/ManageSavedFilters'
 import { TaskStatus, statusLabels } from '../../services/Task/TaskStatus/TaskStatus'
-import { buildLinkToMapperExportCSV } from '../../services/Task/TaskReview/TaskReview'
+import { buildLinkToMapperExportCSV,
+         buildLinkToReviewerMetaExportCSV } from '../../services/Task/TaskReview/TaskReview'
 import { buildLinkToExportCSV, buildLinkToExportGeoJSON } from '../../services/Challenge/Challenge'
 import messages from './Messages'
 
@@ -172,6 +173,23 @@ export class TaskAnalysisTableHeader extends Component {
                           </div>
                         </li>
                       }
+                      {manager.canWriteProject(this.props.challenge.parent) &&
+                       this.props.metaReviewEnabled &&
+                        <li>
+                          <div>
+                            <ConfirmAction
+                              action="onClick"
+                              skipConfirmation={e => e.target.value === ""}>
+                              <button
+                                className="mr-text-current mr-pr-1 mr-text-green-lighter"
+                                onClick={() => this.props.removeMetaReviewRequests(this.props.selectedTasks)}
+                              >
+                                <FormattedMessage {...messages.removeMetaReviewStatusLabel} />
+                              </button>
+                            </ConfirmAction>
+                          </div>
+                        </li>
+                      }
                       <li>
                         <button
                           className="mr-text-green-lighter"
@@ -231,6 +249,19 @@ export class TaskAnalysisTableHeader extends Component {
                         </a>
                       </li>
                     </ul>
+                    {this.props.metaReviewEnabled &&
+                      <ul className="mr-list-dropdown">
+                        <li className="mr-mt-2">
+                          <a target="_blank"
+                             rel="noopener noreferrer"
+                             href={`${buildLinkToReviewerMetaExportCSV(this.props.criteria)}&cid=${_get(this.props, 'challenge.id')}`}
+                             className="mr-flex mr-items-center">
+                            <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                            <FormattedMessage {...messages.exportReviewerMetaCSVLabel} />
+                          </a>
+                        </li>
+                      </ul>
+                    }
                   </React.Fragment>
                 }
               />

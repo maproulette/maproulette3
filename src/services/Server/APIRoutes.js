@@ -101,6 +101,7 @@ const apiRoutes = factory => {
         'updateStatus': factory.put('/taskBundle/:bundleId/:status'),
         'addComment': factory.post('/taskBundle/:bundleId/comment'),
         'updateReviewStatus': factory.put('/taskBundle/:bundleId/review/:status'),
+        'updateMetaReviewStatus': factory.put('/taskBundle/:bundleId/metareview/:status')
       },
       'removeReviewRequest': factory.put('/tasks/review/remove')
     },
@@ -113,6 +114,7 @@ const apiRoutes = factory => {
       'cancelReview': factory.get('/task/:id/review/cancel'),
       'updateStatus': factory.put('/task/:id/:status'),
       'updateReviewStatus': factory.put('/task/:id/review/:status'),
+      'updateMetaReviewStatus': factory.put('/task/:id/metareview/:status'),
       'comments': factory.get('/task/:id/comments'),
       'addComment': factory.post('/task/:id/comment'),
       'create': factory.post('/task'),

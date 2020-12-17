@@ -131,6 +131,10 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
           return props.updateReviewedTasks(userId, searchOnCriteria, pageSize).then(() => {
             this.setState({loading: false})
           })
+        case ReviewTasksType.metaReviewTasks:
+          return props.updateReviewedTasks(userId, searchOnCriteria, pageSize, true).then(() => {
+            this.setState({loading: false})
+          })
         case ReviewTasksType.myReviewedTasks:
         default:
           return props.updateMapperReviewedTasks(userId, searchOnCriteria, pageSize).then(() => {
@@ -208,6 +212,9 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
         case ReviewTasksType.allReviewedTasks:
           reviewData = this.props.currentReviewTasks.reviewed
           break
+        case ReviewTasksType.metaReviewTasks:
+          reviewData = this.props.currentReviewTasks.reviewed
+          break
         case ReviewTasksType.myReviewedTasks:
         default:
           reviewData = this.props.currentReviewTasks.mapperReviewed
@@ -248,8 +255,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   updateReviewNeededTasks: (searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
     return dispatch(fetchReviewNeededTasks(searchCriteria, pageSize))
   },
-  updateReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
-    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, false, pageSize))
+  updateReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE, asMetaReview=false) => {
+    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, false, pageSize, asMetaReview))
   },
   updateMapperReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
     return dispatch(fetchReviewedTasks(userId, searchCriteria, false, true, pageSize))
