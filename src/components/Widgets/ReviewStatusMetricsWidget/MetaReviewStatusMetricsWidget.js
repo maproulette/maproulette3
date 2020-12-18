@@ -16,7 +16,7 @@ import messages from './Messages'
 
 const descriptor = {
   widgetKey: 'MetaReviewStatusMetricsWidget',
-  label: messages.label,
+  label: messages.metaReviewlabel,
   targets: process.env.REACT_APP_FEATURE_META_QC === 'enabled' ?
     [WidgetDataTarget.review, WidgetDataTarget.challenge,
      WidgetDataTarget.challenges] : [],

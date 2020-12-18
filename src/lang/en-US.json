@@ -1536,6 +1536,7 @@
   "Widgets.RecentActivityWidget.title": "Recent Activity",
   "Widgets.ReviewMap.label": "Review Map",
   "Widgets.ReviewStatusMetricsWidget.label": "Review Status Metrics",
+  "Widgets.ReviewStatusMetricsWidget.metaReviewLabel": "Meta-Review Status Metrics",
   "Widgets.ReviewStatusMetricsWidget.metaReviewStatusTitle": "Meta-Review Status",
   "Widgets.ReviewStatusMetricsWidget.title": "Review Status",
   "Widgets.ReviewTableWidget.label": "Review Table",
