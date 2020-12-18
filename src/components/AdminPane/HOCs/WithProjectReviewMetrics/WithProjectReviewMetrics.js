@@ -34,7 +34,8 @@ export const WithProjectReviewMetrics = function(WrappedComponent) {
       this.setState({loading: true})
 
       const challengeIds = this.getChallengeIds(props)
-      props.refreshReviewMetrics(_get(props.user, 'id'), challengeIds).then(() => {
+      props.refreshReviewMetrics(_get(props.user, 'id'), challengeIds,
+        _get(props.project, 'id')).then(() => {
         this.setState({loading: false, currentChallengeIds: challengeIds})
       })
     }
@@ -67,8 +68,9 @@ const mapStateToProps = state => (
 )
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  refreshReviewMetrics: (userId, challengeIds) => {
-    return dispatch(fetchReviewMetrics(userId, ReviewTasksType.allReviewedTasks, {filters:{challengeId: challengeIds}}))
+  refreshReviewMetrics: (userId, challengeIds, projectId) => {
+    return dispatch(fetchReviewMetrics(userId, ReviewTasksType.allReviewedTasks,
+      {filters:{challengeId: challengeIds, projectId: projectId}}))
   },
 })
 
