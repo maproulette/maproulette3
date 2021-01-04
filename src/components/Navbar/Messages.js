@@ -49,6 +49,11 @@ export default defineMessages({
     defaultMessage: "User Metrics",
   },
 
+  achievements: {
+    id: 'Navbar.links.userAchievements',
+    defaultMessage: "Achievements",
+  },
+
   teams: {
     id: 'Navbar.links.teams',
     defaultMessage: "Teams",

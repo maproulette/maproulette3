@@ -81,7 +81,7 @@ class UserSettings extends Component {
       // then this would be set back to None by the normalizeDefaultBasemap().
       const updatedUser = _get(results, 'entities.users', [])[this.props.user.id]
       const settingsFormData = _cloneDeep(this.state.settingsFormData)
-      settingsFormData.defaultBasemap = updatedUser.settings.defaultBasemapId || "-1"
+      settingsFormData.defaultBasemap = _get(updatedUser, 'settings.defaultBasemapId', "-1")
 
       // If we have new customBasemaps data in our state then we need to update any
       // matching new mappings with the server generated id.

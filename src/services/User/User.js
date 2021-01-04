@@ -69,8 +69,8 @@ export const userDenormalizationSchema = function() {
 
 export const subscribeToUserUpdates = function(dispatch, userId) {
   websocketClient.addServerSubscription(
-    "user", userId, `newNotificationHandler_${userId}`,
-    messageObject => onNewNotification(dispatch, userId, messageObject)
+    "user", userId, `userUpdateHandler_${userId}`,
+    messageObject => onUserUpdate(dispatch, userId, messageObject)
   )
 }
 
@@ -92,14 +92,21 @@ export const unsubscribeFromFollowUpdates = function(handle) {
 }
 
 /**
- * Process user notification updates received via websocket
+ * Process updates to users received via websocket, including messages
+ * informing of new notifications and awarded achievements
  */
-const onNewNotification = function(dispatch, userId, messageObject) {
+const onUserUpdate = function(dispatch, userId, messageObject) {
   switch(messageObject.messageType) {
     case "notification-new":
       if (_get(messageObject, 'data.userId') === userId) {
         // Refresh user's notifications from server
         dispatch(fetchUserNotifications(userId))
+      }
+      break
+    case "achievement-awarded":
+      if (_get(messageObject, 'data.userId') === userId) {
+        // Refresh user
+        dispatch(fetchUser(userId))
       }
       break
     default:

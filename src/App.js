@@ -19,6 +19,7 @@ import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
 import Review from './pages/Review/Review'
 import Inbox from './pages/Inbox/Inbox'
 import Teams from './pages/Teams/Teams'
+import Achievements from './pages/Achievements/Achievements'
 import Social from './pages/Social/Social'
 import GlobalActivity from './pages/GlobalActivity/GlobalActivity'
 import PageNotFound from './components/PageNotFound/PageNotFound'
@@ -108,6 +109,7 @@ export class App extends Component {
             <CachedRoute path='/user/profile' component={Profile} />
             <CachedRoute path='/user/metrics/:userId' component={Metrics} />
             <CachedRoute path='/user/metrics' component={Metrics} />
+            <CachedRoute path='/user/achievements' component={Achievements} />
             <CachedRoute path='/dashboard' component={Dashboard} />
             <CachedRoute path='/leaderboard' component={Leaderboard} />
             <CachedRoute exact path='/review/:showType' component={Review} />
