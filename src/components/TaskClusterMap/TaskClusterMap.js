@@ -104,6 +104,11 @@ export class TaskClusterMap extends Component {
       return true
     }
 
+    // The primary task location has changed
+    if (!_isEqual(nextProps.taskCenter, this.props.taskCenter)) {
+      return true
+    }
+
     // the task markers have changed
     if (!_isEqual(nextProps.taskMarkers, this.props.taskMarkers)) {
       return true
@@ -516,7 +521,7 @@ export class TaskClusterMap extends Component {
         <ZoomControl className="mr-z-10" position='topright' />
         {this.props.showFitWorld && <FitWorldControl />}
         {this.props.taskCenter &&
-          <FitBoundsControl centerPoint={this.props.taskCenter} />
+          <FitBoundsControl key={this.props.taskCenter.toString()} centerPoint={this.props.taskCenter} />
         }
         {this.props.showClusterLasso && this.props.onBulkClusterSelection && !this.props.mapZoomedOut &&
           <LassoSelectionControl
