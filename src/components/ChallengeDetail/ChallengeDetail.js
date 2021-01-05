@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { FormattedMessage, FormattedRelativeTime, injectIntl }
+import { FormattedMessage, FormattedDate, injectIntl }
        from 'react-intl'
-import { selectUnit } from '@formatjs/intl-utils'
 import classNames from 'classnames'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
@@ -196,7 +195,8 @@ export class ChallengeDetail extends Component {
                           />
                           :
                         </strong>{' '}
-                        <FormattedRelativeTime {...selectUnit(parse(challenge.dataOriginDate))} />
+                        <FormattedDate value={parse(challenge.dataOriginDate)}
+                                        year='numeric' month='long' day='2-digit' />
                       </li>
                       <li>
                         <Link
