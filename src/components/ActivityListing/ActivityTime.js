@@ -19,7 +19,13 @@ import parse from 'date-fns/parse'
 export const ActivityTime = props => {
   const timestamp = parse(props.entry.created)
   const created = `${props.intl.formatDate(timestamp)} ${props.intl.formatTime(timestamp)}`
-  const selectedUnit = selectUnit(timestamp)
+  const selectedUnit = selectUnit(timestamp, Date.now(),
+    {
+      second: 30,
+      minute: 60,
+      hour: 24,
+      day: 30
+    })
   if (selectedUnit.unit === "second" ||
       selectedUnit.unit === "minute" ||
       selectedUnit.unit === "hour") {
@@ -34,7 +40,7 @@ export const ActivityTime = props => {
       )}
       title={created}
     >
-      {props.showExactDates ?
+      {(props.showExactDates || selectedUnit.unit === "year")?
        <span>
          <FormattedDate value={props.entry.created} /> <FormattedTime value={props.entry.created} />
        </span> :
