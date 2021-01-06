@@ -36,7 +36,7 @@ export default defineMessages({
 
   urlDescription: {
     id: "CustomUrlList.url.description",
-    defaultMessage: "The full URL, using mustache tags for property replacement",
+    defaultMessage: "The full URL, using [mustache tags](https://learn.maproulette.org/documentation/mustache-tag-replacement/) for property replacement. Note that URLs referencing missing or unavailable mustache tags will be automatically disabled to prevent accidental creation of malformed or erroneous URLs",
   },
 
   addLabel: {

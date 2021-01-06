@@ -1,3 +1,5 @@
+import React from 'react'
+import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import messages from './Messages'
 
 /**
@@ -44,6 +46,6 @@ export const uiSchema = intl => ({
     "ui:help": intl.formatMessage(messages.descriptionDescription),
   },
   url: {
-    "ui:help": intl.formatMessage(messages.urlDescription),
+    "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.urlDescription)} />,
   },
 })
