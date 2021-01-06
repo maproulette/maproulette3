@@ -24,6 +24,7 @@ export const Locale = Object.freeze({
   'ru-RU': 'ru-RU',
   uk: 'uk',
   vi: 'vi',
+  tr: 'tr',
 })
 
 // Dynamic imports to load locale data and translation files
@@ -83,6 +84,10 @@ const LocaleImports = {
   [Locale["ru-RU"]]: () => Promise.all([
     import('../../../lang/ru_RU.json'),
     import('@formatjs/intl-relativetimeformat/locale-data/ru'),
+  ]),
+  [Locale.tr]: () => Promise.all([
+    import('../../../lang/tr.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/tr'),
   ]),
 }
 
