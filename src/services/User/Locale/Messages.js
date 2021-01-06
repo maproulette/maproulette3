@@ -60,4 +60,8 @@ export default defineMessages({
     id: "Locale.vi.label",
     defaultMessage: "vi (Vietnamese)",
   },
+  tr: {
+    id: "Locale.tr.label",
+    defaultMessage: "tr (Turkish)",
+  },
 })
