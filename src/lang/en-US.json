@@ -712,7 +712,7 @@
   "CustomUrlList.name.description": "A unique name/label for this custom URL",
   "CustomUrlList.name.label": "Name",
   "CustomUrlList.noCustomUrls": "No custom URLs",
-  "CustomUrlList.url.description": "The full URL, using mustache tags for property replacement",
+  "CustomUrlList.url.description": "The full URL, using [mustache tags](https://learn.maproulette.org/documentation/mustache-tag-replacement/) for property replacement. Note that URLs referencing missing or unavailable mustache tags will be automatically disabled to prevent accidental creation of malformed or erroneous URLs",
   "CustomUrlList.url.label": "URL",
   "Dashboard.ChallengeFilter.pinned.label": "Pinned",
   "Dashboard.ChallengeFilter.visible.label": "Discoverable",
