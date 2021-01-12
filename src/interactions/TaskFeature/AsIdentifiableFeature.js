@@ -66,7 +66,7 @@ export class AsIdentifiableFeature {
 
     let featureType = this.rawFeatureId()
     if (!typeRe.test(featureType)) {
-      featureType = this.properties.type
+      featureType = this.properties.type ? this.properties.type : this.properties["@type"]
       if (!typeRe.test(featureType)) {
         // No luck finding an explicit type. Try to infer from the geometry
         const geometryType = _get(this, 'geometry.type')
