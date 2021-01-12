@@ -315,6 +315,7 @@ const BuildBundle = props => {
       onBulkTaskDeselection={props.deselectTasks}
       allowClusterToggle={false}
       hideSearchControl
+      allowSpidering
       {..._omit(props, 'className')}
     />
 
