@@ -65,6 +65,10 @@ export const uiSchema = (intl) => {
     },
     notificationSubscriptions: {
       classNames: "no-legend",
+      "ui:options": {
+        orderable: false,
+        removable: false,
+      }
     },
     "ui:order": [
       "email", "notificationSubscriptions",
