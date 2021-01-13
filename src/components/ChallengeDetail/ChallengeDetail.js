@@ -140,6 +140,7 @@ export class ChallengeDetail extends Component {
          criteria={{boundingBox: fromLatLngBounds(this.state.bounds), zoom: this.state.zoom}}
          updateTaskFilterBounds={(bounds, zoom) => this.setState({bounds, zoom})}
          skipRefreshTasks
+         allowSpidering
          {...this.props}
        />
 
