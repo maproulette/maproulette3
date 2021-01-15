@@ -53,7 +53,7 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
       {
         schema: {tasks: [taskSchema()]},
         variables: {},
-        params: {limit, sort, order, page: (page * limit), ...searchParameters,
+        params: {limit, sort, order, page, ...searchParameters,
                  includeTags},
       }
     ).execute().then(normalizedResults => {
