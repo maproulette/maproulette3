@@ -3,8 +3,8 @@ import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _reverse from 'lodash/reverse'
-import WithCurrentUser
-       from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
+import WithTargetUser
+       from '../../components/HOCs/WithTargetUser/WithTargetUser'
 import SignIn from '../../pages/SignIn/SignIn'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import External from '../../components/External/External'
@@ -26,7 +26,15 @@ export const Achievements = props => {
     )
   }
 
-  const badges = _reverse(_map(props.user.achievements, achievement => (
+  if (!props.targetUser) {
+    return (
+      <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+        <BusySpinner />
+      </div>
+    )
+  }
+
+  const badges = _reverse(_map(props.targetUser.achievements, achievement => (
     <AchievementBadge
       key={achievement}
       achievement={achievement}
@@ -51,6 +59,13 @@ export const Achievements = props => {
             </div>
           </div>
         </div>
+        {props.targetUser.id !== props.user.id &&
+         <div className="mr-w-full mr-flex mr-justify-center mr-mt-12 mr-text-4xl mr-text-link mr-links-green-lighter">
+           <Link to={`/user/metrics/${props.targetUser.id}`}>
+             {props.targetUser.osmProfile.displayName}
+           </Link>
+         </div>
+        }
         <div className="mr-w-full mr-flex mr-flex-wrap mr-justify-center mr-mt-12">
           {badges}
         </div>
@@ -76,4 +91,4 @@ export const Achievements = props => {
   )
 }
 
-export default WithCurrentUser(Achievements)
+export default WithTargetUser(Achievements)
