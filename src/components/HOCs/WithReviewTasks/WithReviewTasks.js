@@ -239,7 +239,10 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
                           pageSize={criteria.pageSize}
                           changePageSize={this.changePageSize}
                           setFiltered={this.setFiltered}
-                          startReviewing={(url) => this.props.startNextReviewTask(criteria, url, criteria.pageSize)}
+                          startReviewing={
+                            (url, asMetaReview = false) =>
+                              this.props.startNextReviewTask(criteria, url, criteria.pageSize, asMetaReview)
+                          }
                           loading={this.state.loading}
                           reviewChallenges={reviewChallenges}
                           reviewProjects={this.props.currentReviewTasks.reviewProjects}
@@ -269,15 +272,16 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     return dispatch(fetchReviewChallenges(reviewTasksType, null, false))
   },
 
-  startNextReviewTask: (searchCriteria={}, url, pageSize) => {
-    dispatch(loadNextReviewTask(searchCriteria)).then((task) => {
+  startNextReviewTask: (searchCriteria={}, url, pageSize, asMetaReview) => {
+    const reviewType = asMetaReview ? 'meta-review' : 'review'
+    dispatch(loadNextReviewTask(searchCriteria, null, asMetaReview)).then((task) => {
       const searchParams = _cloneDeep(searchCriteria)
       searchParams.pageSize = pageSize
-      url.push(`/challenge/${task.parent}/task/${task.id}/review`, searchParams)
+      url.push(`/challenge/${task.parent}/task/${task.id}/${reviewType}`, searchParams)
     }).catch(error => {
       console.log(error)
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
-      url.push('/review', searchCriteria)
+      url.push(`/${reviewType}`, searchCriteria)
     })
   }
 })

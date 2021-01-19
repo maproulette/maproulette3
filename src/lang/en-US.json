@@ -1147,6 +1147,7 @@
   "Review.TaskAnalysisTable.refresh": "Refresh",
   "Review.TaskAnalysisTable.reviewCompleteControls.label": "Actions",
   "Review.TaskAnalysisTable.reviewerControls.label": "Actions",
+  "Review.TaskAnalysisTable.startMetaReviewing": "Meta-Review these Tasks",
   "Review.TaskAnalysisTable.startReviewing": "Review these Tasks",
   "Review.TaskAnalysisTable.tasksReviewedByMe": "Tasks Reviewed by Me",
   "Review.TaskAnalysisTable.tasksToBeReviewed": "Tasks to be Reviewed",
