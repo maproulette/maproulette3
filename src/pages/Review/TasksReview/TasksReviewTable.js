@@ -209,7 +209,7 @@ export class TaskReviewTable extends Component {
     // Remove any columns not relevant to the current tab.
     switch(reviewTasksType) {
       case ReviewTasksType.reviewedByMe:
-        columns = _omit(columns,  ["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"])
+        columns = _omit(columns,  ["reviewerControls", "mapperControls", "metaReviewerControls"])
         defaultColumns = _pull(defaultColumns, ...["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"])
 
         break
@@ -351,7 +351,9 @@ export class TaskReviewTable extends Component {
 
     switch( this.props.reviewTasksType ) {
       case ReviewTasksType.reviewedByMe:
-        subheader = <FormattedMessage {...messages.tasksReviewedByMe} />
+        subheader = this.props.reviewTasksSubType === "meta-reviewer" ?
+          <FormattedMessage {...messages.tasksMetaReviewedByMe} /> :
+          <FormattedMessage {...messages.tasksReviewedByMe} />
         break
       case ReviewTasksType.toBeReviewed:
         subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
