@@ -911,6 +911,7 @@
   "IntlTable.previous.label": "Previous",
   "IntlTable.rows": "rows",
   "IntlTable.rowsPerPage.label": "rows per page",
+  "IntlTable.total.label": "Total: ",
   "KeyMapping.layers.layerMapillary": "Toggle Mapillary Layer",
   "KeyMapping.layers.layerOSMData": "Toggle OSM Data Layer",
   "KeyMapping.layers.layerTaskFeatures": "Toggle Features Layer",
