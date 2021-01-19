@@ -25,6 +25,7 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
        from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { ReviewTasksType, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
 import { intlTableProps } from '../../../components/IntlTable/IntlTable'
+import IntlTablePagination from '../../../components/IntlTable/IntlTablePagination'
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
 import InTableTagFilter
@@ -305,7 +306,8 @@ export class TaskReviewTable extends Component {
                            taskId => this.setState({openComments: taskId}),
                            data, this.props.reviewCriteria, pageSize)
 
-    const totalPages = Math.ceil(_get(this.props, 'reviewData.totalCount', 0) / pageSize)
+    const totalRows = _get(this.props, 'reviewData.totalCount', 0)
+    const totalPages = Math.ceil(totalRows / pageSize)
 
     let subheader = null
     const columns = _map(_keys(this.props.addedColumns), (column) => columnTypes[column])
@@ -421,9 +423,10 @@ export class TaskReviewTable extends Component {
               />
             </div>
           </header>
-          <div className="mr-mt-6">
+          <div className="mr-mt-6 review">
             <ReactTable data={data} columns={columns} key={this.props.reviewTasksType}
                         pageSize={pageSize}
+                        totalCount={totalRows}
                         defaultSorted={defaultSorted}
                         defaultFiltered={defaultFiltered}
                         minRows={1}
@@ -444,6 +447,7 @@ export class TaskReviewTable extends Component {
                         }}
                         loading={this.props.loading}
                         {...intlTableProps(this.props.intl)}
+                        PaginationComponent={IntlTablePagination}
             />
           </div>
         </div>
