@@ -92,6 +92,13 @@ export class ReviewTaskControls extends Component {
     this.props.editTask(value, this.props.task, this.props.mapBounds, null, this.props.taskBundle)
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.task.id !== this.props.task.id) {
+      // Clear tags if we are on a new task
+      this.setState({tags: ""})
+    }
+  }
+
   render() {
     const user = this.props.user
 
