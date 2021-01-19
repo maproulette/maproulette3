@@ -54,6 +54,11 @@ export default defineMessages({
     defaultMessage: "Tasks Reviewed by Me",
   },
 
+  tasksMetaReviewedByMe: {
+    id: "Review.TaskAnalysisTable.tasksMetaReviewedByMe",
+    defaultMessage: "Tasks Meta-Reviewed by Me",
+  },
+
   myReviewTasks: {
     id: "Review.TaskAnalysisTable.myReviewTasks",
     defaultMessage: "My Mapped Tasks after Review",

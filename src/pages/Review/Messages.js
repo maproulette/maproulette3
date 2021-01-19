@@ -37,5 +37,20 @@ export default defineMessages({
   goBack: {
     id: "Review.Dashboard.goBack.label",
     defaultMessage: "Reconfigure Reviews",
-  }
+  },
+
+  role: {
+    id: "Review.Dashboard.role.label",
+    defaultMessage: "Role:",
+  },
+
+  asReviewer: {
+    id: "Review.Dashboard.asReviewer.label",
+    defaultMessage: "Reviewer",
+  },
+
+  asMetaReviewer: {
+    id: "Review.Dashboard.asMetaReviewer.label",
+    defaultMessage: "Meta-Reviewer",
+  },
 })

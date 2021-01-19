@@ -120,7 +120,8 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 
       switch(props.reviewTasksType) {
         case ReviewTasksType.reviewedByMe:
-          return props.updateUserReviewedTasks(userId, searchOnCriteria, pageSize).then(() => {
+          const asMetaReviewer = props.reviewTasksSubType === "meta-reviewer"
+          return props.updateUserReviewedTasks(userId, searchOnCriteria, pageSize, asMetaReviewer).then(() => {
             this.setState({loading: false})
           })
         case ReviewTasksType.toBeReviewed:
@@ -186,7 +187,8 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
+      if (prevProps.reviewTasksType !== this.props.reviewTasksType ||
+          prevProps.reviewTasksSubType !== this.props.reviewTasksSubType) {
         this.update(this.props,
           this.state.criteria[this.props.reviewTasksType] ||
           this.buildDefaultCriteria(this.props), true)
@@ -259,13 +261,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     return dispatch(fetchReviewNeededTasks(searchCriteria, pageSize))
   },
   updateReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE, asMetaReview=false) => {
-    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, false, pageSize, asMetaReview))
+    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, false, false, pageSize, asMetaReview))
   },
   updateMapperReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
-    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, true, pageSize))
+    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, true, false, pageSize))
   },
-  updateUserReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
-    return dispatch(fetchReviewedTasks(userId, searchCriteria, true, false, pageSize))
+  updateUserReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE, asMetaReviewer) => {
+    return dispatch(fetchReviewedTasks(userId, searchCriteria, !asMetaReviewer, false, asMetaReviewer, pageSize))
   },
 
   updateReviewChallenges: (reviewTasksType) => {
