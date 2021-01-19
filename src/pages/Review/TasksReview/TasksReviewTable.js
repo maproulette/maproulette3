@@ -141,6 +141,10 @@ export class TaskReviewTable extends Component {
     this.props.startReviewing(this.props.history)
   }
 
+  startMetaReviewing() {
+    this.props.startReviewing(this.props.history, true)
+  }
+
   toggleShowFavorites(event) {
     const reviewCriteria = _cloneDeep(this.props.reviewCriteria)
     reviewCriteria.savedChallengesOnly = !reviewCriteria.savedChallengesOnly
@@ -399,6 +403,12 @@ export class TaskReviewTable extends Component {
               {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 &&
                 <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
                   <FormattedMessage {...messages.startReviewing} />
+                </button>
+              }
+              {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 &&
+                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                        onClick={() => this.startMetaReviewing()}>
+                  <FormattedMessage {...messages.startMetaReviewing} />
                 </button>
               }
               <button

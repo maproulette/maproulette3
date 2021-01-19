@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Review these Tasks",
   },
 
+  startMetaReviewing: {
+    id: "Review.TaskAnalysisTable.startMetaReviewing",
+    defaultMessage: "Meta-Review these Tasks",
+  },
+
   onlySavedChallenges: {
     id: "Review.TaskAnalysisTable.onlySavedChallenges",
     defaultMessage: "Limit to favorite challenges",
