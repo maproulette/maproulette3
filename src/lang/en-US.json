@@ -978,6 +978,8 @@
   "Metrics.leaderboard.topChallenges.label": "Top Challenges",
   "Metrics.leaderboard.totalPoints.label": "Total Points",
   "Metrics.leaderboardTitle": "Leaderboard",
+  "Metrics.links.osmCha.label": "OSMCha",
+  "Metrics.links.osmProfile.label": "OSM Profile",
   "Metrics.reviewStats.approved.label": "Reviewed tasks that passed",
   "Metrics.reviewStats.asReviewer.additionalReviews.label": "Provided an additional review",
   "Metrics.reviewStats.asReviewer.approved.label": "Reviews marked as passed",

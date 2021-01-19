@@ -197,6 +197,13 @@ export const fetchOSMUser = function(osmUserId) {
 }
 
 /**
+ * Generates a URL to the given user's OSM profile page
+ */
+export const osmUserProfileURL = function(osmUsername) {
+  return `${process.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(osmUsername)}`
+}
+
+/**
  * Normalize the xmlToJSON representation of XML attributes into key/value
  * pairs that are a bit easier to use
  */
