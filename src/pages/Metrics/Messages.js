@@ -14,6 +14,16 @@ export default defineMessages({
     defaultMessage: 'User since:',
   },
 
+  osmProfileLabel: {
+    id: 'Metrics.links.osmProfile.label',
+    defaultMessage: "OSM Profile",
+  },
+
+  osmChaLabel: {
+    id: 'Metrics.links.osmCha.label',
+    defaultMessage: "OSMCha",
+  },
+
   totalCompletedTasksTitle: {
     id: 'Metrics.totalCompletedTasksTitle',
     defaultMessage: 'Total Completed Tasks',

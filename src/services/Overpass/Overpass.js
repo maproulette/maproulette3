@@ -1,6 +1,5 @@
 import addMinutes from 'date-fns/add_minutes'
 import isAfter from 'date-fns/is_after'
-import format from 'date-fns/format'
 import { isJosmEditor, sendJOSMCommand } from '../Editor/Editor'
 import { fromLatLngBounds } from '../MapBounds/MapBounds'
 import _get from 'lodash/get'
@@ -61,33 +60,6 @@ export const viewAtticOverpass = (selectedEditor, actionDate, bounds, ignoreAtti
    window.open(achaviURL)
  }
 
-/**
- * View changesets in OSMCha. Sets up filters for given bbox, the given start
- * date (typically the earliest relevant date in the task history), and
- * participating usernames
- */
-export const viewOSMCha = (bboxArray, earliestDate, participantUsernames) => {
-  const filterParams = []
-  // Setup bbox filter
-  const bbox = bboxArray.join(',')
-  filterParams.push(`"in_bbox":[{"label":"${bbox}","value":"${bbox}"}]`)
-
-  if (earliestDate) {
-    // Setup start-date filter
-    const startDate = format(earliestDate, "YYYY-MM-DD")
-    filterParams.push(`"date__gte":[{"label":"${startDate}","value":"${startDate}"}]`)
-  }
-
-  // Setup user filter
-  if (participantUsernames && participantUsernames.length > 0) {
-    const userList =
-      participantUsernames.map(username => `{"label":"${username}","value":"${username}"}`)
-    filterParams.push(`"users":[${userList.join(',')}]`)
-  }
-
-  window.open('https://osmcha.mapbox.com/?filters=' +
-              encodeURIComponent(`{${filterParams.join(',')}}`))
-}
 
 /**
  * Returns a Moment instance representing the action date of the given

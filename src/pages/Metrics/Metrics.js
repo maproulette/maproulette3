@@ -37,14 +37,6 @@ class Metrics extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.targetUser && this.props.targetUser.id !== _get(prevProps, 'targetUser.id')) {
-      // if (this.props.targetUser.isLoggedIn) {
-      //   this.props.loadCompleteUser(this.props.targetUser.id)
-      // }
-    }
-  }
-
   digitBoxes = (score, minBoxes=4) => {
     const digits = score.toString().split('')
     const totalBoxes = minBoxes > digits.length ? minBoxes : digits.length
@@ -97,6 +89,24 @@ class Metrics extends Component {
                   value={new Date(this.props.targetUser.created)}
                 />
               </p>
+              <div className="mr-mt-4 mr-w-full mr-flex mr-justify-center mr-links-green-lighter">
+                <a
+                  className="mr-mx-4"
+                  href={this.props.targetUserOSMProfileUrl()}
+                  target='_blank'
+                  rel="noopener noreferrer"
+                >
+                  <FormattedMessage {...messages.osmProfileLabel} />
+                </a>
+                <a
+                  className="mr-mx-4"
+                  href={this.props.targetUserOSMChaProfileUrl()}
+                  target='_blank'
+                  rel="noopener noreferrer"
+                >
+                  <FormattedMessage {...messages.osmChaLabel} />
+                </a>
+              </div>
             </header>
             {optedOut ?
               <h3 className="mr-text-center mr-text-yellow mr-mt-8">
