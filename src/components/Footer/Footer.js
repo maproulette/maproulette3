@@ -35,6 +35,13 @@ class Footer extends Component {
                 </li>
                 <li>
                   <a
+                    href={process.env.REACT_APP_BLOG_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  ><FormattedMessage {...messages.viewBlog} /></a>
+                </li>
+                <li>
+                  <a
                     href="https://github.com/osmlab/maproulette3/issues"
                     target="_blank"
                     rel="noopener noreferrer"
