@@ -99,15 +99,21 @@ export class TaskHistoryList extends Component {
           }
           else {
             logEntry = null
+            const isMetaReview = log.actionType === TaskHistoryAction.metaReview
             updatedStatus =
                 <ReviewStatusLabel
                   {...this.props}
-                  isMetaReview={log.actionType === TaskHistoryAction.metaReview}
-                  intlMessage={messagesByMetaReviewStatus[log.reviewStatus]}
+                  isMetaReview={isMetaReview}
+                  intlMessage={isMetaReview ?
+                    messagesByMetaReviewStatus[log.reviewStatus] :
+                    messagesByReviewStatus[log.reviewStatus]
+                  }
                   className={`mr-review-${_kebabCase(keysByReviewStatus[log.reviewStatus])}`}
                   showDot
                 />
-            username = _get(log, 'reviewedBy.username')
+            username = (log.reviewStatus === TaskReviewStatus.disputed ||
+                        log.reviewStatus === TaskReviewStatus.needed) ?
+              _get(log, 'reviewRequestedBy.username') : _get(log, 'reviewedBy.username')
             userType = log.actionType === TaskHistoryAction.metaReview ? META_REVIEWER_TYPE : REVIEWER_TYPE
 
             if (log.startedAt) {
