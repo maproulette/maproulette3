@@ -16,7 +16,7 @@ import Header from '../Header/Header'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import ExportLayoutModal from './ExportLayoutModal'
-import ImportLayoutModal from './ImportLayoutModal'
+import ImportFileModal from '../ImportFileModal/ImportFileModal'
 import messages from './Messages'
 import './WidgetWorkspace.scss'
 
@@ -32,6 +32,7 @@ export class WidgetWorkspace extends Component {
     isEditingId: null,
     isExportingLayout: false,
     isImportingLayout: false,
+    workspaceContext: {},
   }
 
   startEditingLayout = (conf=this.props.currentConfiguration) => {
@@ -116,6 +117,12 @@ export class WidgetWorkspace extends Component {
   switchConfiguration = (configurationId, closeDropdown) => {
     this.props.switchWorkspaceConfiguration(configurationId)
     closeDropdown()
+  }
+
+  setWorkspaceContext = updatedContext => {
+    this.setState({
+      workspaceContext: Object.assign({}, this.state.workspaceContext, updatedContext),
+    })
   }
 
   componentDidCatch(error, info) {
@@ -219,6 +226,8 @@ export class WidgetWorkspace extends Component {
             </Button>
           }
           workspace={this.props.currentConfiguration}
+          workspaceContext={this.state.workspaceContext}
+          setWorkspaceContext={this.setWorkspaceContext}
         />
         {this.state.isExportingLayout &&
          <ExportLayoutModal
@@ -228,7 +237,8 @@ export class WidgetWorkspace extends Component {
          />
         }
         {this.state.isImportingLayout &&
-         <ImportLayoutModal
+         <ImportFileModal
+           header={<FormattedMessage {...messages.importModalHeader} />}
            onCancel={() => this.setState({isImportingLayout: false})}
            onUpload={file => this.props.importWorkspaceConfiguration(file)}
          />

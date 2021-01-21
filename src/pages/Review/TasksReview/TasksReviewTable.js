@@ -15,14 +15,17 @@ import _omit from 'lodash/omit'
 import _pull from 'lodash/pull'
 import _isObject from 'lodash/isObject'
 import _pick from 'lodash/pick'
+import _isUndefined from 'lodash/isUndefined'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskPriority, keysByPriority, messagesByPriority }
       from '../../../services/Task/TaskPriority/TaskPriority'
-import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsReviewStatus }
+import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
+         messagesByMetaReviewStatus, isNeedsReviewStatus, isMetaReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { ReviewTasksType, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
 import { intlTableProps } from '../../../components/IntlTable/IntlTable'
+import IntlTablePagination from '../../../components/IntlTable/IntlTablePagination'
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
 import InTableTagFilter
@@ -79,6 +82,7 @@ export class TaskReviewTable extends Component {
           // Search all
           filters.challengeId = null
           filters.challenge = null
+          filters.challengeName = null
         }
         else {
           if (filters.challenge.id > 0) {
@@ -105,6 +109,7 @@ export class TaskReviewTable extends Component {
           // Search all
           filters.projectId = null
           filters.project = null
+          filters.projectName = null
         }
         else {
           if (filters.project.id > 0) {
@@ -134,6 +139,10 @@ export class TaskReviewTable extends Component {
 
   startReviewing() {
     this.props.startReviewing(this.props.history)
+  }
+
+  startMetaReviewing() {
+    this.props.startReviewing(this.props.history, true)
   }
 
   toggleShowFavorites(event) {
@@ -189,29 +198,40 @@ export class TaskReviewTable extends Component {
                    "tags":{},
                    "additionalReviewers":{}}
 
+    if (this.props.metaReviewEnabled) {
+      columns.metaReviewStatus = {}
+      columns.metaReviewedBy = {}
+      columns.metaReviewedAt = {}
+      columns.metaReviewerControls = {permanent: true}
+    }
     let defaultColumns = _keys(columns)
 
     // Remove any columns not relevant to the current tab.
     switch(reviewTasksType) {
       case ReviewTasksType.reviewedByMe:
-        columns = _omit(columns,  ["reviewedBy", "reviewerControls", "mapperControls"])
-        defaultColumns = _pull(defaultColumns, ...["reviewedBy", "reviewerControls", "mapperControls"])
+        columns = _omit(columns,  ["reviewerControls", "mapperControls", "metaReviewerControls"])
+        defaultColumns = _pull(defaultColumns, ...["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"])
 
         break
       case ReviewTasksType.toBeReviewed:
-        columns = _omit(columns,  ["reviewCompleteControls", "mapperControls"])
-        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "mapperControls"])
+        columns = _omit(columns,  ["reviewCompleteControls", "mapperControls", "metaReviewerControls"])
+        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "mapperControls", "metaReviewerControls"])
 
         break
       case ReviewTasksType.allReviewedTasks:
-        columns = _omit(columns,  ["reviewCompleteControls", "reviewerControls"])
-        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "reviewerControls"])
+        columns = _omit(columns,  ["reviewCompleteControls", "reviewerControls", "metaReviewerControls"])
+        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "reviewerControls", "metaReviewerControls"])
+
+        break
+      case ReviewTasksType.metaReviewTasks:
+        columns = _omit(columns,  ["reviewCompleteControls", "reviewerControls", "mapperControls"])
+        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "reviewerControls", "mapperControls"])
 
         break
       case ReviewTasksType.myReviewedTasks:
       default:
-        columns = _omit(columns,  ["reviewRequestedBy", "reviewCompleteControls", "reviewerControls"])
-        defaultColumns = _pull(defaultColumns, ...["reviewRequestedBy", "reviewCompleteControls", "reviewerControls"])
+        columns = _omit(columns,  ["reviewRequestedBy", "reviewCompleteControls", "reviewerControls", "metaReviewerControls"])
+        defaultColumns = _pull(defaultColumns, ...["reviewRequestedBy", "reviewCompleteControls", "reviewerControls", "metaReviewerControls"])
 
         break
     }
@@ -290,7 +310,8 @@ export class TaskReviewTable extends Component {
                            taskId => this.setState({openComments: taskId}),
                            data, this.props.reviewCriteria, pageSize)
 
-    const totalPages = Math.ceil(_get(this.props, 'reviewData.totalCount', 0) / pageSize)
+    const totalRows = _get(this.props, 'reviewData.totalCount', 0)
+    const totalPages = Math.ceil(totalRows / pageSize)
 
     let subheader = null
     const columns = _map(_keys(this.props.addedColumns), (column) => columnTypes[column])
@@ -330,13 +351,18 @@ export class TaskReviewTable extends Component {
 
     switch( this.props.reviewTasksType ) {
       case ReviewTasksType.reviewedByMe:
-        subheader = <FormattedMessage {...messages.tasksReviewedByMe} />
+        subheader = this.props.reviewTasksSubType === "meta-reviewer" ?
+          <FormattedMessage {...messages.tasksMetaReviewedByMe} /> :
+          <FormattedMessage {...messages.tasksReviewedByMe} />
         break
       case ReviewTasksType.toBeReviewed:
         subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
         break
       case ReviewTasksType.allReviewedTasks:
         subheader = <FormattedMessage {...messages.allReviewedTasks} />
+        break
+      case ReviewTasksType.metaReviewTasks:
+        subheader = <FormattedMessage {...messages.tasksToMetaReview} />
         break
       case ReviewTasksType.myReviewedTasks:
       default:
@@ -381,6 +407,12 @@ export class TaskReviewTable extends Component {
                   <FormattedMessage {...messages.startReviewing} />
                 </button>
               }
+              {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 &&
+                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                        onClick={() => this.startMetaReviewing()}>
+                  <FormattedMessage {...messages.startMetaReviewing} />
+                </button>
+              }
               <button
                 className={classNames(
                   "mr-button mr-button-small", {
@@ -403,9 +435,10 @@ export class TaskReviewTable extends Component {
               />
             </div>
           </header>
-          <div className="mr-mt-6">
+          <div className="mr-mt-6 review">
             <ReactTable data={data} columns={columns} key={this.props.reviewTasksType}
                         pageSize={pageSize}
+                        totalCount={totalRows}
                         defaultSorted={defaultSorted}
                         defaultFiltered={defaultFiltered}
                         minRows={1}
@@ -426,6 +459,7 @@ export class TaskReviewTable extends Component {
                         }}
                         loading={this.props.loading}
                         {...intlTableProps(this.props.intl)}
+                        PaginationComponent={IntlTablePagination}
             />
           </div>
         </div>
@@ -510,7 +544,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       return (
         <select
           onChange={event => onChange(event.target.value)}
-          style={{ width: '100%' }}
+          className={"mr-w-full"}
           value={filter ? filter.value : 'all'}
         >
           {options}
@@ -552,7 +586,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       return (
         <select
           onChange={event => onChange(event.target.value)}
-          style={{ width: '100%' }}
+          className={"mr-w-full"}
           value={filter ? filter.value : 'all'}
         >
           {options}
@@ -726,6 +760,29 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     },
   }
 
+  columns.metaReviewedAt = {
+    id: 'metaReviewedAt',
+    Header: props.intl.formatMessage(messages.metaReviewedAtLabel),
+    accessor: 'metaReviewedAt',
+    sortable: true,
+    filterable: false,
+    defaultSortDesc: false,
+    exportable: t => t.metaReviewedAt,
+    minWidth: 180,
+    maxWidth: 200,
+    Cell: props => {
+      if (!props.value) {
+        return null
+      }
+
+      return (
+        <span>
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+        </span>
+      )
+    }
+  }
+
   columns.reviewedBy = {
     id: 'reviewedBy',
     Header: makeInvertable(props.intl.formatMessage(messages.reviewedByLabel),
@@ -768,7 +825,17 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
         <option key="all" value="all">All</option>
       ]
 
-      if (props.reviewTasksType === ReviewTasksType.reviewedByMe ||
+      if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
+        _each([TaskReviewStatus.approved,
+               TaskReviewStatus.approvedWithFixes], status =>
+          options.push(
+            <option key={keysByReviewStatus[status]} value={status}>
+              {props.intl.formatMessage(messagesByReviewStatus[status])}
+            </option>
+          )
+        )
+      }
+      else if (props.reviewTasksType === ReviewTasksType.reviewedByMe ||
           props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
           props.reviewTasksType === ReviewTasksType.allReviewedTasks) {
         _each(TaskReviewStatus, (status) => {
@@ -796,13 +863,91 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       return (
         <select
           onChange={event => onChange(event.target.value)}
-          style={{ width: '100%' }}
+          className={"mr-w-full"}
           value={filter ? filter.value : 'all'}
         >
           {options}
         </select>
       )
     },
+  }
+
+  columns.metaReviewStatus = {
+    id: 'metaReviewStatus',
+    Header: makeInvertable(props.intl.formatMessage(messages.metaReviewStatusLabel),
+                           () => props.invertField('metaReviewStatus'),
+                           _get(criteria, 'invertFields.metaReviewStatus')),
+    accessor: 'metaReviewStatus',
+    sortable: true,
+    filterable: true,
+    exportable: t => props.intl.formatMessage(messagesByMetaReviewStatus[t.metaReviewStatus]),
+    maxWidth: 180,
+    Cell: props => (_isUndefined(props.value) ? "" :
+      <StatusLabel
+        {...props}
+        intlMessage={messagesByMetaReviewStatus[props.value]}
+        className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
+      />
+    ),
+    Filter: ({ filter, onChange }) => {
+      const options = [
+      ]
+
+      if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
+        options.push(<option key="all" value="0,-2">{props.intl.formatMessage(messages.allNeeded)}</option>)
+        options.push(<option key="none" value="-2">{props.intl.formatMessage(messages.metaUnreviewed)}</option>)
+        options.push(
+          <option key={keysByReviewStatus[TaskReviewStatus.needed]} value={TaskReviewStatus.needed}>
+            {props.intl.formatMessage(messagesByMetaReviewStatus[TaskReviewStatus.needed])}
+          </option>
+        )
+      }
+      else {
+        options.push(<option key="all" value="all">All</option>)
+        options.push(<option key="none" value="-2">{props.intl.formatMessage(messages.metaUnreviewed)}</option>)
+        _each(TaskReviewStatus, (status) => {
+          if (status !== TaskReviewStatus.unnecessary &&
+              isMetaReviewStatus(status)) {
+
+            options.push(
+              <option key={keysByReviewStatus[status]} value={status}>
+                {props.intl.formatMessage(messagesByMetaReviewStatus[status])}
+              </option>
+            )
+          }
+        })
+      }
+
+      return (
+        <select
+          onChange={event => onChange(event.target.value)}
+          className={"mr-w-full"}
+          value={filter ? filter.value : 'all'}
+        >
+          {options}
+        </select>
+      )
+    },
+  }
+
+  columns.metaReviewedBy = {
+    id: 'metaReviewedBy',
+    Header: makeInvertable(props.intl.formatMessage(messages.metaReviewedByLabel),
+                           () => props.invertField('metaReviewedBy'),
+                           _get(criteria, 'invertFields.metaReviewedBy')),
+    accessor: 'metaReviewedBy',
+    filterable: true,
+    sortable: false,
+    exportable: t => _get(t.metaReviewedBy, 'username'),
+    maxWidth: 180,
+    Cell: ({row}) => (
+      <div
+        className="row-user-column"
+        style={{color: mapColors(_get(row._original.metaReviewedBy, 'username'))}}
+      >
+        {row._original.metaReviewedBy ? row._original.metaReviewedBy.username : ""}
+      </div>
+    ),
   }
 
   columns.reviewerControls = {
@@ -849,7 +994,8 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       let message = <FormattedMessage {...messages.viewTaskLabel} />
 
       // The mapper needs to rereview a contested task.
-      if (row._original.reviewStatus === TaskReviewStatus.disputed) {
+      if (row._original.reviewStatus === TaskReviewStatus.disputed ||
+          row._original.metaReviewStatus === TaskReviewStatus.rejected) {
         linkTo += "/review"
         message = <FormattedMessage {...messages.resolveTaskLabel} />
       }
@@ -859,6 +1005,40 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           {message}
         </div>
       </div>
+    }
+  }
+
+  columns.metaReviewerControls = {
+    id: 'controls',
+    Header: props.intl.formatMessage(messages.actionsColumnHeader),
+    sortable: false,
+    maxWidth: 120,
+    minWidth: 110,
+    Cell: ({row}) =>{
+      const linkTo =`/challenge/${row._original.parent.id}/task/${row._original.id}/meta-review`
+      let action =
+        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+          <FormattedMessage {...messages.metaReviewTaskLabel} />
+        </div>
+
+      if (row._original.reviewedBy) {
+        if (row._original.reviewStatus === TaskReviewStatus.needed) {
+          action =
+            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+              <FormattedMessage {...messages.reviewAgainTaskLabel} />
+            </div>
+        }
+        else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
+          action =
+            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+              <FormattedMessage {...messages.resolveTaskLabel} />
+            </div>
+        }
+      }
+
+      return <div className="row-controls-column">
+              {action}
+            </div>
     }
   }
 
@@ -878,10 +1058,11 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
         <Link to={linkTo}>
           {message}
         </Link>
-        {row._original.reviewStatus !== TaskReviewStatus.needed &&
+        {!props.metaReviewEnabled &&
+         row._original.reviewStatus !== TaskReviewStatus.needed &&
          row._original.reviewedBy && row._original.reviewedBy.id !== props.user.id &&
           <div onClick={() => props.history.push(linkTo + "/review", criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
-            <FormattedMessage {...messages.metaReviewTaskLabel} />
+            <FormattedMessage {...messages.reviewFurtherTaskLabel} />
           </div>
         }
       </div>

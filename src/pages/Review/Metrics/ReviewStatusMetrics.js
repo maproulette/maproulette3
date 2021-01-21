@@ -20,78 +20,134 @@ import BusySpinner from '../../../components/BusySpinner/BusySpinner'
  */
 export default class ReviewStatusMetrics extends Component {
   buildReviewStats = (type, metrics) => {
+    const asMetaReview = this.props.asMetaReview
+    const metaReviewTotal = metrics.metaReviewRequested +
+                            metrics.metaReviewApproved +
+                            metrics.metaReviewRejected +
+                            metrics.metaReviewAssisted
     return (
       <div className="mr-grid mr-grid-columns-1 mr-grid-gap-4">
         {type === ReviewTasksType.toBeReviewed &&
-          buildMetric(metrics.reviewRequested, metrics.total,
-            <FormattedMessage {...messages.awaitingReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.toBeReviewed &&
-          buildMetric(metrics.reviewDisputed, metrics.total,
-            <FormattedMessage {...messages.disputedReview} />,
-            this.props.lightMode)}
+          this.buildToBeReviewed(metrics)}
 
-        {type === ReviewTasksType.reviewedByMe &&
-          buildMetric(metrics.reviewApproved, metrics.total,
-            <FormattedMessage {...messages.approvedReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.reviewedByMe &&
-          buildMetric(metrics.reviewRejected, metrics.total,
-            <FormattedMessage {...messages.rejectedReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.reviewedByMe &&
-          buildMetric(metrics.reviewAssisted, metrics.total,
-            <FormattedMessage {...messages.assistedReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.reviewedByMe &&
-          buildMetric(metrics.reviewDisputed, metrics.total,
-            <FormattedMessage {...messages.disputedReview} />,
-            this.props.lightMode)}
+        {type === ReviewTasksType.reviewedByMe && !asMetaReview &&
+          this.buildReviewedByMe(metrics)}
 
-        {type === ReviewTasksType.myReviewedTasks &&
-          buildMetric(metrics.reviewRequested, metrics.total,
-            <FormattedMessage {...messages.awaitingReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.myReviewedTasks &&
-          buildMetric(metrics.reviewApproved, metrics.total,
-            <FormattedMessage {...messages.approvedReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.myReviewedTasks &&
-          buildMetric(metrics.reviewRejected, metrics.total,
-            <FormattedMessage {...messages.rejectedReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.myReviewedTasks &&
-          buildMetric(metrics.reviewAssisted, metrics.total,
-            <FormattedMessage {...messages.assistedReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.myReviewedTasks &&
-          buildMetric(metrics.reviewDisputed, metrics.total,
-            <FormattedMessage {...messages.disputedReview} />,
-            this.props.lightMode)}
+        {type === ReviewTasksType.myReviewedTasks && !asMetaReview &&
+          this.buildMyReviewTasks(metrics)}
 
-        {type === ReviewTasksType.allReviewedTasks &&
-          buildMetric(metrics.reviewRequested, metrics.total,
-            <FormattedMessage {...messages.awaitingReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.allReviewedTasks &&
-          buildMetric(metrics.reviewApproved, metrics.total,
-            <FormattedMessage {...messages.approvedReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.allReviewedTasks &&
-          buildMetric(metrics.reviewRejected, metrics.total,
-            <FormattedMessage {...messages.rejectedReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.allReviewedTasks &&
-          buildMetric(metrics.reviewAssisted, metrics.total,
-            <FormattedMessage {...messages.assistedReview} />,
-            this.props.lightMode)}
-        {type === ReviewTasksType.allReviewedTasks &&
-          buildMetric(metrics.reviewDisputed, metrics.total,
-            <FormattedMessage {...messages.disputedReview} />,
-            this.props.lightMode)}
+        {type === ReviewTasksType.allReviewedTasks && !asMetaReview &&
+          this.buildAllReviewedTasks(metrics)}
+
+        {type === ReviewTasksType.allReviewedTasks && asMetaReview &&
+          this.buildAllReviewedTasksAsMetaReviewStatus(metrics, metaReviewTotal)}
+
+        {type === ReviewTasksType.metaReviewTasks && !asMetaReview &&
+          this.buildMetaReviewTasks(metrics)}
+
+        {type === ReviewTasksType.metaReviewTasks && asMetaReview &&
+          this.buildMetaReviewTasksAsMetaReviewStatus(metrics, metaReviewTotal)}
       </div>
     )
   }
+
+  buildToBeReviewed = metrics => {
+    return (
+      <React.Fragment>
+        {buildMetric(metrics.reviewRequested, metrics.total,
+          <FormattedMessage {...messages.awaitingReview} />)}
+        {buildMetric(metrics.reviewDisputed, metrics.total,
+          <FormattedMessage {...messages.disputedReview} />)}
+      </React.Fragment>
+    )
+  }
+
+  buildReviewedByMe = metrics => {
+    return (
+      <React.Fragment>
+        {buildMetric(metrics.reviewApproved, metrics.total,
+          <FormattedMessage {...messages.approvedReview} />)}
+        {buildMetric(metrics.reviewRejected, metrics.total,
+          <FormattedMessage {...messages.rejectedReview} />)}
+        {buildMetric(metrics.reviewAssisted, metrics.total,
+          <FormattedMessage {...messages.assistedReview} />)}
+        {buildMetric(metrics.reviewDisputed, metrics.total,
+          <FormattedMessage {...messages.disputedReview} />)}
+      </React.Fragment>
+    )
+  }
+
+  buildMyReviewTasks = metrics => {
+    return (
+      <React.Fragment>
+        {buildMetric(metrics.reviewRequested, metrics.total,
+          <FormattedMessage {...messages.awaitingReview} />)}
+        {buildMetric(metrics.reviewApproved, metrics.total,
+          <FormattedMessage {...messages.approvedReview} />)}
+        {buildMetric(metrics.reviewRejected, metrics.total,
+          <FormattedMessage {...messages.rejectedReview} />)}
+        {buildMetric(metrics.reviewAssisted, metrics.total,
+          <FormattedMessage {...messages.assistedReview} />)}
+        {buildMetric(metrics.reviewDisputed, metrics.total,
+          <FormattedMessage {...messages.disputedReview} />)}
+      </React.Fragment>
+    )
+  }
+
+  buildAllReviewedTasks = metrics => {
+    return (
+      <React.Fragment>
+        {buildMetric(metrics.reviewRequested, metrics.total,
+          <FormattedMessage {...messages.awaitingReview} />)}
+        {buildMetric(metrics.reviewApproved, metrics.total,
+          <FormattedMessage {...messages.approvedReview} />)}
+        {buildMetric(metrics.reviewRejected, metrics.total,
+          <FormattedMessage {...messages.rejectedReview} />)}
+        {buildMetric(metrics.reviewAssisted, metrics.total,
+          <FormattedMessage {...messages.assistedReview} />)}
+        {buildMetric(metrics.reviewDisputed, metrics.total,
+          <FormattedMessage {...messages.disputedReview} />)}
+      </React.Fragment>
+    )
+  }
+
+  buildAllReviewedTasksAsMetaReviewStatus = (metrics, metaReviewTotal) => {
+    return (
+      <React.Fragment>
+        {buildMetric(metrics.metaReviewRequested, metaReviewTotal,
+          <FormattedMessage {...messages.metaRequestedReview} />)}
+        {buildMetric(metrics.metaReviewApproved, metaReviewTotal,
+          <FormattedMessage {...messages.metaApprovedReview} />)}
+        {buildMetric(metrics.metaReviewRejected, metaReviewTotal,
+          <FormattedMessage {...messages.metaRejectedReview} />)}
+        {buildMetric(metrics.metaReviewAssisted, metaReviewTotal,
+          <FormattedMessage {...messages.metaAssistedReview} />)}
+      </React.Fragment>
+    )
+  }
+
+  buildMetaReviewTasks = metrics => {
+    return (
+      <React.Fragment>
+        {buildMetric(metrics.reviewApproved, metrics.total,
+          <FormattedMessage {...messages.approvedReview} />)}
+        {buildMetric(metrics.reviewAssisted, metrics.total,
+          <FormattedMessage {...messages.assistedReview} />)}
+      </React.Fragment>
+    )
+  }
+
+  buildMetaReviewTasksAsMetaReviewStatus = (metrics, metaReviewTotal) => {
+    return (
+      <React.Fragment>
+        {buildMetric((metrics.total - metrics.metaReviewRequested), metrics.total,
+          <FormattedMessage {...messages.awaitingMetaReview} />)}
+        {buildMetric(metrics.metaReviewRequested, metrics.total,
+          <FormattedMessage {...messages.awaitingMetaReReview} />)}
+      </React.Fragment>
+    )
+  }
+
   render() {
     if (this.props.loading) return <BusySpinner />
 
@@ -110,8 +166,7 @@ export default class ReviewStatusMetrics extends Component {
             <div
               className={classNames(
                 "mr-text-md mr-mb-4",
-                this.props.lightMode ? "mr-text-matisse-blue mr-font-medium" :
-                                       "mr-text-yellow mr-font-normal"
+                "mr-text-yellow mr-font-normal"
               )}
             >
               <FormattedMessage
@@ -134,8 +189,7 @@ export default class ReviewStatusMetrics extends Component {
             <div
               className={classNames(
                 "mr-text-md mr-mb-4",
-                this.props.lightMode ? "mr-text-matisse-blue mr-font-medium" :
-                                       "mr-text-yellow mr-font-normal"
+                "mr-text-yellow mr-font-normal"
               )}
             >
               <FormattedMessage
@@ -169,7 +223,7 @@ export default class ReviewStatusMetrics extends Component {
           <div
             className={classNames(
               "mr-cursor-pointer mr-flex mr-items-center mr-mt-6",
-              this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"
+              "mr-text-green-lighter"
             )}
             onClick={(e) => this.props.setShowByPriority(!this.props.showByPriority)}
           >
@@ -192,7 +246,7 @@ export default class ReviewStatusMetrics extends Component {
           <div
             className={classNames(
               "mr-cursor-pointer mr-flex mr-items-center mr-mt-2",
-              this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"
+              "mr-text-green-lighter"
             )}
             onClick={(e) => this.props.setShowByTaskStatus(!this.props.showByTaskStatus)}
           >
@@ -215,7 +269,7 @@ export default class ReviewStatusMetrics extends Component {
   }
 }
 
-function buildMetric(amount, total, description, lightMode = false) {
+function buildMetric(amount, total, description) {
   return (
     <div className="mr-grid mr-grid-columns-5 mr-grid-gap-2">
       <div className="mr-col-span-1 mr-text-2xl mr-text-pink">

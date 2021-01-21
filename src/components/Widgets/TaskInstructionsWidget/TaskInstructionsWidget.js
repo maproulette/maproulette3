@@ -68,13 +68,6 @@ export default class TaskInstructionsWidget extends Component {
 
   render() {
     const minimizeControl = (
-      /*
-      // eslint-disable-next-line jsx-a11y/anchor-is-valid
-      <a className="collapsible-icon" aria-label="more options"
-         onClick={this.toggleMinimized}>
-        <span className="icon"></span>
-      </a>
-      */
       <button className="mr-text-green-lighter" onClick={this.toggleMinimized}>
         <SvgSymbol
           sym="icon-cheveron-down"
@@ -85,12 +78,15 @@ export default class TaskInstructionsWidget extends Component {
     )
 
     return (
-      <QuickWidget {...this.props}
-                   className={classNames(
-                      "task-instructions-widget",
-                      {"is-expanded": !this.props.collapseInstructions})}
-                  widgetTitle={<FormattedMessage {...messages.title} />}
-                  rightHeaderControls={minimizeControl}>
+      <QuickWidget
+        {...this.props}
+        className={classNames(
+          "task-instructions-widget",
+          {"is-expanded": !this.props.collapseInstructions}
+        )}
+        widgetTitle={<FormattedMessage {...messages.title} />}
+        rightHeaderControls={minimizeControl}
+      >
         {!this.props.collapseInstructions && <TaskInstructions {...this.props} />}
       </QuickWidget>
     )

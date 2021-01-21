@@ -99,7 +99,27 @@ export class ViewChallengeTasks extends Component {
       this.props.challenge.id,
       selectedTasks.allSelected ? null : [...selectedTasks.selected.keys()],
       this.props.criteria,
-      selectedTasks.allSelected ? [...selectedTasks.deselected.keys()] : null
+      selectedTasks.allSelected ? [...selectedTasks.deselected.keys()] : null,
+      false
+    ).then(() => {
+      this.props.refreshChallenge()
+      this.props.refreshTasks()
+      this.setState({bulkUpdating: false})
+    })
+  }
+
+  removeMetaReviewRequests = selectedTasks => {
+    if (!selectedTasks.allSelected && selectedTasks.selected.size === 0) {
+      return // Nothing to do
+    }
+
+    this.setState({bulkUpdating: true})
+    this.props.removeReviewRequest(
+      this.props.challenge.id,
+      selectedTasks.allSelected ? null : [...selectedTasks.selected.keys()],
+      this.props.criteria,
+      selectedTasks.allSelected ? [...selectedTasks.deselected.keys()] : null,
+      true
     ).then(() => {
       this.props.refreshChallenge()
       this.props.refreshTasks()
@@ -214,6 +234,7 @@ export class ViewChallengeTasks extends Component {
           allowClusterToggle
           initialBounds={this.state.boundsReset ?
             toLatLngBounds(_get(this.props, 'criteria.boundingBox')) : null}
+          allowSpidering
           {...this.props}
         />
 
@@ -251,6 +272,7 @@ export class ViewChallengeTasks extends Component {
             taskData={_get(this.props, 'taskInfo.tasks')}
             changeStatus={this.changeStatus}
             removeReviewRequests={this.removeReviewRequests}
+            removeMetaReviewRequests={this.removeMetaReviewRequests}
             totalTaskCount={_get(this.props, 'taskInfo.totalCount')}
             totalTasksInChallenge={ calculateTasksInChallenge(this.props) }
             loading={this.props.loadingChallenge}
@@ -350,10 +372,14 @@ ViewChallengeTasks.propTypes = {
   includeTaskStatuses: PropTypes.object,
   /** Object enumerating whether each task review status filter is on or off. */
   includeTaskReviewStatuses: PropTypes.object,
+  /** Object enumerating whether each meta review status filter is on or off. */
+  includeMetaReviewStatuses: PropTypes.object,
   /** Invoked to toggle filtering of a task status on or off */
   toggleIncludedTaskStatus: PropTypes.func.isRequired,
   /** Invoked to toggle filtering of a task review status on or off */
   toggleIncludedTaskReviewStatus: PropTypes.func.isRequired,
+  /** Invoked to toggle filtering of a meta review status on or off */
+  toggleIncludedMetaReviewStatus: PropTypes.func.isRequired,
   /** Latest bounds of the challenge-owner map */
   mapBounds: PropTypes.object,
   /** Latest zoom of the challenge-owner map */

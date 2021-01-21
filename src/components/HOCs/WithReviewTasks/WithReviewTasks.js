@@ -120,7 +120,8 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 
       switch(props.reviewTasksType) {
         case ReviewTasksType.reviewedByMe:
-          return props.updateUserReviewedTasks(userId, searchOnCriteria, pageSize).then(() => {
+          const asMetaReviewer = props.reviewTasksSubType === "meta-reviewer"
+          return props.updateUserReviewedTasks(userId, searchOnCriteria, pageSize, asMetaReviewer).then(() => {
             this.setState({loading: false})
           })
         case ReviewTasksType.toBeReviewed:
@@ -129,6 +130,10 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
           })
         case ReviewTasksType.allReviewedTasks:
           return props.updateReviewedTasks(userId, searchOnCriteria, pageSize).then(() => {
+            this.setState({loading: false})
+          })
+        case ReviewTasksType.metaReviewTasks:
+          return props.updateReviewedTasks(userId, searchOnCriteria, pageSize, true).then(() => {
             this.setState({loading: false})
           })
         case ReviewTasksType.myReviewedTasks:
@@ -182,7 +187,8 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
+      if (prevProps.reviewTasksType !== this.props.reviewTasksType ||
+          prevProps.reviewTasksSubType !== this.props.reviewTasksSubType) {
         this.update(this.props,
           this.state.criteria[this.props.reviewTasksType] ||
           this.buildDefaultCriteria(this.props), true)
@@ -206,6 +212,9 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
           reviewData = this.props.currentReviewTasks.reviewNeeded
           break
         case ReviewTasksType.allReviewedTasks:
+          reviewData = this.props.currentReviewTasks.reviewed
+          break
+        case ReviewTasksType.metaReviewTasks:
           reviewData = this.props.currentReviewTasks.reviewed
           break
         case ReviewTasksType.myReviewedTasks:
@@ -232,7 +241,10 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
                           pageSize={criteria.pageSize}
                           changePageSize={this.changePageSize}
                           setFiltered={this.setFiltered}
-                          startReviewing={(url) => this.props.startNextReviewTask(criteria, url, criteria.pageSize)}
+                          startReviewing={
+                            (url, asMetaReview = false) =>
+                              this.props.startNextReviewTask(criteria, url, criteria.pageSize, asMetaReview)
+                          }
                           loading={this.state.loading}
                           reviewChallenges={reviewChallenges}
                           reviewProjects={this.props.currentReviewTasks.reviewProjects}
@@ -248,29 +260,30 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   updateReviewNeededTasks: (searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
     return dispatch(fetchReviewNeededTasks(searchCriteria, pageSize))
   },
-  updateReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
-    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, false, pageSize))
+  updateReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE, asMetaReview=false) => {
+    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, false, false, pageSize, asMetaReview))
   },
   updateMapperReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
-    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, true, pageSize))
+    return dispatch(fetchReviewedTasks(userId, searchCriteria, false, true, false, pageSize))
   },
-  updateUserReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
-    return dispatch(fetchReviewedTasks(userId, searchCriteria, true, false, pageSize))
+  updateUserReviewedTasks: (userId, searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE, asMetaReviewer) => {
+    return dispatch(fetchReviewedTasks(userId, searchCriteria, !asMetaReviewer, false, asMetaReviewer, pageSize))
   },
 
   updateReviewChallenges: (reviewTasksType) => {
     return dispatch(fetchReviewChallenges(reviewTasksType, null, false))
   },
 
-  startNextReviewTask: (searchCriteria={}, url, pageSize) => {
-    dispatch(loadNextReviewTask(searchCriteria)).then((task) => {
+  startNextReviewTask: (searchCriteria={}, url, pageSize, asMetaReview) => {
+    const reviewType = asMetaReview ? 'meta-review' : 'review'
+    dispatch(loadNextReviewTask(searchCriteria, null, asMetaReview)).then((task) => {
       const searchParams = _cloneDeep(searchCriteria)
       searchParams.pageSize = pageSize
-      url.push(`/challenge/${task.parent}/task/${task.id}/review`, searchParams)
+      url.push(`/challenge/${task.parent}/task/${task.id}/${reviewType}`, searchParams)
     }).catch(error => {
       console.log(error)
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
-      url.push('/review', searchCriteria)
+      url.push(`/${reviewType}`, searchCriteria)
     })
   }
 })

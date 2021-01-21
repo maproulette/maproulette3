@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, Marker, LayerGroup, Rectangle, Pane }
+import { ZoomControl, Marker, LayerGroup, Rectangle, Polyline, Pane }
        from 'react-leaflet'
 import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
@@ -22,10 +22,14 @@ import _isObject from 'lodash/isObject'
 import _sortBy from 'lodash/sortBy'
 import _omit from 'lodash/omit'
 import _isEmpty from 'lodash/isEmpty'
+import _each from 'lodash/each'
+import _filter from 'lodash/filter'
+import _reject from 'lodash/reject'
 import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
        from '../../services/VisibleLayer/LayerSources'
 import { TaskPriorityColors } from '../../services/Task/TaskPriority/TaskPriority'
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
+import AsSpiderableMarkers from '../../interactions/TaskCluster/AsSpiderableMarkers'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import FitBoundsControl from '../EnhancedMap/FitBoundsControl/FitBoundsControl'
@@ -78,12 +82,15 @@ export class TaskClusterMap extends Component {
   currentBounds = null
   currentSize = null
   currentZoom = MIN_ZOOM
+  leafletMap = null
   timerHandle = null
+  unspiderHandle = null
   skipNextBoundsUpdate = false
 
   state = {
     mapMarkers: null,
     searchOpen: false,
+    spidered: new Map(),
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -101,6 +108,11 @@ export class TaskClusterMap extends Component {
 
     // the map bounds have changed
     if (!_isEqual(nextProps.boundingBox, this.props.boundingBox)) {
+      return true
+    }
+
+    // The primary task location has changed
+    if (!_isEqual(nextProps.taskCenter, this.props.taskCenter)) {
       return true
     }
 
@@ -143,7 +155,7 @@ export class TaskClusterMap extends Component {
     return false
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.taskMarkers && !this.props.delayMapLoad &&
        (!_isEqual(this.props.taskMarkers, prevProps.taskMarkers) ||
         this.props.selectedClusters !== prevProps.selectedClusters)) {
@@ -151,6 +163,10 @@ export class TaskClusterMap extends Component {
       // currentBounds if we aren't given a boundingBox
       this.currentBounds = !this.props.boundingBox ? null :
         toLatLngBounds(this.props.boundingBox)
+      this.refreshSpidered()
+      this.generateMarkers()
+    }
+    else if (this.state.spidered !== prevState.spidered) {
       this.generateMarkers()
     }
 
@@ -187,11 +203,20 @@ export class TaskClusterMap extends Component {
    * @private
    */
   updateBounds = (bounds, zoom, mapSize) => {
+    const priorZoom = this.currentZoom
     this.currentZoom = zoom
     this.currentSize = mapSize
     // If the new bounds are the same as the old, do nothing.
     if (this.currentBounds && this.currentBounds.equals(bounds)) {
       return
+    }
+
+    // Unspider tasks when the zoom is changed
+    if (!this.unspiderHandle && this.currentZoom && this.currentZoom !== priorZoom) {
+      this.unspiderHandle = setTimeout(() => {
+        this.unspider()
+        this.unspiderHandle = null
+      }, 500)
     }
 
     this.currentBounds = toLatLngBounds(bounds)
@@ -226,6 +251,80 @@ export class TaskClusterMap extends Component {
 
   debouncedUpdateBounds = _debounce(this.props.updateBounds, 400)
 
+  spiderIfNeeded = (marker, allMarkers) => {
+    if (this.state.spidered.has(marker.options.taskId)) {
+      // Marker is already spidered
+      if (this.props.onTaskClick) {
+        this.props.onTaskClick(marker.options.taskId)
+      }
+      return
+    }
+
+    // Determine if we need to spider out overlapping markers
+    const overlapping = this.overlappingTasks(marker, allMarkers)
+    if (overlapping && overlapping.length > 0) {
+      overlapping.push(marker)
+      this.spider(marker, overlapping)
+    }
+    else {
+      // If nothing needs to be spidered, make sure we're not spidered
+      this.unspider()
+      if (this.props.onTaskClick) {
+        this.props.onTaskClick(marker.options.taskId)
+      }
+    }
+  }
+
+  spider = (clickedMarker, overlappingMarkers) => {
+    const centerPointPx = this.leafletMap.latLngToLayerPoint(clickedMarker.position)
+    const spidered = AsSpiderableMarkers(overlappingMarkers).spider(centerPointPx, CLUSTER_ICON_PIXELS)
+    _each([...spidered.values()], s => s.position = this.leafletMap.layerPointToLatLng(s.positionPx))
+    this.setState({spidered})
+  }
+
+  refreshSpidered = () => {
+    if (this.state.spidered.size === 0) {
+      return
+    }
+
+    const refreshed = new Map()
+    _each(this.props.taskMarkers, marker => {
+      if (this.state.spidered.has(marker.options.taskId)) {
+        // Update icons of spidered tasks from the new task markers, indicating
+        // selected state
+        refreshed.set(marker.options.taskId, Object.assign(
+          {},
+          this.state.spidered.get(marker.options.taskId),
+          {icon: marker.icon}
+        ))
+      }
+    })
+
+    this.setState({spidered: refreshed})
+  }
+
+  unspider = () => {
+    if (this.state.spidered.size > 0) {
+      this.setState({spidered: new Map()})
+    }
+  }
+
+  mapMetricsInDegrees = (iconSize=CLUSTER_ICON_PIXELS + 20) => {
+    const metrics = {}
+    metrics.heightDegrees = this.currentBounds.getNorth() - this.currentBounds.getSouth()
+    metrics.widthDegrees = this.currentBounds.getEast() - this.currentBounds.getWest()
+    metrics.degreesPerPixel = metrics.heightDegrees / this.currentSize.y
+    metrics.iconSizeDegrees = iconSize * metrics.degreesPerPixel
+
+    return metrics
+  }
+
+  markerDistanceDegrees = (first, second) => {
+    const firstPosition = point([first.options.point.lng, first.options.point.lat])
+    const secondPosition = point([second.options.point.lng, second.options.point.lat])
+    return distance(firstPosition, secondPosition, {units: 'degrees'})
+  }
+
   consolidateMarkers = markers => {
     // Make sure conditions are appropriate for consolidation
     if (!this.props.showAsClusters ||
@@ -244,10 +343,7 @@ export class TaskClusterMap extends Component {
     // bigger than 1/4 of the current map bounds or we risk the map not zooming
     // when we fit the map bounds to the cluster bounds as the result of a user
     // click
-    const heightDegrees = this.currentBounds.getNorth() - this.currentBounds.getSouth()
-    const widthDegrees = this.currentBounds.getEast() - this.currentBounds.getWest()
-    const degreesPerPixel = heightDegrees / this.currentSize.y
-    const iconSizeDegrees = (CLUSTER_ICON_PIXELS + 20) * degreesPerPixel
+    const { heightDegrees, widthDegrees, iconSizeDegrees } = this.mapMetricsInDegrees()
     const maxClusterSize = Math.max(heightDegrees, widthDegrees) / 4.0 // 1/4 of map bounds
 
     // Track combined clusters in a map. The first cluster receives the
@@ -282,14 +378,8 @@ export class TaskClusterMap extends Component {
         }
 
         try {
-          // Calculate distance between the cluster centerpoints and see if it's
-          // less than the icon size in degrees
-          const currentPosition = point([currentCluster.options.point.lng,
-                                        currentCluster.options.point.lat])
-          const otherPosition = point([markers[j].options.point.lng,
-                                      markers[j].options.point.lat])
-          const markerDistance = distance(currentPosition, otherPosition, {units: 'degrees'})
-          if (markerDistance <= iconSizeDegrees) {
+          // Check if distance between clusters is less than the icon size in degrees
+          if (this.markerDistanceDegrees(currentCluster, markers[j]) <= iconSizeDegrees) {
             const combinedBounds = bbox(geometryCollection([
               currentCluster.options.bounding,
               markers[j].options.bounding
@@ -355,13 +445,31 @@ export class TaskClusterMap extends Component {
   }
 
   generateMarkers = () => {
-    const mapMarkers = _map(this.consolidateMarkers(this.props.taskMarkers), mark => {
+    let consolidatedMarkers = this.consolidateMarkers(this.props.taskMarkers)
+
+    // If some tasks are spidered, replace their markers with the spidered versions
+    if (this.state.spidered.size > 0) {
+      consolidatedMarkers =
+        _reject(consolidatedMarkers, m => this.state.spidered.has(m.options.taskId))
+      consolidatedMarkers.push(...[...this.state.spidered.values()])
+    }
+
+    const mapMarkers = _map(consolidatedMarkers, mark => {
       let onClick = null
       let popup = null
       const taskId = mark.options.taskId
       let position = mark.position
-      if (taskId && this.props.showMarkerPopup) {
-        popup = this.props.showMarkerPopup(mark)
+      if (taskId) {
+        if (this.props.showMarkerPopup) {
+          popup = this.props.showMarkerPopup(mark)
+        }
+
+        if (this.props.allowSpidering) {
+          onClick = () => this.spiderIfNeeded(mark, consolidatedMarkers)
+        }
+        else if (this.props.onTaskClick) {
+          onClick = () => this.props.onTaskClick(taskId)
+        }
       }
       else {
         onClick = () => this.markerClicked(mark)
@@ -372,8 +480,8 @@ export class TaskClusterMap extends Component {
         `marker-cluster-${mark.options.point.lat}-${mark.options.point.lng}-${mark.options.numberOfPoints}`
 
       // If we're rendering an individual task, snap its position to its geometry
-      // if appropriate
-      if (taskId) {
+      // if appropriate (and it's not spidered)
+      if (taskId && !this.state.spidered.has(taskId)) {
         const nearestToCenter = AsMappableTask(mark.options).nearestPointToCenter()
         if (nearestToCenter) {
           position = [nearestToCenter.geometry.coordinates[1], nearestToCenter.geometry.coordinates[0]]
@@ -391,6 +499,16 @@ export class TaskClusterMap extends Component {
     })
 
     this.setState({mapMarkers})
+  }
+
+  overlappingTasks = (marker, allMarkers) => {
+    const { iconSizeDegrees } = this.mapMetricsInDegrees(CLUSTER_ICON_PIXELS)
+    const overlapping = _filter(allMarkers, otherMarker => {
+      if (otherMarker === marker) return false
+      const dist = this.markerDistanceDegrees(marker, otherMarker)
+      return dist <= iconSizeDegrees
+    })
+    return overlapping
   }
 
   selectTasksInLayers = layers => {
@@ -511,12 +629,14 @@ export class TaskClusterMap extends Component {
         initialBounds = {this.currentBounds}
         zoomControl={false} animate={false} worldCopyJump={true}
         onBoundsChange={this.updateBounds}
+        setLeafletMap={map => this.leafletMap = map}
         justFitFeatures
+        onClick={() => this.unspider()}
       >
         <ZoomControl className="mr-z-10" position='topright' />
         {this.props.showFitWorld && <FitWorldControl />}
         {this.props.taskCenter &&
-          <FitBoundsControl centerPoint={this.props.taskCenter} />
+          <FitBoundsControl key={this.props.taskCenter.toString()} centerPoint={this.props.taskCenter} />
         }
         {this.props.showClusterLasso && this.props.onBulkClusterSelection && !this.props.mapZoomedOut &&
           <LassoSelectionControl
@@ -552,11 +672,29 @@ export class TaskClusterMap extends Component {
             {layer.component}
           </Pane>
         ))}
+        {this.state.spidered.size > 0 && // draw spider lines
+          <Pane
+            key={`pane-${renderId}-spiderlines`}
+            name={`pane-${renderId}-spiderlines`}
+            style={{zIndex: 10 + overlayLayers.length}}
+            className="custom-pane"
+          >
+           {_map([...this.state.spidered.values()], s => (
+              <Polyline
+                key={s.options.id}
+                positions={[s.originalPosition, s.position]}
+                color="black"
+                weight={1}
+              />
+            ))
+           }
+          </Pane>
+        }
         {!this.props.mapZoomedOut &&
          <Pane
            key={`pane-${renderId}-task-markers`}
            name={`pane-${renderId}-task-markers`}
-           style={{zIndex: 10 + overlayLayers.length}}
+           style={{zIndex: 10 + overlayLayers.length + 1}}
            className="custom-pane"
          >
            {this.state.mapMarkers}

@@ -39,6 +39,36 @@ export default defineMessages({
     defaultMessage: "Review not yet requested"
   },
 
+  metaNeeded: {
+    id: "Task.reviewStatus.meta-needed",
+    defaultMessage: "Re-Review Requested"
+  },
+
+  metaApproved: {
+    id: "Task.reviewStatus.meta-approved",
+    defaultMessage: "Approved"
+  },
+
+  metaRejected: {
+    id: "Task.reviewStatus.meta-rejected",
+    defaultMessage: "Needs Revision"
+  },
+
+  metaApprovedWithFixes: {
+    id: "Task.reviewStatus.meta-approvedWithFixes",
+    defaultMessage: "Approved with Fixes"
+  },
+
+  metaUnnecessary: {
+    id: "Task.reviewStatus.meta-unnecessary",
+    defaultMessage: "Unnecessary"
+  },
+
+  metaUnset: {
+    id: "Task.reviewStatus.meta-unset",
+    defaultMessage: "Unreviewed"
+  },
+
   next: {
     id: 'Task.review.loadByMethod.next',
     defaultMessage: "Next Filtered Task",

@@ -5,6 +5,8 @@
  */
 
 // Import first-party widgets shipped with MapRoulette
+export { default as CustomUrlWidget }
+       from './CustomUrlWidget/CustomUrlWidget'
 export { default as OSMHistoryWidget }
        from './OSMHistoryWidget/OSMHistoryWidget'
 export { default as ActivityListingWidget }
@@ -61,6 +63,8 @@ export { default as ReviewTableWidget }
       from './ReviewTableWidget/ReviewTableWidget'
 export { default as ReviewStatusMetricsWidget }
       from './ReviewStatusMetricsWidget/ReviewStatusMetricsWidget'
+export { default as MetaReviewStatusMetricsWidget }
+      from './ReviewStatusMetricsWidget/MetaReviewStatusMetricsWidget'
 export { default as ReviewTagMetricsWidget }
       from './ReviewTagMetricsWidget/ReviewTagMetricsWidget'
 export { default as ReviewMapWidget }

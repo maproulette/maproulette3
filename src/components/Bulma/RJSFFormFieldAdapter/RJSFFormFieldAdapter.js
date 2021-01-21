@@ -15,7 +15,6 @@ import OriginalTextWidget
       from '@rjsf/core/lib/components/widgets/TextWidget'
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
-import MarkdownTemplate from '../../MarkdownContent/MarkdownTemplate'
 import Dropdown from '../../Dropdown/Dropdown'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
@@ -213,6 +212,7 @@ export const ColumnRadioField = function(props) {
  */
 export const MarkdownEditField = props => {
   const [showingPreview, setShowingPreview] = useState(false)
+  const [formValues, setFormValues] = useState({})
 
   return (
     <React.Fragment>
@@ -254,13 +254,17 @@ export const MarkdownEditField = props => {
             "mr-rounded mr-bg-black-15 mr-px-2 mr-py-1 mr-min-h-8"
            }
          >
-           <MarkdownTemplate
-             content={props.formData || ""}
+           <MarkdownContent
+             {...props}
+             markdown={props.formData || ""}
              properties={{}}
-             completionResponses={{}}
-             setCompletionResponse={() => {}}
-             lightMode={false}
-             disableTemplate={true}
+             completionResponses={formValues}
+             setCompletionResponse={(name, value) => {
+               setFormValues(Object.assign({}, formValues, {[name]: value}))
+             }}
+             allowShortCodes
+             allowFormFields
+             allowPropertyReplacement
            />
          </div>
        </React.Fragment> :

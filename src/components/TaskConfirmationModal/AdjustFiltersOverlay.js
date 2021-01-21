@@ -52,7 +52,7 @@ export default class AdjustFiltersOverlay extends Component {
     const statusFilter =
       <div className="mr-mt-4">
         <label className="mr-w-32 mr-inline-block">
-          <FormattedMessage {...messages.reviewStatusLabel} />
+          <FormattedMessage {...messages.statusLabel} />
         </label>
         <select
           className="mr-text-white mr-select mr-w-48"

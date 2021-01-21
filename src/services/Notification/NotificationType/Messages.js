@@ -48,4 +48,12 @@ export default defineMessages({
     id: "Notification.type.follow",
     defaultMessage: "Follow"
   },
+  metaReview: {
+    id: "Notification.type.metaReview",
+    defaultMessage: "Meta-Review"
+  },
+  metaReviewAgain: {
+    id: "Notification.type.metaReviewAgain",
+    defaultMessage: "Meta-Review Again"
+  },
 })

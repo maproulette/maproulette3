@@ -46,6 +46,9 @@ export const defaultWorkspaceSetup = function() {
     widgets: [
       widgetDescriptor('ReviewTableWidget'),
     ],
+    conditionalWidgets: [ // conditionally displayed
+      'MetaReviewStatusMetricsWidget',
+    ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 12, h: 18},
     ],
@@ -62,6 +65,7 @@ export const defaultWorkspaceSetup = function() {
 export class ReviewTasksDashboard extends Component {
   state = {
     showType: ReviewTasksType.toBeReviewed,
+    showSubType: "reviewer",
     filterSelected: {},
   }
 
@@ -189,6 +193,8 @@ export class ReviewTasksDashboard extends Component {
       )
     }
 
+    const metaReviewEnabled = process.env.REACT_APP_FEATURE_META_QC === 'enabled'
+
     const showType = !user.isReviewer() ? ReviewTasksType.myReviewedTasks : this.state.showType
 
     const reviewerTabs =
@@ -244,7 +250,46 @@ export class ReviewTasksDashboard extends Component {
               {this.props.intl.formatMessage(messages.allReviewedTasks)}
             </button>
           </li>
+          {metaReviewEnabled &&
+            <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
+              <button
+                className={classNames(
+                  this.state.showType === ReviewTasksType.metaReviewTasks ? "mr-text-current" : "mr-text-green-lighter"
+                )}
+                onClick={() => this.changeTab(ReviewTasksType.metaReviewTasks)}
+              >
+                {this.props.intl.formatMessage(messages.metaReviewTasks)}
+              </button>
+            </li>
+          }
         </ol>
+        {this.state.showType === ReviewTasksType.reviewedByMe && metaReviewEnabled &&
+          <ol className="mr-list-reset mr-text-md mr-leading-tight mr-flex mr-mt-6">
+            <li className="mr-text-yellow">
+              {this.props.intl.formatMessage(messages.role)}
+            </li>
+            <li className="mr-ml-4 mr-pl-4 mr-border-green">
+              <button
+                className={classNames(
+                  this.state.showSubType === "reviewer" ? "mr-text-white" : "mr-text-green-lighter"
+                )}
+                onClick={() => this.setState({showSubType: "reviewer"})}
+              >
+                {this.props.intl.formatMessage(messages.asReviewer)}
+              </button>
+            </li>
+            <li className="mr-ml-4 mr-pl-4 mr-border-green">
+              <button
+                className={classNames(
+                  this.state.showSubType === "meta-reviewer" ? "mr-text-white" : "mr-text-green-lighter"
+                )}
+                onClick={() => this.setState({showSubType: "meta-reviewer"})}
+              >
+                {this.props.intl.formatMessage(messages.asMetaReviewer)}
+              </button>
+            </li>
+          </ol>
+        }
       </div>
 
     const notReviewerTabs = (
@@ -290,9 +335,11 @@ export class ReviewTasksDashboard extends Component {
             workspaceTitle={null}
             workspaceInfo={user.isReviewer()? reviewerTabs : notReviewerTabs}
             reviewTasksType={showType}
+            reviewTasksSubType={this.state.showSubType}
             defaultFilters={this.state.filterSelected[showType]}
             clearSelected={this.clearSelected}
             pageId={showType}
+            metaReviewEnabled
           />
         }
         <MediaQuery query="(max-width: 1023px)">

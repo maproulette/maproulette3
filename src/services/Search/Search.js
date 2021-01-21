@@ -1,6 +1,7 @@
 import format from 'date-fns/format'
 import _uniqueId from 'lodash/uniqueId'
 import _cloneDeep from 'lodash/cloneDeep'
+import _clone from 'lodash/clone'
 import _set from 'lodash/set'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
@@ -9,11 +10,14 @@ import _omit from 'lodash/omit'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
+import _isUndefined from 'lodash/isUndefined'
+import _findIndex from 'lodash/findIndex'
 import messages from './Messages'
 
 import { fromLatLngBounds } from '../MapBounds/MapBounds'
 import { CHALLENGE_LOCATION_WITHIN_MAPBOUNDS }
   from '../Challenge/ChallengeLocation/ChallengeLocation'
+import { REVIEW_STATUS_NOT_SET } from '../Task/TaskReview/TaskReviewStatus'
 
 
 // redux actions
@@ -65,6 +69,7 @@ export const SortOptions = {
 export const PARAMS_MAP = {
   reviewRequestedBy: 'o',
   reviewedBy: 'r',
+  metaReviewedBy: 'mr',
   completedBy: 'm',
   challengeId: 'cid',
   challenge: 'cs',
@@ -74,6 +79,7 @@ export const PARAMS_MAP = {
   priority: 'tp',
   priorities: 'priorities',
   reviewStatus: 'trStatus',
+  metaReviewStatus: 'mrStatus',
   id: 'tid',
   difficulty: 'cd',
   tags: 'tt',
@@ -149,6 +155,12 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
       invf.push(PARAMS_MAP.reviewedBy)
     }
   }
+  if (filters.metaReviewedBy) {
+    searchParameters[PARAMS_MAP.metaReviewedBy] = filters.metaReviewedBy
+    if (invertFields.metaReviewedBy) {
+      invf.push(PARAMS_MAP.metaReviewedBy)
+    }
+  }
   if (filters.completedBy) {
     searchParameters[PARAMS_MAP.completedBy] = filters.completedBy
     if (invertFields.completedBy) {
@@ -184,7 +196,7 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
       invf.push(PARAMS_MAP.project)
     }
   }
-  if (filters.status && filters.status !== "all") {
+  if (!_isUndefined(filters.status) && filters.status !== "all") {
     if (Array.isArray(filters.status)){
       searchParameters[PARAMS_MAP.status] = filters.status.join(',')
     }
@@ -195,13 +207,13 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
       invf.push(PARAMS_MAP.status)
     }
   }
-  if (filters.priority && filters.priority !== "all") {
+  if (!_isUndefined(filters.priority) && filters.priority !== "all") {
     searchParameters[PARAMS_MAP.priority] = filters.priority
     if (invertFields.priority) {
       invf.push(PARAMS_MAP.priority)
     }
   }
-  if (filters.priorities && filters.priorities !== "all") {
+  if (!_isUndefined(filters.priorities) && filters.priorities !== "all") {
     if (Array.isArray(filters.priorities)){
       searchParameters[PARAMS_MAP.priorities] = filters.priorities.join(',')
     }
@@ -212,7 +224,7 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
       invf.push(PARAMS_MAP.priorities)
     }
   }
-  if (filters.reviewStatus && filters.reviewStatus !== "all") {
+  if (!_isUndefined(filters.reviewStatus) && filters.reviewStatus !== "all") {
     if (Array.isArray(filters.reviewStatus)){
       searchParameters[PARAMS_MAP.reviewStatus] = filters.reviewStatus.join(',')
     }
@@ -221,6 +233,25 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
     if (invertFields.reviewStatus) {
       invf.push(PARAMS_MAP.reviewStatus)
+    }
+  }
+  if (!_isUndefined(filters.metaReviewStatus) && filters.metaReviewStatus !== "all") {
+    if (Array.isArray(filters.metaReviewStatus)){
+      let metaReviewStatuses = _clone(filters.metaReviewStatus)
+
+      if (_findIndex(filters.reviewStatus,
+        x => x.toString() === REVIEW_STATUS_NOT_SET.toString()) > -1) {
+        // If we are searching for tasks that have no associated review requests
+        // than we should also ask for those when applying the metaReviewStatus filter as well.
+        metaReviewStatuses = filters.metaReviewStatus.concat(REVIEW_STATUS_NOT_SET)
+      }
+      searchParameters[PARAMS_MAP.metaReviewStatus] = metaReviewStatuses.join(',')
+    }
+    else {
+      searchParameters[PARAMS_MAP.metaReviewStatus] = filters.metaReviewStatus
+    }
+    if (invertFields.metaReviewStatus) {
+      invf.push(PARAMS_MAP.metaReviewStatus)
     }
   }
   if (filters.reviewedAt) {

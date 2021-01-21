@@ -17,7 +17,9 @@ export default class InstructionsOverlay extends Component {
           <h4 className="mr-text-yellow mr-mb-2">
             <FormattedMessage {...messages.instructionsLabel} />
           </h4>
-          <TaskInstructions {...this.props} inModal />
+          <div className="mr-overflow-scroll mr-h-72 mr-pb-2">
+            <TaskInstructions {...this.props} setNeedsResponses={null} />
+          </div>
         </div>
         <div className="mr-w-full mr-text-center mr-absolute mr-bottom-0">
           <button

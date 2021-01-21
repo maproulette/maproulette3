@@ -25,7 +25,8 @@ import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { commentSchema, receiveComments } from '../Comment/Comment'
-import { projectSchema, fetchProject } from '../Project/Project'
+import { projectSchema, fetchProject, receiveProjects }
+       from '../Project/Project'
 import { ensureUserLoggedIn } from '../User/User'
 import { toLatLngBounds } from '../MapBounds/MapBounds'
 import { addError, addServerError } from '../Error/Error'
@@ -691,6 +692,45 @@ export const fetchChallenge = function(challengeId, suppressReceive = false) {
 
       if (!suppressReceive) {
         dispatch(receiveChallenges(normalizedResults.entities))
+      }
+
+      return normalizedResults
+    }).catch((error) => {
+      dispatch(addError(AppErrors.challenge.fetchFailure))
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
+ * Fetch data for multiple challenges identified by the given ids. Normally
+ * that data will be added to the redux store, but that can be suppressed with
+ * the supressReceive flag
+ *
+ * > Note that the challenge data is retrieved via the search API and may
+ * therefore differ slightly from data fetched directly from the challenge API
+ */
+export const fetchChallenges = function(challengeIds, suppressReceive = false) {
+  return function(dispatch) {
+    if (!_isArray(challengeIds) || challengeIds.length === 0) {
+      return Promise.success()
+    }
+
+    return new Endpoint(api.challenges.search, {
+      schema: [ challengeSchema() ],
+      params: { [PARAMS_MAP.challengeId]: challengeIds.join(',') }
+    }).execute().then(normalizedResults => {
+      // If a challenge has no virtual parents then the field will not be set
+      // by server, so we need to indicate it's empty
+      _each(normalizedResults.entities.challenges, challenge => {
+        if (_isUndefined(challenge.virtualParents)) {
+          challenge.virtualParents = []
+        }
+      })
+
+      if (!suppressReceive) {
+        dispatch(receiveChallenges(normalizedResults.entities))
+        dispatch(receiveProjects(normalizedResults.entities))
       }
 
       return normalizedResults

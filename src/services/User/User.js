@@ -7,6 +7,7 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _pull from 'lodash/pull'
 import _keys from 'lodash/keys'
+import _values from 'lodash/values'
 import _each from 'lodash/each'
 import _map from 'lodash/map'
 import _toPairs from 'lodash/toPairs'
@@ -21,7 +22,8 @@ import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { Locale } from './Locale/Locale'
-import { challengeSchema, receiveChallenges } from '../Challenge/Challenge'
+import { challengeSchema, receiveChallenges, fetchChallenges }
+       from '../Challenge/Challenge'
 import { taskSchema,
          taskDenormalizationSchema,
          receiveTasks } from '../Task/Task'
@@ -69,8 +71,8 @@ export const userDenormalizationSchema = function() {
 
 export const subscribeToUserUpdates = function(dispatch, userId) {
   websocketClient.addServerSubscription(
-    "user", userId, `newNotificationHandler_${userId}`,
-    messageObject => onNewNotification(dispatch, userId, messageObject)
+    "user", userId, `userUpdateHandler_${userId}`,
+    messageObject => onUserUpdate(dispatch, userId, messageObject)
   )
 }
 
@@ -92,14 +94,21 @@ export const unsubscribeFromFollowUpdates = function(handle) {
 }
 
 /**
- * Process user notification updates received via websocket
+ * Process updates to users received via websocket, including messages
+ * informing of new notifications and awarded achievements
  */
-const onNewNotification = function(dispatch, userId, messageObject) {
+const onUserUpdate = function(dispatch, userId, messageObject) {
   switch(messageObject.messageType) {
     case "notification-new":
       if (_get(messageObject, 'data.userId') === userId) {
         // Refresh user's notifications from server
         dispatch(fetchUserNotifications(userId))
+      }
+      break
+    case "achievement-awarded":
+      if (_get(messageObject, 'data.userId') === userId) {
+        // Refresh user
+        dispatch(fetchUser(userId))
       }
       break
     default:
@@ -356,7 +365,7 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
 /**
  * Fetch the saved tasks for the given user.
  */
-export const fetchSavedTasks = function(userId, limit=50) {
+export const fetchSavedTasks = function(userId, limit=50, includeChallenges=true) {
   return function(dispatch) {
     return new Endpoint(api.user.savedTasks, {
       schema: [ taskSchema() ],
@@ -365,8 +374,14 @@ export const fetchSavedTasks = function(userId, limit=50) {
     }).execute().then(normalizedTasks => {
       const tasks = _get(normalizedTasks, 'entities.tasks')
       const user = {id: userId}
-      user.savedTasks = _isObject(tasks) ?
-                        _keys(tasks).map(key => parseInt(key, 10)) :[]
+      user.savedTasks = []
+      if (_isObject(tasks)) {
+        user.savedTasks = _keys(tasks).map(key => parseInt(key, 10))
+        if (includeChallenges) {
+          const challengeIds = _map(_values(tasks), 'parent')
+          dispatch(fetchChallenges(challengeIds))
+        }
+      }
 
       dispatch(receiveTasks(normalizedTasks.entities))
       dispatch(receiveUsers(simulatedEntities(user)))

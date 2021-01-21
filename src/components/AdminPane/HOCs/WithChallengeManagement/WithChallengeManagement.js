@@ -215,8 +215,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     return dispatch(bulkTaskStatusChange(newStatus, challengeId, searchCriteria, excludeTaskIds))
   },
 
-  removeReviewRequest: (challengeId, taskIds, searchCriteria, excludeTaskIds) => {
-    return dispatch(removeReviewRequest(challengeId, taskIds, searchCriteria, excludeTaskIds))
+  removeReviewRequest: (challengeId, taskIds, searchCriteria, excludeTaskIds, asMetaReview) => {
+    return dispatch(removeReviewRequest(challengeId, taskIds, searchCriteria, excludeTaskIds, asMetaReview))
   }
 })
 

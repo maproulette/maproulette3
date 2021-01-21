@@ -14,4 +14,5 @@ export const intlTableProps = intl => ({
   rowsText: intl.formatMessage(messages.rows),
   pageJumpText: intl.formatMessage(messages.jumpToPageLabel),
   rowsSelectorText: intl.formatMessage(messages.rowsPerPageLabel),
+  totalText: intl.formatMessage(messages.totalLabel),
 })

@@ -5,6 +5,7 @@ import { WidgetDataTarget, registerWidgetType }
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import ReviewTaskControls from '../../ReviewTaskControls/ReviewTaskControls'
 import QuickWidget from '../../QuickWidget/QuickWidget'
+import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
 import messages from './Messages'
 
 const descriptor = {
@@ -19,13 +20,18 @@ const descriptor = {
 
 export default class TaskReviewWidget extends Component {
   render() {
+    const title = this.props.asMetaReview ?
+      <FormattedMessage {...messages.metaReviewTaskTitle} /> :
+      (this.props.task.metaReviewStatus === TaskReviewStatus.rejected ?
+        <FormattedMessage {...messages.reviewRevisionTaskTitle} /> :
+        <FormattedMessage {...messages.reviewTaskTitle} />
+      )
+
     return (
       <QuickWidget
         {...this.props}
         className="task-controls-widget"
-        widgetTitle={
-          <FormattedMessage {...messages.reviewTaskTitle} />
-        }
+        widgetTitle={title}
         noMain
       >
         {this.props.taskBundle &&

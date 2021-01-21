@@ -51,6 +51,9 @@ export const defaultDashboardSetup = function() {
       widgetDescriptor('StatusRadarWidget'),
       widgetDescriptor('ChallengeTasksWidget'),
     ],
+    conditionalWidgets: [ // conditionally displayed
+      'MetaReviewStatusMetricsWidget',
+    ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 7},
       {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 7},
@@ -131,6 +134,7 @@ export class ChallengeDashboard extends Component {
           workspaceEyebrow={pageHeader}
           challenges={[this.props.challenge]}
           pageId='ChallengeDashboard'
+          metaReviewEnabled={process.env.REACT_APP_FEATURE_META_QC === 'enabled'}
         />
       </div>
     )

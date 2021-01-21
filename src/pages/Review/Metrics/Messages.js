@@ -14,6 +14,16 @@ export default defineMessages({
     defaultMessage: "Tasks awaiting review",
   },
 
+  awaitingMetaReview: {
+    id: "ReviewStatus.metrics.awaitingMetaReview",
+    defaultMessage: "Tasks awaiting meta-review",
+  },
+
+  awaitingMetaReReview: {
+    id: "ReviewStatus.metrics.awaitingMetaReReview",
+    defaultMessage: "Tasks needing meta re-review",
+  },
+
   approvedReview: {
     id: "ReviewStatus.metrics.approvedReview",
     defaultMessage: "Reviewed tasks that passed",
@@ -32,6 +42,26 @@ export default defineMessages({
   disputedReview: {
     id: "ReviewStatus.metrics.disputedReview",
     defaultMessage: "Reviewed tasks that have been contested",
+  },
+
+  metaRequestedReview: {
+    id: "ReviewStatus.metrics.metaRequestedReview",
+    defaultMessage: "Reviewed tasks that need a meta re-review",
+  },
+
+  metaApprovedReview: {
+    id: "ReviewStatus.metrics.metaApprovedReview",
+    defaultMessage: "Reviewed tasks that passed meta-review",
+  },
+
+  metaRejectedReview: {
+    id: "ReviewStatus.metrics.metaRejectedReview",
+    defaultMessage: "Reviewed tasks that have failed meta-review",
+  },
+
+  metaAssistedReview: {
+    id: "ReviewStatus.metrics.metaAssistedReview",
+    defaultMessage: "Reviewed tasks that passed meta review with fixes",
   },
 
   fixed: {

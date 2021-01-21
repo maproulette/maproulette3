@@ -27,7 +27,7 @@ export default class ImportLayoutModal extends Component {
             </div>
             <div className="mr-w-full">
               <h2 className="mr-text-white mr-text-4xl mr-mb-4">
-                <FormattedMessage {...messages.importModalHeader} />
+                {this.props.header}
               </h2>
 
               <div className="mr-mt-2">
@@ -42,6 +42,8 @@ export default class ImportLayoutModal extends Component {
                        this.props.onUpload(files[0]).then(() => {
                          this.setState({importingFiles: false})
                          this.props.onCancel()
+                       }).catch(() => {
+                        this.setState({importingFiles: false})
                        })
                      }}
                    >
@@ -53,7 +55,7 @@ export default class ImportLayoutModal extends Component {
                              sym="upload-icon"
                              className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
                            />
-                           <FormattedMessage {...messages.importModalUploadLabel} />
+                           <FormattedMessage {...messages.uploadLabel} />
                            <input {...getInputProps()} />
                          </span>
                        )

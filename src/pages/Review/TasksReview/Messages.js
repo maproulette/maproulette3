@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Review these Tasks",
   },
 
+  startMetaReviewing: {
+    id: "Review.TaskAnalysisTable.startMetaReviewing",
+    defaultMessage: "Meta-Review these Tasks",
+  },
+
   onlySavedChallenges: {
     id: "Review.TaskAnalysisTable.onlySavedChallenges",
     defaultMessage: "Limit to favorite challenges",
@@ -49,6 +54,11 @@ export default defineMessages({
     defaultMessage: "Tasks Reviewed by Me",
   },
 
+  tasksMetaReviewedByMe: {
+    id: "Review.TaskAnalysisTable.tasksMetaReviewedByMe",
+    defaultMessage: "Tasks Meta-Reviewed by Me",
+  },
+
   myReviewTasks: {
     id: "Review.TaskAnalysisTable.myReviewTasks",
     defaultMessage: "My Mapped Tasks after Review",
@@ -57,6 +67,16 @@ export default defineMessages({
   allReviewedTasks: {
     id: "Review.TaskAnalysisTable.allReviewedTasks",
     defaultMessage: "All Review-related Tasks",
+  },
+
+  metaReviewTasks: {
+    id: "Review.TaskAnalysisTable.metaReviewTasks",
+    defaultMessage: "Meta Review Tasks",
+  },
+
+  tasksToMetaReview: {
+    id: "Review.TaskAnalysisTable.tasksToMetaReview",
+    defaultMessage: "Tasks to Meta Review",
   },
 
   totalTasks: {
@@ -94,6 +114,11 @@ export default defineMessages({
     defaultMessage: "Actions",
   },
 
+  metaReviewerControlsLabel: {
+    id: "Review.TaskAnalysisTable.metaReviewerControls.label",
+    defaultMessage: "Actions",
+  },
+
   reviewCompleteControlsLabel: {
     id: "Review.TaskAnalysisTable.reviewCompleteControls.label",
     defaultMessage: "Actions",
@@ -114,6 +139,11 @@ export default defineMessages({
     defaultMessage: "Priority",
   },
 
+  metaReviewStatusLabel: {
+    id: "Review.fields.metaReviewStatus.label",
+    defaultMessage: "Meta-Review Status",
+  },
+
   reviewStatusLabel: {
     id: "Review.fields.reviewStatus.label",
     defaultMessage: "Review Status",
@@ -127,6 +157,11 @@ export default defineMessages({
   reviewedByLabel: {
     id: "Review.fields.reviewedBy.label",
     defaultMessage: "Reviewer",
+  },
+
+  metaReviewedByLabel: {
+    id: "Review.fields.metaReviewedBy.label",
+    defaultMessage: "Meta-Reviewer",
   },
 
   additionalReviewersLabel: {
@@ -144,6 +179,11 @@ export default defineMessages({
     defaultMessage: "Reviewed On",
   },
 
+  metaReviewedAtLabel: {
+    id: "Review.fields.metaReviewedAt.label",
+    defaultMessage: "Meta-Reviewed On",
+  },
+
   reviewTaskLabel: {
     id: "Review.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
@@ -156,6 +196,11 @@ export default defineMessages({
 
   metaReviewTaskLabel: {
     id: "Review.TaskAnalysisTable.controls.metaReviewTask.label",
+    defaultMessage: "Meta Review",
+  },
+
+  reviewFurtherTaskLabel: {
+    id: "Review.TaskAnalysisTable.controls.reviewFurther.label",
     defaultMessage: "Review further",
   },
 
@@ -222,5 +267,15 @@ export default defineMessages({
   allProjects: {
     id: "Review.tableFilter.reviewByAllProjects",
     defaultMessage: "All Projects"
+  },
+
+  allNeeded: {
+    id: "Review.tableFilter.metaReviewStatus.allNeeded",
+    defaultMessage: "All Needed"
+  },
+
+  metaUnreviewed: {
+    id: "Review.tableFilter.metaReviewStatus.metaUnreviewed",
+    defaultMessage: "Unreviewed"
   }
 })

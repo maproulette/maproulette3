@@ -7,6 +7,37 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.0] - 2020-01-21
+### Added
+- Achievements
+- Meta-Reviews
+- Improved templating system for Challenge Instructions
+- New copyable (copy-to-clipboard) shortcode in Challenge Instructions (#947)
+- Workspace properties for templating in addition to task properties
+- New optional Custom URLs widget in task-completion workspace
+- Turkish locale and updated translations (huge thanks to the community!)
+- Spidering of overlapping task markers on certain maps
+- Support for `@type` and `@osm_type` feature properties for task OSM type
+- OSM Profile and OSMCha external links on user metrics page
+- Link to MapRoulette blog in site footer
+
+### Fixed
+- Task review refresh button not functioning properly
+- Unrecoverable error in some cases when corrupted workspace imported
+- Review metrics for empty projects showing system-wide metrics
+- Multi-task Work widget recenter control recentering on prior task (#1481)
+- Task review filters not always honored if changed mid-review
+- Challenges with no tasks from Overpass left in Ready status (#986)
+- MR tags sometimes sticking between reviews of tasks
+- Cut-off dropdowns in Safari when viewing Review tables with no results
+- Contested reviews attributed to wrong user in Task History widget
+- Challenge-level constraints on allowed MR tags not always honored
+
+### Changed
+- Form-field templating in Challenge Instructions now rendered inline
+- Most relative dates replaced with actual dates (#1479)
+- No-results message replaced with total count in footer of Review tables
+
 
 ## [v3.6.16] - 2020-12-16
 ### Fixed

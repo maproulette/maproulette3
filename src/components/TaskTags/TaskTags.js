@@ -56,6 +56,7 @@ export class TaskTags extends Component {
           _split(_get(this.props.task.parent, 'preferredTags'), ','),
           (result) => !_isEmpty(result)
         )
+      const limitTags = !!_get(this.props.task.parent, 'limitTags')
 
       return (
         <External>
@@ -71,6 +72,7 @@ export class TaskTags extends Component {
                   formData={this.props.tags} {...this.props}
                   tagType={"tasks"}
                   preferredResults={preferredTags}
+                  limitToPreferred={limitTags}
                   placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
                 />
               </div>

@@ -11,6 +11,8 @@ import { loadUserSettings,
          updateUserSettings,
          updateNotificationSubscriptions,
          resetAPIKey } from '../../../services/User/User'
+import { osmUserProfileURL } from '../../../services/OSM/OSM'
+import { buildOSMChaUrl } from '../../../services/OSMCha/OSMCha'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 
 /**
@@ -113,10 +115,14 @@ const WithTargetUser = function(WrappedComponent, limitToSuperUsers) {
     render() {
       const targetUser = this.getTargetUser(this.props)
 
-      return <WrappedComponent {..._omit(this.props, ['allUsers'])}
-                               targetUser={targetUser}
-                               showingUserId={this.state.showingUserId}
-                               loading={this.state.loading} />
+      return <WrappedComponent
+        {..._omit(this.props, ['allUsers'])}
+        targetUser={targetUser}
+        showingUserId={this.state.showingUserId}
+        loading={this.state.loading}
+        targetUserOSMProfileUrl={() => osmUserProfileURL(targetUser.osmProfile.displayName)}
+        targetUserOSMChaProfileUrl={() => buildOSMChaUrl(null, null, [targetUser.osmProfile.displayName])}
+      />
     }
   }
 }

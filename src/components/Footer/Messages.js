@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Report a Bug",
   },
 
+  viewBlog: {
+    id: "Footer.viewBlog",
+    defaultMessage: "Read the Blog",
+  },
+
   joinNewsletter: {
     id: "Footer.joinNewsletter",
     defaultMessage: "Join the Newsletter!",

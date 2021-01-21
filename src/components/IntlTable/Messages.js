@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: 'Loading...',
   },
 
+  totalLabel: {
+    id: "IntlTable.total.label",
+    defaultMessage: 'Total: ',
+  },
+
   noData: {
     id: "IntlTable.noData",
     defaultMessage: 'No rows found',

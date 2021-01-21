@@ -56,12 +56,18 @@ import { ViewCommentsButton, StatusLabel, makeInvertable }
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
 
 // columns
-const ALL_COLUMNS = {featureId:{}, id:{}, status:{}, priority:{},
-                 completedDuration:{}, mappedOn:{},
-                 reviewStatus:{group:"review"}, reviewRequestedBy:{group:"review"},
-                 reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
-                 reviewDuration:{group:"review"}, controls:{permanent: true},
-                 comments:{}, tags:{}, additionalReviewers:{group:"review"}}
+const ALL_COLUMNS =
+  Object.assign({featureId:{}, id:{}, status:{}, priority:{},
+    completedDuration:{}, mappedOn:{},
+    reviewStatus:{group:"review"},
+    reviewRequestedBy:{group:"review"},
+    reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
+    reviewDuration:{group:"review"}, controls:{permanent: true},
+    comments:{}, tags:{}, additionalReviewers:{group:"review"}},
+    process.env.REACT_APP_FEATURE_META_QC === 'enabled' ?
+      {metaReviewStatus:{group:"review"}, metaReviewedBy:{group:"review"},
+       metaReviewedAt:{group:"review"}} : null
+  )
 
 const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments"]
 
@@ -441,6 +447,24 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     )
   }
 
+  columns.metaReviewedAt = {
+    id: 'metaReviewedAt',
+    Header: props.intl.formatMessage(messages.metaReviewedAtLabel),
+    accessor: 'metaReviewedAt',
+    sortable: true,
+    defaultSortDesc: true,
+    exportable: t => t.metaReviewedAt,
+    maxWidth: 180,
+    minWidth: 150,
+    Cell: props => (
+      !props.value ? null :
+        <span>
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+        </span>
+
+    )
+  }
+
   columns.reviewDuration = {
     id: 'reviewDuration',
     Header: props.intl.formatMessage(messages.reviewDurationLabel),
@@ -485,12 +509,54 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     ),
   }
 
+  columns.metaReviewedBy = {
+    id: 'metaReviewedBy',
+    Header: makeInvertable(props.intl.formatMessage(messages.metaReviewedByLabel),
+                           () => props.invertField('metaReviewedBy'),
+                           _get(props.criteria, 'invertFields.metaReviewedBy')),
+    accessor: 'metaReviewedBy',
+    filterable: true,
+    sortable: true,
+    exportable: t => _get(t.metaReviewedBy, 'username') || t.metaReviewedBy,
+    maxWidth: 180,
+    Cell: ({row}) => (
+      !row._original.metaReviewedBy ?
+      null :
+      <div
+        className="row-user-column"
+        style={{color: mapColors(row._original.metaReviewedBy.username || row._original.metaReviewedBy)}}
+      >
+        {row._original.metaReviewedBy.username || row._original.metaReviewedBy}
+      </div>
+    ),
+  }
+
   columns.reviewStatus = {
     id: 'reviewStatus',
     Header: props.intl.formatMessage(messages.reviewStatusLabel),
     accessor: x => _isUndefined(x.reviewStatus) ? -1 : x.reviewStatus,
     sortable: true,
     exportable: t => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
+    maxWidth: 180,
+    minWidth: 155,
+    defaultSortDesc: true,
+    Cell: props => (
+      (!_isUndefined(props.value) && props.value !== -1) ?
+        <StatusLabel
+          {...props}
+          intlMessage={messagesByReviewStatus[props.value]}
+          className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
+        />
+        : null
+    ),
+  }
+
+  columns.metaReviewStatus = {
+    id: 'metaReviewStatus',
+    Header: props.intl.formatMessage(messages.metaReviewStatusLabel),
+    accessor: x => _isUndefined(x.metaReviewStatus) ? -1 : x.metaReviewStatus,
+    sortable: true,
+    exportable: t => props.intl.formatMessage(messagesByReviewStatus[t.metaReviewStatus]),
     maxWidth: 180,
     minWidth: 155,
     defaultSortDesc: true,
