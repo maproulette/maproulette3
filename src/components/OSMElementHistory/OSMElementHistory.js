@@ -15,7 +15,7 @@ import AsMappableTask
        from '../../interactions/Task/AsMappableTask'
 import AsIdentifiableFeature
        from '../../interactions/TaskFeature/AsIdentifiableFeature'
-import { mapColors } from '../../interactions/User/AsEndUser'
+import AsColoredHashable from '../../interactions/Hashable/AsColoredHashable'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
@@ -219,7 +219,7 @@ const HistoryEntry = props => {
         }
         <div
           className="mr-mb-2"
-          style={{color: mapColors(props.user)}}
+          style={{color: AsColoredHashable(props.user).hashColor}}
         >
           {props.user}
         </div>

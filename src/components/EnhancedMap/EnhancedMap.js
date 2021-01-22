@@ -209,10 +209,6 @@ export class EnhancedMap extends ReactLeafletMap {
   componentDidMount() {
     super.componentDidMount()
 
-    if (this.props.setLeafletMap) {
-      this.props.setLeafletMap(this.leafletElement)
-    }
-
     if (this.props.animator) {
       this.props.animator.setAnimationFunction(this.animateFeatures)
     }

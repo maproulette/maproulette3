@@ -15,6 +15,7 @@ import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _find from 'lodash/find'
 import _noop from 'lodash/noop'
+import AsColoredHashable from '../../interactions/Hashable/AsColoredHashable'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import { keysByStatus, messagesByStatus, TASK_STATUS_CREATED }
@@ -24,7 +25,6 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskHistoryAction } from '../../services/Task/TaskHistory/TaskHistory'
 import { viewAtticOverpass } from '../../services/Overpass/Overpass'
-import { mapColors } from '../../interactions/User/AsEndUser'
 import messages from './Messages'
 
 
@@ -140,7 +140,7 @@ export class TaskHistoryList extends Component {
                                   <div>
                                     <span
                                       className="mr-mr-2"
-                                      style={{color: mapColors(username)}}
+                                      style={{color: AsColoredHashable(username).hashColor}}
                                     >
                                       {username}
                                     </span> <FormattedMessage {...messages.startedOnLabel} />
@@ -200,7 +200,7 @@ export class TaskHistoryList extends Component {
           return (
             <li key={c.username + c.userType} className="">
               <span className="mr-w-40 mr-inline-block mr-px-2 mr-py-1"
-                    style={{color: mapColors(c.username)}} >
+                    style={{color: AsColoredHashable(c.username).hashColor}} >
                 {c.username}
               </span>
               <span className="mr-inline-block mr-text-pink mr-py-1">
@@ -255,7 +255,7 @@ export class TaskHistoryList extends Component {
             {(log.username || log.status) &&
               <li className="mr-mb-4">
                 <div className="mr-flex mr-justify-between">
-                  <span style={{color: mapColors(log.username)}}>
+                  <span style={{color: AsColoredHashable(log.username).hashColor}}>
                     {log.username}
                   </span>
                   {log.status}
