@@ -33,9 +33,9 @@ export class InspectTask extends Component {
     return (
       <div className="admin__manage inspect-task">
         {this.props.project &&
-          <div className="admin__manage__header">
+          <div className="admin__manage__header mr-mb-0">
             <nav className="breadcrumb" aria-label="breadcrumbs">
-              <ul>
+              <ul style={{maxWidth: "100%"}}>
                 <li className="nav-title">
                   <Link to='/admin/projects'>
                     <FormattedMessage {...manageMessages.manageHeader} />
@@ -49,10 +49,13 @@ export class InspectTask extends Component {
                 </li>
                 {_isObject(this.props.challenge) &&
                   <li>
-                    <Link to={{
-                      pathname: `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`,
-                      state: this.challengeState
-                    }}>
+                    <Link
+                      to={{
+                        pathname: `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`,
+                        state: this.challengeState
+                      }}
+                      title={this.props.challenge.name}
+                    >
                       {this.props.challenge.name}
                     </Link>
                   </li>

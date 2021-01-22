@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
 import { Link } from 'react-router-dom'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+import classNames from 'classnames'
 import _get from 'lodash/get'
 import _findIndex from 'lodash/findIndex'
+import _isFinite from 'lodash/isFinite'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
 import { isCompletionStatus }
@@ -22,16 +25,14 @@ import WithLockedTask from '../HOCs/WithLockedTask/WithLockedTask'
 import SignIn from '../../pages/SignIn/SignIn'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
-import VirtualChallengeNameLink
-       from '../VirtualChallengeNameLink/VirtualChallengeNameLink'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
 import BasicDialog from '../BasicDialog/BasicDialog'
+import Dropdown from '../Dropdown/Dropdown'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
 import messages from './Messages'
-import './TaskPane.scss'
 
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails)
@@ -220,110 +221,169 @@ export class TaskPane extends Component {
     const challenge = this.props.task.parent
     let favoriteControl = null
     if (!challenge.isVirtual) {
-      if (
-        _findIndex(this.props.user.savedChallenges, { id: challenge.id }) !== -1
-      ) {
-        favoriteControl = (
-          <li>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => this.props.unsaveChallenge(
-                this.props.user.id,
-                challenge.id
-              )}
-            >
-              <FormattedMessage {...messages.unfavoriteLabel} />
-            </a>
-          </li>
-        )
-      } else {
-        favoriteControl = (
-          <li>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => this.props.saveChallenge(
-                this.props.user.id,
-                challenge.id
-              )}
-            >
-              <FormattedMessage {...messages.favoriteLabel} />
-            </a>
-          </li>
-        )
-      }
+      const isFavorited = _findIndex(this.props.user.savedChallenges, {id: challenge.id}) !== -1
+      favoriteControl = (
+        <li>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a
+            className="mr-normal-case mr-flex"
+            onClick={() => (isFavorited ? this.props.unsaveChallenge : this.props.saveChallenge)(
+              this.props.user.id,
+              challenge.id
+            )}
+          >
+            <div className="mr-text-white mr-w-4">
+              {isFavorited && "✓"}
+            </div>
+            <FormattedMessage {...messages.favoriteLabel} />
+          </a>
+        </li>
+      )
     }
 
     return (
-      <div className='task-pane'>
+      <div className="mr-relative">
         <MediaQuery query="(min-width: 1024px)">
           <WidgetWorkspace
             {...this.props}
-            className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-8 mr-cards-inverse"
-            workspaceEyebrow={<VirtualChallengeNameLink {...this.props} />}
+            className={classNames(
+              "mr-bg-gradient-r-green-dark-blue mr-text-white mr-pb-8 mr-cards-inverse", {
+              "mr-pt-2": !this.props.inspectTask,
+              }
+            )}
             workspaceTitle={
-              <h1 className="mr-h2 mr-my-2 mr-links-inverse">
-                <ChallengeNameLink {...this.props} />
-              </h1>
-            }
-            workspaceInfo={
-              <React.Fragment>
-                <div>
-                  <ul className="mr-list-ruled mr-text-xs mr-links-green-lighter">
-                    <li>
-                      <Link to={`/browse/projects/${_get(this.props.task, 'parent.parent.id')}`}>
-                        {_get(this.props.task, 'parent.parent.displayName')}
-                      </Link>
-                    </li>
+              <div className="mr-flex mr-items-baseline mr-mt-4">
+                <h2 className="mr-text-xl mr-my-0 mr-mr-2 mr-links-inverse">
+                  <ChallengeNameLink {...this.props} includeProject suppressShareLink />
+                </h2>
 
-                    <li className="mr-mt-n1px">
-                      <OwnerContactLink {...this.props} />
-                    </li>
-
-                    {favoriteControl}
-
-                    {isManageable && !this.props.inspectTask && (
-                      <li>
-                        <button
-                          className="mr-transition mr-text-green-lighter hover:mr-text-current"
-                          onClick={() => this.props.history.push(taskInspectRoute)}
-                        >
-                          <FormattedMessage {...messages.inspectLabel} />
-                        </button>
-                      </li>
-                    )}
-                  </ul>
-                </div>
-                {this.props.tryingLock ? <BusySpinner inline /> : (
-                 this.props.taskReadOnly ?
-                 <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
-                   <span className="mr-flex mr-items-baseline mr-text-pink-light">
-                     <FormattedMessage {...messages.taskReadOnlyLabel} />
-                   </span>
-                   <button
-                     type="button"
-                     className="mr-button mr-button--xsmall mr-ml-3"
-                     onClick={() => this.tryLockingTask()}
-                   >
-                     <FormattedMessage {...messages.taskTryLockLabel} />
-                   </button>
-                 </div> :
-
-                 <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
-                   <SvgSymbol
-                     sym="locked-icon"
-                     viewBox="0 0 20 20"
-                     className="mr-fill-current mr-w-4 mr-h-4 mr-mr-1"
-                   />
-                   <span className="mr-flex mr-items-baseline">
-                     <FormattedMessage {...messages.taskLockedLabel} />
-                   </span>
-                   <Link
-                     to={`/browse/challenges/${_get(this.props.task, 'parent.id', this.props.task.parent)}`}
-                     className="mr-button mr-button--xsmall mr-ml-3"
-                   >
-                     <FormattedMessage {...messages.taskUnlockLabel} />
-                   </Link>
-                 </div>
+                {this.props.tryingLock ? <BusySpinner inline className="mr-mr-4" /> : (
+                 <Dropdown
+                   className="mr-dropdown--right"
+                   dropdownButton={dropdown => (
+                     <button
+                       onClick={dropdown.toggleDropdownVisible}
+                       className="mr-flex mr-items-center mr-text-green-lighter mr-mr-4"
+                     >
+                       {this.props.taskReadOnly ?
+                        <SvgSymbol
+                          sym="unlocked-icon"
+                          viewBox="0 0 60 60"
+                          className="mr-w-6 mr-h-6 mr-fill-pink-light"
+                        /> :
+                        <SvgSymbol
+                          sym="locked-icon"
+                          viewBox="0 0 20 20"
+                          className="mr-w-4 mr-h-4 mr-fill-current"
+                        />
+                       }
+                     </button>
+                   )}
+                   dropdownContent={(dropdown) => (
+                     this.props.taskReadOnly ? (
+                       <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
+                         <span className="mr-flex mr-items-baseline mr-text-pink-light">
+                           <FormattedMessage {...messages.taskReadOnlyLabel} />
+                         </span>
+                         <button
+                           type="button"
+                           className="mr-button mr-button--xsmall mr-ml-3"
+                           onClick={() => this.tryLockingTask()}
+                         >
+                           <FormattedMessage {...messages.taskTryLockLabel} />
+                         </button>
+                       </div>
+                     ) : (
+                       <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
+                         <span className="mr-flex mr-items-baseline">
+                           <FormattedMessage {...messages.taskLockedLabel} />
+                         </span>
+                         <Link
+                           to={
+                             _isFinite(this.props.virtualChallengeId) ?
+                             `/browse/virtual/${this.props.virtualChallengeId}` :
+                             `/browse/challenges/${_get(this.props.task, 'parent.id', this.props.task.parent)}`
+                           }
+                           className="mr-button mr-button--xsmall mr-ml-3"
+                         >
+                           <FormattedMessage {...messages.taskUnlockLabel} />
+                         </Link>
+                       </div>
+                     )
+                   )}
+                 />
                 )}
-              </React.Fragment>
+
+                <Dropdown
+                  className="mr-dropdown--right"
+                  dropdownButton={dropdown => (
+                    <button
+                      onClick={dropdown.toggleDropdownVisible}
+                      className="mr-flex mr-items-center mr-text-green-lighter"
+                    >
+                      <SvgSymbol
+                        sym="navigation-more-icon"
+                        viewBox="0 0 20 20"
+                        className="mr-fill-current mr-w-4 mr-h-4"
+                      />
+                    </button>
+                  )}
+                  dropdownContent={(dropdown) => (
+                    <React.Fragment>
+                      <ul className="mr-list-dropdown">
+                        {favoriteControl}
+                      </ul>
+                      <hr className="mr-rule-dropdown" />
+                      <ul className="mr-list-dropdown">
+                        {_isFinite(this.props.virtualChallengeId) &&
+                          <li>
+                            <CopyToClipboard
+                              text={`${process.env.REACT_APP_URL}/browse/virtual/${this.props.virtualChallengeId}`}
+                              onCopy={() => dropdown.closeDropdown()}
+                            >
+                              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                              <a>
+                                <FormattedMessage {...messages.copyVirtualShareLinkLabel} />
+                              </a>
+                            </CopyToClipboard>
+                          </li>
+                        }
+                        <li>
+                          <CopyToClipboard
+                            text={`${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}`}
+                            onCopy={() => dropdown.closeDropdown()}
+                          >
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                            <a>
+                              <FormattedMessage {...messages.copyShareLinkLabel} />
+                            </a>
+                          </CopyToClipboard>
+                        </li>
+
+                        <li className="mr-mt-n1px">
+                          <OwnerContactLink {...this.props} />
+                        </li>
+                      </ul>
+
+                      {isManageable && !this.props.inspectTask && (
+                        <React.Fragment>
+                          <hr className="mr-rule-dropdown" />
+                          <ul className="mr-list-dropdown">
+                            <li>
+                              <button
+                                className="mr-transition mr-text-green-lighter hover:mr-text-current"
+                                onClick={() => this.props.history.push(taskInspectRoute)}
+                              >
+                                <FormattedMessage {...messages.inspectLabel} />
+                              </button>
+                            </li>
+                          </ul>
+                        </React.Fragment>
+                      )}
+                    </React.Fragment>
+                  )}
+                />
+              </div>
             }
             completeTask={this.completeTask}
             completingTask={this.state.completingTask}

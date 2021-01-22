@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { FormattedMessage } from 'react-intl'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 
@@ -52,18 +51,8 @@ export default class ChallengeOwnerContactLink extends Component {
       return (
         <span className="mr-text-green-lighter mr-links-green-lighter">
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a
-            className="mr-flex mr-items-center"
-            onClick={this.updateContactOwnerUrl}
-          >
-            <SvgSymbol
-              sym="envelope-icon"
-              viewBox="0 0 20 16"
-              className="mr-fill-current mr-w-3 mr-h-4"
-            />
-            <span className="mr-ml-1">
-              <FormattedMessage {...messages.contactOwnerLabel} />
-            </span>
+          <a onClick={this.updateContactOwnerUrl}>
+            <FormattedMessage {...messages.contactOwnerLabel} />
           </a>
         </span>
       )
@@ -71,23 +60,14 @@ export default class ChallengeOwnerContactLink extends Component {
 
     return (
       <a
-        className="mr-flex mr-items-center"
 				href={this.state.contactUrl}
 				target='_blank'
 				rel="noopener noreferrer"
       >
-        <SvgSymbol
-          sym="envelope-icon"
-          viewBox="0 0 20 16"
-          className="mr-fill-current mr-w-3 mr-h-3"
+        <FormattedMessage
+          {...messages.contactLinkLabel}
+          values={{owner: this.state.osmUsername}}
         />
-
-        <span className="mr-ml-1">
-          <FormattedMessage
-            {...messages.contactLinkLabel}
-            values={{owner: this.state.osmUsername}}
-          />
-        </span>
       </a>
     )
   }

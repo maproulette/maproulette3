@@ -133,9 +133,17 @@
         max-width: 75vw;
       }
 
+      li {
+        overflow: hidden;
+      }
+
       li a {
+        display: inline;
         color: $white;
         line-height: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       li.nav-title a {

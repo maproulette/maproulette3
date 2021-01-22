@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../../../services/Widget/Widget'
+import AsBrowsableChallenge
+       from '../../../../interactions/Challenge/AsBrowsableChallenge'
 import WithManageableProjects
        from '../../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject
@@ -30,6 +32,7 @@ import TaskDeletingProgress
 import ChallengeControls from '../ChallengeCard/ChallengeControls'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import ChallengeNameLink from '../../../ChallengeNameLink/ChallengeNameLink'
+import ShareLink from '../../../ShareLink/ShareLink'
 import manageMessages from '../Messages'
 import './ChallengeDashboard.scss'
 
@@ -109,7 +112,12 @@ export class ChallengeDashboard extends Component {
             </li>
             <li className="is-active">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <ChallengeNameLink {...this.props} showBelow />
+              <ChallengeNameLink {...this.props} suppressShareLink />
+              <ShareLink
+                {...this.props}
+                link={AsBrowsableChallenge(this.props.challenge).browseURL()}
+                showLeft
+              />
               {this.props.loadingChallenge && <BusySpinner inline />}
             </li>
           </ul>
