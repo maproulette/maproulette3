@@ -86,7 +86,7 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
         if (key === "priority" && _isFinite(value)) {
           textValue = this.props.intl.formatMessage(messagesByPriority[value])
         }
-        else if (key === "priorities" && value.indexOf(",") > -1) {
+        else if (key === "priorities") {
           const splitValues = _split(value, ",")
           if (splitValues.length === _keys(TaskPriority).length) {
             textValue = null
