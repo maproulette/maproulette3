@@ -7,6 +7,11 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.1] - 2020-01-21
+### Fixed
+Certain saved task-property filters could crash tasks table widget (#1513)
+
+
 ## [v3.7.0] - 2020-01-21
 ### Added
 - Achievements
