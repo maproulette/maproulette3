@@ -40,7 +40,7 @@ export const expandTemplatingInJSX = function(jsxNode, props) {
   return React.cloneElement(
     jsxNode,
     {},
-    _map(jsxNode.props.children, child => {
+    jsxNode.props.children ? _map(jsxNode.props.children, child => {
       if (_isString(child)) {
         // Let short-code handlers have an opportunity to normalize the content
         // prior to tokenization
@@ -62,7 +62,7 @@ export const expandTemplatingInJSX = function(jsxNode, props) {
       else {
         return expandTemplatingInJSX(child, props)
       }
-    })
+    }) : jsxNode.props.children
   )
 }
 
