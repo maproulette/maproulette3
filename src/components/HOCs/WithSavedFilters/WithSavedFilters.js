@@ -6,6 +6,7 @@ import _keys from 'lodash/keys'
 import _isFinite from 'lodash/isFinite'
 import _compact from 'lodash/compact'
 import _split from 'lodash/split'
+import _indexOf from 'lodash/indexOf'
 import { buildSearchURL,
          buildSearchCriteriafromURL }
        from '../../../services/SearchCriteria/SearchCriteria'
@@ -86,7 +87,7 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
         if (key === "priority" && _isFinite(value)) {
           textValue = this.props.intl.formatMessage(messagesByPriority[value])
         }
-        else if (key === "priorities" && value.indexOf(",") > -1) {
+        else if (key === "priorities" && _indexOf(value, ",") > -1) {
           const splitValues = _split(value, ",")
           if (splitValues.length === _keys(TaskPriority).length) {
             textValue = null
