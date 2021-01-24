@@ -16,7 +16,8 @@ import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
 export const WithProjectReviewMetrics = function(WrappedComponent) {
   return class extends Component {
     state = {
-      loading: false
+      updateAvailable: true,
+      loading: false,
     }
 
     getChallengeIds(props) {
@@ -31,7 +32,7 @@ export const WithProjectReviewMetrics = function(WrappedComponent) {
     }
 
     refreshMetrics(props) {
-      this.setState({loading: true})
+      this.setState({updateAvailable: false, loading: true})
 
       const challengeIds = this.getChallengeIds(props)
       props.refreshReviewMetrics(_get(props.user, 'id'), challengeIds,
@@ -40,23 +41,24 @@ export const WithProjectReviewMetrics = function(WrappedComponent) {
       })
     }
 
-    componentDidMount() {
-      this.refreshMetrics(this.props)
-    }
-
     componentDidUpdate(prevProps) {
-      if (!this.state.loading &&
-           !_isEqual(this.getChallengeIds(this.props),
-                     this.state.currentChallengeIds)) {
-        this.refreshMetrics(this.props)
+      if (!this.state.loading && !this.state.updateAvailable &&
+          !_isEqual(this.getChallengeIds(this.props),
+                    this.state.currentChallengeIds)) {
+        this.setState({updateAvailable: true})
       }
     }
 
     render() {
       return (
-        <WrappedComponent {..._omit(this.props, ['refreshReviewMetrics'])}
-                          reviewMetrics = {this.props.reviewMetrics}
-                          loading={this.state.loading} />)
+        <WrappedComponent
+          {..._omit(this.props, ['refreshReviewMetrics'])}
+          reviewMetrics = {this.props.reviewMetrics}
+          metricsUpdateAvailable = {this.state.updateAvailable}
+          refreshMetrics = {() => this.refreshMetrics(this.props)}
+          loading={this.state.loading}
+        />
+      )
     }
   }
 }

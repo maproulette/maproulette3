@@ -107,6 +107,10 @@ export default defineMessages({
   avgTimeSpent: {
     id: "ReviewStatus.metrics.averageTime.label",
     defaultMessage: "Avg time per review:"
-  }
+  },
 
+  loadMetricsLabel: {
+    id: "ReviewStatus.metrics.controls.loadMetrics.label",
+    defaultMessage: "Load Metrics"
+  },
 })

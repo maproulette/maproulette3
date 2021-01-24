@@ -151,6 +151,14 @@ export default class ReviewStatusMetrics extends Component {
   render() {
     if (this.props.loading) return <BusySpinner />
 
+    if (this.props.metricsUpdateAvailable) {
+      return (
+        <button className="mr-button" onClick={this.props.refreshMetrics}>
+          <FormattedMessage {...messages.loadMetricsLabel} />
+        </button>
+      )
+    }
+
     const metrics = this.props.reviewMetrics
     const reviewMetricsByPriority = this.props.reviewMetricsByPriority
     const reviewMetricsByTaskStatus = this.props.reviewMetricsByTaskStatus
@@ -273,11 +281,11 @@ function buildMetric(amount, total, description) {
   return (
     <div className="mr-grid mr-grid-columns-5 mr-grid-gap-2">
       <div className="mr-col-span-1 mr-text-2xl mr-text-pink">
-        {amount === 0 ? 0 : Math.round(amount / total * 100)}%
+        {amount === 0 || !(total > 0) ? 0 : Math.round(amount / total * 100)}%
       </div>
       <div className="mr-col-span-4">
         <div className="mr-text-pink mr-text-base">
-          {amount}/{total}
+          {amount ? amount : 0}/{total ? total : 0}
         </div>
         <div>{description}</div>
       </div>

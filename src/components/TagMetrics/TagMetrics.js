@@ -41,6 +41,14 @@ export default class TagMetrics extends Component {
   }
 
   render() {
+    if (this.props.tagMetricsUpdateAvailable) {
+      return (
+        <button className="mr-button" onClick={this.props.refreshTagMetrics}>
+          <FormattedMessage {...messages.loadTagMetricsLabel} />
+        </button>
+      )
+    }
+
     const tagMetrics = this.props.tagMetrics
     const totalTasks = this.props.totalTasks
 
