@@ -7,10 +7,24 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.2] - 2021-01-25
+### Added
+- Optional Supplemental Map widget during task completion (#1492)
+- Colored task map-marker lines when spidered
+- Updated translations (huge thank you to the community!)
+- Performance optimizations around task reviews
+
+### Fixed
+- Failure to render Markdown images and horizontal rules (#1512, #1518)
+- Challenge keyword filters not honored in copy/pasted URLs (#1514)
+
+### Changed
+- Review metrics and Tag metrics widgets now require manual load
+
 
 ## [v3.7.1] - 2021-01-21
 ### Fixed
-Certain saved task-property filters could crash tasks table widget (#1513)
+- Certain saved task-property filters could crash tasks table widget (#1513)
 
 
 ## [v3.7.0] - 2021-01-21
