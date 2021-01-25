@@ -31,6 +31,7 @@ import { TaskPriorityColors } from '../../services/Task/TaskPriority/TaskPriorit
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import AsSpiderableMarkers from '../../interactions/TaskCluster/AsSpiderableMarkers'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
+import AsColoredHashable from '../../interactions/Hashable/AsColoredHashable'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import FitBoundsControl from '../EnhancedMap/FitBoundsControl/FitBoundsControl'
 import FitWorldControl from '../EnhancedMap/FitWorldControl/FitWorldControl'
@@ -79,18 +80,21 @@ export const CLUSTER_ICON_PIXELS = 40
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class TaskClusterMap extends Component {
-  currentBounds = null
-  currentSize = null
-  currentZoom = MIN_ZOOM
-  leafletMap = null
-  timerHandle = null
-  unspiderHandle = null
-  skipNextBoundsUpdate = false
+  constructor(props) {
+    super(props)
 
-  state = {
-    mapMarkers: null,
-    searchOpen: false,
-    spidered: new Map(),
+    this.mapRef = React.createRef()
+    this.currentBounds = null
+    this.currentSize = null
+    this.currentZoom = MIN_ZOOM
+    this.timerHandle = null
+    this.unspiderHandle = null
+    this.skipNextBoundsUpdate = false
+    this.state = {
+      mapMarkers: null,
+      searchOpen: false,
+      spidered: new Map(),
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -253,7 +257,14 @@ export class TaskClusterMap extends Component {
 
   spiderIfNeeded = (marker, allMarkers) => {
     if (this.state.spidered.has(marker.options.taskId)) {
-      // Marker is already spidered
+      // Marker is already spidered. Make its spider line bold
+      this.mapRef.current.leafletElement.eachLayer(layer => {
+        if (layer.options.spideredId === marker.options.taskId) {
+          layer.setStyle({weight: 3})
+          layer.redraw()
+        }
+      })
+
       if (this.props.onTaskClick) {
         this.props.onTaskClick(marker.options.taskId)
       }
@@ -276,9 +287,10 @@ export class TaskClusterMap extends Component {
   }
 
   spider = (clickedMarker, overlappingMarkers) => {
-    const centerPointPx = this.leafletMap.latLngToLayerPoint(clickedMarker.position)
+    const leafletMap = this.mapRef.current.leafletElement
+    const centerPointPx = leafletMap.latLngToLayerPoint(clickedMarker.position)
     const spidered = AsSpiderableMarkers(overlappingMarkers).spider(centerPointPx, CLUSTER_ICON_PIXELS)
-    _each([...spidered.values()], s => s.position = this.leafletMap.layerPointToLatLng(s.positionPx))
+    _each([...spidered.values()], s => s.position = leafletMap.layerPointToLatLng(s.positionPx))
     this.setState({spidered})
   }
 
@@ -622,6 +634,7 @@ export class TaskClusterMap extends Component {
 
     const map =
       <EnhancedMap
+        ref={this.mapRef}
         className="mr-z-0"
         center={latLng(0, 0)}
         zoom={this.currentZoom} minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM}
@@ -629,7 +642,6 @@ export class TaskClusterMap extends Component {
         initialBounds = {this.currentBounds}
         zoomControl={false} animate={false} worldCopyJump={true}
         onBoundsChange={this.updateBounds}
-        setLeafletMap={map => this.leafletMap = map}
         justFitFeatures
         onClick={() => this.unspider()}
       >
@@ -683,8 +695,9 @@ export class TaskClusterMap extends Component {
               <Polyline
                 key={s.options.id}
                 positions={[s.originalPosition, s.position]}
-                color="black"
+                color={AsColoredHashable(s.options.id).hashColor}
                 weight={1}
+                spideredId={s.options.id}
               />
             ))
            }

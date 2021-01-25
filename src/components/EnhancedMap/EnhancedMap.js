@@ -1,7 +1,6 @@
-import React  from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import { injectIntl } from 'react-intl'
 import { Map as ReactLeafletMap } from 'react-leaflet'
 import { LatLngBounds, LatLng, Point, latLng } from 'leaflet'
 import L from 'leaflet'
@@ -209,10 +208,6 @@ export class EnhancedMap extends ReactLeafletMap {
 
   componentDidMount() {
     super.componentDidMount()
-
-    if (this.props.setLeafletMap) {
-      this.props.setLeafletMap(this.leafletElement)
-    }
 
     if (this.props.animator) {
       this.props.animator.setAnimationFunction(this.animateFeatures)
@@ -447,4 +442,4 @@ EnhancedMap.defaultProps = {
   animateFeatures: false,
 }
 
-export default injectIntl(EnhancedMap)
+export default EnhancedMap

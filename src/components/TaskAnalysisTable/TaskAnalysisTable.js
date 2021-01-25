@@ -33,8 +33,8 @@ import { messagesByReviewStatus,
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { messagesByPriority }
        from '../../services/Task/TaskPriority/TaskPriority'
-import { mapColors } from '../../interactions/User/AsEndUser'
 import AsManager from '../../interactions/User/AsManager'
+import AsColoredHashable from '../../interactions/Hashable/AsColoredHashable'
 import WithLoadedTask from '../HOCs/WithLoadedTask/WithLoadedTask'
 import WithConfigurableColumns from '../HOCs/WithConfigurableColumns/WithConfigurableColumns'
 import { intlTableProps } from '../../components/IntlTable/IntlTable'
@@ -422,7 +422,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy)}}
+        style={{color: AsColoredHashable(_get(row._original.completedBy, 'username') || row._original.completedBy).hashColor}}
       >
         {_get(row._original.completedBy, 'username') || row._original.completedBy}
       </div>
@@ -502,7 +502,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       null :
       <div
         className="row-user-column"
-        style={{color: mapColors(row._original.reviewedBy.username || row._original.reviewedBy)}}
+        style={{color: AsColoredHashable(row._original.reviewedBy.username || row._original.reviewedBy).hashColor}}
       >
         {row._original.reviewedBy.username || row._original.reviewedBy}
       </div>
@@ -524,7 +524,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       null :
       <div
         className="row-user-column"
-        style={{color: mapColors(row._original.metaReviewedBy.username || row._original.metaReviewedBy)}}
+        style={{color: AsColoredHashable(row._original.metaReviewedBy.username || row._original.metaReviewedBy).hashColor}}
       >
         {row._original.metaReviewedBy.username || row._original.metaReviewedBy}
       </div>
@@ -581,12 +581,12 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy)}}
+        style={{color: AsColoredHashable(_get(row._original.completedBy, 'username') || row._original.completedBy).hashColor}}
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
             <React.Fragment key={reviewer.username + "-" + index}>
-              <span style={{color: mapColors(reviewer.username)}}>{reviewer.username}</span>
+              <span style={{color: AsColoredHashable(reviewer.username).hashColor}}>{reviewer.username}</span>
               {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
             </React.Fragment>
           )

@@ -17,5 +17,10 @@ export default defineMessages({
   reviewTags: {
     id: "TagMetrics.reviewTags.label",
     defaultMessage: "Review Tags",
-  }
+  },
+
+  loadTagMetricsLabel: {
+    id: "TagMetrics.controls.loadTagMetrics.label",
+    defaultMessage: "Load Tag Metrics",
+  },
 })

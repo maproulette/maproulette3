@@ -24,6 +24,7 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
          messagesByMetaReviewStatus, isNeedsReviewStatus, isMetaReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { ReviewTasksType, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
+import AsColoredHashable from '../../../interactions/Hashable/AsColoredHashable'
 import { intlTableProps } from '../../../components/IntlTable/IntlTable'
 import IntlTablePagination from '../../../components/IntlTable/IntlTablePagination'
 import TaskCommentsModal
@@ -39,7 +40,6 @@ import Dropdown from '../../../components/Dropdown/Dropdown'
 import IntlDatePicker from '../../../components/IntlDatePicker/IntlDatePicker'
 import WithConfigurableColumns from '../../../components/HOCs/WithConfigurableColumns/WithConfigurableColumns'
 import WithCurrentUser from '../../../components/HOCs/WithCurrentUser/WithCurrentUser'
-import { mapColors } from '../../../interactions/User/AsEndUser'
 import messages from './Messages'
 import { ViewCommentsButton, StatusLabel, makeInvertable }
   from '../../../components/TaskAnalysisTable/TaskTableHelpers'
@@ -608,7 +608,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: mapColors(_get(row._original.reviewRequestedBy, 'username'))}}
+        style={{color: AsColoredHashable(_get(row._original.reviewRequestedBy, 'username')).hashColor}}
       >
         {_get(row._original.reviewRequestedBy, 'username')}
       </div>
@@ -625,12 +625,12 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy)}}
+        style={{color: AsColoredHashable(_get(row._original.completedBy, 'username') || row._original.completedBy).hashColor}}
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
             <React.Fragment key={reviewer + "-" + index}>
-              <span style={{color: mapColors(reviewer.username)}}>{reviewer.username}</span>
+              <span style={{color: AsColoredHashable(reviewer.username).hashColor}}>{reviewer.username}</span>
               {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
             </React.Fragment>
           )
@@ -796,7 +796,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: mapColors(_get(row._original.reviewedBy, 'username'))}}
+        style={{color: AsColoredHashable(_get(row._original.reviewedBy, 'username')).hashColor}}
       >
         {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
       </div>
@@ -943,7 +943,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: mapColors(_get(row._original.metaReviewedBy, 'username'))}}
+        style={{color: AsColoredHashable(_get(row._original.metaReviewedBy, 'username')).hashColor}}
       >
         {row._original.metaReviewedBy ? row._original.metaReviewedBy.username : ""}
       </div>

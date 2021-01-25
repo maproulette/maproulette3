@@ -17,11 +17,12 @@ import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
 export const WithChallengeReviewMetrics = function(WrappedComponent) {
   return class extends Component {
     state = {
-      loading: false
+      updateAvailable: true,
+      loading: false,
     }
 
     updateMetrics(props) {
-      this.setState({loading: true})
+      this.setState({updateAvailable: false, loading: true})
 
       const filters = {challengeId: _get(props.challenge, 'id')}
        _merge(filters, _get(props.searchFilters, 'filters'))
@@ -48,38 +49,47 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
       })
     }
 
-    componentDidMount() {
-      this.updateMetrics(this.props)
-    }
-
     componentDidUpdate(prevProps) {
+      if (this.state.updateAvailable) {
+        return // nothing to do
+      }
+
       if (_get(prevProps.challenge, 'id') !== _get(this.props.challenge, 'id')) {
-        return this.updateMetrics(this.props)
+        this.setState({updateAvailable: true})
+        return
       }
 
       if (this.props.includeTaskStatuses !== prevProps.includeTaskStatuses) {
-        return this.updateMetrics(this.props)
+        this.setState({updateAvailable: true})
+        return
       }
 
       if (this.props.includeTaskReviewStatuses !== prevProps.includeTaskReviewStatuses) {
-        return this.updateMetrics(this.props)
+        this.setState({updateAvailable: true})
+        return
       }
 
       if (this.props.includeTaskPriorities !== prevProps.includeTaskPriorities) {
-        return this.updateMetrics(this.props)
+        this.setState({updateAvailable: true})
+        return
       }
 
       if (_get(this.props.searchFilters, 'filters') !== _get(prevProps.searchFilters, 'filters')) {
-        return this.updateMetrics(this.props)
+        this.setState({updateAvailable: true})
+        return
       }
     }
 
     render() {
       return (
-        <WrappedComponent reviewMetrics = {this.state.reviewMetrics ||
-                                           this.props.allReviewMetrics}
-                          loading={this.state.loading}
-                          {..._omit(this.props, ['updateReviewMetrics'])} />)
+        <WrappedComponent
+          {..._omit(this.props, ['updateReviewMetrics'])}
+          reviewMetrics = {this.state.reviewMetrics || this.props.allReviewMetrics}
+          metricsUpdateAvailable = {this.state.updateAvailable}
+          refreshMetrics = {() => this.updateMetrics(this.props)}
+          loading={this.state.loading}
+        />
+      )
     }
   }
 }
