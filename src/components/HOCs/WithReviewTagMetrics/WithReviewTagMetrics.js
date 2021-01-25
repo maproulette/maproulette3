@@ -14,11 +14,12 @@ import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 export const WithReviewTagMetrics = function(WrappedComponent) {
   return class extends Component {
     state = {
-      loading: false
+      loading: false,
+      updateAvailable: true,
     }
 
     updateMetrics(props) {
-      this.setState({loading: true})
+      this.setState({updateAvailable: false, loading: true})
 
       props.updateReviewTagMetrics(_get(props.user, 'id'),
                                    props.reviewTasksType,
@@ -27,24 +28,29 @@ export const WithReviewTagMetrics = function(WrappedComponent) {
       })
     }
 
-    componentDidMount() {
-      this.updateMetrics(this.props)
-    }
-
     componentDidUpdate(prevProps) {
+      if (this.state.updateAvailable) {
+        return // nothing to do
+      }
+
       if (prevProps.reviewTasksType !== this.props.reviewTasksType ||
           prevProps.reviewCriteria !== this.props.reviewCriteria) {
-        this.updateMetrics(this.props)
+        this.setState({updateAvailable: true})
       }
     }
 
     render() {
       const totalTasks = _get(this.props.reviewData, 'totalCount', 0)
       return (
-        <WrappedComponent tagMetrics = {this.props.reviewTagMetrics}
-                          totalTasks = {totalTasks}
-                          loading={this.state.loading}
-                          {..._omit(this.props, ['updateReviewTagMetrics'])} />)
+        <WrappedComponent
+          {..._omit(this.props, ['updateReviewTagMetrics'])}
+          tagMetrics = {this.props.reviewTagMetrics}
+          tagMetricsUpdateAvailable = {this.state.updateAvailable}
+          refreshTagMetrics = {() => this.updateMetrics(this.props)}
+          totalTasks = {totalTasks}
+          loading={this.state.loading}
+        />
+      )
     }
   }
 }
