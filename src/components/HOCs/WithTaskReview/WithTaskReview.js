@@ -9,6 +9,7 @@ import { completeReview,
          loadNextReviewTask,
          fetchTaskForReview }
         from '../../../services/Task/TaskReview/TaskReview'
+import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskReviewLoadMethod }
        from '../../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { addError } from '../../../services/Error/Error'
@@ -39,9 +40,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateTaskReviewStatus: (task, status, comment, tags, loadBy, url,
       taskBundle, requestedNextTask, newTaskStatus) => {
+        // Either this is a meta-review (url is /meta-review) or
+        // it's the reviewer revising their review and requesting
+        // a meta-review on their revision (ie. changing meta-review status 
+        // back to needed)
+        const submitAsMetaReview =
+          asMetaReview(ownProps) ||
+          (status === TaskReviewStatus.needed && task.reviewedBy === ownProps.user.id)
+
         const doReview = taskBundle ?
-          completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, asMetaReview(ownProps)) :
-          completeReview(task.id, status, comment, tags, newTaskStatus, asMetaReview(ownProps))
+          completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, submitAsMetaReview) :
+          completeReview(task.id, status, comment, tags, newTaskStatus, submitAsMetaReview)
 
         dispatch(doReview).then(() => {
           if (loadBy === TaskReviewLoadMethod.nearby && requestedNextTask) {
