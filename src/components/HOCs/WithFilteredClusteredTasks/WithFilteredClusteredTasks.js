@@ -302,10 +302,10 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
       if (useURLFilters) {
         const filteredTasks =
-          this.filterTasks(criteria.filters.status,
-                           criteria.filters.reviewStatus,
-                           criteria.filters.metaReviewStatus,
-                           criteria.filters.priorities,
+          this.filterTasks(criteria.filters.status || this.state.includeStatuses,
+                           criteria.filters.reviewStatus || this.state.includeReviewStatuses,
+                           criteria.filters.metaReviewStatus || this.state.includeMetaReviewStatuses,
+                           criteria.filters.priorities || this.state.includePriorities,
                            this.state.includeLocked)
 
         // Statuses to be shown in drop down need to appear in this list,
