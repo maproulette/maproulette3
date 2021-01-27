@@ -51,7 +51,7 @@ const CurrentReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentMetaReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentVirtualChallengeTaskPane =
   WithVirtualChallenge(WithCurrentTask(TaskPane))
-const VirtualChallengePane = WithVirtualChallenge(ChallengePane)
+const VirtualChallengePane = WithVirtualChallenge(ChallengeDetail)
 const ErrorPane = WithExternalError(ChallengePane)
 const HomeOrDashboard = props => {
   const goHome = sessionStorage.getItem('goHome')
