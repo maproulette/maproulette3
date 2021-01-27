@@ -4,8 +4,6 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
 import _isEmpty from 'lodash/isEmpty'
-import { searchProjects, fetchManageableProjects }
-       from '../../../../services/Project/Project'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithSearchResults
        from '../../../HOCs/WithSearchResults/WithSearchResults'
@@ -13,11 +11,28 @@ import WithPagedProjects
        from '../../../HOCs/WithPagedProjects/WithPagedProjects'
 import SearchBox from '../../../SearchBox/SearchBox'
 import Modal from '../../../Modal/Modal'
-import PageResultsButton from '../../../LoadMoreButton/PageResultsButton'
 import messages from './Messages'
 
 
 export class ProjectPickerModal extends Component {
+  ProjectSearch = WithSearch(
+    SearchBox,
+    'projectPickerModal',
+    criteria => this.executeSearch(criteria)
+  )
+
+  executeSearch = (queryCriteria) => {
+    if (!queryCriteria.query) {
+      return // nothing to do
+    }
+
+    this.props.searchProjects({
+      searchQuery: queryCriteria.query,
+      page: 0,
+      onlyEnabled: false
+    }, _get(queryCriteria, "page.resultsPerPage"))
+  }
+
   render() {
     return (
       <Modal
@@ -31,7 +46,7 @@ export class ProjectPickerModal extends Component {
         </div>
 
         <div className="mr-w-64 mr-mb-6">
-          <ProjectSearch leftAligned />
+          <this.ProjectSearch leftAligned />
         </div>
 
         <CandidateProjectList
@@ -39,45 +54,10 @@ export class ProjectPickerModal extends Component {
           currentProjectId={this.props.currentProjectId}
           onSelectProject={this.props.onSelectProject}
         />
-
-        <div className="mr-mt-4">
-          <MoreResults
-            hasMoreResults={this.props.hasMoreResults}
-            isLoading={this.props.isLoading}
-          />
-        </div>
       </Modal>
     )
   }
 }
-
-const executeSearch = function(queryCriteria) {
-  // If no query, fetch all manageable projects
-  if (!queryCriteria.query) {
-    return fetchManageableProjects(
-      _get(queryCriteria, 'page.currentPage'),
-      _get(queryCriteria, 'page.resultsPerPage')
-    )
-  }
-
-  searchProjects({
-    searchQuery: queryCriteria.query,
-    page: _get(queryCriteria, "page.currentPage"),
-    onlyEnabled: false
-  }, _get(queryCriteria, "page.resultsPerPage"))
-}
-
-const ProjectSearch = WithSearch(
-  SearchBox,
-  'projectPickerModal',
-  executeSearch
-)
-
-const MoreResults = WithSearch(
-  PageResultsButton,
-  'projectPickerModal',
-  executeSearch
-)
 
 const CandidateProjectList = function(props) {
   const projectItems = _compact(_map(props.projects, project => {
