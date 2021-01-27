@@ -339,7 +339,7 @@ export class ReviewTasksDashboard extends Component {
             defaultFilters={this.state.filterSelected[showType]}
             clearSelected={this.clearSelected}
             pageId={showType}
-            metaReviewEnabled
+            metaReviewEnabled={metaReviewEnabled}
           />
         }
         <MediaQuery query="(max-width: 1023px)">
