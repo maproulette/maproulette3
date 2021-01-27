@@ -7,6 +7,17 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.3] - 2021-01-27
+### Added
+- Additional performance optimizations
+
+### Fixed
+- Mappers unable to submit revisions after failing a task review
+- Cannot always search for destination project when moving a challenge
+- Users end up on Find Challenges page when using virtual challenge share link
+- Missing "review further" option from Task Review
+
+
 ## [v3.7.2] - 2021-01-25
 ### Added
 - Optional Supplemental Map widget during task completion (#1492)

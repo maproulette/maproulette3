@@ -11,7 +11,6 @@ import _values from 'lodash/values'
 import queryString from 'query-string'
 import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
-import { TaskReviewStatus } from './TaskReviewStatus'
 import { RECEIVE_REVIEW_NEEDED_TASKS } from './TaskReviewNeeded'
 import { RECEIVE_REVIEWED_TASKS,
          RECEIVE_MAPPER_REVIEWED_TASKS,
@@ -482,7 +481,7 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
     }
   }))
   return new Endpoint(
-    (asMetaReview || newStatus === TaskReviewStatus.needed) ?
+    asMetaReview ?
       api.task.updateMetaReviewStatus : api.task.updateReviewStatus,
     {schema: taskSchema(),
      variables: {id: taskId, status: newStatus},
