@@ -284,7 +284,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       const criteria =
          this.props.history.location.search ?
          buildSearchCriteriafromURL(this.props.history.location.search) :
-         this.props.history.location.state
+         _cloneDeep(this.props.history.location.state)
 
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
