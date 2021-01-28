@@ -14,7 +14,7 @@ const ScreenTooNarrow = props => {
 
   if (minimized) {
     return (
-      <div className="mr-fixed mr-bottom-0 mr-w-full mr-bg-black-50 mr-p-2">
+      <div className="mr-fixed mr-z-200 mr-bottom-0 mr-w-full mr-bg-black-75 mr-p-2">
         <h1 className="mr-text-yellow mr-text-base mr-text-center">
           <FormattedMessage {...messages.header} />
         </h1>
@@ -23,7 +23,7 @@ const ScreenTooNarrow = props => {
   }
 
   return (
-    <div className="mr-fixed mr-bottom-0 mr-h-screen50 mr-bg-black-75 mr-rounded-t-lg mr-shadow-lg mr-p-4 mr-mx-12">
+    <div className="mr-fixed mr-z-200 mr-bottom-0 mr-h-screen50 mr-bg-black-75 mr-rounded-t-lg mr-shadow-lg mr-p-4 mr-mx-12">
       <div className="mr-flex mr-justify-end">
         <button type="button" onClick={() => setMinimized(true)}>
           <SvgSymbol
