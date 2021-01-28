@@ -7,6 +7,13 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.4] - 2021-01-28
+### Fixed
+- Error when trying to review task after using browser back button
+- Unable to review consecutive tasks using Task Status "all" filter
+- Overlay indicating screen is too narrow sometimes obscured
+
+
 ## [v3.7.3] - 2021-01-27
 ### Added
 - Additional performance optimizations
