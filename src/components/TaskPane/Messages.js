@@ -1,22 +1,17 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with TaskPane.
+ * Internationalized messages for use with TaskPane
  */
 export default defineMessages({
   inspectLabel: {
     id: "Task.pane.controls.inspect.label",
-    defaultMessage: "Inspect",
+    defaultMessage: "Inspect Task",
   },
 
   favoriteLabel: {
     id: "Task.pane.controls.favorite.label",
-    defaultMessage: "Favorite",
-  },
-
-  unfavoriteLabel: {
-    id: "Task.pane.controls.unfavorite.label",
-    defaultMessage: "Unfavorite",
+    defaultMessage: "Favorite Challenge",
   },
 
   taskLockedLabel: {
@@ -72,5 +67,15 @@ export default defineMessages({
   saveChangesLabel: {
     id: "Task.pane.controls.saveChanges.label",
     defaultMessage: "Save Changes",
+  },
+
+  copyShareLinkLabel: {
+    id: "Task.pane.controls.copyShareLink.label",
+    defaultMessage: "Copy Challenge Share Link",
+  },
+
+  copyVirtualShareLinkLabel: {
+    id: "Task.pane.controls.copyVirtualShareLink.label",
+    defaultMessage: "Copy Virtual Challenge Share Link",
   },
 })

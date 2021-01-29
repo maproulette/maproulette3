@@ -6,6 +6,7 @@ import './Sprites.scss'
  * Puzzle-piece icon from earlier version of [Octicons](https://octicons.github.com/)
  * Lasso and outline-circle icons made by Freepik from www.flaticon.com
  * reorder-icon made by Theo K. from the Noun Project
+ * Unlock by Vectorstall from the Noun Project
  */
 export default function() {
   return (
@@ -22,8 +23,8 @@ export default function() {
         <symbol id="locked-icon" viewBox="0 0 20 20">
           <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
         </symbol>
-        <symbol id="unlocked-icon" viewBox="0 0 20 20">
-          <path d="M4 8V6a6 6 0 1 1 12 0h-3v2h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+        <symbol id="unlocked-icon" viewBox="0 0 60 60">
+          <path d="M39.85 9.365c-5.644 0-10.234 4.59-10.234 10.227v9.244H12.852a2.937 2.937 0 00-2.93 2.939v15.921a2.937 2.937 0 002.93 2.939h24.515a2.944 2.944 0 002.938-2.939V31.775a2.944 2.944 0 00-2.938-2.939h-1.66v-9.244a4.144 4.144 0 014.144-4.135 4.143 4.143 0 014.135 4.135v10.07c0 .462.364.825.825.825h4.44a.822.822 0 00.826-.825v-10.07c0-5.638-4.589-10.227-10.226-10.227zM27.76 43.181a.67.67 0 01-.66.775h-3.97a.662.662 0 01-.512-.23.701.701 0 01-.157-.545l.38-2.31a3.144 3.144 0 01-.892-2.188c0-1.75 1.42-3.17 3.161-3.17 1.75 0 3.17 1.42 3.17 3.17 0 .817-.322 1.601-.891 2.187l.37 2.311z" />
         </symbol>
         <symbol id="box-icon" viewBox="0 0 20 20">
           <path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v2H0V2zm1 3h18v13a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5zm6 2v2h6V7H7z"/>
