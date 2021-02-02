@@ -18,4 +18,9 @@ export default defineMessages({
     id: "Widgets.CompletionProgressWidget.noTasks",
     defaultMessage: "Challenge has no tasks",
   },
+
+  loadStatsLabel: {
+    id: "Widgets.CompletionProgressWidget.controls.loadStats.label",
+    defaultMessage: "Load Completion Stats",
+  },
 })

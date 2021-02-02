@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with BurndownChart.
+ * Internationalized messages for use with BurndownChart
  */
 export default defineMessages({
   heading: {
