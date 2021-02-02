@@ -140,6 +140,7 @@ export class ProjectDashboard extends Component {
           workspaceEyebrow={pageHeader}
           filterComponent={ChallengeFilterGroup}
           activity={this.props.project.activity}
+          singleProject
         />
       </div>
     )
@@ -174,7 +175,6 @@ WithManageableProjects(
     {
       restrictToGivenProjects: true,
       includeChallenges: true,
-      includeActivity: true,
       includeComments: true,
     }
   )

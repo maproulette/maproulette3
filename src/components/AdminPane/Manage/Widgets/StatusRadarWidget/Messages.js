@@ -13,4 +13,9 @@ export default defineMessages({
     id: "Widgets.StatusRadarWidget.title",
     defaultMessage: "Completion Status Distribution",
   },
+
+  loadStatsLabel: {
+    id: "Widgets.StatusRadarWidget.controls.loadStats.label",
+    defaultMessage: "Load Completion Stats",
+  },
 })

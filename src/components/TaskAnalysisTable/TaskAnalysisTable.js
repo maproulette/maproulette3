@@ -250,7 +250,7 @@ export class TaskAnalysisTable extends Component {
                 this.fetchData()
               }
             }}
-            loading={this.props.loading}
+            loading={this.props.loadingTasks}
             {...intlTableProps(this.props.intl)}
           />
         </section>
