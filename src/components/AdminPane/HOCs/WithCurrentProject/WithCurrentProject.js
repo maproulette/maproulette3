@@ -236,7 +236,7 @@ const mapDispatchToProps = dispatch => ({
   fetchProjectActivity: (projectId, startDate) =>
     dispatch(fetchProjectActivity(projectId, startDate)),
   fetchProjectChallenges: projectId =>
-    dispatch(fetchProjectChallenges(projectId, -1)),
+    dispatch(fetchProjectChallenges(projectId, 300)),
   fetchLatestProjectChallengeActivity: projectId =>
     dispatch(fetchLatestProjectChallengeActivity(projectId)),
   fetchProjectChallengeActions: projectId =>
