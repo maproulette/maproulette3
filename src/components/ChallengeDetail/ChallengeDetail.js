@@ -152,7 +152,7 @@ export class ChallengeDetail extends Component {
         <div className="mr-flex-1">
           <div className="mr-h-content mr-overflow-auto">
             <div className="mr-max-w-md mr-mx-auto">
-              <div className="mr-py-12 mr-px-8">
+              <div className="mr-py-6 mr-px-8">
                 {_get(this.props, 'history.location.state.fromSearch') && (
                   <div className="mr-mb-4">
                     <button
@@ -230,7 +230,7 @@ export class ChallengeDetail extends Component {
                       </li>
                     )}
                     <li>
-                      {_get(this.props.user, 'settings.isReviewer') &&
+                      {!challenge.isVirtual && _get(this.props.user, 'settings.isReviewer') &&
                         <Link
                           className={classNames(
                             "mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-leading-none",

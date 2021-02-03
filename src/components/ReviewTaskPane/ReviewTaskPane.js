@@ -18,7 +18,7 @@ import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from '../TaskPane/TaskMap/TaskMap'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
-import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
+import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import MobileTaskDetails from '../TaskPane/MobileTaskDetails/MobileTaskDetails'
@@ -111,39 +111,52 @@ export class ReviewTaskPane extends Component {
         <MediaQuery query="(min-width: 1024px)">
           <WidgetWorkspace
             {...this.props}
-            className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-8 mr-cards-inverse"
+            className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-pt-2 mr-pb-8 mr-cards-inverse"
             workspaceTitle={
-              <h1 className="mr-h2 mr-my-2 mr-links-inverse">
-                <ChallengeNameLink {...this.props} />
-              </h1>
+              <div className="mr-flex mr-items-baseline mr-mt-4">
+                <h2 className="mr-text-lg mr-my-0 mr-mr-2 mr-links-inverse">
+                  <ChallengeNameLink {...this.props} suppressShareLink />
+                </h2>
+                <Dropdown
+                  className="mr-dropdown--right"
+                  dropdownButton={dropdown => (
+                    <button
+                      onClick={dropdown.toggleDropdownVisible}
+                      className="mr-flex mr-items-center mr-text-green-lighter mr-mr-4"
+                    >
+                      {this.props.taskReadOnly ?
+                       <SvgSymbol
+                         sym="unlocked-icon"
+                         viewBox="0 0 60 60"
+                         className="mr-w-6 mr-h-6 mr-fill-pink-light"
+                       /> :
+                       <SvgSymbol
+                         sym="locked-icon"
+                         viewBox="0 0 20 20"
+                         className="mr-w-4 mr-h-4 mr-fill-current"
+                       />
+                      }
+                    </button>
+                  )}
+                  dropdownContent={(dropdown) => (
+                    <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
+                      <span className="mr-flex mr-items-baseline">
+                        <FormattedMessage {...messages.taskLockedLabel} />
+                      </span>
+                      <button
+                        onClick={() => this.props.stopReviewing(this.props.task, this.props.history)}
+                        className="mr-button mr-button--xsmall mr-ml-3"
+                      >
+                        <FormattedMessage {...messages.taskUnlockLabel} />
+                      </button>
+                    </div>
+                  )}
+                />
+              </div>
             }
-            workspaceInfo={
-              <div>
-                 <ul className="mr-list-ruled mr-text-xs">
-                   <li className="mr-links-inverse">
-                     {_get(this.props.task, 'parent.parent.displayName')}
-                   </li>
-
-                   <li className="mr-links-green-lighter">
-                     <OwnerContactLink {...this.props} />
-                   </li>
-                 </ul>
-                 <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
-                   <SvgSymbol
-                     sym="locked-icon"
-                     viewBox="0 0 20 20"
-                     className="mr-fill-current mr-w-4 mr-h-4 mr-mr-1"
-                   />
-                   <span className="mr-flex mr-items-baseline">
-                     <FormattedMessage {...messages.taskLockedLabel} />
-                   </span>
-                   <button
-                     onClick={() => this.props.stopReviewing(this.props.task, this.props.history)}
-                     className="mr-button mr-button--xsmall mr-ml-3"
-                   >
-                     <FormattedMessage {...messages.taskUnlockLabel} />
-                   </button>
-                 </div>
+            subheader={
+              <div className="mr-text-xs mr-links-green-lighter mr-mt-1">
+                {_get(this.props.task, 'parent.parent.displayName')}
               </div>
             }
             setCompletionResponse={this.setCompletionResponse}

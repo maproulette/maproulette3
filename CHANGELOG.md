@@ -7,6 +7,19 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.5] - 2021-02-03
+### Added
+- More compact workspace headers (#1388)
+
+### Fixed
+- Submitting task revision unnecessarily loads additional task data
+- Managing huge projects can make frontend unresponsive (#750)
+- Various performance problems (#1538, #1542)
+
+### Changed
+- Project completion metrics in Create & Manage now require manual load
+
+
 ## [v3.7.4] - 2021-01-28
 ### Fixed
 - Error when trying to review task after using browser back button

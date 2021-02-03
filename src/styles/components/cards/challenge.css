@@ -22,7 +22,7 @@
   }
 
   &__title {
-    @apply mr-my-1 mr-max-w-full mr-break-words;
+    @apply mr-my-1 mr-max-w-full mr-break-words mr-text-xl;
 
     a {
       @apply mr-text-white;

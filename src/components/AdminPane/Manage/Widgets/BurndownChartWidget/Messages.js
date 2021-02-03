@@ -8,8 +8,14 @@ export default defineMessages({
     id: "Widgets.BurndownChartWidget.label",
     defaultMessage: "Burndown Chart",
   },
+
   title: {
     id: "Widgets.BurndownChartWidget.title",
     defaultMessage: "Tasks Remaining: {taskCount, number}",
+  },
+
+  loadStatsLabel: {
+    id: "Widgets.BurndownChartWidget.controls.loadStats.label",
+    defaultMessage: "Load Completion Stats",
   },
 })

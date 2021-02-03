@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       taskBundle, requestedNextTask, newTaskStatus) => {
         // Either this is a meta-review (url is /meta-review) or
         // it's the reviewer revising their review and requesting
-        // a meta-review on their revision (ie. changing meta-review status 
+        // a meta-review on their revision (ie. changing meta-review status
         // back to needed)
         const submitAsMetaReview =
           asMetaReview(ownProps) ||
@@ -54,11 +54,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         dispatch(doReview).then(() => {
           if (loadBy === TaskReviewLoadMethod.nearby && requestedNextTask) {
-            visitTaskForReview(loadBy, url, requestedNextTask, asMetaReview(ownProps))
+            visitLoadBy(loadBy, url, requestedNextTask, asMetaReview(ownProps))
+          }
+          else if (loadBy === TaskReviewLoadMethod.inbox ||
+                   loadBy === TaskReviewLoadMethod.ALL_LOAD_METHOD) {
+            // Don't need to load next task since we are going to inbox or back
+            // to review all
+            visitLoadBy(loadBy, url, task, asMetaReview(ownProps))
           }
           else {
             loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
-              nextTask => visitTaskForReview(loadBy, url, nextTask, asMetaReview(ownProps)))
+              nextTask => visitLoadBy(loadBy, url, nextTask, asMetaReview(ownProps)))
           }
         }).catch(error => {
           console.log(error)
@@ -69,7 +75,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     skipTaskReview: (task, loadBy, url) => {
       dispatch(cancelReviewClaim(task.id))
       loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
-        nextTask => visitTaskForReview(loadBy, url, nextTask, asMetaReview(ownProps)))
+        nextTask => visitLoadBy(loadBy, url, nextTask, asMetaReview(ownProps)))
     },
 
     stopReviewing: (task, url) => {
@@ -120,7 +126,7 @@ export const parseSearchCriteria = url => {
   }
 }
 
-export const visitTaskForReview = (loadBy, url, task, asMetaReview) => {
+export const visitLoadBy = (loadBy, url, task, asMetaReview) => {
   const parsedCriteria = parseSearchCriteria(url)
   const newState = parsedCriteria.newState
 

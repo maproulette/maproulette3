@@ -33,8 +33,12 @@ export class ShareLink extends Component {
         </button>
 
         {this.props.isActive &&
-         <div className={classNames('menu-wrapper',
-                                    {'mr-mt-12 mr--ml-100': this.props.showBelow})}>
+         <div
+           className={classNames('menu-wrapper', {
+             'mr-mt-12 mr--ml-100': this.props.showBelow,
+             'mr--ml-100': this.props.showLeft,
+           })}
+         >
            <div className='dropdown-menu' role='menu'>
              <div className='mr--mt-7 mr-flex mr-items-center mr-justify-between mr-p-2 mr-bg-blue-dark mr-text-white mr-rounded mr-shadow mr-text-sm'>
                <span className="share-link__text">{absoluteLink}</span>
