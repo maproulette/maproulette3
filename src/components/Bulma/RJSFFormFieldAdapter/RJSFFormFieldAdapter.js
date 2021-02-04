@@ -126,6 +126,19 @@ export const CustomFieldTemplate = function(props) {
          }
        </div>
       }
+      {uiSchema && uiSchema["ui:fieldGroupHeader"] && uiSchema["ui:toggleCollapsed"] &&
+       <div
+         className="mr-flex mr-text-mango mr-uppercase mr-text-md mr-mb-2 mr-cursor-pointer"
+         onClick={() => uiSchema["ui:toggleCollapsed"]()}
+       >
+         <span>{uiSchema["ui:fieldGroupHeader"]}</span>
+         <SvgSymbol
+           sym={isCollapsed ? "icon-cheveron-right" : "icon-cheveron-down"}
+           viewBox="0 0 20 20"
+           className="mr-fill-green-lighter mr-w-6 mr-h-6 mr-ml-2"
+         />
+       </div>
+      }
       {!isCollapsed &&
        <React.Fragment>
          <LabelWithHelp {...props} />

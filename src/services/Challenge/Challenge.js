@@ -783,7 +783,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'overpassTargetType',
         'parent', 'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
         'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
-        'preferredReviewTags', 'limitTags', 'limitReviewTags', 'taskStyles', 'requiresLocal'])
+        'preferredReviewTags', 'presets', 'limitTags', 'limitReviewTags', 'taskStyles',
+        'requiresLocal'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
@@ -1061,6 +1062,10 @@ const reduceChallengesFurther = function(mergedState, oldState, challengeEntitie
 
     if (_isArray(entity.taskStyles)) {
       mergedState[entity.id].taskStyles = entity.taskStyles
+    }
+
+    if (_isArray(entity.presets)) {
+      mergedState[entity.id].presets = entity.presets
     }
   })
 }

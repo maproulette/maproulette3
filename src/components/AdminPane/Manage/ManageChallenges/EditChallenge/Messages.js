@@ -628,6 +628,21 @@ will not be able to make sense of it.
       " Note: challenge will not appear in the Find Challenges list."
   },
 
+  presetsLabel: {
+    id: "Admin.EditChallenge.form.presets.label",
+    defaultMessage: "Restrict iD Editor Presets"
+  },
+
+  presetsDescription: {
+    id: "Admin.EditChallenge.form.presets.description",
+    defaultMessage: "Restrict the types of OSM features presented to mappers " +
+    "in iD by default when working on your tasks, helping to keep them focused on " +
+    "mapping things relevant to your challenge. For example, if your challenge " +
+    "is about mapping buildings, you could enable only presets related to buildings " +
+    "and then mappers would not be presented with the option to map an area as, say, " +
+    "a park or a lake."
+  },
+
   showLongformTooltip: {
     id: "Admin.EditChallenge.controls.showLongform.tooltip",
     defaultMessage: "Show all fields"
@@ -736,6 +751,16 @@ will not be able to make sense of it.
   tagsStepDescription: {
     id: "Admin.EditChallenge.form.steps.tags.description",
     defaultMessage: "Setup preferred MR tags",
+  },
+
+  editorStepHeader: {
+    id: "Admin.EditChallenge.form.steps.editor.header",
+    defaultMessage: "Editor Configuration",
+  },
+
+  editorStepDescription: {
+    id: "Admin.EditChallenge.form.steps.editor.description",
+    defaultMessage: "Customize Editor Settings",
   },
 
   advancedOptionsStepDescription: {
