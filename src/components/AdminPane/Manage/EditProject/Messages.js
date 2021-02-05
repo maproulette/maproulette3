@@ -87,7 +87,7 @@ export default defineMessages({
     id: 'Admin.EditProject.form.isVirtual.description',
     defaultMessage: "If a project is virtual, then you can add " +
       "existing challenges as a means of grouping. You cannot add " +
-      "new Challenges directly to a Virtual Projact. This setting " +
+      "new Challenges directly to a Virtual Project. This setting " +
       "cannot be changed after the project is created. Permissions " +
       "remain in effect from the challenges' original parent projects. "
   },
