@@ -1604,6 +1604,7 @@
   "Widgets.SupplementalMapWidget.controls.trackTaskMap.label": "Track Task Map",
   "Widgets.SupplementalMapWidget.label": "Supplemental Map",
   "Widgets.SupplementalMapWidget.title": "Supplemental Map",
+  "Widgets.TagDiffWidget.controls.editTags.label": "Edit Tags",
   "Widgets.TagDiffWidget.controls.viewAllTags.label": "Show all Tags",
   "Widgets.TagDiffWidget.label": "Cooperativees",
   "Widgets.TagDiffWidget.title": "Proposed OSM Tag Changes",

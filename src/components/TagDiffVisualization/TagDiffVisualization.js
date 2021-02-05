@@ -34,6 +34,12 @@ export class TagDiffVisualization extends Component {
     newTagValid: false,    // whether new tag name can be added
   }
 
+  componentDidMount() {
+    if (this.props.editMode) {
+      this.beginEditing()
+    }
+  }
+
   /**
    * Switch to changeset/XML view of tag changes
    */

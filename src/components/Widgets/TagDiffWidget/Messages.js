@@ -18,5 +18,9 @@ export default defineMessages({
     id: "Widgets.TagDiffWidget.controls.viewAllTags.label",
     defaultMessage: "Show all Tags",
   },
-})
 
+  editTagsLabel: {
+    id: "Widgets.TagDiffWidget.controls.editTags.label",
+    defaultMessage: "Edit Tags",
+  },
+})
