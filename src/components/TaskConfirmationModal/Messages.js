@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Please Confirm Review",
   },
 
+  inMetaReviewHeader: {
+    id: 'TaskConfirmationModal.inMetaReviewHeader',
+    defaultMessage: "Please Confirm Meta-Review",
+  },
+
   commentLabel: {
     id: 'TaskConfirmationModal.comment.label',
     defaultMessage: "Leave optional comment",
@@ -52,6 +57,16 @@ export default defineMessages({
   submitLabel: {
     id: 'TaskConfirmationModal.submit.label',
     defaultMessage: "Submit",
+  },
+
+  invertLabel: {
+    id: 'TaskConfirmationModal.invert.label',
+    defaultMessage: "invert",
+  },
+
+  invertedLabel: {
+    id: 'TaskConfirmationModal.inverted.label',
+    defaultMessage: "inverted",
   },
 
   osmUploadNotice: {
@@ -93,4 +108,69 @@ export default defineMessages({
     id: 'TaskConfirmationModal.addTags.placeholder',
     defaultMessage: "Add MR Tags",
   },
+
+  adjustFilters: {
+    id: 'TaskConfirmationModal.adjustFilters.label',
+    defaultMessage: "Adjust Filters",
+  },
+
+  doneLabel: {
+    id: 'TaskConfirmationModal.done.label',
+    defaultMessage: "Done",
+  },
+
+  useChallengeLabel: {
+    id: 'TaskConfirmationModal.useChallenge.label',
+    defaultMessage: "Use current challenge",
+  },
+
+  reviewStatusLabel: {
+    id: 'TaskConfirmationModal.reviewStatus.label',
+    defaultMessage: "Review Status:",
+  },
+
+  statusLabel: {
+    id: 'TaskConfirmationModal.status.label',
+    defaultMessage: "Status:",
+  },
+
+  priorityLabel: {
+    id: 'TaskConfirmationModal.priority.label',
+    defaultMessage: "Priority:",
+  },
+
+  challengeLabel: {
+    id: 'TaskConfirmationModal.challenge.label',
+    defaultMessage: "Challenge:",
+  },
+
+  mapperLabel: {
+    id: 'TaskConfirmationModal.mapper.label',
+    defaultMessage: "Mapper:",
+  },
+
+  instructionsLabel: {
+    id: 'TaskConfirmationModal.instructions.label',
+    defaultMessage: "Task Instructions",
+  },
+
+  viewInstructions: {
+    id: 'TaskConfirmationModal.instructions.header',
+    defaultMessage: "View Task Instructions",
+  },
+
+  closeInstructionsLabel: {
+    id: 'TaskConfirmationModal.closeInstructions.label',
+    defaultMessage: "Hide Instructions",
+  },
+
+  instructionsContinueLabel: {
+    id: 'TaskConfirmationModal.instructionsContinue.label',
+    defaultMessage: "Continue",
+  },
+
+  metaReviewRequestedLabel: {
+    id: 'TaskConfirmationModal.metaReviewRequested.label',
+    defaultMessage: "Meta-Review Requested",
+  }
 })

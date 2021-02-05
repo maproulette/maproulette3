@@ -50,15 +50,6 @@
       width: auto;
       fill: $grey-lightest;
       vertical-align: middle;
-
-      &.turnOff {
-        fill: $blue;
-      }
-
-      &.partialOn {
-        fill: $blue;
-        opacity: 0.5;
-      }
     }
   }
 
@@ -142,14 +133,25 @@
         max-width: 75vw;
       }
 
-      li a {
-        color: $white;
-        line-height: 16px;
+      li {
+        overflow: hidden;
       }
 
-      li.is-active a {
+      li a {
+        display: inline;
         color: $white;
-        font-weight: $weight-semibold;
+        line-height: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      li.nav-title a {
+        font-size: 28px;
+      }
+
+      li.is-active:not(.nav-title) a {
+        color: $yellow;
 
         .busy-spinner {
           margin-left: 10px;

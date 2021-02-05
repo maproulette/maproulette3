@@ -29,6 +29,11 @@ export default defineMessages({
     defaultMessage: "Edit in Level0",
   },
 
+  editRapid: {
+    id: "KeyMapping.openEditor.editRapid",
+    defaultMessage: "Edit in RapiD",
+  },
+
   layerOSMData: {
     id: "KeyMapping.layers.layerOSMData",
     defaultMessage: "Toggle OSM Data Layer",
@@ -76,7 +81,7 @@ export default defineMessages({
 
   tooHard: {
     id: "KeyMapping.taskCompletion.tooHard",
-    defaultMessage: "Too difficult / Couldn't see",
+    defaultMessage: "Too difficult / Couldn’t see",
   },
 
   alreadyFixed: {

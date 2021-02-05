@@ -32,8 +32,36 @@ export default defineMessages({
     id: "Locale.ko.label",
     defaultMessage: "ko (한국어)",
   },
+  nl: {
+    id: "Locale.nl.label",
+    defaultMessage: "nl (Dutch)",
+  },
   'pt-BR': {
     id: "Locale.pt-BR.label",
-    defaultMessage: "pt (Português Brasileiro)",
+    defaultMessage: "pt-BR (Português Brasileiro)",
+  },
+  'fa-IR': {
+    id: "Locale.fa-IR.label",
+    defaultMessage: "fa-IR (Persian - Iran)",
+  },
+  'cs-CZ': {
+    id: "Locale.cs-CZ.label",
+    defaultMessage: "cs-CZ (Czech - Czech Republic)",
+  },
+  'ru-RU': {
+    id: "Locale.ru-RU.label",
+    defaultMessage: "ru-RU (Russian - Russia)",
+  },
+  'uk': {
+    id: "Locale.uk.label",
+    defaultMessage: "uk (Ukrainian)",
+  },
+  'vi': {
+    id: "Locale.vi.label",
+    defaultMessage: "vi (Vietnamese)",
+  },
+  tr: {
+    id: "Locale.tr.label",
+    defaultMessage: "tr (Turkish)",
   },
 })

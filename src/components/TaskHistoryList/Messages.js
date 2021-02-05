@@ -13,4 +13,40 @@ export default defineMessages({
     id: "TaskHistory.controls.viewAttic.label",
     defaultMessage: "View Attic",
   },
+
+  taskUpdatedLabel: {
+    id: "TaskHistory.fields.taskUpdated.label",
+    defaultMessage: "Task updated by challenge manager",
+  },
+
+  listByTime: {
+    id: "TaskHistory.controls.listByTime.label",
+    defaultMessage: "Entries"
+  },
+
+  listByUser: {
+    id: "TaskHistory.controls.listByUser.label",
+    defaultMessage: "Contributors"
+  },
+
+  reviewerType: {
+    id: "TaskHistory.fields.userType.reviewer",
+    defaultMessage: "Reviewer"
+  },
+
+  metaReviewerType: {
+    id: "TaskHistory.fields.userType.metaReviewer",
+    defaultMessage: "Meta-Reviewer"
+  },
+
+  mapperType: {
+    id: "TaskHistory.fields.userType.mapper",
+    defaultMessage: "Mapper"
+  },
+
+  metaReviewLabel: {
+    id: "TaskHistory.metaReview.label",
+    defaultMessage: "Meta-Review"
+  },
+
 })

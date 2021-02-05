@@ -11,7 +11,7 @@ export default defineMessages({
 
   notFixed: {
     id: 'ActiveTask.controls.notFixed.label',
-    defaultMessage: "Too difficult / Couldn't see",
+    defaultMessage: "Too difficult / Couldn’t see",
   },
 
   alreadyFixed: {

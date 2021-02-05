@@ -48,7 +48,7 @@ export default defineMessages({
 
   visibleLabel: {
     id: "Admin.Challenge.fields.enabled.label",
-    defaultMessage: "Visible:",
+    defaultMessage: "Discoverable:",
   },
 
   startChallengeLabel: {

@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { injectIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import L from 'leaflet'
 import 'leaflet-vectoricon'
-import { ZoomControl, Marker } from 'react-leaflet'
+import { ZoomControl, Marker, Tooltip } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { point, featureCollection } from '@turf/helpers'
-import bbox from '@turf/bbox'
-import bboxPolygon from '@turf/bbox-polygon'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _cloneDeep from 'lodash/cloneDeep'
-import { latLng } from 'leaflet'
-import { colors } from '../../../tailwind'
-import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
+import { buildLayerSources } from '../../../services/VisibleLayer/LayerSources'
+import { TaskStatusColors, messagesByStatus } from '../../../services/Task/TaskStatus/TaskStatus'
+import { messagesByPriority } from '../../../services/Task/TaskPriority/TaskPriority'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
@@ -23,7 +20,11 @@ import WithIntersectingOverlays
        from '../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithTaskMarkers from '../../HOCs/WithTaskMarkers/WithTaskMarkers'
 import BusySpinner from '../../BusySpinner/BusySpinner'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../tailwind.config.js'
 import messages from './Messages'
+
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 // Setup child components with necessary HOCs
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
@@ -44,21 +45,28 @@ const starIconSvg = L.vectorIcon({
   },
 })
 
-const markerIconSvg = (fillColor=colors['blue-leaflet']) => L.vectorIcon({
-  viewBox: '0 0 20 20',
-  svgHeight: 30,
-  svgWidth: 30,
-  type: 'path',
-  shape: { // zondicons "location" icon
-    d: "M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
-  },
-  style: {
-    fill: fillColor,
-    stroke: colors['grey-leaflet'],
-    strokeWidth: 0.5,
-  },
-  iconAnchor: [5, 15], // render tip of SVG near marker location
-})
+const markerIconSvg = (priority, styleOptions={}) => {
+  const prioritizedWidth = 40 - (priority * 10)
+  const prioritizedHeight = 45 - (priority * 10)
+  return L.vectorIcon({
+    viewBox: '0 0 20 20',
+    svgWidth: prioritizedWidth,
+    svgHeight: prioritizedHeight,
+    type: 'path',
+    shape: { // zondicons "location" icon
+      d: "M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+    },
+    style: Object.assign({
+      fill: colors['blue-leaflet'],
+      stroke: colors['grey-leaflet'],
+      strokeWidth: 0.5,
+      marginTop: '0px',
+      marginLeft: '0px',
+    }, styleOptions),
+    iconSize: [prioritizedWidth, prioritizedHeight],
+    iconAnchor: [prioritizedWidth / 2, prioritizedHeight], // tip of marker
+  })
+}
 
 /**
  * TaskNearbyMap allows the user to select a task that is geographically nearby
@@ -92,17 +100,7 @@ export class TaskNearbyMap extends Component {
       return null
     }
 
-    // Compute bounds of task markers to be displayed, including a marker for
-    // the current task to make sure it'll be shown on the map as well
     const currentCenterpoint = AsMappableTask(this.props.task).calculateCenterPoint()
-    const bounding = bboxPolygon(
-      bbox(featureCollection(
-        [point([currentCenterpoint.lng, currentCenterpoint.lat])].concat(
-          _map(this.props.taskMarkers,
-              marker => point([marker.position[1], marker.position[0]]))
-        )
-      ))
-    )
 
     const hasTaskMarkers = _get(this.props, 'taskMarkers.length', 0) > 0
     let coloredMarkers = null
@@ -111,33 +109,60 @@ export class TaskNearbyMap extends Component {
         const isRequestedMarker = marker.options.taskId === this.props.requestedNextTask
         const markerData = _cloneDeep(marker)
         markerData.options.title = `Task ${marker.options.taskId}`
+        const markerStyle = {
+          fill: TaskStatusColors[_get(marker.options, 'status', 0)],
+          stroke: isRequestedMarker ? colors.yellow : colors['grey-leaflet'],
+          strokeWidth: isRequestedMarker ? 2 : 0.5,
+        }
 
         return (
           <Marker
             key={marker.options.taskId}
             {...markerData}
-            icon={markerIconSvg(isRequestedMarker ? colors.yellow : colors['blue-leaflet'])}
+            icon={markerIconSvg(_get(marker.options, 'priority', 0), markerStyle)}
             zIndexOffset={isRequestedMarker ? 1000 : undefined}
             onClick={() => this.markerClicked(markerData)}
-          />
+          >
+            <Tooltip>
+              <div>
+                <FormattedMessage {...messages.priorityLabel} /> {
+                  this.props.intl.formatMessage(
+                    messagesByPriority[_get(marker.options, 'priority', 0)])
+                }
+              </div>
+              <div>
+                <FormattedMessage {...messages.statusLabel} /> {
+                  this.props.intl.formatMessage(
+                    messagesByStatus[_get(marker.options, 'status', 0)])
+                }
+              </div>
+            </Tooltip>
+          </Marker>
         )
       })
     }
 
-    const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
-      <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+    const overlayLayers = buildLayerSources(
+      this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
+      (layerId, index, layerSource) =>
+        <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
     )
+
+    if (!coloredMarkers) {
+      return (
+        <div className="mr-h-full">
+          <FormattedMessage {...messages.noTasksAvailableLabel} />
+        </div>
+      )
+    }
 
     return (
       <div className="mr-h-full">
         <LayerToggle {...this.props} />
         <EnhancedMap
           onClick={this.props.clearNextTask}
-          center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
-          setInitialBounds={false}
+          center={currentCenterpoint} zoom={18} minZoom={2} maxZoom={19}
           zoomControl={false} animate={true} worldCopyJump={true}
-          features={bounding}
-          justFitFeatures
         >
           <ZoomControl position='topright' />
           <VisibleTileLayer {...this.props} zIndex={1} />
@@ -153,8 +178,17 @@ export class TaskNearbyMap extends Component {
            </MarkerClusterGroup>
           }
         </EnhancedMap>
+        {this.props.hasMoreToLoad &&
+          <div className="mr-absolute mr-bottom-0 mr-mb-8 mr-w-full mr-text-center">
+            <button
+              className="mr-button mr-button--small mr-button--blue-fill"
+              onClick={() => this.props.increaseTaskLimit()}>
+                <FormattedMessage {...messages.loadMoreTasks} />
+            </button>
+          </div>
+        }
 
-        {!!this.props.tasksLoading && <BusySpinner mapMode />}
+        {!!this.props.tasksLoading && <BusySpinner mapMode big />}
       </div>
     )
   }

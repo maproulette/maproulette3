@@ -21,7 +21,7 @@ export default defineMessages({
 
   remote: {
     id: "RebuildTasksControl.modal.intro.remote",
-    defaultMessage: "Rebuilding will re-download the GeoJSON data from the challenge's remote URL and rebuild the challenge tasks with the latest data:"
+    defaultMessage: "Rebuilding will re-download the GeoJSON data from the challenge’s remote URL and rebuild the challenge tasks with the latest data:"
   },
 
   local: {
@@ -44,8 +44,8 @@ export default defineMessages({
   },
 
   moreInfo: {
-    id: "RebuildTasksControl.modal.moreInfo",
-    defaultMessage: "[Learn More](https://github.com/osmlab/maproulette3/wiki/Rebuilding-(Updating)-Challenge-Task-Data)"
+    id: "RebuildTasksControl.modal.learnMore",
+    defaultMessage: "Learn More"
   },
 
   removeUnmatchedLabel: {
@@ -61,5 +61,10 @@ export default defineMessages({
   proceed: {
     id: "RebuildTasksControl.modal.controls.proceed.label",
     defaultMessage: "Proceed"
+  },
+
+  dataOriginDateLabel: {
+    id: 'RebuildTasksControl.modal.controls.dataOriginDate.label',
+    defaultMessage: "Date data was sourced",
   },
 })

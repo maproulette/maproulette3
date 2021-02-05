@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import QueryString from 'query-string'
-import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
 import _get from 'lodash/get'
 import _sortBy from 'lodash/sortBy'
 import _map from 'lodash/map'
+import _isFinite from 'lodash/isFinite'
 import { ChallengeBasemap, basemapLayerSources }
        from '../Challenge/ChallengeBasemap/ChallengeBasemap'
 import defaultLayers from '../../defaultLayers.json'
@@ -46,6 +46,10 @@ export const BING = 'Bing'
 export const MAPBOX_STREETS = 'Mapbox'
 export const MAPBOX_LIGHT = 'MapboxLight'
 export const MAPBOX_SATELLITE_STREETS = 'MapboxSatellite'
+
+export const DEFAULT_OVERLAY_ORDER = Object.freeze(
+  ["priority-bounds", "task-features", "osm-data", "mapillary", "openstreetcam"]
+)
 
 /**
  * Array of available layer sources. Start with default layers from the [OSM
@@ -91,7 +95,12 @@ export const normalizeBingLayer = function(layer) {
 
 export const normalizeTMSLayer = function(layer) {
   const normalizedLayer = Object.assign({}, layer)
-  normalizedLayer.subdomains = (normalizedLayer.url.match(/{switch:(.*?)}/) || ['',''])[1].split(',')
+
+  // Only assign subdomains if we have some.
+  if (normalizedLayer.url.match(/{switch:(.*?)}/)) {
+    normalizedLayer.subdomains = normalizedLayer.url.match(/{switch:(.*?)}/)[1].split(',')
+  }
+
   normalizedLayer.url = normalizedLayer.url.replace(/{switch:(.*?)}/, '{s}')
   normalizedLayer.url = normalizedLayer.url.replace('{zoom}', '{z}')
   normalizedLayer.maxZoom = normalizedLayer.max_zoom
@@ -128,23 +137,54 @@ export const defaultLayerSource = function() {
 }
 
 /**
+ * Builds layers with the given function.
+ */
+export const buildLayerSources = function(visibleLayers, userCustomSources, buildLayer) {
+  return _map(visibleLayers, (layerId, index) => {
+    const layerSource = layerSourceWithId(layerId, userCustomSources)
+    if (layerSource) {
+      return buildLayer(layerId, index, layerSource)
+    }
+    else {
+      return null
+    }
+  })
+}
+
+/**
  * Retrieves the (static) layer source with a matching id. Dynamic layer
  * sources are not searched.
  */
-export const layerSourceWithId = function(id) {
-  return _find(LayerSources, {id})
+export const layerSourceWithId = function(id, userCustomSources) {
+  if (_find(LayerSources, {id})) {
+    return _find(LayerSources, {id})
+  }
+
+  const customSource = _find(userCustomSources, source => source.name === id)
+  if (customSource) {
+    return {
+      id: customSource.name,
+      name: customSource.name,
+      url: customSource.url,
+      overlay: customSource.overlay,
+      type: "tms"
+    }
+  }
+
+  return undefined
 }
 
 /**
  * Create and return a dynamic layer source with the given layerId
  * and url. Primarily intended for use with custom basemaps.
  */
-export const createDynamicLayerSource = function(layerId, url) {
+export const createDynamicLayerSource = function(layerId, layerName, url, overlay = false) {
   return {
     id: layerId,
-    name: 'Custom',
+    name: layerName,
     url,
     isDynamic: true,
+    overlay
   }
 }
 
@@ -153,19 +193,22 @@ export const createDynamicLayerSource = function(layerId, url) {
  * customBasemap settings, including generating a dynamic layer source with the
  * given customBasemap and customLayerId if appropriate.
  */
-export const basemapLayerSource = function(defaultBasemap, defaultBasemapId, customBasemap, customLayerId) {
+export const basemapLayerSource = function(defaultBasemap, defaultBasemapId) {
   if (defaultBasemap === ChallengeBasemap.none) {
     return null
   }
   else if (defaultBasemap === ChallengeBasemap.identified) {
     return layerSourceWithId(defaultBasemapId)
   }
-  else if (defaultBasemap !== ChallengeBasemap.custom) {
+  else if (_isFinite(defaultBasemap)) {
     return layerSourceWithId(basemapLayerSources()[defaultBasemap])
   }
-  else if (!_isEmpty(customBasemap)) {
-    return createDynamicLayerSource(customLayerId, customBasemap)
+  else if (defaultBasemap && defaultBasemap.url) {
+    return createDynamicLayerSource(
+      defaultBasemap.name, defaultBasemap.name, defaultBasemap.url,
+      defaultBasemap.overlay)
   }
-
-  return null
+  else {
+    return null
+  }
 }

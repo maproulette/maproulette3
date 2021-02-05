@@ -1,17 +1,23 @@
 import React, { Component } from 'react'
 import MediaQuery from 'react-responsive'
-import { screens } from '../../tailwind'
 import MobileMenu from 'react-burger-menu/lib/menus/slide'
 import classNames from 'classnames'
 import _get from 'lodash/get'
+import _last from 'lodash/last'
 import { Link, NavLink } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
+import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 import SignInButton from '../SignInButton/SignInButton'
 import PointsTicker from '../PointsTicker/PointsTicker'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import Dropdown from '../Dropdown/Dropdown'
+import AchievementBadge from '../AchievementBadge/AchievementBadge'
 import messages from './Messages'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../tailwind.config.js'
 import './Navbar.scss'
+
+const screens = resolveConfig(tailwindConfig).theme.screens
 
 /**
  * Navbar renders the primary top nav in the application, including the brand,
@@ -36,6 +42,17 @@ export default class Navbar extends Component {
     this.setState({mobileMenuOpen: !this.state.mobileMenuOpen})
   }
 
+  showHomePage = () => {
+    // Record in session storage that the user really does want to see the home
+    // page so that we don't redirect them to the Dashboard (if they're signed
+    // in) like we usually would
+    try {
+      sessionStorage.setItem('goHome', 'true')
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   signout = () => {
     this.props.logoutUser(_get(this.props, 'user.id'))
     this.closeMobileMenu()
@@ -45,7 +62,12 @@ export default class Navbar extends Component {
     return (
       <header className="mr-relative mr-bg-gradient-r-green-blue mr-shadow mr-p-6 mr-flex mr-items-center mr-justify-between">
         <nav className="mr-flex mr-items-center">
-          <Link to='/' rel="home" className="mr-text-white hover:mr-text-current">
+          <Link
+            to='/'
+            rel="home"
+            className="mr-text-white hover:mr-text-current"
+            onClick={this.showHomePage}
+          >
             <SvgSymbol sym="mr-logo"
                        viewBox="0 0 174 40"
                        className="mr-block mr-fill-current mr-w-48 mr-h-auto"
@@ -62,6 +84,17 @@ export default class Navbar extends Component {
         <MediaQuery minWidth={screens.lg}>
           <LoggedInUser {...this.props}>
             <div className="mr-flex mr-items-center">
+              {_get(this.props, 'user.achievements.length', 0) > 0 &&
+               <Link className="mr-mx-4 mr-w-16" to="/user/achievements">
+                 <div className="mr-relative mr-w-12">
+                   <AchievementBadge
+                     size="small"
+                     achievement={_last(this.props.user.achievements)}
+                     stackDepth={Math.min(3, this.props.user.achievements.length - 1)}
+                   />
+                 </div>
+               </Link>
+              }
               <a href="/leaderboard">
                 <PointsTicker user={this.props.user} className="mr-mr-8" />
               </a>
@@ -166,11 +199,19 @@ const UnreadNotificationsIndicator = function(props) {
   }
 
   return (
-    <span
-      className={classNames("mr-rounded-full mr-bg-red-light mr-text-white", {
-                            "mr-absolute mr-pin-t mr-pin-l-50 mr-translate-x-1/2 mr-w-3 mr-h-3": !props.inline,
-                            "mr-inline-block mr-ml-2 mr-w-2 mr-h-2": props.inline})}
-    />
+    <div
+      className={classNames(
+        "mr-rounded-full mr-bg-red-light mr-flex mr-justify-center mr-items-center",
+        {
+          "mr-absolute mr-top-0 mr-left-45/100 mr-translate-x-1/2 mr-w-5 mr-h-5": !props.inline,
+          "mr-inline-block mr-ml-2 mr-w-5 mr-h-5": props.inline,
+        }
+      )}
+    >
+      <div className="mr-text-white mr-text-xxs">
+        {props.user.unreadNotificationCount}
+      </div>
+    </div>
   )
 }
 
@@ -179,8 +220,10 @@ const ProfileMenu = function(props) {
     <ol className="mr-list-dropdown">
       <li>
         <NavLink to="/inbox" onClick={props.closeDropdown}>
-          <FormattedMessage {...messages.inbox} />
-          <UnreadNotificationsIndicator {...props} inline />
+          <div className="mr-flex">
+            <FormattedMessage {...messages.inbox} />
+            <UnreadNotificationsIndicator {...props} inline />
+          </div>
         </NavLink>
       </li>
       <li>
@@ -204,6 +247,21 @@ const ProfileMenu = function(props) {
         </NavLink>
       </li>
       <li>
+        <NavLink to="/user/achievements" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.achievements} />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/teams" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.teams} />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/activity" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.globalActivity} />
+        </NavLink>
+      </li>
+      <li>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={props.logoutUser}>
           <FormattedMessage {...messages.signout} />
@@ -216,8 +274,7 @@ const ProfileMenu = function(props) {
 const ProfileImage = props => (
   <img
     className="mr-block mr-w-12 mr-h-12 mr-rounded-full mr-mr-2 xl:mr-mr-4"
-    src={props.user.osmProfile.avatarURL}
-    srcSet={`${props.user.osmProfile.avatarURL}?s=48 1x, ${props.user.osmProfile.avatarURL}?s=96 2x"`}
+    src={AsAvatarUser(props.user.osmProfile).profilePic(256)}
     alt=''
   />
 )
@@ -225,28 +282,28 @@ const ProfileImage = props => (
 const Nav = props => (
   <React.Fragment>
     <LoggedInUser {...props}>
-      <li>
+      <li className="mr-flex mr-flex-col mr-justify-center">
         <NavLink to="/dashboard" onClick={props.closeMobileMenu}>
           <FormattedMessage {...messages.dashboard} />
         </NavLink>
       </li>
     </LoggedInUser>
 
-    <li>
+    <li className="mr-flex mr-flex-col mr-justify-center">
       <NavLink to='/browse/challenges' onClick={props.closeMobileMenu}>
         <FormattedMessage {...messages.results} />
       </NavLink>
     </li>
 
-    <li>
+    <li className="mr-flex mr-flex-col mr-justify-center">
       <NavLink to='/leaderboard' onClick={props.closeMobileMenu}>
         <FormattedMessage {...messages.leaderboard} />
       </NavLink>
     </li>
 
-    <li>
+    <li className="mr-flex mr-flex-col mr-justify-center">
       <a
-        href="https://github.com/osmlab/maproulette3/wiki"
+        href={process.env.REACT_APP_DOCS_URL}
         target="_blank"
         rel="noopener noreferrer"
         onClick={props.closeMobileMenu}>
@@ -288,9 +345,26 @@ const MobileNav = props => (
           </NavLink>
         </li>
         <li>
+          <NavLink to="/user/metrics" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.metrics} />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/user/achievements" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.achievements} />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/teams" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.teams} />
+          </NavLink>
+        </li>
+        <li>
           <NavLink to="/inbox" onClick={props.closeMobileMenu}>
-            <FormattedMessage {...messages.inbox} />
-            <UnreadNotificationsIndicator {...props} inline />
+            <div className="mr-flex">
+              <FormattedMessage {...messages.inbox} />
+              <UnreadNotificationsIndicator {...props} inline />
+            </div>
           </NavLink>
         </li>
         <li>

@@ -16,6 +16,7 @@ import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
 import _values from 'lodash/values'
 import _indexOf from 'lodash/indexOf'
+import _isEqual from 'lodash/isEqual'
 import parse from 'date-fns/parse'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
 import WithDashboardEntityFilter
@@ -39,25 +40,33 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
 
       if (challengeId && props.fetchChallengeActions) {
         this.setState({loading: true})
-        const criteria = {}
+        const criteria = {filters: _get(props.searchFilters, 'filters')}
+        criteria.invertFields = _get(props.searchCriteria, 'filters.invertFields')
 
         if (props.includeTaskStatuses && this.isFiltering(props.includeTaskStatuses)) {
-          criteria.status = _keys(_pickBy(props.includeTaskStatuses)).join(',')
+          criteria.status = _keys(_pickBy(props.includeTaskStatuses, v => v)).join(',')
         }
         if (props.includeTaskReviewStatuses && this.isFiltering(props.includeTaskReviewStatuses)) {
-          criteria.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses)).join(',')
+          criteria.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses, v => v)).join(',')
+        }
+        if (props.includeMetaReviewStatuses && this.isFiltering(props.includeMetaReviewStatuses)) {
+          criteria.metaReviewStatus = _keys(_pickBy(props.includeMetaReviewStatuses, v => v)).join(',')
         }
         if (props.includeTaskPriorities && this.isFiltering(props.includeTaskPriorities)) {
-          criteria.priorities =_keys(_pickBy(props.includeTaskPriorities)).join(',')
+          criteria.priorities =_keys(_pickBy(props.includeTaskPriorities, v => v)).join(',')
         }
 
         props.fetchChallengeActions(challengeId, true, criteria).then((normalizedResults) => {
           let fetchedMetrics = null
+          let fetchedPriorityMetrics = null
           if (_get(normalizedResults, `entities.challenges.${challengeId}`)) {
             fetchedMetrics = _get(normalizedResults, 'entities.challenges')[challengeId].actions
+            fetchedPriorityMetrics = _get(normalizedResults, 'entities.challenges')[challengeId].priorityActions
           }
 
-          this.setState({loading: false, fetchedMetrics: fetchedMetrics})
+          this.setState({loading: false,
+                         fetchedMetrics: fetchedMetrics,
+                         fetchedPriorityMetrics: fetchedPriorityMetrics})
         })
       }
     }
@@ -67,7 +76,7 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
     }
 
     componentDidUpdate(prevProps) {
-      if (this.state.loading || !applyFilters) {
+      if (!applyFilters) {
         return false
       }
 
@@ -75,19 +84,29 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
 
       if (challengeId) {
         if (challengeId !== _get(this.props.challenge, 'id')) {
-          this.updateMetrics(this.props)
+          return this.updateMetrics(this.props)
         }
 
         if (this.props.includeTaskStatuses !== prevProps.includeTaskStatuses) {
-          this.updateMetrics(this.props)
+          return this.updateMetrics(this.props)
         }
 
         if (this.props.includeTaskReviewStatuses !== prevProps.includeTaskReviewStatuses) {
-          this.updateMetrics(this.props)
+          return this.updateMetrics(this.props)
         }
 
         if (this.props.includeTaskPriorities !== prevProps.includeTaskPriorities) {
-          this.updateMetrics(this.props)
+          return this.updateMetrics(this.props)
+        }
+
+        if (!_isEqual(_get(this.props.searchFilters, 'filters'),
+                      _get(prevProps.searchFilters, 'filters'))) {
+          return this.updateMetrics(this.props)
+        }
+
+        if (!_isEqual(_get(this.props.searchCriteria, 'filters.invertFields'),
+                      _get(prevProps.searchCriteria, 'filters.invertFields'))) {
+          return this.updateMetrics(this.props)
         }
       }
     }
@@ -97,6 +116,7 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
       let dailyMetrics = []
 
       const taskMetrics = this.state.fetchedMetrics || this.props.taskMetrics
+      const taskMetricsByPriority = this.state.fetchedPriorityMetrics || this.props.taskMetricsByPriority
 
       if (!_isEmpty(taskMetrics) && !_isEmpty(this.props.challenges) &&
           _get(taskMetrics, 'total', 0) > 0) {
@@ -142,7 +162,8 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
       return <WrappedComponent {...this.props}
                                taskMetrics={taskMetrics}
                                tasksAvailable={tasksAvailable}
-                               dailyMetrics={dailyMetrics} />
+                               dailyMetrics={dailyMetrics}
+                               taskMetricsByPriority={taskMetricsByPriority} />
     }
   }
 }

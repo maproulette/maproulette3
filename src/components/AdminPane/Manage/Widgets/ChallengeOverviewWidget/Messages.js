@@ -29,6 +29,17 @@ export default defineMessages({
     defaultMessage: "Tasks Refreshed:",
   },
 
+  tasksFromDate: {
+    id: "Widgets.ChallengeOverviewWidget.fields.tasksFromDate.label",
+    defaultMessage: "Tasks From:",
+  },
+
+  dataOriginDate: {
+    id: "Widgets.ChallengeOverviewWidget.fields.dataOriginDate.label",
+    defaultMessage: "Tasks built on {refreshDate} from data sourced on {sourceDate}.",
+  },
+
+
   status: {
     id: "Widgets.ChallengeOverviewWidget.fields.status.label",
     defaultMessage: "Status:",
@@ -36,6 +47,16 @@ export default defineMessages({
 
   visibleLabel: {
     id: "Widgets.ChallengeOverviewWidget.fields.enabled.label",
-    defaultMessage: "Visible:",
+    defaultMessage: "Discoverable:",
+  },
+
+  keywordsLabel: {
+    id: "Widgets.ChallengeOverviewWidget.fields.keywords.label",
+    defaultMessage: "Keywords:",
+  },
+
+  projectDisabledWarning: {
+    id: "Widgets.ChallengeOverviewWidget.projectDisabledWarning",
+    defaultMessage: "project not discoverable",
   },
 })

@@ -4,10 +4,13 @@ import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import _isFinite from 'lodash/isFinite'
+import _isPlainObject from 'lodash/isPlainObject'
 import { Link } from 'react-router-dom'
 import { WidgetDataTarget, registerWidgetType }
        from '../../services/Widget/Widget'
+import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import QuickWidget from '../QuickWidget/QuickWidget'
+import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
@@ -23,7 +26,7 @@ const descriptor = {
   defaultHeight: 5,
 }
 
-export default class SavedChallengesWidget extends Component {
+export class SavedChallengesWidget extends Component {
   componentDidMount() {
     if (this.props.user && this.props.fetchSavedChallenges) {
       this.props.fetchSavedChallenges(this.props.user.id)
@@ -51,28 +54,75 @@ const SavedChallengeList = function(props) {
       }
 
       return (
-        <li key={challenge.id} className="mr-mb-2 mr-flex mr-items-center">
-          <button
-            className="mr-mr-2 mr-text-grey-light hover:mr-text-red"
-            onClick={() => props.unsaveChallenge(props.user.id, challenge.id)}
-          >
-            <SvgSymbol
-              sym="minus-outline-icon"
-              viewBox="0 0 32 32"
-              className="mr-fill-current mr-w-4 mr-h-4"
+        <li
+          key={challenge.id}
+          className="mr-py-2 mr-flex mr-justify-between mr-items-center"
+        >
+          <div className="mr-flex mr-flex-col">
+            <Link to={`/browse/challenges/${challenge.id}`}>
+              {challenge.name}
+            </Link>
+            {_isPlainObject(challenge.parent) && // virtual challenges don't have projects
+              <div className="mr-links-grey-light">
+                <Link
+                  onClick={e => {e.stopPropagation()}}
+                  to={`/browse/projects/${challenge.parent.id}`}
+                >
+                  {challenge.parent.displayName || challenge.parent.name}
+                </Link>
+              </div>
+            }
+          </div>
+          <div className="mr-h-5">
+            <Dropdown
+              className="mr-dropdown--right"
+              dropdownButton={dropdown => (
+                <button
+                  onClick={dropdown.toggleDropdownVisible}
+                  className="mr-flex mr-items-center mr-text-white-40"
+                >
+                  <SvgSymbol
+                    sym="navigation-more-icon"
+                    viewBox="0 0 20 20"
+                    className="mr-fill-current mr-w-5 mr-h-5"
+                  />
+                </button>
+              )}
+              dropdownContent={() =>
+                <ul className="mr-list-dropdown mr-links-green-lighter">
+                  <li>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a onClick={() => props.startChallenge(challenge)}>
+                      <FormattedMessage {...messages.startChallenge} />
+                    </a>
+                  </li>
+                  <li>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a onClick={() => props.unsaveChallenge(props.user.id, challenge.id)}>
+                      <FormattedMessage {...messages.unsave} />
+                    </a>
+                  </li>
+                </ul>
+              }
             />
-          </button>
-          <Link to={`/browse/challenges/${challenge.id}`}>
-            {challenge.name}
-          </Link>
+          </div>
         </li>
       )
     }
   ))
 
-  return challengeItems.length > 0 ?
-         <ol className="mr-list-reset">{challengeItems}</ol> :
-         <div className="none">No Challenges</div>
+  return (
+    challengeItems.length > 0 ?
+    <ol className="mr-list-reset mr-links-green-lighter mr-pb-24">
+      {challengeItems}
+    </ol> :
+    <div className="mr-text-grey-lighter">
+      <FormattedMessage {...messages.noChallenges} />
+    </div>
+  )
 }
 
-registerWidgetType(SavedChallengesWidget, descriptor)
+const WrappedWidget = WithStartChallenge(SavedChallengesWidget)
+
+registerWidgetType(WrappedWidget, descriptor)
+export default WrappedWidget

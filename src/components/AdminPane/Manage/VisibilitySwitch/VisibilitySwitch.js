@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _isEmpty from 'lodash/isEmpty'
 import WithChallengeManagement
        from '../../HOCs/WithChallengeManagement/WithChallengeManagement'
 
@@ -18,12 +19,12 @@ export class VisibilitySwitch extends Component {
   }
 
   render() {
-    if (!this.props.challenge) {
+    if (_isEmpty(this.props.challenge)) {
       return null
     }
 
     return (
-      <div className="field visibility-switch" onClick={this.toggleVisible}>
+      <div className="visibility-switch mr-mb-2" onClick={this.toggleVisible}>
         <input type="checkbox" className="switch is-rounded short-and-wide"
                disabled={this.props.disabled}
                checked={this.props.challenge.enabled}

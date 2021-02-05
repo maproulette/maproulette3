@@ -6,24 +6,29 @@ import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
 import _isPlainObject from 'lodash/isPlainObject'
+import _each from 'lodash/each'
 import { taskDenormalizationSchema,
          fetchTask,
          fetchTaskComments,
          fetchTaskPlace,
+         fetchTaskBundle,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
          startTask,
          addTaskComment,
+         addTaskBundleComment,
          completeTask,
-         updateTaskTags } from '../../../services/Task/Task'
-import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
+         completeTaskBundle,
+         updateTaskTags,
+         updateCompletionResponses } from '../../../services/Task/Task'
 import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
 import { fetchChallenge, fetchParentProject }
        from '../../../services/Challenge/Challenge'
 import { fetchUser } from '../../../services/User/User'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
-import { fetchOSMUser, fetchOSMData } from '../../../services/OSM/OSM'
+import { fetchOSMUser, fetchOSMData, fetchOSMElementHistory }
+       from '../../../services/OSM/OSM'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 import { renewVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
@@ -31,7 +36,8 @@ import { CHALLENGE_STATUS_FINISHED }
        from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
-import AsSuggestedFix from '../../../interactions/Task/AsSuggestedFix'
+import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
+import AsMappableBundle from '../../../interactions/TaskBundle/AsMappableBundle'
 
 const TASK_STALE = 30000 // 30 seconds
 const CHALLENGE_STALE = 300000 // 5 minutes
@@ -69,11 +75,11 @@ const WithLoadedTask = function(WrappedComponent, forReview) {
       this.loadNeededTask(this.props)
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (nextProps.taskId !== this.props.taskId) {
+    componentDidUpdate(prevProps) {
+      if (this.props.taskId !== prevProps.taskId) {
         // Only fetch if task data is missing or stale
-        if (!nextProps.task || isStale(nextProps.task, TASK_STALE)) {
-          this.loadNeededTask(nextProps)
+        if (!this.props.task || isStale(this.props.task, TASK_STALE)) {
+          this.loadNeededTask(this.props)
         }
       }
     }
@@ -158,30 +164,23 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     /**
-     * Invoke to mark as a task as complete with the given status
+     * Invoke to mark a task as complete with the given status
      */
     completeTask: (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview,
-                   requestedNextTask, osmComment, tagEdits) => {
+                   requestedNextTask, osmComment, tagEdits, completionResponses, taskBundle) => {
       const taskId = task.id
 
       // Work to be done after the status is set
       const doAfter = () => {
-        if (taskLoadBy) {
-          // Start loading the next task from the challenge.
-          const loadNextTask =
-            _isFinite(requestedNextTask) ?
-            nextRequestedTask(dispatch, ownProps, requestedNextTask) :
-            nextRandomTask(dispatch, ownProps, taskId, taskLoadBy)
-
-          loadNextTask.then(newTask =>
-            visitNewTask(dispatch, ownProps, taskId, newTask)
-          ).catch(error => {
-            ownProps.history.push(`/browse/challenges/${challengeId}`)
-          })
-        }
-
         if (_isString(comment) && comment.length > 0) {
-          dispatch(addTaskComment(taskId, comment, taskStatus))
+          if (taskBundle) {
+            dispatch(addTaskBundleComment(
+              taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId() || taskId, comment, taskStatus
+            ))
+          }
+          else {
+            dispatch(addTaskComment(taskId, comment, taskStatus))
+          }
         }
 
         // Update the user in the background to get their latest score
@@ -197,36 +196,53 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         if (_isFinite(ownProps.virtualChallengeId)) {
           setTimeout(() => dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)), 1000)
         }
-      }
 
-      if (taskStatus === TaskStatus.skipped && task.status !== TaskStatus.created) {
-        // Skipping task that already has a status
-        return doAfter()
-      }
-      else {
-        let suggestedFixSummary = null
-        if (task.suggestedFix) {
-          suggestedFixSummary = AsSuggestedFix(task).tagChangeSummary(tagEdits)
+        if (taskLoadBy) {
+          // Start loading the next task from the challenge.
+          const loadNextTask =
+            _isFinite(requestedNextTask) ?
+            nextRequestedTask(dispatch, ownProps, requestedNextTask) :
+            nextRandomTask(dispatch, ownProps, taskId, taskLoadBy)
+
+          return loadNextTask.then(newTask =>
+            visitNewTask(dispatch, ownProps, taskId, newTask)
+          ).catch(error => {
+            ownProps.history.push(`/browse/challenges/${challengeId}`)
+          })
         }
-
-        return dispatch(
-          completeTask(taskId, challengeId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment)
-        ).then(() => doAfter())
       }
+
+      let cooperativeWorkSummary = null
+      if (AsCooperativeWork(task).isTagType()) {
+        cooperativeWorkSummary = AsCooperativeWork(task).tagChangeSummary(tagEdits)
+      }
+
+      return dispatch(
+        taskBundle ?
+        completeTaskBundle(taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId() || taskId, taskStatus, needsReview, tags, cooperativeWorkSummary, osmComment, completionResponses) :
+        completeTask(taskId, taskStatus, needsReview, tags, cooperativeWorkSummary, osmComment, completionResponses)
+      ).then(() => doAfter())
     },
 
     /**
      * Move to the next task without setting any completion status, useful for
      * when a user visits a task that is already complete.
      */
-    nextTask: (challengeId, taskId, taskLoadBy, comment) => {
+    nextTask: (challengeId, taskId, taskLoadBy, comment, requestedNextTask) => {
       if (_isString(comment) && comment.length > 0) {
         dispatch(addTaskComment(taskId, comment))
       }
 
-      nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
-        visitNewTask(dispatch, ownProps, taskId, newTask)
-      )
+      if (taskLoadBy === TaskLoadMethod.proximity && requestedNextTask) {
+        nextRequestedTask(dispatch, ownProps, requestedNextTask).then(newTask =>
+          visitNewTask(dispatch, ownProps, taskId, newTask)
+        )
+      }
+      else {
+        nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+          visitNewTask(dispatch, ownProps, taskId, newTask)
+        )
+      }
     },
 
     /**
@@ -240,7 +256,20 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      * Update tags on task.
      */
     saveTaskTags: (task, tags) => {
-      return dispatch(updateTaskTags(task.id, tags))
+      if (task.bundleId) {
+        dispatch(fetchTaskBundle(task.bundleId)).then(taskBundle => {
+          _each(taskBundle.tasks, task => {
+            dispatch(updateTaskTags(task.id, tags))
+          })
+        })
+      }
+      else {
+        dispatch(updateTaskTags(task.id, tags))
+      }
+    },
+
+    saveCompletionResponses: (task, completionResponses) => {
+      dispatch(updateCompletionResponses(task.id, completionResponses))
     },
 
     fetchOSMUser,
@@ -249,6 +278,8 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(addError(error))
       })
     },
+
+    fetchOSMElementHistory,
   }
 }
 
@@ -331,16 +362,18 @@ export const visitNewTask = function(dispatch, props, currentTaskId, newTask) {
       const challengeId = challengeIdFromRoute(props, props.challengeId)
       props.history.push(`/challenge/${challengeId}/task/${newTask.id}`)
     }
+    return Promise.resolve()
   }
   else {
     // If challenge is complete, redirect home with note to congratulate user
     if (_isFinite(props.virtualChallengeId)) {
       // We don't get a status for virtual challenges, so just assume we're done
       props.history.push('/browse/challenges', {congratulate: true, warn: false})
+      return Promise.resolve()
     }
     else {
       const challengeId = challengeIdFromRoute(props, props.challengeId)
-      dispatch(fetchChallenge(challengeId)).then( normalizedResults => {
+      return dispatch(fetchChallenge(challengeId)).then(normalizedResults => {
         const challenge = normalizedResults.entities.challenges[normalizedResults.result]
         if (challenge.status === CHALLENGE_STATUS_FINISHED) {
           props.history.push('/browse/challenges', {congratulate: true, warn: false})

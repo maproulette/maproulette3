@@ -4,8 +4,9 @@ import { FormattedMessage } from 'react-intl'
 import _isArray from 'lodash/isArray'
 import { errorShape } from '../../services/Error/Error'
 import WithErrors from '../HOCs/WithErrors/WithErrors'
-import Modal from '../Bulma/Modal'
-import './ErrorModal.scss'
+import Modal from '../Modal/Modal'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import messages from './Messages'
 
 /**
  * ErrorModal presents a modal that displays all of the given errors as individual
@@ -22,22 +23,34 @@ export class ErrorModal extends Component {
 
     const errorMessages = this.props.errors.map(error => (
       <li key={error.id}>
-        <article className="message is-danger">
-          <div className="message-header">
-            <p>Error</p>
-            <button className="delete" aria-label="delete"
-                    onClick={() => this.props.removeError(error)} />
-          </div>
-          <div className="message-body">
-            <FormattedMessage {...error} />
-          </div>
-        </article>
+        <div className="mr-font-medium mr-mt-4">
+          <FormattedMessage {...error} />
+        </div>
       </li>
     ))
 
     return (
-      <Modal className="error-pane" onClose={this.props.clearErrors} isActive={true}>
-        <ul className="error-pane__messages">{errorMessages}</ul>
+      <Modal onClose={this.props.clearErrors} isActive={true}>
+        <div className="mr-top-0 mr-absolute">
+          <SvgSymbol
+            className="mr-fill-white-04 mr-w-48 mr-h-48 mr-mt-4 mr-ml-8"
+            viewBox='0 0 20 20'
+            sym='minus-outline-icon'
+          />
+        </div>
+        <div className="mr-flex mr-flex-col mr-items-center">
+          <div className="mr-w-full mr-flex mr-justify-center mr-mb-4">
+            <SvgSymbol
+              className="mr-fill-red mr-h-10 mr-h-10"
+              viewBox='0 0 20 20'
+              sym='minus-outline-icon'
+            />
+          </div>
+          <div className="mr-text-3xl mr-mb-4">
+            <FormattedMessage {...messages.title} />
+          </div>
+        </div>
+        <ul className="mr-flex mr-flex-col mr-items-center">{errorMessages}</ul>
       </Modal>
     )
   }

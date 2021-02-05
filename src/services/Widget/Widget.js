@@ -1,4 +1,4 @@
-import uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import FileSaver from 'file-saver'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
@@ -8,6 +8,7 @@ import _intersection from 'lodash/intersection'
 import _cloneDeep from 'lodash/cloneDeep'
 import _isString from 'lodash/isString'
 import _findIndex from 'lodash/findIndex'
+import _isEmpty from 'lodash/isEmpty'
 import _each from 'lodash/each'
 import _reduce from 'lodash/reduce'
 import _pick from 'lodash/pick'
@@ -29,6 +30,7 @@ export const WIDGET_DATA_TARGET_TASKS = 'tasks'
 export const WIDGET_DATA_TARGET_TASK = 'task'
 export const WIDGET_DATA_TARGET_USER = 'user'
 export const WIDGET_DATA_TARGET_REVIEW = 'review'
+export const WIDGET_DATA_TARGET_ACTIVITY = 'activity'
 
 export const WIDGET_USER_TARGET_ALL = 'all'
 export const WIDGET_USER_TARGET_MANAGER_READ = 'managerRead'
@@ -43,7 +45,8 @@ export const WidgetDataTarget = {
   tasks: WIDGET_DATA_TARGET_TASKS,
   task: WIDGET_DATA_TARGET_TASK,
   user: WIDGET_DATA_TARGET_USER,
-  review: WIDGET_DATA_TARGET_REVIEW
+  review: WIDGET_DATA_TARGET_REVIEW,
+  activity: WIDGET_DATA_TARGET_ACTIVITY,
 }
 
 export const WidgetUserTarget = {
@@ -180,7 +183,7 @@ export const migrateWidgetGridConfiguration = function(originalConfiguration,
 export const decommissionedWidgets = gridConfiguration => {
   return _reduce(gridConfiguration.widgets, (missing, widgetConfiguration) => {
     const WidgetComponent = widgetComponent(widgetConfiguration)
-    if (!WidgetComponent) {
+    if (!WidgetComponent && widgetConfiguration) {
       const widgetKey = _isString(widgetConfiguration) ?
                         widgetConfiguration :
                         widgetConfiguration.widgetKey
@@ -194,7 +197,12 @@ export const decommissionedWidgets = gridConfiguration => {
  * Returns a copy of the given gridConfiguration pruned of any missing or
  * decommissioned widgets, or the original gridConfiguration if there were none
  */
-export const pruneDecommissionedWidgets = gridConfiguration => {
+export const pruneDecommissionedWidgets = originalGridConfiguration => {
+  let gridConfiguration = originalGridConfiguration
+  if (_findIndex(gridConfiguration.widgets, w => _isEmpty(w)) !== -1) {
+    gridConfiguration = _cloneDeep(gridConfiguration)
+    gridConfiguration.widgets = _compact(gridConfiguration.widgets)
+  }
   const decommissioned = decommissionedWidgets(gridConfiguration)
 
   return decommissioned.length > 0 ?

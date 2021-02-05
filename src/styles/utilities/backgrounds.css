@@ -14,18 +14,6 @@
   }
 }
 
-.mr-bg-road {
-  background-image: url('./static/images/bg-road.jpg');
-
-  @screen retina {
-    background-image: url('./static/images/bg-road@2x.jpg');
-  }
-}
-
-.mr-bg-featured-challenges {
-  background-image: url('./static/images/bg-featured-challenges.svg');
-}
-
 .mr-bg-fireworks {
   background-image: url('./static/images/bg-fireworks-left.svg'), url('./static/images/bg-fireworks-right.svg');
   background-position: left top, right top;
@@ -34,4 +22,96 @@
 
 .mr-bg-world-map {
   background-image: url('./static/images/bg-world-map.svg');
+}
+
+.mr-bg-settings {
+  background-image: url('./static/images/bg-settings.svg');
+}
+
+.mr-bg-cityscape {
+  background-image: url('./static/images/bg-cityscape.svg');
+}
+
+.mr-bg-home {
+  background-image: url('./static/images/home.svg');
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mr-bg-lines {
+  background-image: url('./static/images/lines.svg');
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mr-bg-globe {
+  background-image: url('./static/images/globe.svg');
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mr-bg-skyline {
+  background-image: url('./static/images/skyline.svg');
+  background-position: center bottom;
+  background-size: contain;
+}
+
+.mr-bg-teams {
+  background-image: url('./static/images/teams.svg');
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mr-bg-map {
+  background-image: url('./static/images/bg-map.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mr-bg-space {
+  background-image: url('./static/images/bg-space.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @screen retina {
+    background-image: url('./static/images/bg-space@2x.jpg');
+  }
+}
+
+.mr-bg-expert {
+  background-image: url('./static/images/expert.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mr-bg-find {
+  background-image: url('./static/images/find.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mr-bg-highway {
+  background-image: url('./static/images/bg-highway.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @screen retina {
+    background-image: url('./static/images/bg-highway@2x.jpg');
+  }
+}
+
+.mr-bg-achievements {
+  background-image: url('./static/images/trophy.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }

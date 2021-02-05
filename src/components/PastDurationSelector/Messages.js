@@ -18,4 +18,24 @@ export default defineMessages({
     id: "PastDurationSelector.allTime.selectOption",
     defaultMessage: "All Time",
   },
+
+  customRangeOption: {
+    id: "PastDurationSelector.customRange.selectOption",
+    defaultMessage: "Custom",
+  },
+
+  startDate: {
+    id: "PastDurationSelector.customRange.startDate",
+    defaultMessage: "Start Date",
+  },
+
+  endDate: {
+    id: "PastDurationSelector.customRange.endDate",
+    defaultMessage: "End Date",
+  },
+
+  searchLabel: {
+    id: "PastDurationSelector.customRange.controls.search.label",
+    defaultMessage: "Search",
+  },
 })

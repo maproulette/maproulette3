@@ -17,12 +17,16 @@ import _isArray from 'lodash/isArray'
 import _fromPairs from 'lodash/fromPairs'
 import _isUndefined from 'lodash/isUndefined'
 import _groupBy from 'lodash/groupBy'
+import _join from 'lodash/join'
+import parse from 'date-fns/parse'
+import format from 'date-fns/format'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { commentSchema, receiveComments } from '../Comment/Comment'
-import { projectSchema, fetchProject } from '../Project/Project'
+import { projectSchema, fetchProject, receiveProjects }
+       from '../Project/Project'
 import { ensureUserLoggedIn } from '../User/User'
 import { toLatLngBounds } from '../MapBounds/MapBounds'
 import { addError, addServerError } from '../Error/Error'
@@ -31,9 +35,18 @@ import { RECEIVE_CHALLENGES, REMOVE_CHALLENGE }
        from './ChallengeActions'
 import { ChallengeStatus } from './ChallengeStatus/ChallengeStatus'
 import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
-import { parseQueryString, RESULTS_PER_PAGE, SortOptions }
+import { parseQueryString, RESULTS_PER_PAGE, SortOptions,
+         generateSearchParametersString, PARAMS_MAP }
        from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
+
+/**
+ * Constants defining searches to include/exclude 'local' challenges.
+ */
+export const CHALLENGE_EXCLUDE_LOCAL = 0
+export const CHALLENGE_INCLUDE_LOCAL = 1
+export const CHALLENGE_ONLY_LOCAL = 2
+
 
 // normalizr schema
 export const challengeSchema = function() {
@@ -53,6 +66,43 @@ export const challengeDenormalizationSchema = function() {
 }
 
 // utility functions
+/**
+ * Builds a link to export CSV
+ */
+export const buildLinkToExportCSV = function(challengeId, criteria, timezone = null) {
+  const queryFilters = buildQueryFilters(criteria)
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/` +
+         `${challengeId}/tasks/extract?${queryFilters}&timezone=${encodeURIComponent(timezone)}`
+}
+
+/**
+ * Builds a link to export GeoJSON
+ */
+export const buildLinkToExportGeoJSON = function(challengeId, criteria, timezone = "", filename) {
+  const queryFilters = buildQueryFilters(criteria)
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/` +
+         `${challengeId}?${queryFilters}&timezone=${encodeURIComponent(timezone)}&filename=${encodeURIComponent(filename)}`
+}
+
+// Helper function to build query filters for export links
+const buildQueryFilters = function(criteria) {
+  const filters = _get(criteria, 'filters', {})
+  const taskId = filters.id
+  const reviewRequestedBy = filters.reviewRequestedBy
+  const reviewedBy = filters.reviewedBy
+  const completedBy = filters.completedBy
+  const invf = _map(criteria.invertFields, (v, k) => v ? PARAMS_MAP[k] : undefined)
+
+  return (
+    `status=${_join(filters.status, ',')}&` +
+    `priority=${_join(filters.priorities, ',')}&` +
+    `reviewStatus=${_join(filters.reviewStatus, ',')}` +
+    `${taskId ? `&tid=${taskId}` : ""}` +
+    `${completedBy ? `&m=${completedBy}` : ""}` +
+    `${reviewRequestedBy ? `&o=${reviewRequestedBy}` : ""}` +
+    `${reviewedBy ? `&r=${reviewedBy}` : ""}` +
+    `&invf=${invf.join(',')}`)
+}
 
 /**
  * Retrieves the resulting challenge entity object from the given
@@ -80,6 +130,11 @@ export const challengeResultEntity = function(normalizedChallengeResults) {
  */
 export const receiveChallenges = function(normalizedEntities,
                                           status = RequestStatus.success) {
+  _each(normalizedEntities.challenges, c => {
+    if (c.dataOriginDate) {
+      c.dataOriginDate = format(parse(c.dataOriginDate), 'YYYY-MM-DD')
+    }
+  })
   return {
     type: RECEIVE_CHALLENGES,
     status,
@@ -152,6 +207,17 @@ export const fetchFeaturedChallenges = function(limit = RESULTS_PER_PAGE) {
        console.log(error.response || error)
      })
    }
+ }
+
+/**
+ * Retrieve a listing of tweetable challenges
+ *
+ * @param {number} limit
+ */
+ export const fetchSocialChallenges = function(limit = RESULTS_PER_PAGE) {
+   return new Endpoint(api.challenges.preferred, {
+     params: {limit}
+   }).execute()
  }
 
 /**
@@ -252,10 +318,13 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
     // cs: query string
     // cd: challenge difficulty
     // ct: keywords/tags (comma-separated string)
+    // cid: challenge id
     const queryParams = {
       limit,
       ce: onlyEnabled ? 'true' : 'false',
       pe: onlyEnabled ? 'true' : 'false',
+      // exclude local challenges if we are only finding enabled
+      cLocal: onlyEnabled ? CHALLENGE_EXCLUDE_LOCAL : CHALLENGE_INCLUDE_LOCAL
     }
 
     if (_isFinite(filters.difficulty)) {
@@ -264,6 +333,10 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
 
     if (_isString(filters.project)) {
       queryParams.ps = filters.project
+    }
+
+    if (_isString(filters.challengeId)) {
+      queryParams.cid = filters.challengeId
     }
 
     // Keywords/tags can come from both the the query and the filter, so we need to
@@ -310,24 +383,21 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
  * Fetch action metrics for the given challenge (or all challenges
  * if none is given).
  */
-export const fetchChallengeActions = function(challengeId = null, suppressReceive = false, criteria) {
-  const searchParameters = {}
+export const fetchChallengeActions = function(challengeId = null, suppressReceive = false,
+                                              criteria) {
+  let searchParameters = {}
   if (criteria) {
-    if (criteria.status) {
-      searchParameters.tStatus = criteria.status
-    }
-    if (criteria.reviewStatus) {
-      searchParameters.trStatus = criteria.reviewStatus
-    }
-    if (criteria.priorities) {
-      searchParameters.priority = criteria.priorities
-    }
+    searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                      criteria.boundingBox,
+                                                      false, false, null,
+                                                      _get(criteria, 'invertFields', {}))
   }
 
   return function(dispatch) {
     const challengeActionsEndpoint = new Endpoint(
       _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
-      {schema: [ challengeSchema() ], variables: {id: challengeId}, params:{...searchParameters}}
+      {schema: [ challengeSchema() ], variables: {id: challengeId},
+       params:{...searchParameters, includeByPriority: true}}
     )
 
     return challengeActionsEndpoint.execute().then(normalizedResults => {
@@ -371,9 +441,43 @@ export const fetchProjectChallengeActions = function(projectId, onlyEnabled=fals
   return function(dispatch) {
     return new Endpoint(
       api.challenges.actions,
-      {schema: [ challengeSchema() ], params: {projectList: projectId, onlyEnabled}}
+      {schema: [ challengeSchema() ], params: {projectList: projectId, onlyEnabled,
+                                               includeByPriority: true}}
     ).execute().then(normalizedResults => {
       dispatch(receiveChallenges(normalizedResults.entities))
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.challenge.fetchFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Fetch tag metrics for the given challenge
+ */
+export const fetchTagMetrics = function(userId, criteria) {
+  let searchParameters = {}
+
+  if (criteria) {
+    searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                      criteria.boundingBox,
+                                                      false, false, null,
+                                                      _get(criteria, 'invertFields', {}))
+  }
+
+  return function(dispatch) {
+    return new Endpoint(
+      api.challenges.tagMetrics,
+      {params: {...searchParameters}}
+    ).execute().then(normalizedResults => {
+      return normalizedResults
     }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
@@ -552,6 +656,23 @@ export const fetchProjectChallenges = function(projectId, limit=50) {
 }
 
 /**
+ * Fetch all task property keys on the challenge
+ */
+export const fetchPropertyKeys = function(challengeId) {
+  return new Endpoint(
+    api.challenge.propertyKeys,
+    {
+      schema: {},
+      variables: {id: challengeId},
+    }
+  ).execute().then(normalizedResults => {
+    return _get(normalizedResults, 'result.keys', [])
+  }).catch((error) => {
+    console.log(error.response || error)
+  })
+}
+
+/**
  * Fetch data for the given challenge. Normally that data will be added to the
  * redux store, but that can be suppressed with the supressReceive flag.
  */
@@ -582,6 +703,45 @@ export const fetchChallenge = function(challengeId, suppressReceive = false) {
 }
 
 /**
+ * Fetch data for multiple challenges identified by the given ids. Normally
+ * that data will be added to the redux store, but that can be suppressed with
+ * the supressReceive flag
+ *
+ * > Note that the challenge data is retrieved via the search API and may
+ * therefore differ slightly from data fetched directly from the challenge API
+ */
+export const fetchChallenges = function(challengeIds, suppressReceive = false) {
+  return function(dispatch) {
+    if (!_isArray(challengeIds) || challengeIds.length === 0) {
+      return Promise.success()
+    }
+
+    return new Endpoint(api.challenges.search, {
+      schema: [ challengeSchema() ],
+      params: { [PARAMS_MAP.challengeId]: challengeIds.join(',') }
+    }).execute().then(normalizedResults => {
+      // If a challenge has no virtual parents then the field will not be set
+      // by server, so we need to indicate it's empty
+      _each(normalizedResults.entities.challenges, challenge => {
+        if (_isUndefined(challenge.virtualParents)) {
+          challenge.virtualParents = []
+        }
+      })
+
+      if (!suppressReceive) {
+        dispatch(receiveChallenges(normalizedResults.entities))
+        dispatch(receiveProjects(normalizedResults.entities))
+      }
+
+      return normalizedResults
+    }).catch((error) => {
+      dispatch(addError(AppErrors.challenge.fetchFailure))
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
  * Saves the given challenge (either creating it or updating it, depending on
  * whether it already has an id) and updates the redux store with the latest
  * version from the server.
@@ -595,6 +755,14 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
     let challengeData = _clone(originalChallengeData)
     if (_isArray(challengeData.tags)) {
       challengeData.tags = challengeData.tags.join(',')
+    }
+
+    if (_isArray(challengeData.preferredTags)) {
+      challengeData.preferredTags = challengeData.preferredTags.join(',')
+    }
+
+    if (_isArray(challengeData.preferredReviewTags)) {
+      challengeData.preferredReviewTags = challengeData.preferredReviewTags.join(',')
     }
 
     // If there is local GeoJSON content being transmitted as a string, parse
@@ -612,8 +780,16 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'defaultBasemap', 'defaultBasemapId', 'defaultPriority', 'defaultZoom',
         'description', 'difficulty', 'enabled', 'featured', 'highPriorityRule', 'id',
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
-        'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
-        'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents'])
+        'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'overpassTargetType',
+        'parent', 'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
+        'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
+        'preferredReviewTags', 'presets', 'limitTags', 'limitReviewTags', 'taskStyles',
+        'requiresLocal'])
+
+      if (challengeData.dataOriginDate) {
+        // Set the timestamp on the dataOriginDate so we get proper timezone info.
+        challengeData.dataOriginDate = parse(challengeData.dataOriginDate).toISOString()
+      }
 
       // Setup the save function to either edit or create the challenge
       // depending on whether it has an id.
@@ -660,7 +836,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
  * If removeUnmatchedTasks is set to true, then incomplete tasks will be removed
  * prior to processing of updated sourced data
  */
-export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=true, removeUnmatchedTasks=false) {
+export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=true, removeUnmatchedTasks=false,
+                                               dataOriginDate) {
   return function(dispatch) {
     // Server expects the file in a form part named "json"
     const formData = new FormData()
@@ -669,10 +846,17 @@ export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=
       new File([geoJSON], `challenge_${challengeId}_tasks_${Date.now()}.geojson`)
     )
 
+    if (dataOriginDate) {
+      // Set the timestamp on the dataOriginDate so we get proper timezone info.
+      dataOriginDate = parse(dataOriginDate).toISOString()
+    }
+
+
     return new Endpoint(
       api.challenge.uploadGeoJSON, {
         variables: {id: challengeId},
-        params: {lineByLine, removeUnmatched: removeUnmatchedTasks},
+        params: {lineByLine, removeUnmatched: removeUnmatchedTasks, dataOriginDate,
+                 skipSnapshot: true},
         formData,
       }
     ).execute()
@@ -711,7 +895,7 @@ export const rebuildChallenge = function(challengeId, removeUnmatchedTasks=false
     return new Endpoint(
       api.challenge.rebuild, {
         variables: {id: challengeId},
-        params: {removeUnmatched: removeUnmatchedTasks},
+        params: {removeUnmatched: removeUnmatchedTasks, skipSnapshot: true},
       }
     ).execute().then(() =>
       fetchChallenge(challengeId)(dispatch) // Refresh challenge data
@@ -800,7 +984,8 @@ export const fetchParentProject = function(dispatch, normalizedChallengeResults)
  * results.
  */
 export const findKeyword = function(keywordPrefix, tagType = null) {
-  return new Endpoint(api.keywords.find, {params: {prefix: keywordPrefix, tagType}}).execute()
+  const tagTypes = _isArray(tagType) ? tagType.join(',') : tagType
+  return new Endpoint(api.keywords.find, {params: {prefix: keywordPrefix, tagTypes}}).execute()
 }
 
 /**
@@ -812,6 +997,11 @@ export const findKeyword = function(keywordPrefix, tagType = null) {
  * @returns a Promise
  */
 const removeChallengeKeywords = function(challengeId, oldKeywords=[]) {
+  // If no challenge id, nothing to do
+  if (!_isFinite(challengeId)) {
+    return Promise.resolve()
+  }
+
   // strip empty tags
   const toRemove =
     _compact(_map(oldKeywords, tag => _isEmpty(tag) ? null : tag))
@@ -868,6 +1058,14 @@ const reduceChallengesFurther = function(mergedState, oldState, challengeEntitie
 
     if (_isArray(entity.virtualParents)) {
       mergedState[entity.id].virtualParents = entity.virtualParents
+    }
+
+    if (_isArray(entity.taskStyles)) {
+      mergedState[entity.id].taskStyles = entity.taskStyles
+    }
+
+    if (_isArray(entity.presets)) {
+      mergedState[entity.id].presets = entity.presets
     }
   })
 }

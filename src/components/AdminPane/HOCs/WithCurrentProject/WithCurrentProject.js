@@ -10,8 +10,10 @@ import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import _map from 'lodash/map'
 import _sortBy from 'lodash/sortBy'
+import _each from 'lodash/each'
 import { fetchProject,
-         fetchProjectActivity } from '../../../../services/Project/Project'
+         fetchProjectActivity,
+         fetchProjectsById } from '../../../../services/Project/Project'
 import { challengeDenormalizationSchema,
          fetchProjectChallenges,
          fetchProjectChallengeActions,
@@ -31,7 +33,6 @@ import AsManager from '../../../../interactions/User/AsManager'
  *
  * Supported options:
  * - includeChallenges
- * - includeActivity
  * - includeComments
  * - historicalMonths
  * - defaultToOnlyProject
@@ -44,6 +45,8 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
     state = {
       loadingProject: true,
       loadingChallenges: options.includeChallenges,
+      loadingChallengeStats: false,
+      challengeStatsAvailable: false,
     }
 
     routedProjectId = props =>
@@ -123,36 +126,27 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
             return
           }
 
-          if (!options.includeActivity) {
-            this.setState({loadingProject: false})
-          }
-          else {
-            // Used for daily heatmap
-            let activityStartDate = new Date(project.created)
-
-            const challenges = _sortBy(this.challengeProjects(projectId, props), ['created'])
-            const earliestChallenge = challenges.pop()
-            if (earliestChallenge) {
-              activityStartDate = earliestChallenge.created
-            }
-
-            props.fetchProjectActivity(projectId, activityStartDate).then(() =>
-              this.setState({loadingProject: false})
-            )
-          }
+          this.setState({loadingProject: false})
         })
 
         if (options.includeChallenges) {
           const retrievals = []
-          retrievals.push(props.fetchProjectChallenges(projectId))
-
-          if (options.includeActivity) {
-            // Used to display completion progress for each challenge
-            retrievals.push(props.fetchProjectChallengeActions(projectId))
-
-            // Used to display latest activity for each challenge
-            retrievals.push(props.fetchLatestProjectChallengeActivity(projectId))
-          }
+          retrievals.push(props.fetchProjectChallenges(projectId).then(result => {
+            // If the current project is a virtual project then it's possible
+            // the child challenges have parent projects that haven't been
+            // fetched yet. We need to fetch those so we can show their names.
+            const missingProjects = []
+            _each(_get(result, 'entities.challenges'), (challenge) => {
+              if (!_isObject(challenge.parent)) {
+                if (!this.props.entities.projects[challenge.parent]) {
+                  missingProjects.push(challenge.parent)
+                }
+              }
+            })
+            if (missingProjects.length > 0) {
+              this.props.fetchProjectsById(missingProjects)
+            }
+          }))
 
           if (options.includeComments) {
             retrievals.push(props.fetchProjectChallengeComments(projectId))
@@ -168,21 +162,38 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       }
     }
 
+    loadChallengeStats = project => {
+      this.setState({loadingChallengeStats: true, challengeStatsAvailable: true})
+
+      // Used for burndown chart
+      let activityStartDate = new Date(project)
+      const challenges = _sortBy(this.challengeProjects(project.id, this.props), ['created'])
+      const earliestChallenge = challenges.pop()
+      if (earliestChallenge) {
+        activityStartDate = earliestChallenge.created
+      }
+
+      return Promise.all([
+        this.props.fetchProjectChallengeActions(project.id),
+        this.props.fetchProjectActivity(project.id, activityStartDate),
+        this.props.fetchLatestProjectChallengeActivity(project.id),
+      ]).then(() => this.setState({loadingChallengeStats: false}))
+    }
+
     componentDidMount() {
       this.loadProject(this.props)
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (this.props.loadingProjects && !nextProps.loadingProjects) {
-        this.loadProject(nextProps)
+    componentDidUpdate(prevProps) {
+      if (prevProps.loadingProjects && !this.props.loadingProjects) {
+        this.loadProject(this.props)
         return
       }
 
-      const nextProjectId = this.currentProjectId(nextProps)
-
+      const nextProjectId = this.currentProjectId(this.props)
       if ( _isFinite(nextProjectId) &&
-           nextProjectId !== this.currentProjectId(this.props)) {
-        this.loadProject(nextProps)
+           nextProjectId !== this.currentProjectId(prevProps)) {
+        this.loadProject(this.props)
       }
     }
 
@@ -198,16 +209,20 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
         )
       }
 
-      return <WrappedComponent {..._omit(this.props, ['entities',
-                                                      'notManagerError',
-                                                      'fetchProject',
-                                                      'fetchProjectChallenges'])}
-                               project={project}
-                               challenges={challenges}
-                               activity={options.includeActivity ? _get(project, 'activity') : undefined}
-                               routedProjectId={this.routedProjectId(this.props)}
-                               loadingProject={this.state.loadingProject}
-                               loadingChallenges={this.state.loadingChallenges} />
+      return (
+        <WrappedComponent
+          {..._omit(this.props, ['entities', 'notManagerError', 'fetchProject', 'fetchProjectChallenges'])}
+          project={project}
+          challenges={challenges}
+          activity={_get(project, 'activity')}
+          routedProjectId={this.routedProjectId(this.props)}
+          loadingProject={this.state.loadingProject}
+          loadingChallenges={this.state.loadingChallenges}
+          loadingChallengeStats={this.state.loadingChallengeStats}
+          loadChallengeStats={this.loadChallengeStats}
+          challengeStatsAvailable={this.state.challengeStatsAvailable}
+        />
+      )
     }
   }
 }
@@ -221,13 +236,15 @@ const mapDispatchToProps = dispatch => ({
   fetchProjectActivity: (projectId, startDate) =>
     dispatch(fetchProjectActivity(projectId, startDate)),
   fetchProjectChallenges: projectId =>
-    dispatch(fetchProjectChallenges(projectId, -1)),
+    dispatch(fetchProjectChallenges(projectId, 300)),
   fetchLatestProjectChallengeActivity: projectId =>
     dispatch(fetchLatestProjectChallengeActivity(projectId)),
   fetchProjectChallengeActions: projectId =>
     dispatch(fetchProjectChallengeActions(projectId)),
   fetchProjectChallengeComments: projectId =>
     dispatch(fetchProjectChallengeComments(projectId)),
+  fetchProjectsById: projectIds =>
+    dispatch(fetchProjectsById(projectIds)),
   notManagerError: () => dispatch(addError(AppErrors.project.notManager)),
 })
 

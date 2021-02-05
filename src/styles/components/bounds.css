@@ -1,0 +1,9 @@
+.mr-bounds-selector-map {
+  .leaflet-container {
+    height: 350px;
+
+    .leaflet-pane {
+      z-index: 1;
+    }
+  }
+}

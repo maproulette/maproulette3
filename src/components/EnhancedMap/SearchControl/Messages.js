@@ -13,4 +13,9 @@ export default defineMessages({
     id: 'EnhancedMap.SearchControl.noResults',
     defaultMessage: "No Results",
   },
+
+  nominatimQuery: {
+    id: 'EnhancedMap.SearchControl.nominatimQuery.placeholder',
+    defaultMessage: "Nominatim Query",
+  },
 })

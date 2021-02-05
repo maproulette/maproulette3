@@ -26,15 +26,15 @@ export default class TaskStatusIndicator extends Component {
     return (
       <div className="task-status">
         <div>
-          <div className="task-status__label">
+          <div className="task-status__label mr-flex mr-justify-between">
             <FormattedMessage {...messagesByStatus[this.props.task.status]} />
 
             {this.props.task.changesetId > 0 &&
              <a
-               href={`https://www.openstreetmap.org/changeset/${this.props.task.changesetId}`}
+               href={`${process.env.REACT_APP_OSM_API_SERVER}/changeset/${this.props.task.changesetId}`}
                target="_blank"
                rel="noopener noreferrer"
-               className="task-status__view-changeset-link"
+               className={`task-status__view-changeset-link ${this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"}`}
              >
                <FormattedMessage {...messages.viewChangeset} />
              </a>

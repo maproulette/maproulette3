@@ -2,7 +2,11 @@ import _map from 'lodash/map'
 import _invert from 'lodash/invert'
 import _fromPairs from 'lodash/fromPairs'
 import _startCase from 'lodash/startCase'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../tailwind.config.js'
 import messages from './Messages'
+
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 // These statuses are defined on the server
 export const TASK_STATUS_CREATED = 0
@@ -28,14 +32,14 @@ export const TaskStatus = Object.freeze({
 export const keysByStatus = Object.freeze(_invert(TaskStatus))
 
 export const TaskStatusColors = Object.freeze({
-  [TaskStatus.fixed]: '#61CDBB',
-  [TaskStatus.alreadyFixed]: '#97E3D5',
-  [TaskStatus.falsePositive]: '#F1E15B',
-  [TaskStatus.skipped]: '#E8A838',
-  [TaskStatus.tooHard]: '#F47560',
-  [TaskStatus.created]: '#2281C2',
-  [TaskStatus.disabled]: '#9D6ADC',
-  [TaskStatus.deleted]: '#9D6ADC',
+  [TaskStatus.fixed]: colors['blue-viking'],
+  [TaskStatus.alreadyFixed]: colors['yellow-sand'],
+  [TaskStatus.falsePositive]: colors['mango'],
+  [TaskStatus.skipped]: colors['pink'],
+  [TaskStatus.tooHard]: colors['red-light'],
+  [TaskStatus.created]: colors['purple'],
+  [TaskStatus.disabled]: colors['wild-strawberry'],
+  [TaskStatus.deleted]: colors['grey'],
 })
 
 /**
@@ -48,8 +52,18 @@ export const TaskStatusColors = Object.freeze({
  *
  * @returns a Set of allowed status progressions
  */
-export const allowedStatusProgressions = function(status, includeSelf = false) {
+export const allowedStatusProgressions = function(status, includeSelf = false, forRevision = false) {
   let progressions = null
+
+  if (forRevision) {
+    progressions = new Set([TaskStatus.fixed, TaskStatus.falsePositive,
+                            TaskStatus.alreadyFixed, TaskStatus.tooHard])
+    if (!includeSelf) {
+      progressions.delete(status)
+    }
+    return progressions
+  }
+
   switch(status) {
     case TaskStatus.created:
       progressions = new Set([TaskStatus.fixed, TaskStatus.falsePositive,

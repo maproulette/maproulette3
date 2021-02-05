@@ -13,4 +13,14 @@ export default defineMessages({
     id: "Widgets.LeaderboardWidget.title",
     defaultMessage: "Leaderboard",
   },
+
+  mapper: {
+    id: "Widgets.LeaderboardWidget.mapper",
+    defaultMessage: "Mappers",
+  },
+
+  reviewer: {
+    id: "Widgets.LeaderboardWidget.reviewer",
+    defaultMessage: "Reviewers",
+  },
 })

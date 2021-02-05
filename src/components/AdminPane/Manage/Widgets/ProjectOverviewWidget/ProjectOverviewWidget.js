@@ -3,10 +3,8 @@ import { FormattedMessage } from 'react-intl'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import ProjectOverview from '../../ProjectOverview/ProjectOverview'
-import MarkdownContent from '../../../../MarkdownContent/MarkdownContent'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import messages from './Messages'
-import './ProjectOverviewWidget.scss'
 
 const descriptor = {
   widgetKey: 'ProjectOverviewWidget',
@@ -20,14 +18,12 @@ const descriptor = {
 export default class ProjectOverviewWidget extends Component {
   render() {
     return (
-      <QuickWidget {...this.props}
-                  className="project-overview-widget"
-                  widgetTitle={<FormattedMessage {...messages.title} />}>
-        <ProjectOverview {...this.props} suppressDescription />
-
-        <div className="mr-text-blue-dark mr-mt-4">
-          <MarkdownContent markdown={this.props.project.description} />
-        </div>
+      <QuickWidget
+        {...this.props}
+        className=""
+        widgetTitle={<FormattedMessage {...messages.title} />}
+      >
+        <ProjectOverview {...this.props} />
       </QuickWidget>
     )
   }

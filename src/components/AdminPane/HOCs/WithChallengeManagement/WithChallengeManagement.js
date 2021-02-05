@@ -12,9 +12,12 @@ import { saveChallenge,
          fetchChallenge,
          fetchChallengeActions,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
-import { bulkUpdateTasks, deleteChallengeTasks }
+import { recordChallengeSnapshot }
+          from '../../../../services/Challenge/ChallengeSnapshot'
+import { bulkUpdateTasks, deleteChallengeTasks, bulkTaskStatusChange }
        from '../../../../services/Task/Task'
 import { TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
+import { removeReviewRequest } from '../../../../services/Task/TaskReview/TaskReview'
 import { addError } from '../../../../services/Error/Error'
 import AppErrors from '../../../../services/Error/AppErrors'
 import { ChallengeStatus }
@@ -47,7 +50,7 @@ const WithChallengeManagement = WrappedComponent =>
  *
  * @private
  */
-async function uploadLineByLine(dispatch, ownProps, challenge, geoJSON) {
+async function uploadLineByLine(dispatch, ownProps, challenge, geoJSON, dataOriginDate) {
   ownProps.updateCreatingTasksProgress(true, 0)
   const lineFile = AsLineReadableFile(geoJSON)
   let allLinesRead = false
@@ -61,7 +64,7 @@ async function uploadLineByLine(dispatch, ownProps, challenge, geoJSON) {
     }
 
     await dispatch(
-      uploadChallengeGeoJSON(challenge.id, taskLines.join('\n'), true)
+      uploadChallengeGeoJSON(challenge.id, taskLines.join('\n'), true, false, dataOriginDate)
     )
     totalTasksCreated += taskLines.length
     ownProps.updateCreatingTasksProgress(true, totalTasksCreated)
@@ -140,7 +143,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
   deleteIncompleteTasks: challenge => deleteIncompleteTasks(dispatch, ownProps, challenge),
 
-  rebuildChallenge: async (challenge, localFile) => {
+  recordSnapshot: challengeId => recordChallengeSnapshot(challengeId),
+
+  rebuildChallenge: async (challenge, localFile, dataOriginDate) => {
     ownProps.updateCreatingTasksProgress(true)
 
     try {
@@ -148,11 +153,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       // decide which service call to use
       if (localFile) {
         if (await AsValidatableGeoJSON(localFile).isLineByLine()) {
-          await uploadLineByLine(dispatch, ownProps, challenge, localFile)
+          await uploadLineByLine(dispatch, ownProps, challenge, localFile, dataOriginDate)
         }
         else {
           await dispatch(
-            uploadChallengeGeoJSON(challenge.id, localFile, false)
+            uploadChallengeGeoJSON(challenge.id, localFile, false, false, dataOriginDate)
           )
         }
       }
@@ -166,11 +171,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
     // Refresh all the challenge data, including clustered tasks if we can, as
     // it all has likely changed as a result of the rebuild
-    await ownProps.fetchChallengeActions(challenge.id)
-    await ownProps.fetchChallenge(challenge.id)
-    if (ownProps.fetchClusteredTasks) {
-      await ownProps.fetchClusteredTasks(challenge.id)
-    }
+    await fetchChallengeActions(challenge.id)
+    await fetchChallenge(challenge.id)
 
     // Reset map bounds to avoid potential user confusion after the rebuild
     if (ownProps.clearMapBounds) {
@@ -208,6 +210,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
     return dispatch(bulkUpdateTasks(alteredTasks, true))
   },
+
+  applyBulkTaskStatusChange: (newStatus, challengeId, searchCriteria, excludeTaskIds) => {
+    return dispatch(bulkTaskStatusChange(newStatus, challengeId, searchCriteria, excludeTaskIds))
+  },
+
+  removeReviewRequest: (challengeId, taskIds, searchCriteria, excludeTaskIds, asMetaReview) => {
+    return dispatch(removeReviewRequest(challengeId, taskIds, searchCriteria, excludeTaskIds, asMetaReview))
+  }
 })
 
 export default WithChallengeManagement

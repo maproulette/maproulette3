@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import Form from 'react-jsonschema-form-async';
+import Form from '@rjsf/core'
+import classNames from 'classnames'
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
@@ -8,29 +9,45 @@ import _isUndefined from 'lodash/isUndefined'
 import _isFinite from 'lodash/isFinite'
 import _omit from 'lodash/omit'
 import _filter from 'lodash/filter'
-import _first from 'lodash/first'
 import _difference from 'lodash/difference'
 import _get from 'lodash/get'
+import _remove from 'lodash/remove'
+import _isEqual from 'lodash/isEqual'
+import _merge from 'lodash/merge'
+import _map from 'lodash/map'
+import _without from 'lodash/without'
+import _clone from 'lodash/clone'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
+import External from '../../../../External/External'
+import Modal from '../../../../Modal/Modal'
 import AsLineReadableFile
        from '../../../../../interactions/File/AsLineReadableFile'
-import Steps from '../../../../Bulma/Steps'
 import StepNavigation
        from '../../StepNavigation/StepNavigation'
 import { CustomArrayFieldTemplate,
+         CustomFieldTemplate,
          CustomSelectWidget,
+         CustomTextWidget,
+         ColumnRadioField,
          MarkdownDescriptionField,
-         MarkdownEditField }
+         MarkdownEditField,
+         LabelWithHelp }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import KeywordAutosuggestInput
        from '../../../../KeywordAutosuggestInput/KeywordAutosuggestInput'
+import BoundsSelectorModal
+       from '../../../../BoundsSelectorModal/BoundsSelectorModal'
 import WithCurrentProject
        from '../../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge
        from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithCurrentUser
        from '../../../../HOCs/WithCurrentUser/WithCurrentUser'
+import WithTaskPropertyStyleRules
+      from '../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules'
+import { EMPTY_STYLE_RULE }
+      from '../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules'
 import { ChallengeCategoryKeywords,
          categoryMatchingKeywords,
          rawCategoryKeywords }
@@ -45,44 +62,17 @@ import AsValidatableOverpass
        from '../../../../../interactions/Overpass/AsValidatableOverpass'
 import TaskUploadingProgress
        from '../../TaskUploadingProgress/TaskUploadingProgress'
+import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
+import TaskPropertyStyleRules
+       from '../../TaskPropertyStyleRules/TaskPropertyStyleRules'
 import { preparePriorityRuleGroupForForm,
          preparePriorityRuleGroupForSaving } from './PriorityRuleGroup'
-import { jsSchema as step1jsSchema,
-         uiSchema as step1uiSchema } from './Step1Schema'
-import { jsSchema as step2jsSchema,
-         uiSchema as step2uiSchema } from './Step2Schema'
-import { jsSchema as step3jsSchema,
-         uiSchema as step3uiSchema } from './Step3Schema'
-import { jsSchema as step4jsSchema,
-         uiSchema as step4uiSchema } from './Step4Schema'
+import { preparePresetsForSaving, preparePresetsForForm } from './Presets'
+import WorkflowSteps from './WorkflowSteps'
 import manageMessages from '../../Messages'
 import messages from './Messages'
 import './EditChallenge.scss'
-
-// Workflow steps for creating/editing challenges
-const challengeSteps = [
-  {
-    name: 'General',
-    jsSchema: step1jsSchema,
-    uiSchema: step1uiSchema,
-  },
-  {
-    name: 'GeoJSON',
-    jsSchema: step2jsSchema,
-    uiSchema: step2uiSchema,
-  },
-  {
-    name: 'Priorities',
-    jsSchema: step3jsSchema,
-    uiSchema: step3uiSchema,
-  },
-  {
-    name: 'Extra',
-    jsSchema: step4jsSchema,
-    uiSchema: step4uiSchema,
-  },
-]
 
 /**
  * EditChallenge manages a simple workflow for creating/editing a Challenge. We
@@ -106,14 +96,23 @@ const challengeSteps = [
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class EditChallenge extends Component {
+  challengeState = null
+
   state = {
-    activeStep: 0,
     formData: {},
     formContext: {},
+    extraErrors: {},
     isSaving: false,
+    expandedFieldGroups: {}
   }
 
+  validationPromise = null
   isFinishing = false
+
+  componentDidMount() {
+    this.challengeState = this.props.history.location.state
+    window.scrollTo(0, 0)
+  }
 
   /**
    * Returns true if this challenge's data is being cloned from another
@@ -122,12 +121,54 @@ export class EditChallenge extends Component {
   isCloningChallenge = () =>
     !!_get(this.props, 'location.state.cloneChallenge')
 
-  /** Can the workflow back up to the previous step? */
-  canPrev = () => this.state.activeStep > 0
+  /**
+   * Returns true if all challenge fields should be displayed as a single,
+   * long-form step based on the current user's preferences
+   */
+  isLongForm = () =>
+    !!this.props.getUserAppSetting(this.props.user, 'longFormChallenge')
 
-  /** Can the workflow progress to the next step? */
-  canNext = () => {
-    return this.state.activeStep < challengeSteps.length - 1
+  /**
+   * Update the current user's preferences as to whether all challenge fields
+   * should be displayed as a single, long-form step. This will cause this
+   * component to re-render with the updated settings
+   */
+  setIsLongForm = isLongForm => this.props.updateUserAppSetting(
+    this.props.user.id,
+    {longFormChallenge: isLongForm}
+  )
+
+  /**
+   * Returns the list of challenge form groups that are to be rendered as
+   * collapsed when in longform mode (does not affect stepped mode)
+   */
+  collapsedFormGroups = () =>
+    this.props.getUserAppSetting(this.props.user, 'collapsedChallengeFormGroups') || []
+
+  /**
+   * Update the current user's preferences as to which challenge form groups
+   * are expanded and collapsed when displayed in longform mode (does not
+   * affect stepped mode)
+   */
+  toggleCollapsedFormGroup = groupId => {
+    const collapsed = this.collapsedFormGroups()
+    const updated =
+      collapsed.indexOf(groupId) === -1 ?
+      collapsed.concat([groupId]) :
+      _without(collapsed, groupId)
+
+    this.props.updateUserAppSetting(this.props.user.id, {
+      collapsedChallengeFormGroups: updated,
+    })
+  }
+
+  /**
+   * Set whether a collapsible field group should be expanded or not
+   */
+  setFieldGroupExpanded = (fieldGroup, isExpanded) => {
+    const updatedExpansions = _clone(this.state.expandedFieldGroups)
+    updatedExpansions[fieldGroup] = isExpanded
+    this.setState({expandedFieldGroups: updatedExpansions})
   }
 
   /**
@@ -143,7 +184,13 @@ export class EditChallenge extends Component {
       jsonFileField.validated = true
     }
     else {
-      response.errors = {localGeoJSON: _first(lintErrors).message}
+      response.errors = {
+        localGeoJSON: {
+          __errors: _map(lintErrors, e =>
+            _isObject(e.message) ? this.props.intl.formatMessage(e.message) : `GeoJSON error: ${e.message}`
+          )
+        }
+      }
     }
 
     return response
@@ -158,23 +205,43 @@ export class EditChallenge extends Component {
     const lintErrors = AsValidatableOverpass(query).validate()
 
     if (lintErrors.length > 0) {
-      response.errors = {overpassQL: this.props.intl.formatMessage(_first(lintErrors).message)}
+      response.errors = {
+        overpassQL: {__errors: [this.props.intl.formatMessage(lintErrors[0].message)]}
+      }
     }
 
     return response
   }
 
   /**
-   * Perform additional validation checks beyond schema validation. Primarily
-   * we check Overpass queries and GeoJSON.
+   * Perform additional validation, including async validation that will set
+   * the extraErrors state field to a value as needed
    */
-  validateGeoJSONSource = async (formData) => {
+  validate = (formData, errors, activeStep) => {
+    this.validationPromise = this.validateDataSource(formData, activeStep)
+    this.validationPromise.then(() => {
+      if (!_isEmpty(this.state.extraErrors)) {
+        this.setState({extraErrors: {}})
+      }
+    }).catch(dataSourceErrors => {
+      this.setState({extraErrors: dataSourceErrors})
+    }).finally(() => {
+      this.validationPromise = null
+    })
+
+    return errors
+  }
+
+  /**
+   * Perform additional validation checks beyond schema validation. Primarily
+   * we check Overpass queries and GeoJSON
+   */
+  validateDataSource = async (formData, activeStep) => {
     let response = {}
 
     // Skip additional source data validation if user has indicated they wish
-    // to ignore source errors.
-    if (formData.ignoreSourceErrors ||
-        challengeSteps[this.state.activeStep].name !== "GeoJSON") {
+    // to ignore source errors
+    if (formData.ignoreSourceErrors || activeStep.id !== "DataSource") {
       return response
     }
 
@@ -189,62 +256,45 @@ export class EditChallenge extends Component {
     }
 
     if (response.errors) {
-      throw response
+      throw response.errors
     }
 
     return response
   }
 
-  asyncSubmit = (formData, result) => {
-    return this.isFinishing ? this.finish() : this.nextStep()
-  }
-
-  /** Back up to the previous step in the workflow */
-  prevStep = () => {
-    this.isFinishing = false
-
-    if (this.canPrev()) {
-      this.setState({
-        activeStep: this.state.activeStep - 1,
-      })
-    }
-  }
-
-  /** Advance to the next step in the workflow */
-  nextStep = () => {
-    if (this.canNext()) {
-      this.setState({
-        activeStep: this.state.activeStep + 1,
-      })
+  /**
+   * Process submit event at each step, waiting until any pending validation is
+   * complete before deciding how to proceed
+   */
+  handleSubmit = (formData, nextStep) => {
+    (this.validationPromise || Promise.resolve()).then(() => {
+      this.isFinishing ? this.finish() : nextStep()
       window.scrollTo(0, 0)
-    }
-    else {
-      this.finish()
-    }
-  }
+      return false
+    }).catch(err => {
+      console.log(err)
+    }) // Stay on current step if validation fails
 
-  /** Jump to the given step number */
-  jumpToStep = stepNumber => {
-    if (stepNumber !== this.state.activeStep &&
-        stepNumber >= 0 && stepNumber < challengeSteps.length) {
-      this.setState({
-        activeStep: stepNumber,
-        formContext: {},
-      })
-      window.scrollTo(0, 0)
-    }
+    return false
   }
 
   /** Complete the workflow, saving the challenge data */
   finish = () => {
+    // We cannot continue if the style rules have errors.
+    if (this.hasTaskStyleRuleErrors()) {
+      return
+    }
+
     window.scrollTo(0, 0)
     this.setState({isSaving: true})
 
     this.prepareFormDataForSaving().then(formData => {
       return this.props.saveChallenge(formData).then(challenge => {
         if (_isObject(challenge) && _isNumber(challenge.parent)) {
-          this.props.history.push(
-            `/admin/project/${challenge.parent}/challenge/${challenge.id}`)
+          this.props.history.push({
+            pathname: `/admin/project/${challenge.parent}/challenge/${challenge.id}`,
+            state: this.challengeState
+          })
         }
         else {
           this.finishing = false
@@ -257,8 +307,9 @@ export class EditChallenge extends Component {
   /** Cancel editing */
   cancel = () => {
     _isObject(this.props.challenge) ?
-      this.props.history.push(
-        `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`) :
+      this.props.history.push({
+        pathname: `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`,
+        state: this.challengeState }) :
       this.props.history.push(`/admin/project/${this.props.project.id}`)
   }
 
@@ -289,14 +340,48 @@ export class EditChallenge extends Component {
       this.state.formData
     )
 
-    // If we're cloning a challenge, reset the id, status, and name.
+    // If we're cloning a challenge, reset the id, status, and name, and remove
+    // #maproulette hashtag from changeset comment as its presence will be
+    // controlled by an explicit option offered to user during setup
     if (this.isCloningChallenge()) {
       delete challengeData.id
       delete challengeData.status
+      delete challengeData.virtualParents
 
       if (_isEmpty(this.state.formData.name)) {
         delete challengeData.name
       }
+
+      if (_isEmpty(this.state.formData.dataOriginDate)) {
+        delete challengeData.dataOriginDate
+      }
+
+      if (_isEmpty(this.state.formData.overpassQL)) {
+        delete challengeData.overpassQL
+      }
+
+      if (_isEmpty(this.state.formData.remoteGeoJson)) {
+        delete challengeData.remoteGeoJson
+      }
+
+      challengeData.checkinComment =
+        AsEditableChallenge(challengeData).checkinCommentWithoutMaprouletteHashtag()
+    }
+
+    if (this.state.formData.source === "Overpass Query") {
+      // Overpass Query so delete other options
+      delete challengeData.remoteGeoJson
+      delete challengeData.localGeoJSON
+    }
+    else if (this.state.formData.source === "Local File") {
+      // Local file so delete other options
+      delete challengeData.remoteGeoJson
+      delete challengeData.overpassQL
+    }
+    else if (this.state.formData.source === "Remote URL") {
+      // Remote Url so delete other options
+      delete challengeData.overpassQL
+      delete challengeData.localGeoJSON
     }
 
     // The server uses two fields to represent the default basemap: a legacy
@@ -336,6 +421,10 @@ export class EditChallenge extends Component {
         preparePriorityRuleGroupForForm(challengeData.lowPriorityRule)
     }
 
+    if (_isUndefined(this.state.formData.presets)) {
+      challengeData = preparePresetsForForm(challengeData)
+    }
+
     // Since we represent the challenge category as just another keyword behind
     // the scenes, we need to separate the category keyword and the rest of
     // the keywords so that they're all presented properly in the form. First,
@@ -351,6 +440,24 @@ export class EditChallenge extends Component {
     if (!_isString(this.state.formData.additionalKeywords)) {
       challengeData.additionalKeywords =
         _difference(keywords, rawCategoryKeywords).join(',')
+    }
+
+    challengeData.taskTags =
+      _isString(challengeData.taskTags) ?
+      challengeData.taskTags :
+      challengeData.preferredTags
+
+    challengeData.reviewTaskTags =
+      _isString(challengeData.reviewTaskTags) ?
+      challengeData.reviewTaskTags :
+      challengeData.preferredReviewTags
+
+    if (_isUndefined(challengeData.customTaskStyles)) {
+      challengeData.customTaskStyles = !_isEmpty(challengeData.taskStyles)
+    }
+
+    if (!_isEmpty(challengeData.overpassQL)) {
+      challengeData.source = "Overpass Query"
     }
 
     return challengeData
@@ -370,6 +477,13 @@ export class EditChallenge extends Component {
     // Remove extraneous fields that should not be saved.
     delete challengeData.actions
     delete challengeData.ignoreSourceErrors
+
+    if (this.props.challenge && challengeData.dataOriginDate) {
+      // Don't update dataOriginDate if it hasn't changed (otherwise it's timezone could change)
+      if (this.props.challenge.dataOriginDate === challengeData.dataOriginDate) {
+        delete challengeData.dataOriginDate
+      }
+    }
 
     // Parent field should just be id, not object.
     if (_isObject(challengeData.parent)) {
@@ -396,18 +510,33 @@ export class EditChallenge extends Component {
       preparePriorityRuleGroupForSaving(challengeData.lowPriorityRules.ruleGroup)
     delete challengeData.lowPriorityRules
 
+    preparePresetsForSaving(challengeData)
+
     challengeData.tags = ChallengeCategoryKeywords[challengeData.category] ||
                          ChallengeCategoryKeywords.other
 
     if (!_isEmpty(challengeData.additionalKeywords)) {
       challengeData.tags = challengeData.tags.concat(
-        // replace whitespace with commas, split on comma, and filter out any
-        // empty-string keywords.
+        // split on comma, and filter out any empty-string keywords
         _filter(
-          challengeData.additionalKeywords.replace(/\s+/, ',').split(/,+/),
+          challengeData.additionalKeywords.split(/,+/),
           keyword => !_isEmpty(keyword)
         )
       )
+    }
+
+    if (!_isEmpty(challengeData.taskTags)) {
+      // replace whitespace with commas, split on comma, and filter out any
+      // empty-string tags.
+      challengeData.preferredTags =
+        _filter(challengeData.taskTags.split(/,+/), tag => !_isEmpty(tag))
+    }
+
+    if (!_isEmpty(challengeData.reviewTaskTags)) {
+      // replace whitespace with commas, split on comma, and filter out any
+      // empty-string tags.
+      challengeData.preferredReviewTags =
+        _filter(challengeData.reviewTaskTags.split(/,+/), tag => !_isEmpty(tag))
     }
 
     // Note any old tags that are to be discarded. Right now a separate API
@@ -448,7 +577,37 @@ export class EditChallenge extends Component {
       }
     }
 
+    if (challengeData.customTaskStyles) {
+      const styleRules = this.props.taskPropertyStyleRules
+      // Remove all empty style rules
+      _remove(styleRules, (rule) => (_isEmpty(rule) || _isEqual(rule, {}) ||
+        _isEqual(rule, EMPTY_STYLE_RULE) ||
+        (!rule.propertySearch.key && !rule.propertySearch.value &&
+         !rule.propertySearch.left && !rule.propertySearch.right)
+      ))
+      challengeData.taskStyles = styleRules
+    }
+    else {
+      challengeData.taskStyles = []
+    }
+
+    // Only send across overpassTargetType if we have an overpass query
+    if (challengeData.source !== "Overpass Query") {
+      challengeData.overpassTargetType = null
+    }
+    else if (challengeData.overpassTargetType === "none") {
+      challengeData.overpassTargetType = ""
+    }
+
     return challengeData
+  }
+
+  hasTaskStyleRuleErrors = () => {
+    const useCustom = !_isUndefined(_get(this.state.formData, 'customTaskStyles')) ?
+      _get(this.state.formData, 'customTaskStyles') :
+     !_isEmpty(_get(this.props.challenge, 'taskStyles'))
+
+    return useCustom && this.props.hasAnyStyleRuleErrors
   }
 
   render() {
@@ -457,102 +616,424 @@ export class EditChallenge extends Component {
       return <TaskUploadingProgress {...this.props} />
     }
 
-    if (!this.props.project || this.state.isSaving) {
+    if (!this.props.project || this.props.loadingChallenge || this.state.isSaving) {
       return (
-        <div className="pane-loading full-screen-height">
-          <BusySpinner />
+        <div className="pane-loading full-screen-height mr-flex mr-justify-center mr-items-center">
+          <BusySpinner big />
         </div>
       )
     }
 
     const challengeData = this.prepareChallengeDataForForm()
-    const currentStep = challengeSteps[this.state.activeStep]
-
-    // Override the standard form-field description renderer with our own that
-    // supports Markdown. We pass this in to the `fields` prop on the Form.
-    const customFields = {
-      DescriptionField: MarkdownDescriptionField,
-      markdown: MarkdownEditField,
-      tags: KeywordAutosuggestInput,
-    }
-
-    return (
-      <div className="admin__manage edit-challenge">
-        <div className="admin__manage__pane-wrapper">
-          <div className="admin__manage__primary-content">
-            <div className="admin__manage__header">
-              <nav className="breadcrumb" aria-label="breadcrumbs">
-                <ul>
-                  <li>
-                    <Link to={'/admin/projects'}>
-                      <FormattedMessage {...manageMessages.manageHeader} />
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={`/admin/project/${this.props.project.id}`}>
-                      {this.props.project.displayName ||
-                      this.props.project.name}
-                    </Link>
-                  </li>
-                  {_isObject(this.props.challenge) &&
-                    <li>
-                      <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
-                        {this.props.challenge.name}
-                      </Link>
-                    </li>
+    const isNewChallenge = AsEditableChallenge(challengeData).isNew()
+    return <WorkflowSteps
+      {...this.props}
+      isNewChallenge={isNewChallenge}
+      finish={this.finish}
+      isLongForm={this.isLongForm()}
+      renderStep={({
+        challengeSteps,
+        activeStep,
+        StepComponent,
+        prevStep,
+        nextStep,
+        transitionToStep,
+      }) => {
+        if (StepComponent) {
+          return (
+            <BreadcrumbWrapper
+              {...this.props}
+              cancel={this.cancel}
+              isCloningChallenge={this.isCloningChallenge}
+              isNewChallenge={isNewChallenge}
+              challengeState={this.challengeState}
+            >
+              <div className="mr-flex">
+                <div className="mr-w-54 mr-flex mr-flex-col mr-items-center mr-bg-blue-darker mr-rounded-l mr-pt-8">
+                  {activeStep.icon &&
+                  <SvgSymbol
+                    className="mr-fill-blue-light-75 mr-w-48 mr-h-48"
+                    sym={activeStep.icon}
+                    viewBox={activeStep.viewBox || '0 0 20 20'}
+                  />
                   }
-                  <li className="is-active">
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a aria-current="page">
-                      {
-                        this.isCloningChallenge() ?
-                        <FormattedMessage {...messages.cloneChallenge} /> :
-                        (_isObject(this.props.challenge) ?
-                        <FormattedMessage {...messages.editChallenge} /> :
-                        <FormattedMessage {...messages.newChallenge} />)
-                      }
-                    </a>
-                    {this.props.loadingChallenge && <BusySpinner inline />}
-                  </li>
-                </ul>
-              </nav>
-            </div>
+                </div>
+                <div className="mr-p-4 md:mr-p-8 mr-w-full">
+                  <LongFormToggle
+                    {...this.props}
+                    isLongForm={this.isLongForm()}
+                    setIsLongForm={this.setIsLongForm}
+                  />
+                  <StepComponent
+                    {...this.props}
+                    step={activeStep}
+                    transitionToStep={transitionToStep}
+                    challengeSteps={challengeSteps}
+                  />
+                  <StepNavigation
+                    activeStep={activeStep}
+                    prevStep={stepName => {
+                      this.isFinishing = false
+                      prevStep(stepName)
+                    }}
+                    finish={() => {
+                      this.isFinishing = true
+                      this.handleSubmit()
+                      return false
+                    }}
+                  />
+                </div>
+              </div>
+            </BreadcrumbWrapper>
+          )
+        }
 
-            <Steps steps={challengeSteps} activeStep={this.state.activeStep}
-                   onStepClick={AsEditableChallenge(challengeData).isNew() ? undefined : this.jumpToStep}
-            />
-            <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
-              <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
-                    className="form"
-                    onAsyncValidate={this.validateGeoJSONSource}
-                    uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
-                    widgets={{SelectWidget: CustomSelectWidget}}
-                    ArrayFieldTemplate={CustomArrayFieldTemplate}
-                    fields={customFields}
-                    tagType={"challenges"}
-                    noHtml5Validate
-                    showErrorList={false}
-                    formData={challengeData}
-                    formContext={this.state.formContext}
-                    onChange={this.changeHandler}
-                    onSubmit={this.asyncSubmit}
-                    onError={this.errorHandler}
-              >
-                <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
-                                prevStep={this.prevStep} cancel={this.cancel}
-                                finish={() => this.isFinishing = true}
-                                canFinishEarly={!AsEditableChallenge(challengeData).isNew()} />
-              </Form>
+        // Override the standard form-field description renderer with our own that
+        // supports Markdown. We pass this in to the `fields` prop on the Form.
+        const customFields = {
+          DescriptionField: MarkdownDescriptionField,
+          markdown: MarkdownEditField,
+          columnRadio: ColumnRadioField,
+          tags: props => {
+            return (
+              <React.Fragment>
+                <LabelWithHelp {...props} />
+                <KeywordAutosuggestInput
+                  {...props}
+                  inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
+                  dropdownInnerClassName="mr-bg-blue-darker"
+                />
+              </React.Fragment>
+            )
+          },
+          taskTags: injectIntl(props => {
+            return (
+              <React.Fragment>
+                <LabelWithHelp {...props} />
+                <KeywordAutosuggestInput
+                  {...props}
+                  inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
+                  dropdownInnerClassName="mr-bg-blue-darker"
+                  placeholder={props.intl.formatMessage(messages.addMRTagsPlaceholder)}
+                  tagType={props.uiSchema.tagType}
+                />
+              </React.Fragment>
+            )
+          }),
+          limitTags: injectIntl(props => {
+            return (
+              <React.Fragment>
+                <div className="mr-mb-2">
+                  {props.uiSchema["ui:help"]}
+                </div>
+                <div className="radio">
+                  <input
+                    type="radio"
+                    name={props.name + "yes"}
+                    className="mr-mr-1.5"
+                    checked={!props.formData}
+                    onChange={(e) => props.onChange(false)}
+                  />
+                  <label className="mr-mr-2 mr-text-grey-lighter">
+                    <FormattedMessage {...messages.yesLabel}/>
+                  </label>
+                </div>
+                <div className="radio">
+                  <input
+                    type="radio"
+                    name={props.name + "no"}
+                    className="mr-mr-1.5"
+                    checked={!!props.formData}
+                    onChange={(e) => {
+                      props.onChange(true)
+                    }}
+                  />
+                  <label className="mr-text-grey-lighter">
+                    <FormattedMessage {...messages.noLabel}/>
+                  </label>
+                </div>
+              </React.Fragment>
+            )
+          }),
+          configureCustomTaskStyles: (props) => {
+            return configureCustomTaskStyles(props,
+              () => this.setState({showTaskStyleRules: true}))
+          },
+        }
+
+        return (
+          <BreadcrumbWrapper
+            {...this.props}
+            cancel={this.cancel}
+            isCloningChallenge={this.isCloningChallenge}
+            isNewChallenge={isNewChallenge}
+            challengeState={this.challengeState}
+          >
+            {this.state.showTaskStyleRules &&
+              <External>
+                <Modal className=""
+                        isActive extraWide
+                        onClose={() => this.setState({showTaskStyleRules: false})}>
+                  <div className="mr-overflow-y-auto mr-max-h-screen80 mr-bg-black-15 mr-m-2 mr-p-4">
+                    <TaskPropertyStyleRules {...this.props}>
+                      <button className="mr-button mr-button--green mr-mr-4"
+                        onClick={() => {
+                          this.props.clearStyleRules()
+                        }}>
+                        <FormattedMessage {...messages.taskPropertyStylesClear} />
+                      </button>
+                      {!this.props.hasAnyStyleRuleErrors &&
+                        <button className="mr-button mr-button--green"
+                          onClick={() => {
+                            this.setState({showTaskStyleRules: false})
+                          }}>
+                          <FormattedMessage {...messages.taskPropertyStylesClose} />
+                        </button>
+                      }
+                    </TaskPropertyStyleRules>
+                  </div>
+                </Modal>
+              </External>
+            }
+
+            <div className="mr-flex">
+              <div className="mr-w-54 mr-flex mr-flex-col mr-items-center mr-bg-blue-darker mr-rounded-l mr-pt-8">
+                {activeStep.icon &&
+                 <SvgSymbol
+                   className="mr-fill-blue-light-75 mr-w-48 mr-h-48"
+                   sym={activeStep.icon}
+                   viewBox={activeStep.viewBox || '0 0 20 20'}
+                 />
+                }
+              </div>
+              <div className="mr-p-4 md:mr-p-8 mr-w-full">
+                <LongFormToggle
+                  {...this.props}
+                  isLongForm={this.isLongForm()}
+                  setIsLongForm={this.setIsLongForm}
+                />
+                <Form
+                  schema={activeStep.jsSchema(
+                    this.props.intl, this.props.user, challengeData, this.state.extraErrors, {
+                      longForm: this.isLongForm(),
+                    }
+                  )}
+                  uiSchema={activeStep.uiSchema(
+                    this.props.intl, this.props.user, challengeData, this.state.extraErrors, {
+                      longForm: this.isLongForm(),
+                      collapsedGroups: this.collapsedFormGroups(),
+                      toggleCollapsed: this.toggleCollapsedFormGroup,
+                      expandedFieldGroups: this.state.expandedFieldGroups,
+                      setFieldGroupExpanded: this.setFieldGroupExpanded,
+                    }
+                  )}
+                  className="form"
+                  validate={(formData, errors) => this.validate(formData, errors, activeStep)}
+                  widgets={{SelectWidget: CustomSelectWidget, TextWidget: CustomTextWidget}}
+                  ArrayFieldTemplate={CustomArrayFieldTemplate}
+                  FieldTemplate={CustomFieldTemplate}
+                  fields={customFields}
+                  tagType={"challenges"}
+                  noHtml5Validate
+                  showErrorList={false}
+                  formData={challengeData}
+                  formContext={_merge(this.state.formContext, {
+                    bounding: _get(challengeData, 'bounding'),
+                    buttonAction: BoundsSelectorModal,
+                  })}
+                  onChange={this.changeHandler}
+                  onSubmit={formData => this.handleSubmit(formData, nextStep)}
+                  onError={this.errorHandler}
+                  extraErrors={this.state.extraErrors}
+                >
+                  {this.hasTaskStyleRuleErrors() &&
+                    activeStep.id === "Properties" &&
+                    <div className="mr-text-red-light mr-mb-4">
+                      <FormattedMessage {...messages.customTaskStylesError} />
+                    </div>
+                  }
+
+                  {/* Note: Next button submits the form, so nextStep isn't used here */}
+                  <StepNavigation
+                    activeStep={activeStep}
+                    prevStep={stepName => {
+                      this.isFinishing = false
+                      prevStep(stepName)
+                    }}
+                    finish={() => {
+                      this.isFinishing = true
+                      this.handleSubmit()
+                      return false
+                    }}
+                  />
+                </Form>
+              </div>
             </div>
+          </BreadcrumbWrapper>
+        )
+      }}
+    />
+  }
+}
+
+function configureCustomTaskStyles(props, configureTaskStyleRules) {
+  return (
+    <React.Fragment>
+      <LabelWithHelp {...props} />
+      <div>
+        <div className="radio">
+          <input
+            type="radio"
+            name="no-styles"
+            className="mr-mr-1.5"
+            checked={!props.formData}
+            onChange={(e) => props.onChange(false)}
+          />
+          <label className="mr-mr-2 mr-text-grey-lighter">
+            <FormattedMessage {...messages.customTaskStyleDefaultLabel} />
+          </label>
+        </div>
+        <div className="radio">
+          <input
+            type="radio"
+            name="custom-styles"
+            className="mr-mr-1.5"
+            checked={!!props.formData}
+            onChange={(e) => {
+              props.onChange(true)
+            }}
+          />
+          <label className="mr-text-grey-lighter">
+            <FormattedMessage {...messages.customTaskStyleCustomLabel} />
+          </label>
+        </div>
+        {!!props.formData &&
+         <button
+           className="mr-ml-4 mr-button mr-button--small"
+           onClick={(e) => {
+              configureTaskStyleRules()
+              e.stopPropagation()
+              e.preventDefault()
+           }}
+         >
+            <FormattedMessage {...messages.customTaskStyleButton} />
+          </button>
+        }
+      </div>
+    </React.Fragment>
+  )
+}
+
+const BreadcrumbWrapper = props => {
+  return (
+    <div className="admin__manage edit-challenge">
+      <div className="admin__manage__pane-wrapper">
+        <div className="admin__manage__primary-content">
+          <div className="admin__manage__header">
+            <nav
+              className="breadcrumb mr-w-full mr-flex mr-flex-wrap mr-justify-between"
+              aria-label="breadcrumbs"
+            >
+              <ul>
+                <li className="nav-title">
+                  <Link to={'/admin/projects'}>
+                    <FormattedMessage {...manageMessages.manageHeader} />
+                  </Link>
+                </li>
+                <li>
+                  <Link to={`/admin/project/${props.project.id}`}>
+                    {props.project.displayName || props.project.name}
+                  </Link>
+                </li>
+                {_isObject(props.challenge) &&
+                  <li>
+                    <Link to={{
+                      pathname: `/admin/project/${props.project.id}/challenge/${props.challenge.id}`,
+                      state: props.challengeState
+                    }}>
+                      {props.challenge.name}
+                    </Link>
+                  </li>
+                }
+                <li className="is-active">
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a aria-current="page">
+                    {
+                      props.isCloningChallenge() ?
+                      <FormattedMessage {...messages.cloneChallenge} /> :
+                      (_isObject(props.challenge) ?
+                      <FormattedMessage {...messages.editChallenge} /> :
+                      <FormattedMessage {...messages.newChallenge} />)
+                    }
+                  </a>
+                  {props.loadingChallenge && <BusySpinner inline />}
+                </li>
+              </ul>
+              <button
+                type="button"
+                className="mr-button mr-button--white mr-button--small"
+                onClick={() => props.cancel()}
+              >
+                <FormattedMessage
+                  {...(props.isNewChallenge ? messages.cancelNewChallengeLabel : messages.cancelLabel)}
+                />
+              </button>
+            </nav>
+          </div>
+
+          <div className="mr-max-w-3xl mr-mx-auto mr-bg-blue-dark mr-mt-8 mr-rounded">
+            {props.children}
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
+}
+
+/**
+ * Controls for toggling between long-form and stepped presentation
+ */
+const LongFormToggle = function(props) {
+  return (
+    <div className="mr-w-full mr-flex mr-justify-end">
+      <button
+        type="button"
+        title={props.intl.formatMessage(messages.showStepsTooltip)}
+        onClick={() => props.setIsLongForm(false)}
+      >
+        <SvgSymbol
+          sym="carousel-icon"
+          viewBox="0 0 20 20"
+          className={classNames(
+            "mr-w-4 mr-h-4 mr-mr-4",
+            props.isLongForm ? "mr-fill-green-lighter" : "mr-fill-white"
+          )}
+        />
+      </button>
+      <button
+        type="button"
+        title={props.intl.formatMessage(messages.showLongformTooltip)}
+        onClick={() => props.setIsLongForm(true)}
+      >
+        <SvgSymbol
+          sym="list-icon"
+          viewBox="0 0 20 20"
+          className={classNames(
+            "mr-w-4 mr-h-4",
+            !props.isLongForm ? "mr-fill-green-lighter" : "mr-fill-white"
+          )}
+        />
+      </button>
+    </div>
+  )
 }
 
 export default WithCurrentUser(
   WithCurrentProject(
-    WithCurrentChallenge(injectIntl(EditChallenge))
+    WithCurrentChallenge(
+      WithTaskPropertyStyleRules(
+        injectIntl(EditChallenge)
+      )
+    )
   )
 )

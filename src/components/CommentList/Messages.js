@@ -8,4 +8,9 @@ export default defineMessages({
     id: "CommentList.controls.viewTask.label",
     defaultMessage: "View Task"
   },
+
+  noComments: {
+    id: "CommentList.noComments.label",
+    defaultMessage: "No Comments"
+  },
 })

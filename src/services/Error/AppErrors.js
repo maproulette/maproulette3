@@ -14,6 +14,7 @@ export default {
     updateFailure: messages.userUpdateFailure,
     fetchFailure: messages.userFetchFailure,
     notFound: messages.userNotFound,
+    followFailure: messages.userFollowFailure,
   },
 
   leaderboard: {
@@ -28,6 +29,10 @@ export default {
     fetchFailure: messages.taskFetchFailure,
     doesNotExist: messages.taskDoesNotExist,
     locked: messages.taskLocked,
+    lockRefreshFailure: messages.taskLockRefreshFailure,
+    bundleFailure: messages.taskBundleFailure,
+    lockReleaseFailure: messages.taskLockReleaseFailure,
+    cooperativeFailure: messages.taskCooperativeFailure,
   },
 
   osm: {
@@ -39,6 +44,10 @@ export default {
 
   mapillary: {
     fetchFailure: messages.mapillaryFetchFailure,
+  },
+
+  openStreetCam: {
+    fetchFailure: messages.openStreetCamFetchFailure,
   },
 
   nominatim: {
@@ -95,4 +104,16 @@ export default {
     noResponse: messages.josmNoResponse,
     missingOSMIds: messages.josmMissingOSMIds,
   },
+
+  team: {
+    failure: messages.teamFailure,
+  },
+
+  search: {
+    notSupported: messages.searchNotSupported,
+  },
+
+  file: {
+    formatIncorrect: messages.fileFormatIncorrect,
+  }
 }

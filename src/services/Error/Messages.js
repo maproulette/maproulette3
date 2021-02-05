@@ -32,6 +32,10 @@ export default defineMessages({
     id: "Errors.user.notFound",
     defaultMessage: "No user found with that username."
   },
+  userFollowFailure: {
+    id: "Errors.user.genericFollowFailure",
+    defaultMessage: "Failure{details}"
+  },
 
   leaderboardFetchFailure: {
     id: "Errors.leaderboard.fetchFailure",
@@ -66,6 +70,22 @@ export default defineMessages({
     id: 'Errors.task.alreadyLocked',
     defaultMessage: "Task has already been locked by someone else.",
   },
+  taskLockRefreshFailure: {
+    id: 'Errors.task.lockRefreshFailure',
+    defaultMessage: "Unable to extend your task lock. Your lock may have expired. We recommend refreshing the page to try establishing a fresh lock.",
+  },
+  taskLockReleaseFailure: {
+    id: 'Errors.task.lockReleaseFailure',
+    defaultMessage: "Failed to release task lock. Your lock or your session may have expired.",
+  },
+  taskBundleFailure: {
+    id: 'Errors.task.bundleFailure',
+    defaultMessage: "Unable to bundle tasks together",
+  },
+  taskCooperativeFailure: {
+    id: 'Errors.task.cooperativeFailure',
+    defaultMessage: "Failed to load cooperative task{details}",
+  },
 
   osmRequestTooLarge: {
     id: 'Errors.osm.requestTooLarge',
@@ -87,6 +107,11 @@ export default defineMessages({
   mapillaryFetchFailure: {
     id: 'Errors.mapillary.fetchFailure',
     defaultMessage: "Unable to fetch data from Mapillary",
+  },
+
+  openStreetCamFetchFailure: {
+    id: 'Errors.openStreetCam.fetchFailure',
+    defaultMessage: "Unable to fetch data from OpenStreetCam",
   },
 
   nominatimFetchFailure: {
@@ -180,7 +205,7 @@ export default defineMessages({
 
   mapRenderFailure: {
     id: 'Errors.map.renderFailure',
-    defaultMessage: "Unable to render the map. This may be caused by a problematic custom basemap.",
+    defaultMessage: "Unable to render the map{details}. Attempting to fall back to default map layer.",
   },
 
   placeNotFound: {
@@ -205,8 +230,20 @@ export default defineMessages({
   },
   josmMissingOSMIds: {
     id: 'Errors.josm.missingFeatureIds',
-    defaultMessage: "This task's features do not include the OSM identifiers " +
+    defaultMessage: "This task’s features do not include the OSM identifiers " +
                     "required to open them standalone in JOSM. Please choose " +
                     "another editing option."
+  },
+  teamFailure: {
+    id: "Errors.team.genericFailure",
+    defaultMessage: "Failure{details}"
+  },
+  searchNotSupported: {
+    id: "Errors.search.notSupported",
+    defaultMessage: "Short code search not supported{details}"
+  },
+  fileFormatIncorrect: {
+    id: "Errors.file.formatIncorrect",
+    defaultMessage: "File format is unrecognized or unsupported for this operation"
   },
 })

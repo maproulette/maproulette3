@@ -17,7 +17,7 @@ export const addChallenge = function(challengeId, toProjectId) {
       {variables: {challengeId, projectId: toProjectId}}
     ).execute().then(() => {
       fetchProject(toProjectId)(dispatch) // Refresh challenge data
-      fetchProjectChallenges(toProjectId)(dispatch) // Refresh challenge data
+      fetchProjectChallenges(toProjectId, -1)(dispatch) // Refresh challenge data
     }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>

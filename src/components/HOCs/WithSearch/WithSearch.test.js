@@ -197,10 +197,11 @@ test("searchQueries.searchGroup is passed through to the wrapped component", () 
 test("mapDispatchToProps maps function performSearch", () => {
   const dispatch = jest.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {}, "searchGroup")
+  const someProps = {foo: "foo"}
 
-  mappedProps.performSearch("query", "searchProjects")
+  mappedProps.performSearch("query", "searchProjects", someProps)
   expect(dispatch).toBeCalled()
-  expect(performSearch).toBeCalledWith("searchGroup", "query", "searchProjects")
+  expect(performSearch).toBeCalledWith("searchGroup", "query", "searchProjects", someProps)
   expect(mappedProps).toMatchSnapshot()
 })
 

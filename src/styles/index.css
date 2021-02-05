@@ -1,13 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
 /**
- * This injects Tailwind's base styles, which is a combination of
- * Normalize.css and some additional base styles.
- *
- * You can see the styles here:
- * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+ * This injects Tailwind's base styles, which is a combination of Normalize.css
+ * and some additional base styles.
  */
-@import 'tailwindcss/preflight';
+@import 'tailwindcss/base';
 
 /**
  * This injects any component classes registered by plugins.
@@ -29,12 +26,14 @@
 @import 'components/lists';
 @import 'components/cards/widget';
 @import 'components/cards/challenge';
+@import 'components/cards/project';
 @import 'components/sections';
 @import 'components/forms';
 @import 'components/ticker';
 @import 'pages/leaderboard-row';
 @import 'components/timeline';
 @import 'components/badges';
+@import 'components/bounds';
 
 /**
  * Vendor styles
@@ -42,6 +41,7 @@
 @import 'vendor/react-burger-menu';
 @import 'vendor/react-table';
 @import 'vendor/react-datepicker';
+@import 'vendor/leaflet-areaselect';
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your

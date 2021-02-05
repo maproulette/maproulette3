@@ -5,6 +5,7 @@ import _isFunction from 'lodash/isFunction'
 import _get from 'lodash/get'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
+import SearchTypeFilter from '../SearchTypeFilter/SearchTypeFilter'
 import './SearchBox.scss'
 
 /**
@@ -17,6 +18,7 @@ import './SearchBox.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class SearchBox extends Component {
+
   /**
    * Esc clears search, Enter signals completion
    *
@@ -35,13 +37,21 @@ export default class SearchBox extends Component {
    * @private
    */
   queryChanged = (e) => {
-    this.props.setSearch(e.target.value)
+    this.props.setSearch(e.target.value, this.getSearchType(this.props))
+  }
+
+  getSearchType(props) {
+    return _get(props, 'searchFilters.searchType')
+  }
+
+  getQuery(props) {
+    return (props.searchGroup ?
+        _get(props, `searchQueries.${props.searchGroup}.searchQuery.query`) :
+        _get(props, 'searchQuery.query')) || ''
   }
 
   render() {
-    const query = (this.props.searchGroup ? 
-      _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`) :
-      _get(this.props, 'searchQuery.query')) || ''
+    const query = this.getQuery(this.props)
     const isLoading = _get(this.props, 'searchQuery.meta.fetchingResults')
 
     const clearButton =
@@ -54,34 +64,43 @@ export default class SearchBox extends Component {
       null :
       <button className="button is-clear has-svg-icon search-box--done-button"
               onClick={() => this.props.deactivate && this.props.deactivate()}>
-        <SvgSymbol viewBox='0 0 20 20' sym="outline-arrow-right-icon"/>
+        <SvgSymbol
+          className={this.props.buttonClassName}
+          viewBox='0 0 20 20'
+          sym="outline-arrow-right-icon"
+        />
       </button>
-
 
     return (
       <div
         role="search"
         className={classNames(
-          "mr-flex mr-items-center", {
-            "lg:ml-ml-6 xl:mr-ml-12": !this.props.leftAligned
+          "mr-flex mr-items-center mr-border-none mr-text-white-50 mr-rounded mr-bg-black-15 mr-shadow-inner",
+          this.props.narrow ? "mr-px-2" : "mr-px-4",
+          {
+            "lg:ml-ml-6 xl:mr-ml-12": !this.props.leftAligned,
+            "mr-py-2": !this.props.short,
           },
           this.props.className
         )}
       >
-        <label className="mr-mr-2" htmlFor="input-search">
+        <label className="mr-mr-2 mr-flex mr-items-center" htmlFor="input-search">
           {!isLoading && !this.props.suppressIcon &&
            <SvgSymbol
              sym="search-icon"
              title="Search"
              viewBox="0 0 20 20"
-             className="mr-fill-current mr-w-5 mr-h-5"
+             className={this.props.iconClassName ? this.props.iconClassName : "mr-w-4 mr-h-4 mr-mr-2 mr-fill-white-50"}
            />
           }
           {isLoading && <BusySpinner inline />}
         </label>
         <input
           type="text"
-          className={classNames("mr-appearance-none mr-w-full mr-bg-transparent mr-outline-none mr-shadow-none mr-rounded-none", this.props.inputClassName)}
+          className={classNames(
+            "mr-appearance-none mr-w-full mr-bg-transparent mr-outline-none mr-shadow-none mr-rounded-none mr-text-white mr-leading-normal",
+            this.props.inputClassName
+          )}
           placeholder={this.props.placeholder}
           maxLength="63"
           onChange={this.queryChanged}
@@ -91,6 +110,9 @@ export default class SearchBox extends Component {
 
         {doneButton}
         {clearButton}
+        {this.props.showSearchTypeFilter &&
+          <SearchTypeFilter {...this.props} />
+        }
       </div>
     )
   }

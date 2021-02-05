@@ -14,24 +14,54 @@ export default defineMessages({
     defaultMessage: "Tasks awaiting review",
   },
 
+  awaitingMetaReview: {
+    id: "ReviewStatus.metrics.awaitingMetaReview",
+    defaultMessage: "Tasks awaiting meta-review",
+  },
+
+  awaitingMetaReReview: {
+    id: "ReviewStatus.metrics.awaitingMetaReReview",
+    defaultMessage: "Tasks needing meta re-review",
+  },
+
   approvedReview: {
     id: "ReviewStatus.metrics.approvedReview",
-    defaultMessage: "Review tasks that passed",
+    defaultMessage: "Reviewed tasks that passed",
   },
 
   rejectedReview: {
     id: "ReviewStatus.metrics.rejectedReview",
-    defaultMessage: "Review tasks that failed",
+    defaultMessage: "Reviewed tasks that failed",
   },
 
   assistedReview: {
     id: "ReviewStatus.metrics.assistedReview",
-    defaultMessage: "Review tasks that passed with fixes",
+    defaultMessage: "Reviewed tasks that passed with fixes",
   },
 
   disputedReview: {
     id: "ReviewStatus.metrics.disputedReview",
-    defaultMessage: "Review tasks that have been contested",
+    defaultMessage: "Reviewed tasks that have been contested",
+  },
+
+  metaRequestedReview: {
+    id: "ReviewStatus.metrics.metaRequestedReview",
+    defaultMessage: "Reviewed tasks that need a meta re-review",
+  },
+
+  metaApprovedReview: {
+    id: "ReviewStatus.metrics.metaApprovedReview",
+    defaultMessage: "Reviewed tasks that passed meta-review",
+  },
+
+  metaRejectedReview: {
+    id: "ReviewStatus.metrics.metaRejectedReview",
+    defaultMessage: "Reviewed tasks that have failed meta-review",
+  },
+
+  metaAssistedReview: {
+    id: "ReviewStatus.metrics.metaAssistedReview",
+    defaultMessage: "Reviewed tasks that passed meta review with fixes",
   },
 
   fixed: {
@@ -52,5 +82,35 @@ export default defineMessages({
   tooHard: {
     id: "ReviewStatus.metrics.tooHard",
     defaultMessage: "TOO HARD",
+  },
+
+  byPriorityToggle: {
+    id: "ReviewStatus.metrics.priority.toggle",
+    defaultMessage: "View by Task Priority"
+  },
+
+  priorityLabel: {
+    id: "ReviewStatus.metrics.priority.label",
+    defaultMessage: "{priority} Priority Tasks"
+  },
+
+  byTaskStatusToggle: {
+    id: "ReviewStatus.metrics.byTaskStatus.toggle",
+    defaultMessage: "View by Task Status"
+  },
+
+  taskStatusLabel: {
+    id: "ReviewStatus.metrics.taskStatus.label",
+    defaultMessage: "{status} Tasks"
+  },
+
+  avgTimeSpent: {
+    id: "ReviewStatus.metrics.averageTime.label",
+    defaultMessage: "Avg time per review:"
+  },
+
+  loadMetricsLabel: {
+    id: "ReviewStatus.metrics.controls.loadMetrics.label",
+    defaultMessage: "Load Metrics"
   },
 })

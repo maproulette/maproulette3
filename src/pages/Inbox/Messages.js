@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Refresh",
   },
 
+  groupByTaskLabel: {
+    id: "Inbox.controls.groupByTask.label",
+    defaultMessage: "Group by Task",
+  },
+
   manageSubscriptionsLabel: {
     id: "Inbox.controls.manageSubscriptions.label",
     defaultMessage: "Manage Subscriptions",
@@ -99,6 +104,51 @@ export default defineMessages({
     defaultMessage: "The mapper has revised their work and is requesting an additional review.",
   },
 
+  reviewRevisedNotificationLead: {
+    id: "Inbox.reviewRevisedNotification.lead",
+    defaultMessage: "Another reviewer has revised your review.",
+  },
+
+  metaReviewApprovedNotificationLead: {
+    id: "Inbox.metaReviewApprovedNotification.lead",
+    defaultMessage: "Good news! Your task review has been meta-reviewed and approved.",
+  },
+
+  metaReviewApprovedWithFixesNotificationLead: {
+    id: "Inbox.metaReviewApprovedWithFixesNotification.lead",
+    defaultMessage: "Your task review been approved (with some fixes made for you by the meta-reviewer).",
+  },
+
+  metaReviewRejectedNotificationLead: {
+    id: "Inbox.metaReviewRejectedNotification.lead",
+    defaultMessage: "Following a meta-review of your task review, the meta-reviewer has determined that it needs some additional work.",
+  },
+
+  metaReviewAgainNotificationLead: {
+    id: "Inbox.metaReviewAgainNotification.lead",
+    defaultMessage: "The reviewer has revised their review and is requesting an additional meta-review.",
+  },
+
+  challengeCompleteNotificationLead: {
+    id: "Inbox.challengeCompleteNotification.lead",
+    defaultMessage: "A challenge you manage has been completed.",
+  },
+
+  mapperChallengeCompleteNotificationLead: {
+    id: "Inbox.mapperChallengeCompleteNotification.lead",
+    defaultMessage: "A challenge you worked on has been completed. Thank you for contributing!",
+  },
+
+  teamInviteNotificationLead: {
+    id: "Inbox.teamNotification.invited.lead",
+    defaultMessage: "You've been invited to join a team!",
+  },
+
+  followedNotificationLead: {
+    id: "Inbox.followNotification.followed.lead",
+    defaultMessage: "You have a new follower!",
+  },
+
   deleteNotificationLabel: {
     id: "Inbox.notification.controls.deleteNotification.label",
     defaultMessage: "Delete",
@@ -107,5 +157,25 @@ export default defineMessages({
   viewTaskLabel: {
     id: "Inbox.notification.controls.viewTask.label",
     defaultMessage: "View Task",
+  },
+
+  reviewTaskLabel: {
+    id: "Inbox.notification.controls.reviewTask.label",
+    defaultMessage: "Review Task",
+  },
+
+  manageChallengeLabel: {
+    id: "Inbox.notification.controls.manageChallenge.label",
+    defaultMessage: "Manage Challenge",
+  },
+
+  findMoreChallengesLabel: {
+    id: "Inbox.notification.controls.findMoreChallenge.label",
+    defaultMessage: "Find more challenges to map!",
+  },
+
+  viewTeamsLabel: {
+    id: "Inbox.notification.controls.viewTeams.label",
+    defaultMessage: "View Teams",
   },
 })

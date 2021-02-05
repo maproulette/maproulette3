@@ -10,13 +10,16 @@ import { RESULTS_PER_PAGE } from '../../../../services/Search/Search'
 import { fetchManageableProjects,
          fetchProject,
          fetchProjectsById,
+         searchProjects,
          addProjectManager,
-         setProjectManagerGroupType,
+         setProjectManagerRole,
          fetchProjectManagers,
          removeProjectManager,
          saveProject,
          removeProject,
          deleteProject} from '../../../../services/Project/Project'
+import { setTeamProjectRole, removeTeamFromProject }
+       from '../../../../services/Team/Team'
 import { addChallenge,
          removeChallenge } from '../../../../services/Project/VirtualProject'
 import { fetchProjectChallengeListing }
@@ -115,17 +118,20 @@ const mapStateToProps = state => ({
   entities: state.entities
 })
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   const actions = bindActionCreators({
     fetchManageableProjects,
     fetchProject,
     fetchProjectsById,
     fetchProjectChallengeListing,
+    searchProjects,
     saveProject,
     addProjectManager,
+    setTeamProjectRole,
     fetchProjectManagers,
-    setProjectManagerGroupType,
+    setProjectManagerRole,
     removeProjectManager,
+    removeTeamFromProject,
     addChallenge,
     removeChallenge,
   }, dispatch)
@@ -134,6 +140,11 @@ const mapDispatchToProps = dispatch => {
     // Optimistically remove the project.
     dispatch(removeProject(projectId))
     return dispatch(deleteProject(projectId, immediate))
+  }
+
+  actions.toggleProjectEnabled = project => {
+    const updatedProject = Object.assign({}, project, {enabled: !project.enabled})
+    return dispatch(saveProject(updatedProject, ownProps.user))
   }
 
   return actions

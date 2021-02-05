@@ -67,7 +67,7 @@ export const dynamicLayerWithId = (layerId, ownProps) => {
     return challengeLayer
   }
 
-  const userLayer = AsMappingUser(ownProps.user).defaultLayerSource()
+  const userLayer = AsMappingUser(ownProps.user).findLayerSource(layerId)
   if (userLayer && userLayer.id === layerId) {
     return userLayer
   }
@@ -82,7 +82,6 @@ export const mapStateToProps = (state, ownProps) => {
   if (_isFinite(challengeId)) {
     if (_isString(ownProps.visibleMapLayer)) {
       source = layerSourceWithId(ownProps.visibleMapLayer)
-
       if (!source) {
         // Try a dynamic layer
         source = dynamicLayerWithId(ownProps.visibleMapLayer, ownProps)

@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   contactOwnerLabel: {
     id: 'Task.controls.contactOwner.label',
-    defaultMessage: 'Contact Owner',
+    defaultMessage: 'Contact Challenge Owner',
   },
 
   contactLinkLabel: {

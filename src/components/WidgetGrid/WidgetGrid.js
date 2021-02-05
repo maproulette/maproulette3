@@ -32,8 +32,10 @@ export class WidgetGrid extends Component {
 
     const GridFilters = this.props.filterComponent
     const conditionalWidgets = this.props.workspace.conditionalWidgets || []
+    const permanentWidgets = this.props.workspace.permanentWidgets || []
     const widgetInstances =
       _map(this.props.workspace.widgets, (widgetConfiguration, index) => {
+        const widgetPermanent = permanentWidgets.indexOf(widgetConfiguration.widgetKey) !== -1
         let widgetHidden = false
         const WidgetComponent = widgetComponent(widgetConfiguration)
         if (!WidgetComponent) {
@@ -72,12 +74,15 @@ export class WidgetGrid extends Component {
               "zIndex": widgetHidden ? 0 : (highestY - widgetLayout.y), // higher values towards top of page
             }}
           >
-            <WidgetComponent {...this.props}
-                            widgetLayout={widgetLayout}
-                            widgetConfiguration={_get(widgetConfiguration, 'defaultConfiguration', {})}
-                            updateWidgetConfiguration={conf => this.props.updateWidgetConfiguration(index, conf)}
-                            widgetHidden={widgetHidden}
-                            removeWidget={() => this.props.removeWidget(index)} />
+            <WidgetComponent
+              {...this.props}
+              widgetLayout={widgetLayout}
+              widgetConfiguration={_get(widgetConfiguration, 'defaultConfiguration', {})}
+              updateWidgetConfiguration={conf => this.props.updateWidgetConfiguration(index, conf)}
+              widgetHidden={widgetHidden}
+              widgetPermanent={widgetPermanent}
+              removeWidget={() => this.props.removeWidget(index)}
+            />
           </div>
         )
       })
@@ -91,9 +96,15 @@ export class WidgetGrid extends Component {
              {this.props.editNameControl}
              <WidgetPicker {...this.props} isRight onWidgetSelected={this.props.addWidget} />
              {this.props.doneEditingControl}
+             {this.props.cancelEditingControl}
            </React.Fragment>
           }
         </div>
+        {this.props.subHeader &&
+         <div className={classNames({"mr-mt-24": this.props.isEditing})}>
+           {this.props.subHeader}
+         </div>
+        }
 
         <GridLayout
           className="widget-grid"

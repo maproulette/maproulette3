@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
-import xmlLang from 'react-syntax-highlighter/dist/languages/hljs/xml'
-import highlightColors from 'react-syntax-highlighter/dist/styles/hljs/agate'
+import xmlLang from 'react-syntax-highlighter/dist/esm/languages/hljs/xml'
+import highlightColors from 'react-syntax-highlighter/dist/esm/styles/hljs/agate'
 import vkbeautify from 'vkbeautify'
 import _values from 'lodash/values'
 import _filter from 'lodash/filter'
@@ -32,6 +32,12 @@ export class TagDiffVisualization extends Component {
     addingTag: false,      // user is adding a new tag
     newTagName: null,      // name of new tag being added
     newTagValid: false,    // whether new tag name can be added
+  }
+
+  componentDidMount() {
+    if (this.props.editMode) {
+      this.beginEditing()
+    }
   }
 
   /**
@@ -97,6 +103,7 @@ export class TagDiffVisualization extends Component {
     }
     else {
       tagEdits[tagName].status = 'removed'
+      tagEdits[tagName].newValue = null
     }
 
     this.setState({tagEdits})
@@ -269,7 +276,7 @@ export class TagDiffVisualization extends Component {
         </div>
       )
     }
-        
+
     const tagNames = tagChanges.map(change => (
       <li
         className='mr-border-2 mr-border-transparent mr-my-2 mr-py-3 mr-flex mr-h-6 mr-items-center'
@@ -334,6 +341,7 @@ export class TagDiffVisualization extends Component {
             <React.Fragment>
               <input
                 type="text"
+                className="mr-text-black mr-px-2"
                 value={change.newValue}
                 onChange={e => this.updateTagValue(change.name, e.target.value)}
               />
@@ -455,7 +463,7 @@ export const AddTagControl = props => {
     <div className="mr-flex">
       <input
         type="text"
-        className="mr-mr-2"
+        className="mr-mr-2 mr-text-black mr-px-2"
         value={props.newTagName}
         onChange={e => props.setNewTagName(e.target.value)}
         placeholder={props.intl.formatMessage(messages.tagNamePlaceholder)}

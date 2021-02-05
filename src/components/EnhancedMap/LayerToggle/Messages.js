@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Task Features"
   },
 
+  showPriorityBoundsLabel: {
+    id: "LayerToggle.controls.showPriorityBounds.label",
+    defaultMessage: "Priority Bounds"
+  },
+
   showOSMDataLabel: {
     id: "LayerToggle.controls.showOSMData.label",
     defaultMessage: "OSM Data",
@@ -19,9 +24,14 @@ export default defineMessages({
     defaultMessage: "Mapillary"
   },
 
-  moreMapillaryLabel: {
-    id: "LayerToggle.controls.moreMapillary.label",
+  moreLabel: {
+    id: "LayerToggle.controls.more.label",
     defaultMessage: "More"
+  },
+
+  showOpenStreetCamLabel: {
+    id: "LayerToggle.controls.showOpenStreetCam.label",
+    defaultMessage: "OpenStreetCam"
   },
 
   imageCount: {

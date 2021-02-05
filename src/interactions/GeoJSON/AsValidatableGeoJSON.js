@@ -3,7 +3,12 @@ import _isString from 'lodash/isString'
 import _flatten from 'lodash/flatten'
 import _map from 'lodash/map'
 import _trim from 'lodash/trim'
+import { featureEach } from '@turf/meta'
+import { getGeom } from '@turf/invariant'
 import AsLineReadableFile from '../File/AsLineReadableFile'
+import messages from './Messages'
+
+const RS = String.fromCharCode(0x1E) // RS (record separator) control char
 
 /**
  * Provides methods related to validating and linting GeoJSON.
@@ -36,15 +41,32 @@ export class AsValidatableGeoJSON {
     }
 
     // Our detection approach here is pretty rudimentary, basically looking for
-    // open-brace at start of line and close-brace at end of line (optionally
-    // followed by a newline), and then checking the first two lines to see if
-    // they match
+    // either RFC 7464 compliance or an open-brace at start of line and
+    // close-brace at end of line (optionally followed by a newline) on the
+    // first two lines
     this.geoJSONFile.rewind()
     const lines = await this.geoJSONFile.readLines(2)
     this.geoJSONFile.rewind()
 
     const re = /^\{[^\n]+\}(\r?\n|$)/
-    return lines.length > 1 && re.test(lines[0]) && re.test(lines[1])
+    return this.isRFC7464Sequence(lines[0]) ||
+           (re.test(lines[0]) && re.test(lines[1]))
+  }
+
+  /**
+   * Performs basic check to see if this is RFC 7464 compliant, which is to say
+   * each line begins with a RS (record separator) control character
+   */
+  isRFC7464Sequence(line) {
+    return line && line.length > 1 && line[0] === RS
+  }
+
+  /**
+   * Normalize a RFC 7464 sequence by stripping any RS characters from the beginning
+   * of the line. This is safe to run on strings containing ordinary JSON as well
+   */
+  normalizeRFC7464Sequence(line) {
+    return line.replace(new RegExp(`^${RS}+`, 'g'), '')
   }
 
   /**
@@ -56,18 +78,30 @@ export class AsValidatableGeoJSON {
     let lineNumber = 1
 
     this.geoJSONFile.rewind()
-    this.geoJSONFile.forEach(1, rawLine => {
-      const line = _trim(rawLine)
+    await this.geoJSONFile.forEach(1, rawLine => {
+      const line = this.normalizeRFC7464Sequence(_trim(rawLine))
       if (line.length > 0) { // Skip blank lines or pure whitespace
         try {
           const geoJSONObject = JSON.parse(line)
-          const errors = geojsonhint.hint(geoJSONObject)
-          if (errors.length > 0) {
-            // remap line numbers
-            allErrors.push(_map(errors, error => ({
-              line: lineNumber,
-              message: error.message,
-            })))
+          if (geoJSONObject) {
+            try {
+              this.flagUnsupportedGeometries(geoJSONObject)
+            }
+            catch(errorMessage) {
+              allErrors.push({
+                line: lineNumber,
+                message: errorMessage,
+              })
+            }
+
+            const errors = geojsonhint.hint(geoJSONObject)
+            if (errors.length > 0) {
+              // remap line numbers
+              allErrors.push(_map(errors, error => ({
+                line: lineNumber,
+                message: error.message,
+              })))
+            }
           }
         }
         catch(parseError) {
@@ -108,7 +142,34 @@ export class AsValidatableGeoJSON {
       return [{message: `${parseError}`}]
     }
 
+    if (geoJSONObject) {
+      try {
+        this.flagUnsupportedGeometries(geoJSONObject)
+      }
+      catch(errorMessage) {
+        return [{message: errorMessage}]
+      }
+    }
+
     return geojsonhint.hint(geoJSONObject)
+  }
+
+  /**
+   * Throw error if unsupported (even if technically legal) geometries are
+   * discovered, as otherwise these will simply result in errors or other
+   * problematic behavior on the backend
+   */
+  flagUnsupportedGeometries(geoJSONObject) {
+    featureEach(geoJSONObject, feature => {
+      const geom = getGeom(feature)
+      if (!geom) {
+        throw messages.noNullGeometry
+      }
+
+      if (geom.type === "Point" && geom.coordinates.length > 2) {
+        throw messages.noZCoordinates
+      }
+    })
   }
 }
 

@@ -24,4 +24,36 @@ export default defineMessages({
     id: "Notification.type.review.again",
     defaultMessage: "Review"
   },
+  reviewRevised: {
+    id: "Notification.type.review.revised",
+    defaultMessage: "Review Revised"
+  },
+  challengeCompleted: {
+    id: "Notification.type.challengeCompleted",
+    defaultMessage: "Completed"
+  },
+  challengeCompletedLong: {
+    id: "Notification.type.challengeCompletedLong",
+    defaultMessage: "Challenge Completed"
+  },
+  mapperChallengeCompleted: {
+    id: "Notification.type.challengeCompleted",
+    defaultMessage: "Completed"
+  },
+  team: {
+    id: "Notification.type.team",
+    defaultMessage: "Team"
+  },
+  follow: {
+    id: "Notification.type.follow",
+    defaultMessage: "Follow"
+  },
+  metaReview: {
+    id: "Notification.type.metaReview",
+    defaultMessage: "Meta-Review"
+  },
+  metaReviewAgain: {
+    id: "Notification.type.metaReviewAgain",
+    defaultMessage: "Meta-Review Again"
+  },
 })

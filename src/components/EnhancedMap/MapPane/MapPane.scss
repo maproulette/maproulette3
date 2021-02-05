@@ -29,11 +29,20 @@
 
         animation: marker-bounce 2s cubic-bezier(0.175, 0.885, 0.32, 1.275); // easeOutBack
       }
+
+      &.leaflet-popup-pane {
+        z-index: 100;
+      }
+
+      &.custom-pane img {
+        max-width: none !important;
+      }
     }
 
     .leaflet-control-container {
       .leaflet-top.leaflet-right, .leaflet-top.leaflet-left,
       .leaflet-bottom.leaflet-right, .leaflet-bottom.leaflet-left {
+        -webkit-transform: translate3d(0,0,0); // hack to get Safari to honor z-index
         z-index: $layer-map-control;
 
         .leaflet-control, .leaflet-bar  {
@@ -184,7 +193,7 @@
     }
   }
 
-  .busy-spinner {
+  .busy-spinner:not(.mr-static) {
     @include busy-spinner-color($grey);
     @include busy-spinner-size(30px);
 

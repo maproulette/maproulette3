@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
-import './ChallengeKeywords.scss'
 
 /**
  * ChallengeKeywords renders the keywords of the given challenge as a tag set.
@@ -22,12 +21,12 @@ export default class ChallengeKeywords extends Component {
         return null
       }
 
-      return <span className="tag" key={keyword}>{keyword}</span>
+      return <span className="mr-bg-white-10 mr-text-white mr-mr-2 mr-mb-2 mr-py-1 mr-px-2 mr-rounded" key={keyword}>{keyword}</span>
     }))
 
     return (
       <div
-        className={classNames("challenge-keywords", this.props.className)}
+        className={classNames("mr-flex mr-flex-wrap", this.props.className)}
       >
         {keywords}
       </div>

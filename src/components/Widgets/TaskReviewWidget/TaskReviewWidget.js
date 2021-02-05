@@ -5,6 +5,7 @@ import { WidgetDataTarget, registerWidgetType }
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import ReviewTaskControls from '../../ReviewTaskControls/ReviewTaskControls'
 import QuickWidget from '../../QuickWidget/QuickWidget'
+import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
 import messages from './Messages'
 
 const descriptor = {
@@ -19,18 +20,29 @@ const descriptor = {
 
 export default class TaskReviewWidget extends Component {
   render() {
-    const taskControls = <ReviewTaskControls {...this.props} className="mr-px-4" />
+    const title = this.props.asMetaReview ?
+      <FormattedMessage {...messages.metaReviewTaskTitle} /> :
+      (this.props.task.metaReviewStatus === TaskReviewStatus.rejected ?
+        <FormattedMessage {...messages.reviewRevisionTaskTitle} /> :
+        <FormattedMessage {...messages.reviewTaskTitle} />
+      )
 
     return (
       <QuickWidget
         {...this.props}
         className="task-controls-widget"
-        widgetTitle={
-          <FormattedMessage {...messages.reviewTaskTitle} />
-        }
+        widgetTitle={title}
         noMain
       >
-        {taskControls}
+        {this.props.taskBundle &&
+         <div className="mr-text-pink-light mr-mb-2 mr-text-base">
+           <FormattedMessage
+             {...messages.simultaneousTasks}
+             values={{taskCount: this.props.taskBundle.tasks.length}}
+           />
+         </div>
+        }
+        <ReviewTaskControls {...this.props} className="" />
       </QuickWidget>
     )
   }

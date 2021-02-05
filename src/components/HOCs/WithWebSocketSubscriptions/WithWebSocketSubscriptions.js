@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { subscribeToReviewMessages, unsubscribeFromReviewMessages }
+import { subscribeToReviewMessages,
+         unsubscribeFromReviewMessages,
+         subscribeToChallengeTaskMessages,
+         unsubscribeFromChallengeTaskMessages }
        from '../../../services/Task/Task'
 
 /**
@@ -18,6 +21,8 @@ export const WithWebSocketSubscriptions = function(WrappedComponent) {
           {...this.props}
           subscribeToReviewMessages={this.props.subscribeToReviewMessages}
           unsubscribeFromReviewMessages={this.props.unsubscribeFromReviewMessages}
+          subscribeToChallengeTaskMessages={this.props.subscribeToChallengeTaskMessages}
+          unsubscribeFromChallengeTaskMessages={this.props.unsubscribeFromChallengeTaskMessages}
         />
       )
     }
@@ -27,6 +32,8 @@ export const WithWebSocketSubscriptions = function(WrappedComponent) {
 const mapDispatchToProps = dispatch => ({
   subscribeToReviewMessages: () => subscribeToReviewMessages(dispatch),
   unsubscribeFromReviewMessages: () => unsubscribeFromReviewMessages(),
+  subscribeToChallengeTaskMessages: challengeId => subscribeToChallengeTaskMessages(dispatch, challengeId),
+  unsubscribeFromChallengeTaskMessages: challengeId => unsubscribeFromChallengeTaskMessages(challengeId),
 })
 
 export default WrappedComponent =>

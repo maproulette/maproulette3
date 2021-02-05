@@ -5,11 +5,14 @@ import _get from 'lodash/get'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import _toNumber from 'lodash/toNumber'
+import _cloneDeep from 'lodash/cloneDeep'
 import queryString from 'query-string'
 import { loadUserSettings,
          updateUserSettings,
          updateNotificationSubscriptions,
          resetAPIKey } from '../../../services/User/User'
+import { osmUserProfileURL } from '../../../services/OSM/OSM'
+import { buildOSMChaUrl } from '../../../services/OSMCha/OSMCha'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 
 /**
@@ -77,13 +80,14 @@ const WithTargetUser = function(WrappedComponent, limitToSuperUsers) {
         targetUser = props.user
       }
 
-      if (_get(targetUser, 'osmProfile.avatarURL')) {
-        const avatarURL = targetUser.osmProfile.avatarURL
+      const avatarURL = _get(targetUser, 'osmProfile.avatarURL')
+      if (avatarURL && avatarURL.indexOf('?') !== -1) {
         const avatarUrlBase = avatarURL.substring(avatarURL.indexOf('?'), 0)
         const avatarUrlParams = avatarURL.substring(avatarURL.indexOf('?') + 1)
         let parsedAvatarURLparams = queryString.parse(avatarUrlParams)
         parsedAvatarURLparams = _omit(parsedAvatarURLparams, ['s']) // omit size param coming from server and use `&s={size}` in requests
         const newAvatarUrl = `${avatarUrlBase}?${queryString.stringify(parsedAvatarURLparams)}`
+        targetUser = _cloneDeep(targetUser)
         targetUser.osmProfile.avatarURL = newAvatarUrl
       }
 
@@ -111,10 +115,14 @@ const WithTargetUser = function(WrappedComponent, limitToSuperUsers) {
     render() {
       const targetUser = this.getTargetUser(this.props)
 
-      return <WrappedComponent {..._omit(this.props, ['allUsers'])}
-                               targetUser={targetUser}
-                               showingUserId={this.state.showingUserId}
-                               loading={this.state.loading} />
+      return <WrappedComponent
+        {..._omit(this.props, ['allUsers'])}
+        targetUser={targetUser}
+        showingUserId={this.state.showingUserId}
+        loading={this.state.loading}
+        targetUserOSMProfileUrl={() => osmUserProfileURL(targetUser.osmProfile.displayName)}
+        targetUserOSMChaProfileUrl={() => buildOSMChaUrl(null, null, [targetUser.osmProfile.displayName])}
+      />
     }
   }
 }

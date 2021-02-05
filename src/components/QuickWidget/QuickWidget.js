@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
+import messages from './Messages'
 
 /**
  * QuickWidget makes creation of widgets easier by encapsulating the needed
@@ -14,14 +16,31 @@ import classNames from 'classnames'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class QuickWidget extends Component {
+  state = {
+    error: false,
+  }
+
+  componentDidCatch(error, info) {
+    console.log(error)
+    this.setState({error: true})
+  }
+
   render() {
     if (this.props.widgetHidden) {
       return null
     }
 
+    if (this.state.error) {
+      return (
+        <div className="mr-text-lg mr-text-red-light mr-flex mr-justify-center mr-items-center">
+          <FormattedMessage {...messages.widgetFailure} />
+        </div>
+      )
+    }
+
     return (
       <section className={classNames("mr-flex mr-flex-col mr-h-full", this.props.className, {"mr-mb-4": this.props.isEditing})}>
-        {this.props.isEditing && !this.props.permanent &&
+        {this.props.isEditing && !this.props.permanent && !this.props.widgetPermanent &&
          <button
            className="mr-card-widget__delete"
            onClick={this.props.removeWidget}

@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
-import Form from 'react-jsonschema-form'
+import Form from '@rjsf/core'
 import _merge from 'lodash/merge'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
+import _isFinite from 'lodash/isFinite'
+import _filter from 'lodash/filter'
+import _isEmpty from 'lodash/isEmpty'
+import _split from 'lodash/split'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -37,6 +41,8 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class EditTask extends Component {
+  challengeState = null
+
   state = {
     formData: {},
     isSaving: false,
@@ -51,14 +57,18 @@ export class EditTask extends Component {
    */
   rerouteAfterCompletion = () => {
     if (_get(this.props, 'location.state.fromTaskInspect')) {
-      this.props.history.push(
-        `/admin/project/${this.props.projectId}/` +
-        `challenge/${this.props.challengeId}/task/${this.props.task.id}/inspect`
-      )
+      this.props.history.push({
+        pathname: `/admin/project/${this.props.projectId}/` +
+          `challenge/${this.props.challengeId}/task/${this.props.task.id}/inspect`,
+        state: this.challengeState
+      })
     }
     else {
-      this.props.history.push(`/admin/project/${this.props.projectId}/` +
-                              `challenge/${this.props.challengeId}`)
+      this.props.history.push({
+        pathname:`/admin/project/${this.props.projectId}/` +
+          `challenge/${this.props.challengeId}`,
+        state: this.challengeState
+      })
     }
   }
 
@@ -76,7 +86,28 @@ export class EditTask extends Component {
   /** Cancel editing */
   cancel = () => this.rerouteAfterCompletion()
 
+  componentDidMount() {
+    this.challengeState = this.props.history.location.state
+    window.scrollTo(0, 0)
+  }
+
   render() {
+    // We may have a task id lying around in redux, but at least make sure we
+    // have a task status and geometries before proceeding to load the form
+    if (!_isFinite(_get(this.props, 'task.status')) ||
+        !_isObject(_get(this.props, 'task.geometries')) ||
+        !this.props.challenge || !this.props.project) {
+      return (
+        <div className="admin__manage edit-task">
+          <div className="admin__manage__pane-wrapper">
+            <div className="admin__manage__primary-content">
+              <BusySpinner />
+            </div>
+          </div>
+        </div>
+      )
+    }
+
     const taskData = _merge({}, this.props.task, this.state.formData)
 
     // Present the geometries as a string rather than object
@@ -89,8 +120,23 @@ export class EditTask extends Component {
     const customFields = {
       DescriptionField: MarkdownDescriptionField,
       markdown: MarkdownEditField,
-      tags: (props) => <KeywordAutosuggestInput {...props} tagType={"tasks"}
-        placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />,
+      tags: (props) => {
+        const preferredTags =
+          _filter(
+            _split(_get(this.props.task, 'parent.preferredTags'), ','),
+            (result) => !_isEmpty(result)
+          )
+
+        return (
+          <KeywordAutosuggestInput
+            {...props}
+            inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
+            tagType={"tasks"}
+            preferredResults={preferredTags}
+            placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
+          />
+        )
+      },
     }
 
     return (
@@ -100,7 +146,7 @@ export class EditTask extends Component {
             <div className="admin__manage__header">
               <nav className="breadcrumb" aria-label="breadcrumbs">
                 <ul>
-                  <li>
+                  <li className="nav-title">
                     <Link to='/admin/projects'>
                       <FormattedMessage {...manageMessages.manageHeader} />
                     </Link>
@@ -113,7 +159,10 @@ export class EditTask extends Component {
                   </li>
                   {_isObject(this.props.challenge) &&
                     <li>
-                      <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
+                      <Link to={{
+                        pathname: `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`,
+                        state: this.challengeState
+                      }}>
                         {this.props.challenge.name}
                       </Link>
                     </li>
@@ -133,28 +182,37 @@ export class EditTask extends Component {
               </nav>
             </div>
 
-            <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
-              <Form schema={jsSchema(this.props.intl, this.props.task)}
-                    uiSchema={uiSchema(this.props.intl)}
-                    widgets={{SelectWidget: CustomSelectWidget}}
-                    fields={customFields}
-                    liveValidate
-                    noHtml5Validate
-                    showErrorList={false}
-                    formData={taskData}
-                    onChange={this.changeHandler}
-                    onSubmit={this.finish}
-                    tagType="tasks">
-                <div className="mr-flex mr-justify-end mr-mt-8">
-                  <button className="mr-button mr-button--green"
-                          disabled={this.state.isSaving}
-                          onClick={this.cancel}>
+            <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+              <Form
+                schema={jsSchema(this.props.intl, this.props.task)}
+                uiSchema={uiSchema(this.props.intl)}
+                widgets={{SelectWidget: CustomSelectWidget}}
+                className="form"
+                fields={customFields}
+                liveValidate
+                noHtml5Validate
+                showErrorList={false}
+                formData={taskData}
+                onChange={this.changeHandler}
+                onSubmit={this.finish}
+                tagType="tasks"
+              >
+                <div className="mr-flex mr-justify-between mr-items-center mr-mt-8">
+                  <button
+                    className="mr-button mr-button--white"
+                    disabled={this.state.isSaving}
+                    onClick={this.cancel}
+                  >
                     <FormattedMessage {...messages.cancel} />
                   </button>
 
-                  <button className={classNames("mr-button mr-button--green mr-ml-4",
-                                                {"is-loading": this.state.isSaving})}
-                          onClick={this.props.finish}>
+                  <button
+                    className={classNames(
+                      "mr-button mr-button--green-lighter mr-ml-4",
+                      {"is-loading": this.state.isSaving}
+                    )}
+                    onClick={this.props.finish}
+                  >
                     <FormattedMessage {...messages.save} />
                   </button>
                 </div>

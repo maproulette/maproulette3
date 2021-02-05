@@ -35,18 +35,24 @@ export default class CalendarHeatmapWidget extends Component {
 
     const selector =
       <PastDurationSelector
-        className="mr-button mr-button--blue mr-mr-8"
+        className="mr-button mr-button--green-lighter mr-button--small"
         pastMonthsOptions={[3, 6, 9, 12]}
         currentMonthsPast={monthsPast}
         selectDuration={this.setMonthsPast}
       />
 
     return (
-      <QuickWidget {...this.props}
-                  className={`calendar-heatmap-widget months-${monthsPast}`}
-                  headerControls={selector}
-                  widgetTitle={<FormattedMessage {...messages.title} />}>
-        <CalendarHeatmap {...this.props} suppressHeading months={monthsPast} />
+      <QuickWidget
+        {...this.props}
+        className={`calendar-heatmap-widget months-${monthsPast}`}
+        rightHeaderControls={<div className="mr-my-2">{selector}</div>}
+        widgetTitle={<FormattedMessage {...messages.title} />}
+      >
+        <CalendarHeatmap
+          {...this.props}
+          suppressHeading
+          months={monthsPast}
+        />
       </QuickWidget>
     )
   }

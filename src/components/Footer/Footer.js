@@ -28,10 +28,17 @@ class Footer extends Component {
               <ul className="mr-list-reset mr-text-sm">
                 <li>
                   <a
-                    href="https://github.com/osmlab/maproulette3/wiki"
+                    href={process.env.REACT_APP_DOCS_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                   ><FormattedMessage {...messages.getHelp} /></a>
+                </li>
+                <li>
+                  <a
+                    href={process.env.REACT_APP_BLOG_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  ><FormattedMessage {...messages.viewBlog} /></a>
                 </li>
                 <li>
                   <a

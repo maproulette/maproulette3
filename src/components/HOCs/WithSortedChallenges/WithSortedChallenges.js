@@ -8,8 +8,10 @@ import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import _toLower from 'lodash/toLower'
+import { isCooperative }
+       from '../../../services/Challenge/CooperativeType/CooperativeType'
 import WithChallengeSearch from '../WithSearch/WithChallengeSearch'
-import { SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_SUGGESTED_FIX }
+import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE_WORK }
        from '../../../services/Search/Search'
 
 const FEATURED_POINTS = -1
@@ -26,12 +28,16 @@ export const sortChallenges = function(props, challengesProp='challenges') {
     sortedChallenges = _reverse(_sortBy(sortedChallenges,
       c => c.created ? c.created : ''))
   }
+  else if (sortCriteria === SORT_OLDEST) {
+    sortedChallenges = (_sortBy(sortedChallenges, 
+      c => c.created ? c.created : ''))
+  }
   else if (sortCriteria === SORT_POPULARITY) {
     sortedChallenges = _reverse(_sortBy(sortedChallenges,
       c => _isFinite(c.popularity) ? c.popularity : 0))
   }
-  else if (sortCriteria === SORT_SUGGESTED_FIX) {
-    sortedChallenges = _sortBy(sortedChallenges, c => c.hasSuggestedFixes ? 0 : 1)
+  else if (sortCriteria === SORT_COOPERATIVE_WORK) {
+    sortedChallenges = _sortBy(sortedChallenges, c => isCooperative(c.cooperativeType) ? 0 : 1)
   }
   else {
     // default sort. Prioritizes featured and user-saved challenges,

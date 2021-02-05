@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import wrapWithClickout from 'react-clickout'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import { ExternalContext } from '../External/External'
 
 class Dropdown extends Component {
+  static contextType = ExternalContext
+
   state = {
     isVisible: false,
   }
@@ -18,7 +21,9 @@ class Dropdown extends Component {
   }
 
   handleClickout() {
-    this.closeDropdown()
+    if (!this.context.clickoutSuspended) {
+      this.closeDropdown()
+    }
   }
 
   render() {
@@ -32,18 +37,20 @@ class Dropdown extends Component {
     }
 
     return (
-      <div className={classNames('mr-dropdown', this.props.className)}>
+      <div className={classNames('mr-dropdown', this.props.className)} {...this.props.rootProps}>
         {this.props.dropdownButton(renderFuncArgs)}
         {isDropdownVisible && (
-          <div className="mr-dropdown__wrapper">
+          <div className={classNames("mr-dropdown__wrapper", this.props.wrapperClassName)}>
             <div className="mr-dropdown__main">
-              <div className="mr-dropdown__inner">
-                <SvgSymbol
-                  sym="icon-triangle"
-                  viewBox="0 0 15 10"
-                  className="mr-dropdown__arrow"
-                  aria-hidden
-                />
+              <div className={classNames("mr-dropdown__inner", this.props.innerClassName, {"mr-fixed": this.props.fixedMenu})}>
+                {!this.props.suppressControls &&
+                 <SvgSymbol
+                   sym="icon-triangle"
+                   viewBox="0 0 15 10"
+                   className={classNames("mr-dropdown__arrow", this.props.arrowClassName)}
+                   aria-hidden
+                 />
+                }
                 <div className="mr-dropdown__content">
                   {this.props.dropdownContent(renderFuncArgs)}
                 </div>

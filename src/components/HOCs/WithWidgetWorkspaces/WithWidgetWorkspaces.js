@@ -16,12 +16,13 @@ import {
   exportWorkspaceConfiguration,
   importWorkspaceConfiguration,
   ensurePermanentWidgetsAdded,
+  widgetDescriptor,
 } from '../../../services/Widget/Widget'
+import SignIn from '../../../pages/SignIn/SignIn'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import WithStatus from '../WithStatus/WithStatus'
 import WithErrors from '../WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
-import SignInButton from '../../SignInButton/SignInButton'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 
 /**
@@ -125,15 +126,30 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
         })
       }
       else {
-        // A layout was provided. If heights and/or widths were omitted, fill
-        // them in using component defaults.
+        // A layout was provided. If heights and/or widths were omitted or don't meet
+        // current minimums, fill them in from the widget descriptors
         _each(configuration.layout, (widgetLayout, index) => {
+          if (!configuration.widgets || !configuration.widgets[index]) {
+            return
+          }
+
+          const descriptor = widgetDescriptor(configuration.widgets[index].widgetKey)
+          if (!descriptor) {
+            return
+          }
+
           if (!_isFinite(widgetLayout.w)) {
-            widgetLayout.w = configuration.widgets[index].defaultWidth
+            widgetLayout.w = descriptor.defaultWidth
+          }
+          else if ((_isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth)) {
+            widgetLayout.w = descriptor.minWidth
           }
 
           if (!_isFinite(widgetLayout.h)) {
-            widgetLayout.h = configuration.widgets[index].defaultHeight
+            widgetLayout.h = descriptor.defaultHeight
+          }
+          else if ((_isFinite(descriptor.minHeight) && widgetLayout.h < descriptor.minHeight)) {
+            widgetLayout.h = descriptor.minHeight
           }
         })
       }
@@ -318,12 +334,11 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
     render() {
       if (!_get(this.props, 'user.isLoggedIn')) {
         return (
+          this.props.checkingLoginStatus ?
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
-            {this.props.checkingLoginStatus ?
-             <BusySpinner /> :
-             <SignInButton {...this.props} longForm className='' />
-            }
-          </div>
+           <BusySpinner />
+          </div> :
+          <SignIn {...this.props} />
         )
       }
 

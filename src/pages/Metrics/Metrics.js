@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
-import SignInButton from '../../components/SignInButton/SignInButton'
-import messages from './Messages'
+import SignIn from '../../pages/SignIn/SignIn'
 import SvgSymbol from '../../components/SvgSymbol/SvgSymbol'
 import WithStatus from '../../components/HOCs/WithStatus/WithStatus'
 import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
@@ -12,7 +11,10 @@ import TaskStats from './blocks/TaskStats'
 import LeaderboardStats from './blocks/LeaderboardStats'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
+import _omit from 'lodash/omit'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
+import messages from './Messages'
+import messagesAsReviewer from './MessagesAsReviewer'
 
 const ProfileImage = props => {
 
@@ -21,8 +23,7 @@ const ProfileImage = props => {
   return (
     <img
       className="mr-block mr-mx-auto mr-w-32 mr-h-32 mr-rounded-full mr-mb-4"
-      src={osmProfile.profilePic(128)}
-      srcSet={`${osmProfile.profilePic(128)} 1x, ${osmProfile.profilePic(256)} 2x"`}
+      src={osmProfile.profilePic(256)}
       alt={osmProfile.displayName}
     />
   )
@@ -33,14 +34,6 @@ class Metrics extends Component {
     // Make sure our user info is current
     if (_get(this.props, 'targetUser.isLoggedIn')) {
       this.props.loadCompleteUser(this.props.targetUser.id)
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.targetUser && this.props.targetUser.id !== _get(prevProps, 'targetUser.id')) {
-      // if (this.props.targetUser.isLoggedIn) {
-      //   this.props.loadCompleteUser(this.props.targetUser.id)
-      // }
     }
   }
 
@@ -67,15 +60,11 @@ class Metrics extends Component {
         )
       }
       else {
-        return (
+        return this.props.checkingLoginStatus ? (
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-gradient-r-green-dark-blue">
-            {this.props.checkingLoginStatus ? (
-              <BusySpinner />
-            ) : (
-              <SignInButton {...this.props} longForm />
-            )}
+            <BusySpinner />
           </div>
-        )
+        ) : <SignIn {...this.props} />
       }
     }
 
@@ -100,6 +89,24 @@ class Metrics extends Component {
                   value={new Date(this.props.targetUser.created)}
                 />
               </p>
+              <div className="mr-mt-4 mr-w-full mr-flex mr-justify-center mr-links-green-lighter">
+                <a
+                  className="mr-mx-4"
+                  href={this.props.targetUserOSMProfileUrl()}
+                  target='_blank'
+                  rel="noopener noreferrer"
+                >
+                  <FormattedMessage {...messages.osmProfileLabel} />
+                </a>
+                <a
+                  className="mr-mx-4"
+                  href={this.props.targetUserOSMChaProfileUrl()}
+                  target='_blank'
+                  rel="noopener noreferrer"
+                >
+                  <FormattedMessage {...messages.osmChaLabel} />
+                </a>
+              </div>
             </header>
             {optedOut ?
               <h3 className="mr-text-center mr-text-yellow mr-mt-8">
@@ -111,8 +118,8 @@ class Metrics extends Component {
                 <div className="mr-mb-4 md:mr-mb-0 mr-p-8 mr-bg-blue mr-rounded mr-shadow mr-flex mr-items-center">
                   {!this.props.taskMetrics ?
                     <div className="mr-flex-grow mr-text-center"><BusySpinner /></div> :
-                    <div className="mr-flex-grow mr-text-center">
-                      <div className="mr-mb-4">
+                    <div className="mr-flex-grow mr-flex mr-flex-col mr-items-center">
+                      <div className="mr-mb-6">
                         <SvgSymbol
                           sym="illustration-completed-tasks"
                           className="mr-w-32 mr-h-auto"
@@ -128,12 +135,38 @@ class Metrics extends Component {
                     </div>
                   }
                 </div>
-                <ReviewStats {...this.props} />
+                <ReviewStats {...this.props}
+                  messages={messages}
+                  title={this.props.intl.formatMessage(messages.reviewedTasksTitle)}
+                  tasksMonthsPast={this.props.tasksReviewedMonthsPast}
+                  setTasksMonthsPast={this.props.setTasksReviewedMonthsPast}
+                  setTasksCustomRange={this.props.setTasksReviewedDateRange}
+                />
               </div>
               <div className="md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-3">
                 <TaskStats {...this.props} />
                 <LeaderboardStats {...this.props} />
               </div>
+              {this.props.reviewerMetrics &&
+                <div className="mr-mt-8">
+                  <ReviewStats {...this.props}
+                    asReviewer
+                    reviewMetrics={_omit(this.props.reviewerMetrics, ['requested'])}
+                    totalReviews={(this.props.reviewerMetrics.approved +
+                                   this.props.reviewerMetrics.assisted +
+                                   this.props.reviewerMetrics.rejected)}
+                    tasksMonthsPast={this.props.tasksReviewerMonthsPast}
+                    setTasksMonthsPast={this.props.setTasksReviewerMonthsPast}
+                    setTasksCustomRange={this.props.setTasksReviewerDateRange}
+                    messages={messagesAsReviewer}
+                    title={
+                      this.props.targetUser.id !== _get(this.props.user, 'id') ?
+                      this.props.intl.formatMessage(
+                        messagesAsReviewer.reviewerTitle, {username: this.props.targetUser.name}) :
+                      this.props.intl.formatMessage(messagesAsReviewer.reviewerTitleYou)
+                    }/>
+                </div>
+              }
               </React.Fragment>
             }
           </div>

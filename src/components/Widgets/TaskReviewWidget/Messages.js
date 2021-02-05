@@ -13,4 +13,19 @@ export default defineMessages({
     id: "Widgets.TaskReviewWidget.reviewTaskTitle",
     defaultMessage: "Review",
   },
+
+  metaReviewTaskTitle: {
+    id: "Widgets.TaskReviewWidget.metaReviewTaskTitle",
+    defaultMessage: "Meta-Review",
+  },
+
+  reviewRevisionTaskTitle: {
+    id: "Widgets.TaskReviewWidget.reviewRevisionTaskTitle",
+    defaultMessage: "Review Revision",
+  },
+
+  simultaneousTasks: {
+    id: "Widgets.review.simultaneousTasks",
+    defaultMessage: "Reviewing {taskCount, number} tasks together",
+  },
 })

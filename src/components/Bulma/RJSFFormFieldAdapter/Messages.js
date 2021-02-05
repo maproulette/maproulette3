@@ -18,4 +18,14 @@ export default defineMessages({
     id: "Form.controls.addPriorityRule.label",
     defaultMessage: "Add a Rule",
   },
+
+  writeLabel: {
+    id: 'Form.controls.markdownField.write.label',
+    defaultMessage: "Write",
+  },
+
+  previewLabel: {
+    id: 'Form.controls.markdownField.preview.label',
+    defaultMessage: "Preview",
+  },
 })

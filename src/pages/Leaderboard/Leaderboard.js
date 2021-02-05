@@ -11,7 +11,7 @@ import WithCurrentUser
        from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import PastDurationSelector
        from '../../components/PastDurationSelector/PastDurationSelector'
-import {ALL_TIME, CURRENT_MONTH}
+import {ALL_TIME, CURRENT_MONTH, CUSTOM_RANGE}
        from '../../components/PastDurationSelector/PastDurationSelector'
 import CountrySelector
        from '../../components/CountrySelector/CountrySelector'
@@ -68,7 +68,7 @@ class Leaderboard extends Component {
       <section className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12">
       <div className="mr-max-w-6xl mr-mx-auto mr-bg-fireworks">
         <div className="mr-max-w-2xl mr-mx-auto">
-          <header className="mr-mb-8 mr-rounded mr-bg-white-10 mr-shadow mr-p-4 md:mr-px-6 md:mr-py-8 lg:mr-flex lg:mr-justify-between mr-text-white mr-text-center lg:mr-text-left">
+          <header className="mr-mb-8 mr-rounded mr-bg-black-10 mr-shadow mr-p-4 md:mr-px-6 md:mr-py-8 lg:mr-flex lg:mr-justify-between mr-text-white mr-text-center lg:mr-text-left">
             <div className="mr-max-w-md mr-mb-4 lg:mr-mb-0 lg:mr-pr-8">
               <h1 className="mr-h2 mr-mb-2">
                 {this.props.displayName ?
@@ -86,9 +86,12 @@ class Leaderboard extends Component {
             <div className="mr-flex mr-justify-center mr-mb-2">
               <PastDurationSelector
                 className="mr-button mr-mr-8"
-                pastMonthsOptions={[ALL_TIME, CURRENT_MONTH, 1, 3, 6, 12]}
+                pastMonthsOptions={[ALL_TIME, CURRENT_MONTH, 1, 3, 6, 12, CUSTOM_RANGE]}
                 currentMonthsPast={this.props.monthsPast}
                 selectDuration={this.props.setMonthsPast}
+                selectCustomRange={this.props.setDateRange}
+                customStartDate={this.props.startDate ? new Date(this.props.startDate) : null}
+                customEndDate={this.props.endDate ? new Date(this.props.endDate) : null}
               />
               {!this.props.suppressCountrySelection &&
                <CountrySelector

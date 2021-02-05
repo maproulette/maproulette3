@@ -1,29 +1,34 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
+import { FormattedMessage, FormattedDate, injectIntl }
+       from 'react-intl'
+import classNames from 'classnames'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _findIndex from 'lodash/findIndex'
-import _isNumber from 'lodash/isNumber'
 import parse from 'date-fns/parse'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
-import ChallengeBrowseMap from '../ChallengeBrowseMap/ChallengeBrowseMap'
+import TaskClusterMap from '../TaskClusterMap/TaskClusterMap'
 import { messagesByDifficulty } from '../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import { isUsableChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import messages from './Messages'
 import BusySpinner from '../BusySpinner/BusySpinner'
-import ChallengeTaxonomy from '../ChallengeTaxonomy/ChallengeTaxonomy'
+import Taxonomy from '../Taxonomy/Taxonomy'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SignInButton from '../SignInButton/SignInButton'
 import AsManager from '../../interactions/User/AsManager'
-import WithTaskMarkers from '../HOCs/WithTaskMarkers/WithTaskMarkers'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
+import WithChallengeTaskClusters from '../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
+import WithTaskClusterMarkers from '../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
+import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
 
-const BrowseMap = WithTaskMarkers(ChallengeBrowseMap)
+const ClusterMap = WithChallengeTaskClusters(
+                     WithTaskClusterMarkers(TaskClusterMap('challengeDetail')))
+
 
 /**
  * ChallengeDetail represents a specific challenge view. It presents an
@@ -33,6 +38,13 @@ const BrowseMap = WithTaskMarkers(ChallengeBrowseMap)
  * @author [Ryan Scherler](https://github.com/ryanscherler)
  */
 export class ChallengeDetail extends Component {
+  state = {
+  }
+
+  componentDidMount() {
+    window.scrollTo(0, 0)
+  }
+
   render() {
     const challenge = this.props.browsedChallenge
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
@@ -50,14 +62,7 @@ export class ChallengeDetail extends Component {
     let saveControl = null
     let startControl = null
 
-    let startableChallenge = true
-    const tasksComplete = _isNumber(_get(challenge, 'actions.available')) ?
-                          challenge.actions.available === 0 : false
-
-    if (challenge.deleted || tasksComplete ||
-       !isUsableChallengeStatus(challenge.status)) {
-      startableChallenge = false
-    }
+    const startableChallenge = !challenge.deleted && isUsableChallengeStatus(challenge.status)
 
     if (_isObject(this.props.user) && !challenge.isVirtual) {
       if (
@@ -71,8 +76,9 @@ export class ChallengeDetail extends Component {
               this.props.unsaveChallenge(this.props.user.id, challenge.id)
             }
             className="mr-button"
+            title={this.props.intl.formatMessage(messages.removeFromFavorites)}
           >
-            <FormattedMessage {...messages.unsave} />
+            <FormattedMessage {...messages.unfavorite} />
           </Link>
         )
       } else {
@@ -83,8 +89,9 @@ export class ChallengeDetail extends Component {
               this.props.saveChallenge(this.props.user.id, challenge.id)
             }
             className="mr-button"
+            title={this.props.intl.formatMessage(messages.saveToFavorites)}
           >
-            <FormattedMessage {...messages.save} />
+            <FormattedMessage {...messages.favorite} />
           </Link>
         )
       }
@@ -119,22 +126,33 @@ export class ChallengeDetail extends Component {
       </Link>
     )
 
+    const dataOriginDateText = !challenge.dataOriginDate ? null :
+      this.props.intl.formatMessage(messages.dataOriginDateLabel,
+        {refreshDate: this.props.intl.formatDate(parse(challenge.lastTaskRefresh)),
+         sourceDate: this.props.intl.formatDate(parse(challenge.dataOriginDate))})
+
+   const map =
+       <ClusterMap
+         className="split-pane"
+         onTaskClick={taskId => this.props.startChallengeWithTask(challenge.id, false, taskId)}
+         challenge={challenge}
+         allowClusterToggle={false}
+         criteria={{boundingBox: fromLatLngBounds(this.state.bounds), zoom: this.state.zoom}}
+         updateTaskFilterBounds={(bounds, zoom) => this.setState({bounds, zoom})}
+         skipRefreshTasks
+         allowSpidering
+         {...this.props}
+       />
+
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
         <div className="mr-flex-1">
-          <MapPane>
-            <BrowseMap
-              className="split-pane"
-              challenge={challenge}
-              onTaskClick={this.props.startChallengeWithTask}
-              {...this.props}
-            />
-          </MapPane>
+          <MapPane>{map}</MapPane>
         </div>
         <div className="mr-flex-1">
           <div className="mr-h-content mr-overflow-auto">
             <div className="mr-max-w-md mr-mx-auto">
-              <div className="mr-py-12 mr-px-8">
+              <div className="mr-py-6 mr-px-8">
                 {_get(this.props, 'history.location.state.fromSearch') && (
                   <div className="mr-mb-4">
                     <button
@@ -145,7 +163,7 @@ export class ChallengeDetail extends Component {
                     </button>
                   </div>
                 )}
-                <ChallengeTaxonomy challenge={challenge} isSaved={isSaved} />
+                <Taxonomy {...challenge} isSaved={isSaved} />
                 <h1 className="mr-card-challenge__title">{challenge.name}</h1>
 
                 {challenge.parent && ( // virtual challenges don't have projects
@@ -154,7 +172,7 @@ export class ChallengeDetail extends Component {
                     onClick={e => {
                       e.stopPropagation()
                     }}
-                    to={`/project/${challenge.parent.id}/leaderboard`}
+                    to={`/browse/projects/${challenge.parent.id}`}
                   >
                     {challenge.parent.displayName}
                   </Link>
@@ -171,16 +189,15 @@ export class ChallengeDetail extends Component {
                           {...messagesByDifficulty[challenge.difficulty]}
                         />
                       </li>
-                      <li>
+                      <li title={dataOriginDateText}>
                         <strong className="mr-text-yellow">
                           <FormattedMessage
                             {...messages.lastTaskRefreshLabel}
                           />
                           :
                         </strong>{' '}
-                        <FormattedRelative
-                          value={parse(challenge.lastTaskRefresh)}
-                        />
+                        <FormattedDate value={parse(challenge.dataOriginDate)}
+                                        year='numeric' month='long' day='2-digit' />
                       </li>
                       <li>
                         <Link
@@ -212,7 +229,19 @@ export class ChallengeDetail extends Component {
                         {unsaveControl}
                       </li>
                     )}
-                    {manageControl && <li>{manageControl}</li>}
+                    <li>
+                      {!challenge.isVirtual && _get(this.props.user, 'settings.isReviewer') &&
+                        <Link
+                          className={classNames(
+                            "mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-leading-none",
+                            {"mr-border-r-2 mr-border-white-10 mr-pr-4 mr-mr-4": manageControl})}
+                          to={`/review?challengeId=${challenge.id}&challengeName=${challenge.name}`}
+                        >
+                          <FormattedMessage {...messages.viewReviews} />
+                        </Link>
+                      }
+                      {manageControl}
+                    </li>
                   </ul>
                 </div>
               </div>

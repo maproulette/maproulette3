@@ -13,6 +13,8 @@ export class TaskCommentsModal extends Component {
   state = {
     comment: ""
   }
+  
+  commentInputRef = React.createRef()
 
   setComment = comment => this.setState({comment})
 
@@ -26,16 +28,18 @@ export class TaskCommentsModal extends Component {
       <External>
         <Modal isActive={true} onClose={this.props.onClose}>
           {this.props.commentsLoading ?
-           <BusySpinner /> :
+           <BusySpinner lightMode={false} /> :
            <div>
              <h2 className="mr-text-yellow mr-mb-6">
                <FormattedMessage {...messages.header} />
              </h2>
-             <TaskCommentInput 
+             <TaskCommentInput
                rows={2}
                value={this.state.comment}
                commentChanged={this.setComment}
                submitComment={this.postComment}
+               taskId={this.props.taskId}
+               inputRef={this.commentInputRef}
              />
              <div className="mr-max-h-screen40 mr-overflow-y-scroll">
                <CommentList comments={this.props.comments} />

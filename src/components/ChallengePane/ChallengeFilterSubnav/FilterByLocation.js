@@ -1,18 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
+import _noop from 'lodash/noop'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import { ChallengeLocation,
          locationLabels }
        from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
-import Dropdown from '../../Dropdown/Dropdown'
-import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
 
 /**
- * FilterByLocation displays a nav dropdown containing options for filtering
- * challenges by geographic location, such as Within Map Bounds and Near Me.
+ * FilterByLocation displays radio buttons for filtering challenges by
+ * geographic location -- Intersects Map or Anywhere.
  * The redux store is updated to reflect the selected option.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
@@ -33,72 +31,57 @@ export class FilterByLocation extends Component {
       if (value === ChallengeLocation.nearMe) {
         // Note: repositioning the map will automatically trigger an update of the
         // bounded challenges, so we don't need to request an update here.
-        this.props.setSearchFilters({location: ChallengeLocation.withinMapBounds})
+        this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
         this.props.locateMapToUser(this.props.user)
       }
       else {
         this.props.setSearchFilters({location: value})
       }
     }
-    closeDropdownMenu()
+  }
+
+  componentDidMount(){
+    // Default to 'intersectingMapBounds'
+    this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
   }
 
   render() {
     const localizedLocationLabels = locationLabels(this.props.intl)
-    const notFiltering = _isEmpty(this.props.searchFilters.location)
 
     return (
-      <Dropdown
-        className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
-        dropdownButton={dropdown =>
-          <ButtonFilter
-            type={<FormattedMessage {...messages.locationLabel} />}
-            selection={
-              notFiltering ?
-              localizedLocationLabels.any :
-              localizedLocationLabels[this.props.searchFilters.location]
-            }
-            onClick={dropdown.toggleDropdownVisible}
-            selectionClassName={notFiltering ? null : 'mr-text-yellow'}
+      <div className="form mr-flex mr-items-center mr-mb-6">
+        <span className="mr-mr-4 mr-text-xs mr-uppercase mr-text-white">
+          <FormattedMessage {...messages.locationLabel} />:
+        </span>
+        <span>
+          <input
+            type="radio"
+            name="intersectsMap"
+            className="mr-radio mr-mr-1"
+            checked={this.props.searchFilters.location === ChallengeLocation.intersectingMapBounds}
+            onClick={() => this.updateFilter(ChallengeLocation.intersectingMapBounds)}
+            onChange={_noop}
           />
-        }
-        dropdownContent={dropdown =>
-          <ListLocationItems
-            locationLabels={localizedLocationLabels}
-            updateFilter={this.updateFilter}
-            closeDropdown={dropdown.closeDropdown}
+          <label className="mr-ml-1 mr-mr-4">
+            {localizedLocationLabels[ChallengeLocation.intersectingMapBounds]}
+          </label>
+        </span>
+        <span>
+          <input
+            type="radio"
+            name="intersectsMap"
+            className="mr-radio mr-mr-1"
+            checked={this.props.searchFilters.location !== ChallengeLocation.intersectingMapBounds}
+            onClick={() => this.updateFilter(null)}
+            onChange={_noop}
           />
-        }
-      />
+          <label className="mr-ml-1 mr-mr-4">
+            {localizedLocationLabels.any}
+          </label>
+        </span>
+      </div>
     )
   }
-}
-
-const ListLocationItems = function(props) {
-  const menuItems = _map(ChallengeLocation, (location, name) => (
-    <li key={location}>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a onClick={() => props.updateFilter(location, props.closeDropdown)}>
-        {props.locationLabels[name]}
-      </a>
-    </li>
-  ))
-
-  // Add 'Any' option to start of dropdown
-  menuItems.unshift(
-    <li key='any'>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a onClick={() => props.updateFilter(null, props.closeDropdown)}>
-        {props.locationLabels.any}
-      </a>
-    </li>
-  )
-
-  return (
-    <ol className="mr-list-dropdown mr-list-dropdown--ruled">
-      {menuItems}
-    </ol>
-  )
 }
 
 FilterByLocation.propTypes = {

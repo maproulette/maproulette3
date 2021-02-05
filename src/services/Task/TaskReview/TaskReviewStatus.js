@@ -9,8 +9,10 @@ export const REVIEW_STATUS_APPROVED = 1
 export const REVIEW_STATUS_REJECTED = 2
 export const REVIEW_STATUS_APPROVED_WITH_FIXES = 3
 export const REVIEW_STATUS_DISPUTED = 4
+export const REVIEW_STATUS_UNNECESSARY = 5
 
 export const REVIEW_STATUS_NOT_SET = -1
+export const META_REVIEW_STATUS_NOT_SET = -2
 
 export const TaskReviewStatus = Object.freeze({
   needed: REVIEW_STATUS_NEEDED,
@@ -18,6 +20,7 @@ export const TaskReviewStatus = Object.freeze({
   rejected: REVIEW_STATUS_REJECTED,
   approvedWithFixes: REVIEW_STATUS_APPROVED_WITH_FIXES,
   disputed: REVIEW_STATUS_DISPUTED,
+  unnecessary: REVIEW_STATUS_UNNECESSARY,
 })
 
 export const TaskReviewStatusWithUnset = Object.freeze({
@@ -26,7 +29,17 @@ export const TaskReviewStatusWithUnset = Object.freeze({
   rejected: REVIEW_STATUS_REJECTED,
   approvedWithFixes: REVIEW_STATUS_APPROVED_WITH_FIXES,
   disputed: REVIEW_STATUS_DISPUTED,
+  unnecessary: REVIEW_STATUS_UNNECESSARY,
   unset: REVIEW_STATUS_NOT_SET,
+})
+
+export const TaskMetaReviewStatusWithUnset = Object.freeze({
+  metaNeeded: REVIEW_STATUS_NEEDED,
+  metaApproved: REVIEW_STATUS_APPROVED,
+  metaApprovedWithFixes: REVIEW_STATUS_APPROVED_WITH_FIXES,
+  metaRejected: REVIEW_STATUS_REJECTED,
+  metaUnnecessary: REVIEW_STATUS_UNNECESSARY,
+  metaUnset: META_REVIEW_STATUS_NOT_SET,
 })
 
 export const keysByReviewStatus = Object.freeze(_invert(TaskReviewStatusWithUnset))
@@ -53,6 +66,14 @@ export const messagesByReviewStatus = _fromPairs(
   _map(messages, (message, key) => [TaskReviewStatusWithUnset[key], message])
 )
 
+/**
+ * Returns an object mapping status values to raw internationalized
+ * messages suitable for use with FormattedMessage or formatMessage.
+ */
+export const messagesByMetaReviewStatus = _fromPairs(
+  _map(messages, (message, key) => [TaskMetaReviewStatusWithUnset[key], message])
+)
+
 /** Returns object containing localized labels  */
 export const reviewStatusLabels = intl => _fromPairs(
   _map(messages, (message, key) => [key, intl.formatMessage(message)])
@@ -64,4 +85,16 @@ export const reviewStatusLabels = intl => _fromPairs(
  */
 export const isNeedsReviewStatus = function(status) {
   return status === TaskReviewStatus.needed || status === TaskReviewStatus.disputed
+}
+
+/**
+ * Returns true if the given status represents a status that is
+ * valid for meta-review.
+ */
+export const isMetaReviewStatus = function(status) {
+  return status === TaskReviewStatus.approved ||
+         status === TaskReviewStatus.approvedWithFixes ||
+         status === TaskReviewStatus.rejected ||
+         status === TaskReviewStatus.needed ||
+         status === TaskReviewStatus.unnecessary
 }

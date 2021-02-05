@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _merge from 'lodash/merge'
+import _cloneDeep from 'lodash/cloneDeep'
+import _isUndefined from 'lodash/isUndefined'
 import { FormattedMessage } from 'react-intl'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskStatus, messagesByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewLoadMethod } from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { messagesByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
-import WithTaskReview from '../HOCs/WithTaskReview/WithTaskReview'
 import WithTaskTags from '../HOCs/WithTaskTags/WithTaskTags'
 import WithSearch from '../HOCs/WithSearch/WithSearch'
 import WithKeyboardShortcuts from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
@@ -36,10 +38,17 @@ export class ReviewTaskControls extends Component {
   setComment = comment => this.setState({comment})
   setTags = tags => this.setState({tags})
 
-  onConfirm = () => {
+  onConfirm = (alternateCriteria) => {
+    const history = _cloneDeep(this.props.history)
+    _merge(_get(history, 'location.state', {}), alternateCriteria)
+
+    const requestedNextTask = !this.state.requestedNextTask ? null :
+      {id: this.state.requestedNextTask, parent: this.state.requestedNextTaskParent}
+
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, this.state.tags,
-                                     this.state.loadBy, this.props.history)
+                                     this.state.loadBy, history,
+                                     this.props.taskBundle, requestedNextTask)
     this.setState({confirmingTask: false, comment: ""})
   }
 
@@ -51,14 +60,25 @@ export class ReviewTaskControls extends Component {
     this.setState({loadBy})
   }
 
+  chooseNextTask = (challengeId, isVirtual, taskId) => {
+    this.setState({requestedNextTask: taskId,
+                   requestedNextTaskParent: challengeId})
+  }
+
+  clearNextTask = () => {
+    this.setState({requestedNextTask: null})
+  }
+
   /** Save Review Status */
   updateReviewStatus = (reviewStatus) => {
     this.setState({reviewStatus, confirmingTask: true})
   }
 
-  /** Stop Reviewing (release claim) */
-  stopReviewing = () => {
-    this.props.stopReviewing(this.props.task, this.props.history)
+  /** Skip review of this task */
+  skipReview = () => {
+    this.props.skipTaskReview(this.props.task, this.state.loadBy,
+                              this.props.history, this.props.taskBundle)
+    this.setState({confirmingTask: false, comment: ""})
   }
 
   /** Start Reviewing (claim this task) */
@@ -69,7 +89,14 @@ export class ReviewTaskControls extends Component {
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     this.setState({taskBeingCompleted: this.props.task.id})
-    this.props.editTask(value, this.props.task, this.props.mapBounds)
+    this.props.editTask(value, this.props.task, this.props.mapBounds, null, this.props.taskBundle)
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.task.id !== this.props.task.id) {
+      // Clear tags if we are on a new task
+      this.setState({tags: ""})
+    }
   }
 
   render() {
@@ -157,6 +184,18 @@ export class ReviewTaskControls extends Component {
           />
         </div>
 
+        {this.props.metaReviewEnabled &&
+          <div className="mr-text-sm mr-text-white mr-whitespace-no-wrap">
+            <FormattedMessage
+              {...messages.currentMetaReviewStatus}
+            /> { _isUndefined(this.props.task.metaReviewStatus) ?
+              <span/> :
+              <FormattedMessage
+                {...messagesByReviewStatus[this.props.task.metaReviewStatus]}
+              />
+            }
+          </div>
+        }
         {tags.length > 0 &&
           <div className="mr-text-sm mr-text-white">
             <FormattedMessage
@@ -169,8 +208,20 @@ export class ReviewTaskControls extends Component {
           <UserEditorSelector {...this.props} />
           <div className="mr-mt-4 mr-mb-12 mr-grid mr-grid-columns-2 mr-grid-gap-4">
             <TaskEditControl {...this.props} pickEditor={this.pickEditor} />
+            {this.props.task.metaReviewStatus === TaskReviewStatus.rejected &&
+              <button className="mr-button mr-button--blue-fill"
+                      onClick={() => this.updateReviewStatus(TaskReviewStatus.needed)}>
+                <FormattedMessage {...messages.requestMetaReReview} />
+              </button>
+            }
           </div>
         </div>
+
+        {this.props.task.metaReviewStatus === TaskReviewStatus.rejected &&
+          <div className="mr-my-4 mr-text-yellow mr-text-mango mr-text-lg">
+            <FormattedMessage {...messages.changeReview} />
+          </div>
+        }
 
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           <button className="mr-button mr-button--blue-fill"
@@ -186,8 +237,11 @@ export class ReviewTaskControls extends Component {
             <FormattedMessage {...messages.approvedWithFixes} />
           </button>
           <button className="mr-button mr-button--white"
-                  onClick={() => this.stopReviewing()}>
-            <FormattedMessage {...messages.stopReview} />
+                  onClick={() => this.skipReview()}>
+            {this.props.asMetaReview ?
+              <FormattedMessage {...messages.skipMetaReview} /> :
+              <FormattedMessage {...messages.skipReview} />
+            }
           </button>
         </div>
 
@@ -206,6 +260,9 @@ export class ReviewTaskControls extends Component {
             loadBy={this.state.loadBy}
             inReview={true}
             fromInbox={fromInbox}
+            chooseNextTask={this.chooseNextTask}
+            clearNextTask={this.clearNextTask}
+            requestedNextTask={this.state.requestedNextTask}
           />
         }
       </div>
@@ -221,10 +278,8 @@ ReviewTaskControls.propTypes = {
 export default
   WithSearch(
     WithTaskTags(
-      WithTaskReview(
-        WithEditor(
-          WithKeyboardShortcuts(ReviewTaskControls)
-        )
+      WithEditor(
+        WithKeyboardShortcuts(ReviewTaskControls)
       )
     ),
     'task'

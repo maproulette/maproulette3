@@ -5,9 +5,14 @@ import { Link } from 'react-router-dom'
 import _pick from 'lodash/pick'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 import BusySpinner from '../BusySpinner/BusySpinner'
+import { OPEN_STREET_MAP } from '../../services/VisibleLayer/LayerSources'
 import AsManager from '../../interactions/User/AsManager'
 import WithSearch from '../HOCs/WithSearch/WithSearch'
+import WithChallengePreferences
+       from '../HOCs/WithChallengePreferences/WithChallengePreferences'
+import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithKeyboardShortcuts
        from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import TaskEditControl
@@ -16,6 +21,8 @@ import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import messages from './Messages'
 import './InspectTaskControls.scss'
+
+const shortcutGroup = 'taskInspect'
 
 /**
  * InspectTaskControls presents controls used during task inspect by a challenge
@@ -38,11 +45,16 @@ export class InspectTaskControls extends Component {
 
   /** Process keyboard shortcuts for the inspect controls */
   handleKeyboardShortcuts = (event) => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
     if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 
-    const inspectShortcuts = this.props.keyboardShortcutGroups.taskInspect
+    const inspectShortcuts = this.props.keyboardShortcutGroups[shortcutGroup]
     if (event.key === inspectShortcuts.prevTask.key) {
       this.prevTask()
     }
@@ -53,7 +65,16 @@ export class InspectTaskControls extends Component {
 
   /** Open the task in an editor */
   pickEditor = ({ value }) => {
-    this.props.editTask(value, this.props.task, this.props.mapBounds)
+    this.props.editTask(
+      value,
+      this.props.task,
+      this.props.mapBounds,
+      {
+        imagery: this.props.source.id !== OPEN_STREET_MAP ? this.props.source : undefined,
+        photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null,
+      },
+      this.props.taskBundle
+    )
   }
 
   modifyTaskRoute = () => {
@@ -63,13 +84,13 @@ export class InspectTaskControls extends Component {
 
   componentDidMount() {
     this.props.activateKeyboardShortcutGroup(
-      _pick(this.props.keyboardShortcutGroups, 'taskInspect'),
+      _pick(this.props.keyboardShortcutGroups, shortcutGroup),
       this.handleKeyboardShortcuts
     )
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcutGroup('taskInspect',
+    this.props.deactivateKeyboardShortcutGroup(shortcutGroup,
                                                this.handleKeyboardShortcuts)
   }
   render() {
@@ -84,13 +105,23 @@ export class InspectTaskControls extends Component {
 
     return (
       <div className="inspect-task-controls">
-        <UserEditorSelector {...this.props} className="mr-mb-4" />
+        {this.props.taskReadOnly ?
+         <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
+           <FormattedMessage {...messages.readOnly} />
+         </div> :
+         <UserEditorSelector {...this.props} className="mr-mb-4" />
+        }
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
-          <TaskEditControl pickEditor={this.pickEditor}
-                            className="active-task-controls__edit-control"
-                            {..._omit(this.props, 'className')} />
+          {!this.props.taskReadOnly ?
+           <TaskEditControl
+             pickEditor={this.pickEditor}
+             className="active-task-controls__edit-control"
+             {..._omit(this.props, 'className')}
+           /> :
+           <div />
+          }
 
-          {manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
+          {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
            <Link
              to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
              className="mr-button"
@@ -120,4 +151,13 @@ InspectTaskControls.propTypes = {
   nextSequentialTask: PropTypes.func.isRequired,
 }
 
-export default WithSearch(WithKeyboardShortcuts(InspectTaskControls), 'task')
+export default WithSearch(
+  WithChallengePreferences(
+    WithVisibleLayer(
+      WithKeyboardShortcuts(
+        InspectTaskControls
+      )
+    )
+  ),
+  'task'
+)

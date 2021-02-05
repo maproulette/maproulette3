@@ -1,10 +1,13 @@
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
-import { addKeyboardShortcutGroup,
-         removeKeyboardShortcutGroup,
-         addKeyboardShortcut,
-         removeKeyboardShortcut }
-       from '../../../services/KeyboardShortcuts/KeyboardShortcuts'
+import {
+  addKeyboardShortcutGroup,
+  removeKeyboardShortcutGroup,
+  addKeyboardShortcut,
+  removeKeyboardShortcut,
+  pauseKeyboardShortcuts,
+  resumeKeyboardShortcuts,
+} from '../../../services/KeyboardShortcuts/KeyboardShortcuts'
 import KeyMappings from '../../../services/KeyboardShortcuts/KeyMappings'
 
 const mapStateToProps = state => {
@@ -48,10 +51,20 @@ const mapDispatchToProps = dispatch => {
     removeExternalKeyboardShortcut: (groupName, shortcutName) => {
       dispatch(removeKeyboardShortcut(groupName, shortcutName))
     },
+    pauseKeyboardShortcuts: () => {
+      dispatch(pauseKeyboardShortcuts())
+    },
+    resumeKeyboardShortcuts: () => {
+      dispatch(resumeKeyboardShortcuts())
+    },
     textInputActive: textInputActive,
-    quickKeyHandler: (key, handler) => (event => {
+    quickKeyHandler: (key, handler, allowModifierKeys=false) => (event => {
       if (textInputActive(event)) {
         return // ignore typing in inputs
+      }
+
+      if (!allowModifierKeys && (event.metaKey || event.altKey || event.ctrlKey)) {
+        return
       }
 
       if (event.key === key) {

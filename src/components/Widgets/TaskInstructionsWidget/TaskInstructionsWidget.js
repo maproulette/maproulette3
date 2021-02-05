@@ -32,6 +32,13 @@ export default class TaskInstructionsWidget extends Component {
   toggleMinimized = () => {
     const challengeId = _get(this.props.task, 'parent.id')
     if (_isFinite(challengeId)) {
+      if (!this.props.collapseInstructions) {
+        // Save our current height before collapsing so that we can restore it
+        // later (as our actual height from the widget workspace will reflect
+        // our collapsed state)
+        this.props.updateWidgetConfiguration({expandedHeight: this.props.widgetLayout.h})
+      }
+
       this.props.setInstructionsCollapsed(challengeId, false, !this.props.collapseInstructions)
     }
   }
@@ -43,7 +50,11 @@ export default class TaskInstructionsWidget extends Component {
     }
     else if (!this.props.collapseInstructions &&
              this.props.widgetLayout.h === descriptor.minHeight) {
-      this.props.updateWidgetHeight(this.props.widgetLayout.i, descriptor.defaultHeight) 
+      this.props.updateWidgetHeight(
+        this.props.widgetLayout.i,
+        _isFinite(this.props.widgetConfiguration.expandedHeight) ?
+          this.props.widgetConfiguration.expandedHeight : descriptor.defaultHeight
+      )
     }
   }
 
@@ -57,13 +68,6 @@ export default class TaskInstructionsWidget extends Component {
 
   render() {
     const minimizeControl = (
-      /*
-      // eslint-disable-next-line jsx-a11y/anchor-is-valid
-      <a className="collapsible-icon" aria-label="more options"
-         onClick={this.toggleMinimized}>
-        <span className="icon"></span>
-      </a>
-      */
       <button className="mr-text-green-lighter" onClick={this.toggleMinimized}>
         <SvgSymbol
           sym="icon-cheveron-down"
@@ -74,12 +78,15 @@ export default class TaskInstructionsWidget extends Component {
     )
 
     return (
-      <QuickWidget {...this.props}
-                   className={classNames(
-                      "task-instructions-widget",
-                      {"is-expanded": !this.props.collapseInstructions})}
-                  widgetTitle={<FormattedMessage {...messages.title} />}
-                  rightHeaderControls={minimizeControl}>
+      <QuickWidget
+        {...this.props}
+        className={classNames(
+          "task-instructions-widget",
+          {"is-expanded": !this.props.collapseInstructions}
+        )}
+        widgetTitle={<FormattedMessage {...messages.title} />}
+        rightHeaderControls={minimizeControl}
+      >
         {!this.props.collapseInstructions && <TaskInstructions {...this.props} />}
       </QuickWidget>
     )

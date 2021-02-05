@@ -5,7 +5,6 @@ import { isUsableChallengeStatus }
        from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import _values from 'lodash/values'
 import _get from 'lodash/get'
-import _isNumber from 'lodash/isNumber'
 import _filter from 'lodash/filter'
 
 /**
@@ -28,15 +27,10 @@ export const mapStateToProps = (state, ownProps) => {
   let usableChallenges = challenges
   if (ownProps.allStatuses !== true) {
     usableChallenges = _filter(challenges, challenge => {
-      // Don't treat as complete if we're simply missing completion data.
-      const tasksComplete = _isNumber(_get(challenge, 'actions.available')) ?
-                            challenge.actions.available === 0 : false
-
       const parent = _get(state, `entities.projects.${challenge.parent}`)
       return challenge.enabled &&
              _get(parent, 'enabled', false) &&
              !challenge.deleted &&
-             !tasksComplete &&
              isUsableChallengeStatus(challenge.status)
     })
   }

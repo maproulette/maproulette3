@@ -19,8 +19,23 @@ export default defineMessages({
     defaultMessage: "Inspect",
   },
 
-  suggestedFixTitle: {
-    id: "Widgets.TaskCompletionWidget.suggestedFixTitle",
+  cooperativeWorkTitle: {
+    id: "Widgets.TaskCompletionWidget.cooperativeWorkTitle",
     defaultMessage: "Proposed Changes",
+  },
+
+  simultaneousTasks: {
+    id: "Widgets.TaskCompletionWidget.simultaneousTasks",
+    defaultMessage: "Working on {taskCount, number} tasks together",
+  },
+
+  completeTogether: {
+    id: "Widgets.TaskCompletionWidget.completeTogether",
+    defaultMessage: "Complete Together",
+  },
+
+  cancelSelection: {
+    id: "Widgets.TaskCompletionWidget.cancelSelection",
+    defaultMessage: "Cancel Selection",
   },
 })

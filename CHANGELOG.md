@@ -7,6 +7,639 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.5] - 2021-02-03
+### Added
+- More compact workspace headers (#1388)
+
+### Fixed
+- Submitting task revision unnecessarily loads additional task data
+- Managing huge projects can make frontend unresponsive (#750)
+- Various performance problems (#1538, #1542)
+
+### Changed
+- Project completion metrics in Create & Manage now require manual load
+
+
+## [v3.7.4] - 2021-01-28
+### Fixed
+- Error when trying to review task after using browser back button
+- Unable to review consecutive tasks using Task Status "all" filter
+- Overlay indicating screen is too narrow sometimes obscured
+
+
+## [v3.7.3] - 2021-01-27
+### Added
+- Additional performance optimizations
+
+### Fixed
+- Mappers unable to submit revisions after failing a task review
+- Cannot always search for destination project when moving a challenge
+- Users end up on Find Challenges page when using virtual challenge share link
+- Missing "review further" option from Task Review
+
+
+## [v3.7.2] - 2021-01-25
+### Added
+- Optional Supplemental Map widget during task completion (#1492)
+- Colored task map-marker lines when spidered
+- Updated translations (huge thank you to the community!)
+- Performance optimizations around task reviews
+
+### Fixed
+- Failure to render Markdown images and horizontal rules (#1512, #1518)
+- Challenge keyword filters not honored in copy/pasted URLs (#1514)
+
+### Changed
+- Review metrics and Tag metrics widgets now require manual load
+
+
+## [v3.7.1] - 2021-01-21
+### Fixed
+- Certain saved task-property filters could crash tasks table widget (#1513)
+
+
+## [v3.7.0] - 2021-01-21
+### Added
+- Achievements
+- Meta-Reviews
+- Improved templating system for Challenge Instructions
+- New copyable (copy-to-clipboard) shortcode in Challenge Instructions (#947)
+- Workspace properties for templating in addition to task properties
+- New optional Custom URLs widget in task-completion workspace
+- Turkish locale and updated translations (huge thanks to the community!)
+- Spidering of overlapping task markers on certain maps
+- Support for `@type` and `@osm_type` feature properties for task OSM type
+- OSM Profile and OSMCha external links on user metrics page
+- Link to MapRoulette blog in site footer
+
+### Fixed
+- Task review refresh button not functioning properly
+- Unrecoverable error in some cases when corrupted workspace imported
+- Review metrics for empty projects showing system-wide metrics
+- Multi-task Work widget recenter control recentering on prior task (#1481)
+- Task review filters not always honored if changed mid-review
+- Challenges with no tasks from Overpass left in Ready status (#986)
+- MR tags sometimes sticking between reviews of tasks
+- Cut-off dropdowns in Safari when viewing Review tables with no results
+- Contested reviews attributed to wrong user in Task History widget
+- Challenge-level constraints on allowed MR tags not always honored
+
+### Changed
+- Form-field templating in Challenge Instructions now rendered inline
+- Most relative dates replaced with actual dates (#1479)
+- No-results message replaced with total count in footer of Review tables
+
+
+## [v3.6.16] - 2020-12-16
+### Fixed
+- Inability to recover from certain forms of workspace corruption
+- Challenge filters not honored when moving to next task for review
+
+
+## [v3.6.15] - 2020-12-09
+### Added
+- New lasso-based workflow for creation of virtual challenges
+- Fit-world control to Find Challenges map for quickly zooming back out
+- Configuration option in Location widget to show Lat/Lon vs Lon/Lat
+- Additional details for each task shown on Tracked Tasks widget
+- Display of current owner of task lock if attempt to lock a task fails
+- Limit of 1500 characters in task comments
+
+### Fixed
+- Multi-task Work Widget map could be shrunk until controls unusable
+- Inability to horizontally scroll nominatum search results with long names
+- Task bbox ignoring bundled tasks (fit-to-bounds control, OSMCha link)
+- Misleading label for OSM/External id field during challenge creation
+- URL query parameters lost during sign-in process redirection
+- Map controls occasionally disappearing in Safari
+
+### Changed
+- Name of challenge GeoJSON export filename for improved JOSM compatibility
+
+
+## [v3.6.14] - 2020-11-04
+### Added
+- Updated community translations (huge thank you to translators!)
+- Allow map overlays to be reordered
+- Offer choice of features when map click is ambiguous
+- Highlight selected map feature
+- Ability to save filter setups for various tables
+- Support for arrow keys on auto-suggest dropdowns
+- Control for repositioning task bundle map over primary task
+- Option to favorite/unfavorite challenge from task completion page
+- New optional OSM History widget in task completion
+- Show count of unread notifications in top navbar
+- Show projects alongside challenges on various Dashboard widgets
+- Show name of challenge on challenge-deletion confirmation dialog (#1407)
+- [internal] Various upgrades of package dependencies
+
+### Fixed
+- Task Instructions widget not expanding back to configured height
+- Location map not expanding even when its widget is expanded
+- Failure when non-reviewer visited Review page
+- Search by partial project/challenge name in review table
+- Timezone selection changing to UTC-12 when UTC was selected
+- Missing internationalizations on home page and table controls (#1262)
+
+
+## [v3.6.13] - 2020-10-12
+### Fixed
+- Comment mention dropdown interfering with adding newlines to comment
+
+
+## [v3.6.12] - 2020-10-07
+### Added
+- Updated translations and new Vietnamese locale (thank you translators!)
+- learn.maproulette.org as the new home for MapRoulette documentation
+- Typeahead dropdown when mentioning a user in a comment
+- Ability to specify OSM element type when creating challenges from Overpass
+- Search for challenges by id when adding challenges to virtual projects
+- Allow tasks to be reviewed consecutively from Manage Challenges tasks table
+- Basic support for multiple reviews of task by different reviewers
+- Deselect-all control to Lasso map tool panel
+
+### Fixed
+- Challenge datasource could revert back to original cloned source (#1381)
+- Don't offer Start Challenge button when managing completed challenges
+- Incorrect subdomain substitution in basemap URLs
+- Inability to sort by cooperative challenges (#1395)
+- Inability to update user settings if no custom basemaps set
+- User metrics filtering on creation date instead of completion date
+- Minor visual fixes
+
+### Changed
+- false_positive column to not_an_issue in CSV exports
+- [internal] Renamed primary branch of code repository to `main`
+
+
+## [v3.6.11] - 2020-09-10
+### Added
+- Info control on challenge results to quickly view basic challenge details
+- Show directionality for one-way task features on Task Completion map
+- Support for multiple custom user basemaps and overlays
+- Allow task status to be changed when resubmitting task after a review
+- Option to load more tasks on Nearby Tasks map
+- Lasso select/deselect tools on task map when managing a challenge
+- Improved task selection behavior when managing a challenge
+- Highlight selected tasks on task map when managing a challenge
+- Error on z-coordinates in GeoJSON, noting they are unsupported (#1034)
+- Error on null GeoJSON geometries, noting they are unsupported (#551)
+- Note rebuild-tasks option when editing read-only data source (#1318, #783)
+- Make substituted URL property values clickable in task instructions (#1370)
+
+### Fixed
+- Misinterpretation of some user mentions as OSM entity short codes
+- Broken "Back to Review All" option on task revision confirmation modal
+- Unnecessary restriction on max zoom on Nearby Tasks map
+- Incorrect project-level average time spent per task
+- Stale data sometimes shown on Review-Status Metrics widget
+
+### Removed
+- Quick-selection of tasks by status, priority, etc. in challenge managment
+
+
+## [v3.6.10] - 2020-08-07
+### Fixed
+- Mustache tags in Task Instructions showing stale values (#1354)
+
+
+## [v3.6.9] - 2020-08-06
+### Fixed
+- Unable to open tasks in JOSM during task review (#1353)
+
+
+## [v3.6.8] - 2020-08-05
+### Added
+- Updated community translations (huge thanks to all the translators!)
+- Send active imagery layer to editors when completing task (#1151, #1230)
+- Enlarge busy spinner on maps (#1343)
+- Use overlay to display browser-too-narrow message (#1033)
+- Export of task-review CSV at the project level for project managers
+- Display of top reviewers in Leaderboard widget for challenge managers
+- Notify mappers when a challenge they worked on has been completed
+- Option to view task instructions on completion confirmation modal
+
+### Fixed
+- Broken export of challenge CSV when using timezone with positive offset
+- Minor display issues on User Dashboard page
+- Missing int'l message that could prevent previews of markdown content
+
+
+## [v3.6.7] - 2020-07-23
+### Added
+- Revised challenge creation/editing workflow
+- Ability to cancel editing of a widget workspace
+- Offer custom date-range options on all leaderboards
+- Additional informational columns on leaderboard widget
+- Ability to set preferred MR Tags for Task Review at challenge creation
+- Option to choose desired timezone when exporting challenge CSV/GeoJSON
+
+### Fixed
+- Search sometimes including extraneous results (#1297)
+- Display of relative dates in Safari
+- Crash when attempting to displaying cooperative task error
+- Error when switching priority rule types when editing a challenge
+- Leaderboard widget displaying Current Month regardless of saved setting
+- Leaderboard widget not updating properly for Past Month option
+- Occasional failure to load challenge leaderboard if server response is slow
+- Hang if browser back button used immediately following completion of a task
+- Funky scrollbar behavior when choosing custom date ranges throughout app
+- High memory consumption on Live Activity page if left open for long periods
+- exact-dates setting not honored on Follow Activity view
+
+### Changed
+- Limit leaderboard custom date ranges to past year
+- Refer to challenges and projects as Discoverable instead of Visible
+- New challenges are now set to Discoverable by default
+
+
+## [v3.6.6] - 2020-07-06
+### Fixed
+- Task comments provided during confirmation step not saved
+- Unable to setup location style rules in task prioritization rules
+
+
+## [v3.6.5] - 2020-07-01
+### Added
+- Updated community translations (huge thanks to all the translators!)
+- Map of nearby tasks on Task Review confirmation step
+- Overlay of prioritized bounds on Challenge tasks map for challenge managers
+- Support for RFC 7464 compliant formatting of line-by-line GeoJSON
+- Include project and task link in Following activity
+- Tri-State select-all control on Inbox page
+- MR-tag metrics widget for challenge managers
+- Basic global activity page
+- Task attachments with initial support for JOSM reference layers
+- [internal] Upgrade to node v12 LTS
+- [internal] Numerous upgrades to package dependencies
+- [internal] Various updates required for upgraded package compatibility
+
+### Fixed
+- Inform user if logged out when trying to lock a task (#1233)
+- Positioning of confirmation modal
+- Unclickable controls on Teams page for some browser window sizes
+- Error when using multiple location rules
+- Display of Featured Challenges widget on Safari
+- Various display issues on Project Details page
+- Task Review table page-size reset after every task review
+- Clean up any negative timestamps left by bug maproulette/maproulette2#728
+
+
+## [v3.6.4] - 2020-06-09
+### Added
+- Updated community translations
+
+### Fixed
+- Error during display of certain users with missing avatars
+
+
+## [v3.6.3] - 2020-06-08
+### Added
+- Following of other users' MapRoulette activity
+- Refreshed home page
+- Teams page
+- Notification when invited to join a Team
+- Task prioritization by location for challenge managers
+
+### Fixed
+- Review page search boxes not allowing case-insensitive search
+- Erroneous security errors immediately following creation of new project
+- Long challenge names not wrapping properly in Challenge Highlights widget
+
+
+## [v3.6.2] - 2020-05-28
+### Added
+- Revised Dashboard page
+- Teams widget on Dashboard page
+- Option to invert searches in various task tables
+- Column for MR Tags on various task tables
+- CSV export of mapper metrics for challenge owners and reviewers
+- Bypass picker step when returning to Review as part of normal workflow
+- Ability to edit task form responses when reworking a task
+- Clarifying note about average time to complete challenge tasks
+- Control to copy public challenge URL to clipboard when managing challenges
+- Management tools for challenge snapshots for challenge managers
+- Task Review metrics broken down by task status in Review Metrics widget
+- Updated translations and new Ukrainian locale
+
+### Fixed
+- Join comma-separated priority-rule values based on rule (not group) operator
+- Broken rendering of mustache tags in task forms (#1239)
+- Minor visual fixes
+
+### Changed
+- Make the Dashboard page the landing page for users who are already signed-in
+- Rename "Saved" challenges to "Favorite" challenges
+
+
+## [v3.6.1] - 2020-04-28
+### Added
+- Links to review tasks on Browse Challenge and Browse Project pages
+
+### Fixed
+- User metrics failing to load
+- Remove limit when fetching lists of challenges and projects for review
+
+
+## [v3.6.0] - 2020-04-23
+### Added
+- Cooperative challenges
+- Revised initial setup/search workflow for Reviewers
+- Automatic expiration of review-requested status for old, unreviewed tasks
+- Comma-separated value support in priority rules for challenge managers
+
+### Fixed
+- Blank Top User Challenges widget on User Dashboard
+- Failure to display additional results when listing managed projects
+- Virtual projects losing virtual status when edited (#1207)
+- Virtual project challenges not refreshing after addition or removal (#1208)
+
+### Changed
+- Quick Fix challenges are now called Tag Fix challenges
+
+
+## [v3.5.9] - 2020-04-09
+### Added
+- Require interaction before loading tasks in Review Map on Review Page
+- Default to showing tasks with Fixed status on Review Page
+- New "unnecessary" task-review status for use by challenge managers
+- Update translations
+
+### Fixed
+- Transient display of incorrect challenge leaderboard results while loading
+- Incorrect task count shown when bundling a large number of tasks with lasso
+- Erroneous inclusion of virtual project destinations when moving a challenge
+- Mixed-case or uppercase MapRoulette tags not saving on tasks (#1192)
+
+
+## [v3.5.8] - 2020-03-25
+### Added
+- OpenStreetCam imagery map overlay during task completion
+- Integration with Transifex for supporting community translations (#734)
+- Additional locales: nl, ru-RU, fa-IR, cs-CZ
+- Option to preview task comment Markdown during composition
+- Link user mentions in comments to mentioned user's metrics page
+- Separate rendering colors for nodes, ways, areas in OSM Data map overlay
+- Control over display of nodes, ways, areas in OSM Data map overlay
+- Enter and ESC keyboard shortcuts in Nominatim search box
+- Show busy spinner while performing Nominatim search
+- Show busy spinner while geolocating user when tasks Near Me requested
+- Show administrative updates to tasks by challenge managers in task history
+- Filtering by task priority in Task Review
+- Ability to adjust task-review filters after each reviewed task
+- Notify task reviewer when re-review requested after follow-up changes
+- Make some widgets permanent in various Create & Manage dashboards
+- Option to export project CSVs from main Create & Manage dashboard
+- URLs to tasks and challenges in Project CSVs
+- Display of mapper in Create & Manage tables for all tasks going forward
+- New color palette for colored usernames shown in various tables
+- Various minor UI and color adjustments
+- Challenge flag indicating that local knowledge is required to work on tasks
+- Server admin configuration option to disable default map layers
+- Server admin configuration option to hide OSM Data map overlay
+
+### Fixed
+- Layer toggle unresponsive after failure to load map layer (#1177)
+- Hiding task-feature map layer can cause map zoom to reset (#1167)
+- Removing keywords from cloned challenge causes save to fail (#1188)
+- Empty options menus for some challenges in Create & Manage
+- Task completion keyboard shortcuts active during confirmation step
+- Erroneous calculation of time spent on task if server clocks different
+- Occasional display of old task review status due to stale cache
+
+
+## [v3.5.7] - 2020-03-11
+### Added
+- Dark mode in Create & Manage area
+- Sort challenges by Oldest on Find Challenges page by @brianjor (#935)
+- 'missing' and 'exists' property filter operators
+- Quick-entry of comma-separated property filter values
+- Basic metrics for time spent working on tasks (#762)
+- Time durations to entries in Task History widget
+- Visual representation of status and priority of tasks shown on Nearby map
+- Nearby vs Random option for "Next Task" control on completed tasks
+- Limited challenge controls on Project dashboard in Create & Manage area
+- Limited project controls on All-Projects dashboard in Create & Manage
+- Invitation on Review page for non-reviewers to volunteer as reviewers (#835)
+- Task priority column on Review page tables
+
+### Fixed
+- Date picker switching back to default dates
+- Occasional broken display of empty MR tags on tasks
+- Stale link to wiki documentation when creating a challenge (#912)
+- Don't split challenge preferred tags on spaces (#1123)
+- Status updates to all tasks in Create & Manage not applied to all (#1127)
+- Possible error due to missing historical challenge snapshots
+- Broken task links in exported comments CSV from Create & Manage
+- Task status reset to Created when tasks rebuilt
+- Extraneous quotes sometimes included in generated task names
+
+### Changed
+- Colors used for color-coded usernames shown in various tables
+
+
+## [v3.5.6] - 2020-02-24
+### Fixed
+- Trouble adding new managers to projects (#1122)
+- Tags added to a task bundle sometimes not applied to all tasks
+- Visual bug with task-status change confirmation in Create & Manage
+
+
+## [v3.5.5] - 2020-02-19
+### Added
+- Featured projects
+- Custom task styling based on arbitrary feature properties
+- Simpler OR'ing of multiple values on feature property search
+- Tabulation of Review Status metrics by task priority
+- Custom date range option when viewing user metrics
+- Ability to work on task bundles from any member task
+- [internal] upgrade Tailwind and other package dependencies
+
+### Fixed
+- Users not being made admins of projects they create (#433)
+
+
+## [v3.5.4] - 2020-02-07
+### Added
+- Ability to designate task property as OSM id in challenge creation
+- Ability to setup preferred task tags during challenge creation
+- Reviewer-related stats on User Metrics page
+- Proper links for challenge names on Find Challenges page (#997)
+- Past Progress historical progress widget for challenges in Create & Manage
+- Ability to filter tasks by id, mapper, and reviewer in Create & Manage
+- Option to view tasks actively locked by a mapper in read-only preview mode
+- Default to excluding task reviews assigned to others on Task Review page
+- Support for basic point/marker "simplestyles" task-feature styling
+- Dedicated sign-in page if user navigates to page requiring sign-in
+- Various app-wide color and styling updates and fixes
+- Minor speed-up to loading of challenge dashboard in Create & Manage
+- [internal] Upgrade various package dependencies
+
+### Fixed
+- Incorrect display of 'view by priority' link on Project Detail page
+- Occasional discrepency in count of tasks completed together (#1086)
+- Erroneous treatment of en-US locale as invalid in User Settings
+- Failure during display of Markdown containing explicit line-breaks
+- Negative timers during task build or rebuild
+- Erroneous option to sort tasks by feature columns, which is not supported
+- Incorrect treatment of Current Month in user metrics
+- Occasional wrong result when searching for certain users (#1061)
+- Potential task loop when skipping tasks at a priority boundary
+- [internal] Update unit tests
+
+
+## [v3.5.3] - 2020-01-22
+### Added
+- Support for `out center` in Overpass queries by @Zverik
+- Option for project managers to export CSV of tasks in project
+- Compound filtering on task properties for challenge managers
+- Customization of displayed columns and ordering on tasks tables
+- Include more detail in challenge-completion notification emails
+- Indicate when too many tasks are shown to create virtual challenge
+- Snap task map-markers to line strings in task geometry
+- Option to skip review of current task during task review
+- Option to exclude task reviews (likely re-reviews) assigned to others
+- Attempt to fall back to default map layer if custom basemap fails
+- Ability to see challenge completion progress by task priority
+- Minor updates to README
+
+### Fixed
+- Disabled challenges displayed on virtual project pages
+- Erroneous offer to create virtual challenge from stale data
+- Incorrect initial sorting of task review table
+- Incorrect link to project leaderboard (#1044)
+- Duplication of last MR tag when clicking away from tag input
+- Inability to change data sourcing date on cloned challenge
+- Lost "enabled" setting when creating a new virtual project
+
+### Changed
+- Renamed "All Reviewed Tasks" tab to "All Review-related Tasks"
+- Replaced "Cancel Review" review control with "Unlock Task" control
+
+
+## [v3.5.2] - 2019-12-18
+### Fixed
+- Inability to edit tasks that use non-string OSM id property values
+
+
+## [v3.5.1] - 2019-12-16
+### Added
+- Creation of virtual challenges from task clusters
+- Easier access to searching for challenges by project name
+- Display of matching virtual projects for project-name searches
+- New landing page for projects that lists their challenges (#1020)
+- Notifications of challenge completion for challenge managers
+- Challenge visibility quick-toggle from project management
+
+### Fixed
+- Sorting of task-review columns from challenge management page
+- Failure to substitute task properties included in markdown links
+- Missing challenge parents when viewing a virtual project
+- Failure to filter by task properties containing a colon (#1004)
+- Failure to reprioritize all tasks in some challenges (#999)
+- Erratic map cluster behavior due to tasks with empty geometry
+
+
+## [v3.5.0] - 2019-12-06
+### Added
+- Task browsing at much lower zoom levels on Find Challenges page
+- Overlay on Find Challenges map with "Near Me" option and nominatum search
+- Relocated location filters on Find Challenges page above search results
+- Automatic refreshing of task locks while mapper is actively working on a task
+- New option to explictly "unlock" (abandon) a task on task-completion page
+
+### Fixed
+- Potential wrong timezone on origin/sourcing date recorded for task data
+- Occasional incorrect challenge-completion status resulting from stale checks
+- Incorrect OSM entity ids sometimes sent to iD and JOSM editors
+
+### Removed
+- "Within Map Bounds" filter now that task browsing is offered at lower zoom
+
+
+## [v3.4.6] - 2019-11-14
+### Added
+- Option to change task data source date when rebuilding tasks
+- Link to challenge from Challenge Leaderboard (#967)
+- Make challenge discovery status clearer to challenge managers
+- [internal] Compatibility adjustments for backend API changes around task tags
+- [internal] Upgrade various package dependencies
+
+### Fixed
+- Restore colors to task-cluster markers on maps
+
+
+## [v3.4.5] - 2019-11-06
+### Fixed
+- Impaired ability to use lasso tool on Multi-Task Work widget
+
+
+## [v3.4.4] - 2019-11-06
+### Added
+- Search for tasks by feature property in Create & Manage task map
+- Use backend clustering on Create & Manage task map
+- Use backend clustering on Challenge Details map
+- Use backend clustering on Multi-Task Work Widget map
+- Consolidate visually overlapping clusters from backend
+- Additional resiliency around bad task geometry
+
+### Fixed
+- Challenges with no remaining tasks offered in search results (#934)
+- Challenges containing skipped tasks treated as finished
+- Failure to detect quick-fix setup data on task feature properties (#945)
+- Difficult to read "other" keyword filter on challenge search (#960)
+- Poor appearance of some Markdown elements, especially on light backgrounds
+- Cramped property values in map popups for properties with long names
+- Incorrect task status on Edit Task form in Create & Manage area
+- Inability to navigate directly to Edit Task page in Create & Manage area
+- Escaping of feature properties included as separate columns in CSV exports
+
+
+## [v3.4.3] - 2019-10-16
+### Added
+- Short-codes in task comments for referencing OSM elements and map viewports
+- Lasso task-selection tool on map when bundling together multiple tasks (#937)
+- New field on challenge for tracking a separate origin date of task data
+- Additional caution around sanitizing mustache tags in markdown
+- [internal] Upgrade various package dependencies
+
+### Fixed
+- Empty popup boxes when clicking OSM data layer features (#910)
+- Inadvertent challenge-creation form submission from keywords input (#911)
+- Failure of certain challenges to build or rebuild (#933)
+- Inconsistent display of changeset comment when cloning a challenge (#918)
+- Erroneous application of simplestyle styling to task point features
+- Erroneous attempt to syntax-highlight missing task geometry JSON
+- Failure to retrieve all member challenges in large virtual projects
+- Improper escaping of CSV export fields containing commas
+- Malfunctioning filtering of locked tasks from task clusters
+
+
+## [v3.4.2] - 2019-10-04
+### Added
+- Completion and review of multiple tasks together
+- Templates for generating forms to be filled by mapper during task completion
+- RapiD editor option by @gaoxm
+- Updated help links by @mvexel
+- Additional resiliency to missing task geometries
+- Option to include specific task properties as columns in CSV exports
+- Minor updates to home page
+
+### Fixed
+- Keyboard shortcuts not correctly accounting for modifier keys
+- Broken profile pics for some users who uploaded their own avatars to OSM
+- Error at end of challenge for users viewing nearby-tasks map
+- Erroneous link that implied mappers could review their own tasks
+- Locked tasks erroneously offered to users when browsing a challenge
+- OSM elements not automatically selected in iD editor (#906)
+- Quick-fix task properties not reflecting current OSM tags (#915)
+- Task reset back to created status not served to recent viewer
+- Potential divide-by-zero error when no results for challenge stats
+
+### Changed
+- Control for viewing all tags on a quick-fix tag diff from icon to text
+
+
 ## [v3.4.1] - 2019-09-17
 ### Added
 - Current Month option to leaderboard (#885)
@@ -87,7 +720,7 @@ This project adheres to
 - Notification threading/grouping by task in inbox
 - Export and import of widget workspace layouts
 - Keyboard navigation to task-completion confirmation step
-- Additional task-review tab for All Reviewed Tasks
+- Additional task-review tab for All Review-related Tasks
 - Basic project-name search for mappers
 - Automatically remove newly-excluded widgets from existing workspaces
 - Explanatory message when user has skipped all remaining tasks in challenge

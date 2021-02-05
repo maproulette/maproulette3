@@ -9,9 +9,19 @@ export default defineMessages({
     defaultMessage: "Edit Layout",
   },
 
+  cancelConfigurationLabel: {
+    id: "WidgetWorkspace.controls.cancelConfiguration.label",
+    defaultMessage: "Cancel",
+  },
+
   saveConfigurationLabel: {
     id: "WidgetWorkspace.controls.saveConfiguration.label",
     defaultMessage: "Done Editing",
+  },
+
+  configurationNameLabel: {
+    id: "WidgetWorkspace.fields.configurationName.label",
+    defaultMessage: "Layout Name:",
   },
 
   addConfigurationLabel: {
@@ -72,10 +82,5 @@ export default defineMessages({
   importModalHeader: {
     id: "WidgetWorkspace.importModal.header",
     defaultMessage: "Import a Layout",
-  },
-
-  importModalUploadLabel: {
-    id: "WidgetWorkspace.importModal.controls.upload.label",
-    defaultMessage: "Click to Upload File",
   },
 })

@@ -11,16 +11,17 @@ class HeaderNotifications extends Component {
       <header className="mr-mb-8 mr-pb-4 mr-border-b mr-border-grey-light">
         <div className="sm:mr-flex sm:mr-justify-between mr-mb-2 sm:mr-mb-4">
           <div>
-            <h1 className="mr-h2 mr-text-blue-light mr-mb-2 md:mr-mb-0 md:mr-mr-4">
+            <h1 className="mr-h2 mr-text-white mr-mb-2 md:mr-mb-0 md:mr-mr-4">
               <FormattedMessage {...messages.inboxHeader} />
             </h1>
-            <ul className="mr-list-reset mr-text-sm mr-mt-0">
-              <li className="mr-mb-4">
+            <ul className="mr-list-reset mr-links-green-lighter mr-text-sm mr-mt-0">
+              <li className="mr-mb-4 mr-text-white">
                 <input
                   type="checkbox"
+                  className="mr-checkbox-toggle mr-mr-1"
                   checked={this.props.groupByTask}
                   onChange={this.props.toggleGroupByTask}
-                /> Group by Task
+                /> <FormattedMessage {...messages.groupByTaskLabel} />
               </li>
               <li>
                 <Link to="/user/profile">
@@ -31,9 +32,9 @@ class HeaderNotifications extends Component {
           </div>
           <div>
             {this.props.notificationsLoading ?
-             <BusySpinner lightMode /> :
+             <BusySpinner /> :
              <button
-               className="mr-button mr-button--green"
+               className="mr-button mr-button--green-lighter mr-button--small"
                onClick={this.props.refreshNotifications}
              >
                <FormattedMessage {...messages.refreshNotificationsLabel} />
@@ -42,11 +43,11 @@ class HeaderNotifications extends Component {
           </div>
         </div>
         <div className="mr-flex mr-justify-end mr-items-center">
-          <ul className="mr-list-reset mr-leading-tight mr-flex mr-items-center mr-text-grey-light">
+          <ul className="mr-list-reset mr-leading-tight mr-flex mr-items-center mr-text-white">
             <li className="mr-mr-3 mr-pr-3 mr-border-r mr-border-grey-light">
               <button
                 onClick={this.props.markReadSelected}
-                className="mr-text-current hover:mr-text-grey"
+                className="mr-text-current hover:mr-text-green-lighter mr-transition"
               >
                 <FormattedMessage {...messages.markSelectedReadLabel} />
               </button>
@@ -54,7 +55,7 @@ class HeaderNotifications extends Component {
             <li>
               <button
                 onClick={this.props.deleteSelected}
-                className="mr-text-current hover:mr-text-red"
+                className="mr-text-current hover:mr-text-red-light mr-transition"
               >
                 <FormattedMessage {...messages.deleteSelectedLabel} />
               </button>

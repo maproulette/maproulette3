@@ -4,9 +4,17 @@ import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import Downshift from 'downshift'
 import _map from 'lodash/map'
+import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
+import _split from 'lodash/split'
+import _difference from 'lodash/difference'
+import _clone from 'lodash/clone'
+import _indexOf from 'lodash/indexOf'
+import _filter from 'lodash/filter'
+import _concat from 'lodash/concat'
+import Dropdown from '../Dropdown/Dropdown'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
-import './AutosuggestTextBox.scss'
 
 /**
  * AutosuggestTextBox combines a text input with a dropdown, executing a search
@@ -16,11 +24,58 @@ import './AutosuggestTextBox.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class AutosuggestTextBox extends Component {
+  state = {
+    textBoxActive: false,
+    highlightResult: -1
+  }
+
   inputChanged = inputText => {
     this.props.search(inputText)
 
     if (this.props.onInputValueChange) {
       this.props.onInputValueChange(inputText)
+    }
+  }
+
+  onChange = (item, downshift) => {
+    if (this.props.onChange) {
+      this.props.onChange(item, downshift)
+    }
+
+    // Downshift does not automatically clear the selected menu item when it's
+    // chosen, so we need to do so ourselves. Otherwise if the user clicks off
+    // the component later, Downshift could choose to re-add the selected item.
+    // Note that this clearing will result in another call to onChange with a
+    // null item
+    if (item && downshift.selectedItem) {
+      downshift.clearSelection()
+    }
+  }
+
+  handleKeyDown = (e, dropdown, downshift) => {
+    if (e.key === "Enter") {
+      // Don't let enter key potentially submit a form
+      e.preventDefault()
+    }
+
+    if (dropdown.isDropdownVisible) {
+      const items = _concat(this.getPreferredResults(), this.getSearchResults())
+      const itemsLength = _get(items, 'length', 0)
+
+      if (e.key === "Enter") {
+        downshift.selectItem(items[this.state.highlightResult])
+        this.setState({highlightResult: -1})
+      }
+      else if (e.key === "ArrowDown") {
+        if (this.state.highlightResult < (itemsLength - 1)) {
+          this.setState({highlightResult: (this.state.highlightResult + 1) })
+        }
+      }
+      else if (e.key === "ArrowUp" && this.state.highlightResult > -1) {
+        if (this.state.highlightResult > 0) {
+          this.setState({highlightResult: (this.state.highlightResult - 1) })
+        }
+      }
     }
   }
 
@@ -31,49 +86,135 @@ export default class AutosuggestTextBox extends Component {
    * @private
    */
   dropdownItems(getItemProps, inputValue) {
-    return _map(this.props.searchResults, result => (
-             <a {...getItemProps({
-               key: this.props.resultKey(result),
-               item: result,
-               className: classNames("dropdown-item", this.props.resultClassName ?
-                                                      this.props.resultClassName(result) :
-                                                      null),
-             })}>
-               {this.props.resultLabel(result)}
-             </a>
-           ))
+    const generateResult = (result, className = "", index) => {
+      if (this.state.highlightResult === index) {
+        className += this.props.highlightClassName
+      }
+
+      if (!_isEmpty(result)) {
+        return (
+          <a
+            {...getItemProps({
+              key: this.props.resultKey(result),
+              item: result,
+              className: classNames(
+                className,
+                (this.props.resultClassName ? this.props.resultClassName(result) : null)
+              ),
+            })}
+          >
+            {this.props.resultLabel(result)}
+          </a>
+        )
+      }
+      else return null
+    }
+
+    let items = []
+    const searchResults = this.getSearchResults()
+    const preferredResults = this.getPreferredResults()
+    if (!_isEmpty(preferredResults)) {
+      let className = "mr-font-medium"
+      items = items.concat(_map(preferredResults,
+        (result, index) => {
+          // Add a border bottom to the last entry if there are more
+          // search results.
+          if (index === preferredResults.length - 1 && searchResults.length > 0) {
+            className += " mr-border-b-2 mr-border-white-50 mr-mb-2 mr-pb-2"
+          }
+
+          return generateResult(result, className, index)
+        }))
+    }
+
+    // Now concat all other search results -- but the index will be offset by the
+    // preferred results length
+    items = items.concat(_map(searchResults,
+      (result, index) => generateResult(result, "", index + preferredResults.length)))
+    return items
+  }
+
+  getPreferredResults = () => {
+    // Filter out any tags that have already been selected.
+    const preferredResults = _clone(this.props.preferredResults) || []
+    return _difference(preferredResults, _split(this.props.formData, ','))
+  }
+
+  getSearchResults = () => {
+    // If we are limiting tags to just preferred we don't need to provide
+    // any search results
+    if (this.props.limitToPreferred) {
+      return []
+    }
+
+    // Filter out any of our original preferredResults tags so they don't show
+    // in the list twice.
+    return _filter(this.props.searchResults,
+                   t => _indexOf(this.props.preferredResults, t.name) === -1)
+
   }
 
   render() {
     return (
-      <Downshift {...this.props}
-                 onInputValueChange={this.inputChanged}
-                 itemToString={result => result ? this.props.resultLabel(result) : ''}>
-        {({getInputProps, getItemProps, getMenuProps, isOpen, inputValue}) => {
-          const resultItems = this.dropdownItems(getItemProps, inputValue)
+      <Downshift
+        {...this.props}
+        onInputValueChange={this.inputChanged}
+        onChange={this.onChange}
+        itemToString={result => result ? this.props.resultLabel(result) : ''}
+      >
+        {downshift => {
+          const openOnFocus = this.props.openOnFocus ||
+                              _get(this.props.preferredResults, 'length', 0) > 0
+          const resultItems = this.dropdownItems(downshift.getItemProps, downshift.inputValue)
+          const show = this.state.textBoxActive || (downshift.isOpen && downshift.inputValue.length > 0)
+
           return (
-            <div className={classNames("dropdown autosuggest-text-box",
-                                      {"is-active": isOpen && inputValue.length > 0})}>
-              <div className="autosuggest-text-box__input-wrapper">
-                <input {...getInputProps()}
-                       className={classNames(this.props.inputClassName)}
-                       placeholder={this.props.placeholder}
+            <Dropdown
+              className="mr-w-full mr-dropdown--flush"
+              innerClassName={this.props.dropdownInnerClassName}
+              rootProps={downshift.getRootProps({}, {suppressRefError: true})}
+              suppressControls
+              fixedMenu={this.props.fixedMenu}
+              isVisible={show}
+              toggleVisible={() => this.setState({highlightResult: -1})}
+              dropdownButton={dropdown => (
+                <input
+                  {...downshift.getInputProps()}
+                  className={classNames(
+                    this.props.inputClassName,
+                    "mr-flex-grow mr-w-full mr-h-full mr-outline-none"
+                  )}
+                  onKeyDown={(e) => this.handleKeyDown(e, dropdown, downshift)}
+                  onFocus={(e) => this.setState({textBoxActive: openOnFocus})}
+                  onBlur={(e) => this.setState({textBoxActive: false})}
+                  placeholder={this.props.placeholder}
                 />
-                {this.props.isSearching && <BusySpinner inline />}
-              </div>
-              <div className="dropdown-menu">
-                <div {...getMenuProps({
-                  className: classNames("dropdown-content", {"dropdown-content--fixed": this.props.fixedMenu}),
-                })}>
-                  {resultItems}
-                  {(resultItems.length === 0 || this.props.showNoResults) &&
-                  <div className="autosuggest-text-box__no-results">
-                    <FormattedMessage {...messages.noResults} />
+              )}
+              dropdownContent={() => {
+                if (this.props.isSearching) {
+                  return (
+                    <div
+                      {...downshift.getMenuProps({
+                        className: "mr-flex mr-justify-center mr-items-center mr-my-4 mr-w-full"
+                      })}
+                    >
+                      <BusySpinner />
+                    </div>
+                  )
+                }
+
+                return (
+                  <div {...downshift.getMenuProps({className: "mr-link-list mr-links-inverse"})}>
+                    {resultItems}
+                    {(resultItems.length === 0 || this.props.showNoResults) &&
+                    <div className="mr-text-grey-lighter mr-p-4 mr-text-sm">
+                      <FormattedMessage {...messages.noResults} />
+                    </div>
+                    }
                   </div>
-                  }
-                </div>
-              </div>
-            </div>
+                )
+              }}
+            />
           )
         }}
       </Downshift>
@@ -100,8 +241,13 @@ AutosuggestTextBox.propTypes = {
   onInputValueChange: PropTypes.func,
   /** Set to true to allow user to create new items */
   allowNew: PropTypes.bool,
+  /** Array of preferred matches that should be shown first */
+  preferredResults: PropTypes.array,
+  /** ClassNames for highlighting on arrow keys */
+  highlightClassName: PropTypes.string,
 }
 
 AutosuggestTextBox.defaultProps = {
   allowNew: false,
+  highlightClassName: " mr-bg-blue-darker mr-font-bold",
 }

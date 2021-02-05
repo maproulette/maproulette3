@@ -13,7 +13,6 @@ import _reverse from 'lodash/reverse'
 import _each from 'lodash/each'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import messages from './Messages'
-import './CommentList.scss'
 
 /**
  * CommentList renders the given comments as a list with some basic formatting,
@@ -24,7 +23,11 @@ import './CommentList.scss'
 export default class CommentList extends Component {
   render() {
     if (this.props.comments.length === 0) {
-      return <div className="mr-px-4 comment-list none">No Comments</div>
+      return (
+        <div className="mr-px-4 mr-text-grey-light">
+          <FormattedMessage {...messages.noComments} />
+        </div>
+      )
     }
 
     const commentDates = new Map()
@@ -38,9 +41,9 @@ export default class CommentList extends Component {
 
     const commentItems = _map(sortedComments, comment =>
       !_isObject(comment) ? null : (
-        <article key={comment.id} className="mr-pr-4 mr-mb-4">
-          <div className="mr-list-reset mr-mb-2 mr-text-xs">
-            <span className="mr-font-medium">
+        <article key={comment.id} className="mr-pr-4 mr-mt-4">
+          <div className="mr-mb-2 mr-text-xs">
+            <span className="mr-font-bold">
               <FormattedTime
                 value={commentDates.get(comment.id)}
                 hour='2-digit'
@@ -53,23 +56,26 @@ export default class CommentList extends Component {
               />
             </span> &mdash; {comment.osm_username}
           </div>
-          <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
-                                     this.props.lightMode ? "mr-bg-grey-lighter" : "mr-bg-grey-lighter-10")}>
-            <MarkdownContent markdown={comment.comment} />
-          </div>
-
           {(this.props.includeChallengeNames || this.props.includeTaskLinks) &&
-            <ul className="mr-flex mr-justify-between">
+            <div className="mr-flex mr-justify-between mr-text-xs mr-links-green-lighter mr-mb-2">
               {this.props.includeChallengeNames &&
-               <li>{comment.challengeName}</li>
+               <div className="mr-text-white">{comment.challengeName}</div>
               }
               {this.props.includeTaskLinks &&
                <Link to={`/challenge/${comment.challengeId}/task/${comment.taskId}`}>
                  <FormattedMessage {...messages.viewTaskLabel} />
                </Link>
               }
-            </ul>
+            </div>
           }
+          <div
+            className={classNames(
+              "mr-text-sm mr-rounded-sm mr-p-2 mr-mb-8",
+              this.props.lightMode ? "mr-bg-grey-lighter" : "mr-bg-black-15 mr-shadow-inner mr-text-grey-lighter"
+            )}
+          >
+            <MarkdownContent allowShortCodes markdown={comment.comment} />
+          </div>
         </article>
       )
     )

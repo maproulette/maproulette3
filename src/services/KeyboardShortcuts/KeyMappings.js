@@ -19,6 +19,7 @@ export default {
     editJosmLayer: {key: 't', label: messages.editJosmLayer},
     editJosmFeatures: {key: 'y', label: messages.editJosmFeatures},
     editLevel0: {key: 'v', label: messages.editLevel0},
+    editRapid: {key: 'a', label: messages.editRapid},
   },
   taskEditing: {
     cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel},
@@ -35,10 +36,13 @@ export default {
     fixed: {key: 'f', label: messages.fixed},
     tooHard: {key: 'd', label: messages.tooHard},
     alreadyFixed: {key: 'x', label: messages.alreadyFixed},
-    confirmSubmit: {key: 'Enter', label: messages.confirmSubmit},
   },
   taskInspect: {
     nextTask: {key: 'l', label: messages.nextTask},
     prevTask: {key: 'h', label: messages.prevTask},
+  },
+  taskConfirmation: {
+    confirmSubmit: {key: 'Enter', label: messages.confirmSubmit},
+    cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel},
   },
 }

@@ -1,17 +1,14 @@
+import '@formatjs/intl-relativetimeformat/polyfill'
 import _map from 'lodash/map'
 import _isString from 'lodash/isString'
 import _fromPairs from 'lodash/fromPairs'
 import messages from './Messages'
-import enUSMessages from '../../../lang/en-US.json'
-import esMessages from '../../../lang/es.json'
-import frMessages from '../../../lang/fr.json'
-import deMessages from '../../../lang/de.json'
-import afMessages from '../../../lang/af.json'
-import jaMessages from '../../../lang/ja.json'
-import koMessages from '../../../lang/ko.json'
-import ptBRMessages from '../../../lang/pt-BR.json'
 
-// Supported locales.
+// To add support for a new locale, add it to both `Locale` and `LocaleImports`
+// in this file, and then add a description of the new locale to the
+// `Messages.js` file in this directory
+
+// Supported locales
 export const Locale = Object.freeze({
   enUS: 'en-US',
   es: 'es',
@@ -20,8 +17,79 @@ export const Locale = Object.freeze({
   af: 'af',
   ja: 'ja',
   ko: 'ko',
+  nl: 'nl',
   'pt-BR': 'pt-BR',
+  'cs-CZ': 'cs-CZ',
+  'fa-IR': 'fa-IR',
+  'ru-RU': 'ru-RU',
+  uk: 'uk',
+  vi: 'vi',
+  tr: 'tr',
 })
+
+// Dynamic imports to load locale data and translation files
+const LocaleImports = {
+  [Locale.enUS]: () => Promise.all([
+    import('../../../lang/en-US.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/en'),
+  ]),
+  [Locale.es]: () => Promise.all([
+    import('../../../lang/es.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/es'),
+  ]),
+  [Locale.fr]: () => Promise.all([
+    import('../../../lang/fr.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/fr'),
+  ]),
+  [Locale.de]: () => Promise.all([
+    import('../../../lang/de.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/de'),
+  ]),
+  [Locale.af]: () => Promise.all([
+    import('../../../lang/af.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/af'),
+  ]),
+  [Locale.ja]: () => Promise.all([
+    import('../../../lang/ja.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/ja'),
+  ]),
+  [Locale.ko]: () => Promise.all([
+    import('../../../lang/ko.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/ko'),
+  ]),
+  [Locale.nl]: () => Promise.all([
+    import('../../../lang/nl.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/nl'),
+  ]),
+  [Locale.uk]: () => Promise.all([
+    import('../../../lang/uk.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/uk'),
+  ]),
+  [Locale.vi]: () => Promise.all([
+    import('../../../lang/vi.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/vi'),
+  ]),
+  [Locale["pt-BR"]]: () => Promise.all([
+    import('../../../lang/pt_BR.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/pt'),
+  ]),
+  [Locale["cs-CZ"]]: () => Promise.all([
+    import('../../../lang/cs_CZ.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/cs'),
+  ]),
+  [Locale["fa-IR"]]: () => Promise.all([
+    import('../../../lang/fa_IR.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/fa'),
+  ]),
+  [Locale["ru-RU"]]: () => Promise.all([
+    import('../../../lang/ru_RU.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/ru'),
+  ]),
+  [Locale.tr]: () => Promise.all([
+    import('../../../lang/tr.json'),
+    import('@formatjs/intl-relativetimeformat/locale-data/tr'),
+  ]),
+}
 
 /**
  * Returns true if the given locale matches a supported locale, false
@@ -32,19 +100,16 @@ export const isSupportedLocale = function(locale) {
 }
 
 /**
- * Mapped locales to translated messages loaded from src/lang translation
- * files.
+ * Dynamically load and return the translated messages for the given locale
  */
-export const translatedMessages = Object.freeze({
-  [Locale.enUS]: enUSMessages,
-  [Locale.es]: esMessages,
-  [Locale.fr]: frMessages,
-  [Locale.de]: deMessages,
-  [Locale.af]: afMessages,
-  [Locale.ja]: jaMessages,
-  [Locale.ko]: koMessages,
-  [Locale["pt-BR"]]: ptBRMessages,
-})
+export const loadTranslatedMessages = async function(locale) {
+  if (!isSupportedLocale(locale)) {
+    locale = defaultLocale()
+  }
+
+  const [messages] = await LocaleImports[locale]()
+  return messages
+}
 
 /**
  * Returns the default locale configured in the .env file, or U.S.  English if

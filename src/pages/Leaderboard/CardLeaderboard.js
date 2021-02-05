@@ -25,24 +25,24 @@ class CardLeaderboard extends Component {
     return (
       <article
         className={classNames(
-          'mr-relative mr-bg-white-10 mr-text-white mr-rounded mr-p-4 md:mr-p-6 mr-shadow mr-text-center',
+          'mr-relative mr-bg-black-10 mr-text-white mr-rounded mr-p-4 md:mr-p-6 mr-shadow mr-text-center',
           this.props.className
         )}
       >
         <header className="mr-max-w-xs mr-mx-auto mr-mb-2">
           <div
             className="mr-block mr-w-24 mr-h-24 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-mb-4 mr-rounded-full"
-            style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(200)})` }}
+            style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
           />
           <h2 className="mr-h4 mr-mb-1">
-            <span className="mr-text-4xl mr-font-bold mr-absolute mr-pin-l mr-pin-t mr-mt-6 mr-ml-6">
+            <span className="mr-text-4xl mr-font-bold mr-absolute mr-left-0 mr-top-0 mr-mt-6 mr-ml-6">
               <FormattedNumber value={leader.rank} />
             </span>
             {leader.name}
           </h2>
         </header>
-        <h3 className="mr-h2 mr-mb-4 mr-text-green-lighter">
-          <strong className="mr-font-bold mr-text-green-lighter">
+        <h3 className="mr-h2 mr-mb-4 mr-text-yellow">
+          <strong className="mr-font-bold mr-text-yellow">
             <FormattedNumber value={leader.score} />
           </strong> <FormattedMessage {...messages.userPoints} />
         </h3>
@@ -51,7 +51,7 @@ class CardLeaderboard extends Component {
            <h4 className="mr-inline-block mr-text-md mr-pb-3 mr-mb-3 mr-border-b mr-border-white-40">
              <FormattedMessage {...messages.userTopChallenges} />
            </h4>
-           <ol className="mr-list-reset mr-text-sm mr-links-inverse">
+           <ol className="mr-list-reset mr-text-sm mr-links-green-lighter">
              {topChallengeItems}
            </ol>
          </React.Fragment>

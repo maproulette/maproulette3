@@ -109,11 +109,6 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
               loadingBrowsedChallenge: null,
               isVirtual
             })
-
-            if (challenge.id !== _get(props, 'clusteredTasks.challengeId') ||
-                isVirtual !== _get(props, 'clusteredTasks.isVirtualChallenge')) {
-              props.fetchClusteredTasks(challenge.id, isVirtual)
-            }
           }
           else if (!isVirtual && !_isFinite(this.state.loadingBrowsedChallenge)) {
             // We don't have the challenge available (and we're not in the middle
@@ -198,8 +193,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
   }
 
   _WithBrowsedChallenge.propTypes = {
-    clusteredTasks: PropTypes.object,
-    fetchClusteredTasks: PropTypes.func.isRequired,
+    clusteredTasks: PropTypes.object
   }
 
   return _WithBrowsedChallenge

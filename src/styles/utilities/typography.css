@@ -38,8 +38,12 @@ h4,
   @apply mr-text-yellow mr-text-sm mr-font-medium mr-uppercase mr-my-2;
 }
 
+.mr-text-inherit {
+  color: inherit;
+}
+
 .text-danger {
-  @apply mr-text-red;
+  @apply mr-text-red-light;
 }
 
 .mr-links-inverse a {
@@ -60,6 +64,44 @@ h4,
   }
 }
 
+.mr-links-green-light a {
+  @apply mr-text-green-light;
+
+  &:hover,
+  &.active {
+    @apply mr-text-white;
+  }
+}
+
+.mr-links-blue-light a {
+  @apply mr-text-blue-light;
+
+  &:hover,
+  &.active {
+    @apply mr-text-blue-leaflet;
+  }
+}
+
+.mr-link-list a {
+  @apply mr-block mr-mb-2;
+}
+
+.mr-links-grey-light a {
+  @apply mr-text-grey-light;
+
+  &:hover,
+  &.active {
+    @apply mr-text-white;
+  }
+
+  .mr-lightmode & {
+    &:hover,
+    &:active {
+      @apply mr-text-blue-light;
+    }
+  }
+}
+
 .mr-overflow-ellipsis {
   text-overflow: ellipsis;
 }
@@ -72,7 +114,7 @@ h4,
   h3,
   h4,
   h5 {
-    @apply mr-font-medium mr-leading-tight;
+    @apply mr-font-medium mr-leading-tight mr-text-inherit;
   }
 
   h1 {
@@ -97,7 +139,26 @@ h4,
   ol,
   ul,
   pre {
+    @apply mr-my-4;
+  }
+
+  li > p, li > ul, li > ol {
     @apply mr-my-2;
+  }
+
+  li.task-list-item { /* checklist items */
+    @apply mr-list-none mr--ml-4;
+  }
+
+  code {
+    @apply mr-text-orange;
+  }
+
+  blockquote {
+    @apply mr-my-2;
+    @apply mr-px-2;
+    @apply mr-py-px;
+    @apply mr-bg-black-15;
   }
 
   ol, ul {
@@ -106,14 +167,59 @@ h4,
 
   ul {
     list-style-type: disc;
+
+    > li > ul {
+      list-style-type: circle;
+
+      > li > ul {
+        list-style-type: square;
+      }
+    }
+  }
+
+  ol {
+    list-style-type: decimal;
+
+    > li > ol {
+      list-style-type: lower-alpha;
+
+      > li > ol {
+        list-style-type: lower-roman;
+      }
+    }
+  }
+
+  strong {
+    @apply mr-text-inherit;
+  }
+
+  table {
+    @apply mr-bg-black-5;
+
+    th {
+      @apply mr-p-2 mr-text-inherit;
+    }
+
+    td {
+      @apply mr-px-2;
+    }
+
+    tr:last-child td {
+      @apply mr-pb-2;
+    }
   }
 
   a {
     @apply mr-text-green-lighter;
 
     &:hover {
-      @apply mr-text-yellow;
+      @apply mr-text-white;
     }
+  }
+
+  hr {
+    height: 2px;
+    @apply mr-bg-white-10;
   }
 
   &--longtext {
@@ -129,15 +235,25 @@ h4,
 
   &--light {
     a {
-      @apply mr-text-blue-light mr-underline;
+      @apply mr-text-green-light;
 
       &:hover {
-        @apply mr-text-current;
+        @apply mr-text-blue-light;
       }
     }
   }
 
   &--base {
     @apply mr-text-base;
+  }
+
+  &--compact {
+    p {
+      @apply mr-my-0 mr-mt-4;
+    }
+
+    p:first-child {
+      @apply mr-mt-0;
+    }
   }
 }

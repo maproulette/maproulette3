@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ShareButtons, generateShareIcon } from 'react-share'
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  EmailShareButton,
+  EmailIcon,
+} from 'react-share'
 import './ChallengeShareControls.scss'
 
 export default class ChallengeShareControls extends Component {
@@ -10,18 +17,8 @@ export default class ChallengeShareControls extends Component {
       return null
     }
 
-    const {
-      FacebookShareButton,
-      TwitterShareButton,
-      EmailShareButton,
-    } = ShareButtons
-
-    const FacebookIcon = generateShareIcon('facebook')
-    const TwitterIcon = generateShareIcon('twitter')
-    const EmailIcon = generateShareIcon('email')
-
     const shareUrl = `${process.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`
-    const title = process.env.REACT_APP_TITLE
+    const title = this.props.title || process.env.REACT_APP_TITLE
     const hashtag = 'maproulette'
 
     return (
@@ -43,7 +40,7 @@ export default class ChallengeShareControls extends Component {
         </div>
 
         <div className="share-control">
-          <EmailShareButton url={shareUrl} subject={title} body={shareUrl}>
+          <EmailShareButton url={shareUrl} subject={title}>
             <span className="share-icon">
               <EmailIcon size={26} round />
             </span>

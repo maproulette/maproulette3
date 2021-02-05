@@ -14,6 +14,16 @@ export default defineMessages({
     defaultMessage: 'User since:',
   },
 
+  osmProfileLabel: {
+    id: 'Metrics.links.osmProfile.label',
+    defaultMessage: "OSM Profile",
+  },
+
+  osmChaLabel: {
+    id: 'Metrics.links.osmCha.label',
+    defaultMessage: "OSMCha",
+  },
+
   totalCompletedTasksTitle: {
     id: 'Metrics.totalCompletedTasksTitle',
     defaultMessage: 'Total Completed Tasks',
@@ -73,4 +83,9 @@ export default defineMessages({
     id: 'Metrics.reviewStats.awaiting.label',
     defaultMessage: "Tasks that are awaiting review",
   },
+
+  avgReviewTime: {
+    id: 'Metrics.reviewStats.averageReviewTime.label',
+    defaultMessage: "Average time to review:",
+  }
 })

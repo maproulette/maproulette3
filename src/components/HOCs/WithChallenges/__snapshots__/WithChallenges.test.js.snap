@@ -101,33 +101,6 @@ Object {
 }
 `;
 
-exports[`only challenges with available tasks/actions are normally passed through 1`] = `
-Object {
-  "challenges": Array [
-    Object {
-      "actions": Object {
-        "available": 6,
-      },
-      "difficulty": "easy",
-      "enabled": true,
-      "id": 456,
-      "name": "challenge2",
-      "parent": 987,
-    },
-    Object {
-      "actions": Object {
-        "available": 1,
-      },
-      "difficulty": "easy",
-      "enabled": true,
-      "id": 789,
-      "name": "challenge2",
-      "parent": 987,
-    },
-  ],
-}
-`;
-
 exports[`only challenges with enabled project are normally passed through 1`] = `
 Object {
   "challenges": Array [],

@@ -1,5 +1,8 @@
 @import 'variables.scss';
 
+$inactiveColor: #EEE;
+$activeColor: #47725F;
+
 .steps:not(.is-hollow) {
   .steps-segment {
     .steps-marker.clickable:not(.is-hollow) {
@@ -10,4 +13,24 @@
       }
     } 
   }
+}
+
+.steps-segment:after {
+  background-color: $activeColor !important;
+}
+
+.steps-segment.is-active:after, .steps-segment.is-active ~ .steps-segment:after {
+  background-color: $inactiveColor !important;
+}
+
+.steps:not(.is-hollow) .steps-marker:not(.is-hollow) {
+  background-color: $activeColor !important;
+}
+
+.steps:not(.is-hollow) .steps-segment.is-active .steps-marker:not(.is-hollow) {
+  background-color: $activeColor !important;
+}
+
+.steps:not(.is-hollow) .steps-segment.is-active ~ .steps-segment .steps-marker:not(.is-hollow) {
+  background-color: $inactiveColor !important;
 }

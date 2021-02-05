@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { injectIntl } from 'react-intl'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import { TileLayer } from 'react-leaflet'
-import { BingLayer } from 'react-leaflet-bing'
+import { BingLayer } from 'react-leaflet-bing-v2'
 import _isEmpty from 'lodash/isEmpty'
-import { layerSourceShape, normalizeLayer }
+import _get from 'lodash/get'
+import WithErrors from '../../HOCs/WithErrors/WithErrors'
+import AppErrors from '../../../services/Error/AppErrors'
+import { layerSourceShape, normalizeLayer, defaultLayerSource }
        from '../../../services/VisibleLayer/LayerSources'
 
 /**
@@ -17,6 +20,8 @@ import { layerSourceShape, normalizeLayer }
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class SourcedTileLayer extends Component {
+  state = {}
+
   attribution = layer => {
     if (this.props.skipAttribution || _isEmpty(layer.attribution)) {
       return null
@@ -27,7 +32,50 @@ export class SourcedTileLayer extends Component {
            layer.attribution.text
   }
 
+  componentDidCatch(error, info) {
+    // Errors here are almost always related to bad layer info, e.g. from a
+    // custom basemap. The most common problem is inclusion of an interpolation
+    // variable in the URL that doesn't get replaced, which will cause Leaflet
+    // to throw an exception
+    const details =
+      (this.props.source.name === "Custom" ? "custom basemap: " : "") + error.message
+    this.props.addErrorWithDetails(AppErrors.map.renderFailure, details)
+  }
+
+  static getDerivedStateFromError(error) {
+    return {layerRenderFailed: true}
+  }
+
+  componentDidUpdate(prevProps) {
+    // If we've switched off a failed layer, reset our failure state
+    const currentLayer = _get(this.props, 'source.id')
+    if (this.state.layerRenderFailed && currentLayer &&
+        currentLayer !== _get(prevProps, 'source.id')) {
+      this.setState({layerRenderFailed: false})
+    }
+  }
+
   render() {
+    if (!this.props.source) {
+      return null
+    }
+
+    if (this.state.layerRenderFailed) {
+      // Try rendering the default layer as a fallback. If we *are* the
+      // fallback, just render an error message
+      if (this.props.fallbackLayer) {
+        return (
+          <FormattedMessage
+            {...AppErrors.map.renderFailure}
+            values={{details: 'fallback to default layer failed'}}
+          />
+        )
+      }
+      else {
+        return <SourcedTileLayer source={defaultLayerSource()} fallbackLayer={true} />
+      }
+    }
+
     const normalizedLayer = normalizeLayer(this.props.source)
     if (normalizedLayer.type === 'bing') {
       // Bing layers have to be specially rendered
@@ -55,7 +103,7 @@ export class SourcedTileLayer extends Component {
 
 SourcedTileLayer.propTypes = {
   /** LayerSource to use */
-  source: layerSourceShape.isRequired,
+  source: layerSourceShape,
   /** Set to true to suppress display of source attribution */
   skipAttribution: PropTypes.bool,
 }
@@ -64,4 +112,4 @@ SourcedTileLayer.defaultProps = {
   skipAttribution: false,
 }
 
-export default injectIntl(SourcedTileLayer)
+export default WithErrors(injectIntl(SourcedTileLayer))

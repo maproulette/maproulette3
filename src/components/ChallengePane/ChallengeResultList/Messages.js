@@ -14,14 +14,14 @@ export default defineMessages({
     defaultMessage: "No Results",
   },
 
-  createVirtualChallenge: {
-    id: "VirtualChallenge.controls.create.label",
-    defaultMessage: "Work on {taskCount, number} Mapped Tasks",
+  tooManyTasksLabel: {
+    id: "VirtualChallenge.controls.tooMany.label",
+    defaultMessage: "Zoom in to work on mapped tasks",
   },
 
-  virtualChallengeNameLabel: {
-    id: "VirtualChallenge.fields.name.label",
-    defaultMessage: 'Name your "virtual" challenge',
+  tooManyTasksTooltip: {
+    id: "VirtualChallenge.controls.tooMany.tooltip",
+    defaultMessage: 'At most {maxTasks, number} tasks can be included in a "virtual" challenge',
   },
 
   loadMoreLabel: {

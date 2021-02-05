@@ -86,7 +86,7 @@ export const WithMapillaryImages = function(WrappedComponent) {
         key: feature.properties.key,
         lon: feature.geometry.coordinates[0],
         lat: feature.geometry.coordinates[1],
-        url320: mapillaryImageUrl(feature.properties.key, '320'),
+        url: mapillaryImageUrl(feature.properties.key, '320'),
       }))
     }
 

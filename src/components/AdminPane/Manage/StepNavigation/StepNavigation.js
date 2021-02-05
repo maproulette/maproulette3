@@ -1,48 +1,67 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
+import _isString from 'lodash/isString'
+import _isEmpty from 'lodash/isEmpty'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './StepNavigation.scss'
 
 /**
- * StepNavigation renders cancel, prev, next, and finish controls, as
- * appropriate, for a multi-step editing workflow.
+ * StepNavigation renders prev, next, and finish controls, as appropriate, for
+ * a multi-step editing workflow
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class StepNavigation extends Component {
   render() {
     return (
-      <div className="step-navigation" key={`step-${this.props.activeStep}`}>
-        <button className="button is-secondary is-outlined"
-                onClick={this.props.cancel}>
-          <FormattedMessage {...messages.cancel} />
-        </button>
-
-        <div className="button-group">
-          {this.props.activeStep > 0 &&
-            <button className="button is-secondary is-outlined has-svg-icon"
-                    onClick={this.props.prevStep}>
-              <SvgSymbol viewBox='0 0 20 20' sym="arrow-left-icon" />
-              <FormattedMessage {...messages.prev} />
-            </button>
+      <div
+        className="mr-flex mr-justify-between"
+        key={`step-${this.props.activeStep.name}`}
+      >
+        <div className="mr-flex mr-items-center">
+          {_isString(this.props.activeStep.previous) &&
+           <button
+             type="button"
+             className="mr-button mr-button--green-lighter mr-button--with-icon mr-mr-4"
+             onClick={() => this.props.prevStep()}
+           >
+             <SvgSymbol
+               viewBox='0 0 20 20'
+               sym="arrow-left-icon"
+               className="mr-fill-current mr-w-4 mr-h-4 mr-mr-2"
+             />
+             <FormattedMessage {...messages.prev} />
+           </button>
           }
 
-          {this.props.activeStep < this.props.steps.length - 1 &&
-            <button type="submit"
-                    className="button is-primary is-outlined has-svg-icon">
-              <FormattedMessage {...messages.next} />
-              <SvgSymbol viewBox='0 0 20 20' sym="arrow-right-icon" />
-            </button>
+          {_isString(this.props.activeStep.next) &&
+           <button
+             type="submit"
+             className="mr-button mr-button--green-lighter mr-button--with-icon mr-mr-4"
+           >
+             <FormattedMessage {...messages.next} />
+             <SvgSymbol
+               viewBox='0 0 20 20'
+               sym="arrow-right-icon"
+               className="mr-fill-current mr-w-4 mr-h-4 mr-ml-2"
+             />
+           </button>
           }
+        </div>
 
-          {(this.props.activeStep === this.props.steps.length - 1 ||
-            this.props.canFinishEarly) &&
-            <button type="submit"
-                    className="button is-green is-outlined has-svg-icon"
-                    onClick={() => this.props.finish && this.props.finish()}>
-              <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
+        <div className="mr-flex mr-justify-end mr-items-center">
+          {(_isEmpty(this.props.activeStep.next) || this.props.activeStep.canFinish) &&
+            <button
+              type="submit"
+              className="mr-button mr-button--green-lighter mr-button--with-icon mr-ml-4"
+              onClick={() => this.props.finish && this.props.finish()}
+            >
+              <SvgSymbol
+                viewBox='0 0 20 20'
+                sym="check-icon"
+                className="mr-fill-current mr-w-4 mr-h-4 mr-mr-2"
+              />
               <FormattedMessage {...messages.finish} />
             </button>
           }
@@ -53,22 +72,10 @@ export default class StepNavigation extends Component {
 }
 
 StepNavigation.propTypes = {
-  /** Array of steps in the workflow */
-  steps: PropTypes.array.isRequired,
-  /** The (zero-based) index of the currently active step. */
-  activeStep: PropTypes.number,
+  /** Object representing the currently active step. */
+  activeStep: PropTypes.object.isRequired,
   /** Invoked when user clicks the Prev button */
   prevStep: PropTypes.func.isRequired,
-  /** Invoked when the user clicks the cancel button */
-  cancel: PropTypes.func.isRequired,
   /** Invoked, if provided, when user finishes workflow */
   finish: PropTypes.func,
-  /** Set to true to allow users to finish the workflow early */
-  canFinishEarly: PropTypes.bool,
-}
-
-StepNavigation.defaultProps = {
-  steps: [],
-  activeStep: 0,
-  canFinishEarly: false,
 }

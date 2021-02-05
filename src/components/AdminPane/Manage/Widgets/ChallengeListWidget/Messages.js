@@ -18,4 +18,24 @@ export default defineMessages({
     id: "Widgets.ChallengeListWidget.search.placeholder",
     defaultMessage: "Search",
   },
+
+  exportTitle: {
+    id: "Admin.manageProjectChallenges.controls.export.title",
+    defaultMessage: "Export",
+  },
+
+  exportCSVLabel: {
+    id: "Admin.manageProjectChallenges.controls.exportCSV.label",
+    defaultMessage: "Export CSV",
+  },
+
+  exportMapperReviewCSVLabel: {
+    id: "Admin.manageProjectChallenges.controls.exportReviewCSV.label",
+    defaultMessage: "Export Mapper Review CSV",
+  },
+
+  timezoneLabel: {
+    id: "Admin.manageProjectChallenges.controls.timezone.label",
+    defaultMessage: "Timezone",
+  },
 })

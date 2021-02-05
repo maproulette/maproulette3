@@ -1,9 +1,9 @@
 .mr-status-created {
-  @apply mr-text-blue-light;
+  @apply mr-text-purple;
 }
 
 .mr-status-false-positive {
-  @apply mr-text-orange;
+  @apply mr-text-mango;
 }
 
 .mr-status-skipped {
@@ -11,27 +11,35 @@
 }
 
 .mr-status-already-fixed {
-  @apply mr-text-green-light;
+  @apply mr-text-yellow-sand;
 }
 
 .mr-status-too-hard {
-  @apply mr-text-red;
+  @apply mr-text-red-light;
 }
 
 .mr-status-fixed {
-  @apply mr-text-teal;
+  @apply mr-text-blue-viking;
 }
 
 .mr-status-deleted {
+  @apply mr-text-grey;
+}
+
+.mr-status-disabled {
+  @apply mr-text-wild-strawberry;
+}
+
+.mr-review-needed {
   @apply mr-text-purple;
 }
 
 .mr-review-approved {
-  @apply mr-text-green;
+  @apply mr-text-turquoise;
 }
 
 .mr-review-approved-with-fixes {
-  @apply mr-text-green;
+  @apply mr-text-turquoise;
 }
 
 .mr-review-rejected {
@@ -39,7 +47,11 @@
 }
 
 .mr-review-disputed {
-  @apply mr-text-orange;
+  @apply mr-text-wild-strawberry;
+}
+
+.mr-review-unnecessary {
+  @apply mr-text-grey-light;
 }
 
 .mr-notification-type-mention {
@@ -52,4 +64,8 @@
 
 .mr-notification-type-review-rejected {
   @apply mr-text-red;
+}
+
+.mr-notification-type-meta-review {
+  @apply mr-text-mango;
 }

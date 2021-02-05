@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import _filter from 'lodash/filter'
+import _split from 'lodash/split'
+import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
+import _map from 'lodash/map'
 import KeywordAutosuggestInput
        from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import External from '../External/External'
@@ -24,21 +29,52 @@ export class TaskTags extends Component {
     this.setState({edit: false})
   }
 
+  tagList = () => {
+    const tags = _map(this.props.tags.split(/,\s*/), (tag, index) => {
+      if ( !_isEmpty(tag) ) {
+        return (
+          <div className="mr-bg-white-10 mr-text-white mr-mr-2 mr-px-2 mr-rounded"
+               key={`tag-${index}`}>
+            {tag}
+          </div>
+        )
+      }
+      else {
+        return null
+      }
+    })
+
+    return (
+      <div className="mr-flex mr-text-base mr-ml-2">{tags}</div>
+    )
+  }
+
   render() {
     if (this.state.edit) {
+      const preferredTags =
+        _filter(
+          _split(_get(this.props.task.parent, 'preferredTags'), ','),
+          (result) => !_isEmpty(result)
+        )
+      const limitTags = !!_get(this.props.task.parent, 'limitTags')
+
       return (
         <External>
-          <Modal isActive onClose={() => this.setState({edit: false})}>
+          <Modal isActive onClose={() => this.setState({edit: false})} allowOverflow>
             <div className="mr-w-full">
               <h2 className="mr-text-yellow mr-text-4xl mr-mb-4">
                 <FormattedMessage {...messages.modifyTags} />
               </h2>
-              <div className="mr-mt-2">
-                <KeywordAutosuggestInput handleChangeTags={this.handleChangeTags}
-                                         handleAddTag={this.handleAddTag}
-                                         formData={this.props.tags} {...this.props}
-                                         tagType={"tasks"}
-                                         placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />
+              <div className="mr-mt-2 mr-w-full">
+                <KeywordAutosuggestInput
+                  handleChangeTags={this.handleChangeTags}
+                  handleAddTag={this.handleAddTag}
+                  formData={this.props.tags} {...this.props}
+                  tagType={"tasks"}
+                  preferredResults={preferredTags}
+                  limitToPreferred={limitTags}
+                  placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
+                />
               </div>
               <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
                 <button
@@ -62,26 +98,40 @@ export class TaskTags extends Component {
     }
     else if (this.props.tags && this.props.tags !== "") {
       return (
-        <div>
-          <div className="mr-float-right mr-text-green-lighter hover:mr-text-white"
-               onClick={() => this.setState({edit: true})}>
-            <FormattedMessage {...messages.updateTags} />
-          </div>
-          <div className="mr-text-sm mr-text-white">
+        <div className="mr-flex mr-justify-between mr-items-center mr-mb-2">
+          <div className="mr-text-sm mr-text-white mr-flex mr-items-center mr-flex-grow">
             <FormattedMessage
               {...messages.taskTags}
-            /> {this.props.tags}
+            /> {this.tagList()}
           </div>
+
+          {!this.props.taskReadOnly &&
+           <div className="mr-links-green-lighter mr-flex-grow-0">
+             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+             <a onClick={() => this.setState({edit: true})}>
+               <FormattedMessage {...messages.updateTags} />
+             </a>
+           </div>
+          }
+        </div>
+      )
+    }
+    else if (!this.props.taskReadOnly) {
+      return (
+        <div className="mr-links-green-lighter">
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a onClick={() => this.setState({edit: true})}>
+            <FormattedMessage {...messages.addTags} />
+          </a>
         </div>
       )
     }
     else {
       return (
-        <div>
-          <div className="mr-text-green-lighter hover:mr-text-white"
-               onClick={() => this.setState({edit: true})}>
-            <FormattedMessage {...messages.addTags} />
-          </div>
+        <div className="mr-text-sm mr-text-white">
+          <FormattedMessage
+            {...messages.taskTags}
+          />
         </div>
       )
     }

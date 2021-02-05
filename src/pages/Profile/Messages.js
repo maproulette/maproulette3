@@ -4,9 +4,14 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with Profile
  */
 export default defineMessages({
+  pageTitle: {
+    id: "Profile.page.title",
+    defaultMessage: "User Settings",
+  },
+
   header: {
     id: "Profile.settings.header",
-    defaultMessage: "User Settings",
+    defaultMessage: "General",
   },
 
   userNotFound: {
@@ -39,17 +44,44 @@ export default defineMessages({
     defaultMessage: "Select the default basemap to display on the map. Only a default challenge basemap will override the option selected here.",
   },
 
-  customBasemapLabel: {
-    id: "Profile.form.customBasemap.label",
-    defaultMessage: "Custom Basemap",
+  customBasemapsLabel: {
+    id: "Profile.form.customBasemaps.label",
+    defaultMessage: "Custom Basemaps",
   },
 
-  // Note: dummy variable included to workaround react-intl
-  // [bug 1158](https://github.com/yahoo/react-intl/issues/1158)
-  // Just pass in an empty string for its value
   customBasemapDescription: {
     id: "Profile.form.customBasemap.description",
-    defaultMessage: "Insert a custom base map here. E.g. `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png` {dummy}",
+    defaultMessage: "Insert a custom base map here. E.g. `https://'{s}'.tile.openstreetmap.org/'{z}'/'{x}'/'{y}'.png`",
+  },
+
+  addCustomBasemapLabel: {
+    id: "Profile.form.addCustomBasemap.label",
+    defaultMessage: "Add Custom Basemap",
+  },
+
+  deleteCustomBasemapLabel: {
+    id: "Profile.form.deleteCustomBasemap.label",
+    defaultMessage: "Delete",
+  },
+
+  customBasemapNameLabel: {
+    id: "Profile.form.customBasemap.name.label",
+    defaultMessage: "Name",
+  },
+
+  customBasemapURLLabel: {
+    id: "Profile.form.customBasemap.url.label",
+    defaultMessage: "URL",
+  },
+
+  customBasemapOverlayLabel: {
+    id: "Profile.form.customBasemap.overlay.label",
+    defaultMessage: "is overlay?",
+  },
+
+  uniqueCustomBasemapError: {
+    id: "Profile.form.uniqueCustomBasemap.error",
+    defaultMessage: "Custom Basemap names must be unique",
   },
 
   localeLabel: {
@@ -70,6 +102,17 @@ export default defineMessages({
   leaderboardOptOutDescription: {
     id: "Profile.form.leaderboardOptOut.description",
     defaultMessage: "If yes, you will **not** appear on the public leaderboard.",
+  },
+
+  allowFollowingLabel: {
+    id: "Profile.form.allowFollowing.label",
+    defaultMessage: "Allow Following",
+  },
+
+  allowFollowingDescription: {
+    id: "Profile.form.allowFollowing.description",
+    defaultMessage:
+    "If no, users will not be able to follow your MapRoulette activity."
   },
 
   apiKey: {
@@ -115,7 +158,10 @@ export default defineMessages({
   emailDescription: {
     id: "Profile.form.email.description",
     defaultMessage: "If you request emails in your Notification Subscriptions, they " +
-                    "will be sent here"
+    "will be sent here.\n\nDecide which MapRoulette notifications you would like to " +
+    "receive, along with whether you would like to be sent " +
+    "an email informing you of the notification (either immediately " +
+    "or as a daily digest)"
   },
 
   notificationLabel: {

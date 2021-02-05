@@ -64,6 +64,7 @@ const WithNominatimSearch = function(WrappedComponent) {
           nominatimResults={this.state.results}
           clearNominatimSearch={this.clearSearch}
           chooseNominatimResult={this.chooseResult}
+          nominatumSearching={this.state.loading}
         />
       )
     }

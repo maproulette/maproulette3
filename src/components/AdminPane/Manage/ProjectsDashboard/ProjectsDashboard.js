@@ -34,6 +34,9 @@ export const defaultDashboardSetup = function() {
       widgetDescriptor('ProjectAboutWidget'),
       widgetDescriptor('ProjectListWidget'),
     ],
+    permanentWidgets: [ // Cannot be removed from workspace
+      'ProjectListWidget',
+    ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 3, h: 18},
       {i: generateWidgetId(), x: 3, y: 0, w: 9, h: 18},
@@ -51,7 +54,7 @@ export class ProjectsDashboard extends Component {
       <div className="admin__manage__header admin__manage__header--flush">
         <nav className="breadcrumb" aria-label="breadcrumbs">
           <ul>
-            <li className="is-active">
+            <li className="nav-title is-active">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a aria-current="page">
                 <FormattedMessage {...manageMessages.manageHeader} />
@@ -62,7 +65,7 @@ export class ProjectsDashboard extends Component {
 
         <div className="admin__manage__controls mr-flex">
           <Link to={"/admin/projects/new"}
-                className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                className="mr-button mr-button--dark mr-button--small mr-mr-4">
             <FormattedMessage {...messages.newProject } />
           </Link>
         </div>
@@ -71,18 +74,14 @@ export class ProjectsDashboard extends Component {
 
     return (
       <div className="admin__manage projects-dashboard">
-        {!this.props.loadingProjects && this.props.projects.length === 0 ?
-         <div className="projects-dashboard__no-projects">
-           <FormattedMessage {...messages.regenerateHomeProject} />
-         </div> :
-         <WidgetWorkspace
-           {...this.props}
-           lightMode
-           className="mr-mt-4"
-           workspaceEyebrow={pageHeader}
-           filterComponent={ProjectFilterGroup}
-         />
-        }
+        <WidgetWorkspace
+          {...this.props}
+          lightMode={false}
+          darkMode
+          className="mr-mt-4 mr-cards-inverse"
+          workspaceEyebrow={pageHeader}
+          filterComponent={ProjectFilterGroup}
+        />
       </div>
     )
   }

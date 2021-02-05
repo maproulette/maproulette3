@@ -8,4 +8,9 @@ export default defineMessages({
     id: "ChallengeCard.totalTasks",
     defaultMessage: "Total Tasks"
   },
+
+  visibilityToogleTooltip: {
+    id: "ChallengeCard.controls.visibilityToggle.tooltip",
+    defaultMessage: "Toggle challenge discoverability"
+  },
 })

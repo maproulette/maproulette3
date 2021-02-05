@@ -1,4 +1,5 @@
 import { schema } from 'normalizr'
+import { v1 as uuidv1 } from 'uuid'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -11,6 +12,7 @@ import _isFinite from 'lodash/isFinite'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
+import _remove from 'lodash/remove'
 import { defaultRoutes as api, isSecurityError, websocketClient } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -22,7 +24,9 @@ import { addServerError, addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import { ensureUserLoggedIn } from '../User/User'
 import { markReviewDataStale } from './TaskReview/TaskReview'
+import { receiveClusteredTasks } from './ClusteredTask'
 import { TaskStatus } from './TaskStatus/TaskStatus'
+import { generateSearchParametersString } from '../Search/Search'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -32,6 +36,10 @@ export const taskSchema = function() {
 /** normalizr schema for task tags */
 export const taskTagsSchema = function() {
   return new schema.Entity('tags')
+}
+
+export const taskBundleSchema = function() {
+  return new schema.Entity('taskBundles', {tasks: [ taskSchema() ]})
 }
 
 /**
@@ -46,6 +54,17 @@ export const taskDenormalizationSchema = function() {
   })
 }
 
+export const subscribeToChallengeTaskMessages = function(dispatch, challengeId) {
+  websocketClient.addServerSubscription(
+    "challengeTasks", challengeId, "challengeTaskMessageHandler",
+    messageObject => onChallengeTaskMessage(dispatch, messageObject)
+  )
+}
+
+export const unsubscribeFromChallengeTaskMessages = function(challengeId) {
+  websocketClient.removeServerSubscription("challengeTasks", challengeId, "challengeTaskMessageHandler")
+}
+
 export const subscribeToReviewMessages = function(dispatch) {
   websocketClient.addServerSubscription(
     "reviews", null, "reviewMessageHandler",
@@ -56,6 +75,20 @@ export const subscribeToReviewMessages = function(dispatch) {
 export const unsubscribeFromReviewMessages = function() {
   websocketClient.removeServerSubscription("reviews", null, "reviewMessageHandler")
 }
+
+export const subscribeToAllTasks = function(callback, handle) {
+  websocketClient.addServerSubscription(
+    "tasks",
+    null,
+    handle,
+    messageObject => callback(messageObject)
+  )
+}
+
+export const unsubscribeFromAllTasks = function(handle) {
+  websocketClient.removeServerSubscription("tasks", null, handle)
+}
+
 
 const onReviewMessage = function(dispatch, messageObject) {
   switch(messageObject.messageType) {
@@ -70,9 +103,48 @@ const onReviewMessage = function(dispatch, messageObject) {
   }
 }
 
+const onChallengeTaskMessage = function(dispatch, messageObject) {
+  let task = messageObject.data.task
+  switch(messageObject.messageType) {
+    case "task-claimed":
+      task = Object.assign({}, task, {lockedBy: _get(messageObject, 'data.byUser.userId')})
+      dispatchTaskUpdateNotification(dispatch, task)
+      break
+    case "task-released":
+    case "task-update":
+      dispatchTaskUpdateNotification(dispatch, task)
+      break
+    default:
+      break // Ignore
+  }
+}
+
+const dispatchTaskUpdateNotification = function(dispatch, task) {
+  dispatch(receiveTasks(simulatedEntities(task)))
+  dispatch(receiveClusteredTasks(
+    task.parent,
+    false,
+    [Object.assign(
+      {},
+      _pick(task, ['id', 'created', 'modified', 'priority', 'status', 'difficulty', 'lockedBy']),
+      {
+        parentId: task.parent,
+        point: {lng: task.location.coordinates[0], lat: task.location.coordinates[1]},
+        title: task.name,
+        type: 2,
+      }
+    )],
+    RequestStatus.success,
+    uuidv1(),
+    true,
+    true
+  ))
+}
+
 
 // redux actions
 const RECEIVE_TASKS = 'RECEIVE_TASKS'
+const CLEAR_TASKS = 'CLEAR_TASKS'
 const REMOVE_TASK = 'REMOVE_TASK'
 
 // redux action creators
@@ -85,6 +157,18 @@ export const receiveTasks = function(normalizedEntities) {
     type: RECEIVE_TASKS,
     status: RequestStatus.success,
     entities: normalizedEntities,
+    receivedAt: Date.now()
+  }
+}
+
+/**
+ * Clear task data for a given challenge from the redux store
+ */
+export const clearTasks = function(challengeId) {
+  return {
+    type: CLEAR_TASKS,
+    status: RequestStatus.success,
+    challengeId: challengeId,
     receivedAt: Date.now()
   }
 }
@@ -135,15 +219,11 @@ export const fetchTaskTags = function(taskId) {
       {schema: {}, variables: {id: taskId}}
     ).execute().then(normalizedTags => {
       if (_isObject(normalizedTags.result)) {
-        // Inject tags into task.
-        dispatch(receiveTasks({
-          tasks: {
-            [taskId]: {
-              id: taskId,
-              tags: _values(normalizedTags.result),
-            }
-          }
-        }))
+        // Inject tags into task
+        dispatch(receiveTasks(simulatedEntities({
+          id: taskId,
+          tags: _values(normalizedTags.result),
+        })))
       }
       return normalizedTags
     })
@@ -158,7 +238,12 @@ export const startTask = function(taskId) {
     return new Endpoint(api.task.start, {
       schema: taskSchema(),
       variables: {id: taskId}
-    }).execute()
+    }).execute().catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).catch(err => null)
+      }
+      throw error
+    })
   }
 }
 
@@ -173,18 +258,53 @@ export const releaseTask = function(taskId) {
     }).execute().then(normalizedResults => {
       dispatch(receiveTasks(normalizedResults.entities))
       return normalizedResults
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        ).catch(err => null)
+      }
+      else {
+        dispatch(addError(AppErrors.task.lockReleaseFailure))
+        console.log(error.response || error)
+      }
     })
+  }
+}
+
+/**
+ * Refreshes an active task lock owned by the current user
+ */
+export const refreshTaskLock = function(taskId) {
+  return function(dispatch) {
+    return new Endpoint(api.task.refreshLock, {
+      schema: taskSchema(),
+      variables: {id: taskId}
+    }).execute()
   }
 }
 
 /**
  * Mark the given task as completed with the given status.
  */
-export const completeTask = function(taskId, challengeId, taskStatus, needsReview,
-                                     tags, suggestedFixSummary, osmComment) {
+export const completeTask = function(taskId, taskStatus, needsReview,
+                                     tags, cooperativeWorkSummary, osmComment, completionResponses) {
   return function(dispatch) {
     return updateTaskStatus(dispatch, taskId, taskStatus, needsReview, tags,
-                            suggestedFixSummary, osmComment)
+                            cooperativeWorkSummary, osmComment, completionResponses)
+  }
+}
+
+/**
+ * Mark all tasks in the given bundle as completed with the given status
+ */
+export const completeTaskBundle = function(bundleId, primaryTaskId, taskStatus, needsReview,
+                                           tags, cooperativeWorkSummary, osmComment, completionResponses) {
+  return function(dispatch) {
+    return updateBundledTasksStatus(
+      dispatch, bundleId, primaryTaskId, taskStatus, needsReview, tags,
+      cooperativeWorkSummary, osmComment, completionResponses
+    )
   }
 }
 
@@ -201,7 +321,76 @@ export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
 
     return new Endpoint(
       api.tasks.bulkUpdate, {json: taskData}
-    ).execute().catch(error => {
+    ).execute().then(results => {
+      // Clear all tasks in challenge since we don't know exactly which tasks
+      // are impacted by these changes (as bundling could be affected)
+      if (taskData.length > 0) {
+        dispatch(clearTasks(taskData[0].parentId))
+      }
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Bulk update task status on tasks that match the given criteria.
+ */
+export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, excludeTaskIds) {
+  return function(dispatch) {
+    const filters = _get(criteria, 'filters', {})
+    const searchParameters = generateSearchParametersString(filters,
+                                                            criteria.boundingBox,
+                                                            _get(criteria, 'savedChallengesOnly'),
+                                                            null,
+                                                            criteria.searchQuery,
+                                                            _get(criteria, 'invertFields'),
+                                                            excludeTaskIds)
+    searchParameters.cid = challengeId
+
+    return new Endpoint(
+      api.tasks.bulkStatusChange, {
+        params: {...searchParameters, newStatus},
+        json: filters.taskPropertySearch ?
+          {taskPropertySearch: filters.taskPropertySearch} : null,
+      }
+    ).execute().then( results => {
+      dispatch(clearTasks(challengeId))
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Updates the completion responses on a task.
+ */
+export const updateCompletionResponses = function(taskId, completionResponses) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.task.updateCompletionResponses,
+      {variables: {id: taskId},
+       json: completionResponses
+      }
+    ).execute().then(() => {
+      fetchTask(taskId)(dispatch) // Refresh task data
+    }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -246,6 +435,59 @@ export const addTaskComment = function(taskId, comment, taskStatus) {
 }
 
 /**
+ * Add a comment to tasks in the given bundle, associating the given task
+ * status if provided
+ */
+export const addTaskBundleComment = function(bundleId, primaryTaskId, comment, taskStatus) {
+  return function(dispatch) {
+    const params = {comment}
+    if (_isFinite(taskStatus)) {
+      params.actionId = taskStatus
+    }
+
+    return new Endpoint(api.tasks.bundled.addComment, {
+      variables: {bundleId},
+      params,
+    }).execute().then(() => {
+      fetchTaskComments(primaryTaskId)(dispatch)
+      fetchTask(primaryTaskId)(dispatch) // Refresh task data
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+
+/**
+ * Fetch task bundle with given id
+ */
+export const fetchTaskBundle = function(bundleId) {
+  return function(dispatch) {
+    return new Endpoint(api.tasks.fetchBundle, {
+      variables: {bundleId},
+    }).execute().catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.bundleFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
  * Fetch comments for the given task
  */
 export const fetchTaskComments = function(taskId) {
@@ -257,16 +499,12 @@ export const fetchTaskComments = function(taskId) {
       dispatch(receiveComments(normalizedComments.entities))
 
       if (_isObject(normalizedComments.entities.comments)) {
-        // Inject comment ids into task.
-        dispatch(receiveTasks({
-          tasks: {
-            [taskId]: {
-              id: taskId,
-              comments: _map(_keys(normalizedComments.entities.comments),
-                             id => parseInt(id, 10)),
-            }
-          }
-        }))
+        // Inject comment ids into task
+        dispatch(receiveTasks(simulatedEntities({
+          id: taskId,
+          comments: _map(_keys(normalizedComments.entities.comments),
+                         id => parseInt(id, 10)),
+        })))
       }
 
       return normalizedComments
@@ -284,15 +522,11 @@ export const fetchTaskHistory = function(taskId) {
       {schema: {}, variables: {id: taskId}}
     ).execute().then(normalizedHistory => {
       if (_isObject(normalizedHistory.result)) {
-        // Inject history into task.
-        dispatch(receiveTasks({
-          tasks: {
-            [taskId]: {
-              id: taskId,
-              history: _values(normalizedHistory.result),
-            }
-          }
-        }))
+        // Inject history into task
+        dispatch(receiveTasks(simulatedEntities({
+          id: taskId,
+          history: _values(normalizedHistory.result),
+        })))
       }
 
       return normalizedHistory
@@ -408,11 +642,20 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
  * challenge or virtual challenge id. Note that this does not add the results
  * to the redux store, but simply returns them
  */
-export const fetchNearbyTasks = function(challengeId, isVirtualChallenge, taskId, limit=5) {
+export const fetchNearbyTasks = function(challengeId, isVirtualChallenge, taskId, excludeSelfLocked=false, limit=5) {
   return function(dispatch) {
+    const params = {limit}
+    if (excludeSelfLocked) {
+      params.excludeSelfLocked = 'true'
+    }
+
     return new Endpoint(
       isVirtualChallenge ? api.virtualChallenge.nearbyTasks : api.challenge.nearbyTasks,
-      {schema: [ taskSchema() ], variables: {challengeId, taskId}, params: {limit}}
+      {
+        schema: [ taskSchema() ],
+        variables: {challengeId, taskId},
+        params,
+      }
     ).execute().then(normalizedResults => ({
       challengeId,
       isVirtualChallenge,
@@ -449,17 +692,14 @@ export const deleteChallengeTasks = function(challengeId, statuses=null) {
  * @private
  */
 const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = null,
-                                  tags = null, suggestedFixSummary = null, osmComment = null) {
+                                  tags = null, cooperativeWorkSummary = null,
+                                  osmComment = null, completionResponses = null) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
-  dispatch(receiveTasks({
-    tasks: {
-      [taskId]: {
-        id: taskId,
-        status: newStatus
-      }
-    }
-  }))
+  dispatch(receiveTasks(simulatedEntities({
+    id: taskId,
+    status: newStatus,
+  })))
 
   const params = {}
   if (requestReview != null) {
@@ -471,23 +711,23 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
   }
 
   let endpoint = null
-  // Suggested fixes that have been approved (fixed status) go to a different endpoint
-  if (suggestedFixSummary && newStatus === TaskStatus.fixed) {
-    endpoint = new Endpoint(api.task.applySuggestedFix, {
+  // Completed cooperative work goes to a different endpoint
+  if (cooperativeWorkSummary && newStatus === TaskStatus.fixed) {
+    endpoint = new Endpoint(api.task.applyTagFix, {
       params,
       variables: { id: taskId },
       json: {
         comment: osmComment,
-        changes: suggestedFixSummary,
+        changes: cooperativeWorkSummary,
       }
     })
   }
   else {
-    endpoint = new Endpoint(
-      api.task.updateStatus,
-      {schema: taskSchema(),
-      variables: {id: taskId, status: newStatus}, params}
-    )
+    endpoint = new Endpoint(api.task.updateStatus, {
+      schema: taskSchema(),
+      variables: {id: taskId, status: newStatus}, params,
+      json: completionResponses
+    })
   }
 
   return endpoint.execute().catch(error => {
@@ -504,10 +744,55 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
   })
 }
 
-export const fetchSuggestedTagFixChangeset = function(suggestedFixSummary) {
+/**
+ * Set the given status on the tasks in the given bundle
+ * @private
+ */
+const updateBundledTasksStatus = function(dispatch, bundleId, primaryTaskId,
+                                          newStatus, requestReview = null, tags = null,
+                                          cooperativeWorkSummary = null, osmComment = null,
+                                          completionResponses = null) {
+  if (cooperativeWorkSummary) {
+    throw new Error("Cooperative tasks cannot be updated as a bundle at this time")
+  }
+
+  const params = {
+    primaryId: primaryTaskId,
+  }
+
+  if (requestReview != null) {
+    params.requestReview = requestReview
+  }
+
+  if (tags != null) {
+    params.tags = tags
+  }
+
+  const endpoint = new Endpoint(api.tasks.bundled.updateStatus, {
+    schema: taskBundleSchema(),
+    variables: {bundleId, status: newStatus},
+    params,
+    json: completionResponses,
+  })
+
+  return endpoint.execute().catch(error => {
+    if (isSecurityError(error)) {
+      dispatch(ensureUserLoggedIn()).then(() =>
+        dispatch(addError(AppErrors.user.unauthorized))
+      )
+    }
+    else {
+      dispatch(addError(AppErrors.task.updateFailure))
+      console.log(error.response || error)
+    }
+    fetchTask(primaryTaskId)(dispatch) // Fetch accurate task data
+  })
+}
+
+export const fetchCooperativeTagFixChangeset = function(cooperativeWorkSummary) {
   const endpoint = new Endpoint(api.task.testTagFix, {
     params: { changeType: 'osmchange' },
-    json: suggestedFixSummary,
+    json: cooperativeWorkSummary,
     expectXMLResponse: true,
   })
 
@@ -529,14 +814,10 @@ export const fetchTaskPlace = function(task) {
     ).then(normalizedPlaceResults => {
       // Tasks have no natural reference to places, so inject the place id into
       // the task so that later denormalization will work properly.
-      return dispatch(receiveTasks({
-        tasks: {
-          [task.id]: {
-            id: task.id,
-            place: _get(normalizedPlaceResults, 'result'),
-          }
-        }
-      }))
+      return dispatch(receiveTasks(simulatedEntities({
+        id: task.id,
+        place: _get(normalizedPlaceResults, 'result'),
+      })))
     })
   }
 }
@@ -553,14 +834,10 @@ export const updateTaskTags = function(taskId, tags) {
     ).execute().then(normalizedTags => {
       if (_isObject(normalizedTags.result)) {
         // Inject tags into task.
-        dispatch(receiveTasks({
-          tasks: {
-            [taskId]: {
-              id: taskId,
-              tags: _values(normalizedTags.result),
-            }
-          }
-        }))
+        dispatch(receiveTasks(simulatedEntities({
+          id: taskId,
+          tags: _values(normalizedTags.result),
+        })))
       }
       return normalizedTags
     })
@@ -635,6 +912,51 @@ export const deleteTask = function(taskId) {
   }
 }
 
+export const bundleTasks = function(taskIds, bundleName="") {
+  return function(dispatch) {
+    return new Endpoint(api.tasks.bundle, {
+      json: {name: bundleName, taskIds},
+    }).execute().then(results => {
+      return results
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.bundleFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+export const deleteTaskBundle = function(bundleId, primaryTaskId) {
+  return function(dispatch) {
+    const params = {}
+    if (_isFinite(primaryTaskId)) {
+      params.primaryId = primaryTaskId
+    }
+
+    return new Endpoint(api.tasks.deleteBundle, {
+      variables: {bundleId},
+      params,
+    }).execute().then(results => {
+      return results
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.bundleFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
 
 /**
  * Retrieve and process a single task retrieval from the given endpoint (next
@@ -686,6 +1008,19 @@ export const retrieveChallengeTask = function(dispatch, endpoint) {
 }
 
 /**
+ * Builds a simulated normalized entities representation from the given task
+ *
+ * @private
+ */
+export const simulatedEntities = function(task) {
+  return {
+    tasks: {
+      [task.id]: task,
+    }
+  }
+}
+
+/**
  * reduceTasksFurther will be invoked by the genericEntityReducer function to
  * perform additional reduction on challenge entities.
  *
@@ -709,6 +1044,9 @@ export const taskEntities = function(state, action) {
     const mergedState = _cloneDeep(state)
     delete mergedState[action.taskId]
     return mergedState
+  }
+  else if (action.type === CLEAR_TASKS) {
+    return _remove(_cloneDeep(state), x => (x ? x.parent === action.challengeId : false))
   }
   else {
     return genericEntityReducer(RECEIVE_TASKS, 'tasks', reduceTasksFurther)(state, action)

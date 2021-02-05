@@ -1,6 +1,9 @@
 import { schema } from 'normalizr'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
+import _map from 'lodash/map'
+import _omit from 'lodash/omit'
+import _head from 'lodash/head'
 import addHours from 'date-fns/add_hours'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
@@ -70,13 +73,22 @@ export const fetchVirtualChallenge = function(virtualChallengeId) {
  * explicit expiration timestamp is given, it'll be used; otherwise the virtual
  * challenge will be set to expire after the default configured duration.
  */
-export const createVirtualChallenge = function(name, taskIds, expiration) {
+export const createVirtualChallenge = function(name, taskIds, expiration, clusters) {
   return function(dispatch) {
+    let searchParameters = null
+    if (clusters && clusters.length > 0) {
+      searchParameters = _omit(_head(clusters).params,
+        ['location', 'taskTagConjunction', 'challengeTagConjunction'])
+      searchParameters.boundingGeometries =
+        _map(clusters, (c) => {return {bounding: c.bounding}})
+    }
+
     const challengeData = {
       name,
       taskIdList: taskIds,
       expiry: expiration ? expiration :
-              addHours(new Date(), DEFAULT_EXPIRATION_DURATION).getTime()
+              addHours(new Date(), DEFAULT_EXPIRATION_DURATION).getTime(),
+      searchParameters: searchParameters || {},
     }
 
     return saveVirtualChallenge(
@@ -130,7 +142,6 @@ export const saveVirtualChallenge = function(dispatch, endpoint) {
       )
     }
     else {
-      console.log(serverError.response || serverError)
       dispatch(addServerError(AppErrors.virtualChallenge.createFailure,
                               serverError))
     }

@@ -23,4 +23,29 @@ export default defineMessages({
     id: "ChallengeProgress.tasks.totalCount",
     defaultMessage: " of {totalCount, number}"
   },
+
+  byPriorityToggle: {
+    id: "ChallengeProgress.priority.toggle",
+    defaultMessage: "View by Task Priority"
+  },
+
+  priorityLabel: {
+    id: "ChallengeProgress.priority.label",
+    defaultMessage: "{priority} Priority Tasks"
+  },
+
+  reviewStatusLabel: {
+    id: "ChallengeProgress.reviewStatus.label",
+    defaultMessage: "Review Status"
+  },
+
+  avgTimeSpent: {
+    id: "ChallengeProgress.metrics.averageTime.label",
+    defaultMessage: "Avg time per task:"
+  },
+
+  excludesSkip: {
+    id: "ChallengeProgress.metrics.excludesSkip.label",
+    defaultMessage: "(excluding skipped tasks)"
+  },
 })

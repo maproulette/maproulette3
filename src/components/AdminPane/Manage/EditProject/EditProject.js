@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Form from 'react-jsonschema-form'
+import Form from '@rjsf/core'
 import _merge from 'lodash/merge'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
@@ -50,7 +50,7 @@ export class EditProject extends Component {
         formData.name = _snakeCase(formData.displayName).replace(/^home_/, 'project_')
       }
 
-      this.props.saveProject(formData).then(project => {
+      this.props.saveProject(formData, this.props.user).then(project => {
         if (project) {
           this.props.history.push(`/admin/project/${project.id}`)
         }
@@ -82,7 +82,7 @@ export class EditProject extends Component {
       <div className="admin__manage edit-project">
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
-              <li>
+              <li className="nav-title">
                 <Link to='/admin/projects'>
                   <FormattedMessage {...manageMessages.manageHeader} />
                 </Link>
@@ -108,10 +108,10 @@ export class EditProject extends Component {
             </ul>
           </nav>
 
-          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+          <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
             <Form
-              schema={jsSchema(this.props.intl, this.props.project)}
-              uiSchema={uiSchema(this.props.intl, this.props.project)}
+              schema={jsSchema(this.props.intl, this.props.user, this.props.project)}
+              uiSchema={uiSchema(this.props.intl, this.props.user, this.props.project)}
               widgets={{SelectWidget: CustomSelectWidget}}
               className="form"
               liveValidate
@@ -121,16 +121,22 @@ export class EditProject extends Component {
               onChange={this.changeHandler}
               onSubmit={this.finish}
             >
-              <div className="form-controls">
-                <button className="mr-button mr-button--blue"
-                        disabled={this.state.isSaving}
-                        onClick={this.cancel}>
+              <div className="mr-flex mr-justify-between mr-items-center mr-mt-8">
+                <button
+                  className="mr-button mr-button--white"
+                  disabled={this.state.isSaving}
+                  onClick={this.cancel}
+                >
                   <FormattedMessage {...messages.cancel} />
                 </button>
 
-                <button className={classNames("mr-button mr-button--green mr-ml-4",
-                                              {"is-loading": this.state.isSaving})}
-                        onClick={this.props.finish}>
+                <button
+                  className={classNames(
+                    "mr-button mr-button--green-lighter mr-ml-4",
+                    {"is-loading": this.state.isSaving}
+                  )}
+                  onClick={this.props.finish}
+                >
                   <FormattedMessage {...messages.save} />
                 </button>
               </div>

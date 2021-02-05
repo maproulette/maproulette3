@@ -1,0 +1,30 @@
+.task-properties-form {
+  label.control-label {
+    margin-right: 5px;
+  }
+
+  .rjsf .array-field .property-rule {
+    display: inline;
+  }
+
+  .form-group {
+    .form-select {
+      display: inline;
+      select {
+        width: 150px;
+      }
+    }
+
+    .inline-selector {
+      margin-right: 10px;
+
+      input.form-control {
+        width: 170px;
+      }
+    }
+  }
+
+  fieldset {
+    width: 100%;
+  }
+}

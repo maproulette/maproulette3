@@ -5,11 +5,9 @@ import { taskSchema } from '.././Task'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
 import _get from 'lodash/get'
-import _values from 'lodash/values'
-import _sortBy from 'lodash/sortBy'
-import _reverse from 'lodash/reverse'
+import _map from 'lodash/map'
 import _snakeCase from 'lodash/snakeCase'
-import { setupFilterSearchParameters } from './TaskReview'
+import { generateSearchParametersString } from '../../Search/Search'
 
 // redux actions
 export const RECEIVE_REVIEWED_TASKS = 'RECEIVE_REVIEWED_TASKS'
@@ -39,18 +37,26 @@ export const receiveReviewedTasks = function(tasks,
  * Retrieve all tasks (up to the given limit) that have been reviewed
  * by user or requested by user
  */
-export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, asMapper=false, limit=50) {
+export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
+  asMapper=false, asMetaReviewer=false, limit=50, asMetaReview=false) {
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? _snakeCase(sortBy) : null
   const page = _get(criteria, 'page', 0)
 
-  const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}), criteria.boundingBox)
+  const searchParameters =
+    generateSearchParametersString(_get(criteria, 'filters', {}),
+                                   criteria.boundingBox,
+                                   false, false, null,
+                                   _get(criteria, 'invertFields', {}))
   const mappers = asMapper ? [userId] : []
   const reviewers = asReviewer ? [userId] : []
+  const metaReviewers = asMetaReviewer ? [userId] : []
+
+  const includeTags = criteria.includeTags
 
   let dispatchType = RECEIVE_REVIEWED_TASKS
-  if (asReviewer) {
+  if (asReviewer || asMetaReviewer) {
     dispatchType = RECEIVE_REVIEWED_BY_USER_TASKS
   }
   else if (asMapper) {
@@ -65,17 +71,13 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, a
       api.tasks.reviewed,
       {
         schema: {tasks: [taskSchema()]},
-        params: {mappers, reviewers, limit, sort, order, page: (page * limit),
-                 allowReviewNeeded: (asReviewer ? false : true), ...searchParameters},
+        params: {mappers, reviewers, metaReviewers, limit, sort, order, page,
+                 ...searchParameters, includeTags, asMetaReview,
+                 allowReviewNeeded: (!asReviewer && !asMetaReviewer && !asMetaReview)},
       }
     ).execute().then(normalizedResults => {
-      var tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
-      if (sortBy) {
-        tasks = _sortBy(tasks, (t) => t[sortBy])
-        if (order === "DESC") {
-          tasks = _reverse(tasks)
-        }
-      }
+      const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})
+      const tasks = _map(normalizedResults.result.tasks, (id) => unsortedTaskMap[id])
 
       dispatch(receiveReviewedTasks(tasks, dispatchType,
         RequestStatus.success, normalizedResults.result.total))

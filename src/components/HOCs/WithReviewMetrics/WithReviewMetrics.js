@@ -14,11 +14,12 @@ import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 export const WithReviewMetrics = function(WrappedComponent) {
   return class extends Component {
     state = {
-      loading: false
+      updateAvailable: true,
+      loading: false,
     }
 
     updateMetrics(props) {
-      this.setState({loading: true})
+      this.setState({updateAvailable: false, loading: true})
 
       props.updateReviewMetrics(_get(props.user, 'id'),
                                 props.reviewTasksType,
@@ -27,30 +28,40 @@ export const WithReviewMetrics = function(WrappedComponent) {
       })
     }
 
-    componentDidMount() {
-      this.updateMetrics(this.props)
-    }
-
     componentDidUpdate(prevProps) {
-      if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
-        this.updateMetrics(this.props)
+      if (this.state.updateAvailable) {
+        return // nothing to do
       }
 
-      if (prevProps.reviewCriteria !== this.props.reviewCriteria) {
-        this.updateMetrics(this.props)
+      if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
+        this.setState({updateAvailable: true})
+      }
+      else if (prevProps.reviewCriteria !== this.props.reviewCriteria) {
+        this.setState({updateAvailable: true})
       }
     }
 
     render() {
       return (
-        <WrappedComponent reviewMetrics = {this.props.reviewMetrics}
-                          loading={this.state.loading}
-                          {..._omit(this.props, ['updateReviewMetrics'])} />)
+        <WrappedComponent
+          {..._omit(this.props, ['updateReviewMetrics'])}
+          reviewMetrics = {this.props.reviewMetrics}
+          reviewMetricsByPriority = {this.props.reviewMetricsByPriority}
+          reviewMetricsByTaskStatus = {this.props.reviewMetricsByTaskStatus}
+          metricsUpdateAvailable = {this.state.updateAvailable}
+          refreshMetrics = {() => this.updateMetrics(this.props)}
+          loading={this.state.loading}
+        />
+      )
     }
   }
 }
 
-const mapStateToProps = state => ({ reviewMetrics: _get(state, 'currentReviewTasks.metrics') })
+const mapStateToProps = state => {
+  return ({ reviewMetrics: _get(state, 'currentReviewTasks.metrics.reviewActions'),
+            reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions'),
+            reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') })
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateReviewMetrics: (userId, reviewTasksType, searchCriteria={}) => {

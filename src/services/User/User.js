@@ -7,6 +7,7 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _pull from 'lodash/pull'
 import _keys from 'lodash/keys'
+import _values from 'lodash/values'
 import _each from 'lodash/each'
 import _map from 'lodash/map'
 import _toPairs from 'lodash/toPairs'
@@ -20,7 +21,9 @@ import { resetCache } from '../Server/RequestCache'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
-import { challengeSchema, receiveChallenges } from '../Challenge/Challenge'
+import { Locale } from './Locale/Locale'
+import { challengeSchema, receiveChallenges, fetchChallenges }
+       from '../Challenge/Challenge'
 import { taskSchema,
          taskDenormalizationSchema,
          receiveTasks } from '../Task/Task'
@@ -35,10 +38,18 @@ export const REVIEW_NOT_NEEDED = 0
 export const REVIEW_NEEDED = 1
 export const REVIEW_MANDATORY = 2
 
+export const FOLLOWER_STATUS_FOLLOWING = 0
+export const FOLLOWER_STATUS_BLOCKED = 1
+
 export const needsReviewType = Object.freeze({
   notNeeded: REVIEW_NOT_NEEDED,
   needed: REVIEW_NEEDED,
   mandatory: REVIEW_MANDATORY,
+})
+
+export const FollowerStatus = Object.freeze({
+  following: FOLLOWER_STATUS_FOLLOWING,
+  blocked: FOLLOWER_STATUS_BLOCKED,
 })
 
 /** normalizr schema for users */
@@ -60,8 +71,8 @@ export const userDenormalizationSchema = function() {
 
 export const subscribeToUserUpdates = function(dispatch, userId) {
   websocketClient.addServerSubscription(
-    "user", userId, `newNotificationHandler_${userId}`,
-    messageObject => onNewNotification(dispatch, userId, messageObject)
+    "user", userId, `userUpdateHandler_${userId}`,
+    messageObject => onUserUpdate(dispatch, userId, messageObject)
   )
 }
 
@@ -69,12 +80,35 @@ export const unsubscribeFromUserUpdates = function(userId) {
   websocketClient.removeServerSubscription("user", userId, `newNotificationHandler_${userId}`)
 }
 
-const onNewNotification = function(dispatch, userId, messageObject) {
+export const subscribeToFollowUpdates = function(callback, handle) {
+  websocketClient.addServerSubscription(
+    "following",
+    null,
+    handle,
+    messageObject => callback(messageObject)
+  )
+}
+
+export const unsubscribeFromFollowUpdates = function(handle) {
+  websocketClient.removeServerSubscription("following", null, handle)
+}
+
+/**
+ * Process updates to users received via websocket, including messages
+ * informing of new notifications and awarded achievements
+ */
+const onUserUpdate = function(dispatch, userId, messageObject) {
   switch(messageObject.messageType) {
     case "notification-new":
       if (_get(messageObject, 'data.userId') === userId) {
         // Refresh user's notifications from server
         dispatch(fetchUserNotifications(userId))
+      }
+      break
+    case "achievement-awarded":
+      if (_get(messageObject, 'data.userId') === userId) {
+        // Refresh user
+        dispatch(fetchUser(userId))
       }
       break
     default:
@@ -172,6 +206,16 @@ export const findUser = function(username) {
 }
 
 /**
+ * Search for users by OSM username. Resolves with a (possibly empty) list of
+ * results. Note that each result only contains a few public OSM fields such
+ * as OSM id and avatar URL.
+ */
+export const findPreferredUsers = function(username, taskId) {
+  return new Endpoint(api.users.findPreferred,
+                      {params: {username, tid: taskId}}).execute()
+}
+
+/**
  * Fetch the user data for the given user. Note that this only fetches
  * the user data and does not fetch any accompanying data that would require
  * additional API requests to retrieve. Use `loadCompleteUser` to fully load
@@ -227,9 +271,13 @@ export const ensureUserLoggedIn = function(squelchError=false) {
     return new Endpoint(
       api.user.whoami, {schema: userSchema()}
     ).execute().then(normalizedResults => {
+      const userId = normalizedResults.result
+      if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+        localStorage.setItem('isLoggedIn', 'true')
+      }
       dispatch(receiveUsers(normalizedResults.entities))
-      dispatch(setCurrentUser(normalizedResults.result))
-      return normalizedResults.result
+      dispatch(setCurrentUser(userId))
+      return userId
     }).catch(error => {
       // a 401 (unauthorized) indicates that the user is not logged in. Logout
       // the current user locally to reflect that fact and dispatch an error
@@ -317,7 +365,7 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
 /**
  * Fetch the saved tasks for the given user.
  */
-export const fetchSavedTasks = function(userId, limit=50) {
+export const fetchSavedTasks = function(userId, limit=50, includeChallenges=true) {
   return function(dispatch) {
     return new Endpoint(api.user.savedTasks, {
       schema: [ taskSchema() ],
@@ -326,8 +374,14 @@ export const fetchSavedTasks = function(userId, limit=50) {
     }).execute().then(normalizedTasks => {
       const tasks = _get(normalizedTasks, 'entities.tasks')
       const user = {id: userId}
-      user.savedTasks = _isObject(tasks) ?
-                        _keys(tasks).map(key => parseInt(key, 10)) :[]
+      user.savedTasks = []
+      if (_isObject(tasks)) {
+        user.savedTasks = _keys(tasks).map(key => parseInt(key, 10))
+        if (includeChallenges) {
+          const challengeIds = _map(_values(tasks), 'parent')
+          dispatch(fetchChallenges(challengeIds))
+        }
+      }
 
       dispatch(receiveTasks(normalizedTasks.entities))
       dispatch(receiveUsers(simulatedEntities(user)))
@@ -414,12 +468,32 @@ export const fetchUserActivity = function(userId, limit=50) {
 }
 
 /**
+ * Fetch recent activity from multiple users
+ */
+export const fetchMultipleUserActivity = function(osmUserIds, limit=50, page=0) {
+  const offset = page * limit
+  return new Endpoint(api.user.activity, {
+    params: { osmUserIds: osmUserIds.join(','), limit: limit + 1, offset },
+  }).execute().then(activity => ({
+      activity: activity.slice(0, limit),
+      hasMore: activity.length > limit,
+  }))
+}
+
+/**
  * Fetch the user's recent metrics.
  */
-export const fetchUserMetrics = function(userId, monthDuration = -1, reviewDuration = -1) {
+export const fetchUserMetrics = function(userId,
+                                         monthDuration = -1,
+                                         reviewDuration = -1,
+                                         reviewerDuration = -1,
+                                         start = null, end = null,
+                                         reviewStart = null, reviewEnd = null,
+                                         reviewerStart = null, reviewerEnd = null) {
   return new Endpoint(api.user.metrics, {
     variables: {userId},
-    params: {monthDuration, reviewDuration}
+    params: {monthDuration, reviewDuration, reviewerDuration,
+             start, end, reviewStart, reviewEnd, reviewerStart, reviewerEnd}
   }).execute()
 }
 
@@ -439,9 +513,12 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
       fetchSavedTasks(userId, savedTasksLimit)(dispatch)
       fetchUserActivity(userId)(dispatch)
       fetchNotificationSubscriptions(userId)(dispatch)
-    }).then(() =>
+    }).then(() => {
+      if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+        localStorage.setItem('isLoggedIn', 'true')
+      }
       dispatch(setCurrentUser(userId))
-    ).catch(error => {
+    }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -658,6 +735,7 @@ export const unsaveTask = function(userId, taskId) {
  * Logout the current user on both the client and server.
  */
 export const logoutUser = function(userId) {
+  localStorage.removeItem('isLoggedIn')
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
 
   if (_isFinite(userId) && userId !== GUEST_USER_ID) {
@@ -712,6 +790,9 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
   // The generic reduction will merge arrays, creating a union of values. We
   // don't want that for many of our arrays: we want to replace the old ones
   // with new ones (if we have new ones).
+  //
+  // We also normalize the locale, as the server will default to `en` whereas
+  // we use `en-US`
   for (let entity of userEntities) {
     if (_isArray(entity.groups)) {
       mergedState[entity.id].groups = entity.groups
@@ -740,6 +821,16 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
     // Always completely replace app-specific properties with new ones
     if (_isObject(entity.properties)) {
       mergedState[entity.id].properties = entity.properties
+    }
+
+    // Always completely replace customBasemaps
+    if (_isArray(_get(entity, 'settings.customBasemaps'))) {
+      mergedState[entity.id].settings.customBasemaps = entity.settings.customBasemaps
+    }
+
+    // Normalize server's default `en` locale to `en-US`
+    if (_get(entity, 'settings.locale') === 'en') {
+      mergedState[entity.id].settings.locale = Locale.enUS
     }
   }
 }

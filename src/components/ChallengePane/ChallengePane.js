@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
+import { injectIntl } from 'react-intl'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
+import _uniqBy from 'lodash/uniqBy'
+import _differenceBy from 'lodash/differenceBy'
+import { Popup } from 'react-leaflet'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
+import FilterByLocation from './ChallengeFilterSubnav/FilterByLocation'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
-import ChallengeSearchMap from '../ChallengeSearchMap/ChallengeSearchMap'
-import ChallengeBrowseMap from '../ChallengeBrowseMap/ChallengeBrowseMap'
+import TaskClusterMap from '../TaskClusterMap/TaskClusterMap'
 import CongratulateModal from '../CongratulateModal/CongratulateModal'
 import ChallengeEndModal from '../ChallengeEndModal/ChallengeEndModal'
 import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
@@ -16,24 +20,28 @@ import WithChallengeSearch from '../HOCs/WithSearch/WithChallengeSearch'
 import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
-import WithTaskMarkers from '../HOCs/WithTaskMarkers/WithTaskMarkers'
 import WithMapBoundedTasks from '../HOCs/WithMapBoundedTasks/WithMapBoundedTasks'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
+import WithChallengeTaskClusters from '../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
+import WithTaskClusterMarkers from '../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
+import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
+import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
+import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
+import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
+import StartVirtualChallenge from './StartVirtualChallenge/StartVirtualChallenge'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
-const BrowseMap = WithTaskMarkers(ChallengeBrowseMap)
-let SearchMap = null
-
-// If the map-bounded task browsing feature is enabled, set up the ChallengeSearchMap
-// to use it.
-if (_get(process.env,
-         'REACT_APP_FEATURE_BOUNDED_TASK_BROWSING') === 'enabled') {
-  SearchMap = WithTaskMarkers(ChallengeSearchMap, 'mapBoundedTasks')
-}
-else {
-  SearchMap = ChallengeSearchMap
-}
+const ClusterMap =
+  WithChallengeTaskClusters(
+    WithTaskClusterMarkers(
+      WithCurrentUser(
+        TaskClusterMap('challenges')
+      )
+    ),
+    true
+  )
+const LocationFilter = WithCurrentUser(FilterByLocation)
 
 /**
  * ChallengePane represents the top-level view when the user is browsing,
@@ -43,19 +51,46 @@ else {
  * that match the current search and set of filters, and a ChallengeSearchMap for
  * finding challenges geographically.
  *
- * @see See [ChallengeFilterSubnav](#challengefiltersubnav)
- * @see See [ChallengeResultList](#challengeresultlist)
- * @see See [ChallengeSearchMap](#ChallengeSearchMap)
- *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengePane extends Component {
   state = {
-    sidebarMinimized: true,
+    selectedClusters: [],
   }
 
-  toggleSidebarMinimized = () => {
-    this.setState({sidebarMinimized: !this.state.sidebarMinimized})
+  onBulkClusterSelection = clusters => {
+    if (!clusters || clusters.length === 0) {
+      return
+    }
+
+    // Handle both clusters and individual tasks in case user declustered
+    this.setState({
+      selectedClusters: _uniqBy(
+        this.state.selectedClusters.concat(clusters), clusters[0].isTask ? 'taskId' : 'clusterId'
+      ),
+    })
+  }
+
+  onBulkClusterDeselection = clusters => {
+    if (!clusters || clusters.length === 0) {
+      return
+    }
+
+    // Handle both clusters and individual tasks in case user declustered
+    this.setState({
+      selectedClusters: _differenceBy(
+        this.state.selectedClusters, clusters, clusters[0].isTask ? 'taskId' : 'clusterId'
+      ),
+    })
+  }
+
+  resetSelectedClusters = () => this.setState({selectedClusters: []})
+
+  componentDidUpdate(prevProps) {
+    if (!_isEqual(this.state.bounds, _get(this.props, 'mapBounds.bounds'))) {
+      this.setState({bounds: _get(this.props, 'mapBounds.bounds'),
+                     fromUserAction: _get(this.props, 'mapBounds.fromUserAction')})
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -63,7 +98,30 @@ export class ChallengePane extends Component {
   }
 
   render() {
-    const Map = this.props.browsedChallenge ? BrowseMap : SearchMap
+    const challengeStatus = [ChallengeStatus.ready,
+                             ChallengeStatus.partiallyLoaded,
+                             ChallengeStatus.none,
+                             ChallengeStatus.empty]
+
+    const showMarkerPopup = (markerData) => {
+      return (
+       <Popup>
+        <TaskChallengeMarkerContent
+          marker={markerData}
+          taskId={markerData.options.taskId}
+          {...this.props}/>
+       </Popup>
+      )
+    }
+
+    const virtualChallengeMapOverlay =
+      this.state.selectedClusters.length > 0 ?
+      <StartVirtualChallenge
+        {...this.props}
+        selectedClusters={this.state.selectedClusters}
+      /> :
+      null
+
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50">
         {_get(this.props, 'history.location.state.congratulate', false) &&
@@ -77,12 +135,36 @@ export class ChallengePane extends Component {
         <ChallengeFilterSubnav {...this.props} />
 
         <div className="mr-p-6 lg:mr-flex mr-cards-inverse">
-          <ChallengeResults {...this.props} />
+          <div className="mr-flex-0">
+            <LocationFilter {...this.props} />
+            <ChallengeResults {...this.props} />
+          </div>
           <div className="mr-flex-1">
             <MapPane>
-              <Map challenge={this.props.browsedChallenge}
-                    onTaskClick={this.props.startChallengeWithTask}
-                    {...this.props} />
+              <ClusterMap
+                challenge={this.props.browsedChallenge}
+                showMarkerPopup={showMarkerPopup}
+                initialBounds={this.state.fromUserAction ? this.state.bounds : null}
+                criteria={{boundingBox: fromLatLngBounds(this.state.bounds),
+                          zoom: this.state.zoom,
+                          filters: _get(this.props, 'searchCriteria.filters'),
+                          searchQuery: _get(this.props, 'searchCriteria.query'),
+                          challengeStatus}}
+                updateTaskFilterBounds={(bounds, zoom, fromUserAction) => {
+                  this.props.updateChallengeSearchMapBounds(bounds, fromUserAction)
+                  this.resetSelectedClusters()
+                }}
+                selectedClusters={this.state.selectedClusters}
+                onBulkClusterSelection={this.onBulkClusterSelection}
+                onBulkClusterDeselection={this.onBulkClusterDeselection}
+                resetSelectedClusters={this.resetSelectedClusters}
+                allowClusterToggle
+                showTaskCount
+                showClusterLasso
+                showFitWorld
+                externalOverlay={virtualChallengeMapOverlay}
+                {...this.props}
+              />
             </MapPane>
           </div>
         </div>
@@ -92,19 +174,21 @@ export class ChallengePane extends Component {
 }
 
 export default
-  WithChallenges(
-    WithChallengeSearch(
-      WithFilteredChallenges(
-        WithSearchResults(
+  WithCurrentUser(
+    WithChallenges(
+      WithChallengeSearch(
+        WithClusteredTasks(
           WithMapBoundedTasks(
-            WithClusteredTasks(
-              WithStartChallenge(
-                WithBrowsedChallenge(ChallengePane)
+            WithFilteredChallenges(
+              WithSearchResults(
+                WithStartChallenge(
+                  WithBrowsedChallenge(injectIntl(ChallengePane))
+                ),
+                'challenges',
+                'challenges'
               )
             )
-          ),
-          'challenges',
-          'challenges'
+          )
         )
       )
     )

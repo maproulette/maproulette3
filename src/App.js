@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import { withRouter } from 'react-router'
 import Home from './pages/Home/Home'
 import Profile from './pages/Profile/Profile'
@@ -11,12 +11,17 @@ import ProjectLeaderboard from './pages/Leaderboard/ProjectLeaderboard'
 import CountryLeaderboard from './pages/Leaderboard/CountryLeaderboard'
 import ChallengePane from './components/ChallengePane/ChallengePane'
 import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail'
+import ProjectDetail from './components/ProjectDetail/ProjectDetail'
 import TaskPane from './components/TaskPane/TaskPane'
 import ReviewTaskPane from './components/ReviewTaskPane/ReviewTaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
 import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
 import Review from './pages/Review/Review'
 import Inbox from './pages/Inbox/Inbox'
+import Teams from './pages/Teams/Teams'
+import Achievements from './pages/Achievements/Achievements'
+import Social from './pages/Social/Social'
+import GlobalActivity from './pages/GlobalActivity/GlobalActivity'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 import { resetCache } from './services/Server/RequestCache'
 import WithCurrentUser from './components/HOCs/WithCurrentUser/WithCurrentUser'
@@ -43,10 +48,17 @@ import './App.scss'
 const TopNav = withRouter(WithCurrentUser(Navbar))
 const CurrentTaskPane = WithCurrentTask(TaskPane)
 const CurrentReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
+const CurrentMetaReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentVirtualChallengeTaskPane =
   WithVirtualChallenge(WithCurrentTask(TaskPane))
-const VirtualChallengePane = WithVirtualChallenge(ChallengePane)
+const VirtualChallengePane = WithVirtualChallenge(ChallengeDetail)
 const ErrorPane = WithExternalError(ChallengePane)
+const HomeOrDashboard = props => {
+  const goHome = sessionStorage.getItem('goHome')
+  const loggedIn = localStorage.getItem('isLoggedIn')
+  sessionStorage.removeItem('goHome')
+  return (loggedIn && !goHome) ? <Redirect to="/dashboard" /> : <Home />
+}
 
 /**
  * App represents the top level component of the application.  It renders a
@@ -81,9 +93,10 @@ export class App extends Component {
 
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>
-            <CachedRoute exact path='/' component={Home} />
+            <CachedRoute exact path='/' component={HomeOrDashboard} />
             <CachedRoute exact path='/browse/challenges' component={ChallengePane} />
             <CachedRoute path='/browse/challenges/:challengeId' component={ChallengeDetail} />
+            <CachedRoute path='/browse/projects/:projectId' component={ProjectDetail} />
             <CachedRoute path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
             <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
             <CachedRoute exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
@@ -96,15 +109,22 @@ export class App extends Component {
             <CachedRoute path='/user/profile' component={Profile} />
             <CachedRoute path='/user/metrics/:userId' component={Metrics} />
             <CachedRoute path='/user/metrics' component={Metrics} />
+            <CachedRoute path='/user/achievements/:userId' component={Achievements} />
+            <CachedRoute path='/user/achievements' component={Achievements} />
             <CachedRoute path='/dashboard' component={Dashboard} />
             <CachedRoute path='/leaderboard' component={Leaderboard} />
+            <CachedRoute exact path='/review/:showType' component={Review} />
             <CachedRoute path='/review' component={Review} />
             <CachedRoute path='/inbox' component={Inbox} />
+            <CachedRoute path='/teams' component={Teams} />
+            <CachedRoute path='/social' component={Social} />
+            <CachedRoute path='/activity' component={GlobalActivity} />
             <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
             <CachedRoute path='/project/:projectId/leaderboard' component={ProjectLeaderboard} />
             <CachedRoute path='/country/:countryCode/leaderboard' component={CountryLeaderboard} />
             <CachedRoute path='/challenge/:challengeId/task/:taskId/inspect' component={InspectTask} />
             <CachedRoute path='/challenge/:challengeId/task/:taskId/review' component={CurrentReviewTaskPane} />
+            <CachedRoute path='/challenge/:challengeId/task/:taskId/meta-review' component={CurrentMetaReviewTaskPane}/>
             <CachedRoute path='/admin' component={AdminPane} />
             <CachedRoute path='/error' component={ErrorPane} />
             <Route component={PageNotFound} />

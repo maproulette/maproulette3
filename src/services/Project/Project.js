@@ -3,6 +3,7 @@ import _get from 'lodash/get'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _find from 'lodash/find'
+import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
 import startOfDay from 'date-fns/start_of_day'
@@ -12,11 +13,9 @@ import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions'
 import { RESULTS_PER_PAGE } from '../Search/Search'
-import { GroupType } from './GroupType/GroupType'
-import { addServerError,
-         addError } from '../Error/Error'
+import { addServerError, addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
-import { findUser, ensureUserLoggedIn } from '../User/User'
+import { findUser, ensureUserLoggedIn, fetchUser } from '../User/User'
 
 /** normalizr schema for projects */
 export const projectSchema = function() {
@@ -82,7 +81,7 @@ export const fetchManageableProjects = function(page = null, limit = RESULTS_PER
     return new Endpoint(
       api.projects.managed, {
         schema: [ projectSchema() ],
-        params: {limit: limit, page: (pageToFetch * limit), onlyOwned, onlyEnabled}
+        params: {limit: limit, page: pageToFetch, onlyOwned, onlyEnabled}
       }
     ).execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
@@ -97,6 +96,26 @@ export const fetchManageableProjects = function(page = null, limit = RESULTS_PER
         dispatch(addError(AppErrors.project.fetchFailure))
         console.log(error.response || error)
       }
+    })
+  }
+}
+
+/**
+ * Retrieve all featured projects, up to the given limit
+ */
+export const fetchFeaturedProjects = function(onlyEnabled=true, limit=RESULTS_PER_PAGE, page=null) {
+  return function(dispatch) {
+    const pageToFetch = _isFinite(page) ? page : 0
+
+    return new Endpoint(api.projects.featured, {
+      schema: [ projectSchema() ],
+      params: {onlyEnabled, limit, page: pageToFetch}
+    }).execute().then(normalizedResults => {
+      dispatch(receiveProjects(normalizedResults.entities))
+      return normalizedResults
+    }).catch(error => {
+      dispatch(addError(AppErrors.project.fetchFailure))
+      console.log(error.response || error)
     })
   }
 }
@@ -154,7 +173,7 @@ export const searchProjects = function(searchCriteria, limit=RESULTS_PER_PAGE) {
         params: {
           q: `%${query}%`,
           onlyEnabled: onlyEnabled ? 'true' : 'false',
-          page: page * limit,
+          page,
           limit,
         }
     }).execute().then(normalizedResults => {
@@ -172,7 +191,7 @@ export const searchProjects = function(searchCriteria, limit=RESULTS_PER_PAGE) {
  * whether it already has an id) and update the redux store with the latest
  * version from the server.
  */
-export const saveProject = function(projectData) {
+export const saveProject = function(projectData, user) {
   return function(dispatch) {
     // Setup the save endpoint to either edit or create the project depending
     // on whether it has an id.
@@ -191,11 +210,10 @@ export const saveProject = function(projectData) {
       dispatch(receiveProjects(normalizedResults.entities))
       const project = _get(normalizedResults, `entities.projects.${normalizedResults.result}`)
 
-      // If we just created the project, add the owner as an admin.
+      // If we just created the project, we should refresh the user as they
+      // almost certainly have new grants
       if (areCreating && project) {
-        return setProjectManagerGroupType(
-          project.id, project.owner, GroupType.admin
-        )(dispatch).then(() => project)
+        return fetchUser(user.id)(dispatch).then(() => project)
       }
       else {
         return project
@@ -255,23 +273,36 @@ export const fetchProjectActivity = function(projectId, startDate, endDate) {
 }
 
 /**
- * Fetch managers of the given project.
+ * Fetch managers of the given project, both users and teams
  */
 export const fetchProjectManagers = function(projectId) {
   return function(dispatch) {
-    return new Endpoint(
-      api.project.managers, {variables: {projectId}}
-    ).execute().then(rawManagers => {
-      const normalizedResults = {
-        entities: {
-          projects: {
-            [projectId]: {id: projectId, managers: rawManagers},
-          }
+    const normalizedResults = {
+      entities: {
+        projects: {
+          [projectId]: {id: projectId},
         }
       }
+    }
 
-      return dispatch(receiveProjects(normalizedResults.entities))
-    }).catch(error => {
+    return Promise.all([
+      new Endpoint(
+        api.project.managers, {variables: {projectId}}
+      ).execute().then(rawManagers =>
+        normalizedResults.entities.projects[projectId].managers = rawManagers
+      ),
+
+      new Endpoint(
+        api.teams.projectManagers, {variables: {projectId}}
+      ).execute().then(rawManagers =>
+        normalizedResults.entities.projects[projectId].teamManagers = _map(
+          rawManagers,
+          managingTeam => Object.assign({}, managingTeam.team, {roles: _map(managingTeam.grants, 'role')})
+        )
+      ),
+    ]).then(
+      () => dispatch(receiveProjects(normalizedResults.entities))
+    ).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -286,12 +317,15 @@ export const fetchProjectManagers = function(projectId) {
 }
 
 /**
- * Set group type (permissions) for user on project.
+ * Set role for user on project
  */
-export const setProjectManagerGroupType = function(projectId, userId, groupType) {
+export const setProjectManagerRole = function(projectId, userId, isOSMUserId, role) {
   return function(dispatch) {
     return new Endpoint(
-      api.project.setManagerPermission, {variables: {userId, projectId, groupType}}
+      api.project.setManagerPermission, {
+        variables: {userId, projectId, role},
+        params: {isOSMUserId: isOSMUserId ? 'true' : 'false'},
+      }
     ).execute().then(rawManagers => {
       const normalizedResults = {
         entities: {
@@ -318,9 +352,9 @@ export const setProjectManagerGroupType = function(projectId, userId, groupType)
 
 /**
  * Add a user with the given OSM username to the given project with the given
- * group type (permissions).
+ * role
  */
-export const addProjectManager = function(projectId, username, groupType) {
+export const addProjectManager = function(projectId, username, role) {
   return function(dispatch) {
     return findUser(username).then(matchingUsers => {
       // We want an exact username match
@@ -328,7 +362,7 @@ export const addProjectManager = function(projectId, username, groupType) {
         _get(_find(matchingUsers, match => match.displayName === username), 'osmId')
 
       if (_isFinite(osmId)) {
-        return setProjectManagerGroupType(projectId, osmId, groupType)(dispatch)
+        return setProjectManagerRole(projectId, osmId, true, role)(dispatch)
       }
       else {
         dispatch(addError(AppErrors.user.notFound))
@@ -343,10 +377,13 @@ export const addProjectManager = function(projectId, username, groupType) {
 /**
  * Remove project manager from project
  */
-export const removeProjectManager = function(projectId, userId) {
+export const removeProjectManager = function(projectId, userId, isOSMUserId) {
   return function(dispatch) {
     return new Endpoint(
-      api.project.removeManager, {variables: {userId, projectId}}
+      api.project.removeManager, {
+        variables: {userId, projectId},
+        params: {isOSMUserId: isOSMUserId ? 'true' : 'false'},
+      }
     ).execute().then(
       () => fetchProjectManagers(projectId)(dispatch)
     ).catch(error => {
@@ -410,6 +447,10 @@ const reduceProjectsFurther = function(mergedState, oldState, projectEntities) {
 
     if (_isArray(entity.managers)) {
       mergedState[entity.id].managers = entity.managers
+    }
+
+    if (_isArray(entity.teamManagers)) {
+      mergedState[entity.id].teamManagers = entity.teamManagers
     }
   })
 }

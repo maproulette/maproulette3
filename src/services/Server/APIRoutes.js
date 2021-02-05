@@ -19,6 +19,7 @@ const apiRoutes = factory => {
     'projects': {
       'all': factory.get('/projects'),
       'managed': factory.get('/projects/managed'),
+      'featured': factory.get('/projects/featured'),
       'search': factory.get('/projects/find'),
     },
     'project': {
@@ -30,7 +31,7 @@ const apiRoutes = factory => {
       'activity': factory.get('/data/project/activity'),
       'managers': factory.get('/user/project/:projectId'),
       'comments': factory.get('/project/:id/comments'),
-      'setManagerPermission': factory.put('/user/:userId/project/:projectId/:groupType'),
+      'setManagerPermission': factory.put('/user/:userId/project/:projectId/:role'),
       'removeManager': factory.delete('/user/:userId/project/:projectId/-1'),
       'delete': factory.delete('/project/:id'),
       'addToVirtual': factory.post('/project/:projectId/challenge/:challengeId/add'),
@@ -44,11 +45,13 @@ const apiRoutes = factory => {
       'actions': factory.get('/data/project/summary'),
       'activity': factory.get('/data/status/activity'),
       'latestActivity': factory.get('/data/status/latestActivity'),
+      'withReviewTasks': factory.get('/review/challenges'),
+      'tagMetrics': factory.get('/data/tag/metrics'),
     },
     'challenge': {
       'single': factory.get('/challenge/:id'),
       'tasks': factory.get('/challenge/:id/tasks'),
-      'clusteredTasks': factory.get('/challenge/clustered/:id'),
+      'taskClusters': factory.put('/taskCluster'),
       'nearbyTasks': factory.get('/challenge/:challengeId/tasksNearby/:taskId'),
       'deleteTasks': factory.delete('/challenge/:id/tasks'),
       'randomTask': factory.get('/challenge/:id/tasks/randomTasks', {noCache: true}),
@@ -65,33 +68,53 @@ const apiRoutes = factory => {
       'removeKeywords': factory.delete('/challenge/:id/tags'),
       'uploadGeoJSON': factory.put('/challenge/:id/addFileTasks'),
       'delete': factory.delete('/challenge/:id'),
+      'propertyKeys': factory.get('/data/challenge/:id/propertyKeys'),
+      'snapshotList': factory.get('/snapshot/challenge/:id/list'),
+      'recordSnapshot': factory.get('/snapshot/challenge/:id/record'),
+      'removeSnapshot': factory.delete('/snapshot/:id'),
+      'snapshot': factory.get('/snapshot/:id'),
     },
     'virtualChallenge': {
       'single': factory.get('/virtualchallenge/:id'),
       'create': factory.post('/virtualchallenge'),
       'edit': factory.put('/virtualchallenge/:id'),
       'randomTask': factory.get('/virtualchallenge/:id/task', {noCache: true}),
-      'clusteredTasks': factory.get('/virtualchallenge/clustered/:id'),
       'nearbyTasks': factory.get('/virtualchallenge/:challengeId/tasksNearby/:taskId'),
     },
     'tasks': {
       'random': factory.get('/tasks/random', {noCache: true}),
-      'withinBounds': factory.get('/tasks/box/:left/:bottom/:right/:top'),
+      'withinBounds': factory.put('/tasks/box/:left/:bottom/:right/:top'),
       'bulkUpdate': factory.put('/tasks'),
+      'bulkStatusChange': factory.put('/tasks/changeStatus'),
       'review': factory.get('/tasks/review'),
       'reviewed': factory.get('/tasks/reviewed'),
       'reviewNext': factory.get('/tasks/review/next'),
+      'nearbyReviewTasks': factory.get('/tasks/review/nearby/:taskId'),
       'reviewMetrics': factory.get('/tasks/review/metrics'),
-      'fetchReviewClusters': factory.get('/taskCluster/review')
+      'reviewTagMetrics': factory.get('/tasks/review/tag/metrics'),
+      'fetchReviewClusters': factory.get('/taskCluster/review'),
+      'inCluster': factory.get('/tasksInCluster/:clusterId'),
+      'bundle': factory.post('/taskBundle'),
+      'deleteBundle': factory.delete('/taskBundle/:bundleId'),
+      'fetchBundle': factory.get('/taskBundle/:bundleId'),
+      bundled: {
+        'updateStatus': factory.put('/taskBundle/:bundleId/:status'),
+        'addComment': factory.post('/taskBundle/:bundleId/comment'),
+        'updateReviewStatus': factory.put('/taskBundle/:bundleId/review/:status'),
+        'updateMetaReviewStatus': factory.put('/taskBundle/:bundleId/metareview/:status')
+      },
+      'removeReviewRequest': factory.put('/tasks/review/remove')
     },
     'task': {
       'single': factory.get('/task/:id'),
       'start': factory.get('/task/:id/start'),
       'release': factory.get('/task/:id/release'),
+      'refreshLock': factory.get('/task/:id/refreshLock'),
       'startReview': factory.get('/task/:id/review/start'),
       'cancelReview': factory.get('/task/:id/review/cancel'),
       'updateStatus': factory.put('/task/:id/:status'),
       'updateReviewStatus': factory.put('/task/:id/review/:status'),
+      'updateMetaReviewStatus': factory.put('/task/:id/metareview/:status'),
       'comments': factory.get('/task/:id/comments'),
       'addComment': factory.post('/task/:id/comment'),
       'create': factory.post('/task'),
@@ -100,7 +123,9 @@ const apiRoutes = factory => {
       'tags': factory.get('/task/:id/tags'),
       'updateTags': factory.get('/task/:id/tags/update'),
       'testTagFix': factory.post('/change/tag/test'),
-      'applySuggestedFix': factory.post('/task/:id/fix/apply'),
+      'testCooperativeWork': factory.post('/change/test'),
+      'applyTagFix': factory.post('/task/:id/fix/apply'),
+      'updateCompletionResponses': factory.put('/task/:id/responses'),
     },
     'keywords': {
       'find': factory.get('/keywords'),
@@ -112,7 +137,9 @@ const apiRoutes = factory => {
       'publicByUsername': factory.get('/osmuser/:username/public'),
       'leaderboard': factory.get('/data/user/leaderboard'),
       'userLeaderboard': factory.get('/data/user/:id/leaderboard'),
+      'reviewerLeaderboard': factory.get('/data/reviewer/leaderboard'),
       'find': factory.get('/users/find/:username'),
+      'findPreferred': factory.get('/users/find'),
     },
     'user': {
       'whoami': factory.get('/user/whoami'),
@@ -132,6 +159,14 @@ const apiRoutes = factory => {
       'markNotificationsRead': factory.put('/user/:userId/notifications'),
       'deleteNotifications': factory.delete('/user/:userId/notifications'),
     },
+    'teams': {
+      'find': factory.get('/teams/find'),
+      'projectManagers': factory.get('/teams/projectManagers/:projectId'),
+    },
+    'team': {
+      'setProjectRole': factory.put('/team/:teamId/project/:projectId/:role'),
+      'removeFromProject': factory.delete('/team/:teamId/project/:projectId'),
+    }
   }
 }
 

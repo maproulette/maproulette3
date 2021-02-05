@@ -125,7 +125,7 @@ export default class UserActivityTimelineWidget extends Component {
         const challengeName = challengeNames.get(challengeId)
         return (
           <li key={challengeId}>
-            <h2 className="mr-timeline__name">
+            <h2 className="mr-timeline__name mr-links-green-lighter">
               <Link to={`/browse/challenges/${challengeId}`}>
                 {challengeName}
               </Link>
@@ -165,7 +165,7 @@ export default class UserActivityTimelineWidget extends Component {
         className="user-timeline-activity-widget"
         widgetTitle={<FormattedMessage {...messages.header} />}
       >
-        <ol className="mr-timeline">
+        <ol className="mr-timeline dark-mode">
           {timelineItems}
         </ol>
       </QuickWidget>

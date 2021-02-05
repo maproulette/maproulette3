@@ -10,7 +10,6 @@ import CommentList from '../../../../CommentList/CommentList'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import messages from './Messages'
-import './CommentsWidget.scss'
 
 const descriptor = {
   widgetKey: 'CommentsWidget',
@@ -34,25 +33,35 @@ export default class CommentsWidget extends Component {
     // Comments can only be exported for single challenges.
     if (comments.length > 0 && _get(this.props, 'challenges.length', 0) === 1) {
       exportControl = (
-        <a target="_blank"
-           rel="noopener noreferrer"
-           href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
-           className="button is-outlined is-green has-svg-icon export-control">
-          <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
+          className="mr-button mr-button--green-lighter mr-button--small mr-button--with-icon mr-text-sm"
+        >
+          <SvgSymbol
+            sym='download-icon'
+            viewBox='0 0 20 20'
+            className="mr-h-3 mr-w-3 mr-fill-current mr-mr-2"
+          />
           <FormattedMessage {...messages.exportLabel} />
         </a>
       )
     }
 
     return (
-      <QuickWidget {...this.props}
-                  className="comments-widget"
-                  widgetTitle={<FormattedMessage {...messages.title} />}
-                  headerControls={exportControl}>
-        <CommentList includeChallengeNames={_get(this.props, 'challenges.length', 0) > 1}
-                     includeTaskLinks
-                     lightMode={this.props.lightMode}
-                     comments={comments} />
+      <QuickWidget
+        {...this.props}
+        className=""
+        widgetTitle={<FormattedMessage {...messages.title} />}
+        rightHeaderControls={<div className="mr-my-2">{exportControl}</div>}
+      >
+        <CommentList
+          includeChallengeNames={_get(this.props, 'challenges.length', 0) > 1}
+          includeTaskLinks
+          lightMode={this.props.lightMode}
+          comments={comments}
+        />
       </QuickWidget>
     )
   }

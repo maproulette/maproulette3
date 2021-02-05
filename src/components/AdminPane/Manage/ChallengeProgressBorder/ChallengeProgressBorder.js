@@ -53,8 +53,8 @@ export class ChallengeProgressBorder extends Component {
     const segment = (
       <div
         key={status}
-        className={classNames(overrides.border ? overrides.border : "mr-border-grey-light",
-                             "mr-absolute mr-pin-b mr-mb-n2px mr-border-b-2 mr-h-5px")}
+        className={classNames(overrides.border ? overrides.border : "mr-border-white-25",
+                             "mr-absolute mr-bottom-0 mr-mb-n2px mr-border-b-2 mr-h-5px")}
         style={{
           left: `${cumulativeWidth}px`,
           width: `${segmentWidth}px`,
@@ -67,11 +67,11 @@ export class ChallengeProgressBorder extends Component {
       >
         {this.state.hoveredStatus === status &&
           <div
-            className="mr-absolute mr-mt-4 mr-bg-white mr-py-4 mr-px-2 mr-shadow mr-flex mr-z-50 mr-min-w-48"
+            className="mr-absolute mr-top-0 mr-h-8 mr-mt-4 mr-rounded mr-bg-blue-darker mr-py-2 mr-px-4 mr-shadow mr-z-50 mr-min-w-72 mr-flex mr-items-center"
             style={cumulativePercent > 50 ? {left: "-200px"} : undefined}
           >
             <div className="mr-w-4 mr-h-4" style={{backgroundColor: TaskStatusColors[status]}} />
-            <div className="mr-ml-2 mr-text-xs mr-text-grey">
+            <div className="mr-ml-2 mr-text-base mr-text-white">
               {
                 overrides.label ? overrides.label : localizedStatuses[keysByStatus[status]]
               }: {currentPercent}% ({actionCount}/{actions.total})

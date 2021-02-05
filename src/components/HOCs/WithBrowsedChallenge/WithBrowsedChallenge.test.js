@@ -75,39 +75,8 @@ test("the browsed challenge from the route match is passed down", () => {
                       entities={basicState.entities}
                       loadChallenge={loadChallenge}
                       loadChallengeActions={loadChallengeActions}
-                      fetchClusteredTasks={fetchTasks}
                       history={history} />
   )
 
   expect(wrapper.props().browsedChallenge).toEqual(challenge)
-})
-
-test("clustered task loading is kicked off for a new browsed challenge", async () => {
-  const wrapper = shallow(
-    <WrappedComponent match={match}
-                      entities={basicState.entities}
-                      loadChallenge={loadChallenge}
-                      loadChallengeActions={loadChallengeActions}
-                      fetchClusteredTasks={fetchTasks}
-                      history={history} />
-  )
-
-  expect(fetchTasks).toHaveBeenCalledWith(challenge.id, false)
-})
-
-test("virtual challenges get virtual=true when fetching tasks", async () => {
-  challenge.isVirtual = true
-  match.params = {virtualChallengeId: challenge.id}
-
-  const wrapper = shallow(
-    <WrappedComponent match={match}
-                      entities={basicState.entities}
-                      loadChallenge={loadChallenge}
-                      loadChallengeActions={loadChallengeActions}
-                      fetchClusteredTasks={fetchTasks}
-                      history={history}
-                      virtualChallenge={challenge} />
-  )
-
-  expect(fetchTasks).toHaveBeenCalledWith(challenge.id, true)
 })

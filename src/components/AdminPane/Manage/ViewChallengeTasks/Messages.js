@@ -21,7 +21,7 @@ export default defineMessages({
 
   tasksCreatedCount: {
     id: "Admin.Challenge.tasksCreatedCount",
-    defaultMessage: "{count, number} tasks created so far",
+    defaultMessage: "tasks created so far.",
   },
 
   totalElapsedTime: {
@@ -45,22 +45,8 @@ export default defineMessages({
                     "to geographically index new or modified challenges. " +
                     "Your challenge (and tasks) may not appear as " +
                     "expected in location-specific browsing or " +
-                    "searches until indexing is complete."
-  },
-
-  bulkSelectionTooltip: {
-    id: "Admin.manageTasks.controls.bulkSelection.tooltip",
-    defaultMessage: "Select tasks for bulk operation",
-  },
-
-  changeStatusToLabel: {
-    id: "Admin.manageTasks.controls.changeStatusTo.label",
-    defaultMessage: "Change status to ",
-  },
-
-  chooseStatusLabel: {
-    id: "Admin.manageTasks.controls.chooseStatus.label",
-    defaultMessage: "Choose ... ",
+                    "searches until indexing is complete, nor " +
+                    "when browsing map to choose location-based priority rules."
   },
 
   changePriorityLabel: {
@@ -68,44 +54,9 @@ export default defineMessages({
     defaultMessage: "Change Priority",
   },
 
-  showReviewColumnsLabel: {
-    id: "Admin.manageTasks.controls.showReviewColumns.label",
-    defaultMessage: "Show Review Columns",
-  },
-
-  hideReviewColumnsLabel: {
-    id: "Admin.manageTasks.controls.hideReviewColumns.label",
-    defaultMessage: "Hide Review Columns",
-  },
-
   priorityLabel: {
     id: "Admin.manageTasks.priorityLabel",
     defaultMessage: "Priority",
-  },
-
-  exportCSVLabel: {
-    id: "Admin.manageTasks.controls.exportCSV.label",
-    defaultMessage: "Export CSV",
-  },
-
-  filterByStatusLabel: {
-    id: "Admin.manageTasks.controls.filterByStatus.label",
-    defaultMessage: "Filter by Status",
-  },
-
-  filterByReviewStatusLabel: {
-    id: "Admin.manageTasks.controls.filterByReviewStatus.label",
-    defaultMessage: "Filter by Review Status",
-  },
-
-  filterByPriorityLabel: {
-    id: "Admin.manageTasks.controls.filterByPriority.label",
-    defaultMessage: "Filter by Priority",
-  },
-
-  exportGeoJSONLabel: {
-    id: "Admin.manageTasks.controls.exportGeoJSON.label",
-    defaultMessage: "Export GeoJSON",
   },
 
   clearFiltersLabel: {
@@ -113,13 +64,23 @@ export default defineMessages({
     defaultMessage: "Clear Filters",
   },
 
-  taskCountShownStatus: {
-    id: "Admin.TaskAnalysisTableHeader.taskCountStatus",
-    defaultMessage: "Shown: {countShown} Tasks",
+  inspectTaskLabel: {
+    id: "Admin.ChallengeTaskMap.controls.inspectTask.label",
+    defaultMessage: "Inspect Task",
   },
 
-  taskPercentShownStatus: {
-    id: "Admin.TaskAnalysisTableHeader.taskPercentStatus",
-    defaultMessage: "Shown: {percentShown}% ({countShown}) of {countTotal} Tasks",
+  editTaskLabel: {
+    id: "Admin.ChallengeTaskMap.controls.editTask.label",
+    defaultMessage: "Edit Task",
+  },
+
+  nameLabel: {
+    id: "Admin.Task.fields.name.label",
+    defaultMessage: "Task:",
+  },
+
+  statusLabel: {
+    id: "Admin.Task.fields.status.label",
+    defaultMessage: "Status:",
   },
 })

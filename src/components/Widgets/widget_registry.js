@@ -5,6 +5,24 @@
  */
 
 // Import first-party widgets shipped with MapRoulette
+export { default as SupplementalMapWidget }
+       from './SupplementalMapWidget/SupplementalMapWidget'
+export { default as CustomUrlWidget }
+       from './CustomUrlWidget/CustomUrlWidget'
+export { default as OSMHistoryWidget }
+       from './OSMHistoryWidget/OSMHistoryWidget'
+export { default as ActivityListingWidget }
+       from './ActivityListingWidget/ActivityListingWidget'
+export { default as ActivityMapWidget }
+       from './ActivityMapWidget/ActivityMapWidget'
+export { default as FollowingWidget }
+       from './FollowingWidget/FollowingWidget'
+export { default as MyTeamsWidget }
+       from './TeamsWidget/TeamsWidget'
+export { default as FeatureStyleLegendWidget }
+       from './FeatureStyleLegendWidget/FeatureStyleLegendWidget'
+export { default as TaskBundleWidget }
+       from './TaskBundleWidget/TaskBundleWidget'
 export { default as TagDiffWidget }
        from './TagDiffWidget/TagDiffWidget'
 export { default as TaskMapWidget }
@@ -47,10 +65,14 @@ export { default as ReviewTableWidget }
       from './ReviewTableWidget/ReviewTableWidget'
 export { default as ReviewStatusMetricsWidget }
       from './ReviewStatusMetricsWidget/ReviewStatusMetricsWidget'
-export { default as ReviewTaskMetricsWidget }
-      from './ReviewTaskMetricsWidget/ReviewTaskMetricsWidget'
+export { default as MetaReviewStatusMetricsWidget }
+      from './ReviewStatusMetricsWidget/MetaReviewStatusMetricsWidget'
+export { default as ReviewTagMetricsWidget }
+      from './ReviewTagMetricsWidget/ReviewTagMetricsWidget'
 export { default as ReviewMapWidget }
       from './ReviewMapWidget/ReviewMapWidget'
+export { default as SnapshotProgressWidget }
+       from './SnapshotProgressWidget/SnapshotProgressWidget'
 
 
 // Import (optional) contributed widgets specific to local installation.

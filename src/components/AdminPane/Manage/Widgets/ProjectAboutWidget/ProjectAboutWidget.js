@@ -5,7 +5,6 @@ import { WidgetDataTarget, registerWidgetType }
 import MarkdownContent from '../../../../MarkdownContent/MarkdownContent'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import messages from './Messages'
-import './ProjectAboutWidget.scss'
 
 const descriptor = {
   widgetKey: 'ProjectAboutWidget',
@@ -19,9 +18,11 @@ const descriptor = {
 export default class ProjectAboutWidget extends Component {
   render() {
     return (
-      <QuickWidget {...this.props}
-                  className="project-about-widget"
-                  widgetTitle={<FormattedMessage {...messages.title} />}>
+      <QuickWidget
+        {...this.props}
+        className=""
+        widgetTitle={<FormattedMessage {...messages.title} />}
+      >
         <MarkdownContent markdown={this.props.intl.formatMessage(messages.content)} />
       </QuickWidget>
     )

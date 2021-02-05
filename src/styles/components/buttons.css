@@ -37,7 +37,7 @@
 
   &-info,
   &--blue {
-    @apply mr-border-blue mr-text-blue;
+    @apply mr-border-matisse-blue mr-text-matisse-blue;
 
     &:hover {
       @apply mr-border-green mr-text-green;
@@ -52,6 +52,14 @@
     }
   }
 
+  &--grey {
+    @apply mr-border-grey mr-text-grey;
+
+    &:hover {
+      @apply mr-border-black mr-text-black;
+    }
+  }
+
   &--orange {
     @apply mr-border-orange mr-text-orange;
 
@@ -60,11 +68,75 @@
     }
   }
 
-  &--blue-fill {
-    @apply mr-bg-blue mr-border-0 mr-text-white;
+  &--dark {
+    @apply mr-bg-black-10 mr-text-green-lighter mr-font-normal mr-border-none mr-rounded;
 
     &:hover {
-      @apply mr-bg-blue-dark;
+      @apply mr-bg-black-40 mr-text-green-lighter;
     }
+  }
+
+  &--disabled {
+    @apply mr-border-grey-lighter-50 mr-text-grey-lighter-50;
+
+    &:hover {
+      @apply mr-border-grey-lighter-50 mr-text-grey-lighter-50 mr-cursor-not-allowed;
+    }
+  }
+
+  &--blue-fill {
+    @apply mr-bg-blue-dark mr-border-0 mr-text-white;
+
+    &:hover {
+      @apply mr-bg-blue-darker;
+    }
+  }
+
+  &--with-icon {
+    @apply mr-flex mr-items-center mr-justify-center;
+  }
+}
+
+.mr-expand-available {
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+}
+
+input[type="checkbox"].mr-checkbox-toggle {
+  @apply mr-appearance-none mr-outline-none mr-relative mr-shadow-inner mr-bg-transparent mr-border mr-border-white mr-w-4 mr-h-4 mr-align-text-bottom;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:checked {
+    &:after {
+      content: '';
+      @apply mr-w-2.5 mr-h-1.5 mr-absolute mr-top-0 mr-bg-transparent mr-border-2 mr-border-white mr-border-t-0 mr-border-r-0 mr-ml-2px;
+      transform: rotate(-45deg);
+      margin-top: 1.75px
+    }
+  }
+
+  &:indeterminate {
+    &:after {
+      content: '';
+      @apply mr-w-2 mr-h-1.5 mr-absolute mr-top-0 mr-bg-transparent mr-border-b-2 mr-border-white mr-mt-2px mr-ml-3px;
+    }
+  }
+}
+
+input[type="radio"].mr-radio {
+  @apply mr-appearance-none mr-outline-none mr-relative mr-shadow-inner mr-bg-transparent mr-border mr-border-white mr-rounded-full mr-w-4 mr-h-4 mr-mb-px mr-align-text-bottom;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:checked::after {
+    content: '';
+    @apply mr-w-2 mr-h-2 mr-absolute mr-top-0 mr-bg-white mr-rounded-full;
+    margin-top: 0.1875rem;
+    margin-left: 0.1875rem;
   }
 }

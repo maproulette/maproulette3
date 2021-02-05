@@ -2,6 +2,7 @@
 
 exports[`mapStateToProps provides an editor prop with the current open editor 1`] = `
 Object {
+  "configuredEditor": 0,
   "editor": 1,
 }
 `;

@@ -7,10 +7,10 @@ import { isFinalStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus }
       from '../../../services/Task/TaskReview/TaskReviewStatus'
+import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import TagDiffVisualization from '../../TagDiffVisualization/TagDiffVisualization'
 import TagDiffModal from '../../TagDiffVisualization/TagDiffModal'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import messages from './Messages'
 
@@ -37,17 +37,22 @@ export default class TagDiffWidget extends Component {
         noMain
         permanent
         widgetTitle={
+          <FormattedMessage {...messages.title} />
+        }
+        rightHeaderControls={
           <div className="mr-flex">
-            <FormattedMessage {...messages.title} />
             <button
-              className="mr-text-green-lighter mr-ml-4"
+              className="mr-button mr-button--xsmall mr-mr-4"
               onClick={() => this.setState({showDiffModal: true})}
             >
-              <SvgSymbol
-                sym="expand-icon"
-                viewBox="0 0 32 32"
-                className="mr-transition mr-fill-current mr-w-4 mr-h-4"
-              />
+              <FormattedMessage {...messages.viewAllTagsLabel} />
+            </button>
+
+            <button
+              className="mr-button mr-button--xsmall"
+              onClick={() => this.setState({showDiffModal: true, editMode: true})}
+            >
+              <FormattedMessage {...messages.editTagsLabel} />
             </button>
           </div>
         }
@@ -57,7 +62,8 @@ export default class TagDiffWidget extends Component {
         {this.state.showDiffModal &&
          <TagDiffModal
            {...this.props}
-           onClose={() => this.setState({showDiffModal: false})}
+           editMode={this.state.editMode}
+           onClose={() => this.setState({showDiffModal: false, editMode: false})}
          />
         }
       </QuickWidget>
@@ -67,7 +73,7 @@ export default class TagDiffWidget extends Component {
 
 export const TagDiff = props => {
   const needsRevised = props.task.reviewStatus === TaskReviewStatus.rejected
-  if (props.task.suggestedFix && (!isFinalStatus(props.task.status) || needsRevised)) {
+  if (AsCooperativeWork(props.task).isTagType() && (!isFinalStatus(props.task.status) || needsRevised)) {
     if (props.loadingOSMData) {
       return (
         <div className="mr-mb-4">
@@ -97,7 +103,7 @@ export const TagDiff = props => {
  * false as to whether it should be hidden given the current workspace props
  */
 TagDiffWidget.hideWidget = function(props) {
-  return !_get(props, 'task.suggestedFix', false)
+  return props.task && !AsCooperativeWork(props.task).isTagType()
 }
 
 registerWidgetType(TagDiffWidget, descriptor)

@@ -2,7 +2,7 @@
   @apply mr-relative mr-bg-white mr-shadow mr-rounded mr-text-grey mr-flex mr-flex-col;
 
   .mr-cards-inverse & {
-    @apply mr-bg-white-10 mr-text-white;
+    @apply mr-bg-black-10 mr-text-white;
   }
 
   &--top-row {
@@ -18,7 +18,7 @@
   }
 
   &__delete {
-    @apply mr-transition mr-absolute mr-z-10 mr-pin-r mr-pin-t mr-text-xs mr-bg-red-light mr-py-1 mr-px-2 mr-rounded-bl mr-rounded-tr mr-text-white;
+    @apply mr-transition mr-absolute mr-z-10 mr-right-0 mr-top-0 mr-text-xs mr-bg-red-light mr-py-1 mr-px-2 mr-rounded-bl mr-rounded-tr mr-text-white;
 
     &:hover {
       @apply mr-bg-red;
@@ -34,7 +34,7 @@
   }
 
   &__title {
-    @apply mr-font-bold mr-text-lg mr-text-blue-light mr-my-2;
+    @apply mr-font-bold mr-text-lg mr-text-matisse-blue mr-my-2;
 
     &:after {
       content: '';
@@ -71,7 +71,7 @@
 
     .mr-cards-inverse & {
 
-      a {
+      a::not(.mr-text-green-light) {
         @apply mr-text-green-lighter;
 
         &:hover {

@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import SearchBox from '../../SearchBox/SearchBox'
-import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengeSearch from '../../HOCs/WithSearch/WithChallengeSearch'
 import WithCommandInterpreter from '../../HOCs/WithCommandInterpreter/WithCommandInterpreter'
 import FilterByDifficulty from './FilterByDifficulty'
 import FilterByKeyword from './FilterByKeyword'
-import FilterByLocation from './FilterByLocation'
 import ClearFiltersControl from './ClearFiltersControl'
 import SortChallengesSelector from './SortChallengesSelector'
 import './ChallengeFilterSubnav.scss'
 import messages from './Messages'
 
 // Setup child components with necessary HOCs
-const LocationFilter = WithCurrentUser(FilterByLocation)
 const CommandSearchBox = WithCommandInterpreter(SearchBox)
 
 /**
@@ -39,20 +36,22 @@ export class ChallengeFilterSubnav extends Component {
       this.props.unfilteredChallenges.length > this.props.challenges.length
 
     return (
-      <header className="mr-bg-white-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-hidden lg:mr-flex mr-items-center mr-justify-between">
+      <header className="mr-bg-black-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-hidden lg:mr-flex mr-items-center mr-justify-between">
         <div className="mr-flex-grow mr-flex mr-items-center mr-justify-between lg:mr-justify-start">
           <h1 className="mr-hidden xl:mr-flex mr-text-3xl mr-leading-tight mr-font-normal mr-mr-6">
             <FormattedMessage {...messages.header} />
           </h1>
 
-          <div className="mr-flex">
+          <div className="mr-flex mr-items-center">
             <SortChallengesSelector {...this.props} />
             <FilterByKeyword {...this.props} />
             <FilterByDifficulty {...this.props} />
-            <LocationFilter {...this.props} />
             <CommandSearchBox
               {...this.props}
+              className="mr-h-12"
               placeholder={this.props.intl.formatMessage(messages.searchLabel)}
+              showSearchTypeFilter
+              setSearch={this.props.setSearch}
             />
           </div>
 

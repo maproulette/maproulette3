@@ -3,14 +3,10 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
-import _map from 'lodash/map'
-import _compact from 'lodash/compact'
-import _isEmpty from 'lodash/isEmpty'
-import AsManager from '../../../../interactions/User/AsManager'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../../../services/Widget/Widget'
-import { ChallengeStatus, isUsableChallengeStatus }
-       from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
+import AsBrowsableChallenge
+       from '../../../../interactions/Challenge/AsBrowsableChallenge'
 import WithManageableProjects
        from '../../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject
@@ -19,25 +15,25 @@ import WithCurrentChallenge
        from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithWidgetWorkspaces
        from '../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
+import WithSelectedClusteredTasks
+       from '../../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks'
 import WithFilteredClusteredTasks
-       from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
+       from '../../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
+import WithClusteredTasks
+      from '../../../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
-import WithChallengeReviewMetrics
-      from '../../HOCs/WithChallengeReviewMetrics/WithChallengeReviewMetrics'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
-import RebuildTasksControl from '../RebuildTasksControl/RebuildTasksControl'
 import TaskUploadingProgress
        from '../TaskUploadingProgress/TaskUploadingProgress'
 import TaskDeletingProgress
        from '../TaskDeletingProgress/TaskDeletingProgress'
-import Dropdown from '../../../Dropdown/Dropdown'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import ChallengeControls from '../ChallengeCard/ChallengeControls'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
-import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
+import ChallengeNameLink from '../../../ChallengeNameLink/ChallengeNameLink'
+import ShareLink from '../../../ShareLink/ShareLink'
 import manageMessages from '../Messages'
-import messages from './Messages'
 import './ChallengeDashboard.scss'
 
 // The name of this dashboard.
@@ -57,6 +53,9 @@ export const defaultDashboardSetup = function() {
       widgetDescriptor('BurndownChartWidget'),
       widgetDescriptor('StatusRadarWidget'),
       widgetDescriptor('ChallengeTasksWidget'),
+    ],
+    conditionalWidgets: [ // conditionally displayed
+      'MetaReviewStatusMetricsWidget',
     ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 7},
@@ -78,17 +77,9 @@ export const defaultDashboardSetup = function() {
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeDashboard extends Component {
-  deleteChallenge = () => {
-    this.props.deleteChallenge(this.props.challenge.parent.id,
-                               this.props.challenge.id)
-  }
-
-  moveChallenge = action => {
-    this.props.moveChallenge(this.props.challenge.id, action.projectId)
-  }
-
   render() {
-    if (!this.props.challenge) {
+    // We need to wait for our challenge and for it to be populated
+    if (!this.props.challenge || !this.props.challenge.id) {
       return <BusySpinner />
     }
 
@@ -102,16 +93,13 @@ export class ChallengeDashboard extends Component {
       return <TaskUploadingProgress {...this.props} />
     }
 
-    const manager = AsManager(this.props.user)
     const projectId = _get(this.props, 'challenge.parent.id')
-    const status = _get(this.props, 'challenge.status', ChallengeStatus.none)
-    const hasTasks = _get(this.props, 'challenge.actions.total', 0) > 0
 
     const pageHeader = (
       <div className="admin__manage__header admin__manage__header--flush">
         <nav className="breadcrumb" aria-label="breadcrumbs">
           <ul>
-            <li>
+            <li className="nav-title">
               <Link to='/admin/projects'>
                 <FormattedMessage {...manageMessages.manageHeader} />
               </Link>
@@ -124,77 +112,23 @@ export class ChallengeDashboard extends Component {
             </li>
             <li className="is-active">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a aria-current="page">
-                {this.props.challenge.name}
-                {this.props.loadingChallenge && <BusySpinner inline />}
-              </a>
+              <ChallengeNameLink {...this.props} suppressShareLink />
+              <ShareLink
+                {...this.props}
+                link={AsBrowsableChallenge(this.props.challenge).browseURL()}
+                showLeft
+              />
+              {this.props.loadingChallenge && <BusySpinner inline />}
             </li>
           </ul>
         </nav>
 
-        <div className="admin__manage__controls mr-flex">
-          {hasTasks && isUsableChallengeStatus(status, true) &&
-            <Link to={`/challenge/${this.props.challenge.id}`}
-                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
-              <FormattedMessage {...messages.startChallengeLabel} />
-            </Link>
-          }
-
-          {manager.canWriteProject(this.props.challenge.parent) &&
-            <React.Fragment>
-              <Link to={`/admin/project/${projectId}/` +
-                        `challenge/${this.props.challenge.id}/edit`}
-                    className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
-                <FormattedMessage {...messages.editChallengeLabel } />
-              </Link>
-
-              {_get(this.props, 'projects.length', 0) > 1 &&
-                <Dropdown
-                  className="mr-dropdown--fixed"
-                  dropdownButton={dropdown => (
-                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <a onClick={dropdown.toggleDropdownVisible}
-                       className="mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-flex mr-items-center"
-                    >
-                      <FormattedMessage {...messages.moveChallengeLabel} />
-                      <SvgSymbol
-                        sym="icon-cheveron-down"
-                        viewBox="0 0 20 20"
-                        className="mr-fill-current mr-w-5 mr-h-5"
-                      />
-                    </a>
-                  )}
-                  dropdownContent={dropdown =>
-                    <ListManagedProjectItems
-                      {...this.props}
-                      currentProjectId={projectId}
-                      manager={manager}
-                    />
-                  }
-                />
-              }
-
-              {this.props.challenge.isRebuildable() &&
-               <RebuildTasksControl {...this.props} />
-              }
-
-              <Link to={{pathname: `/admin/project/${projectId}/` +
-                                    `challenge/${this.props.challenge.id}/clone`,
-                        state: {cloneChallenge: true}}}
-                    className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
-                <FormattedMessage {...messages.cloneChallengeLabel } />
-              </Link>
-
-              <ConfirmAction>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a onClick={this.deleteChallenge}
-                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
-                  <FormattedMessage {...messages.deleteChallengeLabel } />
-                </a>
-              </ConfirmAction>
-          </React.Fragment>
-          }
-        </div>
+        <ChallengeControls
+          {...this.props}
+          className="admin__manage__controls mr-flex"
+          controlClassName="mr-button mr-button--dark mr-button--small mr-mr-4"
+          onChallengeDashboard
+        />
       </div>
     )
 
@@ -202,41 +136,19 @@ export class ChallengeDashboard extends Component {
       <div className="admin__manage challenge-dashboard">
         <WidgetWorkspace
           {...this.props}
-          lightMode
-          className="mr-mt-4"
+          lightMode={false}
+          darkMode
+          className="mr-cards-inverse"
           workspaceEyebrow={pageHeader}
+          challenges={[this.props.challenge]}
+          pageId='ChallengeDashboard'
+          metaReviewEnabled={process.env.REACT_APP_FEATURE_META_QC === 'enabled'}
         />
       </div>
     )
   }
 }
 
-const ListManagedProjectItems = function(props) {
-  const projectItems = _compact(_map(props.projects, project => {
-    if (project.id === props.currentProjectId ||
-        !props.manager.canWriteProject(project)) {
-      return null
-    }
-
-    return (
-      <li key={`project-${project.id}`}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a
-          onClick={() => props.moveChallenge(props.challenge.id, project.id)}
-        >
-          {project.displayName ? project.displayName : project.name}
-        </a>
-      </li>
-    )
-  }))
-
-  return _isEmpty(projectItems) ?
-    <FormattedMessage {...messages.noProjects} /> : (
-    <ol className="mr-list-dropdown">
-      {projectItems}
-    </ol>
-  )
-}
 
 ChallengeDashboard.propTypes = {
   /** The parent project of the challenge */
@@ -257,20 +169,21 @@ WithManageableProjects(
     WithSearch(
       WithCurrentChallenge(
         WithWidgetWorkspaces(
-          WithFilteredClusteredTasks(
-            WithChallengeMetrics(
-              WithChallengeReviewMetrics(
-                injectIntl(ChallengeDashboard),
+          WithSelectedClusteredTasks(
+            WithClusteredTasks(
+              WithFilteredClusteredTasks(
+                WithChallengeMetrics(
+                  injectIntl(ChallengeDashboard),
+                ),
+                'clusteredTasks',
+                'filteredClusteredTasks'
               )
-            ),
-            'clusteredTasks',
-            'filteredClusteredTasks',
+            )
           ),
           WidgetDataTarget.challenge,
           DASHBOARD_NAME,
           defaultDashboardSetup
-        ),
-        true
+        )
       ),
       'challengeOwner'
     )

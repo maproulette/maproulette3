@@ -6,7 +6,11 @@ import { ResponsiveLine } from '@nivo/line'
 import _map from 'lodash/map'
 import _filter from 'lodash/filter'
 import _reverse from 'lodash/reverse'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../../tailwind.config.js'
 import messages from './Messages'
+
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 /**
  * BurndownChart displays a basic chart showing progress towards challenge
@@ -69,7 +73,11 @@ export class BurndownChart extends Component {
          </p>
         }
         <ResponsiveLine data={burndownMetrics}
-                        colors={["#61CDBB"]}
+                        theme={{
+                          textColor: "#FFF",
+                        }}
+                        colors={[colors["purple"]]}
+                        textColor="#FFF"
                         margin={{
                           top: 20,
                           right: 20,
@@ -93,11 +101,11 @@ export class BurndownChart extends Component {
                           tickRotation: 0,
                         }}
                         enableArea={true}
-                        enableDots={false}
+                        enablePoints={false}
                         dotSize={10}
                         dotColor="inherit"
                         dotBorderWidth={2}
-                        dotBorderColor="#ffffff"
+                        dotBorderColor="#FFF"
                         enableDotLabel={true}
                         dotLabel="y"
                         dotLabelYOffset={-12}
@@ -107,6 +115,7 @@ export class BurndownChart extends Component {
                         curve="monotoneX"
                         motionStiffness={90}
                         motionDamping={15}
+                        areaOpacity={0.2}
         />
       </div>
     )

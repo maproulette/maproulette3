@@ -62,7 +62,18 @@ export const WithSearchResults = function(WrappedComponent, searchName,
       let searchResults = this.props[itemsProp]
       let searchActive = false
 
-      if (_isString(query) && query.length > 0 &&
+      if (_get(this.props.searchCriteria, 'filters.challengeId')) {
+        const challengeIdFilter = _get(this.props.searchCriteria, 'filters.challengeId')
+        searchResults = _filter(items,
+          (item) => item.id.toString() === challengeIdFilter.toString()
+        )
+      }
+      else if (_get(this.props.searchCriteria, 'filters.project')) {
+        const projectFilter = _get(this.props.searchCriteria, 'filters.project', '').toLowerCase()
+        searchResults = _filter(items,
+          (item) => _get(item, 'parent.displayName', '').toLowerCase().indexOf(projectFilter) !== -1)
+      }
+      else if (_isString(query) && query.length > 0 &&
           _isArray(items) && items.length > 0) {
         const queryParts = parseQueryString(query)
 
@@ -73,11 +84,10 @@ export const WithSearchResults = function(WrappedComponent, searchName,
 
         if (items.length > 0 && queryParts.query.length > 0) {
           const fuzzySearch = new Fuse(items, fuzzySearchOptions)
-          searchResults = _map(fuzzySearch.search(queryParts.query),
-                            (result) => {
-                              result.item.score = result.score
-                              return result.item
-                            })
+          searchResults = _map(
+            fuzzySearch.search(queryParts.query),
+            result => Object.assign({}, result.item, {score: result.score})
+          )
           searchActive = true
         }
         else {

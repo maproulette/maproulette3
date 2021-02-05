@@ -61,6 +61,16 @@ export class AsEditableChallenge {
   }
 
   /**
+   * Returns the checkin/changeset comment less any #maproulette hashtags
+   */
+  checkinCommentWithoutMaprouletteHashtag() {
+    // Strip out any separator whitespace before the hashtag too
+    return this.checkinComment ?
+           this.checkinComment.replace(new RegExp("\\s*" + maprouletteHashtag, "g"), '') :
+           this.checkinComment
+  }
+
+  /**
    * The edit-challenge form can set defaultBasemap to one of the numeric
    * constants, but can also set it to the string identifier of a layer not
    * otherwise represented by a constant.

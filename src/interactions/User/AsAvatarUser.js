@@ -1,3 +1,5 @@
+import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 import defaultPic from '../../static/images/user_no_image.png'
 
 /**
@@ -8,8 +10,18 @@ export class AsAvatarUser {
     Object.assign(this, user)
   }
 
+  rawAvatarURL() {
+    return this.avatarURL || _get(this.osmProfile, 'avatarURL')
+  }
+
   profilePic(size) {
-    return /user_no_image/.test(this.avatarURL) ? defaultPic : `${this.avatarURL}?s=${size}`
+    const rawURL = this.rawAvatarURL()
+    if (_isEmpty(rawURL) || /user_no_image/.test(rawURL)) {
+      return defaultPic
+    }
+
+    const urlParts = rawURL.replace(/\?s=\d+/, '?').split('?')
+    return `${urlParts[0]}?s=${size}&${urlParts.slice(1).join('?')}`
   }
 }
 

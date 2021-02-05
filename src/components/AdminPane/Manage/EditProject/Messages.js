@@ -51,18 +51,31 @@ export default defineMessages({
 
   enabledLabel: {
     id: 'Admin.EditProject.form.enabled.label',
-    defaultMessage: "Visible",
+    defaultMessage: "Discoverable",
   },
 
   enabledDescription: {
     id: 'Admin.EditProject.form.enabled.description',
-    defaultMessage: "If you set your project to Visible, all Challenges under " +
-      "it that are also set to Visible will be available, discoverable, and " +
-      "searchable for other users. Effectively, making your Project visible " +
-      "publishes any Challenges under it that are also Visible. You can still work " +
-      "on your own challenges and share static Challenge URLs for any of your " +
-      "Challenges with people and it will work. So until you set your Project to " +
-      "Visible, you can see your Project as testing ground for Challenges.",
+    defaultMessage: "Once your project is made Discoverable, all Challenges under " +
+      "it that are also set to Discoverable will be discoverable/searchable " +
+      "by other users. If your project is not Discoverable, then no challenges " +
+      "in it will be treated as discoverable regardless of their settings. Note, " +
+      "however, that all projects and challenges are considered public and -- even " +
+      "when Discoverable is off -- users can still view your project or challenge " +
+      "if they have a direct link to it.",
+  },
+
+  featuredLabel: {
+    id: 'Admin.EditProject.form.featured.label',
+    defaultMessage: "Featured",
+  },
+
+  featuredDescription: {
+    id: 'Admin.EditProject.form.featured.description',
+    defaultMessage: "Featured projects are shown on the home page and " +
+    "top of the Find Challenges page to bring attention to them. Note " +
+    "that featuring a project does **not** also feature its challenges. " +
+    "Only super-users may mark a project as featured.",
   },
 
   isVirtualLabel: {

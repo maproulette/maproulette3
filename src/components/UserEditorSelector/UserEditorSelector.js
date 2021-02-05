@@ -19,7 +19,14 @@ export default class UserEditorSelector extends Component {
   currentEditor = () => {
     const configuredEditor =
       _get(this.props, 'user.settings.defaultEditor', Editor.none)
-    return configuredEditor === Editor.none ? DEFAULT_EDITOR : configuredEditor
+    let current = configuredEditor === Editor.none ? DEFAULT_EDITOR : configuredEditor
+
+    // If the current editor isn't allowed, just go with the first allowed editor
+    if (this.props.allowedEditors && this.props.allowedEditors.indexOf(current) === -1) {
+      current = this.props.allowedEditors[0]
+    }
+
+    return current
   }
 
   chooseEditor = (editor, closeDropdown) => {
@@ -53,6 +60,7 @@ export default class UserEditorSelector extends Component {
            }
            dropdownContent={dropdown =>
               <ListEditorItems
+                allowedEditors={this.props.allowedEditors}
                 editorLabels={localizedEditorLabels}
                 activEditor={this.currentEditor()}
                 chooseEditor={this.chooseEditor}
@@ -75,9 +83,9 @@ const EditorButton = function(props) {
       <span className="mr-flex">
         <b className="mr-mr-1">{props.editorLabels[keysByEditor[props.userEditor]]}</b>
         <SvgSymbol
-          sym="cog-icon"
-          viewBox="0 0 15 15"
-          className="mr-fill-green-lighter mr-w-3 mr-h-3"
+          sym="icon-cheveron-down"
+          viewBox="0 0 20 20"
+          className="mr-fill-green-lighter mr-w-4 mr-h-4"
         />
       </span>
     </button>
@@ -89,6 +97,11 @@ const ListEditorItems = function(props) {
     const editor = Editor[key]
     // Don't offer 'none' option
     if (editor === Editor.none) {
+      return null
+    }
+
+    // Honor any restrictions on allowed editors
+    if (props.allowedEditors && props.allowedEditors.indexOf(editor) === -1) {
       return null
     }
 

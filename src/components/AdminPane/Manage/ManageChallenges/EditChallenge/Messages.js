@@ -4,6 +4,16 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with EditChallenge
  */
 export default defineMessages({
+  cancelLabel: {
+    id: "Admin.EditChallenge.controls.cancel.label",
+    defaultMessage: "Abandon Changes",
+  },
+
+  cancelNewChallengeLabel: {
+    id: "Admin.EditChallenge.controls.cancelNewChallenge.label",
+    defaultMessage: "Abandon Challenge",
+  },
+
   editChallenge: {
     id: 'Admin.EditChallenge.edit.header',
     defaultMessage: "Edit",
@@ -24,6 +34,11 @@ export default defineMessages({
     defaultMessage: "Line {line, number}: ",
   },
 
+  addMRTagsPlaceholder: {
+    id: 'Admin.EditChallenge.form.addMRTags.placeholder',
+    defaultMessage: "Add MR Tags",
+  },
+
   step1Label: {
     id: 'Admin.EditChallenge.form.step1.label',
     defaultMessage: "General",
@@ -31,43 +46,43 @@ export default defineMessages({
 
   visibleLabel: {
     id: 'Admin.EditChallenge.form.visible.label',
-    defaultMessage: "Visible",
+    defaultMessage: "Discoverable",
   },
 
   visibleDescription: {
     id: 'Admin.EditChallenge.form.visible.description',
-    defaultMessage: "Allow your challenge to be visible and discoverable to " +
-      "other users (subject to project visibility). Unless you are really " +
-      "confident in creating new Challenges, we would recommend leaving this set " +
-      "to No at first, especially if the parent Project had been made visible. " +
-      "Setting your Challenge's visibility to Yes will make it appear on the home " +
-      "page, in the Challenge search, and in metrics - but only if the parent " +
-      "Project is also visible.",
+    defaultMessage: "Allow your challenge to be easily discoverable by " +
+    "other users via Find Challenges (subject to project discoverability). " +
+    "Note that all challenges are considered public and, even when " +
+    "Discoverable is off, users can still view your challenge if they " +
+    "have a direct link to it.",
   },
 
   nameLabel: {
     id: 'Admin.EditChallenge.form.name.label',
-    defaultMessage: "Name",
+    defaultMessage: "Name of your Challenge",
   },
 
   nameDescription: {
     id: 'Admin.EditChallenge.form.name.description',
     defaultMessage: "Your Challenge name as it will appear in many places " +
-      "throughout the application. This is also what your challenge will be " +
-      "searchable by using the Search box. This field is required and only " +
-      "supports plain text.",
+      "throughout MapRoulette. This is also what your challenge will be " +
+      "searchable by using the Search box. This field is required, must be " +
+      "unique, and only supports plain text.",
   },
 
   descriptionLabel: {
     id: 'Admin.EditChallenge.form.description.label',
-    defaultMessage: "Description",
+    defaultMessage: "Description of your Challenge",
   },
 
   descriptionDescription: {
     id: 'Admin.EditChallenge.form.description.description',
-    defaultMessage: "The primary, longer description of your challenge that " +
+    defaultMessage: "The description of your challenge " +
       "is shown to users when they click on the challenge to learn more about " +
-      "it. This field supports Markdown.",
+      "it.\n\nYour description should provide mappers with enough detail to " +
+      "decide whether or not to try working on your challenge. This field " +
+      "supports Markdown.",
   },
 
   blurbLabel: {
@@ -83,12 +98,9 @@ export default defineMessages({
 
   instructionLabel: {
     id: 'Admin.EditChallenge.form.instruction.label',
-    defaultMessage: "Instructions",
+    defaultMessage: "Detailed Instructions for Mappers",
   },
 
-  // Note: dummy variable included to workaround react-intl
-  // [bug 1158](https://github.com/yahoo/react-intl/issues/1158)
-  // Just pass in an empty string for its value
   instructionDescription: {
     id: 'Admin.EditChallenge.form.instruction.description',
     defaultMessage: "The instruction tells a mapper how to resolve a Task in " +
@@ -97,9 +109,14 @@ export default defineMessages({
       "about how to solve the task, so think about this field carefully. You can " +
       "include links to the OSM wiki or any other hyperlink if you want, because " +
       "this field supports Markdown. You can also reference feature properties " +
-      "from your GeoJSON with simple mustache tags: e.g. `\\{\\{address\\}\\}` would be " +
+      "from your GeoJSON with simple mustache tags: e.g. `'{{address}}'` would be " +
       "replaced with the value of the `address` property, allowing for basic " +
-      "customization of instructions for each task. This field is required. {dummy}",
+      "customization of instructions for each task. This field is required.",
+  },
+
+  addMustachePreviewNote: {
+    id: "Form.controls.addMustachePreview.note",
+    defaultMessage: "Note: all mustache property tags evaluate to empty in preview"
   },
 
   checkinCommentLabel: {
@@ -126,7 +143,7 @@ export default defineMessages({
 
   includeCheckinHashtagTrueLabel: {
     id: 'Admin.EditChallenge.form.includeCheckinHashtag.value.true.label',
-    defaultMessage: "Automatically append #maproulette hashtag (highly recommended)",
+    defaultMessage: "Automatically append `#maproulette` hashtag (highly recommended)",
   },
 
   includeCheckinHashtagFalseLabel: {
@@ -142,42 +159,69 @@ export default defineMessages({
 
   difficultyLabel: {
     id: 'Admin.EditChallenge.form.difficulty.label',
-    defaultMessage: "Difficulty",
+    defaultMessage: "Difficulty of your Tasks",
   },
 
   difficultyDescription: {
     id: 'Admin.EditChallenge.form.difficulty.description',
-    defaultMessage: "Choose between Easy, Normal and Expert to give an " +
-      "indication to mappers what skill level is required to resolve the " +
-      "Tasks in your Challenge. Easy challenges should be suitable for " +
-      "beginners with little or experience.",
+    defaultMessage: "Indicate to mappers what experience level is required to " +
+      "complete tasks in your Challenge.",
   },
 
   categoryLabel: {
     id: 'Admin.EditChallenge.form.category.label',
-    defaultMessage: "Category",
+    defaultMessage: "How should your Challenge be Categorized?",
   },
 
   categoryDescription: {
     id: 'Admin.EditChallenge.form.category.description',
-    defaultMessage: "Selecting an appropriate high-level category for your " +
-      "challenge can aid users in quickly discovering challenges that " + 
+    defaultMessage: "Selecting an appropriate category for your " +
+      "challenge can help users discover challenges that " +
       "match their interests. Choose the Other category if nothing seems " +
       "appropriate.",
   },
 
   additionalKeywordsLabel: {
     id: 'Admin.EditChallenge.form.additionalKeywords.label',
-    defaultMessage: "Keywords",
+    defaultMessage: "Additional Categorization Keywords",
   },
 
   additionalKeywordsDescription: {
     id: 'Admin.EditChallenge.form.additionalKeywords.description',
     defaultMessage: "You can optionally provide additional " +
-    "keywords that can be used to aid discovery of your challenge. Users " +
-    "can search by keyword from the Other option of the Category dropdown " +
-    "filter, or in the Search box by prepending with a hash sign (e.g. " +
-    "#tourism).",
+    "keywords that can be used to aid discovery of your challenge.",
+  },
+
+  preferredTagsLabel: {
+    id: 'Admin.EditChallenge.form.preferredTags.label',
+    defaultMessage: "Preferred MR Tags",
+  },
+
+  preferredTagsDescription: {
+    id: 'Admin.EditChallenge.form.preferredTags.description',
+    defaultMessage: "You can optionally provide a list of " +
+      "preferred tags that you want the user to use when completing a task.",
+  },
+
+  preferredReviewTagsLabel: {
+    id: 'Admin.EditChallenge.form.preferredReviewTags.label',
+    defaultMessage: "Preferred MR Review Tags",
+  },
+
+  preferredReviewTagsDescription: {
+    id: 'Admin.EditChallenge.form.preferredReviewTags.description',
+    defaultMessage: "You can optionally provide a list of " +
+      "preferred tags that you want the reviewer to use when reviewing a task.",
+  },
+
+  limitTagsDescription: {
+    id: "Admin.EditChallenge.form.limitTags.description",
+    defaultMessage: "Allow other tags during task completion?"
+  },
+
+  limitReviewTagsDescription: {
+    id: "Admin.EditChallenge.form.limitReviewTags.description",
+    defaultMessage: "Allow other tags during task review?"
   },
 
   featuredLabel: {
@@ -189,7 +233,7 @@ export default defineMessages({
     id: 'Admin.EditChallenge.form.featured.description',
     defaultMessage: "Featured challenges are shown at the top of the list " +
       "when browsing and searching challenges. Only super-users may mark a " +
-      "a challenge as featured.",
+      "challenge as featured.",
   },
 
   step2Label: {
@@ -197,44 +241,43 @@ export default defineMessages({
     defaultMessage: "GeoJSON Source",
   },
 
-  step2Description: {
+  dataSourceDescription: {
     id: 'Admin.EditChallenge.form.step2.description',
     defaultMessage: `
-Every Task in MapRoulette basically consists of a geometry: a point, line or
-polygon indicating on the map what it is that you want the mapper to evaluate.
+Every Task in MapRoulette consists of a geometry: a point, line or polygon
+indicating on the map what it is that you want the mapper to evaluate.
 This screen lets you define the Tasks for your Challenge by telling MapRoulette
 about the geometries.
 
-There are three ways to feed geometries into your challenge: via an Overpass
-query, via a GeoJSON file on your computer, or via a URL pointing to a GeoJSON
+There are three ways to feed geometries into your challenge: an Overpass
+query, a GeoJSON file on your computer, or with a URL pointing to a GeoJSON
 file on the internet.
 
-#### Via Overpass
+#### Overpass
 
-The Overpass API is a powerful querying interface for OpenStreetMap data. It
-does not work on the live OSM database, but the data you get from Overpass is
-usually just a few minutes old. Using
+Overpass is a powerful querying interface for OpenStreetMap data. Using
 [Overpass QL](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide),
-the Overpass Query Language, you can define exactly which OSM objects you want
-to load into your Challenge as Tasks.
-[Learn more](https://github.com/maproulette/maproulette2/wiki/Introducing-New-MapRoulette---Part-1.-Creating-and-Maintaining-Challenges#via-overpass).
+the Overpass Query Language, you can retrieve matching OSM objects that you want
+to represent as tasks (each result becomes a separate task).
+[Learn more](https://learn.maproulette.org/documentation/using-overpass-to-create-challenges/).
 
-#### Via Local GeoJSON File
+#### Local GeoJSON File
 
-The other option is to use a GeoJSON file you already have. This could be great
+A common option is to use a GeoJSON file you already have. This could be great
 if you have an approved source of external data you would like to manually add
 to OSM. Tools like
 [QGIS](https://gis.stackexchange.com/questions/91812/convert-shapefiles-to-geojson)
 and [gdal](http://www.gdal.org/drv_geojson.html) can convert things like
-Shapefiles to GeoJSON.  When you convert, make sure that you use unprojected
+Shapefiles to GeoJSON. When you convert, make sure that you use unprojected
 lon/lat on the WGS84 datum (EPSG:4326), because this is what MapRoulette uses
 internally.
 
 > Note: for challenges with a large number of tasks, we recommend using a
-[line-by-line](https://github.com/osmlab/maproulette3/wiki/Line-by-Line-GeoJSON-Format)
-format instead, which is much less memory-intensive to process.
+[line-by-line](https://learn.maproulette.org/documentation/line-by-line-geojson/)
+format instead, which is much more efficient to process. Some advanced features
+are only available when the line-by-line format is used.
 
-#### Via Remote GeoJSON URL
+#### Remote GeoJSON URL
 
 The only difference between using a local GeoJSON file and a URL is where you
 tell MapRoulette to get it from. If you use a URL, make sure you point to the
@@ -245,19 +288,20 @@ will not be able to make sense of it.
 
   sourceLabel: {
     id: 'Admin.EditChallenge.form.source.label',
-    defaultMessage: "GeoJSON Source",
+    defaultMessage: "Location of your Task Data",
   },
 
   overpassQLLabel: {
     id: 'Admin.EditChallenge.form.overpassQL.label',
-    defaultMessage: "Overpass API Query",
+    defaultMessage: "I want to provide an Overpass query",
   },
 
   overpassQLDescription: {
     id: 'Admin.EditChallenge.form.overpassQL.description',
-    defaultMessage: "Please provide a suitable bounding box when inserting " +
-      "an overpass query, as this can potentially generate large amounts " +
-      "of data and bog the system down."
+    defaultMessage: "Please see the " +
+      "[docs](https://learn.maproulette.org/documentation/using-overpass-to-create-challenges/) " +
+      "for important details and common pitfalls when creating challenges " +
+      "using Overpass queries."
   },
 
   overpassQLPlaceholder: {
@@ -265,9 +309,40 @@ will not be able to make sense of it.
     defaultMessage: "Enter Overpass API query here...",
   },
 
+  overpassQLReadOnly: {
+    id: 'Admin.EditChallenge.form.overpassQL.readOnly',
+    defaultMessage: "Overpass queries cannot be edited, but you can choose Rebuild Tasks when " +
+      "managing your challenge to re-execute the query and freshen up your tasks."
+  },
+
+  overpassTargetType: {
+    id: 'Admin.EditChallenge.form.overpassQL.targetType',
+    defaultMessage: "Overpass Target Type",
+  },
+
+  overpassTargetDescription: {
+    id: 'Admin.EditChallenge.form.overpassQL.targetType.description',
+    defaultMessage: "An error will be generated if your Overpass results do not match the target type.",
+  },
+
+  targetNoneLabel: {
+    id: 'Admin.EditChallenge.form.overpassQL.target.none',
+    defaultMessage: "Any",
+  },
+
+  targetWayLabel: {
+    id: 'Admin.EditChallenge.form.overpassQL.target.way',
+    defaultMessage: "Ways",
+  },
+
+  targetNodeLabel: {
+    id: 'Admin.EditChallenge.form.overpassQL.target.node',
+    defaultMessage: "Nodes",
+  },
+
   localGeoJsonLabel: {
     id: 'Admin.EditChallenge.form.localGeoJson.label',
-    defaultMessage: "Upload File",
+    defaultMessage: "I want to upload a GeoJSON file",
   },
 
   localGeoJsonDescription: {
@@ -275,9 +350,15 @@ will not be able to make sense of it.
     defaultMessage: "Please upload the local GeoJSON file from your computer",
   },
 
+  localGeoJsonReadOnly: {
+    id: 'Admin.EditChallenge.form.localGeoJson.readOnly',
+    defaultMessage: "If you need to upload fresh GeoJSON, choose Rebuild Tasks " +
+      "when managing your challenge."
+  },
+
   remoteGeoJsonLabel: {
     id: 'Admin.EditChallenge.form.remoteGeoJson.label',
-    defaultMessage: "Remote URL",
+    defaultMessage: "I have a URL to the GeoJSON data",
   },
 
   remoteGeoJsonDescription: {
@@ -288,6 +369,24 @@ will not be able to make sense of it.
   remoteGeoJsonPlaceholder: {
     id: 'Admin.EditChallenge.form.remoteGeoJson.placeholder',
     defaultMessage: "https://www.example.com/geojson.json",
+  },
+
+  remoteGeoJsonReadOnly: {
+    id: 'Admin.EditChallenge.form.remoteGeoJson.readOnly',
+    defaultMessage: "Remote URLs cannot be edited, but you can choose Rebuild Tasks " +
+      "when managing your challenge to re-download updated remote GeoJSON and freshen " +
+      "up your tasks."
+  },
+
+  dataOriginDateLabel: {
+    id: 'Admin.EditChallenge.form.dataOriginDate.label',
+    defaultMessage: "Date that data was sourced",
+  },
+
+  dataOriginDateDescription: {
+    id: 'Admin.EditChallenge.form.dataOriginDate.description',
+    defaultMessage: "Age of the data. The date the data was " +
+                    "downloaded, generated, etc. "
   },
 
   ignoreSourceErrorsLabel: {
@@ -313,11 +412,11 @@ will not be able to make sense of it.
       "The priority of tasks can be defined as High, Medium and Low. All " +
       "high priority tasks will be offered to users first when working " +
       "through a challenge, followed by medium and finally low priority " +
-      "tasks. Each task's priority is assigned automatically based on " +
+      "tasks. Each task’s priority is assigned automatically based on " +
       "the rules you specify below, each of which is evaluated against the " +
-      "task's feature properties (OSM tags if you are using an Overpass " +
-      "query, otherwise whatever properties you've chosen to include in " +
-      "your GeoJSON). Tasks that don't pass any rules will be assigned " +
+      "task’s feature properties (OSM tags if you are using an Overpass " +
+      "query, otherwise whatever properties you’ve chosen to include in " +
+      "your GeoJSON). Tasks that don’t pass any rules will be assigned " +
       "the default priority.",
   },
 
@@ -328,7 +427,24 @@ will not be able to make sense of it.
 
   defaultPriorityDescription: {
     id: 'Admin.EditChallenge.form.defaultPriority.description',
-    defaultMessage: "Default priority level for tasks in this challenge",
+    defaultMessage: "See the " +
+      "[docs](https://learn.maproulette.org/documentation/task-priority-rules/) " +
+      "for an explanation of how to setup priority rules.",
+  },
+
+  highPriorityRulesLabel: {
+    id: 'Admin.EditChallenge.form.highPriorityRules.label',
+    defaultMessage: "High Priority Rules",
+  },
+
+  mediumPriorityRulesLabel: {
+    id: 'Admin.EditChallenge.form.mediumPriorityRules.label',
+    defaultMessage: "Medium Priority Rules",
+  },
+
+  lowPriorityRulesLabel: {
+    id: 'Admin.EditChallenge.form.lowPriorityRules.label',
+    defaultMessage: "Low Priority Rules",
   },
 
   step4Label: {
@@ -367,7 +483,7 @@ will not be able to make sense of it.
     id: 'Admin.EditChallenge.form.defaultZoom.description',
     defaultMessage: "When a user begins work on a task, MapRoulette will " +
       "attempt to automatically use a zoom level that fits the bounds of the " +
-      "task's feature. But if that's not possible, then this default zoom level " +
+      "task’s feature. But if that’s not possible, then this default zoom level " +
       "will be used. It should be set to a level is generally suitable for " +
       "working on most tasks in your challenge.",
   },
@@ -382,7 +498,7 @@ will not be able to make sense of it.
     defaultMessage: "The minimum allowed zoom level for your challenge. " +
       "This should be set to a level that allows the user to sufficiently " +
       "zoom out to work on tasks while keeping them from zooming out to " +
-      "a level that isn't useful.",
+      "a level that isn’t useful.",
   },
 
   maxZoomLabel: {
@@ -395,7 +511,7 @@ will not be able to make sense of it.
     defaultMessage: "The maximum allowed zoom level for your challenge. " +
       "This should be set to a level that allows the user to sufficiently " +
       "zoom in to work on the tasks while keeping them from zooming in " +
-      "to a level that isn't useful or exceeds the available resolution " +
+      "to a level that isn’t useful or exceeds the available resolution " +
       "of the map/imagery in the geographic region.",
   },
 
@@ -416,11 +532,260 @@ will not be able to make sense of it.
     defaultMessage: "Custom Basemap",
   },
 
-  // Note: dummy variable included to workaround react-intl
-  // [bug 1158](https://github.com/yahoo/react-intl/issues/1158)
-  // Just pass in an empty string for its value
   customBasemapDescription: {
     id: "Admin.EditChallenge.form.customBasemap.description",
-    defaultMessage: "Insert a custom base map URL here. E.g. `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png` {dummy}",
+    defaultMessage: "Insert a custom base map URL here. E.g. `https://'{s}'.tile.openstreetmap.org/'{z}'/'{x}'/'{y}'.png`",
   },
+
+  exportablePropertiesLabel: {
+    id: 'Admin.EditChallenge.form.exportableProperties.label',
+    defaultMessage: "Properties to export in CSV",
+  },
+
+  exportablePropertiesDescription: {
+    id: 'Admin.EditChallenge.form.exportableProperties.description',
+    defaultMessage: "Any properties included in this comma separated list " +
+      "will be exported as a column in the CSV export and populated with the " +
+      "first matching feature property from each task.",
+  },
+
+  osmIdPropertyLabel: {
+    id: 'Admin.EditChallenge.form.osmIdProperty.label',
+    defaultMessage: "OSM/External Id Property"
+  },
+
+  osmIdPropertyDescription: {
+    id: 'Admin.EditChallenge.form.osmIdProperty.description',
+    defaultMessage: "The name of the task feature property to treat as an " +
+      "OpenStreetMap element id for tasks. If left blank, " +
+      "MapRoulette will fall back to checking a series of common id properties, " +
+      "including those used by Overpass. If specified, **be sure that it has a " +
+      "unique value for each feature in your data**. Tasks missing the " +
+      "property will be assigned a random identifier even if the task " +
+      "contains other common id properties. " +
+      "[Learn more]" +
+      "(https://learn.maproulette.org/documentation/setting-external-task-identifiers/)."
+  },
+
+  customTaskStyleLabel: {
+    id: "Admin.EditChallenge.form.customTaskStyles.label",
+    defaultMessage: "Customize Task Property Styles"
+  },
+
+  customTaskStylesDescription: {
+    id: "Admin.EditChallenge.form.customTaskStyles.description",
+    defaultMessage: "Enable custom task styling based on specific task feature properties."
+  },
+
+  customTaskStylesError: {
+    id: "Admin.EditChallenge.form.customTaskStyles.error",
+    defaultMessage: "Task property style rules are invalid. Please fix before continuing."
+  },
+
+  customTaskStyleButton: {
+    id: "Admin.EditChallenge.form.customTaskStyles.button",
+    defaultMessage: "Configure"
+  },
+
+  customTaskStyleDefaultLabel: {
+    id: "Admin.EditChallenge.form.customTaskStyles.controls.default.label",
+    defaultMessage: "Default"
+  },
+
+  customTaskStyleCustomLabel: {
+    id: "Admin.EditChallenge.form.customTaskStyles.controls.custom.label",
+    defaultMessage: "Custom"
+  },
+
+  taskPropertyStylesLabel: {
+    id: "Admin.EditChallenge.form.taskPropertyStyles.label",
+    defaultMessage: "Task Property Style Rules"
+  },
+
+  taskPropertyStylesClose: {
+    id: "Admin.EditChallenge.form.taskPropertyStyles.close",
+    defaultMessage: "Done"
+  },
+
+  taskPropertyStylesClear: {
+    id: "Admin.EditChallenge.form.taskPropertyStyles.clear",
+    defaultMessage: "Clear"
+  },
+
+  taskPropertyStylesDescription: {
+    id: "Admin.EditChallenge.form.taskPropertyStyles.description",
+    defaultMessage: "Sets up task property style rules......"
+  },
+
+  requiresLocalLabel: {
+    id: "Admin.EditChallenge.form.requiresLocal.label",
+    defaultMessage: "Requires Local Knowledge"
+  },
+
+  requiresLocalDescription: {
+    id: "Admin.EditChallenge.form.requiresLocal.description",
+    defaultMessage: "Tasks require local or on-the-ground knowledge to complete." +
+      " Note: challenge will not appear in the Find Challenges list."
+  },
+
+  presetsLabel: {
+    id: "Admin.EditChallenge.form.presets.label",
+    defaultMessage: "Restrict iD Editor Presets"
+  },
+
+  presetsDescription: {
+    id: "Admin.EditChallenge.form.presets.description",
+    defaultMessage: "Restrict the types of OSM features presented to mappers " +
+    "in iD by default when working on your tasks, helping to keep them focused on " +
+    "mapping things relevant to your challenge. For example, if your challenge " +
+    "is about mapping buildings, you could enable only presets related to buildings " +
+    "and then mappers would not be presented with the option to map an area as, say, " +
+    "a park or a lake."
+  },
+
+  showLongformTooltip: {
+    id: "Admin.EditChallenge.controls.showLongform.tooltip",
+    defaultMessage: "Show all fields"
+  },
+
+  showStepsTooltip: {
+    id: "Admin.EditChallenge.controls.showSteps.tooltip",
+    defaultMessage: "Show separate steps"
+  },
+
+  dataSourceStepHeader: {
+    id: "Admin.EditChallenge.form.steps.dataSource.header",
+    defaultMessage: "Name and Data Source",
+  },
+
+  dataSourceStepDescription: {
+    id: "Admin.EditChallenge.form.steps.dataSource.description",
+    defaultMessage: "Change Name or Data Source",
+  },
+
+  descriptionStepHeader: {
+    id: "Admin.EditChallenge.form.steps.description.header",
+    defaultMessage: "Description and Category",
+  },
+
+  descriptionStepDescription: {
+    id: "Admin.EditChallenge.form.steps.description.description",
+    defaultMessage: "Change Description or Category",
+  },
+
+  instructionsStepHeader: {
+    id: "Admin.EditChallenge.form.steps.instructions.header",
+    defaultMessage: "Instructions and Difficulty",
+  },
+
+  instructionsStepDescription: {
+    id: "Admin.EditChallenge.form.steps.instructions.description",
+    defaultMessage: "Change Instructions or Difficulty",
+  },
+
+  discoverabilityStepHeader: {
+    id: "Admin.EditChallenge.form.steps.discoverability.header",
+    defaultMessage: "Discoverability",
+  },
+
+  discoverabilityStepDescription: {
+    id: "Admin.EditChallenge.form.steps.discoverability.description",
+    defaultMessage: "Adjust discoverability settings",
+  },
+
+  prioritiesStepHeader: {
+    id: "Admin.EditChallenge.form.steps.priorities.header",
+    defaultMessage: "Task Prioritization Rules",
+  },
+
+  prioritiesStepDescription: {
+    id: "Admin.EditChallenge.form.steps.priorities.description",
+    defaultMessage: "Setup task prioritization rules",
+  },
+
+  zoomStepHeader: {
+    id: "Admin.EditChallenge.form.steps.zoom.header",
+    defaultMessage: "Zoom Levels",
+  },
+
+  zoomStepDescription: {
+    id: "Admin.EditChallenge.form.steps.zoom.description",
+    defaultMessage: "Configure map zoom levels",
+  },
+
+  osmCommitStepHeader: {
+    id: "Admin.EditChallenge.form.steps.osmCommit.header",
+    defaultMessage: "OSM Changeset Info",
+  },
+
+  osmCommitStepDescription: {
+    id: "Admin.EditChallenge.form.steps.osmCommit.description",
+    defaultMessage: "Customize OSM changeset info",
+  },
+
+  basemapStepHeader: {
+    id: "Admin.EditChallenge.form.steps.basemap.header",
+    defaultMessage: "Basemap",
+  },
+
+  basemapStepDescription: {
+    id: "Admin.EditChallenge.form.steps.basemap.description",
+    defaultMessage: "Set a different basemap",
+  },
+
+  propertiesStepHeader: {
+    id: "Admin.EditChallenge.form.steps.properties.header",
+    defaultMessage: "Property-based Behavior",
+  },
+
+  propertiesStepDescription: {
+    id: "Admin.EditChallenge.form.steps.properties.description",
+    defaultMessage: "Configure property-based behavior",
+  },
+
+  tagsStepHeader: {
+    id: "Admin.EditChallenge.form.steps.tags.header",
+    defaultMessage: "Preferred MR tags",
+  },
+
+  tagsStepDescription: {
+    id: "Admin.EditChallenge.form.steps.tags.description",
+    defaultMessage: "Setup preferred MR tags",
+  },
+
+  editorStepHeader: {
+    id: "Admin.EditChallenge.form.steps.editor.header",
+    defaultMessage: "Editor Configuration",
+  },
+
+  editorStepDescription: {
+    id: "Admin.EditChallenge.form.steps.editor.description",
+    defaultMessage: "Customize Editor Settings",
+  },
+
+  advancedOptionsStepDescription: {
+    id: "Admin.EditChallenge.form.steps.advancedOptions.description",
+    defaultMessage: "Advanced Options",
+  },
+
+  advancedOptionsStepIntro: {
+    id: "Admin.EditChallenge.form.steps.advancedOptions.intro",
+    defaultMessage: "Most challenges work well with the default settings, " +
+      "but you can optionally customize any of the following advanced options"
+  },
+
+  allOptionsStepDescription: {
+    id: "Admin.EditChallenge.form.steps.allOptions.description",
+    defaultMessage: "Options",
+  },
+
+  yesLabel: {
+    id: "Admin.EditChallenge.form.steps.yes.label",
+    defaultMessage: "Yes",
+  },
+
+  noLabel: {
+    id: "Admin.EditChallenge.form.steps.no.label",
+    defaultMessage: "No"
+  }
 })

@@ -12,13 +12,17 @@ export default defineMessages({
     id: "Challenge.sort.created",
     defaultMessage: "Newest",
   },
+  Created: {
+    id: "Challenge.sort.oldest",
+    defaultMessage: "Oldest",
+  },
   popularity: {
     id: "Challenge.sort.popularity",
     defaultMessage: "Popular",
   },
-  has_suggested_fixes: {
-    id: "Challenge.sort.suggestedFix",
-    defaultMessage: "Quick Fix",
+  cooperative_type: {
+    id: "Challenge.sort.cooperativeWork",
+    defaultMessage: "Cooperative",
   },
   default: {
     id: "Challenge.sort.default",

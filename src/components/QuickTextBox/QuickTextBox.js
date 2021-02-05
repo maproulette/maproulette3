@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import { FormattedMessage } from 'react-intl'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import './QuickTextBox.scss'
+import messages from './Messages'
 
 /**
  * QuickTextBox renders a simple text input field with icon-only done/cancel
@@ -33,11 +35,11 @@ export default class QuickTextBox extends Component {
   render() {
     return (
       <div className="mr-flex mr-items-center mr-justify-between">
-        <div className="mr-w-9/10 mr-grid mr-grid-columns-6 mr-grid-gap-4">
+        <div className="mr-flex mr-items-center mr-mr-2">
           <input
             autoFocus={this.props.autoFocus}
             type="text"
-            className="mr-input mr-input--green-lighter-outline mr-col-span-4"
+            className={classNames("mr-input mr-mr-2", this.props.inputClassName)}
             placeholder={this.props.placeholder}
             maxLength="50"
             onChange={(e) => this.props.setText(e.target.value)}
@@ -46,10 +48,10 @@ export default class QuickTextBox extends Component {
           />
           {!this.props.suppressControls &&
             <button
-              className="mr-button mr-col-span-2"
+              className={classNames("mr-button", this.props.doneButtonClassName)}
               onClick={this.props.done}
             >
-              Save
+              {this.props.doneLabel || <FormattedMessage {...messages.saveLabel} />}
             </button>
           }
         </div>

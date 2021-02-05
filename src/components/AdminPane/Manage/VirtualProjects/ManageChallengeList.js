@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'
+import _isEmpty from 'lodash/isEmpty'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import WithManageableProjects
@@ -9,6 +10,7 @@ import WithManageableProjects
 import WithCurrentProject from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithSearchResults from '../../../HOCs/WithSearchResults/WithSearchResults'
+import WithCommandInterpreter from '../../../HOCs/WithCommandInterpreter/WithCommandInterpreter'
 import WithPermittedChallenges from '../../HOCs/WithPermittedChallenges/WithPermittedChallenges'
 import WithPagedChallenges from '../../../HOCs/WithPagedChallenges/WithPagedChallenges'
 import { extendedFind } from '../../../../services/Challenge/Challenge'
@@ -24,10 +26,18 @@ import messages from './Messages'
 
 // Setup child components with needed HOCs.
 const ChallengeSearch = WithSearch(
-  SearchBox,
+  WithCommandInterpreter(SearchBox, ['p', 'i']),
   'adminChallengeList',
-  searchCriteria =>
-    extendedFind({searchQuery: searchCriteria.query, onlyEnabled: false}, 1000),
+  searchCriteria => {
+    if (!_isEmpty(_get(searchCriteria, 'filters'))) {
+      return extendedFind({filters: _get(searchCriteria, 'filters', {}),
+                           onlyEnabled: false}, 1000)
+    }
+    else {
+      return extendedFind({searchQuery: searchCriteria.query,
+                           onlyEnabled: false}, 1000)
+    }
+  },
 )
 
 const ChallengeSearchResults =
@@ -43,6 +53,10 @@ const ChallengeSearchResults =
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class manageChallengeList extends Component {
+  componentDidMount() {
+    window.scrollTo(0, 0)
+  }
+
   done(props) {
     props.history.push(`/admin/project/${props.project.id}`)
   }
@@ -53,9 +67,9 @@ export class manageChallengeList extends Component {
     }
 
     const searchControl = this.props.projects.length === 0 ? null : (
-      <ChallengeSearch className="mr-p-2 mr-text-grey-light mr-border mr-border-grey-light mr-rounded-sm"
-                       inputClassName="mr-text-grey mr-leading-normal"
-                       placeholder={"Search..."} />
+      <ChallengeSearch
+        placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)}
+      />
     )
 
     const projectName = _get(this.props, 'project.displayName')
@@ -70,7 +84,7 @@ export class manageChallengeList extends Component {
     const breadcrumbs =
       <nav className="breadcrumb mr-mt-2" aria-label="breadcrumbs">
         <ul>
-          <li>
+          <li className="nav-title">
             <Link to='/admin/projects'>
               <FormattedMessage {...manageMessages.manageHeader} />
             </Link>
@@ -93,7 +107,7 @@ export class manageChallengeList extends Component {
       </nav>
 
     return (
-      <div className="admin__manage edit-project">
+      <div className="admin__manage edit-project mr-cards-inverse">
         <Header
           className="mr-px-8 mr-pt-4"
           eyebrow={breadcrumbs}
@@ -102,18 +116,25 @@ export class manageChallengeList extends Component {
         />
 
         <div className="md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-2">
-          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-my-4 mr-p-4 mr-rounded">
-            <QuickWidget {...this.props}
-                        className="challenge-list-widget"
-                        widgetTitle={this.props.intl.formatMessage(messages.findChallengesLabel)}
-                        rightHeaderControls={searchControl}>
-              <ChallengeSearchResults {..._omit(this.props, 'challenges')} toBeAdded
+          <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-my-4 mr-p-4 mr-rounded">
+            <QuickWidget
+              {...this.props}
+              className="challenge-list-widget"
+              widgetTitle={this.props.intl.formatMessage(messages.findChallengesLabel)}
+              rightHeaderControls={searchControl}
+            >
+              <ChallengeSearchResults
+                {..._omit(this.props, 'challenges')}
+                toBeAdded
                 challenges={this.props.filteredChallenges || []}
                 excludeChallenges={this.props.challenges}
-                allStatuses={true} />
+                allStatuses={true}
+              />
             </QuickWidget>
           </div>
-          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-my-4 mr-p-4 mr-rounded mr-w-full">
+          <div
+            className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-my-4 mr-p-4 mr-rounded mr-w-full"
+          >
             <QuickWidget {...this.props}
                         className="challenge-list-widget"
                         widgetTitle={listTitle}>

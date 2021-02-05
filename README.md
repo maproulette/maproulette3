@@ -14,7 +14,7 @@ not use the production server for development purposes.**
 
 ### Basic Dependencies:
 
-* [Node 10 LTS](https://nodejs.org/)
+* [Node 12 LTS](https://nodejs.org/)
 * [yarn](https://yarnpkg.com/)
 * [jq](https://stedolan.github.io/jq/)
 * [curl](https://curl.haxx.se/)
@@ -108,8 +108,7 @@ server for development use*
 ## Staging/Production build:
 
 1. Setup a `.env.production` file with the desired production setting overrides.
- * set `REACT_APP_BASE_PATH='/mr3'`
- * set `REACT_APP_URL='https://myserver.com/mr3'`
+ * set `REACT_APP_URL='https://myserver.com'`
    (substituting your domain, of course)
  * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://myserver.com'`
  * if you wish to use [Matomo/PIWIK](https://github.com/matomo-org/matomo) for
@@ -168,14 +167,9 @@ The project was bootstrapped with
 Branch management follows
 [GitFlow](https://datasift.github.io/gitflow/IntroducingGitFlow.html) with
 active development occurring on the `develop` branch. Pull requests should
-target the `develop` branch. The master branch always contains the latest
+target the `develop` branch. The main branch always contains the latest
 release, and the `prerelease` branch contains features and fixes promoted from
-`develop` that are candidates for the next release to `master`.
-
-It is okay for pull requests to the `develop` branch to rely on server features
-or fixes that have only been merged into the server's `dev` branch, but they
-will not be promoted to the `prelease` branch until the server-side code makes
-it into the server's `master` branch.
+`develop` that are candidates for the next release to `main`.
 
 Release versions follow [Semantic Versioning](https://semver.org/).
 
@@ -186,27 +180,6 @@ Unit tests are built with [Jest](https://facebook.github.io/jest/) +
 
 `yarn test` to run them in watch mode.
 
-## End-to-End Tests
-
-> Note: End-to-End tests are temporarily disabled as the Chimp framework is not
-> compatible with Node 10 LTS.
-
-End-to-end tests are built with [Chimp](https://chimp.readme.io/), which
-combines [Webdriver.io](http://webdriver.io/guide.html) for Selenium +
-[Cucumber](https://cucumber.io/docs/reference) and
-[Jasmine](https://jasmine.github.io/api/3.0/global) for tests.
-
-Prior to running tests locally, you'll need to tell Chimp the URL to your
-MR3 app. Copy `chimp.example.js` to `chimp.js`, edit the file and modify the
-`mr3URL` setting. You only need to do this once.
-
-Then:
-`yarn e2e` to run the tests, or `yarn e2e --watch` to enter watch mode and only
-run tests with a `@watch` tag (useful when working on new tests).
-
-[Sauce Labs](https://saucelabs.com) has also graciously provided us with free
-access to their cross-browser testing platform.
-
 ## CSS Styling and Naming
 
 We are currently in transition between the old styling that used the
@@ -216,20 +189,29 @@ CSS](https://tailwindcss.com) with PostCSS. New CSS classes are prefixed with
 transition there are still situations where a mix of both Tailwind and Bulma
 are in play.
 
-Tailwind configuration is controlled with the `src/tailwind.js` file. New CSS
-classes can be found in `src/styles/`
+Tailwind configuration is controlled with the `src/tailwind.config.js` file.
+New CSS classes can be found in `src/styles/`
 
-## Internationalization and Localization
+## Internationalization, Localization, and Translation
 
 Internationalization and localization is performed via
 [react-intl](https://github.com/yahoo/react-intl/wiki). Most components feature
 co-located Messages.js files that contain messages intended for display,
-along with default (U.S. English) versions of each message. Translation files
-that contain translated versions of these messages for supported locales are
-stored in the `src/lang/` directory. A fresh en-US.json file can be built from
-the latest messages using `yarn run build-intl`, which is also run
-automatically as part of the `yarn build` script used for creating production
-builds. Translation files for other locales must be updated manually.
+along with default (U.S. English) versions of each message.
+
+A fresh en-US.json file can be built from the latest messages using `yarn run
+build-intl`, which is also run automatically as part of the `yarn build` script
+used for creating production builds.
+
+Translations for other locales are managed through
+[transifex](https://www.transifex.com/osmlab/maproulette3), who kindly provides
+us with free service through their Open Source program. Translation files are
+pulled into the code repository from time to time and stored in the `src/lang/`
+directory.
+
+Adding support for additional locales is quick and straight-forward: edit
+`src/services/User/Locale/Locale.js` and follow the directions at the top of
+the file.
 
 By default, the en-US locale will be used for users who have not set a locale in
 their MapRoulette user settings. This default locale can be changed with the

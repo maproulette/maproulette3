@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import { saveTask,
          deleteTask } from '../../../../services/Task/Task'
-import WithLoadedTask from '../WithLoadedTask/WithLoadedTask'
+import WithLoadedTask from '../../../HOCs/WithLoadedTask/WithLoadedTask'
 
 /**
  * WithCurrentTask makes available to the WrappedComponent the current task

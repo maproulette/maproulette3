@@ -7,19 +7,17 @@ import _isFunction from 'lodash/isFunction'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
 import _includes from 'lodash/includes'
-import { SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_SUGGESTED_FIX,
+import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE_WORK,
          setSort, removeSort, setPage,
          setFilters, removeFilters, clearFilters,
          setSearch, clearSearch,
-         setChallengeSearchMapBounds, setChallengeBrowseMapBounds,
+         setChallengeSearchMapBounds,
          setTaskMapBounds, setChallengeOwnerMapBounds, clearMapBounds,
          performSearch }
        from '../../../services/Search/Search'
 import { addError } from '../../../services/Error/Error'
 import { toLatLngBounds, DEFAULT_MAP_BOUNDS }
        from '../../../services/MapBounds/MapBounds'
-import { CHALLENGE_LOCATION_WITHIN_MAPBOUNDS }
-  from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import WithUserLocation from '../WithUserLocation/WithUserLocation'
 
 /**
@@ -44,7 +42,7 @@ const WithSearch = (WrappedComponent, searchGroup, searchFunction) => {
   // Debounce the search function so the server doesn't get hammered as a user
   // types in a query string
   const debouncedSearch = searchFunction ?
-    _debounce(props => props.performSearch(props.searchCriteria, searchFunction),
+    _debounce(props => props.performSearch(props.searchCriteria, searchFunction, props),
               1000, {leading: false}) : null
 
   return WithUserLocation(
@@ -69,7 +67,7 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
       let prevSearch = _omit(_get(prevProps, `currentSearch.${searchGroup}`), ['meta'])
       let currentSearch = _omit(_get(this.props, `currentSearch.${searchGroup}`), ['meta'])
 
-      if (_get(this.props, 'searchFilters.location') !== CHALLENGE_LOCATION_WITHIN_MAPBOUNDS) {
+      if (!_get(this.props, 'searchFilters.location')) {
         currentSearch = _omit(currentSearch, 'mapBounds')
         prevSearch = _omit(prevSearch, 'mapBounds')
       }
@@ -121,8 +119,8 @@ export const mapStateToProps = (state, searchGroup) => {
 }
 
 export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
-  performSearch: (query, searchFunction) => {
-    return dispatch(performSearch(searchGroup, query, searchFunction))
+  performSearch: (query, searchFunction, props) => {
+    return dispatch(performSearch(searchGroup, query, searchFunction, props))
   },
 
   setSearch: (query, searchName) => {
@@ -157,10 +155,13 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
       case SORT_CREATED:
         sort = {sortBy, direction: 'desc'}
         break
+      case SORT_OLDEST:
+        sort = {sortBy, direction: 'asc'}
+        break
       case SORT_POPULARITY:
         sort = {sortBy, direction: 'desc'}
         break
-      case SORT_SUGGESTED_FIX:
+      case SORT_COOPERATIVE_WORK:
         sort = {sortBy, direction: 'desc'}
         break
       default:
@@ -210,10 +211,6 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     dispatch(setChallengeSearchMapBounds(searchGroup, bounds, fromUserAction))
   },
 
-  setChallengeBrowseMapBounds: (challengeId, bounds, zoom) => {
-    dispatch(setChallengeBrowseMapBounds(searchGroup, challengeId, bounds, zoom))
-  },
-
   setChallengeOwnerMapBounds: (challengeId, bounds, zoom) => {
     dispatch(setChallengeOwnerMapBounds(searchGroup, challengeId, bounds, zoom))
   },
@@ -227,7 +224,7 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   },
 
   locateMapToUser: user => {
-    ownProps.getUserBounds(user).then(userBounds => {
+    return ownProps.getUserBounds(user).then(userBounds => {
       dispatch(setChallengeSearchMapBounds(searchGroup, userBounds, true))
     }).catch(locationError => {
       dispatch(addError(locationError))
