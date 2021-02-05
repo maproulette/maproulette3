@@ -16,6 +16,7 @@ import _isEqual from 'lodash/isEqual'
 import _merge from 'lodash/merge'
 import _map from 'lodash/map'
 import _without from 'lodash/without'
+import _clone from 'lodash/clone'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import External from '../../../../External/External'
@@ -67,6 +68,7 @@ import TaskPropertyStyleRules
        from '../../TaskPropertyStyleRules/TaskPropertyStyleRules'
 import { preparePriorityRuleGroupForForm,
          preparePriorityRuleGroupForSaving } from './PriorityRuleGroup'
+import { preparePresetsForSaving, preparePresetsForForm } from './Presets'
 import WorkflowSteps from './WorkflowSteps'
 import manageMessages from '../../Messages'
 import messages from './Messages'
@@ -101,6 +103,7 @@ export class EditChallenge extends Component {
     formContext: {},
     extraErrors: {},
     isSaving: false,
+    expandedFieldGroups: {}
   }
 
   validationPromise = null
@@ -157,6 +160,15 @@ export class EditChallenge extends Component {
     this.props.updateUserAppSetting(this.props.user.id, {
       collapsedChallengeFormGroups: updated,
     })
+  }
+
+  /**
+   * Set whether a collapsible field group should be expanded or not
+   */
+  setFieldGroupExpanded = (fieldGroup, isExpanded) => {
+    const updatedExpansions = _clone(this.state.expandedFieldGroups)
+    updatedExpansions[fieldGroup] = isExpanded
+    this.setState({expandedFieldGroups: updatedExpansions})
   }
 
   /**
@@ -409,6 +421,10 @@ export class EditChallenge extends Component {
         preparePriorityRuleGroupForForm(challengeData.lowPriorityRule)
     }
 
+    if (_isUndefined(this.state.formData.presets)) {
+      challengeData = preparePresetsForForm(challengeData)
+    }
+
     // Since we represent the challenge category as just another keyword behind
     // the scenes, we need to separate the category keyword and the rest of
     // the keywords so that they're all presented properly in the form. First,
@@ -493,6 +509,8 @@ export class EditChallenge extends Component {
     challengeData.lowPriorityRule =
       preparePriorityRuleGroupForSaving(challengeData.lowPriorityRules.ruleGroup)
     delete challengeData.lowPriorityRules
+
+    preparePresetsForSaving(challengeData)
 
     challengeData.tags = ChallengeCategoryKeywords[challengeData.category] ||
                          ChallengeCategoryKeywords.other
@@ -805,6 +823,8 @@ export class EditChallenge extends Component {
                       longForm: this.isLongForm(),
                       collapsedGroups: this.collapsedFormGroups(),
                       toggleCollapsed: this.toggleCollapsedFormGroup,
+                      expandedFieldGroups: this.state.expandedFieldGroups,
+                      setFieldGroupExpanded: this.setFieldGroupExpanded,
                     }
                   )}
                   className="form"

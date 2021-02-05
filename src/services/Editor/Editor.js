@@ -222,6 +222,10 @@ export const constructIdURI = function(task, mapBounds, options, taskBundle) {
   const commentUriComponent = "comment=" +
                               encodeURIComponent(task.parent.checkinComment)
   const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource)
+
+  const presetsComponent = _isEmpty(task.parent.presets) ? null :
+    "presets=" + encodeURIComponent(task.parent.presets.join(','))
+
   const imageryComponent =
     _get(options, 'imagery') ?
     `background=${
@@ -245,6 +249,7 @@ export const constructIdURI = function(task, mapBounds, options, taskBundle) {
       commentUriComponent,
       sourceComponent,
       imageryComponent,
+      presetsComponent,
       photoOverlayComponent,
     ]).join('&')
   )
@@ -265,6 +270,10 @@ export const constructRapidURI = function(task, mapBounds, options) {
   const commentUriComponent = "comment=" +
                               encodeURIComponent(task.parent.checkinComment)
   const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource)
+
+  const presetsComponent = _isEmpty(task.parent.presets) ? null :
+    "presets=" + encodeURIComponent(task.parent.presets.join(','))
+
   const imageryComponent =
     _get(options, 'imagery') ?
     `background=${
@@ -279,7 +288,7 @@ export const constructRapidURI = function(task, mapBounds, options) {
 
   return baseUriComponent + _compact(
     [selectedEntityComponent, commentUriComponent, sourceComponent,
-      imageryComponent, photoOverlayComponent, mapUriComponent]
+      imageryComponent, presetsComponent, photoOverlayComponent, mapUriComponent]
   ).join('&')
 }
 

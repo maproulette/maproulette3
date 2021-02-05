@@ -77,6 +77,18 @@
   }
 }
 
+.form-group .checkboxes {
+  @apply mr-flex mr-flex-col;
+
+  .checkbox {
+    @apply mr-mb-2;
+
+    input {
+      @apply mr-mr-2;
+    }
+  }
+}
+
 .form-group.field-boolean .checkbox label input[type='checkbox'] {
   @apply mr-mr-2;
 
