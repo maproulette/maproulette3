@@ -7,7 +7,8 @@ import { completeReview,
          completeBundleReview,
          cancelReviewClaim,
          loadNextReviewTask,
-         fetchTaskForReview }
+         fetchTaskForReview,
+         fetchNearbyReviewTasks }
         from '../../../services/Task/TaskReview/TaskReview'
 import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskReviewLoadMethod }
@@ -49,27 +50,60 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           (status === TaskReviewStatus.needed && task.reviewedBy === ownProps.user.id)
 
         const doReview = taskBundle ?
-          completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, submitAsMetaReview) :
-          completeReview(task.id, status, comment, tags, newTaskStatus, submitAsMetaReview)
+          () => completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, submitAsMetaReview) :
+          () => completeReview(task.id, status, comment, tags, newTaskStatus, submitAsMetaReview)
 
-        dispatch(doReview).then(() => {
-          if (loadBy === TaskReviewLoadMethod.nearby && requestedNextTask) {
-            visitLoadBy(loadBy, url, requestedNextTask, asMetaReview(ownProps))
-          }
-          else if (loadBy === TaskReviewLoadMethod.inbox ||
-                   loadBy === TaskReviewLoadMethod.ALL_LOAD_METHOD) {
-            // Don't need to load next task since we are going to inbox or back
-            // to review all
-            visitLoadBy(loadBy, url, task, asMetaReview(ownProps))
-          }
-          else {
-            loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
-              nextTask => visitLoadBy(loadBy, url, nextTask, asMetaReview(ownProps)))
-          }
-        }).catch(error => {
-          console.log(error)
-          url.push('/review/tasksToBeReviewed')
-        })
+        // If we are loading the next task to review we need to ask the server for the next one
+        // first, since otherwise after we change the task review status the current position
+        // of our current task will not be found since it won't be in the review requested
+        // list anymore. After we fetch the task we can do the review and move to the newly
+        // fetched next task.
+        if (loadBy === TaskReviewLoadMethod.next) {
+          loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
+            nextTask => {
+              dispatch(doReview()).then(() =>
+                visitLoadBy(loadBy, url, nextTask, asMetaReview(ownProps)))
+            }
+          ).catch(error => {
+            console.log(error)
+            dispatch(doReview()).then(() =>
+              url.push('/review/tasksToBeReviewed')
+            ).catch(error => {
+              console.log(error)
+              url.push('/review/tasksToBeReviewed')
+            })
+          })
+        }
+        else {
+          dispatch(doReview()).then(() => {
+            if (loadBy === TaskReviewLoadMethod.nearby) {
+              if (requestedNextTask) {
+                visitLoadBy(loadBy, url, requestedNextTask, asMetaReview(ownProps))
+              }
+              else {
+                // Nearby task was not chosen by user so we need to find one
+                dispatch(fetchNearbyReviewTasks(
+                  task.id,
+                  parseSearchCriteria(url).searchCriteria,
+                  1,
+                  asMetaReview(ownProps))
+                ).then(nearbyTasks => {
+                  const nextTask = (nearbyTasks.tasks &&
+                                    nearbyTasks.tasks.length > 0) ? nearbyTasks.tasks[0] : null
+                  visitLoadBy(loadBy, url,nextTask,asMetaReview(ownProps))
+                })
+              }
+            }
+            else {
+              // Don't need to load next task since we are going to inbox or back
+              // to review all
+              visitLoadBy(loadBy, url, task, asMetaReview(ownProps))
+            }
+          }).catch(error => {
+            console.log(error)
+            url.push('/review/tasksToBeReviewed')
+          })
+        }
     },
 
     skipTaskReview: (task, loadBy, url) => {
