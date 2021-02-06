@@ -109,7 +109,7 @@ const mapDispatchToProps = dispatch => ({
   fetchProjectChallenges: projectId =>
     dispatch(fetchProjectChallenges(projectId, -1)),
   fetchProjectChallengeActions: projectId =>
-    dispatch(fetchProjectChallengeActions(projectId)),
+    dispatch(fetchProjectChallengeActions(projectId, false, false)),
 })
 
 export default (WrappedComponent, options) =>
