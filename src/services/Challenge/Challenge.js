@@ -437,12 +437,13 @@ export const fetchChallengeActions = function(challengeId = null, suppressReceiv
 /**
  * Fetch action metrics for all challenges in the given project.
  */
-export const fetchProjectChallengeActions = function(projectId, onlyEnabled=false) {
+export const fetchProjectChallengeActions = function(projectId, onlyEnabled=false,
+  includeByPriority=true) {
   return function(dispatch) {
     return new Endpoint(
       api.challenges.actions,
       {schema: [ challengeSchema() ], params: {projectList: projectId, onlyEnabled,
-                                               includeByPriority: true}}
+                                               includeByPriority}}
     ).execute().then(normalizedResults => {
       dispatch(receiveChallenges(normalizedResults.entities))
     }).catch(error => {
