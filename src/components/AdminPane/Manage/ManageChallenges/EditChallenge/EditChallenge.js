@@ -293,7 +293,9 @@ export class EditChallenge extends Component {
       return this.props.saveChallenge(formData).then(challenge => {
         if (_isObject(challenge) && _isNumber(challenge.parent)) {
           const nextState = _cloneDeep(this.challengeState)
-          nextState.refreshAfterSave = true
+          if (nextState) {
+            nextState.refreshAfterSave = true
+          }
 
           this.props.history.push({
             pathname: `/admin/project/${challenge.parent}/challenge/${challenge.id}`,
