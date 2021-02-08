@@ -17,6 +17,7 @@ import _merge from 'lodash/merge'
 import _map from 'lodash/map'
 import _without from 'lodash/without'
 import _clone from 'lodash/clone'
+import _cloneDeep from 'lodash/cloneDeep'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import External from '../../../../External/External'
@@ -291,9 +292,12 @@ export class EditChallenge extends Component {
     this.prepareFormDataForSaving().then(formData => {
       return this.props.saveChallenge(formData).then(challenge => {
         if (_isObject(challenge) && _isNumber(challenge.parent)) {
+          const nextState = _cloneDeep(this.challengeState)
+          nextState.refreshAfterSave = true
+
           this.props.history.push({
             pathname: `/admin/project/${challenge.parent}/challenge/${challenge.id}`,
-            state: this.challengeState
+            state: nextState
           })
         }
         else {
