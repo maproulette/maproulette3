@@ -247,6 +247,9 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
                 this.props.challengeId !== prevProps.challengeId) {
          this.refreshTasks(typedCriteria)
        }
+       else if (_get(this.props.history.location, 'state.refreshAfterSave')) {
+         this.refreshTasks(typedCriteria)
+       }
      }
 
      render() {
