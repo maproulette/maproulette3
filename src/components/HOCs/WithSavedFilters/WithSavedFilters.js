@@ -13,7 +13,8 @@ import { messagesByPriority, TaskPriority }
        from '../../../services/Task/TaskPriority/TaskPriority'
 import { messagesByStatus, TaskStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
-import { messagesByReviewStatus, TaskReviewStatusWithUnset }
+import { messagesByReviewStatus, TaskReviewStatusWithUnset,
+         messagesByMetaReviewStatus, TaskMetaReviewStatusWithUnset }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
 
 /**
@@ -75,6 +76,28 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
         {[appSettingName]: settings})
     }
 
+    // This will turn an integer or array value into
+    // the appropriate messages.
+    // ie. [0, 1] -> "high, medium" or [1, 2] -> "approved, rejected"
+    makeBrief(value, AllOptions, messages) {
+      let textValue = value
+      if (_isFinite(value) || value.indexOf(",") > -1) {
+        const splitValues = _split(value, ",")
+
+        // If every value is present in the array then we don't
+        // need to include this value in the brief description so
+        // just return null.
+        if (splitValues.length === _keys(AllOptions).length) {
+          textValue = null
+        }
+        else {
+          textValue = _map(splitValues, v =>
+            this.props.intl.formatMessage(messages[v])).join(',')
+        }
+      }
+      return textValue
+    }
+
     getBriefFilters = savedFilters => {
       const criteria = buildSearchCriteriafromURL(savedFilters)
       return _compact(_map(criteria.filters, (value, key) => {
@@ -87,34 +110,16 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
           textValue = this.props.intl.formatMessage(messagesByPriority[value])
         }
         else if (key === "priorities") {
-          const splitValues = _split(value, ",")
-          if (splitValues.length === _keys(TaskPriority).length) {
-            textValue = null
-          }
-          else {
-            textValue = _map(splitValues, v =>
-              this.props.intl.formatMessage(messagesByPriority[v])).join(',')
-          }
+          textValue = this.makeBrief(value, TaskPriority, messagesByPriority)
         }
-        if (key === "status" && (_isFinite(value) || value.indexOf(",") > -1)) {
-          const splitValues = _split(value, ",")
-          if (splitValues.length === _keys(TaskStatus).length) {
-            textValue = null
-          }
-          else {
-            textValue = _map(splitValues, v =>
-              this.props.intl.formatMessage(messagesByStatus[v]))
-          }
+        if (key === "status") {
+          textValue = this.makeBrief(value, TaskStatus, messagesByStatus)
         }
-        if (key === "reviewStatus" && (_isFinite(value) || value.indexOf(",") > -1)) {
-          const splitValues = _split(value, ",")
-          if (splitValues.length === _keys(TaskReviewStatusWithUnset).length) {
-            textValue = null
-          }
-          else {
-            textValue = _map(splitValues, v =>
-              this.props.intl.formatMessage(messagesByReviewStatus[v]))
-          }
+        if (key === "reviewStatus") {
+          textValue = this.makeBrief(value, TaskReviewStatusWithUnset, messagesByReviewStatus)
+        }
+        if (key === "metaReviewStatus") {
+          textValue = this.makeBrief(value, TaskMetaReviewStatusWithUnset, messagesByMetaReviewStatus)
         }
         return textValue ? `${key}${op}${textValue}` : null
       }))
