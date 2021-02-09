@@ -12,7 +12,9 @@ import { MapControl, withLeaflet } from 'react-leaflet'
  */
 const AreaSelectLeaflet = L.Control.extend({
   onAdd: function(map) {
-    const areaSelect = L.areaSelect({width:200, height:300});
+    const areaSelect = this.options.bounds ?
+      L.areaSelect({bounds: this.options.bounds}) :
+      L.areaSelect({height: 300, width: 200})
     areaSelect.addTo(map)
 
     // Send a callback when the bounds change
