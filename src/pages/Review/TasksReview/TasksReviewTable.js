@@ -341,7 +341,7 @@ export class TaskReviewTable extends Component {
         if (reviewFilters.projectId || reviewFilters.projectName) {
           reviewFilters.project = reviewFilters.projectId ?
             _get(this.props.reviewProjects[reviewFilters.projectId],
-                 'name') : reviewFilters.projectName
+                 'displayName') : reviewFilters.projectName
         }
       }
 
