@@ -178,7 +178,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
        const criteria =
           props.history.location.search ?
           buildSearchCriteriafromURL(props.history.location.search) :
-          props.history.location.state
+          _cloneDeep(props.history.location.state)
 
        // These values will come in as comma-separated strings and need to be turned
        // into number arrays
@@ -226,6 +226,10 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
            search: this.props.history.location.search,
            state: {}
          })
+
+         if (this.props.setupFilters) {
+           this.props.setupFilters()
+         }
          this.updateCriteriaFromURL(this.props)
          return
        }
