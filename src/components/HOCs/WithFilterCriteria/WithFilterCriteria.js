@@ -26,7 +26,7 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
+export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true, ignoreLocked = true) {
    return class extends Component {
      state = {
        loading: false,
@@ -169,7 +169,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
        this.props.augmentClusteredTasks(challengeId, false,
                                         criteria,
                                         this.state.criteria.pageSize,
-                                        false).then((results) => {
+                                        false, ignoreLocked).then((results) => {
          this.setState({loading: false})
        })
      }
@@ -279,4 +279,4 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
    }
  }
 
-export default (WrappedComponent, ignoreURL) => WithFilterCriteria(WrappedComponent, ignoreURL)
+export default (WrappedComponent, ignoreURL, ignoreLocked) => WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked)

@@ -50,7 +50,7 @@ export const receiveBoundedTasks = function(tasks,
  * criteria, which should at least include a boundingBox field, and may
  * optionally include a filters field with additional constraints
  */
-export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false, excludeLocked=true, withGeometries) {
+export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false, ignoreLocked=true, withGeometries) {
   return function(dispatch) {
     if (!skipDispatch) {
       // The map is either showing task clusters or bounded tasks so we shouldn't
@@ -122,8 +122,8 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
           top: normalizedBounds.getNorth(),
         },
         params: {limit, page: (page * limit), sort: sortBy, order: direction,
-                 includeTotal: true, excludeLocked, ...searchParameters, includeGeometries,
-                 includeTags},
+                 includeTotal: true, excludeLocked: ignoreLocked, ...searchParameters, 
+                 includeGeometries, includeTags},
         json: filters.taskPropertySearch ?
           {taskPropertySearch: filters.taskPropertySearch} : null,
       }
