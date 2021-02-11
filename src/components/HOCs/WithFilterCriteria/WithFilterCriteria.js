@@ -10,6 +10,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _toInteger from 'lodash/toInteger'
 import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
+import _debounce from 'lodash/debounce'
 import format from 'date-fns/format'
 import { fromLatLngBounds, GLOBAL_MAPBOUNDS } from '../../../services/MapBounds/MapBounds'
 import { buildSearchCriteriafromURL,
@@ -26,7 +27,8 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true, ignoreLocked = true) {
+export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
+  ignoreLocked = true, skipInitialFetch = false) {
    return class extends Component {
      state = {
        loading: false,
@@ -160,19 +162,26 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true, i
        // If we don't have bounds yet, we still want results so let's fetch all
        // tasks globally for this challenge.
        if (!criteria.boundingBox) {
-         if (this.props.skipInitialFetch || !challengeId) {
+         if (skipInitialFetch || !challengeId) {
            return
          }
          criteria.boundingBox = GLOBAL_MAPBOUNDS
        }
 
-       this.props.augmentClusteredTasks(challengeId, false,
-                                        criteria,
-                                        this.state.criteria.pageSize,
-                                        false, ignoreLocked).then((results) => {
-         this.setState({loading: false})
-       })
+       this.debouncedTasksFetch(challengeId, criteria, this.state.criteria.pageSize)
      }
+
+     // Debouncing to give a chance for filters and bounds to all be applied before
+     // making the server call.
+     debouncedTasksFetch = _debounce(
+       (challengeId, criteria, pageSize) => {
+         this.props.augmentClusteredTasks(challengeId, false,
+                                        criteria,
+                                        pageSize,
+                                        false, ignoreLocked).then((results) => {
+          this.setState({loading: false})
+       })
+     }, 400)
 
      updateCriteriaFromURL(props) {
        const criteria =
@@ -279,4 +288,5 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true, i
    }
  }
 
-export default (WrappedComponent, ignoreURL, ignoreLocked) => WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked)
+export default (WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch) =>
+  WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch)
