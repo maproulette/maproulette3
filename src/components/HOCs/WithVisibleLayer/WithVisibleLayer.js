@@ -89,11 +89,21 @@ export const mapStateToProps = (state, ownProps) => {
     }
   }
   else if (state.visibleLayer) {
-    source = layerSourceWithId(state.visibleLayer.id)
+    let sourceId = state.visibleLayer.id
+    if (_isString(ownProps.mapType)) {
+      // If no map has been setup for this mapType, then we want the default
+      if (state.visibleLayer[ownProps.mapType]) {
+        sourceId = state.visibleLayer[ownProps.mapType].id
+      }
+      else {
+        sourceId = null
+      }
+    }
 
+    source = sourceId ? layerSourceWithId(sourceId) : null
     if (!source) {
       // Try a dynamic layer
-      source = dynamicLayerWithId(state.visibleLayer.id, ownProps)
+      source = dynamicLayerWithId(sourceId, ownProps)
     }
   }
 
@@ -105,7 +115,7 @@ export const mapStateToProps = (state, ownProps) => {
 
 export const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    changeLayer: layerId => {
+    changeLayer: (layerId, mapType = null) => {
       const isVirtual = _isFinite(ownProps.virtualChallengeId)
       const challengeId = isVirtual ? ownProps.virtualChallengeId :
                                       _get(ownProps, 'challenge.id')
@@ -114,7 +124,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         ownProps.setVisibleMapLayer(challengeId, isVirtual, layerId)
       }
       else {
-        dispatch(changeVisibleLayer(layerId))
+        dispatch(changeVisibleLayer(layerId, mapType))
       }
     },
 

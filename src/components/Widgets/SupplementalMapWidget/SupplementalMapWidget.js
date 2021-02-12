@@ -77,6 +77,7 @@ const SupplementalMapWidget = props => {
           w={w}
           trackedBounds={trackTaskMap ? workspaceContext.taskMapBounds : undefined}
           trackedZoom={trackTaskMap ? workspaceContext.taskMapZoom : undefined}
+          mapType="supplemental"
         />
       </MapPane>
     </QuickWidget>
