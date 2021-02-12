@@ -384,7 +384,7 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
  * if none is given).
  */
 export const fetchChallengeActions = function(challengeId = null, suppressReceive = false,
-                                              criteria) {
+                                              criteria, includeByPriority = true) {
   let searchParameters = {}
   if (criteria) {
     searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
@@ -397,7 +397,7 @@ export const fetchChallengeActions = function(challengeId = null, suppressReceiv
     const challengeActionsEndpoint = new Endpoint(
       _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
       {schema: [ challengeSchema() ], variables: {id: challengeId},
-       params:{...searchParameters, includeByPriority: true}}
+       params:{...searchParameters, includeByPriority}}
     )
 
     return challengeActionsEndpoint.execute().then(normalizedResults => {

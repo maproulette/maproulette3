@@ -30,7 +30,8 @@ import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterM
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=false, showClusters=true, ignoreLocked=true) {
+export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=false,
+  showClusters=true, ignoreLocked=true, skipInitialFetch=false) {
   return class extends Component {
     state = {
       loading: false,
@@ -144,8 +145,8 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     }
 
     componentDidMount() {
-      if (!this.props.skipInitialFetch) {
-        this.fetchUpdatedClusters(this.state.showAsClusters)
+      if (!skipInitialFetch) {
+        this.debouncedFetchClusters(this.state.showAsClusters)
       }
     }
 
@@ -158,7 +159,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       }
       else if (!_isEqual(_omit(prevProps.criteria, ['page', 'pageSize']),
             _omit(this.props.criteria, ['page', 'pageSize']))) {
-        this.fetchUpdatedClusters(this.state.showAsClusters)
+        this.debouncedFetchClusters(this.state.showAsClusters)
       }
     }
 
@@ -226,5 +227,6 @@ export const mapDispatchToProps = dispatch => Object.assign(
   }
 )
 
-export default (WrappedComponent, storeTasks, showClusters, ignoreLocked) =>
-  connect(null, mapDispatchToProps)(WithChallengeTaskClusters(WrappedComponent, storeTasks, showClusters, ignoreLocked))
+export default (WrappedComponent, storeTasks, showClusters, ignoreLocked, skipInitialFetch) =>
+  connect(null, mapDispatchToProps)(WithChallengeTaskClusters(WrappedComponent,
+    storeTasks, showClusters, ignoreLocked, skipInitialFetch))
