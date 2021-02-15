@@ -23,6 +23,7 @@ let globalLayer = null
 let userLayer = null
 let fooLayer = null
 let barLayer = null
+let alphaLayer = null
 
 beforeEach(() => {
   defaultLayerInstance = {
@@ -39,6 +40,10 @@ beforeEach(() => {
 
   globalLayer = {
     id: "GlobalLayer",
+  }
+
+  alphaLayer = {
+    id: "AlphaLayer",
   }
 
   challenge = {
@@ -182,6 +187,32 @@ describe("mapDispatchToProps", () => {
 
     mappedProps.changeLayer("FooLayer")
     expect(dispatch).toBeCalled()
-    expect(changeVisibleLayer).toBeCalledWith("FooLayer")
+    expect(changeVisibleLayer).toBeCalledWith("FooLayer", null)
+  })
+
+  test("maps the challenge visible layer to a mapType if it has one", () => {
+    const mapState = {
+      visibleLayer: {myMap: {id: "AlphaLayer"}},
+    }
+    const mappedProps =
+      mapStateToProps(mapState, {user, mapType: "myMap", visibleMapLayer: "FooLayer", defaultLayer: "BarLayer"})
+    expect(mappedProps.source).toEqual(alphaLayer)
+  })
+
+  test("maps the challenge visible layer to default if given a mapType and a layer setup but not for mapType", () => {
+    const mapState = {
+      visibleLayer: {id: "AlphaLayer"},
+    }
+    const mappedProps =
+      mapStateToProps(mapState, {user, mapType: "myMap", visibleMapLayer: "FooLayer", defaultLayer: "BarLayer"})
+    expect(mappedProps.source).toEqual(barLayer)
+  })
+
+  test("changeLayer sets the visible layer with map type no challenge is given", () => {
+    const mappedProps = mapDispatchToProps(dispatch, {setVisibleMapLayer})
+
+    mappedProps.changeLayer("FooLayer", "myMap")
+    expect(dispatch).toBeCalled()
+    expect(changeVisibleLayer).toBeCalledWith("FooLayer", "myMap")
   })
 })
