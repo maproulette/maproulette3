@@ -61,7 +61,7 @@ export const clearClusteredTasks = function() {
  * clustered tasks
  */
 export const augmentClusteredTasks = function(challengeId, isVirtualChallenge=false, criteria, limit=15000,
-                                              mergeTasks=true) {
+                                              mergeTasks=true, ignoreLocked=true) {
   return function(dispatch) {
     if (isVirtualChallenge) {
       return
@@ -70,7 +70,7 @@ export const augmentClusteredTasks = function(challengeId, isVirtualChallenge=fa
     const fetchId = uuidv1()
     const augmentedCriteria = _cloneDeep(criteria)
     _set(augmentedCriteria, 'filters.challengeId', challengeId)
-    return fetchBoundedTasks(augmentedCriteria, limit, true)(dispatch).then(result => {
+    return fetchBoundedTasks(augmentedCriteria, limit, true, ignoreLocked)(dispatch).then(result => {
       if (result) {
         // Add parent field
         _each(result.tasks, task => task.parent = challengeId)

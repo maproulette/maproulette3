@@ -10,6 +10,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _toInteger from 'lodash/toInteger'
 import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
+import _debounce from 'lodash/debounce'
 import format from 'date-fns/format'
 import { fromLatLngBounds, GLOBAL_MAPBOUNDS } from '../../../services/MapBounds/MapBounds'
 import { buildSearchCriteriafromURL,
@@ -26,7 +27,8 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
+export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
+  ignoreLocked = true, skipInitialFetch = false) {
    return class extends Component {
      state = {
        loading: false,
@@ -160,25 +162,32 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
        // If we don't have bounds yet, we still want results so let's fetch all
        // tasks globally for this challenge.
        if (!criteria.boundingBox) {
-         if (this.props.skipInitialFetch || !challengeId) {
+         if (skipInitialFetch || !challengeId) {
            return
          }
          criteria.boundingBox = GLOBAL_MAPBOUNDS
        }
 
-       this.props.augmentClusteredTasks(challengeId, false,
-                                        criteria,
-                                        this.state.criteria.pageSize,
-                                        false).then((results) => {
-         this.setState({loading: false})
-       })
+       this.debouncedTasksFetch(challengeId, criteria, this.state.criteria.pageSize)
      }
+
+     // Debouncing to give a chance for filters and bounds to all be applied before
+     // making the server call.
+     debouncedTasksFetch = _debounce(
+       (challengeId, criteria, pageSize) => {
+         this.props.augmentClusteredTasks(challengeId, false,
+                                        criteria,
+                                        pageSize,
+                                        false, ignoreLocked).then((results) => {
+          this.setState({loading: false})
+       })
+     }, 400)
 
      updateCriteriaFromURL(props) {
        const criteria =
           props.history.location.search ?
           buildSearchCriteriafromURL(props.history.location.search) :
-          props.history.location.state
+          _cloneDeep(props.history.location.state)
 
        // These values will come in as comma-separated strings and need to be turned
        // into number arrays
@@ -226,6 +235,10 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
            search: this.props.history.location.search,
            state: {}
          })
+
+         if (this.props.setupFilters) {
+           this.props.setupFilters()
+         }
          this.updateCriteriaFromURL(this.props)
          return
        }
@@ -245,6 +258,9 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
        }
        else if (_get(prevProps, 'challenge.id') !== _get(this.props, 'challenge.id') ||
                 this.props.challengeId !== prevProps.challengeId) {
+         this.refreshTasks(typedCriteria)
+       }
+       else if (_get(this.props.history.location, 'state.refreshAfterSave')) {
          this.refreshTasks(typedCriteria)
        }
      }
@@ -272,4 +288,5 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true) {
    }
  }
 
-export default (WrappedComponent, ignoreURL) => WithFilterCriteria(WrappedComponent, ignoreURL)
+export default (WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch) =>
+  WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch)

@@ -63,7 +63,9 @@ const descriptor = {
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap('taskBundling')),
   false,
-  false
+  false,
+  false,
+  true
 )
 
 
@@ -182,7 +184,6 @@ export default class TaskBundleWidget extends Component {
           bundleTasks={this.bundleTasks}
           unbundleTasks={this.unbundleTasks}
           loading={this.props.loading}
-          skipInitialFetch
         />
       </QuickWidget>
     )
@@ -377,7 +378,7 @@ registerWidgetType(
                 ),
                 'filteredClusteredTasks',
                 'taskInfo'
-              )
+              ), true, false, true
             )
           ),
           'clusteredTasks',

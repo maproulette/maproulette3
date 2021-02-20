@@ -9,11 +9,39 @@ L.AreaSelect = L.Class.extend({
         keepAspectRatio: false,
     },
 
+    determineWidthHeight: function() {
+      if (this._bounds) {
+        const northEast = this.map.latLngToLayerPoint(this.options.bounds.getNorthEast())
+        const southWest = this.map.latLngToLayerPoint(this.options.bounds.getSouthWest())
+
+        this._width = northEast.x - southWest.x
+        this._height = northEast.y - southWest.y
+        this._bounds = null
+      }
+    },
+
+    getWidth: function() {
+      if (this._bounds) {
+        this.determineWidthHeight()
+      }
+
+      return this._width
+    },
+
+    getHeight: function() {
+      if (this._bounds) {
+        this.determineWidthHeight()
+      }
+
+      return this._height
+    },
+
     initialize: function(options) {
         L.Util.setOptions(this, options);
 
         this._width = this.options.width;
         this._height = this.options.height;
+        this._bounds = this.options.bounds;
     },
 
     addTo: function(map) {
@@ -28,8 +56,8 @@ L.AreaSelect = L.Class.extend({
         var topRight = new L.Point();
         var bottomLeft = new L.Point();
 
-        bottomLeft.x = Math.round((size.x - this._width) / 2);
-        topRight.y = Math.round((size.y - this._height) / 2);
+        bottomLeft.x = Math.round((size.x - this.getWidth()) / 2);
+        topRight.y = Math.round((size.y - this.getHeight()) / 2);
         topRight.x = size.x - bottomLeft.x;
         bottomLeft.y = size.y - topRight.y;
 
@@ -47,8 +75,8 @@ L.AreaSelect = L.Class.extend({
         var topLeft = new L.Point();
         var bottomRight = new L.Point();
 
-        bottomLeft.x = Math.round((size.x - this._width) / 2);
-        topRight.y = Math.round((size.y - this._height) / 2);
+        bottomLeft.x = Math.round((size.x - this.getWidth()) / 2);
+        topRight.y = Math.round((size.y - this.getHeight()) / 2);
         topRight.x = size.x - bottomLeft.x;
         bottomLeft.y = size.y - topRight.y;
 
@@ -81,8 +109,8 @@ L.AreaSelect = L.Class.extend({
         if (!dimensions)
             return;
 
-        this._height = parseInt(dimensions.height) || this._height;
-        this._width = parseInt(dimensions.width) || this._width;
+        this._height = parseInt(dimensions.height) || this.getHeight();
+        this._width = parseInt(dimensions.width) || this.getWidth();
         this._render();
         this.fire("change");
     },
@@ -124,23 +152,23 @@ L.AreaSelect = L.Class.extend({
             L.DomEvent.removeListener(this, "mousedown", onMouseDown);
             var curX = event.pageX;
             var curY = event.pageY;
-            var ratio = self._width / self._height;
+            var ratio = self.getWidth() / self.getHeight();
             var size = self.map.getSize();
 
             function onMouseMove(event) {
                 if (self.options.keepAspectRatio) {
-                    var maxHeight = (self._height >= self._width ? size.y : size.y * (1/ratio) ) - 30;
+                    var maxHeight = (self._height >= self.getWidth() ? size.y : size.y * (1/ratio) ) - 30;
                     self._height += (curY - event.originalEvent.pageY) * 2 * yMod;
-                    self._height = Math.max(30, self._height);
-                    self._height = Math.min(maxHeight, self._height);
-                    self._width = self._height * ratio;
+                    self._height = Math.max(30, self.getHeight());
+                    self._height = Math.min(maxHeight, self.getHeight());
+                    self._width = self.getHeight() * ratio;
                 } else {
                     self._width += (curX - event.originalEvent.pageX) * 2 * xMod;
                     self._height += (curY - event.originalEvent.pageY) * 2 * yMod;
-                    self._width = Math.max(30, self._width);
-                    self._height = Math.max(30, self._height);
-                    self._width = Math.min(size.x-30, self._width);
-                    self._height = Math.min(size.y-30, self._height);
+                    self._width = Math.max(30, self.getWidth());
+                    self._height = Math.max(30, self.getHeight());
+                    self._width = Math.min(size.x-30, self.getWidth());
+                    self._height = Math.min(size.y-30, self.getHeight());
 
                 }
 
@@ -175,8 +203,8 @@ L.AreaSelect = L.Class.extend({
         var size = this.map.getSize();
         var handleOffset = Math.round(this._nwHandle.offsetWidth/2);
 
-        var topBottomHeight = Math.round((size.y-this._height)/2);
-        var leftRightWidth = Math.round((size.x-this._width)/2);
+        var topBottomHeight = Math.round((size.y-this.getHeight())/2);
+        var leftRightWidth = Math.round((size.x-this.getWidth())/2);
 
         function setDimensions(element, dimension) {
             element.style.width = dimension.width + "px";

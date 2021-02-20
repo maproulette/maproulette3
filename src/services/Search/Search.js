@@ -12,6 +12,7 @@ import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
 import _findIndex from 'lodash/findIndex'
+import _split from 'lodash/split'
 import messages from './Messages'
 
 import { fromLatLngBounds } from '../MapBounds/MapBounds'
@@ -238,8 +239,10 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
   if (!_isUndefined(filters.metaReviewStatus) && filters.metaReviewStatus !== "all") {
     if (Array.isArray(filters.metaReviewStatus)){
       let metaReviewStatuses = _clone(filters.metaReviewStatus)
+      const reviewStatus = Array.isArray(filters.reviewStatus) ?
+        filters.reviewStatus : _split(filters.reviewStatus, ",")
 
-      if (_findIndex(filters.reviewStatus,
+      if (_findIndex(reviewStatus,
         x => x.toString() === REVIEW_STATUS_NOT_SET.toString()) > -1) {
         // If we are searching for tasks that have no associated review requests
         // than we should also ask for those when applying the metaReviewStatus filter as well.

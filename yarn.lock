@@ -2218,6 +2218,11 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
+"@openstreetmap/id-tagging-schema@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@openstreetmap/id-tagging-schema/-/id-tagging-schema-3.0.0.tgz#63716a56da2fa9f5572dfafa5a3ff433a2d75d17"
+  integrity sha512-nbdf0Ts/wwIgkQcPb/qjmQJMB8NYY7+g7iIkWu8gZFH494qkg3DmGNlZzy1AISAf8+YSs77uAnibvZngNxZEng==
+
 "@rjsf/core@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@rjsf/core/-/core-2.1.0.tgz#00130c89959850cc90224fd14c82feaecc2b9dc8"

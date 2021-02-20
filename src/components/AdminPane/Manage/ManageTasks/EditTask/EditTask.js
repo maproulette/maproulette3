@@ -7,6 +7,7 @@ import _isFinite from 'lodash/isFinite'
 import _filter from 'lodash/filter'
 import _isEmpty from 'lodash/isEmpty'
 import _split from 'lodash/split'
+import _cloneDeep from 'lodash/cloneDeep'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -64,10 +65,13 @@ export class EditTask extends Component {
       })
     }
     else {
+      const challengeState = _cloneDeep(this.challengeState)
+      challengeState.refreshAfterSave = true
+
       this.props.history.push({
         pathname:`/admin/project/${this.props.projectId}/` +
           `challenge/${this.props.challengeId}`,
-        state: this.challengeState
+        state: challengeState
       })
     }
   }

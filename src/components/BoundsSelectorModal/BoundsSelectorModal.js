@@ -83,7 +83,9 @@ export default class BoundsSelectorModal extends Component {
                            zoomControl={false}>
                         <ZoomControl className="mr-z-1000" position='topright' />
                         <SourcedTileLayer source={defaultLayerSource()} skipAttribution={true} />
-                        <AreaSelect onBoundsChanged={(mapBounds) => this.setState({mapBounds})} />
+                        <AreaSelect
+                          bounds={boundingBox}
+                          onBoundsChanged={(mapBounds) => this.setState({mapBounds})} />
                       </Map>
                     </MapPane>
                   </div>

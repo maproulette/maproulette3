@@ -84,7 +84,7 @@ export class LayerToggle extends Component {
           className={
             this.props.source.id === layer.id ? 'mr-text-current' : 'mr-text-green-lighter hover:mr-text-current'
           }
-          onClick={() => this.props.changeLayer(layer.id)}
+          onClick={() => this.props.changeLayer(layer.id, this.props.mapType)}
         >
           {layer.name}
         </button>

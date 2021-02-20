@@ -26,6 +26,8 @@ import { jsSchema as discoverabilityJsSchema,
          uiSchema as discoverabilityUiSchema } from './Schemas/DiscoverabilitySchema'
 import { jsSchema as tagsJsSchema,
          uiSchema as tagsUiSchema } from './Schemas/TagsSchema'
+import { jsSchema as editorJsSchema,
+         uiSchema as editorUiSchema } from './Schemas/EditorSchema'
 import MenuStep from './MenuStep'
 import messages from './Messages'
 
@@ -121,6 +123,15 @@ const tagsStep = {
   viewBox: "0 0 100 125",
 }
 
+const editorConfStep = {
+  id: 'Editor',
+  description: <FormattedMessage {...messages.editorStepDescription} />,
+  jsSchema: editorJsSchema,
+  uiSchema: editorUiSchema,
+  icon: "editor-configuration-icon",
+  viewBox: "0 0 126 129",
+}
+
 const advancedOptionsStep = {
   id: 'AdvancedOptions',
   component: props => (
@@ -169,6 +180,7 @@ const newChallengeSteps = {
       'Basemap',
       'Properties',
       'Tags',
+      'Editor',
     ],
     previous: 'Instructions',
     canFinish: true,
@@ -208,6 +220,11 @@ const newChallengeSteps = {
     previous: 'AdvancedOptions',
     canFinish: true,
   }),
+  'Editor': Object.assign({}, editorConfStep, {
+    next: 'AdvancedOptions',
+    previous: 'AdvancedOptions',
+    canFinish: true,
+  }),
 }
 
 // String together workflow steps for editing an existing challenge
@@ -224,6 +241,7 @@ const editChallengeSteps = {
       'Basemap',
       'Properties',
       'Tags',
+      'Editor',
     ],
     previous: null,
     canFinish: true,
@@ -274,6 +292,11 @@ const editChallengeSteps = {
     canFinish: true,
   }),
   'Tags': Object.assign({}, tagsStep, {
+    next: 'AllOptions',
+    previous: 'AllOptions',
+    canFinish: true,
+  }),
+  'Editor': Object.assign({}, editorConfStep, {
     next: 'AllOptions',
     previous: 'AllOptions',
     canFinish: true,

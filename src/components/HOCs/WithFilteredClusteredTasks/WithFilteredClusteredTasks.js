@@ -279,7 +279,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       )
     }
 
-    componentDidMount() {
+    setupFilters = () => {
       let useURLFilters = false
       const criteria =
          this.props.history.location.search ?
@@ -339,6 +339,10 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       }
     }
 
+    componentDidMount() {
+      this.setupFilters()
+    }
+
     componentDidUpdate(prevProps, prevState) {
       if (!_isEqual(_get(prevProps[tasksProp], 'tasks'), _get(this.props[tasksProp], 'tasks')) ||
           _get(prevProps[tasksProp], 'fetchId') !== _get(this.props[tasksProp], 'fetchId')) {
@@ -362,6 +366,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         toggleIncludedMetaReviewStatus={this.toggleIncludedMetaReviewStatus}
         toggleIncludedTaskPriority={this.toggleIncludedPriority}
         clearAllFilters={this.clearAllFilters}
+        setupFilters={this.setupFilters}
         {..._omit(this.props, outputProp)}
       />
     }
