@@ -93,7 +93,6 @@ export default class MobileTaskDetails extends Component {
   }
 
   render() {
-    console.log(this.props.task.place?.address)
     if (!this.props.task) {
       return null
     }
