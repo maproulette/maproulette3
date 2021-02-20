@@ -7,7 +7,7 @@ import _isString from 'lodash/isString'
 
 export default class PlaceDescription extends Component {
   render() {
-    const addr = _get(this.props, 'place.address')
+    const addr = _get(this.props, 'address')
     const scaleDescriptions = []
 
     if (_isObject(addr)) {
@@ -25,11 +25,7 @@ export default class PlaceDescription extends Component {
       }
 
       if (_isString(addr.county)) {
-        scaleDescriptions.push(
-          addr.county.toLowerCase().indexOf('county') === -1 ?
-          `${addr.county} County` :
-          addr.county
-        )
+        scaleDescriptions.push(addr.county)
       }
 
       if (_isString(addr.state)) {
@@ -45,7 +41,7 @@ export default class PlaceDescription extends Component {
     }
 
     return (
-      <div className={classNames('place-description', this.props.className)}>
+      <div data-testid="place-description" className={classNames('place-description', this.props.className)}>
         {scaleDescriptions.length === 0 ? null : scaleDescriptions.join(', ')}
       </div>
     )
@@ -53,5 +49,5 @@ export default class PlaceDescription extends Component {
 }
 
 PlaceDescription.propTypes = {
-  place: PropTypes.object,
+  address: PropTypes.object,
 }
