@@ -39,7 +39,7 @@ export default class MobileTaskDetails extends Component {
       <div className="mobile-task-details__info">
         <ChallengeInfoSummary {...props} />
         <TaskLocationMap key={this.props.task.id} {...this.props} />
-        <PlaceDescription place={this.props.task.place} />
+        <PlaceDescription address={this.props.task.place?.address} />
         <TaskLatLon task={this.props.task} />
         <div className="mobile-task-details__info__description">
           <MarkdownContent markdown={this.props.task.parent.description ||
@@ -93,6 +93,7 @@ export default class MobileTaskDetails extends Component {
   }
 
   render() {
+    console.log(this.props.task.place?.address)
     if (!this.props.task) {
       return null
     }

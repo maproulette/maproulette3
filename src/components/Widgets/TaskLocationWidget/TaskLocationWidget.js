@@ -88,7 +88,7 @@ export default class TaskLocationWidget extends Component {
         </div>
 
         <PlaceDescription
-          place={this.props.task.place}
+          address={this.props.task.place?.address}
           className="mr-text-xs mr-mt-4"
         />
 
