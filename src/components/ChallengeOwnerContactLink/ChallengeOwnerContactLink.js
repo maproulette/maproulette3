@@ -4,9 +4,10 @@ import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { FormattedMessage } from 'react-intl'
 import BusySpinner from '../BusySpinner/BusySpinner'
+import WithErrors from '../HOCs/WithErrors/WithErrors'
 import messages from './Messages'
 
-export default class ChallengeOwnerContactLink extends Component {
+export class ChallengeOwnerContactLinkInternal extends Component {
   state = {
     contactUrl: null,
     osmUsername: null,
@@ -14,7 +15,7 @@ export default class ChallengeOwnerContactLink extends Component {
   }
 
   updateContactOwnerUrl = () => {
-    const ownerOSMId = _get(this.props, 'task.parent.owner')
+    const ownerOSMId = _get(this.props, 'task.parent.owner') || _get(this.props, 'task.parent.parent.owner')
     if (_isFinite(ownerOSMId) && ownerOSMId > 0) {
       this.setState({updatingUrl: true})
       this.props.fetchOSMUser(ownerOSMId).then(osmUserData => {
@@ -28,6 +29,8 @@ export default class ChallengeOwnerContactLink extends Component {
       }).catch(error => {
         this.setState({updatingUrl: false})
       })
+    } else {
+      this.props.addError(messages.noOwnerFound)
     }
   }
 
@@ -73,7 +76,11 @@ export default class ChallengeOwnerContactLink extends Component {
   }
 }
 
-ChallengeOwnerContactLink.propTypes = {
+ChallengeOwnerContactLinkInternal.propTypes = {
   task: PropTypes.object,
   fetchOSMUser: PropTypes.func.isRequired,
 }
+
+const ChallengeOwnerContactLink = WithErrors(ChallengeOwnerContactLinkInternal);
+
+export default ChallengeOwnerContactLink;
