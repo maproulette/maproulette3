@@ -13,4 +13,9 @@ export default defineMessages({
     id: 'Task.controls.contactLink.label',
     defaultMessage: 'Message {owner} through OSM',
   },
+
+  noOwnerFound: {
+    id: 'Task.controls.noOwnerFound.label',
+    defaultMessage: 'Challenge Owner could not be found',
+  }
 })
