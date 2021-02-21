@@ -300,6 +300,7 @@
   "Admin.ProjectDashboard.controls.delete.label": "Delete Project",
   "Admin.ProjectDashboard.controls.edit.label": "Edit Project",
   "Admin.ProjectDashboard.controls.manageChallenges.label": "Manage Challenges",
+  "Admin.ProjectDashboard.projectNotFound": "Project Not Found",
   "Admin.ProjectManagers.addManager": "Add Project Manager",
   "Admin.ProjectManagers.controls.chooseOSMUser.placeholder": "OpenStreetMap username",
   "Admin.ProjectManagers.controls.chooseTeam.placeholder": "Team name",

@@ -57,7 +57,7 @@ export const defaultDashboardSetup = function() {
   }
 }
 
-export class ProjectDashboard extends Component {
+export class ProjectDashboardInternal extends Component {
   deleteProject = () => {
     this.props.deleteProject(this.props.project.id).then(() => {
       this.props.history.replace('/admin/projects')
@@ -65,8 +65,20 @@ export class ProjectDashboard extends Component {
   }
 
   render() {
+    if (this.props.loadingProject) {
+      return (
+        <div data-testid="loading-indicator">
+          <BusySpinner  />
+        </div>
+      )
+    }
+
     if (!this.props.project) {
-      return <BusySpinner />
+      return (
+        <div className="nav-title">
+          <FormattedMessage {...messages.projectNotFound} />
+        </div>
+      )
     }
 
     const manager = AsManager(this.props.user)
@@ -89,7 +101,6 @@ export class ProjectDashboard extends Component {
                   <span className="mr-mx-4 mr-text-pink mr-text-sm">
                     <FormattedMessage {...manageMessages.virtualHeader} />
                   </span> : null}
-                {this.props.loadingProject && <BusySpinner inline />}
               </a>
             </li>
           </ul>
@@ -131,7 +142,7 @@ export class ProjectDashboard extends Component {
     )
 
     return (
-      <div className="admin__manage project-dashboard">
+      <div data-testid="project-dashboard" className="admin__manage project-dashboard">
         <WidgetWorkspace
           {...this.props}
           lightMode={false}
@@ -147,21 +158,28 @@ export class ProjectDashboard extends Component {
   }
 }
 
-ProjectDashboard.propTypes = {
+ProjectDashboardInternal.propTypes = {
   /** The parent project of the challenge */
   project: PropTypes.object,
   /** Set to true if the project data is still being retrieved */
   loadingProject: PropTypes.bool,
   /** Set to true if the challenges data are still being retrieved */
   loadingChallenges: PropTypes.bool,
+
+  /** These props are required by WidgetWorkspace and directly passed to it, thereby they are required here */
+  name: PropTypes.string.isRequired,
+  targets: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]).isRequired,
+  defaultConfiguration: PropTypes.func.isRequired,
 }
 
-export default
-WithManageableProjects(
+const ProjectDashboard = WithManageableProjects(
   WithCurrentProject(
     WithWidgetWorkspaces(
       WithDashboardEntityFilter(
-        injectIntl(ProjectDashboard),
+        injectIntl(ProjectDashboardInternal),
         'challenge',
         'challenges',
         'pinnedChallenges',
@@ -179,3 +197,5 @@ WithManageableProjects(
     }
   )
 )
+
+export default ProjectDashboard
