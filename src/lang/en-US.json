@@ -1612,7 +1612,7 @@
   "Widgets.SupplementalMapWidget.title": "Supplemental Map",
   "Widgets.TagDiffWidget.controls.editTags.label": "Edit Tags",
   "Widgets.TagDiffWidget.controls.viewAllTags.label": "Show all Tags",
-  "Widgets.TagDiffWidget.label": "Cooperativees",
+  "Widgets.TagDiffWidget.label": "Tag Fix",
   "Widgets.TagDiffWidget.title": "Proposed OSM Tag Changes",
   "Widgets.TagMetricsWidget.label": "Tag Metrics",
   "Widgets.TagMetricsWidget.title": "Tag Metrics",
