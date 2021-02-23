@@ -49,6 +49,7 @@ export const defaultWorkspaceSetup = function() {
     ],
     excludeWidgets: [
       'TaskCompletionWidget',
+      'TagDiffWidget',
     ]
   }
 }

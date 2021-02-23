@@ -56,7 +56,10 @@ export const WithCooperativeWork = function(WrappedComponent) {
         }))
       }
       catch(error) {
-        this.props.addErrorWithDetails(AppErrors.task.cooperativeFailure, error.message)
+        this.props.addErrorWithDetails(
+          AppErrors.task.cooperativeFailure,
+          error.message || error.defaultMessage
+        )
         this.setState({loadingOSMData: false})
         return
       }

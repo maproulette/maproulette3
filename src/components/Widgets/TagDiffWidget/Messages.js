@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   label: {
     id: "Widgets.TagDiffWidget.label",
-    defaultMessage: "Cooperativees",
+    defaultMessage: "Tag Fix",
   },
 
   title: {
