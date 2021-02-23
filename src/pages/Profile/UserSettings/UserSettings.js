@@ -25,6 +25,8 @@ import { LayerSources }
       from '../../../services/VisibleLayer/LayerSources'
 import { NotificationSubscriptionType, keysByNotificationType }
        from '../../../services/Notification/NotificationType/NotificationType'
+import { ChallengeBasemap }
+      from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 import AsEditableUser from '../../../interactions/User/AsEditableUser'
 import WithStatus from '../../../components/HOCs/WithStatus/WithStatus'
 import BusySpinner from '../../../components/BusySpinner/BusySpinner'
@@ -240,6 +242,11 @@ class UserSettings extends Component {
     // in the list.
     if (this.state.settingsFormData.customBasemaps) {
       userSettings.customBasemaps = this.state.settingsFormData.customBasemaps
+    }
+
+    // If we still have no default basemap, let's set it to a default of "-1"
+    if (!userSettings.defaultBasemap) {
+      userSettings.defaultBasemap = ChallengeBasemap.none.toString()
     }
 
     const notificationSettings = _merge(
