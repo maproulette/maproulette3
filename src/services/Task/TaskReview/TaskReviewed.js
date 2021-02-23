@@ -71,7 +71,7 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
       api.tasks.reviewed,
       {
         schema: {tasks: [taskSchema()]},
-        params: {mappers, reviewers, metaReviewers, limit, sort, order, page,
+        params: {users: mappers, reviewers, metaReviewers, limit, sort, order, page,
                  ...searchParameters, includeTags, asMetaReview,
                  allowReviewNeeded: (!asReviewer && !asMetaReviewer && !asMetaReview)},
       }
