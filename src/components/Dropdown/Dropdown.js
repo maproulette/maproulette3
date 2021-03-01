@@ -25,11 +25,14 @@ const Dropdown = ({
   const referenceRef = useRef();
   const popperRef = useRef();
 
-  const toggle = useCallback((bool) => {
-    setActive(bool);
-    toggleVisible();
-    setTimeout(() => setVisible(bool), 1);
-  }, [toggleVisible]);
+  const toggle = useCallback(
+    (bool) => {
+      setActive(bool);
+      toggleVisible();
+      setTimeout(() => setVisible(bool), 1);
+    },
+    [toggleVisible]
+  );
 
   const { styles, attributes, forceUpdate } = usePopper(
     referenceRef.current,
@@ -55,12 +58,14 @@ const Dropdown = ({
   }, [active, forceUpdate]);
 
   useEffect(() => {
-    if (isVisible && !active) {
-      toggle(true);
-    }
+    if (isVisible !== undefined) {
+      if (isVisible && !active) {
+        toggle(true);
+      }
 
-    if (!isVisible && active) {
-      toggle(false);
+      if (!isVisible && active) {
+        toggle(false);
+      }
     }
   }, [isVisible, active, toggle]);
 
@@ -85,12 +90,10 @@ const Dropdown = ({
   };
 
   return (
-    <div
-      data-testid="mr-dropdown"
-      className={classNames("mr-dropdown", className)}
-      {...rootProps}
-    >
-      <div ref={referenceRef}>{dropdownButton(renderFuncArgs)}</div>
+    <div data-testid="mr-dropdown" {...rootProps}>
+      <div ref={referenceRef} className={classNames("mr-dropdown", className)}>
+        {dropdownButton(renderFuncArgs)}
+      </div>
       <Portal>
         <div
           ref={popperRef}
@@ -99,9 +102,7 @@ const Dropdown = ({
           {...attributes.popper}
         >
           {active && (
-            <div
-              style={{ visibility: visible ? "visible" : "hidden" }}
-            >
+            <div style={{ visibility: visible ? "visible" : "hidden" }}>
               <div className="mr-dropdown__main">
                 <div
                   className={classNames("mr-dropdown__inner", innerClassName, {
@@ -132,11 +133,11 @@ Dropdown.propTypes = {
   arrowClassName: PropTypes.string,
   toggleVisible: PropTypes.func,
   isVisible: PropTypes.bool,
-  placement: PropTypes.string
+  placement: PropTypes.string,
 };
 
 Dropdown.defaultProps = {
-  toggleVisible: () => null
-}
+  toggleVisible: () => null,
+};
 
 export default Dropdown;
