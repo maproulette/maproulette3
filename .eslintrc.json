@@ -1,0 +1,28 @@
+{
+  "root": true,
+  "parser": "babel-eslint",
+  "plugins": ["react", "react-hooks", "jest"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "react/display-name": "warn",
+    "react/jsx-key": "warn",
+    "react/no-unescaped-entities": "warn",
+    "react/jsx-no-duplicate-props": "warn",
+    "react/jsx-no-target-blank": "warn",
+    "react/no-unknown-property": "warn",
+    "react/prop-types": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx"],
+      "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "jsx": true
+        }
+      }
+    }
+  ],
+  "extends": ["plugin:react/recommended"]
+}

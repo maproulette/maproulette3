@@ -10,6 +10,7 @@
     "@nivo/bar": "^0.62.0",
     "@nivo/line": "^0.62.0",
     "@nivo/radar": "^0.62.0",
+    "@popperjs/core": "^2.8.4",
     "@rjsf/core": "^2.1.0",
     "@turf/bbox": "^6.0.1",
     "@turf/bbox-polygon": "^6.0.1",
@@ -70,6 +71,7 @@
     "react-leaflet-bing-v2": "^5.0.1",
     "react-leaflet-markercluster": "^2.0.0",
     "react-onclickoutside": "^6.6.3",
+    "react-popper": "^2.2.4",
     "react-redux": "^7.2.0",
     "react-responsive": "^8.1.0",
     "react-router": "^5.2.0",
@@ -136,5 +138,11 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  }
 }
