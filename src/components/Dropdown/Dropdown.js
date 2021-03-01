@@ -29,7 +29,7 @@ const Dropdown = ({
     setActive(bool);
     toggleVisible();
     setTimeout(() => setVisible(bool), 1);
-  }, []);
+  }, [toggleVisible]);
 
   const { styles, attributes, forceUpdate } = usePopper(
     referenceRef.current,
