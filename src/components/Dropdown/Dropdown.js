@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -25,11 +25,11 @@ const Dropdown = ({
   const referenceRef = useRef();
   const popperRef = useRef();
 
-  const toggle = (bool) => {
+  const toggle = useCallback((bool) => {
     setActive(bool);
     toggleVisible();
     setTimeout(() => setVisible(bool), 1);
-  };
+  }, []);
 
   const { styles, attributes, forceUpdate } = usePopper(
     referenceRef.current,
@@ -62,7 +62,7 @@ const Dropdown = ({
     if (!isVisible && active) {
       toggle(false);
     }
-  }, [isVisible]);
+  }, [isVisible, active, toggle]);
 
   const handleDocumentClick = (event) => {
     if (referenceRef.current.contains(event.target)) {
