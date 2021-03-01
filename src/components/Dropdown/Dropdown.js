@@ -27,6 +27,7 @@ const Dropdown = ({
 
   const toggle = (bool) => {
     setActive(bool);
+    toggleVisible();
     setTimeout(() => setVisible(bool), 1);
   };
 
@@ -53,6 +54,16 @@ const Dropdown = ({
     }
   }, [active, forceUpdate]);
 
+  useEffect(() => {
+    if (isVisible && !active) {
+      toggle(true);
+    }
+
+    if (!isVisible && active) {
+      toggle(false);
+    }
+  }, [isVisible]);
+
   const handleDocumentClick = (event) => {
     if (referenceRef.current.contains(event.target)) {
       return null;
@@ -73,9 +84,6 @@ const Dropdown = ({
     closeDropdown: () => toggle(false),
   };
 
-  const isDropdownActive = toggleVisible ? isVisible : active;
-  const isDropdownVisible = toggleVisible ? true : visible;
-
   return (
     <div
       data-testid="mr-dropdown"
@@ -90,9 +98,9 @@ const Dropdown = ({
           style={styles.popper}
           {...attributes.popper}
         >
-          {isDropdownActive && (
+          {active && (
             <div
-              style={{ visibility: isDropdownVisible ? "visible" : "hidden" }}
+              style={{ visibility: visible ? "visible" : "hidden" }}
             >
               <div className="mr-dropdown__main">
                 <div
@@ -126,5 +134,9 @@ Dropdown.propTypes = {
   isVisible: PropTypes.bool,
   placement: PropTypes.string
 };
+
+Dropdown.defaultProps = {
+  toggleVisible: () => null
+}
 
 export default Dropdown;
