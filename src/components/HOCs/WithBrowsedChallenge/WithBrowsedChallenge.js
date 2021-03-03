@@ -230,7 +230,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     ),
 
     loadChallengeActions: challengeId => {
-      return dispatch(fetchChallengeActions(challengeId))
+      return dispatch(fetchChallengeActions(challengeId, false, null, false))
     },
   }
 }

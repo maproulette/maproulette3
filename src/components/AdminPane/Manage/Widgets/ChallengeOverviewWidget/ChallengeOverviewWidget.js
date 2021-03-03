@@ -32,7 +32,8 @@ export default class ChallengeOverviewWidget extends Component {
     const manager = AsManager(this.props.user)
     const status = _get(this.props, 'challenge.status', ChallengeStatus.none)
 
-    const dataOriginDateText = !this.props.challenge.dataOriginDate ? null :
+    const dataOriginDateText =
+      (!this.props.challenge.dataOriginDate || !this.props.challenge.lastTaskRefresh) ? null :
       this.props.intl.formatMessage(messages.dataOriginDate,
         {refreshDate: this.props.intl.formatDate(parse(this.props.challenge.lastTaskRefresh)),
          sourceDate: this.props.intl.formatDate(parse(this.props.challenge.dataOriginDate))})

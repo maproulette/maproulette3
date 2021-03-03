@@ -23,4 +23,9 @@ export default defineMessages({
     id: "Admin.ProjectDashboard.controls.manageChallenges.label",
     defaultMessage: "Manage Challenges",
   },
+
+  projectNotFound: {
+    id: "Admin.ProjectDashboard.projectNotFound",
+    defaultMessage: "Project Not Found",
+  },
 })

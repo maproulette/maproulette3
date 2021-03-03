@@ -384,7 +384,7 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
  * if none is given).
  */
 export const fetchChallengeActions = function(challengeId = null, suppressReceive = false,
-                                              criteria) {
+                                              criteria, includeByPriority = true) {
   let searchParameters = {}
   if (criteria) {
     searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
@@ -397,7 +397,7 @@ export const fetchChallengeActions = function(challengeId = null, suppressReceiv
     const challengeActionsEndpoint = new Endpoint(
       _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
       {schema: [ challengeSchema() ], variables: {id: challengeId},
-       params:{...searchParameters, includeByPriority: true}}
+       params:{...searchParameters, includeByPriority}}
     )
 
     return challengeActionsEndpoint.execute().then(normalizedResults => {
@@ -437,12 +437,13 @@ export const fetchChallengeActions = function(challengeId = null, suppressReceiv
 /**
  * Fetch action metrics for all challenges in the given project.
  */
-export const fetchProjectChallengeActions = function(projectId, onlyEnabled=false) {
+export const fetchProjectChallengeActions = function(projectId, onlyEnabled=false,
+  includeByPriority=true) {
   return function(dispatch) {
     return new Endpoint(
       api.challenges.actions,
       {schema: [ challengeSchema() ], params: {projectList: projectId, onlyEnabled,
-                                               includeByPriority: true}}
+                                               includeByPriority}}
     ).execute().then(normalizedResults => {
       dispatch(receiveChallenges(normalizedResults.entities))
     }).catch(error => {
@@ -783,7 +784,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'overpassTargetType',
         'parent', 'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
         'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
-        'preferredReviewTags', 'limitTags', 'limitReviewTags', 'taskStyles', 'requiresLocal'])
+        'preferredReviewTags', 'presets', 'limitTags', 'limitReviewTags', 'taskStyles',
+        'requiresLocal'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
@@ -1061,6 +1063,10 @@ const reduceChallengesFurther = function(mergedState, oldState, challengeEntitie
 
     if (_isArray(entity.taskStyles)) {
       mergedState[entity.id].taskStyles = entity.taskStyles
+    }
+
+    if (_isArray(entity.presets)) {
+      mergedState[entity.id].presets = entity.presets
     }
   })
 }

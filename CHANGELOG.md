@@ -7,6 +7,29 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.6] - 2021-03-03
+### Added
+- Ability for challenge managers to restrict iD and RapId presets (#1012)
+- More prominent edit-tags control for Tag Fix cooperative challenges
+- Performance improvements to browse-project page
+- Updated help text describing creation of virtual projects by @mvexel
+
+### Fixed
+- Extraneous "county" label on Location widget (#1568) by @jschwarz2030
+- Endless spinner trying to manage missing project (#1537) by @jschwarz2030
+- Tag metrics limited to tasks for which a task review was requested (#1547)
+- Tasks table sometimes renders empty for manager after editing challenge
+- Saved filters not always applied correctly from Challenge Management page
+- Altering layer on Supplemental Map widget also affects Multi-Task Work widget
+- Existing priority-rule bounds not used when editing geographic rules via map
+- Multi-Task work widget displays locked tasks
+- Next task served for task review not always next successive task in queue
+- Review next nearby task requiring desired task to be selected on map
+- Internal project name sometimes shown in Task Review instead of display name
+- Tag Fix widget showing up in Task Review workspace
+- Tasks completed by others sometimes appearing in My Reviewed Tasks
+
+
 ## [v3.7.5] - 2021-02-03
 ### Added
 - More compact workspace headers (#1388)

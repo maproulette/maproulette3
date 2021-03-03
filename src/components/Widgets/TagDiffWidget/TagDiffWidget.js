@@ -40,12 +40,21 @@ export default class TagDiffWidget extends Component {
           <FormattedMessage {...messages.title} />
         }
         rightHeaderControls={
-          <button
-            className="mr-button mr-button--small"
-            onClick={() => this.setState({showDiffModal: true})}
-          >
-            <FormattedMessage {...messages.viewAllTagsLabel} />
-          </button>
+          <div className="mr-flex">
+            <button
+              className="mr-button mr-button--xsmall mr-mr-4"
+              onClick={() => this.setState({showDiffModal: true})}
+            >
+              <FormattedMessage {...messages.viewAllTagsLabel} />
+            </button>
+
+            <button
+              className="mr-button mr-button--xsmall"
+              onClick={() => this.setState({showDiffModal: true, editMode: true})}
+            >
+              <FormattedMessage {...messages.editTagsLabel} />
+            </button>
+          </div>
         }
       >
         <TagDiff {...this.props} />
@@ -53,7 +62,8 @@ export default class TagDiffWidget extends Component {
         {this.state.showDiffModal &&
          <TagDiffModal
            {...this.props}
-           onClose={() => this.setState({showDiffModal: false})}
+           editMode={this.state.editMode}
+           onClose={() => this.setState({showDiffModal: false, editMode: false})}
          />
         }
       </QuickWidget>
