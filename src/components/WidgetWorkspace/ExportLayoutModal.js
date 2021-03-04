@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import External from '../External/External'
-import Modal from '../Modal/Modal'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import messages from './Messages'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
+import External from "../External/External";
+import Modal from "../Modal/Modal";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 export default class ExportLayoutModal extends Component {
   state = {
-    exportName: '',
-  }
+    exportName: "",
+  };
 
   componentDidMount() {
-    this.setState({exportName: this.props.exportName})
+    this.setState({ exportName: this.props.exportName });
   }
 
   render() {
@@ -21,11 +21,11 @@ export default class ExportLayoutModal extends Component {
         <Modal isActive onClose={this.props.onCancel}>
           <div className="mr-flex mr-justify-between">
             <div className="mr-pt-12">
-              <SvgSymbol
+              {/* <SvgSymbol
                 sym="illustration-tasks"
                 viewBox="0 0 200 171"
                 className="mr-h-40 mr-mr-12"
-              />
+              /> */}
             </div>
 
             <div className="mr-w-full">
@@ -41,11 +41,13 @@ export default class ExportLayoutModal extends Component {
                   type="text"
                   className="mr-input"
                   value={this.state.exportName}
-                  onChange={e => this.setState({exportName: e.target.value})}
+                  onChange={(e) =>
+                    this.setState({ exportName: e.target.value })
+                  }
                 />
               </div>
 
-              <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
+              <div className="mr-flex mr-justify-start mr-items-center mr-mt-8">
                 <button
                   className="mr-button mr-button--white mr-mr-4"
                   onClick={this.props.onCancel}
@@ -64,11 +66,11 @@ export default class ExportLayoutModal extends Component {
           </div>
         </Modal>
       </External>
-    )
+    );
   }
 }
 
 ExportLayoutModal.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
-}
+};
