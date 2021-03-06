@@ -67,4 +67,4 @@ const CatAndLaptop = () => {
   );
 };
 
-export default ImportCat;
+export default CatAndLaptop;

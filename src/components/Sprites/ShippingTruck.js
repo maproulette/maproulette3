@@ -233,4 +233,4 @@ const ShippingTruck = () => {
   );
 };
 
-export default ExportTruck;
+export default ShippingTruck;
