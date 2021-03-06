@@ -18,22 +18,22 @@ export default class ExportLayoutModal extends Component {
   render() {
     return (
       <External>
-        <Modal isActive onClose={this.props.onCancel}>
-          <div className="mr-flex mr-justify-between">
-            <div className="mr-pt-12">
-              {/* <SvgSymbol
-                sym="illustration-tasks"
-                viewBox="0 0 200 171"
-                className="mr-h-40 mr-mr-12"
-              /> */}
+        <Modal narrow isActive onClose={this.props.onCancel}>
+          <div>
+            <div className="mr-flex mr-justify-center mr-my-8">
+              <SvgSymbol
+                sym="shipping-truck"
+                style={{
+                  height: 99,
+                  width: 198,
+                }}
+              />
             </div>
-
             <div className="mr-w-full">
               <h2 className="mr-text-white mr-text-4xl mr-mb-4">
                 <FormattedMessage {...messages.exportModalHeader} />
               </h2>
-
-              <div className="mr-text-white mr-text-sm mr-font-medium mr-mt-12">
+              <div className="mr-text-white mr-text-sm mr-font-medium mr-mt-6">
                 <FormattedMessage {...messages.exportModalNameLabel} />
               </div>
               <div className="mr-mt-1">
