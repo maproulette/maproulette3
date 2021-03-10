@@ -16,7 +16,7 @@ const generateMockTask = (id, challengeOwnerId) => {
 };
 
 const fetchOSMUserSuccess = () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     resolve({
       displayName: "John",
       username: "jdoe",
@@ -105,7 +105,7 @@ describe("ChallengeOwnerContactLinkInternal", () => {
   });
 
   it("renders a link to OSM if challenge owner id is missing, but project owner id is found", async () => {
-    const { rerender } = render(
+    render(
       <IntlProvider locale="en">
         <ContactLink
           task={generateMockTask(undefined, 1)}

@@ -208,7 +208,8 @@ export default class AutosuggestMentionTextArea extends Component {
               rootProps={downshift.getRootProps({}, {suppressRefError: true})}
               suppressControls
               fixedMenu={true}
-              isVisible={show}
+              isVisible={Boolean(show)}
+              placement="bottom-start"
               toggleVisible={() => _noop}
               dropdownButton={dropdown => (
                 <textarea

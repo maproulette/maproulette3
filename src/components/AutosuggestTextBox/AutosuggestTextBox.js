@@ -175,7 +175,7 @@ export default class AutosuggestTextBox extends Component {
               rootProps={downshift.getRootProps({}, {suppressRefError: true})}
               suppressControls
               fixedMenu={this.props.fixedMenu}
-              isVisible={show}
+              isVisible={Boolean(show)}
               toggleVisible={() => this.setState({highlightResult: -1})}
               dropdownButton={dropdown => (
                 <input
