@@ -14,6 +14,7 @@ Enzyme.configure({ adapter: new Adapter() });
 global.shallow = shallow;
 global.render = render;
 global.mount = mount;
+global.scrollTo = jest.fn();
 
 // React testing library methods
 const reduxStore = initializeStore();
