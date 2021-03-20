@@ -82,7 +82,7 @@ const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "c
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export class TaskAnalysisTable extends Component {
+export class TaskAnalysisTableInternal extends Component {
   state = {
     openComments: null,
     showConfigureColumns: false,
@@ -682,7 +682,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   return columns
 }
 
-TaskAnalysisTable.propTypes = {
+TaskAnalysisTableInternal.propTypes = {
   /** The tasks to display */
   taskInfo: PropTypes.shape({
     challengeId: PropTypes.number,
@@ -701,7 +701,7 @@ TaskAnalysisTable.propTypes = {
 
 export default injectIntl(
   WithConfigurableColumns(
-    TaskAnalysisTable,
+    TaskAnalysisTableInternal,
     ALL_COLUMNS,
     DEFAULT_COLUMNS,
     messages
