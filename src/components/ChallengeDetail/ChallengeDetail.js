@@ -235,7 +235,7 @@ export class ChallengeDetail extends Component {
                           className={classNames(
                             "mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-leading-none",
                             {"mr-border-r-2 mr-border-white-10 mr-pr-4 mr-mr-4": manageControl})}
-                          to={`/review?challengeId=${challenge.id}&challengeName=${challenge.name}`}
+                          to={`/review?challengeId=${challenge.id}&challengeName=${encodeURIComponent(challenge.name)}`}
                         >
                           <FormattedMessage {...messages.viewReviews} />
                         </Link>
