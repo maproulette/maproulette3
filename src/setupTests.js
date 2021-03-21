@@ -2,6 +2,8 @@ import "@testing-library/jest-dom";
 import React, { Fragment } from "react";
 import Enzyme, { shallow, render, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
+import { createBrowserHistory } from "history";
+import { Router } from "react-router-dom";
 import { render as rtlRender } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { IntlProvider } from "react-intl";
@@ -18,6 +20,7 @@ global.scrollTo = jest.fn();
 
 // React testing library methods
 const reduxStore = initializeStore();
+const routerHistory = createBrowserHistory();
 
 global.withProvider = (
   ui,
@@ -27,7 +30,9 @@ global.withProvider = (
     return (
       <Fragment>
         <Provider store={store}>
-          <IntlProvider locale="en">{children}</IntlProvider>
+          <IntlProvider locale="en">
+            <Router history={routerHistory}>{children}</Router>
+          </IntlProvider>
         </Provider>
         <div id="external-root"></div>
       </Fragment>
