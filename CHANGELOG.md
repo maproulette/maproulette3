@@ -7,6 +7,20 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.7] - 2021-04-07
+### Added
+- Ability to see and add comments in the Task Bundle widget
+
+### Fixed
+- Dropdown menu positioning issues
+- Task Overview page "Review" link now passes more accurate filtering tags
+- Bump elliptic from 6.5.3 to 6.5.4
+- Bump y18n from 4.0.0 to 4.0.1
+
+### Changed
+- New import/export modal design and images
+
+
 ## [v3.7.6] - 2021-03-03
 ### Added
 - Ability for challenge managers to restrict iD and RapId presets (#1012)

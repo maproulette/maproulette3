@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import { ReactComponent as ExpertImage } from '../../static/images/expert.svg'
-import { ReactComponent as FindImage } from '../../static/images/find.svg'
-import { ReactComponent as TeamsImage } from '../../static/images/teams.svg'
-import messages from './Messages'
+import React, { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { ReactComponent as ExpertImage } from "../../static/images/expert.svg";
+import { ReactComponent as FindImage } from "../../static/images/find.svg";
+import { ReactComponent as TeamsImage } from "../../static/images/teams.svg";
+import messages from "./Messages";
 
 class Intro extends Component {
   render() {
@@ -25,7 +25,10 @@ class Intro extends Component {
           <div className="mr-flex mr-justify-between mr-text-white mr-font-light mr-w-3/4">
             <div className="mr-w-52 mr-mx-4">
               <div className="mr-w-full mr-h-40">
-                <ExpertImage viewBox="0 0 236 172" className="mr-w-full mr-h-full" />
+                <ExpertImage
+                  viewBox="0 0 236 172"
+                  className="mr-w-full mr-h-full"
+                />
               </div>
               <h3 className="mr-font-light mr-mt-4">
                 <FormattedMessage {...messages.introFirstBullet} />
@@ -34,7 +37,10 @@ class Intro extends Component {
 
             <div className="mr-w-52 mr-mx-4">
               <div className="mr-w-full mr-h-40">
-                <FindImage viewBox="0 0 277 162" className="mr-w-full mr-h-full" />
+                <FindImage
+                  viewBox="0 0 277 162"
+                  className="mr-w-full mr-h-full"
+                />
               </div>
               <h3 className="mr-font-light mr-mt-4">
                 <FormattedMessage {...messages.introSecondBullet} />
@@ -43,7 +49,10 @@ class Intro extends Component {
 
             <div className="mr-w-52 mr-mx-4">
               <div className="mr-w-full mr-h-40 mr-relative">
-                <TeamsImage viewBox="0 0 687 350" className="mr-w-full mr-h-full" />
+                <TeamsImage
+                  viewBox="0 -30 400 237"
+                  className="mr-w-full mr-h-full"
+                />
               </div>
               <h3 className="mr-font-light mr-mt-4">
                 <FormattedMessage {...messages.introThirdBullet} />
@@ -52,8 +61,8 @@ class Intro extends Component {
           </div>
         </div>
       </section>
-    )
+    );
   }
 }
 
-export default Intro
+export default Intro;

@@ -7,3 +7,4 @@ minimum_perc = 10
 source_file = src/lang/en-US.json
 source_lang = en
 type = KEYVALUEJSON
+

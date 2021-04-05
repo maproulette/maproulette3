@@ -1,39 +1,39 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import External from '../External/External'
-import Modal from '../Modal/Modal'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import messages from './Messages'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
+import External from "../External/External";
+import Modal from "../Modal/Modal";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 export default class ExportLayoutModal extends Component {
   state = {
-    exportName: '',
-  }
+    exportName: "",
+  };
 
   componentDidMount() {
-    this.setState({exportName: this.props.exportName})
+    this.setState({ exportName: this.props.exportName });
   }
 
   render() {
     return (
       <External>
-        <Modal isActive onClose={this.props.onCancel}>
-          <div className="mr-flex mr-justify-between">
-            <div className="mr-pt-12">
+        <Modal narrow isActive onClose={this.props.onCancel}>
+          <div>
+            <div className="mr-flex mr-justify-center mr-my-8">
               <SvgSymbol
-                sym="illustration-tasks"
-                viewBox="0 0 200 171"
-                className="mr-h-40 mr-mr-12"
+                sym="shipping-truck"
+                style={{
+                  height: 99,
+                  width: 198,
+                }}
               />
             </div>
-
             <div className="mr-w-full">
               <h2 className="mr-text-white mr-text-4xl mr-mb-4">
                 <FormattedMessage {...messages.exportModalHeader} />
               </h2>
-
-              <div className="mr-text-white mr-text-sm mr-font-medium mr-mt-12">
+              <div className="mr-text-white mr-text-sm mr-font-medium mr-mt-6">
                 <FormattedMessage {...messages.exportModalNameLabel} />
               </div>
               <div className="mr-mt-1">
@@ -41,11 +41,13 @@ export default class ExportLayoutModal extends Component {
                   type="text"
                   className="mr-input"
                   value={this.state.exportName}
-                  onChange={e => this.setState({exportName: e.target.value})}
+                  onChange={(e) =>
+                    this.setState({ exportName: e.target.value })
+                  }
                 />
               </div>
 
-              <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
+              <div className="mr-flex mr-justify-start mr-items-center mr-mt-8">
                 <button
                   className="mr-button mr-button--white mr-mr-4"
                   onClick={this.props.onCancel}
@@ -64,11 +66,11 @@ export default class ExportLayoutModal extends Component {
           </div>
         </Modal>
       </External>
-    )
+    );
   }
 }
 
 ExportLayoutModal.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
-}
+};

@@ -347,7 +347,7 @@ const BuildBundle = props => {
           taskData={_get(props, 'taskInfo.tasks')}
           totalTaskCount={totalTaskCount}
           totalTasksInChallenge={ calculateTasksInChallenge(props) }
-          showColumns={['selected', 'featureId', 'id', 'status', 'priority']}
+          showColumns={['selected', 'featureId', 'id', 'status', 'priority', 'comments']}
           taskSelectionStatuses={[TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard]}
           taskSelectionReviewStatuses={[]}
           customHeaderControls={bundleButton}
