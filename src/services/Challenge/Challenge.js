@@ -784,8 +784,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'overpassTargetType',
         'parent', 'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
         'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
-        'preferredReviewTags', 'presets', 'limitTags', 'limitReviewTags', 'taskStyles',
-        'requiresLocal'])
+        'preferredReviewTags', 'presets', 'limitTags', 'limitReviewTags', 'taskBundleIdProperty',
+        'taskStyles', 'requiresLocal'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.

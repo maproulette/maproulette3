@@ -549,6 +549,20 @@ will not be able to make sense of it.
       "first matching feature property from each task.",
   },
 
+  taskBundleIdPropertyLabel: {
+    id: "Admin.EditChallenge.form.taskBundlePropertyId.label",
+    defaultMessage: "Task Bundle Id Property"
+  },
+
+  taskBundleIdPropertyDescription: {
+    id: 'Admin.EditChallenge.form.taskBundlePropertyId.description',
+    defaultMessage: "The name of the task feature property to treat as " +
+      "a bundle ID for related tasks. " +
+      "Tasks without this property will remain as isolated tasks. " +
+      "[Learn more]" +
+      "(https://learn.maproulette.org/documentation/setting-task-bundle-identifiers/)."
+  },
+
   osmIdPropertyLabel: {
     id: 'Admin.EditChallenge.form.osmIdProperty.label',
     defaultMessage: "OSM/External Id Property"

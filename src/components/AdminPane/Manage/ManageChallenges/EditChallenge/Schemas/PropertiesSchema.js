@@ -20,6 +20,10 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
+      taskBundleIdProperty: {
+        title: intl.formatMessage(messages.taskBundleIdPropertyLabel),
+        type: "string",
+      },
       osmIdProperty: {
         title: intl.formatMessage(messages.osmIdPropertyLabel),
         type: "string",
@@ -52,12 +56,17 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
   const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
 
   return {
+    taskBundleIdProperty: {
+      "ui:emptyValue": "",
+      "ui:help": intl.formatMessage(messages.taskBundleIdPropertyDescription),
+      "ui:collapsed": isCollapsed,
+      "ui:toggleCollapsed": toggleCollapsed,
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.propertiesStepHeader) : undefined,
+    },
     osmIdProperty: {
       "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.osmIdPropertyDescription),
       "ui:collapsed": isCollapsed,
-      "ui:toggleCollapsed": toggleCollapsed,
-      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.propertiesStepHeader) : undefined,
     },
     customTaskStyles: {
       "ui:field": "configureCustomTaskStyles",
