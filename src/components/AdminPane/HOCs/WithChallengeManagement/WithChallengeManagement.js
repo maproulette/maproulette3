@@ -3,6 +3,7 @@ import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _compact from 'lodash/compact'
+import bundleByTaskBundleId from "../../../../utils/bundleByTaskBundleId";
 import { saveChallenge,
          uploadChallengeGeoJSON,
          setIsEnabled,
@@ -41,6 +42,37 @@ const WithChallengeManagement = WrappedComponent =>
       'creatingTasks'
     ), 'deletingTasks'
   )
+
+/**
+  Method used to convert remote or local data structures into bundled line-by-line GeoJson.
+  Any errors will delicately return false to allow parent methods to continue other processes.
+ *
+ * @private
+ */
+ async function convertAndBundleGeoJson(challenge) {
+  try {
+    let data = {};
+
+    if (challenge.remoteGeoJson) {
+      data = await fetch(challenge.remoteGeoJson).then((response) =>
+        response.json()
+      );
+    }
+
+    if (data.features) {
+      const bundled = bundleByTaskBundleId(
+        data.features,
+        challenge.taskBundleIdProperty
+      );
+      return bundled;
+    }
+
+    return false;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
 
 /**
  * Upload a line-by-line GeoJSON file in chunks of 100 lines/tasks, updating
@@ -123,19 +155,44 @@ async function deleteIncompleteTasks(dispatch, ownProps, challenge) {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  saveChallenge: async challengeData => {
-    return dispatch(saveChallenge(challengeData)).then(async challenge => {
-      // If we have line-by-line GeoJSON, we need to stream that separately
-      if (_isObject(challenge) && challengeData.lineByLineGeoJSON) {
-        await uploadLineByLine(dispatch, ownProps, challenge, challengeData.lineByLineGeoJSON)
-        ownProps.updateCreatingTasksProgress(false)
-      }
+  saveChallenge: async (challengeData) => {
+    let prebundled;
 
-      return challenge
-    }).catch(error => {
-      console.log(error)
-      return null
-    })
+    if (challengeData.taskBundleIdProperty) {
+      prebundled = await convertAndBundleGeoJson(challengeData);
+      challengeData.remoteGeoJson = undefined;
+    }
+
+    return dispatch(saveChallenge(challengeData))
+      .then(async (challenge) => {
+        // If we have line-by-line GeoJSON, we need to stream that separately
+        if (_isObject(challenge)) {
+          if (prebundled) {
+            await dispatch(
+              uploadChallengeGeoJSON(
+                challenge.id,
+                prebundled.join("\n"),
+                true,
+                false
+              )
+            );
+          } else if (challengeData.lineByLineGeoJSON) {
+            await uploadLineByLine(
+              dispatch,
+              ownProps,
+              challenge,
+              challengeData.lineByLineGeoJSON
+            );
+            ownProps.updateCreatingTasksProgress(false);
+          }
+        }
+
+        return challenge;
+      })
+      .catch((error) => {
+        console.log(error);
+        return null;
+      });
   },
 
   moveChallenge: (challengeId, toProjectId) =>
