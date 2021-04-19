@@ -17,21 +17,16 @@ const bundleByTaskBundleId = (tasks, externalId) => {
     });
 
     let bundledTask;
+    let features = [];
 
-    if (matchingTasks.length > 1) {
-      let features = [];
-
-      for (let j = 0; j < matchingTasks.length; j++) {
-        features = features.concat(matchingTasks[j]);
-      }
-
-      bundledTask = {
-        type: "FeatureCollection",
-        features,
-      };
-    } else {
-      bundledTask = matchingTasks[0];
+    for (let j = 0; j < matchingTasks.length; j++) {
+      features = features.concat(matchingTasks[j]);
     }
+
+    bundledTask = {
+      type: "FeatureCollection",
+      features,
+    };
 
     const nonMatchingTasks = leftoverTasks.filter((t) => {
       if (t.properties[externalId] !== id) {
@@ -58,7 +53,7 @@ const bundleByTaskBundleId = (tasks, externalId) => {
     }
   }
 
-  return bundled;
+  return bundled.join("\n");
 };
 
 export default bundleByTaskBundleId;

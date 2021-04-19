@@ -4,6 +4,7 @@ import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _compact from 'lodash/compact'
 import bundleByTaskBundleId from "../../../../utils/bundleByTaskBundleId";
+import createBlob from "../../../../utils/createBlob";
 import { saveChallenge,
          uploadChallengeGeoJSON,
          setIsEnabled,
@@ -44,8 +45,9 @@ const WithChallengeManagement = WrappedComponent =>
   )
 
 /**
-  Method used to convert remote or local data structures into bundled line-by-line GeoJson.
-  Any errors will delicately return false to allow parent methods to continue other processes.
+ * Method used to direct remote or local data structures into line-by-line GeoJson format
+ * if a taskBundleIdProperty is provided. Any errors will be treated silently and return false
+ * to allow parent methods to continue other processes.
  *
  * @private
  */
@@ -53,18 +55,27 @@ const WithChallengeManagement = WrappedComponent =>
   try {
     let data = {};
 
-    if (challenge.remoteGeoJson) {
-      data = await fetch(challenge.remoteGeoJson).then((response) =>
-        response.json()
-      );
-    }
+    if (challenge.taskBundleIdProperty) {
+      if (challenge.remoteGeoJson) {
+        data = await fetch(challenge.remoteGeoJson).then((response) =>
+          response.json()
+        );
+      } else if (challenge.localGeoJSON) {
+        data = JSON.parse(challenge.localGeoJSON);
+      }
 
-    if (data.features) {
-      const bundled = bundleByTaskBundleId(
-        data.features,
-        challenge.taskBundleIdProperty
-      );
-      return bundled;
+      debugger;
+  
+      if (data.features) {
+        const bundled = bundleByTaskBundleId(
+          data.features,
+          challenge.taskBundleIdProperty
+        );
+
+        debugger;
+
+        return bundled;
+      }
     }
 
     return false;
@@ -156,35 +167,29 @@ async function deleteIncompleteTasks(dispatch, ownProps, challenge) {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   saveChallenge: async (challengeData) => {
-    let prebundled;
+    const prebundled = await convertAndBundleGeoJson(challengeData);
 
-    if (challengeData.taskBundleIdProperty) {
-      prebundled = await convertAndBundleGeoJson(challengeData);
+    //If the prebundler succeeds, mutate challenge data to fit line-by-line criteria
+    if (prebundled) {
       challengeData.remoteGeoJson = undefined;
+      challengeData.localGeoJSON = undefined;
+      challengeData.overpassTargetType = null;
+      challengeData.source = "Local File";
+      challengeData.lineByLineGeoJSON = createBlob(prebundled);
     }
 
     return dispatch(saveChallenge(challengeData))
       .then(async (challenge) => {
         // If we have line-by-line GeoJSON, we need to stream that separately
-        if (_isObject(challenge)) {
-          if (prebundled) {
-            await dispatch(
-              uploadChallengeGeoJSON(
-                challenge.id,
-                prebundled.join("\n"),
-                true,
-                false
-              )
-            );
-          } else if (challengeData.lineByLineGeoJSON) {
-            await uploadLineByLine(
-              dispatch,
-              ownProps,
-              challenge,
-              challengeData.lineByLineGeoJSON
-            );
-            ownProps.updateCreatingTasksProgress(false);
-          }
+        if (_isObject(challenge) && challengeData.lineByLineGeoJSON) {
+          await uploadLineByLine(
+            dispatch,
+            ownProps,
+            challenge,
+            challengeData.lineByLineGeoJSON
+          );
+          
+          ownProps.updateCreatingTasksProgress(false);
         }
 
         return challenge;
