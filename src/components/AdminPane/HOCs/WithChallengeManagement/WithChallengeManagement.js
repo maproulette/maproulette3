@@ -51,6 +51,35 @@ const WithChallengeManagement = WrappedComponent =>
  *
  * @private
  */
+ async function rebuildPrebundle(challenge, localFile) {
+  try {
+    if (challenge.taskBundleIdProperty) {
+      if (localFile) {
+        const data = await new Response(localFile).text()
+
+        const bundled = bundleByTaskBundleId(
+          JSON.parse(data).features,
+          challenge.taskBundleIdProperty
+        );
+
+        return createBlob(bundled);
+      }
+    }
+
+    return false;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
+/**
+ * Method used to direct remote or local data structures into line-by-line GeoJson format
+ * if a taskBundleIdProperty is provided. Any errors will be treated silently and return false
+ * to allow parent methods to continue other processes.
+ *
+ * @private
+ */
  async function convertAndBundleGeoJson(challenge) {
   try {
     let data = {};
@@ -63,16 +92,12 @@ const WithChallengeManagement = WrappedComponent =>
       } else if (challenge.localGeoJSON) {
         data = JSON.parse(challenge.localGeoJSON);
       }
-
-      debugger;
   
       if (data.features) {
         const bundled = bundleByTaskBundleId(
           data.features,
           challenge.taskBundleIdProperty
         );
-
-        debugger;
 
         return bundled;
       }
@@ -210,12 +235,16 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   rebuildChallenge: async (challenge, localFile, dataOriginDate) => {
     ownProps.updateCreatingTasksProgress(true)
 
+    const prebundle = await rebuildPrebundle(challenge, localFile);
+
     try {
       // For local files we need to figure out if it's line-by-line to
       // decide which service call to use
-      if (localFile) {
-        if (await AsValidatableGeoJSON(localFile).isLineByLine()) {
-          await uploadLineByLine(dispatch, ownProps, challenge, localFile, dataOriginDate)
+      const fileData = prebundle ||  localFile;
+
+      if (fileData) {
+        if (await AsValidatableGeoJSON(fileData).isLineByLine()) {
+          await uploadLineByLine(dispatch, ownProps, challenge, fileData, dataOriginDate)
         }
         else {
           await dispatch(
