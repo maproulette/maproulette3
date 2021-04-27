@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeDashboard
@@ -39,13 +39,23 @@ export default defineMessages({
     defaultMessage: "Delete Challenge",
   },
 
+  archiveChallengeLabel: {
+    id: "Admin.Challenge.controls.archive.label",
+    defaultMessage: "Archive Challenge",
+  },
+
+  unarchiveChallengeLabel: {
+    id: "Admin.Challenge.controls.unarchive.label",
+    defaultMessage: "Unarchive Challenge",
+  },
+
   deleteChallengeConfirm: {
     id: "Admin.Challenge.controls.delete.confirm",
-    defaultMessage: "Are you sure you wish to delete this challenge?"
+    defaultMessage: "Are you sure you wish to delete this challenge?",
   },
 
   deleteChallengeWarn: {
     id: "Admin.Challenge.controls.delete.warn",
-    defaultMessage: "This action cannot be undone."
-  }
-})
+    defaultMessage: "This action cannot be undone.",
+  },
+});
