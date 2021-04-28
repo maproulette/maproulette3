@@ -15,16 +15,12 @@ import WithProjectManagement from "../../HOCs/WithProjectManagement/WithProjectM
 import messages from "./Messages";
 
 export class ProjectCard extends Component {
-  refresh = () => {
-    this.props.history.push(this.props.location.pathname);
+  archiveProject = () => {
+    this.props.archiveProject(this.props.project.id);
   };
 
-  archiveProject = async (project) => {
-    this.props.archiveProject(project.id, this.props.location.pathname);
-  };
-
-  unarchiveProject = async (project) => {
-    this.props.unarchiveProject(project.id, this.props.location.pathname);
+  unarchiveProject = () => {
+    this.props.unarchiveProject(this.props.project.id);
   };
 
   render() {
@@ -277,4 +273,4 @@ ProjectCard.defaultProps = {
   loadingChallenges: false,
 };
 
-export default injectIntl(WithProjectManagement(ProjectCard));
+export default WithProjectManagement(injectIntl(ProjectCard));

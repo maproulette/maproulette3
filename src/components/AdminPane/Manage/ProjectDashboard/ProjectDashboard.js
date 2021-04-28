@@ -23,6 +23,7 @@ import BusySpinner from "../../../BusySpinner/BusySpinner";
 import manageMessages from "../Messages";
 import messages from "./Messages";
 import "./ProjectDashboard.scss";
+import WithProjectManagement from "../../HOCs/WithProjectManagement/WithProjectManagement";
 
 // The name of this dashboard.
 const DASHBOARD_NAME = "project";
@@ -67,9 +68,13 @@ export class ProjectDashboardInternal extends Component {
     });
   };
 
-  archiveProject = () => {};
+  archiveProject = () => {
+    this.props.archiveProject(this.props.project.id);
+  };
 
-  unarchiveProject = () => {};
+  unarchiveProject = () => {
+    this.props.unarchiveProject(this.props.project.id);
+  };
 
   render() {
     if (this.props.loadingProject) {
@@ -220,26 +225,28 @@ ProjectDashboardInternal.propTypes = {
   defaultConfiguration: PropTypes.func.isRequired,
 };
 
-const ProjectDashboard = WithManageableProjects(
-  WithCurrentProject(
-    WithWidgetWorkspaces(
-      WithDashboardEntityFilter(
-        injectIntl(ProjectDashboardInternal),
-        "challenge",
-        "challenges",
-        "pinnedChallenges",
-        "challenges",
-        challengePassesFilters
+const ProjectDashboard = WithProjectManagement(
+  WithManageableProjects(
+    WithCurrentProject(
+      WithWidgetWorkspaces(
+        WithDashboardEntityFilter(
+          injectIntl(ProjectDashboardInternal),
+          "challenge",
+          "challenges",
+          "pinnedChallenges",
+          "challenges",
+          challengePassesFilters
+        ),
+        [WidgetDataTarget.project, WidgetDataTarget.challenges],
+        DASHBOARD_NAME,
+        defaultDashboardSetup
       ),
-      [WidgetDataTarget.project, WidgetDataTarget.challenges],
-      DASHBOARD_NAME,
-      defaultDashboardSetup
-    ),
-    {
-      restrictToGivenProjects: true,
-      includeChallenges: true,
-      includeComments: true,
-    }
+      {
+        restrictToGivenProjects: true,
+        includeChallenges: true,
+        includeComments: true,
+      }
+    )
   )
 );
 
