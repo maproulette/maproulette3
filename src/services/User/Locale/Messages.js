@@ -1,10 +1,10 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Locale
  */
 export default defineMessages({
-  'en-US': {
+  "en-US": {
     id: "Locale.en-US.label",
     defaultMessage: "en-US (U.S. English)",
   },
@@ -36,27 +36,27 @@ export default defineMessages({
     id: "Locale.nl.label",
     defaultMessage: "nl (Dutch)",
   },
-  'pt-BR': {
+  "pt-BR": {
     id: "Locale.pt-BR.label",
     defaultMessage: "pt-BR (Português Brasileiro)",
   },
-  'fa-IR': {
+  "fa-IR": {
     id: "Locale.fa-IR.label",
     defaultMessage: "fa-IR (Persian - Iran)",
   },
-  'cs-CZ': {
+  "cs-CZ": {
     id: "Locale.cs-CZ.label",
     defaultMessage: "cs-CZ (Czech - Czech Republic)",
   },
-  'ru-RU': {
+  "ru-RU": {
     id: "Locale.ru-RU.label",
     defaultMessage: "ru-RU (Russian - Russia)",
   },
-  'uk': {
+  uk: {
     id: "Locale.uk.label",
     defaultMessage: "uk (Ukrainian)",
   },
-  'vi': {
+  vi: {
     id: "Locale.vi.label",
     defaultMessage: "vi (Vietnamese)",
   },
@@ -64,4 +64,8 @@ export default defineMessages({
     id: "Locale.tr.label",
     defaultMessage: "tr (Turkish)",
   },
-})
+  pl: {
+    id: "Locale.pl.label",
+    defaultMessage: "pl (Polish)",
+  },
+});
