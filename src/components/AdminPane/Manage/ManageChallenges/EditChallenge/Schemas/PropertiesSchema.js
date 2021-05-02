@@ -1,6 +1,6 @@
-import messages from '../Messages'
+import messages from "../Messages";
 
-const STEP_ID = "Properties"
+const STEP_ID = "Properties";
 
 /**
  * Generates a JSON Schema describing property fields of Edit Challenge
@@ -15,14 +15,21 @@ const STEP_ID = "Properties"
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const jsSchema = (
+  intl,
+  user,
+  challengeData,
+  extraErrors,
+  options = {}
+) => {
+  console.log("HEY YOU", challengeData);
   return {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       taskBundleIdProperty: {
         title: intl.formatMessage(messages.taskBundleIdPropertyLabel),
-        type: "string",
+        type: challengeData.source === "Overpass Query" ? null : "string",
       },
       osmIdProperty: {
         title: intl.formatMessage(messages.osmIdPropertyLabel),
@@ -38,8 +45,8 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
         type: "string",
       },
     },
-  }
-}
+  };
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -51,17 +58,33 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
-  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
-  const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+export const uiSchema = (
+  intl,
+  user,
+  challengeData,
+  extraErrors,
+  options = {}
+) => {
+  const isCollapsed =
+    options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1;
+  const toggleCollapsed =
+    options.longForm && options.toggleCollapsed
+      ? () => options.toggleCollapsed(STEP_ID)
+      : undefined;
 
   return {
     taskBundleIdProperty: {
       "ui:emptyValue": "",
-      "ui:help": intl.formatMessage(messages.taskBundleIdPropertyDescription),
+      "ui:help": intl.formatMessage(messages.taskBundleIdPropertyHelp),
       "ui:collapsed": isCollapsed,
       "ui:toggleCollapsed": toggleCollapsed,
-      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.propertiesStepHeader) : undefined,
+      "ui:groupHeader": options.longForm
+        ? intl.formatMessage(messages.propertiesStepHeader)
+        : undefined,
+      "ui:description":
+        challengeData.source === "Overpass Query"
+          ? intl.formatMessage(messages.taskBundleIdPropertyOverpassWarning)
+          : null,
     },
     osmIdProperty: {
       "ui:emptyValue": "",
@@ -78,5 +101,5 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:help": intl.formatMessage(messages.exportablePropertiesDescription),
       "ui:collapsed": isCollapsed,
     },
-  }
-}
+  };
+};

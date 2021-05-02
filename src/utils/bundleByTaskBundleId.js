@@ -1,43 +1,51 @@
 const bundleByTaskBundleId = (tasks, externalId) => {
   const bundled = [];
   let leftoverTasks = tasks;
-  let infiniteLoopCount = 0;
-  let prevLength = leftoverTasks.length;
 
   while (leftoverTasks.length) {
     const task = leftoverTasks[0];
     const id = task.properties[externalId];
-
-    const matchingTasks = leftoverTasks.filter((t) => {
-      if (t.properties[externalId] === id) {
-        return true;
-      }
-
-      return false;
-    });
-
+    const features = [];
+    let infiniteLoopCount = 0;
+    let prevLength = leftoverTasks.length;
     let bundledTask;
-    let features = [];
 
-    for (let j = 0; j < matchingTasks.length; j++) {
-      features = features.concat(matchingTasks[j]);
-    }
+    if (id === undefined) {
+      bundledTask = {
+        type: "FeatureCollection",
+        features: [task],
+      };
+      bundled.push(JSON.stringify(bundledTask));
+      leftoverTasks.shift();
+    } else {
+      const matchingTasks = leftoverTasks.filter((t) => {
+        if (t.properties[externalId] === id) {
+          return true;
+        }
 
-    bundledTask = {
-      type: "FeatureCollection",
-      features,
-    };
+        return false;
+      });
 
-    const nonMatchingTasks = leftoverTasks.filter((t) => {
-      if (t.properties[externalId] !== id) {
-        return true;
+      for (let j = 0; j < matchingTasks.length; j++) {
+        features.push(matchingTasks[j]);
       }
 
-      return false;
-    });
+      bundledTask = {
+        type: "FeatureCollection",
+        features,
+      };
 
-    bundled.push(JSON.stringify(bundledTask));
-    leftoverTasks = nonMatchingTasks;
+      const nonMatchingTasks = leftoverTasks.filter((t) => {
+        if (t.properties[externalId] !== id) {
+          return true;
+        }
+
+        return false;
+      });
+
+      bundled.push(JSON.stringify(bundledTask));
+      leftoverTasks = nonMatchingTasks;
+    }
 
     if (leftoverTasks.length === prevLength) {
       infiniteLoopCount++;
