@@ -249,7 +249,6 @@ async function deleteIncompleteTasks(dispatch, ownProps, challenge) {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   saveChallenge: async (challengeData) => {
-    debugger;
     const prebundled = await convertAndBundleGeoJson(challengeData);
 
     //If the prebundler succeeds, mutate challenge data to fit line-by-line criteria
