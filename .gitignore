@@ -39,3 +39,4 @@ yarn-error.log*
 /.bsp
 /project
 /target
+/.metals
