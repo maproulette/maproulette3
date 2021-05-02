@@ -15,6 +15,7 @@ import {
   fetchChallenge,
   fetchChallengeActions,
   deleteChallenge,
+  archiveChallenge,
 } from "../../../../services/Challenge/Challenge";
 import { recordChallengeSnapshot } from "../../../../services/Challenge/ChallengeSnapshot";
 import {
@@ -249,7 +250,6 @@ async function deleteIncompleteTasks(dispatch, ownProps, challenge) {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   saveChallenge: async (challengeData) => {
-    debugger;
     const prebundled = await convertAndBundleGeoJson(challengeData);
 
     //If the prebundler succeeds, mutate challenge data to fit line-by-line criteria
@@ -348,6 +348,18 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
     dispatch(deleteChallenge(challengeId)).then(() =>
       ownProps.history.replace(`/admin/project/${projectId}`)
+    );
+  },
+
+  archiveChallenge: (projectId, challengeId, pathname) => {
+    dispatch(archiveChallenge(challengeId, true)).then(() =>
+      ownProps.history.replace(pathname)
+    );
+  },
+
+  unarchiveChallenge: (projectId, challengeId, pathname) => {
+    dispatch(archiveChallenge(challengeId, false)).then(() =>
+      ownProps.history.replace(pathname)
     );
   },
 

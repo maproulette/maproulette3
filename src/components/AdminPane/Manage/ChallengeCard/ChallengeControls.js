@@ -49,6 +49,26 @@ export default class ChallengeControls extends Component {
     this.props.deleteChallenge(parent.id, this.props.challenge.id);
   };
 
+  refresh = () => {
+    this.props.history.push(this.props.location.pathname);
+  };
+
+  archiveChallenge = (parent) => {
+    this.props.archiveChallenge(
+      parent.id,
+      this.props.challenge.id,
+      this.props.location.pathname
+    );
+  };
+
+  unarchiveChallenge = (parent) => {
+    this.props.unarchiveChallenge(
+      parent.id,
+      this.props.challenge.id,
+      this.props.location.pathname
+    );
+  };
+
   render() {
     if (!this.props.challenge) {
       return null;
@@ -74,6 +94,7 @@ export default class ChallengeControls extends Component {
     const status = _get(this.props.challenge, "status", ChallengeStatus.none);
     const hasTasks = _get(this.props.challenge, "actions.total", 0) > 0;
     const requiresEmail = isEmailRequired(this.props.user);
+    const isArchived = _get(this.props.challenge, "isArchived");
 
     if (requiresEmail) {
       return (
@@ -179,6 +200,28 @@ export default class ChallengeControls extends Component {
                 </a>
               </ConfirmAction>
             )}
+            {manager.canAdministrateProject(parent) && !isArchived ? (
+              <>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a
+                  onClick={() => this.archiveChallenge(parent)}
+                  className={this.props.controlClassName}
+                >
+                  <FormattedMessage {...messages.archiveChallengeLabel} />
+                </a>
+              </>
+            ) : null}
+            {manager.canAdministrateProject(parent) && isArchived ? (
+              <>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a
+                  onClick={() => this.unarchiveChallenge(parent)}
+                  className={this.props.controlClassName}
+                >
+                  <FormattedMessage {...messages.unarchiveChallengeLabel} />
+                </a>
+              </>
+            ) : null}
             {this.state.pickingProject && (
               <ProjectPickerModal
                 {...this.props}
@@ -199,6 +242,8 @@ ChallengeControls.propTypes = {
   challenge: PropTypes.object,
   /** Invoked when the user wishes to delete the challenge */
   deleteChallenge: PropTypes.func.isRequired,
+  /** Invoked when the user wishes to archive the challenge */
+  archiveChallenge: PropTypes.func.isRequired,
   /** Invoked when the user wishes to move the challenge */
   moveChallenge: PropTypes.func.isRequired,
   /** Invoked when an in-situ control is completed */
