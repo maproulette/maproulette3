@@ -592,7 +592,8 @@ will not be able to make sense of it.
     defaultMessage:
       "The name of the task feature property to treat as " +
       "a bundle ID for related tasks. " +
-      "Tasks without this property will remain as isolated tasks.",
+      "Tasks without this property will remain as isolated tasks. " +
+      "Please note that this feature currently does not work with Overpass queries.",
   },
 
   osmIdPropertyLabel: {
@@ -611,8 +612,7 @@ will not be able to make sense of it.
       "property will be assigned a random identifier even if the task " +
       "contains other common id properties. " +
       "[Learn more]" +
-      "(https://learn.maproulette.org/documentation/setting-external-task-identifiers/)." +
-      "Please note that this feature currently does not work with Overpass queries.",
+      "(https://learn.maproulette.org/documentation/setting-external-task-identifiers/).",
   },
 
   customTaskStyleLabel: {
