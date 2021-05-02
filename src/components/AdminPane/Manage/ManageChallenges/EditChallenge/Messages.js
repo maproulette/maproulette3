@@ -133,7 +133,7 @@ export default defineMessages({
   checkinCommentDescription: {
     id: "Admin.EditChallenge.form.checkinComment.description",
     defaultMessage:
-      "Comment to be associated with changes made by " + "users in editor",
+      "Comment to be associated with changes made by users in editor",
   },
 
   checkinSourceLabel: {
@@ -144,7 +144,7 @@ export default defineMessages({
   checkinSourceDescription: {
     id: "Admin.EditChallenge.form.checkinSource.description",
     defaultMessage:
-      "Source to be associated with changes made by " + "users in editor",
+      "Source to be associated with changes made by users in editor",
   },
 
   includeCheckinHashtagTrueLabel: {
