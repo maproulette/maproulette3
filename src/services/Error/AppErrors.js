@@ -1,4 +1,4 @@
-import messages from './Messages'
+import messages from "./Messages";
 
 /**
  * App errors. Example use: `addError(AppErrors.user.unauthorized)`
@@ -71,6 +71,7 @@ export default {
     fetchFailure: messages.challengeFetchFailure,
     searchFailure: messages.challengeSearchFailure,
     deleteFailure: messages.challengeDeleteFailure,
+    archiveFailure: messages.challengeArchiveFailure,
     saveFailure: messages.challengeSaveFailure,
     rebuildFailure: messages.challengeRebuildFailure,
     doesNotExist: messages.challengeDoesNotExist,
@@ -115,5 +116,5 @@ export default {
 
   file: {
     formatIncorrect: messages.fileFormatIncorrect,
-  }
-}
+  },
+};

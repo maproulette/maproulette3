@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ProjectCard
@@ -39,6 +39,16 @@ export default defineMessages({
     defaultMessage: "Edit Project",
   },
 
+  archiveProjectLabel: {
+    id: "Admin.ProjectCard.controls.archiveProject.label",
+    defaultMessage: "Archive Project",
+  },
+
+  unarchiveProjectLabel: {
+    id: "Admin.ProjectCard.controls.unarchiveProject.label",
+    defaultMessage: "Unarchive Project",
+  },
+
   pinProjectLabel: {
     id: "Admin.ProjectCard.controls.pinProject.label",
     defaultMessage: "Pin Project",
@@ -50,12 +60,12 @@ export default defineMessages({
   },
 
   addChallengeLabel: {
-    id: 'Admin.Project.controls.addChallenge.label',
+    id: "Admin.Project.controls.addChallenge.label",
     defaultMessage: "Add Challenge",
   },
 
   manageChallengeListLabel: {
-    id: 'Admin.Project.controls.manageChallengeList.label',
+    id: "Admin.Project.controls.manageChallengeList.label",
     defaultMessage: "Manage Challenge List",
   },
 
@@ -78,4 +88,4 @@ export default defineMessages({
     id: "Admin.Project.controls.exportReviewCSV.label",
     defaultMessage: "Export Mapper Review CSV",
   },
-})
+});
