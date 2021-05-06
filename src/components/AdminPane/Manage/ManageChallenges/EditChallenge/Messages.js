@@ -587,6 +587,26 @@ will not be able to make sense of it.
       "first matching feature property from each task.",
   },
 
+  taskBundleIdPropertyLabel: {
+    id: "Admin.EditChallenge.form.taskBundlePropertyId.label",
+    defaultMessage: "Task Bundle Id Property",
+  },
+
+  taskBundleIdPropertyOverpassWarning: {
+    id: "Admin.EditChallenge.form.taskBundlePropertyId.overpassWarning",
+    defaultMessage:
+      "Currently not available for Overpass queries. Please select a different data location to use this feature.",
+  },
+
+  taskBundleIdPropertyHelp: {
+    id: "Admin.EditChallenge.form.taskBundlePropertyId.help",
+    defaultMessage:
+      "The name of the task feature property to treat as " +
+      "a bundle ID for related tasks. " +
+      "Tasks without this property will remain as isolated tasks. " +
+      "Please note that this feature currently does not work with Overpass queries.",
+  },
+
   osmIdPropertyLabel: {
     id: "Admin.EditChallenge.form.osmIdProperty.label",
     defaultMessage: "OSM/External Id Property",

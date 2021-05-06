@@ -3,6 +3,8 @@ import _map from "lodash/map";
 import _get from "lodash/get";
 import _isObject from "lodash/isObject";
 import _compact from "lodash/compact";
+import bundleByTaskBundleId from "../../../../utils/bundleByTaskBundleId";
+import createBlob from "../../../../utils/createBlob";
 import {
   saveChallenge,
   uploadChallengeGeoJSON,
@@ -44,6 +46,95 @@ const WithChallengeManagement = (WrappedComponent) =>
     ),
     "deletingTasks"
   );
+
+/**
+ * Method used to direct remote or local data structures into line-by-line GeoJson format
+ * if a taskBundleIdProperty is provided. Any errors will be treated silently and return false
+ * to allow parent methods to continue other processes.
+ *
+ * @private
+ */
+async function rebuildPrebundle(challenge, localFile) {
+  try {
+    if (challenge.taskBundleIdProperty) {
+      if (localFile) {
+        const data = await new Response(localFile).text();
+
+        const bundled = bundleByTaskBundleId(
+          JSON.parse(data).features,
+          challenge.taskBundleIdProperty
+        );
+
+        return createBlob(bundled);
+      }
+    }
+
+    return false;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
+/**
+ * Method used to direct remote or local data structures into line-by-line GeoJson format
+ * if a taskBundleIdProperty is provided. Any errors will be treated silently and return false
+ * to allow parent methods to continue other processes.
+ *
+ * @private
+ */
+async function convertAndBundleGeoJson(challenge) {
+  try {
+    let data = {};
+
+    if (challenge.taskBundleIdProperty) {
+      if (challenge.remoteGeoJson) {
+        data = await fetch(challenge.remoteGeoJson).then((response) =>
+          response.json()
+        );
+      } else if (challenge.lineByLineGeoJSON) {
+        const lineFile = AsLineReadableFile(challenge.lineByLineGeoJSON);
+        let allLinesRead = false;
+        let allLines = [];
+
+        while (!allLinesRead) {
+          let taskLine = await lineFile.readLines(1);
+          if (taskLine[0] === null) {
+            allLinesRead = true;
+          } else {
+            allLines.push(taskLine[0]);
+          }
+        }
+
+        data.features = [];
+
+        if (allLines?.length) {
+          allLines.forEach((taskLine) => {
+            JSON.parse(taskLine).features.forEach((feature) => {
+              data.features.push(feature);
+            });
+          });
+        }
+      } else if (challenge.localGeoJSON) {
+        data = JSON.parse(challenge.localGeoJSON);
+      }
+
+      if (data.features?.length) {
+        const bundled = bundleByTaskBundleId(
+          data.features,
+          challenge.taskBundleIdProperty
+        );
+
+        return bundled;
+      }
+    }
+
+    return false;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
 
 /**
  * Upload a line-by-line GeoJSON file in chunks of 100 lines/tasks, updating
@@ -159,6 +250,17 @@ async function deleteIncompleteTasks(dispatch, ownProps, challenge) {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   saveChallenge: async (challengeData) => {
+    const prebundled = await convertAndBundleGeoJson(challengeData);
+
+    //If the prebundler succeeds, mutate challenge data to fit line-by-line criteria
+    if (prebundled) {
+      challengeData.remoteGeoJson = undefined;
+      challengeData.localGeoJSON = undefined;
+      challengeData.overpassTargetType = null;
+      challengeData.source = "Local File";
+      challengeData.lineByLineGeoJSON = createBlob(prebundled);
+    }
+
     return dispatch(saveChallenge(challengeData))
       .then(async (challenge) => {
         // If we have line-by-line GeoJSON, we need to stream that separately
@@ -191,16 +293,20 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   rebuildChallenge: async (challenge, localFile, dataOriginDate) => {
     ownProps.updateCreatingTasksProgress(true);
 
+    const prebundle = await rebuildPrebundle(challenge, localFile);
+
     try {
       // For local files we need to figure out if it's line-by-line to
       // decide which service call to use
-      if (localFile) {
-        if (await AsValidatableGeoJSON(localFile).isLineByLine()) {
+      const fileData = prebundle || localFile;
+
+      if (fileData) {
+        if (await AsValidatableGeoJSON(fileData).isLineByLine()) {
           await uploadLineByLine(
             dispatch,
             ownProps,
             challenge,
-            localFile,
+            fileData,
             dataOriginDate
           );
         } else {
