@@ -1,24 +1,28 @@
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { denormalize } from 'normalizr'
-import _debounce from 'lodash/debounce'
-import _get from 'lodash/get'
-import { logoutUser,
-         fetchUser,
-         fetchBasicUser,
-         loadCompleteUser,
-         saveChallenge, unsaveChallenge,
-         saveTask, unsaveTask,
-         fetchTopChallenges,
-         fetchSavedChallenges,
-         fetchSavedTasks,
-         fetchUserActivity,
-         updateUserSettings,
-         updateUserAppSetting,
-         userDenormalizationSchema } from '../../../services/User/User'
-import AsEndUser from '../../../interactions/User/AsEndUser'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { denormalize } from "normalizr";
+import _debounce from "lodash/debounce";
+import _get from "lodash/get";
+import {
+  logoutUser,
+  fetchUser,
+  fetchBasicUser,
+  loadCompleteUser,
+  saveChallenge,
+  unsaveChallenge,
+  saveTask,
+  unsaveTask,
+  fetchTopChallenges,
+  fetchSavedChallenges,
+  fetchSavedTasks,
+  fetchUserActivity,
+  updateUserSettings,
+  updateUserAppSetting,
+  userDenormalizationSchema,
+} from "../../../services/User/User";
+import AsEndUser from "../../../interactions/User/AsEndUser";
 
-const APP_ID = "mr3Frontend"
+const APP_ID = "mr3Frontend";
 
 /**
  * WithCurrentUser passes down the current user from the redux store.  If the
@@ -29,57 +33,67 @@ const APP_ID = "mr3Frontend"
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithCurrentUser =
-  WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
+const WithCurrentUser = (WrappedComponent) =>
+  connect(mapStateToProps, mapDispatchToProps)(WrappedComponent);
 
-export const mapStateToProps = state => {
-  const props = {user: null, allUsers: null}
+export const mapStateToProps = (state) => {
+  const props = { user: null, allUsers: null };
 
-  const userId = _get(state, 'currentUser.userId')
-  const userEntity = _get(state, `entities.users.${userId}`)
+  const userId = _get(state, "currentUser.userId");
+  const userEntity = _get(state, `entities.users.${userId}`);
   if (userEntity) {
-    props.user =
-      denormalize(userEntity, userDenormalizationSchema(), state.entities)
+    props.user = denormalize(
+      userEntity,
+      userDenormalizationSchema(),
+      state.entities
+    );
 
     if (props.user) {
-      const endUser = AsEndUser(props.user)
-      props.user.isLoggedIn = endUser.isLoggedIn()
-      props.user.isSuperUser = endUser.isSuperUser()
-      props.user.hasUnreadNotifications = endUser.hasUnreadNotifications()
-      props.user.unreadNotificationCount = endUser.unreadNotificationCount()
+      const endUser = AsEndUser(props.user);
+      props.user.isLoggedIn = endUser.isLoggedIn();
+      props.user.isSuperUser = endUser.isSuperUser();
+      props.user.hasUnreadNotifications = endUser.hasUnreadNotifications();
+      props.user.unreadNotificationCount = endUser.unreadNotificationCount();
     }
   }
 
-  props.allUsers = _get(state, "entities.users")
-  return props
-}
+  props.allUsers = _get(state, "entities.users");
+  return props;
+};
 
-export const mapDispatchToProps = dispatch => {
-  const actions = bindActionCreators({
-    fetchUser,
-    fetchBasicUser,
-    loadCompleteUser,
-    logoutUser,
-    fetchSavedChallenges,
-    saveChallenge,
-    unsaveChallenge,
-    fetchSavedTasks,
-    saveTask,
-    unsaveTask,
-    updateUserSettings,
-    fetchTopChallenges,
-    fetchUserActivity,
-  }, dispatch)
+export const mapDispatchToProps = (dispatch, ownProps) => {
+  const actions = bindActionCreators(
+    {
+      fetchUser,
+      fetchBasicUser,
+      loadCompleteUser,
+      logoutUser,
+      fetchSavedChallenges,
+      saveChallenge,
+      unsaveChallenge,
+      fetchSavedTasks,
+      saveTask,
+      unsaveTask,
+      updateUserSettings,
+      fetchTopChallenges,
+      fetchUserActivity,
+    },
+    dispatch
+  );
 
   actions.updateUserAppSetting = _debounce((userId, setting) => {
-    return dispatch(updateUserAppSetting(userId, APP_ID, setting))
-  }, 100)
+    return dispatch(updateUserAppSetting(userId, APP_ID, setting));
+  }, 100);
 
   actions.getUserAppSetting = (user, settingName) => {
-    return _get(user, `properties.${APP_ID}.settings.${settingName}`)
-  }
+    return _get(user, `properties.${APP_ID}.settings.${settingName}`);
+  };
 
-  return actions
-}
+  actions.updateEmail = (email) => {
+    return dispatch(updateUserSettings(ownProps.user.id, { email }));
+  };
 
-export default WithCurrentUser
+  return actions;
+};
+
+export default WithCurrentUser;

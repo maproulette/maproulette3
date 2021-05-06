@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ProjectDashboard
@@ -12,6 +12,16 @@ export default defineMessages({
   deleteProjectLabel: {
     id: "Admin.ProjectDashboard.controls.delete.label",
     defaultMessage: "Delete Project",
+  },
+
+  archiveProjectLabel: {
+    id: "Admin.ProjectDashboard.controls.archive.label",
+    defaultMessage: "Archive Project",
+  },
+
+  unarchiveProjectLabel: {
+    id: "Admin.ProjectDashboard.controls.unarchive.label",
+    defaultMessage: "Unarchive Project",
   },
 
   addChallengeLabel: {
@@ -28,4 +38,4 @@ export default defineMessages({
     id: "Admin.ProjectDashboard.projectNotFound",
     defaultMessage: "Project Not Found",
   },
-})
+});
