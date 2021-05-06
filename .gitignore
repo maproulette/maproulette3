@@ -34,3 +34,8 @@ yarn-debug.log*
 yarn-error.log*
 
 *.swp
+
+#scala plugin
+/.bsp
+/project
+/target
