@@ -64,6 +64,11 @@ export default defineMessages({
     defaultMessage: "Name of your Challenge",
   },
 
+  emailLabel: {
+    id: "Admin.EditChallenge.form.email.label",
+    defaultMessage: "Email Address",
+  },
+
   nameDescription: {
     id: "Admin.EditChallenge.form.name.description",
     defaultMessage:
@@ -71,6 +76,12 @@ export default defineMessages({
       "throughout MapRoulette. This is also what your challenge will be " +
       "searchable by using the Search box. This field is required, must be " +
       "unique, and only supports plain text.",
+  },
+
+  emailDescription: {
+    id: "Admin.EditChallenge.form.email.description",
+    defaultMessage:
+      "Please provide an email for mappers to contact you with feedback",
   },
 
   descriptionLabel: {
@@ -703,6 +714,11 @@ will not be able to make sense of it.
   showStepsTooltip: {
     id: "Admin.EditChallenge.controls.showSteps.tooltip",
     defaultMessage: "Show separate steps",
+  },
+
+  contactInfoStepHeader: {
+    id: "Admin.EditChallenge.form.steps.contactInfo.header",
+    defaultMessage: "Contact Information",
   },
 
   dataSourceStepHeader: {

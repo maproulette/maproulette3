@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeFilter
@@ -13,5 +13,9 @@ export default defineMessages({
     id: "Dashboard.ChallengeFilter.pinned.label",
     defaultMessage: "Pinned",
   },
-})
 
+  archived: {
+    id: "Dashboard.ChallengeFilter.archived.label",
+    defaultMessage: "Archived",
+  },
+});

@@ -15,6 +15,7 @@ import {
   fetchChallenge,
   fetchChallengeActions,
   deleteChallenge,
+  archiveChallenge,
 } from "../../../../services/Challenge/Challenge";
 import { recordChallengeSnapshot } from "../../../../services/Challenge/ChallengeSnapshot";
 import {
@@ -270,7 +271,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
             challenge,
             challengeData.lineByLineGeoJSON
           );
-
           ownProps.updateCreatingTasksProgress(false);
         }
 
@@ -347,6 +347,18 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
     dispatch(deleteChallenge(challengeId)).then(() =>
       ownProps.history.replace(`/admin/project/${projectId}`)
+    );
+  },
+
+  archiveChallenge: (projectId, challengeId, pathname) => {
+    dispatch(archiveChallenge(challengeId, true)).then(() =>
+      ownProps.history.replace(pathname)
+    );
+  },
+
+  unarchiveChallenge: (projectId, challengeId, pathname) => {
+    dispatch(archiveChallenge(challengeId, false)).then(() =>
+      ownProps.history.replace(pathname)
     );
   },
 
