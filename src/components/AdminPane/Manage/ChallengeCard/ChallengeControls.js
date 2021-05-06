@@ -19,6 +19,16 @@ import ProjectPickerModal from "../ProjectPickerModal/ProjectPickerModal";
 import ConfirmAction from "../../../ConfirmAction/ConfirmAction";
 import messages from "../ChallengeDashboard/Messages";
 
+const isEmailRequired = (user) => {
+  if (process.env.REACT_APP_EMAIL_ENFORCEMENT === "required") {
+    if (!user?.settings?.email) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 export default class ChallengeControls extends Component {
   state = {
     pickingProject: false,
@@ -84,6 +94,15 @@ export default class ChallengeControls extends Component {
     const status = _get(this.props.challenge, "status", ChallengeStatus.none);
     const hasTasks = _get(this.props.challenge, "actions.total", 0) > 0;
     const isArchived = _get(this.props.challenge, "isArchived");
+    const requiresEmail = isEmailRequired(this.props.user);
+
+    if (requiresEmail) {
+      return (
+        <div className="mr-text-red-light">
+          Challenge controls are disabled until an email is provided.
+        </div>
+      );
+    }
 
     return (
       <div className={this.props.className}>
@@ -181,7 +200,6 @@ export default class ChallengeControls extends Component {
                 </a>
               </ConfirmAction>
             )}
-
             {manager.canAdministrateProject(parent) && !isArchived ? (
               <>
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
