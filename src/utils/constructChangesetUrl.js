@@ -3,7 +3,7 @@ export const constructChangesetUrl = (task) => {
     process.env.REACT_APP_CHANGESET_URL === "enabled" &&
     task.parent.changesetUrl
   ) {
-    return ` ${window.location.origin}challenge/${task.parent.id}`;
+    return ` ${window.location.origin}/browse/challenges/${task.parent.id}`;
   } else {
     return "";
   }
