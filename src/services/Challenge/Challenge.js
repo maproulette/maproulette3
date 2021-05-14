@@ -909,6 +909,7 @@ export const saveChallenge = function (
         [
           "blurb",
           "challengeType",
+          "changesetUrl",
           "checkinComment",
           "checkinSource",
           "customBasemap",

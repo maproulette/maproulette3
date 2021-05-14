@@ -791,6 +791,12 @@ will not be able to make sense of it.
     defaultMessage: "Customize OSM changeset info",
   },
 
+  changesetUrlDescription: {
+    id: "Admin.EditChallenge.form.steps.changesetUrl.description",
+    defaultMessage:
+      "Automatically append challenge link to the changeset comment",
+  },
+
   basemapStepHeader: {
     id: "Admin.EditChallenge.form.steps.basemap.header",
     defaultMessage: "Basemap",
