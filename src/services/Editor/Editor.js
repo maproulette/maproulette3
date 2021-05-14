@@ -507,12 +507,9 @@ export const josmLayerParams = function (
  * and source from the given task's challenge
  */
 export const josmChangesetParams = function (task, options) {
-  return (
-    `changeset_comment=${
-      encodeURIComponent(task.parent.checkinComment) +
-      constructChangesetUrl(task)
-    }` + `&changeset_source=${encodeURIComponent(task.parent.checkinSource)}`
-  );
+  return `changeset_comment=${
+    encodeURIComponent(task.parent.checkinComment) + constructChangesetUrl(task)
+  }&changeset_source=${encodeURIComponent(task.parent.checkinSource)}`;
 };
 
 /*
