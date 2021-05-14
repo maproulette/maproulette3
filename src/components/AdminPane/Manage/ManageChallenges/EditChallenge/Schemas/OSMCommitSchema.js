@@ -86,12 +86,15 @@ export const uiSchema = (
       ? () => options.toggleCollapsed(STEP_ID)
       : undefined;
 
+  const changesetUrl =
+    process.env.REACT_APP_CHANGESET_URL === "enabled" ? "changesetUrl" : null;
+
   const uiSchemaFields = {
     "ui:order": [
       "checkinComment",
       "includeCheckinHashtag",
       "checkinSource",
-      "changesetUrl",
+      changesetUrl,
     ],
     checkinComment: {
       "ui:emptyValue": "",
