@@ -1,8 +1,7 @@
-import AsEditableChallenge
-       from '../../../../../../interactions/Challenge/AsEditableChallenge'
-import messages from '../Messages'
+import AsEditableChallenge from "../../../../../../interactions/Challenge/AsEditableChallenge";
+import messages from "../Messages";
 
-const STEP_ID = "OSMCommit"
+const STEP_ID = "OSMCommit";
 
 /**
  * Generates a JSON Schema describing OSM commit fields of Edit Challenge
@@ -17,9 +16,15 @@ const STEP_ID = "OSMCommit"
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const jsSchema = (
+  intl,
+  user,
+  challengeData,
+  extraErrors,
+  options = {}
+) => {
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       checkinComment: {
@@ -30,8 +35,12 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
         title: intl.formatMessage(messages.checkinSourceLabel),
         type: "string",
       },
+      changesetUrl: {
+        type: "boolean",
+        default: false,
+      },
     },
-  }
+  };
 
   // For new challenges, offer option to toggle #maproulette tag on commit comment.
   // The hashtag will be injected into the comment when the challenge is created, so
@@ -42,14 +51,16 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
       title: " ", // blank title
       type: "boolean",
       enum: [true, false],
-      enumNames: [intl.formatMessage(messages.includeCheckinHashtagTrueLabel),
-                  intl.formatMessage(messages.includeCheckinHashtagFalseLabel)],
+      enumNames: [
+        intl.formatMessage(messages.includeCheckinHashtagTrueLabel),
+        intl.formatMessage(messages.includeCheckinHashtagFalseLabel),
+      ],
       default: true,
-    }
+    };
   }
 
-  return schemaFields
-}
+  return schemaFields;
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -61,20 +72,38 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
-  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
-  const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+export const uiSchema = (
+  intl,
+  user,
+  challengeData,
+  extraErrors,
+  options = {}
+) => {
+  const isCollapsed =
+    options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1;
+  const toggleCollapsed =
+    options.longForm && options.toggleCollapsed
+      ? () => options.toggleCollapsed(STEP_ID)
+      : undefined;
+
+  const changesetUrl =
+    process.env.REACT_APP_CHANGESET_URL === "enabled" ? "changesetUrl" : null;
 
   const uiSchemaFields = {
     "ui:order": [
-      "checkinComment", "includeCheckinHashtag", "checkinSource",
+      "checkinComment",
+      "includeCheckinHashtag",
+      "checkinSource",
+      changesetUrl,
     ],
     checkinComment: {
       "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.checkinCommentDescription),
       "ui:collapsed": isCollapsed,
       "ui:toggleCollapsed": toggleCollapsed,
-      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.osmCommitStepHeader) : undefined,
+      "ui:groupHeader": options.longForm
+        ? intl.formatMessage(messages.osmCommitStepHeader)
+        : undefined,
     },
     checkinSource: {
       "ui:help": intl.formatMessage(messages.checkinSourceDescription),
@@ -85,7 +114,13 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:help": intl.formatMessage(messages.includeCheckinHashtagDescription),
       "ui:collapsed": isCollapsed,
     },
-  }
+    changesetUrl: {
+      "ui:title": "Changeset URL",
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.changesetUrlDescription),
+      "ui:collapsed": isCollapsed,
+    },
+  };
 
-  return uiSchemaFields
-}
+  return uiSchemaFields;
+};
