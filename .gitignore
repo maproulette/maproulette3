@@ -40,3 +40,6 @@ yarn-error.log*
 /project
 /target
 /.metals
+
+#vscode
+/.vscode
