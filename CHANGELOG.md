@@ -7,6 +7,19 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.8] - 2021-06-02
+
+### Added
+
+- Ability to prebundle tasks by a task property before creating a challenge
+- Ability to archive projects and challenges
+- Polish language support
+- Ability to add the challenge URL to task changeset comment
+
+### Changed
+
+- Challenge authors will now be required to provide an email address
+
 ## [v3.7.7] - 2021-04-07
 ### Added
 - Ability to see and add comments in the Task Bundle widget
