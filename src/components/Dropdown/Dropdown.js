@@ -78,6 +78,12 @@ const Dropdown = ({
       return null;
     }
 
+    if (
+      document.getElementById("confirm-action-modal")?.contains(event.target)
+    ) {
+      return null;
+    }
+
     toggle(false);
   };
 
