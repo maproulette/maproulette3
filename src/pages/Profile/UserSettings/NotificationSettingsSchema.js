@@ -31,6 +31,53 @@ export const jsSchema = (intl) => {
   const localizedSubscriptionFrequncyLabels =
     subscriptionFrequencyTypeLabels(intl);
 
+  const items = [
+    ..._map(NotificationSubscriptionType, (type, name) => ({
+      title: `${
+        localizedNotificationLabels[`${name}Long`] ||
+        localizedNotificationLabels[name]
+      } ${intl.formatMessage(messages.notificationLabel)}`,
+      type: "number",
+      enum: _values(SubscriptionType),
+      enumNames: _map(
+        SubscriptionType,
+        (value, key) => localizedSubscriptionLabels[key]
+      ),
+      default: SubscriptionType.noEmail,
+    })),
+  ];
+
+  items[8] = items[8] || {};
+  items[9] = items[9] || {};
+  items[10] = items[10] || {};
+  items[11] = items[11] || {};
+
+  items[12] = {
+    title: "Review Count",
+    type: "number",
+    enum: _values(SubscriptionFrequencyType),
+    enumNames: _map(
+      SubscriptionFrequencyType,
+      (value, key) => localizedSubscriptionFrequncyLabels[key]
+    ),
+    default: SubscriptionFrequencyType.ignore,
+  };
+
+  items[13] = {
+    title: "Revision Count",
+    type: "number",
+    enum: _values(SubscriptionFrequencyType),
+    enumNames: _map(
+      SubscriptionFrequencyType,
+      (value, key) => localizedSubscriptionFrequncyLabels[key]
+    ),
+    default: SubscriptionFrequencyType.ignore,
+  };
+
+  const fituredout = items.map((item) => item || {});
+
+  console.log("ye ye", fituredout);
+
   return {
     $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -38,31 +85,7 @@ export const jsSchema = (intl) => {
       notificationSubscriptions: {
         title: intl.formatMessage(messages.notificationSubscriptionsLabel),
         type: "array",
-        items: [
-          ..._map(NotificationSubscriptionType, (type, name) => ({
-            title: `${
-              localizedNotificationLabels[`${name}Long`] ||
-              localizedNotificationLabels[name]
-            } ${intl.formatMessage(messages.notificationLabel)}`,
-            type: "number",
-            enum: _values(SubscriptionType),
-            enumNames: _map(
-              SubscriptionType,
-              (value, key) => localizedSubscriptionLabels[key]
-            ),
-            default: SubscriptionType.noEmail,
-          })),
-          {
-            title: "Revisions Pending",
-            type: "number",
-            enum: _values(SubscriptionFrequencyType),
-            enumNames: _map(
-              SubscriptionFrequencyType,
-              (value, key) => localizedSubscriptionFrequncyLabels[key]
-            ),
-            default: SubscriptionFrequencyType.noEmail,
-          },
-        ],
+        items: fituredout,
       },
       email: {
         title: intl.formatMessage(messages.emailLabel),
@@ -100,14 +123,17 @@ export const uiSchema = (intl) => {
         removable: false,
       },
     },
-    reviewSubscriptions: {
-      classNames: "no-legend",
-      "ui:options": {
-        orderable: false,
-        removable: false,
-      },
-    },
-    "ui:order": ["email", "notificationSubscriptions", "reviewSubscriptions"],
+    // empty: {
+    //   "ui:emptyValue": "",
+    // },
+    // notificationCountSubscriptions: {
+    //   classNames: "no-legend",
+    //   "ui:options": {
+    //     orderable: false,
+    //     removable: false,
+    //   },
+    // },
+    "ui:order": ["email", "notificationSubscriptions"],
     "ui:showTitle": false,
   };
 };
