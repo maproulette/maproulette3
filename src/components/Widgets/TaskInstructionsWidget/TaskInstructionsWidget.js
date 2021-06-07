@@ -22,6 +22,18 @@ const descriptor = {
 }
 
 export default class TaskInstructionsWidget extends Component {
+  state = {
+    /**
+     * Since the API is involved, collapsing the widget takes an undeterminable amount of time
+     * and needs a loader to account for it.
+     */
+    collapsing: false,
+  }
+
+  resetLoader = () => {
+    this.setState({ collapsing: false });
+  }
+
   /**
    * Invoked to toggle minimization of the challenge instructions. If the user
    * is working through a virtual challenge, we nevertheless set the preference
@@ -30,6 +42,7 @@ export default class TaskInstructionsWidget extends Component {
    * works through tasks from multiple challenges.
    */
   toggleMinimized = () => {
+    this.setState({ collapsing: true });
     const challengeId = _get(this.props.task, 'parent.id')
     if (_isFinite(challengeId)) {
       if (!this.props.collapseInstructions) {
@@ -41,6 +54,9 @@ export default class TaskInstructionsWidget extends Component {
 
       this.props.setInstructionsCollapsed(challengeId, false, !this.props.collapseInstructions)
     }
+
+    //this is not ideal, but it will prevent spam clicks until a more asynchronous flow is built for this toggle
+    setTimeout(this.resetLoader, 800);
   }
 
   adjustHeightForMinimization = () => {
@@ -50,25 +66,42 @@ export default class TaskInstructionsWidget extends Component {
     }
     else if (!this.props.collapseInstructions &&
              this.props.widgetLayout.h === descriptor.minHeight) {
-      this.props.updateWidgetHeight(
-        this.props.widgetLayout.i,
-        _isFinite(this.props.widgetConfiguration.expandedHeight) ?
-          this.props.widgetConfiguration.expandedHeight : descriptor.defaultHeight
-      )
+
+      //users who spam clicked get stuck in a corrupt user settings state where
+      //expandedHeight equals minHeight.  This check will stop the infinite render and api call.
+      if (this.props.widgetConfiguration?.expandedHeight !== descriptor.minHeight) {
+        this.props.updateWidgetHeight(
+          this.props.widgetLayout.i,
+          _isFinite(this.props.widgetConfiguration.expandedHeight) ?
+            this.props.widgetConfiguration.expandedHeight : descriptor.defaultHeight
+        )
+      }
     }
   }
 
   componentDidMount() {
-    this.adjustHeightForMinimization()
+    this.adjustHeightForMinimization();
   }
 
-  componentDidUpdate() {
-    this.adjustHeightForMinimization()
+  componentDidUpdate(prevProps) {
+    //When the page loads, the instructions widget should be expanded. Unfortunately this can't be checked
+    //onmount so it is checked here for now.  Refactor needed.
+    if (!this.props.collapseInstructions && this.props.widgetConfiguration?.expandedHeight) {
+      if (this.props.widgetLayout.h !== this.props.widgetConfiguration?.expandedHeight)
+      return this.props.updateWidgetHeight(
+        this.props.widgetLayout.i,
+        descriptor.expandedHeight
+      )
+    }
+
+    if (prevProps.collapseInstructions !== this.props.collapseInstructions) {
+      this.adjustHeightForMinimization();
+    }
   }
 
   render() {
     const minimizeControl = (
-      <button className="mr-text-green-lighter" onClick={this.toggleMinimized}>
+      <button className="mr-text-green-lighter" onClick={this.toggleMinimized} disabled={this.state.collapsing}>
         <SvgSymbol
           sym="icon-cheveron-down"
           viewBox="0 0 20 20"
