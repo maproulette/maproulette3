@@ -7,6 +7,13 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.8rev1] - 2021-06-09
+
+### Fixed
+- Unable to upload tasks (API). [(895)](https://github.com/maproulette/maproulette2/issues/895)
+- Unable to do batch status changes [(1613)](https://github.com/osmlab/maproulette3/issues/1613)
+- Instruction Widget expand/collapse toggle fix.
+
 ## [v3.7.8] - 2021-06-02
 
 ### Added

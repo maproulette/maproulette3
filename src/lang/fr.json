@@ -219,6 +219,8 @@
   "Admin.EditChallenge.form.steps.yes.label": "Yes",
   "Admin.EditChallenge.form.steps.zoom.description": "Configure map zoom levels",
   "Admin.EditChallenge.form.steps.zoom.header": "Zoom Levels",
+  "Admin.EditChallenge.form.taskBundlePropertyId.description": "The name of the task feature property to treat as a bundle ID for related tasks. Tasks without this property will remain as isolated tasks. [Learn more](https://learn.maproulette.org/documentation/setting-task-bundle-identifiers/).",
+  "Admin.EditChallenge.form.taskBundlePropertyId.label": "Task Bundle Id Property",
   "Admin.EditChallenge.form.taskPropertyStyles.clear": "Effacer",
   "Admin.EditChallenge.form.taskPropertyStyles.close": "Terminé",
   "Admin.EditChallenge.form.taskPropertyStyles.description": "Sets up task property style rules......",
