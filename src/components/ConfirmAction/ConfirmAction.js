@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import _get from 'lodash/get'
-import _cloneDeep from 'lodash/cloneDeep'
-import Modal from '../Modal/Modal'
-import External from '../External/External'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import { ExternalContext } from '../External/External'
-import messages from './Messages'
-import './ConfirmAction.scss'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
+import _get from "lodash/get";
+import _cloneDeep from "lodash/cloneDeep";
+import Modal from "../Modal/Modal";
+import External from "../External/External";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import { ExternalContext } from "../External/External";
+import messages from "./Messages";
+import "./ConfirmAction.scss";
 
 /**
  * ConfirmAction intercepts the onClick (or other specified action) of the
@@ -22,41 +22,40 @@ import './ConfirmAction.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class ConfirmAction extends Component {
-  static contextType = ExternalContext
+  static contextType = ExternalContext;
 
-  originalAction = null
+  originalAction = null;
 
   state = {
     confirming: false,
-  }
+  };
 
-  initiateConfirmation = e => {
+  initiateConfirmation = (e) => {
     if (this.props.skipConfirmation && this.props.skipConfirmation(e)) {
       if (this.originalAction) {
-        this.originalAction(e)
+        this.originalAction(e);
       }
-    }
-    else {
+    } else {
       // Suspend clickout so that users can interact with our modal
-      this.context.suspendClickout(true)
-      this.setState({confirming: true, originalEvent: _cloneDeep(e)})
+      this.context.suspendClickout(true);
+      this.setState({ confirming: true, originalEvent: _cloneDeep(e) });
     }
-  }
+  };
 
   cancel = () => {
-    this.context.suspendClickout(false)
-    this.setState({confirming: false})
-  }
+    this.context.suspendClickout(false);
+    this.setState({ confirming: false });
+  };
 
   proceed = () => {
-    const event = this.state.originalEvent
+    const event = this.state.originalEvent;
 
-    this.context.suspendClickout(false)
-    this.setState({confirming: false, originalEvent: null})
+    this.context.suspendClickout(false);
+    this.setState({ confirming: false, originalEvent: null });
     if (this.originalAction) {
-      this.originalAction(event)
+      this.originalAction(event);
     }
-  }
+  };
 
   modal = () => {
     return (
@@ -69,20 +68,20 @@ export default class ConfirmAction extends Component {
           key={this.props.modalName}
           contentClassName="mr-mt-20"
         >
-          <article>
+          <article id="confirm-action-modal">
             <div className="mr-top-0 mr-absolute">
               <SvgSymbol
                 className="mr-fill-white-04 mr-w-48 mr-h-48 mr-mt-4 mr-ml-8"
-                viewBox='0 0 20 20'
-                sym='alert-icon'
+                viewBox="0 0 20 20"
+                sym="alert-icon"
               />
             </div>
             <div className="mr-flex mr-flex-col mr-items-center mr-px-8 mr-pt-12">
               <div className="mr-w-full mr-flex mr-justify-center mr-mb-4">
                 <SvgSymbol
                   className="mr-fill-red mr-h-10 mr-h-10"
-                  viewBox='0 0 20 20'
-                  sym='alert-icon'
+                  viewBox="0 0 20 20"
+                  sym="alert-icon"
                 />
               </div>
               <div className="mr-text-3xl mr-mb-4">
@@ -111,22 +110,23 @@ export default class ConfirmAction extends Component {
           </article>
         </Modal>
       </External>
-    )
-  }
+    );
+  };
 
   render() {
-    const action = this.props.action ? this.props.action : 'onClick'
-    this.originalAction = _get(this.props.children, `props.${action}`)
+    const action = this.props.action ? this.props.action : "onClick";
+    this.originalAction = _get(this.props.children, `props.${action}`);
 
-    const ControlWithConfirmation =
-      React.cloneElement(this.props.children, {[action]: this.initiateConfirmation})
+    const ControlWithConfirmation = React.cloneElement(this.props.children, {
+      [action]: this.initiateConfirmation,
+    });
 
     return (
       <React.Fragment>
         {ControlWithConfirmation}
         {this.state.confirming && this.modal()}
       </React.Fragment>
-    )
+    );
   }
 }
 
@@ -137,4 +137,4 @@ ConfirmAction.propTypes = {
   skipConfirmation: PropTypes.func,
   /** Optional action to intercept. Defaults to onClick */
   action: PropTypes.string,
-}
+};
