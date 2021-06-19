@@ -219,6 +219,8 @@
   "Admin.EditChallenge.form.steps.yes.label": "Так",
   "Admin.EditChallenge.form.steps.zoom.description": "Налаштування масштабування мапи",
   "Admin.EditChallenge.form.steps.zoom.header": "Масштаби",
+  "Admin.EditChallenge.form.taskBundlePropertyId.description": "The name of the task feature property to treat as a bundle ID for related tasks. Tasks without this property will remain as isolated tasks. [Learn more](https://learn.maproulette.org/documentation/setting-task-bundle-identifiers/).",
+  "Admin.EditChallenge.form.taskBundlePropertyId.label": "Task Bundle Id Property",
   "Admin.EditChallenge.form.taskPropertyStyles.clear": "Очистити",
   "Admin.EditChallenge.form.taskPropertyStyles.close": "Готово",
   "Admin.EditChallenge.form.taskPropertyStyles.description": "Встановлення правил стилів для завдань......",

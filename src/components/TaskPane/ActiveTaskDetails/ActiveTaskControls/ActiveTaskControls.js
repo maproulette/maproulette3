@@ -307,6 +307,7 @@ export class ActiveTaskControls extends Component {
                <CooperativeWorkControls
                  {...this.props}
                  allowedProgressions={allowedProgressions}
+                 pickEditor={this.pickEditor}
                  complete={this.initiateCompletion}
                  nextTask={this.next}
                  needsRevised={needsRevised}
@@ -324,14 +325,14 @@ export class ActiveTaskControls extends Component {
              />
              }
 
-             {isEditingTask &&
-             <TaskCompletionStep2
-               {...this.props}
-               allowedProgressions={allowedProgressions}
-               complete={this.initiateCompletion}
-               cancelEditing={this.cancelEditing}
-               needsRevised={needsRevised}
-             />
+             {isEditingTask && !AsCooperativeWork(this.props.task).isTagType() &&
+              <TaskCompletionStep2
+                {...this.props}
+                allowedProgressions={allowedProgressions}
+                complete={this.initiateCompletion}
+                cancelEditing={this.cancelEditing}
+                needsRevised={needsRevised}
+              />
              }
 
              {!isEditingTask && isComplete && !needsRevised &&

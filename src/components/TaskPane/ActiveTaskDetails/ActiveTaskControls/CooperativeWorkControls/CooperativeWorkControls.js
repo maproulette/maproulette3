@@ -18,6 +18,9 @@ import TaskFalsePositiveControl
 import TaskAlreadyFixedControl
        from '../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskAlreadyFixedControl/TaskAlreadyFixedControl'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
+import UserEditorSelector
+       from '../../../../UserEditorSelector/UserEditorSelector'
+       import TaskEditControl from '../TaskEditControl/TaskEditControl'
 import messages from './Messages'
 
 export class CooperativeWorkControls extends Component {
@@ -68,6 +71,15 @@ export class CooperativeWorkControls extends Component {
                dropdownContent={dropdown => <ListMoreOptionsItems {...this.props} />}
              />
             }
+          </div>
+
+          <UserEditorSelector
+            {...this.props}
+            className="mr-mb-4"
+          />
+
+          <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
+            <TaskEditControl {...this.props} />
           </div>
         </div>
       </div>
