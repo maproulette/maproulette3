@@ -23,23 +23,28 @@ export const jsSchema = (
   extraErrors,
   options = {}
 ) => {
+  const properties = {
+    checkinComment: {
+      title: intl.formatMessage(messages.checkinCommentLabel),
+      type: "string",
+    },
+    checkinSource: {
+      title: intl.formatMessage(messages.checkinSourceLabel),
+      type: "string",
+    },
+  }
+
+  if (process.env.REACT_APP_CHANGESET_URL === "enabled") {
+    properties.changesetUrl = {
+      type: "boolean",
+      default: false,
+    }
+  }
+
   const schemaFields = {
     $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
-    properties: {
-      checkinComment: {
-        title: intl.formatMessage(messages.checkinCommentLabel),
-        type: "string",
-      },
-      checkinSource: {
-        title: intl.formatMessage(messages.checkinSourceLabel),
-        type: "string",
-      },
-      changesetUrl: {
-        type: "boolean",
-        default: false,
-      },
-    },
+    properties,
   };
 
   // For new challenges, offer option to toggle #maproulette tag on commit comment.
