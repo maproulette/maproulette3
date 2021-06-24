@@ -3,7 +3,10 @@ import _map from "lodash/map";
 import _values from "lodash/values";
 import {
   NotificationSubscriptionType,
+  NotificationCountType,
   notificationTypeLabels,
+  notificationCountTypeLabels,
+  NOTIFICATION_TYPE_REVISION_COUNT,
 } from "../../../services/Notification/NotificationType/NotificationType";
 import {
   SubscriptionType,
@@ -13,6 +16,25 @@ import {
 } from "../../../services/Notification/NotificationSubscription/NotificationSubscription";
 import MarkdownContent from "../../../components/MarkdownContent/MarkdownContent";
 import messages from "../Messages";
+
+const createSubscriptionInput = (
+  name,
+  notificationLabels,
+  subscriptionTypes,
+  subscriptionLabels,
+  intl,
+  defaultSelection
+) => {
+  return {
+    title: `${
+      notificationLabels[`${name}Long`] || notificationLabels[name]
+    } ${intl.formatMessage(messages.notificationLabel)}`,
+    type: "number",
+    enum: _values(subscriptionTypes),
+    enumNames: _map(subscriptionTypes, (value, key) => subscriptionLabels[key]),
+    default: defaultSelection,
+  };
+};
 
 /**
  * Generates a JSON Schema describing editable Notification Settings fields
@@ -27,56 +49,36 @@ import messages from "../Messages";
  */
 export const jsSchema = (intl) => {
   const localizedNotificationLabels = notificationTypeLabels(intl);
+  const localizedNotificationCountLabels = notificationCountTypeLabels(intl);
   const localizedSubscriptionLabels = subscriptionTypeLabels(intl);
   const localizedSubscriptionFrequncyLabels =
     subscriptionFrequencyTypeLabels(intl);
 
-  const items = [
-    ..._map(NotificationSubscriptionType, (type, name) => ({
-      title: `${
-        localizedNotificationLabels[`${name}Long`] ||
-        localizedNotificationLabels[name]
-      } ${intl.formatMessage(messages.notificationLabel)}`,
-      type: "number",
-      enum: _values(SubscriptionType),
-      enumNames: _map(
-        SubscriptionType,
-        (value, key) => localizedSubscriptionLabels[key]
-      ),
-      default: SubscriptionType.noEmail,
-    })),
-  ];
+  console.log(localizedSubscriptionFrequncyLabels);
 
-  items[8] = items[8] || {};
-  items[9] = items[9] || {};
-  items[10] = items[10] || {};
-  items[11] = items[11] || {};
+  const items = new Array(NOTIFICATION_TYPE_REVISION_COUNT).fill({});
 
-  items[12] = {
-    title: "Review Count",
-    type: "number",
-    enum: _values(SubscriptionFrequencyType),
-    enumNames: _map(
+  _map(NotificationSubscriptionType, (type, name) => {
+    items[type] = createSubscriptionInput(
+      name,
+      localizedNotificationLabels,
+      SubscriptionType,
+      localizedSubscriptionLabels,
+      intl,
+      SubscriptionType.noEmail
+    );
+  });
+
+  _map(NotificationCountType, (type, name) => {
+    items[type] = createSubscriptionInput(
+      name,
+      localizedNotificationCountLabels,
       SubscriptionFrequencyType,
-      (value, key) => localizedSubscriptionFrequncyLabels[key]
-    ),
-    default: SubscriptionFrequencyType.ignore,
-  };
-
-  items[13] = {
-    title: "Revision Count",
-    type: "number",
-    enum: _values(SubscriptionFrequencyType),
-    enumNames: _map(
-      SubscriptionFrequencyType,
-      (value, key) => localizedSubscriptionFrequncyLabels[key]
-    ),
-    default: SubscriptionFrequencyType.ignore,
-  };
-
-  const fituredout = items.map((item) => item || {});
-
-  console.log("ye ye", fituredout);
+      localizedSubscriptionFrequncyLabels,
+      intl,
+      SubscriptionFrequencyType.ignore
+    );
+  });
 
   return {
     $schema: "http://json-schema.org/draft-07/schema#",
@@ -85,7 +87,7 @@ export const jsSchema = (intl) => {
       notificationSubscriptions: {
         title: intl.formatMessage(messages.notificationSubscriptionsLabel),
         type: "array",
-        items: fituredout,
+        items: items,
       },
       email: {
         title: intl.formatMessage(messages.emailLabel),
@@ -123,16 +125,6 @@ export const uiSchema = (intl) => {
         removable: false,
       },
     },
-    // empty: {
-    //   "ui:emptyValue": "",
-    // },
-    // notificationCountSubscriptions: {
-    //   classNames: "no-legend",
-    //   "ui:options": {
-    //     orderable: false,
-    //     removable: false,
-    //   },
-    // },
     "ui:order": ["email", "notificationSubscriptions"],
     "ui:showTitle": false,
   };

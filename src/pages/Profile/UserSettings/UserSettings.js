@@ -178,8 +178,6 @@ class UserSettings extends Component {
     // The user's email address comes in from the notifications data even
     // though its technically a user setting
 
-    debugger;
-
     const toUpdateSettings = _merge({}, userSettings, _pick(formData, "email"));
     if (this.state.settingsFormData.customBasemaps) {
       toUpdateSettings.customBasemaps =
@@ -192,16 +190,12 @@ class UserSettings extends Component {
       saveComplete: false,
     });
 
-    const keyasdf = keysWithCountTypes;
-
     const subscriptionsObject = _fromPairs(
       _map(formData.notificationSubscriptions, (setting, index) => [
         keysWithCountTypes[index],
         parseInt(setting, 10),
       ])
     );
-
-    debugger;
 
     this.saveNotificationSettings(subscriptionsObject);
   };
@@ -307,8 +301,6 @@ class UserSettings extends Component {
       }),
       this.state.notificationsFormData
     );
-
-    console.log("huh", notificationSettings);
 
     return (
       <section className="mr-section mr-mt-0">
