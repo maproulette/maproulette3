@@ -9,8 +9,8 @@ export const NOTIFICATION_EMAIL_NONE = 1; // no email desired
 export const NOTIFICATION_EMAIL_IMMEDIATE = 2; // send email immediately
 export const NOTIFICATION_EMAIL_DIGEST = 3; // include in daily digest
 
-export const NOTIFICATION_DAILY = 4; // daily email
-export const NOTIFICATION_WEEKLY = 5; // weekly email
+export const NOTIFICATION_DAILY = 5; // daily email
+export const NOTIFICATION_WEEKLY = 6; // weekly email
 
 export const SubscriptionType = Object.freeze({
   ignore: NOTIFICATION_IGNORE,
