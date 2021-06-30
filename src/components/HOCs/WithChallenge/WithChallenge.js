@@ -127,7 +127,6 @@ const getChallengeFromTask = async (taskId, props, component) => {
 
   const challengeId = results?.entities?.tasks?.[taskId]?.parent;
   if (challengeId) {
-    debugger;
     props.history.push(`/challenge/${challengeId}/task/${taskId}/review`)
   }
 }
