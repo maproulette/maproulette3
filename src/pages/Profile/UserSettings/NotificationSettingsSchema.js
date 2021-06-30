@@ -54,8 +54,6 @@ export const jsSchema = (intl) => {
   const localizedSubscriptionFrequncyLabels =
     subscriptionFrequencyTypeLabels(intl);
 
-  console.log(localizedSubscriptionFrequncyLabels);
-
   const items = new Array(NOTIFICATION_TYPE_REVISION_COUNT).fill({});
 
   _map(NotificationSubscriptionType, (type, name) => {

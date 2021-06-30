@@ -212,7 +212,6 @@ class UserSettings extends Component {
 
     const subscriptionsArray = [];
     _each(notificationTypes, (constantValue, key) => {
-      console.log(constantValue, key);
       subscriptionsArray[constantValue] =
         notificationsData.notificationSubscriptions[key];
     });
