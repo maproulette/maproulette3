@@ -8,6 +8,9 @@ import { fetchChallenge }
        from '../../../services/Challenge/Challenge'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
+import { defaultRoutes as api } from '../../../services/Server/Server'
+import Endpoint from '../../../services/Server/Endpoint'
+import { taskSchema } from "../../../services/Task/Task"
 
 /**
  * WithChallenge provides functions for loading a challenge.
@@ -35,8 +38,17 @@ const WithChallenge = function(WrappedComponent) {
      * @private
      */
     updateChallenge = props => {
-      const challengeId = this.parseChallengeId(props)
-      getChallenge(challengeId, props, this)
+      let challengeId = this.parseChallengeId(props);
+
+      if (!challengeId) {
+        const taskId = parseInt(_get(props, 'match.params.taskId'), 10)
+
+        if (taskId) {
+          getChallengeFromTask(taskId, props, this)
+        }
+      } else {
+        getChallenge(challengeId, props, this)
+      }
     }
 
     componentDidMount() {
@@ -68,7 +80,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         return dispatch(
           fetchChallenge(challengeId)
         ).then(normalizedResults => {
-          if (!_isFinite(normalizedResults.result) ||
+          if (!_isFinite(normalizedResults?.result) ||
               _get(normalizedResults,
                    `entities.challenges.${normalizedResults.result}.deleted`)) {
             dispatch(addError(AppErrors.challenge.doesNotExist))
@@ -104,6 +116,18 @@ export const getChallenge = (challengeId, props, component) => {
         }
       })
     }
+  }
+}
+
+const getChallengeFromTask = async (taskId, props, component) => {
+  const results = await new Endpoint(api.task.single, {
+    schema: taskSchema(),
+    variables: {id: taskId}
+  }).execute();
+
+  const challengeId = results?.entities?.tasks?.[taskId]?.parent;
+  if (challengeId) {
+    props.history.push(`/challenge/${challengeId}/task/${taskId}/review`)
   }
 }
 

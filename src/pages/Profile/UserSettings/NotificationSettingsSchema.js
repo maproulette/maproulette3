@@ -1,12 +1,40 @@
-import React from 'react'
-import _map from 'lodash/map'
-import _values from 'lodash/values'
-import { NotificationSubscriptionType, notificationTypeLabels }
-       from '../../../services/Notification/NotificationType/NotificationType'
-import { SubscriptionType, subscriptionTypeLabels }
-       from '../../../services/Notification/NotificationSubscription/NotificationSubscription'
-import MarkdownContent from '../../../components/MarkdownContent/MarkdownContent'
-import messages from '../Messages'
+import React from "react";
+import _map from "lodash/map";
+import _values from "lodash/values";
+import {
+  NotificationSubscriptionType,
+  NotificationCountType,
+  notificationTypeLabels,
+  notificationCountTypeLabels,
+  NOTIFICATION_TYPE_REVISION_COUNT,
+} from "../../../services/Notification/NotificationType/NotificationType";
+import {
+  SubscriptionType,
+  SubscriptionFrequencyType,
+  subscriptionTypeLabels,
+  subscriptionFrequencyTypeLabels,
+} from "../../../services/Notification/NotificationSubscription/NotificationSubscription";
+import MarkdownContent from "../../../components/MarkdownContent/MarkdownContent";
+import messages from "../Messages";
+
+const createSubscriptionInput = (
+  name,
+  notificationLabels,
+  subscriptionTypes,
+  subscriptionLabels,
+  intl,
+  defaultSelection
+) => {
+  return {
+    title: `${
+      notificationLabels[`${name}Long`] || notificationLabels[name]
+    } ${intl.formatMessage(messages.notificationLabel)}`,
+    type: "number",
+    enum: _values(subscriptionTypes),
+    enumNames: _map(subscriptionTypes, (value, key) => subscriptionLabels[key]),
+    default: defaultSelection,
+  };
+};
 
 /**
  * Generates a JSON Schema describing editable Notification Settings fields
@@ -20,23 +48,44 @@ import messages from '../Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl) => {
-  const localizedNotificationLabels = notificationTypeLabels(intl)
-  const localizedSubscriptionLabels = subscriptionTypeLabels(intl)
+  const localizedNotificationLabels = notificationTypeLabels(intl);
+  const localizedNotificationCountLabels = notificationCountTypeLabels(intl);
+  const localizedSubscriptionLabels = subscriptionTypeLabels(intl);
+  const localizedSubscriptionFrequncyLabels =
+    subscriptionFrequencyTypeLabels(intl);
+
+  const items = new Array(NOTIFICATION_TYPE_REVISION_COUNT).fill({});
+
+  _map(NotificationSubscriptionType, (type, name) => {
+    items[type] = createSubscriptionInput(
+      name,
+      localizedNotificationLabels,
+      SubscriptionType,
+      localizedSubscriptionLabels,
+      intl,
+      SubscriptionType.noEmail
+    );
+  });
+
+  _map(NotificationCountType, (type, name) => {
+    items[type] = createSubscriptionInput(
+      name,
+      localizedNotificationCountLabels,
+      SubscriptionFrequencyType,
+      localizedSubscriptionFrequncyLabels,
+      intl,
+      SubscriptionFrequencyType.ignore
+    );
+  });
 
   return {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       notificationSubscriptions: {
         title: intl.formatMessage(messages.notificationSubscriptionsLabel),
         type: "array",
-        items: _map(NotificationSubscriptionType, (type, name) => ({
-          title: `${localizedNotificationLabels[`${name}Long`] || localizedNotificationLabels[name]} ${intl.formatMessage(messages.notificationLabel)}`,
-          type: "number",
-          enum: _values(SubscriptionType),
-          enumNames: _map(SubscriptionType, (value, key) => localizedSubscriptionLabels[key]),
-          default: SubscriptionType.noEmail,
-        })),
+        items: items,
       },
       email: {
         title: intl.formatMessage(messages.emailLabel),
@@ -44,8 +93,8 @@ export const jsSchema = (intl) => {
         format: "email",
       },
     },
-  }
-}
+  };
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -61,18 +110,20 @@ export const uiSchema = (intl) => {
   return {
     email: {
       "ui:emptyValue": "",
-      "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.emailDescription)} />,
+      "ui:help": (
+        <MarkdownContent
+          markdown={intl.formatMessage(messages.emailDescription)}
+        />
+      ),
     },
     notificationSubscriptions: {
       classNames: "no-legend",
       "ui:options": {
         orderable: false,
         removable: false,
-      }
+      },
     },
-    "ui:order": [
-      "email", "notificationSubscriptions",
-    ],
+    "ui:order": ["email", "notificationSubscriptions"],
     "ui:showTitle": false,
-  }
-}
+  };
+};
