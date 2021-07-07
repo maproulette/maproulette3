@@ -884,9 +884,8 @@ export const saveChallenge = function (
     }
 
     if (_isArray(challengeData.preferredReviewTags)) {
-      challengeData.preferredReviewTags = challengeData.preferredReviewTags.join(
-        ","
-      );
+      challengeData.preferredReviewTags =
+        challengeData.preferredReviewTags.join(",");
     }
 
     // If there is local GeoJSON content being transmitted as a string, parse

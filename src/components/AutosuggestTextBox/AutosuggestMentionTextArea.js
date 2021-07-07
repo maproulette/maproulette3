@@ -225,6 +225,7 @@ export default class AutosuggestMentionTextArea extends Component {
                   placeholder={this.props.placeholder}
                   rows={this.props.rows}
                   cols={this.props.cols}
+                  style={{ resize: this.props.disableResize ? "none" : "both" }}
                 />
               )}
               dropdownContent={() => {

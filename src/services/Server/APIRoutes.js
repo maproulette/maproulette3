@@ -61,6 +61,7 @@ const apiRoutes = factory => {
       'actions': factory.get('/data/challenge/:id'),
       'activity': factory.get('/data/challenge/:id/activity'),
       'comments': factory.get('/challenge/:id/comments'),
+      'addComment': factory.post('/challenge/:id/comment'),
       'create': factory.post('/challenge'),
       'edit': factory.put('/challenge/:id'),
       'move': factory.post('/challenge/:challengeId/project/:projectId'),

@@ -94,17 +94,14 @@ export const editTask = function (
       }
 
       if (editor === ID) {
-        debugger;
         editorWindowReference = window.open(
           constructIdURI(task, mapBounds, options, taskBundle)
         );
       } else if (editor === LEVEL0) {
-        debugger;
         editorWindowReference = window.open(
           constructLevel0URI(task, mapBounds, options, taskBundle)
         );
       } else if (editor === RAPID) {
-        debugger;
         editorWindowReference = window.open(
           constructRapidURI(task, mapBounds, options)
         );
