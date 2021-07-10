@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { FormattedDate, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
@@ -118,7 +118,7 @@ export const ChallengeCommentsPane = (props) => {
     getChallengeComments();
   };
 
-  const getChallengeComments = async () => {
+  const getChallengeComments = useCallback(async () => {
     const results = await fetchChallengeComments(challengeId);
 
     if (Array.isArray(results)) {
@@ -128,11 +128,11 @@ export const ChallengeCommentsPane = (props) => {
     }
 
     setStatus(DATA_STATUSES.ERROR);
-  };
+  }, [challengeId]);
 
   useEffect(() => {
     getChallengeComments();
-  }, [challengeId]);
+  }, [getChallengeComments]);
 
   return (
     <div id="challengeCommentsPaneRoot">
