@@ -69,13 +69,13 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
             </div>
             <div className="mr-text-sm">
               <FormattedTime
-                value={comment.createdAt}
+                value={comment.created}
                 hour="2-digit"
                 minute="2-digit"
               />
               ,{" "}
               <FormattedDate
-                value={comment.createdAt}
+                value={comment.created}
                 year="numeric"
                 month="long"
                 day="2-digit"
@@ -91,12 +91,15 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
 
 const updateScroll = () => {
   const element = document.getElementById("challenge-comments-container");
-  element.scrollTop = element.scrollHeight;
+  if (element) {
+    element.scrollTop = element.scrollHeight;
+  }
 };
 
 const DATA_STATUSES = {
   LOADING: "LOADING",
   DONE: "",
+  ERROR: "ERROR",
 };
 
 export const ChallengeCommentsPane = (props) => {
@@ -105,30 +108,46 @@ export const ChallengeCommentsPane = (props) => {
   } = UseRouter();
   const [comments, setComments] = useState([]);
   const [input, setInput] = useState("");
-  const [status, setStatus] = useState(DATA_STATUSES.DONE);
+  const [status, setStatus] = useState(DATA_STATUSES.LOADING);
   const [tasksOn, setTasksOn] = useState(false);
-  const offset = props.offset || 560;
+  const offset = props.offset || 570;
 
   const submitComment = async () => {
-    const results = await postChallengeComment(challengeId, input);
+    await postChallengeComment(challengeId, input);
     setInput("");
+    getChallengeComments();
+  };
+
+  const getChallengeComments = async () => {
+    const results = await fetchChallengeComments(challengeId);
+
+    if (Array.isArray(results)) {
+      setComments(results);
+      setStatus(DATA_STATUSES.DONE);
+      return setTimeout(updateScroll, 10);
+    }
+
+    setStatus(DATA_STATUSES.ERROR);
   };
 
   useEffect(() => {
-    const getChallengeComments = async () => {
-      setStatus(DATA_STATUSES.LOADING);
-      const results = await fetchChallengeComments(challengeId);
-
-      setComments(results);
-      setStatus(DATA_STATUSES.DONE);
-      setTimeout(updateScroll, 1);
-    };
-
     getChallengeComments();
   }, [challengeId]);
 
   return (
     <div id="challengeCommentsPaneRoot">
+      <div className="mr-flex mr-justify-end">
+        <input
+          type="checkbox"
+          className="mr-checkbox-toggle mr-ml-4 mr-mr-1"
+          checked={tasksOn}
+          onChange={() => {
+            setTasksOn(!tasksOn);
+            setTimeout(updateScroll, 10);
+          }}
+        />
+        <div className="mr-text-sm mr-mx-1">Task Comments</div>
+      </div>
       <div
         className="mr-bg-black-15 mr-mt-4"
         id="challengeCommentsPaneHeightContainer"
@@ -138,15 +157,6 @@ export const ChallengeCommentsPane = (props) => {
           id="challenge-comments-container"
           className="mr-p-3 mr-h-full mr-overflow-scroll"
         >
-          <div className="mr-flex mr-justify-end">
-            <input
-              type="checkbox"
-              className="mr-checkbox-toggle mr-ml-4 mr-mr-1"
-              checked={tasksOn}
-              onChange={() => setTasksOn(!tasksOn)}
-            />
-            <div className="mr-text-sm mr-mx-1">Task Comments</div>
-          </div>
           {status === DATA_STATUSES.LOADING
             ? "Loading..."
             : renderCommentList({
@@ -164,7 +174,6 @@ export const ChallengeCommentsPane = (props) => {
         value={input}
         onChange={setInput}
       />
-      <div className="mr-my-2"></div>
     </div>
   );
 };
