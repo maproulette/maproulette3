@@ -233,13 +233,17 @@ export class ChallengeDetail extends Component {
                         >
                           <FormattedMessage {...messages.viewLeaderboard} />
                         </Link>
-                        <span className="mr-px-3"> | </span>
-                        <Link
-                          className="mr-text-green-lighter hover:mr-text-white"
-                          onClick={this.onClickTab}
-                        >
-                          <FormattedMessage {...tabMessage} />
-                        </Link>
+                        {this.props.user && (
+                          <Fragment>
+                            <span className="mr-px-3"> | </span>
+                            <Link
+                              className="mr-text-green-lighter hover:mr-text-white"
+                              onClick={this.onClickTab}
+                            >
+                              <FormattedMessage {...tabMessage} />
+                            </Link>
+                          </Fragment>
+                        )}
                       </li>
                     </ol>
                   )}
