@@ -50,10 +50,9 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
           </div>
           <div
             className={classNames(
-              "mr-p-1 mr-rounded mr-p-2",
+              "mr-p-1 mr-rounded mr-p-2 mr-flex-1",
               isUser ? "mr-bg-blue-light" : "mr-bg-green-dark"
             )}
-            style={{ flex: 1 }}
           >
             <div>
               <div className="mr-text-sm">

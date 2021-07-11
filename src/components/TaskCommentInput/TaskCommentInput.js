@@ -106,7 +106,6 @@ export class TaskCommentInput extends Component {
             taskId={this.props.taskId}
             dropdownPlacement={this.props.dropdownPlacement}
             disableResize={this.props.disableResize}
-            disablePreferred={this.props.disablePreferred}
           />
         )}
         {this.props.submitComment && (
@@ -134,7 +133,7 @@ TaskCommentInput.propTypes = {
 TaskCommentInput.defaultProps = {
   value: "",
   rows: 1,
-  maxCharacterCount: 1500
+  maxCharacterCount: 1500,
 };
 
 export default injectIntl(TaskCommentInput);

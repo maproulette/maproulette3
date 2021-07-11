@@ -216,7 +216,8 @@ export default class AutosuggestMentionTextArea extends Component {
                   ref={this.props.inputRef}
                   className={classNames(
                     this.props.inputClassName,
-                    "mr-flex-grow mr-w-full mr-h-full mr-outline-none"
+                    "mr-flex-grow mr-w-full mr-h-full mr-outline-none",
+                    this.props.disableResize ? "mr-resize-none" : "mr-resize"
                   )}
                   onKeyDown={(e) => this.handleKeyDown(e, dropdown, downshift)}
                   onFocus={(e) => this.setState({textBoxActive: true})}
@@ -224,7 +225,6 @@ export default class AutosuggestMentionTextArea extends Component {
                   placeholder={this.props.placeholder}
                   rows={this.props.rows}
                   cols={this.props.cols}
-                  style={{ resize: this.props.disableResize ? "none" : "both" }}
                 />
               )}
               dropdownContent={() => {

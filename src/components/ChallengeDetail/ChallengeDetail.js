@@ -39,7 +39,7 @@ const ClusterMap = WithChallengeTaskClusters(
  */
 export class ChallengeDetail extends Component {
   state = {
-    viewComments: true,
+    viewComments: false,
   };
 
   componentDidMount() {

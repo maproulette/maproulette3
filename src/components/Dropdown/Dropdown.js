@@ -134,6 +134,7 @@ Dropdown.propTypes = {
   className: PropTypes.string,
   rootProps: PropTypes.object,
   innerClassName: PropTypes.string,
+  fixedMenu: PropTypes.bool,
   suppressControls: PropTypes.bool,
   arrowClassName: PropTypes.string,
   toggleVisible: PropTypes.func,
