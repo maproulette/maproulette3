@@ -46,6 +46,12 @@ export class ChallengeDetail extends Component {
     window.scrollTo(0, 0);
   }
 
+  componentDidUpdate() {
+    if (!_isObject(this.props.user) && this.state.viewComments) {
+      this.setState({ viewComments: false });
+    }
+  }
+
   onClickTab = () => {
     this.setState({ viewComments: !this.state.viewComments });
   };
@@ -233,7 +239,7 @@ export class ChallengeDetail extends Component {
                         >
                           <FormattedMessage {...messages.viewLeaderboard} />
                         </Link>
-                        {this.props.user && (
+                        {_isObject(this.props.user) && !challenge.isVirtual && (
                           <Fragment>
                             <span className="mr-px-3"> | </span>
                             <Link
