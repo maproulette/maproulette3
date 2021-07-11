@@ -1,14 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { FormattedDate, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
-import { ChallengeCommentInput } from "./ChallengeCommentInput/ChallengeCommentInput";
+import TaskCommentInput from "../TaskCommentInput/TaskCommentInput";
 import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import {
   fetchChallengeComments,
   postChallengeComment,
 } from "../../services/Challenge/ChallengeComments";
 import { UseRouter } from "../../hooks/UseRouter/UseRouter";
+import defaultPic from "../../static/images/user_no_image.png";
 
 const calcHeight = (offset) => {
   return window.innerHeight - offset;
@@ -34,12 +35,25 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
         <div
           className={classNames("mr-flex", isUser ? "mr-flex-row-reverse" : "")}
         >
-          <div className="mr-p-1">{isUser ? "ME" : "AV"}</div>
+          <div className="mr-px-2 mr-flex-0">
+            <div className="mr-w-9">
+              <img
+                className="mr-block mr-w-9 mr-h-9 mr-rounded-full"
+                src={
+                  comment.avatarUrl.includes("user_no_image")
+                    ? defaultPic
+                    : comment.avatarUrl
+                }
+                alt=""
+              />
+            </div>
+          </div>
           <div
             className={classNames(
               "mr-p-1 mr-rounded mr-p-2",
               isUser ? "mr-bg-blue-light" : "mr-bg-green-dark"
             )}
+            style={{ flex: 1 }}
           >
             <div>
               <div className="mr-text-sm">
@@ -82,7 +96,9 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
               />
             </div>
           </div>
-          <div style={{ width: 160 }} />
+          <div className="mr-flex-0">
+            <div className="mr-w-12"></div>
+          </div>
         </div>
       </div>
     );
@@ -110,6 +126,7 @@ export const ChallengeCommentsPane = (props) => {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState(DATA_STATUSES.LOADING);
   const [tasksOn, setTasksOn] = useState(false);
+  const inputRef = useRef(null);
   const offset = props.offset || 570;
 
   const submitComment = async () => {
@@ -167,12 +184,15 @@ export const ChallengeCommentsPane = (props) => {
               })}
         </div>
       </div>
-      <ChallengeCommentInput
-        onSubmit={submitComment}
-        submitComment={true}
-        maxCharacterCount={1500}
+      <TaskCommentInput
         value={input}
-        onChange={setInput}
+        commentChanged={setInput}
+        submitComment={submitComment}
+        maxCharacterCount={1500}
+        dropdownPlacement="top-start"
+        disableResize
+        rows={3}
+        inputRef={inputRef}
       />
     </div>
   );

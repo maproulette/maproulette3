@@ -167,11 +167,6 @@ export class ChallengeDetail extends Component {
       />
     );
 
-    console.log(
-      this.props.browsedChallenge?.owner,
-      this.props.user?.osmProfile?.id
-    );
-
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
         <div className="mr-flex-1">

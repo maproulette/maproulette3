@@ -41,7 +41,11 @@ const WithOSMUserSearch = function(WrappedComponent) {
             })
           }
           else {
-            this.setState({isSearchingOSMUsers: false, osmUserResults: results})
+            this.setState({
+              isSearchingOSMUsers: false,
+              osmUserPreferredResults: [],
+              osmUserResults: results
+            })
           }
         })
       }
