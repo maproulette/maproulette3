@@ -78,7 +78,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.4",
     "react-share": "^4.2.0",
-    "react-syntax-highlighter": "^12.2.1",
+    "react-syntax-highlighter": "^15.4.3",
     "react-table-6": "^6.11.0",
     "react-tagsinput": "^3.19.0",
     "redux": "^4.0.5",
