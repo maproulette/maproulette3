@@ -4,7 +4,7 @@ import _get from 'lodash/get'
 import VirtualChallengeNameLink
        from '../VirtualChallengeNameLink/VirtualChallengeNameLink'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
-import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
+import OwnerContactLink, { JoinChallengeDiscussionLink } from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
 
 /**
  * ChallengeInfoSummary displays various pieces of summary information about
@@ -15,6 +15,7 @@ import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContact
  */
 export default class ChallengeInfoSummary extends Component {
   render() {
+    console.log("WTFFFFF")
     return (
       <div className="challenge-info-summary">
         <VirtualChallengeNameLink {...this.props} />
@@ -34,6 +35,10 @@ export default class ChallengeInfoSummary extends Component {
 
           <li className="mr-links-green-lighter">
             <OwnerContactLink {...this.props} />
+          </li>
+
+          <li className="mr-links-green-lighter">
+            <JoinChallengeDiscussionLink {...this.props} />
           </li>
         </ul>
       </div>

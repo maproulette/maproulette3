@@ -207,9 +207,8 @@ export default class AutosuggestMentionTextArea extends Component {
               innerClassName={this.props.dropdownInnerClassName}
               rootProps={downshift.getRootProps({}, {suppressRefError: true})}
               suppressControls
-              fixedMenu={true}
               isVisible={Boolean(show)}
-              placement="bottom-start"
+              placement={this.props.dropdownPlacement || "bottom-start"}
               toggleVisible={() => _noop}
               dropdownButton={dropdown => (
                 <textarea
@@ -217,7 +216,8 @@ export default class AutosuggestMentionTextArea extends Component {
                   ref={this.props.inputRef}
                   className={classNames(
                     this.props.inputClassName,
-                    "mr-flex-grow mr-w-full mr-h-full mr-outline-none"
+                    "mr-flex-grow mr-w-full mr-h-full mr-outline-none",
+                    this.props.disableResize ? "mr-resize-none" : "mr-resize"
                   )}
                   onKeyDown={(e) => this.handleKeyDown(e, dropdown, downshift)}
                   onFocus={(e) => this.setState({textBoxActive: true})}
@@ -243,7 +243,7 @@ export default class AutosuggestMentionTextArea extends Component {
                 return (
                   <div {...downshift.getMenuProps({className: "mr-link-list mr-links-inverse"})}>
                     {resultItems}
-                    {(resultItems.length === 0 || this.props.showNoResults) &&
+                    {(resultItems?.length === 0 || this.props.showNoResults) &&
                     <div className="mr-text-grey-lighter mr-p-4 mr-text-sm">
                       <FormattedMessage {...messages.noResults} />
                     </div>

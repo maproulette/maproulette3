@@ -1,11 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from "react-router-dom";
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { FormattedMessage } from 'react-intl'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import WithErrors from '../HOCs/WithErrors/WithErrors'
 import messages from './Messages'
+
+export const JoinChallengeDiscussionLink = (props) => {
+  return (
+    <Link to={`/browse/challenges/${props.challengeId}?tab=conversation`}>
+      <FormattedMessage
+        {...messages.joinChallengeDiscussionLabel}
+      />
+    </Link>
+  );
+}
 
 export class ChallengeOwnerContactLinkInternal extends Component {
   state = {

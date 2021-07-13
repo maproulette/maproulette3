@@ -69,4 +69,13 @@ export default defineMessages({
     defaultMessage: "Review",
   },
 
+  viewComments: {
+    id: "ChallengeDetails.fields.viewComments.label",
+    defaultMessage: "Conversation"
+  },
+
+  viewOverview: {
+    id: "ChallengeDetails.fields.viewOverview.label",
+    defaultMessage: "Overview"
+  }
 })
