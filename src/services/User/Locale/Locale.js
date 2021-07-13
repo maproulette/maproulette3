@@ -26,6 +26,7 @@ export const Locale = Object.freeze({
   vi: "vi",
   tr: "tr",
   pl: "pl",
+  "zh-TW": "zh-TW"
 });
 
 // Dynamic imports to load locale data and translation files
@@ -109,6 +110,11 @@ const LocaleImports = {
     Promise.all([
       import("../../../lang/pl.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/pl"),
+    ]),
+  [Locale["zh-TW"]]: () =>
+    Promise.all([
+      import("../../../lang/zh_TW.json"),
+      import("@formatjs/intl-relativetimeformat/locale-data/zh"),
     ]),
 };
 

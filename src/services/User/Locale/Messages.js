@@ -68,4 +68,8 @@ export default defineMessages({
     id: "Locale.pl.label",
     defaultMessage: "pl (Polish)",
   },
+  "zh-TW": {
+    id: "Locale.zh-TW.label",
+    defaultMessage: "zh-TW (Chinese - Taiwan)",
+  },
 });

@@ -7,6 +7,15 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.9] - 2021-07-13
+
+### Added
+- Challenge comments
+- Review and Revision Count Notifications
+
+### Fixed
+- Upgrade react-syntax-highlighter dependency
+
 ## [v3.7.8-rev2] - 2021-06-22
 
 ### Fixed
