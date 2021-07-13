@@ -26,7 +26,7 @@ import SignIn from '../../pages/SignIn/SignIn'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
-import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
+import OwnerContactLink, { JoinChallengeDiscussionLink } from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
 import BasicDialog from '../BasicDialog/BasicDialog'
 import Dropdown from '../Dropdown/Dropdown'
 import BusySpinner from '../BusySpinner/BusySpinner'
@@ -362,6 +362,10 @@ export class TaskPane extends Component {
 
                         <li className="mr-mt-n1px">
                           <OwnerContactLink {...this.props} />
+                        </li>
+
+                        <li className="mr-links-green-lighter">
+                          <JoinChallengeDiscussionLink {...this.props} />
                         </li>
                       </ul>
 

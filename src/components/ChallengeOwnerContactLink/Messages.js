@@ -17,5 +17,10 @@ export default defineMessages({
   noOwnerFound: {
     id: 'Task.controls.noOwnerFound.label',
     defaultMessage: 'Challenge Owner could not be found',
+  },
+
+  joinChallengeDiscussionLabel: {
+    id: 'Task.controls.joinChallengeDiscussion.label',
+    defaultMessage: 'Join Challenge Discussion',
   }
 })

@@ -39,7 +39,7 @@ const ClusterMap = WithChallengeTaskClusters(
  */
 export class ChallengeDetail extends Component {
   state = {
-    viewComments: false,
+    viewComments: _isObject(this.props.user) && this.props.location.search.includes("conversation"),
   };
 
   componentDidMount() {
@@ -172,6 +172,8 @@ export class ChallengeDetail extends Component {
         {...this.props}
       />
     );
+
+    console.log(this.props);
 
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
