@@ -1252,7 +1252,7 @@
   "ScreenTooNarrow.message": "Bu sayfa henüz küçük ekranlarla uyumlu değildir. Lütfen ya tarayıcınızın ekranını genişletin ya daha geniş ekranlı bir cihaz ile değiştirin",
   "ShareLink.controls.copy.label": "Kopyala",
   "SignIn.control.label": "Giriş yap",
-  "SignIn.control.longLabel": "Başlamak için giriş yap",
+  "SignIn.control.longLabel": "Sign in to participate",
   "Social.featuredChallenges.header": "Öne Çıkan Görevler",
   "Social.featuredChallenges.lead": "MapRoulette'te Öne Çıkanlar:",
   "Social.newestChallenges.header": "En yeni görevler",

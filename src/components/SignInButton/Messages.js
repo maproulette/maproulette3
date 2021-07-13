@@ -11,6 +11,6 @@ export default defineMessages({
 
   longLabel: {
     id: "SignIn.control.longLabel",
-    defaultMessage: "Sign in to get started",
+    defaultMessage: "Sign in to participate",
   }
 })

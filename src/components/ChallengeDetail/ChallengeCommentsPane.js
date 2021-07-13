@@ -12,7 +12,14 @@ import { UseRouter } from "../../hooks/UseRouter/UseRouter";
 import defaultPic from "../../static/images/user_no_image.png";
 
 const calcHeight = (offset) => {
-  return window.innerHeight - offset;
+  const variableHeight = window.innerHeight - offset;
+  const minHeight = 300;
+
+  if (variableHeight < minHeight) {
+    return minHeight;
+  }
+
+  return variableHeight;
 };
 
 const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {

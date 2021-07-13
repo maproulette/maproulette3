@@ -1252,7 +1252,7 @@
   "ScreenTooNarrow.message": "Ця сторінки поки що не сумісна з маленькими екранами. Збільшить вікно вашого оглядача або перейдіть до пристрою з більшим екраном.",
   "ShareLink.controls.copy.label": "Копіювати",
   "SignIn.control.label": "Увійти",
-  "SignIn.control.longLabel": "Увійдіть щоб розпочати",
+  "SignIn.control.longLabel": "Sign in to participate",
   "Social.featuredChallenges.header": "Рекомендовані Виклики",
   "Social.featuredChallenges.lead": "Рекомендовано MapRoulette:",
   "Social.newestChallenges.header": "Найновіші Виклики",

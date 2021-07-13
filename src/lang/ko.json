@@ -1252,7 +1252,7 @@
   "ScreenTooNarrow.message": "이 페이지는 아직 작은 화면과 호환되지 않습니다. 화면 크기를 키우거나 더 큰 기기/모니터를 사용해 주세요.",
   "ShareLink.controls.copy.label": "복사",
   "SignIn.control.label": "로그인",
-  "SignIn.control.longLabel": "시작하려면 로그인하세요",
+  "SignIn.control.longLabel": "Sign in to participate",
   "Social.featuredChallenges.header": "Featured Challenges",
   "Social.featuredChallenges.lead": "Featured on MapRoulette:",
   "Social.newestChallenges.header": "Newest Challenges",

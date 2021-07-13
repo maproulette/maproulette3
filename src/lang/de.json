@@ -1252,7 +1252,7 @@
   "ScreenTooNarrow.message": "Diese Seite ist noch nicht kompatibel mit kleinen Bildschirmen. Bitte das Browser-Fenster vergrößern oder zu einem größeren Gerät oder Bildschirm wechseln.",
   "ShareLink.controls.copy.label": "Kopieren",
   "SignIn.control.label": "Anmelden",
-  "SignIn.control.longLabel": "Bitte melde dich an, um zu starten",
+  "SignIn.control.longLabel": "Sign in to participate",
   "Social.featuredChallenges.header": "Empfohlene Kampagnen",
   "Social.featuredChallenges.lead": "Empfohlen bei MapRoulette:",
   "Social.newestChallenges.header": "Neueste Kampagnen",

@@ -1252,7 +1252,7 @@
   "ScreenTooNarrow.message": "Эта страница не совместима с небольшими экранами. Пожалуйста, раскройте полностью окно браузера или переключитесь на более крупное устройство или экран.",
   "ShareLink.controls.copy.label": "Копировать",
   "SignIn.control.label": "Войти",
-  "SignIn.control.longLabel": "Войти, чтобы начать",
+  "SignIn.control.longLabel": "Sign in to participate",
   "Social.featuredChallenges.header": "Featured Challenges",
   "Social.featuredChallenges.lead": "Featured on MapRoulette:",
   "Social.newestChallenges.header": "Newest Challenges",

@@ -15,7 +15,6 @@ import OwnerContactLink, { JoinChallengeDiscussionLink } from '../ChallengeOwner
  */
 export default class ChallengeInfoSummary extends Component {
   render() {
-    console.log("WTFFFFF")
     return (
       <div className="challenge-info-summary">
         <VirtualChallengeNameLink {...this.props} />
