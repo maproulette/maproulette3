@@ -121,7 +121,7 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
           right: normalizedBounds.getEast(),
           top: normalizedBounds.getNorth(),
         },
-        params: {limit, page: (page * limit), sort: sortBy, order: direction,
+        params: {limit, page, sort: sortBy, order: direction,
                  includeTotal: true, excludeLocked: ignoreLocked, ...searchParameters, 
                  includeGeometries, includeTags},
         json: filters.taskPropertySearch ?
