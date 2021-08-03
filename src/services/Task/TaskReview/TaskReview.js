@@ -48,6 +48,14 @@ export const RECEIVE_REVIEW_CLUSTERS = 'RECEIVE_REVIEW_CLUSTERS'
 export const RECEIVE_REVIEW_CHALLENGES = 'RECEIVE_REVIEW_CHALLENGES'
 export const RECEIVE_REVIEW_PROJECTS = 'RECEIVE_REVIEW_PROJECTS'
 
+const handleExposeError = (error, dispatch) => {
+  dispatch(ensureUserLoggedIn()).then(async () => {
+    const responseBody = await error.response.json();
+    const message = responseBody.status === "Forbidden" ? { id: "Server", defaultMessage: responseBody.message } : AppErrors.user.unauthorized;
+    dispatch(addError(message))
+  })
+}
+
 /**
  * Mark the current review data as stale, meaning the app has been
  * informed or detected that updated task-review data is available
@@ -390,9 +398,7 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria, excl
       }
     ).execute().catch(error => {
       if (isSecurityError(error)) {
-        dispatch(ensureUserLoggedIn()).then(() =>
-          dispatch(addError(AppErrors.user.unauthorized))
-        )
+        handleExposeError(error, dispatch)
       }
       else {
         dispatch(addError(AppErrors.task.updateFailure))
@@ -421,9 +427,7 @@ export const completeBundleReview = function(bundleId, taskReviewStatus, comment
       params:{comment, tags, newTaskStatus, asMetaReview},
     }).execute().catch(error => {
       if (isSecurityError(error)) {
-        dispatch(ensureUserLoggedIn()).then(() =>
-          dispatch(addError(AppErrors.user.unauthorized))
-        )
+        handleExposeError(error, dispatch)
       }
       else {
         dispatch(addError(AppErrors.task.updateFailure))
@@ -488,9 +492,7 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
      params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus}}
   ).execute().catch(error => {
     if (isSecurityError(error)) {
-      dispatch(ensureUserLoggedIn()).then(() =>
-        dispatch(addError(AppErrors.user.unauthorized))
-      )
+      handleExposeError(error, dispatch)
     }
     else {
       dispatch(addError(AppErrors.task.updateFailure))
