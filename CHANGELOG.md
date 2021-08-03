@@ -7,6 +7,12 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.10] - 2021-08-03
+
+### Fixed
+- Expose 403 lock errors to the user error modals
+- Distinguish page from offset in challenge /children search (API).
+
 ## [v3.7.9] - 2021-07-13
 
 ### Added
