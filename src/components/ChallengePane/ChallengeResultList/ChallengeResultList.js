@@ -37,7 +37,12 @@ export class ChallengeResultList extends Component {
   }
 
   render() {
-    const challengeResults = _clone(this.props.pagedChallenges)
+    let challengeResults = _clone(this.props.pagedChallenges);
+
+    if (!this.props.showArchived) {
+      challengeResults = challengeResults.filter(challenge => !challenge.isArchived)
+    }
+    
     const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
 
     const search = _get(this.props, 'currentSearch.challenges', {})
@@ -138,6 +143,9 @@ ChallengeResultList.propTypes = {
 
   /** Remaining challenges after challenges have been paged */
   pagedChallenges: PropTypes.array.isRequired,
+
+  /** Show archived challenges in the results */
+  showArchived: PropTypes.bool,
 }
 
 export default
