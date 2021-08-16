@@ -20,6 +20,32 @@ import PageResultsButton from './PageResultsButton'
 import messages from './Messages'
 import './ChallengeResultList.scss'
 
+const limitUserResults = (challenges) => {
+  const ownerLimit = Number(process.env.REACT_APP_BROWSE_CHALLENGES_OWNER_LIMIT);
+
+  if (ownerLimit) {
+    const userDictionary = {};
+
+    const limitedChallenges = challenges.filter(challenge => {
+      const { owner } = challenge;
+  
+      if (userDictionary[owner]) {
+        userDictionary[owner]++;
+        if (userDictionary[owner] > ownerLimit) {
+          return false;
+        }
+      } else {
+        userDictionary[owner] = 1;
+      }
+  
+      return true;
+    });
+  
+    return limitedChallenges;
+  }
+
+  return challenges;
+}
 
 /**
  * ChallengeResultList applies the current challenge filters and the given
@@ -38,6 +64,7 @@ export class ChallengeResultList extends Component {
 
   render() {
     const challengeResults = _clone(this.props.pagedChallenges)
+    const challengeResults = limitUserResults(challengeResultsUnbound);
     const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
 
     const search = _get(this.props, 'currentSearch.challenges', {})
