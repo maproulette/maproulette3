@@ -56,6 +56,7 @@ const LocationFilter = WithCurrentUser(FilterByLocation)
 export class ChallengePane extends Component {
   state = {
     selectedClusters: [],
+    showArchived: false
   }
 
   onBulkClusterSelection = clusters => {
@@ -133,11 +134,23 @@ export class ChallengePane extends Component {
           <ChallengeEndModal />
         }
         <ChallengeFilterSubnav {...this.props} />
-
         <div className="mr-p-6 lg:mr-flex mr-cards-inverse">
           <div className="mr-flex-0">
             <LocationFilter {...this.props} />
-            <ChallengeResults {...this.props} />
+            
+            <div className="mr-flex">
+              <input
+                type="checkbox"
+                className="mr-checkbox-toggle mr-mr-1 mr-mb-6"
+                checked={this.state.showArchived}
+                onChange={() => {
+                  this.setState({ showArchived: !this.state.showArchived })
+                }}
+              />
+              <div className="mr-text-sm mr-mx-1">Show Archived</div>
+            </div>
+
+            <ChallengeResults {...this.props} showArchived={this.state.showArchived} />
           </div>
           <div className="mr-flex-1">
             <MapPane>
