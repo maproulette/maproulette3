@@ -878,7 +878,6 @@ export const saveChallenge = function (
 
     if (process.env.REACT_APP_CHANGESET_URL === "enabled") {
       if (challengeData.changesetUrl === undefined) {
-        console.log("doing this")
         challengeData.changesetUrl = true;
       }
     }
