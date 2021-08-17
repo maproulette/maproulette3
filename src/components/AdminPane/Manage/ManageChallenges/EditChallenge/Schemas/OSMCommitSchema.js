@@ -37,7 +37,7 @@ export const jsSchema = (
   if (process.env.REACT_APP_CHANGESET_URL === "enabled") {
     properties.changesetUrl = {
       type: "boolean",
-      default: false,
+      default: true,
     }
   }
 
@@ -120,7 +120,7 @@ export const uiSchema = (
       "ui:collapsed": isCollapsed,
     },
     changesetUrl: {
-      "ui:title": "Changeset URL",
+      "ui:title": intl.formatMessage(messages.changesetUrlTitle),
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.changesetUrlDescription),
       "ui:collapsed": isCollapsed,
