@@ -65,9 +65,11 @@ export class ChallengeResultList extends Component {
   render() {
     const challengeResultsUnbound = _clone(this.props.pagedChallenges);
 
-    let challengeResults = this.props.searchSort?.sortBy === "created"
-      ? limitUserResults(challengeResultsUnbound)
-      : challengeResultsUnbound;
+    let challengeResults = this.props.searchSort?.sortBy === "created" 
+      || _isEmpty(this.props.searchSort) 
+      || this.props.location.search.includes("default")
+        ? limitUserResults(challengeResultsUnbound)
+        : challengeResultsUnbound;
 
     if (!this.props.showArchived) {
       challengeResults = challengeResults.filter(challenge => !challenge.isArchived)
