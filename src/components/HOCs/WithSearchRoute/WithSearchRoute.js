@@ -71,12 +71,12 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
       removeSearchCriteriaFromRoute(this.props.history, ['query'])
     }
 
-    setSearchSort = (sortCriteria, fooyouroute) => {
+    setSearchSort = (sortCriteria) => {
       this.props.setSearchSort(sortCriteria)
       addSearchCriteriaToRoute(this.props.history, {sort: _get(sortCriteria, 'sortBy')})
     }
 
-    setSearchArchived = (bool, fooyouroute) => {
+    setSearchArchived = (bool) => {
       this.props.setSearchArchived(bool)
       addSearchCriteriaToRoute(this.props.history, { archived: bool })
     }

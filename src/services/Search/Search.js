@@ -580,17 +580,11 @@ export const currentSearch = function(state={}, action) {
       _set(mergedState, `${action.searchName}.sort`,
             Object.assign({}, _get(state, `${action.searchName}.sort`), action.sortCriteria))
       _set(mergedState, `${action.searchName}.page`, null)
-
-      console.log("wtf is merged state", mergedState);
-
       return mergedState
 
     case SET_ARCHIVED:
       mergedState = _cloneDeep(state)
       _set(mergedState, `challenges.archived`, action.payload)
-
-      console.log("wtf is merged state", mergedState);
-
       return mergedState
 
     case REMOVE_SORT:
