@@ -162,6 +162,7 @@ export const receiveChallenges = function (
       c.dataOriginDate = format(parse(c.dataOriginDate), "YYYY-MM-DD");
     }
   });
+
   return {
     type: RECEIVE_CHALLENGES,
     status,
@@ -309,6 +310,7 @@ export const performChallengeSearch = function (
   limit = RESULTS_PER_PAGE
 ) {
   const sortCriteria = _get(searchObject, "sort", {});
+  const archived = _get(searchObject, "archived", false);
   const filters = _get(searchObject, "filters", {});
   const queryString = _get(searchObject, "query");
   const page = _get(searchObject, "page.currentPage");
@@ -333,6 +335,7 @@ export const performChallengeSearch = function (
       bounds,
       page,
       challengeStatus,
+      archived
     },
     limit
   );
@@ -411,6 +414,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE) {
     }
 
     queryParams.sort = sort;
+    queryParams.archived = criteria.archived;
     queryParams.order = direction;
     queryParams.page = page * limit;
 
@@ -1301,6 +1305,7 @@ export const challengeEntities = function (state, action) {
     mergedState[action.challengeId].deleted = true;
     return mergedState;
   } else {
+    console.log("REDUCER", action);
     return genericEntityReducer(
       RECEIVE_CHALLENGES,
       "challenges",
