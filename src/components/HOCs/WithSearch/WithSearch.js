@@ -145,7 +145,7 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     }
   },
 
-  setSearchSort: (sortCriteria, fooyoubasic) => {
+  setSearchSort: (sortCriteria) => {
     const sortBy = _get(sortCriteria, 'sortBy')
     let sort = null
 

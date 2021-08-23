@@ -1305,7 +1305,6 @@ export const challengeEntities = function (state, action) {
     mergedState[action.challengeId].deleted = true;
     return mergedState;
   } else {
-    console.log("REDUCER", action);
     return genericEntityReducer(
       RECEIVE_CHALLENGES,
       "challenges",

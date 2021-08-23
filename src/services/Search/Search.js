@@ -364,7 +364,6 @@ export const setSort = function(searchName, sortCriteria) {
 }
 
 export const setArchived = function(bool) {
-  console.log("setting archived", bool)
   return {
     type: SET_ARCHIVED,
     payload: bool
