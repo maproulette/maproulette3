@@ -133,6 +133,17 @@ export default class ChallengeListWidget extends Component {
             )}
             dropdownContent={() =>
               <ul className="mr-list-dropdown">
+                {someEnabled && 
+                  <li>
+                    <a
+                      className="mr-flex mr-items-center"
+                      onClick={() => console.log("hello")}
+                    >
+                      Archive Selected
+                    </a>
+                  </li>
+                }
+                
                 <li className="mr-text-md mr-mb-2 mr-text-yellow">
                   <FormattedMessage {...messages.exportTitle} />
                 </li>
