@@ -141,15 +141,17 @@ export default class ChallengeListWidget extends Component {
               <ul className="mr-list-dropdown">
                 {someEnabled && 
                   <li>
-                    <a
-                      className="mr-flex mr-items-center"
+                    <div
+                      className={classNames(
+                        this.props.controlClassName,
+                        "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+                      )}
                       onClick={bulkArchive}
                     >
                       {archivedOn ? "Unarchive Selected" : "Archive Selected"}
-                    </a>
+                    </div>
                   </li>
                 }
-                
                 <li className="mr-text-md mr-mb-2 mr-text-yellow">
                   <FormattedMessage {...messages.exportTitle} />
                 </li>
