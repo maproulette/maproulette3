@@ -100,6 +100,12 @@ export default class ChallengeListWidget extends Component {
     const cIdReview = _isEmpty(selectedChallengeIds) ? "" : `cid=${selectedChallengeIds}`
     const pIdReview = _isEmpty(selectedChallengeIds) ? `pid=${this.props.project.id}` : ""
 
+    const archivedOn = this.props.dashboardChallengeFilters.archived;
+
+    const bulkArchive = () => {
+      this.props.bulkArchive(tallied, !archivedOn, this.props.clearTallies)
+    }
+
     const rightHeaderControls = this.props.projects.length === 0 ? null : (
       <div className="mr-flex mr-justify-end mr-items-center">
         <button className="mr-ml-4" onClick={this.toggleAllTallies}>
@@ -137,9 +143,9 @@ export default class ChallengeListWidget extends Component {
                   <li>
                     <a
                       className="mr-flex mr-items-center"
-                      onClick={() => console.log("hello")}
+                      onClick={bulkArchive}
                     >
-                      Archive Selected
+                      {archivedOn ? "Unarchive Selected" : "Archive Selected"}
                     </a>
                   </li>
                 }
