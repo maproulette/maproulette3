@@ -1192,6 +1192,28 @@ export const archiveChallenge = function (challengeId, bool) {
   };
 };
 
+export const archiveChallenges = function (projectId, challengeIds, bool) {
+  return function (dispatch) {
+    return new Endpoint(api.challenges.bulkArchive, {
+      json: { isArchived: bool, ids: challengeIds },
+    })
+      .execute()
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn()).then(() =>
+            dispatch(addError(AppErrors.user.unauthorized))
+          );
+        } else {
+          dispatch(addError(AppErrors.challenge.archiveFailure));
+          console.log(error.response || error);
+        }
+      });
+  };
+};
+
 /**
  * Retrieves the parent project embedded in the given normalized challenge
  * results.

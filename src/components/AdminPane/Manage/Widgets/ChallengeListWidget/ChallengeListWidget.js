@@ -100,6 +100,12 @@ export default class ChallengeListWidget extends Component {
     const cIdReview = _isEmpty(selectedChallengeIds) ? "" : `cid=${selectedChallengeIds}`
     const pIdReview = _isEmpty(selectedChallengeIds) ? `pid=${this.props.project.id}` : ""
 
+    const archivedOn = this.props.dashboardChallengeFilters.archived;
+
+    const bulkArchive = () => {
+      this.props.bulkArchive(tallied, !archivedOn, this.props.clearTallies)
+    }
+
     const rightHeaderControls = this.props.projects.length === 0 ? null : (
       <div className="mr-flex mr-justify-end mr-items-center">
         <button className="mr-ml-4" onClick={this.toggleAllTallies}>
@@ -133,6 +139,19 @@ export default class ChallengeListWidget extends Component {
             )}
             dropdownContent={() =>
               <ul className="mr-list-dropdown">
+                {someEnabled && 
+                  <li>
+                    <div
+                      className={classNames(
+                        this.props.controlClassName,
+                        "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+                      )}
+                      onClick={bulkArchive}
+                    >
+                      {archivedOn ? "Unarchive Selected" : "Archive Selected"}
+                    </div>
+                  </li>
+                }
                 <li className="mr-text-md mr-mb-2 mr-text-yellow">
                   <FormattedMessage {...messages.exportTitle} />
                 </li>

@@ -42,18 +42,26 @@ export const WithTallied = function(WrappedComponent) {
      */
     updateTallyMarks = (parentId, newTallyMarks) => {
       const newTallyStore =
-          Object.assign({}, this.allTalliedEntities(), {
-            [parentId]: newTallyMarks,
-          })
+        Object.assign({}, this.allTalliedEntities(), {
+          [parentId]: newTallyMarks,
+        })
 
       if (this.state.searchActive) {
         this.setState({searchTallies: newTallyStore})
-      }
-      else {
+      } else {
         this.props.updateUserAppSetting(this.props.user.id, {
           'tallied': newTallyStore
         })
       }
+    }
+
+    /**
+     * clears the tallyMarks for a parentId.
+     *
+     * @private
+     */
+    clearTallies = (parentId) => {
+      this.updateTallyMarks(parentId, [])
     }
 
     /**
@@ -132,7 +140,8 @@ export const WithTallied = function(WrappedComponent) {
               toggleChallengeTally={this.toggleTallyMark}
               updateTallyMarks={this.updateTallyMarks}
               showAsTallied={this.showAsTallied}
-              toggleSearchTallies={this.toggleSearchTallies} />
+              toggleSearchTallies={this.toggleSearchTallies}
+              clearTallies={this.clearTallies} />
     }
   }
 }
