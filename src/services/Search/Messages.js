@@ -16,6 +16,14 @@ export default defineMessages({
     id: "Challenge.sort.oldest",
     defaultMessage: "Oldest",
   },
+  completion_percentage: {
+    id: "Challenge.sort.completion",
+    defaultMessage: "Near Complete",
+  },
+  tasks_remaining: {
+    id: "Challenge.sort.tasksRemaining",
+    defaultMessage: "Tasks Remaining",
+  },
   popularity: {
     id: "Challenge.sort.popularity",
     defaultMessage: "Popular",
