@@ -313,13 +313,13 @@ const AttachedComment = function(props) {
 }
 
 const ViewTask = function(props) {
-  if (!_isFinite(props.notification.challengeId) ||
-      !_isFinite(props.notification.taskId)) {
+  if (!_isFinite(props.notification.challengeId)) {
     return null
   }
 
-  const path =
-    `challenge/${props.notification.challengeId}/task/${props.notification.taskId}`
+  const path = props.notification.taskId
+    ? { pathname: `challenge/${props.notification.challengeId}/task/${props.notification.taskId}`, fromInbox: true }
+    : `browse/challenges/${props.notification.challengeId}?tab=conversation`;
 
   const isMetaReReview =
     props.notification.notificationType === NotificationType.metaReviewAgain
@@ -327,11 +327,13 @@ const ViewTask = function(props) {
     props.notification.notificationType === NotificationType.metaReview &&
     parseInt(props.notification.description, 10) === TaskReviewStatus.rejected
 
+  const label = props.notification.taskId ? messages.viewTaskLabel : messages.viewConversationLabel;
+
   return (
     <div className="mr-mt-8 mr-links-green-lighter">
       <div className="mr-flex mr-leading-tight">
-        <Link to={{ pathname: path, state: {fromInbox: true} }}>
-          <FormattedMessage {...messages.viewTaskLabel} />
+        <Link to={path}>
+          <FormattedMessage {...label} />
         </Link>
 
         {(props.review || needsReReview) &&
