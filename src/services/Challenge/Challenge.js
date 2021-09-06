@@ -1152,12 +1152,18 @@ export const deleteChallenge = function (challengeId) {
 };
 
 /**
- * archives the given challenge.
+ * updates the archive status of the given challenge.
  */
 export const archiveChallenge = function (challengeId, bool) {
   return function (dispatch) {
+    // calling archive is necessary to nullify the system_archived_at field
+    new Endpoint(api.challenge.archive, {
+      variables: { id: challengeId },
+      json: { isArchived: bool },
+    }).execute();
+
+    // calling 'edit' in addition to 'archive' is necessary to override the cache mechanism in the BE.
     return new Endpoint(api.challenge.edit, {
-      schema: challengeSchema(),
       variables: { id: challengeId },
       json: { isArchived: bool },
     })

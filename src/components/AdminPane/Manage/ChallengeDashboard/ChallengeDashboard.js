@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage, injectIntl } from 'react-intl'
+import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
+import parse from 'date-fns/parse';
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
@@ -129,6 +130,15 @@ export class ChallengeDashboard extends Component {
           controlClassName="mr-button mr-button--dark mr-button--small mr-mr-4"
           onChallengeDashboard
         />
+        
+        {
+          this.props.challenge.isArchived && this.props.challenge.systemArchivedAt &&
+          <div className="mr-mt-6 mr-text-red-light">
+            <FormattedMessage {...manageMessages.staleChallengeMessage1} />{" "}
+            <FormattedDate value={parse(this.props.challenge.systemArchivedAt)}year='numeric' month='long' day='2-digit' />{" "}
+            <FormattedMessage {...manageMessages.staleChallengeMessage2} />
+          </div>
+        }
       </div>
     )
 
