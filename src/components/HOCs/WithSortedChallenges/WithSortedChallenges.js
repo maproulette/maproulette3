@@ -11,7 +11,7 @@ import _toLower from 'lodash/toLower'
 import { isCooperative }
        from '../../../services/Challenge/CooperativeType/CooperativeType'
 import WithChallengeSearch from '../WithSearch/WithChallengeSearch'
-import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE_WORK }
+import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE_WORK, SORT_COMPLETION, SORT_TASKS_REMAINING }
        from '../../../services/Search/Search'
 
 const FEATURED_POINTS = -1
@@ -31,6 +31,16 @@ export const sortChallenges = function(props, challengesProp='challenges') {
   else if (sortCriteria === SORT_OLDEST) {
     sortedChallenges = (_sortBy(sortedChallenges, 
       c => c.created ? c.created : ''))
+  }
+  else if (sortCriteria === SORT_COMPLETION) {
+    sortedChallenges = sortedChallenges.filter(challenge => challenge.completionPercentage !== 100);
+    sortedChallenges = _reverse(_sortBy(sortedChallenges, 
+      c => c.completionPercentage ? c.completionPercentage : ''))
+  }
+  else if (sortCriteria === SORT_TASKS_REMAINING) {
+    sortedChallenges = sortedChallenges.filter(challenge => challenge.tasksRemaining !== 0);
+    sortedChallenges = (_sortBy(sortedChallenges, 
+      c => c.tasksRemaining ? c.tasksRemaining : ''))
   }
   else if (sortCriteria === SORT_POPULARITY) {
     sortedChallenges = _reverse(_sortBy(sortedChallenges,
