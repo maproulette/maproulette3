@@ -161,7 +161,7 @@ export default defineMessages({
   },
   challengeArchiveFailure: {
     id: "Errors.challenge.archiveFailure",
-    defaultMessage: "Unable to archive challenge.",
+    defaultMessage: "Unable to update archive status",
   },
   challengeSaveFailure: {
     id: "Errors.challenge.saveFailure",

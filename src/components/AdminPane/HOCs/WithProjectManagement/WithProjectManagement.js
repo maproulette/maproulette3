@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import { archiveProject } from "../../../../services/Project/Project";
+import { archiveChallenges, fetchProjectChallenges } from "../../../../services/Challenge/Challenge";
 
 /**
  * WithProjectManagement provides functions to its WrappedComponent that can
@@ -17,6 +18,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(archiveProject(projectId, false)).then(() =>
       ownProps.history.replace(ownProps.location.pathname)
     );
+  },
+
+  bulkArchive: (challengeIds, bool, callback) => {
+    const projectId = ownProps.match.params.projectId;
+    dispatch(archiveChallenges(projectId, challengeIds, bool)).then(() => {
+      callback(projectId)
+      dispatch(fetchProjectChallenges(projectId))
+    });
   },
 });
 
