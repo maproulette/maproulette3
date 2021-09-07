@@ -159,6 +159,11 @@ export default defineMessages({
     defaultMessage: "View Task",
   },
 
+  viewConversationLabel: {
+    id: "Inbox.notification.controls.viewConversation.label",
+    defaultMessage: "View Conversation"
+  },
+
   reviewTaskLabel: {
     id: "Inbox.notification.controls.reviewTask.label",
     defaultMessage: "Review Task",
