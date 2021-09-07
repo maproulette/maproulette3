@@ -18,7 +18,7 @@ export default defineMessages({
   },
   completion_percentage: {
     id: "Challenge.sort.completion",
-    defaultMessage: "Near Complete",
+    defaultMessage: "% Complete",
   },
   tasks_remaining: {
     id: "Challenge.sort.tasksRemaining",
