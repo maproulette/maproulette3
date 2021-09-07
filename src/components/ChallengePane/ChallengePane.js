@@ -30,6 +30,24 @@ import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/Challe
 import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 import StartVirtualChallenge from './StartVirtualChallenge/StartVirtualChallenge'
 
+const ShowArchivedToggleInternal = (props) => {
+  return (
+    <div className="mr-flex">
+      <input
+        type="checkbox"
+        className="mr-checkbox-toggle mr-mr-1 mr-mb-6"
+        checked={props.showingArchived}
+        onChange={() => {
+          props.setSearchArchived(!props.showingArchived);
+        }}
+      />
+      <div className="mr-text-sm mr-mx-1">Show Archived</div>
+    </div>
+  )
+}
+
+const ShowArchivedToggle = WithChallengeSearch(ShowArchivedToggleInternal);
+
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
 const ClusterMap =
@@ -99,6 +117,7 @@ export class ChallengePane extends Component {
   }
 
   render() {
+    const showingArchived = this.props.history.location.search.includes("archived=true");
     const challengeStatus = [ChallengeStatus.ready,
                              ChallengeStatus.partiallyLoaded,
                              ChallengeStatus.none,
@@ -137,20 +156,8 @@ export class ChallengePane extends Component {
         <div className="mr-p-6 lg:mr-flex mr-cards-inverse">
           <div className="mr-flex-0">
             <LocationFilter {...this.props} />
-            
-            <div className="mr-flex">
-              <input
-                type="checkbox"
-                className="mr-checkbox-toggle mr-mr-1 mr-mb-6"
-                checked={this.state.showArchived}
-                onChange={() => {
-                  this.setState({ showArchived: !this.state.showArchived })
-                }}
-              />
-              <div className="mr-text-sm mr-mx-1">Show Archived</div>
-            </div>
-
-            <ChallengeResults {...this.props} showArchived={this.state.showArchived} />
+            <ShowArchivedToggle showingArchived={showingArchived} {...this.props} />
+            <ChallengeResults {...this.props} />
           </div>
           <div className="mr-flex-1">
             <MapPane>

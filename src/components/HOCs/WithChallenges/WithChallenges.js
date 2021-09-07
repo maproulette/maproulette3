@@ -20,6 +20,7 @@ const WithChallenges =
 
 export const mapStateToProps = (state, ownProps) => {
   const challenges = _values(_get(state, 'entities.challenges')) || []
+  const showArchived = _get(state, 'currentSearch.challenges.archived', false);
 
   // By default, only pass through challenges that are enabled (and belong to
   // an enabled project), have some tasks, and are in a usable status (unless
@@ -39,6 +40,10 @@ export const mapStateToProps = (state, ownProps) => {
   usableChallenges = usableChallenges.map(challenge =>
     denormalize(challenge, challengeSchema(), state.entities)
   )
+
+  if (!showArchived) {
+    usableChallenges = usableChallenges.filter(challenge => !challenge.isArchived)
+  }
 
   return { challenges: usableChallenges }
 }
