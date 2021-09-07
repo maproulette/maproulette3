@@ -130,6 +130,7 @@ export class ChallengeResultItem extends Component {
           saveControl={saveChallengeControl}
           unsaveControl={unsaveChallengeControl}
           manageControl={manageControl}
+          sort={this.props.sort}
           projectQuery={_get(this.props, 'searchFilters.project')}
           excludeProjectId={this.props.excludeProjectId}
           info={

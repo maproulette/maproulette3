@@ -93,6 +93,7 @@ export class ChallengeResultList extends Component {
               className="mr-mb-4"
               challenge={result}
               listRef={this.listRef}
+              sort={search?.sort}
             />
           )
         }
