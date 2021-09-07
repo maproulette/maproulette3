@@ -7,6 +7,20 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.11] - 2021-09-14
+
+### Added
+- Scheduler for Archiving Stale Challenges (API)
+- Add Archived Filter Toggle to Challenge Discoverability
+- Add capability to bulk archive challenges on Project Management page
+- Add capability to sort by challenge completion
+- Changeset URL now defaults to true; verbiage change
+- Add variable cap to the number of tasks allowed in a challenge.
+
+### Fixed
+- Fix missing Review Duration values for CSV exports (API)
+- Fix link in inbox notifications for challenge comments
+
 ## [v3.7.10] - 2021-08-03
 
 ### Fixed
