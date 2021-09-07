@@ -875,6 +875,13 @@ export const saveChallenge = function (
   return function (dispatch) {
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData);
+
+    if (process.env.REACT_APP_CHANGESET_URL === "enabled") {
+      if (challengeData.changesetUrl === undefined) {
+        challengeData.changesetUrl = true;
+      }
+    }
+
     if (_isArray(challengeData.tags)) {
       challengeData.tags = challengeData.tags.join(",");
     }
