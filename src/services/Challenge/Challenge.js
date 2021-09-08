@@ -399,6 +399,10 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE) {
       queryParams.cid = filters.challengeId;
     }
 
+    if (filters.archived) {
+      queryParams.ca = filters.archived;
+    }
+
     // Keywords/tags can come from both the the query and the filter, so we need to
     // combine them into a single keywords array.
     const keywords = queryParts.tagTokens.concat(
@@ -414,7 +418,6 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE) {
     }
 
     queryParams.sort = sort;
-    queryParams.archived = criteria.archived;
     queryParams.order = direction;
     queryParams.page = page * limit;
 

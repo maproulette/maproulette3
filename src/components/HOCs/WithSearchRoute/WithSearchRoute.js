@@ -35,7 +35,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
        project: param => this.props.setSearchFilters({project: param, searchType: SEARCH_TYPE_PROJECT}),
        query: param => this.props.setSearch(param),
        challengeSearch: param => this.props.setChallengeSearchMapBounds(toLatLngBounds(param), true),
-       archived: param => this.props.setSearchArchived(param === "true")
+       archived: param => this.props.setSearchFilters({ archived: param === "true" })
     }
 
     state = {
@@ -74,11 +74,6 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
     setSearchSort = (sortCriteria) => {
       this.props.setSearchSort(sortCriteria)
       addSearchCriteriaToRoute(this.props.history, {sort: _get(sortCriteria, 'sortBy')})
-    }
-
-    setSearchArchived = (bool) => {
-      this.props.setSearchArchived(bool)
-      addSearchCriteriaToRoute(this.props.history, { archived: bool })
     }
 
     setSearchFilters = (filterCriteria) => {
@@ -126,7 +121,6 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
                             setSearch={this.setSearch}
                             clearSearch={this.clearSearch}
                             setSearchSort={this.setSearchSort}
-                            setSearchArchived={this.setSearchArchived}
                             setSearchFilters={this.setSearchFilters}
                             removeSearchFilters={this.removeSearchFilters}
                             setKeywordFilter={this.setKeywordFilter}
