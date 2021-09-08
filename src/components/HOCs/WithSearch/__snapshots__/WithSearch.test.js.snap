@@ -13,7 +13,6 @@ Object {
   "setChallengeSearchMapBounds": [Function],
   "setKeywordFilter": [Function],
   "setSearch": [Function],
-  "setSearchArchived": [Function],
   "setSearchFilters": [Function],
   "setSearchPage": [Function],
   "setSearchSort": [Function],
@@ -34,7 +33,6 @@ Object {
   "setChallengeSearchMapBounds": [Function],
   "setKeywordFilter": [Function],
   "setSearch": [Function],
-  "setSearchArchived": [Function],
   "setSearchFilters": [Function],
   "setSearchPage": [Function],
   "setSearchSort": [Function],
@@ -44,7 +42,6 @@ Object {
 
 exports[`mapStateToProps maps currentSearch 1`] = `
 Object {
-  "archived": false,
   "currentSearch": Object {
     "challenges": Object {
       "filters": Object {
