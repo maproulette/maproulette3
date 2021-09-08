@@ -90,6 +90,7 @@ export const PARAMS_MAP = {
   difficulty: 'cd',
   tags: 'tt',
   excludeTasks: 'tExcl',
+  archived: "ca"
 }
 
 
@@ -149,6 +150,9 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
   const searchParameters = {}
   const invf = []
 
+  if (filters.archived) {
+    searchParameters[PARAMS_MAP.archived] = filters.archived;
+  }
   if (filters.reviewRequestedBy) {
     searchParameters[PARAMS_MAP.reviewRequestedBy] = filters.reviewRequestedBy
     if (invertFields.reviewRequestedBy) {

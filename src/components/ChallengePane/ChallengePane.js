@@ -38,7 +38,9 @@ const ShowArchivedToggleInternal = (props) => {
         className="mr-checkbox-toggle mr-mr-1 mr-mb-6"
         checked={props.showingArchived}
         onChange={() => {
+          props.setSearchFilters({ archived: !props.showingArchived })
           props.setSearchArchived(!props.showingArchived);
+          
         }}
       />
       <div className="mr-text-sm mr-mx-1">Show Archived</div>
