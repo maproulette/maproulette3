@@ -13,7 +13,7 @@ import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE
          setSearch, clearSearch,
          setChallengeSearchMapBounds,
          setTaskMapBounds, setChallengeOwnerMapBounds, clearMapBounds,
-         performSearch, setArchived }
+         performSearch }
        from '../../../services/Search/Search'
 import { addError } from '../../../services/Error/Error'
 import { toLatLngBounds, DEFAULT_MAP_BOUNDS }
@@ -113,7 +113,6 @@ export const mapStateToProps = (state, searchGroup) => {
     searchFilters: _get(state, `currentSearch.${searchGroup}.filters`, {}),
     searchSort: _get(state, `currentSearch.${searchGroup}.sort`, {}),
     searchPage: _get(state, `currentSearch.${searchGroup}.page`, {}),
-    archived: _get(state, `currentSearch.${searchGroup}.archived`, false),
     mapBounds: convertBounds(_get(state, `currentSearch.${searchGroup}.mapBounds`,
                                   {bounds: DEFAULT_MAP_BOUNDS})),
   }
@@ -177,10 +176,6 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     }
 
     dispatch(setSort(searchGroup, sort))
-  },
-
-  setSearchArchived: bool => {
-    dispatch(setArchived(bool));
   },
 
   removeSearchSort:

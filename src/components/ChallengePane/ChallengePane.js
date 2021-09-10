@@ -38,7 +38,7 @@ const ShowArchivedToggleInternal = (props) => {
         className="mr-checkbox-toggle mr-mr-1 mr-mb-6"
         checked={props.showingArchived}
         onChange={() => {
-          props.setSearchArchived(!props.showingArchived);
+          props.setSearchFilters({ archived: !props.showingArchived })
         }}
       />
       <div className="mr-text-sm mr-mx-1">Show Archived</div>
@@ -73,8 +73,7 @@ const LocationFilter = WithCurrentUser(FilterByLocation)
  */
 export class ChallengePane extends Component {
   state = {
-    selectedClusters: [],
-    showArchived: false
+    selectedClusters: []
   }
 
   onBulkClusterSelection = clusters => {

@@ -29,7 +29,6 @@ export const FETCHING_RESULTS = 'FETCHING_RESULTS'
 export const RECEIVED_RESULTS = 'RECEIVED_RESULTS'
 
 export const SET_SORT = 'SET_SORT'
-export const SET_ARCHIVED = 'SET_ARCHIVED'
 export const REMOVE_SORT = 'REMOVE_SORT'
 
 export const SET_PAGE = 'SET_PAGE'
@@ -90,6 +89,7 @@ export const PARAMS_MAP = {
   difficulty: 'cd',
   tags: 'tt',
   excludeTasks: 'tExcl',
+  archived: "ca"
 }
 
 
@@ -149,6 +149,9 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
   const searchParameters = {}
   const invf = []
 
+  if (filters.archived) {
+    searchParameters[PARAMS_MAP.archived] = filters.archived;
+  }
   if (filters.reviewRequestedBy) {
     searchParameters[PARAMS_MAP.reviewRequestedBy] = filters.reviewRequestedBy
     if (invertFields.reviewRequestedBy) {
@@ -367,13 +370,6 @@ export const setSort = function(searchName, sortCriteria) {
   }
 }
 
-export const setArchived = function(bool) {
-  return {
-    type: SET_ARCHIVED,
-    payload: bool
-  }
-}
-
 export const removeSort = function(searchName, criteriaNames) {
   return {
     type: REMOVE_SORT,
@@ -583,11 +579,6 @@ export const currentSearch = function(state={}, action) {
       _set(mergedState, `${action.searchName}.sort`,
             Object.assign({}, _get(state, `${action.searchName}.sort`), action.sortCriteria))
       _set(mergedState, `${action.searchName}.page`, null)
-      return mergedState
-
-    case SET_ARCHIVED:
-      mergedState = _cloneDeep(state)
-      _set(mergedState, `challenges.archived`, action.payload)
       return mergedState
 
     case REMOVE_SORT:
