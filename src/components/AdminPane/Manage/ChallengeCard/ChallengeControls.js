@@ -29,6 +29,18 @@ const isEmailRequired = (user) => {
   return false;
 };
 
+const handleTasksNeedRebuild = (dateString) => {
+  if (dateString) {
+    const lastRefreshDate = new Date(dateString);
+    const today = new Date();
+    const sixMonthsAgo = today.setMonth(today.getMonth() - 6);
+
+    return lastRefreshDate < sixMonthsAgo;
+  }
+
+  return false;
+};
+
 export default class ChallengeControls extends Component {
   state = {
     pickingProject: false,
@@ -95,6 +107,11 @@ export default class ChallengeControls extends Component {
     const hasTasks = _get(this.props.challenge, "actions.total", 0) > 0;
     const isArchived = _get(this.props.challenge, "isArchived");
     const requiresEmail = isEmailRequired(this.props.user);
+    const tasksNeedRebuild = handleTasksNeedRebuild(
+      _get(this.props.challenge, "lastTaskRefresh")
+    );
+    const disableUnarchive =
+      tasksNeedRebuild && _get(this.props.challenge, "systemArchivedAt");
 
     if (requiresEmail) {
       return (
@@ -213,13 +230,27 @@ export default class ChallengeControls extends Component {
             ) : null}
             {manager.canAdministrateProject(parent) && isArchived ? (
               <>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a
-                  onClick={() => this.unarchiveChallenge(parent)}
-                  className={this.props.controlClassName}
-                >
-                  <FormattedMessage {...messages.unarchiveChallengeLabel} />
-                </a>
+                {disableUnarchive ? (
+                  <>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a
+                      onClick={() => null}
+                      style={{ color: "grey", cursor: "default" }}
+                    >
+                      <FormattedMessage {...messages.unarchiveChallengeLabel} />
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a
+                      onClick={() => this.unarchiveChallenge(parent)}
+                      className={this.props.controlClassName}
+                    >
+                      <FormattedMessage {...messages.unarchiveChallengeLabel} />
+                    </a>
+                  </>
+                )}
               </>
             ) : null}
             {this.state.pickingProject && (
