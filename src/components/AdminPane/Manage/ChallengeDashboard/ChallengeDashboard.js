@@ -95,8 +95,6 @@ export class ChallengeDashboard extends Component {
       return <TaskUploadingProgress {...this.props} />;
     }
 
-    console.log("asdkfjasdf", this.props.challenge.systemArchivedAt);
-
     const projectId = _get(this.props, "challenge.parent.id");
 
     const pageHeader = (
