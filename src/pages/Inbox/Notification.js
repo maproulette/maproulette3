@@ -318,7 +318,7 @@ const ViewTask = function(props) {
   }
 
   const path = props.notification.taskId
-    ? { pathname: `challenge/${props.notification.challengeId}/task/${props.notification.taskId}`, fromInbox: true }
+    ? `challenge/${props.notification.challengeId}/task/${props.notification.taskId}`
     : `browse/challenges/${props.notification.challengeId}?tab=conversation`;
 
   const isMetaReReview =
