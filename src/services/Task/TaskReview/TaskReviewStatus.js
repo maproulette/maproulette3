@@ -10,6 +10,7 @@ export const REVIEW_STATUS_REJECTED = 2
 export const REVIEW_STATUS_APPROVED_WITH_FIXES = 3
 export const REVIEW_STATUS_DISPUTED = 4
 export const REVIEW_STATUS_UNNECESSARY = 5
+export const REVIEW_STATUS_APPROVED_WITH_REVISIONS = 6
 
 export const REVIEW_STATUS_NOT_SET = -1
 export const META_REVIEW_STATUS_NOT_SET = -2
@@ -21,6 +22,7 @@ export const TaskReviewStatus = Object.freeze({
   approvedWithFixes: REVIEW_STATUS_APPROVED_WITH_FIXES,
   disputed: REVIEW_STATUS_DISPUTED,
   unnecessary: REVIEW_STATUS_UNNECESSARY,
+  approvedWithRevisions: REVIEW_STATUS_APPROVED_WITH_REVISIONS,
 })
 
 export const TaskReviewStatusWithUnset = Object.freeze({
@@ -31,6 +33,7 @@ export const TaskReviewStatusWithUnset = Object.freeze({
   disputed: REVIEW_STATUS_DISPUTED,
   unnecessary: REVIEW_STATUS_UNNECESSARY,
   unset: REVIEW_STATUS_NOT_SET,
+  approvedWithRevisions: REVIEW_STATUS_APPROVED_WITH_REVISIONS,
 })
 
 export const TaskMetaReviewStatusWithUnset = Object.freeze({
@@ -40,6 +43,7 @@ export const TaskMetaReviewStatusWithUnset = Object.freeze({
   metaRejected: REVIEW_STATUS_REJECTED,
   metaUnnecessary: REVIEW_STATUS_UNNECESSARY,
   metaUnset: META_REVIEW_STATUS_NOT_SET,
+  approvedWithRevisions: REVIEW_STATUS_APPROVED_WITH_REVISIONS,
 })
 
 export const keysByReviewStatus = Object.freeze(_invert(TaskReviewStatusWithUnset))

@@ -166,12 +166,16 @@ export class ReviewTaskControls extends Component {
     const fromInbox = _get(this.props.history, 'location.state.fromInbox')
     const tags = _map(this.props.task.tags, (tag) => tag.name)
 
+    const isRevision = (!this.props.metaReviewEnabled && Boolean(this.props.task?.review?.reviewedBy)) ||
+    (this.props.metaReviewEnabled && Boolean(this.props.task?.review?.metaReviewedBy));
+
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
         <div className="mr-text-sm mr-text-white mr-mt-4 mr-whitespace-no-wrap">
           <FormattedMessage
             {...messages.currentTaskStatus}
-          /> <FormattedMessage
+          /> 
+          <FormattedMessage
             {...messagesByStatus[this.props.task.status]}
           />
         </div>
@@ -179,7 +183,8 @@ export class ReviewTaskControls extends Component {
         <div className="mr-text-sm mr-text-white mr-whitespace-no-wrap">
           <FormattedMessage
             {...messages.currentReviewStatus}
-          /> <FormattedMessage
+          /> 
+          <FormattedMessage
             {...messagesByReviewStatus[this.props.task.reviewStatus]}
           />
         </div>
@@ -188,7 +193,8 @@ export class ReviewTaskControls extends Component {
           <div className="mr-text-sm mr-text-white mr-whitespace-no-wrap">
             <FormattedMessage
               {...messages.currentMetaReviewStatus}
-            /> { _isUndefined(this.props.task.metaReviewStatus) ?
+            /> 
+            { _isUndefined(this.props.task.metaReviewStatus) ?
               <span/> :
               <FormattedMessage
                 {...messagesByReviewStatus[this.props.task.metaReviewStatus]}
@@ -224,10 +230,17 @@ export class ReviewTaskControls extends Component {
         }
 
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
-          <button className="mr-button mr-button--blue-fill"
-                  onClick={() => this.updateReviewStatus(TaskReviewStatus.approved)}>
-            <FormattedMessage {...messages.approved} />
-          </button>
+          {
+            isRevision 
+              ?  <button className="mr-button mr-button--blue-fill"
+                    onClick={() => this.updateReviewStatus(TaskReviewStatus.approvedWithRevisions)}>
+                  <FormattedMessage {...messages.approvedWithRevisions} />
+                </button>
+              : <button className="mr-button mr-button--blue-fill"
+                    onClick={() => this.updateReviewStatus(TaskReviewStatus.approved)}>
+                  <FormattedMessage {...messages.approved} />
+                </button>
+          }
           <button className="mr-button mr-button--blue-fill"
                   onClick={() => this.updateReviewStatus(TaskReviewStatus.rejected)}>
             <FormattedMessage {...messages.rejected} />
