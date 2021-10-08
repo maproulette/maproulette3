@@ -62,7 +62,7 @@ export default defineMessages({
 
   approvedWithRevisions: {
     id: "Admin.TaskReview.controls.approvedWithRevisions",
-    defaultMessage: "Approve with revisions",
+    defaultMessage: "Approve revisions",
   },
 
   rejected: {
@@ -72,6 +72,11 @@ export default defineMessages({
 
   approvedWithFixes: {
     id: "Admin.TaskReview.controls.approvedWithFixes",
+    defaultMessage: "Approve (with fixes)",
+  },
+
+  approvedWithFixesAfterRevisions: {
+    id: "Admin.TaskReview.controls.approvedWithFixesAfterRevisions",
     defaultMessage: "Approve (with fixes)",
   },
 

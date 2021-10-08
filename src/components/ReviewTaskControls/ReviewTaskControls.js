@@ -165,9 +165,11 @@ export class ReviewTaskControls extends Component {
 
     const fromInbox = _get(this.props.history, 'location.state.fromInbox')
     const tags = _map(this.props.task.tags, (tag) => tag.name)
+    const isMetaReview = this.props.history?.location?.pathname?.includes("meta-review")
+    const reviewData = this.props.task?.review;
 
-    const isRevision = (!this.props.metaReviewEnabled && Boolean(this.props.task?.review?.reviewedBy)) ||
-    (this.props.metaReviewEnabled && Boolean(this.props.task?.review?.metaReviewedBy));
+    const isRevision = (!isMetaReview && Boolean(reviewData?.reviewedBy) && reviewData?.reviewStatus !== TaskReviewStatus.approved) ||
+      (isMetaReview && Boolean(reviewData?.metaReviewedBy));
 
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
@@ -189,7 +191,7 @@ export class ReviewTaskControls extends Component {
           />
         </div>
 
-        {this.props.metaReviewEnabled &&
+        {isMetaReview &&
           <div className="mr-text-sm mr-text-white mr-whitespace-no-wrap">
             <FormattedMessage
               {...messages.currentMetaReviewStatus}
@@ -245,10 +247,17 @@ export class ReviewTaskControls extends Component {
                   onClick={() => this.updateReviewStatus(TaskReviewStatus.rejected)}>
             <FormattedMessage {...messages.rejected} />
           </button>
-          <button className="mr-button mr-button--blue-fill"
-                  onClick={() => this.updateReviewStatus(TaskReviewStatus.approvedWithFixes)}>
-            <FormattedMessage {...messages.approvedWithFixes} />
-          </button>
+          {
+            isRevision 
+              ?  <button className="mr-button mr-button--blue-fill"
+                    onClick={() => this.updateReviewStatus(TaskReviewStatus.approvedWithFixesAfterRevisions)}>
+                  <FormattedMessage {...messages.approvedWithFixesAfterRevisions} />
+                </button>
+              : <button className="mr-button mr-button--blue-fill"
+                    onClick={() => this.updateReviewStatus(TaskReviewStatus.approvedWithFixes)}>
+                  <FormattedMessage {...messages.approvedWithFixes} />
+                </button>
+          }
           <button className="mr-button mr-button--white"
                   onClick={() => this.skipReview()}>
             {this.props.asMetaReview ?
