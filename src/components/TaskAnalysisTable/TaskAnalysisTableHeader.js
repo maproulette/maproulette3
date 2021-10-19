@@ -17,7 +17,8 @@ import SavedFiltersList from '../SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../SavedFilters/ManageSavedFilters'
 import { TaskStatus, statusLabels } from '../../services/Task/TaskStatus/TaskStatus'
 import { buildLinkToMapperExportCSV,
-         buildLinkToReviewerMetaExportCSV } from '../../services/Task/TaskReview/TaskReview'
+         buildLinkToReviewerMetaExportCSV,
+         buildLinkTaskReviewHistoryCSV } from '../../services/Task/TaskReview/TaskReview'
 import { buildLinkToExportCSV, buildLinkToExportGeoJSON } from '../../services/Challenge/Challenge'
 import messages from './Messages'
 
@@ -262,6 +263,17 @@ export class TaskAnalysisTableHeader extends Component {
                         </li>
                       </ul>
                     }
+                    <ul className="mr-list-dropdown">
+                      <li className="mr-mt-2">
+                        <a target="_blank"
+                            rel="noopener noreferrer"
+                            href={`${buildLinkTaskReviewHistoryCSV(_get(this.props, 'challenge.id'))}`}
+                            className="mr-flex mr-items-center">
+                          <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                          <FormattedMessage {...messages.exportTaskReviewHistoryLabel} />
+                        </a>
+                      </li>
+                    </ul>
                   </React.Fragment>
                 }
               />
