@@ -8,6 +8,7 @@ import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
 import WithChallengeMetrics
        from '../../AdminPane/HOCs/WithChallengeMetrics/WithChallengeMetrics'
+import { PROJECT_CHALLENGE_LIMIT } from '../../../services/Project/Project'
 
 const descriptor = {
   widgetKey: 'CompletionProgressWidget',
@@ -42,6 +43,9 @@ export default class CompletionProgressWidget extends Component {
     if (this.props.singleProject) {
       if (!this.props.project) {
         content = <BusySpinner />
+      }
+      else if (this.props.challengeLimitExceeded) {
+        content = <div classname="mr-text-red">Sorry, project statistics are not available for projects with more than {PROJECT_CHALLENGE_LIMIT} challenges.</div>
       }
       else if (!this.props.challengeStatsAvailable) {
         content = (

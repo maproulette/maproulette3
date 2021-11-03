@@ -13,6 +13,7 @@ import { fetchProject } from '../../../services/Project/Project'
 import { fetchProjectChallenges,
          fetchProjectChallengeActions }
        from '../../../services/Challenge/Challenge'
+import { PROJECT_CHALLENGE_LIMIT } from '../../../services/Project/Project'
 
 
 /**
@@ -46,7 +47,7 @@ const WithProject = function(WrappedComponent, options={}) {
         })
     }
 
-    loadProject = props => {
+    loadProject = async (props) => {
       const projectId = this.currentProjectId(props)
 
       if (_isFinite(projectId)) {
@@ -54,7 +55,7 @@ const WithProject = function(WrappedComponent, options={}) {
           loadingChallenges: options.includeChallenges,
         })
 
-        props.fetchProject(projectId).then(normalizedProject => {
+        props.fetchProject(projectId).then(async normalizedProject => {
           const project = normalizedProject.entities.projects[normalizedProject.result]
           this.setState({project: project})
 
@@ -62,8 +63,11 @@ const WithProject = function(WrappedComponent, options={}) {
             const retrievals = []
             retrievals.push(props.fetchProjectChallenges(projectId))
 
-            // Used to display completion progress for each challenge
-            retrievals.push(props.fetchProjectChallengeActions(projectId))
+            const challenges = await props.fetchProjectChallenges(projectId)
+
+            if (challenges.result.length < PROJECT_CHALLENGE_LIMIT + 1) {
+              retrievals.push(props.fetchProjectChallengeActions(projectId))
+            }
 
             Promise.all(retrievals).then(() => {
               this.setState({loadingChallenges: false})

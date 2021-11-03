@@ -17,6 +17,7 @@ import WithProject from '../HOCs/WithProject/WithProject'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithComputedMetrics from '../AdminPane/HOCs/WithComputedMetrics/WithComputedMetrics'
 import ChallengeResultList from '../ChallengePane/ChallengeResultList/ChallengeResultList'
+import { PROJECT_CHALLENGE_LIMIT } from '../../services/Project/Project'
 
 const ProjectProgress = WithComputedMetrics(ChallengeProgress)
 
@@ -125,7 +126,12 @@ export class ProjectDetail extends Component {
                     />
                   </div>
 
-                  <ProjectProgress className="mr-my-4" {...this.props} />
+                  {this.props.challenges?.length > PROJECT_CHALLENGE_LIMIT 
+                    ?  <div className="mr-text-red">
+                        Sorry, project statistics are not available for projects with more than {PROJECT_CHALLENGE_LIMIT} challenges.
+                      </div>
+                    :  <ProjectProgress className="mr-my-4" {...this.props} />}
+                 
 
                   <ul className="mr-card-challenge__actions mr-mt-4 mr-leading-none mr-text-base">
                     <li>

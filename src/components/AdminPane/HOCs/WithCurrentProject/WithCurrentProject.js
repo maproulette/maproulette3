@@ -13,7 +13,8 @@ import _sortBy from 'lodash/sortBy'
 import _each from 'lodash/each'
 import { fetchProject,
          fetchProjectActivity,
-         fetchProjectsById } from '../../../../services/Project/Project'
+         fetchProjectsById, 
+         PROJECT_CHALLENGE_LIMIT} from '../../../../services/Project/Project'
 import { challengeDenormalizationSchema,
          fetchProjectChallenges,
          fetchProjectChallengeActions,
@@ -47,6 +48,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       loadingChallenges: options.includeChallenges,
       loadingChallengeStats: false,
       challengeStatsAvailable: false,
+      challengeLimitExceeded: false,
     }
 
     routedProjectId = props =>
@@ -168,16 +170,23 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       // Used for burndown chart
       let activityStartDate = new Date(project)
       const challenges = _sortBy(this.challengeProjects(project.id, this.props), ['created'])
-      const earliestChallenge = challenges.pop()
-      if (earliestChallenge) {
-        activityStartDate = earliestChallenge.created
-      }
 
-      return Promise.all([
-        this.props.fetchProjectChallengeActions(project.id),
-        this.props.fetchProjectActivity(project.id, activityStartDate),
-        this.props.fetchLatestProjectChallengeActivity(project.id),
-      ]).then(() => this.setState({loadingChallengeStats: false}))
+      if (challenges.length < PROJECT_CHALLENGE_LIMIT + 1) {
+        const earliestChallenge = challenges.pop()
+        if (earliestChallenge) {
+          activityStartDate = earliestChallenge.created
+        }
+  
+        const promises = [
+          this.props.fetchProjectChallengeActions(project.id),
+          this.props.fetchProjectActivity(project.id, activityStartDate),
+          this.props.fetchLatestProjectChallengeActivity(project.id),
+        ]
+  
+        return Promise.all(promises).then(() => this.setState({loadingChallengeStats: false}))
+      } else {
+        this.setState({ loadingChallengeStats: false, challengeStatsAvailable: false, challengeLimitExceeded: true })
+      }
     }
 
     componentDidMount() {
@@ -219,6 +228,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
           loadingProject={this.state.loadingProject}
           loadingChallenges={this.state.loadingChallenges}
           loadingChallengeStats={this.state.loadingChallengeStats}
+          challengeLimitExceeded={this.state.challengeLimitExceeded}
           loadChallengeStats={this.loadChallengeStats}
           challengeStatsAvailable={this.state.challengeStatsAvailable}
         />

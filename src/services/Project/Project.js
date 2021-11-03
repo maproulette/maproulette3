@@ -26,6 +26,8 @@ export const projectSchema = function () {
 const RECEIVE_PROJECTS = "RECEIVE_PROJECTS";
 const REMOVE_PROJECT = "REMOVE_PROJECT";
 
+export const PROJECT_CHALLENGE_LIMIT = 100
+
 // redux action creators
 
 /**
