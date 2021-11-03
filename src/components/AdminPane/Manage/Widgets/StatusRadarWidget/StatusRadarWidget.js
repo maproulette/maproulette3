@@ -9,6 +9,7 @@ import WithChallengeMetrics
        from '../../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
 import messages from './Messages'
 import './StatusRadarWidget.scss'
+import { PROJECT_CHALLENGE_LIMIT } from '../../../../../services/Project/Project'
 
 const descriptor = {
   widgetKey: 'StatusRadarWidget',
@@ -25,6 +26,9 @@ export default class StatusRadarWidget extends Component {
     if (this.props.singleProject) {
       if (!this.props.project) {
         content = <BusySpinner />
+      }
+      else if (this.props.challengeLimitExceeded) {
+        content = <div classname="mr-text-red">Sorry, project statistics are not available for projects with more than {PROJECT_CHALLENGE_LIMIT} challenges.</div>
       }
       else if (!this.props.challengeStatsAvailable) {
         content = (
