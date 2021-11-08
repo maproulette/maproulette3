@@ -115,6 +115,18 @@ export default defineMessages({
     "If no, users will not be able to follow your MapRoulette activity."
   },
 
+  seeTagFixSuggestionsDescription: {
+    id: "Profile.form.seeTagFixSuggestions.description",
+    defaultMessage:
+    "User will see tag fix suggestions if they are provided."
+  },
+
+  seeTagFixSuggestionsLabel: {
+    id: "Profile.form.seeTagFixSuggestions.label",
+    defaultMessage:
+    "See Tag Fix Suggestions"
+  },
+
   apiKey: {
     id: "Profile.apiKey.header",
     defaultMessage: "API Key",

@@ -107,9 +107,9 @@ export const jsSchema = (intl, user, editor) => {
         default: false,
       },
       seeTagFixSuggestions: {
-        title: "See Tag Fix Suggestions",
+        title: intl.formatMessage(messages.seeTagFixSuggestionsLabel),
         type: "boolean",
-        default: false
+        default: true
       }
     },
   }
