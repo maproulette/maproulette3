@@ -106,6 +106,11 @@ export const jsSchema = (intl, user, editor) => {
         type: "boolean",
         default: false,
       },
+      seeTagFixSuggestions: {
+        title: intl.formatMessage(messages.seeTagFixSuggestionsLabel),
+        type: "boolean",
+        default: true
+      }
     },
   }
 
@@ -183,9 +188,13 @@ export const uiSchema = (intl, user, editor) => {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.allowFollowingDescription),
     },
+    seeTagFixSuggestions: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.seeTagFixSuggestionsDescription),
+    },
     "ui:order": [
       "locale", "allowFollowing", "defaultEditor", "leaderboardOptOut",
-      "defaultBasemap", "isReviewer", "customBasemaps"
+      "defaultBasemap", "isReviewer", "customBasemaps", "seeTagFixSuggestions"
     ],
   }
 

@@ -40,21 +40,23 @@ export default class TagDiffWidget extends Component {
           <FormattedMessage {...messages.title} />
         }
         rightHeaderControls={
-          <div className="mr-flex">
-            <button
-              className="mr-button mr-button--xsmall mr-mr-4"
-              onClick={() => this.setState({showDiffModal: true})}
-            >
-              <FormattedMessage {...messages.viewAllTagsLabel} />
-            </button>
+          this.props.user.settings.seeTagFixSuggestions
+            ? <div className="mr-flex">
+                <button
+                  className="mr-button mr-button--xsmall mr-mr-4"
+                  onClick={() => this.setState({showDiffModal: true})}
+                >
+                  <FormattedMessage {...messages.viewAllTagsLabel} />
+                </button>
 
-            <button
-              className="mr-button mr-button--xsmall"
-              onClick={() => this.setState({showDiffModal: true, editMode: true})}
-            >
-              <FormattedMessage {...messages.editTagsLabel} />
-            </button>
-          </div>
+                <button
+                  className="mr-button mr-button--xsmall"
+                  onClick={() => this.setState({showDiffModal: true, editMode: true})}
+                >
+                  <FormattedMessage {...messages.editTagsLabel} />
+                </button>
+              </div>
+            : null
         }
       >
         <TagDiff {...this.props} />
@@ -72,6 +74,14 @@ export default class TagDiffWidget extends Component {
 }
 
 export const TagDiff = props => {
+  if (!props.user.settings.seeTagFixSuggestions) {
+    return (
+      <div className="mr-mb-4">
+        <FormattedMessage {...messages.disabledDescription} />
+      </div>
+    )
+  }
+
   const needsRevised = props.task.reviewStatus === TaskReviewStatus.rejected
   if (AsCooperativeWork(props.task).isTagType() && (!isFinalStatus(props.task.status) || needsRevised)) {
     if (props.loadingOSMData) {
