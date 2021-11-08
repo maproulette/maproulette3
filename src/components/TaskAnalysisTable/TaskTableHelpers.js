@@ -9,16 +9,18 @@ import messages from './Messages'
  */
 
 
- export const StatusLabel = props => (
-    <span
-      className={classNames('mr-inline-flex mr-items-center', props.className)}
-    >
-      <span className="mr-w-2 mr-h-2 mr-rounded-full mr-bg-current" />
-      <span className="mr-ml-2 mr-text-xs mr-uppercase mr-tracking-wide">
-        <FormattedMessage {...props.intlMessage} />
+ export const StatusLabel = props => {
+   return (
+      <span
+        className={classNames('mr-inline-flex mr-items-center', props.className)}
+      >
+        <span className="mr-w-2 mr-h-2 mr-rounded-full mr-bg-current" />
+        <span className="mr-ml-2 mr-text-xs mr-uppercase mr-tracking-wide">
+          <FormattedMessage {...props.intlMessage} />
+        </span>
       </span>
-    </span>
-  )
+   )
+ }
 
  export const ViewCommentsButton = function(props) {
    return (

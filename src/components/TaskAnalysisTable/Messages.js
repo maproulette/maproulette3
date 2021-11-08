@@ -209,6 +209,11 @@ export default defineMessages({
     defaultMessage: "Export Meta-Review Coverage CSV",
   },
 
+  exportTaskReviewHistoryLabel: {
+    id: "Admin.manageTasks.controls.exportTaskReviewHistory.label",
+    defaultMessage: "Export Task Review History CSV",
+  },
+
   timezoneLabel: {
     id: "Admin.manageTasks.controls.timezone.label",
     defaultMessage: "Timezone",
