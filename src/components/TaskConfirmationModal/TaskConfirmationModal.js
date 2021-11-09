@@ -258,18 +258,18 @@ export class TaskConfirmationModal extends Component {
 
                   {this.props.status !== TaskStatus.skipped && !reviewConfirmation &&
                     this.props.user.settings.needsReview !== needsReviewType.mandatory &&
-                  <div className="form mr-mt-2 mr-flex mr-items-baseline">
-                    <input
-                      type="checkbox"
-                      className="mr-mr-2"
-                      checked={this.props.needsReview}
-                      onClick={this.props.toggleNeedsReview}
-                      onChange={_noop}
-                    />
-                    <label className="mr-text-white-50">
-                      <FormattedMessage {...messages.reviewLabel} />
-                    </label>
-                  </div>
+                      <div className="form mr-mt-2 mr-flex mr-items-baseline">
+                        <input
+                          type="checkbox"
+                          className="mr-mr-2"
+                          checked={this.props.needsReview}
+                          onClick={this.props.toggleNeedsReview}
+                          onChange={_noop}
+                        />
+                        <label className="mr-text-white-50">
+                          <FormattedMessage {...messages.reviewLabel} />
+                        </label>
+                      </div>
                   }
 
                   <div className="mr-flex mr-items-center mr-mt-8">

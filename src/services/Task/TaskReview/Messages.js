@@ -24,6 +24,16 @@ export default defineMessages({
     defaultMessage: "Approved with Fixes"
   },
 
+  approvedWithRevisions: {
+    id: "Task.reviewStatus.approvedWithRevisions",
+    defaultMessage: "Approved with Revisions"
+  },
+
+  approvedWithFixesAfterRevisions: {
+    id: "Task.reviewStatus.approvedWithFixesAfterRevisions",
+    defaultMessage: "Approved with Fixes after Revisions"
+  },
+
   disputed: {
     id: "Task.reviewStatus.disputed",
     defaultMessage: "Contested"

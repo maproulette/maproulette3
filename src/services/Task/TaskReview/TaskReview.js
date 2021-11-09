@@ -146,6 +146,10 @@ export const buildLinkToReviewerMetaExportCSV = function(criteria) {
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/metareview/reviewers/export?${queryString.stringify(queryFilters)}`
 }
 
+export const buildLinkTaskReviewHistoryCSV = function(challengeId) {
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${challengeId}/extractReviewHistory`
+}
+
 const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTasksType.allReviewedTasks, userId)  {
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
