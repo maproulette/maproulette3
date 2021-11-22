@@ -7,6 +7,13 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.12] - 2021-11-09
+
+### Added
+- User setting "Show Tag Fix Suggestions"
+- Added new review approval statuses
+- Task Review History Report
+
 ## [v3.7.11] - 2021-09-14
 
 ### Added
