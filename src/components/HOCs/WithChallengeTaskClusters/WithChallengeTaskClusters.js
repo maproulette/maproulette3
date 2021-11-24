@@ -91,13 +91,16 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
 
       this.setState({loading: true, fetchId: currentFetchId, showAsClusters: showAsClusters, mapZoomedOut: false})
 
+      const searchCriteria = _cloneDeep(this.props.criteria)
+
+      if (challengeId) {
+        _set(searchCriteria,
+          'filters.challengeId',
+           challengeId);
+        _set(searchCriteria, 'filters.archived', true)
+      }
+
       if (!showAsClusters) {
-        const searchCriteria = _cloneDeep(this.props.criteria)
-        if (challengeId) {
-          _set(searchCriteria,
-              'filters.challengeId',
-               challengeId)
-        }
         searchCriteria.page = 0
 
         // Fetch up to threshold+1 individual tasks (eg. 1001 tasks)
@@ -129,7 +132,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         })
       }
       else {
-        this.props.fetchTaskClusters(challengeId, this.props.criteria
+        this.props.fetchTaskClusters(challengeId, searchCriteria
         ).then(results => {
           const clusters = results.clusters
           if (currentFetchId >= this.state.fetchId) {

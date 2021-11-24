@@ -33,9 +33,10 @@ const handleTasksNeedRebuild = (dateString) => {
   if (dateString) {
     const lastRefreshDate = new Date(dateString);
     const today = new Date();
-    const sixMonthsAgo = today.setMonth(today.getMonth() - 6);
+    const staleMonths = Number(process.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6
+    const staleDate = today.setMonth(today.getMonth() - staleMonths);
 
-    return lastRefreshDate < sixMonthsAgo;
+    return lastRefreshDate < staleDate;
   }
 
   return false;

@@ -22,6 +22,12 @@ export default defineMessages({
   staleChallengeMessage2: {
     id: "Admin.Challenge.controls.stale2",
     defaultMessage:
-      "because the tasks are more than six months old. You will need to rebuild the Tasks before you can unarchive the Challenge.",
+      "because the tasks are more than",
+  },
+
+  staleChallengeMessage3: {
+    id: "Admin.Challenge.controls.stale3",
+    defaultMessage:
+      "months old. You will need to rebuild the Tasks before you can unarchive the Challenge.",
   },
 });
