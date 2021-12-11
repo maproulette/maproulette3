@@ -7,6 +7,19 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.13] - 2021-12-14
+
+### Added
+- add env variable for stale date for archived challenges
+- add stale date configurability to archiveChallenges job (API)
+- Upgrade react, redux, apollo, graphql, node-sass, postcss
+- add evolution for indexes manually added for performance (API)
+
+### Fixed
+- handle null locations for task activity
+- add more restriction to updateLocations (API)
+- add updatePriority protocol on new task uploads (API)
+
 ## [v3.7.12] - 2021-11-09
 
 ### Added
