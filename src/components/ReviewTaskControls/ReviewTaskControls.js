@@ -33,6 +33,7 @@ export class ReviewTaskControls extends Component {
     comment: "",
     tags: "",
     loadBy: TaskReviewLoadMethod.next,
+    rejectTag: -1
   }
 
   setComment = comment => this.setState({comment})
@@ -45,11 +46,19 @@ export class ReviewTaskControls extends Component {
     const requestedNextTask = !this.state.requestedNextTask ? null :
       {id: this.state.requestedNextTask, parent: this.state.requestedNextTaskParent}
 
+
+    const rejectTag = this.state.reviewStatus === TaskReviewStatus.rejected 
+      && this.state.rejectTag > 0 ? this.state.rejectTag : undefined
+
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, this.state.tags,
                                      this.state.loadBy, history,
-                                     this.props.taskBundle, requestedNextTask)
+                                     this.props.taskBundle, requestedNextTask, rejectTag)
     this.setState({confirmingTask: false, comment: ""})
+  }
+
+  handleChangeRejectTag = (e) => {
+    this.setState({ rejectTag: Number(e.target.value) })
   }
 
   onCancel = () => {
@@ -285,6 +294,8 @@ export class ReviewTaskControls extends Component {
             chooseNextTask={this.chooseNextTask}
             clearNextTask={this.clearNextTask}
             requestedNextTask={this.state.requestedNextTask}
+            rejectTag={this.state.rejectTag}
+            onChangeRejectTag={this.handleChangeRejectTag}
           />
         }
       </div>

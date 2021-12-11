@@ -31,6 +31,7 @@ import Modal from '../Modal/Modal'
 import AdjustFiltersOverlay from './AdjustFiltersOverlay'
 import InstructionsOverlay from './InstructionsOverlay'
 import messages from './Messages'
+import RejectReasonDropdown from '../RejectReasonDropdown/RejectReasonDropdown';
 
 const shortcutGroup = 'taskConfirmation'
 
@@ -255,10 +256,13 @@ export class TaskConfirmationModal extends Component {
                     </div>
                     }
                   </div>
-
+                  {
+                    this.props.status === TaskReviewStatus.rejected &&
+                    <RejectReasonDropdown onChange={this.props.onChangeRejectTag} value={this.props.rejectTag} />
+                  }
                   {this.props.status !== TaskStatus.skipped && !reviewConfirmation &&
                     this.props.user.settings.needsReview !== needsReviewType.mandatory &&
-                      <div className="form mr-mt-2 mr-flex mr-items-baseline">
+                      <div className="form mr-flex mr-items-baseline">
                         <input
                           type="checkbox"
                           className="mr-mr-2"
@@ -272,7 +276,7 @@ export class TaskConfirmationModal extends Component {
                       </div>
                   }
 
-                  <div className="mr-flex mr-items-center mr-mt-8">
+                  <div className="mr-flex mr-items-center mr-mt-6">
                     <button
                       className="mr-button mr-button--white mr-mr-12 mr-px-8"
                       onClick={this.props.onCancel}

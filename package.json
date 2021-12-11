@@ -72,6 +72,7 @@
     "react-leaflet-markercluster": "^2.0.0",
     "react-onclickoutside": "^6.6.3",
     "react-popper": "^2.2.4",
+    "react-query": "^3.34.2",
     "react-redux": "^7.2.0",
     "react-responsive": "^8.1.0",
     "react-router": "^5.2.0",
