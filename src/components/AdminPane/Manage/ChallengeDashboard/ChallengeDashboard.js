@@ -143,6 +143,8 @@ export class ChallengeDashboard extends Component {
                 day="2-digit"
               />{" "}
               <FormattedMessage {...manageMessages.staleChallengeMessage2} />
+              {` ${Number(process.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6} `}
+              <FormattedMessage {...manageMessages.staleChallengeMessage3} />
             </div>
           )}
       </div>
