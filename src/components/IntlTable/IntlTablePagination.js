@@ -29,7 +29,7 @@ export default class IntlTablePagination extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps (nextProps) {
     this.setState({ page: nextProps.page })
 
     this.updateCurrentRows(nextProps)

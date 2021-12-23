@@ -159,6 +159,8 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
 
        const criteria = typedCriteria || _cloneDeep(this.state.criteria)
 
+       criteria.filters.archived = true;
+
        // If we don't have bounds yet, we still want results so let's fetch all
        // tasks globally for this challenge.
        if (!criteria.boundingBox) {

@@ -33,7 +33,7 @@ export const ActivityMap = props => {
   let coloredMarkers = null
   if (hasTaskMarkers) {
     coloredMarkers = _map(props.activity, entry => {
-      if (!entry.task) {
+      if (!entry?.task?.location) {
         return null
       }
 
