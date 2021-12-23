@@ -257,7 +257,7 @@ export class TaskConfirmationModal extends Component {
                     }
                   </div>
                   {
-                    this.props.status === TaskReviewStatus.rejected &&
+                    this.props.status === TaskReviewStatus.rejected && this.props.history.location.pathname.includes("review") &&
                     <RejectReasonDropdown onChange={this.props.onChangeRejectTag} value={this.props.rejectTag} />
                   }
                   {this.props.status !== TaskStatus.skipped && !reviewConfirmation &&

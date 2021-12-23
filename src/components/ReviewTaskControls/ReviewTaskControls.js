@@ -53,7 +53,7 @@ export class ReviewTaskControls extends Component {
                                      this.state.comment, this.state.tags,
                                      this.state.loadBy, history,
                                      this.props.taskBundle, requestedNextTask, null, rejectTag)
-    this.setState({confirmingTask: false, comment: ""})
+    this.setState({confirmingTask: false, comment: "", rejectTag: -1})
   }
 
   handleChangeRejectTag = (e) => {
@@ -61,7 +61,7 @@ export class ReviewTaskControls extends Component {
   }
 
   onCancel = () => {
-    this.setState({confirmingTask: false})
+    this.setState({confirmingTask: false, rejectTag: -1})
   }
 
   chooseLoadBy = (loadBy) => {
