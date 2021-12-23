@@ -415,9 +415,9 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria, excl
 /**
  *
  */
-export const completeReview = function(taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview = false) {
+export const completeReview = function(taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview = false, rejectTag) {
   return function(dispatch) {
-    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview)
+    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview, rejectTag)
   }
 }
 
@@ -493,7 +493,7 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
       api.task.updateMetaReviewStatus : api.task.updateReviewStatus,
     {schema: taskSchema(),
      variables: {id: taskId, status: newStatus },
-     params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus, rejectTag }}
+     params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus, rejectTag: rejectTag || -1 }}
   ).execute().catch(error => {
     if (isSecurityError(error)) {
       handleExposeError(error, dispatch)
