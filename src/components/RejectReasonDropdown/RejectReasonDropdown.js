@@ -30,7 +30,7 @@ SelectOptions.propTypes = {
 
 const useRejectReasonOptions = () => {
   const query = useQuery('rejectionTags', () =>
-    new Endpoint(api.keywords.find, { params: { tagType: "tasks", limit: 1000 } }).execute()
+    new Endpoint(api.keywords.find, { params: { tagType: "reject", limit: 1000 } }).execute()
   )
 
   return query;
