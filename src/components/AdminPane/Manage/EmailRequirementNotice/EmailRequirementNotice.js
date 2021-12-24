@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { injectIntl } from 'react-intl'
 import WithCurrentUser from "../../../HOCs/WithCurrentUser/WithCurrentUser";
 import MarkdownContent from "../../../MarkdownContent/MarkdownContent";
 import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
+import messages from "../Messages";
 
 const EmailRequirementNotice = (props) => {
   if (process.env.REACT_APP_EMAIL_ENFORCEMENT === "required") {
@@ -17,11 +19,11 @@ const EmailRequirementNotice = (props) => {
                 className="mr-fill-red-light mr-w-10 mr-w-10 mr-cursor-pointer mr-mx-4"
               />
               <MarkdownContent
-                markdown="Please provide your email so mappers can contact you with any feedback. "
+                markdown={props.intl.formatMessage(messages.emailNoticeBanner)}
                 className="mr-markdown--base"
               />{" "}
               <Link className="mr-px-2" to="/user/profile">
-                Go to Settings
+                {props.intl.formatMessage(messages.emailNoticeSettings)}
               </Link>
             </span>
           </li>
@@ -33,4 +35,4 @@ const EmailRequirementNotice = (props) => {
   return null;
 };
 
-export default WithCurrentUser(EmailRequirementNotice);
+export default WithCurrentUser(injectIntl(EmailRequirementNotice));

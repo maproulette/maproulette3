@@ -42,6 +42,7 @@ import {
 import {
   jsSchema as notificationsJsSchema,
   uiSchema as notificationsUiSchema,
+  transformErrors as notificationTransformErrors
 } from "./NotificationSettingsSchema";
 import messages from "../Messages";
 
@@ -350,6 +351,7 @@ class UserSettings extends Component {
           widgets={{ SelectWidget: CustomSelectWidget }}
           className="form form--2-col"
           liveValidate
+          transformErrors={notificationTransformErrors(this.props.intl)}
           noHtml5Validate
           showErrorList={false}
           formData={notificationSettings}

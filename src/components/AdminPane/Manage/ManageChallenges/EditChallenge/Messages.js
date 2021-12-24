@@ -69,6 +69,11 @@ export default defineMessages({
     defaultMessage: "Email Address",
   },
 
+  requiredErrorLabel: {
+    id: "Admin.EditChallenge.form.required.label",
+    defaultMessage: "is a required property",
+  },
+
   nameDescription: {
     id: "Admin.EditChallenge.form.name.description",
     defaultMessage:

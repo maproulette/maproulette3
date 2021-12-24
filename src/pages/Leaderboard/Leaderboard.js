@@ -72,9 +72,9 @@ class Leaderboard extends Component {
             <div className="mr-max-w-md mr-mb-4 lg:mr-mb-0 lg:mr-pr-8">
               <h1 className="mr-h2 mr-mb-2">
                 {this.props.displayName ?
-                 this.props.displayName :
+                 <><FormattedMessage {...messages.leaderboardTitle} />: {this.props.displayName}</> :
                  <FormattedMessage {...messages.leaderboardGlobal} />
-                } <FormattedMessage {...messages.leaderboardTitle} />
+                }
               </h1>
               <h3 className="mr-text-sm mr-text-yellow mr-uppercase mr-tracking-wide mr-font-normal">
                 {this.props.countryCode ?

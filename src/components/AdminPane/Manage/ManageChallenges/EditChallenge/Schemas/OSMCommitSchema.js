@@ -38,6 +38,10 @@ export const jsSchema = (
     properties.changesetUrl = {
       type: "boolean",
       default: true,
+      enumNames: [
+        intl.formatMessage(messages.yesLabel),
+        intl.formatMessage(messages.noLabel),
+      ],
     }
   }
 
