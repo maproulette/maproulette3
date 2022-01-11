@@ -269,6 +269,9 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
     searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
   }
+  if (filters.mappedOn) {
+    searchParameters.mo = format(filters.mappedOn, 'YYYY-MM-DD')
+  }
 
   if (filters.id) {
     searchParameters[PARAMS_MAP.id] = filters.id
