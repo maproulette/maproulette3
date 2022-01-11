@@ -11,7 +11,7 @@ export default defineMessages({
 
   leaderboardGlobal: {
     id: "Leaderboard.global",
-    defaultMessage: "Global",
+    defaultMessage: "Global Leaderboard",
   },
 
   scoringMethodLabel: {

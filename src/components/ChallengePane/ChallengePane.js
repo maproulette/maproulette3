@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { injectIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
 import _uniqBy from 'lodash/uniqBy'
@@ -29,6 +29,7 @@ import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
 import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 import StartVirtualChallenge from './StartVirtualChallenge/StartVirtualChallenge'
+import messages from './Messages'
 
 const ShowArchivedToggleInternal = (props) => {
   return (
@@ -41,7 +42,7 @@ const ShowArchivedToggleInternal = (props) => {
           props.setSearchFilters({ archived: !props.showingArchived })
         }}
       />
-      <div className="mr-text-sm mr-mx-1">Show Archived</div>
+      <div className="mr-text-sm mr-mx-1"><FormattedMessage {...messages.showArchivedLabel} /></div>
     </div>
   )
 }

@@ -59,6 +59,10 @@ export const jsSchema = (intl, user, editor) => {
             title: intl.formatMessage(messages.customBasemapOverlayLabel),
             type: "boolean",
             default: false,
+            enumNames: [
+              intl.formatMessage(messages.yesLabel),
+              intl.formatMessage(messages.noLabel),
+            ],
           },
         },
         required: ["name", "url"],
@@ -95,21 +99,37 @@ export const jsSchema = (intl, user, editor) => {
         title: intl.formatMessage(messages.leaderboardOptOutLabel),
         type: "boolean",
         default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
       },
       isReviewer: {
         title: intl.formatMessage(messages.isReviewerLabel),
         type: "boolean",
         default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
       },
       allowFollowing: {
         title: intl.formatMessage(messages.allowFollowingLabel),
         type: "boolean",
         default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
       },
       seeTagFixSuggestions: {
         title: intl.formatMessage(messages.seeTagFixSuggestionsLabel),
         type: "boolean",
-        default: true
+        default: true,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
       }
     },
   }

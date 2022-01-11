@@ -181,6 +181,16 @@ export default defineMessages({
     defaultMessage: "Notification",
   },
 
+  errorFormatMessage: {
+    id: "Profile.form.format.error",
+    defaultMessage: "should match format",
+  },
+
+  errorFormatEmail: {
+    id: "Profile.form.email.format",
+    defaultMessage: "email",
+  },
+
   notificationSubscriptionsLabel: {
     id: "Profile.form.notificationSubscriptions.label",
     defaultMessage: "Notification Subscriptions",
