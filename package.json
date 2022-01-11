@@ -48,7 +48,7 @@
     "node-sass": "4.14.1",
     "normalize.css": "^7.0.0",
     "normalizr": "^3.6.0",
-    "parse-link-header": "^1.0.1",
+    "parse-link-header": "^2.0.0",
     "piwik-react-router": "^0.12.1",
     "prop-types": "^15.6.0",
     "query-string": "^6.13.1",
