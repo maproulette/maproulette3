@@ -7,6 +7,14 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.14] - 2022-01-11
+
+### Added
+- add ability to filter by mapped_on date on review page
+
+### Fixed
+- fixed various translation mappings throughout application
+
 ## [v3.7.13] - 2021-12-14
 
 ### Added
