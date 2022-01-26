@@ -24,8 +24,12 @@ const CustomUrlList = props => {
       _map(urls, url => {
         let disabled = false
         let replacedUrl = null
+        let replacedDescription = null
+        let replacedName = null
         try {
           replacedUrl = replacePropertyTags(url.url, properties, true)
+          replacedDescription = replacePropertyTags(url.description, properties, true)
+          replacedName = replacePropertyTags(url.name, properties, true)
         }
         catch(err) {
           disabled = true
@@ -37,14 +41,14 @@ const CustomUrlList = props => {
             className="mr-my-2 mr-flex mr-justify-between mr-items-center"
           >
             {disabled ?
-             <span className="mr-text-grey-light" title={url.description}>{url.name}</span> :
+             <span className="mr-text-grey-light" title={replacedDescription}>{replacedName}</span> :
              <a
                href={encodeURI(replacedUrl)}
                target="_blank"
                rel="noopener noreferrer"
-               title={url.description}
+               title={replacedDescription}
              >
-               {url.name}
+               {replacedName}
              </a>
             }
             <div className="mr-h-5">
