@@ -133,6 +133,10 @@ export const jsSchema = (
         title: intl.formatMessage(messages.ignoreSourceErrorsLabel),
         type: "boolean",
         default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],      
       };
     }
 

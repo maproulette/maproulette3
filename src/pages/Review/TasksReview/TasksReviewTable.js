@@ -705,6 +705,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     Header: props.intl.formatMessage(messages.mappedOnLabel),
     accessor: 'mappedOn',
     sortable: true,
+    filterable: true,
     defaultSortDesc: false,
     exportable: t => t.mappedOn,
     maxWidth: 180,
@@ -717,7 +718,25 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
       )
-    }
+    },
+    Filter: ({ filter, onChange }) => {
+      let mappedOn = _get(criteria, 'filters.mappedOn')
+
+      if (typeof mappedOn === "string" && mappedOn !== "") {
+        mappedOn = parse(mappedOn)
+      }
+      return (
+        <div>
+          <IntlDatePicker
+              selected={mappedOn}
+              onChange={(value) => {
+                props.setFiltered("mappedOn", value)
+              }}
+              intl={props.intl}
+          />
+        </div>
+      )
+    },
   }
 
   columns.reviewedAt = {

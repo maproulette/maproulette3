@@ -36,6 +36,20 @@ const createSubscriptionInput = (
   };
 };
 
+export const transformErrors = (intl) => (errors) => {
+  return errors.map(error => {
+    if (error.name === "format") {
+      const formatMessage = intl.formatMessage(messages.errorFormatMessage)
+
+      if (error.params?.format === "email") {
+        const emailMessage = intl.formatMessage(messages.errorFormatEmail)
+        error.message = `${formatMessage} "${emailMessage}"`;
+      }
+    }
+    return error;
+  });
+}
+
 /**
  * Generates a JSON Schema describing editable Notification Settings fields
  * intended for consumption by react-jsonschema-form.

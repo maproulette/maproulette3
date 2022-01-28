@@ -38,6 +38,10 @@ export const jsSchema = (
         title: intl.formatMessage(messages.customTaskStyleLabel),
         type: "boolean",
         default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
       },
       exportableProperties: {
         title: intl.formatMessage(messages.exportablePropertiesLabel),

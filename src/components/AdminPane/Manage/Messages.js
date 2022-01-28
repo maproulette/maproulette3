@@ -30,4 +30,16 @@ export default defineMessages({
     defaultMessage:
       "months old. You will need to rebuild the Tasks before you can unarchive the Challenge.",
   },
+
+  emailNoticeBanner: {
+    id: "Admin.manage.emailBanner",
+    defaultMessage:
+      "Please provide your email so mappers can contact you with any feedback.",
+  },
+
+  emailNoticeSettings: {
+    id: "Admin.manage.emailSettings",
+    defaultMessage:
+      "Go to Settings.",
+  }
 });

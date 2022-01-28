@@ -231,6 +231,15 @@ export class EditChallenge extends Component {
     return errors;
   };
 
+  transformErrors = (intl) => (errors) => {
+    return errors.map(error => {
+      if (error.name === "required") {
+        error.message = intl.formatMessage(messages.requiredErrorLabel);
+      }
+      return error;
+    });
+  }
+
   /**
    * Perform additional validation checks beyond schema validation. Primarily
    * we check Overpass queries and GeoJSON
@@ -896,6 +905,7 @@ export class EditChallenge extends Component {
                     validate={(formData, errors) =>
                       this.validate(formData, errors, activeStep)
                     }
+                    transformErrors={this.transformErrors(this.props.intl)}
                     widgets={{
                       SelectWidget: CustomSelectWidget,
                       TextWidget: CustomTextWidget,

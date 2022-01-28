@@ -25,6 +25,10 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
         title: intl.formatMessage(messages.visibleLabel),
         type: "boolean",
         default: true,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],      
       },
       additionalKeywords: {
         title: intl.formatMessage(messages.additionalKeywordsLabel),
@@ -34,6 +38,10 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
         title: intl.formatMessage(messages.requiresLocalLabel),
         type: "boolean",
         default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
       },
     },
   }
@@ -44,6 +52,10 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
       title: intl.formatMessage(messages.featuredLabel),
       type: "boolean",
       default: false,
+      enumNames: [
+        intl.formatMessage(messages.yesLabel),
+        intl.formatMessage(messages.noLabel),
+      ],
     }
   }
 

@@ -27,6 +27,10 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
       limitTags: {
         type: "boolean",
         default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
       },
       reviewTaskTags: {
         title: intl.formatMessage(messages.preferredReviewTagsLabel),
@@ -35,6 +39,10 @@ export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => 
       limitReviewTags: {
         type: "boolean",
         default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
       },
     },
   }
