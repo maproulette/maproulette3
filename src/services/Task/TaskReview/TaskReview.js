@@ -415,9 +415,9 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria, excl
 /**
  *
  */
-export const completeReview = function(taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview = false, rejectTag) {
+export const completeReview = function(taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview = false, rejectTags) {
   return function(dispatch) {
-    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview, rejectTag)
+    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview, rejectTags)
   }
 }
 
@@ -477,7 +477,7 @@ export const fetchReviewChallenges = function(reviewTasksType,
 }
 
 const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
-  tags, newTaskStatus, asMetaReview, rejectTag) {
+  tags, newTaskStatus, asMetaReview, rejectTags) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
   dispatch(receiveTasks({
@@ -493,7 +493,7 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
       api.task.updateMetaReviewStatus : api.task.updateReviewStatus,
     {schema: taskSchema(),
      variables: {id: taskId, status: newStatus },
-     params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus, rejectTag: rejectTag || -1 }}
+     params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus, rejectTags: rejectTags ? rejectTags.join(",") : undefined }}
   ).execute().catch(error => {
     if (isSecurityError(error)) {
       handleExposeError(error, dispatch)

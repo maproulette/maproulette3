@@ -22,8 +22,6 @@ const SelectOptions = (props) => {
       return true;
     })
 
-    console.log(props.rt, filteredOptions)
-
     const actualOptions = filteredOptions.map((option) => {
       return (
         <option key={option.id} value={option.id}>
