@@ -33,7 +33,7 @@ export class ReviewTaskControls extends Component {
     comment: "",
     tags: "",
     loadBy: TaskReviewLoadMethod.next,
-    rejectTag: -1
+    rejectTags: []
   }
 
   setComment = comment => this.setState({comment})
@@ -53,15 +53,29 @@ export class ReviewTaskControls extends Component {
                                      this.state.comment, this.state.tags,
                                      this.state.loadBy, history,
                                      this.props.taskBundle, requestedNextTask, null, rejectTag)
-    this.setState({confirmingTask: false, comment: "", rejectTag: -1})
+    this.setState({ confirmingTask: false, comment: "", rejectTags: [] })
   }
 
-  handleChangeRejectTag = (e) => {
-    this.setState({ rejectTag: Number(e.target.value) })
+  handleChangeRejectTag = (e, i) => {
+    const newTags = this.state.rejectTags;
+    newTags[i] = Number(e.target.value);
+    this.setState({ rejectTags: newTags })
+  }
+
+  handleAddRejectTag = () => {
+    const newTags = this.state.rejectTags;
+    newTags.push(-1);
+    this.setState({ rejectTags: newTags });
+  }
+
+  handleRemoveRejectTag = (index) => {
+    const newTags = this.state.rejectTags;
+    newTags.splice(index, 1);
+    this.setState({ rejectTags: newTags });
   }
 
   onCancel = () => {
-    this.setState({confirmingTask: false, rejectTag: -1})
+    this.setState({ confirmingTask: false, rejectTags: [] })
   }
 
   chooseLoadBy = (loadBy) => {
@@ -293,8 +307,10 @@ export class ReviewTaskControls extends Component {
             chooseNextTask={this.chooseNextTask}
             clearNextTask={this.clearNextTask}
             requestedNextTask={this.state.requestedNextTask}
-            rejectTag={this.state.rejectTag}
+            rejectTags={this.state.rejectTags}
             onChangeRejectTag={this.handleChangeRejectTag}
+            addRejectTag={this.handleAddRejectTag}
+            removeRejectTag={this.handleRemoveRejectTag}
           />
         }
       </div>
