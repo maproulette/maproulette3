@@ -16,6 +16,9 @@ import External from '../../components/External/External'
 import Modal from '../../components/Modal/Modal'
 import Markdown from '../../components/MarkdownContent/MarkdownContent'
 import messages from './Messages'
+import { useQuery } from 'react-query';
+import { defaultRoutes as api } from "../../services/Server/Server";
+import Endpoint from "../../services/Server/Endpoint";
 
 class Notification extends Component {
   chosenNotificationRef = React.createRef()
@@ -133,6 +136,44 @@ const MentionBody = function(props) {
   )
 }
 
+const useRejectReasonOptions = () => {
+  const query = useQuery('rejectionTags', () =>
+    new Endpoint(api.keywords.find, { params: { tagType: "reject", limit: 1000 } }).execute()
+  )
+
+  return query;
+}
+
+const formatRejectTags = (rejectTags, options) => {
+  if (rejectTags.length) {
+    const tags = rejectTags.split(",");
+
+    return tags.map((tag) => {
+      const option = options?.data.find(o => o.id === Number(tag));
+
+      return option.name;
+    })
+  }
+}
+
+const RejectTagsComment = ({ rejectTags }) => {
+  const options = useRejectReasonOptions();
+
+  if (options.data) {
+    const formattedRejectTags = formatRejectTags(rejectTags, options);
+  
+    if (formattedRejectTags) {
+      const str = formattedRejectTags.length > 1 ? formattedRejectTags.join(", ") : formatRejectTags;
+  
+      return (
+        <div className="mr-text-red">The following error tags have been applied to your task: {str}</div>
+      )
+    }
+  }
+
+  return null;
+}
+
 const ReviewBody = function(props) {
   let lead = null
   const reviewStatus = parseInt(props.notification.description, 10)
@@ -157,6 +198,8 @@ const ReviewBody = function(props) {
   return (
     <React.Fragment>
       <p className="mr-mb-8 mr-text-base">{lead}</p>
+
+      {props.notification.rejectTags ? <RejectTagsComment rejectTags={props.notification.rejectTags} /> : null}
 
       <AttachedComment notification={props.notification} />
 
