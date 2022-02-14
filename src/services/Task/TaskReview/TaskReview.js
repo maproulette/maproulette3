@@ -421,14 +421,14 @@ export const completeReview = function(taskId, taskReviewStatus, comment, tags, 
   }
 }
 
-export const completeBundleReview = function(bundleId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview=false) {
+export const completeBundleReview = function(bundleId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview=false, rejectTags) {
   return function(dispatch) {
     return new Endpoint(
       asMetaReview ? api.tasks.bundled.updateMetaReviewStatus :
                      api.tasks.bundled.updateReviewStatus, {
       schema: taskBundleSchema(),
       variables: {bundleId, status: taskReviewStatus},
-      params:{comment, tags, newTaskStatus, asMetaReview},
+      params:{comment, tags, newTaskStatus, asMetaReview, rejectTags: rejectTags ? rejectTags.join(",") : undefined },
     }).execute().catch(error => {
       if (isSecurityError(error)) {
         handleExposeError(error, dispatch)

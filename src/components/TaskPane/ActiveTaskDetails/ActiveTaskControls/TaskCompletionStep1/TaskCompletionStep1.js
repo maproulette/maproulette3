@@ -15,7 +15,47 @@ import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
 import TaskRevisedControl from '../TaskRevisedControl/TaskRevisedControl'
 import './TaskCompletionStep1.scss'
 import messages from './Messages'
+import { useQuery } from 'react-query';
+import { defaultRoutes as api } from "../../../../../services/Server/Server";
+import Endpoint from "../../../../../services/Server/Endpoint";
 
+const useRejectReasonOptions = () => {
+  const query = useQuery('rejectionTags', () =>
+    new Endpoint(api.keywords.find, { params: { tagType: "reject", limit: 1000 } }).execute()
+  )
+
+  return query;
+}
+
+const formatRejectTags = (rejectTags, options) => {
+  if (rejectTags.length) {
+    const tags = rejectTags.split(",");
+
+    return tags.map((tag) => {
+      const option = options?.data.find(o => o.id === Number(tag));
+
+      return option?.name;
+    })
+  }
+}
+
+const RejectTagsComment = ({ rejectTags }) => {
+  const options = useRejectReasonOptions();
+
+  if (options.data) {
+    const formattedRejectTags = formatRejectTags(rejectTags, options);
+  
+    if (formattedRejectTags) {
+      const str = formattedRejectTags.length > 1 ? formattedRejectTags.join(", ") : formatRejectTags;
+  
+      return (
+        <div className="mr-text-red">This task needs revision. The following error tags were applied: {str}. Be sure to check comments for any details.</div>
+      )
+    }
+  }
+
+  return null;
+}
 
 /**
  * TaskCompletionStep1 renders and manages controls and keyboard shortcuts for
@@ -44,7 +84,11 @@ export default class TaskCompletionStep1 extends Component {
         {this.props.needsRevised &&
           <div className="mr-text-white mr-text-md mr-mt-4">
             <div>
-              <FormattedMessage {...messages.revisionNeeded} />
+              {
+                this.props.task?.rejectTags
+                  ? <RejectTagsComment rejectTags={this.props.task.rejectTags} />
+                  : <FormattedMessage {...messages.revisionNeeded} />
+              }
             </div>
           </div>
         }

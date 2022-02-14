@@ -22,6 +22,47 @@ import UserEditorSelector
 import TaskConfirmationModal from '../TaskConfirmationModal/TaskConfirmationModal'
 import messages from './Messages'
 import './ReviewTaskControls.scss'
+import { useQuery } from 'react-query';
+import { defaultRoutes as api } from "../../services/Server/Server";
+import Endpoint from "../../services/Server/Endpoint";
+
+const useRejectReasonOptions = () => {
+  const query = useQuery('rejectionTags', () =>
+    new Endpoint(api.keywords.find, { params: { tagType: "reject", limit: 1000 } }).execute()
+  )
+
+  return query;
+}
+
+const formatRejectTags = (rejectTags, options) => {
+  if (rejectTags.length) {
+    const tags = rejectTags.split(",");
+
+    return tags.map((tag) => {
+      const option = options?.data.find(o => o.id === Number(tag));
+
+      return option?.name;
+    })
+  }
+}
+
+const RejectTagsComment = ({ rejectTags }) => {
+  const options = useRejectReasonOptions();
+
+  if (options.data) {
+    const formattedRejectTags = formatRejectTags(rejectTags, options);
+  
+    if (formattedRejectTags) {
+      const str = formattedRejectTags.length > 1 ? formattedRejectTags.join(", ") : formatRejectTags;
+  
+      return (
+        <div className="mr-text-red">Error Tags: {str}</div>
+      )
+    }
+  }
+
+  return null;
+}
 
 /**
  * ReviewTaskControls presents controls used to update the task review status.
@@ -187,6 +228,7 @@ export class ReviewTaskControls extends Component {
 
     const fromInbox = _get(this.props.history, 'location.state.fromInbox')
     const tags = _map(this.props.task.tags, (tag) => tag.name)
+    const rejectTags = this.props.task.rejectTags;
     const isMetaReview = this.props.history?.location?.pathname?.includes("meta-review")
     const reviewData = this.props.task?.review;
 
@@ -232,6 +274,11 @@ export class ReviewTaskControls extends Component {
               {...messages.taskTags}
             /> {tags.join(', ')}
           </div>
+        }
+        {
+          rejectTags
+            ? <RejectTagsComment rejectTags={rejectTags} />
+            : null
         }
 
         <div className="mr-my-4">

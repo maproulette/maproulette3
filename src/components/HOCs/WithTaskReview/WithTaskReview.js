@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           (status === TaskReviewStatus.needed && task.reviewedBy === ownProps.user.id)
 
         const doReview = taskBundle ?
-          () => completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, submitAsMetaReview) :
+          () => completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, submitAsMetaReview, rejectTags) :
           () => completeReview(task.id, status, comment, tags, newTaskStatus, submitAsMetaReview, rejectTags)
 
         // If we are loading the next task to review we need to ask the server for the next one

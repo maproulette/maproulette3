@@ -151,7 +151,7 @@ const formatRejectTags = (rejectTags, options) => {
     return tags.map((tag) => {
       const option = options?.data.find(o => o.id === Number(tag));
 
-      return option.name;
+      return option?.name;
     })
   }
 }
