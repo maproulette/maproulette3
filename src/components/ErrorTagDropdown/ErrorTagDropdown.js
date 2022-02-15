@@ -15,7 +15,7 @@ const SelectOptions = (props) => {
         return true
       }
 
-      if (props.rejectTags.includes(option.id)) {
+      if (props.errorTags.includes(option.id)) {
         return false
       }
   
@@ -36,35 +36,35 @@ const SelectOptions = (props) => {
   }
 }
 
-const useRejectReasonOptions = () => {
-  const query = useQuery('rejectionTags', () =>
-    new Endpoint(api.keywords.find, { params: { tagType: "reject", limit: 1000 } }).execute()
+const useErrorTagOptions = () => {
+  const query = useQuery('errorTags', () =>
+    new Endpoint(api.keywords.find, { params: { tagType: "error", limit: 1000 } }).execute()
   )
 
   return query;
 }
 
-const RejectReasonDropdown = (props) => {
-  const options = useRejectReasonOptions();
+const ErrorTagDropdown = (props) => {
+  const options = useErrorTagOptions();
 
   return (
     <div className="mr-mt-4">
-      {props.rejectTags?.length ? props.rejectTags.map((rt, index) => {
+      {props.errorTags?.length ? props.errorTags.map((rt, index) => {
         return (
           <div className="mr-mt-4 mr-mb-2" key={index}>
-            <div className="mr-mb-1">Reject Reason</div>
+            <div className="mr-mb-1">Error Tag</div>
             <div className="mr-flex">
               <select
-                key="name-review-reject"
+                key="name-error-tags"
                 className="form-select form-control"
                 onChange={(e) => props.onChange(e, index)}
                 value={rt}
               >
-                <SelectOptions options={options.data} rejectTags={props.rejectTags} rt={rt} />
+                <SelectOptions options={options.data} errorTags={props.errorTags} rt={rt} />
               </select>
               <button
                 className="is-clear array-field__item__control remove-item-button button mr-ml-2"
-                onClick={() => props.removeRejectTag(index)}
+                onClick={() => props.removeErrorTag(index)}
               >
               <span className="icon is-danger">
                 <SvgSymbol sym="trash-icon" viewBox='0 0 20 20' className="mr-w-5 mr-h-5"/>
@@ -74,12 +74,12 @@ const RejectReasonDropdown = (props) => {
           </div>
         )
       }): null}
-      {props.rejectTags?.length < 5 && props.rejectTags?.length < options.data?.length
-        ? <div className="mr-underline mr-cursor-pointer mr-text-green-light" onClick={props.addRejectTag}>Add Reject Reason</div> 
+      {props.errorTags?.length < 5 && props.errorTags?.length < options.data?.length
+        ? <div className="mr-underline mr-cursor-pointer mr-text-green-light" onClick={props.addErrorTag}>Add Error Tag</div> 
         : null
       }
     </div>
   )
 }
 
-export default RejectReasonDropdown;
+export default ErrorTagDropdown;

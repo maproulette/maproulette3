@@ -26,17 +26,17 @@ import { useQuery } from 'react-query';
 import { defaultRoutes as api } from "../../services/Server/Server";
 import Endpoint from "../../services/Server/Endpoint";
 
-const useRejectReasonOptions = () => {
-  const query = useQuery('rejectionTags', () =>
-    new Endpoint(api.keywords.find, { params: { tagType: "reject", limit: 1000 } }).execute()
+const useErrorTagOptions = () => {
+  const query = useQuery('errorTags', () =>
+    new Endpoint(api.keywords.find, { params: { tagType: "error", limit: 1000 } }).execute()
   )
 
   return query;
 }
 
-const formatRejectTags = (rejectTags, options) => {
-  if (rejectTags.length) {
-    const tags = rejectTags.split(",");
+const formatErrorTags = (errorTags, options) => {
+  if (errorTags.length) {
+    const tags = errorTags.split(",");
 
     return tags.map((tag) => {
       const option = options?.data.find(o => o.id === Number(tag));
@@ -46,14 +46,14 @@ const formatRejectTags = (rejectTags, options) => {
   }
 }
 
-const RejectTagsComment = ({ rejectTags }) => {
-  const options = useRejectReasonOptions();
+const ErrorTagComment = ({ errorTags }) => {
+  const options = useErrorTagOptions();
 
   if (options.data) {
-    const formattedRejectTags = formatRejectTags(rejectTags, options);
+    const formattedErrorTags = formatErrorTags(errorTags, options);
   
-    if (formattedRejectTags) {
-      const str = formattedRejectTags.length > 1 ? formattedRejectTags.join(", ") : formatRejectTags;
+    if (formattedErrorTags) {
+      const str = formattedErrorTags.length > 1 ? formattedErrorTags.join(", ") : formatErrorTags;
   
       return (
         <div className="mr-text-red">Error Tags: {str}</div>
@@ -74,7 +74,7 @@ export class ReviewTaskControls extends Component {
     comment: "",
     tags: "",
     loadBy: TaskReviewLoadMethod.next,
-    rejectTags: []
+    errorTags: []
   }
 
   setComment = comment => this.setState({comment})
@@ -87,36 +87,36 @@ export class ReviewTaskControls extends Component {
     const requestedNextTask = !this.state.requestedNextTask ? null :
       {id: this.state.requestedNextTask, parent: this.state.requestedNextTaskParent}
 
-    const rejectTags = this.state.reviewStatus === TaskReviewStatus.rejected 
-      && this.state.rejectTags?.length ? this.state.rejectTags : undefined
+    const errorTags = this.state.reviewStatus === TaskReviewStatus.rejected 
+      && this.state.errorTags?.length ? this.state.errorTags : undefined
 
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, this.state.tags,
                                      this.state.loadBy, history,
-                                     this.props.taskBundle, requestedNextTask, null, rejectTags)
-    this.setState({ confirmingTask: false, comment: "", rejectTags: [] })
+                                     this.props.taskBundle, requestedNextTask, null, errorTags)
+    this.setState({ confirmingTask: false, comment: "", errorTags: [] })
   }
 
-  handleChangeRejectTag = (e, i) => {
-    const newTags = this.state.rejectTags;
+  handleChangeErrorTag = (e, i) => {
+    const newTags = this.state.errorTags;
     newTags[i] = Number(e.target.value);
-    this.setState({ rejectTags: newTags })
+    this.setState({ errorTags: newTags })
   }
 
-  handleAddRejectTag = () => {
-    const newTags = this.state.rejectTags;
+  handleAddErrorTag = () => {
+    const newTags = this.state.errorTags;
     newTags.push(-1);
-    this.setState({ rejectTags: newTags });
+    this.setState({ errorTags: newTags });
   }
 
-  handleRemoveRejectTag = (index) => {
-    const newTags = this.state.rejectTags;
+  handleRemoveErrorTag = (index) => {
+    const newTags = this.state.errorTags;
     newTags.splice(index, 1);
-    this.setState({ rejectTags: newTags });
+    this.setState({ errorTags: newTags });
   }
 
   onCancel = () => {
-    this.setState({ confirmingTask: false, rejectTags: [] })
+    this.setState({ confirmingTask: false, errorTags: [] })
   }
 
   chooseLoadBy = (loadBy) => {
@@ -228,7 +228,7 @@ export class ReviewTaskControls extends Component {
 
     const fromInbox = _get(this.props.history, 'location.state.fromInbox')
     const tags = _map(this.props.task.tags, (tag) => tag.name)
-    const rejectTags = this.props.task.rejectTags;
+    const errorTags = this.props.task.errorTags;
     const isMetaReview = this.props.history?.location?.pathname?.includes("meta-review")
     const reviewData = this.props.task?.review;
 
@@ -276,8 +276,8 @@ export class ReviewTaskControls extends Component {
           </div>
         }
         {
-          rejectTags
-            ? <RejectTagsComment rejectTags={rejectTags} />
+          errorTags
+            ? <ErrorTagComment errorTags={errorTags} />
             : null
         }
 
@@ -354,10 +354,10 @@ export class ReviewTaskControls extends Component {
             chooseNextTask={this.chooseNextTask}
             clearNextTask={this.clearNextTask}
             requestedNextTask={this.state.requestedNextTask}
-            rejectTags={this.state.rejectTags}
-            onChangeRejectTag={this.handleChangeRejectTag}
-            addRejectTag={this.handleAddRejectTag}
-            removeRejectTag={this.handleRemoveRejectTag}
+            errorTags={this.state.errorTags}
+            onChangeErrorTag={this.handleChangeErrorTag}
+            addErrorTag={this.handleAddErrorTag}
+            removeErrorTag={this.handleRemoveErrorTag}
           />
         }
       </div>

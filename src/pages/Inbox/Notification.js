@@ -136,17 +136,17 @@ const MentionBody = function(props) {
   )
 }
 
-const useRejectReasonOptions = () => {
-  const query = useQuery('rejectionTags', () =>
-    new Endpoint(api.keywords.find, { params: { tagType: "reject", limit: 1000 } }).execute()
+const useErrorTagOptions = () => {
+  const query = useQuery('errorTags', () =>
+    new Endpoint(api.keywords.find, { params: { tagType: "error", limit: 1000 } }).execute()
   )
 
   return query;
 }
 
-const formatRejectTags = (rejectTags, options) => {
-  if (rejectTags.length) {
-    const tags = rejectTags.split(",");
+const formatErrorTags = (errorTags, options) => {
+  if (errorTags.length) {
+    const tags = errorTags.split(",");
 
     return tags.map((tag) => {
       const option = options?.data.find(o => o.id === Number(tag));
@@ -156,14 +156,14 @@ const formatRejectTags = (rejectTags, options) => {
   }
 }
 
-const RejectTagsComment = ({ rejectTags }) => {
-  const options = useRejectReasonOptions();
+const ErrorTagsComment = ({ errorTags }) => {
+  const options = useErrorTagOptions();
 
   if (options.data) {
-    const formattedRejectTags = formatRejectTags(rejectTags, options);
+    const formattedErrorTags = formatErrorTags(errorTags, options);
   
-    if (formattedRejectTags) {
-      const str = formattedRejectTags.length > 1 ? formattedRejectTags.join(", ") : formatRejectTags;
+    if (formattedErrorTags) {
+      const str = formattedErrorTags.length > 1 ? formattedErrorTags.join(", ") : formatErrorTags;
   
       return (
         <div className="mr-text-red">The following error tags have been applied to your task: {str}</div>
@@ -199,7 +199,7 @@ const ReviewBody = function(props) {
     <React.Fragment>
       <p className="mr-mb-8 mr-text-base">{lead}</p>
 
-      {props.notification.rejectTags ? <RejectTagsComment rejectTags={props.notification.rejectTags} /> : null}
+      {props.notification.errorTags ? <ErrorTagsComment errorTags={props.notification.errorTags} /> : null}
 
       <AttachedComment notification={props.notification} />
 

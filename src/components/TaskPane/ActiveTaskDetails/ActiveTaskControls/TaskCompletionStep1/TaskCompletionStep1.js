@@ -19,17 +19,17 @@ import { useQuery } from 'react-query';
 import { defaultRoutes as api } from "../../../../../services/Server/Server";
 import Endpoint from "../../../../../services/Server/Endpoint";
 
-const useRejectReasonOptions = () => {
-  const query = useQuery('rejectionTags', () =>
-    new Endpoint(api.keywords.find, { params: { tagType: "reject", limit: 1000 } }).execute()
+const useErrorTagOptions = () => {
+  const query = useQuery('errorTags', () =>
+    new Endpoint(api.keywords.find, { params: { tagType: "error", limit: 1000 } }).execute()
   )
 
   return query;
 }
 
-const formatRejectTags = (rejectTags, options) => {
-  if (rejectTags.length) {
-    const tags = rejectTags.split(",");
+const formatErrorTags = (errorTags, options) => {
+  if (errorTags.length) {
+    const tags = errorTags.split(",");
 
     return tags.map((tag) => {
       const option = options?.data.find(o => o.id === Number(tag));
@@ -39,14 +39,14 @@ const formatRejectTags = (rejectTags, options) => {
   }
 }
 
-const RejectTagsComment = ({ rejectTags }) => {
-  const options = useRejectReasonOptions();
+const ErrorTagsComment = ({ errorTags }) => {
+  const options = useErrorTagOptions();
 
   if (options.data) {
-    const formattedRejectTags = formatRejectTags(rejectTags, options);
+    const formattedErrorTags = formatErrorTags(errorTags, options);
   
-    if (formattedRejectTags) {
-      const str = formattedRejectTags.length > 1 ? formattedRejectTags.join(", ") : formatRejectTags;
+    if (formattedErrorTags) {
+      const str = formattedErrorTags.length > 1 ? formattedErrorTags.join(", ") : formatErrorTags;
   
       return (
         <div className="mr-text-red">This task needs revision. The following error tags were applied: {str}. Be sure to check comments for any details.</div>
@@ -85,8 +85,8 @@ export default class TaskCompletionStep1 extends Component {
           <div className="mr-text-white mr-text-md mr-mt-4">
             <div>
               {
-                this.props.task?.rejectTags
-                  ? <RejectTagsComment rejectTags={this.props.task.rejectTags} />
+                this.props.task?.errorTags
+                  ? <ErrorTagsComment errorTags={this.props.task.errorTags} />
                   : <FormattedMessage {...messages.revisionNeeded} />
               }
             </div>

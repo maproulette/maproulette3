@@ -40,7 +40,7 @@ function asMetaReview(props) {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateTaskReviewStatus: (task, status, comment, tags, loadBy, url,
-      taskBundle, requestedNextTask, newTaskStatus, rejectTags) => {
+      taskBundle, requestedNextTask, newTaskStatus, errorTags) => {
         // Either this is a meta-review (url is /meta-review) or
         // it's the reviewer revising their review and requesting
         // a meta-review on their revision (ie. changing meta-review status
@@ -51,8 +51,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           (status === TaskReviewStatus.needed && task.reviewedBy === ownProps.user.id)
 
         const doReview = taskBundle ?
-          () => completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, submitAsMetaReview, rejectTags) :
-          () => completeReview(task.id, status, comment, tags, newTaskStatus, submitAsMetaReview, rejectTags)
+          () => completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, submitAsMetaReview, errorTags) :
+          () => completeReview(task.id, status, comment, tags, newTaskStatus, submitAsMetaReview, errorTags)
 
         // If we are loading the next task to review we need to ask the server for the next one
         // first, since otherwise after we change the task review status the current position

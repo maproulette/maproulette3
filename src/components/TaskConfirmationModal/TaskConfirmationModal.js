@@ -31,7 +31,7 @@ import Modal from '../Modal/Modal'
 import AdjustFiltersOverlay from './AdjustFiltersOverlay'
 import InstructionsOverlay from './InstructionsOverlay'
 import messages from './Messages'
-import RejectReasonDropdown from '../RejectReasonDropdown/RejectReasonDropdown';
+import ErrorTagDropdown from '../ErrorTagDropdown/ErrorTagDropdown'
 
 const shortcutGroup = 'taskConfirmation'
 
@@ -258,11 +258,11 @@ export class TaskConfirmationModal extends Component {
                   </div>
                   {
                     this.props.status === TaskReviewStatus.rejected && this.props.history.location.pathname.includes("review") &&
-                      <RejectReasonDropdown 
-                        onChange={this.props.onChangeRejectTag}
-                        rejectTags={this.props.rejectTags}
-                        addRejectTag={this.props.addRejectTag}
-                        removeRejectTag={this.props.removeRejectTag}
+                      <ErrorTagDropdown 
+                        onChange={this.props.onChangeErrorTag}
+                        errorTags={this.props.errorTags}
+                        addErrorTag={this.props.addErrorTag}
+                        removeErrorTag={this.props.removeErrorTag}
                       />
                   }
                   {this.props.status !== TaskStatus.skipped && !reviewConfirmation &&
