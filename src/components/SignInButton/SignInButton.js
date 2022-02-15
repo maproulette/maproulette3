@@ -37,7 +37,7 @@ export class SignInButton extends Component {
         href={
           `${process.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
             this.props.history.location.pathname + this.props.history.location.search
-          )}`
+          )}`.replace("www.", "").replace("https", "http")
         }
       >
         {this.props.children || (
