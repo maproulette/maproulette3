@@ -415,20 +415,20 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria, excl
 /**
  *
  */
-export const completeReview = function(taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview = false, rejectTags) {
+export const completeReview = function(taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview = false, errorTags) {
   return function(dispatch) {
-    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview, rejectTags)
+    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview, errorTags)
   }
 }
 
-export const completeBundleReview = function(bundleId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview=false, rejectTags) {
+export const completeBundleReview = function(bundleId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview=false, errorTags) {
   return function(dispatch) {
     return new Endpoint(
       asMetaReview ? api.tasks.bundled.updateMetaReviewStatus :
                      api.tasks.bundled.updateReviewStatus, {
       schema: taskBundleSchema(),
       variables: {bundleId, status: taskReviewStatus},
-      params:{comment, tags, newTaskStatus, asMetaReview, rejectTags: rejectTags ? rejectTags.join(",") : undefined },
+      params:{comment, tags, newTaskStatus, asMetaReview, errorTags: errorTags ? errorTags.join(",") : undefined },
     }).execute().catch(error => {
       if (isSecurityError(error)) {
         handleExposeError(error, dispatch)
@@ -477,7 +477,7 @@ export const fetchReviewChallenges = function(reviewTasksType,
 }
 
 const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
-  tags, newTaskStatus, asMetaReview, rejectTags) {
+  tags, newTaskStatus, asMetaReview, errorTags) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
   dispatch(receiveTasks({
@@ -493,7 +493,7 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
       api.task.updateMetaReviewStatus : api.task.updateReviewStatus,
     {schema: taskSchema(),
      variables: {id: taskId, status: newStatus },
-     params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus, rejectTags: rejectTags ? rejectTags.join(",") : undefined }}
+     params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus, errorTags: errorTags ? errorTags.join(",") : undefined }}
   ).execute().catch(error => {
     if (isSecurityError(error)) {
       handleExposeError(error, dispatch)
