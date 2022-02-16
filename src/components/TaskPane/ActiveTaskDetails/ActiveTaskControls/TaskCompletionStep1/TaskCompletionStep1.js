@@ -42,13 +42,18 @@ export default class TaskCompletionStep1 extends Component {
     return (
       <div>
         {this.props.needsRevised &&
-          <div className="mr-text-white mr-text-md mr-mt-4">
+          <div className={`${ this.props.task?.errorTags ? "mr-text-red" : "mr-text-white" } mr-text-md mr-mt-4`}>
             <div>
+              <FormattedMessage {...messages.revisionNeeded} />{" "}
               {
                 this.props.task?.errorTags
-                  ? <div className="mr-text-red">This task needs revision. The following error tags were applied: <ErrorTagComment errorTags={this.props.task.errorTags} />. Be sure to check comments for any details.</div>
-                  : <FormattedMessage {...messages.revisionNeeded} />
+                  ? <>
+                      <FormattedMessage {...messages.errorTagsApplied} />:{" "}
+                      <ErrorTagComment errorTags={this.props.task.errorTags} />{" "}
+                    </>
+                  : ""
               }
+              <FormattedMessage {...messages.checkComments} />
             </div>
           </div>
         }

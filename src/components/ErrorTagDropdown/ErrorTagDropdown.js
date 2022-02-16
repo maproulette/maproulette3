@@ -1,6 +1,8 @@
 import React from "react";
+import { FormattedMessage } from 'react-intl'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import useErrorTagOptions from "../../hooks/UseErrorTagOptions"
+import messages from './Messages'
 
 const SelectOptions = (props) => {
   const defaultOption = [
@@ -42,7 +44,7 @@ const ErrorTagDropdown = (props) => {
       {props.errorTags?.length ? props.errorTags.map((rt, index) => {
         return (
           <div className="mr-mt-4 mr-mb-2" key={index}>
-            <div className="mr-mb-1">Error Tag</div>
+            <div className="mr-mb-1"><FormattedMessage {...messages.errorTag} /></div>
             <div className="mr-flex">
               <select
                 key="name-error-tags"
@@ -65,7 +67,9 @@ const ErrorTagDropdown = (props) => {
         )
       }): null}
       {props.errorTags?.length < 5 && props.errorTags?.length < options.data?.length
-        ? <div className="mr-underline mr-cursor-pointer mr-text-green-light" onClick={props.addErrorTag}>Add Error Tag</div> 
+        ? <div className="mr-underline mr-cursor-pointer mr-text-green-light" onClick={props.addErrorTag}>
+            <FormattedMessage {...messages.addErrorTag} />
+          </div> 
         : null
       }
     </div>

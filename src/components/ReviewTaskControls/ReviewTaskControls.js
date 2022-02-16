@@ -237,7 +237,12 @@ export class ReviewTaskControls extends Component {
         }
         {
           errorTags
-            ?  <div className="mr-text-red">Error Tags: <ErrorTagComment errorTags={errorTags} /></div>
+            ?  <div className="mr-text-red">
+                <FormattedMessage
+                  {...messages.errorTags}
+                />:{" "}
+                <ErrorTagComment errorTags={errorTags} />
+              </div>
             : null
         }
 

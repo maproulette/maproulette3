@@ -160,7 +160,10 @@ const ReviewBody = function(props) {
       <p className="mr-mb-8 mr-text-base">{lead}</p>
 
       {props.notification.errorTags
-        ?  <div className="mr-text-red">The following error tags have been applied to your task: <ErrorTagComment errorTags={props.notification.errorTags} /> </div>
+        ? <div className="mr-text-red">
+            <FormattedMessage {...messages.appliedErrorTags} />:{" "}
+            <ErrorTagComment errorTags={props.notification.errorTags} />
+          </div>
         : null}
 
       <AttachedComment notification={props.notification} />

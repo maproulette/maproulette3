@@ -183,4 +183,9 @@ export default defineMessages({
     id: "Inbox.notification.controls.viewTeams.label",
     defaultMessage: "View Teams",
   },
+
+  appliedErrorTags: {
+    id: "Inbox.notification.appliedErrorTags",
+    defaultMessage: "The following error tags have been applied to your task"
+  }
 })
