@@ -22,47 +22,7 @@ import UserEditorSelector
 import TaskConfirmationModal from '../TaskConfirmationModal/TaskConfirmationModal'
 import messages from './Messages'
 import './ReviewTaskControls.scss'
-import { useQuery } from 'react-query';
-import { defaultRoutes as api } from "../../services/Server/Server";
-import Endpoint from "../../services/Server/Endpoint";
-
-const useErrorTagOptions = () => {
-  const query = useQuery('errorTags', () =>
-    new Endpoint(api.keywords.find, { params: { tagType: "error", limit: 1000 } }).execute()
-  )
-
-  return query;
-}
-
-const formatErrorTags = (errorTags, options) => {
-  if (errorTags.length) {
-    const tags = errorTags.split(",");
-
-    return tags.map((tag) => {
-      const option = options?.data.find(o => o.id === Number(tag));
-
-      return option?.name;
-    })
-  }
-}
-
-const ErrorTagComment = ({ errorTags }) => {
-  const options = useErrorTagOptions();
-
-  if (options.data) {
-    const formattedErrorTags = formatErrorTags(errorTags, options);
-  
-    if (formattedErrorTags) {
-      const str = formattedErrorTags.length > 1 ? formattedErrorTags.join(", ") : formatErrorTags;
-  
-      return (
-        <div className="mr-text-red">Error Tags: {str}</div>
-      )
-    }
-  }
-
-  return null;
-}
+import ErrorTagComment from '../ErrorTagComment/ErrorTagComment'
 
 /**
  * ReviewTaskControls presents controls used to update the task review status.
@@ -277,7 +237,7 @@ export class ReviewTaskControls extends Component {
         }
         {
           errorTags
-            ? <ErrorTagComment errorTags={errorTags} />
+            ?  <div className="mr-text-red">Error Tags: <ErrorTagComment errorTags={errorTags} /></div>
             : null
         }
 

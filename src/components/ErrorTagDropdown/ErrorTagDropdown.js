@@ -1,8 +1,6 @@
 import React from "react";
-import { useQuery } from 'react-query';
-import { defaultRoutes as api } from "../../services/Server/Server";
-import Endpoint from "../../services/Server/Endpoint";
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import useErrorTagOptions from "../../hooks/UseErrorTagOptions"
 
 const SelectOptions = (props) => {
   const defaultOption = [
@@ -34,14 +32,6 @@ const SelectOptions = (props) => {
   } else {
     return defaultOption
   }
-}
-
-const useErrorTagOptions = () => {
-  const query = useQuery('errorTags', () =>
-    new Endpoint(api.keywords.find, { params: { tagType: "error", limit: 1000 } }).execute()
-  )
-
-  return query;
 }
 
 const ErrorTagDropdown = (props) => {

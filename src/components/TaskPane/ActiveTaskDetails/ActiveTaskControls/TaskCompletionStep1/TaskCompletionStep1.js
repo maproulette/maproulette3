@@ -15,47 +15,7 @@ import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
 import TaskRevisedControl from '../TaskRevisedControl/TaskRevisedControl'
 import './TaskCompletionStep1.scss'
 import messages from './Messages'
-import { useQuery } from 'react-query';
-import { defaultRoutes as api } from "../../../../../services/Server/Server";
-import Endpoint from "../../../../../services/Server/Endpoint";
-
-const useErrorTagOptions = () => {
-  const query = useQuery('errorTags', () =>
-    new Endpoint(api.keywords.find, { params: { tagType: "error", limit: 1000 } }).execute()
-  )
-
-  return query;
-}
-
-const formatErrorTags = (errorTags, options) => {
-  if (errorTags.length) {
-    const tags = errorTags.split(",");
-
-    return tags.map((tag) => {
-      const option = options?.data.find(o => o.id === Number(tag));
-
-      return option?.name;
-    })
-  }
-}
-
-const ErrorTagsComment = ({ errorTags }) => {
-  const options = useErrorTagOptions();
-
-  if (options.data) {
-    const formattedErrorTags = formatErrorTags(errorTags, options);
-  
-    if (formattedErrorTags) {
-      const str = formattedErrorTags.length > 1 ? formattedErrorTags.join(", ") : formatErrorTags;
-  
-      return (
-        <div className="mr-text-red">This task needs revision. The following error tags were applied: {str}. Be sure to check comments for any details.</div>
-      )
-    }
-  }
-
-  return null;
-}
+import ErrorTagComment from '../../../../ErrorTagComment/ErrorTagComment'
 
 /**
  * TaskCompletionStep1 renders and manages controls and keyboard shortcuts for
@@ -86,7 +46,7 @@ export default class TaskCompletionStep1 extends Component {
             <div>
               {
                 this.props.task?.errorTags
-                  ? <ErrorTagsComment errorTags={this.props.task.errorTags} />
+                  ? <div className="mr-text-red">This task needs revision. The following error tags were applied: <ErrorTagComment errorTags={this.props.task.errorTags} />. Be sure to check comments for any details.</div>
                   : <FormattedMessage {...messages.revisionNeeded} />
               }
             </div>

@@ -16,9 +16,7 @@ import External from '../../components/External/External'
 import Modal from '../../components/Modal/Modal'
 import Markdown from '../../components/MarkdownContent/MarkdownContent'
 import messages from './Messages'
-import { useQuery } from 'react-query';
-import { defaultRoutes as api } from "../../services/Server/Server";
-import Endpoint from "../../services/Server/Endpoint";
+import ErrorTagComment from '../../components/ErrorTagComment/ErrorTagComment'
 
 class Notification extends Component {
   chosenNotificationRef = React.createRef()
@@ -136,44 +134,6 @@ const MentionBody = function(props) {
   )
 }
 
-const useErrorTagOptions = () => {
-  const query = useQuery('errorTags', () =>
-    new Endpoint(api.keywords.find, { params: { tagType: "error", limit: 1000 } }).execute()
-  )
-
-  return query;
-}
-
-const formatErrorTags = (errorTags, options) => {
-  if (errorTags.length) {
-    const tags = errorTags.split(",");
-
-    return tags.map((tag) => {
-      const option = options?.data.find(o => o.id === Number(tag));
-
-      return option?.name;
-    })
-  }
-}
-
-const ErrorTagsComment = ({ errorTags }) => {
-  const options = useErrorTagOptions();
-
-  if (options.data) {
-    const formattedErrorTags = formatErrorTags(errorTags, options);
-  
-    if (formattedErrorTags) {
-      const str = formattedErrorTags.length > 1 ? formattedErrorTags.join(", ") : formatErrorTags;
-  
-      return (
-        <div className="mr-text-red">The following error tags have been applied to your task: {str}</div>
-      )
-    }
-  }
-
-  return null;
-}
-
 const ReviewBody = function(props) {
   let lead = null
   const reviewStatus = parseInt(props.notification.description, 10)
@@ -199,7 +159,9 @@ const ReviewBody = function(props) {
     <React.Fragment>
       <p className="mr-mb-8 mr-text-base">{lead}</p>
 
-      {props.notification.errorTags ? <ErrorTagsComment errorTags={props.notification.errorTags} /> : null}
+      {props.notification.errorTags
+        ?  <div className="mr-text-red">The following error tags have been applied to your task: <ErrorTagComment errorTags={props.notification.errorTags} /> </div>
+        : null}
 
       <AttachedComment notification={props.notification} />
 
