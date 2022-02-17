@@ -30,6 +30,15 @@ const useMRProperties = workspaceContext => {
       mrProperties['#mrTaskId'] = task.id
       mrProperties['#osmId'] = primaryFeature.osmId()
       mrProperties['#osmType'] = primaryFeature.osmType()
+
+      //map the task specific properties to the workspace properties
+      const { properties } = primaryFeature;
+      if (properties) {
+        Object.keys(properties).map((key, index) => {
+          mrProperties[key] = properties[key];
+          return null;
+        });
+      }
     }
 
     const mapBounds = workspaceContext['taskMapBounds']

@@ -7,6 +7,14 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.15] - 2022-02-08
+
+### Fixed
+- add task specific properties to custom url widget
+- honor priority rule updates to tasks when editing challenge
+- fix task id reference in setBundleTaskReviewStatus causing error
+- update shelljs and follow-redirects libraries
+
 ## [v3.7.14] - 2022-01-11
 
 ### Added

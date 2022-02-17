@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.7.14",
+  "version": "3.7.15",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.5.4",
@@ -112,7 +112,7 @@
     "postcss-simple-vars": "^6.0.3",
     "react-test-renderer": "^16.2.0",
     "redux-mock-store": "^1.4.0",
-    "shelljs": "^0.8.2",
+    "shelljs": "^0.8.5",
     "tailwindcss": "^1.0",
     "tailwindcss-gradients": "^2.3.0",
     "tailwindcss-grid": "^1.2.0",
