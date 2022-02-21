@@ -47,8 +47,7 @@ export class ReviewTaskControls extends Component {
     const requestedNextTask = !this.state.requestedNextTask ? null :
       {id: this.state.requestedNextTask, parent: this.state.requestedNextTaskParent}
 
-    const errorTags = this.state.reviewStatus === TaskReviewStatus.rejected 
-      && this.state.errorTags?.length ? this.state.errorTags : undefined
+    const errorTags = this.state.errorTags?.length ? this.state.errorTags : undefined
 
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, this.state.tags,

@@ -35,6 +35,12 @@ import ErrorTagDropdown from '../ErrorTagDropdown/ErrorTagDropdown'
 
 const shortcutGroup = 'taskConfirmation'
 
+const ERROR_TAG_STATUSES = [
+  TaskReviewStatus.rejected,
+  TaskReviewStatus.approvedWithFixes,
+  TaskReviewStatus.approvedWithFixesAfterRevisions
+];
+
 export class TaskConfirmationModal extends Component {
   state = {
     criteria: {}
@@ -257,8 +263,8 @@ export class TaskConfirmationModal extends Component {
                     }
                   </div>
                   {
-                    this.props.status === TaskReviewStatus.rejected && this.props.history.location.pathname.includes("review") &&
-                      <ErrorTagDropdown 
+                    ERROR_TAG_STATUSES.includes(this.props.status) && this.props.history.location.pathname.includes("review") &&
+                      <ErrorTagDropdown
                         onChange={this.props.onChangeErrorTag}
                         errorTags={this.props.errorTags}
                         addErrorTag={this.props.addErrorTag}

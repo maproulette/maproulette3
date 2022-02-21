@@ -8,7 +8,7 @@ const ErrorTagComment = ({ errorTags }) => {
     const formattedErrorTags = formatErrorTags(errorTags, options);
   
     if (formattedErrorTags) {
-      const str = formattedErrorTags.length > 1 ? formattedErrorTags.join(", ") : formatErrorTags;
+      const str = formattedErrorTags.length > 1 ? formattedErrorTags.join(", ") : formattedErrorTags[0];
 
       return str;
     }
