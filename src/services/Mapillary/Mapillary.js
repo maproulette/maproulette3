@@ -5,8 +5,19 @@ import _isFinite from 'lodash/isFinite'
 
 const API_URI='https://a.mapillary.com/v3'
 const IMAGES_URI='https://images.mapillary.com'
+const IMAGES_URI_V4='https://graph.mapillary.com'
+const VECTOR_TILE_URI = 'https://tiles.mapillary.com/maps/vtp/mly1_public/2'
+const CONNECTION_URI = 'https://www.mapillary.com/connect'
 const CLIENT_ID = process.env.REACT_APP_MAPILLARY_API_KEY
+const CLIENT_TOKEN = process.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
 
+export const getImageEndpoint = (imageId, sequenceId) => {
+  return `${IMAGES_URI_V4}/${imageId}${sequenceId ? `?sequence_id=${sequenceId}` : ""}`
+}
+
+export const getVectorTilesEndpoint = (x, y) => {
+  return `${VECTOR_TILE_URI}/0/${x}${y}?access_token=${CLIENT_TOKEN}`
+}
 
 /**
  * Returns true if Mapillary support is enabled (a Mapillary client id has been
@@ -30,6 +41,11 @@ export const fetchMapillaryImages = async function(bbox, point=null, radius=250,
     throw new Error("Missing Mapillary client id")
   }
 
+  const connectionResponse = await connectToMapillary();
+
+  console.log(connectionResponse)
+  debugger;
+
   // bbox and point can be either arrays or strings with comma-separated coordinates
   const params = [`bbox=${_isArray(bbox) ? bbox.join(',') : bbox}`]
   if (point) {
@@ -46,7 +62,10 @@ export const fetchMapillaryImages = async function(bbox, point=null, radius=250,
   params.push(`per_page=${pageSize}`)
   params.push(`client_id=${CLIENT_ID}`)
 
-  return executeMapillaryImageFetch(`${API_URI}/images?${params.join('&')}`)
+  const latLng = bbox.split(',')
+
+  // return executeMapillaryImageFetch(`${API_URI}/images?${params.join('&')}`)
+  return executeMapillaryImageFetch(getVectorTilesEndpoint(latLng[0], latLng[1]))
 }
 
 /**
@@ -106,11 +125,35 @@ export const getClientId = function() {
 }
 
 /**
+ * Retrieve the active access token
+ */
+export const getAccessToken = function() {
+  return CLIENT_TOKEN
+}
+
+/**
  * Fetches Mapillary results from the given URL and returns a result object
  * with `geojson` and `context` fields on success
  */
 const executeMapillaryImageFetch = async function(mapillaryUrl) {
   const response = await fetch(mapillaryUrl)
+  if (response.ok) {
+    const result = {
+      context: {
+        link: response.headers.get('link'), // used for pagination
+      },
+      geojson: await response.json(),
+    }
+    return result
+  }
+  else {
+    throw new Error("Failed to fetch data from Mapillary")
+  }
+}
+
+const connectToMapillary = async () => {
+  const response = await fetch(`${CONNECTION_URI}?client_id=${CLIENT_ID}`)
+  debugger;
   if (response.ok) {
     const result = {
       context: {

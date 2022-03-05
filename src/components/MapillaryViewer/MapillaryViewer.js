@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import * as Mapillary from 'mapillary-js'
-import { getClientId } from '../../services/Mapillary/Mapillary'
+import { Viewer } from 'mapillary-js';
+import { getAccessToken } from '../../services/Mapillary/Mapillary'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
 
@@ -12,16 +12,34 @@ import Modal from '../Modal/Modal'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class MapillaryViewer extends Component {
+  constructor() {
+    this.containerRef = React.createRef();
+  }
+
   componentDidMount() {
-    this.viewer = new Mapillary.Viewer(
-      'mapillary-viewer',
-      getClientId(),
-      this.props.initialImageKey, {
-        component: {
-          cover: false,
-        }
-      }
-    )
+    // this.viewer = new Viewer(
+    //   'mapillary-viewer',
+    //   getClientId(),
+    //   this.props.initialImageKey, {
+    //     component: {
+    //       cover: false,
+    //     }
+    //   }
+    // )
+
+    this.viewer = Viewer({
+      accessToken: getAccessToken(),
+      container: this.containerRef.current,
+      imageId: this.props.initialImageKey,
+      component: { cover: false },
+    })
+    //.deactivateCover();
+  }
+
+  componentWillUnmount() {
+    if (this.viewer) {
+      this.viewer.remove();
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -33,7 +51,7 @@ export default class MapillaryViewer extends Component {
       <External>
         <Modal isActive onClose={this.props.onClose}>
           <div className="mr-p-2 mr-pt-4 mr-relative">
-            <div id="mapillary-viewer" style={{width: '640px', height: '480px'}}></div>
+            <div ref={this.containerRef} id="mapillary-viewer" style={{width: '640px', height: '480px'}}></div>
           </div>
         </Modal>
       </External>

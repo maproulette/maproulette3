@@ -44,7 +44,7 @@
     "leaflet-lasso": "^2.1.0",
     "leaflet-vectoricon": "https://github.com/nrotstan/Leaflet.VectorIcon.git#honor-existing-margin-styles",
     "leaflet.markercluster": "^1.4.1",
-    "mapillary-js": "^2.20.0",
+    "mapillary-js": "^4.1.0",
     "node-sass": "4.14.1",
     "normalize.css": "^7.0.0",
     "normalizr": "^3.6.0",
