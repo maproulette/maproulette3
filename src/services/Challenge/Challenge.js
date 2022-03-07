@@ -77,14 +77,22 @@ export const challengeDenormalizationSchema = function () {
 export const buildLinkToExportCSV = function (
   challengeId,
   criteria,
-  timezone = null
+  timezone = null,
+  page = -1,
+  limit
 ) {
+  let pageString = '';
+
+  if (page > -1) {
+    pageString = `&page=${page}&limit=${limit}`
+  }
+
   const queryFilters = buildQueryFilters(criteria);
   return (
     `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/` +
     `${challengeId}/tasks/extract?${queryFilters}&timezone=${encodeURIComponent(
       timezone
-    )}`
+    )}${pageString}`
   );
 };
 
