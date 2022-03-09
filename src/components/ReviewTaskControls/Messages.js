@@ -109,4 +109,9 @@ export default defineMessages({
     id: "Admin.TaskReview.controls.changeReview",
     defaultMessage: "Or change your review"
   },
+
+  errorTags: {
+    id: "Admin.TaskReview.controls.errorTags",
+    defaultMessage: "Error Tags"
+  },
 })

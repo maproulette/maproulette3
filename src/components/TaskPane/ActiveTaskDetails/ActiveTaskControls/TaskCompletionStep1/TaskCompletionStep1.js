@@ -15,7 +15,7 @@ import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
 import TaskRevisedControl from '../TaskRevisedControl/TaskRevisedControl'
 import './TaskCompletionStep1.scss'
 import messages from './Messages'
-
+import ErrorTagComment from '../../../../ErrorTagComment/ErrorTagComment'
 
 /**
  * TaskCompletionStep1 renders and manages controls and keyboard shortcuts for
@@ -42,9 +42,18 @@ export default class TaskCompletionStep1 extends Component {
     return (
       <div>
         {this.props.needsRevised &&
-          <div className="mr-text-white mr-text-md mr-mt-4">
+          <div className={`${ this.props.task?.errorTags ? "mr-text-red" : "mr-text-white" } mr-text-md mr-mt-4`}>
             <div>
-              <FormattedMessage {...messages.revisionNeeded} />
+              <FormattedMessage {...messages.revisionNeeded} />{" "}
+              {
+                this.props.task?.errorTags
+                  ? <>
+                      <FormattedMessage {...messages.errorTagsApplied} />:{" "}
+                      <ErrorTagComment errorTags={this.props.task.errorTags} />{" "}
+                    </>
+                  : ""
+              }
+              <FormattedMessage {...messages.checkComments} />
             </div>
           </div>
         }

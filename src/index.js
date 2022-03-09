@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { Provider } from 'react-redux'
 import { IntlProvider } from 'react-intl'
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client'
@@ -68,6 +70,8 @@ const ConnectedIntl = WithUserLocale(props => (
 // Setup the redux store
 const store = initializeStore()
 
+const queryClient = new QueryClient()
+
 // Start with a default challenge search so users can easily 'load more'
 // results if desired
 const defaultSearch = {}
@@ -97,15 +101,18 @@ store.dispatch(
 
 // Render the app
 ReactDOM.render(
-  <Provider store={store}>
-    <ApolloProvider client={graphqlClient}>
-      <ConnectedIntl>
-        <Router history={routerHistory}>
-          <App />
-        </Router>
-      </ConnectedIntl>
-    </ApolloProvider>
-  </Provider>,
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <ApolloProvider client={graphqlClient}>
+        <ConnectedIntl>
+          <Router history={routerHistory}>
+            <App />
+          </Router>
+        </ConnectedIntl>
+      </ApolloProvider>
+    </Provider>
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>,
   document.getElementById('root')
 )
 
