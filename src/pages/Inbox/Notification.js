@@ -16,6 +16,7 @@ import External from '../../components/External/External'
 import Modal from '../../components/Modal/Modal'
 import Markdown from '../../components/MarkdownContent/MarkdownContent'
 import messages from './Messages'
+import ErrorTagComment from '../../components/ErrorTagComment/ErrorTagComment'
 
 class Notification extends Component {
   chosenNotificationRef = React.createRef()
@@ -157,6 +158,13 @@ const ReviewBody = function(props) {
   return (
     <React.Fragment>
       <p className="mr-mb-8 mr-text-base">{lead}</p>
+
+      {props.notification.errorTags
+        ? <div className="mr-text-red">
+            <FormattedMessage {...messages.appliedErrorTags} />:{" "}
+            <ErrorTagComment errorTags={props.notification.errorTags} />
+          </div>
+        : null}
 
       <AttachedComment notification={props.notification} />
 

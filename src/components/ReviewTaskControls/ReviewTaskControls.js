@@ -22,6 +22,7 @@ import UserEditorSelector
 import TaskConfirmationModal from '../TaskConfirmationModal/TaskConfirmationModal'
 import messages from './Messages'
 import './ReviewTaskControls.scss'
+import ErrorTagComment from '../ErrorTagComment/ErrorTagComment'
 
 /**
  * ReviewTaskControls presents controls used to update the task review status.
@@ -33,6 +34,7 @@ export class ReviewTaskControls extends Component {
     comment: "",
     tags: "",
     loadBy: TaskReviewLoadMethod.next,
+    errorTags: []
   }
 
   setComment = comment => this.setState({comment})
@@ -45,15 +47,35 @@ export class ReviewTaskControls extends Component {
     const requestedNextTask = !this.state.requestedNextTask ? null :
       {id: this.state.requestedNextTask, parent: this.state.requestedNextTaskParent}
 
+    const errorTags = this.state.errorTags?.length ? this.state.errorTags : undefined
+
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, this.state.tags,
                                      this.state.loadBy, history,
-                                     this.props.taskBundle, requestedNextTask)
-    this.setState({confirmingTask: false, comment: ""})
+                                     this.props.taskBundle, requestedNextTask, null, errorTags)
+    this.setState({ confirmingTask: false, comment: "", errorTags: [] })
+  }
+
+  handleChangeErrorTag = (e, i) => {
+    const newTags = this.state.errorTags;
+    newTags[i] = Number(e.target.value);
+    this.setState({ errorTags: newTags })
+  }
+
+  handleAddErrorTag = () => {
+    const newTags = this.state.errorTags;
+    newTags.push(-1);
+    this.setState({ errorTags: newTags });
+  }
+
+  handleRemoveErrorTag = (index) => {
+    const newTags = this.state.errorTags;
+    newTags.splice(index, 1);
+    this.setState({ errorTags: newTags });
   }
 
   onCancel = () => {
-    this.setState({confirmingTask: false})
+    this.setState({ confirmingTask: false, errorTags: [] })
   }
 
   chooseLoadBy = (loadBy) => {
@@ -165,6 +187,7 @@ export class ReviewTaskControls extends Component {
 
     const fromInbox = _get(this.props.history, 'location.state.fromInbox')
     const tags = _map(this.props.task.tags, (tag) => tag.name)
+    const errorTags = this.props.task.errorTags;
     const isMetaReview = this.props.history?.location?.pathname?.includes("meta-review")
     const reviewData = this.props.task?.review;
 
@@ -210,6 +233,16 @@ export class ReviewTaskControls extends Component {
               {...messages.taskTags}
             /> {tags.join(', ')}
           </div>
+        }
+        {
+          errorTags
+            ?  <div className="mr-text-red">
+                <FormattedMessage
+                  {...messages.errorTags}
+                />:{" "}
+                <ErrorTagComment errorTags={errorTags} />
+              </div>
+            : null
         }
 
         <div className="mr-my-4">
@@ -285,6 +318,10 @@ export class ReviewTaskControls extends Component {
             chooseNextTask={this.chooseNextTask}
             clearNextTask={this.clearNextTask}
             requestedNextTask={this.state.requestedNextTask}
+            errorTags={this.state.errorTags}
+            onChangeErrorTag={this.handleChangeErrorTag}
+            addErrorTag={this.handleAddErrorTag}
+            removeErrorTag={this.handleRemoveErrorTag}
           />
         }
       </div>

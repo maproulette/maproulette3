@@ -12,6 +12,7 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import TriStateCheckbox from '../Bulma/TriStateCheckbox'
 import ConfirmAction from '../ConfirmAction/ConfirmAction'
 import TimezonePicker from '../TimezonePicker/TimezonePicker'
+import PagePicker from '../PagePicker/PagePicker'
 import WithSavedFilters from '../HOCs/WithSavedFilters/WithSavedFilters'
 import SavedFiltersList from '../SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../SavedFilters/ManageSavedFilters'
@@ -22,13 +23,21 @@ import { buildLinkToMapperExportCSV,
 import { buildLinkToExportCSV, buildLinkToExportGeoJSON } from '../../services/Challenge/Challenge'
 import messages from './Messages'
 
+const CSV_ITEM_LIMIT = 10000;
+
 /**
  * TaskAnalysisTableHeader renders a header for the task analysis table.
  *
  * @author [Ryan Scherler](https://github.com/ryanscherler)
  */
 export class TaskAnalysisTableHeader extends Component {
-  state = {}
+  state = {
+    csvPage: -1
+  }
+
+  handleChangeCSVPage = (pageKey) => {
+    this.setState({ csvPage: pageKey })
+  }
 
   render() {
     const {countShown, configureColumns} = this.props
@@ -213,15 +222,24 @@ export class TaskAnalysisTableHeader extends Component {
                     </div>
                     <ul className="mr-list-dropdown">
                       <li>
-                        <form method="post" action={buildLinkToExportCSV(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone)}>
+                        <form method="post" action={buildLinkToExportCSV(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone, this.state.csvPage, CSV_ITEM_LIMIT)}>
                           <input type="hidden" name="taskPropertySearch"
                             value={JSON.stringify(_get(this.props,
                               'criteria.filters.taskPropertySearch', {}))}
                           />
-                          <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top mr-pb-2">
-                            <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
-                            <FormattedMessage {...messages.exportCSVLabel} />
-                          </button>
+                          <div className="mr-flex">
+                            <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top mr-pb-2">
+                              <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                              <FormattedMessage {...messages.exportCSVLabel} />
+                            </button>
+                            <div className="mr-ml-2">
+                              <PagePicker
+                                changePage={this.handleChangeCSVPage}
+                                numItems={totalTaskCount}
+                                itemLimit={CSV_ITEM_LIMIT}
+                              />
+                            </div>
+                          </div>
                         </form>
                       </li>
                     </ul>
