@@ -31,8 +31,15 @@ import Modal from '../Modal/Modal'
 import AdjustFiltersOverlay from './AdjustFiltersOverlay'
 import InstructionsOverlay from './InstructionsOverlay'
 import messages from './Messages'
+import ErrorTagDropdown from '../ErrorTagDropdown/ErrorTagDropdown'
 
 const shortcutGroup = 'taskConfirmation'
+
+const ERROR_TAG_STATUSES = [
+  TaskReviewStatus.rejected,
+  TaskReviewStatus.approvedWithFixes,
+  TaskReviewStatus.approvedWithFixesAfterRevisions
+];
 
 export class TaskConfirmationModal extends Component {
   state = {
@@ -255,10 +262,18 @@ export class TaskConfirmationModal extends Component {
                     </div>
                     }
                   </div>
-
+                  {
+                    ERROR_TAG_STATUSES.includes(this.props.status) && this.props.history.location.pathname.includes("review") &&
+                      <ErrorTagDropdown
+                        onChange={this.props.onChangeErrorTag}
+                        errorTags={this.props.errorTags}
+                        addErrorTag={this.props.addErrorTag}
+                        removeErrorTag={this.props.removeErrorTag}
+                      />
+                  }
                   {this.props.status !== TaskStatus.skipped && !reviewConfirmation &&
                     this.props.user.settings.needsReview !== needsReviewType.mandatory &&
-                      <div className="form mr-mt-2 mr-flex mr-items-baseline">
+                      <div className="form mr-flex mr-items-baseline">
                         <input
                           type="checkbox"
                           className="mr-mr-2"
@@ -272,7 +287,7 @@ export class TaskConfirmationModal extends Component {
                       </div>
                   }
 
-                  <div className="mr-flex mr-items-center mr-mt-8">
+                  <div className="mr-flex mr-items-center mr-mt-6">
                     <button
                       className="mr-button mr-button--white mr-mr-12 mr-px-8"
                       onClick={this.props.onCancel}

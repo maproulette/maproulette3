@@ -4,21 +4,6 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with Home page and sub-components
  */
 export default defineMessages({
-  heroFirstLine: {
-    id: "Home.Hero.firstLine",
-    defaultMessage: "Be an instant",
-  },
-
-  heroSecondLine: {
-    id: "Home.Hero.secondLine",
-    defaultMessage: "contributor to the",
-  },
-
-  heroThirdLine: {
-    id: "Home.Hero.thirdLine",
-    defaultMessage: "world’s maps",
-  },
-
   getStartedLabel: {
     id: "Home.Hero.controls.getStarted.label",
     defaultMessage: "Get Started",

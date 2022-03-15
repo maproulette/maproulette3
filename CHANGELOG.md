@@ -7,6 +7,16 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.7.16] - 2022-03-08
+
+### Fixed
+- remove redundant "be an instant" transifex strings
+- upgrade url-parse, follow-redirects, ajv libraries
+
+### Added
+- Add ability to download CSV reports 10k tasks at a time
+- Error tags for review flow
+
 ## [v3.7.15] - 2022-02-08
 
 ### Fixed
