@@ -374,20 +374,22 @@ export class TaskMap extends Component {
     }
   }
 
-  mapillaryImageMarkers = () => ({
-    id: "mapillary",
-    component: (
-      <ImageMarkerLayer
-        key="mapillary"
-        mrLayerId="mapillary"
-        mrLayerLabel="Mapillary"
-        images={this.props.mapillaryImages}
-        markerColor="#39AF64"
-        imageClicked={imageKey => this.setState({"mapillaryViewerImage": imageKey})}
-        imageAlt="Mapillary"
-      />
-    ),
-  })
+  mapillaryImageMarkers = () => {
+    return {
+      id: "mapillary",
+      component: (
+        <ImageMarkerLayer
+          key="mapillary"
+          mrLayerId="mapillary"
+          mrLayerLabel="Mapillary"
+          images={this.props.mapillaryImages}
+          markerColor="#39AF64"
+          imageClicked={imageKey => this.setState({"mapillaryViewerImage": imageKey})}
+          imageAlt="Mapillary"
+        />
+      ),
+    }
+  }
 
   openStreetCamImageMarkers = () => ({
     id: "openstreetcam",
@@ -486,7 +488,18 @@ export class TaskMap extends Component {
     return taskFeatures
   }
 
+  renderMapillaryViewer = () => {
+    return (
+      <MapillaryViewer
+        key={Date.now()}
+        initialImageKey={this.state.mapillaryViewerImage}
+        onClose={() => this.setState({mapillaryViewerImage: null})}
+      />
+    )
+  }
+
   render() {
+    console.log("image?", this.state.mapillaryViewerImage)
     const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
     const minZoom = _get(this.props.task, "parent.minZoom", MIN_ZOOM)
     const maxZoom = _get(this.props.task, "parent.maxZoom", MAX_ZOOM)
@@ -616,13 +629,7 @@ export class TaskMap extends Component {
           ))}
         </EnhancedMap>
 
-        {this.state.mapillaryViewerImage &&
-         <MapillaryViewer
-            key={Date.now()}
-            initialImageKey={this.state.mapillaryViewerImage}
-            onClose={() => this.setState({mapillaryViewerImage: null})}
-         />
-        }
+        {this.state.mapillaryViewerImage && this.renderMapillaryViewer()}
 
         {this.state.openStreetCamViewerImage &&
          <OpenStreetCamViewer

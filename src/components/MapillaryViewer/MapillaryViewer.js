@@ -12,28 +12,16 @@ import Modal from '../Modal/Modal'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class MapillaryViewer extends Component {
-  constructor() {
-    this.containerRef = React.createRef();
-  }
+  containerRef = React.createRef();
+  
 
   componentDidMount() {
-    // this.viewer = new Viewer(
-    //   'mapillary-viewer',
-    //   getClientId(),
-    //   this.props.initialImageKey, {
-    //     component: {
-    //       cover: false,
-    //     }
-    //   }
-    // )
-
-    this.viewer = Viewer({
+    this.viewer = new Viewer({
       accessToken: getAccessToken(),
       container: this.containerRef.current,
       imageId: this.props.initialImageKey,
       component: { cover: false },
     })
-    //.deactivateCover();
   }
 
   componentWillUnmount() {

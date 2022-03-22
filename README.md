@@ -152,9 +152,9 @@ simpler.
 
 MapRoulette has built-in support for a Mapillary map layer during task
 completion, allowing the mapper to make of use of available street-level
-imagery. To enable the layer, simply set the `REACT_APP_MAPILLARY_API_KEY` .env
+imagery. To enable the layer, simply set the `REACT_APP_MAPILLARY_CLIENT_TOKEN` .env
 key to your Mapillary client id and restart your dev server (or rebuild your
-dev front-end for staging/production). If you don't have a client id, you can
+dev front-end for staging/production). If you don't have a client token, you can
 set one up through the
 [Mapillary Developer Tools](https://www.mapillary.com/developer)
 

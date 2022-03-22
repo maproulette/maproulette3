@@ -3,28 +3,16 @@ import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
 
-const API_URI='https://a.mapillary.com/v3'
-const IMAGES_URI='https://images.mapillary.com'
-const IMAGES_URI_V4='https://graph.mapillary.com'
-const VECTOR_TILE_URI = 'https://tiles.mapillary.com/maps/vtp/mly1_public/2'
-const CONNECTION_URI = 'https://www.mapillary.com/connect'
-const CLIENT_ID = process.env.REACT_APP_MAPILLARY_API_KEY
-const CLIENT_TOKEN = process.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
-
-export const getImageEndpoint = (imageId, sequenceId) => {
-  return `${IMAGES_URI_V4}/${imageId}${sequenceId ? `?sequence_id=${sequenceId}` : ""}`
-}
-
-export const getVectorTilesEndpoint = (x, y) => {
-  return `${VECTOR_TILE_URI}/0/${x}${y}?access_token=${CLIENT_TOKEN}`
-}
+const EMBED_URI_V4='https://www.mapillary.com/embed'
+const IMAGES_URI_V4='https://graph.mapillary.com/images'
+const ACCESS_TOKEN = process.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
 
 /**
- * Returns true if Mapillary support is enabled (a Mapillary client id has been
+ * Returns true if Mapillary support is enabled (a Mapillary client token has been
  * configured), false if not
  */
 export const isMapillaryEnabled = function() {
-  return !_isEmpty(CLIENT_ID)
+  return !_isEmpty(ACCESS_TOKEN)
 }
 
 /**
@@ -38,13 +26,8 @@ export const isMapillaryEnabled = function() {
  */
 export const fetchMapillaryImages = async function(bbox, point=null, radius=250, lookAt=false, pageSize=1000) {
   if (!isMapillaryEnabled()) {
-    throw new Error("Missing Mapillary client id")
+    throw new Error("Missing Mapillary client token")
   }
-
-  const connectionResponse = await connectToMapillary();
-
-  console.log(connectionResponse)
-  debugger;
 
   // bbox and point can be either arrays or strings with comma-separated coordinates
   const params = [`bbox=${_isArray(bbox) ? bbox.join(',') : bbox}`]
@@ -59,13 +42,10 @@ export const fetchMapillaryImages = async function(bbox, point=null, radius=250,
       params.push(`lookat=${_isArray(point) ? point.join(',') : point}`)
     }
   }
-  params.push(`per_page=${pageSize}`)
-  params.push(`client_id=${CLIENT_ID}`)
+  params.push(`limit=${pageSize}`)
+  params.push(`access_token=${ACCESS_TOKEN}`)
 
-  const latLng = bbox.split(',')
-
-  // return executeMapillaryImageFetch(`${API_URI}/images?${params.join('&')}`)
-  return executeMapillaryImageFetch(getVectorTilesEndpoint(latLng[0], latLng[1]))
+  return executeMapillaryImageFetch(`${IMAGES_URI_V4}?${params.join('&')}`)
 }
 
 /**
@@ -96,8 +76,8 @@ export const nextMapillaryPage = async function(resultContext) {
  * Generates a Mapillary URL for a specific image based on the given image key
  * and desired size. Acceptable image sizes are 320, 640, 1024, and 2048
  */
-export const mapillaryImageUrl = function(imageKey, size='320') {
-  return `${IMAGES_URI}/${imageKey}/thumb-${size}.jpg`
+export const mapillaryImageUrl = function(imageId, size='320') {
+  return `${EMBED_URI_V4}?image_key=${imageId}`
 }
 
 /**
@@ -118,17 +98,10 @@ export const nextMapillaryPageUrl = function(resultContext) {
 }
 
 /**
- * Retrieve the active client id, if enabled
- */
-export const getClientId = function() {
-  return CLIENT_ID
-}
-
-/**
  * Retrieve the active access token
  */
 export const getAccessToken = function() {
-  return CLIENT_TOKEN
+  return ACCESS_TOKEN
 }
 
 /**
@@ -137,23 +110,6 @@ export const getAccessToken = function() {
  */
 const executeMapillaryImageFetch = async function(mapillaryUrl) {
   const response = await fetch(mapillaryUrl)
-  if (response.ok) {
-    const result = {
-      context: {
-        link: response.headers.get('link'), // used for pagination
-      },
-      geojson: await response.json(),
-    }
-    return result
-  }
-  else {
-    throw new Error("Failed to fetch data from Mapillary")
-  }
-}
-
-const connectToMapillary = async () => {
-  const response = await fetch(`${CONNECTION_URI}?client_id=${CLIENT_ID}`)
-  debugger;
   if (response.ok) {
     const result = {
       context: {

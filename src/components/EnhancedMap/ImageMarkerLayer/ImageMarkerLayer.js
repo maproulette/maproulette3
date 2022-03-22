@@ -73,12 +73,22 @@ const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerL
       onMouseover={({target}) => target.openPopup()}
       onClick={() => imageClicked ? imageClicked(imageInfo.key) : null}
     >
-      <Popup>
-        <img
-          src={imageInfo.url}
-          alt={imageAlt}
-          onClick={() => imageClicked ? imageClicked(imageInfo.key) : null}
-        />
+      <Popup maxWidth="351">
+        <div style={{ width: 351 }}>
+          <iframe 
+            src={imageInfo.url} 
+            height="263"
+            width="351"
+            frameborder="0"
+          >
+          </iframe>
+        </div>
+        <div
+          className="mr-w-full mr-text-center mr-text-green mr-cursor-pointer mr-text-lg"
+          onClick={() => imageClicked(imageInfo.key)}
+        >
+          Enlarge
+        </div>
       </Popup>
     </Marker>
   )
