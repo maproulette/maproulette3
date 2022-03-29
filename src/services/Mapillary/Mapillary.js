@@ -24,7 +24,7 @@ export const isMapillaryEnabled = function() {
  * `context` fields. If an additional page of results is needed, the context
  * will need to be passed to `nextMapillaryPage`
  */
-export const fetchMapillaryImages = async function(bbox, point=null, radius=250, lookAt=false, pageSize=1000) {
+export const fetchMapillaryImages = async function(bbox, point=null, radius=250, lookAt=false, pageSize=100) {
   if (!isMapillaryEnabled()) {
     throw new Error("Missing Mapillary client token")
   }
