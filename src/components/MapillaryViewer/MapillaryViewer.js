@@ -38,8 +38,8 @@ export default class MapillaryViewer extends Component {
     return (
       <External>
         <Modal isActive onClose={this.props.onClose}>
-          <div className="mr-p-2 mr-pt-4 mr-relative">
-            <div ref={this.containerRef} id="mapillary-viewer" style={{width: '640px', height: '480px'}}></div>
+          <div className="mr-p-2 mr-pt-4 mr-relative mr-m-auto" style={{ width: 640 }}>
+            <div ref={this.containerRef} id="mapillary-viewer" style={{ width: 640, height: 480 }}></div>
           </div>
         </Modal>
       </External>

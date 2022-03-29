@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Component } from 'react'
 import PropTypes from 'prop-types'
 import { LayerGroup, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import _map from 'lodash/map'
+import { Viewer } from 'mapillary-js'
 import resolveConfig from 'tailwindcss/resolveConfig'
+import { getAccessToken } from '../../../services/Mapillary/Mapillary'
 import tailwindConfig from '../../../tailwind.config.js'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
@@ -58,40 +60,71 @@ ImageMarkerLayer.propTypes = {
   markerColor: PropTypes.string,
 }
 
+class MapillaryViewer extends Component {
+  containerRef = React.createRef();
+
+  componentDidMount() {
+    this.viewer = new Viewer({
+      accessToken: getAccessToken(),
+      container: this.containerRef.current,
+      imageId: this.props.initialImageKey,
+      component: { cover: false },
+    })
+  }
+
+  componentWillUnmount() {
+    if (this.viewer) {
+      this.viewer.remove();
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.initialImageKey !== this.props.initialImageKey
+  }
+
+  render() {
+    return (
+      <div className="mr-p-2 mr-pt-4 mr-relative">
+        <div ref={this.containerRef} id="mapillary-viewer" style={{ width: 335, height: 263 }}></div>
+      </div>
+    )
+  }
+}
+
 const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerLabel) => {
   if (!images || images.length === 0) {
     return []
   }
 
-  return _map(images, imageInfo =>
-    <Marker
-      key={imageInfo.key}
-      mrLayerId={layerId}
-      mrLayerLabel={layerLabel}
-      position={[imageInfo.lat, imageInfo.lon]}
-      icon={icon}
-      onMouseover={({target}) => target.openPopup()}
-      onClick={() => imageClicked ? imageClicked(imageInfo.key) : null}
-    >
-      <Popup maxWidth="351">
-        <div style={{ width: 351 }}>
-          <iframe 
-            src={imageInfo.url} 
-            height="263"
-            width="351"
-            frameborder="0"
+  return _map(images, imageInfo => {
+    return (
+      <Marker
+        key={imageInfo.key}
+        mrLayerId={layerId}
+        mrLayerLabel={layerLabel}
+        position={[imageInfo.lat, imageInfo.lon]}
+        icon={icon}
+        onMouseover={({target}) => target.openPopup()}
+        onClick={() => imageClicked ? imageClicked(imageInfo.key) : null}
+      >
+        <Popup maxWidth="351px">
+          <div style={{ width: 351, marginTop: 20 }}>
+            <MapillaryViewer
+              key={Date.now()}
+              initialImageKey={imageInfo.key}
+              onClose={() => null}
+            />
+          </div>
+          <div
+            className="mr-w-full mr-text-center mr-text-green mr-cursor-pointer mr-text-lg"
+            onClick={() => imageClicked(imageInfo.key)}
           >
-          </iframe>
-        </div>
-        <div
-          className="mr-w-full mr-text-center mr-text-green mr-cursor-pointer mr-text-lg"
-          onClick={() => imageClicked(imageInfo.key)}
-        >
-          Enlarge
-        </div>
-      </Popup>
-    </Marker>
-  )
+            Enlarge
+          </div>
+        </Popup>
+      </Marker>
+    )
+  })
 }
 
 const circleIcon = (color = colors["blue-leaflet"]) => {
