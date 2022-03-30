@@ -499,7 +499,6 @@ export class TaskMap extends Component {
   }
 
   render() {
-    console.log("image?", this.state.mapillaryViewerImage)
     const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
     const minZoom = _get(this.props.task, "parent.minZoom", MIN_ZOOM)
     const maxZoom = _get(this.props.task, "parent.maxZoom", MAX_ZOOM)
