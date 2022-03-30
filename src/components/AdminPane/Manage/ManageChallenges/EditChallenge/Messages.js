@@ -101,7 +101,7 @@ export default defineMessages({
       "is shown to users when they click on the challenge to learn more about " +
       "it.\n\nYour description should provide mappers with enough detail to " +
       "decide whether or not to try working on your challenge. This field " +
-      "supports Markdown.",
+      "supports [Markdown](https://learn.maproulette.org/documentation/markdown/).",
   },
 
   blurbLabel: {
@@ -113,7 +113,7 @@ export default defineMessages({
     id: "Admin.EditChallenge.form.blurb.description",
     defaultMessage:
       "A very brief description of your challenge suitable for " +
-      "small spaces, such as a map marker popup. This field supports Markdown.",
+      "small spaces, such as a map marker popup. This field supports [Markdown](https://learn.maproulette.org/documentation/markdown/).",
   },
 
   instructionLabel: {
@@ -129,8 +129,8 @@ export default defineMessages({
       "a task is loaded, and is the primary piece of information for the mapper " +
       "about how to solve the task, so think about this field carefully. You can " +
       "include links to the OSM wiki or any other hyperlink if you want, because " +
-      "this field supports Markdown. You can also reference feature properties " +
-      "from your GeoJSON with simple mustache tags: e.g. `'{{address}}'` would be " +
+      "this field supports [Markdown](https://learn.maproulette.org/documentation/markdown/). You can also reference feature properties " +
+      "from your GeoJSON with simple [mustache tags](https://learn.maproulette.org/documentation/mustache-tag-replacement/): e.g. `'{{address}}'` would be " +
       "replaced with the value of the `address` property, allowing for basic " +
       "customization of instructions for each task. This field is required.",
   },
