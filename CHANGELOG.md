@@ -7,6 +7,15 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.8.0] - 2022-04-12
+
+### Fixed
+- Upgrade to Mapillary v4
+- Remove duplicate completion_time for bundled tasks (API)
+
+### Added
+- Add Markdown and mustache tags Documentation URL
+
 ## [v3.7.16] - 2022-03-08
 
 ### Fixed
