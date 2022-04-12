@@ -3,17 +3,16 @@ import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
 
-const API_URI='https://a.mapillary.com/v3'
-const IMAGES_URI='https://images.mapillary.com'
-const CLIENT_ID = process.env.REACT_APP_MAPILLARY_API_KEY
-
+const EMBED_URI_V4='https://www.mapillary.com/embed'
+const IMAGES_URI_V4='https://graph.mapillary.com/images'
+const ACCESS_TOKEN = process.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
 
 /**
- * Returns true if Mapillary support is enabled (a Mapillary client id has been
+ * Returns true if Mapillary support is enabled (a Mapillary client token has been
  * configured), false if not
  */
 export const isMapillaryEnabled = function() {
-  return !_isEmpty(CLIENT_ID)
+  return !_isEmpty(ACCESS_TOKEN)
 }
 
 /**
@@ -25,9 +24,9 @@ export const isMapillaryEnabled = function() {
  * `context` fields. If an additional page of results is needed, the context
  * will need to be passed to `nextMapillaryPage`
  */
-export const fetchMapillaryImages = async function(bbox, point=null, radius=250, lookAt=false, pageSize=1000) {
+export const fetchMapillaryImages = async function(bbox, point=null, radius=250, lookAt=false, pageSize=100) {
   if (!isMapillaryEnabled()) {
-    throw new Error("Missing Mapillary client id")
+    throw new Error("Missing Mapillary client token")
   }
 
   // bbox and point can be either arrays or strings with comma-separated coordinates
@@ -43,10 +42,10 @@ export const fetchMapillaryImages = async function(bbox, point=null, radius=250,
       params.push(`lookat=${_isArray(point) ? point.join(',') : point}`)
     }
   }
-  params.push(`per_page=${pageSize}`)
-  params.push(`client_id=${CLIENT_ID}`)
+  params.push(`limit=${pageSize}`)
+  params.push(`access_token=${ACCESS_TOKEN}`)
 
-  return executeMapillaryImageFetch(`${API_URI}/images?${params.join('&')}`)
+  return executeMapillaryImageFetch(`${IMAGES_URI_V4}?${params.join('&')}`)
 }
 
 /**
@@ -77,8 +76,8 @@ export const nextMapillaryPage = async function(resultContext) {
  * Generates a Mapillary URL for a specific image based on the given image key
  * and desired size. Acceptable image sizes are 320, 640, 1024, and 2048
  */
-export const mapillaryImageUrl = function(imageKey, size='320') {
-  return `${IMAGES_URI}/${imageKey}/thumb-${size}.jpg`
+export const mapillaryImageUrl = function(imageId, size='320') {
+  return `${EMBED_URI_V4}?image_key=${imageId}`
 }
 
 /**
@@ -99,10 +98,10 @@ export const nextMapillaryPageUrl = function(resultContext) {
 }
 
 /**
- * Retrieve the active client id, if enabled
+ * Retrieve the active access token
  */
-export const getClientId = function() {
-  return CLIENT_ID
+export const getAccessToken = function() {
+  return ACCESS_TOKEN
 }
 
 /**

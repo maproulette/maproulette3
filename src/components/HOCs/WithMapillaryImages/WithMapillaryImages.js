@@ -82,11 +82,11 @@ export const WithMapillaryImages = function(WrappedComponent) {
      * @private
      */
     extractImages = geojson => {
-      return _map(geojson.features, feature => ({
-        key: feature.properties.key,
+      return _map(geojson.data, feature => ({
+        key: feature.id,
         lon: feature.geometry.coordinates[0],
         lat: feature.geometry.coordinates[1],
-        url: mapillaryImageUrl(feature.properties.key, '320'),
+        url: mapillaryImageUrl(feature.id, '320'),
       }))
     }
 

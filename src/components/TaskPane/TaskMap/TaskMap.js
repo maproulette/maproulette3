@@ -374,20 +374,22 @@ export class TaskMap extends Component {
     }
   }
 
-  mapillaryImageMarkers = () => ({
-    id: "mapillary",
-    component: (
-      <ImageMarkerLayer
-        key="mapillary"
-        mrLayerId="mapillary"
-        mrLayerLabel="Mapillary"
-        images={this.props.mapillaryImages}
-        markerColor="#39AF64"
-        imageClicked={imageKey => this.setState({"mapillaryViewerImage": imageKey})}
-        imageAlt="Mapillary"
-      />
-    ),
-  })
+  mapillaryImageMarkers = () => {
+    return {
+      id: "mapillary",
+      component: (
+        <ImageMarkerLayer
+          key="mapillary"
+          mrLayerId="mapillary"
+          mrLayerLabel="Mapillary"
+          images={this.props.mapillaryImages}
+          markerColor="#39AF64"
+          imageClicked={imageKey => this.setState({"mapillaryViewerImage": imageKey})}
+          imageAlt="Mapillary"
+        />
+      ),
+    }
+  }
 
   openStreetCamImageMarkers = () => ({
     id: "openstreetcam",
@@ -484,6 +486,16 @@ export class TaskMap extends Component {
 
     // Otherwise just give back the features as-is
     return taskFeatures
+  }
+
+  renderMapillaryViewer = () => {
+    return (
+      <MapillaryViewer
+        key={Date.now()}
+        initialImageKey={this.state.mapillaryViewerImage}
+        onClose={() => this.setState({mapillaryViewerImage: null})}
+      />
+    )
   }
 
   render() {
@@ -616,13 +628,7 @@ export class TaskMap extends Component {
           ))}
         </EnhancedMap>
 
-        {this.state.mapillaryViewerImage &&
-         <MapillaryViewer
-            key={Date.now()}
-            initialImageKey={this.state.mapillaryViewerImage}
-            onClose={() => this.setState({mapillaryViewerImage: null})}
-         />
-        }
+        {this.state.mapillaryViewerImage && this.renderMapillaryViewer()}
 
         {this.state.openStreetCamViewerImage &&
          <OpenStreetCamViewer
