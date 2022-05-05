@@ -74,7 +74,7 @@ const WithLockedTask = function(WrappedComponent) {
       this.props.releaseTask(task.id).then(() => {
         //wait for lock to be cleared in db and provide some leeway 
         //time with setTimeout before triggering storage event
-        setTimeout(() => lockStorage.removeLock(task.id), 1000);
+        setTimeout(() => lockStorage.removeLock(task.id), 1500);
       }).catch(err => null)
     }
 
