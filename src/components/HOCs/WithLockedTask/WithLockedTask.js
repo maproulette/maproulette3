@@ -99,8 +99,12 @@ const WithLockedTask = function(WrappedComponent) {
     }
 
     syncLocks = () => {
-      if (!lockStorage.isLocked(this.props.task.id)) {
-        this.refreshTaskLock(this.props.task)
+      const { task } = this.props;
+
+      if (task) {
+        if (!lockStorage.isLocked(task.id)) {
+          this.refreshTaskLock(task)
+        }
       }
     }
 
