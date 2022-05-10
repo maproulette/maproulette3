@@ -7,11 +7,20 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.8.1] - 2022-05-10
+
+### Added
+- Lock storage events to improve prompting relock attempts on tasks
+- Upgrade async module
+- default completed_time_spent on completed tasks (API)
+- Add API version to swagger page (API)
+
 ## [v3.8.0] - 2022-04-12
 
 ### Fixed
 - Upgrade to Mapillary v4
 - Remove duplicate completion_time for bundled tasks (API)
+- Update priority rules during challenge edit for remote GeoJson (API)
 
 ### Added
 - Add Markdown and mustache tags Documentation URL
