@@ -21,6 +21,13 @@ export class SignInButton extends Component {
     clicked: false,
   }
 
+  handleSignin = () => {
+    this.setState({clicked: true});
+
+    //clear stale locks in localStorage
+    localStorage.clear();
+  }
+
   render() {
     if (this.props.checkingLoginStatus || this.state.clicked) {
       return (
@@ -33,7 +40,7 @@ export class SignInButton extends Component {
     return (
       <a
         className={classNames("mr-button", this.props.className)}
-        onClick={() => this.setState({clicked: true})}
+        onClick={this.handleSignin}
         href={
           `${process.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
             this.props.history.location.pathname + this.props.history.location.search

@@ -735,7 +735,9 @@ export const unsaveTask = function(userId, taskId) {
  * Logout the current user on both the client and server.
  */
 export const logoutUser = function(userId) {
-  localStorage.removeItem('isLoggedIn')
+  //clear stale locks and isLoggedIn status
+  localStorage.clear();
+
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
 
   if (_isFinite(userId) && userId !== GUEST_USER_ID) {
