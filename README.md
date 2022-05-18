@@ -1,16 +1,32 @@
-# Getting Started
+# MapRoulette 🎰
 
-maproulette3 is a new front-end for MapRoulette built with
-[React](https://reactjs.org/).
+MapRoulette is the best known and most widely used microtasking platform for [https://osm.org](OpenStreetMap). The live website is at [maproulette.org](https://maproulette.org). 
 
-A back-end server from the
-[maproulette2](https://github.com/maproulette/maproulette2) project is still
-required. You can either install and configure it locally, or -- if looking to
-do front-end development only -- can connect to a pre-existing server if you
-have access to one (you will need your API key for that server). **Please do
-not use the production server for development purposes.**
+## Using MapRoulette
 
-## Developing Locally
+If you're looking to improve OSM using MapRoulette, you can get started at [maproulette.org](https://maproulette.org) right away. You can log in to MapRoulette with your existing OSM account. If you don't have an OSM account, you probably want to learn the basics of mapping with OSM first. The best way to do this is to [create your very own OSM account](https://www.openstreetmap.org/user/new), move the map to your home town, and click "Edit" on the OSM web site. The OSM web editor has a built in walk-though that teaches you the basics. Once you have mastered basic OSM editing, you can use your new OSM account to log on to MapRoulette and start finding some easy tasks!
+
+All documentation for MapRoulette is at [learn.maproulette.org](https://learn.maproulette.org/). This site has resources for both mappers and those interested in developing their own MapRoulette Challenges.
+
+## Contributing to MapRoulette
+
+There are many different ways to contribute to MapRoulette!
+
+* Help [translating MapRoulette](https://www.transifex.com/osmlab/maproulette3/) into different languages. We already have more than 15 language communities!
+* Contribute to the [documentation](learn.maproulette.org). This site has [its own repository](https://github.com/maproulette/docs) as well.
+* Create a new issue in this repo if you encounter bugs in MapRoulette.
+* Join our [Community Meetings](https://hackmd.io/@mvexel/ByS7H0Mw9) on the first Tuesday of every month.
+* If you're a developer (Scala, React), we'd love your help working on the future of MapRoulette.
+
+### Connecting with the MapRoulette community
+
+* Ask a question about MapRoulette on the [OSM community forum](https://community.openstreetmap.org/tag/maproulette)
+* Join the #maproulette channel on the [OSM US Slack](https://slack.openstreetmap.us/)
+* Follow MapRoulette [on Twitter](https://twitter.com/maproulette)
+
+## Development
+
+This is the repository that holds the front-end code. The back-end and API are developed in parallel in a separate repo: [maproulette2](https://github.com/maproulette/maproulette2). Both need to be deployed together for a working setup. We advise you use Docker for production deployments. [This repo](https://github.com/maproulette/maproulette2-docker) will help you set that up easily. 
 
 ### Basic Dependencies:
 
@@ -29,11 +45,8 @@ not use the production server for development purposes.**
 
 3. `yarn run start` to fire up the front-end development server
 
-As mentioned above, a back-end server from the
-[maproulette2](https://github.com/maproulette/maproulette2) project is also
-required. You can either install and configure it locally or, if you have access
-to a pre-existing server, connect directly to it by using your API key for that
-server.
+A back-end server from the [maproulette2](https://github.com/maproulette/maproulette2) project is also required. You can either install and configure it locally or, if you have access to a pre-existing server, connect directly to it by using your API key for that
+server. 
 
 #### Developing with a local back-end server
 
@@ -72,8 +85,7 @@ server.
 #### Developing with a pre-existing back-end server
 
 These instructions are for connecting to an existing back-end server, rather than
-a local one you have installed. *Please do not use the production MapRoulette
-server for development use*
+a local one you have installed. **Please do not use the production API for development purposes.**
 
 1. Open MapRoulette on that server normally in your browser, visit your user
    profile, and take note of your API key at the bottom of the page.
@@ -93,7 +105,6 @@ server for development use*
 4. Point your browser directly at the front-end server, http://127.0.0.1:3000
    by default. Once the page finishes loading, you should show up as signed-in
    if all is working correctly
-
 
 ### Updating to the Latest Code
 
