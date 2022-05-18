@@ -13,7 +13,7 @@ All documentation for MapRoulette is at [learn.maproulette.org](https://learn.ma
 There are many different ways to contribute to MapRoulette!
 
 * Help [translating MapRoulette](https://www.transifex.com/osmlab/maproulette3/) into different languages. We already have more than 15 language communities!
-* Contribute to the [documentation](learn.maproulette.org). This site has [its own repository](https://github.com/maproulette/docs) as well.
+* Contribute to the [documentation](https://learn.maproulette.org). This site has [its own repository](https://github.com/maproulette/docs) as well.
 * Create a new issue in this repo if you encounter bugs in MapRoulette.
 * Join our [Community Meetings](https://hackmd.io/@mvexel/ByS7H0Mw9) on the first Tuesday of every month.
 * If you're a developer (Scala, React), we'd love your help working on the future of MapRoulette. Please see [DEVELOPMENT.md](DEVELOPMENT.md) to get started.
