@@ -1,6 +1,6 @@
 # MapRoulette 🎰
 
-MapRoulette is the best known and most widely used microtasking platform for [https://osm.org](OpenStreetMap). The live website is at [maproulette.org](https://maproulette.org). 
+MapRoulette is the best known and most widely used microtasking platform for [OpenStreetMap](https://osm.org/). The live website is at [maproulette.org](https://maproulette.org). 
 
 ## Using MapRoulette
 
