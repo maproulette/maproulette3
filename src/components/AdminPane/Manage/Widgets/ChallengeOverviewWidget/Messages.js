@@ -16,12 +16,12 @@ export default defineMessages({
 
   creationDate: {
     id: "Widgets.ChallengeOverviewWidget.fields.creationDate.label",
-    defaultMessage: "Created:",
+    defaultMessage: "Challenge Created:",
   },
 
   lastModifiedDate: {
     id: "Widgets.ChallengeOverviewWidget.fields.lastModifiedDate.label",
-    defaultMessage: "Modified:",
+    defaultMessage: "Tasks Last Updated:",
   },
 
   tasksRefreshDate: {
@@ -31,7 +31,7 @@ export default defineMessages({
 
   tasksFromDate: {
     id: "Widgets.ChallengeOverviewWidget.fields.tasksFromDate.label",
-    defaultMessage: "Tasks From:",
+    defaultMessage: "Task Data Sourced:",
   },
 
   dataOriginDate: {
