@@ -34,11 +34,15 @@ export default defineMessages({
     defaultMessage: "Task Data Sourced:",
   },
 
-  dataOriginDate: {
-    id: "Widgets.ChallengeOverviewWidget.fields.dataOriginDate.label",
-    defaultMessage: "Tasks built on {refreshDate} from data sourced on {sourceDate}.",
+  lastTaskRefresh: {
+    id: "Widgets.ChallengeOverviewWidget.fields.lastTaskRefresh.label",
+    defaultMessage: "Last time tasks were built or added to the challenge",
   },
 
+  dataOriginDate: {
+    id: "Widgets.ChallengeOverviewWidget.fields.dataOriginDate.label",
+    defaultMessage: "Tasks built/added on {refreshDate} from data sourced on {sourceDate}.",
+  },
 
   status: {
     id: "Widgets.ChallengeOverviewWidget.fields.status.label",
