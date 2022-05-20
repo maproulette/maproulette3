@@ -193,22 +193,25 @@ export const createDynamicLayerSource = function(layerId, layerName, url, overla
  * customBasemap settings, including generating a dynamic layer source with the
  * given customBasemap and customLayerId if appropriate.
  */
-export const basemapLayerSource = function(defaultBasemap, defaultBasemapId) {
+export const basemapLayerSource = function(defaultBasemap, defaultBasemapId, customMapUrl) {
   if (defaultBasemap === ChallengeBasemap.none) {
     return null
-  }
-  else if (defaultBasemap === ChallengeBasemap.identified) {
+  } else if (defaultBasemap === ChallengeBasemap.identified) {
     return layerSourceWithId(defaultBasemapId)
-  }
-  else if (_isFinite(defaultBasemap)) {
-    return layerSourceWithId(basemapLayerSources()[defaultBasemap])
-  }
-  else if (defaultBasemap && defaultBasemap.url) {
+
+    // if challenge basemap setting is custom and a customMapUrl is provided
+    // we need to set this as default basemap.  It will show up in the map layers
+    // as "Challenge Default" under the User custom basemeps, but will be preselected
+  } else if (defaultBasemap === ChallengeBasemap.custom && customMapUrl) {
+    return createDynamicLayerSource(100, "Challenge Default", customMapUrl, false)
+  } else if (_isFinite(defaultBasemap)) {
+    const basemap = basemapLayerSources()[defaultBasemap]
+    return layerSourceWithId(basemap)
+  } else if (defaultBasemap && defaultBasemap.url) {
     return createDynamicLayerSource(
       defaultBasemap.name, defaultBasemap.name, defaultBasemap.url,
       defaultBasemap.overlay)
-  }
-  else {
+  } else {
     return null
   }
 }
