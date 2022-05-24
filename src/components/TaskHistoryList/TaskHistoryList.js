@@ -26,6 +26,7 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
 import { TaskHistoryAction } from '../../services/Task/TaskHistory/TaskHistory'
 import { viewAtticOverpass } from '../../services/Overpass/Overpass'
 import messages from './Messages'
+import ErrorTagComment from '../ErrorTagComment/ErrorTagComment'
 
 
 // Constants for userType
@@ -62,6 +63,7 @@ export class TaskHistoryList extends Component {
     let startedAtEntry = null
     let duration = null
     let userType = null
+    let errorTags = null
 
     _each(_sortBy(this.props.taskHistory, h => new Date(h.timestamp)), (log, index) => {
       // We are moving on to a new set of actions so let's push
@@ -96,8 +98,7 @@ export class TaskHistoryList extends Component {
           if (log.reviewStatus === TaskReviewStatus.needed) {
             username = _get(log, 'reviewRequestedBy.username')
             logEntry = reviewEntry(log, this.props, index)
-          }
-          else {
+          } else {
             logEntry = null
             const isMetaReview = log.actionType === TaskHistoryAction.metaReview
             updatedStatus =
@@ -115,7 +116,7 @@ export class TaskHistoryList extends Component {
                         log.reviewStatus === TaskReviewStatus.needed) ?
               _get(log, 'reviewRequestedBy.username') : _get(log, 'reviewedBy.username')
             userType = log.actionType === TaskHistoryAction.metaReview ? META_REVIEWER_TYPE : REVIEWER_TYPE
-
+            errorTags = log.errorTags
             if (log.startedAt) {
               duration = new Date(log.timestamp) - new Date(log.startedAt)
             }
@@ -164,7 +165,8 @@ export class TaskHistoryList extends Component {
                          entry: entries,
                          username: username,
                          status: updatedStatus,
-                         userType: userType})
+                         userType: userType,
+                         errorTags: errorTags})
       if (startedAtEntry) {
         combinedLogs.push(startedAtEntry)
         startedAtEntry = null
@@ -262,7 +264,14 @@ export class TaskHistoryList extends Component {
                 </div>
               </li>
             }
-            {log.entry}
+            {log.errorTags
+              ? <div className="mr-text-red">
+                  <FormattedMessage
+                    {...messages.errorTagsLabel}
+                  />:{" "}
+                  <ErrorTagComment errorTags={errorTags} />
+                </div>
+              : null}
           </ol>
         </article>
       )}
