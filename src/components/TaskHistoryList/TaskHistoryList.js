@@ -264,6 +264,7 @@ export class TaskHistoryList extends Component {
                 </div>
               </li>
             }
+            {log.entry}
             {log.errorTags
               ? <div className="mr-text-red">
                   <FormattedMessage
