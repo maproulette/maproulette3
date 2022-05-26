@@ -898,16 +898,22 @@ export const saveChallenge = function (
     }
 
     if (_isArray(challengeData.tags)) {
-      challengeData.tags = challengeData.tags.join(",");
+      challengeData.tags = challengeData.tags.map(t => t.trim()).join(",");
+    } else if (challengeData.tags) {
+      challengeData.tags = challengeData.tags.trim();
     }
 
     if (_isArray(challengeData.preferredTags)) {
-      challengeData.preferredTags = challengeData.preferredTags.join(",");
+      challengeData.preferredTags = challengeData.preferredTags.map(t => t.trim()).join(",");
+    } else if (challengeData.preferredTags) {
+      challengeData.preferredTags = challengeData.preferredTags.trim();
     }
 
     if (_isArray(challengeData.preferredReviewTags)) {
       challengeData.preferredReviewTags =
-        challengeData.preferredReviewTags.join(",");
+        challengeData.preferredReviewTags.map(t => t.trim()).join(",");
+    } else if (challengeData.preferredReviewTags) {
+      challengeData.preferredReviewTags = challengeData.preferredReviewTags.trim();
     }
 
     // If there is local GeoJSON content being transmitted as a string, parse
