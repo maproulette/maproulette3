@@ -131,7 +131,7 @@ export default defineMessages({
 
   challengeCompleteNotificationLead: {
     id: "Inbox.challengeCompleteNotification.lead",
-    defaultMessage: "A challenge you manage has been completed.",
+    defaultMessage: "A challenge you manage has been completed. Have a look at some of the tasks and comments in your challenge to see if users understood the instructions you provided and to make sure there are no inappropriate contributions / vandalism. This step will help make your challenges even better.",
   },
 
   mapperChallengeCompleteNotificationLead: {
