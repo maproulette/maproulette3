@@ -7,6 +7,19 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.9.0] - 2022-06-14
+
+### Added
+- Additional instruction during task completion for owners to check work
+- Error tags will now appear in task widget history
+- Changed titles and sourcing of challenge overview dates
+- Removed API_HOST from swagger.yml (API)
+- task_refresh_date is now changed when tasks are uploaded/added to challenge (API)
+
+### Fixed
+- Trim white spaces from challenge tags on submit
+- Restored challenge custom basemaps
+
 ## [v3.8.1] - 2022-05-10
 
 ### Added
