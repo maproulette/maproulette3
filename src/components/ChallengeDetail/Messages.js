@@ -51,7 +51,7 @@ export default defineMessages({
 
   lastTaskRefreshLabel: {
     id: "ChallengeDetails.fields.lastChallengeDetails.TaskRefresh.label",
-    defaultMessage: "Tasks From",
+    defaultMessage: "Task Data Sourced",
   },
 
   dataOriginDateLabel: {
