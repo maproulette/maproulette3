@@ -19,6 +19,7 @@ import AssociatedChallengeList from './AssociatedChallengeList'
 import QuickWidget from '../../../QuickWidget/QuickWidget'
 import Header from '../../../Header/Header'
 import Button from '../../../Button/Button'
+import ChallengeIdResult from "./ChallengeIdResult";
 
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import manageMessages from '../Messages'
@@ -40,10 +41,19 @@ const ChallengeSearch = WithSearch(
   },
 )
 
+const SearchResults = (props) => {
+  return (
+    <>
+      <ChallengeIdResult {...props} />
+      <AssociatedChallengeList {...props} />
+    </>
+  )
+}
+
 const ChallengeSearchResults =
   WithPermittedChallenges(
     WithSearchResults(
-      WithPagedChallenges(AssociatedChallengeList, 'challenges'),
+      WithPagedChallenges(SearchResults, 'challenges'),
                       'adminChallengeList', 'challenges')
   )
 

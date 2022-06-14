@@ -32,6 +32,8 @@ export default class ChallengeOverviewWidget extends Component {
     const manager = AsManager(this.props.user)
     const status = _get(this.props, 'challenge.status', ChallengeStatus.none)
 
+    const lastTaskRefreshText = this.props.intl.formatMessage(messages.lastTaskRefresh);
+
     const dataOriginDateText =
       (!this.props.challenge.dataOriginDate || !this.props.challenge.lastTaskRefresh) ? null :
       this.props.intl.formatMessage(messages.dataOriginDate,
@@ -108,13 +110,13 @@ export default class ChallengeOverviewWidget extends Component {
           </div>
 
           <div className="mr-flex mr-items-center">
-            <div className="mr-text-yellow mr-mr-2">
+            <div className="mr-text-yellow mr-mr-2" title={lastTaskRefreshText}>
               <FormattedMessage {...messages.lastModifiedDate} />
             </div>
 
             <div>
-              {this.props.challenge.modified &&
-              <FormattedDate value={parse(this.props.challenge.modified)}
+              {this.props.challenge.lastTaskRefresh &&
+              <FormattedDate value={parse(this.props.challenge.lastTaskRefresh)}
                               year='numeric' month='long' day='2-digit' />
               }
             </div>

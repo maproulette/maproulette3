@@ -25,9 +25,8 @@ export default class AssociatedChallengeList extends Component {
               sym={challenge.enabled ? 'visible-icon' : 'hidden-icon'}
             />
           </div>
-
           <div className='mr-flex-grow mr-text-base mr-text-white'>
-            {challenge.name}
+          {this.props.includeId &&  `(id: ${challenge.id})`}{" "}{challenge.name}
             <div className='mr-text-xs mr-text-grey-light'>{_get(challenge.parent, 'displayName')}</div>
           </div>
 
@@ -52,11 +51,9 @@ export default class AssociatedChallengeList extends Component {
 
     return (
       <div className=''>
-        {!this.props.loadingChallenges && challengeCards.length === 0 ?
-         <p className="mr-text-grey-lighter mr-text-base mr-my-4">
-           <FormattedMessage {...messages.noChallenges} />
-         </p> :
-         challengeCards
+        {!this.props.loadingChallenges && challengeCards.length === 0
+          ? null
+          : challengeCards
         }
         {this.props.setSearchPage &&
           <div className="mr-text-center mr-mt-8">
