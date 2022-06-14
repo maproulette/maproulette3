@@ -49,4 +49,9 @@ export default defineMessages({
     defaultMessage: "Meta-Review"
   },
 
+  errorTagsLabel: {
+    id: "TaskHistory.errorTags.label",
+    defaultMessage: "Error Tags"
+  }
+
 })
