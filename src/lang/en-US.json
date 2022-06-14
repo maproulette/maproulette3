@@ -904,7 +904,7 @@
   "ImportFileModal.controls.cancel.label": "Cancel",
   "ImportFileModal.controls.upload.label": "Click to Upload File",
   "Inbox.actions.openNotification.label": "Open",
-  "Inbox.challengeCompleteNotification.lead": "A challenge you manage has been completed.",
+  "Inbox.challengeCompleteNotification.lead": "A challenge you manage has been completed. Have a look at some of the tasks and comments in your challenge to see if users understood the instructions you provided and to make sure there are no inappropriate contributions / vandalism. This step will help make your challenges even better.",
   "Inbox.controls.deleteSelected.label": "Delete",
   "Inbox.controls.groupByTask.label": "Group by Task",
   "Inbox.controls.manageSubscriptions.label": "Manage Subscriptions",
