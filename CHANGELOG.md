@@ -15,10 +15,13 @@ This project adheres to
 - Changed titles and sourcing of challenge overview dates
 - Removed API_HOST from swagger.yml (API)
 - task_refresh_date is now changed when tasks are uploaded/added to challenge (API)
+- Added capability to search for challenges by ID during Virtual Project Mgmt
 
 ### Fixed
 - Trim white spaces from challenge tags on submit
 - Restored challenge custom basemaps
+- Virtual challenges creation when using lasso tool
+- filter out deleted tasks in taskCluster (API)
 
 ## [v3.8.1] - 2022-05-10
 
