@@ -14,7 +14,6 @@ const DashboardHeader = (props) => {
   const latestChallenge = AsUserActivity(
     props.user.activity
   ).recentChallengeId();
-
   const completedTasks = _get(props.taskMetrics, "total", 1);
   const userScore = _get(props.leaderboardMetrics, "score");
   const rank = _get(props.leaderboardMetrics, "rank");
