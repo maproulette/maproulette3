@@ -1,22 +1,20 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { FormattedMessage } from "react-intl";
-import { Link } from "react-router-dom";
-import _get from "lodash/get";
-import _isFinite from "lodash/isFinite";
-import AsUserActivity from "../../interactions/Activity/AsUserActivity";
-import BusySpinner from "../../components/BusySpinner/BusySpinner";
-import messages from "./Messages";
+import React from 'react'
+import PropTypes from 'prop-types'
+import { FormattedMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
+import _get from 'lodash/get'
+import _isFinite from 'lodash/isFinite'
+import AsUserActivity from '../../interactions/Activity/AsUserActivity'
+import BusySpinner from '../../components/BusySpinner/BusySpinner'
+import messages from './Messages'
 
-const NEWBIE_POINTS_THRESHOLD = 49;
+const NEWBIE_POINTS_THRESHOLD = 49
 
-const DashboardHeader = (props) => {
-  const latestChallenge = AsUserActivity(
-    props.user.activity
-  ).recentChallengeId();
-  const completedTasks = _get(props.taskMetrics, "total", 1);
-  const userScore = _get(props.leaderboardMetrics, "score");
-  const rank = _get(props.leaderboardMetrics, "rank");
+const DashboardHeader = props => {
+  const latestChallenge = AsUserActivity(props.user.activity).recentChallengeId()
+  const completedTasks = _get(props.taskMetrics, 'total', 0)
+  const userScore = _get(props.leaderboardMetrics, 'score')
+  const rank = _get(props.leaderboardMetrics, 'rank')
 
   const welcomeBackInterface = () => {
     if (_isFinite(userScore)) {
@@ -71,7 +69,7 @@ const DashboardHeader = (props) => {
             <h2 className="mr-text-yellow mr-font-light mr-text-4xl mr-mb-8">
               <FormattedMessage
                 {...messages.welcome}
-                values={{ username: props.user.osmProfile.displayName }}
+                values={{username: props.user.osmProfile.displayName}}
               />
             </h2>
             {welcomeBackInterface()}
@@ -80,54 +78,53 @@ const DashboardHeader = (props) => {
         </div>
         <div className="mr-bg-black-25 mr-w-full mr-py-4 mr-pl-8 mr-rounded-b">
           <div className="mr-bg-lines mr-p-4 mr-pl-12 mr-flex mr-justify-between mr-items-center">
-            {_isFinite(latestChallenge) ? (
-              <React.Fragment>
-                <div className="mr-flex mr-items-center mr-mr-8">
-                  <div className="mr-mr-4 mr-flex mr-flex-wrap">
-                    <span className="mr-mr-1">
-                      <FormattedMessage {...messages.jumpBackIn} />
-                    </span>
-                    <FormattedMessage {...messages.resume} />
-                  </div>
-                  <div>
-                    <Link
-                      to={`/browse/challenges/${latestChallenge}`}
-                      className="mr-button"
-                    >
-                      <FormattedMessage {...messages.latestChallengeLabel} />
-                    </Link>
-                  </div>
-                </div>
-                <div className="mr-flex mr-items-center mr-mr-20">
-                  <div className="mr-mr-4 mr-flex mr-flex-wrap">
-                    <span className="mr-mr-1">
-                      <FormattedMessage {...messages.find} />
-                    </span>
-                    <FormattedMessage {...messages.somethingNew} />
-                  </div>
-                  <div>
-                    <Link to="/browse/challenges" className="mr-button">
-                      <FormattedMessage {...messages.findChallengeLabel} />
-                    </Link>
-                  </div>
-                </div>
-              </React.Fragment>
-            ) : (
-              <Link to="/browse/challenges" className="mr-button">
-                <FormattedMessage {...messages.findChallengeLabel} />
-              </Link>
-            )}
+            {_isFinite(latestChallenge) ?
+             <React.Fragment>
+               <div className="mr-flex mr-items-center mr-mr-8">
+                 <div className="mr-mr-4 mr-flex mr-flex-wrap">
+                   <span className="mr-mr-1">
+                     <FormattedMessage {...messages.jumpBackIn} />
+                   </span>
+                   <FormattedMessage {...messages.resume} />
+                 </div>
+                 <div>
+                   <Link
+                     to={`/browse/challenges/${latestChallenge}`}
+                     className="mr-button"
+                   >
+                     <FormattedMessage {...messages.latestChallengeLabel} />
+                   </Link>
+                 </div>
+               </div>
+               <div className="mr-flex mr-items-center mr-mr-20">
+                 <div className="mr-mr-4 mr-flex mr-flex-wrap">
+                   <span className="mr-mr-1">
+                     <FormattedMessage {...messages.find} />
+                   </span>
+                   <FormattedMessage {...messages.somethingNew} />
+                 </div>
+                 <div>
+                   <Link to="/browse/challenges" className="mr-button">
+                     <FormattedMessage {...messages.findChallengeLabel} />
+                   </Link>
+                 </div>
+               </div>
+             </React.Fragment> :
+             <Link to="/browse/challenges" className="mr-button">
+               <FormattedMessage {...messages.findChallengeLabel} />
+             </Link>
+            }
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 DashboardHeader.propTypes = {
   user: PropTypes.object.isRequired,
   taskMetrics: PropTypes.object,
   leaderboardMetrics: PropTypes.object,
-};
+}
 
-export default DashboardHeader;
+export default DashboardHeader
