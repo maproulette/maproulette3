@@ -3,11 +3,7 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: [ prerelease, main ]
-  pull_request:
-    branches: [ develop, main ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -19,13 +15,27 @@ jobs:
         node-version: [12.x, 14.x]
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn install
-    - run: yarn run build
-      env:
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Run build
+      run: yarn run build
+            env:
         NODE_OPTIONS: --max-old-space-size=4096      
-    - run: yarn test
+
+    - name: Run the tests
+      run: yarn test -- --coverage
+

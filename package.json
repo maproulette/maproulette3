@@ -133,6 +133,7 @@
     "build": "yarn run build-intl && yarn run update-layers-prod && yarn run build-postcss && react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "test:cov": "react-scripts test --coverage --env=jest-environment-jsdom-sixteen",
+    "test:cov-full": "react-scripts test --coverage --watchAll --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },
   "browserslist": [
