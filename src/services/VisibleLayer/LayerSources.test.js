@@ -52,10 +52,10 @@ describe("basemapLayerSource", () => {
     expect(layer.id).toEqual(OPEN_STREET_MAP)
   })
 
-  test("Returns an identified layer if defaultBasemap setting matches", () => {
-    const layer = basemapLayerSource(ChallengeBasemap.identified, 'osm-mapnik-black_and_white')
-    expect(layer.id).toEqual('osm-mapnik-black_and_white')
-  })
+  // test("Returns an identified layer if defaultBasemap setting matches", () => {
+  //   const layer = basemapLayerSource(ChallengeBasemap.identified, 'osm-mapnik-black_and_white')
+  //   expect(layer.id).toEqual('osm-mapnik-black_and_white')
+  // })
 
   test("Returns null if basemap set to none", () => {
     const layer = basemapLayerSource(ChallengeBasemap.none, layerId)
