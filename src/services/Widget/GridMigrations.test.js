@@ -1,7 +1,7 @@
 import { GridMigrations } from "./GridMigrations";
 
 describe("ProjectFilter", () => {
-  it("Deletes blocks to widgets", () => {
+  it("Deletes blocks in widgets", () => {
     expect(GridMigrations).toBe(undefined);
   });
 });
