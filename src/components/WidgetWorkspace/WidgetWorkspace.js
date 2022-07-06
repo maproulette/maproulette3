@@ -85,7 +85,7 @@ export class WidgetWorkspace extends Component {
   }
 
   addConfiguration = closeDropdown => {
-    const newConf = this.props.addNewWorkspaceConfiguration()
+    const newConf = this.props.addNewWorkspaceConfiguration(this.props.currentConfiguration)
     this.startEditingLayout(closeDropdown, newConf)
   }
 
@@ -115,7 +115,7 @@ export class WidgetWorkspace extends Component {
   }
 
   switchConfiguration = (configurationId, closeDropdown) => {
-    this.props.switchWorkspaceConfiguration(configurationId)
+    this.props.switchWorkspaceConfiguration(configurationId, this.props.currentConfiguration)
     closeDropdown()
   }
 
@@ -230,7 +230,7 @@ export class WidgetWorkspace extends Component {
          <ImportFileModal
            header={<FormattedMessage {...messages.importModalHeader} />}
            onCancel={() => this.setState({isImportingLayout: false})}
-           onUpload={file => this.props.importWorkspaceConfiguration(file)}
+           onUpload={file => this.props.importWorkspaceConfiguration(file, this.props.currentConfiguration)}
          />
         }
       </div>
