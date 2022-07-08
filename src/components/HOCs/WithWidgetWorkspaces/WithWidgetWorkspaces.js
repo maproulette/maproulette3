@@ -32,7 +32,7 @@ import BusySpinner from '../../BusySpinner/BusySpinner'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithWidgetWorkspaces = function(WrappedComponent,
+export const WithWidgetWorkspacesInternal = function(WrappedComponent,
                                        targets, workspaceName, defaultConfiguration) {
   return class extends Component {
     state = {
@@ -401,11 +401,13 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
   }
 }
 
-export default (WrappedComponent, targets, workspaceName, defaultConfiguration) =>
+const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultConfiguration) =>
   WithStatus(
     WithCurrentUser(
       WithErrors(
-        WithWidgetWorkspaces(WrappedComponent, targets, workspaceName, defaultConfiguration)
+        WithWidgetWorkspacesInternal(WrappedComponent, targets, workspaceName, defaultConfiguration)
       )
     )
   )
+
+export default WithWidgetWorkspaces
