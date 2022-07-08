@@ -1,8 +1,7 @@
 import * as React from "react";
-import ReactDOM from "react-dom";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import {WithWidgetWorkspacesInternal as WithWidgetWorkspaces} from "./WithWidgetWorkspaces.js";
-import { createStore } from 'redux'
+import * as services from '../../../services/Widget/Widget'
 
 const testWorkspaces = {
   "userDashboard": {
@@ -47,6 +46,26 @@ const testWorkspaces = {
       "label": "layout 2"
     }
   } 
+}
+
+const importedConfig = {
+  "targets": ["user"],
+  "cols": 12,
+  "rowHeight": 30,
+  "widgets": [{
+    "widgetKey": "FeaturedChallengesWidget",
+    "label": {
+      "id": "FeaturedChallenges.header",
+      "defaultMessage": "Challenge Highlights"
+    },
+    "targets": ["user"],
+    "minWidth": 4,
+    "defaultWidth": 6,
+    "minHeight": 12,
+    "defaultHeight": 12,
+  }],
+  "name": "userDashboard",
+  "label": "imported layout"
 }
 
 const defaultDashboardSetup = () => {
@@ -99,9 +118,10 @@ describe("WithWidgetWorkspaces", () => {
       return (
         <div>
           <div>Current config: {props.currentConfiguration.label}</div>
-          <button onClick={() => props.switchWorkspaceConfiguration(456, testWorkspaces['userDashboard']['123'])}>Switch Config</button>
+          <button onClick={() => props.switchWorkspaceConfiguration(456, props.currentConfiguration)}>Switch Config</button>
           <button onClick={() => props.markWorkspaceConfigurationBroken()}>Mark Broken</button>
-          <button onClick={() => props.addNewWorkspaceConfiguration(testWorkspaces['userDashboard']['123'])}>Add New Config</button>
+          <button onClick={() => props.addNewWorkspaceConfiguration(props.currentConfiguration)}>Add New Config</button>
+          <button onClick={() => props.importWorkspaceConfiguration({}, props.currentConfiguration)}>Import Config</button>
         </div>
       )
     }
@@ -123,6 +143,13 @@ describe("WithWidgetWorkspaces", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Current config: View Challenge")).toBeInTheDocument();
+    });
+
+    jest.spyOn(services, "importWorkspaceConfiguration").mockReturnValue(Promise.resolve(importedConfig));
+    fireEvent.click(screen.getByText("Import Config"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Current config: imported layout")).toBeInTheDocument();
     });
   });
 });
