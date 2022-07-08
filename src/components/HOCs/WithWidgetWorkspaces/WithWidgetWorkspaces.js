@@ -32,7 +32,7 @@ import BusySpinner from '../../BusySpinner/BusySpinner'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithWidgetWorkspaces = function(WrappedComponent,
+export const WithWidgetWorkspacesInternal = function(WrappedComponent,
                                        targets, workspaceName, defaultConfiguration) {
   return class extends Component {
     state = {
@@ -181,7 +181,27 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
     /**
      * Change the active workspace configuration
      */
-    switchWorkspaceConfiguration = workspaceConfigurationId => {
+    switchWorkspaceConfiguration = (workspaceConfigurationId, currentConfig) => {
+      const userWorkspaces = this.allUserWorkspaces();
+      const newConfig = userWorkspaces[currentConfig.name][workspaceConfigurationId]
+
+      userWorkspaces[currentConfig.name] = Object.assign(
+        {},
+        userWorkspaces[currentConfig.name],
+        {[currentConfig.id]: { ...currentConfig, active: false }}
+      )
+
+      userWorkspaces[newConfig.name] = Object.assign(
+        {},
+        userWorkspaces[newConfig.name],
+        {[newConfig.id]: { ...newConfig, active: true }}
+      )
+
+      this.props.updateUserAppSetting(this.props.user.id, {
+        'workspaces': userWorkspaces,
+        'dashboards': undefined, // clear out any legacy settings
+      })
+
       this.setState({currentConfigurationId: workspaceConfigurationId})
     }
 
@@ -267,7 +287,7 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
     /**
      * Import a workspace layout for the given workspace from the given file
      */
-    importWorkspaceConfiguration = importFile => {
+    importWorkspaceConfiguration = (importFile, currentConfig) => {
       return importWorkspaceConfiguration(workspaceName, importFile)
         .then(importedConfiguration => {
           const newConfiguration = this.completeWorkspaceConfiguration(importedConfiguration)
@@ -275,7 +295,9 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
             nextAvailableConfigurationLabel(newConfiguration.label, this.workspaceConfigurationLabels())
           this.saveWorkspaceConfiguration(newConfiguration)
 
-          setTimeout(() => this.setState({currentConfigurationId: newConfiguration.id}), 500)
+          setTimeout(() => {
+            this.switchWorkspaceConfiguration(newConfiguration.id, currentConfig)
+          }, 500)
           return newConfiguration
         }).catch(error => {
           this.props.addErrorWithDetails(AppErrors.widgetWorkspace.importFailure, error.message)
@@ -290,7 +312,14 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
     currentConfiguration = configurations => {
       let currentWorkspace = configurations[this.state.currentConfigurationId]
 
-      // If no current workspace, or it's broken, find a working one
+      // if no current workspace, find last selected workspace from a previous session
+      if (!currentWorkspace) {
+        currentWorkspace = _find(configurations, configuration => {
+          return configuration.active && !configuration.isBroken;
+        })
+      }
+
+      // If no previously active workspace, or it's broken, find a working one
       if (!currentWorkspace) {
         currentWorkspace = _find(configurations, configuration => !configuration.isBroken)
       }
@@ -308,13 +337,15 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
     /**
      * Add a new, default workspace configuration
      */
-    addNewWorkspaceConfiguration = () => {
+    addNewWorkspaceConfiguration = (currentConfig) => {
       const newConfiguration = this.setupWorkspace(defaultConfiguration)
       newConfiguration.label =
         nextAvailableConfigurationLabel(newConfiguration.label, this.workspaceConfigurationLabels())
 
       this.saveWorkspaceConfiguration(newConfiguration)
-      setTimeout(() => this.setState({currentConfigurationId: newConfiguration.id}), 500)
+      setTimeout(() => {
+        this.switchWorkspaceConfiguration(newConfiguration.id, currentConfig)
+      }, 500)
       return newConfiguration
     }
 
@@ -370,11 +401,13 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
   }
 }
 
-export default (WrappedComponent, targets, workspaceName, defaultConfiguration) =>
+const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultConfiguration) =>
   WithStatus(
     WithCurrentUser(
       WithErrors(
-        WithWidgetWorkspaces(WrappedComponent, targets, workspaceName, defaultConfiguration)
+        WithWidgetWorkspacesInternal(WrappedComponent, targets, workspaceName, defaultConfiguration)
       )
     )
   )
+
+export default WithWidgetWorkspaces
