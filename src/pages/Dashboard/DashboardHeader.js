@@ -16,6 +16,51 @@ const DashboardHeader = props => {
   const userScore = _get(props.leaderboardMetrics, 'score')
   const rank = _get(props.leaderboardMetrics, 'rank')
 
+  const welcomeBackInterface = () => {
+    if (_isFinite(userScore)) {
+      return (
+        <p>
+          <FormattedMessage {...messages.completionPrompt} />
+          <span className="mr-ml-1 mr-font-bold mr-text-pink">
+            <FormattedMessage
+              {...messages.completedTasks}
+              values={{ completedTasks }}
+            />
+          </span>
+          <FormattedMessage {...messages.pointsPrompt} />
+          <span className="mr-ml-1 mr-font-bold mr-text-pink">
+            <FormattedMessage
+              {...messages.points}
+              values={{ points: userScore }}
+            />
+          </span>
+          <FormattedMessage {...messages.rankPrompt} />
+          <span className="mr-mx-1 mr-font-bold mr-text-pink">
+            <FormattedMessage {...messages.rank} values={{ rank }} />
+          </span>
+          <FormattedMessage {...messages.globally} />{" "}
+          <FormattedMessage
+            {...(userScore > NEWBIE_POINTS_THRESHOLD
+              ? messages.encouragement
+              : messages.getStarted)}
+          />
+        </p>
+      );
+    } else if (completedTasks === 0) {
+      return (
+        <p>
+          <FormattedMessage
+            {...(userScore > NEWBIE_POINTS_THRESHOLD
+              ? messages.encouragement
+              : messages.getStarted)}
+          />
+        </p>
+      );
+    } else {
+      return <BusySpinner />;
+    }
+  };
+
   return (
     <div className="mr-mx-4 mr-mt-12">
       <div className="mr-flex mr-flex-col mr-items-center mr-bg-blue-dark mr-rounded mr-w-full">
@@ -27,37 +72,7 @@ const DashboardHeader = props => {
                 values={{username: props.user.osmProfile.displayName}}
               />
             </h2>
-            {_isFinite(userScore) ?
-             <p>
-               <FormattedMessage {...messages.completionPrompt} />
-               <span className="mr-ml-1 mr-font-bold mr-text-pink">
-                 <FormattedMessage
-                   {...messages.completedTasks}
-                   values={{completedTasks}}
-                 />
-               </span>
-               <FormattedMessage {...messages.pointsPrompt} />
-               <span className="mr-ml-1 mr-font-bold mr-text-pink">
-                 <FormattedMessage
-                   {...messages.points}
-                   values={{points: userScore}}
-                 />
-               </span>
-               <FormattedMessage {...messages.rankPrompt} />
-               <span className="mr-mx-1 mr-font-bold mr-text-pink">
-                 <FormattedMessage
-                   {...messages.rank}
-                   values={{rank}}
-                 />
-               </span>
-               <FormattedMessage
-                 {...messages.globally}
-               /> <FormattedMessage
-                 {...(userScore > NEWBIE_POINTS_THRESHOLD ? messages.encouragement : messages.getStarted)}
-               />
-             </p> :
-             <BusySpinner />
-            }
+            {welcomeBackInterface()}
           </div>
           <div className="mr-bg-home mr-w-1/3 mr-h-64 mr-absolute mr-right-0 mr-top-0 mr--mt-16 mr-mr-24" />
         </div>
