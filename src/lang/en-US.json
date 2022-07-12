@@ -991,7 +991,7 @@
   "Leaderboard.scoringMethod.label": "Scoring method",
   "Leaderboard.title": "Leaderboard",
   "Leaderboard.updatedDaily": "Updated every 24 hours",
-  "Leaderboard.updatedFrequently": "Updated every 15 minutes",
+  "Leaderboard.updatedFrequently": "Updated every hour",
   "Leaderboard.user.points": "Points",
   "Leaderboard.user.topChallenges": "Top Challenges",
   "Leaderboard.users.none": "No users for time period",

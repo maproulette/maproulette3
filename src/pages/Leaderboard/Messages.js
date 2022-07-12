@@ -56,7 +56,7 @@ export default defineMessages({
 
   updatedFrequently: {
     id: "Leaderboard.updatedFrequently",
-    defaultMessage: "Updated every 15 minutes",
+    defaultMessage: "Updated every hour",
   },
 
   updatedDaily: {
