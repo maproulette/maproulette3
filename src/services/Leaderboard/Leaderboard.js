@@ -32,7 +32,6 @@ export const leaderboardCache = {
     if (cachedData) {
       const parsed = JSON.parse(cachedData);
       const currentTime = Date.now();
-      console.log(currentTime, parsed.date + CACHE_TIME, typeof parsed.date)
       if (currentTime < parsed.date + CACHE_TIME) {
         return JSON.parse(cachedData)?.data;
       }
