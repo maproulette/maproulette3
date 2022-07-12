@@ -1475,6 +1475,7 @@
   "TaskHistory.controls.listByTime.label": "Entries",
   "TaskHistory.controls.listByUser.label": "Contributors",
   "TaskHistory.controls.viewAttic.label": "View Attic",
+  "TaskHistory.errorTags.label": "Error Tags",
   "TaskHistory.fields.startedOn.label": "Started on task",
   "TaskHistory.fields.taskUpdated.label": "Task updated by challenge manager",
   "TaskHistory.fields.userType.mapper": "Mapper",
