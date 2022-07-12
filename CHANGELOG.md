@@ -7,6 +7,26 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.9.1] - 2022-07-12
+
+### Features
+- create retention for last selected layout
+- Added 1 hour leaderboard caching
+
+### Fixes
+- prevent negative review time values (API)
+
+### System Updates
+- Document build/run approach using docker
+- Update browserslist
+- Remove references to end-of-life'd node 12
+- add codecov to CI
+- Auto-fix unused imports using 'sbt scalafixAll' (API)
+- Fail the build if there are unused imports (API)
+- Update many runtime dependencies (API)
+- Jacoco analysis of unit tests (API)
+- Run sbt tests and dependencyTree during CI (API)
+
 ## [v3.9.0] - 2022-06-14
 
 ### Added
