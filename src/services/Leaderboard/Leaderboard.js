@@ -2,6 +2,7 @@ import { defaultRoutes as api } from '../Server/Server'
 import _isArray from 'lodash/isArray'
 import Endpoint from '../Server/Endpoint'
 import startOfMonth from 'date-fns/start_of_month'
+import endOfDay from 'date-fns/end_of_day'
 import { CHALLENGE_INCLUDE_LOCAL } from '../Challenge/Challenge'
 
 // Default leaderboard count
@@ -19,15 +20,46 @@ export const USER_TYPE_MAPPER = "mapper"
 // User Type 'reviewer'
 export const USER_TYPE_REVIEWER = "reviewer"
 
+// one hour
+const CACHE_TIME = 60 * 60 * 1000;
+const GLOBAL_LEADERBOARD = "users";
+const USER_LEADERBOARD = "user";
+
+const leaderboardCache = {
+  get: (params, type) => {
+    const cachedData = localStorage.getItem(`${type}::${JSON.stringify(params)}`);
+
+    if (cachedData) {
+      const parsed = JSON.parse(cachedData);
+      const currentTime = Date.now();
+      console.log(currentTime, parsed.date + CACHE_TIME, typeof parsed.date)
+      if (currentTime < parsed.date + CACHE_TIME) {
+        return JSON.parse(cachedData)?.data;
+      }
+    }
+
+    return false;
+  },
+
+  set: (params, data, type) => {
+    const obj = JSON.stringify({
+      date: Date.now(),
+      data
+    })
+
+    localStorage.setItem(`${type}::${JSON.stringify(params)}`, obj)
+  }
+}
+
 /**
  * Retrieve leaderboard data from the server for the given date range and
  * filters, returning a Promise that resolves to the leaderboard data. Note
  * that leaderboard data is *not* stored in the redux store.
  */
-export const fetchLeaderboard = function(numberMonths=null, onlyEnabled=true,
+export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
                                          forProjects=null, forChallenges=null,
                                          forUsers=null, forCountries=null,
-                                         limit=10, startDate=null, endDate=null) {
+                                         limit=10, startDate=null, endDate=null) => {
   const params = {
     limit,
     onlyEnabled
@@ -36,7 +68,17 @@ export const fetchLeaderboard = function(numberMonths=null, onlyEnabled=true,
   initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
                               forUsers, forCountries, startDate, endDate)
 
-  return new Endpoint(api.users.leaderboard, {params}).execute()
+  const cachedLeaderboard = leaderboardCache.get(params, GLOBAL_LEADERBOARD);
+
+  if (cachedLeaderboard) {
+    return cachedLeaderboard;
+  }
+
+  const results = await new Endpoint(api.users.leaderboard, {params}).execute()
+
+  leaderboardCache.set(params, results, GLOBAL_LEADERBOARD)
+
+  return results
 }
 
 /**
@@ -44,10 +86,10 @@ export const fetchLeaderboard = function(numberMonths=null, onlyEnabled=true,
  * filters, returning a Promise that resolves to the leaderboard data. Note
  * that leaderboard data is *not* stored in the redux store.
  */
-export const fetchLeaderboardForUser = function(userId, bracket=0, numberMonths=1,
+export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
                                          onlyEnabled=true, forProjects=null, forChallenges=null,
                                          forUsers=null, forCountries=null, startDate=null,
-                                         endDate=null) {
+                                         endDate=null) => {
   const params = {
     bracket,
     onlyEnabled
@@ -55,7 +97,17 @@ export const fetchLeaderboardForUser = function(userId, bracket=0, numberMonths=
   initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
                               null, forCountries, startDate, endDate)
 
-  return new Endpoint(api.users.userLeaderboard, {variables: {id: userId}, params}).execute()
+  const cachedLeaderboard = leaderboardCache.get(params, USER_LEADERBOARD);
+
+  if (cachedLeaderboard) {
+    return cachedLeaderboard;
+  }
+
+  const results = await new Endpoint(api.users.userLeaderboard, {variables: {id: userId}, params}).execute()
+
+  leaderboardCache.set(params, results, USER_LEADERBOARD)
+
+  return results;
 }
 
 /**
@@ -85,7 +137,7 @@ const initializeLeaderboardParams = function (params, numberMonths,
                                               startDate, endDate) {
   if (numberMonths === CURRENT_MONTH) {
     params.start = startOfMonth(new Date()).toISOString()
-    params.end = new Date().toISOString()
+    params.end = endOfDay(new Date()).toISOString()
   }
   else if (numberMonths === CUSTOM_RANGE && startDate && endDate) {
     params.start = new Date(startDate).toISOString()
