@@ -76,7 +76,9 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
 
   const results = await new Endpoint(api.users.leaderboard, {params}).execute()
 
-  leaderboardCache.set(params, results, GLOBAL_LEADERBOARD)
+  if (results) {
+    leaderboardCache.set(params, results, GLOBAL_LEADERBOARD)
+  }
 
   return results
 }
@@ -108,7 +110,9 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
 
   const results = await new Endpoint(api.users.userLeaderboard, {variables: {id: userId}, params}).execute()
 
-  leaderboardCache.set(params, results, USER_LEADERBOARD)
+  if (results) {
+    leaderboardCache.set(params, results, USER_LEADERBOARD)
+  }
 
   return results;
 }
