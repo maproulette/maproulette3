@@ -1,5 +1,4 @@
 import {
-  leaderboardCache,
   fetchLeaderboard, 
   initializeLeaderboardParams, 
   fetchReviewerLeaderboard, 
