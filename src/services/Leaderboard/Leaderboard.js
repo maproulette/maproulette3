@@ -25,7 +25,7 @@ const CACHE_TIME = 60 * 60 * 1000;
 const GLOBAL_LEADERBOARD = "users";
 const USER_LEADERBOARD = "user";
 
-const leaderboardCache = {
+export const leaderboardCache = {
   get: (params, type) => {
     const cachedData = localStorage.getItem(`${type}::${JSON.stringify(params)}`);
 
@@ -99,6 +99,9 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
 
   const cachedLeaderboard = leaderboardCache.get(params, USER_LEADERBOARD);
 
+  console.log(params, numberMonths, forProjects, forChallenges,
+    null, forCountries, startDate, endDate)
+
   if (cachedLeaderboard) {
     return cachedLeaderboard;
   }
@@ -131,7 +134,7 @@ export const fetchReviewerLeaderboard = function(numberMonths=null, onlyEnabled=
 }
 
 
-const initializeLeaderboardParams = function (params, numberMonths,
+export const initializeLeaderboardParams = function (params, numberMonths,
                                               forProjects, forChallenges,
                                               forUsers, forCountries,
                                               startDate, endDate) {
