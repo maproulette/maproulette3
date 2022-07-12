@@ -100,9 +100,6 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
 
   const cachedLeaderboard = leaderboardCache.get(params, USER_LEADERBOARD);
 
-  console.log(params, numberMonths, forProjects, forChallenges,
-    null, forCountries, startDate, endDate)
-
   if (cachedLeaderboard) {
     return cachedLeaderboard;
   }
