@@ -33,7 +33,7 @@ export class ChallengeFilterSubnav extends Component {
 
   render() {
     const filtersActive =
-      this.props.unfilteredChallenges.length > this.props.challenges.length
+      this.props.unfilteredChallenges?.length > this.props.challenges?.length
 
     return (
       <header className="mr-bg-black-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-hidden lg:mr-flex mr-items-center mr-justify-between">
