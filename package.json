@@ -45,7 +45,7 @@
     "leaflet-vectoricon": "https://github.com/nrotstan/Leaflet.VectorIcon.git#honor-existing-margin-styles",
     "leaflet.markercluster": "^1.4.1",
     "mapillary-js": "^4.1.0",
-    "node-sass": "4.14.1",
+    "node-sass": "7.0.0",
     "normalize.css": "^7.0.0",
     "normalizr": "^3.6.0",
     "parse-link-header": "^2.0.0",
