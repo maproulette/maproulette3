@@ -3,7 +3,7 @@ import * as React from "react";
 import { App } from "./App";
 
 describe("App", () => {
-  it("renders", () => {
+  it("renders MapRoulette landing page and slogan", () => {
     const { getByText } = global.withProvider(
       <App />
     );
