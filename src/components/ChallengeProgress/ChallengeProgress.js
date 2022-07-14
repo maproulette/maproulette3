@@ -70,7 +70,7 @@ export class ChallengeProgress extends Component {
     return Math.round(value / total * 100)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     // Only re-render if the challenge or actions changed
     if (!_isEqual(nextProps.taskMetrics, this.props.taskMetrics)) {
       return true
@@ -284,7 +284,7 @@ export class ChallengeProgress extends Component {
     const completionData = this.calculateCompletionData(taskActions, availableLabel, localizedStatuses)
     const challengeStats = this.calculateChallengeStats(taskActions, orderedStatuses, localizedStatuses)
 
-    const prioritizedCompletionProgress = _map(TaskPriority, (priority, key) => {
+    const prioritizedCompletionProgress = _map(TaskPriority, (priority) => {
       if (taskPriorityActions && taskPriorityActions[priority]) {
         const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
         const pActions = taskPriorityActions[priority]
@@ -327,7 +327,7 @@ export class ChallengeProgress extends Component {
               "mr-cursor-pointer mr-flex mr-items-center mr-mt-4",
               this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"
             )}
-            onClick={(e) => this.props.setShowByPriority(!this.props.showByPriority)}
+            onClick={() => this.props.setShowByPriority(!this.props.showByPriority)}
           >
             <span className="mr-align-top">
               <FormattedMessage {...messages.byPriorityToggle} />

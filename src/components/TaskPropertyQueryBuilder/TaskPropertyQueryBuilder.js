@@ -103,7 +103,7 @@ export class TaskPropertyQueryBuilder extends Component {
   }
 
   /** Receive errors from form validation */
-  errorHandler = (errors, err, formData) => {
+  errorHandler = () => {
   }
 
   finish = (e) => {
@@ -139,7 +139,7 @@ export class TaskPropertyQueryBuilder extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     // Clear form data if filters.taskPropertyQuery has been cleared.
     if (_isEmpty(this.props.taskPropertyQuery) &&
         !_isEmpty(this.state.preparedData)) {

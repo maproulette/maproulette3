@@ -149,7 +149,6 @@ const DurationButton = function(props) {
 const ListDurationItems = function(props) {
   const menuItems = _map(props.pastMonthsOptions, months => (
     <li key={months}>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.pickDuration(months, props.closeDropdown)}>
         {months > CURRENT_MONTH  && <FormattedMessage {...messages.pastMonthsOption} values={{months}} />}
         {months === CURRENT_MONTH  && <FormattedMessage {...messages.currentMonthOption} />}

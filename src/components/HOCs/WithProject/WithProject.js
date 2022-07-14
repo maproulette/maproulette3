@@ -33,7 +33,7 @@ const WithProject = function(WrappedComponent, options={}) {
     currentProjectId = props =>
       parseInt(_get(props, 'match.params.projectId'), 10)
 
-    challengeProjects = (projectId, props) => {
+    challengeProjects = (projectId) => {
       const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
       return _filter(allChallenges, (challenge) => {
           const matchingVP =

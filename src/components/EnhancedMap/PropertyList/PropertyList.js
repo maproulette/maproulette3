@@ -20,7 +20,6 @@ const PropertyList = props => {
   const tagInfo = process.env.REACT_APP_TAGINFO_SERVER_URL
   const header = (
     <h3 className="mr-flex mr-items-center">
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       {props.onBack && <a onClick={props.onBack} className="mr-mr-4">
           <SvgSymbol
             sym="icon-cheveron-left"

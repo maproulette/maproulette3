@@ -86,7 +86,7 @@ const TeamCards = props => {
                   />
                 </button>
               )}
-              dropdownContent={dropdown =>
+              dropdownContent={() =>
                 <TeamControls {...props} teamMember={AsTeamMember(teamUser)} suppressView />
               }
             />
@@ -110,7 +110,6 @@ const TeamList = props => {
     return (
       <li key={teamMember.team.id} className="mr-h-5 mr-my-2">
         <div className="mr-flex mr-justify-between">
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => props.viewTeam(teamMember.team)}>
             {teamMember.team.name}
           </a>
@@ -135,7 +134,7 @@ const TeamList = props => {
                     />
                   </button>
                 )}
-                dropdownContent={dropdown =>
+                dropdownContent={() =>
                   <TeamControls {...props} teamMember={teamMember} />
                 }
               />

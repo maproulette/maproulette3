@@ -80,7 +80,7 @@ export class LocationSearchBox extends Component {
               toggleVisible
               isVisible
               dropdownButton={() => null}
-              dropdownContent={dropdown =>
+              dropdownContent={() =>
                <React.Fragment>
                  <div className="mr-text-right">
                    <button

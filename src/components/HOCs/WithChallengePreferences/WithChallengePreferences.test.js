@@ -1,4 +1,3 @@
-import { denormalize } from 'normalizr'
 import { mapStateToProps,
          mapDispatchToProps } from './WithChallengePreferences'
 import { TaskLoadMethod }

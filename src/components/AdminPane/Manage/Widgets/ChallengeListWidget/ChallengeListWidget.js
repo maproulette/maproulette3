@@ -64,7 +64,7 @@ const ChallengeSearch = WithSearch(
 )
 
 export default class ChallengeListWidget extends Component {
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     if (this.props.challenges && !this.props.talliedChallenges(this.props.project.id)) {
       this.props.updateTallyMarks(this.props.project.id, _map(this.props.challenges, (c) => c.id))
     }

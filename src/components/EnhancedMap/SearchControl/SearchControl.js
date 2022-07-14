@@ -28,7 +28,7 @@ export class SearchControl extends MapControl {
  * the control content when the control is added to the map
  */
 const SearchLeafletControl = L.Control.extend({
-  onAdd: function(map) {
+  onAdd: function() {
     const controlContainer = L.DomUtil.create('div')
     ReactDOM.render(ControlContent(this.options), controlContainer)
     return controlContainer

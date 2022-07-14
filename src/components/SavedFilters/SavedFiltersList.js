@@ -21,7 +21,6 @@ export default class SavedFiltersList extends Component {
 
       return (
         <li key={search + "-" + index}>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => {
               this.props.history.push({
                 pathname: this.props.history.location.pathname,

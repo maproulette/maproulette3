@@ -77,7 +77,7 @@ export class CardChallenge extends Component {
                />
              </button>
            )}
-           dropdownContent={dropdown => (
+           dropdownContent={() => (
              <div className="mr-w-96 mr-max-w-screen60 mr-whitespace-normal">
                {this.props.info}
              </div>

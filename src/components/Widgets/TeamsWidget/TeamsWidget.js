@@ -52,7 +52,6 @@ const TeamsWidget = props => {
     widgetTitle = messages.viewTeamTitle
     headerControls = (
       <div className="mr-links-green-lighter">
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="mr-mb-4" onClick={() => setViewingTeam(null)}>
           &larr; <FormattedMessage {...messages.myTeamsLabel} />
         </a>
@@ -84,7 +83,7 @@ const TeamsWidget = props => {
             />
           </button>
         )}
-        dropdownContent={(dropdown) => (
+        dropdownContent={() => (
           <ul className="mr-list-dropdown">
             <li>
               <button

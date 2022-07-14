@@ -95,6 +95,7 @@ export const prunePresetCategories = (challengeData, activeCategories) => {
 export const categorizePresetStrings = presetStrings => {
   const categorized = {}
   _each(presetStrings, preset => {
+    // eslint-disable-next-line no-unused-vars
     const parentCategory = _find(_toPairs(idPresets), ([categoryName, category]) => {
       return category.members.indexOf(preset) !== -1
     })

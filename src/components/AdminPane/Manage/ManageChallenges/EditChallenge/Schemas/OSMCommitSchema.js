@@ -20,8 +20,6 @@ export const jsSchema = (
   intl,
   user,
   challengeData,
-  extraErrors,
-  options = {}
 ) => {
   const properties = {
     checkinComment: {

@@ -93,7 +93,7 @@ export default class TaskCompletionStep1 extends Component {
                     <FormattedMessage {...messages.changeStatusOptions} /> :
                     <FormattedMessage {...messages.otherOptions} /> } />
              }
-             dropdownContent={dropdown =>
+             dropdownContent={() =>
                <ListMoreOptionsItems {...this.props} />
              }
            />

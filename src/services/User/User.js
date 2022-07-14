@@ -431,7 +431,7 @@ export const markNotificationsRead = function(userId, notificationIds) {
     return new Endpoint(api.user.markNotificationsRead, {
       variables: {userId},
       params: {notificationIds: notificationIds.join(',')},
-    }).execute().then(response => {
+    }).execute().then(() => {
       return fetchUserNotifications(userId)(dispatch)
     })
   }
@@ -445,7 +445,7 @@ export const deleteNotifications = function(userId, notificationIds) {
     return new Endpoint(api.user.deleteNotifications, {
       variables: {userId},
       params: {notificationIds: notificationIds.join(',')},
-    }).execute().then(response => {
+    }).execute().then(() => {
       return fetchUserNotifications(userId)(dispatch)
     })
   }
@@ -454,7 +454,7 @@ export const deleteNotifications = function(userId, notificationIds) {
 /**
  * Fetch the user's recent activity.
  */
-export const fetchUserActivity = function(userId, limit=50) {
+export const fetchUserActivity = function(userId) {
   return function(dispatch) {
     return new Endpoint(
       api.user.activity
@@ -507,7 +507,7 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
       return null
     }
 
-    return fetchUser(userId)(dispatch).then(normalizedUsers => {
+    return fetchUser(userId)(dispatch).then(() => {
       fetchSavedChallenges(userId, savedChallengesLimit)(dispatch)
       fetchTopChallenges(userId)(dispatch)
       fetchSavedTasks(userId, savedTasksLimit)(dispatch)

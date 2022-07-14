@@ -76,7 +76,7 @@ export const nextMapillaryPage = async function(resultContext) {
  * Generates a Mapillary URL for a specific image based on the given image key
  * and desired size. Acceptable image sizes are 320, 640, 1024, and 2048
  */
-export const mapillaryImageUrl = function(imageId, size='320') {
+export const mapillaryImageUrl = function(imageId) {
   return `${EMBED_URI_V4}?image_key=${imageId}`
 }
 

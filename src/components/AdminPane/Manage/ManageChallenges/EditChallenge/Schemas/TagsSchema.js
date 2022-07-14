@@ -15,7 +15,7 @@ const STEP_ID = "Tags"
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const jsSchema = (intl) => {
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",

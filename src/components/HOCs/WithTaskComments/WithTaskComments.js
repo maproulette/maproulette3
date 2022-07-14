@@ -29,7 +29,7 @@ export const mapStateToProps = (state, ownProps) => {
   return mappedProps
 }
 
-export const mapDispatchToProps = (dispatch, ownProps) => {
+export const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     fetchTaskComments,
     addTaskComment

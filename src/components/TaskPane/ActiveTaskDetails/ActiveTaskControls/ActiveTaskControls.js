@@ -190,7 +190,7 @@ export class ActiveTaskControls extends Component {
                         this.state.requestedNextTask)
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       return this.resetConfirmation()
     }

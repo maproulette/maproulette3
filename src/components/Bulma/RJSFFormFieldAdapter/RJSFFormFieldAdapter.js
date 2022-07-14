@@ -319,7 +319,7 @@ export const TagsInputField = props => {
  * `"ui:widget": DropzoneTextUpload`). The form field should be of type string,
  * and it will be set with the text content of the uploaded file.
  */
-export const DropzoneTextUpload = ({id, required, onChange, readonly, formContext, dropAreaClassName}) => {
+export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAreaClassName}) => {
   if (readonly) {
     return (
       <div className="readonly-file mr-text-pink">
@@ -338,7 +338,7 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
         onChange(files[0].name)
       }}
     >
-      {({acceptedFiles, getRootProps, getInputProps, ...params}) => {
+      {({acceptedFiles, getRootProps, getInputProps}) => {
         const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}</p> : (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
@@ -418,7 +418,7 @@ export const LabelWithHelp = props => {
              />
            </button>
          )}
-         dropdownContent={dropdown => (
+         dropdownContent={() => (
            <div className="mr-w-96 mr-max-w-screen60 mr-whitespace-normal">
              <MarkdownContent markdown={normalizedHelp} lightMode={false} />
            </div>

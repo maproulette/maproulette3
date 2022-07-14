@@ -1044,7 +1044,7 @@ export const uploadChallengeGeoJSON = function (
   removeUnmatchedTasks = false,
   dataOriginDate
 ) {
-  return function (dispatch) {
+  return function () {
     // Server expects the file in a form part named "json"
     const formData = new FormData();
     formData.append(

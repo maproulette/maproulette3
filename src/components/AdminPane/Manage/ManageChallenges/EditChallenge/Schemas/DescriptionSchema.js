@@ -18,7 +18,7 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const jsSchema = (intl) => {
   const localizedKeywordLabels = keywordLabels(intl)
 
   const schemaFields = {

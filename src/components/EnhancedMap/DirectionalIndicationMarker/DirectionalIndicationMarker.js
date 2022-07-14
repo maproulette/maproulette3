@@ -44,7 +44,7 @@ DirectionalIndicationMarker.propTypes = {
   atMidpoint: PropTypes.bool,
 }
 
-export const createDirectionalIndicatorIcon = function(heading, styles={}) {
+export const createDirectionalIndicatorIcon = function(heading) {
   const icon = L.vectorIcon({
     className: 'directional-marker-icon',
     viewBox: '0 0 20 20',

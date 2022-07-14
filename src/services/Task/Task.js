@@ -240,7 +240,7 @@ export const startTask = function(taskId) {
       variables: {id: taskId}
     }).execute().catch(error => {
       if (isSecurityError(error)) {
-        dispatch(ensureUserLoggedIn()).catch(err => null)
+        dispatch(ensureUserLoggedIn()).catch(() => null)
       }
       throw error
     })
@@ -262,7 +262,7 @@ export const releaseTask = function(taskId) {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
-        ).catch(err => null)
+        ).catch(() => null)
       }
       else {
         dispatch(addError(AppErrors.task.lockReleaseFailure))
@@ -276,7 +276,7 @@ export const releaseTask = function(taskId) {
  * Refreshes an active task lock owned by the current user
  */
 export const refreshTaskLock = function(taskId) {
-  return function(dispatch) {
+  return function() {
     return new Endpoint(api.task.refreshLock, {
       schema: taskSchema(),
       variables: {id: taskId}
@@ -321,7 +321,7 @@ export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
 
     return new Endpoint(
       api.tasks.bulkUpdate, {json: taskData}
-    ).execute().then(results => {
+    ).execute().then(() => {
       // Clear all tasks in challenge since we don't know exactly which tasks
       // are impacted by these changes (as bundling could be affected)
       if (taskData.length > 0) {
@@ -362,7 +362,7 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, e
         json: filters.taskPropertySearch ?
           {taskPropertySearch: filters.taskPropertySearch} : null,
       }
-    ).execute().then( results => {
+    ).execute().then(() => {
       dispatch(clearTasks(challengeId))
     }).catch(error => {
       if (isSecurityError(error)) {
@@ -643,7 +643,7 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
  * to the redux store, but simply returns them
  */
 export const fetchNearbyTasks = function(challengeId, isVirtualChallenge, taskId, excludeSelfLocked=false, limit=5) {
-  return function(dispatch) {
+  return function() {
     const params = {limit}
     if (excludeSelfLocked) {
       params.excludeSelfLocked = 'true'
@@ -750,7 +750,7 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
  */
 const updateBundledTasksStatus = function(dispatch, bundleId, primaryTaskId,
                                           newStatus, requestReview = null, tags = null,
-                                          cooperativeWorkSummary = null, osmComment = null,
+                                          cooperativeWorkSummary = null, osmComment,
                                           completionResponses = null) {
   if (cooperativeWorkSummary) {
     throw new Error("Cooperative tasks cannot be updated as a bundle at this time")

@@ -140,7 +140,7 @@ export class LayerToggle extends Component {
                     >
                       {_map(overlays, (overlay, index) => (
                         <Draggable key={overlay.id} draggableId={overlay.id} index={index}>
-                          {(provided, snapshot) => (
+                          {(provided) => (
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}

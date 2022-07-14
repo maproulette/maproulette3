@@ -67,7 +67,6 @@ export default class ProjectListWidget extends Component {
   }
 
   viewControl = (view, icon) => (
-    /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
     <a onClick={() => this.setView(view)}>
       <SvgSymbol
         sym={icon ? icon : `${view}-icon`}

@@ -28,7 +28,7 @@ export default class BurndownChartWidget extends Component {
         content = <BusySpinner />
       }
       else if (this.props.challengeLimitExceeded) {
-        content = <div classname="mr-text-red">Sorry, project statistics are not available for projects with more than {PROJECT_CHALLENGE_LIMIT} challenges.</div>
+        content = <div className="mr-text-red">Sorry, project statistics are not available for projects with more than {PROJECT_CHALLENGE_LIMIT} challenges.</div>
       }
       else if (!this.props.challengeStatsAvailable) {
         content = (
