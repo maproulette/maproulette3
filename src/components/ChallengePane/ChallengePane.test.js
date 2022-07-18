@@ -3,7 +3,7 @@ import * as React from "react";
 import { ChallengePane } from "./ChallengePane";
 
 describe("ChallengePane", () => {
-  it("renders MapRoulette landing page and slogan", () => {
+  it("renders page with Sortby component", () => {
     const { getByText } = global.withProvider(
       <ChallengePane
         setSearchFilters={() => null}
