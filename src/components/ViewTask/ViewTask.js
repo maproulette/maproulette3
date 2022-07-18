@@ -8,7 +8,6 @@ import _get from 'lodash/get'
 
 SyntaxHighlighter.registerLanguage('json', jsonLang)
 
-console.log(highlightColors);
 highlightColors.hljs.background="rgba(0, 0, 0, 0.15)"
 
 export default class ViewTask extends Component {

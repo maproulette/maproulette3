@@ -40,3 +40,37 @@ global.withProvider = (
   }
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 };
+
+jest.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
+  __esModule: true,
+}));
+
+jest.mock('@rjsf/core/lib/components/widgets/TextWidget', () => ({
+  __esModule: true,
+}));
+
+jest.mock('react-syntax-highlighter/dist/esm/languages/hljs/json', () => ({
+  __esModule: true,
+}));
+
+jest.mock('react-syntax-highlighter/dist/esm/styles/hljs/agate', () => ({
+  __esModule: true,
+  default: {
+    hljs: {
+      background: ""
+    }
+  }
+}));
+
+jest.mock('react-syntax-highlighter', () => ({
+  Light: {
+    registerLanguage: () => null
+  }
+}))
+
+jest.mock('react-syntax-highlighter/dist/esm/languages/hljs/xml', () => ({
+  __esModule: true,
+  default: {
+    xmlLang: ""
+  }
+}));
