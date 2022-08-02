@@ -7,6 +7,20 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.9.2] - 2022-08-09
+
+### Features
+- Add capability to mass delete challenges from projects
+
+### Fixes
+- Add flex wrap to tags input fields 
+- Resolve project missing metrics if some challenges are hidden
+
+### System Updates
+- Upgrade React Scripts; Remove unused variables; Add global jest mock functions for incompatible npm libraries; increase unit test coverage
+- Remove node-sass and bulma from the project in favor of dart-sass and tailwind
+- Set thread pool sizes for akka default-dispatcher and hikaricp db (API)
+
 ## [v3.9.1] - 2022-07-12
 
 ### Features
