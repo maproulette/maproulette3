@@ -184,12 +184,8 @@ Unit tests are built with [Jest](https://facebook.github.io/jest/) +
 
 ## CSS Styling and Naming
 
-We are currently in transition between the old styling that used the
-[Bulma](https://bulma.io) framework with SASS and new styling using [Tailwind
-CSS](https://tailwindcss.com) with PostCSS. New CSS classes are prefixed with
-`mr-` to distinguish them from any existing Bulma classes, but during this
-transition there are still situations where a mix of both Tailwind and Bulma
-are in play.
+We are using SASS and [Tailwind
+CSS](https://tailwindcss.com) with PostCSS.
 
 Tailwind configuration is controlled with the `src/tailwind.config.js` file.
 New CSS classes can be found in `src/styles/`

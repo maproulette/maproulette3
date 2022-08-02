@@ -24,13 +24,11 @@
 
   &.is-loading {
     &:enabled:focus:after {
-      // Change spinner color. Bulma css has !important so we have to as well.
       border-color: transparent transparent $background-color $background-color !important;
     }
   }
 }
 
-// Supplements arrow() from Bulma. You must still mixin arrow() as well.
 @mixin dropdown-arrow($size: 10px) {
   height: $size;
   width: $size;

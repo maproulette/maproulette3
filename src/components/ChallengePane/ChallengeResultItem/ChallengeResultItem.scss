@@ -115,7 +115,7 @@
       align-items: flex-end;
 
       .icon {
-        @include arrow($minimizer-arrow-color);
+        //@include arrow($minimizer-arrow-color);
         @include dropdown-arrow();
       }
     }

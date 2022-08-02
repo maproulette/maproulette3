@@ -18,7 +18,7 @@ import '../ActivityTimeline.scss'
 
 /**
  * ChallengeActivityTimeline displays recent challenge activity from the given
- * challenge in the form of a Bulma timeline, with the most recent activity
+ * challenge, with the most recent activity
  * shown at the top. Activity is grouped together by day.
  *
  * @see https://wikiki.github.io/components/timeline/
@@ -52,24 +52,21 @@ export class ChallengeActivityTimeline extends Component {
         }
 
         return (
-          <p key={`${isoDate}-${entry.status}`}
-             className="timeline-item__activity-entry">
-            <span className={classNames("badge", {inverted: this.props.invertBadges})}
-                  data-badge={entry.count}>
-              {localizedStatusLabels[keysByStatus[entry.status]]}
-            </span>
-          </p>
+          <li key={`${isoDate}-${entry.status}`}>
+             <span className="mr-badge">{entry.count}</span> {localizedStatusLabels[keysByStatus[entry.status]]}
+          </li>
         )
       }))
 
       return statuses.length === 0 ? null : (
-        <div key={isoDate} className="timeline-item">
-          <div className="timeline-marker"></div>
-          <div className="timeline-content">
-            <p className="heading">{formattedDate}</p>
+        <li key={isoDate} className="mr-timeline__period">
+          <h3 className="mr-timeline__header">
+            {formattedDate}
+          </h3>
+          <ol className="mr-timeline__activity">
             {statuses}
-          </div>
-        </div>
+          </ol>
+        </li>
       )
     }))
 
@@ -90,17 +87,9 @@ export class ChallengeActivityTimeline extends Component {
     }
 
     return (
-      <div className="timeline activity-timeline">
-        <header className="timeline-header">
-          <span className="tag is-medium">Latest</span>
-        </header>
-
+      <ol className="mr-timeline dark-mode">
         {timelineItems}
-
-        <div className="timeline-header">
-          <span className="tag is-medium">End</span>
-        </div>
-      </div>
+      </ol>
     )
   }
 }
