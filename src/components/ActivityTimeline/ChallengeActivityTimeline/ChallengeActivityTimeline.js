@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
-import classNames from 'classnames'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
 import _groupBy from 'lodash/groupBy'
