@@ -25,9 +25,9 @@ export class VisibilitySwitch extends Component {
 
     return (
       <div className="mr-flex mr-justify-center">
-        <label class="switch-container">
-          <input type="checkbox" checked={this.props.challenge.enabled} />
-          <span class="slider round" onClick={this.toggleVisible}></span>
+        <label className="switch-container">
+          <input type="checkbox" checked={this.props.challenge.enabled} onChange={() => null}/>
+          <span className="slider round" onClick={this.toggleVisible}></span>
         </label>
       </div>
     )

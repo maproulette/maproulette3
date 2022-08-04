@@ -77,9 +77,9 @@ export default class ProjectOverview extends Component {
                   prompt={<FormattedMessage {...messages.confirmDisablePrompt} />}
                   skipConfirmation={() => !this.props.project.enabled}
                 >
-                  <label class="switch-container" onClick={() => this.props.toggleProjectEnabled(this.props.project)}>
-                    <input type="checkbox" checked={this.props.project.enabled} disabled={!manager.canWriteProject(this.props.project)} />
-                    <span class="slider round" onClick={() => null}></span>
+                  <label className="switch-container" onClick={() => this.props.toggleProjectEnabled(this.props.project)}>
+                    <input type="checkbox" checked={this.props.project.enabled} disabled={!manager.canWriteProject(this.props.project)} onChange={() => null} />
+                    <span className="slider round" onClick={() => null}></span>
                   </label>
                 </ConfirmAction>
               </div>
