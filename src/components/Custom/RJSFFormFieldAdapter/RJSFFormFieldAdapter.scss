@@ -55,10 +55,6 @@
   }
 }
 
-
-// Customizations for react-jsonschema-form to adapt it to the Bulma
-// framework. While we try to customize the markup, rjsf customization
-// is a bit clunky and requires some fine-tuning here.
 form.rjsf {
   .array-item-remove::after {
     content: 'Remove';

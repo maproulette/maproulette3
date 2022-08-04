@@ -6,7 +6,7 @@ import _isFinite from 'lodash/isFinite'
 import './LabeledProgressBar.scss'
 
 /**
- * LabeledProgressBar displays a Bulma `progress` component, along with
+ * LabeledProgressBar displays a `progress` component, along with
  * a label and description of the value.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)

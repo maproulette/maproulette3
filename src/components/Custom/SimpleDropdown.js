@@ -7,7 +7,7 @@ import WithOptionalManagement
 import './SimpleDropdown.scss'
 
 /**
- * SimpleDropdown is an optionally self-managed component that sets up a Bulma
+ * SimpleDropdown is an optionally self-managed component that sets up a
  * dropdown containing the given children as content. If no isActive prop is
  * given, it will manage its own active state.
  *

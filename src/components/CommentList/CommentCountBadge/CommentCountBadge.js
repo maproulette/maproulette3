@@ -5,7 +5,7 @@ import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import './CommentCountBadge.scss'
 
 /**
- * CommentCountBadge renders an icon with a Bulma badge containing a count of
+ * CommentCountBadge renders an icon with a badge containing a count of
  * the comments in the given comment list.
  *
  * @see See https://wikiki.github.io/elements/badge/

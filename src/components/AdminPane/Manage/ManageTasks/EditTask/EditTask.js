@@ -32,8 +32,7 @@ import messages from './Messages'
  * EditTask provies a simple form for creating/editing a Task. We
  * make use of a json-schema standard schema that define the fields and basic
  * validation requirements, and react-jsonschema-forms library to render the
- * form from the schemas. We utilize our own field adapter to massage the form
- * markup and class names into something that is roughly Bulma-compliant.
+ * form from the schemas.
  *
  * @see See http://json-schema.org/
  * @see See https://github.com/mozilla-services/react-jsonschema-form

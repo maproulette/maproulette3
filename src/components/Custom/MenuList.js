@@ -6,7 +6,7 @@ import _get from 'lodash/get'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 
 /**
- * MenuList renders a Bulma menu-list with an interface compatible with
+ * MenuList renders a menu-list with an interface compatible with
  * NavDropdown so that components can render into a standalone drop-down or a
  * menu list depending on the situation.
  */
