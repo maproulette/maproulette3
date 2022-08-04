@@ -221,7 +221,6 @@ form.rjsf {
   }
 
   input.form-control {
-    //@extend .input;
     @include basic-form-element-styling();
   }
 
@@ -242,7 +241,6 @@ form.rjsf {
   }
 
   textarea.form-control {
-   // @extend .textarea;
     @include basic-form-element-styling();
   }
 
@@ -265,8 +263,6 @@ form.rjsf {
 
   .control .field-radio-group {
     label {
-      //@extend .radio;
-
       input {
         margin-right: 0.5em;
       }
@@ -296,7 +292,6 @@ form.rjsf {
   }
 
   .react-tagsinput {
-    //@extend .input;
     @include basic-form-element-styling();
 
     .react-tagsinput-tag {
