@@ -19,7 +19,7 @@ import { NotificationType, keysByNotificationType, messagesByNotificationType }
 import { intlTableProps } from '../../components/IntlTable/IntlTable'
 import SignInButton from '../../components/SignInButton/SignInButton'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
-import TriStateCheckbox from '../../components/Bulma/TriStateCheckbox'
+import TriStateCheckbox from '../../components/Custom/TriStateCheckbox'
 import HeaderNotifications from './HeaderNotifications'
 import Notification from './Notification'
 import { useNotificationSelection, useNotificationDisplay }

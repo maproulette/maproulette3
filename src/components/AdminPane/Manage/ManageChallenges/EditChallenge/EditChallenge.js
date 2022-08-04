@@ -33,7 +33,7 @@ import {
   MarkdownDescriptionField,
   MarkdownEditField,
   LabelWithHelp,
-} from "../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
+} from "../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import KeywordAutosuggestInput from "../../../../KeywordAutosuggestInput/KeywordAutosuggestInput";
 import BoundsSelectorModal from "../../../../BoundsSelectorModal/BoundsSelectorModal";
 import WithCurrentProject from "../../../HOCs/WithCurrentProject/WithCurrentProject";

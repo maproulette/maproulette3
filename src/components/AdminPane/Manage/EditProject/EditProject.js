@@ -8,7 +8,7 @@ import _snakeCase from "lodash/snakeCase";
 import classNames from "classnames";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { CustomSelectWidget } from "../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
+import { CustomSelectWidget } from "../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import WithManageableProjects from "../../HOCs/WithManageableProjects/WithManageableProjects";
 import WithCurrentProject from "../../HOCs/WithCurrentProject/WithCurrentProject";
 import BusySpinner from "../../../BusySpinner/BusySpinner";

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
-import SimpleDropdown from '../Bulma/SimpleDropdown'
-import Menu from '../Bulma/Menu'
+import SimpleDropdown from '../Custom/SimpleDropdown'
+import Menu from '../Custom/Menu'
 import FilterByDifficulty
        from '../ChallengePane/ChallengeFilterSubnav/FilterByDifficulty'
 import FilterByLocation

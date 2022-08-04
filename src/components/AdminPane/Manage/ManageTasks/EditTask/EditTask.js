@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom'
 import { CustomSelectWidget,
          MarkdownDescriptionField,
          MarkdownEditField }
-       from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+       from '../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import KeywordAutosuggestInput
       from '../../../../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import WithCurrentProject

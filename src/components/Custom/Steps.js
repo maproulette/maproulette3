@@ -10,7 +10,7 @@ import './Steps.scss'
  * numbers the steps from 1 based off the index of each step. An optional name
  * can be given for each step, in which case it'll be displayed as well.
  *
- * @see See https://aramvisser.github.io/bulma-steps
+ * @see See https://aramvisser.github.io/Custom-steps
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */

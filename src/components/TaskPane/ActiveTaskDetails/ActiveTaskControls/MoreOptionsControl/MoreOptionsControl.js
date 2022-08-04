@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import WithDeactivateOnOutsideClick from
        '../../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import CollapsibleSection from '../../../../CollapsibleSection/CollapsibleSection'
-import Popout from '../../../../Bulma/Popout'
+import Popout from '../../../../Custom/Popout'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 

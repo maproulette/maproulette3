@@ -5,7 +5,7 @@ import AsManageableChallenge from '../../../../interactions/Challenge/AsManageab
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
 import Modal from '../../../Modal/Modal'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
-import { DropzoneTextUpload } from '../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import { DropzoneTextUpload } from '../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import messages from './Messages'
 
 /**

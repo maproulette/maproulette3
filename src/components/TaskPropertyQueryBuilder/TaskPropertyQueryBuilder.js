@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import Form from '@rjsf/core'
 import { CustomSelectWidget }
-       from '../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+       from '../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _head from 'lodash/head'

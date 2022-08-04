@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
 import classNames from 'classnames'
-import Popout from '../Bulma/Popout'
+import Popout from '../Custom/Popout'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import WithDeactivateOnOutsideClick from
        '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
