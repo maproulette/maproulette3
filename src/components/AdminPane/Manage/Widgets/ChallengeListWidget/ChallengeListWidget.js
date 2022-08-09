@@ -20,8 +20,11 @@ import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import Dropdown from '../../../../Dropdown/Dropdown'
 import TimezonePicker from '../../../../TimezonePicker/TimezonePicker'
-import {DEFAULT_TIMEZONE_OFFSET} from '../../../../TimezonePicker/TimezonePicker'
+import { DEFAULT_TIMEZONE_OFFSET } from '../../../../TimezonePicker/TimezonePicker'
+import ProjectPickerModal from "../../ProjectPickerModal/ProjectPickerModal";
+import External from "../../../../External/External";
 import messages from './Messages'
+import ConfirmAction from '../../../../ConfirmAction/ConfirmAction'
 
 const descriptor = {
   widgetKey: 'ChallengeListWidget',
@@ -64,10 +67,32 @@ const ChallengeSearch = WithSearch(
 )
 
 export default class ChallengeListWidget extends Component {
+  state = {
+    pickingProject: false,
+    deletingChallenges: false
+  };
+
   componentDidUpdate() {
     if (this.props.challenges && !this.props.talliedChallenges(this.props.project.id)) {
       this.props.updateTallyMarks(this.props.project.id, _map(this.props.challenges, (c) => c.id))
     }
+  }
+
+  projectPickerCanceled = () => {
+    this.setState({ pickingProject: false });
+  };
+
+  moveToProject = (project, tallied) => {
+    this.setState({ pickingProject: false });
+    this.props.moveChallenges(tallied, project.id, this.props.clearTallies);
+  };
+
+  deleteChallenges = (tallied) => {
+    this.setState({ deletingChallenges: true })
+    this.props.deleteChallenges(tallied, () => {
+      this.props.clearTallies();
+      this.setState({ deletingChallenges: false })
+    });
   }
 
   setTimezone = timezoneOffset => {
@@ -86,6 +111,54 @@ export default class ChallengeListWidget extends Component {
     }
   }
 
+  renderSelectCommands = (tallied) => {
+    const archivedOn = this.props.dashboardChallengeFilters.archived;
+
+    const bulkArchive = () => {
+      this.props.bulkArchive(tallied, !archivedOn, this.props.clearTallies)
+    }
+
+    return (
+      <>
+        <li>
+          <div
+            className={classNames(
+              this.props.controlClassName,
+              "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+            )}
+            onClick={() => this.setState({ pickingProject: true })}
+          >
+             <FormattedMessage {...messages.moveSelected} />
+          </div>
+        </li>
+        <li>
+          <div
+            className={classNames(
+              this.props.controlClassName,
+              "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+            )}
+            onClick={bulkArchive}
+          >
+            {archivedOn ?  <FormattedMessage {...messages.unarchiveSelected} /> :  <FormattedMessage {...messages.archiveSelected} />}
+          </div>
+        </li>
+        <li>
+          <ConfirmAction>
+            <div
+              className={classNames(
+                this.props.controlClassName,
+                "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+              )}
+              onClick={() => this.deleteChallenges(tallied)}
+            >
+               <FormattedMessage {...messages.deleteSelected} />
+            </div>
+          </ConfirmAction>
+        </li>
+      </>
+    )
+  }
+
   render() {
     const tallied = this.props.talliedChallenges(this.props.project.id) || []
     const allEnabled = _difference(_map(this.props.challenges, c => c.id), tallied).length === 0
@@ -99,12 +172,6 @@ export default class ChallengeListWidget extends Component {
     // export mapper review CSV needs 'cid'
     const cIdReview = _isEmpty(selectedChallengeIds) ? "" : `cid=${selectedChallengeIds}`
     const pIdReview = _isEmpty(selectedChallengeIds) ? `pid=${this.props.project.id}` : ""
-
-    const archivedOn = this.props.dashboardChallengeFilters.archived;
-
-    const bulkArchive = () => {
-      this.props.bulkArchive(tallied, !archivedOn, this.props.clearTallies)
-    }
 
     const rightHeaderControls = this.props.projects.length === 0 ? null : (
       <div className="mr-flex mr-justify-end mr-items-center">
@@ -139,19 +206,7 @@ export default class ChallengeListWidget extends Component {
             )}
             dropdownContent={() =>
               <ul className="mr-list-dropdown">
-                {someEnabled && 
-                  <li>
-                    <div
-                      className={classNames(
-                        this.props.controlClassName,
-                        "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
-                      )}
-                      onClick={bulkArchive}
-                    >
-                      {archivedOn ? "Unarchive Selected" : "Archive Selected"}
-                    </div>
-                  </li>
-                }
+                {someEnabled && this.renderSelectCommands(tallied)}
                 <li className="mr-text-md mr-mb-2 mr-text-yellow">
                   <FormattedMessage {...messages.exportTitle} />
                 </li>
@@ -211,21 +266,34 @@ export default class ChallengeListWidget extends Component {
     )
 
     return (
-      <QuickWidget
-        {...this.props}
-        className=""
-        widgetTitle={<FormattedMessage {...messages.title} />}
-        headerControls={<div className="mr-my-2">{searchControl}</div>}
-        rightHeaderControls={<div className="mr-my-2">{rightHeaderControls}</div>}
-      >
-        <div className="mr-pb-32">
-          <ChallengeList
-            {...this.props}
-            challenges={this.props.challenges}
-            suppressControls
-          />
-        </div>
-      </QuickWidget>
+      <>
+        <QuickWidget
+          {...this.props}
+          className=""
+          widgetTitle={<FormattedMessage {...messages.title} />}
+          headerControls={<div className="mr-my-2">{searchControl}</div>}
+          rightHeaderControls={<div className="mr-my-2">{rightHeaderControls}</div>}
+        >
+          <div className="mr-pb-32">
+            <ChallengeList
+              {...this.props}
+              challenges={this.props.challenges}
+              suppressControls
+              loadingChallenges={this.state.deletingChallenges || this.props.loadingChallenges}
+            />
+          </div>
+        </QuickWidget>
+        {this.state.pickingProject && (
+          <External>
+            <ProjectPickerModal
+              {...this.props}
+              currentProjectId={this.props.project.id}
+              onCancel={this.projectPickerCanceled}
+              onSelectProject={(project) => this.moveToProject(project, tallied)}
+            />
+          </External>
+        )}
+      </>
     )
   }
 }
