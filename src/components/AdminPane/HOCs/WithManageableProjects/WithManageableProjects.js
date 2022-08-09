@@ -82,7 +82,7 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
       this.loadProjects()
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
       if (!_isEqual(this.getProjectFilters(this.props),
                     this.getProjectFilters(prevProps))) {
         this.loadProjects()

@@ -37,7 +37,7 @@ export default class SnapshotProgressWidget extends Component {
     this.props.updateWidgetConfiguration({showByPriority: !!showByPriority})
   }
 
-  snapshotButton = (dropdown, props) => {
+  snapshotButton = (dropdown) => {
     return (
       <button
         className="mr-dropdown__button"
@@ -68,7 +68,6 @@ export default class SnapshotProgressWidget extends Component {
   snapshotMenuItems = (dropdown, props) => {
     const menuItems = _map(props.snapshotList, snapshot => (
       <li key={snapshot.id}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={() => {
           dropdown.closeDropdown()
           this.viewSnapshot(props, snapshot)
@@ -78,7 +77,6 @@ export default class SnapshotProgressWidget extends Component {
       </li>
     )).concat(
       <li key="current">
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={() => {
           props.setSelectedSnapshot(null)
           dropdown.closeDropdown()

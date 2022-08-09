@@ -44,7 +44,7 @@ const FollowItem = props => {
                  />
                </button>
              )}
-             dropdownContent={dropdown => props.itemControls(itemUser)}
+             dropdownContent={() => props.itemControls(itemUser)}
            />
           }
         </div>

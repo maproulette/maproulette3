@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { addError, addErrorWithDetails, removeError, clearErrors }
        from '../../../services/Error/Error'
 
-export const mapStateToProps = (state, ownProps) => {
+export const mapStateToProps = (state) => {
   return ({errors: state.currentErrors})
 }
 

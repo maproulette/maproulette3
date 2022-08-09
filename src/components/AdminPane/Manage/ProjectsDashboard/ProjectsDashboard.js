@@ -55,7 +55,6 @@ export class ProjectsDashboard extends Component {
         <nav className="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li className="nav-title is-active">
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a aria-current="page">
                 <FormattedMessage {...manageMessages.manageHeader} />
               </a>

@@ -45,7 +45,6 @@ export default class TaskFixedControl extends Component {
   render() {
     if (this.props.asLink) {
       return (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a onClick={() => this.props.complete(TaskStatus.fixed)}>
           {this.props.fixedLabel ? this.props.fixedLabel :
            <FormattedMessage {...messages.fixedLabel} />

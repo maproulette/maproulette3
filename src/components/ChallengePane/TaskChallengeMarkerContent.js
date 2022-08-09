@@ -19,7 +19,6 @@ class TaskChallengeMarkerContent extends Component {
     return (
       <div className="marker-popup-content">
         <h3>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => this.props.history.push(
             `/browse/challenges/${challengeId}`
           )}>
@@ -29,7 +28,6 @@ class TaskChallengeMarkerContent extends Component {
 
         <div className="marker-popup-content__links">
           <div>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => {
               this.props.startChallengeWithTask(
                 challengeId,

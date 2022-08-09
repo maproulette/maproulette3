@@ -121,7 +121,7 @@ export default class AdjustFiltersOverlay extends Component {
         </button>
 
         {currentFilters.challenge !== challengeName &&
-          <button onClick={event => this.props.filterChange('challenge', challengeName)}
+          <button onClick={() => this.props.filterChange('challenge', challengeName)}
                   className="mr-text-green-lighter hover:mr-text-white mr-text-xs mr-pt-1 mr-ml-32 mr-block">
             <FormattedMessage {...messages.useChallengeLabel} />
           </button>

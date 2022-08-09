@@ -164,7 +164,6 @@ export default class ChallengeControls extends Component {
             </Link>
 
             {manager.canAdministrateProject(parent) && (
-              // eslint-disable-next-line jsx-a11y/anchor-is-valid
               <a
                 onClick={() => this.setState({ pickingProject: true })}
                 className={this.props.controlClassName}
@@ -209,7 +208,6 @@ export default class ChallengeControls extends Component {
                   </React.Fragment>
                 }
               >
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                   onClick={() => this.deleteChallenge(parent)}
                   className={this.props.controlClassName}
@@ -220,7 +218,6 @@ export default class ChallengeControls extends Component {
             )}
             {manager.canAdministrateProject(parent) && !isArchived ? (
               <>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                   onClick={() => this.archiveChallenge(parent)}
                   className={this.props.controlClassName}
@@ -233,7 +230,7 @@ export default class ChallengeControls extends Component {
               <>
                 {disableUnarchive ? (
                   <>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+  
                     <a
                       onClick={() => null}
                       style={{ color: "grey", cursor: "default" }}
@@ -243,7 +240,7 @@ export default class ChallengeControls extends Component {
                   </>
                 ) : (
                   <>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+  
                     <a
                       onClick={() => this.unarchiveChallenge(parent)}
                       className={this.props.controlClassName}

@@ -31,13 +31,13 @@ export default class ConfigureColumnsModal extends Component {
     this.props.onClose()
   }
 
-  buildDraggableColumnList(provided) {
+  buildDraggableColumnList() {
     let index = -1
     return _map(this.props.addedColumns, (column, key) => {
         index += 1
         return (
           <Draggable key={`added-${key}`} draggableId={key} index={index}>
-            {(provided, snapshot) => (
+            {(provided) => (
               <div
                  ref={provided.innerRef}
                  {...provided.draggableProps}
@@ -118,7 +118,7 @@ export default class ConfigureColumnsModal extends Component {
                   <div className="mr-card-widget__content">
                   <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="added-column-droppable">
-                    {(provided, snapshot) => (
+                    {(provided) => (
                       <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}

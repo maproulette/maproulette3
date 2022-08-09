@@ -16,7 +16,6 @@ export default class TaskRevisedControl extends Component {
   render() {
     if (this.props.asLink) {
       return (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a onClick={() => this.props.complete(TaskReviewStatus.needed)}>
           <FormattedMessage {...messages.revisedLabel} />
         </a>
@@ -29,7 +28,7 @@ export default class TaskRevisedControl extends Component {
           dropdownButton={dropdown =>
             <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} {...this.props}/>
           }
-          dropdownContent={dropdown =>
+          dropdownContent={() =>
             <ListMoreOptionsItems {...this.props} />
           }
         />
@@ -53,7 +52,6 @@ const ListMoreOptionsItems = function(props) {
   return (
     <ol className="mr-list-dropdown">
      <li>
-       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
        <a className=""
          onClick={() => props.complete(props.task.status, TaskReviewStatus.needed)}
        >
@@ -61,7 +59,6 @@ const ListMoreOptionsItems = function(props) {
        </a>
      </li>
      <li>
-       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
        <a className=""
          onClick={() => props.complete(props.task.status, TaskReviewStatus.disputed)}
        >

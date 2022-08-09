@@ -66,7 +66,7 @@ export class TaskConfirmationModal extends Component {
     }
   }
 
-  componentDidMount(prevProps, prevState) {
+  componentDidMount() {
     if (this.commentInputRef.current) {
       this.commentInputRef.current.focus()
     }

@@ -138,7 +138,7 @@ const Inbox = props => {
           multiSort={false}
           noDataText={<FormattedMessage {...messages.noNotifications} />}
           loading={props.notificationsLoading}
-          getTrProps={(state, rowInfo, column) => {
+          getTrProps={(state, rowInfo) => {
             const styles = {}
             if (!_get(rowInfo, 'row._original.isRead', false)) {
               styles.fontWeight = 700
@@ -147,7 +147,7 @@ const Inbox = props => {
           }}
           {...intlTableProps(props.intl)}
         >
-          {(state, makeTable, instance) => {
+          {(state, makeTable) => {
             if (groupByTask) {
               const groupedNotifications = threaded(state.sortedData)
               // We need to modify the table's internal array, we can't replace it
@@ -345,7 +345,6 @@ const columns = tableProps => [{
     return (
       <ol className="mr-list-reset mr-links-green-lighter mr-inline-flex mr-justify-between mr-font-normal">
         <li>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a
             onClick={() => tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])}
           >

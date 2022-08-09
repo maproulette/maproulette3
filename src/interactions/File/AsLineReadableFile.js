@@ -30,7 +30,7 @@ export class AsLineReadableFile {
    * @private
    */
   loadChunk() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const nextChunk = this.file.slice(this.filePos, this.filePos + this.chunkSize)
       if (nextChunk.size < this.chunkSize) {
         this.eof = true

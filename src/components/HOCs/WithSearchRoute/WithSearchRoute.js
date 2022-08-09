@@ -47,7 +47,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
       if (!this.state.loadedFromRoute) {
         this.setState({loadedFromRoute: true})
 
-        if (!_isEmpty(this.props.history.location.search)) {
+        if (!_isEmpty(this.props.history?.location.search)) {
           if (this.props.clearSearchFilters) {
             // Clear any redux values first before setting the route criteria
             const routeValues = this.props.history.location.search
@@ -117,7 +117,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
       return (
         <WrappedComponent {...this.props}
                             isLoading={this.props.isLoading || !this.state.loadedFromRoute}
-                            loadedFromRouteDone={this.state.loadedFromRoute || _isEmpty(this.props.history.location.search)}
+                            loadedFromRouteDone={this.state.loadedFromRoute || _isEmpty(this.props.history?.location?.search)}
                             setSearch={this.setSearch}
                             clearSearch={this.clearSearch}
                             setSearchSort={this.setSearchSort}

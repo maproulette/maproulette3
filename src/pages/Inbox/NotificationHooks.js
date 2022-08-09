@@ -52,7 +52,7 @@ export const useNotificationSelection = notifications => {
   )
 
   const toggleNotificationsSelected = useCallback(
-    threads => allNotificationsSelected ? deselectAll() : selectAll(),
+    () => allNotificationsSelected ? deselectAll() : selectAll(),
     [allNotificationsSelected, selectAll, deselectAll]
   )
 

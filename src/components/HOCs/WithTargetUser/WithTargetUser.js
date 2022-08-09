@@ -99,7 +99,7 @@ const WithTargetUser = function(WrappedComponent, limitToSuperUsers) {
       this.loadTargetUser(this.props)
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
       // Load current user so we can check permissions
       if (!this.state.currentUser && this.props.user) {
         this.setState({currentUser: this.props.user})

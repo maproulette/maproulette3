@@ -78,7 +78,6 @@ const ListCountryItems = function(props) {
 
   const menuItems = _map(countryList, country => (
     <li key={country.countryCode}>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.pickCountry(country.countryCode, props.closeDropdown)}>
         {country.name}
       </a>
@@ -88,7 +87,6 @@ const ListCountryItems = function(props) {
   // Add option for "All Countries" that goes to standard (global) leaderboard
   menuItems.unshift(
     <li key="ALL">
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.pickCountry("ALL", props.closeDropdown)}>
         <FormattedMessage {...countryMessages.ALL} />
       </a>

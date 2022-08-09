@@ -107,7 +107,6 @@ export class manageChallengeList extends Component {
           </li>
           }
           <li className="is-active">
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a aria-current="page">
               <FormattedMessage {...messages.manageChallengesLabel} />
             </a>

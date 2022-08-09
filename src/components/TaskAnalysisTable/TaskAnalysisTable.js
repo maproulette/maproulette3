@@ -90,7 +90,7 @@ export class TaskAnalysisTableInternal extends Component {
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
 
-  updateTasks(tableState, instance) {
+  updateTasks(tableState) {
     const sortCriteria = {
       sortBy: tableState.sorted[0].id,
       direction: tableState.sorted[0].desc ? "DESC" : "ASC",
@@ -239,9 +239,9 @@ export class TaskAnalysisTableInternal extends Component {
             pageSize={pageSize}
             pages={totalPages}
             onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
-            onPageSizeChange={(pageSize, pageIndex) => this.props.changePageSize(pageSize)}
+            onPageSizeChange={(pageSize) => this.props.changePageSize(pageSize)}
             page={page}
-            getTheadFilterThProps={(state, rowInfo, column) => {
+            getTheadFilterThProps={() => {
               return {style: {position: "inherit", overflow: "inherit"}}}
             }
             onFilteredChange={filtered => {

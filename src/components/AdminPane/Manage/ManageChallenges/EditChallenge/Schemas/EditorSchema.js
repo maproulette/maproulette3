@@ -17,7 +17,7 @@ const STEP_ID = "Editor"
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const jsSchema = (intl) => {
   const presetSchemas = _fromPairs(_map(idPresets, (presetCategory, categoryName) => {
     return [categoryName, {
       type: "array",

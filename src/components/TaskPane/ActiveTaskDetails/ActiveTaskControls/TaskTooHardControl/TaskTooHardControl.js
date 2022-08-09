@@ -45,7 +45,6 @@ export default class TaskTooHardControl extends Component {
   render() {
     if (this.props.asLink) {
       return (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a onClick={() => this.props.complete(TaskStatus.tooHard)}>
           <FormattedMessage {...messages.tooHardLabel} />
         </a>

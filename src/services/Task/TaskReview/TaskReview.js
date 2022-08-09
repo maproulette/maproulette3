@@ -266,7 +266,7 @@ const determineType = (reviewTasksType) => {
  * Note that this does not add the results to the redux store, but simply returns them
  */
 export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5, asMetaReview=false) {
-  return function(dispatch) {
+  return function() {
     const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                          criteria.boundingBox,
                                                          _get(criteria, 'savedChallengesOnly'),

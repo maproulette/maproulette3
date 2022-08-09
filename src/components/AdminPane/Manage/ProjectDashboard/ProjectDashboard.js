@@ -107,7 +107,6 @@ export class ProjectDashboardInternal extends Component {
               </Link>
             </li>
             <li className="is-active">
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a aria-current="page">
                 {this.props.project.displayName || this.props.project.name}
                 {isVirtual ? (
@@ -150,7 +149,6 @@ export class ProjectDashboardInternal extends Component {
 
           {manager.canAdministrateProject(this.props.project) && (
             <ConfirmAction>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a
                 onClick={this.deleteProject}
                 className="mr-button mr-button--dark mr-button--small mr-mr-4"
@@ -164,7 +162,6 @@ export class ProjectDashboardInternal extends Component {
           !isArchived &&
           !isVirtual ? (
             <>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a
                 onClick={this.archiveProject}
                 className="mr-button mr-button--dark mr-button--small mr-mr-4"
@@ -178,7 +175,6 @@ export class ProjectDashboardInternal extends Component {
           isArchived &&
           !isVirtual ? (
             <>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a
                 onClick={this.unarchiveProject}
                 className="mr-button mr-button--dark mr-button--small mr-mr-4"

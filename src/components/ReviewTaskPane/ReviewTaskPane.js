@@ -139,7 +139,7 @@ export class ReviewTaskPane extends Component {
                       }
                     </button>
                   )}
-                  dropdownContent={(dropdown) => (
+                  dropdownContent={() => (
                     <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
                       <span className="mr-flex mr-items-baseline">
                         <FormattedMessage {...messages.taskLockedLabel} />

@@ -61,7 +61,7 @@ export default class MobileTaskDetails extends Component {
   }, {
     name: "edit",
     icon: "evaluate-icon",
-    component: props => null,
+    component: () => null,
   }, {
     name: "comments",
     icon: props => <CommentCountBadge comments={_get(props, 'task.comments')} />,

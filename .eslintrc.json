@@ -4,13 +4,13 @@
   "plugins": ["react", "react-hooks", "jest"],
   "rules": {
     "no-unused-vars": "warn",
-    "react/display-name": "warn",
+    "react/display-name": 0,
     "react/jsx-key": "warn",
     "react/no-unescaped-entities": "warn",
     "react/jsx-no-duplicate-props": "warn",
     "react/jsx-no-target-blank": "warn",
     "react/no-unknown-property": "warn",
-    "react/prop-types": "warn"
+    "react/prop-types": 0
   },
   "overrides": [
     {

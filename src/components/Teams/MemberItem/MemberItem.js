@@ -75,7 +75,7 @@ const MemberItem = props => {
                    />
                  </button>
                )}
-               dropdownContent={dropdown =>
+               dropdownContent={() =>
                  <MemberControls {...props} teamMember={teamMember} />
                }
              />

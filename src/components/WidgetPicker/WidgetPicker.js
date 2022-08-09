@@ -44,7 +44,7 @@ export class WidgetPicker extends Component {
         dropdownButton={dropdown =>
           <PickerButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
         }
-        dropdownContent={dropdown =>
+        dropdownContent={() =>
           <ol className="mr-list-dropdown">
             {menuItems}
           </ol>

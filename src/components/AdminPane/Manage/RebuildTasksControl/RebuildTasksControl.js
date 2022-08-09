@@ -103,7 +103,6 @@ export class RebuildTasksControl extends Component {
 
     return (
       <React.Fragment>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
           onClick={this.initiateConfirmation}
           className={this.props.controlClassName}

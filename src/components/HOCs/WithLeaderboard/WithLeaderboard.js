@@ -38,7 +38,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       }
     }
 
-    leaderboardParams = (numberMonths, countryCode, startDate, endDate) => {
+    leaderboardParams = (numberMonths, countryCode) => {
       const params = new Map([['numberMonths', numberMonths],
                               ['onlyEnabled', true],
                               ['forProjects', null],

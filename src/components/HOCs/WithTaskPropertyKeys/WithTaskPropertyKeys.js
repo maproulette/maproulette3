@@ -40,7 +40,7 @@ export const WithTaskPropertyKeys = function(WrappedComponent) {
        }
      }
 
-     componentDidUpdate(prevProps, prevState) {
+     componentDidUpdate(prevProps) {
        const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
        if (!challengeId) {
          return

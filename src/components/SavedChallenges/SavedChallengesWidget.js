@@ -91,13 +91,11 @@ const SavedChallengeList = function(props) {
               dropdownContent={() =>
                 <ul className="mr-list-dropdown mr-links-green-lighter">
                   <li>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a onClick={() => props.startChallenge(challenge)}>
                       <FormattedMessage {...messages.startChallenge} />
                     </a>
                   </li>
                   <li>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a onClick={() => props.unsaveChallenge(props.user.id, challenge.id)}>
                       <FormattedMessage {...messages.unsave} />
                     </a>
