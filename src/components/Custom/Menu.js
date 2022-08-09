@@ -4,7 +4,7 @@ import MenuList from './MenuList'
 import './Menu.scss'
 
 /**
- * Menu renders a Bulma menu with the given menuLists
+ * Menu renders a menu with the given menuLists
  */
 export default class Menu extends Component {
   render() {

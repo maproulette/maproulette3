@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
 import _indexOf from 'lodash/indexOf'
 import { TagsInputField }
-       from '../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+       from '../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import AutosuggestTextBox from '../AutosuggestTextBox/AutosuggestTextBox'
 import WithKeywordSearch from '../HOCs/WithKeywordSearch/WithKeywordSearch'
 import messages from './Messages'

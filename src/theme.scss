@@ -1,7 +1,6 @@
 @import './variables.scss';
 @import './mixins.scss';
 
-// Disable mobile breakpoints in Bulma so we can control styling.
 $desktop: 50px;
 $tablet: 40px;
 
@@ -289,7 +288,6 @@ $tablet: 40px;
 
 .button.is-primary.is-loading {
   &:enabled:focus:after {
-    // Change spinner color. Bulma css has !important so we have to as well.
     border-color: transparent transparent $primary-invert $primary-invert !important;
   }
 }
@@ -341,18 +339,10 @@ img.is-circular {
   }
 }
 
-@import '../node_modules/bulma/bulma.sass';
-@import '../node_modules/bulma-badge/dist/bulma-badge.sass';
-@import '../node_modules/bulma-timeline/dist/bulma-timeline.sass';
-@import '../node_modules/bulma-steps-component/bulma-steps.sass';
-@import '../node_modules/bulma-switch/dist/bulma-switch.sass';
-@import '../node_modules/bulma-checkradio/dist/css/bulma-checkradio.sass';
-
 .collapsible-icon {
   height: 1em;
 
   .icon {
-    @include arrow($minimizer-arrow-color);
     @include dropdown-arrow();
     position: static;
   }
@@ -366,7 +356,6 @@ img.is-circular {
 }
 
 .basic-dropdown-indicator {
-  @include arrow($grey-light);
   display: inline-block;
   height: 10px;
   width: 10px;
@@ -400,45 +389,6 @@ code {
   }
 }
 
-// Add a short-and-wide variant of the rounded Bulma switch
-.switch[type='checkbox'].is-rounded.short-and-wide + label::before {
-  background-color: rgba(0, 0, 0, .15);
-  width: 60px;
-  height: 20px;
-}
-
-.switch[type='checkbox'].is-rounded.short-and-wide + label::after {
-  background-color: #FFF;
-  border: 1px solid #FFF;
-  height: 14px;
-  width: 14px;
-  top: 3px;
-}
-
-.switch[type="checkbox"].short-and-wide:checked + label::before {
-  background-color: #91F3A2;
-}
-
-.switch[type='checkbox'].short-and-wide:checked + label::after {
-  left: 41px;
-  border: 1px solid #CCC;
-}
-
-.switch[type='checkbox'].short-and-wide + label {
-  padding-left: 74px;
-  padding-top: 0;
-}
-
-.switch-backdrop {
-  height: auto;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 12px;
-  background-color: rgba(0, 0, 0, 0.15);
-  color: #91F3A2;
-  display: inline-block;
-}
-
 html {
   background-color: $app-background;
 
@@ -450,4 +400,111 @@ html {
 
 strong {
   color: inherit;
+}
+
+.breadcrumb {
+  margin-bottom: 10px;
+
+  ul {
+    display: flex;
+
+    .is-active {
+      display: flex;
+    }
+
+    li {
+      align-items: center;
+      display: flex;
+
+      a {
+        padding: 0.5em 0.75em;
+      }
+
+      a:first-child {
+        padding-left: 0;
+      }
+    }
+
+    li:not(:first-child):before {
+      content: "\0002f";
+      margin: 0 12px 0 0;
+    }
+
+    .share-link {
+      margin-left: 8px;
+    }
+  }
+}
+
+a {
+  cursor: pointer;
+}
+
+.mr-form-switch input:before {
+  background-color: green
+}
+
+.mr-form-switch input:after {
+  background-color: white
+}
+
+.switch-container {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 24px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  input:checked + .slider {
+    background-color: $green-neon;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px $green-neon;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(38px);
+    -ms-transform: translateX(38px);
+    transform: translateX(38px);
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.15);
+    -webkit-transition: .4s;
+    transition: .4s;
+    width: 60px;
+    height: 20px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 4px;
+    bottom: 3px;
+    background-color: $white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
 }

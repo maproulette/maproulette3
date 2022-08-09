@@ -8,7 +8,7 @@ import _isObject from 'lodash/isObject'
 import _find from 'lodash/find'
 
 /**
- * NavDropdown presents a Bulma nav-dropdown with additional logic for
+ * NavDropdown presents a nav-dropdown with additional logic for
  * determining the active test based on the value of the dropdown or a given
  * placeholder if no value is active. It also wraps itself in a
  * WithDeactivateOnOutsideClick so that the dropdown will be automatically

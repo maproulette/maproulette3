@@ -65,8 +65,8 @@ export const jsSchema = (intl, user, project) => {
  * @see See https://github.com/mozilla-services/react-jsonschema-form
  *
  * > Note: for anything other than text inputs, specifying the ui:widget type in
- * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
- * > proper Bulma-compliant markup.
+ * > the form configuration will help the RJSFFormFieldAdapter generate the
+ * > proper markup.
  */
 export const uiSchema = (intl) => {
   const uiSchemaFields = {

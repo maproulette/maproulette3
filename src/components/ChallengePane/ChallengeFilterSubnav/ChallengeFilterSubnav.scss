@@ -41,7 +41,6 @@
       border-right: 2px solid $grey-lightest;
 
       &:after {
-        @include arrow($minimizer-arrow-color);
         @include dropdown-arrow();
         margin-top: 6px;
         margin-right: 10px;

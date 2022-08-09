@@ -153,7 +153,7 @@ export const CustomFieldTemplate = function(props) {
 
 
 /**
- * A custom select widget with the new-ui styling (not Bulma)
+ * A custom select widget with the new-ui styling
  */
 export const CustomSelectWidget = function(props) {
   return (
@@ -172,7 +172,7 @@ export const CustomSelectWidget = function(props) {
 
 
 /**
- * A custom text widget with the new-ui styling (not Bulma)
+ * A custom text widget with the new-ui styling
  */
 export const CustomTextWidget = function(props) {
   const ButtonAction = props.formContext.buttonAction

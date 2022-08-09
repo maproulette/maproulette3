@@ -33,7 +33,7 @@ import {
   MarkdownDescriptionField,
   MarkdownEditField,
   LabelWithHelp,
-} from "../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
+} from "../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import KeywordAutosuggestInput from "../../../../KeywordAutosuggestInput/KeywordAutosuggestInput";
 import BoundsSelectorModal from "../../../../BoundsSelectorModal/BoundsSelectorModal";
 import WithCurrentProject from "../../../HOCs/WithCurrentProject/WithCurrentProject";
@@ -68,9 +68,7 @@ import "./EditChallenge.scss";
  * EditChallenge manages a simple workflow for creating/editing a Challenge. We
  * make use of json-schema standard schemas that define the fields and basic
  * validation requirements for each step in the workflow, and the
- * react-jsonschema-forms library to render the forms from the schemas. We
- * utilize our own field adapter to massage the form markup and class names
- * into something that is roughly Bulma-compliant.
+ * react-jsonschema-forms library to render the forms from the schemas.
  *
  * Additionally, we make use of a form context object that is passed to each
  * field where fields can mark the form as invalid if they are given any errors

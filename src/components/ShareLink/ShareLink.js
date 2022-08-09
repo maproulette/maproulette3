@@ -10,7 +10,7 @@ import messages from './Messages'
 import './ShareLink.scss'
 
 /**
- * ShareLink presents a link icon that toggles a small Bulma dropdown
+ * ShareLink presents a link icon that toggles a small dropdown
  * presenting the given share link (made into an absolute URL using the
  * REACT_APP_URL .env variable) with an option to copy the link to the user's
  * clipboard.
