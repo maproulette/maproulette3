@@ -350,7 +350,7 @@ L.Util.extend(L.OSM, {
     return result;
   },
 
-  getRelations: function (xml, nodes, ways) {
+  getRelations: function (xml, nodes) {
     var result = [];
 
     var rels = xml.getElementsByTagName("relation");

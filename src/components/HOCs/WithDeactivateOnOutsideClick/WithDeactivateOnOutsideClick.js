@@ -26,7 +26,7 @@ export default function(WrappedComponent, initiallyActive=false) {
 
     toggleActive = () => this.state.isActive ? this.deactivate() : this.activate()
 
-    handleClickOutside = (e) => {
+    handleClickOutside = () => {
       if (this.state.isActive) {
         this.deactivate()
       }

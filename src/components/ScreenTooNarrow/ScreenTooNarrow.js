@@ -9,7 +9,7 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const ScreenTooNarrow = props => {
+const ScreenTooNarrow = () => {
   const [minimized, setMinimized] = useState(false)
 
   if (minimized) {

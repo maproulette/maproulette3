@@ -224,7 +224,6 @@ export class TaskPane extends Component {
       const isFavorited = _findIndex(this.props.user.savedChallenges, {id: challenge.id}) !== -1
       favoriteControl = (
         <li>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a
             className="mr-normal-case mr-flex"
             onClick={() => (isFavorited ? this.props.unsaveChallenge : this.props.saveChallenge)(
@@ -279,7 +278,7 @@ export class TaskPane extends Component {
                        }
                      </button>
                    )}
-                   dropdownContent={(dropdown) => (
+                   dropdownContent={() => (
                      this.props.taskReadOnly ? (
                        <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
                          <span className="mr-flex mr-items-baseline mr-text-pink-light">
@@ -341,7 +340,6 @@ export class TaskPane extends Component {
                               text={`${process.env.REACT_APP_URL}/browse/virtual/${this.props.virtualChallengeId}`}
                               onCopy={() => dropdown.closeDropdown()}
                             >
-                              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                               <a>
                                 <FormattedMessage {...messages.copyVirtualShareLinkLabel} />
                               </a>
@@ -353,7 +351,6 @@ export class TaskPane extends Component {
                             text={`${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}`}
                             onCopy={() => dropdown.closeDropdown()}
                           >
-                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                             <a>
                               <FormattedMessage {...messages.copyShareLinkLabel} />
                             </a>

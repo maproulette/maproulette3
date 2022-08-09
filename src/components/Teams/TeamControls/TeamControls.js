@@ -26,7 +26,6 @@ export const TeamControls = props => {
   return (
     <ul className="mr-links-green-lighter">
       {!props.suppressView &&
-       /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
        <a onClick={() => props.viewTeam(props.teamMember.team)}>
          <FormattedMessage {...messages.viewTeamLabel} />
        </a>
@@ -34,7 +33,6 @@ export const TeamControls = props => {
       {isAdmin &&
        <React.Fragment>
          <li key="edit-team" className="mr-my-1">
-           { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
            <a onClick={() => props.editTeam(props.teamMember.team)}>
              <FormattedMessage {...messages.editTeamLabel} />
            </a>
@@ -42,7 +40,6 @@ export const TeamControls = props => {
 
          <li key="delete-team" className="mr-my-1">
            <ConfirmAction>
-             { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
              <a
                onClick={() => {
                  deleteTeam({

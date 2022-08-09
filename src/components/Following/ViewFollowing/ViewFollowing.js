@@ -31,7 +31,6 @@ export const ViewFollowing = props => {
          itemControls = {(itemUser) => (
            <ul className="mr-links-green-lighter">
              <li key="unfollow" className="mr-my-2">
-               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                <a
                  onClick={() =>
                    unfollow({ variables: { userId: itemUser.id } })

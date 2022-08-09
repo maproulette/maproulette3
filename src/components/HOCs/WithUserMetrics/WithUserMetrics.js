@@ -39,7 +39,7 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
       }
     }
 
-    updateUserMetrics(props) {
+    updateUserMetrics() {
       if (!_get(this.props[userProp], 'settings.leaderboardOptOut') ||
            _get(this.props[userProp], 'id') === _get(this.props.currentUser, 'userId')) {
 
@@ -187,9 +187,9 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
   }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = () => ({})
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = () => ({
 })
 
 export default (WrappedComponent, userProp="targetUser") =>

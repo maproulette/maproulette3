@@ -32,7 +32,6 @@ const RemoveMemberControlItem = props => {
   return (
     <li className={props.className}>
       <ConfirmAction>
-        { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
           onClick={() => {
             removeTeamUser({

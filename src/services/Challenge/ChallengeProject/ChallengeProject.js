@@ -9,9 +9,7 @@ import _isObject from 'lodash/isObject'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const challengePassesProjectFilter = function(challengeFilters,
-                                                     challenge,
-                                                     searchCriteria) {
+export const challengePassesProjectFilter = function(challengeFilters, challenge) {
   if (!_isEmpty(challengeFilters.project)) {
     if (!_get(challenge, 'parent.displayName')) {
       return false

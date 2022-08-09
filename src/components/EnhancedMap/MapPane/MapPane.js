@@ -13,7 +13,7 @@ import './MapPane.scss'
 export class MapPane extends Component {
   state = {hasError: false}
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error) {
     this.setState({hasError: true})
     this.props.addErrorWithDetails(AppErrors.map.renderFailure, error.message)
   }

@@ -10,11 +10,11 @@ import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
 const CopyableTextHandler = {
   copyableRegex: "copyable[/ ]?\"([^\"]*)\"",
 
-  handlesShortCode(shortCode, props) {
+  handlesShortCode(shortCode) {
     return new RegExp(this.copyableRegex).test(shortCode)
   },
 
-  expandShortCode(shortCode, props) {
+  expandShortCode(shortCode) {
     const match = new RegExp(this.copyableRegex).exec(shortCode)
     if (!match) {
       return shortCode

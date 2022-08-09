@@ -26,7 +26,7 @@ const WithUserLocation = function(WrappedComponent) {
      * have latitude and longitude fields if a location is available, or will
      * be undefined or empty if not.
      */
-    getUserCenterpoint = user => new Promise((resolve, reject) => {
+    getUserCenterpoint = user => new Promise((resolve) => {
       if (!navigator || !navigator.geolocation) {
         // No browser geolocation service available
         resolve(this.getOSMHomeLocation(user))

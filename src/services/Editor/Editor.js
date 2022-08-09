@@ -406,8 +406,7 @@ export const osmObjectParams = function (
   task,
   abbreviated = false,
   entitySeparator = "",
-  joinSeparator = ",",
-  options
+  joinSeparator = ","
 ) {
   const allTasks = _isArray(task) ? task : [task];
   let objects = [];
@@ -460,8 +459,7 @@ export const josmHost = function () {
 export const josmBoundsParams = function (
   task,
   mapBounds,
-  taskBundle,
-  options
+  taskBundle
 ) {
   let bounds = null;
   if (taskBundle) {
@@ -503,7 +501,7 @@ export const josmLayerParams = function (
  * Generate appropriate JOSM editor URI changeset params with the comment
  * and source from the given task's challenge
  */
-export const josmChangesetParams = function (task, options) {
+export const josmChangesetParams = function (task) {
   return `changeset_comment=${
     encodeURIComponent(task.parent.checkinComment) + constructChangesetUrl(task)
   }&changeset_source=${encodeURIComponent(task.parent.checkinSource)}`;
@@ -710,7 +708,7 @@ export const sendJOSMCommand = function (uri) {
   // communication can proceed. So for Safari only, fall back to sending JOSM
   // requests via the opening of a separate window instead of AJAX
   if (window.safari) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const tab = window.open(uri);
 
       // Close the window after 1 second and resolve the promise

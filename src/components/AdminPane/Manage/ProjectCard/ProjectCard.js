@@ -101,7 +101,6 @@ export class ProjectCard extends Component {
                 </li>
               )}
               <li>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a onClick={() => this.props.toggleProjectPin(project.id)}>
                   <FormattedMessage
                     {...(this.props.isPinned
@@ -165,7 +164,6 @@ export class ProjectCard extends Component {
               !this.props.project.isVirtual &&
               !isArchived ? (
                 <li>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     onClick={this.archiveProject}
                     className={this.props.controlClassName}
@@ -178,7 +176,6 @@ export class ProjectCard extends Component {
               !this.props.project.isVirtual &&
               isArchived ? (
                 <li>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     onClick={this.unarchiveProject}
                     className={this.props.controlClassName}

@@ -20,7 +20,7 @@ export default class PageResultsButton extends Component {
 
     return (
       <LoadMoreButton {...this.props}
-          loadMore={(e) => this.props.setSearchPage({currentPage: (currentPage + 1), resultsPerPage})} >
+          loadMore={() => this.props.setSearchPage({currentPage: (currentPage + 1), resultsPerPage})} >
         <FormattedMessage {...messages.loadMoreLabel} />
       </LoadMoreButton>
     )

@@ -118,13 +118,11 @@ const SavedTaskList = function(props) {
                     </Link>
                   </li>
                   <li>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a onClick={() => props.openComments(task.id)}>
                       <FormattedMessage {...messages.viewComments} />
                     </a>
                   </li>
                   <li>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a onClick={() => props.unsaveTask(props.user.id, task.id)}>
                       <FormattedMessage {...messages.unsave} />
                     </a>

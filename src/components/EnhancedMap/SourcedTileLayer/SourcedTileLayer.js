@@ -32,7 +32,7 @@ export class SourcedTileLayer extends Component {
            layer.attribution.text
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error) {
     // Errors here are almost always related to bad layer info, e.g. from a
     // custom basemap. The most common problem is inclusion of an interpolation
     // variable in the URL that doesn't get replaced, which will cause Leaflet
@@ -42,7 +42,7 @@ export class SourcedTileLayer extends Component {
     this.props.addErrorWithDetails(AppErrors.map.renderFailure, details)
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError() {
     return {layerRenderFailed: true}
   }
 

@@ -20,7 +20,7 @@ export default class QuickWidget extends Component {
     error: false,
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error) {
     console.log(error)
     this.setState({error: true})
   }

@@ -85,7 +85,7 @@ export default class AutosuggestTextBox extends Component {
    *
    * @private
    */
-  dropdownItems(getItemProps, inputValue) {
+  dropdownItems(getItemProps) {
     const generateResult = (result, className = "", index) => {
       if (this.state.highlightResult === index) {
         className += this.props.highlightClassName
@@ -185,8 +185,8 @@ export default class AutosuggestTextBox extends Component {
                     "mr-flex-grow mr-w-full mr-h-full mr-outline-none"
                   )}
                   onKeyDown={(e) => this.handleKeyDown(e, dropdown, downshift)}
-                  onFocus={(e) => this.setState({textBoxActive: openOnFocus})}
-                  onBlur={(e) => this.setState({textBoxActive: false})}
+                  onFocus={() => this.setState({textBoxActive: openOnFocus})}
+                  onBlur={() => this.setState({textBoxActive: false})}
                   placeholder={this.props.placeholder}
                 />
               )}

@@ -37,7 +37,7 @@ export const WithReviewTaskClusters = function(WrappedComponent) {
 
         this.props.fetchClusteredReviewTasks(
           this.props.reviewTasksType, this.props.reviewCriteria
-        ).catch(e => {}).then(() => this.setState({loading: false}))
+        ).catch(() => {}).then(() => this.setState({loading: false}))
       }
     }
 

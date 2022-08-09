@@ -20,7 +20,7 @@ const STEP_ID = "Priorities"
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const jsSchema = (intl) => {
   const localizedPriorityLabels = taskPriorityLabels(intl)
 
   return {

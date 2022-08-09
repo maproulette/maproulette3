@@ -88,7 +88,7 @@ export class AsManageableChallenge {
 /**
  * @private
  */
-export const percentage = function(total, value, decimalPlaces=1) {
+export const percentage = function(total, value) {
   let percentage = 0
   if (_isFinite(total) && total > 0) {
     percentage = value / total * 100.0

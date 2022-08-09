@@ -66,7 +66,6 @@ export class SearchTypeFilter extends Component {
 const ListSearchTypes = function(props) {
   const menuItems = _map(props.searchTypeLabels, (searchType, name) => (
     <li key={name}>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.updateFilter(name, props.closeDropdown)}>
         {props.searchTypeLabels[name]}
       </a>

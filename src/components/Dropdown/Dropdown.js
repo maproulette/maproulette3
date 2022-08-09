@@ -6,7 +6,7 @@ import { usePopper } from "react-popper";
 import UseEventListener from "../../hooks/UseEventListener";
 
 const Portal = ({ children, querySelector = "#dropdown" }) => {
-  return ReactDOM.createPortal(children, document.querySelector(querySelector));
+  return ReactDOM.createPortal(children, document.querySelector(querySelector) || document.createElement('div'));
 };
 
 const Dropdown = ({

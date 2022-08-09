@@ -27,7 +27,7 @@ export const difficultyLabels = intl => _fromPairs(
   _map(messages, (message, key) => [key, intl.formatMessage(message)])
 )
 
-export const challengePassesDifficultyFilter = function(filter, challenge, props) {
+export const challengePassesDifficultyFilter = function(filter, challenge) {
   if (_isNumber(filter.difficulty)) {
     return challenge.difficulty === filter.difficulty
   }

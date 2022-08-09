@@ -21,7 +21,7 @@ export class FilterByLocation extends Component {
    *
    * @private
    */
-  updateFilter = (value, closeDropdownMenu) => {
+  updateFilter = (value) => {
     if (_isEmpty(value)) {
       this.props.removeSearchFilters(['location'])
     }

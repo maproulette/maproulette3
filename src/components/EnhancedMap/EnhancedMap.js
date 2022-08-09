@@ -357,7 +357,6 @@ export class EnhancedMap extends ReactLeafletMap {
           {layers.map(([description, layerInfo]) => {
             return (
               <li key={description} className="mr-my-4">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                   onClick={() => layerInfo.layer.fire('mr-external-interaction', {
                     map: this.leafletElement,
@@ -382,7 +381,7 @@ export class EnhancedMap extends ReactLeafletMap {
     }).setLatLng(latlng).setContent(contentElement).openOn(this.leafletElement)
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.props.animator) {
       this.props.animator.setAnimationFunction(this.animateFeatures)
     }
