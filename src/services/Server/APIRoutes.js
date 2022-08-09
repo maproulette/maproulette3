@@ -53,7 +53,8 @@ const apiRoutes = (factory) => {
       latestActivity: factory.get("/data/status/latestActivity"),
       withReviewTasks: factory.get("/review/challenges"),
       tagMetrics: factory.get("/data/tag/metrics"),
-      bulkArchive: factory.post("/challenges/bulkArchive")
+      bulkArchive: factory.post("/challenges/bulkArchive"),
+      move: factory.post("/challenges/project/:projectId")
     },
     challenge: {
       single: factory.get("/challenge/:id"),

@@ -171,6 +171,10 @@ export default defineMessages({
     id: "Errors.challenge.rebuildFailure",
     defaultMessage: "Unable to rebuild challenge tasks",
   },
+  challengeMoveFailure: {
+    id: "Errors.challenge.moveFailure",
+    defaultMessage: "Unable to move challenge/s",
+  },
   challengeDoesNotExist: {
     id: "Errors.challenge.doesNotExist",
     defaultMessage: "That challenge does not exist.",

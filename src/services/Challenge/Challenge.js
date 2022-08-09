@@ -1146,7 +1146,35 @@ export const moveChallenge = function (challengeId, toProjectId) {
             dispatch(addError(AppErrors.user.unauthorized))
           );
         } else {
-          dispatch(addError(AppErrors.challenge.rebuildFailure));
+          dispatch(addError(AppErrors.challenge.moveFailure));
+          console.log(error.response || error);
+        }
+      });
+  };
+};
+
+/**
+ * Move a list of challenges to the given project.
+ */
+ export const moveChallenges = function (challengeIds, toProjectId) {
+  return function (dispatch) {
+    return new Endpoint(api.challenges.move, {
+      variables: { projectId: toProjectId },
+      json: { challenges: challengeIds },
+    })
+      .execute()
+      .then(() => {
+        challengeIds.forEach(id => {
+          fetchChallenge(id)(dispatch)
+        })
+      })
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn()).then(() =>
+            dispatch(addError(AppErrors.user.unauthorized))
+          );
+        } else {
+          dispatch(addError(AppErrors.challenge.moveFailure));
           console.log(error.response || error);
         }
       });
