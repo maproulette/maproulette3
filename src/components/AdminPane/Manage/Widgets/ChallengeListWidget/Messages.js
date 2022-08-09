@@ -38,4 +38,24 @@ export default defineMessages({
     id: "Admin.manageProjectChallenges.controls.timezone.label",
     defaultMessage: "Timezone",
   },
+
+  moveSelected: {
+    id: "Admin.manageProjectChallenges.controls.moveSelected.label",
+    defaultMessage: "Move Selected",
+  },
+
+  unarchiveSelected: {
+    id: "Admin.manageProjectChallenges.controls.unarchiveSelected.label",
+    defaultMessage: "Unarchive Selected",
+  },
+
+  archiveSelected: {
+    id: "Admin.manageProjectChallenges.controls.archiveSelected.label",
+    defaultMessage: "Archive Selected",
+  },
+
+  deleteSelected: {
+    id: "Admin.manageProjectChallenges.controls.deleteSelected.label",
+    defaultMessage: "Delete Selected",
+  },
 })
