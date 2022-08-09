@@ -31,7 +31,7 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mappedOn', direction: 'ASC'},
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
+export const WithReviewTasks = function(WrappedComponent) {
   return class extends Component {
     state = {
       loading: false,
@@ -186,7 +186,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       this.update(this.props, criteria, true)
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
       if (prevProps.reviewTasksType !== this.props.reviewTasksType ||
           prevProps.reviewTasksSubType !== this.props.reviewTasksSubType) {
         this.update(this.props,
@@ -256,7 +256,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 
 const mapStateToProps = state => ({ currentReviewTasks: state.currentReviewTasks })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   updateReviewNeededTasks: (searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
     return dispatch(fetchReviewNeededTasks(searchCriteria, pageSize))
   },

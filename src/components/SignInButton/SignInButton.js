@@ -43,7 +43,7 @@ export class SignInButton extends Component {
         onClick={this.handleSignin}
         href={
           `${process.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
-            this.props.history.location.pathname + this.props.history.location.search
+            this.props.history?.location?.pathname + this.props.history?.location?.search
           )}`
         }
       >

@@ -95,7 +95,7 @@ export const keywordLabels = (intl, includeCustom=false) => {
 /**
  * Returns object containing localized labels for custom keyword categories
  */
-export const customKeywordLabels = intl => _fromPairs(
+export const customKeywordLabels = () => _fromPairs(
   _map(customCategoryKeywords, (customCategory, key) =>
     [key, customCategory.label || _startCase(key)]
   )
@@ -134,7 +134,7 @@ export const categoryMatchingKeywords = function(keywords, includeCustom=false) 
 /**
  * Determines if the given challenge passes the given keywords filter.
  */
-export const challengePassesKeywordFilter = function(filter, challenge, props) {
+export const challengePassesKeywordFilter = function(filter, challenge) {
   if (_isArray(filter.keywords)) {
     // Any matching keyword is a pass
     return _intersection(filter.keywords, challenge.tags).length > 0

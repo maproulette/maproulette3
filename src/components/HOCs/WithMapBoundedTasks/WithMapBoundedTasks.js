@@ -25,7 +25,7 @@ import AppErrors from '../../../services/Error/AppErrors'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const WithMapBoundedTasks = function(WrappedComponent,
-                                            mapType='challenges',
+                                            mapType,
                                             matchChallenges=true) {
   return class extends Component {
     state = {
@@ -91,7 +91,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
         this.props.startBoundedTasks(
           name,
           _map(tasks, 'id')
-        ).catch(e => {}).then(() => this.setState({creatingVirtualChallenge: false}))
+        ).catch(() => {}).then(() => this.setState({creatingVirtualChallenge: false}))
       }
       else {
         this.setState({creatingVirtualChallenge: true})
@@ -100,7 +100,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
           name,
           null,
           this.props.mapBoundedTaskClusters.clusters
-        ).catch(e => {}).then(() => this.setState({creatingVirtualChallenge: false}))
+        ).catch(() => {}).then(() => this.setState({creatingVirtualChallenge: false}))
       }
     }
 

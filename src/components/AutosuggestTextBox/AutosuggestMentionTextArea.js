@@ -132,7 +132,7 @@ export default class AutosuggestMentionTextArea extends Component {
    *
    * @private
    */
-  dropdownItems(getItemProps, inputValue) {
+  dropdownItems(getItemProps) {
     const generateResult = (result, className = "", index) => {
       if (this.state.highlightResult === index) {
         className += this.props.highlightClassName
@@ -220,8 +220,8 @@ export default class AutosuggestMentionTextArea extends Component {
                     this.props.disableResize ? "mr-resize-none" : "mr-resize"
                   )}
                   onKeyDown={(e) => this.handleKeyDown(e, dropdown, downshift)}
-                  onFocus={(e) => this.setState({textBoxActive: true})}
-                  onBlur={(e) => this.setState({textBoxActive: false})}
+                  onFocus={() => this.setState({textBoxActive: true})}
+                  onBlur={() => this.setState({textBoxActive: false})}
                   placeholder={this.props.placeholder}
                   rows={this.props.rows}
                   cols={this.props.cols}

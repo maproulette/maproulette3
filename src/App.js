@@ -53,7 +53,7 @@ const CurrentVirtualChallengeTaskPane =
   WithVirtualChallenge(WithCurrentTask(TaskPane))
 const VirtualChallengePane = WithVirtualChallenge(ChallengeDetail)
 const ErrorPane = WithExternalError(ChallengePane)
-const HomeOrDashboard = props => {
+const HomeOrDashboard = () => {
   const goHome = sessionStorage.getItem('goHome')
   const loggedIn = localStorage.getItem('isLoggedIn')
   sessionStorage.removeItem('goHome')

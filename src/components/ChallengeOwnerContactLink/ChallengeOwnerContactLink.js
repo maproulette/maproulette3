@@ -37,7 +37,7 @@ export class ChallengeOwnerContactLinkInternal extends Component {
           osmUsername: username,
           updatingUrl: false,
         })
-      }).catch(error => {
+      }).catch(() => {
         this.setState({updatingUrl: false})
       })
     } else {
@@ -45,7 +45,7 @@ export class ChallengeOwnerContactLinkInternal extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (_get(prevProps, 'task.parent.owner') !==
         _get(this.props, 'task.parent.owner')) {
       this.setState({
@@ -64,7 +64,6 @@ export class ChallengeOwnerContactLinkInternal extends Component {
     if (!this.state.contactUrl) {
       return (
         <span className="mr-text-green-lighter mr-links-green-lighter">
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={this.updateContactOwnerUrl}>
             <FormattedMessage {...messages.contactOwnerLabel} />
           </a>

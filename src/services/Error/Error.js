@@ -37,7 +37,7 @@ export const addServerError = function(error, serverError) {
             detailedError.values = {details: `: ${json.message}`}
           }
         }).catch(
-          error => {} // if message isn't valid json, just ignore
+          () => {} // if message isn't valid json, just ignore
         ).then(() => {
           dispatch(addError(detailedError))
           resolve(detailedError)

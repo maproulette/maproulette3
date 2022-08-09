@@ -113,7 +113,6 @@ export class ChallengeDashboard extends Component {
               </Link>
             </li>
             <li className="is-active">
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <ChallengeNameLink {...this.props} suppressShareLink />
               <ShareLink
                 {...this.props}

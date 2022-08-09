@@ -57,7 +57,6 @@ export const Teams = props => {
     subheader = messages.viewTeamTitle
     headerControls = (
       <div className="mr-links-green-lighter">
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="mr-mb-4" onClick={() => setViewingTeam(null)}>
           &larr; <FormattedMessage {...messages.myTeamsLabel} />
         </a>
@@ -77,7 +76,6 @@ export const Teams = props => {
     subheader = messages.myTeamsTitle
     headerControls = (
       <div className="mr-flex mr-justify-end mr-items-center mr-mb-4">
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={() => setShowCards(true)}>
           <SvgSymbol
             sym="cards-icon"
@@ -88,7 +86,6 @@ export const Teams = props => {
             )}
           />
         </a>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={() => setShowCards(false)}>
           <SvgSymbol
             sym="list-icon"

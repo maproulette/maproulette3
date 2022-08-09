@@ -17,7 +17,7 @@ const _LoadRandomVirtualChallengeTask = class extends Component {
         virtualChallengeId
       ).then(task => this.props.history.replace(
                 `/virtual/${virtualChallengeId}/task/${task.id}`)
-      ).catch(error =>
+      ).catch(() =>
         this.props.history.push(`/browse/challenges`)
       )
     }

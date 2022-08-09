@@ -41,7 +41,7 @@ export const WithProjectReviewMetrics = function(WrappedComponent) {
       })
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
       if (!this.state.loading && !this.state.updateAvailable &&
           !_isEqual(this.getChallengeIds(this.props),
                     this.state.currentChallengeIds)) {
@@ -69,7 +69,7 @@ const mapStateToProps = state => (
    reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') }
 )
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   refreshReviewMetrics: (userId, challengeIds, projectId) => {
     return dispatch(fetchReviewMetrics(userId, ReviewTasksType.allReviewedTasks,
       {filters:{challengeId: challengeIds, projectId: projectId}}))

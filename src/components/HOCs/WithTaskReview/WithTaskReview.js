@@ -114,7 +114,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     stopReviewing: (task, url) => {
-      dispatch(cancelReviewClaim(task.id)).catch(error => {
+      dispatch(cancelReviewClaim(task.id)).catch(() => {
         dispatch(addError(AppErrors.user.unauthorized))
       })
 
@@ -125,7 +125,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     startReviewing: (task) => {
-      dispatch(fetchTaskForReview(task.id)).catch(error => {
+      dispatch(fetchTaskForReview(task.id)).catch(() => {
         dispatch(addError(AppErrors.user.unauthorized))
       })
     },

@@ -29,7 +29,6 @@ export class DropdownButton extends Component {
   render() {
     const options = this.props.options.map(option => {
       const link = (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a key={option.key}
           className={classNames('dropdown-item', option.className)}
           onClick={(e) => this.selectOption(e, option)}>

@@ -153,7 +153,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(fetchChallengeActions(loadedTask.parent))
 
         return normalizedResults
-      }).catch(error => {
+      }).catch(() => {
         if (forReview) {
           dispatch(addError(AppErrors.reviewTask.alreadyClaimed))
         }
@@ -206,7 +206,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
           return loadNextTask.then(newTask =>
             visitNewTask(dispatch, ownProps, taskId, newTask)
-          ).catch(error => {
+          ).catch(() => {
             ownProps.history.push(`/browse/challenges/${challengeId}`)
           })
         }

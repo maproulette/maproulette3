@@ -27,7 +27,6 @@ export default class MenuList extends Component {
       const menuOption =
         option.Renderable ?
         <option.Renderable {...this.props} {...option.ownProps} /> :
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a onClick={(e) => this.selectOption(e, option)}>{option.text}</a>
 
       return (

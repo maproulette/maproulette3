@@ -98,7 +98,7 @@ export default class MetaReviewStatusMetricsWidget extends Component {
  * Allow this widget to be treated as a conditional widget, returning true or
  * false as to whether it should be hidden given the current workspace props
  */
-MetaReviewStatusMetricsWidget.hideWidget = function(props) {
+MetaReviewStatusMetricsWidget.hideWidget = function() {
   return process.env.REACT_APP_FEATURE_META_QC !== 'enabled'
 }
 

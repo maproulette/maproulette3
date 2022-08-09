@@ -176,7 +176,7 @@ L.AreaSelect = L.Class.extend({
                 curY = event.originalEvent.pageY;
                 self._render();
             }
-            function onMouseUp(event) {
+            function onMouseUp() {
                 self.map.dragging.enable();
                 L.DomEvent.removeListener(self.map, "mouseup", onMouseUp);
                 L.DomEvent.removeListener(self.map, "mousemove", onMouseMove);

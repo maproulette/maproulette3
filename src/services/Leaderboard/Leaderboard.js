@@ -89,7 +89,7 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
  */
 export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
                                          onlyEnabled=true, forProjects=null, forChallenges=null,
-                                         forUsers=null, forCountries=null, startDate=null,
+                                         forUsers, forCountries=null, startDate=null,
                                          endDate=null) => {
   const params = {
     bracket,

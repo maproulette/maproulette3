@@ -22,7 +22,7 @@ const STEP_ID = "Basemap"
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const jsSchema = (intl) => {
   const localizedBasemapLabels = challengeOwnerBasemapLayerLabels(intl)
 
   const defaultBasemapChoices = [

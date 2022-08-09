@@ -8,9 +8,9 @@ import { fetchTaskHistory } from '../../../services/Task/Task'
 const WithTaskHistory = WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WithLoadedTaskHistory(WrappedComponent))
 
-export const mapStateToProps = (state, ownProps) => ({})
+export const mapStateToProps = () => ({})
 
-export const mapDispatchToProps = (dispatch, ownProps) => {
+export const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     fetchTaskHistory
   }, dispatch)

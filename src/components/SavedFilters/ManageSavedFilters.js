@@ -31,7 +31,7 @@ export default class ManageSavedFilters extends Component {
             <QuickTextBox
               text={this.state.savedFiltersName || ""}
               setText={savedFiltersName => this.setState({savedFiltersName})}
-              done={event => {
+              done={() => {
                 this.props.saveCurrentSearchFilters(
                   this.state.savedFiltersName,
                   searchFilters)
@@ -59,7 +59,7 @@ export default class ManageSavedFilters extends Component {
                         <QuickTextBox
                           text={this.state.savedFiltersName || saved}
                           setText={savedFiltersName => this.setState({savedFiltersName})}
-                          done={event => {
+                          done={() => {
                             this.props.renameSavedFilters(
                               saved,
                               this.state.savedFiltersName,

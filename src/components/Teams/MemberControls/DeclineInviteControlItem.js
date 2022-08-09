@@ -21,7 +21,6 @@ const DeclineInviteControlItem = props => {
 
   return (
     <li className={props.className}>
-      { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a
         onClick={() => {
           declineInvite({

@@ -68,7 +68,7 @@ export const jsSchema = (intl, user, project) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup.
  */
-export const uiSchema = (intl, user, project) => {
+export const uiSchema = (intl) => {
   const uiSchemaFields = {
     featured: {
       "ui:widget": "radio",

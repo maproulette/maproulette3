@@ -127,7 +127,7 @@ export class TaskAnalysisTableHeader extends Component {
                       className="mr-fill-current mr-w-5 mr-h-5" />
                   </button>
                 )}
-                dropdownContent={dropdown =>
+                dropdownContent={() =>
                   <React.Fragment>
                     <ul className="mr-list-dropdown">
                       {manager.canWriteProject(this.props.challenge.parent) &&

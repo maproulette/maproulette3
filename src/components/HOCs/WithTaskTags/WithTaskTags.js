@@ -8,9 +8,9 @@ import { fetchTaskTags } from '../../../services/Task/Task'
 const WithTaskTags = WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WithLoadedTaskTags(WrappedComponent))
 
-export const mapStateToProps = (state, ownProps) => ({})
+export const mapStateToProps = () => ({})
 
-export const mapDispatchToProps = (dispatch, ownProps) => {
+export const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     fetchTaskTags
   }, dispatch)

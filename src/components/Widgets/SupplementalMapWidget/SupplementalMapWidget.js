@@ -48,10 +48,9 @@ const SupplementalMapWidget = props => {
               />
             </button>
           )}
-          dropdownContent={dropdown => (
+          dropdownContent={() => (
             <ul className="mr-list-dropdown">
               <li className="mr-my-2">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                   className="mr-normal-case mr-flex"
                   onClick={() => props.updateWidgetConfiguration({

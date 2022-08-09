@@ -18,9 +18,7 @@ const STEP_ID = "Properties";
 export const jsSchema = (
   intl,
   user,
-  challengeData,
-  extraErrors,
-  options = {}
+  challengeData
 ) => {
   return {
     $schema: "http://json-schema.org/draft-07/schema#",

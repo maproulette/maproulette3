@@ -70,7 +70,7 @@ const WithChallenge = function(WrappedComponent) {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = () => ({
 })
 
 export const mapDispatchToProps = (dispatch, ownProps) => {
@@ -119,7 +119,7 @@ export const getChallenge = (challengeId, props, component) => {
   }
 }
 
-const getChallengeFromTask = async (taskId, props, component) => {
+const getChallengeFromTask = async (taskId, props) => {
   const results = await new Endpoint(api.task.single, {
     schema: taskSchema(),
     variables: {id: taskId}

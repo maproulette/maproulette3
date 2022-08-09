@@ -176,7 +176,7 @@ export default class WebSocketClient {
    *
    * @private
    */
-  handleClose(closeEvent) {
+  handleClose() {
     this.connect()
   }
 

@@ -110,7 +110,6 @@ const ListEditorItems = function(props) {
         key={editor}
         className={classNames({"active": editor === props.activeEditor})}
       >
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={() => props.chooseEditor(editor, props.closeDropdown)}>
           {label}
         </a>

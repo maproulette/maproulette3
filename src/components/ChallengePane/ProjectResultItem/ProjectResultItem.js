@@ -25,7 +25,7 @@ export class ProjectResultItem extends Component {
     this.itemRef = React.createRef()
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     // Only re-render under specific conditions:
 
     // if the user has changed

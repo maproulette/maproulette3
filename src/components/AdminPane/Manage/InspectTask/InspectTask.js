@@ -61,7 +61,6 @@ export class InspectTask extends Component {
                   </li>
                 }
                 <li className="is-active">
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a aria-current="page">
                     <FormattedMessage {...messages.inspectTask} />
                   </a>

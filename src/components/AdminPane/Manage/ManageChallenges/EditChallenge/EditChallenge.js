@@ -344,7 +344,7 @@ export class EditChallenge extends Component {
   };
 
   /** Receive errors from form validation */
-  errorHandler = (errors, err, formData) => {
+  errorHandler = (errors, err) => {
     if ((errors && errors.length > 0) || (err && err.length > 0)) {
       window.scrollTo(0, 100);
     }
@@ -784,7 +784,7 @@ export class EditChallenge extends Component {
                       name={props.name + "yes"}
                       className="mr-mr-1.5"
                       checked={!props.formData}
-                      onChange={(e) => props.onChange(false)}
+                      onChange={() => props.onChange(false)}
                     />
                     <label className="mr-mr-2 mr-text-grey-lighter">
                       <FormattedMessage {...messages.yesLabel} />
@@ -796,7 +796,7 @@ export class EditChallenge extends Component {
                       name={props.name + "no"}
                       className="mr-mr-1.5"
                       checked={!!props.formData}
-                      onChange={(e) => {
+                      onChange={() => {
                         props.onChange(true);
                       }}
                     />
@@ -970,7 +970,7 @@ function configureCustomTaskStyles(props, configureTaskStyleRules) {
             name="no-styles"
             className="mr-mr-1.5"
             checked={!props.formData}
-            onChange={(e) => props.onChange(false)}
+            onChange={() => props.onChange(false)}
           />
           <label className="mr-mr-2 mr-text-grey-lighter">
             <FormattedMessage {...messages.customTaskStyleDefaultLabel} />
@@ -982,7 +982,7 @@ function configureCustomTaskStyles(props, configureTaskStyleRules) {
             name="custom-styles"
             className="mr-mr-1.5"
             checked={!!props.formData}
-            onChange={(e) => {
+            onChange={() => {
               props.onChange(true);
             }}
           />
@@ -1041,7 +1041,6 @@ const BreadcrumbWrapper = (props) => {
                   </li>
                 )}
                 <li className="is-active">
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a aria-current="page">
                     {props.isCloningChallenge() ? (
                       <FormattedMessage {...messages.cloneChallenge} />

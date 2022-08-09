@@ -80,7 +80,7 @@ export class EditTask extends Component {
     if (!this.state.isSaving && errors.length === 0) {
       this.setState({isSaving: true})
 
-      this.props.saveTask(formData).then(task =>
+      this.props.saveTask(formData).then(() =>
         this.rerouteAfterCompletion()
       )
     }
@@ -171,7 +171,6 @@ export class EditTask extends Component {
                     </li>
                   }
                   <li className="is-active">
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a aria-current="page">
                       {
                         _isObject(this.props.task) ?

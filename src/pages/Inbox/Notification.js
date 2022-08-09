@@ -79,7 +79,6 @@ class Notification extends Component {
             </li>
           </ul>
         </header>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <button
           onClick={() => this.props.onDelete(notification)}
           className="mr-button mr-button--small"

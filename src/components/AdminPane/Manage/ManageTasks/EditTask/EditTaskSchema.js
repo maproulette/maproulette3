@@ -15,7 +15,7 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, task) => {
+export const jsSchema = (intl) => {
   const allowedStatuses = _values(TaskStatus)
   const allowedStatusLabels = _map(
     allowedStatuses,

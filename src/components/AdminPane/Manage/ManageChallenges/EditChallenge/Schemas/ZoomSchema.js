@@ -19,7 +19,7 @@ const STEP_ID = "Zoom"
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const jsSchema = (intl) => {
   return {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",

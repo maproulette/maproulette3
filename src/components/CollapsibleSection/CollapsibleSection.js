@@ -41,7 +41,6 @@ export default class CollapsibleSection extends Component {
           {this.props.heading}
 
           {!this.props.hideIndicator &&
-           // eslint-disable-next-line jsx-a11y/anchor-is-valid
            <a className="collapsible-icon" aria-label="more options">
              <span className="icon"></span>
            </a>

@@ -332,3 +332,7 @@ form.rjsf {
   display: flex;
   flex-direction: column;
 }
+
+.tags-field > div > span {
+  flex-wrap: wrap;
+}

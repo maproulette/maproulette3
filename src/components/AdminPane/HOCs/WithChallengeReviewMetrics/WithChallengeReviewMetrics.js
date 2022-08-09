@@ -100,7 +100,7 @@ const mapStateToProps = state => (
    reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') }
 )
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   updateReviewMetrics: (userId, criteria) => {
     return dispatch(fetchReviewMetrics(userId, ReviewTasksType.allReviewedTasks, criteria))
   },

@@ -180,7 +180,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
          this.props.augmentClusteredTasks(challengeId, false,
                                         criteria,
                                         pageSize,
-                                        false, ignoreLocked).then((results) => {
+                                        false, ignoreLocked).then(() => {
           this.setState({loading: false})
        })
      }, 400)

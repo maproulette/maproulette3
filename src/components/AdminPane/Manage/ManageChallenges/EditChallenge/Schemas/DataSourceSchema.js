@@ -22,7 +22,6 @@ export const jsSchema = (
   user,
   challengeData,
   extraErrors,
-  options = {}
 ) => {
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly();
 
