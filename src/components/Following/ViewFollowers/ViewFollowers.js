@@ -50,7 +50,6 @@ export const ViewFollowers = props => {
            <ul className="mr-links-green-lighter">
              {!following.has(itemUser.id) &&
               <li key="followBack" className="mr-my-2">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                   onClick={() =>
                     follow({ variables: { userId: itemUser.id } })
@@ -64,7 +63,6 @@ export const ViewFollowers = props => {
               </li>
              }
              <li key="block" className="mr-my-2">
-               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                <a
                  onClick={() =>
                    block({ variables: { userId: itemUser.id } })
@@ -92,7 +90,6 @@ export const ViewFollowers = props => {
          itemControls = {(itemUser) => (
            <ul className="mr-links-green-lighter">
              <li key="unblock" className="mr-my-2">
-               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                <a
                  onClick={() =>
                    unblock({ variables: { userId: itemUser.id } })

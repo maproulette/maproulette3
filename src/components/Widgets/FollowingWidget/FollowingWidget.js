@@ -94,21 +94,18 @@ const FollowingWidget = props => {
       noMain
       rightHeaderControls = {
         <div className="mr-flex mr-justify-end mr-items-center mr-links-green-lighter mr-leading-none mr-uppercase mr-text-xs">
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a
             className="mr-mr-2 mr-pr-2 mr-border-r-2 mr-border-white-10"
             onClick={() => setTab('activity')}
           >
             <FormattedMessage {...messages.activityLabel} />
           </a>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a
             className="mr-mr-2 mr-pr-2 mr-border-r-2 mr-border-white-10"
             onClick={() => setTab('following')}
           >
             <FormattedMessage {...messages.followingLabel} />
           </a>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
            <a
              className="mr-mr-8"
              onClick={() => setTab('followers')}
@@ -129,10 +126,9 @@ const FollowingWidget = props => {
                 />
               </button>
             )}
-            dropdownContent={(dropdown) => (
+            dropdownContent={() => (
               <ul className="mr-list-dropdown">
                 <li className="mr-my-2">
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     className="mr-normal-case mr-flex"
                     onClick={() => props.updateWidgetConfiguration({

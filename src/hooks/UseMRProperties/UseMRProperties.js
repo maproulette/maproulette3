@@ -34,7 +34,7 @@ const useMRProperties = workspaceContext => {
       //map the task specific properties to the workspace properties
       const { properties } = primaryFeature;
       if (properties) {
-        Object.keys(properties).map((key, index) => {
+        Object.keys(properties).map((key) => {
           mrProperties[key] = properties[key];
           return null;
         });

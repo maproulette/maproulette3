@@ -5,7 +5,7 @@ import AsManageableChallenge from '../../../../interactions/Challenge/AsManageab
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
 import Modal from '../../../Modal/Modal'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
-import { DropzoneTextUpload } from '../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import { DropzoneTextUpload } from '../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import messages from './Messages'
 
 /**
@@ -103,7 +103,6 @@ export class RebuildTasksControl extends Component {
 
     return (
       <React.Fragment>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
           onClick={this.initiateConfirmation}
           className={this.props.controlClassName}

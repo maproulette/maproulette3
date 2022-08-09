@@ -51,7 +51,6 @@ export class SortChallengesSelector extends Component {
 const ListSortItems = function(props) {
   const menuItems = _map(ALL_SORT_OPTIONS, sortByOption => (
     <li key={sortByOption}>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.makeSelection(sortByOption, props.closeDropdown)}>
         {props.sortLabels[sortByOption]}
       </a>

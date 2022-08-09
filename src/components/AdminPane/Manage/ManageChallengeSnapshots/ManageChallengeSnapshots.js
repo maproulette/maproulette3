@@ -16,7 +16,6 @@ export class ManageChallengeSnapshots extends Component {
       return (
         <li key={snapshot.id} className="mr-flex mr-justify-between mr-pb-2 mr-cursor-pointer">
           <div>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => this.props.viewSnapshot(this.props, snapshot)}
               className="mr-text-white hover:mr-text-yellow">
               <FormattedDate
@@ -35,7 +34,6 @@ export class ManageChallengeSnapshots extends Component {
           </div>
           <div>
             <ConfirmAction>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a className="mr-text-green-lighter hover:mr-text-white hover:mr-cursor"
                    onClick={() => this.props.deleteSnapshot(snapshot.id)}>
                 <FormattedMessage {...messages.deleteSnapshot} />

@@ -34,7 +34,7 @@ import {
   CustomSelectWidget,
   NoFieldsetObjectFieldTemplate,
   CustomArrayFieldTemplate,
-} from "../../../components/Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
+} from "../../../components/Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import {
   jsSchema as settingsJsSchema,
   uiSchema as settingsUiSchema,

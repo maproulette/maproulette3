@@ -67,7 +67,6 @@ const CandidateProjectList = function(props) {
 
     return (
       <li key={`project-${project.id}`}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
           onClick={() => props.onSelectProject(project)}
         >

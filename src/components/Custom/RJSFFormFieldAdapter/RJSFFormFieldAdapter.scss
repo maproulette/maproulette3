@@ -55,10 +55,6 @@
   }
 }
 
-
-// Customizations for react-jsonschema-form to adapt it to the Bulma
-// framework. While we try to customize the markup, rjsf customization
-// is a bit clunky and requires some fine-tuning here.
 form.rjsf {
   .array-item-remove::after {
     content: 'Remove';
@@ -221,7 +217,6 @@ form.rjsf {
   }
 
   input.form-control {
-    @extend .input;
     @include basic-form-element-styling();
   }
 
@@ -242,7 +237,6 @@ form.rjsf {
   }
 
   textarea.form-control {
-    @extend .textarea;
     @include basic-form-element-styling();
   }
 
@@ -265,8 +259,6 @@ form.rjsf {
 
   .control .field-radio-group {
     label {
-      @extend .radio;
-
       input {
         margin-right: 0.5em;
       }
@@ -296,7 +288,6 @@ form.rjsf {
   }
 
   .react-tagsinput {
-    @extend .input;
     @include basic-form-element-styling();
 
     .react-tagsinput-tag {
@@ -340,4 +331,8 @@ form.rjsf {
 .nested-rule-group > fieldset {
   display: flex;
   flex-direction: column;
+}
+
+.tags-field > div > span {
+  flex-wrap: wrap;
 }

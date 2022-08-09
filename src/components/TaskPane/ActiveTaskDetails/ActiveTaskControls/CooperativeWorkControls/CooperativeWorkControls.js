@@ -68,7 +68,7 @@ export class CooperativeWorkControls extends Component {
                dropdownButton={dropdown =>
                  <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
                }
-               dropdownContent={dropdown => <ListMoreOptionsItems {...this.props} />}
+               dropdownContent={() => <ListMoreOptionsItems {...this.props} />}
              />
             }
           </div>

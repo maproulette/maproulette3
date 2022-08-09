@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import Confetti from 'react-dom-confetti'
-import Modal from '../Bulma/Modal'
+import Modal from '../Custom/Modal'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './CongratulateModal.scss'

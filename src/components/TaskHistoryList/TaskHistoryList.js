@@ -185,7 +185,7 @@ export class TaskHistoryList extends Component {
 
     const contributorEntries =
       <ol className="mr-list-decimal mr-pl-4">
-        {_map(contributors, (c, index) => {
+        {_map(contributors, (c) => {
           let userType = ""
           switch(c.userType) {
             case REVIEWER_TYPE:
@@ -237,7 +237,6 @@ export class TaskHistoryList extends Component {
                 }
               </div>
               {!this.props.selectDiffs &&
-                // eslint-disable-next-line jsx-a11y/anchor-is-valid
                 <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp,
                                     this.props.mapBounds.bounds, log.ignoreAtticOffset)}>
                   <FormattedMessage {...messages.viewAtticLabel} />
@@ -346,7 +345,7 @@ const commentEntry = (entry, props, index) => {
   )
 }
 
-const statusEntry = (entry, props, index) => {
+const statusEntry = (entry, props) => {
   return (
     <TaskStatusLabel
       {...props}

@@ -7,7 +7,7 @@ import ConfirmAction from '../ConfirmAction/ConfirmAction'
 import SimpleDropdown from './SimpleDropdown'
 
 /**
- * DropdownButton is an optionally self-managed component that sets up a Bulma
+ * DropdownButton is an optionally self-managed component that sets up a
  * dropdown menu that is intended to be activated by a button passed a child
  * component, though it can also be determined by the `isActive` prop. Menu
  * options to be displayed should be passed as an `options` prop array, each
@@ -29,7 +29,6 @@ export class DropdownButton extends Component {
   render() {
     const options = this.props.options.map(option => {
       const link = (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a key={option.key}
           className={classNames('dropdown-item', option.className)}
           onClick={(e) => this.selectOption(e, option)}>

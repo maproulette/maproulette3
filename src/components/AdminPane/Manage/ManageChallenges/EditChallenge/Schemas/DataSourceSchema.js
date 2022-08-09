@@ -1,4 +1,4 @@
-import { DropzoneTextUpload } from "../../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
+import { DropzoneTextUpload } from "../../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import AsEditableChallenge from "../../../../../../interactions/Challenge/AsEditableChallenge";
 import _isEmpty from "lodash/isEmpty";
 import _omit from "lodash/omit";
@@ -22,7 +22,6 @@ export const jsSchema = (
   user,
   challengeData,
   extraErrors,
-  options = {}
 ) => {
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly();
 

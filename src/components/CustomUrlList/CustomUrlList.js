@@ -69,13 +69,11 @@ const CustomUrlList = props => {
                 dropdownContent={() =>
                   <ul className="mr-list-dropdown mr-links-green-lighter">
                     <li>
-                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                       <a onClick={() => editCustomUrl(url.id)}>
                         <FormattedMessage {...messages.editLabel} />
                       </a>
                     </li>
                     <li>
-                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                       <a onClick={() => deleteCustomUrl(url.id)}>
                         <FormattedMessage {...messages.deleteLabel} />
                       </a>

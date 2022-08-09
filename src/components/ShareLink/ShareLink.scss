@@ -35,7 +35,7 @@
         }
 
         .share-link__copy-button {
-          @include invert-on-hover($green, $white)
+          @include invert-on-hover($green, $white);
           margin-left: 10px;
           font-size: $size-7;
           padding: 0px 10px 0px 5px;

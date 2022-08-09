@@ -7,7 +7,7 @@ import ChallengeProgress from './ChallengeProgress'
 import ReviewStatusMetrics from '../../pages/Review/Metrics/ReviewStatusMetrics'
 
 export class ChallengeSnapshotProgress extends Component {
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     // Only re-render if the challenge, metrics or visibility changes
     if (!_isEqual(nextProps.taskMetrics, this.props.taskMetrics)) {
       return true

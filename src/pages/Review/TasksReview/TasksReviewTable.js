@@ -66,7 +66,7 @@ export class TaskReviewTable extends Component {
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
 
-  updateTasks(tableState, instance) {
+  updateTasks(tableState) {
     const sortCriteria = {
       sortBy: tableState.sorted[0].id,
       direction: tableState.sorted[0].desc ? "DESC" : "ASC",
@@ -145,13 +145,13 @@ export class TaskReviewTable extends Component {
     this.props.startReviewing(this.props.history, true)
   }
 
-  toggleShowFavorites(event) {
+  toggleShowFavorites() {
     const reviewCriteria = _cloneDeep(this.props.reviewCriteria)
     reviewCriteria.savedChallengesOnly = !reviewCriteria.savedChallengesOnly
     this.props.updateReviewTasks(reviewCriteria)
   }
 
-  toggleExcludeOthers(event) {
+  toggleExcludeOthers() {
     const reviewCriteria = _cloneDeep(this.props.reviewCriteria)
     reviewCriteria.excludeOtherReviewers = !reviewCriteria.excludeOtherReviewers
     this.props.updateReviewTasks(reviewCriteria)
@@ -239,7 +239,7 @@ export class TaskReviewTable extends Component {
     this.props.resetColumnChoices(columns, defaultColumns)
   }
 
-  filterDropdown = (reviewTasksType) => {
+  filterDropdown = () => {
     return (
       <Dropdown className="mr-dropdown--right"
           dropdownButton={dropdown => (
@@ -447,8 +447,8 @@ export class TaskReviewTable extends Component {
                         noDataText={<FormattedMessage {...messages.noTasks} />}
                         pages={totalPages}
                         onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
-                        onPageSizeChange={(pageSize, pageIndex) => this.props.changePageSize(pageSize)}
-                        getTheadFilterThProps={(state, rowInfo, column) => {
+                        onPageSizeChange={(pageSize) => this.props.changePageSize(pageSize)}
+                        getTheadFilterThProps={() => {
                           return {style: {position: "inherit", overflow: "inherit"}}}
                         }
                         onFilteredChange={filtered => {
@@ -480,7 +480,7 @@ export class TaskReviewTable extends Component {
   }
 }
 
-const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
+const setupColumnTypes = (props, openComments, data, criteria) => {
   const columns = {}
   columns.id = {
     id: 'id',
@@ -719,7 +719,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
         </span>
       )
     },
-    Filter: ({ filter, onChange }) => {
+    Filter: () => {
       let mappedOn = _get(criteria, 'filters.mappedOn')
 
       if (typeof mappedOn === "string" && mappedOn !== "") {
@@ -760,7 +760,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
         </span>
       )
     },
-    Filter: ({ filter, onChange }) => {
+    Filter: () => {
       let reviewedAt = _get(criteria, 'filters.reviewedAt')
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
         reviewedAt = parse(reviewedAt)

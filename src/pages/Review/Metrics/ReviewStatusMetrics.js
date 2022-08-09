@@ -137,7 +137,7 @@ export default class ReviewStatusMetrics extends Component {
     )
   }
 
-  buildMetaReviewTasksAsMetaReviewStatus = (metrics, metaReviewTotal) => {
+  buildMetaReviewTasksAsMetaReviewStatus = (metrics) => {
     return (
       <React.Fragment>
         {buildMetric((metrics.total - metrics.metaReviewRequested), metrics.total,
@@ -165,7 +165,7 @@ export default class ReviewStatusMetrics extends Component {
 
     const type = this.props.reviewTasksType || ReviewTasksType.allReviewedTasks
 
-    const prioritizedReviewStats = _map(TaskPriority, (priority, key) => {
+    const prioritizedReviewStats = _map(TaskPriority, (priority) => {
       if (reviewMetricsByPriority && reviewMetricsByPriority[priority]) {
         const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
 
@@ -188,7 +188,7 @@ export default class ReviewStatusMetrics extends Component {
       }
     })
 
-    const byStatusReviewStats = _map(TaskStatus, (status, key) => {
+    const byStatusReviewStats = _map(TaskStatus, (status) => {
       if (reviewMetricsByTaskStatus && reviewMetricsByTaskStatus[status]) {
         const localizedStatusLabels = statusLabels(this.props.intl)
 
@@ -233,7 +233,7 @@ export default class ReviewStatusMetrics extends Component {
               "mr-cursor-pointer mr-flex mr-items-center mr-mt-6",
               "mr-text-green-lighter"
             )}
-            onClick={(e) => this.props.setShowByPriority(!this.props.showByPriority)}
+            onClick={() => this.props.setShowByPriority(!this.props.showByPriority)}
           >
             <span className="mr-align-top">
               <FormattedMessage {...messages.byPriorityToggle} />
@@ -256,7 +256,7 @@ export default class ReviewStatusMetrics extends Component {
               "mr-cursor-pointer mr-flex mr-items-center mr-mt-2",
               "mr-text-green-lighter"
             )}
-            onClick={(e) => this.props.setShowByTaskStatus(!this.props.showByTaskStatus)}
+            onClick={() => this.props.setShowByTaskStatus(!this.props.showByTaskStatus)}
           >
             <span className="mr-align-top">
               <FormattedMessage {...messages.byTaskStatusToggle} />

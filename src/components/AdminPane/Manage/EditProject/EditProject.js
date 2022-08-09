@@ -8,7 +8,7 @@ import _snakeCase from "lodash/snakeCase";
 import classNames from "classnames";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { CustomSelectWidget } from "../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
+import { CustomSelectWidget } from "../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import WithManageableProjects from "../../HOCs/WithManageableProjects/WithManageableProjects";
 import WithCurrentProject from "../../HOCs/WithCurrentProject/WithCurrentProject";
 import BusySpinner from "../../../BusySpinner/BusySpinner";
@@ -21,8 +21,7 @@ import "./EditProject.scss";
  * EditProject provies a simple form for creating/editing a Project. We
  * make use of a json-schema standard schema that define the fields and basic
  * validation requirements, and react-jsonschema-forms library to render the
- * form from the schemas. We utilize our own field adapter to massage the form
- * markup and class names into something that is roughly Bulma-compliant.
+ * form from the schemas.
  *
  * @see See http://json-schema.org/
  * @see See https://github.com/mozilla-services/react-jsonschema-form
@@ -101,7 +100,6 @@ export class EditProject extends Component {
               </li>
             )}
             <li className="is-active">
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a aria-current="page">
                 {_isObject(this.props.project) ? (
                   <FormattedMessage {...messages.editProject} />

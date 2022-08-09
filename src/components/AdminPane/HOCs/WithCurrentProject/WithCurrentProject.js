@@ -77,7 +77,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       return projectId
     }
 
-    challengeProjects = (projectId, props) => {
+    challengeProjects = (projectId) => {
       const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
       return _filter(allChallenges, (challenge) => {
                       return challenge.parent === projectId ||

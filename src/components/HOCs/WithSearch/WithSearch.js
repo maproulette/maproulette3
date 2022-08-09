@@ -209,7 +209,7 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     dispatch(setFilters(searchGroup, {keywords}))
   },
 
-  clearSearchFilters: (clearRoute = true) => {
+  clearSearchFilters: () => {
     dispatch(clearFilters(searchGroup))
   },
 

@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import _isUndefined from 'lodash/isUndefined'
 
 /**
- * Popout displays a Bulma dropdown menu as a popout that appears
+ * Popout displays a dropdown menu as a popout that appears
  * above, below, or to the right of the trigger element. The trigger
  * element should be given as the `control` prop while the menu options
  * should be given as children.

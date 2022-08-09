@@ -15,7 +15,7 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, task) => {
+export const jsSchema = (intl) => {
   const allowedStatuses = _values(TaskStatus)
   const allowedStatusLabels = _map(
     allowedStatuses,
@@ -63,8 +63,8 @@ export const jsSchema = (intl, task) => {
  * @see See https://github.com/mozilla-services/react-jsonschema-form
  *
  * > Note: for anything other than text inputs, specifying the ui:widget type in
- * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
- * > proper Bulma-compliant markup.
+ * > the form configuration will help the RJSFFormFieldAdapter generate the
+ * > proper markup.
  */
 export const uiSchema = intl => ({
   name: {

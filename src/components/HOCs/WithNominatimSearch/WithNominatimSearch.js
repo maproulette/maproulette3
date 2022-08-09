@@ -32,7 +32,7 @@ const WithNominatimSearch = function(WrappedComponent) {
       this.setState({loading: true})
       fetchPlaceLocation(this.state.query).then(results => {
         this.setState({results, loading: false})
-      }).catch(error => {
+      }).catch(() => {
         this.setState({loading: false})
         this.props.addError(AppErrors.nominatim.fetchFailure)
       })

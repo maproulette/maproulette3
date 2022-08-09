@@ -140,7 +140,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
       this.updateBrowsedChallenge(this.props)
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
       this.updateBrowsedChallenge(this.props)
     }
 

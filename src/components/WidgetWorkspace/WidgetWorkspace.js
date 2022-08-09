@@ -125,7 +125,7 @@ export class WidgetWorkspace extends Component {
     })
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch() {
     // Mark this workspace configuration as broken. This can happen if a
     // widget has a problem. We'll be automatically switched to a working
     // layout (with a fresh one being generated if need be).
@@ -259,7 +259,6 @@ const ListLayoutItems = function(props) {
       <div className="mr-text-white mr-w-4">
         {conf.id === props.currentConfiguration.id && "✓"}
       </div>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.switchConfiguration(conf.id, props.closeDropdown)}>
         {conf.label}
       </a>
@@ -277,40 +276,34 @@ const ListLayoutItems = function(props) {
       <hr className="mr-rule-dropdown" />
       <ol className="mr-list-dropdown">
         <li>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => props.startEditingLayout(props.closeDropdown)}>
             <FormattedMessage {...messages.editConfigurationLabel} />
           </a>
         </li>
         <li>
           <ConfirmAction>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
               <FormattedMessage {...messages.resetConfigurationLabel} />
             </a>
           </ConfirmAction>
         </li>
         <li>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => props.addConfiguration(props.closeDropdown)}>
             <FormattedMessage {...messages.addConfigurationLabel} />
           </a>
         </li>
         <li>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => props.beginExportingConfiguration(props.closeDropdown)}>
             <FormattedMessage {...messages.exportConfigurationLabel} />
           </a>
         </li>
         <li>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => props.importConfiguration(props.closeDropdown)}>
             <FormattedMessage {...messages.importConfigurationLabel} />
           </a>
         </li>
         <li>
           <ConfirmAction>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => props.deleteConfiguration(props.closeDropdown)}>
               <FormattedMessage {...messages.deleteConfigurationLabel} />
             </a>

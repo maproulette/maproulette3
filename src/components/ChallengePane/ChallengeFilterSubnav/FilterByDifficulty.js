@@ -66,7 +66,6 @@ export class FilterByDifficulty extends Component {
 const ListDifficultyTypes = function(props) {
   const menuItems = _map(ChallengeDifficulty, (difficulty, name) => (
     <li key={difficulty}>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.updateFilter(difficulty, props.closeDropdown)}>
         {props.difficultyLabels[name]}
       </a>
@@ -76,7 +75,6 @@ const ListDifficultyTypes = function(props) {
   // Add 'Any' option to start of dropdown
   menuItems.unshift(
     <li key='any'>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.updateFilter(null, props.closeDropdown)}>
         {props.difficultyLabels.any}
       </a>

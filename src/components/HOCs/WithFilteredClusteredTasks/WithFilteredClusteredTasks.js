@@ -343,7 +343,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       this.setupFilters()
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
       if (!_isEqual(_get(prevProps[tasksProp], 'tasks'), _get(this.props[tasksProp], 'tasks')) ||
           _get(prevProps[tasksProp], 'fetchId') !== _get(this.props[tasksProp], 'fetchId')) {
         this.refreshFilteredTasks()

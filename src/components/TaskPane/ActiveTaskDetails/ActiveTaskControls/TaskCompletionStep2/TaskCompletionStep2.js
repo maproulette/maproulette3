@@ -58,7 +58,7 @@ export default class TaskCompletionStep2 extends Component {
              dropdownButton={dropdown =>
                <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
              }
-             dropdownContent={dropdown =>
+             dropdownContent={() =>
                <ListMoreOptionsItems {...this.props} />
              }
            />

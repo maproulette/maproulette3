@@ -107,7 +107,6 @@ export class TaskTags extends Component {
 
           {!this.props.taskReadOnly &&
            <div className="mr-links-green-lighter mr-flex-grow-0">
-             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
              <a onClick={() => this.setState({edit: true})}>
                <FormattedMessage {...messages.updateTags} />
              </a>
@@ -119,7 +118,6 @@ export class TaskTags extends Component {
     else if (!this.props.taskReadOnly) {
       return (
         <div className="mr-links-green-lighter">
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => this.setState({edit: true})}>
             <FormattedMessage {...messages.addTags} />
           </a>

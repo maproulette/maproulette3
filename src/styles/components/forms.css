@@ -16,6 +16,7 @@
     }
 
     .field-radio-group {
+      display: flex;
       @apply mr-text-white;
     }
 

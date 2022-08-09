@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 /**
- * Modal displays a Bulma modal dialogue if the `isActive` prop is true.
+ * Modal displays a modal dialogue if the `isActive` prop is true.
  * Content of the dialog should be passed as children. It includes a background
  * that will invoke `onClose` if the user clicks off the modal. If a close
  * button is desired, it should be provided as part of the the modal content.

@@ -95,7 +95,6 @@ export class FilterByKeyword extends Component {
 const ListFilterItems = function(props) {
   const menuItems = props.categories.map(keyword => (
     <li key={keyword}>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.updateFilter(keyword, props.closeDropdown)}>
         {props.keywordLabels[keyword]}
       </a>
@@ -105,7 +104,6 @@ const ListFilterItems = function(props) {
   // Add 'Anything' option to start of dropdown
   menuItems.unshift(
     <li key='any'>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.updateFilter(null, props.closeDropdown)}>
         {props.keywordLabels.any}
       </a>

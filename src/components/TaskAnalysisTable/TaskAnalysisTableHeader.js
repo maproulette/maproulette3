@@ -9,7 +9,7 @@ import _omit from 'lodash/omit'
 import AsManager from '../../interactions/User/AsManager'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import TriStateCheckbox from '../Bulma/TriStateCheckbox'
+import TriStateCheckbox from '../Custom/TriStateCheckbox'
 import ConfirmAction from '../ConfirmAction/ConfirmAction'
 import TimezonePicker from '../TimezonePicker/TimezonePicker'
 import PagePicker from '../PagePicker/PagePicker'
@@ -127,7 +127,7 @@ export class TaskAnalysisTableHeader extends Component {
                       className="mr-fill-current mr-w-5 mr-h-5" />
                   </button>
                 )}
-                dropdownContent={dropdown =>
+                dropdownContent={() =>
                   <React.Fragment>
                     <ul className="mr-list-dropdown">
                       {manager.canWriteProject(this.props.challenge.parent) &&

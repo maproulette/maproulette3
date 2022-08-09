@@ -330,7 +330,6 @@ const TaskMarkerContent = props => {
 
       <div className="marker-popup-content__links">
         <div>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => props.history.push({
             pathname: `${taskBaseRoute}/inspect`,
             state: props.criteria
@@ -341,7 +340,6 @@ const TaskMarkerContent = props => {
 
         {manager.canWriteProject(props.challenge.parent) &&
           <div>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => props.history.push({
               pathname: `${taskBaseRoute}/edit`,
               state: props.criteria

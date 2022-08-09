@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 import WithChallengeManagement
-       from '../../HOCs/WithChallengeManagement/WithChallengeManagement'
+  from '../../HOCs/WithChallengeManagement/WithChallengeManagement'
 
 
 /**
@@ -15,7 +15,7 @@ import WithChallengeManagement
 export class VisibilitySwitch extends Component {
   toggleVisible = () => {
     this.props.updateEnabled(this.props.challenge.id,
-                             !this.props.challenge.enabled)
+      !this.props.challenge.enabled)
   }
 
   render() {
@@ -24,12 +24,11 @@ export class VisibilitySwitch extends Component {
     }
 
     return (
-      <div className="visibility-switch mr-mb-2" onClick={this.toggleVisible}>
-        <input type="checkbox" className="switch is-rounded short-and-wide"
-               disabled={this.props.disabled}
-               checked={this.props.challenge.enabled}
-               onChange={() => null} />
-        <label>{this.props.label}</label>
+      <div className="mr-flex mr-justify-center">
+        <label className="switch-container">
+          <input type="checkbox" checked={this.props.challenge.enabled} onChange={() => null}/>
+          <span className="slider round" onClick={this.toggleVisible}></span>
+        </label>
       </div>
     )
   }
@@ -37,8 +36,7 @@ export class VisibilitySwitch extends Component {
 
 VisibilitySwitch.propTypes = {
   challenge: PropTypes.object,
-  updateEnabled: PropTypes.func.isRequired,
-  label: PropTypes.node,
+  updateEnabled: PropTypes.func.isRequired
 }
 
 export default WithChallengeManagement(VisibilitySwitch)

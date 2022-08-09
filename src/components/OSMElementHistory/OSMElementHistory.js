@@ -247,7 +247,6 @@ const FeatureSelectionDropdown = props => {
   const menuItems =
     _map(props.featureIds, featureId => (
       <li key={featureId}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={() => props.selectFeatureId(featureId)}>
           {featureId}
         </a>
@@ -264,7 +263,6 @@ const FeatureSelectionDropdown = props => {
       className="mr-dropdown"
       dropdownButton={dropdown => (
         <React.Fragment>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a className="mr-flex" onClick={dropdown.toggleDropdownVisible}>
             <div className="mr-mr-2">
               {props.selectedFeatureId}
@@ -277,7 +275,7 @@ const FeatureSelectionDropdown = props => {
           </a>
         </React.Fragment>
       )}
-      dropdownContent={dropdown =>
+      dropdownContent={() =>
         <ol className="mr-list-dropdown">
           {menuItems}
         </ol>

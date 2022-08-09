@@ -6,7 +6,7 @@
     margin: 0 0 30px 0;
     border-bottom: 2px solid $grey-lighter-more;
 
-    &.level:not(:last-child) { // override bulma level
+    &.level:not(:last-child) {
       margin-bottom: 30px;
       justify-content: flex-start;
     }

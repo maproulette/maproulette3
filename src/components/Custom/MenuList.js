@@ -6,7 +6,7 @@ import _get from 'lodash/get'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 
 /**
- * MenuList renders a Bulma menu-list with an interface compatible with
+ * MenuList renders a menu-list with an interface compatible with
  * NavDropdown so that components can render into a standalone drop-down or a
  * menu list depending on the situation.
  */
@@ -27,7 +27,6 @@ export default class MenuList extends Component {
       const menuOption =
         option.Renderable ?
         <option.Renderable {...this.props} {...option.ownProps} /> :
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a onClick={(e) => this.selectOption(e, option)}>{option.text}</a>
 
       return (

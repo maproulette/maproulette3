@@ -156,7 +156,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     debouncedFetchClusters =
       _debounce((showAsClusters) => this.fetchUpdatedClusters(showAsClusters), 400)
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
       if (!_isEqual(_get(prevProps.criteria, 'searchQuery'), _get(this.props.criteria, 'searchQuery'))) {
         this.debouncedFetchClusters(this.state.showAsClusters)
       }

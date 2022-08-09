@@ -8,7 +8,7 @@ import { fetchChallengeSnapshotList,
          removeChallengeSnapshot } from '../../../../services/Challenge/ChallengeSnapshot'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
 
-const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) {
+const WithChallengeSnapshots = function(WrappedComponent) {
   return class extends Component {
     state = {
       loading: false,
@@ -65,7 +65,7 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
       this.updateSnapshots(this.props)
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
       const challengeId =_get(this.props.challenge, 'id')
       if (challengeId && challengeId !== _get(prevProps.challenge, 'id')) {
         this.updateSnapshots(this.props)

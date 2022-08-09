@@ -156,7 +156,7 @@ export class ChallengeCard extends Component {
   }
 }
 
-const CompleteIcon = function(props) {
+const CompleteIcon = function() {
   return (
     <SvgSymbol
       className="mr-fill-white mr-h-5 mr-align-middle mr-cursor-pointer"

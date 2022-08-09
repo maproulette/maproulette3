@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
-import Modal from '../Bulma/Modal'
+import Modal from '../Custom/Modal'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 

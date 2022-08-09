@@ -8,7 +8,7 @@ import _isObject from 'lodash/isObject'
 import _find from 'lodash/find'
 
 /**
- * NavDropdown presents a Bulma nav-dropdown with additional logic for
+ * NavDropdown presents a nav-dropdown with additional logic for
  * determining the active test based on the value of the dropdown or a given
  * placeholder if no value is active. It also wraps itself in a
  * WithDeactivateOnOutsideClick so that the dropdown will be automatically
@@ -57,7 +57,6 @@ export class NavDropdown extends Component {
       }
 
       return (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a key={option.key} className='navbar-item'
            onClick={(e) => this.selectOption(e, option)}>
           {option.text}
@@ -69,7 +68,6 @@ export class NavDropdown extends Component {
       <div className={classNames('nav-dropdown', 'navbar-item', 'has-dropdown',
                                  {'is-active': this.props.isActive},
                                  this.props.className)}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className='navbar-link' onClick={this.props.toggleActive}>
           {this.props.label && <label>{this.props.label}</label>}
           {this.dropdownLabel()}
