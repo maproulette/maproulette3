@@ -10,11 +10,10 @@ This project adheres to
 ## [v3.9.2] - 2022-08-09
 
 ### Features
-- Add capability to mass delete challenges from projects
+- Add capability to mass move and delete challenges from projects
 
 ### Fixes
 - Add flex wrap to tags input fields 
-- Resolve project missing metrics if some challenges are hidden
 
 ### System Updates
 - Upgrade React Scripts; Remove unused variables; Add global jest mock functions for incompatible npm libraries; increase unit test coverage
