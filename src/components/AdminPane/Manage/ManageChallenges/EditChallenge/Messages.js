@@ -19,6 +19,16 @@ export default defineMessages({
     defaultMessage: "Edit",
   },
 
+  editChallenges: {
+    id: "Admin.EditChallenge.bulkEdit.header",
+    defaultMessage: "Bulk Edit",
+  },
+
+  cancelChallenges: {
+    id: "Admin.EditChallenge.bulkCancel.header",
+    defaultMessage: "Cancel Edit",
+  },
+
   cloneChallenge: {
     id: "Admin.EditChallenge.clone.header",
     defaultMessage: "Clone",
