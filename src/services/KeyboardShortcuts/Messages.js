@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   editId: {
     id: "KeyMapping.openEditor.editId",
-    defaultMessage: "Edit in Id",
+    defaultMessage: "Edit in iD",
   },
 
   editJosm: {
