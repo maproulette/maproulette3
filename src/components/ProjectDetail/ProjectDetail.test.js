@@ -6,7 +6,7 @@ describe("ProjectDetail", () => {
   it("renders page with No Results", () => {
     const { getByText } = global.withProvider(
       <ProjectDetail
-        project={{ id: 1 }}
+        project={{ id: 1, created: "", modified: "" }}
         unfilteredChallenges={[]}
       />
     );

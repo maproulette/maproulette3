@@ -233,4 +233,9 @@ export default defineMessages({
     id: "Admin.TaskAnalysisTable.bundleMember.tooltip",
     defaultMessage: "Member of a task bundle",
   },
+
+  confirmActionWarning: {
+    id: "Admin.TaskAnalysisTable.confirmActionWarning",
+    defaultMessage: "This process can take awhile, depending on the challenge size, and cannot be undone.",
+  },
 })

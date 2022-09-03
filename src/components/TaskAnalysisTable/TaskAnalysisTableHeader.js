@@ -148,6 +148,7 @@ export class TaskAnalysisTableHeader extends Component {
                               <ConfirmAction
                                 action="onChange"
                                 skipConfirmation={e => e.target.value === ""}
+                                prompt={<FormattedMessage {...messages.confirmActionWarning} />}
                               >
                                 <select
                                   onChange={e => { if (e.target.value !== "") this.props.changeStatus(this.props.selectedTasks, e.target.value) }}
