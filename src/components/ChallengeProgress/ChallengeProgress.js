@@ -231,9 +231,7 @@ export class ChallengeProgress extends Component {
   }
 
   render() {
-    const taskActions = this.props.taskMetrics ?
-                        this.props.taskMetrics :
-                        _get(this.props, 'challenge.actions')
+    const taskActions = this.props.challenge?.actions || this.props.taskMetrics
     const taskPriorityActions = this.props.taskMetricsByPriority
 
     if (!_isObject(taskActions)) {

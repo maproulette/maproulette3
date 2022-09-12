@@ -9,6 +9,21 @@ import BusySpinner from '../../../BusySpinner/BusySpinner'
 import messages from './Messages'
 
 const TIMER_INTERVAL = 10000 // 10 seconds
+const TASKS_UPDATING_MESSAGE = "Updating Task Statuses"
+
+const TaskStatusOverview = ({ actions }) => {
+  return (
+    <div>
+      <div><FormattedMessage {...messages.actionCreated} />: {actions.available}</div>
+      <div><FormattedMessage {...messages.actionFixed} />: {actions.fixed}</div>
+      <div><FormattedMessage {...messages.actionNotAnIssue} />: {actions.falsePositive}</div>
+      <div><FormattedMessage {...messages.actionSkipped} />: {actions.skipped}</div>
+      <div><FormattedMessage {...messages.actionAlreadyFixed} />: {actions.alreadyFixed}</div>
+      <div><FormattedMessage {...messages.actionTooHard} />: {actions.tooHard}</div>
+      <div><FormattedMessage {...messages.actionDisabled} />: {actions.disabled}</div>
+    </div>
+  )
+}
 
 /**
  * TaskBuildProgress displays the current number of tasks built so far
@@ -70,6 +85,44 @@ export default class TaskBuildProgress extends Component {
       return null
     }
 
+    const taskCount = _get(this.props.challenge, 'actions.total', 0)
+
+    if (this.props.challenge.statusMessage === TASKS_UPDATING_MESSAGE) {
+      return (
+        <div>
+          <div>
+            <div className="mr-flex mr-justify-between mr-items-center mr-w-full mr-mb-8">
+              <h3 className="mr-text-white">
+                <FormattedMessage
+                  {...messages.tasksUpdating}
+                /> <BusySpinner inline />
+              </h3>
+  
+              <div>
+                <FormattedMessage
+                  {...messages.totalElapsedTime}
+                /> <FormattedDuration seconds={this.totalElapsedSeconds()} format={TIMER_FORMAT} />
+              </div>
+            </div>
+  
+            <div className="mr-text-lg">
+              <div className="mr-mb-2"/>
+              <FormattedMessage {...messages.refreshStatusLabel} /> 
+              <span className="mr-text-orange mr-ml-1">
+              <FormattedDuration
+                seconds={this.nextUpdateSeconds()}
+                format={TIMER_FORMAT}
+              />
+              </span>
+            </div>
+            <div className="mr-text-lg mr-mt-3">
+              <TaskStatusOverview actions={_get(this.props.challenge, 'actions', {})} />
+            </div>
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div>
         <div>
@@ -89,7 +142,7 @@ export default class TaskBuildProgress extends Component {
 
           <div className="mr-text-lg">
             <span className="mr-text-xl mr-text-pink">
-              {_get(this.props.challenge, 'actions.total', 0)}
+              {taskCount}
             </span> <FormattedMessage
               {...messages.tasksCreatedCount}
             /> <FormattedMessage
