@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Tasks Building...",
   },
 
+  tasksUpdating: {
+    id: "Admin.Challenge.tasksUpdating",
+    defaultMessage: "Tasks Updating...",
+  },
+
   tasksFailed: {
     id: "Admin.Challenge.tasksFailed",
     defaultMessage: "Tasks Failed to Build",
@@ -83,4 +88,39 @@ export default defineMessages({
     id: "Admin.Task.fields.status.label",
     defaultMessage: "Status:",
   },
+
+  actionCreated: {
+    id: "Admin.Task.fields.actions.created",
+    defaultMessage: "Created",
+  },
+
+  actionFixed: {
+    id: "Admin.Task.fields.actions.fixed",
+    defaultMessage: "Fixed",
+  },
+
+  actionNotAnIssue: {
+    id: "Admin.Task.fields.actions.notAnIssue",
+    defaultMessage: "Not an Issue",
+  },
+
+  actionSkipped: {
+    id: "Admin.Task.fields.actions.skipped",
+    defaultMessage: "Skipped",
+  },
+
+  actionAlreadyFixed: {
+    id: "Admin.Task.fields.actions.alreadyFixed",
+    defaultMessage: "Already Fixed",
+  },
+
+  actionTooHard: {
+    id: "Admin.Task.fields.actions.tooHard",
+    defaultMessage: "Too Hard",
+  },
+
+  actionDisabled: {
+    id: "Admin.Task.fields.actions.disabled",
+    defaultMessage: "Disabled",
+  }
 })

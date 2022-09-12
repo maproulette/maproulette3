@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import { Link } from "react-router-dom";
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
@@ -120,6 +121,17 @@ export default class ChallengeListWidget extends Component {
 
     return (
       <>
+        <li>
+          <Link
+              to={`/admin/project/${this.props.project.id}/challenges/edit`}
+              className={classNames(
+                this.props.controlClassName,
+                "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+              )}
+            >
+              <FormattedMessage {...messages.editSelected} />
+          </Link>
+        </li>
         <li>
           <div
             className={classNames(

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, Marker, LayerGroup, Rectangle, Polyline, Pane }
+import { ZoomControl, Marker, LayerGroup, Rectangle, Polyline, Pane, Tooltip }
        from 'react-leaflet'
 import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
@@ -72,6 +72,37 @@ export const CLUSTER_POINTS = 25
  * The size of cluster marker icons in pixels
  */
 export const CLUSTER_ICON_PIXELS = 40
+
+// Overlapping, unlike clustering, means the markers are in the EXACT same position.
+export const labelOverlappingMarkers = (markers) => {
+  // Collect a dictionary of unique coordinates
+  const uniqueCoords = {};
+
+  // Get the overlapping marker count for each unique set of coordinates
+  // and store in the dictionary
+  for (let i = 0; i < markers.length; i++) {
+    const marker = markers[i];
+    const stringCoords = marker.position.join(',');
+    const count = uniqueCoords[stringCoords];
+
+    if (count) {
+      uniqueCoords[stringCoords]++;
+    } else {
+      uniqueCoords[stringCoords] = 1;
+    }
+  }
+
+  // Loop back through the markers and apply the overlapping count to each of them
+  for (let i = 0; i < markers.length; i++) {
+    const marker = markers[i];
+    const stringCoords = marker.position.join(',');
+    const count = uniqueCoords[stringCoords];
+
+    marker.overlappingCount = count;
+  }
+
+  return markers;
+}
 
 /**
  * TaskClusterMap allows a user to browse tasks and task clusters
@@ -342,6 +373,14 @@ export class TaskClusterMap extends Component {
     if (!this.props.showAsClusters ||
         this.props.totalTaskCount <= CLUSTER_POINTS ||
         !markers || !this.currentBounds || !this.currentSize) {
+
+      // Depending on zoom level and env variables, the API may still be clustering.
+      // Double-check the first indexed marker for clustering before 
+      // checking overlapping markers
+      if (!markers[0]?.options?.clusterId) {
+        return labelOverlappingMarkers(markers)
+      }
+
       return markers
     }
 
@@ -466,6 +505,8 @@ export class TaskClusterMap extends Component {
       consolidatedMarkers.push(...[...this.state.spidered.values()])
     }
 
+    const uniqueCoords = {};
+
     const mapMarkers = _map(consolidatedMarkers, mark => {
       let onClick = null
       let popup = null
@@ -497,6 +538,25 @@ export class TaskClusterMap extends Component {
         const nearestToCenter = AsMappableTask(mark.options).nearestPointToCenter()
         if (nearestToCenter) {
           position = [nearestToCenter.geometry.coordinates[1], nearestToCenter.geometry.coordinates[0]]
+        }
+      }
+
+      // It's an overlapping mark icon if it's not clustered, has an overlapping count, and isn't already spidered
+      const overlappingMark = !mark.options.clusterId && mark.overlappingCount > 1 && !this.state.spidered.has(mark.options.taskId)
+
+      if (overlappingMark) {
+        const stringCoords = mark.position.join(',');
+
+        //since these markers are overlapping, this will ensure only one marker renders as necessary
+        if (!uniqueCoords[stringCoords]) {
+          uniqueCoords[stringCoords] = true;
+
+          return (
+            <Marker key={markerId} position={position}
+                        onClick={onClick}><Tooltip>{mark.overlappingCount} overlapping tasks</Tooltip></Marker>
+          );
+        } else {
+          return null;
         }
       }
 
