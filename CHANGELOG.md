@@ -12,6 +12,7 @@ This project adheres to
 ### Features
 - Add ability to bulk edit challenge tags
 - Tasks Updting UI
+- Overlapping node markers
 
 ### Fixes
 - Properly format the editor name for iD
@@ -19,6 +20,8 @@ This project adheres to
 - Update nivo dependencies and add nivo/core
 
 ### System Updates
+- Bump terser
+- Bump jsdom
 - Apply scalafmt and require scalafmtCheck during CI build (API)
 - Update sbt, joda, postgres dependencies (API)
 
