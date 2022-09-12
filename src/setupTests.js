@@ -74,3 +74,8 @@ jest.mock('react-syntax-highlighter/dist/esm/languages/hljs/xml', () => ({
     xmlLang: ""
   }
 }));
+
+jest.mock('@nivo/bar', () => ({
+  __esModule: true,
+  ResponsiveBar: () => null
+}));
