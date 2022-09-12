@@ -39,6 +39,11 @@ export default defineMessages({
     defaultMessage: "Timezone",
   },
 
+  editSelected: {
+    id: "Admin.manageProjectChallenges.controls.editSelected.label",
+    defaultMessage: "Edit Selected",
+  },
+
   moveSelected: {
     id: "Admin.manageProjectChallenges.controls.moveSelected.label",
     defaultMessage: "Move Selected",

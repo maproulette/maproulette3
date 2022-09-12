@@ -8,6 +8,7 @@ import WithStatus from "../HOCs/WithStatus/WithStatus";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import ScreenTooNarrow from "../ScreenTooNarrow/ScreenTooNarrow";
 import EditChallenge from "./Manage/ManageChallenges/EditChallenge/EditChallenge";
+import EditChallenges from "./Manage/ManageChallenges/EditChallenge/EditChallenges";
 import EditProject from "./Manage/EditProject/EditProject";
 import ManageChallengeList from "./Manage/VirtualProjects/ManageChallengeList";
 import EditTask from "./Manage/ManageTasks/EditTask/EditTask";
@@ -75,6 +76,11 @@ export class AdminPane extends Component {
                   "/admin/project/:projectId/challenge/:challengeId/clone",
                 ]}
                 component={EditChallenge}
+              />
+              <Route
+                exact
+                path="/admin/project/:projectId/challenges/edit"
+                component={EditChallenges}
               />
               <Route
                 exact
