@@ -73,6 +73,37 @@ export const CLUSTER_POINTS = 25
  */
 export const CLUSTER_ICON_PIXELS = 40
 
+// Overlapping, unlike clustering, means the markers are in the EXACT same position.
+export const labelOverlappingMarkers = (markers) => {
+  // Collect a dictionary of unique coordinates
+  const uniqueCoords = {};
+
+  // Get the overlapping marker count for each unique set of coordinates
+  // and store in the dictionary
+  for (let i = 0; i < markers.length; i++) {
+    const marker = markers[i];
+    const stringCoords = marker.position.join(',');
+    const count = uniqueCoords[stringCoords];
+
+    if (count) {
+      uniqueCoords[stringCoords]++;
+    } else {
+      uniqueCoords[stringCoords] = 1;
+    }
+  }
+
+  // Loop back through the markers and apply the overlapping count to each of them
+  for (let i = 0; i < markers.length; i++) {
+    const marker = markers[i];
+    const stringCoords = marker.position.join(',');
+    const count = uniqueCoords[stringCoords];
+
+    marker.overlappingCount = count;
+  }
+
+  return markers;
+}
+
 /**
  * TaskClusterMap allows a user to browse tasks and task clusters
  * geographically, optionally calling back when map bounds are modified
@@ -337,37 +368,6 @@ export class TaskClusterMap extends Component {
     return distance(firstPosition, secondPosition, {units: 'degrees'})
   }
 
-  // Overlapping, unlike clustering, means the markers are in the EXACT same position.
-  labelOverlappingMarkers = (markers) => {
-    // Collect a dictionary of unique coordinates
-    const uniqueCoords = {};
-
-    // Get the overlapping marker count for each unique set of coordinates
-    // and store in the dictionary
-    for (let i = 0; i < markers.length; i++) {
-      const marker = markers[i];
-      const stringCoords = marker.position.join(',');
-      const count = uniqueCoords[stringCoords];
-
-      if (count) {
-        uniqueCoords[stringCoords]++;
-      } else {
-        uniqueCoords[stringCoords] = 1;
-      }
-    }
-
-    // Loop back through the markers and apply the overlapping count to each of them
-    for (let i = 0; i < markers.length; i++) {
-      const marker = markers[i];
-      const stringCoords = marker.position.join(',');
-      const count = uniqueCoords[stringCoords];
-
-      marker.overlappingCount = count;
-    }
-
-    return markers;
-  }
-
   consolidateMarkers = markers => {
     // Make sure conditions are appropriate for consolidation
     if (!this.props.showAsClusters ||
@@ -378,7 +378,7 @@ export class TaskClusterMap extends Component {
       // Double-check the first indexed marker for clustering before 
       // checking overlapping markers
       if (!markers[0]?.options?.clusterId) {
-        return this.labelOverlappingMarkers(markers)
+        return labelOverlappingMarkers(markers)
       }
 
       return markers
