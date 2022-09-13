@@ -7,6 +7,24 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.10.0] - 2022-09-13
+
+### Features
+- Add ability to bulk edit challenge tags
+- Tasks Updting UI
+- Overlapping node markers
+
+### Fixes
+- Properly format the editor name for iD
+- Modify bulk task status update into a build flow (API)
+- Update nivo dependencies and add nivo/core
+
+### System Updates
+- Bump terser
+- Bump jsdom
+- Apply scalafmt and require scalafmtCheck during CI build (API)
+- Update sbt, joda, postgres dependencies (API)
+
 ## [v3.9.2] - 2022-08-09
 
 ### Features
