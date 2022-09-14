@@ -547,16 +547,18 @@ export class TaskClusterMap extends Component {
       if (overlappingMark) {
         const stringCoords = mark.position.join(',');
 
-        //since these markers are overlapping, this will ensure only one marker renders as necessary
+        //Since these markers are overlapping, this will ensure only one marker is visible.
+        //Tools like Lasso still need all of the nodes to be on the map,
+        //so we still have to return a marker
         if (!uniqueCoords[stringCoords]) {
           uniqueCoords[stringCoords] = true;
 
           return (
-            <Marker key={markerId} position={position}
+            <Marker key={markerId} position={position} taskId={mark?.options?.id}
                         onClick={onClick}><Tooltip>{mark.overlappingCount} overlapping tasks</Tooltip></Marker>
           );
         } else {
-          return null;
+          return <Marker key={markerId} taskId={mark?.options?.id} zIndexOffset={-100} opacity={0} position={position}></Marker>
         }
       }
 
@@ -586,14 +588,18 @@ export class TaskClusterMap extends Component {
   selectTasksInLayers = layers => {
     if (this.props.onBulkTaskSelection) {
       const taskIds = _compact(_map(layers, layer => _get(layer, 'options.icon.options.taskData.taskId')))
-      this.props.onBulkTaskSelection(taskIds)
+      const overlappingIds = _compact(_map(layers, layer => _get(layer, 'options.taskId')))
+      const allIds = taskIds.concat(overlappingIds)
+      this.props.onBulkTaskSelection(allIds)
     }
   }
 
   deselectTasksInLayers = layers => {
     if (this.props.onBulkTaskDeselection) {
       const taskIds = _compact(_map(layers, layer => _get(layer, 'options.icon.options.taskData.taskId')))
-      this.props.onBulkTaskDeselection(taskIds)
+      const overlappingIds = _compact(_map(layers, layer => _get(layer, 'options.taskId')))
+      const allIds = taskIds.concat(overlappingIds)
+      this.props.onBulkTaskDeselection(allIds)
     }
   }
 
