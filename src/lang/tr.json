@@ -525,7 +525,7 @@
   "ChallengeDetails.fields.difficulty.label": "Zorluk",
   "ChallengeDetails.fields.lastChallengeDetails.DataOriginDate.label": "{SourceDate} kaynaklı verilerden {refreshDate} üzerine inşa edilen görevler.",
   "ChallengeDetails.fields.lastChallengeDetails.TaskRefresh.label": "Task Data Sourced",
-  "ChallengeDetails.fields.viewComments.label": "Conversation",
+  "ChallengeDetails.fields.viewComments.label": "Get In Touch",
   "ChallengeDetails.fields.viewLeaderboard.label": "Lider Tablosunu Görüntüle",
   "ChallengeDetails.fields.viewOverview.label": "Overview",
   "ChallengeDetails.fields.viewReviews.label": "Gözden geçir",
