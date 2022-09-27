@@ -18,6 +18,7 @@ import _filter from 'lodash/filter'
 import _reduce from 'lodash/reduce'
 import _find from 'lodash/find'
 import _size from 'lodash/size'
+import _noop from  'lodash/noop'
 import AsIdentifiableFeature
        from '../../interactions/TaskFeature/AsIdentifiableFeature'
 import messages from './Messages'
@@ -228,6 +229,7 @@ export class EnhancedMap extends ReactLeafletMap {
     if (this.props.onBoundsChange) {
       this.leafletElement.on('zoomend', this.onZoomOrMoveEnd)
       this.leafletElement.on('moveend', this.onZoomOrMoveEnd)
+      this.leafletElement.on('movestart', this.props.onZoomOrMoveStart)
 
       // Unless requested otherwise, invoke onBoundsChange for the initial
       // bounding box.
@@ -407,6 +409,7 @@ export class EnhancedMap extends ReactLeafletMap {
       this.leafletElement.stop()
       this.leafletElement.off('zoomend', this.onZoomOrMoveEnd)
       this.leafletElement.off('moveend', this.onZoomOrMoveEnd)
+      this.leafletElement.off('movestart', this.props.onZoomOrMoveStart)
     }
     catch(e) {} // Bad custom basemaps can cause problems when stopping Leaflet
 
@@ -431,6 +434,8 @@ EnhancedMap.propTypes = {
   fitBoundsOnlyAsNecessary: PropTypes.bool,
   /** If true, features will be animated when initially added to the map */
   animateFeatures: PropTypes.bool,
+  /** If given, will invoke a method when map is being moved */
+  onZoomOrMoveStart: PropTypes.func,
 }
 
 EnhancedMap.defaultProps = {
@@ -439,6 +444,7 @@ EnhancedMap.defaultProps = {
   setInitialBounds: true,
   justFitFeatures: false,
   animateFeatures: false,
+  onZoomOrMoveStart: _noop,
 }
 
 export default EnhancedMap
