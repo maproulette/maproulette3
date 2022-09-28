@@ -284,7 +284,7 @@ export class TaskClusterMap extends Component {
 
   closeSearch = () => this.setState({searchOpen: false})
 
-  debouncedUpdateBounds = _debounce(this.props.updateBounds, 400)
+  debouncedUpdateBounds = _debounce(this.props.updateBounds, 800)
 
   spiderIfNeeded = (marker, allMarkers) => {
     if (this.state.spidered.has(marker.options.taskId)) {
@@ -710,6 +710,7 @@ export class TaskClusterMap extends Component {
         onBoundsChange={this.updateBounds}
         justFitFeatures
         onClick={() => this.unspider()}
+        onZoomOrMoveStart={this.debouncedUpdateBounds.cancel}
       >
         <ZoomControl className="mr-z-10" position='topright' />
         {this.props.showFitWorld && <FitWorldControl />}

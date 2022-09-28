@@ -183,7 +183,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
                                         false, ignoreLocked).then(() => {
           this.setState({loading: false})
        })
-     }, 400)
+     }, 800)
 
      updateCriteriaFromURL(props) {
        const criteria =
