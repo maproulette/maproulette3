@@ -71,7 +71,7 @@
     "react-responsive": "^8.1.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.3",
     "react-share": "^4.2.0",
     "react-syntax-highlighter": "^15.4.3",
     "react-table-6": "^6.11.0",
