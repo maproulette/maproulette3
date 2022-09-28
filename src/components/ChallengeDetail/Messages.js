@@ -71,7 +71,7 @@ export default defineMessages({
 
   viewComments: {
     id: "ChallengeDetails.fields.viewComments.label",
-    defaultMessage: "Conversation"
+    defaultMessage: "Get In Touch"
   },
 
   viewOverview: {
