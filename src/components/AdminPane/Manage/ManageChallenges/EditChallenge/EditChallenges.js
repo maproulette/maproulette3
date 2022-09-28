@@ -75,7 +75,12 @@ export class EditChallenges extends Component {
       const challengesEditing = this.props.challenges.filter(c => tallied.includes(c.id));
 
       for (let i = 0; i < challengesEditing.length; i++) {
-        const result = await this.props.saveChallenge({ id: challengesEditing[i].id, tags: formData.tags, changesetUrl: challengesEditing[i].changesetUrl });
+        const result = await this.props.saveChallenge({
+          id: challengesEditing[i].id,
+          tags: formData.tags,
+          preferredTags: formData.taskTags,
+          changesetUrl: challengesEditing[i].changesetUrl
+        });
 
         if (result?.id) {
           this.setState({ challengeNumberSaving: this.state.challengeNumberSaving + 1 });

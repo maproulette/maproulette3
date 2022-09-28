@@ -4,6 +4,8 @@ import _merge from 'lodash/merge'
 import _reduce from 'lodash/reduce'
 import { jsSchema as discoverabilityJsSchema,
          uiSchema as discoverabilityUiSchema } from './BulkSchemas/DiscoverabilitySchema'
+import { jsSchema as tagsJsSchema,
+         uiSchema as tagsUiSchema } from './BulkSchemas/TagsSchema'
 import messages from './Messages'
 
 // Define individual workflow steps. Steps can be driven by either schemas or
@@ -17,6 +19,15 @@ const discoverabilityStep = {
   viewBox: "0 0 64 80",
 }
 
+const tagsStep = {
+  id: 'Tags',
+  description: <FormattedMessage {...messages.tagsStepDescription} />,
+  jsSchema: tagsJsSchema,
+  uiSchema: tagsUiSchema,
+  icon: "tag-icon",
+  viewBox: "0 0 100 125",
+}
+
 // String together workflow steps for creating a new challenge
 const bulkEditSteps = {
   'Discoverability': Object.assign({}, discoverabilityStep, {
@@ -24,6 +35,11 @@ const bulkEditSteps = {
     previous: 'AdvancedOptions',
     canFinish: true,
   }),
+  'Tags': Object.assign({}, tagsStep, {
+    next: 'AdvancedOptions',
+    previous: 'AdvancedOptions',
+    canFinish: true,
+  })
 }
 
 // Combine given workflow steps into a single longform step
