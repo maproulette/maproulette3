@@ -7,6 +7,7 @@ import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
+import './Leaderboard.scss'
 
 class RowLeaderboard extends Component {
   render() {
@@ -22,6 +23,35 @@ class RowLeaderboard extends Component {
         </li>
       ))
 
+    function onHover(value) {
+      const name = document.getElementById('profile-name-' + value)
+      const pic = document.getElementById('profile-pic-' + value)
+
+      if (!name || !pic) {
+        return
+      }
+
+      pic.style.border = '2px solid #7EBC89'
+      pic.style.outline = '2px solid #7EBC89'
+      pic.style.outlineOffset = '4px'
+
+      name.style.color = '#7EBC89'
+    }
+
+    function onLeave(value) {
+      const name = document.getElementById('profile-name-' + value)
+      const pic = document.getElementById('profile-pic-' + value)
+
+      if (!name || !pic) {
+        return
+      }
+
+      pic.style.border = null
+      pic.style.outline = null
+      pic.style.outlineOffset = '-8px'
+
+      name.style.color = '#fff'
+    }
     return (
       <article className={classNames('mr-leaderboard-row', this.props.className)}>
         <div className="sm:mr-grid sm:mr-grid-columns-10 sm:mr-grid-gap-8">
@@ -32,14 +62,24 @@ class RowLeaderboard extends Component {
               </h3>
             </div>
             <div className="md:mr-flex mr-items-center">
-              <div
-                className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full"
+              <a
+                href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
+                className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full card-pic"
+                id={'profile-pic-' + leader.name}
                 style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
+                onMouseOver={() => onHover(leader.name)}
+                onMouseLeave={() => onLeave(leader.name)}
               />
               <div className="md:mr-pl-8">
-                <h2 className="mr-text-lg mr-font-normal mr-mb-2">
+                <a 
+                  href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
+                  className="mr-text-lg mr-font-normal mr-mb-2 mr-text-white card-name"
+                  onMouseOver={() => onHover(leader.name)}
+                  onMouseLeave={() => onLeave(leader.name)}
+                  id={'profile-name-' + leader.name}
+                >
                   {leader.name}
-                </h2>
+                </a>
                 <h4 className="mr-text-md mr-text-yellow">
                   <strong className="mr-text-yellow">
                     <FormattedNumber value={leader.score} />

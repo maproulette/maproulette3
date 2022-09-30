@@ -1,0 +1,10 @@
+@import 'variables.scss';
+
+.card-pic{
+    transition: outline-offset 200ms ease;
+    outline-offset: -8px;
+}
+
+.card-name {
+    transition: all 200ms ease;
+}

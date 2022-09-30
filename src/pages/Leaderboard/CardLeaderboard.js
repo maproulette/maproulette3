@@ -7,6 +7,7 @@ import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
+import './Leaderboard.scss'
 
 class CardLeaderboard extends Component {
   render() {
@@ -22,6 +23,36 @@ class CardLeaderboard extends Component {
         </li>
       ))
 
+    function onHover(value) {
+      const name = document.getElementById('profile-name-' + value)
+      const pic = document.getElementById('profile-pic-' + value)
+
+      if (!name || !pic) {
+        return
+      }
+
+      pic.style.border = '2px solid #7EBC89'
+      pic.style.outline = '2px solid #7EBC89'
+      pic.style.outlineOffset = '4px'
+
+      name.style.color = '#7EBC89'
+    }
+
+    function onLeave(value) {
+      const name = document.getElementById('profile-name-' + value)
+      const pic = document.getElementById('profile-pic-' + value)
+
+      if (!name || !pic) {
+        return
+      }
+
+      pic.style.border = null
+      pic.style.outline = null
+      pic.style.outlineOffset = '-8px'
+
+      name.style.color = '#fff'
+    }
+
     return (
       <article
         className={classNames(
@@ -30,15 +61,27 @@ class CardLeaderboard extends Component {
         )}
       >
         <header className="mr-max-w-xs mr-mx-auto mr-mb-2">
-          <div
-            className="mr-block mr-w-24 mr-h-24 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-mb-4 mr-rounded-full"
+          <a
+            href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
+            className="mr-block mr-w-24 mr-h-24 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-mb-4 mr-rounded-full card-pic"
             style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
+            onMouseOver={() => onHover(leader.name)}
+            onMouseLeave={() => onLeave(leader.name)}
+            id={'profile-pic-' + leader.name}
           />
           <h2 className="mr-h4 mr-mb-1">
             <span className="mr-text-4xl mr-font-bold mr-absolute mr-left-0 mr-top-0 mr-mt-6 mr-ml-6">
               <FormattedNumber value={leader.rank} />
             </span>
-            {leader.name}
+            <a 
+              href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer" 
+              className="mr-text-white card-name"
+              onMouseOver={() => onHover(leader.name)}
+              onMouseLeave={() => onLeave(leader.name)}
+              id={'profile-name-' + leader.name}
+            >
+              {leader.name}
+            </a>
           </h2>
         </header>
         <h3 className="mr-h2 mr-mb-4 mr-text-yellow">
