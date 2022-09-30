@@ -24,33 +24,32 @@ class RowLeaderboard extends Component {
       ))
 
     function onHover(value) {
-      const name = document.getElementById('profile-name-' + value)
-      const pic = document.getElementById('profile-pic-' + value)
+      const name = value ? document.getElementById('profile-name-' + value) : null
+      const pic = value ? document.getElementById('profile-pic-' + value) : null
 
-      if (!name || !pic) {
-        return
+      if (pic) {
+        pic.style.border = '2px solid #7EBC89'
+        pic.style.outline = '2px solid #7EBC89'
+        pic.style.outlineOffset = '4px'
       }
 
-      pic.style.border = '2px solid #7EBC89'
-      pic.style.outline = '2px solid #7EBC89'
-      pic.style.outlineOffset = '4px'
-
-      name.style.color = '#7EBC89'
+      if (name) {
+        name.style.color = '#7EBC89'
+      }
     }
 
     function onLeave(value) {
-      const name = document.getElementById('profile-name-' + value)
-      const pic = document.getElementById('profile-pic-' + value)
+      const name = value ? document.getElementById('profile-name-' + value) : null
+      const pic = value ? document.getElementById('profile-pic-' + value) : null
 
-      if (!name || !pic) {
-        return
+      if (pic) {
+        pic.style.border = null
+        pic.style.outline = null
+        pic.style.outlineOffset = '-8px'
       }
-
-      pic.style.border = null
-      pic.style.outline = null
-      pic.style.outlineOffset = '-8px'
-
-      name.style.color = '#fff'
+      if(name) {
+        name.style.color = '#fff'
+      }
     }
     return (
       <article className={classNames('mr-leaderboard-row', this.props.className)}>
