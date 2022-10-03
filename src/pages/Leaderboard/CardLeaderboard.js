@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, FormattedNumber } from 'react-intl'
@@ -7,9 +7,20 @@ import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
-import './Leaderboard.scss'
 
 class CardLeaderboard extends Component {
+  state = {
+    isHover: false
+  }
+
+  onHover = () => {
+    this.setState({isHover: true})
+  }
+
+  onLeave = () => {
+    this.setState({isHover: false}) 
+  }
+
   render() {
     const leader = this.props.leader
 
@@ -23,33 +34,17 @@ class CardLeaderboard extends Component {
         </li>
       ))
 
-    function onHover(value) {
-      const name = value ? document.getElementById('profile-name-' + value) : null
-      const pic = value ? document.getElementById('profile-pic-' + value) : null
-
-      if (pic) {
-        pic.style.border = '2px solid #7EBC89'
-        pic.style.outline = '2px solid #7EBC89'
-        pic.style.outlineOffset = '4px'
-      }
-
-      if (name) {
-        name.style.color = '#7EBC89'
-      }
+    const picStyle = {
+      transition: 'outline-offset 200ms ease',
+      backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})`,
+      border: this.state.isHover ? '2px solid #7EBC89': null,
+      outline: this.state.isHover ? '2px solid #7EBC89': null,
+      outlineOffset: this.state.isHover ? '4px': '-8px',
     }
 
-    function onLeave(value) {
-      const name = value ? document.getElementById('profile-name-' + value) : null
-      const pic = value ? document.getElementById('profile-pic-' + value) : null
-
-      if (pic) {
-        pic.style.border = null
-        pic.style.outline = null
-        pic.style.outlineOffset = '-8px'
-      }
-      if(name) {
-        name.style.color = '#fff'
-      }
+    const nameStyle = {
+      transition: 'all 200ms ease',
+      color: this.state.isHover ? '#7EBC89': '#fff',
     }
 
     return (
@@ -63,10 +58,9 @@ class CardLeaderboard extends Component {
           <a
             href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
             className="mr-block mr-w-24 mr-h-24 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-mb-4 mr-rounded-full card-pic"
-            style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
-            onMouseOver={() => onHover(leader.name)}
-            onMouseLeave={() => onLeave(leader.name)}
-            id={'profile-pic-' + leader.name}
+            style={picStyle}
+            onMouseOver={this.onHover}
+            onMouseLeave={this.onLeave}
           />
           <h2 className="mr-h4 mr-mb-1">
             <span className="mr-text-4xl mr-font-bold mr-absolute mr-left-0 mr-top-0 mr-mt-6 mr-ml-6">
@@ -75,9 +69,9 @@ class CardLeaderboard extends Component {
             <a 
               href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer" 
               className="mr-text-white card-name"
-              onMouseOver={() => onHover(leader.name)}
-              onMouseLeave={() => onLeave(leader.name)}
-              id={'profile-name-' + leader.name}
+              style={nameStyle}
+              onMouseOver={this.onHover}
+              onMouseLeave={this.onLeave}
             >
               {leader.name}
             </a>

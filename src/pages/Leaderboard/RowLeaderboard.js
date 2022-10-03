@@ -7,9 +7,20 @@ import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
-import './Leaderboard.scss'
 
 class RowLeaderboard extends Component {
+  state = {
+    isHover: false
+  }
+
+  onHover = () => {
+    this.setState({isHover: true})
+  }
+
+  onLeave = () => {
+    this.setState({isHover: false}) 
+  }
+
   render() {
     const leader = this.props.leader
 
@@ -23,34 +34,19 @@ class RowLeaderboard extends Component {
         </li>
       ))
 
-    function onHover(value) {
-      const name = value ? document.getElementById('profile-name-' + value) : null
-      const pic = value ? document.getElementById('profile-pic-' + value) : null
-
-      if (pic) {
-        pic.style.border = '2px solid #7EBC89'
-        pic.style.outline = '2px solid #7EBC89'
-        pic.style.outlineOffset = '4px'
+      const picStyle = {
+        transition: 'outline-offset 200ms ease',
+        backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})`,
+        border: this.state.isHover ? '2px solid #7EBC89': null,
+        outline: this.state.isHover ? '2px solid #7EBC89': null,
+        outlineOffset: this.state.isHover ? '4px': '-8px',
+      }
+  
+      const nameStyle = {
+        transition: 'all 200ms ease',
+        color: this.state.isHover ? '#7EBC89': '#fff',
       }
 
-      if (name) {
-        name.style.color = '#7EBC89'
-      }
-    }
-
-    function onLeave(value) {
-      const name = value ? document.getElementById('profile-name-' + value) : null
-      const pic = value ? document.getElementById('profile-pic-' + value) : null
-
-      if (pic) {
-        pic.style.border = null
-        pic.style.outline = null
-        pic.style.outlineOffset = '-8px'
-      }
-      if(name) {
-        name.style.color = '#fff'
-      }
-    }
     return (
       <article className={classNames('mr-leaderboard-row', this.props.className)}>
         <div className="sm:mr-grid sm:mr-grid-columns-10 sm:mr-grid-gap-8">
@@ -65,16 +61,17 @@ class RowLeaderboard extends Component {
                 href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
                 className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full card-pic"
                 id={'profile-pic-' + leader.name}
-                style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
-                onMouseOver={() => onHover(leader.name)}
-                onMouseLeave={() => onLeave(leader.name)}
+                style={picStyle}
+                onMouseOver={this.onHover}
+                onMouseLeave={this.onLeave}
               />
               <div className="md:mr-pl-8">
                 <a 
                   href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
                   className="mr-text-lg mr-font-normal mr-mb-2 mr-text-white card-name"
-                  onMouseOver={() => onHover(leader.name)}
-                  onMouseLeave={() => onLeave(leader.name)}
+                  style={nameStyle}
+                  onMouseOver={this.onHover}
+                  onMouseLeave={this.onLeave}
                   id={'profile-name-' + leader.name}
                 >
                   {leader.name}
