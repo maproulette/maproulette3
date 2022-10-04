@@ -59,8 +59,7 @@ class RowLeaderboard extends Component {
             <div className="md:mr-flex mr-items-center">
               <a
                 href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
-                className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full card-pic"
-                id={'profile-pic-' + leader.name}
+                className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full"
                 style={picStyle}
                 onMouseOver={this.onHover}
                 onMouseLeave={this.onLeave}
@@ -68,11 +67,10 @@ class RowLeaderboard extends Component {
               <div className="md:mr-pl-8">
                 <a 
                   href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
-                  className="mr-text-lg mr-font-normal mr-mb-2 mr-text-white card-name"
+                  className="mr-text-lg mr-font-normal mr-mb-2 mr-text-white"
                   style={nameStyle}
                   onMouseOver={this.onHover}
                   onMouseLeave={this.onLeave}
-                  id={'profile-name-' + leader.name}
                 >
                   {leader.name}
                 </a>
