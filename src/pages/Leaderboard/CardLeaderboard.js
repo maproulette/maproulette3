@@ -7,6 +7,7 @@ import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
+import './Leaderboard.scss'
 
 class CardLeaderboard extends Component {
   state = {
@@ -34,19 +35,6 @@ class CardLeaderboard extends Component {
         </li>
       ))
 
-    const picStyle = {
-      transition: 'outline-offset 200ms ease',
-      backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})`,
-      border: this.state.isHover ? '2px solid #7EBC89': null,
-      outline: this.state.isHover ? '2px solid #7EBC89': null,
-      outlineOffset: this.state.isHover ? '4px': '-8px',
-    }
-
-    const nameStyle = {
-      transition: 'all 200ms ease',
-      color: this.state.isHover ? '#7EBC89': '#fff',
-    }
-
     return (
       <article
         className={classNames(
@@ -54,11 +42,11 @@ class CardLeaderboard extends Component {
           this.props.className
         )}
       >
-        <header className="mr-max-w-xs mr-mx-auto mr-mb-2">
+        <header className={"mr-max-w-xs mr-mx-auto mr-mb-2 " + (this.state.isHover ? 'hover-style': '')}>
           <a
             href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
-            className="mr-block mr-w-24 mr-h-24 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-mb-4 mr-rounded-full card-pic"
-            style={picStyle}
+            className="mr-block mr-w-24 mr-h-24 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-mb-4 mr-rounded-full hover-pic"
+            style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
             onMouseOver={this.onHover}
             onMouseLeave={this.onLeave}
           />
@@ -68,8 +56,7 @@ class CardLeaderboard extends Component {
             </span>
             <a 
               href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer" 
-              className="mr-text-white card-name"
-              style={nameStyle}
+              className="mr-text-white card-name hover-name"
               onMouseOver={this.onHover}
               onMouseLeave={this.onLeave}
             >

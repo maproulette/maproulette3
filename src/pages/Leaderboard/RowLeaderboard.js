@@ -7,6 +7,7 @@ import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
+import './Leaderboard.scss'
 
 class RowLeaderboard extends Component {
   state = {
@@ -34,19 +35,6 @@ class RowLeaderboard extends Component {
         </li>
       ))
 
-      const picStyle = {
-        transition: 'outline-offset 200ms ease',
-        backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})`,
-        border: this.state.isHover ? '2px solid #7EBC89': null,
-        outline: this.state.isHover ? '2px solid #7EBC89': null,
-        outlineOffset: this.state.isHover ? '4px': '-8px',
-      }
-  
-      const nameStyle = {
-        transition: 'all 200ms ease',
-        color: this.state.isHover ? '#7EBC89': '#fff',
-      }
-
     return (
       <article className={classNames('mr-leaderboard-row', this.props.className)}>
         <div className="sm:mr-grid sm:mr-grid-columns-10 sm:mr-grid-gap-8">
@@ -56,19 +44,18 @@ class RowLeaderboard extends Component {
                 <FormattedNumber value={leader.rank} />
               </h3>
             </div>
-            <div className="md:mr-flex mr-items-center">
+            <div className={"md:mr-flex mr-items-center " + (this.state.isHover ? 'hover-style': '')}>
               <a
                 href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
-                className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full"
-                style={picStyle}
+                className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full hover-pic"
+                style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
                 onMouseOver={this.onHover}
                 onMouseLeave={this.onLeave}
               />
               <div className="md:mr-pl-8">
                 <a 
                   href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
-                  className="mr-text-lg mr-font-normal mr-mb-2 mr-text-white"
-                  style={nameStyle}
+                  className="mr-text-lg mr-font-normal mr-mb-2 mr-text-white hover-name"
                   onMouseOver={this.onHover}
                   onMouseLeave={this.onLeave}
                 >
