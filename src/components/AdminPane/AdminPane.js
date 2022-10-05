@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Switch, Route, withRouter } from "react-router-dom";
+import { Switch, withRouter } from "react-router-dom";
 import MediaQuery from "react-responsive";
 import AsManager from "../../interactions/User/AsManager";
 import SignIn from "../../pages/SignIn/SignIn";

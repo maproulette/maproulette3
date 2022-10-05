@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { withRouter } from 'react-router';
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser';
-import WithCurrentProject from '../AdminPane/HOCs/WithCurrentProject/WithCurrentProject';
-import WithProjects from '../HOCs/WithProjects/WithProjects'
 import WithProject from '../HOCs/WithProject/WithProject'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges';
 import WithChallenge from '../HOCs/WithChallenge/WithChallenge';
@@ -74,9 +72,9 @@ const HeadTitle = (props) => {
   )
 }
 
-export default withRouter(WithCurrentUser(WithCurrentProject(WithProjects(WithProject(
+export default withRouter(WithCurrentUser(WithProject(
   WithChallenges(
     WithChallenge(
       WithBrowsedChallenge(injectIntl(HeadTitle))
     )
-  ))))))
+  ))))
