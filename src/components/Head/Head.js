@@ -10,23 +10,24 @@ import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 
 const HeadTitle = (props) => {
-
-  const [title, setTitle] = useState(process.env.REACT_APP_TITLE)
+  
+  const REACT_APP_TITLE = 'MapRoulette'
+  const [title, setTitle] = useState(REACT_APP_TITLE)
 
   useEffect(() => {
     getPath(props.match.path)
   }, [props.location.pathname, props.project, props.challenge, props.user])
 
   const findCurrentChallengeName = () => {
-    return props.challenge && props.challenge.name
+    return props.challenge?.name
   }
 
   const findCurrentProjectName = () => {
-    return props.project && props.project.displayName
+    return props.project?.displayName
   }
 
   const findCurrentUserName = () => {
-    return props.user && props.user.osmProfile.displayName
+    return props.user?.osmProfile.displayName
   }
 
   const findCurrentCountryCode = () => {
@@ -71,10 +72,10 @@ const HeadTitle = (props) => {
         return params
       }
     })
-    let newTitle = _isEmpty(pathArr) ? process.env.REACT_APP_TITLE : process.env.REACT_APP_TITLE + '-' + pathArr.join('-')
+    let newTitle = _isEmpty(pathArr) ? REACT_APP_TITLE : REACT_APP_TITLE + '-' + pathArr.join('-')
     setTitle(newTitle)
   }
-  console.log(props)
+ 
   return (
     <>
       <Helmet>
