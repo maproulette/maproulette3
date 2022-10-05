@@ -18,6 +18,7 @@ import ProjectDashboard from "./Manage/ProjectDashboard/ProjectDashboard";
 import ChallengeDashboard from "./Manage/ChallengeDashboard/ChallengeDashboard";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import EmailRequirementNotice from "./Manage/EmailRequirementNotice/EmailRequirementNotice";
+import { CachedRoute } from "../../App";
 import "./Manage/Widgets/widget_registry.js";
 import "./AdminPane.scss";
 
@@ -58,17 +59,17 @@ export class AdminPane extends Component {
         <div className="admin mr-bg-gradient-r-green-dark-blue mr-text-white">
           <div className="admin-pane">
             <Switch>
-              <Route
+              <CachedRoute
                 exact
                 path="/admin/project/:projectId/challenge/:challengeId"
                 component={ChallengeDashboard}
               />
-              <Route
+              <CachedRoute
                 exact
                 path={["/admin/projects/new", "/admin/project/:projectId/edit"]}
                 component={EditProject}
               />
-              <Route
+              <CachedRoute
                 exact
                 path={[
                   "/admin/project/:projectId/challenges/new",
@@ -77,37 +78,37 @@ export class AdminPane extends Component {
                 ]}
                 component={EditChallenge}
               />
-              <Route
+              <CachedRoute
                 exact
                 path="/admin/project/:projectId/challenges/edit"
                 component={EditChallenges}
               />
-              <Route
+              <CachedRoute
                 exact
                 path="/admin/project/:projectId/challenge/:challengeId/task/:taskId/edit"
                 component={EditTask}
               />
-              <Route
+              <CachedRoute
                 exact
                 path="/admin/project/:projectId/challenge/:challengeId/task/:taskId/inspect"
                 component={InspectTask}
               />
-              <Route
+              <CachedRoute
                 exact
                 path="/admin/virtual/project/:projectId/challenges/manage"
                 component={ManageChallengeList}
               />
-              <Route
+              <CachedRoute
                 exact
                 path="/admin/projects"
                 component={ProjectsDashboard}
               />
-              <Route
+              <CachedRoute
                 exact
                 path="/admin/project/:projectId"
                 component={ProjectDashboard}
               />
-              <Route component={ProjectsDashboard} />
+              <CachedRoute component={ProjectsDashboard} />
             </Switch>
           </div>
         </div>
