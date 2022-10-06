@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { withRouter } from 'react-router';
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser';
@@ -9,10 +9,9 @@ import { injectIntl } from 'react-intl';
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 
-const HeadTitle = (props) => {
-  
+export const HeadTitle = (props) => {
+
   const REACT_APP_TITLE = 'MapRoulette'
-  const [title, setTitle] = useState(REACT_APP_TITLE)
 
   useEffect(() => {
     getPath(props.match.path)
@@ -43,7 +42,7 @@ const HeadTitle = (props) => {
   }
 
   const getPath = (path) => {
-    pathToTitleFormat(path)
+    return pathToTitleFormat(path)
   }
 
   /* parse names from url path into array, replace id params with names, and then concatenate with - for title */
@@ -73,13 +72,13 @@ const HeadTitle = (props) => {
       }
     })
     let newTitle = _isEmpty(pathArr) ? REACT_APP_TITLE : REACT_APP_TITLE + '-' + pathArr.join('-')
-    setTitle(newTitle)
+    return newTitle
   }
- 
+
   return (
     <>
       <Helmet>
-        <title>{title}</title>
+        <title>{getPath(props.match.path)}</title>
       </Helmet>
     </>
   )
