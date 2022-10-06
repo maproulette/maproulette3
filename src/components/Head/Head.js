@@ -14,7 +14,7 @@ export const HeadTitle = (props) => {
   const REACT_APP_TITLE = 'MapRoulette'
 
   useEffect(() => {
-    getPath(props.match.path)
+    pathToTitleFormat(props.match.path)
   }, [props.location.pathname, props.project, props.challenge, props.user])
 
   const findCurrentChallengeName = () => {
@@ -39,10 +39,6 @@ export const HeadTitle = (props) => {
 
   const findReviewType = () => {
     return _get(props, 'match.params.showType')
-  }
-
-  const getPath = (path) => {
-    return pathToTitleFormat(path)
   }
 
   /* parse names from url path into array, replace id params with names, and then concatenate with - for title */
@@ -76,11 +72,9 @@ export const HeadTitle = (props) => {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>{getPath(props.match.path)}</title>
-      </Helmet>
-    </>
+    <Helmet>
+      <title>{pathToTitleFormat(props.match.path)}</title>
+    </Helmet>
   )
 }
 
