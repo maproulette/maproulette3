@@ -9,9 +9,9 @@ import { injectIntl } from 'react-intl';
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 
-export const HeadTitle = (props) => {
+const REACT_APP_TITLE = 'MapRoulette'
 
-  const REACT_APP_TITLE = 'MapRoulette'
+export const HeadTitle = (props) => {
 
   useEffect(() => {
     pathToTitleFormat(props.match.path)

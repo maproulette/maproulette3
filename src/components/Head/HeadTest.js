@@ -1,5 +1,5 @@
-let _get = require('lodash/get');
-let _isEmpty = require('lodash/isEmpty')
+const _get = require('lodash/get');
+const _isEmpty = require('lodash/isEmpty')
 
 /* Unit tests for Head.js, export functions from Head.js and run tests with node HeadTest.js */
 let path = '/'
@@ -63,6 +63,6 @@ const titleTest = () => {
     console.log('title can be generated for path with params!')
   }
 }
-console.log(titleTest())
+titleTest()
 
 module.exports = 'titleTest'
