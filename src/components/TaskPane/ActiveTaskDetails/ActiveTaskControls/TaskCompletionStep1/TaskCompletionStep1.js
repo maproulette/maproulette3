@@ -93,8 +93,8 @@ export default class TaskCompletionStep1 extends Component {
                     <FormattedMessage {...messages.changeStatusOptions} /> :
                     <FormattedMessage {...messages.otherOptions} /> } />
              }
-             dropdownContent={() =>
-               <ListMoreOptionsItems {...this.props} />
+             dropdownContent={dropdown =>
+               <ListMoreOptionsItems {...this.props} toggleDropdownVisible={dropdown.toggleDropdownVisible}/>
              }
            />
           }
@@ -124,22 +124,22 @@ const ListMoreOptionsItems = function(props) {
   return (
     <ol className="mr-list-dropdown">
       {props.allowedProgressions.has(TaskStatus.falsePositive) && props.needsRevised &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskFalsePositiveControl {...props} complete={complete} asLink />
        </li>
       }
       {props.allowedProgressions.has(TaskStatus.fixed) &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskFixedControl {...props} complete={complete} asLink />
        </li>
       }
       {props.allowedProgressions.has(TaskStatus.tooHard) &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskTooHardControl {...props} complete={complete} asLink />
        </li>
       }
       {props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskAlreadyFixedControl {...props} complete={complete} asLink />
        </li>
       }
