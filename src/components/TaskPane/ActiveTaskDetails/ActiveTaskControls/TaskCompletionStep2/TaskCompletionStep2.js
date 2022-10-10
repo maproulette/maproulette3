@@ -58,8 +58,8 @@ export default class TaskCompletionStep2 extends Component {
              dropdownButton={dropdown =>
                <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
              }
-             dropdownContent={() =>
-               <ListMoreOptionsItems {...this.props} />
+             dropdownContent={dropdown =>
+               <ListMoreOptionsItems {...this.props} toggleDropdownVisible={dropdown.toggleDropdownVisible}/>
              }
            />
           }
@@ -90,12 +90,12 @@ const ListMoreOptionsItems = function(props) {
   return (
     <ol className="mr-list-dropdown">
       {props.allowedProgressions.has(TaskStatus.skipped) &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskSkipControl {...props} asLink />
        </li>
       }
       {props.allowedProgressions.has(TaskStatus.falsePositive) &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskFalsePositiveControl {...props} asLink />
        </li>
       }
