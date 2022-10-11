@@ -7,8 +7,21 @@ import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
+import './Leaderboard.scss'
 
 class RowLeaderboard extends Component {
+  state = {
+    isHover: false
+  }
+
+  onHover = () => {
+    this.setState({isHover: true})
+  }
+
+  onLeave = () => {
+    this.setState({isHover: false}) 
+  }
+
   render() {
     const leader = this.props.leader
 
@@ -31,15 +44,23 @@ class RowLeaderboard extends Component {
                 <FormattedNumber value={leader.rank} />
               </h3>
             </div>
-            <div className="md:mr-flex mr-items-center">
-              <div
-                className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full"
+            <div className={"md:mr-flex mr-items-center " + (this.state.isHover ? 'hover-style': '')}>
+              <a
+                href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
+                className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full hover-pic"
                 style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
+                onMouseOver={this.onHover}
+                onMouseLeave={this.onLeave}
               />
               <div className="md:mr-pl-8">
-                <h2 className="mr-text-lg mr-font-normal mr-mb-2">
+                <a 
+                  href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
+                  className="mr-text-lg mr-font-normal mr-mb-2 mr-text-white hover-name"
+                  onMouseOver={this.onHover}
+                  onMouseLeave={this.onLeave}
+                >
                   {leader.name}
-                </h2>
+                </a>
                 <h4 className="mr-text-md mr-text-yellow">
                   <strong className="mr-text-yellow">
                     <FormattedNumber value={leader.score} />

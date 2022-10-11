@@ -93,24 +93,26 @@ export default class TaskNextControl extends Component {
                 <input
                   type="radio"
                   name="randomnessPreference"
+                  id="randomnessPreference-random"
                   className="mr-radio mr-mr-1"
                   checked={this.props.loadBy === TaskLoadMethod.random}
                   onClick={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
                   onChange={_noop}
                 />
-                <label className="mr-ml-1 mr-mr-4">
+                <label className="mr-ml-1 mr-mr-4" htmlFor="randomnessPreference-random">
                   <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
                 </label>
 
                 <input
                   type="radio"
                   name="randomnessPreference"
+                  id="randomnessPreference-proximity"
                   className="mr-radio mr-mr-1"
                   checked={this.props.loadBy === TaskLoadMethod.proximity}
                   onClick={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
                   onChange={_noop}
                 />
-                <label className="mr-ml-1">
+                <label className="mr-ml-1" htmlFor="randomnessPreference-proximity">
                   <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
                 </label>
               </div>
