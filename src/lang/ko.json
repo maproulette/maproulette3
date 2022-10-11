@@ -525,7 +525,7 @@
   "ChallengeDetails.fields.difficulty.label": "난이도",
   "ChallengeDetails.fields.lastChallengeDetails.DataOriginDate.label": "{sourceDate}에서 가져온 데이터에서 {refreshDate}에 구축된 작업.",
   "ChallengeDetails.fields.lastChallengeDetails.TaskRefresh.label": "임무 데이터 소스",
-  "ChallengeDetails.fields.viewComments.label": "대화",
+  "ChallengeDetails.fields.viewComments.label": "Get In Touch",
   "ChallengeDetails.fields.viewLeaderboard.label": "리더보드 표시",
   "ChallengeDetails.fields.viewOverview.label": "개요",
   "ChallengeDetails.fields.viewReviews.label": "검토",

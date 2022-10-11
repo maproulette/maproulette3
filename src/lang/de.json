@@ -525,7 +525,7 @@
   "ChallengeDetails.fields.difficulty.label": "Schwierigkeit",
   "ChallengeDetails.fields.lastChallengeDetails.DataOriginDate.label": "Aufgaben erstellt am {refreshDate} mit Daten vom {sourceDate}.",
   "ChallengeDetails.fields.lastChallengeDetails.TaskRefresh.label": "Task Data Sourced",
-  "ChallengeDetails.fields.viewComments.label": "Unterhaltung",
+  "ChallengeDetails.fields.viewComments.label": "Get In Touch",
   "ChallengeDetails.fields.viewLeaderboard.label": "Bestenliste anzeigen",
   "ChallengeDetails.fields.viewOverview.label": "Übersicht",
   "ChallengeDetails.fields.viewReviews.label": "Prüfung",

@@ -7,6 +7,29 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.10.1] - 2022-10-11
+
+### Features
+- Add preferred tags to bulk challenge edit
+- Change title of conversation tab
+- Link user profiles to OSM profiles on leaderboard
+- Pages now have unique titles in browser history
+- Add Challenge Comment Notifications for Owners (API)
+- modify mappedOn date depending on task status (API)
+
+### Fixes
+- Cancel debounce on map move
+- Fix typos in routes files (API)
+
+### System Updates
+- Allow automatic minor and patch updates to react-scripts
+- Update to swagger-ui 4.14.2 and tweak its config (API)
+- Update to sbt-scalafmt 2.4.6 and check *.sbt during CI (API)
+- scalastyle: Switch to com.beautiful-scala:sbt-scalastyle (API)
+- Use only sonatypeOss releases resolver (API)
+- Update: scala 2.13.9 and sbt-scalafix 0.10.3 (API)
+- Create the CaffeineCache implementation (API)
+
 ## [v3.10.0] - 2022-09-13
 
 ### Features
