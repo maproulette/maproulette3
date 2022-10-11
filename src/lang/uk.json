@@ -525,7 +525,7 @@
   "ChallengeDetails.fields.difficulty.label": "Складність",
   "ChallengeDetails.fields.lastChallengeDetails.DataOriginDate.label": "Завдання створені {refreshDate}, з отриманих {sourceDate} даних.",
   "ChallengeDetails.fields.lastChallengeDetails.TaskRefresh.label": "Дані отримано",
-  "ChallengeDetails.fields.viewComments.label": "Спілкування",
+  "ChallengeDetails.fields.viewComments.label": "Get In Touch",
   "ChallengeDetails.fields.viewLeaderboard.label": "Дошка досягнень",
   "ChallengeDetails.fields.viewOverview.label": "Огляд",
   "ChallengeDetails.fields.viewReviews.label": "Перевірка",
