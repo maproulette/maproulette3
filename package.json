@@ -59,6 +59,7 @@
     "react-dropzone": "^11.0.1",
     "react-elastic-carousel": "^0.9.0",
     "react-grid-layout": "^0.18.3",
+    "react-helmet": "^6.1.0",
     "react-intl": "^4.6.9",
     "react-intl-formatted-duration": "^4.0.0",
     "react-leaflet": "^2.7.0",

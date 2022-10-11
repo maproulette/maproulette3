@@ -34,6 +34,7 @@ import LoadRandomChallengeTask
        from './components/LoadRandomChallengeTask/LoadRandomChallengeTask'
 import LoadRandomVirtualChallengeTask
        from './components/LoadRandomVirtualChallengeTask/LoadRandomVirtualChallengeTask'
+import HeadTitle from './components/Head/Head'
 import Navbar from './components/Navbar/Navbar'
 import SystemNotices from './components/SystemNotices/SystemNotices'
 import Footer from './components/Footer/Footer'
@@ -143,12 +144,20 @@ export class App extends Component {
 /**
  * Simple wrapper for Route that clears the request cache prior to rendering.
  */
-export const CachedRoute=({component: Component, ...rest}) => (
-  <Route {...rest}
-         render={props => {
-           resetCache()
-           return <Component {...props} />
-         }} />
-)
+export const CachedRoute = ({ component: Component, ...rest }) => {
+  return (
+    <Route {...rest}
+      render={props => {
+        resetCache()
+        return (
+          <>
+            <HeadTitle />
+            <Component {...props} />
+          </>
+
+        )
+      }} />
+  )
+}
 
 export default withRouter(App)
