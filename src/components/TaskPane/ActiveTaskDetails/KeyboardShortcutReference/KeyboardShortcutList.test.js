@@ -14,7 +14,7 @@ describe("shortcut", () => {
   });
 
   it("renders fixed shortcut name", () => {
-    const props = { taskCompletion: { falsePositive: { key: 'f', label: { defaultMessage: 'Yes / I fixed it!', id: 'KeyMapping.taskCompletion.fixed' } } } }
+    const props = { taskCompletion: { fixed: { key: 'f', label: { defaultMessage: 'Yes / I fixed it!', id: 'KeyMapping.taskCompletion.fixed' } } } }
     const { getByText } = global.withProvider(
       <KeyboardShortcutList activeKeyboardShortcuts={props} />
     );
