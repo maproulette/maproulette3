@@ -31,7 +31,7 @@ export class SuperAdminPane extends Component {
   render() {
     // The user needs to be logged in.
     const manager = AsManager(this.props.user);
-    consoloe.log(manager.isSuperUser());
+    console.log(manager.isSuperUser());
     if (!manager.isLoggedIn()) {
       return this.props.checkingLoginStatus ? (
         <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
