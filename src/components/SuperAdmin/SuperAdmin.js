@@ -42,8 +42,12 @@ export class SuperAdminPane extends Component {
       );
     }
 
-    return (
-        <div>m</div>
+    return manager.isSuperUser() ? (
+      <div>hello world</div>
+    ) : (
+      <div>
+        You are not a super admin!
+      </div>
     )
   }
 }

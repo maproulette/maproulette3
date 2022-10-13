@@ -247,6 +247,11 @@ const ProfileMenu = function(props) {
         </NavLink>
       </li>
       <li>
+        <NavLink to="/superadmin" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.superAdmin} />
+        </NavLink>
+      </li>
+      <li>
         <NavLink to="/user/achievements" onClick={props.closeDropdown}>
           <FormattedMessage {...messages.achievements} />
         </NavLink>

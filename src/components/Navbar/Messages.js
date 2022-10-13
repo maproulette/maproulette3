@@ -49,6 +49,11 @@ export default defineMessages({
     defaultMessage: "User Metrics",
   },
 
+  superAdmin: {
+    id: 'Navbar.links.superAdminMetrics',
+    defaultMessage: "Super Admin Metrics",
+  },
+
   achievements: {
     id: 'Navbar.links.userAchievements',
     defaultMessage: "Achievements",
