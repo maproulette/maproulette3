@@ -71,12 +71,12 @@ export default defineMessages({
 
   falsePositive: {
     id: "KeyMapping.taskCompletion.falsePositive",
-    defaultMessage: "Not an Issue",
+    defaultMessage: "No / Not an issue",
   },
 
   fixed: {
     id: "KeyMapping.taskCompletion.fixed",
-    defaultMessage: "I fixed it!",
+    defaultMessage: "Yes / I fixed it!",
   },
 
   tooHard: {
