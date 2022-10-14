@@ -6,17 +6,14 @@ import AsManager from "../../interactions/User/AsManager";
 import SignIn from "../../pages/SignIn/SignIn";
 import WithStatus from "../HOCs/WithStatus/WithStatus";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
-
+import MetricsTable from "./MetricsTable";
 import BusySpinner from "../BusySpinner/BusySpinner";
 
-
 /**
- * AdminPane is the top-level component for administration functions. It has a
- * Projects tab for management of projects, challenges, and tasks, and a
- * Metrics tab for display of various summary metrics. It's worth noting that
- * all logged-in users have access to the AdminPane.
+ * SuperAdminPane is the top-level component for super administration functions. It has a
+ * User/Project/Challenge metrics tab for management of users, projects, challenges, and tasks, and or display of various summary metrics. 
+ * It's worth noting that all logged-in users have access to the AdminPane.
  *
- * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class SuperAdminPane extends Component {
   componentDidUpdate(prevProps) {
@@ -31,7 +28,6 @@ export class SuperAdminPane extends Component {
   render() {
     // The user needs to be logged in.
     const manager = AsManager(this.props.user);
-    console.log(manager.isSuperUser());
     if (!manager.isLoggedIn()) {
       return this.props.checkingLoginStatus ? (
         <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
@@ -43,7 +39,9 @@ export class SuperAdminPane extends Component {
     }
 
     return manager.isSuperUser() ? (
-      <div>hello world</div>
+      <div>
+        <MetricsTable />
+      </div>
     ) : (
       <div>
         You are not a super admin!
