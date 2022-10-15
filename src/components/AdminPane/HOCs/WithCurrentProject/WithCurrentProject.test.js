@@ -1,15 +1,13 @@
 import "@testing-library/jest-dom";
 import * as React from "react";
 import { waitFor } from "@testing-library/react";
-import WithCurrentProject from "./WithCurrentProject";
+import { WithCurrentProject } from "./WithCurrentProject";
 
-const fetchProject = () => {
-  return new Promise((resolve) => {
-    return resolve({
-      message: "success"
-    });
-  });
-}
+const fetchProject = () => Promise.resolve({
+  entities: {
+    projects: []
+  }
+});
 
 describe("WithCurrentProject", () => {
   it("renders a test component successfully", () => {
@@ -25,11 +23,11 @@ describe("WithCurrentProject", () => {
   it("calls redirectUser if user is not a project manager", async () => {
     const redirectUser = jest.fn()
     const TestComponent = (props) => {
-      return <div>projectId: {props.project?.id}</div>
+      return <div>projectId: {props.routedProjectId}</div>
     }
     const TestPage = WithCurrentProject(TestComponent)
     const { getByText } = global.withProvider(
-      <TestPage match={{ params: { projectId: 1 } }} fetchProject={fetchProject} history={{ push: redirectUser }} />
+      <TestPage match={{ params: { projectId: 1 } }} fetchProject={fetchProject} history={{ push: redirectUser }} notManagerError={() => null} />
     );
 
     await waitFor(() => {
@@ -41,11 +39,11 @@ describe("WithCurrentProject", () => {
   it("does not redirect user if allowNonManagers is true", async () => {
     const redirectUser = jest.fn()
     const TestComponent = (props) => {
-      return <div>projectId: {props.project?.id}</div>
+      return <div>projectId: {props.routedProjectId}</div>
     }
     const TestPage = WithCurrentProject(TestComponent, { allowNonManagers: true })
     const { getByText } = global.withProvider(
-      <TestPage match={{ params: { projectId: 1 } }} fetchProject={fetchProject} history={{ push: redirectUser }} />
+      <TestPage match={{ params: { projectId: 1 } }} fetchProject={fetchProject} history={{ push: redirectUser }} notManagerError={() => null} />
     );
 
     await waitFor(() => {

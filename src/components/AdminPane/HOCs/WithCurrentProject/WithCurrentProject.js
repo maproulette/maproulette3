@@ -41,7 +41,7 @@ import AsManager from '../../../../interactions/User/AsManager'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithCurrentProject = function(WrappedComponent, options={}) {
+export const WithCurrentProject = function(WrappedComponent, options={}) {
   return class extends Component {
     state = {
       loadingProject: true,
