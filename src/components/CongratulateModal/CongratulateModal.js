@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import Confetti from 'react-dom-confetti'
-import Modal from '../Custom/Modal'
+import Modal from '../Modal/Modal'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './CongratulateModal.scss'
@@ -31,13 +31,8 @@ export default class CongratulateModal extends Component {
         contentClassName="mr-bg-blue-dark"
         onClose={this.dismiss}
         isActive={this.state.active}
+        extraNarrow
       >
-        <div className="has-svg-icon congratulate-modal__close-control"
-             aria-label="close"
-             onClick={this.dismiss}>
-          <SvgSymbol sym="outline-close-icon" viewBox="0 0 20 20" />
-        </div>
-
         <div className="congratulate-modal__content mr-bg-blue-dark mr-text-white">
           <div className="congratulate-modal__message">
             <SvgSymbol sym="trophy-icon" viewBox="0 0 20 20"

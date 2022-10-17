@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
-import Modal from '../Custom/Modal'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import Modal from '../Modal/Modal'
 import messages from './Messages'
 
 /**
@@ -24,13 +23,6 @@ export default class ChallengeEndModal extends Component {
              isActive={this.state.active}
              onClose={this.dismiss}>
         <div className="mr-bg-blue-dark mr-p-8">
-          <div className="mr-text-right mr-text-green-lighter"
-               aria-label="close" >
-            <button className="mr-text-green-lighter" onClick={this.dismiss}>
-              <SvgSymbol sym="outline-close-icon" viewBox="0 0 20 20"
-                        className="icon mr-fill-current" />
-            </button>
-          </div>
           <div className="mr-bg-blue-dark mr-text-white mr-text-center">
             <div>
               <h2 className="mr-text-yellow mr-text-4xl mr-mb-4">
