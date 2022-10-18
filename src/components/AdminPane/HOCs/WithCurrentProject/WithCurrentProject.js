@@ -41,7 +41,7 @@ import AsManager from '../../../../interactions/User/AsManager'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithCurrentProject = function(WrappedComponent, options={}) {
+export const WithCurrentProject = function(WrappedComponent, options={}) {
   return class extends Component {
     state = {
       loadingProject: true,
@@ -114,18 +114,19 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
         props.fetchProject(projectId).then(normalizedProject => {
           const project = normalizedProject.entities.projects[normalizedProject.result]
 
-          const manager = AsManager(this.props.user)
-          if (!manager.canManage(project)) {
-            // If we have a challenge id too, route to the browse url for the challenge
-            const challengeId = this.routedChallengeId(this.props)
-            if (_isFinite(challengeId)) {
-              props.history.replace(`/browse/challenges/${challengeId}`)
+          if (!options.allowNonManagers) {
+            const manager = AsManager(this.props.user)
+            if (!manager.canManage(project)) {
+              // If we have a challenge id too, route to the browse url for the challenge
+              const challengeId = this.routedChallengeId(this.props)
+              if (_isFinite(challengeId)) {
+                props.history.replace(`/browse/challenges/${challengeId}`)
+              } else {
+                this.props.notManagerError()
+                props.history.push('/admin/projects')
+              }
+              return
             }
-            else {
-              this.props.notManagerError()
-              props.history.push('/admin/projects')
-            }
-            return
           }
 
           this.setState({loadingProject: false})

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { withRouter } from 'react-router';
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser';
@@ -9,77 +8,69 @@ import { injectIntl } from 'react-intl';
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 
-const REACT_APP_TITLE = 'MapRoulette'
+export const REACT_APP_TITLE = 'MapRoulette'
 
-export const HeadTitle = (props) => {
+const capitalize  = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
-  useEffect(() => {
-    pathToTitleFormat(props.match.path)
-  }, [props.location.pathname, props.project, props.challenge, props.user])
+const findCurrentChallengeName = (props) => {
+  return props.challenge?.name
+}
 
-  const findCurrentChallengeName = () => {
-    return props.challenge?.name
-  }
+const findCurrentProjectName = (props) => {
+  return props.project?.displayName
+}
 
-  const findCurrentProjectName = () => {
-    return props.project?.displayName
-  }
+const findCurrentUserName = (props) => {
+  return props.user?.osmProfile.displayName
+}
 
-  const findCurrentUserName = () => {
-    return props.user?.osmProfile.displayName
-  }
+const findCurrentCountryCode = (props) => {
+  return _get(props, 'match.params.countryCode')
+}
 
-  const findCurrentCountryCode = () => {
-    return _get(props, 'match.params.countryCode')
-  }
+const findCurrentTaskId = (props) => {
+  return _get(props, 'match.params.taskId')
+}
 
-  const findCurrentTaskId = () => {
-    return _get(props, 'match.params.taskId')
-  }
+const findReviewType = (props) => {
+  return _get(props, 'match.params.showType')
+}
 
-  const findReviewType = () => {
-    return _get(props, 'match.params.showType')
-  }
+/* parse names from url path into array, replace id params with names, and then concatenate with - for title */
+export const formatTitle = (props) => {
+  if (props?.match?.path) {
+    let pathArr = props.match.path.split('/').filter(element => element)
 
-  /* parse names from url path into array, replace id params with names, and then concatenate with - for title */
-  const pathToTitleFormat = (path) => {
-    let pathArr = path.split('/').filter(element => element)
-    pathArr = pathArr.map(params => {
-      if (params === ':challengeId') {
-        return findCurrentChallengeName()
-      }
-      else if (params === ':projectId') {
-        return findCurrentProjectName()
-      }
-      else if (params === ':countryCode') {
-        return findCurrentCountryCode()
-      }
-      else if (params === ':userId') {
-        return findCurrentUserName()
-      }
-      else if (params === ':taskId') {
-        return findCurrentTaskId()
-      }
-      else if (params === ':showType') {
-        return findReviewType()
-      }
-      else {
-        return params
+    pathArr = pathArr.map(param => {
+      if (param === ':challengeId') {
+        return findCurrentChallengeName(props)
+      } else if (param === ':projectId') {
+        return findCurrentProjectName(props)
+      } else if (param === ':countryCode') {
+        return findCurrentCountryCode(props)
+      } else if (param === ':userId') {
+        return findCurrentUserName(props)
+      } else if (param === ':taskId') {
+        return findCurrentTaskId(props)
+      } else if (param === ':showType') {
+        return findReviewType(props)
+      } else {
+        return capitalize(param)
       }
     })
-    let newTitle = _isEmpty(pathArr) ? REACT_APP_TITLE : REACT_APP_TITLE + '-' + pathArr.join('-')
+    const newTitle = _isEmpty(pathArr) ? REACT_APP_TITLE : REACT_APP_TITLE + ' - ' + pathArr.join(' - ')
     return newTitle
   }
+}
 
+export const HeadTitle = (props) => {
   return (
     <Helmet>
-      <title>{pathToTitleFormat(props.match.path)}</title>
+      <title>{formatTitle(props)}</title>
     </Helmet>
   )
 }
 
-export default withRouter(WithCurrentUser(WithCurrentProject(
-  WithCurrentChallenge(
-    injectIntl(HeadTitle)))
-)
-)
+export default withRouter(WithCurrentUser(WithCurrentProject(WithCurrentChallenge(injectIntl(HeadTitle)))))
