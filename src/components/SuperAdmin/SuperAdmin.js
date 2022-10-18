@@ -8,7 +8,10 @@ import WithStatus from "../HOCs/WithStatus/WithStatus";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import MetricsTable from "./MetricsTable";
 import BusySpinner from "../BusySpinner/BusySpinner";
-
+import WithCommandInterpreter from "../HOCs/WithCommandInterpreter/WithCommandInterpreter";
+import WithChallengeSearch from "../HOCs/WithSearch/WithChallengeSearch";
+import SearchBox from "../SearchBox/SearchBox";
+import MetricsHeader from "./MetricsHeader";
 /**
  * SuperAdminPane is the top-level component for super administration functions. It has a
  * User/Project/Challenge metrics tab for management of users, projects, challenges, and tasks, and or display of various summary metrics. 
@@ -37,9 +40,11 @@ export class SuperAdminPane extends Component {
         <SignIn {...this.props} />
       );
     }
+    const CommandSearchBox = WithCommandInterpreter(SearchBox)
 
     return manager.isSuperUser() ? (
-      <div>
+      <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
+        <MetricsHeader />
         <MetricsTable />
       </div>
     ) : (
@@ -55,4 +60,4 @@ SuperAdminPane.propTypes = {
   location: PropTypes.object.isRequired,
 };
 
-export default WithStatus(WithCurrentUser(withRouter(SuperAdminPane)));
+export default WithChallengeSearch(WithStatus(WithCurrentUser(withRouter(SuperAdminPane))));
