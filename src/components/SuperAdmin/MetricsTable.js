@@ -5,6 +5,8 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import ReactTable from 'react-table-6'
 import { useEffect } from 'react'
 import { FormattedDate } from 'react-intl'
+import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
+import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 const challengesData = (props) => {
 
   const allUsers = Object.values(props.allUsers)
@@ -15,63 +17,73 @@ const challengesData = (props) => {
     return [
       {
         id: 'id',
-        Header: "ID",
-        accessor: task => task.id,
+        Header: 'ID',
         maxWidth: 120,
+        accessor: challenge => challenge.id,
       },
 
       {
         id: 'name',
-        Header: "NAME",
-        accessor: task => task.name,
+        Header: 'NAME',
+        accessor: challenge => {
+          return <a href={`/admin/project/${challenge.parent.id}` +
+            `/challenge/${challenge.id}`}> {challenge.name} </a>
+        },
       },
       {
         id: 'owner',
-        Header: "OWNER",
-        accessor: task => {
+        Header: 'OWNER',
+        accessor: challenge => {
           return allUsers.find(user =>
-            user.osmProfile.id == task.owner
+            user.osmProfile.id == challenge.owner
           ).osmProfile.displayName
         },
+        Cell: cell => <a href={'https://www.openstreetmap.org/user/' + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+        maxWidth: 150,
+      },
+      {
+        id: 'numOfTasks',
+        Header: '# OF TASKS',
+        accessor: challenge => challenge.tasksRemaining,
+        maxWidth: 150,
+      },
+      {
+        id: 'project',
+        Header: 'PROJECT',
+        accessor: challenge => {
+          return <a href={`/admin/project/${challenge.parent.id}`}> {challenge.parent.displayName} </a>
+        },
+      },
+      {
+        id: 'isArchived',
+        Header: 'IS ARCHIVED',
+        accessor: challenge => challenge.isArchived.toString(),
         maxWidth: 150,
       },
       {
         id: 'dateCreated',
-        Header: "DATE CREATED",
-        accessor: task => {
-          return <FormattedDate {...task.created} />
+        Header: 'DATE CREATED',
+        accessor: challenge => {
+          return <FormattedDate {...challenge.created} />
         },
         maxWidth: 150,
       },
       {
-        id: "dateLastModified",
-        Header: "DATE LAST MODIFIED",
-        accessor: task => {
-          return <FormattedDate {...task.modified} />
+        id: 'dateLastModified',
+        Header: 'DATE LAST MODIFIED',
+        accessor: challenge => {
+          return <FormattedDate {...challenge.modified} />
         },
         maxWidth: 180,
-      },
-      {
-        id: "numOfTasks",
-        Header: "# OF TASKS",
-        accessor: task => task.tasksRemaining,
-        maxWidth: 150,
-      },
-      {
-        id: "isArchived",
-        Header: "IS ARCHIVED",
-        accessor: task => task.isArchived.toString(),
-        maxWidth: 150,
       }
     ];
   };
+  console.log(props)
   return <ReactTable
-    className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse"
     columns={constructHeader()}
     data={props.challenges}
-  // pageSize={2} 
-  // pages={2}
+    pageSize={50}
   />;
 }
 
-export default WithCurrentUser(WithChallenges(challengesData))
+export default WithCurrentUser(WithFilteredChallenges(WithSearchResults(WithChallenges(challengesData))))
