@@ -73,4 +73,4 @@ export const HeadTitle = (props) => {
   )
 }
 
-export default withRouter(WithCurrentUser(WithCurrentProject(WithCurrentChallenge(injectIntl(HeadTitle)))))
+export default withRouter(WithCurrentUser(WithCurrentProject(WithCurrentChallenge(injectIntl(HeadTitle)), { allowNonManagers: true })))
