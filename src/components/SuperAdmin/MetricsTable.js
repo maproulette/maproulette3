@@ -1,18 +1,13 @@
 
 import React from 'react'
-import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
-import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
+import WithPagedChallenges from "../HOCs/WithPagedChallenges/WithPagedChallenges";
+import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges';
 import ReactTable from 'react-table-6'
 import { useEffect } from 'react'
-import { FormattedDate } from 'react-intl'
-import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
-import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
+import { FormattedDate, injectIntl} from 'react-intl'
 const challengesData = (props) => {
 
   const allUsers = Object.values(props.allUsers)
-
-  useEffect(() => {
-  }, [props])
   const constructHeader = () => {
     return [
       {
@@ -43,8 +38,14 @@ const challengesData = (props) => {
       },
       {
         id: 'numOfTasks',
-        Header: '# OF TASKS',
+        Header: '# OF TASKS Remaining',
         accessor: challenge => challenge.tasksRemaining,
+        maxWidth: 200,
+      },
+      {
+        id: 'tasksCompletionPercentage',
+        Header: '% Complete Tasks',
+        accessor: challenge => challenge.completionPercentage + '%',
         maxWidth: 150,
       },
       {
@@ -78,7 +79,7 @@ const challengesData = (props) => {
       }
     ];
   };
-  console.log(props)
+ 
   return <ReactTable
     columns={constructHeader()}
     data={props.challenges}
@@ -86,4 +87,6 @@ const challengesData = (props) => {
   />;
 }
 
-export default WithCurrentUser(WithFilteredChallenges(WithSearchResults(WithChallenges(challengesData))))
+export default WithSortedChallenges(
+        WithPagedChallenges(injectIntl(challengesData), 'challenges', 'pagedChallenges')
+      )
