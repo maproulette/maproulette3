@@ -25,8 +25,11 @@ export const mapStateToProps = (state, ownProps) => {
   // By default, only pass through challenges that are enabled (and belong to
   // an enabled project), have some tasks, and are in a usable status (unless
   // the allStatuses prop is set to true).
-  let usableChallenges = challenges
-  if (ownProps.allStatuses !== true) {
+  let usableChallenges
+  if(ownProps.user.isSuperUser === true){
+    usableChallenges = challenges
+  }
+  else if (ownProps.allStatuses !== true) {
     usableChallenges = _filter(challenges, challenge => {
       const parent = _get(state, `entities.projects.${challenge.parent}`)
       return challenge.enabled &&
