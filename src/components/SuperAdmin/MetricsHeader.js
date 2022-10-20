@@ -1,11 +1,16 @@
 import React from "react"
-import { FormattedMessage } from "react-intl"
+import { FormattedMessage, injectIntl} from "react-intl"
 import SearchBox from "../SearchBox/SearchBox"
 import WithCommandInterpreter from "../HOCs/WithCommandInterpreter/WithCommandInterpreter"
 import messages from './Messages'
+import WithChallengeSearch from "../HOCs/WithSearch/WithChallengeSearch"
+import SortChallengesSelector from "../ChallengePane/ChallengeFilterSubnav/SortChallengesSelector"
+import FilterByDifficulty from "../ChallengePane/ChallengeFilterSubnav/FilterByDifficulty"
+import FilterByKeyword from "../ChallengePane/ChallengeFilterSubnav/FilterByKeyword"
 
-const MetricsHeader = (props) => {
 const CommandSearchBox = WithCommandInterpreter(SearchBox)
+const MetricsHeader = (props) => {
+
   return (
     <header className="mr-bg-black-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-hidden lg:mr-flex mr-items-center mr-justify-between">
       <div className="mr-flex-grow mr-flex mr-items-center mr-justify-between lg:mr-justify-start">
@@ -17,10 +22,14 @@ const CommandSearchBox = WithCommandInterpreter(SearchBox)
           <button>Challenge</button>
           <button>Project</button>
           <button>User</button>
+          <SortChallengesSelector {...props} />
+          <FilterByKeyword {...props} />
+          <FilterByDifficulty {...props} />
           <CommandSearchBox
             {...props}
             className="mr-h-12"
             placeholder='placeholder'
+            showSearchTypeFilter
             setSearch={props.setSearch}
           />
         </div>
@@ -29,4 +38,4 @@ const CommandSearchBox = WithCommandInterpreter(SearchBox)
   )
 }
 
-export default MetricsHeader
+export default WithChallengeSearch(injectIntl(MetricsHeader))
