@@ -12,6 +12,10 @@ export default defineMessages({
     id: 'Metrics.discoverable',
     defaultMessage: 'Visible',
   },
+  archived: {
+    id: 'Metrics.archived',
+    defaultMessage: 'is Archived',
+  },
   challengeLabel: {
     id: 'Metrics.challenge',
     defaultMessage: 'Challenge',
