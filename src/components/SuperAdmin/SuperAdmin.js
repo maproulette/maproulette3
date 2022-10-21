@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Switch, Route, withRouter } from "react-router-dom";
-import { FormattedMessage, injectIntl} from "react-intl"
+import { withRouter } from "react-router-dom";
+import { FormattedMessage, injectIntl } from "react-intl"
+import { useState } from "react";
 import MediaQuery from "react-responsive";
 import AsManager from "../../interactions/User/AsManager";
 import SignIn from "../../pages/SignIn/SignIn";
@@ -17,51 +18,58 @@ import WithMapBoundedTasks from "../HOCs/WithMapBoundedTasks/WithMapBoundedTasks
 import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
+import WithDashboardEntityFilter from "../AdminPane/HOCs/WithDashboardEntityFilter/WithDashboardEntityFilter";
+import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
+import WithProjectManagement from "../AdminPane/HOCs/WithProjectManagement/WithProjectManagement";
+import {
+  challengePassesFilters,
+  defaultChallengeFilters,
+} from "../../services/Widget/ChallengeFilter/ChallengeFilter";
+import DashboardFilterToggle from "../AdminPane/Manage/DashboardFilterToggle/DashboardFilterToggle";
 import MetricsHeader from "./MetricsHeader";
 import ChallengeResultList from "../ChallengePane/ChallengeResultList/ChallengeResultList";
-import WithMetricsSearch from "./WithMetricsSearch";
-
+import messages from './Messages'
+import { set } from "date-fns";
 /**
  * SuperAdminPane is the top-level component for super administration functions. It has a
- * User/Project/Challenge metrics tab for management of users, projects, challenges, and tasks, and or display of various summary metrics. 
- * It's worth noting that all logged-in users have access to the AdminPane.
+ * User/Project/Challenge metrics tab for management of users, projects, challenges, and tasks, and display of various summary metrics. 
+ * It's worth noting that only super admins have access to SuperAdminPane.
  *
  */
-export class SuperAdminPane extends Component {
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.location.pathname !== prevProps.location.pathname &&
-      this.props.location.search !== prevProps.location.search
-    ) {
-      window.scrollTo(0, 0);
-    }
-  }
-
-  render() {
+const  SuperAdminPane = (props) => {
+  
+    console.log(props)
+    const VisibleFilterToggle = DashboardFilterToggle("challenge", "visible");
     // The user needs to be logged in.
-    const manager = AsManager(this.props.user);
+    const [currentTab, setCurrentTab] = useState('challenge')
+    const manager = AsManager(props.user);
     const ChallengeResults = ChallengeResultList
     if (!manager.isLoggedIn()) {
-      return this.props.checkingLoginStatus ? (
+      return props.checkingLoginStatus ? (
         <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
           <BusySpinner />
         </div>
       ) : (
-        <SignIn {...this.props} />
+        <SignIn {...props} />
       );
     }
 
     return manager.isSuperUser() ? (
       <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
-        <MetricsHeader {...this.props}/>
-        <MetricsTable {...this.props}/>
+        <MetricsHeader {...props} setCurrentTab={setCurrentTab}/>
+        {/* <VisibleFilterToggle
+         {...props}
+         dashboardEntityFilters={props.dashboardChallengeFilters}
+         toggleEntityFilter={props.toggleDashboardChallengeFilter}
+         filterToggleLabel={<FormattedMessage {...messages.discoverable} />}
+        /> */}
+        <MetricsTable {...props} currentTab={currentTab} />
       </div>
     ) : (
       <div>
         You are not a super admin
       </div>
     )
-  }
 }
 
 SuperAdminPane.propTypes = {
@@ -69,7 +77,7 @@ SuperAdminPane.propTypes = {
   location: PropTypes.object.isRequired,
 };
 
-export default 
+export default
   WithStatus(
     WithCurrentUser(
       withRouter(
@@ -80,7 +88,9 @@ export default
                 WithFilteredChallenges(
                   WithSearchResults(
                     WithStartChallenge(
-                      WithBrowsedChallenge(injectIntl(SuperAdminPane))
+                      WithBrowsedChallenge(
+                        injectIntl(SuperAdminPane),
+                      )
                     ),
                     'challenges',
                     'challenges'
