@@ -1,5 +1,7 @@
 import React from "react"
 import { FormattedMessage, injectIntl} from "react-intl"
+import { Link } from "react-router-dom"
+import AsManager from "../../interactions/User/AsManager";
 import SearchBox from "../SearchBox/SearchBox"
 import WithCommandInterpreter from "../HOCs/WithCommandInterpreter/WithCommandInterpreter"
 import messages from './Messages'
@@ -11,6 +13,11 @@ import FilterByKeyword from "../ChallengePane/ChallengeFilterSubnav/FilterByKeyw
 const CommandSearchBox = WithCommandInterpreter(SearchBox)
 const MetricsHeader = (props) => {
 
+  const handleTabToggle = (e) => {
+    console.log(e.target.innerHTML)
+    props.setCurrentTab(e.target.innerHTML.toLowerCase())
+  }
+
   return (
     <header className="mr-bg-black-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-hidden lg:mr-flex mr-items-center mr-justify-between">
       <div className="mr-flex-grow mr-flex mr-items-center mr-justify-between lg:mr-justify-start">
@@ -19,9 +26,26 @@ const MetricsHeader = (props) => {
         </h1>
 
         <div className="mr-flex mr-items-center">
-          <button>Challenge</button>
-          <button>Project</button>
-          <button>User</button>
+          <div className="admin__manage__controls mr-flex">
+            <button
+              className="mr-button mr-button--dark mr-button--small mr-mr-4"
+              onClick={handleTabToggle}
+            >
+              <FormattedMessage {...messages.challengeLabel} />
+            </button>
+            <button
+              className="mr-button mr-button--dark mr-button--small mr-mr-4"
+              onClick={handleTabToggle}
+            >
+              <FormattedMessage {...messages.projectLabel} />
+            </button>
+            <button
+              className="mr-button mr-button--dark mr-button--small mr-mr-4"
+              onClick={handleTabToggle}
+            >
+              <FormattedMessage {...messages.userLabel} />
+            </button>
+          </div>
           <SortChallengesSelector {...props} />
           <FilterByKeyword {...props} />
           <FilterByDifficulty {...props} />
