@@ -3,8 +3,8 @@ import React from 'react'
 import WithPagedChallenges from "../HOCs/WithPagedChallenges/WithPagedChallenges";
 import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges';
 import ReactTable from 'react-table-6'
-import {setChallengeTab, setProjectTab, setUserTab} from './MetricsData'
-import { FormattedDate, injectIntl} from 'react-intl'
+import {setChallengeTab} from './MetricsData'
+import { injectIntl} from 'react-intl'
 const MetricsTable = (props) => {
   const allUsers = Object.values(props.allUsers)
   const constructHeader = () => {

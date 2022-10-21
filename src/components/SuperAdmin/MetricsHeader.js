@@ -1,7 +1,5 @@
 import React from "react"
 import { FormattedMessage, injectIntl} from "react-intl"
-import { Link } from "react-router-dom"
-import AsManager from "../../interactions/User/AsManager";
 import SearchBox from "../SearchBox/SearchBox"
 import WithCommandInterpreter from "../HOCs/WithCommandInterpreter/WithCommandInterpreter"
 import messages from './Messages'
