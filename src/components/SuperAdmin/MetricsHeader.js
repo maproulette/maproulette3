@@ -1,5 +1,5 @@
 import React from "react"
-import { FormattedMessage, injectIntl} from "react-intl"
+import { FormattedMessage, injectIntl } from "react-intl"
 import SearchBox from "../SearchBox/SearchBox"
 import WithCommandInterpreter from "../HOCs/WithCommandInterpreter/WithCommandInterpreter"
 import messages from './Messages'
@@ -22,7 +22,6 @@ const MetricsHeader = (props) => {
         <h1 className="mr-hidden xl:mr-flex mr-text-3xl mr-leading-tight mr-font-normal mr-mr-6">
           <FormattedMessage {...messages.header} />
         </h1>
-
         <div className="mr-flex mr-items-center">
           <div className="admin__manage__controls mr-flex">
             <button

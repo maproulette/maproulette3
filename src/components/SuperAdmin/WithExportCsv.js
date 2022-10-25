@@ -1,4 +1,3 @@
-import json from 'highlight.js/lib/languages/json'
 import React, { Component } from 'react'
 const WithExportCsv = function (WrappedComponent) {
   return class extends Component {
@@ -7,45 +6,44 @@ const WithExportCsv = function (WrappedComponent) {
       function filterData() {
         let allRow = document.querySelectorAll('[role="row"]:not(.-padRow)')
         let headers = document.querySelectorAll('[role="row"]:not(.-padRow)')[0]
-        let headerParsed = [], dataParsed = []
+        let headerParsed = [], json_pre = []
         for (let i = 0; i < headers.children.length; i++) {
           headerParsed.push(headers.children[i].childNodes[0].innerHTML)
         }
         allRow = [].slice.call(allRow, 1)
         allRow.map((row) => {
-          let item = []
+          let item = {}
           for (let i = 0; i < row.children.length; i++) {
-            item.push(row.children[i].childNodes[0].innerHTML ? row.children[i].childNodes[0].innerHTML : row.children[i].innerHTML)
+            let itemData = row.children[i].childNodes[0].innerHTML ? row.children[i].childNodes[0].innerHTML : row.children[i].innerHTML
+            item[headerParsed[i]] = itemData
           }
-          dataParsed.push(item)
+          json_pre.push(item)
         }
         )
-        let json_pre = [headerParsed, dataParsed]
+        console.log(json_pre)
         return json_pre
       }
 
       function download() {
-
-        var json_pre = challenges.map((c) => ({ id: c.id, Name: c.name, TaskRemaining: c.tasksRemaining, CompletionPercentage: c.completionPercentage }));
-
-        var csv = JSON2CSV(json_pre);
-        var downloadLink = document.createElement("a");
-        var blob = new Blob(["\ufeff", csv]);
+        var json_pre = filterData();
+        var csv = jsonToCsv(json_pre);
+        var downloadLink = document.createElement('a');
+        var blob = new Blob(['\ufeff', csv]);
         var url = URL.createObjectURL(blob);
         downloadLink.href = url;
         downloadLink.download = "data.csv";
-
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
       }
 
-      function JSON2CSV(objArray) {
-        const header = Object.keys(objArray[0]);
+      function jsonToCsv(jsonData) {
+        const header = Object.keys(jsonData[0]);
         const headerString = header.join(',');
+        console.log(headerString)
         // handle null or undefined values here
         const replacer = (key, value) => value ?? '';
-        const rowItems = objArray.map((row) =>
+        const rowItems = jsonData.map((row) =>
           header
             .map((fieldName) => JSON.stringify(row[fieldName], replacer))
             .join(',')
@@ -54,9 +52,18 @@ const WithExportCsv = function (WrappedComponent) {
         const csv = [headerString, ...rowItems].join('\r\n');
         return csv;
       }
+
+      function getNumOfRows() {
+        let allRow = document.querySelectorAll('[role="row"]:not(.-padRow)').length
+        return allRow
+      }
+
       return <WrappedComponent
         {...this.props}
         filterData={filterData}
+        jsonToCsv={jsonToCsv}
+        downloadCsv={download}
+        rowNumber={getNumOfRows()}
       />
     }
   }

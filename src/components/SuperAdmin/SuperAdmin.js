@@ -19,6 +19,7 @@ import WithMapBoundedTasks from "../HOCs/WithMapBoundedTasks/WithMapBoundedTasks
 import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
+import WithExportCsv from "./WithExportCsv";
 import WithMetricsFilter from './WithMetricsFilter'
 import DashboardFilterToggle from "../AdminPane/Manage/DashboardFilterToggle/DashboardFilterToggle";
 import MetricsHeader from "./MetricsHeader";
@@ -64,6 +65,15 @@ const  SuperAdminPane = (props) => {
             toggleEntityFilter={props.toggleFilter}
             filterToggleLabel={<FormattedMessage {...messages.archived} />}
           />
+          <button
+            color="primary"
+            type="button"
+            className="mr-leading-none mr-button--dark mr-ml-4 mr-mr-1"
+            onClick={() => {
+              props.downloadCsv()
+            }}>
+            <FormattedMessage {...messages.download} />
+          </button>
         </div>
         <MetricsTable {...props} currentTab={currentTab} />
       </div>
@@ -92,7 +102,9 @@ export default
                     WithStartChallenge(
                       WithBrowsedChallenge(
                         WithMetricsFilter(
-                        injectIntl(SuperAdminPane),
+                          WithExportCsv(
+                            injectIntl(SuperAdminPane),
+                          )
                         )
                       )
                     ),

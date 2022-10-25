@@ -1,7 +1,6 @@
 import { defineMessages } from 'react-intl'
-
 /**
- * Internationalized messages for use with ChallengeFilterSubnav
+ * Internationalized messages for use with SuperAdmin
  */
 export default defineMessages({
   header: {
@@ -15,6 +14,10 @@ export default defineMessages({
   archived: {
     id: 'Metrics.archived',
     defaultMessage: 'is Archived',
+  },
+  download: {
+    id: 'Metrics.download',
+    defaultMessage: 'download',
   },
   challengeLabel: {
     id: 'Metrics.challenge',

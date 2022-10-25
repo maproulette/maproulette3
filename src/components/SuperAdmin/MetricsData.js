@@ -6,7 +6,7 @@ const setChallengeTab = (allUsers) => {
     {
       id: 'id',
       Header: 'ID',
-      maxWidth: 120,
+      maxWidth: 80,
       accessor: challenge => challenge.id,
     },
 
@@ -27,13 +27,13 @@ const setChallengeTab = (allUsers) => {
         ).osmProfile.displayName
       },
       Cell: cell => <a href={'https://www.openstreetmap.org/user/' + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
-      maxWidth: 150,
+      maxWidth: 100,
     },
     {
       id: 'numOfTasks',
-      Header: '# OF TASKS Remaining',
+      Header: 'TASKS REMAINING',
       accessor: challenge => challenge.tasksRemaining,
-      maxWidth: 200,
+      maxWidth: 150,
     },
     {
       id: 'tasksCompletionPercentage',
@@ -47,12 +47,13 @@ const setChallengeTab = (allUsers) => {
       accessor: challenge => {
         return <a href={`/admin/project/${challenge.parent.id}`}> {challenge.parent.displayName} </a>
       },
+      maxWidth: 120,
     },
     {
       id: 'isArchived',
       Header: 'IS ARCHIVED',
       accessor: challenge => challenge.isArchived.toString(),
-      maxWidth: 150,
+      maxWidth: 120,
     },
     {
       id: 'dateCreated',
