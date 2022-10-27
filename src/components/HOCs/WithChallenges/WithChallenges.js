@@ -6,7 +6,6 @@ import { isUsableChallengeStatus }
 import _values from 'lodash/values'
 import _get from 'lodash/get'
 import _filter from 'lodash/filter'
-import AsManager from '../../../interactions/User/AsManager'
 
 /**
  * WithChallenges passes down denormalized challenges from the redux store to
@@ -22,15 +21,11 @@ const WithChallenges =
 export const mapStateToProps = (state, ownProps) => {
   const challenges = _values(_get(state, 'entities.challenges')) || []
   const showArchived = _get(state, 'currentSearch.challenges.filters.archived', false);
-  const manager = AsManager(ownProps.user);
   // By default, only pass through challenges that are enabled (and belong to
   // an enabled project), have some tasks, and are in a usable status (unless
   // the allStatuses prop is set to true).
-  let usableChallenges
-  if(manager.isLoggedIn(ownProps.user) && manager.isSuperUser(ownProps.user)){
-    usableChallenges = challenges
-  }
-  else if (ownProps.allStatuses !== true) {
+  let usableChallenges = challenges
+  if (ownProps.allStatuses !== true) {
     usableChallenges = _filter(challenges, challenge => {
       const parent = _get(state, `entities.projects.${challenge.parent}`)
       return challenge.enabled &&
