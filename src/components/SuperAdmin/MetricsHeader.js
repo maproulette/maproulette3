@@ -43,12 +43,14 @@ const MetricsHeader = (props) => {
               <FormattedMessage {...messages.userLabel} />
             </button>
           </div>
-          <SortChallengesSelector {...props} />
-          <FilterByKeyword {...props} />
-          <FilterByDifficulty {...props} />
+          {props.currentTab !== 'user' && <>
+            <SortChallengesSelector {...props} />
+            <FilterByKeyword {...props} />
+            <FilterByDifficulty {...props} />
+          </>}
           <CommandSearchBox
             {...props}
-            className="mr-h-12"
+            className="mr-h-12 mr-ml-auto"
             placeholder='placeholder'
             showSearchTypeFilter
             setSearch={props.setSearch}

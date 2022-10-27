@@ -3,20 +3,27 @@ import React from 'react'
 import WithPagedChallenges from "../HOCs/WithPagedChallenges/WithPagedChallenges";
 import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges';
 import ReactTable from 'react-table-6'
-import { setChallengeTab } from './MetricsData'
+import { setChallengeTab, setProjectTab} from './MetricsData'
 import { injectIntl } from 'react-intl'
 import WithExportCsv from './WithExportCsv'
 const MetricsTable = (props) => {
   const allUsers = Object.values(props.allUsers)
+  let data;
   const constructHeader = () => {
     if (props.currentTab === 'challenge') {
+      data = props.challenges;
       return setChallengeTab(allUsers)
+    }
+    if (props.currentTab === 'project') {
+      data = props.projects;
+      return setProjectTab(allUsers)
     }
   }
   const ChallengeReactTable = <ReactTable
     columns={constructHeader()}
-    data={props.challenges}
-    pageSize={props.rowNumber < 50? props.rowNumber : 50}
+    data={data}
+    // pageSize={props.rowNumber < 50? props.rowNumber : 50}
+    pageSize={50}
   />;
  
   return <>

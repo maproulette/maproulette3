@@ -14,8 +14,7 @@ import BusySpinner from "../BusySpinner/BusySpinner";
 import WithChallengeSearch from "../HOCs/WithSearch/WithChallengeSearch";
 import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
 import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
-import WithClusteredTasks from "../HOCs/WithClusteredTasks/WithClusteredTasks";
-import WithMapBoundedTasks from "../HOCs/WithMapBoundedTasks/WithMapBoundedTasks";
+import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
 import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
@@ -24,7 +23,6 @@ import WithMetricsFilter from './WithMetricsFilter'
 import DashboardFilterToggle from "../AdminPane/Manage/DashboardFilterToggle/DashboardFilterToggle";
 import MetricsHeader from "./MetricsHeader";
 import messages from './Messages'
-
 /**
  * SuperAdminPane is the top-level component for super administration functions. It has a
  * User/Project/Challenge metrics tab for management of users, projects, challenges, and tasks, and display of various summary metrics. 
@@ -37,7 +35,7 @@ const  SuperAdminPane = (props) => {
     // HOC
     const VisibleFilterToggle = DashboardFilterToggle("challenge", "visible");
     const ArchivedFilterToggle = DashboardFilterToggle("challenge", "archived");
-
+    const VirtualProjectFilterToggle = DashboardFilterToggle("project", "virtual");
     const manager = AsManager(props.user);
     if (!manager.isLoggedIn()) {
       return props.checkingLoginStatus ? (
@@ -51,8 +49,8 @@ const  SuperAdminPane = (props) => {
 
     return manager.isSuperUser() ? (
       <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
-        <MetricsHeader {...props} setCurrentTab={setCurrentTab}/>
-        <div className='mr-flex mr-justify-end mr-p-4 mr-pt-6'>
+        <MetricsHeader {...props} setCurrentTab={setCurrentTab} currentTab={currentTab}/>
+        {currentTab !== 'user' && <div className='mr-flex mr-justify-end mr-p-4 mr-pt-6'>
           <VisibleFilterToggle
             {...props}
             dashboardEntityFilters={props.entityFilters}
@@ -65,6 +63,12 @@ const  SuperAdminPane = (props) => {
             toggleEntityFilter={props.toggleFilter}
             filterToggleLabel={<FormattedMessage {...messages.archived} />}
           />
+          {currentTab === 'project' && <VirtualProjectFilterToggle
+            {...props}
+            dashboardEntityFilters={props.entityFilters}
+            toggleEntityFilter={props.toggleFilter}
+            filterToggleLabel={<FormattedMessage {...messages.virtual} />}
+          />}
           <button
             color="primary"
             type="button"
@@ -74,7 +78,7 @@ const  SuperAdminPane = (props) => {
             }}>
             <FormattedMessage {...messages.download} />
           </button>
-        </div>
+        </div>}
         <MetricsTable {...props} currentTab={currentTab} />
       </div>
     ) : (
@@ -93,23 +97,22 @@ export default
   WithStatus(
     WithCurrentUser(
       withRouter(
-        WithChallenges(
-          WithChallengeSearch(
-            WithClusteredTasks(
-              WithMapBoundedTasks(
-                WithFilteredChallenges(
-                  WithSearchResults(
-                    WithStartChallenge(
-                      WithBrowsedChallenge(
-                        WithMetricsFilter(
-                          WithExportCsv(
-                            injectIntl(SuperAdminPane),
-                          )
+        WithManageableProjects(
+          WithChallenges(
+            WithChallengeSearch(
+              WithFilteredChallenges(
+                WithSearchResults(
+                  WithStartChallenge(
+                    WithBrowsedChallenge(
+                      WithMetricsFilter(
+                        WithExportCsv(
+                          injectIntl(SuperAdminPane),
                         )
                       )
-                    ),
-                    'challenges',
-                    'challenges'
-                  )))))))));
+                    )
+                  ),
+                  'challenges',
+                  'challenges'
+                ))))))));
 
 

@@ -13,7 +13,15 @@ export default defineMessages({
   },
   archived: {
     id: 'Metrics.archived',
-    defaultMessage: 'is Archived',
+    defaultMessage: 'Archived',
+  },
+  virtual: {
+    id: 'Metrics.virtual',
+    defaultMessage: 'Virtual',
+  },
+  download: {
+    id: 'Metrics.download',
+    defaultMessage: 'download',
   },
   download: {
     id: 'Metrics.download',
