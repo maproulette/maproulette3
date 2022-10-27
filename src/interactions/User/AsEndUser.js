@@ -25,9 +25,8 @@ export class AsEndUser {
    * Returns true if the user is a super user, false otherwise.
    */
   isSuperUser() {
-    // return this.isLoggedIn() &&
-    //        !!_find(this.user.grants, {role: ROLE_SUPERUSER})
-  return true
+    return this.isLoggedIn() &&
+           !!_find(this.user.grants, {role: ROLE_SUPERUSER})
   }
 
   /**

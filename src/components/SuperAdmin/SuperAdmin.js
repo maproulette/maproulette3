@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { withRouter} from "react-router-dom";
 import { FormattedMessage, injectIntl } from "react-intl"
 import { useState } from "react";
-import _get from 'lodash/get'
-import _set from 'lodash/set'
 import AsManager from "../../interactions/User/AsManager";
 import SignIn from "../../pages/SignIn/SignIn";
 import WithStatus from "../HOCs/WithStatus/WithStatus";

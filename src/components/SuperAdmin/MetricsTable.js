@@ -5,7 +5,7 @@ import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallen
 import ReactTable from 'react-table-6'
 import { setChallengeTab, setProjectTab} from './MetricsData'
 import { injectIntl } from 'react-intl'
-import WithExportCsv from './WithExportCsv'
+
 const MetricsTable = (props) => {
   const allUsers = Object.values(props.allUsers)
   let data;
