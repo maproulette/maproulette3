@@ -101,18 +101,6 @@ const setProjectTab = (allUsers) => {
       Cell: cell => <a href={'https://www.openstreetmap.org/user/' + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
       maxWidth: 100,
     },
-    // {
-    //   id: 'numOfTasks',
-    //   Header: 'TASKS REMAINING',
-    //   accessor: challenge => challenge.tasksRemaining,
-    //   maxWidth: 150,
-    // },
-    // {
-    //   id: 'tasksCompletionPercentage',
-    //   Header: '% Complete Tasks',
-    //   accessor: challenge => challenge.completionPercentage + '%',
-    //   maxWidth: 150,
-    // },
     {
       id: 'isArchived',
       Header: 'IS ARCHIVED',
@@ -143,8 +131,45 @@ const setProjectTab = (allUsers) => {
     }
   ]
 }
+
 const setUserTab = () => {
-  return null
+  return [
+    {
+      id: 'id',
+      Header: 'ID',
+      maxWidth: 80,
+      accessor: user => user.id,
+    },
+    {
+      id: 'name',
+      Header: 'NAME',
+      accessor: user => user.osmProfile.displayName,
+      Cell: cell => <a href={'https://www.openstreetmap.org/user/' + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+      maxWidth: 100,
+    },
+    {
+      id: 'score',
+      Header: 'SCORE',
+      accessor: user => user.score,
+      maxWidth: 120,
+    },
+    {
+      id: 'dateCreated',
+      Header: 'DATE CREATED',
+      accessor: user => {
+        return <FormattedDate {...user.created} />
+      },
+      maxWidth: 150,
+    },
+    {
+      id: 'lastActive',
+      Header: 'DATE LAST ACTIVE',
+      accessor: user => {
+        return <FormattedDate {...user.modified} />
+      },
+      maxWidth: 180,
+    }
+  ]
 }
 
 export { setChallengeTab, setProjectTab, setUserTab}

@@ -12,7 +12,7 @@ const CommandSearchBox = WithCommandInterpreter(SearchBox)
 const MetricsHeader = (props) => {
 
   const handleTabToggle = (e) => {
-    console.log(e.target.innerHTML)
+    console.log(e.target.innerHTML.toLowerCase())
     props.setCurrentTab(e.target.innerHTML.toLowerCase())
   }
 
@@ -48,11 +48,15 @@ const MetricsHeader = (props) => {
             <FilterByKeyword {...props} />
             <FilterByDifficulty {...props} />
           </>}
-          <CommandSearchBox
+          {/* <CommandSearchBox
             {...props}
             className="mr-h-12 mr-ml-auto"
-            placeholder='placeholder'
+            placeholder='placeholder' 
             showSearchTypeFilter
+            setSearch={props.setSearch}
+          /> */}
+          <SearchBox 
+            {...props}
             setSearch={props.setSearch}
           />
         </div>
@@ -61,4 +65,4 @@ const MetricsHeader = (props) => {
   )
 }
 
-export default WithChallengeSearch(injectIntl(MetricsHeader))
+export default injectIntl(MetricsHeader)
