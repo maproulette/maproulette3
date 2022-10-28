@@ -1,14 +1,11 @@
 import React from "react"
 import { FormattedMessage, injectIntl } from "react-intl"
 import SearchBox from "../SearchBox/SearchBox"
-import WithCommandInterpreter from "../HOCs/WithCommandInterpreter/WithCommandInterpreter"
 import messages from './Messages'
-import WithChallengeSearch from "../HOCs/WithSearch/WithChallengeSearch"
 import SortChallengesSelector from "../ChallengePane/ChallengeFilterSubnav/SortChallengesSelector"
 import FilterByDifficulty from "../ChallengePane/ChallengeFilterSubnav/FilterByDifficulty"
 import FilterByKeyword from "../ChallengePane/ChallengeFilterSubnav/FilterByKeyword"
 
-const CommandSearchBox = WithCommandInterpreter(SearchBox)
 const MetricsHeader = (props) => {
 
   const handleTabToggle = (e) => {
