@@ -22,11 +22,14 @@ const setChallengeTab = (allUsers) => {
       id: 'owner',
       Header: 'OWNER',
       accessor: challenge => {
-        return allUsers.find(user =>
-          user.osmProfile.id == challenge.owner
-        ).osmProfile.displayName
+        if (allUsers?.length) {
+          return allUsers.find(user =>
+            user.osmProfile.id == challenge.owner
+          ).osmProfile.displayName
+        }
+        return null
       },
-      Cell: cell => <a href={'https://www.openstreetmap.org/user/' + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+      Cell: cell => <a href={`${process.env.REACT_APP_OSM_SERVER}/user/` + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
       maxWidth: 100,
     },
     {
