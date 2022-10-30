@@ -25,9 +25,9 @@ const setChallengeTab = (allUsers) => {
         if (allUsers?.length) {
           return allUsers.find(user =>
             user.osmProfile.id == challenge.owner
-          ).osmProfile.displayName
+          )?.osmProfile?.displayName
         }
-        return null
+        return challenge?.owner
       },
       Cell: cell => <a href={`${process.env.REACT_APP_OSM_SERVER}/user/` + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
       maxWidth: 100,
