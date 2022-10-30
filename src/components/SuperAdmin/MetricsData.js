@@ -1,6 +1,8 @@
 import React from "react";
 import { FormattedDate } from 'react-intl'
 
+const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`;
+
 const setChallengeTab = (allUsers) => {
   return [
     {
@@ -29,7 +31,7 @@ const setChallengeTab = (allUsers) => {
         }
         return challenge?.owner
       },
-      Cell: cell => <a href={`${process.env.REACT_APP_OSM_SERVER}/user/` + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
       maxWidth: 100,
     },
     {
@@ -100,7 +102,7 @@ const setProjectTab = (allUsers) => {
           user.osmProfile.id == project.owner
         ).osmProfile.displayName
       },
-      Cell: cell => <a href={'https://www.openstreetmap.org/user/' + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
       maxWidth: 100,
     },
     {
@@ -146,7 +148,7 @@ const setUserTab = () => {
       id: 'name',
       Header: 'NAME',
       accessor: user => user.osmProfile.displayName,
-      Cell: cell => <a href={'https://www.openstreetmap.org/user/' + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
       maxWidth: 100,
     },
     {
