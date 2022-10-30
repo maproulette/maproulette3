@@ -25,16 +25,14 @@ const MetricsTable = (props) => {
       return setUserTab()
     }
   }
-  const ChallengeReactTable = <ReactTable
-    columns={constructHeader()}
-    data={data}
-    // pageSize={props.rowNumber < 50? props.rowNumber : 50}
-    pageSize={50}
-  />;
- 
-  return <>
-    {ChallengeReactTable}
-  </>;
+
+  return (
+    <ReactTable
+      columns={constructHeader()}
+      data={data}
+      pageSize={50}
+    />
+  )
 }
 
 export default WithSortedChallenges(

@@ -45,13 +45,6 @@ const MetricsHeader = (props) => {
             <FilterByKeyword {...props} />
             <FilterByDifficulty {...props} />
           </>}
-          {/* <CommandSearchBox
-            {...props}
-            className="mr-h-12 mr-ml-auto"
-            placeholder='placeholder' 
-            showSearchTypeFilter
-            setSearch={props.setSearch}
-          /> */}
           <SearchBox 
             {...props}
             setSearch={props.setSearch}

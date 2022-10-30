@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+
 const WithExportCsv = function (WrappedComponent) {
   return class extends Component {
-
     render() {
       function filterData() {
         let allRow = document.querySelectorAll('[role="row"]:not(.-padRow)')
