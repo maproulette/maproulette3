@@ -9,7 +9,6 @@ import FilterByKeyword from "../ChallengePane/ChallengeFilterSubnav/FilterByKeyw
 const MetricsHeader = (props) => {
 
   const handleTabToggle = (e) => {
-    console.log(e.target.innerHTML.toLowerCase())
     props.setCurrentTab(e.target.innerHTML.toLowerCase())
   }
 

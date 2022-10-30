@@ -86,7 +86,6 @@ const setProjectTab = (allUsers) => {
       id: 'name',
       Header: 'NAME',
       accessor: project => {
-        console.log(project.displayName)
         return <a href={`/admin/project/${project.id}`}> {project.displayName} </a>
       },
     },

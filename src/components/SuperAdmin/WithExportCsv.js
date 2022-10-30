@@ -18,9 +18,7 @@ const WithExportCsv = function (WrappedComponent) {
             item[headerParsed[i]] = itemData
           }
           json_pre.push(item)
-        }
-        )
-        console.log(json_pre)
+        })
         return json_pre
       }
 
@@ -40,7 +38,7 @@ const WithExportCsv = function (WrappedComponent) {
       function jsonToCsv(jsonData) {
         const header = Object.keys(jsonData[0]);
         const headerString = header.join(',');
-        console.log(headerString)
+
         // handle null or undefined values here
         const replacer = (key, value) => value ?? '';
         const rowItems = jsonData.map((row) =>

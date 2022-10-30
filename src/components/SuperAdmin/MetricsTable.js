@@ -16,12 +16,10 @@ const MetricsTable = (props) => {
     }
     else if (props.currentTab === 'project') {
       data = props.projects
-          console.log(data)
       return setProjectTab(allUsers)
     }
     else if (props.currentTab === 'user') {
       data = allUsers
-      console.log(data)
       return setUserTab()
     }
   }
