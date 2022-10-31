@@ -101,16 +101,13 @@ export default
           WithChallenges(
             WithChallengeSearch(
               WithFilteredChallenges(
-                WithSearchResults(
-                  WithStartChallenge(
-                    WithBrowsedChallenge(
-                      WithMetricsFilter(
-                        WithExportCsv(
-                          injectIntl(SuperAdminPane),
-                        )
+                WithStartChallenge(
+                  WithBrowsedChallenge(
+                    WithMetricsFilter(
+                      WithExportCsv(
+                        injectIntl(SuperAdminPane),
                       )
                     )
-                  ),
-                  'challenges',
-                  'challenges'
-                ))))))));
+                  )
+                ),
+              )))))));
