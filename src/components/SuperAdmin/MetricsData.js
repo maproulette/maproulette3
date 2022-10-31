@@ -1,8 +1,9 @@
 import React from "react";
 import { FormattedDate } from 'react-intl'
-
+import AsManageableProject from "../../interactions/Project/AsManageableProject";
 const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`;
 
+// Total Number of Tasks, Number of user engaged in task
 const setChallengeTab = (allUsers) => {
   return [
     {
@@ -78,13 +79,15 @@ const setChallengeTab = (allUsers) => {
     }
   ]
 }
-const setProjectTab = (allUsers) => {
+
+// Total Number of Challenges, Number of user engaged project
+const setProjectTab = (allUsers, challenges) => {
   return [
     {
       id: 'id',
       Header: 'ID',
       maxWidth: 80,
-      accessor: project => project.id,
+      accessor: project => project.id
     },
 
     {
@@ -105,6 +108,17 @@ const setProjectTab = (allUsers) => {
       Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
       maxWidth: 100,
     },
+    {
+      id: 'numOfChallenge',
+      Header: '# OF CHALLENGES',
+      accessor: project => {
+        const projectManage= AsManageableProject(project)
+        return(projectManage.childChallenges(challenges).length)
+      },
+      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+      maxWidth: 150,
+    },
+
     {
       id: 'isArchived',
       Header: 'IS ARCHIVED',
@@ -136,6 +150,7 @@ const setProjectTab = (allUsers) => {
   ]
 }
 
+// number of challenges participated, total task completed, total days active
 const setUserTab = () => {
   return [
     {

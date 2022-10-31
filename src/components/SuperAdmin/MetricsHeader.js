@@ -8,8 +8,8 @@ import FilterByKeyword from "../ChallengePane/ChallengeFilterSubnav/FilterByKeyw
 
 const MetricsHeader = (props) => {
 
-  const handleTabToggle = (e) => {
-    props.setCurrentTab(e.target.innerHTML.toLowerCase())
+  const handleTabToggle = (val) => {
+    props.setCurrentTab(val)
   }
 
   return (
@@ -22,19 +22,19 @@ const MetricsHeader = (props) => {
           <div className="admin__manage__controls mr-flex">
             <button
               className="mr-button mr-button--dark mr-button--small mr-mr-4"
-              onClick={handleTabToggle}
+              onClick={() => handleTabToggle('challenge')}
             >
               <FormattedMessage {...messages.challengeLabel} />
             </button>
             <button
               className="mr-button mr-button--dark mr-button--small mr-mr-4"
-              onClick={handleTabToggle}
+              onClick={() => handleTabToggle('project')}
             >
               <FormattedMessage {...messages.projectLabel} />
             </button>
             <button
               className="mr-button mr-button--dark mr-button--small mr-mr-4"
-              onClick={handleTabToggle}
+              onClick={() => handleTabToggle('user')}
             >
               <FormattedMessage {...messages.userLabel} />
             </button>
