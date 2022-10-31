@@ -11,7 +11,6 @@ import MetricsTable from "./MetricsTable";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import WithChallengeSearch from "../HOCs/WithSearch/WithChallengeSearch";
 import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
-import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
 import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
