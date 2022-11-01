@@ -4,7 +4,7 @@ import AsManageableProject from "../../interactions/Project/AsManageableProject"
 const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`;
 
 // Total Number of Tasks, Number of user engaged in task
-const setChallengeTab = (allUsers) => {
+const setChallengeTab = () => {
   return [
     {
       id: 'id',
@@ -35,9 +35,9 @@ const setChallengeTab = (allUsers) => {
     },
     {
       id: 'tasksCompletionPercentage',
-      Header: '% Complete Tasks',
+      Header: '% COMPLETED TASKS',
       accessor: challenge => challenge.completionPercentage + '%',
-      maxWidth: 150,
+      maxWidth: 180,
     },
     {
       id: 'project',
@@ -73,7 +73,7 @@ const setChallengeTab = (allUsers) => {
 }
 
 // Total Number of Challenges, Number of user engaged project
-const setProjectTab = (allUsers, challenges) => {
+const setProjectTab = () => {
   return [
     {
       id: 'id',
