@@ -39,7 +39,7 @@ const MetricsHeader = (props) => {
               <FormattedMessage {...messages.userLabel} />
             </button>
           </div>
-          {props.currentTab !== 'user' && <>
+          {props.currentTab === 'challenge' && <>
             <SortChallengesSelector {...props} />
             <FilterByKeyword {...props} />
             <FilterByDifficulty {...props} />
