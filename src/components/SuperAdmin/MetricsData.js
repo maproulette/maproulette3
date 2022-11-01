@@ -24,15 +24,7 @@ const setChallengeTab = (allUsers) => {
     {
       id: 'owner',
       Header: 'OWNER',
-      accessor: challenge => {
-        if (allUsers?.length) {
-          return allUsers.find(user =>
-            user.osmProfile.id == challenge.owner
-          )?.osmProfile?.displayName
-        }
-        return challenge?.owner
-      },
-      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+      accessor: challenge => challenge.owner,
       maxWidth: 100,
     },
     {
@@ -100,12 +92,7 @@ const setProjectTab = (allUsers, challenges) => {
     {
       id: 'owner',
       Header: 'OWNER',
-      accessor: project => {
-        return allUsers.find(user =>
-          user.osmProfile.id == project.owner
-        ).osmProfile.displayName
-      },
-      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+      accessor: project => project.owner,
       maxWidth: 100,
     },
     {
