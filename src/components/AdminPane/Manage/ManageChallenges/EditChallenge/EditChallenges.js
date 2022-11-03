@@ -74,11 +74,14 @@ export class EditChallenges extends Component {
       const tallied = this.props.user?.properties?.mr3Frontend?.settings?.tallied?.[(this.props.project.id)];
       const challengesEditing = this.props.challenges.filter(c => tallied.includes(c.id));
 
+      debugger;
+
       for (let i = 0; i < challengesEditing.length; i++) {
         const result = await this.props.saveChallenge({
           id: challengesEditing[i].id,
           tags: formData.tags,
           preferredTags: formData.taskTags,
+          exportableProperties: formData.exportableProperties,
           changesetUrl: challengesEditing[i].changesetUrl
         });
 
