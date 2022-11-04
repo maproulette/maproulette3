@@ -52,18 +52,6 @@ export const SuperAdminPane = (props) => {
     <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
       <MetricsHeader {...props} setCurrentTab={setCurrentTab} currentTab={currentTab} />
       {currentTab !== 'user' && <div className='mr-flex mr-justify-end mr-p-4 mr-pt-6'>
-        <VisibleFilterToggle
-          {...props}
-          dashboardEntityFilters={props.entityFilters}
-          toggleEntityFilter={props.toggleFilter}
-          filterToggleLabel={<FormattedMessage {...messages.visible} />}
-        />
-        <ArchivedFilterToggle
-          {...props}
-          dashboardEntityFilters={props.entityFilters}
-          toggleEntityFilter={props.toggleFilter}
-          filterToggleLabel={<FormattedMessage {...messages.archived} />}
-        />
         {currentTab === 'project' && <VirtualProjectFilterToggle
           {...props}
           dashboardEntityFilters={props.entityFilters}
