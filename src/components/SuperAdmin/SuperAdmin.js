@@ -30,8 +30,6 @@ import { useEffect } from "react";
 export const SuperAdminPane = (props) => {
   const [currentTab, setCurrentTab] = useState('challenge')
   //HOC
-  const VisibleFilterToggle = DashboardFilterToggle("challenge", "visible");
-  const ArchivedFilterToggle = DashboardFilterToggle("challenge", "archived");
   const VirtualProjectFilterToggle = DashboardFilterToggle("project", "virtual");
 
   const manager = AsManager(props.user);
