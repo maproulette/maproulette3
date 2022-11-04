@@ -30,14 +30,6 @@ export default class TaskCompletionStep1 extends Component {
     moreOptionsOpen: false,
   }
 
-  toggleMoreOptions = () => {
-    this.setState({moreOptionsOpen: !this.state.moreOptionsOpen})
-  }
-
-  closeMoreOptions = () => {
-    this.setState({moreOptionsOpen: false})
-  }
-
   render() {
     return (
       <div>
@@ -115,7 +107,7 @@ const MoreOptionsButton = function(props) {
   )
 }
 
-const ListMoreOptionsItems = function(props) {
+export const ListMoreOptionsItems = function(props) {
   let complete = props.complete
   if (props.needsRevised) {
     complete = (status) => props.complete(status, TaskReviewStatus.needed)
