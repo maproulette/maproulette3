@@ -9,7 +9,6 @@ import WithStatus from "../HOCs/WithStatus/WithStatus";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import MetricsTable from "./MetricsTable";
 import BusySpinner from "../BusySpinner/BusySpinner";
-import WithChallengeSearch from "../HOCs/WithSearch/WithChallengeSearch";
 import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
 import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
 import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
@@ -17,10 +16,11 @@ import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChalle
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import WithExportCsv from "./WithExportCsv";
 import WithMetricsFilter from './WithMetricsFilter'
+import WithMetricsSearch from "./WithMetricsSearch";
 import DashboardFilterToggle from "../AdminPane/Manage/DashboardFilterToggle/DashboardFilterToggle";
 import MetricsHeader from "./MetricsHeader";
 import messages from './Messages';
-
+import { useEffect } from "react";
 /**
  * SuperAdminPane is the top-level component for super administration functions. It has a
  * User/Project/Challenge metrics tab for management of users, projects, challenges, and tasks, and display of various summary metrics. 
@@ -29,7 +29,6 @@ import messages from './Messages';
  */
 export const SuperAdminPane = (props) => {
   const [currentTab, setCurrentTab] = useState('challenge')
-
   //HOC
   const VisibleFilterToggle = DashboardFilterToggle("challenge", "visible");
   const ArchivedFilterToggle = DashboardFilterToggle("challenge", "archived");
@@ -44,6 +43,9 @@ export const SuperAdminPane = (props) => {
     ) : (
       <SignIn {...props} />
     );
+  }
+  else {
+    useEffect(() => props.setSearchSort({ sortBy: 'default' }), [])
   }
 
   return manager.isSuperUser() ? (
@@ -98,7 +100,7 @@ export default
       withRouter(
         WithManageableProjects(
           WithChallenges(
-            WithChallengeSearch(
+            WithMetricsSearch(
               WithFilteredChallenges(
                 WithStartChallenge(
                   WithBrowsedChallenge(

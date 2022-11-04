@@ -23,7 +23,6 @@ const WithMetricsFilter = function(WrappedComponent) {
           search: searchquery
         })  
       }
-      console.log(this.props.challenges)
       let challenges = entityFilters.visible ? this.props.challenges.filter(c => c.enabled) : this.props.challenges
       challenges = entityFilters.archived ? challenges.filter(c => c.isArchived) : challenges
 
