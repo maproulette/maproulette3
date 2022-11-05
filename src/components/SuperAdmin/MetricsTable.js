@@ -26,7 +26,7 @@ const MetricsTable = (props) => {
     <ReactTable
       columns={constructHeader()}
       data={data}
-      pageSize={50}
+      defaultPageSize={50}
     />
   )
 }
