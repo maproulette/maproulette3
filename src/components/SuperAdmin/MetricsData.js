@@ -48,8 +48,8 @@ const setChallengeTab = () => {
       maxWidth: 120,
     },
     {
-      id: 'isArchived',
-      Header: 'IS ARCHIVED',
+      id: 'archived',
+      Header: 'ARCHIVED',
       accessor: challenge => challenge.isArchived.toString(),
       maxWidth: 120,
     },
@@ -107,14 +107,14 @@ const setProjectTab = () => {
     },
 
     {
-      id: 'isArchived',
-      Header: 'IS ARCHIVED',
+      id: 'archived',
+      Header: 'ARCHIVED',
       accessor: project => project.isArchived.toString(),
       maxWidth: 120,
     },
     {
-      id: 'isVirtual',
-      Header: 'IS VIRTUAL',
+      id: 'Virtual',
+      Header: 'VIRTUAL',
       accessor: project => project.isVirtual.toString(),
       maxWidth: 120,
     },
