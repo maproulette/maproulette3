@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import * as React from "react";
+import { fireEvent, waitFor } from "@testing-library/react";
 import TaskCompletionStep1, { ListMoreOptionsItems } from "./TaskCompletionStep1";
 
 describe("TaskCompletionStep1", () => {
@@ -59,5 +60,37 @@ describe("TaskCompletionStep1", () => {
     );
     const text = getByText("I fixed it!");
     expect(text).toBeInTheDocument();
+  });
+
+  it("shows an option to say I fixed it!", async () => {
+    const toggleDropdownVisible = jest.fn()
+    const allowedProgressions = new Map();
+    allowedProgressions.set(1, 2, 3, 4, 5);
+
+    const { getByText, container } = global.withProvider(
+      <ListMoreOptionsItems
+        task={{}}
+        pickEditor={() => null}
+        complete={() => null}
+        allowedProgressions={allowedProgressions}
+        intl={{ formatMessage: () => null }}
+        keyboardShortcutGroups={{ taskCompletion: { fixed: { key: 123 } } }}
+        activateKeyboardShortcutGroup={() => null}
+        deactivateKeyboardShortcutGroup={() => null}
+        quickKeyHandler={() => null}
+        activateKeyboardShortcut={() => null}
+        deactivateKeyboardShortcut={() => null}
+        needsRevised
+        toggleDropdownVisible={toggleDropdownVisible}
+      />
+    );
+
+    const element = container.querySelector('li');
+
+    fireEvent.click(element);
+
+    await waitFor(() => {
+      expect(toggleDropdownVisible).toHaveBeenCalledTimes(1);
+    });
   });
 });
