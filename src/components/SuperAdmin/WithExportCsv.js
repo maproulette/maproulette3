@@ -3,31 +3,32 @@ import React, { Component } from 'react'
 const WithExportCsv = function (WrappedComponent) {
   return class extends Component {
     render() {
-      function filterData() {
-        let allRow = document.querySelectorAll('[role="row"]:not(.-padRow)')
-        let headers = document.querySelectorAll('[role="row"]:not(.-padRow)')[0]
-        let headerParsed = [], json_pre = []
-        for (let i = 0; i < headers.children.length; i++) {
-          headerParsed.push(headers.children[i].childNodes[0].innerHTML)
-        }
-        allRow = [].slice.call(allRow, 1)
-        allRow.map((row) => {
-          let item = {}
-          for (let i = 0; i < row.children.length; i++) {
-            let itemData = row.children[i].childNodes[0].innerHTML ? row.children[i].childNodes[0].innerHTML : row.children[i].innerHTML
-            item[headerParsed[i]] = itemData
-          }
-          json_pre.push(item)
+      function formatData(data) {
+        let json_pre = data.map((item) => {
+          const created = new Date(item.created);
+          const modified = new Date(item.modified);
+          
+          return {
+            'ID': item.id,
+            'NAME': item.name,
+            'OWNER': item.owner,
+            'TASKS REMAINING': item.tasksRemaining,
+            '% COMPLETED TASKS': item.completionPercentage,
+            'PROJECT': item.parent.displayName,
+            'ARCHIVED': item.isArchived.toString(),
+            'DATE CREATED': `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}`,
+            'DATE LAST MODIFIED': `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}`,
+          };
         })
-        return json_pre
+        return json_pre;
       }
 
-      function download() {
-        var json_pre = filterData();
-        var csv = jsonToCsv(json_pre);
-        var downloadLink = document.createElement('a');
-        var blob = new Blob(['\ufeff', csv]);
-        var url = URL.createObjectURL(blob);
+      function download(data) {
+        const json_pre = formatData(data);
+        const csv = jsonToCsv(json_pre);
+        let downloadLink = document.createElement('a');
+        const blob = new Blob(['\ufeff', csv]);
+        const url = URL.createObjectURL(blob);
         downloadLink.href = url;
         downloadLink.download = "data.csv";
         document.body.appendChild(downloadLink);
@@ -58,7 +59,7 @@ const WithExportCsv = function (WrappedComponent) {
 
       return <WrappedComponent
         {...this.props}
-        filterData={filterData}
+        filterData={formatData}
         jsonToCsv={jsonToCsv}
         downloadCsv={download}
         rowNumber={getNumOfRows()}

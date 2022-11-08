@@ -61,7 +61,7 @@ export const SuperAdminPane = (props) => {
           type="button"
           className="mr-leading-none mr-button--dark mr-ml-4 mr-mr-1"
           onClick={() => {
-            props.downloadCsv()
+            props.downloadCsv(props.challenges)
           }}>
           <FormattedMessage {...messages.download} />
         </button>

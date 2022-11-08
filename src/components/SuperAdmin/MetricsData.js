@@ -57,7 +57,7 @@ const setChallengeTab = () => {
       id: 'dateCreated',
       Header: 'DATE CREATED',
       accessor: challenge => {
-        return <FormattedDate {...challenge.created} />
+        return <FormattedDate value={challenge.created} />
       },
       maxWidth: 150,
     },
@@ -65,7 +65,7 @@ const setChallengeTab = () => {
       id: 'dateLastModified',
       Header: 'DATE LAST MODIFIED',
       accessor: challenge => {
-        return <FormattedDate {...challenge.modified} />
+        return <FormattedDate value={challenge.modified} />
       },
       maxWidth: 180,
     }
