@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 import * as React from "react";
 import { fireEvent, waitFor } from "@testing-library/react";
+import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCompletionStep1, { ListMoreOptionsItems } from "./TaskCompletionStep1";
 
 describe("TaskCompletionStep1", () => {
@@ -40,7 +41,7 @@ describe("TaskCompletionStep1", () => {
 
   it("shows an option to say I fixed it!", () => {
     const allowedProgressions = new Map();
-    allowedProgressions.set(1, 2, 3, 4, 5);
+    allowedProgressions.set(1);
 
     const { getByText } = global.withProvider(
       <ListMoreOptionsItems
@@ -62,10 +63,10 @@ describe("TaskCompletionStep1", () => {
     expect(text).toBeInTheDocument();
   });
 
-  it("shows an option to say I fixed it!", async () => {
+  it("calls props.toggleDropdownVisible if list element is clicked - fixed it", async () => {
     const toggleDropdownVisible = jest.fn()
     const allowedProgressions = new Map();
-    allowedProgressions.set(1, 2, 3, 4, 5);
+    allowedProgressions.set(1);
 
     const { getByText, container } = global.withProvider(
       <ListMoreOptionsItems
@@ -75,6 +76,108 @@ describe("TaskCompletionStep1", () => {
         allowedProgressions={allowedProgressions}
         intl={{ formatMessage: () => null }}
         keyboardShortcutGroups={{ taskCompletion: { fixed: { key: 123 } } }}
+        activateKeyboardShortcutGroup={() => null}
+        deactivateKeyboardShortcutGroup={() => null}
+        quickKeyHandler={() => null}
+        activateKeyboardShortcut={() => null}
+        deactivateKeyboardShortcut={() => null}
+        needsRevised
+        toggleDropdownVisible={toggleDropdownVisible}
+      />
+    );
+
+    const element = container.querySelector('li');
+
+    fireEvent.click(element);
+
+    await waitFor(() => {
+      expect(toggleDropdownVisible).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("calls props.toggleDropdownVisible if list element is clicked - already fixed", async () => {
+    const toggleDropdownVisible = jest.fn()
+    const allowedProgressions = new Map();
+    allowedProgressions.set(2);
+
+    console.log("huh", allowedProgressions)
+
+    const { getByText, container } = global.withProvider(
+      <ListMoreOptionsItems
+        task={{}}
+        pickEditor={() => null}
+        complete={() => null}
+        allowedProgressions={allowedProgressions}
+        intl={{ formatMessage: () => null }}
+        keyboardShortcutGroups={{ taskCompletion: { falsePositive: { key: 123 } } }}
+        activateKeyboardShortcutGroup={() => null}
+        deactivateKeyboardShortcutGroup={() => null}
+        quickKeyHandler={() => null}
+        activateKeyboardShortcut={() => null}
+        deactivateKeyboardShortcut={() => null}
+        needsRevised
+        toggleDropdownVisible={toggleDropdownVisible}
+      />
+    );
+
+    const element = container.querySelector('li');
+
+    fireEvent.click(element);
+
+    await waitFor(() => {
+      expect(toggleDropdownVisible).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("calls props.toggleDropdownVisible if list element is clicked - too hard", async () => {
+    const toggleDropdownVisible = jest.fn()
+    const allowedProgressions = new Map();
+    allowedProgressions.set(6);
+
+    console.log("huh", allowedProgressions)
+
+    const { getByText, container } = global.withProvider(
+      <ListMoreOptionsItems
+        task={{}}
+        pickEditor={() => null}
+        complete={() => null}
+        allowedProgressions={allowedProgressions}
+        intl={{ formatMessage: () => null }}
+        keyboardShortcutGroups={{ taskCompletion: { tooHard: { key: 123 } } }}
+        activateKeyboardShortcutGroup={() => null}
+        deactivateKeyboardShortcutGroup={() => null}
+        quickKeyHandler={() => null}
+        activateKeyboardShortcut={() => null}
+        deactivateKeyboardShortcut={() => null}
+        needsRevised
+        toggleDropdownVisible={toggleDropdownVisible}
+      />
+    );
+
+    const element = container.querySelector('li');
+
+    fireEvent.click(element);
+
+    await waitFor(() => {
+      expect(toggleDropdownVisible).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("calls props.toggleDropdownVisible if list element is clicked - already fixed", async () => {
+    const toggleDropdownVisible = jest.fn()
+    const allowedProgressions = new Map();
+    allowedProgressions.set(5);
+
+    console.log("huh", allowedProgressions)
+
+    const { getByText, container } = global.withProvider(
+      <ListMoreOptionsItems
+        task={{}}
+        pickEditor={() => null}
+        complete={() => null}
+        allowedProgressions={allowedProgressions}
+        intl={{ formatMessage: () => null }}
+        keyboardShortcutGroups={{ taskCompletion: { alreadyFixed: { key: 123 } } }}
         activateKeyboardShortcutGroup={() => null}
         deactivateKeyboardShortcutGroup={() => null}
         quickKeyHandler={() => null}
