@@ -161,7 +161,7 @@ export class TaskNearbyMap extends Component {
         <LayerToggle {...this.props} />
         <EnhancedMap
           onClick={this.props.clearNextTask}
-          center={currentCenterpoint} zoom={18} minZoom={2} maxZoom={19}
+          center={currentCenterpoint} zoom={12} minZoom={2} maxZoom={19}
           zoomControl={false} animate={true} worldCopyJump={true}
         >
           <ZoomControl position='topright' />

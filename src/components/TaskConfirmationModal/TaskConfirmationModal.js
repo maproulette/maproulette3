@@ -147,18 +147,18 @@ export class TaskConfirmationModal extends Component {
       <External>
         <Modal
           contentClassName="mr-pb-6"
-          wide={loadingNearby}
+          fullScreen={loadingNearby}
           narrow={!loadingNearby}
           medium={reviewConfirmation && !loadingNearby}
           isActive
           allowOverflow
           onClose={this.props.onCancel}
         >
-          <div className={loadingNearby ? "mr-flex mr-justify-center" : ''}>
-            <div className={classNames("mr-flex mr-justify-center",
-                                       {"mr-pr-12": loadingNearby})}>
-              <div className={classNames("mr-flex mr-flex-col mr-items-center",
-                                         {"mr-max-w-88": (!reviewConfirmation || loadingNearby)})}>
+          <div className={loadingNearby ? "mr-flex mr-h-full" : ''}>
+            <div className={classNames("mr-flex",
+                                       {"mr-pr-12": loadingNearby},
+                                       {"mr-justify-center": !loadingNearby})}>
+              <div className={classNames("mr-flex mr-flex-col mr-items-center")}>
                 <div className="mr-w-full">
                   <h2 className="mr-text-grey-light-more mr-text-4xl mr-mt-4">
                     {this.props.inReview ?
@@ -445,12 +445,12 @@ export class TaskConfirmationModal extends Component {
               </div>
             </div>
             { loadingNearby &&
-              <div>
+              <div className="mr-w-full mr-h-full mr-flex mr-flex-col">
                 <h4 className="mr-my-6 mr-text-yellow mr-pl-12">
                   <FormattedMessage {...messages.nextNearbyLabel} />
                 </h4>
-                <div className="mr-border-l-2 mr-border-grey-lighter-10 mr-pl-12">
-                  <div className="mr-h-112 mr-w-88">
+                <div className="mr-border-l-2 mr-border-grey-lighter-10 mr-pl-12 mr-flex-grow">
+                  <div className="mr-h-full mr-w-full">
                     <TasksNearby
                       {...this.props}
                       onTaskClick={this.props.chooseNextTask}
