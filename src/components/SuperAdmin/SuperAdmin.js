@@ -44,7 +44,7 @@ export const SuperAdminPane = (props) => {
   else {
     useEffect(() => props.setSearchSort({ sortBy: 'default' }), [])
   }
-  const showingArchived = manager.isLoggedIn() && props.history.location.search.includes("archived=true");
+  const showingArchived = props.history?.location.search.includes("archived=true");
   return manager.isSuperUser() ? (
     <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
       <MetricsHeader {...props} setCurrentTab={setCurrentTab} currentTab={currentTab} />
