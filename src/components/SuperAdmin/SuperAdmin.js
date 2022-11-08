@@ -15,9 +15,9 @@ import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import WithExportCsv from "./WithExportCsv";
-import WithMetricsFilter from './WithMetricsFilter'
 import WithMetricsSearch from "./WithMetricsSearch";
 import DashboardFilterToggle from "../AdminPane/Manage/DashboardFilterToggle/DashboardFilterToggle";
+import MetricsFilterToggle from "./MetricsFilterToggle";
 import MetricsHeader from "./MetricsHeader";
 import messages from './Messages';
 import { useEffect } from "react";
@@ -31,7 +31,7 @@ export const SuperAdminPane = (props) => {
   const [currentTab, setCurrentTab] = useState('challenge')
   //HOC
   const VirtualProjectFilterToggle = DashboardFilterToggle("project", "virtual");
-
+  const showingArchived = props.history.location.search.includes("archived=true");
   const manager = AsManager(props.user);
   if (!manager.isLoggedIn()) {
     return props.checkingLoginStatus ? (
@@ -50,6 +50,7 @@ export const SuperAdminPane = (props) => {
     <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
       <MetricsHeader {...props} setCurrentTab={setCurrentTab} currentTab={currentTab} />
       {currentTab !== 'user' && <div className='mr-flex mr-justify-end mr-p-4 mr-pt-6'>
+        <MetricsFilterToggle {...props} filterName='archived' showingFilter={showingArchived} />
         {currentTab === 'project' && <VirtualProjectFilterToggle
           {...props}
           dashboardEntityFilters={props.entityFilters}
@@ -90,11 +91,10 @@ export default
               WithFilteredChallenges(
                 WithStartChallenge(
                   WithBrowsedChallenge(
-                    WithMetricsFilter(
-                      WithExportCsv(
-                        injectIntl(SuperAdminPane),
-                      )
+                    WithExportCsv(
+                      injectIntl(SuperAdminPane),
                     )
                   )
-                ),
-              )))))));
+                )
+              ),
+            ))))));
