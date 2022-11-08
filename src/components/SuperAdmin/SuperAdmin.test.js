@@ -28,7 +28,8 @@ describe("SuperAdminPane", () => {
           }
         }] }} 
         location={{}}
-        entityFilters={{ visible: false }}
+        filterName={null}
+        showingFilter={() => null}
         setSearch={() => null}
         clearSearch={() => null}
         setSearchSort={() => null}
