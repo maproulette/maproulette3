@@ -79,6 +79,7 @@ export class EditChallenges extends Component {
           id: challengesEditing[i].id,
           tags: formData.tags,
           preferredTags: formData.taskTags,
+          exportableProperties: formData.exportableProperties,
           changesetUrl: challengesEditing[i].changesetUrl
         });
 

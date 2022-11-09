@@ -6,6 +6,8 @@ import { jsSchema as discoverabilityJsSchema,
          uiSchema as discoverabilityUiSchema } from './BulkSchemas/DiscoverabilitySchema'
 import { jsSchema as tagsJsSchema,
          uiSchema as tagsUiSchema } from './BulkSchemas/TagsSchema'
+import { jsSchema as propertiesJsSchema,
+         uiSchema as propertiesUiSchema } from './BulkSchemas/PropertiesSchema'
 import messages from './Messages'
 
 // Define individual workflow steps. Steps can be driven by either schemas or
@@ -28,6 +30,15 @@ const tagsStep = {
   viewBox: "0 0 100 125",
 }
 
+const propertiesStep = {
+  id: 'Properties',
+  description: <FormattedMessage {...messages.propertiesStepDescription} />,
+  jsSchema: propertiesJsSchema,
+  uiSchema: propertiesUiSchema,
+  icon: "configure-icon",
+  viewBox: "0 0 100 125",
+}
+
 // String together workflow steps for creating a new challenge
 const bulkEditSteps = {
   'Discoverability': Object.assign({}, discoverabilityStep, {
@@ -36,6 +47,11 @@ const bulkEditSteps = {
     canFinish: true,
   }),
   'Tags': Object.assign({}, tagsStep, {
+    next: 'AdvancedOptions',
+    previous: 'AdvancedOptions',
+    canFinish: true,
+  }),
+  'Properties': Object.assign({}, propertiesStep, {
     next: 'AdvancedOptions',
     previous: 'AdvancedOptions',
     canFinish: true,

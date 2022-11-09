@@ -47,6 +47,7 @@ jest.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
 
 jest.mock('@rjsf/core/lib/components/widgets/TextWidget', () => ({
   __esModule: true,
+  default: () => null
 }));
 
 jest.mock('react-syntax-highlighter/dist/esm/languages/hljs/json', () => ({
