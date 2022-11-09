@@ -7,6 +7,19 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.0] - 2022-11-08
+
+### Features
+- add Properties to Export input to bulkEdit
+- Remove resolution dropdown from screen appropriately
+- maximize size of next nearby task map 
+- store api key in OSM (API)
+
+### System Updates
+- Update a few dependencies (API)
+- Provide missing IDs to withOptionCaching (API)
+- Fix warnings for "Auto-application to () is deprecated" (API)
+
 ## [v3.10.1] - 2022-10-11
 
 ### Features
