@@ -30,14 +30,6 @@ export default class TaskCompletionStep1 extends Component {
     moreOptionsOpen: false,
   }
 
-  toggleMoreOptions = () => {
-    this.setState({moreOptionsOpen: !this.state.moreOptionsOpen})
-  }
-
-  closeMoreOptions = () => {
-    this.setState({moreOptionsOpen: false})
-  }
-
   render() {
     return (
       <div>
@@ -93,8 +85,8 @@ export default class TaskCompletionStep1 extends Component {
                     <FormattedMessage {...messages.changeStatusOptions} /> :
                     <FormattedMessage {...messages.otherOptions} /> } />
              }
-             dropdownContent={() =>
-               <ListMoreOptionsItems {...this.props} />
+             dropdownContent={dropdown =>
+               <ListMoreOptionsItems {...this.props} toggleDropdownVisible={dropdown.toggleDropdownVisible}/>
              }
            />
           }
@@ -115,7 +107,7 @@ const MoreOptionsButton = function(props) {
   )
 }
 
-const ListMoreOptionsItems = function(props) {
+export const ListMoreOptionsItems = function(props) {
   let complete = props.complete
   if (props.needsRevised) {
     complete = (status) => props.complete(status, TaskReviewStatus.needed)
@@ -124,22 +116,22 @@ const ListMoreOptionsItems = function(props) {
   return (
     <ol className="mr-list-dropdown">
       {props.allowedProgressions.has(TaskStatus.falsePositive) && props.needsRevised &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskFalsePositiveControl {...props} complete={complete} asLink />
        </li>
       }
       {props.allowedProgressions.has(TaskStatus.fixed) &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskFixedControl {...props} complete={complete} asLink />
        </li>
       }
       {props.allowedProgressions.has(TaskStatus.tooHard) &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskTooHardControl {...props} complete={complete} asLink />
        </li>
       }
       {props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
-       <li>
+       <li onClick={props.toggleDropdownVisible}>
          <TaskAlreadyFixedControl {...props} complete={complete} asLink />
        </li>
       }
