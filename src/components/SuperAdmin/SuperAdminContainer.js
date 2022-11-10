@@ -30,32 +30,27 @@ const WrappedSuperAdminPane = WithStatus(
         ))))
 
 class SuperAdminContainer extends Component {
-    constructor(){
-      super()
-      this.state={
-        adminChallenges: [],
-      } 
-    }
-    componentDidMount(){
+  componentDidMount() {
+    this.props.fetchAdminChallenges(this.state)
+  }
 
-      this.setState({
-        adminChallenges: this.props.adminChallenges
-      })
-    }
-    render(){
-       console.log(this.props.adminChallenges)
-       return(<WrappedSuperAdminPane challenges={this.props.adminChallenges}/>)
-    }
+  render() {
+    return(
+      <WrappedSuperAdminPane challenges={this.props.adminChallenges} fetchingChallenges={this.props.loading}/>
+    )
+  }
 }
 
 const mapStateToProps = state => {
-   return {
-        adminChallenges: state.entities.adminChallenges
-    }
+  return {
+    adminChallenges: state.entities?.adminChallenges?.data || [],
+    loading: state.entities?.adminChallenges?.loading
+  }
 }
 const mapDispatchToProps = dispatch => ({
-    fetchAdminChallenges: () => {
-        dispatch(fetchAdminChallenges());
-    },
+  fetchAdminChallenges: (query) => {
+    dispatch(fetchAdminChallenges(query));
+  },
 })
+
 export default connect(mapStateToProps, mapDispatchToProps)(SuperAdminContainer);

@@ -7,6 +7,7 @@ import _isObject from "lodash/isObject"
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import { performChallengeSearch } from '../Challenge/Challenge'
+import { SET_ADMIN_CHALLENGES } from '../Challenge/ChallengeActions'
 import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions';
 import _get from "lodash/get";
 import _compact from "lodash/compact";
@@ -38,53 +39,37 @@ import {
   PARAMS_MAP,
 } from "../Search/Search";
 
-
-// redux actions
-export const SET_ADMIN_CHALLENGES = 'SET_SUPER_ADMIN_CHALLENGES'
-
-// redux action creators
-
-/**
- * Add or update place data in the redux store
- */
-
 export const receiveAdminChallenges = function (
   normalizedEntities,
-  status = RequestStatus.success
+  dispatch
 ) {
+  dispatch({
+    type: SET_ADMIN_CHALLENGES,
+    payload: [],
+    loading: true
+  })
+
   _each(normalizedEntities.challenges, (c) => {
     if (c.dataOriginDate) {
       c.dataOriginDate = format(parse(c.dataOriginDate), "YYYY-MM-DD");
     }
   });
 
+  const results = Object.keys(normalizedEntities.challenges).map(i => normalizedEntities.challenges[i]);
+
   return {
     type: SET_ADMIN_CHALLENGES,
-    status,
-    entities: normalizedEntities,
-    receivedAt: Date.now(),
+    payload: results || [],
+    loading: false
   };
 };
 
-/**
- * Retrieve a description of the place at the given latititude and longitude.
- */
-export const fetchAdminChallenges = function() {
-
+export const fetchAdminChallenges = function(query) {
   return function(dispatch) {
-    return dispatch(performChallengeSearch({onlyEnabled: false, archived: false}, 50000)).then(normalizedResults => {
-      dispatch(receiveAdminChallenges(normalizedResults.entities))
-      console.log(normalizedResults)
-      return normalizedResults
-    })
+    return (
+      dispatch(performChallengeSearch(query, 50000, true)).then(normalizedResults => {
+        return dispatch(receiveAdminChallenges(normalizedResults.entities, dispatch))
+      })
+    )
   }
 }
-
-// redux reducers
-export const adminChallengeEntities = function (state, action) {
-console.log(state, action)  
-      return genericEntityReducer(
-      RECEIVE_CHALLENGES,
-      "challenges"
-    )(state, action);
-};

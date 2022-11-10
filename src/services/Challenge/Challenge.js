@@ -34,7 +34,7 @@ import { ensureUserLoggedIn } from "../User/User";
 import { toLatLngBounds } from "../MapBounds/MapBounds";
 import { addError, addServerError } from "../Error/Error";
 import AppErrors from "../Error/AppErrors";
-import { RECEIVE_CHALLENGES, REMOVE_CHALLENGE } from "./ChallengeActions";
+import { RECEIVE_CHALLENGES, REMOVE_CHALLENGE, SET_ADMIN_CHALLENGES } from "./ChallengeActions";
 import { ChallengeStatus } from "./ChallengeStatus/ChallengeStatus";
 import { zeroTaskActions } from "../Task/TaskAction/TaskAction";
 import {
@@ -315,7 +315,8 @@ export const fetchProjectChallengeListing = function (
  */
 export const performChallengeSearch = function (
   searchObject,
-  limit = RESULTS_PER_PAGE
+  limit = RESULTS_PER_PAGE,
+  admin
 ) {
   const sortCriteria = _get(searchObject, "sort", {});
   const archived = _get(searchObject, "archived", false);
@@ -347,7 +348,8 @@ export const performChallengeSearch = function (
       archived,
       onlyEnabled
     },
-    limit
+    limit,
+    admin
   );
 };
 
@@ -362,7 +364,7 @@ export const performChallengeSearch = function (
                               'page', 'challengeStatus'
  * @param {number} limit
  */
-export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE) {
+export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin = false) {
   const queryString = criteria.searchQuery;
   const filters = criteria.filters || {};
   const onlyEnabled = _isUndefined(criteria.onlyEnabled)
@@ -446,7 +448,9 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE) {
     })
       .execute()
       .then((normalizedResults) => {
-        dispatch(receiveChallenges(normalizedResults.entities));
+        if (!admin) {
+          dispatch(receiveChallenges(normalizedResults.entities));
+        }
         return normalizedResults;
       })
       .catch((error) => {
@@ -1394,3 +1398,18 @@ export const challengeEntities = function (state, action) {
     )(state, action);
   }
 };
+
+const ADMIN_CHALLENGES_INITIAL_STATE = {
+  data: [],
+  loading: false
+}
+
+export const adminChallengeEntities = function(state = ADMIN_CHALLENGES_INITIAL_STATE, action) {
+  switch (action.type) {
+    case SET_ADMIN_CHALLENGES:
+      debugger;
+      return { data: action.payload, loading: action.loading };
+    default:
+      return state;
+  }
+}
