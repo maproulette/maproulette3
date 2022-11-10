@@ -9,6 +9,7 @@ export default WrappedComponent => {
     searchObject,
     limit = 50000
   ) {
+    searchObject = {...searchObject, onlyEnabled: false}
     return performChallengeSearch(searchObject, limit);
   }
 
