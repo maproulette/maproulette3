@@ -40,7 +40,6 @@ import SystemNotices from './components/SystemNotices/SystemNotices'
 import Footer from './components/Footer/Footer'
 import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
-import SuperAdminPane from './components/SuperAdmin/SuperAdmin'
 import SuperAdminContainer from './components/SuperAdmin/SuperAdminContainer'
 import MobileNotSupported
        from './components/MobileNotSupported/MobileNotSupported'

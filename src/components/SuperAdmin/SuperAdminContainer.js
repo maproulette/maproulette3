@@ -5,7 +5,6 @@ import { fetchAdminChallenges } from "../../services/SuperAdmin/SuperAdminChalle
 import WithStatus from "../HOCs/WithStatus/WithStatus";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import { withRouter } from "react-router";
-import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
 import WithMetricsSearch from "./WithMetricsSearch";
 import WithFilteredChallenges from "../HOCs/WithFilteredChallenges/WithFilteredChallenges";
 import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
@@ -13,10 +12,10 @@ import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChalle
 import WithExportCsv from "./WithExportCsv";
 import { injectIntl } from "react-intl";
 
-const WrappedSuperAdminPane = WithStatus(
-  WithCurrentUser(
-    withRouter(
-      //WithManageableProjects(
+const WrappedSuperAdminPane = 
+  WithStatus(
+    WithCurrentUser(
+      withRouter(
         WithMetricsSearch(
           WithFilteredChallenges(
             WithStartChallenge(
@@ -30,32 +29,27 @@ const WrappedSuperAdminPane = WithStatus(
         ))))
 
 class SuperAdminContainer extends Component {
-    constructor(){
-      super()
-      this.state={
-        adminChallenges: [],
-      } 
-    }
-    componentDidMount(){
+  componentDidMount() {
+    this.props.fetchAdminChallenges(this.state)
+  }
 
-      this.setState({
-        adminChallenges: this.props.adminChallenges
-      })
-    }
-    render(){
-       console.log(this.props.adminChallenges)
-       return(<WrappedSuperAdminPane challenges={this.props.adminChallenges}/>)
-    }
+  render() {
+    return(
+      <WrappedSuperAdminPane challenges={this.props.adminChallenges} fetchingChallenges={this.props.loading}/>
+    )
+  }
 }
 
 const mapStateToProps = state => {
-   return {
-        adminChallenges: state.entities.adminChallenges
-    }
+  return {
+    adminChallenges: state.entities?.adminChallenges?.data || [],
+    loading: state.entities?.adminChallenges?.loading
+  }
 }
 const mapDispatchToProps = dispatch => ({
-    fetchAdminChallenges: () => {
-        dispatch(fetchAdminChallenges());
-    },
+  fetchAdminChallenges: (query) => {
+    dispatch(fetchAdminChallenges(query));
+  },
 })
+
 export default connect(mapStateToProps, mapDispatchToProps)(SuperAdminContainer);
