@@ -7,8 +7,7 @@ import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import { withRouter } from "react-router";
 import WithMetricsSearch from "./WithMetricsSearch";
 import WithFilteredChallenges from "../HOCs/WithFilteredChallenges/WithFilteredChallenges";
-import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
-import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
+import WithMetricsFilter from "./WithMetricsFilter";
 import WithExportCsv from "./WithExportCsv";
 import { injectIntl } from "react-intl";
 
@@ -17,16 +16,15 @@ const WrappedSuperAdminPane =
     WithCurrentUser(
       withRouter(
         WithMetricsSearch(
-          WithFilteredChallenges(
-            WithStartChallenge(
-              WithBrowsedChallenge(
-                WithExportCsv(
-                  injectIntl(SuperAdminPane),
-                )
+          WithMetricsFilter(
+            WithFilteredChallenges(
+              WithExportCsv(
+                injectIntl(SuperAdminPane),
               )
             )
-          ),
-        ))))
+          )
+        ),
+      )))
 
 class SuperAdminContainer extends Component {
   componentDidMount() {
@@ -35,7 +33,7 @@ class SuperAdminContainer extends Component {
 
   render() {
     return(
-      <WrappedSuperAdminPane challenges={this.props.adminChallenges} fetchingChallenges={this.props.loading}/>
+      <WrappedSuperAdminPane challenges={this.props.adminChallenges} fetchingChallenges={this.props.loading} />
     )
   }
 }

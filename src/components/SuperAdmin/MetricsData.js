@@ -43,7 +43,7 @@ const setChallengeTab = () => {
       id: 'project',
       Header: 'PROJECT',
       accessor: challenge => {
-        return <a href={`/admin/project/${challenge.parent.id}`}> {challenge.parent.displayName} </a>
+        return <a href={`/admin/project/${challenge.parent}`}> {challenge.parent} </a>
       },
       maxWidth: 120,
     },
