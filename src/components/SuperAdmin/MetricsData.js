@@ -17,7 +17,7 @@ const setChallengeTab = () => {
       id: 'name',
       Header: 'NAME',
       accessor: challenge => {
-        return <a href={`/admin/project/${challenge.parent.id}` +
+        return <a href={`/admin/project/${challenge.parent}` +
           `/challenge/${challenge.id}`}> {challenge.name} </a>
       },
     },

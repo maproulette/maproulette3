@@ -6,7 +6,7 @@ import AsManager from "../../interactions/User/AsManager";
 import SignIn from "../../pages/SignIn/SignIn";
 import MetricsTable from "./MetricsTable";
 import BusySpinner from "../BusySpinner/BusySpinner";
-import DashboardFilterToggle from "../AdminPane/Manage/DashboardFilterToggle/DashboardFilterToggle";
+import internalFilterToggle from "./internalFilterToggle";
 import MetricsHeader from "./MetricsHeader";
 import messages from './Messages';
 /**
@@ -18,9 +18,9 @@ import messages from './Messages';
 export const SuperAdminPane = (props) => {
   const [currentTab, setCurrentTab] = useState('challenge')
   //HOC
-  const VisibleFilterToggle = DashboardFilterToggle("challenge", "visible");
-  const ArchivedFilterToggle = DashboardFilterToggle("challenge", "archived");
-  const VirtualProjectFilterToggle = DashboardFilterToggle("project", "virtual");
+  const VisibleFilterToggle = internalFilterToggle("challenge", "visible");
+  const ArchivedFilterToggle = internalFilterToggle("challenge", "archived");
+  const VirtualProjectFilterToggle = internalFilterToggle("project", "virtual");
   const manager = AsManager(props.user);
   if (!manager.isLoggedIn()) {
     return props.checkingLoginStatus ? (
@@ -31,7 +31,7 @@ export const SuperAdminPane = (props) => {
       <SignIn {...props} />
     );
   }
-
+console.log(props)
   return manager.isSuperUser() ? (
     <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
       <MetricsHeader {...props} setCurrentTab={setCurrentTab} currentTab={currentTab} />

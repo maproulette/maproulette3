@@ -15,7 +15,7 @@ const WrappedSuperAdminPane =
   WithStatus(
     WithCurrentUser(
       withRouter(
-        WithMetricsSearch(
+       WithMetricsSearch(
           WithMetricsFilter(
             WithFilteredChallenges(
               WithExportCsv(
@@ -33,7 +33,7 @@ class SuperAdminContainer extends Component {
 
   render() {
     return(
-      <WrappedSuperAdminPane challenges={this.props.adminChallenges} fetchingChallenges={this.props.loading} />
+      <WrappedSuperAdminPane challenges={this.props.adminChallenges} loading={this.props.loading} />
     )
   }
 }

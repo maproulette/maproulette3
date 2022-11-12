@@ -1,17 +1,20 @@
 import "@testing-library/jest-dom";
 import * as React from "react";
 import { SuperAdminPane } from "./SuperAdmin";
+import DashboardFilterToggle from "../AdminPane/Manage/DashboardFilterToggle/DashboardFilterToggle";
 
 describe("SuperAdminPane", () => {
   it("redirects to Sign In if no user data", () => {
     const { getByText } = global.withProvider(
-      <SuperAdminPane location={{}} />
+      <SuperAdminPane location={{}}  dashboardEntityFilters = {{visible: null, archived: null}}/>
     );
     const text = getByText("Sign in");
     expect(text).toBeInTheDocument();
   });
 
   it("grants super user access to Metrics page", () => {
+    const VisibleFilterToggle = DashboardFilterToggle("challenge", "visible");
+    const archivedFilterToggle = DashboardFilterToggle("challenge", "archived");
     const { getByText } = global.withProvider(
       <SuperAdminPane 
         user={{ id: 1, grants: [{
@@ -28,7 +31,7 @@ describe("SuperAdminPane", () => {
           }
         }] }} 
         location={{}}
-        filterName={null}
+        filterName={{visible: null, archived: null}}
         showingFilter={() => null}
         setSearch={() => null}
         clearSearch={() => null}
@@ -37,8 +40,12 @@ describe("SuperAdminPane", () => {
         removeSearchFilters={() => null}
         setSearchFilters={() => null}
         allUsers={{}}
+        dashboardEntityFilters = {{visible: null}}
+        toggleEntityFilter={() => null} 
+        filterToggleLabel={null}
       />
     );
+
     const text = getByText("Metrics");
     expect(text).toBeInTheDocument();
   });

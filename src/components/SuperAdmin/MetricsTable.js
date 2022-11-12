@@ -6,6 +6,7 @@ import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults';
 import ReactTable from 'react-table-6'
 import { setChallengeTab} from './MetricsData'
 import { injectIntl } from 'react-intl'
+import BusySpinner from '../BusySpinner/BusySpinner';
 
 const MetricsTable = (props) => {
   let data
@@ -21,8 +22,11 @@ const MetricsTable = (props) => {
       return null
     }
   }
-
-  return (
+  return props.loading ? (
+    <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+      <BusySpinner />
+    </div>
+  ) : (
     <ReactTable
       columns={constructHeader()}
       data={data}
