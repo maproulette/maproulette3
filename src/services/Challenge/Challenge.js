@@ -127,14 +127,17 @@ export const exportOSMData = function (url, filename) {
       const file = `${filename}.osm`;
       const pom = document.createElement('a');
       const bb = new Blob([osmData], {type: 'text/plain'});
-      pom.setAttribute('href', window.URL.createObjectURL(bb));
+
+      if (process.env.NODE_ENV !== 'test') {
+        pom.setAttribute('href', window.URL.createObjectURL(bb));
+      }
       pom.setAttribute('download', file);
       pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
       pom.draggable = true; 
       pom.classList.add('dragout');
       pom.click();
 
-      return true;
+      return osmData;
     })
     .catch((error) => {
       console.log(error.response || error);
