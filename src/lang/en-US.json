@@ -441,6 +441,7 @@
   "Admin.manageTasks.controls.exportCSV.label": "Export CSV",
   "Admin.manageTasks.controls.exportGeoJSON.label": "Export GeoJSON",
   "Admin.manageTasks.controls.exportMapperReviewCSV.label": "Export Mapper Review CSV",
+  "Admin.manageTasks.controls.exportOSMData.label": "Export OSM Data",
   "Admin.manageTasks.controls.exportReviewerMetaCSV.label": "Export Meta-Review Coverage CSV",
   "Admin.manageTasks.controls.exportTaskReviewHistory.label": "Export Task Review History CSV",
   "Admin.manageTasks.controls.hideReviewColumns.label": "Hide Review Columns",
