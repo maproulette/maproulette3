@@ -4,7 +4,7 @@ import WithPagedChallenges from "../HOCs/WithPagedChallenges/WithPagedChallenges
 import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges';
 import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults';
 import ReactTable from 'react-table-6'
-import { setChallengeTab} from './MetricsData'
+import { setChallengeTab, setProjectTab} from './MetricsData'
 import { injectIntl } from 'react-intl'
 import BusySpinner from '../BusySpinner/BusySpinner';
 
@@ -16,10 +16,8 @@ const MetricsTable = (props) => {
       return setChallengeTab()
     }
     else if (props.currentTab === 'project') {
-      return null
-    }
-    else if (props.currentTab === 'user') {
-      return null
+      data = props.projects
+      return setProjectTab(props.challenges)
     }
   }
   return props.loading ? (

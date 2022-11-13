@@ -26,6 +26,12 @@ const MetricsHeader = (props) => {
             >
               <FormattedMessage {...messages.challengeLabel} />
             </button>
+            <button
+              className="mr-button mr-button--dark mr-button--small mr-mr-4"
+              onClick={() => handleTabToggle('project')}
+            >
+              <FormattedMessage {...messages.projectLabel} />
+            </button>
           </div>
           {props.currentTab === 'challenge' && <>
             <SortChallengesSelector {...props} />

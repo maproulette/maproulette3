@@ -48,6 +48,12 @@ const setChallengeTab = () => {
       maxWidth: 120,
     },
     {
+      id: 'visible',
+      Header: 'VISIBLE',
+      accessor: challenge => challenge.enabled.toString(),
+      maxWidth: 120,
+    },
+    {
       id: 'archived',
       Header: 'ARCHIVED',
       accessor: challenge => challenge.isArchived.toString(),
@@ -72,8 +78,7 @@ const setChallengeTab = () => {
   ]
 }
 
-// Total Number of Challenges, Number of user engaged project
-const setProjectTab = () => {
+const setProjectTab = (challenges) => {
   return [
     {
       id: 'id',
@@ -105,7 +110,12 @@ const setProjectTab = () => {
       Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
       maxWidth: 150,
     },
-
+    {
+      id: 'visible',
+      Header: 'VISIBLE',
+      accessor: project => project.enabled.toString(),
+      maxWidth: 120,
+    },
     {
       id: 'archived',
       Header: 'ARCHIVED',
@@ -122,7 +132,7 @@ const setProjectTab = () => {
       id: 'dateCreated',
       Header: 'DATE CREATED',
       accessor: project => {
-        return <FormattedDate {...project.created} />
+        return <FormattedDate value={project.created} />
       },
       maxWidth: 150,
     },
@@ -130,7 +140,7 @@ const setProjectTab = () => {
       id: 'dateLastModified',
       Header: 'DATE LAST MODIFIED',
       accessor: project => {
-        return <FormattedDate {...project.modified} />
+        return <FormattedDate value={project.modified} />
       },
       maxWidth: 180,
     }

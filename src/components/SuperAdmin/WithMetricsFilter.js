@@ -26,14 +26,14 @@ const WithMetricsFilter = function(WrappedComponent) {
       let challenges = entityFilters.visible ? this.props.challenges.filter(c => c.enabled) : this.props.challenges
       challenges = entityFilters.archived ? challenges.filter(c => c.isArchived) : challenges
 
-      // let projects = entityFilters.visible? this.props.projects.filter(p => p.enabled): this.props.projects
-      // projects = entityFilters.archived? projects.filter(p => p.isArchived): projects
-      // projects = entityFilters.virtual? projects.filter(p => p.isVirtual): projects
+      let projects = entityFilters.visible? this.props.projects.filter(p => p.enabled): this.props.projects
+      projects = entityFilters.archived? projects.filter(p => p.isArchived): projects
+      projects = entityFilters.virtual? projects.filter(p => p.isVirtual): projects
 
       return (
         <WrappedComponent {...this.props} 
           challenges = {challenges} 
-          // projects={projects}
+          projects={projects}
           entityFilters = {entityFilters}
           toggleFilter = {toggleFilter}
         />

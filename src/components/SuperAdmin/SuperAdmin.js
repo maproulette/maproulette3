@@ -31,7 +31,7 @@ export const SuperAdminPane = (props) => {
       <SignIn {...props} />
     );
   }
-console.log(props)
+
   return manager.isSuperUser() ? (
     <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
       <MetricsHeader {...props} setCurrentTab={setCurrentTab} currentTab={currentTab} />
