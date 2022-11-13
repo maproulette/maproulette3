@@ -17,6 +17,7 @@ import messages from './Messages';
  */
 export const SuperAdminPane = (props) => {
   const [currentTab, setCurrentTab] = useState('challenge')
+console.log(props.loading)
   //HOC
   const VisibleFilterToggle = internalFilterToggle("challenge", "visible");
   const ArchivedFilterToggle = internalFilterToggle("challenge", "archived");
@@ -59,7 +60,7 @@ export const SuperAdminPane = (props) => {
           type="button"
           className="mr-leading-none mr-button--dark mr-ml-4 mr-mr-1"
           onClick={() => {
-            props.downloadCsv(props.challenges)
+            props.downloadCsv(currentTab, props)
           }}>
           <FormattedMessage {...messages.download} />
         </button>

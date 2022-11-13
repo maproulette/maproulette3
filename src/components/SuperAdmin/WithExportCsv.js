@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-
+import AsManageableProject from '../../interactions/Project/AsManageableProject'
+import { ITEM_TYPE_BUNDLE } from '../../services/Activity/ActivityItemTypes/ActivityItemTypes'
 const WithExportCsv = function (WrappedComponent) {
   return class extends Component {
     render() {
-      function formatData(data) {
-        let json_pre = data.map((item) => {
+      function formatChallengeData(props) {
+        let json_pre = props.challenges.map((item) => {
           const created = new Date(item.created);
           const modified = new Date(item.modified);
           
@@ -14,8 +15,31 @@ const WithExportCsv = function (WrappedComponent) {
             'OWNER': item.owner,
             'TASKS REMAINING': item.tasksRemaining,
             '% COMPLETED TASKS': item.completionPercentage,
-            'PROJECT': item.parent.displayName,
+            'PROJECT': item.parent,
+            'VISIBLE': item.enabled.toString(),
             'ARCHIVED': item.isArchived.toString(),
+            'DATE CREATED': `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}`,
+            'DATE LAST MODIFIED': `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}`,
+          };
+        })
+        console.log(json_pre)
+        return json_pre;
+      }
+
+    function formatProjectData(props) {
+        let json_pre = props.projects.map((item) => {
+          const created = new Date(item.created);
+          const modified = new Date(item.modified);
+          const projectManage= AsManageableProject(item)
+          const numOfChallenges = projectManage.childChallenges(props.challenges).length
+          return {
+            'ID': item.id,
+            'NAME': item.name,
+            'OWNER': item.owner,
+            '# OF CHALLENGES': numOfChallenges,
+            'VISIBLE': item.enabled.toString(),
+            'ARCHIVED': item.isArchived.toString(),
+            'VIRTUAL': item.isVirtual.toString(),
             'DATE CREATED': `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}`,
             'DATE LAST MODIFIED': `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}`,
           };
@@ -23,8 +47,15 @@ const WithExportCsv = function (WrappedComponent) {
         return json_pre;
       }
 
-      function download(data) {
-        const json_pre = formatData(data);
+      function download(currentTab, props) {
+        let json_pre
+        console.log(currentTab)
+        if(currentTab === 'challenge'){
+          json_pre = formatChallengeData(props)
+        }
+        else if(currentTab === 'project'){
+          json_pre = formatProjectData(props)
+        }
         const csv = jsonToCsv(json_pre);
         let downloadLink = document.createElement('a');
         const blob = new Blob(['\ufeff', csv]);
@@ -59,10 +90,7 @@ const WithExportCsv = function (WrappedComponent) {
 
       return <WrappedComponent
         {...this.props}
-        filterData={formatData}
-        jsonToCsv={jsonToCsv}
         downloadCsv={download}
-        rowNumber={getNumOfRows()}
       />
     }
   }
