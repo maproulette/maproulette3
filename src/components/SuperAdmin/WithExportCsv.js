@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import AsManageableProject from '../../interactions/Project/AsManageableProject'
-import { ITEM_TYPE_BUNDLE } from '../../services/Activity/ActivityItemTypes/ActivityItemTypes'
 const WithExportCsv = function (WrappedComponent) {
   return class extends Component {
     render() {
