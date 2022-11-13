@@ -46,6 +46,7 @@ const setChallengeTab = () => {
         return <a href={`/admin/project/${challenge.parent}`}> {challenge.parent} </a>
       },
       maxWidth: 120,
+      sortable: false
     },
     {
       id: 'visible',
@@ -66,6 +67,7 @@ const setChallengeTab = () => {
         return <FormattedDate value={challenge.created} />
       },
       maxWidth: 150,
+      sortable: false
     },
     {
       id: 'dateLastModified',
@@ -74,6 +76,7 @@ const setChallengeTab = () => {
         return <FormattedDate value={challenge.modified} />
       },
       maxWidth: 180,
+      sortable: false
     }
   ]
 }
@@ -107,8 +110,8 @@ const setProjectTab = (challenges) => {
         const projectManage= AsManageableProject(project)
         return(projectManage.childChallenges(challenges).length)
       },
-      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
       maxWidth: 150,
+      sortable: false
     },
     {
       id: 'visible',
@@ -135,6 +138,7 @@ const setProjectTab = (challenges) => {
         return <FormattedDate value={project.created} />
       },
       maxWidth: 150,
+      sortable: false
     },
     {
       id: 'dateLastModified',
@@ -143,6 +147,7 @@ const setProjectTab = (challenges) => {
         return <FormattedDate value={project.modified} />
       },
       maxWidth: 180,
+      sortable: false
     }
   ]
 }
