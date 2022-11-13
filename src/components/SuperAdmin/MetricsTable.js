@@ -1,12 +1,12 @@
 
 import React from 'react'
-import WithPagedChallenges from "../HOCs/WithPagedChallenges/WithPagedChallenges";
-import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges';
-import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults';
+import WithPagedChallenges from '../HOCs/WithPagedChallenges/WithPagedChallenges'
+import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges'
+import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 import ReactTable from 'react-table-6'
 import { setChallengeTab, setProjectTab} from './MetricsData'
 import { injectIntl } from 'react-intl'
-import BusySpinner from '../BusySpinner/BusySpinner';
+import BusySpinner from '../BusySpinner/BusySpinner'
 
 const MetricsTable = (props) => {
   let data
@@ -21,7 +21,7 @@ const MetricsTable = (props) => {
     }
   }
   return props.loading ? (
-    <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+    <div className='admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue'>
       <BusySpinner />
     </div>
   ) : (

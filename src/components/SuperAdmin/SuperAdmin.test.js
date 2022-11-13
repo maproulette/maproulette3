@@ -1,7 +1,7 @@
-import "@testing-library/jest-dom";
-import * as React from "react";
-import { SuperAdminPane } from "./SuperAdmin";
-import DashboardFilterToggle from "../AdminPane/Manage/DashboardFilterToggle/DashboardFilterToggle";
+import '@testing-library/jest-dom'
+import * as React from 'react'
+import { SuperAdminPane } from './SuperAdmin'
+import DashboardFilterToggle from '../AdminPane/Manage/DashboardFilterToggle/DashboardFilterToggle'
 
 describe("SuperAdminPane", () => {
   it("redirects to Sign In if no user data", () => {

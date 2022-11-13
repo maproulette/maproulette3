@@ -1,16 +1,16 @@
-import React, {Component} from "react";
-import { connect } from "react-redux";
-import { SuperAdminPane } from "./SuperAdmin";
-import { fetchAdminChallenges } from "../../services/SuperAdmin/SuperAdminChallenges";
-import { fetchAdminProjects } from "../../services/SuperAdmin/SuperAdminProjects";
-import WithStatus from "../HOCs/WithStatus/WithStatus";
-import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
-import { withRouter } from "react-router";
-import WithMetricsSearch from "./WithMetricsSearch";
-import WithFilteredChallenges from "../HOCs/WithFilteredChallenges/WithFilteredChallenges";
-import WithMetricsFilter from "./WithMetricsFilter";
-import WithExportCsv from "./WithExportCsv";
-import { injectIntl } from "react-intl";
+import React, {Component} from 'react'
+import { connect } from 'react-redux'
+import { SuperAdminPane } from './SuperAdmin'
+import { fetchAdminChallenges } from '../../services/SuperAdmin/SuperAdminChallenges'
+import { fetchAdminProjects } from '../../services/SuperAdmin/SuperAdminProjects'
+import WithStatus from '../HOCs/WithStatus/WithStatus'
+import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
+import { withRouter } from 'react-router'
+import WithMetricsSearch from './WithMetricsSearch'
+import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
+import WithMetricsFilter from './WithMetricsFilter'
+import WithExportCsv from './WithExportCsv'
+import { injectIntl } from 'react-intl'
 
 const WrappedSuperAdminPane = 
   WithStatus(
@@ -28,6 +28,7 @@ const WrappedSuperAdminPane =
       )))
 
 class SuperAdminContainer extends Component {
+
   componentDidMount() {
     const searchQuery = {}
     this.props.fetchAdminChallenges(searchQuery)
@@ -36,7 +37,7 @@ class SuperAdminContainer extends Component {
 
   render() {
     return(
-      <WrappedSuperAdminPane challenges={this.props.adminChallenges} projects={this.props.adminProjects} loading={this.props.loadingChallenges && this.props.loadingProjects} />
+      <WrappedSuperAdminPane challenges={this.props.adminChallenges} projects={this.props.adminProjects} loading={this.props.loadingChallenges || this.props.loadingProjects} />
     )
   }
 }

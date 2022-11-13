@@ -1,14 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { FormattedMessage } from "react-intl"
-import { useState } from "react";
-import AsManager from "../../interactions/User/AsManager";
-import SignIn from "../../pages/SignIn/SignIn";
-import MetricsTable from "./MetricsTable";
-import BusySpinner from "../BusySpinner/BusySpinner";
-import internalFilterToggle from "./internalFilterToggle";
-import MetricsHeader from "./MetricsHeader";
-import messages from './Messages';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { FormattedMessage } from 'react-intl'
+import { useState } from 'react'
+import AsManager from '../../interactions/User/AsManager'
+import SignIn from '../../pages/SignIn/SignIn'
+import MetricsTable from './MetricsTable'
+import BusySpinner from '../BusySpinner/BusySpinner'
+import internalFilterToggle from './internalFilterToggle'
+import MetricsHeader from './MetricsHeader'
+import messages from './Messages'
 /**
  * SuperAdminPane is the top-level component for super administration functions. It has a
  * User/Project/Challenge metrics tab for management of users, projects, challenges, and tasks, and display of various summary metrics. 
@@ -17,15 +17,14 @@ import messages from './Messages';
  */
 export const SuperAdminPane = (props) => {
   const [currentTab, setCurrentTab] = useState('challenge')
-console.log(props.loading)
   //HOC
-  const VisibleFilterToggle = internalFilterToggle("challenge", "visible");
-  const ArchivedFilterToggle = internalFilterToggle("challenge", "archived");
-  const VirtualProjectFilterToggle = internalFilterToggle("project", "virtual");
+  const VisibleFilterToggle = internalFilterToggle('challenge', 'visible');
+  const ArchivedFilterToggle = internalFilterToggle('challenge', 'archived');
+  const VirtualProjectFilterToggle = internalFilterToggle('project', 'virtual');
   const manager = AsManager(props.user);
   if (!manager.isLoggedIn()) {
     return props.checkingLoginStatus ? (
-      <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+      <div className='admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue'>
         <BusySpinner />
       </div>
     ) : (
@@ -56,9 +55,9 @@ console.log(props.loading)
           filterToggleLabel={<FormattedMessage {...messages.virtual} />}
         />}
         <button
-          color="primary"
-          type="button"
-          className="mr-leading-none mr-button--dark mr-ml-4 mr-mr-1"
+          color='primary'
+          type='button'
+          className='mr-leading-none mr-button--dark mr-ml-4 mr-mr-1'
           onClick={() => {
             props.downloadCsv(currentTab, props)
           }}>

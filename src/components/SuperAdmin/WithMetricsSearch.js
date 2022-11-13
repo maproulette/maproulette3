@@ -1,6 +1,6 @@
-import { performChallengeSearch } from "../../services/Challenge/Challenge"
-import WithSearch from "../HOCs/WithSearch/WithSearch"
-import WithSearchRoute from "../HOCs/WithSearchRoute/WithSearchRoute"
+import { performChallengeSearch } from '../../services/Challenge/Challenge'
+import WithSearch from '../HOCs/WithSearch/WithSearch'
+import WithSearchRoute from '../HOCs/WithSearchRoute/WithSearchRoute'
 
 const SEARCH_GROUP = 'challenges'
 

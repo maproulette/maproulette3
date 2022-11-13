@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 import { FormattedDate } from 'react-intl'
-import AsManageableProject from "../../interactions/Project/AsManageableProject";
-const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`;
+import AsManageableProject from '../../interactions/Project/AsManageableProject'
+const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`
 
 // Total Number of Tasks, Number of user engaged in task
 const setChallengeTab = () => {
@@ -111,7 +111,6 @@ const setProjectTab = (challenges) => {
         return(projectManage.childChallenges(challenges).length)
       },
       maxWidth: 150,
-      sortable: false
     },
     {
       id: 'visible',

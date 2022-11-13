@@ -60,7 +60,7 @@ const WithExportCsv = function (WrappedComponent) {
         const blob = new Blob(['\ufeff', csv]);
         const url = URL.createObjectURL(blob);
         downloadLink.href = url;
-        downloadLink.download = "data.csv";
+        downloadLink.download = 'data.csv';
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
@@ -80,11 +80,6 @@ const WithExportCsv = function (WrappedComponent) {
         // join header and body, and break into separate lines
         const csv = [headerString, ...rowItems].join('\r\n');
         return csv;
-      }
-
-      function getNumOfRows() {
-        let allRow = document.querySelectorAll('[role="row"]:not(.-padRow)').length
-        return allRow
       }
 
       return <WrappedComponent

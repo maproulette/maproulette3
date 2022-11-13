@@ -1,6 +1,6 @@
-import React from "react";
-import { FormattedMessage } from "react-intl";
-import messages from "./Messages";
+import React from 'react'
+import { FormattedMessage } from 'react-intl'
+import messages from './Messages'
 const MetricsFilterToggle = (props) => {
   const filter = props.filterName
   return(
