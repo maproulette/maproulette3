@@ -1,6 +1,3 @@
-import _each from "lodash/each";
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
 import { fetchProjects } from "../Project/Project";
 
 const SET_ADMIN_PROJECTS = 'SET_ADMIN_PROJECTS'
