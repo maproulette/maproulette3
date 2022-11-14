@@ -22,18 +22,18 @@ const MetricsHeader = (props) => {
           <div className='admin__manage__controls mr-flex'>
             <button
               className='mr-button mr-button--dark mr-button--small mr-mr-4'
-              onClick={() => handleTabToggle('challenge')}
+              onClick={() => handleTabToggle('challenges')}
             >
               <FormattedMessage {...messages.challengeLabel} />
             </button>
             <button
               className='mr-button mr-button--dark mr-button--small mr-mr-4'
-              onClick={() => handleTabToggle('project')}
+              onClick={() => handleTabToggle('projects')}
             >
               <FormattedMessage {...messages.projectLabel} />
             </button>
           </div>
-          {props.currentTab === 'challenge' && <>
+          {props.currentTab === 'challenges' && <>
             <SortChallengesSelector {...props} />
             <FilterByKeyword {...props} />
             <FilterByDifficulty {...props} />

@@ -16,7 +16,7 @@ import messages from './Messages'
  *
  */
 export const SuperAdminPane = (props) => {
-  const [currentTab, setCurrentTab] = useState('challenge')
+  const [currentTab, setCurrentTab] = useState('challenges')
   //HOC
   const VisibleFilterToggle = internalFilterToggle('challenge', 'visible');
   const ArchivedFilterToggle = internalFilterToggle('challenge', 'archived');

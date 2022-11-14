@@ -11,11 +11,11 @@ import BusySpinner from '../BusySpinner/BusySpinner'
 const MetricsTable = (props) => {
   let data
   const constructHeader = () => {
-    if (props.currentTab === 'challenge') {
+    if (props.currentTab === 'challenges') {
       data = props.challenges
       return setChallengeTab()
     }
-    else if (props.currentTab === 'project') {
+    else if (props.currentTab === 'projects') {
       data = props.projects
       return setProjectTab(props.challenges)
     }
@@ -33,6 +33,6 @@ const MetricsTable = (props) => {
   )
 }
 
-export default  WithSearchResults(WithSortedChallenges(
+export default WithSearchResults(WithSortedChallenges(
   WithPagedChallenges(injectIntl(MetricsTable), 'challenges', 'pagedChallenges')
-), 'challenges', 'challenges')
+),'challenges', 'challenges')

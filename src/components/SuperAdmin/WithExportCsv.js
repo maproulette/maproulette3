@@ -49,10 +49,10 @@ const WithExportCsv = function (WrappedComponent) {
       function download(currentTab, props) {
         let json_pre
         console.log(currentTab)
-        if(currentTab === 'challenge'){
+        if(currentTab === 'challenges'){
           json_pre = formatChallengeData(props)
         }
-        else if(currentTab === 'project'){
+        else if(currentTab === 'projects'){
           json_pre = formatProjectData(props)
         }
         const csv = jsonToCsv(json_pre);
