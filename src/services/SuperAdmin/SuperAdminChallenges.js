@@ -23,7 +23,7 @@ export const receiveAdminChallenges = function (
 export const fetchAdminChallenges = function(query) {
   return function(dispatch) {
     return (
-      dispatch(performChallengeSearch(query, 50000)).then(normalizedResults => {
+      dispatch(performChallengeSearch(query, 50000, true)).then(normalizedResults => {
         return dispatch(receiveAdminChallenges(normalizedResults.entities, dispatch))
       })
     )
