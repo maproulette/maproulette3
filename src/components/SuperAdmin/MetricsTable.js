@@ -34,5 +34,5 @@ const MetricsTable = (props) => {
 }
 
 export default WithSearchResults(WithSortedChallenges(
-  WithPagedChallenges(injectIntl(MetricsTable), 'challenges', 'pagedChallenges')
+  WithPagedChallenges(injectIntl(MetricsTable),'challenges', 'pagedChallenges'), 'challenges', null, { frontendSearch: true }
 ),'challenges', 'challenges')
