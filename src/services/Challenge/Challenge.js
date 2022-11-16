@@ -316,7 +316,6 @@ export const fetchProjectChallengeListing = function (
 export const performChallengeSearch = function (
   searchObject,
   limit = RESULTS_PER_PAGE,
-  admin
 ) {
   const sortCriteria = _get(searchObject, "sort", {});
   const archived = _get(searchObject, "archived", false);
@@ -349,7 +348,6 @@ export const performChallengeSearch = function (
       onlyEnabled
     },
     limit,
-    admin
   );
 };
 
@@ -364,7 +362,7 @@ export const performChallengeSearch = function (
                               'page', 'challengeStatus'
  * @param {number} limit
  */
-export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin = false) {
+export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE) {
   const queryString = criteria.searchQuery;
   const filters = criteria.filters || {};
   const onlyEnabled = _isUndefined(criteria.onlyEnabled)
@@ -448,10 +446,8 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
     })
       .execute()
       .then((normalizedResults) => {
-        if (!admin) {
           dispatch(receiveChallenges(normalizedResults.entities));
-        }
-        return normalizedResults;
+          return normalizedResults;
       })
       .catch((error) => {
         dispatch(addError(AppErrors.challenge.searchFailure));
