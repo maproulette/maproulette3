@@ -1,6 +1,5 @@
 
 import React from 'react'
-import WithPagedChallenges from '../HOCs/WithPagedChallenges/WithPagedChallenges'
 import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 import ReactTable from 'react-table-6'
