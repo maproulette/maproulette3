@@ -1,6 +1,3 @@
-import _each from "lodash/each";
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
 import { performChallengeSearch } from '../Challenge/Challenge'
 import { SET_ADMIN_CHALLENGES } from '../Challenge/ChallengeActions'
 
@@ -13,12 +10,6 @@ export const receiveAdminChallenges = function (
     payload: [],
     loading: true
   })
-
-  _each(normalizedEntities.challenges, (c) => {
-    if (c.dataOriginDate) {
-      c.dataOriginDate = format(parse(c.dataOriginDate), "YYYY-MM-DD");
-    }
-  });
 
   const results = Object.keys(normalizedEntities.challenges).map(i => normalizedEntities.challenges[i]);
 
