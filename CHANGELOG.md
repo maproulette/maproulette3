@@ -7,6 +7,11 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.1] - 2022-11-15
+
+### Features
+- Super Admin Metrics - Challenges table
+
 ## [v3.11.0] - 2022-11-08
 
 ### Features
