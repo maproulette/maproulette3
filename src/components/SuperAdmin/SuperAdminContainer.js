@@ -27,7 +27,7 @@ const WrappedSuperAdminPane =
 
 class SuperAdminContainer extends Component {
   componentDidMount() {
-    const searchQuery = {}
+    const searchQuery = {onlyEnabled: false}
     this.props.fetchAdminChallenges(searchQuery)
     this.props.fetchAdminProjects()
   }

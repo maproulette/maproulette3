@@ -323,7 +323,7 @@ export const performChallengeSearch = function (
   const filters = _get(searchObject, "filters", {});
   const queryString = _get(searchObject, "query");
   const page = _get(searchObject, "page.currentPage");
-  const onlyEnabled = _get(searchObject, "onlyEnabled", false);
+  const onlyEnabled = _get(searchObject, "onlyEnabled", true);
   let bounds = null;
 
   if (filters && !_isUndefined(filters.location)) {
