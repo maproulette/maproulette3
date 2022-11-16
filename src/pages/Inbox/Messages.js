@@ -187,5 +187,10 @@ export default defineMessages({
   appliedErrorTags: {
     id: "Inbox.notification.appliedErrorTags",
     defaultMessage: "The following error tags have been applied to your task"
+  },
+
+  commentedOnChallenge: {
+    id: "Inbox.notification.commentedOnChallenge",
+    defaultMessage: "Someone commented on your challenge."
   }
 })

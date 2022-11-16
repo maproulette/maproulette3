@@ -42,6 +42,8 @@ class Notification extends Component {
         return <TeamBody notification={notification} />
       case NotificationType.follow:
         return <FollowBody notification={notification} />
+      case NotificationType.challengeComment:
+        return <ChallengeCommentBody notification={notification} />
       default:
         return null
     }
@@ -298,6 +300,20 @@ const FollowBody = function(props) {
           {props.notification.fromUsername}
         </Link>
       </p>
+    </React.Fragment>
+  )
+}
+
+const ChallengeCommentBody = function(props) {
+  return (
+    <React.Fragment>
+      <p className="mr-mb-8 mr-text-base">
+        <FormattedMessage {...messages.commentedOnChallenge} />
+      </p>
+
+      <AttachedComment notification={props.notification} />
+
+      <ViewTask notification={props.notification} />
     </React.Fragment>
   )
 }
