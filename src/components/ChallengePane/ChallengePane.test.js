@@ -7,6 +7,8 @@ describe("ChallengePane", () => {
     const { getByText } = global.withProvider(
       <ChallengePane
         setSearchFilters={() => null}
+        clearSearchFilters={() => null}
+        clearSearch={() => null}
         history={{ location: { pathname: "", search: "" } }}
       />
     );
