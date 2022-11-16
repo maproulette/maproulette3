@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { SuperAdminPane } from './SuperAdmin'
 import { fetchAdminChallenges } from '../../services/SuperAdmin/SuperAdminChallenges'
 import { fetchAdminProjects } from '../../services/SuperAdmin/SuperAdminProjects'
-import WithStatus from '../HOCs/WithStatus/WithStatus'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import { withRouter } from 'react-router'
 import WithMetricsSearch from './WithMetricsSearch'
@@ -13,26 +12,23 @@ import WithExportCsv from './WithExportCsv'
 import { injectIntl } from 'react-intl'
 
 const WrappedSuperAdminPane = 
-  WithStatus(
-    WithCurrentUser(
-      withRouter(
-       WithMetricsSearch(
-          WithMetricsFilter(
-            WithFilteredChallenges(
-              WithExportCsv(
-                injectIntl(SuperAdminPane),
-              )
+  WithCurrentUser(
+    withRouter(
+      WithMetricsSearch(
+        WithMetricsFilter(
+          WithFilteredChallenges(
+            WithExportCsv(
+              injectIntl(SuperAdminPane),
             )
           )
-        ),
-      )))
+        )
+      ),
+    ))
 
 class SuperAdminContainer extends Component {
-
   componentDidMount() {
     const searchQuery = {}
     this.props.fetchAdminChallenges(searchQuery)
-    this.props.fetchAdminProjects()
   }
 
   render() {
