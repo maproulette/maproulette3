@@ -4,7 +4,7 @@ import WithPagedChallenges from '../HOCs/WithPagedChallenges/WithPagedChallenges
 import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 import ReactTable from 'react-table-6'
-import { setChallengeTab, setProjectTab} from './MetricsData'
+import { setChallengeTab, setProjectTab } from './MetricsData'
 import { injectIntl } from 'react-intl'
 import BusySpinner from '../BusySpinner/BusySpinner'
 

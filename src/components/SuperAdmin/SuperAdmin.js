@@ -11,7 +11,7 @@ import MetricsHeader from './MetricsHeader'
 import messages from './Messages'
 /**
  * SuperAdminPane is the top-level component for super administration functions. It has a
- * User/Project/Challenge metrics tab for management of users, projects, challenges, and tasks, and display of various summary metrics. 
+ * User/Project/Challenge metrics tab for management of users, projects and challenges, and display of various summary metrics. 
  * It's worth noting that only super admins have access to SuperAdminPane.
  *
  */

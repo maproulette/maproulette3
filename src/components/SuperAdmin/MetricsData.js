@@ -1,6 +1,7 @@
 import React from 'react'
 import { FormattedDate } from 'react-intl'
 import AsManageableProject from '../../interactions/Project/AsManageableProject'
+
 const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`
 
 // Total Number of Tasks, Number of user engaged in task
@@ -12,14 +13,20 @@ const setChallengeTab = () => {
       maxWidth: 80,
       accessor: challenge => challenge.id,
     },
-
     {
       id: 'name',
       Header: 'NAME',
-      accessor: challenge => {
-        return <a href={`/admin/project/${challenge.parent}` +
-          `/challenge/${challenge.id}`}> {challenge.name} </a>
-      },
+      accessor: challenge => challenge.name,
+      Cell: props => {
+        if (props.value) {
+          return (
+            <a href={`/admin/project/${props.original.parent}` +
+            `/challenge/${props.original.id}`}> {props.value} </a>
+          )
+        }
+
+        return null
+      }
     },
     {
       id: 'owner',
@@ -36,17 +43,28 @@ const setChallengeTab = () => {
     {
       id: 'tasksCompletionPercentage',
       Header: '% COMPLETED TASKS',
-      accessor: challenge => challenge.completionPercentage + '%',
+      accessor: challenge => {
+        return challenge.completionPercentage
+      },
+      sortable: true,
       maxWidth: 180,
+      Cell: props => <div>{props.value}%</div>
     },
     {
       id: 'project',
       Header: 'PROJECT',
-      accessor: challenge => {
-        return <a href={`/admin/project/${challenge.parent}`}> {challenge.parent} </a>
-      },
+      accessor: challenge => challenge.parent,
       maxWidth: 120,
-      sortable: false
+      sortable: true,
+      Cell: props => {
+        if (props.value) {
+          return (
+            <a href={`/admin/project/${props.value}`}> {props.value} </a>
+          )
+        }
+
+        return null
+      }
     },
     {
       id: 'visible',
@@ -64,19 +82,42 @@ const setChallengeTab = () => {
       id: 'dateCreated',
       Header: 'DATE CREATED',
       accessor: challenge => {
-        return <FormattedDate value={challenge.created} />
+        return challenge.created
       },
       maxWidth: 150,
-      sortable: false
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     },
     {
-      id: 'dateLastModified',
-      Header: 'DATE LAST MODIFIED',
-      accessor: challenge => {
-        return <FormattedDate value={challenge.modified} />
-      },
+      id: 'dataOriginDate',
+      Header: 'DATA ORIGIN DATE',
+      accessor: challenge => challenge.dataOriginDate,
       maxWidth: 180,
-      sortable: false
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
+    },
+    {
+      id: 'lastTaskRefreshDate',
+      Header: 'LAST TASK REFRESH',
+      accessor: challenge => challenge.lastTaskRefresh,
+      maxWidth: 180,
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     }
   ]
 }
