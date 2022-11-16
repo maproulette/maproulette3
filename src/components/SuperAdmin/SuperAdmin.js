@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { useState } from 'react'
 import AsManager from '../../interactions/User/AsManager'
 import SignIn from '../../pages/SignIn/SignIn'
 import MetricsTable from './MetricsTable'
@@ -9,6 +8,8 @@ import BusySpinner from '../BusySpinner/BusySpinner'
 import internalFilterToggle from './internalFilterToggle'
 import MetricsHeader from './MetricsHeader'
 import messages from './Messages'
+import { useEffect } from 'react'
+import queryString from 'query-string'
 /**
  * SuperAdminPane is the top-level component for super administration functions. It has a
  * User/Project/Challenge metrics tab for management of users, projects and challenges, and display of various summary metrics. 
@@ -16,7 +17,13 @@ import messages from './Messages'
  *
  */
 export const SuperAdminPane = (props) => {
-  const [currentTab, setCurrentTab] = useState('challenges')
+  useEffect( () => {
+  props.clearSearch()
+  props.clearSearchFilters()
+  } , [props.match.path])
+
+  const params = queryString.parse(props.location.search)
+  const currentTab = params['tab'] ? params['tab'] : 'challenges'
   //HOC
   const VisibleFilterToggle = internalFilterToggle('challenge', 'visible');
   const ArchivedFilterToggle = internalFilterToggle('challenge', 'archived');
@@ -34,8 +41,8 @@ export const SuperAdminPane = (props) => {
 
   return manager.isSuperUser() ? (
     <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
-      <MetricsHeader {...props} setCurrentTab={setCurrentTab} currentTab={currentTab} />
-      {currentTab !== 'user' && <div className='mr-flex mr-justify-end mr-p-4 mr-pt-6'>
+      <MetricsHeader {...props} currentTab={currentTab} />
+      {currentTab !== 'users' && <div className='mr-flex mr-justify-end mr-p-4 mr-pt-6'>
         <VisibleFilterToggle
           {...props}
           dashboardEntityFilters={props.entityFilters}
@@ -48,7 +55,7 @@ export const SuperAdminPane = (props) => {
           toggleEntityFilter={props.toggleFilter}
           filterToggleLabel={<FormattedMessage {...messages.archived} />}
         />
-        {currentTab === 'project' && <VirtualProjectFilterToggle
+        {currentTab === 'projects' && <VirtualProjectFilterToggle
           {...props}
           dashboardEntityFilters={props.entityFilters}
           toggleEntityFilter={props.toggleFilter}

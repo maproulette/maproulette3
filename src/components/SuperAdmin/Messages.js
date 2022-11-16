@@ -28,15 +28,15 @@ export default defineMessages({
     defaultMessage: 'download',
   },
   challengeLabel: {
-    id: 'Metrics.challenge',
-    defaultMessage: 'Challenge',
+    id: 'Metrics.challenges',
+    defaultMessage: 'Challenges',
   },
   projectLabel: {
-    id: 'Metrics.project',
-    defaultMessage: 'Project',
+    id: 'Metrics.projects',
+    defaultMessage: 'Projects',
   },
   userLabel: {
-    id: 'Metrics.user',
-    defaultMessage: 'User',
+    id: 'Metrics.users',
+    defaultMessage: 'Users',
   }
 })

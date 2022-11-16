@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import queryString from 'query-string'
 
+/**
+ * Deals with superadmin query routes for super admin metrics.
+ * Toggle filter logic here as well.
+ */
 const WithMetricsFilter = function(WrappedComponent) {
   return class extends Component {
     render() {
