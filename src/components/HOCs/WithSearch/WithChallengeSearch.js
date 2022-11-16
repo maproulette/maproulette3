@@ -5,10 +5,12 @@ import WithSearchRoute from '../WithSearchRoute/WithSearchRoute'
 
 const SEARCH_GROUP = 'challenges'
 
-export default WrappedComponent => {
+const WithChallengeSearch = (WrappedComponent, config) => {
   return WithSearch(
     WithSearchRoute(WrappedComponent, SEARCH_GROUP),
     SEARCH_GROUP,
-    performChallengeSearch
+    config?.frontendSearch ? () => null : performChallengeSearch
   )
 }
+
+export default WithChallengeSearch

@@ -4,7 +4,8 @@ import { visibleLayer } from './services/VisibleLayer/VisibleLayer'
 import { visibleOverlays } from './services/VisibleLayer/VisibleOverlays'
 import { currentUser, userEntities } from './services/User/User'
 import { projectEntities } from './services/Project/Project'
-import { challengeEntities } from './services/Challenge/Challenge'
+import { adminProjectEntities } from './services/SuperAdmin/SuperAdminProjects'
+import { challengeEntities, adminChallengeEntities } from './services/Challenge/Challenge'
 import { virtualChallengeEntities }
        from './services/VirtualChallenge/VirtualChallenge'
 import { taskEntities } from './services/Task/Task'
@@ -41,6 +42,8 @@ export const initializeStore = function() {
     tasks: taskEntities,
     comments: commentEntities,
     places: placeEntities,
+    adminChallenges: adminChallengeEntities,
+    adminProjects: adminProjectEntities
   })
 
   // redux root reducer defining the top-level reducers in the store

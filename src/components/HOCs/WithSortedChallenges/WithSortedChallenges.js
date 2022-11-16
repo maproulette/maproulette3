@@ -17,7 +17,7 @@ import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE
 const FEATURED_POINTS = -1
 const SAVED_POINTS = -2
 
-export const sortChallenges = function(props, challengesProp='challenges') {
+export const sortChallenges = function(props, challengesProp='challenges', config) {
   const sortCriteria = _get(props, 'searchSort.sortBy')
   let sortedChallenges = props[challengesProp]
 
@@ -33,7 +33,9 @@ export const sortChallenges = function(props, challengesProp='challenges') {
       c => c.created ? c.created : ''))
   }
   else if (sortCriteria === SORT_COMPLETION) {
-    sortedChallenges = sortedChallenges.filter(challenge => challenge.completionPercentage !== 100);
+    if (!config.frontendSearch) {
+      sortedChallenges = sortedChallenges.filter(challenge => challenge.completionPercentage !== 100);
+    }
     sortedChallenges = _reverse(_sortBy(sortedChallenges, 
       c => c.completionPercentage ? c.completionPercentage : ''))
   }
@@ -69,10 +71,11 @@ export const sortChallenges = function(props, challengesProp='challenges') {
 
 export default function(WrappedComponent,
                         challengesProp='challenges',
-                        outputProp) {
+                        outputProp,
+                        config) {
   class WithSortedChallenges extends Component {
     render() {
-      const sortedChallenges = sortChallenges(this.props, challengesProp)
+      const sortedChallenges = sortChallenges(this.props, challengesProp, config)
 
       if (_isEmpty(outputProp)) {
         outputProp = challengesProp
@@ -88,5 +91,5 @@ export default function(WrappedComponent,
     challenges: PropTypes.array,
   }
 
-  return WithChallengeSearch(WithSortedChallenges)
+  return WithChallengeSearch(WithSortedChallenges, config)
 }

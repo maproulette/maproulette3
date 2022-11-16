@@ -40,6 +40,7 @@ import SystemNotices from './components/SystemNotices/SystemNotices'
 import Footer from './components/Footer/Footer'
 import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
+import SuperAdminContainer from './components/SuperAdmin/SuperAdminContainer'
 import MobileNotSupported
        from './components/MobileNotSupported/MobileNotSupported'
 import './components/Widgets/widget_registry'
@@ -111,6 +112,7 @@ export class App extends Component {
             <CachedRoute path='/user/profile' component={Profile} />
             <CachedRoute path='/user/metrics/:userId' component={Metrics} />
             <CachedRoute path='/user/metrics' component={Metrics} />
+            <CachedRoute exact path='/superadmin' component={SuperAdminContainer} />
             <CachedRoute path='/user/achievements/:userId' component={Achievements} />
             <CachedRoute path='/user/achievements' component={Achievements} />
             <CachedRoute path='/dashboard' component={Dashboard} />

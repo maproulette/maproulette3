@@ -21,7 +21,6 @@ const WithChallenges =
 export const mapStateToProps = (state, ownProps) => {
   const challenges = _values(_get(state, 'entities.challenges')) || []
   const showArchived = _get(state, 'currentSearch.challenges.filters.archived', false);
-
   // By default, only pass through challenges that are enabled (and belong to
   // an enabled project), have some tasks, and are in a usable status (unless
   // the allStatuses prop is set to true).

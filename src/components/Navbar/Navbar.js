@@ -6,6 +6,7 @@ import _get from 'lodash/get'
 import _last from 'lodash/last'
 import { Link, NavLink } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
+import AsManager from "../../interactions/User/AsManager"
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 import SignInButton from '../SignInButton/SignInButton'
 import PointsTicker from '../PointsTicker/PointsTicker'
@@ -215,7 +216,9 @@ const UnreadNotificationsIndicator = function(props) {
   )
 }
 
-const ProfileMenu = function(props) {
+export const ProfileMenu = function(props) {
+  const isSuperUser = AsManager(props.user).isSuperUser();
+
   return (
     <ol className="mr-list-dropdown">
       <li>
@@ -246,6 +249,15 @@ const ProfileMenu = function(props) {
           <FormattedMessage {...messages.metrics} />
         </NavLink>
       </li>
+      {
+        isSuperUser
+          ? <li>
+              <NavLink to="/superadmin" onClick={props.closeDropdown}>
+                <FormattedMessage {...messages.superAdmin} />
+              </NavLink>
+            </li>
+          : null
+      }
       <li>
         <NavLink to="/user/achievements" onClick={props.closeDropdown}>
           <FormattedMessage {...messages.achievements} />
