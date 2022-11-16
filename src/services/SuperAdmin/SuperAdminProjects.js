@@ -9,7 +9,7 @@ export const receiveAdminProjects = function (
   dispatch({
     type: SET_ADMIN_PROJECTS,
     payload: [],
-    loading: true
+    loading: false
   })
 
   const results = Object.keys(normalizedEntities.projects).map(i => normalizedEntities.projects[i]);
@@ -17,7 +17,7 @@ export const receiveAdminProjects = function (
   return {
     type: SET_ADMIN_PROJECTS,
     payload: results || [],
-    loading: false
+    loading: true
   };
 };
 

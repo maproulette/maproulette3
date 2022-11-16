@@ -20,7 +20,7 @@ const MetricsTable = (props) => {
       return setProjectTab(props.challenges)
     }
   }
-  return props.loading ? (
+  return !props.isloadingCompleted ? (
     <div className='admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue'>
       <BusySpinner />
     </div>

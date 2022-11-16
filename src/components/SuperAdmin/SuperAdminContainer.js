@@ -31,13 +31,13 @@ class SuperAdminContainer extends Component {
 
   componentDidMount() {
     const searchQuery = {}
-    this.props.fetchAdminChallenges(searchQuery)
-    this.props.fetchAdminProjects()
+    this.props.fetchAdminChallenges(searchQuery), 10000
+    this.props.fetchAdminProjects(), 10000
   }
 
   render() {
     return(
-      <WrappedSuperAdminPane challenges={this.props.adminChallenges} projects={this.props.adminProjects} loading={this.props.loadingChallenges || this.props.loadingProjects} />
+      <WrappedSuperAdminPane challenges={this.props.adminChallenges} projects={this.props.adminProjects} isloadingCompleted={this.props.loadingChallenges || this.props.loadingProjects} />
     )
   }
 }
