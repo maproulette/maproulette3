@@ -53,7 +53,7 @@ const setChallengeTab = () => {
     {
       id: 'project',
       Header: 'PROJECT',
-      accessor: challenge => challenge.parent,
+      accessor: challenge => challenge.parent.displayName,
       maxWidth: 120,
       sortable: true,
       Cell: props => {
@@ -62,7 +62,6 @@ const setChallengeTab = () => {
             <a href={`/admin/project/${props.value}`}> {props.value} </a>
           )
         }
-
         return null
       }
     },

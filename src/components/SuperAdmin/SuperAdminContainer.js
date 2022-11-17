@@ -10,6 +10,8 @@ import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredC
 import WithMetricsFilter from './WithMetricsFilter'
 import WithExportCsv from './WithExportCsv'
 import { injectIntl } from 'react-intl'
+import { denormalize } from 'normalizr'
+import { challengeSchema } from '../../services/Challenge/Challenge'
 
 const WrappedSuperAdminPane = 
   WithCurrentUser(
@@ -40,8 +42,12 @@ class SuperAdminContainer extends Component {
 }
 
 const mapStateToProps = state => {
+  const adminChallenges = state.entities?.adminChallenges?.data.map(challenge =>
+    denormalize(challenge, challengeSchema(), state.entities)
+  )
+  
   return {
-    adminChallenges: state.entities?.adminChallenges?.data || [],
+    adminChallenges: adminChallenges || [],
     adminProjects: state.entities?.adminProjects?.data || [],
     loadingChallenges: state.entities?.adminChallenges?.loading,
     loadingProjects: state.entities?.adminProjects?.loading
