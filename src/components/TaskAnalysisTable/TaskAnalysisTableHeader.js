@@ -20,7 +20,7 @@ import { TaskStatus, statusLabels } from '../../services/Task/TaskStatus/TaskSta
 import { buildLinkToMapperExportCSV,
          buildLinkToReviewerMetaExportCSV,
          buildLinkTaskReviewHistoryCSV } from '../../services/Task/TaskReview/TaskReview'
-import { buildLinkToExportCSV, buildLinkToExportGeoJSON } from '../../services/Challenge/Challenge'
+import { buildLinkToExportCSV, buildLinkToExportGeoJSON, exportOSMData } from '../../services/Challenge/Challenge'
 import messages from './Messages'
 
 const CSV_ITEM_LIMIT = 10000;
@@ -256,6 +256,20 @@ export class TaskAnalysisTableHeader extends Component {
                             <FormattedMessage {...messages.exportGeoJSONLabel} />
                           </button>
                         </form>
+                      </li>
+                    </ul>
+                    <ul className="mr-list-dropdown mr-mt-2">
+                      <li>
+                        <div onClick={() => exportOSMData(buildLinkToExportGeoJSON(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone, `challenge_${_get(this.props, 'challenge.id')}.geojson`), `Challenge_${_get(this.props, 'challenge.id')}`)}>
+                          <input type="hidden" name="taskPropertySearch"
+                            value={JSON.stringify(_get(this.props,
+                              'criteria.filters.taskPropertySearch', {}))}
+                          />
+                          <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top">
+                            <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                            <FormattedMessage {...messages.exportOSMDataLabel} />
+                          </button>
+                        </div>
                       </li>
                     </ul>
                     <ul className="mr-list-dropdown">
