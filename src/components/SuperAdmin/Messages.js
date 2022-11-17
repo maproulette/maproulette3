@@ -7,9 +7,9 @@ export default defineMessages({
     id: 'Metrics.header',
     defaultMessage: 'Metrics',
   },
-  visible: {
+  discoverable: {
     id: 'Metrics.discoverable',
-    defaultMessage: 'Visible',
+    defaultMessage: 'Discoverable',
   },
   archived: {
     id: 'Metrics.archived',
@@ -18,6 +18,14 @@ export default defineMessages({
   virtual: {
     id: 'Metrics.virtual',
     defaultMessage: 'Virtual',
+  },
+  hideUndiscoverable: {
+    id: 'Metrics.hideUndiscoverable',
+    defaultMessage: 'Hide Undiscoverable'
+  },
+  hideArchived: {
+    id: 'Metrics.hideArchived',
+    defaultMessage: 'Hide Archived'
   },
   download: {
     id: 'Metrics.download',

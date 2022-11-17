@@ -47,13 +47,13 @@ export const SuperAdminPane = (props) => {
           {...props}
           dashboardEntityFilters={props.entityFilters}
           toggleEntityFilter={props.toggleFilter}
-          filterToggleLabel={<FormattedMessage {...messages.visible} />}
+          filterToggleLabel={<FormattedMessage {...messages.hideUndiscoverable} />}
         />
         <ArchivedFilterToggle
           {...props}
           dashboardEntityFilters={props.entityFilters}
           toggleEntityFilter={props.toggleFilter}
-          filterToggleLabel={<FormattedMessage {...messages.archived} />}
+          filterToggleLabel={<FormattedMessage {...messages.hideArchived} />}
         />
         {currentTab === 'projects' && <VirtualProjectFilterToggle
           {...props}

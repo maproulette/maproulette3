@@ -66,10 +66,10 @@ const setChallengeTab = () => {
       }
     },
     {
-      id: 'visible',
-      Header: 'VISIBLE',
+      id: 'discoverable',
+      Header: 'DISCOVERABLE',
       accessor: challenge => challenge.enabled.toString(),
-      maxWidth: 120,
+      maxWidth: 150,
     },
     {
       id: 'archived',
@@ -153,10 +153,10 @@ const setProjectTab = (challenges) => {
       maxWidth: 150,
     },
     {
-      id: 'visible',
-      Header: 'VISIBLE',
+      id: 'discoverable',
+      Header: 'DISCOVERABLE',
       accessor: project => project.enabled.toString(),
-      maxWidth: 120,
+      maxWidth: 150,
     },
     {
       id: 'archived',
