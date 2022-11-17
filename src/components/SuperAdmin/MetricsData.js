@@ -53,13 +53,13 @@ const setChallengeTab = () => {
     {
       id: 'project',
       Header: 'PROJECT',
-      accessor: challenge => challenge.parent.displayName,
+      accessor: challenge => challenge.parent?.displayName,
       maxWidth: 120,
       sortable: true,
       Cell: props => {
         if (props.value) {
           return (
-            <a href={`/admin/project/${props.value}`}> {props.value} </a>
+            <a href={`/admin/project/${props.original?.parent?.id}`}> {props.value} </a>
           )
         }
         return null
