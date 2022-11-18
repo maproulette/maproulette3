@@ -10,10 +10,11 @@ const MetricsHeader = (props) => {
   const handleTabToggle = (val) => {
     props.clearSearchFilters()
     props.clearSearch()
+    const searchQuery = `?tab=${val}&searchType=${val}`
     props.history.push({
       pathname: '/superadmin',
-      search: `?tab=${val}`
-    }) 
+      search: searchQuery
+    })
   }
 
   return (
@@ -29,6 +30,12 @@ const MetricsHeader = (props) => {
               onClick={() => handleTabToggle('challenges')}
             >
               <FormattedMessage {...messages.challengeLabel} />
+            </button>
+            <button
+              className='mr-button mr-button--dark mr-button--small mr-mr-4'
+              onClick={() => handleTabToggle('projects')}
+            >
+              <FormattedMessage {...messages.projectLabel} />
             </button>
           </div>
           {props.currentTab === 'challenges' && <>

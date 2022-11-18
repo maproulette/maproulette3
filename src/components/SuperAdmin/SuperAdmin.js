@@ -20,8 +20,12 @@ export const SuperAdminPane = (props) => {
   useEffect( () => {
   props.clearSearch()
   props.clearSearchFilters()
+  const searchQuery = '?tab=challenges&searchType=challenges'
+  props.history?.push({
+      pathname: '/superadmin',
+      search: searchQuery
+    })  
   } , [props.match.path])
-
   const params = queryString.parse(props.location.search)
   const currentTab = params['tab'] ? params['tab'] : 'challenges'
   //HOC

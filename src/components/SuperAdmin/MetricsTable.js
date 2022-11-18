@@ -37,4 +37,4 @@ const MetricsTable = (props) => {
 // WithSortedChallenges for sort by
 export default WithSearchResults(WithSortedChallenges(
   injectIntl(MetricsTable), 'challenges', null, { frontendSearch: true }
-),'challenges', 'challenges')
+), 'challenges', 'challenges')
