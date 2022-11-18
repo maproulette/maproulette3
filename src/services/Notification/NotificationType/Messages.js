@@ -56,6 +56,10 @@ export default defineMessages({
     id: "Notification.type.metaReviewAgain",
     defaultMessage: "Meta-Review Again",
   },
+  challengeComment: {
+    id: "Notification.type.challengeComment",
+    defaultMessage: "Challenge Comment",
+  }
 });
 
 export const subscriptionCountMessages = defineMessages({
