@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
-import _findIndex from 'lodash/findIndex'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
-import _isFinite from 'lodash/isFinite'
 import _toLower from 'lodash/toLower'
 import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_NUM_OF_CHALLENGES } from '../../services/Search/Search';
 import AsManageableProject from '../../interactions/Project/AsManageableProject';
