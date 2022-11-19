@@ -46,5 +46,9 @@ export default defineMessages({
   userLabel: {
     id: 'Metrics.users',
     defaultMessage: 'Users',
+  },
+  sortByLabel: {
+    id: 'Metrics.sortBy',
+    defaultMessage: 'Sort By'
   }
 })

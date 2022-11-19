@@ -9,7 +9,7 @@ const WithMetricsFilter = function(WrappedComponent) {
   return class extends Component {
     render() {
       const params = queryString.parse(this.props.location.search)
-
+      const tab = params['tab']
       let entityFilters = {
         visible: params['hideUndiscoverable'] === 'true',
         archived: params['hideArchived'] === 'true',
@@ -19,6 +19,7 @@ const WithMetricsFilter = function(WrappedComponent) {
       const toggleFilter = (filterName) => {
         entityFilters[filterName] = !entityFilters[filterName]
         let searchquery = `?`
+        searchquery += `tab=${tab}&`
         searchquery += `hideUndiscoverable=${entityFilters.visible}&`
         searchquery += `hideArchived=${entityFilters.archived}&`
         searchquery += `virtual=${entityFilters.virtual}`
@@ -27,11 +28,12 @@ const WithMetricsFilter = function(WrappedComponent) {
           search: searchquery
         })  
       }
+
       let challenges = entityFilters.visible ? this.props.challenges.filter(c => c.enabled) : this.props.challenges
       challenges = entityFilters.archived ? challenges.filter(c => !c.isArchived) : challenges
 
       let projects = entityFilters.visible? this.props.projects.filter(p => p.enabled): this.props.projects
-      projects = entityFilters.archived? projects.filter(p => p.isArchived): projects
+      projects = entityFilters.archived? projects.filter(p => !p.isArchived): projects
       projects = entityFilters.virtual? projects.filter(p => p.isVirtual): projects
 
       return (

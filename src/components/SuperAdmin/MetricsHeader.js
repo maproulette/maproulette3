@@ -5,6 +5,7 @@ import messages from './Messages'
 import SortChallengesSelector from '../ChallengePane/ChallengeFilterSubnav/SortChallengesSelector'
 import FilterByDifficulty from '../ChallengePane/ChallengeFilterSubnav/FilterByDifficulty'
 import FilterByKeyword from '../ChallengePane/ChallengeFilterSubnav/FilterByKeyword'
+import SortProjectsSelector from './SortProjectsSelector'
 
 const MetricsHeader = (props) => {
   const handleTabToggle = (val) => {
@@ -42,6 +43,9 @@ const MetricsHeader = (props) => {
             <SortChallengesSelector {...props} />
             <FilterByKeyword {...props} />
             <FilterByDifficulty {...props} />
+          </>}
+          {props.currentTab === 'projects' && <>
+            <SortProjectsSelector {...props}/>
           </>}
           <SearchBox 
             {...props}

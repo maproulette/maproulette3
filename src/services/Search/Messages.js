@@ -32,6 +32,10 @@ export default defineMessages({
     id: "Challenge.sort.cooperativeWork",
     defaultMessage: "Cooperative",
   },
+  num_of_challenges: {
+    id: "Project.sort.numOfChallenges",
+    defaultMessage: "numOfChallenges"
+  },
   default: {
     id: "Challenge.sort.default",
     defaultMessage: "Default",

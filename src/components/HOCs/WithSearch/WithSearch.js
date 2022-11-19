@@ -7,13 +7,13 @@ import _isFunction from 'lodash/isFunction'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
 import _includes from 'lodash/includes'
-import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE_WORK, SORT_COMPLETION, SORT_TASKS_REMAINING,
+import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE_WORK, SORT_COMPLETION, SORT_TASKS_REMAINING, SORT_NUM_OF_CHALLENGES,
          setSort, removeSort, setPage,
          setFilters, removeFilters, clearFilters,
          setSearch, clearSearch,
          setChallengeSearchMapBounds,
          setTaskMapBounds, setChallengeOwnerMapBounds, clearMapBounds,
-         performSearch }
+         performSearch}
        from '../../../services/Search/Search'
 import { addError } from '../../../services/Error/Error'
 import { toLatLngBounds, DEFAULT_MAP_BOUNDS }
@@ -147,7 +147,7 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   setSearchSort: (sortCriteria) => {
     const sortBy = _get(sortCriteria, 'sortBy')
     let sort = null
-
+    console.log(sortBy)
     switch(sortBy) {
       case SORT_NAME:
         sort = {sortBy, direction: 'asc'}
@@ -170,11 +170,14 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
       case SORT_COOPERATIVE_WORK:
         sort = {sortBy, direction: 'desc'}
         break
+      case SORT_NUM_OF_CHALLENGES:
+        sort = {sortBy, direction: 'desc'}
+        break
       default:
         sort = {sortBy: null, direction: null}
         break
     }
-
+    console.log(sort)
     dispatch(setSort(searchGroup, sort))
   },
 

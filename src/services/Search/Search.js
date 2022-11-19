@@ -54,7 +54,9 @@ export const SORT_COMPLETION = 'completion_percentage'
 export const SORT_TASKS_REMAINING = 'tasks_remaining'
 export const SORT_COOPERATIVE_WORK = 'cooperative_type'
 export const SORT_DEFAULT = 'default'
+export const SORT_NUM_OF_CHALLENGES = 'num_of_challenges'
 export const ALL_SORT_OPTIONS = [SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE_WORK, SORT_COMPLETION, SORT_TASKS_REMAINING, SORT_DEFAULT]
+export const PROJECT_SORT_OPTIONS = [SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_NUM_OF_CHALLENGES, SORT_DEFAULT]
 
 // Default Results Per page
 export const RESULTS_PER_PAGE = 50
@@ -92,12 +94,10 @@ export const PARAMS_MAP = {
   archived: "ca"
 }
 
-
 /** Returns object containing localized labels  */
 export const sortLabels = intl => _fromPairs(
   _map(messages, (message, key) => [key, intl.formatMessage(message)])
 )
-
 
 /**
  * Parse the given raw query text that may include hashtags for keywords and

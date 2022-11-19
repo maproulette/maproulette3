@@ -2,6 +2,7 @@
 import React from 'react'
 import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
+import WithSortedProjects from './WithSortedProjects'
 import ReactTable from 'react-table-6'
 import { setChallengeTab, setProjectTab } from './MetricsData'
 import { injectIntl } from 'react-intl'
@@ -35,6 +36,6 @@ const MetricsTable = (props) => {
 
 // WithSearchResults for search box
 // WithSortedChallenges for sort by
-export default WithSearchResults(WithSortedChallenges(
+export default WithSearchResults(WithSortedProjects(WithSortedChallenges(
   injectIntl(MetricsTable), 'challenges', null, { frontendSearch: true }
-), 'challenges', 'challenges')
+), 'projects', null), 'challenges', 'challenges')
