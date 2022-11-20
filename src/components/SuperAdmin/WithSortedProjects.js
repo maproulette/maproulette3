@@ -27,7 +27,7 @@ export const sortProjects = function(props, projectsProp='projects') {
      sortedProjects = (_sortBy(sortedProjects, 
       p => {
         const projectManage= AsManageableProject(p)
-        return(projectManage.childChallenges(challenges).length)
+        return(projectManage.childChallenges(props.challenges).length)
       }))
   }
   return sortedProjects

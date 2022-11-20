@@ -147,7 +147,6 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   setSearchSort: (sortCriteria) => {
     const sortBy = _get(sortCriteria, 'sortBy')
     let sort = null
-    console.log(sortBy)
     switch(sortBy) {
       case SORT_NAME:
         sort = {sortBy, direction: 'asc'}
@@ -177,7 +176,6 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
         sort = {sortBy: null, direction: null}
         break
     }
-    console.log(sort)
     dispatch(setSort(searchGroup, sort))
   },
 

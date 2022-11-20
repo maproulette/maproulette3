@@ -16,6 +16,7 @@ const MetricsHeader = (props) => {
       pathname: '/superadmin',
       search: searchQuery
     })
+    props.setSearchSort({sortBy: 'default'})
   }
 
   return (
@@ -24,7 +25,7 @@ const MetricsHeader = (props) => {
         <h1 className='mr-hidden xl:mr-flex mr-text-3xl mr-leading-tight mr-font-normal mr-mr-6'>
           <FormattedMessage {...messages.header} />
         </h1>
-        <div className={'mr-flex mr-items-center ' + (props.currentTab !== 'challenges' ? 'mr-py-6' : '')}>
+        <div className={'mr-flex mr-items-center '}>
           <div className='admin__manage__controls mr-flex'>
             <button
               className='mr-button mr-button--dark mr-button--small mr-mr-4'
