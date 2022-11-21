@@ -345,8 +345,7 @@ export const fetchProjectChallengeListing = function (
  */
 export const performChallengeSearch = function (
   searchObject,
-  limit = RESULTS_PER_PAGE,
-  admin
+  limit = RESULTS_PER_PAGE
 ) {
   const sortCriteria = _get(searchObject, "sort", {});
   const archived = _get(searchObject, "archived", false);
@@ -354,6 +353,7 @@ export const performChallengeSearch = function (
   const queryString = _get(searchObject, "query");
   const page = _get(searchObject, "page.currentPage");
   const onlyEnabled = _get(searchObject, "onlyEnabled", true);
+  const admin = _get(searchObject, "admin", false);
   let bounds = null;
 
   if (filters && !_isUndefined(filters.location)) {
