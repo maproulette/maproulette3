@@ -17,6 +17,7 @@ import queryString from 'query-string'
  *
  */
 export const SuperAdminPane = (props) => {
+console.log(props)
   useEffect( () => {
   props.clearSearch()
   props.clearSearchFilters()

@@ -20,8 +20,8 @@ const setChallengeTab = () => {
       Cell: props => {
         if (props.value) {
           return (
-            <a href={`/admin/project/${props.original.parent}` +
-            `/challenge/${props.original.id}`} target='_blank'> {props.value} </a>
+            <a href={`/admin/project/${props.original?.parent?.id}` +
+            `/challenge/${props.original.id}`} target='_blank' rel='noopener noreferrer'> {props.value} </a>
           )
         }
 
@@ -59,7 +59,7 @@ const setChallengeTab = () => {
       Cell: props => {
         if (props.value) {
           return (
-            <a href={`/admin/project/${props.original?.parent?.id}` } target='_blank'> {props.value} </a>
+            <a href={`/admin/project/${props.original?.parent?.id}` } target='_blank' rel='noopener noreferrer'> {props.value} </a>
           )
         }
         return null
@@ -134,7 +134,7 @@ const setProjectTab = (challenges) => {
       id: 'name',
       Header: 'NAME',
       accessor: project => {
-        return <a href={`/admin/project/${project.id}`} target='_blank'> {project.displayName} </a>
+        return <a href={`/admin/project/${project.id}`} target='_blank' rel='noopener noreferrer'> {project.displayName} </a>
       },
     },
     {
@@ -204,7 +204,7 @@ const setUserTab = () => {
       id: 'name',
       Header: 'NAME',
       accessor: user => user.osmProfile.displayName,
-      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
+      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noopener noreferrer' > {cell.value} </a>,
       maxWidth: 100,
     },
     {
