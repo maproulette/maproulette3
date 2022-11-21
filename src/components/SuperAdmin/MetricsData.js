@@ -21,7 +21,7 @@ const setChallengeTab = () => {
         if (props.value) {
           return (
             <a href={`/admin/project/${props.original.parent}` +
-            `/challenge/${props.original.id}`}> {props.value} </a>
+            `/challenge/${props.original.id}`} target='_blank'> {props.value} </a>
           )
         }
 
@@ -59,7 +59,7 @@ const setChallengeTab = () => {
       Cell: props => {
         if (props.value) {
           return (
-            <a href={`/admin/project/${props.original?.parent?.id}`}> {props.value} </a>
+            <a href={`/admin/project/${props.original?.parent?.id}` } target='_blank'> {props.value} </a>
           )
         }
         return null
@@ -134,7 +134,7 @@ const setProjectTab = (challenges) => {
       id: 'name',
       Header: 'NAME',
       accessor: project => {
-        return <a href={`/admin/project/${project.id}`}> {project.displayName} </a>
+        return <a href={`/admin/project/${project.id}`} target='_blank'> {project.displayName} </a>
       },
     },
     {
