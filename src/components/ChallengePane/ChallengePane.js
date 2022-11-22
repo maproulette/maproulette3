@@ -104,9 +104,11 @@ export class ChallengePane extends Component {
   }
 
   resetSelectedClusters = () => this.setState({selectedClusters: []})
+
   componentDidMount() {
     this.props.clearSearch()
     this.props.clearSearchFilters()
+    this.props.setSearchSort({sortBy: 'default'})
   }
 
   componentDidUpdate() {

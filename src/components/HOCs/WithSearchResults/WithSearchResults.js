@@ -63,7 +63,7 @@ export const WithSearchResults = function(WrappedComponent, searchName,
       let items, searchType
       if(admin){
         const params = queryString.parse(this.props.location.search)
-        searchType = params['searchType']
+        searchType = params['searchType'] || 'challenges'
         items = this.props[searchType]
       }
       else{

@@ -23,7 +23,6 @@ export class SortProjectsSelector extends Component {
   render() {
     const localizedLabels = sortLabels(this.props.intl)
     const currentSortCriteria = _get(this.props, 'searchSort.sortBy')
-        console.log(currentSortCriteria)
     const activeLabel = currentSortCriteria ? localizedLabels[currentSortCriteria] :
                         localizedLabels[SORT_DEFAULT]
     return (
