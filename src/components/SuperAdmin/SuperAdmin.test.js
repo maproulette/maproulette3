@@ -103,7 +103,7 @@ describe("SuperAdminPane", () => {
     const element = Array.from(container.querySelectorAll('button'))
       .find(e => e.textContent === 'Projects');
     fireEvent.click(element);
-    expect(clearSearch).toHaveBeenCalledTimes(2);
+    expect(clearSearch).toHaveBeenCalledTimes(1);
   });
 
   it("can toggle for challenge table", () => {
