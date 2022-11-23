@@ -7,6 +7,18 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.2] - 2022-11-22
+
+### Features
+- Add ability to download challenge OSM file
+
+### Fixes
+- Challenge comments not sending notifications
+- Discoverability page not populating some results
+
+### System Updates
+- Update to jackson 2.13.4 (API)
+
 ## [v3.11.1] - 2022-11-15
 
 ### Features
