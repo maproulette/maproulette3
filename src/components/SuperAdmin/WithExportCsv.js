@@ -14,7 +14,7 @@ const WithExportCsv = function (WrappedComponent) {
             'OWNER': item.owner,
             'TASKS REMAINING': item.tasksRemaining,
             '% COMPLETED TASKS': item.completionPercentage,
-            'PROJECT': item.parent,
+            'PROJECT': item.parent?.displayName,
             'VISIBLE': item.enabled.toString(),
             'ARCHIVED': item.isArchived.toString(),
             'DATE CREATED': `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}`,
