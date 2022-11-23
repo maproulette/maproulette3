@@ -35,6 +35,7 @@ const props = {
   allUsers: {},
   dashboardEntityFilters: { visible: null },
   toggleFilter: () => null,
+  clearDateFilter: () => null,
   filterToggleLabel: null,
   projects: [],
   challenges: [{id: 1, name: 'challenge1', isArchived: true}, {id: 2, name: 'challenge2', isArchived: true}, {id: 3, name: 'challenge3', isArchived: false}]
@@ -89,6 +90,7 @@ describe("SuperAdminPane", () => {
         setSearch={props.setSearch}
         clearSearch={() => clearSearch()}
         setSearchSort={props.setSearchSort}
+        clearDateFilter={props.clearDateFilter}
         history={props.history}
         setKeywordFilter={props.setKeywordFilter}
         removeSearchFilters={props.removeSearchFilters}

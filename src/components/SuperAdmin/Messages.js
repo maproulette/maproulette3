@@ -31,9 +31,9 @@ export default defineMessages({
     id: 'Metrics.download',
     defaultMessage: 'download',
   },
-  download: {
-    id: 'Metrics.download',
-    defaultMessage: 'download',
+  clear: {
+    id: 'Metrics.clear',
+    defaultMessage: 'clear'
   },
   challengeLabel: {
     id: 'Metrics.challenges',

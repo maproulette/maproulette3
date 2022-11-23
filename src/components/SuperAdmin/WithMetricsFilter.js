@@ -18,7 +18,6 @@ const WithMetricsFilter = function(WrappedComponent) {
       if(params['to']){
         [endYear, endMonth, endDate] = params['to'].split('-')
       }
-      console.log(startYear, startMonth, startDate)
       let entityFilters = {
         visible: params['hideUndiscoverable'] === 'true',
         archived: params['hideArchived'] === 'true',
@@ -29,7 +28,6 @@ const WithMetricsFilter = function(WrappedComponent) {
 
       const toggleFilter = (filterName) => {
         entityFilters[filterName] = !entityFilters[filterName]
-        // const newQueries = { ...params, [filterName]: entityFilters[filterName]};
         let searchquery = `?`
         searchquery += `tab=${tab}&`
         searchquery += `hideUndiscoverable=${entityFilters.visible}&`
@@ -43,7 +41,6 @@ const WithMetricsFilter = function(WrappedComponent) {
 
       const toggleStartDate = (startDate) => {
         entityFilters.from = startDate
-        console.log('yes', entityFilters)
         const newQueries = { ...params, from: startDate }
         this.props.history.push({
           pathname: '/superadmin',
@@ -60,11 +57,18 @@ const WithMetricsFilter = function(WrappedComponent) {
         })
       }
 
+      const clearDateFilter = () => {
+        const newQueries = {...params, from: undefined, to: undefined}
+         this.props.history.push({
+          pathname: '/superadmin',
+          search: queryString.stringify(newQueries)
+        })
+      }
+
       let challenges = this.props.challenges
       let projects = this.props.projects
 
       if (tab === 'challenges') {
-        console.log('hello', entityFilters)
         challenges = entityFilters.visible ? this.props.challenges.filter(c => c.enabled) : this.props.challenges
         challenges = entityFilters.archived ? challenges.filter(c => !c.isArchived) : challenges
         challenges = entityFilters.from ? challenges.filter(c => {
@@ -90,13 +94,14 @@ const WithMetricsFilter = function(WrappedComponent) {
         }) : projects
       }
       return (
-        <WrappedComponent {...this.props} 
-          challenges = {challenges} 
+        <WrappedComponent {...this.props}
+          challenges={challenges}
           projects={projects}
-          entityFilters = {entityFilters}
-          toggleFilter = {toggleFilter}
-          toggleStartDate = {toggleStartDate}
-          toggleEndDate = {toggleEndDate}
+          entityFilters={entityFilters}
+          toggleFilter={toggleFilter}
+          toggleStartDate={toggleStartDate}
+          toggleEndDate={toggleEndDate}
+          clearDateFilter={clearDateFilter}
         />
       )
     }
