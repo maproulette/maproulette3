@@ -6,8 +6,33 @@ import SortChallengesSelector from '../ChallengePane/ChallengeFilterSubnav/SortC
 import FilterByDifficulty from '../ChallengePane/ChallengeFilterSubnav/FilterByDifficulty'
 import FilterByKeyword from '../ChallengePane/ChallengeFilterSubnav/FilterByKeyword'
 import SortProjectsSelector from './SortProjectsSelector'
+import DatePicker from "react-datepicker";
+import { useState } from 'react'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 
 const MetricsHeader = (props) => {
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  const formatDate = (date) => {
+    const offset = date.getTimezoneOffset()
+    date = new Date(date.getTime() - (offset * 60 * 1000))
+    return date.toISOString().split('T')[0]
+  }
+
+  const handleStartDate = (date) => {
+    setStartDate(date)
+    const formattedDate = formatDate(date)
+    props.toggleStartDate(formattedDate)
+  }
+
+  const handleEndDate = (date) => {
+    setEndDate(date)
+    const formattedDate = formatDate(date)
+    props.toggleEndDate(formattedDate)
+  }
+
   const handleTabToggle = (val) => {
     props.clearSearchFilters()
     props.clearSearch()
@@ -48,10 +73,25 @@ const MetricsHeader = (props) => {
           {props.currentTab === 'projects' && <>
             <SortProjectsSelector {...props}/>
           </>}
+          <div>
+            <span className="mr-block mr-text-left mr-mb-1 mr-text-xs mr-uppercase mr-text-white">
+              Date Range
+            </span>
+            <div className='mr-flex mr-items-center'>
+            <DatePicker selected={startDate} onChange={(date) => handleStartDate(date)} maxDate={endDate}/>
+            <SvgSymbol
+              viewBox='0 0 20 20'
+              sym="arrow-right-icon"
+              className="mr-fill-current mr-w-4 mr-h-4 mr-ml-2 mr-mr-2"
+            />
+            <DatePicker selected={endDate} onChange={(date) => handleEndDate(date)} minDate={startDate}/>
+            </div>
+          </div>
           <SearchBox 
             {...props}
             setSearch={props.setSearch}
-          />
+        
+            />
         </div>
       </div>
     </header>
