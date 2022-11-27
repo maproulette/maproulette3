@@ -230,7 +230,7 @@ This project adheres to
 ## [v3.7.8rev1] - 2021-06-09
 
 ### Fixed
-- Unable to upload tasks (API). [(895)](https://github.com/maproulette/maproulette2/issues/895)
+- Unable to upload tasks (API). [(895)](https://github.com/maproulette/maproulette-backend/issues/895)
 - Unable to do batch status changes [(1613)](https://github.com/maproulette/maproulette3/issues/1613)
 - Instruction Widget expand/collapse toggle fix.
 
@@ -559,7 +559,7 @@ This project adheres to
 - Display of Featured Challenges widget on Safari
 - Various display issues on Project Details page
 - Task Review table page-size reset after every task review
-- Clean up any negative timestamps left by bug maproulette/maproulette2#728
+- Clean up any negative timestamps left by bug maproulette/maproulette-backend#728
 
 
 ## [v3.6.4] - 2020-06-09
