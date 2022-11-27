@@ -202,7 +202,7 @@ build-intl`, which is also run automatically as part of the `yarn build` script
 used for creating production builds.
 
 Translations for other locales are managed through
-[transifex](https://www.transifex.com/osmlab/maproulette3), who kindly provides
+[transifex](https://www.transifex.com/maproulette/maproulette3), who kindly provides
 us with free service through their Open Source program. Translation files are
 pulled into the code repository from time to time and stored in the `src/lang/`
 directory.
