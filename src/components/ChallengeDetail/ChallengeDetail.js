@@ -25,6 +25,7 @@ import WithChallengeTaskClusters from "../HOCs/WithChallengeTaskClusters/WithCha
 import WithTaskClusterMarkers from "../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers";
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
@@ -40,6 +41,7 @@ const ClusterMap = WithChallengeTaskClusters(
 export class ChallengeDetail extends Component {
   state = {
     viewComments: _isObject(this.props.user) && this.props.location.search.includes("conversation"),
+    challengeFlagged: false
   };
 
   componentDidMount() {
@@ -53,8 +55,12 @@ export class ChallengeDetail extends Component {
   }
 
   onClickTab = () => {
-    this.setState({ viewComments: !this.state.viewComments });
+    this.setState({ ...this.state, viewComments: !this.state.viewComments });
   };
+
+  handleFlag = () => {
+    this.setState({...this.state, challengeFlagged: true})
+  }
 
   render() {
     const challenge = this.props.browsedChallenge;
@@ -194,7 +200,7 @@ export class ChallengeDetail extends Component {
                 )}
                 <Taxonomy {...challenge} isSaved={isSaved} />
                 <h1 className="mr-card-challenge__title">{challenge.name}</h1>
-
+                <SvgSymbol sym='flag-icon' viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={this.handleFlag}/>
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"
