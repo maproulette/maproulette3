@@ -26,6 +26,7 @@ import WithTaskClusterMarkers from "../HOCs/WithTaskClusterMarkers/WithTaskClust
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import { Octokit } from "@octokit/core"
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
@@ -39,13 +40,30 @@ const ClusterMap = WithChallengeTaskClusters(
  * @author [Ryan Scherler](https://github.com/ryanscherler)
  */
 export class ChallengeDetail extends Component {
+
   state = {
     viewComments: _isObject(this.props.user) && this.props.location.search.includes("conversation"),
-    challengeFlagged: false
+    challengeFlagged: false,
+    listOfIssues: [],
   };
 
   componentDidMount() {
     window.scrollTo(0, 0);
+    const octokit = new Octokit({
+      auth: process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
+    })
+
+    const getIssues = async () => {
+      await octokit.request('GET /repos/tsun812/api_test/issues', {
+        owner: 'tsun812',
+        repo: 'api_test'
+      }).then(res => {
+        this.setState({ ...this.state, listOfIssues: res.data })
+        console.log(this.state.listOfIssues)
+      })
+    }
+
+    getIssues()
   }
 
   componentDidUpdate() {
@@ -58,11 +76,8 @@ export class ChallengeDetail extends Component {
     this.setState({ ...this.state, viewComments: !this.state.viewComments });
   };
 
-  handleFlag = () => {
-    this.setState({...this.state, challengeFlagged: true})
-  }
-
   render() {
+    console.log(this.props)
     const challenge = this.props.browsedChallenge;
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
       return (
@@ -157,6 +172,39 @@ export class ChallengeDetail extends Component {
             parse(challenge.dataOriginDate)
           ),
         });
+    const octokit = new Octokit({
+      auth: process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
+    })
+console.log(this.state.listOfIssues)
+    const handleFlag = async () => {
+      const re = /[^#]\d+\s/g
+      let shouldCreateIssue = true
+      for (let i = 0; i < this.state.listOfIssues.length; i++) {
+        let findMatch = this.state.listOfIssues[i].title.match(re)
+        if (findMatch && findMatch[0] == challenge.id) {
+          shouldCreateIssue = false
+          break;
+        }
+      }
+      if (shouldCreateIssue) {
+        await octokit.request('POST /repos/tsun812/api_test/issues', {
+          owner: 'tsun812',
+          repo: 'api_test',
+          title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
+          body: `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})`,
+          state: 'open',
+          labels: [
+            'bug'
+          ]
+        })
+      }
+      else {
+        console.log('cannot create a issue')
+
+      }
+      this.setState({ ...this.state, challengeFlagged: true })
+    }
+
 
     const map = (
       <ClusterMap
@@ -200,7 +248,7 @@ export class ChallengeDetail extends Component {
                 )}
                 <Taxonomy {...challenge} isSaved={isSaved} />
                 <h1 className="mr-card-challenge__title">{challenge.name}</h1>
-                <SvgSymbol sym='flag-icon' viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={this.handleFlag}/>
+                <SvgSymbol sym='flag-icon' viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={handleFlag}/>
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"
