@@ -45,6 +45,11 @@ jest.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
   __esModule: true,
 }));
 
+jest.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
+  __esModule: true,
+  default: () => null
+}));
+
 jest.mock('@rjsf/core/lib/components/widgets/TextWidget', () => ({
   __esModule: true,
   default: () => null
