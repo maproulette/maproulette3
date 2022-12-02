@@ -77,5 +77,25 @@ export default defineMessages({
   viewOverview: {
     id: "ChallengeDetails.fields.viewOverview.label",
     defaultMessage: "Overview"
+  },
+
+  write: {
+    id: "ChallengeDetails.controls.write.label",
+    defaultMessage: "Write"
+  },
+
+  preview: {
+    id: "ChallengeDetails.controls.preview.label",
+    defaultMessage: "Preview"
+  },
+
+  review: {
+    id: "ChallengeDetails.controls.review.label",
+    defaultMessage: "I have attempted to contact the Challenge creator"
+  },
+
+  submitFlag: {
+    id: "ChallengeDetails.controls.submit.flag.label",
+    defaultMessage: "Flag Challenge"
   }
 })

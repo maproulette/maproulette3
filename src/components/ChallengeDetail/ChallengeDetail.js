@@ -27,6 +27,7 @@ import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import { Octokit } from "@octokit/core"
+import FlagModal from "./FlagModal";
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
@@ -45,6 +46,7 @@ export class ChallengeDetail extends Component {
     viewComments: _isObject(this.props.user) && this.props.location.search.includes("conversation"),
     challengeFlagged: false,
     listOfIssues: [],
+    clickFlag: true
   };
 
   componentDidMount() {
@@ -197,12 +199,11 @@ console.log(this.state.listOfIssues)
             'bug'
           ]
         })
+      this.setState({ ...this.state, challengeFlagged: true })
       }
       else {
         console.log('cannot create a issue')
-
-      }
-      this.setState({ ...this.state, challengeFlagged: true })
+      }     
     }
 
 
@@ -248,7 +249,8 @@ console.log(this.state.listOfIssues)
                 )}
                 <Taxonomy {...challenge} isSaved={isSaved} />
                 <h1 className="mr-card-challenge__title">{challenge.name}</h1>
-                <SvgSymbol sym='flag-icon' viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={handleFlag}/>
+                <SvgSymbol sym='flag-icon' title='Flag challenge' viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={handleFlag}/>
+                <FlagModal />
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"
