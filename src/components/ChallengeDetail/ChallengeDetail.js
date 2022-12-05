@@ -65,7 +65,6 @@ export class ChallengeDetail extends Component {
         repo: 'api_test'
       }).then(res => {
         this.setState({ ...this.state, listOfIssues: res.data })
-        console.log(this.state.listOfIssues)
       })
     }
 
@@ -99,7 +98,6 @@ export class ChallengeDetail extends Component {
   }
 
   render() {
-    console.log(this.props)
     const challenge = this.props.browsedChallenge;
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
       return (
@@ -110,6 +108,7 @@ export class ChallengeDetail extends Component {
     }
 
     const re = /[^#]\d+\s/g
+    const newIssues = JSON.parse(localStorage.getItem('newFlags'))
     if (this.state.challengeFlagged != true) {
       for (let i = 0; i < this.state.listOfIssues.length; i++) {
         let findMatch = this.state.listOfIssues[i].title.match(re)
@@ -117,9 +116,13 @@ export class ChallengeDetail extends Component {
           this.setState({challengeFlagged: true, issue: this.state.listOfIssues[i]})
           break
         }
+        else if(newIssues.includes(challenge.id)){
+          this.setState({challengeFlagged: true, issue: challenge.id})
+          break
+        }
       } 
     }
-
+  
     // Setup saved status and controls based on whether the user has saved this
     // challenge
     let isSaved = false;
@@ -211,10 +214,15 @@ export class ChallengeDetail extends Component {
 
     const handleFlag = () => {
       if (this.state.challengeFlagged) {
-        window.open(this.state.issue.html_url, "_blank")
+        if (this.state.issue?.html_url) {
+          window.open(this.state.issue.html_url, "_blank")
+        }
+        else {
+          window.open('https://github.com/maproulette/challenge-reports/issues', "_blank")
+        }
       } else {
-        this.setState({...this.state, modalToggle: true, modalClosed: true})
-      }   
+        this.setState({ ...this.state, modalToggle: true, modalClosed: true })
+      }
     }
 
 

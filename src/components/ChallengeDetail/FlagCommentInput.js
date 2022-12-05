@@ -24,6 +24,9 @@ export class FlagCommentInput extends Component {
       this.props.handleCheckboxError()
     }
     else {
+      let currentIssues = JSON.parse(localStorage.getItem('newFlags')) || []
+      currentIssues.push(this.props.challenge.id)
+      localStorage.setItem('newFlags', JSON.stringify(currentIssues))
       const octokit = new Octokit({
         auth: process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
       })
