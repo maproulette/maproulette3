@@ -94,8 +94,23 @@ export default defineMessages({
     defaultMessage: "I have attempted to contact the Challenge creator"
   },
 
+  modalSubtitle: {
+    id: "ChallengeDetails.controls.modal.subtitle",
+    defaultMessage:  "You are about to flag a Challenge. An issue will be created here and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Flagging a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets."
+  },
+
   submitFlag: {
     id: "ChallengeDetails.controls.submit.flag.label",
     defaultMessage: "Flag Challenge"
+  },
+
+  textInputError: {
+    id: "ChallengeDetails.controls.text.input.error",
+    defaultMessage: "Text Input should have minimum 100 characters"
+  },
+
+  checkboxError: {
+    id: "ChallengeDetails.controls.checkbox.error",
+    defaultMessage: "Please ensure that checkbox is checked before continue"
   }
 })

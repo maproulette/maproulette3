@@ -46,7 +46,11 @@ export class ChallengeDetail extends Component {
     viewComments: _isObject(this.props.user) && this.props.location.search.includes("conversation"),
     challengeFlagged: false,
     listOfIssues: [],
-    clickFlag: true
+    modalToggle: false,
+    issue: undefined,
+    modalClosed: true,
+    displayInputError: false,
+    displayCheckboxError: false,
   };
 
   componentDidMount() {
@@ -75,8 +79,24 @@ export class ChallengeDetail extends Component {
   }
 
   onClickTab = () => {
-    this.setState({ ...this.state, viewComments: !this.state.viewComments });
+    this.setState({ ...this.state, viewComments: !this.state.viewComments});
   };
+
+  onCancel = () => {
+    this.setState({ ...this.state, modalClosed: false });
+  }
+
+  onModalSubmit = () => {
+    this.setState({ ...this.state, challengeFlagged: true, modalClosed: false, displayInputError: false});
+  }
+
+  handleInputError = () => {
+    this.setState({...this.state, displayInputError: !this.state.displayInputError})
+  }
+
+  handleCheckboxError = () => {
+    this.setState({ ...this.state, displayInputError: false, displayCheckboxError: !this.state.displayCheckboxError})
+  }
 
   render() {
     console.log(this.props)
@@ -87,6 +107,17 @@ export class ChallengeDetail extends Component {
           <BusySpinner />
         </div>
       );
+    }
+
+    const re = /[^#]\d+\s/g
+    if (this.state.challengeFlagged != true) {
+      for (let i = 0; i < this.state.listOfIssues.length; i++) {
+        let findMatch = this.state.listOfIssues[i].title.match(re)
+        if (findMatch && findMatch[0] == challenge.id) {
+          this.setState({challengeFlagged: true, issue: this.state.listOfIssues[i]})
+          break
+        }
+      } 
     }
 
     // Setup saved status and controls based on whether the user has saved this
@@ -177,33 +208,13 @@ export class ChallengeDetail extends Component {
     const octokit = new Octokit({
       auth: process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
     })
-console.log(this.state.listOfIssues)
-    const handleFlag = async () => {
-      const re = /[^#]\d+\s/g
-      let shouldCreateIssue = true
-      for (let i = 0; i < this.state.listOfIssues.length; i++) {
-        let findMatch = this.state.listOfIssues[i].title.match(re)
-        if (findMatch && findMatch[0] == challenge.id) {
-          shouldCreateIssue = false
-          break;
-        }
-      }
-      if (shouldCreateIssue) {
-        await octokit.request('POST /repos/tsun812/api_test/issues', {
-          owner: 'tsun812',
-          repo: 'api_test',
-          title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
-          body: `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})`,
-          state: 'open',
-          labels: [
-            'bug'
-          ]
-        })
-      this.setState({ ...this.state, challengeFlagged: true })
-      }
-      else {
-        console.log('cannot create a issue')
-      }     
+
+    const handleFlag = () => {
+      if (this.state.challengeFlagged) {
+        window.open(this.state.issue.html_url, "_blank")
+      } else {
+        this.setState({...this.state, modalToggle: true, modalClosed: true})
+      }   
     }
 
 
@@ -250,7 +261,7 @@ console.log(this.state.listOfIssues)
                 <Taxonomy {...challenge} isSaved={isSaved} />
                 <h1 className="mr-card-challenge__title">{challenge.name}</h1>
                 <SvgSymbol sym='flag-icon' title='Flag challenge' viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={handleFlag}/>
-                <FlagModal />
+                {this.state.modalToggle && this.state.modalClosed && <FlagModal challenge={challenge} {...this.props} onCancel={this.onCancel} onModalSubmit={this.onModalSubmit} handleInputError={this.handleInputError} displayInputError={this.state.displayInputError} disabledButton={this.state.disabledButton} handleDisabledButton={this.handleDisabledButton} displayCheckboxError={this.state.displayCheckboxError} handleCheckboxError={this.handleCheckboxError}/>}
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"

@@ -5,6 +5,7 @@ import _get from "lodash/get";
 import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import AutosuggestMentionTextArea from "../AutosuggestTextBox/AutosuggestMentionTextArea";
 import messages from "./Messages";
+import { Octokit } from "@octokit/core";
 
 export class FlagCommentInput extends Component {
   state = {
@@ -12,26 +13,45 @@ export class FlagCommentInput extends Component {
     characterCount: 0,
     value: '',
     checked: false,
-    disabledButton: true
   };
 
-  handleSubmit = () => {
-    this.setState({ showingPreview: false });
-    this.props.submitComment();
+  handleSubmit = async () => {
+    if (this.state.characterCount < 100) {
+      this.props.handleInputError()
+    }
+
+    else if (!this.state.checked) {
+      this.props.handleCheckboxError()
+    }
+    else {
+      const octokit = new Octokit({
+        auth: process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
+      })
+      const challenge = this.props.challenge
+      let body = `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})`
+      body += ` \n\n` + this.state.value;
+      await octokit.request('POST /repos/tsun812/api_test/issues', {
+        owner: 'tsun812',
+        repo: 'api_test',
+        title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
+        body: body,
+        state: 'open',
+        labels: [
+          'bug'
+        ]
+      })
+      this.props.onModalSubmit()
+    }
   };
 
   handleChange = (val) => {
     if (val.length <= 1000) {
-      this.setState({ value: val });
-      this.setState({ characterCount: _get(this.state.value, "length", 0) })
+      this.setState({ ...this.state, value: val, characterCount: val.length });
     }
   };
 
-   handleToggle = () => {
-    this.setState({checked: !this.state.checked})
-    if(this.state.characterCount > 100){
-      this.setState({disabledButton: !this.state.disabledButton})
-    }
+  handleToggle = () => {
+    this.setState({ checked: !this.state.checked })
   };
 
   render() {
@@ -70,7 +90,7 @@ export class FlagCommentInput extends Component {
                 this.state.characterCount < maxCharacterCount &&
                 this.state.characterCount > maxCharacterCount * 0.9,
               "mr-text-red-light":
-                this.state.characterCount >= maxCharacterCount || this.state.characterCount < 100
+                this.state.characterCount >= maxCharacterCount || this.state.characterCount < minCharacterCount
             })}
           >
             {this.state.characterCount}/{maxCharacterCount}
@@ -84,7 +104,7 @@ export class FlagCommentInput extends Component {
                 : "mr-border-2 mr-rounded mr-border-black-15 mr-px-2 mr-min-h-8"
             }
           >
-            <MarkdownContent allowShortCodes markdown={this.state.value} />
+            <MarkdownContent markdown={this.state.value} />
           </div>
         ) : (
           <AutosuggestMentionTextArea
@@ -109,11 +129,18 @@ export class FlagCommentInput extends Component {
             <FormattedMessage {...messages.review} />
           </label>
         </div>
+        {this.props.displayInputError &&
+          <div className="mr-text-red">
+            <FormattedMessage {...messages.textInputError} />
+          </div>}
+        {this.props.displayCheckboxError &&
+          <div className="mr-text-red">
+            <FormattedMessage {...messages.checkboxError} />
+          </div>}
         <div className="mr-flex mr-items-center mr-mt-6">
           <button
             className="mr-button mr-button--white mr-mr-12 mr-px-8"
             onClick={this.handleSubmit}
-            disabled={this.state.disabledButton}
           >
             <FormattedMessage {...messages.submitFlag} />
           </button>
