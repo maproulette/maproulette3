@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { SuperAdminPane } from './SuperAdmin'
 import { fetchAdminChallenges } from '../../services/SuperAdmin/SuperAdminChallenges'
 import { fetchAdminProjects } from '../../services/SuperAdmin/SuperAdminProjects'
+import { fetchAdminUsers } from '../../services/SuperAdmin/SuperAdminUsers'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import { withRouter } from 'react-router'
 import WithMetricsSearch from './WithMetricsSearch'
@@ -32,11 +33,16 @@ class SuperAdminContainer extends Component {
     const searchQuery = {onlyEnabled: false}
     this.props.fetchAdminChallenges(searchQuery)
     this.props.fetchAdminProjects()
+    this.props.fetchAdminUsers()
   }
 
   render() {
     return(
-      <WrappedSuperAdminPane challenges={this.props.adminChallenges} projects={this.props.adminProjects} isloadingCompleted={this.props.loadingChallenges || this.props.loadingProjects} />
+      <WrappedSuperAdminPane
+        challenges={this.props.adminChallenges}
+        projects={this.props.adminProjects}
+        isloadingCompleted={this.props.loadingChallenges || this.props.loadingProjects}
+      />
     )
   }
 }
@@ -45,7 +51,7 @@ const mapStateToProps = state => {
   const adminChallenges = state.entities?.adminChallenges?.data.map(challenge =>
     denormalize(challenge, challengeSchema(), state.entities)
   )
-  
+
   return {
     adminChallenges: adminChallenges || [],
     adminProjects: state.entities?.adminProjects?.data || [],
@@ -59,6 +65,9 @@ const mapDispatchToProps = dispatch => ({
   },
   fetchAdminProjects: () => {
     dispatch(fetchAdminProjects())
+  },
+  fetchAdminUsers: () => {
+    dispatch(fetchAdminUsers())
   }
 })
 
