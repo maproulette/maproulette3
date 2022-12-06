@@ -7,6 +7,24 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.3] - 2022-12-13
+
+### Features
+- Super Admin Metrics - Projects and Users
+- add priority rules to bulk edit
+- create users findAll service for superusers (API)
+
+### Fixes
+- encode comments to allow special characters
+- add % sign in Challenge Completion Widget tooltip
+- disable OSM file download/upload
+- markRead and delete endpoints now work on mass notification selections
+- prevent duplicate notifications in task bundles (API)
+
+### System Updates
+- add mastodon link to readme
+- Bump decode-uri-component from 0.2.0 to 0.2.2
+
 ## [v3.11.2] - 2022-11-22
 
 ### Features
