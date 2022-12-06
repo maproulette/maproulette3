@@ -17,7 +17,7 @@ import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE
 const FEATURED_POINTS = -1
 const SAVED_POINTS = -2
 
-export const sortChallenges = function(props, challengesProp='challenges', config) {
+export const sortChallenges = function(props, challengesProp='challenges') {
   const sortCriteria = _get(props, 'searchSort.sortBy')
   let sortedChallenges = props[challengesProp]
 
@@ -73,7 +73,7 @@ export default function(WrappedComponent,
                         config) {
   class WithSortedChallenges extends Component {
     render() {
-      const sortedChallenges = sortChallenges(this.props, challengesProp, config)
+      const sortedChallenges = sortChallenges(this.props, challengesProp)
 
       if (_isEmpty(outputProp)) {
         outputProp = challengesProp
