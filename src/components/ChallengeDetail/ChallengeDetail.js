@@ -64,6 +64,7 @@ export class ChallengeDetail extends Component {
         owner: 'tsun812',
         repo: 'api_test'
       }).then(res => {
+        localStorage.setItem('allFlags', JSON.stringify(res.data))
         this.setState({ ...this.state, listOfIssues: res.data })
       })
     }
@@ -85,8 +86,8 @@ export class ChallengeDetail extends Component {
     this.setState({ ...this.state, modalClosed: false });
   }
 
-  onModalSubmit = () => {
-    this.setState({ ...this.state, challengeFlagged: true, modalClosed: false, displayInputError: false});
+  onModalSubmit = (data) => {
+    this.setState({ ...this.state, challengeFlagged: true, modalClosed: false, displayInputError: false, issue: data});
   }
 
   handleInputError = () => {
@@ -98,6 +99,7 @@ export class ChallengeDetail extends Component {
   }
 
   render() {
+  console.log(this.props)
     const challenge = this.props.browsedChallenge;
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
       return (
@@ -108,16 +110,12 @@ export class ChallengeDetail extends Component {
     }
 
     const re = /[^#]\d+\s/g
-    const newIssues = JSON.parse(localStorage.getItem('newFlags'))
+    let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
     if (this.state.challengeFlagged != true) {
-      for (let i = 0; i < this.state.listOfIssues.length; i++) {
-        let findMatch = this.state.listOfIssues[i].title.match(re)
+      for (let i = 0; i < currentIssues.length; i++) {
+        let findMatch = currentIssues[i].title.match(re)
         if (findMatch && findMatch[0] == challenge.id) {
-          this.setState({challengeFlagged: true, issue: this.state.listOfIssues[i]})
-          break
-        }
-        else if(newIssues.includes(challenge.id)){
-          this.setState({challengeFlagged: true, issue: challenge.id})
+          this.setState({challengeFlagged: true, issue: currentIssues[i]})
           break
         }
       } 
@@ -214,12 +212,7 @@ export class ChallengeDetail extends Component {
 
     const handleFlag = () => {
       if (this.state.challengeFlagged) {
-        if (this.state.issue?.html_url) {
           window.open(this.state.issue.html_url, "_blank")
-        }
-        else {
-          window.open('https://github.com/maproulette/challenge-reports/issues', "_blank")
-        }
       } else {
         this.setState({ ...this.state, modalToggle: true, modalClosed: true })
       }

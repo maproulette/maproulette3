@@ -13,6 +13,7 @@ export class FlagCommentInput extends Component {
     characterCount: 0,
     value: '',
     checked: false,
+    emailValue: this.props.user.settings.email || ''
   };
 
   handleSubmit = async () => {
@@ -24,16 +25,15 @@ export class FlagCommentInput extends Component {
       this.props.handleCheckboxError()
     }
     else {
-      let currentIssues = JSON.parse(localStorage.getItem('newFlags')) || []
-      currentIssues.push(this.props.challenge.id)
-      localStorage.setItem('newFlags', JSON.stringify(currentIssues))
+      let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
+    
       const octokit = new Octokit({
         auth: process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
       })
       const challenge = this.props.challenge
       let body = `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})`
       body += ` \n\n` + this.state.value;
-      await octokit.request('POST /repos/tsun812/api_test/issues', {
+      const response = await octokit.request('POST /repos/tsun812/api_test/issues', {
         owner: 'tsun812',
         repo: 'api_test',
         title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
@@ -43,7 +43,10 @@ export class FlagCommentInput extends Component {
           'bug'
         ]
       })
-      this.props.onModalSubmit()
+      currentIssues.push(response.data)
+      localStorage.setItem('allFlags', JSON.stringify(currentIssues))
+      console.log(response.data)
+      this.props.onModalSubmit(response.data)
     }
   };
 
@@ -62,6 +65,10 @@ export class FlagCommentInput extends Component {
     const minCharacterCount = 100
     return (
       <div className="mr-mt-2">
+        <label className="mr-text-white-50">
+            Email
+          </label>
+        <input class="form-control mr-mb-4" type="email" id="root_email" label="Email address" placeholder="Enter your email" value={this.state.emailValue} onChange={(event) => this.setState({emailValue: event.target.value})} />
         <div className="mr-flex mr-justify-between mr-mb-2 mr-leading-tight mr-text-xxs">
           <div className="mr-flex mr-items-center">
             <button
