@@ -39,5 +39,6 @@ describe("exportOSMData", () => {
     const osmData = await exportOSMData('mockEndpoint');
 
     expect(osmData.includes('lat=\"12.457374955871742\" lon=\"20.28233073276013\"')).toBe(true);
+    expect(osmData.includes('download="never" upload="never"')).toBe(true);
   });
 });
