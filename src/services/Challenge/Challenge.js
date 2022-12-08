@@ -121,7 +121,7 @@ export const exportOSMData = function (url, filename) {
   })
     .execute()
     .then(geojson => {
-      const osmData = geojsontoosm(geojson)
+      const osmData = geojsontoosm(geojson).replace('generator="geojsontoosm"', 'generator="geojsontoosm" download="never" upload="never"');
       
       //https://stackoverflow.com/questions/5143504/how-to-create-and-download-an-xml-file-on-the-fly-using-javascript
       const file = `${filename}.osm`;
