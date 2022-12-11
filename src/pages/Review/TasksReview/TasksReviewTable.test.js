@@ -414,25 +414,6 @@ describe("TaskReviewTable", () => {
     const text = getByText("My Mapped Tasks after Review");
     expect(text).toBeInTheDocument();
   });
-
-  it("renders My Mapped Tasks after Review", () => {
-    const { getByText } = global.withProvider(
-      <TaskReviewTable
-        location={{ search: "" }}
-        intl={{
-          formatMessage: () => null,
-          formatDate: () => ""
-        }}
-        reviewData={{ tasks: testTableData }}
-        user={{ id: 4 }}
-        challenges={[]}
-        isActive
-        resetColumnChoices={() => null}
-      />
-    );
-    const text = getByText("My asdf Tasks after Review");
-    expect(text).toBeInTheDocument();
-  });
 });
 
 describe("setupColumnTypes", () => {
