@@ -7,7 +7,7 @@ const WithExportCsv = function (WrappedComponent) {
         let json_pre = props.challenges.map((item) => {
           const created = new Date(item.created);
           const modified = new Date(item.modified);
-          
+
           return {
             'ID': item.id,
             'NAME': item.name,
@@ -21,15 +21,14 @@ const WithExportCsv = function (WrappedComponent) {
             'DATE LAST MODIFIED': `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}`,
           };
         })
-        console.log(json_pre)
         return json_pre;
       }
 
-    function formatProjectData(props) {
+      function formatProjectData(props) {
         let json_pre = props.projects.map((item) => {
           const created = new Date(item.created);
           const modified = new Date(item.modified);
-          const projectManage= AsManageableProject(item)
+          const projectManage = AsManageableProject(item)
           const numOfChallenges = projectManage.childChallenges(props.challenges).length
           return {
             'ID': item.id,
@@ -46,14 +45,31 @@ const WithExportCsv = function (WrappedComponent) {
         return json_pre;
       }
 
+      function formatUserData(props) {
+        let json_pre = props.adminUsers.map((item) => {
+          const created = new Date(item.created);
+          const modified = new Date(item.modified);
+          return {
+            'ID': item.id,
+            'NAME': item.osmProfile.displayName,
+            'SCORE': item.score,
+            'DATE CREATED': `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}`,
+            'DATE LAST MODIFIED': `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}`,
+          };
+        })
+        return json_pre;
+      }
       function download(currentTab, props) {
         let json_pre
         console.log(currentTab)
-        if(currentTab === 'challenges'){
+        if (currentTab === 'challenges') {
           json_pre = formatChallengeData(props)
         }
-        else if(currentTab === 'projects'){
+        else if (currentTab === 'projects') {
           json_pre = formatProjectData(props)
+        }
+        else {
+          json_pre = formatUserData(props)
         }
         const csv = jsonToCsv(json_pre);
         let downloadLink = document.createElement('a');

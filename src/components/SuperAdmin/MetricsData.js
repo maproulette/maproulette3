@@ -5,7 +5,8 @@ import AsManageableProject from '../../interactions/Project/AsManageableProject'
 const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`
 
 // Total Number of Tasks, Number of user engaged in task
-const setChallengeTab = () => {
+const setChallengeTab = (props) => {
+  const users = props.adminUsers
   return [
     {
       id: 'id',
@@ -31,7 +32,16 @@ const setChallengeTab = () => {
     {
       id: 'owner',
       Header: 'OWNER',
-      accessor: challenge => challenge.owner,
+      accessor: challenge => {
+        const user = users.find(user => user.osmProfile.id == challenge.owner)
+        return user ? user.osmProfile.displayName : ''
+      },
+      Cell: props => {
+        if (props.value) {
+          return <a href={OSM_USER_LINK + props.value} target='_blank' rel='noopener noreferrer' > {props.value} </a>
+        }
+        return null
+      },
       maxWidth: 100,
     },
     {
@@ -121,7 +131,9 @@ const setChallengeTab = () => {
   ]
 }
 
-const setProjectTab = (challenges) => {
+const setProjectTab = (props) => {
+  const challenges = props.challenges
+  const users = props.adminUsers
   return [
     {
       id: 'id',
@@ -140,7 +152,16 @@ const setProjectTab = (challenges) => {
     {
       id: 'owner',
       Header: 'OWNER',
-      accessor: project => project.owner,
+      accessor: project => {
+        const user = users.find(user => user.osmProfile.id == project.owner)
+        return user ? user.osmProfile.displayName : ''
+      },
+      Cell: props => {
+        if (props.value) {
+          return <a href={OSM_USER_LINK + props.value} target='_blank' rel='noopener noreferrer' > {props.value} </a>
+        }
+        return null
+      },
       maxWidth: 100,
     },
     {
@@ -174,19 +195,31 @@ const setProjectTab = (challenges) => {
       id: 'dateCreated',
       Header: 'DATE CREATED',
       accessor: project => {
-        return <FormattedDate value={project.created} />
+        return project.created
       },
       maxWidth: 150,
-      sortable: false
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     },
     {
       id: 'dateLastModified',
       Header: 'DATE LAST MODIFIED',
       accessor: project => {
-        return <FormattedDate value={project.modified} />
+        return project.modified
       },
-      maxWidth: 180,
-      sortable: false
+      maxWidth: 150,
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     }
   ]
 }
@@ -217,17 +250,31 @@ const setUserTab = () => {
       id: 'dateCreated',
       Header: 'DATE CREATED',
       accessor: user => {
-        return <FormattedDate {...user.created} />
+        return user.created
       },
       maxWidth: 150,
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     },
     {
       id: 'lastActive',
       Header: 'DATE LAST ACTIVE',
       accessor: user => {
-        return <FormattedDate {...user.modified} />
+        return user.modified
       },
-      maxWidth: 180,
+      maxWidth: 150,
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     }
   ]
 }

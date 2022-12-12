@@ -64,6 +64,9 @@ export const WithSearchResults = function(WrappedComponent, searchName,
       if(admin){
         const params = queryString.parse(this.props.location.search)
         searchType = params['searchType'] || 'challenges'
+        if(searchType === 'users'){
+          searchType = 'adminUsers'
+        }
         items = this.props[searchType]
       }
       else{
@@ -86,6 +89,10 @@ export const WithSearchResults = function(WrappedComponent, searchName,
       else if (admin && searchType === 'projects' && query){
          searchResults = _filter(items,
           (item) => _get(item, 'displayName', '').toLowerCase().indexOf(query) !== -1)
+      }
+      else if (admin && searchType === 'users' && query){
+         searchResults = _filter(items,
+          (item) => _get(item, 'osmProfile.displayName', '').toLowerCase().indexOf(query) !== -1 )
       }
       else if (_isString(query) && query.length > 0 &&
           _isArray(items) && items.length > 0) {

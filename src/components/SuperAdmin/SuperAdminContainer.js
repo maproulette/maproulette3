@@ -41,13 +41,15 @@ class SuperAdminContainer extends Component {
       <WrappedSuperAdminPane
         challenges={this.props.adminChallenges}
         projects={this.props.adminProjects}
-        isloadingCompleted={this.props.loadingChallenges || this.props.loadingProjects}
+        adminUsers={this.props.adminUsers}
+        isloadingCompleted={this.props.loadingChallenges || this.props.loadingProjects || this.props.loadingUsers}
       />
     )
   }
 }
 
 const mapStateToProps = state => {
+  console.log(state)
   const adminChallenges = state.entities?.adminChallenges?.data.map(challenge =>
     denormalize(challenge, challengeSchema(), state.entities)
   )
@@ -55,8 +57,10 @@ const mapStateToProps = state => {
   return {
     adminChallenges: adminChallenges || [],
     adminProjects: state.entities?.adminProjects?.data || [],
+    adminUsers: state.entities?.adminUsers?.data || [],
     loadingChallenges: state.entities?.adminChallenges?.loading,
-    loadingProjects: state.entities?.adminProjects?.loading
+    loadingProjects: state.entities?.adminProjects?.loading,
+    loadingUsers: state.entities?.adminUsers?.loading
   }
 }
 const mapDispatchToProps = dispatch => ({

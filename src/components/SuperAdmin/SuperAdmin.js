@@ -20,7 +20,7 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
  *
  */
 export const SuperAdminPane = (props) => {
- 
+ console.log(props)
   useEffect(() => {
     if (props.location.search === '') {
       props.clearSearch()
@@ -28,9 +28,17 @@ export const SuperAdminPane = (props) => {
       props.setSearchSort({ sortBy: 'default' })
     }
   }, [])
-
   const params = queryString.parse(props.location.search)
   const currentTab = params['tab'] ? params['tab'] : 'challenges'
+
+  const formatDateFromTab = (date) => {
+    const offset = date.getTimezoneOffset()
+    date = new Date(date.getTime() + (offset * 60 * 1000))
+    return date
+  }
+
+  const fromDateTab = params['from'] ? formatDateFromTab(new Date(params['from'])) : null
+  const endDateTab = params['to'] ? formatDateFromTab(new Date(params['to'])) : null
   //HOC
   const VisibleFilterToggle = internalFilterToggle('challenge', 'visible');
   const ArchivedFilterToggle = internalFilterToggle('challenge', 'archived');
@@ -46,9 +54,9 @@ export const SuperAdminPane = (props) => {
     );
   }
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-    const formatDate = (date) => {
+  const [startDate, setStartDate] = useState(fromDateTab);
+  const [endDate, setEndDate] = useState(endDateTab);
+  const formatDate = (date) => {
     const offset = date.getTimezoneOffset()
     date = new Date(date.getTime() - (offset * 60 * 1000))
     return date.toISOString().split('T')[0]
@@ -66,7 +74,7 @@ export const SuperAdminPane = (props) => {
     props.toggleEndDate(formattedDate)
   }
 
-  const clearDateFilter = () => {
+  const clearDate = () => {
     props.clearDateFilter()
     setStartDate(null)
     setEndDate(null)
@@ -74,8 +82,8 @@ export const SuperAdminPane = (props) => {
 
   return manager.isSuperUser() ? (
     <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
-      <MetricsHeader {...props} currentTab={currentTab} setStartDate={setStartDate} setEndDate={setEndDate}/>
-      {currentTab !== 'users' && <div className='mr-flex mr-justify-between mr-p-4 mr-pt-6'>
+      <MetricsHeader {...props} currentTab={currentTab} clearDate={clearDate}/>
+      {<div className='mr-flex mr-justify-between mr-p-4 mr-pt-6'>
         <div>
           <div className='mr-flex mr-items-center'>
             <div className='mr-w-32'>
@@ -90,45 +98,45 @@ export const SuperAdminPane = (props) => {
               <DatePicker selected={endDate} placeholderText={'End date'} onChange={(date) => handleEndDate(date)} minDate={startDate} />
             </div>
             <button
-          color='primary'
-          type='button'
-          className='mr-leading-none mr-button--dark mr-ml-4 mr-mr-1'
-          onClick={() => {
-            clearDateFilter()
-          }}>
+              color='primary'
+              type='button'
+              className='mr-leading-none mr-button--dark mr-ml-4 mr-mr-1'
+              onClick={() => {
+                clearDate()
+              }}>
           <FormattedMessage {...messages.clear} />
         </button>
           </div>
         </div>
         <div className='mr-flex mr-items-center'>
-        <VisibleFilterToggle
-          {...props}
-          dashboardEntityFilters={props.entityFilters}
-          toggleEntityFilter={props.toggleFilter}
-          filterToggleLabel={<FormattedMessage {...messages.hideUndiscoverable} />}
-        />
-        <ArchivedFilterToggle
-          {...props}
-          dashboardEntityFilters={props.entityFilters}
-          toggleEntityFilter={props.toggleFilter}
-          filterToggleLabel={<FormattedMessage {...messages.hideArchived} />}
-        />
-        {currentTab === 'projects' && <VirtualProjectFilterToggle
-          {...props}
-          dashboardEntityFilters={props.entityFilters}
-          toggleEntityFilter={props.toggleFilter}
-          filterToggleLabel={<FormattedMessage {...messages.virtual} />}
-        />}
-        <button
-          color='primary'
-          type='button'
-          className='mr-leading-none mr-button--dark mr-ml-4 mr-mr-1'
-          onClick={() => {
-            props.downloadCsv(currentTab, props)
-          }}>
-          <FormattedMessage {...messages.download} />
-        </button>
-      </div>
+          {currentTab !== 'users' && <VisibleFilterToggle
+            {...props}
+            dashboardEntityFilters={props.entityFilters}
+            toggleEntityFilter={props.toggleFilter}
+            filterToggleLabel={<FormattedMessage {...messages.hideUndiscoverable} />}
+          />}
+          {currentTab !== 'users' && <ArchivedFilterToggle
+            {...props}
+            dashboardEntityFilters={props.entityFilters}
+            toggleEntityFilter={props.toggleFilter}
+            filterToggleLabel={<FormattedMessage {...messages.hideArchived} />}
+          />}
+          {currentTab === 'projects' && <VirtualProjectFilterToggle
+            {...props}
+            dashboardEntityFilters={props.entityFilters}
+            toggleEntityFilter={props.toggleFilter}
+            filterToggleLabel={<FormattedMessage {...messages.virtual} />}
+          />}
+          <button
+            color='primary'
+            type='button'
+            className='mr-leading-none mr-button--dark mr-ml-4 mr-mr-1'
+            onClick={() => {
+              props.downloadCsv(currentTab, props)
+            }}>
+            <FormattedMessage {...messages.download} />
+          </button> 
+        </div>
       </div>}
       <MetricsTable {...props} currentTab={currentTab}/>
     </div>

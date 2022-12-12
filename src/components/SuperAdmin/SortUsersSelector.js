@@ -3,17 +3,17 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
-import { sortLabels, SORT_DEFAULT, PROJECT_SORT_OPTIONS} from '../../services/Search/Search'
+import { sortLabels, SORT_DEFAULT, USER_SORT_OPTIONS} from '../../services/Search/Search'
 import Dropdown from '../Dropdown/Dropdown'
 import ButtonFilter from '../ChallengePane/ChallengeFilterSubnav/ButtonFilter'
 import messages from './Messages'
 
 /**
- * SortProjectsSelector renders an unmanaged dropdown button that can be used
+ * SortUsersSelector renders an unmanaged dropdown button that can be used
  * to modify the sort order of project results.
  *
  */
-export class SortProjectsSelector extends Component {
+export class SortUsersSelector extends Component {
   makeSelection = (option, closeDropdownMenu) => {
     this.props.setSearchSort({sortBy: option})
     closeDropdownMenu()
@@ -47,7 +47,7 @@ export class SortProjectsSelector extends Component {
 }
 
 const ListSortItems = function(props) {
-  const menuItems = _map(PROJECT_SORT_OPTIONS, sortByOption => (
+  const menuItems = _map(USER_SORT_OPTIONS, sortByOption => (
     <li key={sortByOption}>
       <a onClick={() => props.makeSelection(sortByOption, props.closeDropdown)}>
         {props.sortLabels[sortByOption]}
@@ -62,9 +62,9 @@ const ListSortItems = function(props) {
   )
 }
 
-SortProjectsSelector.propTypes = {
+SortUsersSelector.propTypes = {
   /** Invoked to sort the challenges when a value is selected */
   setSearchSort: PropTypes.func.isRequired,
 }
 
-export default injectIntl(SortProjectsSelector)
+export default injectIntl(SortUsersSelector)

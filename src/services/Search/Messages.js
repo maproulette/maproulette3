@@ -36,6 +36,10 @@ export default defineMessages({
     id: "Project.sort.numOfChallenges",
     defaultMessage: "numOfChallenges"
   },
+  score: {
+    id: "User.sort.numOfChallenges",
+    defaultMessage: "Score"
+  },
   default: {
     id: "Challenge.sort.default",
     defaultMessage: "Default",

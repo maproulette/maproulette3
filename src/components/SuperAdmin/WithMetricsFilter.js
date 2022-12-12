@@ -10,14 +10,6 @@ const WithMetricsFilter = function(WrappedComponent) {
     render() {
       const params = queryString.parse(this.props.location.search)
       const tab = params['tab'] 
-      let startYear, startMonth, startDate, endYear, endMonth, endDate
-
-      if(params['from']){
-        [startYear, startMonth, startDate] = params['from'].split('-')
-      }
-      if(params['to']){
-        [endYear, endMonth, endDate] = params['to'].split('-')
-      }
       let entityFilters = {
         visible: params['hideUndiscoverable'] === 'true',
         archived: params['hideArchived'] === 'true',
@@ -67,17 +59,20 @@ const WithMetricsFilter = function(WrappedComponent) {
 
       let challenges = this.props.challenges
       let projects = this.props.projects
+      let users = this.props.adminUsers
+      let startDate = new Date (entityFilters.from)
+      let endDate = new Date(entityFilters.to)
 
       if (tab === 'challenges') {
         challenges = entityFilters.visible ? this.props.challenges.filter(c => c.enabled) : this.props.challenges
         challenges = entityFilters.archived ? challenges.filter(c => !c.isArchived) : challenges
         challenges = entityFilters.from ? challenges.filter(c => {
           const date = new Date(c.created)
-          return date.getFullYear() >= startYear && date.getMonth() + 1 >= startMonth && date.getDate() + 1 >= startDate
+          return date >= startDate
         }) : challenges
         challenges = entityFilters.to ? challenges.filter(c => {
           const date = new Date(c.created)
-          return date.getFullYear() <= endYear && date.getMonth() + 1 <= endMonth && date.getDate() + 1 <= endDate
+          return date <= endDate
         }) : challenges
       }
       else if (tab === 'projects') {
@@ -86,17 +81,30 @@ const WithMetricsFilter = function(WrappedComponent) {
         projects = entityFilters.virtual ? projects.filter(p => p.isVirtual) : projects
         projects = entityFilters.from ? projects.filter(p => {
           const date = new Date(p.created)
-          return date.getFullYear() >= startYear && date.getMonth() + 1 >= startMonth && date.getDate() + 1 >= startDate
+          return date >= startDate
         }) : projects
         projects = entityFilters.to ? projects.filter(p => {
           const date = new Date(p.created)
-          return date.getFullYear() <= endYear && date.getMonth() + 1 <= endMonth && date.getDate() + 1 <= endDate
+          return date <= endDate
         }) : projects
       }
+      else{
+        users = entityFilters.from ? users.filter(user => {
+          const date = new Date(user.created)
+          return date >= startDate
+        }) : users
+    
+        users = entityFilters.to ? users.filter(user => {
+          const date = new Date(user.created)
+          return date <= endDate
+        }) : users
+      }
+
       return (
         <WrappedComponent {...this.props}
           challenges={challenges}
           projects={projects}
+          adminUsers={users}
           entityFilters={entityFilters}
           toggleFilter={toggleFilter}
           toggleStartDate={toggleStartDate}

@@ -6,15 +6,14 @@ import SortChallengesSelector from '../ChallengePane/ChallengeFilterSubnav/SortC
 import FilterByDifficulty from '../ChallengePane/ChallengeFilterSubnav/FilterByDifficulty'
 import FilterByKeyword from '../ChallengePane/ChallengeFilterSubnav/FilterByKeyword'
 import SortProjectsSelector from './SortProjectsSelector'
+import SortUsersSelector from './SortUsersSelector'
 
 const MetricsHeader = (props) => {
 
   const handleTabToggle = (val) => {
     props.clearSearchFilters()
     props.clearSearch()
-    props.clearDateFilter()
-    props.setStartDate(null)
-    props.setEndDate(null)
+    props.clearDate()
     const searchQuery = `?tab=${val}&searchType=${val}`
     props.history.push({
       pathname: '/superadmin',
@@ -43,6 +42,12 @@ const MetricsHeader = (props) => {
             >
               <FormattedMessage {...messages.projectLabel} />
             </button>
+            <button
+              className='mr-button mr-button--dark mr-button--small mr-mr-4'
+              onClick={() => handleTabToggle('users')}
+            >
+              <FormattedMessage {...messages.userLabel} />
+            </button>
           </div>
           {props.currentTab === 'challenges' && <>
             <SortChallengesSelector {...props} />
@@ -52,11 +57,13 @@ const MetricsHeader = (props) => {
           {props.currentTab === 'projects' && <>
             <SortProjectsSelector {...props}/>
           </>}
-          <SearchBox 
+          {props.currentTab === 'users' && <>
+            <SortUsersSelector {...props}/>
+          </>}
+          <SearchBox
             {...props}
             setSearch={props.setSearch}
-        
-            />
+          />
         </div>
       </div>
     </header>

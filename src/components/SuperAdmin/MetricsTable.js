@@ -3,8 +3,9 @@ import React from 'react'
 import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 import WithSortedProjects from './WithSortedProjects'
+import WithSortedUsers from './WithSortedUsers'
 import ReactTable from 'react-table-6'
-import { setChallengeTab, setProjectTab } from './MetricsData'
+import { setChallengeTab, setProjectTab, setUserTab} from './MetricsData'
 import { injectIntl } from 'react-intl'
 import BusySpinner from '../BusySpinner/BusySpinner'
 
@@ -13,11 +14,15 @@ const MetricsTable = (props) => {
   const constructHeader = () => {
     if (props.currentTab === 'challenges') {
       data = props.challenges
-      return setChallengeTab()
+      return setChallengeTab(props)
     }
     else if (props.currentTab === 'projects') {
       data = props.projects
-      return setProjectTab(props.challenges)
+      return setProjectTab(props)
+    }
+    else{
+      data = props.adminUsers
+      return setUserTab()
     }
   }
   return !props.isloadingCompleted ? (
@@ -36,6 +41,6 @@ const MetricsTable = (props) => {
 
 // WithSearchResults for search box
 // WithSortedChallenges for sort by
-export default WithSearchResults(WithSortedProjects(WithSortedChallenges(
+export default WithSearchResults(WithSortedUsers(WithSortedProjects(WithSortedChallenges(
   injectIntl(MetricsTable), 'challenges', null, { frontendSearch: true }
-), 'projects', null), 'challenges', 'challenges')
+), 'projects', null), 'adminUsers', null), 'challenges', 'challenges')
