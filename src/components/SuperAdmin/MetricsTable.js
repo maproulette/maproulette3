@@ -21,7 +21,7 @@ const MetricsTable = (props) => {
       return setProjectTab(props)
     }
     else{
-      data = props.adminUsers
+      data = props.users
       return setUserTab()
     }
   }
@@ -43,4 +43,4 @@ const MetricsTable = (props) => {
 // WithSortedChallenges for sort by
 export default WithSearchResults(WithSortedUsers(WithSortedProjects(WithSortedChallenges(
   injectIntl(MetricsTable), 'challenges', null, { frontendSearch: true }
-), 'projects', null), 'adminUsers', null), 'challenges', 'challenges')
+), 'projects', null), 'users', null), 'challenges', 'challenges')

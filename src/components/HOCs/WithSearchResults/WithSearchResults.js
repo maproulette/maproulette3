@@ -64,9 +64,6 @@ export const WithSearchResults = function(WrappedComponent, searchName,
       if(admin){
         const params = queryString.parse(this.props.location.search)
         searchType = params['searchType'] || 'challenges'
-        if(searchType === 'users'){
-          searchType = 'adminUsers'
-        }
         items = this.props[searchType]
       }
       else{

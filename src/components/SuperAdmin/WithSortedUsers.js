@@ -8,7 +8,7 @@ import _omit from 'lodash/omit'
 import _toLower from 'lodash/toLower'
 import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_SCORE} from '../../services/Search/Search';
 
-export const sortUsers = function(props, usersProp='adminUsers') {
+export const sortUsers = function(props, usersProp='users') {
   const sortCriteria = _get(props, 'searchSort.sortBy')
   let sortedUsers = props[usersProp]
   if (sortCriteria === SORT_NAME) {
@@ -30,7 +30,7 @@ export const sortUsers = function(props, usersProp='adminUsers') {
 }
 
 export default function(WrappedComponent,
-                        usersProp='adminUsers',
+                        usersProp='users',
                         outputProp) {
   class WithSortedUsers extends Component {
     render() {
@@ -46,7 +46,7 @@ export default function(WrappedComponent,
   }
 
   WithSortedUsers.propTypes = {
-    adminUsers: PropTypes.object,
+    users: PropTypes.object,
   }
 
   return WithSortedUsers

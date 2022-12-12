@@ -46,7 +46,7 @@ const WithExportCsv = function (WrappedComponent) {
       }
 
       function formatUserData(props) {
-        let json_pre = props.adminUsers.map((item) => {
+        let json_pre = props.users.map((item) => {
           const created = new Date(item.created);
           const modified = new Date(item.modified);
           return {

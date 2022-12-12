@@ -6,7 +6,7 @@ const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`
 
 // Total Number of Tasks, Number of user engaged in task
 const setChallengeTab = (props) => {
-  const users = props.adminUsers
+  const users = props.users
   return [
     {
       id: 'id',
@@ -133,7 +133,7 @@ const setChallengeTab = (props) => {
 
 const setProjectTab = (props) => {
   const challenges = props.challenges
-  const users = props.adminUsers
+  const users = props.users
   return [
     {
       id: 'id',

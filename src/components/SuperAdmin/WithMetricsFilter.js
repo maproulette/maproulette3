@@ -59,7 +59,7 @@ const WithMetricsFilter = function(WrappedComponent) {
 
       let challenges = this.props.challenges
       let projects = this.props.projects
-      let users = this.props.adminUsers
+      let users = this.props.users
       let startDate = new Date (entityFilters.from)
       let endDate = new Date(entityFilters.to)
 
@@ -104,7 +104,7 @@ const WithMetricsFilter = function(WrappedComponent) {
         <WrappedComponent {...this.props}
           challenges={challenges}
           projects={projects}
-          adminUsers={users}
+          users={users}
           entityFilters={entityFilters}
           toggleFilter={toggleFilter}
           toggleStartDate={toggleStartDate}

@@ -41,7 +41,7 @@ class SuperAdminContainer extends Component {
       <WrappedSuperAdminPane
         challenges={this.props.adminChallenges}
         projects={this.props.adminProjects}
-        adminUsers={this.props.adminUsers}
+        users={this.props.adminUsers}
         isloadingCompleted={this.props.loadingChallenges || this.props.loadingProjects || this.props.loadingUsers}
       />
     )
