@@ -61,7 +61,6 @@ const WithExportCsv = function (WrappedComponent) {
       }
       function download(currentTab, props) {
         let json_pre
-        console.log(currentTab)
         if (currentTab === 'challenges') {
           json_pre = formatChallengeData(props)
         }

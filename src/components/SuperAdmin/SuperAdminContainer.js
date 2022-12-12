@@ -49,7 +49,6 @@ class SuperAdminContainer extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
   const adminChallenges = state.entities?.adminChallenges?.data.map(challenge =>
     denormalize(challenge, challengeSchema(), state.entities)
   )
