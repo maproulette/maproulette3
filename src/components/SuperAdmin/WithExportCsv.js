@@ -19,7 +19,7 @@ const WithExportCsv = function (WrappedComponent) {
             'TASKS REMAINING': item.tasksRemaining,
             '% COMPLETED TASKS': item.completionPercentage,
             'PROJECT': item.parent?.displayName,
-            'VISIBLE': item.enabled.toString(),
+            'DISCOVERABLE': item.enabled.toString(),
             'ARCHIVED': item.isArchived.toString(),
             'DATE CREATED': created ? `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}` : '',
             'DATA ORIGIN DATE': dataOriginDate ? `${dataOriginDate.getMonth() + 1}/${dataOriginDate.getDate()}/${dataOriginDate.getFullYear()}` : '',
@@ -43,7 +43,7 @@ const WithExportCsv = function (WrappedComponent) {
             'NAME': item.displayName,
             'OWNER': user ? user.osmProfile.displayName : '',
             '# OF CHALLENGES': numOfChallenges,
-            'VISIBLE': item.enabled.toString(),
+            'DISCOVERABLE': item.enabled.toString(),
             'ARCHIVED': item.isArchived.toString(),
             'VIRTUAL': item.isVirtual.toString(),
             'DATE CREATED': created ? `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}` : '',
@@ -62,7 +62,7 @@ const WithExportCsv = function (WrappedComponent) {
             'NAME': item.osmProfile.displayName,
             'SCORE': item.score,
             'DATE CREATED': created ? `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}` : '',
-            'DATE LAST MODIFIED': modified ? `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}` : '',
+            'DATE LAST ACTIVE': modified ? `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}` : '',
           };
         })
         return json_pre;
