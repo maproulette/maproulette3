@@ -58,6 +58,7 @@ export default class FilterSuggestTextBox extends Component {
         allowNew={true}
         fixedMenu
         openOnFocus
+        multiselect={this.props.multiselect}
       />
     )
   }

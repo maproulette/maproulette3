@@ -22,11 +22,11 @@ export default class External extends Component {
   el = document.createElement('div')
 
   componentDidMount() {
-    modalRoot.appendChild(this.el)
+    modalRoot?.appendChild(this.el)
   }
 
   componentWillUnmount() {
-    modalRoot.removeChild(this.el)
+    modalRoot?.removeChild(this.el)
   }
 
   render() {
