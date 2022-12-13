@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { create } from 'react-test-renderer'
 import AsManageableProject from '../../interactions/Project/AsManageableProject'
 const WithExportCsv = function (WrappedComponent) {
   return class extends Component {
