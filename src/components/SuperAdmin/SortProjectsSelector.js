@@ -11,7 +11,6 @@ import messages from './Messages'
 /**
  * SortProjectsSelector renders an unmanaged dropdown button that can be used
  * to modify the sort order of project results.
- *
  */
 export class SortProjectsSelector extends Component {
   makeSelection = (option, closeDropdownMenu) => {

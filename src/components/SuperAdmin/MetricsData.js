@@ -4,7 +4,6 @@ import AsManageableProject from '../../interactions/Project/AsManageableProject'
 
 const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`
 
-// Total Number of Tasks, Number of user engaged in task
 const setChallengeTab = (props) => {
   const users = props.users
   return [
@@ -27,7 +26,9 @@ const setChallengeTab = (props) => {
         }
 
         return null
-      }
+      },
+      maxWidth: 180,
+      sortable: true
     },
     {
       id: 'owner',
@@ -141,13 +142,18 @@ const setProjectTab = (props) => {
       maxWidth: 80,
       accessor: project => project.id
     },
-
     {
       id: 'name',
       Header: 'NAME',
-      accessor: project => {
-        return <a href={`/admin/project/${project.id}`} target='_blank' rel='noopener noreferrer'> {project.displayName} </a>
+      accessor: project => project.displayName,
+      Cell: props => {
+        if (props.value) {
+          return <a href={`/admin/project/${props.original.id}`} target='_blank' rel='noopener noreferrer'> {props.value} </a>
+        }
+        return null
       },
+      sortable: true,
+      maxWidth: 180,
     },
     {
       id: 'owner',
@@ -162,7 +168,7 @@ const setProjectTab = (props) => {
         }
         return null
       },
-      maxWidth: 100,
+      maxWidth: 200,
     },
     {
       id: 'numOfChallenge',
@@ -224,7 +230,6 @@ const setProjectTab = (props) => {
   ]
 }
 
-// number of challenges participated, total task completed, total days active
 const setUserTab = () => {
   return [
     {
@@ -238,7 +243,8 @@ const setUserTab = () => {
       Header: 'NAME',
       accessor: user => user.osmProfile.displayName,
       Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noopener noreferrer' > {cell.value} </a>,
-      maxWidth: 100,
+      sortable: true,
+      maxWidth: 180,
     },
     {
       id: 'score',

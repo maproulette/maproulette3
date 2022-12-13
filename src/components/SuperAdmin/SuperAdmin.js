@@ -20,7 +20,7 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
  *
  */
 export const SuperAdminPane = (props) => {
- console.log(props)
+console.log(props)
   useEffect(() => {
     if (props.location.search === '') {
       props.clearSearch()

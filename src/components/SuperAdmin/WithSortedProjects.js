@@ -13,7 +13,7 @@ export const sortProjects = function(props, projectsProp='projects') {
   const sortCriteria = _get(props, 'searchSort.sortBy')
   let sortedProjects = props[projectsProp]
   if (sortCriteria === SORT_NAME) {
-    sortedProjects = _sortBy(sortedProjects, (p) => _toLower(p.name))
+    sortedProjects = _sortBy(sortedProjects, (p) => _toLower(p.displayName))
   }
   else if (sortCriteria === SORT_CREATED) {
     sortedProjects = _reverse(_sortBy(sortedProjects,
@@ -49,8 +49,7 @@ export default function(WrappedComponent,
     }
   }
 
-  WithSortedProjects.propTypes = {
-    user: PropTypes.object,
+  WithSortedProjects.propTypes = {  
     projects: PropTypes.array,
   }
 

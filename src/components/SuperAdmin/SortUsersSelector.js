@@ -10,8 +10,7 @@ import messages from './Messages'
 
 /**
  * SortUsersSelector renders an unmanaged dropdown button that can be used
- * to modify the sort order of project results.
- *
+ * to modify the sort order of user results.
  */
 export class SortUsersSelector extends Component {
   makeSelection = (option, closeDropdownMenu) => {
