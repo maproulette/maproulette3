@@ -21,7 +21,8 @@ const WithMetricsFilter = function(WrappedComponent) {
       const toggleFilter = (filterName) => {
         entityFilters[filterName] = !entityFilters[filterName]
         let searchquery = `?`
-        searchquery += `tab=${tab}&`
+        searchquery += `tab=${tab}`
+        searchquery += `&searchType=${tab}`
         searchquery += tab !== 'users' && `&hideUndiscoverable=${entityFilters.visible}`
         searchquery += tab !== 'users' && `&hideArchived=${entityFilters.archived}`
         searchquery += tab === 'projects' && `&virtual=${entityFilters.virtual}`
