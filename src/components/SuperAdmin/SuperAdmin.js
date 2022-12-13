@@ -44,10 +44,10 @@ export const SuperAdminPane = (props) => {
         pathname: '/superadmin',
         search: searchQuery
       })
+      props.setSearchSort({ sortBy: 'default' })
     }
     setStartDate(fromDateTab)
     setEndDate(endDateTab)
-    props.setSearchSort({ sortBy: 'default' })
   }, [])
 
   //HOC
