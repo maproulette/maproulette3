@@ -39,11 +39,15 @@ export const SuperAdminPane = (props) => {
     if (props.location.search === '') {
       props.clearSearch()
       props.clearSearchFilters()
-      props.setSearchSort({ sortBy: 'default' })
+      const searchQuery = `?tab=challenges&searchType=challenges`
+      props.history.push({
+        pathname: '/superadmin',
+        search: searchQuery
+      })
     }
-
     setStartDate(fromDateTab)
     setEndDate(endDateTab)
+    props.setSearchSort({ sortBy: 'default' })
   }, [])
 
   //HOC
