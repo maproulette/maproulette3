@@ -254,7 +254,7 @@ export const fetchUser = function(userId) {
         return normalizedResults;
       })
       .catch((error) => {
-        dispatch(addError(AppErrors.project.fetchFailure));
+        dispatch(addError(AppErrors.user.fetchFailure));
         console.log(error.response || error);
       });
   };

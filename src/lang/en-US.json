@@ -1571,6 +1571,7 @@
   "Team.noTeams": "You are not a member of any teams",
   "TopUserChallenges.widget.label": "Your Top Challenges",
   "TopUserChallenges.widget.noChallenges": "No Challenges",
+  "User.sort.numOfChallenges": "Score",
   "UserEditorSelector.currentEditor.label": "Current Editor:",
   "UserProfile.favoriteChallenges.header": "Your Favorite Challenges",
   "UserProfile.savedTasks.header": "Tracked Tasks",

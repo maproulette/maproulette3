@@ -69,7 +69,7 @@ export const WithSearchResults = function(WrappedComponent, searchName,
       else{
         items = this.props[itemsProp]
       }
-      let searchResults = admin? this.props[searchType] : this.props[itemsProp]
+      let searchResults = admin ? this.props[searchType] : this.props[itemsProp]
       let searchActive = false
 
       if (_get(this.props.searchCriteria, 'filters.challengeId')) {
