@@ -20,7 +20,9 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
  *
  */
 export const SuperAdminPane = (props) => {
-console.log(props)
+  const [startDate, setStartDate] = useState(fromDateTab);
+  const [endDate, setEndDate] = useState(endDateTab);
+
   useEffect(() => {
     if (props.location.search === '') {
       props.clearSearch()
@@ -28,6 +30,7 @@ console.log(props)
       props.setSearchSort({ sortBy: 'default' })
     }
   }, [])
+
   const params = queryString.parse(props.location.search)
   const currentTab = params['tab'] ? params['tab'] : 'challenges'
 
@@ -54,8 +57,6 @@ console.log(props)
     );
   }
 
-  const [startDate, setStartDate] = useState(fromDateTab);
-  const [endDate, setEndDate] = useState(endDateTab);
   const formatDate = (date) => {
     const offset = date.getTimezoneOffset()
     date = new Date(date.getTime() - (offset * 60 * 1000))

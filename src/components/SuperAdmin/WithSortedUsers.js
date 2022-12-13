@@ -46,7 +46,7 @@ export default function(WrappedComponent,
   }
 
   WithSortedUsers.propTypes = {
-    users: PropTypes.object,
+    users: PropTypes.array,
   }
 
   return WithSortedUsers
