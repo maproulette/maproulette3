@@ -20,16 +20,8 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
  *
  */
 export const SuperAdminPane = (props) => {
-  const [startDate, setStartDate] = useState(fromDateTab);
-  const [endDate, setEndDate] = useState(endDateTab);
-
-  useEffect(() => {
-    if (props.location.search === '') {
-      props.clearSearch()
-      props.clearSearchFilters()
-      props.setSearchSort({ sortBy: 'default' })
-    }
-  }, [])
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const params = queryString.parse(props.location.search)
   const currentTab = params['tab'] ? params['tab'] : 'challenges'
@@ -42,6 +34,18 @@ export const SuperAdminPane = (props) => {
 
   const fromDateTab = params['from'] ? formatDateFromTab(new Date(params['from'])) : null
   const endDateTab = params['to'] ? formatDateFromTab(new Date(params['to'])) : null
+
+  useEffect(() => {
+    if (props.location.search === '') {
+      props.clearSearch()
+      props.clearSearchFilters()
+      props.setSearchSort({ sortBy: 'default' })
+    }
+
+    setStartDate(fromDateTab)
+    setEndDate(endDateTab)
+  }, [])
+
   //HOC
   const VisibleFilterToggle = internalFilterToggle('challenge', 'visible');
   const ArchivedFilterToggle = internalFilterToggle('challenge', 'archived');
