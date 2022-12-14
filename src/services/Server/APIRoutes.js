@@ -163,6 +163,7 @@ const apiRoutes = (factory) => {
       reviewerLeaderboard: factory.get("/data/reviewer/leaderboard"),
       find: factory.get("/users/find/:username"),
       findPreferred: factory.get("/users/find"),
+      all: factory.get("/users")
     },
     user: {
       whoami: factory.get("/user/whoami"),

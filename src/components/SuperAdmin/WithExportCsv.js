@@ -5,55 +5,77 @@ const WithExportCsv = function (WrappedComponent) {
     render() {
       function formatChallengeData(props) {
         let json_pre = props.challenges.map((item) => {
-          const created = new Date(item.created);
-          const modified = new Date(item.modified);
-          
+          const created = item.created ? new Date(item.created) : ''
+          const dataOriginDate = item.dataOriginDate ? new Date(item.dataOriginDate) : ''
+          const lastTaskRefresh = item.lastTaskRefresh ? new Date(item.lastTaskRefresh) : ''
+          const users = props.users
+          const user = users.find(user => user.osmProfile.id == item.owner)
+
           return {
             'ID': item.id,
             'NAME': item.name,
-            'OWNER': item.owner,
+            'OWNER': user ? user.osmProfile.displayName : '',
             'TASKS REMAINING': item.tasksRemaining,
             '% COMPLETED TASKS': item.completionPercentage,
-            'PROJECT': item.parent,
-            'VISIBLE': item.enabled.toString(),
+            'PROJECT': item.parent?.displayName,
+            'DISCOVERABLE': item.enabled.toString(),
             'ARCHIVED': item.isArchived.toString(),
-            'DATE CREATED': `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}`,
-            'DATE LAST MODIFIED': `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}`,
+            'DATE CREATED': created ? `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}` : '',
+            'DATA ORIGIN DATE': dataOriginDate ? `${dataOriginDate.getMonth() + 1}/${dataOriginDate.getDate()}/${dataOriginDate.getFullYear()}` : '',
+            'LAST TASK REFRESH': lastTaskRefresh ? `${lastTaskRefresh.getMonth() + 1}/${lastTaskRefresh.getDate()}/${lastTaskRefresh.getFullYear()}` : '',
           };
         })
-        console.log(json_pre)
         return json_pre;
       }
 
-    function formatProjectData(props) {
+      function formatProjectData(props) {
         let json_pre = props.projects.map((item) => {
-          const created = new Date(item.created);
-          const modified = new Date(item.modified);
-          const projectManage= AsManageableProject(item)
+          const created = item.created ? new Date(item.created) : ''
+          const modified = item.modified ? new Date(item.modified) : ''
+          const projectManage = AsManageableProject(item)
           const numOfChallenges = projectManage.childChallenges(props.challenges).length
+          const users = props.users
+          const user = users.find(user => user.osmProfile.id == item.owner)
+
           return {
             'ID': item.id,
-            'NAME': item.name,
-            'OWNER': item.owner,
+            'NAME': item.displayName,
+            'OWNER': user ? user.osmProfile.displayName : '',
             '# OF CHALLENGES': numOfChallenges,
-            'VISIBLE': item.enabled.toString(),
+            'DISCOVERABLE': item.enabled.toString(),
             'ARCHIVED': item.isArchived.toString(),
             'VIRTUAL': item.isVirtual.toString(),
-            'DATE CREATED': `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}`,
-            'DATE LAST MODIFIED': `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}`,
+            'DATE CREATED': created ? `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}` : '',
+            'DATE LAST MODIFIED': modified ? `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}` : '',
           };
         })
         return json_pre;
       }
 
+      function formatUserData(props) {
+        let json_pre = props.users.map((item) => {
+          const created = item.created ? new Date(item.created) : ''
+          const modified = item.modified ? new Date(item.modified) : ''
+          return {
+            'ID': item.id,
+            'NAME': item.osmProfile.displayName,
+            'SCORE': item.score,
+            'DATE CREATED': created ? `${created.getMonth() + 1}/${created.getDate()}/${created.getFullYear()}` : '',
+            'DATE LAST ACTIVE': modified ? `${modified.getMonth() + 1}/${modified.getDate()}/${modified.getFullYear()}` : '',
+          };
+        })
+        return json_pre;
+      }
       function download(currentTab, props) {
         let json_pre
-        console.log(currentTab)
-        if(currentTab === 'challenges'){
+        if (currentTab === 'challenges') {
           json_pre = formatChallengeData(props)
         }
-        else if(currentTab === 'projects'){
+        else if (currentTab === 'projects') {
           json_pre = formatProjectData(props)
+        }
+        else {
+          json_pre = formatUserData(props)
         }
         const csv = jsonToCsv(json_pre);
         let downloadLink = document.createElement('a');
