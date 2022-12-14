@@ -4,8 +4,8 @@ import AsManageableProject from '../../interactions/Project/AsManageableProject'
 
 const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`
 
-// Total Number of Tasks, Number of user engaged in task
-const setChallengeTab = () => {
+const setChallengeTab = (props) => {
+  const users = props.users
   return [
     {
       id: 'id',
@@ -20,18 +20,29 @@ const setChallengeTab = () => {
       Cell: props => {
         if (props.value) {
           return (
-            <a href={`/admin/project/${props.original.parent}` +
-            `/challenge/${props.original.id}`}> {props.value} </a>
+            <a href={`/admin/project/${props.original?.parent?.id}` +
+            `/challenge/${props.original.id}`} target='_blank' rel='noopener noreferrer'> {props.value} </a>
           )
         }
 
         return null
-      }
+      },
+      maxWidth: 180,
+      sortable: true
     },
     {
       id: 'owner',
       Header: 'OWNER',
-      accessor: challenge => challenge.owner,
+      accessor: challenge => {
+        const user = users.find(user => user.osmProfile.id == challenge.owner)
+        return user ? user.osmProfile.displayName : ''
+      },
+      Cell: props => {
+        if (props.value) {
+          return <a href={OSM_USER_LINK + props.value} target='_blank' rel='noopener noreferrer' > {props.value} </a>
+        }
+        return null
+      },
       maxWidth: 100,
     },
     {
@@ -53,24 +64,23 @@ const setChallengeTab = () => {
     {
       id: 'project',
       Header: 'PROJECT',
-      accessor: challenge => challenge.parent,
+      accessor: challenge => challenge.parent?.displayName,
       maxWidth: 120,
       sortable: true,
       Cell: props => {
         if (props.value) {
           return (
-            <a href={`/admin/project/${props.value}`}> {props.value} </a>
+            <a href={`/admin/project/${props.original?.parent?.id}` } target='_blank' rel='noopener noreferrer'> {props.value} </a>
           )
         }
-
         return null
       }
     },
     {
-      id: 'visible',
-      Header: 'VISIBLE',
+      id: 'discoverable',
+      Header: 'DISCOVERABLE',
       accessor: challenge => challenge.enabled.toString(),
-      maxWidth: 120,
+      maxWidth: 150,
     },
     {
       id: 'archived',
@@ -122,7 +132,9 @@ const setChallengeTab = () => {
   ]
 }
 
-const setProjectTab = (challenges) => {
+const setProjectTab = (props) => {
+  const challenges = props.challenges
+  const users = props.users
   return [
     {
       id: 'id',
@@ -130,19 +142,33 @@ const setProjectTab = (challenges) => {
       maxWidth: 80,
       accessor: project => project.id
     },
-
     {
       id: 'name',
       Header: 'NAME',
-      accessor: project => {
-        return <a href={`/admin/project/${project.id}`}> {project.displayName} </a>
+      accessor: project => project.displayName,
+      Cell: props => {
+        if (props.value) {
+          return <a href={`/admin/project/${props.original.id}`} target='_blank' rel='noopener noreferrer'> {props.value} </a>
+        }
+        return null
       },
+      sortable: true,
+      maxWidth: 180,
     },
     {
       id: 'owner',
       Header: 'OWNER',
-      accessor: project => project.owner,
-      maxWidth: 100,
+      accessor: project => {
+        const user = users.find(user => user.osmProfile.id == project.owner)
+        return user ? user.osmProfile.displayName : ''
+      },
+      Cell: props => {
+        if (props.value) {
+          return <a href={OSM_USER_LINK + props.value} target='_blank' rel='noopener noreferrer' > {props.value} </a>
+        }
+        return null
+      },
+      maxWidth: 200,
     },
     {
       id: 'numOfChallenge',
@@ -154,10 +180,10 @@ const setProjectTab = (challenges) => {
       maxWidth: 150,
     },
     {
-      id: 'visible',
-      Header: 'VISIBLE',
+      id: 'discoverable',
+      Header: 'DISCOVERABLE',
       accessor: project => project.enabled.toString(),
-      maxWidth: 120,
+      maxWidth: 150,
     },
     {
       id: 'archived',
@@ -175,24 +201,35 @@ const setProjectTab = (challenges) => {
       id: 'dateCreated',
       Header: 'DATE CREATED',
       accessor: project => {
-        return <FormattedDate value={project.created} />
+        return project.created
       },
       maxWidth: 150,
-      sortable: false
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     },
     {
       id: 'dateLastModified',
       Header: 'DATE LAST MODIFIED',
       accessor: project => {
-        return <FormattedDate value={project.modified} />
+        return project.modified
       },
-      maxWidth: 180,
-      sortable: false
+      maxWidth: 150,
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     }
   ]
 }
 
-// number of challenges participated, total task completed, total days active
 const setUserTab = () => {
   return [
     {
@@ -205,8 +242,9 @@ const setUserTab = () => {
       id: 'name',
       Header: 'NAME',
       accessor: user => user.osmProfile.displayName,
-      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noreferrer' > {cell.value} </a>,
-      maxWidth: 100,
+      Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noopener noreferrer' > {cell.value} </a>,
+      sortable: true,
+      maxWidth: 180,
     },
     {
       id: 'score',
@@ -218,17 +256,31 @@ const setUserTab = () => {
       id: 'dateCreated',
       Header: 'DATE CREATED',
       accessor: user => {
-        return <FormattedDate {...user.created} />
+        return user.created
       },
       maxWidth: 150,
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     },
     {
       id: 'lastActive',
       Header: 'DATE LAST ACTIVE',
       accessor: user => {
-        return <FormattedDate {...user.modified} />
+        return user.modified
       },
-      maxWidth: 180,
+      maxWidth: 150,
+      sortable: true,
+      Cell: props => (
+        !props.value ? null :
+          <span>
+            <FormattedDate value={props.value} />
+          </span>
+      )
     }
   ]
 }
