@@ -11,7 +11,6 @@ import _omit from 'lodash/omit'
 import _map from 'lodash/map'
 import WithSearch from '../WithSearch/WithSearch'
 import { parseQueryString } from '../../../services/Search/Search'
-import queryString from 'query-string'
 
 // Local fuzzy search configuration. See fusejs.io for details.
 const fuzzySearchOptions = {
@@ -58,18 +57,9 @@ export const WithSearchResults = function(WrappedComponent, searchName,
     }
 
     render() {
-      const admin = this.props.location?.pathname === '/superadmin'
       const query = _get(this.props, `searchCriteria.query`, '')
-      let items, searchType
-      if(admin){
-        const params = queryString.parse(this.props.location.search)
-        searchType = params['searchType'] || 'challenges'
-        items = this.props[searchType]
-      }
-      else{
-        items = this.props[itemsProp]
-      }
-      let searchResults = admin ? this.props[searchType] : this.props[itemsProp]
+      let items = this.props[itemsProp]
+      let searchResults = this.props[itemsProp]
       let searchActive = false
 
       if (_get(this.props.searchCriteria, 'filters.challengeId')) {
@@ -82,14 +72,6 @@ export const WithSearchResults = function(WrappedComponent, searchName,
         const projectFilter = _get(this.props.searchCriteria, 'filters.project', '').toLowerCase()
         searchResults = _filter(items,
           (item) => _get(item, 'parent.displayName', '').toLowerCase().indexOf(projectFilter) !== -1)
-      }
-      else if (admin && searchType === 'projects' && query){
-         searchResults = _filter(items,
-          (item) => _get(item, 'displayName', '').toLowerCase().indexOf(query) !== -1)
-      }
-      else if (admin && searchType === 'users' && query){
-         searchResults = _filter(items,
-          (item) => _get(item, 'osmProfile.displayName', '').toLowerCase().indexOf(query) !== -1 )
       }
       else if (_isString(query) && query.length > 0 &&
           _isArray(items) && items.length > 0) {
@@ -112,12 +94,11 @@ export const WithSearchResults = function(WrappedComponent, searchName,
           searchResults = items
         }
       }
-     
+
       if (_isEmpty(outputProp)) {
-        outputProp = itemsProp 
+        outputProp = itemsProp
       }
-      outputProp = admin? searchType : outputProp
-      searchName = admin? searchType : searchName
+
       return <WrappedComponent {...{
                                  [outputProp]: searchResults,
                                  [`${searchName}SearchActive`]: searchActive,

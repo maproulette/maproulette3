@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { SuperAdminPane } from './SuperAdmin'
 import { fetchAdminChallenges } from '../../services/SuperAdmin/SuperAdminChallenges'
 import { fetchAdminProjects } from '../../services/SuperAdmin/SuperAdminProjects'
-import { fetchAdminUsers } from '../../services/SuperAdmin/SuperAdminUsers'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import { withRouter } from 'react-router'
 import WithMetricsSearch from './WithMetricsSearch'
@@ -11,8 +10,6 @@ import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredC
 import WithMetricsFilter from './WithMetricsFilter'
 import WithExportCsv from './WithExportCsv'
 import { injectIntl } from 'react-intl'
-import { denormalize } from 'normalizr'
-import { challengeSchema } from '../../services/Challenge/Challenge'
 
 const WrappedSuperAdminPane = 
   WithCurrentUser(
@@ -33,33 +30,21 @@ class SuperAdminContainer extends Component {
     const searchQuery = {onlyEnabled: false}
     this.props.fetchAdminChallenges(searchQuery)
     this.props.fetchAdminProjects()
-    this.props.fetchAdminUsers()
   }
 
   render() {
     return(
-      <WrappedSuperAdminPane
-        challenges={this.props.adminChallenges}
-        projects={this.props.adminProjects}
-        users={this.props.adminUsers}
-        isloadingCompleted={this.props.loadingChallenges || this.props.loadingProjects || this.props.loadingUsers}
-      />
+      <WrappedSuperAdminPane challenges={this.props.adminChallenges} projects={this.props.adminProjects} isloadingCompleted={this.props.loadingChallenges || this.props.loadingProjects} />
     )
   }
 }
 
 const mapStateToProps = state => {
-  const adminChallenges = state.entities?.adminChallenges?.data.map(challenge =>
-    denormalize(challenge, challengeSchema(), state.entities)
-  )
-
   return {
-    adminChallenges: adminChallenges || [],
+    adminChallenges: state.entities?.adminChallenges?.data || [],
     adminProjects: state.entities?.adminProjects?.data || [],
-    adminUsers: state.entities?.adminUsers?.data || [],
     loadingChallenges: state.entities?.adminChallenges?.loading,
-    loadingProjects: state.entities?.adminProjects?.loading,
-    loadingUsers: state.entities?.adminUsers?.loading
+    loadingProjects: state.entities?.adminProjects?.loading
   }
 }
 const mapDispatchToProps = dispatch => ({
@@ -68,9 +53,6 @@ const mapDispatchToProps = dispatch => ({
   },
   fetchAdminProjects: () => {
     dispatch(fetchAdminProjects())
-  },
-  fetchAdminUsers: () => {
-    dispatch(fetchAdminUsers())
   }
 })
 
