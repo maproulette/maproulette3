@@ -60,7 +60,6 @@ export default class Navbar extends Component {
   }
 
   render() {
-    const isSuperUser = AsManager(this.props.user).isSuperUser();
     return (
       <header className="mr-relative mr-bg-gradient-r-green-blue mr-shadow mr-p-6 mr-flex mr-items-center mr-justify-between">
         <nav className="mr-flex mr-items-center">
@@ -153,7 +152,6 @@ export default class Navbar extends Component {
               {...this.props}
               signout={this.signout}
               closeMobileMenu={this.closeMobileMenu}
-              isSuperUser={isSuperUser}
             />
           </MobileMenu>
 
@@ -362,15 +360,6 @@ const MobileNav = props => (
             <FormattedMessage {...messages.metrics} />
           </NavLink>
         </li>
-        {
-          props.isSuperUser
-            ? <li>
-                <NavLink to="/superadmin" onClick={props.closeMobileMenu}>
-                  <FormattedMessage {...messages.superAdmin} />
-                </NavLink>
-              </li>
-            : null
-        }
         <li>
           <NavLink to="/user/achievements" onClick={props.closeMobileMenu}>
             <FormattedMessage {...messages.achievements} />
