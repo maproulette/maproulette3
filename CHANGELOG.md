@@ -13,17 +13,20 @@ This project adheres to
 - Super Admin Metrics - Projects and Users
 - add priority rules to bulk edit
 - create users findAll service for superusers (API)
+- Add ability to multiselect challenges in review table
+- add changesetUrl to tag fix flow
 
 ### Fixes
 - encode comments to allow special characters
 - add % sign in Challenge Completion Widget tooltip
 - disable OSM file download/upload
-- markRead and delete endpoints now work on mass notification selections
 - prevent duplicate notifications in task bundles (API)
+- conditionalize config in SortedChallenges
 
 ### System Updates
 - add mastodon link to readme
 - Bump decode-uri-component from 0.2.0 to 0.2.2
+- Bump express from 4.17.1 to 4.18.2
 
 ## [v3.11.2] - 2022-11-22
 
