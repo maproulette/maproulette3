@@ -27,6 +27,7 @@ This project adheres to
 - add mastodon link to readme
 - Bump decode-uri-component from 0.2.0 to 0.2.2
 - Bump express from 4.17.1 to 4.18.2
+- Update docs to show how to import the project (API)
 
 ## [v3.11.2] - 2022-11-22
 
