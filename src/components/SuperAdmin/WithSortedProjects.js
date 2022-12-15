@@ -6,8 +6,7 @@ import _reverse from 'lodash/reverse'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
 import _toLower from 'lodash/toLower'
-import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_NUM_OF_CHALLENGES } from '../../services/Search/Search';
-import AsManageableProject from '../../interactions/Project/AsManageableProject';
+import { SORT_NAME, SORT_CREATED, SORT_OLDEST } from '../../services/Search/Search';
 
 export const sortProjects = function(props, projectsProp='projects') {
   const sortCriteria = _get(props, 'searchSort.sortBy')
@@ -22,13 +21,6 @@ export const sortProjects = function(props, projectsProp='projects') {
   else if (sortCriteria === SORT_OLDEST) {
     sortedProjects = (_sortBy(sortedProjects, 
       p => p.created ? p.created : ''))
-  }
-  else if (sortCriteria === SORT_NUM_OF_CHALLENGES) {
-     sortedProjects = (_sortBy(sortedProjects, 
-      p => {
-        const projectManage= AsManageableProject(p)
-        return(projectManage.childChallenges(props.challenges).length)
-      }))
   }
   return sortedProjects
 }

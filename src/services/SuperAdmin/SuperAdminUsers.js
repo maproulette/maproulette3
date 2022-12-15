@@ -9,7 +9,7 @@ export const receiveAdminUsers = function (
   dispatch({
     type: SET_ADMIN_USERS,
     payload: [],
-    loading: false
+    loadingCompleted: false
   })
 
   const results = Object.keys(normalizedEntities.users).map(i => normalizedEntities.users[i]);
@@ -17,7 +17,7 @@ export const receiveAdminUsers = function (
   return {
     type: SET_ADMIN_USERS,
     payload: results || [],
-    loading: true
+    loadingCompleted: true
   };
 };
 
@@ -33,13 +33,13 @@ export const fetchAdminUsers = function() {
 
 const ADMIN_USERS_INITIAL_STATE = {
   data: [],
-  loading: false
+  loadingCompleted: false
 }
 
 export const adminUserEntities = function(state = ADMIN_USERS_INITIAL_STATE, action) {
   switch (action.type) {
     case SET_ADMIN_USERS:
-      return { data: action.payload, loading: action.loading };
+      return { data: action.payload, loadingCompleted: action.loadingCompleted };
     default:
       return state;
   }

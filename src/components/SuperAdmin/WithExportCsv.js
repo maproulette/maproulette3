@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import AsManageableProject from '../../interactions/Project/AsManageableProject'
 const WithExportCsv = function (WrappedComponent) {
   return class extends Component {
     render() {
@@ -8,13 +7,11 @@ const WithExportCsv = function (WrappedComponent) {
           const created = item.created ? new Date(item.created) : ''
           const dataOriginDate = item.dataOriginDate ? new Date(item.dataOriginDate) : ''
           const lastTaskRefresh = item.lastTaskRefresh ? new Date(item.lastTaskRefresh) : ''
-          const users = props.users
-          const user = users.find(user => user.osmProfile.id == item.owner)
 
           return {
             'ID': item.id,
             'NAME': item.name,
-            'OWNER': user ? user.osmProfile.displayName : '',
+            'OWNER': item.owner,
             'TASKS REMAINING': item.tasksRemaining,
             '% COMPLETED TASKS': item.completionPercentage,
             'PROJECT': item.parent?.displayName,
@@ -32,16 +29,11 @@ const WithExportCsv = function (WrappedComponent) {
         let json_pre = props.projects.map((item) => {
           const created = item.created ? new Date(item.created) : ''
           const modified = item.modified ? new Date(item.modified) : ''
-          const projectManage = AsManageableProject(item)
-          const numOfChallenges = projectManage.childChallenges(props.challenges).length
-          const users = props.users
-          const user = users.find(user => user.osmProfile.id == item.owner)
-
+        
           return {
             'ID': item.id,
             'NAME': item.displayName,
-            'OWNER': user ? user.osmProfile.displayName : '',
-            '# OF CHALLENGES': numOfChallenges,
+            'OWNER': item.owner,
             'DISCOVERABLE': item.enabled.toString(),
             'ARCHIVED': item.isArchived.toString(),
             'VIRTUAL': item.isVirtual.toString(),

@@ -42,7 +42,7 @@ class SuperAdminContainer extends Component {
         challenges={this.props.adminChallenges}
         projects={this.props.adminProjects}
         users={this.props.adminUsers}
-        isloadingCompleted={this.props.loadingChallenges || this.props.loadingProjects || this.props.loadingUsers}
+        isloadingCompleted={this.props.loadingChallenges && this.props.loadingProjects && this.props.loadingUsers}
       />
     )
   }
@@ -57,9 +57,9 @@ const mapStateToProps = state => {
     adminChallenges: adminChallenges || [],
     adminProjects: state.entities?.adminProjects?.data || [],
     adminUsers: state.entities?.adminUsers?.data || [],
-    loadingChallenges: state.entities?.adminChallenges?.loading,
-    loadingProjects: state.entities?.adminProjects?.loading,
-    loadingUsers: state.entities?.adminUsers?.loading
+    loadingChallenges: state.entities?.adminChallenges?.loadingCompleted,
+    loadingProjects: state.entities?.adminProjects?.loadingCompleted,
+    loadingUsers: state.entities?.adminUsers?.loadingCompleted
   }
 }
 const mapDispatchToProps = dispatch => ({

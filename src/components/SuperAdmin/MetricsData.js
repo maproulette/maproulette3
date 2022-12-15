@@ -1,11 +1,9 @@
 import React from 'react'
 import { FormattedDate } from 'react-intl'
-import AsManageableProject from '../../interactions/Project/AsManageableProject'
 
 const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`
 
-const setChallengeTab = (props) => {
-  const users = props.users
+const setChallengeTab = () => {
   return [
     {
       id: 'id',
@@ -33,17 +31,7 @@ const setChallengeTab = (props) => {
     {
       id: 'owner',
       Header: 'OWNER',
-      accessor: challenge => {
-        const user = users.find(user => user.osmProfile.id == challenge.owner)
-        return user ? user.osmProfile.displayName : ''
-      },
-      Cell: props => {
-        if (props.value) {
-          return <a href={OSM_USER_LINK + props.value} target='_blank' rel='noopener noreferrer' > {props.value} </a>
-        }
-        return null
-      },
-      maxWidth: 100,
+      accessor: challenge => challenge.owner,
     },
     {
       id: 'numOfTasks',
@@ -132,9 +120,7 @@ const setChallengeTab = (props) => {
   ]
 }
 
-const setProjectTab = (props) => {
-  const challenges = props.challenges
-  const users = props.users
+const setProjectTab = () => {
   return [
     {
       id: 'id',
@@ -158,26 +144,8 @@ const setProjectTab = (props) => {
     {
       id: 'owner',
       Header: 'OWNER',
-      accessor: project => {
-        const user = users.find(user => user.osmProfile.id == project.owner)
-        return user ? user.osmProfile.displayName : ''
-      },
-      Cell: props => {
-        if (props.value) {
-          return <a href={OSM_USER_LINK + props.value} target='_blank' rel='noopener noreferrer' > {props.value} </a>
-        }
-        return null
-      },
-      maxWidth: 200,
-    },
-    {
-      id: 'numOfChallenge',
-      Header: '# OF CHALLENGES',
-      accessor: project => {
-        const projectManage= AsManageableProject(project)
-        return(projectManage.childChallenges(challenges).length)
-      },
-      maxWidth: 150,
+      accessor: project => project.owner,
+      maxWidth: 120,
     },
     {
       id: 'discoverable',
@@ -241,7 +209,7 @@ const setUserTab = () => {
     {
       id: 'name',
       Header: 'NAME',
-      accessor: user => user.osmProfile.displayName,
+      accessor: user => user.displayName,
       Cell: cell => <a href={OSM_USER_LINK + cell.value} target='_blank' rel='noopener noreferrer' > {cell.value} </a>,
       sortable: true,
       maxWidth: 180,
