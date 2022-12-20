@@ -32,17 +32,6 @@ export const jsSchema = (
     },
   }
 
-  if (process.env.REACT_APP_CHANGESET_URL === "enabled") {
-    properties.changesetUrl = {
-      type: "boolean",
-      default: true,
-      enumNames: [
-        intl.formatMessage(messages.yesLabel),
-        intl.formatMessage(messages.noLabel),
-      ],
-    }
-  }
-
   const schemaFields = {
     $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -93,15 +82,11 @@ export const uiSchema = (
       ? () => options.toggleCollapsed(STEP_ID)
       : undefined;
 
-  const changesetUrl =
-    process.env.REACT_APP_CHANGESET_URL === "enabled" ? "changesetUrl" : null;
-
   const uiSchemaFields = {
     "ui:order": [
       "checkinComment",
       "includeCheckinHashtag",
       "checkinSource",
-      changesetUrl,
     ],
     checkinComment: {
       "ui:emptyValue": "",
@@ -120,13 +105,7 @@ export const uiSchema = (
       "ui:field": "columnRadio",
       "ui:help": intl.formatMessage(messages.includeCheckinHashtagDescription),
       "ui:collapsed": isCollapsed,
-    },
-    changesetUrl: {
-      "ui:title": intl.formatMessage(messages.changesetUrlTitle),
-      "ui:widget": "radio",
-      "ui:help": intl.formatMessage(messages.changesetUrlDescription),
-      "ui:collapsed": isCollapsed,
-    },
+    }
   };
 
   return uiSchemaFields;

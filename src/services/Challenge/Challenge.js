@@ -927,12 +927,6 @@ export const saveChallenge = function (
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData);
 
-    if (process.env.REACT_APP_CHANGESET_URL === "enabled") {
-      if (challengeData.changesetUrl === undefined) {
-        challengeData.changesetUrl = true;
-      }
-    }
-
     if (_isArray(challengeData.tags)) {
       challengeData.tags = challengeData.tags.map(t => t.trim()).join(",");
     } else if (challengeData.tags) {
@@ -972,7 +966,6 @@ export const saveChallenge = function (
         [
           "blurb",
           "challengeType",
-          "changesetUrl",
           "checkinComment",
           "checkinSource",
           "customBasemap",
