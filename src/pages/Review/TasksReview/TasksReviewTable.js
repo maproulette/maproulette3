@@ -91,9 +91,6 @@ export class TaskReviewTable extends Component {
     const filters = {}
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
 
-    const partialChallengeSearch = _get(this.props.reviewCriteria, 'filters.challengeId') === filters.challengeId &&
-      _get(this.props.reviewCriteria, 'filters.challenge') !== filters.challenge
-
     // Determine if we can search by challenge Id or do name search
     if (filters.challenge) {
       if (_isObject(filters.challenge)) {
