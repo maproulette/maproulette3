@@ -13,6 +13,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _keys from 'lodash/keys'
 import _omit from 'lodash/omit'
 import _pull from 'lodash/pull'
+import _isEqual from 'lodash/isEqual'
 import _isObject from 'lodash/isObject'
 import _pick from 'lodash/pick'
 import _isUndefined from 'lodash/isUndefined'
@@ -54,6 +55,9 @@ export const getChallengeFilterIds = (search) => {
 
   for (let pair of searchParams.entries()) {
     if (pair[0] === "filters.challengeId" && pair[1]) {
+      if (pair[1] === '0') {
+        return [FILTER_SEARCH_ALL]
+      }
       return pair[1].split(',').map(n => Number(n))
     }
   }
@@ -93,23 +97,14 @@ export class TaskReviewTable extends Component {
     // Determine if we can search by challenge Id or do name search
     if (filters.challenge) {
       if (_isObject(filters.challenge)) {
-        if (filters.challenge.id === FILTER_SEARCH_ALL) {
+        if (!this.state.challengeFilterIds.includes(FILTER_SEARCH_TEXT) && !this.state.challengeFilterIds.includes(FILTER_SEARCH_ALL)) {
+          filters.challengeId = this.state.challengeFilterIds
+          filters.challenge = null
+        } else if (filters.challenge.id === FILTER_SEARCH_ALL) {
           // Search all
           filters.challengeId = null
           filters.challenge = null
           filters.challengeName = null
-        }
-        else {
-          if (filters.challenge.id > 0) {
-            filters.challengeId = filters.challenge.id
-          }
-          else if (partialChallengeSearch) {
-            // We must be doing a partial search and can't search by id. Our
-            // prior id is invalid.
-            filters.challengeId = null
-          }
-
-          filters.challenge = filters.challenge.name
         }
       }
     }
@@ -140,16 +135,7 @@ export class TaskReviewTable extends Component {
         }
       }
     }
-
-    if (!partialChallengeSearch) {
-      if (!this.state.challengeFilterIds.includes(FILTER_SEARCH_TEXT) && !this.state.challengeFilterIds.includes(FILTER_SEARCH_ALL)) {
-        filters.challengeId = this.state.challengeFilterIds
-      } else {
-        filters.challengeId = null
-        filters.challenge = null
-      }
-    }
-
+    
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered"])})
       this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
@@ -206,6 +192,10 @@ export class TaskReviewTable extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
       this.setupConfigurableColumns(this.props.reviewTasksType)
+    }
+
+    if (!_isEqual(getChallengeFilterIds(this.props.location.search), this.state.challengeFilterIds)) {
+      setTimeout(() => this.setState({ challengeFilterIds: getChallengeFilterIds(this.props.location.search) }), 100)
     }
 
     // If we've added the "tag" column, we need to update the table to fetch
