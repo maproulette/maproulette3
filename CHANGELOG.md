@@ -7,6 +7,13 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.4] - 2022-12-22
+
+### Fixes
+- move notificationIds to json in services
+- check for logged in user if getting activity data
+- Challenge multi filter revisions
+
 ## [v3.11.3] - 2022-12-13
 
 ### Features
