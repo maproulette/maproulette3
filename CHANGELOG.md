@@ -13,6 +13,7 @@ This project adheres to
 - move notificationIds to json in services
 - check for logged in user if getting activity data
 - Challenge multi filter revisions
+- Super admin metrics - Projects/Users - performance
 
 ## [v3.11.3] - 2022-12-13
 
