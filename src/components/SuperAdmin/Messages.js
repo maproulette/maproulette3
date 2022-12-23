@@ -7,9 +7,9 @@ export default defineMessages({
     id: 'Metrics.header',
     defaultMessage: 'Metrics',
   },
-  visible: {
+  discoverable: {
     id: 'Metrics.discoverable',
-    defaultMessage: 'Visible',
+    defaultMessage: 'Discoverable',
   },
   archived: {
     id: 'Metrics.archived',
@@ -19,24 +19,36 @@ export default defineMessages({
     id: 'Metrics.virtual',
     defaultMessage: 'Virtual',
   },
-  download: {
-    id: 'Metrics.download',
-    defaultMessage: 'download',
+  hideUndiscoverable: {
+    id: 'Metrics.hideUndiscoverable',
+    defaultMessage: 'Hide Undiscoverable'
+  },
+  hideArchived: {
+    id: 'Metrics.hideArchived',
+    defaultMessage: 'Hide Archived'
   },
   download: {
     id: 'Metrics.download',
     defaultMessage: 'download',
+  },
+  clear: {
+    id: 'Metrics.clear',
+    defaultMessage: 'clear'
   },
   challengeLabel: {
-    id: 'Metrics.challenge',
-    defaultMessage: 'Challenge',
+    id: 'Metrics.challenges',
+    defaultMessage: 'Challenges',
   },
   projectLabel: {
-    id: 'Metrics.project',
-    defaultMessage: 'Project',
+    id: 'Metrics.projects',
+    defaultMessage: 'Projects',
   },
   userLabel: {
-    id: 'Metrics.user',
-    defaultMessage: 'User',
+    id: 'Metrics.users',
+    defaultMessage: 'Users',
+  },
+  sortByLabel: {
+    id: 'Metrics.sortBy',
+    defaultMessage: 'Sort By'
   }
 })

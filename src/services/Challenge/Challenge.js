@@ -1431,13 +1431,13 @@ export const challengeEntities = function (state, action) {
 
 const ADMIN_CHALLENGES_INITIAL_STATE = {
   data: [],
-  loading: false
+  loadingCompleted: false
 }
 
 export const adminChallengeEntities = function(state = ADMIN_CHALLENGES_INITIAL_STATE, action) {
   switch (action.type) {
     case SET_ADMIN_CHALLENGES:
-      return { data: action.payload, loading: action.loading };
+      return { data: action.payload, loadingCompleted: action.loadingCompleted };
     default:
       return state;
   }

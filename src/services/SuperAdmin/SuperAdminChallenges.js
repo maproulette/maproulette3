@@ -8,7 +8,7 @@ export const receiveAdminChallenges = function (
   dispatch({
     type: SET_ADMIN_CHALLENGES,
     payload: [],
-    loading: false
+    loadingCompleted: false
   })
 
   const results = Object.keys(normalizedEntities.challenges).map(i => normalizedEntities.challenges[i]);
@@ -16,7 +16,7 @@ export const receiveAdminChallenges = function (
   return {
     type: SET_ADMIN_CHALLENGES,
     payload: results || [],
-    loading: true
+    loadingCompleted: true
   };
 };
 
