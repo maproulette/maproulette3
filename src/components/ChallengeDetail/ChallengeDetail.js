@@ -294,9 +294,9 @@ export class ChallengeDetail extends Component {
                                       manageControl,
                                   }
                                 )}
-                                to={`/review?challengeId=${
+                                to={`/review?filters.challengeId=${
                                   challenge.id
-                                }&challengeName=${encodeURIComponent(
+                                }&filters.challengeName=${encodeURIComponent(
                                   challenge.name
                                 )}`}
                               >
