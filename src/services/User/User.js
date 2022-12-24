@@ -241,26 +241,6 @@ export const fetchUser = function(userId) {
 }
 
 /**
- * Fetch data on all users (up to the given limit).
- */
- export const fetchUsers = function (limit = 50) {
-  return function (dispatch) {
-    return new Endpoint(api.users.all, {
-      schema: [userSchema()],
-      params: { limit },
-    })
-      .execute()
-      .then((normalizedResults) => {
-        return normalizedResults;
-      })
-      .catch((error) => {
-        dispatch(addError(AppErrors.user.fetchFailure));
-        console.log(error.response || error);
-      });
-  };
-};
-
-/**
  * Fetch the public user data for the given user.
  *
  * @param userId - Can be either a userId, osmUserId, or username
