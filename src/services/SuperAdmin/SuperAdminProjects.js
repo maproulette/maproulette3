@@ -9,7 +9,7 @@ export const receiveAdminProjects = function (
   dispatch({
     type: SET_ADMIN_PROJECTS,
     payload: [],
-    loadingCompleted: false
+    loading: false
   })
 
   const results = Object.keys(normalizedEntities.projects).map(i => normalizedEntities.projects[i]);
@@ -17,7 +17,7 @@ export const receiveAdminProjects = function (
   return {
     type: SET_ADMIN_PROJECTS,
     payload: results || [],
-    loadingCompleted: true
+    loading: true
   };
 };
 
@@ -33,13 +33,13 @@ export const fetchAdminProjects = function() {
 
 const ADMIN_PROJECTS_INITIAL_STATE = {
   data: [],
-  loadingCompleted: false
+  loading: false
 }
 
 export const adminProjectEntities = function(state = ADMIN_PROJECTS_INITIAL_STATE, action) {
   switch (action.type) {
     case SET_ADMIN_PROJECTS:
-      return { data: action.payload, loadingCompleted: action.loadingCompleted };
+      return { data: action.payload, loading: action.loading };
     default:
       return state;
   }
