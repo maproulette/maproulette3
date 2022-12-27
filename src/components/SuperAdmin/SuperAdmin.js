@@ -51,9 +51,9 @@ export const SuperAdminPane = (props) => {
   }, [])
 
   //HOC
-  const VisibleFilterToggle = internalFilterToggle('challenge', 'visible');
-  const ArchivedFilterToggle = internalFilterToggle('challenge', 'archived');
-  const VirtualProjectFilterToggle = internalFilterToggle('project', 'virtual');
+  const VisibleFilterToggle = internalFilterToggle('visible');
+  const ArchivedFilterToggle = internalFilterToggle('archived');
+  const VirtualProjectFilterToggle = internalFilterToggle('virtual');
   const manager = AsManager(props.user);
   if (!manager.isLoggedIn()) {
     return props.checkingLoginStatus ? (

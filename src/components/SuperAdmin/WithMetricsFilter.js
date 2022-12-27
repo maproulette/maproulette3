@@ -23,9 +23,9 @@ const WithMetricsFilter = function(WrappedComponent) {
         let searchquery = `?`
         searchquery += `tab=${tab}`
         searchquery += `&searchType=${tab}`
-        searchquery += tab !== 'users' && `&hideUndiscoverable=${entityFilters.visible}`
-        searchquery += tab !== 'users' && `&hideArchived=${entityFilters.archived}`
-        searchquery += tab === 'projects' && `&virtual=${entityFilters.virtual}`
+        searchquery += tab !== 'users' ? `&hideUndiscoverable=${entityFilters.visible}` : ''
+        searchquery += tab !== 'users' ? `&hideArchived=${entityFilters.archived}` : ''
+        searchquery += tab === 'projects' ? `&virtual=${entityFilters.virtual}` : ''
         searchquery += entityFilters.from ? `&from=${entityFilters.from}` : ''
         searchquery += entityFilters.to ? `&to=${entityFilters.to}` : ''
         this.props.history.push({

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-const internalFilterToggle = (filterType, filterName) => {
+const internalFilterToggle = (filterName) => {
   return class extends Component {
     render() {
       return (

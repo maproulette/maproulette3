@@ -110,7 +110,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
       this.props.setChallengeSearchMapBounds(bounds, fromUserAction)
 
       const locationFilter = _get(this.props, `currentSearch.${searchGroup}.filters.location`)
-      updateBoundsOnRoute(this.props, searchGroup, bounds, locationFilter, true)
+      updateBoundsOnRoute(this.props, searchGroup, bounds, locationFilter, true)  
     }
 
     render() {

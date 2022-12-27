@@ -29,6 +29,7 @@ import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
 import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 import StartVirtualChallenge from './StartVirtualChallenge/StartVirtualChallenge'
+import { ChallengeLocation } from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import messages from './Messages'
 
 const ShowArchivedToggleInternal = (props) => {
@@ -109,6 +110,8 @@ export class ChallengePane extends Component {
     this.props.clearSearch()
     this.props.clearSearchFilters()
     this.props.setSearchSort({sortBy: 'default'})
+    this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
+    this.props.clearMapBounds()
   }
 
   componentDidUpdate() {
