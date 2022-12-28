@@ -10,6 +10,7 @@ describe("ChallengePane", () => {
         clearSearchFilters={() => null}
         clearSearch={() => null}
         setSearchSort={() => null}
+        clearMapBounds={() => null}
         history={{ location: { pathname: "", search: "" } }}
       />
     );
