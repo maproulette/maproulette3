@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import { FormattedMessage, injectIntl } from "react-intl";
-import _get from "lodash/get";
 import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import AutosuggestMentionTextArea from "../AutosuggestTextBox/AutosuggestMentionTextArea";
+import { postChallengeComment} from "../../services/Challenge/ChallengeComments";
 import messages from "./Messages";
 import { Octokit } from "@octokit/core";
 
@@ -45,8 +45,9 @@ export class FlagCommentInput extends Component {
       })
       currentIssues.push(response.data)
       localStorage.setItem('allFlags', JSON.stringify(currentIssues))
-      console.log(response.data)
       this.props.onModalSubmit(response.data)
+      await postChallengeComment(challenge.id, body)
+      this.props.handleViewCommentsSubmit()
     }
   };
 
@@ -68,7 +69,7 @@ export class FlagCommentInput extends Component {
         <label className="mr-text-white-50">
             Email
           </label>
-        <input class="form-control mr-mb-4" type="email" id="root_email" label="Email address" placeholder="Enter your email" value={this.state.emailValue} onChange={(event) => this.setState({emailValue: event.target.value})} />
+        <input className="form-control mr-mb-4" type="email" id="root_email" label="Email address" placeholder="Enter your email" value={this.state.emailValue} onChange={(event) => this.setState({emailValue: event.target.value})} />
         <div className="mr-flex mr-justify-between mr-mb-2 mr-leading-tight mr-text-xxs">
           <div className="mr-flex mr-items-center">
             <button

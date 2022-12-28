@@ -98,8 +98,11 @@ export class ChallengeDetail extends Component {
     this.setState({ ...this.state, displayInputError: false, displayCheckboxError: !this.state.displayCheckboxError})
   }
 
+  handleViewCommentsSubmit = () => {
+     this.setState({ ...this.state, viewComments: true})
+  }
+
   render() {
-  console.log(this.props)
     const challenge = this.props.browsedChallenge;
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
       return (
@@ -109,7 +112,7 @@ export class ChallengeDetail extends Component {
       );
     }
 
-    const re = /[^#]\d+\s/g
+    const re = /(?!#)(\d+)\s/g
     let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
     if (this.state.challengeFlagged != true) {
       for (let i = 0; i < currentIssues.length; i++) {
@@ -206,9 +209,6 @@ export class ChallengeDetail extends Component {
             parse(challenge.dataOriginDate)
           ),
         });
-    const octokit = new Octokit({
-      auth: process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
-    })
 
     const handleFlag = () => {
       if (this.state.challengeFlagged) {
@@ -262,7 +262,20 @@ export class ChallengeDetail extends Component {
                 <Taxonomy {...challenge} isSaved={isSaved} />
                 <h1 className="mr-card-challenge__title">{challenge.name}</h1>
                 <SvgSymbol sym='flag-icon' title='Flag challenge' viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={handleFlag}/>
-                {this.state.modalToggle && this.state.modalClosed && <FlagModal challenge={challenge} {...this.props} onCancel={this.onCancel} onModalSubmit={this.onModalSubmit} handleInputError={this.handleInputError} displayInputError={this.state.displayInputError} disabledButton={this.state.disabledButton} handleDisabledButton={this.handleDisabledButton} displayCheckboxError={this.state.displayCheckboxError} handleCheckboxError={this.handleCheckboxError}/>}
+                {this.state.modalToggle && this.state.modalClosed && 
+                  <FlagModal 
+                    {...this.props} 
+                    challenge={challenge}  
+                    onCancel={this.onCancel} 
+                    onModalSubmit={this.onModalSubmit} 
+                    handleInputError={this.handleInputError} 
+                    displayInputError={this.state.displayInputError} 
+                    disabledButton={this.state.disabledButton} 
+                    handleDisabledButton={this.handleDisabledButton} 
+                    displayCheckboxError={this.state.displayCheckboxError} 
+                    handleCheckboxError={this.handleCheckboxError} 
+                    handleViewCommentsSubmit={this.handleViewCommentsSubmit} 
+                    />}
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"
