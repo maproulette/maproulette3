@@ -10,6 +10,7 @@ assignees: ''
 **Please Read First**
 * If you are having **issues creating your own Challenges**, please make sure you carefully read the MapRoulette [documentation](https://learn.maproulette.org/documentation/), specifically the section about Creating and Managing Challenges. If that doesn't help you, please post to the [OSM community forum](https://community.openstreetmap.org) with the hashtag **#maproulette**. 
 * If you would like to report a Challenge you think is causing bad edits to OSM, please raise the issue with the Challenge owner first using the *Get In Touch* feature on the Challenge home page. If they fail to respond, please post to the [OSM community forum](https://community.openstreetmap.org) with the hashtag **#maproulette**.
+* There is a [separate repository for the MapRoulette back end](https://github.com/maproulette/maproulette-backend/issues). If your report pertains to the API / back end, please submit it there.
 
 Thanks for helping us make MapRoulette great for everyone!
 
