@@ -68,8 +68,10 @@ export class ChallengeDetail extends Component {
         this.setState({ ...this.state, listOfIssues: res.data })
       })
     }
-
-    getIssues()
+    const currentIssues = localStorage.getItem('allFlags')
+    if(!currentIssues){
+      getIssues()
+    }
   }
 
   componentDidUpdate() {
@@ -114,6 +116,7 @@ export class ChallengeDetail extends Component {
 
     const re = /(?!#)(\d+)\s/g
     let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
+    console.log(currentIssues)
     if (this.state.challengeFlagged != true) {
       for (let i = 0; i < currentIssues.length; i++) {
         let findMatch = currentIssues[i].title.match(re)
