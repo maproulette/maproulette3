@@ -16,7 +16,7 @@ class Footer extends Component {
                 <FormattedMessage {...messages.versionLabel} />{' '}
                 <span className="mr-text-green-light mr-font-mono mr-text-base">
                   <a
-                    href={`https://github.com/osmlab/maproulette3/releases/tag/v${process.env.REACT_APP_VERSION_SEMVER}`}
+                    href={`https://github.com/maproulette/maproulette3/releases/tag/v${process.env.REACT_APP_VERSION_SEMVER}`}
                   >
                     v{process.env.REACT_APP_VERSION_SEMVER}
                   </a>
@@ -42,7 +42,7 @@ class Footer extends Component {
                 </li>
                 <li>
                   <a
-                    href="https://github.com/osmlab/maproulette3/issues"
+                    href="https://github.com/maproulette/maproulette3/issues"
                     target="_blank"
                     rel="noopener noreferrer"
                   ><FormattedMessage {...messages.reportBug} /></a>

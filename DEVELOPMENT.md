@@ -1,6 +1,6 @@
 # MapRoulette Development
 
-This is the repository that holds the front-end code. The back-end and API are developed in parallel in a separate repo: [maproulette2](https://github.com/maproulette/maproulette2). Both need to be deployed together for a working setup. We advise you use Docker for production deployments. [This repo](https://github.com/maproulette/maproulette2-docker) will help you set that up easily.
+This is the repository that holds the front-end code. The back-end and API are developed in parallel in a separate repo: [maproulette-backend](https://github.com/maproulette/maproulette-backend). Both need to be deployed together for a working setup. We advise you use Docker for production deployments. [This repo](https://github.com/maproulette/maproulette2-docker) will help you set that up easily.
 
 ### Basic Dependencies:
 
@@ -19,7 +19,7 @@ This is the repository that holds the front-end code. The back-end and API are d
 
 3. `yarn run start` to fire up the front-end development server
 
-A back-end server from the [maproulette2](https://github.com/maproulette/maproulette2) project is also required. You can either install and configure it locally or, if you have access to a pre-existing server, connect directly to it by using your API key for that
+A back-end server from the [maproulette-backend](https://github.com/maproulette/maproulette-backend) project is also required. You can either install and configure it locally or, if you have access to a pre-existing server, connect directly to it by using your API key for that
 server.
 
 #### Run the UI from Docker
@@ -41,7 +41,7 @@ Note that this will create the development build and not the 'production' build.
 
 #### Developing with a local back-end server
 
-1. Install the back-end server using the instructions from the maproulette2
+1. Install the back-end server using the instructions from the maproulette-backend
    project, if you haven't already
 
 2. Visit your [OpenStreetMap account](https://www.openstreetmap.org) and go
@@ -55,14 +55,14 @@ Note that this will create the development build and not the 'production' build.
 3. In your back-end server project, setup a .conf file that overrides properties
    as needed from `conf/application.conf` (unless you'd prefer to set explicit
    system properties on the command line when starting up the server). Refer
-   to the `conf/application.conf` file, `conf/dev.conf` file and maproulette2
+   to the `conf/application.conf` file, `conf/dev.conf` file and maproulette-backend
    docs for explanations of the various server configuration settings. At the
    very least, you'll want to make sure your JDBC url is correct and your OAuth
    consumer key and secret are set properly.
 
 4. Fire up your back-end server, specifying the path to your .conf file with
    `-Dconfig.resource` or explicitly specifying the various system properties
-   on the command line. See the maproulette2 docs for details on starting up
+   on the command line. See the maproulette-backend docs for details on starting up
    the server
 
 5. Edit your `.env.development.local` file in your front-end project and set:
@@ -99,7 +99,7 @@ a local one you have installed. **Please do not use the production API for devel
 
 ### Updating to the Latest Code
 
-> Note that the [maproulette2](https://github.com/maproulette/maproulette2)
+> Note that the [maproulette-backend](https://github.com/maproulette/maproulette-backend)
 > back-end server must be updated separately.
 
 1. Stop your front-end server (ctrl-c) if it's running.
@@ -202,7 +202,7 @@ build-intl`, which is also run automatically as part of the `yarn build` script
 used for creating production builds.
 
 Translations for other locales are managed through
-[transifex](https://www.transifex.com/osmlab/maproulette3), who kindly provides
+[transifex](https://www.transifex.com/maproulette/maproulette3), who kindly provides
 us with free service through their Open Source program. Translation files are
 pulled into the code repository from time to time and stored in the `src/lang/`
 directory.
