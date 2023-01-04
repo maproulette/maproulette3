@@ -77,5 +77,10 @@ export default defineMessages({
   viewOverview: {
     id: "ChallengeDetails.fields.viewOverview.label",
     defaultMessage: "Overview"
+  },
+
+  overpassQL: {
+    id: "ChallengeDetails.fields.overpassQL.label",
+    defaultMessage: "Overpass Query"
   }
 })

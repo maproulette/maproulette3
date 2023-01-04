@@ -526,6 +526,7 @@
   "ChallengeDetails.fields.difficulty.label": "Difficulty",
   "ChallengeDetails.fields.lastChallengeDetails.DataOriginDate.label": "Tasks built on {refreshDate} from data sourced on {sourceDate}.",
   "ChallengeDetails.fields.lastChallengeDetails.TaskRefresh.label": "Task Data Sourced",
+  "ChallengeDetails.fields.overpassQL.label": "Overpass Query",
   "ChallengeDetails.fields.viewComments.label": "Get In Touch",
   "ChallengeDetails.fields.viewLeaderboard.label": "View Leaderboard",
   "ChallengeDetails.fields.viewOverview.label": "Overview",
