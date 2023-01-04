@@ -30,6 +30,12 @@ const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
 );
 
+const DETAIL_TABS = {
+  OVERVIEW: "OVERVIEW",
+  COMMENTS: "COMMENTS",
+  OVERPASS: "OVERPASS"
+}
+
 /**
  * ChallengeDetail represents a specific challenge view. It presents an
  * overview of the challenge and allows the user to choose to start
@@ -39,7 +45,7 @@ const ClusterMap = WithChallengeTaskClusters(
  */
 export class ChallengeDetail extends Component {
   state = {
-    viewComments: _isObject(this.props.user) && this.props.location.search.includes("conversation"),
+    detailTab: _isObject(this.props.user) && this.props.location.search.includes("conversation") ? DETAIL_TABS.COMMENTS : DETAIL_TABS.OVERVIEW
   };
 
   componentDidMount() {
@@ -47,14 +53,204 @@ export class ChallengeDetail extends Component {
   }
 
   componentDidUpdate() {
-    if (!_isObject(this.props.user) && this.state.viewComments) {
-      this.setState({ viewComments: false });
+    if (!_isObject(this.props.user) && this.state.detailTab === DETAIL_TABS.COMMENTS) {
+      this.setState({ detailTab: DETAIL_TABS.OVERVIEW });
     }
   }
 
-  onClickTab = () => {
-    this.setState({ viewComments: !this.state.viewComments });
+  onClickTab = (detailTab) => {
+    this.setState({ detailTab });
   };
+
+  renderDetailTabs = () => {
+    const challenge = this.props.browsedChallenge;
+    if (!challenge.isVirtual) {
+      return (
+        <li>
+          {
+            _isObject(this.props.user) && !challenge.overpassQL && (
+              <Link
+                className="mr-text-green-lighter hover:mr-text-white"
+                onClick={() => this.onClickTab(DETAIL_TABS.OVERVIEW)}
+              >
+                <FormattedMessage {...messages.viewOverview} />
+              </Link>
+            )
+          }
+          {
+            _isObject(this.props.user) && (
+              <Fragment>
+                <span className="mr-px-3"> | </span>
+                <Link
+                  className="mr-text-green-lighter hover:mr-text-white"
+                  onClick={() => this.onClickTab(DETAIL_TABS.COMMENTS)}
+                >
+                  <FormattedMessage {...messages.viewComments} />
+                </Link>
+              </Fragment>
+            )
+          }
+          {
+            challenge.overpassQL && (
+              <Fragment>
+                <span className="mr-px-3"> | </span>
+                <Link
+                  className="mr-text-green-lighter hover:mr-text-white"
+                  onClick={() => this.onClickTab(DETAIL_TABS.OVERPASS)}
+                >
+                  <FormattedMessage {...messages.overpassQL} />
+                </Link>
+              </Fragment>
+            )
+          }
+        </li>
+      )
+    }
+  }
+
+  renderDetailBody = () => {
+    const challenge = this.props.browsedChallenge;
+    switch (this.state.detailTab) {
+      case DETAIL_TABS.OVERPASS:
+        return (
+          <textarea 
+            disabled
+            className="mr-bg-black-15 mr-w-full mr-p-2 mr-text-sm"
+            style={{ height: 500 }}
+          >
+            {challenge.overpassQL}
+          </textarea>
+        )
+      case DETAIL_TABS.COMMENTS:
+        return (
+          <ChallengeCommentsPane
+            challengeId={this.props}
+            osmId={this.props.user?.osmProfile?.id}
+            owner={this.props.browsedChallenge?.owner}
+          />
+        )
+      case DETAIL_TABS.OVERVIEW:
+      default:
+        // Setup saved status and controls based on whether the user has saved this
+        // challenge
+        let unsaveControl = null;
+        let saveControl = null;
+        let startControl = null;
+
+        const startableChallenge =
+          !challenge.deleted && isUsableChallengeStatus(challenge.status);
+
+        if (_isObject(this.props.user) && !challenge.isVirtual) {
+          if (
+            _findIndex(this.props.user.savedChallenges, { id: challenge.id }) !== -1
+          ) {
+            unsaveControl = (
+              <Link
+                to={{}}
+                onClick={() =>
+                  this.props.unsaveChallenge(this.props.user.id, challenge.id)
+                }
+                className="mr-button"
+                title={this.props.intl.formatMessage(messages.removeFromFavorites)}
+              >
+                <FormattedMessage {...messages.unfavorite} />
+              </Link>
+            );
+          } else {
+            saveControl = (
+              <Link
+                to={{}}
+                onClick={() =>
+                  this.props.saveChallenge(this.props.user.id, challenge.id)
+                }
+                className="mr-button"
+                title={this.props.intl.formatMessage(messages.saveToFavorites)}
+              >
+                <FormattedMessage {...messages.favorite} />
+              </Link>
+            );
+          }
+        }
+
+            // Users need to be signed in to start a challenge
+        if (!_isObject(this.props.user)) {
+          startControl = <SignInButton {...this.props} longForm className="" />;
+        } else {
+          startControl = (
+            <Link
+              to={{}}
+              className="mr-button"
+              onClick={() => this.props.startChallenge(challenge)}
+            >
+              <FormattedMessage {...messages.start} />
+            </Link>
+          );
+        }
+
+        // Does this user own (or can manage) the current challenge?
+        const isManageable = AsManager(this.props.user).canManageChallenge(
+          challenge
+        );
+
+        const manageControl = !isManageable ? null : (
+          <Link
+            to={`/admin/project/${challenge.parent.id}/challenge/${challenge.id}`}
+            className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
+          >
+            <FormattedMessage {...messages.manageLabel} />
+          </Link>
+        );
+
+        return (
+          <Fragment>
+            <div className="mr-card-challenge__description">
+              <MarkdownContent
+                markdown={challenge.description || challenge.blurb}
+              />
+            </div>
+
+            <ChallengeProgress
+              className="mr-my-4"
+              challenge={challenge}
+            />
+
+            <ul className="mr-card-challenge__actions">
+              {startableChallenge && startControl && (
+                <li>{startControl}</li>
+              )}
+              {(saveControl || unsaveControl) && (
+                <li>
+                  {saveControl}
+                  {unsaveControl}
+                </li>
+              )}
+              <li>
+                {!challenge.isVirtual &&
+                  _get(this.props.user, "settings.isReviewer") && (
+                    <Link
+                      className={classNames(
+                        "mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-leading-none",
+                        {
+                          "mr-border-r-2 mr-border-white-10 mr-pr-4 mr-mr-4":
+                            manageControl,
+                        }
+                      )}
+                      to={`/review?filters.challengeId=${
+                        challenge.id
+                      }&filters.challengeName=${encodeURIComponent(
+                        challenge.name
+                      )}`}
+                    >
+                      <FormattedMessage {...messages.viewReviews} />
+                    </Link>
+                  )}
+                {manageControl}
+              </li>
+            </ul>
+          </Fragment>
+      )
+    }
+  }
 
   render() {
     const challenge = this.props.browsedChallenge;
@@ -66,80 +262,15 @@ export class ChallengeDetail extends Component {
       );
     }
 
-    // Setup saved status and controls based on whether the user has saved this
-    // challenge
     let isSaved = false;
-    let unsaveControl = null;
-    let saveControl = null;
-    let startControl = null;
-
-    const startableChallenge =
-      !challenge.deleted && isUsableChallengeStatus(challenge.status);
-    const tabMessage = this.state.viewComments
-      ? messages.viewOverview
-      : messages.viewComments;
 
     if (_isObject(this.props.user) && !challenge.isVirtual) {
       if (
         _findIndex(this.props.user.savedChallenges, { id: challenge.id }) !== -1
       ) {
         isSaved = true;
-        unsaveControl = (
-          <Link
-            to={{}}
-            onClick={() =>
-              this.props.unsaveChallenge(this.props.user.id, challenge.id)
-            }
-            className="mr-button"
-            title={this.props.intl.formatMessage(messages.removeFromFavorites)}
-          >
-            <FormattedMessage {...messages.unfavorite} />
-          </Link>
-        );
-      } else {
-        saveControl = (
-          <Link
-            to={{}}
-            onClick={() =>
-              this.props.saveChallenge(this.props.user.id, challenge.id)
-            }
-            className="mr-button"
-            title={this.props.intl.formatMessage(messages.saveToFavorites)}
-          >
-            <FormattedMessage {...messages.favorite} />
-          </Link>
-        );
       }
     }
-
-    // Users need to be signed in to start a challenge
-    if (!_isObject(this.props.user)) {
-      startControl = <SignInButton {...this.props} longForm className="" />;
-    } else {
-      startControl = (
-        <Link
-          to={{}}
-          className="mr-button"
-          onClick={() => this.props.startChallenge(challenge)}
-        >
-          <FormattedMessage {...messages.start} />
-        </Link>
-      );
-    }
-
-    // Does this user own (or can manage) the current challenge?
-    const isManageable = AsManager(this.props.user).canManageChallenge(
-      challenge
-    );
-
-    const manageControl = !isManageable ? null : (
-      <Link
-        to={`/admin/project/${challenge.parent.id}/challenge/${challenge.id}`}
-        className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
-      >
-        <FormattedMessage {...messages.manageLabel} />
-      </Link>
-    );
 
     const dataOriginDateText = !challenge.dataOriginDate
       ? null
@@ -239,75 +370,12 @@ export class ChallengeDetail extends Component {
                         >
                           <FormattedMessage {...messages.viewLeaderboard} />
                         </Link>
-                        {_isObject(this.props.user) && !challenge.isVirtual && (
-                          <Fragment>
-                            <span className="mr-px-3"> | </span>
-                            <Link
-                              className="mr-text-green-lighter hover:mr-text-white"
-                              onClick={this.onClickTab}
-                            >
-                              <FormattedMessage {...tabMessage} />
-                            </Link>
-                          </Fragment>
-                        )}
                       </li>
+                      <div className="mr-mb-3" />
+                      {this.renderDetailTabs()}
                     </ol>
                   )}
-
-                  {this.state.viewComments ? (
-                    <ChallengeCommentsPane
-                      challengeId={this.props}
-                      osmId={this.props.user?.osmProfile?.id}
-                      owner={this.props.browsedChallenge?.owner}
-                    />
-                  ) : (
-                    <Fragment>
-                      <div className="mr-card-challenge__description">
-                        <MarkdownContent
-                          markdown={challenge.description || challenge.blurb}
-                        />
-                      </div>
-
-                      <ChallengeProgress
-                        className="mr-my-4"
-                        challenge={challenge}
-                      />
-
-                      <ul className="mr-card-challenge__actions">
-                        {startableChallenge && startControl && (
-                          <li>{startControl}</li>
-                        )}
-                        {(saveControl || unsaveControl) && (
-                          <li>
-                            {saveControl}
-                            {unsaveControl}
-                          </li>
-                        )}
-                        <li>
-                          {!challenge.isVirtual &&
-                            _get(this.props.user, "settings.isReviewer") && (
-                              <Link
-                                className={classNames(
-                                  "mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-leading-none",
-                                  {
-                                    "mr-border-r-2 mr-border-white-10 mr-pr-4 mr-mr-4":
-                                      manageControl,
-                                  }
-                                )}
-                                to={`/review?filters.challengeId=${
-                                  challenge.id
-                                }&filters.challengeName=${encodeURIComponent(
-                                  challenge.name
-                                )}`}
-                              >
-                                <FormattedMessage {...messages.viewReviews} />
-                              </Link>
-                            )}
-                          {manageControl}
-                        </li>
-                      </ul>
-                    </Fragment>
-                  )}
+                  {this.renderDetailBody()}
                 </div>
               </div>
             </div>
