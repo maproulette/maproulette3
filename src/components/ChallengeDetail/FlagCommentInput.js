@@ -5,7 +5,6 @@ import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import AutosuggestMentionTextArea from "../AutosuggestTextBox/AutosuggestMentionTextArea";
 import { postChallengeComment} from "../../services/Challenge/ChallengeComments";
 import messages from "./Messages";
-import { Octokit } from "@octokit/core";
 
 export class FlagCommentInput extends Component {
   state = {
@@ -26,28 +25,37 @@ export class FlagCommentInput extends Component {
     }
     else {
       let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
-    
-      const octokit = new Octokit({
-        auth: process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
-      })
       const challenge = this.props.challenge
       let body = `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})`
       body += ` \n\n` + this.state.value;
-      const response = await octokit.request('POST /repos/tsun812/api_test/issues', {
-        owner: 'tsun812',
-        repo: 'api_test',
-        title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
-        body: body,
-        state: 'open',
-        labels: [
-          'bug'
-        ]
+      const response = await fetch(`https://api.github.com/repos/tsun812/api_test/issues`, {
+        method: 'POST',
+        body: JSON.stringify({
+          title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
+          owner: 'tsun812',
+          repo: 'api_test',
+          body: JSON.stringify(body),
+          state: 'open',
+          labels: [
+            'bug'
+          ]
+        }),
+        headers: {
+          'Authorization': `token ${process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json',
+        },
       })
-      currentIssues.push(response.data)
-      localStorage.setItem('allFlags', JSON.stringify(currentIssues))
-      this.props.onModalSubmit(response.data)
-      await postChallengeComment(challenge.id, body)
-      this.props.handleViewCommentsSubmit()
+      if (response.ok) {
+        const responseBody = await response.json()
+        currentIssues.push(responseBody)
+        localStorage.setItem('allFlags', JSON.stringify(currentIssues))
+        this.props.onModalSubmit(responseBody)
+        const issue_link = responseBody.html_url
+        const comment = `This challenge has been flagged by [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName}). Please use [this GitHub issue](${issue_link}) to discuss. \n\n ${this.state.value}`
+        await postChallengeComment(challenge.id, comment)
+        this.props.handleViewCommentsSubmit()
+      }
     }
   };
 

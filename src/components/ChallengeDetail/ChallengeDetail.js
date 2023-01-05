@@ -26,7 +26,6 @@ import WithTaskClusterMarkers from "../HOCs/WithTaskClusterMarkers/WithTaskClust
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import { Octokit } from "@octokit/core"
 import FlagModal from "./FlagModal";
 
 const ClusterMap = WithChallengeTaskClusters(
@@ -54,24 +53,26 @@ export class ChallengeDetail extends Component {
   };
 
   componentDidMount() {
-    window.scrollTo(0, 0);
-    const octokit = new Octokit({
-      auth: process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
-    })
+    window.scrollTo(0, 0)
 
     const getIssues = async () => {
-      await octokit.request('GET /repos/tsun812/api_test/issues', {
+      const response = await fetch('https://api.github.com/repos/tsun812/api_test/issues', {
+        method: 'GET',
+        authorization: 'token ' + process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN,
         owner: 'tsun812',
         repo: 'api_test'
-      }).then(res => {
-        localStorage.setItem('allFlags', JSON.stringify(res.data))
-        this.setState({ ...this.state, listOfIssues: res.data })
       })
+      if (response.ok) {
+        const responseBody = await response.json()
+        localStorage.setItem('allFlags', JSON.stringify(responseBody))
+        this.setState({ ...this.state, listOfIssues: responseBody })
+      }
     }
-    const currentIssues = localStorage.getItem('allFlags')
-    if(!currentIssues){
-      getIssues()
-    }
+    // const currentIssues = localStorage.getItem('allFlags')
+    // if(!currentIssues){
+    //   getIssues()
+    // }
+    getIssues()
   }
 
   componentDidUpdate() {
@@ -116,7 +117,6 @@ export class ChallengeDetail extends Component {
 
     const re = /(?!#)(\d+)\s/g
     let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
-    console.log(currentIssues)
     if (this.state.challengeFlagged != true) {
       for (let i = 0; i < currentIssues.length; i++) {
         let findMatch = currentIssues[i].title.match(re)
@@ -263,22 +263,29 @@ export class ChallengeDetail extends Component {
                   </div>
                 )}
                 <Taxonomy {...challenge} isSaved={isSaved} />
-                <h1 className="mr-card-challenge__title">{challenge.name}</h1>
-                <SvgSymbol sym='flag-icon' title='Flag challenge' viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={handleFlag}/>
+                <div className="mr-flex mr-items-center">
+                  <h1 className="mr-card-challenge__title mr-mr-3">{challenge.name}</h1>
+                  <SvgSymbol sym='flag-icon' title={!this.state.challengeFlagged ? 'Flag challenge' : 'View github issue'} viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={handleFlag}/>
+                  {this.state.challengeFlagged && 
+                    <div className='mr-text-red-light'>
+                      <FormattedMessage {...messages.flaggedText}/>
+                    </div>
+                  }
+                </div>
                 {this.state.modalToggle && this.state.modalClosed && 
-                  <FlagModal 
-                    {...this.props} 
-                    challenge={challenge}  
-                    onCancel={this.onCancel} 
-                    onModalSubmit={this.onModalSubmit} 
-                    handleInputError={this.handleInputError} 
-                    displayInputError={this.state.displayInputError} 
-                    disabledButton={this.state.disabledButton} 
-                    handleDisabledButton={this.handleDisabledButton} 
-                    displayCheckboxError={this.state.displayCheckboxError} 
-                    handleCheckboxError={this.handleCheckboxError} 
-                    handleViewCommentsSubmit={this.handleViewCommentsSubmit} 
-                    />}
+                    <FlagModal 
+                      {...this.props} 
+                      challenge={challenge}  
+                      onCancel={this.onCancel} 
+                      onModalSubmit={this.onModalSubmit} 
+                      handleInputError={this.handleInputError} 
+                      displayInputError={this.state.displayInputError} 
+                      disabledButton={this.state.disabledButton} 
+                      handleDisabledButton={this.handleDisabledButton} 
+                      displayCheckboxError={this.state.displayCheckboxError} 
+                      handleCheckboxError={this.handleCheckboxError} 
+                      handleViewCommentsSubmit={this.handleViewCommentsSubmit} 
+                      />}
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"

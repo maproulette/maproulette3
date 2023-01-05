@@ -112,5 +112,9 @@ export default defineMessages({
   checkboxError: {
     id: "ChallengeDetails.controls.checkbox.error",
     defaultMessage: "Please ensure that checkbox is checked before continue"
+  },
+  flaggedText: {
+    id: "ChallengeDetails.controls.flagged_text",
+    defaultMessage: "This challenge has been flagged"
   }
 })
