@@ -26,15 +26,14 @@ export class FlagCommentInput extends Component {
     else {
       let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
       const challenge = this.props.challenge
-      let body = `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})`
-      body += ` \n\n` + this.state.value;
+      let body = `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})\n\n${this.state.value}`
       const response = await fetch(`https://api.github.com/repos/tsun812/api_test/issues`, {
         method: 'POST',
         body: JSON.stringify({
           title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
           owner: 'tsun812',
           repo: 'api_test',
-          body: JSON.stringify(body),
+          body: body,
           state: 'open',
           labels: [
             'bug'
