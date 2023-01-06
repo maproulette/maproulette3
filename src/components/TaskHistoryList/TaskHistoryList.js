@@ -119,6 +119,24 @@ export class TaskHistoryList extends Component {
             errorTags = log.errorTags
             if (log.startedAt) {
               duration = new Date(log.timestamp) - new Date(log.startedAt)
+
+              //add an additional entry for when review was started
+              const startedReviewAtEntry = {timestamp: (log.startedAt),
+                ignoreAtticOffset: true,
+                entry: [
+                  <li className="mr-mb-4" key={"start-" + index}>
+                    <div>
+                      <span
+                        className="mr-mr-2"
+                        style={{color: AsColoredHashable(username).hashColor}}
+                      >
+                        {username}
+                      </span> <FormattedMessage {...messages.startedReviewOnLabel} />
+                    </div>
+                  </li>
+                ]}
+
+                combinedLogs.push(startedReviewAtEntry)
             }
           }
           break

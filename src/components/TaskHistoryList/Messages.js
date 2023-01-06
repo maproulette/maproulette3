@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Started on task",
   },
 
+  startedReviewOnLabel: {
+    id: "TaskHistory.fields.startedReviewOn.label",
+    defaultMessage: "Started review on task",
+  },
+
   viewAtticLabel: {
     id: "TaskHistory.controls.viewAttic.label",
     defaultMessage: "View Attic",
