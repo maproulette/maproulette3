@@ -67,12 +67,12 @@ export class ChallengeDetail extends Component {
     if (!challenge.isVirtual) {
       return (
         <li>
-            <Link
-              className="mr-text-green-lighter hover:mr-text-white"
-              onClick={() => this.onClickTab(DETAIL_TABS.OVERVIEW)}
-            >
-              <FormattedMessage {...messages.viewOverview} />
-            </Link>
+          <Link
+            className="mr-text-green-lighter hover:mr-text-white"
+            onClick={() => this.onClickTab(DETAIL_TABS.OVERVIEW)}
+          >
+            <FormattedMessage {...messages.viewOverview} />
+          </Link>
           {
             _isObject(this.props.user) && (
               <Fragment>
