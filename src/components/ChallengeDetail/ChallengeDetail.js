@@ -52,17 +52,43 @@ export class ChallengeDetail extends Component {
     displayCheckboxError: false,
     shouldFetchIssues: true,
   };
+
+  paginated_fetch = (
+    url, // Improvised required argument in JS
+    page = 1,
+    previousResponse = []
+  ) => {
+    return fetch(`${url}?state=all&sort=updated&page=${page}&per_page=30`, {
+      method: 'GET',
+      authorization: 'token ' + process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN,
+      owner: 'tsun812',
+      repo: 'api_test',
+    }).then(response => response.json())
+      .then(newResponse => {
+        const response = [...previousResponse, ...newResponse]; // Combine the two arrays
+
+        if (newResponse.length !== 0) {
+          page++;
+
+          return this.paginated_fetch(url, page, response);
+        }
+
+        return response;
+      });
+  }
   getIssues = async (id) => {
-    let page = 1
     const currentId = parseInt(id)
+    const page = 1
     const response = await fetch(`https://api.github.com/repos/tsun812/api_test/issues?state=all&sort=updated&page=${page}&per_page=100`, {
       method: 'GET',
       authorization: 'token ' + process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN,
       owner: 'tsun812',
       repo: 'api_test',
     })
+    //const response = await this.paginated_fetch('https://api.github.com/repos/tsun812/api_test/issues')
     if (response.ok) {
       const responseBody = await response.json()
+      console.log(responseBody)
       let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
       if (!currentIssues.length) {
         console.log(responseBody)
