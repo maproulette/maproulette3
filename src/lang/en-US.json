@@ -522,6 +522,7 @@
   "ChallengeDetails.controls.start.label": "Start",
   "ChallengeDetails.controls.unfavorite.label": "Unfavorite",
   "ChallengeDetails.controls.unfavorite.tooltip": "Remove from favorites",
+  "ChallengeDetails.controls.flagged_text": "This challenge has been flagged",
   "ChallengeDetails.fields.difficulty.label": "Difficulty",
   "ChallengeDetails.fields.lastChallengeDetails.DataOriginDate.label": "Tasks built on {refreshDate} from data sourced on {sourceDate}.",
   "ChallengeDetails.fields.lastChallengeDetails.TaskRefresh.label": "Task Data Sourced",

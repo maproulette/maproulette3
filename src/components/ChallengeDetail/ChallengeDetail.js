@@ -50,32 +50,98 @@ export class ChallengeDetail extends Component {
     modalClosed: true,
     displayInputError: false,
     displayCheckboxError: false,
+    shouldFetchIssues: true,
   };
-
-  componentDidMount() {
-    window.scrollTo(0, 0)
-
-    const getIssues = async () => {
-      const response = await fetch('https://api.github.com/repos/tsun812/api_test/issues', {
-        method: 'GET',
-        authorization: 'token ' + process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN,
-        owner: 'tsun812',
-        repo: 'api_test'
-      })
-      if (response.ok) {
-        const responseBody = await response.json()
+  getIssues = async (id) => {
+    let page = 1
+    const currentId = parseInt(id)
+    const response = await fetch(`https://api.github.com/repos/tsun812/api_test/issues?state=all&sort=updated&page=${page}&per_page=100`, {
+      method: 'GET',
+      authorization: 'token ' + process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN,
+      owner: 'tsun812',
+      repo: 'api_test',
+    })
+    if (response.ok) {
+      const responseBody = await response.json()
+      let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
+      if (!currentIssues.length) {
+        console.log(responseBody)
         localStorage.setItem('allFlags', JSON.stringify(responseBody))
-        this.setState({ ...this.state, listOfIssues: responseBody })
+      }
+
+      const re = /(?!#)(\d+)\s/g
+
+      for (let i = 0; i < responseBody.length; i++) {
+        let remoteIdMatch = responseBody[i]?.title.match(re)
+        // for all matched open issues, check if ls has the same issue, update staled ls issue to remote one, for all new issues not in ls, add to ls
+        if (remoteIdMatch && remoteIdMatch[0] == currentId && responseBody[i]?.closed_at === null) {
+          console.log('1 remote open')
+          let currentIssue = null
+          for (let j = 0; j < currentIssues.length; j++) {
+            let localIdMatch = currentIssues[j].title.match(re)
+            if (localIdMatch && localIdMatch[0] == currentId && responseBody[i]?.updated_at > currentIssues[j]?.updated_at) {
+              console.log('1 should sync')
+              currentIssues[j] = responseBody[i]
+              currentIssue = responseBody[i]
+              break
+            }
+            else if (localIdMatch && localIdMatch[0] == currentId) {
+              console.log('1 ls not sync')
+              break
+            }
+            else {
+              console.log('1 ls add')
+              currentIssues.push(responseBody[i])
+            }
+          }
+          console.log(currentIssues)
+          localStorage.setItem('allFlags', JSON.stringify(currentIssues))
+          this.handleCurrentIssueState(true, currentIssue)
+          break
+        }
+
+        // for all matched closed issues, check if ls has the same issue, if so remove from ls
+        else if (remoteIdMatch && remoteIdMatch[0] == currentId && responseBody[i]?.closed_at !== null) {
+          console.log('2 remote closed')
+          for (let j = 0; j < currentIssues.length; j++) {
+            let localIdMatch = currentIssues[j]?.title.match(re)
+            if (localIdMatch && localIdMatch[0] == currentId) {
+              console.log('2 ls remove')
+              currentIssues.splice(j, 1)
+              break
+            }
+          }
+          localStorage.setItem('allFlags', JSON.stringify(currentIssues))
+          this.handleCurrentIssueState(false, null)
+          return
+        }
+
+        // for newly flagged issues not in remote yet, read from ls
+        else {
+          console.log('3 only ls has it')
+          for (let j = 0; j < currentIssues.length; j++) {
+            let localIdMatch = currentIssues[j].title.match(re)
+            if (localIdMatch && localIdMatch[0] == currentId) {
+              console.log('3 should flag')
+              this.handleCurrentIssueState(true, currentIssues[j])
+              return
+            }
+          }
+        }
       }
     }
-    // const currentIssues = localStorage.getItem('allFlags')
-    // if(!currentIssues){
-    //   getIssues()
-    // }
-    getIssues()
+    this.handleFetchIssues()
   }
-
+  componentDidMount() {
+    window.scrollTo(0, 0)
+    if (this.state.shouldFetchIssues) {
+      this.getIssues(this.props.match.params.challengeId)
+    }
+  }
   componentDidUpdate() {
+    if (this.state.shouldFetchIssues) {
+      this.getIssues(this.props.match.params.challengeId)
+    }
     if (!_isObject(this.props.user) && this.state.viewComments) {
       this.setState({ viewComments: false });
     }
@@ -104,6 +170,14 @@ export class ChallengeDetail extends Component {
   handleViewCommentsSubmit = () => {
      this.setState({ ...this.state, viewComments: true})
   }
+  
+  handleFetchIssues = () => {
+     this.setState({...this.state, shouldFetchIssues: false})
+  }
+
+  handleCurrentIssueState = (shouldFlag, currentIssue) => {
+    this.setState({ ...this.state, challengeFlagged: shouldFlag, issue: currentIssue })
+  }
 
   render() {
     const challenge = this.props.browsedChallenge;
@@ -115,17 +189,6 @@ export class ChallengeDetail extends Component {
       );
     }
 
-    const re = /(?!#)(\d+)\s/g
-    let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
-    if (this.state.challengeFlagged != true) {
-      for (let i = 0; i < currentIssues.length; i++) {
-        let findMatch = currentIssues[i].title.match(re)
-        if (findMatch && findMatch[0] == challenge.id) {
-          this.setState({challengeFlagged: true, issue: currentIssues[i]})
-          break
-        }
-      } 
-    }
   
     // Setup saved status and controls based on whether the user has saved this
     // challenge
@@ -215,7 +278,7 @@ export class ChallengeDetail extends Component {
 
     const handleFlag = () => {
       if (this.state.challengeFlagged) {
-          window.open(this.state.issue.html_url, "_blank")
+          window.open(this.state.issue?.html_url, "_blank")
       } else {
         this.setState({ ...this.state, modalToggle: true, modalClosed: true })
       }
