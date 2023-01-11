@@ -10,13 +10,18 @@ This project adheres to
 ## [v3.11.5] - 2023-1-10
 
 ### Features
-- Flag a Challenge
 - Remove changesetUrl configs and make mandatory
-- Super admin metrics - Projects/Users - performance
+- add overpass query to challenge detail page
+
+### Fixes
+- Make toggleVisible a function on LocationSearchBox - fixes a type error
+- add history entries for when a task review was started
+- revert conditionally rendered Overview link on Challenge Detail
 
 ### System Updates
 - Add issue templates for features and bugs
 - Bump flat from 5.0.0 to 5.0.2
+- Bump json5 from 1.0.1 to 1.0.2
 - update maproulette3 github location
 
 ## [v3.11.4] - 2022-12-22
