@@ -161,12 +161,12 @@ export class ChallengeDetail extends Component {
   componentDidMount() {
     window.scrollTo(0, 0)
     if (this.state.shouldFetchIssues) {
-      this.getIssues(this.props.match.params.challengeId)
+      this.getIssues(this.props.match?.params.challengeId)
     }
   }
   componentDidUpdate() {
     if (this.state.shouldFetchIssues) {
-      this.getIssues(this.props.match.params.challengeId)
+      this.getIssues(this.props.match?.params.challengeId)
     }
     if (!_isObject(this.props.user) && this.state.viewComments) {
       this.setState({ viewComments: false });
