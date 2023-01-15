@@ -36,7 +36,7 @@ Note that this will create the development build and not the 'production' build.
    REACT_APP_FEATURE_MOBILE_DEVICES='enabled'
    ```
 
-1. Build the image using `docker build -t maproulette-ui .`
+1. Build the image using `docker build --pull -t maproulette-ui .`
 1. Start a container from the image using `docker run -itd -p 127.0.0.1:3000:3000 --name maproulette-ui maproulette-ui`
 
 #### Developing with a local back-end server
