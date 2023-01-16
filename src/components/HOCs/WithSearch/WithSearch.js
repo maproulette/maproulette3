@@ -13,7 +13,7 @@ import { SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE
          setSearch, clearSearch,
          setChallengeSearchMapBounds,
          setTaskMapBounds, setChallengeOwnerMapBounds, clearMapBounds,
-         performSearch}
+         performSearch }
        from '../../../services/Search/Search'
 import { addError } from '../../../services/Error/Error'
 import { toLatLngBounds, DEFAULT_MAP_BOUNDS }
@@ -147,6 +147,7 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   setSearchSort: (sortCriteria) => {
     const sortBy = _get(sortCriteria, 'sortBy')
     let sort = null
+
     switch(sortBy) {
       case SORT_NAME:
         sort = {sortBy, direction: 'asc'}
@@ -176,6 +177,7 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
         sort = {sortBy: null, direction: null}
         break
     }
+
     dispatch(setSort(searchGroup, sort))
   },
 

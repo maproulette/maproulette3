@@ -109,9 +109,8 @@ export class ChallengePane extends Component {
   componentDidMount() {
     this.props.clearSearch()
     this.props.clearSearchFilters()
-    this.props.setSearchSort({sortBy: 'default'})
-    this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
-    this.props.clearMapBounds()
+    this.props.setSearchSort({ sortBy: 'default' })
+    this.props.setSearchFilters({ location: ChallengeLocation.intersectingMapBounds })
   }
 
   componentDidUpdate() {

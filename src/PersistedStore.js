@@ -45,7 +45,7 @@ export const initializeStore = function() {
     places: placeEntities,
     adminChallenges: adminChallengeEntities,
     adminProjects: adminProjectEntities,
-    adminUsers: adminUserEntities
+    adminUsers: adminUserEntities,
   })
 
   // redux root reducer defining the top-level reducers in the store

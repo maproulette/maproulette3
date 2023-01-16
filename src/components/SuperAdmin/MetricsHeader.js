@@ -9,7 +9,6 @@ import SortProjectsSelector from './SortProjectsSelector'
 import SortUsersSelector from './SortUsersSelector'
 
 const MetricsHeader = (props) => {
-
   const handleTabToggle = (val) => {
     props.clearSearchFilters()
     props.clearSearch()
@@ -17,9 +16,9 @@ const MetricsHeader = (props) => {
     const searchQuery = `?tab=${val}&searchType=${val}`
     props.history.push({
       pathname: '/superadmin',
-      search: searchQuery
+      search: searchQuery,
     })
-    props.setSearchSort({sortBy: 'default'})
+    props.setSearchSort({ sortBy: 'default' })
   }
 
   return (
@@ -49,21 +48,24 @@ const MetricsHeader = (props) => {
               <FormattedMessage {...messages.userLabel} />
             </button>
           </div>
-          {props.currentTab === 'challenges' && <>
-            <SortChallengesSelector {...props} />
-            <FilterByKeyword {...props} />
-            <FilterByDifficulty {...props} />
-          </>}
-          {props.currentTab === 'projects' && <>
-            <SortProjectsSelector {...props}/>
-          </>}
-          {props.currentTab === 'users' && <>
-            <SortUsersSelector {...props}/>
-          </>}
-          <SearchBox
-            {...props}
-            setSearch={props.setSearch}
-          />
+          {props.currentTab === 'challenges' && (
+            <>
+              <SortChallengesSelector {...props} />
+              <FilterByKeyword {...props} />
+              <FilterByDifficulty {...props} />
+            </>
+          )}
+          {props.currentTab === 'projects' && (
+            <>
+              <SortProjectsSelector {...props} />
+            </>
+          )}
+          {props.currentTab === 'users' && (
+            <>
+              <SortUsersSelector {...props} />
+            </>
+          )}
+          <SearchBox {...props} setSearch={props.setSearch} />
         </div>
       </div>
     </header>

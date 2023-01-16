@@ -50,5 +50,5 @@ export default defineMessages({
   sortByLabel: {
     id: 'Metrics.sortBy',
     defaultMessage: 'Sort By'
-  }
+  },
 })

@@ -1,25 +1,28 @@
 import '@testing-library/jest-dom'
 import * as React from 'react'
 import { SuperAdminPane } from './SuperAdmin'
-import { fireEvent } from "@testing-library/react";
+import { fireEvent } from '@testing-library/react'
 
 const props = {
   user: {
-    id: 1, grants: [{
-      "id": 13,
-      "name": "Super User Override",
-      "grantee": {
-        "granteeType": 5,
-        "granteeId": 1
+    id: 1,
+    grants: [
+      {
+        id: 13,
+        name: 'Super User Override',
+        grantee: {
+          granteeType: 5,
+          granteeId: 1,
+        },
+        role: -1,
+        target: {
+          objectType: 0,
+          objectId: 0,
+        },
       },
-      "role": -1,
-      "target": {
-        "objectType": 0,
-        "objectId": 0
-      }
-    }]
+    ],
   },
-  location: {search: '?tab=challenges&searchType=challenges'},
+  location: { search: '?tab=challenges&searchType=challenges' },
   history: { push: () => null, location: { search: null } },
   match: {},
   clearSearchFilters: () => null,
@@ -38,18 +41,28 @@ const props = {
   clearDateFilter: () => null,
   filterToggleLabel: null,
   projects: [],
-  challenges: [{id: 1, name: 'challenge1', isArchived: true}, {id: 2, name: 'challenge2', isArchived: true}, {id: 3, name: 'challenge3', isArchived: false}]
+  challenges: [
+    { id: 1, name: 'challenge1', isArchived: true },
+    { id: 2, name: 'challenge2', isArchived: true },
+    { id: 3, name: 'challenge3', isArchived: false },
+  ],
 }
-describe("SuperAdminPane", () => {
-  it("redirects to Sign In if no user data", () => {
+describe('SuperAdminPane', () => {
+  it('redirects to Sign In if no user data', () => {
     const { getByText } = global.withProvider(
-      <SuperAdminPane location={props.location} match={props.match} clearSearchFilters={props.clearSearch} clearSearch={props.clearSearch} dashboardEntityFilters={props.dashboardEntityFilters} />
-    );
-    const text = getByText("Sign in");
-    expect(text).toBeInTheDocument();
-  });
+      <SuperAdminPane
+        location={props.location}
+        match={props.match}
+        clearSearchFilters={props.clearSearch}
+        clearSearch={props.clearSearch}
+        dashboardEntityFilters={props.dashboardEntityFilters}
+      />
+    )
+    const text = getByText('Sign in')
+    expect(text).toBeInTheDocument()
+  })
 
-  it("grants super user access to Metrics page", () => {
+  it('grants super user access to Metrics page', () => {
     const { getByText } = global.withProvider(
       <SuperAdminPane
         user={props.user}
@@ -70,13 +83,13 @@ describe("SuperAdminPane", () => {
         toggleFilter={props.toggleFilter}
         filterToggleLabel={props.filterToggleLabel}
       />
-    );
+    )
 
-    const text = getByText("Metrics");
-    expect(text).toBeInTheDocument();
-  });
+    const text = getByText('Metrics')
+    expect(text).toBeInTheDocument()
+  })
 
-  it("can switch tab", () => {
+  it('can switch tab', () => {
     const clearSearch = jest.fn()
     const { container } = global.withProvider(
       <SuperAdminPane
@@ -100,15 +113,16 @@ describe("SuperAdminPane", () => {
         toggleFilter={props.toggleFilter}
         filterToggleLabel={props.filterToggleLabel}
       />
-    );
+    )
 
-    const element = Array.from(container.querySelectorAll('button'))
-      .find(e => e.textContent === 'Projects');
-    fireEvent.click(element);
-    expect(clearSearch).toHaveBeenCalledTimes(1);
-  });
+    const element = Array.from(container.querySelectorAll('button')).find(
+      (e) => e.textContent === 'Projects'
+    )
+    fireEvent.click(element)
+    expect(clearSearch).toHaveBeenCalledTimes(1)
+  })
 
-  it("can toggle for challenge table", () => {
+  it('can toggle for challenge table', () => {
     const toggleFilter = jest.fn()
     const { container } = global.withProvider(
       <SuperAdminPane
@@ -127,15 +141,15 @@ describe("SuperAdminPane", () => {
         removeSearchFilters={props.removeSearchFilters}
         setSearchFilters={props.setSearchFilters}
         allUsers={props.allUsers}
-        entityFilters = {{visible: true, archived: true, virtual: true}}
+        entityFilters={{ visible: true, archived: true, virtual: true }}
         toggleFilter={() => toggleFilter()}
         filterToggleLabel={props.filterToggleLabel}
         challenges={props.challenges}
       />
-    );
-    
+    )
+
     const element = container.querySelectorAll('input[type=checkbox]')[1]
-    fireEvent.click(element);
+    fireEvent.click(element)
     expect(toggleFilter).toHaveBeenCalledTimes(1)
-  });
-});
+  })
+})

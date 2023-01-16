@@ -8,7 +8,6 @@ import FilterByKeyword from './FilterByKeyword'
 import ClearFiltersControl from './ClearFiltersControl'
 import SortChallengesSelector from './SortChallengesSelector'
 import './ChallengeFilterSubnav.scss'
-import { ChallengeLocation } from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import messages from './Messages'
 
 // Setup child components with necessary HOCs
@@ -30,8 +29,6 @@ export class ChallengeFilterSubnav extends Component {
   clearFilters = () => {
     this.props.clearSearchFilters()
     this.props.clearSearch()
-    this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
-    this.props.clearMapBounds()
   }
 
   render() {
