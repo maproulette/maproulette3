@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { FormattedMessage, injectIntl } from "react-intl";
 import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import AutosuggestMentionTextArea from "../AutosuggestTextBox/AutosuggestMentionTextArea";
-import { postChallengeComment} from "../../services/Challenge/ChallengeComments";
+import { postChallengeComment } from "../../services/Challenge/ChallengeComments";
 import messages from "./Messages";
 
 export class FlagCommentInput extends Component {
@@ -12,32 +12,30 @@ export class FlagCommentInput extends Component {
     characterCount: 0,
     value: '',
     checked: false,
-    emailValue: this.props.user.settings.email || ''
+    emailValue: this.props.user.settings.email || '',
+    submittingFlag: false
   };
 
   handleSubmit = async () => {
+    this.setState({ submittingFlag: true })
+
     if (this.state.characterCount < 100) {
       this.props.handleInputError()
-    }
-
-    else if (!this.state.checked) {
+    } else if (!this.state.checked) {
       this.props.handleCheckboxError()
-    }
-    else {
-      let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
+    } else {
       const challenge = this.props.challenge
-      let body = `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})\n\n${this.state.value}`
-      const response = await fetch(`https://api.github.com/repos/tsun812/api_test/issues`, {
+      const owner = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
+      const repo = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
+      const body = `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})\n\n${this.state.value}`
+      const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
         method: 'POST',
         body: JSON.stringify({
           title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
-          owner: 'tsun812',
-          repo: 'api_test',
-          body: body,
-          state: 'open',
-          labels: [
-            'bug'
-          ]
+          owner,
+          repo,
+          body,
+          state: 'open'
         }),
         headers: {
           'Authorization': `token ${process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN}`,
@@ -45,10 +43,9 @@ export class FlagCommentInput extends Component {
           'Accept': 'application/vnd.github.v3+json',
         },
       })
+
       if (response.ok) {
         const responseBody = await response.json()
-        currentIssues.push(responseBody)
-        localStorage.setItem('allFlags', JSON.stringify(currentIssues))
         this.props.onModalSubmit(responseBody)
         const issue_link = responseBody.html_url
         const comment = `This challenge has been flagged by [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName}). Please use [this GitHub issue](${issue_link}) to discuss. \n\n ${this.state.value}`
@@ -56,6 +53,8 @@ export class FlagCommentInput extends Component {
         this.props.handleViewCommentsSubmit()
       }
     }
+
+    this.setState({ submittingFlag: false })
   };
 
   handleChange = (val) => {
@@ -74,9 +73,9 @@ export class FlagCommentInput extends Component {
     return (
       <div className="mr-mt-2">
         <label className="mr-text-white-50">
-            Email
-          </label>
-        <input className="form-control mr-mb-4" type="email" id="root_email" label="Email address" placeholder="Enter your email" value={this.state.emailValue} onChange={(event) => this.setState({emailValue: event.target.value})} />
+          Email
+        </label>
+        <input className="form-control mr-mb-4" type="email" id="root_email" label="Email address" placeholder="Enter your email" value={this.state.emailValue} onChange={(event) => this.setState({ emailValue: event.target.value })} />
         <div className="mr-flex mr-justify-between mr-mb-2 mr-leading-tight mr-text-xxs">
           <div className="mr-flex mr-items-center">
             <button
@@ -132,8 +131,10 @@ export class FlagCommentInput extends Component {
             cols="1"
             inputValue={this.state.value}
             onInputValueChange={this.handleChange}
-            placeholder='enter text here'
+            placeholder='Enter text here'
             disableResize={true}
+            search={() => null}
+            disableShowSuggestions
           />
         )}
         <div className="form mr-flex mr-items-baseline">
@@ -141,7 +142,7 @@ export class FlagCommentInput extends Component {
             type="checkbox"
             className="mr-mr-2"
             checked={this.state.checked}
-            onClick={this.handleToggle}
+            onChange={this.handleToggle}
           />
           <label className="mr-text-white-50">
             <FormattedMessage {...messages.review} />
@@ -159,6 +160,7 @@ export class FlagCommentInput extends Component {
           <button
             className="mr-button mr-button--white mr-mr-12 mr-px-8"
             onClick={this.handleSubmit}
+            disabled={this.state.submittingFlag}
           >
             <FormattedMessage {...messages.submitFlag} />
           </button>

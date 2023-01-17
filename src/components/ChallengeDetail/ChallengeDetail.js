@@ -32,6 +32,11 @@ const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
 );
 
+const FLAG_REPO_NAME = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
+const FLAG_REPO_OWNER = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
+const FLAG_TOKEN = process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
+const FLAGGING_ACTIVE = FLAG_REPO_NAME && FLAG_REPO_OWNER && FLAG_TOKEN
+
 /**
  * ChallengeDetail represents a specific challenge view. It presents an
  * overview of the challenge and allows the user to choose to start
@@ -43,131 +48,47 @@ export class ChallengeDetail extends Component {
 
   state = {
     viewComments: _isObject(this.props.user) && this.props.location.search.includes("conversation"),
-    challengeFlagged: false,
-    listOfIssues: [],
-    modalToggle: false,
+    flagLoading: true,
     issue: undefined,
-    modalClosed: true,
     displayInputError: false,
     displayCheckboxError: false,
-    shouldFetchIssues: true,
+    submittingFlag: false,
   };
 
-  paginated_fetch = (
-    url, // Improvised required argument in JS
-    page = 1,
-    previousResponse = []
-  ) => {
-    return fetch(`${url}?state=all&sort=updated&page=${page}&per_page=30`, {
+  queryForIssue = async (id) => {
+    this.setState({ flagLoading: true });
+
+    const owner = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
+    const repo = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
+    const query = `q='Reported+Challenge+${encodeURIComponent('#') + id}'+in:title+state:open+repo:${owner}/${repo}`;
+    const response = await fetch(`https://api.github.com/search/issues?${query}`, {
       method: 'GET',
-      authorization: 'token ' + process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN,
-      owner: 'tsun812',
-      repo: 'api_test',
-    }).then(response => response.json())
-      .then(newResponse => {
-        const response = [...previousResponse, ...newResponse]; // Combine the two arrays
-
-        if (newResponse.length !== 0) {
-          page++;
-
-          return this.paginated_fetch(url, page, response);
-        }
-
-        return response;
-      });
-  }
-  getIssues = async (id) => {
-    const currentId = parseInt(id)
-    const page = 1
-    const response = await fetch(`https://api.github.com/repos/tsun812/api_test/issues?state=all&sort=updated&page=${page}&per_page=100`, {
-      method: 'GET',
-      authorization: 'token ' + process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN,
-      owner: 'tsun812',
-      repo: 'api_test',
+      headers: {
+        'Accept': 'application/vnd.github.text-match+json'
+      },
     })
-    //const response = await this.paginated_fetch('https://api.github.com/repos/tsun812/api_test/issues')
+
     if (response.ok) {
-      const responseBody = await response.json()
-      console.log(responseBody)
-      let currentIssues = JSON.parse(localStorage.getItem('allFlags')) || []
-      if (!currentIssues.length) {
-        console.log(responseBody)
-        localStorage.setItem('allFlags', JSON.stringify(responseBody))
+      const body = await response.json()
+      if (body?.total_count) {
+        this.setState({ issue: body.items[0] })
       }
 
-      const re = /(?!#)(\d+)\s/g
-
-      for (let i = 0; i < responseBody.length; i++) {
-        let remoteIdMatch = responseBody[i]?.title.match(re)
-        // for all matched open issues, check if ls has the same issue, update staled ls issue to remote one, for all new issues not in ls, add to ls
-        if (remoteIdMatch && remoteIdMatch[0] == currentId && responseBody[i]?.closed_at === null) {
-          console.log('1 remote open')
-          let currentIssue = null
-          for (let j = 0; j < currentIssues.length; j++) {
-            let localIdMatch = currentIssues[j].title.match(re)
-            if (localIdMatch && localIdMatch[0] == currentId && responseBody[i]?.updated_at > currentIssues[j]?.updated_at) {
-              console.log('1 should sync')
-              currentIssues[j] = responseBody[i]
-              currentIssue = responseBody[i]
-              break
-            }
-            else if (localIdMatch && localIdMatch[0] == currentId) {
-              console.log('1 ls not sync')
-              break
-            }
-            else {
-              console.log('1 ls add')
-              currentIssues.push(responseBody[i])
-            }
-          }
-          console.log(currentIssues)
-          localStorage.setItem('allFlags', JSON.stringify(currentIssues))
-          this.handleCurrentIssueState(true, currentIssue)
-          break
-        }
-
-        // for all matched closed issues, check if ls has the same issue, if so remove from ls
-        else if (remoteIdMatch && remoteIdMatch[0] == currentId && responseBody[i]?.closed_at !== null) {
-          console.log('2 remote closed')
-          for (let j = 0; j < currentIssues.length; j++) {
-            let localIdMatch = currentIssues[j]?.title.match(re)
-            if (localIdMatch && localIdMatch[0] == currentId) {
-              console.log('2 ls remove')
-              currentIssues.splice(j, 1)
-              break
-            }
-          }
-          localStorage.setItem('allFlags', JSON.stringify(currentIssues))
-          this.handleCurrentIssueState(false, null)
-          return
-        }
-
-        // for newly flagged issues not in remote yet, read from ls
-        else {
-          console.log('3 only ls has it')
-          for (let j = 0; j < currentIssues.length; j++) {
-            let localIdMatch = currentIssues[j].title.match(re)
-            if (localIdMatch && localIdMatch[0] == currentId) {
-              console.log('3 should flag')
-              this.handleCurrentIssueState(true, currentIssues[j])
-              return
-            }
-          }
-        }
-      }
+      this.setState({ flagLoading: false })
     }
-    this.handleFetchIssues()
   }
+
   componentDidMount() {
     window.scrollTo(0, 0)
-    if (this.state.shouldFetchIssues) {
-      this.getIssues(this.props.match?.params.challengeId)
+
+    const { url, params } = this.props.match
+
+    if (FLAGGING_ACTIVE && !url.includes('virtual')) {
+      this.queryForIssue(params.challengeId)
     }
   }
+
   componentDidUpdate() {
-    if (this.state.shouldFetchIssues) {
-      this.getIssues(this.props.match?.params.challengeId)
-    }
     if (!_isObject(this.props.user) && this.state.viewComments) {
       this.setState({ viewComments: false });
     }
@@ -178,11 +99,11 @@ export class ChallengeDetail extends Component {
   };
 
   onCancel = () => {
-    this.setState({ ...this.state, modalClosed: false });
+    this.setState({ ...this.state, flagModal: false });
   }
 
   onModalSubmit = (data) => {
-    this.setState({ ...this.state, challengeFlagged: true, modalClosed: false, displayInputError: false, issue: data});
+    this.setState({ ...this.state, flagModal: false, displayInputError: false, issue: data });
   }
 
   handleInputError = () => {
@@ -196,14 +117,6 @@ export class ChallengeDetail extends Component {
   handleViewCommentsSubmit = () => {
      this.setState({ ...this.state, viewComments: true})
   }
-  
-  handleFetchIssues = () => {
-     this.setState({...this.state, shouldFetchIssues: false})
-  }
-
-  handleCurrentIssueState = (shouldFlag, currentIssue) => {
-    this.setState({ ...this.state, challengeFlagged: shouldFlag, issue: currentIssue })
-  }
 
   render() {
     const challenge = this.props.browsedChallenge;
@@ -214,7 +127,6 @@ export class ChallengeDetail extends Component {
         </div>
       );
     }
-
   
     // Setup saved status and controls based on whether the user has saved this
     // challenge
@@ -302,14 +214,13 @@ export class ChallengeDetail extends Component {
           ),
         });
 
-    const handleFlag = () => {
-      if (this.state.challengeFlagged) {
-          window.open(this.state.issue?.html_url, "_blank")
+    const handleFlagClick = () => {
+      if (this.state.issue) {
+        window.open(this.state.issue?.html_url, "_blank")
       } else {
-        this.setState({ ...this.state, modalToggle: true, modalClosed: true })
+        this.setState({ flagModal: true })
       }
     }
-
 
     const map = (
       <ClusterMap
@@ -354,27 +265,30 @@ export class ChallengeDetail extends Component {
                 <Taxonomy {...challenge} isSaved={isSaved} />
                 <div className="mr-flex mr-items-center">
                   <h1 className="mr-card-challenge__title mr-mr-3">{challenge.name}</h1>
-                  <SvgSymbol sym='flag-icon' title={!this.state.challengeFlagged ? 'Flag challenge' : 'View github issue'} viewBox='0 0 20 20' className={`mr-w-4 mr-h-4 mr-fill-current mr-cursor-pointer mr-mr-2 ${this.state.challengeFlagged && 'mr-fill-red-light'}`}   onClick={handleFlag}/>
-                  {this.state.challengeFlagged && 
-                    <div className='mr-text-red-light'>
-                      <FormattedMessage {...messages.flaggedText}/>
+                  {FLAGGING_ACTIVE && !this.state.flagLoading && !challenge.isVirtual &&
+                    <div title={!this.state.issue ? 'Flag challenge' : 'View github issue'} className="mr-flex mr-align-center mr-cursor-pointer" onClick={handleFlagClick}>
+                      <SvgSymbol sym="flag-icon" viewBox="0 0 20 20" className={`mr-w-4 mr-h-4 mr-fill-current mr-mr-2${this.state.issue ? ' mr-fill-red-light mr-mt-4px' : ''}`} />
+                      {this.state.issue &&
+                        <div className="mr-text-red-light">
+                          <FormattedMessage {...messages.flaggedText} />
+                        </div>
+                      }
                     </div>
                   }
                 </div>
-                {this.state.modalToggle && this.state.modalClosed && 
-                    <FlagModal 
-                      {...this.props} 
-                      challenge={challenge}  
-                      onCancel={this.onCancel} 
-                      onModalSubmit={this.onModalSubmit} 
-                      handleInputError={this.handleInputError} 
-                      displayInputError={this.state.displayInputError} 
-                      disabledButton={this.state.disabledButton} 
-                      handleDisabledButton={this.handleDisabledButton} 
-                      displayCheckboxError={this.state.displayCheckboxError} 
-                      handleCheckboxError={this.handleCheckboxError} 
-                      handleViewCommentsSubmit={this.handleViewCommentsSubmit} 
-                      />}
+                {this.state.flagModal &&
+                  <FlagModal
+                    {...this.props}
+                    challenge={challenge}
+                    onCancel={this.onCancel}
+                    onModalSubmit={this.onModalSubmit}
+                    handleInputError={this.handleInputError}
+                    displayInputError={this.state.displayInputError}
+                    displayCheckboxError={this.state.displayCheckboxError}
+                    handleCheckboxError={this.handleCheckboxError}
+                    handleViewCommentsSubmit={this.handleViewCommentsSubmit}
+                  />
+                }
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"

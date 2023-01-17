@@ -4,8 +4,8 @@ import Modal from "../Modal/Modal";
 import FlagCommentInput from "./FlagCommentInput";
 import messages from "./Messages";
 import { FormattedMessage } from "react-intl";
-const FlagModel = (props) => {
 
+const FlagModel = (props) => {
   return (
     <External>
       <Modal
@@ -20,7 +20,8 @@ const FlagModel = (props) => {
         </div>
         <FlagCommentInput challenge={props.challenge} {...props} />
       </Modal>
-    </External>)
+    </External>
+  )
 }
 
 export default FlagModel
