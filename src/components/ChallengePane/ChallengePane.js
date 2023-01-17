@@ -106,13 +106,6 @@ export class ChallengePane extends Component {
 
   resetSelectedClusters = () => this.setState({selectedClusters: []})
 
-  componentDidMount() {
-    this.props.clearSearch()
-    this.props.clearSearchFilters()
-    this.props.setSearchSort({ sortBy: 'default' })
-    this.props.setSearchFilters({ location: ChallengeLocation.intersectingMapBounds })
-  }
-
   componentDidUpdate() {
     if (!_isEqual(this.state.bounds, _get(this.props, 'mapBounds.bounds'))) {
       this.setState({bounds: _get(this.props, 'mapBounds.bounds'),
