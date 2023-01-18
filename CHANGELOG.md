@@ -7,7 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.11.5] - 2023-1-10
+## [v3.11.6] - 2023-1-17
 
 ### Features
 - Challenge Flagging
