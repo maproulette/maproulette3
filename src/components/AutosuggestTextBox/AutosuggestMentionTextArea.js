@@ -28,14 +28,16 @@ export default class AutosuggestMentionTextArea extends Component {
   }
 
   inputChanged = (inputText, downshift) => {
-    const searchOn = this.findMatch(inputText,
-      _get(this.props.inputRef, 'current.selectionStart'))
-    if (searchOn !== undefined && searchOn !== null) {
-      this.props.search(searchOn)
-      this.setState({showSuggestions: true})
-    }
-    else if (this.state.showSuggestions) {
-      this.setState({showSuggestions: false})
+    if (!this.props.disableShowSuggestions) {
+      const searchOn = this.findMatch(inputText,
+        _get(this.props.inputRef, 'current.selectionStart'))
+      if (searchOn !== undefined && searchOn !== null) {
+        this.props.search(searchOn)
+        this.setState({showSuggestions: true})
+      }
+      else if (this.state.showSuggestions) {
+        this.setState({showSuggestions: false})
+      }
     }
 
     // inputChanged() gets called with the item if an item is

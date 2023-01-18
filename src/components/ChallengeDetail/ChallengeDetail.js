@@ -25,10 +25,17 @@ import WithChallengeTaskClusters from "../HOCs/WithChallengeTaskClusters/WithCha
 import WithTaskClusterMarkers from "../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers";
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import FlagModal from "./FlagModal";
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
 );
+
+const FLAG_REPO_NAME = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
+const FLAG_REPO_OWNER = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
+const FLAG_TOKEN = process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
+const FLAGGING_ACTIVE = FLAG_REPO_NAME && FLAG_REPO_OWNER && FLAG_TOKEN
 
 const DETAIL_TABS = {
   OVERVIEW: "OVERVIEW",
@@ -45,11 +52,22 @@ const DETAIL_TABS = {
  */
 export class ChallengeDetail extends Component {
   state = {
-    detailTab: _isObject(this.props.user) && this.props.location.search.includes("conversation") ? DETAIL_TABS.COMMENTS : DETAIL_TABS.OVERVIEW
+    detailTab: _isObject(this.props.user) && this.props.location.search.includes("conversation") ? DETAIL_TABS.COMMENTS : DETAIL_TABS.OVERVIEW,
+    flagLoading: true,
+    issue: undefined,
+    displayInputError: false,
+    displayCheckboxError: false,
+    submittingFlag: false,
   };
 
   componentDidMount() {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
+
+    const { url, params } = this.props.match
+
+    if (FLAGGING_ACTIVE && !url.includes('virtual')) {
+      this.queryForIssue(params.challengeId)
+    }
   }
 
   componentDidUpdate() {
@@ -58,9 +76,60 @@ export class ChallengeDetail extends Component {
     }
   }
 
+  queryForIssue = async (id) => {
+    this.setState({ flagLoading: true });
+
+    const owner = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
+    const repo = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
+    const query = `q='Reported+Challenge+${encodeURIComponent('#') + id}'+in:title+state:open+repo:${owner}/${repo}`;
+    const response = await fetch(`https://api.github.com/search/issues?${query}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/vnd.github.text-match+json'
+      },
+    })
+
+    if (response.ok) {
+      const body = await response.json()
+      if (body?.total_count) {
+        this.setState({ issue: body.items[0] })
+      }
+
+      this.setState({ flagLoading: false })
+    }
+  }
+
   onClickTab = (detailTab) => {
     this.setState({ detailTab });
   };
+
+  onCancel = () => {
+    this.setState({ flagModal: false });
+  }
+
+  onModalSubmit = (data) => {
+    this.setState({ flagModal: false, displayInputError: false, issue: data });
+  }
+
+  handleInputError = () => {
+    this.setState({displayInputError: !this.state.displayInputError})
+  }
+
+  handleCheckboxError = () => {
+    this.setState({ displayInputError: false, displayCheckboxError: !this.state.displayCheckboxError})
+  }
+
+  handleViewCommentsSubmit = () => {
+     this.setState({ viewComments: true})
+  }
+
+  handleFlagClick = () => {
+    if (this.state.issue) {
+      window.open(this.state.issue?.html_url, "_blank")
+    } else {
+      this.setState({ flagModal: true })
+    }
+  }
 
   renderDetailTabs = () => {
     const challenge = this.props.browsedChallenge;
@@ -320,7 +389,32 @@ export class ChallengeDetail extends Component {
                   </div>
                 )}
                 <Taxonomy {...challenge} isSaved={isSaved} />
-                <h1 className="mr-card-challenge__title">{challenge.name}</h1>
+                <div className="mr-flex mr-items-center">
+                  <h1 className="mr-card-challenge__title mr-mr-3">{challenge.name}</h1>
+                  {FLAGGING_ACTIVE && !this.state.flagLoading && !challenge.isVirtual &&
+                    <div title={!this.state.issue ? 'Flag challenge' : 'View github issue'} className="mr-flex mr-align-center mr-cursor-pointer" onClick={this.handleFlagClick}>
+                      <SvgSymbol sym="flag-icon" viewBox="0 0 20 20" className={`mr-w-4 mr-h-4 mr-fill-current mr-mr-2${this.state.issue ? ' mr-fill-red-light mr-mt-4px' : ''}`} />
+                      {this.state.issue &&
+                        <div className="mr-text-red-light">
+                          <FormattedMessage {...messages.flaggedText} />
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+                {this.state.flagModal &&
+                  <FlagModal
+                    {...this.props}
+                    challenge={challenge}
+                    onCancel={this.onCancel}
+                    onModalSubmit={this.onModalSubmit}
+                    handleInputError={this.handleInputError}
+                    displayInputError={this.state.displayInputError}
+                    displayCheckboxError={this.state.displayCheckboxError}
+                    handleCheckboxError={this.handleCheckboxError}
+                    handleViewCommentsSubmit={this.handleViewCommentsSubmit}
+                  />
+                }
 
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link

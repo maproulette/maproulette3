@@ -8,7 +8,7 @@ describe("ChallengeDetail", () => {
   it("doesn't break if only required props are provided", () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <ChallengeDetail />
+        <ChallengeDetail match={{ url: "", params: {} }} />
         <div>Test Passes</div>
       </IntlProvider>
     );
