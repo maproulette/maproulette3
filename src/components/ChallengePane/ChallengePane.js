@@ -29,7 +29,6 @@ import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
 import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 import StartVirtualChallenge from './StartVirtualChallenge/StartVirtualChallenge'
-import { ChallengeLocation } from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import messages from './Messages'
 
 const ShowArchivedToggleInternal = (props) => {
