@@ -450,7 +450,7 @@ export const markNotificationsRead = function(userId, notificationIds) {
   return function(dispatch) {
     return new Endpoint(api.user.markNotificationsRead, {
       variables: {userId},
-      params: {notificationIds: notificationIds.join(',')},
+      json: { notificationIds },
     }).execute().then(() => {
       return fetchUserNotifications(userId)(dispatch)
     })
@@ -464,7 +464,7 @@ export const deleteNotifications = function(userId, notificationIds) {
   return function(dispatch) {
     return new Endpoint(api.user.deleteNotifications, {
       variables: {userId},
-      params: {notificationIds: notificationIds.join(',')},
+      json: { notificationIds },
     }).execute().then(() => {
       return fetchUserNotifications(userId)(dispatch)
     })

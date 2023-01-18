@@ -16,6 +16,9 @@ import Dropdown from '../Dropdown/Dropdown'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 
+export const FILTER_SEARCH_TEXT = -1
+export const FILTER_SEARCH_ALL = -2
+
 /**
  * AutosuggestTextBox combines a text input with a dropdown, executing a search
  * as characters are typed and presenting matching items in the dropdown for
@@ -86,6 +89,18 @@ export default class AutosuggestTextBox extends Component {
    * @private
    */
   dropdownItems(getItemProps) {
+    const isChecked = (result) => {
+      if (result.id === FILTER_SEARCH_ALL && this.props.multiselect?.includes(FILTER_SEARCH_ALL)) {
+        return true
+      }
+
+      if (this.props.multiselect?.includes(result.id)) {
+        return true
+      }
+
+      return false
+    }
+
     const generateResult = (result, className = "", index) => {
       if (this.state.highlightResult === index) {
         className += this.props.highlightClassName
@@ -103,7 +118,20 @@ export default class AutosuggestTextBox extends Component {
               ),
             })}
           >
-            {this.props.resultLabel(result)}
+            <div className="mr-flex mr-items-center">
+              {this.props.multiselect && result.id !== FILTER_SEARCH_TEXT
+                ? <input 
+                    type="checkbox"
+                    className="mr-checkbox-toggle mr-mr-2"
+                    id={result.id}
+                    name={result.id}
+                    checked={isChecked(result)}
+                    readOnly
+                  />
+                : null
+              }
+              {this.props.resultLabel(result)}
+            </div>
           </a>
         )
       }

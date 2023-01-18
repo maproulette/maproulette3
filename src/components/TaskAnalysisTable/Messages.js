@@ -199,6 +199,11 @@ export default defineMessages({
     defaultMessage: "Export GeoJSON",
   },
 
+  exportOSMDataLabel: {
+    id: "Admin.manageTasks.controls.exportOSMData.label",
+    defaultMessage: "Export OSM Data",
+  },
+
   exportMapperReviewCSVLabel: {
     id: "Admin.manageTasks.controls.exportMapperReviewCSV.label",
     defaultMessage: "Export Mapper Review CSV",

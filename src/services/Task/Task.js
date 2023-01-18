@@ -410,7 +410,7 @@ export const updateCompletionResponses = function(taskId, completionResponses) {
  */
 export const addTaskComment = function(taskId, comment, taskStatus) {
   return function(dispatch) {
-    const params = {comment}
+    const params = { comment: encodeURIComponent(comment) }
     if (_isFinite(taskStatus)) {
       params.actionId = taskStatus
     }
@@ -440,7 +440,7 @@ export const addTaskComment = function(taskId, comment, taskStatus) {
  */
 export const addTaskBundleComment = function(bundleId, primaryTaskId, comment, taskStatus) {
   return function(dispatch) {
-    const params = {comment}
+    const params = { comment: encodeURIComponent(comment) }
     if (_isFinite(taskStatus)) {
       params.actionId = taskStatus
     }

@@ -45,6 +45,7 @@ import {
   PARAMS_MAP,
 } from "../Search/Search";
 import startOfDay from "date-fns/start_of_day";
+import geojsontoosm from 'geojsontoosm';
 
 /**
  * Constants defining searches to include/exclude 'local' challenges.
@@ -112,6 +113,35 @@ export const buildLinkToExportGeoJSON = function (
       timezone
     )}&filename=${encodeURIComponent(filename)}`
   );
+};
+
+export const exportOSMData = function (url, filename) {
+  return new Endpoint({ url: () => url, method: 'post', options: { noCache: true } }, {
+    method: 'post'
+  })
+    .execute()
+    .then(geojson => {
+      const osmData = geojsontoosm(geojson).replace('generator="geojsontoosm"', 'generator="geojsontoosm" download="never" upload="never"');
+      
+      //https://stackoverflow.com/questions/5143504/how-to-create-and-download-an-xml-file-on-the-fly-using-javascript
+      const file = `${filename}.osm`;
+      const pom = document.createElement('a');
+      const bb = new Blob([osmData], {type: 'text/plain'});
+
+      if (process.env.NODE_ENV !== 'test') {
+        pom.setAttribute('href', window.URL.createObjectURL(bb));
+      }
+      pom.setAttribute('download', file);
+      pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+      pom.draggable = true; 
+      pom.classList.add('dragout');
+      pom.click();
+
+      return osmData;
+    })
+    .catch((error) => {
+      console.log(error.response || error);
+    });
 };
 
 // Helper function to build query filters for export links
@@ -315,8 +345,7 @@ export const fetchProjectChallengeListing = function (
  */
 export const performChallengeSearch = function (
   searchObject,
-  limit = RESULTS_PER_PAGE,
-  admin
+  limit = RESULTS_PER_PAGE
 ) {
   const sortCriteria = _get(searchObject, "sort", {});
   const archived = _get(searchObject, "archived", false);
@@ -324,6 +353,7 @@ export const performChallengeSearch = function (
   const queryString = _get(searchObject, "query");
   const page = _get(searchObject, "page.currentPage");
   const onlyEnabled = _get(searchObject, "onlyEnabled", true);
+  const admin = _get(searchObject, "admin", false);
   let bounds = null;
 
   if (filters && !_isUndefined(filters.location)) {
@@ -897,12 +927,6 @@ export const saveChallenge = function (
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData);
 
-    if (process.env.REACT_APP_CHANGESET_URL === "enabled") {
-      if (challengeData.changesetUrl === undefined) {
-        challengeData.changesetUrl = true;
-      }
-    }
-
     if (_isArray(challengeData.tags)) {
       challengeData.tags = challengeData.tags.map(t => t.trim()).join(",");
     } else if (challengeData.tags) {
@@ -942,7 +966,6 @@ export const saveChallenge = function (
         [
           "blurb",
           "challengeType",
-          "changesetUrl",
           "checkinComment",
           "checkinSource",
           "customBasemap",

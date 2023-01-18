@@ -24,4 +24,4 @@ There are many different ways to contribute to MapRoulette!
 
 * Ask a question about MapRoulette on the [OSM community forum](https://community.openstreetmap.org/tag/maproulette)
 * Join the #maproulette channel on the [OSM US Slack](https://slack.openstreetmap.us/)
-* Follow MapRoulette [on Twitter](https://twitter.com/maproulette)
+* Follow MapRoulette [on Mastodon](https://en.osm.town/@MapRoulette) or [on Twitter](https://twitter.com/maproulette)

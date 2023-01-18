@@ -33,7 +33,7 @@ export const sortChallenges = function(props, challengesProp='challenges', confi
       c => c.created ? c.created : ''))
   }
   else if (sortCriteria === SORT_COMPLETION) {
-    if (!config.frontendSearch) {
+    if (!config?.frontendSearch) {
       sortedChallenges = sortedChallenges.filter(challenge => challenge.completionPercentage !== 100);
     }
     sortedChallenges = _reverse(_sortBy(sortedChallenges, 

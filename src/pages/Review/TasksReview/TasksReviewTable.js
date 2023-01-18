@@ -13,6 +13,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _keys from 'lodash/keys'
 import _omit from 'lodash/omit'
 import _pull from 'lodash/pull'
+import _isEqual from 'lodash/isEqual'
 import _isObject from 'lodash/isObject'
 import _pick from 'lodash/pick'
 import _isUndefined from 'lodash/isUndefined'
@@ -34,7 +35,7 @@ import InTableTagFilter
 import ConfigureColumnsModal
        from '../../../components/ConfigureColumnsModal/ConfigureColumnsModal'
 import FilterSuggestTextBox from './FilterSuggestTextBox'
-import { FILTER_SEARCH_ALL } from './FilterSuggestTextBox'
+import { FILTER_SEARCH_ALL, FILTER_SEARCH_TEXT } from './FilterSuggestTextBox'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
 import Dropdown from '../../../components/Dropdown/Dropdown'
 import IntlDatePicker from '../../../components/IntlDatePicker/IntlDatePicker'
@@ -49,6 +50,20 @@ import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilt
 import { Link } from 'react-router-dom'
 import ReactTable from 'react-table-6'
 
+export const getChallengeFilterIds = (search) => {
+  const searchParams = new URLSearchParams(search);
+
+  for (let pair of searchParams.entries()) {
+    if (pair[0] === "filters.challengeId" && pair[1]) {
+      if (pair[1] === '0') {
+        return [FILTER_SEARCH_ALL]
+      }
+      return pair[1].split(',').map(n => Number(n))
+    }
+  }
+
+  return [FILTER_SEARCH_ALL];
+}
 
 /**
  * TaskReviewTable displays tasks that need to be reviewed or have been reviewed
@@ -61,7 +76,8 @@ export class TaskReviewTable extends Component {
 
   state = {
     openComments: null,
-    showConfigureColumns: false
+    showConfigureColumns: false,
+    challengeFilterIds: getChallengeFilterIds(this.props.location.search)
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -78,26 +94,14 @@ export class TaskReviewTable extends Component {
     // Determine if we can search by challenge Id or do name search
     if (filters.challenge) {
       if (_isObject(filters.challenge)) {
-        if (filters.challenge.id === FILTER_SEARCH_ALL) {
+        if (!this.state.challengeFilterIds.includes(FILTER_SEARCH_TEXT) && !this.state.challengeFilterIds.includes(FILTER_SEARCH_ALL)) {
+          filters.challengeId = this.state.challengeFilterIds
+          filters.challenge = null
+        } else if (filters.challenge.id === FILTER_SEARCH_ALL) {
           // Search all
           filters.challengeId = null
           filters.challenge = null
           filters.challengeName = null
-        }
-        else {
-          if (filters.challenge.id > 0) {
-            filters.challengeId = filters.challenge.id
-          }
-          else if (_get(this.props.reviewCriteria, 'filters.challengeId') ===
-                     filters.challengeId &&
-                   _get(this.props.reviewCriteria, 'filters.challenge') !==
-                     filters.challenge) {
-            // We must be doing a partial search and can't search by id. Our
-            // prior id is invalid.
-            filters.challengeId = null
-          }
-
-          filters.challenge = filters.challenge.name
         }
       }
     }
@@ -128,7 +132,7 @@ export class TaskReviewTable extends Component {
         }
       }
     }
-
+    
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered"])})
       this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
@@ -157,6 +161,22 @@ export class TaskReviewTable extends Component {
     this.props.updateReviewTasks(reviewCriteria)
   }
 
+  updateChallengeFilterIds = (item) => {
+    let newIds = []
+    if (item.id > 0) {
+      newIds = this.state.challengeFilterIds.filter(i => i > 0);
+      if (this.state.challengeFilterIds.includes(item.id)) {
+        newIds = newIds.filter(i => i !== item.id);
+      } else {
+        newIds.push(item.id)
+      }
+    } else {
+      newIds = [item.id]
+    }
+
+    this.setState({ challengeFilterIds: newIds })
+  }
+
   componentWillUnmount() {
     this.componentIsMounted = false
   }
@@ -169,6 +189,10 @@ export class TaskReviewTable extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
       this.setupConfigurableColumns(this.props.reviewTasksType)
+    }
+
+    if (!_isEqual(getChallengeFilterIds(this.props.location.search), this.state.challengeFilterIds)) {
+      setTimeout(() => this.setState({ challengeFilterIds: getChallengeFilterIds(this.props.location.search) }), 100)
     }
 
     // If we've added the "tag" column, we need to update the table to fetch
@@ -306,7 +330,11 @@ export class TaskReviewTable extends Component {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'reviewData.tasks', [])
     const pageSize = this.props.pageSize
-    const columnTypes = setupColumnTypes(this.props,
+    const columnTypes = setupColumnTypes({
+                            ...this.props, 
+                            updateChallengeFilterIds: this.updateChallengeFilterIds,
+                            challengeFilterIds: this.state.challengeFilterIds
+                           },
                            taskId => this.setState({openComments: taskId}),
                            data, this.props.reviewCriteria, pageSize)
 
@@ -480,7 +508,7 @@ export class TaskReviewTable extends Component {
   }
 }
 
-const setupColumnTypes = (props, openComments, data, criteria) => {
+export const setupColumnTypes = (props, openComments, data, criteria) => {
   const columns = {}
   columns.id = {
     id: 'id',
@@ -662,9 +690,13 @@ const setupColumnTypes = (props, openComments, data, criteria) => {
           filterType={"challenge"}
           filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
           selectedItem={""}
-          onChange={onChange}
+          onChange={(item) => {
+            onChange(item)
+            setTimeout(() => props.updateChallengeFilterIds(item), 0)
+          }}
           value={filter ? filter.value : ""}
           itemList={props.reviewChallenges}
+          multiselect={props.challengeFilterIds}
         />
       )
     }

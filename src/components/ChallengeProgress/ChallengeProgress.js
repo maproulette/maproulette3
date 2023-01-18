@@ -21,6 +21,16 @@ import tailwindConfig from '../../tailwind.config.js'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
 
+export const ProgressTooltip = (props) => {
+  return (
+    <div className="mr-bg-black mr-p-2 mr-flex mr-items-center mr-color-white">
+      <div className="mr-w-3 mr-h-3 mr-mr-2" style={{ backgroundColor: props.input.color }} />
+      <div>{props.input.label}</div>
+      <div className="mr-ml-1 mr-font-bold">{props.input.value}%</div>
+    </div>
+  )
+}
+
 const theme = (lightMode = false) => {
   return {
     axis: {
@@ -168,7 +178,7 @@ export class ChallengeProgress extends Component {
                       motionDamping={15}
                       axisLeft={{tickCount: 0, tickValues: []}}
                       axisBottom={{format: v => `${v}%`, tickCount: 5}}
-                      tooltipFormat={v => `${v}%`}
+                      tooltip={(input) => <ProgressTooltip input={input} />}
                       theme={theme(this.props.lightMode)}
         />
         {taskActions.total > 0 && taskActions.available === 0 &&
