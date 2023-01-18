@@ -7,6 +7,15 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.6] - 2023-1-17
+
+### Features
+- Challenge Flagging
+- Super Admin Metrics - Projects and Users
+
+### System Updates
+- robots.txt: Disallow indexing of /ws
+
 ## [v3.11.5] - 2023-1-10
 
 ### Features
@@ -34,7 +43,6 @@ This project adheres to
 ## [v3.11.3] - 2022-12-13
 
 ### Features
-- Super Admin Metrics - Projects and Users
 - add priority rules to bulk edit
 - create users findAll service for superusers (API)
 - Add ability to multiselect challenges in review table
