@@ -1,46 +1,48 @@
-import { fetchProjects } from "../Project/Project";
+import { fetchProjects } from '../Project/Project'
 
 const SET_ADMIN_PROJECTS = 'SET_ADMIN_PROJECTS'
 
-export const receiveAdminProjects = function (
-  normalizedEntities,
-  dispatch
-) {
+export const receiveAdminProjects = function (normalizedEntities, dispatch) {
   dispatch({
     type: SET_ADMIN_PROJECTS,
     payload: [],
-    loading: false
+    loadingCompleted: false,
   })
 
-  const results = Object.keys(normalizedEntities.projects).map(i => normalizedEntities.projects[i]);
+  const results = Object.keys(normalizedEntities.projects).map(
+    (i) => normalizedEntities.projects[i]
+  )
 
   return {
     type: SET_ADMIN_PROJECTS,
     payload: results || [],
-    loading: true
-  };
-};
+    loadingCompleted: true,
+  }
+}
 
-export const fetchAdminProjects = function() {
-  return function(dispatch) {
-    return (
-      dispatch(fetchProjects(50000)).then(normalizedResults => {
-        return dispatch(receiveAdminProjects(normalizedResults.entities, dispatch))
-      })
-    )
+export const fetchAdminProjects = function () {
+  return function (dispatch) {
+    return dispatch(fetchProjects(50000)).then((normalizedResults) => {
+      return dispatch(
+        receiveAdminProjects(normalizedResults.entities, dispatch)
+      )
+    })
   }
 }
 
 const ADMIN_PROJECTS_INITIAL_STATE = {
   data: [],
-  loading: false
+  loadingCompleted: false,
 }
 
-export const adminProjectEntities = function(state = ADMIN_PROJECTS_INITIAL_STATE, action) {
+export const adminProjectEntities = function (
+  state = ADMIN_PROJECTS_INITIAL_STATE,
+  action
+) {
   switch (action.type) {
     case SET_ADMIN_PROJECTS:
-      return { data: action.payload, loading: action.loading };
+      return { data: action.payload, loadingCompleted: action.loadingCompleted }
     default:
-      return state;
+      return state
   }
 }
