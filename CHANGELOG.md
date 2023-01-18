@@ -43,7 +43,6 @@ This project adheres to
 ## [v3.11.3] - 2022-12-13
 
 ### Features
-- Super Admin Metrics - Projects and Users
 - add priority rules to bulk edit
 - create users findAll service for superusers (API)
 - Add ability to multiselect challenges in review table
