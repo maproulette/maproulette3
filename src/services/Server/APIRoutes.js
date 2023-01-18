@@ -163,6 +163,7 @@ const apiRoutes = (factory) => {
       reviewerLeaderboard: factory.get("/data/reviewer/leaderboard"),
       find: factory.get("/users/find/:username"),
       findPreferred: factory.get("/users/find"),
+      all: factory.get("/users")
     },
     user: {
       whoami: factory.get("/user/whoami"),
@@ -184,7 +185,7 @@ const apiRoutes = (factory) => {
       ),
       notifications: factory.get("/user/:userId/notifications"),
       markNotificationsRead: factory.put("/user/:userId/notifications"),
-      deleteNotifications: factory.delete("/user/:userId/notifications"),
+      deleteNotifications: factory.put("/user/:userId/notifications/delete"),
     },
     teams: {
       find: factory.get("/teams/find"),

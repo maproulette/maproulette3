@@ -7,10 +7,42 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.6] - 2023-1-17
+
+### Features
+- Challenge Flagging
+- Super Admin Metrics - Projects and Users
+
+### System Updates
+- robots.txt: Disallow indexing of /ws
+
+## [v3.11.5] - 2023-1-10
+
+### Features
+- Remove changesetUrl configs and make mandatory
+- add overpass query to challenge detail page
+
+### Fixes
+- Make toggleVisible a function on LocationSearchBox - fixes a type error
+- add history entries for when a task review was started
+- revert conditionally rendered Overview link on Challenge Detail
+
+### System Updates
+- Add issue templates for features and bugs
+- Bump flat from 5.0.0 to 5.0.2
+- Bump json5 from 1.0.1 to 1.0.2
+- update maproulette3 github location
+
+## [v3.11.4] - 2022-12-22
+
+### Fixes
+- move notificationIds to json in services
+- check for logged in user if getting activity data
+- Challenge multi filter revisions
+
 ## [v3.11.3] - 2022-12-13
 
 ### Features
-- Super Admin Metrics - Projects and Users
 - add priority rules to bulk edit
 - create users findAll service for superusers (API)
 - Add ability to multiselect challenges in review table
@@ -252,8 +284,8 @@ This project adheres to
 ## [v3.7.8rev1] - 2021-06-09
 
 ### Fixed
-- Unable to upload tasks (API). [(895)](https://github.com/maproulette/maproulette2/issues/895)
-- Unable to do batch status changes [(1613)](https://github.com/osmlab/maproulette3/issues/1613)
+- Unable to upload tasks (API). [(895)](https://github.com/maproulette/maproulette-backend/issues/895)
+- Unable to do batch status changes [(1613)](https://github.com/maproulette/maproulette3/issues/1613)
 - Instruction Widget expand/collapse toggle fix.
 
 ## [v3.7.8] - 2021-06-02
@@ -581,7 +613,7 @@ This project adheres to
 - Display of Featured Challenges widget on Safari
 - Various display issues on Project Details page
 - Task Review table page-size reset after every task review
-- Clean up any negative timestamps left by bug maproulette/maproulette2#728
+- Clean up any negative timestamps left by bug maproulette/maproulette-backend#728
 
 
 ## [v3.6.4] - 2020-06-09

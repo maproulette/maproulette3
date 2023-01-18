@@ -77,7 +77,7 @@ export class LocationSearchBox extends Component {
             <Dropdown
               className="mr-flex"
               arrowClassName="mr-pr-5"
-              toggleVisible
+              toggleVisible={() => null}
               isVisible
               dropdownButton={() => null}
               dropdownContent={() =>
