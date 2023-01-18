@@ -185,7 +185,7 @@ const apiRoutes = (factory) => {
       ),
       notifications: factory.get("/user/:userId/notifications"),
       markNotificationsRead: factory.put("/user/:userId/notifications"),
-      deleteNotifications: factory.delete("/user/:userId/notifications"),
+      deleteNotifications: factory.put("/user/:userId/notifications/delete"),
     },
     teams: {
       find: factory.get("/teams/find"),

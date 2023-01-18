@@ -31,6 +31,7 @@ import {
 import AsEditableChallenge from "../../../../../interactions/Challenge/AsEditableChallenge";
 import BusySpinner from "../../../../BusySpinner/BusySpinner";
 import BulkEditSteps from "./BulkEditSteps";
+import { preparePriorityRuleGroupForSaving } from "./PriorityRuleGroup";
 import manageMessages from "../../Messages";
 import messages from "./Messages";
 import "./EditChallenge.scss";
@@ -77,10 +78,14 @@ export class EditChallenges extends Component {
       for (let i = 0; i < challengesEditing.length; i++) {
         const result = await this.props.saveChallenge({
           id: challengesEditing[i].id,
+          changesetUrl: challengesEditing[i].changesetUrl,
           tags: formData.tags,
-          preferredTags: formData.taskTags,
+          preferredTags: formData.preferredTags,
           exportableProperties: formData.exportableProperties,
-          changesetUrl: challengesEditing[i].changesetUrl
+          defaultPriority: formData.defaultPriority,
+          highPriorityRule: formData.highPriorityRule === "{}" ? undefined : formData.highPriorityRule,
+          mediumPriorityRule: formData.mediumPriorityRule === "{}" ? undefined : formData.mediumPriorityRule,
+          lowPriorityRule: formData.lowPriorityRule === "{}" ? undefined : formData.lowPriorityRule
         });
 
         if (result?.id) {
@@ -152,6 +157,21 @@ export class EditChallenges extends Component {
       )
     );
 
+    challengeData.highPriorityRule = preparePriorityRuleGroupForSaving(
+      challengeData.highPriorityRules.ruleGroup
+    );
+    delete challengeData.highPriorityRules;
+
+    challengeData.mediumPriorityRule = preparePriorityRuleGroupForSaving(
+      challengeData.mediumPriorityRules.ruleGroup
+    );
+    delete challengeData.mediumPriorityRules;
+
+    challengeData.lowPriorityRule = preparePriorityRuleGroupForSaving(
+      challengeData.lowPriorityRules.ruleGroup
+    );
+    delete challengeData.lowPriorityRules;
+
     challengeData.tags =
       ChallengeCategoryKeywords[challengeData.category] ||
       ChallengeCategoryKeywords.other;
@@ -163,6 +183,15 @@ export class EditChallenges extends Component {
           challengeData.additionalKeywords.split(/,+/),
           (keyword) => !_isEmpty(keyword)
         )
+      );
+    }
+
+    if (!_isEmpty(challengeData.taskTags)) {
+      // replace whitespace with commas, split on comma, and filter out any
+      // empty-string tags.
+      challengeData.preferredTags = _filter(
+        challengeData.taskTags.split(/,+/),
+        (tag) => !_isEmpty(tag)
       );
     }
 

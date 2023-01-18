@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.11.1",
+  "version": "3.11.5",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.5.4",
@@ -34,6 +34,7 @@
     "fontsource-bungee-inline": "^3.1.5",
     "fontsource-bungee-shade": "^3.1.5",
     "fuse.js": "^6.2.0",
+    "geojsontoosm": "^0.0.3",
     "graphql": "^16.0.1",
     "leaflet": "^1.6.0",
     "leaflet-lasso": "^2.1.0",

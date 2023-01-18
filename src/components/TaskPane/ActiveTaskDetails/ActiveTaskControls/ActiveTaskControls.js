@@ -36,6 +36,7 @@ import TaskConfirmationModal
        from '../../../TaskConfirmationModal/TaskConfirmationModal'
 import TaskTags from '../../../TaskTags/TaskTags'
 import messages from './Messages'
+import { constructChangesetUrl } from '../../../../utils/constructChangesetUrl'
 import './ActiveTaskControls.scss'
 
 
@@ -163,7 +164,7 @@ export class ActiveTaskControls extends Component {
   initiateCompletion = (taskStatus, submitRevision) => {
     this.setState({
       confirmingTask: this.props.task,
-      osmComment: this.props.task.parent.checkinComment,
+      osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
       confirmingStatus: taskStatus,
       submitRevision,
     })
