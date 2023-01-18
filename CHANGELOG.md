@@ -10,6 +10,15 @@ This project adheres to
 ## [v3.11.5] - 2023-1-10
 
 ### Features
+- Challenge Flagging
+- Super Admin Metrics - Projects and Users
+
+### System Updates
+- robots.txt: Disallow indexing of /ws
+
+## [v3.11.5] - 2023-1-10
+
+### Features
 - Remove changesetUrl configs and make mandatory
 - add overpass query to challenge detail page
 
