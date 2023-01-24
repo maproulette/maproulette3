@@ -137,30 +137,32 @@ export class WidgetWorkspace extends Component {
     if (!this.isEditing()) {
       return (
         <div className="mr-text-xs mr-flex mr-pt-3 mr-whitespace-no-wrap mr-ml-24">
-          <Dropdown
-            className="mr-dropdown--right"
-            dropdownButton={dropdown =>
-              <LayoutButton
-                {...this.props}
-                toggleDropdownVisible={dropdown.toggleDropdownVisible}
-              />
-            }
-            dropdownContent={dropdown =>
-              <ListLayoutItems
-                workspaceConfigurations={this.props.workspaceConfigurations}
-                currentConfiguration={this.props.currentConfiguration}
-                switchConfiguration={this.switchConfiguration}
-                startEditingLayout={this.startEditingLayout}
-                addConfiguration={this.addConfiguration}
-                resetConfiguration={this.resetConfiguration}
-                beginExportingConfiguration={this.beginExportingConfiguration}
-                importConfiguration={this.importConfiguration}
-                deleteConfiguration={this.deleteConfiguration}
-                closeDropdown={dropdown.closeDropdown}
-              />
-            }
-          >
-          </Dropdown>
+          {!this.props.hideLayoutButton &&
+            <Dropdown
+              className="mr-dropdown--right"
+              dropdownButton={dropdown =>
+                  <LayoutButton
+                  {...this.props}
+                  toggleDropdownVisible={dropdown.toggleDropdownVisible}
+                  />
+              }
+              dropdownContent={dropdown =>
+                <ListLayoutItems
+                  workspaceConfigurations={this.props.workspaceConfigurations}
+                  currentConfiguration={this.props.currentConfiguration}
+                  switchConfiguration={this.switchConfiguration}
+                  startEditingLayout={this.startEditingLayout}
+                  addConfiguration={this.addConfiguration}
+                  resetConfiguration={this.resetConfiguration}
+                  beginExportingConfiguration={this.beginExportingConfiguration}
+                  importConfiguration={this.importConfiguration}
+                  deleteConfiguration={this.deleteConfiguration}
+                  closeDropdown={dropdown.closeDropdown}
+                />
+              }
+            >
+            </Dropdown>
+          }
         </div>
       )
     }
