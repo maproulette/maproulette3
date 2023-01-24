@@ -49,6 +49,10 @@ export const clearTaskClusters = function() {
  */
 export const fetchTaskClusters = function(challengeId, criteria, points=25) {
   return function(dispatch) {
+    if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true') {
+      return new Promise((resolve) => resolve());
+    }
+
     // The map is either showing task clusters or bounded tasks so we can't
     // have both in redux.
     dispatch(clearBoundedTasks())
