@@ -2,7 +2,7 @@ import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _isString from 'lodash/isString'
-import { ChallengeBasemap }
+import { ChallengeBasemap, ChallengeBasemapBulkEdit }
        from '../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 
 const maprouletteHashtag = '#maproulette'
@@ -81,7 +81,11 @@ export class AsEditableChallenge {
    *
    */
   normalizeDefaultBasemap() {
-    if (_isFinite(Number(this.defaultBasemap))) {
+    if (Number(this.defaultBasemap) === ChallengeBasemapBulkEdit.unchanged) {
+      delete this.defaultBasemapId
+      delete this.defaultBasemap
+    }
+    else if (_isFinite(Number(this.defaultBasemap))) {
       this.defaultBasemapId = ''
       this.defaultBasemap = Number(this.defaultBasemap)
     }

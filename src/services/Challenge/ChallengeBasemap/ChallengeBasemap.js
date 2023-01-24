@@ -16,7 +16,22 @@ export const CHALLENGE_BASEMAP_BING = 2
 export const CHALLENGE_BASEMAP_CUSTOM = 3
 export const CHALLENGE_BASEMAP_IDENTIFIED = 4
 
+/**
+ * Global variable to indicate to the frontend not to submit a basemap change
+ */
+export const CHALLENGE_BASEMAP_UNCHANGED = -2
+
 export const ChallengeBasemap = Object.freeze({
+  none: CHALLENGE_BASEMAP_NONE,
+  openStreetMap: CHALLENGE_BASEMAP_OPEN_STREET_MAP,
+  openCycleMap: CHALLENGE_BASEMAP_OPEN_CYCLE_MAP,
+  bing: CHALLENGE_BASEMAP_BING,
+  custom: CHALLENGE_BASEMAP_CUSTOM,
+  identified: CHALLENGE_BASEMAP_IDENTIFIED,
+})
+
+export const ChallengeBasemapBulkEdit = Object.freeze({
+  unchanged: CHALLENGE_BASEMAP_UNCHANGED,
   none: CHALLENGE_BASEMAP_NONE,
   openStreetMap: CHALLENGE_BASEMAP_OPEN_STREET_MAP,
   openCycleMap: CHALLENGE_BASEMAP_OPEN_CYCLE_MAP,
