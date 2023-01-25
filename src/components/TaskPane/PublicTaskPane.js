@@ -23,7 +23,8 @@ import BusySpinner from '../BusySpinner/BusySpinner'
 import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
 import messages from './Messages'
 import WithPublicWidgetWorkspaces from '../HOCs/WithPublicWidgetWorkspaces/WithPublicWidgetWorkspaces'
-
+import WidgetGrid from '../WidgetGrid/WidgetGrid'
+import Button from '../Button/Button'
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails)
 
@@ -38,20 +39,25 @@ export const defaultWorkspaceSetup = function() {
     name: WIDGET_WORKSPACE_NAME,
     label: "Task Completion",
     widgets: [
-      widgetDescriptor('TaskInstructionsWidget'),
+      widgetDescriptor('TaskMapWidget'),
+      widgetDescriptor('TaskCompletionWidget'),
+      widgetDescriptor('TaskLocationWidget'),
     ],
     layout: [
-      {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4},
-      {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 5},
       {i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19},
       {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
+      {i: generateWidgetId(), x: 0, y: 11, w: 4, h: 8},
     ],
     permanentWidgets: [ // Cannot be removed from workspace
+      'TaskMapWidget',
+      'TaskCompletionWidget',
+      'TagDiffWidget',
     ],
     excludeWidgets: [ // Cannot be added to workspace
       'TaskReviewWidget',
     ],
     conditionalWidgets: [ // conditionally displayed
+      'TagDiffWidget',
     ],
   }
 }
@@ -127,6 +133,15 @@ export class PublicTaskPane extends Component {
   }
 
   render() {
+    return (
+      <WidgetGrid
+        {...this.props}
+        workspace={this.props.currentConfiguration}
+        workspaceContext={this.state.workspaceContext}
+        setWorkspaceContext={this.setWorkspaceContext}
+        targets={WidgetDataTarget.task}
+    />
+    )
     if (!_get(this.props, 'task.parent.parent')) {
       return (
         <div className="pane-loading full-screen-height">
@@ -138,7 +153,7 @@ export class PublicTaskPane extends Component {
     return (
       <div className="mr-relative">
         <MediaQuery query="(min-width: 1024px)">
-          <WidgetWorkspace
+          {/* <WidgetWorkspace
             {...this.props}
             className={classNames(
               "mr-bg-gradient-r-green-dark-blue mr-text-white mr-pb-8 mr-cards-inverse", {
@@ -153,7 +168,7 @@ export class PublicTaskPane extends Component {
               </div>
             }
             hideLayoutButton={true}
-          />
+          /> */}
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
           <MapPane completingTask={this.state.completingTask}>
