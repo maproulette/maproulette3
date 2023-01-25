@@ -19,6 +19,9 @@ export const uiSchema = (
   intl
 ) => {
   return {
+    "ui:order": [
+      "exportableProperties",
+    ],
     exportableProperties: {
       "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.exportablePropertiesDescription),
