@@ -7,6 +7,35 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.7] - 2023-1-24
+Release with [maproulette-backend_v4.3.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.3.1)
+
+### Features
+- add basemap inputs to bulk edit
+- Create API endpoint /api/v2/service/info (API)
+- Generate BuildInfo.scala with useful build-time data (API)
+
+### Fixes
+- return empty data during security errors for /data queries
+- require logged in user to show flagging feature
+- remove changesetUrl config in .env
+- Require authN for routes in DataController.scala (API)
+- Enforce max task count for POST /api/v2/tasks (API)
+- use reviewStartedAt when there's no reviewClaimedAt (API)
+
+### System Updates
+- add toggle to disable fetching task clusters
+- add toggle to disable super admin metrics
+- Web crawlers should not access /api/v2/data*
+- Remove old files (API)
+- Update scalac opts to see more possible code issues (API)
+- Improve the sbt swagger routes file generation (API)
+- More logging when storing user API key in OSM (API)
+- Simplify the application.conf and dev.conf.example (API)
+- Support conf overrides of max tasks per challenge (API)
+- README show to use postgis:13-3.3 (API)
+- Set caffeine as the default cache type (API)
+
 ## [v3.11.6] - 2023-1-17
 
 ### Features
