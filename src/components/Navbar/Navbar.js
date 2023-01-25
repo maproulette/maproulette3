@@ -252,7 +252,7 @@ export const ProfileMenu = function(props) {
         </NavLink>
       </li>
       {
-        isSuperUser
+        isSuperUser && process.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS !== 'true'
           ? <li>
               <NavLink to="/superadmin" onClick={props.closeDropdown}>
                 <FormattedMessage {...messages.superAdmin} />

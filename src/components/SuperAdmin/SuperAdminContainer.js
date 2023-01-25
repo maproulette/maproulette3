@@ -5,6 +5,7 @@ import { fetchAdminChallenges } from '../../services/SuperAdmin/SuperAdminChalle
 import { fetchAdminProjects } from '../../services/SuperAdmin/SuperAdminProjects'
 import { fetchAdminUsers } from '../../services/SuperAdmin/SuperAdminUsers'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
+import AsManager from '../../interactions/User/AsManager'
 import { withRouter } from 'react-router'
 import WithMetricsSearch from './WithMetricsSearch'
 import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
@@ -26,13 +27,21 @@ const WrappedSuperAdminPane = WithCurrentUser(
 
 class SuperAdminContainer extends Component {
   componentDidMount() {
-    const searchQuery = { onlyEnabled: false }
-    this.props.fetchAdminChallenges(searchQuery)
-    this.props.fetchAdminProjects()
-    this.props.fetchAdminUsers()
+    if (process.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS !== 'true') {
+      if (AsManager(this.props.user).isSuperUser()) {
+        const searchQuery = { onlyEnabled: false }
+        this.props.fetchAdminChallenges(searchQuery)
+        this.props.fetchAdminProjects()
+        this.props.fetchAdminUsers()
+      }
+    }
   }
 
   render() {
+    if (process.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS === 'true') {
+      return <div>Super Admin Metrics is currently disabled</div>
+    }
+
     return (
       <WrappedSuperAdminPane
         challenges={this.props.adminChallenges}
@@ -74,4 +83,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SuperAdminContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(WithCurrentUser(SuperAdminContainer))
