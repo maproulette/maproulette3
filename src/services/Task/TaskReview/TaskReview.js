@@ -221,6 +221,10 @@ export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) 
                                                           null,
                                                           _get(criteria, 'invertFields', {}))
   return function(dispatch) {
+    if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true') {
+      return new Promise((resolve) => resolve());
+    }
+
     const type = determineType(reviewTasksType)
     const fetchId = uuidv1()
 
