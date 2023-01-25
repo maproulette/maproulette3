@@ -547,9 +547,12 @@ export const fetchChallengeActions = function (
       })
       .catch((error) => {
         if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
-          );
+          //We are making 401s for this endpoint silent to allow overview
+          //pages to continue to function without challenge action data.
+          //This is a temporary solution until performance degredation in
+          //maproulette-backend's DataController is addressed.
+          //Also see https://github.com/maproulette/maproulette-backend/pull/1014
+          return []
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
           console.log(error.response || error);
@@ -577,9 +580,12 @@ export const fetchProjectChallengeActions = function (
       })
       .catch((error) => {
         if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
-          );
+          //We are making 401s for this endpoint silent to allow overview
+          //pages to continue to function without challenge action data.
+          //This is a temporary solution until performance degredation in
+          //maproulette-backend's DataController is addressed.
+          //Also see https://github.com/maproulette/maproulette-backend/pull/1014
+          return []
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
           console.log(error.response || error);
