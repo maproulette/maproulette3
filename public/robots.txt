@@ -1,4 +1,5 @@
-# Tell all robots to not index the websocket endpoint /ws.
-# This is simply to not waste the resources on a bot.
 user-agent: *
+# Disallow websocket to simply to not waste the resources on a bot.
 disallow: /ws
+# Disallow everything under data
+disallow: /api/v2/data
