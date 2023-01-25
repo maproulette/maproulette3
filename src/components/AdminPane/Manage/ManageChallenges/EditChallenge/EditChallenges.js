@@ -82,6 +82,9 @@ export class EditChallenges extends Component {
           tags: formData.tags,
           preferredTags: formData.preferredTags,
           exportableProperties: formData.exportableProperties,
+          customBasemap: formData.customBasemap,
+          defaultBasemap: formData.defaultBasemap,
+          defaultBasemapId: formData.defaultBasemapId,
           defaultPriority: formData.defaultPriority,
           highPriorityRule: formData.highPriorityRule === "{}" ? undefined : formData.highPriorityRule,
           mediumPriorityRule: formData.mediumPriorityRule === "{}" ? undefined : formData.mediumPriorityRule,
@@ -156,6 +159,8 @@ export class EditChallenges extends Component {
         this.state.formData
       )
     );
+
+    challengeData.normalizeDefaultBasemap();
 
     challengeData.highPriorityRule = preparePriorityRuleGroupForSaving(
       challengeData.highPriorityRules.ruleGroup

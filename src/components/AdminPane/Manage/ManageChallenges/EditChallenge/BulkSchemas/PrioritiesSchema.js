@@ -251,11 +251,8 @@ const priorityRuleGroupUISchema = (isCollapsed) => ({
  * > proper markup
  */
 export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
-  console.log("options", options)
   const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
   const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
-
-  console.log(isCollapsed, toggleCollapsed)
 
   return {
     defaultPriority: {
