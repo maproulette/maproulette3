@@ -25,6 +25,7 @@ Release with [maproulette-backend_v4.3.1](https://github.com/maproulette/maproul
 
 ### System Updates
 - add toggle to disable fetching task clusters
+- add toggle to disable super admin metrics
 - Web crawlers should not access /api/v2/data*
 - Remove old files (API)
 - Update scalac opts to see more possible code issues (API)
