@@ -50,11 +50,11 @@ import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilt
 import { Link } from 'react-router-dom'
 import ReactTable from 'react-table-6'
 
-export const getChallengeFilterIds = (search) => {
+export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
 
   for (let pair of searchParams.entries()) {
-    if (pair[0] === "filters.challengeId" && pair[1]) {
+    if (pair[0] === param && pair[1]) {
       if (pair[1] === '0') {
         return [FILTER_SEARCH_ALL]
       }
@@ -77,7 +77,8 @@ export class TaskReviewTable extends Component {
   state = {
     openComments: null,
     showConfigureColumns: false,
-    challengeFilterIds: getChallengeFilterIds(this.props.location.search)
+    challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
+    projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId')
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -109,26 +110,14 @@ export class TaskReviewTable extends Component {
     // Determine if we can search by project Id or do name search
     if (filters.project) {
       if (_isObject(filters.project)) {
-        if (filters.project.id === FILTER_SEARCH_ALL) {
+        if (!this.state.projectFilterIds.includes(FILTER_SEARCH_TEXT) && !this.state.projectFilterIds.includes(FILTER_SEARCH_ALL)) {
+          filters.projectId = this.state.projectFilterIds
+          filters.project = null
+        } else if (filters.project.id === FILTER_SEARCH_ALL) {
           // Search all
           filters.projectId = null
           filters.project = null
           filters.projectName = null
-        }
-        else {
-          if (filters.project.id > 0) {
-            filters.projectId = filters.project.id
-          }
-          else if (_get(this.props.reviewCriteria, 'filters.projectId') ===
-                     filters.projectId &&
-                   _get(this.props.reviewCriteria, 'filters.project') !==
-                     filters.project) {
-            // We must be doing a partial search and can't search by id. Our
-            // prior id is invalid.
-            filters.projectId = null
-          }
-
-          filters.project = filters.project.name
         }
       }
     }
@@ -177,6 +166,22 @@ export class TaskReviewTable extends Component {
     this.setState({ challengeFilterIds: newIds })
   }
 
+  updateProjectFilterIds = (item) => {
+    let newIds = []
+    if (item.id > 0) {
+      newIds = this.state.projectFilterIds.filter(i => i > 0);
+      if (this.state.projectFilterIds.includes(item.id)) {
+        newIds = newIds.filter(i => i !== item.id);
+      } else {
+        newIds.push(item.id)
+      }
+    } else {
+      newIds = [item.id]
+    }
+
+    this.setState({ projectFilterIds: newIds })
+  }
+
   componentWillUnmount() {
     this.componentIsMounted = false
   }
@@ -191,8 +196,14 @@ export class TaskReviewTable extends Component {
       this.setupConfigurableColumns(this.props.reviewTasksType)
     }
 
-    if (!_isEqual(getChallengeFilterIds(this.props.location.search), this.state.challengeFilterIds)) {
-      setTimeout(() => this.setState({ challengeFilterIds: getChallengeFilterIds(this.props.location.search) }), 100)
+    if (
+      !_isEqual(getFilterIds(this.props.location.search, 'filters.challengeId'), this.state.challengeFilterIds) ||
+      !_isEqual(getFilterIds(this.props.location.search, 'filters.projectId'), this.state.projectFilterIds)
+    ) {
+      setTimeout(() => this.setState({ 
+        challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
+        projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId')
+      }), 100)
     }
 
     // If we've added the "tag" column, we need to update the table to fetch
@@ -333,7 +344,9 @@ export class TaskReviewTable extends Component {
     const columnTypes = setupColumnTypes({
                             ...this.props, 
                             updateChallengeFilterIds: this.updateChallengeFilterIds,
-                            challengeFilterIds: this.state.challengeFilterIds
+                            updateProjectFilterIds: this.updateProjectFilterIds,
+                            challengeFilterIds: this.state.challengeFilterIds,
+                            projectFilterIds: this.state.projectFilterIds
                            },
                            taskId => this.setState({openComments: taskId}),
                            data, this.props.reviewCriteria, pageSize)
@@ -724,9 +737,13 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           filterType={"project"}
           filterAllLabel={props.intl.formatMessage(messages.allProjects)}
           selectedItem={""}
-          onChange={onChange}
+          onChange={(item) => {
+            onChange(item)
+            setTimeout(() => props.updateProjectFilterIds(item), 0)
+          }}
           value={filter ? filter.value : ""}
           itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
+          multiselect={props.projectFilterIds}
         />
       )
     }
