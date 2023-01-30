@@ -1,32 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage, injectIntl } from 'react-intl'
-import MediaQuery from 'react-responsive'
-import classNames from 'classnames'
+import { injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
-import WithWidgetWorkspaces
-       from '../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
-import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
-import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import WithCooperativeWork from '../HOCs/WithCooperativeWork/WithCooperativeWork'
 import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
 import WithLockedTask from '../HOCs/WithLockedTask/WithLockedTask'
-import MapPane from '../EnhancedMap/MapPane/MapPane'
-import TaskMap from './TaskMap/TaskMap'
-import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
-import BasicDialog from '../BasicDialog/BasicDialog'
 import BusySpinner from '../BusySpinner/BusySpinner'
-import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
-import messages from './Messages'
 import WithPublicWidgetWorkspaces from '../HOCs/WithPublicWidgetWorkspaces/WithPublicWidgetWorkspaces'
-import WidgetGrid from '../WidgetGrid/WidgetGrid'
-import Button from '../Button/Button'
-// Setup child components with necessary HOCs
-const MobileTabBar = WithCurrentUser(MobileTaskDetails)
+import { PublicWidgetGrid } from '../PublicWidgetGrid/PublicWidgetGrid'
 
 const WIDGET_WORKSPACE_NAME = "taskCompletion"
 
@@ -37,37 +22,36 @@ export const defaultWorkspaceSetup = function() {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Task Completion",
+    label: 'Task Completion',
     widgets: [
-      widgetDescriptor('TaskMapWidget'),
+      widgetDescriptor('ChallengeShareWidget'),
+      // widgetDescriptor('TaskInstructionsWidget'),
+      widgetDescriptor('CompletionProgressWidget'),
       widgetDescriptor('TaskCompletionWidget'),
-      widgetDescriptor('TaskLocationWidget'),
+      widgetDescriptor('TaskStatusWidget'),
+      widgetDescriptor('OSMHistoryWidget'),
+      widgetDescriptor('TaskHistoryWidget')
+     // widgetDescriptor('TaskMapWidget'),
     ],
     layout: [
-      {i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19},
+      { i: generateWidgetId(), x: 0, y: 0, w: 3, h: 3 },
+      // { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
+      { i: generateWidgetId(), x: 4, y: 5, w: 5, h: 7 },
       {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
-      {i: generateWidgetId(), x: 0, y: 11, w: 4, h: 8},
-    ],
-    permanentWidgets: [ // Cannot be removed from workspace
-      'TaskMapWidget',
-      'TaskCompletionWidget',
-      'TagDiffWidget',
-    ],
-    excludeWidgets: [ // Cannot be added to workspace
-      'TaskReviewWidget',
-    ],
-    conditionalWidgets: [ // conditionally displayed
-      'TagDiffWidget',
+      {i: generateWidgetId(), x: 0, y: 4, w: 3, h: 4},
+      {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
+      {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
+      //{ i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19 },
     ],
   }
 }
 
 /**
- * TaskPane presents the current task being actively worked upon. It contains
- * an WidgetWorkspace with information and controls, including a TaskMap
- * displaying the appropriate map and task geometries.
- *
- * @author [Neil Rotstan](https://github.com/nrotstan)
+ * PublicTaskPane presents the preview page of current task. It contains
+ * an WidgetWorkspace with information and controls, including
+ * task instruction, challenge share control, task completion progress, task status
+ * OSM history, task history, and a task map
+ * 
  */
 export class PublicTaskPane extends Component {
   lockRefreshInterval = null
@@ -81,6 +65,7 @@ export class PublicTaskPane extends Component {
     completionResponses: null,
     showLockFailureDialog: false,
     needsResponses: false,
+    workspaceContext: {},
   }
 
   tryLockingTask = () => {
@@ -107,41 +92,32 @@ export class PublicTaskPane extends Component {
   componentDidMount() {
     // Setup an interval to refresh the task lock every so often so that it
     // doesn't expire while the mapper is actively working on the task
-    this.clearLockRefreshInterval()
-    this.lockRefreshInterval = setInterval(() => {
-      this.props.refreshTaskLock(this.props.task).then(success => {
-        if (!success) {
-          this.setState({showLockFailureDialog: true})
-        }
-      })
-    }, LOCK_REFRESH_INTERVAL)
+    // this.clearLockRefreshInterval()
+    // this.lockRefreshInterval = setInterval(() => {
+    //   this.props.refreshTaskLock(this.props.task).then(success => {
+    //     if (!success) {
+    //       this.setState({showLockFailureDialog: true})
+    //     }
+    //   })
+    // }, LOCK_REFRESH_INTERVAL)
   }
 
   componentWillUnmount() {
     this.clearLockRefreshInterval()
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.location.pathname !== prevProps.location.pathname &&
-        this.props.location.search !== prevProps.location.search) {
-      window.scrollTo(0, 0)
-    }
+  // componentDidUpdate(prevProps) {
+  //   if (this.props.location.pathname !== prevProps.location.pathname &&
+  //       this.props.location.search !== prevProps.location.search) {
+  //     window.scrollTo(0, 0)
+  //   }
 
-    if (this.props.taskReadOnly && !prevProps.taskReadOnly) {
-      this.setState({showLockFailureDialog: true})
-    }
-  }
+  //   if (this.props.taskReadOnly && !prevProps.taskReadOnly) {
+  //     this.setState({showLockFailureDialog: true})
+  //   }
+  // }
 
   render() {
-    return (
-      <WidgetGrid
-        {...this.props}
-        workspace={this.props.currentConfiguration}
-        workspaceContext={this.state.workspaceContext}
-        setWorkspaceContext={this.setWorkspaceContext}
-        targets={WidgetDataTarget.task}
-    />
-    )
     if (!_get(this.props, 'task.parent.parent')) {
       return (
         <div className="pane-loading full-screen-height">
@@ -149,82 +125,16 @@ export class PublicTaskPane extends Component {
         </div>
       )
     }
-
+    console.log('hello')
     return (
-      <div className="mr-relative">
-        <MediaQuery query="(min-width: 1024px)">
-          {/* <WidgetWorkspace
-            {...this.props}
-            className={classNames(
-              "mr-bg-gradient-r-green-dark-blue mr-text-white mr-pb-8 mr-cards-inverse", {
-              "mr-pt-2": !this.props.inspectTask,
-              }
-            )}
-            workspaceTitle={
-              <div className="mr-flex mr-items-baseline mr-mt-4">
-                <h2 className="mr-text-xl mr-my-0 mr-mr-2 mr-links-inverse">
-                  <ChallengeNameLink {...this.props} includeProject suppressShareLink />
-                </h2>
-              </div>
-            }
-            hideLayoutButton={true}
-          /> */}
-        </MediaQuery>
-        <MediaQuery query="(max-width: 1023px)">
-          <MapPane completingTask={this.state.completingTask}>
-            <TaskMap isMobile
-                     task={this.props.task}
-                     challenge={this.props.task.parent}
-                     {...this.props} />
-          </MapPane>
-          <MobileTabBar {...this.props} />
-        </MediaQuery>
-        {this.state.showLockFailureDialog &&
-         <BasicDialog
-           title={<FormattedMessage {...messages.lockFailedTitle} />}
-            prompt={
-              <React.Fragment>
-                <span>
-                  {_get(
-                    this.props,
-                    'lockFailureDetails.message',
-                    this.props.intl.formatMessage(messages.genericLockFailure)
-                  )}
-                </span>
-                <FormattedMessage {...messages.previewAvailable} />
-              </React.Fragment>
-            }
-           icon="unlocked-icon"
-           onClose={() => this.clearLockFailure()}
-           controls = {
-             <React.Fragment>
-               <button
-                 className="mr-button mr-button--green-light mr-mr-4"
-                 onClick={() => this.clearLockFailure()}
-               >
-                 <FormattedMessage {...messages.previewTaskLabel} />
-               </button>
-               {this.props.tryingLock ?
-                <div className="mr-mr-4"><BusySpinner inline /></div> :
-                <button
-                  className="mr-button mr-button--green-light mr-mr-4"
-                  onClick={() => this.tryLockingTask()}
-                >
-                  <FormattedMessage {...messages.retryLockLabel} />
-                </button>
-               }
-               <button
-                 className="mr-button mr-button--white"
-                 onClick={() => {
-                   this.props.history.push(`/browse/challenges/${_get(this.props.task, 'parent.id', this.props.task.parent)}`)
-                 }}
-               >
-                 <FormattedMessage {...messages.browseChallengeLabel} />
-               </button>
-             </React.Fragment>
-           }
-         />
-        }
+      //<TaskInstructionsWidget {...this.props} task={this.props.task} widgetLayout={{h:20, w:20}}  workspaceContext={{taskMapZoom: 20}} widgetConfiguration={{expandedHeight: 20}}></TaskInstructionsWidget>
+      <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-pb-8 mr-cards-inverse">
+      <PublicWidgetGrid 
+        {...this.props}
+        workspace={this.props.currentConfiguration}
+        workspaceContext={this.state.workspaceContext}
+        setWorkspaceContext={this.setWorkspaceContext}
+      />
       </div>
     )
   }

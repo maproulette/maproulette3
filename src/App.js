@@ -51,8 +51,7 @@ import './App.scss'
 const TopNav = withRouter(WithCurrentUser(Navbar))
 const CurrentTaskPane = () => {
   const loggedIn = localStorage.getItem('isLoggedIn')
-  // return loggedIn ? WithCurrentTask(TaskPane) : WithCurrentTask(PublicTaskPane)
-  return WithCurrentTask(PublicTaskPane)
+  return loggedIn ? WithCurrentTask(TaskPane) : WithCurrentTask(PublicTaskPane)
 }
 const CurrentReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentMetaReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
@@ -77,13 +76,18 @@ const HomeOrDashboard = () => {
 export class App extends Component {
   state = {
     firstTimeModalDismissed: false,
+    shouldDisplayError: true
   }
 
   dismissModal = () => {
     this.setState({firstTimeModalDismissed: true})
   }
 
+  // function handleShouldDisplayError(){
+
+  // }
   render() {
+    console.log(this.props)
     // We don't currently support mobile devices. Unless the mobile feature
     // is explicitly enabled, inform user that mobile is not supported.
     if (process.env.REACT_APP_FEATURE_MOBILE_DEVICES !== 'enabled') {

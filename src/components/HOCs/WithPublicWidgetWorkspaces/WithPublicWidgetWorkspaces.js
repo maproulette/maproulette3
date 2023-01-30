@@ -7,6 +7,7 @@ import _each from 'lodash/each'
 import _map from 'lodash/map'
 import _omit from 'lodash/omit'
 import _assign from 'lodash/assign'
+import _cloneDeep from 'lodash/cloneDeep'
 import {
   generateWidgetId,
   nextAvailableConfigurationLabel,
@@ -28,8 +29,12 @@ import BusySpinner from '../../BusySpinner/BusySpinner'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithWidgetWorkspacesInternal = function(WrappedComponent,
-                                       targets, workspaceName, defaultConfiguration) {
+export const WithWidgetWorkspacesInternal = function (
+  WrappedComponent,
+  targets,
+  workspaceName,
+  defaultConfiguration
+) {
   return class extends Component {
     state = {
       currentConfigurationId: null,
@@ -39,18 +44,22 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
      * Sets up a brand-new workspace based on the given default configuration
      * function
      */
-    setupWorkspace = defaultConfiguration => {
+    setupWorkspace = (defaultConfiguration) => {
       const conf = defaultConfiguration()
       // Ensure default layout honors properties from each widget's descriptor
       for (let i = 0; i < conf.widgets.length; i++) {
         const widget = conf.widgets[i]
         if (widget) {
-          conf.layout[i] = Object.assign({}, {
-            minW: widget.minWidth,
-            maxW: widget.maxWidth,
-            minH: widget.minHeight,
-            maxH: widget.maxHeight,
-          }, conf.layout[i])
+          conf.layout[i] = Object.assign(
+            {},
+            {
+              minW: widget.minWidth,
+              maxW: widget.maxWidth,
+              minH: widget.minHeight,
+              maxH: widget.maxHeight,
+            },
+            conf.layout[i]
+          )
         }
       }
 
@@ -63,23 +72,27 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
      *
      * @private
      */
-    completeWorkspaceConfiguration = initialWorkspace => {
-      let configuration = _assign({
-        id: generateWidgetId(),
-        targets: _isArray(targets) ? targets : [targets], // store as array
-        cols: 12,
-        rowHeight: 30,
-        widgets: [],
-        layout: [],
-      }, initialWorkspace)
+    completeWorkspaceConfiguration = (initialWorkspace) => {
+      let configuration = _assign(
+        {
+          id: generateWidgetId(),
+          targets: _isArray(targets) ? targets : [targets], // store as array
+          cols: 12,
+          rowHeight: 30,
+          widgets: [],
+          layout: [],
+        },
+        initialWorkspace
+      )
 
       // Generate a simple layout if none provided, with one widget per row
       if (configuration.layout.length === 0) {
         let nextY = 0
-        _each(configuration.widgets, widgetConf => {
+        _each(configuration.widgets, (widgetConf) => {
           configuration.layout.push({
             i: generateWidgetId(),
-            x: 0, y: nextY,
+            x: 0,
+            y: nextY,
             w: widgetConf.defaultWidth,
             minW: widgetConf.minWidth,
             maxW: widgetConf.maxWidth,
@@ -90,8 +103,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
 
           nextY += widgetConf.defaultHeight
         })
-      }
-      else {
+      } else {
         // A layout was provided. If heights and/or widths were omitted or don't meet
         // current minimums, fill them in from the widget descriptors
         _each(configuration.layout, (widgetLayout, index) => {
@@ -99,47 +111,64 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
             return
           }
 
-          const descriptor = widgetDescriptor(configuration.widgets[index].widgetKey)
+          const descriptor = widgetDescriptor(
+            configuration.widgets[index].widgetKey
+          )
           if (!descriptor) {
             return
           }
 
           if (!_isFinite(widgetLayout.w)) {
             widgetLayout.w = descriptor.defaultWidth
-          }
-          else if ((_isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth)) {
+          } else if (
+            _isFinite(descriptor.minWidth) &&
+            widgetLayout.w < descriptor.minWidth
+          ) {
             widgetLayout.w = descriptor.minWidth
           }
 
           if (!_isFinite(widgetLayout.h)) {
             widgetLayout.h = descriptor.defaultHeight
-          }
-          else if ((_isFinite(descriptor.minHeight) && widgetLayout.h < descriptor.minHeight)) {
+          } else if (
+            _isFinite(descriptor.minHeight) &&
+            widgetLayout.h < descriptor.minHeight
+          ) {
             widgetLayout.h = descriptor.minHeight
           }
         })
       }
 
-      // Make sure workspace is upgraded to latest data model
-      configuration = migrateWidgetGridConfiguration(configuration,
-                                                     () => this.setupWorkspace(defaultConfiguration))
+      // // Make sure workspace is upgraded to latest data model
+      // configuration = migrateWidgetGridConfiguration(configuration, () =>
+      //   this.setupWorkspace(defaultConfiguration)
+      // )
 
-      // Prune any widgets that have been decommissioned
-      configuration = pruneDecommissionedWidgets(configuration)
+      // // Prune any widgets that have been decommissioned
+      // configuration = pruneDecommissionedWidgets(configuration)
 
-      // Make sure excludedWidgets reflects latest from default configuration,
-      // and prune any newly excluded widgets if necessary
-      configuration.excludeWidgets = defaultConfiguration().excludeWidgets
-      if (configuration.excludeWidgets && configuration.excludeWidgets.length > 0) {
-        configuration = pruneWidgets(configuration, configuration.excludeWidgets)
-      }
+      // // Make sure excludedWidgets reflects latest from default configuration,
+      // // and prune any newly excluded widgets if necessary
+      // configuration.excludeWidgets = defaultConfiguration().excludeWidgets
+      // if (
+      //   configuration.excludeWidgets &&
+      //   configuration.excludeWidgets.length > 0
+      // ) {
+      //   configuration = pruneWidgets(
+      //     configuration,
+      //     configuration.excludeWidgets
+      //   )
+      // }
 
-      // Make sure any new permanent widgets are added into the configuration
-      configuration.permanentWidgets = defaultConfiguration().permanentWidgets
-      configuration = ensurePermanentWidgetsAdded(configuration, defaultConfiguration())
+      // // Make sure any new permanent widgets are added into the configuration
+      // configuration.permanentWidgets = defaultConfiguration().permanentWidgets
+      // configuration = ensurePermanentWidgetsAdded(
+      //   configuration,
+      //   defaultConfiguration()
+      // )
 
-      // Make sure conditionalWidgets reflect the latest from default configuration
-      configuration.conditionalWidgets = defaultConfiguration().conditionalWidgets
+      // // Make sure conditionalWidgets reflect the latest from default configuration
+      // configuration.conditionalWidgets =
+      //   defaultConfiguration().conditionalWidgets
 
       return configuration
     }
@@ -149,24 +178,38 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
      * there is no active configuration
      */
     currentConfiguration = () => {
-      return this.completeWorkspaceConfiguration(this.setupWorkspace(defaultConfiguration))
+      return this.completeWorkspaceConfiguration(
+        this.setupWorkspace(defaultConfiguration)
+      )
     }
 
     render() {
       const currentConfiguration = this.currentConfiguration()
       console.log(currentConfiguration)
-      return <WrappedComponent
-               {...this.props}
-               name={workspaceName}
-               targets={targets}
-               defaultConfiguration={defaultConfiguration}
-               currentConfiguration={currentConfiguration}
-             />
+      return (
+        <WrappedComponent
+          {...this.props}
+          name={workspaceName}
+          targets={targets}
+          defaultConfiguration={defaultConfiguration}
+          currentConfiguration={currentConfiguration}
+        />
+      )
     }
   }
 }
 
-const WithPublicWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultConfiguration) =>
-    WithWidgetWorkspacesInternal(WrappedComponent, targets, workspaceName, defaultConfiguration)
+const WithPublicWidgetWorkspaces = (
+  WrappedComponent,
+  targets,
+  workspaceName,
+  defaultConfiguration
+) =>
+  WithWidgetWorkspacesInternal(
+    WrappedComponent,
+    targets,
+    workspaceName,
+    defaultConfiguration
+  )
 
 export default WithPublicWidgetWorkspaces
