@@ -7,7 +7,6 @@ import _each from 'lodash/each'
 import _map from 'lodash/map'
 import _omit from 'lodash/omit'
 import _assign from 'lodash/assign'
-import _cloneDeep from 'lodash/cloneDeep'
 import {
   generateWidgetId,
   nextAvailableConfigurationLabel,

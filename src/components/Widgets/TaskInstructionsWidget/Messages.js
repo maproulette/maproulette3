@@ -13,4 +13,9 @@ export default defineMessages({
     id: "Widgets.TaskInstructionsWidget.title",
     defaultMessage: "Instructions",
   },
+
+  publicLabel: {
+    id: "Widgets.PublicTaskInstructionsWidget.label",
+    defaultMessage: "Instructions",
+  },
 })

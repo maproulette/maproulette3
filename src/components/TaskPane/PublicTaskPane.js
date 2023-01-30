@@ -24,23 +24,23 @@ export const defaultWorkspaceSetup = function() {
     name: WIDGET_WORKSPACE_NAME,
     label: 'Task Completion',
     widgets: [
-      widgetDescriptor('ChallengeShareWidget'),
-      // widgetDescriptor('TaskInstructionsWidget'),
-      widgetDescriptor('CompletionProgressWidget'),
-      widgetDescriptor('TaskCompletionWidget'),
-      widgetDescriptor('TaskStatusWidget'),
-      widgetDescriptor('OSMHistoryWidget'),
-      widgetDescriptor('TaskHistoryWidget')
-     // widgetDescriptor('TaskMapWidget'),
+      // widgetDescriptor('ChallengeShareWidget'),
+      widgetDescriptor('PublicTaskInstructionsWidget'), // need prop
+      // widgetDescriptor('CompletionProgressWidget'),
+      // widgetDescriptor('TaskCompletionWidget'), // problem
+      // widgetDescriptor('TaskStatusWidget'),
+      // widgetDescriptor('OSMHistoryWidget'),
+      // widgetDescriptor('TaskHistoryWidget') // problem
+     // widgetDescriptor('TaskMapWidget'), // need prop
     ],
     layout: [
-      { i: generateWidgetId(), x: 0, y: 0, w: 3, h: 3 },
-      // { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
-      { i: generateWidgetId(), x: 4, y: 5, w: 5, h: 7 },
-      {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
-      {i: generateWidgetId(), x: 0, y: 4, w: 3, h: 4},
-      {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
-      {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
+      // { i: generateWidgetId(), x: 0, y: 0, w: 3, h: 3 },
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
+      // { i: generateWidgetId(), x: 4, y: 5, w: 5, h: 7 },
+      // {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
+      // {i: generateWidgetId(), x: 0, y: 4, w: 3, h: 4},
+      // {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
+      // {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
       //{ i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19 },
     ],
   }
