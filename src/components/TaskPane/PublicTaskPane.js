@@ -12,6 +12,7 @@ import WithLockedTask from '../HOCs/WithLockedTask/WithLockedTask'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import WithPublicWidgetWorkspaces from '../HOCs/WithPublicWidgetWorkspaces/WithPublicWidgetWorkspaces'
 import { PublicWidgetGrid } from '../PublicWidgetGrid/PublicWidgetGrid'
+import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 
 const WIDGET_WORKSPACE_NAME = "taskCompletion"
 
@@ -24,24 +25,24 @@ export const defaultWorkspaceSetup = function() {
     name: WIDGET_WORKSPACE_NAME,
     label: 'Task Completion',
     widgets: [
-      // widgetDescriptor('ChallengeShareWidget'),
-      widgetDescriptor('PublicTaskInstructionsWidget'), // need prop
-      // widgetDescriptor('CompletionProgressWidget'),
+      widgetDescriptor('ChallengeShareWidget'),
+      widgetDescriptor('PublicTaskInstructionsWidget'),
+      widgetDescriptor('CompletionProgressWidget'),
       // widgetDescriptor('TaskCompletionWidget'), // problem
-      // widgetDescriptor('TaskStatusWidget'),
-      // widgetDescriptor('OSMHistoryWidget'),
+      widgetDescriptor('TaskStatusWidget'),
+      widgetDescriptor('OSMHistoryWidget'),
       // widgetDescriptor('TaskHistoryWidget') // problem
-     // widgetDescriptor('TaskMapWidget'), // need prop
+      // widgetDescriptor('TaskMapWidget'),
     ],
     layout: [
-      // { i: generateWidgetId(), x: 0, y: 0, w: 3, h: 3 },
+      { i: generateWidgetId(), x: 0, y: 0, w: 3, h: 3 },
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
-      // { i: generateWidgetId(), x: 4, y: 5, w: 5, h: 7 },
+      { i: generateWidgetId(), x: 4, y: 5, w: 5, h: 7 },
       // {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
-      // {i: generateWidgetId(), x: 0, y: 4, w: 3, h: 4},
+      {i: generateWidgetId(), x: 0, y: 4, w: 3, h: 4},
+      {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
       // {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
-      // {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
-      //{ i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19 },
+      // { i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19 },
     ],
   }
 }
@@ -69,13 +70,13 @@ export class PublicTaskPane extends Component {
   }
 
   tryLockingTask = () => {
-    this.props.tryLocking(this.props.task).then(success => {
-      this.setState({showLockFailureDialog: !success})
+    this.props.tryLocking(this.props.task).then((success) => {
+      this.setState({ showLockFailureDialog: !success })
     })
   }
 
   clearLockFailure = () => {
-    this.setState({showLockFailureDialog: false})
+    this.setState({ showLockFailureDialog: false })
   }
 
   /**
@@ -87,7 +88,6 @@ export class PublicTaskPane extends Component {
       this.lockRefreshInterval = null
     }
   }
-  
 
   componentDidMount() {
     // Setup an interval to refresh the task lock every so often so that it
@@ -120,21 +120,25 @@ export class PublicTaskPane extends Component {
   render() {
     if (!_get(this.props, 'task.parent.parent')) {
       return (
-        <div className="pane-loading full-screen-height">
+        <div className='pane-loading full-screen-height'>
           <BusySpinner />
         </div>
       )
     }
-    console.log('hello')
+
     return (
-      //<TaskInstructionsWidget {...this.props} task={this.props.task} widgetLayout={{h:20, w:20}}  workspaceContext={{taskMapZoom: 20}} widgetConfiguration={{expandedHeight: 20}}></TaskInstructionsWidget>
-      <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-pb-8 mr-cards-inverse">
-      <PublicWidgetGrid 
-        {...this.props}
-        workspace={this.props.currentConfiguration}
-        workspaceContext={this.state.workspaceContext}
-        setWorkspaceContext={this.setWorkspaceContext}
-      />
+      <div className='mr-bg-gradient-r-green-dark-blue'>
+        <h2 className='mr-text-xl mr-pl-4 mr-pt-4 mr-links-inverse'>
+          <ChallengeNameLink {...this.props} includeProject suppressShareLink />
+        </h2>
+        <div className='mr-text-white mr-pb-8 mr-cards-inverse'>
+          <PublicWidgetGrid
+            {...this.props}
+            workspace={this.props.currentConfiguration}
+            workspaceContext={this.state.workspaceContext}
+            setWorkspaceContext={this.setWorkspaceContext}
+          />
+        </div>
       </div>
     )
   }
