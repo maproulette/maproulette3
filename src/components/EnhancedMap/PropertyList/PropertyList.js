@@ -67,7 +67,7 @@ const PropertyList = props => {
   }))
 
   return (
-    <div className="feature-properties mr-ml-2">
+    <div className="feature-properties mr-ml-4">
       {!props.hideHeader && header}
       <table className={classNames("property-list", {"mr-bg-transparent mr-text-white": darkMode, "table": !darkMode})}>
         <tbody>{rows}</tbody>
