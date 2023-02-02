@@ -26,23 +26,19 @@ export const defaultWorkspaceSetup = function() {
     label: 'Task Completion',
     widgets: [
       widgetDescriptor('ChallengeShareWidget'),
-      widgetDescriptor('PublicTaskInstructionsWidget'),
-      widgetDescriptor('CompletionProgressWidget'),
-      // widgetDescriptor('TaskCompletionWidget'), // problem
       widgetDescriptor('TaskStatusWidget'),
       widgetDescriptor('OSMHistoryWidget'),
       // widgetDescriptor('TaskHistoryWidget') // problem
-      // widgetDescriptor('TaskMapWidget'),
+      widgetDescriptor('PublicTaskInstructionsWidget'),
+      widgetDescriptor('TaskMapWidget'),
     ],
     layout: [
-      { i: generateWidgetId(), x: 0, y: 0, w: 3, h: 3 },
-      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
-      { i: generateWidgetId(), x: 4, y: 5, w: 5, h: 7 },
-      // {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
-      {i: generateWidgetId(), x: 0, y: 4, w: 3, h: 4},
-      {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
-      // {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 6},
-      // { i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19 },
+      { i: generateWidgetId(), x: 10, y: 8, w: 2, h: 3 },
+      { i: generateWidgetId(), x: 8, y: 8, w: 2, h: 3 },
+      { i: generateWidgetId(), x: 4, y: 6, w: 4, h: 6 },
+      // {i: generateWidgetId(), x: 4, y: 0, w: 4, h: 6},
+      {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 11},
+      {i: generateWidgetId(), x: 8, y: 0, w: 4, h: 8},
     ],
   }
 }
@@ -87,6 +83,12 @@ export class PublicTaskPane extends Component {
       clearInterval(this.lockRefreshInterval)
       this.lockRefreshInterval = null
     }
+  }
+
+  setWorkspaceContext = updatedContext => {
+    this.setState({
+      workspaceContext: Object.assign({}, this.state.workspaceContext, updatedContext),
+    })
   }
 
   componentDidMount() {

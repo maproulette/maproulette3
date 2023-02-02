@@ -112,8 +112,8 @@ export class PublicWidgetGrid extends Component {
           rowHeight={this.props.workspace.rowHeight || 30}
           layout={this.props.workspace.layout || []}
           margin={[16, 16]}
-          // isDraggable={this.props.isEditing}
-          // isResizable={this.props.isEditing}
+          isDraggable={false}
+          isResizable={false}
           // onLayoutChange={this.props.onLayoutChange}
         >
           {widgetInstances}
