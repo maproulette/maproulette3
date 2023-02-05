@@ -83,11 +83,7 @@ export class App extends Component {
     this.setState({firstTimeModalDismissed: true})
   }
 
-  // function handleShouldDisplayError(){
-
-  // }
   render() {
-    console.log(this.props)
     // We don't currently support mobile devices. Unless the mobile feature
     // is explicitly enabled, inform user that mobile is not supported.
     if (process.env.REACT_APP_FEATURE_MOBILE_DEVICES !== 'enabled') {

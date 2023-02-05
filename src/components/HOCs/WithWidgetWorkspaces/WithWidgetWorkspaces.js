@@ -18,12 +18,12 @@ import {
   ensurePermanentWidgetsAdded,
   widgetDescriptor,
 } from '../../../services/Widget/Widget'
-import SignIn from '../../../pages/SignIn/SignIn'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import WithStatus from '../WithStatus/WithStatus'
 import WithErrors from '../WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
 import BusySpinner from '../../BusySpinner/BusySpinner'
+import { Redirect } from 'react-router-dom'
 
 /**
  * WithWidgetWorkspaces provides the WrappedComponent with access to the saved
@@ -369,7 +369,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
            <BusySpinner />
           </div> :
-          <SignIn {...this.props} />
+          <Redirect to={`/challenge/${this.props.challengeId}/task/${this.props.task.id}`} />
         )
       }
 
