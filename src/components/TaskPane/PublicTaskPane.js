@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import {
@@ -10,15 +9,12 @@ import {
 } from '../../services/Widget/Widget'
 import WithChallengePreferences from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import WithCooperativeWork from '../HOCs/WithCooperativeWork/WithCooperativeWork'
-import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
-import WithLockedTask from '../HOCs/WithLockedTask/WithLockedTask'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import WithPublicWidgetWorkspaces from '../HOCs/WithPublicWidgetWorkspaces/WithPublicWidgetWorkspaces'
 import { PublicWidgetGrid } from '../PublicWidgetGrid/PublicWidgetGrid'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 import SignInButton from '../SignInButton/SignInButton'
 import { Redirect } from 'react-router'
-
 const WIDGET_WORKSPACE_NAME = 'taskCompletion'
 
 // How frequently the task lock should be refreshed
@@ -43,8 +39,11 @@ export const defaultWorkspaceSetup = function () {
       { i: generateWidgetId(), x: 4, y: 6, w: 4, h: 6 },
       // {i: generateWidgetId(), x: 4, y: 0, w: 4, h: 6},
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 11 },
-      // {i: generateWidgetId(), x: 8, y: 0, w: 4, h: 8},
+      // { i: generateWidgetId(), x: 8, y: 0, w: 4, h: 8 },
     ],
+    // permanentWidgets: [ // Cannot be removed from workspace
+    //   'TaskMapWidget',
+    // ],
   }
 }
 
@@ -56,7 +55,6 @@ export const defaultWorkspaceSetup = function () {
  *
  */
 export class PublicTaskPane extends Component {
-  lockRefreshInterval = null
 
   state = {
     /**
@@ -65,29 +63,8 @@ export class PublicTaskPane extends Component {
      */
     completingTask: null,
     completionResponses: null,
-    showLockFailureDialog: false,
     needsResponses: false,
     workspaceContext: {},
-  }
-
-  tryLockingTask = () => {
-    this.props.tryLocking(this.props.task).then((success) => {
-      this.setState({ showLockFailureDialog: !success })
-    })
-  }
-
-  clearLockFailure = () => {
-    this.setState({ showLockFailureDialog: false })
-  }
-
-  /**
-   * Clear the lock-refresh timer if one is set
-   */
-  clearLockRefreshInterval = () => {
-    if (this.lockRefreshInterval !== null) {
-      clearInterval(this.lockRefreshInterval)
-      this.lockRefreshInterval = null
-    }
   }
 
   setWorkspaceContext = (updatedContext) => {
@@ -99,34 +76,6 @@ export class PublicTaskPane extends Component {
       ),
     })
   }
-
-  componentDidMount() {
-    // Setup an interval to refresh the task lock every so often so that it
-    // doesn't expire while the mapper is actively working on the task
-    // this.clearLockRefreshInterval()
-    // this.lockRefreshInterval = setInterval(() => {
-    //   this.props.refreshTaskLock(this.props.task).then(success => {
-    //     if (!success) {
-    //       this.setState({showLockFailureDialog: true})
-    //     }
-    //   })
-    // }, LOCK_REFRESH_INTERVAL)
-  }
-
-  componentWillUnmount() {
-    this.clearLockRefreshInterval()
-  }
-
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.location.pathname !== prevProps.location.pathname &&
-  //       this.props.location.search !== prevProps.location.search) {
-  //     window.scrollTo(0, 0)
-  //   }
-
-  //   if (this.props.taskReadOnly && !prevProps.taskReadOnly) {
-  //     this.setState({showLockFailureDialog: true})
-  //   }
-  // }
 
   render() {
     const loggedIn = localStorage.getItem('isLoggedIn')
@@ -174,9 +123,7 @@ PublicTaskPane.propTypes = {
 
 export default WithChallengePreferences(
   WithPublicWidgetWorkspaces(
-    WithTaskBundle(
-      WithCooperativeWork(WithLockedTask(injectIntl(PublicTaskPane)))
-    ),
+    WithCooperativeWork(PublicTaskPane),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup

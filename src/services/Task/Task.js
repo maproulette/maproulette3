@@ -240,8 +240,7 @@ export const startTask = function(taskId) {
       variables: {id: taskId}
     }).execute().catch(error => {
       if (isSecurityError(error)) {
-        throw error
-        // dispatch(ensureUserLoggedIn()).catch(() => null)
+        dispatch(ensureUserLoggedIn()).catch(() => null)
       }
       throw error
     })
@@ -261,10 +260,9 @@ export const releaseTask = function(taskId) {
       return normalizedResults
     }).catch(error => {
       if (isSecurityError(error)) {
-        throw error
-        // dispatch(ensureUserLoggedIn()).then(() =>
-        //   dispatch(addError(AppErrors.user.unauthorized))
-        // ).catch(() => null)
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        ).catch(() => null)
       }
       else {
         dispatch(addError(AppErrors.task.lockReleaseFailure))
