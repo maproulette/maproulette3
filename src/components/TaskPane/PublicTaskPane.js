@@ -16,7 +16,8 @@ import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 import SignInButton from '../SignInButton/SignInButton'
 import { Redirect } from 'react-router'
 const WIDGET_WORKSPACE_NAME = 'taskCompletion'
-
+import MapPane from '../EnhancedMap/MapPane/MapPane'
+import TaskMap from './TaskMap/TaskMap'
 // How frequently the task lock should be refreshed
 const LOCK_REFRESH_INTERVAL = 600000 // 10 minutes
 
@@ -29,7 +30,7 @@ export const defaultWorkspaceSetup = function () {
       widgetDescriptor('ChallengeShareWidget'),
       widgetDescriptor('TaskStatusWidget'),
       widgetDescriptor('OSMHistoryWidget'),
-      // widgetDescriptor('TaskHistoryWidget') // problem
+      widgetDescriptor('TaskHistoryWidget'), // problem
       widgetDescriptor('PublicTaskInstructionsWidget'),
       // widgetDescriptor('TaskMapWidget'),
     ],
@@ -37,8 +38,8 @@ export const defaultWorkspaceSetup = function () {
       { i: generateWidgetId(), x: 10, y: 8, w: 2, h: 3 },
       { i: generateWidgetId(), x: 8, y: 8, w: 2, h: 3 },
       { i: generateWidgetId(), x: 4, y: 6, w: 4, h: 6 },
-      // {i: generateWidgetId(), x: 4, y: 0, w: 4, h: 6},
-      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 11 },
+      { i: generateWidgetId(), x: 4, y: 0, w: 4, h: 6},
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 12 },
       // { i: generateWidgetId(), x: 8, y: 0, w: 4, h: 8 },
     ],
     // permanentWidgets: [ // Cannot be removed from workspace
@@ -105,11 +106,6 @@ export class PublicTaskPane extends Component {
             workspaceContext={this.state.workspaceContext}
             setWorkspaceContext={this.setWorkspaceContext}
           />
-          {!loggedIn && (
-            <div className='mr-pl-4'>
-              <SignInButton {...this.props} longForm className='' />
-            </div>
-          )}
         </div>
       </div>
     )

@@ -530,6 +530,8 @@ export const fetchTaskHistory = function(taskId) {
       }
 
       return normalizedHistory
+    }).catch(error => {
+      console.log(error)
     })
   }
 }
