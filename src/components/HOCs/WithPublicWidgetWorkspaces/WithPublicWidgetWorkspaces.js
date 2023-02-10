@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
-import _get from 'lodash/get'
-import _find from 'lodash/find'
 import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
 import _each from 'lodash/each'
-import _map from 'lodash/map'
-import _omit from 'lodash/omit'
 import _assign from 'lodash/assign'
 import {
   generateWidgetId,
