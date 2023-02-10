@@ -9,17 +9,8 @@ import _omit from 'lodash/omit'
 import _assign from 'lodash/assign'
 import {
   generateWidgetId,
-  nextAvailableConfigurationLabel,
-  migrateWidgetGridConfiguration,
-  pruneDecommissionedWidgets,
-  pruneWidgets,
-  exportWorkspaceConfiguration,
-  importWorkspaceConfiguration,
-  ensurePermanentWidgetsAdded,
   widgetDescriptor,
 } from '../../../services/Widget/Widget'
-import AppErrors from '../../../services/Error/AppErrors'
-import BusySpinner from '../../BusySpinner/BusySpinner'
 
 /**
  * WithWidgetWorkspaces provides the WrappedComponent with access to the saved
@@ -35,10 +26,6 @@ export const WithWidgetWorkspacesInternal = function (
   defaultConfiguration
 ) {
   return class extends Component {
-    state = {
-      currentConfigurationId: null,
-    }
-
     /**
      * Sets up a brand-new workspace based on the given default configuration
      * function
@@ -136,38 +123,6 @@ export const WithWidgetWorkspacesInternal = function (
           }
         })
       }
-
-      // // Make sure workspace is upgraded to latest data model
-      // configuration = migrateWidgetGridConfiguration(configuration, () =>
-      //   this.setupWorkspace(defaultConfiguration)
-      // )
-
-      // // Prune any widgets that have been decommissioned
-      // configuration = pruneDecommissionedWidgets(configuration)
-
-      // // Make sure excludedWidgets reflects latest from default configuration,
-      // // and prune any newly excluded widgets if necessary
-      // configuration.excludeWidgets = defaultConfiguration().excludeWidgets
-      // if (
-      //   configuration.excludeWidgets &&
-      //   configuration.excludeWidgets.length > 0
-      // ) {
-      //   configuration = pruneWidgets(
-      //     configuration,
-      //     configuration.excludeWidgets
-      //   )
-      // }
-
-      // // Make sure any new permanent widgets are added into the configuration
-      // configuration.permanentWidgets = defaultConfiguration().permanentWidgets
-      // configuration = ensurePermanentWidgetsAdded(
-      //   configuration,
-      //   defaultConfiguration()
-      // )
-
-      // // Make sure conditionalWidgets reflect the latest from default configuration
-      // configuration.conditionalWidgets =
-      //   defaultConfiguration().conditionalWidgets
 
       return configuration
     }
