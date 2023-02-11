@@ -363,6 +363,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
     }
 
     render() {
+      // Render public task page if user is not logged in.
       if (!_get(this.props, 'user.isLoggedIn')) {
         return (
           this.props.checkingLoginStatus ?
