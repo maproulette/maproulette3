@@ -135,7 +135,6 @@ export const WithWidgetWorkspacesInternal = function (
 
     render() {
       const currentConfiguration = this.currentConfiguration()
-      console.log(currentConfiguration)
       return (
         <WrappedComponent
           {...this.props}

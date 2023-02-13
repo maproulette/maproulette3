@@ -23,7 +23,8 @@ import WithStatus from '../WithStatus/WithStatus'
 import WithErrors from '../WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
 import BusySpinner from '../../BusySpinner/BusySpinner'
-import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router'
+import SignIn from '../../../pages/SignIn/SignIn'
 
 /**
  * WithWidgetWorkspaces provides the WrappedComponent with access to the saved
@@ -370,7 +371,9 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
            <BusySpinner />
           </div> :
-          <Redirect to={`/challenge/${this.props.challengeId}/task/${this.props.task.id}`} />
+          (this.props.match.path !== '/challenge/:challengeId/task/:taskId' ?
+          <SignIn {...this.props} /> :
+          <Redirect to={`/challenge/${this.props.challengeId}/task/${this.props.task.id}`} />)
         )
       }
 
