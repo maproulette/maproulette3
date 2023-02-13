@@ -18,7 +18,7 @@ export const defaultWorkspaceSetup = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: 'Task Completion',
+    label: 'Public Task',
     widgets: [
       widgetDescriptor('ChallengeShareWidget'),
       widgetDescriptor('TaskStatusWidget'),
@@ -40,9 +40,9 @@ export const defaultWorkspaceSetup = function () {
 
 /**
  * PublicTaskPane presents the preview page of current task. It contains
- * an WidgetWorkspace with information and controls, including
- * task context, challenge share control, task completion progress, task status
- * OSM history, task history, and a task map
+ * a workspace of different widgets with related information about current task,
+ * including task context, challenge share control, task completion progress, task status
+ * OSM history, task history, and task map.
  */
 export class PublicTaskPane extends Component {
   state = {
@@ -60,10 +60,11 @@ export class PublicTaskPane extends Component {
   }
 
   render() {
+    //render regular TaskPane for logged in users.
     const loggedIn = localStorage.getItem('isLoggedIn')
     if (loggedIn) {
       <Redirect
-        to={`/challenge/${this.props.challengeId}/task/${this.props.task.id}`}
+        to={`/challenge/${this.props.challengeId}/task/${this.props.task?.id}`}
       />
     }
 

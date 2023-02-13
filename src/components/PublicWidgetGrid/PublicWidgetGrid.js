@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import ReactGridLayout, { WidthProvider } from 'react-grid-layout'
 import { widgetComponent } from '../../services/Widget/Widget'
@@ -21,14 +20,12 @@ export class PublicWidgetGrid extends Component {
             `Missing component for widget: ${widgetConfiguration.widgetKey}`
           )
         }
-
+ 
         const widgetLayout = this.props.workspace.layout[index]
         return (
           <div key={widgetLayout.i} className='mr-card-widget'>
             <WidgetComponent
               {...this.props}
-              widgetLayout={widgetLayout}
-              widgetConfiguration={_get(widgetConfiguration, 'defaultConfiguration', {})}
             />
           </div>
         )

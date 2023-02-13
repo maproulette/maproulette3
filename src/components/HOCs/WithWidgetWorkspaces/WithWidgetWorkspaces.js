@@ -373,7 +373,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
           </div> :
           (this.props.match.path !== '/challenge/:challengeId/task/:taskId' ?
           <SignIn {...this.props} /> :
-          <Redirect to={`/challenge/${this.props.challengeId}/task/${this.props.task.id}`} />)
+          <Redirect to={`/challenge/${this.props.challengeId}/task/${this.props.task?.id}`} />)
         )
       }
 

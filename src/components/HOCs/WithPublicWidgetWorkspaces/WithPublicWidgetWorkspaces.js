@@ -7,15 +7,13 @@ import {
   generateWidgetId,
   widgetDescriptor,
 } from '../../../services/Widget/Widget'
+import { Redirect } from 'react-router'
 
 /**
- * WithWidgetWorkspaces provides the WrappedComponent with access to the saved
- * workspace configurations as well as various workspace-configuration
- * management functions.
- *
- * @author [Neil Rotstan](https://github.com/nrotstan)
+ * WithPublicWidgetWorkspaces provides the WrappedComponent with access to public task workspace configurations
+ * and functions for setting up public task workspace.
  */
-export const WithWidgetWorkspacesInternal = function (
+export const WithPublicWidgetWorkspacesInternal = function (
   WrappedComponent,
   targets,
   workspaceName,
@@ -23,7 +21,7 @@ export const WithWidgetWorkspacesInternal = function (
 ) {
   return class extends Component {
     /**
-     * Sets up a brand-new workspace based on the given default configuration
+     * Sets up a public workspace based on the given default configuration
      * function
      */
     setupWorkspace = (defaultConfiguration) => {
@@ -70,9 +68,9 @@ export const WithWidgetWorkspacesInternal = function (
       // Generate a simple layout if none provided, with one widget per row
       if (configuration.layout.length === 0) {
         let nextY = 0
-        _each(configuration.widgets, (widgetConf) => {
+        _each(configuration.widgets, (widgetConf, index) => {
           configuration.layout.push({
-            i: generateWidgetId(),
+            i: `${index}`,
             x: 0,
             y: nextY,
             w: widgetConf.defaultWidth,
@@ -123,18 +121,23 @@ export const WithWidgetWorkspacesInternal = function (
       return configuration
     }
 
-    /**
-     * Retrieve the current, active configuration or a default configuration if
-     * there is no active configuration
-     */
     currentConfiguration = () => {
+
       return this.completeWorkspaceConfiguration(
         this.setupWorkspace(defaultConfiguration)
       )
     }
 
     render() {
+      //render regular TaskPane for logged in users.
+      const loggedIn = localStorage.getItem('isLoggedIn')
+      if (loggedIn) {
+        <Redirect
+          to={`/challenge/${this.props.challengeId}/task/${this.props.task?.id}`}
+        />
+      }
       const currentConfiguration = this.currentConfiguration()
+
       return (
         <WrappedComponent
           {...this.props}
@@ -154,7 +157,7 @@ const WithPublicWidgetWorkspaces = (
   workspaceName,
   defaultConfiguration
 ) =>
-  WithWidgetWorkspacesInternal(
+  WithPublicWidgetWorkspacesInternal(
     WrappedComponent,
     targets,
     workspaceName,
