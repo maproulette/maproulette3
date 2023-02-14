@@ -7,6 +7,13 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.8] - 2023-1-24
+Release with [maproulette-backend_v4.3.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.3.2)
+
+### Fixes
+- Update transifex json
+- Fix the base url for users to update their email preferences (API)
+
 ## [v3.11.7] - 2023-1-24
 Release with [maproulette-backend_v4.3.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.3.1)
 
