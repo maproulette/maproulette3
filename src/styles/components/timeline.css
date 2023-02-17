@@ -5,9 +5,7 @@
     @apply mr-border-white-15;
   }
 
-  @screen md {
-    @apply mr-ml-6;
-  }
+  @apply md:mr-ml-6;
 
   &__period {
     @apply mr-relative mr-mb-6;

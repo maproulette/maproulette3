@@ -1,37 +1,25 @@
 h1,
 .mr-h1 {
   @apply mr-text-4xl mr-font-normal mr-leading-tight;
-
-  @screen md {
-    @apply mr-text-5xl;
-  }
+  @apply md:mr-text-5xl;
 }
 
 h2,
 .mr-h2 {
   @apply mr-text-3xl mr-font-normal mr-leading-tight;
-
-  @screen md {
-    @apply mr-text-4xl;
-  }
+  @apply md:mr-text-4xl;
 }
 
 h3,
 .mr-h3 {
   @apply mr-text-xl mr-font-normal mr-leading-tight;
-
-  @screen md {
-    @apply mr-text-2xl;
-  }
+  @apply md:mr-text-2xl;
 }
 
 h4,
 .mr-h4 {
   @apply mr-text-md mr-font-normal mr-leading-tight;
-
-  @screen md {
-    @apply mr-text-lg;
-  }
+  @apply md:mr-text-lg;
 }
 
 .mr-list-header {

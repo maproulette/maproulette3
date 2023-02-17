@@ -34,9 +34,9 @@
   }
 
   &--2-col .fieldset {
-    @screen md {
-      @apply mr-grid mr-grid-columns-2 mr-grid-gap-8;
+    @apply md:mr-grid md:mr-grid-columns-2 md:mr-grid-gap-8;
 
+    @screen md {
       legend {
         @apply mr-col-span-2;
       }
