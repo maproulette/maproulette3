@@ -66,7 +66,7 @@
 
     .-btn {
       @apply mr-py-2 mr-px-4 mr-rounded mr-border-2 mr-bg-transparent mr-font-medium mr-text-green-lighter mr-transition;
-      border: theme('borderWidths.2') solid theme('colors.current');
+      border: theme('borderWidth.2') solid theme('colors.current');
 
       &[disabled] {
         @apply mr-opacity-25;

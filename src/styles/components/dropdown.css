@@ -58,6 +58,6 @@ $(self-dropdown) {
   }
 
   &__content {
-    @apply mr-min-w-24 mr-max-w-full mr-max-h-115 mr-overflow-auto mr-scrolling-touch mr-pr-4 mr-whitespace-no-wrap mr-text-left;
+    @apply mr-min-w-24 mr-max-w-full mr-max-h-115 mr-overflow-auto mr-pr-4 mr-whitespace-nowrap mr-text-left;
   }
 }

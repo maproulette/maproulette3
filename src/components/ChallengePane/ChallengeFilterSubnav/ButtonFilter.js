@@ -9,7 +9,7 @@ const ButtonFilter = props => (
     </span>
     <span className="mr-flex mr-items-center mr-text-green-lighter mr-cursor-pointer" onClick={props.onClick}>
       <span className={classNames(
-        "mr-w-24 mr-mr-2 mr-overflow-hidden mr-whitespace-no-wrap mr-overflow-ellipsis",
+        "mr-w-24 mr-mr-2 mr-overflow-hidden mr-whitespace-nowrap mr-overflow-ellipsis",
         props.selectionClassName)}
       >
         {props.selection}

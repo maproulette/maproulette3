@@ -136,7 +136,7 @@ export class WidgetWorkspace extends Component {
   headerActions = () => {
     if (!this.isEditing()) {
       return (
-        <div className="mr-text-xs mr-flex mr-pt-3 mr-whitespace-no-wrap mr-ml-24">
+        <div className="mr-text-xs mr-flex mr-pt-3 mr-whitespace-nowrap mr-ml-24">
           <Dropdown
             className="mr-dropdown--right"
             dropdownButton={dropdown =>
