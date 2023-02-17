@@ -23,7 +23,7 @@ export const defaultWorkspaceSetup = function () {
       widgetDescriptor('ChallengeShareWidget'),
       widgetDescriptor('TaskStatusWidget'),
       widgetDescriptor('OSMHistoryWidget'),
-      // widgetDescriptor('TaskHistoryWidget'),
+      widgetDescriptor('TaskHistoryWidget'),
       widgetDescriptor('PublicTaskInstructionsWidget'),
       widgetDescriptor('TaskMapWidget'),
     ],
@@ -31,7 +31,7 @@ export const defaultWorkspaceSetup = function () {
       { i: '0', x: 10, y: 8, w: 2, h: 3 },
       { i: '1', x: 8, y: 8, w: 2, h: 3 },
       { i: '2', x: 4, y: 6, w: 4, h: 6 },
-      // { i: '3', x: 4, y: 0, w: 4, h: 5 },
+      { i: '3', x: 4, y: 0, w: 4, h: 5 },
       { i: '4', x: 0, y: 0, w: 4, h: 11 },
       { i: '5', x: 8, y: 0, w: 4, h: 8 },
     ],
@@ -60,6 +60,7 @@ export class PublicTaskPane extends Component {
   }
 
   render() {
+console.log(this.props)
     //render regular TaskPane for logged in users.
     const loggedIn = localStorage.getItem('isLoggedIn')
     if (loggedIn) {
