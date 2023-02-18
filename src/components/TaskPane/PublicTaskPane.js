@@ -39,8 +39,8 @@ export const defaultWorkspaceSetup = function () {
 }
 
 /**
- * PublicTaskPane presents the preview page of current task. It contains
- * a workspace of different widgets with related information about current task,
+ * PublicTaskPane presents the preview page of a task. It contains
+ * a workspace of different widgets with related information about a task,
  * including task context, challenge share control, task completion progress, task status
  * OSM history, task history, and task map.
  */
@@ -60,7 +60,6 @@ export class PublicTaskPane extends Component {
   }
 
   render() {
-console.log(this.props)
     //render regular TaskPane for logged in users.
     const loggedIn = localStorage.getItem('isLoggedIn')
     if (loggedIn) {
