@@ -80,7 +80,7 @@ const SearchContent = props => {
             {resultItems.length === 0 ?
               <FormattedMessage {...messages.noResults } /> :
               <ol
-                className="mr-o-2 mr-max-w-screen50 mr-whitespace-no-wrap mr-overflow-x-scroll"
+                className="mr-o-2 mr-max-w-screen50 mr-whitespace-nowrap mr-overflow-x-scroll"
                 onClick={() => props.closeSearch()}
               >
                 {resultItems}

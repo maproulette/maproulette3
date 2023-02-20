@@ -36,7 +36,7 @@ export class SearchTypeFilter extends Component {
         dropdownButton={dropdown =>
           <div className="" onClick={dropdown.toggleDropdownVisible}>
             <span className="mr-flex mr-items-center mr-text-green-lighter mr-cursor-pointer">
-              <span className="mr-w-20 mr-mr-2 mr-overflow-hidden mr-whitespace-no-wrap mr-overflow-ellipsis">
+              <span className="mr-w-20 mr-mr-2 mr-overflow-hidden mr-whitespace-nowrap mr-overflow-ellipsis">
               {
                 notFiltering ?
                 localizedSearchTypeLabels.challenges :

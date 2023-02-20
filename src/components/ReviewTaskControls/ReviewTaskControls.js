@@ -196,7 +196,7 @@ export class ReviewTaskControls extends Component {
 
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
-        <div className="mr-text-sm mr-text-white mr-mt-4 mr-whitespace-no-wrap">
+        <div className="mr-text-sm mr-text-white mr-mt-4 mr-whitespace-nowrap">
           <FormattedMessage
             {...messages.currentTaskStatus}
           /> 
@@ -205,7 +205,7 @@ export class ReviewTaskControls extends Component {
           />
         </div>
 
-        <div className="mr-text-sm mr-text-white mr-whitespace-no-wrap">
+        <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
           <FormattedMessage
             {...messages.currentReviewStatus}
           /> 
@@ -215,7 +215,7 @@ export class ReviewTaskControls extends Component {
         </div>
 
         {isMetaReview &&
-          <div className="mr-text-sm mr-text-white mr-whitespace-no-wrap">
+          <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
             <FormattedMessage
               {...messages.currentMetaReviewStatus}
             /> 
