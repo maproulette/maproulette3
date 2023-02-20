@@ -196,7 +196,7 @@ export class TaskPane extends Component {
         <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
           <BusySpinner />
         </div> :
-        <Redirect to={`/challenge/${this.props.challengeId}/task/${this.props.task?.id}`} />
+        <Redirect to={`${this.match.url}`} />
       )
     }
 

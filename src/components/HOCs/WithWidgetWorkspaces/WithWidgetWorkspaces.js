@@ -371,9 +371,9 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
            <BusySpinner />
           </div> :
-          (this.props.match.path !== '/challenge/:challengeId/task/:taskId' ?
+          ((this.props.match.path !== '/challenge/:challengeId/task/:taskId' && this.props.match.path !== '/task/:taskId') ?
           <SignIn {...this.props} /> :
-          <Redirect to={`/challenge/${this.props.challengeId}/task/${this.props.task?.id}`} />)
+          <Redirect to={`${this.props.match.url}`} />)
         )
       }
 

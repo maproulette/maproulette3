@@ -22,7 +22,7 @@ export class SignInButton extends Component {
   }
 
   handleSignin = () => {
-      //clear stale locks in localStorage
+    //clear stale locks in localStorage
     localStorage.clear();
     localStorage.setItem('isLoggedIn', 'true')
     this.setState({clicked: true});

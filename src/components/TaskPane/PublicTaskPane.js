@@ -64,7 +64,7 @@ export class PublicTaskPane extends Component {
     const loggedIn = localStorage.getItem('isLoggedIn')
     if (loggedIn) {
       <Redirect
-        to={`/challenge/${this.props.challengeId}/task/${this.props.task?.id}`}
+        to={`${this.match.url}`}
       />
     }
 
