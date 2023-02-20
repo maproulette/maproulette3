@@ -18,12 +18,13 @@ import {
   ensurePermanentWidgetsAdded,
   widgetDescriptor,
 } from '../../../services/Widget/Widget'
-import SignIn from '../../../pages/SignIn/SignIn'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import WithStatus from '../WithStatus/WithStatus'
 import WithErrors from '../WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
 import BusySpinner from '../../BusySpinner/BusySpinner'
+import { Redirect } from 'react-router'
+import SignIn from '../../../pages/SignIn/SignIn'
 
 /**
  * WithWidgetWorkspaces provides the WrappedComponent with access to the saved
@@ -363,13 +364,16 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
     }
 
     render() {
+      // Render public task page if user is not logged in.
       if (!_get(this.props, 'user.isLoggedIn')) {
         return (
           this.props.checkingLoginStatus ?
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
            <BusySpinner />
           </div> :
-          <SignIn {...this.props} />
+          ((this.props.match.path !== '/challenge/:challengeId/task/:taskId' && this.props.match.path !== '/task/:taskId') ?
+          <SignIn {...this.props} /> :
+          <Redirect to={`${this.props.match.url}`} />)
         )
       }
 
