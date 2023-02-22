@@ -21,12 +21,14 @@ import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
 import WithClusteredTasks from "../HOCs/WithClusteredTasks/WithClusteredTasks";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
+import WithCurrentChallenge from "../AdminPane/HOCs/WithCurrentChallenge/WithCurrentChallenge";
 import WithChallengeTaskClusters from "../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters";
 import WithTaskClusterMarkers from "../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers";
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
+import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
@@ -58,6 +60,7 @@ export class ChallengeDetail extends Component {
     displayInputError: false,
     displayCheckboxError: false,
     submittingFlag: false,
+    pickingProject: false,
   };
 
   componentDidMount() {
@@ -168,6 +171,20 @@ export class ChallengeDetail extends Component {
               </Fragment>
             )
           }
+          {
+            _isObject(this.props.user) && (
+              <Fragment>
+                <span className="mr-px-3"> | </span>
+                <a
+                onClick={() => this.setState({ pickingProject: true })}
+                className="mr-text-green-lighter hover:mr-text-white"
+                >
+                  <FormattedMessage {...messages.cloneChallenge} />
+                </a>
+              </Fragment>
+            )
+          }
+          
         </li>
       )
     }
@@ -478,6 +495,6 @@ export class ChallengeDetail extends Component {
 
 export default WithCurrentUser(
   WithClusteredTasks(
-    WithStartChallenge(WithBrowsedChallenge(injectIntl(ChallengeDetail)))
+    WithStartChallenge(WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail))))
   )
 );
