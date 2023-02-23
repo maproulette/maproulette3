@@ -106,8 +106,17 @@ export class EditChallenge extends Component {
    * Returns true if this challenge's data is being cloned from another
    * challenge.
    */
-  isCloningChallenge = () =>
-    !!_get(this.props, "location.state.cloneChallenge");
+  isCloningChallenge = () => {
+    return !!_get(this.props, "location.state.cloneChallenge");
+  }
+
+  /**
+   * Returns the project ID of which the challenge is being cloned into. Project Id
+   * is passed in from challengeDetail.js
+   */
+  getProjectId = () => {
+    return _get(this.props, "location.state.projectId");
+  }
 
   /**
    * Returns true if all challenge fields should be displayed as a single,
@@ -518,7 +527,8 @@ export class EditChallenge extends Component {
 
     // Parent field should just be id, not object.
     if (_isObject(challengeData.parent)) {
-      challengeData.parent = challengeData.parent.id;
+      const projectId = this.getProjectId();
+      challengeData.parent = projectId ? projectId : challengeData.parent.id;
     }
 
     // For new challenges, append the #maproulette hashtag to the changeset comment

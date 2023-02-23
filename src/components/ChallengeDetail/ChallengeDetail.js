@@ -5,6 +5,7 @@ import classNames from "classnames";
 import _isObject from "lodash/isObject";
 import _get from "lodash/get";
 import _findIndex from "lodash/findIndex";
+import _merge from "lodash/merge";
 import parse from "date-fns/parse";
 import MapPane from "../EnhancedMap/MapPane/MapPane";
 import TaskClusterMap from "../TaskClusterMap/TaskClusterMap";
@@ -29,6 +30,7 @@ import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
 import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
+import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
@@ -61,6 +63,7 @@ export class ChallengeDetail extends Component {
     displayCheckboxError: false,
     submittingFlag: false,
     pickingProject: false,
+    projectId: null,
   };
 
   componentDidMount() {
@@ -134,6 +137,14 @@ export class ChallengeDetail extends Component {
     }
   }
 
+  projectPickerCanceled = () => {
+    this.setState({ pickingProject: false });
+  }
+
+  onProjectPick = () => {
+    
+  }
+
   renderDetailTabs = () => {
     const challenge = this.props.browsedChallenge;
     if (!challenge.isVirtual) {
@@ -181,6 +192,22 @@ export class ChallengeDetail extends Component {
                 >
                   <FormattedMessage {...messages.cloneChallenge} />
                 </a>
+                {/* <Link
+                to={{
+                  pathname:
+                    `/admin/project/${this.state.projectId}/` +
+                    `challenge/${challenge.id}/clone`,
+                  state: _merge(
+                    { cloneChallenge: true,
+                      projectId: this.state.projectId,
+                    },
+                    _get(this.props.searchCriteria, "filters")
+                  ),
+                }}
+                className={this.props.controlClassName}
+              >
+                <FormattedMessage {...messages.cloneChallenge} />
+              </Link> */}
               </Fragment>
             )
           }
@@ -335,6 +362,7 @@ export class ChallengeDetail extends Component {
   }
 
   render() {
+    console.log(this.props);
     const challenge = this.props.browsedChallenge;
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
       return (
@@ -432,7 +460,14 @@ export class ChallengeDetail extends Component {
                     handleViewCommentsSubmit={this.handleViewCommentsSubmit}
                   />
                 }
-
+            {this.state.pickingProject && (
+              <ProjectPickerModal
+                {...this.props}
+                currentProjectId={null}
+                onCancel={this.projectPickerCanceled}
+                onSelectProject={this.moveToProject}
+              />
+            )}
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"
@@ -494,7 +529,9 @@ export class ChallengeDetail extends Component {
 }
 
 export default WithCurrentUser(
-  WithClusteredTasks(
-    WithStartChallenge(WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail))))
+  WithManageableProjects(
+    WithClusteredTasks(
+      WithStartChallenge(WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail))))
+    )
   )
 );
