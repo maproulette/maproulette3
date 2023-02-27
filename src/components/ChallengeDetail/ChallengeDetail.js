@@ -63,7 +63,6 @@ export class ChallengeDetail extends Component {
     displayCheckboxError: false,
     submittingFlag: false,
     pickingProject: false,
-    projectId: null,
   };
 
   componentDidMount() {
@@ -141,8 +140,17 @@ export class ChallengeDetail extends Component {
     this.setState({ pickingProject: false });
   }
 
-  onProjectPick = () => {
-    
+  cloneToProject = (project) => {
+    this.setState({ pickingProject: false })
+    this.props.history.push({
+      pathname:
+        `/admin/project/${project.id}/` +
+        `challenge/${this.props.challenge.id}/clone`,
+      state: _merge(
+        { cloneChallenge: true, projectId: project.id },
+        _get(this.props.searchCriteria, 'filters')
+      ),
+    })
   }
 
   renderDetailTabs = () => {
@@ -192,22 +200,6 @@ export class ChallengeDetail extends Component {
                 >
                   <FormattedMessage {...messages.cloneChallenge} />
                 </a>
-                {/* <Link
-                to={{
-                  pathname:
-                    `/admin/project/${this.state.projectId}/` +
-                    `challenge/${challenge.id}/clone`,
-                  state: _merge(
-                    { cloneChallenge: true,
-                      projectId: this.state.projectId,
-                    },
-                    _get(this.props.searchCriteria, "filters")
-                  ),
-                }}
-                className={this.props.controlClassName}
-              >
-                <FormattedMessage {...messages.cloneChallenge} />
-              </Link> */}
               </Fragment>
             )
           }
@@ -362,7 +354,6 @@ export class ChallengeDetail extends Component {
   }
 
   render() {
-    console.log(this.props);
     const challenge = this.props.browsedChallenge;
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
       return (
@@ -465,7 +456,7 @@ export class ChallengeDetail extends Component {
                 {...this.props}
                 currentProjectId={null}
                 onCancel={this.projectPickerCanceled}
-                onSelectProject={this.moveToProject}
+                onSelectProject={this.cloneToProject}
               />
             )}
                 {challenge.parent && ( // virtual challenges don't have projects
