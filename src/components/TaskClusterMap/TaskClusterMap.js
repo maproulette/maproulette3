@@ -815,12 +815,25 @@ export class TaskClusterMap extends Component {
            closeSearch={this.closeSearch}
          />
         }
-        {this.props.delayMapLoad && !this.state.searchOpen &&
+        {this.props.delayMapLoad && !this.state.searchOpen && !process.env.REACT_APP_DISABLE_TASK_CLUSTERS &&
           <div className="mr-absolute mr-top-0 mr-mt-3 mr-w-full mr-flex mr-justify-center"
             onClick={() => this.props.forceMapLoad()}>
             <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
               <div className="mr-py-2 mr-px-3 mr-text-center mr-cursor-pointer">
                 <FormattedMessage {...messages.moveMapToRefresh} />
+              </div>
+            </div>
+          </div>
+        }
+        {process.env.REACT_APP_DISABLE_TASK_CLUSTERS && this.props.onClickFetchClusters && !this.props.mapZoomedOut &&
+          <div className="mr-absolute mr-bottom-0 mr-mb-3 mr-w-full mr-flex mr-justify-center"
+            onClick={() => {
+              this.props.onClickFetchClusters()
+            }}
+          >
+            <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
+              <div className="mr-py-2 mr-px-3 mr-text-center mr-cursor-pointer">
+                <FormattedMessage {...messages.refreshTasks} />
               </div>
             </div>
           </div>

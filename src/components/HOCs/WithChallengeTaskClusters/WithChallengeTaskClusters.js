@@ -60,7 +60,11 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       this.fetchUpdatedClusters(!this.state.showAsClusters)
     }
 
-    fetchUpdatedClusters(wantToShowAsClusters) {
+    onClickFetchClusters = () => {
+      this.fetchUpdatedClusters(this.state.showAsClusters, true)
+    }
+
+    fetchUpdatedClusters(wantToShowAsClusters, overrideDisable = false) {
       if (!!_get(this.props, 'nearbyTasks.loading')) {
         return
       }
@@ -100,6 +104,10 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         _set(searchCriteria, 'filters.archived', true)
       }
 
+      if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
+        return this.setState({ loading: false })
+      }
+
       if (!showAsClusters) {
         searchCriteria.page = 0
 
@@ -111,7 +119,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
             // (unless we are zoomed all the way in already)
             if (results.totalCount > UNCLUSTER_THRESHOLD &&
                 _get(this.props, 'criteria.zoom', 0) < MAX_ZOOM) {
-              this.props.fetchTaskClusters(challengeId, searchCriteria
+              this.props.fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable
               ).then(results => {
                 const clusters = results.clusters
                 if (currentFetchId >= this.state.fetchId) {
@@ -132,7 +140,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         })
       }
       else {
-        this.props.fetchTaskClusters(challengeId, searchCriteria
+        this.props.fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable
         ).then(results => {
           const clusters = results.clusters
           if (currentFetchId >= this.state.fetchId) {
@@ -150,6 +158,13 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     componentDidMount() {
       if (!skipInitialFetch) {
         this.debouncedFetchClusters(this.state.showAsClusters)
+      }
+
+      if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS) {
+        const bounds = _get(this.props.criteria, 'boundingBox')
+        if (!bounds || !boundsWithinAllowedMaxDegrees(bounds)) {
+          this.setState({ mapZoomedOut: true })
+        }
       }
     }
 
@@ -213,6 +228,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
           showAsClusters = {this.state.showAsClusters}
           totalTaskCount = {this.state.taskCount}
           mapZoomedOut = {this.state.mapZoomedOut}
+          onClickFetchClusters = {this.onClickFetchClusters}
         />
       )
     }
