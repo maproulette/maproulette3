@@ -389,9 +389,8 @@ export class EditChallenge extends Component {
         delete challengeData.dataOriginDate;
       }
 
-      if (_isEmpty(this.state.formData.overpassQL)) {
-        delete challengeData.overpassQL;
-      }
+      challengeData.overpassQL = `/*\nTHIS IS THE QUERY OF THE CHALLENGE YOU CLONED PLEASE ADAPT BEFORE USING TO AVOID CREATING DUPLICATE TASKS\n\n` 
+        + challengeData.overpassQL + `\n*/`;
 
       if (_isEmpty(this.state.formData.remoteGeoJson)) {
         delete challengeData.remoteGeoJson;

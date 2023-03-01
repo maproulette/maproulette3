@@ -36,6 +36,8 @@ const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
 );
 
+const ProjectPicker = WithManageableProjects(ProjectPickerModal);
+
 const FLAG_REPO_NAME = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
 const FLAG_REPO_OWNER = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
 const FLAG_TOKEN = process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
@@ -191,7 +193,7 @@ export class ChallengeDetail extends Component {
             )
           }
           {
-            _isObject(this.props.user) && (
+            _isObject(this.props.user) && challenge.enabled && (
               <Fragment>
                 <span className="mr-px-3"> | </span>
                 <a
@@ -451,14 +453,14 @@ export class ChallengeDetail extends Component {
                     handleViewCommentsSubmit={this.handleViewCommentsSubmit}
                   />
                 }
-            {this.state.pickingProject && (
-              <ProjectPickerModal
-                {...this.props}
-                currentProjectId={null}
-                onCancel={this.projectPickerCanceled}
-                onSelectProject={this.cloneToProject}
-              />
-            )}
+                {this.state.pickingProject && _isObject(this.props.user) && (
+                  <ProjectPicker
+                    {...this.props}
+                    currentProjectId={null}
+                    onCancel={this.projectPickerCanceled}
+                    onSelectProject={this.cloneToProject}
+                  />
+                )}
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"
@@ -520,9 +522,7 @@ export class ChallengeDetail extends Component {
 }
 
 export default WithCurrentUser(
-  WithManageableProjects(
-    WithClusteredTasks(
-      WithStartChallenge(WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail))))
-    )
+  WithClusteredTasks(
+    WithStartChallenge(WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail))))
   )
 );
