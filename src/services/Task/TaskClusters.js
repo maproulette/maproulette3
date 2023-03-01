@@ -47,9 +47,9 @@ export const clearTaskClusters = function() {
  * boundingBox string -- see Search.generateSearchParametersString for details
  * of supported filters
  */
-export const fetchTaskClusters = function(challengeId, criteria, points=25) {
+export const fetchTaskClusters = function(challengeId, criteria, points=25, overrideDisable=false) {
   return function(dispatch) {
-    if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true') {
+    if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true' && !overrideDisable) {
       return new Promise((resolve) => resolve());
     }
 
