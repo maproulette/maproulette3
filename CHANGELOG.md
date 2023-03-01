@@ -7,6 +7,23 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.11.9] - 2023-3-1
+Release with [maproulette-backend_v4.3.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.3.2)
+
+### Features
+- Public Task Landing Page
+- Manual Task Cluster Fetching if Clustering is Disabled
+- Apply review_started_at to all tasks in a bundle (API)
+- Remove mandatory valid session requirement when fetching task history (API)
+
+### Fixes
+- Fixed the base url for users to update their email preferences
+- Prevent duplicate notifications of challenge ccompletion (API)
+
+### System Updates
+- Upgrade to Tailwind V2
+- Add toggle to disable user leaderboard configs
+
 ## [v3.11.8] - 2023-2-14
 Release with [maproulette-backend_v4.3.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.3.1)
 
