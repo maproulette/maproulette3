@@ -4,6 +4,7 @@ import Endpoint from '../Server/Endpoint'
 import startOfMonth from 'date-fns/start_of_month'
 import endOfDay from 'date-fns/end_of_day'
 import { CHALLENGE_INCLUDE_LOCAL } from '../Challenge/Challenge'
+import { setupCustomCache } from '../../utils/setupCustomCache'
 
 // Default leaderboard count
 export const DEFAULT_LEADERBOARD_COUNT = 10
@@ -22,33 +23,10 @@ export const USER_TYPE_REVIEWER = "reviewer"
 
 // one hour
 const CACHE_TIME = 60 * 60 * 1000;
-const GLOBAL_LEADERBOARD = "users";
-const USER_LEADERBOARD = "user";
+const GLOBAL_LEADERBOARD_CACHE = "globalLeaderboard";
+const USER_LEADERBOARD_CACHE = "userLeaderboard";
 
-export const leaderboardCache = {
-  get: (params, type) => {
-    const cachedData = localStorage.getItem(`${type}::${JSON.stringify(params)}`);
-
-    if (cachedData) {
-      const parsed = JSON.parse(cachedData);
-      const currentTime = Date.now();
-      if (currentTime < parsed.date + CACHE_TIME) {
-        return JSON.parse(cachedData)?.data;
-      }
-    }
-
-    return false;
-  },
-
-  set: (params, data, type) => {
-    const obj = JSON.stringify({
-      date: Date.now(),
-      data
-    })
-
-    localStorage.setItem(`${type}::${JSON.stringify(params)}`, obj)
-  }
-}
+const leaderboardCache = setupCustomCache(CACHE_TIME);
 
 /**
  * Retrieve leaderboard data from the server for the given date range and
@@ -67,7 +45,7 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
   initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
                               forUsers, forCountries, startDate, endDate)
 
-  const cachedLeaderboard = leaderboardCache.get(params, GLOBAL_LEADERBOARD);
+  const cachedLeaderboard = leaderboardCache.get(params, GLOBAL_LEADERBOARD_CACHE);
 
   if (cachedLeaderboard) {
     return cachedLeaderboard;
@@ -76,7 +54,7 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
   const results = await new Endpoint(api.users.leaderboard, {params}).execute()
 
   if (results) {
-    leaderboardCache.set(params, results, GLOBAL_LEADERBOARD)
+    leaderboardCache.set(params, results, GLOBAL_LEADERBOARD_CACHE)
   }
 
   return results
@@ -98,7 +76,7 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
   initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
                               null, forCountries, startDate, endDate)
 
-  const cachedLeaderboard = leaderboardCache.get(params, USER_LEADERBOARD);
+  const cachedLeaderboard = leaderboardCache.get(params, USER_LEADERBOARD_CACHE);
 
   if (cachedLeaderboard) {
     return cachedLeaderboard;
@@ -107,7 +85,7 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
   const results = await new Endpoint(api.users.userLeaderboard, {variables: {id: userId}, params}).execute()
 
   if (results) {
-    leaderboardCache.set(params, results, USER_LEADERBOARD)
+    leaderboardCache.set(params, results, USER_LEADERBOARD_CACHE)
   }
 
   return results;
