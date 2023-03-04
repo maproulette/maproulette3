@@ -15,6 +15,7 @@ import _omit from 'lodash/omit'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import subMonths from 'date-fns/sub_months'
+import startOfDay from 'date-fns/start_of_day'
 import { defaultRoutes as api, isSecurityError, credentialsPolicy, websocketClient }
        from '../Server/Server'
 import { resetCache } from '../Server/RequestCache'
@@ -29,6 +30,13 @@ import { taskSchema,
          receiveTasks } from '../Task/Task'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
+import { setupCustomCache } from '../../utils/setupCustomCache'
+
+// 60 minutes
+const CACHE_TIME = 60 * 60 * 1000;
+const USER_ACTIVITY_CACHE = "userActivity";
+const USER_TOP_CHALLENGES = "userTopChallenges";
+const userCache = setupCustomCache(CACHE_TIME);
 
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in
@@ -346,15 +354,25 @@ export const fetchSavedChallenges = function(userId, limit=50) {
 export const fetchTopChallenges = function(userId, startDate, limit=5) {
   return function(dispatch) {
     // If no startDate given, default to past month.
+    const params = {
+      start: (startDate ? startOfDay(startDate) : startOfDay(subMonths(new Date(), 1))).toISOString(),
+      limit,
+    }
+
+    const cachedTopChallenges = userCache.get(params, USER_TOP_CHALLENGES);
+
+    if (cachedTopChallenges) {
+      dispatch(receiveChallenges(cachedTopChallenges.challenges))
+      dispatch(receiveUsers(cachedTopChallenges.user))
+
+      return cachedTopChallenges.challenges
+    }
 
     return new Endpoint(
       api.user.topChallenges, {
         schema: [ challengeSchema() ],
         variables: {userId},
-        params: {
-          start: (startDate ? startDate : subMonths(new Date(), 1)).toISOString(),
-          limit,
-        }
+        params,
       }
     ).execute().then(normalizedChallenges => {
       const challenges = _get(normalizedChallenges, 'entities.challenges')
@@ -373,6 +391,8 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
       _each(challenges, challenge => {
         delete challenge.activity
       })
+
+      userCache.set(params, { challenges: normalizedChallenges.entities, user }, USER_TOP_CHALLENGES)
 
       dispatch(receiveChallenges(normalizedChallenges.entities))
       dispatch(receiveUsers(simulatedEntities(user)))
@@ -476,28 +496,25 @@ export const deleteNotifications = function(userId, notificationIds) {
  */
 export const fetchUserActivity = function(userId) {
   return function(dispatch) {
+
+    const cachedUserActivity = userCache.get({}, USER_ACTIVITY_CACHE);
+
+    if (cachedUserActivity) {
+      return dispatch(receiveUsers(simulatedEntities(cachedUserActivity)));
+    }
+
     return new Endpoint(
       api.user.activity
     ).execute().then(activity => {
       const user = {id: userId}
       user.activity = activity
+
+      userCache.set({}, user, USER_ACTIVITY_CACHE)
+
       dispatch(receiveUsers(simulatedEntities(user)))
       return activity
     })
   }
-}
-
-/**
- * Fetch recent activity from multiple users
- */
-export const fetchMultipleUserActivity = function(osmUserIds, limit=50, page=0) {
-  const offset = page * limit
-  return new Endpoint(api.user.activity, {
-    params: { osmUserIds: osmUserIds.join(','), limit: limit + 1, offset },
-  }).execute().then(activity => ({
-      activity: activity.slice(0, limit),
-      hasMore: activity.length > limit,
-  }))
 }
 
 /**
