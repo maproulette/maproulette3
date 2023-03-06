@@ -118,6 +118,7 @@ export class ChallengePane extends Component {
 
   render() {
     const showingArchived = this.props.history.location.search.includes("archived=true");
+    console.log(this.props);
     const challengeStatus = [ChallengeStatus.ready,
                              ChallengeStatus.partiallyLoaded,
                              ChallengeStatus.none,

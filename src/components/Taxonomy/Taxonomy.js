@@ -28,7 +28,7 @@ const Taxonomy = props => {
           </span>
         </li>
       }
-      {props.featured &&
+      {props.featured && (!props.tasksRemaining == 0) &&
         <li>
           <span className="mr-text-turquoise">
             <FormattedMessage {...messages.featuredLabel} />

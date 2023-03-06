@@ -82,23 +82,34 @@ export class ChallengeResultList extends Component {
       _isEmpty(otherFilters) &&
       (_isEmpty(locationFilter) || !bounds || !boundsWithinAllowedMaxDegrees(bounds))
 
-    // If no filters are applied, inject any featured projects
-    if (unfiltered && this.props.featuredProjects.length > 0) {
-      // Try to locate them right above any featured challenges in the results
-      let featuredIndex = _findIndex(challengeResults, {featured: true})
-      if (featuredIndex === -1) {
-        // No featured challenges. If no sorting is in play, inject at top (after any
-        // saved challenges, if present)
-        if (_isEmpty(_get(search, 'sort.sortBy'))) {
-          const savedChallenges = _get(this.props, 'user.savedChallenges', [])
-          featuredIndex =
-            _findIndex(challengeResults, result => _findIndex(savedChallenges, {id: result.id}) === -1)
+      if (unfiltered && this.props.featuredProjects.length > 0) {
+        // Try to locate them right above any featured challenges in the results
+        let featuredIndex = _findIndex(challengeResults, {featured: true})
+        if (featuredIndex === -1) {
+          // No featured challenges. If no sorting is in play, inject at top (after any
+          // saved challenges, if present)
+          if (_isEmpty(_get(search, 'sort.sortBy'))) {
+            const savedChallenges = _get(this.props, 'user.savedChallenges', [])
+            featuredIndex =
+              _findIndex(challengeResults, result => _findIndex(savedChallenges, {id: result.id}) === -1)
+          }
+        }
+        if (featuredIndex !== -1) {
+          // Remove the "featured" flag from any challenges that have already finished
+          const updatedFeaturedProjects = this.props.featuredProjects.map(project => {
+            if (project.challenges.every(c => c.isComplete)) {
+              return {
+                ...project,
+                challenges: project.challenges.map(c => ({ ...c, featured: false }))
+              };
+            } else {
+              return project;
+            }
+          });
+      
+          challengeResults.splice(featuredIndex, 0, ...updatedFeaturedProjects)
         }
       }
-      if (featuredIndex !== -1) {
-        challengeResults.splice(featuredIndex, 0, ...this.props.featuredProjects)
-      }
-    }
 
     let results = null
     if (challengeResults.length === 0) {
