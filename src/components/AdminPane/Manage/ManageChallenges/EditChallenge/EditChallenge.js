@@ -396,6 +396,10 @@ export class EditChallenge extends Component {
           `\n*/`
       }
 
+      if (!_isEmpty(challengeData.overpassQL) && challengeData.overpassTargetType === '') {
+	      challengeData.overpassTargetType = 'none';
+      }
+
       if (_isEmpty(this.state.formData.remoteGeoJson)) {
         delete challengeData.remoteGeoJson;
       }
