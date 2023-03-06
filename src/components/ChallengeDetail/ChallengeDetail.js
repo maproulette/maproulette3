@@ -25,12 +25,12 @@ import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import WithCurrentChallenge from "../AdminPane/HOCs/WithCurrentChallenge/WithCurrentChallenge";
 import WithChallengeTaskClusters from "../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters";
 import WithTaskClusterMarkers from "../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers";
+import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
 import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
-import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
@@ -196,12 +196,12 @@ export class ChallengeDetail extends Component {
             _isObject(this.props.user) && challenge.enabled && (
               <Fragment>
                 <span className="mr-px-3"> | </span>
-                <a
-                onClick={() => this.setState({ pickingProject: true })}
-                className="mr-text-green-lighter hover:mr-text-white"
+                <button
+                  onClick={() => this.setState({ pickingProject: true })}
+                  className="mr-text-green-lighter hover:mr-text-white"
                 >
                   <FormattedMessage {...messages.cloneChallenge} />
-                </a>
+                </button>
               </Fragment>
             )
           }
@@ -453,10 +453,10 @@ export class ChallengeDetail extends Component {
                     handleViewCommentsSubmit={this.handleViewCommentsSubmit}
                   />
                 }
-                {this.state.pickingProject && _isObject(this.props.user) && (
+                {_isObject(this.props.user) && challenge.enabled && this.state.pickingProject && (
                   <ProjectPicker
                     {...this.props}
-                    currentProjectId={null}
+                    currentProjectId={challenge.parent.id}
                     onCancel={this.projectPickerCanceled}
                     onSelectProject={this.cloneToProject}
                   />

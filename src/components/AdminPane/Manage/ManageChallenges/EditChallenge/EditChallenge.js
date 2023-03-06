@@ -111,10 +111,10 @@ export class EditChallenge extends Component {
   }
 
   /**
-   * Returns the project ID of which the challenge is being cloned into. Project Id
+   * Returns the project Id of which the challenge is being cloned into. Project Id
    * is passed in from challengeDetail.js
    */
-  getProjectId = () => {
+  getCloningProjectId = () => {
     return _get(this.props, "location.state.projectId");
   }
 
@@ -389,8 +389,12 @@ export class EditChallenge extends Component {
         delete challengeData.dataOriginDate;
       }
 
-      challengeData.overpassQL = `/*\nTHIS IS THE QUERY OF THE CHALLENGE YOU CLONED PLEASE ADAPT BEFORE USING TO AVOID CREATING DUPLICATE TASKS\n\n` 
-        + challengeData.overpassQL + `\n*/`;
+      if (_isEmpty(this.state.formData.overpassQL) && !_isEmpty(challengeData.overpassQL)) {
+        challengeData.overpassQL =
+          `/*\nTHIS IS THE QUERY OF THE CHALLENGE YOU CLONED PLEASE ADAPT BEFORE USING TO AVOID CREATING DUPLICATE TASKS\n\n` +
+          challengeData.overpassQL +
+          `\n*/`
+      }
 
       if (_isEmpty(this.state.formData.remoteGeoJson)) {
         delete challengeData.remoteGeoJson;
@@ -526,8 +530,8 @@ export class EditChallenge extends Component {
 
     // Parent field should just be id, not object.
     if (_isObject(challengeData.parent)) {
-      const projectId = this.getProjectId();
-      challengeData.parent = projectId ? projectId : challengeData.parent.id;
+      const cloningProjectId = this.getCloningProjectId();
+      challengeData.parent = cloningProjectId ? cloningProjectId : challengeData.parent.id;
     }
 
     // For new challenges, append the #maproulette hashtag to the changeset comment
