@@ -323,6 +323,7 @@ export class EditChallenge extends Component {
           const nextState = _cloneDeep(this.challengeState);
           if (nextState) {
             nextState.refreshAfterSave = true;
+            nextState.cloneChallenge = false;
           }
 
           this.props.history.push({
