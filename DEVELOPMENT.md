@@ -19,6 +19,8 @@ This is the repository that holds the front-end code. The back-end and API are d
 
 3. `yarn run start` to fire up the front-end development server
 
+Note: When installing Node LTS,  ensure that the version of node installed is <= 17.0.1 & conversely, the version of npm is <= 8.19.3. Otherwise, with higher versions of node, yarn would not be able to recognize Node and run the frontend portion of the codebase.
+
 A back-end server from the [maproulette-backend](https://github.com/maproulette/maproulette-backend) project is also required. You can either install and configure it locally or, if you have access to a pre-existing server, connect directly to it by using your API key for that
 server.
 
