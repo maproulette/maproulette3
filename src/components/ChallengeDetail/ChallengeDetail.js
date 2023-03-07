@@ -453,6 +453,7 @@ export class ChallengeDetail extends Component {
                     handleViewCommentsSubmit={this.handleViewCommentsSubmit}
                   />
                 }
+
                 {_isObject(this.props.user) && challenge.enabled && this.state.pickingProject && (
                   <ProjectPicker
                     {...this.props}
@@ -461,6 +462,7 @@ export class ChallengeDetail extends Component {
                     onSelectProject={this.cloneToProject}
                   />
                 )}
+
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"
@@ -523,6 +525,8 @@ export class ChallengeDetail extends Component {
 
 export default WithCurrentUser(
   WithClusteredTasks(
-    WithStartChallenge(WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail))))
+    WithStartChallenge(
+      WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail)))
+    )
   )
-);
+)
