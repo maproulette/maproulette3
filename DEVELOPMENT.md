@@ -9,6 +9,8 @@ This is the repository that holds the front-end code. The back-end and API are d
 * [jq](https://stedolan.github.io/jq/)
 * [curl](https://curl.haxx.se/)
 
+Note: When installing Node LTS,  ensure that the version of node installed is <= 17.0.1 & conversely, the version of npm is <= 8.19.3. Otherwise, with higher versions of node, yarn would not be able to recognize Node and run the frontend portion of the codebase.
+
 ### Initial Setup
 
 1. Create a `.env.development.local` file and then look through `.env` at the
