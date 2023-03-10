@@ -68,6 +68,7 @@ const ClusterMap = WithChallengeTaskClusters(
   true
 )
 
+const shortcutGroup = 'taskEditing'
 
 export default class TaskBundleWidget extends Component {
   bundleTasks = () => {
@@ -132,7 +133,26 @@ export default class TaskBundleWidget extends Component {
     )
   }
 
+  completeTask = () => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
+    this.props.complete(TaskStatus.alreadyFixed)
+  }
+
+  handleKeyboardShortcuts = this.props.quickKeyHandler(
+    this.props.keyboardShortcutGroups.taskEditing.completeTogether.key,
+    () => this.completeTask()
+  )
+
   componentDidMount() {
+    this.props.activateKeyboardShortcut(
+      shortcutGroup,
+      _pick(this.props.keyboardShortcutGroups.taskEditing, 'alreadyFixed'),
+      this.handleKeyboardShortcuts)
+
     if (!this.props.taskBundle) {
       this.initializeClusterFilters()
       this.initializeWebsocketSubscription()
@@ -160,6 +180,8 @@ export default class TaskBundleWidget extends Component {
   }
 
   componentWillUnmount() {
+    this.props.deactivateKeyboardShortcut(shortcutGroup, 'alreadyFixed',
+                                          this.handleKeyboardShortcuts)
     const challengeId = _get(this.props.task, 'parent.id')
     if (_isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
