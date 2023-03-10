@@ -4,6 +4,10 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with Navbar.
  */
 export default defineMessages({
+  blog: {
+    id: 'Navbar.links.blog',
+    defaultMessage: "Blog",
+  },
   dashboard: {
     id: 'Navbar.links.dashboard',
     defaultMessage: "Dashboard",

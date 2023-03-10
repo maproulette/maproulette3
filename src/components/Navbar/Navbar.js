@@ -323,6 +323,16 @@ const Nav = props => (
         <FormattedMessage {...messages.help} />
       </a>
     </li>
+
+    <li className="mr-flex mr-flex-col mr-justify-center">
+      <a
+        href="https://blog.maproulette.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={props.closeMobileMenu}>
+        <FormattedMessage {...messages.blog} />
+      </a>
+    </li>
   </React.Fragment>
 )
 
