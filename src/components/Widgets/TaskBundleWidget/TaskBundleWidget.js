@@ -72,10 +72,19 @@ const shortcutGroup = 'taskEditing'
 
 export default class TaskBundleWidget extends Component {
   bundleTasks = () => {
+
+
     // Because there's no way to select all tasks (TriState checkbox is
     // suppressed on the TaskAnalysisTables), we only need to worry about
     // explicitly selected tasks
     this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()])
+
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+    return
+    }
+
+    this.props.complete(TaskStatus.completeTogether)
   }
 
   /**
@@ -133,26 +142,12 @@ export default class TaskBundleWidget extends Component {
     )
   }
 
-  completeTask = () => {
-    // Ignore if shortcut group is not active
-    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
-      return
-    }
-
-    this.props.complete(TaskStatus.alreadyFixed)
-  }
-
   handleKeyboardShortcuts = this.props.quickKeyHandler(
     this.props.keyboardShortcutGroups.taskEditing.completeTogether.key,
-    () => this.completeTask()
+    () => this.bundleTasks()
   )
 
   componentDidMount() {
-    this.props.activateKeyboardShortcut(
-      shortcutGroup,
-      _pick(this.props.keyboardShortcutGroups.taskEditing, 'alreadyFixed'),
-      this.handleKeyboardShortcuts)
-
     if (!this.props.taskBundle) {
       this.initializeClusterFilters()
       this.initializeWebsocketSubscription()
@@ -161,6 +156,11 @@ export default class TaskBundleWidget extends Component {
     if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
       this.props.selectTasks([this.props.task])
     }
+
+    this.props.activateKeyboardShortcut(
+      shortcutGroup,
+      _pick(this.props.keyboardShortcutGroups.taskEditing, 'completeTogether'),
+      this.handleKeyboardShortcuts)
   }
 
   componentDidUpdate(prevProps) {
@@ -180,12 +180,14 @@ export default class TaskBundleWidget extends Component {
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcut(shortcutGroup, 'alreadyFixed',
-                                          this.handleKeyboardShortcuts)
+    
     const challengeId = _get(this.props.task, 'parent.id')
     if (_isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
+
+    this.props.deactivateKeyboardShortcut(shortcutGroup, 'completeTogether',
+                                          this.handleKeyboardShortcuts)
   }
 
   render() {
@@ -414,3 +416,8 @@ registerWidgetType(
     )
   ), descriptor
 )
+
+TaskBundle.propTypes = {
+  /** Invoked to mark the task as task bundled */
+  complete: PropTypes.func.isRequired,
+}
