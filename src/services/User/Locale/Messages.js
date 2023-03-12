@@ -28,6 +28,10 @@ export default defineMessages({
     id: "Locale.ja.label",
     defaultMessage: "ja (日本語)",
   },
+  "it-IT": {
+    id: "Locale.it-IT.label",
+    defaultMessage: "it-IT (Italiano)",
+  },
   ko: {
     id: "Locale.ko.label",
     defaultMessage: "ko (한국어)",

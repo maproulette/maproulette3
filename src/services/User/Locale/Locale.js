@@ -16,6 +16,7 @@ export const Locale = Object.freeze({
   de: "de",
   af: "af",
   ja: "ja",
+  "it-IT": "it-IT",
   ko: "ko",
   nl: "nl",
   "pt-BR": "pt-BR",
@@ -60,6 +61,11 @@ const LocaleImports = {
     Promise.all([
       import("../../../lang/ja.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/ja"),
+    ]),
+  [Locale["it_IT"]]: () =>
+    Promise.all([
+      import("../../../lang/it_IT.json"),
+      import("@formatjs/intl-relativetimeformat/locale-data/it"),
     ]),
   [Locale.ko]: () =>
     Promise.all([
