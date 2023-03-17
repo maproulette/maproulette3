@@ -31,6 +31,7 @@ import OSMDataLayer from '../../EnhancedMap/OSMDataLayer/OSMDataLayer'
 import ImageMarkerLayer from '../../EnhancedMap/ImageMarkerLayer/ImageMarkerLayer'
 import TaskFeatureLayer from '../../EnhancedMap/TaskFeatureLayer/TaskFeatureLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
+import RapidToggle from '../../EnhancedMap/RapidToggle/RapidToggle.js'
 import FitBoundsControl
        from '../../EnhancedMap/FitBoundsControl/FitBoundsControl'
 import MapAnimator from '../../EnhancedMap/MapAnimator/MapAnimator'
@@ -581,6 +582,8 @@ export class TaskMap extends Component {
 
     return (
       <div className={classNames("task-map task", {"full-screen-map": this.props.isMobile})}>
+        
+
         <LayerToggle
           {...this.props}
           showTaskFeatures={this.state.showTaskFeatures}
@@ -613,6 +616,7 @@ export class TaskMap extends Component {
           externalInteractive
           overlayOrder={overlayOrder}
         >
+          
           <ZoomControl position='topright' />
           <FitBoundsControl />
           <SourcedTileLayer maxZoom={maxZoom} {...this.props} />
@@ -626,6 +630,7 @@ export class TaskMap extends Component {
               {layer.component}
             </Pane>
           ))}
+          <RapidToggle />
         </EnhancedMap>
 
         {this.state.mapillaryViewerImage && this.renderMapillaryViewer()}
@@ -637,6 +642,7 @@ export class TaskMap extends Component {
             initialImageKey={this.state.openStreetCamViewerImage}
             onClose={() => this.setState({openStreetCamViewerImage: null})}
          />
+         
         }
       </div>
     )
