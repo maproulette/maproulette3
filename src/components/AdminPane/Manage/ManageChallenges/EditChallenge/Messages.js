@@ -721,6 +721,17 @@ will not be able to make sense of it.
       "a park or a lake.",
   },
 
+  reviewSettingsLabel: {
+    id: "Admin.EditChallenge.form.reviewSettings.label",
+    defaultMessage: "Request Review By Default",
+  },
+
+  reviewSettingsDescription: {
+    id: "Admin.EditChallenge.form.reviewSettings.description",
+    defaultMessage: 
+    "This will pre-check the users request review box when submitting a task."
+  },
+
   showLongformTooltip: {
     id: "Admin.EditChallenge.controls.showLongform.tooltip",
     defaultMessage: "Show all fields",

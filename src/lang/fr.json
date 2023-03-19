@@ -188,6 +188,8 @@
   "Admin.EditChallenge.form.preferredTags.label": "Tags MR préférés",
   "Admin.EditChallenge.form.presets.description": "Limitez les types d'éléments OSM présentés par défaut aux cartographes dans iD lorsqu'ils travaillent sur vos tâches, afin qu'ils se concentrent sur la cartographie des éléments pertinents pour votre défi. Par exemple, si votre défi consiste à cartographier des bâtiments, vous pouvez activer uniquement les préréglages relatifs aux bâtiments. Les cartographes n'auront alors pas la possibilité de cartographier une zone comme, par exemple, un parc ou un lac.",
   "Admin.EditChallenge.form.presets.label": "Restreindre les préréglages d'iD",
+  "Admin.EditChallenge.form.reviewSettings.description": "Cela pré-cochera la case de révision de la demande des utilisateurs lors de la soumission d'une tâche.",
+  "Admin.EditChallenge.form.reviewSettings.label": "Demander une révision par défaut",
   "Admin.EditChallenge.form.remoteGeoJson.description": "Saisir l'URL permettant de récupérer le GeoJSON distant.",
   "Admin.EditChallenge.form.remoteGeoJson.label": "J'ai une URL vers les données au format GeoJSON.",
   "Admin.EditChallenge.form.remoteGeoJson.placeholder": "https://www.example.com/geojson.json",

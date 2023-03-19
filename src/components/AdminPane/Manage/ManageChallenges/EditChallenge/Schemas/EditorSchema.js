@@ -33,6 +33,15 @@ export const jsSchema = (intl) => {
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     properties: {
+      reviewSettings: {
+        title: intl.formatMessage(messages.reviewSettingsLabel),
+        type: "boolean",
+        default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
+      },
       presets: {
         title: intl.formatMessage(messages.presetsLabel),
         type: "boolean",
@@ -100,6 +109,13 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
   }))
 
   const uiSchemaFields = Object.assign({}, {
+    reviewSettings: {
+      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.editorStepHeader) : undefined,
+      "ui:help": intl.formatMessage(messages.reviewSettingsDescription),
+      "ui:collapsed": isGroupCollapsed,
+      "ui:toggleCollapsed": toggleGroupCollapsed,
+      "ui:widget": "radio",
+    },
     presets: {
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.editorStepHeader) : undefined,
       "ui:collapsed": isGroupCollapsed,

@@ -188,6 +188,8 @@
   "Admin.EditChallenge.form.preferredTags.label": "선호하는 MR 태그",
   "Admin.EditChallenge.form.presets.description": "임무를 수행할 때 기본적으로 iD의 지도 제작자에게 제공되는 OSM 기능 유형을 제한하여 도전과 관련된 매핑에 집중할 수 있도록 합니다. 예를 들어, 건물 매핑 관련 도전이 있는 경우, 건물과 관련된 사전 설정만 활성화하면 지도 제작자에게 공원이나 호수와 같은 지역을 매핑하는 옵션이 표시되지 않습니다.",
   "Admin.EditChallenge.form.presets.label": "iD 편집기 사전 설정 제한",
+  "Admin.EditChallenge.form.reviewSettings.description": "이것은 작업을 제출할 때 사용자 요청 검토 상자를 미리 확인합니다.",
+  "Admin.EditChallenge.form.reviewSettings.label": "기본적으로 검토 요청",
   "Admin.EditChallenge.form.remoteGeoJson.description": "GeoJSON 파일을 가져올 URL을 입력해 주세요",
   "Admin.EditChallenge.form.remoteGeoJson.label": "GeoJSON 데이터에 대한 URL을 가지고 있어요",
   "Admin.EditChallenge.form.remoteGeoJson.placeholder": "https://www.example.com/geojson.json",

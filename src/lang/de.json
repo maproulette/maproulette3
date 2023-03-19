@@ -188,6 +188,8 @@
   "Admin.EditChallenge.form.preferredTags.label": "Bevorzugte MR Tags",
   "Admin.EditChallenge.form.presets.description": "Beschränke die Auswahl von OSM Objekttypen beim Bearbeiten mit dem iD Editor, damit sich Bearbeiter auf das Kartieren von Dingen konzentrieren können, die für die Kampagne relevant sind. Sollen in der Kampagne zum Beispiel Gebäude kartiert werden, kann die Auswahl der Vorlagen in iD auf Gebäudetypen beschränkt werden, so dass Bearbeiter keine Möglichkeit haben, ein Gebiet als Park oder See zu kartieren.",
   "Admin.EditChallenge.form.presets.label": "iD Editor Presets einschränken",
+  "Admin.EditChallenge.form.reviewSettings.description": "Dadurch wird das Überprüfungsfeld des Benutzers vorab aktiviert, wenn eine Aufgabe gesendet wird.",
+  "Admin.EditChallenge.form.reviewSettings.label": "Überprüfung standardmäßig anfordern",
   "Admin.EditChallenge.form.remoteGeoJson.description": "Externe URL, von der die GeoJSON Datei geladen werden soll.",
   "Admin.EditChallenge.form.remoteGeoJson.label": "Ich habe eine URL zu den GeoJSON-Daten",
   "Admin.EditChallenge.form.remoteGeoJson.placeholder": "https://www.beispiel.com/geojson.json",

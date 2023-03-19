@@ -188,6 +188,8 @@
   "Admin.EditChallenge.form.preferredTags.label": "Бажані MR теґи",
   "Admin.EditChallenge.form.presets.description": "Обмежте типи об’єктів OSM, які показуватимуться маперам в iD, коли вони працюватимуть над завданням, що допоможе їм сконцентрувати увагу на речах, які стосуються Виклику. Наприклад, якщо ваш Виклик має на меті мапінг будинків, ви можете задіяти набір елементів, які мають стосунок до будинків і мапери не бачитимуть, скажімо, парки чи озера.",
   "Admin.EditChallenge.form.presets.label": "Показувати елементи даних в iD",
+  "Admin.EditChallenge.form.reviewSettings.description": "Це попередньо встановить прапорець запиту користувачів на перевірку під час надсилання завдання.",
+  "Admin.EditChallenge.form.reviewSettings.label": "Надіслати запит на перегляд за замовчуванням",
   "Admin.EditChallenge.form.remoteGeoJson.description": "Посилання URL, звідки можна отримати дані у вигляді GeoJSON",
   "Admin.EditChallenge.form.remoteGeoJson.label": "Я бажаю скористатись URL для отримання GeoJSON даних ",
   "Admin.EditChallenge.form.remoteGeoJson.placeholder": "https://www.example.com/geojson.json",

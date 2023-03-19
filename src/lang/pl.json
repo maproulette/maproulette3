@@ -188,6 +188,8 @@
   "Admin.EditChallenge.form.preferredTags.label": "Preferowane tagi MR",
   "Admin.EditChallenge.form.presets.description": "Ogranicz rodzaje funkcji OSM prezentowanych domyślnie edytorom w edytorze iD podczas pracy nad zadaniami, co pomoże im skupić się na mapowaniu rzeczy istotnych dla Twojego wyzwania. Na przykład, jeśli zadanie dotyczy mapowania budynków, możesz włączyć tylko ustawienia wstępne związane z budynkami, dzięki czemu edytorzy nie będą mieli możliwości mapowania obszaru na przykład jako parku lub jeziora.",
   "Admin.EditChallenge.form.presets.label": "Ogranicz ustawienia edytora iD",
+  "Admin.EditChallenge.form.reviewSettings.description": "Spowoduje to wstępne zaznaczenie pola przeglądu prośby użytkowników podczas przesyłania zadania.",
+  "Admin.EditChallenge.form.reviewSettings.label": "Prośba o weryfikację domyślnie",
   "Admin.EditChallenge.form.remoteGeoJson.description": "Zdalny adres URL, z którego ma zostać pobrany GeoJSON",
   "Admin.EditChallenge.form.remoteGeoJson.label": "Mam adres URL do danych GeoJSON",
   "Admin.EditChallenge.form.remoteGeoJson.placeholder": "https://www.przyklad.com/geojson.json",

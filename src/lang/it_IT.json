@@ -188,6 +188,8 @@
   "Admin.EditChallenge.form.preferredTags.label": "Etichette MR preferite",
   "Admin.EditChallenge.form.presets.description": "Limita i tipi di funzionalità OSM presentate ai mappatori con ID predefinito quando lavori ai tuoi compiti, aiutandoli a rimanere concentrati sulla mappatura di cose rilevanti per la tua sfida. Ad esempio, se la tua sfida riguarda la mappatura degli edifici, potresti abilitare solo i preset relativi agli edifici e quindi ai mappatori non verrebbe presentata l'opzione per mappare un'area come, ad esempio, un parco o un lago.",
   "Admin.EditChallenge.form.presets.label": "Limita i preimpostati dell'editor ID",
+  "Admin.EditChallenge.form.reviewSettings.description": "Questo pre-controllerà la casella di revisione della richiesta degli utenti quando inviano un'attività.",
+  "Admin.EditChallenge.form.reviewSettings.label": "Richiedi revisione per impostazione predefinita",
   "Admin.EditChallenge.form.remoteGeoJson.description": "Posizione dell'URL remoto da cui recuperare il GeoJSON",
   "Admin.EditChallenge.form.remoteGeoJson.label": "Ho un URL per i dati GeoJSON",
   "Admin.EditChallenge.form.remoteGeoJson.placeholder": "https://www.example.com/geojson.json",

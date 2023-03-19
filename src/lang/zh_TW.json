@@ -188,6 +188,8 @@
   "Admin.EditChallenge.form.preferredTags.label": "Preferred MR Tags",
   "Admin.EditChallenge.form.presets.description": "Restrict the types of OSM features presented to mappers in iD by default when working on your tasks, helping to keep them focused on mapping things relevant to your challenge. For example, if your challenge is about mapping buildings, you could enable only presets related to buildings and then mappers would not be presented with the option to map an area as, say, a park or a lake.",
   "Admin.EditChallenge.form.presets.label": "Restrict iD Editor Presets",
+  "Admin.EditChallenge.form.reviewSettings.description": "This will pre-check the users request review box when submitting a task.",
+  "Admin.EditChallenge.form.reviewSettings.label": "Request Review By Default",
   "Admin.EditChallenge.form.remoteGeoJson.description": "Remote URL location from which to retrieve the GeoJSON",
   "Admin.EditChallenge.form.remoteGeoJson.label": "I have a URL to the GeoJSON data",
   "Admin.EditChallenge.form.remoteGeoJson.placeholder": "https://www.example.com/geojson.json",
