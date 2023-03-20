@@ -52,7 +52,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
             // Clear any redux values first before setting the route criteria
             const routeValues = this.props.history.location.search
             this.props.clearSearchFilters(false)
-            this.props.clearSearch(searchGroup)
+            this.props.clearSearchDispatch(searchGroup)
             this.props.clearMapBounds(searchGroup)
 
             executeRouteSearch(this.routeCriteria, routeValues)
