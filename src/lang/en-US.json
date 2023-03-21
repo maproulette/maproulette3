@@ -1091,6 +1091,7 @@
   "Navbar.links.inbox": "Inbox",
   "Navbar.links.leaderboard": "Leaderboard",
   "Navbar.links.review": "Review",
+  "Navbar.links.sent": "Sent",
   "Navbar.links.signout": "Sign out",
   "Navbar.links.superAdminMetrics": "Super Admin Metrics",
   "Navbar.links.teams": "Teams",

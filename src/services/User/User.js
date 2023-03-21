@@ -31,6 +31,7 @@ import { taskSchema,
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import { setupCustomCache } from '../../utils/setupCustomCache'
+import { commentSchema } from '../Comment/Comment'
 
 // 60 minutes
 const CACHE_TIME = 60 * 60 * 1000;
@@ -266,6 +267,42 @@ export const fetchUser = function(userId) {
         console.log(error.response || error);
       });
   };
+};
+
+/**
+ * Fetch data on all users (up to the given limit).
+ */
+export const fetchUserTaskComments = function (limit = 50) {
+  return new Endpoint(api.users.taskComments, {
+    schema: [commentSchema()],
+    params: { limit },
+  })
+    .execute()
+    .then((normalizedResults) => {
+      return normalizedResults;
+    })
+    .catch((error) => {
+      console.log(error.response || error);
+      return error;
+    });
+};
+
+/**
+ * Fetch data on all users (up to the given limit).
+ */
+export const fetchUserChallengeComments = function (limit = 50) {
+  return new Endpoint(api.users.challengeComments, {
+    schema: [commentSchema()],
+    params: { limit },
+  })
+    .execute()
+    .then((normalizedResults) => {
+      return normalizedResults;
+    })
+    .catch((error) => {
+      console.log(error.response || error);
+      return error;
+    });
 };
 
 /**
