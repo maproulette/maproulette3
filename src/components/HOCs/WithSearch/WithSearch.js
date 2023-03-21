@@ -144,6 +144,10 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     }
   },
 
+  clearSearchDispatch: (searchName) => {
+    dispatch(clearSearch(searchName))
+  },
+
   setSearchSort: (sortCriteria) => {
     const sortBy = _get(sortCriteria, 'sortBy')
     let sort = null

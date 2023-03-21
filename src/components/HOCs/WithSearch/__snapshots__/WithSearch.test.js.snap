@@ -4,6 +4,7 @@ exports[`mapDispatchToProps maps function performSearch 1`] = `
 Object {
   "clearMapBounds": [Function],
   "clearSearch": [Function],
+  "clearSearchDispatch": [Function],
   "clearSearchFilters": [Function],
   "locateMapToUser": [Function],
   "performSearch": [Function],
@@ -24,6 +25,7 @@ exports[`mapDispatchToProps maps function setSearch 1`] = `
 Object {
   "clearMapBounds": [Function],
   "clearSearch": [Function],
+  "clearSearchDispatch": [Function],
   "clearSearchFilters": [Function],
   "locateMapToUser": [Function],
   "performSearch": [Function],
