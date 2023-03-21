@@ -127,5 +127,10 @@ export default defineMessages({
   email: {
     id: "ChallengeDetails.controls.email",
     defaultMessage: "Email"
+  },
+
+  cloneChallenge: {
+    id: "ChallengeDetails.controls.clone.challenge",
+    defaultMessage: "Clone Challenge"
   }
 })

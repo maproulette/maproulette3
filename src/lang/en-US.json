@@ -517,6 +517,7 @@
   "ChallengeCard.totalTasks": "Total Tasks",
   "ChallengeDetails.Task.fields.featured.label": "Featured",
   "ChallengeDetails.controls.checkbox.error": "Please ensure that checkbox is checked before continue",
+  "ChallengeDetails.controls.clone.challenge": "Clone Challenge",
   "ChallengeDetails.controls.email": "Email",
   "ChallengeDetails.controls.favorite.label": "Favorite",
   "ChallengeDetails.controls.favorite.tooltip": "Save to favorites",

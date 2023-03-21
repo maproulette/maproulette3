@@ -5,6 +5,7 @@ import classNames from "classnames";
 import _isObject from "lodash/isObject";
 import _get from "lodash/get";
 import _findIndex from "lodash/findIndex";
+import _merge from "lodash/merge";
 import parse from "date-fns/parse";
 import MapPane from "../EnhancedMap/MapPane/MapPane";
 import TaskClusterMap from "../TaskClusterMap/TaskClusterMap";
@@ -21,16 +22,21 @@ import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
 import WithClusteredTasks from "../HOCs/WithClusteredTasks/WithClusteredTasks";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
+import WithCurrentChallenge from "../AdminPane/HOCs/WithCurrentChallenge/WithCurrentChallenge";
 import WithChallengeTaskClusters from "../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters";
 import WithTaskClusterMarkers from "../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers";
+import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
+import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
 );
+
+const ProjectPicker = WithManageableProjects(ProjectPickerModal);
 
 const FLAG_REPO_NAME = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
 const FLAG_REPO_OWNER = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
@@ -58,6 +64,7 @@ export class ChallengeDetail extends Component {
     displayInputError: false,
     displayCheckboxError: false,
     submittingFlag: false,
+    pickingProject: false,
   };
 
   componentDidMount() {
@@ -131,6 +138,23 @@ export class ChallengeDetail extends Component {
     }
   }
 
+  projectPickerCanceled = () => {
+    this.setState({ pickingProject: false });
+  }
+
+  cloneToProject = (project) => {
+    this.setState({ pickingProject: false })
+    this.props.history.push({
+      pathname:
+        `/admin/project/${project.id}/` +
+        `challenge/${this.props.challenge.id}/clone`,
+      state: _merge(
+        { cloneChallenge: true, projectId: project.id },
+        _get(this.props.searchCriteria, 'filters')
+      ),
+    })
+  }
+
   renderDetailTabs = () => {
     const challenge = this.props.browsedChallenge;
     if (!challenge.isVirtual) {
@@ -168,6 +192,20 @@ export class ChallengeDetail extends Component {
               </Fragment>
             )
           }
+          {
+            _isObject(this.props.user) && challenge.enabled && (
+              <Fragment>
+                <span className="mr-px-3"> | </span>
+                <button
+                  onClick={() => this.setState({ pickingProject: true })}
+                  className="mr-text-green-lighter hover:mr-text-white"
+                >
+                  <FormattedMessage {...messages.cloneChallenge} />
+                </button>
+              </Fragment>
+            )
+          }
+          
         </li>
       )
     }
@@ -416,6 +454,15 @@ export class ChallengeDetail extends Component {
                   />
                 }
 
+                {_isObject(this.props.user) && challenge.enabled && this.state.pickingProject && (
+                  <ProjectPicker
+                    {...this.props}
+                    currentProjectId={challenge.parent.id}
+                    onCancel={this.projectPickerCanceled}
+                    onSelectProject={this.cloneToProject}
+                  />
+                )}
+
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"
@@ -478,6 +525,8 @@ export class ChallengeDetail extends Component {
 
 export default WithCurrentUser(
   WithClusteredTasks(
-    WithStartChallenge(WithBrowsedChallenge(injectIntl(ChallengeDetail)))
+    WithStartChallenge(
+      WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail)))
+    )
   )
-);
+)

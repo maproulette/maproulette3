@@ -106,8 +106,17 @@ export class EditChallenge extends Component {
    * Returns true if this challenge's data is being cloned from another
    * challenge.
    */
-  isCloningChallenge = () =>
-    !!_get(this.props, "location.state.cloneChallenge");
+  isCloningChallenge = () => {
+    return !!_get(this.props, "location.state.cloneChallenge");
+  }
+
+  /**
+   * Returns the project Id of which the challenge is being cloned into. Project Id
+   * is passed in from challengeDetail.js
+   */
+  getCloningProjectId = () => {
+    return _get(this.props, "location.state.projectId");
+  }
 
   /**
    * Returns true if all challenge fields should be displayed as a single,
@@ -314,6 +323,7 @@ export class EditChallenge extends Component {
           const nextState = _cloneDeep(this.challengeState);
           if (nextState) {
             nextState.refreshAfterSave = true;
+            nextState.cloneChallenge = false;
           }
 
           this.props.history.push({
@@ -380,8 +390,15 @@ export class EditChallenge extends Component {
         delete challengeData.dataOriginDate;
       }
 
-      if (_isEmpty(this.state.formData.overpassQL)) {
-        delete challengeData.overpassQL;
+      if (_isEmpty(this.state.formData.overpassQL) && !_isEmpty(challengeData.overpassQL)) {
+        challengeData.overpassQL =
+          `/*\nTHIS IS THE QUERY OF THE CHALLENGE YOU CLONED PLEASE ADAPT BEFORE USING TO AVOID CREATING DUPLICATE TASKS\n\n` +
+          challengeData.overpassQL +
+          `\n*/`
+      }
+
+      if (!_isEmpty(challengeData.overpassQL) && challengeData.overpassTargetType === '') {
+	      challengeData.overpassTargetType = 'none';
       }
 
       if (_isEmpty(this.state.formData.remoteGeoJson)) {
@@ -518,7 +535,8 @@ export class EditChallenge extends Component {
 
     // Parent field should just be id, not object.
     if (_isObject(challengeData.parent)) {
-      challengeData.parent = challengeData.parent.id;
+      const cloningProjectId = this.getCloningProjectId();
+      challengeData.parent = cloningProjectId ? cloningProjectId : challengeData.parent.id;
     }
 
     // For new challenges, append the #maproulette hashtag to the changeset comment
