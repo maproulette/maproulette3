@@ -46,7 +46,7 @@ Note that this will create the development build and not the 'production' build.
 1. Install the back-end server using the instructions from the maproulette-backend
    project, if you haven't already
 
-2. Visit your [OpenStreetMap account](https://www.openstreetmap.org) and go
+2. Visit your [OpenStreetMap account](https://master.apis.dev.openstreetmap.org) and go
    to My Settings -> oauth settings -> Register your application and setup a
    new application for development. For the `Main Application URL` and
    `Callback URL` settings, put in `http://127.0.0.1:9000` (assuming your
