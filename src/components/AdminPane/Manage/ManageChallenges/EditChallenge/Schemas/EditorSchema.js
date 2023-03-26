@@ -1,9 +1,11 @@
 import _map from 'lodash/map'
+import _values from 'lodash/values'
 import _fromPairs from 'lodash/fromPairs'
 import _startCase from 'lodash/startCase'
 import _isUndefined from 'lodash/isUndefined'
 import _intersection from 'lodash/intersection'
 import idPresets from '../../../../../../preset_categories.json'
+import { ChallengeReviewSetting } from '../../../../../../services/Challenge/ChallengeReviewSetting/ChallengeReviewSetting'
 import messages from '../Messages'
 
 const STEP_ID = "Editor"
@@ -33,14 +35,15 @@ export const jsSchema = (intl) => {
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     properties: {
-      reviewSettings: {
-        title: intl.formatMessage(messages.reviewSettingsLabel),
-        type: "boolean",
-        default: false,
+      reviewSetting: {
+        title: intl.formatMessage(messages.reviewSettingLabel),
+        type: "number",
+        enum: _values(ChallengeReviewSetting),
         enumNames: [
-          intl.formatMessage(messages.yesLabel),
-          intl.formatMessage(messages.noLabel),
+          intl.formatMessage(messages.reviewSettingNotRequired),
+          intl.formatMessage(messages.reviewSettingRequested),
         ],
+        default: ChallengeReviewSetting.notRequired,
       },
       presets: {
         title: intl.formatMessage(messages.presetsLabel),
@@ -109,12 +112,12 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
   }))
 
   const uiSchemaFields = Object.assign({}, {
-    reviewSettings: {
+    reviewSetting: {
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.editorStepHeader) : undefined,
-      "ui:help": intl.formatMessage(messages.reviewSettingsDescription),
+      "ui:help": intl.formatMessage(messages.reviewSettingDescription),
       "ui:collapsed": isGroupCollapsed,
       "ui:toggleCollapsed": toggleGroupCollapsed,
-      "ui:widget": "radio",
+      "ui:field": "columnRadio",
     },
     presets: {
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.editorStepHeader) : undefined,

@@ -277,7 +277,7 @@ export class TaskConfirmationModal extends Component {
                         <input
                           type="checkbox"
                           className="mr-mr-2"
-                          checked={this.props.challenge.reviewSettings == true ? this.props.challenge.reviewSettings : this.props.reviewSettings}
+                          checked={this.props.needsReview}
                           onClick={this.props.toggleNeedsReview}
                           onChange={_noop}
                         />

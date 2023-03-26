@@ -1010,7 +1010,7 @@ export const saveChallenge = function (
           "limitReviewTags",
           "taskStyles",
           "requiresLocal",
-          "reviewSettings",
+          "reviewSetting",
         ]
       );
 
