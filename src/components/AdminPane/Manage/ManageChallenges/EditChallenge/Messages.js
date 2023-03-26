@@ -729,7 +729,7 @@ will not be able to make sense of it.
   reviewSettingDescription: {
     id: "Admin.EditChallenge.form.reviewSetting.description",
     defaultMessage: 
-    "This will pre-check the users request review box when submitting a task."
+    "This will pre-check the users request review box when submitting a task.",
   },
 
   reviewSettingNotRequired: {
@@ -739,8 +739,7 @@ will not be able to make sense of it.
 
   reviewSettingRequested: {
     id: "Challenge.reviewSetting.requested",
-    defaultMessage: 
-    "Yes"
+    defaultMessage: "Yes",
   },
 
   showLongformTooltip: {
