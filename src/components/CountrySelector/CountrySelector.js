@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _map from 'lodash/map'
@@ -68,6 +68,10 @@ const CountryButton = function(props) {
 }
 
 const ListCountryItems = function(props) {
+
+  const [searchInput, setSearchInput] = useState('')
+  const [filteredCountries, setFilteredCountries] = useState(countryList)
+
   const countryList = _sortBy(
     _each(supportedCountries(), country => {
       country.name =
@@ -76,13 +80,32 @@ const ListCountryItems = function(props) {
     'name'
   )
 
-  const menuItems = _map(countryList, country => (
+  const menuDisplay = () => menuItems= _map(countryList, country => (
     <li key={country.countryCode}>
       <a onClick={() => props.pickCountry(country.countryCode, props.closeDropdown)}>
         {country.name}
       </a>
     </li>
   ))
+
+  const filteredMenuDisplay = () => filteredCountries= _map(countryList, country => (
+    <li key={country.countryCode}>
+      <a onClick={() => props.pickCountry(country.countryCode, props.closeDropdown)}>
+        {country.name}
+      </a>
+    </li>
+  ))
+
+  const searchCountries = (event) => {
+    setSearchInput(event.target.value)
+    if(event.target.value !== ''){
+      const filteredData = menuItems.filter(country => country.name.toLowerCase().includes(searchInput.toLowerCase()))
+      setFilteredCountries(filteredData)
+    }
+    else{
+      setFilteredCountries(menuItems)
+    }
+}
 
   // Add option for "All Countries" that goes to standard (global) leaderboard
   menuItems.unshift(
@@ -95,7 +118,16 @@ const ListCountryItems = function(props) {
 
   return (
     <ol className="mr-list-dropdown">
-      {menuItems}
+      <div>
+          <input 
+                type="text"
+                style={{color: 'black'}}
+                placeholder='Search By Country'
+                onChange={searchCountries}
+            />
+      </div>
+      <br />
+      {menuItems.length > 0 ? filteredMenuDisplay() : menuDisplay()}
     </ol>
   )
 }
