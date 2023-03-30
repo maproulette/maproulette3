@@ -372,6 +372,10 @@ export class EditChallenge extends Component {
       delete challengeData.status;
       delete challengeData.virtualParents;
 
+      if (challengeData.checkinComment.includes('#maproulette')) {
+        challengeData.includeCheckinHashtag = true
+      }
+
       if (_isEmpty(this.state.formData.name)) {
         delete challengeData.name;
       }

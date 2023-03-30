@@ -51,7 +51,7 @@ export const jsSchema = (
         intl.formatMessage(messages.includeCheckinHashtagTrueLabel),
         intl.formatMessage(messages.includeCheckinHashtagFalseLabel),
       ],
-      default: true,
+      default: challengeData.checkinComment === undefined || challengeData.includeCheckinHashtag ? true : false,
     };
   }
 
