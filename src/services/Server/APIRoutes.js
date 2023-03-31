@@ -164,8 +164,8 @@ const apiRoutes = (factory) => {
       find: factory.get("/users/find/:username"),
       findPreferred: factory.get("/users/find"),
       all: factory.get("/users"),
-      taskComments: factory.get("/comments/user/:id"),
-      challengeComments: factory.get("/challengeComments/user/:id")
+      taskComments: factory.get("/comments/user/:id", { noCache: true }),
+      challengeComments: factory.get("/challengeComments/user/:id", { noCache: true })
     },
     user: {
       whoami: factory.get("/user/whoami"),

@@ -1,19 +1,40 @@
 import { useState } from 'react';
-import { fetchUserTaskComments } from "../../services/User/User"
+import { useDispatch } from 'react-redux';
+import { fetchUserComments } from '../../services/User/User';
 
-export const useSentComments = () => {
-  const [comments, setComments] = useState([]);
+export const useSentComments = (commentType) => {
+  const dispatch = useDispatch();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [count, setCount] = useState(0);
 
-  const fetchComments = async () => {
-    const taskComments = await fetchUserTaskComments();
+  const fetch = async (userId, sort = { id: 'created', desc: true }, pagination = { page: 0, pageSize: 25 }) => {
+    if (userId) {
+      setError("");
+      setLoading(true);
 
-    if (taskComments) {
-      return setComments(taskComments)
+      const apiFilters = {
+        sort: sort.id,
+        order: sort.desc ? "DESC" : "ASC",
+        page: pagination.page,
+        limit: pagination.pageSize
+      }
+
+      const result = await dispatch(fetchUserComments(userId, commentType, apiFilters));
+
+      if (!Array.isArray(result)) {
+        setError("An error occurred while fetching data");
+        setData([]);
+        setCount(0);
+      } else {
+        setData(result);
+        setCount(result?.[0]?.fullCount || 0)
+      }
+  
+      setLoading(false);
     }
-
-    setError("There was an error")
   }
 
-  return { comments, fetchComments }
+  return { data, fetch, loading, error, count };
 }

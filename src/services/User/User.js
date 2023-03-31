@@ -31,7 +31,7 @@ import { taskSchema,
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import { setupCustomCache } from '../../utils/setupCustomCache'
-import { commentSchema } from '../Comment/Comment'
+import CommentType from '../Comment/CommentType'
 
 // 60 minutes
 const CACHE_TIME = 60 * 60 * 1000;
@@ -272,37 +272,24 @@ export const fetchUser = function(userId) {
 /**
  * Fetch data on all users (up to the given limit).
  */
-export const fetchUserTaskComments = function (limit = 50) {
-  return new Endpoint(api.users.taskComments, {
-    schema: [commentSchema()],
-    params: { limit },
-  })
-    .execute()
-    .then((normalizedResults) => {
-      return normalizedResults;
-    })
-    .catch((error) => {
-      console.log(error.response || error);
-      return error;
-    });
-};
+export const fetchUserComments = function (userId, type = CommentType.TASK, filters = { sort: 'created', order: 'DESC', page: 0, limit: 25 } ) {
+  return function(dispatch) {
+    const endpoint = type === CommentType.CHALLENGE ? api.users.challengeComments : api.users.taskComments
 
-/**
- * Fetch data on all users (up to the given limit).
- */
-export const fetchUserChallengeComments = function (limit = 50) {
-  return new Endpoint(api.users.challengeComments, {
-    schema: [commentSchema()],
-    params: { limit },
-  })
-    .execute()
-    .then((normalizedResults) => {
-      return normalizedResults;
+    return new Endpoint(endpoint, {
+      variables: { id: userId },
+      params: filters
     })
-    .catch((error) => {
-      console.log(error.response || error);
-      return error;
-    });
+      .execute()
+      .then((normalizedResults) => {
+        return normalizedResults;
+      })
+      .catch((error) => {
+        dispatch(addError(AppErrors.user.fetchFailure))
+        console.log(error.response || error);
+        return error.response || error;
+      });
+  }
 };
 
 /**
