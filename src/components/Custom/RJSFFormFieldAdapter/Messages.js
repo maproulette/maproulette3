@@ -4,11 +4,6 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with RJSFFormFieldAdapter.
  */
 export default defineMessages({
-  uploadErrorText:{
-    id: "Form.textUpload.error",
-    defaultMessage: "Upload Failed!",
-  },
-
   uploadFilePrompt: {
     id: "Form.textUpload.prompt",
     defaultMessage: "Drop GeoJSON file here or click to select file",

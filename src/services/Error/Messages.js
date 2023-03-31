@@ -263,9 +263,4 @@ export default defineMessages({
     defaultMessage:
       "File format is unrecognized or unsupported for this operation",
   },
-  uploadError: {
-    id: "Errors.file.uploadError",
-    defaultMessage:
-      "Please upload a .geojson file.",
-  },
 });
