@@ -335,7 +335,7 @@ export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAre
       disablePreview
       onDrop={files => {
         formContext[id] = {file: files[0]}
-        onChange(files[0])
+        onChange(files[0].name)
       }}
     >
       {({acceptedFiles, getRootProps, getInputProps}) => {
