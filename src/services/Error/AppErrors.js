@@ -118,4 +118,7 @@ export default {
   file: {
     formatIncorrect: messages.fileFormatIncorrect,
   },
+  uploadFile: {
+    fileError: messages.uploadError,
+  },
 };
