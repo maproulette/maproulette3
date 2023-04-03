@@ -6,9 +6,8 @@ import TaskMap from '../../TaskPane/TaskMap/TaskMap'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
 import { FormattedMessage} from 'react-intl'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import EditSwitch from '../../AdminPane/Manage/EditSwitch/EditSwitch'
-import Button from '../../Button/Button'
+import NotificationCard from '../../AdminPane/Manage/NotificationCard/NotificationCard'
 
 const descriptor = {
   widgetKey: 'TaskMapWidget',
@@ -21,17 +20,6 @@ const descriptor = {
 }
 
 export default class TaskMapWidget extends Component {
-
-  state = { showButton: true };
-
-  handleClick = () => {
-    this.setState({ showButton: false });
-  };
-
-  componentDidMount() {
-    this.setState({ showButton: true });
-  }
-
   render() {
     return (
       <QuickWidget
@@ -40,30 +28,20 @@ export default class TaskMapWidget extends Component {
         noMain
         permanent
       >
-
         <div className="mr-flex mr-items-center ">
           <div className="mr-text-yellow mr-mr-3">
             <FormattedMessage {...messages.editMode}/>
           </div>
 
           <div>
-                <div className="mr-mt-1">
-                  <EditSwitch
-                    {...this.props}
-                  />
-                </div>
-                
+            <div className="mr-mt-1">
+              <EditSwitch {...this.props}/>
+              </div>
           </div>
          </div>
 
-         <div> {this.state.showButton && (
-            <Button
-              className="mr-input mr-border-none mr-shadow-none mr-bg-green mr-p-4"
-            >
-              <SvgSymbol sym="close-icon" className="mr-w-4 mr-h-4 mr-fill-current" viewBox="0 0 20 20" onClick={this.handleClick}/>
-              <FormattedMessage {...messages.tempFeature}/>
-            </Button>
-        )}
+         <div> 
+            <NotificationCard {...this.props}/>
         </div>
 
         <MapPane {...this.props}>

@@ -9,24 +9,28 @@ import React, { Component } from 'react'
  */
 export class EditSwitch extends Component {
   state = {
-    checked: false
+    isEditMode: this.props.getUserAppSetting(this.props.user, 'isEditMode') || false,
   }
 
   toggleVisible = () => {
-    const checked = !this.state.checked
-    this.setState({ checked })
-    this.props.updateEnabled(this.props.challenge.id, checked)
+    const newIsEditMode = !this.state.isEditMode;
+      this.setState({
+        isEditMode: newIsEditMode,
+      });
+      this.props.updateUserAppSetting(this.props.user.id, {
+        isEditMode: newIsEditMode,
+      });
   }
 
   render() {
     return (
       <div className="mr-flex mr-justify-center">
         <label className="switch-container">
-          <input type="checkbox" checked={this.state.checked} onChange={() => null}/>
+          <input type="checkbox" checked={this.state.isEditMode} onChange={() => null}/>
           <span className="slider round" onClick={this.toggleVisible}></span>
         </label>
         <span className="mr-ml-2">
-          {this.state.checked ? 'Edit Mode' : 'Classic Mode'}
+          {this.state.isEditMode ? 'Edit Mode' : 'Classic Mode'}
         </span>
       </div>
     )
