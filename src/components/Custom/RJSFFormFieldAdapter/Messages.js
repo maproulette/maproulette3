@@ -28,4 +28,9 @@ export default defineMessages({
     id: 'Form.controls.markdownField.preview.label',
     defaultMessage: "Preview",
   },
+
+  uploadErrorText: {
+    id: 'Form.controls.markdownField.uploadErrorText.label',
+    defaultMessage: "Upload Failed!",
+  }
 })
