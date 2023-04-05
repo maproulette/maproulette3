@@ -48,6 +48,7 @@
     "piwik-react-router": "^0.12.1",
     "prop-types": "^15.6.0",
     "query-string": "^6.13.1",
+    "RapiD": "facebookincubator/rapid#rapid-v1.1.9-tm.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.0.0",
     "react-burger-menu": "^2.4.4",

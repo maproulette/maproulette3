@@ -9,6 +9,9 @@ import { FormattedMessage} from 'react-intl'
 import EditSwitch from '../../AdminPane/Manage/EditSwitch/EditSwitch'
 import NotificationCard from '../../AdminPane/Manage/NotificationCard/NotificationCard'
 
+import RapidEditor from './RapidEditor';
+// const RapidEditor = React.lazy(() => import('./RapidEditor'))
+
 const descriptor = {
   widgetKey: 'TaskMapWidget',
   label: messages.label,
@@ -21,6 +24,8 @@ const descriptor = {
 
 export default class TaskMapWidget extends Component {
   render() {
+    const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+
     return (
       <QuickWidget
         {...this.props}
@@ -28,24 +33,38 @@ export default class TaskMapWidget extends Component {
         noMain
         permanent
       >
-        <div className="mr-flex mr-items-center ">
-          <div className="mr-text-yellow mr-mr-3">
-            <FormattedMessage {...messages.editMode}/>
-          </div>
-
-          <div>
-            <div className="mr-mt-1">
-              <EditSwitch {...this.props}/>
-              </div>
-          </div>
-         </div>
-
-         <div> 
-            <NotificationCard {...this.props}/>
-        </div>
-
+        {
+          this.props.getUserAppSetting 
+            ? <>
+                <div className="mr-flex mr-items-center ">
+                  <div className="mr-text-yellow mr-mr-3">
+                    <FormattedMessage {...messages.editMode}/>
+                  </div>
+                  <div>
+                    <div className="mr-mt-1">
+                      <EditSwitch {...this.props}/>
+                    </div>
+                  </div>
+                </div>
+                <div> 
+                  <NotificationCard {...this.props}/>
+                </div>
+              </>
+            : null
+        }
         <MapPane {...this.props}>
-          <TaskMap {...this.props} challenge={this.props.task.parent} />
+          {
+            editMode
+              ? <RapidEditor
+                  setDisable={() => null}
+                  comment={"#maproulette"}
+                  presets={['building']}
+                  imagery={undefined}
+                  gpxUrl={undefined}
+                  powerUser={null}
+                />
+              : <TaskMap {...this.props} challenge={this.props.task.parent} />
+          }
         </MapPane>
       </QuickWidget>
     )

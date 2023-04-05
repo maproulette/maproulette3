@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import * as RapiD from 'RapiD/dist/iD.legacy';
-import 'RapiD/dist/RapiD.css';
+import { useSelector } from 'react-redux';
+import * as RapiD from '../../../../node_modules/RapiD/dist/iD.legacy.js';
+import '../../../../node_modules/RapiD/dist/iD.css';
 
-import { OSM_CLIENT_ID, OSM_CLIENT_SECRET, OSM_REDIRECT_URI, OSM_SERVER_URL } from '../config';
+const OSM_CLIENT_ID = 'rab7bN3lXn09oWycy5PJvcdX2hkeavh2nFh2ySIP'
+const OSM_CLIENT_SECRET = 'ZAGZhF9BJRzgAup6asjyIskz7M0oayc1PWJYoDKu'
+const OSM_REDIRECT_URI = 'http://127.0.0.1:3000'
+const OSM_SERVER_URL = 'https://master.apis.dev.openstreetmap.org'
 
 export default function RapidEditor({
   setDisable,
@@ -13,14 +16,20 @@ export default function RapidEditor({
   gpxUrl,
   powerUser = false,
 }) {
-  const dispatch = useDispatch();
-  const session = useSelector((state) => state.auth.session);
-  const RapiDContext = useSelector((state) => state.editor.rapidContext);
-  const locale = useSelector((state) => state.preferences.locale);
+  const currentUserId = useSelector((state) => state.currentUser.userId);
+  const osmOauthToken = useSelector((state) => state.entities.users[currentUserId].osmProfile.requestToken.token);
+  const locale = 'en';
   const [customImageryIsSet, setCustomImageryIsSet] = useState(false);
   const windowInit = typeof window !== undefined;
   const customSource =
     RapiDContext && RapiDContext.background() && RapiDContext.background().findSource('custom');
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [RapiDContext, setRapiDContext] = useState(null);
+
+  console.log(isVisible);
+
+  console.log("RapiDContext", RapiDContext)
 
   useEffect(() => {
     if (!customImageryIsSet && imagery && customSource) {
@@ -40,21 +49,21 @@ export default function RapidEditor({
 
   useEffect(() => {
     return () => {
-      dispatch({ type: 'SET_VISIBILITY', isVisible: true });
+      setIsVisible(true)
     };
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (windowInit) {
-      dispatch({ type: 'SET_VISIBILITY', isVisible: false });
+      setIsVisible(false)
       if (RapiDContext === null) {
         // we need to keep iD context on redux store because iD works better if
         // the context is not restarted while running in the same browser session
-        dispatch({ type: 'SET_RAPIDEDITOR', context: window.iD.coreContext() });
+        setRapiDContext(window.iD.coreContext())
       }
     }
-  }, [windowInit, RapiDContext, dispatch]);
+  }, [windowInit, RapiDContext]);
 
   useEffect(() => {
     if (RapiDContext && comment) {
@@ -63,7 +72,7 @@ export default function RapidEditor({
   }, [comment, RapiDContext]);
 
   useEffect(() => {
-    if (session && locale && RapiD && RapiDContext) {
+    if (osmOauthToken && locale && RapiD && RapiDContext) {
       // if presets is not a populated list we need to set it as null
       try {
         if (presets.length) {
@@ -99,7 +108,7 @@ export default function RapidEditor({
         client_id: OSM_CLIENT_ID,
         client_secret: OSM_CLIENT_SECRET,
         redirect_uri: OSM_REDIRECT_URI,
-        access_token: session.osm_oauth_token,
+        access_token: osmOauthToken,
       };
       osm.switch(auth);
 
@@ -114,7 +123,7 @@ export default function RapidEditor({
         }
       });
     }
-  }, [session, RapiDContext, setDisable, presets, locale, gpxUrl, powerUser]);
+  }, [osmOauthToken, RapiDContext, setDisable, presets, locale, gpxUrl, powerUser]);
 
   return <div className="w-100 vh-minus-69-ns" id="rapid-container"></div>;
 }
