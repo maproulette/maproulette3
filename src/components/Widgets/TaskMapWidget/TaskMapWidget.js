@@ -33,39 +33,42 @@ export default class TaskMapWidget extends Component {
         noMain
         permanent
       >
-        {
-          this.props.getUserAppSetting 
-            ? <>
-                <div className="mr-flex mr-items-center ">
-                  <div className="mr-text-yellow mr-mr-3">
-                    <FormattedMessage {...messages.editMode}/>
-                  </div>
-                  <div>
-                    <div className="mr-mt-1">
-                      <EditSwitch {...this.props}/>
-                    </div>
-                  </div>
-                </div>
-                <div> 
-                  <NotificationCard {...this.props}/>
-                </div>
-              </>
-            : null
-        }
-        <MapPane {...this.props}>
+        <div
+          className="mr-mt-2"
+          style={{height: "calc(100% - 3rem)"}}
+        >
           {
-            editMode
-              ? <RapidEditor
-                  setDisable={() => null}
-                  comment={"#maproulette"}
-                  presets={['building']}
-                  imagery={undefined}
-                  gpxUrl={undefined}
-                  powerUser={null}
-                />
-              : <TaskMap {...this.props} challenge={this.props.task.parent} />
+            this.props.getUserAppSetting 
+              ? <>
+                  <div className="mr-flex mr-items-center ">
+                    <div className="mr-text-yellow mr-mr-3">
+                      <FormattedMessage {...messages.editMode}/>
+                    </div>
+                      <div className="mr-mt-1">
+                        <EditSwitch {...this.props}/>
+                      </div>
+                    </div>
+                  <div> 
+                    <NotificationCard {...this.props}/>
+                  </div>
+                </>
+              : null
           }
-        </MapPane>
+          <MapPane {...this.props}>
+            {
+              editMode
+                ? <RapidEditor
+                    setDisable={() => null}
+                    comment={"#maproulette"}
+                    presets={['building']}
+                    imagery={undefined}
+                    gpxUrl={undefined}
+                    powerUser={null}
+                  />
+                : <TaskMap {...this.props} challenge={this.props.task.parent} />
+            }
+          </MapPane>
+        </div>
       </QuickWidget>
     )
   }
