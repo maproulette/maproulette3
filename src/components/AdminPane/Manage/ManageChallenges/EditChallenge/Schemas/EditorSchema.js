@@ -1,9 +1,11 @@
 import _map from 'lodash/map'
+import _values from 'lodash/values'
 import _fromPairs from 'lodash/fromPairs'
 import _startCase from 'lodash/startCase'
 import _isUndefined from 'lodash/isUndefined'
 import _intersection from 'lodash/intersection'
 import idPresets from '../../../../../../preset_categories.json'
+import { ChallengeReviewSetting } from '../../../../../../services/Challenge/ChallengeReviewSetting/ChallengeReviewSetting'
 import messages from '../Messages'
 
 const STEP_ID = "Editor"
@@ -33,6 +35,16 @@ export const jsSchema = (intl) => {
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     properties: {
+      reviewSetting: {
+        title: intl.formatMessage(messages.reviewSettingLabel),
+        type: "number",
+        enum: _values(ChallengeReviewSetting),
+        enumNames: [
+          intl.formatMessage(messages.reviewSettingRequested),
+          intl.formatMessage(messages.reviewSettingNotRequired),
+        ],
+        default: ChallengeReviewSetting.notRequired,
+      },
       presets: {
         title: intl.formatMessage(messages.presetsLabel),
         type: "boolean",
@@ -100,8 +112,14 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
   }))
 
   const uiSchemaFields = Object.assign({}, {
-    presets: {
+    reviewSetting: {
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.editorStepHeader) : undefined,
+      "ui:help": intl.formatMessage(messages.reviewSettingDescription),
+      "ui:collapsed": isGroupCollapsed,
+      "ui:toggleCollapsed": toggleGroupCollapsed,
+      "ui:widget": "radio",
+    },
+    presets: {
       "ui:collapsed": isGroupCollapsed,
       "ui:toggleCollapsed": toggleGroupCollapsed,
       "ui:widget": "radio",
