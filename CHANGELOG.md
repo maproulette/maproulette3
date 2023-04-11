@@ -7,6 +7,31 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.12.0] - 2023-4-11
+Release with [maproulette-backend_v4.4.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.0)
+
+### Features
+- Add additional caching to multiple endpoints
+- Ability to clone other people's challenges
+- add italian language and sort locale alphabetically
+- Added Blog tab with associated link to the NavBar
+- Added keyboard shortcut for completeTogetherbutton
+- Add Challenge Editor Review Setting
+- Sent comments
+
+### Fixes
+- fix query param in URL for discoverability page
+- Cloning Challenge #maproulette Hashtag Fix 
+- fix sql to account for commas in c.name (API)
+- check class type in internalCreate before checking task count (API)
+- filter out deleted/undiscoverable parents (API)
+
+### System Updates
+- Added Node Dependency Information
+- corrected link for openstreetMap account in documentation
+- update pre-existing server documentation
+- Fix links to Postman collection (API)
+
 ## [v3.11.9] - 2023-3-1
 Release with [maproulette-backend_v4.3.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.3.2)
 
