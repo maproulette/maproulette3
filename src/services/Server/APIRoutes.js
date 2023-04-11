@@ -163,7 +163,9 @@ const apiRoutes = (factory) => {
       reviewerLeaderboard: factory.get("/data/reviewer/leaderboard"),
       find: factory.get("/users/find/:username"),
       findPreferred: factory.get("/users/find"),
-      all: factory.get("/users")
+      all: factory.get("/users"),
+      taskComments: factory.get("/comments/user/:id", { noCache: true }),
+      challengeComments: factory.get("/challengeComments/user/:id", { noCache: true })
     },
     user: {
       whoami: factory.get("/user/whoami"),

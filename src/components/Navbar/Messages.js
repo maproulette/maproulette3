@@ -28,6 +28,11 @@ export default defineMessages({
     defaultMessage: "Inbox",
   },
 
+  sent: {
+    id: 'Navbar.links.sent',
+    defaultMessage: "Sent",
+  },
+
   review: {
     id: 'Navbar.links.review',
     defaultMessage: "Review",
