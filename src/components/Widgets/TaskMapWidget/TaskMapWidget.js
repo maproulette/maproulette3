@@ -54,20 +54,20 @@ export default class TaskMapWidget extends Component {
                 </>
               : null
           }
-          <MapPane {...this.props}>
-            {
-              editMode
-                ? <RapidEditor
-                    setDisable={() => null}
-                    comment={"#maproulette"}
-                    presets={['building']}
-                    imagery={undefined}
-                    gpxUrl={undefined}
-                    powerUser={null}
-                  />
-                : <TaskMap {...this.props} challenge={this.props.task.parent} />
-            }
-          </MapPane>
+          {
+            editMode
+              ? <RapidEditor
+                  setDisable={() => null}
+                  comment={"#maproulette"}
+                  presets={['building']}
+                  imagery={undefined}
+                  gpxUrl={'https://tasking-manager-staging-api.hotosm.org/api/v2/projects/8512/tasks/queries/gpx/?tasks=440'}
+                  powerUser={null}
+                />
+              : <MapPane {...this.props}>
+                  <TaskMap {...this.props} challenge={this.props.task.parent} />
+                </MapPane>
+          }
         </div>
       </QuickWidget>
     )

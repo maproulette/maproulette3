@@ -3,14 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as RapiD from '../../../../node_modules/RapiD/dist/iD.legacy.js';
 import '../../../../node_modules/RapiD/dist/RapiD.css';
 
-const OSM_CLIENT_ID = 'rab7bN3lXn09oWycy5PJvcdX2hkeavh2nFh2ySIP'
-const OSM_CLIENT_SECRET = 'ZAGZhF9BJRzgAup6asjyIskz7M0oayc1PWJYoDKu'
+// const OSM_CLIENT_ID = 'rab7bN3lXn09oWycy5PJvcdX2hkeavh2nFh2ySIP'
+const OSM_CLIENT_ID = ''
+// const OSM_CLIENT_SECRET = 'ZAGZhF9BJRzgAup6asjyIskz7M0oayc1PWJYoDKu'
+const OSM_CLIENT_SECRET = ''
 const OSM_REDIRECT_URI = 'http://127.0.0.1:3000'
-const OSM_SERVER_URL = 'https://master.apis.dev.openstreetmap.org'
-
-// export default function RapidEditor({}) {
-//   return null;
-// }
+const OSM_SERVER_URL = 'https://www.openstreetmap.org'
 
 export default function RapidEditor({
   comment,
@@ -31,13 +29,7 @@ export default function RapidEditor({
   const customSource =
     RapiDContext && RapiDContext.background() && RapiDContext.background().findSource('custom');
 
-  const [isVisible, setIsVisible] = useState(false);
-
-  console.log(isVisible);
-
-  console.log("RapiDContext", RapiDContext)
-
-  useEffectDebugger(() => {
+  useEffect(() => {
     if (!customImageryIsSet && imagery && customSource) {
       if (imagery.startsWith('http')) {
         RapiDContext.background().baseLayerSource(customSource.template(imagery));
@@ -51,34 +43,25 @@ export default function RapidEditor({
         }
       }
     }
-  }, [customImageryIsSet, imagery, RapiDContext, customSource]);
+  }, [customImageryIsSet, imagery, RapiDContext, customSource],
+  ['customImageryIsSet', 'imagery', 'RapidContext', 'customSource']);
 
-  useEffectDebugger(() => {
-    return () => {
-      setIsVisible(true)
-    };
-    // eslint-disable-next-line
-  }, []);
-
-  useEffectDebugger(() => {
-    if (windowInit) {
-      setIsVisible(false)
-      if (RapiDContext === null) {
-        // we need to keep iD context on redux store because iD works better if
-        // the context is not restarted while running in the same browser session
-        //setRapiDContext(window.iD.coreContext())
-        dispatch({ type: 'SET_RAPIDEDITOR', context: window.iD.coreContext() });
-      }
+  useEffect(() => {
+    if (RapiDContext === null) {
+      // we need to keep iD context on redux store because iD works better if
+      // the context is not restarted while running in the same browser session
+      //setRapiDContext(window.iD.coreContext())
+      dispatch({ type: 'SET_RAPIDEDITOR', context: window.iD.coreContext() });
     }
-  }, [windowInit, RapiDContext]);
+  }, [RapiDContext, dispatch], ['windowInit', 'RapidContext']);
 
-  useEffectDebugger(() => {
+  useEffect(() => {
     if (RapiDContext && comment) {
       RapiDContext.defaultChangesetComment(comment);
     }
   }, [comment, RapiDContext]);
 
-  useEffectDebugger(() => {
+  useEffect(() => {
     if (osmOauthToken && locale && RapiD && RapiDContext) {
       // if presets is not a populated list we need to set it as null
       try {
@@ -123,48 +106,16 @@ export default function RapidEditor({
       const thereAreChanges = (changes) =>
         changes.modified.length || changes.created.length || changes.deleted.length;
 
-      // RapiDContext.history().on('change', () => {
-      //   if (thereAreChanges(RapiDContext.history().changes())) {
-      //     setDisable(true);
-      //   } else {
-      //     setDisable(false);
-      //   }
-      // });
+      RapiDContext.history().on('change', () => {
+        if (thereAreChanges(RapiDContext.history().changes())) {
+          setDisable(true);
+        } else {
+          setDisable(false);
+        }
+      });
     }
-  }, [osmOauthToken, RapiDContext, locale, gpxUrl, powerUser]);
+  }, [RapiDContext]
+  , ['osmOauthToken', 'Rapidcontext', 'locale', 'gpxUrl', 'powerUser']);
 
   return <div className="w-100 vh-minus-69-ns" id="rapid-container"></div>;
 }
-
-const usePrevious = (value, initialValue) => {
-  const ref = useRef(initialValue);
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-};
-
-const useEffectDebugger = (effectHook, dependencies, dependencyNames = []) => {
-  const previousDeps = usePrevious(dependencies, []);
-
-  const changedDeps = dependencies.reduce((accum, dependency, index) => {
-    if (dependency !== previousDeps[index]) {
-      const keyName = dependencyNames[index] || index;
-      return {
-        ...accum,
-        [keyName]: {
-          before: previousDeps[index],
-          after: dependency
-        }
-      };
-    }
-
-    return accum;
-  }, {});
-
-  if (Object.keys(changedDeps).length) {
-    console.log('[use-effect-debugger] ', changedDeps);
-  }
-
-  useEffect(effectHook, dependencies);
-};
