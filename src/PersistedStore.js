@@ -24,6 +24,7 @@ import { currentStatus } from './services/Status/Status'
 import { currentErrors } from './services/Error/Error'
 import { adminContext } from './services/AdminContext/AdminContext'
 import { currentPreferences } from './services/Preferences/Preferences'
+import { rapidEditor } from './services/RapidEditor/RapidEditor'
 
 /**
  * initializeStore sets up the redux store
@@ -65,6 +66,7 @@ export const initializeStore = function() {
       currentBoundedTasks,
       currentReviewTasks,
       entities,
+      rapidEditor,
   })
 
   // Create the redux store, adding the thunk middleware so we can use

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as RapiD from '../../../../node_modules/RapiD/dist/iD.legacy.js';
 import '../../../../node_modules/RapiD/dist/RapiD.css';
 
@@ -18,11 +18,13 @@ export default function RapidEditor({
   gpxUrl,
   powerUser = false,
 }) {
+  const dispatch = useDispatch();
   const setDisable = () => null;
   const presets = ['building']
 
   const currentUserId = useSelector((state) => state.currentUser.userId);
   const osmOauthToken = useSelector((state) => state.entities.users[currentUserId].osmProfile.requestToken.token);
+  const RapiDContext = useSelector((state) => state.rapidEditor.rapidContext);
   const locale = 'en';
   const [customImageryIsSet, setCustomImageryIsSet] = useState(false);
   const windowInit = typeof window !== undefined;
@@ -30,7 +32,6 @@ export default function RapidEditor({
     RapiDContext && RapiDContext.background() && RapiDContext.background().findSource('custom');
 
   const [isVisible, setIsVisible] = useState(false);
-  const [RapiDContext, setRapiDContext] = useState(null);
 
   console.log(isVisible);
 
@@ -63,10 +64,10 @@ export default function RapidEditor({
     if (windowInit) {
       setIsVisible(false)
       if (RapiDContext === null) {
-        debugger;
         // we need to keep iD context on redux store because iD works better if
         // the context is not restarted while running in the same browser session
-        setRapiDContext(window.iD.coreContext())
+        //setRapiDContext(window.iD.coreContext())
+        dispatch({ type: 'SET_RAPIDEDITOR', context: window.iD.coreContext() });
       }
     }
   }, [windowInit, RapiDContext]);
@@ -78,8 +79,6 @@ export default function RapidEditor({
   }, [comment, RapiDContext]);
 
   useEffectDebugger(() => {
-    console.log("RAPID", RapiD)
-    debugger;
     if (osmOauthToken && locale && RapiD && RapiDContext) {
       // if presets is not a populated list we need to set it as null
       try {
