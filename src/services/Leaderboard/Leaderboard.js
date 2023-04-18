@@ -45,16 +45,16 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
   initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
                               forUsers, forCountries, startDate, endDate)
 
-  const cachedLeaderboard = leaderboardCache.get(params, GLOBAL_LEADERBOARD_CACHE);
-
-  if (cachedLeaderboard) {
-    return cachedLeaderboard;
-  }
-
   const results = await new Endpoint(api.users.leaderboard, {params}).execute()
 
   if (results) {
     leaderboardCache.set(params, results, GLOBAL_LEADERBOARD_CACHE)
+  }
+
+  const cachedLeaderboard = leaderboardCache.get(params, GLOBAL_LEADERBOARD_CACHE);
+
+  if (cachedLeaderboard) {
+    return cachedLeaderboard;
   }
 
   return results
