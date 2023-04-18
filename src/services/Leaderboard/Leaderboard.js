@@ -45,16 +45,16 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
   initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
                               forUsers, forCountries, startDate, endDate)
 
-  const results = await new Endpoint(api.users.leaderboard, {params}).execute()
-
-  if (results) {
-    leaderboardCache.set(params, results, GLOBAL_LEADERBOARD_CACHE)
-  }
-
   const cachedLeaderboard = leaderboardCache.get(params, GLOBAL_LEADERBOARD_CACHE);
 
   if (cachedLeaderboard) {
     return cachedLeaderboard;
+  }
+
+  const results = await new Endpoint(api.users.leaderboard, {params}).execute()
+
+  if (results) {
+    leaderboardCache.set(params, results, GLOBAL_LEADERBOARD_CACHE)
   }
 
   return results
@@ -77,14 +77,8 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
                               null, forCountries, startDate, endDate)
 
   const results = await new Endpoint(api.users.userLeaderboard, {variables: {id: userId}, params}).execute()
-  const cachedLeaderboard = leaderboardCache.get(params, USER_LEADERBOARD_CACHE);
 
-  if (results) {
-    leaderboardCache.set(params, results, USER_LEADERBOARD_CACHE)
-    return results;
-  }
-
-  return cachedLeaderboard
+  return results;
 }
 
 /**
