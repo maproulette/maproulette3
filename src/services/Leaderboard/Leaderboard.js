@@ -24,7 +24,6 @@ export const USER_TYPE_REVIEWER = "reviewer"
 // one hour
 const CACHE_TIME = 60 * 60 * 1000;
 const GLOBAL_LEADERBOARD_CACHE = "globalLeaderboard";
-const USER_LEADERBOARD_CACHE = "userLeaderboard";
 
 const leaderboardCache = setupCustomCache(CACHE_TIME);
 
