@@ -8,9 +8,8 @@ import messages from './Messages'
 import { FormattedMessage} from 'react-intl'
 import EditSwitch from '../../AdminPane/Manage/EditSwitch/EditSwitch'
 import NotificationCard from '../../AdminPane/Manage/NotificationCard/NotificationCard'
-
 import RapidEditor from './RapidEditor';
-// const RapidEditor = React.lazy(() => import('./RapidEditor'))
+import { createBoundsXml } from './createBoundsXml'
 
 const descriptor = {
   widgetKey: 'TaskMapWidget',
@@ -44,7 +43,7 @@ export default class TaskMapWidget extends Component {
                     <div className="mr-text-yellow mr-mr-3">
                       <FormattedMessage {...messages.editMode}/>
                     </div>
-                      <div className="mr-mt-1">
+                      <div className="mr-mt-1 mr-mb-2">
                         <EditSwitch {...this.props}/>
                       </div>
                     </div>
@@ -58,11 +57,14 @@ export default class TaskMapWidget extends Component {
             editMode
               ? <RapidEditor
                   setDisable={() => null}
-                  comment={"#maproulette"}
-                  presets={['building']}
+                  comment={this.props.task.parent.checkinComment}
+                  presets={[]}
                   imagery={undefined}
-                  gpxUrl={'https://tasking-manager-staging-api.hotosm.org/api/v2/projects/8512/tasks/queries/gpx/?tasks=440'}
+                  //gpxUrl={'https://tasking-manager-staging-api.hotosm.org/api/v2/projects/8512/tasks/queries/gpx/?tasks=440'}
+                  gpxUrl={createBoundsXml(this.props.task.location.coordinates)}
                   powerUser={null}
+                  locale={this.props.user.settings.locale}
+                  token={this.props.user.osmProfile.requestToken.token}
                 />
               : <MapPane {...this.props}>
                   <TaskMap {...this.props} challenge={this.props.task.parent} />

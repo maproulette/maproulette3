@@ -3,29 +3,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as RapiD from '../../../../node_modules/RapiD/dist/iD.legacy.js';
 import '../../../../node_modules/RapiD/dist/RapiD.css';
 
-// const OSM_CLIENT_ID = 'rab7bN3lXn09oWycy5PJvcdX2hkeavh2nFh2ySIP'
-const OSM_CLIENT_ID = ''
-// const OSM_CLIENT_SECRET = 'ZAGZhF9BJRzgAup6asjyIskz7M0oayc1PWJYoDKu'
-const OSM_CLIENT_SECRET = ''
-const OSM_REDIRECT_URI = 'http://127.0.0.1:3000'
-const OSM_SERVER_URL = 'https://www.openstreetmap.org'
+const OSM_CLIENT_ID = process.env.REACT_APP_OSM_CLIENT_ID
+const OSM_CLIENT_SECRET = process.env.REACT_APP_OSM_CLIENT_SECRET
+const OSM_REDIRECT_URI = process.env.REACT_APP_URL
+const OSM_SERVER_URL = process.env.REACT_APP_OSM_SERVER
 
 export default function RapidEditor({
   comment,
   imagery,
   gpxUrl,
   powerUser = false,
+  presets,
+  setDisable,
+  locale,
+  token
 }) {
   const dispatch = useDispatch();
-  const setDisable = () => null;
-  const presets = ['building']
-
-  const currentUserId = useSelector((state) => state.currentUser.userId);
-  const osmOauthToken = useSelector((state) => state.entities.users[currentUserId].osmProfile.requestToken.token);
-  const RapiDContext = useSelector((state) => state.rapidEditor.rapidContext);
-  const locale = 'en';
   const [customImageryIsSet, setCustomImageryIsSet] = useState(false);
-  const windowInit = typeof window !== undefined;
+  const [RapiDContext, setRapiDContext] = useState(null);
   const customSource =
     RapiDContext && RapiDContext.background() && RapiDContext.background().findSource('custom');
 
@@ -43,17 +38,14 @@ export default function RapidEditor({
         }
       }
     }
-  }, [customImageryIsSet, imagery, RapiDContext, customSource],
-  ['customImageryIsSet', 'imagery', 'RapidContext', 'customSource']);
+  }, [customImageryIsSet, imagery, RapiDContext, customSource]);
 
   useEffect(() => {
     if (RapiDContext === null) {
-      // we need to keep iD context on redux store because iD works better if
-      // the context is not restarted while running in the same browser session
-      //setRapiDContext(window.iD.coreContext())
-      dispatch({ type: 'SET_RAPIDEDITOR', context: window.iD.coreContext() });
+      setRapiDContext(window.iD.coreContext())
+      //dispatch({ type: 'SET_RAPIDEDITOR', context: window.iD.coreContext() });
     }
-  }, [RapiDContext, dispatch], ['windowInit', 'RapidContext']);
+  }, [RapiDContext, dispatch]);
 
   useEffect(() => {
     if (RapiDContext && comment) {
@@ -62,7 +54,7 @@ export default function RapidEditor({
   }, [comment, RapiDContext]);
 
   useEffect(() => {
-    if (osmOauthToken && locale && RapiD && RapiDContext) {
+    if (token && locale && RapiD && RapiDContext) {
       // if presets is not a populated list we need to set it as null
       try {
         if (presets.length) {
@@ -88,19 +80,21 @@ export default function RapidEditor({
         RapiDContext.init();
       }
       if (gpxUrl) {
-        RapiDContext.layers().layer('data').url(gpxUrl, '.gpx');
+        //RapiDContext.layers().layer('data').url(gpxUrl, '.gpx');
+        RapiDContext.rapidContext().setTaskExtentByGpxData(gpxUrl);
       }
 
       RapiDContext.rapidContext().showPowerUser = powerUser;
 
       let osm = RapiDContext.connection();
       const auth = {
-        url: OSM_SERVER_URL,
-        client_id: OSM_CLIENT_ID,
-        client_secret: OSM_CLIENT_SECRET,
+        url: 'https://www.openstreetmap.org',
+        client_id: 'nmqRe5oIVOMNqvagH11iTB-mCC9M9nKkpjukP-RBdi8',
+        client_secret: 'nt0ha1Qr4qHiMq3MnLVlmgN6qBgP5UZyEhZD63edCV0',
         redirect_uri: OSM_REDIRECT_URI,
-        access_token: osmOauthToken,
+        access_token: token,
       };
+      console.log(auth)
       osm.switch(auth);
 
       const thereAreChanges = (changes) =>
@@ -114,8 +108,7 @@ export default function RapidEditor({
         }
       });
     }
-  }, [RapiDContext]
-  , ['osmOauthToken', 'Rapidcontext', 'locale', 'gpxUrl', 'powerUser']);
+  }, [RapiDContext]);
 
   return <div className="w-100 vh-minus-69-ns" id="rapid-container"></div>;
 }
