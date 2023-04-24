@@ -12,8 +12,8 @@ import CountryLeaderboard from './pages/Leaderboard/CountryLeaderboard'
 import ChallengePane from './components/ChallengePane/ChallengePane'
 import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail'
 import ProjectDetail from './components/ProjectDetail/ProjectDetail'
+import CurrentTaskPane from './components/CurrentTaskPane/CurrentTaskPane'
 import TaskPane from './components/TaskPane/TaskPane'
-import PublicTaskPane from './components/TaskPane/PublicTaskPane'
 import ReviewTaskPane from './components/ReviewTaskPane/ReviewTaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
 import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
@@ -49,7 +49,6 @@ import './App.scss'
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
-const CurrentTaskPane = WithCurrentTask(TaskPane)
 const CurrentReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentMetaReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentVirtualChallengeTaskPane =
