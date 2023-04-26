@@ -4,6 +4,7 @@ import { Popup } from 'react-leaflet'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isEqual from 'lodash/isEqual'
+import _isEmpty from 'lodash/isEmpty'
 import _sum from 'lodash/sum'
 import _values from 'lodash/values'
 import _pick from 'lodash/pick'
@@ -41,6 +42,7 @@ import BusySpinner from '../../BusySpinner/BusySpinner'
 import TaskAnalysisTable from '../../TaskAnalysisTable/TaskAnalysisTable'
 import TaskMarkerContent from './TaskMarkerContent'
 import messages from './Messages'
+import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 
 const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
 const VALID_STATUSES =
@@ -68,6 +70,7 @@ const ClusterMap = WithChallengeTaskClusters(
   true
 )
 
+const shortcutGroup = 'taskEditing'
 
 export default class TaskBundleWidget extends Component {
   bundleTasks = () => {
@@ -75,6 +78,22 @@ export default class TaskBundleWidget extends Component {
     // suppressed on the TaskAnalysisTables), we only need to worry about
     // explicitly selected tasks
     this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()])
+  }
+
+  handleKeyboardShortcuts = (event) => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
+    if (this.props.textInputActive(event)) { // ignore typing in inputs
+      return
+    }
+
+    const shortcuts = this.props.keyboardShortcutGroups.taskEditing
+    if (event.key === shortcuts.completeTogether.key) {
+      this.bundleTasks()
+    }
   }
 
   /**
@@ -141,6 +160,11 @@ export default class TaskBundleWidget extends Component {
     if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
       this.props.selectTasks([this.props.task])
     }
+
+    this.props.activateKeyboardShortcut(
+      shortcutGroup,
+      _pick(this.props.keyboardShortcutGroups.taskEditing, 'c'),
+      this.handleKeyboardShortcuts)
   }
 
   componentDidUpdate(prevProps) {
@@ -164,6 +188,9 @@ export default class TaskBundleWidget extends Component {
     if (_isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
+
+    this.props.deactivateKeyboardShortcut(shortcutGroup, 'c',
+                                          this.handleKeyboardShortcuts)
   }
 
   render() {
@@ -373,7 +400,7 @@ registerWidgetType(
               WithBoundedTasks(
                 WithBrowsedChallenge(
                   WithWebSocketSubscriptions(
-                    TaskBundleWidget,
+                    WithKeyboardShortcuts(TaskBundleWidget )
                   )
                 ),
                 'filteredClusteredTasks',

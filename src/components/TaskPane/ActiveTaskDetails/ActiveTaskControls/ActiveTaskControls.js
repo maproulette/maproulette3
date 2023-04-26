@@ -56,6 +56,7 @@ export class ActiveTaskControls extends Component {
     tags: null,
     revisionLoadBy: TaskReviewLoadMethod.all,
     doneLoadByFromHistory: false,
+    needsReview: this.props.challenge.reviewSetting === 1 ? true : undefined
   }
 
   setComment = comment => this.setState({comment})

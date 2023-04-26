@@ -232,6 +232,11 @@ export const ProfileMenu = function(props) {
         </NavLink>
       </li>
       <li>
+        <NavLink to="/sent" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.sent} />
+        </NavLink>
+      </li>
+      <li>
         <NavLink to="/review" onClick={props.closeDropdown}>
           <FormattedMessage {...messages.review} />
         </NavLink>
@@ -395,6 +400,11 @@ const MobileNav = props => (
               <FormattedMessage {...messages.inbox} />
               <UnreadNotificationsIndicator {...props} inline />
             </div>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/sent" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.sent} />
           </NavLink>
         </li>
         <li>

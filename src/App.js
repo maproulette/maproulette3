@@ -19,6 +19,7 @@ import AdminPane from './components/AdminPane/AdminPane'
 import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
 import Review from './pages/Review/Review'
 import Inbox from './pages/Inbox/Inbox'
+import Sent from './pages/Sent/Sent'
 import Teams from './pages/Teams/Teams'
 import Achievements from './pages/Achievements/Achievements'
 import Social from './pages/Social/Social'
@@ -125,6 +126,7 @@ export class App extends Component {
             <CachedRoute exact path='/review/:showType' component={Review} />
             <CachedRoute path='/review' component={Review} />
             <CachedRoute path='/inbox' component={Inbox} />
+            <CachedRoute path='/sent' component={Sent} />
             <CachedRoute path='/teams' component={Teams} />
             <CachedRoute path='/social' component={Social} />
             <CachedRoute path='/activity' component={GlobalActivity} />

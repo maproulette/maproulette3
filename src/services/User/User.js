@@ -30,6 +30,7 @@ import { taskSchema,
          receiveTasks } from '../Task/Task'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
+import CommentType from '../Comment/CommentType'
 
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in
@@ -259,6 +260,29 @@ export const fetchUser = function(userId) {
         console.log(error.response || error);
       });
   };
+};
+
+/**
+ * Fetch data on all users (up to the given limit).
+ */
+export const fetchUserComments = function (userId, type = CommentType.TASK, filters = { sort: 'created', order: 'DESC', page: 0, limit: 25 } ) {
+  return function(dispatch) {
+    const endpoint = type === CommentType.CHALLENGE ? api.users.challengeComments : api.users.taskComments
+
+    return new Endpoint(endpoint, {
+      variables: { id: userId },
+      params: filters
+    })
+      .execute()
+      .then((normalizedResults) => {
+        return normalizedResults;
+      })
+      .catch((error) => {
+        dispatch(addError(AppErrors.user.fetchFailure))
+        console.log(error.response || error);
+        return error.response || error;
+      });
+  }
 };
 
 /**

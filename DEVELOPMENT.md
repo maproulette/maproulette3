@@ -89,6 +89,8 @@ a local one you have installed. **Please do not use the production API for devel
    variables:
   ```
   REACT_APP_MAP_ROULETTE_SERVER_URL='https://yourserver.com'
+  REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL='wss://yourserver.com/ws'
+  REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL='https://yourserver.com/graphql'
   REACT_APP_SERVER_API_KEY='your-api-key-for-that-server'
   ```
 

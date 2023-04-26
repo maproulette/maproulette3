@@ -59,6 +59,11 @@ export default defineMessages({
     defaultMessage: "Fit Map to Task Features",
   },
 
+  completeTogether: {
+    id: "KeyMapping.taskEditing.completeTogether",
+    defaultMessage: "Complete tasks together"
+  },
+
   escapeLabel: {
     id: "KeyMapping.taskEditing.escapeLabel",
     defaultMessage: "ESC",
