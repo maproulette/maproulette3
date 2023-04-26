@@ -30,14 +30,7 @@ import { taskSchema,
          receiveTasks } from '../Task/Task'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
-import { setupCustomCache } from '../../utils/setupCustomCache'
 import CommentType from '../Comment/CommentType'
-
-// 60 minutes
-const CACHE_TIME = 60 * 60 * 1000;
-const USER_ACTIVITY_CACHE = "userActivity";
-const USER_TOP_CHALLENGES = "userTopChallenges";
-const userCache = setupCustomCache(CACHE_TIME);
 
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in
@@ -383,15 +376,6 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
       limit,
     }
 
-    const cachedTopChallenges = userCache.get(params, USER_TOP_CHALLENGES);
-
-    if (cachedTopChallenges) {
-      dispatch(receiveChallenges(cachedTopChallenges.challenges))
-      dispatch(receiveUsers(cachedTopChallenges.user))
-
-      return cachedTopChallenges.challenges
-    }
-
     return new Endpoint(
       api.user.topChallenges, {
         schema: [ challengeSchema() ],
@@ -415,8 +399,6 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
       _each(challenges, challenge => {
         delete challenge.activity
       })
-
-      userCache.set(params, { challenges: normalizedChallenges.entities, user }, USER_TOP_CHALLENGES)
 
       dispatch(receiveChallenges(normalizedChallenges.entities))
       dispatch(receiveUsers(simulatedEntities(user)))
@@ -520,20 +502,11 @@ export const deleteNotifications = function(userId, notificationIds) {
  */
 export const fetchUserActivity = function(userId) {
   return function(dispatch) {
-
-    const cachedUserActivity = userCache.get({}, USER_ACTIVITY_CACHE);
-
-    if (cachedUserActivity) {
-      return dispatch(receiveUsers(simulatedEntities(cachedUserActivity)));
-    }
-
     return new Endpoint(
       api.user.activity
     ).execute().then(activity => {
       const user = {id: userId}
       user.activity = activity
-
-      userCache.set({}, user, USER_ACTIVITY_CACHE)
 
       dispatch(receiveUsers(simulatedEntities(user)))
       return activity
