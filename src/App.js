@@ -45,6 +45,7 @@ import Sprites from './components/Sprites/Sprites'
 import SuperAdminContainer from './components/SuperAdmin/SuperAdminContainer'
 import MobileNotSupported
        from './components/MobileNotSupported/MobileNotSupported'
+import CheckForToken from './components/CheckForToken/CheckForToken'
 import './components/Widgets/widget_registry'
 import './App.scss'
 
@@ -98,6 +99,8 @@ export class App extends Component {
       <React.Fragment>
         <TopNav />
         <SystemNotices />
+
+        <CheckForToken />
 
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>

@@ -308,6 +308,39 @@ export const fetchBasicUser = function(userId) {
 }
 
 /**
+ * Fetch the osm oauth token.
+ *
+ * @param authCode - the token
+ */
+export const callback = async (authCode) => {
+  const resetURI =
+  `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`
+
+  // Since we're bypassing Endpoint and manually performing an update, we
+  // need to also manually reset the request cache.
+  resetCache()
+
+  fetch(resetURI, {credentials: credentialsPolicy}).then(async (result) => {
+    const jsonData = await result.json();
+    console.log(jsonData);
+    debugger;
+  }).catch(error => {
+    // if (isSecurityError(error)) {
+    //   dispatch(ensureUserLoggedIn()).then(() =>
+    //     dispatch(addError(AppErrors.user.unauthorized))
+    //   )
+    // }
+    // else {
+    //   dispatch(addError(AppErrors.user.updateFailure))
+    //   console.log(error.response || error)
+    // }
+
+    console.log(error);
+    debugger;
+  })
+}
+
+/**
  * Pings the server to ensure the current (given) user is logged in with
  * the server, and automatically signs out the user locally if not.
  */
