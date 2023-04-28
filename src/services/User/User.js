@@ -571,7 +571,7 @@ export const fetchUserMetrics = async (userId,
     params
   }).execute()
 
-  if (userMetrics.tasks) {
+  if (userMetrics?.tasks) {
     userCache.set(variables, params, userMetrics, USER_METRICS_CACHE)
   }
 
