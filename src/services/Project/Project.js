@@ -18,8 +18,8 @@ import AppErrors from "../Error/AppErrors";
 import { findUser, ensureUserLoggedIn, fetchUser } from "../User/User";
 import { setupCustomCache } from "../../utils/setupCustomCache";
 
-// 30 minute cache
-const CACHE_TIME = 30 * 60 * 1000;
+// 5 minute cache
+const CACHE_TIME = 5 * 60 * 1000;
 const PROJECT_ACTIVITY_CACHE = "projectActivity";
 const FEATURED_PROJECTS_CACHE = 'featuredProjects';
 const projectCache = setupCustomCache(CACHE_TIME);
@@ -129,7 +129,7 @@ export const fetchFeaturedProjects = function (
   return function (dispatch) {
     const pageToFetch = _isFinite(page) ? page : 0;
     const params = { onlyEnabled, limit, page: pageToFetch }
-    const cachedFeaturedProjects = projectCache.get(params, FEATURED_PROJECTS_CACHE);
+    const cachedFeaturedProjects = projectCache.get({}, params, FEATURED_PROJECTS_CACHE);
 
     if (cachedFeaturedProjects) {
       return new Promise((resolve) => {
@@ -144,7 +144,7 @@ export const fetchFeaturedProjects = function (
     })
       .execute()
       .then((normalizedResults) => {
-        projectCache.set(params, normalizedResults, FEATURED_PROJECTS_CACHE)
+        projectCache.set({}, params, normalizedResults, FEATURED_PROJECTS_CACHE)
         dispatch(receiveProjects(normalizedResults.entities));
         return normalizedResults;
       })
@@ -339,7 +339,7 @@ export const fetchProjectActivity = function (projectId, startDate, endDate) {
       params.end = startOfDay(endDate).toISOString();
     }
 
-    const cachedProjectActivity = projectCache.get(params, PROJECT_ACTIVITY_CACHE);
+    const cachedProjectActivity = projectCache.get({}, params, PROJECT_ACTIVITY_CACHE);
 
     if (cachedProjectActivity) {
       return dispatch(receiveProjects(cachedProjectActivity));
@@ -356,7 +356,7 @@ export const fetchProjectActivity = function (projectId, startDate, endDate) {
           },
         };
 
-        projectCache.set(params, normalizedResults, PROJECT_ACTIVITY_CACHE)
+        projectCache.set({}, params, normalizedResults, PROJECT_ACTIVITY_CACHE)
 
         return dispatch(receiveProjects(normalizedResults.entities));
       })
