@@ -571,7 +571,9 @@ export const fetchUserMetrics = async (userId,
     params
   }).execute()
 
-  userCache.set(variables, params, userMetrics, USER_METRICS_CACHE)
+  if (userMetrics.tasks) {
+    userCache.set(variables, params, userMetrics, USER_METRICS_CACHE)
+  }
 
   return userMetrics
 }
