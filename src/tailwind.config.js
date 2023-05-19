@@ -65,6 +65,7 @@ module.exports = {
       'pink-light-10': 'rgba(255,178,240,0.1)',
       'pink-light-50': 'rgba(255,178,240,0.5)',
       twitter: '#1DA1F2',
+      mastodon: '#595AFF',
       orange: '#f7bb59',
       'orange-jaffa': '#EA8433',
       red: '#CA484C',
