@@ -4,6 +4,7 @@ import _find from 'lodash/find'
 import _get from 'lodash/get'
 import _sortBy from 'lodash/sortBy'
 import _map from 'lodash/map'
+import _filter from 'lodash/filter'
 import _isFinite from 'lodash/isFinite'
 import { ChallengeBasemap, basemapLayerSources }
        from '../Challenge/ChallengeBasemap/ChallengeBasemap'
@@ -57,7 +58,7 @@ export const DEFAULT_OVERLAY_ORDER = Object.freeze(
  * add/override based on local .env file settings.
  */
 export const LayerSources = _sortBy(
-  _map(defaultLayers.concat(customLayers), layer => (
+  _map(_filter(defaultLayers, layer => layer.properties.id !== 'tf-cycle').concat(customLayers), layer => (
     // Pull properties into the top level
     Object.assign({}, layer.properties, {geometry: layer.geometry})
   )),
