@@ -65,6 +65,8 @@ export { default as UserActivityTimelineWidget }
        from '../ActivityTimeline/UserActivityTimeline/UserActivityTimelineWidget'
 export { default as ReviewTableWidget }
       from './ReviewTableWidget/ReviewTableWidget'
+export { default as ReviewTableWithMapWidget }
+      from './ReviewTableWithMapWidget/ReviewTableWithMapWidget'
 export { default as ReviewStatusMetricsWidget }
       from './ReviewStatusMetricsWidget/ReviewStatusMetricsWidget'
 export { default as MetaReviewStatusMetricsWidget }

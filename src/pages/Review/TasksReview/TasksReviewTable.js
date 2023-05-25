@@ -47,6 +47,7 @@ import { ViewCommentsButton, StatusLabel, makeInvertable }
 import WithSavedFilters from '../../../components/HOCs/WithSavedFilters/WithSavedFilters'
 import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
+import MapPane from '../../../components/EnhancedMap/MapPane/MapPane'
 import { Link } from 'react-router-dom'
 import ReactTable from 'react-table-6'
 
@@ -411,14 +412,33 @@ export class TaskReviewTable extends Component {
         break
     }
 
+
+    //Used to add a map to the "Tasks Review Table" widget format to create the "Review Table With Map" widget.
+    const BrowseMap = this.props.BrowseMap ? this.props.BrowseMap : '';
+    let IncludeMap = '';
+    
+    if (BrowseMap === '') {
+      IncludeMap = '';
+    } else {
+      IncludeMap = (
+        <div className="mr-h-100 mr-mb-8">
+          <MapPane>
+            <BrowseMap {..._omit(this.props, ['className'])} />
+          </MapPane>
+        </div>
+      );
+    }
+    
     return (
       <React.Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
           <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
-            <div>
-              <h1 className="mr-h2 mr-text-yellow md:mr-mr-4">
-                {subheader}
-              </h1>
+            <h1 className="mr-h2 mr-mb-4 mr-text-yellow md:mr-mr-4">
+              {subheader}
+            </h1>
+          </header>
+          {IncludeMap}
+          <div className='sm:mr-flex sm:mr-items-center sm:mr-justify-between'>
               {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
                 <div className="mr-flex">
                   <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
@@ -441,8 +461,7 @@ export class TaskReviewTable extends Component {
                   </div>
                 </div>
               }
-            </div>
-            <div>
+            <div className="mr-ml-auto">
               {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 &&
                 <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
                   <FormattedMessage {...messages.startReviewing} />
@@ -475,7 +494,7 @@ export class TaskReviewTable extends Component {
                 {...this.props}
               />
             </div>
-          </header>
+          </div>
           <div className="mr-mt-6 review">
             <ReactTable data={data} columns={columns} key={this.props.reviewTasksType}
                         pageSize={pageSize}
