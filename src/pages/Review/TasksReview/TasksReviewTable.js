@@ -416,7 +416,6 @@ export class TaskReviewTable extends Component {
     //Used to add a map to the "Tasks Review Table" widget format to create the "Review Table With Map" widget.
     const BrowseMap = this.props.BrowseMap ? this.props.BrowseMap : '';
     let IncludeMap = '';
-    
     if (BrowseMap === '') {
       IncludeMap = '';
     } else {
@@ -432,67 +431,69 @@ export class TaskReviewTable extends Component {
     return (
       <React.Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
-          <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
-            <h1 className="mr-h2 mr-mb-4 mr-text-yellow md:mr-mr-4">
-              {subheader}
-            </h1>
-          </header>
-          {IncludeMap}
-          <div className='sm:mr-flex sm:mr-items-center sm:mr-justify-between'>
-              {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
-                <div className="mr-flex">
-                  <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
-                    <input
-                      type="checkbox"
-                      className="mr-checkbox-toggle mr-mr-px"
-                      checked={!!this.props.reviewCriteria.savedChallengesOnly}
-                      onChange={() => null}
-                    />
-                    <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+          <div className={BrowseMap == '' ? 'sm:mr-flex sm:mr-items-center sm:mr-justify-between' : ""}>
+            <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
+            <h1 className={"mr-h2 mr-text-yellow md:mr-mr-4 " + (BrowseMap === '' ? '' : "mr-mb-4")}>
+                {subheader}
+              </h1>
+            </header>
+            {IncludeMap}
+            <div className='sm:mr-flex sm:mr-items-center sm:mr-justify-between'>
+                {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
+                  <div className="mr-flex">
+                    <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
+                      <input
+                        type="checkbox"
+                        className="mr-checkbox-toggle mr-mr-px"
+                        checked={!!this.props.reviewCriteria.savedChallengesOnly}
+                        onChange={() => null}
+                      />
+                      <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+                    </div>
+                    <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
+                      <input
+                        type="checkbox"
+                        className="mr-checkbox-toggle mr-mr-px"
+                        checked={!!this.props.reviewCriteria.excludeOtherReviewers}
+                        onChange={() => null}
+                      />
+                      <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
+                    </div>
                   </div>
-                  <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
-                    <input
-                      type="checkbox"
-                      className="mr-checkbox-toggle mr-mr-px"
-                      checked={!!this.props.reviewCriteria.excludeOtherReviewers}
-                      onChange={() => null}
-                    />
-                    <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
+                }
+              <div className="mr-ml-auto">
+                {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 &&
+                  <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
+                    <FormattedMessage {...messages.startReviewing} />
+                  </button>
+                }
+                {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 &&
+                  <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                          onClick={() => this.startMetaReviewing()}>
+                    <FormattedMessage {...messages.startMetaReviewing} />
+                  </button>
+                }
+                <button
+                  className={classNames(
+                    "mr-button mr-button-small", {
+                    "mr-button--green-lighter": !_get(this.props, 'reviewData.dataStale', false),
+                    "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
+                  })}
+                  onClick={() => this.props.refresh()}
+                >
+                  <FormattedMessage {...messages.refresh} />
+                </button>
+                <div className="mr-float-right mr-mt-3 mr-ml-3">
+                  <div className="mr-flex mr-justify-start mr-ml-4">
+                    {this.filterDropdown(this.props.reviewTasksType)}
+                    {this.gearDropdown(this.props.reviewTasksType)}
                   </div>
                 </div>
-              }
-            <div className="mr-ml-auto">
-              {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 &&
-                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
-                  <FormattedMessage {...messages.startReviewing} />
-                </button>
-              }
-              {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 &&
-                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
-                        onClick={() => this.startMetaReviewing()}>
-                  <FormattedMessage {...messages.startMetaReviewing} />
-                </button>
-              }
-              <button
-                className={classNames(
-                  "mr-button mr-button-small", {
-                  "mr-button--green-lighter": !_get(this.props, 'reviewData.dataStale', false),
-                  "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
-                })}
-                onClick={() => this.props.refresh()}
-              >
-                <FormattedMessage {...messages.refresh} />
-              </button>
-              <div className="mr-float-right mr-mt-3 mr-ml-3">
-                <div className="mr-flex mr-justify-start mr-ml-4">
-                  {this.filterDropdown(this.props.reviewTasksType)}
-                  {this.gearDropdown(this.props.reviewTasksType)}
-                </div>
+                <ManageSavedFilters
+                  searchFilters={this.props.reviewCriteria}
+                  {...this.props}
+                />
               </div>
-              <ManageSavedFilters
-                searchFilters={this.props.reviewCriteria}
-                {...this.props}
-              />
             </div>
           </div>
           <div className="mr-mt-6 review">

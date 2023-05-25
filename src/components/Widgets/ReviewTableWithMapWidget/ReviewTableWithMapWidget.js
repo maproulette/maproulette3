@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import _omit from 'lodash/omit'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import TasksReviewTable from '../../../pages/Review/TasksReview/TasksReviewTable'
