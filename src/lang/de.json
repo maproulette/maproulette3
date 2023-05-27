@@ -994,6 +994,7 @@
   "KeyMapping.taskCompletion.skip": "Überspringen",
   "KeyMapping.taskCompletion.tooHard": "Zu schwierig",
   "KeyMapping.taskEditing.cancel": "Bearbeiten abbrechen",
+  "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "ESC",
   "KeyMapping.taskEditing.fitBounds": "Skaliere Karte auf die Aufgabe",
   "KeyMapping.taskInspect.nextTask": "Nächste",

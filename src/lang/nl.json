@@ -994,6 +994,7 @@
   "KeyMapping.taskCompletion.skip": "Overslaan",
   "KeyMapping.taskCompletion.tooHard": "Te moeilijk / Onduidelijk",
   "KeyMapping.taskEditing.cancel": "Bewerken annuleren",
+  "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "ESC",
   "KeyMapping.taskEditing.fitBounds": "Kaart passend aan objecten van taak maken",
   "KeyMapping.taskInspect.nextTask": "Volgende taak",

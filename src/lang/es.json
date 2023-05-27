@@ -994,6 +994,7 @@
   "KeyMapping.taskCompletion.skip": "Omitir",
   "KeyMapping.taskCompletion.tooHard": "Demasiado difícil / No pude verlo bien",
   "KeyMapping.taskEditing.cancel": "Cancelar edición",
+  "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "ESC",
   "KeyMapping.taskEditing.fitBounds": "Ajustar mapa a los elementos de la tarea",
   "KeyMapping.taskInspect.nextTask": "Siguiente tarea",

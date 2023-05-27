@@ -168,7 +168,7 @@ export default class TaskBundleWidget extends Component {
 
     this.props.activateKeyboardShortcut(
       shortcutGroup,
-      _pick(this.props.keyboardShortcutGroups.taskEditing, 'c'),
+      _pick(this.props.keyboardShortcutGroups.taskEditing, 'completeTogether'),
       this.handleKeyboardShortcuts)
   }
 

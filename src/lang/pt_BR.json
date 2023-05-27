@@ -994,6 +994,7 @@
   "KeyMapping.taskCompletion.skip": "Ignorar",
   "KeyMapping.taskCompletion.tooHard": "Too difficult / Couldn’t see",
   "KeyMapping.taskEditing.cancel": "Cancelar edição",
+  "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "ESC",
   "KeyMapping.taskEditing.fitBounds": "Ajustar Mapa aos Recursos da Tarefa",
   "KeyMapping.taskInspect.nextTask": "Próxima tarefa",

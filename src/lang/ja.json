@@ -994,6 +994,7 @@
   "KeyMapping.taskCompletion.skip": "スキップ",
   "KeyMapping.taskCompletion.tooHard": "Too difficult / Couldn’t see",
   "KeyMapping.taskEditing.cancel": "編集をキャンセル",
+  "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "ESC",
   "KeyMapping.taskEditing.fitBounds": "タスクの内容にマップを合わせる",
   "KeyMapping.taskInspect.nextTask": "次のタスク",

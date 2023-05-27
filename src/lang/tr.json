@@ -994,6 +994,7 @@
   "KeyMapping.taskCompletion.skip": "Geç",
   "KeyMapping.taskCompletion.tooHard": "Çok zor / Görülemedi",
   "KeyMapping.taskEditing.cancel": "Düzenlemeyi İptal Et",
+  "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "ESC",
   "KeyMapping.taskEditing.fitBounds": "Haritayı Görev Özelliklerine Sığdır",
   "KeyMapping.taskInspect.nextTask": "Sonraki Görev",
