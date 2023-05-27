@@ -90,6 +90,11 @@ export default class TaskBundleWidget extends Component {
       return
     }
 
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
     const shortcuts = this.props.keyboardShortcutGroups.taskEditing
     if (event.key === shortcuts.completeTogether.key) {
       this.bundleTasks()
