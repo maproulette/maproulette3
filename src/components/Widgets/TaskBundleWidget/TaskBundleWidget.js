@@ -194,7 +194,7 @@ export default class TaskBundleWidget extends Component {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
 
-    this.props.deactivateKeyboardShortcut(shortcutGroup, 'c',
+    this.props.deactivateKeyboardShortcut(shortcutGroup, 'completeTogether',
                                           this.handleKeyboardShortcuts)
   }
 
@@ -405,7 +405,7 @@ registerWidgetType(
               WithBoundedTasks(
                 WithBrowsedChallenge(
                   WithWebSocketSubscriptions(
-                    WithKeyboardShortcuts(TaskBundleWidget )
+                    WithKeyboardShortcuts(TaskBundleWidget)
                   )
                 ),
                 'filteredClusteredTasks',
