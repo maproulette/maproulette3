@@ -90,6 +90,11 @@ export default class TaskBundleWidget extends Component {
       return
     }
 
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
     const shortcuts = this.props.keyboardShortcutGroups.taskEditing
     if (event.key === shortcuts.completeTogether.key) {
       this.bundleTasks()
@@ -163,7 +168,7 @@ export default class TaskBundleWidget extends Component {
 
     this.props.activateKeyboardShortcut(
       shortcutGroup,
-      _pick(this.props.keyboardShortcutGroups.taskEditing, 'c'),
+      _pick(this.props.keyboardShortcutGroups.taskEditing, 'completeTogether'),
       this.handleKeyboardShortcuts)
   }
 
@@ -189,7 +194,7 @@ export default class TaskBundleWidget extends Component {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
 
-    this.props.deactivateKeyboardShortcut(shortcutGroup, 'c',
+    this.props.deactivateKeyboardShortcut(shortcutGroup, 'completeTogether',
                                           this.handleKeyboardShortcuts)
   }
 
@@ -400,7 +405,7 @@ registerWidgetType(
               WithBoundedTasks(
                 WithBrowsedChallenge(
                   WithWebSocketSubscriptions(
-                    WithKeyboardShortcuts(TaskBundleWidget )
+                    WithKeyboardShortcuts(TaskBundleWidget)
                   )
                 ),
                 'filteredClusteredTasks',

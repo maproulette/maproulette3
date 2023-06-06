@@ -994,6 +994,7 @@
   "KeyMapping.taskCompletion.skip": "넘기기",
   "KeyMapping.taskCompletion.tooHard": "너무 어려움 / 볼 수 없음",
   "KeyMapping.taskEditing.cancel": "편집 취소",
+  "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "ESC",
   "KeyMapping.taskEditing.fitBounds": "지도를 작업할 지물에 맞추기",
   "KeyMapping.taskInspect.nextTask": "다음 작업",

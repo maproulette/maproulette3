@@ -25,7 +25,11 @@ export default class SearchBox extends Component {
    * @private
    */
   checkForSpecialKeys = (e) => {
-    if (e.key === "Escape") {
+    // Ignore if modifier keys were pressed
+    if (e.metaKey || e.altKey || e.ctrlKey) {
+      return
+    }
+    else if (e.key === "Escape") {
       this.props.clearSearch()
     }
     else if (e.key === "Enter" && _isFunction(this.props.deactivate)) {

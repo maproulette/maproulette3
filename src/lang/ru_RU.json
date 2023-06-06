@@ -994,6 +994,7 @@
   "KeyMapping.taskCompletion.skip": "Пропустить",
   "KeyMapping.taskCompletion.tooHard": "Слишком сложно / Не вижу",
   "KeyMapping.taskEditing.cancel": "Отменить изменения",
+  "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "Выйти",
   "KeyMapping.taskEditing.fitBounds": "Подогнать карту под требования задачи",
   "KeyMapping.taskInspect.nextTask": "Следующая задача",

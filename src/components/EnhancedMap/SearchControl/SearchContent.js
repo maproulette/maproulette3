@@ -9,8 +9,12 @@ import messages from './Messages'
 
 const SearchContent = props => {
   const checkForSpecialKeys = e => {
+    // Ignore if modifier keys were pressed
+    if (e.metaKey || e.altKey || e.ctrlKey) {
+      return
+    }
     // Esc clears search, Enter signals completion
-    if (e.key === "Escape") {
+    else if (e.key === "Escape") {
       props.clearNominatimSearch()
     }
     else if (e.key === "Enter") {

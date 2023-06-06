@@ -61,7 +61,7 @@ export default defineMessages({
 
   completeTogether: {
     id: "KeyMapping.taskEditing.completeTogether",
-    defaultMessage: "Complete tasks together"
+    defaultMessage: "Complete Tasks Together"
   },
 
   escapeLabel: {

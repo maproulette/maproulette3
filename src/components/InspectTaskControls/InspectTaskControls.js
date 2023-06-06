@@ -54,6 +54,11 @@ export class InspectTaskControls extends Component {
       return
     }
 
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
     const inspectShortcuts = this.props.keyboardShortcutGroups[shortcutGroup]
     if (event.key === inspectShortcuts.prevTask.key) {
       this.prevTask()

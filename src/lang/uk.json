@@ -994,6 +994,7 @@
   "KeyMapping.taskCompletion.skip": "Пропустити",
   "KeyMapping.taskCompletion.tooHard": "Дуже важко/Не бачу",
   "KeyMapping.taskEditing.cancel": "Скасувати редагування",
+  "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "ESC",
   "KeyMapping.taskEditing.fitBounds": "Підігнати масштаб під елементи завдання",
   "KeyMapping.taskInspect.nextTask": "Наступне Завдання",
