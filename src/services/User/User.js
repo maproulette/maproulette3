@@ -754,7 +754,7 @@ export const resetAPIKey = function(userId) {
 /**
  * Add the given challenge to the given user's list of saved challenges.
  */
-export const saveChallenge = function(userId, challengeId) {
+export const saveChallengeForUser = function(userId, challengeId) {
   return updateUser(userId, (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated properly by the server response.
@@ -770,7 +770,7 @@ export const saveChallenge = function(userId, challengeId) {
  * Remove the given challenge from the given user's list of saved
  * challenges.
  */
-export const unsaveChallenge = function(userId, challengeId) {
+export const unsaveChallengeForUser = function(userId, challengeId) {
   return updateUser(userId, (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated by the server response.

@@ -227,7 +227,7 @@ export class TaskPane extends Component {
         <li>
           <a
             className="mr-normal-case mr-flex"
-            onClick={() => (isFavorited ? this.props.unsaveChallenge : this.props.saveChallenge)(
+            onClick={() => (isFavorited ? this.props.unsaveChallengeForUser : this.props.saveChallengeForUser)(
               this.props.user.id,
               challenge.id
             )}
