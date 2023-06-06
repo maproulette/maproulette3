@@ -51,10 +51,23 @@ class Footer extends Component {
             </div>
 
             <div className="md:mr-px-4 md:mr-flex-1 md:mr-flex md:mr-justify-end">
-              <div>
+              <div className="mr-flex mr-flex-col">
                 <h3 className="mr-mb-2 mr-text-xl mr-text-green-lighter">
                   <FormattedMessage {...messages.followUs} />
                 </h3>
+                <a
+                  href="https://en.osm.town/@MapRoulette"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mr-inline-flex mr-items-center"
+                >
+                  <SvgSymbol
+                    sym="icon-mastodon"
+                    viewBox="0 0 30 24"
+                    className="mr-w-12 mr-h-auto mr-fill-mastodon"
+                  />
+                  <span className="mr-absolute mr-ml-8">@Maproulette</span>
+                </a>
                 <a
                   href="https://twitter.com/maproulette"
                   target="_blank"
