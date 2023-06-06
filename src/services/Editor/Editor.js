@@ -419,14 +419,19 @@ export const osmObjectParams = function (
       objects = objects.concat(
         _compact(
           task.geometries.features.map((feature) => {
-            const osmId = AsIdentifiableFeature(feature).osmId();
-            const osmType = AsIdentifiableFeature(feature).osmType();
-            
+            const currentFeature = AsIdentifiableFeature(feature)
+            const osmId = currentFeature.osmId();
+            const osmType = currentFeature.osmType();
+            let areAllTypesValid;
             if (!osmId) {
               return null;
             }
 
             if (osmType) {
+              areAllTypesValid = currentFeature.checkValidTypeMultipleIds(osmType);
+            }
+            // We will use osm types defined by user if they exist and are consistent, if not fall back to geometry type 
+            if (osmType && areAllTypesValid) {
               switch(osmType) {
                 case "node":
                   return `${
