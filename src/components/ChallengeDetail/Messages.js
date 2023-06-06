@@ -101,7 +101,7 @@ export default defineMessages({
 
   modalSubtitle: {
     id: "ChallengeDetails.controls.modal.subtitle",
-    defaultMessage:  "You are about to flag a Challenge. An issue will be created here and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Flagging a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets."
+    defaultMessage:  "You are about to flag a Challenge. An issue will be created in this [public github repository](https://github.com/maproulette/challenge-reports/issues) and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Flagging a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.",
   },
 
   submitFlag: {
