@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Refresh",
   },
 
+  toggleMap: {
+    id: "Review.TaskAnalysisTable.toggleMap",
+    defaultMessage: "Toggle Map",
+  },
+
   startReviewing: {
     id: "Review.TaskAnalysisTable.startReviewing",
     defaultMessage: "Review these Tasks",

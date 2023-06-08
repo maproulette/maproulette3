@@ -47,6 +47,7 @@ import { ViewCommentsButton, StatusLabel, makeInvertable }
 import WithSavedFilters from '../../../components/HOCs/WithSavedFilters/WithSavedFilters'
 import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
+import MapPane from '../../../components/EnhancedMap/MapPane/MapPane'
 import { Link } from 'react-router-dom'
 import ReactTable from 'react-table-6'
 
@@ -75,6 +76,7 @@ export class TaskReviewTable extends Component {
   componentIsMounted: false
 
   state = {
+    displayMap: false,
     openComments: null,
     showConfigureColumns: false,
     challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
@@ -411,111 +413,141 @@ export class TaskReviewTable extends Component {
         break
     }
 
+
+    //Used to add a map to the "Tasks Review Table" widget format to create the "Review Table With Map" widget.
+    const BrowseMap = this.state.displayMap == true ? this.props.BrowseMap : '';
+    let IncludeMap = '';
+    if (BrowseMap === '') {
+      IncludeMap = '';
+    } else {
+      IncludeMap = (
+        <div className="mr-h-100 mr-mb-8">
+          <MapPane>
+            <BrowseMap {..._omit(this.props, ['className'])} />
+          </MapPane>
+        </div>
+      );
+    }
+
+    const checkBoxes = (
+      this.props.reviewTasksType === ReviewTasksType.toBeReviewed && (
+        <div className="xl:mr-flex mr-mr-4">
+          <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
+            <input
+              type="checkbox"
+              className="mr-checkbox-toggle mr-mr-px"
+              checked={!!this.props.reviewCriteria.savedChallengesOnly}
+              onChange={() => null}
+            />
+            <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+          </div>
+          <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
+            <input
+              type="checkbox"
+              className="mr-checkbox-toggle mr-mr-px"
+              checked={!!this.props.reviewCriteria.excludeOtherReviewers}
+              onChange={() => null}
+            />
+            <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
+          </div>
+        </div>
+      )
+    );
+    
+    
     return (
       <React.Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
-          <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
-            <div>
-              <h1 className="mr-h2 mr-text-yellow md:mr-mr-4">
-                {subheader}
-              </h1>
-              {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
-                <div className="mr-flex">
-                  <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
-                    <input
-                      type="checkbox"
-                      className="mr-checkbox-toggle mr-mr-px"
-                      checked={!!this.props.reviewCriteria.savedChallengesOnly}
-                      onChange={() => null}
-                    />
-                    <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
-                  </div>
-                  <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
-                    <input
-                      type="checkbox"
-                      className="mr-checkbox-toggle mr-mr-px"
-                      checked={!!this.props.reviewCriteria.excludeOtherReviewers}
-                      onChange={() => null}
-                    />
-                    <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
-                  </div>
-                </div>
-              }
-            </div>
-            <div>
-              {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 &&
-                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
-                  <FormattedMessage {...messages.startReviewing} />
-                </button>
-              }
-              {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 &&
-                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
-                        onClick={() => this.startMetaReviewing()}>
-                  <FormattedMessage {...messages.startMetaReviewing} />
-                </button>
-              }
-              <button
-                className={classNames(
-                  "mr-button mr-button-small", {
-                  "mr-button--green-lighter": !_get(this.props, 'reviewData.dataStale', false),
-                  "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
-                })}
-                onClick={() => this.props.refresh()}
-              >
-                <FormattedMessage {...messages.refresh} />
-              </button>
-              <div className="mr-float-right mr-mt-3 mr-ml-3">
-                <div className="mr-flex mr-justify-start mr-ml-4">
-                  {this.filterDropdown(this.props.reviewTasksType)}
-                  {this.gearDropdown(this.props.reviewTasksType)}
-                </div>
+          <div className={BrowseMap === '' ? 'sm:mr-flex sm:mr-items-center sm:mr-justify-between' : ''}>
+            <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
+              <div>
+                <h1 className={`mr-h2 mr-text-yellow md:mr-mr-4 ${BrowseMap === '' ? '' : 'mr-mb-4'}`}>
+                  {subheader}
+                </h1>
+                {BrowseMap === '' ? checkBoxes : ''}
               </div>
-              <ManageSavedFilters
-                searchFilters={this.props.reviewCriteria}
-                {...this.props}
-              />
+            </header>
+            {IncludeMap}
+            <div className='sm:mr-flex sm:mr-items-center sm:mr-justify-between'>
+              {BrowseMap === '' ? '' : checkBoxes}
+              <div className="mr-ml-auto">
+                {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 && (
+                  <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
+                    <FormattedMessage {...messages.startReviewing} />
+                  </button>
+                )}
+                {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 && (
+                  <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startMetaReviewing()}>
+                    <FormattedMessage {...messages.startMetaReviewing} />
+                  </button>
+                )}
+                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                  onClick={() => this.setState({ displayMap: !this.state.displayMap })}
+                >
+                  <FormattedMessage {...messages.toggleMap} />
+                </button>
+                <button
+                  className={classNames("mr-button mr-button-small", {
+                    "mr-button--green-lighter": !_get(this.props, 'reviewData.dataStale', false),
+                    "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
+                  })}
+                  onClick={() => this.props.refresh()}
+                >
+                  <FormattedMessage {...messages.refresh} />
+                </button>
+                <div className="mr-float-right mr-mt-3 mr-ml-3">
+                  <div className="mr-flex mr-justify-start mr-ml-4">
+                    {this.filterDropdown(this.props.reviewTasksType)}
+                    {this.gearDropdown(this.props.reviewTasksType)}
+                  </div>
+                </div>
+                <ManageSavedFilters searchFilters={this.props.reviewCriteria} {...this.props} />
+              </div>
             </div>
-          </header>
+          </div>
           <div className="mr-mt-6 review">
-            <ReactTable data={data} columns={columns} key={this.props.reviewTasksType}
-                        pageSize={pageSize}
-                        totalCount={totalRows}
-                        defaultSorted={defaultSorted}
-                        defaultFiltered={defaultFiltered}
-                        minRows={1}
-                        manual
-                        multiSort={false}
-                        noDataText={<FormattedMessage {...messages.noTasks} />}
-                        pages={totalPages}
-                        onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
-                        onPageSizeChange={(pageSize) => this.props.changePageSize(pageSize)}
-                        getTheadFilterThProps={() => {
-                          return {style: {position: "inherit", overflow: "inherit"}}}
-                        }
-                        onFilteredChange={filtered => {
-                          this.setState({ filtered })
-                          if (this.fetchData) {
-                            this.fetchData()
-                          }
-                        }}
-                        loading={this.props.loading}
-                        {...intlTableProps(this.props.intl)}
-                        PaginationComponent={IntlTablePagination}
+            <ReactTable
+              data={data}
+              columns={columns}
+              key={this.props.reviewTasksType}
+              pageSize={pageSize}
+              totalCount={totalRows}
+              defaultSorted={defaultSorted}
+              defaultFiltered={defaultFiltered}
+              minRows={1}
+              manual
+              multiSort={false}
+              noDataText={<FormattedMessage {...messages.noTasks} />}
+              pages={totalPages}
+              onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+              onPageSizeChange={pageSize => this.props.changePageSize(pageSize)}
+              getTheadFilterThProps={() => {
+                return { style: { position: "inherit", overflow: "inherit" } };
+              }}
+              onFilteredChange={filtered => {
+                this.setState({ filtered });
+                if (this.fetchData) {
+                  this.fetchData();
+                }
+              }}
+              loading={this.props.loading}
+              {...intlTableProps(this.props.intl)}
+              PaginationComponent={IntlTablePagination}
             />
           </div>
         </div>
-        {_isFinite(this.state.openComments) &&
-         <TaskCommentsModal
-           taskId={this.state.openComments}
-           onClose={() => this.setState({openComments: null})}
-         />
-        }
-        {this.state.showConfigureColumns &&
-         <ConfigureColumnsModal
-           {...this.props}
-           onClose={() => this.setState({showConfigureColumns: false})}
-         />
-        }
+        {_isFinite(this.state.openComments) && (
+          <TaskCommentsModal
+            taskId={this.state.openComments}
+            onClose={() => this.setState({ openComments: null })}
+          />
+        )}
+        {this.state.showConfigureColumns && (
+          <ConfigureColumnsModal
+            {...this.props}
+            onClose={() => this.setState({ showConfigureColumns: false })}
+          />
+        )}
       </React.Fragment>
     )
   }
