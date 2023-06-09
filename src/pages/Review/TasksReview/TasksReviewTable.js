@@ -76,7 +76,7 @@ export class TaskReviewTable extends Component {
   componentIsMounted: false
 
   state = {
-    displayMap: false,
+    displayMap: localStorage.getItem('displayMap') === 'true' ? true : false,    
     openComments: null,
     showConfigureColumns: false,
     challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
@@ -414,20 +414,16 @@ export class TaskReviewTable extends Component {
     }
 
 
-    //Used to add a map to the "Tasks Review Table" widget format to create the "Review Table With Map" widget.
-    const BrowseMap = this.state.displayMap == true ? this.props.BrowseMap : '';
-    let IncludeMap = '';
-    if (BrowseMap === '') {
-      IncludeMap = '';
-    } else {
-      IncludeMap = (
-        <div className="mr-h-100 mr-mb-8">
-          <MapPane>
-            <BrowseMap {..._omit(this.props, ['className'])} />
-          </MapPane>
-        </div>
-      );
-    }
+    
+    const BrowseMap = this.props.BrowseMap
+    
+    const IncludeMap = this.state.displayMap ? (
+      <div className="mr-h-100 mr-mb-8">
+        <MapPane>
+          <BrowseMap {..._omit(this.props, ['className'])} />
+        </MapPane>
+      </div>
+    ) : null;
 
     const checkBoxes = (
       this.props.reviewTasksType === ReviewTasksType.toBeReviewed && (
@@ -458,18 +454,18 @@ export class TaskReviewTable extends Component {
     return (
       <React.Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
-          <div className={BrowseMap === '' ? 'sm:mr-flex sm:mr-items-center sm:mr-justify-between' : ''}>
+          <div className={IncludeMap === null ? 'sm:mr-flex sm:mr-items-center sm:mr-justify-between' : null}>
             <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
               <div>
                 <h1 className={`mr-h2 mr-text-yellow md:mr-mr-4 ${BrowseMap === '' ? '' : 'mr-mb-4'}`}>
                   {subheader}
                 </h1>
-                {BrowseMap === '' ? checkBoxes : ''}
+                {IncludeMap === null ? checkBoxes : null}
               </div>
             </header>
             {IncludeMap}
             <div className='sm:mr-flex sm:mr-items-center sm:mr-justify-between'>
-              {BrowseMap === '' ? '' : checkBoxes}
+              {IncludeMap === null ? null : checkBoxes}
               <div className="mr-ml-auto">
                 {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 && (
                   <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
@@ -482,7 +478,11 @@ export class TaskReviewTable extends Component {
                   </button>
                 )}
                 <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
-                  onClick={() => this.setState({ displayMap: !this.state.displayMap })}
+                  onClick={() => {
+                    const newDisplayMap = !this.state.displayMap;
+                    localStorage.setItem('displayMap', JSON.stringify(newDisplayMap));
+                    this.setState({ displayMap: newDisplayMap })
+                  }}
                 >
                   <FormattedMessage {...messages.toggleMap} />
                 </button>
