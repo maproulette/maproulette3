@@ -165,19 +165,19 @@ export default defineMessages({
   },
   challengeSaveDetailsFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveDetailsFailure",
-    defaultMessage: "Unable to save your changes (Likely Duplicate Challenge Name)",
+    defaultMessage: "Unable to save your changes. It is likely a duplicate challenge name.",
   },
   challengeSaveNameFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveNameFailure",
-    defaultMessage: "Challenge name is rRequired to be more than 3 characters long.",
+    defaultMessage: "The challenge name is required and must be more than 3 characters long.",
   },
   challengeSaveDescriptionFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveDescriptionFailure",
-    defaultMessage: "Description is Required",
+    defaultMessage: "The description is required.",
   },
   challengeSaveInstructionFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveInstructionFailure",
-    defaultMessage: "Instructions must have more than 150 characters and 20 words",
+    defaultMessage: "Instructions must have more than 150 characters and at least 20 words.",
   },
   challengeRebuildFailure: {
     id: "Errors.challenge.rebuildFailure",
