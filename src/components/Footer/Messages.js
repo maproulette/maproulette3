@@ -43,4 +43,9 @@ export default defineMessages({
     id: "Footer.email.submit.label",
     defaultMessage: "Submit",
   },
+
+  donateButton: {
+    id: "Footer.email.donateButton",
+    defaultMessage: "Donate to Maproulette",
+  },
 })

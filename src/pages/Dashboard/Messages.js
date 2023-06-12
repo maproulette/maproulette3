@@ -59,14 +59,29 @@ export default defineMessages({
     defaultMessage: "Earn points by completing challenge tasks!",
   },
 
-  jumpBackIn: {
-    id: "Dashboard.header.jumpBackIn",
-    defaultMessage: "Jump back in!",
+  resumeYour: {
+    id: "Dashboard.header.resumeYour",
+    defaultMessage: "Resume your",
   },
 
-  resume: {
-    id: "Dashboard.header.resume",
-    defaultMessage: "Resume your last challenge",
+  challenge: {
+    id: "Dashboard.header.challenge",
+    defaultMessage: "last challenge",
+  },
+
+  help: {
+    id: "Dashboard.header.help",
+    defaultMessage: "Help",
+  },
+
+  grow: {
+    id: "Dashboard.header.grow",
+    defaultMessage: "MapRoulette grow",
+  },
+
+  donateLabel: {
+    id: "Dashboard.header.controls.donate.label",
+    defaultMessage: "Donate to MapRoulette",
   },
 
   latestChallengeLabel: {

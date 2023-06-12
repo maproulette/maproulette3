@@ -80,12 +80,12 @@ const DashboardHeader = props => {
           <div className="mr-bg-lines mr-p-4 mr-pl-12 mr-flex mr-justify-between mr-items-center">
             {_isFinite(latestChallenge) ?
              <React.Fragment>
-               <div className="mr-flex mr-items-center mr-mr-8">
-                 <div className="mr-mr-4 mr-flex mr-flex-wrap">
+               <div className="xl:mr-flex mr-items-center mr-mr-8">
+                 <div className="mr-mr-4 xl:mr-flex mr-flex-wrap">
                    <span className="mr-mr-1">
-                     <FormattedMessage {...messages.jumpBackIn} />
+                     <FormattedMessage {...messages.resumeYour} />
                    </span>
-                   <FormattedMessage {...messages.resume} />
+                   <FormattedMessage {...messages.challenge} />
                  </div>
                  <div>
                    <Link
@@ -96,8 +96,26 @@ const DashboardHeader = props => {
                    </Link>
                  </div>
                </div>
-               <div className="mr-flex mr-items-center mr-mr-20">
-                 <div className="mr-mr-4 mr-flex mr-flex-wrap">
+               <div className="xl:mr-flex mr-items-center mr-mr-20">
+                 <div className="mr-mr-4 xl:mr-flex mr-flex-wrap">
+                   <span className="mr-mr-1">
+                     <FormattedMessage {...messages.help} />
+                   </span>
+                   <FormattedMessage {...messages.grow} />
+                 </div>
+                 <div>
+                   <a
+                     href="https://openstreetmap.app.neoncrm.com/forms/maproulette"
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     className="mr-button mr-justify-center mr-flex mr-items-center mr-mx-auto"
+                   >
+                     <FormattedMessage {...messages.donateLabel} />
+                   </a>
+                 </div>
+               </div>
+               <div className="xl:mr-flex mr-items-center mr-mr-20">
+                 <div className="mr-mr-4 xl:mr-flex mr-flex-wrap">
                    <span className="mr-mr-1">
                      <FormattedMessage {...messages.find} />
                    </span>
