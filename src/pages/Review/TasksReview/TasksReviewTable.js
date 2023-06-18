@@ -24,7 +24,7 @@ import { TaskPriority, keysByPriority, messagesByPriority }
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
          messagesByMetaReviewStatus, isNeedsReviewStatus, isMetaReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
-import { ReviewTasksType, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
+import { ReviewTasksType, buildLinkToTasksExportCSV } from '../../../services/Task/TaskReview/TaskReview'
 import AsColoredHashable from '../../../interactions/Hashable/AsColoredHashable'
 import { intlTableProps } from '../../../components/IntlTable/IntlTable'
 import IntlTablePagination from '../../../components/IntlTable/IntlTablePagination'
@@ -324,7 +324,7 @@ export class TaskReviewTable extends Component {
               <li onClick={dropdown.toggleDropdownVisible}>
                 <a target="_blank"
                    rel="noopener noreferrer"
-                   href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
+                   href={buildLinkToTasksExportCSV(this.props.reviewCriteria)}
                    className="mr-flex mr-items-center">
                   <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                   <FormattedMessage {...messages.exportMapperCSVLabel} />
