@@ -349,6 +349,7 @@ const BuildBundle = props => {
       allowClusterToggle={false}
       hideSearchControl
       allowSpidering
+      showSelectMarkersInView
       {..._omit(props, 'className')}
     />
 
@@ -370,6 +371,9 @@ const BuildBundle = props => {
           </li>
           <li>
             <TaskPropertyFilter {...props} />
+          </li>
+          <li>
+            <button className='mr-ml-8' onClick={() => console.log(props)}>props log</button>
           </li>
         </ul>
       </div>
