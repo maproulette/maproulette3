@@ -129,6 +129,44 @@ export class AsIdentifiableFeature {
     const re = new RegExp(/^(node|way|relation|n|r|w)?\/?\d+$/)
     return !!re.exec(id)
   }
+
+  // check whether osm types are consistent if there are multiple Ids
+  checkValidTypeMultipleIds(type) {
+    const typeRe = /^(node|way|relation|n|r|w)/
+    for (let i = 0; i < featureIdFields.length; i++) {
+      const match = typeRe.exec(this.properties[featureIdFields[i]])
+      let currentType
+
+      if (match) {
+        switch (match[0]) {
+          case 'node':
+          case 'n':
+            currentType = 'node'
+            break
+          case 'way':
+          case 'w':
+            currentType = 'way'
+            break
+          case 'relation':
+          case 'r':
+            currentType = 'relation'
+            break
+          default:
+            currentType = null
+        }
+      } else {
+        currentType = null
+      }
+
+      if (!currentType) {
+        continue
+      } else if (currentType != type) {
+        return false
+      }
+    }
+
+    return true
+  }
 }
 
 export default feature => new AsIdentifiableFeature(feature)
