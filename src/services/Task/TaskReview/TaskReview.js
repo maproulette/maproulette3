@@ -140,10 +140,10 @@ export const buildLinkToMapperExportCSV = function(criteria) {
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/mappers/export?${queryString.stringify(queryFilters)}`
 }
 
-export const buildLinkToTasksExportCSV = function(criteria) {
+export const buildToReviewTableExportCSV = function(criteria) {
   const queryFilters = generateReviewSearch(criteria)
 
-  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/allReviewRelatedTasks/export?${queryString.stringify(queryFilters)}`
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/reviewTable/export?${queryString.stringify(queryFilters)}`
 }
 
 export const buildLinkToReviewerMetaExportCSV = function(criteria) {
