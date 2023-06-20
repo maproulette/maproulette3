@@ -29,17 +29,17 @@ const SelectMarkersInViewLeafletControl = L.Control.extend({
    
     const controlContent = (
       <button
-      className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
-      onClick={handleSelectAllInViewClick}
-    >
+        className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
+        onClick={handleSelectAllInViewClick}
+      >
 
-      <SvgSymbol
+        <SvgSymbol
           title={this.options.intl.formatMessage(messages.tooltip)}
-        sym="check-circled-icon"
-        className="mr-w-4 mr-h-4 mr-fill-current mr-stroke-current"
-        viewBox="0 0 20 20" 
-      />
-    </button>
+          sym="check-circled-icon"
+          className="mr-w-4 mr-h-4 mr-fill-current mr-stroke-current"
+          viewBox="0 0 20 20" 
+        />
+      </button>
 
     )
 
@@ -60,7 +60,6 @@ export class SelectMarkersInViewControl extends MapControl {
     return new SelectMarkersInViewLeafletControl(props)
   }
 }
-
 export default withLeaflet(injectIntl(SelectMarkersInViewControl))
 
 
