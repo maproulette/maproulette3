@@ -100,7 +100,7 @@ export class App extends Component {
         <TopNav />
         <SystemNotices />
 
-        <CheckForToken />
+        <CheckForToken>
 
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>
@@ -144,6 +144,8 @@ export class App extends Component {
             <Route component={PageNotFound} />
           </Switch>
         </main>
+
+        </CheckForToken>
 
         <Footer />
         <ErrorModal />

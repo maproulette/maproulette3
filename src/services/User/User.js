@@ -312,7 +312,7 @@ export const fetchBasicUser = function(userId) {
  *
  * @param authCode - the token
  */
-export const callback = async (authCode) => {
+export const callback = async (authCode, dispatch) => {
   const resetURI =
   `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`
 
@@ -323,7 +323,19 @@ export const callback = async (authCode) => {
   fetch(resetURI, {credentials: credentialsPolicy}).then(async (result) => {
     const jsonData = await result.json();
     console.log(jsonData);
-    debugger;
+
+
+    if (jsonData.token) {
+      dispatch(
+        ensureUserLoggedIn(true)
+      ).then(userId => {
+        dispatch(fetchSavedChallenges(userId))
+        dispatch(fetchUserNotifications(userId))
+        subscribeToUserUpdates(store.dispatch, userId)
+      }).catch(
+        error => console.log(error)
+      ).then(() => null)
+    }
   }).catch(error => {
     // if (isSecurityError(error)) {
     //   dispatch(ensureUserLoggedIn()).then(() =>
@@ -336,7 +348,6 @@ export const callback = async (authCode) => {
     // }
 
     console.log(error);
-    debugger;
   })
 }
 
@@ -344,7 +355,7 @@ export const callback = async (authCode) => {
  * Pings the server to ensure the current (given) user is logged in with
  * the server, and automatically signs out the user locally if not.
  */
-export const ensureUserLoggedIn = function(squelchError=false) {
+export const ensureUserLoggedIn = function(squelchError=false, initializeData = false) {
   return function(dispatch) {
     return new Endpoint(
       api.user.whoami, {schema: userSchema()}
