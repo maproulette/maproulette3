@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import L from 'leaflet'
+import { injectIntl } from 'react-intl'
 import { MapControl, withLeaflet } from 'react-leaflet'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _compact from 'lodash/compact'
+import messages from './Messages'
+
 
 const SelectMarkersInViewLeafletControl = L.Control.extend({
 
@@ -23,7 +26,8 @@ const SelectMarkersInViewLeafletControl = L.Control.extend({
     >
 
       <SvgSymbol
-        sym="check-icon"
+          title={this.options.intl.formatMessage(messages.tooltip)}
+        sym="check-circled-icon"
         className="mr-w-4 mr-h-4 mr-fill-current mr-stroke-current"
         viewBox="0 0 20 20" 
       />
@@ -43,7 +47,7 @@ export class SelectMarkersInViewControl extends MapControl {
   }
 }
 
-export default withLeaflet(SelectMarkersInViewControl)
+export default withLeaflet(injectIntl(SelectMarkersInViewControl))
 
 
 
