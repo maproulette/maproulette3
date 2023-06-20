@@ -9,13 +9,21 @@ import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import messages from './Messages'
 
-
+/**
+ * Leaflet control that selects all task markers currently in view on the map
+ *
+ * Note: An object passed to the constructor will be available as `this.options`
+ *
+ * @private
+ */
 const SelectMarkersInViewLeafletControl = L.Control.extend({
 
   onAdd: function(map) {
     const handleSelectAllInViewClick = () => {
-
+      if(!map || !map._layers) return
       const taskIds = _compact(_map(map._layers, layer => _get(layer, 'options.icon.options.taskData.taskId')))
+      // Disallow use if cannot populate taskIds from map
+      if(!taskIds.length) return
       this.options.onSelectAllInView(taskIds)
     }
    
@@ -41,6 +49,12 @@ const SelectMarkersInViewLeafletControl = L.Control.extend({
   },
 })
 
+/**
+ * SelectMarkersInViewControl is a react-leaflet MapControl component intended to be
+ * used as a child of a react-leaflet Map instance, such as EnhancedMap. When inspecting 
+ * a nearby task in a Work On Multiple Tasks Together/Task Bundle widget, when clicked
+ * the control selects all task markers currently visible on the map.
+ */
 export class SelectMarkersInViewControl extends MapControl {
   createLeafletElement(props) {
     return new SelectMarkersInViewLeafletControl(props)
