@@ -22,6 +22,7 @@ import { challengeSchema } from '../../Challenge/Challenge'
 import { generateSearchParametersString } from '../../Search/Search'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
+import _join from "lodash/join";
 import { ensureUserLoggedIn } from '../../User/User'
 
 
@@ -140,10 +141,10 @@ export const buildLinkToMapperExportCSV = function(criteria) {
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/mappers/export?${queryString.stringify(queryFilters)}`
 }
 
-export const buildToReviewTableExportCSV = function(criteria) {
-  const queryFilters = generateReviewSearch(criteria)
+export const buildLinkToReviewTableExportCSV = function(criteria) {
+  const queryFilters = buildQueryFilters(criteria);
 
-  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/reviewTable/export?${queryString.stringify(queryFilters)}`
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/reviewTable/export?${queryFilters}`
 }
 
 export const buildLinkToReviewerMetaExportCSV = function(criteria) {
@@ -169,6 +170,60 @@ const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTas
 
   return {...searchParameters, mappers, reviewers}
 }
+
+const buildQueryFilters = function (criteria) {
+
+  const filters = _get(criteria, "filters", {});
+  const taskId = filters.id;
+  const challengeId = filters.challengeId;
+  const projectId = filters.projectId;
+  const reviewedAt = filters.reviewedAt;
+  const mappedOn = filters.mappedOn;
+  const tags = filters.tags;
+  const reviewRequestedBy = filters.reviewRequestedBy;
+  const reviewedBy = filters.reviewedBy;
+  const invf = _map(criteria.invertFields, (v, k) =>
+    v ? PARAMS_MAP[k] : undefined
+  )
+  let timestamp = ""
+
+  if(mappedOn){
+    const date = new Date(filters.mappedOn);
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = String(date.getFullYear());
+    timestamp = `${year}-${month}-${day}`
+  }
+
+  let status = ['0', '1', '2', '3', '4', '5', '6', '9']
+  let reviewStatus = ['0', '1', '2', '3', '4', '5', '6', '7', '-1']
+  let priority = ['0', '1', '2']
+
+  if(filters.status != "all" && filters.status != undefined){
+    status = JSON.stringify(filters.status)
+  }
+  if(filters.reviewStatus != "all" &&  filters.reviewStatus != undefined){
+    reviewStatus = JSON.stringify(filters.reviewStatus)
+  }
+  if(filters.priority != "all" &&  filters.priority != undefined){
+    priority = JSON.stringify(filters.priority)
+  }
+
+  return (
+    `${taskId ? `taskId=${taskId}` : ""}` +
+    `&reviewStatus=${_join(reviewStatus, ",")}`+
+    `${reviewRequestedBy ? `&mapper=${reviewRequestedBy}` : ""}` +
+    `${challengeId ? `&challengeId=${challengeId}` : ""}` +
+    `${projectId ? `&projectIds=${projectId}` : ""}` +
+    `${mappedOn ? `&mappedOn=${timestamp}` : ""}` +
+    `${reviewedBy ? `&reviewedBy=${reviewedBy}` : ""}` +
+    `${reviewedAt ? `&reviewedAt=${reviewedAt}` : ""}` +
+    `&status=${_join(status, ",")}&` +
+    `&priority=${_join(priority, ",")}&` +
+    `${tags ? `&tagFilter=${tags}` : ""}` +
+    `&invf=${invf.join(",")}`
+  );
+};
 
 /**
  * Retrieve metrics for a given review tasks type and filter criteria
