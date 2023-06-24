@@ -66,10 +66,10 @@ if (_get(process.env, 'REACT_APP_DEFAULT_MAP_LAYERS', 'enabled') === 'disabled')
 else {
   shell.echo("Extracting default layers")
   const jqLayerConditionals = additionalIndexLayers.map(layerId => ` or .properties.id == "${layerId}"`).join(' ')
-  // if (shell.exec("jq '[.features[] | select((.properties.default == true and .properties.geometry == null)" + jqLayerConditionals + ")]' ./src/imagery.json > ./src/defaultLayers.json").code !== 0) {
-  //   shell.echo("Extracting default layers failed")
-  //   shell.exit(1)
-  // }
+  if (shell.exec("jq '[.features[] | select((.properties.default == true and .properties.geometry == null)" + jqLayerConditionals + ")]' ./src/imagery.json > ./src/defaultLayers.json").code !== 0) {
+    shell.echo("Extracting default layers failed")
+    shell.exit(1)
+  }
 }
 
 // Users can add custom layers to `src/customLayers.json`. If the file does not
