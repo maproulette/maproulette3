@@ -19,7 +19,7 @@ import RequestStatus from '../../Server/RequestStatus'
 import { taskSchema, taskBundleSchema, retrieveChallengeTask,
          receiveTasks, fetchTask } from '../Task'
 import { challengeSchema } from '../../Challenge/Challenge'
-import { generateSearchParametersString } from '../../Search/Search'
+import { generateSearchParametersString, PARAMS_MAP } from '../../Search/Search'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
 import _join from "lodash/join";
@@ -172,7 +172,12 @@ const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTas
 }
 
 const buildQueryFilters = function (criteria) {
+  //Sort criteria filtering
+  const sortCriteria =  _get(criteria, 'sortCriteria', {})
+  const sortBy = sortCriteria.sortBy
+  const direction = sortCriteria.direction
 
+  //Main Filters
   const filters = _get(criteria, "filters", {});
   const taskId = filters.id;
   const challengeId = filters.challengeId;
@@ -182,31 +187,52 @@ const buildQueryFilters = function (criteria) {
   const tags = filters.tags;
   const reviewRequestedBy = filters.reviewRequestedBy;
   const reviewedBy = filters.reviewedBy;
-  const invf = _map(criteria.invertFields, (v, k) =>
+
+  //inverted filters
+  let invertedFilters = _map(criteria.invertFields, (v, k) =>
     v ? PARAMS_MAP[k] : undefined
   )
+  //fix invertedFilters values
+  invertedFilters = invertedFilters.map(element => element === 'tp' ? 'priorities' : element);
+  invertedFilters = invertedFilters.map(element => element === 'o' ? 'm' : element);
+  invertedFilters = invertedFilters.map(element => element === 'cs' ? 'cid' : element);
+  invertedFilters = invertedFilters.map(element => element === 'ps' ? 'pid' : element);
+  
+  //Fixes mappedOn Formatting Data
   let timestamp = ""
-
   if(mappedOn){
     const date = new Date(filters.mappedOn);
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const year = String(date.getFullYear());
     timestamp = `${year}-${month}-${day}`
   }
 
+  //Sets initial value of these parameters to negate their "all" value
   let status = ['0', '1', '2', '3', '4', '5', '6', '9']
   let reviewStatus = ['0', '1', '2', '3', '4', '5', '6', '7', '-1']
   let priority = ['0', '1', '2']
 
+  //add configuration to remove inverting on the "all" value
+  function removeValueFromArray(arr, value) {
+    return arr.filter(element => element !== value);
+  }
+  //add configuration to replace the value "all" with the needed equivalent values
+  //remove inversion if values are equal to "all"
   if(filters.status != "all" && filters.status != undefined){
     status = JSON.stringify(filters.status)
+  } else if(filters.status == 'all' || filters.status != undefined) {
+    invertedFilters = removeValueFromArray(invertedFilters, "tStatus");
   }
-  if(filters.reviewStatus != "all" &&  filters.reviewStatus != undefined){
+  if(filters.reviewStatus != "all" &&  filters.reviewStatus != undefined) {
     reviewStatus = JSON.stringify(filters.reviewStatus)
+  } else if(filters.reviewStatus == 'all' || filters.reviewStatus == undefined) {
+    invertedFilters = removeValueFromArray(invertedFilters, "trStatus");
   }
   if(filters.priority != "all" &&  filters.priority != undefined){
     priority = JSON.stringify(filters.priority)
+  } else if(filters.priority == 'all' || filters.priority == undefined) {
+    invertedFilters = removeValueFromArray(invertedFilters, "priorities");
   }
 
   return (
@@ -221,7 +247,9 @@ const buildQueryFilters = function (criteria) {
     `&status=${_join(status, ",")}&` +
     `&priority=${_join(priority, ",")}&` +
     `${tags ? `&tagFilter=${tags}` : ""}` +
-    `&invf=${invf.join(",")}`
+    `${sortBy ? `&sortBy=${sortBy}` : ""}` +
+    `${direction ? `&direction=${direction}` : ""}` +
+    `&invertedFilters=${invertedFilters.join(",")}`
   );
 };
 
