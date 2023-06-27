@@ -1,6 +1,6 @@
 import React from 'react'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
-import WithFundraisingNotices from '../HOCs/WithFundraisingNotices.js/WithFundraisingNotices'
+import WithFundraisingNotices from '../HOCs/WithFundraisingNotices/WithFundraisingNotices'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 
