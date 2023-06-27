@@ -174,8 +174,12 @@ const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTas
 const buildQueryFilters = function (criteria) {
   //Sort criteria filtering
   const sortCriteria =  _get(criteria, 'sortCriteria', {})
-  const sortBy = sortCriteria.sortBy
   const direction = sortCriteria.direction
+  let sortBy = sortCriteria.sortBy //Set and fix sort by values
+  sortBy = sortBy == "mappedOn" ? "mapped_on" : sortBy
+  sortBy = sortBy == "id" ? "task_id" : sortBy
+  sortBy = sortBy == "reviewStatus" ? "review_status" : sortBy
+  sortBy = sortBy == "reviewedAt" ? "reviewed_at" : sortBy
 
   //Main Filters
   const filters = _get(criteria, "filters", {});
@@ -192,6 +196,7 @@ const buildQueryFilters = function (criteria) {
   let invertedFilters = _map(criteria.invertFields, (v, k) =>
     v ? PARAMS_MAP[k] : undefined
   )
+  
   //fix invertedFilters values
   invertedFilters = invertedFilters.map(element => element === 'tp' ? 'priorities' : element);
   invertedFilters = invertedFilters.map(element => element === 'o' ? 'm' : element);
