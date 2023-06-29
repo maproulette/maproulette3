@@ -25,6 +25,8 @@ export class SignInButton extends Component {
     //clear stale locks in localStorage
     localStorage.clear();
     localStorage.setItem('isLoggedIn', 'true')
+    localStorage.setItem('redirect', window.location.pathname)
+
     this.setState({clicked: true});
   }
 

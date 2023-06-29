@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from 'react-redux'
-import { useHistory, useLocation } from 'react-router-dom'
 import { UseRouter } from "../../hooks/UseRouter/UseRouter";
 import { callback } from "../../services/User/User";
 
@@ -9,8 +8,7 @@ export const CheckForToken = ({ children }) => {
     query: { code },
   } = UseRouter();
   const dispatch = useDispatch()
-  const location = useLocation()
-  const history = useHistory()
+  const router = UseRouter();
 
   const authCode = code;
   // const state = params.state;
@@ -23,14 +21,19 @@ export const CheckForToken = ({ children }) => {
 
     if (authCode) {
       callback(authCode, dispatch).then((res) => {
-        const queryParams = new URLSearchParams(location.search)
+        const queryParams = new URLSearchParams(router.location.search)
 
         if (queryParams.has('code')) {
           queryParams.delete('code')
           queryParams.delete('state')
-          history.replace({
+          router.history.replace({
             search: queryParams.toString(),
           })
+
+          const redirectUrl = localStorage.getItem('redirect');
+          if (redirectUrl) {
+            router.push(redirectUrl)
+          }
         }
       });
 

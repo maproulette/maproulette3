@@ -331,7 +331,7 @@ export const callback = async (authCode, dispatch) => {
       ).then(userId => {
         dispatch(fetchSavedChallenges(userId))
         dispatch(fetchUserNotifications(userId))
-        subscribeToUserUpdates(store.dispatch, userId)
+        subscribeToUserUpdates(dispatch, userId)
       }).catch(
         error => console.log(error)
       ).then(() => null)
@@ -813,8 +813,14 @@ export const unsaveTask = function(userId, taskId) {
  * Logout the current user on both the client and server.
  */
 export const logoutUser = function(userId) {
-  //clear stale locks and isLoggedIn status
+  //clear stale locks and isLoggedIn status but retain redirect
+  const redirect = localStorage.getItem('redirect');
+
   localStorage.clear();
+
+  if (redirect) {
+    localStorage.setItem('redirect', redirect)
+  }
 
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
 
