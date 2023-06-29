@@ -13,7 +13,7 @@ export const CheckForToken = ({ children }) => {
 
   useEffect(() => {
     if (authCode) {
-      callback(authCode, dispatch).then((res) => {
+      callback(authCode, dispatch).then(() => {
         const queryParams = new URLSearchParams(router.location.search)
 
         if (queryParams.has('code')) {
