@@ -352,7 +352,7 @@ export const callback = async (authCode, dispatch) => {
  * Pings the server to ensure the current (given) user is logged in with
  * the server, and automatically signs out the user locally if not.
  */
-export const ensureUserLoggedIn = function(squelchError=false, initializeData = false) {
+export const ensureUserLoggedIn = function(squelchError=false) {
   return function(dispatch) {
     return new Endpoint(
       api.user.whoami, {schema: userSchema()}
