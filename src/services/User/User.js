@@ -322,9 +322,6 @@ export const callback = async (authCode, dispatch) => {
 
   fetch(resetURI, {credentials: credentialsPolicy}).then(async (result) => {
     const jsonData = await result.json();
-    console.log(jsonData);
-
-
     if (jsonData.token) {
       dispatch(
         ensureUserLoggedIn(true)
@@ -337,15 +334,15 @@ export const callback = async (authCode, dispatch) => {
       ).then(() => null)
     }
   }).catch(error => {
-    // if (isSecurityError(error)) {
-    //   dispatch(ensureUserLoggedIn()).then(() =>
-    //     dispatch(addError(AppErrors.user.unauthorized))
-    //   )
-    // }
-    // else {
-    //   dispatch(addError(AppErrors.user.updateFailure))
-    //   console.log(error.response || error)
-    // }
+    if (isSecurityError(error)) {
+      dispatch(ensureUserLoggedIn()).then(() =>
+        dispatch(addError(AppErrors.user.unauthorized))
+      )
+    }
+    else {
+      dispatch(addError(AppErrors.user.updateFailure))
+      console.log(error.response || error)
+    }
 
     console.log(error);
   })

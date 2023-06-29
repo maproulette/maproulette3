@@ -9,16 +9,9 @@ export const CheckForToken = ({ children }) => {
   } = UseRouter();
   const dispatch = useDispatch()
   const router = UseRouter();
-
   const authCode = code;
-  // const state = params.state;
-  // const username = searchParams.get("username");
-  // const sessionToken = searchParams.get("session_token");
-  // const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
 
   useEffect(() => {
-    console.log(authCode);
-
     if (authCode) {
       callback(authCode, dispatch).then((res) => {
         const queryParams = new URLSearchParams(router.location.search)
