@@ -141,8 +141,8 @@ export const buildLinkToMapperExportCSV = function(criteria) {
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/mappers/export?${queryString.stringify(queryFilters)}`
 }
 
-export const buildLinkToReviewTableExportCSV = function(criteria) {
-  const queryFilters = buildQueryFilters(criteria);
+export const buildLinkToReviewTableExportCSV = function(criteria, addedColumns) {
+  const queryFilters = buildQueryFilters(criteria, addedColumns);
 
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/reviewTable/export?${queryFilters}`
 }
@@ -171,7 +171,7 @@ const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTas
   return {...searchParameters, mappers, reviewers}
 }
 
-const buildQueryFilters = function (criteria) {
+const buildQueryFilters = function (criteria, addedColumns) {
   //Sort criteria filtering
   const sortCriteria =  _get(criteria, 'sortCriteria', {})
   const direction = sortCriteria.direction
@@ -191,6 +191,7 @@ const buildQueryFilters = function (criteria) {
   const tags = filters.tags;
   const reviewRequestedBy = filters.reviewRequestedBy;
   const reviewedBy = filters.reviewedBy;
+  const metaReviewedBy = filters.metaReviewedBy;
 
   //inverted filters
   let invertedFilters = _map(criteria.invertFields, (v, k) =>
@@ -198,10 +199,10 @@ const buildQueryFilters = function (criteria) {
   )
   
   //fix invertedFilters values
-  invertedFilters = invertedFilters.map(element => element === 'tp' ? 'priorities' : element);
-  invertedFilters = invertedFilters.map(element => element === 'o' ? 'm' : element);
-  invertedFilters = invertedFilters.map(element => element === 'cs' ? 'cid' : element);
-  invertedFilters = invertedFilters.map(element => element === 'ps' ? 'pid' : element);
+  invertedFilters = invertedFilters.map(e => e === 'tp' ? 'priorities' : e);
+  invertedFilters = invertedFilters.map(e => e === 'o' ? 'm' : e);
+  invertedFilters = invertedFilters.map(e => e === 'cs' ? 'cid' : e);
+  invertedFilters = invertedFilters.map(e => e === 'ps' ? 'pid' : e);
   
   //Fixes mappedOn Formatting Data
   let timestamp = ""
@@ -217,10 +218,11 @@ const buildQueryFilters = function (criteria) {
   let status = ['0', '1', '2', '3', '4', '5', '6', '9']
   let reviewStatus = ['0', '1', '2', '3', '4', '5', '6', '7', '-1']
   let priority = ['0', '1', '2']
+  let metaReviewStatus = ['-2', '0', '1', '2', '3', '6']
 
   //add configuration to remove inverting on the "all" value
   function removeValueFromArray(arr, value) {
-    return arr.filter(element => element !== value);
+    return arr.filter(e => e !== value);
   }
   //add configuration to replace the value "all" with the needed equivalent values
   //remove inversion if values are equal to "all"
@@ -239,6 +241,23 @@ const buildQueryFilters = function (criteria) {
   } else if(filters.priority == 'all' || filters.priority == undefined) {
     invertedFilters = removeValueFromArray(invertedFilters, "priorities");
   }
+  if(filters.metaReviewStatus != "all" &&  filters.metaReviewStatus != undefined){
+    metaReviewStatus = JSON.stringify(filters.metaReviewStatus)
+  } else if(filters.metaReviewStatus == 'all' || filters.metaReviewStatus == undefined) {
+    invertedFilters = removeValueFromArray(invertedFilters, "mrStatus");
+  }
+
+  //Holds the displayed column names and their order
+  let displayedColumns = Object.keys(addedColumns).map(key => {
+    const capitalizedKey = key.replace(/([A-Z])/g, ' $1').trim();
+    return capitalizedKey.charAt(0).toUpperCase() + capitalizedKey.slice(1);
+  });
+  //Fix Headers
+  displayedColumns = displayedColumns.map(e => e === 'Id' ? 'Internal Id' : e);
+  displayedColumns = displayedColumns.map(e => e === 'Mapper Controls' ? 'Actions' : e);
+  displayedColumns = displayedColumns.map(e => e === 'Review Requested By' ? 'Mapper' : e);
+  displayedColumns = displayedColumns.map(e => e === 'Reviewed By' ? 'Reviewer' : e);
+  displayedColumns = displayedColumns.map(e => e === 'Reviewed At' ? 'Reviewed On' : e);
 
   return (
     `${taskId ? `taskId=${taskId}` : ""}` +
@@ -249,11 +268,14 @@ const buildQueryFilters = function (criteria) {
     `${mappedOn ? `&mappedOn=${timestamp}` : ""}` +
     `${reviewedBy ? `&reviewedBy=${reviewedBy}` : ""}` +
     `${reviewedAt ? `&reviewedAt=${reviewedAt}` : ""}` +
+    `${metaReviewedBy ? `&metaReviewedBy=${metaReviewedBy}` : ""}` +
+    `&metaReviewStatus=${_join(metaReviewStatus, ",")}&` +
     `&status=${_join(status, ",")}&` +
     `&priority=${_join(priority, ",")}&` +
     `${tags ? `&tagFilter=${tags}` : ""}` +
     `${sortBy ? `&sortBy=${sortBy}` : ""}` +
     `${direction ? `&direction=${direction}` : ""}` +
+    `${displayedColumns ? `&displayedColumns=${displayedColumns}` : ""}` +
     `&invertedFilters=${invertedFilters.join(",")}`
   );
 };
