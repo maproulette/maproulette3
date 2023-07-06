@@ -349,12 +349,13 @@ const BuildBundle = props => {
       allowClusterToggle={false}
       hideSearchControl
       allowSpidering
+      showSelectMarkersInView
       {..._omit(props, 'className')}
     />
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
-      <div className="mr-h-2/5 mr-min-h-72 mr-max-h-100">
+      <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
         {props.loading ?
           <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
           <MapPane showLasso>{map}</MapPane>
@@ -370,6 +371,9 @@ const BuildBundle = props => {
           </li>
           <li>
             <TaskPropertyFilter {...props} />
+          </li>
+          <li>
+            <button className='mr-ml-8' onClick={() => console.log(props)}>props log</button>
           </li>
         </ul>
       </div>
