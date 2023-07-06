@@ -72,10 +72,16 @@ export default {
     searchFailure: messages.challengeSearchFailure,
     deleteFailure: messages.challengeDeleteFailure,
     archiveFailure: messages.challengeArchiveFailure,
-    saveFailure: messages.challengeSaveFailure,
     rebuildFailure: messages.challengeRebuildFailure,
     doesNotExist: messages.challengeDoesNotExist,
     moveFailure: messages.challengeMoveFailure
+  },
+
+  challengeSaveFailure: {
+    saveDetailsFailure: messages.challengeSaveDetailsFailure,
+    saveNameFailure: messages.challengeSaveNameFailure,
+    saveDescriptionFailure: messages.challengeSaveDescriptionFailure,
+    saveInstructionsFailure: messages.challengeSaveInstructionFailure,
   },
 
   virtualChallenge: {

@@ -54,6 +54,11 @@ export class TaskConfirmationModal extends Component {
       return
     }
 
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
     if (event.key ===
         this.props.keyboardShortcutGroups.taskConfirmation.confirmSubmit.key &&
         event.shiftKey) {

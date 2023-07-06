@@ -56,6 +56,11 @@ export default class AutosuggestTextBox extends Component {
   }
 
   handleKeyDown = (e, dropdown, downshift) => {
+    // Ignore if modifier keys were pressed
+    if (e.metaKey || e.altKey || e.ctrlKey) {
+      return
+    }
+
     if (e.key === "Enter") {
       // Don't let enter key potentially submit a form
       e.preventDefault()

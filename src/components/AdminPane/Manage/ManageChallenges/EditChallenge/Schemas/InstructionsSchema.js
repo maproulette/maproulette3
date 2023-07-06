@@ -24,6 +24,9 @@ export const jsSchema = (intl) => {
       instruction: {
         title: intl.formatMessage(messages.instructionLabel),
         type: "string",
+        pattern: "^(\\W*\\w+(?:\\W+\\w+){19,}\\W*)$",
+        minLength: 150,
+        description: "Instructions must have more than 150 characters and at least 20 words.",
       },
       difficulty: {
         title: intl.formatMessage(messages.difficultyLabel),

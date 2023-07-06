@@ -391,11 +391,15 @@ export const constructLevel0URI = function (
 };
 
 /**
- * Extracts osm identifiers from the given task's (or array of tasks) features
+ * Extracts numerical osm identifiers and osm types from the given task's (or array of tasks) features
  * and returns them as a comma-separated string by default. Features with
  * missing osm ids are skipped, and an empty string is returned if the task has
  * no features or none of its features have osm ids
  *
+ * Osm types will be extracted from osm id properties("@id", "osmid", "osmIdentifier", "id") if defined 
+ * to allow for customization from user 
+ * if there is no osm type defined in osm id properties, it will be generated based on geometry type
+ * 
  * To support varying formats required by different editors, the output string
  * can optionally be customized with options that control whether the entity
  * type is abbreviated or not, a separator character to be used between
@@ -415,9 +419,31 @@ export const osmObjectParams = function (
       objects = objects.concat(
         _compact(
           task.geometries.features.map((feature) => {
-            const osmId = AsIdentifiableFeature(feature).osmId();
+            const currentFeature = AsIdentifiableFeature(feature)
+            const osmId = currentFeature.osmId();
+            const osmType = currentFeature.osmType();
+            let areAllTypesValid;
             if (!osmId) {
               return null;
+            }
+
+            if (osmType) {
+              areAllTypesValid = currentFeature.checkValidTypeMultipleIds(osmType);
+            }
+            // We will use osm types defined by user if they exist and are consistent, if not fall back to geometry type 
+            if (osmType && areAllTypesValid) {
+              switch(osmType) {
+                case "node":
+                  return `${
+                    abbreviated ? "n" : "node"
+                  }${entitySeparator}${osmId}`;
+                case "way":
+                  return `${abbreviated ? "w" : "way"}${entitySeparator}${osmId}`;
+                case "relation":
+                  return `${
+                    abbreviated ? "r" : "relation"
+                  }${entitySeparator}${osmId}`;
+              }
             }
 
             switch (feature.geometry.type) {

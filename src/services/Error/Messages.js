@@ -163,9 +163,21 @@ export default defineMessages({
     id: "Errors.challenge.archiveFailure",
     defaultMessage: "Unable to update archive status",
   },
-  challengeSaveFailure: {
-    id: "Errors.challenge.saveFailure",
-    defaultMessage: "Unable to save your changes{details}",
+  challengeSaveDetailsFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveDetailsFailure",
+    defaultMessage: "Unable to save your changes. It is likely a duplicate challenge name.",
+  },
+  challengeSaveNameFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveNameFailure",
+    defaultMessage: "The challenge name is required and must be more than 3 characters long.",
+  },
+  challengeSaveDescriptionFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveDescriptionFailure",
+    defaultMessage: "The description is required.",
+  },
+  challengeSaveInstructionFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveInstructionFailure",
+    defaultMessage: "Instructions must have more than 150 characters and at least 20 words.",
   },
   challengeRebuildFailure: {
     id: "Errors.challenge.rebuildFailure",

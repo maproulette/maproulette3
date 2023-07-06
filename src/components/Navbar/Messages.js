@@ -8,6 +8,12 @@ export default defineMessages({
     id: 'Navbar.links.blog',
     defaultMessage: "Blog",
   },
+
+  donate: {
+    id: 'Navbar.links.donate',
+    defaultMessage: "Donate",
+  },
+
   dashboard: {
     id: 'Navbar.links.dashboard',
     defaultMessage: "Dashboard",

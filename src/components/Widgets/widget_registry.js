@@ -71,8 +71,6 @@ export { default as MetaReviewStatusMetricsWidget }
       from './ReviewStatusMetricsWidget/MetaReviewStatusMetricsWidget'
 export { default as ReviewTagMetricsWidget }
       from './ReviewTagMetricsWidget/ReviewTagMetricsWidget'
-export { default as ReviewMapWidget }
-      from './ReviewMapWidget/ReviewMapWidget'
 export { default as SnapshotProgressWidget }
        from './SnapshotProgressWidget/SnapshotProgressWidget'
 
