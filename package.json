@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.12.1",
+  "version": "3.12.2",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.5.4",
