@@ -1035,6 +1035,18 @@ export const saveChallenge = function (
       return saveEndpoint
         .execute()
         .then((normalizedResults) => {
+          if (
+            challengeData.instruction === undefined ||
+            challengeData.instruction.length < 150 ||
+            challengeData.instruction.split(' ').length < 20 ||
+            challengeData.description === undefined ||
+            challengeData.description === '' ||
+            challengeData.name === undefined ||
+            challengeData.name.length <= 3
+          ) {
+            throw new Error();
+          }
+
           if (storeResponse) {
             dispatch(receiveChallenges(normalizedResults.entities));
           }
@@ -1045,6 +1057,21 @@ export const saveChallenge = function (
           );
         })
         .catch((serverError) => {
+          let errorMessage = 'challengeData.name.length';
+
+          if (challengeData.name === undefined || challengeData.name.length <= 3) {
+            errorMessage = AppErrors.challengeSaveFailure.saveNameFailure;
+          } else if (challengeData.description === undefined || challengeData.description === '') {
+            errorMessage = AppErrors.challengeSaveFailure.saveDescriptionFailure;
+          } else if (
+            challengeData.instruction === undefined ||
+            challengeData.instruction.length < 150 ||
+            challengeData.instruction.split(' ').length < 20
+          ) {
+            errorMessage = AppErrors.challengeSaveFailure.saveInstructionsFailure;
+          } else {
+            errorMessage = AppErrors.challengeSaveFailure.saveDetailsFailure;
+          }
           if (isSecurityError(serverError)) {
             dispatch(ensureUserLoggedIn()).then(() =>
               dispatch(addError(AppErrors.user.unauthorized))
@@ -1052,7 +1079,7 @@ export const saveChallenge = function (
           } else {
             console.log(serverError.response || serverError);
             dispatch(
-              addServerError(AppErrors.challenge.saveFailure, serverError)
+              addServerError(errorMessage, serverError)
             );
 
             // Reload challenge data to ensure our local store is in sync with the
