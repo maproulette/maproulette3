@@ -7,6 +7,26 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.12.1] - 2023-7-11
+Release with [maproulette-backend_v4.4.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.4)
+
+### Features
+- Multi task select all in view - @AndrewPhilbin
+- Add geojson upload error messages for unsupported files - @CollinBeczak
+- Add toggle-capable map to Review Table Widget and remove redundant map widget - @CollinBeczak
+- Add validation for Create Challenge Long Form - @CollinBeczak
+- Add donate button - @CollinBeczak
+- Add mastadon link - @tsun812
+- Add github link - @tsun812
+- Disable modifier keys when working with MR shortcuts - @tsun812
+- Support OSM types extraction from OSM identifiers for editor URI - @tsun812
+
+### Fixes
+- Fix Favorite-Challenge feature - @jschwarz2030
+
+### System Updates
+- Update browserlist - @CollinBeczak
+
 ## [v3.12.0] - 2023-4-11
 Release with [maproulette-backend_v4.4.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.0)
 
