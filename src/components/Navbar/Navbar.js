@@ -338,6 +338,16 @@ const Nav = props => (
         <FormattedMessage {...messages.blog} />
       </a>
     </li>
+
+    <li className="mr-flex mr-flex-col mr-justify-center">
+      <a
+        href="https://openstreetmap.app.neoncrm.com/forms/maproulette"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={props.closeMobileMenu}>
+        <FormattedMessage {...messages.donate} />
+      </a>
+    </li>
   </React.Fragment>
 )
 
