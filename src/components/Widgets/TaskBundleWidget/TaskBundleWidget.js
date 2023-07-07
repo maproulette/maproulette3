@@ -372,9 +372,6 @@ const BuildBundle = props => {
           <li>
             <TaskPropertyFilter {...props} />
           </li>
-          <li>
-            <button className='mr-ml-8' onClick={() => console.log(props)}>props log</button>
-          </li>
         </ul>
       </div>
       <div className="mr-px-4 mr-h-half mr-overflow-y-auto">
