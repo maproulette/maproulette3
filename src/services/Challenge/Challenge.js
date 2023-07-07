@@ -1029,8 +1029,9 @@ export const saveChallenge = function (
       } = challengeData;
 
       if (
-        instruction?.length < 150 ||
-        instruction?.split(' ')?.length < 20 ||
+        instruction == undefined ||
+        instruction.length < 150 ||
+        instruction.split(' ').length < 20 ||
         description?.trim()?.length === 0 ||
         name?.length <= 3
       ) {
