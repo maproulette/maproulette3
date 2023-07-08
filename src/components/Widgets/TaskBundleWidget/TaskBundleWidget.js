@@ -90,6 +90,11 @@ export default class TaskBundleWidget extends Component {
       return
     }
 
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
     const shortcuts = this.props.keyboardShortcutGroups.taskEditing
     if (event.key === shortcuts.completeTogether.key) {
       this.bundleTasks()
@@ -163,7 +168,7 @@ export default class TaskBundleWidget extends Component {
 
     this.props.activateKeyboardShortcut(
       shortcutGroup,
-      _pick(this.props.keyboardShortcutGroups.taskEditing, 'c'),
+      _pick(this.props.keyboardShortcutGroups.taskEditing, 'completeTogether'),
       this.handleKeyboardShortcuts)
   }
 
@@ -189,7 +194,7 @@ export default class TaskBundleWidget extends Component {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
 
-    this.props.deactivateKeyboardShortcut(shortcutGroup, 'c',
+    this.props.deactivateKeyboardShortcut(shortcutGroup, 'completeTogether',
                                           this.handleKeyboardShortcuts)
   }
 
@@ -344,12 +349,13 @@ const BuildBundle = props => {
       allowClusterToggle={false}
       hideSearchControl
       allowSpidering
+      showSelectMarkersInView
       {..._omit(props, 'className')}
     />
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
-      <div className="mr-h-2/5 mr-min-h-72 mr-max-h-100">
+      <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
         {props.loading ?
           <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
           <MapPane showLasso>{map}</MapPane>
@@ -400,7 +406,7 @@ registerWidgetType(
               WithBoundedTasks(
                 WithBrowsedChallenge(
                   WithWebSocketSubscriptions(
-                    WithKeyboardShortcuts(TaskBundleWidget )
+                    WithKeyboardShortcuts(TaskBundleWidget)
                   )
                 ),
                 'filteredClusteredTasks',

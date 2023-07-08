@@ -4,7 +4,6 @@ import { ReactComponent as ExpertImage } from "../../static/images/expert.svg";
 import { ReactComponent as FindImage } from "../../static/images/find.svg";
 import { ReactComponent as TeamsImage } from "../../static/images/teams.svg";
 import messages from "./Messages";
-
 class Intro extends Component {
   render() {
     return (
@@ -14,7 +13,6 @@ class Intro extends Component {
             <h2 className="mr-text-yellow mr-mb-12 mr-font-light md:mr-text-5xl">
               <FormattedMessage {...messages.introHeader} />
             </h2>
-
             <p className="mr-text-white mr-mb-20">
               <FormattedMessage {...messages.introDetail} />
             </p>
@@ -60,6 +58,14 @@ class Intro extends Component {
             </div>
           </div>
         </div>
+        <a
+          href="https://openstreetmap.app.neoncrm.com/forms/maproulette"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mr-button mr-mt-20 mr-w-2/3 mr-justify-center mr-flex mr-items-center mr-mx-auto"
+        >
+          <FormattedMessage {...messages.donateButton} />
+        </a>
       </section>
     );
   }

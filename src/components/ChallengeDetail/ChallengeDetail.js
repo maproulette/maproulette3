@@ -251,7 +251,7 @@ export class ChallengeDetail extends Component {
               <Link
                 to={{}}
                 onClick={() =>
-                  this.props.unsaveChallenge(this.props.user.id, challenge.id)
+                  this.props.unsaveChallengeForUser(this.props.user.id, challenge.id)
                 }
                 className="mr-button"
                 title={this.props.intl.formatMessage(messages.removeFromFavorites)}
@@ -264,7 +264,7 @@ export class ChallengeDetail extends Component {
               <Link
                 to={{}}
                 onClick={() =>
-                  this.props.saveChallenge(this.props.user.id, challenge.id)
+                  this.props.saveChallengeForUser(this.props.user.id, challenge.id)
                 }
                 className="mr-button"
                 title={this.props.intl.formatMessage(messages.saveToFavorites)}

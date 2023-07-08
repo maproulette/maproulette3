@@ -468,7 +468,11 @@ export const AddTagControl = props => {
         onChange={e => props.setNewTagName(e.target.value)}
         placeholder={props.intl.formatMessage(messages.tagNamePlaceholder)}
         onKeyDown={e => { // Support Enter and ESC keys
-          if (e.key === "Escape") {
+          // Ignore if modifier keys were pressed
+          if (e.metaKey || e.altKey || e.ctrlKey) {
+            return
+          }
+          else if (e.key === "Escape") {
             props.cancelNewTag()
           }
           else if (props.newTagValid && e.key === "Enter") {

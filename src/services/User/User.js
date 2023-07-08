@@ -30,7 +30,15 @@ import { taskSchema,
          receiveTasks } from '../Task/Task'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
+import { setupCustomCache } from '../../utils/setupCustomCache'
 import CommentType from '../Comment/CommentType'
+
+// 60 minutes
+const CACHE_TIME = 60 * 60 * 1000;
+const USER_ACTIVITY_CACHE = "userActivity";
+const USER_TOP_CHALLENGES = "userTopChallenges";
+const USER_METRICS_CACHE = "userMetrics";
+const userCache = setupCustomCache(CACHE_TIME);
 
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in
@@ -376,10 +384,21 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
       limit,
     }
 
+    const variables = { userId }
+
+    const cachedTopChallenges = userCache.get(variables, params, USER_TOP_CHALLENGES);
+
+    if (cachedTopChallenges) {
+      dispatch(receiveChallenges(cachedTopChallenges.challenges))
+      dispatch(receiveUsers(cachedTopChallenges.user))
+
+      return cachedTopChallenges.challenges
+    }
+
     return new Endpoint(
       api.user.topChallenges, {
         schema: [ challengeSchema() ],
-        variables: {userId},
+        variables,
         params,
       }
     ).execute().then(normalizedChallenges => {
@@ -399,6 +418,8 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
       _each(challenges, challenge => {
         delete challenge.activity
       })
+
+      userCache.set(variables, params, { challenges: normalizedChallenges.entities, user }, USER_TOP_CHALLENGES)
 
       dispatch(receiveChallenges(normalizedChallenges.entities))
       dispatch(receiveUsers(simulatedEntities(user)))
@@ -502,11 +523,20 @@ export const deleteNotifications = function(userId, notificationIds) {
  */
 export const fetchUserActivity = function(userId) {
   return function(dispatch) {
+
+    const cachedUserActivity = userCache.get({}, {}, USER_ACTIVITY_CACHE);
+
+    if (cachedUserActivity) {
+      return dispatch(receiveUsers(simulatedEntities(cachedUserActivity)));
+    }
+
     return new Endpoint(
       api.user.activity
     ).execute().then(activity => {
       const user = {id: userId}
       user.activity = activity
+
+      userCache.set({}, {}, user, USER_ACTIVITY_CACHE)
 
       dispatch(receiveUsers(simulatedEntities(user)))
       return activity
@@ -517,18 +547,35 @@ export const fetchUserActivity = function(userId) {
 /**
  * Fetch the user's recent metrics.
  */
-export const fetchUserMetrics = function(userId,
+export const fetchUserMetrics = async (userId,
                                          monthDuration = -1,
                                          reviewDuration = -1,
                                          reviewerDuration = -1,
                                          start = null, end = null,
                                          reviewStart = null, reviewEnd = null,
-                                         reviewerStart = null, reviewerEnd = null) {
-  return new Endpoint(api.user.metrics, {
-    variables: {userId},
-    params: {monthDuration, reviewDuration, reviewerDuration,
-             start, end, reviewStart, reviewEnd, reviewerStart, reviewerEnd}
+                                         reviewerStart = null, reviewerEnd = null) => {
+
+  const params = { monthDuration, reviewDuration, reviewerDuration,
+    start, end, reviewStart, reviewEnd, reviewerStart, reviewerEnd }
+
+  const variables = { userId }
+
+  const cachedUserMetrics = userCache.get(variables, params, USER_METRICS_CACHE);
+
+  if (cachedUserMetrics) {
+    return cachedUserMetrics;
+  }
+  
+  const userMetrics = await new Endpoint(api.user.metrics, {
+    variables,
+    params
   }).execute()
+
+  if (userMetrics?.tasks) {
+    userCache.set(variables, params, userMetrics, USER_METRICS_CACHE)
+  }
+
+  return userMetrics
 }
 
 /**
@@ -707,7 +754,7 @@ export const resetAPIKey = function(userId) {
 /**
  * Add the given challenge to the given user's list of saved challenges.
  */
-export const saveChallenge = function(userId, challengeId) {
+export const saveChallengeForUser = function(userId, challengeId) {
   return updateUser(userId, (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated properly by the server response.
@@ -723,7 +770,7 @@ export const saveChallenge = function(userId, challengeId) {
  * Remove the given challenge from the given user's list of saved
  * challenges.
  */
-export const unsaveChallenge = function(userId, challengeId) {
+export const unsaveChallengeForUser = function(userId, challengeId) {
   return updateUser(userId, (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated by the server response.

@@ -49,7 +49,18 @@ class Footer extends Component {
                 </li>
               </ul>
             </div>
-
+            <div className="mr-mb-8 md:mr-mb-0 md:mr-px-4 md:mr-flex-1">
+              <a
+                href="https://openstreetmap.app.neoncrm.com/forms/maproulette"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mr-items-center"
+              >
+                <span className="mr-absolute mr-ml-8"> 
+                  <FormattedMessage {...messages.donateButton} />
+                </span>
+              </a>
+            </div>
             <div className="md:mr-px-4 md:mr-flex-1 md:mr-flex md:mr-justify-end">
               <div>
                 <h3 className="mr-mb-2 mr-text-xl mr-text-green-lighter">

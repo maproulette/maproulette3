@@ -39,6 +39,7 @@ import LoadRandomVirtualChallengeTask
 import HeadTitle from './components/Head/Head'
 import Navbar from './components/Navbar/Navbar'
 import SystemNotices from './components/SystemNotices/SystemNotices'
+import FundraisingNotices from './components/FundraisingNotices/FundraisingNotices'
 import Footer from './components/Footer/Footer'
 import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
@@ -98,7 +99,8 @@ export class App extends Component {
       <React.Fragment>
         <TopNav />
         <SystemNotices />
-
+        <FundraisingNotices />
+        
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>
             <CachedRoute exact path='/' component={HomeOrDashboard} />

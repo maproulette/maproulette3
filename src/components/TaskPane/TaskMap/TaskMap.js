@@ -96,6 +96,11 @@ export class TaskMap extends Component {
       return
     }
 
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
     const layerShortcuts = this.props.keyboardShortcutGroups[shortcutGroup]
     switch(event.key) {
       case layerShortcuts.layerOSMData.key:

@@ -41,6 +41,7 @@ import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
 import SearchContent from '../EnhancedMap/SearchControl/SearchContent'
 import LassoSelectionControl
        from '../EnhancedMap/LassoSelectionControl/LassoSelectionControl'
+import SelectMarkersInViewControl from '../EnhancedMap/SelectMarkersInViewControl/SelectMarkersInViewControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
@@ -717,6 +718,7 @@ export class TaskClusterMap extends Component {
         {this.props.taskCenter &&
           <FitBoundsControl key={this.props.taskCenter.toString()} centerPoint={this.props.taskCenter} />
         }
+        {this.props.showSelectMarkersInView && <SelectMarkersInViewControl onSelectAllInView={this.props.onBulkTaskSelection}/>}
         {this.props.showClusterLasso && this.props.onBulkClusterSelection && !this.props.mapZoomedOut &&
           <LassoSelectionControl
             onLassoSelection={this.selectClustersInLayers}

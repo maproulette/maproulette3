@@ -335,10 +335,16 @@ export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAre
       disablePreview
       onDrop={files => {
         formContext[id] = {file: files[0]}
-        onChange(files[0].name)
+        onChange(files[0])
       }}
     >
       {({acceptedFiles, getRootProps, getInputProps}) => {
+        const [uploadErrorText, setUploadErrorText] = useState('')
+
+        if(acceptedFiles[0] !== undefined && !acceptedFiles[0].name.endsWith('.geojson')){
+          acceptedFiles.pop() 
+          setUploadErrorText(<span className="mr-mr-4 mr-text-red-light mr-ml-1"><FormattedMessage {...messages.uploadErrorText} /></span>)
+        }
         const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}</p> : (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
@@ -346,6 +352,7 @@ export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAre
               sym="upload-icon"
               className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
             />
+            {uploadErrorText}
             <FormattedMessage {...messages.uploadFilePrompt} />
             <input {...getInputProps()} />
           </span>
