@@ -254,7 +254,7 @@ const buildQueryFilters = function (criteria, addedColumns) {
   });
   //Fix Headers
   displayedColumns = displayedColumns.map(e => e === 'Id' ? 'Internal Id' : e);
-  displayedColumns = displayedColumns.map(e => e === 'Mapper Controls' ? 'Actions' : e);
+  displayedColumns = displayedColumns.map(e => e === 'Reviewer Controls' ? 'Actions' : e);
   displayedColumns = displayedColumns.map(e => e === 'Review Requested By' ? 'Mapper' : e);
   displayedColumns = displayedColumns.map(e => e === 'Reviewed By' ? 'Reviewer' : e);
   displayedColumns = displayedColumns.map(e => e === 'Reviewed At' ? 'Reviewed On' : e);
