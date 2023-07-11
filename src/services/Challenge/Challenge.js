@@ -1029,11 +1029,15 @@ export const fetchChallenges = function (
       } = challengeData;
 
       if (
-        instruction == undefined ||
-        instruction.length < 150 ||
-        instruction.split(' ').length < 20 ||
-        description?.trim()?.length === 0 ||
-        name?.length <= 3
+        challengeData.parent != undefined && 
+        (
+          !instruction ||
+          instruction.length < 150 ||
+          instruction.split(' ').length < 20 ||
+          !description?.trim()?.length ||
+          !name ||
+          name.length <= 3
+        )
       ) {
         let errorMessage = '';
 
