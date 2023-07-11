@@ -925,7 +925,7 @@ export const fetchChallenges = function (
  * If storeResponse is false, the redux store will not be updated with the
  * response data upon completion of a successful request.
  */
-export const saveChallenge = function (
+ export const saveChallenge = function (
   originalChallengeData,
   storeResponse = true
 ) {
@@ -1029,11 +1029,15 @@ export const saveChallenge = function (
       } = challengeData;
 
       if (
-        instruction == undefined ||
-        instruction.length < 150 ||
-        instruction.split(' ').length < 20 ||
-        description?.trim()?.length === 0 ||
-        name?.length <= 3
+        challengeData.parent != undefined && 
+        (
+          !instruction ||
+          instruction.length < 150 ||
+          instruction.split(' ').length < 20 ||
+          !description?.trim()?.length ||
+          !name ||
+          name.length <= 3
+        )
       ) {
         let errorMessage = '';
 
