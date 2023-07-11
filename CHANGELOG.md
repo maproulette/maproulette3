@@ -15,6 +15,7 @@ Release with [maproulette-backend_v4.4.4](https://github.com/maproulette/maproul
 - Add geojson upload error messages for unsupported files - @CollinBeczak
 - Add toggle-capable map to Review Table Widget and remove redundant map widget - @CollinBeczak
 - Add validation for Create Challenge Long Form - @CollinBeczak
+- Add Review Table CSV Extract option - @CollinBeczak
 - Add donate button - @CollinBeczak
 - Add mastadon link - @tsun812
 - Add github link - @tsun812
