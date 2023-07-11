@@ -177,7 +177,7 @@ const buildQueryFilters = function (criteria, addedColumns) {
   const direction = sortCriteria.direction
   let sortBy = sortCriteria.sortBy //Set and fix sort by values
   sortBy = sortBy == "mappedOn" ? "mapped_on" : sortBy
-  sortBy = sortBy == "id" ? "task_id" : sortBy
+  sortBy = sortBy == "id" ? "tasks.id" : sortBy
   sortBy = sortBy == "reviewStatus" ? "review_status" : sortBy
   sortBy = sortBy == "reviewedAt" ? "reviewed_at" : sortBy
 
@@ -188,7 +188,6 @@ const buildQueryFilters = function (criteria, addedColumns) {
   const projectId = filters.projectId;
   const reviewedAt = filters.reviewedAt;
   const mappedOn = filters.mappedOn;
-  const tags = filters.tags;
   const reviewRequestedBy = filters.reviewRequestedBy;
   const reviewedBy = filters.reviewedBy;
   const metaReviewedBy = filters.metaReviewedBy;
@@ -228,7 +227,7 @@ const buildQueryFilters = function (criteria, addedColumns) {
   //remove inversion if values are equal to "all"
   if(filters.status != "all" && filters.status != undefined){
     status = JSON.stringify(filters.status)
-  } else if(filters.status == 'all' || filters.status != undefined) {
+  } else if(filters.status == 'all' || filters.status == undefined) {
     invertedFilters = removeValueFromArray(invertedFilters, "tStatus");
   }
   if(filters.reviewStatus != "all" &&  filters.reviewStatus != undefined) {
@@ -259,6 +258,8 @@ const buildQueryFilters = function (criteria, addedColumns) {
   displayedColumns = displayedColumns.map(e => e === 'Review Requested By' ? 'Mapper' : e);
   displayedColumns = displayedColumns.map(e => e === 'Reviewed By' ? 'Reviewer' : e);
   displayedColumns = displayedColumns.map(e => e === 'Reviewed At' ? 'Reviewed On' : e);
+  displayedColumns = removeValueFromArray(displayedColumns, "View Comments");
+  displayedColumns = removeValueFromArray(displayedColumns, "Tags");
 
   return (
     `${taskId ? `taskId=${taskId}` : ""}` +
@@ -273,7 +274,6 @@ const buildQueryFilters = function (criteria, addedColumns) {
     `&metaReviewStatus=${_join(metaReviewStatus, ",")}&` +
     `&status=${_join(status, ",")}&` +
     `&priority=${_join(priority, ",")}&` +
-    `${tags ? `&tagFilter=${tags}` : ""}` +
     `${sortBy ? `&sortBy=${sortBy}` : ""}` +
     `${direction ? `&direction=${direction}` : ""}` +
     `${displayedColumns ? `&displayedColumns=${displayedColumns}` : ""}` +
