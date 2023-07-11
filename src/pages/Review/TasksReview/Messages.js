@@ -99,6 +99,11 @@ export default defineMessages({
     defaultMessage: "Export mapper CSV"
   },
 
+  exportReviewTableCSVLabel: {
+    id: "Review.TaskAnalysisTable.exportReviewTableCSVLabel",
+    defaultMessage: "Export Review Table CSV"
+  },
+
   actionsColumnHeader: {
     id: "Review.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
