@@ -12,7 +12,6 @@ export const CheckForToken = ({ children }) => {
   } = UseRouter();
   const [verifying, setVerifying] = useState(false)
   const dispatch = useDispatch()
-  const router = UseRouter();
   const authCode = code;
 
   useEffect(() => {
