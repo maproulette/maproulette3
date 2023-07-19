@@ -33,14 +33,18 @@ export const CheckForToken = ({ children }) => {
             const redirectUrl = localStorage.getItem('redirect');
   
             setVerifying(false)
-  
+            localStorage.removeItem('state');
+
             if (redirectUrl) {
               push(redirectUrl)
             }
           }
         }).catch(() => {
           setVerifying(false)
+          localStorage.removeItem('state');
         });
+      } else {
+        localStorage.removeItem('state');
       }
 
       return;

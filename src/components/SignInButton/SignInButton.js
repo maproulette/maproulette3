@@ -19,6 +19,15 @@ import './SignInButton.scss'
 export class SignInButton extends Component {
   state = {
     clicked: false,
+    verifyingToken: false
+  }
+
+  componentDidMount = () => {
+    const storedState = localStorage.getItem('state');
+
+    if (storedState) {
+      this.setState({ clicked: true })
+    }
   }
 
   handleSignin = () => {
