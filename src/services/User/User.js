@@ -859,11 +859,16 @@ export const unsaveTask = function(userId, taskId) {
 export const logoutUser = function(userId) {
   //clear stale locks and isLoggedIn status but retain redirect
   const redirect = localStorage.getItem('redirect');
+  const state = localStorage.getItem('state');
 
   localStorage.clear();
 
   if (redirect) {
     localStorage.setItem('redirect', redirect)
+  }
+
+  if (state) {
+    localStorage.setItem('state', state)
   }
 
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`

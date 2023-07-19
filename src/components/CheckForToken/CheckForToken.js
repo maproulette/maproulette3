@@ -1,44 +1,62 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux'
 import { UseRouter } from "../../hooks/UseRouter/UseRouter";
 import { callback } from "../../services/User/User";
 
 export const CheckForToken = ({ children }) => {
   const {
-    query: { code },
+    query: { code, state },
+    location,
+    history,
+    push
   } = UseRouter();
+  const [verifying, setVerifying] = useState(false)
   const dispatch = useDispatch()
   const router = UseRouter();
   const authCode = code;
 
   useEffect(() => {
     if (authCode) {
-      callback(authCode, dispatch).then(() => {
-        const queryParams = new URLSearchParams(router.location.search)
+      const storedState = localStorage.getItem('state')
 
-        if (queryParams.has('code')) {
-          queryParams.delete('code')
-          queryParams.delete('state')
-          router.history.replace({
-            search: queryParams.toString(),
-          })
-
-          const redirectUrl = localStorage.getItem('redirect');
-          if (redirectUrl) {
-            router.push(redirectUrl)
+      if (storedState === state || process.env.NODE_ENV === 'development') {
+        setVerifying(true)
+        callback(authCode, dispatch).then(() => {
+          const queryParams = new URLSearchParams(location.search)
+  
+          if (queryParams.has('code')) {
+            queryParams.delete('code')
+            queryParams.delete('state')
+            history.replace({
+              search: queryParams.toString(),
+            })
+  
+            const redirectUrl = localStorage.getItem('redirect');
+  
+            setVerifying(false)
+  
+            if (redirectUrl) {
+              push(redirectUrl)
+            }
           }
-        }
-      });
+        }).catch(() => {
+          setVerifying(false)
+        });
+      }
 
       return;
     }
   }, [authCode]);
 
+  if (verifying) {
+    return <div>Verifying session...</div>
+  }
+
   if (!authCode) {
     return children;
   }
 
-  return <div>Verifying session...</div>
+  return null;
 };
 
 export default CheckForToken

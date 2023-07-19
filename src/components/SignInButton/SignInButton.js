@@ -28,6 +28,20 @@ export class SignInButton extends Component {
     localStorage.setItem('redirect', window.location.pathname)
 
     this.setState({clicked: true});
+
+    const loginUrl = `${process.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
+      this.props.history?.location?.pathname + this.props.history?.location?.search)}`
+
+    fetch(loginUrl).then(async (result) => {
+      const jsonData = await result.json();
+      if (jsonData.state) {
+        localStorage.setItem('state', jsonData.state)
+        window.location.href = jsonData.redirect
+      }
+    }).catch(() => {
+      console.log("error logging in")
+      this.setState({ clicked: false })
+    })
   }
 
   render() {
@@ -43,11 +57,6 @@ export class SignInButton extends Component {
       <a
         className={classNames("mr-button", this.props.className)}
         onClick={this.handleSignin}
-        href={
-          `${process.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
-            this.props.history?.location?.pathname + this.props.history?.location?.search
-          )}`
-        }
       >
         {this.props.children || (
          this.props.longForm ?
