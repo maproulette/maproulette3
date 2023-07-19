@@ -48,6 +48,8 @@ export const CheckForToken = ({ children }) => {
       }
 
       return;
+    } else {
+      localStorage.removeItem('state');
     }
   }, [authCode]);
 
