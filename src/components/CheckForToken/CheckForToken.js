@@ -20,7 +20,7 @@ export const CheckForToken = ({ children }) => {
 
       if (storedState === state || process.env.NODE_ENV === 'development') {
         setVerifying(true)
-        callback(authCode, dispatch).then(() => {
+        callback(authCode, dispatch, push).then(() => {
           const queryParams = new URLSearchParams(location.search)
   
           if (queryParams.has('code')) {
@@ -30,14 +30,8 @@ export const CheckForToken = ({ children }) => {
               search: queryParams.toString(),
             })
   
-            const redirectUrl = localStorage.getItem('redirect');
-  
             setVerifying(false)
             localStorage.removeItem('state');
-
-            if (redirectUrl) {
-              push(redirectUrl)
-            }
           }
         }).catch(() => {
           setVerifying(false)

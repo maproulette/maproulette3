@@ -320,7 +320,7 @@ export const fetchBasicUser = function(userId) {
  *
  * @param authCode - the token
  */
-export const callback = async (authCode, dispatch) => {
+export const callback = async (authCode, dispatch, push) => {
   const resetURI =
   `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`
 
@@ -337,6 +337,13 @@ export const callback = async (authCode, dispatch) => {
         dispatch(fetchSavedChallenges(userId))
         dispatch(fetchUserNotifications(userId))
         subscribeToUserUpdates(dispatch, userId)
+
+        const redirectUrl = localStorage.getItem('redirect');
+
+        if (redirectUrl) {
+          push(redirectUrl)
+          localStorage.removeItem('redirects')
+        }
       }).catch(
         error => console.log(error)
       ).then(() => null)
