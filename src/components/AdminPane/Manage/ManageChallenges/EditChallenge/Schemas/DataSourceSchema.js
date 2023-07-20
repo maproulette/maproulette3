@@ -33,7 +33,7 @@ export const jsSchema = (
         title: intl.formatMessage(messages.nameLabel),
         type: "string",
         minLength: 3,
-        description: 'The challenge name is required and must be more than 3 characters long.',
+        description: intl.formatMessage(messages.nameDescription), 
       },
     },
     required: ["name"],

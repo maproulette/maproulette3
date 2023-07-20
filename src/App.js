@@ -46,6 +46,7 @@ import Sprites from './components/Sprites/Sprites'
 import SuperAdminContainer from './components/SuperAdmin/SuperAdminContainer'
 import MobileNotSupported
        from './components/MobileNotSupported/MobileNotSupported'
+import CheckForToken from './components/CheckForToken/CheckForToken'
 import './components/Widgets/widget_registry'
 import './App.scss'
 
@@ -100,7 +101,7 @@ export class App extends Component {
         <TopNav />
         <SystemNotices />
         <FundraisingNotices />
-        
+        <CheckForToken>
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>
             <CachedRoute exact path='/' component={HomeOrDashboard} />
@@ -143,7 +144,7 @@ export class App extends Component {
             <Route component={PageNotFound} />
           </Switch>
         </main>
-
+        </CheckForToken>
         <Footer />
         <ErrorModal />
         <Sprites />

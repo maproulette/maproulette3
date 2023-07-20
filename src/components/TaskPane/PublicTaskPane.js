@@ -63,9 +63,11 @@ export class PublicTaskPane extends Component {
     //render regular TaskPane for logged in users.
     const loggedIn = localStorage.getItem('isLoggedIn')
     if (loggedIn) {
-      <Redirect
-        to={`${this.match.url}`}
-      />
+      return (
+        <Redirect
+          to={`${this.props.match.url}`}
+        />
+      )
     }
 
     if (!_get(this.props, 'task.parent.parent')) {

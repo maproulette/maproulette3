@@ -742,6 +742,16 @@ will not be able to make sense of it.
     defaultMessage: "Yes",
   },
 
+  instructionsDescription: {
+    id: "Admin.EditChallenge.form.instructionsDescription",
+    defaultMessage: "Instructions must have more than 150 characters and at least 20 words.",
+  },
+
+  nameDescription: {
+    id: "Admin.EditChallenge.form.nameDescription",
+    defaultMessage: "The challenge name is required and must be more than 3 characters long."
+  },
+
   showLongformTooltip: {
     id: "Admin.EditChallenge.controls.showLongform.tooltip",
     defaultMessage: "Show all fields",
