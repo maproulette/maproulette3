@@ -316,6 +316,54 @@ export const fetchBasicUser = function(userId) {
 }
 
 /**
+ * Fetch the osm oauth token.
+ *
+ * @param authCode - the token
+ */
+export const callback = async (authCode, dispatch, push) => {
+  const resetURI =
+  `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`
+
+  // Since we're bypassing Endpoint and manually performing an update, we
+  // need to also manually reset the request cache.
+  resetCache()
+
+  fetch(resetURI, {credentials: credentialsPolicy}).then(async (result) => {
+    const jsonData = await result.json();
+    if (jsonData.token) {
+      dispatch(
+        ensureUserLoggedIn(true)
+      ).then(userId => {
+        dispatch(fetchSavedChallenges(userId))
+        dispatch(fetchUserNotifications(userId))
+        subscribeToUserUpdates(dispatch, userId)
+
+        const redirectUrl = localStorage.getItem('redirect');
+
+        if (redirectUrl) {
+          push(redirectUrl)
+          localStorage.removeItem('redirects')
+        }
+      }).catch(
+        error => console.log(error)
+      ).then(() => null)
+    }
+  }).catch(error => {
+    if (isSecurityError(error)) {
+      dispatch(ensureUserLoggedIn()).then(() =>
+        dispatch(addError(AppErrors.user.unauthorized))
+      )
+    }
+    else {
+      dispatch(addError(AppErrors.user.updateFailure))
+      console.log(error.response || error)
+    }
+
+    console.log(error);
+  })
+}
+
+/**
  * Pings the server to ensure the current (given) user is logged in with
  * the server, and automatically signs out the user locally if not.
  */
@@ -816,8 +864,19 @@ export const unsaveTask = function(userId, taskId) {
  * Logout the current user on both the client and server.
  */
 export const logoutUser = function(userId) {
-  //clear stale locks and isLoggedIn status
+  //clear stale locks and isLoggedIn status but retain redirect
+  const redirect = localStorage.getItem('redirect');
+  const state = localStorage.getItem('state');
+
   localStorage.clear();
+
+  if (redirect) {
+    localStorage.setItem('redirect', redirect)
+  }
+
+  if (state) {
+    localStorage.setItem('state', state)
+  }
 
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
 
