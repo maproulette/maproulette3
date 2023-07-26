@@ -699,6 +699,40 @@ export class TaskClusterMap extends Component {
       this.currentBounds = this.props.initialBounds
     }
 
+    let selectionKit = this.props.hideLasso === true ? null : (
+      <>
+        {this.props.showSelectMarkersInView && (
+          <SelectMarkersInViewControl
+            onSelectAllInView={this.props.onBulkTaskSelection}
+          />
+        )}
+    
+        {this.props.showClusterLasso &&
+          this.props.onBulkClusterSelection &&
+          !this.props.mapZoomedOut && (
+            <LassoSelectionControl
+              onLassoSelection={this.selectClustersInLayers}
+              onLassoDeselection={this.deselectClustersInLayers}
+              onLassoClear={this.props.resetSelectedClusters}
+              onLassoInteraction={this.closeSearch}
+            />
+          )}
+    
+        {this.props.showLasso &&
+          this.props.onBulkTaskSelection &&
+          (!this.props.showAsClusters ||
+            (!this.props.showClusterLasso &&
+              this.props.totalTaskCount <= CLUSTER_POINTS)) && (
+            <LassoSelectionControl
+              onLassoSelection={this.selectTasksInLayers}
+              onLassoDeselection={this.deselectTasksInLayers}
+              onLassoClear={this.props.resetSelectedTasks}
+              onLassoInteraction={this.closeSearch}
+            />
+          )}
+      </>
+    )
+
     const map =
       <EnhancedMap
         ref={this.mapRef}
@@ -718,24 +752,7 @@ export class TaskClusterMap extends Component {
         {this.props.taskCenter &&
           <FitBoundsControl key={this.props.taskCenter.toString()} centerPoint={this.props.taskCenter} />
         }
-        {this.props.showSelectMarkersInView && <SelectMarkersInViewControl onSelectAllInView={this.props.onBulkTaskSelection}/>}
-        {this.props.showClusterLasso && this.props.onBulkClusterSelection && !this.props.mapZoomedOut &&
-          <LassoSelectionControl
-            onLassoSelection={this.selectClustersInLayers}
-            onLassoDeselection={this.deselectClustersInLayers}
-            onLassoClear={this.props.resetSelectedClusters}
-            onLassoInteraction={this.closeSearch}
-          />
-        }
-        {this.props.showLasso && this.props.onBulkTaskSelection &&
-         (!this.props.showAsClusters || (!this.props.showClusterLasso && this.props.totalTaskCount <= CLUSTER_POINTS)) &&
-         <LassoSelectionControl
-            onLassoSelection={this.selectTasksInLayers}
-            onLassoDeselection={this.deselectTasksInLayers}
-            onLassoClear={this.props.resetSelectedTasks}
-            onLassoInteraction={this.closeSearch}
-         />
-        }
+        {selectionKit}
         {!this.props.hideSearchControl &&
           <SearchControl
             {...this.props}

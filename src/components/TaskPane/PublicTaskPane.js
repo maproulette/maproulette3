@@ -35,6 +35,9 @@ export const defaultWorkspaceSetup = function () {
       { i: '4', x: 0, y: 0, w: 4, h: 11 },
       { i: '5', x: 8, y: 0, w: 4, h: 8 },
     ],
+    excludeWidgets: [ // Cannot be added to workspace
+    'ReviewNearbyTasksWidget',
+    ],
   }
 }
 

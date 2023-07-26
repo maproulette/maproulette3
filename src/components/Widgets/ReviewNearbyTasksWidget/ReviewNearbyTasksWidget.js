@@ -17,6 +17,7 @@ import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 import TaskPropertyFilter from '../../TaskFilters/TaskPropertyFilter'
 import TaskPriorityFilter from '../../TaskFilters/TaskPriorityFilter'
+import TaskReviewStatusFilter from '../../TaskFilters/TaskReviewStatusFilter'
 import TaskStatusFilter from '../../TaskFilters/TaskStatusFilter'
 import WithSelectedClusteredTasks
        from '../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks'
@@ -31,33 +32,21 @@ import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
-import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 import WithWebSocketSubscriptions
        from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
-import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
-import { TaskAction } from '../../../services/Task/TaskAction/TaskAction'
 import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import BusySpinner from '../../BusySpinner/BusySpinner'
-import TaskAnalysisTable from '../../TaskAnalysisTable/TaskAnalysisTable'
 import TaskMarkerContent from './TaskMarkerContent'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 
-const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
-const VALID_STATUSES =
-{
-  [TaskStatus.created]: true,
-  [TaskStatus.skipped]: true,
-  [TaskStatus.tooHard]: true,
-}
-
 const descriptor = {
-  widgetKey: 'TasksWidget',
+  widgetKey: 'ReviewNearbyTasksWidget',
   label: messages.label,
   targets: [WidgetDataTarget.task],
-  minWidth: 5,
-  defaultWidth: 5,
+  minWidth: 7,
+  defaultWidth: 7,
   minHeight: 10,
   defaultHeight: 11,
 }
@@ -66,7 +55,15 @@ const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap('taskBundling'))
 )
 
-export default class TasksWidget extends Component {
+export default class ReviewNearbyTasksWidget extends Component {
+  constructor(props) {
+    super(props);
+
+    // Define the initial state
+    this.state = {
+      currentSelectedTasks: []
+    };
+  }
   /**
    * Initialize the cluster filters to include tasks from the current challenge
    * and initially within bounds of "nearby" tasks as a starting point for the
@@ -125,6 +122,10 @@ export default class TasksWidget extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if(this.state.currentSelectedTasks.length === 0) {
+      this.setState({currentSelectedTasks: this.props.selectedTasks})
+    }
+
     if (!this.props.taskBundle) {
       this.initializeClusterFilters(prevProps)
       this.initializeWebsocketSubscription(prevProps)
@@ -137,12 +138,12 @@ export default class TasksWidget extends Component {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
     if (_isFinite(_get(this.props, 'task.id')) &&
-    _isFinite(_get(prevProps, 'task.id')) &&
-    this.props.task.id !== prevProps.task.id) {
-  this.props.resetSelectedTasks()
-}
-else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
-  this.props.selectTasks([this.props.task])
+        _isFinite(_get(prevProps, 'task.id')) &&
+        this.props.task.id !== prevProps.task.id) {
+          this.props.resetSelectedTasks()
+    }
+    else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
+      this.props.selectTasks([this.props.task])
 }
   }
 
@@ -159,8 +160,8 @@ else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelect
           </div>
         </Popup>
       )
-      }
-  
+    }
+
     const boundingBoxData = this.props.criteria.boundingBox ? 'criteria.boundingBox' : 'workspaceContext.taskMapBounds'
   
     const map =
@@ -171,12 +172,12 @@ else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelect
       taskCenter={AsMappableTask(this.props.task).calculateCenterPoint()}
       boundingBox={_get(this.props, boundingBoxData)}
       initialBounds={toLatLngBounds(_get(this.props, boundingBoxData, []))}
-      selectedTasks={this.state.selectedTasks}
       hideSearchControl
       allowSpidering
-      showClusterLasso={false}
+      hideLasso={true}
       showSelectMarkersInView
       {..._omit(this.props, 'className')}
+      selectedTasks={this.state.currentSelectedTasks}
     />
 
     return (
@@ -209,6 +210,9 @@ else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelect
                   <TaskStatusFilter {...this.props} />
                 </li>
                 <li className="md:mr-mr-8">
+                  <TaskReviewStatusFilter {...this.props} />
+                </li>
+                <li className="md:mr-mr-8">
                   <TaskPriorityFilter {...this.props} />
                 </li>
                 <li>
@@ -232,7 +236,7 @@ registerWidgetType(
               WithBoundedTasks(
                 WithBrowsedChallenge(
                   WithWebSocketSubscriptions(
-                    WithKeyboardShortcuts(TasksWidget)
+                    WithKeyboardShortcuts(ReviewNearbyTasksWidget)
                   )
                 ),
                 'nearbyTasks',
@@ -244,7 +248,6 @@ registerWidgetType(
           'taskClusters',
           'filteredClusteredTasks',
           {
-            statuses: VALID_STATUSES,
             includeLocked: false,
           }
         )

@@ -37,17 +37,20 @@ export const defaultWorkspaceSetup = function() {
     label: "Task Review",
     widgets: [
       widgetDescriptor('TaskReviewWidget'),
+      widgetDescriptor('TasksWidget'),
       widgetDescriptor('TaskHistoryWidget'),
       widgetDescriptor('TaskInstructionsWidget'),
       widgetDescriptor('TaskMapWidget'),
     ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 9},
+      {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 8},
       {i: generateWidgetId(), x: 0, y: 9, w: 4, h: 8},
       {i: generateWidgetId(), x: 0, y: 17, w: 4, h: 4},
       {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 18},
     ],
     excludeWidgets: [
+      'TaskBundleWidget',
       'TaskCompletionWidget',
       'TagDiffWidget',
     ]
