@@ -56,17 +56,15 @@ const descriptor = {
   widgetKey: 'TasksWidget',
   label: messages.label,
   targets: [WidgetDataTarget.task],
-  minWidth: 4,
-  defaultWidth: 6,
-  minHeight: 12,
-  defaultHeight: 14,
+  minWidth: 5,
+  defaultWidth: 5,
+  minHeight: 10,
+  defaultHeight: 11,
 }
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap('taskBundling'))
 )
-
-const shortcutGroup = 'taskEditing'
 
 export default class TasksWidget extends Component {
   /**
@@ -74,7 +72,7 @@ export default class TasksWidget extends Component {
    * and initially within bounds of "nearby" tasks as a starting point for the
    * widget map
    */
-  initializeClusterFilters(prevProps={}) {
+  initializeClusterFilters(prevProps={}) {    
     // If the nearby tasks loaded, update bounds
     if (_get(this.props, 'nearbyTasks.tasks.length', 0) > 0 &&
         !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)) {
@@ -119,13 +117,10 @@ export default class TasksWidget extends Component {
   }
 
   componentDidMount() {
+    this.props.selectTasks(this.props.taskBundle ? this.props.taskBundle.tasks : [this.props.task])
     if (!this.props.taskBundle) {
       this.initializeClusterFilters()
       this.initializeWebsocketSubscription()
-    }
-
-    if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
-      this.props.selectTasks(this.props.taskBundle.tasks ? this.props.taskBundle.tasks : [this.props.taskBundle])
     }
   }
 
@@ -141,11 +136,49 @@ export default class TasksWidget extends Component {
     if (_isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
+    if (_isFinite(_get(this.props, 'task.id')) &&
+    _isFinite(_get(prevProps, 'task.id')) &&
+    this.props.task.id !== prevProps.task.id) {
+  this.props.resetSelectedTasks()
+}
+else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
+  this.props.selectTasks([this.props.task])
+}
   }
 
   render() {
-    const WidgetContent = _get(this.props, 'taskBundle.tasks.length', 0) > 0 ?
-                          ActiveBundle : BuildBundle
+    const showMarkerPopup = (markerData) => {
+      return (
+        <Popup key={markerData.options.taskId}>
+          <div className="marker-popup-content">
+            <TaskMarkerContent
+              {...this.props}
+              marker={markerData}
+              taskId={markerData.options.taskId}
+            />
+          </div>
+        </Popup>
+      )
+      }
+  
+    const boundingBoxData = this.props.criteria.boundingBox ? 'criteria.boundingBox' : 'workspaceContext.taskMapBounds'
+  
+    const map =
+    <ClusterMap
+      loadingTasks={this.props.loadingTasks}
+      highlightPrimaryTask={this.props.task.id}
+      showMarkerPopup={showMarkerPopup}
+      taskCenter={AsMappableTask(this.props.task).calculateCenterPoint()}
+      boundingBox={_get(this.props, boundingBoxData)}
+      initialBounds={toLatLngBounds(_get(this.props, boundingBoxData, []))}
+      selectedTasks={this.state.selectedTasks}
+      hideSearchControl
+      allowSpidering
+      showClusterLasso={false}
+      showSelectMarkersInView
+      {..._omit(this.props, 'className')}
+    />
+
     return (
       <QuickWidget
         {...this.props}
@@ -155,136 +188,38 @@ export default class TasksWidget extends Component {
         }
         noMain
       >
-        <WidgetContent
-          {...this.props}
-          updateBounds={this.updateBounds}
-          loading={this.props.loading}
-        />
+       <div className="mr-pb-2 mr-h-full mr-rounded">
+         {this.props.taskBundle ? <div className="mr-flex mr-justify-between mr-content-center mr-mb-2">
+            <h3 className="mr-text-lg mr-text-pink-light">
+              <FormattedMessage
+                {...messages.simultaneousTasks}
+                values={{taskCount: this.props.taskBundle.taskIds.length}}
+              />
+            </h3>
+          </div> : null}
+            <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
+              {this.props.loading ?
+                <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
+                <MapPane showLasso>{map}</MapPane>
+              }
+            </div>
+            <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between">
+              <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
+                <li className="md:mr-mr-8">
+                  <TaskStatusFilter {...this.props} />
+                </li>
+                <li className="md:mr-mr-8">
+                  <TaskPriorityFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskPropertyFilter {...this.props} />
+                </li>
+              </ul>
+            </div>
+          </div>
       </QuickWidget>
     )
   }
-}
-
-const ActiveBundle = props => {
-  if (!props.taskBundle) {
-    return null
-  }
-
-  const showMarkerPopup = (markerData) => {
-    return (
-      <Popup key={markerData.options.taskId}>
-        <div className="marker-popup-content">
-          <TaskMarkerContent
-            {...props}
-            marker={markerData}
-            taskId={markerData.options.taskId}
-          />
-        </div>
-      </Popup>
-    )
-    }
-
-  const boundingBoxData = props.criteria.boundingBox ? 'criteria.boundingBox' : 'workspaceContext.taskMapBounds'
-
-  const map =
-  <ClusterMap
-    loadingTasks={props.loadingTasks}
-    showMarkerPopup={showMarkerPopup}
-    taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
-    boundingBox={_get(props, boundingBoxData)}
-    initialBounds={toLatLngBounds(_get(props, boundingBoxData, []))}
-    allowClusterToggle={false}
-    hideSearchControl
-    showSelectMarkersInView
-    {..._omit(props, 'className')}
-  />
-
-  return (
-    <div className="mr-p-4 mr-h-full mr-rounded">
-      <div className="mr-flex mr-justify-between mr-content-center mr-mb-8">
-        <h3 className="mr-text-lg mr-text-pink-light">
-          <FormattedMessage
-            {...messages.simultaneousTasks}
-            values={{taskCount: props.taskBundle.taskIds.length}}
-          />
-        </h3>
-      </div>
-
-      <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
-        {props.loading ?
-          <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
-          <MapPane showLasso>{map}</MapPane>
-        }
-      </div>
-      <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between">
-        <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
-          <li className="md:mr-mr-8">
-            <TaskStatusFilter {...props} />
-          </li>
-          <li className="md:mr-mr-8">
-            <TaskPriorityFilter {...props} />
-          </li>
-          <li>
-            <TaskPropertyFilter {...props} />
-          </li>
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-const BuildBundle = props => {
-  const showMarkerPopup = (markerData) => {
-    return (
-      <Popup key={markerData.options.taskId}>
-        <div className="marker-popup-content">
-          <TaskMarkerContent
-            {...props}
-            marker={markerData}
-            taskId={markerData.options.taskId}
-          />
-        </div>
-      </Popup>
-    )
-  }
-
-  const map =
-    <ClusterMap
-      loadingTasks={props.loadingTasks}
-      showMarkerPopup={showMarkerPopup}
-      taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
-      boundingBox={_get(props, 'criteria.boundingBox')}
-      initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
-      allowClusterToggle={false}
-      hideSearchControl
-      allowSpidering
-      showSelectMarkersInView
-      {..._omit(props, 'className')}
-    />
-
-  return (
-    <div className="mr-pb-2 mr-h-full mr-rounded">
-      <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
-        {props.loading ?
-          <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
-          <MapPane showLasso>{map}</MapPane>
-        }
-      </div>
-      <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between">
-        <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
-          <li className="md:mr-mr-8">
-            <TaskStatusFilter {...props} />
-          </li>
-          <li className="md:mr-mr-8">
-            <TaskPriorityFilter {...props} />
-          </li>
-          <li>
-            <TaskPropertyFilter {...props} />
-          </li>
-        </ul>
-      </div>
-    </div>
-  )
 }
 
 registerWidgetType(
@@ -307,8 +242,6 @@ registerWidgetType(
           ),
           'nearbyTasks',
           'taskClusters',
-          'taskInfo',
-          'clusteredTasks',
           'filteredClusteredTasks',
           {
             statuses: VALID_STATUSES,
