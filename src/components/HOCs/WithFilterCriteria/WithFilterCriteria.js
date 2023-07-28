@@ -38,6 +38,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
 
      updateCriteria = (newCriteria) => {
        const criteria = _cloneDeep(this.state.criteria)
+       console.log('filter criteria in updateCriteria', criteria)
        criteria.sortCriteria = newCriteria.sortCriteria
        criteria.page = newCriteria.page
        criteria.filters = newCriteria.filters
@@ -58,6 +59,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
 
      updateTaskPropertyCriteria = (propertySearch) => {
        const criteria = _cloneDeep(this.state.criteria)
+       console.log('filter added in updateTaskPropertyCriteria', propertySearch)
        criteria.filters.taskPropertySearch = propertySearch
        this.setState({criteria})
      }
@@ -79,16 +81,19 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
 
      clearAllFilters = () => {
        if (this.props.clearAllFilters) {
+          console.log('is upstream clear filters running?')
          this.props.clearAllFilters()
        }
 
        const newCriteria = _cloneDeep(DEFAULT_CRITERIA)
+
        newCriteria.boundingBox = null
        newCriteria.zoom = this.state.zoom
        newCriteria.filters["status"] = _keys(_pickBy(this.props.includeTaskStatuses, (s) => s))
        newCriteria.filters["reviewStatus"] = _keys(_pickBy(this.props.includeReviewStatuses, (r) => r))
        newCriteria.filters["metaReviewStatus"] = _keys(_pickBy(this.props.includeMetaReviewStatuses, (r) => r))
        newCriteria.filters["priorities"] = _keys(_pickBy(this.props.includeTaskPriorities, (p) => p))
+
 
        if (!ignoreURL) {
          this.props.history.push({
@@ -98,6 +103,30 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        }
 
        this.setState({criteria: newCriteria, loading: true})
+     }
+
+     // Alternate clear function to maintain map zoom and bounding box when clearing filters
+
+     clearAllFiltersAndMaintainMapState = () => {
+
+      // Runs upstream clear function, specifically in HOCs that manage filter state and pass filter statuses to this component.
+
+      if (this.props.clearAllFilters) {
+        console.log('is this running?')
+         this.props.clearAllFilters()
+       }
+
+       const newCriteria = _cloneDeep(DEFAULT_CRITERIA)
+
+       newCriteria.boundingBox = this.state.criteria.boundingBox
+       newCriteria.zoom = this.state.criteria.zoom
+       newCriteria.filters["status"] = _keys(_pickBy(this.props.includeTaskStatuses, (s) => s))
+       newCriteria.filters["reviewStatus"] = _keys(_pickBy(this.props.includeReviewStatuses, (r) => r))
+       newCriteria.filters["metaReviewStatus"] = _keys(_pickBy(this.props.includeMetaReviewStatuses, (r) => r))
+       newCriteria.filters["priorities"] = _keys(_pickBy(this.props.includeTaskPriorities, (p) => p))
+
+       this.setState({criteria: newCriteria, loading: true})
+
      }
 
      changePageSize = (pageSize) => {
@@ -117,6 +146,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
 
      updateIncludedFilters(props, criteria = {}) {
        const typedCriteria = _merge({}, criteria, _cloneDeep(this.state.criteria))
+       console.log('typedCriteria in updateIncludedFilters', typedCriteria)
        typedCriteria.filters["status"] = _keys(_pickBy(props.includeTaskStatuses, (s) => s))
        typedCriteria.filters["reviewStatus"] = _keys(_pickBy(props.includeTaskReviewStatuses, (r) => r))
        typedCriteria.filters["metaReviewStatus"] = _keys(_pickBy(props.includeMetaReviewStatuses, (r) => r))
@@ -226,6 +256,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
      }
 
      componentDidUpdate(prevProps, prevState) {
+      console.log('update ran in withfiltercriteria')
        const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
        if (!challengeId) {
          return
@@ -285,6 +316,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
                            updateCriteria={this.updateCriteria}
                            refreshTasks={this.refreshTasks}
                            clearAllFilters={this.clearAllFilters}
+                           clearAllFiltersAndMaintainMapState={this.clearAllFiltersAndMaintainMapState}
                            {..._omit(this.props, ['loadingChallenge', 'clearAllFilters'])} />)
      }
    }

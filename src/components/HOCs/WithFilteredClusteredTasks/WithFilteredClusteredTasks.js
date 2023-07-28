@@ -40,6 +40,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
                                                    initialFilters) {
   return class extends Component {
     defaultFilters = () => {
+      console.log('initialfilters in defaultFilters', initialFilters)
       return {
         includeStatuses: _get(initialFilters, 'statuses',
                               _fromPairs(_map(TaskStatus, status => [status, true]))),
@@ -281,6 +282,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
     setupFilters = () => {
       let useURLFilters = false
+      console.log('history location search prop in setupFilters', this.props.history.location.search)
+      console.log('history location state prop in setupFilters', this.props.history.location.state)
       const criteria =
          this.props.history.location.search ?
          buildSearchCriteriafromURL(this.props.history.location.search) :
@@ -340,6 +343,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     }
 
     componentDidMount() {
+      console.log('does this run in other workflow contexts?')
       this.setupFilters()
     }
 

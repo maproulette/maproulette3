@@ -41,6 +41,7 @@ import QuickWidget from '../../QuickWidget/QuickWidget'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import TaskAnalysisTable from '../../TaskAnalysisTable/TaskAnalysisTable'
 import TaskMarkerContent from './TaskMarkerContent'
+import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 
@@ -353,6 +354,10 @@ const BuildBundle = props => {
       {..._omit(props, 'className')}
     />
 
+    const {criteria} = props
+    const priorityFilterCount = Object.keys(props.includeTaskPriorities).length
+    const statusFilterCount = Object.keys(props.includeTaskStatuses).length
+
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
       <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
@@ -373,6 +378,11 @@ const BuildBundle = props => {
             <TaskPropertyFilter {...props} />
           </li>
         </ul>
+        {(criteria && criteria?.filters?.taskPropertySearch) || 
+         (criteria && criteria?.filters?.priorities?.length < priorityFilterCount) || 
+         (criteria && criteria?.filters?.status?.length < statusFilterCount) ? 
+         (<ClearFiltersControl clearFilters={props.clearAllFiltersAndMaintainMapState}/>) 
+         : null}
       </div>
       <div className="mr-px-4 mr-h-half mr-overflow-y-auto">
         <TaskAnalysisTable
@@ -425,3 +435,16 @@ registerWidgetType(
     )
   ), descriptor
 )
+
+const ClearFiltersControl = ({clearFilters}) => {
+  const handleClick = () => {clearFilters()}
+  return (
+    <button className="mr-flex mr-items-center mr-text-green-lighter"
+      onClick={handleClick}>
+      <SvgSymbol sym="close-icon"
+        viewBox='0 0 20 20'
+        className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+      <FormattedMessage {...messages.clearFiltersLabel} />
+    </button>
+  )
+}
