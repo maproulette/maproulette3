@@ -323,17 +323,32 @@ export class TaskReviewTable extends Component {
               </button>
             </li>
             {(reviewTasksType === ReviewTasksType.allReviewedTasks || reviewTasksType === ReviewTasksType.toBeReviewed) &&
-              <li onClick={dropdown.toggleDropdownVisible}>
-                <a target="_blank"
-                   rel="noopener noreferrer"
-                   href={buildLinkToReviewTableExportCSV(this.props.reviewCriteria, this.props.addedColumns)}
-                   className="mr-flex mr-items-center">
-                  <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
-                  <FormattedMessage {...messages.exportReviewTableCSVLabel} />
-                </a>
+              <li>
+                {this.props.reviewCriteria.filters.project ?
+                  <a target="_blank"
+                    rel="noopener noreferrer"
+                    href={buildLinkToReviewTableExportCSV(this.props.reviewCriteria, this.props.addedColumns)}
+                    onClick={dropdown.toggleDropdownVisible}
+                    className="mr-flex mr-items-center">
+                    <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                    <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                  </a> : 
+                  <div>
+                    <div className="mr-flex mr-items-center mr-opacity-50">
+                      <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                      <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                    </div>
+                    <div className="mr-text-grey-light">
+                      <FormattedMessage  {...messages.requiredForExport} />
+                      <div />
+                      <FormattedMessage  {...messages.requiredProject} />
+                    </div>
+                  </div>
+                }
                 <a target="_blank"
                    rel="noopener noreferrer"
                    href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
+                   onClick={dropdown.toggleDropdownVisible}
                    className="mr-flex mr-items-center">
                   <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                   <FormattedMessage {...messages.exportMapperCSVLabel} />
