@@ -228,7 +228,7 @@ export default defineMessages({
   },
   projectBrokenTask: {
     id: "Errors.project.brokenTask",
-    defaultMessage: "Error in task, {Features, Null} - This task is broken.",
+    defaultMessage: "Error in task. Features Null. This task is broken.",
   },
 
   mapRenderFailure: {
