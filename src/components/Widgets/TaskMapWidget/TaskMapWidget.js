@@ -28,7 +28,7 @@ export default class TaskMapWidget extends Component {
           <FormattedMessage {...messages.title} />
         }
       >
-        {!this.props.task.geometries.features === null ?
+        {this.props.task.geometries.features !== null ?
           <MapPane {...this.props}>
             <TaskMap {...this.props} challenge={this.props.task.parent} />
           </MapPane>: 
