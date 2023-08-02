@@ -261,7 +261,7 @@ export class ActiveTaskControls extends Component {
 
       return (
         <div>
-          {this.props.task.geometries.features !== null ? !isEditingTask && isComplete &&
+          {this.props.task.geometries.features ? !isEditingTask && isComplete &&
            <div className="mr-text-white mr-text-md mr-my-4 mr-links-green-lighter">
              <div className="mr-flex mr-justify-between mr-items-center">
                <span>

@@ -210,7 +210,7 @@ export default class TaskBundleWidget extends Component {
         }
         noMain
       >
-       {this.props.task.geometries.features !== null ? 
+       {this.props.task.geometries.features ? 
         <WidgetContent
             {...this.props}
             updateBounds={this.updateBounds}

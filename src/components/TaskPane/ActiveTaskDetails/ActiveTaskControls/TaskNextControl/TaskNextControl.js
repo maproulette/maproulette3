@@ -24,7 +24,7 @@ export default class TaskNextControl extends Component {
   }
 
   render() {
-    if(this.props.task.geometries.features === null){
+    if(!this.props.task.geometries.features){
       return (
       <button
       className={classNames("mr-button mr-button--white mr-w-full", this.props.className)}
