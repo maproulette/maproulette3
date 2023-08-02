@@ -349,6 +349,7 @@ const BuildBundle = props => {
       allowClusterToggle={false}
       hideSearchControl
       allowSpidering
+      showScaleControl
       showSelectMarkersInView
       {..._omit(props, 'className')}
     />

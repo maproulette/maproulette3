@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, Marker, LayerGroup, Rectangle, Polyline, Pane, Tooltip }
+import { ZoomControl, ScaleControl, Marker, LayerGroup, Rectangle, Polyline, Pane, Tooltip }
        from 'react-leaflet'
 import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
@@ -714,6 +714,7 @@ export class TaskClusterMap extends Component {
         onZoomOrMoveStart={this.debouncedUpdateBounds.cancel}
       >
         <ZoomControl className="mr-z-10" position='topright' />
+        {this.props.showScaleControl && <ScaleControl className="mr-z-10" position='topleft'/>}
         {this.props.showFitWorld && <FitWorldControl />}
         {this.props.taskCenter &&
           <FitBoundsControl key={this.props.taskCenter.toString()} centerPoint={this.props.taskCenter} />
