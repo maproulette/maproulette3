@@ -84,4 +84,9 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.readOnly",
     defaultMessage: "Previewing task in read-only mode",
   },
+
+  mapFailed: {
+    id: "Widgets.mapFailed",
+    defaultMessage: "Widget Failed",
+  },
 })

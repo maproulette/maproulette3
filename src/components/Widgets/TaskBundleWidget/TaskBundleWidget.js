@@ -210,13 +210,18 @@ export default class TaskBundleWidget extends Component {
         }
         noMain
       >
+       {!this.props.task.geometries.features === null ? 
         <WidgetContent
-          {...this.props}
-          updateBounds={this.updateBounds}
-          bundleTasks={this.bundleTasks}
-          unbundleTasks={this.unbundleTasks}
-          loading={this.props.loading}
-        />
+            {...this.props}
+            updateBounds={this.updateBounds}
+            bundleTasks={this.bundleTasks}
+            unbundleTasks={this.unbundleTasks}
+            loading={this.props.loading}
+          /> : 
+          <div className="mr-text-lg mr-text-red-light mr-flex">
+            <FormattedMessage {...messages.mapFailed} />
+          </div>
+        }
       </QuickWidget>
     )
   }

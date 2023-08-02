@@ -96,6 +96,7 @@ export default {
     searchFailure: messages.projectSearchFailure,
     deleteFailure: messages.projectDeleteFailure,
     notManager: messages.projectNotManager,
+    brokenTask: messages.projectBrokenTask,
   },
 
   map: {

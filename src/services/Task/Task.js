@@ -200,6 +200,10 @@ export const fetchTask = function(taskId, suppressReceive=false, includeMapillar
       variables: {id: taskId},
       params: {mapillary: includeMapillary}
     }).execute().then(normalizedResults => {
+      if (_get(normalizedResults.entities.tasks, taskId).geometries.features === null) {
+        dispatch(addError(AppErrors.project.brokenTask));
+      }
+      
       if (!suppressReceive) {
         dispatch(receiveTasks(normalizedResults.entities))
       }

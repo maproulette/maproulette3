@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
@@ -23,11 +24,18 @@ export default class TaskMapWidget extends Component {
         {...this.props}
         className="task-map-widget"
         noMain
-        permanent
+        widgetTitle={
+          <FormattedMessage {...messages.title} />
+        }
       >
-        <MapPane {...this.props}>
-          <TaskMap {...this.props} challenge={this.props.task.parent} />
-        </MapPane>
+        {!this.props.task.geometries.features === null ?
+          <MapPane {...this.props}>
+            <TaskMap {...this.props} challenge={this.props.task.parent} />
+          </MapPane>: 
+          <div className="mr-text-lg mr-text-red-light mr-flex">
+            <FormattedMessage {...messages.mapFailed} />
+          </div>
+        }
       </QuickWidget>
     )
   }

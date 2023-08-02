@@ -226,6 +226,10 @@ export default defineMessages({
     id: "Errors.project.notManager",
     defaultMessage: "You must be a manager of that project to proceed.",
   },
+  projectBrokenTask: {
+    id: "Errors.project.brokenTask",
+    defaultMessage: "Error in task: {Features: Null} - This task is broken.",
+  },
 
   mapRenderFailure: {
     id: "Errors.map.renderFailure",

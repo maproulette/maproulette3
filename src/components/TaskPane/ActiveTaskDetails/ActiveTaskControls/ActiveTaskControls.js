@@ -261,7 +261,7 @@ export class ActiveTaskControls extends Component {
 
       return (
         <div>
-          {!isEditingTask && isComplete &&
+          {this.props.task.geometries.features !== null ? !isEditingTask && isComplete &&
            <div className="mr-text-white mr-text-md mr-my-4 mr-links-green-lighter">
              <div className="mr-flex mr-justify-between mr-items-center">
                <span>
@@ -288,6 +288,9 @@ export class ActiveTaskControls extends Component {
                   <FormattedMessage {...messages.awaitingReview} />
                 </div>
              }
+           </div> :  
+           <div className="mr-text-lg mr-text-red-light mr-flex">
+             <FormattedMessage {...messages.brokenTask} />
            </div>
           }
 

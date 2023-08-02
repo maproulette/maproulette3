@@ -11,6 +11,10 @@ export default defineMessages({
 
   title: {
     id: "Widgets.TaskMapWidget.title",
-    defaultMessage: "Task",
+    defaultMessage: "Task Map",
+  },
+  mapFailed: {
+    id: "Widgets.mapFailed",
+    defaultMessage: "Widget Failed",
   },
 })

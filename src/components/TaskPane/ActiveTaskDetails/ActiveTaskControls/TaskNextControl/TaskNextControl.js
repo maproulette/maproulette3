@@ -24,6 +24,24 @@ export default class TaskNextControl extends Component {
   }
 
   render() {
+    if(this.props.task.geometries.features === null){
+      return (
+      <button
+      className={classNames("mr-button mr-button--white mr-w-full", this.props.className)}
+      onClick={() => {
+        if (this.props.loadBy === TaskLoadMethod.proximity) {
+          this.setState({chooseNearbyTasks: true})
+        }
+        else {
+          this.props.nextTask(this.props.task.parent.id, this.props.task.id)
+        }
+      }}
+    >
+      <FormattedMessage {...messages.nextLabel} />
+    </button>
+      )
+    }
+
     const loadNearbyModal =
       <External>
         <Modal
