@@ -31,7 +31,7 @@ export default class TaskMapWidget extends Component {
         {this.props.task.geometries.features ?
           <MapPane {...this.props}>
             <TaskMap {...this.props} challenge={this.props.task.parent} />
-          </MapPane>: 
+          </MapPane> : 
           <div className="mr-text-lg mr-text-red-light mr-flex">
             <FormattedMessage {...messages.mapFailed} />
           </div>
