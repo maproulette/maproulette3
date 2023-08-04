@@ -34,15 +34,23 @@ export default class TaskReviewWidget extends Component {
         widgetTitle={title}
         noMain
       >
-        {this.props.taskBundle &&
-         <div className="mr-text-pink-light mr-mb-2 mr-text-base">
-           <FormattedMessage
-             {...messages.simultaneousTasks}
-             values={{taskCount: this.props.taskBundle.tasks.length}}
-           />
-         </div>
-        }
-        <ReviewTaskControls {...this.props} className="" />
+        {this.props.task.geometries.features ? (
+          <>
+            {this.props.taskBundle && (
+              <div className="mr-text-pink-light mr-mb-2 mr-text-base">
+                <FormattedMessage
+                  {...messages.simultaneousTasks}
+                  values={{ taskCount: this.props.taskBundle.tasks.length }}
+                />
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="mr-text-lg mr-text-red-light mr-flex">
+            <FormattedMessage {...messages.featuresNull} />
+          </div>
+        )}
+         <ReviewTaskControls {...this.props} className="" />
       </QuickWidget>
     )
   }

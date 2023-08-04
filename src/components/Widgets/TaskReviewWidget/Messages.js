@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Review Revision",
   },
 
+  featuresNull: {
+    id: "Widgets.TaskReviewWidget.featuresNull",
+    defaultMessage: "This task is unable to be reviewed. Features Null",
+  },
+
   simultaneousTasks: {
     id: "Widgets.review.simultaneousTasks",
     defaultMessage: "Reviewing {taskCount, number} tasks together",

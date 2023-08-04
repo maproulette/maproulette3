@@ -124,6 +124,19 @@ export class ReviewTaskControls extends Component {
   render() {
     const user = this.props.user
 
+   // This task is broken
+    if(!this.props.task.geometries.features) {
+      return (
+        <button className="mr-button mr-mt-4 mr-button--white"
+          onClick={() => this.skipReview()}>
+          {this.props.asMetaReview ?
+            <FormattedMessage {...messages.skipMetaReview} /> :
+            <FormattedMessage {...messages.skipReview} />
+          }
+        </button>
+      )
+    }
+
     // This task has not been completed yet.
     if (this.props.task.status === TaskStatus.created) {
       return (
