@@ -465,6 +465,9 @@ export const fetchTaskForReview = function(taskId, includeMapillary=false) {
       variables: {id: taskId},
       params: {mapillary: includeMapillary}
     }).execute().then(normalizedResults => {
+      if (!_get(normalizedResults.entities.tasks, taskId).geometries.features) {
+        dispatch(addError(AppErrors.project.brokenTask));
+      }
       dispatch(receiveTasks(normalizedResults.entities))
       return normalizedResults
     })
