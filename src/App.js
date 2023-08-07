@@ -13,7 +13,7 @@ import ChallengePane from './components/ChallengePane/ChallengePane'
 import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail'
 import ProjectDetail from './components/ProjectDetail/ProjectDetail'
 import TaskPane from './components/TaskPane/TaskPane'
-import PublicTaskPane from './components/TaskPane/PublicTaskPane'
+import CurrentTaskPane from './components/CurrentTaskPane/CurrentTaskPane'
 import ReviewTaskPane from './components/ReviewTaskPane/ReviewTaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
 import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
@@ -52,10 +52,6 @@ import './App.scss'
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
-const CurrentTaskPane = () => {
-  const loggedIn = localStorage.getItem('isLoggedIn')
-  return loggedIn ? WithCurrentTask(TaskPane) : WithCurrentTask(PublicTaskPane)
-}
 const CurrentReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentMetaReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentVirtualChallengeTaskPane =
@@ -109,13 +105,13 @@ export class App extends Component {
             <CachedRoute path='/browse/challenges/:challengeId' component={ChallengeDetail} />
             <CachedRoute path='/browse/projects/:projectId' component={ProjectDetail} />
             <CachedRoute path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
-            <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane()} />
+            <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
             <CachedRoute exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
             <CachedRoute exact path='/virtual/:virtualChallengeId/task/:taskId'
                   component={CurrentVirtualChallengeTaskPane} />
             <CachedRoute exact path='/virtual/:virtualChallengeId'
                   component={LoadRandomVirtualChallengeTask} />
-            <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane()} />
+            <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane} />
             <CachedRoute exact path='/task/:taskId/review' component={CurrentReviewTaskPane} />
             <CachedRoute path='/user/profile/:userId' component={Profile} />
             <CachedRoute path='/user/profile' component={Profile} />

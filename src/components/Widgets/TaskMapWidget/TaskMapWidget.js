@@ -5,6 +5,11 @@ import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import TaskMap from '../../TaskPane/TaskMap/TaskMap'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
+import { FormattedMessage } from 'react-intl'
+import EditSwitch from './RapidEditor/EditSwitch'
+import NotificationCard from './RapidEditor/NotificaitonCard'
+import RapidEditor from './RapidEditor/RapidEditor';
+import { createBoundsXml } from './RapidEditor/createBoundsXml'
 
 const descriptor = {
   widgetKey: 'TaskMapWidget',
@@ -18,6 +23,8 @@ const descriptor = {
 
 export default class TaskMapWidget extends Component {
   render() {
+    const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+
     return (
       <QuickWidget
         {...this.props}
@@ -25,9 +32,45 @@ export default class TaskMapWidget extends Component {
         noMain
         permanent
       >
-        <MapPane {...this.props}>
-          <TaskMap {...this.props} challenge={this.props.task.parent} />
-        </MapPane>
+        <div
+          className="mr-mt-2"
+          style={{height: "calc(100% - 3rem)"}}
+        >
+          {
+            this.props.getUserAppSetting 
+              ? <>
+                  <div className="mr-flex mr-items-center ">
+                    <div className="mr-text-yellow mr-mr-3">
+                      <FormattedMessage {...messages.editMode}/>
+                    </div>
+                      <div className="mr-mt-1 mr-mb-2">
+                        <EditSwitch {...this.props}/>
+                      </div>
+                    </div>
+                  <div> 
+                    <NotificationCard {...this.props}/>
+                  </div>
+                </>
+              : null
+          }
+          {
+            editMode
+              ? <RapidEditor
+                  setDisable={() => null}
+                  comment={this.props.task.parent.checkinComment}
+                  presets={[]}
+                  imagery={undefined}
+                  //gpxUrl={'https://tasking-manager-staging-api.hotosm.org/api/v2/projects/8512/tasks/queries/gpx/?tasks=440'}
+                  gpxUrl={createBoundsXml(this.props.task.location.coordinates)}
+                  powerUser={null}
+                  locale={this.props.user.settings.locale}
+                  token={this.props.user.osmProfile.requestToken}
+                />
+              : <MapPane {...this.props}>
+                  <TaskMap {...this.props} challenge={this.props.task.parent} />
+                </MapPane>
+          }
+        </div>
       </QuickWidget>
     )
   }
