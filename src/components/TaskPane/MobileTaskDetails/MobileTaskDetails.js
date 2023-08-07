@@ -17,6 +17,8 @@ import TaskInstructions from '../TaskInstructions/TaskInstructions'
 import TaskTrackControls from '../TaskTrackControls/TaskTrackControls'
 import TaskRandomnessControl
        from '../TaskRandomnessControl/TaskRandomnessControl'
+import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
+import { TaskCompletionWidget, TagDiffWidget, TaskHistoryWidget } from '../../Widgets/widget_registry'
 import ChallengeShareControls
        from '../ChallengeShareControls/ChallengeShareControls'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
@@ -61,8 +63,19 @@ export default class MobileTaskDetails extends Component {
   }, {
     name: "edit",
     icon: "evaluate-icon",
-    component: () => null,
-  }, {
+    component: props => (
+      console.log(props.task),
+        <TaskCompletionWidget {...props} />
+    )
+  }, { 
+    name: "tags",
+    icon: "pencil-icon",
+    component: props => (
+      AsCooperativeWork(this.props.task).isTagType() ? 
+      <TagDiffWidget {...props} /> : 
+      <TaskHistoryWidget {...props} />
+    )
+  }, { 
     name: "comments",
     icon: props => <CommentCountBadge comments={_get(props, 'task.comments')} />,
     component: props => (

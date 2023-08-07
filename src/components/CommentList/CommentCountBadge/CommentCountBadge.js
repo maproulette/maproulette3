@@ -15,13 +15,11 @@ import './CommentCountBadge.scss'
 export default class CommentCountBadge extends Component {
   render() {
     return (
-      <div className={classNames("comment-count-badge", this.props.className)}>
-        <span className={classNames("badge is-badge-outlined",
+        <div className={classNames("badge is-badge-outlined",
                                     {"is-empty": this.props.comments.length === 0})}
               data-badge={this.props.comments.length}>
           <SvgSymbol viewBox='0 0 20 20' sym="chat-icon" />
-        </span>
-      </div>
+        </div>
     )
   }
 }
