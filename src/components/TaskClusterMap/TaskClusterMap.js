@@ -714,7 +714,7 @@ export class TaskClusterMap extends Component {
         onZoomOrMoveStart={this.debouncedUpdateBounds.cancel}
       >
         <ZoomControl className="mr-z-10" position='topright' />
-        {this.props.showScaleControl && <ScaleControl className="mr-z-10" position='topleft'/>}
+        {this.props.showScaleControl && <ScaleControl className="mr-z-10" position='bottomleft'/>}
         {this.props.showFitWorld && <FitWorldControl />}
         {this.props.taskCenter &&
           <FitBoundsControl key={this.props.taskCenter.toString()} centerPoint={this.props.taskCenter} />
