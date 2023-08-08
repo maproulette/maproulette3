@@ -26,6 +26,7 @@
     "@turf/meta": "^6.0.2",
     "@turf/midpoint": "^5.1.5",
     "@turf/nearest-point-on-line": "^6.0.2",
+    "RapiD": "facebook/RapiD#rapid-v2.0.3",
     "autoprefixer": "^10.4.13",
     "classnames": "^2.2.5",
     "date-fns": "^1.29.0",
@@ -48,7 +49,6 @@
     "piwik-react-router": "^0.12.1",
     "prop-types": "^15.6.0",
     "query-string": "^6.13.1",
-    "RapiD": "facebook/RapiD#rapid-v2.0.3",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.0.0",
     "react-burger-menu": "^2.4.4",
@@ -96,6 +96,8 @@
     "xmltojson": "^1.3.5"
   },
   "devDependencies": {
+    "@babel/helper-get-function-arity": "^7.16.7",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@openstreetmap/id-tagging-schema": "^3.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.2",
