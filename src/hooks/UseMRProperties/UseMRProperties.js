@@ -17,45 +17,47 @@ import AsIdentifiableFeature
 const useMRProperties = workspaceContext => {
   const [properties, setProperties] = useState({})
 
-  if(workspaceContext){
-    useEffect(() => {
-      const mrProperties = {
-        '#mapZoom': workspaceContext['taskMapZoom'],
+  useEffect(() => {
+    if(workspaceContext){
+      return null
+    }
+
+    const mrProperties = {
+      '#mapZoom': workspaceContext['taskMapZoom'],
+    }
+
+    const task = workspaceContext['taskMapTask']
+    if (task) {
+      const primaryFeature =
+        AsIdentifiableFeature(AsMappableTask(task).normalizedGeometries().features[0])
+
+      mrProperties['#mrTaskId'] = task.id
+      mrProperties['#osmId'] = primaryFeature.osmId()
+      mrProperties['#osmType'] = primaryFeature.osmType()
+
+      //map the task specific properties to the workspace properties
+      const { properties } = primaryFeature;
+      if (properties) {
+        Object.keys(properties).map((key) => {
+          mrProperties[key] = properties[key];
+          return null;
+        });
       }
+    }
 
-      const task = workspaceContext['taskMapTask']
-      if (task) {
-        const primaryFeature =
-          AsIdentifiableFeature(AsMappableTask(task).normalizedGeometries().features[0])
+    const mapBounds = workspaceContext['taskMapBounds']
+    if (mapBounds) {
+      mrProperties['#mapLat'] = mapBounds.getCenter().lat
+      mrProperties['#mapLon'] = mapBounds.getCenter().lng
+      mrProperties['#mapBBox'] = mapBounds.toBBoxString()
+      mrProperties['#mapWest'] = mapBounds.getWest()
+      mrProperties['#mapSouth'] = mapBounds.getSouth()
+      mrProperties['#mapEast'] = mapBounds.getEast()
+      mrProperties['#mapNorth'] = mapBounds.getNorth()
+    }
 
-        mrProperties['#mrTaskId'] = task.id
-        mrProperties['#osmId'] = primaryFeature.osmId()
-        mrProperties['#osmType'] = primaryFeature.osmType()
-
-        //map the task specific properties to the workspace properties
-        const { properties } = primaryFeature;
-        if (properties) {
-          Object.keys(properties).map((key) => {
-            mrProperties[key] = properties[key];
-            return null;
-          });
-        }
-      }
-
-      const mapBounds = workspaceContext['taskMapBounds']
-      if (mapBounds) {
-        mrProperties['#mapLat'] = mapBounds.getCenter().lat
-        mrProperties['#mapLon'] = mapBounds.getCenter().lng
-        mrProperties['#mapBBox'] = mapBounds.toBBoxString()
-        mrProperties['#mapWest'] = mapBounds.getWest()
-        mrProperties['#mapSouth'] = mapBounds.getSouth()
-        mrProperties['#mapEast'] = mapBounds.getEast()
-        mrProperties['#mapNorth'] = mapBounds.getNorth()
-      }
-
-      setProperties(mrProperties)
-    }, [workspaceContext])
-  }
+    setProperties(mrProperties)
+  }, [workspaceContext])
 
   return properties
 }
