@@ -61,6 +61,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       filteredTasks: {tasks: []},
     })
 
+    
+
     /**
      * Toggle filtering on or off for the given task status
      */

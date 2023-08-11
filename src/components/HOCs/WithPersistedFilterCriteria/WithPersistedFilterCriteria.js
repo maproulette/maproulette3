@@ -53,7 +53,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        // We need to update the saved filter string with the new criteria
        // along with local state.
        if(this.props.saveCurrentSearchFilters) {
-        console.log('savecurrentsearchfilters ran')
         this.props.saveCurrentSearchFilters('taskBundleFilters', criteria)
        }
      }
@@ -227,7 +226,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
      }
 
      componentDidMount() {
-      
         if(this.props.savedFilters && this.props.savedFilters['taskBundleFilters']) {
           this.updateCriteriaFromSavedFilters(this.props.savedFilters['taskBundleFilters'])
         } 

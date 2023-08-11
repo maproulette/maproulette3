@@ -38,6 +38,7 @@ import messages from './Messages'
 const MobileTabBar = WithCurrentUser(MobileTaskDetails)
 
 const WIDGET_WORKSPACE_NAME = "taskCompletion"
+const PAGE_ID = "TaskPane"
 
 // How frequently the task lock should be refreshed
 const LOCK_REFRESH_INTERVAL = 600000 // 10 minutes
@@ -394,6 +395,7 @@ export class TaskPane extends Component {
             completionResponses={completionResponses}
             needsResponses={this.state.needsResponses}
             templateRevision={isCompletionStatus(this.props.task.status)}
+            pageId={PAGE_ID}
           />
           {this.state.completingTask && this.state.completingTask === this.props.task.id &&
            <div
