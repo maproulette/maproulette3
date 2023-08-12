@@ -34,6 +34,7 @@ import {
   CustomSelectWidget,
   NoFieldsetObjectFieldTemplate,
   CustomArrayFieldTemplate,
+  CustomNotificationSettingsArrayFieldTemplate,
 } from "../../../components/Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import {
   jsSchema as settingsJsSchema,
@@ -178,13 +179,13 @@ class UserSettings extends Component {
   notificationsChangeHandler = (userSettings, { formData }) => {
     // The user's email address comes in from the notifications data even
     // though its technically a user setting
-
     const toUpdateSettings = _merge({}, userSettings, _pick(formData, "email"));
     if (this.state.settingsFormData.customBasemaps) {
       toUpdateSettings.customBasemaps =
         this.state.settingsFormData.customBasemaps;
     }
     this.settingsChangeHandler({ formData: toUpdateSettings });
+
 
     this.setState({
       notificationsFormData: formData,
@@ -197,6 +198,9 @@ class UserSettings extends Component {
         parseInt(setting, 10),
       ])
     );
+
+    console.log('subscriptions on notification settings update', subscriptionsObject)
+
 
     this.saveNotificationSettings(subscriptionsObject);
   };
@@ -236,6 +240,7 @@ class UserSettings extends Component {
         this.props.loadCompleteUser(this.props.user.id);
       }
     }
+    console.log(this.state)
   }
 
   render() {
@@ -348,8 +353,8 @@ class UserSettings extends Component {
         <Form
           schema={notificationsJsSchema(this.props.intl)}
           uiSchema={notificationsUiSchema(this.props.intl)}
-          widgets={{ SelectWidget: CustomSelectWidget }}
-          className="form form--2-col"
+          widgets={{ SelectWidget: CustomSelectWidget}}
+          className="form form--modified-2-col"
           liveValidate
           transformErrors={notificationTransformErrors(this.props.intl)}
           noHtml5Validate

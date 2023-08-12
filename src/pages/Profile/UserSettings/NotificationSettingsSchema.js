@@ -23,7 +23,7 @@ const createSubscriptionInput = (
   subscriptionTypes,
   subscriptionLabels,
   intl,
-  defaultSelection
+  defaultSelection,
 ) => {
   return {
     title: `${
@@ -65,7 +65,7 @@ export const jsSchema = (intl) => {
   const localizedNotificationLabels = notificationTypeLabels(intl);
   const localizedNotificationCountLabels = notificationCountTypeLabels(intl);
   const localizedSubscriptionLabels = subscriptionTypeLabels(intl);
-  const localizedSubscriptionFrequncyLabels =
+  const localizedSubscriptionFrequencyLabels =
     subscriptionFrequencyTypeLabels(intl);
 
   const items = new Array(NOTIFICATION_TYPE_REVISION_COUNT).fill({});
@@ -77,7 +77,7 @@ export const jsSchema = (intl) => {
       SubscriptionType,
       localizedSubscriptionLabels,
       intl,
-      SubscriptionType.noEmail
+      SubscriptionType.noEmail,
     );
   });
 
@@ -86,9 +86,9 @@ export const jsSchema = (intl) => {
       name,
       localizedNotificationCountLabels,
       SubscriptionFrequencyType,
-      localizedSubscriptionFrequncyLabels,
+      localizedSubscriptionFrequencyLabels,
       intl,
-      SubscriptionFrequencyType.ignore
+      SubscriptionFrequencyType.ignore,
     );
   });
 
@@ -123,6 +123,7 @@ export const jsSchema = (intl) => {
 export const uiSchema = (intl) => {
   return {
     email: {
+      classNames: "notification-email",
       "ui:emptyValue": "",
       "ui:help": (
         <MarkdownContent
@@ -130,14 +131,18 @@ export const uiSchema = (intl) => {
         />
       ),
     },
+    
     notificationSubscriptions: {
-      classNames: "no-legend",
+      classNames: "no-legend notification-subscriptions",
       "ui:options": {
         orderable: false,
         removable: false,
       },
-    },
-    "ui:order": ["email", "notificationSubscriptions"],
-    "ui:showTitle": false,
+        },
+      "ui:order": ["email", "notificationSubscriptions"],
+      "ui:showTitle": false,
+      
   };
 };
+
+

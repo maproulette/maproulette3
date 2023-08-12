@@ -47,6 +47,30 @@
     }
   }
 
+  &--modified-2-col {
+
+    @screen md {
+      @apply mr-w-full;
+
+      .notification-email {
+        @apply mr-w-1/2 mr-pr-4;
+      }
+  
+      .notification-subscriptions {
+        fieldset {
+          .array-item-list {
+            @apply mr-grid mr-grid-cols-2 mr-gap-x-8 mr-grid-flow-row;
+
+            .field {
+              @apply mr-mb-0;
+            }
+          }
+        }
+        
+      }
+    }
+  }
+
   .custom-basemaps-item {
     .fieldset {
       display: block;
@@ -104,7 +128,7 @@
 
 .mr-input,
 .form-control {
-  @apply mr-appearance-none mr-outline-none mr-w-full mr-py-2 mr-px-4 mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner mr-w-full;
+  @apply mr-appearance-none mr-outline-none mr-w-full mr-py-2 mr-px-4 mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner;
 
   &:focus {
     @apply mr-outline-none mr-border-pink;
