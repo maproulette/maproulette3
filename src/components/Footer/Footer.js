@@ -45,16 +45,19 @@ class Footer extends Component {
                   </a>
                 </span>
               </h3>
-             { this.state.data ? <h3 className="mr-text-white mr-text-md mr-mb-2">
-                <FormattedMessage {...messages.APIVersionLabel} />{' '}
-                <span className="mr-text-green-light mr-font-mono mr-text-base">
-                  <a
-                    href={`https://github.com/maproulette/maproulette-backend/releases/tag/v${this.state.data.compiletime.version}`}
-                  >
-                    v{this.state.data.compiletime.version}
-                  </a>
-                </span>
-              </h3> : null}
+             { this.state.data ? 
+              <h3 className="mr-text-white mr-text-md mr-mb-2">
+                  <FormattedMessage {...messages.APIVersionLabel} />{' '}
+                  <span className="mr-text-green-light mr-font-mono mr-text-base">
+                    <a
+                      href={`https://github.com/maproulette/maproulette-backend/releases/tag/v${this.state.data.compiletime.version}`}
+                    >
+                      v{this.state.data.compiletime.version}
+                    </a>
+                  </span>
+                </h3> : 
+                null 
+              }
             </div>
 
             <div className="mr-mb-8 md:mr-mb-0 md:mr-px-4 md:mr-flex-1">
