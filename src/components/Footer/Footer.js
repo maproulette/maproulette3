@@ -4,6 +4,29 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
 class Footer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data : null
+    };
+  }
+
+  componentDidMount() {
+    this.renderMyData();
+  }
+
+  renderMyData(){
+    fetch(`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
+        .then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({ data : responseJson })
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  }
+  
   render() {
     return (
       <footer
@@ -22,6 +45,16 @@ class Footer extends Component {
                   </a>
                 </span>
               </h3>
+             { this.state.data ? <h3 className="mr-text-white mr-text-md mr-mb-2">
+                <FormattedMessage {...messages.APIVersionLabel} />{' '}
+                <span className="mr-text-green-light mr-font-mono mr-text-base">
+                  <a
+                    href={`https://github.com/maproulette/maproulette-backend/releases/tag/v${this.state.data.compiletime.version}`}
+                  >
+                    v{this.state.data.compiletime.version}
+                  </a>
+                </span>
+              </h3> : null}
             </div>
 
             <div className="mr-mb-8 md:mr-mb-0 md:mr-px-4 md:mr-flex-1">
