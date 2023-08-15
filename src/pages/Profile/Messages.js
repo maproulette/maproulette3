@@ -204,6 +204,11 @@ export default defineMessages({
                     "or as a daily digest)"
   },
 
+  systemNotificationsDescription: {
+    id: "Profile.form.systemNotifications.description",
+    defaultMessage: "This is a test system notifications help label",
+  },
+
   yesLabel: {
     id: "Profile.form.yes.label",
     defaultMessage: "Yes",

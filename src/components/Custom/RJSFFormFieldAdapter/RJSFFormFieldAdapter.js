@@ -61,7 +61,6 @@ export const CustomArrayFieldTemplate = props => {
   const addLabel = props.uiSchema["ui:addLabel"] ||
     <FormattedMessage {...messages.addPriorityRuleLabel} />
   const deleteLabel = props.uiSchema["ui:deleteLabel"]
-
   const itemFields = _map(props.items, element =>
     <div
       key={element.index}
@@ -96,7 +95,7 @@ export const CustomArrayFieldTemplate = props => {
       {props.canAdd &&
        <div className="array-field__block-controls">
          <button
-           className="mr-button mr-button mr-button--small"
+           className="mr-button mr-button--small"
            onClick={props.onAddClick}
          >
            {addLabel}

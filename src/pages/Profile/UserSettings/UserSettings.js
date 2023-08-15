@@ -34,7 +34,7 @@ import {
   CustomSelectWidget,
   NoFieldsetObjectFieldTemplate,
   CustomArrayFieldTemplate,
-  CustomNotificationSettingsArrayFieldTemplate,
+  CustomFieldTemplate
 } from "../../../components/Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import {
   jsSchema as settingsJsSchema,
@@ -63,7 +63,7 @@ class UserSettings extends Component {
     if (!this.areBasemapNamesUnique(settings.customBasemaps)) {
       return;
     }
-
+    console.log('settings in save settings', settings)
     this.setState({ isSaving: true, saveComplete: false });
 
     const editableUser = AsEditableUser(_cloneDeep(settings));
@@ -138,7 +138,6 @@ class UserSettings extends Component {
     if (_isEmpty(settings)) {
       return;
     }
-
     this.setState({ isSaving: true, saveComplete: false });
     this.props
       .updateNotificationSubscriptions(this.props.user.id, settings)
@@ -192,6 +191,8 @@ class UserSettings extends Component {
       saveComplete: false,
     });
 
+    console.log(formData)
+
     const subscriptionsObject = _fromPairs(
       _map(formData.notificationSubscriptions, (setting, index) => [
         keysWithCountTypes[index],
@@ -240,7 +241,7 @@ class UserSettings extends Component {
         this.props.loadCompleteUser(this.props.user.id);
       }
     }
-    console.log(this.state)
+    // console.log(this.state)
   }
 
   render() {
@@ -364,6 +365,9 @@ class UserSettings extends Component {
             this.notificationsChangeHandler(userSettings, params)
           }
           ObjectFieldTemplate={NoFieldsetObjectFieldTemplate}
+          // ArrayFieldTemplate={testCustomArrayFieldTemplate}
+          // FieldTemplate={CustomFieldTemplate}
+          // CustomFields={customFields}
         >
           <div className="form-controls" />
         </Form>

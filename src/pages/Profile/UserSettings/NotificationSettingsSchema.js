@@ -16,6 +16,7 @@ import {
 } from "../../../services/Notification/NotificationSubscription/NotificationSubscription";
 import MarkdownContent from "../../../components/MarkdownContent/MarkdownContent";
 import messages from "../Messages";
+import { CustomFieldTemplate } from '../../../components/Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter';
 
 const createSubscriptionInput = (
   name,
@@ -26,6 +27,7 @@ const createSubscriptionInput = (
   defaultSelection,
 ) => {
   return {
+    name: name,
     title: `${
       notificationLabels[`${name}Long`] || notificationLabels[name]
     } ${intl.formatMessage(messages.notificationLabel)}`,
@@ -37,6 +39,7 @@ const createSubscriptionInput = (
 };
 
 export const transformErrors = (intl) => (errors) => {
+  console.log('errors', errors)
   return errors.map(error => {
     if (error.name === "format") {
       const formatMessage = intl.formatMessage(messages.errorFormatMessage)
@@ -92,14 +95,24 @@ export const jsSchema = (intl) => {
     );
   });
 
+
+  const notificationObject = {}
+  items.forEach((item, i) => {
+    notificationObject[i] = item
+  })
+
   return {
     $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
+      // notificationSubscriptions: {
+      //   title: intl.formatMessage(messages.notificationSubscriptionsLabel),
+      //   type: "array",
+      //   items: items,
+      // },
       notificationSubscriptions: {
         title: intl.formatMessage(messages.notificationSubscriptionsLabel),
-        type: "array",
-        items: items,
+        properties: notificationObject,
       },
       email: {
         title: intl.formatMessage(messages.emailLabel),
@@ -134,11 +147,15 @@ export const uiSchema = (intl) => {
     
     notificationSubscriptions: {
       classNames: "no-legend notification-subscriptions",
+        0: {
+          "ui:help": intl.formatMessage(messages.systemNotificationsDescription),
+          "ui:FieldTemplate": CustomFieldTemplate,
+          },
+      },
       "ui:options": {
         orderable: false,
         removable: false,
       },
-        },
       "ui:order": ["email", "notificationSubscriptions"],
       "ui:showTitle": false,
       

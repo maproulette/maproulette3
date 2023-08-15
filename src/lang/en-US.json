@@ -1186,6 +1186,7 @@
   "Profile.form.notificationSubscriptions.label": "Notification Subscriptions",
   "Profile.form.seeTagFixSuggestions.description": "User will see tag fix suggestions if they are provided.",
   "Profile.form.seeTagFixSuggestions.label": "See Tag Fix Suggestions",
+  "Profile.form.systemNotifications.description": "This is a test system notifications help label",
   "Profile.form.uniqueCustomBasemap.error": "Custom Basemap names must be unique",
   "Profile.form.yes.label": "Yes",
   "Profile.noUser": "User not found or you are unauthorized to view this user.",
