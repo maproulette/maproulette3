@@ -10,6 +10,7 @@ import EditSwitch from './RapidEditor/EditSwitch'
 import NotificationCard from './RapidEditor/NotificaitonCard'
 import RapidEditor from './RapidEditor/RapidEditor';
 import { createBoundsXml } from './RapidEditor/createBoundsXml'
+import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 
 const descriptor = {
   widgetKey: 'TaskMapWidget',
@@ -22,6 +23,24 @@ const descriptor = {
 }
 
 export default class TaskMapWidget extends Component {
+  componentDidUnmount = () => {
+    this.props.resumeKeyboardShortcuts()
+  }
+
+  componentDidUpdate = () => {
+    this.handlePauseShortcuts()
+  }
+
+  handlePauseShortcuts = () => {
+    const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+
+    if (editMode) {
+      this.props.pauseKeyboardShortcuts()
+    } else {
+      this.props.resumeKeyboardShortcuts()
+    }
+  }
+
   render() {
     const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
 
@@ -76,4 +95,4 @@ export default class TaskMapWidget extends Component {
   }
 }
 
-registerWidgetType(TaskMapWidget, descriptor)
+registerWidgetType(WithKeyboardShortcuts(TaskMapWidget), descriptor)
