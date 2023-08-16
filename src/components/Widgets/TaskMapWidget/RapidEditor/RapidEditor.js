@@ -97,7 +97,7 @@ const RapidEditor = ({
 
       let osm = RapiDContext.connection();
       const auth = {
-        url: 'https://master.apis.dev.openstreetmap.org/',
+        url: process.env.REACT_APP_OSM_SERVER,
         access_token: token,
       };
       osm.switch(auth);
