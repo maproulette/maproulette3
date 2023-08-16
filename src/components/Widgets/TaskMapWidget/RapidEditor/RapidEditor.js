@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import _get from 'lodash/get'
 import * as RapiD from '../../../../../node_modules/RapiD/dist/rapid.legacy.min.js';
 import '../../../../../node_modules/RapiD/dist/rapid.css';
+import { UseRouter } from '../../../../hooks/UseRouter/UseRouter.js';
+import { constructRapidURI } from '../../../../services/Editor/Editor.js';
+import WithSearch from '../../../HOCs/WithSearch/WithSearch.js';
+import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/ChallengeZoom.js';
 
 const OSM_CLIENT_ID = process.env.REACT_APP_OSM_CLIENT_ID
 const OSM_CLIENT_SECRET = process.env.REACT_APP_OSM_CLIENT_SECRET
 const OSM_REDIRECT_URI = process.env.REACT_APP_URL
 const OSM_SERVER_URL = process.env.REACT_APP_OSM_SERVER
 
-export default function RapidEditor({
+const RapidEditor = ({
   comment,
   imagery,
   gpxUrl,
@@ -16,8 +21,10 @@ export default function RapidEditor({
   presets,
   setDisable,
   locale,
-  token
-}) {
+  token,
+  mapBounds,
+  task
+}) => {
   const dispatch = useDispatch();
   const [customImageryIsSet, setCustomImageryIsSet] = useState(false);
   // const session = useSelector((state) => state.auth.session);
@@ -25,6 +32,7 @@ export default function RapidEditor({
   const customSource =
     RapiDContext && RapiDContext.background() && RapiDContext.background().findSource('custom');
   const windowInit = typeof window !== undefined;
+  const router = UseRouter()
 
   useEffect(() => {
     if (!customImageryIsSet && imagery && customSource) {
@@ -59,6 +67,18 @@ export default function RapidEditor({
   //     }
   //   }
   // }, [windowInit, RapiDContext, dispatch]);
+
+  useEffect(() => {
+    if (mapBounds) {
+      if (!mapBounds.zoom) {
+        mapBounds.zoom = _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
+      }
+      const rapidUrl = constructRapidURI(task, mapBounds, {})
+      const rapidParams = rapidUrl.split('#')[1]
+      const updatedSearch = window.location.search.split('#')[0] + '#' + rapidParams
+      router.replace({ search: updatedSearch })
+    }
+  }, [mapBounds])
 
   useEffect(() => {
     if (RapiDContext && comment) {
@@ -125,3 +145,5 @@ export default function RapidEditor({
 
   return <div className="w-100 vh-minus-69-ns" id="rapid-container"></div>;
 }
+
+export default WithSearch(RapidEditor)

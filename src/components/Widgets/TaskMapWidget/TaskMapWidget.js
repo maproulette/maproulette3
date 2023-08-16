@@ -23,7 +23,7 @@ const descriptor = {
 }
 
 export default class TaskMapWidget extends Component {
-  componentDidUnmount = () => {
+  componentWillUnmount = () => {
     this.props.resumeKeyboardShortcuts()
   }
 
@@ -84,6 +84,7 @@ export default class TaskMapWidget extends Component {
                   powerUser={null}
                   locale={this.props.user.settings.locale}
                   token={this.props.user.osmProfile.requestToken}
+                  task={this.props.task}
                 />
               : <MapPane {...this.props}>
                   <TaskMap {...this.props} challenge={this.props.task.parent} />
