@@ -23,11 +23,23 @@ const descriptor = {
 }
 
 export default class TaskMapWidget extends Component {
+  state = {
+    counter: 0
+  }
+
   componentWillUnmount = () => {
     this.props.resumeKeyboardShortcuts()
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.task.id !== this.props.task.id) {
+      this.setState({ counter: this.state.counter + 1 })
+    }
+
+    if (this.state.counter % 2) {
+      this.setState({ counter: this.state.counter + 1 })
+    }
+
     this.handlePauseShortcuts()
   }
 
@@ -38,6 +50,27 @@ export default class TaskMapWidget extends Component {
       this.props.pauseKeyboardShortcuts()
     } else {
       this.props.resumeKeyboardShortcuts()
+    }
+  }
+
+  handleRenderRapid = () => {
+    if (this.state.counter % 2) {
+      return null
+    } else {
+      return (
+        <RapidEditor
+          setDisable={() => null}
+          comment={this.props.task.parent.checkinComment}
+          presets={[]}
+          imagery={undefined}
+          //gpxUrl={'https://tasking-manager-staging-api.hotosm.org/api/v2/projects/8512/tasks/queries/gpx/?tasks=440'}
+          gpxUrl={createBoundsXml(this.props.task.location.coordinates)}
+          powerUser={null}
+          locale={this.props.user.settings.locale}
+          token={this.props.user.osmProfile.requestToken}
+          task={this.props.task}
+        />
+      )
     }
   }
 
@@ -74,18 +107,7 @@ export default class TaskMapWidget extends Component {
           }
           {
             editMode
-              ? <RapidEditor
-                  setDisable={() => null}
-                  comment={this.props.task.parent.checkinComment}
-                  presets={[]}
-                  imagery={undefined}
-                  //gpxUrl={'https://tasking-manager-staging-api.hotosm.org/api/v2/projects/8512/tasks/queries/gpx/?tasks=440'}
-                  gpxUrl={createBoundsXml(this.props.task.location.coordinates)}
-                  powerUser={null}
-                  locale={this.props.user.settings.locale}
-                  token={this.props.user.osmProfile.requestToken}
-                  task={this.props.task}
-                />
+              ? this.handleRenderRapid()
               : <MapPane {...this.props}>
                   <TaskMap {...this.props} challenge={this.props.task.parent} />
                 </MapPane>

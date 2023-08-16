@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import _get from 'lodash/get'
 import * as RapiD from '../../../../../node_modules/RapiD/dist/rapid.legacy.min.js';
 import '../../../../../node_modules/RapiD/dist/rapid.css';
@@ -20,7 +19,6 @@ const RapidEditor = ({
   mapBounds,
   task
 }) => {
-  const dispatch = useDispatch();
   const [customImageryIsSet, setCustomImageryIsSet] = useState(false);
   const [RapiDContext, setRapiDContext] = useState(null);
   const customSource =
@@ -47,19 +45,7 @@ const RapidEditor = ({
     if (RapiDContext === null) {
       setRapiDContext(window.iD.coreContext())
     }
-  }, [RapiDContext, dispatch]);
-
-  useEffect(() => {
-    if (mapBounds) {
-      if (!mapBounds.zoom) {
-        mapBounds.zoom = _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
-      }
-      const rapidUrl = constructRapidURI(task, mapBounds, {})
-      const rapidParams = rapidUrl.split('#')[1]
-      const updatedSearch = window.location.search.split('#')[0] + '#' + rapidParams
-      router.replace({ search: updatedSearch })
-    }
-  }, [mapBounds])
+  }, [RapiDContext]);
 
   useEffect(() => {
     if (RapiDContext && comment) {
@@ -68,8 +54,17 @@ const RapidEditor = ({
   }, [comment, RapiDContext]);
 
   useEffect(() => {
-    console.log(token, locale, RapiD, RapiDContext)
-    if (token && locale && RapiD && RapiDContext) {
+    if (token && locale && RapiD && RapiDContext && task?.id) {
+      if (mapBounds && task?.id) {
+        if (!mapBounds.zoom) {
+          mapBounds.zoom = _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
+        }
+        const rapidUrl = constructRapidURI(task, mapBounds, {})
+        const rapidParams = rapidUrl.split('#')[1]
+        const updatedSearch = window.location.search.split('#')[0] + '#' + rapidParams
+        router.replace({ search: updatedSearch })
+      }
+
       // if presets is not a populated list we need to set it as null
       try {
         if (presets.length) {
@@ -118,7 +113,7 @@ const RapidEditor = ({
         }
       });
     }
-  }, [RapiDContext]);
+  }, [RapiDContext, task?.id]);
 
   return <div className="w-100 vh-minus-69-ns" id="rapid-container"></div>;
 }
