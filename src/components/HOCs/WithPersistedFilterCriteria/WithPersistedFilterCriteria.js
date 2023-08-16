@@ -21,9 +21,9 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
 /**
  * WithPersistedFilterCriteria keeps track of the current criteria being used
  * to filter, sort and page the tasks. It is a streamlined version of 
- * WithFilterCriteria used in the context of the TaskBundleWidget to persisted
+ * WithFilterCriteria used in the context of the TaskBundleWidget to persist
  * filter state beyond task resolution. An upstream WithSavedFilters HOC provides
- * the method props for coding and decoding filters formatted as URL search parameters
+ * the methods as props for coding and decoding filters formatted as URL search parameters
  * (as these methods are used elsewhere in the app in other contexts), and also
  * for saving the filter string as a user app setting in the database.
  *
