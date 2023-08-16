@@ -389,7 +389,16 @@ const BuildBundle = props => {
     />
   )
 
-  const { criteria } = props  
+  const { criteria } = props
+
+  const areTaskStatusFiltersApplied = criteria?.filters?.status?.length < Object.keys(VALID_STATUSES).length
+  const areTaskPriorityFiltersApplied = criteria?.filters?.priorities?.length < Object.keys(TaskPriority).length
+  const areTaskPropertyFiltersApplied = areFiltersApplied = criteria?.filters?.taskPropertySearch
+
+  let areFiltersApplied = criteria?.filters?.taskPropertySearch ||
+    criteria?.filters?.priorities?.length < Object.keys(TaskPriority).length ||
+    criteria?.filters?.status?.length < Object.keys(VALID_STATUSES).length ||
+    (criteria && !_isEqual(criteria?.sortCriteria, {sortBy: 'name', direction: 'DESC'}))
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
@@ -402,20 +411,20 @@ const BuildBundle = props => {
       </div>
       <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between">
         <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
-          <li className="md:mr-mr-8">
+          <li className="md:mr-mr-8 mr-flex mr-items-center mr-gap-1">
+            {areTaskStatusFiltersApplied && <div className="mr-rounded-full mr-h-2 mr-w-2 mr-bg-green-lighter" content='' />}
             <TaskStatusFilter {...props} isUsedInTaskBundleContext={true} />
           </li>
-          <li className="md:mr-mr-8">
+          <li className="md:mr-mr-8 mr-flex mr-items-center mr-gap-1">
+            {areTaskPriorityFiltersApplied && <div className="mr-rounded-full mr-h-2 mr-w-2 mr-bg-green-lighter" content='' />}
             <TaskPriorityFilter {...props} />
           </li>
-          <li>
+          <li className="mr-flex mr-items-center mr-gap-1">
+            {areTaskPropertyFiltersApplied && <div className="mr-rounded-full mr-h-2 mr-w-2 mr-bg-green-lighter" content='' />}
             <TaskPropertyFilter {...props} />
           </li>
         </ul>
-        {criteria?.filters?.taskPropertySearch ||
-        criteria?.filters?.priorities?.length < Object.keys(TaskPriority).length ||
-        criteria?.filters?.status?.length < Object.keys(VALID_STATUSES).length ||
-        (criteria && !_isEqual(criteria.sortCriteria, {sortBy: 'name', direction: 'DESC'})) ? (
+        {areFiltersApplied ? (
           <ClearFiltersControl
             clearFilters={props.clearAllFiltersAndMaintainMapState}
           />
