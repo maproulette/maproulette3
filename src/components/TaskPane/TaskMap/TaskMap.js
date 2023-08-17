@@ -653,8 +653,6 @@ TaskMap.propTypes = {
   task: PropTypes.object,
   /** Invoked when the bounds of the map are modified by the user */
   setTaskMapBounds: PropTypes.func.isRequired,
-  /** Invoked when user wishes to display OSM data layer on map */
-  fetchOSMData: PropTypes.func.isRequired,
   /**
    * The desired centerpoint of the map in (Lat, Lng).
    * @see See WithTaskCenterpoint HOC
