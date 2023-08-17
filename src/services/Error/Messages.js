@@ -169,15 +169,15 @@ export default defineMessages({
   },
   challengeSaveNameFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveNameFailure",
-    defaultMessage: "The challenge name is required and must be more than 3 characters long.",
+    defaultMessage: "The 'NAME OF YOUR CHALLENGE' field is required and must be more than 3 characters long.",
   },
   challengeSaveDescriptionFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveDescriptionFailure",
-    defaultMessage: "The description is required.",
+    defaultMessage: "The 'DESCRIPTION OF YOUR CHALLENGE' field is required.",
   },
   challengeSaveInstructionFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveInstructionFailure",
-    defaultMessage: "Instructions must have more than 150 characters and at least 20 words.",
+    defaultMessage: "The 'DETAILED INSTRUCTIONS FOR MAPPERS' field must have more than 150 characters and at least 20 words.",
   },
   challengeRebuildFailure: {
     id: "Errors.challenge.rebuildFailure",

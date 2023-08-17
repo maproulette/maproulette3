@@ -13,4 +13,9 @@ export default defineMessages({
     id: "Widgets.TaskMapWidget.title",
     defaultMessage: "Task",
   },
+
+  editMode: {
+    id: "Widgets.TaskMapWidget.editMode",
+    defaultMessage: "Current Mode:",
+  },
 })

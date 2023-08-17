@@ -170,10 +170,6 @@ ChallengeResultItem.propTypes = {
   user: PropTypes.object,
   /** The challenge represented by this item */
   challenge: PropTypes.object.isRequired,
-  /** Invoked when a user indicates they wish to save/bookmark a challenge */
-  saveChallenge: PropTypes.func.isRequired,
-  /** Invoked when a user indicates they wish to unsave/bookmark a challenge */
-  unsaveChallenge: PropTypes.func.isRequired,
 }
 
 export default injectIntl(ChallengeResultItem)
