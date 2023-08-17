@@ -7,9 +7,7 @@ import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
 import { FormattedMessage } from 'react-intl'
 import EditSwitch from './RapidEditor/EditSwitch'
-import NotificationCard from './RapidEditor/NotificaitonCard'
 import RapidEditor from './RapidEditor/RapidEditor';
-import { createBoundsXml } from './RapidEditor/createBoundsXml'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 
 const descriptor = {
@@ -63,8 +61,6 @@ export default class TaskMapWidget extends Component {
           comment={this.props.task.parent.checkinComment}
           presets={[]}
           imagery={undefined}
-          //gpxUrl={'https://tasking-manager-staging-api.hotosm.org/api/v2/projects/8512/tasks/queries/gpx/?tasks=440'}
-          gpxUrl={createBoundsXml(this.props.task.location.coordinates)}
           powerUser={null}
           locale={this.props.user.settings.locale}
           token={this.props.user.osmProfile.requestToken}
@@ -99,9 +95,6 @@ export default class TaskMapWidget extends Component {
                         <EditSwitch {...this.props}/>
                       </div>
                     </div>
-                  <div> 
-                    <NotificationCard {...this.props}/>
-                  </div>
                 </>
               : null
           }

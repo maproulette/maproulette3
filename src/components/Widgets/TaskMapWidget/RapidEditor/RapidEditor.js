@@ -10,7 +10,6 @@ import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/Chall
 const RapidEditor = ({
   comment,
   imagery,
-  gpxUrl,
   powerUser = false,
   presets,
   setDisable,
@@ -87,10 +86,6 @@ const RapidEditor = ({
         RapiDContext.ui().restart();
       } else {
         RapiDContext.init();
-      }
-      if (gpxUrl) {
-        //RapiDContext.layers().layer('data').url(gpxUrl, '.gpx');
-        RapiDContext.rapidContext().setTaskExtentByGpxData(gpxUrl);
       }
 
       RapiDContext.rapidContext().showPowerUser = powerUser;
