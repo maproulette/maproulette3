@@ -150,6 +150,20 @@ export const CustomFieldTemplate = function(props) {
   )
 }
 
+export const CustomNotificationFieldTemplate = function(props) {
+  const {classNames, children, description, uiSchema, errors} = props
+  return (
+    <div className={classNames}>
+       <React.Fragment>
+         <LabelWithHelp {...props} control />
+         {children}
+         {errors}
+         {description}
+       </React.Fragment>
+    </div>
+  )
+}
+
 
 /**
  * A custom select widget with the new-ui styling
@@ -388,8 +402,7 @@ export const MarkdownDescriptionField = ({id, description}) => {
 }
 
 export const LabelWithHelp = props => {
-  const {id, displayLabel, label, required, rawHelp, schema, uiSchema} = props
-
+  const {id, displayLabel, label, required, control, rawHelp, schema, uiSchema} = props
   if (displayLabel === false || uiSchema["ui:displayLabel"] === false) {
     return null
   }
@@ -403,7 +416,7 @@ export const LabelWithHelp = props => {
 
   return (
     <div className="mr-mb-2 mr-flex">
-      <label htmlFor={id} className="mr-text-mango mr-text-md mr-uppercase mr-mb-2">
+      <label htmlFor={id} className={control ? "mr-text-base mr-text-mango" : "mr-text-mango mr-text-md mr-uppercase mr-mb-2"}>  
         {normalizedLabel}
         {required && <span className="mr-text-red-light mr-ml-1">*</span>}
       </label>

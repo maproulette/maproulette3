@@ -209,6 +209,56 @@ export default defineMessages({
     defaultMessage: "This is a test system notifications help label",
   },
 
+  mentionNotificationsDescription: {
+    id: "Profile.form.mentionNotifications.description",
+    defaultMessage: "Receive a notification when someone @mentions you in a comment",
+  },
+
+  reviewApprovedNotificationsDescription: {
+    id: "Profile.form.reviewApprovedNotifications.description",
+    defaultMessage: "Receive a notification when your task was approved following a review",
+  },
+
+  reviewRejectedNotificationsDescription: {
+    id: "Profile.form.reviewRejectedNotifications.description",
+    defaultMessage: "Receive a notification when your task needs to be revisited following a review",
+  },
+
+  reviewAgainNotificationsDescription: {
+    id: "Profile.form.reviewAgainNotifications.description",
+    defaultMessage: "This is a test review again notifications help label",
+  },
+
+  challengeCompletedNotificationsDescription: {
+    id: "Profile.form.challengeCompletedNotifications.description",
+    defaultMessage: "Receive a notification when a Challenge you created has been completed",
+  },
+
+  teamNotificationsDescription: {
+    id: "Profile.form.teamNotifications.description",
+    defaultMessage: "This is a test team notifications help label",
+  },
+
+  followNotificationsDescription: {
+    id: "Profile.form.followNotifications.description",
+    defaultMessage: "This is a test follow help label",
+  },
+
+  metaReviewNotificationsDescription: {
+    id: "Profile.form.metaReviewNotifications.description",
+    defaultMessage: "This is a test meta review help label",
+  },
+
+  reviewCountNotificationsDescription: {
+    id: "Profile.form.reviewCountNotifications.description",
+    defaultMessage: "This is a test review count help label",
+  },
+
+  revisionCountNotificationsDescription: {
+    id: "Profile.form.revisionCountNotifications.description",
+    defaultMessage: "This is a test revise count help label",
+  },
+
   yesLabel: {
     id: "Profile.form.yes.label",
     defaultMessage: "Yes",

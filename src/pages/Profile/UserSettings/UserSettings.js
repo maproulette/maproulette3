@@ -6,7 +6,6 @@ import _get from "lodash/get";
 import _pick from "lodash/pick";
 import _merge from "lodash/merge";
 import _map from "lodash/map";
-import _fromPairs from "lodash/fromPairs";
 import _isUndefined from "lodash/isUndefined";
 import _isEmpty from "lodash/isEmpty";
 import _isFinite from "lodash/isFinite";
@@ -20,11 +19,6 @@ import _findLastIndex from "lodash/findLastIndex";
 import _trim from "lodash/trim";
 import { basemapLayerSources } from "../../../services/Challenge/ChallengeBasemap/ChallengeBasemap";
 import { LayerSources } from "../../../services/VisibleLayer/LayerSources";
-import {
-  NotificationSubscriptionType,
-  NotificationCountType,
-  keysWithCountTypes,
-} from "../../../services/Notification/NotificationType/NotificationType";
 import { ChallengeBasemap } from "../../../services/Challenge/ChallengeBasemap/ChallengeBasemap";
 import AsEditableUser from "../../../interactions/User/AsEditableUser";
 import WithStatus from "../../../components/HOCs/WithStatus/WithStatus";
@@ -34,7 +28,6 @@ import {
   CustomSelectWidget,
   NoFieldsetObjectFieldTemplate,
   CustomArrayFieldTemplate,
-  CustomFieldTemplate
 } from "../../../components/Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import {
   jsSchema as settingsJsSchema,
@@ -63,7 +56,6 @@ class UserSettings extends Component {
     if (!this.areBasemapNamesUnique(settings.customBasemaps)) {
       return;
     }
-    console.log('settings in save settings', settings)
     this.setState({ isSaving: true, saveComplete: false });
 
     const editableUser = AsEditableUser(_cloneDeep(settings));
@@ -183,50 +175,32 @@ class UserSettings extends Component {
       toUpdateSettings.customBasemaps =
         this.state.settingsFormData.customBasemaps;
     }
+
     this.settingsChangeHandler({ formData: toUpdateSettings });
-
-
+    
     this.setState({
       notificationsFormData: formData,
       saveComplete: false,
     });
 
-    console.log(formData)
-
-    const subscriptionsObject = _fromPairs(
-      _map(formData.notificationSubscriptions, (setting, index) => [
-        keysWithCountTypes[index],
-        parseInt(setting, 10),
-      ])
-    );
-
-    console.log('subscriptions on notification settings update', subscriptionsObject)
-
-
+    const subscriptionsObject = formData.notificationSubscriptions
+    
     this.saveNotificationSettings(subscriptionsObject);
   };
 
   prepareNotificationsDataForForm = (settingsData, notificationsData) => {
+
     if (!notificationsData.notificationSubscriptions) {
       return notificationsData;
     }
 
-    const notificationTypes = {
-      ...NotificationSubscriptionType,
-      ...NotificationCountType,
-    };
-
-    const subscriptionsArray = [];
-    _each(notificationTypes, (constantValue, key) => {
-      subscriptionsArray[constantValue] =
-        notificationsData.notificationSubscriptions[key];
-    });
-
     return {
       email: settingsData.email,
-      notificationSubscriptions: subscriptionsArray,
-    };
+      notificationSubscriptions: notificationsData.notificationSubscriptions
+    }
   };
+
+  
 
   componentDidMount() {
     // Make sure our user info is current
@@ -241,7 +215,6 @@ class UserSettings extends Component {
         this.props.loadCompleteUser(this.props.user.id);
       }
     }
-    // console.log(this.state)
   }
 
   render() {
@@ -365,9 +338,6 @@ class UserSettings extends Component {
             this.notificationsChangeHandler(userSettings, params)
           }
           ObjectFieldTemplate={NoFieldsetObjectFieldTemplate}
-          // ArrayFieldTemplate={testCustomArrayFieldTemplate}
-          // FieldTemplate={CustomFieldTemplate}
-          // CustomFields={customFields}
         >
           <div className="form-controls" />
         </Form>

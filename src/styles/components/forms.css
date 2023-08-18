@@ -57,23 +57,16 @@
       }
   
       .notification-subscriptions {
-        fieldset {
-          .array-item-list {
+        .fieldset {
             @apply mr-grid mr-grid-cols-2 mr-gap-x-8 mr-grid-flow-row;
-
-            .field {
-              @apply mr-mb-0;
-            }
           }
 
           .control-label {
             @apply mr-cursor-default
           }
         }
-        
       }
     }
-  }
 
   .custom-basemaps-item {
     .fieldset {
