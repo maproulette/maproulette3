@@ -55,7 +55,7 @@ export const WithSearchResults = function(WrappedComponent, searchName,
         return false
       })
     }
-
+ 
     render() {
       const query = _get(this.props, `searchCriteria.query`, '')
       let items = this.props[itemsProp]
@@ -72,7 +72,7 @@ export const WithSearchResults = function(WrappedComponent, searchName,
         const projectFilter = _get(this.props.searchCriteria, 'filters.project', '').toLowerCase()
         searchResults = _filter(items,
           (item) => _get(item, 'parent.displayName', '').toLowerCase().indexOf(projectFilter) !== -1)
-      }
+        }
       else if (_isString(query) && query.length > 0 &&
           _isArray(items) && items.length > 0) {
         const queryParts = parseQueryString(query)
@@ -82,7 +82,9 @@ export const WithSearchResults = function(WrappedComponent, searchName,
           items = this.itemsMatchingTags(items, queryParts.tagTokens)
         }
 
-        if (items.length > 0 && queryParts.query.length > 0) {
+        if (!isNaN(query)) {
+          searchResults = _filter(items, (item) => item.id.toString() == query.toString());
+        } else if (items.length > 0 && queryParts.query.length > 0) {
           const fuzzySearch = new Fuse(items, fuzzySearchOptions)
           searchResults = _map(
             fuzzySearch.search(queryParts.query),
