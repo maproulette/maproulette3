@@ -11,7 +11,22 @@ export default defineMessages({
 
   noResults: {
     id: "Challenge.results.noResults",
-    defaultMessage: "No Results",
+    defaultMessage: "Cannot find matching name",
+  },
+
+  noChallengeIds: {
+    id: "Challenge.detectedIds.noChallengeIds",
+    defaultMessage: "Cannot find matching Id",
+  },
+
+  challenge: {
+    id: "Challenge.detectedIds.challenge",
+    defaultMessage: "Challenge ",
+  },
+
+  project: {
+    id: "Challenge.detectedIds.project",
+    defaultMessage: "Project ",
   },
 
   tooManyTasksLabel: {
