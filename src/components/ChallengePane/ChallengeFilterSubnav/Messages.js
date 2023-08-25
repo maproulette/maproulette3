@@ -26,7 +26,7 @@ export default defineMessages({
 
   searchLabel: {
     id: 'ChallengeFilterSubnav.filter.search.label',
-    defaultMessage: 'Search by name',
+    defaultMessage: 'Search by name or Id',
   },
 
   clearFiltersLabel: {

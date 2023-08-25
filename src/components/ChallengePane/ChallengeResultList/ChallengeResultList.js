@@ -84,8 +84,8 @@ export class ChallengeResultList extends Component {
       _isEmpty(otherFilters) &&
       (_isEmpty(locationFilter) || !bounds || !boundsWithinAllowedMaxDegrees(bounds))
 
-    const query = this.props.searchFilters.searchType == "projects" ? this.props.searchFilters.project : this.props.searchCriteria.query
-    
+    const query = search.query ? search.query : this.props.searchFilters.project
+
     let matchedId = []
     if(!isNaN(query) && query) {
       if(this.props.searchFilters.searchType == "projects"){
@@ -208,7 +208,9 @@ export class ChallengeResultList extends Component {
             {detectedIds}
             <div
               className={`mr-border mr-border-white ${
-                matchedId.length !== 0
+                matchedId.length && results.length
+                  ? "mr-mt-6 mr-mb-6"
+                  : matchedId.length
                   ? "mr-mt-6"
                   : !results
                   ? "mr-mb-6"
