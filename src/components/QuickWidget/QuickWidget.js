@@ -23,11 +23,12 @@ export default class QuickWidget extends Component {
       error: false,
     }
   }
+
   componentDidCatch(error) {
     console.log(error)
     this.setState({error: true})
   }
-  
+
   componentDidUpdate(prevProps){
     console.log(prevProps.taskId !== this.props.taskId)
     if(prevProps.taskId !== this.props.taskId){
@@ -36,7 +37,6 @@ export default class QuickWidget extends Component {
       }
     }
   }
-
 
   render() {
     if (this.props.widgetHidden) {
