@@ -237,12 +237,13 @@ export class ActiveTaskControls extends Component {
     else if (!this.props.task) {
       return null
     }
-
+    const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
     const needsRevised = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
     const isEditingTask =
       _get(this.props, 'editor.taskId') === this.props.task.id &&
-      _get(this.props, 'editor.success') === true
+      _get(this.props, 'editor.success') === true || 
+      editMode
 
     const editorLoading =
       _get(this.props, 'editor.taskId') !== this.props.task.id &&
@@ -334,6 +335,7 @@ export class ActiveTaskControls extends Component {
                 complete={this.initiateCompletion}
                 cancelEditing={this.cancelEditing}
                 needsRevised={needsRevised}
+                editMode={editMode}
               />
              }
 
