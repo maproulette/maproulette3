@@ -74,10 +74,29 @@ const shortcutGroup = 'taskEditing'
 
 export default class TaskBundleWidget extends Component {
   bundleTasks = () => {
+    const selectedArray = Array.from(this.props.selectedTasks.selected.values());
+    let bundleTypeMismatch = "";
+    
+    if (selectedArray.length > 1) {
+      if (AsCooperativeWork(this.props.task).isCooperative()) {
+        selectedArray.forEach(item => {
+          if (!AsCooperativeWork(item).isCooperative()) {
+            bundleTypeMismatch = "cooperative"
+          }
+        });
+      } else {
+        selectedArray.forEach(item => {
+          if (AsCooperativeWork(item).isCooperative()) {
+            bundleTypeMismatch = "notCooperative"
+          }
+        })
+      }
+    }
+  
     // Because there's no way to select all tasks (TriState checkbox is
     // suppressed on the TaskAnalysisTables), we only need to worry about
     // explicitly selected tasks
-    this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()])
+    this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()], bundleTypeMismatch)
   }
 
   handleKeyboardShortcuts = (event) => {
@@ -296,13 +315,6 @@ const BuildBundle = props => {
     )
   }
 
-  if (AsCooperativeWork(props.task).isCooperative()) {
-    return (
-      <div className="mr-text-base">
-        <FormattedMessage {...messages.noCooperativeWork} />
-      </div>
-    )
-  }
 
   if (props.virtualChallenge || _isFinite(props.virtualChallengeId)) {
     return (
@@ -314,12 +326,12 @@ const BuildBundle = props => {
 
   const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
   const bundleButton = props.selectedTaskCount(totalTaskCount) > 1 ? (
-    <button
-      className="mr-button mr-button--green-lighter mr-button--small"
-      onClick={props.bundleTasks}
-    >
-      <FormattedMessage {...messages.bundleTasksLabel} />
-    </button>
+      <button
+        className="mr-button mr-button--green-lighter mr-button--small"
+        onClick={props.bundleTasks}
+      >
+        <FormattedMessage {...messages.bundleTasksLabel} />
+      </button>
   ) : null
 
   const showMarkerPopup = (markerData) => {
