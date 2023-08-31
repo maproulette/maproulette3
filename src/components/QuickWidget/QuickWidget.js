@@ -30,7 +30,6 @@ export default class QuickWidget extends Component {
   }
 
   componentDidUpdate(prevProps){
-    console.log(prevProps.taskId !== this.props.taskId)
     if(prevProps.taskId !== this.props.taskId){
       if (this.scrollRef.current) {
         this.scrollRef.current.scrollTop = 0;
