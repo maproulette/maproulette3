@@ -151,7 +151,7 @@ export const CustomFieldTemplate = function(props) {
 }
 
 export const CustomNotificationFieldTemplate = function(props) {
-  const {classNames, children, description, uiSchema, errors} = props
+  const {classNames, children, description, errors} = props
   return (
     <div className={classNames}>
        <React.Fragment>
