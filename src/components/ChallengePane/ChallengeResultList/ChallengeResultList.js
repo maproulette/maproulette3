@@ -89,9 +89,9 @@ export class ChallengeResultList extends Component {
     let matchedId = []
     if(!isNaN(query) && query) {
       if(this.props.searchFilters.searchType == "projects"){
-        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.parent.id.toString() == query.toString());
+        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.parent.id.toString() === query.toString());
       } else {
-        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.id.toString() == query.toString());
+        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.id.toString() === query.toString());
       }
     }
 
