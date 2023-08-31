@@ -18,7 +18,7 @@ const useMRProperties = workspaceContext => {
   const [properties, setProperties] = useState({})
 
   useEffect(() => {
-    if(workspaceContext){
+    if(!workspaceContext){
       return null
     }
 
