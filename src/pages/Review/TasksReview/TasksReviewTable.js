@@ -324,13 +324,16 @@ export class TaskReviewTable extends Component {
             </li>
             {(reviewTasksType === ReviewTasksType.allReviewedTasks || reviewTasksType === ReviewTasksType.toBeReviewed) &&
               <li onClick={dropdown.toggleDropdownVisible}>
-                <a target="_blank"
-                   rel="noopener noreferrer"
-                   href={buildLinkToReviewTableExportCSV(this.props.reviewCriteria, this.props.addedColumns)}
-                   className="mr-flex mr-items-center">
-                  <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
-                  <FormattedMessage {...messages.exportReviewTableCSVLabel} />
-                </a>
+                {
+                  process.env.REACT_APP_REVIEW_TABLE_EXPORT_CSV ?
+                    <a target="_blank"
+                      rel="noopener noreferrer"
+                      href={buildLinkToReviewTableExportCSV(this.props.reviewCriteria, this.props.addedColumns)}
+                      className="mr-flex mr-items-center">
+                      <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                      <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                    </a> : null
+                }
                 <a target="_blank"
                    rel="noopener noreferrer"
                    href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
