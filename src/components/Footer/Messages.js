@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "MapRoulette",
   },
 
+  APIVersionLabel: {
+    id: "Footer.APIversionLabel",
+    defaultMessage: "MaprouletteAPI",
+  },
+
   getHelp: {
     id: "Footer.getHelp",
     defaultMessage: "Get Help",
