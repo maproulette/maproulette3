@@ -85,6 +85,14 @@ export default defineMessages({
     id: "Errors.task.bundleFailure",
     defaultMessage: "Unable to bundle tasks together",
   },
+  taskBundleCooperative: {
+    id: "Errors.task.bundleCooperative",
+    defaultMessage: "The main task is Cooperative. All selected tasks must be Cooperative.",
+  },
+  taskBundleNotCooperative: {
+    id: "Errors.task.bundleNotCooperative",
+    defaultMessage: "The main task is not Cooperative. No selected tasks can be Cooperative.",
+  },
   taskCooperativeFailure: {
     id: "Errors.task.cooperativeFailure",
     defaultMessage: "Failed to load cooperative task{details}",

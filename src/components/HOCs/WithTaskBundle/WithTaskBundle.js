@@ -27,8 +27,8 @@ export function WithTaskBundle(WrappedComponent) {
       })
     }
 
-    createTaskBundle = (taskIds, name) => {
-      this.props.bundleTasks(taskIds, name).then(taskBundle => {
+    createTaskBundle = (taskIds, bundleTypeMismatch, name) => {
+      this.props.bundleTasks(taskIds, bundleTypeMismatch, name).then(taskBundle => {
         this.setState({taskBundle})
       })
     }
