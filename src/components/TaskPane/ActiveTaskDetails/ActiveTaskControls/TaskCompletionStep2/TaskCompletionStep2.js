@@ -68,8 +68,8 @@ export default class TaskCompletionStep2 extends Component {
         {this.props.needsRevised &&
           <TaskRevisedControl {...this.props} className="mr-mb-4" />
         }
-
-        <TaskCancelEditingControl {...this.props} className="" />
+        
+        {!this.props.editMode ? <TaskCancelEditingControl {...this.props} className="" /> : null}
       </div>
     )
   }
