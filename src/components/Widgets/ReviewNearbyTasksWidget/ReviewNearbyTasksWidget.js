@@ -132,7 +132,7 @@ export default class ReviewNearbyTasksWidget extends Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(prevProps) {
     const challengeId = _get(this.props.task, 'parent.id');
     if (_isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId);
