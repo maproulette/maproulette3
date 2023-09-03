@@ -52,10 +52,13 @@ import './App.scss'
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
-const CurrentTaskPane = () => {
+
+const CurrentTaskPaneInternal = (props) => {
   const loggedIn = localStorage.getItem('isLoggedIn')
-  return loggedIn ? WithCurrentTask(TaskPane) : WithCurrentTask(PublicTaskPane)
+  return loggedIn ? <TaskPane {...props} /> : <PublicTaskPane {...props} />
 }
+const CurrentTaskPane = WithCurrentTask(CurrentTaskPaneInternal)
+
 const CurrentReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentMetaReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentVirtualChallengeTaskPane =
@@ -109,13 +112,13 @@ export class App extends Component {
             <CachedRoute path='/browse/challenges/:challengeId' component={ChallengeDetail} />
             <CachedRoute path='/browse/projects/:projectId' component={ProjectDetail} />
             <CachedRoute path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
-            <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane()} />
+            <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
             <CachedRoute exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
             <CachedRoute exact path='/virtual/:virtualChallengeId/task/:taskId'
                   component={CurrentVirtualChallengeTaskPane} />
             <CachedRoute exact path='/virtual/:virtualChallengeId'
                   component={LoadRandomVirtualChallengeTask} />
-            <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane()} />
+            <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane} />
             <CachedRoute exact path='/task/:taskId/review' component={CurrentReviewTaskPane} />
             <CachedRoute path='/user/profile/:userId' component={Profile} />
             <CachedRoute path='/user/profile' component={Profile} />

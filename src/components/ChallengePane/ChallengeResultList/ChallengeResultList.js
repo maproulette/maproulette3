@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _filter from 'lodash/filter'
 import _compact from 'lodash/compact'
 import _clone from 'lodash/clone'
 import _findIndex from 'lodash/findIndex'
@@ -70,10 +71,11 @@ export class ChallengeResultList extends Component {
           || this.props.location.search.includes("default"))
         ? limitUserResults(challengeResultsUnbound)
         : challengeResultsUnbound;
-    
+
     const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
 
     const search = _get(this.props, 'currentSearch.challenges', {})
+    const searchType = this.props.searchFilters.searchType
     const bounds = _get(search, 'mapBounds.bounds')
     const locationFilter = _get(search, 'filters.location')
     const otherFilters = _omit(search.filters, ['location'])
@@ -81,6 +83,17 @@ export class ChallengeResultList extends Component {
       _isEmpty(search.query) &&
       _isEmpty(otherFilters) &&
       (_isEmpty(locationFilter) || !bounds || !boundsWithinAllowedMaxDegrees(bounds))
+
+    const query = search.query ? search.query : this.props.searchFilters.project
+
+    let matchedId = []
+    if(!isNaN(query) && query) {
+      if(this.props.searchFilters.searchType == "projects"){
+        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.parent.id.toString() === query.toString());
+      } else {
+        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.id.toString() === query.toString());
+      }
+    }
 
     // If no filters are applied, inject any featured projects
     if (unfiltered && this.props.featuredProjects.length > 0) {
@@ -100,6 +113,49 @@ export class ChallengeResultList extends Component {
       }
     }
 
+    let detectedIds = null;
+
+    if (!isNaN(query) && query) {
+      if (matchedId.length === 0) {
+        detectedIds = (
+          <div className="mr-text-white mr-text-lg mr-pt-4">
+            <span>
+              <FormattedMessage {...messages.noChallengeIds} />
+            </span>
+          </div>
+        );
+      } else if (searchType === undefined || searchType === "challenges") {
+        detectedIds = (
+          <div>
+            <FormattedMessage {...messages.challenge} />
+            {matchedId[0].id}
+            <ChallengeResultItem
+              key={`challenge_${matchedId[0].id}`}
+              {...this.props}
+              challenge={matchedId[0]}
+              listRef={this.listRef}
+              sort={search?.sort}
+            />
+          </div>
+        );
+      } else if (searchType === "projects") {
+        detectedIds = (
+          <div>
+            <FormattedMessage {...messages.project} />
+            {matchedId[0].parent.id} {_compact(_map(matchedId, (item) => (
+              <ProjectResultItem
+                key={`project_${item.id}`}
+                {...this.props}
+                project={item}
+                listRef={this.listRef}
+              />
+            )))}
+          </div>
+        );
+      }
+    }
+    
+    
     let results = null
     if (challengeResults.length === 0) {
       if (!isFetching) {
@@ -147,6 +203,22 @@ export class ChallengeResultList extends Component {
         ref={this.listRef}
         className="mr-relative lg:mr-w-sm lg:mr-pr-6 lg:mr-mr-2 mr-mb-6 lg:mr-mb-0 lg:mr-rounded lg:mr-h-challenges lg:mr-overflow-auto"
       >
+        {detectedIds ? (
+          <div>
+            {detectedIds}
+            <div
+              className={`mr-border mr-border-white ${
+                matchedId.length && results.length
+                  ? "mr-mt-6 mr-mb-6"
+                  : matchedId.length
+                  ? "mr-mt-6"
+                  : !results
+                  ? "mr-mb-6"
+                  : "mr-mt-4 mr-mb-6"
+              }`}
+            />
+          </div>
+        ) : null}
         {results}
 
         <div className="after-results">

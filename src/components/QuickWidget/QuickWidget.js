@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
@@ -16,13 +16,25 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class QuickWidget extends Component {
-  state = {
-    error: false,
+  constructor(props) {
+    super(props)
+    this.scrollRef = createRef()
+    this.state = {
+      error: false,
+    }
   }
 
   componentDidCatch(error) {
     console.log(error)
     this.setState({error: true})
+  }
+
+  componentDidUpdate(prevProps){
+    if(prevProps.taskId !== this.props.taskId){
+      if (this.scrollRef.current) {
+        this.scrollRef.current.scrollTop = 0;
+      }
+    }
   }
 
   render() {
@@ -71,7 +83,7 @@ export default class QuickWidget extends Component {
             {this.props.intro &&
             <div className="mr-card-widget__intro">{this.props.intro}</div>
             }
-            <div className="mr-card-widget__content">{this.props.children}</div>
+            <div ref={this.scrollRef} className="mr-card-widget__content">{this.props.children}</div>
           </div>
         }
 

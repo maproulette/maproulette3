@@ -1773,6 +1773,7 @@
   "Widgets.TaskLocationWidget.label": "Location",
   "Widgets.TaskLocationWidget.show": "Show:",
   "Widgets.TaskLocationWidget.title": "Location",
+  "Widgets.TaskMapWidget.editMode": "Current Mode:",
   "Widgets.TaskMapWidget.label": "Task",
   "Widgets.TaskMapWidget.title": "Task",
   "Widgets.TaskMoreOptionsWidget.label": "More Options",

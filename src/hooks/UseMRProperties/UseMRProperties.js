@@ -18,6 +18,10 @@ const useMRProperties = workspaceContext => {
   const [properties, setProperties] = useState({})
 
   useEffect(() => {
+    if(!workspaceContext){
+      return null
+    }
+
     const mrProperties = {
       '#mapZoom': workspaceContext['taskMapZoom'],
     }
