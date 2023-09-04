@@ -139,6 +139,11 @@ export default defineMessages({
     defaultMessage: "Internal Id",
   },
 
+  featureIdLabel: {
+    id: "Review.Task.fields.featureId.label",
+    defaultMessage: "Feature Id",
+  },
+
   statusLabel: {
     id: "Review.fields.status.label",
     defaultMessage: "Status",
@@ -234,11 +239,22 @@ export default defineMessages({
     defaultMessage: "Challenge",
   },
 
+  challengeIdLabel: {
+    id: "Review.fields.challengeId.label",
+    defaultMessage: "Challenge Id",
+  },
+
+  
   projectLabel: {
     id: "Review.fields.project.label",
     defaultMessage: "Project",
   },
 
+  projectIdLabel: {
+    id: "Review.fields.projectId.label",
+    defaultMessage: "Project Id",
+  },
+  
   tagsLabel: {
     id: "Review.fields.tags.label",
     defaultMessage: "Tags",

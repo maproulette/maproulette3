@@ -180,6 +180,7 @@ const buildQueryFilters = function (criteria, addedColumns) {
   sortBy = sortBy == "id" ? "tasks.id" : sortBy
   sortBy = sortBy == "reviewStatus" ? "review_status" : sortBy
   sortBy = sortBy == "reviewedAt" ? "reviewed_at" : sortBy
+  sortBy = sortBy == "metaReviewedAt" ? "meta_reviewed_at" : sortBy
 
   //Main Filters
   const filters = _get(criteria, "filters", {});

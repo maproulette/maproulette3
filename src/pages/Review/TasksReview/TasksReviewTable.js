@@ -219,9 +219,12 @@ export class TaskReviewTable extends Component {
 
   setupConfigurableColumns = (reviewTasksType) => {
     let columns = {"id":{},
+                   "featureId":{},
                    "reviewStatus":{permanent: true},
                    "reviewRequestedBy":{},
+                   "challengeId":{},
                    "challenge":{},
+                   "projectId":{},
                    "project":{},
                    "mappedOn":{},
                    "reviewedBy":{},
@@ -592,6 +595,18 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     maxWidth: 120,
   }
 
+  columns.featureId = {
+    id: 'featureId',
+    Header: props.intl.formatMessage(messages.featureIdLabel),
+    accessor: t => {
+        return <span>{t.geometries.features ? t.geometries.features[0].id : "N/A"}</span>
+    },
+    exportable: t => t.geometries.features ? t.geometries.features[0].id : "N/A",
+    sortable: false,
+    filterable: false,
+    maxWidth: 120,
+  }
+
   columns.status = {
     id: 'status',
     Header: makeInvertable(props.intl.formatMessage(messages.statusLabel),
@@ -722,6 +737,18 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     ),
   }
 
+  columns.challengeId = {
+    id: 'challengeId',
+    Header: props.intl.formatMessage(messages.challengeIdLabel),
+    accessor: t => {
+        return <span>{t.parent.id}</span>
+    },
+    exportable: t => t.id,
+    sortable: false,
+    filterable: false,
+    maxWidth: 120,
+  }
+
   columns.challenge = {
     id: 'challenge',
     Header: makeInvertable(props.intl.formatMessage(messages.challengeLabel),
@@ -755,6 +782,18 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         />
       )
     }
+  }
+
+  columns.projectId = {
+    id: 'projectId',
+    Header: props.intl.formatMessage(messages.projectIdLabel),
+    accessor: t => {
+      return <span>{t.parent.parent.id}</span>
+  },
+  exportable: t => t.parent.parent.id,
+  sortable: false,
+  filterable: false,
+  maxWidth: 120,
   }
 
   columns.project = {
