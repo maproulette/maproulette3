@@ -23,6 +23,8 @@ export { default as FeatureStyleLegendWidget }
        from './FeatureStyleLegendWidget/FeatureStyleLegendWidget'
 export { default as TaskBundleWidget }
        from './TaskBundleWidget/TaskBundleWidget'
+export { default as ReviewNearbyTasksWidget }
+       from './ReviewNearbyTasksWidget/ReviewNearbyTasksWidget'
 export { default as TagDiffWidget }
        from './TagDiffWidget/TagDiffWidget'
 export { default as TaskMapWidget }
