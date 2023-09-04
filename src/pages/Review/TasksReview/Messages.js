@@ -104,6 +104,16 @@ export default defineMessages({
     defaultMessage: "Export Review Table CSV"
   },
 
+  requiredForExport: {
+    id: "Review.TaskAnalysisTable.requiredForExport",
+    defaultMessage: "Your can only export one"
+  },
+
+  requiredProject: {
+    id: "Review.TaskAnalysisTable.requiredProject",
+    defaultMessage: "project at a time."
+  },
+
   actionsColumnHeader: {
     id: "Review.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
