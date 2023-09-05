@@ -289,7 +289,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
       _each(["status", "reviewStatus", "metaReviewStatus", "priorities"], key => {
-        if (!_isUndefined(_get(criteria, `filters.${key}`))) {
+        if (!_isUndefined(_get(criteria, `filters.${key}`)) && !this.props.taskId) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
           }
