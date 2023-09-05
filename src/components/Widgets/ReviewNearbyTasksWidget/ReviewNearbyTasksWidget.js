@@ -39,8 +39,8 @@ const descriptor = {
   widgetKey: 'ReviewNearbyTasksWidget',
   label: messages.label,
   targets: [WidgetDataTarget.task],
-  minWidth: 7,
-  defaultWidth: 7,
+  minWidth: 8,
+  defaultWidth: 8,
   minHeight: 10,
   defaultHeight: 11,
 };
@@ -191,7 +191,7 @@ export default class ReviewNearbyTasksWidget extends Component {
     );
 
     const clearFiltersControl = (
-      <button className="mr-flex mr-items-center mr-text-green-lighter mr-mb-2"
+      <button className="mr-flex mr-items-center mr-text-green-lighter mr-mb-4"
         onClick={() => {
           this.props.clearAllFilters()
         }}>
@@ -212,7 +212,6 @@ export default class ReviewNearbyTasksWidget extends Component {
         noMain
       >
         <div className="mr-pb-2 mr-h-full mr-rounded">
-          <div className="mr-flex">
             {this.props.taskBundle ? (
               <div className="mr-flex mr-justify-between mr-content-center mr-mb-2 mr-flex-1">
                 <h3 className="mr-text-lg mr-text-pink-light">
@@ -222,9 +221,7 @@ export default class ReviewNearbyTasksWidget extends Component {
                   />
                 </h3>
               </div>
-            ) : null}   
-            {clearFiltersControl}
-          </div>
+            ) : null}
           <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
             {this.props.loading ? (
               <BusySpinner className="mr-h-full mr-flex mr-items-center" />
@@ -232,21 +229,22 @@ export default class ReviewNearbyTasksWidget extends Component {
               <MapPane showLasso>{map}</MapPane>
             )}
           </div>
-          <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between">
+          <div className="mr-my-4 mr-px-4 mr-justify-between mr-flex">
             <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
-              <li className="md:mr-mr-8">
+              <li className="md:mr-mr-4">
                 <TaskStatusFilter {...this.props} />
               </li>
-              <li className="md:mr-mr-8">
+              <li className="md:mr-mr-4">
                 <TaskReviewStatusFilter {...this.props} />
               </li>
-              <li className="md:mr-mr-8">
+              <li className="md:mr-mr-4">
                 <TaskPriorityFilter {...this.props} />
               </li>
-              <li>
+              <li className="md:mr-mr-4">
                 <TaskPropertyFilter {...this.props} />
               </li>
             </ul>
+            {clearFiltersControl}
           </div>
         </div>
       </QuickWidget>
