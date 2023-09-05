@@ -9,6 +9,7 @@ import bbox from '@turf/bbox'
 import { point, featureCollection } from '@turf/helpers'
 
 import { WidgetDataTarget, registerWidgetType } from '../../../services/Widget/Widget'
+import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 import TaskPropertyFilter from '../../TaskFilters/TaskPropertyFilter'
@@ -189,6 +190,18 @@ export default class ReviewNearbyTasksWidget extends Component {
       />
     );
 
+    const clearFiltersControl = (
+      <button className="mr-flex mr-items-center mr-text-green-lighter mr-mb-2"
+        onClick={() => {
+          this.props.clearAllFilters()
+        }}>
+        <SvgSymbol sym="close-icon"
+          viewBox='0 0 20 20'
+          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+        <FormattedMessage {...messages.clearFiltersLabel} />
+      </button>
+    )
+
     return (
       <QuickWidget
         {...this.props}
@@ -199,16 +212,19 @@ export default class ReviewNearbyTasksWidget extends Component {
         noMain
       >
         <div className="mr-pb-2 mr-h-full mr-rounded">
-          {this.props.taskBundle ? (
-            <div className="mr-flex mr-justify-between mr-content-center mr-mb-2">
-              <h3 className="mr-text-lg mr-text-pink-light">
-                <FormattedMessage
-                  {...messages.simultaneousTasks}
-                  values={{ taskCount: this.props.taskBundle.taskIds.length }}
-                />
-              </h3>
-            </div>
-          ) : null}
+          <div className="mr-flex">
+            {this.props.taskBundle ? (
+              <div className="mr-flex mr-justify-between mr-content-center mr-mb-2 mr-flex-1">
+                <h3 className="mr-text-lg mr-text-pink-light">
+                  <FormattedMessage
+                    {...messages.simultaneousTasks}
+                    values={{ taskCount: this.props.taskBundle.taskIds.length }}
+                  />
+                </h3>
+              </div>
+            ) : null}   
+            {clearFiltersControl}
+          </div>
           <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
             {this.props.loading ? (
               <BusySpinner className="mr-h-full mr-flex mr-items-center" />
