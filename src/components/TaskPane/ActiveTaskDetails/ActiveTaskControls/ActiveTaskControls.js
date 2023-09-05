@@ -27,6 +27,7 @@ import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
 import WithTaskTags from '../../../HOCs/WithTaskTags/WithTaskTags'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import WithTaskFeatureProperties from '../../../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
@@ -37,6 +38,7 @@ import TaskConfirmationModal
 import TaskTags from '../../../TaskTags/TaskTags'
 import messages from './Messages'
 import { constructChangesetUrl } from '../../../../utils/constructChangesetUrl'
+import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement'
 import './ActiveTaskControls.scss'
 
 
@@ -84,13 +86,19 @@ export class ActiveTaskControls extends Component {
       null
   }
 
+
+
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
+    const {task, taskFeatureProperties} = this.props
     const allowed = this.allowedEditors()
     // If the given editor isn't allowed, default to first allowed editor
     if (allowed && allowed.indexOf(value) === -1) {
       value = allowed[0]
     }
+
+    const comment = task.parent.checkinComment
+    const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
 
     this.setState({taskBeingCompleted: this.props.task.id})
     this.props.editTask(
@@ -101,7 +109,8 @@ export class ActiveTaskControls extends Component {
         imagery: this.props.source.id !== OPEN_STREET_MAP ? this.props.source : undefined,
         photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null,
       },
-      this.props.taskBundle
+      this.props.taskBundle,
+      replacedComment
     )
   }
 
@@ -404,7 +413,9 @@ export default WithSearch(
       WithTaskTags(
         WithTaskReview(
           WithKeyboardShortcuts(
-            injectIntl(ActiveTaskControls)
+            WithTaskFeatureProperties(
+              injectIntl(ActiveTaskControls)
+            )
           )
         )
       )

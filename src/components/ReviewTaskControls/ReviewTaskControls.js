@@ -16,6 +16,8 @@ import WithTaskTags from '../HOCs/WithTaskTags/WithTaskTags'
 import WithSearch from '../HOCs/WithSearch/WithSearch'
 import WithKeyboardShortcuts from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithEditor from '../HOCs/WithEditor/WithEditor'
+import WithTaskFeatureProperties from '../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
+import { replacePropertyTags } from '../../hooks/UsePropertyReplacement/UsePropertyReplacement'
 import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
@@ -110,8 +112,12 @@ export class ReviewTaskControls extends Component {
 
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
+    const {task, taskFeatureProperties} = this.props
+    const comment = task.parent.checkinComment
+    const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
+
     this.setState({taskBeingCompleted: this.props.task.id})
-    this.props.editTask(value, this.props.task, this.props.mapBounds, null, this.props.taskBundle)
+    this.props.editTask(value, this.props.task, this.props.mapBounds, null, this.props.taskBundle, replacedComment)
   }
 
   componentDidUpdate(prevProps) {
@@ -338,7 +344,9 @@ export default
   WithSearch(
     WithTaskTags(
       WithEditor(
-        WithKeyboardShortcuts(ReviewTaskControls)
+        WithKeyboardShortcuts(
+          WithTaskFeatureProperties(ReviewTaskControls)
+        )
       )
     ),
     'task'
