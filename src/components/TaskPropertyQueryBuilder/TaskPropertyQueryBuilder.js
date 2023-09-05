@@ -111,7 +111,6 @@ export class TaskPropertyQueryBuilder extends Component {
   }
 
   finish = (e) => {
-    console.log(this.formRef.current)
     e.preventDefault()
     e.stopPropagation()
 
