@@ -7,8 +7,8 @@ import { challengePassesDifficultyFilter }
        from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import { challengePassesKeywordFilter }
        from '../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
-import { challengePassesCategorizationKeywordsFilter }
-       from '../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
+import { challengePassesCategorizationKeywordsFilter } 
+       from '../../../services/Challenge/ChallengeCategorizationKeywords/ChallengeCategorizationKeywords';
 import { challengePassesLocationFilter }
        from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import { challengePassesProjectFilter }
