@@ -27,6 +27,11 @@ class FilterByCategorizationKeywords extends Component {
       }
     }
 
+    if(Array.from(updatedFilters).length === 0){
+      this.props.removeSearchFilters(['categorizationKeywords'])
+      return
+    }
+
     // Update redux store or perform other necessary actions
     this.props.setCategorizationFilters(Array.from(updatedFilters))
   }
@@ -49,13 +54,11 @@ class FilterByCategorizationKeywords extends Component {
 
   removeKeyword = (value, categories, categorizationFilters) => {
     const removeKeyword = new Set(categories)
-    const removeFilter =  new Set(categorizationFilters)
     
     removeKeyword.delete(value)
 
-    if (removeFilter.has(value)) {
-      removeFilter.delete(value)
-      this.props.setCategorizationFilters(Array.from(removeFilter))
+    if (categorizationFilters.includes(value)) {
+      this.updateFilter(value, categorizationFilters)
     }
 
     // Update redux store or perform other necessary actions
@@ -159,6 +162,8 @@ const ListFilterItems = function (props) {
 FilterByCategorizationKeywords.propTypes = {
   /** Invoked to update the challenge keyword filter */
   setCategorizationFilters: PropTypes.func.isRequired,
+  /** Invoked to clear the challenge keyword filter */
+  removeSearchFilters: PropTypes.func.isRequired,
 }
 
 export default injectIntl(FilterByCategorizationKeywords)
