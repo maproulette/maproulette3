@@ -5,6 +5,7 @@ import WithChallengeSearch from '../../HOCs/WithSearch/WithChallengeSearch'
 import WithCommandInterpreter from '../../HOCs/WithCommandInterpreter/WithCommandInterpreter'
 import FilterByDifficulty from './FilterByDifficulty'
 import FilterByKeyword from './FilterByKeyword'
+import FilterByCategorizationKeywords from './FilterByCategorizationKeywords'
 import ClearFiltersControl from './ClearFiltersControl'
 import SortChallengesSelector from './SortChallengesSelector'
 import './ChallengeFilterSubnav.scss'
@@ -20,6 +21,7 @@ const CommandSearchBox = WithCommandInterpreter(SearchBox)
  *
  * @see See FilterByDifficulty
  * @see See FilterByKeyword
+ * @see See FilterByCategorizationKeywords
  * @see See FilterByLocation
  * @see See SearchBox
  *
@@ -46,6 +48,8 @@ export class ChallengeFilterSubnav extends Component {
             <SortChallengesSelector {...this.props} />
             <FilterByKeyword {...this.props} />
             <FilterByDifficulty {...this.props} />
+            <FilterByKeyword {...this.props} />
+            <FilterByCategorizationKeywords {...this.props} />
             <CommandSearchBox
               {...this.props}
               className="mr-h-12"

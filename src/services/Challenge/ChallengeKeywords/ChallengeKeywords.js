@@ -142,3 +142,16 @@ export const challengePassesKeywordFilter = function(filter, challenge) {
 
   return true
 }
+
+/**
+ * Determines if the given challenge passes the given categorization keywords filter.
+ */
+export const challengePassesCategorizationKeywordsFilter = function(filter, challenge) {
+  console.log(filter.CategorizationKeywords, challenge.tags)
+  if (_isArray(filter.categorizationKeywords)) {
+    // Any matching keyword is a pass
+    return _intersection(filter.categorizationKeywords, challenge.tags).length > 0
+  }
+
+  return true
+}

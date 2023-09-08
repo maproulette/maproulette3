@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: 'Work on',
   },
 
+  categorizeLabel: {
+    id: 'ChallengeFilterSubnav.filter.categorize.label',
+    defaultMessage: 'Categorize',
+  },
+
   locationLabel: {
     id: 'ChallengeFilterSubnav.filter.location.label',
     defaultMessage: 'Location',
