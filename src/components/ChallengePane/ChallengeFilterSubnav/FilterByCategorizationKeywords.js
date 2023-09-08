@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import _keys from 'lodash/keys'
-import _without from 'lodash/without'
-import _isEmpty from 'lodash/isEmpty'
-import _first from 'lodash/first'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import Dropdown from '../../Dropdown/Dropdown'
 import ButtonFilter from './ButtonFilter'
@@ -53,13 +49,14 @@ class FilterByCategorizationKeywords extends Component {
 
   removeKeyword = (value, categories, categorizationFilters) => {
     const removeKeyword = new Set(categories)
-
-    if (removeKeyword.has(value)) {
-      removeKeyword.delete(value)
-      this.props.setCategorizationFilters(Array.from(removeKeyword))
-    }
-
+    const removeFilter =  new Set(categorizationFilters)
+    
     removeKeyword.delete(value)
+
+    if (removeFilter.has(value)) {
+      removeFilter.delete(value)
+      this.props.setCategorizationFilters(Array.from(removeFilter))
+    }
 
     // Update redux store or perform other necessary actions
     this.props.updateUserAppSetting(this.props.user.id, {
