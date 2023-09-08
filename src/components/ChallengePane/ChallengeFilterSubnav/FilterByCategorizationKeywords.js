@@ -17,7 +17,7 @@ class FilterByCategorizationKeywords extends Component {
     const updatedFilters = new Set(categorizationFilters)
 
     if (value === null) {
-      this.props.setCategorizationFilters([])
+      this.props.removeSearchFilters(['categorizationKeywords'])
       return
     } else {
       if (updatedFilters.has(value)) {
