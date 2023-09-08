@@ -28,5 +28,4 @@ export const fetchActiveFundraisingNotices = async function () {
     // Allow server admin to delete file when not in use
     return []
   }
-  return []
 }
