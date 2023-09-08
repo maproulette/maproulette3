@@ -30,6 +30,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
     routeCriteria = {
        sort: param => this.props.setSearchSort({sortBy: param}),
        difficulty: param => this.props.setSearchFilters({difficulty: parseInt(param, 10)}),
+       categorizationKeywords: param => this.props.setCategorizationFilters(param.split(',')),
        keywords: param => this.props.setKeywordFilter(param.split(',')),
        location: param => this.props.setSearchFilters({location: param}),
        project: param => this.props.setSearchFilters({project: param, searchType: SEARCH_TYPE_PROJECT}),
@@ -101,6 +102,11 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
       addSearchCriteriaToRoute(this.props.history, {keywords: keywords ? keywords.join(',') : keywords})
     }
 
+    setCategorizationFilters = (categorization) => {
+      this.props.setCategorizationFilters(categorization)
+      addSearchCriteriaToRoute(this.props.history, {categorizationKeywords: categorization ? categorization.join(',') : categorization})
+    }
+
     clearSearchFilters = (clearRoute = true) => {
       this.props.clearSearchFilters(clearRoute)
       clearRoute && this.props.history.push(this.props.history.location.pathname)
@@ -124,6 +130,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
                             setSearchFilters={this.setSearchFilters}
                             removeSearchFilters={this.removeSearchFilters}
                             setKeywordFilter={this.setKeywordFilter}
+                            setCategorizationFilters={this.setCategorizationFilters}
                             clearSearchFilters={this.clearSearchFilters}
                             updateChallengeSearchMapBounds={this.updateChallengeSearchMapBounds} />
        )
