@@ -1,5 +1,4 @@
 import _isArray from 'lodash/isArray'
-import _intersection from 'lodash/intersection'
 
 /**
  * Determines if the given challenge passes the given categorization keywords filter.
