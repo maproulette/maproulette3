@@ -122,7 +122,7 @@ const ListFilterItems = function (props) {
   // Add 'Anything' option to start of dropdown
   menuItems.unshift(
     <li key="anything">
-      <a onClick={() => props.updateFilter(null)}>Anything</a>
+      <a onClick={() => props.updateFilter(null)}><FormattedMessage {...messages.anything}/></a>
     </li>
   )
 
@@ -130,10 +130,10 @@ const ListFilterItems = function (props) {
   menuItems.push(
     <li key="add">
       {props.categories.length === 0 ? (
-        <div className="mr-text-grey-light mr-pt-2"> You have not set any categories.</div>
+        <div className="mr-text-grey-light mr-pt-2"> <FormattedMessage {...messages.set}/></div>
       ) : null}
       <div className="mr-flex mr-items-center mr-py-3">
-        <label className="mr-text-green-lighter mr-mr-4 mr-cursor-pointer">Add:</label>
+        <label className="mr-text-green-lighter mr-mr-4 mr-cursor-pointer"><FormattedMessage {...messages.add}/></label>
         <form onSubmit={(e) => {
           e.preventDefault() // Prevent the default form submission behavior
           const value = e.target.elements.inputName.value // Replace 'inputName' with the actual name attribute of the input
@@ -150,7 +150,7 @@ const ListFilterItems = function (props) {
       </div>
       <div className="mr-text-grey-light">
         {props.categories.length === 6
-          ? <div><div>You must delete a category</div>to add a new one.</div>
+          ? <div><div><FormattedMessage {...messages.delete}/></div><FormattedMessage {...messages.new}/></div>
           : "Add a new category"}
       </div>
     </li>
