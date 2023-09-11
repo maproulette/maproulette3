@@ -216,6 +216,10 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     dispatch(setFilters(searchGroup, {keywords}))
   },
 
+  setCategorizationFilters: categorizationKeywords => {
+    dispatch(setFilters(searchGroup, {categorizationKeywords}))
+  },
+
   clearSearchFilters: () => {
     dispatch(clearFilters(searchGroup))
   },
