@@ -206,22 +206,22 @@ export default defineMessages({
 
   systemNotificationsDescription: {
     id: "Profile.form.systemNotifications.description",
-    defaultMessage: "This is a test system notifications help label",
+    defaultMessage: "Receive notifications for important MapRoulette system events, such as planned downtime.",
   },
 
   mentionNotificationsDescription: {
     id: "Profile.form.mentionNotifications.description",
-    defaultMessage: "Receive a notification when someone @mentions you in a comment",
+    defaultMessage: "Receive a notification when someone @mentions you in a comment.",
   },
 
   reviewApprovedNotificationsDescription: {
     id: "Profile.form.reviewApprovedNotifications.description",
-    defaultMessage: "Receive a notification when your task was approved following a review",
+    defaultMessage: "Receive a notification when your task was approved following a review.",
   },
 
   reviewRejectedNotificationsDescription: {
     id: "Profile.form.reviewRejectedNotifications.description",
-    defaultMessage: "Receive a notification when your task needs to be revisited following a review",
+    defaultMessage: "Receive a notification when your task needs to be revisited following a review.",
   },
 
   reviewAgainNotificationsDescription: {
@@ -231,17 +231,17 @@ export default defineMessages({
 
   challengeCompletedNotificationsDescription: {
     id: "Profile.form.challengeCompletedNotifications.description",
-    defaultMessage: "Receive a notification when a Challenge you created has been completed",
+    defaultMessage: "Receive a notification when a Challenge you created has been completed.",
   },
 
   teamNotificationsDescription: {
     id: "Profile.form.teamNotifications.description",
-    defaultMessage: "This is a test team notifications help label",
+    defaultMessage: "Receive a notification when you have been invited by another user to join a team.",
   },
 
   followNotificationsDescription: {
     id: "Profile.form.followNotifications.description",
-    defaultMessage: "This is a test follow help label",
+    defaultMessage: "Receive notifications when other users choose to follow you.",
   },
 
   metaReviewNotificationsDescription: {
@@ -251,12 +251,12 @@ export default defineMessages({
 
   reviewCountNotificationsDescription: {
     id: "Profile.form.reviewCountNotifications.description",
-    defaultMessage: "This is a test review count help label",
+    defaultMessage: "Receive periodic notifications indicating how many task reviews you currently have pending.",
   },
 
   revisionCountNotificationsDescription: {
     id: "Profile.form.revisionCountNotifications.description",
-    defaultMessage: "This is a test revise count help label",
+    defaultMessage: "Receive periodic notifications indicating how many task revisions you currently have pending.",
   },
 
   yesLabel: {
