@@ -28,9 +28,9 @@ export class MobileFilterMenu extends Component {
                       toggleActive={this.props.toggleActive}>
         <Menu {...this.props}>
           <FilterByDifficulty asMenuList {...this.props} />
+          <FilterByKeyword asMenuList {...this.props} />
           <LocationFilter asMenuList {...this.props} />
           <FilterByCategorizationKeywords asMenuList {...this.props} />
-          <FilterByKeyword asMenuList {...this.props} />
         </Menu>
       </SimpleDropdown>
     )

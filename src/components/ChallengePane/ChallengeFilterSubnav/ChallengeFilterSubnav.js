@@ -48,7 +48,6 @@ export class ChallengeFilterSubnav extends Component {
             <SortChallengesSelector {...this.props} />
             <FilterByKeyword {...this.props} />
             <FilterByDifficulty {...this.props} />
-            <FilterByKeyword {...this.props} />
             <FilterByCategorizationKeywords {...this.props} />
             <CommandSearchBox
               {...this.props}
