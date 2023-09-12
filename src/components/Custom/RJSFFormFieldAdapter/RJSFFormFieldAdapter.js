@@ -61,7 +61,6 @@ export const CustomArrayFieldTemplate = props => {
   const addLabel = props.uiSchema["ui:addLabel"] ||
     <FormattedMessage {...messages.addPriorityRuleLabel} />
   const deleteLabel = props.uiSchema["ui:deleteLabel"]
-
   const itemFields = _map(props.items, element =>
     <div
       key={element.index}
@@ -96,7 +95,7 @@ export const CustomArrayFieldTemplate = props => {
       {props.canAdd &&
        <div className="array-field__block-controls">
          <button
-           className="mr-button mr-button mr-button--small"
+           className="mr-button mr-button--small"
            onClick={props.onAddClick}
          >
            {addLabel}
@@ -147,6 +146,20 @@ export const CustomFieldTemplate = function(props) {
          {description}
        </React.Fragment>
       }
+    </div>
+  )
+}
+
+export const CustomNotificationFieldTemplate = function(props) {
+  const {classNames, children, description, errors} = props
+  return (
+    <div className={classNames}>
+       <React.Fragment>
+         <LabelWithHelp {...props} control />
+         {children}
+         {errors}
+         {description}
+       </React.Fragment>
     </div>
   )
 }
@@ -389,8 +402,7 @@ export const MarkdownDescriptionField = ({id, description}) => {
 }
 
 export const LabelWithHelp = props => {
-  const {id, displayLabel, label, required, rawHelp, schema, uiSchema} = props
-
+  const {id, displayLabel, label, required, control, rawHelp, schema, uiSchema} = props
   if (displayLabel === false || uiSchema["ui:displayLabel"] === false) {
     return null
   }
@@ -404,7 +416,7 @@ export const LabelWithHelp = props => {
 
   return (
     <div className="mr-mb-2 mr-flex">
-      <label htmlFor={id} className="mr-text-mango mr-text-md mr-uppercase mr-mb-2">
+      <label htmlFor={id} className={control ? "mr-text-base mr-text-mango" : "mr-text-mango mr-text-md mr-uppercase mr-mb-2"}>  
         {normalizedLabel}
         {required && <span className="mr-text-red-light mr-ml-1">*</span>}
       </label>
