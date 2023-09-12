@@ -226,7 +226,7 @@ export default defineMessages({
 
   reviewAgainNotificationsDescription: {
     id: "Profile.form.reviewAgainNotifications.description",
-    defaultMessage: "This is a test review again notifications help label",
+    defaultMessage: "Receive a notification when your review status is updated by the mapper whose task you have reviewed.",
   },
 
   challengeCompletedNotificationsDescription: {
@@ -246,7 +246,7 @@ export default defineMessages({
 
   metaReviewNotificationsDescription: {
     id: "Profile.form.metaReviewNotifications.description",
-    defaultMessage: "This is a test meta review help label",
+    defaultMessage: "Receive a notification when your review status is updated by another reviewer.",
   },
 
   reviewCountNotificationsDescription: {
