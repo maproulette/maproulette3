@@ -8,19 +8,15 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [v3.13.1] - 2023-9-12
-Realease with [maproulette-backend_v4.4.6-rev1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.6-rev1)
+Realease with [maproulette-backend_v4.4.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.7)
 
 ### Features
 - Add columns to Review Table - @CollinBeczak
 - Add Scale Bar Leaflet control to multi-tasking map - @AndrewPhilbin
 - Add cooperative task bundling - @CollinBeczak
-- Change ENV REACT_APP_LEVEL0_EDITOR_SERVER_URL from http to https - @CollinBeczak
-- Fix completion buttons for Rapid - @CollinBeczak
 - Make Task Instructions widget scroll to top on Task ID change - @CollinBeczak
 - Add filtering for project and challenge IDs - @CollinBeczak
-- Add ENV toggle to Review Table CSV - @jschwarz2030
 - Add API version number in Footer - @CollinBeczak
-- Fix mobile instructions widget error - @CollinBeczak
 - Add widgets to mobile workspace - @CollinBeczak
 - Add columns to review table - @CollinBeczak
 - Add single project requirement for Review Table CSV - @CollinBeczak
@@ -28,8 +24,21 @@ Realease with [maproulette-backend_v4.4.6-rev1](https://github.com/maproulette/m
 - Allow use of mustache replacement tags in Changeset Descriptions - @AndrewPhilbin
 - Overhaul Task Property Search filter UI behavior - @AndrewPhilbin
 - Add filter dropdown for categorization keywords in Find Challenges - @CollinBeczak
-- Fix hotkeys preventing stying in Rapid search box in integrated editor - @AndrewPhilbin
+- Notify all project admins of "get in touch" challenge comments(API) - @AndrewPhilbin
+- Provide more information on notification settings - @AndrewPhilbin
 
+### Fixes
+- Fix completion buttons for Rapid - @CollinBeczak
+- Fix mobile instructions widget error - @CollinBeczak
+- Fix hotkeys preventing stying in Rapid search box in integrated editor - @AndrewPhilbin
+- Fix Team and Follow notification subscriptions so user choices persist(API) - @AndrewPhilbin
+
+### System Updates
+- Add ENV toggle to Review Table CSV - @jschwarz2030
+- Change ENV REACT_APP_LEVEL0_EDITOR_SERVER_URL from http to https - @CollinBeczak
+- Support configurable OSM OAuth2 scope - @ljdelight
+- Use https in a few URLs - @ljdelight
+- Include project version from git in /api/v2/service/info - @ljdelight
 
 ## [v3.13.0] - 2023-8-16
 Release with [maproulette-backend_v4.4.6](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.6)
