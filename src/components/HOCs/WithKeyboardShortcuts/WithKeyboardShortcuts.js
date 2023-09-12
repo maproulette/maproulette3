@@ -17,14 +17,17 @@ const mapStateToProps = state => {
   }
 }
 const textInputActive = function(event) {
-  if (event.target.type === 'text')
+  if (event.target.type === 'text' || event.target.type === 'search') {
     return true
+  }
 
   return (event.target.nodeName != null &&
           event.target.getAttribute('type') != null &&
           event.target.nodeName.toLowerCase() === 'input' &&
-          event.target.getAttribute('type').toLowerCase() === 'text') ||
-          event.target.nodeName.toLowerCase() === 'textarea'
+          (event.target.getAttribute('type').toLowerCase() === 'text' ||
+          event.target.getAttribute('type').toLowerCase() === 'search')) ||
+          event.target.nodeName.toLowerCase() === 'textarea' 
+          
 }
 
 const mapDispatchToProps = dispatch => {
