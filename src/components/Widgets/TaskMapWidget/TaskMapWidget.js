@@ -37,6 +37,8 @@ export default class TaskMapWidget extends Component {
     if (this.state.counter % 2) {
       this.setState({ counter: this.state.counter + 1 })
     }
+
+    this.handlePauseShortcuts()
   }
 
   handlePauseShortcuts = () => {
