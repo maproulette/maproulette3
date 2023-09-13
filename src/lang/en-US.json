@@ -1811,6 +1811,7 @@
   "Widgets.TaskLocationWidget.title": "Location",
   "Widgets.TaskMapWidget.editMode": "Current Mode:",
   "Widgets.TaskMapWidget.label": "Task",
+  "Widgets.TaskMapWidget.rapidFailed": "Widget Failed! Geometries Null!",
   "Widgets.TaskMapWidget.title": "Task",
   "Widgets.TaskMoreOptionsWidget.label": "More Options",
   "Widgets.TaskMoreOptionsWidget.title": "More Options",
