@@ -70,6 +70,7 @@ export default class TaskMapWidget extends Component {
 
   render() {
     const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+    
     if(!this.props.task.geometries.features){
       return  (
         <QuickWidget
