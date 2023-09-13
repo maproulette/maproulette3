@@ -42,15 +42,17 @@ export const removeKeyboardShortcut = function(groupName, shortcutName) {
   }
 }
 
-export const pauseKeyboardShortcuts = function() {
+export const pauseKeyboardShortcuts = function(groupName) {
   return {
     type: PAUSE_KEYBOARD_SHORTCUTS,
+    groupName,
   }
 }
 
-export const resumeKeyboardShortcuts = function() {
+export const resumeKeyboardShortcuts = function(groupName) {
   return {
     type: RESUME_KEYBOARD_SHORTCUTS,
+    groupName,
   }
 }
 
@@ -103,7 +105,8 @@ export const currentKeyboardShortcuts = function(state={}, action) {
   }
   else if (action.type === PAUSE_KEYBOARD_SHORTCUTS) {
     // If we're already paused, ignore
-    if (_isEmpty(state.paused)) {
+    console.log(state)
+    if (!_isEmpty(state.paused)) {
       return state
     }
 

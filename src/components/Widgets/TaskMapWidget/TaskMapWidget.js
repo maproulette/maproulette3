@@ -10,6 +10,8 @@ import EditSwitch from './RapidEditor/EditSwitch'
 import RapidEditor from './RapidEditor/RapidEditor';
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 
+const shortcutAction = 'pause'
+
 const descriptor = {
   widgetKey: 'TaskMapWidget',
   label: messages.label,
@@ -26,7 +28,7 @@ export default class TaskMapWidget extends Component {
   }
 
   componentWillUnmount = () => {
-    this.props.resumeKeyboardShortcuts()
+    this.props.resumeKeyboardShortcuts(shortcutAction)
   }
 
   componentDidUpdate = (prevProps) => {
@@ -38,16 +40,16 @@ export default class TaskMapWidget extends Component {
       this.setState({ counter: this.state.counter + 1 })
     }
 
-    this.handlePauseShortcuts()
+    this.handlePauseShortcuts(shortcutAction)
   }
 
   handlePauseShortcuts = () => {
     const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
 
     if (editMode) {
-      this.props.pauseKeyboardShortcuts()
+      this.props.pauseKeyboardShortcuts(shortcutAction)
     } else {
-      this.props.resumeKeyboardShortcuts()
+      this.props.resumeKeyboardShortcuts(shortcutAction)
     }
   }
 

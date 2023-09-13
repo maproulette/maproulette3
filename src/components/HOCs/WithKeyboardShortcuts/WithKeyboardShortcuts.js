@@ -54,11 +54,11 @@ const mapDispatchToProps = dispatch => {
     removeExternalKeyboardShortcut: (groupName, shortcutName) => {
       dispatch(removeKeyboardShortcut(groupName, shortcutName))
     },
-    pauseKeyboardShortcuts: () => {
-      dispatch(pauseKeyboardShortcuts())
+    pauseKeyboardShortcuts: (groupName) => {
+      dispatch(pauseKeyboardShortcuts(groupName))
     },
-    resumeKeyboardShortcuts: () => {
-      dispatch(resumeKeyboardShortcuts())
+    resumeKeyboardShortcuts: (groupName) => {
+      dispatch(resumeKeyboardShortcuts(groupName))
     },
     textInputActive: textInputActive,
     quickKeyHandler: (key, handler, allowModifierKeys=false) => (event => {

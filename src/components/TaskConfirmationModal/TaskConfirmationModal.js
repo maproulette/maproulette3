@@ -34,6 +34,7 @@ import messages from './Messages'
 import ErrorTagDropdown from '../ErrorTagDropdown/ErrorTagDropdown'
 
 const shortcutGroup = 'taskConfirmation'
+const shortcutAction = 'pause'
 
 const ERROR_TAG_STATUSES = [
   TaskReviewStatus.rejected,
@@ -76,7 +77,7 @@ export class TaskConfirmationModal extends Component {
       this.commentInputRef.current.focus()
     }
 
-    this.props.pauseKeyboardShortcuts()
+    this.props.pauseKeyboardShortcuts(shortcutAction)
     this.props.activateKeyboardShortcut(
       shortcutGroup,
       this.props.keyboardShortcutGroups.taskConfirmation,
@@ -92,7 +93,7 @@ export class TaskConfirmationModal extends Component {
   componentWillUnmount() {
     this.props.deactivateKeyboardShortcut(shortcutGroup, 'confirmSubmit',
                                           this.handleKeyboardShortcuts)
-    this.props.resumeKeyboardShortcuts()
+    this.props.resumeKeyboardShortcuts(shortcutAction)
   }
 
   handleAddTag = (value) => {
