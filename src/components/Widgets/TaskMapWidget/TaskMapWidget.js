@@ -50,14 +50,6 @@ export default class TaskMapWidget extends Component {
   }
 
   handleRenderRapid = () => {
-    if(!this.props.task.geometries.features){
-      return  (
-        <div className="mr-text-lg mr-text-red-light mr-flex">
-          <FormattedMessage {...messages.rapidFailed} />
-        </div>
-      )
-    }
-
     if (this.state.counter % 2) {
       return null
     } else {
@@ -78,6 +70,20 @@ export default class TaskMapWidget extends Component {
 
   render() {
     const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+    if(!this.props.task.geometries.features){
+      return  (
+        <QuickWidget
+          {...this.props}
+          className="task-map-widget"
+          noMain
+          permanent
+        >
+          <div className="mr-text-lg mr-text-red-light mr-flex">
+            <FormattedMessage {...messages.rapidFailed} />
+          </div>
+        </QuickWidget>
+      )
+    }
 
     return (
       <QuickWidget
