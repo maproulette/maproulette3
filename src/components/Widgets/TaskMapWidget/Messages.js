@@ -18,4 +18,9 @@ export default defineMessages({
     id: "Widgets.TaskMapWidget.editMode",
     defaultMessage: "Current Mode:",
   },
+
+  rapidFailed: {
+    id: "Widgets.TaskMapWidget.rapidFailed",
+    defaultMessage: "Rapid Failed! Geometries: Null",
+  },
 })

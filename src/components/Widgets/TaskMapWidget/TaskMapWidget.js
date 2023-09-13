@@ -37,8 +37,6 @@ export default class TaskMapWidget extends Component {
     if (this.state.counter % 2) {
       this.setState({ counter: this.state.counter + 1 })
     }
-
-    this.handlePauseShortcuts()
   }
 
   handlePauseShortcuts = () => {
@@ -52,6 +50,14 @@ export default class TaskMapWidget extends Component {
   }
 
   handleRenderRapid = () => {
+    if(!this.props.task.geometries.features){
+      return  (
+        <div className="mr-text-lg mr-text-red-light mr-flex">
+          <FormattedMessage {...messages.rapidFailed} />
+        </div>
+      )
+    }
+
     if (this.state.counter % 2) {
       return null
     } else {
