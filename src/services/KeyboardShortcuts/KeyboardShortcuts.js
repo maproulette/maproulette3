@@ -105,7 +105,6 @@ export const currentKeyboardShortcuts = function(state={}, action) {
   }
   else if (action.type === PAUSE_KEYBOARD_SHORTCUTS) {
     // If we're already paused, ignore
-    console.log(state)
     if (!_isEmpty(state.paused)) {
       return state
     }
