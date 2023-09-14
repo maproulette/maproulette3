@@ -5,6 +5,7 @@ import '../../../../../node_modules/RapiD/dist/rapid.css';
 import { UseRouter } from '../../../../hooks/UseRouter/UseRouter.js';
 import { constructRapidURI } from '../../../../services/Editor/Editor.js';
 import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement.js';
+import AsMappableTask from '../../../../interactions/Task/AsMappableTask.js';
 import WithSearch from '../../../HOCs/WithSearch/WithSearch.js';
 import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/ChallengeZoom.js';
 
@@ -24,6 +25,8 @@ const RapidEditor = ({
   const customSource =
     RapiDContext && RapiDContext.background() && RapiDContext.background().findSource('custom');
   const router = UseRouter()
+
+  const asMappableTask = task ? AsMappableTask(task) : null
 
   useEffect(() => {
     if (!customImageryIsSet && imagery && customSource) {
@@ -49,15 +52,19 @@ const RapidEditor = ({
 
   useEffect(() => {
     if (RapiDContext && comment) {
-      const properties = task?.geometries?.features[0]?.properties
-      if(properties && Object.keys(properties).length) {
-        const replacedComment = replacePropertyTags(comment, properties, false)
-        RapiDContext.defaultChangesetComment(replacedComment);
+      if(asMappableTask) {
+        const taskFeatureProperties = asMappableTask.allFeatureProperties()
+        if(taskFeatureProperties && Object.keys(taskFeatureProperties).length) {
+          const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
+          RapiDContext.defaultChangesetComment(replacedComment);
+        } else {
+          RapiDContext.defaultChangesetComment(comment);
+        } 
       } else {
         RapiDContext.defaultChangesetComment(comment);
-      }
+      } 
     }
-  }, [comment, RapiDContext, task?.geometries?.features[0]?.properties]);
+  }, [comment, RapiDContext, asMappableTask]);
 
   useEffect(() => {
     if (token && locale && RapiD && RapiDContext && task?.id) {
