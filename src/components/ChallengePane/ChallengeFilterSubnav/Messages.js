@@ -34,6 +34,11 @@ export default defineMessages({
     defaultMessage: 'Search by name or Id',
   },
 
+  searchLabelForId: {
+    id: 'ChallengeFilterSubnav.filter.searchForId.label',
+    defaultMessage: 'Search for task Id',
+  },
+
   clearFiltersLabel: {
     id: "Challenge.controls.clearFilters.label",
     defaultMessage: "Clear Filters",

@@ -12,5 +12,10 @@ export default defineMessages({
   searchTypeChallenge: {
     id: "ChallengeFilterSubnav.query.searchType.challenge",
     defaultMessage: "Challenges"
+  },
+
+  searchTypeTask: {
+    id: "ChallengeFilterSubnav.query.searchType.task",
+    defaultMessage: "Task"
   }
 })

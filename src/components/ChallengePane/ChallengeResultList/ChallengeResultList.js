@@ -8,6 +8,7 @@ import _clone from 'lodash/clone'
 import _findIndex from 'lodash/findIndex'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
+import { Link } from 'react-router-dom'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { boundsWithinAllowedMaxDegrees }
        from '../../../services/MapBounds/MapBounds'
@@ -61,7 +62,20 @@ export class ChallengeResultList extends Component {
   constructor(props) {
     super(props)
     this.listRef = React.createRef()
+    this.state = { data: null }
   }
+
+  async fetchData(query) {
+    await fetch(`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${query}`)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({ data : responseJson })
+    })
+    .catch((error) => {
+      this.setState({ data : null })
+      console.error(error);
+    })
+  }  
 
   render() {
     const challengeResultsUnbound = _clone(this.props.pagedChallenges);
@@ -84,7 +98,7 @@ export class ChallengeResultList extends Component {
       _isEmpty(otherFilters) &&
       (_isEmpty(locationFilter) || !bounds || !boundsWithinAllowedMaxDegrees(bounds))
 
-    const query = search.query ? search.query : this.props.searchFilters.project
+    const query = search.query ? search.query : this.props.searchFilters.project ? this.props.searchFilters.project : this.props.searchFilters.task 
 
     let matchedId = []
     if(!isNaN(query) && query) {
@@ -115,8 +129,68 @@ export class ChallengeResultList extends Component {
 
     let detectedIds = null;
 
+    if (searchType === "task" && query && isNaN(query)) {
+      detectedIds = (
+        <div className="mr-text-white mr-text-lg mr-pt-4">
+          <span>
+            <FormattedMessage {...messages.invalidId} />
+          </span>
+        </div>
+      );
+    }
+    
     if (!isNaN(query) && query) {
-      if (matchedId.length === 0) {
+      // Filters for Task Id
+      if (searchType === "task") {
+        this.fetchData(query);
+        let matchedChallengeId = null;
+        
+        if (this.state.data) {
+          matchedChallengeId = _filter(this.props.unfilteredChallenges, (item) =>
+            item.id.toString() === this.state.data.parent.toString()
+          );
+        }
+      
+        if (matchedChallengeId && matchedChallengeId.length > 0) {
+          detectedIds = (
+            <div>
+              <div className="mr-text-white mr-text-lg mr-pt-4">
+                <FormattedMessage {...messages.goTo} />
+                <Link
+                  to={`/challenge/${this.state.data.parent}/task/${this.state.data.id}`}
+                  className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
+                >
+                  <div className="mr-border mr-border-white mr-text-green-lighter mr-text-lg mr-p-2 mr-mt-2">
+                    <FormattedMessage {...messages.task} /> {`${this.state.data.id}`}
+                  </div>
+                </Link>
+                <div>
+                  <div className="mr-pt-4 mr-pb-2">
+                    <FormattedMessage {...messages.locatedIn} />
+                    <FormattedMessage {...messages.challenge} />
+                    {this.state.data.parent}
+                  </div>
+                  <ChallengeResultItem
+                    key={`challenge_${this.state.data.parent}`}
+                    {...this.props}
+                    challenge={matchedChallengeId[0]}
+                    listRef={this.listRef}
+                    sort={search?.sort}
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        } else {
+          detectedIds = (
+            <div className="mr-text-white mr-text-lg mr-pt-4">
+              <span>
+                <FormattedMessage {...messages.doesntExist} />
+              </span>
+            </div>
+          );
+        }      
+      } else if (matchedId.length === 0) {
         detectedIds = (
           <div className="mr-text-white mr-text-lg mr-pt-4">
             <span>
@@ -124,6 +198,7 @@ export class ChallengeResultList extends Component {
             </span>
           </div>
         );
+      // Filters for Challenge Id
       } else if (searchType === undefined || searchType === "challenges") {
         detectedIds = (
           <div>
@@ -138,6 +213,7 @@ export class ChallengeResultList extends Component {
             />
           </div>
         );
+      // Filters for Project Id
       } else if (searchType === "projects") {
         detectedIds = (
           <div>
@@ -197,7 +273,7 @@ export class ChallengeResultList extends Component {
         }
       }))
     }
-
+  
     return (
       <div
         ref={this.listRef}
@@ -208,9 +284,9 @@ export class ChallengeResultList extends Component {
             {detectedIds}
             <div
               className={`mr-border mr-border-white ${
-                matchedId.length && results.length
+                matchedId && results
                   ? "mr-mt-6 mr-mb-6"
-                  : matchedId.length
+                  : matchedId
                   ? "mr-mt-6"
                   : !results
                   ? "mr-mb-6"
