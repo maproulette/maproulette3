@@ -4,6 +4,7 @@ import * as RapiD from '../../../../../node_modules/RapiD/dist/rapid.legacy.min.
 import '../../../../../node_modules/RapiD/dist/rapid.css';
 import { UseRouter } from '../../../../hooks/UseRouter/UseRouter.js';
 import { constructRapidURI } from '../../../../services/Editor/Editor.js';
+import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement.js';
 import WithSearch from '../../../HOCs/WithSearch/WithSearch.js';
 import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/ChallengeZoom.js';
 
@@ -48,9 +49,15 @@ const RapidEditor = ({
 
   useEffect(() => {
     if (RapiDContext && comment) {
-      RapiDContext.defaultChangesetComment(comment);
+      const properties = task?.geometries?.features[0]?.properties
+      if(properties && Object.keys(properties).length) {
+        const replacedComment = replacePropertyTags(comment, properties, false)
+        RapiDContext.defaultChangesetComment(replacedComment);
+      } else {
+        RapiDContext.defaultChangesetComment(comment);
+      }
     }
-  }, [comment, RapiDContext]);
+  }, [comment, RapiDContext, task?.geometries?.features[0]?.properties]);
 
   useEffect(() => {
     if (token && locale && RapiD && RapiDContext && task?.id) {
