@@ -62,7 +62,7 @@ export class ChallengeResultList extends Component {
   constructor(props) {
     super(props)
     this.listRef = React.createRef()
-    this.state = { data: null }
+    this.state = { data: null, currentId: null }
   }
 
   async fetchData(query) {
@@ -71,9 +71,8 @@ export class ChallengeResultList extends Component {
     .then((responseJson) => {
       this.setState({ data : responseJson })
     })
-    .catch((error) => {
+    .catch(() => {
       this.setState({ data : null })
-      console.error(error);
     })
   }  
 
@@ -142,8 +141,12 @@ export class ChallengeResultList extends Component {
     if (!isNaN(query) && query) {
       // Filters for Task Id
       if (searchType === "task") {
-        this.fetchData(query);
         let matchedChallengeId = null;
+        
+        if(this.state.currentId !== query){
+          this.fetchData(query);
+          this.setState({ currentId: query })
+        }
         
         if (this.state.data) {
           matchedChallengeId = _filter(this.props.unfilteredChallenges, (item) =>
