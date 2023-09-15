@@ -73,6 +73,7 @@ export class ChallengeResultList extends Component {
     })
     .catch(() => {
       this.setState({ data : null })
+      this.setState({ currentId: query })
     })
   }  
 
@@ -145,7 +146,6 @@ export class ChallengeResultList extends Component {
         
         if(this.state.currentId !== query){
           this.fetchData(query);
-          this.setState({ currentId: query })
         }
         
         if (this.state.data) {
