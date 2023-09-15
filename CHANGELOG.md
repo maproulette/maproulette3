@@ -15,7 +15,7 @@ Realease with [maproulette-backend_v4.4.7](https://github.com/maproulette/maprou
 - Add Scale Bar Leaflet control to multi-tasking map - @AndrewPhilbin
 - Add cooperative task bundling - @CollinBeczak
 - Make Task Instructions widget scroll to top on Task ID change - @CollinBeczak
-- Add filtering for project and challenge IDs - @CollinBeczak
+- Add filtering for project, challenge and task IDs - @CollinBeczak
 - Add API version number in Footer - @CollinBeczak
 - Add widgets to mobile workspace - @CollinBeczak
 - Add columns to review table - @CollinBeczak
