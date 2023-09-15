@@ -70,6 +70,7 @@ export class ChallengeResultList extends Component {
     .then((response) => response.json())
     .then((responseJson) => {
       this.setState({ data : responseJson })
+      this.setState({ currentId: query })
     })
     .catch(() => {
       this.setState({ data : null })
