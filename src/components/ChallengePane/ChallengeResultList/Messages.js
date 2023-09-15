@@ -29,6 +29,11 @@ export default defineMessages({
     defaultMessage: "Project ",
   },
 
+  locatedIn: {
+    id: 'ChallengeFilterSubnav.filter.locatedIn.label',
+    defaultMessage: 'Located in ',
+  },
+
   tooManyTasksLabel: {
     id: "VirtualChallenge.controls.tooMany.label",
     defaultMessage: "Zoom in to work on mapped tasks",
@@ -42,5 +47,25 @@ export default defineMessages({
   loadMoreLabel: {
     id: "Challenge.controls.loadMore.label",
     defaultMessage: "More Results",
+  },
+
+  invalidId: {
+    id: "Challenge.controls.invalidId.label",
+    defaultMessage: "Id must be a number.",
+  },
+
+  doesntExist: {
+    id: "Challenge.controls.doesntExist.label",
+    defaultMessage: "No discoverable task with this id exists.",
+  },
+
+  task: {
+    id: "Challenge.controls.task.label",
+    defaultMessage: "Task",
+  },
+
+  goTo: {
+    id: "Challenge.controls.goTo.label",
+    defaultMessage: "Go directly to:",
   },
 })

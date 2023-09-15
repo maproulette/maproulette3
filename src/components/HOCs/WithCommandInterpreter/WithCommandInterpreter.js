@@ -13,7 +13,7 @@ import _isNaN from 'lodash/isNaN'
 import { fetchPlaceLocation } from '../../../services/Place/Place'
 import WithErrors from '../WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
-import { SEARCH_TYPE_PROJECT } from '../../SearchTypeFilter/SearchTypeFilter'
+import { SEARCH_TYPE_PROJECT, SEARCH_TYPE_TASK } from '../../SearchTypeFilter/SearchTypeFilter'
 
 /**
  * WithCommandInterpreter interprets search strings to
@@ -22,6 +22,7 @@ import { SEARCH_TYPE_PROJECT } from '../../SearchTypeFilter/SearchTypeFilter'
  * Supported Actions:
  *    m/  => Execute a map bounds search with either a bounding box or a centerpoint
  *    n/  => Execute a nominatim search and move map bounds
+ *    t/  => Execute task id search
  *    p/  => Execute project name search
  *    i/  => Execute a search by challenge id (exact matches only)
  *    s/ or default => Execute a standard search query
@@ -51,7 +52,7 @@ const WithCommandInterpreter = function(WrappedComponent, acceptedCommands = nul
     clearSearch = () => {
       // Temporary: until we add an Advanced Search dialog where a user can
       // clear a project search filter, we need to do it explicitly here
-      this.props.removeSearchFilters(['query', 'project', 'searchType', 'challengeId'])
+      this.props.removeSearchFilters(['query', 'task', 'project', 'searchType', 'challengeId'])
 
       this.props.clearSearch()
       this.setState({commandString: null, searchType: null, searchActive: true})
@@ -70,9 +71,14 @@ const WithCommandInterpreter = function(WrappedComponent, acceptedCommands = nul
         if (this.state.commandString) {
           this.setState({commandString: null, searchType: null})
         }
-        else {
+        else if(_get(this.props, 'searchQuery.filters.project')) {
           // Happens when project query is on url route
           this.setState({commandString: _get(this.props, 'searchQuery.filters.project'),
+                         searchType: _get(this.props, 'searchQuery.filters.searchType')})
+        } 
+        else {
+          // Happens when task query is on url route
+          this.setState({commandString: _get(this.props, 'searchQuery.filters.task'),
                          searchType: _get(this.props, 'searchQuery.filters.searchType')})
         }
       }
@@ -124,6 +130,11 @@ export const executeCommand = (props, commandString, searchType, setLoading,
     return false
   }
 
+  if (searchType === SEARCH_TYPE_TASK) {
+    props.setSearchFilters({task: commandString})
+    return false
+  }
+
   const command = commandString && commandString.length >= 2 ? commandString.substring(0, 2) : null
   let query = commandString ? commandString.substring(2) : commandString
 
@@ -161,6 +172,17 @@ export const executeCommand = (props, commandString, searchType, setLoading,
         props.setSearchFilters({})
       }
       return false
+      case 't/':
+        props.setSearch("") // We need to clear the initial 't' from the query
+        if (isCommandSupported('t', acceptedCommands, props)) {
+          if (query.length > 0) {
+            props.setSearchFilters({task: query})
+          }
+        }
+        else {
+          props.setSearchFilters({})
+        }
+        return false
     case 'i/':
       props.setSearch("") // We need to clear the initial 'i' from the query
       if (isCommandSupported('i', acceptedCommands, props)) {
@@ -178,7 +200,7 @@ export const executeCommand = (props, commandString, searchType, setLoading,
         query = commandString
       }
       // Remove any lingering search filters.
-      props.removeSearchFilters(['project', 'challengeId'])
+      props.removeSearchFilters(['task', 'project', 'challengeId'])
 
       // Standard search query
       props.setSearch(query)
