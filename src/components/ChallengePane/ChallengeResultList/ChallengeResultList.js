@@ -59,24 +59,42 @@ const limitUserResults = (challenges) => {
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeResultList extends Component {
-  constructor(props) {
-    super(props)
-    this.listRef = React.createRef()
-    this.state = { data: null, currentId: null }
-  }
-
-  async fetchData(query) {
-    await fetch(`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${query}`)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({ data : responseJson })
-      this.setState({ currentId: query })
-    })
-    .catch(() => {
-      this.setState({ data : null })
-      this.setState({ currentId: query })
-    })
-  }  
+    constructor(props) {
+      super(props);
+      this.listRef = React.createRef();
+      this.state = { data: null, pauseFetch: true };
+    }
+  
+  
+    componentDidUpdate(prevProps) {
+      const prevQuery = prevProps.searchFilters.project || prevProps.searchFilters.task;
+      const currentQuery = this.props.searchFilters.project || this.props.searchFilters.task;
+      const searchType = this.props.searchFilters.searchType
+      
+      if (prevQuery !== currentQuery && !isNaN(currentQuery) && searchType === "task" ) {
+        this.fetchData();
+      }
+    }
+  
+    async fetchData() {
+      if (this.state.pauseFetch) {
+        this.setState({ pauseFetch: false });
+        const query = this.props.searchFilters.project || this.props.searchFilters.task;
+        
+        if (query) {
+          try {
+            const response = await fetch(`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${query}`);
+            const responseJson = await response.json();
+            this.setState({ data: responseJson });
+          } catch (error) {
+            console.error(error);
+            this.setState({ data: null });
+          }
+        }
+        
+        this.setState({ pauseFetch: true });
+      }
+    }
 
   render() {
     const challengeResultsUnbound = _clone(this.props.pagedChallenges);
@@ -144,10 +162,7 @@ export class ChallengeResultList extends Component {
       // Filters for Task Id
       if (searchType === "task") {
         let matchedChallengeId = null;
-        
-        if(this.state.currentId !== query){
-          this.fetchData(query);
-        }
+
         
         if (this.state.data) {
           matchedChallengeId = _filter(this.props.unfilteredChallenges, (item) =>
