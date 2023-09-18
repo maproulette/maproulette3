@@ -65,15 +65,13 @@ export class ChallengeResultList extends Component {
       this.state = { data: null, pauseFetch: true };
     }
   
-    componentDidMount() {
-      this.fetchData();
-    }
   
     componentDidUpdate(prevProps) {
       const prevQuery = prevProps.searchFilters.project || prevProps.searchFilters.task;
       const currentQuery = this.props.searchFilters.project || this.props.searchFilters.task;
-  
-      if (prevQuery !== currentQuery) {
+      const searchType = this.props.searchFilters.searchType
+      
+      if (prevQuery !== currentQuery && !isNaN(currentQuery) && searchType === "task" ) {
         this.fetchData();
       }
     }
