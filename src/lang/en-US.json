@@ -930,7 +930,7 @@
   "Form.controls.addMustachePreview.note": "Note: all mustache property tags evaluate to empty in preview",
   "Form.controls.addPriorityRule.label": "Add a Rule",
   "Form.controls.markdownField.preview.label": "Preview",
-  "Form.controls.markdownField.uploadErrorText.label": "Upload Failed!",
+  "Form.controls.markdownField.uploadErrorText.label": "Upload Failed! File must have '.geojson' extension.",
   "Form.controls.markdownField.write.label": "Write",
   "Form.textUpload.prompt": "Drop GeoJSON file here or click to select file",
   "Form.textUpload.readonly": "Existing file will be used",
