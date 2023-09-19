@@ -31,6 +31,6 @@ export default defineMessages({
 
   uploadErrorText: {
     id: 'Form.controls.markdownField.uploadErrorText.label',
-    defaultMessage: "Upload Failed!",
+    defaultMessage: "Upload Failed! File must have '.geojson' extension.",
   }
 })
