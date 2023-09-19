@@ -58,7 +58,7 @@ export default class TaskMapWidget extends Component {
       return (
         <RapidEditor
           setDisable={() => null}
-          comment={this.props.task.parent.checkinComment}
+          comment={this.props.task?.parent?.checkinComment ?? "#mapRoulette"}
           presets={[]}
           imagery={undefined}
           powerUser={null}

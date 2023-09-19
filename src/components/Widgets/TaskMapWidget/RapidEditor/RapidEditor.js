@@ -26,7 +26,6 @@ const RapidEditor = ({
     RapiDContext && RapiDContext.background() && RapiDContext.background().findSource('custom');
   const router = UseRouter()
 
-  const asMappableTask = task ? AsMappableTask(task) : null
 
   useEffect(() => {
     if (!customImageryIsSet && imagery && customSource) {
@@ -51,6 +50,7 @@ const RapidEditor = ({
   }, [RapiDContext]);
 
   useEffect(() => {
+    const asMappableTask = task ? AsMappableTask(task) : null
     if (RapiDContext && comment) {
       if(asMappableTask) {
         const taskFeatureProperties = asMappableTask.allFeatureProperties()
@@ -64,7 +64,7 @@ const RapidEditor = ({
         RapiDContext.defaultChangesetComment(comment);
       } 
     }
-  }, [comment, RapiDContext, asMappableTask]);
+  }, [comment, RapiDContext, AsMappableTask, task]);
 
   useEffect(() => {
     if (token && locale && RapiD && RapiDContext && task?.id) {
