@@ -185,7 +185,7 @@ export default defineMessages({
   },
   challengeSaveInstructionFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveInstructionFailure",
-    defaultMessage: "The 'DETAILED INSTRUCTIONS FOR MAPPERS' field must have more than 150 characters and at least 20 words.",
+    defaultMessage: "The 'DETAILED INSTRUCTIONS FOR MAPPERS' field must have more than 150 characters.",
   },
   challengeRebuildFailure: {
     id: "Errors.challenge.rebuildFailure",
