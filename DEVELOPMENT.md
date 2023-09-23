@@ -4,7 +4,7 @@ This is the repository that holds the front-end code. The back-end and API are d
 
 ### Basic Dependencies:
 
-* [Node 14 LTS](https://nodejs.org/)
+* [Node 16 LTS](https://nodejs.org/)
 * [yarn](https://yarnpkg.com/)
 * [jq](https://stedolan.github.io/jq/)
 * [curl](https://curl.haxx.se/)
