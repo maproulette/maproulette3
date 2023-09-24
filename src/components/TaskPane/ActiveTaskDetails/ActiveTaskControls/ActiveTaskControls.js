@@ -118,6 +118,9 @@ export class ActiveTaskControls extends Component {
     const isVirtual = _isFinite(this.props.virtualChallengeId)
     const challengeId = isVirtual ? this.props.virtualChallengeId :
                                     this.props.challengeId
+    this.props.updateUserAppSetting(this.props.user.id, {
+      'loadMethod': loadMethod,
+    })     
     this.props.setTaskLoadBy(challengeId, isVirtual, loadMethod)
   }
 
