@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _pick from 'lodash/pick'
+import _isEmpty from 'lodash/isEmpty'
 import { FormattedMessage } from 'react-intl'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus } from '../../../../../services/Task/TaskReview/TaskReviewStatus'
@@ -17,6 +19,9 @@ import './TaskCompletionStep1.scss'
 import messages from './Messages'
 import ErrorTagComment from '../../../../ErrorTagComment/ErrorTagComment'
 
+const hiddenShortcutGroup = 'taskCompletion'
+const hidenShortcuts = ['fixed', 'falsePositive', 'tooHard', 'alreadyFixed']
+
 /**
  * TaskCompletionStep1 renders and manages controls and keyboard shortcuts for
  * initiating editing a task (fix, skip, false positive).
@@ -28,6 +33,41 @@ import ErrorTagComment from '../../../../ErrorTagComment/ErrorTagComment'
 export default class TaskCompletionStep1 extends Component {
   state = {
     moreOptionsOpen: false,
+  };
+
+  completeTask = (shortcut) => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup])) {
+      return;
+    }
+
+    this.props.complete(TaskStatus[shortcut]); 
+  };
+
+  handleKeyboardShortcuts = (shortcut) =>
+    this.props.quickKeyHandler(
+      this.props.keyboardShortcutGroups.taskCompletion[shortcut].key,
+      () => this.completeTask(shortcut)
+    );
+
+  componentDidMount() {
+    hidenShortcuts.forEach((shortcut) => {
+      this.props.activateKeyboardShortcut(
+        hiddenShortcutGroup,
+        _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
+        this.handleKeyboardShortcuts
+      );
+    });
+  }
+
+  componentWillUnmount() {
+    hidenShortcuts.forEach((shortcut) => {
+      this.props.deactivateKeyboardShortcut(
+        hiddenShortcutGroup,
+        shortcut,
+        this.handleKeyboardShortcuts(shortcut)
+      );
+    });
   }
 
   render() {
