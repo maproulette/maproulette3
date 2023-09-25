@@ -60,16 +60,6 @@ export default class TaskCompletionStep1 extends Component {
       });
     }
 
-  componentWillUnmount() {
-    hiddenShortcuts.forEach((shortcut) => {
-      this.props.deactivateKeyboardShortcut(
-        hiddenShortcutGroup,
-        shortcut,
-        this.handleKeyboardShortcuts(shortcut)
-      );
-    });
-  }
-
   render() {
     return (
       <div>
