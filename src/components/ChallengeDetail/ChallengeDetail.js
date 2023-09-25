@@ -6,6 +6,9 @@ import _isObject from "lodash/isObject";
 import _get from "lodash/get";
 import _findIndex from "lodash/findIndex";
 import _merge from "lodash/merge";
+import _uniqBy from "lodash/uniqBy";
+import _differenceBy from "lodash/differenceBy";
+import { Popup } from 'react-leaflet'
 import parse from "date-fns/parse";
 import MapPane from "../EnhancedMap/MapPane/MapPane";
 import TaskClusterMap from "../TaskClusterMap/TaskClusterMap";
@@ -26,15 +29,23 @@ import WithCurrentChallenge from "../AdminPane/HOCs/WithCurrentChallenge/WithCur
 import WithChallengeTaskClusters from "../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters";
 import WithTaskClusterMarkers from "../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers";
 import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
+import TaskChallengeMarkerContent from "../ChallengePane/TaskChallengeMarkerContent";
+import StartVirtualChallenge from "../ChallengePane/StartVirtualChallenge/StartVirtualChallenge";
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
 import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
 
-const ClusterMap = WithChallengeTaskClusters(
-  WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
-);
+const ClusterMap =
+  WithChallengeTaskClusters(
+    WithTaskClusterMarkers(
+      WithCurrentUser(
+        TaskClusterMap('challengeDetail')
+      )
+    ),
+    true
+  )
 
 const ProjectPicker = WithManageableProjects(ProjectPickerModal);
 
@@ -65,7 +76,37 @@ export class ChallengeDetail extends Component {
     displayCheckboxError: false,
     submittingFlag: false,
     pickingProject: false,
+    selectedClusters: [],
   };
+
+  onBulkClusterSelection = clusters => {
+    if (!clusters || clusters.length === 0) {
+      return
+    }
+
+    // Handle both clusters and individual tasks in case user declustered
+    this.setState({
+      selectedClusters: _uniqBy(
+        this.state.selectedClusters.concat(clusters), clusters[0].isTask ? 'taskId' : 'clusterId'
+      ),
+    })
+  }
+
+  onBulkClusterDeselection = clusters => {
+    if (!clusters || clusters.length === 0) {
+      return
+    }
+
+    // Handle both clusters and individual tasks in case user declustered
+    this.setState({
+      selectedClusters: _differenceBy(
+        this.state.selectedClusters, clusters, clusters[0].isTask ? 'taskId' : 'clusterId'
+      ),
+    })
+  }
+
+  resetSelectedClusters = () => this.setState({selectedClusters: []})
+
 
   componentDidMount() {
     window.scrollTo(0, 0)
@@ -386,12 +427,32 @@ export class ChallengeDetail extends Component {
           ),
         });
 
+        const showMarkerPopup = (markerData) => {
+          return (
+           <Popup>
+            <TaskChallengeMarkerContent
+              marker={markerData}
+              taskId={markerData.options.taskId}
+              {...this.props}/>
+           </Popup>
+          )
+        }
+
+    const virtualChallengeMapOverlay =
+    this.state.selectedClusters.length > 0 ?
+    <StartVirtualChallenge
+      {...this.props}
+      selectedClusters={this.state.selectedClusters}
+    /> :
+    null
+
     const map = (
       <ClusterMap
         className="split-pane"
         onTaskClick={(taskId) =>
           this.props.startChallengeWithTask(challenge.id, false, taskId)
         }
+        showMarkerPopup={showMarkerPopup}
         challenge={challenge}
         allowClusterToggle={false}
         criteria={{
@@ -403,6 +464,14 @@ export class ChallengeDetail extends Component {
         }
         skipRefreshTasks
         allowSpidering
+        selectedClusters={this.state.selectedClusters}
+        onBulkClusterSelection={this.onBulkClusterSelection}
+        onBulkClusterDeselection={this.onBulkClusterDeselection}
+        resetSelectedClusters={this.resetSelectedClusters}
+        showTaskCount
+        showClusterLasso
+        showFitWorld
+        externalOverlay={virtualChallengeMapOverlay}
         {...this.props}
       />
     );
