@@ -20,7 +20,7 @@ import messages from './Messages'
 import ErrorTagComment from '../../../../ErrorTagComment/ErrorTagComment'
 
 const hiddenShortcutGroup = 'taskCompletion'
-const hidenShortcuts = ['fixed', 'falsePositive', 'tooHard', 'alreadyFixed']
+const hiddenShortcuts = ['fixed', 'falsePositive', 'tooHard', 'alreadyFixed']
 
 /**
  * TaskCompletionStep1 renders and manages controls and keyboard shortcuts for
@@ -50,18 +50,18 @@ export default class TaskCompletionStep1 extends Component {
       () => this.completeTask(shortcut)
     );
 
-  componentDidMount() {
-    hidenShortcuts.forEach((shortcut) => {
-      this.props.activateKeyboardShortcut(
-        hiddenShortcutGroup,
-        _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
-        this.handleKeyboardShortcuts
-      );
-    });
-  }
+    componentDidMount() {
+      hiddenShortcuts.forEach((shortcut) => {
+        this.props.activateKeyboardShortcut(
+          hiddenShortcutGroup,
+          _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
+          this.handleKeyboardShortcuts(shortcut)
+        );
+      });
+    }
 
   componentWillUnmount() {
-    hidenShortcuts.forEach((shortcut) => {
+    hiddenShortcuts.forEach((shortcut) => {
       this.props.deactivateKeyboardShortcut(
         hiddenShortcutGroup,
         shortcut,
