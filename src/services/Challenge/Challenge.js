@@ -1033,7 +1033,6 @@ export const fetchChallenges = function (
         (
           !instruction ||
           instruction.length < 150 ||
-          instruction.split(' ').length < 20 ||
           !description?.trim()?.length ||
           !name ||
           name.length <= 3
@@ -1047,8 +1046,7 @@ export const fetchChallenges = function (
           errorMessage = AppErrors.challengeSaveFailure.saveDescriptionFailure;
         } else if (
           instruction === undefined ||
-          instruction.length < 150 ||
-          instruction.split(' ').length < 20
+          instruction.length < 150
         ) {
           errorMessage = AppErrors.challengeSaveFailure.saveInstructionsFailure;
         } else {

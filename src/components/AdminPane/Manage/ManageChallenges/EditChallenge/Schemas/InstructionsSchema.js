@@ -24,7 +24,6 @@ export const jsSchema = (intl) => {
       instruction: {
         title: intl.formatMessage(messages.instructionLabel),
         type: "string",
-        pattern: "^(\\W*\\w+(?:\\W+\\w+){19,}\\W*)$",
         minLength: 150,
         description: intl.formatMessage(messages.instructionsDescription),
       },
