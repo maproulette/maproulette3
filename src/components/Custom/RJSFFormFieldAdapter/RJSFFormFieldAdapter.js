@@ -333,7 +333,7 @@ export const TagsInputField = props => {
  * and it will be set with the text content of the uploaded file.
  */
 export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAreaClassName}) => {
-  if (readonly) {
+  if (readonly && id !== "root_widgetLayout") {
     return (
       <div className="readonly-file mr-text-pink">
         <FormattedMessage {...messages.readOnlyFile} />
@@ -354,11 +354,18 @@ export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAre
       {({acceptedFiles, getRootProps, getInputProps}) => {
         const [uploadErrorText, setUploadErrorText] = useState('')
 
-        if(acceptedFiles[0] !== undefined && !acceptedFiles[0].name.endsWith('.geojson')){
-          acceptedFiles.pop() 
-          setUploadErrorText(<span className="mr-mr-4 mr-text-red-light mr-ml-1"><FormattedMessage {...messages.uploadErrorText} /></span>)
+        if (acceptedFiles.length > 0) {
+          const fileName = acceptedFiles[0].name;
+          if (!fileName.endsWith('.geojson') && !fileName.endsWith('.json')) {
+            acceptedFiles.pop();
+            setUploadErrorText(
+              <span className="mr-mr-4 mr-text-red-light mr-ml-1">
+                <FormattedMessage {...messages.uploadErrorText} />
+              </span>
+            );
+          }
         }
-        const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}</p> : (
+        const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}<input {...getInputProps()} /></p> : (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
               viewBox='0 0 20 20'

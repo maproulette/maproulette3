@@ -16,6 +16,7 @@ import Header from '../Header/Header'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import ExportLayoutModal from './ExportLayoutModal'
+import { importRecommendedConfiguration } from '../../services/Widget/Widget'
 import ImportFileModal from '../ImportFileModal/ImportFileModal'
 import messages from './Messages'
 import './WidgetWorkspace.scss'
@@ -33,6 +34,25 @@ export class WidgetWorkspace extends Component {
     isExportingLayout: false,
     isImportingLayout: false,
     workspaceContext: {},
+  }
+
+  componentDidMount() {
+    const { task, workspaceConfigurations, saveWorkspaceConfiguration } = this.props
+    const recommendedLayout = task?.parent?.widgetLayout ? JSON.parse(task.parent.widgetLayout).workspace : null
+  
+    if (recommendedLayout && !workspaceConfigurations.recommendedLayout) {
+      recommendedLayout.id = "recommendedLayout"
+      recommendedLayout.label = "Recommended Layout"
+      recommendedLayout.name = "taskCompletion"
+      importRecommendedConfiguration(recommendedLayout)
+      saveWorkspaceConfiguration(recommendedLayout)
+    }
+  }
+  
+  componentWillUnmount() {
+    if (this.props.workspaceConfigurations?.recommendedLayout) {
+      this.props.deleteWorkspaceConfiguration(this.props.workspaceConfigurations.recommendedLayout.id)
+    }
   }
 
   startEditingLayout = (closeDropdown, conf=this.props.currentConfiguration) => {
@@ -142,6 +162,8 @@ export class WidgetWorkspace extends Component {
             dropdownButton={dropdown =>
               <LayoutButton
                 {...this.props}
+                switchConfiguration={this.switchConfiguration}
+                closeDropdown={dropdown.closeDropdown}
                 toggleDropdownVisible={dropdown.toggleDropdownVisible}
               />
             }
@@ -189,7 +211,6 @@ export class WidgetWorkspace extends Component {
         </React.Fragment>
       )
     }
-
 
     return (
       <div className={classNames("mr-widget-workspace", this.props.className)}>
@@ -240,30 +261,41 @@ export class WidgetWorkspace extends Component {
 
 const LayoutButton = function(props) {
   return (
-    <button
-      className="mr-dropdown__button"
-      onClick={props.toggleDropdownVisible}
-    >
-      <SvgSymbol
-        sym="cog-icon"
-        viewBox="0 0 20 20"
-        className="mr-fill-green-lighter mr-w-4 mr-h-4"
-      />
-    </button>
+    <div className="mr-normal-case mr-flex">
+      { props.workspaceConfigurations.recommendedLayout ?
+        <h3 className="mr-text-base mr-font-bold mr-mr-2">
+        {props.workspaceConfigurations.recommendedLayout.id === props.currentConfiguration.id && "✓"}
+        <a className='mr-ml-2' onClick={() => props.switchConfiguration(props.workspaceConfigurations.recommendedLayout.id, props.closeDropdown)}>
+        <FormattedMessage {...messages.useRecommendedLayoutLabel} />
+        </a>
+        </h3>: null
+      }
+      <button
+        className="mr-dropdown__button"
+        onClick={props.toggleDropdownVisible}
+      >
+        <SvgSymbol
+          sym="cog-icon"
+          viewBox="0 0 20 20"
+          className="mr-fill-green-lighter mr-w-4 mr-h-4"
+        />
+      </button>
+    </div>
   )
 }
 
 const ListLayoutItems = function(props) {
-  const configurationItems = _map(props.workspaceConfigurations, conf => (
-    <li key={conf.id} className="mr-normal-case mr-flex">
-      <div className="mr-text-white mr-w-4">
-        {conf.id === props.currentConfiguration.id && "✓"}
-      </div>
-      <a onClick={() => props.switchConfiguration(conf.id, props.closeDropdown)}>
-        {conf.label}
-      </a>
-    </li>
-  ))
+  const configurationItems = _map(props.workspaceConfigurations, conf => {
+    if (conf.id !== 'recommendedLayout') {
+      return (
+        <li key={conf.id} className="mr-normal-case mr-flex">
+              <div className="mr-text-white mr-w-4">{conf.id === props.currentConfiguration.id && "✓"}</div>
+              <a onClick={() => props.switchConfiguration(conf.id, props.closeDropdown)}>{conf.label}</a>
+        </li>
+      )
+    }
+    return null
+  })
 
   return (
     <React.Fragment>
@@ -275,18 +307,47 @@ const ListLayoutItems = function(props) {
       </ol>
       <hr className="mr-rule-dropdown" />
       <ol className="mr-list-dropdown">
-        <li>
-          <a onClick={() => props.startEditingLayout(props.closeDropdown)}>
-            <FormattedMessage {...messages.editConfigurationLabel} />
-          </a>
-        </li>
-        <li>
-          <ConfirmAction>
-            <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
-              <FormattedMessage {...messages.resetConfigurationLabel} />
-            </a>
-          </ConfirmAction>
-        </li>
+        { props.currentConfiguration.id === 'recommendedLayout' ? (
+          <li className="mr-normal-case mr-flex">
+            <div className="mr-text-white mr-w-4">{"✓"}</div>
+            <FormattedMessage {...messages.recommendedLayoutLabel} />
+          </li>
+        ) : props.workspaceConfigurations.recommendedLayout ? (
+          <>
+            <li className="mr-normal-case mr-flex">
+              <a onClick={() => props.switchConfiguration(props.workspaceConfigurations.recommendedLayout.id, props.closeDropdown)}>
+                <FormattedMessage {...messages.recommendedLayoutLabel} />
+              </a>
+            </li>
+            <li>
+              <a onClick={() => props.startEditingLayout(props.closeDropdown)}>
+                <FormattedMessage {...messages.editConfigurationLabel} />
+              </a>
+            </li>
+            <li>
+              <ConfirmAction>
+                <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
+                  <FormattedMessage {...messages.resetConfigurationLabel} />
+                </a>
+              </ConfirmAction>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <a onClick={() => props.startEditingLayout(props.closeDropdown)}>
+                <FormattedMessage {...messages.editConfigurationLabel} />
+              </a>
+            </li>
+            <li>
+              <ConfirmAction>
+                <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
+                  <FormattedMessage {...messages.resetConfigurationLabel} />
+                </a>
+              </ConfirmAction>
+            </li>
+          </>
+        )}
         <li>
           <a onClick={() => props.addConfiguration(props.closeDropdown)}>
             <FormattedMessage {...messages.addConfigurationLabel} />
@@ -302,13 +363,15 @@ const ListLayoutItems = function(props) {
             <FormattedMessage {...messages.importConfigurationLabel} />
           </a>
         </li>
-        <li>
-          <ConfirmAction>
-            <a onClick={() => props.deleteConfiguration(props.closeDropdown)}>
-              <FormattedMessage {...messages.deleteConfigurationLabel} />
-            </a>
-          </ConfirmAction>
-        </li>
+        { props.currentConfiguration.id !== 'recommendedLayout' ? 
+          <li>
+            <ConfirmAction>
+              <a onClick={() => props.deleteConfiguration(props.closeDropdown)}>
+                <FormattedMessage {...messages.deleteConfigurationLabel} />
+              </a>
+            </ConfirmAction>
+          </li> : null 
+        }
       </ol>
     </React.Fragment>
   )

@@ -986,6 +986,7 @@ export const fetchChallenges = function (
           "highPriorityRule",
           "id",
           "instruction",
+          "widgetLayout",
           "localGeoJSON",
           "lowPriorityRule",
           "maxZoom",

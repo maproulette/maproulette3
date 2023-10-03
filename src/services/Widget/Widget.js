@@ -327,6 +327,20 @@ export const exportWorkspaceConfiguration = (workspaceConfiguration, exportName)
  * Parses and returns a previously-exported workspace layout from the given
  * file
  */
+export const importRecommendedConfiguration = (recommendedLayout) => {
+  const importedConfiguration = recommendedLayout
+  importedConfiguration.widgets =
+    _map(importedConfiguration.widgetKeys, key => widgetDescriptor(key))
+  delete importedConfiguration.widgetKeys
+
+  _each(importedConfiguration.layout, widgetLayout => widgetLayout.i = generateWidgetId())
+  return (importedConfiguration)
+}
+
+/**
+ * Parses and returns a previously-exported workspace layout from the given
+ * file
+ */
 export const importWorkspaceConfiguration = (workspaceName, importFile) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()

@@ -636,6 +636,16 @@ export class EditChallenge extends Component {
       }
     }
 
+    if (challengeData.widgetLayout) {
+      const geoJSONFile = this.state.formContext["root_widgetLayout"].file;
+      if (!geoJSONFile) {
+        throw new Error("No geojson file");
+      }
+      challengeData.widgetLayout = (
+        await AsLineReadableFile(geoJSONFile).allLines()
+      ).join("\n");
+    } 
+
     if (challengeData.customTaskStyles) {
       const styleRules = this.props.taskPropertyStyleRules;
       // Remove all empty style rules

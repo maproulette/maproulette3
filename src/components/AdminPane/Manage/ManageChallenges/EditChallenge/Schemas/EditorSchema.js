@@ -5,6 +5,8 @@ import _startCase from 'lodash/startCase'
 import _isUndefined from 'lodash/isUndefined'
 import _intersection from 'lodash/intersection'
 import idPresets from '../../../../../../preset_categories.json'
+import AsEditableChallenge from "../../../../../../interactions/Challenge/AsEditableChallenge";
+import { DropzoneTextUpload } from "../../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import { ChallengeReviewSetting } from '../../../../../../services/Challenge/ChallengeReviewSetting/ChallengeReviewSetting'
 import messages from '../Messages'
 
@@ -55,6 +57,11 @@ export const jsSchema = (intl) => {
         ],
         default: false,
       },
+      widgetLayout: {
+        title: "Layout File",
+        type: "string",
+        description: intl.formatMessage(messages.widgetLayoutReadOnly)
+      },
     },
     dependencies: {
       presets: {
@@ -93,7 +100,8 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
     options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
   const toggleGroupCollapsed =
     options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
-
+  const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly();
+  
   const presetUiSchemas = _fromPairs(_map(idPresets, (presetCategory, categoryName) => {
     // We normally render each preset category as collapsed by default, but
     // want to show it expanded if there are selected presets in the category
@@ -124,6 +132,10 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:toggleCollapsed": toggleGroupCollapsed,
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.presetsDescription),
+    },
+    widgetLayout: {
+      "ui:widget": DropzoneTextUpload,
+      "ui:readonly": sourceReadOnly,
     }
   }, presetUiSchemas)
 
