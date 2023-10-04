@@ -96,7 +96,6 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       this.setState({loading: true, fetchId: currentFetchId, showAsClusters: showAsClusters, mapZoomedOut: false})
 
       const searchCriteria = _cloneDeep(this.props.criteria)
-      console.log('searchCriteria in WithChallengeTaskClusters fetchUpdatedClusters func', searchCriteria)
 
       if (challengeId) {
         _set(searchCriteria,
