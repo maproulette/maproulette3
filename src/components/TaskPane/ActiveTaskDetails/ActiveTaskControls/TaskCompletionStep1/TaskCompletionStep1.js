@@ -49,27 +49,31 @@ export default class TaskCompletionStep1 extends Component {
       this.props.keyboardShortcutGroups.taskCompletion[shortcut].key,
       () => this.completeTask(shortcut)
     );
-
+  
   componentDidMount() {
-    hiddenShortcuts.forEach((shortcut) => {
-      this.props.activateKeyboardShortcut(
-        hiddenShortcutGroup,
-        _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
-        this.handleKeyboardShortcuts(shortcut)
-      );
-    });
+    if (this.props.keyboardShortcutGroups) {
+      hiddenShortcuts.forEach((shortcut) => {
+        this.props.activateKeyboardShortcut(
+          hiddenShortcutGroup,
+          _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
+            this.handleKeyboardShortcuts(shortcut)
+        );
+      });
+    }
   }
-
+  
   componentWillUnmount() {
-    hiddenShortcuts.forEach((shortcut) => {
-      this.props.deactivateKeyboardShortcut(
-        hiddenShortcutGroup,
-        shortcut,
-        this.handleKeyboardShortcuts(shortcut)
-      );
-    });
+    if (this.props.keyboardShortcutGroups) {
+      hiddenShortcuts.forEach((shortcut) => {
+        this.props.deactivateKeyboardShortcut(
+          hiddenShortcutGroup,
+          shortcut,
+          this.handleKeyboardShortcuts(shortcut)
+        );
+      });
+    }
   }
-
+  
   render() {
     return (
       <div>
