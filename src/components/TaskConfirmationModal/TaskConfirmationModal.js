@@ -50,7 +50,7 @@ export class TaskConfirmationModal extends Component {
 
   handleKeyboardShortcuts = event => {
     // Ignore if shortcut group is not active
-    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+    if (_isEmpty(this.props.activeKeyboardShortcuts)) {
       return
     }
 
