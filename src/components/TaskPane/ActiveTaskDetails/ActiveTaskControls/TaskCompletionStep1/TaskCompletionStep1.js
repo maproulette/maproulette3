@@ -45,7 +45,7 @@ export default class TaskCompletionStep1 extends Component {
   };
 
   handleKeyboardShortcuts = (shortcut) => {
-    if(this.props.keyboardShortcutGroups.taskCompletion[shortcut]) {
+    if(this.props.keyboardShortcutGroups.taskCompletion) {
       return (
         this.props.quickKeyHandler(
           this.props.keyboardShortcutGroups.taskCompletion[shortcut].key,
@@ -56,7 +56,7 @@ export default class TaskCompletionStep1 extends Component {
   }
   
   componentDidMount() {
-    if (this.props.keyboardShortcutGroups) {
+    if (this.props.keyboardShortcutGroups && this.props.activateKeyboardShortcut) {
       hiddenShortcuts.forEach((shortcut) => {
         this.props.activateKeyboardShortcut(
           hiddenShortcutGroup,
@@ -68,7 +68,7 @@ export default class TaskCompletionStep1 extends Component {
   }
   
   componentWillUnmount() {
-    if (this.props.keyboardShortcutGroups) {
+    if (this.props.keyboardShortcutGroups && this.props.deactivateKeyboardShortcut) {
       hiddenShortcuts.forEach((shortcut) => {
         this.props.deactivateKeyboardShortcut(
           hiddenShortcutGroup,
