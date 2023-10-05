@@ -44,11 +44,16 @@ export default class TaskCompletionStep1 extends Component {
     this.props.complete(TaskStatus[shortcut]); 
   };
 
-  handleKeyboardShortcuts = (shortcut) => 
-    this.props.quickKeyHandler(
-      this.props.keyboardShortcutGroups.taskCompletion[shortcut].key,
-      () => this.completeTask(shortcut)
-    );
+  handleKeyboardShortcuts = (shortcut) => {
+    if(this.props.keyboardShortcutGroups.taskCompletion[shortcut]) {
+      return (
+        this.props.quickKeyHandler(
+          this.props.keyboardShortcutGroups.taskCompletion[shortcut].key,
+          () => this.completeTask(shortcut)
+        )
+      )
+    }
+  }
   
   componentDidMount() {
     if (this.props.keyboardShortcutGroups) {
