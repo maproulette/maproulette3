@@ -40,39 +40,35 @@ export default class TaskCompletionStep1 extends Component {
     if (_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup])) {
       return;
     }
-  
-    this.props.complete(TaskStatus[shortcut]);
+
+    this.props.complete(TaskStatus[shortcut]); 
   };
-  
-  handleKeyboardShortcuts = (shortcut) =>
+
+  handleKeyboardShortcuts = (shortcut) => 
     this.props.quickKeyHandler(
       this.props.keyboardShortcutGroups.taskCompletion[shortcut].key,
       () => this.completeTask(shortcut)
     );
-  
+
   componentDidMount() {
     hiddenShortcuts.forEach((shortcut) => {
-      if (this.props.keyboardShortcutGroups?.taskCompletion?.[shortcut]) {
-        this.props.activateKeyboardShortcut(
-          hiddenShortcutGroup,
-          _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
-          () => this.handleKeyboardShortcuts(shortcut)
-        );
-      }
+      this.props.activateKeyboardShortcut(
+        hiddenShortcutGroup,
+        _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
+        this.handleKeyboardShortcuts(shortcut)
+      );
     });
   }
 
   componentWillUnmount() {
     hiddenShortcuts.forEach((shortcut) => {
-      if (this.props.keyboardShortcutGroups?.taskCompletion?.[shortcut]) {
-        this.props.deactivateKeyboardShortcut(
-          hiddenShortcutGroup,
-          _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
-          () => this.handleKeyboardShortcuts(shortcut)
-        );
-      }
+      this.props.deactivateKeyboardShortcut(
+        hiddenShortcutGroup,
+        shortcut,
+        this.handleKeyboardShortcuts(shortcut)
+      );
     });
-  }  
+  }
 
   render() {
     return (
