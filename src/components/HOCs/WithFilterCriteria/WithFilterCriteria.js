@@ -28,7 +28,7 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
-  ignoreLocked = true, skipInitialFetch = false) {
+  ignoreLocked = true, skipInitialFetch = false, usePersistedFilters = false) {
    return class extends Component {
      state = {
        loading: false,
@@ -214,13 +214,44 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        }
      }
 
+     updateCriteriaFromSavedFilters(props) {
+       const savedFilters = this.props.getUserAppSetting(
+        this.props.user, 'taskBundleFilters') || ''
+       const criteria = savedFilters && savedFilters.length > 0 ?
+       buildSearchCriteriafromURL(savedFilters) :
+       _cloneDeep(props.history.location.state)
+       
+        // These values will come in as comma-separated strings and need to be turned
+       // into number arrays
+       _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], key => {
+         if (!_isUndefined(criteria[key]) && key === "boundingBox") {
+           if (typeof criteria[key] === "string") {
+            criteria[key] = criteria[key].split(',').map(x => parseFloat(x))
+           }
+         }
+         else if (!_isUndefined(_get(criteria, `filters.${key}`))) {
+          if (typeof criteria.filters[key] === "string") {
+            criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
+          }
+         }
+      })
+
+      if (!_get(criteria, 'filters.status')) {
+        this.updateIncludedFilters(props)
+      }
+      else {
+        this.setState({criteria})
+      }
+     }
+
      componentDidMount() {
        if (!ignoreURL &&
            (!_isEmpty(this.props.history.location.search) ||
             !_isEmpty(this.props.history.location.state))) {
          this.updateCriteriaFromURL(this.props)
-       }
-       else {
+       } else if(usePersistedFilters) {
+         this.updateCriteriaFromSavedFilters(this.props)
+       } else {
          this.updateIncludedFilters(this.props)
        }
      }
@@ -290,5 +321,5 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
    }
  }
 
-export default (WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch) =>
-  WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch)
+export default (WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch, usePersistedFilters) =>
+  WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch, usePersistedFilters)

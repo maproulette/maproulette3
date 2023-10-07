@@ -37,7 +37,8 @@ import { buildSearchCriteriafromURL } from '../../../services/SearchCriteria/Sea
 export default function WithFilteredClusteredTasks(WrappedComponent,
                                                    tasksProp='clusteredTasks',
                                                    outputProp,
-                                                   initialFilters) {
+                                                   initialFilters,
+                                                   useSavedFilters = false) {
   return class extends Component {
     defaultFilters = () => {
       return {
@@ -280,11 +281,18 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     }
 
     setupFilters = () => {
+      const savedFilters = this.props.getUserAppSetting(
+        this.props.user, 'taskBundleFilters') || ''
       let useURLFilters = false
+      let loadFromSavedFilters = false
       const criteria =
+         savedFilters && savedFilters.length > 0 ?
+         buildSearchCriteriafromURL(savedFilters) :
          this.props.history.location.search ?
          buildSearchCriteriafromURL(this.props.history.location.search) :
          _cloneDeep(this.props.history.location.state)
+
+      console.log('criteria in WithFilteredClusteredTasks', criteria)
 
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
@@ -297,10 +305,19 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
             criteria.filters[key] = [criteria.filters[key]]
           }
           useURLFilters = true
+        } else if (!_isUndefined(_get(criteria, `filters.${key}`)) && useSavedFilters) {
+          if (typeof criteria.filters[key] === "string") {
+            criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
+          }
+          else if (_isFinite(criteria.filters[key])) {
+            criteria.filters[key] = [criteria.filters[key]]
+          }
+          loadFromSavedFilters = true
         }
       })
 
-      if (useURLFilters) {
+      if (useURLFilters || loadFromSavedFilters) {
+        console.log('using url filters or saved filters')
         const filteredTasks =
           this.filterTasks(criteria.filters.status || this.state.includeStatuses,
                            criteria.filters.reviewStatus || this.state.includeReviewStatuses,
@@ -340,6 +357,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     }
 
     componentDidMount() {
+      console.log('use saved filters', useSavedFilters)
       this.setupFilters()
     }
 

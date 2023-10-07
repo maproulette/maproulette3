@@ -13,6 +13,7 @@ import bbox from '@turf/bbox'
 import { point, featureCollection } from '@turf/helpers'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
+       import { buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 import TaskPropertyFilter from '../../TaskFilters/TaskPropertyFilter'
@@ -30,6 +31,7 @@ import WithTaskPropertyKeys from '../../HOCs/WithTaskPropertyKeys/WithTaskProper
 import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
+import WithSavedFilters from '../../HOCs/WithSavedFilters/WithSavedFilters'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 import WithWebSocketSubscriptions
@@ -41,6 +43,8 @@ import QuickWidget from '../../QuickWidget/QuickWidget'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import TaskAnalysisTable from '../../TaskAnalysisTable/TaskAnalysisTable'
 import TaskMarkerContent from './TaskMarkerContent'
+import Dropdown from '../../Dropdown/Dropdown'
+import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 
@@ -175,6 +179,20 @@ export default class TaskBundleWidget extends Component {
     )
   }
 
+  saveFilters = () => {
+    if(!this.props.criteria) return
+    const searchURL = buildSearchURL(this.props.criteria)
+    this.props.updateUserAppSetting(this.props.user.id, {'taskBundleFilters': searchURL})
+    console.log(searchURL)
+  }
+
+  clearFilters = () => {
+    if(this.props.clearAllFilters) {
+      this.props.clearAllFilters()
+    }
+    console.log(this.props.user)
+  }
+
   componentDidMount() {
     if (!this.props.taskBundle) {
       this.initializeClusterFilters()
@@ -231,6 +249,8 @@ export default class TaskBundleWidget extends Component {
       >
         <WidgetContent
           {...this.props}
+          saveFilters={this.saveFilters}
+          clearFilters={this.clearFilters}
           updateBounds={this.updateBounds}
           bundleTasks={this.bundleTasks}
           unbundleTasks={this.unbundleTasks}
@@ -374,7 +394,7 @@ const BuildBundle = props => {
           <MapPane showLasso>{map}</MapPane>
         }
       </div>
-      <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between">
+      <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between mr-items-center">
         <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
           <li className="md:mr-mr-8">
             <TaskStatusFilter {...props} />
@@ -386,6 +406,29 @@ const BuildBundle = props => {
             <TaskPropertyFilter {...props} />
           </li>
         </ul>
+        <div className='mr-mr-4'>
+          <Dropdown
+          className='mr-flex mr-items-center'
+            dropdownButton={(dropdown) => (
+              <button
+                onClick={dropdown.toggleDropdownVisible}
+                className="mr-flex mr-items-center mr-text-green-lighter"
+              >
+                <SvgSymbol
+                  sym="filter-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-5 mr-h-5"
+                />
+              </button>
+            )}
+            dropdownContent={() => (
+              <div className='mr-flex mr-flex-col mr-space-y-2'>
+                <SaveFiltersControl saveFilters={props.saveFilters} />
+                <ClearFiltersControl clearFilters={props.clearFilters}/>
+              </div>
+            )}
+          />
+        </div>
       </div>
       <div className="mr-px-4 mr-h-half mr-overflow-y-auto">
         <TaskAnalysisTable
@@ -413,28 +456,57 @@ registerWidgetType(
   WithSelectedClusteredTasks(
     WithNearbyTasks(
       WithClusteredTasks(
-        WithFilteredClusteredTasks(
-          WithTaskPropertyKeys(
-            WithFilterCriteria(
-              WithBoundedTasks(
-                WithBrowsedChallenge(
-                  WithWebSocketSubscriptions(
-                    WithKeyboardShortcuts(TaskBundleWidget)
-                  )
-                ),
-                'filteredClusteredTasks',
-                'taskInfo'
-              ), true, false, true
-            )
-          ),
-          'clusteredTasks',
-          'filteredClusteredTasks',
-          {
-            statuses: VALID_STATUSES,
-            includeLocked: false,
-          }
+        WithSavedFilters(
+          WithFilteredClusteredTasks(
+            WithTaskPropertyKeys(
+              WithFilterCriteria(
+                WithBoundedTasks(
+                  WithBrowsedChallenge(
+                    WithWebSocketSubscriptions(
+                      WithKeyboardShortcuts(TaskBundleWidget)
+                    )
+                  ),
+                  'filteredClusteredTasks',
+                  'taskInfo'
+                ), true, false, true, 'what',
+              )
+            ),
+            'clusteredTasks',
+            'filteredClusteredTasks',
+            {
+              statuses: VALID_STATUSES,
+              includeLocked: false,
+            },
+            true
+          )
         )
       )
     )
   ), descriptor
 )
+
+const ClearFiltersControl = ({clearFilters}) => {
+  const handleClick = () => {clearFilters()}
+  return (
+    <button className="mr-flex mr-items-center mr-text-green-lighter"
+      onClick={handleClick}>
+      <SvgSymbol sym="close-icon"
+        viewBox='0 0 20 20'
+        className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+      <FormattedMessage {...messages.clearFiltersLabel} />
+    </button>
+  )
+}
+
+const SaveFiltersControl = ({saveFilters}) => {
+  const handleClick = () => {saveFilters()}
+  return (
+    <button className="mr-flex mr-items-center mr-text-green-lighter"
+      onClick={handleClick}>
+      <SvgSymbol sym="check-circled-icon"
+        viewBox='0 0 20 20'
+        className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+      <FormattedMessage {...messages.saveFiltersLabel} />
+    </button>
+  )
+}

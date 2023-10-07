@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Clear Filters",
   },
 
+  saveFiltersLabel: {
+    id: "Widgets.TaskBundleWidget.controls.saveFilters.label",
+    defaultMessage: "Save Filters"
+  },
+
   taskIdLabel: {
     id: "Widgets.TaskBundleWidget.popup.fields.taskId.label",
     defaultMessage: "Internal Id:",
