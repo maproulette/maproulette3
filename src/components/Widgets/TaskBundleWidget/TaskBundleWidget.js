@@ -187,10 +187,15 @@ export default class TaskBundleWidget extends Component {
   }
 
   clearFilters = () => {
+    console.log(this.props.criteria)
+
     if(this.props.clearAllFilters) {
       this.props.clearAllFilters()
     }
-    console.log(this.props.user)
+    
+    if(this.props.updateUserAppSetting) {
+      this.props.updateUserAppSetting(this.props.user.id, {'taskBundleFilters': ''})
+    }
   }
 
   componentDidMount() {
@@ -397,7 +402,7 @@ const BuildBundle = props => {
       <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between mr-items-center">
         <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
           <li className="md:mr-mr-8">
-            <TaskStatusFilter {...props} />
+            <TaskStatusFilter {...props} isUsedInTaskBundleContext={true} />
           </li>
           <li className="md:mr-mr-8">
             <TaskPriorityFilter {...props} />
@@ -406,7 +411,7 @@ const BuildBundle = props => {
             <TaskPropertyFilter {...props} />
           </li>
         </ul>
-        <div className='mr-mr-4'>
+        <div className='mr-mr-8'>
           <Dropdown
           className='mr-flex mr-items-center'
             dropdownButton={(dropdown) => (
@@ -490,9 +495,9 @@ const ClearFiltersControl = ({clearFilters}) => {
   return (
     <button className="mr-flex mr-items-center mr-text-green-lighter"
       onClick={handleClick}>
-      <SvgSymbol sym="close-icon"
+      {/* <SvgSymbol sym="close-icon"
         viewBox='0 0 20 20'
-        className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+        className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" /> */}
       <FormattedMessage {...messages.clearFiltersLabel} />
     </button>
   )
@@ -503,9 +508,9 @@ const SaveFiltersControl = ({saveFilters}) => {
   return (
     <button className="mr-flex mr-items-center mr-text-green-lighter"
       onClick={handleClick}>
-      <SvgSymbol sym="check-circled-icon"
+      {/* <SvgSymbol sym="check-circled-icon"
         viewBox='0 0 20 20'
-        className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+        className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" /> */}
       <FormattedMessage {...messages.saveFiltersLabel} />
     </button>
   )

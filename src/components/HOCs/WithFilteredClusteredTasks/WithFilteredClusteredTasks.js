@@ -328,10 +328,13 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         // Statuses to be shown in drop down need to appear in this list,
         // so we include all the initialFitlers.statuses but mark them false
         // (unchecked) and then only mark the ones from our criteria as true
-        const includeStatuses =
-         _get(initialFilters, 'statuses',
-           _fromPairs(_map(TaskStatus, status => [status, false])))
 
+        const includeStatuses = 
+          useSavedFilters && savedFilters && savedFilters.length > 0?
+          _fromPairs(_map(criteria.filters.status, status => [status, false])) :
+          _get(initialFilters, 'statuses',
+            _fromPairs(_map(TaskStatus, status => [status, false])))
+        
         _each(criteria.filters.status, status => {
          includeStatuses[status] = true
         })
@@ -346,6 +349,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         ))
       }
       else {
+        console.log('should be running on filter clear')
         const filteredTasks =
           this.filterTasks(this.state.includeStatuses,
                            this.state.includeReviewStatuses,

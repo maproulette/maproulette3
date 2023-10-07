@@ -97,6 +97,12 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
          })
        }
 
+       if(usePersistedFilters) {
+        this.props.history.push({
+          state: {refresh: true}
+        })
+       }
+
        this.setState({criteria: newCriteria, loading: true})
      }
 
@@ -220,6 +226,12 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        const criteria = savedFilters && savedFilters.length > 0 ?
        buildSearchCriteriafromURL(savedFilters) :
        _cloneDeep(props.history.location.state)
+
+       //Use default filter values if no saved values are present
+       if(!criteria) {
+        this.updateIncludedFilters(props)
+        return
+      }
        
         // These values will come in as comma-separated strings and need to be turned
        // into number arrays
@@ -275,6 +287,19 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
          this.updateCriteriaFromURL(this.props)
          return
        }
+
+      //  if(usePersistedFilters && _get(this.props.history.location, 'state.refresh')) {
+      //   console.log()
+      //    this.props.history.push({
+      //     state: {}
+      //    })
+
+      //    if (this.props.setupFilters) {
+      //     this.props.setupFilters()
+      //   }
+      //   this.updateIncludedFilters(this.props)
+      //   return
+      //  }
 
        let typedCriteria = _cloneDeep(this.state.criteria)
 
