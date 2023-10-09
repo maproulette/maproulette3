@@ -216,7 +216,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
 
 
      updateCriteriaFromSavedFilters(props) {
-      console.log('updatecriteriafromsavedfilters ran')
        const savedFilters = this.props.getUserAppSetting(
         this.props.user, 'taskBundleFilters') || ''
        const criteria = savedFilters && savedFilters.length > 0 ?
@@ -253,7 +252,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
      }
 
      componentDidMount() {
-      console.log('usePersistedFilters', usePersistedFilters)
        if (!ignoreURL &&
            (!_isEmpty(this.props.history.location.search) ||
             !_isEmpty(this.props.history.location.state))) {

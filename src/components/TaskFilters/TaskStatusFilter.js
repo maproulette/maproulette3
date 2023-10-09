@@ -26,7 +26,8 @@ export default class TaskStatusFilter extends Component {
       VALID_TASK_BUNDLE_TASK_STATUSES :
       _keys(this.props.includeTaskStatuses)
 
-    const areFiltersActive = !Object.values(this.props.includeTaskStatuses).every(value => value)
+    const areFiltersActive = !Object.values(this.props.includeTaskStatuses).every(value => value) || 
+      Object.keys(this.props.includeTaskStatuses).length < Object.keys(taskStatusOptions).length
     
     return (
       <div className='mr-flex mr-space-x-1 mr-items-center'>

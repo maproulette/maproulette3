@@ -423,9 +423,9 @@ const BuildBundle = props => {
                 />
               </button>
             )}
-            dropdownContent={() => (
+            dropdownContent={(dropdown) => (
               <div className='mr-flex mr-flex-col mr-space-y-2'>
-                <SaveFiltersControl saveFilters={props.saveFilters} />
+                <SaveFiltersControl saveFilters={props.saveFilters} closeDropdown={dropdown.closeDropdown}/>
                 <ClearFiltersControl clearFilters={props.clearFilters}/>
               </div>
             )}
@@ -500,8 +500,11 @@ const ClearFiltersControl = ({clearFilters}) => {
   )
 }
 
-const SaveFiltersControl = ({saveFilters}) => {
-  const handleClick = () => {saveFilters()}
+const SaveFiltersControl = ({saveFilters, closeDropdown}) => {
+  const handleClick = () => {
+    saveFilters() 
+    closeDropdown()
+  }
   return (
     <button className="mr-flex mr-items-center mr-text-green-lighter"
       onClick={handleClick}>
