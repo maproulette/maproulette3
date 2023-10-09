@@ -27,7 +27,7 @@ export default class TaskStatusFilter extends Component {
       _keys(this.props.includeTaskStatuses)
 
     const areFiltersActive = !Object.values(this.props.includeTaskStatuses).every(value => value)
-
+    
     return (
       <div className='mr-flex mr-space-x-1 mr-items-center'>
         {areFiltersActive && <TaskFilterIndicator />}
