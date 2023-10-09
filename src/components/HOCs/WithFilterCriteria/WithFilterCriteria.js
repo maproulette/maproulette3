@@ -97,12 +97,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
          })
        }
 
-       if(usePersistedFilters) {
-        this.props.history.push({
-          state: {refresh: true}
-        })
-       }
-
        this.setState({criteria: newCriteria, loading: true})
      }
 
@@ -220,7 +214,9 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        }
      }
 
+
      updateCriteriaFromSavedFilters(props) {
+      console.log('updatecriteriafromsavedfilters ran')
        const savedFilters = this.props.getUserAppSetting(
         this.props.user, 'taskBundleFilters') || ''
        const criteria = savedFilters && savedFilters.length > 0 ?
@@ -233,7 +229,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
         return
       }
        
-        // These values will come in as comma-separated strings and need to be turned
+       // These values will come in as comma-separated strings and need to be turned
        // into number arrays
        _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], key => {
          if (!_isUndefined(criteria[key]) && key === "boundingBox") {
@@ -257,6 +253,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
      }
 
      componentDidMount() {
+      console.log('usePersistedFilters', usePersistedFilters)
        if (!ignoreURL &&
            (!_isEmpty(this.props.history.location.search) ||
             !_isEmpty(this.props.history.location.state))) {

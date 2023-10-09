@@ -470,7 +470,7 @@ registerWidgetType(
                   ),
                   'filteredClusteredTasks',
                   'taskInfo'
-                ), true, false, true, 'what',
+                ), true, false, true, true,
               )
             ),
             'clusteredTasks',
