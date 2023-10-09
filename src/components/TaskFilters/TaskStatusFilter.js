@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import FilterDropdown from './FilterDropdown'
 import TaskFilterIndicator from './TaskFilterIndicator'
