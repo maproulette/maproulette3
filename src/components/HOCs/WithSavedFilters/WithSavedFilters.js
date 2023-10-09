@@ -34,7 +34,6 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
      * This will save the current search filters to the user's app settings.
      */
     saveCurrentSearchFilters = (name, currentFilters) => {
-      console.log(currentFilters)
       const searchURL = buildSearchURL(currentFilters)
       const settings =
         this.props.getUserAppSetting(this.props.user, appSettingName) || {}

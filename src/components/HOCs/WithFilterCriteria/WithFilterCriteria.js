@@ -83,7 +83,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        }
 
        const newCriteria = _cloneDeep(DEFAULT_CRITERIA)
-       newCriteria.boundingBox = null
+       newCriteria.boundingBox = usePersistedFilters ? this.state.criteria.boundingBox : null
        newCriteria.zoom = this.state.zoom
        newCriteria.filters["status"] = _keys(_pickBy(this.props.includeTaskStatuses, (s) => s))
        newCriteria.filters["reviewStatus"] = _keys(_pickBy(this.props.includeReviewStatuses, (r) => r))
@@ -287,19 +287,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
          this.updateCriteriaFromURL(this.props)
          return
        }
-
-      //  if(usePersistedFilters && _get(this.props.history.location, 'state.refresh')) {
-      //   console.log()
-      //    this.props.history.push({
-      //     state: {}
-      //    })
-
-      //    if (this.props.setupFilters) {
-      //     this.props.setupFilters()
-      //   }
-      //   this.updateIncludedFilters(this.props)
-      //   return
-      //  }
 
        let typedCriteria = _cloneDeep(this.state.criteria)
 

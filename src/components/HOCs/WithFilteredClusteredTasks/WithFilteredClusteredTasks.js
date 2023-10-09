@@ -292,8 +292,6 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
          buildSearchCriteriafromURL(this.props.history.location.search) :
          _cloneDeep(this.props.history.location.state)
 
-      console.log('criteria in WithFilteredClusteredTasks', criteria)
-
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
       _each(["status", "reviewStatus", "metaReviewStatus", "priorities"], key => {
@@ -317,7 +315,6 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       })
 
       if (useURLFilters || loadFromSavedFilters) {
-        console.log('using url filters or saved filters')
         const filteredTasks =
           this.filterTasks(criteria.filters.status || this.state.includeStatuses,
                            criteria.filters.reviewStatus || this.state.includeReviewStatuses,
@@ -349,7 +346,6 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         ))
       }
       else {
-        console.log('should be running on filter clear')
         const filteredTasks =
           this.filterTasks(this.state.includeStatuses,
                            this.state.includeReviewStatuses,
@@ -361,7 +357,6 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     }
 
     componentDidMount() {
-      console.log('use saved filters', useSavedFilters)
       this.setupFilters()
     }
 

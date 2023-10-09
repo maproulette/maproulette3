@@ -183,12 +183,9 @@ export default class TaskBundleWidget extends Component {
     if(!this.props.criteria) return
     const searchURL = buildSearchURL(this.props.criteria)
     this.props.updateUserAppSetting(this.props.user.id, {'taskBundleFilters': searchURL})
-    console.log(searchURL)
   }
 
   clearFilters = () => {
-    console.log(this.props.criteria)
-
     if(this.props.clearAllFilters) {
       this.props.clearAllFilters()
     }
