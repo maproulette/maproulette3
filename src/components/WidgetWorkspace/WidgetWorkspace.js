@@ -36,16 +36,27 @@ export class WidgetWorkspace extends Component {
     workspaceContext: {},
   }
 
-  componentDidMount() {
-    const { task, workspaceConfigurations, saveWorkspaceConfiguration } = this.props
-    const recommendedLayout = task?.parent?.widgetLayout ? JSON.parse(task.parent.widgetLayout).workspace : null
+  async componentDidMount() {
+    const { task, workspaceConfigurations, saveWorkspaceConfiguration, importRecommendedConfiguration } = this.props;
+    let recommendedLayout = null;
+  
+    if (task?.parent?.widgetLayout) {
+      const data = task.parent.widgetLayout;
+      try {
+        if (typeof data === 'string') {
+          recommendedLayout = JSON.parse(data);
+        }
+      } catch {
+        console.log("An invalid widget layout was recommended. It will be excluded.");
+      }
+    }
   
     if (recommendedLayout && !workspaceConfigurations.recommendedLayout) {
-      recommendedLayout.id = "recommendedLayout"
-      recommendedLayout.label = "Recommended Layout"
-      recommendedLayout.name = "taskCompletion"
-      importRecommendedConfiguration(recommendedLayout)
-      saveWorkspaceConfiguration(recommendedLayout)
+      recommendedLayout.id = "recommendedLayout";
+      recommendedLayout.label = "Recommended Layout";
+      recommendedLayout.name = "taskCompletion";
+      importRecommendedConfiguration(recommendedLayout);
+      saveWorkspaceConfiguration(recommendedLayout);
     }
   }
   

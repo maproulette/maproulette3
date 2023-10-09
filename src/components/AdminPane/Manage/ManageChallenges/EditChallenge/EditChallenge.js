@@ -637,14 +637,18 @@ export class EditChallenge extends Component {
     }
 
     if (challengeData.widgetLayout) {
-      const geoJSONFile = this.state.formContext["root_widgetLayout"].file;
-      if (!geoJSONFile) {
-        throw new Error("No geojson file");
+      const geoJSONFile = this.state.formContext?.root_widgetLayout?.file ?? null;
+      if (geoJSONFile) {
+        try {
+          const data = (await AsLineReadableFile(geoJSONFile).allLines()).join("\n");
+          if (JSON.parse(data)) {
+            challengeData.widgetLayout = data;
+          }
+        } catch {
+          console.log("Unable to parse widget layout recommendation. Please check the file, or create a new widget preset.");
+        }
       }
-      challengeData.widgetLayout = (
-        await AsLineReadableFile(geoJSONFile).allLines()
-      ).join("\n");
-    } 
+    }
 
     if (challengeData.customTaskStyles) {
       const styleRules = this.props.taskPropertyStyleRules;

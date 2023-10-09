@@ -986,7 +986,6 @@ export const fetchChallenges = function (
           "highPriorityRule",
           "id",
           "instruction",
-          "widgetLayout",
           "localGeoJSON",
           "lowPriorityRule",
           "maxZoom",
@@ -1012,6 +1011,7 @@ export const fetchChallenges = function (
           "taskStyles",
           "requiresLocal",
           "reviewSetting",
+          "widgetLayout",
         ]
       );
 

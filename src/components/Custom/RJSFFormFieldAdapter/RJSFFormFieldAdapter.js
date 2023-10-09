@@ -333,7 +333,8 @@ export const TagsInputField = props => {
  * and it will be set with the text content of the uploaded file.
  */
 export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAreaClassName}) => {
-  if (readonly && id !== "root_widgetLayout") {
+  const idRequirements = idRequirements
+  if (readonly && idRequirements) {
     return (
       <div className="readonly-file mr-text-pink">
         <FormattedMessage {...messages.readOnlyFile} />
@@ -360,7 +361,10 @@ export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAre
             acceptedFiles.pop();
             setUploadErrorText(
               <span className="mr-mr-4 mr-text-red-light mr-ml-1">
-                <FormattedMessage {...messages.uploadErrorText} />
+                { idRequirements ?
+                  <FormattedMessage {...messages.uploadErrorGeoJSON} /> :
+                  <FormattedMessage {...messages.uploadErrorJSON} />
+                } 
               </span>
             );
           }
@@ -373,7 +377,10 @@ export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAre
               className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
             />
             {uploadErrorText}
-            <FormattedMessage {...messages.uploadFilePrompt} />
+              { idRequirements ?
+                <FormattedMessage {...messages.uploadFilePromptGeoJSON} /> :
+                <FormattedMessage {...messages.uploadFilePromptJSON} />
+              } 
             <input {...getInputProps()} />
           </span>
         )
