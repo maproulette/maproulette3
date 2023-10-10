@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import FilterDropdown from './FilterDropdown'
+import TaskFilterIndicator from './TaskFilterIndicator'
 import _map from 'lodash/map'
 import { TaskReviewStatusWithUnset,
         messagesByReviewStatus,
@@ -10,6 +11,9 @@ import { TaskReviewStatusWithUnset,
 import messages from './Messages'
 
 
+// const areTaskReviewStatusFiltersActive = 
+
+
 /**
  * TaskReviewStatusFilter builds a dropdown for searching by task review status
  *
@@ -17,6 +21,21 @@ import messages from './Messages'
  */
 export default class TaskReviewStatusFilter extends Component {
   render() {
+
+    const taskReviewStatusesActive = Object.values(this.props.includeTaskReviewStatuses).every(value => value) || 
+      Object.keys(this.props.includeTaskReviewStatuses).length < Object.keys(TaskReviewStatusWithUnset).length
+
+    const currentTaskMetaReviewStatuses = this.props.metaReviewEnabled ? 
+      Object.values(this.props.includeMetaReviewStatuses).every(value => value) : 
+      false
+      
+    const taskMetaReviewStatusesActive = this.props.metaReviewEnabled ? 
+      Object.keys(this.props.includeMetaReviewStatuses).length < Object.keys(TaskMetaReviewStatusWithUnset).length : 
+      false
+
+    const areTaskReviewStatusFilersActive = this.props.metaReviewEnabled ? 
+      (!taskReviewStatusesActive || !currentTaskMetaReviewStatuses || taskMetaReviewStatusesActive) : 
+      !taskMetaReviewStatusesActive
 
     const metaReviewStatusFilter =
       !this.props.metaReviewEnabled ? {} : {
@@ -41,27 +60,30 @@ export default class TaskReviewStatusFilter extends Component {
         }
 
     return (
-      <FilterDropdown
-        title={<FormattedMessage {...messages.filterByReviewStatusLabel} />}
-        filters={
-          _map(TaskReviewStatusWithUnset, status => (
-            <li key={status}>
-              <label className="mr-flex mr-items-center">
-                <input
-                  className="mr-checkbox-toggle mr-mr-2"
-                  type="checkbox"
-                  checked={this.props.includeTaskReviewStatuses[status]}
-                  onChange={(e) =>
-                    this.props.toggleIncludedTaskReviewStatus(status,
-                                                              e.nativeEvent.shiftKey)
-                  } />
-                <FormattedMessage {...messagesByReviewStatus[status]} />
-              </label>
-            </li>
-          ))
-        }
-        {...metaReviewStatusFilter}
-      />
+      <div className='mr-flex mr-space-x-1 mr-items-center'>
+        {areTaskReviewStatusFilersActive && <TaskFilterIndicator />}
+        <FilterDropdown
+          title={<FormattedMessage {...messages.filterByReviewStatusLabel} />}
+          filters={
+            _map(TaskReviewStatusWithUnset, status => (
+              <li key={status} className='mr-w-76'>
+                <label className="mr-flex mr-items-center">
+                  <input
+                    className="mr-checkbox-toggle mr-mr-2"
+                    type="checkbox"
+                    checked={this.props.includeTaskReviewStatuses[status]}
+                    onChange={(e) =>
+                      this.props.toggleIncludedTaskReviewStatus(status,
+                                                                e.nativeEvent.shiftKey)
+                    } />
+                  <FormattedMessage {...messagesByReviewStatus[status]} />
+                </label>
+              </li>
+            ))
+          }
+          {...metaReviewStatusFilter}
+        />
+      </div>
     )
   }
 }
