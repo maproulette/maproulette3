@@ -39,7 +39,7 @@ export class WidgetWorkspace extends Component {
   async componentDidMount() {
     const { task, workspaceConfigurations, saveWorkspaceConfiguration } = this.props;
     let recommendedLayout = null;
-  debugger
+  
     if (task?.parent?.widgetLayout) {
       const data = task.parent.widgetLayout;
       try {
