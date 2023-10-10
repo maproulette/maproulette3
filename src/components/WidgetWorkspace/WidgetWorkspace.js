@@ -37,13 +37,13 @@ export class WidgetWorkspace extends Component {
   }
 
   async componentDidMount() {
-    const { task, workspaceConfigurations, saveWorkspaceConfiguration, importRecommendedConfiguration } = this.props;
+    const { task, workspaceConfigurations, saveWorkspaceConfiguration } = this.props;
     let recommendedLayout = null;
   
     if (task?.parent?.widgetLayout) {
       const data = task.parent.widgetLayout;
       try {
-        if (typeof data === 'string') {
+        if (JSON.parse(data)) {
           recommendedLayout = JSON.parse(data);
         }
       } catch {
