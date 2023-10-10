@@ -333,7 +333,8 @@ export const TagsInputField = props => {
  * and it will be set with the text content of the uploaded file.
  */
 export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAreaClassName}) => {
-  const idRequirements = idRequirements
+  const idRequirements = (id !== "root_widgetLayout" && id !== "root")
+
   if (readonly && idRequirements) {
     return (
       <div className="readonly-file mr-text-pink">

@@ -637,7 +637,7 @@ export class EditChallenge extends Component {
     }
 
     if (challengeData.widgetLayout) {
-      const geoJSONFile = this.state.formContext?.root_widgetLayout?.file ?? null;
+      const geoJSONFile = this.state.formContext?.root_widgetLayout?.file ?? this.state.formContext?.root?.file ?? null;
       if (geoJSONFile) {
         try {
           const data = (await AsLineReadableFile(geoJSONFile).allLines()).join("\n");
