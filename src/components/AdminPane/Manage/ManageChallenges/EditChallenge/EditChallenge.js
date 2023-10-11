@@ -641,11 +641,12 @@ export class EditChallenge extends Component {
       if (geoJSONFile) {
         try {
           const data = (await AsLineReadableFile(geoJSONFile).allLines()).join("\n");
-          if (JSON.parse(data)) {
-            challengeData.widgetLayout = data;
+          if (!JSON.parse(data).workspace) {
+            throw new Error("Widget layout with the wrong format was submitted, it was not included in the save.")
           }
-        } catch {
-          console.log("Unable to parse widget layout recommendation. Please check the file, or create a new widget preset.");
+          challengeData.widgetLayout = data;
+        } catch(error) {
+          console.error(error);
         }
       }
     }
