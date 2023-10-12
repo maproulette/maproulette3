@@ -969,7 +969,7 @@ export const fetchChallenges = function (
           throw new Error("Widget layout with the wrong format was submitted, it was not included in the save.")
         }
       } catch(error) {
-        challengeData.widgetLayout = "Workspace not supported";
+        challengeData.widgetLayout = "";
         console.error(error);
       }
       
