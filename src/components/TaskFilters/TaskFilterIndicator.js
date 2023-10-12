@@ -2,7 +2,7 @@ import React from 'react'
 
 function TaskFilterIndicator() {
   return (
-    <div className="mr-rounded-full mr-h-2 mr-w-2 mr-bg-green-lighter" content='' />
+    <div className="mr-rounded-full mr-h-1.5 mr-w-1.5 mr-bg-green-lighter" content='' />
   )  
 }
 

@@ -14,7 +14,7 @@ export default class FilterDropdown extends Component {
             onClick={dropdown.toggleDropdownVisible}
           >
             <span className="mr-text-base mr-uppercase mr-mr-1">
-              {this.props.title}
+              <span className='mr-hidden xl:mr-inline'>Filter By </span>{this.props.title}
             </span>
             <SvgSymbol
               sym="icon-cheveron-down"

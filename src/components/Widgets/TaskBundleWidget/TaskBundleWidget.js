@@ -396,18 +396,23 @@ const BuildBundle = props => {
           <MapPane showLasso>{map}</MapPane>
         }
       </div>
-      <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between mr-items-center">
-        <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
-          <li className="md:mr-mr-8">
-            <TaskStatusFilter {...props} isUsedInTaskBundleContext={true} />
-          </li>
-          <li className="md:mr-mr-8">
-            <TaskPriorityFilter {...props} />
-          </li>
-          <li>
-            <TaskPropertyFilter {...props} />
-          </li>
-        </ul>
+      <div className="mr-my-4 mr-px-4 mr-flex mr-justify-between">
+        <div className='mr-flex'>
+          <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-6">
+            <FormattedMessage {...messages.filterListLabel} />
+          </p>
+          <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
+            <li className="md:mr-mr-8">
+              <TaskStatusFilter {...props} isUsedInTaskBundleContext={true} />
+            </li>
+            <li className="md:mr-mr-8">
+              <TaskPriorityFilter {...props} />
+            </li>
+            <li>
+              <TaskPropertyFilter {...props} />
+            </li>
+          </ul>
+        </div>
         <div>
           <Dropdown
           className='mr-flex mr-items-center'
@@ -419,7 +424,7 @@ const BuildBundle = props => {
                 <SvgSymbol
                   sym="filter-icon"
                   viewBox="0 0 20 20"
-                  className="mr-fill-current mr-w-4 mr-h-4 xl:mr-w-5 xl:mr-h-5"
+                  className="mr-fill-current mr-w-5 mr-h-5"
                 />
               </button>
             )}

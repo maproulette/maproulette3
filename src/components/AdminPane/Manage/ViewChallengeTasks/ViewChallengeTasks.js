@@ -216,7 +216,9 @@ export class ViewChallengeTasks extends Component {
         <SvgSymbol sym="close-icon"
           viewBox='0 0 20 20'
           className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
-        <FormattedMessage {...messages.clearFiltersLabel} />
+          <span>
+            <FormattedMessage {...messages.clearFiltersLabel} />
+          </span>
       </button>
     )
 
@@ -249,24 +251,31 @@ export class ViewChallengeTasks extends Component {
           </MapPane>
         </div>
 
-        <div className="mr-my-4 xl:mr-flex mr-justify-between">
-          <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
-            <li className="md:mr-mr-8">
-              <TaskStatusFilter {...this.props} />
-            </li>
-            <li className="md:mr-mr-8">
-              <TaskReviewStatusFilter {...this.props} />
-            </li>
-            <li className="md:mr-mr-8">
-              <TaskPriorityFilter {...this.props} />
-            </li>
-            <li>
-              <TaskPropertyFilter {...this.props} />
-            </li>
-          </ul>
-
-            {calculateTasksInChallenge(this.props) !== _get(this.props, 'taskInfo.totalCount', 0) ? clearFiltersControl : null}
+        <div className="mr-my-4 mr-space-y-3">
+            {/* <p className="mr-text-base mr-uppercase mr-text-mango">
+              <FormattedMessage {...messages.filterListLabel} />
+            </p> */}
+          
+            <div className='mr-flex mr-justify-between mr-flex-1 mr-px-2 xl:mr-px-4'>
+              <ul className="mr-mb-4 xl:mr-mb-0 mr-flex mr-items-center mr-space-x-6 xl:mr-space-x-8">
+                <li>
+                  <TaskStatusFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskReviewStatusFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskPriorityFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskPropertyFilter {...this.props} />
+                </li>
+              </ul>
+              <div>
+                {calculateTasksInChallenge(this.props) !== _get(this.props, 'taskInfo.totalCount', 0) ? clearFiltersControl : null}
+              </div>
           </div>
+        </div>
 
           <TaskAnalysisTable
             taskData={_get(this.props, 'taskInfo.tasks')}

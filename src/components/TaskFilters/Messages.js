@@ -6,27 +6,26 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   filterByPropertyLabel: {
     id: "TaskPropertyFilter.label",
-    defaultMessage: "Filter By Property",
+    defaultMessage: "Task Property",
   },
 
   filterByPriorityLabel: {
     id: "TaskPriorityFilter.label",
-    defaultMessage: "Filter by Priority",
+    defaultMessage: "Task Priority",
   },
 
   filterByStatusLabel: {
     id: "TaskStatusFilter.label",
-    defaultMessage: "Filter by Status",
+    defaultMessage: "Task Status",
   },
 
   filterByReviewStatusLabel: {
     id: "TaskReviewStatusFilter.label",
-    defaultMessage: "Filter by Review Status",
+    defaultMessage: "Task Review Status",
   },
 
   filterByMetaReviewStatusLabel: {
     id: "TaskReviewStatusFilter.metaReviewStatuses.label",
     defaultMessage: "Meta-Review Statuses",
   },
-
 })
