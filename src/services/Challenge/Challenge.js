@@ -972,7 +972,6 @@ export const fetchChallenges = function (
         challengeData.widgetLayout = "";
         console.error(error);
       }
-      
     }
 
 

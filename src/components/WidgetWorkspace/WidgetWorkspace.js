@@ -40,19 +40,8 @@ export class WidgetWorkspace extends Component {
   componentDidUpdate() {
     if(!this.state.activeRecommendedLayout && this.props.task?.parent?.widgetLayout) {
       const { task, workspaceConfigurations, saveWorkspaceConfiguration } = this.props;
-      let recommendedLayout = null;
-    
-      if (task?.parent?.widgetLayout) {
-        const data = task.parent.widgetLayout;
-        try {
-          if (JSON.parse(data)) {
-            recommendedLayout = JSON.parse(data).workspace;
-          }
-        } catch {
-          console.log("An invalid widget layout was recommended. It will be excluded.");
-        }
-      }
-    
+      let recommendedLayout = JSON.parse(task.parent.widgetLayout).workspace;
+
       if (this.props.workspaceConfigurations?.recommendedLayout) {
         this.props.deleteWorkspaceConfiguration(this.props.workspaceConfigurations.recommendedLayout.id)
       }
@@ -279,7 +268,6 @@ export class WidgetWorkspace extends Component {
 }
 
 const LayoutButton = function(props) {
-
   return (
     <div className="mr-normal-case mr-flex">
       { props.workspaceConfigurations.recommendedLayout ?

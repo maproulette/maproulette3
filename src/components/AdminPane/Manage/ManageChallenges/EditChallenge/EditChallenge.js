@@ -639,15 +639,7 @@ export class EditChallenge extends Component {
     if (challengeData.widgetLayout) {
       const geoJSONFile = this.state.formContext?.root_widgetLayout?.file ?? this.state.formContext?.root?.file ?? null;
       if (geoJSONFile) {
-        try {
-          const data = (await AsLineReadableFile(geoJSONFile).allLines()).join("\n");
-          if (!JSON.parse(data).workspace) {
-            throw new Error("Widget layout with the wrong format was submitted, it was not included in the save.")
-          }
-          challengeData.widgetLayout = data;
-        } catch(error) {
-          console.error(error);
-        }
+          challengeData.widgetLayout = (await AsLineReadableFile(geoJSONFile).allLines()).join("\n")
       }
     }
 
