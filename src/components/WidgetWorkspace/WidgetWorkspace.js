@@ -34,33 +34,41 @@ export class WidgetWorkspace extends Component {
     isExportingLayout: false,
     isImportingLayout: false,
     workspaceContext: {},
+    activeRecommendedLayout: false
   }
 
-  async componentDidMount() {
-    const { task, workspaceConfigurations, saveWorkspaceConfiguration } = this.props;
-    let recommendedLayout = null;
-  
-    if (task?.parent?.widgetLayout) {
-      const data = task.parent.widgetLayout;
-      try {
-        if (JSON.parse(data)) {
-          recommendedLayout = JSON.parse(data).workspace;
-        }
-      } catch {
-        console.log("An invalid widget layout was recommended. It will be excluded.");
-      }
-    }
+ setRecommendedLayout = () => {
+  const { task, workspaceConfigurations, saveWorkspaceConfiguration } = this.props;
+  let recommendedLayout = null;
 
-    if (this.props.workspaceConfigurations?.recommendedLayout) {
-      this.props.deleteWorkspaceConfiguration(this.props.workspaceConfigurations.recommendedLayout.id)
+  if (task?.parent?.widgetLayout) {
+    const data = task.parent.widgetLayout;
+    try {
+      if (JSON.parse(data)) {
+        recommendedLayout = JSON.parse(data).workspace;
+      }
+    } catch {
+      console.log("An invalid widget layout was recommended. It will be excluded.");
     }
-  
-    if (recommendedLayout && !workspaceConfigurations.recommendedLayout) {
-      recommendedLayout.id = "recommendedLayout";
-      recommendedLayout.label = "Recommended Layout";
-      recommendedLayout.name = "taskCompletion";
-      importRecommendedConfiguration(recommendedLayout);
-      saveWorkspaceConfiguration(recommendedLayout);
+  }
+
+  if (this.props.workspaceConfigurations?.recommendedLayout) {
+    this.props.deleteWorkspaceConfiguration(this.props.workspaceConfigurations.recommendedLayout.id)
+  }
+
+  if (recommendedLayout && !workspaceConfigurations.recommendedLayout) {
+    this.setState({activeRecommendedLayout: true })
+    recommendedLayout.id = "recommendedLayout";
+    recommendedLayout.label = "Recommended Layout";
+    recommendedLayout.name = "taskCompletion";
+    importRecommendedConfiguration(recommendedLayout);
+    saveWorkspaceConfiguration(recommendedLayout);
+  }
+ }
+
+  componentDidUpdate() {
+    if(!this.state.activeRecommendedLayout && this.props.task?.parent?.widgetLayout) {
+      this.setRecommendedLayout()
     }
   }
   
