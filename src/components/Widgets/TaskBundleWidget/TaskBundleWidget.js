@@ -408,7 +408,7 @@ const BuildBundle = props => {
             <TaskPropertyFilter {...props} />
           </li>
         </ul>
-        <div className='mr-mr-8'>
+        <div>
           <Dropdown
           className='mr-flex mr-items-center'
             dropdownButton={(dropdown) => (
@@ -419,7 +419,7 @@ const BuildBundle = props => {
                 <SvgSymbol
                   sym="filter-icon"
                   viewBox="0 0 20 20"
-                  className="mr-fill-current mr-w-5 mr-h-5"
+                  className="mr-fill-current mr-w-4 mr-h-4 xl:mr-w-5 xl:mr-h-5"
                 />
               </button>
             )}
@@ -490,12 +490,9 @@ registerWidgetType(
 const ClearFiltersControl = ({clearFilters}) => {
   const handleClick = () => {clearFilters()}
   return (
-    <button className="mr-flex mr-items-center mr-text-green-lighter"
+    <button className="mr-flex mr-items-center mr-text-current hover:mr-text-green-lighter mr-transition-colors"
       onClick={handleClick}>
-      {/* <SvgSymbol sym="close-icon"
-        viewBox='0 0 20 20'
-        className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" /> */}
-      <FormattedMessage {...messages.clearFiltersLabel} />
+      <FormattedMessage {...messages.restoreDefaultFiltersLabel} />
     </button>
   )
 }
@@ -506,12 +503,9 @@ const SaveFiltersControl = ({saveFilters, closeDropdown}) => {
     closeDropdown()
   }
   return (
-    <button className="mr-flex mr-items-center mr-text-green-lighter"
+    <button className="mr-flex mr-items-center mr-text-current hover:mr-text-green-lighter mr-transition-colors"
       onClick={handleClick}>
-      {/* <SvgSymbol sym="check-circled-icon"
-        viewBox='0 0 20 20'
-        className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" /> */}
-      <FormattedMessage {...messages.saveFiltersLabel} />
+      <FormattedMessage {...messages.saveCurrentFiltersLabel} />
     </button>
   )
 }

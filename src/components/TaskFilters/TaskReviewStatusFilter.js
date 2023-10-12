@@ -22,20 +22,25 @@ import messages from './Messages'
 export default class TaskReviewStatusFilter extends Component {
   render() {
 
-    const taskReviewStatusesActive = Object.values(this.props.includeTaskReviewStatuses).every(value => value) || 
+    // console.log('includereviewstatus props', this.props.includeTaskReviewStatuses)
+    // console.log('base review statuses',TaskReviewStatusWithUnset)
+    // console.log('includeMetaReviewStatuses props', this.props.includeMetaReviewStatuses)
+    // console.log('base metaReviewStatuses', TaskMetaReviewStatusWithUnset)
+
+    const taskReviewStatusFiltersActive = !Object.values(this.props.includeTaskReviewStatuses).every(value => value) || 
       Object.keys(this.props.includeTaskReviewStatuses).length < Object.keys(TaskReviewStatusWithUnset).length
 
     const currentTaskMetaReviewStatuses = this.props.metaReviewEnabled ? 
       Object.values(this.props.includeMetaReviewStatuses).every(value => value) : 
       false
       
-    const taskMetaReviewStatusesActive = this.props.metaReviewEnabled ? 
+    const taskMetaReviewStatusFiltersActive = this.props.metaReviewEnabled ? 
       Object.keys(this.props.includeMetaReviewStatuses).length < Object.keys(TaskMetaReviewStatusWithUnset).length : 
       false
 
     const areTaskReviewStatusFilersActive = this.props.metaReviewEnabled ? 
-      (!taskReviewStatusesActive || !currentTaskMetaReviewStatuses || taskMetaReviewStatusesActive) : 
-      !taskMetaReviewStatusesActive
+      (taskReviewStatusFiltersActive || !currentTaskMetaReviewStatuses || taskMetaReviewStatusFiltersActive) : 
+      taskReviewStatusFiltersActive
 
     const metaReviewStatusFilter =
       !this.props.metaReviewEnabled ? {} : {

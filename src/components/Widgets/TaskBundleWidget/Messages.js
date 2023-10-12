@@ -14,14 +14,14 @@ export default defineMessages({
     defaultMessage: "Work on Multiple Tasks Together",
   },
 
-  clearFiltersLabel: {
-    id: "Widgets.TaskBundleWidget.controls.clearFilters.label",
-    defaultMessage: "Clear Filters",
+  restoreDefaultFiltersLabel: {
+    id: "Widgets.TaskBundleWidget.controls.restoreDefaultFilters.label",
+    defaultMessage: "Restore Default Filters",
   },
 
-  saveFiltersLabel: {
-    id: "Widgets.TaskBundleWidget.controls.saveFilters.label",
-    defaultMessage: "Save Filters"
+  saveCurrentFiltersLabel: {
+    id: "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label",
+    defaultMessage: "Save Current Filters"
   },
 
   taskIdLabel: {
