@@ -961,6 +961,21 @@ export const fetchChallenges = function (
       challengeData.localGeoJSON = JSON.parse(challengeData.localGeoJSON);
     }
 
+    // If there is local GeoJSON content being transmitted as a string, parse
+    // it into JSON first.
+    if (challengeData.widgetLayout) {
+      try {
+        if (!JSON.parse(challengeData.widgetLayout).workspace) {
+          throw new Error("Widget layout with the wrong format was submitted, it was not included in the save.")
+        }
+      } catch(error) {
+        challengeData.widgetLayout = "Workspace not supported";
+        console.error(error);
+      }
+      
+    }
+
+
     // We need to remove any old challenge keywords first, prior to the
     // update.
     return removeChallengeKeywords(
