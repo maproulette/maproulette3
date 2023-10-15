@@ -963,12 +963,12 @@ export const fetchChallenges = function (
 
     // If there is local GeoJSON content being transmitted as a string, parse
     // it into JSON first.
-    if (challengeData.widgetLayout) {
+    if (!challengeData.widgetLayout.workspace && challengeData.widgetLayout) {
       try {
         if (!JSON.parse(challengeData.widgetLayout).workspace) {
           throw new Error("Widget layout with the wrong format was submitted, it was not included in the save.")
         }
-        challengeData.widgetLayout = JSON.parse(challengeData.widgetLayout).workspace
+        challengeData.widgetLayout = JSON.parse(challengeData.widgetLayout)
       } catch(error) {
         challengeData.widgetLayout = "";
         console.error(error);
