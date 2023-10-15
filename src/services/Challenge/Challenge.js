@@ -968,6 +968,7 @@ export const fetchChallenges = function (
         if (!JSON.parse(challengeData.widgetLayout).workspace) {
           throw new Error("Widget layout with the wrong format was submitted, it was not included in the save.")
         }
+        challengeData.widgetLayout = JSON.parse(challengeData.widgetLayout).workspace
       } catch(error) {
         challengeData.widgetLayout = "";
         console.error(error);

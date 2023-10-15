@@ -40,7 +40,7 @@ export class WidgetWorkspace extends Component {
   componentDidUpdate() {
     if(!this.state.activeRecommendedLayout && this.props.task?.parent?.widgetLayout) {
       const { task, workspaceConfigurations, saveWorkspaceConfiguration } = this.props;
-      let recommendedLayout = JSON.parse(task.parent.widgetLayout).workspace;
+      let recommendedLayout = task.parent.widgetLayout
 
       if (this.props.workspaceConfigurations?.recommendedLayout) {
         this.props.deleteWorkspaceConfiguration(this.props.workspaceConfigurations.recommendedLayout.id)
