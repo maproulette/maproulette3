@@ -333,7 +333,7 @@ export const TagsInputField = props => {
  * and it will be set with the text content of the uploaded file.
  */
 export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAreaClassName}) => {
-  const idRequirements = (id !== "root_widgetLayout" && id !== "root")
+  const idRequirements = (id !== "root_taskWidgetLayout" && id !== "root")
 
   if (readonly && idRequirements) {
     return (

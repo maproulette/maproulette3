@@ -636,10 +636,10 @@ export class EditChallenge extends Component {
       }
     }
 
-    if (challengeData.widgetLayout) {
-      const geoJSONFile = this.state.formContext?.root_widgetLayout?.file ?? this.state.formContext?.root?.file ?? null;
+    if (challengeData.taskWidgetLayout) {
+      const geoJSONFile = this.state.formContext?.root_taskWidgetLayout?.file ?? this.state.formContext?.root?.file ?? null;
       if (geoJSONFile) {
-          challengeData.widgetLayout = (await AsLineReadableFile(geoJSONFile).allLines()).join("\n")
+          challengeData.taskWidgetLayout = (await AsLineReadableFile(geoJSONFile).allLines()).join("\n")
       }
     }
 

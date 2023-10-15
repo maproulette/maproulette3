@@ -332,8 +332,8 @@ export const importRecommendedConfiguration = (recommendedLayout) => {
   importedConfiguration.widgets =
     _map(importedConfiguration.widgetKeys, key => widgetDescriptor(key))
   delete importedConfiguration.widgetKeys
-
-  _each(importedConfiguration.layout, widgetLayout => widgetLayout.i = generateWidgetId())
+debugger
+  _each(importedConfiguration.layout, taskWidgetLayout => taskWidgetLayout.i = generateWidgetId())
   return (importedConfiguration)
 }
 

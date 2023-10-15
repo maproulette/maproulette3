@@ -963,14 +963,14 @@ export const fetchChallenges = function (
 
     // If there is local GeoJSON content being transmitted as a string, parse
     // it into JSON first.
-    if (!challengeData.widgetLayout.workspace && challengeData.widgetLayout) {
+    if (!challengeData.taskWidgetLayout.workspace && challengeData.taskWidgetLayout) {
       try {
-        if (!JSON.parse(challengeData.widgetLayout).workspace) {
+        if (!JSON.parse(challengeData.taskWidgetLayout).workspace) {
           throw new Error("Widget layout with the wrong format was submitted, it was not included in the save.")
         }
-        challengeData.widgetLayout = JSON.parse(challengeData.widgetLayout)
+        challengeData.taskWidgetLayout = JSON.parse(challengeData.taskWidgetLayout)
       } catch(error) {
-        challengeData.widgetLayout = "";
+        challengeData.taskWidgetLayout = "";
         console.error(error);
       }
     }
@@ -1026,7 +1026,7 @@ export const fetchChallenges = function (
           "taskStyles",
           "requiresLocal",
           "reviewSetting",
-          "widgetLayout",
+          "taskWidgetLayout",
         ]
       );
 

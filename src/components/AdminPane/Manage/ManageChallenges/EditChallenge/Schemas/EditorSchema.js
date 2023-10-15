@@ -57,10 +57,10 @@ export const jsSchema = (intl) => {
         ],
         default: false,
       },
-      widgetLayout: {
+      taskWidgetLayout: {
         title: "Layout File",
         type: "string",
-        description: intl.formatMessage(messages.widgetLayoutReadOnly)
+        description: intl.formatMessage(messages.taskWidgetLayoutReadOnly)
       },
     },
     dependencies: {
@@ -133,7 +133,7 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.presetsDescription),
     },
-    widgetLayout: {
+    taskWidgetLayout: {
       "ui:widget": DropzoneTextUpload,
       "ui:readonly": sourceReadOnly,
     }
