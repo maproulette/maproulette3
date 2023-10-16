@@ -230,20 +230,25 @@ export default class ReviewNearbyTasksWidget extends Component {
             )}
           </div>
           <div className="mr-my-4 mr-px-4 mr-justify-between mr-flex">
-            <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
-              <li className="md:mr-mr-4">
-                <TaskStatusFilter {...this.props} />
-              </li>
-              <li className="md:mr-mr-4">
-                <TaskReviewStatusFilter {...this.props} />
-              </li>
-              <li className="md:mr-mr-4">
-                <TaskPriorityFilter {...this.props} />
-              </li>
-              <li className="md:mr-mr-4">
-                <TaskPropertyFilter {...this.props} />
-              </li>
-            </ul>
+            <div className='mr-flex'>
+              <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
+                <FormattedMessage {...messages.filterListLabel} />
+              </p>
+              <ul className="md:mr-space-x-6 mr-mb-4 xl:mr-mb-0 md:mr-flex">
+                <li>
+                  <TaskStatusFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskReviewStatusFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskPriorityFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskPropertyFilter {...this.props} />
+                </li>
+              </ul>
+            </div>
             {clearFiltersControl}
           </div>
         </div>
@@ -270,15 +275,17 @@ registerWidgetType(
               ),
               true,
               false,
-              true
+              true,
+              false
             )
           ),
           'nearbyTasks',
-          'taskClusters',
+          // 'taskClusters',
           'filteredClusteredTasks',
           {
             includeLocked: false,
-          }
+          },
+          false
         )
       )
     )

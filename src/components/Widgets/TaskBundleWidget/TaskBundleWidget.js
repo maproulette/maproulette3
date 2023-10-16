@@ -398,7 +398,7 @@ const BuildBundle = props => {
       </div>
       <div className="mr-my-4 mr-px-4 mr-flex mr-justify-between">
         <div className='mr-flex'>
-          <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-6">
+          <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
             <FormattedMessage {...messages.filterListLabel} />
           </p>
           <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
@@ -475,7 +475,7 @@ registerWidgetType(
                   ),
                   'filteredClusteredTasks',
                   'taskInfo'
-                ), true, false, true, true,
+                ), true, false, true, true, 'taskBundleFilters'
               )
             ),
             'clusteredTasks',
@@ -484,7 +484,8 @@ registerWidgetType(
               statuses: VALID_STATUSES,
               includeLocked: false,
             },
-            true
+            true,
+            'taskBundleFilters'
           )
         )
       )

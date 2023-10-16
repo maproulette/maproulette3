@@ -23,12 +23,14 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
 
 /**
  * WithFilterCriteria keeps track of the current criteria being used
- * to filter, sort and page the tasks.
+ * to filter, sort and page the tasks. If a use case requires user app settings for 
+ * saving and loading filters, the 'usePersistedFilters' prop must be true and the correct 
+ * setting name provided via the 'savedFilterSettingName' prop.
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
-  ignoreLocked = true, skipInitialFetch = false, usePersistedFilters = false) {
+  ignoreLocked = true, skipInitialFetch = false, usePersistedFilters = false, savedFilterSettingName = null) {
    return class extends Component {
      state = {
        loading: false,
@@ -216,8 +218,8 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
 
 
      updateCriteriaFromSavedFilters(props) {
-       const savedFilters = this.props.getUserAppSetting(
-        this.props.user, 'taskBundleFilters') || ''
+       const savedFilters = usePersistedFilters && savedFilterSettingName ? this.props.getUserAppSetting(
+        this.props.user, savedFilterSettingName) : ''
        const criteria = savedFilters && savedFilters.length > 0 ?
        buildSearchCriteriafromURL(savedFilters) :
        _cloneDeep(props.history.location.state)

@@ -22,11 +22,6 @@ import messages from './Messages'
 export default class TaskReviewStatusFilter extends Component {
   render() {
 
-    // console.log('includereviewstatus props', this.props.includeTaskReviewStatuses)
-    // console.log('base review statuses',TaskReviewStatusWithUnset)
-    // console.log('includeMetaReviewStatuses props', this.props.includeMetaReviewStatuses)
-    // console.log('base metaReviewStatuses', TaskMetaReviewStatusWithUnset)
-
     const taskReviewStatusFiltersActive = !Object.values(this.props.includeTaskReviewStatuses).every(value => value) || 
       Object.keys(this.props.includeTaskReviewStatuses).length < Object.keys(TaskReviewStatusWithUnset).length
 

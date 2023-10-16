@@ -252,11 +252,11 @@ export class ViewChallengeTasks extends Component {
         </div>
 
         <div className="mr-my-4 mr-space-y-3">
-            {/* <p className="mr-text-base mr-uppercase mr-text-mango">
-              <FormattedMessage {...messages.filterListLabel} />
-            </p> */}
-          
-            <div className='mr-flex mr-justify-between mr-flex-1 mr-px-2 xl:mr-px-4'>
+          <div className='mr-flex mr-justify-between mr-flex-1 mr-px-2 xl:mr-px-4'>
+            <div className='mr-flex'>
+              <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
+                <FormattedMessage {...messages.filterListLabel} />
+              </p>
               <ul className="mr-mb-4 xl:mr-mb-0 mr-flex mr-items-center mr-space-x-6 xl:mr-space-x-8">
                 <li>
                   <TaskStatusFilter {...this.props} />
@@ -271,6 +271,7 @@ export class ViewChallengeTasks extends Component {
                   <TaskPropertyFilter {...this.props} />
                 </li>
               </ul>
+            </div>
               <div>
                 {calculateTasksInChallenge(this.props) !== _get(this.props, 'taskInfo.totalCount', 0) ? clearFiltersControl : null}
               </div>

@@ -30,7 +30,9 @@ import { buildSearchCriteriafromURL } from '../../../services/SearchCriteria/Sea
  * down in the `includeTaskStatuses`, `includeTaskPriorities`, and
  * `selectedTasks` props. By default, all statuses and priorities are enabled
  * (so tasks in any status and priority will pass through) and no tasks are
- * selected.
+ * selected. If a use case requires user app settings for saving and loading filters,
+ * the 'useSavedFilters' prop must be true and the correct setting name provided
+ * via the 'savedFilterSettingName' prop.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
@@ -38,7 +40,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
                                                    tasksProp='clusteredTasks',
                                                    outputProp,
                                                    initialFilters,
-                                                   useSavedFilters = false) {
+                                                   useSavedFilters = false,
+                                                   savedFilterSettingName = null) {
   return class extends Component {
     defaultFilters = () => {
       return {
@@ -280,9 +283,12 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       )
     }
 
+    // This will check for saved filters if the 'useSavedFilters' prop is true and a valid user
+    // app setting value has been provided for the filter location.
+
     setupFilters = () => {
-      const savedFilters = this.props.getUserAppSetting(
-        this.props.user, 'taskBundleFilters') || ''
+      const savedFilters = useSavedFilters && savedFilterSettingName ? this.props.getUserAppSetting(
+        this.props.user, savedFilterSettingName) : ''
       let useURLFilters = false
       let loadFromSavedFilters = false
       const criteria =
