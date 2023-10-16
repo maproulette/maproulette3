@@ -965,7 +965,7 @@ export const fetchChallenges = function (
     // it into JSON first.
     if (!challengeData.taskWidgetLayout.workspace && challengeData.taskWidgetLayout) {
       try {
-        if (!JSON.parse(challengeData.taskWidgetLayout).workspace) {
+        if (!(JSON.parse(challengeData.taskWidgetLayout).workspace.name === "taskCompletion")) {
           throw new Error("Widget layout with the wrong format was submitted, it was not included in the save.")
         }
         challengeData.taskWidgetLayout = JSON.parse(challengeData.taskWidgetLayout)
