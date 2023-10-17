@@ -83,4 +83,14 @@ export default defineMessages({
     id: "WidgetWorkspace.importModal.header",
     defaultMessage: "Import a Layout",
   },
+
+  recommendedLayoutLabel: {
+    id: "WidgetWorkspace.recommendedLayout.label",
+    defaultMessage: "Recommended Layout",
+  },
+
+  useRecommendedLayoutLabel: {
+    id: "WidgetWorkspace.useRecommendedLayoutLabel.label",
+    defaultMessage: "Use Recommended Layout",
+  }
 })
