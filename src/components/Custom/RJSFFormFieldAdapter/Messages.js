@@ -42,5 +42,10 @@ export default defineMessages({
   uploadErrorJSON: {
     id: 'Form.controls.markdownField.uploadErrorJSON.label',
     defaultMessage: "Upload Failed! File must have '.json' extension.",
+  },
+
+  formatErrorJSON: {
+    id: 'Form.controls.markdownField.formatErrorJSON.label',
+    defaultMessage: "Upload Failed! Layout must be exported from the task completion flow.",
   }
 })
