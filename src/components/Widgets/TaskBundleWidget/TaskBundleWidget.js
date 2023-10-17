@@ -396,7 +396,7 @@ const BuildBundle = props => {
           <MapPane showLasso>{map}</MapPane>
         }
       </div>
-      <div className="mr-my-4 mr-px-4 lg:mr-flex lg:mr-flex-row lg:mr-justify-between mr-items-center">
+      <div className="mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center">
         <div className='mr-flex mr-items-center'>
           <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
             <FormattedMessage {...messages.filterListLabel} />
