@@ -185,7 +185,7 @@ export default class TaskBundleWidget extends Component {
     this.props.updateUserAppSetting(this.props.user.id, {'taskBundleFilters': searchURL})
   }
 
-  clearFilters = () => {
+  revertFilters = () => {
     if(this.props.clearAllFilters) {
       this.props.clearAllFilters()
     }
@@ -252,7 +252,7 @@ export default class TaskBundleWidget extends Component {
         <WidgetContent
           {...this.props}
           saveFilters={this.saveFilters}
-          clearFilters={this.clearFilters}
+          revertFilters={this.revertFilters}
           updateBounds={this.updateBounds}
           bundleTasks={this.bundleTasks}
           unbundleTasks={this.unbundleTasks}
@@ -396,12 +396,12 @@ const BuildBundle = props => {
           <MapPane showLasso>{map}</MapPane>
         }
       </div>
-      <div className="mr-my-4 mr-px-4 mr-flex mr-justify-between">
-        <div className='mr-flex'>
+      <div className="mr-my-4 mr-px-4 lg:mr-flex lg:mr-flex-row lg:mr-justify-between mr-items-center">
+        <div className='mr-flex mr-items-center'>
           <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
             <FormattedMessage {...messages.filterListLabel} />
           </p>
-          <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
+          <ul className="md:mr-flex">
             <li className="md:mr-mr-8">
               <TaskStatusFilter {...props} isUsedInTaskBundleContext={true} />
             </li>
@@ -413,7 +413,9 @@ const BuildBundle = props => {
             </li>
           </ul>
         </div>
-        <div>
+        
+        <div className='mr-flex mr-space-x-3 mr-items-center mr-justify-end'>
+        {<ClearFiltersControl clearFilters={props.clearAllFilters}/>}
           <Dropdown
           className='mr-flex mr-items-center'
             dropdownButton={(dropdown) => (
@@ -431,7 +433,7 @@ const BuildBundle = props => {
             dropdownContent={(dropdown) => (
               <div className='mr-flex mr-flex-col mr-space-y-2'>
                 <SaveFiltersControl saveFilters={props.saveFilters} closeDropdown={dropdown.closeDropdown}/>
-                <ClearFiltersControl clearFilters={props.clearFilters}/>
+                <RevertFiltersControl revertFilters={props.revertFilters}/>
               </div>
             )}
           />
@@ -493,8 +495,8 @@ registerWidgetType(
   ), descriptor
 )
 
-const ClearFiltersControl = ({clearFilters}) => {
-  const handleClick = () => {clearFilters()}
+const RevertFiltersControl = ({revertFilters}) => {
+  const handleClick = () => {revertFilters()}
   return (
     <button className="mr-flex mr-items-center mr-text-current hover:mr-text-green-lighter mr-transition-colors"
       onClick={handleClick}>
@@ -515,3 +517,13 @@ const SaveFiltersControl = ({saveFilters, closeDropdown}) => {
     </button>
   )
 }
+
+const ClearFiltersControl = ({clearFilters}) => (
+  <button className="mr-flex mr-items-center mr-text-green-lighter"
+    onClick={clearFilters}>
+    <SvgSymbol sym="close-icon"
+      viewBox='0 0 20 20'
+      className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+    <FormattedMessage {...messages.clearFiltersLabel} />
+  </button>
+)

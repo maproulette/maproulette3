@@ -241,6 +241,7 @@ export class ViewChallengeTasks extends Component {
         />
 
     this.boundsReset = false
+
     return (
       <div className='admin__manage-tasks'>
         <GeographicIndexingNotice challenge={this.props.challenge} />
@@ -252,12 +253,12 @@ export class ViewChallengeTasks extends Component {
         </div>
 
         <div className="mr-my-4 mr-space-y-3">
-          <div className='mr-flex mr-justify-between mr-flex-1 mr-px-2 xl:mr-px-4'>
+          <div className='xl:mr-flex xl:mr-justify-between xl:mr-flex-1 mr-px-2 xl:mr-px-4'>
             <div className='mr-flex'>
-              <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
+              <p className="mr-text-center mr-text-base mr-uppercase mr-text-mango mr-mr-8">
                 <FormattedMessage {...messages.filterListLabel} />
               </p>
-              <ul className="mr-mb-4 xl:mr-mb-0 mr-flex mr-items-center mr-space-x-6 xl:mr-space-x-8">
+              <ul className="mr-mb-4 xl:mr-mb-0 mr-flex mr-items-center mr-space-x-4 xl:mr-space-x-8">
                 <li>
                   <TaskStatusFilter {...this.props} />
                 </li>
@@ -272,8 +273,8 @@ export class ViewChallengeTasks extends Component {
                 </li>
               </ul>
             </div>
-              <div>
-                {calculateTasksInChallenge(this.props) !== _get(this.props, 'taskInfo.totalCount', 0) ? clearFiltersControl : null}
+              <div className='mr-flex mr-justify-end'>
+                {clearFiltersControl}
               </div>
           </div>
         </div>

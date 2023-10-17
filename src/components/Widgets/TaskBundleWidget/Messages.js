@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Save Current Filters"
   },
 
+  clearFiltersLabel: {
+    id: "Widgets.TaskBundleWidget.controls.clearFilters.label",
+    defaultMessage: "Clear Filters"
+  },
+
   filterListLabel: {
     id: "Widgets.TaskBundleWidget.controls.filterList.label",
     defaultMessage: "Filter By:"
