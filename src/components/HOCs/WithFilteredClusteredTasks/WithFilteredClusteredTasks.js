@@ -291,6 +291,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         this.props.user, savedFilterSettingName) : ''
       let useURLFilters = false
       let loadFromSavedFilters = false
+      
       const criteria =
          useSavedFilters && savedFilters && savedFilters.length > 0 ?
          buildSearchCriteriafromURL(savedFilters) :

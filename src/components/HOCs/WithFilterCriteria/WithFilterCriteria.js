@@ -30,7 +30,7 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
-  ignoreLocked = true, skipInitialFetch = false, usePersistedFilters = false, savedFilterSettingName = null) {
+  ignoreLocked = true, skipInitialFetch = false, usePersistedFilters = false, savedFilterSettingName = undefined) {
    return class extends Component {
      state = {
        loading: false,
@@ -223,7 +223,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        const criteria = savedFilters && savedFilters.length > 0 ?
        buildSearchCriteriafromURL(savedFilters) :
        _cloneDeep(props.history.location.state)
-
+       
        //Use default filter values if no saved values are present
        if(!criteria) {
         this.updateIncludedFilters(props)
@@ -330,5 +330,5 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
    }
  }
 
-export default (WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch, usePersistedFilters) =>
-  WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch, usePersistedFilters)
+export default (WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch, usePersistedFilters, savedFilterSettingName) =>
+  WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch, usePersistedFilters, savedFilterSettingName)
