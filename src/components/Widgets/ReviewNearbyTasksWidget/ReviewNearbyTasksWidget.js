@@ -229,12 +229,12 @@ export default class ReviewNearbyTasksWidget extends Component {
               <MapPane showLasso>{map}</MapPane>
             )}
           </div>
-          <div className="mr-mt-4 mr-px-4 xl:mr-justify-between xl:mr-flex xl:mr-items-center">
-            <div className='mr-flex mr-mb-4 mr-items-center'>
+          <div className="mr-my-4 mr-px-4 xl:mr-justify-between xl:mr-flex mr-items-center">
+            <div className='mr-flex mr-items-center'>
               <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
                 <FormattedMessage {...messages.filterListLabel} />
               </p>
-              <ul className="md:mr-space-x-6 md:mr-flex">
+              <ul className="md:mr-space-x-6 md:mr-flex mr-items-center">
                 <li>
                   <TaskStatusFilter {...this.props} />
                 </li>
@@ -249,7 +249,7 @@ export default class ReviewNearbyTasksWidget extends Component {
                 </li>
               </ul>
             </div>
-            <div className='mr-flex mr-justify-end mr-mb-4'>
+            <div className='mr-flex mr-justify-end'>
               {clearFiltersControl}
             </div>
           </div>
