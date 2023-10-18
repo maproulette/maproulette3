@@ -7,7 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.13.2] - 2023-10-10
+## [v3.13.2] - 2023-10-17
 Realease with [maproulette-backend_v4.4.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.8)
 
 ### Features
