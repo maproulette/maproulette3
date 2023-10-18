@@ -191,7 +191,7 @@ export default class ReviewNearbyTasksWidget extends Component {
     );
 
     const clearFiltersControl = (
-      <button className="mr-flex mr-items-center mr-text-green-lighter mr-mb-4"
+      <button className="mr-flex mr-items-center mr-text-green-lighter"
         onClick={() => {
           this.props.clearAllFilters()
         }}>
@@ -229,22 +229,29 @@ export default class ReviewNearbyTasksWidget extends Component {
               <MapPane showLasso>{map}</MapPane>
             )}
           </div>
-          <div className="mr-my-4 mr-px-4 mr-justify-between mr-flex">
-            <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
-              <li className="md:mr-mr-4">
-                <TaskStatusFilter {...this.props} />
-              </li>
-              <li className="md:mr-mr-4">
-                <TaskReviewStatusFilter {...this.props} />
-              </li>
-              <li className="md:mr-mr-4">
-                <TaskPriorityFilter {...this.props} />
-              </li>
-              <li className="md:mr-mr-4">
-                <TaskPropertyFilter {...this.props} />
-              </li>
-            </ul>
-            {clearFiltersControl}
+          <div className="mr-my-4 mr-px-4 xl:mr-justify-between xl:mr-flex mr-items-center">
+            <div className='mr-flex mr-items-center'>
+              <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
+                <FormattedMessage {...messages.filterListLabel} />
+              </p>
+              <ul className="md:mr-space-x-6 md:mr-flex mr-items-center">
+                <li>
+                  <TaskStatusFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskReviewStatusFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskPriorityFilter {...this.props} />
+                </li>
+                <li>
+                  <TaskPropertyFilter {...this.props} />
+                </li>
+              </ul>
+            </div>
+            <div className='mr-flex mr-justify-end'>
+              {clearFiltersControl}
+            </div>
           </div>
         </div>
       </QuickWidget>
@@ -270,15 +277,17 @@ registerWidgetType(
               ),
               true,
               false,
-              true
+              true,
+              false
             )
           ),
           'nearbyTasks',
-          'taskClusters',
+          // 'taskClusters',
           'filteredClusteredTasks',
           {
             includeLocked: false,
-          }
+          },
+          false
         )
       )
     )

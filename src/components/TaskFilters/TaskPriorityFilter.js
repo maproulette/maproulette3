@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import FilterDropdown from './FilterDropdown'
+import TaskFilterIndicator from './TaskFilterIndicator'
 import _map from 'lodash/map'
 import _reverse from 'lodash/reverse'
 import { TaskPriority, messagesByPriority }
@@ -15,27 +16,33 @@ import messages from './Messages'
  */
 export default class TaskPriorityFilter extends Component {
   render() {
+    const areFiltersActive = !Object.values(this.props.includeTaskPriorities).every(value => value) 
+      || Object.keys(this.props.includeTaskPriorities).length < Object.keys(TaskPriority).length
+
     return (
-      <FilterDropdown
-        title={<FormattedMessage {...messages.filterByPriorityLabel} />}
-        filters={
-          _reverse(_map(TaskPriority, priority => (
-            <li key={priority}>
-              <label className="mr-flex mr-items-center">
-                <input
-                  className="mr-checkbox-toggle mr-mr-2"
-                  type="checkbox"
-                  checked={this.props.includeTaskPriorities[priority]}
-                  onChange={(e) =>
-                    this.props.toggleIncludedTaskPriority(priority,
-                                                          e.nativeEvent.shiftKey)
-                  } />
-                <FormattedMessage {...messagesByPriority[priority]} />
-              </label>
-            </li>
-          )))
-        }
-      />
+      <div className='mr-flex mr-space-x-1 mr-items-center'>
+        {areFiltersActive && <TaskFilterIndicator />}
+        <FilterDropdown
+          title={<FormattedMessage {...messages.filterByPriorityLabel} />}
+          filters={
+            _reverse(_map(TaskPriority, priority => (
+              <li key={priority}>
+                <label className="mr-flex mr-items-center">
+                  <input
+                    className="mr-checkbox-toggle mr-mr-2"
+                    type="checkbox"
+                    checked={this.props.includeTaskPriorities[priority]}
+                    onChange={(e) =>
+                      this.props.toggleIncludedTaskPriority(priority,
+                                                            e.nativeEvent.shiftKey)
+                    } />
+                  <FormattedMessage {...messagesByPriority[priority]} />
+                </label>
+              </li>
+            )))
+          }
+        />
+      </div>
     )
   }
 }

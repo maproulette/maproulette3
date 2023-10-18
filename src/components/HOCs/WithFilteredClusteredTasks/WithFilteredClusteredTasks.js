@@ -30,14 +30,18 @@ import { buildSearchCriteriafromURL } from '../../../services/SearchCriteria/Sea
  * down in the `includeTaskStatuses`, `includeTaskPriorities`, and
  * `selectedTasks` props. By default, all statuses and priorities are enabled
  * (so tasks in any status and priority will pass through) and no tasks are
- * selected.
+ * selected. If a use case requires user app settings for saving and loading filters,
+ * the 'useSavedFilters' prop must be true and the correct setting name provided
+ * via the 'savedFilterSettingName' prop.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default function WithFilteredClusteredTasks(WrappedComponent,
                                                    tasksProp='clusteredTasks',
                                                    outputProp,
-                                                   initialFilters) {
+                                                   initialFilters,
+                                                   useSavedFilters = false,
+                                                   savedFilterSettingName = null) {
   return class extends Component {
     defaultFilters = () => {
       return {
@@ -279,9 +283,18 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       )
     }
 
+    // This will check for saved filters if the 'useSavedFilters' prop is true and a valid user
+    // app setting value has been provided for the filter location.
+
     setupFilters = () => {
+      const savedFilters = useSavedFilters && savedFilterSettingName ? this.props.getUserAppSetting(
+        this.props.user, savedFilterSettingName) : ''
       let useURLFilters = false
+      let loadFromSavedFilters = false
+      
       const criteria =
+         useSavedFilters && savedFilters && savedFilters.length > 0 ?
+         buildSearchCriteriafromURL(savedFilters) :
          this.props.history.location.search ?
          buildSearchCriteriafromURL(this.props.history.location.search) :
          _cloneDeep(this.props.history.location.state)
@@ -297,10 +310,18 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
             criteria.filters[key] = [criteria.filters[key]]
           }
           useURLFilters = true
+        } else if (!_isUndefined(_get(criteria, `filters.${key}`)) && useSavedFilters) {
+          if (typeof criteria.filters[key] === "string") {
+            criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
+          }
+          else if (_isFinite(criteria.filters[key])) {
+            criteria.filters[key] = [criteria.filters[key]]
+          }
+          loadFromSavedFilters = true
         }
       })
 
-      if (useURLFilters) {
+      if (useURLFilters || loadFromSavedFilters) {
         const filteredTasks =
           this.filterTasks(criteria.filters.status || this.state.includeStatuses,
                            criteria.filters.reviewStatus || this.state.includeReviewStatuses,
@@ -311,10 +332,13 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         // Statuses to be shown in drop down need to appear in this list,
         // so we include all the initialFitlers.statuses but mark them false
         // (unchecked) and then only mark the ones from our criteria as true
-        const includeStatuses =
-         _get(initialFilters, 'statuses',
-           _fromPairs(_map(TaskStatus, status => [status, false])))
 
+        const includeStatuses = 
+          useSavedFilters && savedFilters && savedFilters.length > 0?
+          _fromPairs(_map(criteria.filters.status, status => [status, false])) :
+          _get(initialFilters, 'statuses',
+            _fromPairs(_map(TaskStatus, status => [status, false])))
+        
         _each(criteria.filters.status, status => {
          includeStatuses[status] = true
         })

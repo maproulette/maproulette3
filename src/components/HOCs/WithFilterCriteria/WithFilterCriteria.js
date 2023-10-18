@@ -23,12 +23,14 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
 
 /**
  * WithFilterCriteria keeps track of the current criteria being used
- * to filter, sort and page the tasks.
+ * to filter, sort and page the tasks. If a use case requires user app settings for 
+ * saving and loading filters, the 'usePersistedFilters' prop must be true and the correct 
+ * setting name provided via the 'savedFilterSettingName' prop.
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
-  ignoreLocked = true, skipInitialFetch = false) {
+  ignoreLocked = true, skipInitialFetch = false, usePersistedFilters = false, savedFilterSettingName = undefined) {
    return class extends Component {
      state = {
        loading: false,
@@ -83,7 +85,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        }
 
        const newCriteria = _cloneDeep(DEFAULT_CRITERIA)
-       newCriteria.boundingBox = null
+       newCriteria.boundingBox = usePersistedFilters ? this.state.criteria.boundingBox : null
        newCriteria.zoom = this.state.zoom
        newCriteria.filters["status"] = _keys(_pickBy(this.props.includeTaskStatuses, (s) => s))
        newCriteria.filters["reviewStatus"] = _keys(_pickBy(this.props.includeReviewStatuses, (r) => r))
@@ -214,13 +216,51 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        }
      }
 
+
+     updateCriteriaFromSavedFilters(props) {
+       const savedFilters = usePersistedFilters && savedFilterSettingName ? this.props.getUserAppSetting(
+        this.props.user, savedFilterSettingName) : ''
+       const criteria = savedFilters && savedFilters.length > 0 ?
+       buildSearchCriteriafromURL(savedFilters) :
+       _cloneDeep(props.history.location.state)
+       
+       //Use default filter values if no saved values are present
+       if(!criteria) {
+        this.updateIncludedFilters(props)
+        return
+      }
+       
+       // These values will come in as comma-separated strings and need to be turned
+       // into number arrays
+       _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], key => {
+         if (!_isUndefined(criteria[key]) && key === "boundingBox") {
+           if (typeof criteria[key] === "string") {
+            criteria[key] = criteria[key].split(',').map(x => parseFloat(x))
+           }
+         }
+         else if (!_isUndefined(_get(criteria, `filters.${key}`))) {
+          if (typeof criteria.filters[key] === "string") {
+            criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
+          }
+         }
+      })
+
+      if (!_get(criteria, 'filters.status')) {
+        this.updateIncludedFilters(props)
+      }
+      else {
+        this.setState({criteria})
+      }
+     }
+
      componentDidMount() {
        if (!ignoreURL &&
            (!_isEmpty(this.props.history.location.search) ||
             !_isEmpty(this.props.history.location.state))) {
          this.updateCriteriaFromURL(this.props)
-       }
-       else {
+       } else if(usePersistedFilters) {
+         this.updateCriteriaFromSavedFilters(this.props)
+       } else {
          this.updateIncludedFilters(this.props)
        }
      }
@@ -290,5 +330,5 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
    }
  }
 
-export default (WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch) =>
-  WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch)
+export default (WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch, usePersistedFilters, savedFilterSettingName) =>
+  WithFilterCriteria(WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch, usePersistedFilters, savedFilterSettingName)
