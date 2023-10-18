@@ -400,6 +400,12 @@ will not be able to make sense of it.
       "when managing your challenge.",
   },
 
+  taskWidgetLayoutReadOnly: {
+    id: "Admin.EditChallenge.form.taskWidgetLayout.readOnly",
+    defaultMessage:
+      "Upload a widget layout to be used as a recommendation for the mapper in the task completion workflow.",
+  },
+
   remoteGeoJsonLabel: {
     id: "Admin.EditChallenge.form.remoteGeoJson.label",
     defaultMessage: "I have a URL to the GeoJSON data",
@@ -719,6 +725,37 @@ will not be able to make sense of it.
       "is about mapping buildings, you could enable only presets related to buildings " +
       "and then mappers would not be presented with the option to map an area as, say, " +
       "a park or a lake.",
+  },
+
+  reviewSettingLabel: {
+    id: "Admin.EditChallenge.form.reviewSetting.label",
+    defaultMessage: "Request Review By Default",
+  },
+
+  reviewSettingDescription: {
+    id: "Admin.EditChallenge.form.reviewSetting.description",
+    defaultMessage: 
+    "This will pre-check the users request review box when submitting a task.",
+  },
+
+  reviewSettingNotRequired: {
+    id: "Challenge.reviewSetting.notRequired",
+    defaultMessage: "No",
+  },
+
+  reviewSettingRequested: {
+    id: "Challenge.reviewSetting.requested",
+    defaultMessage: "Yes",
+  },
+
+  instructionsDescription: {
+    id: "Admin.EditChallenge.form.instructionsDescription",
+    defaultMessage: "Instructions must have more than 150 characters.",
+  },
+
+  nameDescription: {
+    id: "Admin.EditChallenge.form.nameDescription",
+    defaultMessage: "The challenge name is required and must be more than 3 characters long."
   },
 
   showLongformTooltip: {

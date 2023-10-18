@@ -22,6 +22,9 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
   const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
 
   const uiSchemaFields = {
+    "ui:order": [
+      "taskTags",
+    ],
     taskTags: {
       "ui:field": "taskTags",
       "ui:help": intl.formatMessage(messages.preferredTagsDescription),

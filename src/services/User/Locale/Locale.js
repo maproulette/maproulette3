@@ -9,11 +9,12 @@ import messages from "./Messages";
 // `Messages.js` file in this directory
 
 // Supported locales
-export const Locale = Object.freeze({
+export const unsortedLocale = {
   enUS: "en-US",
   es: "es",
   fr: "fr",
   de: "de",
+  it: "it",
   af: "af",
   ja: "ja",
   ko: "ko",
@@ -27,7 +28,15 @@ export const Locale = Object.freeze({
   tr: "tr",
   pl: "pl",
   "zh-TW": "zh-TW"
-});
+};
+
+export const Locale = Object.freeze(Object.keys(unsortedLocale).sort().reduce(
+  (obj, key) => { 
+    obj[key] = unsortedLocale[key]; 
+    return obj;
+  }, 
+  {}
+));
 
 // Dynamic imports to load locale data and translation files
 const LocaleImports = {
@@ -50,6 +59,11 @@ const LocaleImports = {
     Promise.all([
       import("../../../lang/de.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/de"),
+    ]),
+  [Locale.it]: () =>
+    Promise.all([
+      import("../../../lang/it_IT.json"),
+      import("@formatjs/intl-relativetimeformat/locale-data/it"),
     ]),
   [Locale.af]: () =>
     Promise.all([

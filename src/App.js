@@ -13,11 +13,13 @@ import ChallengePane from './components/ChallengePane/ChallengePane'
 import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail'
 import ProjectDetail from './components/ProjectDetail/ProjectDetail'
 import TaskPane from './components/TaskPane/TaskPane'
+import PublicTaskPane from './components/TaskPane/PublicTaskPane'
 import ReviewTaskPane from './components/ReviewTaskPane/ReviewTaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
 import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
 import Review from './pages/Review/Review'
 import Inbox from './pages/Inbox/Inbox'
+import Sent from './pages/Sent/Sent'
 import Teams from './pages/Teams/Teams'
 import Achievements from './pages/Achievements/Achievements'
 import Social from './pages/Social/Social'
@@ -37,18 +39,26 @@ import LoadRandomVirtualChallengeTask
 import HeadTitle from './components/Head/Head'
 import Navbar from './components/Navbar/Navbar'
 import SystemNotices from './components/SystemNotices/SystemNotices'
+import FundraisingNotices from './components/FundraisingNotices/FundraisingNotices'
 import Footer from './components/Footer/Footer'
 import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
 import SuperAdminContainer from './components/SuperAdmin/SuperAdminContainer'
 import MobileNotSupported
        from './components/MobileNotSupported/MobileNotSupported'
+import CheckForToken from './components/CheckForToken/CheckForToken'
 import './components/Widgets/widget_registry'
 import './App.scss'
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
-const CurrentTaskPane = WithCurrentTask(TaskPane)
+
+const CurrentTaskPaneInternal = (props) => {
+  const loggedIn = localStorage.getItem('isLoggedIn')
+  return loggedIn ? <TaskPane {...props} /> : <PublicTaskPane {...props} />
+}
+const CurrentTaskPane = WithCurrentTask(CurrentTaskPaneInternal)
+
 const CurrentReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentMetaReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentVirtualChallengeTaskPane =
@@ -72,6 +82,7 @@ const HomeOrDashboard = () => {
 export class App extends Component {
   state = {
     firstTimeModalDismissed: false,
+    shouldDisplayError: true
   }
 
   dismissModal = () => {
@@ -92,7 +103,8 @@ export class App extends Component {
       <React.Fragment>
         <TopNav />
         <SystemNotices />
-
+        <FundraisingNotices />
+        <CheckForToken>
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>
             <CachedRoute exact path='/' component={HomeOrDashboard} />
@@ -120,6 +132,7 @@ export class App extends Component {
             <CachedRoute exact path='/review/:showType' component={Review} />
             <CachedRoute path='/review' component={Review} />
             <CachedRoute path='/inbox' component={Inbox} />
+            <CachedRoute path='/sent' component={Sent} />
             <CachedRoute path='/teams' component={Teams} />
             <CachedRoute path='/social' component={Social} />
             <CachedRoute path='/activity' component={GlobalActivity} />
@@ -134,7 +147,7 @@ export class App extends Component {
             <Route component={PageNotFound} />
           </Switch>
         </main>
-
+        </CheckForToken>
         <Footer />
         <ErrorModal />
         <Sprites />

@@ -9,6 +9,7 @@ import WithSearch from '../../HOCs/WithSearch/WithSearch'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import AsMappableBundle from '../../../interactions/TaskBundle/AsMappableBundle'
 import QuickWidget from '../../QuickWidget/QuickWidget'
+import SignInButton  from '../../SignInButton/SignInButton'
 import { viewDiffOverpass } from '../../../services/Overpass/Overpass'
 import { viewOSMCha } from '../../../services/OSMCha/OSMCha'
 import messages from './Messages'
@@ -95,6 +96,8 @@ export default class TaskHistoryWidget extends Component {
   }
 
   render() {
+    const loggedIn = localStorage.getItem('isLoggedIn')
+
     return (
       <QuickWidget
         {...this.props}
@@ -127,15 +130,22 @@ export default class TaskHistoryWidget extends Component {
           </div>
         }
        >
-        <div className="mr-my-8 mr-mr-4">
-          <TaskCommentInput
-            value={this.state.comment}
-            commentChanged={this.setComment}
-            submitComment={this.postComment}
-            taskId={this.props.task.id}
-            inputRef={this.commentInputRef}
-          />
-        </div>
+
+        {loggedIn ? 
+          <div className="mr-my-8 mr-mr-4">
+            <TaskCommentInput
+              value={this.state.comment}
+              commentChanged={this.setComment}
+              submitComment={this.postComment}
+              taskId={this.props.task.id}
+              inputRef={this.commentInputRef}
+            />
+          </div> :
+          <div className='mr-flex mr-justify-center mr-my-4'>
+            <SignInButton {...this.props} longForm/>
+          </div>
+          
+        }
 
         <TaskHistoryList
           className="mr-px-4"

@@ -35,7 +35,7 @@ export const ActivityTime = props => {
   return (
     <div
       className={classNames(
-        "mr-whitespace-no-wrap mr-leading-tight mr-capitalize mr-flex-grow-0",
+        "mr-whitespace-nowrap mr-leading-tight mr-capitalize mr-flex-grow-0",
         {"mr-text-yellow": !props.simplified}
       )}
       title={created}

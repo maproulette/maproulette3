@@ -144,6 +144,10 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     }
   },
 
+  clearSearchDispatch: (searchName) => {
+    dispatch(clearSearch(searchName))
+  },
+
   setSearchSort: (sortCriteria) => {
     const sortBy = _get(sortCriteria, 'sortBy')
     let sort = null
@@ -210,6 +214,10 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
 
   setKeywordFilter: keywords => {
     dispatch(setFilters(searchGroup, {keywords}))
+  },
+
+  setCategorizationFilters: categorizationKeywords => {
+    dispatch(setFilters(searchGroup, {categorizationKeywords}))
   },
 
   clearSearchFilters: () => {

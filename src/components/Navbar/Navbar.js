@@ -232,6 +232,11 @@ export const ProfileMenu = function(props) {
         </NavLink>
       </li>
       <li>
+        <NavLink to="/sent" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.sent} />
+        </NavLink>
+      </li>
+      <li>
         <NavLink to="/review" onClick={props.closeDropdown}>
           <FormattedMessage {...messages.review} />
         </NavLink>
@@ -252,7 +257,7 @@ export const ProfileMenu = function(props) {
         </NavLink>
       </li>
       {
-        isSuperUser
+        isSuperUser && process.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS !== 'true'
           ? <li>
               <NavLink to="/superadmin" onClick={props.closeDropdown}>
                 <FormattedMessage {...messages.superAdmin} />
@@ -323,6 +328,26 @@ const Nav = props => (
         <FormattedMessage {...messages.help} />
       </a>
     </li>
+
+    <li className="mr-flex mr-flex-col mr-justify-center">
+      <a
+        href="https://blog.maproulette.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={props.closeMobileMenu}>
+        <FormattedMessage {...messages.blog} />
+      </a>
+    </li>
+
+    <li className="mr-flex mr-flex-col mr-justify-center">
+      <a
+        href="https://openstreetmap.app.neoncrm.com/forms/maproulette"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={props.closeMobileMenu}>
+        <FormattedMessage {...messages.donate} />
+      </a>
+    </li>
   </React.Fragment>
 )
 
@@ -385,6 +410,11 @@ const MobileNav = props => (
               <FormattedMessage {...messages.inbox} />
               <UnreadNotificationsIndicator {...props} inline />
             </div>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/sent" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.sent} />
           </NavLink>
         </li>
         <li>

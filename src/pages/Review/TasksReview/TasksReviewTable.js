@@ -24,7 +24,7 @@ import { TaskPriority, keysByPriority, messagesByPriority }
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
          messagesByMetaReviewStatus, isNeedsReviewStatus, isMetaReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
-import { ReviewTasksType, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
+import { ReviewTasksType, buildLinkToReviewTableExportCSV, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
 import AsColoredHashable from '../../../interactions/Hashable/AsColoredHashable'
 import { intlTableProps } from '../../../components/IntlTable/IntlTable'
 import IntlTablePagination from '../../../components/IntlTable/IntlTablePagination'
@@ -47,14 +47,15 @@ import { ViewCommentsButton, StatusLabel, makeInvertable }
 import WithSavedFilters from '../../../components/HOCs/WithSavedFilters/WithSavedFilters'
 import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
+import MapPane from '../../../components/EnhancedMap/MapPane/MapPane'
 import { Link } from 'react-router-dom'
 import ReactTable from 'react-table-6'
 
-export const getChallengeFilterIds = (search) => {
+export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
 
   for (let pair of searchParams.entries()) {
-    if (pair[0] === "filters.challengeId" && pair[1]) {
+    if (pair[0] === param && pair[1]) {
       if (pair[1] === '0') {
         return [FILTER_SEARCH_ALL]
       }
@@ -75,9 +76,11 @@ export class TaskReviewTable extends Component {
   componentIsMounted: false
 
   state = {
+    displayMap: localStorage.getItem('displayMap') === 'true' ? true : false,    
     openComments: null,
     showConfigureColumns: false,
-    challengeFilterIds: getChallengeFilterIds(this.props.location.search)
+    challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
+    projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId')
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -109,26 +112,14 @@ export class TaskReviewTable extends Component {
     // Determine if we can search by project Id or do name search
     if (filters.project) {
       if (_isObject(filters.project)) {
-        if (filters.project.id === FILTER_SEARCH_ALL) {
+        if (!this.state.projectFilterIds.includes(FILTER_SEARCH_TEXT) && !this.state.projectFilterIds.includes(FILTER_SEARCH_ALL)) {
+          filters.projectId = this.state.projectFilterIds
+          filters.project = null
+        } else if (filters.project.id === FILTER_SEARCH_ALL) {
           // Search all
           filters.projectId = null
           filters.project = null
           filters.projectName = null
-        }
-        else {
-          if (filters.project.id > 0) {
-            filters.projectId = filters.project.id
-          }
-          else if (_get(this.props.reviewCriteria, 'filters.projectId') ===
-                     filters.projectId &&
-                   _get(this.props.reviewCriteria, 'filters.project') !==
-                     filters.project) {
-            // We must be doing a partial search and can't search by id. Our
-            // prior id is invalid.
-            filters.projectId = null
-          }
-
-          filters.project = filters.project.name
         }
       }
     }
@@ -177,6 +168,22 @@ export class TaskReviewTable extends Component {
     this.setState({ challengeFilterIds: newIds })
   }
 
+  updateProjectFilterIds = (item) => {
+    let newIds = []
+    if (item.id > 0) {
+      newIds = this.state.projectFilterIds.filter(i => i > 0);
+      if (this.state.projectFilterIds.includes(item.id)) {
+        newIds = newIds.filter(i => i !== item.id);
+      } else {
+        newIds.push(item.id)
+      }
+    } else {
+      newIds = [item.id]
+    }
+
+    this.setState({ projectFilterIds: newIds })
+  }
+
   componentWillUnmount() {
     this.componentIsMounted = false
   }
@@ -191,8 +198,14 @@ export class TaskReviewTable extends Component {
       this.setupConfigurableColumns(this.props.reviewTasksType)
     }
 
-    if (!_isEqual(getChallengeFilterIds(this.props.location.search), this.state.challengeFilterIds)) {
-      setTimeout(() => this.setState({ challengeFilterIds: getChallengeFilterIds(this.props.location.search) }), 100)
+    if (
+      !_isEqual(getFilterIds(this.props.location.search, 'filters.challengeId'), this.state.challengeFilterIds) ||
+      !_isEqual(getFilterIds(this.props.location.search, 'filters.projectId'), this.state.projectFilterIds)
+    ) {
+      setTimeout(() => this.setState({ 
+        challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
+        projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId')
+      }), 100)
     }
 
     // If we've added the "tag" column, we need to update the table to fetch
@@ -206,9 +219,12 @@ export class TaskReviewTable extends Component {
 
   setupConfigurableColumns = (reviewTasksType) => {
     let columns = {"id":{},
+                   "featureId":{},
                    "reviewStatus":{permanent: true},
                    "reviewRequestedBy":{},
+                   "challengeId":{},
                    "challenge":{},
+                   "projectId":{},
                    "project":{},
                    "mappedOn":{},
                    "reviewedBy":{},
@@ -310,10 +326,32 @@ export class TaskReviewTable extends Component {
               </button>
             </li>
             {(reviewTasksType === ReviewTasksType.allReviewedTasks || reviewTasksType === ReviewTasksType.toBeReviewed) &&
-              <li onClick={dropdown.toggleDropdownVisible}>
+              <li>
+                {this.props.reviewCriteria.filters.project ?
+                  <a target="_blank"
+                    rel="noopener noreferrer"
+                    href={buildLinkToReviewTableExportCSV(this.props.reviewCriteria, this.props.addedColumns)}
+                    onClick={dropdown.toggleDropdownVisible}
+                    className="mr-flex mr-items-center">
+                    <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                    <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                  </a> : 
+                  <div>
+                    <div className="mr-flex mr-items-center mr-opacity-50">
+                      <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                      <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                    </div>
+                    <div className="mr-text-grey-light">
+                      <FormattedMessage  {...messages.requiredForExport} />
+                      <div />
+                      <FormattedMessage  {...messages.requiredProject} />
+                    </div>
+                  </div>
+                }
                 <a target="_blank"
                    rel="noopener noreferrer"
                    href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
+                   onClick={dropdown.toggleDropdownVisible}
                    className="mr-flex mr-items-center">
                   <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                   <FormattedMessage {...messages.exportMapperCSVLabel} />
@@ -333,7 +371,9 @@ export class TaskReviewTable extends Component {
     const columnTypes = setupColumnTypes({
                             ...this.props, 
                             updateChallengeFilterIds: this.updateChallengeFilterIds,
-                            challengeFilterIds: this.state.challengeFilterIds
+                            updateProjectFilterIds: this.updateProjectFilterIds,
+                            challengeFilterIds: this.state.challengeFilterIds,
+                            projectFilterIds: this.state.projectFilterIds
                            },
                            taskId => this.setState({openComments: taskId}),
                            data, this.props.reviewCriteria, pageSize)
@@ -398,111 +438,141 @@ export class TaskReviewTable extends Component {
         break
     }
 
+
+    
+    const BrowseMap = this.props.BrowseMap
+    
+    const IncludeMap = this.state.displayMap ? (
+      <div className="mr-h-100 mr-mb-8">
+        <MapPane>
+          <BrowseMap {..._omit(this.props, ['className'])} />
+        </MapPane>
+      </div>
+    ) : null;
+
+    const checkBoxes = (
+      this.props.reviewTasksType === ReviewTasksType.toBeReviewed && (
+        <div className="xl:mr-flex mr-mr-4">
+          <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
+            <input
+              type="checkbox"
+              className="mr-checkbox-toggle mr-mr-px"
+              checked={!!this.props.reviewCriteria.savedChallengesOnly}
+              onChange={() => null}
+            />
+            <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+          </div>
+          <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
+            <input
+              type="checkbox"
+              className="mr-checkbox-toggle mr-mr-px"
+              checked={!!this.props.reviewCriteria.excludeOtherReviewers}
+              onChange={() => null}
+            />
+            <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
+          </div>
+        </div>
+      )
+    );
+    
+    
     return (
       <React.Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
-          <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
-            <div>
-              <h1 className="mr-h2 mr-text-yellow md:mr-mr-4">
-                {subheader}
-              </h1>
-              {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
-                <div className="mr-flex">
-                  <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
-                    <input
-                      type="checkbox"
-                      className="mr-checkbox-toggle mr-mr-px"
-                      checked={!!this.props.reviewCriteria.savedChallengesOnly}
-                      onChange={() => null}
-                    />
-                    <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
-                  </div>
-                  <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
-                    <input
-                      type="checkbox"
-                      className="mr-checkbox-toggle mr-mr-px"
-                      checked={!!this.props.reviewCriteria.excludeOtherReviewers}
-                      onChange={() => null}
-                    />
-                    <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
-                  </div>
-                </div>
-              }
-            </div>
-            <div>
-              {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 &&
-                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
-                  <FormattedMessage {...messages.startReviewing} />
-                </button>
-              }
-              {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 &&
-                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
-                        onClick={() => this.startMetaReviewing()}>
-                  <FormattedMessage {...messages.startMetaReviewing} />
-                </button>
-              }
-              <button
-                className={classNames(
-                  "mr-button mr-button-small", {
-                  "mr-button--green-lighter": !_get(this.props, 'reviewData.dataStale', false),
-                  "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
-                })}
-                onClick={() => this.props.refresh()}
-              >
-                <FormattedMessage {...messages.refresh} />
-              </button>
-              <div className="mr-float-right mr-mt-3 mr-ml-3">
-                <div className="mr-flex mr-justify-start mr-ml-4">
-                  {this.filterDropdown(this.props.reviewTasksType)}
-                  {this.gearDropdown(this.props.reviewTasksType)}
-                </div>
+          <div className={IncludeMap === null ? 'sm:mr-flex sm:mr-items-center sm:mr-justify-between' : null}>
+            <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
+              <div>
+                <h1 className={`mr-h2 mr-text-yellow md:mr-mr-4 ${BrowseMap === '' ? '' : 'mr-mb-4'}`}>
+                  {subheader}
+                </h1>
+                {IncludeMap === null ? checkBoxes : null}
               </div>
-              <ManageSavedFilters
-                searchFilters={this.props.reviewCriteria}
-                {...this.props}
-              />
+            </header>
+            {IncludeMap}
+            <div className='sm:mr-flex sm:mr-items-center sm:mr-justify-between'>
+              {IncludeMap === null ? null : checkBoxes}
+              <div className="mr-ml-auto">
+                {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 && (
+                  <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
+                    <FormattedMessage {...messages.startReviewing} />
+                  </button>
+                )}
+                {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 && (
+                  <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startMetaReviewing()}>
+                    <FormattedMessage {...messages.startMetaReviewing} />
+                  </button>
+                )}
+                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                  onClick={() => {
+                    const newDisplayMap = !this.state.displayMap;
+                    localStorage.setItem('displayMap', JSON.stringify(newDisplayMap));
+                    this.setState({ displayMap: newDisplayMap })
+                  }}
+                >
+                  <FormattedMessage {...messages.toggleMap} />
+                </button>
+                <button
+                  className={classNames("mr-button mr-button-small", {
+                    "mr-button--green-lighter": !_get(this.props, 'reviewData.dataStale', false),
+                    "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
+                  })}
+                  onClick={() => this.props.refresh()}
+                >
+                  <FormattedMessage {...messages.refresh} />
+                </button>
+                <div className="mr-float-right mr-mt-3 mr-ml-3">
+                  <div className="mr-flex mr-justify-start mr-ml-4">
+                    {this.filterDropdown(this.props.reviewTasksType)}
+                    {this.gearDropdown(this.props.reviewTasksType)}
+                  </div>
+                </div>
+                <ManageSavedFilters searchFilters={this.props.reviewCriteria} {...this.props} />
+              </div>
             </div>
-          </header>
+          </div>
           <div className="mr-mt-6 review">
-            <ReactTable data={data} columns={columns} key={this.props.reviewTasksType}
-                        pageSize={pageSize}
-                        totalCount={totalRows}
-                        defaultSorted={defaultSorted}
-                        defaultFiltered={defaultFiltered}
-                        minRows={1}
-                        manual
-                        multiSort={false}
-                        noDataText={<FormattedMessage {...messages.noTasks} />}
-                        pages={totalPages}
-                        onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
-                        onPageSizeChange={(pageSize) => this.props.changePageSize(pageSize)}
-                        getTheadFilterThProps={() => {
-                          return {style: {position: "inherit", overflow: "inherit"}}}
-                        }
-                        onFilteredChange={filtered => {
-                          this.setState({ filtered })
-                          if (this.fetchData) {
-                            this.fetchData()
-                          }
-                        }}
-                        loading={this.props.loading}
-                        {...intlTableProps(this.props.intl)}
-                        PaginationComponent={IntlTablePagination}
+            <ReactTable
+              data={data}
+              columns={columns}
+              key={this.props.reviewTasksType}
+              pageSize={pageSize}
+              totalCount={totalRows}
+              defaultSorted={defaultSorted}
+              defaultFiltered={defaultFiltered}
+              minRows={1}
+              manual
+              multiSort={false}
+              noDataText={<FormattedMessage {...messages.noTasks} />}
+              pages={totalPages}
+              onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+              onPageSizeChange={pageSize => this.props.changePageSize(pageSize)}
+              getTheadFilterThProps={() => {
+                return { style: { position: "inherit", overflow: "inherit" } };
+              }}
+              onFilteredChange={filtered => {
+                this.setState({ filtered });
+                if (this.fetchData) {
+                  this.fetchData();
+                }
+              }}
+              loading={this.props.loading}
+              {...intlTableProps(this.props.intl)}
+              PaginationComponent={IntlTablePagination}
             />
           </div>
         </div>
-        {_isFinite(this.state.openComments) &&
-         <TaskCommentsModal
-           taskId={this.state.openComments}
-           onClose={() => this.setState({openComments: null})}
-         />
-        }
-        {this.state.showConfigureColumns &&
-         <ConfigureColumnsModal
-           {...this.props}
-           onClose={() => this.setState({showConfigureColumns: false})}
-         />
-        }
+        {_isFinite(this.state.openComments) && (
+          <TaskCommentsModal
+            taskId={this.state.openComments}
+            onClose={() => this.setState({ openComments: null })}
+          />
+        )}
+        {this.state.showConfigureColumns && (
+          <ConfigureColumnsModal
+            {...this.props}
+            onClose={() => this.setState({ showConfigureColumns: false })}
+          />
+        )}
       </React.Fragment>
     )
   }
@@ -534,6 +604,18 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     },
     sortable: true,
     exportable: t => t.id,
+    maxWidth: 120,
+  }
+
+  columns.featureId = {
+    id: 'featureId',
+    Header: props.intl.formatMessage(messages.featureIdLabel),
+    accessor: t => {
+        return <span>{t.geometries.features ? t.geometries.features[0].id : "N/A"}</span>
+    },
+    exportable: t => t.geometries.features ? t.geometries.features[0].id : "N/A",
+    sortable: false,
+    filterable: false,
     maxWidth: 120,
   }
 
@@ -667,6 +749,18 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     ),
   }
 
+  columns.challengeId = {
+    id: 'challengeId',
+    Header: props.intl.formatMessage(messages.challengeIdLabel),
+    accessor: t => {
+        return <span>{t.parent.id}</span>
+    },
+    exportable: t => t.id,
+    sortable: false,
+    filterable: false,
+    maxWidth: 120,
+  }
+
   columns.challenge = {
     id: 'challenge',
     Header: makeInvertable(props.intl.formatMessage(messages.challengeLabel),
@@ -702,6 +796,18 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     }
   }
 
+  columns.projectId = {
+    id: 'projectId',
+    Header: props.intl.formatMessage(messages.projectIdLabel),
+    accessor: t => {
+      return <span>{t.parent.parent.id}</span>
+  },
+  exportable: t => t.parent.parent.id,
+  sortable: false,
+  filterable: false,
+  maxWidth: 120,
+  }
+
   columns.project = {
     id: 'project',
     Header: makeInvertable(props.intl.formatMessage(messages.projectLabel),
@@ -724,9 +830,13 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           filterType={"project"}
           filterAllLabel={props.intl.formatMessage(messages.allProjects)}
           selectedItem={""}
-          onChange={onChange}
+          onChange={(item) => {
+            onChange(item)
+            setTimeout(() => props.updateProjectFilterIds(item), 0)
+          }}
           value={filter ? filter.value : ""}
           itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
+          multiselect={props.projectFilterIds}
         />
       )
     }

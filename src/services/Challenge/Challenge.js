@@ -547,9 +547,12 @@ export const fetchChallengeActions = function (
       })
       .catch((error) => {
         if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
-          );
+          //We are making 401s for this endpoint silent to allow overview
+          //pages to continue to function without challenge action data.
+          //This is a temporary solution until performance degredation in
+          //maproulette-backend's DataController is addressed.
+          //Also see https://github.com/maproulette/maproulette-backend/pull/1014
+          return []
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
           console.log(error.response || error);
@@ -577,9 +580,12 @@ export const fetchProjectChallengeActions = function (
       })
       .catch((error) => {
         if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
-          );
+          //We are making 401s for this endpoint silent to allow overview
+          //pages to continue to function without challenge action data.
+          //This is a temporary solution until performance degredation in
+          //maproulette-backend's DataController is addressed.
+          //Also see https://github.com/maproulette/maproulette-backend/pull/1014
+          return []
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
           console.log(error.response || error);
@@ -919,7 +925,7 @@ export const fetchChallenges = function (
  * If storeResponse is false, the redux store will not be updated with the
  * response data upon completion of a successful request.
  */
-export const saveChallenge = function (
+ export const saveChallenge = function (
   originalChallengeData,
   storeResponse = true
 ) {
@@ -954,6 +960,21 @@ export const saveChallenge = function (
     ) {
       challengeData.localGeoJSON = JSON.parse(challengeData.localGeoJSON);
     }
+
+    // If there is local JSON content being transmitted as a string, parse
+    // it into JSON first.
+    if (!challengeData.taskWidgetLayout.workspace && challengeData.taskWidgetLayout) {
+      try {
+        if (!(JSON.parse(challengeData.taskWidgetLayout).workspace.name === "taskCompletion")) {
+          throw new Error("Widget layout for task completion flow with the wrong format was submitted, it was not included in the save.")
+        }
+        challengeData.taskWidgetLayout = JSON.parse(challengeData.taskWidgetLayout)
+      } catch(error) {
+        challengeData.taskWidgetLayout = "";
+        console.error(error);
+      }
+    }
+
 
     // We need to remove any old challenge keywords first, prior to the
     // update.
@@ -1004,6 +1025,8 @@ export const saveChallenge = function (
           "limitReviewTags",
           "taskStyles",
           "requiresLocal",
+          "reviewSetting",
+          "taskWidgetLayout",
         ]
       );
 
@@ -1012,6 +1035,44 @@ export const saveChallenge = function (
         challengeData.dataOriginDate = parse(
           challengeData.dataOriginDate
         ).toISOString();
+      }
+
+      // Validate the fields before saving
+      const {
+        instruction,
+        description,
+        name
+      } = challengeData;
+
+      if (
+        challengeData.parent != undefined && 
+        (
+          !instruction ||
+          instruction.length < 150 ||
+          !description?.trim()?.length ||
+          !name ||
+          name.length <= 3
+        )
+      ) {
+        let errorMessage = '';
+
+        if (name === undefined || name.length <= 3) {
+          errorMessage = AppErrors.challengeSaveFailure.saveNameFailure;
+        } else if (description === undefined || description === '') {
+          errorMessage = AppErrors.challengeSaveFailure.saveDescriptionFailure;
+        } else if (
+          instruction === undefined ||
+          instruction.length < 150
+        ) {
+          errorMessage = AppErrors.challengeSaveFailure.saveInstructionsFailure;
+        } else {
+          errorMessage = AppErrors.challengeSaveFailure.saveDetailsFailure;
+        }
+
+        dispatch(
+          addServerError(errorMessage)
+        );
+        throw new Error(errorMessage);
       }
 
       // Setup the save function to either edit or create the challenge
@@ -1045,7 +1106,7 @@ export const saveChallenge = function (
           } else {
             console.log(serverError.response || serverError);
             dispatch(
-              addServerError(AppErrors.challenge.saveFailure, serverError)
+              addServerError(AppErrors.challengeSaveFailure.saveDetailsFailure, serverError)
             );
 
             // Reload challenge data to ensure our local store is in sync with the

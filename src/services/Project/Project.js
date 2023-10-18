@@ -16,6 +16,13 @@ import { RESULTS_PER_PAGE } from "../Search/Search";
 import { addServerError, addError } from "../Error/Error";
 import AppErrors from "../Error/AppErrors";
 import { findUser, ensureUserLoggedIn, fetchUser } from "../User/User";
+import { setupCustomCache } from "../../utils/setupCustomCache";
+
+// 5 minute cache
+const CACHE_TIME = 5 * 60 * 1000;
+const PROJECT_ACTIVITY_CACHE = "projectActivity";
+const FEATURED_PROJECTS_CACHE = 'featuredProjects';
+const projectCache = setupCustomCache(CACHE_TIME);
 
 /** normalizr schema for projects */
 export const projectSchema = function () {
@@ -121,13 +128,23 @@ export const fetchFeaturedProjects = function (
 ) {
   return function (dispatch) {
     const pageToFetch = _isFinite(page) ? page : 0;
+    const params = { onlyEnabled, limit, page: pageToFetch }
+    const cachedFeaturedProjects = projectCache.get({}, params, FEATURED_PROJECTS_CACHE);
+
+    if (cachedFeaturedProjects) {
+      return new Promise((resolve) => {
+        dispatch(receiveProjects(cachedFeaturedProjects.entities));
+        resolve(cachedFeaturedProjects)
+      })
+    }
 
     return new Endpoint(api.projects.featured, {
       schema: [projectSchema()],
-      params: { onlyEnabled, limit, page: pageToFetch },
+      params
     })
       .execute()
       .then((normalizedResults) => {
+        projectCache.set({}, params, normalizedResults, FEATURED_PROJECTS_CACHE)
         dispatch(receiveProjects(normalizedResults.entities));
         return normalizedResults;
       })
@@ -322,6 +339,12 @@ export const fetchProjectActivity = function (projectId, startDate, endDate) {
       params.end = startOfDay(endDate).toISOString();
     }
 
+    const cachedProjectActivity = projectCache.get({}, params, PROJECT_ACTIVITY_CACHE);
+
+    if (cachedProjectActivity) {
+      return dispatch(receiveProjects(cachedProjectActivity));
+    }
+
     return new Endpoint(api.project.activity, { params })
       .execute()
       .then((rawActivity) => {
@@ -332,6 +355,8 @@ export const fetchProjectActivity = function (projectId, startDate, endDate) {
             },
           },
         };
+
+        projectCache.set({}, params, normalizedResults, PROJECT_ACTIVITY_CACHE)
 
         return dispatch(receiveProjects(normalizedResults.entities));
       })

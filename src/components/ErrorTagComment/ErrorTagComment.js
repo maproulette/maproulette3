@@ -10,7 +10,7 @@ const ErrorTagComment = ({ errorTags }) => {
     if (formattedErrorTags) {
       const str = formattedErrorTags.length > 1 ? formattedErrorTags.join(", ") : formattedErrorTags[0];
 
-      return str;
+      return str || null;
     }
   }
 

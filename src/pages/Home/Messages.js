@@ -76,4 +76,9 @@ export default defineMessages({
     id: "Home.Featured.header",
     defaultMessage: "Featured Challenges",
   },
+
+  donateButton: {
+    id: "Home.Intro.donateButton",
+    defaultMessage: "Support the growth of MapRoulette by donating here!",
+  },
 })

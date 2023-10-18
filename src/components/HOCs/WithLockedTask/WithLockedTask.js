@@ -137,7 +137,9 @@ const WithLockedTask = function(WrappedComponent) {
       window.removeEventListener('storage', this.syncLocks);
 
       if (task) {
-        this.unlockTask(task)
+        if (localStorage.getItem('isLoggedIn')) {
+          this.unlockTask(task)
+        }
         lockStorage.removeLock(task.id)
       }
     }

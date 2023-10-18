@@ -15,6 +15,7 @@ import _omit from 'lodash/omit'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import subMonths from 'date-fns/sub_months'
+import startOfDay from 'date-fns/start_of_day'
 import { defaultRoutes as api, isSecurityError, credentialsPolicy, websocketClient }
        from '../Server/Server'
 import { resetCache } from '../Server/RequestCache'
@@ -29,6 +30,15 @@ import { taskSchema,
          receiveTasks } from '../Task/Task'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
+import { setupCustomCache } from '../../utils/setupCustomCache'
+import CommentType from '../Comment/CommentType'
+
+// 60 minutes
+const CACHE_TIME = 60 * 60 * 1000;
+const USER_ACTIVITY_CACHE = "userActivity";
+const USER_TOP_CHALLENGES = "userTopChallenges";
+const USER_METRICS_CACHE = "userMetrics";
+const userCache = setupCustomCache(CACHE_TIME);
 
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in
@@ -261,6 +271,29 @@ export const fetchUser = function(userId) {
 };
 
 /**
+ * Fetch data on all users (up to the given limit).
+ */
+export const fetchUserComments = function (userId, type = CommentType.TASK, filters = { sort: 'created', order: 'DESC', page: 0, limit: 25 } ) {
+  return function(dispatch) {
+    const endpoint = type === CommentType.CHALLENGE ? api.users.challengeComments : api.users.taskComments
+
+    return new Endpoint(endpoint, {
+      variables: { id: userId },
+      params: filters
+    })
+      .execute()
+      .then((normalizedResults) => {
+        return normalizedResults;
+      })
+      .catch((error) => {
+        dispatch(addError(AppErrors.user.fetchFailure))
+        console.log(error.response || error);
+        return error.response || error;
+      });
+  }
+};
+
+/**
  * Fetch the public user data for the given user.
  *
  * @param userId - Can be either a userId, osmUserId, or username
@@ -280,6 +313,54 @@ export const fetchBasicUser = function(userId) {
       return normalizedResults
     })
   }
+}
+
+/**
+ * Fetch the osm oauth token.
+ *
+ * @param authCode - the token
+ */
+export const callback = async (authCode, dispatch, push) => {
+  const resetURI =
+  `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`
+
+  // Since we're bypassing Endpoint and manually performing an update, we
+  // need to also manually reset the request cache.
+  resetCache()
+
+  fetch(resetURI, {credentials: credentialsPolicy}).then(async (result) => {
+    const jsonData = await result.json();
+    if (jsonData.token) {
+      dispatch(
+        ensureUserLoggedIn(true)
+      ).then(userId => {
+        dispatch(fetchSavedChallenges(userId))
+        dispatch(fetchUserNotifications(userId))
+        subscribeToUserUpdates(dispatch, userId)
+
+        const redirectUrl = localStorage.getItem('redirect');
+
+        if (redirectUrl) {
+          push(redirectUrl)
+          localStorage.removeItem('redirects')
+        }
+      }).catch(
+        error => console.log(error)
+      ).then(() => null)
+    }
+  }).catch(error => {
+    if (isSecurityError(error)) {
+      dispatch(ensureUserLoggedIn()).then(() =>
+        dispatch(addError(AppErrors.user.unauthorized))
+      )
+    }
+    else {
+      dispatch(addError(AppErrors.user.updateFailure))
+      console.log(error.response || error)
+    }
+
+    console.log(error);
+  })
 }
 
 /**
@@ -346,15 +427,27 @@ export const fetchSavedChallenges = function(userId, limit=50) {
 export const fetchTopChallenges = function(userId, startDate, limit=5) {
   return function(dispatch) {
     // If no startDate given, default to past month.
+    const params = {
+      start: (startDate ? startOfDay(startDate) : startOfDay(subMonths(new Date(), 1))).toISOString(),
+      limit,
+    }
+
+    const variables = { userId }
+
+    const cachedTopChallenges = userCache.get(variables, params, USER_TOP_CHALLENGES);
+
+    if (cachedTopChallenges) {
+      dispatch(receiveChallenges(cachedTopChallenges.challenges))
+      dispatch(receiveUsers(cachedTopChallenges.user))
+
+      return cachedTopChallenges.challenges
+    }
 
     return new Endpoint(
       api.user.topChallenges, {
         schema: [ challengeSchema() ],
-        variables: {userId},
-        params: {
-          start: (startDate ? startDate : subMonths(new Date(), 1)).toISOString(),
-          limit,
-        }
+        variables,
+        params,
       }
     ).execute().then(normalizedChallenges => {
       const challenges = _get(normalizedChallenges, 'entities.challenges')
@@ -373,6 +466,8 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
       _each(challenges, challenge => {
         delete challenge.activity
       })
+
+      userCache.set(variables, params, { challenges: normalizedChallenges.entities, user }, USER_TOP_CHALLENGES)
 
       dispatch(receiveChallenges(normalizedChallenges.entities))
       dispatch(receiveUsers(simulatedEntities(user)))
@@ -476,11 +571,21 @@ export const deleteNotifications = function(userId, notificationIds) {
  */
 export const fetchUserActivity = function(userId) {
   return function(dispatch) {
+
+    const cachedUserActivity = userCache.get({}, {}, USER_ACTIVITY_CACHE);
+
+    if (cachedUserActivity) {
+      return dispatch(receiveUsers(simulatedEntities(cachedUserActivity)));
+    }
+
     return new Endpoint(
       api.user.activity
     ).execute().then(activity => {
       const user = {id: userId}
       user.activity = activity
+
+      userCache.set({}, {}, user, USER_ACTIVITY_CACHE)
+
       dispatch(receiveUsers(simulatedEntities(user)))
       return activity
     })
@@ -488,33 +593,37 @@ export const fetchUserActivity = function(userId) {
 }
 
 /**
- * Fetch recent activity from multiple users
- */
-export const fetchMultipleUserActivity = function(osmUserIds, limit=50, page=0) {
-  const offset = page * limit
-  return new Endpoint(api.user.activity, {
-    params: { osmUserIds: osmUserIds.join(','), limit: limit + 1, offset },
-  }).execute().then(activity => ({
-      activity: activity.slice(0, limit),
-      hasMore: activity.length > limit,
-  }))
-}
-
-/**
  * Fetch the user's recent metrics.
  */
-export const fetchUserMetrics = function(userId,
+export const fetchUserMetrics = async (userId,
                                          monthDuration = -1,
                                          reviewDuration = -1,
                                          reviewerDuration = -1,
                                          start = null, end = null,
                                          reviewStart = null, reviewEnd = null,
-                                         reviewerStart = null, reviewerEnd = null) {
-  return new Endpoint(api.user.metrics, {
-    variables: {userId},
-    params: {monthDuration, reviewDuration, reviewerDuration,
-             start, end, reviewStart, reviewEnd, reviewerStart, reviewerEnd}
+                                         reviewerStart = null, reviewerEnd = null) => {
+
+  const params = { monthDuration, reviewDuration, reviewerDuration,
+    start, end, reviewStart, reviewEnd, reviewerStart, reviewerEnd }
+
+  const variables = { userId }
+
+  const cachedUserMetrics = userCache.get(variables, params, USER_METRICS_CACHE);
+
+  if (cachedUserMetrics) {
+    return cachedUserMetrics;
+  }
+  
+  const userMetrics = await new Endpoint(api.user.metrics, {
+    variables,
+    params
   }).execute()
+
+  if (userMetrics?.tasks) {
+    userCache.set(variables, params, userMetrics, USER_METRICS_CACHE)
+  }
+
+  return userMetrics
 }
 
 /**
@@ -693,7 +802,7 @@ export const resetAPIKey = function(userId) {
 /**
  * Add the given challenge to the given user's list of saved challenges.
  */
-export const saveChallenge = function(userId, challengeId) {
+export const saveChallengeForUser = function(userId, challengeId) {
   return updateUser(userId, (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated properly by the server response.
@@ -709,7 +818,7 @@ export const saveChallenge = function(userId, challengeId) {
  * Remove the given challenge from the given user's list of saved
  * challenges.
  */
-export const unsaveChallenge = function(userId, challengeId) {
+export const unsaveChallengeForUser = function(userId, challengeId) {
   return updateUser(userId, (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated by the server response.
@@ -755,8 +864,19 @@ export const unsaveTask = function(userId, taskId) {
  * Logout the current user on both the client and server.
  */
 export const logoutUser = function(userId) {
-  //clear stale locks and isLoggedIn status
+  //clear stale locks and isLoggedIn status but retain redirect
+  const redirect = localStorage.getItem('redirect');
+  const state = localStorage.getItem('state');
+
   localStorage.clear();
+
+  if (redirect) {
+    localStorage.setItem('redirect', redirect)
+  }
+
+  if (state) {
+    localStorage.setItem('state', state)
+  }
 
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
 

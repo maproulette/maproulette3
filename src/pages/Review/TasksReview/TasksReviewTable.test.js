@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import * as React from "react";
 import { render } from "@testing-library/react";
-import { TaskReviewTable, setupColumnTypes, getChallengeFilterIds } from "./TasksReviewTable";
+import { TaskReviewTable, setupColumnTypes, getFilterIds } from "./TasksReviewTable";
 
 const testTableData = [
   {
@@ -444,12 +444,12 @@ describe("setupColumnTypes", () => {
 
 describe("getChallengeFilterIds", () => {
   it("finds and returns and array of challenge ids in the url", () => {
-    const challengeIds = getChallengeFilterIds('http://127.0.0.1:3000/review/myReviewedTasks?filters.challenge=alskdjfalsdjfa+ioweiru&filters.challengeId=30%2C31&sortCriteria.sortBy=mappedOn&sortCriteria.direction=ASC&page=0&includeTags=true&excludeOtherReviewers=true&pageSize=20');
+    const challengeIds = getFilterIds('http://127.0.0.1:3000/review/myReviewedTasks?filters.challenge=alskdjfalsdjfa+ioweiru&filters.challengeId=30%2C31&sortCriteria.sortBy=mappedOn&sortCriteria.direction=ASC&page=0&includeTags=true&excludeOtherReviewers=true&pageSize=20', 'filters.challengeId');
     expect(challengeIds[0]).toBe(30);
   });
 
   it("returns [-2] if there's no challenge ids", () => {
-    const challengeIds = getChallengeFilterIds('http://127.0.0.1:3000/review/myReviewedTasks?sortCriteria.sortBy=mappedOn&sortCriteria.direction=ASC&page=0&includeTags=true&excludeOtherReviewers=true&pageSize=20');
+    const challengeIds = getFilterIds('http://127.0.0.1:3000/review/myReviewedTasks?sortCriteria.sortBy=mappedOn&sortCriteria.direction=ASC&page=0&includeTags=true&excludeOtherReviewers=true&pageSize=20', 'filters.challengeId');
     expect(challengeIds[0]).toBe(-2);
   });
 });

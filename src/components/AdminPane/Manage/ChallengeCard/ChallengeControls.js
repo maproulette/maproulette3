@@ -156,7 +156,10 @@ export default class ChallengeControls extends Component {
                 pathname:
                   `/admin/project/${projectId}/` +
                   `challenge/${this.props.challenge.id}/edit`,
-                state: _get(this.props.searchCriteria, "filters"),
+                state: _merge(
+                  { cloneChallenge: false },
+                  _get(this.props.searchCriteria, "filters"),
+                )
               }}
               className={this.props.controlClassName}
             >

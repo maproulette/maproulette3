@@ -3,7 +3,7 @@ import { mapStateToProps, mapDispatchToProps } from './WithCurrentUser'
 import AsEndUser from '../../../interactions/User/AsEndUser'
 import { denormalize } from 'normalizr'
 import { logoutUser,
-         saveChallenge, unsaveChallenge,
+         saveChallengeForUser, unsaveChallengeForUser,
          saveTask, unsaveTask,
          userDenormalizationSchema } from '../../../services/User/User'
 
@@ -90,28 +90,28 @@ test("mapDispatchToProps makes the logoutUser() function available", () => {
   expect(logoutUser).toBeCalled()
 })
 
-test("mapDispatchToProps makes the saveChallenge() function available", () => {
+test("mapDispatchToProps makes the saveChallengeForUser() function available", () => {
   const dispatch = jest.fn()
   const mappedProps = mapDispatchToProps(dispatch)
 
   const userId = 123
   const challengeId = 987
 
-  mappedProps.saveChallenge(userId, challengeId)
+  mappedProps.saveChallengeForUser(userId, challengeId)
   expect(dispatch).toBeCalled()
-  expect(saveChallenge).toBeCalledWith(userId, challengeId)
+  expect(saveChallengeForUser).toBeCalledWith(userId, challengeId)
 })
 
-test("mapDispatchToProps makes the unsaveChallenge() function available", () => {
+test("mapDispatchToProps makes the unsaveChallengeForUser() function available", () => {
   const dispatch = jest.fn()
   const mappedProps = mapDispatchToProps(dispatch)
 
   const userId = 123
   const challengeId = 987
 
-  mappedProps.unsaveChallenge(userId, challengeId)
+  mappedProps.unsaveChallengeForUser(userId, challengeId)
   expect(dispatch).toBeCalled()
-  expect(unsaveChallenge).toBeCalledWith(userId, challengeId)
+  expect(unsaveChallengeForUser).toBeCalledWith(userId, challengeId)
 })
 
 test("mapDispatchToProps makes the saveTask() function available", () => {

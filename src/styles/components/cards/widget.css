@@ -63,7 +63,7 @@
   }
 
   &__content {
-    @apply mr-text-sm mr-h-full mr-overflow-auto mr-scrolling-touch mr-px-4 mr-pb-4;
+    @apply mr-text-sm mr-h-full mr-overflow-auto mr-px-4 mr-pb-4;
 
     .mr-card-widget--padded & {
       @apply mr-px-6;

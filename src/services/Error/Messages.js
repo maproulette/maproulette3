@@ -85,6 +85,14 @@ export default defineMessages({
     id: "Errors.task.bundleFailure",
     defaultMessage: "Unable to bundle tasks together",
   },
+  taskBundleCooperative: {
+    id: "Errors.task.bundleCooperative",
+    defaultMessage: "The main task is Cooperative. All selected tasks must be Cooperative.",
+  },
+  taskBundleNotCooperative: {
+    id: "Errors.task.bundleNotCooperative",
+    defaultMessage: "The main task is not Cooperative. No selected tasks can be Cooperative.",
+  },
   taskCooperativeFailure: {
     id: "Errors.task.cooperativeFailure",
     defaultMessage: "Failed to load cooperative task{details}",
@@ -163,9 +171,21 @@ export default defineMessages({
     id: "Errors.challenge.archiveFailure",
     defaultMessage: "Unable to update archive status",
   },
-  challengeSaveFailure: {
-    id: "Errors.challenge.saveFailure",
-    defaultMessage: "Unable to save your changes{details}",
+  challengeSaveDetailsFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveDetailsFailure",
+    defaultMessage: "Unable to save your changes. It is likely a duplicate challenge name.",
+  },
+  challengeSaveNameFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveNameFailure",
+    defaultMessage: "The 'NAME OF YOUR CHALLENGE' field is required and must be more than 3 characters long.",
+  },
+  challengeSaveDescriptionFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveDescriptionFailure",
+    defaultMessage: "The 'DESCRIPTION OF YOUR CHALLENGE' field is required.",
+  },
+  challengeSaveInstructionFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveInstructionFailure",
+    defaultMessage: "The 'DETAILED INSTRUCTIONS FOR MAPPERS' field must have more than 150 characters.",
   },
   challengeRebuildFailure: {
     id: "Errors.challenge.rebuildFailure",

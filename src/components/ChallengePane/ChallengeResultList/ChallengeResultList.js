@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _filter from 'lodash/filter'
 import _compact from 'lodash/compact'
 import _clone from 'lodash/clone'
 import _findIndex from 'lodash/findIndex'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
+import { Link } from 'react-router-dom'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { boundsWithinAllowedMaxDegrees }
        from '../../../services/MapBounds/MapBounds'
@@ -57,10 +59,42 @@ const limitUserResults = (challenges) => {
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeResultList extends Component {
-  constructor(props) {
-    super(props)
-    this.listRef = React.createRef()
-  }
+    constructor(props) {
+      super(props);
+      this.listRef = React.createRef();
+      this.state = { data: null, pauseFetch: true };
+    }
+  
+  
+    componentDidUpdate(prevProps) {
+      const prevQuery = prevProps.searchFilters.project || prevProps.searchFilters.task;
+      const currentQuery = this.props.searchFilters.project || this.props.searchFilters.task;
+      const searchType = this.props.searchFilters.searchType
+      
+      if (prevQuery !== currentQuery && !isNaN(currentQuery) && searchType === "task" ) {
+        this.fetchData();
+      }
+    }
+  
+    async fetchData() {
+      if (this.state.pauseFetch) {
+        this.setState({ pauseFetch: false });
+        const query = this.props.searchFilters.project || this.props.searchFilters.task;
+        
+        if (query) {
+          try {
+            const response = await fetch(`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${query}`);
+            const responseJson = await response.json();
+            this.setState({ data: responseJson });
+          } catch (error) {
+            console.error(error);
+            this.setState({ data: null });
+          }
+        }
+        
+        this.setState({ pauseFetch: true });
+      }
+    }
 
   render() {
     const challengeResultsUnbound = _clone(this.props.pagedChallenges);
@@ -70,10 +104,11 @@ export class ChallengeResultList extends Component {
           || this.props.location.search.includes("default"))
         ? limitUserResults(challengeResultsUnbound)
         : challengeResultsUnbound;
-    
+
     const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
 
     const search = _get(this.props, 'currentSearch.challenges', {})
+    const searchType = this.props.searchFilters.searchType
     const bounds = _get(search, 'mapBounds.bounds')
     const locationFilter = _get(search, 'filters.location')
     const otherFilters = _omit(search.filters, ['location'])
@@ -81,6 +116,17 @@ export class ChallengeResultList extends Component {
       _isEmpty(search.query) &&
       _isEmpty(otherFilters) &&
       (_isEmpty(locationFilter) || !bounds || !boundsWithinAllowedMaxDegrees(bounds))
+
+    const query = search.query ? search.query : this.props.searchFilters.project ? this.props.searchFilters.project : this.props.searchFilters.task 
+
+    let matchedId = []
+    if(!isNaN(query) && query) {
+      if(this.props.searchFilters.searchType == "projects"){
+        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.parent.id.toString() === query.toString());
+      } else {
+        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.id.toString() === query.toString());
+      }
+    }
 
     // If no filters are applied, inject any featured projects
     if (unfiltered && this.props.featuredProjects.length > 0) {
@@ -100,6 +146,111 @@ export class ChallengeResultList extends Component {
       }
     }
 
+    let detectedIds = null;
+
+    if (searchType === "task" && query && isNaN(query)) {
+      detectedIds = (
+        <div className="mr-text-white mr-text-lg mr-pt-4">
+          <span>
+            <FormattedMessage {...messages.invalidId} />
+          </span>
+        </div>
+      );
+    }
+    
+    if (!isNaN(query) && query) {
+      // Filters for Task Id
+      if (searchType === "task") {
+        let matchedChallengeId = null;
+
+        
+        if (this.state.data) {
+          matchedChallengeId = _filter(this.props.unfilteredChallenges, (item) =>
+            item.id.toString() === this.state.data.parent.toString()
+          );
+        }
+      
+        if (matchedChallengeId && matchedChallengeId.length > 0) {
+          detectedIds = (
+            <div>
+              <div className="mr-text-white mr-text-lg mr-pt-4">
+                <FormattedMessage {...messages.goTo} />
+                <Link
+                  to={`/challenge/${this.state.data.parent}/task/${this.state.data.id}`}
+                  className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
+                >
+                  <div className="mr-border mr-border-white mr-text-green-lighter mr-text-lg mr-p-2 mr-mt-2">
+                    <FormattedMessage {...messages.task} /> {`${this.state.data.id}`}
+                  </div>
+                </Link>
+                <div>
+                  <div className="mr-pt-4 mr-pb-2">
+                    <FormattedMessage {...messages.locatedIn} />
+                    <FormattedMessage {...messages.challenge} />
+                    {this.state.data.parent}
+                  </div>
+                  <ChallengeResultItem
+                    key={`challenge_${this.state.data.parent}`}
+                    {...this.props}
+                    challenge={matchedChallengeId[0]}
+                    listRef={this.listRef}
+                    sort={search?.sort}
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        } else {
+          detectedIds = (
+            <div className="mr-text-white mr-text-lg mr-pt-4">
+              <span>
+                <FormattedMessage {...messages.doesntExist} />
+              </span>
+            </div>
+          );
+        }      
+      } else if (matchedId.length === 0) {
+        detectedIds = (
+          <div className="mr-text-white mr-text-lg mr-pt-4">
+            <span>
+              <FormattedMessage {...messages.noChallengeIds} />
+            </span>
+          </div>
+        );
+      // Filters for Challenge Id
+      } else if (searchType === undefined || searchType === "challenges") {
+        detectedIds = (
+          <div>
+            <FormattedMessage {...messages.challenge} />
+            {matchedId[0].id}
+            <ChallengeResultItem
+              key={`challenge_${matchedId[0].id}`}
+              {...this.props}
+              challenge={matchedId[0]}
+              listRef={this.listRef}
+              sort={search?.sort}
+            />
+          </div>
+        );
+      // Filters for Project Id
+      } else if (searchType === "projects") {
+        detectedIds = (
+          <div>
+            <FormattedMessage {...messages.project} />
+            {matchedId[0].parent.id} {_compact(_map(matchedId, (item) => (
+              <ProjectResultItem
+                key={`project_${item.id}`}
+                {...this.props}
+                project={item}
+                listRef={this.listRef}
+              />
+            )))}
+          </div>
+        );
+      }
+    }
+    
+    
     let results = null
     if (challengeResults.length === 0) {
       if (!isFetching) {
@@ -141,12 +292,28 @@ export class ChallengeResultList extends Component {
         }
       }))
     }
-
+  
     return (
       <div
         ref={this.listRef}
         className="mr-relative lg:mr-w-sm lg:mr-pr-6 lg:mr-mr-2 mr-mb-6 lg:mr-mb-0 lg:mr-rounded lg:mr-h-challenges lg:mr-overflow-auto"
       >
+        {detectedIds ? (
+          <div>
+            {detectedIds}
+            <div
+              className={`mr-border mr-border-white ${
+                matchedId && results
+                  ? "mr-mt-6 mr-mb-6"
+                  : matchedId
+                  ? "mr-mt-6"
+                  : !results
+                  ? "mr-mb-6"
+                  : "mr-mt-4 mr-mb-6"
+              }`}
+            />
+          </div>
+        ) : null}
         {results}
 
         <div className="after-results">

@@ -23,6 +23,7 @@ export const mapStateToProps = (state, ownProps) => {
   const isVirtual = _isFinite(ownProps.virtualChallengeId)
   const concreteChallengeId = _get(ownProps, 'challenge.id', ownProps.challengeId)
   const challengeId = isVirtual ? ownProps.virtualChallengeId : concreteChallengeId
+  const taskLoadMethod = ownProps.user?.properties.mr3Frontend?.settings?.loadMethod || TaskLoadMethod.random
   const mappedProps = {}
 
   if (_isFinite(challengeId)) {
@@ -45,7 +46,7 @@ export const mapStateToProps = (state, ownProps) => {
     mappedProps.taskLoadBy =
       _get(state.currentPreferences,
            `${preferenceGroup(isVirtual)}.${challengeId}.taskLoadMethod`,
-           TaskLoadMethod.random)
+           taskLoadMethod)
 
     mappedProps.visibleMapLayer =
       _get(state.currentPreferences,

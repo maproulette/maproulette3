@@ -158,7 +158,6 @@ export const preparePropertyRulesForForm = data => {
     return {}
   }
 
-
   if (!data.key && data.left && data.right) {
     const compactKey = (rule, values) => {
       if (rule.operationType === TaskPropertyOperationType.or) {
@@ -215,12 +214,14 @@ export const preparePropertyRulesForForm = data => {
  */
 export const validatePropertyRules = (rule, errors=[]) => {
   if (!rule) {
+    errors.push(PROPERTY_RULE_ERRORS.missingPropertyType)
     return errors
   }
 
   if (!rule.key && !rule.value && !rule.left && !rule.right &&
            !rule.valueType) {
     // We have an empty rule.
+    errors.push(PROPERTY_RULE_ERRORS.missingPropertyType)
     return errors
   }
 

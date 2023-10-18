@@ -83,24 +83,28 @@ class Leaderboard extends Component {
                 }
               </h3>
             </div>
-            <div className="mr-flex mr-justify-center mr-mb-2">
-              <PastDurationSelector
-                className="mr-button mr-mr-8"
-                pastMonthsOptions={[ALL_TIME, CURRENT_MONTH, 1, 3, 6, 12, CUSTOM_RANGE]}
-                currentMonthsPast={this.props.monthsPast}
-                selectDuration={this.props.setMonthsPast}
-                selectCustomRange={this.props.setDateRange}
-                customStartDate={this.props.startDate ? new Date(this.props.startDate) : null}
-                customEndDate={this.props.endDate ? new Date(this.props.endDate) : null}
-              />
-              {!this.props.suppressCountrySelection &&
-               <CountrySelector
-                 className="mr-button"
-                 currentCountryCode={this.props.countryCode}
-                 selectCountry={this.props.setCountryCode}
-               />
-              }
-            </div>
+            {
+              !process.env.REACT_APP_DISABLE_USER_LEADERBOARD_CONFIGS
+                ? <div className="mr-flex mr-justify-center mr-mb-2">
+                    <PastDurationSelector
+                      className="mr-button mr-mr-8"
+                      pastMonthsOptions={[ALL_TIME, CURRENT_MONTH, 1, 3, 6, 12, CUSTOM_RANGE]}
+                      currentMonthsPast={this.props.monthsPast}
+                      selectDuration={this.props.setMonthsPast}
+                      selectCustomRange={this.props.setDateRange}
+                      customStartDate={this.props.startDate ? new Date(this.props.startDate) : null}
+                      customEndDate={this.props.endDate ? new Date(this.props.endDate) : null}
+                    />
+                    {!this.props.suppressCountrySelection &&
+                    <CountrySelector
+                      className="mr-button"
+                      currentCountryCode={this.props.countryCode}
+                      selectCountry={this.props.setCountryCode}
+                    />
+                    }
+                  </div>
+                : null
+            }
           </header>
 
           {_get(this.props, "leaderboardOptions.filterCountry") &&

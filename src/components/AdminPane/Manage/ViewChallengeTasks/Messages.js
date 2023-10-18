@@ -64,6 +64,11 @@ export default defineMessages({
     defaultMessage: "Priority",
   },
 
+  filterListLabel: {
+    id: "Admin.manageTasks.controls.filterList.label",
+    defaultMessage: "Filter By:"
+  },
+
   clearFiltersLabel: {
     id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",

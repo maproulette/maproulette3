@@ -47,8 +47,12 @@ export const clearTaskClusters = function() {
  * boundingBox string -- see Search.generateSearchParametersString for details
  * of supported filters
  */
-export const fetchTaskClusters = function(challengeId, criteria, points=25) {
+export const fetchTaskClusters = function(challengeId, criteria, points=25, overrideDisable=false) {
   return function(dispatch) {
+    if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true' && !overrideDisable) {
+      return new Promise((resolve) => resolve());
+    }
+
     // The map is either showing task clusters or bounded tasks so we can't
     // have both in redux.
     dispatch(clearBoundedTasks())

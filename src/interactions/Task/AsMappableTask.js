@@ -101,6 +101,31 @@ export class AsMappableTask {
     return allProperties
   }
 
+    /**
+   * Generates an array of property objects containing all feature properties found in the
+   * task's geometries. Later properties will overwrite earlier properties with
+   * the same name.
+   */
+    allFeaturePropertiesArray(features) {
+      if (!this.hasGeometries()) {
+        return []
+      }
+  
+      if (!features) {
+        features = this.geometries.features
+      }
+  
+      let allProperties = []
+  
+      features.forEach(feature => {
+        if (feature && feature.properties) {
+          allProperties.push(feature);
+        }
+      })
+  
+      return allProperties
+    }
+
   /**
    * Similar to allFeatureProperties, but uses current OSM tags for the feature
    * properties. If OSM data isn't available, falls back to default behavior of
@@ -112,10 +137,10 @@ export class AsMappableTask {
     }
 
     if (!osmElements || osmElements.size === 0) {
-      return this.allFeatureProperties()
+      return this.allFeaturePropertiesArray()
     }
 
-    return this.allFeatureProperties(
+    return this.allFeaturePropertiesArray(
       this.featuresWithTags(this.geometries.features, osmElements, true, supportedSimplestyles)
     )
   }

@@ -10,6 +10,8 @@ import { jsSchema as propertiesJsSchema,
          uiSchema as propertiesUiSchema } from './BulkSchemas/PropertiesSchema'
 import { jsSchema as prioritiesJsSchema,
          uiSchema as prioritiesUiSchema } from './BulkSchemas/PrioritiesSchema'
+import { jsSchema as basemapJsSchema,
+         uiSchema as basemapUiSchema } from './BulkSchemas/BasemapSchema'
 import messages from './Messages'
 
 // Define individual workflow steps. Steps can be driven by either schemas or
@@ -41,6 +43,15 @@ const propertiesStep = {
   viewBox: "0 0 100 125",
 }
 
+const basemapStep = {
+  id: 'Basemap',
+  description: <FormattedMessage {...messages.basemapStepDescription} />,
+  jsSchema: basemapJsSchema,
+  uiSchema: basemapUiSchema,
+  icon: "basemap-icon",
+  viewBox: "0 0 30 37.5",
+}
+
 const prioritiesStep = {
   id: 'Priorities',
   description: <FormattedMessage {...messages.prioritiesStepDescription} />,
@@ -63,6 +74,11 @@ const bulkEditSteps = {
     canFinish: true,
   }),
   'Properties': Object.assign({}, propertiesStep, {
+    next: 'AdvancedOptions',
+    previous: 'AdvancedOptions',
+    canFinish: true,
+  }),
+  'Basemap': Object.assign({}, basemapStep, {
     next: 'AdvancedOptions',
     previous: 'AdvancedOptions',
     canFinish: true,

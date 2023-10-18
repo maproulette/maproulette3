@@ -44,7 +44,7 @@ export default class UserEditorSelector extends Component {
     const localizedEditorLabels = editorLabels(this.props.intl)
 
     return (
-      <div className="mr-text-xs mr-text-white mr-flex mr-pt-2 mr-whitespace-no-wrap">
+      <div className="mr-text-xs mr-text-white mr-flex mr-pt-2 mr-whitespace-nowrap">
         <span className="mr-mr-1">
           <FormattedMessage {...messages.currentlyUsing} />
         </span>

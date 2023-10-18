@@ -106,8 +106,17 @@ export class EditChallenge extends Component {
    * Returns true if this challenge's data is being cloned from another
    * challenge.
    */
-  isCloningChallenge = () =>
-    !!_get(this.props, "location.state.cloneChallenge");
+  isCloningChallenge = () => {
+    return !!_get(this.props, "location.state.cloneChallenge");
+  }
+
+  /**
+   * Returns the project Id of which the challenge is being cloned into. Project Id
+   * is passed in from challengeDetail.js
+   */
+  getCloningProjectId = () => {
+    return _get(this.props, "location.state.projectId");
+  }
 
   /**
    * Returns true if all challenge fields should be displayed as a single,
@@ -314,6 +323,7 @@ export class EditChallenge extends Component {
           const nextState = _cloneDeep(this.challengeState);
           if (nextState) {
             nextState.refreshAfterSave = true;
+            nextState.cloneChallenge = false;
           }
 
           this.props.history.push({
@@ -372,6 +382,10 @@ export class EditChallenge extends Component {
       delete challengeData.status;
       delete challengeData.virtualParents;
 
+      if (challengeData.checkinComment.includes('#maproulette')) {
+        challengeData.includeCheckinHashtag = true
+      }
+
       if (_isEmpty(this.state.formData.name)) {
         delete challengeData.name;
       }
@@ -380,8 +394,15 @@ export class EditChallenge extends Component {
         delete challengeData.dataOriginDate;
       }
 
-      if (_isEmpty(this.state.formData.overpassQL)) {
-        delete challengeData.overpassQL;
+      if (_isEmpty(this.state.formData.overpassQL) && !_isEmpty(challengeData.overpassQL)) {
+        challengeData.overpassQL =
+          `/*\nTHIS IS THE QUERY OF THE CHALLENGE YOU CLONED PLEASE ADAPT BEFORE USING TO AVOID CREATING DUPLICATE TASKS\n\n` +
+          challengeData.overpassQL +
+          `\n*/`
+      }
+
+      if (!_isEmpty(challengeData.overpassQL) && challengeData.overpassTargetType === '') {
+	      challengeData.overpassTargetType = 'none';
       }
 
       if (_isEmpty(this.state.formData.remoteGeoJson)) {
@@ -518,7 +539,8 @@ export class EditChallenge extends Component {
 
     // Parent field should just be id, not object.
     if (_isObject(challengeData.parent)) {
-      challengeData.parent = challengeData.parent.id;
+      const cloningProjectId = this.getCloningProjectId();
+      challengeData.parent = cloningProjectId ? cloningProjectId : challengeData.parent.id;
     }
 
     // For new challenges, append the #maproulette hashtag to the changeset comment
@@ -611,6 +633,13 @@ export class EditChallenge extends Component {
         // It's possible someone could have uploaded a file and then changed
         // there source type so let's remove localGeoJSON if it's not local.
         delete challengeData.localGeoJSON;
+      }
+    }
+
+    if (challengeData.taskWidgetLayout) {
+      const geoJSONFile = this.state.formContext?.root_taskWidgetLayout?.file ?? this.state.formContext?.root?.file ?? null;
+      if (geoJSONFile) {
+          challengeData.taskWidgetLayout = (await AsLineReadableFile(geoJSONFile).allLines()).join("\n")
       }
     }
 

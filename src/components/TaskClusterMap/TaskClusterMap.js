@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, Marker, LayerGroup, Rectangle, Polyline, Pane, Tooltip }
+import { ZoomControl, ScaleControl, Marker, LayerGroup, Rectangle, Polyline, Pane, Tooltip }
        from 'react-leaflet'
 import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
@@ -41,6 +41,7 @@ import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
 import SearchContent from '../EnhancedMap/SearchControl/SearchContent'
 import LassoSelectionControl
        from '../EnhancedMap/LassoSelectionControl/LassoSelectionControl'
+import SelectMarkersInViewControl from '../EnhancedMap/SelectMarkersInViewControl/SelectMarkersInViewControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
@@ -698,6 +699,40 @@ export class TaskClusterMap extends Component {
       this.currentBounds = this.props.initialBounds
     }
 
+    let selectionKit = this.props.hideLasso === true ? null : (
+      <>
+        {this.props.showSelectMarkersInView && (
+          <SelectMarkersInViewControl
+            onSelectAllInView={this.props.onBulkTaskSelection}
+          />
+        )}
+    
+        {this.props.showClusterLasso &&
+          this.props.onBulkClusterSelection &&
+          !this.props.mapZoomedOut && (
+            <LassoSelectionControl
+              onLassoSelection={this.selectClustersInLayers}
+              onLassoDeselection={this.deselectClustersInLayers}
+              onLassoClear={this.props.resetSelectedClusters}
+              onLassoInteraction={this.closeSearch}
+            />
+          )}
+    
+        {this.props.showLasso &&
+          this.props.onBulkTaskSelection &&
+          (!this.props.showAsClusters ||
+            (!this.props.showClusterLasso &&
+              this.props.totalTaskCount <= CLUSTER_POINTS)) && (
+            <LassoSelectionControl
+              onLassoSelection={this.selectTasksInLayers}
+              onLassoDeselection={this.deselectTasksInLayers}
+              onLassoClear={this.props.resetSelectedTasks}
+              onLassoInteraction={this.closeSearch}
+            />
+          )}
+      </>
+    )
+
     const map =
       <EnhancedMap
         ref={this.mapRef}
@@ -713,27 +748,12 @@ export class TaskClusterMap extends Component {
         onZoomOrMoveStart={this.debouncedUpdateBounds.cancel}
       >
         <ZoomControl className="mr-z-10" position='topright' />
+        {this.props.showScaleControl && <ScaleControl className="mr-z-10" position='bottomleft'/>}
         {this.props.showFitWorld && <FitWorldControl />}
         {this.props.taskCenter &&
           <FitBoundsControl key={this.props.taskCenter.toString()} centerPoint={this.props.taskCenter} />
         }
-        {this.props.showClusterLasso && this.props.onBulkClusterSelection && !this.props.mapZoomedOut &&
-          <LassoSelectionControl
-            onLassoSelection={this.selectClustersInLayers}
-            onLassoDeselection={this.deselectClustersInLayers}
-            onLassoClear={this.props.resetSelectedClusters}
-            onLassoInteraction={this.closeSearch}
-          />
-        }
-        {this.props.showLasso && this.props.onBulkTaskSelection &&
-         (!this.props.showAsClusters || (!this.props.showClusterLasso && this.props.totalTaskCount <= CLUSTER_POINTS)) &&
-         <LassoSelectionControl
-            onLassoSelection={this.selectTasksInLayers}
-            onLassoDeselection={this.deselectTasksInLayers}
-            onLassoClear={this.props.resetSelectedTasks}
-            onLassoInteraction={this.closeSearch}
-         />
-        }
+        {selectionKit}
         {!this.props.hideSearchControl &&
           <SearchControl
             {...this.props}
@@ -815,12 +835,25 @@ export class TaskClusterMap extends Component {
            closeSearch={this.closeSearch}
          />
         }
-        {this.props.delayMapLoad && !this.state.searchOpen &&
+        {this.props.delayMapLoad && !this.state.searchOpen && !process.env.REACT_APP_DISABLE_TASK_CLUSTERS &&
           <div className="mr-absolute mr-top-0 mr-mt-3 mr-w-full mr-flex mr-justify-center"
             onClick={() => this.props.forceMapLoad()}>
             <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
               <div className="mr-py-2 mr-px-3 mr-text-center mr-cursor-pointer">
                 <FormattedMessage {...messages.moveMapToRefresh} />
+              </div>
+            </div>
+          </div>
+        }
+        {process.env.REACT_APP_DISABLE_TASK_CLUSTERS && this.props.onClickFetchClusters && !this.props.mapZoomedOut &&
+          <div className="mr-absolute mr-bottom-0 mr-mb-3 mr-w-full mr-flex mr-justify-center"
+            onClick={() => {
+              this.props.onClickFetchClusters()
+            }}
+          >
+            <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
+              <div className="mr-py-2 mr-px-3 mr-text-center mr-cursor-pointer">
+                <FormattedMessage {...messages.refreshTasks} />
               </div>
             </div>
           </div>

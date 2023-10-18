@@ -8,6 +8,7 @@ import messages from './Messages'
 
 export const SEARCH_TYPE_PROJECT = "projects"
 export const SEARCH_TYPE_CHALLENGE = "challenges"
+export const SEARCH_TYPE_TASK = "task"
 
 /**
  * SearchTypeFilter displays a dropdown containing options for name searching
@@ -24,7 +25,9 @@ export class SearchTypeFilter extends Component {
 
   render() {
     const localizedSearchTypeLabels =
-      {[SEARCH_TYPE_CHALLENGE]:
+      {[SEARCH_TYPE_TASK]:
+          this.props.intl.formatMessage(messages.searchTypeTask),
+       [SEARCH_TYPE_CHALLENGE]:
           this.props.intl.formatMessage(messages.searchTypeChallenge),
        [SEARCH_TYPE_PROJECT]:
           this.props.intl.formatMessage(messages.searchTypeProject)}
@@ -36,7 +39,7 @@ export class SearchTypeFilter extends Component {
         dropdownButton={dropdown =>
           <div className="" onClick={dropdown.toggleDropdownVisible}>
             <span className="mr-flex mr-items-center mr-text-green-lighter mr-cursor-pointer">
-              <span className="mr-w-20 mr-mr-2 mr-overflow-hidden mr-whitespace-no-wrap mr-overflow-ellipsis">
+              <span className="mr-w-20 mr-mr-2 mr-overflow-hidden mr-whitespace-nowrap mr-overflow-ellipsis">
               {
                 notFiltering ?
                 localizedSearchTypeLabels.challenges :

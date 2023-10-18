@@ -5,6 +5,10 @@ import classNames from "classnames";
 import _isObject from "lodash/isObject";
 import _get from "lodash/get";
 import _findIndex from "lodash/findIndex";
+import _merge from "lodash/merge";
+import _uniqBy from "lodash/uniqBy";
+import _differenceBy from "lodash/differenceBy";
+import { Popup } from 'react-leaflet'
 import parse from "date-fns/parse";
 import MapPane from "../EnhancedMap/MapPane/MapPane";
 import TaskClusterMap from "../TaskClusterMap/TaskClusterMap";
@@ -21,16 +25,29 @@ import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
 import WithClusteredTasks from "../HOCs/WithClusteredTasks/WithClusteredTasks";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
+import WithCurrentChallenge from "../AdminPane/HOCs/WithCurrentChallenge/WithCurrentChallenge";
 import WithChallengeTaskClusters from "../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters";
 import WithTaskClusterMarkers from "../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers";
+import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/WithManageableProjects";
+import TaskChallengeMarkerContent from "../ChallengePane/TaskChallengeMarkerContent";
+import StartVirtualChallenge from "../ChallengePane/StartVirtualChallenge/StartVirtualChallenge";
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
+import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
 
-const ClusterMap = WithChallengeTaskClusters(
-  WithTaskClusterMarkers(TaskClusterMap("challengeDetail"))
-);
+const ClusterMap =
+  WithChallengeTaskClusters(
+    WithTaskClusterMarkers(
+      WithCurrentUser(
+        TaskClusterMap('challengeDetail')
+      )
+    ),
+    true
+  )
+
+const ProjectPicker = WithManageableProjects(ProjectPickerModal);
 
 const FLAG_REPO_NAME = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
 const FLAG_REPO_OWNER = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
@@ -58,7 +75,38 @@ export class ChallengeDetail extends Component {
     displayInputError: false,
     displayCheckboxError: false,
     submittingFlag: false,
+    pickingProject: false,
+    selectedClusters: [],
   };
+
+  onBulkClusterSelection = clusters => {
+    if (!clusters || clusters.length === 0) {
+      return
+    }
+
+    // Handle both clusters and individual tasks in case user declustered
+    this.setState({
+      selectedClusters: _uniqBy(
+        this.state.selectedClusters.concat(clusters), clusters[0].isTask ? 'taskId' : 'clusterId'
+      ),
+    })
+  }
+
+  onBulkClusterDeselection = clusters => {
+    if (!clusters || clusters.length === 0) {
+      return
+    }
+
+    // Handle both clusters and individual tasks in case user declustered
+    this.setState({
+      selectedClusters: _differenceBy(
+        this.state.selectedClusters, clusters, clusters[0].isTask ? 'taskId' : 'clusterId'
+      ),
+    })
+  }
+
+  resetSelectedClusters = () => this.setState({selectedClusters: []})
+
 
   componentDidMount() {
     window.scrollTo(0, 0)
@@ -131,6 +179,23 @@ export class ChallengeDetail extends Component {
     }
   }
 
+  projectPickerCanceled = () => {
+    this.setState({ pickingProject: false });
+  }
+
+  cloneToProject = (project) => {
+    this.setState({ pickingProject: false })
+    this.props.history.push({
+      pathname:
+        `/admin/project/${project.id}/` +
+        `challenge/${this.props.challenge.id}/clone`,
+      state: _merge(
+        { cloneChallenge: true, projectId: project.id },
+        _get(this.props.searchCriteria, 'filters')
+      ),
+    })
+  }
+
   renderDetailTabs = () => {
     const challenge = this.props.browsedChallenge;
     if (!challenge.isVirtual) {
@@ -168,6 +233,20 @@ export class ChallengeDetail extends Component {
               </Fragment>
             )
           }
+          {
+            _isObject(this.props.user) && challenge.enabled && (
+              <Fragment>
+                <span className="mr-px-3"> | </span>
+                <button
+                  onClick={() => this.setState({ pickingProject: true })}
+                  className="mr-text-green-lighter hover:mr-text-white"
+                >
+                  <FormattedMessage {...messages.cloneChallenge} />
+                </button>
+              </Fragment>
+            )
+          }
+          
         </li>
       )
     }
@@ -213,7 +292,7 @@ export class ChallengeDetail extends Component {
               <Link
                 to={{}}
                 onClick={() =>
-                  this.props.unsaveChallenge(this.props.user.id, challenge.id)
+                  this.props.unsaveChallengeForUser(this.props.user.id, challenge.id)
                 }
                 className="mr-button"
                 title={this.props.intl.formatMessage(messages.removeFromFavorites)}
@@ -226,7 +305,7 @@ export class ChallengeDetail extends Component {
               <Link
                 to={{}}
                 onClick={() =>
-                  this.props.saveChallenge(this.props.user.id, challenge.id)
+                  this.props.saveChallengeForUser(this.props.user.id, challenge.id)
                 }
                 className="mr-button"
                 title={this.props.intl.formatMessage(messages.saveToFavorites)}
@@ -348,12 +427,32 @@ export class ChallengeDetail extends Component {
           ),
         });
 
+        const showMarkerPopup = (markerData) => {
+          return (
+           <Popup>
+            <TaskChallengeMarkerContent
+              marker={markerData}
+              taskId={markerData.options.taskId}
+              {...this.props}/>
+           </Popup>
+          )
+        }
+
+    const virtualChallengeMapOverlay =
+    this.state.selectedClusters.length > 0 ?
+    <StartVirtualChallenge
+      {...this.props}
+      selectedClusters={this.state.selectedClusters}
+    /> :
+    null
+
     const map = (
       <ClusterMap
         className="split-pane"
         onTaskClick={(taskId) =>
           this.props.startChallengeWithTask(challenge.id, false, taskId)
         }
+        showMarkerPopup={showMarkerPopup}
         challenge={challenge}
         allowClusterToggle={false}
         criteria={{
@@ -365,6 +464,14 @@ export class ChallengeDetail extends Component {
         }
         skipRefreshTasks
         allowSpidering
+        selectedClusters={this.state.selectedClusters}
+        onBulkClusterSelection={this.onBulkClusterSelection}
+        onBulkClusterDeselection={this.onBulkClusterDeselection}
+        resetSelectedClusters={this.resetSelectedClusters}
+        showTaskCount
+        showClusterLasso
+        showFitWorld
+        externalOverlay={virtualChallengeMapOverlay}
         {...this.props}
       />
     );
@@ -391,7 +498,7 @@ export class ChallengeDetail extends Component {
                 <Taxonomy {...challenge} isSaved={isSaved} />
                 <div className="mr-flex mr-items-center">
                   <h1 className="mr-card-challenge__title mr-mr-3">{challenge.name}</h1>
-                  {FLAGGING_ACTIVE && !this.state.flagLoading && !challenge.isVirtual &&
+                  {FLAGGING_ACTIVE && !this.state.flagLoading && !challenge.isVirtual && this.props.user &&
                     <div title={!this.state.issue ? 'Flag challenge' : 'View github issue'} className="mr-flex mr-align-center mr-cursor-pointer" onClick={this.handleFlagClick}>
                       <SvgSymbol sym="flag-icon" viewBox="0 0 20 20" className={`mr-w-4 mr-h-4 mr-fill-current mr-mr-2${this.state.issue ? ' mr-fill-red-light mr-mt-4px' : ''}`} />
                       {this.state.issue &&
@@ -415,6 +522,15 @@ export class ChallengeDetail extends Component {
                     handleViewCommentsSubmit={this.handleViewCommentsSubmit}
                   />
                 }
+
+                {_isObject(this.props.user) && challenge.enabled && this.state.pickingProject && (
+                  <ProjectPicker
+                    {...this.props}
+                    currentProjectId={challenge.parent.id}
+                    onCancel={this.projectPickerCanceled}
+                    onSelectProject={this.cloneToProject}
+                  />
+                )}
 
                 {challenge.parent && ( // virtual challenges don't have projects
                   <Link
@@ -478,6 +594,8 @@ export class ChallengeDetail extends Component {
 
 export default WithCurrentUser(
   WithClusteredTasks(
-    WithStartChallenge(WithBrowsedChallenge(injectIntl(ChallengeDetail)))
+    WithStartChallenge(
+      WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail)))
+    )
   )
-);
+)

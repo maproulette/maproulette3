@@ -4,10 +4,12 @@ This is the repository that holds the front-end code. The back-end and API are d
 
 ### Basic Dependencies:
 
-* [Node 14 LTS](https://nodejs.org/)
+* [Node 16 LTS](https://nodejs.org/)
 * [yarn](https://yarnpkg.com/)
 * [jq](https://stedolan.github.io/jq/)
 * [curl](https://curl.haxx.se/)
+
+Note: When installing Node LTS,  ensure that the version of node installed is <= 17.0.1 & conversely, the version of npm is <= 8.19.3. Otherwise, with higher versions of node, yarn would not be able to recognize Node and run the frontend portion of the codebase.
 
 ### Initial Setup
 
@@ -44,7 +46,7 @@ Note that this will create the development build and not the 'production' build.
 1. Install the back-end server using the instructions from the maproulette-backend
    project, if you haven't already
 
-2. Visit your [OpenStreetMap account](https://www.openstreetmap.org) and go
+2. Visit your [OpenStreetMap account](https://master.apis.dev.openstreetmap.org) and go
    to My Settings -> oauth settings -> Register your application and setup a
    new application for development. For the `Main Application URL` and
    `Callback URL` settings, put in `http://127.0.0.1:9000` (assuming your
@@ -87,6 +89,8 @@ a local one you have installed. **Please do not use the production API for devel
    variables:
   ```
   REACT_APP_MAP_ROULETTE_SERVER_URL='https://yourserver.com'
+  REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL='wss://yourserver.com/ws'
+  REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL='https://yourserver.com/graphql'
   REACT_APP_SERVER_API_KEY='your-api-key-for-that-server'
   ```
 

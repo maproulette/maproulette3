@@ -22,7 +22,7 @@ import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import WithCooperativeWork from '../HOCs/WithCooperativeWork/WithCooperativeWork'
 import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
 import WithLockedTask from '../HOCs/WithLockedTask/WithLockedTask'
-import SignIn from '../../pages/SignIn/SignIn'
+import { Redirect } from 'react-router'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
@@ -68,6 +68,7 @@ export const defaultWorkspaceSetup = function() {
     ],
     excludeWidgets: [ // Cannot be added to workspace
       'TaskReviewWidget',
+      'ReviewNearbyTasksWidget',
     ],
     conditionalWidgets: [ // conditionally displayed
       'TagDiffWidget',
@@ -189,13 +190,14 @@ export class TaskPane extends Component {
   }
 
   render() {
+    // Render public task page if user is not logged in.
     if (!this.props.user) {
       return (
         this.props.checkingLoginStatus ?
         <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
           <BusySpinner />
         </div> :
-        <SignIn {...this.props} />
+        <Redirect to={`${this.match.url}`} />
       )
     }
 
@@ -226,7 +228,7 @@ export class TaskPane extends Component {
         <li>
           <a
             className="mr-normal-case mr-flex"
-            onClick={() => (isFavorited ? this.props.unsaveChallenge : this.props.saveChallenge)(
+            onClick={() => (isFavorited ? this.props.unsaveChallengeForUser : this.props.saveChallengeForUser)(
               this.props.user.id,
               challenge.id
             )}

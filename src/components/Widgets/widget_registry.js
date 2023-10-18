@@ -23,12 +23,16 @@ export { default as FeatureStyleLegendWidget }
        from './FeatureStyleLegendWidget/FeatureStyleLegendWidget'
 export { default as TaskBundleWidget }
        from './TaskBundleWidget/TaskBundleWidget'
+export { default as ReviewNearbyTasksWidget }
+       from './ReviewNearbyTasksWidget/ReviewNearbyTasksWidget'
 export { default as TagDiffWidget }
        from './TagDiffWidget/TagDiffWidget'
 export { default as TaskMapWidget }
        from './TaskMapWidget/TaskMapWidget'
 export { default as TaskInstructionsWidget }
        from './TaskInstructionsWidget/TaskInstructionsWidget'
+export { default as PublicTaskInstructionsWidget }
+       from './TaskInstructionsWidget/PublicTaskInstructionsWidget'
 export { default as TaskCompletionWidget }
        from './TaskCompletionWidget/TaskCompletionWidget'
 export { default as TaskReviewWidget }
@@ -69,8 +73,6 @@ export { default as MetaReviewStatusMetricsWidget }
       from './ReviewStatusMetricsWidget/MetaReviewStatusMetricsWidget'
 export { default as ReviewTagMetricsWidget }
       from './ReviewTagMetricsWidget/ReviewTagMetricsWidget'
-export { default as ReviewMapWidget }
-      from './ReviewMapWidget/ReviewMapWidget'
 export { default as SnapshotProgressWidget }
        from './SnapshotProgressWidget/SnapshotProgressWidget'
 

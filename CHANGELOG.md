@@ -7,6 +7,170 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.13.2] - 2023-10-17
+Realease with [maproulette-backend_v4.4.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.8)
+
+### Features
+- Add lasso and virtual challenge creation functionality to challenge dashboard map - @CollinBeczak
+- Add user setting for random/nearby selection - @CollinBeczak
+- Add drop box for recommended widget layout in challenge creation form - @CollinBeczak
+- Add notice for recommended widget layouts in task completion flow - @CollinBeczak
+- Add user app setting for saving filters in task bundle widget in task completion workflow - @AndrewPhilbin
+- Add visual filter indications for all dropdown task filters - @AndrewPhilbin
+
+### Fixes
+- Remove word number requirement from challenge editor - @CollinBeczak
+- Fix task property search clear bug - @AndrewPhilbin
+- Fix workspace layout name keypress crash bug - @AndrewPhilbin
+- Fix confirmation keyboard shortcuts - @CollinBeczak
+
+### System Updates
+- Update all node version references to node 16 - @CollinBeczak
+- Add Stringified widget layout JSON to challenge table - @CollinBeczak
+
+## [v3.13.1] - 2023-9-12
+Realease with [maproulette-backend_v4.4.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.7)
+
+### Features
+- Add columns to Review Table - @CollinBeczak
+- Add Scale Bar Leaflet control to multi-tasking map - @AndrewPhilbin
+- Add cooperative task bundling - @CollinBeczak
+- Make Task Instructions widget scroll to top on Task ID change - @CollinBeczak
+- Add filtering for project, challenge and task IDs - @CollinBeczak
+- Add API version number in Footer - @CollinBeczak
+- Add widgets to mobile workspace - @CollinBeczak
+- Add columns to review table - @CollinBeczak
+- Add single project requirement for Review Table CSV - @CollinBeczak
+- Add Nearby Tasks Widget in Task Review workspace - @CollinBeczak
+- Allow use of mustache replacement tags in Changeset Descriptions - @AndrewPhilbin
+- Overhaul Task Property Search filter UI behavior - @AndrewPhilbin
+- Add filter dropdown for categorization keywords in Find Challenges - @CollinBeczak
+- Notify all project admins of "get in touch" challenge comments(API) - @AndrewPhilbin
+- Provide more information on notification settings - @AndrewPhilbin
+
+### Fixes
+- Fix completion buttons for Rapid - @CollinBeczak
+- Fix mobile instructions widget error - @CollinBeczak
+- Fix hotkeys preventing stying in Rapid search box in integrated editor - @AndrewPhilbin
+- Fix Team and Follow notification subscriptions so user choices persist(API) - @AndrewPhilbin
+
+### System Updates
+- Add ENV toggle to Review Table CSV - @jschwarz2030
+- Change ENV REACT_APP_LEVEL0_EDITOR_SERVER_URL from http to https - @CollinBeczak
+- Support configurable OSM OAuth2 scope - @ljdelight
+- Use https in a few URLs - @ljdelight
+- Include project version from git in /api/v2/service/info - @ljdelight
+
+## [v3.13.0] - 2023-8-16
+Release with [maproulette-backend_v4.4.6](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.6)
+
+### Features
+- Rapid Integration - @jschwarz2030
+
+## [v3.12.2] - 2023-7-11
+Release with [maproulette-backend_v4.4.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.5)
+
+### Features
+- Oauth2 - @jschwarz2030
+
+## [v3.12.1] - 2023-7-11
+Release with [maproulette-backend_v4.4.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.4)
+
+### Features
+- Multi task select all in view - @AndrewPhilbin
+- Add geojson upload error messages for unsupported files - @CollinBeczak
+- Add toggle-capable map to Review Table Widget and remove redundant map widget - @CollinBeczak
+- Add validation for Create Challenge Long Form - @CollinBeczak
+- Add Review Table CSV Extract option - @CollinBeczak
+- Add donate button - @CollinBeczak
+- Add mastadon link - @tsun812
+- Add github link - @tsun812
+- Disable modifier keys when working with MR shortcuts - @tsun812
+- Support OSM types extraction from OSM identifiers for editor URI - @tsun812
+
+### Fixes
+- Fix Favorite-Challenge feature - @jschwarz2030
+
+### System Updates
+- Update browserlist - @CollinBeczak
+
+## [v3.12.0] - 2023-4-11
+Release with [maproulette-backend_v4.4.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.0)
+
+### Features
+- Add additional caching to multiple endpoints
+- Ability to clone other people's challenges
+- add italian language and sort locale alphabetically
+- Added Blog tab with associated link to the NavBar
+- Added keyboard shortcut for completeTogetherbutton
+- Add Challenge Editor Review Setting
+- Sent comments
+
+### Fixes
+- fix query param in URL for discoverability page
+- Cloning Challenge #maproulette Hashtag Fix 
+- fix sql to account for commas in c.name (API)
+- check class type in internalCreate before checking task count (API)
+- filter out deleted/undiscoverable parents (API)
+
+### System Updates
+- Added Node Dependency Information
+- corrected link for openstreetMap account in documentation
+- update pre-existing server documentation
+- Fix links to Postman collection (API)
+
+## [v3.11.9] - 2023-3-1
+Release with [maproulette-backend_v4.3.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.3.2)
+
+### Features
+- Public Task Landing Page
+- Manual Task Cluster Fetching if Clustering is Disabled
+- Apply review_started_at to all tasks in a bundle (API)
+- Remove mandatory valid session requirement when fetching task history (API)
+
+### Fixes
+- Fixed the base url for users to update their email preferences
+- Prevent duplicate notifications of challenge ccompletion (API)
+
+### System Updates
+- Upgrade to Tailwind V2
+- Add toggle to disable user leaderboard configs
+
+## [v3.11.8] - 2023-2-14
+Release with [maproulette-backend_v4.3.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.3.1)
+
+### Fixes
+- Update transifex json
+
+## [v3.11.7] - 2023-1-24
+Release with [maproulette-backend_v4.3.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.3.1)
+
+### Features
+- add basemap inputs to bulk edit
+- Create API endpoint /api/v2/service/info (API)
+- Generate BuildInfo.scala with useful build-time data (API)
+
+### Fixes
+- return empty data during security errors for /data queries
+- require logged in user to show flagging feature
+- remove changesetUrl config in .env
+- Require authN for routes in DataController.scala (API)
+- Enforce max task count for POST /api/v2/tasks (API)
+- use reviewStartedAt when there's no reviewClaimedAt (API)
+
+### System Updates
+- add toggle to disable fetching task clusters
+- add toggle to disable super admin metrics
+- Web crawlers should not access /api/v2/data*
+- Remove old files (API)
+- Update scalac opts to see more possible code issues (API)
+- Improve the sbt swagger routes file generation (API)
+- More logging when storing user API key in OSM (API)
+- Simplify the application.conf and dev.conf.example (API)
+- Support conf overrides of max tasks per challenge (API)
+- README show to use postgis:13-3.3 (API)
+- Set caffeine as the default cache type (API)
+
 ## [v3.11.6] - 2023-1-17
 
 ### Features

@@ -78,7 +78,8 @@ export const editTask = function (
   task,
   mapBounds,
   options,
-  taskBundle
+  taskBundle,
+  replacedComment = null
 ) {
   return function (dispatch) {
     if (options && process.env.REACT_APP_FEATURE_EDITOR_IMAGERY !== "enabled") {
@@ -95,15 +96,15 @@ export const editTask = function (
 
       if (editor === ID) {
         editorWindowReference = window.open(
-          constructIdURI(task, mapBounds, options, taskBundle)
+          constructIdURI(task, mapBounds, options, taskBundle, replacedComment)
         );
       } else if (editor === LEVEL0) {
         editorWindowReference = window.open(
-          constructLevel0URI(task, mapBounds, options, taskBundle)
+          constructLevel0URI(task, mapBounds, options, taskBundle, replacedComment)
         );
       } else if (editor === RAPID) {
         editorWindowReference = window.open(
-          constructRapidURI(task, mapBounds, options)
+          constructRapidURI(task, mapBounds, options, replacedComment)
         );
       }
 
@@ -256,7 +257,7 @@ export const taskCenterPoint = function (mapBounds, task, taskBundle) {
 /**
  * Builds a Id editor URI for editing of the given task
  */
-export const constructIdURI = function (task, mapBounds, options, taskBundle) {
+export const constructIdURI = function (task, mapBounds, options, taskBundle, replacedComment) {
   const baseUriComponent = `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id`;
 
   const centerPoint = taskCenterPoint(mapBounds, task, taskBundle);
@@ -272,10 +273,14 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle) {
     options
   );
 
-  const commentUriComponent =
+  const commentUriComponent = replacedComment ?
+    "comment=" +
+    encodeURIComponent(replacedComment) +
+    constructChangesetUrl(task) :
     "comment=" +
     encodeURIComponent(task.parent.checkinComment) +
     constructChangesetUrl(task);
+
   const sourceComponent =
     "source=" + encodeURIComponent(task.parent.checkinSource);
 
@@ -316,7 +321,7 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle) {
 /**
  * Builds a RapiD editor URI for editing of the given task
  */
-export const constructRapidURI = function (task, mapBounds, options) {
+export const constructRapidURI = function (task, mapBounds, options, replacedComment) {
   const baseUriComponent = `${process.env.REACT_APP_RAPID_EDITOR_SERVER_URL}#`;
 
   const centerPoint = taskCenterPoint(mapBounds, task);
@@ -324,10 +329,15 @@ export const constructRapidURI = function (task, mapBounds, options) {
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join("/");
 
   const selectedEntityComponent = "id=" + osmObjectParams(task, true);
-  const commentUriComponent =
+
+  const commentUriComponent = replacedComment ?
+    "comment=" +
+    encodeURIComponent(replacedComment) +
+    constructChangesetUrl(task) :
     "comment=" +
     encodeURIComponent(task.parent.checkinComment) +
     constructChangesetUrl(task);
+
   const sourceComponent =
     "source=" + encodeURIComponent(task.parent.checkinSource);
 
@@ -368,7 +378,8 @@ export const constructLevel0URI = function (
   task,
   mapBounds,
   options,
-  taskBundle
+  taskBundle,
+  replacedComment
 ) {
   const baseUriComponent = `${process.env.REACT_APP_LEVEL0_EDITOR_SERVER_URL}?`;
 
@@ -376,7 +387,10 @@ export const constructLevel0URI = function (
   const mapCenterComponent =
     "center=" + [centerPoint.lat, centerPoint.lng].join(",");
 
-  const commentComponent =
+    const commentComponent = replacedComment ?
+    "comment=" +
+    encodeURIComponent(replacedComment) +
+    constructChangesetUrl(task) :
     "comment=" +
     encodeURIComponent(task.parent.checkinComment) +
     constructChangesetUrl(task);
@@ -391,11 +405,15 @@ export const constructLevel0URI = function (
 };
 
 /**
- * Extracts osm identifiers from the given task's (or array of tasks) features
+ * Extracts numerical osm identifiers and osm types from the given task's (or array of tasks) features
  * and returns them as a comma-separated string by default. Features with
  * missing osm ids are skipped, and an empty string is returned if the task has
  * no features or none of its features have osm ids
  *
+ * Osm types will be extracted from osm id properties("@id", "osmid", "osmIdentifier", "id") if defined 
+ * to allow for customization from user 
+ * if there is no osm type defined in osm id properties, it will be generated based on geometry type
+ * 
  * To support varying formats required by different editors, the output string
  * can optionally be customized with options that control whether the entity
  * type is abbreviated or not, a separator character to be used between
@@ -415,9 +433,31 @@ export const osmObjectParams = function (
       objects = objects.concat(
         _compact(
           task.geometries.features.map((feature) => {
-            const osmId = AsIdentifiableFeature(feature).osmId();
+            const currentFeature = AsIdentifiableFeature(feature)
+            const osmId = currentFeature.osmId();
+            const osmType = currentFeature.osmType();
+            let areAllTypesValid;
             if (!osmId) {
               return null;
+            }
+
+            if (osmType) {
+              areAllTypesValid = currentFeature.checkValidTypeMultipleIds(osmType);
+            }
+            // We will use osm types defined by user if they exist and are consistent, if not fall back to geometry type 
+            if (osmType && areAllTypesValid) {
+              switch(osmType) {
+                case "node":
+                  return `${
+                    abbreviated ? "n" : "node"
+                  }${entitySeparator}${osmId}`;
+                case "way":
+                  return `${abbreviated ? "w" : "way"}${entitySeparator}${osmId}`;
+                case "relation":
+                  return `${
+                    abbreviated ? "r" : "relation"
+                  }${entitySeparator}${osmId}`;
+              }
             }
 
             switch (feature.geometry.type) {

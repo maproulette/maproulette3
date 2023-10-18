@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: 'Work on',
   },
 
+  categorizeLabel: {
+    id: 'ChallengeFilterSubnav.filter.categorize.label',
+    defaultMessage: 'Categorize',
+  },
+
   locationLabel: {
     id: 'ChallengeFilterSubnav.filter.location.label',
     defaultMessage: 'Location',
@@ -26,7 +31,12 @@ export default defineMessages({
 
   searchLabel: {
     id: 'ChallengeFilterSubnav.filter.search.label',
-    defaultMessage: 'Search by name',
+    defaultMessage: 'Search by name or Id',
+  },
+
+  searchLabelForId: {
+    id: 'ChallengeFilterSubnav.filter.searchForId.label',
+    defaultMessage: 'Search for task Id',
   },
 
   clearFiltersLabel: {
@@ -42,5 +52,30 @@ export default defineMessages({
   otherOption: {
     id: "ChallengeFilterSubnav.filter.keywords.otherLabel",
     defaultMessage: "Other:",
+  },
+
+  anything: {
+    id: "ChallengeFilterSubnav.filter.categorization.anything",
+    defaultMessage: "Anything",
+  },
+
+  set: {
+    id: "ChallengeFilterSubnav.filter.categorization.set",
+    defaultMessage: "You have not set any categories.",
+  },
+
+  add: {
+    id: "ChallengeFilterSubnav.filter.categorization.add",
+    defaultMessage: "Add:",
+  },
+
+  delete: {
+    id: "ChallengeFilterSubnav.filter.categorization.delete",
+    defaultMessage: "You must delete a category.",
+  },
+
+  new: {
+    id: "ChallengeFilterSubnav.filter.categorization.new",
+    defaultMessage: "to add a new one.",
   },
 })

@@ -27,6 +27,7 @@ import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
 import WithTaskTags from '../../../HOCs/WithTaskTags/WithTaskTags'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import WithTaskFeatureProperties from '../../../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
@@ -37,6 +38,7 @@ import TaskConfirmationModal
 import TaskTags from '../../../TaskTags/TaskTags'
 import messages from './Messages'
 import { constructChangesetUrl } from '../../../../utils/constructChangesetUrl'
+import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement'
 import './ActiveTaskControls.scss'
 
 
@@ -56,6 +58,7 @@ export class ActiveTaskControls extends Component {
     tags: null,
     revisionLoadBy: TaskReviewLoadMethod.all,
     doneLoadByFromHistory: false,
+    needsReview: this.props.challenge.reviewSetting === 1 ? true : undefined
   }
 
   setComment = comment => this.setState({comment})
@@ -83,13 +86,19 @@ export class ActiveTaskControls extends Component {
       null
   }
 
+
+
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
+    const {task, taskFeatureProperties} = this.props
     const allowed = this.allowedEditors()
     // If the given editor isn't allowed, default to first allowed editor
     if (allowed && allowed.indexOf(value) === -1) {
       value = allowed[0]
     }
+
+    const comment = task.parent.checkinComment
+    const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
 
     this.setState({taskBeingCompleted: this.props.task.id})
     this.props.editTask(
@@ -100,7 +109,8 @@ export class ActiveTaskControls extends Component {
         imagery: this.props.source.id !== OPEN_STREET_MAP ? this.props.source : undefined,
         photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null,
       },
-      this.props.taskBundle
+      this.props.taskBundle,
+      replacedComment
     )
   }
 
@@ -108,6 +118,9 @@ export class ActiveTaskControls extends Component {
     const isVirtual = _isFinite(this.props.virtualChallengeId)
     const challengeId = isVirtual ? this.props.virtualChallengeId :
                                     this.props.challengeId
+    this.props.updateUserAppSetting(this.props.user.id, {
+      'loadMethod': loadMethod,
+    })     
     this.props.setTaskLoadBy(challengeId, isVirtual, loadMethod)
   }
 
@@ -236,12 +249,13 @@ export class ActiveTaskControls extends Component {
     else if (!this.props.task) {
       return null
     }
-
+    const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
     const needsRevised = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
     const isEditingTask =
       _get(this.props, 'editor.taskId') === this.props.task.id &&
-      _get(this.props, 'editor.success') === true
+      _get(this.props, 'editor.success') === true || 
+      editMode
 
     const editorLoading =
       _get(this.props, 'editor.taskId') !== this.props.task.id &&
@@ -333,6 +347,7 @@ export class ActiveTaskControls extends Component {
                 complete={this.initiateCompletion}
                 cancelEditing={this.cancelEditing}
                 needsRevised={needsRevised}
+                editMode={editMode}
               />
              }
 
@@ -401,7 +416,9 @@ export default WithSearch(
       WithTaskTags(
         WithTaskReview(
           WithKeyboardShortcuts(
-            injectIntl(ActiveTaskControls)
+            WithTaskFeatureProperties(
+              injectIntl(ActiveTaskControls)
+            )
           )
         )
       )

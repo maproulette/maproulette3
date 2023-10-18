@@ -7,7 +7,7 @@ import _debounce from 'lodash/debounce'
 import queryString from 'query-string'
 import { toLatLngBounds, fromLatLngBounds }
        from '../../../services/MapBounds/MapBounds'
-import { SEARCH_TYPE_PROJECT } from '../../SearchTypeFilter/SearchTypeFilter'
+import { SEARCH_TYPE_PROJECT, SEARCH_TYPE_TASK} from '../../SearchTypeFilter/SearchTypeFilter'
 
 /**
  * WithSearchRoute adds functionality to WithSearch to add/remove values to the URL route
@@ -30,8 +30,10 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
     routeCriteria = {
        sort: param => this.props.setSearchSort({sortBy: param}),
        difficulty: param => this.props.setSearchFilters({difficulty: parseInt(param, 10)}),
+       categorizationKeywords: param => this.props.setCategorizationFilters(param.split(',')),
        keywords: param => this.props.setKeywordFilter(param.split(',')),
        location: param => this.props.setSearchFilters({location: param}),
+       task: param => this.props.setSearchFilters({task: param, searchType: SEARCH_TYPE_TASK}),
        project: param => this.props.setSearchFilters({project: param, searchType: SEARCH_TYPE_PROJECT}),
        query: param => this.props.setSearch(param),
        challengeSearch: param => this.props.setChallengeSearchMapBounds(toLatLngBounds(param), true),
@@ -52,7 +54,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
             // Clear any redux values first before setting the route criteria
             const routeValues = this.props.history.location.search
             this.props.clearSearchFilters(false)
-            this.props.clearSearch(searchGroup)
+            this.props.clearSearchDispatch(searchGroup)
             this.props.clearMapBounds(searchGroup)
 
             executeRouteSearch(this.routeCriteria, routeValues)
@@ -101,6 +103,11 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
       addSearchCriteriaToRoute(this.props.history, {keywords: keywords ? keywords.join(',') : keywords})
     }
 
+    setCategorizationFilters = (categorization) => {
+      this.props.setCategorizationFilters(categorization)
+      addSearchCriteriaToRoute(this.props.history, {categorizationKeywords: categorization ? categorization.join(',') : categorization})
+    }
+
     clearSearchFilters = (clearRoute = true) => {
       this.props.clearSearchFilters(clearRoute)
       clearRoute && this.props.history.push(this.props.history.location.pathname)
@@ -124,6 +131,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
                             setSearchFilters={this.setSearchFilters}
                             removeSearchFilters={this.removeSearchFilters}
                             setKeywordFilter={this.setKeywordFilter}
+                            setCategorizationFilters={this.setCategorizationFilters}
                             clearSearchFilters={this.clearSearchFilters}
                             updateChallengeSearchMapBounds={this.updateChallengeSearchMapBounds} />
        )

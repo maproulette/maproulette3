@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "MapRoulette",
   },
 
+  APIVersionLabel: {
+    id: "Footer.APIversionLabel",
+    defaultMessage: "MaprouletteAPI",
+  },
+
   getHelp: {
     id: "Footer.getHelp",
     defaultMessage: "Get Help",
@@ -42,5 +47,10 @@ export default defineMessages({
   submitEmail: {
     id: "Footer.email.submit.label",
     defaultMessage: "Submit",
+  },
+
+  donateButton: {
+    id: "Footer.email.donateButton",
+    defaultMessage: "Donate to Maproulette",
   },
 })

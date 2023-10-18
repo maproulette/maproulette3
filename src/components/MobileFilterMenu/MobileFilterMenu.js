@@ -8,6 +8,8 @@ import FilterByLocation
        from '../ChallengePane/ChallengeFilterSubnav/FilterByLocation'
 import FilterByKeyword
        from '../ChallengePane/ChallengeFilterSubnav/FilterByKeyword'
+import FilterByCategorizationKeywords 
+       from '../ChallengePane/ChallengeFilterSubnav/FilterByCategorizationKeywords'
 import WithDeactivateOnOutsideClick from
        '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import './MobileFilterMenu.scss'
@@ -26,8 +28,9 @@ export class MobileFilterMenu extends Component {
                       toggleActive={this.props.toggleActive}>
         <Menu {...this.props}>
           <FilterByDifficulty asMenuList {...this.props} />
-          <LocationFilter asMenuList {...this.props} />
           <FilterByKeyword asMenuList {...this.props} />
+          <LocationFilter asMenuList {...this.props} />
+          <FilterByCategorizationKeywords asMenuList {...this.props} />
         </Menu>
       </SimpleDropdown>
     )

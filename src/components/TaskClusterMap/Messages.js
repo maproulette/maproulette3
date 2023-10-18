@@ -32,4 +32,8 @@ export default defineMessages({
     id: "TaskClusterMap.message.moveMapToRefresh.label",
     defaultMessage: "Click to show tasks"
   },
+  refreshTasks: {
+    id: "TaskClusterMap.message.refreshTasks.label",
+    defaultMessage: "Click to refresh tasks"
+  },
 })

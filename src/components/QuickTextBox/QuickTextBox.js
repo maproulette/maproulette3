@@ -24,10 +24,14 @@ export default class QuickTextBox extends Component {
    * @private
    */
   checkForSpecialKeys = (e) => {
-    if (e.key === "Escape") {
+    // Ignore if modifier keys were pressed
+    if (e.metaKey || e.altKey || e.ctrlKey) {
+      return
+    }
+    else if (e.key === "Escape" && !this.props.suppressControls) {
       this.props.cancel()
     }
-    else if (e.key === "Enter") {
+    else if (e.key === "Enter" && !this.props.suppressControls) {
       this.props.done()
     }
   }
@@ -86,7 +90,7 @@ QuickTextBox.propTypes = {
   placeHolder: PropTypes.string,
   /** Set to true for smaller size */
   small: PropTypes.bool,
-  /** Set to true to suppress done/cancel controls */
+  /** Set to true to suppress done/cancel button and keyboard controls */
   suppressControls: PropTypes.bool,
 }
 

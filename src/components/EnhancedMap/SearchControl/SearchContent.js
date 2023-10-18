@@ -9,8 +9,12 @@ import messages from './Messages'
 
 const SearchContent = props => {
   const checkForSpecialKeys = e => {
+    // Ignore if modifier keys were pressed
+    if (e.metaKey || e.altKey || e.ctrlKey) {
+      return
+    }
     // Esc clears search, Enter signals completion
-    if (e.key === "Escape") {
+    else if (e.key === "Escape") {
       props.clearNominatimSearch()
     }
     else if (e.key === "Enter") {
@@ -80,7 +84,7 @@ const SearchContent = props => {
             {resultItems.length === 0 ?
               <FormattedMessage {...messages.noResults } /> :
               <ol
-                className="mr-o-2 mr-max-w-screen50 mr-whitespace-no-wrap mr-overflow-x-scroll"
+                className="mr-o-2 mr-max-w-screen50 mr-whitespace-nowrap mr-overflow-x-scroll"
                 onClick={() => props.closeSearch()}
               >
                 {resultItems}

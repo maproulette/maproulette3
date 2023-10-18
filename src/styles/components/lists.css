@@ -22,8 +22,6 @@
 }
 
 .mr-list-nav-mobile {
-  @apply;
-
   li {
     & + li {
       @apply mr-mt-4;

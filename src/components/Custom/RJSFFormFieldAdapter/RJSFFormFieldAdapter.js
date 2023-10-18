@@ -61,7 +61,6 @@ export const CustomArrayFieldTemplate = props => {
   const addLabel = props.uiSchema["ui:addLabel"] ||
     <FormattedMessage {...messages.addPriorityRuleLabel} />
   const deleteLabel = props.uiSchema["ui:deleteLabel"]
-
   const itemFields = _map(props.items, element =>
     <div
       key={element.index}
@@ -96,7 +95,7 @@ export const CustomArrayFieldTemplate = props => {
       {props.canAdd &&
        <div className="array-field__block-controls">
          <button
-           className="mr-button mr-button mr-button--small"
+           className="mr-button mr-button--small"
            onClick={props.onAddClick}
          >
            {addLabel}
@@ -147,6 +146,20 @@ export const CustomFieldTemplate = function(props) {
          {description}
        </React.Fragment>
       }
+    </div>
+  )
+}
+
+export const CustomNotificationFieldTemplate = function(props) {
+  const {classNames, children, description, errors} = props
+  return (
+    <div className={classNames}>
+       <React.Fragment>
+         <LabelWithHelp {...props} control />
+         {children}
+         {errors}
+         {description}
+       </React.Fragment>
     </div>
   )
 }
@@ -320,7 +333,9 @@ export const TagsInputField = props => {
  * and it will be set with the text content of the uploaded file.
  */
 export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAreaClassName}) => {
-  if (readonly) {
+  const idRequirements = (id !== "root_taskWidgetLayout" && id !== "root")
+
+  if (readonly && idRequirements) {
     return (
       <div className="readonly-file mr-text-pink">
         <FormattedMessage {...messages.readOnlyFile} />
@@ -335,18 +350,38 @@ export const DropzoneTextUpload = ({id, onChange, readonly, formContext, dropAre
       disablePreview
       onDrop={files => {
         formContext[id] = {file: files[0]}
-        onChange(files[0].name)
+        onChange(files[0] ? files[0].name : files[0])
       }}
     >
       {({acceptedFiles, getRootProps, getInputProps}) => {
-        const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}</p> : (
+        const [uploadErrorText, setUploadErrorText] = useState('')
+
+        if (acceptedFiles.length > 0) {
+          const fileName = acceptedFiles[0].name;
+          if (!fileName.endsWith('.geojson') && !fileName.endsWith('.json')) {
+            acceptedFiles.pop();
+            setUploadErrorText(
+              <span className="mr-mr-4 mr-text-red-light mr-ml-1">
+                { idRequirements ?
+                  <FormattedMessage {...messages.uploadErrorGeoJSON} /> :
+                  <FormattedMessage {...messages.uploadErrorJSON} />
+                } 
+              </span>
+            );
+          }
+        }
+        const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}<input {...getInputProps()} /></p> : (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
               viewBox='0 0 20 20'
               sym="upload-icon"
               className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
             />
-            <FormattedMessage {...messages.uploadFilePrompt} />
+            {uploadErrorText}
+              { idRequirements ?
+                <FormattedMessage {...messages.uploadFilePromptGeoJSON} /> :
+                <FormattedMessage {...messages.uploadFilePromptJSON} />
+              } 
             <input {...getInputProps()} />
           </span>
         )
@@ -382,8 +417,7 @@ export const MarkdownDescriptionField = ({id, description}) => {
 }
 
 export const LabelWithHelp = props => {
-  const {id, displayLabel, label, required, rawHelp, schema, uiSchema} = props
-
+  const {id, displayLabel, label, required, control, rawHelp, schema, uiSchema} = props
   if (displayLabel === false || uiSchema["ui:displayLabel"] === false) {
     return null
   }
@@ -397,7 +431,7 @@ export const LabelWithHelp = props => {
 
   return (
     <div className="mr-mb-2 mr-flex">
-      <label htmlFor={id} className="mr-text-mango mr-text-md mr-uppercase mr-mb-2">
+      <label htmlFor={id} className={control ? "mr-text-base mr-text-mango" : "mr-text-mango mr-text-md mr-uppercase mr-mb-2"}>  
         {normalizedLabel}
         {required && <span className="mr-text-red-light mr-ml-1">*</span>}
       </label>

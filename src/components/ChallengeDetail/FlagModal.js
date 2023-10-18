@@ -3,6 +3,7 @@ import External from "../External/External";
 import Modal from "../Modal/Modal";
 import FlagCommentInput from "./FlagCommentInput";
 import messages from "./Messages";
+import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import { FormattedMessage } from "react-intl";
 
 const FlagModel = (props) => {
@@ -18,7 +19,7 @@ const FlagModel = (props) => {
           <FormattedMessage {...messages.email} />
         </h2>
         <div className="mr-text-base mr-mt-4 mr-text-yellow">
-         <FormattedMessage {...messages.modalSubtitle} />
+         <MarkdownContent markdown={props.intl.formatMessage(messages.modalSubtitle)} />
         </div>
         <FlagCommentInput challenge={props.challenge} {...props} />
       </Modal>

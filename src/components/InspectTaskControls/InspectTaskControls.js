@@ -8,6 +8,7 @@ import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import { OPEN_STREET_MAP } from '../../services/VisibleLayer/LayerSources'
+import { replacePropertyTags } from '../../hooks/UsePropertyReplacement/UsePropertyReplacement'
 import AsManager from '../../interactions/User/AsManager'
 import WithSearch from '../HOCs/WithSearch/WithSearch'
 import WithChallengePreferences
@@ -15,6 +16,7 @@ import WithChallengePreferences
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithKeyboardShortcuts
        from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import WithTaskFeatureProperties from '../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
 import TaskEditControl
        from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
 import UserEditorSelector
@@ -54,6 +56,11 @@ export class InspectTaskControls extends Component {
       return
     }
 
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
     const inspectShortcuts = this.props.keyboardShortcutGroups[shortcutGroup]
     if (event.key === inspectShortcuts.prevTask.key) {
       this.prevTask()
@@ -65,6 +72,10 @@ export class InspectTaskControls extends Component {
 
   /** Open the task in an editor */
   pickEditor = ({ value }) => {
+    const {task, taskFeatureProperties} = this.props
+    const comment = task.parent.checkinComment
+    const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
+
     this.props.editTask(
       value,
       this.props.task,
@@ -73,7 +84,8 @@ export class InspectTaskControls extends Component {
         imagery: this.props.source.id !== OPEN_STREET_MAP ? this.props.source : undefined,
         photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null,
       },
-      this.props.taskBundle
+      this.props.taskBundle,
+      replacedComment
     )
   }
 
@@ -155,7 +167,9 @@ export default WithSearch(
   WithChallengePreferences(
     WithVisibleLayer(
       WithKeyboardShortcuts(
-        InspectTaskControls
+        WithTaskFeatureProperties(
+          InspectTaskControls
+        )
       )
     )
   ),

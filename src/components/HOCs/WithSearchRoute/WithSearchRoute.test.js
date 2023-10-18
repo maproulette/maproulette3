@@ -14,7 +14,7 @@ beforeEach(() => {
   basicProps.setSearchFilters = jest.fn()
   basicProps.setSearchSort = jest.fn()
   basicProps.setKeywordFilter = jest.fn()
-  basicProps.clearSearch = jest.fn()
+  basicProps.clearSearchDispatch = jest.fn()
   basicProps.clearSearchFilters = jest.fn()
   basicProps.clearMapBounds = jest.fn()
 })
@@ -28,7 +28,7 @@ test("executeRouteSearch clears old redux values first", () => {
   )
   expect(basicProps.clearSearchFilters).toHaveBeenCalled()
   expect(basicProps.clearMapBounds).toHaveBeenCalled()
-  expect(basicProps.clearSearch).toHaveBeenCalled()
+  expect(basicProps.clearSearchDispatch).toHaveBeenCalled()
 })
 
 test("executeRouteSearch executes setSearch when passed query=", () => {

@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Refresh",
   },
 
+  toggleMap: {
+    id: "Review.TaskAnalysisTable.toggleMap",
+    defaultMessage: "Toggle Map",
+  },
+
   startReviewing: {
     id: "Review.TaskAnalysisTable.startReviewing",
     defaultMessage: "Review these Tasks",
@@ -94,6 +99,21 @@ export default defineMessages({
     defaultMessage: "Export mapper CSV"
   },
 
+  exportReviewTableCSVLabel: {
+    id: "Review.TaskAnalysisTable.exportReviewTableCSVLabel",
+    defaultMessage: "Export Review Table CSV"
+  },
+
+  requiredForExport: {
+    id: "Review.TaskAnalysisTable.requiredForExport",
+    defaultMessage: "Your can only export one"
+  },
+
+  requiredProject: {
+    id: "Review.TaskAnalysisTable.requiredProject",
+    defaultMessage: "project at a time."
+  },
+
   actionsColumnHeader: {
     id: "Review.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
@@ -127,6 +147,11 @@ export default defineMessages({
   idLabel: {
     id: "Review.Task.fields.id.label",
     defaultMessage: "Internal Id",
+  },
+
+  featureIdLabel: {
+    id: "Review.Task.fields.featureId.label",
+    defaultMessage: "Feature Id",
   },
 
   statusLabel: {
@@ -224,11 +249,22 @@ export default defineMessages({
     defaultMessage: "Challenge",
   },
 
+  challengeIdLabel: {
+    id: "Review.fields.challengeId.label",
+    defaultMessage: "Challenge Id",
+  },
+
+  
   projectLabel: {
     id: "Review.fields.project.label",
     defaultMessage: "Project",
   },
 
+  projectIdLabel: {
+    id: "Review.fields.projectId.label",
+    defaultMessage: "Project Id",
+  },
+  
   tagsLabel: {
     id: "Review.fields.tags.label",
     defaultMessage: "Tags",

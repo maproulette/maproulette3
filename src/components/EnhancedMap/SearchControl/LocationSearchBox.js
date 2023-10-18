@@ -24,7 +24,11 @@ export class LocationSearchBox extends Component {
    * @private
    */
   checkForSpecialKeys = (e) => {
-    if (e.key === "Escape") {
+    // Ignore if modifier keys were pressed
+    if (e.metaKey || e.altKey || e.ctrlKey) {
+      return
+    }
+    else if (e.key === "Escape") {
       this.props.clearNominatimSearch()
     }
     else if (e.key === "Enter") {

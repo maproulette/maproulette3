@@ -530,6 +530,8 @@ export const fetchTaskHistory = function(taskId) {
       }
 
       return normalizedHistory
+    }).catch(error => {
+      console.log(error)
     })
   }
 }
@@ -912,7 +914,7 @@ export const deleteTask = function(taskId) {
   }
 }
 
-export const bundleTasks = function(taskIds, bundleName="") {
+export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") {
   return function(dispatch) {
     return new Endpoint(api.tasks.bundle, {
       json: {name: bundleName, taskIds},
@@ -925,6 +927,11 @@ export const bundleTasks = function(taskIds, bundleName="") {
         )
       }
       else {
+        if(bundleTypeMismatch == "cooperative") {
+          dispatch(addError(AppErrors.task.bundleCooperative))
+        } else if (bundleTypeMismatch == "notCooperative") {
+          dispatch(addError(AppErrors.task.bundleNotCooperative))
+        }
         dispatch(addError(AppErrors.task.bundleFailure))
         console.log(error.response || error)
       }

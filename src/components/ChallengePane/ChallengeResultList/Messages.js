@@ -11,7 +11,27 @@ export default defineMessages({
 
   noResults: {
     id: "Challenge.results.noResults",
-    defaultMessage: "No Results",
+    defaultMessage: "Cannot find matching name",
+  },
+
+  noChallengeIds: {
+    id: "Challenge.detectedIds.noChallengeIds",
+    defaultMessage: "Cannot find matching Id",
+  },
+
+  challenge: {
+    id: "Challenge.detectedIds.challenge",
+    defaultMessage: "Challenge ",
+  },
+
+  project: {
+    id: "Challenge.detectedIds.project",
+    defaultMessage: "Project ",
+  },
+
+  locatedIn: {
+    id: 'ChallengeFilterSubnav.filter.locatedIn.label',
+    defaultMessage: 'Located in ',
   },
 
   tooManyTasksLabel: {
@@ -27,5 +47,25 @@ export default defineMessages({
   loadMoreLabel: {
     id: "Challenge.controls.loadMore.label",
     defaultMessage: "More Results",
+  },
+
+  invalidId: {
+    id: "Challenge.controls.invalidId.label",
+    defaultMessage: "Id must be a number.",
+  },
+
+  doesntExist: {
+    id: "Challenge.controls.doesntExist.label",
+    defaultMessage: "No discoverable task with this id exists.",
+  },
+
+  task: {
+    id: "Challenge.controls.task.label",
+    defaultMessage: "Task",
+  },
+
+  goTo: {
+    id: "Challenge.controls.goTo.label",
+    defaultMessage: "Go directly to:",
   },
 })

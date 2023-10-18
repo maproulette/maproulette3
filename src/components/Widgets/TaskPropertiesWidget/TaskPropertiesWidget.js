@@ -23,14 +23,26 @@ export default class TaskPropertiesWidget extends Component {
   render() {
     const taskList = _get(this.props.taskBundle, 'tasks') || [this.props.task]
     const propertyLists = _map(taskList, (task) => {
-      const properties = AsMappableTask(task).osmFeatureProperties(this.props.osmElements)
+      const featurePropertiesList = AsMappableTask(task).osmFeatureProperties(this.props.osmElements)
+
       return (
         <div key={task.id} className="mr-mb-6">
           <div className="mr-text-yellow">
             <FormattedMessage {...messages.taskLabel} values={{taskId: task.id}}/>
           </div>
-          <PropertyList featureProperties={properties} hideHeader
-                        lightMode={false} {...this.props} />
+          {
+            featurePropertiesList.map((feature, index) => {
+              return (
+                <div key={index}>
+                  <div className="mr-text-yellow mr-ml-2">
+                    {feature.properties?.id || feature.geometry?.type}
+                  </div>
+                  <PropertyList featureProperties={feature.properties} hideHeader
+                    lightMode={false} {...this.props} />
+                </div>
+              )
+            })
+          }
         </div>
       )
     })

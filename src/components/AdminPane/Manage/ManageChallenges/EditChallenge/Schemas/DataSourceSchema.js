@@ -33,6 +33,7 @@ export const jsSchema = (
         title: intl.formatMessage(messages.nameLabel),
         type: "string",
         minLength: 3,
+        description: intl.formatMessage(messages.nameDescription), 
       },
     },
     required: ["name"],

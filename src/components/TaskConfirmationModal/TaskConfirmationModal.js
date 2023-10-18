@@ -50,10 +50,15 @@ export class TaskConfirmationModal extends Component {
 
   handleKeyboardShortcuts = event => {
     // Ignore if shortcut group is not active
-    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+    if (_isEmpty(this.props.activeKeyboardShortcuts)) {
       return
     }
 
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
     if (event.key ===
         this.props.keyboardShortcutGroups.taskConfirmation.confirmSubmit.key &&
         event.shiftKey) {

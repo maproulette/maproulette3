@@ -65,6 +65,11 @@ export default class AutosuggestMentionTextArea extends Component {
   }
 
   handleKeyDown = (e, dropdown, downshift) => {
+    // Ignore if modifier keys were pressed
+    if (e.metaKey || e.altKey || e.ctrlKey) {
+      return
+    }
+    
     if (dropdown.isDropdownVisible) {
       if (e.key === "ArrowUp" ||
           e.key === "ArrowDown" ||

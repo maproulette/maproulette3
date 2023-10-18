@@ -90,6 +90,7 @@ describe("WithWidgetWorkspaces", () => {
     const TestWrapped = WithWidgetWorkspaces(TestComponent)
     const { getByText } = global.withProvider(
       <TestWrapped
+        match={{path: ''}}
         history={{ location: { pathname: "", search: "" } }}
         getUserAppSetting={() => null}
       />
@@ -97,6 +98,23 @@ describe("WithWidgetWorkspaces", () => {
     const component = getByText("Welcome Back!");
     expect(component).toBeInTheDocument();
   });
+
+  it("doesn't render signin for public task page", () => {
+    const TestComponent = () => <div>Test</div>
+    const TestWrapped = WithWidgetWorkspaces(TestComponent)
+    const { queryByText } = global.withProvider(
+    <TestWrapped
+      match={{ path: '/challenge/:challengeId/task/:taskId' }}
+      task={{id: 1, parent: {id: 2, parent: {id: 3}}}}
+      taskId={1}
+      challengeId={2}
+      history={{ location: { pathname: '', search: '' } }}
+      getUserAppSetting={() => null}
+    />
+    )
+    const component = queryByText('Welcome Back!')
+    expect(component).not.toBeInTheDocument()
+  })
 
   it("renders wrapped component if user is logged in", () => {
     const TestComponent = () => <div>Test</div>

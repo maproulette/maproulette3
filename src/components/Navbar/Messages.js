@@ -4,6 +4,16 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with Navbar.
  */
 export default defineMessages({
+  blog: {
+    id: 'Navbar.links.blog',
+    defaultMessage: "Blog",
+  },
+
+  donate: {
+    id: 'Navbar.links.donate',
+    defaultMessage: "Donate",
+  },
+
   dashboard: {
     id: 'Navbar.links.dashboard',
     defaultMessage: "Dashboard",
@@ -22,6 +32,11 @@ export default defineMessages({
   inbox: {
     id: 'Navbar.links.inbox',
     defaultMessage: "Inbox",
+  },
+
+  sent: {
+    id: 'Navbar.links.sent',
+    defaultMessage: "Sent",
   },
 
   review: {
