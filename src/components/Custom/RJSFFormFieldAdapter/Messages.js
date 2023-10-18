@@ -4,9 +4,14 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with RJSFFormFieldAdapter.
  */
 export default defineMessages({
-  uploadFilePrompt: {
-    id: "Form.textUpload.prompt",
+  uploadFilePromptGeoJSON: {
+    id: "Form.textUpload.promptGeoJSON",
     defaultMessage: "Drop GeoJSON file here or click to select file",
+  },
+
+  uploadFilePromptJSON: {
+    id: "Form.textUpload.promptJSON",
+    defaultMessage: "Drop JSON file here or click to select file",
   },
 
   readOnlyFile: {
@@ -29,8 +34,18 @@ export default defineMessages({
     defaultMessage: "Preview",
   },
 
-  uploadErrorText: {
-    id: 'Form.controls.markdownField.uploadErrorText.label',
-    defaultMessage: "Upload Failed! File must have '.geojson' extension.",
+  uploadErrorGeoJSON: {
+    id: 'Form.controls.markdownField.uploadErrorGeoJSON.label',
+    defaultMessage: "Upload Failed! File must have '.json' or .geojson' extension.",
+  },
+
+  uploadErrorJSON: {
+    id: 'Form.controls.markdownField.uploadErrorJSON.label',
+    defaultMessage: "Upload Failed! File must have '.json' extension.",
+  },
+
+  formatErrorJSON: {
+    id: 'Form.controls.markdownField.formatErrorJSON.label',
+    defaultMessage: "Upload Failed! Layout must be exported from the task completion flow.",
   }
 })

@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Nearby Tasks",
   },
 
+  filterListLabel: {
+    id: "Widgets.ReviewNearbyTasksWidget.controls.filterList.label",
+    defaultMessage: "Filter By:"
+  },
+
   clearFiltersLabel: {
     id: "Widgets.ReviewNearbyTasksWidget.controls.clearFilters.label",
     defaultMessage: "Clear Filters",

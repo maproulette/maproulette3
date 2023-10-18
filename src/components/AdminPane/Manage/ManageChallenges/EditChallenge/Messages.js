@@ -400,6 +400,12 @@ will not be able to make sense of it.
       "when managing your challenge.",
   },
 
+  taskWidgetLayoutReadOnly: {
+    id: "Admin.EditChallenge.form.taskWidgetLayout.readOnly",
+    defaultMessage:
+      "Upload a widget layout to be used as a recommendation for the mapper in the task completion workflow.",
+  },
+
   remoteGeoJsonLabel: {
     id: "Admin.EditChallenge.form.remoteGeoJson.label",
     defaultMessage: "I have a URL to the GeoJSON data",

@@ -961,6 +961,21 @@ export const fetchChallenges = function (
       challengeData.localGeoJSON = JSON.parse(challengeData.localGeoJSON);
     }
 
+    // If there is local JSON content being transmitted as a string, parse
+    // it into JSON first.
+    if (!challengeData.taskWidgetLayout.workspace && challengeData.taskWidgetLayout) {
+      try {
+        if (!(JSON.parse(challengeData.taskWidgetLayout).workspace.name === "taskCompletion")) {
+          throw new Error("Widget layout for task completion flow with the wrong format was submitted, it was not included in the save.")
+        }
+        challengeData.taskWidgetLayout = JSON.parse(challengeData.taskWidgetLayout)
+      } catch(error) {
+        challengeData.taskWidgetLayout = "";
+        console.error(error);
+      }
+    }
+
+
     // We need to remove any old challenge keywords first, prior to the
     // update.
     return removeChallengeKeywords(
@@ -1011,6 +1026,7 @@ export const fetchChallenges = function (
           "taskStyles",
           "requiresLocal",
           "reviewSetting",
+          "taskWidgetLayout",
         ]
       );
 
