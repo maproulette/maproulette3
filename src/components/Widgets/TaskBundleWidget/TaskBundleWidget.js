@@ -60,7 +60,7 @@ const descriptor = {
   widgetKey: 'TaskBundleWidget',
   label: messages.label,
   targets: [WidgetDataTarget.task],
-  minWidth: 4,
+  minWidth: 6,
   defaultWidth: 6,
   minHeight: 12,
   defaultHeight: 14,
