@@ -3,7 +3,7 @@
 
 name: Node.js CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
@@ -22,11 +22,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+        cache-dependency-path: 'yarn.lock'
 
     - name: Install dependencies
       run: yarn install
