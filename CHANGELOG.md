@@ -7,6 +7,27 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.13.2] - 2023-10-17
+Realease with [maproulette-backend_v4.4.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.8)
+
+### Features
+- Add lasso and virtual challenge creation functionality to challenge dashboard map - @CollinBeczak
+- Add user setting for random/nearby selection - @CollinBeczak
+- Add drop box for recommended widget layout in challenge creation form - @CollinBeczak
+- Add notice for recommended widget layouts in task completion flow - @CollinBeczak
+- Add user app setting for saving filters in task bundle widget in task completion workflow - @AndrewPhilbin
+- Add visual filter indications for all dropdown task filters - @AndrewPhilbin
+
+### Fixes
+- Remove word number requirement from challenge editor - @CollinBeczak
+- Fix task property search clear bug - @AndrewPhilbin
+- Fix workspace layout name keypress crash bug - @AndrewPhilbin
+- Fix confirmation keyboard shortcuts - @CollinBeczak
+
+### System Updates
+- Update all node version references to node 16 - @CollinBeczak
+- Add Stringified widget layout JSON to challenge table - @CollinBeczak
+
 ## [v3.13.1] - 2023-9-12
 Realease with [maproulette-backend_v4.4.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.7)
 
