@@ -170,13 +170,6 @@ set one up through the
 The project was bootstrapped with
 [Create React App](https://github.com/facebookincubator/create-react-app).
 
-Branch management follows
-[GitFlow](https://datasift.github.io/gitflow/IntroducingGitFlow.html) with
-active development occurring on the `develop` branch. Pull requests should
-target the `develop` branch. The main branch always contains the latest
-release, and the `prerelease` branch contains features and fixes promoted from
-`develop` that are candidates for the next release to `main`.
-
 Release versions follow [Semantic Versioning](https://semver.org/).
 
 ## Unit Tests
