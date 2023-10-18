@@ -11,7 +11,7 @@ const descriptor = {
   widgetKey: 'ChallengeTasksWidget',
   label: messages.label,
   targets: [WidgetDataTarget.challenge],
-  minWidth: 4,
+  minWidth: 6,
   defaultWidth: 8,
   defaultHeight: 49,
   defaultConfiguration: {
