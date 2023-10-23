@@ -12,6 +12,8 @@ import { jsSchema as prioritiesJsSchema,
          uiSchema as prioritiesUiSchema } from './BulkSchemas/PrioritiesSchema'
 import { jsSchema as basemapJsSchema,
          uiSchema as basemapUiSchema } from './BulkSchemas/BasemapSchema'
+import { jsSchema as dataSourceJsSchema,
+         uiSchema as dataSourceUiSchema } from './BulkSchemas/DataSourceSchema'
 import messages from './Messages'
 
 // Define individual workflow steps. Steps can be driven by either schemas or
@@ -52,6 +54,15 @@ const basemapStep = {
   viewBox: "0 0 30 37.5",
 }
 
+const dataSourceStep = {
+  id: 'Data Source',
+  description: <FormattedMessage {...messages.dataSourceStepDescription} />,
+  jsSchema: dataSourceJsSchema,
+  uiSchema: dataSourceUiSchema,
+  icon: "basemap-icon",
+  viewBox: "0 0 30 37.5",
+}
+
 const prioritiesStep = {
   id: 'Priorities',
   description: <FormattedMessage {...messages.prioritiesStepDescription} />,
@@ -63,6 +74,11 @@ const prioritiesStep = {
 
 // String together workflow steps for creating a new challenge
 const bulkEditSteps = {
+  'Data Source': Object.assign({}, dataSourceStep, {
+    next: 'AdvancedOptions',
+    previous: 'AdvancedOptions',
+    canFinish: true,
+  }),
   'Discoverability': Object.assign({}, discoverabilityStep, {
     next: 'AdvancedOptions',
     previous: 'AdvancedOptions',
