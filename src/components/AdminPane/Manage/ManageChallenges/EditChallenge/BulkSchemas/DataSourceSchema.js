@@ -1,12 +1,7 @@
-import _isEmpty from "lodash/isEmpty";
-import _omit from "lodash/omit";
 import messages from "../Messages";
 
 export const jsSchema = (
   intl,
-  user,
-  challengeData,
-  extraErrors,
 ) => {
   const schema = {
     $schema: "http://json-schema.org/draft-07/schema#",
@@ -25,10 +20,6 @@ export const jsSchema = (
 
 export const uiSchema = (
   intl,
-  user,
-  challengeData,
-  extraErrors,
-  options = {}
 ) => {
   return {
     dataOriginDate: {
