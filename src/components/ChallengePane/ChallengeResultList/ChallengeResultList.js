@@ -107,7 +107,7 @@ export class ChallengeResultList extends Component {
 
     const uniqueParents = new Set();
 
-    const projectResults = this.props.challenges.reduce((result, challenge) => {
+    const projectResults = this.props.challenges?.reduce((result, challenge) => {
       if (isNaN(query) && !uniqueParents.has(challenge.parent.id)) {
         uniqueParents.add(challenge.parent.id);
         result.push(challenge.parent);
@@ -118,7 +118,7 @@ export class ChallengeResultList extends Component {
 
     const uniqueParentIds = new Set();
 
-    const projectIdResults = this.props.unfilteredChallenges.reduce((result, challenge) => {
+    const projectIdResults = this.props.unfilteredChallenges?.reduce((result, challenge) => {
       if (isNaN(query) && !uniqueParentIds.has(challenge.parent.id)) {
         uniqueParentIds.add(challenge.parent.id);
         result.push(challenge.parent);
@@ -297,7 +297,7 @@ export class ChallengeResultList extends Component {
           );
         }
       }))
-    } else if (!this.props.excludeProjectResults && searchType === "projects") {
+    } else if (!this.props.excludeProjectResults && searchType === "projects" && projectResults) {
       results = _compact(_map(projectResults, (result) => {
           return (
             <ProjectResultItem
