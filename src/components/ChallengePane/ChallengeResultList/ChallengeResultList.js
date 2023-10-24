@@ -105,6 +105,27 @@ export class ChallengeResultList extends Component {
         ? limitUserResults(challengeResultsUnbound)
         : challengeResultsUnbound;
 
+    const uniqueParents = new Set();
+
+    const projectResults = this.props.challenges.reduce((result, challenge) => {
+      if (isNaN(query) && !uniqueParents.has(challenge.parent.id)) {
+        uniqueParents.add(challenge.parent.id);
+        result.push(challenge.parent);
+      }
+      return result;
+    }, []);
+    
+
+    const uniqueParentIds = new Set();
+
+    const projectIdResults = this.props.unfilteredChallenges.reduce((result, challenge) => {
+      if (isNaN(query) && !uniqueParentIds.has(challenge.parent.id)) {
+        uniqueParentIds.add(challenge.parent.id);
+        result.push(challenge.parent);
+      }
+      return result;
+    }, []);
+
     const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
 
     const search = _get(this.props, 'currentSearch.challenges', {})
@@ -120,9 +141,9 @@ export class ChallengeResultList extends Component {
     const query = search.query ? search.query : this.props.searchFilters.project ? this.props.searchFilters.project : this.props.searchFilters.task 
 
     let matchedId = []
-    if(!isNaN(query) && query) {
+    if(!isNaN(query) && query && !this.props.history.location.pathname.includes('browse/projects/')) {
       if(this.props.searchFilters.searchType == "projects"){
-        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.parent.id.toString() === query.toString());
+        matchedId = _filter(projectIdResults, (item) => item.id.toString() === query.toString());
       } else {
         matchedId = _filter(this.props.unfilteredChallenges, (item) => item.id.toString() === query.toString());
       }
@@ -158,7 +179,7 @@ export class ChallengeResultList extends Component {
       );
     }
     
-    if (!isNaN(query) && query) {
+    if (!isNaN(query) && query  && !this.props.history.location.pathname.includes('browse/projects/')) {
       // Filters for Task Id
       if (searchType === "task") {
         let matchedChallengeId = null;
@@ -237,19 +258,18 @@ export class ChallengeResultList extends Component {
         detectedIds = (
           <div>
             <FormattedMessage {...messages.project} />
-            {matchedId[0].parent.id} {_compact(_map(matchedId, (item) => (
-              <ProjectResultItem
-                key={`project_${item.id}`}
-                {...this.props}
-                project={item}
-                listRef={this.listRef}
-              />
-            )))}
+            {matchedId[0].id}
+            <ProjectResultItem
+              key={`project_${matchedId[0].id}`}
+              {...this.props}
+              className="mr-mb-4"
+              project={matchedId[0]}
+              listRef={this.listRef}
+            />
           </div>
         );
       }
     }
-    
     
     let results = null
     if (challengeResults.length === 0) {
@@ -262,8 +282,8 @@ export class ChallengeResultList extends Component {
           </div>
         )
       }
-    } else {
-      results = _compact(_map(challengeResults, result => {
+    } else if (this.props.history.location.pathname.includes('browse/projects/') || searchType === undefined || searchType === "challenges") {
+      results = _compact(_map(challengeResults, (result) => {
         if (result.parent) {
           return (
             <ChallengeResultItem
@@ -274,9 +294,11 @@ export class ChallengeResultList extends Component {
               listRef={this.listRef}
               sort={search?.sort}
             />
-          )
+          );
         }
-        else if (!this.props.excludeProjectResults) {
+      }))
+    } else if (!this.props.excludeProjectResults && searchType === "projects") {
+      results = _compact(_map(projectResults, (result) => {
           return (
             <ProjectResultItem
               key={`project_${result.id}`}
@@ -286,11 +308,9 @@ export class ChallengeResultList extends Component {
               listRef={this.listRef}
             />
           )
-        }
-        else {
-          return null
-        }
       }))
+    } else {
+      results = null
     }
   
     return (
