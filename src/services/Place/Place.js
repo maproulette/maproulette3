@@ -66,6 +66,7 @@ export const fetchPlaceLocation = function(placeSearch, limit=5) {
         name: place.display_name,
         type: place.type,
         bbox: [bounds[2], bounds[1], bounds[3], bounds[0]], // NSWE => WSEN
+        place: place
       }
     })
   })

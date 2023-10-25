@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
+import Button from '../../../Button/Button';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import _get from "lodash/get";
 import _isObject from "lodash/isObject";
@@ -16,6 +17,7 @@ import {
 } from "../../../../services/Challenge/ChallengeStatus/ChallengeStatus";
 import RebuildTasksControl from "../RebuildTasksControl/RebuildTasksControl";
 import ProjectPickerModal from "../ProjectPickerModal/ProjectPickerModal";
+import { CloneOverPassChallengeForAreaModal } from '../CloneOverpassChallengeForAreaModal/CloneOverpassChallengeForAreaModal';
 import ConfirmAction from "../../../ConfirmAction/ConfirmAction";
 import messages from "../ChallengeDashboard/Messages";
 
@@ -45,15 +47,20 @@ const handleTasksNeedRebuild = (dateString) => {
 export default class ChallengeControls extends Component {
   state = {
     pickingProject: false,
+    cloningOverpassChallengeForArea: false
   };
 
   projectPickerCanceled = () => {
-    this.setState({ pickingProject: false });
+    this.setState(state => ({ ...state, pickingProject: false }));
     this.props.onControlComplete && this.props.onControlComplete();
   };
 
+  closeCloneOverpassChallengeForAreaModal = () => {
+    this.setState(state => ({...state, cloningOverpassChallengeForArea: false}))
+  };
+
   moveToProject = (project) => {
-    this.setState({ pickingProject: false });
+    this.setState(state => ({ ...state, pickingProject: false }));
     this.props.moveChallenge(this.props.challenge.id, project.id);
     this.props.onControlComplete && this.props.onControlComplete();
   };
@@ -168,7 +175,7 @@ export default class ChallengeControls extends Component {
 
             {manager.canAdministrateProject(parent) && (
               <a
-                onClick={() => this.setState({ pickingProject: true })}
+                onClick={() => this.setState(state => ({ ...state, pickingProject: true }))}
                 className={this.props.controlClassName}
               >
                 <FormattedMessage {...messages.moveChallengeLabel} />
@@ -194,6 +201,15 @@ export default class ChallengeControls extends Component {
             >
               <FormattedMessage {...messages.cloneChallengeLabel} />
             </Link>
+            {this.props.onChallengeDashboard && this.props.challenge && this.props.challenge.overpassQL.length ? (
+              <Button 
+                onClick={() => this.setState(state => ({...state, cloningOverpassChallengeForArea: true}))}
+                className={this.props.controlClassName}
+              > 
+                Clone For Area
+              </Button>
+            ) : null}
+            
 
             {manager.canAdministrateProject(parent) && (
               <ConfirmAction
@@ -260,6 +276,12 @@ export default class ChallengeControls extends Component {
                 currentProjectId={projectId}
                 onCancel={this.projectPickerCanceled}
                 onSelectProject={this.moveToProject}
+              />
+            )}
+            {this.state.cloningOverpassChallengeForArea && (
+              <CloneOverPassChallengeForAreaModal
+                {...this.props}
+                onCloseModal={this.closeCloneOverpassChallengeForAreaModal}
               />
             )}
           </React.Fragment>
