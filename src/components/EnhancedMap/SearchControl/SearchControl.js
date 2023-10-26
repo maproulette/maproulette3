@@ -42,7 +42,6 @@ const ControlContent = props => {
   return (
     <button
       onClick={e => {
-        console.log(e)
         props.openSearch(e.target)
       }}
       className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter"

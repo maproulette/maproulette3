@@ -17,7 +17,7 @@ import {
 } from "../../../../services/Challenge/ChallengeStatus/ChallengeStatus";
 import RebuildTasksControl from "../RebuildTasksControl/RebuildTasksControl";
 import ProjectPickerModal from "../ProjectPickerModal/ProjectPickerModal";
-import { CloneOverPassChallengeForAreaModal } from '../CloneOverpassChallengeForAreaModal/CloneOverpassChallengeForAreaModal';
+import CloneOverPassChallengeForAreaModal from '../CloneOverpassChallengeForAreaModal/CloneOverpassChallengeForAreaModal';
 import ConfirmAction from "../../../ConfirmAction/ConfirmAction";
 import messages from "../ChallengeDashboard/Messages";
 

@@ -36,6 +36,7 @@ import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
 import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
+import CloneOverPassChallengeForAreaModal from '../AdminPane/Manage/CloneOverpassChallengeForAreaModal/CloneOverpassChallengeForAreaModal';
 
 const ClusterMap =
   WithChallengeTaskClusters(
@@ -77,6 +78,7 @@ export class ChallengeDetail extends Component {
     submittingFlag: false,
     pickingProject: false,
     selectedClusters: [],
+    cloningOverpassChallengeForArea: false,
   };
 
   onBulkClusterSelection = clusters => {
@@ -158,6 +160,10 @@ export class ChallengeDetail extends Component {
   onModalSubmit = (data) => {
     this.setState({ flagModal: false, displayInputError: false, issue: data });
   }
+
+  closeCloneOverpassChallengeForAreaModal = () => {
+    this.setState(state => ({...state, cloningOverpassChallengeForArea: false}))
+  };
 
   handleInputError = () => {
     this.setState({displayInputError: !this.state.displayInputError})
@@ -245,6 +251,18 @@ export class ChallengeDetail extends Component {
                 </button>
               </Fragment>
             )
+          }
+          {challenge && challenge.overpassQL.length && (
+            <Fragment>
+              <span className="mr-px-3"> | </span>
+              <button 
+                onClick={() => this.setState(state => ({...state, cloningOverpassChallengeForArea: true}))}
+                className="mr-text-green-lighter hover:mr-text-white"
+              > 
+                Clone For Area
+              </button>
+            </Fragment>
+          )
           }
           
         </li>
@@ -529,6 +547,13 @@ export class ChallengeDetail extends Component {
                     currentProjectId={challenge.parent.id}
                     onCancel={this.projectPickerCanceled}
                     onSelectProject={this.cloneToProject}
+                  />
+                )}
+
+                {challenge && challenge.overpassQL && this.state.cloningOverpassChallengeForArea && (
+                  <CloneOverPassChallengeForAreaModal 
+                    {...this.props}
+                    onCloseModal={this.closeCloneOverpassChallengeForAreaModal}
                   />
                 )}
 

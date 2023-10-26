@@ -4,6 +4,15 @@ import classNames from 'classnames'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 
 class Modal extends Component {
+  componentDidMount() {
+    const body = document.querySelector('body')
+    body.classList.add("mr-modal-scroll-fix")
+  }
+
+  componentWillUnmount() {
+    const body = document.querySelector('body')
+    body.classList.remove("mr-modal-scroll-fix")
+  }
   render() {
     return (
       <div
