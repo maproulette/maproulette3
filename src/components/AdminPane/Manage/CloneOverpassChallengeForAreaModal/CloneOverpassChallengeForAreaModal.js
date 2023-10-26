@@ -3,6 +3,7 @@ import { FormattedMessage, injectIntl} from 'react-intl'
 import CloneChallengeNominatimSearchbox from './CloneChallengeNominatimSearchbox'
 import Modal from '../../../Modal/Modal'
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
+import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
 
@@ -52,9 +53,25 @@ class CloneOverPassChallengeForAreaModal extends Component {
               <div className='mr-text-lg mr-text-mango'>
                 <FormattedMessage {...messages.selectedNominatimArea}/>
               </div>
-              {this.state.searchResult && this.state.searchResult.name ? (  
-                <p className='mr-bg-white-10 mr-p-2 mr-text-mango' style={{maxWidth: "max-content"}}>{`"${this.state.searchResult.name}"`}</p>
-              ) : <p className='mr-bg-white-10 mr-p-2 mr-text-mango mr-max-w-1/3'>None Selected</p>}
+              <div className='mr-flex mr-space-x-2 mr-min-w-1/3 mr-items-center'>
+                {this.state.searchResult && this.state.searchResult.name ? (  
+                  <p className='mr-bg-white-10 mr-p-2 mr-text-mango mr-min-w-1/3' style={{maxWidth: "max-content"}}>{`"${this.state.searchResult.name}"`}</p>
+                ) : <p className='mr-bg-white-10 mr-p-2 mr-text-mango mr-w-1/3'>None Selected</p>}
+                {this.state.searchResult && this.state.searchResult.name && (
+                  <button
+                    className="mr-top-0 mr-right-0 mr-transition mr-text-green-lighter hover:mr-text-white"
+                    onClick={() => {
+                      this.setState({searchResult: {}})
+                    }}
+                  >
+                    <SvgSymbol
+                      sym="close-outline-icon"
+                      viewBox="0 0 20 20"
+                      className="mr-fill-current mr-w-5 mr-h-5"
+                    />
+                  </button>
+                )}
+              </div>
             </div>
         </article>
       </Modal>

@@ -34,6 +34,12 @@ $tablet: 40px;
   z-index: $layer-modal;
 }
 
+.modal-scroll-fix {
+  height: 100vh;
+  overflow-y: hidden;
+  padding-right: 15px;
+}
+
 .full-screen-height {
   height: calc(100vh - #{$navbar-height} - #{$subnav-height});
 
