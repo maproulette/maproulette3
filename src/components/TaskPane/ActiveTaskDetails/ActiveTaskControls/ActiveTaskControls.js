@@ -337,6 +337,7 @@ export class ActiveTaskControls extends Component {
                 complete={this.initiateCompletion}
                 nextTask={this.next}
                 needsRevised={needsRevised}
+                editMode={editMode}
               />
              }
 

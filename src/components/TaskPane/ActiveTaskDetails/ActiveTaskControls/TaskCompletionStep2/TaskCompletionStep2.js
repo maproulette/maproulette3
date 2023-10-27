@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _pick from 'lodash/pick'
+import _isEmpty from 'lodash/isEmpty'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus } from '../../../../../services/Task/TaskReview/TaskReviewStatus'
 import TaskFixedControl from '../TaskFixedControl/TaskFixedControl'
@@ -11,6 +13,9 @@ import TaskRevisedControl from '../TaskRevisedControl/TaskRevisedControl'
 import TaskCancelEditingControl from '../TaskCancelEditingControl/TaskCancelEditingControl'
 import Dropdown from '../../../../Dropdown/Dropdown'
 import './TaskCompletionStep2.scss'
+
+const hiddenShortcutGroup = 'taskCompletion'
+const hiddenShortcuts = ['skip', 'falsePositive', 'fixed', 'tooHard', 'alreadyFixed']
 
 /**
  * TaskCompletionStep2 presents controls for finishing up completion of a
@@ -25,12 +30,75 @@ export default class TaskCompletionStep2 extends Component {
     moreOptionsOpen: false,
   }
 
+  completeTask = (shortcut) => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup])) {
+      return;
+    }
+
+    if(shortcut === 'skip') {
+      this.props.complete(TaskStatus.skipped); 
+      return
+    }
+
+    this.props.complete(TaskStatus[shortcut]);
+  };
+
+  handleKeyboardShortcuts = (shortcut) => {
+    return (
+      this.props.quickKeyHandler(
+        this.props.keyboardShortcutGroups.taskCompletion[shortcut].key,
+        () => this.completeTask(shortcut)
+      )
+    )
+  }
+
+  componentDidUpdate() {
+    if (
+      !_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup]) &&
+      this.props.editMode
+    ) {
+      hiddenShortcuts.forEach((shortcut) => {
+        this.props.deactivateKeyboardShortcut(
+          hiddenShortcutGroup,
+          shortcut,
+          this.handleKeyboardShortcuts(shortcut)
+        );
+      });
+    } else if (
+      _isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup]) &&
+      this.props.keyboardShortcutGroups &&
+      this.props.activateKeyboardShortcut &&
+      !this.props.editMode
+    ) {
+      hiddenShortcuts.forEach((shortcut) => {
+        this.props.activateKeyboardShortcut(
+          hiddenShortcutGroup,
+          _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
+          this.handleKeyboardShortcuts(shortcut)
+        );
+      });
+    }
+  }
+  
+  componentWillUnmount() {
+    if (!_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup])) {
+      hiddenShortcuts.forEach((shortcut) => {
+        this.props.deactivateKeyboardShortcut(
+          hiddenShortcutGroup,
+          shortcut,
+          this.handleKeyboardShortcuts(shortcut)
+        );
+      });
+    }
+  }
+
   render() {
     let complete = this.props.complete
     if (this.props.needsRevised) {
       complete = (status) => this.props.complete(status, TaskReviewStatus.needed)
     }
-
+    
     return (
       <div>
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
