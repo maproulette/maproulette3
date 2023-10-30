@@ -37,7 +37,7 @@ export default class TaskCompletionStep1 extends Component {
 
   completeTask = (shortcut) => {
     // Ignore if shortcut group is not active
-    if (_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup])) {
+    if (_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
       return;
     }
 
@@ -60,7 +60,7 @@ export default class TaskCompletionStep1 extends Component {
 
   componentDidUpdate() {
     if (
-      !_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup]) &&
+      !_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
       this.props.editMode
     ) {
       hiddenShortcuts.forEach((shortcut) => {
@@ -71,7 +71,7 @@ export default class TaskCompletionStep1 extends Component {
         );
       });
     } else if (
-      _isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup]) &&
+      _isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
       this.props.keyboardShortcutGroups &&
       this.props.activateKeyboardShortcut &&
       !this.props.editMode
@@ -87,7 +87,7 @@ export default class TaskCompletionStep1 extends Component {
   }
   
   componentWillUnmount() {
-    if (!_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup])) {
+    if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
       hiddenShortcuts.forEach((shortcut) => {
         this.props.deactivateKeyboardShortcut(
           hiddenShortcutGroup,
