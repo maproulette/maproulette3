@@ -6,12 +6,12 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   tooHardLabel: {
     id: 'Task.controls.tooHard.label',
-    defaultMessage: "Too hard / Can’t see",
+    defaultMessage: "Can't Complete",
   },
 
   tooHardTooltip: {
     id: 'Task.controls.tooHard.tooltip',
-    defaultMessage: "Too hard / Can’t see",
+    defaultMessage: "Can't Complete",
   },
 })
 
