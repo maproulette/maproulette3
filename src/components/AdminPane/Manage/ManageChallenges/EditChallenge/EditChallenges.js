@@ -86,6 +86,7 @@ export class EditChallenges extends Component {
           defaultBasemap: formData.defaultBasemap,
           defaultBasemapId: formData.defaultBasemapId,
           defaultPriority: formData.defaultPriority,
+          dataOriginDate: formData.dataOriginDate,
           highPriorityRule: formData.highPriorityRule === "{}" ? undefined : formData.highPriorityRule,
           mediumPriorityRule: formData.mediumPriorityRule === "{}" ? undefined : formData.mediumPriorityRule,
           lowPriorityRule: formData.lowPriorityRule === "{}" ? undefined : formData.lowPriorityRule
