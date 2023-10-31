@@ -122,7 +122,7 @@ export class TagDiffVisualization extends Component {
     if (!this.state.newTagValid) {
       return
     }
-
+  
     const tagEdits = this.state.tagEdits
     tagEdits[this.state.newTagName] = {
       name: this.state.newTagName,
@@ -130,8 +130,10 @@ export class TagDiffVisualization extends Component {
       newValue: '',
       status: 'added',
     }
-
-    this.setState({tagEdits, addingTag: false, newTagName: null, newTagValid: false})
+  
+    this.setState({ tagEdits, addingTag: false, newTagName: null, newTagValid: false }, () => {
+      this.newTagInput.focus()
+    })
   }
 
   cancelNewTag() {
@@ -340,6 +342,7 @@ export class TagDiffVisualization extends Component {
             </button> :
             <React.Fragment>
               <input
+                ref={input => (this.newTagInput = input)} 
                 type="text"
                 className="mr-text-black mr-px-2"
                 value={change.newValue}
