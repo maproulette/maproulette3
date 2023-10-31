@@ -60,7 +60,7 @@ const descriptor = {
   widgetKey: 'TaskBundleWidget',
   label: messages.label,
   targets: [WidgetDataTarget.task],
-  minWidth: 4,
+  minWidth: 6,
   defaultWidth: 6,
   minHeight: 12,
   defaultHeight: 14,
@@ -77,6 +77,10 @@ const ClusterMap = WithChallengeTaskClusters(
 const shortcutGroup = 'taskEditing'
 
 export default class TaskBundleWidget extends Component {
+  state = {
+    shortcutActive: false,
+  }
+
   bundleTasks = () => {
     const selectedArray = Array.from(this.props.selectedTasks.selected.values());
     let bundleTypeMismatch = "";
@@ -204,17 +208,27 @@ export default class TaskBundleWidget extends Component {
     if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
       this.props.selectTasks([this.props.task])
     }
-
-    this.props.activateKeyboardShortcut(
-      shortcutGroup,
-      _pick(this.props.keyboardShortcutGroups.taskEditing, 'completeTogether'),
-      this.handleKeyboardShortcuts)
   }
 
   componentDidUpdate(prevProps) {
     if (!this.props.taskBundle) {
       this.initializeClusterFilters(prevProps)
       this.initializeWebsocketSubscription(prevProps)
+    }
+
+    if (this.props.selectedTaskCount(this.props.taskInfo.totalCount) > 1 && this.state.shortcutActive === false) {
+      debugger
+      this.setState({ shortcutActive: true })
+      this.props.activateKeyboardShortcut(
+        shortcutGroup,
+        _pick(this.props.keyboardShortcutGroups.taskEditing, 'completeTogether'),
+        this.handleKeyboardShortcuts
+      )
+    } else if (this.state.shortcutActive === true && this.props.selectedTaskCount(this.props.taskInfo.totalCount) <= 1){
+      debugger
+      this.setState({ shortcutActive: false })
+      this.props.deactivateKeyboardShortcut(shortcutGroup, 'completeTogether',
+      this.handleKeyboardShortcuts)
     }
 
     if (_isFinite(_get(this.props, 'task.id')) &&
