@@ -76,6 +76,8 @@ export class EditChallenges extends Component {
       const challengesEditing = this.props.challenges.filter(c => tallied.includes(c.id));
 
       for (let i = 0; i < challengesEditing.length; i++) {
+        debugger
+
         const result = await this.props.saveChallenge({
           id: challengesEditing[i].id,
           changesetUrl: challengesEditing[i].changesetUrl,
@@ -83,6 +85,7 @@ export class EditChallenges extends Component {
           preferredTags: formData.preferredTags,
           exportableProperties: formData.exportableProperties,
           customBasemap: formData.customBasemap,
+          instruction: formData.instruction,
           defaultBasemap: formData.defaultBasemap,
           defaultBasemapId: formData.defaultBasemapId,
           defaultPriority: formData.defaultPriority,
