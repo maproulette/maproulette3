@@ -61,7 +61,7 @@ const descriptor = {
   label: messages.label,
   targets: [WidgetDataTarget.task],
   minWidth: 4,
-  defaultWidth: 4,
+  defaultWidth: 6,
   minHeight: 12,
   defaultHeight: 14,
 }
