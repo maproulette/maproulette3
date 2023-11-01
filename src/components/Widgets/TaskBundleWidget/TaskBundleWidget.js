@@ -217,7 +217,6 @@ export default class TaskBundleWidget extends Component {
     }
 
     if (this.props.selectedTaskCount(this.props.taskInfo.totalCount) > 1 && this.state.shortcutActive === false) {
-      debugger
       this.setState({ shortcutActive: true })
       this.props.activateKeyboardShortcut(
         shortcutGroup,
@@ -225,7 +224,6 @@ export default class TaskBundleWidget extends Component {
         this.handleKeyboardShortcuts
       )
     } else if (this.state.shortcutActive === true && this.props.selectedTaskCount(this.props.taskInfo.totalCount) <= 1){
-      debugger
       this.setState({ shortcutActive: false })
       this.props.deactivateKeyboardShortcut(shortcutGroup, 'completeTogether',
       this.handleKeyboardShortcuts)
