@@ -35,27 +35,48 @@ export default class TaskCompletionStep1 extends Component {
     moreOptionsOpen: false,
   }
 
-  completeTask = (shortcut) => {
-    // Ignore if shortcut group is not active
+  completeTask = (key) => {
+    // Ignore if the shortcut group is not active
     if (_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
       return;
     }
 
-    if(shortcut === 'skip') {
-      this.props.complete(TaskStatus.skipped); 
+    // Handle different keyboard shortcuts
+    switch (key) {
+      case 'f':
+        this.props.complete(TaskStatus.fixed)
+        break
+      case 'd':
+        this.props.complete(TaskStatus.tooHard)
+        break
+      case 'x':
+        this.props.complete(TaskStatus.alreadyFixed)
+        break
+      case 'w':
+        this.props.complete(TaskStatus.skipped)
+        break
+      case 'q':
+        this.props.complete(TaskStatus.falsePositive)
+        break
+      default:
+        break // Handle other keys or do nothing
+    }
+  }
+
+  handleKeyboardShortcuts = (event) => {
+    if (_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup])) {
       return
     }
 
-    this.props.complete(TaskStatus[shortcut]);
-  };
+    if (this.props.textInputActive(event)) {
+      return // Ignore typing in inputs
+    }
 
-  handleKeyboardShortcuts = (shortcut) => {
-    return (
-      this.props.quickKeyHandler(
-        this.props.keyboardShortcutGroups.taskCompletion[shortcut].key,
-        () => this.completeTask(shortcut)
-      )
-    )
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+
+    this.completeTask(event.key)
   }
 
   componentDidUpdate() {
@@ -80,9 +101,9 @@ export default class TaskCompletionStep1 extends Component {
         this.props.activateKeyboardShortcut(
           hiddenShortcutGroup,
           _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
-          this.handleKeyboardShortcuts(shortcut)
-        );
-      });
+          this.handleKeyboardShortcuts
+        )
+      })
     }
   }
   
@@ -92,9 +113,9 @@ export default class TaskCompletionStep1 extends Component {
         this.props.deactivateKeyboardShortcut(
           hiddenShortcutGroup,
           shortcut,
-          this.handleKeyboardShortcuts(shortcut)
-        );
-      });
+          this.handleKeyboardShortcuts
+        )
+      })
     }
   }
 
