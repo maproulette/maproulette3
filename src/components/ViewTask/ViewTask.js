@@ -23,7 +23,6 @@ export default class ViewTask extends Component {
       <div className="view-task">
         <SyntaxHighlighter language="json" style={highlightColors}>
           {JSON.stringify(this.props.task.geometries, null, 4)}
-          {/* {this.props.task.geometries} */}
         </SyntaxHighlighter>
       </div>
     )
