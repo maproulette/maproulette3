@@ -7,6 +7,26 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.13.3] - 2023-11-XX
+Realease with [maproulette-backend_v4.4.X](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.X)
+
+### Features
+- Add lasso and virtual challenge creation functionality to challenge dashboard map - @CollinBeczak
+- Add bulk editing of the date That Data Was Sourced within a project - @jschwarz2030
+- Change button "Too Hard / Can't See" to "Can't Complete" - @CollinBeczak
+
+### Fixes
+- Fix input selection when adding tag in tag fix challenges - @CollinBeczak
+- Fix the routing logic and tag results for the "Find Challenges" page when searching for projects - @CollinBeczak
+- fix task bundle widget width minimum - @CollinBeczak
+- Update react-error-overlay version - @AndrewPhilbin
+
+### System Updates
+- Modified the `ChallengeController` to store `taskWidgetLayout` as an empty JSON object instead of an empty string 
+when the field is not provided in the request. - @ljdelight
+- Updated `MRSchemaTypes` in the GraphQL schema to handle `taskWidgetLayout` as an optional JSON value, defaulting to 
+an empty JSON object when not present. - @ljdelight
+
 ## [v3.13.2] - 2023-10-17
 Realease with [maproulette-backend_v4.4.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.8)
 
@@ -26,7 +46,12 @@ Realease with [maproulette-backend_v4.4.8](https://github.com/maproulette/maprou
 
 ### System Updates
 - Update all node version references to node 16 - @CollinBeczak
-- Add Stringified widget layout JSON to challenge table - @CollinBeczak
+- Added an optional JSON field `taskWidgetLayout` to the `Challenge` model to store configurations and data related to 
+task widget layout. - @ljdelight
+- Inserted `taskWidgetLayout` into JSON bodies in the `ChallengeController`. - @ljdelight
+- Updated GraphQL schema, `MRSchemaTypes`, to include the new field. - @ljdelight
+- Modified the `ChallengeRepository` and `ChallengeDAL` to handle CRUD operations related to the new field. - @ljdelight
+- Added the corresponding database evolution script to create the new column in the `challenges` table. - @ljdelight
 
 ## [v3.13.1] - 2023-9-12
 Realease with [maproulette-backend_v4.4.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.7)
