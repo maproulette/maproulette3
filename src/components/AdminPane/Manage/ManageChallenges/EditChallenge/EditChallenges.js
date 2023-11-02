@@ -550,8 +550,8 @@ class ConfirmationModal extends Component {
           isActive={true}
           onClose={this.props.onClose}
         >
-          <h1 style={{ marginBottom: 10 }}>Review and Submit</h1>
-          <div className="mr-text-red mr-text-lg" style={{ marginBottom: 14 }}>The following changes will be applied to all selected challenges.  This process is not reversible, so please review before submitting.</div>
+          <h1 style={{ marginBottom: 10 }}><FormattedMessage {...messages.reviewAndSubmitLabel} /></h1>
+          <div className="mr-text-red mr-text-lg" style={{ marginBottom: 14 }}><FormattedMessage {...messages.bulkEditWarningLabel} /></div>
           {confirmationMap().map((data) => {
             if (formData[data.id] && formData[data.id] !== data.default) {
               const val = data.json ? JSON.parse(formData[data.id]) : formData[data.id]

@@ -737,6 +737,16 @@ will not be able to make sense of it.
     defaultMessage: "Request Review By Default",
   },
 
+  reviewAndSubmitLabel: {
+    id: "Admin.EditChallenge.form.reviewAndSubmit.label",
+    defaultMessage: "Review and Submit",
+  },
+
+  bulkEditWarningLabel: {
+    id: "Admin.EditChallenge.form.bulkSubmit.label",
+    defaultMessage: "The following changes will be applied to all selected challenges.  This process is not reversible, so please review before submitting.",
+  },
+
   reviewSettingDescription: {
     id: "Admin.EditChallenge.form.reviewSetting.description",
     defaultMessage: 
