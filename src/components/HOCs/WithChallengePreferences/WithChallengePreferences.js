@@ -23,7 +23,7 @@ export const mapStateToProps = (state, ownProps) => {
   const isVirtual = _isFinite(ownProps.virtualChallengeId)
   const concreteChallengeId = _get(ownProps, 'challenge.id', ownProps.challengeId)
   const challengeId = isVirtual ? ownProps.virtualChallengeId : concreteChallengeId
-  const taskLoadMethod = ownProps.user?.properties.mr3Frontend?.settings?.loadMethod || TaskLoadMethod.random
+  const taskLoadMethod = ownProps.user?.properties?.mr3Frontend?.settings?.loadMethod || TaskLoadMethod.random
   const mappedProps = {}
 
   if (_isFinite(challengeId)) {
