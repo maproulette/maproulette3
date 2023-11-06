@@ -69,7 +69,7 @@ class FilterByCategorizationKeywords extends Component {
 
   render() {
     const categorizationFilters = this.props.searchFilters?.categorizationKeywords ?? [];
-    const categories = this.props.user?.properties.mr3Frontend.settings.categorizationKeys ?? [];
+    const categories = this.props.user?.properties?.mr3Frontend?.settings?.categorizationKeys ?? [];
 
     return (
       <Dropdown

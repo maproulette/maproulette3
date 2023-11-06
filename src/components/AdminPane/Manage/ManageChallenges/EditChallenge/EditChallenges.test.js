@@ -30,5 +30,3 @@ describe("EditChallenges", () => {
     expect(challengeTwo).toBeInTheDocument();
   });
 });
-
-//props.user?.properties?.mr3Frontend?.settings?.tallied?.[(props.project.id)];
