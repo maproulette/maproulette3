@@ -25,6 +25,11 @@ import WithChallengeManagement from "../../../HOCs/WithChallengeManagement/WithC
 import WithCurrentUser from "../../../../HOCs/WithCurrentUser/WithCurrentUser";
 import WithTallied from "../../../HOCs/WithTallied/WithTallied";
 import WithTaskPropertyStyleRules from "../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules";
+import External from "../../../../External/External";
+import Modal from "../../../../Modal/Modal";
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
+import jsonLang from 'react-syntax-highlighter/dist/esm/languages/hljs/json'
+import highlightColors from 'react-syntax-highlighter/dist/esm/styles/hljs/agate'
 import {
   ChallengeCategoryKeywords
 } from "../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords";
@@ -36,6 +41,10 @@ import manageMessages from "../../Messages";
 import messages from "./Messages";
 import "./EditChallenge.scss";
 
+SyntaxHighlighter.registerLanguage('json', jsonLang)
+
+highlightColors.hljs.background="rgba(0, 0, 0, 0.15)"
+
 export class EditChallenges extends Component {
   challengeState = null;
 
@@ -46,6 +55,7 @@ export class EditChallenges extends Component {
     isSaving: false,
     expandedFieldGroups: {},
     challengeNumberSaving: 0,
+    confirmModal: false,
   };
 
   validationPromise = null;
@@ -83,6 +93,7 @@ export class EditChallenges extends Component {
           preferredTags: formData.preferredTags,
           exportableProperties: formData.exportableProperties,
           customBasemap: formData.customBasemap,
+          instruction: formData.instruction,
           defaultBasemap: formData.defaultBasemap,
           defaultBasemapId: formData.defaultBasemapId,
           defaultPriority: formData.defaultPriority,
@@ -147,6 +158,16 @@ export class EditChallenges extends Component {
 
     return challengeData;
   };
+
+  toggleConfirmModal = (bool) => {
+    if (bool) {
+      this.prepareFormDataForSaving().then(async (formData) => {
+        this.setState({ confirmModal: formData })
+      })
+    } else {
+      this.setState({ confirmModal: false })
+    }
+  }
 
   /**
    * Performs the reverse of prepareChallengeDataForForm, taking the form data
@@ -302,65 +323,81 @@ export class EditChallenges extends Component {
           };
 
           return (
-            <BreadcrumbWrapper
-              {...this.props}
-              cancel={this.cancel}
-              isCloningChallenge={false}
-              isNewChallenge={false}
-              challengeState={this.challengeState}
-            >
-              <div className="mr-flex">
-                <div className="mr-p-4 md:mr-p-8 mr-w-full">
-                  <Form
-                    schema={activeStep.jsSchema(
-                      this.props.intl,
-                      this.props.user,
-                      challengeData,
-                      this.state.extraErrors,
-                      {
-                        longForm: true,
+            <>
+              <BreadcrumbWrapper
+                {...this.props}
+                cancel={this.cancel}
+                isCloningChallenge={false}
+                isNewChallenge={false}
+                challengeState={this.challengeState}
+              >
+                <div className="mr-flex">
+                  <div className="mr-p-4 md:mr-p-8 mr-w-full">
+                    <Form
+                      schema={activeStep.jsSchema(
+                        this.props.intl,
+                        this.props.user,
+                        challengeData,
+                        this.state.extraErrors,
+                        {
+                          longForm: true,
+                        }
+                      )}
+                      uiSchema={activeStep.uiSchema(
+                        this.props.intl,
+                        this.props.user,
+                        challengeData,
+                        this.state.extraErrors,
+                        {
+                          longForm: true,
+                        }
+                      )}
+                      className="form"
+                      validate={(formData, errors) =>
+                        this.validate(formData, errors, activeStep)
                       }
-                    )}
-                    uiSchema={activeStep.uiSchema(
-                      this.props.intl,
-                      this.props.user,
-                      challengeData,
-                      this.state.extraErrors,
-                      {
-                        longForm: true,
-                      }
-                    )}
-                    className="form"
-                    validate={(formData, errors) =>
-                      this.validate(formData, errors, activeStep)
-                    }
-                    transformErrors={this.transformErrors(this.props.intl)}
-                    widgets={{
-                      SelectWidget: CustomSelectWidget,
-                      TextWidget: CustomTextWidget,
-                    }}
-                    ArrayFieldTemplate={CustomArrayFieldTemplate}
-                    FieldTemplate={CustomFieldTemplate}
-                    fields={customFields}
-                    tagType={"challenges"}
-                    noHtml5Validate
-                    showErrorList={false}
-                    formData={challengeData}
-                    formContext={_merge(this.state.formContext, {
-                      bounding: _get(challengeData, "bounding"),
-                      buttonAction: BoundsSelectorModal,
-                    })}
-                    onChange={this.changeHandler}
-                    onSubmit={(formData) =>
-                      this.handleSubmit(formData, nextStep)
-                    }
-                    onError={() => null}
-                    extraErrors={this.state.extraErrors}
-                  >
-                  </Form>
+                      transformErrors={this.transformErrors(this.props.intl)}
+                      widgets={{
+                        SelectWidget: CustomSelectWidget,
+                        TextWidget: CustomTextWidget,
+                      }}
+                      ArrayFieldTemplate={CustomArrayFieldTemplate}
+                      FieldTemplate={CustomFieldTemplate}
+                      fields={customFields}
+                      tagType={"challenges"}
+                      noHtml5Validate
+                      showErrorList={false}
+                      formData={challengeData}
+                      formContext={_merge(this.state.formContext, {
+                        bounding: _get(challengeData, "bounding"),
+                        buttonAction: BoundsSelectorModal,
+                      })}
+                      onChange={this.changeHandler}
+                      onSubmit={(formData) => {
+                        this.toggleConfirmModal(formData)
+                      }}
+                      onError={() => null}
+                      extraErrors={this.state.extraErrors}
+                    >
+                    </Form>
+                  </div>
                 </div>
-              </div>
-            </BreadcrumbWrapper>
+              </BreadcrumbWrapper>
+              {
+                this.state.confirmModal
+                  ? <ConfirmationModal
+                      formData={this.state.confirmModal}
+                      submit={() => {
+                        this.toggleConfirmModal(false)
+                        this.handleSubmit(formData, nextStep)}
+                      }
+                      cancel={() => {
+                        this.toggleConfirmModal(false)
+                      }}
+                    />
+                  : null
+              }
+            </>
           );
         }}
       />
@@ -443,6 +480,110 @@ const BreadcrumbWrapper = (props) => {
     </div>
   );
 };
+
+const confirmationMap = () => {
+  return [
+    {
+      id: 'additionalKeywords',
+      displayName: <FormattedMessage {...messages.additionalKeywordsLabel} />
+    },
+    {
+      id: 'taskTags',
+      displayName: <FormattedMessage {...messages.preferredTagsLabel} />
+    },
+    {
+      id: 'exportableProperties',
+      displayName: <FormattedMessage {...messages.exportablePropertiesLabel} />
+    },
+    {
+      id: 'customBasemap',
+      displayName: <FormattedMessage {...messages.customBasemapLabel} />
+    },
+    {
+      id: 'instruction',
+      displayName: <FormattedMessage {...messages.instructionLabel} />,
+      props: {
+        wrapLines: true,
+        lineProps: { style: { wordBreak: 'break-all', whiteSpace: 'pre-wrap'} }
+      }
+    },
+    {
+      id: 'defaultBasemapId',
+      displayName: <FormattedMessage {...messages.defaultBasemapLabel} />,
+    },
+    {
+      id: 'defaultPriority',
+      displayName: <FormattedMessage {...messages.defaultPriorityLabel} />,
+    },
+    {
+      id: 'dataOriginDate',
+      displayName: <FormattedMessage {...messages.dataOriginDateLabel} />,
+    },
+    {
+      id: 'highPriorityRule',
+      default: "{}",
+      json: true,
+      displayName: <FormattedMessage {...messages.highPriorityRulesLabel} />,
+    },
+    {
+      id: 'mediumPriorityRule',
+      default: "{}",
+      json: true,
+      displayName: <FormattedMessage {...messages.mediumPriorityRulesLabel} />,
+    },
+    {
+      id: 'lowPriorityRule',
+      default: "{}",
+      json: true,
+      displayName: <FormattedMessage {...messages.lowPriorityRulesLabel} />,
+    }
+  ]
+}
+
+class ConfirmationModal extends Component {
+  render() {
+    const { formData } = this.props
+    return (
+      <External>
+        <Modal
+          fullScreen
+          isActive={true}
+          onClose={this.props.onClose}
+        >
+          <h1 style={{ marginBottom: 10 }}><FormattedMessage {...messages.reviewAndSubmitLabel} /></h1>
+          <div className="mr-text-red mr-text-lg" style={{ marginBottom: 14 }}><FormattedMessage {...messages.bulkEditWarningLabel} /></div>
+          {confirmationMap().map((data) => {
+            if (formData[data.id] && formData[data.id] !== data.default) {
+              const val = data.json ? JSON.parse(formData[data.id]) : formData[data.id]
+              return (
+                <div key={data.id} style={{ marginBottom: 10 }}>
+                  <div>{data.displayName || data.id}</div>
+                  <SyntaxHighlighter language="json" style={{ ...highlightColors }} {...data.props}>
+                    {JSON.stringify(val, null, 4)}
+                  </SyntaxHighlighter>
+                </div>
+              )
+            }
+          })}
+          <button
+            type="button"
+            className="mr-button mr-button--white mr-button--small mr-mr-8 mr-text-red mr-border-red"
+            onClick={() => this.props.submit()}
+          >
+            <FormattedMessage {...messages.submitChallenges} />
+          </button>
+          <button
+            type="button"
+            className="mr-button mr-button--white mr-button--small"
+            onClick={() => this.props.cancel()}
+          >
+            <FormattedMessage {...messages.cancelChallenges} />
+          </button>
+        </Modal>
+      </External>
+    )
+  }
+}
 
 export default WithCurrentUser(
   WithCurrentProject(

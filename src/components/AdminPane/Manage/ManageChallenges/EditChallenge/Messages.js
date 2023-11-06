@@ -29,6 +29,11 @@ export default defineMessages({
     defaultMessage: "Cancel Edit",
   },
 
+  submitChallenges: {
+    id: "Admin.EditChallenge.bulkSubmit.header",
+    defaultMessage: "Submit Bulk Edit",
+  },
+
   cloneChallenge: {
     id: "Admin.EditChallenge.clone.header",
     defaultMessage: "Clone",
@@ -730,6 +735,16 @@ will not be able to make sense of it.
   reviewSettingLabel: {
     id: "Admin.EditChallenge.form.reviewSetting.label",
     defaultMessage: "Request Review By Default",
+  },
+
+  reviewAndSubmitLabel: {
+    id: "Admin.EditChallenge.form.reviewAndSubmit.label",
+    defaultMessage: "Review and Submit",
+  },
+
+  bulkEditWarningLabel: {
+    id: "Admin.EditChallenge.form.bulkSubmit.label",
+    defaultMessage: "The following changes will be applied to all selected challenges.  This process is not reversible, so please review before submitting.",
   },
 
   reviewSettingDescription: {
