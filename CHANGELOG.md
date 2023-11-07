@@ -7,13 +7,15 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.13.3] - 2023-11-XX
-Realease with [maproulette-backend_v4.4.X](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.X)
+## [v3.14.0] - 2023-11-14
+Realease with [maproulette-backend_v4.4.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.9)
 
 ### Features
 - Add lasso and virtual challenge creation functionality to challenge dashboard map - @CollinBeczak
 - Add bulk editing of the date That Data Was Sourced within a project - @jschwarz2030
+- Add bulk editing of instructions and add a confirmation modal - @jschwarz2030
 - Change button "Too Hard / Can't See" to "Can't Complete" - @CollinBeczak
+- Add a keyboard shortcut for editing bundled tasks - @CollinBeczak
 
 ### Fixes
 - Fix input selection when adding tag in tag fix challenges - @CollinBeczak
@@ -26,6 +28,9 @@ Realease with [maproulette-backend_v4.4.X](https://github.com/maproulette/maprou
 when the field is not provided in the request. - @ljdelight
 - Updated `MRSchemaTypes` in the GraphQL schema to handle `taskWidgetLayout` as an optional JSON value, defaulting to 
 an empty JSON object when not present. - @ljdelight
+- support short url and short path for changesets - @jschwarz2030
+- Bump browserify-sign from 4.2.1 to 4.2.2
+- update and migrate transifex config - @jschwarz2030
 
 ## [v3.13.2] - 2023-10-17
 Realease with [maproulette-backend_v4.4.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.8)
