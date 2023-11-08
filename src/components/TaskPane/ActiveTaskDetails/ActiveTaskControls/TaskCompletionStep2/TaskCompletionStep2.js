@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import _pick from 'lodash/pick'
-import _isEmpty from 'lodash/isEmpty'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus } from '../../../../../services/Task/TaskReview/TaskReviewStatus'
 import TaskFixedControl from '../TaskFixedControl/TaskFixedControl'
@@ -14,9 +12,6 @@ import TaskCancelEditingControl from '../TaskCancelEditingControl/TaskCancelEdit
 import Dropdown from '../../../../Dropdown/Dropdown'
 import './TaskCompletionStep2.scss'
 
-const hiddenShortcutGroup = 'taskCompletion'
-const hiddenShortcuts = ['skip', 'falsePositive', 'fixed', 'tooHard', 'alreadyFixed']
-
 /**
  * TaskCompletionStep2 presents controls for finishing up completion of a
  * task after an editor has been opened. It allows the user to mark that they
@@ -28,92 +23,6 @@ const hiddenShortcuts = ['skip', 'falsePositive', 'fixed', 'tooHard', 'alreadyFi
 export default class TaskCompletionStep2 extends Component {
   state = {
     moreOptionsOpen: false,
-  }
-
-  completeTask = (key) => {
-    // Ignore if the shortcut group is not active
-    if (_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
-      return;
-    }
-
-    // Handle different keyboard shortcuts
-    switch (key) {
-      case 'f':
-        this.props.complete(TaskStatus.fixed)
-        break
-      case 'd':
-        this.props.complete(TaskStatus.tooHard)
-        break
-      case 'x':
-        this.props.complete(TaskStatus.alreadyFixed)
-        break
-      case 'w':
-        this.props.complete(TaskStatus.skipped)
-        break
-      case 'q':
-        this.props.complete(TaskStatus.falsePositive)
-        break
-      default:
-        break // Handle other keys or do nothing
-    }
-  }
-
-  handleKeyboardShortcuts = (event) => {
-    if (_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup])) {
-      return
-    }
-
-    if (this.props.textInputActive(event)) {
-      return // Ignore typing in inputs
-    }
-
-    if (event.metaKey || event.altKey || event.ctrlKey) {
-      return
-    }
-
-    this.completeTask(event.key)
-    event.preventDefault()
-  }
-
-  componentDidUpdate() {
-    console.log(this.props)
-    if (
-      !_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
-      this.props.editMode
-    ) {
-      hiddenShortcuts.forEach((shortcut) => {
-        this.props.deactivateKeyboardShortcut(
-          hiddenShortcutGroup,
-          shortcut,
-          this.handleKeyboardShortcuts(shortcut)
-        );
-      });
-    } else if (
-      _isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
-      this.props.keyboardShortcutGroups &&
-      this.props.activateKeyboardShortcut &&
-      !this.props.editMode 
-    ) {
-      hiddenShortcuts.forEach((shortcut) => {
-        this.props.activateKeyboardShortcut(
-          hiddenShortcutGroup,
-          _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
-          this.handleKeyboardShortcuts
-        )
-      })
-    }
-  }
-  
-  componentWillUnmount() {
-    if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
-      hiddenShortcuts.forEach((shortcut) => {
-        this.props.deactivateKeyboardShortcut(
-          hiddenShortcutGroup,
-          shortcut,
-          this.handleKeyboardShortcuts
-        )
-      })
-    }
   }
 
   render() {
