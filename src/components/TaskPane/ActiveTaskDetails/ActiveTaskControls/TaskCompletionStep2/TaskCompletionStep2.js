@@ -72,9 +72,11 @@ export default class TaskCompletionStep2 extends Component {
     }
 
     this.completeTask(event.key)
+    event.preventDefault()
   }
 
   componentDidUpdate() {
+    console.log(this.props)
     if (
       !_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
       this.props.editMode
@@ -90,7 +92,7 @@ export default class TaskCompletionStep2 extends Component {
       _isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
       this.props.keyboardShortcutGroups &&
       this.props.activateKeyboardShortcut &&
-      !this.props.editMode
+      !this.props.editMode 
     ) {
       hiddenShortcuts.forEach((shortcut) => {
         this.props.activateKeyboardShortcut(

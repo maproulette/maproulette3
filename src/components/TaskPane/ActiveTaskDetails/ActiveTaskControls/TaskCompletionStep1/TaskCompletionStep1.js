@@ -77,6 +77,7 @@ export default class TaskCompletionStep1 extends Component {
     }
 
     this.completeTask(event.key)
+    event.preventDefault()
   }
 
   componentDidUpdate() {
