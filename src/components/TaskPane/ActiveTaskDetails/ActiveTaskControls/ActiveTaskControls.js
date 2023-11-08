@@ -208,7 +208,7 @@ export class ActiveTaskControls extends Component {
                         this.state.requestedNextTask)
   }
 
-  completeTask = (key) => {
+  openCompletionModal = (key) => {
     // Ignore if the shortcut group is not active
     if (_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
       return;
@@ -249,7 +249,7 @@ export class ActiveTaskControls extends Component {
       return
     }
 
-    this.completeTask(event.key)
+    this.openCompletionModal(event.key)
     event.preventDefault()
   }
 
