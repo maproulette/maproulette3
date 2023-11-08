@@ -283,9 +283,10 @@ export class ActiveTaskControls extends Component {
     }
 
     if((!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions)) {
+      const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
       if (
         !_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
-        this.props.editMode
+        editMode
       ) {
         hiddenShortcuts.forEach((shortcut) => {
           this.props.deactivateKeyboardShortcut(
@@ -298,7 +299,7 @@ export class ActiveTaskControls extends Component {
         _isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
         this.props.keyboardShortcutGroups &&
         this.props.activateKeyboardShortcut &&
-        !this.props.editMode
+        !editMode
       ) {
         hiddenShortcuts.forEach((shortcut) => {
           this.props.activateKeyboardShortcut(
