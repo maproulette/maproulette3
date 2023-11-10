@@ -930,4 +930,19 @@ will not be able to make sense of it.
     id: "Admin.EditChallenge.form.steps.no.label",
     defaultMessage: "No",
   },
+
+  automatedEditsPolicyAgreementLabel: {
+    id: "Admin.EditChallenge.form.automatedEditsPolicy.label",
+    defaultMessage: 'Test Label'
+  },
+
+  automatedEditsPolicyAgreementDescription: {
+    id: "Admin.EditChallenge.form.automatedEditsPolicy.description",
+    defaultMessage: "Test Description"
+  },
+
+  automatedEditsPolicyAgreementStepDescription: {
+  id: "Admin.EditChallenge.form.steps.automatedEditsPolicy.description",
+  defaultMessage: "Test Step Description"
+  },
 });

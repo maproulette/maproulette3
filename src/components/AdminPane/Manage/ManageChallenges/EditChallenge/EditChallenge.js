@@ -221,6 +221,7 @@ export class EditChallenge extends Component {
    * the extraErrors state field to a value as needed
    */
   validate = (formData, errors, activeStep) => {
+    console.log('validate ran', formData, errors, activeStep)
     this.validationPromise = this.validateDataSource(formData, activeStep);
     this.validationPromise
       .then(() => {
@@ -234,7 +235,6 @@ export class EditChallenge extends Component {
       .finally(() => {
         this.validationPromise = null;
       });
-
     return errors;
   };
 
@@ -285,17 +285,17 @@ export class EditChallenge extends Component {
    * Process submit event at each step, waiting until any pending validation is
    * complete before deciding how to proceed
    */
-  handleSubmit = (formData, nextStep) => {
+  handleSubmit = (formData, nextStep) => {   
     (this.validationPromise || Promise.resolve())
       .then(() => {
         this.isFinishing ? this.finish() : nextStep();
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
         return false;
       })
       .catch((err) => {
         console.log(err);
       }); // Stay on current step if validation fails
-
+      
     return false;
   };
 
@@ -706,6 +706,7 @@ export class EditChallenge extends Component {
 
     const challengeData = this.prepareChallengeDataForForm();
     const isNewChallenge = AsEditableChallenge(challengeData).isNew();
+
     return (
       <WorkflowSteps
         {...this.props}
