@@ -82,6 +82,10 @@ export default class TaskBundleWidget extends Component {
   }
 
   bundleTasks = () => {
+    if(_get(this.props, 'taskBundle.tasks.length', 0) > 0){
+      return
+    }
+    
     const selectedArray = Array.from(this.props.selectedTasks.selected.values());
     let bundleTypeMismatch = "";
     
