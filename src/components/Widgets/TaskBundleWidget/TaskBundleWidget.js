@@ -150,6 +150,10 @@ export default class TaskBundleWidget extends Component {
     this.props.resetSelectedTasks()
     this.setBoundsToNearbyTask()
   }
+  
+  unbundleTask = (task) => {
+    this.props.removeTaskFromBundle(this.props.taskBundle.bundleId, task)
+  }
 
   updateBounds = (challengeId, bounds, zoom) => {
     this.props.updateTaskFilterBounds(bounds, zoom)
@@ -255,6 +259,7 @@ export default class TaskBundleWidget extends Component {
           revertFilters={this.revertFilters}
           updateBounds={this.updateBounds}
           bundleTasks={this.bundleTasks}
+          unbundleTask={this.unbundleTask}
           unbundleTasks={this.unbundleTasks}
           loading={this.props.loading}
         />
@@ -273,6 +278,8 @@ const calculateTasksInChallenge = props => {
 }
 
 const ActiveBundle = props => {
+  const enableRemove = props.task.completedBy ? props.task.completedBy === props.user.id : true
+
   if (!props.taskBundle) {
     return null
   }
@@ -286,7 +293,7 @@ const ActiveBundle = props => {
             values={{taskCount: props.taskBundle.taskIds.length}}
           />
         </h3>
-        {!props.taskReadOnly && !props.disallowBundleChanges &&
+        {!props.taskReadOnly && props.task.status === 0 && enableRemove && !props.disallowBundleChanges &&
           <button
             className="mr-button mr-button--green-lighter mr-button--small"
             onClick={() => {
@@ -305,11 +312,12 @@ const ActiveBundle = props => {
           loading: false,
           tasks: props.taskBundle.tasks,
         }}
+        unbundleTask={props.unbundleTask}
         selectedTasks={new Map()}
         taskData={_get(props, 'taskBundle.tasks')}
         totalTaskCount={_get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')}
         totalTasksInChallenge={ calculateTasksInChallenge(props) }
-        showColumns={['featureId', 'id', 'status', 'priority']}
+        showColumns={['featureId', 'id', 'status', 'priority', 'unbundle']}
         taskSelectionStatuses={[TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard]}
         taskSelectionReviewStatuses={[]}
         suppressHeader
