@@ -29,6 +29,7 @@ import {
   CustomFieldTemplate,
   CustomSelectWidget,
   CustomTextWidget,
+  CustomCheckboxField,
   ColumnRadioField,
   MarkdownDescriptionField,
   MarkdownEditField,
@@ -221,7 +222,6 @@ export class EditChallenge extends Component {
    * the extraErrors state field to a value as needed
    */
   validate = (formData, errors, activeStep) => {
-    console.log('validate ran', formData, errors, activeStep)
     this.validationPromise = this.validateDataSource(formData, activeStep);
     this.validationPromise
       .then(() => {
@@ -285,7 +285,7 @@ export class EditChallenge extends Component {
    * Process submit event at each step, waiting until any pending validation is
    * complete before deciding how to proceed
    */
-  handleSubmit = (formData, nextStep) => {   
+  handleSubmit = (formData, nextStep) => {
     (this.validationPromise || Promise.resolve())
       .then(() => {
         this.isFinishing ? this.finish() : nextStep();
@@ -306,7 +306,7 @@ export class EditChallenge extends Component {
       return;
     }
 
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     this.setState({ isSaving: true });
 
     if (this.state.formData.email) {
@@ -523,6 +523,8 @@ export class EditChallenge extends Component {
         this.state.formData
       )
     );
+
+    // if(!challengeData.policyAgreement) throw new Error
 
     // Remove extraneous fields that should not be saved.
     delete challengeData.actions;
@@ -776,6 +778,7 @@ export class EditChallenge extends Component {
             DescriptionField: MarkdownDescriptionField,
             markdown: MarkdownEditField,
             columnRadio: ColumnRadioField,
+
             tags: (props) => {
               return (
                 <React.Fragment>
@@ -889,7 +892,6 @@ export class EditChallenge extends Component {
                   </Modal>
                 </External>
               )}
-
               <div className="mr-flex">
                 <div className="mr-w-54 mr-flex mr-flex-col mr-items-center mr-bg-blue-darker mr-rounded-l mr-pt-8">
                   {activeStep.icon && (
@@ -937,6 +939,8 @@ export class EditChallenge extends Component {
                     widgets={{
                       SelectWidget: CustomSelectWidget,
                       TextWidget: CustomTextWidget,
+                      automatedEditsCheckbox: CustomCheckboxField,
+
                     }}
                     ArrayFieldTemplate={CustomArrayFieldTemplate}
                     FieldTemplate={CustomFieldTemplate}
@@ -984,6 +988,7 @@ export class EditChallenge extends Component {
             </BreadcrumbWrapper>
           );
         }}
+        
       />
     );
   }

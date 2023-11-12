@@ -975,7 +975,6 @@ export const fetchChallenges = function (
       }
     }
 
-
     // We need to remove any old challenge keywords first, prior to the
     // update.
     return removeChallengeKeywords(

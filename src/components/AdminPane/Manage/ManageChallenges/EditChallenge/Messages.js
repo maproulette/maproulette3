@@ -931,18 +931,31 @@ will not be able to make sense of it.
     defaultMessage: "No",
   },
 
-  automatedEditsPolicyAgreementLabel: {
-    id: "Admin.EditChallenge.form.automatedEditsPolicy.label",
-    defaultMessage: 'Test Label'
+  automatedEditsCodeLabel: {
+    id: "Admin.EditChallenge.form.automatedEditsCode.label",
+    defaultMessage: 'Automated Edits Code of Conduct Agreement'
   },
 
-  automatedEditsPolicyAgreementDescription: {
-    id: "Admin.EditChallenge.form.automatedEditsPolicy.description",
-    defaultMessage: "Test Description"
+  automatedEditsCodeDescription: {
+    id: "Admin.EditChallenge.form.automatedEditsCode.description",
+    defaultMessage: 
+      "You are about to create a MapRoulette challenge. " + 
+      "With this power comes responsibility. Make sure that " + 
+      "your Challenge is designed to encourage careful human " + 
+      "attention to each task, in the spirit of OpenStreetMap's " + 
+      "[Automated Edits code of conduct](https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct). " + 
+      "Please read this document " + 
+      "carefully. By checking the box below, you acknowledge that " + 
+      "you understand and accept this responsibility."
   },
 
-  automatedEditsPolicyAgreementStepDescription: {
-  id: "Admin.EditChallenge.form.steps.automatedEditsPolicy.description",
+  automatedEditsCodeStepHeader: {
+    id: "Admin.EditChallenge.form.steps.automatedEditsCode.header",
+    defaultMessage: "OSM Automated Edits Code of Conduct"
+  },
+
+  automatedEditsCodeStepDescription: {
+  id: "Admin.EditChallenge.form.steps.automatedEditsCode.description",
   defaultMessage: "Test Step Description"
   },
 });

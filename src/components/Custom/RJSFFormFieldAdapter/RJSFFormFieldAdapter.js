@@ -7,12 +7,15 @@ import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
 import _isEmpty from 'lodash/isEmpty'
 import _trim from 'lodash/trim'
+import _omit from 'lodash/omit'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
        from '@rjsf/core/lib/components/widgets/SelectWidget'
 import OriginalTextWidget
       from '@rjsf/core/lib/components/widgets/TextWidget'
+import OriginalCheckboxWidget
+      from '@rjsf/core/lib/components/widgets/CheckboxWidget'
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import Dropdown from '../../Dropdown/Dropdown'
@@ -179,6 +182,19 @@ export const CustomSelectWidget = function(props) {
           className="mr-fill-current mr-w-4 mr-h-4"
         />
       </div>
+    </div>
+  )
+}
+
+export const CustomCheckboxField = function(props) {
+  return (
+    <div className='mr-space-y-4'>
+      <p className="mr-text-mango mr-text-md mr-uppercase">  
+        {props.schema.title}
+        {props.required && <span className="mr-text-red-light mr-ml-1">*</span>}
+      </p>
+      <MarkdownContent markdown={props.schema.agreementDescription} lightMode={false} />
+      <OriginalCheckboxWidget {...props} label='I have read the OSM Automated Edits Code of Conduct'/>
     </div>
   )
 }

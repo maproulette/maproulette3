@@ -48,8 +48,9 @@ export const jsSchema = (intl) => {
                   'REACT_APP_INITIAL_CHALLENGE_MAX_ZOOM',
                   MAX_ZOOM),
       }
-    }
+    },
   }
+  
 }
 
 /**
