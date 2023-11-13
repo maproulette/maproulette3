@@ -15,8 +15,8 @@ export const jsSchema = (intl) => {
         type: "boolean",
         default: null,
         enum: [null, true],
-        agreementDescription: intl.formatMessage(messages.automatedEditsCodeDescription)
-        // description: intl.formatMessage(messages.automatedEditsCodeDescription),
+        agreementDescription: intl.formatMessage(messages.automatedEditsCodeDescription),
+        checkboxLabel: messages.automatedEditsCodeUICheckboxLabel
       }
     },
     required: ["automatedEditsCodeAgreement"]

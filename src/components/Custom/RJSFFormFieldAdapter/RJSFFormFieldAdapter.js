@@ -186,13 +186,20 @@ export const CustomSelectWidget = function(props) {
 
 export const CustomCheckboxField = function(props) {
   return (
-    <div className='mr-space-y-4'>
+    <div className="mr-space-y-4">
       <p className="mr-text-mango mr-text-md mr-uppercase">  
         {props.schema.title}
         {props.required && <span className="mr-text-red-light mr-ml-1">*</span>}
       </p>
-      <MarkdownContent markdown={props.schema.agreementDescription} lightMode={false} />
-      <OriginalCheckboxWidget {...props} label='I have read the OSM Automated Edits Code of Conduct'/>
+      <div className="mr-bg-blue-firefly mr-pt-4 mr-px-4 mr-pb-6 mr-rounded">
+        <MarkdownContent markdown={props.schema.agreementDescription} lightMode={false} />
+        <div className="mr-items-center mr-flex mr-space-x-2">
+          <OriginalCheckboxWidget {...props} label=""/>
+          <p className="mr-text-mango mr-text-sm">
+            <FormattedMessage {...props.schema.checkboxLabel} />
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

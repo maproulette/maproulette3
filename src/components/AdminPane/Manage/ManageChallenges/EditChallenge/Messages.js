@@ -954,8 +954,8 @@ will not be able to make sense of it.
     defaultMessage: "OSM Automated Edits Code of Conduct"
   },
 
-  automatedEditsCodeStepDescription: {
-  id: "Admin.EditChallenge.form.steps.automatedEditsCode.description",
-  defaultMessage: "Test Step Description"
-  },
+  automatedEditsCodeUICheckboxLabel: {
+    id: "Admin.EditChallenge.form.automatedEditsCode.UICheckboxLabel",
+    defaultMessage: "I have read and understand the OSM Automated Edits code of conduct"
+  }
 });
