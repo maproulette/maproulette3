@@ -7,7 +7,6 @@ import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
 import _isEmpty from 'lodash/isEmpty'
 import _trim from 'lodash/trim'
-import _omit from 'lodash/omit'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
