@@ -47,7 +47,7 @@ const WithCurrentChallenge = function(WrappedComponent) {
           if (this.props.user) {
             Promise.all([
               this.props.fetchChallengeComments(challengeId),
-              this.props.fetchChallengeActivity(challengeId, new Date(challenge.created)),
+              this.props.fetchChallengeActivity(challengeId, new Date(challenge?.created)),
               this.props.fetchChallengeActions(challengeId),
             ]).then(() => this.setState({loadingChallenge: false}))
           } else {
