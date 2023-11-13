@@ -412,8 +412,9 @@ const BuildBundle = props => {
           <MapPane showLasso>{map}</MapPane>
         }
       </div>
-      <div className="mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center">
-        <div className='mr-flex mr-items-center'>
+
+      <div className={props.widgetLayout && props.widgetLayout?.w === 4 ? "mr-my-4 mr-px-4 mr-space-y-3" : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"}>
+        <div className="mr-flex mr-items-center">
           <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
             <FormattedMessage {...messages.filterListLabel} />
           </p>
@@ -430,10 +431,10 @@ const BuildBundle = props => {
           </ul>
         </div>
         
-        <div className='mr-flex mr-space-x-3 mr-items-center mr-justify-end'>
+        <div className={`mr-flex mr-space-x-3 mr-items-center ${props.widgetLayout && props.widgetLayout?.w === 4 ? 'mr-justify-between' : 'mr-justify-end'}`}>
         {<ClearFiltersControl clearFilters={props.clearAllFilters}/>}
           <Dropdown
-          className='mr-flex mr-items-center'
+          className="mr-flex mr-items-center"
             dropdownButton={(dropdown) => (
               <button
                 onClick={dropdown.toggleDropdownVisible}
