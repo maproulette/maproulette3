@@ -53,7 +53,6 @@ describe("TaskCompletionStep1", () => {
         keyboardShortcutGroups={{ taskCompletion: { fixed: { key: 123 } } }}
         activateKeyboardShortcutGroup={() => null}
         deactivateKeyboardShortcutGroup={() => null}
-        quickKeyHandler={() => null}
         activateKeyboardShortcut={() => null}
         deactivateKeyboardShortcut={() => null}
         needsRevised
@@ -78,7 +77,6 @@ describe("TaskCompletionStep1", () => {
         keyboardShortcutGroups={{ taskCompletion: { fixed: { key: 123 } } }}
         activateKeyboardShortcutGroup={() => null}
         deactivateKeyboardShortcutGroup={() => null}
-        quickKeyHandler={() => null}
         activateKeyboardShortcut={() => null}
         deactivateKeyboardShortcut={() => null}
         needsRevised
@@ -112,7 +110,6 @@ describe("TaskCompletionStep1", () => {
         keyboardShortcutGroups={{ taskCompletion: { falsePositive: { key: 123 } } }}
         activateKeyboardShortcutGroup={() => null}
         deactivateKeyboardShortcutGroup={() => null}
-        quickKeyHandler={() => null}
         activateKeyboardShortcut={() => null}
         deactivateKeyboardShortcut={() => null}
         needsRevised
@@ -146,7 +143,6 @@ describe("TaskCompletionStep1", () => {
         keyboardShortcutGroups={{ taskCompletion: { tooHard: { key: 123 } } }}
         activateKeyboardShortcutGroup={() => null}
         deactivateKeyboardShortcutGroup={() => null}
-        quickKeyHandler={() => null}
         activateKeyboardShortcut={() => null}
         deactivateKeyboardShortcut={() => null}
         needsRevised
@@ -180,7 +176,6 @@ describe("TaskCompletionStep1", () => {
         keyboardShortcutGroups={{ taskCompletion: { alreadyFixed: { key: 123 } } }}
         activateKeyboardShortcutGroup={() => null}
         deactivateKeyboardShortcutGroup={() => null}
-        quickKeyHandler={() => null}
         activateKeyboardShortcut={() => null}
         deactivateKeyboardShortcut={() => null}
         needsRevised

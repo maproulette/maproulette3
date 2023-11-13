@@ -4,12 +4,14 @@ import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _pick from 'lodash/pick'
 import _isEmpty from 'lodash/isEmpty'
 import _remove from 'lodash/remove'
 import _cloneDeep from 'lodash/cloneDeep'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
+import { TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 import { allowedStatusProgressions, isCompletionStatus,
          isFinalStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -41,6 +43,8 @@ import { constructChangesetUrl } from '../../../../utils/constructChangesetUrl'
 import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement'
 import './ActiveTaskControls.scss'
 
+const hiddenShortcutGroup = 'taskCompletion'
+const hiddenShortcuts = ['skip', 'falsePositive', 'fixed', 'tooHard', 'alreadyFixed']
 
 /**
  * ActiveTaskControls renders the appropriate controls for the given
@@ -204,6 +208,51 @@ export class ActiveTaskControls extends Component {
                         this.state.requestedNextTask)
   }
 
+  openCompletionModal = (key) => {
+    // Ignore if the shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
+      return;
+    }
+
+    // Handle different keyboard shortcuts
+    switch (key) {
+      case 'f':
+        this.initiateCompletion(TaskStatus.fixed)
+        break
+      case 'd':
+        this.initiateCompletion(TaskStatus.tooHard)
+        break
+      case 'x':
+        this.initiateCompletion(TaskStatus.alreadyFixed)
+        break
+      case 'w':
+        this.initiateCompletion(TaskStatus.skipped)
+        break
+      case 'q':
+        this.initiateCompletion(TaskStatus.falsePositive)
+        break
+      default:
+        break // Handle other keys or do nothing
+    }
+  }
+
+  handleKeyboardShortcuts = (event) => {
+    if (_isEmpty(this.props.activeKeyboardShortcuts[hiddenShortcutGroup])) {
+      return
+    }
+
+    if (this.props.textInputActive(event)) {
+      return // Ignore typing in inputs
+    }
+
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+
+    this.openCompletionModal(event.key)
+    event.preventDefault()
+  }
+
   componentDidUpdate(prevProps) {
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       return this.resetConfirmation()
@@ -231,6 +280,47 @@ export class ActiveTaskControls extends Component {
         !this.state.doneLoadByFromHistory) {
       return this.setState({revisionLoadBy: TaskReviewLoadMethod.inbox,
                             doneLoadByFromHistory: true})
+    }
+
+    if((!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions)) {
+      const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+      if (
+        !_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
+        editMode
+      ) {
+        hiddenShortcuts.forEach((shortcut) => {
+          this.props.deactivateKeyboardShortcut(
+            hiddenShortcutGroup,
+            shortcut,
+            this.handleKeyboardShortcuts
+          );
+        });
+      } else if (
+        _isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
+        this.props.keyboardShortcutGroups &&
+        this.props.activateKeyboardShortcut &&
+        !editMode
+      ) {
+        hiddenShortcuts.forEach((shortcut) => {
+          this.props.activateKeyboardShortcut(
+            hiddenShortcutGroup,
+            _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
+            this.handleKeyboardShortcuts
+          )
+        })
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
+      hiddenShortcuts.forEach((shortcut) => {
+        this.props.deactivateKeyboardShortcut(
+          hiddenShortcutGroup,
+          shortcut,
+          this.handleKeyboardShortcuts
+        )
+      })
     }
   }
 
@@ -337,6 +427,7 @@ export class ActiveTaskControls extends Component {
                 complete={this.initiateCompletion}
                 nextTask={this.next}
                 needsRevised={needsRevised}
+                editMode={editMode}
               />
              }
 

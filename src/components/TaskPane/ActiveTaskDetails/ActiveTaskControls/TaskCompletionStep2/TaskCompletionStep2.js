@@ -30,7 +30,7 @@ export default class TaskCompletionStep2 extends Component {
     if (this.props.needsRevised) {
       complete = (status) => this.props.complete(status, TaskReviewStatus.needed)
     }
-
+    
     return (
       <div>
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
