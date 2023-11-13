@@ -21,8 +21,8 @@ export class EditSwitch extends Component {
     return (
       <div className="mr-flex mr-justify-center">
         <label className="switch-container">
-          <input type="checkbox" checked={editModeOn} onChange={() => null}/>
-          <span className="slider round" onClick={this.toggleVisible}></span>
+          <input type="checkbox" checked={editModeOn} />
+          <span className="slider round" onClick={() => this.toggleVisible()}></span>
         </label>
         <span className="mr-ml-2">
           {editModeOn ? 'Edit Mode' : 'Classic Mode'}
