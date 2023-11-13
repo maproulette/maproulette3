@@ -1083,7 +1083,7 @@ export const fetchChallenges = function (
           dispatch(
             addServerError(errorMessage)
           );
-          // throw new Error(errorMessage)
+          throw new Error(errorMessage)
         } else {
           delete challengeData.automatedEditsCodeAgreement
         }
