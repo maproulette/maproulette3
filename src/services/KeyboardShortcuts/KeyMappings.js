@@ -24,7 +24,7 @@ export default {
   taskEditing: {
     cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel},
     fitBounds: {key: '0', label: messages.fitBounds},
-    completeTogether: {key: 'c', label: messages.completeTogether}
+    completeTogether: {key: 'b', label: messages.completeTogether}
   },
   layers: {
     layerOSMData: {key: 'o', label: messages.layerOSMData},
