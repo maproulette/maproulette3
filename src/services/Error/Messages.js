@@ -177,7 +177,7 @@ export default defineMessages({
   },
   challengeSaveDetailsFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveDetailsFailure",
-    defaultMessage: "Unable to save your changes.",
+    defaultMessage: "Unable to save your changes. It is likely a duplicate challenge name.",
   },
   challengeSaveNameFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveNameFailure",
