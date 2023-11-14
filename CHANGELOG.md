@@ -14,13 +14,18 @@ Realease with [maproulette-backend_v4.4.9](https://github.com/maproulette/maprou
 - Add lasso and virtual challenge creation functionality to challenge dashboard map - @CollinBeczak
 - Add bulk editing of the date That Data Was Sourced within a project - @jschwarz2030
 - Add bulk editing of instructions and add a confirmation modal - @jschwarz2030
-- Change button "Too Hard / Can't See" to "Can't Complete" - @CollinBeczak
-- Add a keyboard shortcut for editing bundled tasks - @CollinBeczak
 
 ### Fixes
 - Fix input selection when adding tag in tag fix challenges - @CollinBeczak
 - Fix the routing logic and tag results for the "Find Challenges" page when searching for projects - @CollinBeczak
-- fix task bundle widget width minimum - @CollinBeczak
+- Fix task bundle widget width minimum - @CollinBeczak
+- Make all keyboard shortcuts in option dropdown menu active - @CollinBeczak
+- Fix error caused by missing props when no user is signed in - @CollinBeczak
+- Change keyboard shortcut for bundling tasks and make it conditional - @CollinBeczak
+- Fix categorization filter related errors with sign in validation - @CollinBeczak
+- Fix `includes does not exist` error when filtering by categorization in Find Challenges page - @CollinBeczak
+- Add catches rare bugs with fetching projects and challenge - @CollinBeczak
+- Change button "Too Hard / Can't See" to "Can't Complete" - @CollinBeczak
 - Update react-error-overlay version - @AndrewPhilbin
 
 ### System Updates
