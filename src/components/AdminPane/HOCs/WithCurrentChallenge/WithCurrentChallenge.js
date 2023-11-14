@@ -46,6 +46,7 @@ const WithCurrentChallenge = function(WrappedComponent) {
             const challenge = challengeResultEntity(normalizedChallengeData)
 
             if (this.props.user) {
+              debugger
               Promise.all([
                 this.props.fetchChallengeComments(challengeId),
                 this.props.fetchChallengeActivity(challengeId, new Date(challenge.created)),
