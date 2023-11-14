@@ -7,7 +7,7 @@ export const challengePassesCategorizationKeywordsFilter = function(filter, chal
   let passing = true
     if (_isArray(filter.categorizationKeywords)) {
       filter.categorizationKeywords.map(key => {
-        if(!challenge.tags.includes(key)){
+        if(!challenge.tags?.includes(key)){
           passing = false
         }
       })
@@ -15,3 +15,4 @@ export const challengePassesCategorizationKeywordsFilter = function(filter, chal
   
     return passing
   }
+  

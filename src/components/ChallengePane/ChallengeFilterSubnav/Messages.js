@@ -64,6 +64,11 @@ export default defineMessages({
     defaultMessage: "You have not set any categories.",
   },
 
+  signIn: {
+    id: "ChallengeFilterSubnav.filter.categorization.signIn",
+    defaultMessage: "You must sign in to add a keyword.",
+  },
+
   add: {
     id: "ChallengeFilterSubnav.filter.categorization.add",
     defaultMessage: "Add:",
@@ -71,7 +76,7 @@ export default defineMessages({
 
   delete: {
     id: "ChallengeFilterSubnav.filter.categorization.delete",
-    defaultMessage: "You must delete a category.",
+    defaultMessage: "You must delete a category",
   },
 
   new: {
