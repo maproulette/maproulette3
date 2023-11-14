@@ -68,13 +68,19 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
           this.props.fetchProjectsById(missingProjects)
 
           if (includeChallenges) {
-            this.props.fetchProjectChallengeListing(missingProjects).then(() => {
+            this.props.fetchProjectChallengeListing(missingProjects)
+            .then(() => {
               this.setState({loadingChallenges: false})
             })
           }
         }
 
         this.setState({loadingProjects: false})
+      })
+      .catch(error => {
+        // Handle any errors that occurred during project loading
+        console.error('Error loading projects:', error)
+        this.setState({ loadingProjects: false })
       })
     }
 

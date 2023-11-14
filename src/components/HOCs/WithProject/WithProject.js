@@ -55,26 +55,31 @@ const WithProject = function(WrappedComponent, options={}) {
           loadingChallenges: options.includeChallenges,
         })
 
-        props.fetchProject(projectId).then(async normalizedProject => {
-          const project = normalizedProject.entities.projects[normalizedProject.result]
-          this.setState({project: project})
+        props.fetchProject(projectId)
+          .then(async normalizedProject => {
+            const project = normalizedProject.entities.projects[normalizedProject.result]
+            this.setState({project: project})
 
-          if (options.includeChallenges) {
-            const retrievals = []
-            retrievals.push(props.fetchProjectChallenges(projectId))
+            if (options.includeChallenges) {
+              const retrievals = []
+              retrievals.push(props.fetchProjectChallenges(projectId))
 
-            const challenges = await props.fetchProjectChallenges(projectId)
+              const challenges = await props.fetchProjectChallenges(projectId)
 
-            if (challenges.result.length < PROJECT_CHALLENGE_LIMIT + 1) {
-              retrievals.push(props.fetchProjectChallengeActions(projectId))
+              if (challenges.result.length < PROJECT_CHALLENGE_LIMIT + 1) {
+                retrievals.push(props.fetchProjectChallengeActions(projectId))
+              }
+
+              Promise.all(retrievals).then(() => {
+                this.setState({loadingChallenges: false})
+              })
             }
-
-            Promise.all(retrievals).then(() => {
-              this.setState({loadingChallenges: false})
-            })
-          }
-
-        })
+          })
+          .catch(error => {
+            // Handle any errors that occurred during project fetching
+            console.error('Error fetching project:', error);
+            this.setState({ loadingChallenges: false });
+          });
       }
     }
 

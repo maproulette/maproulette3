@@ -111,26 +111,32 @@ export const WithCurrentProject = function(WrappedComponent, options={}) {
           loadingChallenges: options.includeChallenges,
         })
 
-        props.fetchProject(projectId).then(normalizedProject => {
-          const project = normalizedProject.entities.projects[normalizedProject.result]
+        props.fetchProject(projectId)
+          .then(normalizedProject => {
+            const project = normalizedProject.entities.projects[normalizedProject.result]
 
-          if (!options.allowNonManagers) {
-            const manager = AsManager(this.props.user)
-            if (!manager.canManage(project)) {
-              // If we have a challenge id too, route to the browse url for the challenge
-              const challengeId = this.routedChallengeId(this.props)
-              if (_isFinite(challengeId)) {
-                props.history.replace(`/browse/challenges/${challengeId}`)
-              } else {
-                this.props.notManagerError()
-                props.history.push('/admin/projects')
+            if (!options.allowNonManagers) {
+              const manager = AsManager(this.props.user)
+              if (!manager.canManage(project)) {
+                // If we have a challenge id too, route to the browse url for the challenge
+                const challengeId = this.routedChallengeId(this.props)
+                if (_isFinite(challengeId)) {
+                  props.history.replace(`/browse/challenges/${challengeId}`)
+                } else {
+                  this.props.notManagerError()
+                  props.history.push('/admin/projects')
+                }
+                return
               }
-              return
             }
-          }
 
-          this.setState({loadingProject: false})
-        })
+            this.setState({loadingProject: false})
+          })
+          .catch(error => {
+            // Handle any errors that occurred during project fetching
+            console.error('Error fetching project:', error);
+            this.setState({ loadingProject: false });
+          });
 
         if (options.includeChallenges) {
           const retrievals = []
