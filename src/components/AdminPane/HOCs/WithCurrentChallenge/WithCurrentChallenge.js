@@ -41,21 +41,25 @@ const WithCurrentChallenge = function(WrappedComponent) {
         this.setState({loadingChallenge: true})
 
         // Start by fetching the challenge. Then fetch follow-up data.
-        return this.props.fetchChallenge(challengeId).then(normalizedChallengeData => {
-          const challenge = challengeResultEntity(normalizedChallengeData)
+        return this.props.fetchChallenge(challengeId)
+          .then(normalizedChallengeData => {
+            const challenge = challengeResultEntity(normalizedChallengeData)
 
-          if (this.props.user) {
-            Promise.all([
-              this.props.fetchChallengeComments(challengeId),
-              this.props.fetchChallengeActivity(challengeId, new Date(challenge.created)),
-              this.props.fetchChallengeActions(challengeId),
-            ]).then(() => this.setState({loadingChallenge: false}))
-          } else {
+            if (this.props.user) {
+              Promise.all([
+                this.props.fetchChallengeComments(challengeId),
+                this.props.fetchChallengeActivity(challengeId, new Date(challenge.created)),
+                this.props.fetchChallengeActions(challengeId),
+              ]).then(() => this.setState({loadingChallenge: false}))
+            } else {
+              this.setState({ loadingChallenge: false })
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading challenge:", error)
             this.setState({ loadingChallenge: false })
-          }
-        })
-      }
-      else {
+          })
+      } else {
         this.setState({loadingChallenge: false})
       }
     }
