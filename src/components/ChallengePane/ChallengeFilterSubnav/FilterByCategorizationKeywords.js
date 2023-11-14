@@ -37,6 +37,10 @@ class FilterByCategorizationKeywords extends Component {
   }
 
   addKeyword = (value, categories) => {
+    if(!this.props.user?.id){
+      return
+    }
+
     value = value.trim()
     const addKeyword = new Set(categories)
 
@@ -90,6 +94,7 @@ class FilterByCategorizationKeywords extends Component {
             addKeyword={this.addKeyword}
             removeKeyword={this.removeKeyword}
             closeDropdown={dropdown.closeDropdown}
+            signedOut={!this.props.user?.id}
           />
         )}
       />
@@ -129,8 +134,14 @@ const ListFilterItems = function (props) {
   // Add box for manually entering other keywords not included in the menu.
   menuItems.push(
     <li key="add">
-      {props.categories.length === 0 ? (
-        <div className="mr-text-grey-light mr-pt-2"> <FormattedMessage {...messages.set}/></div>
+      { props.signedOut ? (
+        <div className="mr-text-grey-light mr-pt-2">
+          <FormattedMessage {...messages.signIn} />
+        </div>
+      ) : props.categories.length === 0 ? (
+        <div className="mr-text-grey-light mr-pt-2">
+          <FormattedMessage {...messages.set} />
+        </div>
       ) : null}
       <div className="mr-flex mr-items-center mr-py-3">
         <label className="mr-text-green-lighter mr-mr-4 mr-cursor-pointer"><FormattedMessage {...messages.add}/></label>
