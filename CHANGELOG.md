@@ -7,6 +7,36 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.0] - 2023-11-14
+Realease with [maproulette-backend_v4.4.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.9)
+
+### Features
+- Add lasso and virtual challenge creation functionality to challenge dashboard map - @CollinBeczak
+- Add bulk editing of the date That Data Was Sourced within a project - @jschwarz2030
+- Add bulk editing of instructions and add a confirmation modal - @jschwarz2030
+
+### Fixes
+- Fix input selection when adding tag in tag fix challenges - @CollinBeczak
+- Fix the routing logic and tag results for the "Find Challenges" page when searching for projects - @CollinBeczak
+- Fix task bundle widget width minimum - @CollinBeczak
+- Make all keyboard shortcuts in option dropdown menu active - @CollinBeczak
+- Fix error caused by missing props when no user is signed in - @CollinBeczak
+- Change keyboard shortcut for bundling tasks and make it conditional - @CollinBeczak
+- Fix categorization filter related errors with sign in validation - @CollinBeczak
+- Fix `includes does not exist` error when filtering by categorization in Find Challenges page - @CollinBeczak
+- Add catches rare bugs with fetching projects and challenge - @CollinBeczak
+- Change button "Too Hard / Can't See" to "Can't Complete" - @CollinBeczak
+- Update react-error-overlay version - @AndrewPhilbin
+
+### System Updates
+- Modified the `ChallengeController` to store `taskWidgetLayout` as an empty JSON object instead of an empty string 
+when the field is not provided in the request. - @ljdelight
+- Updated `MRSchemaTypes` in the GraphQL schema to handle `taskWidgetLayout` as an optional JSON value, defaulting to 
+an empty JSON object when not present. - @ljdelight
+- support short url and short path for changesets - @jschwarz2030
+- Bump browserify-sign from 4.2.1 to 4.2.2
+- update and migrate transifex config - @jschwarz2030
+
 ## [v3.13.2] - 2023-10-17
 Realease with [maproulette-backend_v4.4.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.8)
 
