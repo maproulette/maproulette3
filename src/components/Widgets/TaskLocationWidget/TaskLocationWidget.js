@@ -20,7 +20,7 @@ const descriptor = {
   minHeight: 6,
   defaultHeight: 8,
   defaultConfiguration: {
-    reverseLonLat: false,
+    reverseLonLat: true,
   }
 }
 
