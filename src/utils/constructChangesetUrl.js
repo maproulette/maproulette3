@@ -23,8 +23,6 @@ export const constructChallengeLink = (challengeId) => {
   const rootUrl = getRootUrl();
   const path = process.env.REACT_APP_SHORT_PATH === 'enabled' ? `/c/${challengeId}` : `/browse/challenges/${challengeId}`
 
-  console.log(process.env.REACT_APP_SHORT_PATH, path)
-
   return `${rootUrl}${path}`;
 };
 
