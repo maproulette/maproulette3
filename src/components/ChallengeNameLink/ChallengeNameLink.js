@@ -8,6 +8,7 @@ import AsBrowsableChallenge
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import ShareLink from '../ShareLink/ShareLink'
+import { constructChallengeLink } from '../../utils/constructChangesetUrl'
 
 /**
  * ChallengeNameLink displays a linked name of the parent challenge of the
@@ -20,6 +21,7 @@ export default class ChallengeNameLink extends Component {
     const challenge = _get(this.props.task, 'parent') || this.props.challenge || {}
     const project = _get(this.props.task, 'parent.parent') || this.props.project || {}
     const challengeBrowseRoute = AsBrowsableChallenge(challenge).browseURL()
+    const challengeShareLink = constructChallengeLink(challenge?.id)
 
     return (
       <span className="mr-flex mr-items-baseline mr-relative mr-overflow-hidden">
@@ -60,7 +62,7 @@ export default class ChallengeNameLink extends Component {
           }
         </div>
         {!this.props.suppressShareLink &&
-         <ShareLink link={challengeBrowseRoute} {...this.props} />
+         <ShareLink link={challengeShareLink} {...this.props} />
         }
       </span>
     )

@@ -33,6 +33,7 @@ import BusySpinner from '../BusySpinner/BusySpinner'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
 import messages from './Messages'
+import { constructChallengeLink } from '../../utils/constructChangesetUrl'
 
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails)
@@ -350,7 +351,7 @@ export class TaskPane extends Component {
                         }
                         <li>
                           <CopyToClipboard
-                            text={`${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}`}
+                            text={constructChallengeLink(challenge.id)}
                             onCopy={() => dropdown.closeDropdown()}
                           >
                             <a>

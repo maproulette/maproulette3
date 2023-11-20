@@ -9,7 +9,6 @@ import {
   WidgetDataTarget,
   widgetDescriptor,
 } from "../../../../services/Widget/Widget";
-import AsBrowsableChallenge from "../../../../interactions/Challenge/AsBrowsableChallenge";
 import WithManageableProjects from "../../HOCs/WithManageableProjects/WithManageableProjects";
 import WithCurrentProject from "../../HOCs/WithCurrentProject/WithCurrentProject";
 import WithCurrentChallenge from "../../HOCs/WithCurrentChallenge/WithCurrentChallenge";
@@ -28,6 +27,7 @@ import ChallengeNameLink from "../../../ChallengeNameLink/ChallengeNameLink";
 import ShareLink from "../../../ShareLink/ShareLink";
 import manageMessages from "../Messages";
 import "./ChallengeDashboard.scss";
+import { constructChallengeLink } from "../../../../utils/constructChangesetUrl";
 
 // The name of this dashboard.
 const DASHBOARD_NAME = "challenge";
@@ -116,7 +116,7 @@ export class ChallengeDashboard extends Component {
               <ChallengeNameLink {...this.props} suppressShareLink />
               <ShareLink
                 {...this.props}
-                link={AsBrowsableChallenge(this.props.challenge).browseURL()}
+                link={constructChallengeLink(this.props.challenge?.id)}
                 showLeft
               />
               {this.props.loadingChallenge && <BusySpinner inline />}

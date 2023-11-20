@@ -19,8 +19,6 @@ import './ShareLink.scss'
  */
 export class ShareLink extends Component {
   render() {
-    const absoluteLink = `${process.env.REACT_APP_URL}${this.props.link}`
-    
     return (
       <div className={classNames('share-link dropdown mr-flex mr-items-center', {'is-active': this.props.isActive},
                                  this.props.className)}>
@@ -41,9 +39,9 @@ export class ShareLink extends Component {
          >
            <div className='dropdown-menu' role='menu'>
              <div className='mr--mt-7 mr-flex mr-items-center mr-justify-between mr-p-2 mr-bg-blue-dark mr-text-white mr-rounded mr-shadow mr-text-sm'>
-               <span className="share-link__text">{absoluteLink}</span>
+               <span className="share-link__text">{this.props.link}</span>
 
-               <CopyToClipboard text={absoluteLink} onCopy={this.props.deactivate}>
+               <CopyToClipboard text={this.props.link} onCopy={this.props.deactivate}>
                  <button className="mr-button mr-button--small mr-ml-2 mr-flex mr-items-center">
                    <FormattedMessage {...messages.copy} />
                    <SvgSymbol viewBox='0 0 20 20' className="mr-ml-2 mr-w-3 mr-h-3 mr-fill-current" sym="clipboard-icon" />
