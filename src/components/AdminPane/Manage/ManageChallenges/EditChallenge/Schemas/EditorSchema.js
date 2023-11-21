@@ -136,6 +136,7 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
     taskWidgetLayout: {
       "ui:widget": DropzoneTextUpload,
       "ui:readonly": sourceReadOnly,
+      "ui:collapsed": isGroupCollapsed,
     }
   }, presetUiSchemas)
 
