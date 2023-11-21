@@ -11,7 +11,7 @@ describe("isMetaReviewStatus", () => {
       3: { defaultMessage: "Skipped", id: "Task.status.skipped" },
       4: { defaultMessage: "Deleted", id: "Task.status.deleted" },
       5: { defaultMessage: "Already Fixed", id: "Task.status.alreadyFixed" },
-      6: { defaultMessage: "Too Hard", id: "Task.status.tooHard" },
+      6: { defaultMessage: "Can't Complete", id: "Task.status.tooHard" },
       9: { defaultMessage: "Disabled", id: "Task.status.disabled" },
     });
   });

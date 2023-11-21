@@ -1053,7 +1053,7 @@
   "LayerToggle.loading": "(загрузка ...)",
   "Leaderboard.controls.loadMore.label": "Показать больше",
   "Leaderboard.global": "Глобальный рейтинг",
-  "Leaderboard.scoringMethod.explanation": "\n##### Points are awarded per completed task as follows:\n\n| Status        | Points |\n| :------------ | -----: |\n| Fixed         | 5      |\n| Not an Issue  | 3      |\n| Already Fixed | 3      |\n| Too Hard      | 1      |\n| Skipped       | 0      |\n",
+  "Leaderboard.scoringMethod.explanation": "\n##### Points are awarded per completed task as follows:\n\n| Status        | Points |\n| :------------ | -----: |\n| Fixed         | 5      |\n| Not an Issue  | 3      |\n| Already Fixed | 3      |\n| Can't Complete| 1      |\n| Skipped       | 0      |\n",
   "Leaderboard.scoringMethod.label": "Способ подсчета очков",
   "Leaderboard.title": "Рейтинг",
   "Leaderboard.updatedDaily": "Обновляется каждые 24 ч",

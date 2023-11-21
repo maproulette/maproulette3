@@ -81,7 +81,7 @@ export default defineMessages({
 
   tooHard: {
     id: "ReviewStatus.metrics.tooHard",
-    defaultMessage: "TOO HARD",
+    defaultMessage: "CAN'T COMPLETE",
   },
 
   byPriorityToggle: {

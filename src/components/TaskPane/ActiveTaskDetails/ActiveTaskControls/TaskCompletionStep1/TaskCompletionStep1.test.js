@@ -126,7 +126,7 @@ describe("TaskCompletionStep1", () => {
     });
   });
 
-  it("calls props.toggleDropdownVisible if list element is clicked - too hard", async () => {
+  it("calls props.toggleDropdownVisible if list element is clicked - can't complete", async () => {
     const toggleDropdownVisible = jest.fn()
     const allowedProgressions = new Map();
     allowedProgressions.set(6);

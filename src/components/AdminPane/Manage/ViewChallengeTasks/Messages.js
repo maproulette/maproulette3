@@ -121,7 +121,7 @@ export default defineMessages({
 
   actionTooHard: {
     id: "Admin.Task.fields.actions.tooHard",
-    defaultMessage: "Too Hard",
+    defaultMessage: "Can't Complete",
   },
 
   actionDisabled: {

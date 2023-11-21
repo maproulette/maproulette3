@@ -12,7 +12,7 @@ export default defineMessages({
   primaryMessage: {
     id: "ChallengeEndModal.primaryMessage",
     defaultMessage: "You have marked all remaining tasks in this challenge " + 
-                    "as either skipped or too hard."
+                    "as either skipped or can't complete."
   },
 
   dismiss: {
