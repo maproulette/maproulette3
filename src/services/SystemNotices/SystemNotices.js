@@ -44,7 +44,6 @@ export const fetchActiveSystemNotices = () => {
         }).filter(notice => isFuture(notice.expirationDate))
       }
       else {
-        debugger;
         // Allow server admin to delete file when not in use
         return []
       }
