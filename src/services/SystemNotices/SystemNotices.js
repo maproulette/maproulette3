@@ -1,9 +1,8 @@
-import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import parse from 'date-fns/parse'
 import isFuture from 'date-fns/is_future'
-
-const NOTICES_URL = process.env.REACT_APP_SYSTEM_NOTICES_URL
+import Endpoint from '../Server/Endpoint'
+import { defaultRoutes as api } from "../Server/Server";
 
 /**
  * Fetches system notices from the configured URL. Reponse is expected to be a
@@ -32,26 +31,21 @@ const NOTICES_URL = process.env.REACT_APP_SYSTEM_NOTICES_URL
  *    }
  * ```
  */
-export const fetchActiveSystemNotices = async function() {
-  if (_isEmpty(NOTICES_URL)) {
-    return []
-  }
-
-  const response = await fetch(NOTICES_URL)
-  if (response.ok) {
-    const systemNotices = await response.json()
-    if (!systemNotices || !_isArray(systemNotices.notices)) {
-      return []
-    }
-
-    return systemNotices.notices.map(notice => {
-      // add Date instance for expiration timestamp
-      notice.expirationDate = parse(notice.expirationTimestamp)
-      return notice
-    }).filter(notice => isFuture(notice.expirationDate))
-  }
-  else {
-    // Allow server admin to delete file when not in use
-    return []
-  }
+export const fetchActiveSystemNotices = () => {
+  return new Endpoint(api.user.announcements)
+    .execute()
+    .then(response => {
+      const systemNotices = response?.message?.notices
+      if (_isArray(systemNotices)) {    
+        return systemNotices.map(notice => {
+          // add Date instance for expiration timestamp
+          notice.expirationDate = parse(notice.expirationTimestamp)
+          return notice
+        }).filter(notice => isFuture(notice.expirationDate))
+      }
+      else {
+        // Allow server admin to delete file when not in use
+        return []
+      }
+    })
 }
