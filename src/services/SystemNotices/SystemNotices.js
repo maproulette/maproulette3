@@ -48,4 +48,7 @@ export const fetchActiveSystemNotices = () => {
         return []
       }
     })
+    .catch(() => {
+      return []
+    })
 }
