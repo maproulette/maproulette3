@@ -136,7 +136,7 @@
     "start-js": "react-scripts --max_old_space_size=4096 start",
     "start": "npm-run-all -p copy-static update-layers watch-postcss start-js",
     "build": "yarn update-static && yarn run build-intl && yarn run update-layers-prod && yarn run build-postcss && react-scripts --max_old_space_size=4096 build",
-    "test": "react-scripts test --resetMocks=false",
+    "test": "react-scripts test --resetMocks=false --detectOpenHandles",
     "test:cov": "react-scripts test --coverage --resetMocks=false",
     "test:cov-full": "react-scripts test --coverage --watchAll --resetMocks=false",
     "eject": "react-scripts eject"
