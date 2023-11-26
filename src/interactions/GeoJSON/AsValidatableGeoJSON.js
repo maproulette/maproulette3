@@ -103,12 +103,12 @@ export class AsValidatableGeoJSON {
           allErrors.push({
             line: lineNumber,
             message: `${parseError}`,
-          });
+          })
         }
 
         lineNumber++
       }
-    });
+    })
 
     return allErrors.length === 0 ? [] : _flatten(allErrors)
   }
@@ -128,7 +128,7 @@ export class AsValidatableGeoJSON {
     // and give an object to geojsonhint, which side-steps the issue. The
     // downside is that we lose line numbers when reporting errors.
     try {
-      let geoJSON = this.geoJSONString;
+      let geoJSON = this.geoJSONString
       if (geoJSON === null && this.geoJSONFile) {
         let geoJSONLines = await this.geoJSONFile.allLines()
         geoJSON = geoJSONLines.join('\n')
