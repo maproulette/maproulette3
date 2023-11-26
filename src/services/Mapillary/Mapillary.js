@@ -85,34 +85,34 @@ export const mapillaryImageUrl = function(imageId) {
  */
 export const nextMapillaryPageUrl = function(resultContext) {
   if (!resultContext || !resultContext.link) {
-    return null;
+    return null
   }
 
   const parseLinkHeader = (linkHeader) => {
-    const links = {};
+    const links = {}
 
     if (linkHeader) {
       linkHeader.split(',').forEach(link => {
-        const match = link.match(/<([^>]+)>;\s*rel="([^"]+)"/);
+        const match = link.match(/<([^>]+)>;\s*rel="([^"]+)"/)
         if (match) {
-          const url = match[1];
-          const rel = match[2];
-          links[rel] = { url };
+          const url = match[1]
+          const rel = match[2]
+          links[rel] = { url }
         }
       });
     }
 
-    return links;
+    return links
   }
 
-  const linkHeader = resultContext.link;
-  const links = parseLinkHeader(linkHeader);
+  const linkHeader = resultContext.link
+  const links = parseLinkHeader(linkHeader)
 
   if (!links.next) {
-    return null;
+    return null
   }
 
-  return links.next.url;
+  return links.next.url
 };
 
 /**

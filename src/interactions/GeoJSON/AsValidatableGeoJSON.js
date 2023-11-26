@@ -73,30 +73,30 @@ export class AsValidatableGeoJSON {
    * an individual GeoJSON entity.
    */  
   async validateLineByLine() {
-    const allErrors = [];
-    let lineNumber = 1;
-  
-    this.geoJSONFile.rewind();
+    const allErrors = []
+    let lineNumber = 1
+
+    this.geoJSONFile.rewind()
     await this.geoJSONFile.forEach(1, rawLine => {
-      const line = this.normalizeRFC7464Sequence(_trim(rawLine));
+      const line = this.normalizeRFC7464Sequence(_trim(rawLine))
       if (line.length > 0) { // Skip blank lines or pure whitespace
         try {
-          const geoJSONObject = JSON.parse(line);
+          const geoJSONObject = JSON.parse(line)
           if (geoJSONObject) {
             try {
-              this.flagUnsupportedGeometries(geoJSONObject);
+              this.flagUnsupportedGeometries(geoJSONObject)
             } catch (errorMessage) {
               allErrors.push({
                 line: lineNumber,
                 message: errorMessage,
-              });
+              })
             }
-  
+
             if (!booleanValid(geoJSONObject)) {
               allErrors.push({
                 line: lineNumber,
                 message: 'Invalid GeoJSON geometry',
-              });
+              })
             }
           }
         } catch (parseError) {
@@ -105,25 +105,24 @@ export class AsValidatableGeoJSON {
             message: `${parseError}`,
           });
         }
-  
-        lineNumber++;
+
+        lineNumber++
       }
     });
-  
-    return allErrors.length === 0 ? [] : _flatten(allErrors);
+
+    return allErrors.length === 0 ? [] : _flatten(allErrors)
   }
-  
 
   /**
    * Validate the raw GeoJSON. Will attempt to auto-detect line-by-line
    */
   async validate() {
     if (await this.isLineByLine()) {
-      return this.validateLineByLine();
+      return this.validateLineByLine()
     }
-  
-    let geoJSONObject = null;
-  
+
+    let geoJSONObject = null
+
     // json-lint-lines, used by geojsonhint when parsing string data, seems
     // to struggle with certain geojson files. So we parse the json ourselves
     // and give an object to geojsonhint, which side-steps the issue. The
@@ -131,29 +130,28 @@ export class AsValidatableGeoJSON {
     try {
       let geoJSON = this.geoJSONString;
       if (geoJSON === null && this.geoJSONFile) {
-        let geoJSONLines = await this.geoJSONFile.allLines();
-        geoJSON = geoJSONLines.join('\n');
+        let geoJSONLines = await this.geoJSONFile.allLines()
+        geoJSON = geoJSONLines.join('\n')
       }
-      geoJSONObject = JSON.parse(geoJSON);
+      geoJSONObject = JSON.parse(geoJSON)
     } catch (parseError) {
-      return [{ message: `${parseError}` }];
+      return [{ message: `${parseError}` }]
     }
-  
+
     if (geoJSONObject) {
       try {
         this.flagUnsupportedGeometries(geoJSONObject);
       } catch (errorMessage) {
-        return [{ message: errorMessage }];
+        return [{ message: errorMessage }]
       }
   
       if (!booleanValid(geoJSONObject)) {
-        return [{ message: 'Invalid GeoJSON geometry' }];
+        return [{ message: 'Invalid GeoJSON geometry' }]
       }
     }
-  
-    return [];
+
+    return []
   }
-  
 
   /**
    * Throw error if unsupported (even if technically legal) geometries are
