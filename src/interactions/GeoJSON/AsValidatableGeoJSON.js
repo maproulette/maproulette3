@@ -1,9 +1,9 @@
 //TODO: replace
 // import geojsonhint from '@mapbox/geojsonhint'
 import _isString from 'lodash/isString'
-import _flatten from 'lodash/flatten'
-import _map from 'lodash/map'
-import _trim from 'lodash/trim'
+// import _flatten from 'lodash/flatten'
+// import _map from 'lodash/map'
+// import _trim from 'lodash/trim'
 import { featureEach } from '@turf/meta'
 import { getGeom } from '@turf/invariant'
 import AsLineReadableFile from '../File/AsLineReadableFile'

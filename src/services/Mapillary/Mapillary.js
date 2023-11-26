@@ -85,7 +85,8 @@ export const mapillaryImageUrl = function(imageId) {
  * Extract the URL for the next page of Mapillary results from the given result
  * context object and return it, or null if there is no next page of results
  */
-export const nextMapillaryPageUrl = function(resultContext) {
+export const nextMapillaryPageUrl = function() {
+//export const nextMapillaryPageUrl = function(resultContext) {
   // if (!resultContext || !resultContext.link) {
   //   return null
   // }
