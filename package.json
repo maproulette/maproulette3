@@ -18,6 +18,7 @@
     "@turf/bearing": "^6.0.1",
     "@turf/boolean-contains": "^6.0.1",
     "@turf/boolean-disjoint": "^6.0.2",
+    "@turf/boolean-valid": "^6.5.0",
     "@turf/center": "^6.0.1",
     "@turf/centroid": "^6.0.2",
     "@turf/distance": "^6.0.1",
