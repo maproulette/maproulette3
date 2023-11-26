@@ -1,4 +1,5 @@
-import geojsonhint from '@mapbox/geojsonhint'
+//TODO: replace
+// import geojsonhint from '@mapbox/geojsonhint'
 import _isString from 'lodash/isString'
 import _flatten from 'lodash/flatten'
 import _map from 'lodash/map'
@@ -74,84 +75,88 @@ export class AsValidatableGeoJSON {
    * an individual GeoJSON entity.
    */
   async validateLineByLine() {
-    const allErrors = []
-    let lineNumber = 1
+    // const allErrors = []
+    // let lineNumber = 1
 
-    this.geoJSONFile.rewind()
-    await this.geoJSONFile.forEach(1, rawLine => {
-      const line = this.normalizeRFC7464Sequence(_trim(rawLine))
-      if (line.length > 0) { // Skip blank lines or pure whitespace
-        try {
-          const geoJSONObject = JSON.parse(line)
-          if (geoJSONObject) {
-            try {
-              this.flagUnsupportedGeometries(geoJSONObject)
-            }
-            catch(errorMessage) {
-              allErrors.push({
-                line: lineNumber,
-                message: errorMessage,
-              })
-            }
+    // this.geoJSONFile.rewind()
+    // await this.geoJSONFile.forEach(1, rawLine => {
+    //   const line = this.normalizeRFC7464Sequence(_trim(rawLine))
+    //   if (line.length > 0) { // Skip blank lines or pure whitespace
+    //     try {
+    //       const geoJSONObject = JSON.parse(line)
+    //       if (geoJSONObject) {
+    //         try {
+    //           this.flagUnsupportedGeometries(geoJSONObject)
+    //         }
+    //         catch(errorMessage) {
+    //           allErrors.push({
+    //             line: lineNumber,
+    //             message: errorMessage,
+    //           })
+    //         }
 
-            const errors = geojsonhint.hint(geoJSONObject)
-            if (errors.length > 0) {
-              // remap line numbers
-              allErrors.push(_map(errors, error => ({
-                line: lineNumber,
-                message: error.message,
-              })))
-            }
-          }
-        }
-        catch(parseError) {
-          allErrors.push({
-            line: lineNumber,
-            message: `${parseError}`,
-          })
-        }
-      }
-    })
+    //         // const errors = geojsonhint.hint(geoJSONObject)
+    //         // if (errors.length > 0) {
+    //         //   // remap line numbers
+    //         //   allErrors.push(_map(errors, error => ({
+    //         //     line: lineNumber,
+    //         //     message: error.message,
+    //         //   })))
+    //         // }
+    //       }
+    //     }
+    //     catch(parseError) {
+    //       allErrors.push({
+    //         line: lineNumber,
+    //         message: `${parseError}`,
+    //       })
+    //     }
+    //   }
+    // })
 
-    return allErrors.length === 0 ? [] : _flatten(allErrors)
+    // return allErrors.length === 0 ? [] : _flatten(allErrors)
+
+    return []
   }
 
   /**
    * Validate the raw GeoJSON. Will attempt to auto-detect line-by-line
    */
   async validate() {
-    if (await this.isLineByLine()) {
-      return this.validateLineByLine()
-    }
+    // if (await this.isLineByLine()) {
+    //   return this.validateLineByLine()
+    // }
 
-    let geoJSONObject = null
+    // let geoJSONObject = null
 
-    // json-lint-lines, used by geojsonhint when parsing string data, seems
-    // to struggle with certain geojson files. So we parse the json ourselves
-    // and give an object to geojsonhint, which side-steps the issue. The
-    // downside is that we lose line numbers when reporting errors.
-    try {
-      let geoJSON = this.geoJSONString
-      if (geoJSON === null && this.geoJSONFile) {
-        let geoJSONLines = await this.geoJSONFile.allLines()
-        geoJSON = geoJSONLines.join('\n')
-      }
-      geoJSONObject = JSON.parse(geoJSON)
-    }
-    catch(parseError) {
-      return [{message: `${parseError}`}]
-    }
+    // // json-lint-lines, used by geojsonhint when parsing string data, seems
+    // // to struggle with certain geojson files. So we parse the json ourselves
+    // // and give an object to geojsonhint, which side-steps the issue. The
+    // // downside is that we lose line numbers when reporting errors.
+    // try {
+    //   let geoJSON = this.geoJSONString
+    //   if (geoJSON === null && this.geoJSONFile) {
+    //     let geoJSONLines = await this.geoJSONFile.allLines()
+    //     geoJSON = geoJSONLines.join('\n')
+    //   }
+    //   geoJSONObject = JSON.parse(geoJSON)
+    // }
+    // catch(parseError) {
+    //   return [{message: `${parseError}`}]
+    // }
 
-    if (geoJSONObject) {
-      try {
-        this.flagUnsupportedGeometries(geoJSONObject)
-      }
-      catch(errorMessage) {
-        return [{message: errorMessage}]
-      }
-    }
+    // if (geoJSONObject) {
+    //   try {
+    //     this.flagUnsupportedGeometries(geoJSONObject)
+    //   }
+    //   catch(errorMessage) {
+    //     return [{message: errorMessage}]
+    //   }
+    // }
 
-    return geojsonhint.hint(geoJSONObject)
+    // return geojsonhint.hint(geoJSONObject)
+
+    return []
   }
 
   /**

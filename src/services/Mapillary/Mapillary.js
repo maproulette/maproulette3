@@ -1,4 +1,5 @@
-import parseLinkHeader from 'parse-link-header'
+//TODO: replace
+//import parseLinkHeader from 'parse-link-header'
 import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
@@ -85,16 +86,18 @@ export const mapillaryImageUrl = function(imageId) {
  * context object and return it, or null if there is no next page of results
  */
 export const nextMapillaryPageUrl = function(resultContext) {
-  if (!resultContext || !resultContext.link) {
-    return null
-  }
+  // if (!resultContext || !resultContext.link) {
+  //   return null
+  // }
 
-  const linkHeader = parseLinkHeader(resultContext.link)
-  if (!linkHeader.next) {
-    return null
-  }
+  // const linkHeader = parseLinkHeader(resultContext.link)
+  // if (!linkHeader.next) {
+  //   return null
+  // }
 
-  return linkHeader.next.url
+  // return linkHeader.next.url
+
+  return null
 }
 
 /**
