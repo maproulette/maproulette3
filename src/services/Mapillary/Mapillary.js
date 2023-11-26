@@ -1,5 +1,3 @@
-//TODO: replace
-//import parseLinkHeader from 'parse-link-header'
 import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
@@ -85,21 +83,37 @@ export const mapillaryImageUrl = function(imageId) {
  * Extract the URL for the next page of Mapillary results from the given result
  * context object and return it, or null if there is no next page of results
  */
-export const nextMapillaryPageUrl = function() {
-//export const nextMapillaryPageUrl = function(resultContext) {
-  // if (!resultContext || !resultContext.link) {
-  //   return null
-  // }
+export const nextMapillaryPageUrl = function(resultContext) {
+  if (!resultContext || !resultContext.link) {
+    return null;
+  }
 
-  // const linkHeader = parseLinkHeader(resultContext.link)
-  // if (!linkHeader.next) {
-  //   return null
-  // }
+  const parseLinkHeader = (linkHeader) => {
+    const links = {};
 
-  // return linkHeader.next.url
+    if (linkHeader) {
+      linkHeader.split(',').forEach(link => {
+        const match = link.match(/<([^>]+)>;\s*rel="([^"]+)"/);
+        if (match) {
+          const url = match[1];
+          const rel = match[2];
+          links[rel] = { url };
+        }
+      });
+    }
 
-  return null
-}
+    return links;
+  }
+
+  const linkHeader = resultContext.link;
+  const links = parseLinkHeader(linkHeader);
+
+  if (!links.next) {
+    return null;
+  }
+
+  return links.next.url;
+};
 
 /**
  * Retrieve the active access token
