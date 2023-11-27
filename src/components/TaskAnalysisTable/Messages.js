@@ -29,6 +29,11 @@ export default defineMessages({
     defaultMessage: "Feature Id",
   },
 
+  unbundle: {
+    id: "Task.fields.unbundle.label",
+    defaultMessage: "Remove",
+  },
+
   statusLabel: {
     id: "Task.fields.status.label",
     defaultMessage: "Status",
