@@ -252,11 +252,8 @@ export class TaskMap extends Component {
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       this.deactivateOSMDataLayer()
       this.setState({
+        ...prevState,
         skipFit: false,
-        // Keep the previous state values
-        showOSMData: prevState.showOSMData,
-        showTaskFeatures: prevState.showTaskFeatures,
-        showOSMElements: { ...prevState.showOSMElements },
       })
       this.generateDirectionalityMarkers()
     }
