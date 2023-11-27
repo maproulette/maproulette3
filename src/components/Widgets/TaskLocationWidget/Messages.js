@@ -14,9 +14,9 @@ export default defineMessages({
     defaultMessage: "Location",
   },
 
-  showPrompt: {
-    id: "Widgets.TaskLocationWidget.show",
-    defaultMessage: "Show:",
+  switchPrompt: {
+    id: "Widgets.TaskLocationWidget.switch",
+    defaultMessage: "Switch to:",
   },
 
   lonLatLabel: {
