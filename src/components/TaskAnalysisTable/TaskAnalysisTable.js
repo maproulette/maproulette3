@@ -364,11 +364,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: 'remove',
     minWidth: 110,
     Cell: ({ row }) => {
-      const isTaskSelected = props.taskId === row._original.id;
-      const isTaskEditable = props.task.status === 0 || props.task.reviewStatus === 2;
-      const isTaskRemovable = !props.taskReadOnly && isTaskEditable;
+      const isTaskSelected = props.taskId === row._original.id
+      const isTaskEditable = props.task?.status === 0 || props.task?.reviewStatus === 2
+      const isTaskRemovable = !props.taskReadOnly && isTaskEditable
 
-      const enableRemove = props.task.completedBy ? props.task.completedBy === props.user.id : true;
+      const enableRemove = props.task?.completedBy ? props.task.completedBy === props.user.id : true
 
       return (
         <div>
