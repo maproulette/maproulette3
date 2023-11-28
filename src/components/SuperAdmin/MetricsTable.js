@@ -47,6 +47,7 @@ const MetricsTable = (props) => {
         score: u.score,
         created: u.created,
         modified: u.modified,
+        superUser: Boolean(u.grants?.find(grant => grant.role === -1))
       }))
 
       return setUserTab()
