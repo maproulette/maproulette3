@@ -10,10 +10,11 @@ import _trim from 'lodash/trim'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
-       from '@rjsf/core/lib/components/widgets/SelectWidget'
+      from '@rjsf/core/lib/components/widgets/SelectWidget'
 import OriginalTextWidget
       from '@rjsf/core/lib/components/widgets/TextWidget'
-import OriginalCheckboxWidget from '@rjsf/core/lib/components/widgets/CheckboxWidget'
+import OriginalCheckboxWidget 
+      from '@rjsf/core/lib/components/widgets/CheckboxWidget'
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import Dropdown from '../../Dropdown/Dropdown'
