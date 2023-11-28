@@ -144,7 +144,7 @@ export class EditChallenge extends Component {
     this.props.getUserAppSetting(
       this.props.user,
       "collapsedChallengeFormGroups"
-    ) || ["OSMCommit", "Editor"];
+    ) || [];
 
   /**
    * Update the current user's preferences as to which challenge form groups
@@ -289,7 +289,7 @@ export class EditChallenge extends Component {
     (this.validationPromise || Promise.resolve())
       .then(() => {
         this.isFinishing ? this.finish() : nextStep();
-        // window.scrollTo(0, 0);
+        window.scrollTo(0, 0);
         return false;
       })
       .catch((err) => {
@@ -306,7 +306,7 @@ export class EditChallenge extends Component {
       return;
     }
 
-    // window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
     this.setState({ isSaving: true });
 
     if (this.state.formData.email) {
@@ -685,8 +685,6 @@ export class EditChallenge extends Component {
   };
 
   render() {
-    console.log(this.props.user.properties?.mr3Frontend?.settings?.collapsedChallengeFormGroups)
-    console.log(this.state)
     const isUploadingTasks = _get(
       this.props,
       "progress.creatingTasks.inProgress",

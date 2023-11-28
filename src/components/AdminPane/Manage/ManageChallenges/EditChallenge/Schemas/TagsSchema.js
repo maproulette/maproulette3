@@ -61,7 +61,7 @@ export const jsSchema = (intl) => {
  * > proper markup
  */
 export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
-  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
+  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1
   const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
 
   const uiSchemaFields = {

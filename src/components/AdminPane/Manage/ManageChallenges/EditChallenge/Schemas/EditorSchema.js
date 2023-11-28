@@ -97,7 +97,7 @@ export const jsSchema = (intl) => {
  */
 export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
   const isGroupCollapsed =
-    options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
+    options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1
   const toggleGroupCollapsed =
     options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly();
