@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   startTaskLabel: {
     id: "ChallengePane.controls.startTask.label",
-    defaultMessage: "Start Task "
+    defaultMessage: "Start Task"
   },
 
   showArchivedLabel: {
