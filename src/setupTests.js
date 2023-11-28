@@ -55,6 +55,11 @@ jest.mock('@rjsf/core/lib/components/widgets/TextWidget', () => ({
   default: () => null
 }));
 
+jest.mock('@rjsf/core/lib/components/widgets/CheckboxWidget', () => ({
+  __esModule: true,
+  default: () => null
+}));
+
 jest.mock('react-syntax-highlighter/dist/esm/languages/hljs/json', () => ({
   __esModule: true,
 }));
