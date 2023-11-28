@@ -524,8 +524,6 @@ export class EditChallenge extends Component {
       )
     );
 
-    // if(!challengeData.policyAgreement) throw new Error
-
     // Remove extraneous fields that should not be saved.
     delete challengeData.actions;
     delete challengeData.ignoreSourceErrors;
