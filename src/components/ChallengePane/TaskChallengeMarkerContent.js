@@ -34,7 +34,8 @@ class TaskChallengeMarkerContent extends Component {
                 false,
                 markerData.options.taskId)
             }}>
-              {this.props.intl.formatMessage(messages.startChallengeLabel)}
+              {this.props.intl.formatMessage(messages.startTaskLabel)}
+              {this.props.taskId}
             </a>
           </div>
         </div>
