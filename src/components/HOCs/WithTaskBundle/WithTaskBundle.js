@@ -43,7 +43,7 @@ export function WithTaskBundle(WrappedComponent) {
 
     removeTaskFromBundle = async (bundleId, taskId) => {
       this.setState({loading: true})
-      if(this.state.taskBundle.taskIds.length == 2) {
+      if(this.state.taskBundle.taskIds.length === 2) {
         this.props.deleteTaskBundle(bundleId, this.state.taskBundle.taskIds[0])
         this.clearActiveTaskBundle()
         this.setState({loading: false})
