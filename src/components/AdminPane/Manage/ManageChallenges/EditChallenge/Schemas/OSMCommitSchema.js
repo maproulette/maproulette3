@@ -76,7 +76,7 @@ export const uiSchema = (
   options = {}
 ) => {
   const isCollapsed =
-    options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1;
+    options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
   const toggleCollapsed =
     options.longForm && options.toggleCollapsed
       ? () => options.toggleCollapsed(STEP_ID)

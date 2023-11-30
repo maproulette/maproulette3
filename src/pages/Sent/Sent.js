@@ -107,7 +107,6 @@ const taskColumns = ({ setSelectedComment }) => [{
   Header: 'Comment',
   accessor: 'comment',
   Cell: ({ value, row }) => {
-    console.log(row)
     return <Link onClick={() => setSelectedComment({ id: row.task_id, text: value, type: CommentType.TASK })} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>{value}</Link>
   },
   sortable: true,

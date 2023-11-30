@@ -29,6 +29,7 @@ import {
   CustomFieldTemplate,
   CustomSelectWidget,
   CustomTextWidget,
+  CustomCheckboxField,
   ColumnRadioField,
   MarkdownDescriptionField,
   MarkdownEditField,
@@ -234,7 +235,6 @@ export class EditChallenge extends Component {
       .finally(() => {
         this.validationPromise = null;
       });
-
     return errors;
   };
 
@@ -295,7 +295,7 @@ export class EditChallenge extends Component {
       .catch((err) => {
         console.log(err);
       }); // Stay on current step if validation fails
-
+      
     return false;
   };
 
@@ -706,6 +706,7 @@ export class EditChallenge extends Component {
 
     const challengeData = this.prepareChallengeDataForForm();
     const isNewChallenge = AsEditableChallenge(challengeData).isNew();
+
     return (
       <WorkflowSteps
         {...this.props}
@@ -775,6 +776,7 @@ export class EditChallenge extends Component {
             DescriptionField: MarkdownDescriptionField,
             markdown: MarkdownEditField,
             columnRadio: ColumnRadioField,
+
             tags: (props) => {
               return (
                 <React.Fragment>
@@ -888,7 +890,6 @@ export class EditChallenge extends Component {
                   </Modal>
                 </External>
               )}
-
               <div className="mr-flex">
                 <div className="mr-w-54 mr-flex mr-flex-col mr-items-center mr-bg-blue-darker mr-rounded-l mr-pt-8">
                   {activeStep.icon && (
@@ -936,6 +937,8 @@ export class EditChallenge extends Component {
                     widgets={{
                       SelectWidget: CustomSelectWidget,
                       TextWidget: CustomTextWidget,
+                      automatedEditsCheckbox: CustomCheckboxField,
+
                     }}
                     ArrayFieldTemplate={CustomArrayFieldTemplate}
                     FieldTemplate={CustomFieldTemplate}
@@ -983,6 +986,7 @@ export class EditChallenge extends Component {
             </BreadcrumbWrapper>
           );
         }}
+        
       />
     );
   }

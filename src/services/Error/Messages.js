@@ -187,6 +187,10 @@ export default defineMessages({
     id: "Errors.challengeSaveFailure.challengeSaveInstructionFailure",
     defaultMessage: "The 'DETAILED INSTRUCTIONS FOR MAPPERS' field must have more than 150 characters.",
   },
+  challengeSaveEditPolicyAgreementFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveEditPolicyAgreementFailure",
+    defaultMessage: "You must check the box at the bottom of the page to indicate that you acknowledge OpenStreetMap's Automated Edits code of conduct."
+  },
   challengeRebuildFailure: {
     id: "Errors.challenge.rebuildFailure",
     defaultMessage: "Unable to rebuild challenge tasks",

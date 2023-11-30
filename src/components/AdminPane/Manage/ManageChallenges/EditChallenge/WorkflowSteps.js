@@ -28,6 +28,8 @@ import { jsSchema as tagsJsSchema,
          uiSchema as tagsUiSchema } from './Schemas/TagsSchema'
 import { jsSchema as editorJsSchema,
          uiSchema as editorUiSchema } from './Schemas/EditorSchema'
+import {jsSchema as automatedEditsCodeAgreementJsSchema,
+        uiSchema as automatedEditsCodeAgreementUiSchema} from './Schemas/AutomatedEditsCodeAgreementSchema'
 import MenuStep from './MenuStep'
 import messages from './Messages'
 
@@ -132,6 +134,15 @@ const editorConfStep = {
   viewBox: "0 0 126 129",
 }
 
+const automatedEditsCodeAgreementStep = {
+  id: "AutomatedEditsCodeAgreement",
+  description: <FormattedMessage {...messages.automatedEditsCodeStepDescription} />,
+  jsSchema: automatedEditsCodeAgreementJsSchema,
+  uiSchema: automatedEditsCodeAgreementUiSchema,
+  icon: "info-icon",
+  viewBox: "0 0 100 125",
+}
+
 const advancedOptionsStep = {
   id: 'AdvancedOptions',
   component: props => (
@@ -168,7 +179,7 @@ const newChallengeSteps = {
     previous: 'DataSource',
   }),
   'Instructions': Object.assign({}, instructionsStep, {
-    next: 'AdvancedOptions',
+    next: 'AutomatedEditsCodeAgreement',
     previous: 'Description',
   }),
   'AdvancedOptions': Object.assign({}, advancedOptionsStep, {
@@ -182,7 +193,7 @@ const newChallengeSteps = {
       'Tags',
       'Editor',
     ],
-    previous: 'Instructions',
+    previous: 'AutomatedEditsCodeAgreement',
     canFinish: true,
   }),
   'Discoverability': Object.assign({}, discoverabilityStep, {
@@ -225,6 +236,10 @@ const newChallengeSteps = {
     previous: 'AdvancedOptions',
     canFinish: true,
   }),
+  'AutomatedEditsCodeAgreement': Object.assign({}, automatedEditsCodeAgreementStep, {
+    next: 'AdvancedOptions',
+    previous: 'Instructions'
+  })
 }
 
 // String together workflow steps for editing an existing challenge
@@ -330,6 +345,7 @@ const combinedSteps = steps => ({
     },
     {})
     combinedSchema["ui:order"].push("*")
+    combinedSchema["ui:order"].push("automatedEditsCodeAgreement")
     return combinedSchema
   }
 })

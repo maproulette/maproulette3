@@ -16,9 +16,6 @@ export default class ViewTask extends Component {
       return <BusySpinner />
     }
 
-    console.log(this.props.task.geometries)
-    console.log(JSON.stringify(this.props.task.geometries, null, 4))
-
     return (
       <div className="view-task">
         <SyntaxHighlighter language="json" style={highlightColors}>

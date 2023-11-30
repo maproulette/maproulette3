@@ -930,4 +930,32 @@ will not be able to make sense of it.
     id: "Admin.EditChallenge.form.steps.no.label",
     defaultMessage: "No",
   },
+
+  automatedEditsCodeLabel: {
+    id: "Admin.EditChallenge.form.automatedEditsCode.label",
+    defaultMessage: 'Automated Edits Code of Conduct Agreement'
+  },
+
+  automatedEditsCodeDescription: {
+    id: "Admin.EditChallenge.form.automatedEditsCode.description",
+    defaultMessage: 
+      "You are about to create a MapRoulette challenge. " + 
+      "With this power comes responsibility. Make sure that " + 
+      "your Challenge is designed to encourage careful human " + 
+      "attention to each task, in the spirit of OpenStreetMap's " + 
+      "[Automated Edits code of conduct](https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct). " + 
+      "Please read this document " + 
+      "carefully. By checking the box below, you acknowledge that " + 
+      "you understand and accept this responsibility."
+  },
+
+  automatedEditsCodeStepHeader: {
+    id: "Admin.EditChallenge.form.steps.automatedEditsCode.header",
+    defaultMessage: "OSM Automated Edits Code of Conduct"
+  },
+
+  automatedEditsCodeUICheckboxLabel: {
+    id: "Admin.EditChallenge.form.automatedEditsCode.UICheckboxLabel",
+    defaultMessage: "I have read and understand the OSM Automated Edits code of conduct"
+  }
 });

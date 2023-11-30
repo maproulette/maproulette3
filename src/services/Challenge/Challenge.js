@@ -932,7 +932,7 @@ export const fetchChallenges = function (
   return function (dispatch) {
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData);
-
+    
     if (_isArray(challengeData.tags)) {
       challengeData.tags = challengeData.tags.map(t => t.trim()).join(",");
     } else if (challengeData.tags) {
@@ -974,7 +974,6 @@ export const fetchChallenges = function (
         console.error(error);
       }
     }
-
 
     // We need to remove any old challenge keywords first, prior to the
     // update.
@@ -1027,6 +1026,7 @@ export const fetchChallenges = function (
           "requiresLocal",
           "reviewSetting",
           "taskWidgetLayout",
+          "automatedEditsCodeAgreement"
         ]
       );
 
@@ -1073,6 +1073,20 @@ export const fetchChallenges = function (
           addServerError(errorMessage)
         );
         throw new Error(errorMessage);
+      }
+
+      // Agreement box should be checked, but if it passes as true the property should not be included
+      // in the data sent to server.
+      if(!_isFinite(challengeData.id) && Object.hasOwn(challengeData, "automatedEditsCodeAgreement")) {
+        if(!challengeData.automatedEditsCodeAgreement) {
+          const errorMessage = AppErrors.challengeSaveFailure.saveEditPolicyAgreementFailure
+          dispatch(
+            addServerError(errorMessage)
+          );
+          throw new Error(errorMessage)
+        } else {
+          delete challengeData.automatedEditsCodeAgreement
+        }
       }
 
       // Setup the save function to either edit or create the challenge
