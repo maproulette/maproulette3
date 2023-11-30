@@ -9,6 +9,7 @@ import { FormattedMessage } from 'react-intl'
 import EditSwitch from './RapidEditor/EditSwitch'
 import RapidEditor from './RapidEditor/RapidEditor';
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 
 const descriptor = {
   widgetKey: 'TaskMapWidget',
@@ -71,7 +72,8 @@ export default class TaskMapWidget extends Component {
   }
 
   render() {
-    const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+    const disableRapid = AsCooperativeWork(this.props.task).isTagType() || this.props.task.cooperativeWork
+    const editMode = disableRapid ? false : this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false
 
     if(!this.props.task.geometries.features){
       return  (
@@ -103,11 +105,11 @@ export default class TaskMapWidget extends Component {
             this.props.getUserAppSetting 
               ? <>
                   <div className="mr-flex mr-items-center ">
-                    <div className="mr-text-yellow mr-mr-3">
+                    <div className="mr-text-yellow mr-mr-1 mr-mt-1 mr-mb-2">
                       <FormattedMessage {...messages.editMode}/>
                     </div>
                       <div className="mr-mt-1 mr-mb-2">
-                        <EditSwitch {...this.props}/>
+                        <EditSwitch {...this.props} disableRapid={disableRapid} editMode={editMode} />
                       </div>
                     </div>
                 </>

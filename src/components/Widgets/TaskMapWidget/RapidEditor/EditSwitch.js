@@ -16,15 +16,18 @@ export class EditSwitch extends Component {
   }
 
   render() {
-    const editModeOn = this.props.getUserAppSetting(this.props.user, 'isEditMode')
+    const editModeOn = this.props.editMode
+    const disableRapid = this.props.disableRapid
 
     return (
       <div className="mr-flex mr-justify-center">
-        <label className="switch-container">
-          <input type="checkbox" checked={editModeOn} />
-          <span className="slider round" onClick={() => this.toggleVisible()}></span>
-        </label>
-        <span className="mr-ml-2">
+        {!disableRapid ?
+          <label className="switch-container mr-mr-2">
+            <input type="checkbox" checked={editModeOn} />
+            <span className="slider round" onClick={() => this.toggleVisible()}></span>
+          </label> : null
+        }
+        <span>
           {editModeOn ? 'Edit Mode' : 'Classic Mode'}
         </span>
       </div>
