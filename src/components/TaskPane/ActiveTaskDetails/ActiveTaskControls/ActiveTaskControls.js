@@ -60,6 +60,7 @@ export class ActiveTaskControls extends Component {
     osmComment: "",
     comment: "",
     tags: null,
+    reviewTags: null,
     revisionLoadBy: TaskReviewLoadMethod.all,
     doneLoadByFromHistory: false,
     needsReview: this.props.challenge.reviewSetting === 1 ? true : undefined
@@ -148,11 +149,13 @@ export class ActiveTaskControls extends Component {
 
   /** Mark the task as complete with the given status */
   complete = taskStatus => {
+    this.props.saveTaskTags(this.props.task, this.state.tags)
+
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
     if (!_isUndefined(this.state.submitRevision)) {
       this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
-                                        this.state.comment, this.state.tags,
+                                        this.state.comment, this.state.reviewTags,
                                         this.state.revisionLoadBy, this.props.history,
                                         this.props.taskBundle, this.state.requestedNextTask,
                                         taskStatus)
@@ -268,9 +271,28 @@ export class ActiveTaskControls extends Component {
           return _isEmpty(t.name)
         }
       })
-      const tags = _map(unfilteredTags, tag => (tag.name ? tag.name : tag)).join(', ')
+      const tagsArray = _map(this.props.task.tags, (tag) => tag.name);
+      const filteredTagsArray = tagsArray.filter((tag) => tag !== "");
+      const uniqueTagsArray = filteredTagsArray.filter((value, index, self) => self.indexOf(value) === index);
+      const tags = uniqueTagsArray.join(',');
 
-      return this.setState({tags: tags})
+      const reviewTagsArray = _map(this.props.task.tags?.tagType === "review" ? this.props.task.tags : [], (tag) => tag.name);
+      const filteredReviewTagsArray = reviewTagsArray.filter((tag) => tag !== "");
+      const reviewTags = filteredReviewTagsArray.join(',');
+
+      if(tags.length > 0 && this.state.tags === null) {
+        this.setState({tags: tags})
+      }
+  
+      if(reviewTags.length > 0 && this.state.reviewTags === null) {
+        this.setState({reviewTags: reviewTags})
+      }
+  
+      if (prevProps.task.id !== this.props.task.id) {
+        // Clear tags if we are on a new task
+        this.setState({tags: tags ?? null})
+        this.setState({reviewTags: reviewTags ?? null})
+      }
     }
 
     // Let's set default revisionLoadBy to inbox if we are coming from inbox
@@ -395,6 +417,7 @@ export class ActiveTaskControls extends Component {
           }
 
           <TaskTags
+            user={this.props.user.id}
             task={this.props.task}
             tags={this.state.tags}
             setTags={this.setTags}

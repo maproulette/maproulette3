@@ -22,6 +22,7 @@ import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/Ta
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import TaskConfirmationModal from '../TaskConfirmationModal/TaskConfirmationModal'
+import TaskTags from '../TaskTags/TaskTags'
 import messages from './Messages'
 import './ReviewTaskControls.scss'
 import ErrorTagComment from '../ErrorTagComment/ErrorTagComment'
@@ -32,9 +33,14 @@ import ErrorTagComment from '../ErrorTagComment/ErrorTagComment'
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class ReviewTaskControls extends Component {
+  constructor(props) {
+    super(props);
+    this.onConfirm = this.onConfirm.bind(this);
+  }
   state = {
     comment: "",
-    tags: "",
+    tags: null,
+    reviewTags: null,
     loadBy: TaskReviewLoadMethod.next,
     errorTags: []
   }
@@ -43,6 +49,8 @@ export class ReviewTaskControls extends Component {
   setTags = tags => this.setState({tags})
 
   onConfirm = (alternateCriteria) => {
+    this.props.saveTaskTags(this.props.task, this.state.tags)
+
     const history = _cloneDeep(this.props.history)
     _merge(_get(history, 'location.state', {}), alternateCriteria)
 
@@ -52,7 +60,7 @@ export class ReviewTaskControls extends Component {
     const errorTags = this.state.errorTags?.length ? this.state.errorTags : undefined
 
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
-                                     this.state.comment, this.state.tags,
+                                     this.state.comment, this.state.reviewTags,
                                      this.state.loadBy, history,
                                      this.props.taskBundle, requestedNextTask, null, errorTags)
     this.setState({ confirmingTask: false, comment: "", errorTags: [] })
@@ -121,9 +129,27 @@ export class ReviewTaskControls extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    const tagsArray = _map(this.props.task.tags, (tag) => tag.name);
+    const filteredTagsArray = tagsArray.filter((tag) => tag !== "");
+    const uniqueTagsArray = filteredTagsArray.filter((value, index, self) => self.indexOf(value) === index);
+    const tags = uniqueTagsArray.join(',');
+
+    const reviewTagsArray = _map(this.props.task.tags?.tagType === "review" ? this.props.task.tags : [], (tag) => tag.name);
+    const filteredReviewTagsArray = reviewTagsArray.filter((tag) => tag !== "");
+    const reviewTags = filteredReviewTagsArray.join(',');
+
+    if(tags.length > 0 && this.state.tags === null) {
+      this.setState({tags: tags})
+    }
+
+    if(reviewTags.length > 0 && this.state.reviewTags === null) {
+      this.setState({reviewTags: reviewTags})
+    }
+
     if (prevProps.task.id !== this.props.task.id) {
       // Clear tags if we are on a new task
-      this.setState({tags: ""})
+      this.setState({tags: tags ?? null})
+      this.setState({reviewTags: reviewTags ?? null})
     }
   }
 
@@ -192,7 +218,6 @@ export class ReviewTaskControls extends Component {
     }
 
     const fromInbox = _get(this.props.history, 'location.state.fromInbox')
-    const tags = _map(this.props.task.tags, (tag) => tag.name)
     const errorTags = this.props.task.errorTags;
     const isMetaReview = this.props.history?.location?.pathname?.includes("meta-review")
     const reviewData = this.props.task?.review;
@@ -233,13 +258,17 @@ export class ReviewTaskControls extends Component {
             }
           </div>
         }
-        {tags.length > 0 &&
-          <div className="mr-text-sm mr-text-white">
-            <FormattedMessage
-              {...messages.taskTags}
-            /> {tags.join(', ')}
-          </div>
-        }
+
+        <TaskTags
+          user={this.props.user.id}
+          task={this.props.task}
+          tags={this.state.tags}
+          setTags={this.setTags}
+          onConfirm={this.onConfirm}
+          saveTaskTags={this.props.saveTaskTags}
+          taskReadOnly={this.props.taskReadOnly}
+        />
+
         {
           errorTags
             ?  <div className="mr-text-red">
