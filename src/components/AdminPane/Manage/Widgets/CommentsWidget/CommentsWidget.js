@@ -14,7 +14,7 @@ import messages from './Messages'
 const descriptor = {
   widgetKey: 'CommentsWidget',
   label: messages.label,
-  targets: [WidgetDataTarget.challenges, WidgetDataTarget.challenge],
+  targets: [WidgetDataTarget.challenges, WidgetDataTarget.challenge, WidgetDataTarget.task],
   minWidth: 3,
   defaultWidth: 4,
   defaultHeight: 12,
