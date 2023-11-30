@@ -1,7 +1,6 @@
-import geojsonhint from '@mapbox/geojsonhint'
+import booleanValid from '@turf/boolean-valid'
 import _isString from 'lodash/isString'
 import _flatten from 'lodash/flatten'
-import _map from 'lodash/map'
 import _trim from 'lodash/trim'
 import { featureEach } from '@turf/meta'
 import { getGeom } from '@turf/invariant'
@@ -72,7 +71,7 @@ export class AsValidatableGeoJSON {
   /**
    * Performs validation on each line separately, ensuring each line represents
    * an individual GeoJSON entity.
-   */
+   */  
   async validateLineByLine() {
     const allErrors = []
     let lineNumber = 1
@@ -86,30 +85,28 @@ export class AsValidatableGeoJSON {
           if (geoJSONObject) {
             try {
               this.flagUnsupportedGeometries(geoJSONObject)
-            }
-            catch(errorMessage) {
+            } catch (errorMessage) {
               allErrors.push({
                 line: lineNumber,
                 message: errorMessage,
               })
             }
 
-            const errors = geojsonhint.hint(geoJSONObject)
-            if (errors.length > 0) {
-              // remap line numbers
-              allErrors.push(_map(errors, error => ({
+            if (!booleanValid(geoJSONObject)) {
+              allErrors.push({
                 line: lineNumber,
-                message: error.message,
-              })))
+                message: 'Invalid GeoJSON geometry',
+              })
             }
           }
-        }
-        catch(parseError) {
+        } catch (parseError) {
           allErrors.push({
             line: lineNumber,
             message: `${parseError}`,
           })
         }
+
+        lineNumber++
       }
     })
 
@@ -137,21 +134,23 @@ export class AsValidatableGeoJSON {
         geoJSON = geoJSONLines.join('\n')
       }
       geoJSONObject = JSON.parse(geoJSON)
-    }
-    catch(parseError) {
-      return [{message: `${parseError}`}]
+    } catch (parseError) {
+      return [{ message: `${parseError}` }]
     }
 
     if (geoJSONObject) {
       try {
-        this.flagUnsupportedGeometries(geoJSONObject)
+        this.flagUnsupportedGeometries(geoJSONObject);
+      } catch (errorMessage) {
+        return [{ message: errorMessage }]
       }
-      catch(errorMessage) {
-        return [{message: errorMessage}]
+  
+      if (!booleanValid(geoJSONObject)) {
+        return [{ message: 'Invalid GeoJSON geometry' }]
       }
     }
 
-    return geojsonhint.hint(geoJSONObject)
+    return []
   }
 
   /**

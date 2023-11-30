@@ -97,6 +97,9 @@ export class ChallengeResultList extends Component {
     }
 
   render() {
+    const search = _get(this.props, 'currentSearch.challenges', {})
+    const query = search.query ? search.query : this.props.searchFilters.project ? this.props.searchFilters.project : this.props.searchFilters.task 
+
     const challengeResultsUnbound = _clone(this.props.pagedChallenges);
     const challengeResults = this.props.location?.pathname?.includes("browse/challenges") 
       && (this.props.searchSort?.sortBy === "created"
@@ -127,8 +130,6 @@ export class ChallengeResultList extends Component {
     }, []);
 
     const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
-
-    const search = _get(this.props, 'currentSearch.challenges', {})
     const searchType = this.props.searchFilters.searchType
     const bounds = _get(search, 'mapBounds.bounds')
     const locationFilter = _get(search, 'filters.location')
@@ -137,8 +138,6 @@ export class ChallengeResultList extends Component {
       _isEmpty(search.query) &&
       _isEmpty(otherFilters) &&
       (_isEmpty(locationFilter) || !bounds || !boundsWithinAllowedMaxDegrees(bounds))
-
-    const query = search.query ? search.query : this.props.searchFilters.project ? this.props.searchFilters.project : this.props.searchFilters.task 
 
     let matchedId = []
     if(!isNaN(query) && query && !this.props.history.location.pathname.includes('browse/projects/')) {
