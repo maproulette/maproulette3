@@ -245,13 +245,16 @@ export class TaskMap extends Component {
     this.generateDirectionalityMarkers()
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     this.loadMapillaryIfNeeded()
     this.loadOpenStreetCamIfNeeded()
-
+  
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       this.deactivateOSMDataLayer()
-      this.setState({skipFit: false})
+      this.setState({
+        ...prevState,
+        skipFit: false,
+      })
       this.generateDirectionalityMarkers()
     }
     else if (!_isEqual(_get(prevProps, 'task.geometries'), _get(this.props, 'task.geometries'))) {
