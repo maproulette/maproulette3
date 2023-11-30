@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithMetricsSearchResults from './WithMetricsSearchResults'
 import WithSortedProjects from './WithSortedProjects'
@@ -9,6 +9,7 @@ import { injectIntl } from 'react-intl'
 import BusySpinner from '../BusySpinner/BusySpinner'
 
 const MetricsTable = (props) => {
+  const [userChanges, setUserChanges] = useState({})
   let data
   const constructHeader = () => {
     if (props.currentTab === 'challenges') {
@@ -50,7 +51,7 @@ const MetricsTable = (props) => {
         superUser: Boolean(u.grants?.find(grant => grant.role === -1))
       }))
 
-      return setUserTab()
+      return setUserTab(userChanges, setUserChanges)
     }
   }
 

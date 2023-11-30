@@ -221,7 +221,7 @@ const setProjectTab = () => {
   ]
 }
 
-const setUserTab = () => {
+const setUserTab = (userChanges, setUserChanges) => {
   return [
     {
       id: 'id',
@@ -291,7 +291,12 @@ const setUserTab = () => {
       sortable: true,
       Cell: (props) => {
         return (
-          <SuperUserToggle initialValue={props.value} userId={props?.original?.id} />
+          <SuperUserToggle
+            initialValue={props.value}
+            userId={props?.original?.id}
+            userChanges={userChanges}
+            setUserChanges={setUserChanges}
+          />
         )
       }
     },
