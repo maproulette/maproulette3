@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Endpoint from '../../services/Server/Endpoint'
 import { defaultRoutes as api } from "../../services/Server/Server";
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser';
 
 const SuperUserToggle = (props) => {
   const [selection, setSelection] = useState(props.initialValue ? "super" : "basic")
+
+  useEffect(() => {
+    const localState = props.userChanges[props.userId]
+    setSelection(localState || props.initialValue ? "super" : "basic")
+  }, [props.userId])
 
   const updateValue = async (e) => {
     const value = e.target.value
@@ -16,6 +21,10 @@ const SuperUserToggle = (props) => {
         await new Endpoint(api.superUser.deleteSuperUserGrant, { variables: { userId: props.userId } }).execute()
       }
 
+      props.setUserChanges({
+        ...props.userChanges,
+        [props.userId]: value
+      })
       setSelection(value)
     } catch (e) {
       console.log(e)
