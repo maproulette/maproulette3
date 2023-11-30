@@ -15,7 +15,7 @@ import './TaskCompletionStep2.scss'
 /**
  * TaskCompletionStep2 presents controls for finishing up completion of a
  * task after an editor has been opened. It allows the user to mark that they
- * fixed the task, the task was too hard, it was already fixed by someone else,
+ * fixed the task, can't complete, it was already fixed by someone else,
  * etc. The user can also cancel and abort completion of the task.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)

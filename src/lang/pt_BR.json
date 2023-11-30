@@ -1029,7 +1029,7 @@
   "KeyMapping.taskCompletion.falsePositive": "Não/Não é um problema",
   "KeyMapping.taskCompletion.fixed": "Sim/Eu corrigi!",
   "KeyMapping.taskCompletion.skip": "Ignorar",
-  "KeyMapping.taskCompletion.tooHard": "Too difficult / Couldn’t see",
+  "KeyMapping.taskCompletion.tooHard": "Can't Complete",
   "KeyMapping.taskEditing.cancel": "Cancelar edição",
   "KeyMapping.taskEditing.completeTogether": "Complete Tasks Together",
   "KeyMapping.taskEditing.escapeLabel": "ESC",

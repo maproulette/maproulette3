@@ -34,6 +34,6 @@ export default defineMessages({
   },
   tooHard: {
     id: "Task.status.tooHard",
-    defaultMessage: "Too Hard"
+    defaultMessage: "Can't Complete"
   },
 })

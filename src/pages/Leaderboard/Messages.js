@@ -29,7 +29,7 @@ export default defineMessages({
 | Fixed         | 5      |
 | Not an Issue  | 3      |
 | Already Fixed | 3      |
-| Too Hard      | 1      |
+| Can't Complete| 1      |
 | Skipped       | 0      |
 `
   },

@@ -349,7 +349,7 @@
   "Admin.Task.fields.actions.fixed": "Fixed",
   "Admin.Task.fields.actions.notAnIssue": "Not an Issue",
   "Admin.Task.fields.actions.skipped": "Skipped",
-  "Admin.Task.fields.actions.tooHard": "Too Hard",
+  "Admin.Task.fields.actions.tooHard": "Can't Complete",
   "Admin.Task.fields.name.label": "작업:",
   "Admin.Task.fields.status.label": "상태:",
   "Admin.TaskAnalysisTable.bundleMember.tooltip": " 임무의 구성원",
