@@ -58,7 +58,7 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
 // columns
 const ALL_COLUMNS =
   Object.assign({featureId:{}, id:{}, status:{}, priority:{},
-    completedDuration:{}, mappedOn:{},
+    completedDuration:{}, mappedOn:{}, unbundle: {},
     reviewStatus:{group:"review"},
     reviewRequestedBy:{group:"review"},
     reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
@@ -69,7 +69,7 @@ const ALL_COLUMNS =
        metaReviewedAt:{group:"review"}} : null
   )
 
-const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments"]
+const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments", "unbundle"]
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
@@ -229,6 +229,7 @@ export class TaskAnalysisTableInternal extends Component {
             SubComponent={props =>
               <ViewTaskSubComponent taskId={props.original.id} />
             }
+            unbundleTask={this.props.unbundleTask}
             collapseOnDataChange={false}
             minRows={1}
             manual
@@ -356,6 +357,33 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       </div>
     ),
   }
+
+  columns.unbundle = {
+    id: 'unbundle',
+    Header: '',
+    accessor: 'remove',
+    minWidth: 110,
+    Cell: ({ row }) => {
+      const isTaskSelected = props.taskId === row._original.id
+      const isTaskEditable = props.task?.status === 0 || props.task?.reviewStatus === 2
+      const isTaskRemovable = !props.taskReadOnly && isTaskEditable
+
+      const enableRemove = props.task?.completedBy ? props.task.completedBy === props.user.id : true
+
+      return (
+        <div>
+          {isTaskRemovable && !isTaskSelected && enableRemove ? (
+            <button
+              className="mr-text-red"
+              onClick={() => props.unbundleTask(row._original.id)}
+            >
+              <FormattedMessage {...messages.unbundle} />
+            </button>
+          ) : null}
+        </div>
+      );
+    },
+  };
 
   columns.priority = {
     id: 'priority',

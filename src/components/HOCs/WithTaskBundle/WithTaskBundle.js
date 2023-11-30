@@ -4,8 +4,7 @@ import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
-import { bundleTasks, deleteTaskBundle, fetchTaskBundle }
-       from '../../../services/Task/Task'
+import { bundleTasks, deleteTaskBundle, removeTaskFromBundle, fetchTaskBundle } from '../../../services/Task/Task'
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -42,6 +41,20 @@ export function WithTaskBundle(WrappedComponent) {
       }
     }
 
+    removeTaskFromBundle = async (bundleId, taskId) => {
+      this.setState({loading: true})
+      if(this.state.taskBundle.taskIds.length === 2) {
+        this.props.deleteTaskBundle(bundleId, this.state.taskBundle.taskIds[0])
+        this.clearActiveTaskBundle()
+        this.setState({loading: false})
+        return
+      }
+
+      this.props.removeTaskFromBundle(bundleId, taskId).then(taskBundle => {
+        this.setState({taskBundle, loading: false})
+      })
+    };
+
     clearActiveTaskBundle = () => {
       this.setState({taskBundle: null, loading: false})
     }
@@ -66,11 +79,12 @@ export function WithTaskBundle(WrappedComponent) {
     render() {
       return (
         <WrappedComponent
-          {..._omit(this.props, ['bundleTasks', 'deleteTaskBundle'])}
+          {..._omit(this.props, ['bundleTasks', 'deleteTaskBundle', 'removeTaskFromBundle'])}
           taskBundle={this.state.taskBundle}
           taskBundleLoading={this.state.loading}
           createTaskBundle={this.createTaskBundle}
           removeTaskBundle={this.removeTaskBundle}
+          removeTaskFromBundle={this.removeTaskFromBundle}
           clearActiveTaskBundle={this.clearActiveTaskBundle}
           setSelectedTasks={(selectedTasks) => this.setState({selectedTasks})}
           selectedTasks={this.state.selectedTasks}
@@ -86,6 +100,7 @@ export function WithTaskBundle(WrappedComponent) {
 export const mapDispatchToProps = dispatch => bindActionCreators({
   bundleTasks,
   deleteTaskBundle,
+  removeTaskFromBundle,
   fetchTaskBundle,
 }, dispatch)
 
