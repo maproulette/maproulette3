@@ -105,12 +105,12 @@ export class TaskTags extends Component {
             /> {this.tagList()}
           </div>
 
-          {!this.props.taskReadOnly &&
+          {!this.props.taskReadOnly && (this.props.completedBy === this.props.user || this.props.task.reviewClaimedBy === this.props.user) ?
            <div className="mr-links-green-lighter mr-flex-grow-0">
              <a onClick={() => this.setState({edit: true})}>
                <FormattedMessage {...messages.updateTags} />
              </a>
-           </div>
+           </div> : null
           }
         </div>
       )
