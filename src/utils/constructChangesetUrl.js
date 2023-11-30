@@ -6,11 +6,33 @@ export const constructChangesetUrl = (task) => {
     task?.parent?.enabled &&
     task?.parent?.parent?.enabled
   ) {
-    const rootUrl = process.env.REACT_APP_SHORT_URL || window.location.origin
-    const path = process.env.REACT_APP_SHORT_PATH === 'enabled' ? `/c/${task.parent.id}/t/${task.id}` : `/challenge/${task.parent.id}/task/${task.id}`
-
-    return ` ${rootUrl}${path}`;
+    return ` ${constructTaskLink(task.parent.id, task.id)}`
   } else {
     return "";
   }
 };
+
+export const constructProjectLink = (projectId) => {
+  const rootUrl = getRootUrl();
+  const path = process.env.REACT_APP_SHORT_PATH === 'enabled' ? `/p/${projectId}` : `/browse/projects/${projectId}`
+
+  return `${rootUrl}${path}`;
+};
+
+export const constructChallengeLink = (challengeId) => {
+  const rootUrl = getRootUrl();
+  const path = process.env.REACT_APP_SHORT_PATH === 'enabled' ? `/c/${challengeId}` : `/browse/challenges/${challengeId}`
+
+  return `${rootUrl}${path}`;
+};
+
+export const constructTaskLink = (challengeId, taskId) => {
+  const rootUrl = getRootUrl();
+  const path = process.env.REACT_APP_SHORT_PATH === 'enabled' ? `/c/${challengeId}/t/${taskId}` : `/challenge/${challengeId}/task/${taskId}`
+
+  return `${rootUrl}${path}`;
+}
+
+const getRootUrl = () => {
+  return process.env.REACT_APP_SHORT_URL || window.location.origin
+}
