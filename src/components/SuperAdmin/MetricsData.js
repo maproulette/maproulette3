@@ -1,5 +1,6 @@
 import React from 'react'
 import { FormattedDate } from 'react-intl'
+import SuperUserToggle from './SuperUserToggle'
 
 const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`
 
@@ -279,6 +280,20 @@ const setUserTab = () => {
             <FormattedDate value={props.value} />
           </span>
         ),
+    },
+    {
+      id: 'superUser',
+      Header: 'ROLE',
+      accessor: (user) => {
+        return user.superUser
+      },
+      maxWidth: 200,
+      sortable: true,
+      Cell: (props) => {
+        return (
+          <SuperUserToggle initialValue={props.value} userId={props?.original?.id} />
+        )
+      }
     },
   ]
 }

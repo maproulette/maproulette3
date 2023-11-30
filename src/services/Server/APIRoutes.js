@@ -198,6 +198,10 @@ const apiRoutes = (factory) => {
       setProjectRole: factory.put("/team/:teamId/project/:projectId/:role"),
       removeFromProject: factory.delete("/team/:teamId/project/:projectId"),
     },
+    superUser: {
+      addSuperUserGrant: factory.put("/superuser/:userId"),
+      deleteSuperUserGrant: factory.delete("/superuser/:userId")
+    }
   };
 };
 

@@ -34,7 +34,7 @@ describe("Profile Menu", () => {
         }] }}
       />
     );
-    const text = getByText("Super Admin Metrics");
+    const text = getByText("Super Admin Settings");
     expect(text).toBeInTheDocument();
   });
 });
