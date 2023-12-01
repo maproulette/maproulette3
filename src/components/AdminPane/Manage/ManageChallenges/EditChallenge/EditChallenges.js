@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Form from "@rjsf/core";
+import validator from "@rjsf/validator-ajv8";
 import _isObject from "lodash/isObject";
 import _isEmpty from "lodash/isEmpty";
 import _omit from "lodash/omit";
@@ -356,6 +357,7 @@ export class EditChallenges extends Component {
                       validate={(formData, errors) =>
                         this.validate(formData, errors, activeStep)
                       }
+                      validator={validator}
                       transformErrors={this.transformErrors(this.props.intl)}
                       widgets={{
                         SelectWidget: CustomSelectWidget,

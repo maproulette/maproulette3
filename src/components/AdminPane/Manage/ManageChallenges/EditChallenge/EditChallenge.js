@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Form from "@rjsf/core";
+import validator from "@rjsf/validator-ajv8";
 import classNames from "classnames";
 import _isObject from "lodash/isObject";
 import _isNumber from "lodash/isNumber";
@@ -225,15 +226,15 @@ export class EditChallenge extends Component {
     this.validationPromise = this.validateDataSource(formData, activeStep);
     this.validationPromise
       .then(() => {
-        if (!_isEmpty(this.state.extraErrors)) {
-          this.setState({ extraErrors: {} });
-        }
+      if (!_isEmpty(this.state.extraErrors)) {
+        this.setState({ extraErrors: {} });
+      }
       })
       .catch((dataSourceErrors) => {
-        this.setState({ extraErrors: dataSourceErrors });
+      this.setState({ extraErrors: dataSourceErrors });
       })
       .finally(() => {
-        this.validationPromise = null;
+      this.validationPromise = null;
       });
     return errors;
   };
@@ -295,7 +296,7 @@ export class EditChallenge extends Component {
       .catch((err) => {
         console.log(err);
       }); // Stay on current step if validation fails
-      
+
     return false;
   };
 
@@ -930,6 +931,7 @@ export class EditChallenge extends Component {
                       }
                     )}
                     className="form"
+                    validator={validator}
                     validate={(formData, errors) =>
                       this.validate(formData, errors, activeStep)
                     }

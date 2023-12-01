@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Form from '@rjsf/core'
+import validator from "@rjsf/validator-ajv8";
 import _merge from 'lodash/merge'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
@@ -191,6 +192,7 @@ export class EditTask extends Component {
                 widgets={{SelectWidget: CustomSelectWidget}}
                 className="form"
                 fields={customFields}
+                validator={validator}
                 liveValidate
                 noHtml5Validate
                 showErrorList={false}

@@ -13,6 +13,7 @@
     "@popperjs/core": "^2.8.4",
     "@rjsf/core": "^5.14.2",
     "@rjsf/utils": "^5.14.2",
+    "@rjsf/validator-ajv8": "^5.14.3",
     "@turf/bbox": "^6.0.1",
     "@turf/bbox-polygon": "^6.0.1",
     "@turf/bearing": "^6.0.1",
