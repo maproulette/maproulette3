@@ -181,14 +181,14 @@ export const jsSchema = (intl) => {
  * @private
  */
 const priorityRuleGroupUISchema = (isCollapsed) => ({
-  classNames: "priority-rule-group",
+  'ui:classNames': "priority-rule-group",
   condition: {
     "ui:widget": "select",
   },
   rules: {
     items: {
       "ui:options": { inline: true, label: false },
-      classNames: "priority-rule",
+      'ui:classNames': "priority-rule",
       keyType: {
         "ui:widget": "select",
         "ui:displayLabel": false,
@@ -215,7 +215,7 @@ const priorityRuleGroupUISchema = (isCollapsed) => ({
         "ui:collapsed": isCollapsed,
       },
       ruleGroup: {
-        classNames: "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
+        'ui:classNames': "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
         rules: {
           items: {
             key: {
@@ -229,7 +229,7 @@ const priorityRuleGroupUISchema = (isCollapsed) => ({
               "ui:collapsed": isCollapsed,
             },
             ruleGroup: {
-              classNames: "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
+              'ui:classNames': "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
               rules: {
                 items: {
                   key: {

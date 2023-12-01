@@ -124,7 +124,7 @@ export const jsSchema = (
         intl.formatMessage(messages.overpassQLLabel),
         intl.formatMessage(messages.localGeoJsonLabel),
         intl.formatMessage(messages.remoteGeoJsonLabel),
-      ],
+    ],
       default: "Overpass Query",
     };
 
@@ -136,7 +136,7 @@ export const jsSchema = (
         enumNames: [
           intl.formatMessage(messages.yesLabel),
           intl.formatMessage(messages.noLabel),
-        ],      
+      ],   
       };
     }
 
@@ -207,7 +207,7 @@ export const uiSchema = (
       "ui:readonly": sourceReadOnly,
     },
     overpassTargetType: {
-      classNames: "",
+      'ui:classNames': "",
       "ui:widget": "select",
       "ui:options": { inline: true },
     },
