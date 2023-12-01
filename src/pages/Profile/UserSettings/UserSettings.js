@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Form from "@rjsf/core";
+import validator from "@rjsf/validator-ajv8";
 import _each from "lodash/each";
 import _get from "lodash/get";
 import _pick from "lodash/pick";
@@ -305,6 +306,7 @@ class UserSettings extends Component {
           className="form form--2-col"
           liveValidate
           noHtml5Validate
+          validator={validator}
           showErrorList={false}
           validate={this.validate}
           formData={userSettings}
@@ -330,6 +332,7 @@ class UserSettings extends Component {
           widgets={{ SelectWidget: CustomSelectWidget}}
           className="form form--modified-2-col"
           liveValidate
+          validator={validator}
           transformErrors={notificationTransformErrors(this.props.intl)}
           noHtml5Validate
           showErrorList={false}

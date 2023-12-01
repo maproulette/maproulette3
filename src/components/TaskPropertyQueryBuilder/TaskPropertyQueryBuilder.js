@@ -1,6 +1,7 @@
 import React, { Component, createRef } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import Form from '@rjsf/core'
+import validator from "@rjsf/validator-ajv8";
 import { CustomSelectWidget }
        from '../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import _get from 'lodash/get'
@@ -238,6 +239,7 @@ export class TaskPropertyQueryBuilder extends Component {
           tagType={"taskProperties"}
           widgets={{SelectWidget: CustomSelectWidget}}
           noHtml5Validate
+          validator={validator}
           showErrorList={false}
           formData={data}
           onChange={this.changeHandler}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Form from '@rjsf/core'
+import validator from "@rjsf/validator-ajv8";
 import { FormattedMessage } from 'react-intl'
 import { jsSchema, uiSchema } from './UrlSchema'
 import messages from './Messages'
@@ -17,6 +18,7 @@ export const EditCustomUrl = props => {
       uiSchema={uiSchema(props.intl)}
       className="form"
       liveValidate
+      validator={validator}
       noHtml5Validate
       showErrorList={false}
       formData={Object.assign({}, props.url, urlFields)}

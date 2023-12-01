@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/client'
 import Form from '@rjsf/core'
+import validator from "@rjsf/validator-ajv8";
 import { FormattedMessage } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
 import _isEmpty from 'lodash/isEmpty'
@@ -30,6 +31,7 @@ export const EditTeam = props => {
       uiSchema={uiSchema(props.intl)}
       className="form"
       liveValidate
+      validator={validator}
       noHtml5Validate
       showErrorList={false}
       formData={Object.assign({}, props.team, teamFields)}
