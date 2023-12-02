@@ -1,3 +1,4 @@
+import parseLinkHeader from 'parse-link-header'
 import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
@@ -88,32 +89,13 @@ export const nextMapillaryPageUrl = function(resultContext) {
     return null
   }
 
-  const parseLinkHeader = (linkHeader) => {
-    const links = {}
-
-    if (linkHeader) {
-      linkHeader.split(',').forEach(link => {
-        const match = link.match(/<([^>]+)>;\s*rel="([^"]+)"/)
-        if (match) {
-          const url = match[1]
-          const rel = match[2]
-          links[rel] = { url }
-        }
-      });
-    }
-
-    return links
-  }
-
-  const linkHeader = resultContext.link
-  const links = parseLinkHeader(linkHeader)
-
-  if (!links.next) {
+  const linkHeader = parseLinkHeader(resultContext.link)
+  if (!linkHeader.next) {
     return null
   }
 
-  return links.next.url
-};
+  return linkHeader.next.url
+}
 
 /**
  * Retrieve the active access token

@@ -1,6 +1,6 @@
 {
   "root": true,
-  "parser": "@babel/eslint-parser",
+  "parser": "babel-eslint",
   "plugins": ["react", "react-hooks", "jest"],
   "rules": {
     "no-unused-vars": "warn",
