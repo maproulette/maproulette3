@@ -53,7 +53,7 @@ const Dropdown = ({
 
   useEffect(() => {
     if (active && forceUpdate) {
-      forceUpdate();
+      forceUpdate
     }
   }, [active, forceUpdate]);
 
