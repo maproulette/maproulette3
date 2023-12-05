@@ -52,9 +52,17 @@ const Dropdown = ({
   );
 
   useEffect(() => {
+    let timeoutId;
+  
     if (active && forceUpdate) {
-      forceUpdate();
+      timeoutId = setTimeout(() => {
+        forceUpdate();
+      }, 0);
     }
+  
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [active, forceUpdate]);
 
   useEffect(() => {
