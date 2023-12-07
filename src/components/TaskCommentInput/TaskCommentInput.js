@@ -133,7 +133,7 @@ TaskCommentInput.propTypes = {
 TaskCommentInput.defaultProps = {
   value: "",
   rows: 1,
-  maxCharacterCount: 1500,
+  maxCharacterCount: 5000,
 };
 
 export default injectIntl(TaskCommentInput);
