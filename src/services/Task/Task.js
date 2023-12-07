@@ -410,13 +410,13 @@ export const updateCompletionResponses = function(taskId, completionResponses) {
  */
 export const addTaskComment = function(taskId, comment, taskStatus) {
   return function(dispatch) {
-    const params = { comment: encodeURIComponent(comment) }
+    const params = {}
     if (_isFinite(taskStatus)) {
       params.actionId = taskStatus
     }
 
     return new Endpoint(
-      api.task.addComment, {variables: {id: taskId}, params}
+      api.task.addComment, {variables: {id: taskId}, params, json: {comment: encodeURIComponent(comment)}}
     ).execute().then(() => {
       fetchTaskComments(taskId)(dispatch)
       fetchTask(taskId)(dispatch) // Refresh task data
@@ -440,14 +440,14 @@ export const addTaskComment = function(taskId, comment, taskStatus) {
  */
 export const addTaskBundleComment = function(bundleId, primaryTaskId, comment, taskStatus) {
   return function(dispatch) {
-    const params = { comment: encodeURIComponent(comment) }
+    const params = {}
     if (_isFinite(taskStatus)) {
       params.actionId = taskStatus
     }
-
     return new Endpoint(api.tasks.bundled.addComment, {
       variables: {bundleId},
       params,
+      json: {comment: encodeURIComponent(comment)}
     }).execute().then(() => {
       fetchTaskComments(primaryTaskId)(dispatch)
       fetchTask(primaryTaskId)(dispatch) // Refresh task data
