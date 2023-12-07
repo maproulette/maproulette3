@@ -22,22 +22,49 @@ import messages from './Messages'
  */
 export default class CommentList extends Component {
   render() {
-    if (this.props.comments.length === 0) {
+    if (
+      this.props.comments?.length === 0 &&
+      this.props.taskComments?.length === 0
+    ) {
       return (
         <div className="mr-px-4 mr-text-grey-light">
           <FormattedMessage {...messages.noComments} />
         </div>
       )
     }
-
-    const commentDates = new Map()
-    _each(this.props.comments,
-          comment => commentDates.set(comment.id, parse(comment.created)))
-
+    
+    let commentDates = []
+    
     // Show in descending order, with the most recent comment first.
-    const sortedComments =
-      _reverse(_sortBy(this.props.comments,
-                       comment => commentDates.get(comment.id).getTime()))
+    let sortedComments = []
+    
+    if (this.props.comments?.length !== 0) {
+      commentDates = new Map()
+      _each(this.props.comments, (comment) =>
+        commentDates.set(comment.id, parse(comment.created))
+      )
+    
+      // Show in descending order, with the most recent comment first.
+      sortedComments = _reverse(
+        _sortBy(
+          this.props.comments,
+          (comment) => commentDates.get(comment.id).getTime()
+        )
+      )
+    } else {
+      commentDates = new Map()
+      _each(this.props.taskComments, (comment) =>
+        commentDates.set(comment.id, parse(comment.created))
+      )
+    
+      // Show in descending order, with the most recent comment first.
+      sortedComments = _reverse(
+        _sortBy(
+          this.props.taskComments,
+          (comment) => commentDates.get(comment.id).getTime()
+        )
+      )
+    }
 
     const commentItems = _map(sortedComments, comment =>
       !_isObject(comment) ? null : (
@@ -61,7 +88,7 @@ export default class CommentList extends Component {
               {this.props.includeChallengeNames &&
                <div className="mr-text-white">{comment.challengeName}</div>
               }
-              {this.props.includeTaskLinks &&
+              {this.props.includeTaskLinks && this.props.comments?.length !== 0 &&
                <Link to={`/challenge/${comment.challengeId}/task/${comment.taskId}`}>
                  <FormattedMessage {...messages.viewTaskLabel} />
                </Link>
