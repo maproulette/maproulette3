@@ -416,7 +416,7 @@ export const addTaskComment = function(taskId, comment, taskStatus) {
     }
 
     return new Endpoint(
-      api.task.addComment, {variables: {id: taskId}, params, json: {comment: encodeURIComponent(comment)}}
+      api.task.addComment, {variables: {id: taskId}, params, json: {comment: comment}}
     ).execute().then(() => {
       fetchTaskComments(taskId)(dispatch)
       fetchTask(taskId)(dispatch) // Refresh task data
@@ -447,7 +447,7 @@ export const addTaskBundleComment = function(bundleId, primaryTaskId, comment, t
     return new Endpoint(api.tasks.bundled.addComment, {
       variables: {bundleId},
       params,
-      json: {comment: encodeURIComponent(comment)}
+      json: {comment: comment}
     }).execute().then(() => {
       fetchTaskComments(primaryTaskId)(dispatch)
       fetchTask(primaryTaskId)(dispatch) // Refresh task data

@@ -43,7 +43,7 @@ export const fetchChallengeComments = function (challengeId) {
 export const postChallengeComment = function (challengeId, comment) {
   return new Endpoint(api.challenge.addComment, {
     variables: { id: challengeId },
-    json: { comment: encodeURIComponent(comment) },
+    json: { comment: comment },
   })
     .execute()
     .catch((error) => {
