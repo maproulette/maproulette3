@@ -65,7 +65,7 @@
     "react-intl": "^6.5.5",
     "react-intl-formatted-duration": "^4.0.0",
     "react-leaflet": "^2.7.0",
-    "react-leaflet-bing-v2": "^5.0.1",
+    "react-leaflet-bing-v2": "~5.1.2",
     "react-leaflet-markercluster": "^2.0.0",
     "react-onclickoutside": "^6.6.3",
     "react-popper": "^2.2.4",
