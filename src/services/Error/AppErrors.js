@@ -33,6 +33,7 @@ export default {
     bundleFailure: messages.taskBundleFailure,
     removeTaskFromBundleFailure: messages.removeTaskFromBundleFailure,
     bundleCooperative: messages.taskBundleCooperative,
+    addCommentFailure: messages.addCommentFailure,
     bundleNotCooperative: messages.taskBundleNotCooperative,
     lockReleaseFailure: messages.taskLockReleaseFailure,
     cooperativeFailure: messages.taskCooperativeFailure,

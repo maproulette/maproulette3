@@ -1,5 +1,7 @@
 import _values from "lodash/values";
 import Endpoint from "../Server/Endpoint";
+import AppErrors from "../Error/AppErrors";
+import { addError } from "../Error/Error";
 import { defaultRoutes as api } from "../Server/Server";
 
 /**
@@ -47,6 +49,7 @@ export const postChallengeComment = function (challengeId, comment) {
   })
     .execute()
     .catch((error) => {
+      dispatch(addError(AppErrors.task.addCommentFailure))
       console.log(error.response || error);
     });
 };

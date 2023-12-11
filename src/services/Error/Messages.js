@@ -93,6 +93,10 @@ export default defineMessages({
     id: "Errors.task.bundleCooperative",
     defaultMessage: "The main task is Cooperative. All selected tasks must be Cooperative.",
   },
+  addCommentFailure: {
+    id: "Errors.task.addCommentFailure",
+    defaultMessage: "Comment was unable to be saved. An empty string was most likely submitted.",
+  },
   taskBundleNotCooperative: {
     id: "Errors.task.bundleNotCooperative",
     defaultMessage: "The main task is not Cooperative. No selected tasks can be Cooperative.",
