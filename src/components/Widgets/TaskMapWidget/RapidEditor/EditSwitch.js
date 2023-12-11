@@ -21,15 +21,13 @@ export class EditSwitch extends Component {
 
     return (
       <div className="mr-flex mr-justify-center">
-        {!disableRapid ?
+        {!disableRapid && (
           <label className="switch-container mr-mr-2">
-            <input type="checkbox" checked={editModeOn} />
-            <span className="slider round" onClick={() => this.toggleVisible()}></span>
-          </label> : null
-        }
-        <span>
-          {editModeOn ? 'Edit Mode' : 'Classic Mode'}
-        </span>
+            <input type="checkbox" checked={editModeOn} onChange={this.toggleVisible} />
+            <span className="slider round"></span>
+          </label>
+        )}
+        <span>{editModeOn ? 'Edit Mode' : 'Classic Mode'}</span>
       </div>
     )
   }
