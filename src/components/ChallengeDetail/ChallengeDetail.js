@@ -201,22 +201,22 @@ export class ChallengeDetail extends Component {
     if (!challenge.isVirtual) {
       return (
         <li>
-          <Link
+          <button
             className="mr-text-green-lighter hover:mr-text-white"
             onClick={() => this.onClickTab(DETAIL_TABS.OVERVIEW)}
           >
             <FormattedMessage {...messages.viewOverview} />
-          </Link>
+          </button>
           {
             _isObject(this.props.user) && (
               <Fragment>
                 <span className="mr-px-3"> | </span>
-                <Link
+                <button
                   className="mr-text-green-lighter hover:mr-text-white"
                   onClick={() => this.onClickTab(DETAIL_TABS.COMMENTS)}
                 >
                   <FormattedMessage {...messages.viewComments} />
-                </Link>
+                </button>
               </Fragment>
             )
           }
@@ -224,12 +224,12 @@ export class ChallengeDetail extends Component {
             challenge.overpassQL && (
               <Fragment>
                 <span className="mr-px-3"> | </span>
-                <Link
+                <button
                   className="mr-text-green-lighter hover:mr-text-white"
                   onClick={() => this.onClickTab(DETAIL_TABS.OVERPASS)}
                 >
                   <FormattedMessage {...messages.overpassQL} />
-                </Link>
+                </button>
               </Fragment>
             )
           }

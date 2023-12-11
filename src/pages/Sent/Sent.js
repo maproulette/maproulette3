@@ -107,7 +107,7 @@ const taskColumns = ({ setSelectedComment }) => [{
   Header: 'Comment',
   accessor: 'comment',
   Cell: ({ value, row }) => {
-    return <Link onClick={() => setSelectedComment({ id: row.task_id, text: value, type: CommentType.TASK })} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>{value}</Link>
+    return <button className="mr-text-green-light hover:mr-text-white" onClick={() => setSelectedComment({ id: row.task_id, text: value, type: CommentType.TASK })} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>{value}</button>
   },
   sortable: true,
   resizable: false
@@ -138,7 +138,7 @@ const challengeColumns = ({ setSelectedComment }) => [{
   Header: 'Comment',
   accessor: 'comment',
   Cell: ({ value, original }) => {
-    return <Link onClick={() => setSelectedComment({ id: original.challengeId, text: value, type: CommentType.CHALLENGE })} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>{value}</Link>
+    return <button className="mr-text-green-light hover:mr-text-white" onClick={() => setSelectedComment({ id: original.challengeId, text: value, type: CommentType.CHALLENGE })} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>{value}</button>
   },
   sortable: true,
   resizable: false
