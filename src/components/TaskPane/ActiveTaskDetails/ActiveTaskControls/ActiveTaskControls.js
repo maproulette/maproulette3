@@ -361,7 +361,15 @@ export class ActiveTaskControls extends Component {
     else if (!this.props.task) {
       return null
     }
-    const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+    const cooperative = AsCooperativeWork(this.props.task).isTagType() || this.props.task.cooperativeWork
+    const disableRapid =  cooperative || this.props.taskReadOnly || (
+      this.props.task?.status !== 0 && ( 
+      this.props.completedBy !== this.props.user && 
+      this.props.task?.reviewClaimedBy !== this.props.user
+      )
+    )
+    const editMode = disableRapid ? false : this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false
+
     const needsRevised = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
     const isEditingTask =
@@ -383,7 +391,7 @@ export class ActiveTaskControls extends Component {
         allowedStatusProgressions(this.props.task.status, false, needsRevised)
       const isComplete = isCompletionStatus(this.props.task.status)
       const isFinal = isFinalStatus(this.props.task.status)
-
+ 
       return (
         <div>
           {!isEditingTask && isComplete &&
