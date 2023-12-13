@@ -7,6 +7,18 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.2] - 2023-12-12
+Realease with [maproulette-backend_v4.4.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.11)
+
+## [v3.14.1] - 2023-11-24
+Realease with [maproulette-backend_v4.4.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.10)
+
+## What's Changed
+* call backend service for system notices by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2179
+* add silent catch statement to system notices call by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2180
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.0...v3.14.1
+
 ## [v3.14.0] - 2023-11-14
 Realease with [maproulette-backend_v4.4.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.9)
 
