@@ -40,7 +40,6 @@ export class ReviewTaskControls extends Component {
   state = {
     comment: "",
     tags: null,
-    reviewTags: null,
     loadBy: TaskReviewLoadMethod.next,
     errorTags: []
   }
@@ -60,7 +59,7 @@ export class ReviewTaskControls extends Component {
     const errorTags = this.state.errorTags?.length ? this.state.errorTags : undefined
 
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
-                                     this.state.comment, this.state.reviewTags,
+                                     this.state.comment, "",
                                      this.state.loadBy, history,
                                      this.props.taskBundle, requestedNextTask, null, errorTags)
     this.setState({ confirmingTask: false, comment: "", errorTags: [] })
@@ -103,6 +102,8 @@ export class ReviewTaskControls extends Component {
 
   /** Save Review Status */
   updateReviewStatus = (reviewStatus) => {
+    this.props.saveTaskTags(this.props.task, this.state.tags)
+
     this.setState({reviewStatus, confirmingTask: true})
   }
 
@@ -134,22 +135,13 @@ export class ReviewTaskControls extends Component {
     const uniqueTagsArray = filteredTagsArray.filter((value, index, self) => self.indexOf(value) === index);
     const tags = uniqueTagsArray.join(',');
 
-    const reviewTagsArray = _map(this.props.task.tags?.tagType === "review" ? this.props.task.tags : [], (tag) => tag.name);
-    const filteredReviewTagsArray = reviewTagsArray.filter((tag) => tag !== "");
-    const reviewTags = filteredReviewTagsArray.join(',');
-
     if(tags.length > 0 && this.state.tags === null) {
       this.setState({tags: tags})
-    }
-
-    if(reviewTags.length > 0 && this.state.reviewTags === null) {
-      this.setState({reviewTags: reviewTags})
     }
 
     if (prevProps.task.id !== this.props.task.id) {
       // Clear tags if we are on a new task
       this.setState({tags: tags ?? null})
-      this.setState({reviewTags: reviewTags ?? null})
     }
   }
 

@@ -278,7 +278,7 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle, re
     encodeURIComponent(replacedComment) +
     constructChangesetUrl(task) :
     "comment=" +
-    encodeURIComponent(task.parent.checkinComment) +
+    encodeURIComponent(task.parent?.checkinComment) +
     constructChangesetUrl(task);
 
   const sourceComponent =
@@ -335,7 +335,7 @@ export const constructRapidURI = function (task, mapBounds, options, replacedCom
     encodeURIComponent(replacedComment) +
     constructChangesetUrl(task) :
     "comment=" +
-    encodeURIComponent(task.parent.checkinComment) +
+    encodeURIComponent(task.parent?.checkinComment) +
     constructChangesetUrl(task);
 
   const sourceComponent =
@@ -392,7 +392,7 @@ export const constructLevel0URI = function (
     encodeURIComponent(replacedComment) +
     constructChangesetUrl(task) :
     "comment=" +
-    encodeURIComponent(task.parent.checkinComment) +
+    encodeURIComponent(task.parent?.checkinComment) +
     constructChangesetUrl(task);
 
   const urlComponent =
@@ -543,7 +543,7 @@ export const josmLayerParams = function (
  */
 export const josmChangesetParams = function (task) {
   return `changeset_comment=${
-    encodeURIComponent(task.parent.checkinComment) + constructChangesetUrl(task)
+    encodeURIComponent(task.parent?.checkinComment) + constructChangesetUrl(task)
   }&changeset_source=${encodeURIComponent(task.parent.checkinSource)}`;
 };
 
