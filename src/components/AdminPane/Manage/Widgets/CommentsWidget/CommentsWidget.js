@@ -27,6 +27,9 @@ export default class CommentsWidget extends Component {
       _map(challenge.comments, comment => Object.assign({challengeName: challenge.name}, comment)) :
       null
     ))
+    const taskComments =  this.props.task?.comments ?
+      _map(this.props.task.comments, comment => Object.assign({challengeName: this.props.task.parent.name}, comment)) :
+      null
 
     let exportControl = null
 
@@ -61,6 +64,7 @@ export default class CommentsWidget extends Component {
           includeTaskLinks
           lightMode={this.props.lightMode}
           comments={comments}
+          taskComments={taskComments}
         />
       </QuickWidget>
     )

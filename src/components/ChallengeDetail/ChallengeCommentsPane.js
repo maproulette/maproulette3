@@ -194,7 +194,7 @@ export const ChallengeCommentsPane = (props) => {
         value={input}
         commentChanged={setInput}
         submitComment={submitComment}
-        maxCharacterCount={1500}
+        maxCharacterCount={5000}
         dropdownPlacement="top-start"
         disableResize
         rows={3}
