@@ -73,15 +73,20 @@ export default class TaskMapWidget extends Component {
 
   render() {
     const cooperative = AsCooperativeWork(this.props.task).isTagType() || this.props.task.cooperativeWork
-    const disableRapid =  cooperative || this.props.taskReadOnly || (
-      (this.props.task?.status !== 0 && (![0, 2, 4, 5].includes(this.props.task?.reviewStatus))) && ( 
-      this.props.completedBy !== this.props.user.id && 
-      this.props.task?.reviewClaimedBy !== this.props.user.id &&
-      this.props.task?.metaReviewedBy !== this.props.user.id
-      )
-    )
-    
-    const editMode = disableRapid ? false : this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false
+    const isReviewing = this.props.task?.reviewClaimedBy === this.props.user.id && this.props.task?.reviewStatus === 0
+    const disableRapid =  cooperative ||
+                          this.props.taskReadOnly || ( 
+                          ![0, 3, 6].includes(this.props.task?.status) && 
+                          ![2, 4, 5].includes(this.props.task?.reviewStatus) 
+                          && !isReviewing 
+                          && !this.props.asMetaReview
+                          )
+
+    const editMode = disableRapid ? 
+                     false : 
+                     this.props.getUserAppSetting ? 
+                     this.props.getUserAppSetting(this.props.user, 'isEditMode') : 
+                     false
 
     if(!this.props.task.geometries.features){
       return  (
