@@ -49,6 +49,7 @@ import InTableTagFilter
 import messages from './Messages'
 import './TaskAnalysisTable.scss'
 import TaskAnalysisTableHeader from './TaskAnalysisTableHeader'
+import AsCooperativeWork from '../../interactions/Task/AsCooperativeWork'
 import { ViewCommentsButton, StatusLabel, makeInvertable }
   from './TaskTableHelpers'
 
@@ -279,16 +280,24 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   columns.selected = {id: 'selected',
     Header: null,
     accessor: task => props.isTaskSelected(task.id),
-    Cell: ({value, original}) => (
+    Cell: ({value, original}) => {
+      const isMapper = props.task?.completedBy ? props.task.completedBy === props.user.id : true
+      
+      const isTagFix = AsCooperativeWork(props.task).isTagType()
+      const enableEditForMapper = props.task?.status === 0 || (props.task?.reviewStatus === ( 2 || 4 || 5 ))
+      const disableSelecting = props.taskReadOnly || isTagFix || !isMapper || !enableEditForMapper
+
+      return (
       props.highlightPrimaryTask && original.id === props.task.id ?
-      <span className="mr-text-green-lighter">✓</span> :
+      <span className="mr-text-green-lighter">✓</span> : !disableSelecting ?
       <input
         type="checkbox"
         className="mr-checkbox-toggle"
         checked={value}
         onChange={() => props.toggleTaskSelection(original)}
-      />
-    ),
+      /> : ''   
+      )
+    },
     maxWidth: 25,
     sortable: false,
     resizable: false,
@@ -365,8 +374,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     minWidth: 110,
     Cell: ({ row }) => {
       const isTaskSelected = props.taskId === row._original.id
-      const isTaskEditable = props.task?.status === 0 || props.task?.reviewStatus === 2
-      const isTaskRemovable = !props.taskReadOnly && isTaskEditable
+      const enableEditForMapper = props.task?.status === 0 || (props.task?.reviewStatus === ( 2 || 4 || 5 ))
+      const isTaskRemovable = !props.taskReadOnly && enableEditForMapper
 
       const enableRemove = props.task?.completedBy ? props.task.completedBy === props.user.id : true
 

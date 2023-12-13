@@ -50,6 +50,15 @@ export class TaskTags extends Component {
   }
 
   render() {
+    const disableEditTags = this.props.taskReadOnly || (
+      (this.props.task?.status !== 0 &&
+         (![0, 2, 4, 5].includes(this.props.task?.reviewStatus))) && 
+         ( 
+      this.props.task?.reviewRequestedBy !== this.props.user && 
+      this.props.task?.reviewClaimedBy !== this.props.user
+      )
+    )
+
     if (this.state.edit) {
       const preferredTags =
         _filter(
@@ -57,7 +66,7 @@ export class TaskTags extends Component {
           (result) => !_isEmpty(result)
         )
       const limitTags = !!_get(this.props.task.parent, 'limitTags')
-
+      
       return (
         <External>
           <Modal isActive onClose={() => this.setState({edit: false})} allowOverflow>
@@ -96,7 +105,7 @@ export class TaskTags extends Component {
         </External>
       )
     }
-    else if (this.props.tags && this.props.tags !== "") {
+    else if (this.props.tags && this.props.tags !== "") {     
       return (
         <div className="mr-flex mr-justify-between mr-items-center mr-mb-2">
           <div className="mr-text-sm mr-text-white mr-flex mr-items-center mr-flex-grow">
@@ -105,7 +114,7 @@ export class TaskTags extends Component {
             /> {this.tagList()}
           </div>
 
-          {!this.props.taskReadOnly && (this.props.completedBy === this.props.user || this.props.task.reviewClaimedBy === this.props.user) ?
+          {!disableEditTags ?
            <div className="mr-links-green-lighter mr-flex-grow-0">
              <a onClick={() => this.setState({edit: true})}>
                <FormattedMessage {...messages.updateTags} />
@@ -115,7 +124,7 @@ export class TaskTags extends Component {
         </div>
       )
     }
-    else if (!this.props.taskReadOnly) {
+    else if (!disableEditTags) {
       return (
         <div className="mr-links-green-lighter">
           <a onClick={() => this.setState({edit: true})}>
