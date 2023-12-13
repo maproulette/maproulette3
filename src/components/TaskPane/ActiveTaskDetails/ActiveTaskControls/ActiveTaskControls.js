@@ -60,7 +60,6 @@ export class ActiveTaskControls extends Component {
     osmComment: "",
     comment: "",
     tags: null,
-    reviewTags: null,
     revisionLoadBy: TaskReviewLoadMethod.all,
     doneLoadByFromHistory: false,
     needsReview: this.props.challenge.reviewSetting === 1 ? true : undefined
@@ -155,14 +154,14 @@ export class ActiveTaskControls extends Component {
 
     if (!_isUndefined(this.state.submitRevision)) {
       this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
-                                        this.state.comment, this.state.reviewTags,
+                                        this.state.comment, "",
                                         this.state.revisionLoadBy, this.props.history,
                                         this.props.taskBundle, this.state.requestedNextTask,
                                         taskStatus)
     }
     else {
       this.props.completeTask(this.props.task, this.props.task.parent.id,
-                              taskStatus, this.state.comment, this.state.tags,
+                              taskStatus, this.state.comment, "",
                               revisionSubmission ? null : this.props.taskLoadBy,
                               this.props.user.id,
                               revisionSubmission || this.state.needsReview,
@@ -276,22 +275,13 @@ export class ActiveTaskControls extends Component {
       const uniqueTagsArray = filteredTagsArray.filter((value, index, self) => self.indexOf(value) === index);
       const tags = uniqueTagsArray.join(',');
 
-      const reviewTagsArray = _map(this.props.task.tags?.tagType === "review" ? this.props.task.tags : [], (tag) => tag.name);
-      const filteredReviewTagsArray = reviewTagsArray.filter((tag) => tag !== "");
-      const reviewTags = filteredReviewTagsArray.join(',');
-
       if(tags.length > 0 && this.state.tags === null) {
         this.setState({tags: tags})
       }
-  
-      if(reviewTags.length > 0 && this.state.reviewTags === null) {
-        this.setState({reviewTags: reviewTags})
-      }
-  
+
       if (prevProps.task.id !== this.props.task.id) {
         // Clear tags if we are on a new task
         this.setState({tags: tags ?? null})
-        this.setState({reviewTags: reviewTags ?? null})
       }
     }
 
@@ -361,7 +351,15 @@ export class ActiveTaskControls extends Component {
     else if (!this.props.task) {
       return null
     }
-    const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+    const cooperative = AsCooperativeWork(this.props.task).isTagType() || this.props.task.cooperativeWork
+    const disableRapid =  cooperative || this.props.taskReadOnly || (
+      this.props.task?.status !== 0 && ( 
+      this.props.completedBy !== this.props.user && 
+      this.props.task?.reviewClaimedBy !== this.props.user
+      )
+    )
+    const editMode = disableRapid ? false : this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false
+
     const needsRevised = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
     const isEditingTask =
@@ -383,7 +381,7 @@ export class ActiveTaskControls extends Component {
         allowedStatusProgressions(this.props.task.status, false, needsRevised)
       const isComplete = isCompletionStatus(this.props.task.status)
       const isFinal = isFinalStatus(this.props.task.status)
-
+ 
       return (
         <div>
           {!isEditingTask && isComplete &&

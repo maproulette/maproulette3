@@ -70,6 +70,16 @@ export default defineMessages({
     defaultMessage: "Reject",
   },
 
+  next: {
+    id: "Admin.TaskReview.controls.next",
+    defaultMessage: "Review next task",
+  },
+
+  alreadyReviewed: {
+    id: "Admin.TaskReview.controls.alreadyReviewed",
+    defaultMessage: "Task has already been reviewed",
+  },
+
   approvedWithFixes: {
     id: "Admin.TaskReview.controls.approvedWithFixes",
     defaultMessage: "Approve (with fixes)",
