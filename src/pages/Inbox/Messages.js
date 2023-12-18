@@ -21,7 +21,7 @@ export default defineMessages({
 
   challengeGroupingNotice: {
     id: "Inbox.controls.challengeGroupingNotice.label",
-    defaultMessage: "Challenge comments filter by challenge name.",
+    defaultMessage: "Challenge comments group by challenge name.",
   },
 
   manageSubscriptionsLabel: {
