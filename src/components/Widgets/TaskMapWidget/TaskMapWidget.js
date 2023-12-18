@@ -73,7 +73,7 @@ export default class TaskMapWidget extends Component {
 
   render() {
     const cooperative = AsCooperativeWork(this.props.task).isTagType() || this.props.task.cooperativeWork
-    const isReviewing = this.props.task?.reviewClaimedBy === this.props.user.id && this.props.task?.reviewStatus === 0
+    const isReviewing = this.props.task?.reviewClaimedBy === this.props.user?.id && this.props.task?.reviewStatus === 0
     const disableRapid =  cooperative ||
                           this.props.taskReadOnly || ( 
                           ![0, 3, 6].includes(this.props.task?.status) && 

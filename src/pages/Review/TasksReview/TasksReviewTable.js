@@ -1221,7 +1221,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         </Link>
         {!props.metaReviewEnabled &&
          row._original.reviewStatus !== TaskReviewStatus.needed &&
-         row._original.reviewedBy && row._original.reviewedBy.id !== props.user.id &&
+         row._original.reviewedBy && row._original.reviewedBy.id !== props.user?.id &&
           <div onClick={() => props.history.push(linkTo + "/review", criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
             <FormattedMessage {...messages.reviewFurtherTaskLabel} />
           </div>
