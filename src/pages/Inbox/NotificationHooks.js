@@ -6,6 +6,12 @@ import _map from 'lodash/map'
 import _isArray from 'lodash/isArray'
 
 export const useNotificationSelection = notifications => {
+  notifications.forEach(notification => {
+    if (!notification.taskId && notification.challengeId) {
+      notification.taskId = notification.challengeName;
+    }
+  });
+
   const [groupByTask, setGroupByTask] = useState(true)
   const [selectedNotifications, setSelectedNotifications] = useState(new Set())
 
