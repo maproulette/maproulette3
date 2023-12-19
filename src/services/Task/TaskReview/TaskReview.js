@@ -550,7 +550,8 @@ export const completeBundleReview = function(bundleId, taskReviewStatus, comment
                      api.tasks.bundled.updateReviewStatus, {
       schema: taskBundleSchema(),
       variables: {bundleId, status: taskReviewStatus},
-      params:{comment, tags, newTaskStatus, asMetaReview, errorTags: errorTags ? errorTags.join(",") : undefined },
+      params:{tags, newTaskStatus, asMetaReview, errorTags: errorTags ? errorTags.join(",") : undefined },
+      json: { comment: comment }
     }).execute().catch(error => {
       if (isSecurityError(error)) {
         handleExposeError(error, dispatch)
@@ -615,7 +616,9 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
       api.task.updateMetaReviewStatus : api.task.updateReviewStatus,
     {schema: taskSchema(),
      variables: {id: taskId, status: newStatus },
-     params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus, errorTags: errorTags ? errorTags.join(",") : undefined }}
+     params:{ tags: tags, newTaskStatus: newTaskStatus, errorTags: errorTags ? errorTags.join(",") : undefined },
+     json: { comment: comment }
+    },
   ).execute().catch(error => {
     if (isSecurityError(error)) {
       handleExposeError(error, dispatch)
