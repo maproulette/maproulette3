@@ -615,7 +615,8 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
       api.task.updateMetaReviewStatus : api.task.updateReviewStatus,
     {schema: taskSchema(),
      variables: {id: taskId, status: newStatus },
-     params:{comment: comment, tags: tags, newTaskStatus: newTaskStatus, errorTags: errorTags ? errorTags.join(",") : undefined }}
+     params:{tags: tags, newTaskStatus: newTaskStatus, errorTags: errorTags ? errorTags.join(",") : undefined },
+     json: { comment: comment }}
   ).execute().catch(error => {
     if (isSecurityError(error)) {
       handleExposeError(error, dispatch)
