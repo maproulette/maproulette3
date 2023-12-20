@@ -144,10 +144,6 @@ export class AsValidatableGeoJSON {
       } catch (errorMessage) {
         return [{ message: errorMessage }]
       }
-  
-      if (!booleanValid(geoJSONObject)) {
-        return [{ message: 'Invalid GeoJSON geometry' }]
-      }
     }
 
     return []
