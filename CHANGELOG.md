@@ -13,7 +13,7 @@ Realease with [maproulette-backend_v4.4.12](https://github.com/maproulette/mapro
 ## What's Changed
 * move comments to request body for meta review by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2209)
 * fix undefined user id error handler by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2214)
-* Move meta review comments to request body (https://github.com/maproulette/maproulette-backend/pull/1094)
+* Move meta review comments to request body by @CollinBeczak in (https://github.com/maproulette/maproulette-backend/pull/1094)
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.2...v3.14.3
 
