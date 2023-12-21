@@ -7,6 +7,16 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.3] - 2023-12-20
+Realease with [maproulette-backend_v4.4.12](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.12)
+
+## What's Changed
+* move comments to request body for meta review by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2209)
+* fix undefined user id error handler by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2214)
+* Move meta review comments to request body (https://github.com/maproulette/maproulette-backend/pull/1094)
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.2...v3.14.3
+
 ## [v3.14.2] - 2023-12-12
 Realease with [maproulette-backend_v4.4.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.11)
 
