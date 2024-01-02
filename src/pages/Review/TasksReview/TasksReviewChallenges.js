@@ -18,21 +18,17 @@ import messages from './Messages'
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 class TasksReviewChallenges extends Component {
-  state = {
-    searchQuery: {}
-  }
-
   performSearch = (search, type) => {
-    const searchQuery = _cloneDeep(this.state.searchQuery)
+    const searchQuery = _cloneDeep(this.props.searchQuery)
 
     searchQuery[this.props.reviewTasksType] =
       _merge({}, searchQuery[this.props.reviewTasksType], {[type]: search})
 
-    this.setState({searchQuery})
+    this.props.setSearchFilters(searchQuery)
   }
 
   matchesQuery(value, queryType) {
-    const searchString = _get(this.state.searchQuery,
+    const searchString = _get(this.props.searchQuery,
                               `${this.props.reviewTasksType}.${queryType}`,
                               "")
     return _toLower(value).includes(_toLower(searchString))
@@ -73,7 +69,7 @@ class TasksReviewChallenges extends Component {
       <SearchBox
         setSearch={(search) => this.performSearch(search, "project")}
         clearSearch={() => this.performSearch(null, "project")}
-        searchQuery={{query: _get(this.state.searchQuery,
+        searchQuery={{query: _get(this.props.searchQuery,
                                   `${this.props.reviewTasksType}.project`)}}
       />
 
@@ -81,7 +77,7 @@ class TasksReviewChallenges extends Component {
       <SearchBox
         setSearch={(search) => this.performSearch(search, "challenge")}
         clearSearch={() => this.performSearch(null, "challenge")}
-        searchQuery={{query: _get(this.state.searchQuery,
+        searchQuery={{query: _get(this.props.searchQuery,
                                   `${this.props.reviewTasksType}.challenge`)}}
       />
 

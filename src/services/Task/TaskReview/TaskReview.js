@@ -568,18 +568,19 @@ export const completeBundleReview = function(bundleId, taskReviewStatus, comment
  * Fetches a list of challenges which have review tasks
  */
 export const fetchReviewChallenges = function(reviewTasksType,
+                                              challengeSearchQuery, 
+                                              projectSearchQuery,
                                               includeTaskStatuses = null,
                                               excludeOtherReviewers = true) {
   return function(dispatch) {
     const type = determineType(reviewTasksType)
-
     const tStatus = includeTaskStatuses ? includeTaskStatuses.join(',') : ""
 
     return new Endpoint(
       api.challenges.withReviewTasks,
       {schema: [challengeSchema()],
-       params:{reviewTasksType: type, excludeOtherReviewers, tStatus,
-               limit: -1}}
+       params:{reviewTasksType: type, excludeOtherReviewers, tStatus, challengeSearchQuery, projectSearchQuery,
+               limit: 10}}
     ).execute().then(normalizedResults => {
       dispatch(receiveReviewChallenges(normalizedResults.entities.challenges, RequestStatus.success))
       dispatch(receiveReviewProjects(normalizedResults.entities.projects, RequestStatus.success))

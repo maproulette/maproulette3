@@ -21,8 +21,9 @@ export default class FilterSuggestTextBox extends Component {
   }
 
   searchResults = () => {
-    const filteredList = _filter(this.props.itemList,
-      item => _toLower(item.name).includes(_toLower(this.state.searchQuery)))
+    const filteredList = _filter(this.props.itemList, item =>
+      _toLower(item.name).includes(_toLower(this.state.searchQuery))
+    ).slice(0, 20)
 
     if (this.state.searchQuery &&
        !_find(filteredList, item => _toLower(item.name) === _toLower(this.state.searchQuery))) {

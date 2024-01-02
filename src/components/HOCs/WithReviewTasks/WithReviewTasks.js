@@ -271,7 +271,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 
   updateReviewChallenges: (reviewTasksType) => {
-    return dispatch(fetchReviewChallenges(reviewTasksType, null, false))
+    return dispatch(fetchReviewChallenges(reviewTasksType, challengeSearchQuery, projectSearchQuery, null, false))
   },
 
   startNextReviewTask: (searchCriteria={}, url, pageSize, asMetaReview) => {

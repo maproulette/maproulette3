@@ -67,6 +67,7 @@ export class ReviewTasksDashboard extends Component {
     showType: ReviewTasksType.toBeReviewed,
     showSubType: "reviewer",
     filterSelected: {},
+    searchQuery: {},
   }
 
   componentDidMount() {
@@ -157,6 +158,10 @@ export class ReviewTasksDashboard extends Component {
     }
 
     this.setState({filterSelected})
+  }
+
+  setSearchFilters = (searchQuery) => {
+    this.setState({searchQuery})
   }
 
   setSelectedChallenge = (challengeId, challengeName) => {
@@ -322,6 +327,8 @@ export class ReviewTasksDashboard extends Component {
             <div>
               <TasksReviewChallenges
                 reviewTasksType={this.state.showType}
+                searchQuery={this.state.searchQuery}
+                setSearchFilters={this.setSearchFilters}
                 selectChallenge={this.setSelectedChallenge}
                 selectProject={this.setSelectedProject}
               />

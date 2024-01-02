@@ -30,14 +30,16 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
       */
      updateReviewChallenges = (reviewTasksType) => {
        const reviewChallenges = _cloneDeep(this.state.reviewChallenges)
-       reviewChallenges[reviewTasksType] = {loading: true}
        this.setState({reviewChallenges})
 
+       const challengeSearchQuery = (this.props.searchQuery[this.props.reviewTasksType])?.challenge
+       const projectSearchQuery = (this.props.searchQuery[this.props.reviewTasksType])?.project
+       
        const includeStatuses =
          reviewTasksType === ReviewTasksType.toBeReviewed ?
            [TaskStatus.fixed] : null
 
-       this.props.fetchReviewChallenges(reviewTasksType, includeStatuses, true).then(challenges => {
+       this.props.fetchReviewChallenges(reviewTasksType, challengeSearchQuery, projectSearchQuery, includeStatuses, true).then(challenges => {
          const loadedChallenges = _cloneDeep(this.state.reviewChallenges)
          loadedChallenges[reviewTasksType] = {
            loading: true,
@@ -58,13 +60,10 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 
      componentDidUpdate(prevProps) {
        const reviewTasksType = this.props.reviewTasksType
-       if (this.state.reviewChallenges[reviewTasksType] &&
-          !this.state.reviewChallenges[reviewTasksType].loading) {
+       if (prevProps.searchQuery !== this.props.searchQuery || this.state.reviewChallenges[reviewTasksType] &&
+          !this.state.reviewChallenges[reviewTasksType].loading || reviewTasksType !== prevProps.reviewTasksType) {
          this.updateReviewChallenges(reviewTasksType)
-       }
-       else if (reviewTasksType !== prevProps.reviewTasksType) {
-         this.updateReviewChallenges(reviewTasksType)
-       }
+      }
      }
 
      componentWillUnmount() {
