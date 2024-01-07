@@ -57,10 +57,11 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
     if (results) {
       leaderboardCache.set({}, params, results, GLOBAL_LEADERBOARD_CACHE)
     }
-
+    
     return results
   } catch (error) {
     console.error('Error fetching leaderboard:', error)
+    return []
   }
 }
 

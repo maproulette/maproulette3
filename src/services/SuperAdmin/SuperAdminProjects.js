@@ -27,7 +27,6 @@ export const fetchAdminProjects = function () {
       return dispatch(receiveAdminProjects(normalizedResults.entities, dispatch))
     } catch (error) {
       console.error('Error loading admin projects:', error)
-      throw error
     }
   }
 }
