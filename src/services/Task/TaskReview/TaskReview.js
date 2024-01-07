@@ -395,7 +395,7 @@ export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5, asM
                                                          _get(criteria, 'excludeOtherReviewers'),
                                                          null,
                                                          _get(criteria, 'invertFields', {}))
-    const params = { limit, ...searchParameters, asMetaReview }
+    const params = {limit, ...searchParameters, asMetaReview}
 
     return await new Endpoint(
       api.tasks.nearbyReviewTasks,
@@ -437,7 +437,7 @@ export const loadNextReviewTask = function(criteria={}, lastTaskId, asMetaReview
                                                        _get(criteria, 'invertFields', {}))
 
   return async function(dispatch) {
-    const params = { sort, order, ...searchParameters, asMetaReview }
+    const params = {sort, order, ...searchParameters, asMetaReview}
     
     if (_isFinite(lastTaskId)) {
       params.lastTaskId = lastTaskId
@@ -454,6 +454,7 @@ export const loadNextReviewTask = function(criteria={}, lastTaskId, asMetaReview
       ))
     } catch (error) {
       console.error('Error fetching review next task:', error)
+      dispatch(addError(AppErrors.challenge.fetchFailure))
     }
   }
 }
@@ -465,7 +466,7 @@ export const loadNextReviewTask = function(criteria={}, lastTaskId, asMetaReview
  * includeMapillary to true
  */
 export const fetchTaskForReview = function(taskId, includeMapillary=false) {
-  return async function (dispatch) {
+  return async function(dispatch) {
     return await new Endpoint(api.task.startReview, {
       schema: taskSchema(),
       variables: {id: taskId},
@@ -475,6 +476,7 @@ export const fetchTaskForReview = function(taskId, includeMapillary=false) {
       return normalizedResults
     }).catch(error => {
       console.error('Error fetching task for review:', error)
+      dispatch(addError(AppErrors.challenge.fetchFailure))
     })
   }
 }

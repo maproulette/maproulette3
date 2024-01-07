@@ -102,6 +102,7 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
     return results;
   } catch (error) {
     console.error('Error fetching user leaderboard:', error)
+    return []
   }
 }
 
