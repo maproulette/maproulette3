@@ -22,7 +22,7 @@ export const CLEAR_ERRORS = 'CLEAR_ERRORS'
  * @returns error
  */
 export const addServerError = function(error, serverError) {
-  return function(dispatch) {
+  return async function(dispatch) {
     return new Promise(resolve => {
       if (!serverError || !serverError.response) {
         dispatch(addError(error))
@@ -52,7 +52,7 @@ export const addServerError = function(error, serverError) {
  * default error message must support the inclusion of details
  */
 export const addErrorWithDetails = function(error, detailString) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const detailedError = _cloneDeep(error)
     detailedError.values = {details: `: ${detailString}`}
     return dispatch(addError(detailedError))

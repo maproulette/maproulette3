@@ -115,8 +115,8 @@ export const buildLinkToExportGeoJSON = function (
   );
 };
 
-export const exportOSMData = function (url, filename) {
-  return new Endpoint({ url: () => url, method: 'post', options: { noCache: true } }, {
+export const exportOSMData = async function (url, filename) {
+  return await new Endpoint({ url: () => url, method: 'post', options: { noCache: true } }, {
     method: 'post'
   })
     .execute()
@@ -228,8 +228,8 @@ export const removeChallenge = function (challengeId) {
  * @param {number} limit
  */
 export const fetchFeaturedChallenges = function (limit = RESULTS_PER_PAGE) {
-  return function (dispatch) {
-    return new Endpoint(api.challenges.featured, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenges.featured, {
       schema: [challengeSchema()],
       params: { limit },
     })
@@ -253,8 +253,8 @@ export const fetchFeaturedChallenges = function (limit = RESULTS_PER_PAGE) {
  * @param {number} limit
  */
 export const fetchPreferredChallenges = function (limit = RESULTS_PER_PAGE) {
-  return function (dispatch) {
-    return new Endpoint(api.challenges.preferred, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenges.preferred, {
       schema: {
         popular: [challengeSchema()],
         featured: [challengeSchema()],
@@ -296,8 +296,8 @@ export const fetchPreferredChallenges = function (limit = RESULTS_PER_PAGE) {
  *
  * @param {number} limit
  */
-export const fetchSocialChallenges = function (limit = RESULTS_PER_PAGE) {
-  return new Endpoint(api.challenges.preferred, {
+export const fetchSocialChallenges = async function (limit = RESULTS_PER_PAGE) {
+  return await new Endpoint(api.challenges.preferred, {
     params: { limit },
   }).execute();
 };
@@ -313,8 +313,8 @@ export const fetchProjectChallengeListing = function (
   onlyEnabled = false,
   limit = -1
 ) {
-  return function (dispatch) {
-    return new Endpoint(api.challenges.listing, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenges.listing, {
       schema: [challengeSchema()],
       params: {
         projectIds: _isArray(projectIds) ? projectIds.join(",") : projectIds,
@@ -410,7 +410,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
   const page = _isFinite(criteria.page) ? criteria.page : 0;
   const challengeStatus = criteria.challengeStatus;
 
-  return function (dispatch) {
+  return async function (dispatch) {
     const queryParts = parseQueryString(queryString);
 
     // setup query parameters desired by server.
@@ -472,7 +472,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
       queryParams.bb = boundsObject.toBBoxString();
     }
 
-    return new Endpoint(api.challenges.search, {
+    return await new Endpoint(api.challenges.search, {
       schema: [challengeSchema()],
       params: queryParams,
     })
@@ -512,7 +512,7 @@ export const fetchChallengeActions = function (
     );
   }
 
-  return function (dispatch) {
+  return async function (dispatch) {
     const challengeActionsEndpoint = new Endpoint(
       _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
       {
@@ -569,8 +569,8 @@ export const fetchProjectChallengeActions = function (
   onlyEnabled = false,
   includeByPriority = true
 ) {
-  return function (dispatch) {
-    return new Endpoint(api.challenges.actions, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenges.actions, {
       schema: [challengeSchema()],
       params: { projectList: projectId, onlyEnabled, includeByPriority },
     })
@@ -611,8 +611,8 @@ export const fetchTagMetrics = function (userId, criteria) {
     );
   }
 
-  return function (dispatch) {
-    return new Endpoint(api.challenges.tagMetrics, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenges.tagMetrics, {
       params: { ...searchParameters },
     })
       .execute()
@@ -640,7 +640,7 @@ export const fetchChallengeActivity = function (
   startDate,
   endDate
 ) {
-  return function (dispatch) {
+  return async function (dispatch) {
     const params = {};
     if (startDate) {
       params.start = startOfDay(startDate).toISOString();
@@ -650,7 +650,7 @@ export const fetchChallengeActivity = function (
       params.end = startOfDay(endDate).toISOString();
     }
 
-    return new Endpoint(api.challenge.activity, {
+    return await new Endpoint(api.challenge.activity, {
       variables: { id: challengeId },
       params,
     })
@@ -686,8 +686,8 @@ export const fetchChallengeActivity = function (
  * with that data.
  */
 export const fetchLatestProjectChallengeActivity = function (projectId) {
-  return function (dispatch) {
-    return new Endpoint(api.challenges.latestActivity, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenges.latestActivity, {
       params: { projectIds: projectId },
     })
       .execute()
@@ -734,8 +734,8 @@ export const fetchLatestProjectChallengeActivity = function (projectId) {
  * Fetch comments for the given challenge
  */
 export const fetchChallengeComments = function (challengeId) {
-  return function (dispatch) {
-    return new Endpoint(api.challenge.comments, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenge.comments, {
       variables: { id: challengeId },
     })
       .execute()
@@ -764,6 +764,11 @@ export const fetchChallengeComments = function (challengeId) {
         }
 
         return normalizedComments;
+      })
+      .catch((error) => {
+        console.error('Error fetching challenge comments:', error);
+        dispatch(addError(AppErrors.challenge.fetchFailure));
+        return []
       });
   };
 };
@@ -772,8 +777,8 @@ export const fetchChallengeComments = function (challengeId) {
  * Fetch challenge comments for the given project
  */
 export const fetchProjectChallengeComments = function (projectId) {
-  return function (dispatch) {
-    return new Endpoint(api.project.comments, { variables: { id: projectId } })
+  return async function (dispatch) {
+    return await new Endpoint(api.project.comments, { variables: { id: projectId } })
       .execute()
       .then((rawComments) => {
         const normalizedComments = normalize(rawComments, [commentSchema()]);
@@ -794,6 +799,11 @@ export const fetchProjectChallengeComments = function (projectId) {
         };
         dispatch(receiveChallenges(normalizedChallenges));
         return normalizedComments;
+      })
+      .catch((error) => {
+        console.error('Error fetching project challenge comments:', error);
+        dispatch(addError(AppErrors.challenge.fetchFailure));
+        return []
       });
   };
 };
@@ -803,8 +813,8 @@ export const fetchProjectChallengeComments = function (projectId) {
  * limit.
  */
 export const fetchProjectChallenges = function (projectId, limit = 50) {
-  return function (dispatch) {
-    return new Endpoint(api.project.challenges, {
+  return async function (dispatch) {
+    return await new Endpoint(api.project.challenges, {
       schema: [challengeSchema()],
       variables: { id: projectId },
       params: { limit },
@@ -824,8 +834,8 @@ export const fetchProjectChallenges = function (projectId, limit = 50) {
 /**
  * Fetch all task property keys on the challenge
  */
-export const fetchPropertyKeys = function (challengeId) {
-  return new Endpoint(api.challenge.propertyKeys, {
+export const fetchPropertyKeys = async function (challengeId) {
+  return await new Endpoint(api.challenge.propertyKeys, {
     schema: {},
     variables: { id: challengeId },
   })
@@ -843,8 +853,8 @@ export const fetchPropertyKeys = function (challengeId) {
  * redux store, but that can be suppressed with the supressReceive flag.
  */
 export const fetchChallenge = function (challengeId, suppressReceive = false) {
-  return function (dispatch) {
-    return new Endpoint(api.challenge.single, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenge.single, {
       schema: challengeSchema(),
       variables: { id: challengeId },
     })
@@ -884,12 +894,12 @@ export const fetchChallenges = function (
   challengeIds,
   suppressReceive = false
 ) {
-  return function (dispatch) {
+  return async function (dispatch) {
     if (!_isArray(challengeIds) || challengeIds.length === 0) {
       return Promise.success();
     }
 
-    return new Endpoint(api.challenges.search, {
+    return await new Endpoint(api.challenges.search, {
       schema: [challengeSchema()],
       params: { [PARAMS_MAP.challengeId]: challengeIds.join(",") },
     })
@@ -929,7 +939,7 @@ export const fetchChallenges = function (
   originalChallengeData,
   storeResponse = true
 ) {
-  return function (dispatch) {
+  return async function (dispatch) {
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData);
     
@@ -1148,7 +1158,7 @@ export const uploadChallengeGeoJSON = function (
   removeUnmatchedTasks = false,
   dataOriginDate
 ) {
-  return function () {
+  return async function  () {
     // Server expects the file in a form part named "json"
     const formData = new FormData();
     formData.append(
@@ -1164,16 +1174,20 @@ export const uploadChallengeGeoJSON = function (
       dataOriginDate = parse(dataOriginDate).toISOString();
     }
 
-    return new Endpoint(api.challenge.uploadGeoJSON, {
-      variables: { id: challengeId },
-      params: {
-        lineByLine,
-        removeUnmatched: removeUnmatchedTasks,
-        dataOriginDate,
-        skipSnapshot: true,
-      },
-      formData,
-    }).execute();
+    try {
+      return await new Endpoint(api.challenge.uploadGeoJSON, {
+        variables: { id: challengeId },
+        params: {
+          lineByLine,
+          removeUnmatched: removeUnmatchedTasks,
+          dataOriginDate,
+          skipSnapshot: true,
+        },
+        formData,
+      }).execute();
+    } catch (error) {
+      console.error('Error uploading GeoJSON:', error);
+    }
   };
 };
 
@@ -1181,7 +1195,7 @@ export const uploadChallengeGeoJSON = function (
  * Set whether the given challenge is enabled (publicly visible) or not.
  */
 export const setIsEnabled = function (challengeId, isEnabled) {
-  return function (dispatch) {
+  return async function (dispatch) {
     // Optimistically assume request will succeed. The store will be updated
     // with fresh challenge data from the server if the save encounters
     // an error.
@@ -1210,8 +1224,8 @@ export const rebuildChallenge = function (
   challengeId,
   removeUnmatchedTasks = false
 ) {
-  return function (dispatch) {
-    return new Endpoint(api.challenge.rebuild, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenge.rebuild, {
       variables: { id: challengeId },
       params: { removeUnmatched: removeUnmatchedTasks, skipSnapshot: true },
     })
@@ -1236,8 +1250,8 @@ export const rebuildChallenge = function (
  * Move the given challenge to the given project.
  */
 export const moveChallenge = function (challengeId, toProjectId) {
-  return function (dispatch) {
-    return new Endpoint(api.challenge.move, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenge.move, {
       variables: { challengeId, projectId: toProjectId },
     })
       .execute()
@@ -1261,8 +1275,8 @@ export const moveChallenge = function (challengeId, toProjectId) {
  * Move a list of challenges to the given project.
  */
  export const moveChallenges = function (challengeIds, toProjectId) {
-  return function (dispatch) {
-    return new Endpoint(api.challenges.move, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenges.move, {
       variables: { projectId: toProjectId },
       json: { challenges: challengeIds },
     })
@@ -1289,8 +1303,8 @@ export const moveChallenge = function (challengeId, toProjectId) {
  * Deletes the given challenge from the server.
  */
 export const deleteChallenge = function (challengeId) {
-  return function (dispatch) {
-    return new Endpoint(api.challenge.delete, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenge.delete, {
       variables: { id: challengeId },
     })
       .execute()
@@ -1315,7 +1329,7 @@ export const deleteChallenge = function (challengeId) {
  * updates the archive status of the given challenge.
  */
 export const archiveChallenge = function (challengeId, bool) {
-  return function (dispatch) {
+  return async function (dispatch) {
     // calling archive is necessary to nullify the system_archived_at field
     new Endpoint(api.challenge.archive, {
       variables: { id: challengeId },
@@ -1323,7 +1337,7 @@ export const archiveChallenge = function (challengeId, bool) {
     }).execute();
 
     // calling 'edit' in addition to 'archive' is necessary to override the cache mechanism in the BE.
-    return new Endpoint(api.challenge.edit, {
+    return await new Endpoint(api.challenge.edit, {
       variables: { id: challengeId },
       json: { isArchived: bool },
     })
@@ -1348,8 +1362,8 @@ export const archiveChallenge = function (challengeId, bool) {
 };
 
 export const archiveChallenges = function (projectId, challengeIds, bool) {
-  return function (dispatch) {
-    return new Endpoint(api.challenges.bulkArchive, {
+  return async function (dispatch) {
+    return await new Endpoint(api.challenges.bulkArchive, {
       json: { isArchived: bool, ids: challengeIds },
     })
       .execute()
@@ -1391,11 +1405,15 @@ export const fetchParentProject = function (
  * Search for keyword by prefix. Resolves with a (possibly empty) list of
  * results.
  */
-export const findKeyword = function (keywordPrefix, tagType = null) {
-  const tagTypes = _isArray(tagType) ? tagType.join(",") : tagType;
-  return new Endpoint(api.keywords.find, {
-    params: { prefix: keywordPrefix, tagTypes },
-  }).execute();
+export const findKeyword = async function (keywordPrefix, tagType = null) {
+  try {
+    const tagTypes = _isArray(tagType) ? tagType.join(",") : tagType;
+    return await new Endpoint(api.keywords.find, {
+      params: { prefix: keywordPrefix, tagTypes },
+    }).execute();
+  } catch (error) {
+    console.error('Error finding keyword:', error)
+  }
 };
 
 /**
@@ -1406,7 +1424,7 @@ export const findKeyword = function (keywordPrefix, tagType = null) {
  *
  * @returns a Promise
  */
-const removeChallengeKeywords = function (challengeId, oldKeywords = []) {
+const removeChallengeKeywords = async function (challengeId, oldKeywords = []) {
   // If no challenge id, nothing to do
   if (!_isFinite(challengeId)) {
     return Promise.resolve();
@@ -1421,10 +1439,14 @@ const removeChallengeKeywords = function (challengeId, oldKeywords = []) {
   if (toRemove.length === 0) {
     return Promise.resolve();
   } else {
-    return new Endpoint(api.challenge.removeKeywords, {
-      variables: { id: challengeId },
-      params: { tags: toRemove.join(",") },
-    }).execute();
+    try {
+      return await new Endpoint(api.challenge.removeKeywords, {
+        variables: { id: challengeId },
+        params: { tags: toRemove.join(",") },
+      }).execute();
+    } catch (error) {
+      console.error('Error removing challenge keywords:', error);
+    }
   }
 };
 

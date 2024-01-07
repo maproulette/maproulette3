@@ -120,14 +120,18 @@ export const getChallenge = (challengeId, props, component) => {
 }
 
 const getChallengeFromTask = async (taskId, props) => {
-  const results = await new Endpoint(api.task.single, {
-    schema: taskSchema(),
-    variables: {id: taskId}
-  }).execute();
+  try {
+    const results = await new Endpoint(api.task.single, {
+      schema: taskSchema(),
+      variables: {id: taskId}
+    }).execute();
 
-  const challengeId = results?.entities?.tasks?.[taskId]?.parent;
-  if (challengeId) {
-    props.history.push(`/challenge/${challengeId}/task/${taskId}/review`)
+    const challengeId = results?.entities?.tasks?.[taskId]?.parent;
+    if (challengeId) {
+      props.history.push(`/challenge/${challengeId}/task/${taskId}/review`)
+    }
+  } catch (error) {
+    console.error('Error fetching challenge from task:', error)
   }
 }
 

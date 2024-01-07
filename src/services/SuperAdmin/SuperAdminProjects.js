@@ -21,12 +21,14 @@ export const receiveAdminProjects = function (normalizedEntities, dispatch) {
 }
 
 export const fetchAdminProjects = function () {
-  return function (dispatch) {
-    return dispatch(fetchProjects(50000)).then((normalizedResults) => {
-      return dispatch(
-        receiveAdminProjects(normalizedResults.entities, dispatch)
-      )
-    })
+  return async function (dispatch) {
+    try {
+      const normalizedResults = await dispatch(fetchProjects(50000))
+      return dispatch(receiveAdminProjects(normalizedResults.entities, dispatch))
+    } catch (error) {
+      console.error('Error loading admin projects:', error)
+      throw error
+    }
   }
 }
 

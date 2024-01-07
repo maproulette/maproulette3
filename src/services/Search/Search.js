@@ -521,7 +521,7 @@ export const receivedResults = function(searchName, fetchId) {
 
 // async action creators
 export const performSearch = function(searchName, query, asyncSearchAction, props) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const fetchId = _uniqueId()
     if (!query || query.length < 2) {
       return null
@@ -532,7 +532,7 @@ export const performSearch = function(searchName, query, asyncSearchAction, prop
 
     if (actionToDo) {
       dispatch(fetchingResults(searchName, fetchId))
-      return dispatch(
+      return await dispatch(
         actionToDo
       ).then(() => dispatch(receivedResults(searchName, fetchId)))
       .catch((error) => {

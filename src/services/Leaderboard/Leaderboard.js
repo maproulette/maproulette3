@@ -51,13 +51,17 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
     return cachedLeaderboard;
   }
 
-  const results = await new Endpoint(api.users.leaderboard, {params}).execute()
+  try {
+    const results = await new Endpoint(api.users.leaderboard, { params }).execute()
 
-  if (results) {
-    leaderboardCache.set({}, params, results, GLOBAL_LEADERBOARD_CACHE)
+    if (results) {
+      leaderboardCache.set({}, params, results, GLOBAL_LEADERBOARD_CACHE)
+    }
+
+    return results
+  } catch (error) {
+    console.error('Error fetching leaderboard:', error)
   }
-
-  return results
 }
 
 /**
@@ -87,13 +91,17 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
     return cachedLeaderboard;
   }
 
-  const results = await new Endpoint(api.users.userLeaderboard, {variables, params}).execute()
+  try {
+    const results = await new Endpoint(api.users.userLeaderboard, { variables, params }).execute()
 
-  if (results) {
-    leaderboardCache.set(variables, params, results, USER_LEADERBOARD_CACHE)
+    if (results) {
+      leaderboardCache.set(variables, params, results, USER_LEADERBOARD_CACHE)
+    }
+
+    return results;
+  } catch (error) {
+    console.error('Error fetching user leaderboard:', error)
   }
-
-  return results;
 }
 
 /**
@@ -101,7 +109,7 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
  * filters, returning a Promise that resolves to the leaderboard data. Note
  * that leaderboard data is *not* stored in the redux store.
  */
-export const fetchReviewerLeaderboard = function(numberMonths=null, onlyEnabled=true,
+export const fetchReviewerLeaderboard = async function(numberMonths=null, onlyEnabled=true,
                                                  forProjects=null, forChallenges=null,
                                                  forUsers=null, forCountries=null,
                                                  limit=10, startDate=null, endDate=null) {
@@ -113,7 +121,11 @@ export const fetchReviewerLeaderboard = function(numberMonths=null, onlyEnabled=
   initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
                               forUsers, forCountries, startDate, endDate)
 
-  return new Endpoint(api.users.reviewerLeaderboard, {params}).execute()
+  try {
+    return await new Endpoint(api.users.reviewerLeaderboard, { params }).execute()
+  } catch (error) {
+    console.error('Error fetching reviewer leaderboard:', error)
+  }
 }
 
 

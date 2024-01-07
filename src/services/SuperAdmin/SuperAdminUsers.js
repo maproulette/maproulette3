@@ -20,11 +20,12 @@ export const receiveAdminUsers = function (normalizedEntities, dispatch) {
   }
 }
 
-export const fetchAdminUsers = function () {
-  return function (dispatch) {
-    return dispatch(fetchUsers(50000)).then((normalizedResults) => {
-      return dispatch(receiveAdminUsers(normalizedResults.entities, dispatch))
-    })
+export const fetchAdminUsers = async function (dispatch) {
+  try {
+    const normalizedResults = await dispatch(fetchUsers(50000))
+    return dispatch(receiveAdminUsers(normalizedResults.entities, dispatch))
+  } catch (error) {
+    console.error('Error fetching admin users:', error)
   }
 }
 

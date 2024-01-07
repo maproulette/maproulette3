@@ -40,7 +40,7 @@ export const receiveComments = function(normalizedEntities,
  * @param {function} fetchFunction - the function used to retrieve the comments
  */
 export const loadComments = function(fetchFunction) {
-  return function(dispatch) {
+  return async function(dispatch) {
     return fetchFunction(dispatch).then(normalizedComments => {
       dispatch(receiveComments(normalizedComments.entities))
       return normalizedComments

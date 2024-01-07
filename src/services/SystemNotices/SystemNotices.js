@@ -31,8 +31,8 @@ import { defaultRoutes as api } from "../Server/Server";
  *    }
  * ```
  */
-export const fetchActiveSystemNotices = () => {
-  return new Endpoint(api.user.announcements)
+export const fetchActiveSystemNotices = async () => {
+  return await new Endpoint(api.user.announcements)
     .execute()
     .then(response => {
       const systemNotices = response?.message?.notices

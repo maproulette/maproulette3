@@ -35,7 +35,7 @@ export const fetchPlace = function(lat, lng) {
   const placeURI =
     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
 
-  return function(dispatch) {
+  return async function(dispatch) {
     return fetchContent(placeURI, placeSchema(), {omitCredentials: true}).then(normalizedResults => {
       dispatch(receivePlace(normalizedResults.entities))
       return normalizedResults

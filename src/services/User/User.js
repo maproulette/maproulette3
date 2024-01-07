@@ -211,8 +211,12 @@ export const removeSavedTask = function(userId, taskId) {
  * results. Note that each result only contains a few public OSM fields such
  * as OSM id and avatar URL.
  */
-export const findUser = function(username) {
-  return new Endpoint(api.users.find, {variables: {username}}).execute()
+export const findUser = async function (username) {
+  try {
+    return await new Endpoint(api.users.find, {variables: {username}}).execute()
+  } catch (error) {
+    console.error('Error finding user:', error)
+  }
 }
 
 /**
@@ -220,9 +224,12 @@ export const findUser = function(username) {
  * results. Note that each result only contains a few public OSM fields such
  * as OSM id and avatar URL.
  */
-export const findPreferredUsers = function(username, taskId) {
-  return new Endpoint(api.users.findPreferred,
-                      {params: {username, tid: taskId}}).execute()
+export const findPreferredUsers = async function (username, taskId) {
+  try {
+    return await new Endpoint(api.users.findPreferred,{params: {username, tid: taskId}}).execute()
+  } catch (error) {
+    console.error('Error finding preferred users:', error)
+  }
 }
 
 /**
@@ -234,19 +241,22 @@ export const findPreferredUsers = function(username, taskId) {
  * @param userId - Can be either a userId, osmUserId, or username
  */
 export const fetchUser = function(userId) {
-  return function(dispatch) {
-    const endPoint = isFinite(userId) ?
-      new Endpoint(
-        api.users.single, {schema: userSchema(), variables: {id: userId}}
-      ) :
-      new Endpoint(
-        api.users.singleByUsername, {schema: userSchema(), variables: {username: userId}}
-      )
-
-    return endPoint.execute().then(normalizedResults => {
+  return async function(dispatch) {
+    try {
+      const endPoint = isFinite(userId) ?
+        new Endpoint(
+          api.users.single, {schema: userSchema(), variables: {id: userId}}
+        ) :
+        new Endpoint(
+          api.users.singleByUsername, {schema: userSchema(), variables: {username: userId}}
+        )
+  
+      const normalizedResults = await endPoint.execute()
       dispatch(receiveUsers(normalizedResults.entities))
       return normalizedResults
-    })
+    } catch (error) {
+      console.error('Error fetching user:', error)
+    }
   }
 }
 
@@ -254,8 +264,8 @@ export const fetchUser = function(userId) {
  * Fetch data on all users (up to the given limit).
  */
  export const fetchUsers = function (limit = 50) {
-  return function (dispatch) {
-    return new Endpoint(api.users.all, {
+  return async function (dispatch) {
+    return await new Endpoint(api.users.all, {
       schema: [userSchema()],
       params: { limit },
     })
@@ -274,22 +284,21 @@ export const fetchUser = function(userId) {
  * Fetch data on all users (up to the given limit).
  */
 export const fetchUserComments = function (userId, type = CommentType.TASK, filters = { sort: 'created', order: 'DESC', page: 0, limit: 25 } ) {
-  return function(dispatch) {
-    const endpoint = type === CommentType.CHALLENGE ? api.users.challengeComments : api.users.taskComments
-
-    return new Endpoint(endpoint, {
-      variables: { id: userId },
-      params: filters
-    })
-      .execute()
-      .then((normalizedResults) => {
-        return normalizedResults;
-      })
-      .catch((error) => {
-        dispatch(addError(AppErrors.user.fetchFailure))
-        console.log(error.response || error);
-        return error.response || error;
-      });
+  return async function(dispatch) {
+    try {
+      const endpoint = type === CommentType.CHALLENGE ? api.users.challengeComments : api.users.taskComments
+  
+      const normalizedResults = await new Endpoint(endpoint, {
+        variables: { id: userId },
+        params: filters
+      }).execute()
+  
+      return normalizedResults
+    }catch(error) {
+      dispatch(addError(AppErrors.user.fetchFailure))
+      console.log(error.response || error);
+      return error.response || error;
+    }
   }
 };
 
@@ -299,19 +308,22 @@ export const fetchUserComments = function (userId, type = CommentType.TASK, filt
  * @param userId - Can be either a userId, osmUserId, or username
  */
 export const fetchBasicUser = function(userId) {
-  return function(dispatch) {
-    const endPoint = isFinite(userId) ?
-      new Endpoint(
-        api.users.public, {schema: userSchema(), variables: {id: userId}}
-      ) :
-      new Endpoint(
-        api.users.publicByUsername, {schema: userSchema(), variables: {username: userId}}
-      )
-
-    return endPoint.execute().then(normalizedResults => {
+  return async function(dispatch) {
+    try {
+      const endPoint = isFinite(userId) ?
+        new Endpoint(
+          api.users.public, {schema: userSchema(), variables: {id: userId}}
+        ) :
+        new Endpoint(
+          api.users.publicByUsername, {schema: userSchema(), variables: {username: userId}}
+        )
+  
+      const normalizedResults = await endPoint.execute()
       dispatch(receiveUsers(normalizedResults.entities))
       return normalizedResults
-    })
+    } catch (error) {
+      console.error(error.response || error)
+    }
   }
 }
 
@@ -368,8 +380,8 @@ export const callback = async (authCode, dispatch, push) => {
  * the server, and automatically signs out the user locally if not.
  */
 export const ensureUserLoggedIn = function(squelchError=false) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.user.whoami, {schema: userSchema()}
     ).execute().then(normalizedResults => {
       const userId = normalizedResults.result
@@ -399,8 +411,8 @@ export const ensureUserLoggedIn = function(squelchError=false) {
  * Fetch the saved challenges for the given user.
  */
 export const fetchSavedChallenges = function(userId, limit=50) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.user.savedChallenges, {
         schema: [ challengeSchema() ],
         variables: {userId},
@@ -425,34 +437,35 @@ export const fetchSavedChallenges = function(userId, limit=50) {
  * month is used.
  */
 export const fetchTopChallenges = function(userId, startDate, limit=5) {
-  return function(dispatch) {
-    // If no startDate given, default to past month.
-    const params = {
-      start: (startDate ? startOfDay(startDate) : startOfDay(subMonths(new Date(), 1))).toISOString(),
-      limit,
-    }
-
-    const variables = { userId }
-
-    const cachedTopChallenges = userCache.get(variables, params, USER_TOP_CHALLENGES);
-
-    if (cachedTopChallenges) {
-      dispatch(receiveChallenges(cachedTopChallenges.challenges))
-      dispatch(receiveUsers(cachedTopChallenges.user))
-
-      return cachedTopChallenges.challenges
-    }
-
-    return new Endpoint(
-      api.user.topChallenges, {
-        schema: [ challengeSchema() ],
-        variables,
-        params,
+  return async function(dispatch) {
+    try {
+      // If no startDate given, default to past month.
+      const params = {
+        start: (startDate ? startOfDay(startDate) : startOfDay(subMonths(new Date(), 1))).toISOString(),
+        limit,
       }
-    ).execute().then(normalizedChallenges => {
+  
+      const variables = { userId }
+  
+      const cachedTopChallenges = userCache.get(variables, params, USER_TOP_CHALLENGES);
+  
+      if (cachedTopChallenges) {
+        dispatch(receiveChallenges(cachedTopChallenges.challenges))
+        dispatch(receiveUsers(cachedTopChallenges.user))
+      
+        return cachedTopChallenges.challenges
+      }
+  
+      const normalizedChallenges = await new Endpoint(
+        api.user.topChallenges, {
+          schema: [ challengeSchema() ],
+          variables,
+          params,
+        }).execute()
+
       const challenges = _get(normalizedChallenges, 'entities.challenges')
       const user = {id: userId, topChallenges: []}
-
+  
       // Store the top challenge ids in order, sorted by user activity (descending)
       if (_isObject(challenges)) {
         user.topChallenges = _map(
@@ -460,20 +473,22 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
           idAndChallenge => parseInt(idAndChallenge[0], 10)
         )
       }
-
+  
       // Remove the user-specific activity score before adding this challenge
       // to the general redux store.
       _each(challenges, challenge => {
         delete challenge.activity
       })
-
+  
       userCache.set(variables, params, { challenges: normalizedChallenges.entities, user }, USER_TOP_CHALLENGES)
-
+  
       dispatch(receiveChallenges(normalizedChallenges.entities))
       dispatch(receiveUsers(simulatedEntities(user)))
-
+  
       return normalizedChallenges
-    })
+    } catch (error) {
+      console.error('Error fetching top challenges:', error)
+    }
   }
 }
 
@@ -481,12 +496,14 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
  * Fetch the saved tasks for the given user.
  */
 export const fetchSavedTasks = function(userId, limit=50, includeChallenges=true) {
-  return function(dispatch) {
-    return new Endpoint(api.user.savedTasks, {
-      schema: [ taskSchema() ],
-      variables: {userId},
-      params: {limit}
-    }).execute().then(normalizedTasks => {
+  return async function(dispatch) {
+    try {
+      const normalizedTasks = await new Endpoint(api.user.savedTasks, {
+        schema: [taskSchema()],
+        variables: {userId},
+        params: {limit}
+      }).execute()
+
       const tasks = _get(normalizedTasks, 'entities.tasks')
       const user = {id: userId}
       user.savedTasks = []
@@ -497,11 +514,13 @@ export const fetchSavedTasks = function(userId, limit=50, includeChallenges=true
           dispatch(fetchChallenges(challengeIds))
         }
       }
-
+  
       dispatch(receiveTasks(normalizedTasks.entities))
       dispatch(receiveUsers(simulatedEntities(user)))
       return normalizedTasks
-    })
+    } catch (error) {
+      console.error('Error fetching saved tasks:', error)
+    }
   }
 }
 
@@ -509,15 +528,19 @@ export const fetchSavedTasks = function(userId, limit=50, includeChallenges=true
  * Fetch the user's notification subscriptions
  */
 export const fetchNotificationSubscriptions = function(userId) {
-  return function(dispatch) {
-    return new Endpoint(api.user.notificationSubscriptions, {
-      variables: {userId},
-    }).execute().then(response => {
+  return async function(dispatch) {
+    try {
+      const response = await new Endpoint(api.user.notificationSubscriptions, {
+        variables: {userId},
+      }).execute()
+  
       const user = {id: userId}
       user.notificationSubscriptions = _omit(response, ['id', 'userId'])
       dispatch(receiveUsers(simulatedEntities(user)))
       return response
-    })
+    } catch (error) {
+      console.error('Error fetching notification subscriptions:', error)
+    }
   }
 }
 
@@ -525,16 +548,20 @@ export const fetchNotificationSubscriptions = function(userId) {
  * Fetch the user's notifications
  */
 export const fetchUserNotifications = function(userId) {
-  return function(dispatch) {
-    return new Endpoint(api.user.notifications, {
-      variables: {userId},
-      params: {limit: -1}
-    }).execute().then(response => {
+  return async function(dispatch) {
+    try {
+      const response = await new Endpoint(api.user.notifications, {
+        variables: {userId},
+        params: {limit: -1}
+      }).execute()
+
       const user = {id: userId}
       user.notifications = response
       dispatch(receiveUsers(simulatedEntities(user)))
       return response
-    })
+    } catch (error) {
+      console.error('Error fetching user notifications:', error)
+    }
   }
 }
 
@@ -542,13 +569,17 @@ export const fetchUserNotifications = function(userId) {
  * Mark notifications as read
  */
 export const markNotificationsRead = function(userId, notificationIds) {
-  return function(dispatch) {
-    return new Endpoint(api.user.markNotificationsRead, {
-      variables: {userId},
-      json: { notificationIds },
-    }).execute().then(() => {
+  return async function(dispatch) {
+    try {
+      await new Endpoint(api.user.markNotificationsRead, {
+        variables: {userId},
+        json: { notificationIds },
+      }).execute()
+
       return fetchUserNotifications(userId)(dispatch)
-    })
+    } catch (error) {
+      console.error('Error marking notifications as read:', error)
+    }
   }
 }
 
@@ -556,13 +587,17 @@ export const markNotificationsRead = function(userId, notificationIds) {
  * Delete notifications
  */
 export const deleteNotifications = function(userId, notificationIds) {
-  return function(dispatch) {
-    return new Endpoint(api.user.deleteNotifications, {
-      variables: {userId},
-      json: { notificationIds },
-    }).execute().then(() => {
+  return async function(dispatch) {
+    try {
+      await new Endpoint(api.user.deleteNotifications, {
+        variables: {userId},
+        json: { notificationIds },
+      }).execute()
+  
       return fetchUserNotifications(userId)(dispatch)
-    })
+    } catch (error) {
+      console.error('Error deleting notifications:', error)
+    }
   }
 }
 
@@ -570,15 +605,14 @@ export const deleteNotifications = function(userId, notificationIds) {
  * Fetch the user's recent activity.
  */
 export const fetchUserActivity = function(userId) {
-  return function(dispatch) {
-
+  return async function(dispatch) {
     const cachedUserActivity = userCache.get({}, {}, USER_ACTIVITY_CACHE);
 
     if (cachedUserActivity) {
       return dispatch(receiveUsers(simulatedEntities(cachedUserActivity)));
     }
 
-    return new Endpoint(
+    return await new Endpoint(
       api.user.activity
     ).execute().then(activity => {
       const user = {id: userId}
@@ -588,6 +622,8 @@ export const fetchUserActivity = function(userId) {
 
       dispatch(receiveUsers(simulatedEntities(user)))
       return activity
+    }).catch(error => {
+      console.error('Error fetching user activity:', error)
     })
   }
 }
@@ -613,17 +649,21 @@ export const fetchUserMetrics = async (userId,
   if (cachedUserMetrics) {
     return cachedUserMetrics;
   }
-  
-  const userMetrics = await new Endpoint(api.user.metrics, {
-    variables,
-    params
-  }).execute()
 
-  if (userMetrics?.tasks) {
-    userCache.set(variables, params, userMetrics, USER_METRICS_CACHE)
+  try {
+    const userMetrics = await new Endpoint(api.user.metrics, {
+      variables,
+      params
+    }).execute()
+
+    if (userMetrics?.tasks) {
+      userCache.set(variables, params, userMetrics, USER_METRICS_CACHE)
+    }
+
+    return userMetrics
+  } catch (error) {
+    console.error('Error fetching user metrics:', error)
   }
-
-  return userMetrics
 }
 
 /**
@@ -631,12 +671,12 @@ export const fetchUserMetrics = async (userId,
  * multiple API requests as needed.
  */
 export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedTasksLimit=50) {
-  return function(dispatch) {
+  return async function(dispatch) {
     if (!_isFinite(userId) || userId === GUEST_USER_ID) {
       return null
     }
 
-    return fetchUser(userId)(dispatch).then(() => {
+    return await fetchUser(userId)(dispatch).then(() => {
       fetchSavedChallenges(userId, savedChallengesLimit)(dispatch)
       fetchTopChallenges(userId)(dispatch)
       fetchSavedTasks(userId, savedTasksLimit)(dispatch)
@@ -665,12 +705,12 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
  * performing multiple API requests as needed.
  */
 export const loadUserSettings = function(userId) {
-  return function(dispatch) {
+  return async function(dispatch) {
     if (userId === GUEST_USER_ID) {
       return null
     }
 
-    return fetchUser(userId)(dispatch).then(normalizedUsers => {
+    return await fetchUser(userId)(dispatch).then(normalizedUsers => {
       const fetchedUserId = normalizedUsers.result
       if (fetchedUserId) {
         fetchNotificationSubscriptions(fetchedUserId)(dispatch)
@@ -695,14 +735,20 @@ export const loadUserSettings = function(userId) {
  * Update the given user's settings with the given settings.
  */
 export const updateUserSettings = function(userId, settings) {
-  return updateUser(userId, dispatch => {
+  return updateUser(userId, async dispatch => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated properly by the server response.
     dispatch(receiveUsers({[userId]: {id: userId, settings}}))
 
-    return new Endpoint(
-      api.user.updateSettings, {variables: {userId}, json: settings}
-    ).execute().then(() => dispatch(fetchUser(userId))) // fetch latest
+    try {
+      await new Endpoint(
+        api.user.updateSettings, {variables: {userId}, json: settings}
+      ).execute()
+
+      dispatch(fetchUser(userId))
+    } catch (error) {
+      console.error('Error updating user settings:', error)
+    }
   })
 }
 
@@ -711,14 +757,20 @@ export const updateUserSettings = function(userId, settings) {
  * subscriptions
  */
 export const updateNotificationSubscriptions = function(userId, subscriptions) {
-  return updateUser(userId, dispatch => {
+  return updateUser(userId, async dispatch => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated properly by the server response.
-    dispatch(receiveUsers({[userId]: {id: userId, notificationSubscriptions: subscriptions}}))
+    dispatch(receiveUsers({ [userId]: { id: userId, notificationSubscriptions: subscriptions } }))
 
-    return new Endpoint(
-      api.user.updateNotificationSubscriptions, {variables: {userId}, json: {...subscriptions, userId, id: -1}}
-    ).execute().then(() => dispatch(fetchNotificationSubscriptions(userId))) // fetch latest
+    try {
+      await new Endpoint(
+        api.user.updateNotificationSubscriptions, {variables: {userId}, json: {...subscriptions, userId, id: -1}}
+      ).execute()
+
+      dispatch(fetchNotificationSubscriptions(userId))
+    } catch (error) {
+      console.error('Error updating notification subscriptions:', error)
+    }
   })
 }
 
@@ -728,10 +780,12 @@ export const updateNotificationSubscriptions = function(userId, subscriptions) {
  * `{ settingName: ...  }`
  */
 export const updateUserAppSetting = function(userId, appId, appSetting) {
-  return updateUser(userId, dispatch => {
-    return new Endpoint(
-      api.users.single, {schema: userSchema(), variables: {id: userId}}
-    ).execute().then(normalizedResults => {
+  return updateUser(userId, async dispatch => {
+    try {
+      const normalizedResults = await new Endpoint(
+        api.users.single, {schema: userSchema(), variables: {id: userId}}
+      ).execute()
+
       const oldUser = normalizedResults.entities.users[normalizedResults.result]
 
       // Combined properties format for multiple client applications:
@@ -764,11 +818,13 @@ export const updateUserAppSetting = function(userId, appId, appSetting) {
       // If it doesn't, it'll get updated properly by the server response.
       dispatch(receiveUsers({users: {[userId]: userData}}))
 
-      return new Endpoint(api.user.updateSettings, {
+      return await new Endpoint(api.user.updateSettings, {
         variables: { userId },
         json: userData,
       }).execute()
-    })
+    } catch (error) {
+      console.error('Error updating user app setting:', error)
+    }
   })
 }
 
@@ -776,14 +832,14 @@ export const updateUserAppSetting = function(userId, appId, appSetting) {
  * Reset the user's API key
  */
 export const resetAPIKey = function(userId) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const resetURI =
       `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/generateAPIKey?userId=${userId}`
 
     // Since we're bypassing Endpoint and manually performing an update, we
     // need to also manually reset the request cache.
     resetCache()
-    fetch(resetURI, {credentials: credentialsPolicy}).then(() => {
+    await fetch(resetURI, {credentials: credentialsPolicy}).then(() => {
       return fetchUser(userId)(dispatch)
     }).catch(error => {
       if (isSecurityError(error)) {
@@ -803,14 +859,18 @@ export const resetAPIKey = function(userId) {
  * Add the given challenge to the given user's list of saved challenges.
  */
 export const saveChallengeForUser = function(userId, challengeId) {
-  return updateUser(userId, (dispatch) => {
+  return updateUser(userId, async (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated properly by the server response.
     dispatch(addSavedChallenge(userId, challengeId))
 
-    return new Endpoint(
-      api.user.saveChallenge, {variables: {userId, challengeId}}
-    ).execute()
+    try {
+      await new Endpoint(
+        api.user.saveChallenge, {variables: {userId, challengeId}}
+      ).execute()
+    } catch (error) {
+      console.error('Error saving challenge for user:', error)
+    }
   })
 }
 
@@ -819,14 +879,18 @@ export const saveChallengeForUser = function(userId, challengeId) {
  * challenges.
  */
 export const unsaveChallengeForUser = function(userId, challengeId) {
-  return updateUser(userId, (dispatch) => {
+  return updateUser(userId, async (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated by the server response.
     dispatch(removeSavedChallenge(userId, challengeId))
 
-    return new Endpoint(
-      api.user.unsaveChallenge, {variables: {userId, challengeId}}
-    ).execute()
+    try {
+      await new Endpoint(
+        api.user.unsaveChallenge, {variables: {userId, challengeId}}
+      ).execute()
+    } catch (error) {
+      console.error('Error unsaving challenge for user:', error)
+    }
   })
 }
 
@@ -834,14 +898,18 @@ export const unsaveChallengeForUser = function(userId, challengeId) {
  * Add the given task to the given user's list of saved tasks.
  */
 export const saveTask = function(userId, taskId) {
-  return updateUser(userId, (dispatch) => {
+  return updateUser(userId, async (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated properly by the server response.
     dispatch(addSavedTask(userId, taskId))
 
-    return new Endpoint(
-      api.user.saveTask, {variables: {userId, taskId}}
-    ).execute()
+    try {
+      await new Endpoint(
+        api.user.saveTask, {variables: {userId, taskId}}
+      ).execute()
+    } catch (error) {
+      console.error('Error saving task for user:', error)
+    }
   })
 }
 
@@ -849,14 +917,18 @@ export const saveTask = function(userId, taskId) {
  * Remove the given task from the given user's list of saved tasks.
  */
 export const unsaveTask = function(userId, taskId) {
-  return updateUser(userId, (dispatch) => {
+  return updateUser(userId, async (dispatch) => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated by the server response.
     dispatch(removeSavedTask(userId, taskId))
 
-    return new Endpoint(
-      api.user.unsaveTask, {variables: {userId, taskId}}
-    ).execute()
+    try {
+      await new Endpoint(
+        api.user.unsaveTask, {variables: {userId, taskId}}
+      ).execute()
+    } catch (error) {
+      console.error('Error unsaving task for user:', error)
+    }
   })
 }
 
@@ -884,9 +956,13 @@ export const logoutUser = function(userId) {
     unsubscribeFromUserUpdates(userId)
   }
 
-  return function(dispatch) {
-    dispatch(setCurrentUser(GUEST_USER_ID))
-    fetch(logoutURI, {credentials: credentialsPolicy})
+  return async function(dispatch) {
+    try {
+      dispatch(setCurrentUser(GUEST_USER_ID))
+      await fetch(logoutURI, {credentials: credentialsPolicy})
+    } catch (error) {
+      console.error('Error during logout fetch:', error)
+    }
   }
 }
 
@@ -901,8 +977,8 @@ export const logoutUser = function(userId) {
  * in the event optimistic local updates were made.
  */
 const updateUser = function(userId, updateFunction) {
-  return function(dispatch) {
-    return updateFunction(dispatch).catch(error => {
+  return async function(dispatch) {
+    return await updateFunction(dispatch).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))

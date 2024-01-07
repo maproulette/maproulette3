@@ -4,8 +4,8 @@ import { defaultRoutes as api } from '../Server/Server'
 /**
  * Fetch challenge snapshot list for the given challenge.
  */
-export const fetchChallengeSnapshotList = function(challengeId, includeAllData = false) {
-  return new Endpoint(
+export const fetchChallengeSnapshotList = async function(challengeId, includeAllData = false) {
+  return await new Endpoint(
     api.challenge.snapshotList,
     {
       schema: {},
@@ -20,8 +20,8 @@ export const fetchChallengeSnapshotList = function(challengeId, includeAllData =
 /**
  * Record a challenge snapshot.
  */
-export const recordChallengeSnapshot = function(challengeId) {
-  return new Endpoint(
+export const recordChallengeSnapshot = async function(challengeId) {
+  return await new Endpoint(
     api.challenge.recordSnapshot,
     {
       variables: {id: challengeId},
@@ -34,8 +34,8 @@ export const recordChallengeSnapshot = function(challengeId) {
 /**
  * Removes a challenge snapshot.
  */
-export const removeChallengeSnapshot = function(snapshotId) {
-  return new Endpoint(
+export const removeChallengeSnapshot = async function(snapshotId) {
+  return await new Endpoint(
     api.challenge.removeSnapshot,
     {
       variables: {id: snapshotId},
@@ -48,8 +48,8 @@ export const removeChallengeSnapshot = function(snapshotId) {
 /**
  * Fetch challenge snapshot by id.
  */
-export const fetchChallengeSnapshot = function(snapshotId) {
-  return new Endpoint(
+export const fetchChallengeSnapshot = async function(snapshotId) {
+  return await new Endpoint(
     api.challenge.snapshot,
     {
       schema: {},

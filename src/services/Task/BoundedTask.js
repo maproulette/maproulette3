@@ -51,7 +51,7 @@ export const receiveBoundedTasks = function(tasks,
  * optionally include a filters field with additional constraints
  */
 export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false, ignoreLocked=true, withGeometries) {
-  return function(dispatch) {
+  return async function(dispatch) {
     if (!skipDispatch) {
       // The map is either showing task clusters or bounded tasks so we shouldn't
       // have both in redux.
@@ -112,7 +112,7 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
     const fetchId = uuidv1()
     !skipDispatch && dispatch(receiveBoundedTasks(null, RequestStatus.inProgress, fetchId))
 
-    return new Endpoint(
+    return await new Endpoint(
       api.tasks.withinBounds, {
         schema: {tasks: [taskSchema()]},
         variables: {

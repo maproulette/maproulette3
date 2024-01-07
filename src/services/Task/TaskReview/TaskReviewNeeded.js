@@ -47,8 +47,8 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
                                                           _get(criteria, 'invertFields', {}))
   const includeTags = criteria.includeTags
 
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.tasks.review,
       {
         schema: {tasks: [taskSchema()]},

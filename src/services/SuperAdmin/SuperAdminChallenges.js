@@ -20,13 +20,14 @@ export const receiveAdminChallenges = function (normalizedEntities, dispatch) {
 }
 
 export const fetchAdminChallenges = function (query) {
-  return function (dispatch) {
-    return dispatch(performChallengeSearch(query, 50000, true)).then(
-      (normalizedResults) => {
-        return dispatch(
-          receiveAdminChallenges(normalizedResults.entities, dispatch)
-        )
+  return async function (dispatch) {
+    return async function (dispatch) {
+      try {
+        const normalizedResults = await dispatch(performChallengeSearch(query, 50000, true))
+        return dispatch(receiveAdminChallenges(normalizedResults.entities, dispatch))
+      } catch (error) {
+        console.error('Error searching admin challenges:', error)
       }
-    )
+    }
   }
 }

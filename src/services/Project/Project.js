@@ -66,8 +66,8 @@ export const removeProject = function (projectId) {
  * Fetch data on all projects (up to the given limit).
  */
 export const fetchProjects = function (limit = 50) {
-  return function (dispatch) {
-    return new Endpoint(api.projects.all, {
+  return async function (dispatch) {
+    return await new Endpoint(api.projects.all, {
       schema: [projectSchema()],
       params: { limit },
     })
@@ -95,8 +95,8 @@ export const fetchManageableProjects = function (
 ) {
   const pageToFetch = _isFinite(page) ? page : 0;
 
-  return function (dispatch) {
-    return new Endpoint(api.projects.managed, {
+  return async function (dispatch) {
+    return await new Endpoint(api.projects.managed, {
       schema: [projectSchema()],
       params: { limit: limit, page: pageToFetch, onlyOwned, onlyEnabled },
     })
@@ -126,19 +126,19 @@ export const fetchFeaturedProjects = function (
   limit = RESULTS_PER_PAGE,
   page = null
 ) {
-  return function (dispatch) {
+  return async function (dispatch) {
     const pageToFetch = _isFinite(page) ? page : 0;
     const params = { onlyEnabled, limit, page: pageToFetch }
     const cachedFeaturedProjects = projectCache.get({}, params, FEATURED_PROJECTS_CACHE);
 
     if (cachedFeaturedProjects) {
-      return new Promise((resolve) => {
+      return await new Promise((resolve) => {
         dispatch(receiveProjects(cachedFeaturedProjects.entities));
         resolve(cachedFeaturedProjects)
       })
     }
 
-    return new Endpoint(api.projects.featured, {
+    return await new Endpoint(api.projects.featured, {
       schema: [projectSchema()],
       params
     })
@@ -159,8 +159,8 @@ export const fetchFeaturedProjects = function (
  * Fetch data for the given project.
  */
 export const fetchProject = function (projectId) {
-  return function (dispatch) {
-    return new Endpoint(api.project.single, {
+  return async function (dispatch) {
+    return await new Endpoint(api.project.single, {
       schema: projectSchema(),
       variables: { id: projectId },
     })
@@ -180,8 +180,8 @@ export const fetchProject = function (projectId) {
  * Fetch data for the given project.
  */
 export const fetchProjectsById = function (projectIds) {
-  return function (dispatch) {
-    return new Endpoint(api.project.multiple, {
+  return async function (dispatch) {
+    return await new Endpoint(api.project.multiple, {
       schema: [projectSchema()],
       params: {
         projectIds: _isArray(projectIds) ? projectIds.join(",") : projectIds,
@@ -218,8 +218,8 @@ export const searchProjects = function (
     ? _get(searchCriteria, "page")
     : 0;
 
-  return function (dispatch) {
-    return new Endpoint(api.projects.search, {
+  return async function (dispatch) {
+    return await new Endpoint(api.projects.search, {
       schema: [projectSchema()],
       params: {
         q: `%${query}%`,
@@ -246,7 +246,7 @@ export const searchProjects = function (
  * version from the server.
  */
 export const saveProject = function (projectData, user) {
-  return function (dispatch) {
+  return async function (dispatch) {
     // Setup the save endpoint to either edit or create the project depending
     // on whether it has an id.
     const areCreating = !_isFinite(projectData.id);
@@ -294,14 +294,14 @@ export const saveProject = function (projectData, user) {
  * Archives or unarchives a project.
  */
 export const archiveProject = (id, bool) => {
-  return function (dispatch) {
+  return async function (dispatch) {
     const saveEndpoint = new Endpoint(api.project.edit, {
       schema: projectSchema(),
       variables: { id },
       json: { isArchived: bool },
     });
 
-    return saveEndpoint
+    return await saveEndpoint
       .execute()
       .then((normalizedResults) => {
         dispatch(receiveProjects(normalizedResults.entities));
@@ -329,7 +329,7 @@ export const archiveProject = (id, bool) => {
  * Fetch activity timeline for the given project.
  */
 export const fetchProjectActivity = function (projectId, startDate, endDate) {
-  return function (dispatch) {
+  return async function (dispatch) {
     const params = { projectList: projectId };
     if (startDate) {
       params.start = startOfDay(startDate).toISOString();
@@ -345,7 +345,7 @@ export const fetchProjectActivity = function (projectId, startDate, endDate) {
       return dispatch(receiveProjects(cachedProjectActivity));
     }
 
-    return new Endpoint(api.project.activity, { params })
+    return await new Endpoint(api.project.activity, { params })
       .execute()
       .then((rawActivity) => {
         const normalizedResults = {
@@ -377,7 +377,7 @@ export const fetchProjectActivity = function (projectId, startDate, endDate) {
  * Fetch managers of the given project, both users and teams
  */
 export const fetchProjectManagers = function (projectId) {
-  return function (dispatch) {
+  return async function (dispatch) {
     const normalizedResults = {
       entities: {
         projects: {
@@ -386,7 +386,7 @@ export const fetchProjectManagers = function (projectId) {
       },
     };
 
-    return Promise.all([
+    return await Promise.all([
       new Endpoint(api.project.managers, { variables: { projectId } })
         .execute()
         .then(
@@ -432,8 +432,8 @@ export const setProjectManagerRole = function (
   isOSMUserId,
   role
 ) {
-  return function (dispatch) {
-    return new Endpoint(api.project.setManagerPermission, {
+  return async function (dispatch) {
+    return await new Endpoint(api.project.setManagerPermission, {
       variables: { userId, projectId, role },
       params: { isOSMUserId: isOSMUserId ? "true" : "false" },
     })
@@ -467,7 +467,7 @@ export const setProjectManagerRole = function (
  * role
  */
 export const addProjectManager = function (projectId, username, role) {
-  return function (dispatch) {
+  return async function (dispatch) {
     return findUser(username)
       .then((matchingUsers) => {
         // We want an exact username match
@@ -493,8 +493,8 @@ export const addProjectManager = function (projectId, username, role) {
  * Remove project manager from project
  */
 export const removeProjectManager = function (projectId, userId, isOSMUserId) {
-  return function (dispatch) {
-    return new Endpoint(api.project.removeManager, {
+  return async function (dispatch) {
+    return await new Endpoint(api.project.removeManager, {
       variables: { userId, projectId },
       params: { isOSMUserId: isOSMUserId ? "true" : "false" },
     })
@@ -517,8 +517,8 @@ export const removeProjectManager = function (projectId, userId, isOSMUserId) {
  * Deletes the given project from the server.
  */
 export const deleteProject = function (projectId, immediate = false) {
-  return function (dispatch) {
-    return new Endpoint(api.project.delete, {
+  return async function (dispatch) {
+    return await new Endpoint(api.project.delete, {
       variables: { id: projectId },
       params: immediate ? { immediate: "true" } : undefined,
     })

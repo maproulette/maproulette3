@@ -194,8 +194,8 @@ export const removeTask = function(taskId) {
  * includeMapillary to true
  */
 export const fetchTask = function(taskId, suppressReceive=false, includeMapillary=false) {
-  return function(dispatch) {
-    return new Endpoint(api.task.single, {
+  return async function(dispatch) {
+    return await new Endpoint(api.task.single, {
       schema: taskSchema(),
       variables: {id: taskId},
       params: {mapillary: includeMapillary}
@@ -213,11 +213,13 @@ export const fetchTask = function(taskId, suppressReceive=false, includeMapillar
  * Fetch tags for the given task.
  */
 export const fetchTaskTags = function(taskId) {
-  return function(dispatch) {
-    return new Endpoint(
-      api.task.tags,
-      {schema: {}, variables: {id: taskId}}
-    ).execute().then(normalizedTags => {
+  return async function(dispatch) {
+    try {
+      const normalizedTags = await new Endpoint(
+        api.task.tags,
+        {schema: {}, variables: {id: taskId}}
+      ).execute()
+
       if (_isObject(normalizedTags.result)) {
         // Inject tags into task
         dispatch(receiveTasks(simulatedEntities({
@@ -226,7 +228,9 @@ export const fetchTaskTags = function(taskId) {
         })))
       }
       return normalizedTags
-    })
+    } catch (error) {
+      console.error('Error fetching task tags:', error)
+    }
   }
 }
 
@@ -234,16 +238,20 @@ export const fetchTaskTags = function(taskId) {
  * Locks a task that is to be started.
  */
 export const startTask = function(taskId) {
-  return function(dispatch) {
-    return new Endpoint(api.task.start, {
-      schema: taskSchema(),
-      variables: {id: taskId}
-    }).execute().catch(error => {
+  return async function(dispatch) {
+    try {
+      const result = await new Endpoint(api.task.start, {
+        schema: taskSchema(),
+        variables: {id: taskId}
+      }).execute()
+  
+      return result
+    } catch (error) {
       if (isSecurityError(error)) {
-        dispatch(ensureUserLoggedIn()).catch(() => null)
+        await dispatch(ensureUserLoggedIn()).catch(() => null)
       }
       throw error
-    })
+    }
   }
 }
 
@@ -251,8 +259,8 @@ export const startTask = function(taskId) {
  * Unlocks a task.
  */
 export const releaseTask = function(taskId) {
-  return function(dispatch) {
-    return new Endpoint(api.task.release, {
+  return async function(dispatch) {
+    return await new Endpoint(api.task.release, {
       schema: taskSchema(),
       variables: {id: taskId}
     }).execute().then(normalizedResults => {
@@ -275,12 +283,16 @@ export const releaseTask = function(taskId) {
 /**
  * Refreshes an active task lock owned by the current user
  */
-export const refreshTaskLock = function(taskId) {
-  return function() {
-    return new Endpoint(api.task.refreshLock, {
+export const refreshTaskLock = async function (taskId) {
+  try {
+    const result = await new Endpoint(api.task.refreshLock, {
       schema: taskSchema(),
       variables: {id: taskId}
     }).execute()
+
+    return result
+  } catch (error) {
+    console.error('Error refreshing task lock:', error)
   }
 }
 
@@ -289,8 +301,8 @@ export const refreshTaskLock = function(taskId) {
  */
 export const completeTask = function(taskId, taskStatus, needsReview,
                                      tags, cooperativeWorkSummary, osmComment, completionResponses) {
-  return function(dispatch) {
-    return updateTaskStatus(dispatch, taskId, taskStatus, needsReview, tags,
+  return async function(dispatch) {
+    return await updateTaskStatus(dispatch, taskId, taskStatus, needsReview, tags,
                             cooperativeWorkSummary, osmComment, completionResponses)
   }
 }
@@ -300,8 +312,8 @@ export const completeTask = function(taskId, taskStatus, needsReview,
  */
 export const completeTaskBundle = function(bundleId, primaryTaskId, taskStatus, needsReview,
                                            tags, cooperativeWorkSummary, osmComment, completionResponses) {
-  return function(dispatch) {
-    return updateBundledTasksStatus(
+  return async function(dispatch) {
+    return await updateBundledTasksStatus(
       dispatch, bundleId, primaryTaskId, taskStatus, needsReview, tags,
       cooperativeWorkSummary, osmComment, completionResponses
     )
@@ -314,12 +326,12 @@ export const completeTaskBundle = function(bundleId, primaryTaskId, taskStatus, 
  * perform a conversion unless skipConversion is true.
  */
 export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const taskData =
       skipConversion ? updatedTasks :
       _map(updatedTasks, task => Object.assign({}, task, {id: task.id.toString()}))
 
-    return new Endpoint(
+    return await new Endpoint(
       api.tasks.bulkUpdate, {json: taskData}
     ).execute().then(() => {
       // Clear all tasks in challenge since we don't know exactly which tasks
@@ -345,7 +357,7 @@ export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
  * Bulk update task status on tasks that match the given criteria.
  */
 export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, excludeTaskIds) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const filters = _get(criteria, 'filters', {})
     const searchParameters = generateSearchParametersString(filters,
                                                             criteria.boundingBox,
@@ -356,7 +368,7 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, e
                                                             excludeTaskIds)
     searchParameters.cid = challengeId
 
-    return new Endpoint(
+    return await new Endpoint(
       api.tasks.bulkStatusChange, {
         params: {...searchParameters, newStatus},
         json: filters.taskPropertySearch ?
@@ -382,8 +394,8 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, e
  * Updates the completion responses on a task.
  */
 export const updateCompletionResponses = function(taskId, completionResponses) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.task.updateCompletionResponses,
       {variables: {id: taskId},
        json: completionResponses
@@ -409,13 +421,13 @@ export const updateCompletionResponses = function(taskId, completionResponses) {
  * provided.
  */
 export const addTaskComment = function(taskId, comment, taskStatus) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const params = {}
     if (_isFinite(taskStatus)) {
       params.actionId = taskStatus
     }
 
-    return new Endpoint(
+    return await new Endpoint(
       api.task.addComment, {variables: {id: taskId}, params, json: { comment: comment }}
     ).execute().then(() => {
       fetchTaskComments(taskId)(dispatch)
@@ -439,12 +451,12 @@ export const addTaskComment = function(taskId, comment, taskStatus) {
  * status if provided
  */
 export const addTaskBundleComment = function(bundleId, primaryTaskId, comment, taskStatus) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const params = {}
     if (_isFinite(taskStatus)) {
       params.actionId = taskStatus
     }
-    return new Endpoint(api.tasks.bundled.addComment, {
+    return await new Endpoint(api.tasks.bundled.addComment, {
       variables: {bundleId},
       params,
       json: { comment: comment }
@@ -470,8 +482,8 @@ export const addTaskBundleComment = function(bundleId, primaryTaskId, comment, t
  * Fetch task bundle with given id
  */
 export const fetchTaskBundle = function(bundleId) {
-  return function(dispatch) {
-    return new Endpoint(api.tasks.fetchBundle, {
+  return async function(dispatch) {
+    return await new Endpoint(api.tasks.fetchBundle, {
       variables: {bundleId},
     }).execute().catch(error => {
       if (isSecurityError(error)) {
@@ -491,24 +503,28 @@ export const fetchTaskBundle = function(bundleId) {
  * Fetch comments for the given task
  */
 export const fetchTaskComments = function(taskId) {
-  return function(dispatch) {
-    return new Endpoint(
-      api.task.comments,
-      {schema: [ commentSchema() ], variables: {id: taskId}}
-    ).execute().then(normalizedComments => {
+  return async function(dispatch) {
+    try {
+      const normalizedComments = await new Endpoint(
+        api.task.comments,
+        { schema: [commentSchema()], variables: { id: taskId } }
+      ).execute()
+  
       dispatch(receiveComments(normalizedComments.entities))
-
+  
       if (_isObject(normalizedComments.entities.comments)) {
         // Inject comment ids into task
         dispatch(receiveTasks(simulatedEntities({
-          id: taskId,
-          comments: _map(_keys(normalizedComments.entities.comments),
+              id: taskId,
+          comments: _map(_keys(normalizedComments.entities.comments), 
                          id => parseInt(id, 10)),
-        })))
+            })))
       }
-
+  
       return normalizedComments
-    })
+    } catch (error) {
+      console.error('Error fetching task comments:', error)
+    }
   }
 }
 
@@ -516,8 +532,8 @@ export const fetchTaskComments = function(taskId) {
  * Fetch history for the given task
  */
 export const fetchTaskHistory = function(taskId) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.task.history,
       {schema: {}, variables: {id: taskId}}
     ).execute().then(normalizedHistory => {
@@ -547,17 +563,23 @@ export const fetchTaskHistory = function(taskId) {
 export const loadRandomTaskFromChallenge = function(challengeId,
                                                     priorTaskId,
                                                     includeMapillary=false) {
-  return function(dispatch) {
-    const endpoint = new Endpoint(api.challenge.prioritizedTask, {
-      schema: [ taskSchema() ],
-      variables: { id: challengeId },
-      params: {
-        proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
-        mapillary: includeMapillary
-      },
-    })
+  return async function (dispatch) {
+    try {
+      const endpoint = new Endpoint(api.challenge.prioritizedTask, {
+        schema: [ taskSchema() ],
+        variables: { id: challengeId },
+        params: {
+          proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+          mapillary: includeMapillary
+        },
+      })
 
-    return retrieveChallengeTask(dispatch, endpoint)
+      const result = await retrieveChallengeTask(dispatch, endpoint)
+
+      return result
+    } catch (error) {
+      console.error('Error loading random task from challenge:', error)
+    }
   }
 }
 
@@ -572,18 +594,24 @@ export const loadRandomTaskFromChallenge = function(challengeId,
 export const loadRandomTaskFromVirtualChallenge = function(virtualChallengeId,
                                                            priorTaskId,
                                                            includeMapillary=false) {
-  return function(dispatch) {
-    return retrieveChallengeTask(dispatch, new Endpoint(
-      api.virtualChallenge.randomTask,
-      {
-        schema: taskSchema(),
-        variables: {id: virtualChallengeId},
-        params: {
-          proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
-          mapillary: includeMapillary,
+  return async function (dispatch) {
+    try {
+      const result = await retrieveChallengeTask(dispatch, new Endpoint(
+        api.virtualChallenge.randomTask,
+        {
+          schema: taskSchema(),
+          variables: {id: virtualChallengeId},
+          params: {
+            proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+            mapillary: includeMapillary,
+          }
         }
-      }
-    ))
+      ))
+
+      return result
+    } catch (error) {
+      console.error('Error retrieving random task from virtual challenge:', error)
+    }
   }
 }
 
@@ -593,14 +621,18 @@ export const loadRandomTaskFromVirtualChallenge = function(virtualChallengeId,
  */
 export const loadPreviousSequentialTaskFromChallenge = function(challengeId,
                                                                 currentTaskId) {
-  return function(dispatch) {
-    return retrieveChallengeTask(dispatch, new Endpoint(
-      api.challenge.previousSequentialTask,
-      {
-        schema: taskSchema(),
-        variables: {challengeId: challengeId, taskId: currentTaskId},
-      }
-    ))
+  return async function(dispatch) {
+    try {
+      return await retrieveChallengeTask(dispatch, new Endpoint(
+        api.challenge.previousSequentialTask,
+        {
+          schema: taskSchema(),
+          variables: {challengeId: challengeId, taskId: currentTaskId},
+        }
+      ))
+    } catch (error) {
+      console.error('Error retrieving previous sequential task from challenge:', error)
+    }
   }
 }
 
@@ -610,14 +642,18 @@ export const loadPreviousSequentialTaskFromChallenge = function(challengeId,
  */
 export const loadNextSequentialTaskFromChallenge = function(challengeId,
                                                             currentTaskId) {
-  return function(dispatch) {
-    return retrieveChallengeTask(dispatch, new Endpoint(
-      api.challenge.nextSequentialTask,
-      {
-        schema: taskSchema(),
-        variables: {challengeId: challengeId, taskId: currentTaskId},
-      }
-    ))
+  return async function(dispatch) {
+    try {
+      return await retrieveChallengeTask(dispatch, new Endpoint(
+        api.challenge.nextSequentialTask,
+        {
+          schema: taskSchema(),
+          variables: {challengeId: challengeId, taskId: currentTaskId},
+        }
+      ));
+    } catch (error) {
+      console.error('Error retrieving next sequential task from challenge:', error)
+    }
   }
 }
 
@@ -626,8 +662,8 @@ export const loadNextSequentialTaskFromChallenge = function(challengeId,
  * challenge
  */
 export const fetchChallengeTasks = function(challengeId, limit=50) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.challenge.tasks,
       {schema: [ taskSchema() ], variables: {id: challengeId}, params: {limit}}
     ).execute().then(normalizedResults => {
@@ -645,35 +681,42 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
  * to the redux store, but simply returns them
  */
 export const fetchNearbyTasks = function(challengeId, isVirtualChallenge, taskId, excludeSelfLocked=false, limit=5) {
-  return function() {
+  return async function() {
     const params = {limit}
     if (excludeSelfLocked) {
       params.excludeSelfLocked = 'true'
     }
-
-    return new Endpoint(
-      isVirtualChallenge ? api.virtualChallenge.nearbyTasks : api.challenge.nearbyTasks,
-      {
-        schema: [ taskSchema() ],
-        variables: {challengeId, taskId},
-        params,
-      }
-    ).execute().then(normalizedResults => ({
-      challengeId,
-      isVirtualChallenge,
-      loading: false,
-      tasks: _map(_values(_get(normalizedResults, 'entities.tasks', {})), task => {
-        if (task.location) {
-          // match clusteredTasks response, which returns a point with lat/lng fields
-          task.point = {
-            lng: task.location.coordinates[0],
-            lat: task.location.coordinates[1]
-          }
+    
+    try {
+      const normalizedResults = await new Endpoint(
+        isVirtualChallenge ? api.virtualChallenge.nearbyTasks : api.challenge.nearbyTasks,
+        {
+          schema: [ taskSchema() ],
+          variables: {challengeId, taskId},
+          params,
         }
-
-        return task
-      })
-    }))
+      ).execute()
+    
+      return {
+        challengeId,
+        isVirtualChallenge,
+        loading: false,
+        tasks: _map(_values(_get(normalizedResults, 'entities.tasks', {})), task => {
+          if (task.location) {
+            // match clusteredTasks response, which returns a point with lat/lng fields
+            task.point = {
+              lng: task.location.coordinates[0],
+              lat: task.location.coordinates[1]
+            }
+          }
+    
+          return task
+        }),
+      }
+    } catch (error) {
+      console.error('Error executing endpoint for fetching nearby tasks:', error)
+      throw error
+    }    
   }
 }
 
@@ -682,18 +725,22 @@ export const fetchNearbyTasks = function(challengeId, isVirtualChallenge, taskId
  * challenge. Note that this does not wait until the tasks have been deleted
  * before resolving.
  */
-export const deleteChallengeTasks = function(challengeId, statuses=null) {
-  return new Endpoint(api.challenge.deleteTasks, {
-    variables: {id: challengeId},
-    params: statuses ? {statusFilters: statuses.join(',')} : undefined,
-  }).execute()
+export const deleteChallengeTasks = async function (challengeId, statuses = null) {
+  try {
+    return await new Endpoint(api.challenge.deleteTasks, {
+      variables: {id: challengeId},
+      params: statuses ? {statusFilters: statuses.join(',')} : undefined,
+    }).execute()
+  } catch (error) {
+    console.error('Error deleting challenge tasks:', error)
+  }
 }
 
 /**
  * Set the given status on the given task
  * @private
  */
-const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = null,
+const updateTaskStatus = async function(dispatch, taskId, newStatus, requestReview = null,
                                   tags = null, cooperativeWorkSummary = null,
                                   osmComment = null, completionResponses = null) {
   // Optimistically assume request will succeed. The store will be updated
@@ -732,25 +779,25 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
     })
   }
 
-  return endpoint.execute().catch(error => {
+  try {
+    await endpoint.execute()
+  } catch (error) {
     if (isSecurityError(error)) {
-      dispatch(ensureUserLoggedIn()).then(() =>
-        dispatch(addError(AppErrors.user.unauthorized))
-      )
-    }
-    else {
+      await dispatch(ensureUserLoggedIn())
+      await dispatch(addError(AppErrors.user.unauthorized))
+    } else {
       dispatch(addError(AppErrors.task.updateFailure))
-      console.log(error.response || error)
+      console.error(error.response || error)
     }
-    fetchTask(taskId)(dispatch) // Fetch accurate task data
-  })
+    await fetchTask(taskId)(dispatch)
+  }
 }
 
 /**
  * Set the given status on the tasks in the given bundle
  * @private
  */
-const updateBundledTasksStatus = function(dispatch, bundleId, primaryTaskId,
+const updateBundledTasksStatus = async function(dispatch, bundleId, primaryTaskId,
                                           newStatus, requestReview = null, tags = null,
                                           cooperativeWorkSummary = null, osmComment,
                                           completionResponses = null) {
@@ -777,28 +824,33 @@ const updateBundledTasksStatus = function(dispatch, bundleId, primaryTaskId,
     json: completionResponses,
   })
 
-  return endpoint.execute().catch(error => {
+  try {
+    await endpoint.execute()
+  } catch (error) {
     if (isSecurityError(error)) {
-      dispatch(ensureUserLoggedIn()).then(() =>
-        dispatch(addError(AppErrors.user.unauthorized))
-      )
-    }
-    else {
+      await dispatch(ensureUserLoggedIn())
+      await dispatch(addError(AppErrors.user.unauthorized))
+    } else {
       dispatch(addError(AppErrors.task.updateFailure))
-      console.log(error.response || error)
+      console.error(error.response || error)
     }
-    fetchTask(primaryTaskId)(dispatch) // Fetch accurate task data
-  })
+    await fetchTask(primaryTaskId)(dispatch)
+  }
 }
 
-export const fetchCooperativeTagFixChangeset = function(cooperativeWorkSummary) {
+export const fetchCooperativeTagFixChangeset = async function (cooperativeWorkSummary) {
   const endpoint = new Endpoint(api.task.testTagFix, {
     params: { changeType: 'osmchange' },
     json: cooperativeWorkSummary,
     expectXMLResponse: true,
   })
 
-  return endpoint.execute()
+  try {
+    return await endpoint.execute()
+  } catch (error) {
+    console.error('Error fetching cooperative tag fix changeset:', error)
+    throw error
+  }
 }
 
 /**
@@ -809,7 +861,7 @@ export const fetchCooperativeTagFixChangeset = function(cooperativeWorkSummary) 
  * > place description of the first result is retrieved.
  */
 export const fetchTaskPlace = function(task) {
-  return function(dispatch) {
+  return async function(dispatch) {
     return dispatch(
       fetchPlace(_get(task, 'location.coordinates[1]', 0),
                  _get(task, 'location.coordinates[0]', 0))
@@ -829,10 +881,10 @@ export const fetchTaskPlace = function(task) {
  *
  */
 export const updateTaskTags = function(taskId, tags) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.task.updateTags,
-      {schema: {}, variables: {id: taskId}, params: {tags: tags}}
+      { schema: {}, variables: { id: taskId }, params: { tags: tags } }
     ).execute().then(normalizedTags => {
       if (_isObject(normalizedTags.result)) {
         // Inject tags into task.
@@ -842,6 +894,9 @@ export const updateTaskTags = function(taskId, tags) {
         })))
       }
       return normalizedTags
+    }).catch(error => {
+      console.error('Error updating task tags:', error)
+      throw error
     })
   }
 }
@@ -852,7 +907,7 @@ export const updateTaskTags = function(taskId, tags) {
  * version from the server.
  */
 export const saveTask = function(originalTaskData) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const taskData = _pick(
       originalTaskData,
       ['id', 'name', 'instruction', 'geometries', 'status', 'priority', 'tags']
@@ -874,7 +929,7 @@ export const saveTask = function(originalTaskData) {
       }
     )
 
-    return saveEndpoint.execute().then(normalizedResults => {
+    return await saveEndpoint.execute().then(normalizedResults => {
       dispatch(receiveTasks(normalizedResults.entities))
       return _get(normalizedResults, `entities.tasks.${normalizedResults.result}`)
     }).catch(error => {
@@ -895,8 +950,8 @@ export const saveTask = function(originalTaskData) {
  * Deletes the given task from the server.
  */
 export const deleteTask = function(taskId) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.task.delete, {variables: {id: taskId}}
     ).execute().then(() =>
       dispatch(removeTask(taskId))
@@ -915,8 +970,8 @@ export const deleteTask = function(taskId) {
 }
 
 export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") {
-  return function(dispatch) {
-    return new Endpoint(api.tasks.bundle, {
+  return async function(dispatch) {
+    return await new Endpoint(api.tasks.bundle, {
       json: {name: bundleName, taskIds},
     }).execute().then(results => {
       return results
@@ -940,13 +995,13 @@ export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") 
 }
 
 export const deleteTaskBundle = function(bundleId, primaryTaskId) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const params = {}
     if (_isFinite(primaryTaskId)) {
       params.primaryId = primaryTaskId
     }
 
-    return new Endpoint(api.tasks.deleteBundle, {
+    return await new Endpoint(api.tasks.deleteBundle, {
       variables: {bundleId},
       params,
     }).execute().then(results => {
@@ -966,8 +1021,8 @@ export const deleteTaskBundle = function(bundleId, primaryTaskId) {
 }
 
 export const removeTaskFromBundle = function (bundleId, taskIds) {
-  return function (dispatch) {
-    return new Endpoint(api.tasks.removeTaskFromBundle, {
+  return async function (dispatch) {
+    return await new Endpoint(api.tasks.removeTaskFromBundle, {
       variables: { id: bundleId },
       params: { id: bundleId, taskIds: taskIds },
     })

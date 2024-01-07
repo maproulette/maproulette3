@@ -41,7 +41,7 @@ export const clearManagedChallenge = function() {
 
 // async action creators
 export const manageProject = function(projectId) {
-  return function(dispatch) {
+  return async function(dispatch) {
     dispatch(beginManagingProject(projectId, RequestStatus.inProgress))
 
     return fetchProjectChallenges(projectId)(dispatch)
@@ -50,7 +50,7 @@ export const manageProject = function(projectId) {
 }
 
 export const manageChallenge = function(challengeId) {
-  return function(dispatch) {
+  return async function(dispatch) {
     dispatch(beginManagingChallenge(challengeId, RequestStatus.inProgress))
 
     return fetchChallengeTasks(challengeId)(dispatch)

@@ -7,16 +7,16 @@ import { defaultRoutes as api } from "../Server/Server";
 /**
  * Fetch challenge comments and task comments associated with the given challenge
  */
-export const fetchChallengeComments = function (challengeId) {
-  return new Endpoint(api.challenge.comments, {
+export const fetchChallengeComments = async function (challengeId) {
+  return await new Endpoint(api.challenge.comments, {
     schema: {},
     variables: { id: challengeId },
   })
     .execute()
-    .then((rawTaskComments) => {
+    .then(async (rawTaskComments) => {
       const taskComments = _values(rawTaskComments?.result);
 
-      return new Endpoint(api.challenge.challengeComments, {
+      return await new Endpoint(api.challenge.challengeComments, {
         schema: {},
         variables: { id: challengeId },
       })
@@ -42,8 +42,8 @@ export const fetchChallengeComments = function (challengeId) {
 /**
  * Post challenge comment
  */
-export const postChallengeComment = function (challengeId, comment) {
-  return new Endpoint(api.challenge.addComment, {
+export const postChallengeComment = async function (challengeId, comment) {
+  return await new Endpoint(api.challenge.addComment, {
     variables: { id: challengeId },
     json: { comment: comment },
   })

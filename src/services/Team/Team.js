@@ -20,20 +20,26 @@ export const unsubscribeFromTeamUpdates = function(handle) {
 /**
  * Search for teams by name. Resolves with a (possibly empty) list of results
  */
-export const findTeam = function(teamName) {
-  return new Endpoint(api.teams.find, {params: {name: teamName}}).execute()
+export const findTeam = async function (teamName) {
+  return await new Endpoint(api.teams.find, {params: {name: teamName}}).execute().catch(error => {
+    console.error('Error finding team:', error)
+  })
 }
 
 /**
  * Set a team's granted role on a project
  */
 export const setTeamProjectRole = function(projectId, teamId, role) {
-  return function(dispatch) {
-    return new Endpoint(api.team.setProjectRole, {
-      variables: {teamId, projectId, role},
-    }).execute().then(() =>
-      fetchProjectManagers(projectId)(dispatch)
-    )
+  return async function(dispatch) {
+    try {
+      await new Endpoint(api.team.setProjectRole, {
+        variables: { teamId, projectId, role },
+      }).execute()
+  
+      await fetchProjectManagers(projectId)(dispatch)
+    } catch (error) {
+      console.error('Error setting team project role:', error)
+    }
   }
 }
 
@@ -41,11 +47,15 @@ export const setTeamProjectRole = function(projectId, teamId, role) {
  * Set a team's granted role on a project
  */
 export const removeTeamFromProject = function(projectId, teamId) {
-  return function(dispatch) {
-    return new Endpoint(api.team.removeFromProject, {
-      variables: {teamId, projectId},
-    }).execute().then(() =>
-      fetchProjectManagers(projectId)(dispatch)
-    )
+  return async function(dispatch) {
+    try {
+      await new Endpoint(api.team.removeFromProject, {
+        variables: {teamId, projectId},
+      }).execute()
+  
+      await fetchProjectManagers(projectId)(dispatch)
+    } catch (error) {
+      console.error('Error removing team from project:', error)
+    }
   }
 }

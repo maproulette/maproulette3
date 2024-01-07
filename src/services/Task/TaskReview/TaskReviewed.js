@@ -63,11 +63,11 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
     dispatchType = RECEIVE_MAPPER_REVIEWED_TASKS
   }
 
-  return function(dispatch) {
+  return async function(dispatch) {
     dispatch(receiveReviewedTasks(null,
       dispatchType,
       RequestStatus.inProgress))
-    return new Endpoint(
+    return await new Endpoint(
       api.tasks.reviewed,
       {
         schema: {tasks: [taskSchema()]},

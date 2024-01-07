@@ -8,9 +8,13 @@ import _omit from 'lodash/omit'
 import AssociatedChallengeList from './AssociatedChallengeList';
 
 const getChallengeById = async (id) => {
-  const result = await new Endpoint(api.challenge.single, { variables: { id }, schema: challengeSchema() }).execute()
+  try {
+    const result = await new Endpoint(api.challenge.single, { variables: { id }, schema: challengeSchema() }).execute()
 
-  return result
+    return result
+  } catch (error) {
+    console.error('Error fetching challenge by ID:', error)
+  }
 }
 
 const ChallengeIdResult = (props) => {

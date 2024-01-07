@@ -11,8 +11,8 @@ import { fetchChallenge, fetchProjectChallenges } from '../Challenge/Challenge'
  * Add the given challenge to the given virtual project.
  */
 export const addChallenge = function(challengeId, toProjectId) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.project.addToVirtual,
       {variables: {challengeId, projectId: toProjectId}}
     ).execute().then(() => {
@@ -32,8 +32,8 @@ export const addChallenge = function(challengeId, toProjectId) {
  * Remove the given challenge from the given virtual project.
  */
 export const removeChallenge = function(challengeId, fromProjectId) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.project.removeFromVirtual,
       {variables: {challengeId, projectId: fromProjectId}}
     ).execute().then(() => {

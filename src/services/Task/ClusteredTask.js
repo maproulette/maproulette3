@@ -62,7 +62,7 @@ export const clearClusteredTasks = function() {
  */
 export const augmentClusteredTasks = function(challengeId, isVirtualChallenge=false, criteria, limit=15000,
                                               mergeTasks=true, ignoreLocked=true) {
-  return function(dispatch) {
+  return async function(dispatch) {
     if (isVirtualChallenge) {
       return
     }

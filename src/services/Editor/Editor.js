@@ -81,7 +81,7 @@ export const editTask = function (
   taskBundle,
   replacedComment = null
 ) {
-  return function (dispatch) {
+  return async function (dispatch) {
     if (options && process.env.REACT_APP_FEATURE_EDITOR_IMAGERY !== "enabled") {
       delete options.imagery;
     }

@@ -49,8 +49,8 @@ export const receiveVirtualChallenges = function(normalizedEntities,
  * Fetch data for the given virtual challenge.
  */
 export const fetchVirtualChallenge = function(virtualChallengeId) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.virtualChallenge.single,
       {schema: virtualChallengeSchema(), variables: {id: virtualChallengeId}}
     ).execute().then(normalizedResults => {
@@ -74,7 +74,7 @@ export const fetchVirtualChallenge = function(virtualChallengeId) {
  * challenge will be set to expire after the default configured duration.
  */
 export const createVirtualChallenge = function(name, taskIds, expiration, clusters) {
-  return function(dispatch) {
+  return async function(dispatch) {
     let searchParameters = null
     if (clusters && clusters.length > 0) {
       searchParameters = _omit(_head(clusters).params,
@@ -91,13 +91,17 @@ export const createVirtualChallenge = function(name, taskIds, expiration, cluste
       searchParameters: searchParameters || {},
     }
 
-    return saveVirtualChallenge(
-      dispatch,
-      new Endpoint(api.virtualChallenge.create, {
-        schema: virtualChallengeSchema(),
-        json: challengeData,
-      })
-    )
+    try {
+      return await saveVirtualChallenge(
+        dispatch,
+        new Endpoint(api.virtualChallenge.create, {
+          schema: virtualChallengeSchema(),
+          json: challengeData,
+        })
+      )
+    } catch (error) {
+      console.error('Error creating virtual challenge:', error)
+    }
   }
 }
 
@@ -107,20 +111,22 @@ export const createVirtualChallenge = function(name, taskIds, expiration, cluste
  * configured duration if no expiration is specified.
  */
 export const renewVirtualChallenge = function(virtualChallengeId, expiration) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const challengeData = {
       expiry: expiration ? expiration :
               addHours(new Date(), DEFAULT_EXPIRATION_DURATION).getTime()
     }
 
-    return saveVirtualChallenge(
+    return await saveVirtualChallenge(
       dispatch,
       new Endpoint(api.virtualChallenge.edit, {
         variables: {id: virtualChallengeId},
         schema: virtualChallengeSchema(),
         json: challengeData,
       })
-    )
+    ).catch(error => {
+      console.error('Error renewing virtual challenge:', error)
+    })
   }
 }
 

@@ -48,9 +48,13 @@ export const clearTaskClusters = function() {
  * of supported filters
  */
 export const fetchTaskClusters = function(challengeId, criteria, points=25, overrideDisable=false) {
-  return function(dispatch) {
+  return async function(dispatch) {
     if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true' && !overrideDisable) {
-      return new Promise((resolve) => resolve());
+      try{
+      return await new Promise((resolve) => resolve());
+      } catch (error) {
+        console.log('Cluster failed', error )
+      }
     }
 
     // The map is either showing task clusters or bounded tasks so we can't
@@ -87,7 +91,7 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25, over
                                               CHALLENGE_INCLUDE_LOCAL
     }
 
-    return new Endpoint(
+    return await new Endpoint(
       api.challenge.taskClusters, {
         params: {points, ...searchParameters},
         json: filters.taskPropertySearch ? 

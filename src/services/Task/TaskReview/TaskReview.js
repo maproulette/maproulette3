@@ -289,8 +289,8 @@ const buildQueryFilters = function (criteria, addedColumns) {
   const type = determineType(reviewTasksType)
   const params = generateReviewSearch(criteria, reviewTasksType, userId)
 
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.tasks.reviewMetrics,
       {
         params: {reviewTasksType: type, ...params,
@@ -312,8 +312,8 @@ const buildQueryFilters = function (criteria, addedColumns) {
   const type = determineType(reviewTasksType)
   const params = generateReviewSearch(criteria, reviewTasksType, userId)
 
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.tasks.reviewTagMetrics,
       {
         schema: null,
@@ -338,7 +338,7 @@ export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) 
                                                           _get(criteria, 'excludeOtherReviewers'),
                                                           null,
                                                           _get(criteria, 'invertFields', {}))
-  return function(dispatch) {
+  return async function(dispatch) {
     if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true') {
       return new Promise((resolve) => resolve());
     }
@@ -347,7 +347,7 @@ export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) 
     const fetchId = uuidv1()
 
     dispatch(receiveReviewClusters({}, RequestStatus.inProgress, fetchId))
-    return new Endpoint(
+    return await new Endpoint(
       api.tasks.fetchReviewClusters,
       {
         schema: {tasks: [taskSchema()]},
@@ -388,17 +388,16 @@ const determineType = (reviewTasksType) => {
  * Note that this does not add the results to the redux store, but simply returns them
  */
 export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5, asMetaReview=false) {
-  return function() {
+  return async function() {
     const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                          criteria.boundingBox,
                                                          _get(criteria, 'savedChallengesOnly'),
                                                          _get(criteria, 'excludeOtherReviewers'),
                                                          null,
                                                          _get(criteria, 'invertFields', {}))
+    const params = { limit, ...searchParameters, asMetaReview }
 
-    const params = {limit, ...searchParameters, asMetaReview}
-
-    return new Endpoint(
+    return await new Endpoint(
       api.tasks.nearbyReviewTasks,
       {
         schema: [ taskSchema() ],
@@ -416,11 +415,12 @@ export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5, asM
           }
         }
         return task
-      })
-    }))
+      }),
+    })).catch(error => {
+      console.error('Error fetching nearby review tasks:', error)
+    })
   }
 }
-
 
 /**
  * Retrieve the next task to review with the given sort and filter criteria
@@ -436,20 +436,25 @@ export const loadNextReviewTask = function(criteria={}, lastTaskId, asMetaReview
                                                        null,
                                                        _get(criteria, 'invertFields', {}))
 
-  return function(dispatch) {
-    const params = {sort, order, ...searchParameters, asMetaReview}
+  return async function(dispatch) {
+    const params = { sort, order, ...searchParameters, asMetaReview }
+    
     if (_isFinite(lastTaskId)) {
       params.lastTaskId = lastTaskId
     }
-
-    return retrieveChallengeTask(dispatch, new Endpoint(
-      api.tasks.reviewNext,
-      {
-        schema: taskSchema(),
-        variables: {},
-        params,
-      }
-    ))
+  
+    try {
+      return await retrieveChallengeTask(dispatch, new Endpoint(
+        api.tasks.reviewNext,
+        {
+          schema: taskSchema(),
+          variables: {},
+          params,
+        }
+      ))
+    } catch (error) {
+      console.error('Error fetching review next task:', error)
+    }
   }
 }
 
@@ -460,14 +465,16 @@ export const loadNextReviewTask = function(criteria={}, lastTaskId, asMetaReview
  * includeMapillary to true
  */
 export const fetchTaskForReview = function(taskId, includeMapillary=false) {
-  return function(dispatch) {
-    return new Endpoint(api.task.startReview, {
+  return async function (dispatch) {
+    return await new Endpoint(api.task.startReview, {
       schema: taskSchema(),
       variables: {id: taskId},
       params: {mapillary: includeMapillary}
     }).execute().then(normalizedResults => {
       dispatch(receiveTasks(normalizedResults.entities))
       return normalizedResults
+    }).catch(error => {
+      console.error('Error fetching task for review:', error)
     })
   }
 }
@@ -476,8 +483,8 @@ export const fetchTaskForReview = function(taskId, includeMapillary=false) {
  * Remove the task review claim on this task.
  */
 export const cancelReviewClaim = function(taskId) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       api.task.cancelReview, {schema: taskSchema(), variables: {id: taskId}}
     ).execute().then(normalizedResults => {
       // Server doesn't explicitly return empty fields from JSON.
@@ -501,7 +508,7 @@ export const cancelReviewClaim = function(taskId) {
 }
 
 export const removeReviewRequest = function(challengeId, taskIds, criteria, excludeTaskIds, asMetaReview) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const filters = _get(criteria, 'filters', {})
     const searchParameters = !criteria ? {} :
       generateSearchParametersString(filters,
@@ -516,7 +523,7 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria, excl
       searchParameters.ids = taskIds.join(',')
     }
 
-    return new Endpoint(
+    return await new Endpoint(
       api.tasks.removeReviewRequest, {
         params: {...searchParameters, asMetaReview},
         json: filters.taskPropertySearch ?
@@ -538,14 +545,14 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria, excl
  *
  */
 export const completeReview = function(taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview = false, errorTags) {
-  return function(dispatch) {
-    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview, errorTags)
+  return async function(dispatch) {
+    return await updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview, errorTags)
   }
 }
 
 export const completeBundleReview = function(bundleId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview=false, errorTags) {
-  return function(dispatch) {
-    return new Endpoint(
+  return async function(dispatch) {
+    return await new Endpoint(
       asMetaReview ? api.tasks.bundled.updateMetaReviewStatus :
                      api.tasks.bundled.updateReviewStatus, {
       schema: taskBundleSchema(),
@@ -570,12 +577,12 @@ export const completeBundleReview = function(bundleId, taskReviewStatus, comment
 export const fetchReviewChallenges = function(reviewTasksType,
                                               includeTaskStatuses = null,
                                               excludeOtherReviewers = true) {
-  return function(dispatch) {
+  return async function(dispatch) {
     const type = determineType(reviewTasksType)
 
     const tStatus = includeTaskStatuses ? includeTaskStatuses.join(',') : ""
 
-    return new Endpoint(
+    return await new Endpoint(
       api.challenges.withReviewTasks,
       {schema: [challengeSchema()],
        params:{reviewTasksType: type, excludeOtherReviewers, tStatus,
@@ -599,7 +606,7 @@ export const fetchReviewChallenges = function(reviewTasksType,
   }
 }
 
-const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
+const updateTaskReviewStatus = async function(dispatch, taskId, newStatus, comment,
   tags, newTaskStatus, asMetaReview, errorTags) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
@@ -611,7 +618,7 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
       }
     }
   }))
-  return new Endpoint(
+  return await new Endpoint(
     asMetaReview ?
       api.task.updateMetaReviewStatus : api.task.updateReviewStatus,
     {schema: taskSchema(),

@@ -54,7 +54,7 @@ export class SignInButton extends Component {
   }
 
   render() {
-    if (this.props.checkingLoginStatus || this.state.clicked) {
+    if (this.state.clicked) {
       return (
         <BusySpinner
           className={classNames("mr-mx-8", {"mr-mx-20": this.props.longForm})}
