@@ -8,7 +8,6 @@ import _clone from 'lodash/clone'
 import _findIndex from 'lodash/findIndex'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
-import _find from 'lodash/find'
 import { Link } from 'react-router-dom'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { boundsWithinAllowedMaxDegrees }

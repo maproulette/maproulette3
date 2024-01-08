@@ -5,7 +5,6 @@ import { FormattedMessage, FormattedDate, injectIntl }
        from 'react-intl'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
-import _find from 'lodash/find'
 import _filter from 'lodash/filter'
 import parse from 'date-fns/parse'
 import messages from './Messages'
