@@ -5,6 +5,8 @@ import { FormattedMessage, FormattedDate, injectIntl }
        from 'react-intl'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
+import _find from 'lodash/find'
+import _filter from 'lodash/filter'
 import parse from 'date-fns/parse'
 import messages from './Messages'
 import BusySpinner from '../BusySpinner/BusySpinner'
@@ -18,6 +20,7 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithComputedMetrics from '../AdminPane/HOCs/WithComputedMetrics/WithComputedMetrics'
 import ChallengeResultList from '../ChallengePane/ChallengeResultList/ChallengeResultList'
 import { PROJECT_CHALLENGE_LIMIT } from '../../services/Project/Project'
+import { isUsableChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 
 const ProjectProgress = WithComputedMetrics(ChallengeProgress)
 
@@ -37,6 +40,9 @@ export class ProjectDetail extends Component {
         </div>
       )
     }
+    const challengeResults = _filter(this.props.challenges, (challenge) => {
+      return (isUsableChallengeStatus(challenge.status))
+    })
 
     // Does this user own (or can manage) the current project?
     const isManageable = AsManager(this.props.user).canManage(project)
@@ -58,7 +64,7 @@ export class ProjectDetail extends Component {
               <FormattedMessage
                 {...messages.challengeCount}
                 values={{
-                  count:_get(this.props, 'challenges.length', 0),
+                  count: challengeResults.length,
                   isVirtual: this.props.project.isVirtual
                 }}
               />

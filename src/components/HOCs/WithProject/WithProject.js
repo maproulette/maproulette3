@@ -7,8 +7,6 @@ import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
 import _filter from 'lodash/filter'
 import _find from 'lodash/find'
-import { isUsableChallengeStatus }
-       from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { fetchProject } from '../../../services/Project/Project'
 import { fetchProjectChallenges,
          fetchProjectChallengeActions }
@@ -42,8 +40,7 @@ const WithProject = function(WrappedComponent, options={}) {
             })
 
           return ((challenge.parent === projectId || matchingVP)
-                  && challenge.enabled
-                  && isUsableChallengeStatus(challenge.status))
+                  && challenge.enabled)
         })
     }
 
