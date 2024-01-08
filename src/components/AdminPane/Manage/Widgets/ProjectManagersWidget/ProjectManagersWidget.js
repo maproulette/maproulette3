@@ -42,10 +42,14 @@ export default class ProjectManagersWidget extends Component {
     choosingTeam: false,
   }
 
-  componentDidMount() {
-    this.props.fetchProjectManagers(this.props.project.id).then(() =>
-      this.setState({loadingManagers: false})
-    )
+  async componentDidMount() {
+    try {
+      await this.props.fetchProjectManagers(this.props.project.id)
+      this.setState({ loadingManagers: false })
+    } catch (error) {
+      console.error("Error fetching project managers:", error)
+      this.setState({ loadingManagers: false })
+    }
   }
 
   switchManagerType = newType => {
