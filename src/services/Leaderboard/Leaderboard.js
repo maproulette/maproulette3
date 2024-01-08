@@ -51,13 +51,18 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
     return cachedLeaderboard;
   }
 
-  const results = await new Endpoint(api.users.leaderboard, {params}).execute()
+  try {
+    const results = await new Endpoint(api.users.leaderboard, { params }).execute()
 
-  if (results) {
-    leaderboardCache.set({}, params, results, GLOBAL_LEADERBOARD_CACHE)
+    if (results) {
+      leaderboardCache.set({}, params, results, GLOBAL_LEADERBOARD_CACHE)
+    }
+
+    return results
+  } catch (error) {
+    console.error('Error fetching leaderboard:', error)
+    return []
   }
-
-  return results
 }
 
 /**
