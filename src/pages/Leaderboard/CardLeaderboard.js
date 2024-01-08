@@ -44,7 +44,7 @@ class CardLeaderboard extends Component {
       >
         <header className={"mr-max-w-xs mr-mx-auto mr-mb-2 " + (this.state.isHover ? 'hover-style': '')}>
           <a
-            href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
+            href={'https://www.openstreetmap.org/user/' + encodeURIComponent(leader.name)} target="_blank" rel="noreferrer"
             className="mr-block mr-w-24 mr-h-24 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-mb-4 mr-rounded-full hover-pic"
             style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
             onMouseOver={this.onHover}
@@ -55,7 +55,7 @@ class CardLeaderboard extends Component {
               <FormattedNumber value={leader.rank} />
             </span>
             <a 
-              href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer" 
+              href={'https://www.openstreetmap.org/user/' + encodeURIComponent(leader.name)} target="_blank" rel="noreferrer" 
               className="mr-text-white card-name hover-name"
               onMouseOver={this.onHover}
               onMouseLeave={this.onLeave}

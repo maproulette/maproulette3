@@ -27,7 +27,7 @@ export class FlagCommentInput extends Component {
       const challenge = this.props.challenge
       const owner = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
       const repo = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
-      const body = `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${this.props.user.osmProfile.displayName})\n\n${this.state.value}`
+      const body = `Challenge: [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${encodeURIComponent(this.props.user.osmProfile.displayName)})\n\n${this.state.value}`
       const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
         method: 'POST',
         body: JSON.stringify({
