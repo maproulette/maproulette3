@@ -108,8 +108,8 @@ export class ChallengeResultList extends Component {
       && (this.props.searchSort?.sortBy === "created"
           || _isEmpty(this.props.searchSort) 
           || this.props.location.search.includes("default"))
-    ? limitUserResults(challengeResultsUnbound)
-    : challengeResultsUnbound;
+        ? limitUserResults(challengeResultsUnbound)
+        : challengeResultsUnbound;
   
     const challengeResults = this.props.project?.id ? _filter(allChallenges, (challenge) => {
         return (isUsableChallengeStatus(challenge.status))
