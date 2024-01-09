@@ -1,6 +1,7 @@
 import format from 'date-fns/format'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import { fetchLeaderboardForUser } from '../../../services/Leaderboard/Leaderboard'
@@ -31,7 +32,7 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
       if ( this.props[userProp] &&
           (!_get(this.props[userProp], 'settings.leaderboardOptOut') ||
            _get(this.props[userProp], 'id') === _get(this.props.currentUser, 'userId'))) {
-        fetchLeaderboardForUser(this.props[userProp].id, 0, -1).then(userLeaderboard => {
+        this.props.fetchLeaderboardForUser(this.props[userProp].id, 0, -1).then(userLeaderboard => {
           this.setState({loading: false, leaderboardMetrics: userLeaderboard[0]})
         })
 
@@ -182,15 +183,14 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
                           setTasksReviewerMonthsPast={this.setTasksReviewerMonthsPast}
                           setTasksReviewerDateRange={this.setTasksReviewerDateRange}
                           loading={this.state.loading}
-                          {..._omit(this.props, ['updateLeaderboardMetrics'])} />)
+                          {..._omit(this.props, ['fetchLeaderboardForUser'])} />)
     }
   }
 }
 
 const mapStateToProps = () => ({})
 
-const mapDispatchToProps = () => ({
-})
+const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchLeaderboardForUser }, dispatch)
 
 export default (WrappedComponent, userProp="targetUser") =>
   connect(mapStateToProps, mapDispatchToProps)(WithUserMetrics(WrappedComponent, userProp))
