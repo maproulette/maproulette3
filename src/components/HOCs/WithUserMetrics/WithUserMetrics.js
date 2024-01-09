@@ -183,7 +183,7 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
                           setTasksReviewerMonthsPast={this.setTasksReviewerMonthsPast}
                           setTasksReviewerDateRange={this.setTasksReviewerDateRange}
                           loading={this.state.loading}
-                          {..._omit(this.props, ['fetchLeaderboardForUser'])} />)
+                          {..._omit(this.props, ['updateLeaderboardMetrics', 'fetchLeaderboardForUser'])} />)
     }
   }
 }
