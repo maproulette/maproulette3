@@ -25,8 +25,7 @@ export class TaskCommentInput extends Component {
 
   handleSubmit = () => {
     if (!this.state.isSubmitActionPerformed) {
-      this.setState({ isSubmitActionPerformed: true });
-      this.setState({ showingPreview: false });
+      this.setState({ isSubmitActionPerformed: true, showingPreview: false });
       this.props.submitComment();
     }
   };
@@ -40,8 +39,7 @@ export class TaskCommentInput extends Component {
   componentDidUpdate(prevProps) {
     // Update our character count as needed
     if (this.props.value !== prevProps.value) {
-      this.setState({ characterCount: _get(this.props.value, "length", 0) });
-      this.setState({ isSubmitActionPerformed: false });
+      this.setState({ characterCount: _get(this.props.value, "length", 0), isSubmitActionPerformed: false });
     }
   }
 
