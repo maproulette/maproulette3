@@ -21,8 +21,8 @@ import { fetchLeaderboard, fetchLeaderboardForUser, fetchReviewerLeaderboard,
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialOptions={}) {
-  class WithLeaderboardClass extends Component {
+const WithCurrentLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialOptions={}) {
+  class WithCurrentLeaderboardClass extends Component {
     state = {
       leaderboard: null,
       leaderboardLoading: false,
@@ -226,13 +226,14 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
                                {...this.props} />
     }
   }
-  return WithLeaderboardClass;
+  return WithCurrentLeaderboardClass;
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchLeaderboard, fetchLeaderboardForUser, fetchReviewerLeaderboard }, dispatch)
 
 
-const WithCurrentLeaderboard = (WrappedComponent) =>
-  connect(null, mapDispatchToProps)(WithLeaderboard(WrappedComponent))
+const WithLeaderboard = (WrappedComponent) =>
+  connect(null, mapDispatchToProps)(WithCurrentLeaderboard(WrappedComponent))
 
-export default WithCurrentLeaderboard
+export default WithLeaderboard
+
