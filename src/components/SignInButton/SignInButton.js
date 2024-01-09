@@ -22,6 +22,14 @@ export class SignInButton extends Component {
     verifyingToken: false
   }
 
+  componentDidMount = () => {
+    const storedState = localStorage.getItem('state');
+
+    if (storedState) {
+      this.setState({ clicked: true })
+    }
+  }
+
   handleSignin = () => {
     //clear stale locks in localStorage
     localStorage.clear();
@@ -46,7 +54,7 @@ export class SignInButton extends Component {
   }
 
   render() {
-    if (this.state.clicked) {
+    if (this.props.checkingLoginStatus || this.state.clicked) {
       return (
         <BusySpinner
           className={classNames("mr-mx-8", {"mr-mx-20": this.props.longForm})}
