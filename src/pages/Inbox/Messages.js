@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Group by Task",
   },
 
+  challengeGroupingNotice: {
+    id: "Inbox.controls.challengeGroupingNotice.label",
+    defaultMessage: "Challenge comments group by challenge name.",
+  },
+
   manageSubscriptionsLabel: {
     id: "Inbox.controls.manageSubscriptions.label",
     defaultMessage: "Manage Subscriptions",

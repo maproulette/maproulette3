@@ -214,24 +214,27 @@ const columns = tableProps => [{
   minWidth: 100,
   maxWidth: 125,
   filterable: true,
-  Cell: ({ value, row }) => (
-    <span
-      className={classNames(
-        "mr-cursor-pointer",
-        {"mr-line-through mr-opacity-50": row._original.isRead}
-      )}
-      onClick={() => tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])}
-    >
-      {value}
-      {tableProps.groupByTask && tableProps.threads[value].length > 1 &&
-       <span
-         className="mr-ml-2 mr-font-normal mr-text-white mr-text-xs mr-w-5 mr-h-5 mr-rounded-full mr-inline-flex mr-items-center mr-justify-center mr-bg-teal"
-       >
-         {tableProps.threads[value].length}
-       </span>
-      }
-    </span>
-  ),
+  Cell: ({ value, row }) => {
+    const displayId = value == row._original.challengeName ? '' : value
+    return (
+      <span
+        className={classNames(
+          "mr-cursor-pointer",
+          {"mr-line-through mr-opacity-50": row._original.isRead}
+        )}
+        onClick={() => tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])}
+      >
+        {displayId}
+        {tableProps.groupByTask && tableProps.threads[value].length > 1 &&
+        <span
+          className="mr-ml-2 mr-font-normal mr-text-white mr-text-xs mr-w-5 mr-h-5 mr-rounded-full mr-inline-flex mr-items-center mr-justify-center mr-bg-teal"
+        >
+          {tableProps.threads[value].length}
+        </span>
+        }
+      </span>
+    )
+  },
 }, {
   id: 'notificationType',
   Header: tableProps.intl.formatMessage(messages.notificationTypeLabel),
