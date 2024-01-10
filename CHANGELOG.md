@@ -7,6 +7,23 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.4] - 2023-1-9
+Realease with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
+
+## What's Changed
+* General documentation updates and fixes by @jschwarz2030 in (https://github.com/maproulette/docs/pull/30)
+* Add setState to prevent submitting twice before character count is reset by @CollinBeczak in  (https://github.com/maproulette/maproulette3/pull/2215)
+* Add grouping for challenge comment notifications  by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2216)
+* Remove conflicting validation requirements by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2219)
+* Fix project metrics on finished challenges by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2227)
+* Add catches to leaderboard by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2228)
+* Update sign-in button loading status conditions by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2230)
+* Convert osm profile links in flagged challenge comments to be URI encoded by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2229)
+* Improve 'updateLocations' Task for Database Efficiency by @ljdelight in (https://github.com/maproulette/maproulette-backend/pull/1096)
+* Require user for leaderboard and topChallenges by @ljdelight in (https://github.com/maproulette/maproulette-backend/pull/1098)
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.3...v3.14.4
+
 ## [v3.14.3] - 2023-12-20
 Realease with [maproulette-backend_v4.4.12](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.12)
 
