@@ -40,8 +40,24 @@ class TasksReviewChallenges extends Component {
 
   render() {
     if (!this.props.challenges) {
-      return <BusySpinner />
-    }
+      return (
+        <div className="mr-mt-8">
+          <h3 className="mr-flex mr-justify-between mr-items-center mr-ml-8">
+            <span>
+              <FormattedMessage {...messages.chooseFilter} />
+            </span>
+    
+            <div
+              className="mr-inline-block mr-mx-4 mr-text-green-lighter mr-text-sm hover:mr-text-white mr-cursor-pointer"
+              onClick={() => this.props.selectProject('')}
+            >
+              <FormattedMessage {...messages.viewAllTasks} />
+            </div>
+          </h3>
+          <BusySpinner />
+        </div>
+      )
+    }    
 
     const filteredChallenges = _filter(this.props.challenges,
       challenge => this.matchesQuery(challenge.name, 'challenge'))
