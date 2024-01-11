@@ -1044,7 +1044,7 @@ export const fetchChallenges = function (
         name
       } = challengeData;
 
-      const instructionsLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_LENGTH || 150
+      const instructionsMinLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
       if (
         challengeData.parent != undefined && 
         (
@@ -1066,7 +1066,7 @@ export const fetchChallenges = function (
           instruction.length < 150
         ) {
           errorMessage = AppErrors.challengeSaveFailure.saveInstructionsFailure;
-          errorMessage.values = { details: `${instructionsLength}` };
+          errorMessage.values = { minLength: `${instructionsMinLength}` };
         } else {
           errorMessage = AppErrors.challengeSaveFailure.saveDetailsFailure;
         }

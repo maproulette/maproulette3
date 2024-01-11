@@ -1,7 +1,7 @@
 import messages from '../Messages'
 
 export const jsSchema = (intl) => {
-  const instructionsLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_LENGTH || 150
+  const instructionsMinLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -9,8 +9,8 @@ export const jsSchema = (intl) => {
       instruction: {
         title: intl.formatMessage(messages.instructionLabel),
         type: "string",
-        minLength: instructionsLength,
-        description: intl.formatMessage(messages.instructionsDescription, {details: `${instructionsLength}`})
+        minLength: instructionsMinLength,
+        description: intl.formatMessage(messages.instructionsDescription, {minLength: `${instructionsMinLength}`})
       },
     },
   }
