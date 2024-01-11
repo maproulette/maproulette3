@@ -764,7 +764,7 @@ will not be able to make sense of it.
   },
 
   instructionsDescription: {
-    id: "Admin.EditChallenge.form.instructionsDescriptiojn",
+    id: "Admin.EditChallenge.form.instructionsDescription",
     defaultMessage: "Instructions must be longer than {details} characters.",
   },
 

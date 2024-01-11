@@ -202,7 +202,7 @@ export default defineMessages({
     defaultMessage: "The 'DESCRIPTION OF YOUR CHALLENGE' field is required.",
   },
   challengeSaveInstructionFailure: {
-    id: "Errors.challengeSaveFailure.challengeSaveInstructionFailurke",
+    id: "Errors.challengeSaveFailure.challengeSaveInstructionFailure",
     defaultMessage: "The 'DETAILED INSTRUCTIONS FOR MAPPERS' field must have more than {details} characters.",
   },
   challengeSaveEditPolicyAgreementFailure: {
