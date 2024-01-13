@@ -13,6 +13,7 @@ import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
 import layerMessages from '../LayerToggle/Messages'
+import { IntlProvider } from 'react-intl'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
 const HIGHLIGHT_SIMPLESTYLE = {
@@ -33,7 +34,13 @@ const TaskFeatureLayer = props => {
   const propertyList = (featureProperties, onBack) => {
     const contentElement = document.createElement('div')
     ReactDOM.render(
-      <PropertyList featureProperties={featureProperties} onBack={onBack} />,
+      <IntlProvider key={props.intl.locale} 
+                    locale={props.intl.locale} 
+                    messages={props.intl.messages}
+                    textComponent="span" 
+      >
+        <PropertyList featureProperties={featureProperties} onBack={onBack} />
+      </IntlProvider>,
       contentElement
     )
     return contentElement
