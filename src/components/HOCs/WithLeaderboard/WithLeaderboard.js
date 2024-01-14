@@ -210,8 +210,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
     render() {
       const moreResults = this.state.leaderboard ? this.state.showingCount <= this.state.leaderboard.length : true
 
-      return <WrappedComponent key={this.state.fetchId}
-                               {..._omit(this.props, ['fetchLeaderboard', 'fetchLeaderboardForUser', 'fetchReviewerLeaderboard'])}
+      return <WrappedComponent {..._omit(this.props, ['fetchLeaderboard', 'fetchLeaderboardForUser', 'fetchReviewerLeaderboard'])}
                                leaderboard={this.state.leaderboard}
                                leaderboardLoading={this.state.leaderboardLoading}
                                monthsPast={this.monthsPast()}
