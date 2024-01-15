@@ -7,11 +7,19 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.5] - 2023-1-14
+Realease with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
+
+## What's Changed
+* Add environment variable to disable country leaderboard filter selctor by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2237)
+* fix data drop issue in WithLeaderboard component and restore leaderboards initial data sorted by "All Time" by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2235)
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.4...v3.14.5
+
 ## [v3.14.4] - 2023-1-9
 Realease with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
-* General documentation updates and fixes by @jschwarz2030 in (https://github.com/maproulette/docs/pull/30)
 * Add setState to prevent submitting twice before character count is reset by @CollinBeczak in  (https://github.com/maproulette/maproulette3/pull/2215)
 * Add grouping for challenge comment notifications  by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2216)
 * Remove conflicting validation requirements by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2219)
