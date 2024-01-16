@@ -94,38 +94,29 @@ export default class AutosuggestTextBox extends Component {
    * @private
    */
   dropdownItems(getItemProps) {
-    const isChecked = (result) => {
-      if (result.id === FILTER_SEARCH_ALL && this.props.multiselect?.includes(FILTER_SEARCH_ALL)) {
-        return true
-      }
-
-      if (this.props.multiselect?.includes(result.id)) {
-        return true
-      }
-
-      return false
-    }
+    const isChecked = (result) =>
+      (result.id === FILTER_SEARCH_ALL || this.props.multiselect?.includes(result.id)) ||
+      false
 
     const generateResult = (result, className = "", index) => {
       if (this.state.highlightResult === index) {
         className += this.props.highlightClassName
       }
 
-      if (!_isEmpty(result)) {
-        return (
+      return !_isEmpty(result) ? (
           <a
             {...getItemProps({
               key: this.props.resultKey(result),
               item: result,
               className: classNames(
                 className,
-                (this.props.resultClassName ? this.props.resultClassName(result) : null)
+              this.props.resultClassName ? this.props.resultClassName(result) : null
               ),
             })}
           >
             <div className="mr-flex mr-items-center">
-              {this.props.multiselect && result.id !== FILTER_SEARCH_TEXT
-                ? <input 
+            {this.props.multiselect && result.id !== FILTER_SEARCH_TEXT && (
+              <input
                     type="checkbox"
                     className="mr-checkbox-toggle mr-mr-2"
                     id={result.id}
@@ -133,14 +124,11 @@ export default class AutosuggestTextBox extends Component {
                     checked={isChecked(result)}
                     readOnly
                   />
-                : null
-              }
+            )}
               {this.props.resultLabel(result)}
             </div>
           </a>
-        )
-      }
-      else return null
+      ) : null
     }
 
     let items = []
