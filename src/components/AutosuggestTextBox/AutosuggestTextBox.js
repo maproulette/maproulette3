@@ -136,8 +136,8 @@ export default class AutosuggestTextBox extends Component {
     const preferredResults = this.getPreferredResults()
     
     const reorderedSearchResults = searchResults.sort((a, b) => {
-      if (a.id === (FILTER_SEARCH_ALL || this.props.inputValue)) return -1
-      if (b.id === (FILTER_SEARCH_ALL || this.props.inputValue)) return 1
+      if(a.id === FILTER_SEARCH_ALL || a.name === this.props.inputValue) return -1 
+      if(b.id === FILTER_SEARCH_ALL || b.name === this.props.inputValue) return 1 
       return isChecked(b) - isChecked(a)
     })
 
