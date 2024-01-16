@@ -146,13 +146,20 @@ export default class AutosuggestTextBox extends Component {
     let items = []
     const searchResults = this.getSearchResults()
     const preferredResults = this.getPreferredResults()
+    
+    const reorderedSearchResults = searchResults.sort((a, b) => {
+      if (a.id === (FILTER_SEARCH_ALL || this.props.inputValue)) return -1
+      if (b.id === (FILTER_SEARCH_ALL || this.props.inputValue)) return 1
+      return isChecked(b) - isChecked(a)
+    })
+
     if (!_isEmpty(preferredResults)) {
       let className = "mr-font-medium"
-      items = items.concat(_map(preferredResults,
+      items = items.concat(_map(reorderedSearchResults,
         (result, index) => {
           // Add a border bottom to the last entry if there are more
           // search results.
-          if (index === preferredResults.length - 1 && searchResults.length > 0) {
+          if (index === reorderedSearchResults.length - 1 && reorderedSearchResults.length > 0) {
             className += " mr-border-b-2 mr-border-white-50 mr-mb-2 mr-pb-2"
           }
 
