@@ -1115,33 +1115,37 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'controls',
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
+    minWidth: 90,
     maxWidth: 120,
-    minWidth: 110,
-    Cell: ({row}) =>{
-      const linkTo =`/challenge/${row._original.parent.id}/task/${row._original.id}/review`
-      let action =
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+    Cell: ({ row }) => {
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}/review`
+      let action = (
+        <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
           <FormattedMessage {...messages.reviewTaskLabel} />
-        </div>
-
+        </Link>
+      )
+  
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
-          action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+          action = (
+            <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
-            </div>
-        }
-        else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
-          action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+            </Link>
+          )
+        } else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
+          action = (
+            <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
               <FormattedMessage {...messages.resolveTaskLabel} />
-            </div>
+            </Link>
+          )
         }
       }
-
-      return <div className="row-controls-column">
-              {action}
-            </div>
+  
+      return (
+        <div className="row-controls-column">
+          {action}
+        </div>
+      )
     }
   }
 
@@ -1149,23 +1153,28 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'controls',
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
-    maxWidth: 110,
-    Cell: ({row}) =>{
+    minWidth: 90,
+    maxWidth: 120,
+    Cell: ({row}) => {
       let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
-      let message = <FormattedMessage {...messages.viewTaskLabel} />
-
-      // The mapper needs to rereview a contested task.
-      if (row._original.reviewStatus === TaskReviewStatus.disputed ||
-          row._original.metaReviewStatus === TaskReviewStatus.rejected) {
-        linkTo += "/review"
-        message = <FormattedMessage {...messages.resolveTaskLabel} />
-      }
-
-      return <div className="row-controls-column">
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
-          {message}
+      let message = row._original.reviewStatus === TaskReviewStatus.rejected ?
+        <FormattedMessage {...messages.fixTaskLabel} /> :
+        <FormattedMessage {...messages.viewTaskLabel} />
+  
+      return (
+        <div className="row-controls-column mr-links-green-lighter">
+          <Link to={linkTo}>
+            {message}
+          </Link>
+          {!props.metaReviewEnabled &&
+            row._original.reviewStatus !== TaskReviewStatus.needed &&
+            row._original.reviewedBy && row._original.reviewedBy.id !== props.user?.id &&
+            <Link to={`${linkTo}/review`} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+              <FormattedMessage {...messages.reviewFurtherTaskLabel} />
+            </Link>
+          }
         </div>
-      </div>
+      )
     }
   }
 
@@ -1177,31 +1186,34 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     minWidth: 110,
     Cell: ({row}) =>{
       const linkTo =`/challenge/${row._original.parent.id}/task/${row._original.id}/meta-review`
-      let action =
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+      let action =(
+        <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
           <FormattedMessage {...messages.metaReviewTaskLabel} />
-        </div>
-
+        </Link>
+      )
+  
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
-          action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+          action = (
+            <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
-            </div>
-        }
+            </Link>
+          )
+        } 
         else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
-          action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+          action = (
+            <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
               <FormattedMessage {...messages.resolveTaskLabel} />
-            </div>
+            </Link>
+          )
         }
       }
-
+  
       return <div className="row-controls-column">
-              {action}
-            </div>
+          {action}
+        </div>
     }
-  }
+  }  
 
   columns.mapperControls = {
     id: 'controls',
