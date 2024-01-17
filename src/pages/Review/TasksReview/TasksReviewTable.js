@@ -1115,8 +1115,8 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'controls',
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
-    minWidth: 90,
     maxWidth: 120,
+    minWidth: 110,
     Cell: ({ row }) => {
       const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}/review`
       let action = (
@@ -1124,7 +1124,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           <FormattedMessage {...messages.reviewTaskLabel} />
         </Link>
       )
-  
+
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action = (
@@ -1140,7 +1140,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           )
         }
       }
-  
+
       return (
         <div className="row-controls-column">
           {action}
@@ -1153,14 +1153,13 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'controls',
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
-    minWidth: 90,
-    maxWidth: 120,
+    minWidth: 110,
     Cell: ({row}) => {
       let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
       let message = row._original.reviewStatus === TaskReviewStatus.rejected ?
         <FormattedMessage {...messages.fixTaskLabel} /> :
         <FormattedMessage {...messages.viewTaskLabel} />
-  
+
       return (
         <div className="row-controls-column mr-links-green-lighter">
           <Link to={linkTo}>
