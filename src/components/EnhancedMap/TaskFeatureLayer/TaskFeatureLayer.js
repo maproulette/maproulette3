@@ -80,8 +80,10 @@ const TaskFeatureLayer = props => {
                 Object.assign(styleableFeature.markerSimplestyles(layer), HIGHLIGHT_SIMPLESTYLE)
               )
               popup.on('remove', function() {
-                // Restore original styling when popup closes
-                styleableFeature.popLeafletLayerSimpleStyles(layer)
+                if (layer && layer._leaflet_events) {
+                  // Restore original styling when popup closes
+                  styleableFeature.popLeafletLayerSimpleStyles(layer)
+                }
               })
               popup.openOn(map)
             })
