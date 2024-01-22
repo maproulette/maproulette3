@@ -6,7 +6,7 @@ import Intro from './Intro'
 import Instructions from './Instructions'
 import Featured from './Featured'
 import MetaDecorator from '../../utils/metaDecorator'
-import Image from '../../../public/assets/images/favicons/android-chrome-512x512.png'
+import Image from '../../static/images/bg-map@2x.jpg'
 
 export class Home extends Component {
   render() {

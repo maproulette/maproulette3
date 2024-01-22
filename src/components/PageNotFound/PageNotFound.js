@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import messages from './Messages'
 import Illustration404 from '../../static/images/404-illustration.svg'
 import MetaDecorator from '../../utils/metaDecorator'
-import Image from '../../../public/assets/images/favicons/android-chrome-512x512.png'
+import Image from '../../static/images/bg-map@2x.jpg'
 
 /**
  * PageNotFound displays a 404 message.
