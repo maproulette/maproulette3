@@ -5,6 +5,7 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser';
 import WithCurrentProject from '../AdminPane/HOCs/WithCurrentProject/WithCurrentProject';
 import WithCurrentChallenge from '../AdminPane/HOCs/WithCurrentChallenge/WithCurrentChallenge';
 import { injectIntl } from 'react-intl';
+import Image from '../../static/images/bg-highway.jpg'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 
@@ -69,6 +70,17 @@ export const HeadTitle = (props) => {
   return (
     <Helmet>
       <title>{formatTitle(props)}</title>
+      <meta property="og:title" content={formatTitle(props)} />
+      <meta name="description" content={props.challenge ? props.challenge?.description: "Navigate to Maproulette.org"} />
+      <meta property="og:description" content={"description"} />
+      <meta property="og:image" content={Image} />
+      <meta
+        property="og:url"
+        content={window.location.pathname + window.location.search}
+      />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:image:alt" content={"maproulette image"} />
+      <meta name="twitter:site" content={""} />
     </Helmet>
   )
 }
