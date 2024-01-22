@@ -61,26 +61,31 @@ export const formatTitle = (props) => {
         return capitalize(param)
       }
     })
-    const newTitle = _isEmpty(pathArr) ? REACT_APP_TITLE : REACT_APP_TITLE + ' - ' + pathArr.join(' - ')
+
+    pathArr.reverse();
+
+    const newTitle = _isEmpty(pathArr) ? REACT_APP_TITLE : pathArr.join(' - ') + ' - ' +  REACT_APP_TITLE
     return newTitle
   }
 }
 
 export const HeadTitle = (props) => {
+
   return (
     <Helmet>
       <title>{formatTitle(props)}</title>
-      <meta property="og:title" content={formatTitle(props)} />
-      <meta name="description" content={props.challenge ? props.challenge?.description: "Navigate to Maproulette.org"} />
-      <meta property="og:description" content={"description"} />
-      <meta property="og:image" content={Image} />
-      <meta
-        property="og:url"
-        content={window.location.pathname + window.location.search}
-      />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:image:alt" content={"maproulette image"} />
-      <meta name="twitter:site" content={""} />
+      <meta name="title" content="MapRoulette" />
+      <meta name="description" content="Description" />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://staging.maproulette.org/challenge/40012/task/169368684" />
+      <meta property="og:title" content="MapRoulette" />
+      <meta property="og:description" content="" />
+      <meta property="og:image" content="https://metatags.io/images/meta-tags.png" />
+      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:url" content="https://staging.maproulette.org/challenge/40012/task/169368684" />
+      <meta property="twitter:title" content="MapRoulette" />
+      <meta property="twitter:description" content="twitter description" />
+      <meta property="twitter:image" content="https://metatags.io/images/meta-tags.png" />
     </Helmet>
   )
 }

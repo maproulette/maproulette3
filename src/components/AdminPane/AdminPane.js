@@ -131,10 +131,10 @@ export const CustomRoute = ({ component: Component, ...rest }) => {
       render={props => {
         return (
           <>
-            <HeadTitle />
+            <HeadTitle {...props} />
             <Component {...props} />
           </>
-
+          
         )
       }} />
   )
