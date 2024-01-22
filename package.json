@@ -112,6 +112,7 @@
     "postcss-import": "^14.0.2",
     "postcss-nested": "^5.0.6",
     "postcss-simple-vars": "^6.0.3",
+    "react-snap": "^1.23.0",
     "react-test-renderer": "^16.2.0",
     "redux-mock-store": "^1.4.0",
     "shelljs": "^0.8.5",
@@ -138,7 +139,8 @@
     "test": "react-scripts test --resetMocks=false --detectOpenHandles",
     "test:cov": "react-scripts test --coverage --resetMocks=false",
     "test:cov-full": "react-scripts test --coverage --watchAll --resetMocks=false",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postbuild": "react-snap"
   },
   "browserslist": [
     ">0.2%",

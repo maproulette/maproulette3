@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import { hydrate, render } from 'react-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { Provider } from 'react-redux'
@@ -99,8 +99,7 @@ store.dispatch(
   error => console.log(error)
 ).then(() => store.dispatch(popFetchChallenges(-1)))
 
-// Render the app
-ReactDOM.render(
+const APP = (
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <ApolloProvider client={graphqlClient}>
@@ -112,9 +111,15 @@ ReactDOM.render(
       </ApolloProvider>
     </Provider>
     <ReactQueryDevtools initialIsOpen={false} />
-  </QueryClientProvider>,
-  document.getElementById('root')
+  </QueryClientProvider>
 )
+
+const rootElement = document.getElementById('root')
+if (rootElement.hasChildNodes()) {
+  hydrate(APP, rootElement)
+} else {
+  render(APP, rootElement)
+}
 
 if (!_isEmpty(process.env.REACT_APP_TITLE)) {
   document.title = process.env.REACT_APP_TITLE
