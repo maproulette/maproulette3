@@ -73,7 +73,7 @@ export const getFilterIds = (search, param) => {
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class TaskReviewTable extends Component {
-  componentIsMounted: false
+  componentIsMounted = false
 
   state = {
     displayMap: localStorage.getItem('displayMap') === 'true' ? true : false,    
@@ -320,7 +320,9 @@ export class TaskReviewTable extends Component {
             <li>
               <button
                 className="mr-text-current"
-                onClick={() => this.setState({showConfigureColumns: true})}
+                onClick={() => {
+                  this.setState({showConfigureColumns: true}) 
+                  dropdown.toggleDropdownVisible()}}
               >
                 <FormattedMessage {...messages.configureColumnsLabel} />
               </button>
@@ -1263,7 +1265,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         <InTableTagFilter
           {...props}
           onChange={onChange}
-          value={_get(filter, 'value')}
+          value={filter ? _get(filter, 'value') : ''}
         />
       )
     }

@@ -15,7 +15,7 @@
     .rt-tr {
       @apply mr-text-left;
     }
-
+    
     .rt-th,
     .rt-tb {
       @apply mr-outline-none mr-border-none mr-p-4 mr-text-white mr-text-xs mr-font-medium mr-uppercase mr-tracking-wide;

@@ -19,10 +19,10 @@ import _reverse from 'lodash/reverse'
 import _keys from 'lodash/keys'
 import _concat from 'lodash/concat'
 import _filter from 'lodash/filter'
-import _cloneDeep from 'lodash/cloneDeep'
 import _split from 'lodash/split'
 import _isEmpty from 'lodash/isEmpty'
 import _merge from 'lodash/merge'
+import _pick from 'lodash/pick'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
@@ -97,6 +97,8 @@ export class TaskAnalysisTableInternal extends Component {
       direction: tableState.sorted[0].desc ? "DESC" : "ASC",
     }
 
+    console.log('tableState', tableState)
+
     const filters = {}
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
 
@@ -104,7 +106,9 @@ export class TaskAnalysisTableInternal extends Component {
       boundingBox: this.props.boundingBox,
       includeTags: !!_get(this.props.addedColumns, 'tags')})
 
-    this.setState({lastTableState: _cloneDeep(tableState)})
+    // Use pick instead of cloneDeep, as cloning the entire tableState seems to cause an error
+    // when any column with a "makeInvertable" header is present.
+    this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
   }
 
   configureColumns() {
@@ -148,6 +152,7 @@ export class TaskAnalysisTableInternal extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // console.log(this.state)
     // If we've added the "tag" column, we need to update the table to fetch
     // the tag data.
     if (!_get(prevProps.addedColumns, 'tags') &&
@@ -227,6 +232,29 @@ export class TaskAnalysisTableInternal extends Component {
           <ReactTable
             data={data}
             columns={columns}
+            FilterComponent={({ filter, onChange }) => {
+              const filterValue = filter ? filter.value : ''
+              const clearFilter = () => onChange('')
+              return (
+                <div className='mr-space-x-1'>
+                  <input
+                    type="text"
+                    style={{
+                      width: '100%',
+                    }}
+                    value={filterValue}
+                    onChange={event => {
+                      console.log(event.target.value)
+                      onChange(event.target.value)
+                    }}
+                  />
+                  {filterValue && <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+                    <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+                  </button>}
+                </div>
+                )
+              }
+            }
             SubComponent={props =>
               <ViewTaskSubComponent taskId={props.original.id} />
             }
@@ -247,6 +275,7 @@ export class TaskAnalysisTableInternal extends Component {
               return {style: {position: "inherit", overflow: "inherit"}}}
             }
             onFilteredChange={filtered => {
+              console.log(filtered)
               this.setState({ filtered })
               if (this.fetchData) {
                 this.fetchData()
@@ -710,7 +739,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
           {...props}
           preferredTags={preferredTags}
           onChange={onChange}
-          value={_get(filter, 'value')}
+          value={_get(filter, 'value') ?? ""}
         />
       )
     }

@@ -85,6 +85,7 @@ export class ReviewTasksDashboard extends Component {
 
     if (!this.state.filterSelected[this.state.showType]) {
       if (_get(this.props.history, 'location.search')) {
+        console.log('search filter string from url',buildSearchCriteriafromURL(this.props.history.location.search))
         this.setSelectedFilters(
           buildSearchCriteriafromURL(this.props.history.location.search)
         )
@@ -102,6 +103,7 @@ export class ReviewTasksDashboard extends Component {
 
     // If our path params have changed we need to update the default filters
     if (!_isEqual(this.props.location.search, prevProps.location.search)) {
+      console.log('search filter string from url',buildSearchCriteriafromURL(this.props.history.location.search))
       this.setSelectedFilters(
         buildSearchCriteriafromURL(this.props.history.location.search), true
       )
