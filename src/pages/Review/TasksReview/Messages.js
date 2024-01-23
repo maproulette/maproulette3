@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Toggle Map",
   },
 
+  clearFiltersLabel: {
+    id: "Review.TaskAnalysisTable.clearFilters",
+    defaultMessage: "Clear Filters"
+  },
+
   startReviewing: {
     id: "Review.TaskAnalysisTable.startReviewing",
     defaultMessage: "Review these Tasks",

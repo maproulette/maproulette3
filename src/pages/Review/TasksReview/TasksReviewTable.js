@@ -125,7 +125,7 @@ export class TaskReviewTable extends Component {
     }
     
     if (this.componentIsMounted) {
-      this.setState({lastTableState: _pick(tableState, ["sorted", "filtered"])})
+      this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
       this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
         boundingBox: this.props.reviewCriteria.boundingBox,
         includeTags: !!_get(this.props.addedColumns, 'tags')})
@@ -284,7 +284,7 @@ export class TaskReviewTable extends Component {
       <Dropdown className="mr-dropdown--right"
           dropdownButton={dropdown => (
             <button onClick={dropdown.toggleDropdownVisible}
-              className="mr-text-green-lighter mr-mr-4">
+              className="mr-text-green-lighter hover:mr-text-white mr-transition-colors">
             <SvgSymbol
               sym="filter-icon"
               viewBox="0 0 20 20"
@@ -309,7 +309,7 @@ export class TaskReviewTable extends Component {
       <Dropdown className="mr-dropdown--right"
         dropdownButton={dropdown => (
           <button onClick={dropdown.toggleDropdownVisible}
-            className="mr-text-green-lighter">
+            className="mr-text-green-lighter hover:mr-text-white mr-transition-colors">
             <SvgSymbol sym="cog-icon"
               viewBox="0 0 20 20"
               className="mr-fill-current mr-w-5 mr-h-5" />
@@ -363,6 +363,20 @@ export class TaskReviewTable extends Component {
           </ul>
         }
       />
+    )
+  }
+
+  clearFiltersControl = () => {
+    return (
+      <div className='mr-pb-2'>
+      <button className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
+        onClick={() => this.props.clearFilterCriteria()}>
+        <SvgSymbol sym="close-icon"
+          viewBox='0 0 20 20'
+          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+        <FormattedMessage {...messages.clearFiltersLabel} />
+      </button>
+      </div>
     )
   }
 
@@ -522,8 +536,9 @@ export class TaskReviewTable extends Component {
                 >
                   <FormattedMessage {...messages.refresh} />
                 </button>
-                <div className="mr-float-right mr-mt-3 mr-ml-3">
-                  <div className="mr-flex mr-justify-start mr-ml-4">
+                <div className="mr-float-right mr-mt-2 mr-ml-3">
+                  <div className="mr-flex mr-justify-start mr-ml-4 mr-items-center mr-space-x-4">
+                    {this.clearFiltersControl()}
                     {this.filterDropdown(this.props.reviewTasksType)}
                     {this.gearDropdown(this.props.reviewTasksType)}
                   </div>
@@ -575,9 +590,11 @@ export class TaskReviewTable extends Component {
                         onChange(event.target.value)
                       }}
                     />
-                    {filterValue && <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
-                      <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
-                    </button>}
+                    {filterValue && (
+                      <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+                        <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+                      </button>
+                    )}
                   </div>
                   )
                 }
@@ -891,8 +908,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       if (typeof mappedOn === "string" && mappedOn !== "") {
         mappedOn = parse(mappedOn)
       }
+
+      const clearFilter = () => props.setFiltered("mappedOn", null)
+      
       return (
-        <div>
+        <div className='mr-space-x-1'>
           <IntlDatePicker
               selected={mappedOn}
               onChange={(value) => {
@@ -900,6 +920,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               }}
               intl={props.intl}
           />
+          {mappedOn && (
+            <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          )}
         </div>
       )
     },
@@ -931,8 +956,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
         reviewedAt = parse(reviewedAt)
       }
+
+      const clearFilter = () => props.setFiltered("reviewedAt", null)
+
       return (
-        <div>
+        <div className='mr-space-x-1'>
           <IntlDatePicker
               selected={reviewedAt}
               onChange={(value) => {
@@ -940,6 +968,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               }}
               intl={props.intl}
           />
+          {reviewedAt && (
+            <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          )}
         </div>
       )
     },

@@ -175,6 +175,10 @@ export class ReviewTasksDashboard extends Component {
     })
   }
 
+  clearFilters = () => {
+    this.setSelectedFilters({}, true)
+  }
+
   changeTab = (tab) => {
     this.props.history.push({
       pathname: `/review/${tab}`
@@ -337,6 +341,7 @@ export class ReviewTasksDashboard extends Component {
             reviewTasksSubType={this.state.showSubType}
             defaultFilters={this.state.filterSelected[showType]}
             clearSelected={this.clearSelected}
+            clearFilters={this.clearFilters}
             pageId={showType}
             metaReviewEnabled={metaReviewEnabled}
           />

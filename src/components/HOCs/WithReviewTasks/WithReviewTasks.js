@@ -144,6 +144,10 @@ export const WithReviewTasks = function(WrappedComponent) {
       }
     }
 
+    clearCriteria = () => {
+      this.props.clearFilters()
+    }
+
     updateURL(props, criteria) {
       let searchCriteria = _merge({filters:{}}, criteria)
 
@@ -238,6 +242,7 @@ export const WithReviewTasks = function(WrappedComponent) {
                           updateReviewTasks={(criteria) => this.update(this.props, criteria)}
                           refresh={this.refresh}
                           reviewCriteria={criteria}
+                          clearFilterCriteria={this.clearCriteria}
                           pageSize={criteria.pageSize}
                           changePageSize={this.changePageSize}
                           setFiltered={this.setFiltered}
