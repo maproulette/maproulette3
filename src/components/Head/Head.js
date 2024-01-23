@@ -69,11 +69,9 @@ export const formatTitle = (props) => {
 }
 
 export const HeadTitle = (props) => {
-
   return (
     <Helmet>
       <title>{formatTitle(props)}</title>
-      <meta name="title" content="MapRoulette" />
     </Helmet>
   )
 }

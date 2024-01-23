@@ -26,7 +26,6 @@ import './theme.scss'
 import './index.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
-import HeadTitle from './components/Head/Head';
 
 // Setup Apollo graphql client
 const graphqlClient = new ApolloClient({
@@ -107,7 +106,6 @@ ReactDOM.render(
       <ApolloProvider client={graphqlClient}>
         <ConnectedIntl>
           <Router history={routerHistory}>
-            <HeadTitle />
             <App />
           </Router>
         </ConnectedIntl>

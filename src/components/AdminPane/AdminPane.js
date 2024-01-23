@@ -18,9 +18,9 @@ import ProjectDashboard from "./Manage/ProjectDashboard/ProjectDashboard";
 import ChallengeDashboard from "./Manage/ChallengeDashboard/ChallengeDashboard";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import EmailRequirementNotice from "./Manage/EmailRequirementNotice/EmailRequirementNotice";
+import HeadTitle from "../Head/Head";
 import "./Manage/Widgets/widget_registry.js";
 import "./AdminPane.scss";
-import { HeadTitle } from "../Head/Head";
 
 /**
  * AdminPane is the top-level component for administration functions. It has a
@@ -131,10 +131,9 @@ export const CustomRoute = ({ component: Component, ...rest }) => {
       render={props => {
         return (
           <>
-            <HeadTitle /> 
+            <HeadTitle />
             <Component {...props} />
           </>
-          
         )
       }} />
   )

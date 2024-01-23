@@ -36,6 +36,7 @@ import LoadRandomChallengeTask
        from './components/LoadRandomChallengeTask/LoadRandomChallengeTask'
 import LoadRandomVirtualChallengeTask
        from './components/LoadRandomVirtualChallengeTask/LoadRandomVirtualChallengeTask'
+import HeadTitle from './components/Head/Head'
 import Navbar from './components/Navbar/Navbar'
 import SystemNotices from './components/SystemNotices/SystemNotices'
 import FundraisingNotices from './components/FundraisingNotices/FundraisingNotices'
@@ -48,7 +49,6 @@ import MobileNotSupported
 import CheckForToken from './components/CheckForToken/CheckForToken'
 import './components/Widgets/widget_registry'
 import './App.scss'
-import { HeadTitle } from './components/Head/Head'
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
@@ -169,7 +169,6 @@ export const CachedRoute = ({ component: Component, ...rest }) => {
             <HeadTitle />
             <Component {...props} />
           </>
-          
         )
       }} />
   )
