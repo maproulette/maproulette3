@@ -118,7 +118,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
      }
 
      updateIncludedFilters(props, criteria = {}) {
-        console.log('props in updateIncludedFilters', props)
        const typedCriteria = _merge({}, criteria, _cloneDeep(this.state.criteria))
        typedCriteria.filters["status"] = _keys(_pickBy(props.includeTaskStatuses, (s) => s))
        typedCriteria.filters["reviewStatus"] = _keys(_pickBy(props.includeTaskReviewStatuses, (r) => r))

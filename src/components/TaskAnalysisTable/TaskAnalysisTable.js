@@ -97,8 +97,6 @@ export class TaskAnalysisTableInternal extends Component {
       direction: tableState.sorted[0].desc ? "DESC" : "ASC",
     }
 
-    console.log('tableState', tableState)
-
     const filters = {}
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
 
@@ -152,7 +150,6 @@ export class TaskAnalysisTableInternal extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // console.log(this.state)
     // If we've added the "tag" column, we need to update the table to fetch
     // the tag data.
     if (!_get(prevProps.addedColumns, 'tags') &&
@@ -244,7 +241,6 @@ export class TaskAnalysisTableInternal extends Component {
                     }}
                     value={filterValue}
                     onChange={event => {
-                      console.log(event.target.value)
                       onChange(event.target.value)
                     }}
                   />
@@ -275,7 +271,6 @@ export class TaskAnalysisTableInternal extends Component {
               return {style: {position: "inherit", overflow: "inherit"}}}
             }
             onFilteredChange={filtered => {
-              console.log(filtered)
               this.setState({ filtered })
               if (this.fetchData) {
                 this.fetchData()

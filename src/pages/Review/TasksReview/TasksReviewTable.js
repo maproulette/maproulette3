@@ -560,6 +560,28 @@ export class TaskReviewTable extends Component {
               loading={this.props.loading}
               {...intlTableProps(this.props.intl)}
               PaginationComponent={IntlTablePagination}
+              FilterComponent={({ filter, onChange }) => {
+                const filterValue = filter ? filter.value : ''
+                const clearFilter = () => onChange('')
+                return (
+                  <div className='mr-space-x-1'>
+                    <input
+                      type="text"
+                      style={{
+                        width: '100%',
+                      }}
+                      value={filterValue}
+                      onChange={event => {
+                        onChange(event.target.value)
+                      }}
+                    />
+                    {filterValue && <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+                      <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+                    </button>}
+                  </div>
+                  )
+                }
+              }
             />
           </div>
         </div>
