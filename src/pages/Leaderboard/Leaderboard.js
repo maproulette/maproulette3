@@ -11,7 +11,7 @@ import WithCurrentUser
        from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import PastDurationSelector
        from '../../components/PastDurationSelector/PastDurationSelector'
-import {ALL_TIME, CURRENT_MONTH, CUSTOM_RANGE}
+import {ALL_TIME, CUSTOM_RANGE}
        from '../../components/PastDurationSelector/PastDurationSelector'
 import CountrySelector
        from '../../components/CountrySelector/CountrySelector'
@@ -21,7 +21,7 @@ import RowLeaderboard from './RowLeaderboard'
 import LeaderboardMap from './LeaderboardMap'
 import messages from './Messages'
 
-const INITIAL_MONTHS_PAST = 0;
+const INITIAL_MONTHS_PAST = 1;
 
 class Leaderboard extends Component {
   loggedInUserMissing = () => {
@@ -88,7 +88,7 @@ class Leaderboard extends Component {
                 ? <div className="mr-flex mr-justify-center mr-mb-2">
                     <PastDurationSelector
                       className="mr-button mr-mr-8"
-                      pastMonthsOptions={[ALL_TIME, CURRENT_MONTH, 1, 3, 6, 12, CUSTOM_RANGE]}
+                      pastMonthsOptions={[ALL_TIME, 1, 3, 6, 12, CUSTOM_RANGE]}
                       currentMonthsPast={this.props.monthsPast}
                       selectDuration={this.props.setMonthsPast}
                       selectCustomRange={this.props.setDateRange}

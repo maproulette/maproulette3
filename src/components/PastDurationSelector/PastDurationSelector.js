@@ -151,7 +151,6 @@ const ListDurationItems = function(props) {
     <li key={months}>
       <a onClick={() => props.pickDuration(months, props.closeDropdown)}>
         {months > CURRENT_MONTH  && <FormattedMessage {...messages.pastMonthsOption} values={{months}} />}
-        {months === CURRENT_MONTH  && <FormattedMessage {...messages.currentMonthOption} />}
         {months === ALL_TIME  && <FormattedMessage {...messages.allTimeOption} />}
         {months <= CUSTOM_RANGE  && <FormattedMessage {...messages.customRangeOption} />}
       </a>

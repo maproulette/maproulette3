@@ -4,7 +4,7 @@ import messages from '../Messages'
 import QuickWidget from '../../../components/QuickWidget/QuickWidget'
 import ChallengeProgress from '../../../components/ChallengeProgress/ChallengeProgress'
 import PastDurationSelector from '../../../components/PastDurationSelector/PastDurationSelector'
-import {ALL_TIME, CURRENT_MONTH, CUSTOM_RANGE}
+import {ALL_TIME, CUSTOM_RANGE}
        from '../../../components/PastDurationSelector/PastDurationSelector'
 
 export default class TaskStats extends Component {
@@ -19,7 +19,7 @@ export default class TaskStats extends Component {
         rightHeaderControls={
           <PastDurationSelector
             className="mr-button mr-button--small"
-            pastMonthsOptions={[1, 3, 6, 9, 12, CURRENT_MONTH, ALL_TIME, CUSTOM_RANGE]}
+            pastMonthsOptions={[1, 3, 6, 9, 12, ALL_TIME, CUSTOM_RANGE]}
             currentMonthsPast={this.props.tasksCompletedMonthsPast}
             selectDuration={this.props.setTasksCompletedMonthsPast}
             selectCustomRange={this.props.setTasksCompletedDateRange}
