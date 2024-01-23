@@ -34,6 +34,6 @@ describe("formatTitle", () => {
         }
       } 
     });
-    expect(title).toBe(' - Foo - Bar - Project Name - 3 - User - 2 - 5' + REACT_APP_TITLE);
+    expect(title).toBe('5 - 2 - User - 3 - Project Name - Bar - Foo - ' + REACT_APP_TITLE);
   });
 });
