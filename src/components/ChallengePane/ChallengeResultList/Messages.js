@@ -24,6 +24,13 @@ export default defineMessages({
     defaultMessage: "Challenge ",
   },
 
+  completedChallengeCount: {
+    id: "Challenge.fields.ChallengeResultList.label",
+    defaultMessage:
+    "{count,plural,=0{No challenges} one{# challenge} other{# challenges}} " +
+    "completed in project"
+  },
+
   project: {
     id: "Challenge.detectedIds.project",
     defaultMessage: "Project ",

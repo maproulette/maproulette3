@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from "react-redux"
+import { bindActionCreators } from 'redux'
+import _omit from 'lodash/omit'
 import _isArray from 'lodash/isArray'
 import _isBoolean from 'lodash/isBoolean'
 import _map from 'lodash/map'
@@ -89,7 +92,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       this.setState({leaderboardLoading: true, showingCount, fetchId: currentFetch})
 
       const fetch = userType === USER_TYPE_REVIEWER ?
-        fetchReviewerLeaderboard : fetchLeaderboard
+        this.props.fetchReviewerLeaderboard : this.props.fetchLeaderboard
 
       fetch(...this.leaderboardParams(numberMonths, countryCode),
         showingCount, startDate, endDate).then(leaderboard => {
@@ -98,7 +101,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
 
             const userId = _get(this.props, 'user.id')
             if (userId && !options.ignoreUser && userType !== USER_TYPE_REVIEWER) {
-              fetchLeaderboardForUser(userId, 1,
+              this.props.fetchLeaderboardForUser(userId, 1,
                 ...this.leaderboardParams(numberMonths, countryCode),
                 startDate, endDate).then(userLeaderboard => {
                   this.mergeInUserLeaderboard(userLeaderboard)
@@ -207,7 +210,8 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
     render() {
       const moreResults = this.state.leaderboard ? this.state.showingCount <= this.state.leaderboard.length : true
 
-      return <WrappedComponent leaderboard={this.state.leaderboard}
+      return <WrappedComponent {..._omit(this.props, ['fetchLeaderboard', 'fetchLeaderboardForUser', 'fetchReviewerLeaderboard'])}
+                               leaderboard={this.state.leaderboard}
                                leaderboardLoading={this.state.leaderboardLoading}
                                monthsPast={this.monthsPast()}
                                startDate={this.startDate()}
@@ -224,4 +228,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
   }
 }
 
-export default WithLeaderboard
+const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchLeaderboard, fetchLeaderboardForUser, fetchReviewerLeaderboard }, dispatch)
+
+export default (WrappedComponent, initialMonthsPast, initialOptions) =>
+  connect(null, mapDispatchToProps)(WithLeaderboard(WrappedComponent, initialMonthsPast, initialOptions))

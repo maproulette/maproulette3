@@ -19,6 +19,8 @@ export default {
 
   leaderboard: {
     fetchFailure: messages.leaderboardFetchFailure,
+    reviewerLeaderboard: messages.reviewerLeaderboard,
+    userFetchFailure: messages.userFetchFailure,
   },
 
   task: {

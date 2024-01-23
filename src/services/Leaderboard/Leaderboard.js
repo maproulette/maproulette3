@@ -5,6 +5,8 @@ import startOfMonth from 'date-fns/start_of_month'
 import endOfDay from 'date-fns/end_of_day'
 import { CHALLENGE_INCLUDE_LOCAL } from '../Challenge/Challenge'
 import { setupCustomCache } from '../../utils/setupCustomCache'
+import { addError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
 
 // Default leaderboard count
 export const DEFAULT_LEADERBOARD_COUNT = 10
@@ -33,31 +35,39 @@ const leaderboardCache = setupCustomCache(CACHE_TIME);
  * filters, returning a Promise that resolves to the leaderboard data. Note
  * that leaderboard data is *not* stored in the redux store.
  */
-export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
-                                         forProjects=null, forChallenges=null,
-                                         forUsers=null, forCountries=null,
-                                         limit=10, startDate=null, endDate=null) => {
+export const fetchLeaderboard = (numberMonths=null, onlyEnabled=true,
+                                       forProjects=null, forChallenges=null,
+                                       forUsers=null, forCountries=null,
+                                       limit=10, startDate=null, endDate=null) => {
   const params = {
     limit,
     onlyEnabled
   }
 
-  initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
-                              forUsers, forCountries, startDate, endDate)
+  return async function (dispatch) {
+    initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
+    forUsers, forCountries, startDate, endDate)
 
-  const cachedLeaderboard = leaderboardCache.get({}, params, GLOBAL_LEADERBOARD_CACHE);
+    const cachedLeaderboard = leaderboardCache.get({}, params, GLOBAL_LEADERBOARD_CACHE);
 
-  if (cachedLeaderboard) {
-    return cachedLeaderboard;
+    if (cachedLeaderboard) {
+      return cachedLeaderboard;
+    }
+
+    try {
+      const results = await new Endpoint(api.users.leaderboard, { params }).execute()
+
+      if (results) {
+        leaderboardCache.set({}, params, results, GLOBAL_LEADERBOARD_CACHE)
+      }
+
+      return results
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error)
+      dispatch(addError(AppErrors.leaderboard.fetchFailure))
+      return []
+    }
   }
-
-  const results = await new Endpoint(api.users.leaderboard, {params}).execute()
-
-  if (results) {
-    leaderboardCache.set({}, params, results, GLOBAL_LEADERBOARD_CACHE)
-  }
-
-  return results
 }
 
 /**
@@ -65,7 +75,7 @@ export const fetchLeaderboard = async (numberMonths=null, onlyEnabled=true,
  * filters, returning a Promise that resolves to the leaderboard data. Note
  * that leaderboard data is *not* stored in the redux store.
  */
-export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
+export const fetchLeaderboardForUser = (userId, bracket=0, numberMonths=1,
                                          onlyEnabled=true, forProjects=null, forChallenges=null,
                                          forUsers, forCountries=null, startDate=null,
                                          endDate=null) => {
@@ -73,6 +83,8 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
     bracket,
     onlyEnabled
   }
+
+  return async function (dispatch) {
 
   const variables = {
     id: userId
@@ -87,13 +99,20 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
     return cachedLeaderboard;
   }
 
-  const results = await new Endpoint(api.users.userLeaderboard, {variables, params}).execute()
+    try {
+      const results = await new Endpoint(api.users.userLeaderboard, {variables, params}).execute()
 
-  if (results) {
-    leaderboardCache.set(variables, params, results, USER_LEADERBOARD_CACHE)
+      if (results) {
+        leaderboardCache.set(variables, params, results, USER_LEADERBOARD_CACHE)
+      }
+
+      return results;
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error)
+      dispatch(addError(AppErrors.leaderboard.userFetchFailure))
+      return null
+    }
   }
-
-  return results;
 }
 
 /**
@@ -101,19 +120,29 @@ export const fetchLeaderboardForUser = async (userId, bracket=0, numberMonths=1,
  * filters, returning a Promise that resolves to the leaderboard data. Note
  * that leaderboard data is *not* stored in the redux store.
  */
-export const fetchReviewerLeaderboard = function(numberMonths=null, onlyEnabled=true,
+export const fetchReviewerLeaderboard = (numberMonths=null, onlyEnabled=true,
                                                  forProjects=null, forChallenges=null,
                                                  forUsers=null, forCountries=null,
-                                                 limit=10, startDate=null, endDate=null) {
+                                                 limit=10, startDate=null, endDate=null) => {
+  
   const params = {
     limit,
     onlyEnabled
   }
 
-  initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
-                              forUsers, forCountries, startDate, endDate)
+  return async function (dispatch) {
+    try {
 
-  return new Endpoint(api.users.reviewerLeaderboard, {params}).execute()
+      initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
+                                  forUsers, forCountries, startDate, endDate)
+      const result = await new Endpoint(api.users.reviewerLeaderboard, {params}).execute()
+      return result
+    } catch (error) {
+      console.error("Error in fetchReviewerLeaderboard:", error)
+      dispatch(addError(AppErrors.leaderboard.reviewerLeaderboard))
+      return []
+    }
+  }
 }
 
 

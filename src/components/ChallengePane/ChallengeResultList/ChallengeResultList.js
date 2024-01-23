@@ -19,6 +19,8 @@ import WithFeatured from '../../HOCs/WithFeatured/WithFeatured'
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
 import ProjectResultItem from '../ProjectResultItem/ProjectResultItem'
 import PageResultsButton from './PageResultsButton'
+import { isUsableChallengeStatus }
+       from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import messages from './Messages'
 import './ChallengeResultList.scss'
 
@@ -101,13 +103,21 @@ export class ChallengeResultList extends Component {
     const query = search.query ? search.query : this.props.searchFilters.project ? this.props.searchFilters.project : this.props.searchFilters.task 
 
     const challengeResultsUnbound = _clone(this.props.pagedChallenges);
-    const challengeResults = this.props.location?.pathname?.includes("browse/challenges") 
+    const allChallenges = this.props.location?.pathname?.includes("browse/challenges") 
       && (this.props.searchSort?.sortBy === "created"
           || _isEmpty(this.props.searchSort) 
           || this.props.location.search.includes("default"))
         ? limitUserResults(challengeResultsUnbound)
         : challengeResultsUnbound;
-
+  
+    const challengeResults = this.props.project?.id ? _filter(allChallenges, (challenge) => {
+        return (isUsableChallengeStatus(challenge.status))
+      }) : allChallenges
+  
+    const finishedChallengeResults = this.props.project?.id ? _filter(allChallenges, (challenge) => {
+        return (!isUsableChallengeStatus(challenge.status))
+      }) : []
+  
     const uniqueParents = new Set();
 
     const projectResults = this.props.challenges?.reduce((result, challenge) => {
@@ -271,7 +281,7 @@ export class ChallengeResultList extends Component {
     }
     
     let results = null
-    if (challengeResults.length === 0) {
+    if (challengeResults.length === 0 && finishedChallengeResults.length == 0) {
       if (!isFetching) {
         results = (
           <div className="mr-text-white mr-text-lg mr-pt-4">
@@ -296,6 +306,32 @@ export class ChallengeResultList extends Component {
           );
         }
       }))
+      if(finishedChallengeResults?.length > 0){
+        results.push(
+          <div className="mr-text-sm mr-text-yellow mr-uppercase mr-mb-4">
+          <FormattedMessage
+            {...messages.completedChallengeCount}
+            values={{
+              count: finishedChallengeResults.length,
+            }}
+          />
+        </div>,
+          ..._compact(_map(finishedChallengeResults, (result) => {
+            if (result.parent) {
+              return (
+                <ChallengeResultItem
+                  key={`challenge_${result.id}`}
+                  {...this.props}
+                  className="mr-mb-4"
+                  challenge={result}
+                  listRef={this.listRef}
+                  sort={search?.sort}
+                />
+              )
+            }
+          }))
+        )
+      }
     } else if (!this.props.excludeProjectResults && searchType === "projects" && projectResults) {
       results = _compact(_map(projectResults, (result) => {
           return (

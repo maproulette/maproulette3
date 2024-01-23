@@ -15,13 +15,16 @@ class HeaderNotifications extends Component {
               <FormattedMessage {...messages.inboxHeader} />
             </h1>
             <ul className="mr-list-reset mr-links-green-lighter mr-text-sm mr-mt-0">
-              <li className="mr-mb-4 mr-text-white">
+              <li className="mr-text-white">
                 <input
                   type="checkbox"
                   className="mr-checkbox-toggle mr-mr-1"
                   checked={this.props.groupByTask}
                   onChange={this.props.toggleGroupByTask}
                 /> <FormattedMessage {...messages.groupByTaskLabel} />
+              </li>
+              <li className="mr-mb-4">
+                <FormattedMessage {...messages.challengeGroupingNotice} />
               </li>
               <li>
                 <Link to="/user/profile">

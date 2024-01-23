@@ -13,8 +13,8 @@ export const jsSchema = (intl) => {
       automatedEditsCodeAgreement: {
         title: intl.formatMessage(messages.automatedEditsCodeLabel),
         type: "boolean",
-        default: null,
-        enum: [null, true],
+        default: false,
+        enum: [false, true],
         agreementDescription: intl.formatMessage(messages.automatedEditsCodeDescription),
         checkboxLabel: messages.automatedEditsCodeUICheckboxLabel
       }

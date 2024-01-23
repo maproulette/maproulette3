@@ -1,4 +1,4 @@
-import booleanValid from '@turf/boolean-valid'
+ import { isFeatureCollection } from 'geojson-validation';
 import _isString from 'lodash/isString'
 import _flatten from 'lodash/flatten'
 import _trim from 'lodash/trim'
@@ -92,7 +92,8 @@ export class AsValidatableGeoJSON {
               })
             }
 
-            if (!booleanValid(geoJSONObject)) {
+            const validationResult = isFeatureCollection(geoJSONObject)
+            if(validationResult.errors) {
               allErrors.push({
                 line: lineNumber,
                 message: 'Invalid GeoJSON geometry',
@@ -142,14 +143,18 @@ export class AsValidatableGeoJSON {
       try {
         this.flagUnsupportedGeometries(geoJSONObject);
       } catch (errorMessage) {
-        return [{ message: errorMessage }]
-      }
-  
-      if (!booleanValid(geoJSONObject)) {
-        return [{ message: 'Invalid GeoJSON geometry' }]
+        return [{ message: errorMessage }];
       }
     }
 
+    const validationResult = isFeatureCollection(geoJSONObject);
+    
+    if( validationResult.errors ){
+    return validationResult.valid ? [] : validationResult.errors(error => ({
+      message: error,
+    }));
+
+  }
     return []
   }
 

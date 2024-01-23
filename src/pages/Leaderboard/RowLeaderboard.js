@@ -46,7 +46,7 @@ class RowLeaderboard extends Component {
             </div>
             <div className={"md:mr-flex mr-items-center " + (this.state.isHover ? 'hover-style': '')}>
               <a
-                href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
+                href={'https://www.openstreetmap.org/user/' + encodeURIComponent(leader.name)} target="_blank" rel="noreferrer"
                 className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full hover-pic"
                 style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
                 onMouseOver={this.onHover}
@@ -54,7 +54,7 @@ class RowLeaderboard extends Component {
               />
               <div className="md:mr-pl-8">
                 <a 
-                  href={'https://www.openstreetmap.org/user/' + leader.name} target="_blank" rel="noreferrer"
+                  href={'https://www.openstreetmap.org/user/' + encodeURIComponent(leader.name)} target="_blank" rel="noreferrer"
                   className="mr-text-lg mr-font-normal mr-mb-2 mr-text-white hover-name"
                   onMouseOver={this.onHover}
                   onMouseLeave={this.onLeave}

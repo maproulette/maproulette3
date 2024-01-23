@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.14.3",
+  "version": "3.14.6",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.5.4",
@@ -17,7 +17,6 @@
     "@turf/bearing": "^6.0.1",
     "@turf/boolean-contains": "^6.0.1",
     "@turf/boolean-disjoint": "^6.0.2",
-    "@turf/boolean-valid": "^6.5.0",
     "@turf/center": "^6.0.1",
     "@turf/centroid": "^6.0.2",
     "@turf/distance": "^6.0.1",
@@ -36,6 +35,7 @@
     "fontsource-bungee-inline": "^3.1.5",
     "fontsource-bungee-shade": "^3.1.5",
     "fuse.js": "^6.2.0",
+    "geojson-validation": "^1.0.2",
     "geojsontoosm": "^0.0.3",
     "graphql": "^16.0.1",
     "leaflet": "^1.6.0",

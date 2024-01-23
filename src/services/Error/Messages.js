@@ -43,6 +43,16 @@ export default defineMessages({
     defaultMessage: "Unable to fetch leaderboard.",
   },
 
+  reviewerLeaderboard: {
+    id: "Errors.leaderboard.reviewerLeaderboard",
+    defaultMessage: "Unable to retrieve reviewer leaderboard data.",
+  },
+
+  userFetchFailure: {
+    id: "Errors.leaderboard.userFetchFailure",
+    defaultMessage: "Unable to retrieve leaderboard data for user.",
+  },
+
   taskNone: {
     id: "Errors.task.none",
     defaultMessage: "No tasks remain in this challenge.",
