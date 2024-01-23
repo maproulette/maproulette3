@@ -74,18 +74,6 @@ export const HeadTitle = (props) => {
     <Helmet>
       <title>{formatTitle(props)}</title>
       <meta name="title" content="MapRoulette" />
-      <meta name="description" content="Navigate to Maproulette.org" />
-      <meta property="og:image" content="https://www.youtube.com/img/desktop/yt_1200.png" />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://staging.maproulette.org/challenge/40012/task/169368684" />
-      <meta property="og:title" content="MapRoulette" />
-      <meta property="og:description" content="Navigate to Maproulette.org" />
-      <meta property="twitter:site" content="@YourTwitterUsername" />
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content="https://staging.maproulette.org/challenge/40012/task/169368684" />
-      <meta property="twitter:title" content="MapRoulette" />
-      <meta property="twitter:description" content="twitter description" />
-      <meta property="twitter:image" content="https://metatags.io/images/meta-tags.png" />
     </Helmet>
   )
 }

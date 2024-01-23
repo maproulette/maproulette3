@@ -48,6 +48,7 @@ import MobileNotSupported
 import CheckForToken from './components/CheckForToken/CheckForToken'
 import './components/Widgets/widget_registry'
 import './App.scss'
+import { HeadTitle } from './components/Head/Head'
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
@@ -165,6 +166,7 @@ export const CachedRoute = ({ component: Component, ...rest }) => {
         resetCache()
         return (
           <>
+            <HeadTitle />
             <Component {...props} />
           </>
           
