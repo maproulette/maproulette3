@@ -18,7 +18,6 @@ import ProjectDashboard from "./Manage/ProjectDashboard/ProjectDashboard";
 import ChallengeDashboard from "./Manage/ChallengeDashboard/ChallengeDashboard";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import EmailRequirementNotice from "./Manage/EmailRequirementNotice/EmailRequirementNotice";
-import HeadTitle from "../Head/Head";
 import "./Manage/Widgets/widget_registry.js";
 import "./AdminPane.scss";
 
@@ -131,7 +130,6 @@ export const CustomRoute = ({ component: Component, ...rest }) => {
       render={props => {
         return (
           <>
-            <HeadTitle />
             <Component {...props} />
           </>
           

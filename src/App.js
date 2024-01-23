@@ -36,7 +36,6 @@ import LoadRandomChallengeTask
        from './components/LoadRandomChallengeTask/LoadRandomChallengeTask'
 import LoadRandomVirtualChallengeTask
        from './components/LoadRandomVirtualChallengeTask/LoadRandomVirtualChallengeTask'
-import HeadTitle from './components/Head/Head'
 import Navbar from './components/Navbar/Navbar'
 import SystemNotices from './components/SystemNotices/SystemNotices'
 import FundraisingNotices from './components/FundraisingNotices/FundraisingNotices'
@@ -166,7 +165,6 @@ export const CachedRoute = ({ component: Component, ...rest }) => {
         resetCache()
         return (
           <>
-            <HeadTitle />
             <Component {...props} />
           </>
           

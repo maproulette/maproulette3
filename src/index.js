@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { Provider } from 'react-redux'
@@ -26,6 +27,7 @@ import './theme.scss'
 import './index.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import HeadTitle from './components/Head/Head';
 
 // Setup Apollo graphql client
 const graphqlClient = new ApolloClient({
@@ -106,6 +108,7 @@ ReactDOM.render(
       <ApolloProvider client={graphqlClient}>
         <ConnectedIntl>
           <Router history={routerHistory}>
+            <HeadTitle />
             <App />
           </Router>
         </ConnectedIntl>

@@ -5,7 +5,6 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser';
 import WithCurrentProject from '../AdminPane/HOCs/WithCurrentProject/WithCurrentProject';
 import WithCurrentChallenge from '../AdminPane/HOCs/WithCurrentChallenge/WithCurrentChallenge';
 import { injectIntl } from 'react-intl';
-import Image from '../../static/images/bg-highway.jpg'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 
