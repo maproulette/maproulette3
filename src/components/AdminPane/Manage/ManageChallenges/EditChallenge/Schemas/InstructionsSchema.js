@@ -25,7 +25,7 @@ export const jsSchema = (intl) => {
       instruction: {
         title: intl.formatMessage(messages.instructionLabel),
         type: "string",
-        minLength: instructionsLength,
+        minLength: instructionsMinLength,
         description: intl.formatMessage(messages.instructionsDescription, {minLength: `${instructionsMinLength}`})
       },
       difficulty: {

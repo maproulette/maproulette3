@@ -1049,7 +1049,7 @@ export const fetchChallenges = function (
         challengeData.parent != undefined && 
         (
           !instruction ||
-          instruction.length < (instructionsLength) ||
+          instruction.length < instructionsMinLength ||
           !description?.trim()?.length ||
           !name ||
           name.length <= 3
