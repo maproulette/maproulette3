@@ -166,7 +166,7 @@ export const CachedRoute = ({ component: Component, ...rest }) => {
         resetCache()
         return (
           <>
-            <HeadTitle {...props} />
+            <HeadTitle />
             <Component {...props} />
           </>
           
