@@ -19,10 +19,10 @@ import _reverse from 'lodash/reverse'
 import _keys from 'lodash/keys'
 import _concat from 'lodash/concat'
 import _filter from 'lodash/filter'
-import _cloneDeep from 'lodash/cloneDeep'
 import _split from 'lodash/split'
 import _isEmpty from 'lodash/isEmpty'
 import _merge from 'lodash/merge'
+import _pick from 'lodash/pick'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
@@ -104,7 +104,9 @@ export class TaskAnalysisTableInternal extends Component {
       boundingBox: this.props.boundingBox,
       includeTags: !!_get(this.props.addedColumns, 'tags')})
 
-    this.setState({lastTableState: _cloneDeep(tableState)})
+    // Use pick instead of cloneDeep, as cloning the entire tableState seems to cause an error
+    // when any column with a "makeInvertable" header is present.
+    this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
   }
 
   configureColumns() {
