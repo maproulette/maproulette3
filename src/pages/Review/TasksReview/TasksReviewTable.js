@@ -53,7 +53,6 @@ import ReactTable from 'react-table-6'
 
 export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
-
   for (let pair of searchParams.entries()) {
     if (pair[0] === param && pair[1]) {
       if (pair[1] === '0') {
@@ -491,7 +490,6 @@ export class TaskReviewTable extends Component {
       )
     );
     
-    
     return (
       <React.Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
@@ -820,19 +818,35 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       )
     },
     Filter: ({ filter, onChange }) => {
+      
       return (
-        <FilterSuggestTextBox
-          filterType={"challenge"}
-          filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
-          selectedItem={""}
-          onChange={(item) => {
-            onChange(item)
-            setTimeout(() => props.updateChallengeFilterIds(item), 0)
-          }}
-          value={filter ? filter.value : ""}
-          itemList={props.reviewChallenges}
-          multiselect={props.challengeFilterIds}
-        />
+        <div className='mr-space-x-1'>
+          <div className='mr-inline-block'>
+            <FilterSuggestTextBox
+              filterType={"challenge"}
+              filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
+              selectedItem={""}
+              onChange={(item) => {
+                onChange(item)
+                setTimeout(() => props.updateChallengeFilterIds(item), 0)
+              }}
+              value={filter ? filter.value : ""}
+              itemList={props.reviewChallenges}
+              multiselect={props.challengeFilterIds}
+            />
+          </div>
+          {props.challengeFilterIds && props.challengeFilterIds.length && props.challengeFilterIds?.[0] !== -2 ? (
+            <button 
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => {
+                onChange({ id: -2, name: "All Challenges" })
+                setTimeout(() => props.updateChallengeFilterIds({ id: -2, name: "All Challenges" }), 0)
+              }}
+            >
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          ) : null}
+        </div>
       )
     }
   }
@@ -866,19 +880,36 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       )
     },
     Filter: ({ filter, onChange }) => {
+      
       return (
-        <FilterSuggestTextBox
-          filterType={"project"}
-          filterAllLabel={props.intl.formatMessage(messages.allProjects)}
-          selectedItem={""}
-          onChange={(item) => {
-            onChange(item)
-            setTimeout(() => props.updateProjectFilterIds(item), 0)
-          }}
-          value={filter ? filter.value : ""}
-          itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
-          multiselect={props.projectFilterIds}
-        />
+        <div className='mr-space-x-1'>
+          <div className='mr-inline-block'>
+            <FilterSuggestTextBox
+              filterType={"project"}
+              filterAllLabel={props.intl.formatMessage(messages.allProjects)}
+              selectedItem={""}
+              onChange={(item) => {
+                onChange(item)
+                setTimeout(() => props.updateProjectFilterIds(item), 0)
+              }}
+              value={filter ? filter.value : ""}
+              itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
+              multiselect={props.projectFilterIds}
+            />
+          </div>
+            {props.projectFilterIds && props.projectFilterIds.length && props.projectFilterIds?.[0] !== -2 ? (
+              <button 
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => {
+                  onChange({ id: -2, name: "All Projects" })
+                  setTimeout(() => props.updateProjectFilterIds({ id: -2, name: "All Projects" }), 0)
+                }}
+              >
+                <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+              </button>
+            ) : null}
+        </div>
+        
       )
     }
   }
