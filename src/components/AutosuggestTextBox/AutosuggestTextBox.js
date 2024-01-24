@@ -94,40 +94,47 @@ export default class AutosuggestTextBox extends Component {
    * @private
    */
   dropdownItems(getItemProps) {
-    const isChecked = (result) =>
-      (result.id === FILTER_SEARCH_ALL || this.props.multiselect?.includes(result.id)) ||
-      false
-
+    const isChecked = (result) => {
+      const isAllOption = result.id === FILTER_SEARCH_ALL
+  
+      if (this.props.multiselect) {
+        const isItemSelected = this.props.multiselect.includes(result.id)
+        return this.props.multiselect.length === 0 ? isAllOption : isItemSelected
+      }
+  
+      return isAllOption
+    }
+  
     const generateResult = (result, className = "", index) => {
       if (this.state.highlightResult === index) {
         className += this.props.highlightClassName
       }
-
+  
       return !_isEmpty(result) ? (
-          <a
-            {...getItemProps({
-              key: this.props.resultKey(result),
-              item: result,
-              className: classNames(
-                className,
+        <a
+          {...getItemProps({
+            key: this.props.resultKey(result),
+            item: result,
+            className: classNames(
+              className,
               this.props.resultClassName ? this.props.resultClassName(result) : null
-              ),
-            })}
-          >
-            <div className="mr-flex mr-items-center">
+            ),
+          })}
+        >
+          <div className="mr-flex mr-items-center">
             {this.props.multiselect && result.id !== FILTER_SEARCH_TEXT && (
               <input
-                    type="checkbox"
-                    className="mr-checkbox-toggle mr-mr-2"
-                    id={result.id}
-                    name={result.id}
-                    checked={isChecked(result)}
-                    readOnly
-                  />
+                type="checkbox"
+                className="mr-checkbox-toggle mr-mr-2"
+                id={result.id}
+                name={result.id}
+                checked={isChecked(result)}
+                readOnly
+              />
             )}
-              {this.props.resultLabel(result)}
-            </div>
-          </a>
+            {this.props.resultLabel(result)}
+          </div>
+        </a>
       ) : null
     }
 
