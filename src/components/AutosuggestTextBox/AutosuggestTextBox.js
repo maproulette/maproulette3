@@ -95,64 +95,68 @@ export default class AutosuggestTextBox extends Component {
    */
   dropdownItems(getItemProps) {
     const isChecked = (result) => {
-      if (result.id === FILTER_SEARCH_ALL && this.props.multiselect?.includes(FILTER_SEARCH_ALL)) {
-        return true
+      const isAllOption = result.id === FILTER_SEARCH_ALL
+  
+      if (this.props.multiselect) {
+        const isItemSelected = this.props.multiselect.includes(result.id)
+        return this.props.multiselect.length === 0 ? isAllOption : isItemSelected
       }
-
-      if (this.props.multiselect?.includes(result.id)) {
-        return true
-      }
-
-      return false
+  
+      return isAllOption
     }
-
+  
     const generateResult = (result, className = "", index) => {
       if (this.state.highlightResult === index) {
         className += this.props.highlightClassName
       }
-
-      if (!_isEmpty(result)) {
-        return (
-          <a
-            {...getItemProps({
-              key: this.props.resultKey(result),
-              item: result,
-              className: classNames(
-                className,
-                (this.props.resultClassName ? this.props.resultClassName(result) : null)
-              ),
-            })}
-          >
-            <div className="mr-flex mr-items-center">
-              {this.props.multiselect && result.id !== FILTER_SEARCH_TEXT
-                ? <input 
-                    type="checkbox"
-                    className="mr-checkbox-toggle mr-mr-2"
-                    id={result.id}
-                    name={result.id}
-                    checked={isChecked(result)}
-                    readOnly
-                  />
-                : null
-              }
-              {this.props.resultLabel(result)}
-            </div>
-          </a>
-        )
-      }
-      else return null
+  
+      return !_isEmpty(result) ? (
+        <a
+          {...getItemProps({
+            key: this.props.resultKey(result),
+            item: result,
+            className: classNames(
+              className,
+              this.props.resultClassName ? this.props.resultClassName(result) : null
+            ),
+          })}
+        >
+          <div className="mr-flex mr-items-center">
+            {this.props.multiselect && result.id !== FILTER_SEARCH_TEXT && (
+              <input
+                type="checkbox"
+                className="mr-checkbox-toggle mr-mr-2"
+                id={result.id}
+                name={result.id}
+                checked={isChecked(result)}
+                readOnly
+              />
+            )}
+            {this.props.resultLabel(result)}
+          </div>
+        </a>
+      ) : null
     }
 
     let items = []
     const searchResults = this.getSearchResults()
     const preferredResults = this.getPreferredResults()
+    
+    const reorderedSearchResults = searchResults.sort((a, b) => {
+      if (a.id === FILTER_SEARCH_ALL) return -1
+      if (b.id === FILTER_SEARCH_ALL) return 1
+      if (a.name === this.props.inputValue) return -1
+      if (b.name === this.props.inputValue) return 1
+      return isChecked(b) - isChecked(a)
+    })
+    
     if (!_isEmpty(preferredResults)) {
       let className = "mr-font-medium"
-      items = items.concat(_map(preferredResults,
+      items = items.concat(_map(reorderedSearchResults,
         (result, index) => {
           // Add a border bottom to the last entry if there are more
           // search results.
-          if (index === preferredResults.length - 1 && searchResults.length > 0) {
+          if (index === reorderedSearchResults.length - 1 && reorderedSearchResults.length > 0) {
             className += " mr-border-b-2 mr-border-white-50 mr-mb-2 mr-pb-2"
           }
 
