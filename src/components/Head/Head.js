@@ -60,7 +60,10 @@ export const formatTitle = (props) => {
         return capitalize(param)
       }
     })
-    const newTitle = _isEmpty(pathArr) ? REACT_APP_TITLE : REACT_APP_TITLE + ' - ' + pathArr.join(' - ')
+
+    pathArr.reverse();
+
+    const newTitle = _isEmpty(pathArr) ? REACT_APP_TITLE : pathArr.join(' - ') + ' - ' +  REACT_APP_TITLE
     return newTitle
   }
 }
