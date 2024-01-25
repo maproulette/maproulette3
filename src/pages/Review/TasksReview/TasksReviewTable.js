@@ -1153,8 +1153,8 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'controls',
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
-    minWidth: 110,
-    Cell: ({row}) => {
+    maxWidth: 110,
+    Cell: ({ row }) => {
       let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
       let message = row._original.reviewStatus === TaskReviewStatus.rejected ?
         <FormattedMessage {...messages.fixTaskLabel} /> :
@@ -1207,12 +1207,12 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           )
         }
       }
-  
+
       return <div className="row-controls-column">
           {action}
         </div>
     }
-  }  
+  }
 
   columns.mapperControls = {
     id: 'controls',
