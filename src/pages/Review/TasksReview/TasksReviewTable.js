@@ -579,6 +579,12 @@ export class TaskReviewTable extends Component {
 }
 
 export const setupColumnTypes = (props, openComments, data, criteria) => {
+  const handleClick = () => {
+    props.history.push({
+      criteria,
+    })
+  }
+  
   const columns = {}
   columns.id = {
     id: 'id',
@@ -1122,13 +1128,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       let action = (
         <Link 
           to={linkTo} 
-          onClick={(e) => {
-            e.preventDefault()
-            props.history.push({
-              pathname: linkTo,
-              criteria,
-            })
-          }} 
+          onClick={() => handleClick()}
           className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
         >
           <FormattedMessage {...messages.reviewTaskLabel} />
@@ -1140,13 +1140,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           action = (
             <Link 
               to={linkTo} 
-              onClick={(e) => {
-                e.preventDefault()
-                props.history.push({
-                  pathname: linkTo,
-                  criteria,
-                })
-              }} 
+              onClick={() => handleClick()}
               className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
             >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
@@ -1156,13 +1150,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           action = (
             <Link 
               to={linkTo} 
-              onClick={(e) => {
-                e.preventDefault()
-                props.history.push({
-                  pathname: linkTo,
-                  criteria,
-                })
-              }} 
+              onClick={() => handleClick()}
               className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
             >
               <FormattedMessage {...messages.resolveTaskLabel} />
@@ -1194,13 +1182,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         <div className="row-controls-column mr-links-green-lighter">
           <Link
             to={linkTo} 
-            onClick={(e) => {
-              e.preventDefault()
-              props.history.push({
-                pathname: linkTo,
-                criteria,
-              })
-            }} 
+            onClick={() => handleClick()}
           >
             {message}
           </Link>
@@ -1210,13 +1192,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
             <Link 
               to={`${linkTo}/review`} 
               className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
-              onClick={(e) => {
-                e.preventDefault()
-                props.history.push({
-                  pathname: `${linkTo}/review`,
-                  criteria,
-                })
-              }} 
+              onClick={() => handleClick()}
             >
               <FormattedMessage {...messages.reviewFurtherTaskLabel} />
             </Link>
@@ -1237,13 +1213,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       let action =(
         <Link 
           to={linkTo} 
-          onClick={(e) => {
-            e.preventDefault()
-            props.history.push({
-              pathname: linkTo,
-              criteria,
-            })
-          }} 
+          onClick={() => handleClick()}
           className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
         >
           <FormattedMessage {...messages.metaReviewTaskLabel} />
@@ -1255,13 +1225,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           action = (
             <Link 
               to={linkTo}  
-              onClick={(e) => {
-                e.preventDefault()
-                props.history.push({
-                  pathname: linkTo,
-                  criteria,
-                })
-              }} 
+              onClick={() => handleClick()}
               className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
             >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
@@ -1272,13 +1236,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           action = (
             <Link 
               to={linkTo}  
-              onClick={(e) => {
-                e.preventDefault()
-                props.history.push({
-                  pathname: linkTo,
-                  criteria,
-                })
-              }} 
+              onClick={() => handleClick()}
               className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
             >
               <FormattedMessage {...messages.resolveTaskLabel} />
