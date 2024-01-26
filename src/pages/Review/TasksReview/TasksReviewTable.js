@@ -1120,7 +1120,17 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     Cell: ({ row }) => {
       const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}/review`
       let action = (
-        <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+        <Link 
+          to={linkTo} 
+          onClick={(e) => {
+            e.preventDefault()
+            props.history.push({
+              pathname: linkTo,
+              criteria,
+            })
+          }} 
+          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+        >
           <FormattedMessage {...messages.reviewTaskLabel} />
         </Link>
       )
@@ -1128,13 +1138,33 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action = (
-            <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+            <Link 
+              to={linkTo} 
+              onClick={(e) => {
+                e.preventDefault()
+                props.history.push({
+                  pathname: linkTo,
+                  criteria,
+                })
+              }} 
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </Link>
           )
         } else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
           action = (
-            <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+            <Link 
+              to={linkTo} 
+              onClick={(e) => {
+                e.preventDefault()
+                props.history.push({
+                  pathname: linkTo,
+                  criteria,
+                })
+              }} 
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.resolveTaskLabel} />
             </Link>
           )
@@ -1162,13 +1192,32 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
 
       return (
         <div className="row-controls-column mr-links-green-lighter">
-          <Link to={linkTo}>
+          <Link
+            to={linkTo} 
+            onClick={(e) => {
+              e.preventDefault()
+              props.history.push({
+                pathname: linkTo,
+                criteria,
+              })
+            }} 
+          >
             {message}
           </Link>
           {!props.metaReviewEnabled &&
             row._original.reviewStatus !== TaskReviewStatus.needed &&
             row._original.reviewedBy && row._original.reviewedBy.id !== props.user?.id &&
-            <Link to={`${linkTo}/review`} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+            <Link 
+              to={`${linkTo}/review`} 
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+              onClick={(e) => {
+                e.preventDefault()
+                props.history.push({
+                  pathname: `${linkTo}/review`,
+                  criteria,
+                })
+              }} 
+            >
               <FormattedMessage {...messages.reviewFurtherTaskLabel} />
             </Link>
           }
@@ -1186,7 +1235,17 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     Cell: ({row}) =>{
       const linkTo =`/challenge/${row._original.parent.id}/task/${row._original.id}/meta-review`
       let action =(
-        <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+        <Link 
+          to={linkTo} 
+          onClick={(e) => {
+            e.preventDefault()
+            props.history.push({
+              pathname: linkTo,
+              criteria,
+            })
+          }} 
+          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+        >
           <FormattedMessage {...messages.metaReviewTaskLabel} />
         </Link>
       )
@@ -1194,14 +1253,34 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action = (
-            <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+            <Link 
+              to={linkTo}  
+              onClick={(e) => {
+                e.preventDefault()
+                props.history.push({
+                  pathname: linkTo,
+                  criteria,
+                })
+              }} 
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </Link>
           )
         } 
         else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
           action = (
-            <Link to={linkTo} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+            <Link 
+              to={linkTo}  
+              onClick={(e) => {
+                e.preventDefault()
+                props.history.push({
+                  pathname: linkTo,
+                  criteria,
+                })
+              }} 
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.resolveTaskLabel} />
             </Link>
           )
@@ -1220,27 +1299,53 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     sortable: false,
     minWidth: 90,
     maxWidth: 120,
-    Cell: ({row}) =>{
-      let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
-      let message = row._original.reviewStatus === TaskReviewStatus.rejected ?
-                        <FormattedMessage {...messages.fixTaskLabel} /> :
-                        <FormattedMessage {...messages.viewTaskLabel} />
-
-      return <div className="row-controls-column mr-links-green-lighter">
-        <Link to={linkTo}>
-          {message}
-        </Link>
-        {!props.metaReviewEnabled &&
-         row._original.reviewStatus !== TaskReviewStatus.needed &&
-         row._original.reviewedBy && row._original.reviewedBy.id !== props.user?.id &&
-          <div onClick={() => props.history.push(linkTo + "/review", criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
-            <FormattedMessage {...messages.reviewFurtherTaskLabel} />
-          </div>
-        }
-      </div>
+    Cell: ({ row }) => {
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
+  
+      let message =
+        row._original.reviewStatus === TaskReviewStatus.rejected ? (
+          <FormattedMessage {...messages.fixTaskLabel} />
+        ) : (
+          <FormattedMessage {...messages.viewTaskLabel} />
+        )
+  
+      return (
+        <div className="row-controls-column mr-links-green-lighter">
+          <Link
+            to={linkTo}
+            onClick={(e) => {
+              e.preventDefault()
+              props.history.push({
+                pathname: linkTo,
+                criteria,
+              })
+            }}
+          >
+            {message}
+          </Link>
+          {!props.metaReviewEnabled &&
+            row._original.reviewStatus !== TaskReviewStatus.needed &&
+            row._original.reviewedBy &&
+            row._original.reviewedBy.id !== props.user?.id && (
+              <Link
+                to={`${linkTo}/review`}
+                onClick={(e) => {
+                  e.preventDefault()
+                  props.history.push({
+                    pathname: `${linkTo}/review`,
+                    criteria,
+                  })
+                }}
+                className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+              >
+                <FormattedMessage {...messages.reviewFurtherTaskLabel} />
+              </Link>
+            )}
+        </div>
+      )
     }
   }
-
+  
   columns.viewComments = {
     id: 'viewComments',
     Header: () => <FormattedMessage {...messages.viewCommentsLabel} />,
