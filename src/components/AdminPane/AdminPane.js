@@ -134,7 +134,6 @@ export const CustomRoute = ({ component: Component, ...rest }) => {
             <HeadTitle />
             <Component {...props} />
           </>
-
         )
       }} />
   )

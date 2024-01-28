@@ -7,11 +7,27 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.14.4] - 2023-1-9
-Realease with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
+## [v3.14.6] - 2023-1-17
+Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
-* General documentation updates and fixes by @jschwarz2030 in (https://github.com/maproulette/docs/pull/30)
+* Fix task map property list on task markers by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2236)
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.5...v3.14.6
+
+## [v3.14.5] - 2023-1-14
+Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
+
+## What's Changed
+* Add environment variable to disable country leaderboard filter selctor by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2237)
+* fix data drop issue in WithLeaderboard component and restore leaderboards initial data sorted by "All Time" by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2235)
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.4...v3.14.5
+
+## [v3.14.4] - 2023-1-9
+Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
+
+## What's Changed
 * Add setState to prevent submitting twice before character count is reset by @CollinBeczak in  (https://github.com/maproulette/maproulette3/pull/2215)
 * Add grouping for challenge comment notifications  by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2216)
 * Remove conflicting validation requirements by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2219)
@@ -25,7 +41,7 @@ Realease with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.3...v3.14.4
 
 ## [v3.14.3] - 2023-12-20
-Realease with [maproulette-backend_v4.4.12](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.12)
+Released with [maproulette-backend_v4.4.12](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.12)
 
 ## What's Changed
 * move comments to request body for meta review by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2209)
@@ -35,7 +51,7 @@ Realease with [maproulette-backend_v4.4.12](https://github.com/maproulette/mapro
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.2...v3.14.3
 
 ## [v3.14.2] - 2023-12-12
-Realease with [maproulette-backend_v4.4.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.11)
+Released with [maproulette-backend_v4.4.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.11)
 
 ## What's Changed
 * change default lat/lon default and make the order of lat/lon its own user setting in location widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2172
@@ -59,7 +75,7 @@ Realease with [maproulette-backend_v4.4.11](https://github.com/maproulette/mapro
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.1...v3.14.2
 
 ## [v3.14.1] - 2023-11-24
-Realease with [maproulette-backend_v4.4.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.10)
+Released with [maproulette-backend_v4.4.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.10)
 
 ## What's Changed
 * call backend service for system notices by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2179
@@ -68,7 +84,7 @@ Realease with [maproulette-backend_v4.4.10](https://github.com/maproulette/mapro
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.0...v3.14.1
 
 ## [v3.14.0] - 2023-11-14
-Realease with [maproulette-backend_v4.4.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.9)
+Released with [maproulette-backend_v4.4.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.9)
 
 ### Features
 - Add lasso and virtual challenge creation functionality to challenge dashboard map - @CollinBeczak
@@ -98,7 +114,7 @@ an empty JSON object when not present. - @ljdelight
 - update and migrate transifex config - @jschwarz2030
 
 ## [v3.13.2] - 2023-10-17
-Realease with [maproulette-backend_v4.4.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.8)
+Released with [maproulette-backend_v4.4.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.8)
 
 ### Features
 - Add lasso and virtual challenge creation functionality to challenge dashboard map - @CollinBeczak
@@ -119,7 +135,7 @@ Realease with [maproulette-backend_v4.4.8](https://github.com/maproulette/maprou
 - Add Stringified widget layout JSON to challenge table - @CollinBeczak
 
 ## [v3.13.1] - 2023-9-12
-Realease with [maproulette-backend_v4.4.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.7)
+Released with [maproulette-backend_v4.4.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.7)
 
 ### Features
 - Add columns to Review Table - @CollinBeczak

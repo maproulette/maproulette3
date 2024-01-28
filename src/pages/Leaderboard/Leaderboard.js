@@ -95,7 +95,7 @@ class Leaderboard extends Component {
                       customStartDate={this.props.startDate ? new Date(this.props.startDate) : null}
                       customEndDate={this.props.endDate ? new Date(this.props.endDate) : null}
                     />
-                    {!this.props.suppressCountrySelection &&
+                    {!this.props.suppressCountrySelection && !process.env.REACT_APP_DISABLE_COUNTRY_LEADERBOARD_CONFIG &&
                     <CountrySelector
                       className="mr-button"
                       currentCountryCode={this.props.countryCode}

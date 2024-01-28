@@ -169,7 +169,6 @@ export const CachedRoute = ({ component: Component, ...rest }) => {
             <HeadTitle />
             <Component {...props} />
           </>
-
         )
       }} />
   )
