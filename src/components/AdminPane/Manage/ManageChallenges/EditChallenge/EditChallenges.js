@@ -249,8 +249,7 @@ export class EditChallenges extends Component {
         finish={this.finish}
         isLongForm={true}
         renderStep={({
-          activeStep,
-          nextStep,
+          activeStep
         }) => {
 
           // Override the standard form-field description renderer with our own that
@@ -389,8 +388,8 @@ export class EditChallenges extends Component {
                       formData={this.state.confirmModal}
                       submit={() => {
                         this.toggleConfirmModal(false)
-                        this.handleSubmit(formData, nextStep)}
-                      }
+                        this.handleSubmit()
+                      }}
                       cancel={() => {
                         this.toggleConfirmModal(false)
                       }}
