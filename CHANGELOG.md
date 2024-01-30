@@ -7,6 +7,17 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.7] - 2023-1-30
+Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
+
+## What's Changed
+* Fix error caused by cloning react table internal state instance by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2249
+* update header of challenge/projects widgets in review to persist while challenges are loading by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2233
+* update css for group challenge comments notice by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2239
+* add link previews by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2251
+* move active filters at top of filter list fo auto suggest text box by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2244
+* remove undefined formData var by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2254
+
 ## [v3.14.6] - 2023-1-17
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
