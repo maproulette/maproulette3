@@ -59,7 +59,7 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
 // columns
 const ALL_COLUMNS =
   Object.assign({featureId:{}, id:{}, status:{}, priority:{},
-    completedDuration:{}, mappedOn:{}, unbundle: {},
+    completedDuration:{}, mappedOn:{}, editBundle: {},
     reviewStatus:{group:"review"},
     reviewRequestedBy:{group:"review"},
     reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
@@ -70,7 +70,7 @@ const ALL_COLUMNS =
        metaReviewedAt:{group:"review"}} : null
   )
 
-const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments", "unbundle"]
+const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments", "editBundle"]
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
@@ -213,7 +213,7 @@ export class TaskAnalysisTableInternal extends Component {
 
     const manager = AsManager(this.props.user)
     const columns = this.getColumns(manager, taskBaseRoute, data)
-
+    
     return (
       <React.Fragment>
         <section className="mr-my-4 mr-min-h-100 mr-fixed-containing-block">
@@ -233,6 +233,7 @@ export class TaskAnalysisTableInternal extends Component {
               <ViewTaskSubComponent taskId={props.original.id} />
             }
             unbundleTask={this.props.unbundleTask}
+            bundleTask={this.props.bundleTask}
             collapseOnDataChange={false}
             minRows={1}
             manual
@@ -288,10 +289,10 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const isTagFix = AsCooperativeWork(props.task).isTagType()
       const enableEditForMapper = props.task?.status === 0 || (props.task?.reviewStatus === ( 2 || 4 || 5 ))
       const disableSelecting = props.taskReadOnly || isTagFix || !isMapper || !enableEditForMapper
-
+ console.log(original.bundleId)
       return (
-      props.highlightPrimaryTask && original.id === props.task.id ?
-      <span className="mr-text-green-lighter">✓</span> : !disableSelecting ?
+      props.highlightPrimaryTask && original.id === props.task.id && !original.bundleId ?
+      <span className="mr-text-green-lighter">✓</span> : !disableSelecting && !original.bundleId ?
       <input
         type="checkbox"
         className="mr-checkbox-toggle"
@@ -369,8 +370,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     ),
   }
 
-  columns.unbundle = {
-    id: 'unbundle',
+  columns.editBundle = {
+    id: 'editBundle',
     Header: '',
     accessor: 'remove',
     minWidth: 110,
@@ -378,20 +379,30 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const isTaskSelected = props.taskId === row._original.id
       const enableEditForMapper = props.task?.status === 0 || (props.task?.reviewStatus === ( 2 || 4 || 5 ))
       const isTaskRemovable = !props.taskReadOnly && enableEditForMapper
-
+      
+      const alreadyBundled = row._original.bundleId !== props.task.bundleId
       const enableRemove = props.task?.completedBy ? props.task.completedBy === props.user.id : true
 
       return (
         <div>
-          {isTaskRemovable && !isTaskSelected && enableRemove ? (
-            <button
-              className="mr-text-red"
-              onClick={() => props.unbundleTask(row._original.id)}
-            >
+          {isTaskRemovable && !isTaskSelected && enableRemove && props.taskBundle.taskIds.includes(row._original.id) && (
+            <button className="mr-text-red-light" onClick={() => props.unbundleTask(row._original)}>
               <FormattedMessage {...messages.unbundle} />
             </button>
-          ) : null}
-        </div>
+          )}
+        
+          {isTaskRemovable && !isTaskSelected && enableRemove && !props.taskBundle.taskIds.includes(row._original.id) && !alreadyBundled && (
+            <button className="mr-text-green-lighter" onClick={() => props.bundleTask(row._original)}>
+              <FormattedMessage {...messages.bundle} />
+            </button>
+          )}
+        
+          {isTaskSelected && <div className="mr-text-yellow">Primary Task</div>}
+        
+          {alreadyBundled && !isTaskSelected && (
+            <div className="mr-text-grey mr-text-xs">Unable to bundle</div>
+          )}
+       </div>      
       );
     },
   };

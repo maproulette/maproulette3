@@ -965,6 +965,29 @@ export const deleteTaskBundle = function(bundleId, primaryTaskId) {
   }
 }
 
+export const addTaskToBundle = function (bundleId, taskIds) {
+  return function (dispatch) {
+    return new Endpoint(api.tasks.addTaskToBundle, {
+      variables: { id: bundleId },
+      params: { id: bundleId, taskIds: taskIds },
+    })
+      .execute()
+      .then((results) => {
+        return results
+      })
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn()).then(() =>
+            dispatch(addError(AppErrors.user.unauthorized))
+          )
+        } else {
+          dispatch(addError(AppErrors.task.addTaskToBundleFailure))
+          console.log(error.response || error)
+        }
+      })
+  }
+}
+
 export const removeTaskFromBundle = function (bundleId, taskIds) {
   return function (dispatch) {
     return new Endpoint(api.tasks.removeTaskFromBundle, {

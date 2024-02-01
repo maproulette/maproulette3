@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Popup } from 'react-leaflet'
 import _get from 'lodash/get'
@@ -47,6 +47,7 @@ import Dropdown from '../../Dropdown/Dropdown'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import TaskReviewStatusFilter from '../../TaskFilters/TaskReviewStatusFilter'
 
 const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
 const VALID_STATUSES =
@@ -160,7 +161,13 @@ export default class TaskBundleWidget extends Component {
   }
 
   unbundleTask = (task) => {
-    this.props.removeTaskFromBundle(this.props.taskBundle.bundleId, task)
+    this.props.removeTaskFromBundle(this.props.taskBundle.bundleId, task.id)
+    this.props.toggleTaskSelection(task)
+  }
+  
+  bundleTask = (task) => {
+    this.props.addTaskToBundle(this.props.taskBundle.bundleId, task.id)
+    this.props.toggleTaskSelection(task)
   }
 
   updateBounds = (challengeId, bounds, zoom) => {
@@ -252,7 +259,7 @@ export default class TaskBundleWidget extends Component {
     if (_isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
-
+ //need to remove task bundles here if no tasks were submitted
     this.props.deactivateKeyboardShortcut(shortcutGroup, 'completeTogether',
                                           this.handleKeyboardShortcuts)
   }
@@ -275,6 +282,7 @@ export default class TaskBundleWidget extends Component {
           revertFilters={this.revertFilters}
           updateBounds={this.updateBounds}
           bundleTasks={this.bundleTasks}
+          bundleTask={this.bundleTask}
           unbundleTask={this.unbundleTask}
           unbundleTasks={this.unbundleTasks}
           loading={this.props.loading}
@@ -294,6 +302,47 @@ const calculateTasksInChallenge = props => {
 }
 
 const ActiveBundle = props => {
+  const [bundledOnly, setBundledOnly] = useState(true)
+console.log(props.selectedTasks)
+  const showMarkerPopup = (markerData) => {
+    return (
+      <Popup key={markerData.options.taskId}>
+        <div className="marker-popup-content">
+          <TaskMarkerContent
+            {...props}
+            marker={markerData}
+            taskId={markerData.options.taskId}
+            taskBundleData={_get(props, 'taskBundle.tasks')}
+            bundling
+            unbundleTask={props.unbundleTask}
+            bundleTask={props.bundleTask}
+          />
+        </div>
+      </Popup>
+    );
+  };
+
+  const boundingBoxData = props.criteria.boundingBox
+    ? 'criteria.boundingBox'
+    : 'workspaceContext.taskMapBounds';
+
+  const map = (
+    <ClusterMap
+      loadingTasks={props.loadingTasks}
+      highlightPrimaryTask={props.task.id}
+      showMarkerPopup={showMarkerPopup}
+      taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
+      boundingBox={_get(props, boundingBoxData)}
+      initialBounds={toLatLngBounds(_get(props, boundingBoxData, []))}
+      hideSearchControl
+      allowSpidering
+      hideLasso={true}
+      showSelectMarkersInView
+      {..._omit(props, 'className')}
+      selectedTasks={props.selectedTasks}
+    />
+  );
+
   const enableRemove = props.task.completedBy ? props.task.completedBy === props.user.id : true
 
   if (!props.taskBundle) {
@@ -302,7 +351,18 @@ const ActiveBundle = props => {
 
   return (
     <div className="mr-p-4 mr-h-full mr-rounded">
-      <div className="mr-flex mr-justify-between mr-content-center mr-mb-8">
+        <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
+          <MapPane showLasso>{map}</MapPane>
+        </div>
+      <div className="mr-flex mr-justify-between mr-content-center mr-my-4">
+   
+      <button 
+        className="mr-button mr-button--green-lighter mr-button--small" 
+        onClick={() => {setBundledOnly(!bundledOnly)}}
+      >
+        {bundledOnly ? <div>Display All Tasks In View</div> : <div>Display Only Bundled Tasks</div>}
+      </button>
+ 
         <h3 className="mr-text-lg mr-text-pink-light">
           <FormattedMessage
             {...messages.simultaneousTasks}
@@ -311,7 +371,7 @@ const ActiveBundle = props => {
         </h3>
         {!props.taskReadOnly && props.task.status === 0 && enableRemove && !props.disallowBundleChanges &&
           <button
-            className="mr-button mr-button--green-lighter mr-button--small"
+            className="mr-button mr-border-red mr-text-red mr-button--small"
             onClick={() => {
               props.unbundleTasks()
             }}
@@ -320,6 +380,38 @@ const ActiveBundle = props => {
           </button>
         }
       </div>
+      <div className="mr-my-4 mr-px-4 xl:mr-justify-between xl:mr-flex mr-items-center">
+            <div className='mr-flex mr-items-center'>
+              <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
+                <FormattedMessage {...messages.filterListLabel} />
+              </p>
+              <ul className="md:mr-space-x-6 md:mr-flex mr-items-center">
+                <li>
+                  <TaskStatusFilter {...props} />
+                </li>
+                <li>
+                  <TaskReviewStatusFilter {...props} />
+                </li>
+                <li>
+                  <TaskPriorityFilter {...props} />
+                </li>
+                <li>
+                  <TaskPropertyFilter {...props} />
+                </li>
+              </ul>
+            </div>
+            <div className='mr-flex mr-justify-end'>
+            <button className="mr-flex mr-items-center mr-text-green-lighter"
+        onClick={() => {
+          props.clearAllFilters()
+        }}>
+        <SvgSymbol sym="close-icon"
+          viewBox='0 0 20 20'
+          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+        <FormattedMessage {...messages.clearFiltersLabel} />
+      </button>
+            </div>
+          </div>
 
       <TaskAnalysisTable
         {...props}
@@ -329,10 +421,10 @@ const ActiveBundle = props => {
           tasks: props.taskBundle.tasks,
         }}
         selectedTasks={new Map()}
-        taskData={_get(props, 'taskBundle.tasks')}
+        taskData={bundledOnly ? _get(props, 'taskBundle.tasks') : _get(props, 'taskInfo.tasks')}
         totalTaskCount={_get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')}
         totalTasksInChallenge={ calculateTasksInChallenge(props) }
-        showColumns={['featureId', 'id', 'status', 'priority', 'unbundle']}
+        showColumns={['featureId', 'id', 'status', 'priority', 'editBundle']}
         taskSelectionStatuses={[TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard]}
         taskSelectionReviewStatuses={[]}
         suppressHeader

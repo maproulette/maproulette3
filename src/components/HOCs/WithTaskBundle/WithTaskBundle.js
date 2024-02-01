@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
-import { bundleTasks, deleteTaskBundle, removeTaskFromBundle, fetchTaskBundle } from '../../../services/Task/Task'
+import { bundleTasks, deleteTaskBundle, removeTaskFromBundle, addTaskToBundle, fetchTaskBundle } from '../../../services/Task/Task'
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -27,8 +27,9 @@ export function WithTaskBundle(WrappedComponent) {
     }
 
     createTaskBundle = (taskIds, bundleTypeMismatch, name) => {
+      this.setState({loading: true})
       this.props.bundleTasks(taskIds, bundleTypeMismatch, name).then(taskBundle => {
-        this.setState({taskBundle})
+        this.setState({taskBundle, loading: false})
       })
     }
 
@@ -41,11 +42,10 @@ export function WithTaskBundle(WrappedComponent) {
       }
     }
 
-    removeTaskFromBundle = async (bundleId, taskId) => {
+    removeTaskFromBundle = (bundleId, taskId) => {
       this.setState({loading: true})
       if(this.state.taskBundle.taskIds.length === 2) {
-        this.props.deleteTaskBundle(bundleId, this.state.taskBundle.taskIds[0])
-        this.clearActiveTaskBundle()
+        this.removeTaskBundle(bundleId, this.state.taskBundle.taskIds[0])
         this.setState({loading: false})
         return
       }
@@ -54,6 +54,14 @@ export function WithTaskBundle(WrappedComponent) {
         this.setState({taskBundle, loading: false})
       })
     };
+
+    addTaskToBundle = (bundleId, taskId) => {
+      this.setState({loading: true})
+      this.props.addTaskToBundle(bundleId, taskId).then(taskBundle => {
+        this.setState({taskBundle, loading: false})
+      })
+    };
+
 
     clearActiveTaskBundle = () => {
       this.setState({taskBundle: null, loading: false})
@@ -85,6 +93,7 @@ export function WithTaskBundle(WrappedComponent) {
           createTaskBundle={this.createTaskBundle}
           removeTaskBundle={this.removeTaskBundle}
           removeTaskFromBundle={this.removeTaskFromBundle}
+          addTaskToBundle={this.addTaskToBundle}
           clearActiveTaskBundle={this.clearActiveTaskBundle}
           setSelectedTasks={(selectedTasks) => this.setState({selectedTasks})}
           selectedTasks={this.state.selectedTasks}
@@ -101,6 +110,7 @@ export const mapDispatchToProps = dispatch => bindActionCreators({
   bundleTasks,
   deleteTaskBundle,
   removeTaskFromBundle,
+  addTaskToBundle,
   fetchTaskBundle,
 }, dispatch)
 
