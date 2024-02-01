@@ -165,12 +165,16 @@ export const WithReviewTasks = function(WrappedComponent) {
         _omit(searchCriteria.filters, 'challengeName')
       }
 
+      console.log('searchCriteria in WithReviewTasks updateURL', searchCriteria)
+      console.log('searchURL in WithReviewTasks updateURL', buildSearchURL(searchCriteria))
       return buildSearchURL(searchCriteria)
     }
 
     componentDidMount() {
       const searchParams = this.props.history.location.state
+      console.log('searchParams WithReviewTasks mount', searchParams)
       const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props))
+      console.log('criteria in WithReviewTasks mount', criteria)
 
       let pageSize = _get(searchParams, 'pageSize') || criteria.pageSize || DEFAULT_PAGE_SIZE
       criteria.pageSize = pageSize

@@ -10,10 +10,6 @@ import { TaskReviewStatusWithUnset,
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import messages from './Messages'
 
-
-// const areTaskReviewStatusFiltersActive = 
-
-
 /**
  * TaskReviewStatusFilter builds a dropdown for searching by task review status
  *
@@ -33,14 +29,14 @@ export default class TaskReviewStatusFilter extends Component {
       Object.keys(this.props.includeMetaReviewStatuses).length < Object.keys(TaskMetaReviewStatusWithUnset).length : 
       false
 
-    const areTaskReviewStatusFilersActive = this.props.metaReviewEnabled ? 
+    const areTaskReviewStatusFiltersActive = this.props.metaReviewEnabled ? 
       (taskReviewStatusFiltersActive || !currentTaskMetaReviewStatuses || taskMetaReviewStatusFiltersActive) : 
       taskReviewStatusFiltersActive
 
     const metaReviewStatusFilter =
       !this.props.metaReviewEnabled ? {} : {
         secondaryFilterLabel:
-          this.props.intl.formatMessage(messages.filterByReviewStatusLabel),
+          this.props.intl.formatMessage(messages.filterByMetaReviewStatusLabel),
         secondaryFilters:
           _map(TaskMetaReviewStatusWithUnset, status => (
             <li key={`meta-${status}`}>
@@ -61,7 +57,7 @@ export default class TaskReviewStatusFilter extends Component {
 
     return (
       <div className='mr-flex mr-space-x-1 mr-items-center'>
-        {areTaskReviewStatusFilersActive && <TaskFilterIndicator />}
+        {areTaskReviewStatusFiltersActive && <TaskFilterIndicator />}
         <FilterDropdown
           title={<FormattedMessage {...messages.filterByReviewStatusLabel} />}
           filters={
