@@ -99,7 +99,13 @@ export default class AutosuggestTextBox extends Component {
   
       if (this.props.multiselect) {
         const isItemSelected = this.props.multiselect.includes(result.id)
-        return this.props.multiselect.length === 0 ? isAllOption : isItemSelected
+        const isPreferredTag = preferredResults.some((preferredResult) => preferredResult.id === result.id)
+  
+        if (!_isEmpty(preferredResults)) {
+          return isPreferredTag && (this.props.multiselect.length === 0 || isItemSelected)
+        } else {
+          return this.props.multiselect.length === 0 ? isAllOption : isItemSelected
+        }
       }
   
       return isAllOption
@@ -137,60 +143,67 @@ export default class AutosuggestTextBox extends Component {
         </a>
       ) : null
     }
-
+  
     let items = []
     const searchResults = this.getSearchResults()
     const preferredResults = this.getPreferredResults()
-    
-    const reorderedSearchResults = searchResults.sort((a, b) => {
+  
+    // Filter preferredResults based on user input
+    const filteredPreferredResults = preferredResults.filter((result) =>
+      result.toLowerCase().includes(this.props.inputValue.toLowerCase())
+    )
+  
+    searchResults.sort((a, b) => {
       if (a.id === FILTER_SEARCH_ALL) return -1
       if (b.id === FILTER_SEARCH_ALL) return 1
       if (a.name === this.props.inputValue) return -1
       if (b.name === this.props.inputValue) return 1
       return isChecked(b) - isChecked(a)
     })
-    
-    if (!_isEmpty(preferredResults)) {
+  
+    if (!_isEmpty(filteredPreferredResults)) {
       let className = "mr-font-medium"
-      items = items.concat(_map(reorderedSearchResults,
-        (result, index) => {
+      items = items.concat(
+        _map(filteredPreferredResults, (result, index) => {
           // Add a border bottom to the last entry if there are more
           // search results.
-          if (index === reorderedSearchResults.length - 1 && reorderedSearchResults.length > 0) {
+          if (index === filteredPreferredResults.length - 1 && filteredPreferredResults.length > 0) {
             className += " mr-border-b-2 mr-border-white-50 mr-mb-2 mr-pb-2"
           }
-
           return generateResult(result, className, index)
-        }))
+        })
+      )
     }
-
-    // Now concat all other search results -- but the index will be offset by the
-    // preferred results length
-    items = items.concat(_map(searchResults,
-      (result, index) => generateResult(result, "", index + preferredResults.length)))
+  
+    // Now concatenate all other search results, but the index will be offset by the
+    // preferred results length.
+    items = items.concat(
+      _map(searchResults, (result, index) => generateResult(result, "", index + filteredPreferredResults.length))
+    )
+  
     return items
   }
-
+  
   getPreferredResults = () => {
     // Filter out any tags that have already been selected.
     const preferredResults = _clone(this.props.preferredResults) || []
     return _difference(preferredResults, _split(this.props.formData, ','))
   }
-
+  
   getSearchResults = () => {
     // If we are limiting tags to just preferred we don't need to provide
     // any search results
     if (this.props.limitToPreferred) {
       return []
     }
-
+  
     // Filter out any of our original preferredResults tags so they don't show
     // in the list twice.
     return _filter(this.props.searchResults,
-                   t => _indexOf(this.props.preferredResults, t.name) === -1)
-
+      t => _indexOf(this.props.preferredResults, t.name) === -1)
+      
   }
-
+  
   render() {
     return (
       <Downshift
