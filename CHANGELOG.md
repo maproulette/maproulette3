@@ -7,6 +7,15 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.8] - 2023-2-02
+Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
+
+## What's Changed
+* change leaderboard initial months past to 1 month by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2258
+* fix preferred mr tags being dropped issue by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2257
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.7...v3.14.8
+
 ## [v3.14.7] - 2023-1-30
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
@@ -17,6 +26,8 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 * add link previews by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2251
 * move active filters at top of filter list fo auto suggest text box by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2244
 * remove undefined formData var by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2254
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.6...v3.14.7
 
 ## [v3.14.6] - 2023-1-17
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
