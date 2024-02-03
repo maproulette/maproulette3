@@ -73,7 +73,7 @@ export const getFilterIds = (search, param) => {
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class TaskReviewTable extends Component {
-  componentIsMounted: false
+  componentIsMounted = false
 
   state = {
     displayMap: localStorage.getItem('displayMap') === 'true' ? true : false,    
@@ -126,6 +126,12 @@ export class TaskReviewTable extends Component {
     
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered"])})
+      // If no map, omit map bounding box from filter criteria on update
+      if(!this.state.displayMap) {
+        this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
+          includeTags: !!_get(this.props.addedColumns, 'tags')})
+          return
+      }
       this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
         boundingBox: this.props.reviewCriteria.boundingBox,
         includeTags: !!_get(this.props.addedColumns, 'tags')})
@@ -193,7 +199,7 @@ export class TaskReviewTable extends Component {
     this.setupConfigurableColumns(this.props.reviewTasksType)
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
       this.setupConfigurableColumns(this.props.reviewTasksType)
     }
@@ -210,9 +216,13 @@ export class TaskReviewTable extends Component {
 
     // If we've added the "tag" column, we need to update the table to fetch
     // the tag data.
-    else if (!_get(prevProps.addedColumns, 'tags') &&
+    if (!_get(prevProps.addedColumns, 'tags') &&
         _get(this.props.addedColumns, 'tags') &&
         this.state.lastTableState) {
+      this.updateTasks(this.state.lastTableState)
+    }
+
+    if(this.state.displayMap !== prevState.displayMap) {
       this.updateTasks(this.state.lastTableState)
     }
   }
