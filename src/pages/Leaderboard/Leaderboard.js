@@ -21,7 +21,7 @@ import RowLeaderboard from './RowLeaderboard'
 import LeaderboardMap from './LeaderboardMap'
 import messages from './Messages'
 
-const INITIAL_MONTHS_PAST = -1;
+const INITIAL_MONTHS_PAST = 1;
 
 class Leaderboard extends Component {
   loggedInUserMissing = () => {
