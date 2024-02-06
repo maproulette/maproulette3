@@ -66,6 +66,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
 
      invertField = (fieldName) => {
        const criteria = _cloneDeep(this.state.criteria)
+       criteria.invertFields = criteria.invertFields || {}
        criteria.invertFields[fieldName] = !criteria.invertFields[fieldName]
        this.setState({criteria})
        if (this.props.setSearchFilters) {
