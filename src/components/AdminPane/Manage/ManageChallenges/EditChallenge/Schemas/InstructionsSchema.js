@@ -17,6 +17,7 @@ import messages from '../Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl) => {
+  const instructionsMinLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -24,8 +25,8 @@ export const jsSchema = (intl) => {
       instruction: {
         title: intl.formatMessage(messages.instructionLabel),
         type: "string",
-        minLength: 150,
-        description: intl.formatMessage(messages.instructionsDescription),
+        minLength: instructionsMinLength,
+        description: intl.formatMessage(messages.instructionsDescription, {minLength: `${instructionsMinLength}`})
       },
       difficulty: {
         title: intl.formatMessage(messages.difficultyLabel),
