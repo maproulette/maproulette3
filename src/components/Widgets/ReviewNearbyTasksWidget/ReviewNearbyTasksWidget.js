@@ -282,7 +282,6 @@ registerWidgetType(
             )
           ),
           'nearbyTasks',
-          // 'taskClusters',
           'filteredClusteredTasks',
           {
             includeLocked: false,

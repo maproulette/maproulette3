@@ -289,7 +289,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const isTagFix = AsCooperativeWork(props.task).isTagType()
       const enableEditForMapper = props.task?.status === 0 || (props.task?.reviewStatus === ( 2 || 4 || 5 ))
       const disableSelecting = props.taskReadOnly || isTagFix || !isMapper || !enableEditForMapper
- console.log(original.bundleId)
+
       return (
       props.highlightPrimaryTask && original.id === props.task.id && !original.bundleId ?
       <span className="mr-text-green-lighter">✓</span> : !disableSelecting && !original.bundleId ?
@@ -331,13 +331,27 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
           </span>
         )
       }
-      else if (_isFinite(t.bundleId)) {
+      else if (_isFinite(t.bundleId) && t.bundleId && t.bundleId == props.taskBundle?.bundleId) {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
               sym="puzzle-icon"
               viewBox="0 0 20 20"
               className="mr-fill-current mr-w-4 mr-h-4 mr-absolute mr-left-0 mr--ml-2"
+              title={props.intl.formatMessage(messages.bundleMemberTooltip)}
+            />
+            {t.id}
+          </span>
+        )
+      } else if (_isFinite(t.bundleId)) {
+        return (
+          <span className="mr-flex mr-items-center" title={
+            'This task has been bundled by someone else, check back later to see if this task is open to edits'
+          }>
+            <SvgSymbol
+              sym="box-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-green mr-w-4 mr-h-4 mr-absolute mr-left-0 mr--ml-2"
               title={props.intl.formatMessage(messages.bundleMemberTooltip)}
             />
             {t.id}
@@ -376,22 +390,20 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: 'remove',
     minWidth: 110,
     Cell: ({ row }) => {
-      const isTaskSelected = props.taskId === row._original.id
-      const enableEditForMapper = props.task?.status === 0 || (props.task?.reviewStatus === ( 2 || 4 || 5 ))
-      const isTaskRemovable = !props.taskReadOnly && enableEditForMapper
-      
-      const alreadyBundled = row._original.bundleId !== props.task.bundleId
-      const enableRemove = props.task?.completedBy ? props.task.completedBy === props.user.id : true
+      const alreadyBundled = row._original?.bundleId && row._original?.bundleId !== props.taskBundle?.bundleId
+      const enableRemove = props.task?.completedBy ? props.task?.completedBy === props.user?.id : true 
+      const isTaskRemovable = !props.taskReadOnly && props.task
+      const isTaskSelected = row._original.isBundlePrimary
 
       return (
         <div>
-          {isTaskRemovable && !isTaskSelected && enableRemove && props.taskBundle.taskIds.includes(row._original.id) && (
+          {isTaskRemovable && !isTaskSelected && enableRemove && props.taskBundle?.taskIds.includes(row._original.id) && (
             <button className="mr-text-red-light" onClick={() => props.unbundleTask(row._original)}>
               <FormattedMessage {...messages.unbundle} />
             </button>
           )}
         
-          {isTaskRemovable && !isTaskSelected && enableRemove && !props.taskBundle.taskIds.includes(row._original.id) && !alreadyBundled && (
+          {isTaskRemovable && !isTaskSelected && enableRemove && !props.taskBundle?.taskIds.includes(row._original.id) && !alreadyBundled && (
             <button className="mr-text-green-lighter" onClick={() => props.bundleTask(row._original)}>
               <FormattedMessage {...messages.bundle} />
             </button>

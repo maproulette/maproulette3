@@ -914,10 +914,10 @@ export const deleteTask = function(taskId) {
   }
 }
 
-export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") {
+export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bundleName="") {
   return function(dispatch) {
     return new Endpoint(api.tasks.bundle, {
-      json: {name: bundleName, taskIds},
+      json: {name: bundleName, primaryId, taskIds},
     }).execute().then(results => {
       return results
     }).catch(error => {

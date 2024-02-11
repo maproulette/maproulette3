@@ -47,12 +47,6 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         const criteria = _cloneDeep(this.props.criteria)
         criteria.boundingBox = arrayBounds.join(',')
         this.props.updateTaskFilterBounds(bounds, zoom, fromUserAction)
-
-        // If task selection is active, prune any selections that no longer
-        // intersect with the new map bounds
-        this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
-          booleanDisjoint(AsMappableTask(task).normalizedGeometries(), bboxPolygon(arrayBounds))
-        )
       }
     }
 

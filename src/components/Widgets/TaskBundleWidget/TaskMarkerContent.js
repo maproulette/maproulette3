@@ -16,6 +16,11 @@ class TaskMarkerContent extends Component {
   render() {
     const bundle = this.props.taskBundleData?.map((bundleObject) => bundleObject.id) || []
     const selected = this.props.isTaskSelected(this.props.marker.options.taskId)
+
+    //include other mappers in the future
+    const enableEdit = this.props.task.completedBy ? this.props.task.completedBy === this.props.user.id : true
+    const disableBundling = this.props.marker.options.taskStatus !== 0
+
     const isChecked = (
       !this.props.bundling && 
       this.props.marker.options.taskId !== this.props.task.id && 
@@ -75,6 +80,7 @@ class TaskMarkerContent extends Component {
                 </span>
               )}
 
+              { enableEdit && this.props.bundling ?
                 <div>
                   {this.props.task.id === this.props.marker.options.id ? 
                     <div>Cannot edit primary task</div> : 
@@ -86,15 +92,16 @@ class TaskMarkerContent extends Component {
                     >
                       Remove from Bundle
                     </button>
-                  ) : this.props.bundling && !this.props.marker.options.bundleId ? (
+                  ) : this.props.bundling && !this.props.marker.options.bundleId && !disableBundling ? (
                     <button
                       onClick={() => this.props.bundleTask(this.props.marker.options)}
                       className="mr-text-green mr-border-solid mr-border mr-border-green mr-px-2 mr-mb-1"
                     >
                       Add to Bundle
                     </button>
-                  ) : this.props.bundling ? <div>This task is currently bundled by someone else</div> : null}
-                </div>
+                  ) : this.props.marker.options.bundleId ? <div>You do not have permission to edit this bundle this task.</div> : null}
+                </div> : !enableEdit ? <div>You do not have permission to edit this bundle this task.</div> : null
+              }
             </label>
           </div>
         </div>

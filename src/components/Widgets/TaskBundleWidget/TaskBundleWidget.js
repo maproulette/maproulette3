@@ -37,7 +37,6 @@ import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 import WithWebSocketSubscriptions
        from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
-import { TaskAction } from '../../../services/Task/TaskAction/TaskAction'
 import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -48,14 +47,6 @@ import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import TaskReviewStatusFilter from '../../TaskFilters/TaskReviewStatusFilter'
-
-const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
-const VALID_STATUSES =
-{
-  [TaskStatus.created]: true,
-  [TaskStatus.skipped]: true,
-  [TaskStatus.tooHard]: true,
-}
 
 const descriptor = {
   widgetKey: 'TaskBundleWidget',
@@ -252,6 +243,11 @@ export default class TaskBundleWidget extends Component {
     else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
       this.props.selectTasks([this.props.task])
     }
+
+    if(this.props.taskBundle && this.props.taskBundle !== prevProps.taskBundle && this.props.selectedTasks.selected.size !== this.props.taskBundle.tasks.length){
+      this.props.setupBundle(this.props.taskBundle.bundleId)
+      this.props.selectTasks(this.props.taskBundle.tasks)
+    }
   }
 
   componentWillUnmount() {
@@ -262,6 +258,7 @@ export default class TaskBundleWidget extends Component {
  //need to remove task bundles here if no tasks were submitted
     this.props.deactivateKeyboardShortcut(shortcutGroup, 'completeTogether',
                                           this.handleKeyboardShortcuts)
+
   }
 
   render() {
@@ -298,12 +295,11 @@ const calculateTasksInChallenge = props => {
     return _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
   }
 
-  return _sum(_values(_pick(actions, VALID_STATUS_KEYS)))
+  return _sum(_values(_pick(actions)))
 }
 
 const ActiveBundle = props => {
   const [bundledOnly, setBundledOnly] = useState(true)
-console.log(props.selectedTasks)
   const showMarkerPopup = (markerData) => {
     return (
       <Popup key={markerData.options.taskId}>
@@ -345,14 +341,10 @@ console.log(props.selectedTasks)
 
   const enableRemove = props.task.completedBy ? props.task.completedBy === props.user.id : true
 
-  if (!props.taskBundle) {
-    return null
-  }
-
   return (
     <div className="mr-p-4 mr-h-full mr-rounded">
         <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
-          <MapPane showLasso>{map}</MapPane>
+          <MapPane>{map}</MapPane>
         </div>
       <div className="mr-flex mr-justify-between mr-content-center mr-my-4">
    
@@ -369,7 +361,7 @@ console.log(props.selectedTasks)
             values={{taskCount: props.taskBundle.taskIds.length}}
           />
         </h3>
-        {!props.taskReadOnly && props.task.status === 0 && enableRemove && !props.disallowBundleChanges &&
+        {!props.taskReadOnly && enableRemove && !props.disallowBundleChanges &&
           <button
             className="mr-button mr-border-red mr-text-red mr-button--small"
             onClick={() => {
@@ -415,11 +407,6 @@ console.log(props.selectedTasks)
 
       <TaskAnalysisTable
         {...props}
-        taskInfo={{
-          challengeId: props.challengeId,
-          loading: false,
-          tasks: props.taskBundle.tasks,
-        }}
         selectedTasks={new Map()}
         taskData={bundledOnly ? _get(props, 'taskBundle.tasks') : _get(props, 'taskInfo.tasks')}
         totalTaskCount={_get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')}
@@ -493,8 +480,8 @@ const BuildBundle = props => {
       taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
       boundingBox={_get(props, 'criteria.boundingBox')}
       initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
-      onBulkTaskSelection={props.selectTasks}
       onBulkTaskDeselection={props.deselectTasks}
+      hideLasso={true}
       allowClusterToggle={false}
       hideSearchControl
       allowSpidering
@@ -508,7 +495,7 @@ const BuildBundle = props => {
       <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
         {props.loading ?
           <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
-          <MapPane showLasso>{map}</MapPane>
+          <MapPane>{map}</MapPane>
         }
       </div>
 
@@ -599,7 +586,6 @@ registerWidgetType(
             'clusteredTasks',
             'filteredClusteredTasks',
             {
-              statuses: VALID_STATUSES,
               includeLocked: false,
             },
             true,

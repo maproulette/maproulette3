@@ -21,14 +21,16 @@ export function WithTaskBundle(WrappedComponent) {
 
     setupBundle = bundleId => {
       this.setState({loading: true})
+      if(bundleId) {
       this.props.fetchTaskBundle(bundleId).then(taskBundle => {
         this.setState({taskBundle, loading: false})
       })
     }
+    }
 
     createTaskBundle = (taskIds, bundleTypeMismatch, name) => {
       this.setState({loading: true})
-      this.props.bundleTasks(taskIds, bundleTypeMismatch, name).then(taskBundle => {
+      this.props.bundleTasks(this.props.taskId, taskIds, bundleTypeMismatch, name).then(taskBundle => {
         this.setState({taskBundle, loading: false})
       })
     }
@@ -45,6 +47,7 @@ export function WithTaskBundle(WrappedComponent) {
     removeTaskFromBundle = (bundleId, taskId) => {
       this.setState({loading: true})
       if(this.state.taskBundle.taskIds.length === 2) {
+        //need to make sure this deletes all columns related to the bundle related to restrictions on bundling
         this.removeTaskBundle(bundleId, this.state.taskBundle.taskIds[0])
         this.setState({loading: false})
         return
@@ -81,6 +84,8 @@ export function WithTaskBundle(WrappedComponent) {
         else {
           this.clearActiveTaskBundle()
         }
+      } else if (_isFinite(_get(this.props, 'task.bundleId')) !== _isFinite(_get(prevProps, 'task.bundleId'))){
+        this.setupBundle(this.props.task.bundleId)
       }
     }
 
@@ -94,6 +99,7 @@ export function WithTaskBundle(WrappedComponent) {
           removeTaskBundle={this.removeTaskBundle}
           removeTaskFromBundle={this.removeTaskFromBundle}
           addTaskToBundle={this.addTaskToBundle}
+          setupBundle={this.setupBundle}
           clearActiveTaskBundle={this.clearActiveTaskBundle}
           setSelectedTasks={(selectedTasks) => this.setState({selectedTasks})}
           selectedTasks={this.state.selectedTasks}
