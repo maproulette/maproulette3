@@ -8,7 +8,7 @@ class Footer extends Component {
     super(props);
 
     this.state = {
-      data : null
+      data: null
     };
   }
 
@@ -16,17 +16,17 @@ class Footer extends Component {
     this.renderMyData();
   }
 
-  renderMyData(){
+  renderMyData() {
     fetch(`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
-        .then((response) => response.json())
-        .then((responseJson) => {
-          this.setState({ data : responseJson })
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({ data: responseJson })
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
-  
+
   render() {
     return (
       <footer
@@ -45,8 +45,8 @@ class Footer extends Component {
                   </a>
                 </span>
               </h3>
-             { this.state.data ? 
-              <h3 className="mr-text-white mr-text-md mr-mb-2">
+              {this.state.data ?
+                <h3 className="mr-text-white mr-text-md mr-mb-2">
                   <FormattedMessage {...messages.APIVersionLabel} />{' '}
                   <span className="mr-text-green-light mr-font-mono mr-text-base">
                     <a
@@ -55,8 +55,8 @@ class Footer extends Component {
                       v{this.state.data.compiletime.version}
                     </a>
                   </span>
-                </h3> : 
-                null 
+                </h3> :
+                null
               }
             </div>
 
@@ -92,7 +92,7 @@ class Footer extends Component {
                 rel="noopener noreferrer"
                 className="mr-items-center"
               >
-                <span className="mr-absolute mr-ml-8"> 
+                <span className="mr-absolute mr-ml-8">
                   <FormattedMessage {...messages.donateButton} />
                 </span>
               </a>
@@ -103,13 +103,13 @@ class Footer extends Component {
                   <FormattedMessage {...messages.followUs} />
                 </h3>
                 <a
-                  href="https://twitter.com/maproulette"
+                  href="https://en.osm.town/@MapRoulette"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mr-inline-flex mr-items-center"
                 >
                   <SvgSymbol
-                    sym="icon-twitter"
+                    sym="icon-mastodon"
                     viewBox="0 0 30 24"
                     className="mr-w-6 mr-h-auto mr-fill-twitter"
                   />
