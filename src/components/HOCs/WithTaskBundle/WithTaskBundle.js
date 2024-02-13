@@ -36,7 +36,7 @@ export function WithTaskBundle(WrappedComponent) {
         if (_isFinite(_get(task, 'bundleId'))) {
           this.setupBundle(task.bundleId)
         }
-        if ((this.state.taskBundle || this.state.initialBundle) && 
+        if ((prevState.taskBundle || prevState.initialBundle) && 
             prevState.taskBundle !== prevState.initialBundle  && 
             (!prevState.completingTask || prevProps.task.status === 3)) {
           if (initialBundle) {
