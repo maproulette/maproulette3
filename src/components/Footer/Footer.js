@@ -17,10 +17,10 @@ class Footer extends Component {
   }
 
   renderMyData(){
-      fetch(`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
+    fetch(`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
         .then((response) => response.json())
         .then((responseJson) => {
-          this.setState({ data: responseJson })
+          this.setState({ data : responseJson })
         })
         .catch((error) => {
           console.error(error);
@@ -45,7 +45,7 @@ class Footer extends Component {
                   </a>
                 </span>
               </h3>
-              { this.state.data ? 
+             { this.state.data ? 
               <h3 className="mr-text-white mr-text-md mr-mb-2">
                   <FormattedMessage {...messages.APIVersionLabel} />{' '}
                   <span className="mr-text-green-light mr-font-mono mr-text-base">
