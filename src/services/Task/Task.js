@@ -27,6 +27,7 @@ import { markReviewDataStale } from './TaskReview/TaskReview'
 import { receiveClusteredTasks } from './ClusteredTask'
 import { TaskStatus } from './TaskStatus/TaskStatus'
 import { generateSearchParametersString } from '../Search/Search'
+import { addErrorWithDetails } from '../Error/Error'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -920,17 +921,24 @@ export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") 
       json: {name: bundleName, taskIds},
     }).execute().then(results => {
       return results
-    }).catch(error => {
+    }).catch(async error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
         )
       }
       else {
-        if(bundleTypeMismatch == "cooperative") {
-          dispatch(addError(AppErrors.task.bundleCooperative))
-        } else if (bundleTypeMismatch == "notCooperative") {
-          dispatch(addError(AppErrors.task.bundleNotCooperative))
+        if (bundleTypeMismatch === "cooperative") {
+          dispatch(addError(AppErrors.task.bundleCooperative));
+        } else if (bundleTypeMismatch === "notCooperative") {
+          dispatch(addError(AppErrors.task.bundleNotCooperative));
+        }
+
+        const errorMessage = await error.response.text()
+        if (errorMessage.includes('task IDs were locked')) {
+          const numberPattern = /\d+/g
+          const numbersOnly = errorMessage.match(numberPattern).map(Number)
+          dispatch(addErrorWithDetails(AppErrors.task.unableToBundleTasks, numbersOnly))
         }
         dispatch(addError(AppErrors.task.bundleFailure))
         console.log(error.response || error)

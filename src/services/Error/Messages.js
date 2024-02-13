@@ -115,7 +115,11 @@ export default defineMessages({
     id: "Errors.task.cooperativeFailure",
     defaultMessage: "Failed to load cooperative task{details}",
   },
-
+  unableToBundleTasks: {
+    id: "Errors.task.unableToBundleTasks",
+    defaultMessage: "The tasks with these IDs are locked by another user{details}. This most likely happened because a user completed or " +
+    "bundled a task while you've been looking at this task. Refresh the page to view only tasks that are unlocked.",
+  },
   osmRequestTooLarge: {
     id: "Errors.osm.requestTooLarge",
     defaultMessage: "OpenStreetMap data request too large",
