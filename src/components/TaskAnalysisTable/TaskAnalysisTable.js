@@ -286,7 +286,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const isMapper = props.task?.completedBy ? props.task.completedBy === props.user.id : true
       
       const isTagFix = AsCooperativeWork(props.task).isTagType()
-      const enableEditForMapper = props.task?.status === 0 || (props.task?.reviewStatus === ( 2 || 4 || 5 ))
+      const enableEditForMapper = [0, 3].includes(props.task?.status) || [2, 4, 5].includes(props.task?.reviewStatus)
+
       const disableSelecting = props.taskReadOnly || isTagFix || !isMapper || !enableEditForMapper
 
       return (
@@ -376,7 +377,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     minWidth: 110,
     Cell: ({ row }) => {
       const isTaskSelected = props.taskId === row._original.id
-      const enableEditForMapper = props.task?.status === 0 || (props.task?.reviewStatus === ( 2 || 4 || 5 ))
+      const enableEditForMapper = [0, 3].includes(props.task?.status) || [2, 4, 5].includes(props.task?.reviewStatus)
       const isTaskRemovable = !props.taskReadOnly && enableEditForMapper
 
       const enableRemove = props.task?.completedBy ? props.task.completedBy === props.user.id : true
