@@ -4,12 +4,7 @@ import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
-import {
-  bundleTasks,
-  deleteTaskBundle,
-  removeTaskFromBundle,
-  fetchTaskBundle
-} from '../../../services/Task/Task'
+import { bundleTasks, deleteTaskBundle, removeTaskFromBundle, fetchTaskBundle } from '../../../services/Task/Task'
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -151,9 +146,9 @@ export function WithTaskBundle(WrappedComponent) {
 }
 
 export const mapDispatchToProps = dispatch => bindActionCreators({
-      bundleTasks,
-      deleteTaskBundle,
-      removeTaskFromBundle,
+  bundleTasks,
+  deleteTaskBundle,
+  removeTaskFromBundle,
   fetchTaskBundle,
 }, dispatch)
 
