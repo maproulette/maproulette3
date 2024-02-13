@@ -372,7 +372,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.unbundle = {
     id: 'unbundle',
-    Header: '',
+    Header: null,
+    sortable: false,
     accessor: 'remove',
     minWidth: 110,
     Cell: ({ row }) => {
