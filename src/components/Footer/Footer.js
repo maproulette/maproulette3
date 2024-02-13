@@ -103,13 +103,13 @@ class Footer extends Component {
                   <FormattedMessage {...messages.followUs} />
                 </h3>
                 <a
-                  href="https://twitter.com/maproulette"
+                  href="https://en.osm.town/@MapRoulette"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mr-inline-flex mr-items-center"
                 >
                   <SvgSymbol
-                    sym="icon-twitter"
+                    sym="icon-mastodon"
                     viewBox="0 0 30 24"
                     className="mr-w-6 mr-h-auto mr-fill-twitter"
                   />
