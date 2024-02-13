@@ -53,7 +53,6 @@ import ReactTable from 'react-table-6'
 
 export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
-
   for (let pair of searchParams.entries()) {
     if (pair[0] === param && pair[1]) {
       if (pair[1] === '0') {
@@ -73,7 +72,7 @@ export const getFilterIds = (search, param) => {
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class TaskReviewTable extends Component {
-  componentIsMounted: false
+  componentIsMounted = false
 
   state = {
     displayMap: localStorage.getItem('displayMap') === 'true' ? true : false,    
@@ -125,7 +124,7 @@ export class TaskReviewTable extends Component {
     }
     
     if (this.componentIsMounted) {
-      this.setState({lastTableState: _pick(tableState, ["sorted", "filtered"])})
+      this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
       this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
         boundingBox: this.props.reviewCriteria.boundingBox,
         includeTags: !!_get(this.props.addedColumns, 'tags')})
@@ -284,7 +283,7 @@ export class TaskReviewTable extends Component {
       <Dropdown className="mr-dropdown--right"
           dropdownButton={dropdown => (
             <button onClick={dropdown.toggleDropdownVisible}
-              className="mr-text-green-lighter mr-mr-4">
+              className="mr-text-green-lighter hover:mr-text-white mr-transition-colors">
             <SvgSymbol
               sym="filter-icon"
               viewBox="0 0 20 20"
@@ -309,7 +308,7 @@ export class TaskReviewTable extends Component {
       <Dropdown className="mr-dropdown--right"
         dropdownButton={dropdown => (
           <button onClick={dropdown.toggleDropdownVisible}
-            className="mr-text-green-lighter">
+            className="mr-text-green-lighter hover:mr-text-white mr-transition-colors">
             <SvgSymbol sym="cog-icon"
               viewBox="0 0 20 20"
               className="mr-fill-current mr-w-5 mr-h-5" />
@@ -320,7 +319,9 @@ export class TaskReviewTable extends Component {
             <li>
               <button
                 className="mr-text-current"
-                onClick={() => this.setState({showConfigureColumns: true})}
+                onClick={() => {
+                  this.setState({showConfigureColumns: true}) 
+                  dropdown.toggleDropdownVisible()}}
               >
                 <FormattedMessage {...messages.configureColumnsLabel} />
               </button>
@@ -361,6 +362,20 @@ export class TaskReviewTable extends Component {
           </ul>
         }
       />
+    )
+  }
+
+  clearFiltersControl = () => {
+    return (
+      <div className='mr-pb-2'>
+      <button className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
+        onClick={() => this.props.clearFilterCriteria()}>
+        <SvgSymbol sym="close-icon"
+          viewBox='0 0 20 20'
+          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+        <FormattedMessage {...messages.clearFiltersLabel} />
+      </button>
+      </div>
     )
   }
 
@@ -475,7 +490,6 @@ export class TaskReviewTable extends Component {
       )
     );
     
-    
     return (
       <React.Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
@@ -520,8 +534,9 @@ export class TaskReviewTable extends Component {
                 >
                   <FormattedMessage {...messages.refresh} />
                 </button>
-                <div className="mr-float-right mr-mt-3 mr-ml-3">
-                  <div className="mr-flex mr-justify-start mr-ml-4">
+                <div className="mr-float-right mr-mt-2 mr-ml-3">
+                  <div className="mr-flex mr-justify-start mr-ml-4 mr-items-center mr-space-x-4">
+                    {this.clearFiltersControl()}
                     {this.filterDropdown(this.props.reviewTasksType)}
                     {this.gearDropdown(this.props.reviewTasksType)}
                   </div>
@@ -558,6 +573,30 @@ export class TaskReviewTable extends Component {
               loading={this.props.loading}
               {...intlTableProps(this.props.intl)}
               PaginationComponent={IntlTablePagination}
+              FilterComponent={({ filter, onChange }) => {
+                const filterValue = filter ? filter.value : ''
+                const clearFilter = () => onChange('')
+                return (
+                  <div className='mr-space-x-1'>
+                    <input
+                      type="text"
+                      style={{
+                        width: '100%',
+                      }}
+                      value={filterValue}
+                      onChange={event => {
+                        onChange(event.target.value)
+                      }}
+                    />
+                    {filterValue && (
+                      <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+                        <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+                      </button>
+                    )}
+                  </div>
+                  )
+                }
+              }
             />
           </div>
         </div>
@@ -787,18 +826,33 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     },
     Filter: ({ filter, onChange }) => {
       return (
-        <FilterSuggestTextBox
-          filterType={"challenge"}
-          filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
-          selectedItem={""}
-          onChange={(item) => {
-            onChange(item)
-            setTimeout(() => props.updateChallengeFilterIds(item), 0)
-          }}
-          value={filter ? filter.value : ""}
-          itemList={props.reviewChallenges}
-          multiselect={props.challengeFilterIds}
-        />
+        <div className='mr-space-x-1'>
+          <div className='mr-inline-block'>
+            <FilterSuggestTextBox
+              filterType={"challenge"}
+              filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
+              selectedItem={""}
+              onChange={(item) => {
+                onChange(item)
+                setTimeout(() => props.updateChallengeFilterIds(item), 0)
+              }}
+              value={filter ? filter.value : ""}
+              itemList={props.reviewChallenges}
+              multiselect={props.challengeFilterIds}
+            />
+          </div>
+          {props.challengeFilterIds && props.challengeFilterIds.length && props.challengeFilterIds?.[0] !== -2 ? (
+            <button 
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => {
+                onChange({ id: -2, name: "All Challenges" })
+                setTimeout(() => props.updateChallengeFilterIds({ id: -2, name: "All Challenges" }), 0)
+              }}
+            >
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          ) : null}
+        </div>
       )
     }
   }
@@ -833,18 +887,33 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     },
     Filter: ({ filter, onChange }) => {
       return (
-        <FilterSuggestTextBox
-          filterType={"project"}
-          filterAllLabel={props.intl.formatMessage(messages.allProjects)}
-          selectedItem={""}
-          onChange={(item) => {
-            onChange(item)
-            setTimeout(() => props.updateProjectFilterIds(item), 0)
-          }}
-          value={filter ? filter.value : ""}
-          itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
-          multiselect={props.projectFilterIds}
-        />
+        <div className='mr-space-x-1'>
+          <div className='mr-inline-block'>
+            <FilterSuggestTextBox
+              filterType={"project"}
+              filterAllLabel={props.intl.formatMessage(messages.allProjects)}
+              selectedItem={""}
+              onChange={(item) => {
+                onChange(item)
+                setTimeout(() => props.updateProjectFilterIds(item), 0)
+              }}
+              value={filter ? filter.value : ""}
+              itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
+              multiselect={props.projectFilterIds}
+            />
+          </div>
+            {props.projectFilterIds && props.projectFilterIds.length && props.projectFilterIds?.[0] !== -2 ? (
+              <button 
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => {
+                  onChange({ id: -2, name: "All Projects" })
+                  setTimeout(() => props.updateProjectFilterIds({ id: -2, name: "All Projects" }), 0)
+                }}
+              >
+                <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+              </button>
+            ) : null}
+        </div>
       )
     }
   }
@@ -874,8 +943,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       if (typeof mappedOn === "string" && mappedOn !== "") {
         mappedOn = parse(mappedOn)
       }
+
+      const clearFilter = () => props.setFiltered("mappedOn", null)
+      
       return (
-        <div>
+        <div className='mr-space-x-1'>
           <IntlDatePicker
               selected={mappedOn}
               onChange={(value) => {
@@ -883,6 +955,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               }}
               intl={props.intl}
           />
+          {mappedOn && (
+            <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          )}
         </div>
       )
     },
@@ -914,8 +991,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
         reviewedAt = parse(reviewedAt)
       }
+
+      const clearFilter = () => props.setFiltered("reviewedAt", null)
+
       return (
-        <div>
+        <div className='mr-space-x-1'>
           <IntlDatePicker
               selected={reviewedAt}
               onChange={(value) => {
@@ -923,6 +1003,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               }}
               intl={props.intl}
           />
+          {reviewedAt && (
+            <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          )}
         </div>
       )
     },
@@ -1338,7 +1423,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         <InTableTagFilter
           {...props}
           onChange={onChange}
-          value={_get(filter, 'value')}
+          value={filter ? _get(filter, 'value') : ''}
         />
       )
     }

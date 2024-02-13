@@ -33,7 +33,6 @@ import WithReviewTasks from '../../components/HOCs/WithReviewTasks/WithReviewTas
 import TasksReviewChallenges from './TasksReview/TasksReviewChallenges'
 import messages from './Messages'
 
-
 const WIDGET_WORKSPACE_NAME = "reviewOverview"
 
 const ReviewWidgetWorkspace = WithReviewTasks(WidgetWorkspace)
@@ -174,6 +173,10 @@ export class ReviewTasksDashboard extends Component {
     this.props.history.push({
       pathname: `/review/${this.state.showType}`
     })
+  }
+
+  clearFilters = () => {
+    this.setSelectedFilters({}, true)
   }
 
   changeTab = (tab) => {
@@ -338,6 +341,7 @@ export class ReviewTasksDashboard extends Component {
             reviewTasksSubType={this.state.showSubType}
             defaultFilters={this.state.filterSelected[showType]}
             clearSelected={this.clearSelected}
+            clearFilters={this.clearFilters}
             pageId={showType}
             metaReviewEnabled={metaReviewEnabled}
           />

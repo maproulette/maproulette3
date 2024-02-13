@@ -127,7 +127,7 @@ export class TaskAnalysisTableHeader extends Component {
                       className="mr-fill-current mr-w-5 mr-h-5" />
                   </button>
                 )}
-                dropdownContent={() =>
+                dropdownContent={(dropdown) =>
                   <React.Fragment>
                     <ul className="mr-list-dropdown">
                       {manager.canWriteProject(this.props.challenge.parent) &&
@@ -204,7 +204,10 @@ export class TaskAnalysisTableHeader extends Component {
                       <li>
                         <button
                           className="mr-text-green-lighter"
-                          onClick={() => configureColumns()}>
+                          onClick={() => {
+                            configureColumns()
+                            dropdown.toggleDropdownVisible()  
+                          }}>
                           <FormattedMessage {...messages.configureColumnsLabel} />
                         </button>
                       </li>

@@ -333,8 +333,8 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
   }
 
   if (filters.tags) {
-    searchParameters[PARAMS_MAP.tags] = filters.tags.trim()
-  }
+    searchParameters[PARAMS_MAP.tags] = `${filters.tags}`.trim()
+  }  
 
   if (excludeTasks && excludeTasks.length > 0) {
     searchParameters[PARAMS_MAP.excludeTasks] = excludeTasks.join(',')

@@ -100,6 +100,7 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
 
     getBriefFilters = savedFilters => {
       const criteria = buildSearchCriteriafromURL(savedFilters)
+
       return _compact(_map(criteria.filters, (value, key) => {
         let op = '='
         let textValue = value
