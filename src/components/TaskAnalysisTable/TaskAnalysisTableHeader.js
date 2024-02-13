@@ -208,7 +208,6 @@ export class TaskAnalysisTableHeader extends Component {
                             configureColumns()
                             dropdown.toggleDropdownVisible()  
                           }}>
-                          
                           <FormattedMessage {...messages.configureColumnsLabel} />
                         </button>
                       </li>

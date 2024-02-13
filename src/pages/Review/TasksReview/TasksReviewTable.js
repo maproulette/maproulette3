@@ -818,7 +818,6 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       )
     },
     Filter: ({ filter, onChange }) => {
-      
       return (
         <div className='mr-space-x-1'>
           <div className='mr-inline-block'>
@@ -880,7 +879,6 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       )
     },
     Filter: ({ filter, onChange }) => {
-      
       return (
         <div className='mr-space-x-1'>
           <div className='mr-inline-block'>
@@ -909,7 +907,6 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               </button>
             ) : null}
         </div>
-        
       )
     }
   }
