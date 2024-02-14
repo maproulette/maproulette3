@@ -7,6 +7,26 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.9] - 2023-2-14
+Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
+
+## What's Changed
+* Bump follow-redirects from 1.15.3 to 1.15.4 by @dependabot in https://github.com/maproulette/maproulette3/pull/2231
+* add instructions length environment variable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2234
+* fix links in review table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2247
+* Fix issue where inverting filter columns in task analysis tables throws an error instead of inverting by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2264
+* Replace Twitter with Mastodon in footer by @mvexel in https://github.com/maproulette/maproulette3/pull/2265
+* Filter clearing for Task Tables by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2253
+* fix request meta-review username issue by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2242
+* add bundling restrictions and deletion of new bundles that weren't completed on redirect by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2266
+
+## MR2 Changes
+* Enhance Country Leaderboard Availability During Refresh by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1099
+* Enhance Leaderboard Availability During Refresh by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1101
+* Migrate to io.github.play-swagger and update swagger-ui by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1103
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.8...v3.14.9
+
 ## [v3.14.8] - 2023-2-02
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
