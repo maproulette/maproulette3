@@ -309,7 +309,7 @@ const ActiveBundle = props => {
             values={{taskCount: props.taskBundle.taskIds.length}}
           />
         </h3>
-        {!props.taskReadOnly && props.task.status === 0 && enableRemove && !props.disallowBundleChanges &&
+        {!props.taskReadOnly && props.task?.status === 0 || props.task?.status === 3 && enableRemove && !props.disallowBundleChanges ?
           <button
             className="mr-button mr-button--green-lighter mr-button--small"
             onClick={() => {
@@ -317,7 +317,7 @@ const ActiveBundle = props => {
             }}
           >
             <FormattedMessage {...messages.unbundleTasksLabel} />
-          </button>
+          </button> : null
         }
       </div>
 
