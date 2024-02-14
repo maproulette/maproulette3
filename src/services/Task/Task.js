@@ -937,8 +937,14 @@ export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") 
         const errorMessage = await error.response.text()
         if (errorMessage.includes('task IDs were locked')) {
           const numberPattern = /\d+/g
-          const numbersOnly = errorMessage.match(numberPattern).map(Number)
-          dispatch(addErrorWithDetails(AppErrors.task.unableToBundleTasks, numbersOnly))
+          const matchedNumbers = errorMessage.match(numberPattern)
+          if (matchedNumbers) {
+            const numbersOnly = matchedNumbers.map(Number)
+            dispatch(addErrorWithDetails(AppErrors.task.unableToBundleTasks, numbersOnly))
+          } else {
+            console.log("No task IDs found in the error message.")
+            dispatch(addError(AppErrors.task.bundleFailure))
+          }
         }
         dispatch(addError(AppErrors.task.bundleFailure))
         console.log(error.response || error)
