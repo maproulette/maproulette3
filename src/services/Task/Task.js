@@ -943,7 +943,6 @@ export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") 
             dispatch(addErrorWithDetails(AppErrors.task.unableToBundleTasks, numbersOnly))
           } else {
             console.log("No task IDs found in the error message.")
-            dispatch(addError(AppErrors.task.bundleFailure))
           }
         }
         dispatch(addError(AppErrors.task.bundleFailure))
