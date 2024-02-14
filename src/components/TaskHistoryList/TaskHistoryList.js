@@ -96,7 +96,7 @@ export class TaskHistoryList extends Component {
         case TaskHistoryAction.review:
         case TaskHistoryAction.metaReview:
           if (log.reviewStatus === TaskReviewStatus.needed) {
-            username = _get(log, 'reviewRequestedBy.username')
+            username = _get(log, 'metaReviewRequestedBy.username')
             logEntry = reviewEntry(log, this.props, index)
           } else {
             logEntry = null
