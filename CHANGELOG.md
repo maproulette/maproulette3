@@ -19,6 +19,7 @@ Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/mapro
 * Filter clearing for Task Tables by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2253
 * fix request meta-review username issue by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2242
 * add bundling restrictions and deletion of new bundles that weren't completed on redirect by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2266
+* fix username in task history widget for revisions by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2270
 
 ## MR2 Changes
 * Enhance Country Leaderboard Availability During Refresh by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1099
