@@ -289,13 +289,13 @@ export class EditChallenge extends Component {
     (this.validationPromise || Promise.resolve())
       .then(() => {
         this.isFinishing ? this.finish() : nextStep();
-        window.scrollTo(0, 0);
+      window.scrollTo(0, 0);
         return false;
       })
       .catch((err) => {
-        console.log(err);
+      console.log(err);
       }); // Stay on current step if validation fails
-      
+
     return false;
   };
 
@@ -758,6 +758,10 @@ export class EditChallenge extends Component {
                         this.isFinishing = false;
                         prevStep(stepName);
                       }}
+                      nextStep={() => {
+                        this.isFinishing = false;
+                        nextStep();
+                      }}
                       finish={() => {
                         this.isFinishing = true;
                         this.handleSubmit();
@@ -967,12 +971,15 @@ export class EditChallenge extends Component {
                         </div>
                       )}
 
-                    {/* Note: Next button submits the form, so nextStep isn't used here */}
                     <StepNavigation
                       activeStep={activeStep}
                       prevStep={(stepName) => {
                         this.isFinishing = false;
                         prevStep(stepName);
+                      }}
+                      nextStep={() => {
+                        this.isFinishing = false;
+                        nextStep();
                       }}
                       finish={() => {
                         this.isFinishing = true;

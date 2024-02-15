@@ -37,8 +37,8 @@ export default class StepNavigation extends Component {
 
           {_isString(this.props.activeStep.next) &&
            <button
-             type="submit"
              className="mr-button mr-button--green-lighter mr-button--with-icon mr-mr-4"
+             onClick={() => this.props.nextStep()}
            >
              <FormattedMessage {...messages.next} />
              <SvgSymbol
