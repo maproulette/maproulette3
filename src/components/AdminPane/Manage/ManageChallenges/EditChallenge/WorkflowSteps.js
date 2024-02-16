@@ -182,6 +182,10 @@ const newChallengeSteps = {
     next: 'AutomatedEditsCodeAgreement',
     previous: 'Description',
   }),
+  'AutomatedEditsCodeAgreement': Object.assign({}, automatedEditsCodeAgreementStep, {
+    next: 'AdvancedOptions',
+    previous: 'Instructions'
+  }),
   'AdvancedOptions': Object.assign({}, advancedOptionsStep, {
     next: [
       'Discoverability',
@@ -236,10 +240,6 @@ const newChallengeSteps = {
     previous: 'AdvancedOptions',
     canFinish: true,
   }),
-  'AutomatedEditsCodeAgreement': Object.assign({}, automatedEditsCodeAgreementStep, {
-    next: 'AdvancedOptions',
-    previous: 'Instructions'
-  })
 }
 
 // String together workflow steps for editing an existing challenge

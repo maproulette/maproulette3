@@ -758,10 +758,6 @@ export class EditChallenge extends Component {
                         this.isFinishing = false;
                         prevStep(stepName);
                       }}
-                      nextStep={() => {
-                        this.isFinishing = false;
-                        nextStep();
-                      }}
                       finish={() => {
                         this.isFinishing = true;
                         this.handleSubmit();
@@ -976,10 +972,6 @@ export class EditChallenge extends Component {
                       prevStep={(stepName) => {
                         this.isFinishing = false;
                         prevStep(stepName);
-                      }}
-                      nextStep={() => {
-                        this.isFinishing = false;
-                        nextStep();
                       }}
                       finish={() => {
                         this.isFinishing = true;

@@ -16,8 +16,15 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
+
+const validateMinLength = val => {
+  if(!isNaN(val)) return val | 0
+  return 150
+}
+
 export const jsSchema = (intl) => {
-  const instructionsMinLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
+  const instructionsMinLength = validateMinLength(process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH)
+
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
