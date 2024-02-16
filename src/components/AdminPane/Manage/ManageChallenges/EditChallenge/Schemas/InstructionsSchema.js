@@ -18,12 +18,21 @@ import messages from '../Messages'
  */
 
 const validateMinLength = val => {
-  if(!isNaN(val)) return val | 0
-  return 150
+  if(!val) {
+    // Handle undefined. null and empty string case and default to 150:
+    if(typeof val === 'string' && val.length === 0) return 150
+    return 150
+  }
+  // Handle 0 separately. Non-strict equals will be true for '0' string value:
+  if(val == 0) return 0
+
+  // Bitwise operator coerces to number value:
+  return val | 0
 }
 
 export const jsSchema = (intl) => {
-  const instructionsMinLength = validateMinLength(process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH)
+  const minLengthEnvValue = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH
+  const instructionsMinLength = validateMinLength(minLengthEnvValue)
 
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
