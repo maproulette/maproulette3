@@ -1344,14 +1344,14 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     minWidth: 90,
     maxWidth: 120,
     Cell: ({ row }) => {
-      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
-  
-      let message =
-        row._original.reviewStatus === TaskReviewStatus.rejected ? (
-          <FormattedMessage {...messages.fixTaskLabel} />
-        ) : (
-          <FormattedMessage {...messages.viewTaskLabel} />
-        )
+      let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
+      let message = <FormattedMessage {...messages.viewTaskLabel} />
+
+      if (row._original.reviewStatus === TaskReviewStatus.disputed ||
+          row._original.metaReviewStatus === TaskReviewStatus.rejected) {
+        linkTo += "/review"
+        message = <FormattedMessage {...messages.resolveTaskLabel} />
+      }
   
       return (
         <div className="row-controls-column mr-links-green-lighter">
@@ -1367,24 +1367,6 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           >
             {message}
           </Link>
-          {!props.metaReviewEnabled &&
-            row._original.reviewStatus !== TaskReviewStatus.needed &&
-            row._original.reviewedBy &&
-            row._original.reviewedBy.id !== props.user?.id && (
-              <Link
-                to={`${linkTo}/review`}
-                onClick={(e) => {
-                  e.preventDefault()
-                  props.history.push({
-                    pathname: `${linkTo}/review`,
-                    criteria,
-                  })
-                }}
-                className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
-              >
-                <FormattedMessage {...messages.reviewFurtherTaskLabel} />
-              </Link>
-            )}
         </div>
       )
     }
