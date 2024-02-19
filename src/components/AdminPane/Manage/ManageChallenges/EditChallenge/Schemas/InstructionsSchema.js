@@ -20,7 +20,8 @@ import messages from '../Messages'
 const validateMinLength = val => {
   if(!val) {
     // Handle undefined. null and empty string case and default to 150:
-    if(typeof val === 'string' && val.length === 0) return 150
+    if(typeof val === 'string' && val.length === 0) return 0
+    if(val === 0) return 0
     return 150
   }
   // Handle 0 separately. Non-strict equals will be true for '0' string value:
