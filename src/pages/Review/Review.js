@@ -69,17 +69,25 @@ export class ReviewTasksDashboard extends Component {
   }
 
   componentDidMount() {
+    const user = AsEndUser(this.props.user)
+
+    if(!user.isReviewer()){
+      this.setState({showType: ReviewTasksType.myReviewedTasks})
+    }
+
     this.props.subscribeToReviewMessages()
   }
 
   componentDidUpdate(prevProps) {
-    if (_isUndefined(_get(this.props, 'match.params.showType')) &&
-        this.state.showType !== ReviewTasksType.toBeReviewed ) {
-      this.setState({showType:ReviewTasksType.toBeReviewed})
-    }
-    else if (_get(this.props, 'match.params.showType') !== this.state.showType &&
-        !_isUndefined(_get(this.props, 'match.params.showType'))) {
-      this.setState({showType: _get(this.props, 'match.params.showType')})
+    if(this.state.showType !== ReviewTasksType.myReviewedTasks){
+      if (_isUndefined(_get(this.props, 'match.params.showType')) &&
+          this.state.showType !== ReviewTasksType.toBeReviewed ) {
+        this.setState({showType:ReviewTasksType.toBeReviewed})
+      }
+      else if (_get(this.props, 'match.params.showType') !== this.state.showType &&
+          !_isUndefined(_get(this.props, 'match.params.showType'))) {
+        this.setState({showType: _get(this.props, 'match.params.showType')})
+      }
     }
 
     if (!this.state.filterSelected[this.state.showType]) {
@@ -198,7 +206,7 @@ export class ReviewTasksDashboard extends Component {
 
     const metaReviewEnabled = process.env.REACT_APP_FEATURE_META_QC === 'enabled'
 
-    const showType = !user.isReviewer() ? ReviewTasksType.myReviewedTasks : this.state.showType
+    const showType = this.state.showType
 
     const reviewerTabs =
       <div>
@@ -216,7 +224,7 @@ export class ReviewTasksDashboard extends Component {
           <li>
             <button
               className={classNames(
-                this.state.showType === 'tasksToBeReviewed' ? "mr-text-white" : "mr-text-green-lighter"
+                showType === 'tasksToBeReviewed' ? "mr-text-white" : "mr-text-green-lighter"
               )}
               onClick={() => this.changeTab(ReviewTasksType.toBeReviewed)}
             >
@@ -226,7 +234,7 @@ export class ReviewTasksDashboard extends Component {
           <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
             <button
               className={classNames(
-                this.state.showType === ReviewTasksType.reviewedByMe ? "mr-text-white" : "mr-text-green-lighter"
+                showType === ReviewTasksType.reviewedByMe ? "mr-text-white" : "mr-text-green-lighter"
               )}
               onClick={() => this.changeTab(ReviewTasksType.reviewedByMe)}
             >
@@ -236,7 +244,7 @@ export class ReviewTasksDashboard extends Component {
           <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
             <button
               className={classNames(
-                this.state.showType === ReviewTasksType.myReviewedTasks ? "mr-text-white" : "mr-text-green-lighter"
+                showType === ReviewTasksType.myReviewedTasks ? "mr-text-white" : "mr-text-green-lighter"
               )}
               onClick={() => this.changeTab(ReviewTasksType.myReviewedTasks)}
             >
@@ -246,7 +254,7 @@ export class ReviewTasksDashboard extends Component {
           <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
             <button
               className={classNames(
-                this.state.showType === ReviewTasksType.allReviewedTasks ? "mr-text-current" : "mr-text-green-lighter"
+                showType === ReviewTasksType.allReviewedTasks ? "mr-text-current" : "mr-text-green-lighter"
               )}
               onClick={() => this.changeTab(ReviewTasksType.allReviewedTasks)}
             >
@@ -257,7 +265,7 @@ export class ReviewTasksDashboard extends Component {
             <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
               <button
                 className={classNames(
-                  this.state.showType === ReviewTasksType.metaReviewTasks ? "mr-text-current" : "mr-text-green-lighter"
+                  showType === ReviewTasksType.metaReviewTasks ? "mr-text-current" : "mr-text-green-lighter"
                 )}
                 onClick={() => this.changeTab(ReviewTasksType.metaReviewTasks)}
               >
@@ -266,7 +274,7 @@ export class ReviewTasksDashboard extends Component {
             </li>
           }
         </ol>
-        {this.state.showType === ReviewTasksType.reviewedByMe && metaReviewEnabled &&
+        {showType === ReviewTasksType.reviewedByMe && metaReviewEnabled &&
           <ol className="mr-list-reset mr-text-md mr-leading-tight mr-flex mr-mt-6">
             <li className="mr-text-yellow">
               {this.props.intl.formatMessage(messages.role)}
@@ -324,7 +332,7 @@ export class ReviewTasksDashboard extends Component {
             />
             <div>
               <TasksReviewChallenges
-                reviewTasksType={this.state.showType}
+                reviewTasksType={showType}
                 selectChallenge={this.setSelectedChallenge}
                 selectProject={this.setSelectedProject}
               />
