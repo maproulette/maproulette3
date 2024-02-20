@@ -79,7 +79,9 @@ export class ReviewTasksDashboard extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.state.showType !== ReviewTasksType.myReviewedTasks){
+    const user = AsEndUser(this.props.user)
+    
+    if(user.isReviewer()) {
       if (_isUndefined(_get(this.props, 'match.params.showType')) &&
           this.state.showType !== ReviewTasksType.toBeReviewed ) {
         this.setState({showType:ReviewTasksType.toBeReviewed})
