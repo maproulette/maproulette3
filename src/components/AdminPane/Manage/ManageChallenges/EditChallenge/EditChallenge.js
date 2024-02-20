@@ -131,11 +131,12 @@ export class EditChallenge extends Component {
    * should be displayed as a single, long-form step. This will cause this
    * component to re-render with the updated settings
    */
-  setIsLongForm = (isLongForm) =>
+  setIsLongForm = (isLongForm) => {
+    if(this.isFinishing) this.isFinishing = false
     this.props.updateUserAppSetting(this.props.user.id, {
       longFormChallenge: isLongForm,
     });
-
+  }
   /**
    * Returns the list of challenge form groups that are to be rendered as
    * collapsed when in longform mode (does not affect stepped mode)
