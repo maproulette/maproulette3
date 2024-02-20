@@ -215,6 +215,7 @@ export default class AutosuggestTextBox extends Component {
           return (
             <Dropdown
               className="mr-w-full mr-dropdown--flush"
+              placement="bottom-start"
               innerClassName={this.props.dropdownInnerClassName}
               rootProps={downshift.getRootProps({}, {suppressRefError: true})}
               suppressControls

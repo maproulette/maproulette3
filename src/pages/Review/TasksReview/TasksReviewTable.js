@@ -35,6 +35,7 @@ import InTableTagFilter
 import ConfigureColumnsModal
        from '../../../components/ConfigureColumnsModal/ConfigureColumnsModal'
 import FilterSuggestTextBox from './FilterSuggestTextBox'
+import TaskFilterMultiSelectDropdown from './TaskFilterMultiSelectDropdown'
 import { FILTER_SEARCH_ALL, FILTER_SEARCH_TEXT } from './FilterSuggestTextBox'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
 import Dropdown from '../../../components/Dropdown/Dropdown'
@@ -79,8 +80,11 @@ export class TaskReviewTable extends Component {
     openComments: null,
     showConfigureColumns: false,
     challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
-    projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId')
+    projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId'),
+    // taskStatusFilters: getFilterIds(this.props.location.search, 'filters.status')
   }
+
+  
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
 
@@ -92,6 +96,8 @@ export class TaskReviewTable extends Component {
 
     const filters = {}
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
+
+    console.log('filters in update tasks', filters)
 
     // Determine if we can search by challenge Id or do name search
     if (filters.challenge) {
@@ -463,7 +469,7 @@ export class TaskReviewTable extends Component {
         break
     }
 
-
+    // console.log('defaultFiltered in review table render', defaultFiltered)
     
     const BrowseMap = this.props.BrowseMap
     
@@ -575,6 +581,7 @@ export class TaskReviewTable extends Component {
                 return { style: { position: "inherit", overflow: "inherit" } };
               }}
               onFilteredChange={filtered => {
+                console.log('filtered on table state change', filtered)
                 this.setState({ filtered });
                 if (this.fetchData) {
                   this.fetchData();
@@ -693,28 +700,58 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       />
     ),
     Filter: ({ filter, onChange }) => {
-      const options = [
-        <option key="all" value="all">All</option>
-      ]
+      // const options = [
+      //   <option key="all" value="all">All</option>
+      // ]
 
-      _each(TaskStatus, (status) => {
-        if (isReviewableStatus(status)) {
-          options.push(
-            <option key={keysByStatus[status]} value={status}>
-              {props.intl.formatMessage(messagesByStatus[status])}
-            </option>
-          )
+      // _each(TaskStatus, (status) => {
+      //   if (isReviewableStatus(status)) {
+      //     options.push(
+      //       <option key={keysByStatus[status]} value={status}>
+      //         {props.intl.formatMessage(messagesByStatus[status])}
+      //       </option>
+      //     )
+      //   }
+      // })
+
+
+      const items = [{
+        key: "all",
+        value: "all"
+      }]
+      _each(TaskStatus, status => {
+        if(isReviewableStatus(status)) {
+          items.push({
+            key: keysByStatus[status],
+            value: status
+          })
         }
       })
 
+      // console.log('filter in render for table status column', filter)
+
+      const toggleStatusFilter = () => {
+        
+      }
+
+      // console.log(items)
+
       return (
-        <select
-          onChange={event => onChange(event.target.value)}
-          className={"mr-w-full"}
-          value={filter ? filter.value : 'all'}
-        >
-          {options}
-        </select>
+        // <select
+        //   onChange={event => onChange(event.target.value)}
+        //   className={"mr-w-full"}
+        //   value={filter ? filter.value : 'all'}
+        // >
+        //   {options}
+        // </select>
+        <TaskFilterMultiSelectDropdown 
+          itemList={items}
+          filter={filter}
+          onChange={item => {
+            console.log('item', item)
+            console.log(filter)
+          }}   
+        />
       )
     },
   }
@@ -843,7 +880,8 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
               selectedItem={""}
               onChange={(item) => {
-                onChange(item)
+                console.log(filter)
+            onChange(item)
                 setTimeout(() => props.updateChallengeFilterIds(item), 0)
               }}
               value={filter ? filter.value : ""}

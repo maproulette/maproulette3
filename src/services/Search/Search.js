@@ -342,6 +342,8 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
 
   searchParameters.invf = invf.join(',')
 
+  console.log('searchParameters in generateSearchParametersString', searchParameters)
+
   return searchParameters
 }
 

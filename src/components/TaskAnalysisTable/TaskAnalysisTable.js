@@ -107,6 +107,7 @@ export class TaskAnalysisTableInternal extends Component {
     // Use pick instead of cloneDeep, as cloning the entire tableState seems to cause an error
     // when any column with a "makeInvertable" header is present.
     this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
+    // this.setState({lastTableState: _cloneDeep(tableState)})
   }
 
   configureColumns() {
