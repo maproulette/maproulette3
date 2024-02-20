@@ -53,7 +53,6 @@ import ReactTable from 'react-table-6'
 
 export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
-
   for (let pair of searchParams.entries()) {
     if (pair[0] === param && pair[1]) {
       if (pair[1] === '0') {
@@ -125,7 +124,7 @@ export class TaskReviewTable extends Component {
     }
     
     if (this.componentIsMounted) {
-      this.setState({lastTableState: _pick(tableState, ["sorted", "filtered"])})
+      this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
       // If no map, omit map bounding box from filter criteria on update
       if(!this.state.displayMap) {
         this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
@@ -294,7 +293,7 @@ export class TaskReviewTable extends Component {
       <Dropdown className="mr-dropdown--right"
           dropdownButton={dropdown => (
             <button onClick={dropdown.toggleDropdownVisible}
-              className="mr-text-green-lighter mr-mr-4">
+              className="mr-text-green-lighter hover:mr-text-white mr-transition-colors">
             <SvgSymbol
               sym="filter-icon"
               viewBox="0 0 20 20"
@@ -319,7 +318,7 @@ export class TaskReviewTable extends Component {
       <Dropdown className="mr-dropdown--right"
         dropdownButton={dropdown => (
           <button onClick={dropdown.toggleDropdownVisible}
-            className="mr-text-green-lighter">
+            className="mr-text-green-lighter hover:mr-text-white mr-transition-colors">
             <SvgSymbol sym="cog-icon"
               viewBox="0 0 20 20"
               className="mr-fill-current mr-w-5 mr-h-5" />
@@ -330,7 +329,9 @@ export class TaskReviewTable extends Component {
             <li>
               <button
                 className="mr-text-current"
-                onClick={() => this.setState({showConfigureColumns: true})}
+                onClick={() => {
+                  this.setState({showConfigureColumns: true}) 
+                  dropdown.toggleDropdownVisible()}}
               >
                 <FormattedMessage {...messages.configureColumnsLabel} />
               </button>
@@ -371,6 +372,20 @@ export class TaskReviewTable extends Component {
           </ul>
         }
       />
+    )
+  }
+
+  clearFiltersControl = () => {
+    return (
+      <div className='mr-pb-2'>
+      <button className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
+        onClick={() => this.props.clearFilterCriteria()}>
+        <SvgSymbol sym="close-icon"
+          viewBox='0 0 20 20'
+          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+        <FormattedMessage {...messages.clearFiltersLabel} />
+      </button>
+      </div>
     )
   }
 
@@ -485,7 +500,6 @@ export class TaskReviewTable extends Component {
       )
     );
     
-    
     return (
       <React.Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
@@ -530,8 +544,9 @@ export class TaskReviewTable extends Component {
                 >
                   <FormattedMessage {...messages.refresh} />
                 </button>
-                <div className="mr-float-right mr-mt-3 mr-ml-3">
-                  <div className="mr-flex mr-justify-start mr-ml-4">
+                <div className="mr-float-right mr-mt-2 mr-ml-3">
+                  <div className="mr-flex mr-justify-start mr-ml-4 mr-items-center mr-space-x-4">
+                    {this.clearFiltersControl()}
                     {this.filterDropdown(this.props.reviewTasksType)}
                     {this.gearDropdown(this.props.reviewTasksType)}
                   </div>
@@ -568,6 +583,30 @@ export class TaskReviewTable extends Component {
               loading={this.props.loading}
               {...intlTableProps(this.props.intl)}
               PaginationComponent={IntlTablePagination}
+              FilterComponent={({ filter, onChange }) => {
+                const filterValue = filter ? filter.value : ''
+                const clearFilter = () => onChange('')
+                return (
+                  <div className='mr-space-x-1'>
+                    <input
+                      type="text"
+                      style={{
+                        width: '100%',
+                      }}
+                      value={filterValue}
+                      onChange={event => {
+                        onChange(event.target.value)
+                      }}
+                    />
+                    {filterValue && (
+                      <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+                        <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+                      </button>
+                    )}
+                  </div>
+                  )
+                }
+              }
             />
           </div>
         </div>
@@ -589,6 +628,13 @@ export class TaskReviewTable extends Component {
 }
 
 export const setupColumnTypes = (props, openComments, data, criteria) => {
+  const handleClick = (e, linkTo) => {
+    e.preventDefault()
+    props.history.push({
+      pathname: linkTo,
+      criteria,
+    })
+  }
   const columns = {}
   columns.id = {
     id: 'id',
@@ -790,18 +836,33 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     },
     Filter: ({ filter, onChange }) => {
       return (
-        <FilterSuggestTextBox
-          filterType={"challenge"}
-          filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
-          selectedItem={""}
-          onChange={(item) => {
-            onChange(item)
-            setTimeout(() => props.updateChallengeFilterIds(item), 0)
-          }}
-          value={filter ? filter.value : ""}
-          itemList={props.reviewChallenges}
-          multiselect={props.challengeFilterIds}
-        />
+        <div className='mr-space-x-1'>
+          <div className='mr-inline-block'>
+            <FilterSuggestTextBox
+              filterType={"challenge"}
+              filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
+              selectedItem={""}
+              onChange={(item) => {
+                onChange(item)
+                setTimeout(() => props.updateChallengeFilterIds(item), 0)
+              }}
+              value={filter ? filter.value : ""}
+              itemList={props.reviewChallenges}
+              multiselect={props.challengeFilterIds}
+            />
+          </div>
+          {props.challengeFilterIds && props.challengeFilterIds.length && props.challengeFilterIds?.[0] !== -2 ? (
+            <button 
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => {
+                onChange({ id: -2, name: "All Challenges" })
+                setTimeout(() => props.updateChallengeFilterIds({ id: -2, name: "All Challenges" }), 0)
+              }}
+            >
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          ) : null}
+        </div>
       )
     }
   }
@@ -836,18 +897,33 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     },
     Filter: ({ filter, onChange }) => {
       return (
-        <FilterSuggestTextBox
-          filterType={"project"}
-          filterAllLabel={props.intl.formatMessage(messages.allProjects)}
-          selectedItem={""}
-          onChange={(item) => {
-            onChange(item)
-            setTimeout(() => props.updateProjectFilterIds(item), 0)
-          }}
-          value={filter ? filter.value : ""}
-          itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
-          multiselect={props.projectFilterIds}
-        />
+        <div className='mr-space-x-1'>
+          <div className='mr-inline-block'>
+            <FilterSuggestTextBox
+              filterType={"project"}
+              filterAllLabel={props.intl.formatMessage(messages.allProjects)}
+              selectedItem={""}
+              onChange={(item) => {
+                onChange(item)
+                setTimeout(() => props.updateProjectFilterIds(item), 0)
+              }}
+              value={filter ? filter.value : ""}
+              itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
+              multiselect={props.projectFilterIds}
+            />
+          </div>
+            {props.projectFilterIds && props.projectFilterIds.length && props.projectFilterIds?.[0] !== -2 ? (
+              <button 
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => {
+                  onChange({ id: -2, name: "All Projects" })
+                  setTimeout(() => props.updateProjectFilterIds({ id: -2, name: "All Projects" }), 0)
+                }}
+              >
+                <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+              </button>
+            ) : null}
+        </div>
       )
     }
   }
@@ -877,8 +953,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       if (typeof mappedOn === "string" && mappedOn !== "") {
         mappedOn = parse(mappedOn)
       }
+
+      const clearFilter = () => props.setFiltered("mappedOn", null)
+      
       return (
-        <div>
+        <div className='mr-space-x-1'>
           <IntlDatePicker
               selected={mappedOn}
               onChange={(value) => {
@@ -886,6 +965,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               }}
               intl={props.intl}
           />
+          {mappedOn && (
+            <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          )}
         </div>
       )
     },
@@ -917,8 +1001,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
         reviewedAt = parse(reviewedAt)
       }
+
+      const clearFilter = () => props.setFiltered("reviewedAt", null)
+
       return (
-        <div>
+        <div className='mr-space-x-1'>
           <IntlDatePicker
               selected={reviewedAt}
               onChange={(value) => {
@@ -926,6 +1013,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               }}
               intl={props.intl}
           />
+          {reviewedAt && (
+            <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          )}
         </div>
       )
     },
@@ -1127,31 +1219,47 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     sortable: false,
     maxWidth: 120,
     minWidth: 110,
-    Cell: ({row}) =>{
-      const linkTo =`/challenge/${row._original.parent.id}/task/${row._original.id}/review`
-      let action =
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+    Cell: ({ row }) => {
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}/review`
+      let action = (
+        <Link 
+          to={linkTo} 
+          onClick={(e) => handleClick(e, linkTo)}
+          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+        >
           <FormattedMessage {...messages.reviewTaskLabel} />
-        </div>
+        </Link>
+      )
 
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
-          action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+          action = (
+            <Link 
+              to={linkTo} 
+              onClick={(e) => handleClick(e, linkTo)}
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
-            </div>
-        }
-        else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
-          action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+            </Link>
+          )
+        } else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
+          action = (
+            <Link 
+              to={linkTo} 
+              onClick={(e) => handleClick(e, linkTo)}
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.resolveTaskLabel} />
-            </div>
+            </Link>
+          )
         }
       }
 
-      return <div className="row-controls-column">
-              {action}
-            </div>
+      return (
+        <div className="row-controls-column">
+          {action}
+        </div>
+      )
     }
   }
 
@@ -1160,7 +1268,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
     maxWidth: 110,
-    Cell: ({row}) =>{
+    Cell: ({ row }) => {
       let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
       let message = <FormattedMessage {...messages.viewTaskLabel} />
 
@@ -1171,11 +1279,16 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         message = <FormattedMessage {...messages.resolveTaskLabel} />
       }
 
-      return <div className="row-controls-column">
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
-          {message}
+      return (
+        <div className="row-controls-column mr-links-green-lighter">
+          <Link
+            to={linkTo} 
+            onClick={(e) => handleClick(e, linkTo)}
+          >
+            {message}
+          </Link>
         </div>
-      </div>
+      )
     }
   }
 
@@ -1187,29 +1300,44 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     minWidth: 110,
     Cell: ({row}) =>{
       const linkTo =`/challenge/${row._original.parent.id}/task/${row._original.id}/meta-review`
-      let action =
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+      let action =(
+        <Link 
+          to={linkTo} 
+          onClick={(e) => handleClick(e, linkTo)}
+          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+        >
           <FormattedMessage {...messages.metaReviewTaskLabel} />
-        </div>
-
+        </Link>
+      )
+  
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
-          action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+          action = (
+            <Link 
+              to={linkTo}  
+              onClick={(e) => handleClick(e, linkTo)}
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
-            </div>
-        }
+            </Link>
+          )
+        } 
         else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
-          action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
+          action = (
+            <Link 
+              to={linkTo}  
+              onClick={(e) => handleClick(e, linkTo)}
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.resolveTaskLabel} />
-            </div>
+            </Link>
+          )
         }
       }
 
       return <div className="row-controls-column">
-              {action}
-            </div>
+          {action}
+        </div>
     }
   }
 
@@ -1219,27 +1347,40 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     sortable: false,
     minWidth: 90,
     maxWidth: 120,
-    Cell: ({row}) =>{
-      let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
-      let message = row._original.reviewStatus === TaskReviewStatus.rejected ?
-                        <FormattedMessage {...messages.fixTaskLabel} /> :
-                        <FormattedMessage {...messages.viewTaskLabel} />
-
-      return <div className="row-controls-column mr-links-green-lighter">
-        <Link to={linkTo}>
-          {message}
-        </Link>
-        {!props.metaReviewEnabled &&
-         row._original.reviewStatus !== TaskReviewStatus.needed &&
-         row._original.reviewedBy && row._original.reviewedBy.id !== props.user?.id &&
-          <div onClick={() => props.history.push(linkTo + "/review", criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
-            <FormattedMessage {...messages.reviewFurtherTaskLabel} />
-          </div>
-        }
-      </div>
+    Cell: ({ row }) => {
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
+      let message =
+        row._original.reviewStatus === TaskReviewStatus.rejected ? (
+          <FormattedMessage {...messages.fixTaskLabel} />
+        ) : (
+          <FormattedMessage {...messages.viewTaskLabel} />
+        )
+  
+      return (
+        <div className="row-controls-column mr-links-green-lighter">
+          <Link
+            to={linkTo}
+            onClick={(e) => handleClick(e, linkTo)}
+          >
+            {message}
+          </Link>
+          {!props.metaReviewEnabled &&
+            row._original.reviewStatus !== TaskReviewStatus.needed &&
+            row._original.reviewedBy &&
+            row._original.reviewedBy.id !== props.user?.id && (
+              <Link
+                to={`${linkTo}/review`}
+                onClick={(e) => handleClick(e, `${linkTo}/review`)}
+                className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+              >
+                <FormattedMessage {...messages.reviewFurtherTaskLabel} />
+              </Link>
+            )}
+        </div>
+      )
     }
   }
-
+  
   columns.viewComments = {
     id: 'viewComments',
     Header: () => <FormattedMessage {...messages.viewCommentsLabel} />,
@@ -1273,7 +1414,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         <InTableTagFilter
           {...props}
           onChange={onChange}
-          value={_get(filter, 'value')}
+          value={filter ? _get(filter, 'value') : ''}
         />
       )
     }

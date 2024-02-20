@@ -131,11 +131,12 @@ export class EditChallenge extends Component {
    * should be displayed as a single, long-form step. This will cause this
    * component to re-render with the updated settings
    */
-  setIsLongForm = (isLongForm) =>
+  setIsLongForm = (isLongForm) => {
+    if(this.isFinishing) this.isFinishing = false
     this.props.updateUserAppSetting(this.props.user.id, {
       longFormChallenge: isLongForm,
     });
-
+  }
   /**
    * Returns the list of challenge form groups that are to be rendered as
    * collapsed when in longform mode (does not affect stepped mode)
@@ -289,13 +290,13 @@ export class EditChallenge extends Component {
     (this.validationPromise || Promise.resolve())
       .then(() => {
         this.isFinishing ? this.finish() : nextStep();
-        window.scrollTo(0, 0);
+      window.scrollTo(0, 0);
         return false;
       })
       .catch((err) => {
-        console.log(err);
+      console.log(err);
       }); // Stay on current step if validation fails
-      
+
     return false;
   };
 
@@ -967,7 +968,6 @@ export class EditChallenge extends Component {
                         </div>
                       )}
 
-                    {/* Note: Next button submits the form, so nextStep isn't used here */}
                     <StepNavigation
                       activeStep={activeStep}
                       prevStep={(stepName) => {

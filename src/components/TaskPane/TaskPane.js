@@ -92,7 +92,6 @@ export class TaskPane extends Component {
      * id of task once user initiates completion. This is used to help our
      * animation transitions.
      */
-    completingTask: null,
     completionResponses: null,
     showLockFailureDialog: false,
     needsResponses: false,
@@ -126,19 +125,18 @@ export class TaskPane extends Component {
    */
   completeTask = (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
                   needsReview, requestedNextTask, osmComment, tagEdits, taskBundle) => {
-    this.setState({completingTask: task.id})
+    this.props.setCompletingTask(task.id)
     this.props.completeTask(task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
                             needsReview, requestedNextTask, osmComment, tagEdits,
                             this.state.completionResponses, taskBundle).then(() => {
       this.clearCompletingTask()
     })
-    this.props.clearActiveTaskBundle()
   }
 
   clearCompletingTask = () => {
     // Clear on next tick to give our animation transition a chance to clean up.
     setTimeout(() => {
-      this.setState({completingTask: null})
+      this.props.setCompletingTask(null)
     }, 0)
   }
 
@@ -390,14 +388,14 @@ export class TaskPane extends Component {
               </div>
             }
             completeTask={this.completeTask}
-            completingTask={this.state.completingTask}
+            completingTask={this.props.completingTask}
             setCompletionResponse={this.setCompletionResponse}
             setNeedsResponses={this.setNeedsResponses}
             completionResponses={completionResponses}
             needsResponses={this.state.needsResponses}
             templateRevision={isCompletionStatus(this.props.task.status)}
           />
-          {this.state.completingTask && this.state.completingTask === this.props.task.id &&
+          {this.props.completingTask && this.props.completingTask === this.props.task.id &&
            <div
              className="mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200 mr-bg-blue-firefly-75 mr-flex mr-justify-center mr-items-center"
            >
@@ -406,7 +404,7 @@ export class TaskPane extends Component {
           }
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
-          <MapPane completingTask={this.state.completingTask}>
+          <MapPane completingTask={this.props.completingTask}>
             <TaskMap isMobile
                      task={this.props.task}
                      challenge={this.props.task.parent}

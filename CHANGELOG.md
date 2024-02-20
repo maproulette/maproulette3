@@ -7,6 +7,61 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.10] - 2023-2-19
+Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
+
+## What's Changed
+* Update create challenge form's next button functionality by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2271
+* Fix non reviewer tasks table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2273
+* Reset boolean value in EditChallenge to fix form validation error issue between short and long form views by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2275
+* Fix infinite loop when inspecting task after challenge save by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2276
+* Restore correct action links in the review section "All Review Related tasks" by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2274
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.9...v3.14.10
+
+## [v3.14.9] - 2023-2-14
+Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
+
+## What's Changed
+* Bump follow-redirects from 1.15.3 to 1.15.4 by @dependabot in https://github.com/maproulette/maproulette3/pull/2231
+* add instructions length environment variable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2234
+* fix links in review table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2247
+* Fix issue where inverting filter columns in task analysis tables throws an error instead of inverting by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2264
+* Replace Twitter with Mastodon in footer by @mvexel in https://github.com/maproulette/maproulette3/pull/2265
+* Filter clearing for Task Tables by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2253
+* fix request meta-review username issue by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2242
+* add bundling restrictions and deletion of new bundles that weren't completed on redirect by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2266
+* fix username in task history widget for revisions by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2270
+
+## MR2 Changes
+* Enhance Country Leaderboard Availability During Refresh by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1099
+* Enhance Leaderboard Availability During Refresh by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1101
+* Migrate to io.github.play-swagger and update swagger-ui by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1103
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.8...v3.14.9
+
+## [v3.14.8] - 2023-2-02
+Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
+
+## What's Changed
+* change leaderboard initial months past to 1 month by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2258
+* fix preferred mr tags being dropped issue by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2257
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.7...v3.14.8
+
+## [v3.14.7] - 2023-1-30
+Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
+
+## What's Changed
+* Fix error caused by cloning react table internal state instance by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2249
+* update header of challenge/projects widgets in review to persist while challenges are loading by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2233
+* update css for group challenge comments notice by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2239
+* add link previews by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2251
+* move active filters at top of filter list fo auto suggest text box by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2244
+* remove undefined formData var by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2254
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.6...v3.14.7
+
 ## [v3.14.6] - 2023-1-17
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 

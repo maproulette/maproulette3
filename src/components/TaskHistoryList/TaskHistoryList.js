@@ -87,7 +87,6 @@ export class TaskHistoryList extends Component {
       }
       lastTimestamp = new Date(log.timestamp)
 
-
       switch(log.actionType) {
         case TaskHistoryAction.comment:
           logEntry = commentEntry(log, this.props, index)
@@ -96,7 +95,7 @@ export class TaskHistoryList extends Component {
         case TaskHistoryAction.review:
         case TaskHistoryAction.metaReview:
           if (log.reviewStatus === TaskReviewStatus.needed) {
-            username = _get(log, 'reviewRequestedBy.username')
+            username = TaskHistoryAction.review === log.actionType ? _get(log, 'reviewRequestedBy.username') : _get(log, 'metaReviewRequestedBy.username') 
             logEntry = reviewEntry(log, this.props, index)
           } else {
             logEntry = null

@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import KeywordAutosuggestInput from './KeywordAutosuggestInput'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
 /**
@@ -23,16 +24,27 @@ export default class InTableTagFilter extends Component {
     this.setState({showTagChooser: false, currentValue: null})
   }
 
+  clearFilter = () => {
+    this.setState({currentValue: ''}, () => {
+      this.props.onChange(this.state.currentValue)
+    })
+  }
+
   render() {
     return (
       <div>
-        <input readOnly type="text" value={this.props.value} className="mr-w-full"
-          onFocus={() => {
-            if (!this.state.showTagChooser) {
-              this.setState({showTagChooser: true})
-            }
-          }}
-        />
+        <div className="mr-space-x-1 mr-pr-1">
+          <input readOnly type="text" value={this.props.value} className="mr-w-full"
+            onFocus={() => {
+              if (!this.state.showTagChooser) {
+                this.setState({showTagChooser: true})
+              }
+            }}
+          />
+          {this.props.value && <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={this.clearFilter}>
+            <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+          </button>}
+        </div>
 
         <External>
           <Modal isActive={this.state.showTagChooser}

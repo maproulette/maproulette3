@@ -17,6 +17,65 @@ export function WithTaskBundle(WrappedComponent) {
     state = {
       loading: false,
       taskBundle: null,
+      completingTask: null,
+      initialBundle: null,
+      newBundle: false,
+      selectedTasks: [],
+      resetSelectedTasks: null
+    }
+
+    componentDidMount() {
+      window.addEventListener('beforeunload', this.handleBeforeUnload)
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      const { initialBundle, newBundle } = this.state
+      const { task } = this.props
+      if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
+        this.setState({ taskBundle: null, loading: false })
+        if (_isFinite(_get(task, 'bundleId'))) {
+          this.setupBundle(task.bundleId)
+        }
+        if ((prevState.taskBundle || prevState.initialBundle) && 
+            prevState.taskBundle !== prevState.initialBundle  && 
+            (!prevState.completingTask || prevProps.task.status === 3)) {
+          if (initialBundle) {
+            // Whenever the user redirects, skips a task, or refreshes and there is a 
+            // new bundle state, the bundle state needs to reset to its initial value.
+            // this.props.resetTaskBundle(prevState.initialBundle, prevProps.taskBundle)
+          } else {
+            this.props.deleteTaskBundle(prevState.taskBundle.bundleId, prevProps.task.id)
+          }
+        }
+      }
+      if (this.state.taskBundle && !initialBundle && !newBundle) {
+        this.setState({ initialBundle: this.state.taskBundle }) 
+      }
+    }
+
+    componentWillUnmount() {
+      this.resetBundle()
+      window.removeEventListener('beforeunload', this.handleBeforeUnload)
+    }
+
+    handleBeforeUnload = () => {
+     this.resetBundle()
+    }
+
+    resetBundle = () => {
+      const { initialBundle, taskBundle } = this.state
+      const { task } = this.props
+      if ((this.state.taskBundle || this.state.initialBundle) &&
+          this.state.taskBundle !== this.state.initialBundle &&
+          (!this.state.completingTask || task.status === 3)) {
+        if (initialBundle) {
+          // Whenever the user redirects, skips a task, or refreshes and there is a 
+          // new bundle state, the bundle state needs to reset to its initial value.
+          // this.props.resetTaskBundle(initialBundle, taskBundle)
+        } else {
+          this.props.deleteTaskBundle(taskBundle.bundleId, task.id)
+        }
+      }
     }
 
     setupBundle = bundleId => {
@@ -28,7 +87,7 @@ export function WithTaskBundle(WrappedComponent) {
 
     createTaskBundle = (taskIds, bundleTypeMismatch, name) => {
       this.props.bundleTasks(taskIds, bundleTypeMismatch, name).then(taskBundle => {
-        this.setState({taskBundle})
+        this.setState({taskBundle, newBundle: true})
       })
     }
 
@@ -53,27 +112,14 @@ export function WithTaskBundle(WrappedComponent) {
       this.props.removeTaskFromBundle(bundleId, taskId).then(taskBundle => {
         this.setState({taskBundle, loading: false})
       })
-    };
+    }
 
     clearActiveTaskBundle = () => {
       this.setState({taskBundle: null, loading: false})
     }
 
-    componentDidMount() {
-      if (_isFinite(_get(this.props, 'task.bundleId'))) {
-        this.setupBundle(this.props.task.bundleId)
-      }
-    }
-
-    componentDidUpdate(prevProps) {
-      if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
-        if (_isFinite(_get(this.props, 'task.bundleId'))) {
-          this.setupBundle(this.props.task.bundleId)
-        }
-        else {
-          this.clearActiveTaskBundle()
-        }
-      }
+    setCompletingTask = task => {
+      this.setState({ completingTask: task })
     }
 
     render() {
@@ -82,6 +128,8 @@ export function WithTaskBundle(WrappedComponent) {
           {..._omit(this.props, ['bundleTasks', 'deleteTaskBundle', 'removeTaskFromBundle'])}
           taskBundle={this.state.taskBundle}
           taskBundleLoading={this.state.loading}
+          setCompletingTask={this.setCompletingTask}
+          completingTask={this.props.completingTask}
           createTaskBundle={this.createTaskBundle}
           removeTaskBundle={this.removeTaskBundle}
           removeTaskFromBundle={this.removeTaskFromBundle}

@@ -66,6 +66,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
 
      invertField = (fieldName) => {
        const criteria = _cloneDeep(this.state.criteria)
+       criteria.invertFields = criteria.invertFields || {}
        criteria.invertFields[fieldName] = !criteria.invertFields[fieldName]
        this.setState({criteria})
        if (this.props.setSearchFilters) {
@@ -303,8 +304,12 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
          this.refreshTasks(typedCriteria)
        }
        else if (_get(this.props.history.location, 'state.refreshAfterSave')) {
-         this.refreshTasks(typedCriteria)
-       }
+        this.refreshTasks(typedCriteria)
+        this.props.history.push({
+          pathname: this.props.history.location.pathname,
+          state: { refreshAfterSave: false }
+        })
+      }
      }
 
      render() {
