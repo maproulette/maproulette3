@@ -7,6 +7,18 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.10] - 2023-2-19
+Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
+
+## What's Changed
+* Update create challenge form's next button functionality by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2271
+* Fix non reviewer tasks table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2273
+* Reset boolean value in EditChallenge to fix form validation error issue between short and long form views by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2275
+* Fix infinite loop when inspecting task after challenge save by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2276
+* Restore correct action links in the review section "All Review Related tasks" by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2274
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.9...v3.14.10
+
 ## [v3.14.9] - 2023-2-14
 Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
 
