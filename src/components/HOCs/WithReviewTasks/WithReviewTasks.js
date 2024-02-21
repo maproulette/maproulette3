@@ -40,7 +40,6 @@ export const WithReviewTasks = function(WrappedComponent) {
     }
 
     buildDefaultCriteria(props) {
-      console.log('default filters in buildDefaultCriteria', props.defaultFilters)
       return _merge({}, DEFAULT_CRITERIA, props.defaultFilters)
     }
 
@@ -119,9 +118,6 @@ export const WithReviewTasks = function(WrappedComponent) {
 
       this.setState({loading: true, criteria: typedCriteria})
 
-      // console.log('typedCriteria in WithReviewTasks update', typedCriteria)
-      // console.log('searchOnCriteria in WithReviewTasks update', searchOnCriteria)
-
       switch(props.reviewTasksType) {
         case ReviewTasksType.reviewedByMe:
           const asMetaReviewer = props.reviewTasksSubType === "meta-reviewer"
@@ -173,16 +169,12 @@ export const WithReviewTasks = function(WrappedComponent) {
         _omit(searchCriteria.filters, 'challengeName')
       }
 
-      // console.log('searchCriteria in WithReviewTasks updateURL', searchCriteria)
-      // console.log('searchURL in WithReviewTasks updateURL', buildSearchURL(searchCriteria))
       return buildSearchURL(searchCriteria)
     }
 
     componentDidMount() {
       const searchParams = this.props.history.location.state
       const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props))
-
-      console.log('criteria in withReviewTasks mount', criteria)
 
       let pageSize = _get(searchParams, 'pageSize') || criteria.pageSize || DEFAULT_PAGE_SIZE
       criteria.pageSize = pageSize
@@ -201,7 +193,7 @@ export const WithReviewTasks = function(WrappedComponent) {
     componentDidUpdate(prevProps) {
       if (prevProps.reviewTasksType !== this.props.reviewTasksType ||
           prevProps.reviewTasksSubType !== this.props.reviewTasksSubType) {
-        // console.log('defaultCriteria on reviewtasks type or subtype change componentDidUpdate withReviewTasks', this.buildDefaultCriteria(this.props))
+
         this.update(this.props,
           this.state.criteria[this.props.reviewTasksType] ||
           this.buildDefaultCriteria(this.props), true)
@@ -209,7 +201,6 @@ export const WithReviewTasks = function(WrappedComponent) {
       }
 
       if (!_isEqual(this.props.defaultFilters, prevProps.defaultFilters)) {
-        // console.log('defaultCriteria on filter change componentDidUpdate withReviewTasks', this.buildDefaultCriteria(this.props))
         this.update(this.props, this.buildDefaultCriteria(this.props), true)
         return
       }
@@ -236,9 +227,6 @@ export const WithReviewTasks = function(WrappedComponent) {
           reviewData = this.props.currentReviewTasks.mapperReviewed
           break
       }
-
-      // console.log('criteria from state in withReviewTasks render', this.state.criteria[this.props.reviewTasksType])
-      // console.log('criteria from buildDefaultCriteria in withReviewTasks render', this.buildDefaultCriteria(this.props))
 
       const criteria = this.state.criteria[this.props.reviewTasksType] || this.buildDefaultCriteria(this.props)
       const projectId = _get(this.state.criteria[this.props.reviewTasksType],

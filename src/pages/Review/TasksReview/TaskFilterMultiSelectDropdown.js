@@ -3,7 +3,7 @@ import Dropdown from '../../../components/Dropdown/Dropdown'
 import classNames from 'classnames'
 
 
-const TaskFilterMultiSelectDropdown = ({itemList, onChange, filter}) => {
+const TaskFilterMultiSelectDropdown = ({itemList, onChange, filterState}) => {
   const multiSelectItems = 
   <div className='mr-flex mr-flex-col mr-space-y-2 mr-px-1'>
     {itemList.map(item => (
@@ -13,7 +13,7 @@ const TaskFilterMultiSelectDropdown = ({itemList, onChange, filter}) => {
           className="mr-checkbox-toggle mr-mr-2"
           id={item}
           onChange={e => onChange(item)}
-          checked={true}
+          checked={filterState.includes(item.value)}
           readOnly
           value={item.value}
         />

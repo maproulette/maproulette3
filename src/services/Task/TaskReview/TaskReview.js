@@ -227,22 +227,30 @@ const buildQueryFilters = function (criteria, addedColumns) {
   //add configuration to replace the value "all" with the needed equivalent values
   //remove inversion if values are equal to "all"
   if(filters.status != "all" && filters.status != undefined){
-    status = JSON.stringify(filters.status)
+    if(filters.status.split(',').length > 1) {
+      status = filters.status.split(',')
+    } else status = JSON.stringify(filters.status)
   } else if(filters.status == 'all' || filters.status == undefined) {
     invertedFilters = removeValueFromArray(invertedFilters, "tStatus");
   }
   if(filters.reviewStatus != "all" &&  filters.reviewStatus != undefined) {
-    reviewStatus = JSON.stringify(filters.reviewStatus)
+    if(filters.reviewStatus.split(',').length > 1) {
+      reviewStatus = filters.reviewStatus.split(',')
+    } else reviewStatus = JSON.stringify(filters.reviewStatus)
   } else if(filters.reviewStatus == 'all' || filters.reviewStatus == undefined) {
     invertedFilters = removeValueFromArray(invertedFilters, "trStatus");
   }
   if(filters.priority != "all" &&  filters.priority != undefined){
-    priority = JSON.stringify(filters.priority)
+    if(filters.priority.split(',').length > 1) {
+      priority = filters.priority.split(',')
+    } else priority = JSON.stringify(filters.priority)
   } else if(filters.priority == 'all' || filters.priority == undefined) {
     invertedFilters = removeValueFromArray(invertedFilters, "priorities");
   }
   if(filters.metaReviewStatus != "all" &&  filters.metaReviewStatus != undefined){
-    metaReviewStatus = JSON.stringify(filters.metaReviewStatus)
+    if(filters.metaReviewStatus.split(',').length > 1) {
+      metaReviewStatus = filters.metaReviewStatus.split(',')
+    } else metaReviewStatus = JSON.stringify(filters.metaReviewStatus)
   } else if(filters.metaReviewStatus == 'all' || filters.metaReviewStatus == undefined) {
     invertedFilters = removeValueFromArray(invertedFilters, "mrStatus");
   }
@@ -252,6 +260,7 @@ const buildQueryFilters = function (criteria, addedColumns) {
     const capitalizedKey = key.replace(/([A-Z])/g, ' $1').trim();
     return capitalizedKey.charAt(0).toUpperCase() + capitalizedKey.slice(1);
   });
+  
   //Fix Headers
   displayedColumns = displayedColumns.map(e => e === 'Id' ? 'Internal Id' : e);
   displayedColumns = displayedColumns.map(e => e === 'Mapper Controls' ? 'Actions' : e);

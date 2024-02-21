@@ -66,6 +66,16 @@ export const getFilterIds = (search, param) => {
   return [FILTER_SEARCH_ALL];
 }
 
+export const getTaskStatusFilterIds = (search, param) => {
+  const searchParams = new URLSearchParams(search)
+  for(let pair of searchParams.entries()) {
+    if(pair[0] === param && pair[1]) {
+      return pair[1].split(',').map(n => Number(n))
+    }  
+  }
+  return Object.values(TaskStatus).filter(el => isReviewableStatus(el))
+}
+
 /**
  * TaskReviewTable displays tasks that need to be reviewed or have been reviewed
  * as a table.
@@ -81,7 +91,8 @@ export class TaskReviewTable extends Component {
     showConfigureColumns: false,
     challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
     projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId'),
-    // taskStatusFilters: getFilterIds(this.props.location.search, 'filters.status')
+    taskStatusFilterIds: getTaskStatusFilterIds(this.props.location.search, 'filters.status')
+    // taskStatusFilterIds: []
   }
 
   
@@ -97,8 +108,8 @@ export class TaskReviewTable extends Component {
     const filters = {}
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
 
-    console.log('filters in update tasks', filters)
-
+    console.log('taskStatusFilters on state update', filters)
+    console.log('challenge filter ids on state update', this.state.challengeFilterIds)
     // Determine if we can search by challenge Id or do name search
     if (filters.challenge) {
       if (_isObject(filters.challenge)) {
@@ -128,6 +139,10 @@ export class TaskReviewTable extends Component {
         }
       }
     }
+
+    console.log('status filters in state on update', this.state.taskStatusFilterIds)
+
+    filters.status = this.state.taskStatusFilterIds
     
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
@@ -193,6 +208,22 @@ export class TaskReviewTable extends Component {
     }
 
     this.setState({ projectFilterIds: newIds })
+  }
+
+  updateTaskStatusFilterIds = item => {
+    let newIds = this.state.taskStatusFilterIds.slice()
+    if(item.value !== "all") {
+      newIds = newIds.filter(i => i !== "all")
+      if(this.state.taskStatusFilterIds.includes(item.value)) {
+        newIds = newIds.filter(i => i !== item.value)
+      } else {
+        newIds.push(item.value)
+      }
+    } else newIds = [
+      "all"
+    ]
+  console.log('newIds in updateTaskStatusFilterIds', newIds)
+    this.setState({ taskStatusFilterIds: newIds})
   }
 
   componentWillUnmount() {
@@ -403,8 +434,10 @@ export class TaskReviewTable extends Component {
                             ...this.props, 
                             updateChallengeFilterIds: this.updateChallengeFilterIds,
                             updateProjectFilterIds: this.updateProjectFilterIds,
+                            updateTaskStatusFilterIds: this.updateTaskStatusFilterIds,
                             challengeFilterIds: this.state.challengeFilterIds,
-                            projectFilterIds: this.state.projectFilterIds
+                            projectFilterIds: this.state.projectFilterIds,
+                            taskStatusFilterIds: this.state.taskStatusFilterIds
                            },
                            taskId => this.setState({openComments: taskId}),
                            data, this.props.reviewCriteria, pageSize)
@@ -468,8 +501,6 @@ export class TaskReviewTable extends Component {
         subheader = <FormattedMessage {...messages.myReviewTasks} />
         break
     }
-
-    // console.log('defaultFiltered in review table render', defaultFiltered)
     
     const BrowseMap = this.props.BrowseMap
     
@@ -722,19 +753,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       _each(TaskStatus, status => {
         if(isReviewableStatus(status)) {
           items.push({
-            key: keysByStatus[status],
+            key: messagesByStatus[status].defaultMessage,
             value: status
           })
         }
       })
-
-      // console.log('filter in render for table status column', filter)
-
-      const toggleStatusFilter = () => {
-        
-      }
-
-      // console.log(items)
 
       return (
         // <select
@@ -746,8 +769,10 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         // </select>
         <TaskFilterMultiSelectDropdown 
           itemList={items}
-          filter={filter}
+          filterState={props.taskStatusFilterIds}
           onChange={item => {
+            onChange(item)
+            setTimeout(() => props.updateTaskStatusFilterIds(item), 0)
             console.log('item', item)
             console.log(filter)
           }}   
@@ -880,8 +905,8 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
               selectedItem={""}
               onChange={(item) => {
-                console.log(filter)
-            onChange(item)
+                console.log(filter, item)
+                onChange(item)
                 setTimeout(() => props.updateChallengeFilterIds(item), 0)
               }}
               value={filter ? filter.value : ""}

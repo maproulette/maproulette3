@@ -109,6 +109,6 @@ export function buildSearchCriteriafromURL(searchURL) {
       searchCriteria[key] = massageValue(parsedURL[key])
     }
   })
-  console.log('searchCriteria from buildSearchCriteriafromURL', searchCriteria)
+
   return searchCriteria
 }
