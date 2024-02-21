@@ -46,7 +46,6 @@ class UserSettings extends Component {
     notificationsFormData: {},
     isSaving: false,
     saveComplete: false,
-    isPopupOpen: false
   };
 
   /** Save the latest user settings modified by the user */
@@ -122,7 +121,6 @@ class UserSettings extends Component {
           isSaving: false,
           saveComplete: true,
           settingsFormData: settingsFormData,
-          isPopupOpen: true
         });
       });
   }, 750);
@@ -202,11 +200,7 @@ class UserSettings extends Component {
     }
   };
 
-  togglePopup = () => {
-    this.setState((prevState) => ({
-      isPopupOpen: !prevState.isPopupOpen
-    }))
-  }
+  
 
   componentDidMount() {
     // Make sure our user info is current
@@ -231,14 +225,11 @@ class UserSettings extends Component {
       saveIndicator = <BusySpinner inline />;
     } else if (this.state.saveComplete) {
       saveIndicator = (
-        <span className="mr-text-green-lighter mr-text-sm mr-inline-flex">
-          <SvgSymbol
-            sym="check-icon"
-            className="mr-fill-green-lighter mr-w-4 mr-h-4 mr-mx-1"
-            viewBox="0 0 20 20"
-          />
-          <FormattedMessage {...messages.settingsSaved} />
-        </span>
+        <SvgSymbol
+          sym="check-icon"
+          className="mr-fill-green-lighter mr-w-4 mr-h-4"
+          viewBox="0 0 20 20"
+        />
       );
     }
 
@@ -350,29 +341,6 @@ class UserSettings extends Component {
         >
           <div className="form-controls" />
         </Form>
-        {this.state.isPopupOpen && (
-          <div className="mr-fixed mr-bottom-0 mr-left-0 mr-right-0 mr-w-56 mr-mx-auto">
-            <div className="mr-m-auto">
-              <div className="mr-flex mr-bg-black mr-bg-opacity-75 mr-rounded-t-lg mr-shadow-lg">
-                <div className="mr-flex mr-flex-1 mr-items-center mr-justify-between mr-p-3">
-                  <span className="mr-ml-2 mr-text-green-lighter mr-text-md mr-inline-flex">
-                    <FormattedMessage {...messages.settingsSaved} />
-                    <SvgSymbol
-                      sym="check-icon"
-                      className="mr-fill-green-lighter mr-w-4 mr-ml-2"
-                      viewBox="0 0 20 20"
-                    />
-                  </span>
-                </div>
-                <button onClick={this.togglePopup}>
-                  <svg viewBox="0 0 40 40" className="mr-fill-current mr-w-5 mr-h-5 mr-mr-4 hover:mr-text-white">
-                    <use href="#close-outline-icon"></use>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </section>
     );
   }
