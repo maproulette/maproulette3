@@ -72,7 +72,7 @@ export class FlagCommentInput extends Component {
     const minCharacterCount = 100
     return (
       <div className="mr-mt-2">
-        <label className="mr-text-white-50">
+        <label htmlFor="root_email" className="mr-text-white-50">
         <FormattedMessage {...messages.email} />
         </label>
         <input className="form-control mr-mb-4" type="email" id="root_email" label="Email address" placeholder="Enter your email" value={this.state.emailValue} onChange={(event) => this.setState({ emailValue: event.target.value })} />
@@ -139,12 +139,13 @@ export class FlagCommentInput extends Component {
         )}
         <div className="form mr-flex mr-items-baseline">
           <input
+            id="review-label"
             type="checkbox"
             className="mr-mr-2"
             checked={this.state.checked}
             onChange={this.handleToggle}
           />
-          <label className="mr-text-white-50">
+          <label htmlFor="review-label" className="mr-text-white-50">
             <FormattedMessage {...messages.review} />
           </label>
         </div>

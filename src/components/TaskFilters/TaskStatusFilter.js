@@ -37,14 +37,14 @@ export default class TaskStatusFilter extends Component {
           filters={
             _map(taskStatusOptions, status => (
               <li key={status}>
-                <label className="mr-flex mr-items-center">
+                <label htmlFor={status} className="mr-flex mr-items-center">
                   <input
+                    id={status}
                     className="mr-checkbox-toggle mr-mr-2"
                     type="checkbox"
                     checked={this.props.includeTaskStatuses[status]}
                     onChange={(e) =>
-                      this.props.toggleIncludedTaskStatus(status,
-                                                          e.nativeEvent.shiftKey)
+                      this.props.toggleIncludedTaskStatus(status, e.nativeEvent.shiftKey)
                     } />
                   <FormattedMessage {...messagesByStatus[status]} />
                 </label>

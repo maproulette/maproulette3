@@ -32,13 +32,14 @@ const CheckboxFormField = props => {
   return (
     <React.Fragment>
       <input
+        id="checkbox-label"
         type="checkbox"
         className="checkbox"
         defaultChecked={isChecked}
         disabled={props.disableTemplate}
         onChange={() => props.setCompletionResponse(props.propertyName, !isChecked)}
       />
-      <label className="mr-pl-2">{props.label}</label>
+      <label htmlFor="checkbox-label" className="mr-pl-2">{props.label}</label>
     </React.Fragment>
   )
 }

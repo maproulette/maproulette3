@@ -96,6 +96,7 @@ export default class LeaderboardWidget extends Component {
       <div className="mr-text-xs mr--mb-5">
         <span>
           <input
+            id="user-mapper-type-label"
             type="radio"
             name="showByMappers"
             className="mr-radio mr-mr-1"
@@ -103,12 +104,13 @@ export default class LeaderboardWidget extends Component {
             onClick={() => this.setUserType(USER_TYPE_MAPPER)}
             onChange={_noop}
           />
-          <label className="mr-ml-1 mr-mr-4">
+          <label htmlFor="user-mapper-type-label" className="mr-ml-1 mr-mr-4">
             <FormattedMessage {...messages[USER_TYPE_MAPPER]}/>
           </label>
         </span>
         <span>
           <input
+            id="user-reviewer-type-label"
             type="radio"
             name="showByReviewers"
             className="mr-radio mr-mr-1"
@@ -116,7 +118,7 @@ export default class LeaderboardWidget extends Component {
             onClick={() => this.setUserType(USER_TYPE_REVIEWER)}
             onChange={_noop}
           />
-          <label className="mr-ml-1 mr-mr-4">
+          <label htmlFor="user-reviewer-type-label" className="mr-ml-1 mr-mr-4">
             <FormattedMessage {...messages[USER_TYPE_REVIEWER]}/>
           </label>
         </span>

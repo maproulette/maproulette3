@@ -280,13 +280,14 @@ export class TaskConfirmationModal extends Component {
                     this.props.user.settings.needsReview !== needsReviewType.mandatory &&
                       <div className="form mr-flex mr-items-baseline">
                         <input
+                          id="review-input"
                           type="checkbox"
                           className="mr-mr-2"
                           checked={this.props.needsReview}
                           onClick={this.props.toggleNeedsReview}
                           onChange={_noop}
                         />
-                        <label className="mr-text-white-50">
+                        <label htmlFor="review-input" className="mr-text-white-50">
                           <FormattedMessage {...messages.reviewLabel} />
                         </label>
                       </div>
@@ -315,6 +316,7 @@ export class TaskConfirmationModal extends Component {
                           <FormattedMessage {...messages.loadByLabel} />
                         </span>
                         <input
+                          id="load-method-random-input"
                           type="radio"
                           name="randomnessPreference"
                           className="mr-radio mr-mr-1"
@@ -322,11 +324,12 @@ export class TaskConfirmationModal extends Component {
                           onClick={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
                           onChange={_noop}
                         />
-                        <label className="mr-ml-1 mr-mr-4">
+                        <label htmlFor="load-method-random-input" className="mr-ml-1 mr-mr-4">
                           <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
                         </label>
 
                         <input
+                          id="load-method-proximity-input"
                           type="radio"
                           name="randomnessPreference"
                           className="mr-radio mr-mr-1"
@@ -334,7 +337,7 @@ export class TaskConfirmationModal extends Component {
                           onClick={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
                           onChange={_noop}
                         />
-                        <label className="mr-ml-1">
+                        <label htmlFor="load-method-proximity-input" className="mr-ml-1">
                           <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
                         </label>
                       </div>
@@ -430,10 +433,11 @@ export class TaskConfirmationModal extends Component {
                         onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
                         onChange={_noop}
                       />
-                      <label className="mr-mr-4">
+                      <label htmlFor="review-load-method-input" className="mr-mr-4">
                         <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
                       </label>
                       <input
+                        id="review-load-method-input"
                         type="radio"
                         name="loadReviewPreference"
                         className="mr-mr-2"

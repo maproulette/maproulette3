@@ -232,6 +232,7 @@ export const ColumnRadioField = function(props) {
       {props.schema.enum.map((option, index) =>
         <div key={option} className="mr-flex mr-items-center mr-my-2">
           <input
+            id={props.schema.enumNames ? props.schema.enumNames[index] : props.schema.enum[index]}
             type="radio"
             name={props.name}
             value={option}
@@ -239,7 +240,7 @@ export const ColumnRadioField = function(props) {
             className="mr-radio mr-mr-2"
             onChange={() => props.onChange(option)}
           />
-          <label onClick={() => props.onChange(option)}>
+          <label htmlFor={props.schema.enumNames ? props.schema.enumNames[index] : props.schema.enum[index]} onClick={() => props.onChange(option)}>
             <MarkdownContent
               compact
               markdown={

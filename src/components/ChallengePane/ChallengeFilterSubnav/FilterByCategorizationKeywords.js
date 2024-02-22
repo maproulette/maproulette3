@@ -144,7 +144,7 @@ const ListFilterItems = function (props) {
         </div>
       ) : null}
       <div className="mr-flex mr-items-center mr-py-3">
-        <label className="mr-text-green-lighter mr-mr-4 mr-cursor-pointer"><FormattedMessage {...messages.add}/></label>
+        <label htmlFor="input-name" className="mr-text-green-lighter mr-mr-4 mr-cursor-pointer"><FormattedMessage {...messages.add}/></label>
         <form onSubmit={(e) => {
           e.preventDefault() // Prevent the default form submission behavior
           const value = e.target.elements.inputName.value // Replace 'inputName' with the actual name attribute of the input
@@ -156,6 +156,7 @@ const ListFilterItems = function (props) {
           <input
             className="mr-flex mr-items-center mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner mr-px-2"
             name="inputName"
+            id="input-name"
           />
         </form>
       </div>

@@ -471,20 +471,22 @@ export class TaskReviewTable extends Component {
           <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
             <input
               type="checkbox"
+              id="only-saved-challenges-checkbox"
               className="mr-checkbox-toggle mr-mr-px"
               checked={!!this.props.reviewCriteria.savedChallengesOnly}
               onChange={() => null}
             />
-            <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+            <label htmlFor="only-saved-challenges-checkbox"> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
           </div>
           <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
             <input
               type="checkbox"
+              id="exclude-other-reviewers-checkbox"
               className="mr-checkbox-toggle mr-mr-px"
               checked={!!this.props.reviewCriteria.excludeOtherReviewers}
               onChange={() => null}
             />
-            <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
+            <label htmlFor="exclude-other-reviewers-checkbox"> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
           </div>
         </div>
       )

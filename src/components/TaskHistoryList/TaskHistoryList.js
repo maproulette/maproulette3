@@ -298,6 +298,7 @@ export class TaskHistoryList extends Component {
       <div className="mr-text-right mr-text-xs mr-mb-2">
         <span>
           <input
+            id="by-time-input"
             type="radio"
             name="showByTime"
             className="mr-radio mr-mr-1"
@@ -305,12 +306,13 @@ export class TaskHistoryList extends Component {
             onClick={() => this.setState({listType: TIME_TOGGLE})}
             onChange={_noop}
           />
-          <label className="mr-ml-1 mr-mr-4">
+          <label htmlFor="by-time-input" className="mr-ml-1 mr-mr-4">
             <FormattedMessage {...messages.listByTime}/>
           </label>
         </span>
         <span>
           <input
+            id="by-user-input"
             type="radio"
             name="showByReviewers"
             className="mr-radio mr-mr-1"
@@ -318,7 +320,7 @@ export class TaskHistoryList extends Component {
             onClick={() => this.setState({listType: USER_TOGGLE})}
             onChange={_noop}
           />
-          <label className="mr-ml-1 mr-mr-4">
+          <label htmlFor="by-user-input" className="mr-ml-1 mr-mr-4">
             <FormattedMessage {...messages.listByUser}/>
           </label>
         </span>

@@ -805,8 +805,9 @@ export class TaskClusterMap extends Component {
     return (
       <div className={classNames('taskcluster-map', {"full-screen-map": this.props.isMobile}, this.props.className)}>
         {canClusterToggle && !this.state.searchOpen && !this.props.loading &&
-         <label className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
+         <label htmlFor="show-clusters-input" className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
            <input
+             id="show-clusters-input"
              type="checkbox"
              className="mr-mr-2"
              checked={this.props.showAsClusters}
