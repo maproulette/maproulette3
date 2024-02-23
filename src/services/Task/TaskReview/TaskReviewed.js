@@ -49,7 +49,6 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
                                    criteria.boundingBox,
                                    false, false, null,
                                    _get(criteria, 'invertFields', {}))
-  console.log('criteria in taskreviewed dispatch',  criteria, 'searchparams', searchParameters)
   const mappers = asMapper ? [userId] : []
   const reviewers = asReviewer ? [userId] : []
   const metaReviewers = asMetaReviewer ? [userId] : []
