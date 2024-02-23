@@ -132,7 +132,7 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if (prevProps[userProp] !== this.props[userProp]) {
+      if (prevProps[userProp].score !== this.props[userProp].score) {
         this.updateAllMetrics(this.props)
       }
 
