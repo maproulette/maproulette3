@@ -100,7 +100,8 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
             this.setState({leaderboard})
 
             const userId = _get(this.props, 'user.id')
-            if (userId && !options.ignoreUser && userType !== USER_TYPE_REVIEWER) {
+            const userScore = _get(this.props, 'user.score')
+            if (userScore && userId && !options.ignoreUser && userType !== USER_TYPE_REVIEWER) {
               this.props.fetchLeaderboardForUser(userId, 1,
                 ...this.leaderboardParams(numberMonths, countryCode),
                 startDate, endDate).then(userLeaderboard => {
