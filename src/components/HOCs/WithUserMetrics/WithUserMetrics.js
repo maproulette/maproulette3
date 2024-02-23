@@ -132,38 +132,26 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if(prevProps[userProp]?.score){
-        if (prevProps[userProp]?.score !== this.props[userProp]?.score) {
+      const { userProp } = this.props
+    
+      if (prevProps[userProp]?.score) {
+        const scoreChanged = prevProps[userProp]?.score !== this.props[userProp]?.score
+        const { tasksCompletedMonthsPast, tasksReviewedMonthsPast, tasksReviewerMonthsPast,
+          tasksCompletedDateRange, tasksReviewedDateRange, tasksReviewerDateRange } = this.state
+    
+        if (scoreChanged) {
           this.updateAllMetrics(this.props)
-        }
-
-        else if (prevState.tasksReviewedMonthsPast !== this.state.tasksReviewedMonthsPast &&
-                this.state.tasksReviewedMonthsPast !== CUSTOM_RANGE) {
+        } else if (tasksReviewedMonthsPast !== CUSTOM_RANGE && (
+            prevState.tasksCompletedMonthsPast !== tasksCompletedMonthsPast ||
+            prevState.tasksReviewedMonthsPast !== tasksReviewedMonthsPast ||
+            prevState.tasksReviewerMonthsPast !== tasksReviewerMonthsPast
+          )) {
           this.updateUserMetrics(this.props)
-        }
-
-        else if (prevState.tasksReviewerMonthsPast !== this.state.tasksReviewerMonthsPast &&
-                this.state.tasksReviewerMonthsPast !== CUSTOM_RANGE) {
-          this.updateUserMetrics(this.props)
-        }
-
-        else if (prevState.tasksCompletedMonthsPast !== this.state.tasksCompletedMonthsPast &&
-                this.state.tasksCompletedMonthsPast !== CUSTOM_RANGE) {
-          this.updateUserMetrics(this.props)
-        }
-
-        else if (this.state.tasksCompletedMonthsPast === CUSTOM_RANGE &&
-                prevState.tasksCompletedDateRange !== this.state.tasksCompletedDateRange) {
-          this.updateUserMetrics(this.props)
-        }
-
-        else if (this.state.tasksReviewedMonthsPast === CUSTOM_RANGE &&
-                prevState.tasksReviewedDateRange !== this.state.tasksReviewedDateRange) {
-          this.updateUserMetrics(this.props)
-        }
-
-        else if (this.state.tasksReviewerMonthsPast === CUSTOM_RANGE &&
-                prevState.tasksReviewerDateRange !== this.state.tasksReviewerDateRange) {
+        } else if (tasksCompletedMonthsPast === CUSTOM_RANGE && (
+            prevState.tasksCompletedDateRange !== tasksCompletedDateRange ||
+            prevState.tasksReviewedDateRange !== tasksReviewedDateRange ||
+            prevState.tasksReviewerDateRange !== tasksReviewerDateRange
+          )) {
           this.updateUserMetrics(this.props)
         }
       }
