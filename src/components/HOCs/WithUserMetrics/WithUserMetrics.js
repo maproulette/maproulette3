@@ -126,44 +126,46 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
     }
 
     componentDidMount() {
-      if (this.props[userProp]) {
+      if (this.props[userProp]?.score) {
         this.updateAllMetrics(this.props)
       }
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if (prevProps[userProp].score !== this.props[userProp].score) {
-        this.updateAllMetrics(this.props)
-      }
+      if(prevProps[userProp]?.score){
+        if (prevProps[userProp]?.score !== this.props[userProp]?.score) {
+          this.updateAllMetrics(this.props)
+        }
 
-      else if (prevState.tasksReviewedMonthsPast !== this.state.tasksReviewedMonthsPast &&
-               this.state.tasksReviewedMonthsPast !== CUSTOM_RANGE) {
-        this.updateUserMetrics(this.props)
-      }
+        else if (prevState.tasksReviewedMonthsPast !== this.state.tasksReviewedMonthsPast &&
+                this.state.tasksReviewedMonthsPast !== CUSTOM_RANGE) {
+          this.updateUserMetrics(this.props)
+        }
 
-      else if (prevState.tasksReviewerMonthsPast !== this.state.tasksReviewerMonthsPast &&
-               this.state.tasksReviewerMonthsPast !== CUSTOM_RANGE) {
-        this.updateUserMetrics(this.props)
-      }
+        else if (prevState.tasksReviewerMonthsPast !== this.state.tasksReviewerMonthsPast &&
+                this.state.tasksReviewerMonthsPast !== CUSTOM_RANGE) {
+          this.updateUserMetrics(this.props)
+        }
 
-      else if (prevState.tasksCompletedMonthsPast !== this.state.tasksCompletedMonthsPast &&
-               this.state.tasksCompletedMonthsPast !== CUSTOM_RANGE) {
-        this.updateUserMetrics(this.props)
-      }
+        else if (prevState.tasksCompletedMonthsPast !== this.state.tasksCompletedMonthsPast &&
+                this.state.tasksCompletedMonthsPast !== CUSTOM_RANGE) {
+          this.updateUserMetrics(this.props)
+        }
 
-      else if (this.state.tasksCompletedMonthsPast === CUSTOM_RANGE &&
-               prevState.tasksCompletedDateRange !== this.state.tasksCompletedDateRange) {
-        this.updateUserMetrics(this.props)
-      }
+        else if (this.state.tasksCompletedMonthsPast === CUSTOM_RANGE &&
+                prevState.tasksCompletedDateRange !== this.state.tasksCompletedDateRange) {
+          this.updateUserMetrics(this.props)
+        }
 
-      else if (this.state.tasksReviewedMonthsPast === CUSTOM_RANGE &&
-               prevState.tasksReviewedDateRange !== this.state.tasksReviewedDateRange) {
-        this.updateUserMetrics(this.props)
-      }
+        else if (this.state.tasksReviewedMonthsPast === CUSTOM_RANGE &&
+                prevState.tasksReviewedDateRange !== this.state.tasksReviewedDateRange) {
+          this.updateUserMetrics(this.props)
+        }
 
-      else if (this.state.tasksReviewerMonthsPast === CUSTOM_RANGE &&
-               prevState.tasksReviewerDateRange !== this.state.tasksReviewerDateRange) {
-        this.updateUserMetrics(this.props)
+        else if (this.state.tasksReviewerMonthsPast === CUSTOM_RANGE &&
+                prevState.tasksReviewerDateRange !== this.state.tasksReviewerDateRange) {
+          this.updateUserMetrics(this.props)
+        }
       }
     }
 
