@@ -7,17 +7,17 @@ const TaskFilterMultiSelectDropdown = ({itemList, onChange, filterState}) => {
   const multiSelectItems = 
   <div className='mr-flex mr-flex-col mr-space-y-2 mr-px-1'>
     {itemList.map(item => (
-      <label key={`${item.key} - ${item.value}`}>
+      <label key={`${item.label} - ${item.value}`}>
         <input
           type="checkbox"
           className="mr-checkbox-toggle mr-mr-2"
           id={item}
-          onChange={e => onChange(item)}
+          onChange={() => onChange(item)}
           checked={filterState.includes(item.value)}
           readOnly
           value={item.value}
         />
-        {item.key}
+        {item.label}
       </label>
     ))}
   </div>
@@ -43,7 +43,7 @@ const TaskFilterMultiSelectDropdown = ({itemList, onChange, filterState}) => {
         
         </button>
       )}
-      dropdownContent={dropdown => (
+      dropdownContent={() => (
         {...multiSelectItems}
       )}
     />

@@ -22,7 +22,7 @@ import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
 import { TaskPriority, keysByPriority, messagesByPriority }
       from '../../../services/Task/TaskPriority/TaskPriority'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
-         messagesByMetaReviewStatus, isNeedsReviewStatus, isMetaReviewStatus }
+         messagesByMetaReviewStatus, isNeedsReviewStatus, isMetaReviewStatus, TaskMetaReviewStatusWithUnset }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { ReviewTasksType, buildLinkToReviewTableExportCSV, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
 import AsColoredHashable from '../../../interactions/Hashable/AsColoredHashable'
@@ -98,6 +98,24 @@ const getTaskReviewStatusFilterIds = (search, param, props) => {
   }
 }
 
+const getTaskMetaReviewStatusFilterIds = (search, param, props) => {
+  const searchParams = new URLSearchParams(search)
+  for(let pair of searchParams.entries()) {
+    if(pair[0] === param && pair[1]) {
+      if(pair[1].length === 0) return []
+      return pair[1].split(',').map(n => Number(n))
+    }
+  }
+  if(props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
+    return [TaskMetaReviewStatusWithUnset.metaUnset, TaskReviewStatus.needed]
+  } else {
+    const allTaskMetaReviewStatusValues = Object.values(TaskReviewStatus)
+      .filter(el => el !== TaskReviewStatus.unnecessary && isMetaReviewStatus(el))
+    console.log('meta review filter values', [TaskMetaReviewStatusWithUnset.metaUnset, ...allTaskMetaReviewStatusValues])
+    return [TaskMetaReviewStatusWithUnset.metaUnset, ...allTaskMetaReviewStatusValues]
+  }
+}
+
 /**
  * TaskReviewTable displays tasks that need to be reviewed or have been reviewed
  * as a table.
@@ -114,7 +132,8 @@ export class TaskReviewTable extends Component {
     challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
     projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId'),
     taskStatusFilterIds: getTaskStatusFilterIds(this.props.location.search, 'filters.status'),
-    taskReviewStatusFilterIds: getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props)
+    taskReviewStatusFilterIds: getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props),
+    taskMetaReviewStatusFilterIds: getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props)
   }
 
   
@@ -164,6 +183,7 @@ export class TaskReviewTable extends Component {
 
     filters.status = this.state.taskStatusFilterIds
     filters.reviewStatus = this.state.taskReviewStatusFilterIds
+    filters.metaReviewStatus = this.state.taskMetaReviewStatusFilterIds
     
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
@@ -768,12 +788,13 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         className={`mr-status-${_kebabCase(keysByStatus[props.value])}`}
       />
     ),
-    Filter: ({ filter, onChange }) => {
+    Filter: ({ onChange }) => {
       const items = []
       _each(TaskStatus, status => {
         if(isReviewableStatus(status)) {
           items.push({
-            key: messagesByStatus[status].defaultMessage,
+            // label: messagesByStatus[status].defaultMessage,
+            label: props.intl.formatMessage(messagesByStatus[status]),
             value: status
           })
         }
@@ -1156,12 +1177,13 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
       />
     ),
-    Filter: ({ filter, onChange }) => {
+    Filter: ({ onChange }) => {
       const items = []
       if(props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
         _each([TaskReviewStatus.approved, TaskReviewStatus.approvedWithFixes], status => {
           items.push({
-            key: messagesByReviewStatus[status].defaultMessage,
+            // label: messagesByReviewStatus[status].defaultMessage,
+            label: props.intl.formatMessage(messagesByReviewStatus[status]),
             value: status
           })
         })
@@ -1171,7 +1193,8 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         _each(TaskReviewStatus, (status) => {
           if (status !== TaskReviewStatus.unnecessary) {
             items.push({
-              key: messagesByReviewStatus[status].defaultMessage,
+              // label: messagesByReviewStatus[status].defaultMessage,
+              label: props.intl.formatMessage(messagesByReviewStatus[status]),
               value: status
             })
           }
@@ -1180,62 +1203,53 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         _each(TaskReviewStatus, (status) => {
           if (isNeedsReviewStatus(status)) {
             items.push({
-              key: messagesByReviewStatus[status].defaultMessage,
+              // label: messagesByReviewStatus[status].defaultMessage,
+              label: props.intl.formatMessage(messagesByReviewStatus[status]),
               value: status
-              
             })
           }
         })
       }
 
-      const options = [
-        <option key="all" value="all">All</option>
-      ]
+      // const options = [
+      //   <option key="all" value="all">All</option>
+      // ]
 
-      if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
-        _each([TaskReviewStatus.approved,
-               TaskReviewStatus.approvedWithFixes], status =>
-          options.push(
-            <option key={keysByReviewStatus[status]} value={status}>
-              {props.intl.formatMessage(messagesByReviewStatus[status])}
-            </option>
-          )
-        )
-      }
-      else if (props.reviewTasksType === ReviewTasksType.reviewedByMe ||
-          props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
-          props.reviewTasksType === ReviewTasksType.allReviewedTasks) {
-        _each(TaskReviewStatus, (status) => {
-          if (status !== TaskReviewStatus.unnecessary) {
-            options.push(
-              <option key={keysByReviewStatus[status]} value={status}>
-                {props.intl.formatMessage(messagesByReviewStatus[status])}
-              </option>
-            )
-          }
-        })
-      }
-      else {
-        _each(TaskReviewStatus, (status) => {
-          if (isNeedsReviewStatus(status)) {
-            options.push(
-              <option key={keysByReviewStatus[status]} value={status}>
-                {props.intl.formatMessage(messagesByReviewStatus[status])}
-              </option>
-            )
-          }
-        })
-      }
+      // if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
+      //   _each([TaskReviewStatus.approved,
+      //          TaskReviewStatus.approvedWithFixes], status =>
+      //     options.push(
+      //       <option key={keysByReviewStatus[status]} value={status}>
+      //         {props.intl.formatMessage(messagesByReviewStatus[status])}
+      //       </option>
+      //     )
+      //   )
+      // }
+      // else if (props.reviewTasksType === ReviewTasksType.reviewedByMe ||
+      //     props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
+      //     props.reviewTasksType === ReviewTasksType.allReviewedTasks) {
+      //   _each(TaskReviewStatus, (status) => {
+      //     if (status !== TaskReviewStatus.unnecessary) {
+      //       options.push(
+      //         <option key={keysByReviewStatus[status]} value={status}>
+      //           {props.intl.formatMessage(messagesByReviewStatus[status])}
+      //         </option>
+      //       )
+      //     }
+      //   })
+      // }
+      // else {
+      //   _each(TaskReviewStatus, (status) => {
+      //     if (isNeedsReviewStatus(status)) {
+      //       options.push(
+      //         <option key={keysByReviewStatus[status]} value={status}>
+      //           {props.intl.formatMessage(messagesByReviewStatus[status])}
+      //         </option>
+      //       )
+      //     }
+      //   })
+      // }
 
-      // return (
-      //   <select
-      //     onChange={event => onChange(event.target.value)}
-      //     className={"mr-w-full"}
-      //     value={filter ? filter.value : 'all'}
-      //   >
-      //     {options}
-      //   </select>
-      // )
       return (
         <TaskFilterMultiSelectDropdown 
           itemList={items}
@@ -1267,8 +1281,35 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       />
     ),
     Filter: ({ filter, onChange }) => {
-      const options = [
-      ]
+      const items = []
+
+      if(props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
+        items.push({
+          label: props.intl.formatMessage(messages.metaUnreviewed),
+          value: TaskMetaReviewStatusWithUnset.metaUnset
+        })
+        items.push({
+          label: props.intl.formatMessage(messagesByMetaReviewStatus[TaskReviewStatus.needed]),
+          value: TaskReviewStatus.needed
+        })
+      } else {
+        items.push({
+          label: props.intl.formatMessage(messages.metaUnreviewed),
+          value: TaskMetaReviewStatusWithUnset.metaUnset
+        })
+        _each(TaskReviewStatus, (status) => {
+          if (status !== TaskReviewStatus.unnecessary && isMetaReviewStatus(status)) {
+            items.push({
+              label: props.intl.formatMessage(messagesByMetaReviewStatus[status]),
+              value: status
+            })
+          }
+        })
+      }
+
+      console.log('items in metareview multiselect render', items)
+
+      const options = []
 
       if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
         options.push(<option key="all" value="0,-2">{props.intl.formatMessage(messages.allNeeded)}</option>)
@@ -1295,14 +1336,24 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         })
       }
 
+      // return (
+      //   <select
+      //     onChange={event => onChange(event.target.value)}
+      //     className={"mr-w-full"}
+      //     value={filter ? filter.value : 'all'}
+      //   >
+      //     {options}
+      //   </select>
+      // )
       return (
-        <select
-          onChange={event => onChange(event.target.value)}
-          className={"mr-w-full"}
-          value={filter ? filter.value : 'all'}
-        >
-          {options}
-        </select>
+        <TaskFilterMultiSelectDropdown 
+          itemList={items}
+          filterState={props.taskReviewStatusFilterIds}
+          onChange={item => {
+            onChange(item)
+            setTimeout(() => console.log(items))
+          }}   
+        />
       )
     },
   }
