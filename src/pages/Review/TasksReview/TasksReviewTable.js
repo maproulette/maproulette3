@@ -283,6 +283,22 @@ export class TaskReviewTable extends Component {
     this.setState({ taskReviewStatusFilterIds: newIds})
   }
 
+  updateTaskMetaReviewStatusFilterIds = item => {
+    let newIds = this.state.taskMetaReviewStatusFilterIds.slice()
+    if(item.value !== "all") {
+      newIds = newIds.filter(i => i !== "all")
+      if(this.state.taskMetaReviewStatusFilterIds.includes(item.value)) {
+        newIds = newIds.filter(i => i !== item.value)
+      } else {
+        newIds.push(item.value)
+      }
+    } else newIds = [
+      "all"
+    ]
+    
+    this.setState({ taskMetaReviewStatusFilterIds: newIds})
+  }
+
   componentWillUnmount() {
     this.componentIsMounted = false
   }
@@ -493,10 +509,12 @@ export class TaskReviewTable extends Component {
                             updateProjectFilterIds: this.updateProjectFilterIds,
                             updateTaskStatusFilterIds: this.updateTaskStatusFilterIds,
                             updateTaskReviewStatusFilterIds: this.updateTaskReviewStatusFilterIds,
+                            updateTaskMetaReviewStatusFilterIds: this.updateTaskMetaReviewStatusFilterIds,
                             challengeFilterIds: this.state.challengeFilterIds,
                             projectFilterIds: this.state.projectFilterIds,
                             taskStatusFilterIds: this.state.taskStatusFilterIds,
-                            taskReviewStatusFilterIds: this.state.taskReviewStatusFilterIds
+                            taskReviewStatusFilterIds: this.state.taskReviewStatusFilterIds,
+                            taskMetaReviewStatusFilterIds: this.state.taskMetaReviewStatusFilterIds
                            },
                            taskId => this.setState({openComments: taskId}),
                            data, this.props.reviewCriteria, pageSize)
@@ -1307,7 +1325,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         })
       }
 
-      console.log('items in metareview multiselect render', items)
+      // console.log('items in metareview multiselect render', items)
 
       const options = []
 
@@ -1348,10 +1366,10 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       return (
         <TaskFilterMultiSelectDropdown 
           itemList={items}
-          filterState={props.taskReviewStatusFilterIds}
+          filterState={props.taskMetaReviewStatusFilterIds}
           onChange={item => {
             onChange(item)
-            setTimeout(() => console.log(items))
+            setTimeout(() => props.updateTaskMetaReviewStatusFilterIds(item), 0)
           }}   
         />
       )

@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
 
 const TaskFilterMultiSelectDropdown = ({itemList, onChange, filterState}) => {
+  console.log('filterstate in TaskFilterMultiSelectDropdown', filterState)
   const multiSelectItems = 
   <div className='mr-flex mr-flex-col mr-space-y-2 mr-px-1'>
     {itemList.map(item => (
