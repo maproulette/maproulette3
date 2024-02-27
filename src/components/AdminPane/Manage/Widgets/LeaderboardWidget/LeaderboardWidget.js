@@ -9,8 +9,9 @@ import ChallengeOwnerLeaderboard
        from '../../ChallengeOwnerLeaderboard/ChallengeOwnerLeaderboard'
 import PastDurationSelector
        from '../../../../PastDurationSelector/PastDurationSelector'
-import { CURRENT_MONTH, CUSTOM_RANGE }
-       from '../../../../PastDurationSelector/PastDurationSelector'
+//CURRENT_MONTH, and CUSTOM_RANGE removed untill endpoint can handle unique params
+// import { CURRENT_MONTH, CUSTOM_RANGE }
+//        from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import { USER_TYPE_MAPPER, USER_TYPE_REVIEWER }
        from '../../../../../services/Leaderboard/Leaderboard'
@@ -84,7 +85,8 @@ export default class LeaderboardWidget extends Component {
     const selector =
       <PastDurationSelector
         className="mr-button mr-button--green-lighter mr-button--small mr-dropdown--right"
-        pastMonthsOptions={[CURRENT_MONTH, 1, 3, 6, 12, CUSTOM_RANGE]}
+        // CURRENT_MONTH, and CUSTOM_RANGE removed untill endpoint can handle unique params
+        pastMonthsOptions={[1, 3, 6, 12]}
         currentMonthsPast={monthsPast}
         selectDuration={this.setMonthsPast}
         selectCustomRange={this.setDateRange}

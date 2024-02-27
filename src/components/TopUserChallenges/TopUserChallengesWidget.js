@@ -28,29 +28,32 @@ const descriptor = {
 }
 
 export class TopUserChallengesWidget extends Component {
-  updateChallenges = monthsPast => {
-    this.props.fetchTopChallenges(
-      this.props.user.id,
-      subMonths(new Date(), monthsPast)
-    )
-  }
+  // Disable till related endpoint allows for unique values
 
-  currentMonthsPast = () => {
-    return this.props.widgetConfiguration.monthsPast || 1
-  }
 
-  setMonthsPast = monthsPast => {
-    if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
-      this.props.updateWidgetConfiguration({monthsPast})
-      this.updateChallenges(monthsPast)
-    }
-  }
+  // updateChallenges = monthsPast => {
+  //   this.props.fetchTopChallenges(
+  //     this.props.user.id,
+  //     subMonths(new Date(), monthsPast)
+  //   )
+  // }
 
-  componentDidMount() {
-    if (this.props.user) {
-      this.updateChallenges(this.currentMonthsPast())
-    }
-  }
+  // currentMonthsPast = () => {
+  //   return this.props.widgetConfiguration.monthsPast || 1
+  // }
+
+  // setMonthsPast = monthsPast => {
+  //   if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
+  //     this.props.updateWidgetConfiguration({monthsPast})
+  //     this.updateChallenges(monthsPast)
+  //   }
+  // }
+
+  // componentDidMount() {
+  //   if (this.props.user) {
+  //     this.updateChallenges(this.currentMonthsPast())
+  //   }
+  // }
 
   render() {
     return (
@@ -58,17 +61,18 @@ export class TopUserChallengesWidget extends Component {
         {...this.props}
         className="top-user-challenges-widget"
         widgetTitle={<FormattedMessage {...messages.header} />}
-        rightHeaderControls={
-          <PastDurationSelector
-            className={classNames(
-              "mr-button mr-button--small",
-              this.props.lightMode ? "mr-button--green" : "mr-button--green-lighter"
-            )}
-            pastMonthsOptions={[1, 3, 6, 12]}
-            currentMonthsPast={this.currentMonthsPast()}
-            selectDuration={this.setMonthsPast}
-          />
-        }
+        // Disable till related endpoint allows for unique values
+        // rightHeaderControls={
+        //   <PastDurationSelector
+        //     className={classNames(
+        //       "mr-button mr-button--small",
+        //       this.props.lightMode ? "mr-button--green" : "mr-button--green-lighter"
+        //     )}
+        //     pastMonthsOptions={[1, 3, 6, 12]}
+        //     currentMonthsPast={this.currentMonthsPast()}
+        //     selectDuration={this.setMonthsPast}
+        //   />
+        // }
       >
         <TopChallengeList {...this.props} />
       </QuickWidget>

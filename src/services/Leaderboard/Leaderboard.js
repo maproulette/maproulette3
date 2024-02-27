@@ -64,7 +64,10 @@ export const fetchLeaderboard = (numberMonths=null, onlyEnabled=true,
       return results
     } catch (error) {
       console.error('Error fetching leaderboard:', error)
-      dispatch(addError(AppErrors.leaderboard.fetchFailure))
+       //Prevent error modals on leaderboard widgets, and retain error modal on leaderboard page
+      if(!forProjects && !forChallenges){
+        dispatch(addError(AppErrors.leaderboard.fetchFailure))
+      }
       return []
     }
   }

@@ -425,56 +425,59 @@ export const fetchSavedChallenges = function(userId, limit=50) {
  * month is used.
  */
 export const fetchTopChallenges = function(userId, startDate, limit=5) {
-  return function(dispatch) {
-    // If no startDate given, default to past month.
-    const params = {
-      start: (startDate ? startOfDay(startDate) : startOfDay(subMonths(new Date(), 1))).toISOString(),
-      limit,
-    }
+  // Prevent endpont from being called till it can handle unique queries.
+  return
 
-    const variables = { userId }
+  // return function(dispatch) {
+  //   // If no startDate given, default to past month.
+  //   const params = {
+  //     start: (startDate ? startOfDay(startDate) : startOfDay(subMonths(new Date(), 1))).toISOString(),
+  //     limit,
+  //   }
 
-    const cachedTopChallenges = userCache.get(variables, params, USER_TOP_CHALLENGES);
+  //   const variables = { userId }
 
-    if (cachedTopChallenges) {
-      dispatch(receiveChallenges(cachedTopChallenges.challenges))
-      dispatch(receiveUsers(cachedTopChallenges.user))
+  //   const cachedTopChallenges = userCache.get(variables, params, USER_TOP_CHALLENGES);
 
-      return cachedTopChallenges.challenges
-    }
+  //   if (cachedTopChallenges) {
+  //     dispatch(receiveChallenges(cachedTopChallenges.challenges))
+  //     dispatch(receiveUsers(cachedTopChallenges.user))
 
-    return new Endpoint(
-      api.user.topChallenges, {
-        schema: [ challengeSchema() ],
-        variables,
-        params,
-      }
-    ).execute().then(normalizedChallenges => {
-      const challenges = _get(normalizedChallenges, 'entities.challenges')
-      const user = {id: userId, topChallenges: []}
+  //     return cachedTopChallenges.challenges
+  //   }
 
-      // Store the top challenge ids in order, sorted by user activity (descending)
-      if (_isObject(challenges)) {
-        user.topChallenges = _map(
-          _reverse(_sortBy(_toPairs(challenges), idAndChallenge => idAndChallenge[1].activity)),
-          idAndChallenge => parseInt(idAndChallenge[0], 10)
-        )
-      }
+  //   return new Endpoint(
+  //     api.user.topChallenges, {
+  //       schema: [ challengeSchema() ],
+  //       variables,
+  //       params,
+  //     }
+  //   ).execute().then(normalizedChallenges => {
+  //     const challenges = _get(normalizedChallenges, 'entities.challenges')
+  //     const user = {id: userId, topChallenges: []}
 
-      // Remove the user-specific activity score before adding this challenge
-      // to the general redux store.
-      _each(challenges, challenge => {
-        delete challenge.activity
-      })
+  //     // Store the top challenge ids in order, sorted by user activity (descending)
+  //     if (_isObject(challenges)) {
+  //       user.topChallenges = _map(
+  //         _reverse(_sortBy(_toPairs(challenges), idAndChallenge => idAndChallenge[1].activity)),
+  //         idAndChallenge => parseInt(idAndChallenge[0], 10)
+  //       )
+  //     }
 
-      userCache.set(variables, params, { challenges: normalizedChallenges.entities, user }, USER_TOP_CHALLENGES)
+  //     // Remove the user-specific activity score before adding this challenge
+  //     // to the general redux store.
+  //     _each(challenges, challenge => {
+  //       delete challenge.activity
+  //     })
 
-      dispatch(receiveChallenges(normalizedChallenges.entities))
-      dispatch(receiveUsers(simulatedEntities(user)))
+  //     userCache.set(variables, params, { challenges: normalizedChallenges.entities, user }, USER_TOP_CHALLENGES)
 
-      return normalizedChallenges
-    })
-  }
+  //     dispatch(receiveChallenges(normalizedChallenges.entities))
+  //     dispatch(receiveUsers(simulatedEntities(user)))
+
+  //     return normalizedChallenges
+  //   })
+  // }
 }
 
 /**
