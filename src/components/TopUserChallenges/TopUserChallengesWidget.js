@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import classNames from 'classnames'
+  // Disable till TopUserChallengesWidget is reimplemented
+// import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
@@ -7,12 +8,14 @@ import _compact from 'lodash/compact'
 import _isFinite from 'lodash/isFinite'
 import _isPlainObject from 'lodash/isPlainObject'
 import { Link } from 'react-router-dom'
-import subMonths from 'date-fns/sub_months'
+  // Disable till TopUserChallengesWidget is reimplemented
+// import subMonths from 'date-fns/sub_months'
 import { WidgetDataTarget, registerWidgetType }
        from '../../services/Widget/Widget'
 import QuickWidget from '../QuickWidget/QuickWidget'
-import PastDurationSelector
-       from '../PastDurationSelector/PastDurationSelector'
+  // Disable till TopUserChallengesWidget is reimplemented
+// import PastDurationSelector
+//        from '../PastDurationSelector/PastDurationSelector'
 import messages from './Messages'
 
 const descriptor = {

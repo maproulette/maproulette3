@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
+//reimplement when DurationButtons are reimplemented
+//FormattedDate
+import { FormattedMessage, injectIntl } from 'react-intl'
 import _map from 'lodash/map'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
