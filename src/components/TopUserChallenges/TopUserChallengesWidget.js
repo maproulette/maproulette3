@@ -2,12 +2,12 @@ import React, { Component } from 'react'
   // Disable till TopUserChallengesWidget is reimplemented
 // import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
-import _map from 'lodash/map'
-import _get from 'lodash/get'
-import _compact from 'lodash/compact'
-import _isFinite from 'lodash/isFinite'
-import _isPlainObject from 'lodash/isPlainObject'
-import { Link } from 'react-router-dom'
+// import _map from 'lodash/map'
+// import _get from 'lodash/get'
+// import _compact from 'lodash/compact'
+// import _isFinite from 'lodash/isFinite'
+// import _isPlainObject from 'lodash/isPlainObject'
+// import { Link } from 'react-router-dom'
   // Disable till TopUserChallengesWidget is reimplemented
 // import subMonths from 'date-fns/sub_months'
 import { WidgetDataTarget, registerWidgetType }
@@ -77,7 +77,10 @@ export class TopUserChallengesWidget extends Component {
         //   />
         // }
       >
-        <TopChallengeList {...this.props} />
+        <div className="mr-text-red"> 
+          <FormattedMessage {...messages.topChallengesDisabled}/>
+        </div>
+        {/* <TopChallengeList {...this.props} /> */}
       </QuickWidget>
     )
   }
@@ -87,43 +90,43 @@ TopUserChallengesWidget.defaultProps = {
   lightMode: false,
 }
 
-const TopChallengeList = function(props) {
-  const challengeItems =
-    _compact(_map(_get(props, 'user.topChallenges', []), challenge => {
-      if (!_isFinite(_get(challenge, 'id'))) {
-        return null
-      }
+// const TopChallengeList = function(props) {
+//   const challengeItems =
+//     _compact(_map(_get(props, 'user.topChallenges', []), challenge => {
+//       if (!_isFinite(_get(challenge, 'id'))) {
+//         return null
+//       }
 
-      return (
-        <li key={challenge.id} className="mr-py-2">
-          <Link to={`/browse/challenges/${challenge.id}`}>
-            {challenge.name}
-          </Link>
-          {_isPlainObject(challenge.parent) && // virtual challenges don't have projects
-            <div className="mr-links-grey-light">
-              <Link
-                onClick={e => {e.stopPropagation()}}
-                to={`/browse/projects/${challenge.parent.id}`}
-              >
-                {challenge.parent.displayName || challenge.parent.name}
-              </Link>
-            </div>
-          }
-        </li>
-      )
-    }
-  ))
+//       return (
+//         <li key={challenge.id} className="mr-py-2">
+//           <Link to={`/browse/challenges/${challenge.id}`}>
+//             {challenge.name}
+//           </Link>
+//           {_isPlainObject(challenge.parent) && // virtual challenges don't have projects
+//             <div className="mr-links-grey-light">
+//               <Link
+//                 onClick={e => {e.stopPropagation()}}
+//                 to={`/browse/projects/${challenge.parent.id}`}
+//               >
+//                 {challenge.parent.displayName || challenge.parent.name}
+//               </Link>
+//             </div>
+//           }
+//         </li>
+//       )
+//     }
+//   ))
 
-  return (
-    challengeItems.length > 0 ?
-    <ol className="mr-list-reset mr-links-green-lighter">
-      {challengeItems}
-    </ol> :
-    <div className="mr-text-grey-lighter">
-      <FormattedMessage {...messages.noChallenges} />
-    </div>
-  )
-}
+//   return (
+//     challengeItems.length > 0 ?
+//     <ol className="mr-list-reset mr-links-green-lighter">
+//       {challengeItems}
+//     </ol> :
+//     <div className="mr-text-grey-lighter">
+//       <FormattedMessage {...messages.noChallenges} />
+//     </div>
+//   )
+// }
 
 registerWidgetType(TopUserChallengesWidget, descriptor)
 
