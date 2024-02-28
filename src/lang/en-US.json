@@ -1331,6 +1331,7 @@
   "Review.fields.metaReviewStatus.label": "Meta-Review Status",
   "Review.fields.metaReviewedAt.label": "Meta-Reviewed On",
   "Review.fields.metaReviewedBy.label": "Meta-Reviewer",
+  "Review.fields.priorities.label": "Priority",
   "Review.fields.priority.label": "Priority",
   "Review.fields.project.label": "Project",
   "Review.fields.projectId.label": "Project Id",

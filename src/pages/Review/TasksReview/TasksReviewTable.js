@@ -127,8 +127,14 @@ const getTaskMetaReviewStatusFilterIds = (search, param, props) => {
 }
 
 const getTaskPriorityFilterIds = (search, param) => {
-  return formatURLSearchParamEntryPairs(search, param) || 
-  Object.values(TaskPriority)
+  const searchParams = new URLSearchParams(search)
+  for(let pair of searchParams.entries()) {
+    if(pair[0] === param && pair[1]) {
+      if(pair[1].length === 0) return []
+      return pair[1].split(',').map(n => Number(n))
+    }
+  } 
+  return Object.values(TaskPriority)
 }
 
 /**
@@ -162,8 +168,6 @@ export class TaskReviewTable extends Component {
 
     const filters = {}
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
-
-    console.log('Filters on state update', filters)
     
     // Determine if we can search by challenge Id or do name search
     if (filters.challenge) {
@@ -199,8 +203,6 @@ export class TaskReviewTable extends Component {
     filters.reviewStatus = this.state.taskReviewStatusFilterIds
     filters.metaReviewStatus = this.state.taskMetaReviewStatusFilterIds
     filters.priorities = this.state.taskPriorityFilterIds
-
-    console.log('filters in task updater', filters)
     
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
@@ -320,7 +322,7 @@ export class TaskReviewTable extends Component {
     let newIds = this.state.taskPriorityFilterIds.slice()
     if(item.value !== "all") {
       newIds = newIds.filter(i => i !== "all")
-      if(this.state.taskMetaReviewStatusFilterIds.includes(item.value)) {
+      if(this.state.taskPriorityFilterIds.includes(item.value)) {
         newIds = newIds.filter(i => i !== item.value)
       } else {
         newIds.push(item.value)
@@ -337,7 +339,6 @@ export class TaskReviewTable extends Component {
   }
 
   componentDidMount() {
-    console.log(this.state)
     this.componentIsMounted = true
     this.setupConfigurableColumns(this.props.reviewTasksType)
   }
@@ -383,8 +384,8 @@ export class TaskReviewTable extends Component {
                    "reviewedBy":{},
                    "reviewedAt":{},
                    "status":{},
-                  //  "priorities":{},
-                   "priority": {},
+                   "priority":{},
+                  //  "priority": {},
                    "reviewCompleteControls":{permanent: true},
                    "reviewerControls":{permanent: true},
                    "mapperControls":{permanent: true},
@@ -870,9 +871,9 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
 
   columns.priority = {
     id: 'priority',
-    Header: makeInvertable(props.intl.formatMessage(messages.priorityLabel),
-                           () => props.invertField('priority'),
-                           _get(criteria, 'invertFields.priority')),
+    Header: makeInvertable(props.intl.formatMessage(messages.prioritiesLabel),
+                           () => props.invertField('priorities'),
+                           _get(criteria, 'invertFields.priorities')),
     accessor: 'priority',
     sortable: true,
     filterable: true,
@@ -885,7 +886,8 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         className={`mr-status-${_kebabCase(keysByPriority[props.value])}`}
       />
     ),
-    Filter: ({ filter, onChange }) => {
+    
+    Filter: ({ onChange }) => {
       const items = []
 
       _each(TaskPriority, priority => {
@@ -895,17 +897,17 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         })
       })
 
-      const options = [
-        <option key="all" value="all">All</option>
-      ]
+      // const options = [
+      //   <option key="all" value="all">All</option>
+      // ]
 
-      _each(TaskPriority, (priority) => {
-        options.push(
-          <option key={keysByPriority[priority]} value={priority}>
-            {props.intl.formatMessage(messagesByPriority[priority])}
-          </option>
-        )
-      })
+      // _each(TaskPriority, (priority) => {
+      //   options.push(
+      //     <option key={keysByPriority[priority]} value={priority}>
+      //       {props.intl.formatMessage(messagesByPriority[priority])}
+      //     </option>
+      //   )
+      // })
 
       // return (
       //   <select
@@ -922,7 +924,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           itemList={items}
           filterState={props.taskPriorityFilterIds}
           onChange={item => {
-            onChange()
+            onChange(null)
             setTimeout(() => props.updateTaskPriorityFilterIds(item), 0)
           }}   
         />
