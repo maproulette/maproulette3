@@ -9,9 +9,9 @@ import ChallengeOwnerLeaderboard
        from '../../ChallengeOwnerLeaderboard/ChallengeOwnerLeaderboard'
 import PastDurationSelector
        from '../../../../PastDurationSelector/PastDurationSelector'
-//CURRENT_MONTH, and CUSTOM_RANGE removed untill endpoint can handle unique params
-// import { CURRENT_MONTH, CUSTOM_RANGE }
-//        from '../../../../PastDurationSelector/PastDurationSelector'
+// CURRENT_MONTH removed untill endpoint can handle unique params
+import { CUSTOM_RANGE }
+       from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import { USER_TYPE_MAPPER, USER_TYPE_REVIEWER }
        from '../../../../../services/Leaderboard/Leaderboard'
