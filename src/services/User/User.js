@@ -425,59 +425,57 @@ export const fetchSavedChallenges = function(userId, limit=50) {
  * month is used.
  */
 export const fetchTopChallenges = function(userId, startDate, limit=5) {
-  // Prevent endpont from being called till it can handle unique queries.
-  return
+  return function(dispatch) {
+    // If no startDate given, default to past month.
+    const params = {
+      start: (startDate ? startOfDay(startDate) : startOfDay(subMonths(new Date(), 1))).toISOString(),
+      limit,
+    }
 
-  // return function(dispatch) {
-  //   // If no startDate given, default to past month.
-  //   const params = {
-  //     start: (startDate ? startOfDay(startDate) : startOfDay(subMonths(new Date(), 1))).toISOString(),
-  //     limit,
-  //   }
+    const variables = { userId }
 
-  //   const variables = { userId }
+    const cachedTopChallenges = userCache.get(variables, params, USER_TOP_CHALLENGES);
 
-  //   const cachedTopChallenges = userCache.get(variables, params, USER_TOP_CHALLENGES);
+    if (cachedTopChallenges) {
+      dispatch(receiveChallenges(cachedTopChallenges.challenges))
+      dispatch(receiveUsers(cachedTopChallenges.user))
 
-  //   if (cachedTopChallenges) {
-  //     dispatch(receiveChallenges(cachedTopChallenges.challenges))
-  //     dispatch(receiveUsers(cachedTopChallenges.user))
+      return cachedTopChallenges.challenges
+    }
 
-  //     return cachedTopChallenges.challenges
-  //   }
 
-  //   return new Endpoint(
-  //     api.user.topChallenges, {
-  //       schema: [ challengeSchema() ],
-  //       variables,
-  //       params,
-  //     }
-  //   ).execute().then(normalizedChallenges => {
-  //     const challenges = _get(normalizedChallenges, 'entities.challenges')
-  //     const user = {id: userId, topChallenges: []}
+    return new Endpoint(
+      api.user.topChallenges, {
+        schema: [ challengeSchema() ],
+        variables,
+        params,
+      }
+    ).execute().then(normalizedChallenges => {
+      const challenges = _get(normalizedChallenges, 'entities.challenges')
+      const user = {id: userId, topChallenges: []}
 
-  //     // Store the top challenge ids in order, sorted by user activity (descending)
-  //     if (_isObject(challenges)) {
-  //       user.topChallenges = _map(
-  //         _reverse(_sortBy(_toPairs(challenges), idAndChallenge => idAndChallenge[1].activity)),
-  //         idAndChallenge => parseInt(idAndChallenge[0], 10)
-  //       )
-  //     }
+      // Store the top challenge ids in order, sorted by user activity (descending)
+      if (_isObject(challenges)) {
+        user.topChallenges = _map(
+          _reverse(_sortBy(_toPairs(challenges), idAndChallenge => idAndChallenge[1].activity)),
+          idAndChallenge => parseInt(idAndChallenge[0], 10)
+        )
+      }
 
-  //     // Remove the user-specific activity score before adding this challenge
-  //     // to the general redux store.
-  //     _each(challenges, challenge => {
-  //       delete challenge.activity
-  //     })
+      // Remove the user-specific activity score before adding this challenge
+      // to the general redux store.
+      _each(challenges, challenge => {
+        delete challenge.activity
+      })
 
-  //     userCache.set(variables, params, { challenges: normalizedChallenges.entities, user }, USER_TOP_CHALLENGES)
+      userCache.set(variables, params, { challenges: normalizedChallenges.entities, user }, USER_TOP_CHALLENGES)
 
-  //     dispatch(receiveChallenges(normalizedChallenges.entities))
-  //     dispatch(receiveUsers(simulatedEntities(user)))
+      dispatch(receiveChallenges(normalizedChallenges.entities))
+      dispatch(receiveUsers(simulatedEntities(user)))
 
-  //     return normalizedChallenges
-  //   })
-  // }
+      return normalizedChallenges
+    })
+  }
 }
 
 /**
@@ -641,7 +639,8 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
 
     return fetchUser(userId)(dispatch).then(() => {
       fetchSavedChallenges(userId, savedChallengesLimit)(dispatch)
-      fetchTopChallenges(userId)(dispatch)
+      // disabled untill endpoint is fixed
+      // fetchTopChallenges(userId)(dispatch)
       fetchSavedTasks(userId, savedTasksLimit)(dispatch)
       fetchUserActivity(userId)(dispatch)
       fetchNotificationSubscriptions(userId)(dispatch)
