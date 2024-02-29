@@ -7,6 +7,16 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.14.11] - 2023-2-28
+Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
+
+## What's Changed
+* Disable TopChallenges, and Leaderboard relate features that are broken by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2285
+* Fix handler looping issue with leaderboard fetching by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2284
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.10...v3.14.11
+
+
 ## [v3.14.10] - 2023-2-19
 Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
 
