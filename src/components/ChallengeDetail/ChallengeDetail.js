@@ -569,14 +569,15 @@ export class ChallengeDetail extends Component {
                           day="2-digit"
                         />
                       </li>
-                      <li>
+                      {/* Disable Link tell project leaderboard page is reimplemented */}
+                      {/* <li>
                         <Link
                           className="mr-text-green-lighter hover:mr-text-white"
                           to={`/challenge/${challenge.id}/leaderboard`}
                         >
                           <FormattedMessage {...messages.viewLeaderboard} />
                         </Link>
-                      </li>
+                      </li> */}
                       <div className="mr-mb-3" />
                       {this.renderDetailTabs()}
                     </ol>

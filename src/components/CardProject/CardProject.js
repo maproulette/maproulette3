@@ -43,7 +43,8 @@ export class CardProject extends Component {
 
         {this.props.isExpanded &&
          <div className="mr-card-project__content">
-           <ol className="mr-card-project__meta">
+           {/* Disable Link tell project leaderboard page is reimplemented */}
+           {/* <ol className="mr-card-project__meta">
              <li>
                <Link
                  className="mr-text-green-lighter hover:mr-text-white"
@@ -52,7 +53,7 @@ export class CardProject extends Component {
                  <FormattedMessage {...messages.viewLeaderboard} />
                </Link>
              </li>
-           </ol>
+           </ol> */}
 
            <div className="mr-card-project__description">
              <MarkdownContent markdown={this.props.project.description} />

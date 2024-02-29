@@ -140,14 +140,15 @@ export class CardChallenge extends Component {
                   year='numeric' month='long' day='2-digit'
                 />
               </li>
-              <li>
+              {/* Disable Link tell project leaderboard page is reimplemented */}
+              {/* <li>
                 <Link
                   className="mr-text-green-lighter hover:mr-text-white"
                   to={`/challenge/${this.props.challenge.id}/leaderboard`}
                 >
                   <FormattedMessage {...messages.viewLeaderboard} />
                 </Link>
-              </li>
+              </li> */}
             </ol>
            }
 

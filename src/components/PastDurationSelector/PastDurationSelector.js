@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
+//reimplement when DurationButtons are reimplemented
+//FormattedDate
+import { FormattedMessage, injectIntl } from 'react-intl'
 import _map from 'lodash/map'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -125,16 +127,18 @@ const DurationButton = function(props) {
           {props.currentMonthsPast > CURRENT_MONTH &&
             <FormattedMessage {...messages.pastMonthsOption}
                               values={{months: props.currentMonthsPast}} />}
-          {props.currentMonthsPast === CURRENT_MONTH &&
-            <FormattedMessage {...messages.currentMonthOption} />}
+          {/* Disable until the leaderboard can handle unique params */}
+          {/* {props.currentMonthsPast === CURRENT_MONTH &&
+            <FormattedMessage {...messages.currentMonthOption} />} */}
           {props.currentMonthsPast === ALL_TIME &&
             <FormattedMessage {...messages.allTimeOption} />}
-          {props.currentMonthsPast <= CUSTOM_RANGE &&
+          {/* Disable until the leaderboard can handle unique params */}
+          {/* {props.currentMonthsPast <= CUSTOM_RANGE &&
             <React.Fragment>
               <FormattedDate value={props.customStartDate} /> -
               <FormattedDate value={props.customEndDate} />
             </React.Fragment>
-          }
+          } */}
         </span>
         <SvgSymbol
           sym="icon-cheveron-down"
@@ -151,9 +155,11 @@ const ListDurationItems = function(props) {
     <li key={months}>
       <a onClick={() => props.pickDuration(months, props.closeDropdown)}>
         {months > CURRENT_MONTH  && <FormattedMessage {...messages.pastMonthsOption} values={{months}} />}
-        {months === CURRENT_MONTH  && <FormattedMessage {...messages.currentMonthOption} />}
+        {/* Disable until the leaderboard can handle unique params */}
+        {/* {months === CURRENT_MONTH  && <FormattedMessage {...messages.currentMonthOption} />} */}
         {months === ALL_TIME  && <FormattedMessage {...messages.allTimeOption} />}
-        {months <= CUSTOM_RANGE  && <FormattedMessage {...messages.customRangeOption} />}
+        {/* Disable until the leaderboard can handle unique params */}
+        {/* {months <= CUSTOM_RANGE  && <FormattedMessage {...messages.customRangeOption} />} */}
       </a>
     </li>
   ))

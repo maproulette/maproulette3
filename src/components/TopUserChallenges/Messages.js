@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Your Top Challenges",
   },
 
+  topChallengesDisabled: {
+    id: "TopUserChallenges.topChallengesDisabled.label",
+    defaultMessage: "Results for Top Challenges widget are currently disabled",
+  },
+
   noChallenges: {
     id: "TopUserChallenges.widget.noChallenges",
     defaultMessage: "No Challenges",

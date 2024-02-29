@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
-import classNames from 'classnames'
+  // Disable till TopUserChallengesWidget is reimplemented
+// import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
-import _map from 'lodash/map'
-import _get from 'lodash/get'
-import _compact from 'lodash/compact'
-import _isFinite from 'lodash/isFinite'
-import _isPlainObject from 'lodash/isPlainObject'
-import { Link } from 'react-router-dom'
-import subMonths from 'date-fns/sub_months'
+// import _map from 'lodash/map'
+// import _get from 'lodash/get'
+// import _compact from 'lodash/compact'
+// import _isFinite from 'lodash/isFinite'
+// import _isPlainObject from 'lodash/isPlainObject'
+// import { Link } from 'react-router-dom'
+  // Disable till TopUserChallengesWidget is reimplemented
+// import subMonths from 'date-fns/sub_months'
 import { WidgetDataTarget, registerWidgetType }
        from '../../services/Widget/Widget'
 import QuickWidget from '../QuickWidget/QuickWidget'
-import PastDurationSelector
-       from '../PastDurationSelector/PastDurationSelector'
+  // Disable till TopUserChallengesWidget is reimplemented
+// import PastDurationSelector
+//        from '../PastDurationSelector/PastDurationSelector'
 import messages from './Messages'
 
 const descriptor = {
@@ -28,29 +31,32 @@ const descriptor = {
 }
 
 export class TopUserChallengesWidget extends Component {
-  updateChallenges = monthsPast => {
-    this.props.fetchTopChallenges(
-      this.props.user.id,
-      subMonths(new Date(), monthsPast)
-    )
-  }
+  // Disable till related endpoint allows for unique values
 
-  currentMonthsPast = () => {
-    return this.props.widgetConfiguration.monthsPast || 1
-  }
 
-  setMonthsPast = monthsPast => {
-    if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
-      this.props.updateWidgetConfiguration({monthsPast})
-      this.updateChallenges(monthsPast)
-    }
-  }
+  // updateChallenges = monthsPast => {
+  //   this.props.fetchTopChallenges(
+  //     this.props.user.id,
+  //     subMonths(new Date(), monthsPast)
+  //   )
+  // }
 
-  componentDidMount() {
-    if (this.props.user) {
-      this.updateChallenges(this.currentMonthsPast())
-    }
-  }
+  // currentMonthsPast = () => {
+  //   return this.props.widgetConfiguration.monthsPast || 1
+  // }
+
+  // setMonthsPast = monthsPast => {
+  //   if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
+  //     this.props.updateWidgetConfiguration({monthsPast})
+  //     this.updateChallenges(monthsPast)
+  //   }
+  // }
+
+  // componentDidMount() {
+  //   if (this.props.user) {
+  //     this.updateChallenges(this.currentMonthsPast())
+  //   }
+  // }
 
   render() {
     return (
@@ -58,19 +64,23 @@ export class TopUserChallengesWidget extends Component {
         {...this.props}
         className="top-user-challenges-widget"
         widgetTitle={<FormattedMessage {...messages.header} />}
-        rightHeaderControls={
-          <PastDurationSelector
-            className={classNames(
-              "mr-button mr-button--small",
-              this.props.lightMode ? "mr-button--green" : "mr-button--green-lighter"
-            )}
-            pastMonthsOptions={[1, 3, 6, 12]}
-            currentMonthsPast={this.currentMonthsPast()}
-            selectDuration={this.setMonthsPast}
-          />
-        }
+        // Disable till related endpoint allows for unique values
+        // rightHeaderControls={
+        //   <PastDurationSelector
+        //     className={classNames(
+        //       "mr-button mr-button--small",
+        //       this.props.lightMode ? "mr-button--green" : "mr-button--green-lighter"
+        //     )}
+        //     pastMonthsOptions={[1, 3, 6, 12]}
+        //     currentMonthsPast={this.currentMonthsPast()}
+        //     selectDuration={this.setMonthsPast}
+        //   />
+        // }
       >
-        <TopChallengeList {...this.props} />
+        <div className="mr-text-red"> 
+          <FormattedMessage {...messages.topChallengesDisabled}/>
+        </div>
+        {/* <TopChallengeList {...this.props} /> */}
       </QuickWidget>
     )
   }
@@ -80,43 +90,43 @@ TopUserChallengesWidget.defaultProps = {
   lightMode: false,
 }
 
-const TopChallengeList = function(props) {
-  const challengeItems =
-    _compact(_map(_get(props, 'user.topChallenges', []), challenge => {
-      if (!_isFinite(_get(challenge, 'id'))) {
-        return null
-      }
+// const TopChallengeList = function(props) {
+//   const challengeItems =
+//     _compact(_map(_get(props, 'user.topChallenges', []), challenge => {
+//       if (!_isFinite(_get(challenge, 'id'))) {
+//         return null
+//       }
 
-      return (
-        <li key={challenge.id} className="mr-py-2">
-          <Link to={`/browse/challenges/${challenge.id}`}>
-            {challenge.name}
-          </Link>
-          {_isPlainObject(challenge.parent) && // virtual challenges don't have projects
-            <div className="mr-links-grey-light">
-              <Link
-                onClick={e => {e.stopPropagation()}}
-                to={`/browse/projects/${challenge.parent.id}`}
-              >
-                {challenge.parent.displayName || challenge.parent.name}
-              </Link>
-            </div>
-          }
-        </li>
-      )
-    }
-  ))
+//       return (
+//         <li key={challenge.id} className="mr-py-2">
+//           <Link to={`/browse/challenges/${challenge.id}`}>
+//             {challenge.name}
+//           </Link>
+//           {_isPlainObject(challenge.parent) && // virtual challenges don't have projects
+//             <div className="mr-links-grey-light">
+//               <Link
+//                 onClick={e => {e.stopPropagation()}}
+//                 to={`/browse/projects/${challenge.parent.id}`}
+//               >
+//                 {challenge.parent.displayName || challenge.parent.name}
+//               </Link>
+//             </div>
+//           }
+//         </li>
+//       )
+//     }
+//   ))
 
-  return (
-    challengeItems.length > 0 ?
-    <ol className="mr-list-reset mr-links-green-lighter">
-      {challengeItems}
-    </ol> :
-    <div className="mr-text-grey-lighter">
-      <FormattedMessage {...messages.noChallenges} />
-    </div>
-  )
-}
+//   return (
+//     challengeItems.length > 0 ?
+//     <ol className="mr-list-reset mr-links-green-lighter">
+//       {challengeItems}
+//     </ol> :
+//     <div className="mr-text-grey-lighter">
+//       <FormattedMessage {...messages.noChallenges} />
+//     </div>
+//   )
+// }
 
 registerWidgetType(TopUserChallengesWidget, descriptor)
 

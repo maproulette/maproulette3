@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "# Tasks",
   },
 
+  challengeOwnerLeaderboardDisabled: {
+    id: "ChallengeOwnerLeaderboard.challengeOwnerLeaderboardDisabled.label",
+    defaultMessage: "Sorry, mapper results for this leaderboard are currently disabled.",
+  },
+
   reviewsCompletedLabel: {
     id: "ChallengeOwnerLeaderboard.reviewsCompleted.label",
     defaultMessage: "# Reviews",

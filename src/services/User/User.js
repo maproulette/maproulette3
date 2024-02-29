@@ -443,6 +443,7 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
       return cachedTopChallenges.challenges
     }
 
+
     return new Endpoint(
       api.user.topChallenges, {
         schema: [ challengeSchema() ],
@@ -638,7 +639,8 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
 
     return fetchUser(userId)(dispatch).then(() => {
       fetchSavedChallenges(userId, savedChallengesLimit)(dispatch)
-      fetchTopChallenges(userId)(dispatch)
+      // disabled untill endpoint is fixed
+      // fetchTopChallenges(userId)(dispatch)
       fetchSavedTasks(userId, savedTasksLimit)(dispatch)
       fetchUserActivity(userId)(dispatch)
       fetchNotificationSubscriptions(userId)(dispatch)
