@@ -42,6 +42,7 @@ export class EnhancedMap extends ReactLeafletMap {
   animationHandle = null
   mapBoundsFitToLayer = false
   mapMoved = false
+  noInitialBoundsSet = true
 
   /**
    * Invoked after the user is finished altering the map bounds, either by
@@ -388,10 +389,10 @@ export class EnhancedMap extends ReactLeafletMap {
       this.props.animator.setAnimationFunction(this.animateFeatures)
     }
 
-    if (this.props.initialBounds && _isFinite(this.props.initialBounds.getNorth())) {
+    if (this.props.taskMarkers && this.noInitialBoundsSet && this.props.initialBounds && _isFinite(this.props.initialBounds.getNorth())) {
+      this.noInitialBoundsSet = false
       this.leafletElement.fitBounds(this.props.initialBounds)
-    }
-    else if (!this.props.center.equals(prevProps.center)) {
+    } else if (!this.props.center.equals(prevProps.center)) {
       this.leafletElement.panTo(this.props.center)
     }
 
