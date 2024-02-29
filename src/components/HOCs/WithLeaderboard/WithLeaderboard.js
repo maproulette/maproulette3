@@ -100,7 +100,14 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
             this.setState({leaderboard})
 
             const userId = _get(this.props, 'user.id')
-            if (userId && !options.ignoreUser && userType !== USER_TYPE_REVIEWER) {
+            // The reason for using _get is that the structure of the props may vary
+            // depending on where this component is used, and accessing the user's score
+            // directly through `this.props.user.score` may result in runtime errors if
+            // the `user` object or the `score` property is not available in certain contexts.
+            // By using `_get`, we safely handle cases where the expected property may be missing
+            // or nested within a deeper structure. 
+            const userScore = _get(this.props, 'user.score')
+            if (userScore && userId && !options.ignoreUser && userType !== USER_TYPE_REVIEWER) {
               this.props.fetchLeaderboardForUser(userId, 1,
                 ...this.leaderboardParams(numberMonths, countryCode),
                 startDate, endDate).then(userLeaderboard => {
