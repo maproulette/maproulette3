@@ -951,6 +951,27 @@ export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") 
     })
   }
 }
+// initialBundle, taskBundle props
+export const resetTaskBundle = function() {
+  return
+  // return function(dispatch) {
+  //   return new Endpoint(api.tasks.resetBundle, {
+  //     params: { initialBundle, taskBundle },
+  //   }).execute()
+  //     .then(results => {
+  //       return results
+  //     })
+  //     .catch(error => {
+  //       if (isSecurityError(error)) {
+  //         dispatch(ensureUserLoggedIn())
+  //           .then(() => dispatch(addError(AppErrors.user.unauthorized)))
+  //       } else {
+  //         dispatch(addError(AppErrors.task.bundleFailure))
+  //         console.log(error.response || error)
+  //       }
+  //     })
+  // }
+}
 
 export const deleteTaskBundle = function(bundleId, primaryTaskId) {
   return function(dispatch) {

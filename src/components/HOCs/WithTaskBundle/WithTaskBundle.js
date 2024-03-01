@@ -19,20 +19,23 @@ export function WithTaskBundle(WrappedComponent) {
       taskBundle: null,
       completingTask: null,
       initialBundle: null,
-      newBundle: false,
       selectedTasks: [],
       resetSelectedTasks: null
     }
 
     componentDidMount() {
+      const { task } = this.props
+      if (_isFinite(_get(task, 'bundleId'))) {
+        this.setupBundle(task.bundleId)
+      }
       window.addEventListener('beforeunload', this.handleBeforeUnload)
     }
 
     componentDidUpdate(prevProps, prevState) {
-      const { initialBundle, newBundle } = this.state
+      const { initialBundle } = this.state
       const { task } = this.props
       if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
-        this.setState({ taskBundle: null, loading: false })
+        this.setState({ initialBundle: null, taskBundle: null, loading: false })
         if (_isFinite(_get(task, 'bundleId'))) {
           this.setupBundle(task.bundleId)
         }
@@ -44,12 +47,11 @@ export function WithTaskBundle(WrappedComponent) {
             // new bundle state, the bundle state needs to reset to its initial value.
             // this.props.resetTaskBundle(prevState.initialBundle, prevProps.taskBundle)
           } else {
+            // Whenever the user redirects, skips a task, or refreshes and there was 
+            // no intial value, the bundle will be destroyed.
             this.props.deleteTaskBundle(prevState.taskBundle.bundleId, prevProps.task.id)
           }
         }
-      }
-      if (this.state.taskBundle && !initialBundle && !newBundle) {
-        this.setState({ initialBundle: this.state.taskBundle }) 
       }
     }
 
@@ -73,6 +75,8 @@ export function WithTaskBundle(WrappedComponent) {
           // new bundle state, the bundle state needs to reset to its initial value.
           // this.props.resetTaskBundle(initialBundle, taskBundle)
         } else {
+          // Whenever the user redirects, skips a task, or refreshes and there was 
+          // no intial value, the bundle will be destroyed.
           this.props.deleteTaskBundle(taskBundle.bundleId, task.id)
         }
       }
@@ -81,18 +85,18 @@ export function WithTaskBundle(WrappedComponent) {
     setupBundle = bundleId => {
       this.setState({loading: true})
       this.props.fetchTaskBundle(bundleId).then(taskBundle => {
-        this.setState({taskBundle, loading: false})
+        this.setState({initialBundle: taskBundle, taskBundle, loading: false})
       })
     }
 
     createTaskBundle = (taskIds, bundleTypeMismatch, name) => {
       this.props.bundleTasks(taskIds, bundleTypeMismatch, name).then(taskBundle => {
-        this.setState({taskBundle, newBundle: true})
+        this.setState({taskBundle})
       })
     }
 
     removeTaskBundle = (bundleId, taskId) => {
-      if (_isFinite(bundleId) && _get(this.state, 'taskBundle.bundleId') === bundleId) {
+      if (_isFinite(bundleId) && _get(this.state, 'taskBundle.bundleId') === bundleId && this.props.task.status === 0 || this.props.task.status === 3) {
         // The task id we pass to delete will be left locked, so it needs to be
         // the current task even if it's not the primary task in the bundle
         this.props.deleteTaskBundle(bundleId, taskId)
@@ -102,7 +106,7 @@ export function WithTaskBundle(WrappedComponent) {
 
     removeTaskFromBundle = async (bundleId, taskId) => {
       this.setState({loading: true})
-      if(this.state.taskBundle.taskIds.length === 2) {
+      if(this.state.taskBundle.taskIds.length === 2 && !this.state.initialBundle && this.props.task.status === 0 || this.props.task.status === 3) {
         this.props.deleteTaskBundle(bundleId, this.state.taskBundle.taskIds[0])
         this.clearActiveTaskBundle()
         this.setState({loading: false})
@@ -148,6 +152,7 @@ export function WithTaskBundle(WrappedComponent) {
 export const mapDispatchToProps = dispatch => bindActionCreators({
   bundleTasks,
   deleteTaskBundle,
+  // resetTaskBundle,
   removeTaskFromBundle,
   fetchTaskBundle,
 }, dispatch)
