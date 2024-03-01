@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import { Link } from "react-router-dom";
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
@@ -425,8 +426,15 @@ export class ActiveTaskControls extends Component {
           />
 
           {this.props.taskReadOnly ?
-           <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
-            <FormattedMessage {...messages.readOnly} />
+           <div>
+             <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
+               <FormattedMessage {...messages.readOnly} />
+             </div>
+             <Link to={`/browse/challenges/${this.props.challengeId}`}>
+               <button className="mr-mt-4 mr-button">
+                 <FormattedMessage {...messages.browseChallenge} />
+               </button>
+             </Link>
            </div> :
            <React.Fragment>
              {AsCooperativeWork(this.props.task).isTagType() && (!isFinal || needsRevised) && this.props.user.settings.seeTagFixSuggestions &&
