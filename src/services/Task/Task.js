@@ -952,26 +952,38 @@ export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") 
   }
 }
 // initialBundle, taskBundle props
-export const resetTaskBundle = function() {
-  return
-  // return function(dispatch) {
-  //   return new Endpoint(api.tasks.resetBundle, {
-  //     params: { initialBundle, taskBundle },
-  //   }).execute()
-  //     .then(results => {
-  //       return results
-  //     })
-  //     .catch(error => {
-  //       if (isSecurityError(error)) {
-  //         dispatch(ensureUserLoggedIn())
-  //           .then(() => dispatch(addError(AppErrors.user.unauthorized)))
-  //       } else {
-  //         dispatch(addError(AppErrors.task.bundleFailure))
-  //         console.log(error.response || error)
-  //       }
-  //     })
-  // }
-}
+  export const resetTaskBundle = function(initialBundle, primaryTaskId) {
+
+    const bundleId = initialBundle.bundleId;
+    let taskIdsArray = [];
+    if (initialBundle && initialBundle.taskIds) { 
+        taskIdsArray.push(...initialBundle.taskIds); 
+    }
+    
+    const params = {};
+    if (Number.isFinite(primaryTaskId)) { 
+        params.primaryId = primaryTaskId;
+        params.taskIds = taskIdsArray;
+    }
+    return function(dispatch) {
+      return new Endpoint(api.tasks.resetBundle, {
+        variables: {bundleId},
+        params
+      }).execute()
+        .then(results => {
+          return results
+        })
+        .catch(error => {
+          if (isSecurityError(error)) {
+            dispatch(ensureUserLoggedIn())
+              .then(() => dispatch(addError(AppErrors.user.unauthorized)))
+          } else {
+            dispatch(addError(AppErrors.task.bundleFailure))
+            console.log(error.response || error)
+          }
+        })
+    }
+  }
 
 export const deleteTaskBundle = function(bundleId, primaryTaskId) {
   return function(dispatch) {
@@ -999,11 +1011,11 @@ export const deleteTaskBundle = function(bundleId, primaryTaskId) {
   }
 }
 
-export const removeTaskFromBundle = function (bundleId, taskIds) {
+export const removeTaskFromBundle = function (initialBundleTaskIds, bundleId, taskIds) {
   return function (dispatch) {
     return new Endpoint(api.tasks.removeTaskFromBundle, {
       variables: { id: bundleId },
-      params: { id: bundleId, taskIds: taskIds },
+      params: { id: bundleId, taskIds: taskIds, preventTaskIdUnlocks: initialBundleTaskIds || [] },
     })
       .execute()
       .then((results) => {

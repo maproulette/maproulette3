@@ -69,6 +69,11 @@ export default defineMessages({
     defaultMessage: "Unbundle",
   },
 
+  resetBundleLabel: {
+    id: "Widgets.TaskBundleWidget.controls.resetBundleLabel.label",
+    defaultMessage: "Reset Bundle",
+  },
+
   currentTask: {
     id: "Widgets.TaskBundleWidget.currentTask",
     defaultMessage: "(current task)",
