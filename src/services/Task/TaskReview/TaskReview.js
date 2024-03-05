@@ -217,7 +217,7 @@ const buildQueryFilters = function (criteria, addedColumns) {
   //Sets initial value of these parameters to negate their "all" value
   let status = ['0', '1', '2', '3', '4', '5', '6', '9']
   let reviewStatus = ['0', '1', '2', '3', '4', '5', '6', '7', '-1']
-  let priority = ['0', '1', '2']
+  let priorities = ['0', '1', '2']
   let metaReviewStatus = ['-2', '0', '1', '2', '3', '6']
 
   //add configuration to remove inverting on the "all" value
@@ -242,13 +242,22 @@ const buildQueryFilters = function (criteria, addedColumns) {
   } else if(filters.reviewStatus == 'all' || filters.reviewStatus == undefined) {
     invertedFilters = removeValueFromArray(invertedFilters, "trStatus");
   }
-  if(filters.priority != "all" &&  filters.priority != undefined){
-    if(filters.priority.length > 1) {
-      priority = filters.priority.split(',')
-    } else priority = JSON.stringify(filters.priority)
-  } else if(filters.priority == 'all' || filters.priority == undefined) {
-    invertedFilters = removeValueFromArray(invertedFilters, "priorities");
-  }
+  // if(filters.priority && filters.priority != "all" &&  filters.priority != undefined){
+  //   console.log('filters.priority in .csv', filters.priority)
+  //   if(filters.priority.length > 1) {
+  //     priority = filters.priority.split(',')
+  //   } else priority = JSON.stringify(filters.priority)
+  // } else if(filters.priority == 'all' || filters.priority == undefined) {
+  //   invertedFilters = removeValueFromArray(invertedFilters, "priorities");
+  // }
+
+  if(filters.priorities || filters.priorities == 0) {
+    if(filters.priorities.length > 1) {
+      priorities = filters.priorities.split(',')
+    } else priorities = JSON.stringify(filters.priorities)
+  } 
+
+
   if(filters.metaReviewStatus != "all" &&  filters.metaReviewStatus != undefined){
     if(filters.metaReviewStatus.length > 1) {
       metaReviewStatus = filters.metaReviewStatus.split(',')
@@ -273,6 +282,26 @@ const buildQueryFilters = function (criteria, addedColumns) {
   displayedColumns = removeValueFromArray(displayedColumns, "View Comments");
   displayedColumns = removeValueFromArray(displayedColumns, "Tags");
 
+  const priorityFilter = priorities.length > 1 ? `&priority=${_join(priorities, ",")}` : `&priority=${_join(priorities, ",")}` 
+
+  // console.log(`${taskId ? `taskId=${taskId}` : ""}` +
+  // `&reviewStatus=${_join(reviewStatus, ",")}`+
+  // `${reviewRequestedBy ? `&mapper=${reviewRequestedBy}` : ""}` +
+  // `${challengeId ? `&challengeId=${challengeId}` : ""}` +
+  // `${projectId ? `&projectIds=${projectId}` : ""}` +
+  // `${mappedOn ? `&mappedOn=${timestamp}` : ""}` +
+  // `${reviewedBy ? `&reviewedBy=${reviewedBy}` : ""}` +
+  // `${reviewedAt ? `&reviewedAt=${reviewedAt}` : ""}` +
+  // `${metaReviewedBy ? `&metaReviewedBy=${metaReviewedBy}` : ""}` +
+  // `&metaReviewStatus=${_join(metaReviewStatus, ",")}` +
+  // `&status=${_join(status, ",")}` +
+  // // `&priority=${_join(priority, ",")}` +
+  // priorityFilter +
+  // `${sortBy ? `&sortBy=${sortBy}` : ""}` +
+  // `${direction ? `&direction=${direction}` : ""}` +
+  // `${displayedColumns ? `&displayedColumns=${displayedColumns}` : ""}` +
+  // `&invertedFilters=${invertedFilters.join(",")}`)
+
   return (
     `${taskId ? `taskId=${taskId}` : ""}` +
     `&reviewStatus=${_join(reviewStatus, ",")}`+
@@ -283,9 +312,10 @@ const buildQueryFilters = function (criteria, addedColumns) {
     `${reviewedBy ? `&reviewedBy=${reviewedBy}` : ""}` +
     `${reviewedAt ? `&reviewedAt=${reviewedAt}` : ""}` +
     `${metaReviewedBy ? `&metaReviewedBy=${metaReviewedBy}` : ""}` +
-    `&metaReviewStatus=${_join(metaReviewStatus, ",")}&` +
-    `&status=${_join(status, ",")}&` +
-    `&priority=${_join(priority, ",")}&` +
+    `&metaReviewStatus=${_join(metaReviewStatus, ",")}` +
+    `&status=${_join(status, ",")}` +
+    // `&priority=${_join(priorities, ",")}&` +
+    priorityFilter +
     `${sortBy ? `&sortBy=${sortBy}` : ""}` +
     `${direction ? `&direction=${direction}` : ""}` +
     `${displayedColumns ? `&displayedColumns=${displayedColumns}` : ""}` +

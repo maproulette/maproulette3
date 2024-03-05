@@ -93,7 +93,10 @@ export class ReviewTasksDashboard extends Component {
     }
 
     if (!this.state.filterSelected[this.state.showType]) {
+      console.log('!this.state.filterSelected[this.state.showType] is running')
       if (_get(this.props.history, 'location.search')) {
+        console.log('location.search exists in update')
+        console.log(this.props.history.location)
         this.setSelectedFilters(
           buildSearchCriteriafromURL(this.props.history.location.search)
         )
@@ -101,6 +104,8 @@ export class ReviewTasksDashboard extends Component {
       }
 
       if (!_isEmpty(_get(this.props.history, 'location.state.filters'))) {
+        console.log('location.state.filters exists in update')
+        console.log(this.props.history.location.state)
         // We already have filters set in our history, so let's just move
         // on to the table.
         return
@@ -111,6 +116,9 @@ export class ReviewTasksDashboard extends Component {
 
     // If our path params have changed we need to update the default filters
     if (!_isEqual(this.props.location.search, prevProps.location.search)) {
+      console.log('!_isEqual(this.props.location.search, prevProps.location.search is running')
+      console.log('current location.search', this.props.location.search)
+      console.log('previous location.search', prevProps.location.search)
       this.setSelectedFilters(
         buildSearchCriteriafromURL(this.props.history.location.search), true
       )
@@ -226,7 +234,8 @@ export class ReviewTasksDashboard extends Component {
           <li>
             <button
               className={classNames(
-                showType === 'tasksToBeReviewed' ? "mr-text-white" : "mr-text-green-lighter"
+                showType === 'tasksToBeReviewed' ? "mr-text-white" : "mr-text-green-lighter",
+                "hover:mr-text-white mr-transition-colors"
               )}
               onClick={() => this.changeTab(ReviewTasksType.toBeReviewed)}
             >
@@ -236,7 +245,8 @@ export class ReviewTasksDashboard extends Component {
           <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
             <button
               className={classNames(
-                showType === ReviewTasksType.reviewedByMe ? "mr-text-white" : "mr-text-green-lighter"
+                showType === ReviewTasksType.reviewedByMe ? "mr-text-white" : "mr-text-green-lighter",
+                "hover:mr-text-white mr-transition-colors"
               )}
               onClick={() => this.changeTab(ReviewTasksType.reviewedByMe)}
             >
@@ -246,7 +256,8 @@ export class ReviewTasksDashboard extends Component {
           <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
             <button
               className={classNames(
-                showType === ReviewTasksType.myReviewedTasks ? "mr-text-white" : "mr-text-green-lighter"
+                showType === ReviewTasksType.myReviewedTasks ? "mr-text-white" : "mr-text-green-lighter",
+                "hover:mr-text-white mr-transition-colors"
               )}
               onClick={() => this.changeTab(ReviewTasksType.myReviewedTasks)}
             >
@@ -256,7 +267,8 @@ export class ReviewTasksDashboard extends Component {
           <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
             <button
               className={classNames(
-                showType === ReviewTasksType.allReviewedTasks ? "mr-text-current" : "mr-text-green-lighter"
+                showType === ReviewTasksType.allReviewedTasks ? "mr-text-current" : "mr-text-green-lighter",
+                "hover:mr-text-white mr-transition-colors"
               )}
               onClick={() => this.changeTab(ReviewTasksType.allReviewedTasks)}
             >
@@ -267,7 +279,8 @@ export class ReviewTasksDashboard extends Component {
             <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
               <button
                 className={classNames(
-                  showType === ReviewTasksType.metaReviewTasks ? "mr-text-current" : "mr-text-green-lighter"
+                  showType === ReviewTasksType.metaReviewTasks ? "mr-text-current" : "mr-text-green-lighter",
+                  "hover:mr-text-white mr-transition-colors"
                 )}
                 onClick={() => this.changeTab(ReviewTasksType.metaReviewTasks)}
               >

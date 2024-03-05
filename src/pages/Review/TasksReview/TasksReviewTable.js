@@ -199,10 +199,10 @@ export class TaskReviewTable extends Component {
       }
     }
 
-    filters.status = this.state.taskStatusFilterIds
-    filters.reviewStatus = this.state.taskReviewStatusFilterIds
-    filters.metaReviewStatus = this.state.taskMetaReviewStatusFilterIds
-    filters.priorities = this.state.taskPriorityFilterIds
+    filters.status = this.state.taskStatusFilterIds.length ? this.state.taskStatusFilterIds : null
+    filters.reviewStatus = this.state.taskReviewStatusFilterIds.length ? this.state.taskReviewStatusFilterIds : null
+    filters.metaReviewStatus = this.state.taskMetaReviewStatusFilterIds.length ? this.state.taskMetaReviewStatusFilterIds : null
+    filters.priorities = this.state.taskPriorityFilterIds.length ? this.state.taskPriorityFilterIds : null
     
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
@@ -282,7 +282,7 @@ export class TaskReviewTable extends Component {
     } else newIds = [
       "all"
     ]
-    
+
     this.setState({ taskStatusFilterIds: newIds})
   }
 
@@ -330,7 +330,7 @@ export class TaskReviewTable extends Component {
     } else newIds = [
       "all"
     ]
-    
+
     this.setState({ taskPriorityFilterIds: newIds})
   }
 

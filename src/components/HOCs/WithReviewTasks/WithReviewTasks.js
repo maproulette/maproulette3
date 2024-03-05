@@ -56,7 +56,6 @@ export const WithReviewTasks = function(WrappedComponent) {
     setFiltered = (column, value) => {
       const typedCriteria = _cloneDeep(this.state.criteria)
       typedCriteria[this.props.reviewTasksType].filters[column] = value
-      console.log('typedCriteria in withreviewtasks', typedCriteria)
       this.setState({criteria: typedCriteria})
     }
 
