@@ -203,6 +203,8 @@ export class TaskReviewTable extends Component {
     filters.reviewStatus = this.state.taskReviewStatusFilterIds.length ? this.state.taskReviewStatusFilterIds : null
     filters.metaReviewStatus = this.state.taskMetaReviewStatusFilterIds.length ? this.state.taskMetaReviewStatusFilterIds : null
     filters.priorities = this.state.taskPriorityFilterIds.length ? this.state.taskPriorityFilterIds : null
+
+    console.log('filters in table state task updater', filters)
     
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
@@ -525,7 +527,9 @@ export class TaskReviewTable extends Component {
     return (
       <div className='mr-pb-2'>
       <button className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
-        onClick={() => this.props.clearFilterCriteria()}>
+        onClick={() => this.props.clearFilterCriteria()}
+      >
+
         <SvgSymbol sym="close-icon"
           viewBox='0 0 20 20'
           className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />

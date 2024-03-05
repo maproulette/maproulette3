@@ -24,11 +24,12 @@ import SignInButton from '../../components/SignInButton/SignInButton'
 import Header from '../../components/Header/Header'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
+import { getInitialTaskStatusFiltersByContext } from './taskStatusFiltersByReviewType'
 import WithWidgetWorkspaces
        from '../../components/HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WidgetWorkspace from '../../components/WidgetWorkspace/WidgetWorkspace'
 import { ReviewTasksType } from '../../services/Task/TaskReview/TaskReview'
-import { buildSearchCriteriafromURL } from '../../services/SearchCriteria/SearchCriteria'
+import { buildSearchCriteriafromURL, buildSearchURL } from '../../services/SearchCriteria/SearchCriteria'
 import WithReviewTasks from '../../components/HOCs/WithReviewTasks/WithReviewTasks'
 import TasksReviewChallenges from './TasksReview/TasksReviewChallenges'
 import messages from './Messages'
@@ -95,8 +96,8 @@ export class ReviewTasksDashboard extends Component {
     if (!this.state.filterSelected[this.state.showType]) {
       console.log('!this.state.filterSelected[this.state.showType] is running')
       if (_get(this.props.history, 'location.search')) {
-        console.log('location.search exists in update')
-        console.log(this.props.history.location)
+        // console.log('location.search exists in update')
+        console.log('props history location in filterselected update change', this.props.history.location)
         this.setSelectedFilters(
           buildSearchCriteriafromURL(this.props.history.location.search)
         )
@@ -104,8 +105,6 @@ export class ReviewTasksDashboard extends Component {
       }
 
       if (!_isEmpty(_get(this.props.history, 'location.state.filters'))) {
-        console.log('location.state.filters exists in update')
-        console.log(this.props.history.location.state)
         // We already have filters set in our history, so let's just move
         // on to the table.
         return
@@ -119,6 +118,7 @@ export class ReviewTasksDashboard extends Component {
       console.log('!_isEqual(this.props.location.search, prevProps.location.search is running')
       console.log('current location.search', this.props.location.search)
       console.log('previous location.search', prevProps.location.search)
+      console.log('history location search', this.props.history.location.search)
       this.setSelectedFilters(
         buildSearchCriteriafromURL(this.props.history.location.search), true
       )
@@ -137,7 +137,7 @@ export class ReviewTasksDashboard extends Component {
 
   setSelectedFilters = (filters, clearPrevState = false) => {
     const filterSelected = _cloneDeep(this.state.filterSelected)
-
+    // console.log('filters in setSelectedFilters', filters)
     filterSelected[this.state.showType] = clearPrevState ?
       _merge({filters:{}}, filters) :
       _merge({filters:{}}, filterSelected[this.state.showType], filters)
@@ -172,7 +172,7 @@ export class ReviewTasksDashboard extends Component {
           filterSelected[this.state.showType], ['projectId', 'project', 'projectName'])
       }
     }
-
+    // console.log('filterSelected in setSelectedFilters', filterSelected)
     this.setState({filterSelected})
   }
 
@@ -194,7 +194,18 @@ export class ReviewTasksDashboard extends Component {
   }
 
   clearFilters = () => {
-    this.setSelectedFilters({}, true)
+    console.log(this.state.showType)
+    console.log(this.state.filterSelected)
+    const filterSelected = _cloneDeep(this.state.filterSelected)
+     
+    const initialTaskStatusFilters = getInitialTaskStatusFiltersByContext(this.state.showType)
+    filterSelected[this.state.showType] = {}
+    filterSelected[this.state.showType].filters = initialTaskStatusFilters
+    const taskFilterURLReset = buildSearchURL(filterSelected[this.state.showType])
+    console.log('taskfilterurlreset', taskFilterURLReset)
+    this.props.history.push({search: taskFilterURLReset})
+    this.setState({filterSelected})
+    // this.setSelectedFilters({filters: initialTaskStatusFilters}, true)
   }
 
   changeTab = (tab) => {
