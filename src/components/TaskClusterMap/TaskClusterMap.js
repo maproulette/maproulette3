@@ -285,7 +285,7 @@ export class TaskClusterMap extends Component {
 
   closeSearch = () => this.setState({searchOpen: false})
 
-  debouncedUpdateBounds = _debounce(this.props.updateBounds, 800)
+  debouncedUpdateBounds = _debounce(this.props.updateBounds, 500)
 
   spiderIfNeeded = (marker, allMarkers) => {
     if (this.state.spidered.has(marker.options.taskId)) {
@@ -744,6 +744,7 @@ export class TaskClusterMap extends Component {
         zoomControl={false} animate={false} worldCopyJump={true}
         onBoundsChange={this.updateBounds}
         justFitFeatures
+        taskMarkers={this.props.taskMarkers}
         onClick={() => this.unspider()}
         onZoomOrMoveStart={this.debouncedUpdateBounds.cancel}
       >
