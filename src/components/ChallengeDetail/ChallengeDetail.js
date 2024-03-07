@@ -499,11 +499,11 @@ export class ChallengeDetail extends Component {
                 <div className="mr-flex mr-items-center">
                   <h1 className="mr-card-challenge__title mr-mr-3">{challenge.name}</h1>
                   {FLAGGING_ACTIVE && !this.state.flagLoading && !challenge.isVirtual && this.props.user &&
-                    <div title={!this.state.issue ? 'Flag challenge' : 'View github issue'} className="mr-flex mr-align-center mr-cursor-pointer" onClick={this.handleFlagClick}>
+                    <div title={!this.state.issue ? 'Report challenge' : 'View github issue'} className="mr-flex mr-align-center mr-cursor-pointer" onClick={this.handleFlagClick}>
                       <SvgSymbol sym="flag-icon" viewBox="0 0 20 20" className={`mr-w-4 mr-h-4 mr-fill-current mr-mr-2${this.state.issue ? ' mr-fill-red-light mr-mt-4px' : ''}`} />
                       {this.state.issue &&
                         <div className="mr-text-red-light">
-                          <FormattedMessage {...messages.flaggedText} />
+                          <FormattedMessage {...messages.reportedText} />
                         </div>
                       }
                     </div>

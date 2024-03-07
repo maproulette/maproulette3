@@ -101,12 +101,12 @@ export default defineMessages({
 
   modalSubtitle: {
     id: "ChallengeDetails.controls.modal.subtitle",
-    defaultMessage:  "You are about to flag a Challenge. An issue will be created in this [public github repository](https://github.com/maproulette/challenge-reports/issues) and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Flagging a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.",
+    defaultMessage:  "You are about to report a Challenge. An issue will be created in this [public github repository](https://github.com/maproulette/challenge-reports/issues) and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.",
   },
 
-  submitFlag: {
-    id: "ChallengeDetails.controls.submit.flag.label",
-    defaultMessage: "Flag Challenge"
+  submitReport: {
+    id: "ChallengeDetails.controls.submit.report.label",
+    defaultMessage: "Report Challenge"
   },
 
   textInputError: {
@@ -119,9 +119,9 @@ export default defineMessages({
     defaultMessage: "Please ensure that checkbox is checked before continue"
   },
 
-  flaggedText: {
-    id: "ChallengeDetails.controls.flagged_text",
-    defaultMessage: "This challenge has been flagged"
+  reportedText: {
+    id: "ChallengeDetails.controls.reported_text",
+    defaultMessage: "This challenge has been reported"
   },
 
   email: {
