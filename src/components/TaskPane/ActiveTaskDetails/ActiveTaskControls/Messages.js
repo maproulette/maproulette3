@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Previewing task in read-only mode",
   },
 
+  browseChallenge: {
+    id: 'Task.browseChallenge.message',
+    defaultMessage: "View Challenge",
+  },
+
   viewChangesetLabel: {
     id: "Task.controls.viewChangeset.label",
     defaultMessage: "View Changeset",
