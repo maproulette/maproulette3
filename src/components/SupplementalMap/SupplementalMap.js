@@ -92,7 +92,7 @@ const SupplementalMap = props => {
         {_map(overlayLayers, (layer, index) => (
           <Pane
             key={`pane-${renderId}-${index}`}
-            name={`pane-${index}`}
+            name={`pane-${renderId}-${index}`}
             style={{zIndex: 10 + index}}
             className="custom-pane"
           >
