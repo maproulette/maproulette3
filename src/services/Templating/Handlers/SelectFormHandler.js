@@ -43,6 +43,7 @@ const SelectFormField = props => {
   return (
     <React.Fragment>
       <select
+        id="select-label" 
         onChange={e => props.setCompletionResponse(props.propertyName, e.target.value)}
         className="select mr-text-black mr-text-xs"
         defaultValue={currentValue}
@@ -51,7 +52,7 @@ const SelectFormField = props => {
         <option key="0" value=""></option>
         {_map(props.values, (value, i) => <option key={i} value={value}>{value}</option>)}
       </select>
-      <label className="mr-pl-2">{props.label}</label>
+      <label htmlFor="select-label" className="mr-pl-2">{props.label}</label>
     </React.Fragment>
   )
 }

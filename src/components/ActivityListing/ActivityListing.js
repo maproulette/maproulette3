@@ -27,13 +27,14 @@ export const Activity = props => {
          {props.toggleIsGrouped &&
           <React.Fragment>
             <input
+              id="group-label"
               type="checkbox"
               className="mr-checkbox-toggle mr-ml-4 mr-mr-px"
               checked={props.isGrouped}
               onClick={props.toggleIsGrouped}
               onChange={() => null}
             />
-            <label className="mr-ml-2"><FormattedMessage {...messages.groupLabel} /></label>
+            <label htmlFor="group-label" className="mr-ml-2"><FormattedMessage {...messages.groupLabel} /></label>
           </React.Fragment>
          }
          <div className="mr-timeline mr-links-green-lighter">

@@ -88,7 +88,7 @@ export default class SearchBox extends Component {
           this.props.className
         )}
       >
-        <label className="mr-mr-2 mr-flex mr-items-center" htmlFor="input-search">
+        <label className="mr-mr-2 mr-flex mr-items-center">
           {!isLoading && !this.props.suppressIcon &&
            <SvgSymbol
              sym="search-icon"

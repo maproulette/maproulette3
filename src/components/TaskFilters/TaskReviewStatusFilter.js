@@ -44,14 +44,14 @@ export default class TaskReviewStatusFilter extends Component {
         secondaryFilters:
           _map(TaskMetaReviewStatusWithUnset, status => (
             <li key={`meta-${status}`}>
-              <label className="mr-flex mr-items-center">
+              <label htmlFor={`meta-${status}`} className="mr-flex mr-items-center">
                 <input
+                  id={`meta-${status}`}
                   className="mr-checkbox-toggle mr-mr-2"
                   type="checkbox"
                   checked={this.props.includeMetaReviewStatuses[status]}
                   onChange={(e) =>
-                    this.props.toggleIncludedMetaReviewStatus(status,
-                                                              e.nativeEvent.shiftKey)
+                    this.props.toggleIncludedMetaReviewStatus(status, e.nativeEvent.shiftKey)
                   } />
                 <FormattedMessage {...messagesByMetaReviewStatus[status]} />
               </label>
@@ -67,14 +67,14 @@ export default class TaskReviewStatusFilter extends Component {
           filters={
             _map(TaskReviewStatusWithUnset, status => (
               <li key={status} className='mr-w-76'>
-                <label className="mr-flex mr-items-center">
+                <label htmlFor={status} className="mr-flex mr-items-center">
                   <input
+                    id={status}
                     className="mr-checkbox-toggle mr-mr-2"
                     type="checkbox"
                     checked={this.props.includeTaskReviewStatuses[status]}
                     onChange={(e) =>
-                      this.props.toggleIncludedTaskReviewStatus(status,
-                                                                e.nativeEvent.shiftKey)
+                      this.props.toggleIncludedTaskReviewStatus(status, e.nativeEvent.shiftKey)
                     } />
                   <FormattedMessage {...messagesByReviewStatus[status]} />
                 </label>

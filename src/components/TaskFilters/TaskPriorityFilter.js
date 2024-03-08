@@ -27,8 +27,9 @@ export default class TaskPriorityFilter extends Component {
           filters={
             _reverse(_map(TaskPriority, priority => (
               <li key={priority}>
-                <label className="mr-flex mr-items-center">
+                <label htmlFor={priority} className="mr-flex mr-items-center">
                   <input
+                    id={priority}
                     className="mr-checkbox-toggle mr-mr-2"
                     type="checkbox"
                     checked={this.props.includeTaskPriorities[priority]}

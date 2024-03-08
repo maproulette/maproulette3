@@ -26,10 +26,11 @@ export default class AdjustFiltersOverlay extends Component {
 
     const reviewStatusFilter =
       <div className="mr-mt-4">
-        <label className="mr-w-32 mr-inline-block">
+        <label htmlFor="review-status-label" className="mr-w-32 mr-inline-block">
           <FormattedMessage {...messages.reviewStatusLabel} />
         </label>
         <select
+          id="review-status-label"
           className="mr-text-white mr-select mr-w-48"
           onChange={event => this.props.filterChange('reviewStatus', event.target.value)}
           value={currentFilters.reviewStatus ? currentFilters.reviewStatus : 'all'}
@@ -51,10 +52,11 @@ export default class AdjustFiltersOverlay extends Component {
 
     const statusFilter =
       <div className="mr-mt-4">
-        <label className="mr-w-32 mr-inline-block">
+        <label htmlFor="status-select" className="mr-w-32 mr-inline-block">
           <FormattedMessage {...messages.statusLabel} />
         </label>
         <select
+          id="status-select"
           className="mr-text-white mr-select mr-w-48"
           onChange={event => this.props.filterChange('status', event.target.value)}
           value={currentFilters.status ? currentFilters.status : 'all'}
@@ -74,10 +76,11 @@ export default class AdjustFiltersOverlay extends Component {
 
     const priorityFilter =
       <div className="mr-mt-4">
-        <label className="mr-w-32 mr-inline-block">
+        <label htmlFor="priority-select" className="mr-w-32 mr-inline-block">
           <FormattedMessage {...messages.priorityLabel} />
         </label>
         <select
+          id="priority-label" 
           className="mr-text-white mr-select mr-w-48"
           onChange={event => this.props.filterChange('priority', event.target.value)}
           value={currentFilters.priority ? currentFilters.priority : 'all'}
@@ -97,10 +100,11 @@ export default class AdjustFiltersOverlay extends Component {
 
     const challengeFilter =
       <div className="mr-mt-4">
-        <label className="mr-w-32 mr-inline-block">
+        <label htmlFor="challenge-label" className="mr-w-32 mr-inline-block">
           <FormattedMessage {...messages.challengeLabel} />
         </label>
-        <input type="text"
+        <input id="mapper-label" 
+               type="text"
                className="mr-text-white mr-input mr-w-64"
                value={currentFilters.challenge || ""}
                onChange={event => this.props.filterChange('challenge', event.target.value)}/>
@@ -130,10 +134,11 @@ export default class AdjustFiltersOverlay extends Component {
 
     const mapperFilter =
       <div className="mr-mt-4">
-        <label className="mr-w-32 mr-inline-block">
+        <label htmlFor="mapper-label" className="mr-w-32 mr-inline-block">
           <FormattedMessage {...messages.mapperLabel} />
         </label>
-        <input type="text"
+        <input id="mapper-label" 
+               type="text"
                className="mr-text-white mr-input mr-w-64"
                value={currentFilters.reviewRequestedBy}
                onChange={event => this.props.filterChange('reviewRequestedBy', event.target.value)}/>

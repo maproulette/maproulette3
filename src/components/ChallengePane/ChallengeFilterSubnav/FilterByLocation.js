@@ -55,6 +55,7 @@ export class FilterByLocation extends Component {
         </span>
         <span>
           <input
+            id="location-input"
             type="radio"
             name="intersectsMap"
             className="mr-radio mr-mr-1"
@@ -62,12 +63,13 @@ export class FilterByLocation extends Component {
             onClick={() => this.updateFilter(ChallengeLocation.intersectingMapBounds)}
             onChange={_noop}
           />
-          <label className="mr-ml-1 mr-mr-4">
+          <label htmlFor="location-input" className="mr-ml-1 mr-mr-4">
             {localizedLocationLabels[ChallengeLocation.intersectingMapBounds]}
           </label>
         </span>
         <span>
           <input
+            id="any-location-input"
             type="radio"
             name="intersectsMap"
             className="mr-radio mr-mr-1"
@@ -75,7 +77,7 @@ export class FilterByLocation extends Component {
             onClick={() => this.updateFilter(null)}
             onChange={_noop}
           />
-          <label className="mr-ml-1 mr-mr-4">
+          <label htmlFor="any-location-input" className="mr-ml-1 mr-mr-4">
             {localizedLocationLabels.any}
           </label>
         </span>

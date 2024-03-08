@@ -87,10 +87,11 @@ export class RebuildTasksControl extends Component {
     if (challenge.dataSource() === 'local') {
       originDateField = (
         <div>
-          <label className="mr-text-orange mr-mr-2">
+          <label htmlFor="data-origin-date-input" className="mr-text-orange mr-mr-2">
             <FormattedMessage {...messages.dataOriginDateLabel} />
           </label>
           <input
+            id="data-origin-date-input"
             className="mr-text-white mr-bg-transparent mr-border mr-border-white mr-rounded mr-p-2"
             type="date"
             label={this.props.intl.formatMessage(messages.dataOriginDateLabel)}
@@ -168,12 +169,13 @@ export class RebuildTasksControl extends Component {
                 <div className="mr-w-full mr-flex mr-justify-between mr-items-center mr-mt-2">
                   <div>
                     <input
+                      id="remove-unmatched-input"
                       type="checkbox"
                       className="mr-mr-2"
                       checked={this.state.removeUnmatchedTasks}
                       onChange={this.toggleRemoveUnmatchedTasks}
                     />
-                    <label className="mr-text-orange">
+                    <label htmlFor="remove-unmatched-input" className="mr-text-orange">
                       <FormattedMessage {...messages.removeUnmatchedLabel} />
                     </label>
                   </div>

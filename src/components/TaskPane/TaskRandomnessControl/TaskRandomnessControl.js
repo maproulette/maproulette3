@@ -34,18 +34,24 @@ export default class TaskRandomnessControl extends Component {
           </div>
 
           <div className="task-randomness-control__options">
-            <label className="radio">
-              <input type="radio" name="randomnessPreference"
-                    className="task-randomness-control__random-option"
-                    checked={this.props.taskLoadBy === TaskLoadMethod.random}
-                    onChange={() => this.loadBy(TaskLoadMethod.random)} />
+            <label htmlFor="load-method-random-label" className="radio">
+              <input 
+                type="radio" 
+                id="load-method-random-label"
+                name="randomnessPreference"
+                className="task-randomness-control__random-option"
+                checked={this.props.taskLoadBy === TaskLoadMethod.random}
+                onChange={() => this.loadBy(TaskLoadMethod.random)} />
               <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
             </label>
-            <label className="radio">
-              <input type="radio" name="randomnessPreference"
-                    className="task-randomness-control__proximity-option"
-                    checked={this.props.taskLoadBy === TaskLoadMethod.proximity}
-                    onChange={() => this.loadBy(TaskLoadMethod.proximity)} />
+            <label htmlFor="load-method-proximity-label" className="radio">
+              <input 
+                type="radio" 
+                id="load-method-proximity-label"
+                name="randomnessPreference"
+                className="task-randomness-control__proximity-option"
+                checked={this.props.taskLoadBy === TaskLoadMethod.proximity}
+                onChange={() => this.loadBy(TaskLoadMethod.proximity)} />
               <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
             </label>
           </div>

@@ -999,18 +999,20 @@ function configureCustomTaskStyles(props, configureTaskStyleRules) {
       <div>
         <div className="radio">
           <input
+            id="custom-task-style-default-label" 
             type="radio"
             name="no-styles"
             className="mr-mr-1.5"
             checked={!props.formData}
             onChange={() => props.onChange(false)}
           />
-          <label className="mr-mr-2 mr-text-grey-lighter">
+          <label htmlFor="custom-task-style-default-label" className="mr-mr-2 mr-text-grey-lighter">
             <FormattedMessage {...messages.customTaskStyleDefaultLabel} />
           </label>
         </div>
         <div className="radio">
           <input
+            id="custom-task-style-custom-label"
             type="radio"
             name="custom-styles"
             className="mr-mr-1.5"
@@ -1019,7 +1021,7 @@ function configureCustomTaskStyles(props, configureTaskStyleRules) {
               props.onChange(true);
             }}
           />
-          <label className="mr-text-grey-lighter">
+          <label htmlFor="custom-task-style-custom-label" className="mr-text-grey-lighter">
             <FormattedMessage {...messages.customTaskStyleCustomLabel} />
           </label>
         </div>

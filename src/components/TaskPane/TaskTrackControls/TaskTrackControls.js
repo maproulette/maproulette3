@@ -35,12 +35,13 @@ export default class TaskTrackControls extends Component {
       <div>
         <div onClick={this.toggleSaved}>
           <input
+            id="task-track-checkbox"
             type="checkbox"
             className="mr-mr-2"
             onChange={() => _noop}
             checked={this.taskIsTracked()}
           />
-          <label>
+          <label htmlFor="task-track-checkbox">
             <FormattedMessage {...messages.trackLabel } />
           </label>
         </div>

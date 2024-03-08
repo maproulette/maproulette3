@@ -18,7 +18,6 @@ class HeaderNotifications extends Component {
               <li className="mr-text-white">
                 <input
                   type="checkbox"
-
                   className="mr-checkbox-toggle mr-mr-1"
                   checked={this.props.groupByTask}
                   onChange={this.props.toggleGroupByTask}
