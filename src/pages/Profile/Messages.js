@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "General",
   },
 
+  settingsSaved: {
+    id: "Profile.settings.settingsSaved",
+    defaultMessage: "Settings Saved",
+  },
+
   userNotFound: {
     id: "Profile.noUser",
     defaultMessage: "User not found or you are unauthorized to view this user.",
