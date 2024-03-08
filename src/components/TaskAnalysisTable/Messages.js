@@ -31,7 +31,12 @@ export default defineMessages({
 
   unbundle: {
     id: "Task.fields.unbundle.label",
-    defaultMessage: "Remove",
+    defaultMessage: "Unbundle",
+  },
+
+  bundle: {
+    id: "Task.fields.bundle.label",
+    defaultMessage: "Bundle",
   },
 
   statusLabel: {

@@ -90,10 +90,13 @@ export default class ReviewNearbyTasksWidget extends Component {
     const taskList = _get(this.props, 'nearbyTasks.tasks');
     const mappableTask = AsMappableTask(this.props.task);
     mappableTask.point = mappableTask.calculateCenterPoint();
-    taskList.push(mappableTask);
-
-    if (taskList.length === 0) {
-      return;
+    
+    if (taskList) {
+      taskList?.push(mappableTask)
+    }
+    
+    if (!taskList || taskList.length === 0) {
+      return
     }
 
     const nearbyBounds = bbox(
@@ -122,7 +125,7 @@ export default class ReviewNearbyTasksWidget extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (this.state.currentSelectedTasks.length === 0) {
       this.setState({ currentSelectedTasks: this.props.selectedTasks });
     }
@@ -131,13 +134,6 @@ export default class ReviewNearbyTasksWidget extends Component {
       this.initializeClusterFilters(prevProps);
       this.initializeWebsocketSubscription(prevProps);
     }
-  }
-
-  componentWillUnmount(prevProps) {
-    const challengeId = _get(this.props.task, 'parent.id');
-    if (_isFinite(challengeId)) {
-      this.props.unsubscribeFromChallengeTaskMessages(challengeId);
-    }
 
     if (
       _isFinite(_get(this.props, 'task.id')) &&
@@ -145,12 +141,21 @@ export default class ReviewNearbyTasksWidget extends Component {
       this.props.task.id !== prevProps.task.id
     ) {
       this.props.resetSelectedTasks();
+      this.setBoundsToNearbyTask()
     } else if (
-      this.props.task &&
-      this.props.selectedTasks &&
-      !this.props.isTaskSelected(this.props.task.id)
+      this.props.taskBundle &&
+      this.props.taskBundle !== prevProps.taskBundle
     ) {
-      this.props.selectTasks([this.props.task]);
+      await this.props.resetSelectedTasks()
+      this.props.selectTasks(this.props.taskBundle.tasks)
+    }
+  }  
+
+  componentWillUnmount() {
+    this.props.resetSelectedTasks()
+    const challengeId = _get(this.props.task, 'parent.id')
+    if (_isFinite(challengeId)) {
+      this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
   }
 

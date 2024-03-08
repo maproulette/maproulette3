@@ -33,11 +33,21 @@ export const WithTaskClusterMarkers = function(WrappedComponent) {
      */
     updateMapMarkers() {
       const markers = _map(this.props.taskClusters, cluster => {
+        const bundleConflict = Boolean(
+          this.props.task &&
+          !(cluster.taskStatus === 0 || cluster.status === 0) &&
+          !this.props.taskBundle?.taskIds?.includes(cluster.id || cluster.taskId) &&
+          !this.props.initialBundle?.taskIds?.includes(cluster.id || cluster.taskId) &&
+          (cluster.id || cluster.taskId) ||
+          (cluster?.bundleId && cluster.bundleId !== this.props.taskBundle.bundleId)
+        );
+
         return AsMappableCluster(cluster).mapMarker(
           this.props.monochromaticClusters,
           this.props.selectedTasks,
           this.props.highlightPrimaryTask,
-          this.props.selectedClusters
+          this.props.selectedClusters,
+          bundleConflict
         )
       })
 

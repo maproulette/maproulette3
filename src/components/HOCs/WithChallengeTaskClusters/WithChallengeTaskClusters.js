@@ -48,11 +48,11 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         criteria.boundingBox = arrayBounds.join(',')
         this.props.updateTaskFilterBounds(bounds, zoom, fromUserAction)
 
-        // If task selection is active, prune any selections that no longer
-        // intersect with the new map bounds
-        this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
-          booleanDisjoint(AsMappableTask(task).normalizedGeometries(), bboxPolygon(arrayBounds))
-        )
+        // // If task selection is active, prune any selections that no longer
+        // // intersect with the new map bounds
+        // this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
+        //   booleanDisjoint(AsMappableTask(task).normalizedGeometries(), bboxPolygon(arrayBounds))
+        // )
       }
     }
 
@@ -104,6 +104,10 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         _set(searchCriteria, 'filters.archived', true)
       }
 
+      if (this.props.taskBundle && this.props.bundledOnly ){
+        _set(searchCriteria, 'filters.bundleId', this.props.taskBundle.bundleId)
+         
+      }
       if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
         return this.setState({ loading: false })
       }
@@ -177,6 +181,10 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       }
       else if (!_isEqual(_omit(prevProps.criteria, ['page', 'pageSize']),
             _omit(this.props.criteria, ['page', 'pageSize']))) {
+        this.debouncedFetchClusters(this.state.showAsClusters)
+      } else if(this.props.taskBundle && 
+        (this.props.bundledOnly !== prevProps.bundledOnly || 
+        this.props.taskBundle !== prevProps.taskBundle)){
         this.debouncedFetchClusters(this.state.showAsClusters)
       }
     }

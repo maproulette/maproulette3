@@ -49,7 +49,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         const submitAsMetaReview =
           asMetaReview(ownProps) ||
           (status === TaskReviewStatus.needed && task.reviewedBy === ownProps.user.id)
-
+ 
         const doReview = taskBundle ?
           () => completeBundleReview(taskBundle.bundleId, status, comment, tags, newTaskStatus, submitAsMetaReview, errorTags) :
           () => completeReview(task.id, status, comment, tags, newTaskStatus, submitAsMetaReview, errorTags)

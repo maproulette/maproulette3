@@ -85,16 +85,16 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       this.setState({includeStatuses, filteredTasks})
 
       // If task selection is active, prune any selections that no longer pass filters
-      this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
-        !this.taskPassesFilters(
-          task,
-          includeStatuses,
-          this.state.includeReviewStatuses,
-          this.state.includeMetaReviewStatuses,
-          this.state.includePriorities,
-          this.state.includeLocked
-        )
-      )
+      // this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
+      //   !this.taskPassesFilters(
+      //     task,
+      //     includeStatuses,
+      //     this.state.includeReviewStatuses,
+      //     this.state.includeMetaReviewStatuses,
+      //     this.state.includePriorities,
+      //     this.state.includeLocked
+      //   )
+      // )
     }
 
     /**
@@ -121,17 +121,17 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
       this.setState({includeReviewStatuses, filteredTasks})
 
-      // If task selection is active, prune any selections that no longer pass filters
-      this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
-        !this.taskPassesFilters(
-          task,
-          this.state.includeStatuses,
-          includeReviewStatuses,
-          this.state.includeMetaReviewStatuses,
-          this.state.includePriorities,
-          this.state.includeLocked
-        )
-      )
+      // // If task selection is active, prune any selections that no longer pass filters
+      // this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
+      //   !this.taskPassesFilters(
+      //     task,
+      //     this.state.includeStatuses,
+      //     includeReviewStatuses,
+      //     this.state.includeMetaReviewStatuses,
+      //     this.state.includePriorities,
+      //     this.state.includeLocked
+      //   )
+      // )
     }
 
     /**
@@ -158,17 +158,17 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
       this.setState({includeMetaReviewStatuses, filteredTasks})
 
-      // If task selection is active, prune any selections that no longer pass filters
-      this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
-        !this.taskPassesFilters(
-          task,
-          this.state.includeStatuses,
-          this.state.includeReviewStatuses,
-          includeMetaReviewStatuses,
-          this.state.includePriorities,
-          this.state.includeLocked
-        )
-      )
+      // // If task selection is active, prune any selections that no longer pass filters
+      // this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
+      //   !this.taskPassesFilters(
+      //     task,
+      //     this.state.includeStatuses,
+      //     this.state.includeReviewStatuses,
+      //     includeMetaReviewStatuses,
+      //     this.state.includePriorities,
+      //     this.state.includeLocked
+      //   )
+      // )
     }
 
     /**
@@ -270,17 +270,17 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
       this.setState({filteredTasks})
 
-      // If task selection is active, prune any selections that no longer pass filters
-      this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
-        !this.taskPassesFilters(
-          task,
-          this.state.includeStatuses,
-          this.state.includeReviewStatuses,
-          this.state.includeMetaReviewStatuses,
-          this.state.includePriorities,
-          this.state.includeLocked
-        )
-      )
+      // // If task selection is active, prune any selections that no longer pass filters
+      // this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
+      //   !this.taskPassesFilters(
+      //     task,
+      //     this.state.includeStatuses,
+      //     this.state.includeReviewStatuses,
+      //     this.state.includeMetaReviewStatuses,
+      //     this.state.includePriorities,
+      //     this.state.includeLocked
+      //   )
+      // )
     }
 
     // This will check for saved filters if the 'useSavedFilters' prop is true and a valid user

@@ -60,13 +60,13 @@ export default defineMessages({
   },
 
   bundleTasksLabel: {
-    id: "Widgets.TaskBundleWidget.controls.bundleTasks.label",
-    defaultMessage: "Complete Together",
+    id: "Widgets.TaskBundleWidget.controls.startBundling.label",
+    defaultMessage: "Start Bundling Tasks",
   },
 
   unbundleTasksLabel: {
-    id: "Widgets.TaskBundleWidget.controls.unbundleTasks.label",
-    defaultMessage: "Unbundle",
+    id: "Widgets.TaskBundleWidget.controls.stopBundling.label",
+    defaultMessage: "Stop Bundling Tasks",
   },
 
   resetBundleLabel: {

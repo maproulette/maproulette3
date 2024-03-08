@@ -607,6 +607,7 @@ export class TaskMap extends Component {
           overlayOrder={overlayOrder}
         />
         <EnhancedMap
+          taskBundle={this.props.taskBundle}
           center={this.props.centerPoint}
           zoom={zoom}
           zoomControl={false}

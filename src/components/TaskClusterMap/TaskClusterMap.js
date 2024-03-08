@@ -697,9 +697,17 @@ export class TaskClusterMap extends Component {
     else if (this.props.initialBounds) {
       this.currentBounds = this.props.initialBounds
     }
+
     const currentCenterpoint = AsMappableTask(this.props.task).calculateCenterPoint()
-    let selectionKit = this.props.hideLasso === true ? null : (
-      <>
+    
+    let selectionKit = (
+       <>
+        {this.props.clearSelectedSelector && (
+            <LassoSelectionControl
+              onLassoClear={this.props.resetSelectedTasks}
+            />
+        )}
+
         {this.props.showSelectMarkersInView && (
           <SelectMarkersInViewControl
             onSelectAllInView={this.props.onBulkTaskSelection}

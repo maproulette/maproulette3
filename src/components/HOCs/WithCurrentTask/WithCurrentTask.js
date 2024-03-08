@@ -257,7 +257,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      */
     saveTaskTags: (task, tags) => {
       if (task.bundleId) {
-        dispatch(fetchTaskBundle(task.bundleId)).then(taskBundle => {
+        dispatch(fetchTaskBundle(task.bundleId), false).then(taskBundle => {
           _each(taskBundle.tasks, task => {
             dispatch(updateTaskTags(task.id, tags))
           })

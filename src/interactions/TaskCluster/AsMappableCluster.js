@@ -58,14 +58,14 @@ export class AsMappableCluster {
    * Generates a map marker object suitable for use with a Leaflet map, with
    * optionally customized appearance for the given map layer
    */
-  mapMarker(monochromatic, selectedTasks, highlightPrimaryTask, selectedClusters=null) {
+  mapMarker(monochromatic, selectedTasks, highlightPrimaryTask, selectedClusters=null, bundleConflict) {
     return {
       position: [this.point.lat, this.point.lng],
       options: {...(_merge(this.rawData, {taskStatus: this.rawData.status,
                                           taskPriority: this.rawData.priority,
                                           name: this.rawData.title,
                                           taskId: this.rawData.id}))},
-      icon: this.leafletMarkerIcon(monochromatic, selectedTasks, highlightPrimaryTask, selectedClusters),
+      icon: this.leafletMarkerIcon(monochromatic, selectedTasks, highlightPrimaryTask, selectedClusters, bundleConflict),
     }
   }
 
@@ -73,7 +73,7 @@ export class AsMappableCluster {
    * Generates a Leaflet Icon object appropriate for the given cluster based on
    * its size, including using a standard marker for a single point
    */
-  leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask=false, selectedClusters=null) {
+  leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask=false, selectedClusters=null, bundleConflict=false) {
     const count = _isFunction(this.rawData.getChildCount) ?
                   this.rawData.getChildCount() :
                   _get(this.options, 'numberOfPoints', this.numberOfPoints)
@@ -128,6 +128,14 @@ export class AsMappableCluster {
       }
 
       let icon = _cloneDeep(statusIcons[markerData.taskStatus] || statusIcons[0])
+
+        if (bundleConflict) {
+            const red = parseInt(icon.options.style.fill.slice(1, 3), 16);
+            const green = parseInt(icon.options.style.fill.slice(3, 5), 16);
+            const blue = parseInt(icon.options.style.fill.slice(5, 7), 16);
+
+            icon.options.style.fill = `rgba(${red}, ${green}, ${blue}, 0.4)`;
+        }
 
       if (_isFinite(highlightPrimaryTask) && highlightPrimaryTask === markerData.taskId) {
         // Make marker for current task larger
