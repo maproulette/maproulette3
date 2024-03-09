@@ -71,7 +71,6 @@ export const WithReviewTasks = function(WrappedComponent) {
     }
 
     update(props, criteria, skipURLUpdate = false) {
-      console.log('criteria in review task updater', criteria)
       const searchOnCriteria = _cloneDeep(criteria)
       const userId = _get(props, 'user.id')
       const pageSize = _get(this.state.criteria[props.reviewTasksType], 'pageSize') || DEFAULT_PAGE_SIZE
@@ -151,7 +150,6 @@ export const WithReviewTasks = function(WrappedComponent) {
 
     updateURL(props, criteria) {
       let searchCriteria = _merge({filters:{}}, criteria)
-      console.log('criteria in update url', searchCriteria)
       if (searchCriteria.filters.reviewedAt &&
           typeof searchCriteria.filters.reviewedAt === "object") {
         searchCriteria.filters.reviewedAt =

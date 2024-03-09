@@ -203,8 +203,6 @@ export class TaskReviewTable extends Component {
     filters.reviewStatus = this.state.taskReviewStatusFilterIds.length ? this.state.taskReviewStatusFilterIds : null
     filters.metaReviewStatus = this.state.taskMetaReviewStatusFilterIds.length ? this.state.taskMetaReviewStatusFilterIds : null
     filters.priorities = this.state.taskPriorityFilterIds.length ? this.state.taskPriorityFilterIds : null
-
-    console.log('filters in table state task updater', filters)
     
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
@@ -350,13 +348,24 @@ export class TaskReviewTable extends Component {
       this.setupConfigurableColumns(this.props.reviewTasksType)
     }
 
+    // Since we're bypassing table state to populate multiselect filters, we need to check all of the multiselect filters from the
+    // URL search string against local state and update accordingly.
     if (
       !_isEqual(getFilterIds(this.props.location.search, 'filters.challengeId'), this.state.challengeFilterIds) ||
-      !_isEqual(getFilterIds(this.props.location.search, 'filters.projectId'), this.state.projectFilterIds)
+      !_isEqual(getFilterIds(this.props.location.search, 'filters.projectId'), this.state.projectFilterIds) ||
+      !_isEqual(getTaskStatusFilterIds(this.props.location.search, 'filters.status'), this.state.taskStatusFilterIds) ||
+      !_isEqual(getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props), this.state.taskReviewStatusFilterIds) ||
+      !_isEqual(getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props), this.state.taskMetaReviewStatusFilterIds) ||
+      !_isEqual(getTaskPriorityFilterIds(this.props.location.search, 'filters.priority'), this.state.taskPriorityFilterIds)
     ) {
+      
       setTimeout(() => this.setState({ 
         challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
-        projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId')
+        projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId'),
+        taskStatusFilterIds: getTaskStatusFilterIds(this.props.location.search, 'filters.status'),
+        taskReviewStatusFilterIds: getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props),
+        taskMetaReviewStatusFilterIds: getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props),
+        taskPriorityFilterIds: getTaskPriorityFilterIds(this.props.location.search, 'filters.priorities')
       }), 100)
     }
 

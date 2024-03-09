@@ -236,7 +236,6 @@ const buildQueryFilters = function (criteria, addedColumns) {
   }
   if(filters.reviewStatus != "all" &&  filters.reviewStatus != undefined) {
     if(filters.reviewStatus.length > 1) {
-    // if(filters.reviewStatus.split(',').length > 1) {
       reviewStatus = filters.reviewStatus.split(',')
     } else reviewStatus = JSON.stringify(filters.reviewStatus)
   } else if(filters.reviewStatus == 'all' || filters.reviewStatus == undefined) {

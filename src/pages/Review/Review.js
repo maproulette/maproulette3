@@ -94,10 +94,7 @@ export class ReviewTasksDashboard extends Component {
     }
 
     if (!this.state.filterSelected[this.state.showType]) {
-      console.log('!this.state.filterSelected[this.state.showType] is running')
       if (_get(this.props.history, 'location.search')) {
-        // console.log('location.search exists in update')
-        console.log('props history location in filterselected update change', this.props.history.location)
         this.setSelectedFilters(
           buildSearchCriteriafromURL(this.props.history.location.search)
         )
@@ -115,10 +112,6 @@ export class ReviewTasksDashboard extends Component {
 
     // If our path params have changed we need to update the default filters
     if (!_isEqual(this.props.location.search, prevProps.location.search)) {
-      console.log('!_isEqual(this.props.location.search, prevProps.location.search is running')
-      console.log('current location.search', this.props.location.search)
-      console.log('previous location.search', prevProps.location.search)
-      console.log('history location search', this.props.history.location.search)
       this.setSelectedFilters(
         buildSearchCriteriafromURL(this.props.history.location.search), true
       )
@@ -137,7 +130,6 @@ export class ReviewTasksDashboard extends Component {
 
   setSelectedFilters = (filters, clearPrevState = false) => {
     const filterSelected = _cloneDeep(this.state.filterSelected)
-    // console.log('filters in setSelectedFilters', filters)
     filterSelected[this.state.showType] = clearPrevState ?
       _merge({filters:{}}, filters) :
       _merge({filters:{}}, filterSelected[this.state.showType], filters)
@@ -172,7 +164,7 @@ export class ReviewTasksDashboard extends Component {
           filterSelected[this.state.showType], ['projectId', 'project', 'projectName'])
       }
     }
-    // console.log('filterSelected in setSelectedFilters', filterSelected)
+
     this.setState({filterSelected})
   }
 
@@ -194,18 +186,11 @@ export class ReviewTasksDashboard extends Component {
   }
 
   clearFilters = () => {
-    console.log(this.state.showType)
-    console.log(this.state.filterSelected)
-    const filterSelected = _cloneDeep(this.state.filterSelected)
-     
     const initialTaskStatusFilters = getInitialTaskStatusFiltersByContext(this.state.showType)
-    filterSelected[this.state.showType] = {}
-    filterSelected[this.state.showType].filters = initialTaskStatusFilters
-    const taskFilterURLReset = buildSearchURL(filterSelected[this.state.showType])
-    console.log('taskfilterurlreset', taskFilterURLReset)
-    this.props.history.push({search: taskFilterURLReset})
-    this.setState({filterSelected})
-    // this.setSelectedFilters({filters: initialTaskStatusFilters}, true)
+    this.setSelectedFilters(initialTaskStatusFilters, true)
+    this.props.history.push({
+      pathname: `/review/${this.state.showType}`
+    })
   }
 
   changeTab = (tab) => {
