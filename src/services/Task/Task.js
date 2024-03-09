@@ -927,7 +927,7 @@ export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bund
         )
       }
       else {
-        if(bundleTypeMismatch === "cooperative") {
+        if (bundleTypeMismatch === "cooperative") {
           dispatch(addError(AppErrors.task.bundleCooperative))
         } else if (bundleTypeMismatch === "notCooperative") {
           dispatch(addError(AppErrors.task.bundleNotCooperative))

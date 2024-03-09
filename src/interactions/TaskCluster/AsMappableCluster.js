@@ -129,13 +129,13 @@ export class AsMappableCluster {
 
       let icon = _cloneDeep(statusIcons[markerData.taskStatus] || statusIcons[0])
 
-        if (bundleConflict) {
-            const red = parseInt(icon.options.style.fill.slice(1, 3), 16);
-            const green = parseInt(icon.options.style.fill.slice(3, 5), 16);
-            const blue = parseInt(icon.options.style.fill.slice(5, 7), 16);
+      if (bundleConflict) {
+          const red = parseInt(icon.options.style.fill.slice(1, 3), 16);
+          const green = parseInt(icon.options.style.fill.slice(3, 5), 16);
+          const blue = parseInt(icon.options.style.fill.slice(5, 7), 16);
 
-            icon.options.style.fill = `rgba(${red}, ${green}, ${blue}, 0.4)`;
-        }
+          icon.options.style.fill = `rgba(${red}, ${green}, ${blue}, 0.4)`;
+      }
 
       if (_isFinite(highlightPrimaryTask) && highlightPrimaryTask === markerData.taskId) {
         // Make marker for current task larger

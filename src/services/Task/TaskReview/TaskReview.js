@@ -544,7 +544,6 @@ export const completeReview = function(taskId, taskReviewStatus, comment, tags, 
 }
 
 export const completeBundleReview = function(bundleId, taskReviewStatus, comment, tags, newTaskStatus, asMetaReview=false, errorTags) {
-   
   return function(dispatch) {
     return new Endpoint(
       asMetaReview ? api.tasks.bundled.updateMetaReviewStatus :
@@ -612,7 +611,6 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment,
       }
     }
   }))
-   
   return new Endpoint(
     asMetaReview ?
       api.task.updateMetaReviewStatus : api.task.updateReviewStatus,
