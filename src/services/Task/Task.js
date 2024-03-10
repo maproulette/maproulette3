@@ -952,7 +952,6 @@ export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bund
 }
 // initialBundle, taskBundle props
   export const resetTaskBundle = function(initialBundle, primaryTaskId) {
-
     const bundleId = initialBundle.bundleId;
     let taskIdsArray = [];
     if (initialBundle && initialBundle.taskIds) { 
@@ -1007,29 +1006,6 @@ export const deleteTaskBundle = function(bundleId, primaryTaskId) {
         console.log(error.response || error)
       }
     })
-  }
-}
-
-export const addTaskToBundle = function (bundleId, taskIds) {
-  return function (dispatch) {
-    return new Endpoint(api.tasks.addTaskToBundle, {
-      variables: { id: bundleId },
-      params: { id: bundleId, taskIds: taskIds },
-    })
-      .execute()
-      .then((results) => {
-        return results
-      })
-      .catch((error) => {
-        if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
-          )
-        } else {
-          dispatch(addError(AppErrors.task.addTaskToBundleFailure))
-          console.log(error.response || error)
-        }
-      })
   }
 }
 

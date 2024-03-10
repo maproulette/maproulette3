@@ -39,7 +39,7 @@ export const WithTaskClusterMarkers = function(WrappedComponent) {
           !this.props.taskBundle?.taskIds?.includes(cluster.id || cluster.taskId) &&
           !this.props.initialBundle?.taskIds?.includes(cluster.id || cluster.taskId) &&
           (cluster.id || cluster.taskId) ||
-          (cluster?.bundleId && cluster.bundleId !== this.props.taskBundle.bundleId)
+          (cluster?.bundleId && cluster.bundleId !== this.props.taskBundle?.bundleId)
         );
 
         return AsMappableCluster(cluster).mapMarker(

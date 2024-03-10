@@ -34,7 +34,6 @@ export default {
     lockRefreshFailure: messages.taskLockRefreshFailure,
     bundleFailure: messages.taskBundleFailure,
     removeTaskFromBundleFailure: messages.removeTaskFromBundleFailure,
-    addTaskToBundleFailure: messages.addTaskToBundleFailure,
     bundleCooperative: messages.taskBundleCooperative,
     addCommentFailure: messages.addCommentFailure,
     bundleNotCooperative: messages.taskBundleNotCooperative,

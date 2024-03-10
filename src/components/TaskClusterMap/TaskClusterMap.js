@@ -66,7 +66,7 @@ export const UNCLUSTER_THRESHOLD = 1000 // max number of tasks
 /**
  * The number of clusters to show.
  */
-export const CLUSTER_POINTS = 25
+export const CLUSTER_POINTS = 100
 
 /**
  * The size of cluster marker icons in pixels

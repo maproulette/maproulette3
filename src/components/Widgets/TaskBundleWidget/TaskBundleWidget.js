@@ -154,12 +154,6 @@ export default class TaskBundleWidget extends Component {
     this.props.toggleTaskSelection(task)
   }
 
-  bundleTask = (task) => {
-    const taskId = task.id ?? task.taskId 
-    this.props.addTaskToBundle(this.props.taskBundle.bundleId, taskId)
-    this.props.toggleTaskSelection(task)
-  }
-
   updateBounds = (challengeId, bounds, zoom) => {
     this.props.updateTaskFilterBounds(bounds, zoom)
   }
@@ -287,7 +281,6 @@ export default class TaskBundleWidget extends Component {
           revertFilters={this.revertFilters}
           updateBounds={this.updateBounds}
           bundleTasks={this.bundleTasks}
-          bundleTask={this.bundleTask}
           unbundleTask={this.unbundleTask}
           unbundleTasks={this.unbundleTasks}
           loading={this.props.loading}

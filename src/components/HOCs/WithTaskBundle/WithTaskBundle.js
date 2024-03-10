@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
-import { bundleTasks, deleteTaskBundle, resetTaskBundle, addTaskToBundle, removeTaskFromBundle, fetchTaskBundle } from '../../../services/Task/Task'
+import { bundleTasks, deleteTaskBundle, resetTaskBundle, removeTaskFromBundle, fetchTaskBundle } from '../../../services/Task/Task'
 import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
 
 /**
@@ -162,13 +162,6 @@ export function WithTaskBundle(WrappedComponent) {
       })
     }
 
-    addTaskToBundle = (bundleId, taskId) => {
-      this.setState({loading: true})
-      this.props.addTaskToBundle(bundleId, taskId).then(taskBundle => {
-        this.setState({selectedTasks: taskBundle?.taskIds, taskBundle, loading: false})
-      })
-    };
-
     clearActiveTaskBundle = () => {
       this.setState({selectedTasks: [], taskBundle: null, loading: false})
       this.resetSelectedTasks()
@@ -188,7 +181,6 @@ export function WithTaskBundle(WrappedComponent) {
           setCompletingTask={this.setCompletingTask}
           completingTask={this.props.completingTask}
           createTaskBundle={this.createTaskBundle}
-          addTaskToBundle={this.addTaskToBundle}
           removeTaskBundle={this.removeTaskBundle}
           initialBundle={this.state.initialBundle}
           removeTaskFromBundle={this.removeTaskFromBundle}
@@ -207,7 +199,6 @@ export const mapDispatchToProps = dispatch => bindActionCreators({
   bundleTasks,
   deleteTaskBundle,
   resetTaskBundle,
-  addTaskToBundle,
   removeTaskFromBundle,
   fetchTaskBundle,
 }, dispatch)
