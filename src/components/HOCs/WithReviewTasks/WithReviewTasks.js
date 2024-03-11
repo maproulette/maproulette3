@@ -90,9 +90,20 @@ export const WithReviewTasks = function(WrappedComponent) {
       // We need to update our list of challenges since some challenges may
       // have been excluded on initial fetch because the list was limited to
       // taskStatus 'fixed' and 'excludeOtherReviewers' by default.
-      if (searchOnCriteria.excludeOtherReviewers === false ||
-          _get(searchOnCriteria, 'filters.status') !==
-            _get(this.state.criteria[this.props.reviewTasksType], "filters.status")) {
+      let searchOnCriteriaStatusFilters = _get(searchOnCriteria, 'filters.status')
+      let stateCriteriaStatusFilters = _get(this.state.criteria[this.props.reviewTasksType], "filters.status")
+
+      if(Array.isArray(searchOnCriteriaStatusFilters)) {
+        searchOnCriteriaStatusFilters = searchOnCriteriaStatusFilters.join(',')
+      }
+      if(Array.isArray(stateCriteriaStatusFilters)) {
+        stateCriteriaStatusFilters = stateCriteriaStatusFilters.join(',')
+      }
+
+      if (searchOnCriteria.excludeOtherReviewers === false || searchOnCriteriaStatusFilters !== stateCriteriaStatusFilters)
+          // _get(searchOnCriteria, 'filters.status') !==
+          //   _get(this.state.criteria[this.props.reviewTasksType], "filters.status")) 
+        {
         this.props.updateReviewChallenges(this.props.reviewTasksType)
       }
 

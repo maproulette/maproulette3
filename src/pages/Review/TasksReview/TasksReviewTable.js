@@ -78,15 +78,15 @@ const formatURLSearchParamEntryPairs = (search, param) => {
 
 // Status filter Idx should all be selected by default if there aren't specific selections in the URL
 const getTaskStatusFilterIds = (search, param) => {
-  // const searchParams = new URLSearchParams(search)
-  // for(let pair of searchParams.entries()) {
-  //   if(pair[0] === param && pair[1]) {
-  //     if(pair[1].length === 0) return []
-  //     return pair[1].split(',').map(n => Number(n))
-  //   }  
-  // }
-  return formatURLSearchParamEntryPairs(search, param) || 
-  Object.values(TaskStatus).filter(el => isReviewableStatus(el))
+  const searchParams = new URLSearchParams(search)
+  for(let pair of searchParams.entries()) {
+    if(pair[0] === param && pair[1]) {
+      if(pair[1].length === 0) return []
+      return pair[1].split(',').map(n => Number(n))
+    }  
+  }
+  // return formatURLSearchParamEntryPairs(search, param) || 
+  return Object.values(TaskStatus).filter(el => isReviewableStatus(el))
 }
 
 // Task review status filtering options are contingent on review context
@@ -199,10 +199,10 @@ export class TaskReviewTable extends Component {
       }
     }
 
-    filters.status = this.state.taskStatusFilterIds.length ? this.state.taskStatusFilterIds : null
-    filters.reviewStatus = this.state.taskReviewStatusFilterIds.length ? this.state.taskReviewStatusFilterIds : null
-    filters.metaReviewStatus = this.state.taskMetaReviewStatusFilterIds.length ? this.state.taskMetaReviewStatusFilterIds : null
-    filters.priorities = this.state.taskPriorityFilterIds.length ? this.state.taskPriorityFilterIds : null
+    filters.status = this.state.taskStatusFilterIds?.length ? this.state.taskStatusFilterIds : null
+    filters.reviewStatus = this.state.taskReviewStatusFilterIds?.length ? this.state.taskReviewStatusFilterIds : null
+    filters.metaReviewStatus = this.state.taskMetaReviewStatusFilterIds?.length ? this.state.taskMetaReviewStatusFilterIds : null
+    filters.priorities = this.state.taskPriorityFilterIds?.length ? this.state.taskPriorityFilterIds : null
     
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
@@ -356,7 +356,7 @@ export class TaskReviewTable extends Component {
       !_isEqual(getTaskStatusFilterIds(this.props.location.search, 'filters.status'), this.state.taskStatusFilterIds) ||
       !_isEqual(getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props), this.state.taskReviewStatusFilterIds) ||
       !_isEqual(getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props), this.state.taskMetaReviewStatusFilterIds) ||
-      !_isEqual(getTaskPriorityFilterIds(this.props.location.search, 'filters.priority'), this.state.taskPriorityFilterIds)
+      !_isEqual(getTaskPriorityFilterIds(this.props.location.search, 'filters.priorities'), this.state.taskPriorityFilterIds)
     ) {
       
       setTimeout(() => this.setState({ 
@@ -396,7 +396,6 @@ export class TaskReviewTable extends Component {
                    "reviewedAt":{},
                    "status":{},
                    "priority":{},
-                  //  "priority": {},
                    "reviewCompleteControls":{permanent: true},
                    "reviewerControls":{permanent: true},
                    "mapperControls":{permanent: true},

@@ -29,7 +29,7 @@ import WithWidgetWorkspaces
        from '../../components/HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WidgetWorkspace from '../../components/WidgetWorkspace/WidgetWorkspace'
 import { ReviewTasksType } from '../../services/Task/TaskReview/TaskReview'
-import { buildSearchCriteriafromURL, buildSearchURL } from '../../services/SearchCriteria/SearchCriteria'
+import { buildSearchCriteriafromURL } from '../../services/SearchCriteria/SearchCriteria'
 import WithReviewTasks from '../../components/HOCs/WithReviewTasks/WithReviewTasks'
 import TasksReviewChallenges from './TasksReview/TasksReviewChallenges'
 import messages from './Messages'
