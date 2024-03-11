@@ -33,6 +33,8 @@ const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mappedOn', direction: 'ASC'},
  */
 export const WithReviewTasks = function(WrappedComponent) {
   return class extends Component {
+    challengesFetchedInitially = false
+
     state = {
       loading: false,
       criteria: {},
@@ -100,10 +102,7 @@ export const WithReviewTasks = function(WrappedComponent) {
         stateCriteriaStatusFilters = stateCriteriaStatusFilters.join(',')
       }
 
-      if (searchOnCriteria.excludeOtherReviewers === false || searchOnCriteriaStatusFilters !== stateCriteriaStatusFilters)
-          // _get(searchOnCriteria, 'filters.status') !==
-          //   _get(this.state.criteria[this.props.reviewTasksType], "filters.status")) 
-        {
+      if (searchOnCriteria.excludeOtherReviewers === false || searchOnCriteriaStatusFilters !== stateCriteriaStatusFilters) {
         this.props.updateReviewChallenges(this.props.reviewTasksType)
       }
 

@@ -54,7 +54,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
      updateTaskFilterBounds = (bounds, zoom) => {
        const newCriteria = _cloneDeep(this.state.criteria)
        newCriteria.boundingBox = fromLatLngBounds(bounds)
-       console.log('boundingBox in WithFilterCriteria',newCriteria.boundingBox)
        newCriteria.zoom = zoom
        this.setState({criteria: newCriteria})
      }
