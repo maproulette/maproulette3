@@ -141,8 +141,8 @@ export const buildLinkToMapperExportCSV = function(criteria) {
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/mappers/export?${queryString.stringify(queryFilters)}`
 }
 
-export const buildLinkToReviewTableExportCSV = function(criteria, addedColumns) {
-  const queryFilters = buildQueryFilters(criteria, addedColumns);
+export const buildLinkToReviewTableExportCSV = function(criteria, addedColumns, reviewContext) {
+  const queryFilters = buildQueryFilters(criteria, addedColumns, reviewContext);
 
   return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/reviewTable/export?${queryFilters}`
 }
@@ -171,7 +171,7 @@ const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTas
   return {...searchParameters, mappers, reviewers}
 }
 
-const buildQueryFilters = function (criteria, addedColumns) {
+const buildQueryFilters = function (criteria, addedColumns, reviewContext) {
   //Sort criteria filtering
   const sortCriteria =  _get(criteria, 'sortCriteria', {})
   const direction = sortCriteria.direction
@@ -219,6 +219,8 @@ const buildQueryFilters = function (criteria, addedColumns) {
   let reviewStatus = ['0', '1', '2', '3', '4', '5', '6', '7', '-1']
   let priorities = ['0', '1', '2']
   let metaReviewStatus = ['-2', '0', '1', '2', '3', '6']
+
+  console.log(reviewContext)
 
   //add configuration to remove inverting on the "all" value
   function removeValueFromArray(arr, value) {
@@ -281,6 +283,9 @@ const buildQueryFilters = function (criteria, addedColumns) {
   displayedColumns = removeValueFromArray(displayedColumns, "View Comments");
   displayedColumns = removeValueFromArray(displayedColumns, "Tags");
 
+  // While the search param value for this filter can be either "priority" or "priorities", the task review
+  // API endpoint expects only "priority" to be used and despite its original intent as a single-value filter,
+  // it accepts either a single value or a list (array), as implemented below:
   const priorityFilter = priorities.length > 1 ? `&priority=${_join(priorities, ",")}` : `&priority=${_join(priorities, ",")}` 
 
   // console.log(`${taskId ? `taskId=${taskId}` : ""}` +

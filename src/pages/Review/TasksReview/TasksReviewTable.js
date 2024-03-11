@@ -14,12 +14,6 @@ import _pull from 'lodash/pull'
 import _isEqual from 'lodash/isEqual'
 import _isObject from 'lodash/isObject'
 import _pick from 'lodash/pick'
-import { TaskStatus, isReviewableStatus }
-       from '../../../services/Task/TaskStatus/TaskStatus'
-import { TaskPriority }
-      from '../../../services/Task/TaskPriority/TaskPriority'
-import { TaskReviewStatus, isNeedsReviewStatus, isMetaReviewStatus, TaskMetaReviewStatusWithUnset }
-       from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { ReviewTasksType, buildLinkToReviewTableExportCSV, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
 import { intlTableProps } from '../../../components/IntlTable/IntlTable'
 import IntlTablePagination from '../../../components/IntlTable/IntlTablePagination'
@@ -38,92 +32,9 @@ import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
 import MapPane from '../../../components/EnhancedMap/MapPane/MapPane'
 import ReactTable from 'react-table-6'
-import { setupColumnTypes } from './taskReviewTableDefaultColumnTypes'
-
-export const getFilterIds = (search, param) => {
-  const searchParams = new URLSearchParams(search);
-  for (let pair of searchParams.entries()) {
-    if (pair[0] === param && pair[1]) {
-      if (pair[1] === '0') {
-        return [FILTER_SEARCH_ALL]
-      }
-      return pair[1].split(',').map(n => Number(n))
-    }
-  }
-
-  return [FILTER_SEARCH_ALL];
-}
-
-const formatURLSearchParamEntryPairs = (search, param) => {
-  const searchParams = new URLSearchParams(search)
-  for(let pair of searchParams.entries()) {
-    if(pair[0] === param && pair[1]) {
-      if(pair[1].length === 0) return []
-      return pair[1].split(',').map(n => Number(n))
-    }  
-  }
-}
-
-// Status filter Idx should all be selected by default if there aren't specific selections in the URL
-const getTaskStatusFilterIds = (search, param) => {
-  const searchParams = new URLSearchParams(search)
-  for(let pair of searchParams.entries()) {
-    if(pair[0] === param && pair[1]) {
-      if(pair[1].length === 0) return []
-      return pair[1].split(',').map(n => Number(n))
-    }  
-  }
-  // return formatURLSearchParamEntryPairs(search, param) || 
-  return Object.values(TaskStatus).filter(el => isReviewableStatus(el))
-}
-
-// Task review status filtering options are contingent on review context
-const getTaskReviewStatusFilterIds = (search, param, props) => {
-  const searchParams = new URLSearchParams(search)
-  for(let pair of searchParams.entries()) {
-    if(pair[0] === param && pair[1]) {
-      if(pair[1].length === 0) return []
-      return pair[1].split(',').map(n => Number(n))
-    }  
-  }
-  if(props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
-    return [TaskReviewStatus.approved, TaskReviewStatus.approvedWithFixes]
-  } else if(props.reviewTasksType === ReviewTasksType.reviewedByMe ||
-      props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
-      props.reviewTasksType === ReviewTasksType.allReviewedTasks) {
-    return Object.values(TaskReviewStatus).filter(el => el !== TaskReviewStatus.unnecessary)  
-  } else {
-    return Object.values(TaskReviewStatus).filter(el => isNeedsReviewStatus(el))
-  }
-}
-
-const getTaskMetaReviewStatusFilterIds = (search, param, props) => {
-  const searchParams = new URLSearchParams(search)
-  for(let pair of searchParams.entries()) {
-    if(pair[0] === param && pair[1]) {
-      if(pair[1].length === 0) return []
-      return pair[1].split(',').map(n => Number(n))
-    }
-  }
-  if(props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
-    return [TaskMetaReviewStatusWithUnset.metaUnset, TaskReviewStatus.needed]
-  } else {
-    const allTaskMetaReviewStatusValues = Object.values(TaskReviewStatus)
-      .filter(el => el !== TaskReviewStatus.unnecessary && isMetaReviewStatus(el))
-    return [TaskMetaReviewStatusWithUnset.metaUnset, ...allTaskMetaReviewStatusValues]
-  }
-}
-
-const getTaskPriorityFilterIds = (search, param) => {
-  const searchParams = new URLSearchParams(search)
-  for(let pair of searchParams.entries()) {
-    if(pair[0] === param && pair[1]) {
-      if(pair[1].length === 0) return []
-      return pair[1].split(',').map(n => Number(n))
-    }
-  } 
-  return Object.values(TaskPriority)
-}
+import { getFilterIds, getTaskStatusFilterIds, getTaskReviewStatusFilterIds, 
+  getTaskMetaReviewStatusFilterIds, getTaskPriorityFilterIds } from './taskReviewFilterUtils' 
+import { setupColumnTypes } from './TaskReviewTableDefaultColumnTypes'
 
 /**
  * TaskReviewTable displays tasks that need to be reviewed or have been reviewed
@@ -141,8 +52,8 @@ export class TaskReviewTable extends Component {
     challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
     projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId'),
     taskStatusFilterIds: getTaskStatusFilterIds(this.props.location.search, 'filters.status'),
-    taskReviewStatusFilterIds: getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props),
-    taskMetaReviewStatusFilterIds: getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props),
+    taskReviewStatusFilterIds: getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props.reviewTasksType),
+    taskMetaReviewStatusFilterIds: getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props. reviewTasksType),
     taskPriorityFilterIds: getTaskPriorityFilterIds(this.props.location.search, 'filters.priorities')
   }
 
@@ -338,8 +249,8 @@ export class TaskReviewTable extends Component {
       !_isEqual(getFilterIds(this.props.location.search, 'filters.challengeId'), this.state.challengeFilterIds) ||
       !_isEqual(getFilterIds(this.props.location.search, 'filters.projectId'), this.state.projectFilterIds) ||
       !_isEqual(getTaskStatusFilterIds(this.props.location.search, 'filters.status'), this.state.taskStatusFilterIds) ||
-      !_isEqual(getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props), this.state.taskReviewStatusFilterIds) ||
-      !_isEqual(getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props), this.state.taskMetaReviewStatusFilterIds) ||
+      !_isEqual(getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props.reviewTasksType), this.state.taskReviewStatusFilterIds) ||
+      !_isEqual(getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props.reviewTasksType), this.state.taskMetaReviewStatusFilterIds) ||
       !_isEqual(getTaskPriorityFilterIds(this.props.location.search, 'filters.priorities'), this.state.taskPriorityFilterIds)
     ) {
       
@@ -347,8 +258,8 @@ export class TaskReviewTable extends Component {
         challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
         projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId'),
         taskStatusFilterIds: getTaskStatusFilterIds(this.props.location.search, 'filters.status'),
-        taskReviewStatusFilterIds: getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props),
-        taskMetaReviewStatusFilterIds: getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props),
+        taskReviewStatusFilterIds: getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props.reviewTasksType),
+        taskMetaReviewStatusFilterIds: getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props.reviewTasksType),
         taskPriorityFilterIds: getTaskPriorityFilterIds(this.props.location.search, 'filters.priorities')
       }), 100)
     }
@@ -539,10 +450,11 @@ export class TaskReviewTable extends Component {
                             ...this.props, 
                             updateChallengeFilterIds: this.updateChallengeFilterIds,
                             updateProjectFilterIds: this.updateProjectFilterIds,
-                            updateTaskStatusFilterIds: this.updateTaskStatusFilterIds,
-                            updateTaskReviewStatusFilterIds: this.updateTaskReviewStatusFilterIds,
-                            updateTaskMetaReviewStatusFilterIds: this.updateTaskMetaReviewStatusFilterIds,
-                            updateTaskPriorityFilterIds: this.updateTaskPriorityFilterIds,
+                            updateTaskStatusFiltersByCategory: this.updateTaskStatusFiltersByCategory,
+                            // updateTaskStatusFilterIds: this.updateTaskStatusFilterIds,
+                            // updateTaskReviewStatusFilterIds: this.updateTaskReviewStatusFilterIds,
+                            // updateTaskMetaReviewStatusFilterIds: this.updateTaskMetaReviewStatusFilterIds,
+                            // updateTaskPriorityFilterIds: this.updateTaskPriorityFilterIds,
                             challengeFilterIds: this.state.challengeFilterIds,
                             projectFilterIds: this.state.projectFilterIds,
                             taskStatusFilterIds: this.state.taskStatusFilterIds,

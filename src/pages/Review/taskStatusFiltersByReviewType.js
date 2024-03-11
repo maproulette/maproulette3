@@ -1,13 +1,12 @@
-import { TaskStatus, isReviewableStatus }
-       from '../../services/Task/TaskStatus/TaskStatus'
-import { TaskPriority }
-       from '../../services/Task/TaskPriority/TaskPriority'
+import { TaskStatus, isReviewableStatus } from '../../services/Task/TaskStatus/TaskStatus'
+import { TaskPriority } from '../../services/Task/TaskPriority/TaskPriority'
 import { TaskReviewStatus, isNeedsReviewStatus, isMetaReviewStatus, TaskMetaReviewStatusWithUnset }
-        from '../../services/Task/TaskReview/TaskReviewStatus'
+  from '../../services/Task/TaskReview/TaskReviewStatus'
 
 // Utilities for generating initial task filter statuses based on review workspace context
 
 export const reviewableTaskStatusFilterValues = Object.values(TaskStatus).filter(el => isReviewableStatus(el))
+
 export const taskPriorityFilterValues = Object.values(TaskPriority)
 
 export const reviewStatusFilterValuesByContext = context => {
@@ -25,12 +24,6 @@ export const metaReviewStatusFilterValuesByContext = context => {
 }
 
 export const getInitialTaskStatusFiltersByContext = context => {
-  // return ({
-  //   status: reviewableTaskStatusFilterValues.join(","),
-  //   priorities: taskPriorityFilterValues.join(","),
-  //   reviewStatus: reviewStatusFilterValuesByContext(context).join(","),
-  //   metaReviewStatus: metaReviewStatusFilterValuesByContext(context).join(",")
-  // })
   return ({
     status: reviewableTaskStatusFilterValues,
     priorities: taskPriorityFilterValues,

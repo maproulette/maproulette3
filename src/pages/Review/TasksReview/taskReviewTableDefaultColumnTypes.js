@@ -28,6 +28,9 @@ import AsColoredHashable from '../../../interactions/Hashable/AsColoredHashable'
 import { ViewCommentsButton, makeInvertable }
   from '../../../components/TaskAnalysisTable/TaskTableHelpers'
 
+// Column setup to be used with the TasksReviewTable react-table implementation to render default columns.
+// Formatted to return a "columns" object to allow column management and custom columns in the table component.
+
 export const setupColumnTypes = (props, openComments, data, criteria) => {
   const handleClick = (e, linkTo) => {
     e.preventDefault()
@@ -110,7 +113,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           filterState={props.taskStatusFilterIds}
           onChange={item => {
             onChange(item)
-            setTimeout(() => props.updateTaskStatusFilterIds(item), 0)
+            setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskStatusFilterIds"), 0)
           }}   
         />
       )
@@ -151,7 +154,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           filterState={props.taskPriorityFilterIds}
           onChange={item => {
             onChange(null)
-            setTimeout(() => props.updateTaskPriorityFilterIds(item), 0)
+            setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskPriorityFilterIds"), 0)
           }}   
         />
       )
@@ -517,7 +520,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           filterState={props.taskReviewStatusFilterIds}
           onChange={item => {
             onChange(item)
-            setTimeout(() => props.updateTaskReviewStatusFilterIds(item), 0)
+            setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskReviewStatusFilterIds"), 0)
           }}   
         />
       )
@@ -574,7 +577,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           filterState={props.taskMetaReviewStatusFilterIds}
           onChange={item => {
             onChange(item)
-            setTimeout(() => props.updateTaskMetaReviewStatusFilterIds(item), 0)
+            setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskMetaReviewStatusFilterIds"), 0)
           }}   
         />
       )
@@ -810,3 +813,4 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
 
   return columns
 }
+
