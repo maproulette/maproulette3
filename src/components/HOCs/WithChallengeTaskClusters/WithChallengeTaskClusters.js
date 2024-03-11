@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import bboxPolygon from '@turf/bbox-polygon'
-import booleanDisjoint from '@turf/boolean-disjoint'
 import _omit from 'lodash/omit'
 import _cloneDeep from 'lodash/cloneDeep'
 import _get from 'lodash/get'
@@ -21,7 +19,6 @@ import { fetchTaskClusters, clearTaskClusters }
        from '../../../services/Task/TaskClusters'
 import { fetchBoundedTasks, clearBoundedTasks }
        from '../../../services/Task/BoundedTask'
-import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterMap'
 
 /**
