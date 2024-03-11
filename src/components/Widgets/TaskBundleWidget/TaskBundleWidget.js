@@ -474,14 +474,6 @@ const ActiveBundle = props => {
 }
 
 const BuildBundle = props => {
-  if (props.taskReadOnly) {
-    return (
-      <div className="mr-text-pink-light mr-text-lg">
-        <FormattedMessage {...messages.readOnly} />
-      </div>
-    )
-  }
-
   if (props.virtualChallenge || _isFinite(props.virtualChallengeId)) {
     return (
       <div className="mr-text-base">

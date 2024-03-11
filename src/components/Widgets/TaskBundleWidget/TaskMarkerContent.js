@@ -24,8 +24,8 @@ class TaskMarkerContent extends Component {
       this.props.marker.options.taskId !== this.props.task.id &&
       !(this.props.workspace.name === 'taskReview') &&
       (this.props.marker.options.status === 0 || this.props.marker.options.status === 3 || 
-      this.props.marker.options.taskStatus === 0 || this.props.marker.options.taskStatus === 3) ||
-      AsCooperativeWork(this.props.task).isTagType() || this.props.taskReadOnly
+      this.props.marker.options.taskStatus === 0 || this.props.marker.options.taskStatus === 3) &&
+      !AsCooperativeWork(this.props.task).isTagType() && !this.props.taskReadOnly
 
     const notActive =
       this.props.taskReadOnly ||
@@ -91,7 +91,7 @@ class TaskMarkerContent extends Component {
 
               {this.props.bundling ? (
                 <div>
-                  {bundlePrimary?.id === taskId || taskId === this.props.task?.id ? (
+                  {bundlePrimary?.id === taskId || (!bundlePrimary && taskId === this.props.task?.id) ? (
                     <div>Cannot edit primary task</div>
                   ) : this.props.bundling && bundle.includes(taskId) ? (
                     <button

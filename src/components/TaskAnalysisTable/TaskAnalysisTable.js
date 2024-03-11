@@ -312,8 +312,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
           original.taskId !== props.task.id &&
           !(props.workspace.name === 'taskReview') &&
           (original.status === 0 || original.status === 3 ||
-            original.taskStatus === 0 || original.taskStatus === 3)) ||
-        AsCooperativeWork(props.task).isTagType() || props.taskReadOnly
+            original.taskStatus === 0 || original.taskStatus === 3)) &&
+        !AsCooperativeWork(props.task).isTagType() && !props.taskReadOnly
 
       return (
         props.highlightPrimaryTask && original.id === props.task.id && !original.bundleId ?
@@ -403,8 +403,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: 'remove',
     minWidth: 110,
     Cell: ({ row }) => {
-      const isTaskSelected = row._original.id === bundlePrimary?.id || row._original.id === props.task?.id
       const bundlePrimary = props.taskBundle?.tasks.find(task => task.isBundlePrimary === true)
+      const isTaskSelected = row._original.id === bundlePrimary?.id || (!bundlePrimary && row._original.id === props.task?.id)
       const alreadyBundled = props.taskBundle?.taskIds?.includes(row._original.id)
       const enableBundleEdits = (row._original.status === 0 || row._original.status === 3 ||
         props.initialBundle?.taskIds?.includes(row._original.id) ||
