@@ -76,7 +76,6 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
                                                             null, null,
                                                             _get(criteria, 'invertFields'))
     const includeTags = _get(criteria, 'includeTags', false)
-    console.log('filters and searchparams in bounded task', filters, searchParameters)
     // If we don't have a challenge Id then we need to do some limiting.
     if (!filters.challengeId) {
       includeGeometries = false

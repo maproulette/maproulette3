@@ -181,54 +181,6 @@ export class TaskReviewTable extends Component {
     this.setState( {[category]: newIds})
   }
 
-  updateTaskStatusFilterIds = item => {
-    let newIds = this.state.taskStatusFilterIds.slice()
-    if(this.state.taskStatusFilterIds.includes(item.value)) {
-      newIds = newIds.filter(i => i !== item.value)
-    } else {
-      newIds.push(item.value)
-    }
-    
-    newIds.sort((a, b) => a - b)
-    this.setState({ taskStatusFilterIds: newIds})
-  }
-
-  updateTaskReviewStatusFilterIds = item => {
-    let newIds = this.state.taskReviewStatusFilterIds.slice()
-      if(this.state.taskReviewStatusFilterIds.includes(item.value)) {
-        newIds = newIds.filter(i => i !== item.value)
-      } else {
-        newIds.push(item.value)
-      }
-
-    newIds.sort((a, b) => a - b)
-    this.setState({ taskReviewStatusFilterIds: newIds})
-  }
-
-  updateTaskMetaReviewStatusFilterIds = item => {
-    let newIds = this.state.taskMetaReviewStatusFilterIds.slice()
-      if(this.state.taskMetaReviewStatusFilterIds.includes(item.value)) {
-        newIds = newIds.filter(i => i !== item.value)
-      } else {
-        newIds.push(item.value)
-      }
-    
-    newIds.sort((a, b) => a - b)
-    this.setState({ taskMetaReviewStatusFilterIds: newIds})
-  }
-
-  updateTaskPriorityFilterIds = item => {
-    let newIds = this.state.taskPriorityFilterIds.slice()
-      if(this.state.taskPriorityFilterIds.includes(item.value)) {
-        newIds = newIds.filter(i => i !== item.value)
-      } else {
-        newIds.push(item.value)
-      }
-
-    newIds.sort((a, b) => a - b)
-    this.setState({ taskPriorityFilterIds: newIds})
-  }
-
   componentWillUnmount() {
     this.componentIsMounted = false
   }
@@ -451,10 +403,6 @@ export class TaskReviewTable extends Component {
                             updateChallengeFilterIds: this.updateChallengeFilterIds,
                             updateProjectFilterIds: this.updateProjectFilterIds,
                             updateTaskStatusFiltersByCategory: this.updateTaskStatusFiltersByCategory,
-                            // updateTaskStatusFilterIds: this.updateTaskStatusFilterIds,
-                            // updateTaskReviewStatusFilterIds: this.updateTaskReviewStatusFilterIds,
-                            // updateTaskMetaReviewStatusFilterIds: this.updateTaskMetaReviewStatusFilterIds,
-                            // updateTaskPriorityFilterIds: this.updateTaskPriorityFilterIds,
                             challengeFilterIds: this.state.challengeFilterIds,
                             projectFilterIds: this.state.projectFilterIds,
                             taskStatusFilterIds: this.state.taskStatusFilterIds,
