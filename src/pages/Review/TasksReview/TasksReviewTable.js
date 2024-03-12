@@ -344,7 +344,7 @@ export class TaskReviewTable extends Component {
                 {this.props.reviewCriteria.filters.project ?
                   <a target="_blank"
                     rel="noopener noreferrer"
-                    href={buildLinkToReviewTableExportCSV(this.props.reviewCriteria, this.props.addedColumns)}
+                    href={buildLinkToReviewTableExportCSV(this.props.reviewCriteria, this.props.addedColumns, reviewTasksType)}
                     onClick={dropdown.toggleDropdownVisible}
                     className="mr-flex mr-items-center">
                     <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />

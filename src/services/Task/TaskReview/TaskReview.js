@@ -23,6 +23,7 @@ import { generateSearchParametersString, PARAMS_MAP } from '../../Search/Search'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
 import _join from "lodash/join";
+import { getInitialTaskStatusFiltersByContext } from '../../../pages/Review/taskStatusFiltersByReviewType'
 import { ensureUserLoggedIn } from '../../User/User'
 
 
@@ -215,12 +216,11 @@ const buildQueryFilters = function (criteria, addedColumns, reviewContext) {
   }
 
   //Sets initial value of these parameters to negate their "all" value
+  //to-do: Refactor to use context-specific task review status filter values?
   let status = ['0', '1', '2', '3', '4', '5', '6', '9']
   let reviewStatus = ['0', '1', '2', '3', '4', '5', '6', '7', '-1']
   let priorities = ['0', '1', '2']
   let metaReviewStatus = ['-2', '0', '1', '2', '3', '6']
-
-  console.log(reviewContext)
 
   //add configuration to remove inverting on the "all" value
   function removeValueFromArray(arr, value) {
@@ -229,43 +229,59 @@ const buildQueryFilters = function (criteria, addedColumns, reviewContext) {
 
   //add configuration to replace the value "all" with the needed equivalent values
   //remove inversion if values are equal to "all"
-  if(filters.status != "all" && filters.status != undefined){
+  // to-do: test new logic and remove following
+  // if(filters.status != "all" && filters.status != undefined){
+  //   if(filters.status.length > 1) {
+  //     status = filters.status.split(',')
+  //   } else status = JSON.stringify(filters.status)
+  // } else if(filters.status == 'all' || filters.status == undefined) {
+  //   invertedFilters = removeValueFromArray(invertedFilters, "tStatus");
+  // }
+
+  // if(filters.reviewStatus != "all" &&  filters.reviewStatus != undefined) {
+  //   if(filters.reviewStatus.length > 1) {
+  //     reviewStatus = filters.reviewStatus.split(',')
+  //   } else reviewStatus = JSON.stringify(filters.reviewStatus)
+  // } else if(filters.reviewStatus == 'all' || filters.reviewStatus == undefined) {
+  //   invertedFilters = removeValueFromArray(invertedFilters, "trStatus");
+  // }
+
+  // if(filters.metaReviewStatus != "all" &&  filters.metaReviewStatus != undefined){
+  //   if(filters.metaReviewStatus.length > 1) {
+  //     metaReviewStatus = filters.metaReviewStatus.split(',')
+  //   } else metaReviewStatus = JSON.stringify(filters.metaReviewStatus)
+  // } else if(filters.metaReviewStatus == 'all' || filters.metaReviewStatus == undefined) {
+  //   invertedFilters = removeValueFromArray(invertedFilters, "mrStatus");
+  // }
+
+  if(filters.status || filters.status == 0) {
     if(filters.status.length > 1) {
       status = filters.status.split(',')
     } else status = JSON.stringify(filters.status)
-  } else if(filters.status == 'all' || filters.status == undefined) {
-    invertedFilters = removeValueFromArray(invertedFilters, "tStatus");
   }
-  if(filters.reviewStatus != "all" &&  filters.reviewStatus != undefined) {
+
+  if(filters.reviewStatus || filters.reviewStatus == 0) {
     if(filters.reviewStatus.length > 1) {
       reviewStatus = filters.reviewStatus.split(',')
     } else reviewStatus = JSON.stringify(filters.reviewStatus)
-  } else if(filters.reviewStatus == 'all' || filters.reviewStatus == undefined) {
-    invertedFilters = removeValueFromArray(invertedFilters, "trStatus");
   }
-  // if(filters.priority && filters.priority != "all" &&  filters.priority != undefined){
-  //   console.log('filters.priority in .csv', filters.priority)
-  //   if(filters.priority.length > 1) {
-  //     priority = filters.priority.split(',')
-  //   } else priority = JSON.stringify(filters.priority)
-  // } else if(filters.priority == 'all' || filters.priority == undefined) {
-  //   invertedFilters = removeValueFromArray(invertedFilters, "priorities");
-  // }
 
   if(filters.priorities || filters.priorities == 0) {
     if(filters.priorities.length > 1) {
       priorities = filters.priorities.split(',')
     } else priorities = JSON.stringify(filters.priorities)
-  } 
+  }
 
-
-  if(filters.metaReviewStatus != "all" &&  filters.metaReviewStatus != undefined){
+  if(filters.metaReviewStatus || filters.metaReviewStatus == 0) {
     if(filters.metaReviewStatus.length > 1) {
       metaReviewStatus = filters.metaReviewStatus.split(',')
     } else metaReviewStatus = JSON.stringify(filters.metaReviewStatus)
-  } else if(filters.metaReviewStatus == 'all' || filters.metaReviewStatus == undefined) {
-    invertedFilters = removeValueFromArray(invertedFilters, "mrStatus");
   }
+
+  if(status.length === 8) invertedFilters = removeValueFromArray(invertedFilters, "tStatus")
+  if(reviewStatus.length === 9) invertedFilters = removeValueFromArray(invertedFilters, "trStatus")
+  if(priorities.length === 3) invertedFilters = removeValueFromArray(invertedFilters, "priorites")
+  if(metaReviewStatus.length === 6) invertedFilters = removeValueFromArray(invertedFilters, "mrStatus")
 
   //Holds the displayed column names and their order
   let displayedColumns = Object.keys(addedColumns).map(key => {
@@ -283,28 +299,10 @@ const buildQueryFilters = function (criteria, addedColumns, reviewContext) {
   displayedColumns = removeValueFromArray(displayedColumns, "View Comments");
   displayedColumns = removeValueFromArray(displayedColumns, "Tags");
 
-  // While the search param value for this filter can be either "priority" or "priorities", the task review
+  // While the URL search param value for this filter can be either "priority" or "priorities", the task review
   // API endpoint expects only "priority" to be used and despite its original intent as a single-value filter,
   // it accepts either a single value or a list (array), as implemented below:
   const priorityFilter = priorities.length > 1 ? `&priority=${_join(priorities, ",")}` : `&priority=${_join(priorities, ",")}` 
-
-  // console.log(`${taskId ? `taskId=${taskId}` : ""}` +
-  // `&reviewStatus=${_join(reviewStatus, ",")}`+
-  // `${reviewRequestedBy ? `&mapper=${reviewRequestedBy}` : ""}` +
-  // `${challengeId ? `&challengeId=${challengeId}` : ""}` +
-  // `${projectId ? `&projectIds=${projectId}` : ""}` +
-  // `${mappedOn ? `&mappedOn=${timestamp}` : ""}` +
-  // `${reviewedBy ? `&reviewedBy=${reviewedBy}` : ""}` +
-  // `${reviewedAt ? `&reviewedAt=${reviewedAt}` : ""}` +
-  // `${metaReviewedBy ? `&metaReviewedBy=${metaReviewedBy}` : ""}` +
-  // `&metaReviewStatus=${_join(metaReviewStatus, ",")}` +
-  // `&status=${_join(status, ",")}` +
-  // // `&priority=${_join(priority, ",")}` +
-  // priorityFilter +
-  // `${sortBy ? `&sortBy=${sortBy}` : ""}` +
-  // `${direction ? `&direction=${direction}` : ""}` +
-  // `${displayedColumns ? `&displayedColumns=${displayedColumns}` : ""}` +
-  // `&invertedFilters=${invertedFilters.join(",")}`)
 
   return (
     `${taskId ? `taskId=${taskId}` : ""}` +
@@ -318,7 +316,6 @@ const buildQueryFilters = function (criteria, addedColumns, reviewContext) {
     `${metaReviewedBy ? `&metaReviewedBy=${metaReviewedBy}` : ""}` +
     `&metaReviewStatus=${_join(metaReviewStatus, ",")}` +
     `&status=${_join(status, ",")}` +
-    // `&priority=${_join(priorities, ",")}&` +
     priorityFilter +
     `${sortBy ? `&sortBy=${sortBy}` : ""}` +
     `${direction ? `&direction=${direction}` : ""}` +
