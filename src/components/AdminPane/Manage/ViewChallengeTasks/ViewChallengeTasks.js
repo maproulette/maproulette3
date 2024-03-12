@@ -208,7 +208,7 @@ export class ViewChallengeTasks extends Component {
     }
 
     const clearFiltersControl = (
-      <button className="mr-flex mr-items-center mr-text-green-lighter"
+      <button className="mr-flex mr-items-center mr-text-green-lighter hover:mr-text-white mr-transition-color"
         onClick={() => {
           this.props.clearAllFilters()
           this.resetMapBounds()

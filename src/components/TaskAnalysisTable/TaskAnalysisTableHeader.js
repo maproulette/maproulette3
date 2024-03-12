@@ -99,7 +99,7 @@ export class TaskAnalysisTableHeader extends Component {
               <Dropdown className="mr-dropdown--right" key="filter-dropdown"
                 dropdownButton={dropdown => (
                   <button onClick={dropdown.toggleDropdownVisible}
-                    className="mr-text-green-lighter mr-mr-4">
+                    className="mr-text-green-lighter mr-mr-4 hover:mr-text-white mr-transition-colors">
                   <SvgSymbol
                     sym="filter-icon"
                     viewBox="0 0 20 20"
@@ -121,7 +121,7 @@ export class TaskAnalysisTableHeader extends Component {
               <Dropdown className="mr-dropdown--right" key="gear-dropdown"
                 dropdownButton={dropdown => (
                   <button onClick={dropdown.toggleDropdownVisible}
-                    className="mr-text-green-lighter">
+                    className="mr-text-green-lighter hover:mr-text-white mr-transition-colors">
                     <SvgSymbol sym="cog-icon"
                       viewBox="0 0 20 20"
                       className="mr-fill-current mr-w-5 mr-h-5" />
