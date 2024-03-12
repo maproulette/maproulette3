@@ -48,7 +48,7 @@ import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import { TaskAction } from '../../../services/Task/TaskAction/TaskAction'
 
-const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
+const VALID_STATUS_KEYS = [TaskAction.alreadyFixed, TaskAction.falsePositive, TaskAction.fixed, TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
 
 
 const descriptor = {
