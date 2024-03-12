@@ -46,6 +46,10 @@ import Dropdown from '../../Dropdown/Dropdown'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import { TaskAction } from '../../../services/Task/TaskAction/TaskAction'
+
+const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
+
 
 const descriptor = {
   widgetKey: 'TaskBundleWidget',
@@ -73,7 +77,11 @@ export default class TaskBundleWidget extends Component {
   }
 
   bundleTasks = () => {
-    if(_get(this.props, 'taskBundle.tasks.length', 0) > 0){
+    const notActive = this.props.taskReadOnly ||
+    (this.props.task?.reviewStatus === TaskReviewStatus.needed &&
+      (!(this.props.workspace.name === "taskReview") || this.props.task?.reviewClaimedBy !== this.props.user.id));
+
+    if(_get(this.props, 'taskBundle.tasks.length', 0) > 0 || notActive){
       return
     }
     
@@ -296,7 +304,7 @@ const calculateTasksInChallenge = props => {
     return _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
   }
 
-  return _sum(_values(_pick(actions)))
+  return _sum(_values(_pick(actions, VALID_STATUS_KEYS)))
 }
 
 const ActiveBundle = props => {
@@ -381,9 +389,9 @@ const ActiveBundle = props => {
             onClick={() => props.setBundledOnly(!props.bundledOnly)}
           >
             {props.bundledOnly ? (
-              <div>display all tasks in view</div>
+              <FormattedMessage {...messages.displayAllTasksLabel} />
             ) : (
-              <div>display only bundled tasks</div>
+              <FormattedMessage {...messages.displayBundledTasksLabel} />
             )}
           </button>
           <h3 className="mr-text-lg mr-text-center mr-text-pink-light">
@@ -481,9 +489,11 @@ const BuildBundle = props => {
       </div>
     )
   }
-
+  const notActive = props.taskReadOnly ||
+    (props.task?.reviewStatus === TaskReviewStatus.needed &&
+      (!(props.workspace.name === "taskReview") || props.task?.reviewClaimedBy !== props.user.id));
   const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
-  const bundleButton = props.selectedTaskCount(totalTaskCount) > 1 ? (
+  const bundleButton = props.selectedTaskCount(totalTaskCount) > 1 &&  !notActive ? (
       <button
         className="mr-button mr-button--green-lighter mr-button--small"
         onClick={props.bundleTasks}
@@ -514,12 +524,13 @@ const BuildBundle = props => {
       taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
       boundingBox={_get(props, 'criteria.boundingBox')}
       initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
+      onBulkTaskSelection={props.selectTasks}
       onBulkTaskDeselection={props.deselectTasks}
       allowClusterToggle={false}
       hideSearchControl
       allowSpidering
       showScaleControl
-      clearSelectedSelector
+      showSelectMarkersInView
       {..._omit(props, 'className')}
     />
 
@@ -528,7 +539,7 @@ const BuildBundle = props => {
       <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
         {props.loading ?
           <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
-          <MapPane>{map}</MapPane>
+          <MapPane showLasso>{map}</MapPane>
         }
       </div>
 
@@ -619,8 +630,8 @@ registerWidgetType(
             {
               includeLocked: false,
             },
-            false,
-            "bundleId"
+            true,
+            'taskBundleFilters'
           )
         )
       )

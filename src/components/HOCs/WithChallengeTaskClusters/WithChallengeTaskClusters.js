@@ -114,7 +114,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
             // (unless we are zoomed all the way in already)
             if (results.totalCount > UNCLUSTER_THRESHOLD &&
                 _get(this.props, 'criteria.zoom', 0) < MAX_ZOOM) {
-              this.props.fetchTaskClusters(challengeId, searchCriteria, 100, overrideDisable
+              this.props.fetchTaskClusters(challengeId, searchCriteria, 500, overrideDisable
               ).then(results => {
                 const clusters = results.clusters
                 if (currentFetchId >= this.state.fetchId) {
@@ -135,7 +135,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         })
       }
       else {
-        this.props.fetchTaskClusters(challengeId, searchCriteria, 100, overrideDisable
+        this.props.fetchTaskClusters(challengeId, searchCriteria, 500, overrideDisable
         ).then(results => {
           const clusters = results.clusters
           if (currentFetchId >= this.state.fetchId) {
@@ -200,7 +200,12 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
 
     onBulkTaskSelection = taskIds => {
       const tasks =
-        _filter(this.clustersAsTasks(), task => taskIds.indexOf(task.id) !== -1)
+        _filter(this.clustersAsTasks(), task => taskIds.indexOf(task.id) !== -1 &&  !(this.props.task &&
+        !(task.taskStatus === 0 || task.status === 0 || task.taskStatus === 3 || task.status === 3) &&
+        !this.props.taskBundle?.taskIds?.includes(task.id || task.taskId) &&
+        !this.props.initialBundle?.taskIds?.includes(task.id || task.taskId) &&
+        (task.id || task.taskId) ||
+        (task?.bundleId && task.bundleId !== this.props.taskBundle?.bundleId)))
       this.props.onBulkTaskSelection(tasks)
     }
 

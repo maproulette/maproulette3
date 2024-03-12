@@ -63,6 +63,31 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.controls.startBundling.label",
     defaultMessage: "Start Bundling Tasks",
   },
+  
+  displayAllTasksLabel: {
+    id: "Widgets.TaskBundleWidget.controls.displayAllTasks.label",
+    defaultMessage: "Display All Tasks In View",
+  },
+
+  displayBundledTasksLabel: {
+    id: "Widgets.TaskBundleWidget.controls.displayBundledTasks.label",
+    defaultMessage: "Display Only Bundled Tasks",
+  },
+
+  unableToSelect: {
+    id: "Widgets.TaskBundleWidget.unableToSelect",
+    defaultMessage: "Unable to select",
+  },
+  
+  cannotEditPrimaryTask: {
+    id: "Widgets.TaskBundleWidget.cannotEditPrimaryTask",
+    defaultMessage: "Cannot edit primary task",
+  },
+
+  removeFromBundle: {
+    id: "Widgets.TaskBundleWidget.removeFromBundle",
+    defaultMessage: "Remove from bundle",
+  },
 
   unbundleTasksLabel: {
     id: "Widgets.TaskBundleWidget.controls.stopBundling.label",

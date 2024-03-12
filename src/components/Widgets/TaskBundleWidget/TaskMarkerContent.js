@@ -76,7 +76,7 @@ class TaskMarkerContent extends Component {
                 />
               ) : !this.props.bundling && !this.props.marker.options.bundleId && this.props.marker.options.taskId === this.props.task.id ? (
                 <span className="mr-mr-1">✓</span>
-              ) : !this.props.bundling ? <span className="mr-mr-1">Unable to select</span> : null}
+              ) : !this.props.bundling ? <span className="mr-mr-1"><FormattedMessage {...messages.unableToSelect} /></span> : null}
 
               {!this.props.bundling && !this.props.marker.options.bundleId && (checkBoxEnabled || this.props.marker.options.taskId === this.props.task.id) && (
                 <span>
@@ -92,7 +92,7 @@ class TaskMarkerContent extends Component {
               {this.props.bundling ? (
                 <div>
                   {bundlePrimary?.id === taskId || (!bundlePrimary && taskId === this.props.task?.id) ? (
-                    <div>Cannot edit primary task</div>
+                    <FormattedMessage {...messages.cannotEditPrimaryTask} />
                   ) : this.props.bundling && bundle.includes(taskId) ? (
                     <button
                       disabled={notActive}
@@ -103,7 +103,7 @@ class TaskMarkerContent extends Component {
                         opacity: notActive ? 0.3 : 1,
                       }}
                     >
-                      Remove from Bundle
+                      <FormattedMessage {...messages.removeFromBundle} />
                     </button>
                   ) : null}
                 </div>
