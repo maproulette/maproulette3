@@ -175,7 +175,7 @@ export class TaskAnalysisTableHeader extends Component {
                               action="onClick"
                               skipConfirmation={e => e.target.value === ""}>
                               <button
-                                className="mr-text-current mr-pr-1 mr-text-green-lighter"
+                                className="mr-text-current mr-pr-1 mr-text-green-lighter hover:mr-text-white mr-transition-colors"
                                 onClick={() => this.props.removeReviewRequests(this.props.selectedTasks)}
                               >
                                 <FormattedMessage {...messages.changeReviewStatusLabel} />
@@ -192,7 +192,7 @@ export class TaskAnalysisTableHeader extends Component {
                               action="onClick"
                               skipConfirmation={e => e.target.value === ""}>
                               <button
-                                className="mr-text-current mr-pr-1 mr-text-green-lighter"
+                                className="mr-text-current mr-pr-1 mr-text-green-lighter hover:mr-text-white mr-transition-colors"
                                 onClick={() => this.props.removeMetaReviewRequests(this.props.selectedTasks)}
                               >
                                 <FormattedMessage {...messages.removeMetaReviewStatusLabel} />
@@ -203,7 +203,7 @@ export class TaskAnalysisTableHeader extends Component {
                       }
                       <li>
                         <button
-                          className="mr-text-green-lighter"
+                          className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
                           onClick={() => {
                             configureColumns()
                             dropdown.toggleDropdownVisible()  
@@ -232,7 +232,7 @@ export class TaskAnalysisTableHeader extends Component {
                               'criteria.filters.taskPropertySearch', {}))}
                           />
                           <div className="mr-flex">
-                            <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top mr-pb-2">
+                            <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top mr-pb-2 hover:mr-text-white mr-transition-colors">
                               <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                               <FormattedMessage {...messages.exportCSVLabel} />
                             </button>
@@ -254,7 +254,7 @@ export class TaskAnalysisTableHeader extends Component {
                             value={JSON.stringify(_get(this.props,
                               'criteria.filters.taskPropertySearch', {}))}
                           />
-                          <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top">
+                          <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top hover:mr-text-white mr-transition-colors">
                             <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                             <FormattedMessage {...messages.exportGeoJSONLabel} />
                           </button>
@@ -268,7 +268,7 @@ export class TaskAnalysisTableHeader extends Component {
                             value={JSON.stringify(_get(this.props,
                               'criteria.filters.taskPropertySearch', {}))}
                           />
-                          <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top">
+                          <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top hover:mr-text-white mr-transition-colors">
                             <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                             <FormattedMessage {...messages.exportOSMDataLabel} />
                           </button>

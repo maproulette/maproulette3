@@ -6,6 +6,9 @@ import { TaskStatus, isReviewableStatus }
 import { TaskPriority } from '../../../services/Task/TaskPriority/TaskPriority'
 import { FILTER_SEARCH_ALL } from './FilterSuggestTextBox'
 
+// Utilities to set filter state values for TasksReviewTable based on review context
+// (see ReviewTasksType for relevant contexts)
+
 export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
   for (let pair of searchParams.entries()) {
@@ -19,16 +22,6 @@ export const getFilterIds = (search, param) => {
 
   return [FILTER_SEARCH_ALL];
 }
-
-// export const formatURLSearchParamEntryPairs = (search, param) => {
-//   const searchParams = new URLSearchParams(search)
-//   for(let pair of searchParams.entries()) {
-//     if(pair[0] === param && pair[1]) {
-//       if(pair[1].length === 0) return []
-//       return pair[1].split(',').map(n => Number(n))
-//     }  
-//   }
-// }
 
 // Status filter Idx should all be selected by default if there aren't specific selections in the URL
 export const getTaskStatusFilterIds = (search, param) => {
