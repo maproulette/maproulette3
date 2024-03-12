@@ -39,14 +39,14 @@ export default class SavedFiltersList extends Component {
     return (
       <React.Fragment>
         <li>
-          <button className="mr-text-current"
+          <button className="mr-text-current hover:mr-text-white mr-transition-colors"
                   onClick={() => {this.props.saveFilters(); this.props.afterClick()}}>
             <FormattedMessage {...messages.saveFiltersLabel} />
           </button>
         </li>
         {listSearches.length > 0 &&
           <li>
-            <button className="mr-text-current"
+            <button className="mr-text-current hover:mr-text-white mr-transition-colors"
                     onClick={() => {this.props.manageFilters(); this.props.afterClick()}}>
               <FormattedMessage {...messages.manageFiltersLabel} />
             </button>

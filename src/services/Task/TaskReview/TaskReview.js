@@ -23,7 +23,6 @@ import { generateSearchParametersString, PARAMS_MAP } from '../../Search/Search'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
 import _join from "lodash/join";
-import { getInitialTaskStatusFiltersByContext } from '../../../pages/Review/taskStatusFiltersByReviewType'
 import { ensureUserLoggedIn } from '../../User/User'
 
 
@@ -172,7 +171,7 @@ const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTas
   return {...searchParameters, mappers, reviewers}
 }
 
-const buildQueryFilters = function (criteria, addedColumns, reviewContext) {
+const buildQueryFilters = function (criteria, addedColumns) {
   //Sort criteria filtering
   const sortCriteria =  _get(criteria, 'sortCriteria', {})
   const direction = sortCriteria.direction

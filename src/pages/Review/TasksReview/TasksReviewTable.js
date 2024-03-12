@@ -35,6 +35,7 @@ import ReactTable from 'react-table-6'
 import { getFilterIds, getTaskStatusFilterIds, getTaskReviewStatusFilterIds, 
   getTaskMetaReviewStatusFilterIds, getTaskPriorityFilterIds } from './taskReviewFilterUtils' 
 import { setupColumnTypes } from './TaskReviewTableDefaultColumnTypes'
+import { getInitialTaskStatusFiltersByContext } from '../taskStatusFiltersByReviewType'
 
 /**
  * TaskReviewTable displays tasks that need to be reviewed or have been reviewed
@@ -178,7 +179,12 @@ export class TaskReviewTable extends Component {
       newIds.push(filterItem.value)
     }
     newIds.sort((a, b) => a - b)
-    this.setState( {[category]: newIds})
+    this.setState({[category]: newIds})
+  }
+
+  clearTaskStatusFiltersByCategory = (filterCategory, filterStateCategory) => {
+    const initialStatusFilters = getInitialTaskStatusFiltersByContext(this.props.reviewTasksType)[filterCategory]
+    this.setState({[filterStateCategory]: initialStatusFilters})
   }
 
   componentWillUnmount() {
@@ -331,7 +337,7 @@ export class TaskReviewTable extends Component {
           <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
             <li>
               <button
-                className="mr-text-current"
+                className="mr-text-current hover:mr-text-white mr-transition-colors"
                 onClick={() => {
                   this.setState({showConfigureColumns: true}) 
                   dropdown.toggleDropdownVisible()}}
@@ -403,6 +409,7 @@ export class TaskReviewTable extends Component {
                             updateChallengeFilterIds: this.updateChallengeFilterIds,
                             updateProjectFilterIds: this.updateProjectFilterIds,
                             updateTaskStatusFiltersByCategory: this.updateTaskStatusFiltersByCategory,
+                            clearTaskStatusFiltersByCategory: this.clearTaskStatusFiltersByCategory,
                             challengeFilterIds: this.state.challengeFilterIds,
                             projectFilterIds: this.state.projectFilterIds,
                             taskStatusFilterIds: this.state.taskStatusFilterIds,

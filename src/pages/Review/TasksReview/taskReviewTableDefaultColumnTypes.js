@@ -10,7 +10,6 @@ import InTableTagFilter from '../../../components/KeywordAutosuggestInput/InTabl
 import messages from './Messages'
 import parse from 'date-fns/parse'
 import _map from 'lodash/map'
-
 import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _kebabCase from 'lodash/kebabCase'
@@ -23,7 +22,7 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
          messagesByMetaReviewStatus, isNeedsReviewStatus, isMetaReviewStatus, TaskMetaReviewStatusWithUnset }
       from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
-
+import { getInitialTaskStatusFiltersByContext } from '../taskStatusFiltersByReviewType'
 import AsColoredHashable from '../../../interactions/Hashable/AsColoredHashable'
 import { ViewCommentsButton, makeInvertable }
   from '../../../components/TaskAnalysisTable/TaskTableHelpers'
@@ -32,6 +31,7 @@ import { ViewCommentsButton, makeInvertable }
 // Formatted to return a "columns" object to allow column management and custom columns in the table component.
 
 export const setupColumnTypes = (props, openComments, data, criteria) => {
+  const initialTaskStatusFilters = getInitialTaskStatusFiltersByContext(props.reviewTasksType)
   const handleClick = (e, linkTo) => {
     e.preventDefault()
     props.history.push({
@@ -108,14 +108,29 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       })
 
       return (
-        <TaskFilterMultiSelectDropdown 
-          itemList={items}
-          filterState={props.taskStatusFilterIds}
-          onChange={item => {
-            onChange(item)
-            setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskStatusFilterIds"), 0)
-          }}   
-        />
+      <div className='mr-space-x-1 mr-flex'>
+        <div className='mr-w-full mr-flex-shrink-0'>
+          <TaskFilterMultiSelectDropdown 
+            itemList={items}
+            filterState={props.taskStatusFilterIds}
+            onChange={item => {
+              onChange(item)
+              setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskStatusFilterIds"), 0)
+            }}   
+          />
+        </div>
+        {props.taskStatusFilterIds.length < initialTaskStatusFilters.status.length && (
+          <button 
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => {
+                onChange(initialTaskStatusFilters.status.join(','))
+                setTimeout(() => props.clearTaskStatusFiltersByCategory("status", "taskStatusFilterIds"), 0)
+              }}
+            >
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+          </button> 
+        )}
+      </div>
       )
     },
   }
@@ -149,14 +164,29 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       })
 
       return (
-        <TaskFilterMultiSelectDropdown 
-          itemList={items}
-          filterState={props.taskPriorityFilterIds}
-          onChange={item => {
-            onChange(null)
-            setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskPriorityFilterIds"), 0)
-          }}   
-        />
+        <div className='mr-space-x-1 mr-flex'>
+          <div className='mr-w-full mr-flex-shrink-0'>
+            <TaskFilterMultiSelectDropdown 
+              itemList={items}
+              filterState={props.taskPriorityFilterIds}
+              onChange={item => {
+                onChange(null)
+                setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskPriorityFilterIds"), 0)
+              }}   
+            />
+          </div>
+          {props.taskPriorityFilterIds.length < initialTaskStatusFilters.priorities.length && (
+            <button 
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => {
+                  onChange(null)
+                  setTimeout(() => props.clearTaskStatusFiltersByCategory("priorities", "taskPriorityFilterIds"), 0)
+                }}
+              >
+                <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          )}
+        </div>
       )
     },
   }
@@ -515,14 +545,29 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       }
 
       return (
-        <TaskFilterMultiSelectDropdown 
-          itemList={items}
-          filterState={props.taskReviewStatusFilterIds}
-          onChange={item => {
-            onChange(item)
-            setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskReviewStatusFilterIds"), 0)
-          }}   
-        />
+        <div className='mr-space-x-1 mr-flex'>
+          <div className='mr-w-full mr-flex-shrink-0'>
+            <TaskFilterMultiSelectDropdown 
+              itemList={items}
+              filterState={props.taskReviewStatusFilterIds}
+              onChange={item => {
+                onChange(item)
+                setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskReviewStatusFilterIds"), 0)
+              }}   
+            />
+          </div>
+          {props.taskReviewStatusFilterIds.length < initialTaskStatusFilters.reviewStatus.length && (
+            <button 
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => {
+                onChange(initialTaskStatusFilters.reviewStatus.join(','))
+                setTimeout(() => props.clearTaskStatusFiltersByCategory("reviewStatus", "taskReviewStatusFilterIds"), 0)
+              }}
+            >
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          )}
+        </div>
       )
     },
   }
@@ -572,14 +617,29 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       }
 
       return (
-        <TaskFilterMultiSelectDropdown 
-          itemList={items}
-          filterState={props.taskMetaReviewStatusFilterIds}
-          onChange={item => {
-            onChange(item)
-            setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskMetaReviewStatusFilterIds"), 0)
-          }}   
-        />
+        <div className='mr-space-x-1 mr-flex'>
+          <div className='mr-w-full mr-flex-shrink-0'>
+            <TaskFilterMultiSelectDropdown 
+              itemList={items}
+              filterState={props.taskMetaReviewStatusFilterIds}
+              onChange={item => {
+                onChange(item)
+                setTimeout(() => props.updateTaskStatusFiltersByCategory(item, "taskMetaReviewStatusFilterIds"), 0)
+              }}   
+            />
+          </div>
+          {props.taskMetaReviewStatusFilterIds.length < initialTaskStatusFilters.metaReviewStatus.length && (
+            <button 
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => {
+                onChange(initialTaskStatusFilters.metaReviewStatus.join(','))
+                setTimeout(() => props.clearTaskStatusFiltersByCategory("metaReviewStatus", "taskMetaReviewStatusFilterIds"), 0)
+              }}
+            >
+              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            </button>
+          )}
+        </div>
       )
     },
   }
