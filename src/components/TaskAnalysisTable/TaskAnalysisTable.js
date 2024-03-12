@@ -309,14 +309,14 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Cell: ({ value, original }) => {
       const enableSelecting =
         (!props.bundling &&
-          original.taskId !== props.task.id &&
+          original.taskId !== props.task?.id &&
           !(props.workspace.name === 'taskReview') &&
           (original.status === 0 || original.status === 3 ||
             original.taskStatus === 0 || original.taskStatus === 3)) &&
         !AsCooperativeWork(props.task).isTagType() && !props.taskReadOnly
 
       return (
-        props.highlightPrimaryTask && original.id === props.task.id && !original.bundleId ?
+        props.highlightPrimaryTask && original.id === props.task?.id && !original.bundleId ?
           <span className="mr-text-green-lighter">✓</span> :
           enableSelecting ?
             <input
@@ -344,7 +344,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     id: 'id',
     Header: props.intl.formatMessage(messages.idLabel),
     accessor: t => {
-      if (t.isBundlePrimary && t.id === props.task.id) {
+      if (t.isBundlePrimary && t.id === props.task?.id) {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
