@@ -698,7 +698,7 @@ export class TaskClusterMap extends Component {
     else if (this.props.initialBounds) {
       this.currentBounds = this.props.initialBounds
     }
-
+    const currentCenterpoint = AsMappableTask(this.props.task).calculateCenterPoint()
     let selectionKit = this.props.hideLasso === true ? null : (
       <>
         {this.props.showSelectMarkersInView && (
@@ -737,7 +737,7 @@ export class TaskClusterMap extends Component {
       <EnhancedMap
         ref={this.mapRef}
         className="mr-z-0"
-        center={latLng(0, 0)}
+        center={currentCenterpoint}
         zoom={this.currentZoom} minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM}
         setInitialBounds={false}
         initialBounds = {this.currentBounds}
