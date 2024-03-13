@@ -70,15 +70,14 @@ const CandidateProjectList = function(props) {
     }
 
     let index = 0
-    if (searchQuery) {
+    if (searchQuery && project.displayName) {
       const displayNameLower = project.displayName.toLowerCase()
       const searchQueryLower = searchQuery.toLowerCase()
       if (displayNameLower.startsWith(searchQueryLower)) {
         index = 3
       } else if (displayNameLower.includes(searchQueryLower)) {
         index = 2
-      }
-       else {
+      } else {
         const similarity = levenshtein(searchQueryLower, displayNameLower)
         if (similarity > 0 && similarity < 4) {
           index = 1 
