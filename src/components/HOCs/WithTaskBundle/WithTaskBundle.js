@@ -103,6 +103,8 @@ export function WithTaskBundle(WrappedComponent) {
 
     setupBundle = bundleId => {
       const notActive = this.props.taskReadOnly ||
+      (!this.props.task?.reviewStatus && !(this.props.task?.reviewStatus === 0) && 
+      !(this.props.task?.status  === 0 || this.props.task?.status  === 3)) ||
       (this.props.task?.reviewStatus === TaskReviewStatus.needed && !(this.props.workspace?.name === "taskReview") ||
       (this.props.task?.reviewStatus === TaskReviewStatus.needed && this.props.task?.reviewClaimedBy !== this.props.user?.id))
 

@@ -78,8 +78,10 @@ export default class TaskBundleWidget extends Component {
 
   bundleTasks = () => {
     const notActive = this.props.taskReadOnly ||
+    (!this.props.task?.reviewStatus && !(this.props.task?.reviewStatus === 0) && 
+    !(this.props.task?.status === 0 || this.props.task?.status  === 3)) ||
     (this.props.task?.reviewStatus === TaskReviewStatus.needed &&
-      (!(this.props.workspace.name === "taskReview") || this.props.task?.reviewClaimedBy !== this.props.user.id));
+    (!(this.props.workspace.name === "taskReview") || this.props.task?.reviewClaimedBy !== this.props.user.id));
 
     if(_get(this.props, 'taskBundle.tasks.length', 0) > 0 || notActive){
       return
@@ -490,8 +492,11 @@ const BuildBundle = props => {
     )
   }
   const notActive = props.taskReadOnly ||
+    (!props.task?.reviewStatus && !(props.task?.reviewStatus === 0) && 
+    !(props.task?.status  === 0 || props.task?.status  === 3)) ||
     (props.task?.reviewStatus === TaskReviewStatus.needed &&
-      (!(props.workspace.name === "taskReview") || props.task?.reviewClaimedBy !== props.user.id));
+    (!(props.workspace.name === "taskReview") || props.task?.reviewClaimedBy !== props.user.id));
+
   const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
   const bundleButton = props.selectedTaskCount(totalTaskCount) > 1 &&  !notActive ? (
       <button

@@ -29,9 +29,10 @@ class TaskMarkerContent extends Component {
 
     const notActive =
       this.props.taskReadOnly ||
+      (!this.props.task?.reviewStatus && !(this.props.task?.reviewStatus === 0) && 
+      !(this.props.task?.status  === 0 || this.props.task?.status  === 3)) ||
       (this.props.task?.reviewStatus === TaskReviewStatus.needed &&
-        (!(this.props.workspace.name === "taskReview") ||
-          this.props.task?.reviewClaimedBy !== this.props.user.id))
+      (!(this.props.workspace.name === "taskReview") || this.props.task?.reviewClaimedBy !== this.props.user.id))
 
     const statusMessage = messagesByStatus[
       _isFinite(this.props.marker.options.taskStatus)
