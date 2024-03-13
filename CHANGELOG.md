@@ -8,7 +8,7 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [v3.14.13] - 2023-3-12
-Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
+Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
 
 ## What's Changed
 * Fix map jumping bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2286
