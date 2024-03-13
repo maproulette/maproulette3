@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { ZoomControl, ScaleControl, Marker, LayerGroup, Rectangle, Polyline, Pane, Tooltip }
        from 'react-leaflet'
-import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
 import bboxPolygon from '@turf/bbox-polygon'
 import distance from '@turf/distance'
