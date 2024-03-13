@@ -7,11 +7,17 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.14.13] - 2023-3-23
-Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
+## [v3.14.13] - 2023-3-12
+Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
 
 ## What's Changed
-* TBD
+* Fix map jumping bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2286
+* Add better project picker modal filtering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2279
+* Resolve some "missing id" related errors by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2281
+* Make user setting save indicators more noticable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2280
+* Fix duplicate pane name errors from task completion modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2282
+* Add view challenge button in task read only modes completion widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2290
+* Convert "flag challenge" related text to "report challenge" by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2283
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.12...v3.14.13
 
