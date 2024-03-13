@@ -401,11 +401,11 @@ const ActiveBundle = props => {
             />
           </h3>
           <button
-            disabled={notActive}
+            disabled={(notActive || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length))}
             className="mr-button mr-button--green-lighter mr-button--small"
             style={{
-              cursor: notActive ? 'default' : 'pointer',
-              opacity: notActive ? 0.3 : 1
+              cursor: (notActive || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 'default' : 'pointer',
+              opacity:(notActive || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 0.3 : 1
             }}
             onClick={() => props.unbundleTasks()}
           >
