@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { ZoomControl, ScaleControl, Marker, LayerGroup, Rectangle, Polyline, Pane, Tooltip }
        from 'react-leaflet'
-import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
 import bboxPolygon from '@turf/bbox-polygon'
 import distance from '@turf/distance'
@@ -698,7 +697,7 @@ export class TaskClusterMap extends Component {
     else if (this.props.initialBounds) {
       this.currentBounds = this.props.initialBounds
     }
-
+    const currentCenterpoint = AsMappableTask(this.props.task).calculateCenterPoint()
     let selectionKit = this.props.hideLasso === true ? null : (
       <>
         {this.props.showSelectMarkersInView && (
@@ -737,7 +736,7 @@ export class TaskClusterMap extends Component {
       <EnhancedMap
         ref={this.mapRef}
         className="mr-z-0"
-        center={latLng(0, 0)}
+        center={currentCenterpoint}
         zoom={this.currentZoom} minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM}
         setInitialBounds={false}
         initialBounds = {this.currentBounds}
