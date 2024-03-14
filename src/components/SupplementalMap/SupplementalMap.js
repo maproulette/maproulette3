@@ -86,6 +86,7 @@ const SupplementalMap = props => {
         maxZoom={maxZoom}
         worldCopyJump={true}
         overlayOrder={overlayOrder}
+        intl={props.intl}
       >
         <ZoomControl position='topright' />
         <SourcedTileLayer maxZoom={maxZoom} {...props} />
