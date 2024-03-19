@@ -84,7 +84,9 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
     setSharedFilterUserAppSetting = (filterString) => {
       const settings = this.props.getUserAppSetting(this.props.user, "sharedWorkspaceFilters") || {}
       settings["useSharedWorkspaceFilters"] = !settings["useSharedWorkspaceFilters"] || false
-      settings["sharedWorkspaceFilterString"] = filterString
+      if(settings.useSharedWorkspaceFilters) {
+        settings["sharedWorkspaceFilterString"] = filterString
+      }
       this.props.updateUserAppSetting(this.props.user.id, {["sharedWorkspaceFilters"]: settings})
     }
 

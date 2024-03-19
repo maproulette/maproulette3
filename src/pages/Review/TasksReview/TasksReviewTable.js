@@ -30,7 +30,7 @@ import messages from './Messages'
 import WithSavedFilters from '../../../components/HOCs/WithSavedFilters/WithSavedFilters'
 import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
-import SharedFiltersModal from '../../../components/SavedFilters/SharedFiltersModal'
+import SharedFiltersModal from '../../../components/SavedFilters/SharedFiltersModal/SharedFiltersModal'
 import MapPane from '../../../components/EnhancedMap/MapPane/MapPane'
 import ReactTable from 'react-table-6'
 import { getFilterIds, getTaskStatusFilterIds, getTaskReviewStatusFilterIds, 

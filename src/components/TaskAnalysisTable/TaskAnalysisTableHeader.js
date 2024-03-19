@@ -16,7 +16,7 @@ import PagePicker from '../PagePicker/PagePicker'
 import WithSavedFilters from '../HOCs/WithSavedFilters/WithSavedFilters'
 import SavedFiltersList from '../SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../SavedFilters/ManageSavedFilters'
-import SharedFiltersModal from '../SavedFilters/SharedFiltersModal'
+import SharedFiltersModal from '../SavedFilters/SharedFiltersModal/SharedFiltersModal'
 import { TaskStatus, statusLabels } from '../../services/Task/TaskStatus/TaskStatus'
 import { buildLinkToMapperExportCSV,
          buildLinkToReviewerMetaExportCSV,
