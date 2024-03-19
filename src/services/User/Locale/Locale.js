@@ -26,6 +26,7 @@ export const unsortedLocale = {
   uk: "uk",
   vi: "vi",
   tr: "tr",
+  sr: "sr",
   pl: "pl",
   "zh-TW": "zh-TW"
 };
@@ -119,6 +120,11 @@ const LocaleImports = {
     Promise.all([
       import("../../../lang/tr.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/tr"),
+    ]),
+  [Locale.sr]: () =>
+    Promise.all([
+      import("../../../lang/sr.json"),
+      import("@formatjs/intl-relativetimeformat/locale-data/sr"),
     ]),
   [Locale.pl]: () =>
     Promise.all([

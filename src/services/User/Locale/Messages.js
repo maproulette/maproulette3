@@ -68,6 +68,10 @@ export default defineMessages({
     id: "Locale.tr.label",
     defaultMessage: "tr (Turkish)",
   },
+  sr: {
+    id: "Locale.sr.label",
+    defaultMessage: "sr (Српски)",
+  },
   pl: {
     id: "Locale.pl.label",
     defaultMessage: "pl (Polish)",
