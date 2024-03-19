@@ -90,8 +90,3 @@ jest.mock('@nivo/bar', () => ({
   __esModule: true,
   ResponsiveBar: () => null
 }));
-
-jest.mock('../node_modules/RapiD/dist/rapid.legacy.min.js', () => ({
-  __esModule: true,
-  default: {}
-}));

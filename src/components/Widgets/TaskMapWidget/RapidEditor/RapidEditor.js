@@ -1,130 +1,201 @@
+//credit https://github.com/hotosm/tasking-manager/blob/develop/frontend/src/components/rapidEditor.js for implementation guidance
+
 import React, { useEffect, useState } from 'react';
 import _get from 'lodash/get'
-import * as RapiD from '../../../../../node_modules/RapiD/dist/rapid.legacy.min.js';
-import '../../../../../node_modules/RapiD/dist/rapid.css';
 import { UseRouter } from '../../../../hooks/UseRouter/UseRouter.js';
 import { constructRapidURI } from '../../../../services/Editor/Editor.js';
 import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement.js';
 import AsMappableTask from '../../../../interactions/Task/AsMappableTask.js';
 import WithSearch from '../../../HOCs/WithSearch/WithSearch.js';
 import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/ChallengeZoom.js';
+import { useDispatch, useSelector } from 'react-redux';
+import rapidPackage from '@rapideditor/rapid/package.json';
+
+const { version: rapidVersion, name: rapidName } = rapidPackage;
+const baseCdnUrl = `https://cdn.jsdelivr.net/npm/${rapidName}@~${rapidVersion}/dist/`;
+
+/**
+ * Resize rapid
+ * @param {Context} rapidContext The rapid context to resize
+ * @type {import('@rapideditor/rapid').Context} Context
+ */
+function resizeRapid(rapidContext) {
+  // Get rid of black bars when toggling the TM sidebar
+  const uiSystem = rapidContext?.systems?.ui;
+  if (uiSystem?.started) {
+    uiSystem.resize();
+  }
+}
+
+/**
+ * Check if there are changes
+ * @param changes The changes to check
+ * @returns {boolean} {@code true} if there are changes
+ */
+function thereAreChanges(changes) {
+  return changes.modified.length || changes.created.length || changes.deleted.length;
+}
+
+/**
+ * Update the disable state for the sidebar map actions
+ * @param {function(boolean)} setDisable
+ * @param {EditSystem} editSystem The edit system
+ * @type {import('@rapideditor/rapid/modules').EditSystem} EditSystem
+ */
+function updateDisableState(setDisable, editSystem) {
+  if (thereAreChanges(editSystem.changes())) {
+    setDisable(true);
+  } else {
+    setDisable(false);
+  }
+}
 
 const RapidEditor = ({
-  comment,
-  imagery,
-  powerUser = false,
-  presets,
   setDisable,
   locale,
   token,
+  task,
   mapBounds,
-  task
+  comment
 }) => {
-  const [customImageryIsSet, setCustomImageryIsSet] = useState(false);
-  const [RapiDContext, setRapiDContext] = useState(null);
-  const customSource =
-    RapiDContext && RapiDContext.background() && RapiDContext.background().findSource('custom');
   const router = UseRouter()
-
+  const dispatch = useDispatch();
+  const [rapidLoaded, setRapidLoaded] = useState(window.Rapid !== undefined);
+  const { context, dom } = useSelector((state) => state.rapidEditor.rapidContext);
+  const windowInit = typeof window !== 'undefined';
 
   useEffect(() => {
-    if (!customImageryIsSet && imagery && customSource) {
-      if (imagery.startsWith('http')) {
-        RapiDContext.background().baseLayerSource(customSource.template(imagery));
-        setCustomImageryIsSet(true);
-        // this line is needed to update the value on the custom background dialog
-        window.iD.prefs('background-custom-template', imagery);
+    if (!rapidLoaded && !context) {
+      // Add the style element
+      const style = document.createElement('link');
+      style.setAttribute('type', 'text/css');
+      style.setAttribute('rel', 'stylesheet');
+      style.setAttribute('href', baseCdnUrl + 'rapid.css');
+      document.head.appendChild(style);
+      // Now add the editor
+      const script = document.createElement('script');
+      script.src = baseCdnUrl + 'rapid.js';
+      script.async = true;
+      script.onload = () => setRapidLoaded(true);
+      document.body.appendChild(script);
+    } else if (context && !rapidLoaded) {
+      setRapidLoaded(true);
+    }
+  }, [rapidLoaded, setRapidLoaded, context]);
+
+  useEffect(() => {
+    return () => {
+      dispatch({ type: 'SET_VISIBILITY', isVisible: true });
+    };
+  });
+
+  useEffect(() => {
+    if (windowInit && context === null && rapidLoaded) {
+      /* This is used to avoid needing to re-initialize Rapid on every page load -- this can lead to jerky movements in the UI */
+      const dom = document.createElement('div');
+      dom.className = 'w-100 vh-minus-69-ns';
+      dom.style = { height: "100%" }
+      // we need to keep Rapid context on redux store because Rapid works better if
+      // the context is not restarted while running in the same browser session
+      // Unfortunately, we need to recreate the context every time we recreate the rapid-container dom node.
+      const context = new window.Rapid.Context();
+      context.embed(true);
+      context.containerNode = dom;
+      context.assetPath = baseCdnUrl;
+      context.apiConnections = [
+        {
+          url: process.env.REACT_APP_OSM_SERVER,
+          apiUrl: 'https://api.openstreetmap.org',
+          access_token: token,
+        },
+      ];
+      dispatch({ type: 'SET_RAPIDEDITOR', context: { context, dom } });
+    }
+  }, [windowInit, rapidLoaded, context, dispatch]);
+
+  useEffect(() => {
+    if (context) {
+      context.locale = locale;
+    }
+  }, [context, locale]);
+
+  useEffect(() => {
+    resizeRapid(context);
+    return () => resizeRapid(context);
+  }, [context]);
+
+  useEffect(() => {
+    const containerRoot = document.getElementById('rapid-container-root');
+    const editListener = () => updateDisableState(setDisable, context.systems.edits);
+    if (context && dom) {
+
+      containerRoot.appendChild(dom);
+      let promise;
+      if (context?.systems?.ui !== undefined) {
+        resizeRapid(context);
+        promise = Promise.resolve();
       } else {
-        const imagerySource = RapiDContext.background().findSource(imagery);
-        if (imagerySource) {
-          RapiDContext.background().baseLayerSource(imagerySource);
-        }
+        promise = context.initAsync();
       }
+
+      promise.then(() => {
+        const editSystem = context.systems.editor;
+
+        editSystem.on('change', editListener);
+        editSystem.on('reset', editListener);
+      });
     }
-  }, [customImageryIsSet, imagery, RapiDContext, customSource]);
+    return () => {
+      if (containerRoot?.childNodes && dom in containerRoot.childNodes) {
+        document.getElementById('rapid-container-root')?.removeChild(dom);
+      }
+      if (context?.systems?.edits) {
+        const editSystem = context.systems.edits;
+        editSystem.off('change', editListener);
+        editSystem.off('reset', editListener);
+      }
+    };
+  }, [dom, context, setDisable]);
 
   useEffect(() => {
-    if (RapiDContext === null) {
-      setRapiDContext(window.iD.coreContext())
-    }
-  }, [RapiDContext]);
-
-  useEffect(() => {
-    const asMappableTask = task ? AsMappableTask(task) : null
-    if (RapiDContext && comment) {
-      if(asMappableTask) {
-        const taskFeatureProperties = asMappableTask.allFeatureProperties()
-        if(taskFeatureProperties && Object.keys(taskFeatureProperties).length) {
-          const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
-          RapiDContext.defaultChangesetComment(replacedComment);
-        } else {
-          RapiDContext.defaultChangesetComment(comment);
-        } 
-      } else {
-        RapiDContext.defaultChangesetComment(comment);
-      } 
-    }
-  }, [comment, RapiDContext, AsMappableTask, task]);
-
-  useEffect(() => {
-    if (token && locale && RapiD && RapiDContext && task?.id) {
+    if (context && task?.id) {
       if (mapBounds && task?.id) {
         if (!mapBounds.zoom) {
           mapBounds.zoom = _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
         }
-        const rapidUrl = constructRapidURI(task, mapBounds, {})
+
+        let replacedComment = comment
+
+        const asMappableTask = task ? AsMappableTask(task) : null
+        if (context && comment) {
+          if(asMappableTask) {
+            const taskFeatureProperties = asMappableTask.allFeatureProperties()
+            if(taskFeatureProperties && Object.keys(taskFeatureProperties).length) {
+              replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
+            } 
+          }
+        }
+
+        const rapidUrl = constructRapidURI(task, mapBounds, {}, replacedComment)
         const rapidParams = rapidUrl.split('#')[1]
         const updatedSearch = window.location.search.split('#')[0] + '#' + rapidParams
         router.replace({ search: updatedSearch })
       }
+    }
+  }, [task?.id, context]);
 
-      // if presets is not a populated list we need to set it as null
-      try {
-        if (presets.length) {
-          window.iD.presetManager.addablePresetIDs(presets);
-        } else {
-          window.iD.presetManager.addablePresetIDs(null);
-        }
-      } catch (e) {
-        window.iD.presetManager.addablePresetIDs(null);
-      }
-
-      // setup the context
-      RapiDContext.embed(true)
-        .assetPath('/static/rapid/')
-        .locale(locale)
-        .containerNode(document.getElementById('rapid-container'));
-      // init the ui or restart if it was loaded previously
-      if (RapiDContext.ui() !== undefined) {
-        RapiDContext.reset();
-        RapiDContext.ui().restart();
-      } else {
-        RapiDContext.init();
-      }
-
-      RapiDContext.rapidContext().showPowerUser = powerUser;
-
-      let osm = RapiDContext.connection();
-      const auth = {
+  useEffect(() => {
+    if (context && token) {
+      context.preauth = {
         url: process.env.REACT_APP_OSM_SERVER,
+        apiUrl: 'https://api.openstreetmap.org',
         access_token: token,
       };
-      osm.switch(auth);
-
-      const thereAreChanges = (changes) =>
-        changes.modified.length || changes.created.length || changes.deleted.length;
-
-      RapiDContext.history().on('change', () => {
-        if (thereAreChanges(RapiDContext.history().changes())) {
-          setDisable(true);
-        } else {
-          setDisable(false);
-        }
-      });
+      context.apiConnections = [context.preauth];
     }
-  }, [RapiDContext, task?.id]);
+  }, [context, token]);
 
-  return <div className="w-100 vh-minus-69-ns" id="rapid-container"></div>;
+  return <div className="w-100" style={{ height: "100%" }} id="rapid-container-root"></div>;
 }
 
-export default WithSearch(RapidEditor)
+export default WithSearch(RapidEditor);
