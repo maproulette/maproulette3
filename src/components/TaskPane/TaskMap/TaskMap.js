@@ -620,6 +620,7 @@ export class TaskMap extends Component {
           conditionalStyles={_get(this.props, 'challenge.taskStyles')}
           externalInteractive
           overlayOrder={overlayOrder}
+          intl={this.props.intl}
         >
           <ZoomControl position='topright' />
           <FitBoundsControl />

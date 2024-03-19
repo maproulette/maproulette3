@@ -88,6 +88,7 @@ export const ActivityMap = props => {
         zoomControl={false} animate={true} worldCopyJump={true}
         justFitFeatures
         noAttributionPrefix={props.noAttributionPrefix}
+        intl={props.intl}
       >
         <ZoomControl position='topright' />
         <VisibleTileLayer {...props} zIndex={1} noWrap bounds={toLatLngBounds(GLOBAL_MAPBOUNDS)} />

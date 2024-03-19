@@ -746,6 +746,7 @@ export class TaskClusterMap extends Component {
         taskMarkers={this.props.taskMarkers}
         onClick={() => this.unspider()}
         onZoomOrMoveStart={this.debouncedUpdateBounds.cancel}
+        intl={this.props.intl}
       >
         <ZoomControl className="mr-z-10" position='topright' />
         {this.props.showScaleControl && <ScaleControl className="mr-z-10" position='bottomleft'/>}

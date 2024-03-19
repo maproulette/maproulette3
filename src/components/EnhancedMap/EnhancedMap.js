@@ -8,6 +8,7 @@ import bboxPolygon from '@turf/bbox-polygon'
 import booleanDisjoint from '@turf/boolean-disjoint'
 import booleanContains from '@turf/boolean-contains'
 import _get from 'lodash/get'
+import _omit from 'lodash/omit'
 import _each from 'lodash/each'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
@@ -19,9 +20,11 @@ import _reduce from 'lodash/reduce'
 import _find from 'lodash/find'
 import _size from 'lodash/size'
 import _noop from  'lodash/noop'
+import { IntlProvider } from 'react-intl'
 import AsIdentifiableFeature
        from '../../interactions/TaskFeature/AsIdentifiableFeature'
 import messages from './Messages'
+import PropertyList from './PropertyList/PropertyList'
 
 const PIXEL_MARGIN = 10 // number of pixels on each side of a click to consider
 
@@ -359,19 +362,18 @@ export class EnhancedMap extends ReactLeafletMap {
         <ol>
           {layers.map(([description, layerInfo]) => {
             return (
-              <li key={description} className="mr-my-4">
-                <a
-                  onClick={() => layerInfo.layer.fire('mr-external-interaction', {
-                    map: this.leafletElement,
-                    latlng: latlng,
-                    onBack: () => this.popupLayerSelectionList(layers, latlng),
-                  })}
-                  onMouseEnter={() => layerInfo.layer.fire("mr-external-interaction:start-preview")}
-                  onMouseLeave={() => layerInfo.layer.fire("mr-external-interaction:end-preview")}
+                <IntlProvider
+                              key={this.props.intl.locale} 
+                              locale={this.props.intl.locale} 
+                              messages={this.props.intl.messages}
+                              textComponent="span" 
                 >
-                  {layerInfo.label || description}
-                </a>
-              </li>
+                  <PropertyList
+                    header={description}
+                    featureProperties={_omit(layerInfo?.geometry?.properties, ['id', 'type'])}
+                    onBack={() => this.popupLayerSelectionList(layers, latlng)}
+                  />
+                </IntlProvider>
             )
           })}
         </ol>
