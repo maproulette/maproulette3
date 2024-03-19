@@ -27,7 +27,8 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
   return class extends Component {
     state = {
       savingFilters: false,
-      managingFilters: false
+      managingFilters: false,
+      managingSharedFilterSettings: false
     }
 
     /**
@@ -76,6 +77,10 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
         {[appSettingName]: settings})
     }
 
+    toggleSharedFilterSettingsModal = () => {
+      this.setState({sharedFiltersSettingsModalOpen: true})
+    }
+
     // This will turn an integer or array value into
     // the appropriate messages.
     // ie. [0, 1] -> "high, medium" or [1, 2] -> "approved, rejected"
@@ -100,7 +105,6 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
 
     getBriefFilters = savedFilters => {
       const criteria = buildSearchCriteriafromURL(savedFilters)
-
       return _compact(_map(criteria.filters, (value, key) => {
         let op = '='
         let textValue = value
@@ -122,6 +126,9 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
         if (key === "metaReviewStatus") {
           textValue = this.makeBrief(value, TaskMetaReviewStatusWithUnset, messagesByMetaReviewStatus)
         }
+        if (key === "taskPropertySearch") {
+          console.log('taskproperty in getBriefFilters', criteria.filters[key])
+        }
         return textValue ? `${key}${op}${textValue}` : null
       }))
     }
@@ -134,8 +141,11 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
                                renameSavedFilters={this.renameSavedFilters}
                                manageFilters={() => this.setState({managingFilters: true})}
                                saveFilters={() => this.setState({savingFilters: true})}
+                               manageSharedFilterSettings={() => this.setState({managingSharedFilterSettings: true})}
                                managingFilters={this.state.managingFilters}
                                savingFilters={this.state.savingFilters}
+                               managingSharedFilterSettings={this.state.managingSharedFilterSettings}
+                               cancelManagingSharedFilterSettings={() => this.setState({managingSharedFilterSettings: false})}
                                cancelSavingFilters={() =>
                                  this.setState({savingFilters: false})
                                }

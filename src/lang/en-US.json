@@ -1383,6 +1383,7 @@
   "SavedFilters.controls.edit.label": "edit",
   "SavedFilters.controls.manageFilters.label": "Manage saved filters",
   "SavedFilters.controls.saveFilters.label": "Save current filters",
+  "SavedFilters.controls.sharedFilters.label": "Shared Filters",
   "SavedFilters.noSavedFilters.": "No Saved Filters",
   "SavedFilters.placeholder.label": "Name your saved filters",
   "SavedFilters.savedFilters.title": "Saved Filters",

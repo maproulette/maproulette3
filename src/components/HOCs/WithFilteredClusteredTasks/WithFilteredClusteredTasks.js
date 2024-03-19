@@ -76,8 +76,6 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
           this.state.includeStatuses,
           {[status]: !this.state.includeStatuses[status]}
         )
-      
-      console.log(includeStatuses)
 
       const filteredTasks = this.filterTasks(includeStatuses,
                                              this.state.includeReviewStatuses,

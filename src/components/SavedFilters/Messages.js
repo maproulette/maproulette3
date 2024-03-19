@@ -34,6 +34,11 @@ export default defineMessages({
     defaultMessage: "Manage saved filters"
   },
 
+  sharedFiltersLabel: {
+    id: "SavedFilters.controls.sharedFilters.label",
+    defaultMessage: "Shared Filters"
+  },
+
   savedFiltersTitle: {
     id: "SavedFilters.savedFilters.title",
     defaultMessage: "Saved Filters"

@@ -16,6 +16,7 @@ import PagePicker from '../PagePicker/PagePicker'
 import WithSavedFilters from '../HOCs/WithSavedFilters/WithSavedFilters'
 import SavedFiltersList from '../SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../SavedFilters/ManageSavedFilters'
+import SharedFiltersModal from '../SavedFilters/SharedFiltersModal'
 import { TaskStatus, statusLabels } from '../../services/Task/TaskStatus/TaskStatus'
 import { buildLinkToMapperExportCSV,
          buildLinkToReviewerMetaExportCSV,
@@ -95,6 +96,11 @@ export class TaskAnalysisTableHeader extends Component {
             <ManageSavedFilters {...this.props}
               searchFilters={this.props.criteria}
             />
+            <SharedFiltersModal 
+              managingSharedFilterSettings={this.props.managingSharedFilterSettings}
+              cancelManagingSharedFilterSettings={this.props.cancelManagingSharedFilterSettings}
+            {...this.props} 
+        />
             <div className="mr-flex mr-justify-start">
               <Dropdown className="mr-dropdown--right" key="filter-dropdown"
                 dropdownButton={dropdown => (

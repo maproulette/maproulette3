@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, memo } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage }
        from 'react-intl'
@@ -30,12 +30,15 @@ import messages from './Messages'
 import WithSavedFilters from '../../../components/HOCs/WithSavedFilters/WithSavedFilters'
 import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
+import SharedFiltersModal from '../../../components/SavedFilters/SharedFiltersModal'
 import MapPane from '../../../components/EnhancedMap/MapPane/MapPane'
 import ReactTable from 'react-table-6'
 import { getFilterIds, getTaskStatusFilterIds, getTaskReviewStatusFilterIds, 
   getTaskMetaReviewStatusFilterIds, getTaskPriorityFilterIds } from './taskReviewFilterUtils' 
 import { setupColumnTypes } from './TaskReviewTableDefaultColumnTypes'
 import { getInitialTaskStatusFiltersByContext } from '../taskStatusFiltersByReviewType'
+
+const MemoizedSharedFiltersModal = memo(SharedFiltersModal)
 
 /**
  * TaskReviewTable displays tasks that need to be reviewed or have been reviewed
@@ -567,6 +570,11 @@ export class TaskReviewTable extends Component {
                   </div>
                 </div>
                 <ManageSavedFilters searchFilters={this.props.reviewCriteria} {...this.props} />
+                <MemoizedSharedFiltersModal 
+                  managingSharedFilterSettings={this.props.managingSharedFilterSettings}
+                  cancelManagingSharedFilterSettings={this.props.cancelManagingSharedFilterSettings}
+                  {...this.props} 
+                />
               </div>
             </div>
           </div>
