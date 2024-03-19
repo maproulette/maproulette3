@@ -37,6 +37,7 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
     e.preventDefault()
     e.stopPropagation()
    setIsSliderToggled(toggled => !toggled)
+   props.setSharedFilterUserAppSetting(props.location.search)
   }
 
   const briefFilters = useMemo(() => props.getBriefFilters(props.location.search), [props.location.search])

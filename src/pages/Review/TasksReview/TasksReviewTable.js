@@ -58,7 +58,7 @@ export class TaskReviewTable extends Component {
     taskStatusFilterIds: getTaskStatusFilterIds(this.props.location.search, 'filters.status'),
     taskReviewStatusFilterIds: getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props.reviewTasksType),
     taskMetaReviewStatusFilterIds: getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props. reviewTasksType),
-    taskPriorityFilterIds: getTaskPriorityFilterIds(this.props.location.search, 'filters.priorities')
+    taskPriorityFilterIds: getTaskPriorityFilterIds(this.props.location.search, 'filters.priorities'),
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
