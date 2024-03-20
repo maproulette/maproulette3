@@ -330,10 +330,12 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   }
 
   columns.featureId = {
-    id: 'name',
+    id: 'featureId',
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: t => t.name || t.title,
     exportable: t => t.name || t.title,
+    sortable: false,
+    filterable: true,
   }
 
   columns.id = {
