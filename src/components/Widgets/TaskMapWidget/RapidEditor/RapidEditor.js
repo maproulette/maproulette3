@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import _get from 'lodash/get'
-import { UseRouter } from '../../../../hooks/UseRouter/UseRouter.js';
 import { constructRapidURI } from '../../../../services/Editor/Editor.js';
 import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement.js';
 import AsMappableTask from '../../../../interactions/Task/AsMappableTask.js';
@@ -13,6 +12,75 @@ import rapidPackage from '@rapideditor/rapid/package.json';
 
 const { version: rapidVersion, name: rapidName } = rapidPackage;
 const baseCdnUrl = `https://cdn.jsdelivr.net/npm/${rapidName}@~${rapidVersion}/dist/`;
+
+/**
+ * Check if two URL search parameters are semantically equal
+ * @param {URLSearchParams} first
+ * @param {URLSearchParams} second
+ * @return {boolean} true if they are semantically equal
+ */
+function equalsUrlParameters(first, second) {
+  if (first.size === second.size) {
+    for (const [key, value] of first) {
+      if (!second.has(key) || second.get(key) !== value) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Update the URL (this also fires a hashchange event)
+ * @param {URLSearchParams} hashParams the URL hash parameters
+ */
+function updateUrl(hashParams) {
+  const oldUrl = window.location.href;
+  const newUrl = window.location.pathname + window.location.search + '#' + hashParams.toString();
+  window.history.pushState(null, '', newUrl);
+  window.dispatchEvent(
+    new HashChangeEvent('hashchange', {
+      newUrl: newUrl,
+      oldUrl: oldUrl,
+    }),
+  );
+}
+
+/**
+ * Generate the starting hash for the project
+ * @param {string | undefined} comment The comment to use
+ * @param {Array.<String> | undefined} presets The presets
+ * @param {string | undefined} gpxUrl The task boundaries
+ * @param {boolean | undefined} powerUser if the user should be shown advanced options
+ * @param {string | undefined} imagery The imagery to use for the task
+ * @return {module:url.URLSearchParams | boolean} the new URL search params or {@code false} if no parameters changed
+ */
+function generateStartingHash({ mapBounds, task, comment }) {
+  if (!mapBounds.zoom) {
+    mapBounds.zoom = _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
+  }
+
+  let replacedComment = comment
+
+  const asMappableTask = task ? AsMappableTask(task) : null
+
+  if (asMappableTask) {
+    const taskFeatureProperties = asMappableTask.allFeatureProperties()
+    if(taskFeatureProperties && Object.keys(taskFeatureProperties).length) {
+      replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
+    } 
+  }
+
+  const rapidUrl = constructRapidURI(task, mapBounds, {}, replacedComment)
+  const rapidParams = rapidUrl.split('#')[1]
+
+  if (equalsUrlParameters(new URLSearchParams(rapidParams), new URLSearchParams(window.location.hash.substring(1)))) {
+    return false;
+  }
+
+  return rapidParams
+}
 
 /**
  * Resize rapid
@@ -56,14 +124,20 @@ const RapidEditor = ({
   token,
   task,
   mapBounds,
-  comment
+  comment,
+  showSidebar,
+  presets,
+  gpxUrl,
+  powerUser,
+  imagery
 }) => {
-  const router = UseRouter()
   const dispatch = useDispatch();
   const [rapidLoaded, setRapidLoaded] = useState(window.Rapid !== undefined);
   const { context, dom } = useSelector((state) => state.rapidEditor.rapidContext);
   const windowInit = typeof window !== 'undefined';
 
+  // This significantly reduces build time _and_ means different TM instances can share the same download of Rapid.
+  // Unfortunately, Rapid doesn't use a public CDN itself, so we cannot reuse that.
   useEffect(() => {
     if (!rapidLoaded && !context) {
       // Add the style element
@@ -115,30 +189,47 @@ const RapidEditor = ({
 
   useEffect(() => {
     if (context) {
+      // setup the context
       context.locale = locale;
     }
   }, [context, locale]);
 
+  // This ensures that Rapid has the correct map size
   useEffect(() => {
+    // This might be a _slight_ efficiency improvement by making certain that Rapid isn't painting unneeded items
     resizeRapid(context);
+    // This is the only bit that is *really* needed -- it prevents black bars when hiding the sidebar.
     return () => resizeRapid(context);
-  }, [context]);
+  }, [showSidebar, context]);
+
+  useEffect(() => {
+    if (task?.id) {
+      const newParams = generateStartingHash({ mapBounds, task, comment });
+      if (newParams) {
+        updateUrl(newParams);
+      }
+    }
+  }, [comment, presets, gpxUrl, powerUser, imagery, task?.id]);
 
   useEffect(() => {
     const containerRoot = document.getElementById('rapid-container-root');
     const editListener = () => updateDisableState(setDisable, context.systems.edits);
     if (context && dom) {
-
       containerRoot.appendChild(dom);
+      // init the ui or restart if it was loaded previously
       let promise;
       if (context?.systems?.ui !== undefined) {
+        // Currently commented out in Rapid source code (2023-07-20)
+        // RapidContext.systems.ui.restart();
         resizeRapid(context);
         promise = Promise.resolve();
       } else {
         promise = context.initAsync();
       }
 
+      /* Perform tasks after Rapid has started up */
       promise.then(() => {
+        /* Keep track of edits */
         const editSystem = context.systems.editor;
 
         editSystem.on('change', editListener);
@@ -158,31 +249,10 @@ const RapidEditor = ({
   }, [dom, context, setDisable]);
 
   useEffect(() => {
-    if (context && task?.id) {
-      if (mapBounds && task?.id) {
-        if (!mapBounds.zoom) {
-          mapBounds.zoom = _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
-        }
-
-        let replacedComment = comment
-
-        const asMappableTask = task ? AsMappableTask(task) : null
-        if (context && comment) {
-          if(asMappableTask) {
-            const taskFeatureProperties = asMappableTask.allFeatureProperties()
-            if(taskFeatureProperties && Object.keys(taskFeatureProperties).length) {
-              replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
-            } 
-          }
-        }
-
-        const rapidUrl = constructRapidURI(task, mapBounds, {}, replacedComment)
-        const rapidParams = rapidUrl.split('#')[1]
-        const updatedSearch = window.location.search.split('#')[0] + '#' + rapidParams
-        router.replace({ search: updatedSearch })
-      }
+    if (context?.save) {
+      return () => context.save();
     }
-  }, [task?.id, context]);
+  }, [context]);
 
   useEffect(() => {
     if (context && token) {
