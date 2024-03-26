@@ -70,19 +70,12 @@ const CandidateProjectList = function(props) {
     }
 
     let index = 0
-    if (searchQuery && project.displayName) {
-      const displayNameLower = project.displayName.toLowerCase()
+
+    if (searchQuery && (project.displayName || project.name)) {
+      const nameLower = project.displayName ? project.displayName.toLowerCase() : project.name.toLowerCase()
       const searchQueryLower = searchQuery.toLowerCase()
-      if (displayNameLower.startsWith(searchQueryLower)) {
-        index = 3
-      } else if (displayNameLower.includes(searchQueryLower)) {
-        index = 2
-      } else {
-        const similarity = levenshtein(searchQueryLower, displayNameLower)
-        if (similarity > 0 && similarity < 4) {
-          index = 1 
-        }
-      }
+      const similarity = levenshtein(searchQueryLower, nameLower)
+      index = (100 - similarity)
     }
 
     return { project, index }
