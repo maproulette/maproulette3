@@ -209,7 +209,7 @@ export class AsMappableTask {
    * FeatureCollection type
    */
   normalizedGeometries() {
-    if (_isArray(this.geometries.features) && !this.geometries.type) {
+    if (_isArray(this.geometries?.features) && !this.geometries?.type) {
       return Object.assign({type: "FeatureCollection"}, this.geometries)
     }
 

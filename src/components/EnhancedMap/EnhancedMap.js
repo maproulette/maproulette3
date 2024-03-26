@@ -396,7 +396,7 @@ export class EnhancedMap extends ReactLeafletMap {
       this.leafletElement.panTo(this.props.center)
     }
 
-    if (!_isEqual(this.props.fitToLayer, prevProps.fitToLayer)) {
+    if (!_isEqual(this.props.fitToLayer, prevProps.fitToLayer) || this.props.taskBundle !== prevProps.taskBundle) {
       this.fitBoundsToLayer()
     }
   }

@@ -125,7 +125,6 @@ export class TaskPane extends Component {
    */
   completeTask = (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
                   needsReview, requestedNextTask, osmComment, tagEdits, taskBundle) => {
-    this.props.setCompletingTask(task.id)
     this.props.completeTask(task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
                             needsReview, requestedNextTask, osmComment, tagEdits,
                             this.state.completionResponses, taskBundle).then(() => {

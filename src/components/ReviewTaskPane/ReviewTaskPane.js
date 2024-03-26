@@ -50,7 +50,6 @@ export const defaultWorkspaceSetup = function() {
       {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 18},
     ],
     excludeWidgets: [
-      'TaskBundleWidget',
       'TaskCompletionWidget',
       'TagDiffWidget',
     ]
@@ -166,7 +165,6 @@ export class ReviewTaskPane extends Component {
             setCompletionResponse={this.setCompletionResponse}
             completionResponses={completionResponses}
             templateRevision={true}
-            disallowBundleChanges={true}
         />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
