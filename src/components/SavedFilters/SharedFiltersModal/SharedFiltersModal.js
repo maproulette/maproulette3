@@ -27,16 +27,9 @@ const formatFilterDisplayName = (name) =>  {
 }
 
 function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedFilterSettings, ...props}) {
+  const sharedFiltersettings = props.getUserAppSetting(props.user, "sharedWorkspaceFilters") || {}
   const toggleSetting = props.getSharedFilterUserAppSetting()?.useSharedWorkspaceFilters || false
   const contextualTaskFilters = useMemo(() => getInitialTaskStatusFiltersByContext(props.reviewTasksType), [props.reviewTasksType])
-
-  useEffect(() => {
-    console.log('review task type', props.reviewTasksType)
-  }, [props.reviewTasksType])
-
-  useEffect(() => {
-    console.log('contextualTaskFilters', contextualTaskFilters)
-  }, [contextualTaskFilters])
 
   const handleToggleSlider = (e) => {
     e.preventDefault()
@@ -44,7 +37,7 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
     props.setSharedFilterUserAppSetting(props.location.search)
   }
 
-  const briefFilters = useMemo(() => props.getBriefFilters(props.location.search), [props.location.search])
+  const briefFilters = props.getBriefFilters(sharedFiltersettings.sharedWorkspaceFilterString) || []
 
   const formattedFilters = briefFilters.map(filterSet => {
     if(filterSet.includes('=')) return filterSet.split('=')
@@ -113,7 +106,7 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
               </h4>
               
               <ul>
-                {formattedFilters.map(filter => {
+                {formattedFilters && formattedFilters.length ? formattedFilters.map(filter => {
                   if(filter.length === 1) return (
                     <p key={filter}>{filter}</p>
                   )
@@ -139,7 +132,7 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
                       <span className='mr-text-sm'>{filterValueDisplayName}</span>
                     </li>
                   )
-                })}
+                }) : null}
                 {/* {displayedSortCriteria} */}
               </ul>
             </div>
@@ -155,19 +148,5 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
     </React.Fragment>
   )
 }
-
-// const Slider = () => {
-//   const [boolState, setBoolState] = useState(false)
-//   const toggleBoolState = () => {
-//     setBoolState(b => !b)
-//   }
-//   return (
-
-//     <button className={`mr-text-lg ${boolState ? 'mr-text-green' : 'mr-text-blue'}`} onClick={toggleBoolState}>
-//       Toggle
-//     </button>
-//   )
-// }
-
 
 export default SharedFiltersModal

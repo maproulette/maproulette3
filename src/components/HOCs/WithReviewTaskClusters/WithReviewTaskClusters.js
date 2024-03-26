@@ -28,6 +28,7 @@ export const WithReviewTaskClusters = function(WrappedComponent) {
       }
       const criteria = _cloneDeep(this.props.reviewCriteria)
       criteria.boundingBox = fromLatLngBounds(bounds).join(',')
+      console.log('is this running in WithReviewTaskClusters?', criteria)
       this.props.updateReviewTasks(criteria)
     }
 

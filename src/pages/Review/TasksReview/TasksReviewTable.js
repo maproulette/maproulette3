@@ -111,10 +111,12 @@ export class TaskReviewTable extends Component {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
       // If no map, omit map bounding box from filter criteria on update
       if(!this.state.displayMap) {
+        console.log('update called from TaskReviewTable', sortCriteria, filters)
         this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
           includeTags: !!_get(this.props.addedColumns, 'tags')})
           return
       }
+      console.log('update called from TaskReviewTable', sortCriteria, filters)
       this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
         boundingBox: this.props.reviewCriteria.boundingBox,
         includeTags: !!_get(this.props.addedColumns, 'tags')})
@@ -230,10 +232,12 @@ export class TaskReviewTable extends Component {
     if (!_get(prevProps.addedColumns, 'tags') &&
         _get(this.props.addedColumns, 'tags') &&
         this.state.lastTableState) {
+      console.log('is the tag column comparison update in taskreviewtable running')
       this.updateTasks(this.state.lastTableState)
     }
 
     if(this.state.displayMap !== prevState.displayMap) {
+      console.log('is the map comparison update in taskreviewtable running')
       this.updateTasks(this.state.lastTableState)
     }
   }
@@ -592,7 +596,10 @@ export class TaskReviewTable extends Component {
               multiSort={false}
               noDataText={<FormattedMessage {...messages.noTasks} />}
               pages={totalPages}
-              onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+              onFetchData={(state, instance) => {
+                console.log('is the table data fetch running the update function on mount')  
+                this.debouncedUpdateTasks(state, instance)
+              }}
               onPageSizeChange={pageSize => this.props.changePageSize(pageSize)}
               getTheadFilterThProps={() => {
                 return { style: { position: "inherit", overflow: "inherit" } };
