@@ -5,7 +5,6 @@ import _get from 'lodash/get'
 import { constructRapidURI } from '../../../../services/Editor/Editor.js';
 import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement.js';
 import AsMappableTask from '../../../../interactions/Task/AsMappableTask.js';
-import WithSearch from '../../../HOCs/WithSearch/WithSearch.js';
 import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/ChallengeZoom.js';
 import { useDispatch, useSelector } from 'react-redux';
 import rapidPackage from '@rapideditor/rapid/package.json';
@@ -56,9 +55,9 @@ function updateUrl(hashParams) {
  * @param {string | undefined} imagery The imagery to use for the task
  * @return {module:url.URLSearchParams | boolean} the new URL search params or {@code false} if no parameters changed
  */
-function generateStartingHash({ mapBounds, task, comment }) {
-  if (!mapBounds.zoom) {
-    mapBounds.zoom = _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
+function generateStartingHash({ task, comment }) {
+  let mapBounds = {
+    zoom: _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
   }
 
   let replacedComment = comment
@@ -69,7 +68,12 @@ function generateStartingHash({ mapBounds, task, comment }) {
     const taskFeatureProperties = asMappableTask.allFeatureProperties()
     if(taskFeatureProperties && Object.keys(taskFeatureProperties).length) {
       replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
-    } 
+    }
+
+    mapBounds = {
+      ...mapBounds,
+      ...asMappableTask.calculateCenterPoint()
+    }
   }
 
   const rapidUrl = constructRapidURI(task, mapBounds, {}, replacedComment)
@@ -268,4 +272,4 @@ const RapidEditor = ({
   return <div className="w-100" style={{ height: "100%" }} id="rapid-container-root"></div>;
 }
 
-export default WithSearch(RapidEditor);
+export default RapidEditor;
