@@ -8,6 +8,7 @@ import AsMappableTask from '../../../../interactions/Task/AsMappableTask.js';
 import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/ChallengeZoom.js';
 import { useDispatch, useSelector } from 'react-redux';
 import rapidPackage from '@rapideditor/rapid/package.json';
+import WithSearch from '../../../HOCs/WithSearch/WithSearch.js';
 
 const { version: rapidVersion, name: rapidName } = rapidPackage;
 const baseCdnUrl = `https://cdn.jsdelivr.net/npm/${rapidName}@~${rapidVersion}/dist/`;
@@ -55,13 +56,8 @@ function updateUrl(hashParams) {
  * @param {string | undefined} imagery The imagery to use for the task
  * @return {module:url.URLSearchParams | boolean} the new URL search params or {@code false} if no parameters changed
  */
-function generateStartingHash({ task, comment }) {
-  let mapBounds = {
-    zoom: _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
-  }
-
+function generateStartingHash({ mapBounds, task, comment }) {
   let replacedComment = comment
-
   const asMappableTask = task ? AsMappableTask(task) : null
 
   if (asMappableTask) {
@@ -70,9 +66,14 @@ function generateStartingHash({ task, comment }) {
       replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
     }
 
-    mapBounds = {
-      ...mapBounds,
-      ...asMappableTask.calculateCenterPoint()
+    if (!mapBounds) {
+      mapBounds = {
+        ...asMappableTask.calculateCenterPoint()
+      }
+    }
+
+    if (!mapBounds.zoom) {
+      mapBounds.zoom = _get(task, "parent.defaultZoom", DEFAULT_ZOOM)
     }
   }
 
@@ -213,7 +214,16 @@ const RapidEditor = ({
         updateUrl(newParams);
       }
     }
-  }, [comment, presets, gpxUrl, powerUser, imagery, task?.id]);
+  }, [comment, presets, gpxUrl, powerUser, imagery]);
+
+  useEffect(() => {
+    if (task?.id) {
+      const newParams = generateStartingHash({ task, comment });
+      if (newParams) {
+        updateUrl(newParams);
+      }
+    }
+  }, [task?.id]);
 
   useEffect(() => {
     const containerRoot = document.getElementById('rapid-container-root');
@@ -272,4 +282,4 @@ const RapidEditor = ({
   return <div className="w-100" style={{ height: "100%" }} id="rapid-container-root"></div>;
 }
 
-export default RapidEditor;
+export default WithSearch(RapidEditor);
