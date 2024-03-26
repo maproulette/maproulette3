@@ -90,6 +90,7 @@ export const PARAMS_MAP = {
   reviewStatus: 'trStatus',
   metaReviewStatus: 'mrStatus',
   id: 'tid',
+  featureId: 'fid',
   difficulty: 'cd',
   tags: 'tt',
   excludeTasks: 'tExcl',
@@ -279,6 +280,10 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
 
   if (filters.id) {
     searchParameters[PARAMS_MAP.id] = filters.id
+  }
+
+  if (filters.featureId) {
+    searchParameters[PARAMS_MAP.featureId] = filters.featureId
   }
 
   if (_isFinite(filters.difficulty)) {

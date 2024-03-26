@@ -185,6 +185,7 @@ const buildQueryFilters = function (criteria, addedColumns) {
   //Main Filters
   const filters = _get(criteria, "filters", {});
   const taskId = filters.id;
+  const featureId = filters.featureId;
   const challengeId = filters.challengeId;
   const projectId = filters.projectId;
   const reviewedAt = filters.reviewedAt;
@@ -264,6 +265,7 @@ const buildQueryFilters = function (criteria, addedColumns) {
 
   return (
     `${taskId ? `taskId=${taskId}` : ""}` +
+    `${featureId ? `&featureId=${featureId}` : ""}` +
     `&reviewStatus=${_join(reviewStatus, ",")}`+
     `${reviewRequestedBy ? `&mapper=${reviewRequestedBy}` : ""}` +
     `${challengeId ? `&challengeId=${challengeId}` : ""}` +

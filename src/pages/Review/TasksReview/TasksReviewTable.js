@@ -658,12 +658,10 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
   columns.featureId = {
     id: 'featureId',
     Header: props.intl.formatMessage(messages.featureIdLabel),
-    accessor: t => {
-        return <span>{t.geometries.features ? t.geometries.features[0].id : "N/A"}</span>
-    },
-    exportable: t => t.geometries.features ? t.geometries.features[0].id : "N/A",
+    accessor: t => t.name || t.title,
+    exportable: t => t.name || t.title,
     sortable: false,
-    filterable: false,
+    filterable: true,
     maxWidth: 120,
   }
 
