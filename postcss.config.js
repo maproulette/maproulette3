@@ -1,11 +1,9 @@
-const tailwindcss = require('tailwindcss')
-
-module.exports = () => ({
-  plugins: [
-    require('postcss-import'),
-    require('postcss-simple-vars'),
-    tailwindcss('./src/tailwind.config.js'),
-    require('postcss-nested'),
-    require('autoprefixer'),
-  ],
-})
+module.exports = {
+  plugins: {
+    'postcss-import': {},
+    'postcss-simple-vars': {},
+    'tailwindcss/nesting': {},
+    'tailwindcss': { config: './src/tailwind.config.js'},
+    'autoprefixer': {},
+  }
+}
