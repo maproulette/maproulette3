@@ -86,7 +86,7 @@ export class ActiveTaskControls extends Component {
 
   allowedEditors = () => {
     // Only JOSM allowed for change-file cooperative tasks
-    return AsCooperativeWork(this.props.task).isChangeFileType() ?
+    return AsCooperativeWork(this.props.task).isChangeFileType() || this.props.taskBundle ?
       [Editor.josmLayer, Editor.josm] :
       null
   }
@@ -224,7 +224,9 @@ export class ActiveTaskControls extends Component {
         this.initiateCompletion(TaskStatus.fixed)
         break
       case 'd':
-        this.initiateCompletion(TaskStatus.tooHard)
+        if(!this.props.taskBundle){
+          this.initiateCompletion(TaskStatus.tooHard)
+        }
         break
       case 'x':
         this.initiateCompletion(TaskStatus.alreadyFixed)
@@ -354,7 +356,7 @@ export class ActiveTaskControls extends Component {
       return null
     }
     const cooperative = AsCooperativeWork(this.props.task).isTagType() || this.props.task.cooperativeWork
-    const disableRapid =  cooperative || this.props.taskReadOnly || (
+    const disableRapid = this.props.taskBundle || cooperative || this.props.taskReadOnly || (
       this.props.task?.status !== 0 && ( 
       this.props.completedBy !== this.props.user && 
       this.props.task?.reviewClaimedBy !== this.props.user

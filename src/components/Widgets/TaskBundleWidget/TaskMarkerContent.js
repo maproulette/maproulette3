@@ -23,14 +23,14 @@ class TaskMarkerContent extends Component {
       !this.props.bundling &&
       this.props.marker.options.taskId !== this.props.task.id &&
       !(this.props.workspace.name === 'taskReview') &&
-      (this.props.marker.options.status === 0 || this.props.marker.options.status === 3 || 
-      this.props.marker.options.taskStatus === 0 || this.props.marker.options.taskStatus === 3) &&
+      (this.props.marker.options.status === 0 || this.props.marker.options.status === 3 || this.props.marker.options.status === 6 || 
+      this.props.marker.options.taskStatus === 0 || this.props.marker.options.taskStatus === 3 || this.props.marker.options.taskStatus === 6) &&
       !AsCooperativeWork(this.props.task).isTagType() && !this.props.taskReadOnly
 
     const notActive =
       this.props.taskReadOnly ||
       (!this.props.task?.reviewStatus && !(this.props.task?.reviewStatus === 0) && 
-      !(this.props.task?.status  === 0 || this.props.task?.status  === 3)) ||
+      !(this.props.task?.status  === 0 || this.props.task?.status  === 3 || this.props.task?.status  === 6)) ||
       (this.props.task?.reviewStatus === TaskReviewStatus.needed &&
       (!(this.props.workspace.name === "taskReview") || this.props.task?.reviewClaimedBy !== this.props.user.id))
 

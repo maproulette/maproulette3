@@ -40,7 +40,9 @@ export default class TaskEditControl extends Component {
 
     switch(event.key) {
       case editShortcuts.editId.key:
-        this.props.pickEditor({value: Editor.id})
+        if(!this.props.taskBundle){
+          this.props.pickEditor({value: Editor.id})
+        }
         break
       case editShortcuts.editJosm.key:
         this.props.pickEditor({value: Editor.josm})
@@ -52,10 +54,14 @@ export default class TaskEditControl extends Component {
         this.props.pickEditor({value: Editor.josmFeatures})
         break
       case editShortcuts.editLevel0.key:
-        this.props.pickEditor({value: Editor.level0})
+        if(!this.props.taskBundle){
+          this.props.pickEditor({value: Editor.level0})
+        }
         break
       case editShortcuts.editRapid.key:
-        this.props.pickEditor({value: Editor.rapid})
+        if(!this.props.taskBundle){
+          this.props.pickEditor({value: Editor.rapid})
+        }
         break
       default:
     }

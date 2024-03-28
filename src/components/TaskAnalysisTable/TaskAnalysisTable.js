@@ -311,8 +311,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
         (!props.bundling &&
           original.taskId !== props.task?.id &&
           !(props.workspace.name === 'taskReview') &&
-          (original.status === 0 || original.status === 3 ||
-            original.taskStatus === 0 || original.taskStatus === 3)) &&
+          (original.status === 0 || original.status === 3 || original.status === 6 ||
+            original.taskStatus === 0 || original.taskStatus === 3 || original.taskStatus === 6)) &&
         !AsCooperativeWork(props.task).isTagType() && !props.taskReadOnly
 
       return (
@@ -406,13 +406,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const bundlePrimary = props.taskBundle?.tasks.find(task => task.isBundlePrimary === true)
       const isTaskSelected = row._original.id === bundlePrimary?.id || (!bundlePrimary && row._original.id === props.task?.id)
       const alreadyBundled = props.taskBundle?.taskIds?.includes(row._original.id)
-      const enableBundleEdits = (row._original.status === 0 || row._original.status === 3 ||
+      const enableBundleEdits = (row._original.status === 0 || row._original.status === 3 || row._original.status === 6 ||
         props.initialBundle?.taskIds?.includes(row._original.id) ||
         props.taskBundle?.taskIds?.includes(row._original.id))
   
       const notActive = props.taskReadOnly ||
         (!props.task?.reviewStatus && !(props.task?.reviewStatus === 0) && 
-        !(props.task?.status === 0 || props.task?.status === 3)) ||
+        !(props.task?.status === 0 || props.task?.status || props.task?.status === 6)) ||
         (props.task?.reviewStatus === TaskReviewStatus.needed && 
         (!(props.workspace.name === "taskReview") || (props.task?.reviewClaimedBy !== props.user.id)))
 

@@ -79,7 +79,7 @@ export default class TaskBundleWidget extends Component {
   bundleTasks = () => {
     const notActive = this.props.taskReadOnly ||
     (!this.props.task?.reviewStatus && !(this.props.task?.reviewStatus === 0) && 
-    !(this.props.task?.status === 0 || this.props.task?.status  === 3)) ||
+    !(this.props.task?.status === 0 || this.props.task?.status === 3 || this.props.task?.status === 6)) ||
     (this.props.task?.reviewStatus === TaskReviewStatus.needed &&
     (!(this.props.workspace.name === "taskReview") || this.props.task?.reviewClaimedBy !== this.props.user.id));
 
@@ -493,7 +493,7 @@ const BuildBundle = props => {
   }
   const notActive = props.taskReadOnly ||
     (!props.task?.reviewStatus && !(props.task?.reviewStatus === 0) && 
-    !(props.task?.status  === 0 || props.task?.status  === 3)) ||
+    !(props.task?.status  === 0 || props.task?.status === 3 || props.task?.status === 6)) ||
     (props.task?.reviewStatus === TaskReviewStatus.needed &&
     (!(props.workspace.name === "taskReview") || props.task?.reviewClaimedBy !== props.user.id));
 

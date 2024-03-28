@@ -101,7 +101,7 @@ const MoreOptionsButton = function(props) {
 const ListMoreOptionsItems = function(props) {
   return (
     <ol className="mr-list-dropdown">
-      {props.allowedProgressions.has(TaskStatus.tooHard) &&
+      {props.allowedProgressions.has(TaskStatus.tooHard) && !props.taskBundle &&
        <li>
          <TaskTooHardControl {...props} asLink />
        </li>

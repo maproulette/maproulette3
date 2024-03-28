@@ -125,7 +125,7 @@ export const ListMoreOptionsItems = function(props) {
          <TaskFixedControl {...props} complete={complete} asLink />
        </li>
       }
-      {props.allowedProgressions.has(TaskStatus.tooHard) &&
+      {props.allowedProgressions.has(TaskStatus.tooHard) && !props.taskBundle &&
        <li onClick={props.toggleDropdownVisible}>
          <TaskTooHardControl {...props} complete={complete} asLink />
        </li>

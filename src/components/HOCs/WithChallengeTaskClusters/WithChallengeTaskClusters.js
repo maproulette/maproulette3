@@ -201,7 +201,9 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     onBulkTaskSelection = taskIds => {
       const tasks =
         _filter(this.clustersAsTasks(), task => taskIds.indexOf(task.id) !== -1 &&  !(this.props.task &&
-        !(task.taskStatus === 0 || task.status === 0 || task.taskStatus === 3 || task.status === 3) &&
+        !(task.taskStatus === 0 || task.status === 0 || 
+          task.taskStatus === 3 || task.status === 3 || 
+          task.taskStatus === 6 || task.status === 6) &&
         !this.props.taskBundle?.taskIds?.includes(task.id || task.taskId) &&
         !this.props.initialBundle?.taskIds?.includes(task.id || task.taskId) &&
         (task.id || task.taskId) ||
