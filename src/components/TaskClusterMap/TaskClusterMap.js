@@ -580,7 +580,7 @@ export class TaskClusterMap extends Component {
     const overlapping = _filter(allMarkers, otherMarker => {
       if (otherMarker === marker) return false
       const dist = this.markerDistanceDegrees(marker, otherMarker)
-      return dist <= iconSizeDegrees
+      return dist <= iconSizeDegrees/3
     })
     return overlapping
   }
