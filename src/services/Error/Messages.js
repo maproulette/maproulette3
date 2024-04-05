@@ -115,6 +115,10 @@ export default defineMessages({
     id: "Errors.task.cooperativeFailure",
     defaultMessage: "Failed to load cooperative task{details}",
   },
+  taskAlreadyBundled: {
+    id: "Errors.task.taskAlreadyBundled",
+    defaultMessage: "Task{details} is already part of a bundle and cannot be bundled. There could be other tasks that you tried to bundle that are not listed, the Id presented is the first one task detected to be in a bundle.",
+  },
   unableToBundleTasks: {
     id: "Errors.task.unableToBundleTasks",
     defaultMessage: "The tasks with these IDs are locked by another user{details}. This most likely happened because a user completed or " +

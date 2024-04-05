@@ -224,9 +224,7 @@ export class ActiveTaskControls extends Component {
         this.initiateCompletion(TaskStatus.fixed)
         break
       case 'd':
-        if(!this.props.taskBundle){
-          this.initiateCompletion(TaskStatus.tooHard)
-        }
+        this.initiateCompletion(TaskStatus.tooHard)
         break
       case 'x':
         this.initiateCompletion(TaskStatus.alreadyFixed)

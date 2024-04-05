@@ -38,6 +38,7 @@ export default {
     addCommentFailure: messages.addCommentFailure,
     bundleNotCooperative: messages.taskBundleNotCooperative,
     unableToBundleTasks: messages.unableToBundleTasks,
+    taskAlreadyBundled: messages.taskAlreadyBundled,
     lockReleaseFailure: messages.taskLockReleaseFailure,
     cooperativeFailure: messages.taskCooperativeFailure,
   },

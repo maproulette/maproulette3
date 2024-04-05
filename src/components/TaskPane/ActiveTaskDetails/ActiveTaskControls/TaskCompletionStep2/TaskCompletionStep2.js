@@ -38,7 +38,7 @@ export default class TaskCompletionStep2 extends Component {
             <TaskFixedControl {...this.props} complete={complete} />
           }
 
-          {this.props.allowedProgressions.has(TaskStatus.tooHard) && !this.props.taskBundle &&
+          {this.props.allowedProgressions.has(TaskStatus.tooHard) &&
             <TaskTooHardControl {...this.props} complete={complete} />
           }
 

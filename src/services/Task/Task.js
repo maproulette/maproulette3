@@ -20,7 +20,7 @@ import genericEntityReducer from '../Server/GenericEntityReducer'
 import { challengeSchema } from '../Challenge/Challenge'
 import { placeSchema, fetchPlace } from '../Place/Place'
 import { commentSchema, receiveComments } from '../Comment/Comment'
-import { addServerError, addError } from '../Error/Error'
+import { addServerError, addError, addErrorWithDetails } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import { ensureUserLoggedIn } from '../User/User'
 import { markReviewDataStale } from './TaskReview/TaskReview'
@@ -934,6 +934,16 @@ export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bund
         }
 
         const errorMessage = await error.response.text()
+        if (errorMessage.includes('already assigned to bundle')) {
+          const numberPattern = /\d+/
+          const matchedNumber = errorMessage.match(numberPattern)
+          if (matchedNumber) {
+            const taskId = parseInt(matchedNumber[0])
+            dispatch(addErrorWithDetails(AppErrors.task.taskAlreadyBundled, [taskId]))
+          } else {
+            console.log("No task ID found in the error message.")
+          }
+        } 
         if (errorMessage.includes('task IDs were locked')) {
           const numberPattern = /\d+/g
           const matchedNumbers = errorMessage.match(numberPattern)
