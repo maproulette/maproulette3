@@ -117,7 +117,7 @@ export default defineMessages({
   },
   taskAlreadyBundled: {
     id: "Errors.task.taskAlreadyBundled",
-    defaultMessage: "Task{details} is already part of a bundle and cannot be bundled. There could be other tasks that you tried to bundle that are not listed, the Id presented is the first one task detected to be in a bundle.",
+    defaultMessage: "Task{details} is already in a bundle and can't be put into another bundle. There might be other tasks you tried to bundle that aren't mentioned here, but the ID given is for the first task we noticed is already bundled.",
   },
   unableToBundleTasks: {
     id: "Errors.task.unableToBundleTasks",
