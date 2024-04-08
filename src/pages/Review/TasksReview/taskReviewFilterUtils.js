@@ -32,6 +32,7 @@ export const getTaskStatusFilterIds = (search, param) => {
       return pair[1].split(',').map(n => Number(n))
     }  
   }
+  
   // return formatURLSearchParamEntryPairs(search, param) || 
   return Object.values(TaskStatus).filter(el => isReviewableStatus(el))
 }
@@ -39,6 +40,7 @@ export const getTaskStatusFilterIds = (search, param) => {
 // Task review status filtering options are contingent on review context
 export const getTaskReviewStatusFilterIds = (search, param, reviewTasksType) => {
   const searchParams = new URLSearchParams(search)
+  console.log('searchParams in getTaskReviewStatusFilterIds', searchParams)
   for(let pair of searchParams.entries()) {
     if(pair[0] === param && pair[1]) {
       if(pair[1].length === 0) return []

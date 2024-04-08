@@ -59,6 +59,10 @@ export class TaskReviewTable extends Component {
     taskReviewStatusFilterIds: getTaskReviewStatusFilterIds(this.props.location.search, 'filters.reviewStatus', this.props.reviewTasksType),
     taskMetaReviewStatusFilterIds: getTaskMetaReviewStatusFilterIds(this.props.location.search, 'filters.metaReviewStatus', this.props. reviewTasksType),
     taskPriorityFilterIds: getTaskPriorityFilterIds(this.props.location.search, 'filters.priorities'),
+    // taskStatusFilterIds: null,
+    // taskReviewStatusFilterIds: null,
+    // taskMetaReviewStatusFilterIds: null,
+    // taskPriorityFilterIds: null
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -102,21 +106,27 @@ export class TaskReviewTable extends Component {
       }
     }
 
+    const sharedFiltersettings = this.props.getUserAppSetting(this.props.user, "sharedWorkspaceFilters") || {}
+      const usingSharedFilters = sharedFiltersettings && sharedFiltersettings.useSharedWorkspaceFilters && 
+      sharedFiltersettings.sharedWorkspaceFilterString && sharedFiltersettings.sharedWorkspaceFilterString.length
+      const searchURL = sharedFiltersettings.sharedWorkspaceFilterString
+
+    console.log('sharedFiltersettings in table update', sharedFiltersettings)
+
     filters.status = this.state.taskStatusFilterIds?.length ? this.state.taskStatusFilterIds : null
     filters.reviewStatus = this.state.taskReviewStatusFilterIds?.length ? this.state.taskReviewStatusFilterIds : null
     filters.metaReviewStatus = this.state.taskMetaReviewStatusFilterIds?.length ? this.state.taskMetaReviewStatusFilterIds : null
     filters.priorities = this.state.taskPriorityFilterIds?.length ? this.state.taskPriorityFilterIds : null
     
+    console.log('filters in table update', filters)
     if (this.componentIsMounted) {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
       // If no map, omit map bounding box from filter criteria on update
       if(!this.state.displayMap) {
-        console.log('update called from TaskReviewTable', sortCriteria, filters)
         this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
           includeTags: !!_get(this.props.addedColumns, 'tags')})
           return
       }
-      console.log('update called from TaskReviewTable', sortCriteria, filters)
       this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
         boundingBox: this.props.reviewCriteria.boundingBox,
         includeTags: !!_get(this.props.addedColumns, 'tags')})
@@ -232,12 +242,10 @@ export class TaskReviewTable extends Component {
     if (!_get(prevProps.addedColumns, 'tags') &&
         _get(this.props.addedColumns, 'tags') &&
         this.state.lastTableState) {
-      console.log('is the tag column comparison update in taskreviewtable running')
       this.updateTasks(this.state.lastTableState)
     }
 
     if(this.state.displayMap !== prevState.displayMap) {
-      console.log('is the map comparison update in taskreviewtable running')
       this.updateTasks(this.state.lastTableState)
     }
   }
@@ -597,7 +605,6 @@ export class TaskReviewTable extends Component {
               noDataText={<FormattedMessage {...messages.noTasks} />}
               pages={totalPages}
               onFetchData={(state, instance) => {
-                console.log('is the table data fetch running the update function on mount')  
                 this.debouncedUpdateTasks(state, instance)
               }}
               onPageSizeChange={pageSize => this.props.changePageSize(pageSize)}

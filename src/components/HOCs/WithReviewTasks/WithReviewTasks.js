@@ -76,7 +76,6 @@ export const WithReviewTasks = function(WrappedComponent) {
       const searchOnCriteria = _cloneDeep(criteria)
       const userId = _get(props, 'user.id')
       const pageSize = _get(this.state.criteria[props.reviewTasksType], 'pageSize') || DEFAULT_PAGE_SIZE
-      // console.log('state criteria in update function', this.state.criteria)
       if (!criteria.invertFields) {
         searchOnCriteria.invertFields = this.state.criteria[props.reviewTasksType].invertFields
       }
@@ -110,16 +109,12 @@ export const WithReviewTasks = function(WrappedComponent) {
       typedCriteria[props.reviewTasksType] = searchOnCriteria
       typedCriteria[props.reviewTasksType].pageSize = pageSize
 
-      // console.log('searchOnCriteria in updater function', searchOnCriteria)
       const searchURL = this.updateURL(props, searchOnCriteria)
-
-      console.log('searchURL in updater function', searchURL)
 
       // If our search on the URL hasn't changed then don't do another
       // update as we receive a second update when we change the URL.
       if (_isEqual(props.history.location.search, searchURL) &&
           this.state.loading) {
-            console.log('are we not getting to url update?')
         return
       }
       else if (!skipURLUpdate) {
@@ -186,26 +181,34 @@ export const WithReviewTasks = function(WrappedComponent) {
     }
 
     componentDidMount() {
-      console.log('mount logic in WithReviewTasks running')
+
+      // this.props.history.push({
+      //   pathname: this.props.history.location.pathname,
+      //   search: searchURL,
+      //   state: {refresh: true}
+      // })
 
       const sharedFiltersettings = this.props.getUserAppSetting(this.props.user, "sharedWorkspaceFilters") || {}
       const usingSharedFilters = sharedFiltersettings && sharedFiltersettings.useSharedWorkspaceFilters && 
-        sharedFiltersettings.sharedWorkspaceFilterString && sharedFiltersettings.sharedWorkspaceFilterString.length
-          // const searchURL = sharedFiltersettings.sharedWorkspaceFilterString
-          // this.props.history.push({
-          //   pathname: this.props.history.location.pathname,
-          //   search: searchURL,
-          //   // state: {refresh: true}
-        //   })
+      sharedFiltersettings.sharedWorkspaceFilterString && sharedFiltersettings.sharedWorkspaceFilterString.length
+      const searchURL = sharedFiltersettings.sharedWorkspaceFilterString
+          // 
         // }
       if(usingSharedFilters) {
+        console.log('sharedfilterstring on mount', sharedFiltersettings.sharedWorkspaceFilterString)
         const criteria = buildSearchCriteriafromURL(sharedFiltersettings.sharedWorkspaceFilterString)
         const stateCriteria = _cloneDeep(this.state.criteria)
         stateCriteria[this.props.reviewTasksType] = criteria
         console.log('stateCriteria in usingSharedFilters mount logic', stateCriteria)
-        this.setState({criteria: stateCriteria}, () => {
-          this.update(this.props, criteria, false)
-        })
+        this.setState({criteria: stateCriteria})
+        this.props.history.push({
+            pathname: this.props.history.location.pathname,
+            search: searchURL,
+            state: {refresh: true}
+          })
+
+        // this.update(this.props, criteria, false)
+
       } else {
 
      
@@ -238,26 +241,26 @@ export const WithReviewTasks = function(WrappedComponent) {
       // const usingSharedFilters = sharedFiltersettings && sharedFiltersettings.useSharedWorkspaceFilters && 
       //   sharedFiltersettings.sharedWorkspaceFilterString && sharedFiltersettings.sharedWorkspaceFilterString.length
       // // console.log('WithReviewTasks componentDidUpdate is running')
-      // if (prevProps.reviewTasksType !== this.props.reviewTasksType ||
-      //     prevProps.reviewTasksSubType !== this.props.reviewTasksSubType) {
+      if (prevProps.reviewTasksType !== this.props.reviewTasksType ||
+          prevProps.reviewTasksSubType !== this.props.reviewTasksSubType) {
 
-      //   // console.log('review tasks type or subtype change update running')
-      //   this.update(this.props,
-      //     this.state.criteria[this.props.reviewTasksType] ||
-      //     this.buildDefaultCriteria(this.props), true)
-      //   return
-      // }
+        // console.log('review tasks type or subtype change update running')
+        this.update(this.props,
+          this.state.criteria[this.props.reviewTasksType] ||
+          this.buildDefaultCriteria(this.props), true)
+        return
+      }
 
-      // if (!_isEqual(this.props.defaultFilters, prevProps.defaultFilters)) {
-      //   console.log('defaultFilters change update running')
-      //   // if(usingSharedFilters) {
-      //   //   const criteria = buildSearchCriteriafromURL(sharedFiltersettings.sharedWorkspaceFilterString)
-      //   //   this.update(this.props, criteria, true)
-      //   //   return
-      //   // }
-      //   this.update(this.props, this.buildDefaultCriteria(this.props), true)
-      //   return
-      // }
+      if (!_isEqual(this.props.defaultFilters, prevProps.defaultFilters)) {
+        console.log('defaultFilters change update running')
+        // if(usingSharedFilters) {
+        //   const criteria = buildSearchCriteriafromURL(sharedFiltersettings.sharedWorkspaceFilterString)
+        //   this.update(this.props, criteria, true)
+        //   return
+        // }
+        this.update(this.props, this.buildDefaultCriteria(this.props), true)
+        return
+      }
     }
 
     render() {
