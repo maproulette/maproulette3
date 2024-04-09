@@ -7,7 +7,21 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.14.13] - 2023-3-12
+## [v3.15.0] - 2024-4-9
+Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
+
+## What's Changed
+* Bump follow-redirects from 1.15.4 to 1.15.6 by @dependabot in https://github.com/maproulette/maproulette3/pull/2298
+* add support for sr (Српски) language by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2302
+* Bump express from 4.18.2 to 4.19.2 by @dependabot in https://github.com/maproulette/maproulette3/pull/2310
+* Bump webpack-dev-middleware from 5.3.3 to 5.3.4 by @dependabot in https://github.com/maproulette/maproulette3/pull/2309
+* update rapid editor by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2304
+* fix initial zoom on tasks by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2303
+* reconfirgure project modal filtering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2308
+* fix challenge comments link by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2312
+* reduce spidering distance by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2313
+
+## [v3.14.13] - 2024-3-12
 Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
 
 ## What's Changed
@@ -21,7 +35,7 @@ Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.12...v3.14.13
 
-## [v3.14.12] - 2023-2-29
+## [v3.14.12] - 2024-2-29
 Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
 
 ## What's Changed
@@ -29,7 +43,7 @@ Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.11...v3.14.12
 
-## [v3.14.11] - 2023-2-28
+## [v3.14.11] - 2024-2-28
 Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
 
 ## What's Changed
@@ -38,7 +52,7 @@ Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.10...v3.14.11
 
-## [v3.14.10] - 2023-2-19
+## [v3.14.10] - 2024-2-19
 Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
 
 ## What's Changed
@@ -50,7 +64,7 @@ Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.9...v3.14.10
 
-## [v3.14.9] - 2023-2-14
+## [v3.14.9] - 2024-2-14
 Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
 
 ## What's Changed
@@ -71,7 +85,7 @@ Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.8...v3.14.9
 
-## [v3.14.8] - 2023-2-02
+## [v3.14.8] - 2024-2-02
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
@@ -80,7 +94,7 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.7...v3.14.8
 
-## [v3.14.7] - 2023-1-30
+## [v3.14.7] - 2024-1-30
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
@@ -93,7 +107,7 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.6...v3.14.7
 
-## [v3.14.6] - 2023-1-17
+## [v3.14.6] - 2024-1-17
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
@@ -101,7 +115,7 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.5...v3.14.6
 
-## [v3.14.5] - 2023-1-14
+## [v3.14.5] - 2024-1-14
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
@@ -110,7 +124,7 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.4...v3.14.5
 
-## [v3.14.4] - 2023-1-9
+## [v3.14.4] - 2024-1-9
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
