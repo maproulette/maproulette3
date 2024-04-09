@@ -584,7 +584,7 @@ module.exports = {
       inset: ['responsive'],
       resize: ['responsive'],
       boxShadow: ['responsive', 'hover', 'focus'],
-      fill: [],
+      fill: ['hover'],
       stroke: [],
       tableLayout: ['responsive'],
       textAlign: ['responsive'],

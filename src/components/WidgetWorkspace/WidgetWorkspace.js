@@ -285,7 +285,7 @@ const LayoutButton = function(props) {
         <SvgSymbol
           sym="cog-icon"
           viewBox="0 0 20 20"
-          className="mr-fill-green-lighter mr-w-4 mr-h-4"
+          className="mr-fill-green-lighter mr-w-4 mr-h-4 hover:mr-fill-white mr-transition-colors"
         />
       </button>
     </div>

@@ -51,7 +51,7 @@ export default class ConfigureColumnsModal extends Component {
                     {!column.permanent &&
                       <div className="mr-text-sm mr-text-green-lighter mr-my-2">
                         <button
-                          className="mr-text-current"
+                          className="mr-text-current hover:mr-text-white mr-transition-colors"
                           onClick={() => this.props.removeColumn(key)}
                         >
                           <FormattedMessage {...messages.removeLabel} />
@@ -75,7 +75,7 @@ export default class ConfigureColumnsModal extends Component {
 
         <div className="mr-text-sm mr-text-green-lighter">
           <button
-            className="mr-text-current"
+            className="mr-text-current hover:mr-text-white mr-transition-colors"
             onClick={() => this.props.addColumn(key)}
           >
             <FormattedMessage {...messages.addLabel} />

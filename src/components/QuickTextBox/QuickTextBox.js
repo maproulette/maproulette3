@@ -67,7 +67,7 @@ export default class QuickTextBox extends Component {
             <SvgSymbol
               sym="icon-close"
               viewBox="0 0 20 20"
-              className="mr-fill-white mr-w-4 mr-h-4"
+              className="mr-fill-white mr-w-4 mr-h-4 hover:mr-fill-green-lighter mr-transition-colors"
               aria-hidden
             />
           </button>
