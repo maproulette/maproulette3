@@ -301,7 +301,7 @@ export class TaskReviewTable extends Component {
           <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
             <li>
               <button
-                className="mr-text-current"
+                className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
                 onClick={() => {
                   this.setState({showConfigureColumns: true}) 
                   dropdown.toggleDropdownVisible()}}

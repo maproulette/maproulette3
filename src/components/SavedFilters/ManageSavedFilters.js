@@ -79,11 +79,11 @@ export default class ManageSavedFilters extends Component {
                             {this.props.getBriefFilters(savedFilters[saved]).join(', ')}
                           </div>
                           <div className="mr-w-40 mr-mb-4">
-                            <button className="mr-text-green-lighter mr-mr-2"
+                            <button className="mr-text-green-lighter mr-mr-2 hover:mr-text-white mr-transition-colors"
                               onClick={() => this.setState({renaming: saved})}>
                               <FormattedMessage {...messages.editLabel} />
                             </button>
-                            <button className="mr-text-green-lighter"
+                            <button className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
                               onClick={() => this.props.removeSavedFilters(saved)}>
                               <FormattedMessage {...messages.deleteLabel} />
                             </button>

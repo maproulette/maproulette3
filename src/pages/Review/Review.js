@@ -226,7 +226,8 @@ export class ReviewTasksDashboard extends Component {
           <li>
             <button
               className={classNames(
-                showType === 'tasksToBeReviewed' ? "mr-text-white" : "mr-text-green-lighter"
+                showType === 'tasksToBeReviewed' ? "mr-text-white" : "mr-text-green-lighter",
+                "hover:mr-text-white mr-transition-colors"
               )}
               onClick={() => this.changeTab(ReviewTasksType.toBeReviewed)}
             >
@@ -236,7 +237,8 @@ export class ReviewTasksDashboard extends Component {
           <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
             <button
               className={classNames(
-                showType === ReviewTasksType.reviewedByMe ? "mr-text-white" : "mr-text-green-lighter"
+                showType === ReviewTasksType.reviewedByMe ? "mr-text-white" : "mr-text-green-lighter",
+                "hover:mr-text-white mr-transition-colors"
               )}
               onClick={() => this.changeTab(ReviewTasksType.reviewedByMe)}
             >
@@ -246,7 +248,8 @@ export class ReviewTasksDashboard extends Component {
           <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
             <button
               className={classNames(
-                showType === ReviewTasksType.myReviewedTasks ? "mr-text-white" : "mr-text-green-lighter"
+                showType === ReviewTasksType.myReviewedTasks ? "mr-text-white" : "mr-text-green-lighter",
+                "hover:mr-text-white mr-transition-colors"
               )}
               onClick={() => this.changeTab(ReviewTasksType.myReviewedTasks)}
             >
@@ -256,7 +259,8 @@ export class ReviewTasksDashboard extends Component {
           <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
             <button
               className={classNames(
-                showType === ReviewTasksType.allReviewedTasks ? "mr-text-current" : "mr-text-green-lighter"
+                showType === ReviewTasksType.allReviewedTasks ? "mr-text-current" : "mr-text-green-lighter",
+                "hover:mr-text-white mr-transition-colors"
               )}
               onClick={() => this.changeTab(ReviewTasksType.allReviewedTasks)}
             >
@@ -267,7 +271,8 @@ export class ReviewTasksDashboard extends Component {
             <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
               <button
                 className={classNames(
-                  showType === ReviewTasksType.metaReviewTasks ? "mr-text-current" : "mr-text-green-lighter"
+                  showType === ReviewTasksType.metaReviewTasks ? "mr-text-current" : "mr-text-green-lighter",
+                  "hover:mr-text-white mr-transition-colors"
                 )}
                 onClick={() => this.changeTab(ReviewTasksType.metaReviewTasks)}
               >
