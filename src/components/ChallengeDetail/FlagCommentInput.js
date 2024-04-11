@@ -48,7 +48,7 @@ export class FlagCommentInput extends Component {
         const responseBody = await response.json()
         this.props.onModalSubmit(responseBody)
         const issue_link = responseBody.html_url
-        const comment = `This challenge has been reported by [${this.props.user.osmProfile.displayName}](${process.env.REACT_APP_OSM_SERVER}/user/${this.props.user.osmProfile.displayName}). Please use [this GitHub issue](${issue_link}) to discuss. \n\n ${this.state.value}`
+        const comment = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}) in project [#${challenge.parent.id} - ${challenge.parent.displayName}](${process.env.REACT_APP_URL}/browse/projects/${challenge.parent.id}), has been reported by [${this.props.user.osmProfile.displayName}](${process.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(this.props.user.osmProfile.displayName)}). Please use [this GitHub issue](${issue_link}) to discuss. \n\n Report Content: \n ${this.state.value}`
         await postChallengeComment(challenge.id, comment)
         this.props.handleViewCommentsSubmit()
       }
