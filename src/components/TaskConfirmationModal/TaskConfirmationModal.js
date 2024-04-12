@@ -82,10 +82,12 @@ export class TaskConfirmationModal extends Component {
       this.props.keyboardShortcutGroups.taskConfirmation,
       this.handleKeyboardShortcuts
     )
-    // Initialize challenge name in next task selection filters for review workflow.
-    const challengeName = _get(this.props.challenge, 'name', '')
-    this.filterChange('challenge', challengeName)
 
+    if(this.props.inReview){
+      // Initialize challenge name in next task selection filters for review workflow.
+      const challengeName = _get(this.props.challenge, 'name', '')
+      this.filterChange('challenge', challengeName)
+    }
 
     if (this.props.needsResponses && _isEmpty(this.props.completionResponses) &&
         this.props.status !== TaskStatus.skipped) {
@@ -107,20 +109,30 @@ export class TaskConfirmationModal extends Component {
     this.props.setTags(value)
   }
 
-  filterChange = (key, value, invert=false) => {
-    const criteria = _cloneDeep(this.currentFilters())
-    criteria.filters = criteria.filters || {}
-    criteria.filters[key] = value
+  filterChange = (key, value, invert = false) => {
+    this.setState(prevState => {
+      const criteria = _cloneDeep(prevState.criteria)
+      criteria.filters = criteria.filters || {}
+      criteria.filters[key] = value
+  
+      if (key === "challenge") {
+        // If we are using a challenge filter then we need to cleanup
+        // the challengeId filter as it gets priority.
+        criteria.filters.challengeId = null
+      }
+  
+      criteria.invertFields = criteria.invertFields || {}
+      criteria.invertFields[key] = invert
 
-    if (key === "challenge") {
-      // If we are using a challenge filter then we need to cleanup
-      // the challengeId filter as it gets priority.
-      criteria.filters.challengeId = null
-    }
-
-    criteria.invertFields = criteria.invertFields || {}
-    criteria.invertFields[key] = invert
-    this.setState({criteria})
+      return { criteria }
+    }, this.updateHistory)
+  }
+  
+  updateHistory = () => {
+    const { criteria } = this.state
+    const currentState = _get(this.props.history, 'location.state', {})
+    const newState = _merge({}, currentState, criteria)
+    this.props.history.replace({ ...this.props.history.location, state: newState })
   }
 
   currentFilters = () => {
