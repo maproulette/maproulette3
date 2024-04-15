@@ -425,7 +425,7 @@ export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5, asM
 /**
  * Retrieve the next task to review with the given sort and filter criteria
  */
-export const loadNextReviewTask = function(criteria={}, lastTaskId, asMetaReview) {
+export const loadNextReviewTask = function(criteria={}, lastChallengeId, lastTaskId, asMetaReview) {
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? `${_snakeCase(sortBy)}` : null
@@ -440,6 +440,9 @@ export const loadNextReviewTask = function(criteria={}, lastTaskId, asMetaReview
     const params = {sort, order, ...searchParameters, asMetaReview}
     if (_isFinite(lastTaskId)) {
       params.lastTaskId = lastTaskId
+    }
+    if (_isFinite(lastChallengeId)) {
+      params.lastChallengeId = lastChallengeId
     }
 
     return retrieveChallengeTask(dispatch, new Endpoint(

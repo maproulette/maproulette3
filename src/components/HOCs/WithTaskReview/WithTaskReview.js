@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         // list anymore. After we fetch the task we can do the review and move to the newly
         // fetched next task.
         if (loadBy === TaskReviewLoadMethod.next) {
-          loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
+          loadNextTaskForReview(dispatch, url, task.parent?.id, task.id, asMetaReview(ownProps)).then(
             nextTask => {
               dispatch(doReview()).then(() =>
                 visitLoadBy(loadBy, url, nextTask, asMetaReview(ownProps)))
@@ -109,7 +109,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
     skipTaskReview: (task, loadBy, url) => {
       dispatch(cancelReviewClaim(task.id))
-      loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
+      loadNextTaskForReview(dispatch, url, task.parent?.id, task.id, asMetaReview(ownProps)).then(
         nextTask => visitLoadBy(loadBy, url, nextTask, asMetaReview(ownProps)))
     },
 
@@ -187,8 +187,8 @@ export const visitLoadBy = (loadBy, url, task, asMetaReview) => {
   }
 }
 
-export const loadNextTaskForReview = (dispatch, url, lastTaskId, asMetaReview) => {
-  return dispatch(loadNextReviewTask(parseSearchCriteria(url).searchCriteria, lastTaskId, asMetaReview))
+export const loadNextTaskForReview = (dispatch, url, lastChallengeId, lastTaskId, asMetaReview) => {
+  return dispatch(loadNextReviewTask(parseSearchCriteria(url).searchCriteria, lastChallengeId, lastTaskId, asMetaReview))
 }
 
 export default WrappedComponent =>

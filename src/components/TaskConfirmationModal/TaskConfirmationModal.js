@@ -83,12 +83,6 @@ export class TaskConfirmationModal extends Component {
       this.handleKeyboardShortcuts
     )
 
-    if(this.props.inReview){
-      // Initialize challenge name in next task selection filters for review workflow.
-      const challengeName = _get(this.props.challenge, 'name', '')
-      this.filterChange('challenge', challengeName)
-    }
-
     if (this.props.needsResponses && _isEmpty(this.props.completionResponses) &&
         this.props.status !== TaskStatus.skipped) {
       this.setState({showInstructions: true, instructionsContinue: true})
