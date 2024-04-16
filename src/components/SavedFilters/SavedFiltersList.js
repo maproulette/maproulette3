@@ -52,6 +52,14 @@ export default class SavedFiltersList extends Component {
             </button>
           </li>
         }
+        <li>
+          <button 
+            className='mr-text-green-lighter hover:mr-text-white mr-transition-colors'
+            onClick={() => {this.props.manageSharedFilterSettings(); this.props.afterClick()}}
+          >
+            <FormattedMessage {...messages.sharedFiltersLabel} />
+          </button>
+        </li>
         <li><hr className="mr-rule-dropdown" /></li>
         {listSearches.length > 0 &&
           <li>
