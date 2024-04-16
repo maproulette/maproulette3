@@ -1,7 +1,7 @@
 export const SET_RAPIDEDITOR = 'SET_RAPIDEDITOR';
 
 const initialState = {
-  rapidContext: null,
+  rapidContext: { context: null, dom: null },
 };
 
 export function rapidEditor(state = initialState, action) {

@@ -393,6 +393,7 @@ export class EnhancedMap extends ReactLeafletMap {
       this.noInitialBoundsSet = false
       this.leafletElement.fitBounds(this.props.initialBounds)
     } else if (!this.props.center.equals(prevProps.center)) {
+      this.fitBoundsToLayer()
       this.leafletElement.panTo(this.props.center)
     }
 
