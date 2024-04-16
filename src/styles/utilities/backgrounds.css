@@ -1,7 +1,7 @@
 .mr-bg-hero {
   background-image: url('./static/images/bg-hero.jpg');
 
-  @screen retina {
+  @media (-webkit-min-device-pixel-ratio: 2) {
     background-image: url('./static/images/bg-hero@2x.jpg');
   }
 }
@@ -9,7 +9,7 @@
 .mr-bg-map {
   background-image: url('./static/images/bg-map.jpg');
 
-  @screen retina {
+  @media (-webkit-min-device-pixel-ratio: 2) {
     background-image: url('./static/images/bg-map@2x.jpg');
   }
 }
@@ -79,7 +79,7 @@
   background-repeat: no-repeat;
   background-size: cover;
 
-  @screen retina {
+  @media (-webkit-min-device-pixel-ratio: 2) {
     background-image: url('./static/images/bg-space@2x.jpg');
   }
 }
@@ -104,7 +104,7 @@
   background-repeat: no-repeat;
   background-size: cover;
 
-  @screen retina {
+  @media (-webkit-min-device-pixel-ratio: 2) {
     background-image: url('./static/images/bg-highway@2x.jpg');
   }
 }
