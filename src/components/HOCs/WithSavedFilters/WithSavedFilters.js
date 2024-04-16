@@ -27,7 +27,8 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
   return class extends Component {
     state = {
       savingFilters: false,
-      managingFilters: false
+      managingFilters: false,
+      managingSharedFilterSettings: false
     }
 
     /**
@@ -74,6 +75,24 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
       settings[this.props.pageId][newName] = searchURL
       this.props.updateUserAppSetting(this.props.user.id,
         {[appSettingName]: settings})
+    }
+
+    toggleSharedFilterSettingsModalState = () => {
+      this.setState({sharedFiltersSettingsModalOpen: true})
+    }
+
+    setSharedFilterUserAppSetting = (filterString) => {
+      const settings = this.props.getUserAppSetting(this.props.user, "sharedWorkspaceFilters") || {}
+      settings["useSharedWorkspaceFilters"] = !settings["useSharedWorkspaceFilters"] || false
+      if(settings.useSharedWorkspaceFilters) {
+        settings["sharedWorkspaceFilterString"] = filterString
+      }
+      this.props.updateUserAppSetting(this.props.user.id, {["sharedWorkspaceFilters"]: settings})
+    }
+
+    getSharedFilterUserAppSetting = () => {
+      const settings = this.props.getUserAppSetting(this.props.user, "sharedWorkspaceFilters") || {}
+      return settings
     }
 
     // This will turn an integer or array value into
@@ -127,22 +146,30 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
     }
 
     render() {
-      return <WrappedComponent {...this.props}
-                               saveCurrentSearchFilters={this.saveCurrentSearchFilters}
-                               savedFilters={this.getSavedFilters()}
-                               removeSavedFilters={this.removeSavedFilters}
-                               renameSavedFilters={this.renameSavedFilters}
-                               manageFilters={() => this.setState({managingFilters: true})}
-                               saveFilters={() => this.setState({savingFilters: true})}
-                               managingFilters={this.state.managingFilters}
-                               savingFilters={this.state.savingFilters}
-                               cancelSavingFilters={() =>
-                                 this.setState({savingFilters: false})
-                               }
-                               cancelManagingFilters={() =>
-                                 this.setState({managingFilters: false})
-                               }
-                               getBriefFilters={this.getBriefFilters}/>
+      return (
+        <WrappedComponent {...this.props}
+          saveCurrentSearchFilters={this.saveCurrentSearchFilters}
+          savedFilters={this.getSavedFilters()}
+          removeSavedFilters={this.removeSavedFilters}
+          renameSavedFilters={this.renameSavedFilters}
+          manageFilters={() => this.setState({managingFilters: true})}
+          saveFilters={() => this.setState({savingFilters: true})}
+          manageSharedFilterSettings={() => this.setState({managingSharedFilterSettings: true})}
+          managingFilters={this.state.managingFilters}
+          savingFilters={this.state.savingFilters}
+          managingSharedFilterSettings={this.state.managingSharedFilterSettings}
+          cancelManagingSharedFilterSettings={() => this.setState({managingSharedFilterSettings: false})}
+          cancelSavingFilters={() =>
+            this.setState({savingFilters: false})
+          }
+          cancelManagingFilters={() =>
+            this.setState({managingFilters: false})
+          }
+          getBriefFilters={this.getBriefFilters}
+          setSharedFilterUserAppSetting={this.setSharedFilterUserAppSetting}
+          getSharedFilterUserAppSetting={this.getSharedFilterUserAppSetting}
+        />
+      )
     }
   }
 }
