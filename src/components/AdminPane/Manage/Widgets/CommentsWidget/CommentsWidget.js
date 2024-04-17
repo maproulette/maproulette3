@@ -28,7 +28,7 @@ export default class CommentsWidget extends Component {
       null
     ))
     const taskComments =  this.props.task?.comments ?
-      _map(this.props.task.comments, comment => Object.assign({challengeName: this.props.task.parent.name}, comment)) :
+      _map(this.props.task.comments, comment => Object.assign({challengeName: this.props.task?.parent?.name}, comment)) :
       null
 
     let exportControl = null
