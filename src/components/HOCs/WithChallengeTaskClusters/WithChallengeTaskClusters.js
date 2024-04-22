@@ -97,8 +97,8 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
 
       if (this.props.taskBundle && this.props.bundledOnly ){
         _set(searchCriteria, 'filters.bundleId', this.props.taskBundle.bundleId)
-         
       }
+
       if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
         return this.setState({ loading: false })
       }
@@ -199,14 +199,18 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     }
 
     onBulkTaskSelection = taskIds => {
-      const tasks =
-        _filter(this.clustersAsTasks(), task => taskIds.indexOf(task.id) !== -1 &&  !(this.props.task &&
-        !(task.taskStatus === 0 || task.status === 0 || 
-          task.taskStatus === 3 || task.status === 3 || 
-          task.taskStatus === 6 || task.status === 6) &&
-        !this.props.taskBundle?.taskIds?.includes(task.id || task.taskId) &&
-        !this.props.initialBundle?.taskIds?.includes(task.id || task.taskId) &&
-        (task.id || task.taskId)))
+      const tasks = this.clustersAsTasks().filter(task => {
+        const taskId = task.id || task.taskId
+        return taskIds.includes(taskId) &&
+          !(
+            this.props.task &&
+            ![0, 3, 6].includes(task.taskStatus || task.status) &&
+            (!this.props.taskBundle?.taskIds?.includes(taskId) &&
+              !this.props.initialBundle?.taskIds?.includes(taskId))
+          ) &&
+          taskId
+      })
+      
       this.props.onBulkTaskSelection(tasks)
     }
 

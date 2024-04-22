@@ -78,9 +78,9 @@ export default class TaskBundleWidget extends Component {
 
   bundleTasks = () => {
     const notActive = this.props.taskReadOnly ||
-    (!this.props.task?.reviewStatus && !(this.props.task?.reviewStatus === 0) && 
+    (!(this.props.task?.reviewStatus === 0) && 
     !(this.props.task?.status === 0 || this.props.task?.status === 3 || this.props.task?.status === 6)) ||
-    (this.props.task?.reviewStatus === TaskReviewStatus.needed &&
+    ((this.props.task?.reviewStatus === TaskReviewStatus.needed || this.props.task?.reviewStatus === TaskReviewStatus.disputed) &&
     (!(this.props.workspace.name === "taskReview") || this.props.task?.reviewClaimedBy !== this.props.user.id));
 
     if(_get(this.props, 'taskBundle.tasks.length', 0) > 0 || notActive){
@@ -155,7 +155,7 @@ export default class TaskBundleWidget extends Component {
   }
 
   unbundleTasks = async () => {
-    this.props.removeTaskBundle(this.props.taskBundle.bundleId, this.props.task.id)
+    this.props.removeTaskBundle(this.props.taskBundle.bundleId)
   }
 
   unbundleTask = (task) => {
@@ -311,7 +311,7 @@ const calculateTasksInChallenge = props => {
 
 const ActiveBundle = props => {
   const notActive = props.taskReadOnly ||
-    (props.task?.reviewStatus === TaskReviewStatus.needed &&
+    ((props.task?.reviewStatus === TaskReviewStatus.needed || props.task?.reviewStatus === TaskReviewStatus.disputed) &&
       (!(props.workspace.name === "taskReview") || props.task?.reviewClaimedBy !== props.user.id));
 
   const showMarkerPopup = markerData => {
@@ -492,9 +492,9 @@ const BuildBundle = props => {
     )
   }
   const notActive = props.taskReadOnly ||
-    (!props.task?.reviewStatus && !(props.task?.reviewStatus === 0) && 
+    (!(props.task?.reviewStatus === 0) && 
     !(props.task?.status  === 0 || props.task?.status === 3 || props.task?.status === 6)) ||
-    (props.task?.reviewStatus === TaskReviewStatus.needed &&
+    ((props.task?.reviewStatus === TaskReviewStatus.needed || props.task?.reviewStatus === TaskReviewStatus.disputed) &&
     (!(props.workspace.name === "taskReview") || props.task?.reviewClaimedBy !== props.user.id));
 
   const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')

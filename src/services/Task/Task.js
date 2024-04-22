@@ -961,18 +961,15 @@ export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bund
   }
 }
 // initialBundle, taskBundle props
-  export const resetTaskBundle = function(initialBundle, primaryTaskId) {
+  export const resetTaskBundle = function(initialBundle) {
+    const params = {};
     const bundleId = initialBundle.bundleId;
     let taskIdsArray = [];
     if (initialBundle && initialBundle.taskIds) { 
         taskIdsArray.push(...initialBundle.taskIds); 
-    }
-    
-    const params = {};
-    if (Number.isFinite(primaryTaskId)) { 
-        params.primaryId = primaryTaskId;
         params.taskIds = taskIdsArray;
     }
+
     return function(dispatch) {
       return new Endpoint(api.tasks.resetBundle, {
         variables: {bundleId},
@@ -993,16 +990,10 @@ export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bund
     }
   }
 
-export const deleteTaskBundle = function(bundleId, primaryTaskId) {
+export const deleteTaskBundle = function(bundleId) {
   return function(dispatch) {
-    const params = {}
-    if (_isFinite(primaryTaskId)) {
-      params.primaryId = primaryTaskId
-    }
-
     return new Endpoint(api.tasks.deleteBundle, {
       variables: {bundleId},
-      params,
     }).execute().then(results => {
       return results
     }).catch(error => {

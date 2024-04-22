@@ -409,11 +409,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const enableBundleEdits = (row._original.status === 0 || row._original.status === 3 || row._original.status === 6 ||
         props.initialBundle?.taskIds?.includes(row._original.id) ||
         props.taskBundle?.taskIds?.includes(row._original.id))
-  
+
       const notActive = props.taskReadOnly ||
-        (!props.task?.reviewStatus && !(props.task?.reviewStatus === 0) && 
-        !(props.task?.status === 0 || props.task?.status || props.task?.status === 6)) ||
-        (props.task?.reviewStatus === TaskReviewStatus.needed && 
+        (!(props.task?.reviewStatus === 0) && 
+        !(props.task?.status === 0 || props.task?.status === 3 || props.task?.status === 6)) ||
+        ((props.task?.reviewStatus === TaskReviewStatus.needed || props.task?.reviewStatus === TaskReviewStatus.disputed) && 
         (!(props.workspace.name === "taskReview") || (props.task?.reviewClaimedBy !== props.user.id)))
 
       return (
