@@ -119,7 +119,7 @@ const apiRoutes = (factory) => {
       resetBundle: factory.post("/taskBundle/:bundleId/reset"),
       deleteBundle: factory.delete("/taskBundle/:bundleId"),
       removeTaskFromBundle: factory.post("/taskBundle/:id/unbundle"),
-      fetchBundle: factory.get("/taskBundle/:bundleId"),
+      fetchBundle: factory.post("/taskBundle/:bundleId"),
       bundled: {
         updateStatus: factory.put("/taskBundle/:bundleId/:status"),
         addComment: factory.post("/taskBundle/:bundleId/comment"),
