@@ -17,6 +17,7 @@ export function WithTaskBundle(WrappedComponent) {
   return class extends Component {
     state = {
       loading: false,
+      bundleEditsDisabled: false,
       taskBundle: null,
       completingTask: null,
       initialBundle: null,
@@ -101,13 +102,14 @@ export function WithTaskBundle(WrappedComponent) {
     }
 
     setupBundle = bundleId => {
-      const { task, taskReadOnly, workspace, user } = this.props
-      const isTaskReviewNeeded =  (task?.reviewStatus === TaskReviewStatus.needed || task?.reviewStatus === TaskReviewStatus.disputed) && 
-        (workspace?.name !== "taskReview" || task?.reviewClaimedBy !== user?.id)
-      const notActive = taskReadOnly || (!task?.reviewStatus && task?.status !== 0) || isTaskReviewNeeded
+      const { task, taskReadOnly, workspace, user, name} = this.props
+      const inReview = (task?.reviewStatus === TaskReviewStatus.needed || task?.reviewStatus === TaskReviewStatus.disputed)
+      const invalidWorkspace = (workspace?.name === "taskReview" || name === "taskReview")
+      const completeStatus = !task?.reviewStatus && ![0,3,6].includes(task?.status)
+      const bundleEditsDisabled = taskReadOnly || (!user.isSuperUser && (user.id !== task.completedBy || completeStatus || inReview || invalidWorkspace))
 
       this.setState({loading: true})
-      this.props.fetchTaskBundle(bundleId, !notActive).then(taskBundle => {
+      this.props.fetchTaskBundle(bundleId, !bundleEditsDisabled).then(taskBundle => {
         if (!this.props.task.isBundlePrimary) {
           const challengeId = this.props.task?.parent?.id;
           const primaryTask = taskBundle.tasks.find(task => task.isBundlePrimary);
@@ -119,7 +121,7 @@ export function WithTaskBundle(WrappedComponent) {
             console.error("Primary task not found in task bundle.");
           }
         }
-        this.setState({initialBundle: taskBundle, selectedTasks: taskBundle?.taskIds, taskBundle, loading: false})
+        this.setState({bundleEditsDisabled, initialBundle: taskBundle, selectedTasks: taskBundle?.taskIds, taskBundle, loading: false})
       })
     }
 
@@ -198,6 +200,7 @@ export function WithTaskBundle(WrappedComponent) {
           clearActiveTaskBundle={this.clearActiveTaskBundle}
           setSelectedTasks={(selectedTasks) => this.setState({selectedTasks})}
           selectedTasks={this.state.selectedTasks}
+          bundleEditsDisabled={this.state.bundleEditsDisabled}
           setResetSelectedTasksAccessor={(f) => this.setState({resetSelectedTasks: f})}
           resetSelectedTasks={this.resetSelectedTasks}
         />

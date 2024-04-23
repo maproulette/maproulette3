@@ -36,7 +36,6 @@ import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 import WithWebSocketSubscriptions
        from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
-import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -77,13 +76,7 @@ export default class TaskBundleWidget extends Component {
   }
 
   bundleTasks = () => {
-    const notActive = this.props.taskReadOnly ||
-    (!(this.props.task?.reviewStatus === 0) && 
-    !(this.props.task?.status === 0 || this.props.task?.status === 3 || this.props.task?.status === 6)) ||
-    ((this.props.task?.reviewStatus === TaskReviewStatus.needed || this.props.task?.reviewStatus === TaskReviewStatus.disputed) &&
-    (!(this.props.workspace.name === "taskReview") || this.props.task?.reviewClaimedBy !== this.props.user.id));
-
-    if(_get(this.props, 'taskBundle.tasks.length', 0) > 0 || notActive){
+    if(_get(this.props, 'taskBundle.tasks.length', 0) > 0 || this.props.bundleEditsDisabled){
       return
     }
     
@@ -310,10 +303,6 @@ const calculateTasksInChallenge = props => {
 }
 
 const ActiveBundle = props => {
-  const notActive = props.taskReadOnly ||
-    ((props.task?.reviewStatus === TaskReviewStatus.needed || props.task?.reviewStatus === TaskReviewStatus.disputed) &&
-      (!(props.workspace.name === "taskReview") || props.task?.reviewClaimedBy !== props.user.id));
-
   const showMarkerPopup = markerData => {
     return (
       <Popup key={markerData.options.taskId}>
@@ -403,11 +392,11 @@ const ActiveBundle = props => {
             />
           </h3>
           <button
-            disabled={(notActive || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length))}
+            disabled={(props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length))}
             className="mr-button mr-button--green-lighter mr-button--small"
             style={{
-              cursor: (notActive || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 'default' : 'pointer',
-              opacity:(notActive || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 0.3 : 1
+              cursor: (props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 'default' : 'pointer',
+              opacity:(props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 0.3 : 1
             }}
             onClick={() => props.unbundleTasks()}
           >
@@ -491,14 +480,9 @@ const BuildBundle = props => {
       </div>
     )
   }
-  const notActive = props.taskReadOnly ||
-    (!(props.task?.reviewStatus === 0) && 
-    !(props.task?.status  === 0 || props.task?.status === 3 || props.task?.status === 6)) ||
-    ((props.task?.reviewStatus === TaskReviewStatus.needed || props.task?.reviewStatus === TaskReviewStatus.disputed) &&
-    (!(props.workspace.name === "taskReview") || props.task?.reviewClaimedBy !== props.user.id));
 
   const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
-  const bundleButton = props.selectedTaskCount(totalTaskCount) > 1 &&  !notActive ? (
+  const bundleButton = props.selectedTaskCount(totalTaskCount) > 1 &&  !props.bundleEditsDisabled ? (
       <button
         className="mr-button mr-button--green-lighter mr-button--small"
         onClick={props.bundleTasks}

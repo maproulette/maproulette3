@@ -50,7 +50,6 @@ import messages from './Messages'
 import './TaskAnalysisTable.scss'
 import TaskAnalysisTableHeader from './TaskAnalysisTableHeader'
 import AsCooperativeWork from '../../interactions/Task/AsCooperativeWork'
-import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { ViewCommentsButton, StatusLabel, makeInvertable }
   from './TaskTableHelpers'
 
@@ -410,22 +409,16 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
         props.initialBundle?.taskIds?.includes(row._original.id) ||
         props.taskBundle?.taskIds?.includes(row._original.id))
 
-      const notActive = props.taskReadOnly ||
-        (!(props.task?.reviewStatus === 0) && 
-        !(props.task?.status === 0 || props.task?.status === 3 || props.task?.status === 6)) ||
-        ((props.task?.reviewStatus === TaskReviewStatus.needed || props.task?.reviewStatus === TaskReviewStatus.disputed) && 
-        (!(props.workspace.name === "taskReview") || (props.task?.reviewClaimedBy !== props.user.id)))
-
       return (
         <div>
           {!isTaskSelected && enableBundleEdits && alreadyBundled && (
             <button
-              disabled={notActive}
+              disabled={props.bundleEditsDisabled}
               className="mr-text-red-light"
               style={{
-                cursor: notActive ? 'default' : 'pointer',
-                opacity: notActive ? 0.3 : 1,
-                pointerEvents: notActive ? 'none' : 'auto'
+                cursor: props.bundleEditsDisabled ? 'default' : 'pointer',
+                opacity: props.bundleEditsDisabled ? 0.3 : 1,
+                pointerEvents: props.bundleEditsDisabled ? 'none' : 'auto'
               }}
               onClick={() => props.unbundleTask(row._original)}
             >

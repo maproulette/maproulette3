@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
 import { messagesByStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { messagesByPriority } from '../../../services/Task/TaskPriority/TaskPriority'
-import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
 import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 import messages from './Messages'
 
@@ -26,13 +25,6 @@ class TaskMarkerContent extends Component {
       (this.props.marker.options.status === 0 || this.props.marker.options.status === 3 || this.props.marker.options.status === 6 || 
       this.props.marker.options.taskStatus === 0 || this.props.marker.options.taskStatus === 3 || this.props.marker.options.taskStatus === 6) &&
       !AsCooperativeWork(this.props.task).isTagType() && !this.props.taskReadOnly
-
-    const notActive =
-      this.props.taskReadOnly ||
-      (!(this.props.task?.reviewStatus === 0) && 
-      !(this.props.task?.status === 0 || this.props.task?.status === 3 || this.props.task?.status === 6)) ||
-      ((this.props.task?.reviewStatus === TaskReviewStatus.needed || this.props.task?.reviewStatus === TaskReviewStatus.disputed) &&
-      (!(this.props.workspace.name === "taskReview") || this.props.task?.reviewClaimedBy !== this.props.user.id))
 
     const statusMessage = messagesByStatus[
       _isFinite(this.props.marker.options.taskStatus)
@@ -96,12 +88,12 @@ class TaskMarkerContent extends Component {
                     <FormattedMessage {...messages.cannotEditPrimaryTask} />
                   ) : this.props.bundling && bundle.includes(taskId) ? (
                     <button
-                      disabled={notActive}
+                      disabled={this.props.bundleEditsDisabled}
                       onClick={() => this.props.unbundleTask(this.props.marker.options)}
                       className="mr-text-red mr-border-solid mr-border mr-border-red mr-px-2 mr-mb-1"
                       style={{
-                        cursor: notActive ? 'default' : 'pointer',
-                        opacity: notActive ? 0.3 : 1,
+                        cursor: this.props.bundleEditsDisabled ? 'default' : 'pointer',
+                        opacity: this.props.bundleEditsDisabled ? 0.3 : 1,
                       }}
                     >
                       <FormattedMessage {...messages.removeFromBundle} />
