@@ -61,7 +61,6 @@ export class ActiveTaskControls extends Component {
     osmComment: "",
     comment: "",
     tags: null,
-    reviewedTaskIds: [],
     revisionLoadBy: TaskReviewLoadMethod.all,
     doneLoadByFromHistory: false,
     needsReview: this.props.challenge.reviewSetting === 1 ? true : undefined
@@ -155,7 +154,7 @@ export class ActiveTaskControls extends Component {
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
     if (!_isUndefined(this.state.submitRevision)) {
-      this.props.updateTaskReviewStatus(this.props.task, this.state.reviewedTaskIds, this.state.submitRevision,
+      this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
                                         this.state.comment, "",
                                         this.state.revisionLoadBy, this.props.history,
                                         this.props.taskBundle, this.state.requestedNextTask,

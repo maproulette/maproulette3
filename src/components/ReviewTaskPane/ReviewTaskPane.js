@@ -67,20 +67,12 @@ export const defaultWorkspaceSetup = function() {
 export class ReviewTaskPane extends Component {
   state = {
     completionResponses: null,
-    reviewedTaskIds: []
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.location.pathname !== prevProps.location.pathname &&
         this.props.location.search !== prevProps.location.search) {
       window.scrollTo(0, 0)
-    }
-
-    const taskId = _get(this.props, 'task.id')
-    if (taskId && !this.state.reviewedTaskIds.includes(taskId)) {
-      this.setState(prevState => ({
-        reviewedTaskIds: [...prevState.reviewedTaskIds, taskId]
-      }))
     }
 
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
@@ -173,7 +165,6 @@ export class ReviewTaskPane extends Component {
             }
             setCompletionResponse={this.setCompletionResponse}
             completionResponses={completionResponses}
-            reviewedTaskIds={this.state.reviewedTaskIds}
             templateRevision={true}
             disallowBundleChanges={true}
         />

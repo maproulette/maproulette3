@@ -281,7 +281,7 @@ const mapDispatchToProps = (dispatch) => ({
 
   startNextReviewTask: (searchCriteria={}, url, pageSize, asMetaReview) => {
     const reviewType = asMetaReview ? 'meta-review' : 'review'
-    dispatch(loadNextReviewTask(searchCriteria, null, null, [], asMetaReview)).then((task) => {
+    dispatch(loadNextReviewTask(searchCriteria, null, asMetaReview)).then((task) => {
       const searchParams = _cloneDeep(searchCriteria)
       searchParams.pageSize = pageSize
       url.push(`/challenge/${task.parent}/task/${task.id}/${reviewType}`, searchParams)

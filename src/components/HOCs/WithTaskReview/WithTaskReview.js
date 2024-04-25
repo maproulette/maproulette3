@@ -39,7 +39,7 @@ function asMetaReview(props) {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateTaskReviewStatus: (task, reviewedTaskIds, status, comment, tags, loadBy, url,
+    updateTaskReviewStatus: (task, status, comment, tags, loadBy, url,
       taskBundle, requestedNextTask, newTaskStatus, errorTags) => {
         // Either this is a meta-review (url is /meta-review) or
         // it's the reviewer revising their review and requesting
@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         // list anymore. After we fetch the task we can do the review and move to the newly
         // fetched next task.
         if (loadBy === TaskReviewLoadMethod.next) {
-          loadNextTaskForReview(dispatch, url, task.parent?.id, task.id, reviewedTaskIds, asMetaReview(ownProps)).then(
+          loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
             nextTask => {
               dispatch(doReview()).then(() =>
                 visitLoadBy(loadBy, url, nextTask, asMetaReview(ownProps)))
@@ -107,9 +107,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
     },
 
-    skipTaskReview: (task, reviewedTaskIds, loadBy, url) => {
+    skipTaskReview: (task, loadBy, url) => {
       dispatch(cancelReviewClaim(task.id))
-      loadNextTaskForReview(dispatch, url, task.parent?.id, task.id, reviewedTaskIds, asMetaReview(ownProps)).then(
+      loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then(
         nextTask => visitLoadBy(loadBy, url, nextTask, asMetaReview(ownProps)))
     },
 
@@ -187,8 +187,8 @@ export const visitLoadBy = (loadBy, url, task, asMetaReview) => {
   }
 }
 
-export const loadNextTaskForReview = (dispatch, url, lastChallengeId, lastTaskId, reviewedTaskIds, asMetaReview) => {
-  return dispatch(loadNextReviewTask(parseSearchCriteria(url).searchCriteria, lastChallengeId, lastTaskId, reviewedTaskIds, asMetaReview))
+export const loadNextTaskForReview = (dispatch, url, lastTaskId, asMetaReview) => {
+  return dispatch(loadNextReviewTask(parseSearchCriteria(url).searchCriteria, lastTaskId, asMetaReview))
 }
 
 export default WrappedComponent =>

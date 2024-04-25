@@ -58,7 +58,7 @@ export class ReviewTaskControls extends Component {
 
     const errorTags = this.state.errorTags?.length ? this.state.errorTags : undefined
 
-    this.props.updateTaskReviewStatus(this.props.task, this.props.reviewedTaskIds, this.state.reviewStatus,
+    this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, "",
                                      this.state.loadBy, history,
                                      this.props.taskBundle, requestedNextTask, null, errorTags)
@@ -109,7 +109,7 @@ export class ReviewTaskControls extends Component {
 
   /** Skip review of this task */
   skipReview = () => {
-    this.props.skipTaskReview(this.props.task, this.props.reviewedTaskIds, this.state.loadBy,
+    this.props.skipTaskReview(this.props.task, this.state.loadBy,
                               this.props.history, this.props.taskBundle)
     this.setState({confirmingTask: false, comment: ""})
   }
