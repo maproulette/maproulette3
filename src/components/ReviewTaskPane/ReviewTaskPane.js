@@ -66,7 +66,7 @@ export const defaultWorkspaceSetup = function() {
  */
 export class ReviewTaskPane extends Component {
   state = {
-    completionResponses: null,
+    completionResponses: null
   }
 
   componentDidUpdate(prevProps) {
