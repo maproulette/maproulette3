@@ -15,31 +15,21 @@ class TaskMarkerContent extends Component {
   }
 
   render() {
-    const bundle = this.props.taskBundleData?.map((bundleObject) => bundleObject.id) || []
-    const selected = this.props.isTaskSelected(this.props.marker.options.taskId)
+    const selected = this.props.isTaskSelected(this.props.marker.options.taskId);
+    const taskId = this.props.marker.options.taskId ?? this.props.marker.options.id
+    const bundle = (this.props.taskBundleData || []).map(bundleObject => bundleObject.id);
+    const taskStatus = this.props.marker.options.status ?? this.props.marker.options.taskStatus
+    const bundlePrimary = this.props.taskBundle?.tasks.find(task => task.isBundlePrimary === true)
+    const statusMessage = messagesByStatus[this.props.marker.options.status ?? this.props.marker.options.taskStatus]
+    const priorityMessage = messagesByPriority[this.props.marker.options.priority ?? this.props.marker.options.taskPriority ]
 
     const checkBoxEnabled =
       !this.props.bundling &&
-      this.props.marker.options.taskId !== this.props.task.id &&
-      !(this.props.workspace.name === 'taskReview') &&
-      (this.props.marker.options.status === 0 || this.props.marker.options.status === 3 || this.props.marker.options.status === 6 || 
-      this.props.marker.options.taskStatus === 0 || this.props.marker.options.taskStatus === 3 || this.props.marker.options.taskStatus === 6) &&
-      !AsCooperativeWork(this.props.task).isTagType() && !this.props.taskReadOnly
-
-    const statusMessage = messagesByStatus[
-      _isFinite(this.props.marker.options.taskStatus)
-        ? this.props.marker.options.taskStatus
-        : this.props.marker.options.status
-    ]
-    
-    const priorityMessage = messagesByPriority[
-      _isFinite(this.props.marker.options.taskPriority)
-        ? this.props.marker.options.taskPriority
-        : this.props.marker.options.priority
-    ]
-
-    const taskId = this.props.marker.options.taskId ?? this.props.marker.options.id
-    const bundlePrimary = this.props.taskBundle?.tasks.find(task => task.isBundlePrimary === true)
+      !this.props.taskReadOnly &&
+      [0, 3, 6].includes(taskStatus) &&
+      this.props.workspace.name !== 'taskReview' &&
+      !AsCooperativeWork(this.props.task).isTagType() &&
+      this.props.marker.options.taskId !== this.props.task.id
 
     return (
       <div className="mr-flex mr-justify-center">
@@ -101,7 +91,6 @@ class TaskMarkerContent extends Component {
                   ) : null}
                 </div>
               ) : null}
-
             </label>
           </div>
         </div>

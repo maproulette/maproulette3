@@ -306,13 +306,15 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Header: null,
     accessor: task => props.isTaskSelected(task.id),
     Cell: ({ value, original }) => {
+      const status = original.status ?? original.taskStatus
       const enableSelecting =
-        (!props.bundling &&
-          original.taskId !== props.task?.id &&
-          !(props.workspace.name === 'taskReview') &&
-          (original.status === 0 || original.status === 3 || original.status === 6 ||
-            original.taskStatus === 0 || original.taskStatus === 3 || original.taskStatus === 6)) &&
-        !AsCooperativeWork(props.task).isTagType() && !props.taskReadOnly
+      !props.bundling &&
+      !props.taskReadOnly &&
+      [0, 3, 6].includes(status) &&
+      original.taskId !== props.task?.id &&
+      props.workspace.name !== 'taskReview' &&
+      !AsCooperativeWork(props.task).isTagType()
+    
 
       return (
         props.highlightPrimaryTask && original.id === props.task?.id && !original.bundleId ?
@@ -402,12 +404,12 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: 'remove',
     minWidth: 110,
     Cell: ({ row }) => {
-      const bundlePrimary = props.taskBundle?.tasks.find(task => task.isBundlePrimary === true)
-      const isTaskSelected = row._original.id === bundlePrimary?.id || (!bundlePrimary && row._original.id === props.task?.id)
+      const bundlePrimary = props.taskBundle?.tasks.find(task => task.isBundlePrimary)
+      const isTaskSelected = row._original.id === (bundlePrimary?.id || props.task?.id)
       const alreadyBundled = props.taskBundle?.taskIds?.includes(row._original.id)
-      const enableBundleEdits = (row._original.status === 0 || row._original.status === 3 || row._original.status === 6 ||
-        props.initialBundle?.taskIds?.includes(row._original.id) ||
-        props.taskBundle?.taskIds?.includes(row._original.id))
+      const enableBundleEdits = props.initialBundle?.taskIds?.includes(row._original.id) ||
+                                [0, 3, 6].includes(row._original.status) ||
+                                alreadyBundled      
 
       return (
         <div>

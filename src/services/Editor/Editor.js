@@ -321,13 +321,13 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle, re
 /**
  * Builds a RapiD editor URI for editing of the given task
  */
-export const constructRapidURI = function (task, mapBounds, options, taskBundle, replacedComment) {
+export const constructRapidURI = function (task, mapBounds, options, replacedComment) {
   const baseUriComponent = `${process.env.REACT_APP_RAPID_EDITOR_SERVER_URL}#`;
   const centerPoint = taskCenterPoint(mapBounds, task);
   const mapUriComponent =
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join("/");
 
-  const selectedEntityComponent = "id=" + osmObjectParams(_get(taskBundle, "tasks", task), true);
+  const selectedEntityComponent = "id=" + osmObjectParams(task, true);
 
   const commentUriComponent = replacedComment ?
     "comment=" +
@@ -468,7 +468,6 @@ export const osmObjectParams = function (
               case "Polygon":
                 return `${abbreviated ? "w" : "way"}${entitySeparator}${osmId}`;
               case "MultiPolygon":
-              case "GeometryCollection":
                 return `${
                   abbreviated ? "r" : "relation"
                 }${entitySeparator}${osmId}`;

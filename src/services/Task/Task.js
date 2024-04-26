@@ -960,11 +960,12 @@ export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bund
     })
   }
 }
-// initialBundle, taskBundle props
+
   export const resetTaskBundle = function(initialBundle) {
     const params = {};
     const bundleId = initialBundle.bundleId;
     let taskIdsArray = [];
+
     if (initialBundle && initialBundle.taskIds) { 
         taskIdsArray.push(...initialBundle.taskIds); 
         params.taskIds = taskIdsArray;

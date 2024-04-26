@@ -448,8 +448,7 @@ export class ActiveTaskControls extends Component {
                  needsRevised={needsRevised}
                />
              }
-             {(!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions) && !(this.props.task.reviewStatus === TaskReviewStatus.needed ||
-               this.props.task.reviewStatus === TaskReviewStatus.disputed) && !isEditingTask && (!isFinal || needsRevised) &&
+             {(!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions) && !isEditingTask && (!isFinal || needsRevised) &&
               <TaskCompletionStep1
                 {...this.props}
                 allowedEditors={this.allowedEditors()}
