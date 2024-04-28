@@ -1041,10 +1041,12 @@ export const fetchChallenges = function (
       const {
         instruction,
         description,
-        name
+        name,
+        checkinComment
       } = challengeData;
 
       const instructionsMinLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
+      debugger
       if (
         challengeData.parent != undefined && 
         (
@@ -1052,7 +1054,9 @@ export const fetchChallenges = function (
           instruction.length < instructionsMinLength ||
           !description?.trim()?.length ||
           !name ||
-          name.length <= 3
+          name.length <= 3 ||
+          !checkinComment ||
+          checkinComment === '#maproulette'
         )
       ) {
         let errorMessage = '';
@@ -1063,10 +1067,12 @@ export const fetchChallenges = function (
           errorMessage = AppErrors.challengeSaveFailure.saveDescriptionFailure;
         } else if (
           instruction === undefined ||
-          instruction.length < 150
+          instruction.length < instructionsMinLength
         ) {
           errorMessage = AppErrors.challengeSaveFailure.saveInstructionsFailure;
           errorMessage.values = { minLength: `${instructionsMinLength}` };
+        } else if (checkinComment === undefined || checkinComment === '' || checkinComment === '#maproulette') {
+          errorMessage = AppErrors.challengeSaveFailure.saveChangesetDescriptionFailure;
         } else {
           errorMessage = AppErrors.challengeSaveFailure.saveDetailsFailure;
         }
