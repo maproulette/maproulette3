@@ -1046,7 +1046,6 @@ export const fetchChallenges = function (
       } = challengeData;
 
       const instructionsMinLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
-      debugger
       if (
         challengeData.parent != undefined && 
         (
