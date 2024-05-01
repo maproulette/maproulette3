@@ -11,15 +11,12 @@ export default defineMessages({
 
   sharedFiltersModalDescription: {
     id: "SharedFiltersModal.description",
-    defaultMessage: "When this setting is toggled the current filters will also be applied in " +
-                    "other contexts (currently the Challenge Management and Task Review workspaces)"
+    defaultMessage: "Apply Task Property filtering rules from your saved Challenge Admin filter profiles to the current Review Task workspace."
   },
 
   sharedFiltersModalSubDescription: {
     id: "SharedFiltersModal.subDescription",
-    defaultMessage: "Context-specific filters (currently task properties, certain table column sorting filters and specific task statuses) " + 
-                    "will only be applied to their relevant context. Changing this setting to \"off\" or applying a saved filter " + 
-                    "profile from the list will return filtering to its default behavior."
+    defaultMessage: "Only task property filters will be applied."
   },
 
   sharedFiltersModalFilterListLabel: {

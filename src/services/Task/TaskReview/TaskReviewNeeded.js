@@ -46,6 +46,7 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
                                                           null,
                                                           _get(criteria, 'invertFields', {}))
   const includeTags = criteria.includeTags
+  const filters = (_get(criteria, 'filters', {}))
 
   return function(dispatch) {
     return new Endpoint(
@@ -55,7 +56,9 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
         variables: {},
         params: {limit, sort, order, page, ...searchParameters,
                  includeTags},
-      }
+        json: filters.taskPropertySearch ? 
+          {taskPropertySearch: filters.taskPropertySearch} : null,
+      },
     ).execute().then(normalizedResults => {
       const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})
       const tasks = _map(normalizedResults.result.tasks, (id) => unsortedTaskMap[id])
