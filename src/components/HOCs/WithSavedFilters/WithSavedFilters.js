@@ -55,6 +55,16 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
     }
 
     /**
+     * This retrieves filters specific to the challenge dashboard admin context.
+     */
+    getChallengeAdminFilters = () => {
+      const settings = this.props.getUserAppSetting(
+        this.props.user, "adminSearchFilters") || {}
+      
+      return settings["ChallengeDashboard"]
+    }
+
+    /**
      * This will remove the given saved search filters from the user's app settings.
      */
     removeSavedFilters = name => {
@@ -79,20 +89,6 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
 
     toggleSharedFilterSettingsModalState = () => {
       this.setState({sharedFiltersSettingsModalOpen: true})
-    }
-
-    setSharedFilterUserAppSetting = (filterString) => {
-      const settings = this.props.getUserAppSetting(this.props.user, "sharedWorkspaceFilters") || {}
-      settings["useSharedWorkspaceFilters"] = !settings["useSharedWorkspaceFilters"] || false
-      if(settings.useSharedWorkspaceFilters) {
-        settings["sharedWorkspaceFilterString"] = filterString
-      }
-      this.props.updateUserAppSetting(this.props.user.id, {["sharedWorkspaceFilters"]: settings})
-    }
-
-    getSharedFilterUserAppSetting = () => {
-      const settings = this.props.getUserAppSetting(this.props.user, "sharedWorkspaceFilters") || {}
-      return settings
     }
 
     // This will turn an integer or array value into
@@ -148,8 +144,10 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
     render() {
       return (
         <WrappedComponent {...this.props}
+          appSettingName={appSettingName}
           saveCurrentSearchFilters={this.saveCurrentSearchFilters}
           savedFilters={this.getSavedFilters()}
+          challengeAdminFilters={this.getChallengeAdminFilters()}
           removeSavedFilters={this.removeSavedFilters}
           renameSavedFilters={this.renameSavedFilters}
           manageFilters={() => this.setState({managingFilters: true})}
@@ -166,8 +164,6 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
             this.setState({managingFilters: false})
           }
           getBriefFilters={this.getBriefFilters}
-          setSharedFilterUserAppSetting={this.setSharedFilterUserAppSetting}
-          getSharedFilterUserAppSetting={this.getSharedFilterUserAppSetting}
         />
       )
     }

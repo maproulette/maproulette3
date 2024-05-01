@@ -54,6 +54,7 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
   const metaReviewers = asMetaReviewer ? [userId] : []
 
   const includeTags = criteria.includeTags
+  const filters = (_get(criteria, 'filters', {}))
 
   let dispatchType = RECEIVE_REVIEWED_TASKS
   if (asReviewer || asMetaReviewer) {
@@ -74,6 +75,8 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
         params: {users: mappers, reviewers, metaReviewers, limit, sort, order, page,
                  ...searchParameters, includeTags, asMetaReview,
                  allowReviewNeeded: (!asReviewer && !asMetaReviewer && !asMetaReview)},
+        json: filters.taskPropertySearch ? 
+          {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute().then(normalizedResults => {
       const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})
