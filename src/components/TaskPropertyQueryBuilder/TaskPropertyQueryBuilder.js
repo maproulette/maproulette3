@@ -129,7 +129,9 @@ export class TaskPropertyQueryBuilder extends Component {
   }
 
   setupFormData = (taskPropertyQuery) => {
+    console.log('taskPropertyQuery in builder', taskPropertyQuery)
     const rules = preparePropertyRulesForForm(taskPropertyQuery)
+    console.log('prepared rules in builder', rules)
     this.setState({formData: {
       propertyRules: {
         rootRule: taskPropertyQuery ? rules : {}

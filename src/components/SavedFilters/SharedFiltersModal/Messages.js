@@ -11,12 +11,12 @@ export default defineMessages({
 
   sharedFiltersModalDescription: {
     id: "SharedFiltersModal.description",
-    defaultMessage: "Apply Task Property filtering rules from your saved Challenge Admin filter profiles to the current Review Task workspace."
+    defaultMessage: "Select a filter set from below to apply a saved Task Property filter to the current Review table tasks. The filtering rules are populated via any Challenge Admin filters you have saved that contain task property rules."
   },
 
   sharedFiltersModalSubDescription: {
     id: "SharedFiltersModal.subDescription",
-    defaultMessage: "Only task property filters will be applied."
+    defaultMessage: "Only task property filters will be applied. The Task Property filters will only apply if you are viewing tasks from a single challenge in the review table."
   },
 
   sharedFiltersModalFilterListLabel: {
@@ -37,5 +37,10 @@ export default defineMessages({
   toggleLabel: {
     id: "SharedFiltersModal.controls.toggle.label",
     defaultMessage: "Toggle filter settings across workspace contexts: "
+  },
+
+  clearFiltersLabel: {
+    id: "SharedFiltersModal.controls.clearFilters.label",
+    defaultMessage: "Clear Current Task Property Filters"
   }
 })
