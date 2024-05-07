@@ -19,7 +19,7 @@ export default class TaskPropertyFilter extends Component {
     showForm: false
   }
 
-  render() {    
+  render() {
     const formSearch =
       <TaskPropertyQueryBuilder
         {...this.props}
