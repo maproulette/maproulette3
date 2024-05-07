@@ -9,17 +9,14 @@ import _keys from 'lodash/keys'
 import messages from './Messages'
 
 /**
- * SharedFiltersModal provides a modal overlay and UI to enable use of task and other filter settings
+ * SharedFiltersModal provides a modal overlay and UI to enable use of task property filter rules
  * across workspace contexts. It consumes props from the WithSavedFilters HOC to manage the setting
- * toggle state as well as the filter state, which is saved as a URL string. URL filter strings are 
- * currently consumed by the challenge "Create and Manage" view as well as the Task Review tables.
- * Filter sharing enabled via this modal will function in both of those workspace contexts.
+ * toggle state as well as the filter state, which is saved as a URL string. Currently any saved Challenge Admin
+ * filters that contain Task Property rules will be available via the modal to apply to task review tables.
  * @author [Andrew Philbin](https://github.com/AndrewPhilbin)
  */
 
-
-
-function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedFilterSettings, ...props}) {
+function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedFilterSettings, challengeAdminFilters}) {
   const history = useHistory()
   const currentSearchString = history.location.search
   const pathname = history.location.pathname
@@ -37,6 +34,8 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
     }
   }
 
+
+
   const filterClearButton = 
     <button 
       className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
@@ -47,13 +46,14 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
       <FormattedMessage {...messages.clearFiltersLabel} />
   </button>
 
-  const listSearches = _map(_keys(props.challengeAdminFilters), (search, index) => {
-    const adminSearchURL = props.challengeAdminFilters[search]
+  const listSearches = _map(_keys(challengeAdminFilters), (search, index) => {
+    const adminSearchURL = challengeAdminFilters[search]
     const adminParams = new URLSearchParams(adminSearchURL)
     const filterApplyButton = 
     <a 
       onClick={() => {
-        let currentSearchParams = new URLSearchParams(currentSearchString)
+        // Clear current task property query parameter if present and set to value from saved filter, then update tasks.
+        const currentSearchParams = new URLSearchParams(currentSearchString)
         if(currentSearchParams.has("filters.taskPropertySearch")) currentSearchParams.delete("filters.taskPropertySearch")
         const taskPropertySearchValue = adminParams.get("filters.taskPropertySearch")
         currentSearchParams.append("filters.taskPropertySearch", taskPropertySearchValue)
@@ -69,6 +69,7 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
       {search}
     </a>
 
+    // Include only saved admin filters that have task property rules
     if(adminParams.has("filters.taskPropertySearch")) return (
       <li key={search + "-" + index}>
         <div className='mr-flex mr-space-x-2 mr-items-center'>
@@ -103,7 +104,7 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
             </div>
             <div className='mr-space-y-1 mr-p-4'>
               <ul>
-                {listSearches}
+                {challengeAdminFilters ? listSearches : null}
               </ul>
             </div>
           </div>
