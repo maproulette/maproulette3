@@ -531,7 +531,7 @@ export class TaskReviewTable extends Component {
                 <SharedFiltersModal 
                   managingSharedFilterSettings={this.props.managingSharedFilterSettings}
                   cancelManagingSharedFilterSettings={this.props.cancelManagingSharedFilterSettings}
-                  {...this.props} 
+                  challengeAdminFilters={this.props.challengeAdminFilters}
                 />
               </div>
             </div>
