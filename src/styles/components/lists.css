@@ -36,7 +36,7 @@
   }
 }
 
-@variants responsive {
+@layer utilities {
   .mr-list-ruled {
     @apply mr-leading-tight mr-inline-flex;
   }

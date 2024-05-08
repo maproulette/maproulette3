@@ -41,7 +41,7 @@ class Modal extends Component {
                'mr-overflow-y-auto': !this.props.allowOverflow,
                'mr-h-full': this.props.fullScreen,
                'mr-overflow-visible': this.props.allowOverflow},
-              'mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full mr-w-md mr-mx-auto mr-max-h-screen90 mr-min-w-72',
+              'mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full mr-mx-auto mr-max-h-screen90 mr-min-w-72',
               this.props.contentClassName
             )}
           >
