@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import Downshift from 'downshift'
+import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _split from 'lodash/split'
@@ -169,7 +170,7 @@ export default class AutosuggestTextBox extends Component {
     if (!_isEmpty(filteredPreferredResults)) {
       let className = "mr-font-medium"
       items = items.concat(
-        filteredPreferredResults.map((result, index) => {
+        _map(filteredPreferredResults, (result, index) => {
           // Add a border bottom to the last entry if there are more search results.
           if (index === filteredPreferredResults.length - 1 && filteredPreferredResults.length > 0) {
             className += " mr-border-b-2 mr-border-white-50 mr-mb-2 mr-pb-2"
@@ -180,9 +181,9 @@ export default class AutosuggestTextBox extends Component {
     }
 
     // Now concatenate all other search results, but the index will be offset by the preferred results length.
-    items = items.concat(
-      searchResults.map((result, index) => generateResult(result, "", index + filteredPreferredResults.length))
-    )
+    items = items.concat(_map(searchResults, 
+      (result, index) => generateResult(result, "", index + filteredPreferredResults.length)
+    ))
 
     return items
   }
@@ -200,9 +201,7 @@ export default class AutosuggestTextBox extends Component {
     }
 
     // Filter out any of our original preferredResults tags so they don't show in the list twice.
-    return _filter(this.props.searchResults, t => {  
-      return _indexOf(t.name || t.displayName) === -1
-    })
+    return _filter(this.props.searchResults, t => _indexOf(this.props.preferredResults, (t.name || t.displayName)) === -1)
   }
 
   render() {
