@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import Downshift from 'downshift'
-import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _split from 'lodash/split'
@@ -101,10 +100,10 @@ export default class AutosuggestTextBox extends Component {
         const isItemSelected = this.props.multiselect.includes(result.id)
         const isPreferredTag = preferredResults.some((preferredResult) => preferredResult.id === result.id)
 
-        if (!_isEmpty(preferredResults)) {
-          return isPreferredTag && (this.props.multiselect.length === 0 || isItemSelected)
-        } else {
+        if (!preferredResults.length) {
           return this.props.multiselect.length === 0 ? isAllOption : isItemSelected
+        } else {
+          return isPreferredTag && (this.props.multiselect.length === 0 || isItemSelected)
         }
       }
 
@@ -145,26 +144,32 @@ export default class AutosuggestTextBox extends Component {
     }
 
     let items = []
-    const searchResults = this.getSearchResults()
+    let searchResults = this.getSearchResults()
+    searchResults = searchResults.filter(result => result?.id !== -999)
+
+    searchResults = searchResults.sort((a, b) => {
+      const nameA = a.name || a.displayName
+      const nameB = b.name || b.displayName
+
+      if (a.id === FILTER_SEARCH_ALL) return -1
+      if (b.id === FILTER_SEARCH_ALL) return 1
+      if (nameA === this.props.inputValue) return -1
+      if (nameB === this.props.inputValue) return 1
+      return isChecked(b) - isChecked(a)
+    })
+
     const preferredResults = this.getPreferredResults()
 
     // Filter preferredResults based on user input
-    const filteredPreferredResults = preferredResults.filter((result) =>
-      result.toLowerCase().includes(this.props.inputValue.toLowerCase())
-    )
-
-    searchResults.sort((a, b) => {
-      if (a.id === FILTER_SEARCH_ALL) return -1
-      if (b.id === FILTER_SEARCH_ALL) return 1
-      if (a.name === this.props.inputValue) return -1
-      if (b.name === this.props.inputValue) return 1
-      return isChecked(b) - isChecked(a)
+    const filteredPreferredResults = preferredResults.filter((result) => {
+      const name = result.name || result.displayName
+      return name.toLowerCase().includes(this.props.inputValue.toLowerCase())
     })
 
     if (!_isEmpty(filteredPreferredResults)) {
       let className = "mr-font-medium"
       items = items.concat(
-        _map(filteredPreferredResults, (result, index) => {
+        filteredPreferredResults.map((result, index) => {
           // Add a border bottom to the last entry if there are more search results.
           if (index === filteredPreferredResults.length - 1 && filteredPreferredResults.length > 0) {
             className += " mr-border-b-2 mr-border-white-50 mr-mb-2 mr-pb-2"
@@ -175,9 +180,9 @@ export default class AutosuggestTextBox extends Component {
     }
 
     // Now concatenate all other search results, but the index will be offset by the preferred results length.
-    items = items.concat(_map(searchResults, 
-      (result, index) => generateResult(result, "", index + filteredPreferredResults.length)
-    ))
+    items = items.concat(
+      searchResults.map((result, index) => generateResult(result, "", index + filteredPreferredResults.length))
+    )
 
     return items
   }
@@ -195,7 +200,9 @@ export default class AutosuggestTextBox extends Component {
     }
 
     // Filter out any of our original preferredResults tags so they don't show in the list twice.
-    return _filter(this.props.searchResults, t => _indexOf(this.props.preferredResults, t.name) === -1)
+    return _filter(this.props.searchResults, t => {  
+      return _indexOf(t.name || t.displayName) === -1
+    })
   }
 
   render() {
