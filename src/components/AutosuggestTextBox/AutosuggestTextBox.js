@@ -146,6 +146,13 @@ export default class AutosuggestTextBox extends Component {
 
     let items = []
     let searchResults = this.getSearchResults()
+    const preferredResults = this.getPreferredResults()
+
+    // Filter preferredResults based on user input
+    const filteredPreferredResults = preferredResults.filter((result) =>
+      result.toLowerCase().includes(this.props.inputValue.toLowerCase())
+    )
+
     searchResults = searchResults.filter(result => result?.id !== -999)
 
     searchResults = searchResults.sort((a, b) => {
@@ -157,14 +164,6 @@ export default class AutosuggestTextBox extends Component {
       if (nameA === this.props.inputValue) return -1
       if (nameB === this.props.inputValue) return 1
       return isChecked(b) - isChecked(a)
-    })
-
-    const preferredResults = this.getPreferredResults()
-
-    // Filter preferredResults based on user input
-    const filteredPreferredResults = preferredResults.filter((result) => {
-      const name = result.name || result.displayName
-      return name.toLowerCase().includes(this.props.inputValue.toLowerCase())
     })
 
     if (!_isEmpty(filteredPreferredResults)) {
