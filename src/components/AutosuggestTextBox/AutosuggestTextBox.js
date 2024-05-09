@@ -101,10 +101,10 @@ export default class AutosuggestTextBox extends Component {
         const isItemSelected = this.props.multiselect.includes(result.id)
         const isPreferredTag = preferredResults.some((preferredResult) => preferredResult.id === result.id)
 
-        if (!preferredResults.length) {
-          return this.props.multiselect.length === 0 ? isAllOption : isItemSelected
-        } else {
+        if (!_isEmpty(preferredResults)) {
           return isPreferredTag && (this.props.multiselect.length === 0 || isItemSelected)
+        } else {
+          return this.props.multiselect.length === 0 ? isAllOption : isItemSelected
         }
       }
 
