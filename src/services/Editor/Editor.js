@@ -469,6 +469,7 @@ export const osmObjectParams = function (
               case "Polygon":
                 return `${abbreviated ? "w" : "way"}${entitySeparator}${osmId}`;
               case "MultiPolygon":
+              case "GeometryCollection":
                 return `${
                   abbreviated ? "r" : "relation"
                 }${entitySeparator}${osmId}`;
