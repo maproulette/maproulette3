@@ -89,6 +89,7 @@ export default {
     saveNameFailure: messages.challengeSaveNameFailure,
     saveDescriptionFailure: messages.challengeSaveDescriptionFailure,
     saveInstructionsFailure: messages.challengeSaveInstructionFailure,
+    saveChangesetDescriptionFailure: messages.challengeSaveChangesetDescriptionFailure,
     saveEditPolicyAgreementFailure: messages.challengeSaveEditPolicyAgreementFailure,
   },
 
