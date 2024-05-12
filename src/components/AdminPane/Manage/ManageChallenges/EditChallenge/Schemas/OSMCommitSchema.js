@@ -1,8 +1,6 @@
 import AsEditableChallenge from "../../../../../../interactions/Challenge/AsEditableChallenge";
 import messages from "../Messages";
 
-const STEP_ID = "OSMCommit";
-
 /**
  * Generates a JSON Schema describing OSM commit fields of Edit Challenge
  * workflow intended for consumption by react-jsonschema-form
