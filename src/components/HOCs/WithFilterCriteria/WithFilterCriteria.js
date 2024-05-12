@@ -36,6 +36,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        loading: false,
        criteria: DEFAULT_CRITERIA,
        pageSize: DEFAULT_PAGE_SIZE,
+       bundledOnly: true
      }
 
      updateCriteria = (newCriteria) => {
@@ -330,6 +331,9 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
                            updateCriteria={this.updateCriteria}
                            refreshTasks={this.refreshTasks}
                            clearAllFilters={this.clearAllFilters}
+                           bundledOnly={this.state.bundledOnly}
+                           setBundledOnly={(bundledOnly) => {
+                             this.setState({bundledOnly})}}
                            {..._omit(this.props, ['loadingChallenge', 'clearAllFilters'])} />)
      }
    }

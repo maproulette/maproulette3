@@ -66,7 +66,7 @@ export const UNCLUSTER_THRESHOLD = 1000 // max number of tasks
 /**
  * The number of clusters to show.
  */
-export const CLUSTER_POINTS = 25
+export const CLUSTER_POINTS = 250
 
 /**
  * The size of cluster marker icons in pixels
@@ -697,9 +697,16 @@ export class TaskClusterMap extends Component {
     else if (this.props.initialBounds) {
       this.currentBounds = this.props.initialBounds
     }
+
     const currentCenterpoint = AsMappableTask(this.props.task).calculateCenterPoint()
-    let selectionKit = this.props.hideLasso === true ? null : (
-      <>
+    
+    let selectionKit = (
+       <>
+        {this.props.clearSelectedSelector && (
+            <LassoSelectionControl
+              onLassoClear={this.props.resetSelectedTasks}
+            />
+        )}
         {this.props.showSelectMarkersInView && (
           <SelectMarkersInViewControl
             onSelectAllInView={this.props.onBulkTaskSelection}

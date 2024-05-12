@@ -21,16 +21,18 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
      * Toggle selection of the given task on or off
      */
     toggleTaskSelection = task => {
+      const taskId = task.id ?? task.taskId
+
       // If allSelected is false, then we work off the selectedTasks map;
       // otherwise we work off the deselectedTasks map
       if (!this.state.allSelected) {
         const selected = new Map(this.state.selectedTasks)
-        selected.has(task.id) ? selected.delete(task.id) : selected.set(task.id, task)
+        selected.has(taskId) ? selected.delete(taskId) : selected.set(taskId, task)
         this.setState({selectedTasks: selected})
       }
       else {
         const deselected = new Map(this.state.deselectedTasks)
-        deselected.has(task.id) ? deselected.delete(task.id) : deselected.set(task.id, task)
+        deselected.has(taskId) ? deselected.delete(taskId) : deselected.set(taskId, task)
         this.setState({deselectedTasks: deselected})
       }
     }

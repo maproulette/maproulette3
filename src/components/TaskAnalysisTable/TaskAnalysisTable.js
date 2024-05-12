@@ -59,7 +59,7 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
 // columns
 const ALL_COLUMNS =
   Object.assign({featureId:{}, id:{}, status:{}, priority:{},
-    completedDuration:{}, mappedOn:{}, unbundle: {},
+    completedDuration:{}, mappedOn:{}, editBundle: {},
     reviewStatus:{group:"review"},
     reviewRequestedBy:{group:"review"},
     reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
@@ -70,7 +70,7 @@ const ALL_COLUMNS =
        metaReviewedAt:{group:"review"}} : null
   )
 
-const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments", "unbundle"]
+const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments", "editBundle"]
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
@@ -301,26 +301,31 @@ export class TaskAnalysisTableInternal extends Component {
 const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => {
   const columns = {}
 
-  columns.selected = {id: 'selected',
+  columns.selected = {
+    id: 'selected',
     Header: null,
     accessor: task => props.isTaskSelected(task.id),
-    Cell: ({value, original}) => {
-      const isMapper = props.task?.completedBy ? props.task.completedBy === props.user.id : true
-      
-      const isTagFix = AsCooperativeWork(props.task).isTagType()
-      const enableEditForMapper = [0, 3].includes(props.task?.status) || [2, 4, 5].includes(props.task?.reviewStatus)
-
-      const disableSelecting = props.taskReadOnly || isTagFix || !isMapper || !enableEditForMapper
+    Cell: ({ value, original }) => {
+      const status = original.status ?? original.taskStatus
+      const enableSelecting =
+      !props.bundling &&
+      !props.taskReadOnly &&
+      [0, 3, 6].includes(status) &&
+      original.taskId !== props.task?.id &&
+      props.workspace.name !== 'taskReview' &&
+      !AsCooperativeWork(props.task).isTagType()
+    
 
       return (
-      props.highlightPrimaryTask && original.id === props.task.id ?
-      <span className="mr-text-green-lighter">✓</span> : !disableSelecting ?
-      <input
-        type="checkbox"
-        className="mr-checkbox-toggle"
-        checked={value}
-        onChange={() => props.toggleTaskSelection(original)}
-      /> : ''   
+        props.highlightPrimaryTask && original.id === props.task?.id && !original.bundleId ?
+          <span className="mr-text-green-lighter">✓</span> :
+          enableSelecting ?
+            <input
+              type="checkbox"
+              className="mr-checkbox-toggle"
+              checked={value}
+              onChange={() => props.toggleTaskSelection(original)}
+            /> : ''
       )
     },
     maxWidth: 25,
@@ -342,7 +347,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     id: 'id',
     Header: props.intl.formatMessage(messages.idLabel),
     accessor: t => {
-      if (t.isBundlePrimary) {
+      if (t.isBundlePrimary && t.id === props.task?.id) {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
@@ -355,7 +360,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
           </span>
         )
       }
-      else if (_isFinite(t.bundleId)) {
+      else if (_isFinite(t.bundleId) && t.bundleId && t.bundleId == props.taskBundle?.bundleId) {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
@@ -394,29 +399,38 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     ),
   }
 
-  columns.unbundle = {
-    id: 'unbundle',
+  columns.editBundle = {
+    id: 'editBundle',
     Header: null,
     sortable: false,
     accessor: 'remove',
     minWidth: 110,
     Cell: ({ row }) => {
-      const isTaskSelected = props.taskId === row._original.id
-      const enableEditForMapper = [0, 3].includes(props.task?.status) || [2, 4, 5].includes(props.task?.reviewStatus)
-      const isTaskRemovable = !props.taskReadOnly && enableEditForMapper
-
-      const enableRemove = props.task?.completedBy ? props.task.completedBy === props.user.id : true
+      const bundlePrimary = props.taskBundle?.tasks.find(task => task.isBundlePrimary)
+      const isTaskSelected = row._original.id === (bundlePrimary?.id || props.task?.id)
+      const alreadyBundled = props.taskBundle?.taskIds?.includes(row._original.id)
+      const enableBundleEdits = props.initialBundle?.taskIds?.includes(row._original.id) ||
+                                [0, 3, 6].includes(row._original.status) ||
+                                alreadyBundled      
 
       return (
         <div>
-          {isTaskRemovable && !isTaskSelected && enableRemove ? (
+          {!isTaskSelected && enableBundleEdits && alreadyBundled && (
             <button
-              className="mr-text-red"
-              onClick={() => props.unbundleTask(row._original.id)}
+              disabled={props.bundleEditsDisabled}
+              className="mr-text-red-light"
+              style={{
+                cursor: props.bundleEditsDisabled ? 'default' : 'pointer',
+                opacity: props.bundleEditsDisabled ? 0.3 : 1,
+                pointerEvents: props.bundleEditsDisabled ? 'none' : 'auto'
+              }}
+              onClick={() => props.unbundleTask(row._original)}
             >
               <FormattedMessage {...messages.unbundle} />
             </button>
-          ) : null}
+          )}
+  
+          {isTaskSelected && <div className="mr-text-yellow">Primary Task</div>}
         </div>
       );
     },

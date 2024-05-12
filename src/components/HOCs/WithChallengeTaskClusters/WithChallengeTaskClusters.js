@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import bboxPolygon from '@turf/bbox-polygon'
-import booleanDisjoint from '@turf/boolean-disjoint'
 import _omit from 'lodash/omit'
 import _cloneDeep from 'lodash/cloneDeep'
 import _get from 'lodash/get'
@@ -21,7 +19,6 @@ import { fetchTaskClusters, clearTaskClusters }
        from '../../../services/Task/TaskClusters'
 import { fetchBoundedTasks, clearBoundedTasks }
        from '../../../services/Task/BoundedTask'
-import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterMap'
 
 /**
@@ -47,12 +44,6 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         const criteria = _cloneDeep(this.props.criteria)
         criteria.boundingBox = arrayBounds.join(',')
         this.props.updateTaskFilterBounds(bounds, zoom, fromUserAction)
-
-        // If task selection is active, prune any selections that no longer
-        // intersect with the new map bounds
-        this.props.pruneSelectedTasks && this.props.pruneSelectedTasks(task =>
-          booleanDisjoint(AsMappableTask(task).normalizedGeometries(), bboxPolygon(arrayBounds))
-        )
       }
     }
 
@@ -104,6 +95,10 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         _set(searchCriteria, 'filters.archived', true)
       }
 
+      if (this.props.taskBundle && this.props.bundledOnly ){
+        _set(searchCriteria, 'filters.bundleId', this.props.taskBundle.bundleId)
+      }
+
       if (process.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
         return this.setState({ loading: false })
       }
@@ -119,7 +114,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
             // (unless we are zoomed all the way in already)
             if (results.totalCount > UNCLUSTER_THRESHOLD &&
                 _get(this.props, 'criteria.zoom', 0) < MAX_ZOOM) {
-              this.props.fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable
+              this.props.fetchTaskClusters(challengeId, searchCriteria, 500, overrideDisable
               ).then(results => {
                 const clusters = results.clusters
                 if (currentFetchId >= this.state.fetchId) {
@@ -140,7 +135,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         })
       }
       else {
-        this.props.fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable
+        this.props.fetchTaskClusters(challengeId, searchCriteria, 500, overrideDisable
         ).then(results => {
           const clusters = results.clusters
           if (currentFetchId >= this.state.fetchId) {
@@ -178,6 +173,10 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       else if (!_isEqual(_omit(prevProps.criteria, ['page', 'pageSize']),
             _omit(this.props.criteria, ['page', 'pageSize']))) {
         this.debouncedFetchClusters(this.state.showAsClusters)
+      } else if(this.props.taskBundle && 
+        (this.props.bundledOnly !== prevProps.bundledOnly || 
+        this.props.taskBundle !== prevProps.taskBundle)){
+        this.debouncedFetchClusters(this.state.showAsClusters)
       }
     }
 
@@ -200,8 +199,18 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     }
 
     onBulkTaskSelection = taskIds => {
-      const tasks =
-        _filter(this.clustersAsTasks(), task => taskIds.indexOf(task.id) !== -1)
+      const tasks = this.clustersAsTasks().filter(task => {
+        const taskId = task.id || task.taskId
+        return taskIds.includes(taskId) &&
+          !(
+            this.props.task &&
+            ![0, 3, 6].includes(task.taskStatus || task.status) &&
+            (!this.props.taskBundle?.taskIds?.includes(taskId) &&
+              !this.props.initialBundle?.taskIds?.includes(taskId))
+          ) &&
+          taskId
+      })
+      
       this.props.onBulkTaskSelection(tasks)
     }
 

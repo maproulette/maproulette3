@@ -104,7 +104,7 @@ export const editTask = function (
         );
       } else if (editor === RAPID) {
         editorWindowReference = window.open(
-          constructRapidURI(task, mapBounds, options, replacedComment)
+          constructRapidURI(task, mapBounds, options, taskBundle, replacedComment)
         );
       }
 
@@ -323,7 +323,6 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle, re
  */
 export const constructRapidURI = function (task, mapBounds, options, replacedComment) {
   const baseUriComponent = `${process.env.REACT_APP_RAPID_EDITOR_SERVER_URL}#`;
-
   const centerPoint = taskCenterPoint(mapBounds, task);
   const mapUriComponent =
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join("/");
