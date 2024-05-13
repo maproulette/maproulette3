@@ -514,7 +514,7 @@ const BuildBundle = props => {
       initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
       onBulkTaskSelection={props.selectTasks}
       onBulkTaskDeselection={props.deselectTasks}
-      allowClusterToggle={false}
+      allowClusterToggle
       hideSearchControl
       allowSpidering
       showScaleControl

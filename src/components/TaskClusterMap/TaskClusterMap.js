@@ -191,7 +191,7 @@ export class TaskClusterMap extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(!this.props.showAsClusters && this.props.totalTaskCount > 200) {
+    if(!this.props.showAsClusters && this.props.totalTaskCount > UNCLUSTER_THRESHOLD) {
       this.props.toggleShowAsClusters()
     }
 
@@ -681,8 +681,6 @@ export class TaskClusterMap extends Component {
     }
 
     const canClusterToggle = (
-      this.props.totalTaskCount &&
-      this.props.totalTaskCount < 200 &&
       this.props.allowClusterToggle &&
       this.props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
       this.props.totalTaskCount > CLUSTER_POINTS &&
