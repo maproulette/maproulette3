@@ -333,6 +333,7 @@ const ActiveBundle = props => {
       taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
       boundingBox={_get(props, boundingBoxData)}
       initialBounds={toLatLngBounds(_get(props, boundingBoxData, []))}
+      allowClusterToggle
       hideSearchControl
       allowSpidering
       selectedTasks={props.selectedTasks}
@@ -514,7 +515,7 @@ const BuildBundle = props => {
       initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
       onBulkTaskSelection={props.selectTasks}
       onBulkTaskDeselection={props.deselectTasks}
-      allowClusterToggle={false}
+      allowClusterToggle
       hideSearchControl
       allowSpidering
       showScaleControl

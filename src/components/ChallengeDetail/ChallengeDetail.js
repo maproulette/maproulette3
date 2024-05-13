@@ -454,7 +454,7 @@ export class ChallengeDetail extends Component {
         }
         showMarkerPopup={showMarkerPopup}
         challenge={challenge}
-        allowClusterToggle={false}
+        allowClusterToggle
         criteria={{
           boundingBox: fromLatLngBounds(this.state.bounds),
           zoom: this.state.zoom,
