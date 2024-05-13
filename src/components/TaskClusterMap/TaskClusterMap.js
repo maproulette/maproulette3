@@ -680,10 +680,14 @@ export class TaskClusterMap extends Component {
       }).reverse()
     }
 
-    const canClusterToggle = (this.props.totalTaskCount && this.props.totalTaskCount < 200) || (!!this.props.allowClusterToggle &&
+    const canClusterToggle = (
+      this.props.totalTaskCount &&
+      this.props.totalTaskCount < 200 &&
+      this.props.allowClusterToggle &&
       this.props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
       this.props.totalTaskCount > CLUSTER_POINTS &&
-      this.currentZoom < MAX_ZOOM)
+      this.currentZoom < MAX_ZOOM
+    )
 
     if (!this.currentBounds && this.state.mapMarkers) {
       // Set Current Bounds to the minimum bounding box of our markers
