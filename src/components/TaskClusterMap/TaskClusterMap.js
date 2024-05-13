@@ -66,7 +66,7 @@ export const UNCLUSTER_THRESHOLD = 1000 // max number of tasks
 /**
  * The number of clusters to show.
  */
-export const CLUSTER_POINTS = 250
+export const CLUSTER_POINTS = 25
 
 /**
  * The size of cluster marker icons in pixels
@@ -191,6 +191,10 @@ export class TaskClusterMap extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if(!this.props.showAsClusters && this.props.totalTaskCount > 200) {
+      this.props.toggleShowAsClusters()
+    }
+
     if (this.props.taskMarkers && !this.props.delayMapLoad &&
        (!_isEqual(this.props.taskMarkers, prevProps.taskMarkers) ||
         this.props.selectedClusters !== prevProps.selectedClusters)) {
@@ -676,10 +680,10 @@ export class TaskClusterMap extends Component {
       }).reverse()
     }
 
-    const canClusterToggle = !!this.props.allowClusterToggle &&
+    const canClusterToggle = (this.props.totalTaskCount && this.props.totalTaskCount < 200) || (!!this.props.allowClusterToggle &&
       this.props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
       this.props.totalTaskCount > CLUSTER_POINTS &&
-      this.currentZoom < MAX_ZOOM
+      this.currentZoom < MAX_ZOOM)
 
     if (!this.currentBounds && this.state.mapMarkers) {
       // Set Current Bounds to the minimum bounding box of our markers
