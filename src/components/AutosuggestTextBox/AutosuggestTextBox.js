@@ -150,8 +150,11 @@ export default class AutosuggestTextBox extends Component {
 
     // Filter preferredResults based on user input
     const filteredPreferredResults = preferredResults.filter((result) => {
-      const resultName = result.name || result.displayName
-      return resultName.toLowerCase().includes(this.props.inputValue.toLowerCase())
+      const resultName = result.name || result.displayName || result
+      if (typeof resultName === 'string') {
+        return resultName.toLowerCase().includes(this.props.inputValue.toLowerCase())
+      }
+      return false
     })
 
     searchResults = searchResults.filter(result => result?.id !== -999)
