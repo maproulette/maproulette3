@@ -7,6 +7,31 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.1] - 2024-5-14
+Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
+
+## What's Changed
+* Persist adjusted filters in next task review workflow by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2319
+* Add bundle resets on when user redirects away from bundle by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2291
+* Add map to bundling widget's bundled mode by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2291
+* Make changset description mandatory and fix instruction length condition in challenge editor by @tjaySchwarz24 in https://github.com/maproulette/maproulette3/pull/2326
+* Fix project manager user permissions auto suggest box by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2329
+* Add feature id table filter by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2307
+* Add support for overpass generated relations by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2301
+* Fix geometries undefined race condition by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2325
+* Support user-friendly task identifier in search result markers  by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2322
+* Fix get in touch reporting format by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2318
+* Bump ejs from 3.1.9 to 3.1.10 by @dependabot in https://github.com/maproulette/maproulette3/pull/2327
+* Fix comments prop "name" undefined error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2321
+* Update GH actions versions and remove last node 16 refs by @ljdelight in https://github.com/maproulette/maproulette3/pull/2320
+* Refactor task clustering toggles and limits by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2333
+
+## MR2 Changes
+* Add feature id filter to search parameters by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1108
+* Add support for relations in overpass queries by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1106
+* Fix nearby task looping too hard tasks issue by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1110
+* Adjust bundling endpoints annd add resetTaskBundle endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1107
+
 ## [v3.15.0] - 2024-4-9
 Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
 
