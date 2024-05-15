@@ -119,6 +119,11 @@ export default class TaskBundleWidget extends Component {
       return
     }
     
+    //Ignore if in read only mode
+    if (this.props.taskReadOnly) {
+      return
+    }
+
     const shortcuts = this.props.keyboardShortcutGroups.taskEditing
     if (event.key === shortcuts.completeTogether.key) {
       this.bundleTasks()
@@ -482,7 +487,7 @@ const BuildBundle = props => {
   }
 
   const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
-  const bundleButton = props.selectedTaskCount(totalTaskCount) > 1 &&  !props.bundleEditsDisabled ? (
+  const bundleButton = !props.taskReadOnly && props.selectedTaskCount(totalTaskCount) > 1 && !props.bundleEditsDisabled ? (
       <button
         className="mr-button mr-button--green-lighter mr-button--small"
         onClick={props.bundleTasks}

@@ -80,7 +80,7 @@ export function WithTaskBundle(WrappedComponent) {
       const inReview = task?.reviewStatus === TaskReviewStatus.needed || task?.reviewStatus === TaskReviewStatus.disputed
       const invalidWorkspace = workspace?.name === "taskReview" || name === "taskReview"
       const completeStatus = (!inReview && !task?.reviewStatus !== 0) && ![0, 3, 6].includes(task?.status)
-      const bundleEditsDisabled = taskReadOnly || ( completeStatus || ((!user.isSuperUser) && (user.id !== task.completedBy || invalidWorkspace)))
+      const bundleEditsDisabled = taskReadOnly || ( completeStatus || ((!user.isSuperUser) && ((task.completedBy && user.id !== task.completedBy) || invalidWorkspace)))
 
       this.setState({ bundleEditsDisabled })
     }
