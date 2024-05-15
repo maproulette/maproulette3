@@ -121,8 +121,7 @@ export default defineMessages({
   },
   unableToBundleTasks: {
     id: "Errors.task.unableToBundleTasks",
-    defaultMessage: "The tasks with these IDs are locked by another user{details}. This most likely happened because a user completed or " +
-    "bundled a task while you've been looking at this task. Refresh the page to view only tasks that are unlocked.",
+    defaultMessage: "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
   },
   osmRequestTooLarge: {
     id: "Errors.osm.requestTooLarge",
