@@ -20,10 +20,10 @@ export const WithTaskPropertyKeys = function(WrappedComponent) {
        if (challengeId && !this.state.loadingPropertyKeys){
          this.setState({loadingPropertyKeys: true})
          fetchPropertyKeys(challengeId).then( (results) => {
+           console.log('task prop key results', results)
            this.setState({loadingPropertyKeys: false, taskPropertyKeys: _sortBy(results)})
            return results
          }).catch(error => {
-           console.log(error)
            this.setState({loadingPropertyKeys: false, taskPropertyKeys: []})
          })
          return []

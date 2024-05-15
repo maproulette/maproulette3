@@ -4,6 +4,7 @@ import Modal from '../Modal/Modal'
 import External from '../External/External'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import _get from 'lodash/get'
+import WithSavedTaskPropertyFilters from '../HOCs/WithSavedTaskPropertyFilters/WithSavedTaskPropertyFilters'
 import TaskPropertyQueryBuilder
        from '../TaskPropertyQueryBuilder/TaskPropertyQueryBuilder'
 import TaskFilterIndicator from './TaskFilterIndicator'
@@ -14,9 +15,10 @@ import messages from './Messages'
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export default class TaskPropertyFilter extends Component {
+export class TaskPropertyFilter extends Component {
   state = {
-    showForm: false
+    showForm: false,
+    showSavedList: false
   }
 
   render() {
@@ -52,8 +54,29 @@ export default class TaskPropertyFilter extends Component {
           {this.state.showForm &&
             <External>
               <Modal isActive wide onClose={() => this.setState({showForm: false})}>
-                <div className="mr-max-h-screen75">
+                <div className="mr-max-h-screen75 mr-space-y-4">
                   {formSearch}
+                  <div className='mr-space-y-2'>
+                    <div className='mr-flex mr-space-x-1 mr-items-center'>
+                      <button 
+                        onClick={() => this.setState(prev => ({showSavedList: !prev.showSavedList}))} 
+                        className=' hover:mr-text-white mr-flex mr-items-center mr-text-grey-light'
+                      >
+                        <span>Saved Property Filter Rules</span>
+                        <SvgSymbol 
+                          sym='icon-cheveron-right' 
+                          viewBox="0 0 20 20"
+                          className={`mr-fill-current  mr-w-5 mr-h-5 ${this.state.showSavedList ? 'mr-rotate-90' : ''}`} 
+                        />
+                      </button>  
+                    </div>
+                    { this.state.showSavedList && 
+                      <div className='mr-bg-blue-firefly-75 mr-p-2'>
+                        <p>Hello</p>
+                        <button onClick={() => this.props.saveCurrentTaskPropertyFilters(this.props.criteria)}>Test Save</button>
+                      </div>
+                    }
+                  </div>
                 </div>
               </Modal>
             </External>
@@ -63,3 +86,5 @@ export default class TaskPropertyFilter extends Component {
     )
   }
 }
+
+export default WithSavedTaskPropertyFilters(TaskPropertyFilter)

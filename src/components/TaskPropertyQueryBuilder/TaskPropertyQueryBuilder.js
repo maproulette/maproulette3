@@ -119,7 +119,7 @@ export class TaskPropertyQueryBuilder extends Component {
 
     if (errors.length === 0) {
       const preparedData = preparePropertyRulesForSaving(rootRule)
-
+      console.log('prepared date', preparedData)
       this.setState({preparedData, errors: null})
       this.props.updateTaskPropertyQuery(preparedData)
     }
@@ -180,6 +180,7 @@ export class TaskPropertyQueryBuilder extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.user?.properties?.mr3Frontend)
     if (this.props.taskPropertyQuery) {
       this.setupFormData(this.props.taskPropertyQuery)
     }
@@ -189,6 +190,7 @@ export class TaskPropertyQueryBuilder extends Component {
   }
 
   componentDidUpdate() {
+    console.log('taskpropquerybuilderstate', this.state.formData)
     // Clear form data if filters.taskPropertyQuery has been cleared.
     if (_isEmpty(this.props.taskPropertyQuery) &&
         !_isEmpty(this.state.preparedData)) {
@@ -251,9 +253,9 @@ export class TaskPropertyQueryBuilder extends Component {
             </div>
           }
           {!this.props.updateAsChange &&
-            <div className="mr-pt-2 mr-pb-4 mr-pl-1">
+            <div className="mr-flex mr-space-x-4 mr-pt-2 mr-pb-4 mr-pl-1">
               <button
-                className="mr-button mr-button--green-lighter mr-mr-4"
+                className="mr-button mr-button--green-lighter"
                 onClick={this.clearForm}
               >
                 <FormattedMessage {...messages.clearButton} />
@@ -265,6 +267,15 @@ export class TaskPropertyQueryBuilder extends Component {
               >
                 <FormattedMessage {...messages.searchButton} />
               </button>
+              { this.state.formData && this.state.formData.propertyRules && Object.keys(this.state.formData.propertyRules).length && 
+                <button
+                  className="mr-button mr-button--green-lighter"
+                  onClick={() => console.log(this.props)}
+                >
+                  {/* <FormattedMessage {...messages.searchButton} /> */}
+                  Save Current Property Rules
+                </button>
+              }
             </div>
           }
         </Form>
