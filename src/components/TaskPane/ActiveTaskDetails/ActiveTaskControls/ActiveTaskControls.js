@@ -354,7 +354,7 @@ export class ActiveTaskControls extends Component {
       return null
     }
     const cooperative = AsCooperativeWork(this.props.task).isTagType() || this.props.task.cooperativeWork
-    const disableRapid = this.props.taskBundle || cooperative || this.props.taskReadOnly || (
+    const disableRapid = cooperative || this.props.taskReadOnly || (
       this.props.task?.status !== 0 && ( 
       this.props.completedBy !== this.props.user && 
       this.props.task?.reviewClaimedBy !== this.props.user

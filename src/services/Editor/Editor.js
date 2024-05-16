@@ -104,7 +104,7 @@ export const editTask = function (
         );
       } else if (editor === RAPID) {
         editorWindowReference = window.open(
-          constructRapidURI(task, mapBounds, options, taskBundle, replacedComment)
+          constructRapidURI(task, mapBounds, options, replacedComment)
         );
       }
 
