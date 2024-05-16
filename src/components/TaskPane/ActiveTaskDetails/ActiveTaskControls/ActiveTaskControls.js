@@ -86,7 +86,7 @@ export class ActiveTaskControls extends Component {
 
   allowedEditors = () => {
     // Only JOSM allowed for change-file cooperative tasks
-    return AsCooperativeWork(this.props.task).isChangeFileType() || this.props.taskBundle ?
+    return AsCooperativeWork(this.props.task).isChangeFileType() ?
       [Editor.josmLayer, Editor.josm] :
       null
   }
