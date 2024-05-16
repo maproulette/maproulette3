@@ -533,7 +533,7 @@ const BuildBundle = props => {
       <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
         {props.loading ?
           <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
-          <MapPane showLasso>{map}</MapPane>
+          <MapPane showLasso={!props.bundleEditsDisabled}>{map}</MapPane>
         }
       </div>
 

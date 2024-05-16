@@ -6,6 +6,7 @@ import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { bundleTasks, deleteTaskBundle, resetTaskBundle, removeTaskFromBundle, fetchTaskBundle } from '../../../services/Task/Task'
 import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
+import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -80,7 +81,7 @@ export function WithTaskBundle(WrappedComponent) {
       const inReview = task?.reviewStatus === TaskReviewStatus.needed || task?.reviewStatus === TaskReviewStatus.disputed
       const invalidWorkspace = workspace?.name === "taskReview" || name === "taskReview"
       const completeStatus = (!inReview && !task?.reviewStatus !== 0) && ![0, 3, 6].includes(task?.status)
-      const bundleEditsDisabled = taskReadOnly || ( completeStatus || ((!user.isSuperUser) && ((task.completedBy && user.id !== task.completedBy) || invalidWorkspace)))
+      const bundleEditsDisabled = (AsCooperativeWork(task).isTagType() || AsCooperativeWork(task).isCooperative() )|| taskReadOnly || ( completeStatus || ((!user.isSuperUser) && ((task.completedBy && user.id !== task.completedBy) || invalidWorkspace)))
 
       this.setState({ bundleEditsDisabled })
     }
