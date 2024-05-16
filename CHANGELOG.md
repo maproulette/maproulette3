@@ -11,7 +11,7 @@ This project adheres to
 Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
 
 ## What's Changed
-* Add rapid editor back to task bundles by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2339
+* Enable all other editors for bundles by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2339
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.1...v3.15.2
 
