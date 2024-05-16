@@ -7,6 +7,14 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.2] - 2024-5-15
+Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
+
+## What's Changed
+* Add rapid editor back to task bundles by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2339
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.1...v3.15.2
+
 ## [v3.15.1] - 2024-5-14
 Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
 
@@ -32,6 +40,8 @@ Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/mapro
 * Fix nearby task looping too hard tasks issue by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1110
 * Adjust bundling endpoints annd add resetTaskBundle endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1107
 
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.0...v3.15.1
+
 ## [v3.15.0] - 2024-4-9
 Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
 
@@ -45,6 +55,8 @@ Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/mapro
 * reconfirgure project modal filtering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2308
 * fix challenge comments link by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2312
 * reduce spidering distance by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2313
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.13...v3.15.0
 
 ## [v3.14.13] - 2024-3-12
 Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
