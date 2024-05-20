@@ -16,6 +16,9 @@ import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithProject from '../HOCs/WithProject/WithProject'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
+import ProjectFilterSubnav from '../ChallengePane/ChallengeFilterSubnav/ProjectFilterSubnav'
+import WithFilteredChallenges from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
+import WithChallengeSearch from '../HOCs/WithSearch/WithChallengeSearch'
 import WithComputedMetrics from '../AdminPane/HOCs/WithComputedMetrics/WithComputedMetrics'
 import ChallengeResultList from '../ChallengePane/ChallengeResultList/ChallengeResultList'
 import { PROJECT_CHALLENGE_LIMIT } from '../../services/Project/Project'
@@ -56,104 +59,107 @@ export class ProjectDetail extends Component {
     )
 
     return (
-      <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
-        {!this.props.loadingChallenges &&
-          <div className="mr-pt-8 mr-pl-8">
-            <div className="mr-text-sm mr-text-yellow mr-uppercase mr-mb-4">
-              <FormattedMessage
-                {...messages.challengeCount}
-                values={{
-                  count: challengeResults.length,
-                  isVirtual: this.props.project.isVirtual
-                }}
+      <div className="mr-bg-gradient-r-green-dark-blue mr-text-white">
+        <ProjectFilterSubnav {...this.props} />
+        <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
+          {!this.props.loadingChallenges &&
+            <div className="mr-pt-8 mr-pl-8">
+              <div className="mr-text-sm mr-text-yellow mr-uppercase mr-mb-4">
+                <FormattedMessage
+                  {...messages.challengeCount}
+                  values={{
+                    count: challengeResults.length,
+                    isVirtual: this.props.project.isVirtual
+                  }}
+                />
+              </div>
+              <ChallengeResultList
+                unfilteredChallenges={this.props.challenges}
+                excludeProjectResults
+                excludeProjectId={this.props.project.id}
+                {...this.props}
               />
             </div>
-            <ChallengeResultList
-              unfilteredChallenges={this.props.challenges}
-              excludeProjectResults
-              excludeProjectId={this.props.project.id}
-              {...this.props}
-            />
-          </div>
-        }
-        {this.props.loadingChallenges && <BusySpinner />}
-        <div className="mr-flex-1">
-          <div className="mr-h-content mr-overflow-auto">
-            <div className="mr-max-w-md mr-mx-auto">
-              <div className="mr-pt-6 mr-px-8">
-                <div className="mr-mb-4">
-                  <button
-                    className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
-                    onClick={() => this.props.history.goBack()}
-                  >
-                    &larr; <FormattedMessage {...messages.goBack} />
-                  </button>
-                </div>
-
-                <h1 className="mr-card-challenge__title">{project.displayName}</h1>
-                <div className="mr-card-challenge__content">
-                  <ol className="mr-card-challenge__meta">
-                    <li>
-                      <strong className="mr-text-yellow">
-                        <FormattedMessage
-                          {...messages.createdOnLabel}
-                        />
-                        :
-                      </strong>{' '}
-                      <FormattedDate value={parse(project.created)}
-                                      year='numeric' month='long' day='2-digit' />
-                    </li>
-                    <li>
-                      <strong className="mr-text-yellow">
-                        <FormattedMessage
-                          {...messages.modifiedOnLabel}
-                        />
-                        :
-                      </strong>{' '}
-                      <FormattedDate value={parse(project.modified)}
-                                      year='numeric' month='long' day='2-digit' />
-                    </li>
-                    {/* Disable Link tell project leaderboard page is reimplemented */}
-                    {/* {_get(this.props, 'challenges.length', 0) > 0 &&
-                      <li>
-                        <Link
-                          className="mr-text-green-lighter hover:mr-text-white"
-                          to={`/project/${project.id}/leaderboard`}
-                        >
-                          <FormattedMessage {...messages.viewLeaderboard} />
-                        </Link>
-                      </li>
-                    } */}
-                  </ol>
-
-                  <div className="mr-card-challenge__description">
-                    <MarkdownContent
-                      markdown={project.description}
-                    />
+          }
+          {this.props.loadingChallenges && <BusySpinner />}
+          <div className="mr-flex-1">
+            <div className="mr-h-content mr-overflow-auto">
+              <div className="mr-max-w-md mr-mx-auto">
+                <div className="mr-pt-6 mr-px-8">
+                  <div className="mr-mb-4">
+                    <button
+                      className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
+                      onClick={() => this.props.history.goBack()}
+                    >
+                      &larr; <FormattedMessage {...messages.goBack} />
+                    </button>
                   </div>
 
-                  {this.props.challenges?.length > PROJECT_CHALLENGE_LIMIT 
-                    ?  <div className="mr-text-red">
-                        Sorry, project statistics are not available for projects with more than {PROJECT_CHALLENGE_LIMIT} challenges.
-                      </div>
-                    :  <ProjectProgress className="mr-my-4" {...this.props} />}
-                 
+                  <h1 className="mr-card-challenge__title">{project.displayName}</h1>
+                  <div className="mr-card-challenge__content">
+                    <ol className="mr-card-challenge__meta">
+                      <li>
+                        <strong className="mr-text-yellow">
+                          <FormattedMessage
+                            {...messages.createdOnLabel}
+                          />
+                          :
+                        </strong>{' '}
+                        <FormattedDate value={parse(project.created)}
+                                        year='numeric' month='long' day='2-digit' />
+                      </li>
+                      <li>
+                        <strong className="mr-text-yellow">
+                          <FormattedMessage
+                            {...messages.modifiedOnLabel}
+                          />
+                          :
+                        </strong>{' '}
+                        <FormattedDate value={parse(project.modified)}
+                                        year='numeric' month='long' day='2-digit' />
+                      </li>
+                      {/* Disable Link tell project leaderboard page is reimplemented */}
+                      {/* {_get(this.props, 'challenges.length', 0) > 0 &&
+                        <li>
+                          <Link
+                            className="mr-text-green-lighter hover:mr-text-white"
+                            to={`/project/${project.id}/leaderboard`}
+                          >
+                            <FormattedMessage {...messages.viewLeaderboard} />
+                          </Link>
+                        </li>
+                      } */}
+                    </ol>
 
-                  <ul className="mr-card-challenge__actions mr-mt-4 mr-leading-none mr-text-base">
-                    <li>
-                      {_get(this.props.user, 'settings.isReviewer') &&
-                        <Link
-                          className={classNames(
-                            "mr-text-green-lighter hover:mr-text-white mr-mr-4",
-                            {"mr-border-r-2 mr-border-white-10 mr-pr-4 mr-mr-4": manageControl})}
-                          to={`/review?projectId=${project.id}&projectName=${project.displayName}`}
-                        >
-                          <FormattedMessage {...messages.viewReviews} />
-                        </Link>
-                      }
-                      {manageControl}
-                    </li>
-                  </ul>
+                    <div className="mr-card-challenge__description">
+                      <MarkdownContent
+                        markdown={project.description}
+                      />
+                    </div>
+
+                    {this.props.challenges?.length > PROJECT_CHALLENGE_LIMIT 
+                      ?  <div className="mr-text-red">
+                          Sorry, project statistics are not available for projects with more than {PROJECT_CHALLENGE_LIMIT} challenges.
+                        </div>
+                      :  <ProjectProgress className="mr-my-4" {...this.props} />}
+                  
+
+                    <ul className="mr-card-challenge__actions mr-mt-4 mr-leading-none mr-text-base">
+                      <li>
+                        {_get(this.props.user, 'settings.isReviewer') &&
+                          <Link
+                            className={classNames(
+                              "mr-text-green-lighter hover:mr-text-white mr-mr-4",
+                              {"mr-border-r-2 mr-border-white-10 mr-pr-4 mr-mr-4": manageControl})}
+                            to={`/review?projectId=${project.id}&projectName=${project.displayName}`}
+                          >
+                            <FormattedMessage {...messages.viewReviews} />
+                          </Link>
+                        }
+                        {manageControl}
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -166,9 +172,13 @@ export class ProjectDetail extends Component {
 
 export default WithCurrentUser(
   WithProject(
-    WithStartChallenge(
-      WithBrowsedChallenge(
-        injectIntl(ProjectDetail)
+    WithChallengeSearch(
+      WithFilteredChallenges(
+        WithStartChallenge(
+          WithBrowsedChallenge(
+            injectIntl(ProjectDetail)
+          )
+        )
       )
     ), {includeChallenges: true}
   )
