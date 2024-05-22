@@ -33,6 +33,10 @@ const ProjectProgress = WithComputedMetrics(ChallengeProgress)
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class ProjectDetail extends Component {
+  state = {
+    remainingChallengeOnly: true
+  }
+
   render() {
     const project = this.props.project
     if (!_isObject(project)) {
@@ -72,11 +76,15 @@ export class ProjectDetail extends Component {
                     isVirtual: this.props.project.isVirtual
                   }}
                 />
+              <button  className="mr-button mr-button--small mr-button--green-lighter mr-ml-4" onClick={() => this.setState({ remainingChallengeOnly: !this.state.remainingChallengeOnly })}>
+                { this.state.remainingChallengeOnly ? <FormattedMessage {...messages.showAll} /> : <FormattedMessage {...messages.showRemaining} />  }
+              </button>
               </div>
               <ChallengeResultList
                 unfilteredChallenges={this.props.challenges}
                 excludeProjectResults
                 excludeProjectId={this.props.project.id}
+                remainingChallengeOnly={this.state.remainingChallengeOnly}
                 {...this.props}
               />
             </div>
