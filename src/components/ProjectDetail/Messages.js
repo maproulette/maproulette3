@@ -24,11 +24,6 @@ export default defineMessages({
     defaultMessage: "Manage",
   },
 
-  showRemaining: {
-    id: "ProjectDetails.management.controls.showRemaining.label",
-    defaultMessage: "Display Remaining Challenges",
-  },
-
   showAll: {
     id: "ProjectDetails.management.controls.showAll.label",
     defaultMessage: "Display All Challenges",

@@ -68,17 +68,25 @@ export class ProjectDetail extends Component {
         <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
           {!this.props.loadingChallenges &&
             <div className="mr-pt-8 mr-pl-8">
-              <div className="mr-text-sm mr-text-yellow mr-uppercase mr-mb-4">
-                <FormattedMessage
-                  {...messages.challengeCount}
-                  values={{
-                    count: challengeResults.length,
-                    isVirtual: this.props.project.isVirtual
-                  }}
-                />
-              <button  className="mr-button mr-button--small mr-button--green-lighter mr-ml-4" onClick={() => this.setState({ remainingChallengeOnly: !this.state.remainingChallengeOnly })}>
-                { this.state.remainingChallengeOnly ? <FormattedMessage {...messages.showAll} /> : <FormattedMessage {...messages.showRemaining} />  }
-              </button>
+              <div className="mr-flex mr-mb-4">
+                <div className="mr-text-sm mr-text-yellow mr-uppercase mr-my-auto">
+                  <FormattedMessage
+                    {...messages.challengeCount}
+                    values={{
+                      count: challengeResults.length,
+                      isVirtual: this.props.project.isVirtual
+                    }}
+                  />
+                </div>
+                <div className="mr-my-auto">
+                  <input
+                    type="checkbox"
+                    className="mr-checkbox-toggle mr-ml-4"
+                    checked={!this.state.remainingChallengeOnly}
+                    onChange={() => this.setState({ remainingChallengeOnly: !this.state.remainingChallengeOnly })}
+                  />
+                  <label className="mr-text-white mr-ml-1 mr-text-sm"><FormattedMessage {...messages.showAll} /></label>
+                </div>
               </div>
               <ChallengeResultList
                 unfilteredChallenges={this.props.challenges}
