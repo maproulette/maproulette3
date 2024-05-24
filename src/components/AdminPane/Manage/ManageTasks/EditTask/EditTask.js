@@ -65,7 +65,9 @@ export class EditTask extends Component {
     }
     else {
       const challengeState = _cloneDeep(this.challengeState)
-      challengeState.refreshAfterSave = true
+      if (challengeState) {
+        challengeState.refreshAfterSave = true
+      }
 
       this.props.history.push({
         pathname:`/admin/project/${this.props.projectId}/` +
