@@ -1,8 +1,17 @@
 # MapRoulette 🎰
 
-MapRoulette is the best known and most widely used microtasking platform for [OpenStreetMap](https://osm.org/). The live website is at [maproulette.org](https://maproulette.org). 
+MapRoulette is a quality assurance platform for [OpenStreetMap](https://osm.org/). The live website is at [maproulette.org](https://maproulette.org). 
 
-Help build a sustainable MapRoulette by [donating](https://liberapay.com/MapRoulette/donate) as little as USD 1. <img src="https://img.shields.io/liberapay/receives/MapRoulette.svg?logo=liberapay">
+MapRoulette helps you connect with your OpenStreetMap Community! Whether you're an individual mapper looking to check off a to-do list of mapping tasks, a community organizer looking to make your events more engaging, or a map QA team lead looking for a tool to add process to your OSM QA backlog: MapRoulette should be high on your list of tools to use!
+
+Some of the things you can do with MapRoulette:
+
+* Solve some tasks to make the map better!
+* Create a public MapRoulette Challenge, consisting of small mapping tasks for the OSM community.
+* Create internal OSM QA workflows for your organization, including task review and progress metrics.
+* Use the MapRoulette API to automate Challenge maintenance
+
+MapRoulette is an OpenStreetMap U.S. [Charter Project](https://openstreetmap.us/our-work/charter-projects/maproulette/). 
 
 ## Using MapRoulette
 
@@ -14,10 +23,10 @@ All documentation for MapRoulette is at [learn.maproulette.org](https://learn.ma
 
 There are many different ways to contribute to MapRoulette!
 
-* Help [translating MapRoulette](https://www.transifex.com/osmlab/maproulette3/) into different languages. We already have more than 15 language communities!
-* Contribute to the [documentation](https://learn.maproulette.org). This site has [its own repository](https://github.com/maproulette/docs) as well.
+* Help [translating MapRoulette](https://www.transifex.com/osmlab/maproulette3/) or [the documentation](https://app.transifex.com/maproulette/mr-docs) into different languages. We already have more than 15 language communities!
+* Contribute to the [documentation](https://learn.maproulette.org), which has [its own repository](https://github.com/maproulette/docs).
 * Create a new issue in this repo if you encounter bugs in MapRoulette.
-* Join our [Community Meetings](https://hackmd.io/@mvexel/ByS7H0Mw9) on the first Tuesday of every month.
+* Join our [Slack Channel](https://osmus.slack.com/archives/C1QN12RS7) or our [Community Meetings](https://hackmd.io/@mvexel/ByS7H0Mw9) on the first Tuesday of every month.
 * If you're a developer (Scala, React), we'd love your help working on the future of MapRoulette. Please see [DEVELOPMENT.md](DEVELOPMENT.md) to get started.
 
 ### Connecting with the MapRoulette community
