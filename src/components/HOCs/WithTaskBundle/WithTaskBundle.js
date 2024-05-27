@@ -66,6 +66,7 @@ export function WithTaskBundle(WrappedComponent) {
         } else if ((prevTaskBundle && prevInitialBundle) && prevTaskBundle !== prevInitialBundle && prevState.completingTask) {
           const tasksToUnlock = prevInitialBundle.taskIds.filter(taskId => !prevTaskBundle.taskIds.includes(taskId))
           tasksToUnlock.map(taskId => {
+            debugger
             this.props.releaseTask(taskId).then(() => {
               // wait for lock to be cleared in db and provide some leeway 
               // time with setTimeout before triggering storage event
@@ -129,6 +130,7 @@ export function WithTaskBundle(WrappedComponent) {
           (taskId) => !this.state.taskBundle.taskIds.includes(taskId)
         )
         tasksToUnlock.map((taskId) => {
+          debugger
           this.props.releaseTask(taskId).then(() => {
             // wait for lock to be cleared in db and provide some leeway 
             // time with setTimeout before triggering storage event
@@ -247,6 +249,7 @@ export const mapDispatchToProps = dispatch => bindActionCreators({
   resetTaskBundle,
   removeTaskFromBundle,
   fetchTaskBundle,
+  releaseTask
 }, dispatch)
 
 export default WrappedComponent =>
