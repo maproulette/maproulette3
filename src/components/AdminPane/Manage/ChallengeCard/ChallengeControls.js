@@ -157,7 +157,6 @@ export default class ChallengeControls extends Component {
                   `/admin/project/${projectId}/` +
                   `challenge/${this.props.challenge.id}/edit`,
                 state: _merge(
-                  { cloneChallenge: false },
                   _get(this.props.searchCriteria, "filters"),
                 )
               }}
@@ -186,7 +185,6 @@ export default class ChallengeControls extends Component {
                   `/admin/project/${projectId}/` +
                   `challenge/${this.props.challenge.id}/clone`,
                 state: _merge(
-                  { cloneChallenge: true },
                   _get(this.props.searchCriteria, "filters")
                 ),
               }}
