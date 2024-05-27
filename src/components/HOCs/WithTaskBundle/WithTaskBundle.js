@@ -6,6 +6,7 @@ import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { bundleTasks, deleteTaskBundle, resetTaskBundle, removeTaskFromBundle, fetchTaskBundle } from '../../../services/Task/Task'
 import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
+import { releaseTask } from '../../../services/Task/Task'
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -58,18 +59,25 @@ export function WithTaskBundle(WrappedComponent) {
             this.props.resetTaskBundle(prevInitialBundle)
           } else {
             // Whenever the user redirects, skips a task, or refreshes and there was 
-            // no intial value, the bundle will be destroyed.
+            // no initial value, the bundle will be destroyed.
             this.props.deleteTaskBundle(prevTaskBundle.bundleId)
             this.clearActiveTaskBundle()
           }
+        } else if ((prevTaskBundle && prevInitialBundle) && prevTaskBundle !== prevInitialBundle && prevState.completingTask) {
+          const tasksToUnlock = prevInitialBundle.taskIds.filter(taskId => !prevTaskBundle.taskIds.includes(taskId))
+          tasksToUnlock.map(taskId => {
+            this.props.releaseTask(taskId).then(() => {
+              // wait for lock to be cleared in db and provide some leeway 
+              // time with setTimeout before triggering storage event
+              setTimeout(() => localStorage.removeItem(`lock-${taskId}`), 1500)
+            }).catch(() => null)
+          })
         }
       }
     }
 
     componentWillUnmount() {
-      if(!this.state.completingTask){
-        this.resetBundle()
-      }
+      this.resetBundle()
 
       this.setState({ selectedTasks: [], initialBundle: null, taskBundle: null, loading: false, completingTask: null })
       window.removeEventListener('beforeunload', this.handleBeforeUnload)
@@ -79,36 +87,57 @@ export function WithTaskBundle(WrappedComponent) {
       const { task, taskReadOnly, workspace, user, name } = this.props
       const inReview = task?.reviewStatus === TaskReviewStatus.needed || task?.reviewStatus === TaskReviewStatus.disputed
       const invalidWorkspace = workspace?.name === "taskReview" || name === "taskReview"
-      const completeStatus = (!inReview && !task?.reviewStatus !== 0) && ![0, 3, 6].includes(task?.status)
+      const completeStatus = (!inReview && ![0, 2].includes(task?.reviewStatus)) && ![0, 3, 6].includes(task?.status)
       const bundleEditsDisabled = taskReadOnly || ( completeStatus || ((!user.isSuperUser) && ((task.completedBy && user.id !== task.completedBy) || invalidWorkspace)))
 
       this.setState({ bundleEditsDisabled })
     }
 
     handleBeforeUnload = () => {
-      if(!this.state.completingTask){
-        this.resetBundle()
-      }
+      this.resetBundle()
 
       this.setState({ selectedTasks: [], initialBundle: null, taskBundle: null, loading: false, completingTask: null })
     }
 
     resetBundle = () => {
       const { initialBundle } = this.state
-      this.resetSelectedTasks()
-      if ((this.state.taskBundle || this.state.initialBundle) &&
+      if (!this.state.completingTask) {
+        this.resetSelectedTasks()
+        if (
+          (this.state.taskBundle || this.state.initialBundle) &&
           this.state.taskBundle !== this.state.initialBundle &&
-          (!this.state.completingTask)) {
-        if (initialBundle) {
-          // Whenever the user redirects, skips a task, or refreshes and there is a 
-          // new bundle state, the bundle state needs to reset to its initial value.
-          this.props.resetTaskBundle(initialBundle)
-        } else {
-          // Whenever the user redirects, skips a task, or refreshes and there was 
-          // no intial value, the bundle will be destroyed.
-          this.props.deleteTaskBundle(this.state.taskBundle.bundleId)
-          this.clearActiveTaskBundle()
+          !this.state.completingTask
+        ) {
+          if (initialBundle) {
+            // Whenever the user redirects, skips a task, or refreshes and there is a 
+            // new bundle state, the bundle state needs to reset to its initial value.
+            this.props.resetTaskBundle(initialBundle)
+          } else {
+            // Whenever the user redirects, skips a task, or refreshes and there was 
+            // no initial value, the bundle will be destroyed.
+            this.props.deleteTaskBundle(this.state.taskBundle.bundleId)
+            this.clearActiveTaskBundle()
+          }
         }
+      } else if (
+        this.state.taskBundle &&
+        this.state.initialBundle &&
+        this.state.taskBundle !== this.state.initialBundle &&
+        this.state.completingTask
+      ) {
+        const tasksToUnlock = this.state.initialBundle.taskIds.filter(
+          (taskId) => !this.state.taskBundle.taskIds.includes(taskId)
+        )
+        tasksToUnlock.map((taskId) => {
+          this.props.releaseTask(taskId).then(() => {
+            // wait for lock to be cleared in db and provide some leeway 
+            // time with setTimeout before triggering storage event
+            setTimeout(
+              () => localStorage.removeItem(`lock-${taskId}`),
+              1500
+            )
+          }).catch(() => null)
+        })
       }
     }
 
