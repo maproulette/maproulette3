@@ -29,6 +29,10 @@ There are many different ways to contribute to MapRoulette!
 * Join our [Slack Channel](https://osmus.slack.com/archives/C1QN12RS7) or our [Community Meetings](https://hackmd.io/@mvexel/ByS7H0Mw9) on the first Tuesday of every month.
 * If you're a developer (Scala, React), we'd love your help working on the future of MapRoulette. Please see [DEVELOPMENT.md](DEVELOPMENT.md) to get started.
 
+## Donating
+
+MapRoulette is a core part of OpenStreetMap QA infrastructure, relied upon by thousands of community members, many of whom use MapRoulette daily. Ongoing maintenance and development of MapRoulette is entirely reliant on in-kind and financial support. If you're interested in supporting MapRoulette by making a financial contribution or commit developer resources to the project, please contact OpenStreetMap US by emailing team@openstreetmap.us.
+
 ### Connecting with the MapRoulette community
 
 * Ask a question about MapRoulette on the [OSM community forum](https://community.openstreetmap.org/tag/maproulette)
