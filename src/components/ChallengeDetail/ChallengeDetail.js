@@ -190,7 +190,7 @@ export class ChallengeDetail extends Component {
         `/admin/project/${project.id}/` +
         `challenge/${this.props.challenge.id}/clone`,
       state: _merge(
-        { cloneChallenge: true, projectId: project.id },
+        { projectId: project.id },
         _get(this.props.searchCriteria, 'filters')
       ),
     })
