@@ -145,19 +145,21 @@ export function WithTaskBundle(WrappedComponent) {
       const { task, workspace, history, fetchTaskBundle } = this.props
       this.setState({ loading: true })
       fetchTaskBundle(bundleId, !this.state.bundleEditsDisabled).then(taskBundle => {
-        if (!task.isBundlePrimary) {
-          const challengeId = task?.parent?.id
-          const primaryTask = taskBundle.tasks.find(task => task.isBundlePrimary)
-          const isMetaReview = history?.location?.pathname?.includes("meta-review")
-          const location = workspace?.name === "taskReview" ? (isMetaReview ? "/meta-review" : "/review") : ""
-          if (primaryTask) {
-            history.push(`/challenge/${challengeId}/task/${primaryTask.id}${location}`)
-          } else {
-            console.error("Primary task not found in task bundle.")
+        if(taskBundle) {
+          if (!task.isBundlePrimary) {
+            const primaryTask = taskBundle.tasks.find(task => task.isBundlePrimary)
+            const isMetaReview = history?.location?.pathname?.includes("meta-review")
+            const location = workspace?.name === "taskReview" ? (isMetaReview ? "/meta-review" : "/review") : ""
+            if (primaryTask) {
+              history.push(`/challenge/${primaryTask.parent}/task/${primaryTask.id}${location}`)
+            } else {
+              console.error("Primary task not found in task bundle.")
+            }
           }
         }
-        this.setState({ initialBundle: taskBundle, selectedTasks: taskBundle?.taskIds, taskBundle, loading: false })
+        this.setState({ initialBundle: taskBundle, selectedTasks: taskBundle?.taskIds, taskBundle })
       })
+      this.setState({ loading: false })
     }
 
     createTaskBundle = (taskIds, bundleTypeMismatch, name) => {
