@@ -7,6 +7,27 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.3] - 2024-5-28
+Released with [maproulette-backend_v4.5.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.0)
+
+## What's Changed
+* Readme update by @mvexel in https://github.com/maproulette/maproulette3/pull/2348
+* Fix undefined prop bug in task editor by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2347
+* Fix clone/edit challenge bug with url state by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2352
+
+## MR2 Changes
+* fix changeset submittion bug for tag fix tasks with relations by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1121
+* Introduce Java 17 to MapRoulette-backend CI tests by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1125
+* Update GH Action versions and test against PostGIS 13-3.3 and 16-3.4 by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1124
+* Remove 'connectionTestQuery' from application.conf by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1123
+* Update to Play 2.9 by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1122
+* Update to the latest Play 2.8.x by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1116
+* Migrate JTS package from vividsolutions to Eclipse Foundation by @ljdelight in https://github.com/maproulette/maproulette-backend/commit/ff2597c31d2aaa13278f6623877a50f5d9cb9302
+* Upgrade anorm, postgresql, and postgis-jdbc dependencies by @ljdelight in https://github.com/maproulette/maproulette-backend/commit/420ff21a88215ae4f3d91db685b62bc3b1e15ef8
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.2...v3.15.3
+
+
 ## [v3.15.2] - 2024-5-15
 Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
 
