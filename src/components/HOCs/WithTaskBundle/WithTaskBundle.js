@@ -85,10 +85,15 @@ export function WithTaskBundle(WrappedComponent) {
 
     setBundlingConditions = () => {
       const { task, taskReadOnly, workspace, user, name } = this.props
-      const inReview = task?.reviewStatus === TaskReviewStatus.needed || task?.reviewStatus === TaskReviewStatus.disputed
-      const invalidWorkspace = workspace?.name === "taskReview" || name === "taskReview"
-      const completeStatus = (!inReview && ![0, 2].includes(task?.reviewStatus)) && ![0, 3, 6].includes(task?.status)
-      const bundleEditsDisabled = taskReadOnly || ( completeStatus || ((!user.isSuperUser) && ((task.completedBy && user.id !== task.completedBy) || invalidWorkspace)))
+      const isCompletionWorkspace = workspace?.name === "taskCompletion" || name === "taskCompletion"
+      const isReviewWorkspace = workspace?.name === "taskReview" || name === "taskReview"
+      
+      const completionStatus = isCompletionWorkspace && ([2].includes(task?.reviewStatus) || [0, 3, 6].includes(task?.status))
+      
+      const enableMapperEdits = (!task?.completedBy || user.id === task.completedBy) && completionStatus && !isReviewWorkspace
+      const enableSuperUserEdits = user.isSuperUser && (completionStatus || isReviewWorkspace)
+      
+      const bundleEditsDisabled = taskReadOnly || (!enableMapperEdits && !enableSuperUserEdits)
 
       this.setState({ bundleEditsDisabled })
     }
