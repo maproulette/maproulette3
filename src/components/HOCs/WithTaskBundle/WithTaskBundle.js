@@ -5,7 +5,6 @@ import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { bundleTasks, deleteTaskBundle, resetTaskBundle, removeTaskFromBundle, fetchTaskBundle } from '../../../services/Task/Task'
-import { TaskReviewStatus } from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { releaseTask } from '../../../services/Task/Task'
 
 /**
