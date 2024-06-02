@@ -19,6 +19,7 @@ import Taxonomy from '../Taxonomy/Taxonomy'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
+import { isUsableChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 
 export class CardChallenge extends Component {
   render() {
@@ -55,7 +56,7 @@ export class CardChallenge extends Component {
       <article
         ref={node => this.node = node}
         className={classNames(
-          "mr-card-challenge",
+          `${isUsableChallengeStatus(this.props.challenge?.status) ? "mr-card-challenge" : "mr-card-challenge mr-bg-white-10"}`,
           this.props.className,
           {'is-active': this.props.isExpanded}
         )}
@@ -120,7 +121,7 @@ export class CardChallenge extends Component {
             }
           </div>
         </header>
-
+        {this.props.challenge?.status === 5 ? <FormattedMessage {...messages.completedChallengeLabel} /> : null}
         {this.props.isExpanded &&
          <div className="mr-card-challenge__content">
            {!this.props.challenge.isVirtual &&

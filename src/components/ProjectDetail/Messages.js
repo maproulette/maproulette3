@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Manage",
   },
 
+  showAll: {
+    id: "ProjectDetails.management.controls.showAll.label",
+    defaultMessage: "Display All Challenges",
+  },
+
   startLabel: {
     id: "ProjectDetails.management.controls.start.label",
     defaultMessage: "Start",
