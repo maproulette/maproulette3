@@ -48,7 +48,7 @@ export const receiveBoundedTasks = function(tasks,
  * criteria, which should at least include a boundingBox field, and may
  * optionally include a filters field with additional constraints
  */
-export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispatch = false, ignoreLocked = true, withGeometries) {
+export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispatch = false, ignoreLocked = true) {
   return function(dispatch) {
     if (!skipDispatch) {
       // The map is either showing task clusters or bounded tasks so we shouldn't
