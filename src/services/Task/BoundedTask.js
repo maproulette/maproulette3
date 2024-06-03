@@ -43,7 +43,109 @@ export const receiveBoundedTasks = function(tasks,
   }
 }
 
-// async action creators
+/**
+ * Retrieve all task markers (up to the given limit) matching the given search
+ * criteria, which should at least include a boundingBox field, and may
+ * optionally include a filters field with additional constraints
+ */
+export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispatch = false, ignoreLocked = true, withGeometries) {
+  return function(dispatch) {
+    if (!skipDispatch) {
+      // The map is either showing task clusters or bounded tasks so we shouldn't
+      // have both in redux.
+      // (ChallengeLocation needs to know which challenge tasks pass the location)
+      dispatch(clearTaskClusters())
+    }
+
+    const normalizedBounds = toLatLngBounds(criteria.boundingBox)
+    if (!normalizedBounds) {
+      return null
+    }
+
+    const filters = _get(criteria, 'filters', {})
+    const searchParameters = generateSearchParametersString(
+      filters,
+      null,
+      _get(criteria, 'savedChallengesOnly'),
+      null,
+      null,
+      _get(criteria, 'invertFields')
+    )
+
+    if (!filters.challengeId) {
+      const onlyEnabled = _isUndefined(criteria.onlyEnabled) ?
+        true :
+        criteria.onlyEnabled
+      const challengeStatus = criteria.challengeStatus
+      if (challengeStatus) {
+        searchParameters.cStatus = challengeStatus.join(',')
+      }
+
+      // ce: limit to enabled challenges
+      // pe: limit to enabled projects
+      searchParameters.ce = onlyEnabled ? 'true' : 'false'
+      searchParameters.pe = onlyEnabled ? 'true' : 'false'
+
+      // if we are restricting to onlyEnabled challenges then let's
+      // not show 'local' challenges either.
+      searchParameters.cLocal = onlyEnabled ? CHALLENGE_EXCLUDE_LOCAL :
+        CHALLENGE_INCLUDE_LOCAL
+    }
+
+    // If we are searching within map bounds we need to ensure the parent
+    // challenge is also within those bounds
+    if (filters.location === CHALLENGE_LOCATION_WITHIN_MAPBOUNDS) {
+      if (_isArray(criteria.boundingBox)) {
+        searchParameters.bb = criteria.boundingBox.join(',')
+      } else {
+        searchParameters.bb = criteria.boundingBox
+      }
+    }
+
+    const fetchId = uuidv1()
+    !skipDispatch && dispatch(receiveBoundedTasks(null, RequestStatus.inProgress, fetchId))
+
+    return new Endpoint(
+      api.tasks.markersWithinBounds, {
+        schema: {
+          tasks: [taskSchema()]
+        },
+        variables: {
+          left: normalizedBounds.getWest(),
+          bottom: normalizedBounds.getSouth(),
+          right: normalizedBounds.getEast(),
+          top: normalizedBounds.getNorth(),
+        },
+        params: {
+          limit,
+          excludeLocked: ignoreLocked,
+          ...searchParameters,
+        },
+        json: filters.taskPropertySearch ? {
+          taskPropertySearch: filters.taskPropertySearch
+        } : null,
+      }
+    ).execute().then(normalizedResults => {
+      const totalCount = normalizedResults.result.total
+
+      let tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
+      tasks = _map(tasks, task =>
+        Object.assign(task, {}, task.pointReview)
+      )
+
+      !skipDispatch && dispatch(receiveBoundedTasks(tasks, RequestStatus.success, fetchId, totalCount))
+
+      return {
+        tasks,
+        totalCount
+      }
+    }).catch(error => {
+      dispatch(receiveBoundedTasks([], RequestStatus.error, fetchId))
+      dispatch(addError(AppErrors.boundedTask.fetchFailure))
+      console.log(error.response || error)
+    })
+  }
+}
 
 /**
  * Retrieve all tasks (up to the given limit) matching the given search
