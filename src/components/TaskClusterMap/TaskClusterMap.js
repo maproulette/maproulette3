@@ -34,7 +34,7 @@ export const MIN_ZOOM = 2
  * An uncluster option will be offered if no more than number of tasks
  * will be shown.
  */
-export const UNCLUSTER_THRESHOLD = 1000 // max number of tasks
+export const UNCLUSTER_THRESHOLD = 500 // max number of tasks
 
 /**
  * The number of clusters to show.
