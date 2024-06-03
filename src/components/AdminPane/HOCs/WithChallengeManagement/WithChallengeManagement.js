@@ -163,6 +163,11 @@ async function uploadLineByLine(
       taskLines = _compact(taskLines);
     }
 
+    if (taskLines.length === 0) {
+      allLinesRead = true;
+     return
+    }
+
     await dispatch(
       uploadChallengeGeoJSON(
         challenge.id,
