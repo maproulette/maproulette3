@@ -7,6 +7,20 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.4] - 2024-6-04
+Released with [maproulette-backend_v4.5.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.1)
+
+## What's Changed
+* unlock unbundled tasks on updated bundle submittion by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2349
+* add challenge filtering on browse projects page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2343
+
+## MR2 Changes
+* Store new API key instead of old API key on API key reset by @tsmock in https://github.com/maproulette/maproulette-backend/pull/1127
+* Introduce maproulette.secret.key conf and MAPROULETTE_SECRET_KEY env by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1128
+* update task caching for task bundling endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1126
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.3...v3.15.4
+
 ## [v3.15.3] - 2024-5-28
 Released with [maproulette-backend_v4.5.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.0)
 
@@ -26,7 +40,6 @@ Released with [maproulette-backend_v4.5.0](https://github.com/maproulette/maprou
 * Upgrade anorm, postgresql, and postgis-jdbc dependencies by @ljdelight in https://github.com/maproulette/maproulette-backend/commit/420ff21a88215ae4f3d91db685b62bc3b1e15ef8
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.2...v3.15.3
-
 
 ## [v3.15.2] - 2024-5-15
 Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
@@ -48,7 +61,7 @@ Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/mapro
 * Add feature id table filter by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2307
 * Add support for overpass generated relations by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2301
 * Fix geometries undefined race condition by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2325
-* Support user-friendly task identifier in search result markers  by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2322
+* Support user-friendly task identifier in search result markers by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2322
 * Fix get in touch reporting format by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2318
 * Bump ejs from 3.1.9 to 3.1.10 by @dependabot in https://github.com/maproulette/maproulette3/pull/2327
 * Fix comments prop "name" undefined error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2321
@@ -186,8 +199,8 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
-* Add setState to prevent submitting twice before character count is reset by @CollinBeczak in  (https://github.com/maproulette/maproulette3/pull/2215)
-* Add grouping for challenge comment notifications  by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2216)
+* Add setState to prevent submitting twice before character count is reset by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2215)
+* Add grouping for challenge comment notifications by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2216)
 * Remove conflicting validation requirements by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2219)
 * Fix project metrics on finished challenges by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2227)
 * Add catches to leaderboard by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2228)
