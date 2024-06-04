@@ -18,7 +18,19 @@ import messages from './Messages'
 export class TaskPropertyFilter extends Component {
   state = {
     showForm: false,
-    showSavedList: false
+    showSavedList: false,
+  }
+
+  logCurrentRule = (rule) => {
+    console.log('task property rule', rule)
+  }
+
+  testSaveRule = () => {
+    this.props.saveCurrentTaskPropertyFilters(this.props.criteria)
+  }
+
+  toggleSaveCurrentRules = () => {
+    this.setState({savingCurrentRules: true})
   }
 
   render() {
@@ -31,6 +43,8 @@ export class TaskPropertyFilter extends Component {
           this.setState({showForm: false})
           this.props.updateTaskPropertyCriteria(data)
         }}
+        handleSaveCurrentRules={this.logCurrentRule}
+        enableSavedRules
       />
     
     const currentTaskPropertyFilters = _get(this.props, 'criteria.filters.taskPropertySearch')
@@ -51,12 +65,13 @@ export class TaskPropertyFilter extends Component {
               className="mr-fill-current mr-w-5 mr-h-5"
             />
           </button>
-          {this.state.showForm &&
+          {this.state.showForm && 
             <External>
               <Modal isActive wide onClose={() => this.setState({showForm: false})}>
                 <div className="mr-max-h-screen75 mr-space-y-4">
                   {formSearch}
-                  <div className='mr-space-y-2'>
+                  <div className='mr-space-y-4'>
+                    
                     <div className='mr-flex mr-space-x-1 mr-items-center'>
                       <button 
                         onClick={() => this.setState(prev => ({showSavedList: !prev.showSavedList}))} 
@@ -70,10 +85,11 @@ export class TaskPropertyFilter extends Component {
                         />
                       </button>  
                     </div>
-                    { this.state.showSavedList && 
+                    {this.state.showSavedList && 
                       <div className='mr-bg-blue-firefly-75 mr-p-2'>
                         <p>Hello</p>
-                        <button onClick={() => this.props.saveCurrentTaskPropertyFilters(this.props.criteria)}>Test Save</button>
+                        <button onClick={this.logCurrentRule}>Test Save</button>
+                        <button onClick={() => console.log(this.props.user)}>Log Saved Rules</button>
                       </div>
                     }
                   </div>
