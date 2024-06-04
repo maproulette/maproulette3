@@ -1,6 +1,7 @@
 import React, { Component, createRef } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import Form from '@rjsf/core'
+import QuickTextBox from '../QuickTextBox/QuickTextBox'
 import { CustomSelectWidget }
        from '../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import _get from 'lodash/get'
@@ -23,6 +24,11 @@ import './TaskPropertiesSchema.scss'
  */
 export class TaskPropertyQueryBuilder extends Component {
   state = {
+    savedPropertyRulesName: null, 
+    savingCurrentRules: false,
+    formData: null,
+    preparedData: null,
+    errors: null
   }
 
   formRef = createRef()
@@ -128,6 +134,16 @@ export class TaskPropertyQueryBuilder extends Component {
     }
   }
 
+  handleSaveCurrentRule = () => {
+    const rootRule = _get(this.state.formData, 'propertyRules.rootRule')
+    const errors = validatePropertyRules(rootRule)
+    if (errors.length === 0) {
+      const preparedData = preparePropertyRulesForSaving(rootRule)
+      this.props.handleSaveCurrentRules(preparedData)
+      this.setState({savedFiltersName: null, savingCurrentRules: false})
+    } else this.setState({errors})
+  }
+
   setupFormData = (taskPropertyQuery) => {
     console.log('taskPropertyQuery in builder', taskPropertyQuery)
     const rules = preparePropertyRulesForForm(taskPropertyQuery)
@@ -231,7 +247,7 @@ export class TaskPropertyQueryBuilder extends Component {
     }
 
     return (
-      <div className="task-properties-form mr-w-full mr-pt-4">
+      <div className="task-properties-form mr-w-full mr-pt-4 mr-space-y-2">
         <Form
           ref={this.formRef}
           submitOnEnter={false}
@@ -252,7 +268,7 @@ export class TaskPropertyQueryBuilder extends Component {
               {this.props.intl.formatMessage(messages[_head(this.state.errors)])}
             </div>
           }
-          {!this.props.updateAsChange &&
+          {this.props.enableSavedRules &&
             <div className="mr-flex mr-space-x-4 mr-pt-2 mr-pb-4 mr-pl-1">
               <button
                 className="mr-button mr-button--green-lighter"
@@ -270,7 +286,7 @@ export class TaskPropertyQueryBuilder extends Component {
               { this.state.formData && this.state.formData.propertyRules && Object.keys(this.state.formData.propertyRules).length && 
                 <button
                   className="mr-button mr-button--green-lighter"
-                  onClick={() => console.log(this.props)}
+                  onClick={() => this.setState({savingCurrentRules: true})}
                 >
                   {/* <FormattedMessage {...messages.searchButton} /> */}
                   Save Current Property Rules
@@ -279,6 +295,23 @@ export class TaskPropertyQueryBuilder extends Component {
             </div>
           }
         </Form>
+        {this.state.savingCurrentRules && this.props.enableSavedRules &&
+          <div className='mr-flex mr-space-x-2'>
+            <QuickTextBox
+              // inputClassName="mr-min-w-full"
+              text={this.state.savedFiltersName || ""}
+              setText={savedFiltersName => this.setState({savedFiltersName})}
+              done={() => {
+                console.log(this.props.criteria)
+                this.handleSaveCurrentRule()
+              }}
+              cancel={() => {
+                this.setState({savedFiltersName: null, savingCurrentRules: false, errors: null})
+              }}
+              placeholder="Name your saved filter"
+            />
+          </div>
+        }
       </div>
     )
   }
