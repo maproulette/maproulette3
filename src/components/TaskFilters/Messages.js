@@ -28,4 +28,9 @@ export default defineMessages({
     id: "TaskReviewStatusFilter.metaReviewStatuses.label",
     defaultMessage: "Meta-Review Statuses",
   },
+
+  savedTaskPropertyListToggleLabel: {
+    id: "TaskPropertyFilter.savedTaskPropertyListToggle.label",
+    defaultMessage: "Saved Property Filter Rules"
+  },
 })

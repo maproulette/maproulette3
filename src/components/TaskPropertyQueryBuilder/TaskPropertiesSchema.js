@@ -264,7 +264,7 @@ export function ArrayFieldTemplate(props) {
             }
           </div>
           {props.canAdd && props.items.length === (index + 1) &&
-            <button type="button" className="mr-text-green-lighter mr-mt-1"
+            <button type="button" className="mr-text-green-lighter mr-mt-1 hover:mr-text-white"
                     onClick={props.onAddClick}>
               <FormattedMessage {...messages.addValueButton} />
             </button>}
