@@ -49,6 +49,16 @@ export default defineMessages({
     defaultMessage: "Please choose a property type.",
   },
 
+  missingSavedRuleName: {
+    id: "TaskPropertyQueryBuilder.error.missingSavedRuleName",
+    defaultMessage: "Please enter a name for your saved property rule."
+  },
+
+  duplicateSavedRuleName: {
+    id: "TaskPropertyQueryBuilder.error.duplicateSavedRuleName",
+    defaultMessage: "Duplicate saved property rule name. Please enter another."
+  },
+
   notNumericValue: {
     id: "TaskPropertyQueryBuilder.error.notNumericValue",
     defaultMessage: "Property value given is not a valid number.",
@@ -82,5 +92,10 @@ export default defineMessages({
   commaSeparateValues: {
     id: "TaskPropertyQueryBuilder.commaSeparateValues.label",
     defaultMessage: "Comma separate values",
+  },
+
+  savedFilterRuleNamePlaceholder: {
+    id: "TaskPropertyQueryBuilder.savedFilterRuleNamePlaceholder.label",
+    defaultMessage: "Name your saved filter"
   },
 })

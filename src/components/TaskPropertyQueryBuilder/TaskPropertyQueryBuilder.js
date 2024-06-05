@@ -8,6 +8,7 @@ import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _head from 'lodash/head'
 import _cloneDeep from 'lodash/cloneDeep'
+import _isEqual from 'lodash/isEqual'
 import { jsSchema, uiSchema, ArrayFieldTemplate } from './TaskPropertiesSchema'
 import { preparePropertyRulesForSaving,
          preparePropertyRulesForForm,
@@ -24,7 +25,7 @@ import './TaskPropertiesSchema.scss'
  */
 export class TaskPropertyQueryBuilder extends Component {
   state = {
-    savedPropertyRulesName: null, 
+    savedPropertyRuleName: null, 
     savingCurrentRules: false,
     formData: null,
     preparedData: null,
@@ -125,7 +126,6 @@ export class TaskPropertyQueryBuilder extends Component {
 
     if (errors.length === 0) {
       const preparedData = preparePropertyRulesForSaving(rootRule)
-      console.log('prepared date', preparedData)
       this.setState({preparedData, errors: null})
       this.props.updateTaskPropertyQuery(preparedData)
     }
@@ -135,19 +135,21 @@ export class TaskPropertyQueryBuilder extends Component {
   }
 
   handleSaveCurrentRule = () => {
+    const {savedPropertyRuleName} = this.state
     const rootRule = _get(this.state.formData, 'propertyRules.rootRule')
+    const currentSavedPropertyFilters = this.props.savedTaskPropertyFilters
     const errors = validatePropertyRules(rootRule)
+    if(!savedPropertyRuleName || (savedPropertyRuleName && savedPropertyRuleName.length === 0)) errors.push('missingSavedRuleName')
+    if(Object.hasOwn(currentSavedPropertyFilters, savedPropertyRuleName)) errors.push('duplicateSavedRuleName')
     if (errors.length === 0) {
       const preparedData = preparePropertyRulesForSaving(rootRule)
-      this.props.handleSaveCurrentRules(preparedData)
-      this.setState({savedFiltersName: null, savingCurrentRules: false})
+      this.props.saveCurrentTaskPropertyFilters(preparedData, savedPropertyRuleName)
+      this.setState({savedPropertyRuleName: null, savingCurrentRules: false, errors: null})
     } else this.setState({errors})
   }
 
   setupFormData = (taskPropertyQuery) => {
-    console.log('taskPropertyQuery in builder', taskPropertyQuery)
     const rules = preparePropertyRulesForForm(taskPropertyQuery)
-    console.log('prepared rules in builder', rules)
     this.setState({formData: {
       propertyRules: {
         rootRule: taskPropertyQuery ? rules : {}
@@ -196,7 +198,6 @@ export class TaskPropertyQueryBuilder extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.user?.properties?.mr3Frontend)
     if (this.props.taskPropertyQuery) {
       this.setupFormData(this.props.taskPropertyQuery)
     }
@@ -205,12 +206,15 @@ export class TaskPropertyQueryBuilder extends Component {
     }
   }
 
-  componentDidUpdate() {
-    console.log('taskpropquerybuilderstate', this.state.formData)
+  componentDidUpdate(prevProps) {
     // Clear form data if filters.taskPropertyQuery has been cleared.
     if (_isEmpty(this.props.taskPropertyQuery) &&
         !_isEmpty(this.state.preparedData)) {
       this.setState({formData: null, preparedData: null})
+    }
+
+    if(!_isEqual(this.props.taskPropertyQuery, prevProps.taskPropertyQuery)) {
+      this.setupFormData(this.props.taskPropertyQuery)
     }
   }
 
@@ -288,7 +292,6 @@ export class TaskPropertyQueryBuilder extends Component {
                   className="mr-button mr-button--green-lighter"
                   onClick={() => this.setState({savingCurrentRules: true})}
                 >
-                  {/* <FormattedMessage {...messages.searchButton} /> */}
                   Save Current Property Rules
                 </button>
               }
@@ -298,17 +301,15 @@ export class TaskPropertyQueryBuilder extends Component {
         {this.state.savingCurrentRules && this.props.enableSavedRules &&
           <div className='mr-flex mr-space-x-2'>
             <QuickTextBox
-              // inputClassName="mr-min-w-full"
-              text={this.state.savedFiltersName || ""}
-              setText={savedFiltersName => this.setState({savedFiltersName})}
+              text={this.state.savedPropertyRuleName || ""}
+              setText={savedPropertyRuleName => this.setState({savedPropertyRuleName})}
               done={() => {
-                console.log(this.props.criteria)
                 this.handleSaveCurrentRule()
               }}
               cancel={() => {
-                this.setState({savedFiltersName: null, savingCurrentRules: false, errors: null})
+                this.setState({savedPropertyRuleName: null, savingCurrentRules: false, errors: null})
               }}
-              placeholder="Name your saved filter"
+              placeholder={this.props.intl.formatMessage(messages.savedFilterRuleNamePlaceholder)}
             />
           </div>
         }

@@ -273,8 +273,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
          return
        }
 
-       console.log('we are updating')
-
        if (!ignoreURL && _get(this.props.history.location, 'state.refresh')) {
          this.props.history.push({
            pathname: this.props.history.location.pathname,
@@ -300,7 +298,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        }
 
        if (!_isEqual(prevState.criteria, this.state.criteria) && !this.props.skipRefreshTasks) {
-        console.log('is it a general criteria compare for task prop updates?')
          this.refreshTasks(typedCriteria)
        }
        else if (_get(prevProps, 'challenge.id') !== _get(this.props, 'challenge.id') ||
@@ -308,7 +305,6 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
          this.refreshTasks(typedCriteria)
        }
        else if (_get(this.props.history.location, 'state.refreshAfterSave')) {
-        console.log('is it this state.refreshAfterSave block?')
         this.refreshTasks(typedCriteria)
         this.props.history.push({
           pathname: this.props.history.location.pathname,

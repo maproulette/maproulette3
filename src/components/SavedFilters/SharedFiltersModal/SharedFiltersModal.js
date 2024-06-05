@@ -58,12 +58,16 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
         const taskPropertySearchValue = adminParams.get("filters.taskPropertySearch")
         currentSearchParams.append("filters.taskPropertySearch", taskPropertySearchValue)
         const newSearchString = currentSearchParams.toString()
-        history.push({
-          pathname,
-          search: newSearchString,
-          state: {refresh: true}
-        })
-        cancelManagingSharedFilterSettings()
+        console.log('currentSearchParams',currentSearchParams)
+        console.log('taskPropertySearchValue', taskPropertySearchValue)
+        console.log('newSearchString',newSearchString)
+
+        // history.push({
+        //   pathname,
+        //   search: newSearchString,
+        //   state: {refresh: true}
+        // })
+        // cancelManagingSharedFilterSettings()
       }}
       title={adminSearchURL}>
       {search}
