@@ -34,9 +34,9 @@ export default defineMessages({
     defaultMessage: "Manage saved filters"
   },
   
-  sharedFiltersLabel: {
-    id: "SavedFilters.controls.sharedFilters.label",
-    defaultMessage: "Shared Filters"
+  taskPropertyFiltersLabel: {
+    id: "SavedFilters.controls.taskPropertyFilters.label",
+    defaultMessage: "Task Property Filters"
   },
 
   savedFiltersTitle: {

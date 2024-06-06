@@ -9,14 +9,13 @@ import _keys from 'lodash/keys'
 import messages from './Messages'
 
 /**
- * SharedFiltersModal provides a modal overlay and UI to enable use of task property filter rules
- * across workspace contexts. It consumes props from the WithSavedFilters HOC to manage the setting
- * toggle state as well as the filter state, which is saved as a URL string. Currently any saved Challenge Admin
- * filters that contain Task Property rules will be available via the modal to apply to task review tables.
+ * TaskPropertyFiltersModal provides a modal overlay and UI to enable use of task property filter rules
+ * across workspace contexts. It consumes props from the WithSavedTaskPropertyFilters HOC to manage the setting
+ * toggle state as well as the filter state, which is saved as a URL string.
  * @author [Andrew Philbin](https://github.com/AndrewPhilbin)
  */
 
-function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedFilterSettings, challengeAdminFilters}) {
+function TaskPropertyFiltersModal({managingSavedTaskPropertyFilterSettings, cancelManagingSavedTaskPropertyFilterSettings, savedTaskPropertyFilters}) {
   const history = useHistory()
   const currentSearchString = history.location.search
   const pathname = history.location.pathname
@@ -46,16 +45,16 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
       <FormattedMessage {...messages.clearFiltersLabel} />
   </button>
 
-  const listSearches = _map(_keys(challengeAdminFilters), (search, index) => {
-    const adminSearchURL = challengeAdminFilters[search]
-    const adminParams = new URLSearchParams(adminSearchURL)
+  const listSearches = _map(_keys(savedTaskPropertyFilters), (search, index) => {
+    const taskPropertyURL = savedTaskPropertyFilters[search]
+    const taskPropertyParams = new URLSearchParams(taskPropertyURL)
     const filterApplyButton = 
     <a 
       onClick={() => {
         // Clear current task property query parameter if present and set to value from saved filter, then update tasks.
         const currentSearchParams = new URLSearchParams(currentSearchString)
         if(currentSearchParams.has("filters.taskPropertySearch")) currentSearchParams.delete("filters.taskPropertySearch")
-        const taskPropertySearchValue = adminParams.get("filters.taskPropertySearch")
+        const taskPropertySearchValue = taskPropertyParams.get("filters.taskPropertySearch")
         currentSearchParams.append("filters.taskPropertySearch", taskPropertySearchValue)
         const newSearchString = currentSearchParams.toString()
         console.log('currentSearchParams',currentSearchParams)
@@ -69,15 +68,15 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
         // })
         // cancelManagingSharedFilterSettings()
       }}
-      title={adminSearchURL}>
+      title={taskPropertyURL}>
       {search}
     </a>
 
     // Include only saved admin filters that have task property rules
-    if(adminParams.has("filters.taskPropertySearch")) return (
+    if(taskPropertyParams.has("filters.taskPropertySearch")) return (
       <li key={search + "-" + index}>
         <div className='mr-flex mr-space-x-2 mr-items-center'>
-          <FilterListEntry applyButton={filterApplyButton}>{adminSearchURL}</FilterListEntry>
+          <FilterListEntry applyButton={filterApplyButton}>{taskPropertyURL}</FilterListEntry>
         </div>
       </li>
     )
@@ -87,34 +86,34 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
     <React.Fragment>
       <External>
         <Modal 
-          isActive={managingSharedFilterSettings} 
-          onClose={cancelManagingSharedFilterSettings} 
+          isActive={managingSavedTaskPropertyFilterSettings} 
+          onClose={cancelManagingSavedTaskPropertyFilterSettings} 
           narrow
         >
           <div className='mr-space-y-4'>
             <div className='mr-max-w-sm'>  
               <h3 className="mr-text-yellow mr-mb-4">
-                <FormattedMessage {...messages.sharedFiltersModalTitle} />
+                <FormattedMessage {...messages.taskPropertyFiltersModalTitle} />
               </h3>
               <div className='mr-space-y-3'>
                 <p className='mr-text-base'>
-                  <FormattedMessage {...messages.sharedFiltersModalDescription} />
+                  <FormattedMessage {...messages.taskPropertyFiltersModalDescription} />
                 </p>
                 <p className='mr-text-sm mr-text-mango'>
-                  <FormattedMessage {...messages.sharedFiltersModalSubDescription} />
+                  <FormattedMessage {...messages.taskPropertyFiltersModalSubDescription} />
                 </p>
                   {filterClearButton}
                 </div>
             </div>
             <div className='mr-space-y-1 mr-p-4'>
               <ul>
-                {challengeAdminFilters ? listSearches : null}
+                {savedTaskPropertyFilters ? listSearches : null}
               </ul>
             </div>
           </div>
           <button
             className="mr-button mr-col-span-2 mr-mt-8"
-            onClick={cancelManagingSharedFilterSettings}
+            onClick={cancelManagingSavedTaskPropertyFilterSettings}
           >
             <FormattedMessage {...messages.doneLabel} />
           </button>
@@ -124,7 +123,7 @@ function SharedFiltersModal({managingSharedFilterSettings, cancelManagingSharedF
   )
 }
 
-export default SharedFiltersModal
+export default TaskPropertyFiltersModal
 
 const FilterListEntry = ({applyButton, children}) => {
   const [isExpanded, setIsExpanded] = useState(false)

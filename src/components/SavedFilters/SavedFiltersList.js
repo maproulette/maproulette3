@@ -58,7 +58,7 @@ export default class SavedFiltersList extends Component {
               className='mr-text-green-lighter hover:mr-text-white mr-transition-colors'
               onClick={() => {this.props.manageSharedFilterSettings(); this.props.afterClick()}}
             >
-              <FormattedMessage {...messages.sharedFiltersLabel} />
+              <FormattedMessage {...messages.taskPropertyFiltersLabel} />
             </button>
           </li>
         }
