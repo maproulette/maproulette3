@@ -28,9 +28,10 @@ import WithConfigurableColumns from '../../../components/HOCs/WithConfigurableCo
 import WithCurrentUser from '../../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import messages from './Messages'
 import WithSavedFilters from '../../../components/HOCs/WithSavedFilters/WithSavedFilters'
+import WithSavedTaskPropertyFilters from '../../../components/HOCs/WithSavedTaskPropertyFilters/WithSavedTaskPropertyFilters'
 import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
-import SharedFiltersModal from '../../../components/SavedFilters/SharedFiltersModal/SharedFiltersModal'
+import TaskPropertyFiltersModal from '../../../components/SavedFilters/TaskPropertyFiltersModal/TaskPropertyFiltersModal'
 import MapPane from '../../../components/EnhancedMap/MapPane/MapPane'
 import { setupColumnTypes } from './TasksReviewTableDefaultColumnTypes'
 import ReactTable from 'react-table-6'
@@ -528,10 +529,10 @@ export class TaskReviewTable extends Component {
                   </div>
                 </div>
                 <ManageSavedFilters searchFilters={this.props.reviewCriteria} {...this.props} />
-                <SharedFiltersModal 
-                  managingSharedFilterSettings={this.props.managingSharedFilterSettings}
-                  cancelManagingSharedFilterSettings={this.props.cancelManagingSharedFilterSettings}
-                  challengeAdminFilters={this.props.challengeAdminFilters}
+                <TaskPropertyFiltersModal 
+                  managingSavedTaskPropertyFilterSettings={this.props.managingSharedFilterSettings}
+                  cancelManagingSavedTaskPropertyFilterSettings={this.props.cancelManagingSharedFilterSettings}
+                  savedTaskPropertyFilters={this.props.savedTaskPropertyFilters}
                 />
               </div>
             </div>
@@ -608,7 +609,11 @@ export class TaskReviewTable extends Component {
   }
 }
 
-export default WithCurrentUser(WithConfigurableColumns(
-  WithSavedFilters(TaskReviewTable, "reviewSearchFilters"),
-  {}, [], messages, "reviewColumns", "reviewTasksType", false)
+export default WithCurrentUser(
+  WithConfigurableColumns(
+    WithSavedTaskPropertyFilters(
+      WithSavedFilters(TaskReviewTable, "reviewSearchFilters")
+    ),
+      {}, [], messages, "reviewColumns", "reviewTasksType", false
+  )
 )
