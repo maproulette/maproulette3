@@ -862,7 +862,11 @@ export const fetchChallenge = function (challengeId, suppressReceive = false) {
         if (!suppressReceive) {
           dispatch(receiveChallenges(normalizedResults.entities));
         }
-
+        
+        if (typeof normalizedResults.entities.challenges[challengeId].defaultOverlay === "string") {
+          normalizedResults.entities.challenges[challengeId].defaultOverlay = normalizedResults.entities.challenges[challengeId].defaultOverlay.split(',');
+        }
+        
         return normalizedResults;
       })
       .catch((error) => {
@@ -952,6 +956,13 @@ export const fetchChallenges = function (
       challengeData.preferredReviewTags = challengeData.preferredReviewTags.trim();
     }
 
+    if (_isArray(challengeData.defaultOverlay)) {
+      challengeData.defaultOverlay =
+        challengeData.defaultOverlay.map(t => t.trim()).join(",");
+    } else if (challengeData.defaultOverlay) {
+      challengeData.defaultOverlay = challengeData.defaultOverlay.trim();
+    }
+
     // If there is local GeoJSON content being transmitted as a string, parse
     // it into JSON first.
     if (
@@ -991,6 +1002,7 @@ export const fetchChallenges = function (
           "customBasemap",
           "defaultBasemap",
           "defaultBasemapId",
+          "defaultOverlay",
           "defaultPriority",
           "defaultZoom",
           "description",
@@ -1029,7 +1041,7 @@ export const fetchChallenges = function (
           "automatedEditsCodeAgreement"
         ]
       );
-
+      
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
         challengeData.dataOriginDate = parse(

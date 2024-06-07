@@ -2,6 +2,7 @@ import { ChallengeBasemap,
          challengeOwnerBasemapLayerLabels }
        from '../../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 import { LayerSources } from '../../../../../../services/VisibleLayer/LayerSources'
+import { layerLabels } from '../../../../../../services/Challenge/ChallengeOverlay/ChallengeOverlay'
 import _without from 'lodash/without'
 import _map from 'lodash/map'
 import _filter from 'lodash/filter'
@@ -43,6 +44,16 @@ export const jsSchema = (intl) => {
         enumNames: _map(defaultBasemapChoices, 'name'),
         default: ChallengeBasemap.none.toString(),
       },
+      defaultOverlay: {
+        type: "array",
+        title: intl.formatMessage(messages.defaultOverlayLabel),
+        items: {
+          type: "string",
+          enum: layerLabels.map(layer => layer.id), 
+          enumNames: layerLabels.map(layer => layer.name),
+        },
+        uniqueItems: true
+      }
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -87,13 +98,18 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
   const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
 
   return {
-    "ui:order": ["defaultBasemap", "customBasemap"],
+    "ui:order": ["defaultBasemap", "defaultOverlay", "customBasemap"],
     defaultBasemap: {
       "ui:widget": "select",
       "ui:help": intl.formatMessage(messages.defaultBasemapDescription),
       "ui:collapsed": isCollapsed,
       "ui:toggleCollapsed": toggleCollapsed,
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.basemapStepHeader) : undefined,
+    },
+    defaultOverlay: {
+      "ui:widget": "checkboxes",
+      "ui:help": intl.formatMessage(messages.defaultOverlayDescription),
+      "ui:collapsed": isCollapsed,
     },
     customBasemap: {
       "ui:emptyValue": "",

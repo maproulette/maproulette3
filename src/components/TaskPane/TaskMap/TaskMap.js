@@ -69,7 +69,7 @@ export class TaskMap extends Component {
   animator = new MapAnimator()
 
   state = {
-    showTaskFeatures: true,
+    showTaskFeatures: false,
     showOSMData: false,
     showOSMElements: {
       nodes: true,
@@ -235,7 +235,60 @@ export class TaskMap extends Component {
     }
   }
 
+  //Loads the default overlay values selected in the challenge form
+  loadDefaultOverlay = async () => {
+    const isVirtual = _isFinite(this.props.virtualChallengeId)
+    const challengeId = isVirtual ? this.props.virtualChallengeId :
+                                    this.props.challenge.id
+
+    if (typeof this.props.challenge.defaultOverlay === "string") {
+      this.props.challenge.defaultOverlay = this.props.challenge.defaultOverlay.split(',');
+    }
+
+    if(this.props.challenge.defaultOverlay.includes('task-features')) {
+      this.setState({showTaskFeatures: true})
+    } else {
+      this.setState({showTaskFeatures: false})
+    }
+
+    if(this.props.challenge.defaultOverlay.includes('osm-data')) {
+      this.setState({showOSMData: true})
+    } else {
+      this.setState({showOSMData: false})
+    }
+
+    if(this.props.challenge.defaultOverlay.includes('mapillary')) {
+        this.props.setShowMapillaryLayer(challengeId, isVirtual, true)
+        await this.props.fetchMapillaryImagery(
+          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+          this.props.task
+      )
+    } else {
+        this.props.setShowMapillaryLayer(challengeId, isVirtual, false)
+        await this.props.fetchMapillaryImagery(
+          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+          this.props.task
+      )
+    }
+
+    if(this.props.challenge.defaultOverlay.includes('openstreetcam')) {
+        this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, true)
+        await this.props.fetchOpenStreetCamImagery(
+          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+          this.props.task
+      ) 
+      } else {
+        this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, false)
+        await this.props.fetchOpenStreetCamImagery(
+          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+          this.props.task
+        )
+      }
+    debugger
+  }
+
   componentDidMount() {
+    this.loadDefaultOverlay()
     this.props.activateKeyboardShortcutGroup(
       _pick(this.props.keyboardShortcutGroups, shortcutGroup),
       this.handleKeyboardShortcuts)

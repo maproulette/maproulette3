@@ -374,7 +374,7 @@ export class EditChallenge extends Component {
       _omit(this.props.challenge, ["activity", "comments"]),
       this.state.formData
     );
-
+   
     // If we're cloning a challenge, reset the id, status, and name, and remove
     // #maproulette hashtag from changeset comment as its presence will be
     // controlled by an explicit option offered to user during setup
@@ -507,6 +507,10 @@ export class EditChallenge extends Component {
 
     if (!_isEmpty(challengeData.overpassQL)) {
       challengeData.source = "Overpass Query";
+    }
+
+    if (typeof challengeData.defaultOverlay === "string") {
+      challengeData.defaultOverlay = challengeData.defaultOverlay.split(',');
     }
 
     return challengeData;
