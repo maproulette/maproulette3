@@ -56,7 +56,7 @@ export default class SavedFiltersList extends Component {
           <li>
             <button 
               className='mr-text-green-lighter hover:mr-text-white mr-transition-colors'
-              onClick={() => {this.props.manageSharedFilterSettings(); this.props.afterClick()}}
+              onClick={() => {this.props.openSavedTaskPropertyFiltersModal(); this.props.afterClick()}}
             >
               <FormattedMessage {...messages.taskPropertyFiltersLabel} />
             </button>

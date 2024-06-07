@@ -55,16 +55,6 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
     }
 
     /**
-     * This retrieves filters specific to the challenge dashboard admin context.
-     */
-    getChallengeAdminFilters = () => {
-      const settings = this.props.getUserAppSetting(
-        this.props.user, "adminSearchFilters") || {}
-      
-      return settings["ChallengeDashboard"]
-    }
-
-    /**
      * This will remove the given saved search filters from the user's app settings.
      */
     removeSavedFilters = name => {
@@ -85,10 +75,6 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
       settings[this.props.pageId][newName] = searchURL
       this.props.updateUserAppSetting(this.props.user.id,
         {[appSettingName]: settings})
-    }
-
-    toggleSharedFilterSettingsModalState = () => {
-      this.setState({sharedFiltersSettingsModalOpen: true})
     }
 
     // This will turn an integer or array value into
@@ -147,16 +133,12 @@ const WithSavedFilters = function(WrappedComponent, appSettingName) {
           appSettingName={appSettingName}
           saveCurrentSearchFilters={this.saveCurrentSearchFilters}
           savedFilters={this.getSavedFilters()}
-          challengeAdminFilters={this.getChallengeAdminFilters()}
           removeSavedFilters={this.removeSavedFilters}
           renameSavedFilters={this.renameSavedFilters}
           manageFilters={() => this.setState({managingFilters: true})}
           saveFilters={() => this.setState({savingFilters: true})}
-          manageSharedFilterSettings={() => this.setState({managingSharedFilterSettings: true})}
           managingFilters={this.state.managingFilters}
           savingFilters={this.state.savingFilters}
-          managingSharedFilterSettings={this.state.managingSharedFilterSettings}
-          cancelManagingSharedFilterSettings={() => this.setState({managingSharedFilterSettings: false})}
           cancelSavingFilters={() =>
             this.setState({savingFilters: false})
           }

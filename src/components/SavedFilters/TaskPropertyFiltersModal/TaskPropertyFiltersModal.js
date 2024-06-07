@@ -15,7 +15,7 @@ import messages from './Messages'
  * @author [Andrew Philbin](https://github.com/AndrewPhilbin)
  */
 
-function TaskPropertyFiltersModal({managingSavedTaskPropertyFilterSettings, cancelManagingSavedTaskPropertyFilterSettings, savedTaskPropertyFilters}) {
+function TaskPropertyFiltersModal({isOpen, closeModal, savedTaskPropertyFilters}) {
   const history = useHistory()
   const currentSearchString = history.location.search
   const pathname = history.location.pathname
@@ -33,8 +33,6 @@ function TaskPropertyFiltersModal({managingSavedTaskPropertyFilterSettings, canc
     }
   }
 
-
-
   const filterClearButton = 
     <button 
       className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
@@ -43,34 +41,34 @@ function TaskPropertyFiltersModal({managingSavedTaskPropertyFilterSettings, canc
         viewBox='0 0 20 20'
         className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
       <FormattedMessage {...messages.clearFiltersLabel} />
-  </button>
+    </button>
 
   const listSearches = _map(_keys(savedTaskPropertyFilters), (search, index) => {
     const taskPropertyURL = savedTaskPropertyFilters[search]
     const taskPropertyParams = new URLSearchParams(taskPropertyURL)
-    const filterApplyButton = 
-    <a 
-      onClick={() => {
-        // Clear current task property query parameter if present and set to value from saved filter, then update tasks.
-        const currentSearchParams = new URLSearchParams(currentSearchString)
-        if(currentSearchParams.has("filters.taskPropertySearch")) currentSearchParams.delete("filters.taskPropertySearch")
-        const taskPropertySearchValue = taskPropertyParams.get("filters.taskPropertySearch")
-        currentSearchParams.append("filters.taskPropertySearch", taskPropertySearchValue)
-        const newSearchString = currentSearchParams.toString()
-        console.log('currentSearchParams',currentSearchParams)
-        console.log('taskPropertySearchValue', taskPropertySearchValue)
-        console.log('newSearchString',newSearchString)
 
-        history.push({
-          pathname,
-          search: newSearchString,
-          state: {refresh: true}
-        })
-        cancelManagingSavedTaskPropertyFilterSettings()
-      }}
-      title={taskPropertyURL}>
-      {search}
-    </a>
+    const filterApplyButton = 
+      <button
+        className="hover:mr-text-green-lighter" 
+        onClick={() => {
+          // Clear current task property query parameter if present and set to value from saved filter, then update tasks.
+          const currentSearchParams = new URLSearchParams(currentSearchString)
+          if(currentSearchParams.has("filters.taskPropertySearch")) currentSearchParams.delete("filters.taskPropertySearch")
+          const taskPropertySearchValue = taskPropertyParams.get("filters.taskPropertySearch")
+          currentSearchParams.append("filters.taskPropertySearch", taskPropertySearchValue)
+          const newSearchString = currentSearchParams.toString()
+          console.log('props from taskPropertyFiltersModal', props)
+
+          // history.push({
+          //   pathname,
+          //   search: newSearchString,
+          //   state: {refresh: true}
+          // })
+          // cancelManagingSavedTaskPropertyFilterSettings()
+        }}
+        title={taskPropertyURL}>
+        {search}
+      </button>
 
     // Include only saved admin filters that have task property rules
     if(taskPropertyParams.has("filters.taskPropertySearch")) return (
@@ -86,8 +84,8 @@ function TaskPropertyFiltersModal({managingSavedTaskPropertyFilterSettings, canc
     <React.Fragment>
       <External>
         <Modal 
-          isActive={managingSavedTaskPropertyFilterSettings} 
-          onClose={cancelManagingSavedTaskPropertyFilterSettings} 
+          isActive={isOpen} 
+          onClose={closeModal} 
           narrow
         >
           <div className='mr-space-y-4'>
@@ -113,7 +111,7 @@ function TaskPropertyFiltersModal({managingSavedTaskPropertyFilterSettings, canc
           </div>
           <button
             className="mr-button mr-col-span-2 mr-mt-8"
-            onClick={cancelManagingSavedTaskPropertyFilterSettings}
+            onClick={closeModal}
           >
             <FormattedMessage {...messages.doneLabel} />
           </button>
