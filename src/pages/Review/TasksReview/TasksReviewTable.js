@@ -64,7 +64,8 @@ export class TaskReviewTable extends Component {
     openComments: null,
     showConfigureColumns: false,
     challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
-    projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId')
+    projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId'),
+    isSavedTaskPropertyFiltersModalOpen: false
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -280,6 +281,7 @@ export class TaskReviewTable extends Component {
               <SavedFiltersList
                 searchFilters={this.props.reviewCriteria}
                 afterClick={dropdown.toggleDropdownVisible}
+                openSavedTaskPropertyFiltersModal={() => this.setState({isSavedTaskPropertyFiltersModalOpen: true})}
                 {...this.props}
               />
             </ul>
@@ -530,8 +532,8 @@ export class TaskReviewTable extends Component {
                 </div>
                 <ManageSavedFilters searchFilters={this.props.reviewCriteria} {...this.props} />
                 <TaskPropertyFiltersModal 
-                  managingSavedTaskPropertyFilterSettings={this.props.managingSharedFilterSettings}
-                  cancelManagingSavedTaskPropertyFilterSettings={this.props.cancelManagingSharedFilterSettings}
+                  isOpen={this.state.isSavedTaskPropertyFiltersModalOpen}
+                  closeModal={() => this.setState({isSavedTaskPropertyFiltersModalOpen: false})}
                   savedTaskPropertyFilters={this.props.savedTaskPropertyFilters}
                 />
               </div>
