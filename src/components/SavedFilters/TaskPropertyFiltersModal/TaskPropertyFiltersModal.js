@@ -61,12 +61,12 @@ function TaskPropertyFiltersModal({managingSavedTaskPropertyFilterSettings, canc
         console.log('taskPropertySearchValue', taskPropertySearchValue)
         console.log('newSearchString',newSearchString)
 
-        // history.push({
-        //   pathname,
-        //   search: newSearchString,
-        //   state: {refresh: true}
-        // })
-        // cancelManagingSharedFilterSettings()
+        history.push({
+          pathname,
+          search: newSearchString,
+          state: {refresh: true}
+        })
+        cancelManagingSavedTaskPropertyFilterSettings()
       }}
       title={taskPropertyURL}>
       {search}
