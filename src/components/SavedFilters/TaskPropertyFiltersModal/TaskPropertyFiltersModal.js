@@ -15,7 +15,7 @@ import messages from './Messages'
  * @author [Andrew Philbin](https://github.com/AndrewPhilbin)
  */
 
-function TaskPropertyFiltersModal({isOpen, closeModal, savedTaskPropertyFilters}) {
+function TaskPropertyFiltersModal({isOpen, closeModal, savedTaskPropertyFilters, ...props}) {
   const history = useHistory()
   const currentSearchString = history.location.search
   const pathname = history.location.pathname

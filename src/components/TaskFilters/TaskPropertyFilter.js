@@ -21,22 +21,8 @@ export class TaskPropertyFilter extends Component {
     showSavedList: false,
   }
 
-  logCurrentRule = (rule) => {
-    console.log('task property rule', rule)
-  }
-
-  logSavedRuleUserSettings = () => {
-    const rules = this.props.savedTaskPropertyFilters
-    console.log(this.props.user.properties.mr3Frontend.settings)
-    console.log(rules)
-  }
-
-  testSaveRule = () => {
+  saveCurrentTaskPropertyFilterRules = () => {
     this.props.saveCurrentTaskPropertyFilters(this.props.criteria)
-  }
-
-  toggleSaveCurrentRules = () => {
-    this.setState({savingCurrentRules: true})
   }
 
   render() {
@@ -49,7 +35,7 @@ export class TaskPropertyFilter extends Component {
           this.setState({showForm: false})
           this.props.updateTaskPropertyCriteria(data)
         }}
-        handleSaveCurrentRules={this.testSaveRule}
+        handleSaveCurrentRules={this.saveCurrentTaskPropertyFilterRules}
         enableSavedRules
       />
     
@@ -95,27 +81,15 @@ export class TaskPropertyFilter extends Component {
                     {this.state.showSavedList && 
                       <div className='mr-bg-blue-firefly-75 mr-p-2'>
                         <ul>
-                          <li>
-                            <button onClick={this.logSavedRuleUserSettings}>Log Saved Rules</button>
-                          </li>
                           {savedPropertyRules && Object.keys(savedPropertyRules).length ?
                             Object.keys(savedPropertyRules).map(ruleName => (
                               <li className="mr-flex mr-space-x-3 mr-items-center" key={`${ruleName} - ${savedPropertyRules[ruleName]}`}>
                                 <button 
                                   className="hover:mr-text-green-lighter" 
                                   onClick={() => {
-                                      const {pathname, search} = this.props.history.location
                                       const savedRuleParam = new URLSearchParams(savedPropertyRules[ruleName])
-                                      const params = new URLSearchParams(search)
                                       const savedRuleValue = savedRuleParam.get("filters.taskPropertySearch")
-                                      if(params.has("filters.taskPropertySearch")) params.delete("filters.taskPropertySearch")
-                                      params.append("filters.taskPropertySearch", savedRuleValue)
-                                      const newSearchString = params.toString()
-                                      this.props.history.push({
-                                        pathname,
-                                        search: newSearchString,
-                                        state: {refresh: true}
-                                      })
+                                      this.props.updateTaskPropertyCriteria(JSON.parse(savedRuleValue))
                                     }
                                   }
                                 >
