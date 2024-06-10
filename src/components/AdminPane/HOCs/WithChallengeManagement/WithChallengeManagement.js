@@ -163,7 +163,7 @@ async function uploadLineByLine(
       taskLines = _compact(taskLines);
     }
 
-    if (taskLines.length === 0) {
+    if (!taskLines || taskLines.length === 0) {
       allLinesRead = true;
      return
     }
