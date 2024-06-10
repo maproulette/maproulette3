@@ -69,7 +69,7 @@ export class TaskMap extends Component {
   animator = new MapAnimator()
 
   state = {
-    showTaskFeatures: false,
+    showTaskFeatures: true,
     showOSMData: false,
     showOSMElements: {
       nodes: true,
@@ -242,50 +242,34 @@ export class TaskMap extends Component {
                                     this.props.challenge.id
 
     if (typeof this.props.challenge.defaultOverlay === "string") {
-      this.props.challenge.defaultOverlay = this.props.challenge.defaultOverlay.split(',');
-    }
+      const defaultOverlay = this.props.challenge.defaultOverlay.split(',');
 
-    if(this.props.challenge.defaultOverlay.includes('task-features')) {
-      this.setState({showTaskFeatures: true})
-    } else {
-      this.setState({showTaskFeatures: false})
-    }
+      this.setState({showTaskFeatures: defaultOverlay.includes('task-features')})
+      this.setState({showOSMData: defaultOverlay.includes('osm-data')})
 
-    if(this.props.challenge.defaultOverlay.includes('osm-data')) {
-      this.setState({showOSMData: true})
-    } else {
-      this.setState({showOSMData: false})
-    }
-
-    if(this.props.challenge.defaultOverlay.includes('mapillary')) {
+      if (defaultOverlay.includes('mapillary')) {
         this.props.setShowMapillaryLayer(challengeId, isVirtual, true)
         await this.props.fetchMapillaryImagery(
           this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
           this.props.task
-      )
-    } else {
+        )
+      }
+      else {
         this.props.setShowMapillaryLayer(challengeId, isVirtual, false)
-        await this.props.fetchMapillaryImagery(
-          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
-          this.props.task
-      )
-    }
+      }
 
-    if(this.props.challenge.defaultOverlay.includes('openstreetcam')) {
+      if (defaultOverlay.includes('openstreetcam')) {
         this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, true)
-        await this.props.fetchOpenStreetCamImagery(
-          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
-          this.props.task
-      ) 
-      } else {
-        this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, false)
         await this.props.fetchOpenStreetCamImagery(
           this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
           this.props.task
         )
       }
-    debugger
-  }
+      else {
+        this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, false)
+      }
+    }
+  }                               
 
   componentDidMount() {
     this.loadDefaultOverlay()
@@ -301,7 +285,7 @@ export class TaskMap extends Component {
   componentDidUpdate(prevProps, prevState) {
     this.loadMapillaryIfNeeded()
     this.loadOpenStreetCamIfNeeded()
-  
+    
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       this.deactivateOSMDataLayer()
       this.setState({

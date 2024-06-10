@@ -52,7 +52,8 @@ export const jsSchema = (intl) => {
           enum: layerLabels.map(layer => layer.id), 
           enumNames: layerLabels.map(layer => layer.name),
         },
-        uniqueItems: true
+        uniqueItems: true,
+        default: layerLabels[0].id,
       }
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
