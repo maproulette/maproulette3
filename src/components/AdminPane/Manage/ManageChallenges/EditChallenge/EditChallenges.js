@@ -80,7 +80,7 @@ export class EditChallenges extends Component {
   handleSubmit = async () => {
     window.scrollTo(0, 0);
     this.setState({ isSaving: true });
- 
+
     this.prepareFormDataForSaving().then(async (formData) => {
       const tallied = this.props.user?.properties?.mr3Frontend?.settings?.tallied?.[(this.props.project.id)];
       const challengesEditing = this.props.challenges.filter(c => tallied.includes(c.id));
