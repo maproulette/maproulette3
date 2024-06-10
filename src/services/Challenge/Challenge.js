@@ -1041,7 +1041,7 @@ export const fetchChallenges = function (
           "automatedEditsCodeAgreement"
         ]
       );
-      
+
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
         challengeData.dataOriginDate = parse(

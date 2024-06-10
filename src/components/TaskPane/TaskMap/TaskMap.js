@@ -285,7 +285,7 @@ export class TaskMap extends Component {
   componentDidUpdate(prevProps, prevState) {
     this.loadMapillaryIfNeeded()
     this.loadOpenStreetCamIfNeeded()
-    
+  
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       this.deactivateOSMDataLayer()
       this.setState({
