@@ -62,6 +62,14 @@ export class WidgetGrid extends Component {
           }
         }
 
+        const widgetStyle = {
+          "zIndex": widgetHidden ? 0 : (highestY - widgetLayout.y), // higher values towards top of page
+        }
+
+        // Prevent the editing layout from rendering an empty resizable elememnt for "permanent but conditionally shown" widgets 
+        // that are currently hidden.
+        if(widgetHidden && widgetPermanent && this.props.isEditing) widgetStyle["display"] = "none" 
+
         return (
           <div
             key={widgetLayout.i}
@@ -70,9 +78,7 @@ export class WidgetGrid extends Component {
                 'mr-card-widget--editing': this.props.isEditing,
                 'mr-card-widget--top-row': widgetLayout.y === 0,
               })}
-            style={{
-              "zIndex": widgetHidden ? 0 : (highestY - widgetLayout.y), // higher values towards top of page
-            }}
+            style={widgetStyle}
           >
             <WidgetComponent
               {...this.props}
