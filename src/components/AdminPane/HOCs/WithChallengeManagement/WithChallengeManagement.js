@@ -158,14 +158,14 @@ async function uploadLineByLine(
 
   while (!allLinesRead) {
     let taskLines = await lineFile.readLines(100);
-    if (taskLines[taskLines.length - 1] === null) {
-      allLinesRead = true;
-      taskLines = _compact(taskLines);
-    }
-
     if (!taskLines || taskLines?.length === 0) {
       allLinesRead = true;
      return
+    }
+
+    if (taskLines[taskLines.length - 1] === null) {
+      allLinesRead = true;
+      taskLines = _compact(taskLines);
     }
 
     await dispatch(
