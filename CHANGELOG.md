@@ -15,7 +15,7 @@ Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maprou
 * Upgrade tailwind to v3 by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2331
 * fix GeoJSON task creation/rebuild fails if number of tasks is divisible by 100 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2357
 
-## MR2 Changes v4.5.1 -> v4.5.3\
+## MR2 Changes v4.5.1 -> v4.5.3
 * update tasks_remaining column in challenge table by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1131
 * Remove quotes around HOCON substitutions by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1133
 
