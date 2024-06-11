@@ -158,8 +158,8 @@ async function uploadLineByLine(
 
   while (!allLinesRead) {
     let taskLines = await lineFile.readLines(100);
-    if (!taskLines || taskLines.length === 0) {
 
+    if (!taskLines || taskLines.length === 0) {
       allLinesRead = true;
       return challenge;
     }
