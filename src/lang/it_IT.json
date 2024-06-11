@@ -906,7 +906,7 @@
   "Errors.task.removeTaskFromBundleFailure": "Impossibile rimuovere il compito dal pacchetto",
   "Errors.task.saveFailure": "Impossibile salvare le modifiche{details}",
   "Errors.task.taskAlreadyBundled": "Task{details} is already in a bundle and can't be put into another bundle. There might be other tasks you tried to bundle that aren't mentioned here, but the ID given is for the first task we noticed is already bundled.",
-  "Errors.task.unableToBundleTasks": "I compiti con questi ID sono bloccati da un altro utente{details}. Questo può essere successo perché un utente ha completato o incluso un compito mentre stavi guardando questo compito. Aggiorna la pagina per visualizzare solo i compiti non bloccati.",
+  "Errors.task.unableToBundleTasks": "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
   "Errors.task.updateFailure": "Impossibile salvare le modifiche.",
   "Errors.team.genericFailure": "Fallimento{details}",
   "Errors.user.fetchFailure": "Impossibile recuperare i dati utente dal server.",

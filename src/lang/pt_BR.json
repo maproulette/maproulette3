@@ -906,7 +906,7 @@
   "Errors.task.removeTaskFromBundleFailure": "Não foi possível remover tarefa do grupo",
   "Errors.task.saveFailure": "Não foi possível salvar suas alterações{details}",
   "Errors.task.taskAlreadyBundled": "A tarefa{details} já está em um grupo e não pode ser colocada em outro. Pode haver outras tarefas que você tentou agrupar que não foram mencionadas aqui, mas o ID fornecido é para a primeira tarefa que percebemos que já está agrupada.",
-  "Errors.task.unableToBundleTasks": "As tarefas com esses IDs estão bloqueadas por outro usuário{details}. Isso provavelmente aconteceu porque um usuário concluiu ou agrupou uma tarefa enquanto você estava olhando para esta tarefa. Atualize a página para visualizar apenas as tarefas desbloqueadas.",
+  "Errors.task.unableToBundleTasks": "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
   "Errors.task.updateFailure": "Não foi possível salvar suas alterações.",
   "Errors.team.genericFailure": "Erro{details}",
   "Errors.user.fetchFailure": "Não foi possível obter os dados do usuário no servidor.",

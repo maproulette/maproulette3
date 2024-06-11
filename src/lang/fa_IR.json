@@ -906,7 +906,7 @@
   "Errors.task.removeTaskFromBundleFailure": "Unable to remove task from bundle",
   "Errors.task.saveFailure": "Unable to save your changes{details}",
   "Errors.task.taskAlreadyBundled": "Task{details} is already in a bundle and can't be put into another bundle. There might be other tasks you tried to bundle that aren't mentioned here, but the ID given is for the first task we noticed is already bundled.",
-  "Errors.task.unableToBundleTasks": "The tasks with these IDs are locked by another user{details}. This most likely happened because a user completed or bundled a task while you've been looking at this task. Refresh the page to view only tasks that are unlocked.",
+  "Errors.task.unableToBundleTasks": "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
   "Errors.task.updateFailure": "Unable to save your changes.",
   "Errors.team.genericFailure": "Failure{details}",
   "Errors.user.fetchFailure": "Unable to fetch user data from server.",

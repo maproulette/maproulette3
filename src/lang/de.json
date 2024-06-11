@@ -906,7 +906,7 @@
   "Errors.task.removeTaskFromBundleFailure": "Nicht in der Lage, die Aufgabe aus dem Bundle zu entfernen.",
   "Errors.task.saveFailure": "Deine Änderungen konnten nicht gespeichert werden{details}",
   "Errors.task.taskAlreadyBundled": "Aufgabe{details} ist bereits in einem Bündel und kann nicht in ein weiteres Bündel aufgenommen werden. Es könnte andere Aufgaben geben, die du versucht hast zu bündeln, die hier nicht erwähnt werden, aber die angegebene ID bezieht sich auf die erste Aufgabe, die uns aufgefallen ist, die bereits gebündelt ist.",
-  "Errors.task.unableToBundleTasks": "Die Aufgaben mit diesen IDs wurden von einem anderen Benutzer gesperrt{details}. Dies ist höchstwahrscheinlich passiert, weil ein Benutzer eine Aufgabe abgeschlossen oder gebündelt hat, während du diese Aufgabe angezeigt hast. Aktualisiere die Seite, um nur die Aufgaben anzuzeigen, die nicht gesperrt sind.",
+  "Errors.task.unableToBundleTasks": "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
   "Errors.task.updateFailure": "Deine Änderungen konnten nicht gespeichert werden.",
   "Errors.team.genericFailure": "Fehler{details}",
   "Errors.user.fetchFailure": "Benutzerdaten konnten nicht vom Server geladen werden.",
