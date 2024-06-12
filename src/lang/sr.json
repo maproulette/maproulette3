@@ -906,7 +906,7 @@
   "Errors.task.removeTaskFromBundleFailure": "Не могу да уклоним задатак из групе",
   "Errors.task.saveFailure": "Не могу да сачувам Ваше измене{details}",
   "Errors.task.taskAlreadyBundled": "Task{details} is already in a bundle and can't be put into another bundle. There might be other tasks you tried to bundle that aren't mentioned here, but the ID given is for the first task we noticed is already bundled.",
-  "Errors.task.unableToBundleTasks": "Задаци са овим идентификацијама су закључани од стране другог корисника{details}. Ово се највероватније десило јер је корисник завршио или увезао задатак док сте га Ви гледали. Освежите страни да видите само откључане задатке.",
+  "Errors.task.unableToBundleTasks": "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
   "Errors.task.updateFailure": "Не могу да сачувам Ваше измене.",
   "Errors.team.genericFailure": "Failure{details}",
   "Errors.user.fetchFailure": "Unable to fetch user data from server.",

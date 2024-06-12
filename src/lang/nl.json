@@ -906,7 +906,7 @@
   "Errors.task.removeTaskFromBundleFailure": "Kan taak niet uit bundel verwijderen",
   "Errors.task.saveFailure": "Kan uw wijzigingen{details} niet opslaan",
   "Errors.task.taskAlreadyBundled": "Taak{details} zit al in een bundel en kan niet in een andere bundel worden geplaatst. Er zouden andere taken kunnen zijn, die u hebt geprobeerd te bundelen, die hier niet vermeld zijn, maar de opgegeven ID is voor de eerste taak waarvan we merkten dat die al gebundeld is.",
-  "Errors.task.unableToBundleTasks": "De taken met deze ID's zijn vergrendeld door een andere gebruiker{details}. Dit gebeurde waarschijnlijk omdat een gebruiker een taak bundelde of voltooide toen u naar deze taak keek. Vernieuw de pagina om alleen taken te bekijken die niet vergrendeld zijn.",
+  "Errors.task.unableToBundleTasks": "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
   "Errors.task.updateFailure": "Kan uw wijzigingen niet opslaan.",
   "Errors.team.genericFailure": "Mislukt{details}",
   "Errors.user.fetchFailure": "Gebruikersgegevens konden niet worden opgehaald.",

@@ -7,6 +7,20 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.5] - 2024-6-11
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
+
+## What's Changed
+* Prevent "ghost widget" from appearing in workspace widget layout editor by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2361
+* Upgrade tailwind to v3 by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2331
+* fix GeoJSON task creation/rebuild fails if number of tasks is divisible by 100 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2357
+
+## MR2 Changes v4.5.1 -> v4.5.3
+* update tasks_remaining column in challenge table by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1131
+* Remove quotes around HOCON substitutions by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1133
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.4...v3.15.5
+
 ## [v3.15.4] - 2024-6-04
 Released with [maproulette-backend_v4.5.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.1)
 
