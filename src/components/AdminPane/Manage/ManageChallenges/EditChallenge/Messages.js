@@ -600,6 +600,18 @@ will not be able to make sense of it.
       "Insert a custom base map URL here. E.g. `https://'{s}'.tile.openstreetmap.org/'{z}'/'{x}'/'{y}'.png`",
   },
 
+  defaultOverlayLabel: {
+    id: "Admin.EditChallenge.form.defaultOverlay.label",
+    defaultMessage: "Challenge Overlay",
+  },
+
+  defaultOverlayDescription: {
+    id: "Admin.EditChallenge.form.defaultOverlay.description",
+    defaultMessage:
+      "The default overlay to use for the challenge, overriding any " +
+      "user settings that define a default overlay",
+  },
+
   exportablePropertiesLabel: {
     id: "Admin.EditChallenge.form.exportableProperties.label",
     defaultMessage: "Properties to export in CSV",
@@ -866,12 +878,12 @@ will not be able to make sense of it.
 
   basemapStepHeader: {
     id: "Admin.EditChallenge.form.steps.basemap.header",
-    defaultMessage: "Basemap",
+    defaultMessage: "Basemap and Overlay",
   },
 
   basemapStepDescription: {
     id: "Admin.EditChallenge.form.steps.basemap.description",
-    defaultMessage: "Set a different basemap",
+    defaultMessage: "Set a different basemap and overlay",
   },
 
   propertiesStepHeader: {

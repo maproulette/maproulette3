@@ -218,7 +218,7 @@
   "Admin.EditChallenge.form.steps.allOptions.description": "Options",
   "Admin.EditChallenge.form.steps.automatedEditsCode.header": "OSM Automated Edits Code of Conduct",
   "Admin.EditChallenge.form.steps.basemap.description": "Set a different basemap",
-  "Admin.EditChallenge.form.steps.basemap.header": "Basemap",
+  "Admin.EditChallenge.form.steps.basemap.header": "Basemap and Overlay",
   "Admin.EditChallenge.form.steps.changesetUrl.title": "Add Changeset URL",
   "Admin.EditChallenge.form.steps.contactInfo.header": "Contact Information",
   "Admin.EditChallenge.form.steps.dataSource.description": "Change Name or Data Source",

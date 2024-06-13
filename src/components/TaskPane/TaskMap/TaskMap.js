@@ -235,7 +235,44 @@ export class TaskMap extends Component {
     }
   }
 
+  //Loads the default overlay values selected in the challenge form
+  loadDefaultOverlay = async () => {
+    const isVirtual = _isFinite(this.props.virtualChallengeId)
+    const challengeId = isVirtual ? this.props.virtualChallengeId :
+                                    this.props.challenge.id
+
+    if (typeof this.props.challenge.defaultOverlay === "string") {
+      const defaultOverlay = this.props.challenge.defaultOverlay.split(',');
+
+      this.setState({showTaskFeatures: defaultOverlay.includes('task-features')})
+      this.setState({showOSMData: defaultOverlay.includes('osm-data')})
+
+      if (defaultOverlay.includes('mapillary')) {
+        this.props.setShowMapillaryLayer(challengeId, isVirtual, true)
+        await this.props.fetchMapillaryImagery(
+          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+          this.props.task
+        )
+      }
+      else {
+        this.props.setShowMapillaryLayer(challengeId, isVirtual, false)
+      }
+
+      if (defaultOverlay.includes('openstreetcam')) {
+        this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, true)
+        await this.props.fetchOpenStreetCamImagery(
+          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+          this.props.task
+        )
+      }
+      else {
+        this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, false)
+      }
+    }
+  }                               
+
   componentDidMount() {
+    this.loadDefaultOverlay()
     this.props.activateKeyboardShortcutGroup(
       _pick(this.props.keyboardShortcutGroups, shortcutGroup),
       this.handleKeyboardShortcuts)

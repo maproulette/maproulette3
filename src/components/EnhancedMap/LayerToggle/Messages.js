@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with LayerToggle
+ * Internationalized messages for use with LayerToggle and ChallengeOverlay
  */
 export default defineMessages({
   showTaskFeaturesLabel: {

@@ -508,6 +508,10 @@ export class EditChallenge extends Component {
       challengeData.source = "Overpass Query";
     }
 
+    if (typeof challengeData.defaultOverlay === "string") {
+      challengeData.defaultOverlay = challengeData.defaultOverlay.split(',');
+    }
+
     return challengeData;
   };
 
