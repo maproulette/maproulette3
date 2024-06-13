@@ -9,7 +9,7 @@ import _isNumber from 'lodash/isNumber'
 import _reverse from 'lodash/reverse'
 import _sortBy from 'lodash/sortBy'
 import _compact from 'lodash/compact'
-import { startOfDay, parse, parseISO, format } from 'date-fns'
+import { startOfDay, parseISO, format } from 'date-fns'
 import { ActivityItemType,
          typeLabels,
          keysByType }
