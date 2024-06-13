@@ -154,7 +154,7 @@ export const WithReviewTasks = function(WrappedComponent) {
       if (searchCriteria.filters.reviewedAt &&
           typeof searchCriteria.filters.reviewedAt === "object") {
         searchCriteria.filters.reviewedAt =
-          format(searchCriteria.filters.reviewedAt, 'YYYY-MM-DD')
+          format(searchCriteria.filters.reviewedAt, 'yyyy-MM-dd')
       }
 
       // The criteria filters use 'project' but on the url it can also be

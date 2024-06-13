@@ -9,7 +9,7 @@ import _isNumber from 'lodash/isNumber'
 import _reverse from 'lodash/reverse'
 import _sortBy from 'lodash/sortBy'
 import _compact from 'lodash/compact'
-import { startOfDay, parseISO } from 'date-fns'
+import { startOfDay, parse, parseISO, format } from 'date-fns'
 import { ActivityItemType,
          typeLabels,
          keysByType }
@@ -139,7 +139,7 @@ export default class UserActivityTimelineWidget extends Component {
       return (
         <li key={entriesByDate[0]} className="mr-timeline__period">
           <h3 className="mr-timeline__header">
-            {this.props.intl.formatDate(parseISO(entriesByDate[0]),
+            {this.props.intl.formatDate(parseISO(format(entriesByDate[0], "yyyy-MM-dd'T'HH:mm:ssxxx")),
                                         {month: 'long', day: 'numeric'})}
           </h3>
           <ol className="mr-timeline__activity">

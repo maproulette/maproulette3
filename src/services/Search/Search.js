@@ -272,11 +272,11 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
   }
   if (filters.reviewedAt) {
-    searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
-    searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
+    searchParameters.startDate = format(filters.reviewedAt, 'yyyy-MM-dd')
+    searchParameters.endDate = format(filters.reviewedAt, 'yyyy-MM-dd')
   }
   if (filters.mappedOn) {
-    searchParameters.mo = format(filters.mappedOn, 'YYYY-MM-DD')
+    searchParameters.mo = format(filters.mappedOn, 'yyyy-MM-dd')
   }
 
   if (filters.id) {

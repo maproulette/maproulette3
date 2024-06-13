@@ -108,7 +108,7 @@ export default class OpenStreetCamViewer extends Component {
                    @{currentImage.username}
                  </div>
                  <div>
-                   {format(parseISO(currentImage.shotDate), 'YYYY-MM-DD')}
+                   {format(parseISO(currentImage.shotDate), 'yyyy-MM-dd')}
                  </div>
                </div>
               }

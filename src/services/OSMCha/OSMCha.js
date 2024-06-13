@@ -23,7 +23,7 @@ export const buildOSMChaUrl = (bboxArray, earliestDate, participantUsernames) =>
 
   // Setup start-date filter
   if (earliestDate) {
-    const startDate = format(earliestDate, "YYYY-MM-DD")
+    const startDate = format(earliestDate, "yyyy-MM-dd")
     filterParams.push(`"date__gte":[{"label":"${startDate}","value":"${startDate}"}]`)
   }
   else {

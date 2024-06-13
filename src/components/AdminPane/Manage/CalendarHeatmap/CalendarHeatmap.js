@@ -35,7 +35,7 @@ export default class CalendarHeatmap extends Component {
       _compact(_map(_reverse(this.props.dailyMetrics), metrics =>
         metrics.value === 0 ? null :
         ({
-          date: format(metrics.day, 'YYYY-MM-DD'),
+          date: format(metrics.day, 'yyyy-MM-dd'),
           count: metrics.value,
         })
     ))

@@ -135,7 +135,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        if (searchCriteria.filters.reviewedAt &&
            typeof searchCriteria.filters.reviewedAt === "object") {
          searchCriteria.filters.reviewedAt =
-           format(searchCriteria.filters.reviewedAt, 'YYYY-MM-DD')
+           format(searchCriteria.filters.reviewedAt, 'yyyy-MM-dd')
        }
 
        return buildSearchURL(searchCriteria)
