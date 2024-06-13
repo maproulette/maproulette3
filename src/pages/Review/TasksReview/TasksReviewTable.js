@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage, FormattedDate, FormattedTime }
        from 'react-intl'
-import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _map from 'lodash/map'
@@ -941,7 +941,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       let mappedOn = _get(criteria, 'filters.mappedOn')
 
       if (typeof mappedOn === "string" && mappedOn !== "") {
-        mappedOn = parse(mappedOn)
+        mappedOn = parseISO(mappedOn)
       }
 
       const clearFilter = () => props.setFiltered("mappedOn", null)
@@ -989,7 +989,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     Filter: () => {
       let reviewedAt = _get(criteria, 'filters.reviewedAt')
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
-        reviewedAt = parse(reviewedAt)
+        reviewedAt = parseISO(reviewedAt)
       }
 
       const clearFilter = () => props.setFiltered("reviewedAt", null)

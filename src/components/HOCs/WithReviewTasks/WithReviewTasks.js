@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _merge from 'lodash/merge'

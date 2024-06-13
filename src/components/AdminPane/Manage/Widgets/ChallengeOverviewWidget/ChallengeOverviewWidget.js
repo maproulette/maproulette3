@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage, FormattedDate } from 'react-intl'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
-import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 import { ChallengeStatus, messagesByStatus }
        from  '../../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { WidgetDataTarget, registerWidgetType }
@@ -37,8 +37,8 @@ export default class ChallengeOverviewWidget extends Component {
     const dataOriginDateText =
       (!this.props.challenge.dataOriginDate || !this.props.challenge.lastTaskRefresh) ? null :
       this.props.intl.formatMessage(messages.dataOriginDate,
-        {refreshDate: this.props.intl.formatDate(parse(this.props.challenge.lastTaskRefresh)),
-         sourceDate: this.props.intl.formatDate(parse(this.props.challenge.dataOriginDate))})
+        {refreshDate: this.props.intl.formatDate(parseISO(this.props.challenge.lastTaskRefresh)),
+         sourceDate: this.props.intl.formatDate(parseISO(this.props.challenge.dataOriginDate))})
 
     return (
       <QuickWidget {...this.props}
@@ -103,7 +103,7 @@ export default class ChallengeOverviewWidget extends Component {
 
             <div>
               {this.props.challenge.created &&
-              <FormattedDate value={parse(this.props.challenge.created)}
+              <FormattedDate value={parseISO(this.props.challenge.created)}
                               year='numeric' month='long' day='2-digit' />
               }
             </div>
@@ -116,7 +116,7 @@ export default class ChallengeOverviewWidget extends Component {
 
             <div>
               {this.props.challenge.lastTaskRefresh &&
-              <FormattedDate value={parse(this.props.challenge.lastTaskRefresh)}
+              <FormattedDate value={parseISO(this.props.challenge.lastTaskRefresh)}
                               year='numeric' month='long' day='2-digit' />
               }
             </div>
@@ -129,7 +129,7 @@ export default class ChallengeOverviewWidget extends Component {
 
             <div title={dataOriginDateText}>
               {this.props.challenge.dataOriginDate &&
-              <FormattedDate value={parse(this.props.challenge.dataOriginDate)}
+              <FormattedDate value={parseISO(this.props.challenge.dataOriginDate)}
                               year='numeric' month='long' day='2-digit' />
               }
             </div>

@@ -9,7 +9,7 @@ import _merge from "lodash/merge";
 import _uniqBy from "lodash/uniqBy";
 import _differenceBy from "lodash/differenceBy";
 import { Popup } from 'react-leaflet'
-import parse from "date-fns/parse";
+import { parseISO } from "date-fns";
 import MapPane from "../EnhancedMap/MapPane/MapPane";
 import TaskClusterMap from "../TaskClusterMap/TaskClusterMap";
 import { messagesByDifficulty } from "../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty";
@@ -420,10 +420,10 @@ export class ChallengeDetail extends Component {
       ? null
       : this.props.intl.formatMessage(messages.dataOriginDateLabel, {
           refreshDate: this.props.intl.formatDate(
-            parse(challenge.lastTaskRefresh)
+            parseISO(challenge.lastTaskRefresh)
           ),
           sourceDate: this.props.intl.formatDate(
-            parse(challenge.dataOriginDate)
+            parseISO(challenge.dataOriginDate)
           ),
         });
 
@@ -563,7 +563,7 @@ export class ChallengeDetail extends Component {
                           :
                         </strong>{" "}
                         <FormattedDate
-                          value={parse(challenge.dataOriginDate)}
+                          value={parseISO(challenge.dataOriginDate)}
                           year="numeric"
                           month="long"
                           day="2-digit"

@@ -1,7 +1,6 @@
 import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
-import parse from 'date-fns/parse'
-import isFuture from 'date-fns/is_future'
+import { isFuture, parseISO } from 'date-fns'
 
 const NOTICES_URL = process.env.REACT_APP_FUNDRAISING_NOTICES_URL
 
@@ -20,7 +19,7 @@ export const fetchActiveFundraisingNotices = async function () {
     return fundraisingNotices.notices
       .map((notice) => {
         // add Date instance for expiration timestamp
-        notice.expirationDate = parse(notice.expirationTimestamp)
+        notice.expirationDate = parseISO(notice.expirationTimestamp)
         return notice
       })
       .filter((notice) => isFuture(notice.expirationDate))

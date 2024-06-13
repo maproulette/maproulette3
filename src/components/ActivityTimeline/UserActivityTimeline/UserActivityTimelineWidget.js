@@ -9,8 +9,7 @@ import _isNumber from 'lodash/isNumber'
 import _reverse from 'lodash/reverse'
 import _sortBy from 'lodash/sortBy'
 import _compact from 'lodash/compact'
-import parse from 'date-fns/parse'
-import startOfDay from 'date-fns/start_of_day'
+import { startOfDay, parseISO } from 'date-fns'
 import { ActivityItemType,
          typeLabels,
          keysByType }
@@ -68,7 +67,7 @@ export default class UserActivityTimelineWidget extends Component {
       challengeNames.set(entry.parentId, entry.parentName)
 
       return Object.assign({}, entry, {
-        normalizedISODate: this.props.startOfDay(parse(entry.created)),
+        normalizedISODate: this.props.startOfDay(parseISO(entry.created)),
         challengeId: entry.parentId,
         description: `${localizedActionLabels[keysByAction[entry.action]]} ` +
                      localizedTypeLabels[keysByType[entry.typeId]] +
@@ -104,7 +103,7 @@ export default class UserActivityTimelineWidget extends Component {
     // Sort date groups in descending date order.
     const latestEntries = _reverse(_sortBy(
       groupedByDate,
-      pairs => parse(pairs[0]).getTime()
+      pairs => parseISO(pairs[0]).getTime()
     ))
 
     // Build timeline entries for each day, showing each unique type of activity
@@ -140,7 +139,7 @@ export default class UserActivityTimelineWidget extends Component {
       return (
         <li key={entriesByDate[0]} className="mr-timeline__period">
           <h3 className="mr-timeline__header">
-            {this.props.intl.formatDate(parse(entriesByDate[0]),
+            {this.props.intl.formatDate(parseISO(entriesByDate[0]),
                                         {month: 'long', day: 'numeric'})}
           </h3>
           <ol className="mr-timeline__activity">

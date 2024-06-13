@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { Link } from 'react-router-dom'
-import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 import _isEmpty from 'lodash/isEmpty'
 import _map from 'lodash/map'
 import { fetchSocialChallenges } from '../../services/Challenge/Challenge'
@@ -118,7 +118,7 @@ const ChallengeItem = props => {
         {props.challenge.name}
       </Link>
       <div className="mr-text-sm mr-text-grey-light mr-my-2">
-        <FormattedDate value={parse(props.challenge.created)} />
+        <FormattedDate value={parseISO(props.challenge.created)} />
       </div>
       <div className="mr-text-white mr-break-words">
         <MarkdownContent markdown={props.challenge.description} />

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.5.4",
-    "@formatjs/intl-relativetimeformat": "^6.0.2",
+    "@formatjs/intl-relativetimeformat": "^11.2.14",
     "@mapbox/geo-viewport": "^0.4.0",
     "@nivo/bar": "^0.79.1",
     "@nivo/core": "^0.79.0",
@@ -28,7 +28,7 @@
     "@turf/nearest-point-on-line": "^6.0.2",
     "autoprefixer": "^10.4.19",
     "classnames": "^2.2.5",
-    "date-fns": "^1.29.0",
+    "date-fns": "^3.6.0",
     "downshift": "^5.4.3",
     "file-saver": "^2.0.2",
     "fontsource-bungee": "^3.1.5",

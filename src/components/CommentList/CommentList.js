@@ -5,7 +5,7 @@ import { FormattedMessage,
          FormattedDate,
          FormattedTime } from 'react-intl'
 import { Link } from 'react-router-dom'
-import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 import _map from 'lodash/map'
 import _isObject from 'lodash/isObject'
 import _sortBy from 'lodash/sortBy'
@@ -41,7 +41,7 @@ export default class CommentList extends Component {
     if (this.props.comments?.length !== 0) {
       commentDates = new Map()
       _each(this.props.comments, (comment) =>
-        commentDates.set(comment.id, parse(comment.created))
+        commentDates.set(comment.id, parseISO(comment.created))
       )
     
       // Show in descending order, with the most recent comment first.
@@ -54,7 +54,7 @@ export default class CommentList extends Component {
     } else {
       commentDates = new Map()
       _each(this.props.taskComments, (comment) =>
-        commentDates.set(comment.id, parse(comment.created))
+        commentDates.set(comment.id, parseISO(comment.created))
       )
     
       // Show in descending order, with the most recent comment first.

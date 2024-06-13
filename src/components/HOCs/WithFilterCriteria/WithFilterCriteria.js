@@ -11,7 +11,7 @@ import _toInteger from 'lodash/toInteger'
 import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
 import _debounce from 'lodash/debounce'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { fromLatLngBounds, GLOBAL_MAPBOUNDS } from '../../../services/MapBounds/MapBounds'
 import { buildSearchCriteriafromURL,
          buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'

@@ -6,7 +6,7 @@ import { FormattedMessage, FormattedDate, injectIntl }
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _filter from 'lodash/filter'
-import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 import messages from './Messages'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
@@ -121,7 +121,7 @@ export class ProjectDetail extends Component {
                           />
                           :
                         </strong>{' '}
-                        <FormattedDate value={parse(project.created)}
+                        <FormattedDate value={parseISO(project.created)}
                                         year='numeric' month='long' day='2-digit' />
                       </li>
                       <li>
@@ -131,7 +131,7 @@ export class ProjectDetail extends Component {
                           />
                           :
                         </strong>{' '}
-                        <FormattedDate value={parse(project.modified)}
+                        <FormattedDate value={parseISO(project.modified)}
                                         year='numeric' month='long' day='2-digit' />
                       </li>
                       {/* Disable Link tell project leaderboard page is reimplemented */}
