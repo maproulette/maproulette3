@@ -4,8 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import { ZoomControl, CircleMarker, Popup } from 'react-leaflet'
 import { getCoord } from '@turf/invariant'
 import centroid from '@turf/centroid'
-import parse from 'date-fns/parse'
-import differenceInHours from 'date-fns/difference_in_hours'
+import { differenceInHours, parseISO } from 'date-fns' 
 import _isString from 'lodash/isString'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
@@ -42,7 +41,7 @@ export const ActivityMap = props => {
         JSON.parse(entry.task.location) :
         entry.task.location
       const center = getCoord(centroid(geojson))
-      const hoursOld = differenceInHours(Date.now(), parse(entry.created))
+      const hoursOld = differenceInHours(Date.now(), parseISO(entry.created))
 
       return (
         <CircleMarker

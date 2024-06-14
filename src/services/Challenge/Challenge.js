@@ -18,8 +18,7 @@ import _fromPairs from "lodash/fromPairs";
 import _isUndefined from "lodash/isUndefined";
 import _groupBy from "lodash/groupBy";
 import _join from "lodash/join";
-import parse from "date-fns/parse";
-import format from "date-fns/format";
+import { parseISO, format, startOfDay } from "date-fns";
 import { defaultRoutes as api, isSecurityError } from "../Server/Server";
 import Endpoint from "../Server/Endpoint";
 import RequestStatus from "../Server/RequestStatus";
@@ -44,7 +43,6 @@ import {
   generateSearchParametersString,
   PARAMS_MAP,
 } from "../Search/Search";
-import startOfDay from "date-fns/start_of_day";
 import geojsontoosm from 'geojsontoosm';
 
 /**
@@ -197,7 +195,7 @@ export const receiveChallenges = function (
 ) {
   _each(normalizedEntities.challenges, (c) => {
     if (c.dataOriginDate) {
-      c.dataOriginDate = format(parse(c.dataOriginDate), "YYYY-MM-DD");
+      c.dataOriginDate = format(parseISO(c.dataOriginDate), "yyyy-MM-dd");
     }
   });
 
@@ -1032,7 +1030,7 @@ export const fetchChallenges = function (
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
-        challengeData.dataOriginDate = parse(
+        challengeData.dataOriginDate = parseISO(
           challengeData.dataOriginDate
         ).toISOString();
       }
@@ -1168,7 +1166,7 @@ export const uploadChallengeGeoJSON = function (
 
     if (dataOriginDate) {
       // Set the timestamp on the dataOriginDate so we get proper timezone info.
-      dataOriginDate = parse(dataOriginDate).toISOString();
+      dataOriginDate = parseISO(dataOriginDate).toISOString();
     }
 
     return new Endpoint(api.challenge.uploadGeoJSON, {

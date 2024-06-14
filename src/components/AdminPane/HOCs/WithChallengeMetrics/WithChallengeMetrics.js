@@ -17,7 +17,7 @@ import _pickBy from 'lodash/pickBy'
 import _values from 'lodash/values'
 import _indexOf from 'lodash/indexOf'
 import _isEqual from 'lodash/isEqual'
-import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
 import WithDashboardEntityFilter
        from '../../HOCs/WithDashboardEntityFilter/WithDashboardEntityFilter'
@@ -134,7 +134,7 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
           // Calculate metrics for each day
           let totalRemaining = tasksAvailable
           dailyMetrics = _map(groupedByDate, dailyEntries => {
-            const day = parse(dailyEntries[0])
+            const day = parseISO(dailyEntries[0])
             const dayActivity = dailyEntries[1]
 
             const completedToday = _sumBy(dayActivity, entry =>

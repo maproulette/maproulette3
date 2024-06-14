@@ -3,6 +3,7 @@ import * as React from "react";
 import { IntlProvider } from "react-intl";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { ChallengeDetail } from "./ChallengeDetail.js";
+import { format } from "date-fns";
 
 describe("ChallengeDetail", () => {
   it("doesn't break if only required props are provided", () => {
@@ -25,8 +26,8 @@ describe("ChallengeDetail", () => {
         browsedChallenge={{
           id: 1,
           parent: { id: 2 },
-          lastTaskRefresh: new Date(),
-          dataOriginDate: new Date(),
+          lastTaskRefresh: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
+          dataOriginDate: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx").slice(0, 10),
         }}
         intl={{
           formatMessage: () => '',
@@ -54,8 +55,8 @@ describe("ChallengeDetail", () => {
         browsedChallenge={{
           id: 1,
           parent: { id: 2 },
-          lastTaskRefresh: new Date(),
-          dataOriginDate: new Date(),
+          lastTaskRefresh: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
+          dataOriginDate: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx").slice(0, 10),
           enabled: true,
         }}
         intl={{

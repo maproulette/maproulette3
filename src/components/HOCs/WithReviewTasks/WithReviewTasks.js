@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _merge from 'lodash/merge'
@@ -154,7 +154,7 @@ export const WithReviewTasks = function(WrappedComponent) {
       if (searchCriteria.filters.reviewedAt &&
           typeof searchCriteria.filters.reviewedAt === "object") {
         searchCriteria.filters.reviewedAt =
-          format(searchCriteria.filters.reviewedAt, 'YYYY-MM-DD')
+          format(searchCriteria.filters.reviewedAt, 'yyyy-MM-dd')
       }
 
       // The criteria filters use 'project' but on the url it can also be

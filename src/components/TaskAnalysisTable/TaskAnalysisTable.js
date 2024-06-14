@@ -23,8 +23,7 @@ import _split from 'lodash/split'
 import _isEmpty from 'lodash/isEmpty'
 import _merge from 'lodash/merge'
 import _pick from 'lodash/pick'
-import parse from 'date-fns/parse'
-import differenceInSeconds from 'date-fns/difference_in_seconds'
+import { parseISO,differenceInSeconds } from 'date-fns'
 import { messagesByStatus,
          keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
@@ -193,7 +192,7 @@ export class TaskAnalysisTableInternal extends Component {
           if (!t.reviewedAt || !t.reviewStartedAt) {
             return 0
           }
-          return differenceInSeconds(parse(t.reviewedAt), parse(t.reviewStartedAt))
+          return differenceInSeconds(parseISO(t.reviewedAt), parseISO(t.reviewStartedAt))
         })
       }
       else {
@@ -556,8 +555,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       if (!row._original.reviewedAt ||
           !row._original.reviewStartedAt) return null
 
-      const seconds = differenceInSeconds(parse(row._original.reviewedAt),
-                                          parse(row._original.reviewStartedAt))
+      const seconds = differenceInSeconds(parseISO(row._original.reviewedAt),
+                                          parseISO(row._original.reviewStartedAt))
       return (
         <span>
           {Math.floor(seconds / 60)}m {seconds % 60}s

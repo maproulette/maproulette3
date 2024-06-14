@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, FormattedDate } from 'react-intl'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
-import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 import _isUndefined from 'lodash/isUndefined'
 import _noop from 'lodash/noop'
 import _get from 'lodash/get'
@@ -137,7 +137,7 @@ export class CardChallenge extends Component {
                 <strong className="mr-text-yellow">
                   <FormattedMessage {...messages.lastTaskRefreshLabel} />:
                 </strong> <FormattedDate
-                  value={parse(this.props.challenge.dataOriginDate)}
+                  value={parseISO(this.props.challenge.dataOriginDate)}
                   year='numeric' month='long' day='2-digit'
                 />
               </li>

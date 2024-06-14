@@ -4,7 +4,7 @@ import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _maxBy from 'lodash/maxBy'
-import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 import { ChallengeStatus }
        from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { isCompletionStatus }
@@ -76,12 +76,12 @@ export class AsManageableChallenge {
     }
 
     return _maxBy(this.completionActivity(),
-                  entry => parse(entry.date).getTime())
+                  entry => parseISO(entry.date).getTime())
   }
 
   mostRecentCompletionActivityDate() {
     const entry = this.mostRecentCompletionActivityEntry()
-    return _isObject(entry) ? parse(entry.date) : null
+    return _isObject(entry) ? parseISO(entry.date) : null
   }
 }
 
