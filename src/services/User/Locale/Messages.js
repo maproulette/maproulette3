@@ -44,6 +44,10 @@ export default defineMessages({
     id: "Locale.pt-BR.label",
     defaultMessage: "pt-BR (Português Brasileiro)",
   },
+  "pt-PT": {
+    id: "Locale.pt-PT.label",
+    defaultMessage: "pt-PT (Português Portugal)",
+  },
   "fa-IR": {
     id: "Locale.fa-IR.label",
     defaultMessage: "fa-IR (Persian - Iran)",
