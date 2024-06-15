@@ -104,7 +104,7 @@ const LocaleImports = {
     ]),
   [Locale["pt-PT"]]: () =>
     Promise.all([
-      import("../../../lang/pt-PT.json"),
+      import("../../../lang/pt_PT.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/pt"),
     ]),
   [Locale["cs-CZ"]]: () =>
