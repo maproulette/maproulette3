@@ -7,6 +7,15 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.6] - 2024-6-14
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
+
+## What's Changed
+* Bump @formatjs/intl-relativetimeformat from v6.0.2 to v11.2.14 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2364
+* Bump date-fns from v1.29.0 to v3.6.0 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2364
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.5...v3.15.6
+
 ## [v3.15.5] - 2024-6-11
 Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
 
