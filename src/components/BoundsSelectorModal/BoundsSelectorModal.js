@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import bbox from '@turf/bbox'
 import _split from 'lodash/split'
 import classNames from 'classnames'
-import { Map, ZoomControl } from 'react-leaflet'
+import { MapContainer, ZoomControl } from 'react-leaflet'
 import { toLatLngBounds, fromLatLngBounds }
        from '../../services/MapBounds/MapBounds'
 import SourcedTileLayer
@@ -79,14 +79,15 @@ export default class BoundsSelectorModal extends Component {
                   </div>
                   <div className={classNames("mr-bounds-selector-map", this.props.className)}>
                     <MapPane>
-                      <Map bounds={boundingBox}
-                           zoomControl={false}>
+                      <MapContainer 
+                        bounds={boundingBox}
+                        zoomControl={false}>
                         <ZoomControl className="mr-z-1000" position='topright' />
                         <SourcedTileLayer source={defaultLayerSource()} skipAttribution={true} />
                         <AreaSelect
                           bounds={boundingBox}
                           onBoundsChanged={(mapBounds) => this.setState({mapBounds})} />
-                      </Map>
+                      </MapContainer>
                     </MapPane>
                   </div>
                   <div className="mr-text-center mr-mt-6">

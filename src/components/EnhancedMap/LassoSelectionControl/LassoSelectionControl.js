@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import L from 'leaflet'
 import 'leaflet-lasso'
 import { injectIntl } from 'react-intl'
-import { MapControl, withLeaflet } from 'react-leaflet'
+import { createControlComponent } from '@react-leaflet/core'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 
 /**
@@ -97,11 +97,8 @@ const LassoSelectionLeafletControl = L.Control.extend({
  * clicked, the control toggles activation of a lasso tool for selecting map
  * features
  */
-export class LassoSelectionControl extends MapControl {
-  // props will be available as `options` field in the leaflet control
-  createLeafletElement(props) {
-    return new LassoSelectionLeafletControl(props)
-  }
-}
+export const LassoSelectionControl = createControlComponent(
+  (props) => {return new LassoSelectionLeafletControl(props)}
+)
 
-export default withLeaflet(injectIntl(LassoSelectionControl))
+export default injectIntl(LassoSelectionControl)

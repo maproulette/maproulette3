@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { Map, Marker } from 'react-leaflet'
+import { MapContainer, Marker, useMap } from 'react-leaflet'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import { layerSourceWithId,
          defaultLayerSource } from '../../services/VisibleLayer/LayerSources'
@@ -28,21 +28,21 @@ export default class InsetMap extends Component {
 
     return (
       <div className={classNames("inset-map", this.props.className)}>
-        <Map
+        <MapContainer
           center={this.props.centerPoint}
           zoom={this.props.fixedZoom}
           minZoom={this.props.fixedZoom}
           maxZoom={this.props.fixedZoom}
           zoomControl={false} worldCopyJump={true}
           attributionControl={false}
-          ref={this.mapRef}
+          whenCreated={this.mapRef}
         >
           <SourcedTileLayer source={layerSource} skipAttribution={true} />
           <Marker
             position={this.props.centerPoint}
             {...(this.props.markerIcon ? {icon: this.props.markerIcon} : {})}
           />
-        </Map>
+        </MapContainer>
       </div>
     )
   }

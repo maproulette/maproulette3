@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { Map, Rectangle } from 'react-leaflet'
+import { MapContainer, Rectangle } from 'react-leaflet'
 import { toLatLngBounds } from '../../services/MapBounds/MapBounds'
 import { layerSourceWithId, defaultLayerSource }
        from '../../services/VisibleLayer/LayerSources'
@@ -22,14 +22,14 @@ export default class LeaderboardMap extends Component {
 
     return (
       <div className={classNames("leaderboard-map", this.props.className)}>
-        <Map bounds={toLatLngBounds(boundingBox)}
+        <MapContainer bounds={toLatLngBounds(boundingBox)}
              maxBounds={toLatLngBounds(boundingBox)}
              zoomControl={false} worldCopyJump={true} dragging={false}
              scrollWheelZoom={false}
              attributionControl={false}>
           <SourcedTileLayer source={this.mapLayerSource()} skipAttribution={true} />
           <Rectangle bounds={toLatLngBounds(boundingBox)} />
-        </Map>
+        </MapContainer>
       </div>
     )
   }

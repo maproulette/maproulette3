@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import L from 'leaflet'
 import { injectIntl } from 'react-intl'
-import { MapControl, withLeaflet } from 'react-leaflet'
+import { createControlComponent } from '@react-leaflet/core'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
@@ -41,11 +41,8 @@ const FitWorldLeafletControl = L.Control.extend({
  * used as a child of a react-leaflet Map instance, such as EnhancedMap. When
  * clicked, the control zooms out to a worldwide view
  */
-export class FitWorldControl extends MapControl {
-  // props will be available as `options` field in the leaflet control
-  createLeafletElement(props) {
-    return new FitWorldLeafletControl(props)
-  }
-}
+export const FitWorldControl = createControlComponent(
+  (props) => {return new FitWorldLeafletControl(props)}
+)
 
-export default withLeaflet(injectIntl(FitWorldControl))
+export default injectIntl(FitWorldControl)

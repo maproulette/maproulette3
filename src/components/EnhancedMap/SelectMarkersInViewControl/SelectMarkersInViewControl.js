@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import L from 'leaflet'
 import { injectIntl } from 'react-intl'
-import { MapControl, withLeaflet } from 'react-leaflet'
+import { createControlComponent } from '@react-leaflet/core'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
@@ -50,17 +50,16 @@ const SelectMarkersInViewLeafletControl = L.Control.extend({
 })
 
 /**
- * SelectMarkersInViewControl is a react-leaflet MapControl component intended to be
+ * SelectMarkersInViewControl is a react-leaflet createControlComponent component intended to be
  * used as a child of a react-leaflet Map instance, such as EnhancedMap. When inspecting 
  * a nearby task in a Work On Multiple Tasks Together/Task Bundle widget, when clicked
  * the control selects all task markers currently visible on the map.
  */
-export class SelectMarkersInViewControl extends MapControl {
-  createLeafletElement(props) {
-    return new SelectMarkersInViewLeafletControl(props)
-  }
-}
-export default withLeaflet(injectIntl(SelectMarkersInViewControl))
+export const SelectMarkersInViewControl = createControlComponent(
+  (props) => {return new SelectMarkersInViewLeafletControl(props)}
+)
+
+export default injectIntl(SelectMarkersInViewControl)
 
 
 

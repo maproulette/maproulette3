@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { GeoJSON, withLeaflet } from 'react-leaflet'
+import { GeoJSON } from 'react-leaflet'
 import L from 'leaflet'
 import { injectIntl } from 'react-intl'
 import { featureCollection } from '@turf/helpers'
@@ -119,4 +119,4 @@ const TaskFeatureLayer = props => {
   return layer
 }
 
-export default withLeaflet(injectIntl(TaskFeatureLayer))
+export default injectIntl(TaskFeatureLayer)

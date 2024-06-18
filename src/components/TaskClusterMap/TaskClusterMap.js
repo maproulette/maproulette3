@@ -559,7 +559,7 @@ export class TaskClusterMap extends Component {
 
           return (
             <Marker key={markerId} position={position} taskId={mark?.options?.id}
-                        onClick={onClick}><Tooltip>{mark.overlappingCount} overlapping tasks</Tooltip></Marker>
+                        eventHandlers={{click: () => {onClick()}}}><Tooltip>{mark.overlappingCount} overlapping tasks</Tooltip></Marker>
           );
         } else {
           return <Marker key={markerId} taskId={mark?.options?.id} zIndexOffset={-100} opacity={0} position={position}></Marker>
@@ -568,11 +568,11 @@ export class TaskClusterMap extends Component {
 
       if (mark.icon) {
         return <Marker key={markerId} position={position} icon={mark.icon}
-                        onClick={onClick}>{popup}</Marker>
+                        eventHandlers={{click: () => {onClick()}}}>{popup}</Marker>
       }
       else {
         return <Marker key={markerId} position={position}
-                        onClick={onClick}>{popup}</Marker>
+                        eventHandlers={{click: () => {onClick()}}}>{popup}</Marker>
       }
     })
 
@@ -805,14 +805,14 @@ export class TaskClusterMap extends Component {
           </Pane>
         }
         {!this.props.mapZoomedOut &&
-         <Pane
-           key={`pane-${renderId}-task-markers`}
-           name={`pane-${renderId}-task-markers`}
-           style={{zIndex: 10 + overlayLayers.length + 1}}
-           className="custom-pane"
-         >
-           {this.state.mapMarkers}
-         </Pane>
+        //  <Pane
+        //    key={`pane-${renderId}-task-markers`}
+        //    name={`pane-${renderId}-task-markers`}
+        //    style={{zIndex: 10 + overlayLayers.length + 1}}
+        //    className="custom-pane"
+        //  >
+           this.state.mapMarkers
+        //  </Pane>
         }
       </EnhancedMap>
 

@@ -1,7 +1,7 @@
 import L from 'leaflet'
 import './leaflet-areaselect'
 import { injectIntl } from 'react-intl'
-import { MapControl, withLeaflet } from 'react-leaflet'
+import { createControlComponent } from '@react-leaflet/core'
 
 /**
  * Leaflet AreaSelect that allows selection of a bounding box.
@@ -31,11 +31,6 @@ const AreaSelectLeaflet = L.Control.extend({
  * used as a child of a react-leaflet Map instance, such as EnhancedMap. When
  * clicked, the control activates
  */
-export class AreaSelect extends MapControl {
-  // props will be available as `options` field in the leaflet control
-  createLeafletElement(props) {
-    return new AreaSelectLeaflet(props)
-  }
-}
+export const AreaSelect = createControlComponent((props) => {return new AreaSelectLeaflet(props)})
 
-export default withLeaflet(injectIntl(AreaSelect))
+export default injectIntl(AreaSelect)

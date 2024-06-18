@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import L from 'leaflet'
-import { MapControl, withLeaflet } from 'react-leaflet'
+import { createControlComponent } from '@react-leaflet/core'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
+import { useMap } from 'react-leaflet'
 
 /**
  * SearchControl presents a Leaflet control that can be used to execute
@@ -10,18 +11,15 @@ import SvgSymbol from '../../SvgSymbol/SvgSymbol'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export class SearchControl extends MapControl {
-  // props will be available as `options` field in the leaflet control
-  createLeafletElement(props) {
-    return new SearchLeafletControl(props)
-  }
+export const SearchControl = createControlComponent(
+  (props) => {return new SearchLeafletControl(props)},
 
-  // Re-render the control content when this component is rerendered
-  updateLeafletElement(fromProps, toProps) {
-    ReactDOM.render(ControlContent(toProps), this.leafletElement.getContainer())
-    return this.leafletElement
+  (instance, props, prevProps) => {
+    const map = useMap()
+    ReactDOM.render(ControlContent(props), map.getContainer())
+    return map
   }
-}
+)
 
 /**
  * The actual Leaflet control, which simply performs an initial rendering of
@@ -52,4 +50,4 @@ const ControlContent = props => {
   )
 }
 
-export default withLeaflet(SearchControl)
+export default SearchControl

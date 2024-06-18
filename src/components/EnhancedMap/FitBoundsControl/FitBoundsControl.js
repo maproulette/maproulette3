@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Control, Handler, DomUtil, DomEvent, FeatureGroup }
        from 'leaflet'
 import { injectIntl } from 'react-intl'
-import { MapControl, withLeaflet } from 'react-leaflet'
+import { createControlComponent } from '@react-leaflet/core'
 import _pick from 'lodash/pick'
 import _isEmpty from 'lodash/isEmpty'
 import WithKeyboardShortcuts
@@ -131,11 +131,8 @@ const keyboardHandler = function(key, controlFunction) {
  * as a child of a react-leaflet Map instance, such as EnhancedMap. When clicked,
  * the control fits the map to the bounds of the current features.
  */
-export class FitBoundsControl extends MapControl {
-  // props will be available as `options` field in the leaflet control
-  createLeafletElement(props) {
-    return new FitBoundsLeafletControl(props)
-  }
-}
+export const FitBoundsControl = createControlComponent(
+  (props) => {return new FitBoundsLeafletControl(props)}
+)
 
-export default WithKeyboardShortcuts(withLeaflet(injectIntl(FitBoundsControl)))
+export default WithKeyboardShortcuts(injectIntl(FitBoundsControl))

@@ -79,7 +79,6 @@ const SupplementalMap = props => {
       <LayerToggle {...props} overlayOrder={overlayOrder} />
       <EnhancedMap
         taskBundle={props.taskBundle}
-        ref={mapRef}
         center={props.centerPoint}
         zoom={zoom}
         zoomControl={false}
