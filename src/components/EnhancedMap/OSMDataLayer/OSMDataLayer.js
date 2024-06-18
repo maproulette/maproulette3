@@ -1,28 +1,28 @@
-import React, { useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
-import { FeatureGroup, useMap } from 'react-leaflet';
-import { injectIntl } from 'react-intl';
-import L from 'leaflet';
-import _get from 'lodash/get';
-import _omit from 'lodash/omit';
-import AsStylableLayer from '../../../interactions/LeafletLayer/AsStyleableLayer';
-import PropertyList from '../PropertyList/PropertyList';
-import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '../../../tailwind.config.js';
+import React, { useEffect, useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { FeatureGroup, useMap } from 'react-leaflet'
+import { injectIntl } from 'react-intl'
+import L from 'leaflet'
+import _get from 'lodash/get'
+import _omit from 'lodash/omit'
+import AsStylableLayer from '../../../interactions/LeafletLayer/AsStyleableLayer'
+import PropertyList from '../PropertyList/PropertyList'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../tailwind.config.js'
 
-const colors = resolveConfig(tailwindConfig).theme.colors;
+const colors = resolveConfig(tailwindConfig).theme.colors
 const HIGHLIGHT_STYLE = {
   color: colors.gold,
   fillColor: colors.gold,
   weight: 7,
-};
+}
 
 const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, externalInteractive }) => {
-  const map = useMap();
-  const lastZoom = useRef(null);
+  const map = useMap()
+  const lastZoom = useRef(null)
 
   const popupContent = (layer, onBack) => {
-    const properties = layer.feature.properties;
+    const properties = layer.feature.properties
     const header = (
       <a
         target="_blank"
@@ -31,9 +31,9 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
       >
         {properties.type} {properties.id}
       </a>
-    );
+    )
 
-    const contentElement = document.createElement('div');
+    const contentElement = document.createElement('div')
     ReactDOM.render(
       <PropertyList
         header={header}
@@ -41,32 +41,32 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
         onBack={onBack}
       />,
       contentElement
-    );
-    return contentElement;
-  };
+    )
+    return contentElement
+  }
 
   useEffect(() => {
-    setStyle();
-  }, [leaflet, intl]);
+    setStyle()
+  }, [leaflet, intl])
 
   const setStyle = () => {
-    if (!map || !leaflet) return;
+    if (!map || !leaflet) return
 
     map.eachLayer((layer) => {
       if (layer.options.mrLayerLabel === mrLayerLabel) {
-        const newLayers = generateLayer();
-        newLayers.eachLayer((newLayer) => map.addLayer(newLayer));
+        const newLayers = generateLayer()
+        newLayers.eachLayer((newLayer) => map.addLayer(newLayer))
       }
-    });
+    })
 
-    lastZoom.current = map.getZoom();
-  };
+    lastZoom.current = map.getZoom()
+  }
 
   const generateElementStyles = () => {
-    const zoom = map.getZoom();
+    const zoom = map.getZoom()
     const globalStyleOptions = {
       weight: zoom >= 18 ? 3 : zoom > 15 ? 2 : 1,
-    };
+    }
 
     return {
       way: { ...globalStyleOptions, color: colors['orange-jaffa'] },
@@ -77,8 +77,8 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
         radius: zoom >= 18 ? 10 : 5,
       },
       changeset: { ...globalStyleOptions, color: colors.red },
-    };
-  };
+    }
+  }
 
   const generateLayer = () => {
     const layerGroup = new L.OSM.DataLayer(xmlData, {
@@ -87,68 +87,68 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
       showWays: showOSMElements.ways,
       showAreas: showOSMElements.areas,
       pane: _get(leaflet, 'pane'),
-    });
+    })
 
     layerGroup.eachLayer((layer) => {
-      layer.options.mrLayerLabel = mrLayerLabel;
-      layer.options.fill = false;
-      layer.options.pane = layerGroup.options.pane;
-      layer.originalToGeoJSON = layer.toGeoJSON;
+      layer.options.mrLayerLabel = mrLayerLabel
+      layer.options.fill = false
+      layer.options.pane = layerGroup.options.pane
+      layer.originalToGeoJSON = layer.toGeoJSON
       layer.toGeoJSON = (precision) => {
-        const geojson = layer.originalToGeoJSON(precision);
+        const geojson = layer.originalToGeoJSON(precision)
         return {
           ...geojson.geometry,
           properties: layer.feature.properties,
-        };
-      };
+        }
+      }
 
       if (externalInteractive) {
-        const styleableLayer = AsStylableLayer(layer);
+        const styleableLayer = AsStylableLayer(layer)
         layer.on('mr-external-interaction', ({ map, latlng, onBack }) => {
-          styleableLayer.popStyle('mr-external-interaction:start-preview');
+          styleableLayer.popStyle('mr-external-interaction:start-preview')
           const popup = L.popup({}, layer)
             .setLatLng(latlng)
-            .setContent(popupContent(layer, onBack));
-          styleableLayer.pushStyle({ ...HIGHLIGHT_STYLE });
-          popup.on('remove', () => styleableLayer.popStyle());
-          popup.openOn(map);
-        });
+            .setContent(popupContent(layer, onBack))
+          styleableLayer.pushStyle({ ...HIGHLIGHT_STYLE })
+          popup.on('remove', () => styleableLayer.popStyle())
+          popup.openOn(map)
+        })
         layer.on('mr-external-interaction:start-preview', () => {
           styleableLayer.pushStyle(
             { ...HIGHLIGHT_STYLE },
             'mr-external-interaction:start-preview'
-          );
-        });
+          )
+        })
         layer.on('mr-external-interaction:end-preview', () => {
-          styleableLayer.popStyle('mr-external-interaction:start-preview');
-        });
+          styleableLayer.popStyle('mr-external-interaction:start-preview')
+        })
       }
-    });
+    })
 
     if (!externalInteractive) {
-      layerGroup.bindPopup(popupContent);
+      layerGroup.bindPopup(popupContent)
     }
 
-    return layerGroup;
-  };
+    return layerGroup
+  }
 
   useEffect(() => {
-    if (!map || !leaflet || !externalInteractive) return;
+    if (!map || !leaflet || !externalInteractive) return
 
     map.eachLayer((layer) => {
       if (layer.options.mrLayerLabel === mrLayerLabel) {
-        layer.unbindPopup();
-        generateLayer().eachLayer((newLayer) => map.addLayer(newLayer));
+        layer.unbindPopup()
+        generateLayer().eachLayer((newLayer) => map.addLayer(newLayer))
       }
-    });
+    })
 
-    lastZoom.current = map.getZoom();
-  }, [map, leaflet, externalInteractive, mrLayerLabel]);
+    lastZoom.current = map.getZoom()
+  }, [map, leaflet, externalInteractive, mrLayerLabel])
 
-  return <FeatureGroup />;
-};
+  return <FeatureGroup />
+}
 
-export default injectIntl(OSMDataLayer);
+export default injectIntl(OSMDataLayer)
 
 
 // The below code (with a couple minor linter fixes) comes from the
