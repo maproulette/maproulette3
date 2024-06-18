@@ -14,7 +14,7 @@ import { useMap } from 'react-leaflet'
 export const SearchControl = createControlComponent(
   (props) => {return new SearchLeafletControl(props)},
 
-  (instance, props, prevProps) => {
+  (instance, props) => {
     const map = useMap()
     ReactDOM.render(ControlContent(props), map.getContainer())
     return map

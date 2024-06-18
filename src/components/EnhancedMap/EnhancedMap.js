@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { MapContainer, useMap } from 'react-leaflet'

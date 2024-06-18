@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { MapContainer, Marker, useMap } from 'react-leaflet'
+import { MapContainer, Marker } from 'react-leaflet'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import { layerSourceWithId,
          defaultLayerSource } from '../../services/VisibleLayer/LayerSources'

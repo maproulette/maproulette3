@@ -3,14 +3,12 @@ import ReactDOM from 'react-dom';
 import { FeatureGroup, useMap } from 'react-leaflet';
 import { injectIntl } from 'react-intl';
 import L from 'leaflet';
-import _isEqual from 'lodash/isEqual';
 import _get from 'lodash/get';
 import _omit from 'lodash/omit';
 import AsStylableLayer from '../../../interactions/LeafletLayer/AsStyleableLayer';
 import PropertyList from '../PropertyList/PropertyList';
 import resolveConfig from 'tailwindcss/resolveConfig';
 import tailwindConfig from '../../../tailwind.config.js';
-import layerMessages from '../LayerToggle/Messages';
 
 const colors = resolveConfig(tailwindConfig).theme.colors;
 const HIGHLIGHT_STYLE = {
