@@ -278,9 +278,6 @@ export class TaskClusterMap extends Component {
         // Reset Map so that it zooms to new marker bounds
         this.setState({mapMarkers: null})
       }
-      else if (this.props.onTaskClick) {
-        this.props.onTaskClick(marker.options.taskId)
-      }
     }
   }
 
@@ -293,16 +290,12 @@ export class TaskClusterMap extends Component {
   spiderIfNeeded = (marker, allMarkers) => {
     if (this.state.spidered.has(marker.options.taskId)) {
       // Marker is already spidered. Make its spider line bold
-      this.mapRef.current.leafletElement.eachLayer(layer => {
+      this.mapRef.eachLayer(layer => {
         if (layer.options.spideredId === marker.options.taskId) {
           layer.setStyle({weight: 3})
           layer.redraw()
         }
       })
-
-      if (this.props.onTaskClick) {
-        this.props.onTaskClick(marker.options.taskId)
-      }
       return
     }
 
@@ -315,14 +308,11 @@ export class TaskClusterMap extends Component {
     else {
       // If nothing needs to be spidered, make sure we're not spidered
       this.unspider()
-      if (this.props.onTaskClick) {
-        this.props.onTaskClick(marker.options.taskId)
-      }
     }
   }
 
   spider = (clickedMarker, overlappingMarkers) => {
-    const leafletMap = this.mapRef.current.leafletElement
+    const leafletMap = this.mapRef
     const centerPointPx = leafletMap.latLngToLayerPoint(clickedMarker.position)
     const spidered = AsSpiderableMarkers(overlappingMarkers).spider(centerPointPx, CLUSTER_ICON_PIXELS)
     _each([...spidered.values()], s => s.position = leafletMap.layerPointToLatLng(s.positionPx))
@@ -524,9 +514,6 @@ export class TaskClusterMap extends Component {
         if (this.props.allowSpidering) {
           onClick = () => this.spiderIfNeeded(mark, consolidatedMarkers)
         }
-        else if (this.props.onTaskClick) {
-          onClick = () => this.props.onTaskClick(taskId)
-        }
       }
       else {
         onClick = () => this.markerClicked(mark)
@@ -559,7 +546,7 @@ export class TaskClusterMap extends Component {
 
           return (
             <Marker key={markerId} position={position} taskId={mark?.options?.id}
-                        eventHandlers={{click: () => {onClick()}}}><Tooltip>{mark.overlappingCount} overlapping tasks</Tooltip></Marker>
+                        eventHandlers={{click: () => {if(onClick){onClick()}}}}><Tooltip>{mark.overlappingCount} overlapping tasks</Tooltip></Marker>
           );
         } else {
           return <Marker key={markerId} taskId={mark?.options?.id} zIndexOffset={-100} opacity={0} position={position}></Marker>
@@ -568,11 +555,11 @@ export class TaskClusterMap extends Component {
 
       if (mark.icon) {
         return <Marker key={markerId} position={position} icon={mark.icon}
-                        eventHandlers={{click: () => {onClick()}}}>{popup}</Marker>
+                        eventHandlers={{click: () => {if(onClick){onClick()}}}}>{popup}</Marker>
       }
       else {
         return <Marker key={markerId} position={position}
-                        eventHandlers={{click: () => {onClick()}}}>{popup}</Marker>
+                        eventHandlers={{click: () => {if(onClick){onClick()}}}}>{popup}</Marker>
       }
     })
 
@@ -747,7 +734,8 @@ export class TaskClusterMap extends Component {
 
     const map =
       <EnhancedMap
-        ref={this.mapRef}
+        mapRef={this.mapRef}
+        setMapRef={(newMapRef) => {this.mapRef = newMapRef}}
         className="mr-z-0"
         center={currentCenterpoint}
         zoom={this.currentZoom} minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM}
@@ -805,14 +793,13 @@ export class TaskClusterMap extends Component {
           </Pane>
         }
         {!this.props.mapZoomedOut &&
-        //  <Pane
-        //    key={`pane-${renderId}-task-markers`}
-        //    name={`pane-${renderId}-task-markers`}
-        //    style={{zIndex: 10 + overlayLayers.length + 1}}
-        //    className="custom-pane"
-        //  >
-           this.state.mapMarkers
-        //  </Pane>
+         <Pane
+           key={`pane-${renderId}-task-markers`}
+           style={{zIndex: 10 + overlayLayers.length + 1}}
+           className="custom-pane"
+         >
+           {this.state.mapMarkers}
+        </Pane>
         }
       </EnhancedMap>
 

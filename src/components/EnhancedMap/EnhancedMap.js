@@ -41,7 +41,7 @@ const PIXEL_MARGIN = 10 // number of pixels on each side of a click to consider
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const Map = (props) => {
+const MapComponent = (props) => {
   const [noInitialBoundsSet, setNoInitialBoundsSet] = useState(true)
   const [mapMoved, setMapMoved] = useState(false)
   const map = useMap()
@@ -386,6 +386,10 @@ const Map = (props) => {
   }
 
   useEffect(() => {
+    if(props.setMapRef) {
+      props.setMapRef(map)
+    }
+
     if (!props.prevCenter || !props.prevFitToLayer || !props.prevTaskBundle) {
       props = {...props, prevCenter: props.center, prevFitToLayer: props.fitToLayer, prevTaskBundle: props.taskBundle}
     }
@@ -432,8 +436,8 @@ const Map = (props) => {
 
 const EnhancedMap = (props) => {
   return (
-    <MapContainer whenCreated={props.ref} center={props.center} zoom={props.zoom}>
-      <Map {...props} />
+    <MapContainer center={props.center} zoom={props.zoom}>
+      <MapComponent {...props} />
     </MapContainer>
   )
 }
@@ -461,7 +465,6 @@ EnhancedMap.propTypes = {
 EnhancedMap.defaultProps = {
   center: latLng(0, 45),
   zoom: 13,
-  ref: React.createRef(),
   setInitialBounds: true,
   justFitFeatures: false,
   onZoomOrMoveStart: _noop,

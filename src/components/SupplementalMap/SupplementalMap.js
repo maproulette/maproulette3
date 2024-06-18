@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ZoomControl, Pane } from 'react-leaflet'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
@@ -22,22 +22,22 @@ import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import BusySpinner from '../BusySpinner/BusySpinner'
 
 const SupplementalMap = props => {
-  const mapRef = useRef(null)
+  const [mapRef, setMapRef] = useState(useRef(null))
   const { task, user, trackedBounds, trackedZoom, h, w } = props
 
   // Follow the tracked map, if provided
   useEffect(() => {
-    if (mapRef.current && trackedBounds) {
+    if (mapRef && trackedBounds) {
       if (trackedBounds.isValid()) {
-        mapRef.current.leafletElement.setView(trackedBounds.getCenter(), trackedZoom)
+        mapRef.setView(trackedBounds.getCenter(), trackedZoom)
       }
     }
   }, [trackedBounds, trackedZoom])
 
   // Inform Leaflet if our map size changes
   useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.leafletElement.invalidateSize()
+    if (mapRef) {
+      mapRef.invalidateSize()
     }
   }, [h, w])
 
@@ -78,6 +78,8 @@ const SupplementalMap = props => {
     <div className="task-map">
       <LayerToggle {...props} overlayOrder={overlayOrder} />
       <EnhancedMap
+        mapRef={mapRef}
+        setMapRef={setMapRef}
         taskBundle={props.taskBundle}
         center={props.centerPoint}
         zoom={zoom}

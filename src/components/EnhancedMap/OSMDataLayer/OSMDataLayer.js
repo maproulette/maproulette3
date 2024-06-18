@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { useMap } from 'react-leaflet'
 import { createLayerComponent, updateGridLayer } from '@react-leaflet/core'

@@ -449,9 +449,6 @@ export class ChallengeDetail extends Component {
     const map = (
       <ClusterMap
         className="split-pane"
-        onTaskClick={(taskId) =>
-          this.props.startChallengeWithTask(challenge.id, false, taskId)
-        }
         showMarkerPopup={showMarkerPopup}
         challenge={challenge}
         allowClusterToggle
