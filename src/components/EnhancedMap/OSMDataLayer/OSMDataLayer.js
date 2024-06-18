@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { useMap } from 'react-leaflet'
-import { createLayerComponent } from '@react-leaflet/core'
+import { createLayerComponent, updateGridLayer } from '@react-leaflet/core'
 import { injectIntl } from 'react-intl'
 import L from 'leaflet'
 import _get from 'lodash/get'
@@ -21,9 +21,9 @@ const HIGHLIGHT_STYLE = {
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
  */
-const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, externalInteractive }) => {
+const OSMDataLayer = (props) => {
+  const [lastZoom, setLastZoom] = useState(null)
   const map = useMap()
-  const lastZoom = useRef(null)
 
   const popupContent = (layer, onBack) => {
     const properties = layer.feature.properties
@@ -49,28 +49,24 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
   }
 
   useEffect(() => {
-    setStyle()
-  }, [leaflet, intl])
-
-  const setStyle = () => {
-    if (!map || !leaflet) return
-
-    map.eachLayer((layer) => {
-      if (layer.options.mrLayerLabel === mrLayerLabel) {
-        const newLayers = generateLayer()
-        newLayers.eachLayer((newLayer) => map.addLayer(newLayer))
-      }
-    })
-
-    lastZoom.current = map.getZoom()
-  }
+    setStyle(props)
+  }, [props.leaflet, props.intl])
   
-  createLayerComponent((props) => {  lastZoom = props.zoom
+  createLayerComponent((props) => {  setLastZoom(props.zoom)
     return this.generateLayer({
       mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
       ...props,
     })}) 
 
+    updateGridLayer((props) => {   setLastZoom(props.zoom)
+      if (props.zoom !== lastZoom ||
+        !_isEqual(fromProps.showOSMElements, props.showOSMElements)) {
+      map.clearLayers()
+      const newLayers = generateLayer(props)
+      newLayers.eachLayer(layer => map.addLayer(layer))
+      setLastZoom(props.zoom)
+    }
+  }) 
   const generateElementStyles = () => {
     const zoom = map.getZoom()
     const globalStyleOptions = {
@@ -80,28 +76,27 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
     }
 
     return {
-      way: { ...globalStyleOptions, color: colors['orange-jaffa'] },
-      area: { ...globalStyleOptions, color: colors['pink-light'] },
-      node: {
-        ...globalStyleOptions,
+      way: Object.assign({}, globalStyleOptions, { color: colors['orange-jaffa'] }),
+      area: Object.assign({}, globalStyleOptions, { color: colors['pink-light'] }),
+      node: Object.assign({}, globalStyleOptions, {
         color: '#C20534',
-        radius: zoom >= 18 ? 10 : 5,
-      },
-      changeset: { ...globalStyleOptions, color: colors.red },
+        radius: zoom >= 18 ? 10 : 5, // shrink size when zoomed out
+      }),
+      changeset: Object.assign({}, globalStyleOptions, { color: colors.red }),
     }
   }
 
-  const generateLayer = () => {
-    const layerGroup = new L.OSM.DataLayer(xmlData, {
+  const generateLayer = (props) => {
+    const layerGroup = new L.OSM.DataLayer(props.xmlData, {
       styles: generateElementStyles(),
-      showNodes: showOSMElements.nodes,
-      showWays: showOSMElements.ways,
-      showAreas: showOSMElements.areas,
-      pane: _get(leaflet, 'pane'),
+      showNodes: props.showOSMElements.nodes,
+      showWays: props.showOSMElements.ways,
+      showAreas: props.showOSMElements.areas,
+      pane: _get(props, 'leaflet.pane'),
     })
 
-    layerGroup.eachLayer((layer) => {
-      layer.options.mrLayerLabel = mrLayerLabel
+    layerGroup.eachLayer(layer => {
+      layer.options.mrLayerLabel = props.mrLayerLabel
       layer.options.fill = false
       layer.options.pane = layerGroup.options.pane
       layer.originalToGeoJSON = layer.toGeoJSON
@@ -113,21 +108,20 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
         }
       }
 
-      if (externalInteractive) {
+      if (props.externalInteractive) {
         const styleableLayer = AsStylableLayer(layer)
+        layer.on('mr-external-interaction', ({map, latlng, onBack}) => {
           // Ensure any orphaned preview styles get cleaned up
-        layer.on('mr-external-interaction', ({ map, latlng, onBack }) => {
           styleableLayer.popStyle('mr-external-interaction:start-preview')
-          const popup = L.popup({}, layer)
-            .setLatLng(latlng)
-            .setContent(popupContent(layer, onBack))
-          styleableLayer.pushStyle({ ...HIGHLIGHT_STYLE })
+          const popup = L.popup({}, layer).setLatLng(latlng).setContent(popupContent(layer, onBack))
+          // Highlight selected feature
+          styleableLayer.pushStyle(Object.assign({}, HIGHLIGHT_STYLE))
           popup.on('remove', () => styleableLayer.popStyle())
           popup.openOn(map)
         })
         layer.on('mr-external-interaction:start-preview', () => {
           styleableLayer.pushStyle(
-            { ...HIGHLIGHT_STYLE },
+            Object.assign({}, HIGHLIGHT_STYLE),
             'mr-external-interaction:start-preview'
           )
         })
@@ -137,7 +131,7 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
       }
     })
 
-    if (!externalInteractive) {
+    if (!props.externalInteractive) {
       layerGroup.bindPopup(popupContent)
     }
 
