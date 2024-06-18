@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
-import { FeatureGroup, useMap } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
+import { createLayerComponent } from '@react-leaflet/core'
 import { injectIntl } from 'react-intl'
 import L from 'leaflet'
 import _get from 'lodash/get'
@@ -17,6 +18,9 @@ const HIGHLIGHT_STYLE = {
   weight: 7,
 }
 
+/**
+ * Serves as a react-leaflet adapter for the leaflet-osm package
+ */
 const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, externalInteractive }) => {
   const map = useMap()
   const lastZoom = useRef(null)
@@ -24,10 +28,9 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
   const popupContent = (layer, onBack) => {
     const properties = layer.feature.properties
     const header = (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href={`https://www.openstreetmap.org/${properties.type}/${properties.id}`}
+      <a target="_blank"
+         rel="noopener noreferrer"
+         href={`https://www.openstreetmap.org/${properties.type}/${properties.id}`}
       >
         {properties.type} {properties.id}
       </a>
@@ -61,10 +64,18 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
 
     lastZoom.current = map.getZoom()
   }
+  
+  createLayerComponent((props) => {  lastZoom = props.zoom
+    return this.generateLayer({
+      mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
+      ...props,
+    })}) 
 
   const generateElementStyles = () => {
     const zoom = map.getZoom()
     const globalStyleOptions = {
+      // Set stroke weight to 3px when zoomed way in, then 2px and
+      // finally down to 1px at zoom 15
       weight: zoom >= 18 ? 3 : zoom > 15 ? 2 : 1,
     }
 
@@ -104,6 +115,7 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
 
       if (externalInteractive) {
         const styleableLayer = AsStylableLayer(layer)
+          // Ensure any orphaned preview styles get cleaned up
         layer.on('mr-external-interaction', ({ map, latlng, onBack }) => {
           styleableLayer.popStyle('mr-external-interaction:start-preview')
           const popup = L.popup({}, layer)
@@ -131,21 +143,6 @@ const OSMDataLayer = ({ intl, xmlData, showOSMElements, mrLayerLabel, leaflet, e
 
     return layerGroup
   }
-
-  useEffect(() => {
-    if (!map || !leaflet || !externalInteractive) return
-
-    map.eachLayer((layer) => {
-      if (layer.options.mrLayerLabel === mrLayerLabel) {
-        layer.unbindPopup()
-        generateLayer().eachLayer((newLayer) => map.addLayer(newLayer))
-      }
-    })
-
-    lastZoom.current = map.getZoom()
-  }, [map, leaflet, externalInteractive, mrLayerLabel])
-
-  return <FeatureGroup />
 }
 
 export default injectIntl(OSMDataLayer)
