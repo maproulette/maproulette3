@@ -123,7 +123,6 @@ export class TaskPropertyQueryBuilder extends Component {
 
     const rootRule = _get(this.state.formData, 'propertyRules.rootRule')
     const errors = validatePropertyRules(rootRule)
-
     if (errors.length === 0) {
       const preparedData = preparePropertyRulesForSaving(rootRule)
       this.setState({preparedData, errors: null})
