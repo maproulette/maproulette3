@@ -6,12 +6,14 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   taskPropertyFiltersModalTitle: {
     id: "TaskPropertyFiltersModal.title",
-    defaultMessage: "Saved Task Property Filter Settings"
+    defaultMessage: "Task Property Filter Settings"
   },
 
   taskPropertyFiltersModalDescription: {
     id: "TaskPropertyFiltersModal.description",
-    defaultMessage: "Select a filter set from below to apply a saved Task Property filter to the current Review table tasks."
+    defaultMessage: 
+      "Select a filter set from below to apply a saved Task Property filter to the current Review table tasks. " +
+      "You can create and save task property rules by filtering by property when managing a challenge, working on multiple tasks or reviewing nearby tasks."
   },
 
   taskPropertyFiltersModalSubDescription: {
@@ -22,11 +24,6 @@ export default defineMessages({
   taskPropertyFiltersModalFilterListLabel: {
     id: "TaskPropertyFiltersModal.filterList.label",
     defaultMessage: "Current Filter Settings for this Workspace "
-  },
-
-  taskPropertyFiltersModalFilterListSubLabel: {
-    id: "TaskPropertyFiltersModal.filterList.subLabel",
-    defaultMessage: "(Task Status and Priority filters listed are inclusive)"
   },
 
   doneLabel: {

@@ -31,7 +31,7 @@ import WithSavedFilters from '../../../components/HOCs/WithSavedFilters/WithSave
 import WithSavedTaskPropertyFilters from '../../../components/HOCs/WithSavedTaskPropertyFilters/WithSavedTaskPropertyFilters'
 import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
 import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
-import TaskPropertyFiltersModal from '../../../components/SavedFilters/TaskPropertyFiltersModal/TaskPropertyFiltersModal'
+import TaskPropertyFiltersModal from '../../../components/TaskPropertyFiltersModal/TaskPropertyFiltersModal'
 import MapPane from '../../../components/EnhancedMap/MapPane/MapPane'
 import { setupColumnTypes } from './TasksReviewTableDefaultColumnTypes'
 import ReactTable from 'react-table-6'
