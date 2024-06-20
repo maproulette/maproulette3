@@ -36,7 +36,6 @@ import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
 import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
-import TaskClusterMap from "../TaskClusterMap/TaskClusterMap";
 
 const ClusterMap =
   WithChallengeTaskClusters(

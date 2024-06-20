@@ -30,7 +30,6 @@ import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/Challe
 import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 import StartVirtualChallenge from './StartVirtualChallenge/StartVirtualChallenge'
 import messages from './Messages'
-import TaskClusterMap from '../TaskClusterMap/TaskClusterMap'
 
 const ShowArchivedToggleInternal = (props) => {
   return (

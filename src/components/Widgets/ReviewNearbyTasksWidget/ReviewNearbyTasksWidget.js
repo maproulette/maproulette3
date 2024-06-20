@@ -34,7 +34,6 @@ import BusySpinner from '../../BusySpinner/BusySpinner'
 import TaskMarkerContent from './TaskMarkerContent'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
-import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 
 const descriptor = {
   widgetKey: 'ReviewNearbyTasksWidget',

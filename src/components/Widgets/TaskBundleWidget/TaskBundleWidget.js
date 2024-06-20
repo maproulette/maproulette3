@@ -46,7 +46,6 @@ import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import { TaskAction } from '../../../services/Task/TaskAction/TaskAction'
-import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 
 const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
 

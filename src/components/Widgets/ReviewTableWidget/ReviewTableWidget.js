@@ -7,7 +7,6 @@ import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 import WithReviewTaskClusters from '../../HOCs/WithReviewTaskClusters/WithReviewTaskClusters'
 import WithTaskClusterMarkers from '../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
 import messages from './Messages'
-import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 
 const descriptor = {
   widgetKey: 'ReviewTableWidget',

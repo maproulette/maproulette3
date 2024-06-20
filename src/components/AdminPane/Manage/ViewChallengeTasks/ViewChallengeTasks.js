@@ -37,7 +37,6 @@ import TaskPropertyFilter from '../../../TaskFilters/TaskPropertyFilter'
 import TaskBuildProgress from './TaskBuildProgress'
 import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
-import TaskClusterMap from '../../../TaskClusterMap/TaskClusterMap'
 
 const ClusterMap = WithChallengeTaskClusters(
                      WithTaskClusterMarkers(TaskClusterMap('challengeOwner')))
