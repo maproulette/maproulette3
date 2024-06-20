@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { GeoJSON } from 'react-leaflet'
+import { GeoJSON, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { injectIntl } from 'react-intl'
 import { featureCollection } from '@turf/helpers'
@@ -30,6 +30,7 @@ const HIGHLIGHT_SIMPLESTYLE = {
  */
 const TaskFeatureLayer = props => {
   const [layer, setLayer] = useState(null)
+  const map = useMap()
 
   const propertyList = (featureProperties, onBack) => {
     const contentElement = document.createElement('div')
@@ -58,33 +59,22 @@ const TaskFeatureLayer = props => {
         mrLayerLabel={layerLabel}
         data={featureCollection(features)}
         pointToLayer={(point, latLng) => {
-          return L.marker(latLng, {pane, mrLayerLabel: layerLabel, mrLayerId: mrLayerId})
+          return L.marker(latLng)
         }}
         onEachFeature={(feature, layer) => {
-          const styleableFeature =
-            _isFunction(feature.styleLeafletLayer) ?
-            feature :
-            AsSimpleStyleableFeature(feature)
+          const styleableFeature = _isFunction(feature.styleLeafletLayer) ? feature : AsSimpleStyleableFeature(feature)
 
           if (!externalInteractive) {
             layer.bindPopup(() => propertyList(feature.properties))
-          }
-          else {
-            layer.on('mr-external-interaction', ({map, latlng, onBack}) => {
-              // Ensure any orphaned preview styles get cleaned up
-              styleableFeature.popLeafletLayerSimpleStyles(layer, 'mr-external-interaction:start-preview')
-              const popup = L.popup({}, layer).setLatLng(latlng).setContent(propertyList(feature.properties, onBack))
-              // Highlight selected feature, preserving existing marker size (if a marker)
-              styleableFeature.pushLeafletLayerSimpleStyles(
-                layer,
-                Object.assign(styleableFeature.markerSimplestyles(layer), HIGHLIGHT_SIMPLESTYLE)
-              )
-              popup.on('remove', function() {
-                if (layer && layer._leaflet_events) {
-                  // Restore original styling when popup closes
-                  styleableFeature.popLeafletLayerSimpleStyles(layer)
-                }
+          } else {
+            layer.on('click', ({ latlng }) => {
+              const popup = L.popup({
+                offset: [1, -20], 
+                maxHeight: 300, 
               })
+                .setLatLng(latlng)
+                .setContent(propertyList(feature.properties))
+
               popup.openOn(map)
             })
 
@@ -101,7 +91,6 @@ const TaskFeatureLayer = props => {
             })
           }
 
-          // Animate features when added to map (if requested)
           if (animator) {
             const oldOnAdd = layer.onAdd
             layer.onAdd = map => {
@@ -110,7 +99,7 @@ const TaskFeatureLayer = props => {
             }
           }
 
-          styleableFeature.styleLeafletLayer(layer) // Custom layer styling
+          styleableFeature.styleLeafletLayer(layer)
         }}
       />
     )
