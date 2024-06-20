@@ -105,7 +105,13 @@ const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerL
         position={[imageInfo.lat, imageInfo.lon]}
         icon={icon}
         onMouseover={({target}) => target.openPopup()}
-        onClick={() => imageClicked ? imageClicked(imageInfo.key) : null}
+        eventHandlers={{
+          click: () => {
+            if (onClick) {
+              imageClicked ? imageClicked(imageInfo.key) : null
+            }
+          },
+        }}
       >
         <Popup maxWidth="351px" offset={[0, -5]}>
           <div style={{ width: 351, marginTop: 20 }}>

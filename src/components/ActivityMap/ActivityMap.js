@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { ZoomControl, CircleMarker, Popup } from 'react-leaflet'
+import { ZoomControl, CircleMarker, Popup, MapContainer } from 'react-leaflet'
 import { getCoord } from '@turf/invariant'
 import centroid from '@turf/centroid'
 import { differenceInHours, parseISO } from 'date-fns' 
@@ -81,7 +81,7 @@ export const ActivityMap = props => {
   return (
     <div className="mr-w-full mr-h-full">
       <LayerToggle {...props} />
-      <EnhancedMap
+      <MapContainer
         center={latLng(5, 0)} zoom={2} minZoom={1} maxZoom={18}
         setInitialBounds={false}
         zoomControl={false} animate={true} worldCopyJump={true}
@@ -93,7 +93,7 @@ export const ActivityMap = props => {
         <VisibleTileLayer {...props} zIndex={1} noWrap bounds={toLatLngBounds(GLOBAL_MAPBOUNDS)} />
         {overlayLayers}
         {coloredMarkers}
-      </EnhancedMap>
+      </MapContainer>
     </div>
   )
 }

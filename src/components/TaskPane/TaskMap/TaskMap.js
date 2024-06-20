@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, LayerGroup, Pane } from 'react-leaflet'
+import { ZoomControl, LayerGroup, Pane, MapContainer } from 'react-leaflet'
 import { featureCollection } from '@turf/helpers'
 import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
@@ -606,13 +606,28 @@ export class TaskMap extends Component {
           openStreetCamCount={_get(this.props, 'openStreetCamImages.length', 0)}
           overlayOrder={overlayOrder}
         />
-        <EnhancedMap
+        {/* <MapContainer overlayOrder={overlayOrder}>
+        <ZoomControl position='topright' />
+          <FitBoundsControl />
+          <SourcedTileLayer maxZoom={maxZoom} {...this.props} />
+          {_map(overlayLayers, (layer, index) => (
+            <Pane
+              key={`pane-${renderId}-${index}`}
+              name={`pane-${renderId}-${index}`}
+              style={{zIndex: 10 + index}}
+              className="custom-pane"
+            >
+              {layer.component}
+            </Pane>
+          ))}
+        </MapContainer> */}
+        <MapContainer
           taskBundle={this.props.taskBundle}
           center={this.props.centerPoint}
-          zoom={zoom}
-          zoomControl={false}
-          minZoom={minZoom}
-          maxZoom={maxZoom}
+          // zoom={zoom}
+          // zoomControl={false}
+          // minZoom={minZoom}
+          // maxZoom={maxZoom}
           worldCopyJump={true}
           fitToLayer={this.state.skipFit ? null : 'task-features'}
           fitBoundsOnlyAsNecessary
@@ -636,7 +651,7 @@ export class TaskMap extends Component {
               {layer.component}
             </Pane>
           ))}
-        </EnhancedMap>
+        </MapContainer>
 
         {this.state.mapillaryViewerImage && this.renderMapillaryViewer()}
 
