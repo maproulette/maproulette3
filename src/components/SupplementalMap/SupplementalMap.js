@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ZoomControl, Pane } from 'react-leaflet'
+import { ZoomControl, Pane, MapContainer } from 'react-leaflet'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isEmpty from 'lodash/isEmpty'
@@ -77,7 +77,7 @@ const SupplementalMap = props => {
   return (
     <div className="task-map">
       <LayerToggle {...props} overlayOrder={overlayOrder} />
-      <EnhancedMap
+      <MapContainer
         mapRef={mapRef}
         setMapRef={setMapRef}
         taskBundle={props.taskBundle}
@@ -102,7 +102,7 @@ const SupplementalMap = props => {
             {layer.component}
           </Pane>
         ))}
-      </EnhancedMap>
+      </MapContainer>
     </div>
   )
 }

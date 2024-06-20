@@ -7,6 +7,7 @@ import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 import WithReviewTaskClusters from '../../HOCs/WithReviewTaskClusters/WithReviewTaskClusters'
 import WithTaskClusterMarkers from '../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
 import messages from './Messages'
+import TaskContainerMap from '../../TaskClusterMap/TaskContainerMap'
 
 const descriptor = {
   widgetKey: 'ReviewTableWidget',
@@ -19,7 +20,7 @@ const descriptor = {
 }
 
 const BrowseMap =
-  WithReviewTaskClusters(WithTaskClusterMarkers(TaskClusterMap('reviewBrowse')))
+  WithReviewTaskClusters(WithTaskClusterMarkers(TaskContainerMap('reviewBrowse')))
 
 export default class ReviewTableWidget extends Component {
   render() {

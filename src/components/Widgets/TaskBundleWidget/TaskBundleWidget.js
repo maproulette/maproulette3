@@ -46,6 +46,7 @@ import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import { TaskAction } from '../../../services/Task/TaskAction/TaskAction'
+import TaskContainerMap from '../../TaskClusterMap/TaskContainerMap'
 
 const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
 
@@ -60,7 +61,7 @@ const descriptor = {
 }
 
 const ClusterMap = WithChallengeTaskClusters(
-  WithTaskClusterMarkers(TaskClusterMap('taskBundling')),
+  WithTaskClusterMarkers(TaskContainerMap('taskBundling')),
   true,
   true,
   false,
@@ -309,7 +310,7 @@ const calculateTasksInChallenge = props => {
 const ActiveBundle = props => {
   const showMarkerPopup = markerData => {
     return (
-      <Popup key={markerData.options.taskId}>
+      <Popup key={markerData.options.taskId} offset={[0, -5]}>
         <div className="marker-popup-content">
           <TaskMarkerContent
             {...props}
@@ -498,7 +499,7 @@ const BuildBundle = props => {
 
   const showMarkerPopup = (markerData) => {
     return (
-      <Popup key={markerData.options.taskId}>
+      <Popup key={markerData.options.taskId} offset={[0, -5]}>
         <div className="marker-popup-content">
           <TaskMarkerContent
             {...props}

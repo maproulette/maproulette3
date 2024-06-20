@@ -36,12 +36,13 @@ import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
 import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
+import TaskContainerMap from "../TaskClusterMap/TaskContainerMap";
 
 const ClusterMap =
   WithChallengeTaskClusters(
     WithTaskClusterMarkers(
       WithCurrentUser(
-        TaskClusterMap('challengeDetail')
+        TaskContainerMap('challengeDetail')
       )
     ),
     true
@@ -429,7 +430,7 @@ export class ChallengeDetail extends Component {
 
         const showMarkerPopup = (markerData) => {
           return (
-           <Popup>
+            <Popup offset={[0, -5]}>
             <TaskChallengeMarkerContent
               marker={markerData}
               taskId={markerData.options.taskId}

@@ -107,7 +107,7 @@ const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerL
         onMouseover={({target}) => target.openPopup()}
         onClick={() => imageClicked ? imageClicked(imageInfo.key) : null}
       >
-        <Popup maxWidth="351px">
+        <Popup maxWidth="351px" offset={[0, -5]}>
           <div style={{ width: 351, marginTop: 20 }}>
             <MapillaryViewer
               key={Date.now()}

@@ -34,6 +34,7 @@ import BusySpinner from '../../BusySpinner/BusySpinner'
 import TaskMarkerContent from './TaskMarkerContent'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import TaskContainerMap from '../../TaskClusterMap/TaskContainerMap'
 
 const descriptor = {
   widgetKey: 'ReviewNearbyTasksWidget',
@@ -46,7 +47,7 @@ const descriptor = {
 };
 
 const ClusterMap = WithChallengeTaskClusters(
-  WithTaskClusterMarkers(TaskClusterMap('taskBundling'))
+  WithTaskClusterMarkers(TaskContainerMap('taskBundling'))
 );
 
 export default class ReviewNearbyTasksWidget extends Component {
@@ -162,7 +163,7 @@ export default class ReviewNearbyTasksWidget extends Component {
   render() {
     const showMarkerPopup = (markerData) => {
       return (
-        <Popup key={markerData.options.taskId}>
+        <Popup key={markerData.options.taskId} offset={[0, -5]}>
           <div className="marker-popup-content">
             <TaskMarkerContent
               {...this.props}

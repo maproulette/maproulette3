@@ -30,6 +30,7 @@ import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/Challe
 import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 import StartVirtualChallenge from './StartVirtualChallenge/StartVirtualChallenge'
 import messages from './Messages'
+import TaskContainerMap from '../TaskClusterMap/TaskContainerMap'
 
 const ShowArchivedToggleInternal = (props) => {
   return (
@@ -55,7 +56,7 @@ const ClusterMap =
   WithChallengeTaskClusters(
     WithTaskClusterMarkers(
       WithCurrentUser(
-        TaskClusterMap('challenges')
+        TaskContainerMap('challenges')
       )
     ),
     true
@@ -125,7 +126,7 @@ export class ChallengePane extends Component {
 
     const showMarkerPopup = (markerData) => {
       return (
-       <Popup>
+       <Popup offset={[0, -5]}>
         <TaskChallengeMarkerContent
           marker={markerData}
           taskId={markerData.options.taskId}

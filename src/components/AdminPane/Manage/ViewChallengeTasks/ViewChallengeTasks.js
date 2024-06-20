@@ -37,9 +37,10 @@ import TaskPropertyFilter from '../../../TaskFilters/TaskPropertyFilter'
 import TaskBuildProgress from './TaskBuildProgress'
 import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
+import TaskContainerMap from '../../../TaskClusterMap/TaskContainerMap'
 
 const ClusterMap = WithChallengeTaskClusters(
-                     WithTaskClusterMarkers(TaskClusterMap('challengeOwner')))
+                     WithTaskClusterMarkers(TaskContainerMap('challengeOwner')))
 
 /**
  * ViewChallengeTasks displays challenge tasks as both a map and a table,
@@ -141,7 +142,7 @@ export class ViewChallengeTasks extends Component {
   showMarkerPopup = markerData => {
     const TaskData = WithLoadedTask(TaskMarkerContent)
     return (
-      <Popup>
+      <Popup offset={[0, -5]}>
         <div className="marker-popup-content">
           <TaskData marker={markerData} taskId={markerData.options.taskId} {...this.props} />
         </div>
