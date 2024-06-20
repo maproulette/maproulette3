@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import { TileLayer } from 'react-leaflet'
@@ -19,11 +19,11 @@ import { layerSourceShape, normalizeLayer, defaultLayerSource }
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export class SourcedTileLayer extends Component {
-  state = {}
+const SourcedTileLayer = (props) => {
+  const [layerRenderFailed, setLayerRenderFailed] = useState(false)
 
-  attribution = layer => {
-    if (this.props.skipAttribution || _isEmpty(layer.attribution)) {
+  const attribution = layer => {
+    if (props.skipAttribution || _isEmpty(layer.attribution)) {
       return null
     }
 
@@ -32,73 +32,76 @@ export class SourcedTileLayer extends Component {
            layer.attribution.text
   }
 
-  componentDidCatch(error) {
-    // Errors here are almost always related to bad layer info, e.g. from a
-    // custom basemap. The most common problem is inclusion of an interpolation
-    // variable in the URL that doesn't get replaced, which will cause Leaflet
-    // to throw an exception
-    const details =
-      (this.props.source.name === "Custom" ? "custom basemap: " : "") + error.message
-    this.props.addErrorWithDetails(AppErrors.map.renderFailure, details)
-  }
-
-  static getDerivedStateFromError() {
-    return {layerRenderFailed: true}
-  }
-
-  componentDidUpdate(prevProps) {
-    // If we've switched off a failed layer, reset our failure state
-    const currentLayer = _get(this.props, 'source.id')
-    if (this.state.layerRenderFailed && currentLayer &&
-        currentLayer !== _get(prevProps, 'source.id')) {
-      this.setState({layerRenderFailed: false})
-    }
-  }
-
-  render() {
-    if (!this.props.source) {
-      return null
-    }
-
-    if (this.state.layerRenderFailed) {
-      // Try rendering the default layer as a fallback. If we *are* the
-      // fallback, just render an error message
-      if (this.props.fallbackLayer) {
-        return (
-          <FormattedMessage
-            {...AppErrors.map.renderFailure}
-            values={{details: 'fallback to default layer failed'}}
-          />
-        )
+   
+    useEffect(() => {
+      const componentDidCatch = (error) => {
+        if(error){
+          const details = (props.source.name === "Custom" ? "custom basemap: " : "") + error.message
+          addErrorWithDetails(AppErrors.map.renderFailure, details)
+        }
       }
-      else {
-        return <SourcedTileLayer source={defaultLayerSource()} fallbackLayer={true} />
+      componentDidCatch()
+    }, [props.source])
+  
+   
+    useEffect(() => {
+      const getDerivedStateFromError = () => {
+        return { layerRenderFailed: true }
+      }
+      getDerivedStateFromError()
+    }, [])
+
+ 
+  useEffect(() => {
+    const componentDidUpdate = (prevProps) => {
+      const currentLayer = _get(props.source, 'id')
+      if (layerRenderFailed && currentLayer && currentLayer !== _get(prevProps, 'source.id')) {
+        setLayerRenderFailed(false)
       }
     }
+    componentDidUpdate()
+  }, [props.source])
 
-    const normalizedLayer = normalizeLayer(this.props.source)
-    if (normalizedLayer.type === 'bing') {
-      // Bing layers have to be specially rendered
+  if (!props.source) {
+    return null
+  }
+
+  if (layerRenderFailed) {
+    if (fallbackLayer) {
       return (
-        <BingLayer
-          key={normalizedLayer.id}
-          {...normalizedLayer}
-          type="Aerial"
-          attribution={this.attribution(normalizedLayer)}
-          {...this.props}
+        <FormattedMessage
+          {...AppErrors.map.renderFailure}
+          values={{details: 'fallback to default layer failed'}}
         />
       )
     }
+    else {
+      return <SourcedTileLayer source={defaultLayerSource()} fallbackLayer={true} />
+    }
+  }
 
+  const normalizedLayer = normalizeLayer(props.source)
+
+  if (normalizedLayer.type === 'bing') {
     return (
-      <TileLayer
+      <BingLayer
         key={normalizedLayer.id}
         {...normalizedLayer}
-        attribution={this.attribution(normalizedLayer)}
-        {...this.props}
+        type="Aerial"
+        attribution={attribution(normalizedLayer)}
+        {...props}
       />
     )
   }
+
+  return (
+    <TileLayer
+      key={normalizedLayer.id}
+      {...normalizedLayer}
+      attribution={attribution(normalizedLayer)}
+      {...props}
+    />
+  )
 }
 
 SourcedTileLayer.propTypes = {

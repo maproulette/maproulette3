@@ -57,7 +57,6 @@ export const labelOverlappingMarkers = (markers) => {
 const Markers = (props) => {
   const map = useMap();
   const [mapMarkers, setMapMarkers] = useState([]);
-  const [currentBounds, setCurrentBounds] = useState(map.getBounds());
   const [currentSize, setCurrentSize] = useState(map.getSize());
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [spidered, setSpidered] = useState(new Map());
@@ -65,16 +64,11 @@ const Markers = (props) => {
   const prevProps = useRef({ ...props });
 
   useEffect(() => {
-    props.setCurrentZoom(map.getZoom());
-    props.updateBounds(map.getBounds(), props.currentZoom);
-  }, []);
-
-  useEffect(() => {
     const executeCode = async () => {
       const bounds = map.getBounds();
       setCurrentSize(map.getSize());
       props.setCurrentZoom(map.getZoom());
-      setCurrentBounds(bounds);
+      props.setCurrentBounds(bounds);
       setSpidered(new Map());
       await props.updateBounds(bounds, props.currentZoom);
     };
@@ -127,7 +121,7 @@ const Markers = (props) => {
         })
       );
       map.fitBounds(bounds);
-      setCurrentBounds(bounds);
+      props.setCurrentBounds(bounds);
       setInitialLoadComplete(true);
     }
   }, [mapMarkers, initialLoadComplete]);
@@ -155,8 +149,8 @@ const Markers = (props) => {
 
   const mapMetricsInDegrees = (iconSize = CLUSTER_ICON_PIXELS + 20) => {
     const metrics = {}
-    metrics.heightDegrees = currentBounds.getNorth() - currentBounds.getSouth()
-    metrics.widthDegrees = currentBounds.getEast() - currentBounds.getWest()
+    metrics.heightDegrees = props.currentBounds.getNorth() - props.currentBounds.getSouth()
+    metrics.widthDegrees = props.currentBounds.getEast() - props.currentBounds.getWest()
     metrics.degreesPerPixel = metrics.heightDegrees / currentSize.y
     metrics.iconSizeDegrees = iconSize * metrics.degreesPerPixel
 
@@ -195,7 +189,7 @@ const Markers = (props) => {
   };
 
   const consolidateMarkers = markers => {
-    if (!(props.showAsClusters && props.totalTaskCount > CLUSTER_POINTS && markers && currentBounds && currentSize)) {
+    if (!(props.showAsClusters && props.totalTaskCount > CLUSTER_POINTS && markers && props.currentBounds && currentSize)) {
       return markers;
     }
 
@@ -258,7 +252,7 @@ const Markers = (props) => {
       if (marker.options.bounding && marker.options.numberOfPoints > 1) {
         const bounds = toLatLngBounds(bbox(marker.options.bounding));
         map.fitBounds(bounds);
-        setCurrentBounds(bounds);
+        props.setCurrentBounds(bounds);
       }
     }
   };

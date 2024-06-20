@@ -46,7 +46,7 @@ import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import { TaskAction } from '../../../services/Task/TaskAction/TaskAction'
-import TaskContainerMap from '../../TaskClusterMap/TaskContainerMap'
+import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 
 const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
 
@@ -61,7 +61,7 @@ const descriptor = {
 }
 
 const ClusterMap = WithChallengeTaskClusters(
-  WithTaskClusterMarkers(TaskContainerMap('taskBundling')),
+  WithTaskClusterMarkers(TaskClusterMap('taskBundling')),
   true,
   true,
   false,
@@ -336,15 +336,10 @@ const ActiveBundle = props => {
       loadingTasks={props.loadingTasks}
       highlightPrimaryTask={props.task.id}
       showMarkerPopup={showMarkerPopup}
-      taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
       boundingBox={_get(props, boundingBoxData)}
       initialBounds={toLatLngBounds(_get(props, boundingBoxData, []))}
-      allowClusterToggle
       hideSearchControl
-      allowSpidering
       selectedTasks={props.selectedTasks}
-      className={{}}
-      {..._omit(props, 'className')}
     />
   )
 

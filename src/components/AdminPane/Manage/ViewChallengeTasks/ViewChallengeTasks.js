@@ -37,10 +37,10 @@ import TaskPropertyFilter from '../../../TaskFilters/TaskPropertyFilter'
 import TaskBuildProgress from './TaskBuildProgress'
 import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
-import TaskContainerMap from '../../../TaskClusterMap/TaskContainerMap'
+import TaskClusterMap from '../../../TaskClusterMap/TaskClusterMap'
 
 const ClusterMap = WithChallengeTaskClusters(
-                     WithTaskClusterMarkers(TaskContainerMap('challengeOwner')))
+                     WithTaskClusterMarkers(TaskClusterMap('challengeOwner')))
 
 /**
  * ViewChallengeTasks displays challenge tasks as both a map and a table,

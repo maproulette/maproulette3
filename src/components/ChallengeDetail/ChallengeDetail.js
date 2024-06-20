@@ -36,13 +36,13 @@ import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import FlagModal from "./FlagModal";
 import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
-import TaskContainerMap from "../TaskClusterMap/TaskContainerMap";
+import TaskClusterMap from "../TaskClusterMap/TaskClusterMap";
 
 const ClusterMap =
   WithChallengeTaskClusters(
     WithTaskClusterMarkers(
       WithCurrentUser(
-        TaskContainerMap('challengeDetail')
+        TaskClusterMap('challengeDetail')
       )
     ),
     true
