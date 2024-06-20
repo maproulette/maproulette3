@@ -20,7 +20,6 @@ import _clone from 'lodash/clone'
 import _uniqueId from 'lodash/uniqueId'
 import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
        from '../../../services/VisibleLayer/LayerSources'
-import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import DirectionalIndicationMarker
        from '../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker'
 import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'

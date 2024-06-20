@@ -13,7 +13,6 @@ import { toLatLngBounds, GLOBAL_MAPBOUNDS } from '../../services/MapBounds/MapBo
 import { buildLayerSources } from '../../services/VisibleLayer/LayerSources'
 import { TaskStatusColors } from '../../services/Task/TaskStatus/TaskStatus'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
-import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import ActivityDescription from '../ActivityListing/ActivityDescription'

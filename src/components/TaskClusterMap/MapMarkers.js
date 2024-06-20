@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Marker, Tooltip, Polyline, useMap } from 'react-leaflet';
-import _get from 'lodash/get';
 import _map from 'lodash/map';
 import _isEqual from 'lodash/isEqual';
-import _debounce from 'lodash/debounce';
 import _each from 'lodash/each';
 import _filter from 'lodash/filter';
 import _reject from 'lodash/reject';

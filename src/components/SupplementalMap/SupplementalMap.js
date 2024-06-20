@@ -15,7 +15,6 @@ import WithTaskCenterPoint
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
-import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer
        from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'

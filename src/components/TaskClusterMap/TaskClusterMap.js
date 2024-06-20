@@ -12,7 +12,6 @@ import WithIntersectingOverlays from '../HOCs/WithIntersectingOverlays/WithInter
 import MapMarkers from './MapMarkers'
 import { FormattedMessage } from 'react-intl';
 import messages from './Messages'
-import AsMappableTask from '../../interactions/Task/AsMappableTask';
 import SearchContent from '../EnhancedMap/SearchControl/SearchContent';
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle';
 import ZoomInMessage from './ZoomInMessage';
@@ -52,11 +51,10 @@ export const CLUSTER_ICON_PIXELS = 40
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const TaskClusterMap = (props) => {
-    const [currentBounds, setCurrentBounds] = useState(null);
-    const [searchOpen, setSearchOpen] = useState(false)
-    const [currentZoom, setCurrentZoom] = useState()
-const [closeSearch, setCloseSearch] = useState()
-    const prevProps = useRef({ showAsClusters: props.showAsClusters, loading: props.loading });
+  const [currentBounds, setCurrentBounds] = useState(null);
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [currentZoom, setCurrentZoom] = useState()
+  const prevProps = useRef({ showAsClusters: props.showAsClusters, loading: props.loading });
   const timerHandle = useRef(null);
   const [displayTaskCount, setDisplayTaskCount] = useState(false);
 
@@ -193,8 +191,7 @@ const [closeSearch, setCloseSearch] = useState()
     
         return clusterData
       }
-    
-    const currentCenterpoint = AsMappableTask(props.task).calculateCenterPoint()
+
     let selectionKit = (
         <>
          {props.clearSelectedSelector && (
@@ -215,7 +212,7 @@ const [closeSearch, setCloseSearch] = useState()
                onLassoSelection={selectClustersInLayers}
                onLassoDeselection={deselectClustersInLayers}
                onLassoClear={props.resetSelectedClusters}
-               onLassoInteraction={closeSearch}
+               onLassoInteraction={setSearchOpen(true)}
              />
            )}
      
@@ -228,7 +225,7 @@ const [closeSearch, setCloseSearch] = useState()
                onLassoSelection={selectTasksInLayers}
                onLassoDeselection={deselectTasksInLayers}
                onLassoClear={props.resetSelectedTasks}
-               onLassoInteraction={closeSearch}
+               onLassoInteraction={setSearchOpen(true)}
              />
            )}
        </>
@@ -274,7 +271,7 @@ const [closeSearch, setCloseSearch] = useState()
               setCurrentBounds(toLatLngBounds(bounds))
               props.updateBounds(bounds)
            }}
-           closeSearch={closeSearch}
+           closeSearch={setSearchOpen(false)}
          />
         }
         {props.delayMapLoad && !searchOpen && !process.env.REACT_APP_DISABLE_TASK_CLUSTERS &&
