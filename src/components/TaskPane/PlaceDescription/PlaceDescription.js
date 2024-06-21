@@ -47,7 +47,3 @@ export default class PlaceDescription extends Component {
     )
   }
 }
-
-PlaceDescription.propTypes = {
-  address: PropTypes.object,
-}

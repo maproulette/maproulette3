@@ -1,7 +1,8 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
 import * as React from "react";
-import { TaskClusterMap, labelOverlappingMarkers } from "./TaskClusterMap";
+import { TaskClusterMap } from "./TaskClusterMap";
+import { labelOverlappingMarkers } from "./MapMarkers";
 
 describe("TaskClusterMap", () => {
   it("renders TaskClusterMap UI", () => {

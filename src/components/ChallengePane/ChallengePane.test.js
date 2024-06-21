@@ -7,6 +7,9 @@ describe("ChallengePane", () => {
     const { getByText } = global.withProvider(
       <ChallengePane
         setSearchFilters={() => null}
+        removeSearchFilters={() => {}}
+        locateMapToUser={() => {}}
+        unfilteredChallenges={[]}
         history={{ location: { pathname: "", search: "" } }}
       />
     );
