@@ -50,7 +50,7 @@ const OSMDataLayer = (props) => {
 
   useEffect(() => {
     setStyle(props)
-  }, [props.leaflet, props.intl])
+  }, [])
   
   createLayerComponent((props) => {  setLastZoom(props.zoom)
     return this.generateLayer({
@@ -67,6 +67,7 @@ const OSMDataLayer = (props) => {
       setLastZoom(props.zoom)
     }
   }) 
+
   const generateElementStyles = () => {
     const zoom = map.getZoom()
     const globalStyleOptions = {
@@ -140,7 +141,6 @@ const OSMDataLayer = (props) => {
 }
 
 export default injectIntl(OSMDataLayer)
-
 
 // The below code (with a couple minor linter fixes) comes from the
 // [leaflet-osm](https://github.com/openstreetmap/leaflet-osm) project's

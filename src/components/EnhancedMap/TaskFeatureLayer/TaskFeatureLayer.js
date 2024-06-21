@@ -91,6 +91,7 @@ const TaskFeatureLayer = props => {
             })
           }
 
+          // Animate features when added to map (if requested)
           if (animator) {
             const oldOnAdd = layer.onAdd
             layer.onAdd = map => {
@@ -99,7 +100,7 @@ const TaskFeatureLayer = props => {
             }
           }
 
-          styleableFeature.styleLeafletLayer(layer)
+          styleableFeature.styleLeafletLayer(layer) // Custom layer styling
         }}
       />
     )

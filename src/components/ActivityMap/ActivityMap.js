@@ -81,9 +81,14 @@ export const ActivityMap = props => {
     <div className="mr-w-full mr-h-full">
       <LayerToggle {...props} />
       <MapContainer
-        center={latLng(5, 0)} zoom={2} minZoom={1} maxZoom={18}
+        center={latLng(5, 0)} 
+        zoom={2} 
+        minZoom={1} 
+        maxZoom={18}
         setInitialBounds={false}
-        zoomControl={false} animate={true} worldCopyJump={true}
+        zoomControl={false} 
+        animate={true} 
+        worldCopyJump={true}
         justFitFeatures
         noAttributionPrefix={props.noAttributionPrefix}
         intl={props.intl}

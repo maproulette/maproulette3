@@ -212,7 +212,7 @@ export const TaskClusterMap = (props) => {
                onLassoSelection={selectClustersInLayers}
                onLassoDeselection={deselectClustersInLayers}
                onLassoClear={props.resetSelectedClusters}
-               onLassoInteraction={setSearchOpen(true)}
+               onLassoInteraction={() => setSearchOpen(false)}
              />
            )}
      
@@ -225,7 +225,7 @@ export const TaskClusterMap = (props) => {
                onLassoSelection={selectTasksInLayers}
                onLassoDeselection={deselectTasksInLayers}
                onLassoClear={props.resetSelectedTasks}
-               onLassoInteraction={setSearchOpen(true)}
+               onLassoInteraction={() => setSearchOpen(false)}
              />
            )}
        </>
@@ -271,7 +271,7 @@ export const TaskClusterMap = (props) => {
               setCurrentBounds(toLatLngBounds(bounds))
               props.updateBounds(bounds)
            }}
-           closeSearch={setSearchOpen(false)}
+           closeSearch={() => setSearchOpen(false)}
          />
         }
         {props.delayMapLoad && !searchOpen && !process.env.REACT_APP_DISABLE_TASK_CLUSTERS &&

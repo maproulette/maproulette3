@@ -92,10 +92,8 @@ const LassoSelectionLeafletControl = L.Control.extend({
 })
 
 /**
- * LassoSelectionControl is a react-leaflet MapControl component intended to be
- * used as a child of a react-leaflet Map instance, such as EnhancedMap. When
- * clicked, the control toggles activation of a lasso tool for selecting map
- * features
+ * LassoSelectionControl is a react-leaflet Control component intended to be
+ * used as a child of a react-leaflet Map instance.
  */
 export const LassoSelectionControl = createControlComponent(
   (props) => {return new LassoSelectionLeafletControl(props)}

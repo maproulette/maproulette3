@@ -37,9 +37,8 @@ const FitWorldLeafletControl = L.Control.extend({
 })
 
 /**
- * FitWorldControl is a react-leaflet MapControl component intended to be
- * used as a child of a react-leaflet Map instance, such as EnhancedMap. When
- * clicked, the control zooms out to a worldwide view
+ * FitWorldControl is a react-leaflet Control component intended to be
+ * used as a child of a react-leaflet MapContainer instance,.
  */
 export const FitWorldControl = createControlComponent(
   (props) => {return new FitWorldLeafletControl(props)}

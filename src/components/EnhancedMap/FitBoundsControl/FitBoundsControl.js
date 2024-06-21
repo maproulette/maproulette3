@@ -127,9 +127,8 @@ const keyboardHandler = function(key, controlFunction) {
 }
 
 /**
- * FitBoundsControl is a react-leaflet MapControl component intended to be used
- * as a child of a react-leaflet Map instance, such as EnhancedMap. When clicked,
- * the control fits the map to the bounds of the current features.
+ * FitBoundsControl is a react-leaflet Control component intended to be used
+ * as a child of a react-leaflet Map instance.
  */
 export const FitBoundsControl = createControlComponent(
   (props) => {return new FitBoundsLeafletControl(props)}

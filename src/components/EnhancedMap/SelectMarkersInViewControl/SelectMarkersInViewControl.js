@@ -50,9 +50,8 @@ const SelectMarkersInViewLeafletControl = L.Control.extend({
 })
 
 /**
- * SelectMarkersInViewControl is a react-leaflet createControlComponent component intended to be
- * used as a child of a react-leaflet Map instance, such as EnhancedMap. When inspecting 
- * a nearby task in a Work On Multiple Tasks Together/Task Bundle widget, when clicked
+ * SelectMarkersInViewControl is a react-leaflet Control component intended to be
+ * used as a child of a react-leaflet MapContainer instance, when clicked
  * the control selects all task markers currently visible on the map.
  */
 export const SelectMarkersInViewControl = createControlComponent(

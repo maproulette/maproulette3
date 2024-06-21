@@ -28,8 +28,7 @@ const AreaSelectLeaflet = L.Control.extend({
 
 /**
  * AreaSelect is a react-leaflet component intended to be
- * used as a child of a react-leaflet Map instance, such as EnhancedMap. When
- * clicked, the control activates
+ * used as a child of a react-leaflet MapContainer instance.
  */
 export const AreaSelect = createControlComponent((props) => {return new AreaSelectLeaflet(props)})
 
