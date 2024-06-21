@@ -67,7 +67,6 @@ const Markers = (props) => {
       setCurrentSize(map.getSize());
       props.setCurrentZoom(map.getZoom());
       props.setCurrentBounds(bounds);
-      setSpidered(new Map());
       await props.updateBounds(bounds, props.currentZoom);
     };
 
@@ -100,6 +99,11 @@ const Markers = (props) => {
     }
     prevProps.current = { ...props, spidered: spidered };
   }, [props.taskMarkers, spidered]);
+
+  useEffect(() => {
+    setSpidered(new Map());
+    prevProps.current = { ...props, spidered: spidered };
+  }, [props.currentZoom]);
 
   useEffect(() => {
     // Fit bounds to initial tasks when they are loaded
@@ -377,8 +381,14 @@ const Markers = (props) => {
           key={s.options.id}
           positions={[s.originalPosition, s.position]}
           color={AsColoredHashable(s.options.id).hashColor}
-          weight={2}
+          weight={3}
           spideredId={s.options.id}
+          style={{padding: "30px" }}
+          eventHandlers={{
+            click: () => {
+              setSpidered(new Map());
+            },
+          }}
         />
       ))}
       {!props.mapZoomedOut && mapMarkers}
