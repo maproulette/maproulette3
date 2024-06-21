@@ -179,7 +179,10 @@ export const TaskClusterMap = (props) => {
           // Single-task markers will use `taskData` instead of `clusterData`, but
           // have fields compatible with clusterData
           clusterData = _get(layer, 'options.icon.options.taskData')
-    
+          if(!clusterData){
+            return
+          }
+
           // True tasks (versus clusters representing 1 task) won't have a
           // numberOfPoints field set, so add that for compatibility and mark that
           // it's actually a task
