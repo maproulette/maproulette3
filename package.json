@@ -101,7 +101,7 @@
     "@babel/helper-get-function-arity": "^7.16.7",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@openstreetmap/id-tagging-schema": "^3.0.0",
-    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^12.1.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.7",
@@ -136,7 +136,7 @@
     "start-js": "react-scripts --max_old_space_size=4096 start",
     "start": "npm-run-all -p copy-static update-layers watch-postcss start-js",
     "build": "yarn update-static && yarn run build-intl && yarn run update-layers-prod && yarn run build-postcss && react-scripts --max_old_space_size=4096 build",
-    "test": "react-scripts test --resetMocks=false --detectOpenHandles",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-leaflet)/\" --resetMocks=false --detectOpenHandles",
     "test:cov": "react-scripts test --coverage --resetMocks=false",
     "test:cov-full": "react-scripts test --coverage --watchAll --resetMocks=false",
     "eject": "react-scripts eject"
