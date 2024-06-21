@@ -507,6 +507,7 @@ const BuildBundle = props => {
 
   const map =
     <ClusterMap
+      {...props}
       loadingTasks={props.loadingTasks}
       showMarkerPopup={showMarkerPopup}
       highlightPrimaryTask={props.task.id}
@@ -517,10 +518,8 @@ const BuildBundle = props => {
       onBulkTaskDeselection={props.deselectTasks}
       allowClusterToggle
       hideSearchControl
-      allowSpidering
       showScaleControl
       showSelectMarkersInView
-      {..._omit(props, 'className')}
     />
 
   return (

@@ -165,11 +165,13 @@ export class ChallengePane extends Component {
                 challenge={this.props.browsedChallenge}
                 showMarkerPopup={showMarkerPopup}
                 initialBounds={this.state.fromUserAction ? this.state.bounds : null}
-                criteria={{boundingBox: fromLatLngBounds(this.state.bounds),
-                          zoom: this.state.zoom,
-                          filters: _get(this.props, 'searchCriteria.filters'),
-                          searchQuery: _get(this.props, 'searchCriteria.query'),
-                          challengeStatus}}
+                criteria={{
+                  boundingBox: fromLatLngBounds(this.state.bounds),
+                  zoom: this.state.zoom,
+                  filters: _get(this.props, 'searchCriteria.filters'),
+                  searchQuery: _get(this.props, 'searchCriteria.query'),
+                  challengeStatus
+                }}
                 updateTaskFilterBounds={(bounds, zoom, fromUserAction) => {
                   this.props.updateChallengeSearchMapBounds(bounds, fromUserAction)
                   this.resetSelectedClusters()

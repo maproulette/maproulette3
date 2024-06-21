@@ -126,7 +126,7 @@ export const TaskClusterMap = (props) => {
         })
       }
   
-      let overlayOrder = props.getUserAppSetting(props.user, 'mapOverlayOrder')
+      let overlayOrder = props.getUserAppSetting(props.user, 'mapOverlayOrder') || []
       if (_isEmpty(overlayOrder)) {
         overlayOrder = DEFAULT_OVERLAY_ORDER
       }

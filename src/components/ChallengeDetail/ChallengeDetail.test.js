@@ -16,7 +16,6 @@ describe("ChallengeDetail", () => {
     const text = getByText("Test Passes");
     expect(text).toBeInTheDocument();
   });
-  
 
   it('renders public challenge page when user is not logged in', () => {
     const { queryByText } = global.withProvider(

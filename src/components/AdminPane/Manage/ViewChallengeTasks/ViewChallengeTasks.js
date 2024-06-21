@@ -236,7 +236,6 @@ export class ViewChallengeTasks extends Component {
           allowClusterToggle
           initialBounds={this.state.boundsReset ?
             toLatLngBounds(_get(this.props, 'criteria.boundingBox')) : null}
-          allowSpidering
           {...this.props}
         />
 

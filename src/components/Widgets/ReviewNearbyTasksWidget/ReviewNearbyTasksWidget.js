@@ -187,10 +187,8 @@ export default class ReviewNearbyTasksWidget extends Component {
         boundingBox={_get(this.props, boundingBoxData)}
         initialBounds={toLatLngBounds(_get(this.props, boundingBoxData, []))}
         hideSearchControl
-        allowSpidering
         hideLasso={true}
         showSelectMarkersInView
-        {..._omit(this.props, 'className')}
         selectedTasks={this.state.currentSelectedTasks}
       />
     );

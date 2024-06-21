@@ -24,7 +24,9 @@ export default class LeaderboardMap extends Component {
       <div className={classNames("leaderboard-map", this.props.className)}>
         <MapContainer bounds={toLatLngBounds(boundingBox)}
              maxBounds={toLatLngBounds(boundingBox)}
-             zoomControl={false} worldCopyJump={true} dragging={false}
+             zoomControl={false} 
+             worldCopyJump={true} 
+             dragging={false}
              scrollWheelZoom={false}
              attributionControl={false}>
           <SourcedTileLayer source={this.mapLayerSource()} skipAttribution={true} />

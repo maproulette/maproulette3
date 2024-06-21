@@ -71,21 +71,22 @@ const SupplementalMapContent = props => {
   // Note: we need to also pass maxZoom to the tile layer (in addition to the
   // map), or else leaflet won't autoscale if the zoom goes beyond the
   // capabilities of the layer.
-  return (<>
-    <LayerToggle {...props} overlayOrder={overlayOrder} />
-        <ZoomControl position='topright' />
-        <SourcedTileLayer maxZoom={props.maxZoom} {...props} />
-        {_map(overlayLayers, (layer, index) => (
-          <Pane
-            key={`pane-${renderId}-${index}`}
-            name={`pane-${renderId}-${index}`}
-            style={{zIndex: 10 + index}}
-            className="custom-pane"
-          >
-            {layer.component}
-          </Pane>
-        ))}
-        </>
+  return (
+    <>
+      <LayerToggle {...props} overlayOrder={overlayOrder} />
+      <ZoomControl position='topright' />
+      <SourcedTileLayer maxZoom={props.maxZoom} {...props} />
+      {_map(overlayLayers, (layer, index) => (
+        <Pane
+          key={`pane-${renderId}-${index}`}
+          name={`pane-${renderId}-${index}`}
+          style={{zIndex: 10 + index}}
+          className="custom-pane"
+        >
+          {layer.component}
+        </Pane>
+      ))}
+    </>
   )
 }
 

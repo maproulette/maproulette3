@@ -165,8 +165,14 @@ export class TaskNearbyMap extends Component {
       <div className="mr-h-full">
         <LayerToggle {...this.props} />
         <MapContainer
-          center={currentCenterpoint} zoom={12} minZoom={2} maxZoom={19}
-          zoomControl={false} animate={true} worldCopyJump={true} intl={this.props.intl}
+          center={currentCenterpoint} 
+          zoom={12} 
+          minZoom={2} 
+          maxZoom={19}
+          zoomControl={false}
+          animate={true}
+          worldCopyJump={true}
+          intl={this.props.intl}
         >
           <ZoomControl position='topright' />
           <VisibleTileLayer {...this.props} zIndex={1} />

@@ -460,7 +460,6 @@ export class ChallengeDetail extends Component {
           this.setState({ bounds, zoom })
         }
         skipRefreshTasks
-        allowSpidering
         selectedClusters={this.state.selectedClusters}
         onBulkClusterSelection={this.onBulkClusterSelection}
         onBulkClusterDeselection={this.onBulkClusterDeselection}
