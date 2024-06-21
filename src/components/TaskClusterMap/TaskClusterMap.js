@@ -21,6 +21,7 @@ import LassoSelectionControl from '../EnhancedMap/LassoSelectionControl/LassoSel
 import SelectMarkersInViewControl from '../EnhancedMap/SelectMarkersInViewControl/SelectMarkersInViewControl';
 import FitBoundsControl from '../EnhancedMap/FitBoundsControl/FitBoundsControl';
 import FitWorldControl from '../EnhancedMap/FitWorldControl/FitWorldControl';
+import BusySpinner from '../BusySpinner/BusySpinner';
 
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
 
@@ -239,6 +240,7 @@ export const TaskClusterMap = (props) => {
         className={classNames('taskcluster-map', { 'full-screen-map': props.isMobile }, props.className)}
         zoomControl={false}
         >
+        {(!!props.loading || !!props.loadingChallenge) && <BusySpinner mapMode xlarge />}
         {canClusterToggle && !searchOpen && !props.loading &&
          <label htmlFor="show-clusters-input" className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
            <input

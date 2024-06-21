@@ -559,7 +559,7 @@ export class ChallengeDetail extends Component {
                           :
                         </strong>{" "}
                         <FormattedDate
-                          value={parseISO(challenge.dataOriginDate)}
+                          value={challenge.dataOriginDate}
                           year="numeric"
                           month="long"
                           day="2-digit"

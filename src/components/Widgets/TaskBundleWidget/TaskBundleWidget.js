@@ -8,7 +8,6 @@ import _isEmpty from 'lodash/isEmpty'
 import _sum from 'lodash/sum'
 import _values from 'lodash/values'
 import _pick from 'lodash/pick'
-import _omit from 'lodash/omit'
 import bbox from '@turf/bbox'
 import { point, featureCollection } from '@turf/helpers'
 import { WidgetDataTarget, registerWidgetType }
