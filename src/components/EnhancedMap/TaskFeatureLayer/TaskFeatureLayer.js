@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { GeoJSON, useMap } from 'react-leaflet'
-import L from 'leaflet'
+import L, { FeatureGroup } from 'leaflet'
 import { injectIntl } from 'react-intl'
 import { featureCollection } from '@turf/helpers'
 import _isFunction from 'lodash/isFunction'
 import _get from 'lodash/get'
 import _uniqueId from 'lodash/uniqueId'
-import AsSimpleStyleableFeature
-       from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
+import AsSimpleStyleableFeature from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
@@ -105,6 +104,20 @@ const TaskFeatureLayer = props => {
       />
     )
   }, [features, mrLayerId, pane, animator, externalInteractive, layerLabel])
+
+  useEffect(() => {
+    const geoJSONFeatures = new FeatureGroup()
+
+    map.eachLayer(layer => {
+      if (layer.feature) {
+        geoJSONFeatures.addLayer(layer)
+      }
+    })
+
+    if (geoJSONFeatures.getLayers().length !== 0) {
+      map.fitBounds(geoJSONFeatures.getBounds())
+    }
+  }, [layer])
 
   return layer
 }

@@ -334,6 +334,7 @@ const ActiveBundle = props => {
       loadingTasks={props.loadingTasks}
       highlightPrimaryTask={props.task.id}
       showMarkerPopup={showMarkerPopup}
+      taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
       boundingBox={_get(props, boundingBoxData)}
       initialBounds={toLatLngBounds(_get(props, boundingBoxData, []))}
       hideSearchControl
