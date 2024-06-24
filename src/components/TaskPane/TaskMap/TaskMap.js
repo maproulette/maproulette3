@@ -7,7 +7,6 @@ import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
-import _isEqual from 'lodash/isEqual'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
@@ -64,23 +63,17 @@ const shortcutGroup = 'layers'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const TaskMapContainer = (props) => {
-  const map = useMap()
   const [latestBounds, setLatestBounds] = useState(null)
+  const [showTaskFeatures, setShowTaskFeatures] = useState(true)
+  const [showOSMData, setShowOSMData] = useState(false)
+  const [osmData, setOsmData] = useState(null)
+  const [osmDataLoading, setOsmDataLoading] = useState(null)
+  const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null)
+  const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null)
+  const [latestZoom, setLatestZoom] = useState(null)
+  const [directionalityIndicators, setDirectionalityIndicators] = useState(null)
+  const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
   const animator = new MapAnimator()
-const [showTaskFeatures, setShowTaskFeatures] = useState(true)
-const [showOSMData, setShowOSMData] = useState(false)
-const [showOSMElements, setShowOSMElements] = useState({
-  nodes: true,
-  ways: true,
-  areas: true,
-})
-const [osmData, setOsmData] = useState(null)
-const [osmDataLoading, setOsmDataLoading] = useState(null)
-const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null)
-const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null)
-const [skipFit, setSkipFit] = useState(null)
-const [latestZoom, setLatestZoom] = useState(null)
-const [directionalityIndicators, setDirectionalityIndicators] = useState(null)
 
   /** Process keyboard shortcuts for the layers */
   const handleKeyboardShortcuts = event => {
@@ -119,7 +112,6 @@ const [directionalityIndicators, setDirectionalityIndicators] = useState(null)
    */
   const toggleTaskFeatureVisibility = () => {
     setShowTaskFeatures(!showTaskFeatures)
-    setSkipFit(true)
   }
 
   /**
@@ -136,7 +128,6 @@ const [directionalityIndicators, setDirectionalityIndicators] = useState(null)
         // extend beyond the current view and we don't want the map to zoom out
         setOsmData(xmlData)
         setOsmDataLoading(false)
-        setSkipFit(true)
       })
     }
     setShowOSMData(!showOSMData)
@@ -416,7 +407,6 @@ const [directionalityIndicators, setDirectionalityIndicators] = useState(null)
     )
   }
     const zoom = _get(props.task, "parent.defaultZoom", DEFAULT_ZOOM)
-    const minZoom = _get(props.task, "parent.minZoom", MIN_ZOOM)
     const maxZoom = _get(props.task, "parent.maxZoom", MAX_ZOOM)
     const renderId = _uniqueId()
     let overlayOrder = props.getUserAppSetting(props.user, 'mapOverlayOrder')
