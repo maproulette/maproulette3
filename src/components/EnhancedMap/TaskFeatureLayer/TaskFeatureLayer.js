@@ -103,7 +103,7 @@ const TaskFeatureLayer = props => {
         }}
       />
     )
-  }, [features, mrLayerId, pane, animator, externalInteractive, layerLabel])
+  }, [features.length])
 
   useEffect(() => {
     const geoJSONFeatures = new FeatureGroup()

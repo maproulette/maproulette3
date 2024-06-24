@@ -16,7 +16,6 @@ import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
 import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
-import _uniqueId from 'lodash/uniqueId'
 import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
        from '../../../services/VisibleLayer/LayerSources'
 import DirectionalIndicationMarker
@@ -406,7 +405,6 @@ export const TaskMapContainer = (props) => {
   }
     const zoom = _get(props.task, "parent.defaultZoom", DEFAULT_ZOOM)
     const maxZoom = _get(props.task, "parent.maxZoom", MAX_ZOOM)
-    const renderId = _uniqueId()
     let overlayOrder = props.getUserAppSetting(props.user, 'mapOverlayOrder')
     if (_isEmpty(overlayOrder)) {
       overlayOrder = DEFAULT_OVERLAY_ORDER
@@ -507,8 +505,8 @@ export const TaskMapContainer = (props) => {
           <SourcedTileLayer maxZoom={maxZoom} {...props} />
           {_map(overlayLayers, (layer, index) => (
             <Pane
-              key={`pane-${renderId}-${index}`}
-              name={`pane-${renderId}-${index}`}
+              key={`pane-${index}`}
+              name={`pane-${index}`}
               className="custom-pane"
             >
               {layer.component}
