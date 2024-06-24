@@ -30,6 +30,6 @@ const AreaSelectLeaflet = L.Control.extend({
  * AreaSelect is a react-leaflet component intended to be
  * used as a child of a react-leaflet MapContainer instance.
  */
-export const AreaSelect = createControlComponent((props) => {return new AreaSelectLeaflet(props)})
+export const AreaSelect = createControlComponent((props) => new AreaSelectLeaflet(props))
 
 export default injectIntl(AreaSelect)

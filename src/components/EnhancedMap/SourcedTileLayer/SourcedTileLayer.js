@@ -32,35 +32,11 @@ const SourcedTileLayer = (props) => {
            layer.attribution.text
   }
 
-   
-    useEffect(() => {
-      const componentDidCatch = (error) => {
-        if(error){
-          const details = (props.source.name === "Custom" ? "custom basemap: " : "") + error.message
-          addErrorWithDetails(AppErrors.map.renderFailure, details)
-        }
-      }
-      componentDidCatch()
-    }, [props.source])
-  
-   
-    useEffect(() => {
-      const getDerivedStateFromError = () => {
-        return { layerRenderFailed: true }
-      }
-      getDerivedStateFromError()
-    }, [])
-
- 
   useEffect(() => {
-    const componentDidUpdate = (prevProps) => {
-      const currentLayer = _get(props.source, 'id')
-      if (layerRenderFailed && currentLayer && currentLayer !== _get(prevProps, 'source.id')) {
-        setLayerRenderFailed(false)
-      }
+    if (layerRenderFailed && currentLayer) {
+      setLayerRenderFailed(false)
     }
-    componentDidUpdate()
-  }, [props.source])
+  }, [props.source.id])
 
   if (!props.source) {
     return null

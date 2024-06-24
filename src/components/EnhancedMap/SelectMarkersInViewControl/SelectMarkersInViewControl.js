@@ -54,9 +54,7 @@ const SelectMarkersInViewLeafletControl = L.Control.extend({
  * used as a child of a react-leaflet MapContainer instance, when clicked
  * the control selects all task markers currently visible on the map.
  */
-export const SelectMarkersInViewControl = createControlComponent(
-  (props) => {return new SelectMarkersInViewLeafletControl(props)}
-)
+export const SelectMarkersInViewControl = createControlComponent((props) => new SelectMarkersInViewLeafletControl(props))
 
 export default injectIntl(SelectMarkersInViewControl)
 

@@ -130,8 +130,6 @@ const keyboardHandler = function(key, controlFunction) {
  * FitBoundsControl is a react-leaflet Control component intended to be used
  * as a child of a react-leaflet Map instance.
  */
-export const FitBoundsControl = createControlComponent(
-  (props) => {return new FitBoundsLeafletControl(props)}
-)
+export const FitBoundsControl = createControlComponent((props) => new FitBoundsLeafletControl(props))
 
 export default WithKeyboardShortcuts(injectIntl(FitBoundsControl))

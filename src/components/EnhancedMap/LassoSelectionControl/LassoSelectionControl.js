@@ -95,8 +95,6 @@ const LassoSelectionLeafletControl = L.Control.extend({
  * LassoSelectionControl is a react-leaflet Control component intended to be
  * used as a child of a react-leaflet Map instance.
  */
-export const LassoSelectionControl = createControlComponent(
-  (props) => {return new LassoSelectionLeafletControl(props)}
-)
+export const LassoSelectionControl = createControlComponent((props) => new LassoSelectionLeafletControl(props))
 
 export default injectIntl(LassoSelectionControl)

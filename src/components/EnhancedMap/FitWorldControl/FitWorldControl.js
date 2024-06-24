@@ -40,8 +40,6 @@ const FitWorldLeafletControl = L.Control.extend({
  * FitWorldControl is a react-leaflet Control component intended to be
  * used as a child of a react-leaflet MapContainer instance,.
  */
-export const FitWorldControl = createControlComponent(
-  (props) => {return new FitWorldLeafletControl(props)}
-)
+export const FitWorldControl = createControlComponent((props) => new FitWorldLeafletControl(props))
 
 export default injectIntl(FitWorldControl)

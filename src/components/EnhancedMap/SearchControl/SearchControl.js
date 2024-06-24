@@ -12,7 +12,7 @@ import { useMap } from 'react-leaflet'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const SearchControl = createControlComponent(
-  (props) => {return new SearchLeafletControl(props)},
+  (props) => new SearchLeafletControl(props),
   
  // Re-render the control content when this component is rerendered
   (instance, props) => {
