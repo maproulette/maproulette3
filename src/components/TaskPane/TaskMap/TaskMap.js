@@ -268,8 +268,8 @@ export const TaskMapContainer = (props) => {
 
 
   useEffect(() => {
-    setLatestBounds(bounds)
-    setLatestZoom(zoom)
+    setLatestBounds(map.getBounds())
+    setLatestZoom(map.getZoom())
 
     if (props.task.id !== props.completingTask) {
       props.setTaskMapBounds(props.task.id, latestBounds, latestZoom, false)
@@ -281,7 +281,7 @@ export const TaskMapContainer = (props) => {
         })
       }
     }
-  }, [map.getBounds()])
+  }, [map])
 
   const mapillaryImageMarkers = () => {
     return {
