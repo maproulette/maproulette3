@@ -308,7 +308,7 @@ const calculateTasksInChallenge = props => {
 const ActiveBundle = props => {
   const showMarkerPopup = markerData => {
     return (
-      <Popup key={markerData.options.taskId} offset={[0, -5]}>
+      <Popup key={markerData.options.taskId} offset={props.task.id === markerData.options.taskId ? [0.5, -16] :  [0.5, -5]}>
         <div className="marker-popup-content">
           <TaskMarkerContent
             {...props}
@@ -493,7 +493,7 @@ const BuildBundle = props => {
 
   const showMarkerPopup = (markerData) => {
     return (
-      <Popup key={markerData.options.taskId} offset={[0, -5]}>
+      <Popup key={markerData.options.taskId} offset={props.task.id === markerData.options.taskId ? [0.5, -16] :  [0.5, -5]}>
         <div className="marker-popup-content">
           <TaskMarkerContent
             {...props}

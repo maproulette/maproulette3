@@ -151,10 +151,12 @@ const Markers = (props) => {
 
   const mapMetricsInDegrees = (iconSize = CLUSTER_ICON_PIXELS + 20) => {
     const metrics = {}
-    metrics.heightDegrees = props.currentBounds.getNorth() - props.currentBounds.getSouth()
-    metrics.widthDegrees = props.currentBounds.getEast() - props.currentBounds.getWest()
-    metrics.degreesPerPixel = metrics.heightDegrees / currentSize.y
-    metrics.iconSizeDegrees = iconSize * metrics.degreesPerPixel
+    if(props.currentBounds) {
+      metrics.heightDegrees = props.currentBounds.getNorth() - props.currentBounds.getSouth()
+      metrics.widthDegrees = props.currentBounds.getEast() - props.currentBounds.getWest()
+      metrics.degreesPerPixel = metrics.heightDegrees / currentSize.y
+      metrics.iconSizeDegrees = iconSize * metrics.degreesPerPixel
+    }
 
     return metrics
   }

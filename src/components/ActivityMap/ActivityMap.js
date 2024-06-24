@@ -53,7 +53,7 @@ export const ActivityMap = props => {
           stroke={false}
           options={{ title: `Task ${entry.task.id}` }}
         >
-          <Popup offset={[0, -5]}>
+          <Popup offset={ [0.5, -5]}>
             <div className="mr-p-4 mr-pt-6 mr-lightmode">
               <ActivityDescription {...props} entry={entry} simplified />
             </div>

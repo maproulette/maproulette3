@@ -125,7 +125,7 @@ export class ChallengePane extends Component {
 
     const showMarkerPopup = (markerData) => {
       return (
-       <Popup offset={[0, -5]}>
+       <Popup offset={ [0.5, -5]}>
         <TaskChallengeMarkerContent
           marker={markerData}
           taskId={markerData.options.taskId}

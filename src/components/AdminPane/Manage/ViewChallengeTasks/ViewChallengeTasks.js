@@ -141,7 +141,7 @@ export class ViewChallengeTasks extends Component {
   showMarkerPopup = markerData => {
     const TaskData = WithLoadedTask(TaskMarkerContent)
     return (
-      <Popup offset={[0, -5]}>
+      <Popup offset={ [0.5, -5]}>
         <div className="marker-popup-content">
           <TaskData marker={markerData} taskId={markerData.options.taskId} {...this.props} />
         </div>

@@ -113,7 +113,7 @@ const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerL
           },
         }}
       >
-        <Popup maxWidth="351px" offset={[0, -5]}>
+        <Popup maxWidth="351px" offset={ [0.5, -5]}>
           <div style={{ width: 351, marginTop: 20 }}>
             <MapillaryViewer
               key={Date.now()}
