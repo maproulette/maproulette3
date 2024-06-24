@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, LayerGroup, Pane, MapContainer } from 'react-leaflet'
+import { ZoomControl, LayerGroup, Pane, MapContainer, useMap } from 'react-leaflet'
 import { featureCollection } from '@turf/helpers'
 import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
@@ -63,6 +63,7 @@ const shortcutGroup = 'layers'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const TaskMapContainer = (props) => {
+  const map = useMap()
   const [latestBounds, setLatestBounds] = useState(null)
   const [showTaskFeatures, setShowTaskFeatures] = useState(true)
   const [showOSMData, setShowOSMData] = useState(false)
@@ -264,6 +265,23 @@ export const TaskMapContainer = (props) => {
       props.deactivateKeyboardShortcutGroup(shortcutGroup, handleKeyboardShortcuts);
     };
   }, []);
+
+
+  useEffect(() => {
+    setLatestBounds(bounds)
+    setLatestZoom(zoom)
+
+    if (props.task.id !== props.completingTask) {
+      props.setTaskMapBounds(props.task.id, latestBounds, latestZoom, false)
+      if (props.setWorkspaceContext) {
+        props.setWorkspaceContext({
+          taskMapTask: props.task,
+          taskMapBounds: latestBounds,
+          taskMapZoom: latestZoom
+        })
+      }
+    }
+  }, [map.getBounds()])
 
   const mapillaryImageMarkers = () => {
     return {
