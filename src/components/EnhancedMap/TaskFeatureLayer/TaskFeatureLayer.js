@@ -48,7 +48,6 @@ const TaskFeatureLayer = props => {
 
   const { features, mrLayerId, animator, externalInteractive } = props
   const layerLabel = props.intl.formatMessage(layerMessages.showTaskFeaturesLabel)
-  const pane = _get(props, 'leaflet.pane')
 
   useEffect(() => {
     setLayer(

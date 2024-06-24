@@ -4,7 +4,6 @@ import { injectIntl, FormattedMessage } from 'react-intl'
 import { TileLayer } from 'react-leaflet'
 import { BingLayer } from 'react-leaflet-bing-v2'
 import _isEmpty from 'lodash/isEmpty'
-import _get from 'lodash/get'
 import WithErrors from '../../HOCs/WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
 import { layerSourceShape, normalizeLayer, defaultLayerSource }
