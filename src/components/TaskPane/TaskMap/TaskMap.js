@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, LayerGroup, Pane, MapContainer, useMap } from 'react-leaflet'
+import { ZoomControl, LayerGroup, Pane, MapContainer } from 'react-leaflet'
 import { featureCollection } from '@turf/helpers'
 import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
@@ -264,26 +264,6 @@ export const TaskMapContainer = (props) => {
       props.deactivateKeyboardShortcutGroup(shortcutGroup, handleKeyboardShortcuts);
     };
   }, []);
-  
-
-  const updateTaskBounds = (bounds, zoom) => {
-    setLatestBounds(bounds)
-    setLatestZoom(zoom)
-
-    // Don't update map bounds if this task is in the process of completing.
-    // We don't want to risk sending updates on a stale task as this one gets
-    // unloaded.
-    if (props.task.id !== props.completingTask) {
-      props.setTaskMapBounds(props.task.id, bounds, zoom, false)
-      if (props.setWorkspaceContext) {
-        props.setWorkspaceContext({
-          taskMapTask: props.task,
-          taskMapBounds: bounds,
-          taskMapZoom: zoom
-        })
-      }
-    }
-  }
 
   const mapillaryImageMarkers = () => {
     return {
