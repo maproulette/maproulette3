@@ -267,19 +267,21 @@ export const TaskMapContainer = (props) => {
 
 
   useEffect(() => {
-    setLatestBounds(map.getBounds())
-    setLatestZoom(map.getZoom())
+    const currentBounds = map.getBounds()
+    const currentZoom = map.getZoom()
 
     if (props.task.id !== props.completingTask) {
-      props.setTaskMapBounds(props.task.id, latestBounds, latestZoom, false)
+      props.setTaskMapBounds(props.task.id, currentBounds, currentZoom, false)
       if (props.setWorkspaceContext) {
         props.setWorkspaceContext({
           taskMapTask: props.task,
-          taskMapBounds: latestBounds,
-          taskMapZoom: latestZoom
+          taskMapBounds: currentBounds,
+          taskMapZoom: currentZoom
         })
       }
     }
+    setLatestBounds(currentBounds)
+    setLatestZoom(currentZoom)
   }, [map])
 
   const mapillaryImageMarkers = () => {
