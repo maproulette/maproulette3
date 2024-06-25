@@ -156,7 +156,7 @@ test("completeTask calls fetchChallengeActions", () => {
   mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
   jest.runOnlyPendingTimers()
 
-  expect(fetchChallengeActions).toBeCalledWith(challenge.id)
+  expect(fetchChallengeActions).toBeCalledWith(challenge.id, false, {}, true, undefined)
 })
 
 test("completeTask routes the user to the new task if there is one", async () => {

@@ -150,7 +150,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(fetchTaskComments(taskId))
         dispatch(fetchTaskPlace(loadedTask))
         dispatch(fetchChallenge(loadedTask.parent))
-        dispatch(fetchChallengeActions(loadedTask.parent))
+        dispatch(fetchChallengeActions(loadedTask.parent, false, {}, true, ownProps.virtualChallengeId))
 
         return normalizedResults
       }).catch(() => {
@@ -188,7 +188,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
         // Updating the challenge actions will allow us to show more accurate
         // completion progress, but this can be done in the background
-        setTimeout(() => dispatch(fetchChallengeActions(challengeId)), 500)
+        setTimeout(() => dispatch(fetchChallengeActions(challengeId, false, {}, true, ownProps.virtualChallengeId)), 500)
 
         // If working on a virtual challenge, renew it (extend its expiration)
         // since we've seen some activity, but this can be done in the

@@ -496,7 +496,8 @@ export const fetchChallengeActions = function (
   challengeId = null,
   suppressReceive = false,
   criteria,
-  includeByPriority = true
+  includeByPriority = true,
+  virtualChallengeId = 0,
 ) {
   let searchParameters = {};
   if (criteria) {
@@ -516,7 +517,7 @@ export const fetchChallengeActions = function (
       {
         schema: [challengeSchema()],
         variables: { id: challengeId },
-        params: { ...searchParameters, includeByPriority },
+        params: { ...searchParameters, includeByPriority, virtualChallengeId },
       }
     );
 
