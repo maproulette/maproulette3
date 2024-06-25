@@ -122,7 +122,7 @@ export const TaskMapContainer = (props) => {
     if (!showOSMData && !osmData && !osmDataLoading) {
       setOsmDataLoading(true)
       props.fetchOSMData(
-        props.mapBounds.bounds.toBBoxString()
+        map.getBounds().toBBoxString()
       ).then(xmlData => {
         // Indicate the map should skip fitting to bounds as the OSM data could
         // extend beyond the current view and we don't want the map to zoom out
@@ -457,7 +457,7 @@ export const TaskMapContainer = (props) => {
             key="osm-data"
             mrLayerId="osm-data"
             xmlData={osmData}
-            zoom={_isFinite(latestZoom) ? latestZoom : zoom}
+            zoom={map.getZoom()}
             showOSMElements={showOSMElements}
             animator={animator}
             externalInteractive

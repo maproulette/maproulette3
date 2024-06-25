@@ -19,99 +19,116 @@ const HIGHLIGHT_STYLE = {
   weight: 7,
 }
 
-  const popupContent = (layer, onBack) => {
-    const properties = layer.feature.properties
-    const header = (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href={`https://www.openstreetmap.org/${properties.type}/${properties.id}`}
-      >
-        {properties.type} {properties.id}
-      </a>
+const popupContent = (layer, onBack) => {
+  const properties = layer.feature.properties
+  const header = (
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={`https://www.openstreetmap.org/${properties.type}/${properties.id}`}
+    >
+      {properties.type} {properties.id}
+    </a>
+  )
+
+  const contentElement = document.createElement('div')
+  ReactDOM.render(
+    <PropertyList
+      header={header}
+      featureProperties={_omit(layer.feature.properties, ['id', 'type'])}
+      onBack={onBack}
+    />,
+    contentElement
+  )
+  return contentElement
+}
+
+const generateElementStyles = props => {
+  const globalStyleOptions = {
+    // Set stroke weight to 3px when zoomed way in, then 2px and
+    // finally down to 1px at zoom 15
+    weight: props.zoom >= 18 ? 5 : props.zoom > 15 ? 4 : 2,
+  }
+
+  return {
+    way: { ...globalStyleOptions, color: colors['orange-jaffa'] },
+    area: {
+      ...globalStyleOptions,
+      color: colors['pink-light'],
+      fillColor: 'rgba(255, 192, 203, 0.5)', // Pink color with 50% transparency
+    },
+    node: {
+      ...globalStyleOptions,
+      color: '#C20534',
+      radius: props.zoom >= 18 ? 10 : 5, // shrink size when zoomed out
+    },
+    changeset: { ...globalStyleOptions, color: colors.red },
+  }
+}
+
+const generateLayer = props => {
+  const layerGroup = new L.OSM.DataLayer(props.xmlData, {
+    styles: generateElementStyles(props),
+    showNodes: props.showOSMElements.nodes,
+    showWays: props.showOSMElements.ways,
+    showAreas: props.showOSMElements.areas,
+    pane: _get(props, 'leaflet.pane'),
+  })
+
+  layerGroup.eachLayer(layer => {
+    layer.options.mrLayerLabel = props.intl.formatMessage(
+      layerMessages.showOSMDataLabel
     )
-
-    const contentElement = document.createElement('div')
-    ReactDOM.render(
-      <PropertyList
-        header={header}
-        featureProperties={_omit(layer.feature.properties, ['id', 'type'])}
-        onBack={onBack}
-      />,
-      contentElement
-    )
-    return contentElement
-  }
-
-  const generateElementStyles = props => {
-    const globalStyleOptions = {
-      // Set stroke weight to 3px when zoomed way in, then 2px and
-      // finally down to 1px at zoom 15
-      weight: props.zoom >= 18 ? 3 : props.zoom > 15 ? 2 : 1,
-    }
-
-    return {
-      way: Object.assign({}, globalStyleOptions, { color: colors['orange-jaffa'] }),
-      area: Object.assign({}, globalStyleOptions, { color: colors['pink-light'] }),
-      node: Object.assign({}, globalStyleOptions, {
-        color: '#C20534',
-        radius: props.zoom >= 18 ? 10 : 5, // shrink size when zoomed out
-      }),
-      changeset: Object.assign({}, globalStyleOptions, { color: colors.red }),
-    }
-  }
-
-  const generateLayer = props => {
-    const layerGroup = new L.OSM.DataLayer(props.xmlData, {
-      styles: generateElementStyles(props),
-      showNodes: props.showOSMElements.nodes,
-      showWays: props.showOSMElements.ways,
-      showAreas: props.showOSMElements.areas,
-      pane: _get(props, 'leaflet.pane'),
-    })
-
-    layerGroup.eachLayer(layer => {
-      layer.options.mrLayerLabel = props.mrLayerLabel
-      layer.options.fill = false
-      layer.options.pane = layerGroup.options.pane
-      layer.originalToGeoJSON = layer.toGeoJSON
-      layer.toGeoJSON = precision => {
-        const geojson = layer.originalToGeoJSON(precision)
-        return {
-          ...geojson.geometry,
-          properties: layer.feature.properties,
-        }
+    layer.options.fill = false
+    layer.options.pane = layerGroup.options.pane
+    layer.originalToGeoJSON = layer.toGeoJSON
+    layer.toGeoJSON = precision => {
+      const geojson = layer.originalToGeoJSON(precision)
+      return {
+        ...geojson.geometry,
+        properties: layer.feature.properties,
       }
-
-      if (props.externalInteractive) {
-        const styleableLayer = AsStylableLayer(layer)
-        layer.on('mr-external-interaction', ({map, latlng, onBack}) => {
-          // Ensure any orphaned preview styles get cleaned up
-          styleableLayer.popStyle('mr-external-interaction:start-preview')
-          const popup = L.popup({}, layer).setLatLng(latlng).setContent(popupContent(layer, onBack))
-          // Highlight selected feature
-          styleableLayer.pushStyle(Object.assign({}, HIGHLIGHT_STYLE))
-          popup.on('remove', () => styleableLayer.popStyle())
-          popup.openOn(map)
-        })
-        layer.on('mr-external-interaction:start-preview', () => {
-          styleableLayer.pushStyle(
-            Object.assign({}, HIGHLIGHT_STYLE),
-            'mr-external-interaction:start-preview'
-          )
-        })
-        layer.on('mr-external-interaction:end-preview', () => {
-          styleableLayer.popStyle('mr-external-interaction:start-preview')
-        })
-      }
-    })
-
-    if (!props.externalInteractive) {
-      layerGroup.bindPopup(popupContent)
     }
 
-    return layerGroup
-  }
+    if (props.externalInteractive) {
+      const styleableLayer = AsStylableLayer(layer)
+
+      layer.on('click', ({ latlng }) => {
+        debugger
+        const popup = L.popup()
+          .setLatLng(latlng)
+          .setContent(popupContent(layer, () => {}))
+
+        // Highlight selected feature
+        styleableLayer.pushStyle({ ...HIGHLIGHT_STYLE })
+
+        // Remove highlight style when popup is closed
+        popup.on('remove', () => {
+          styleableLayer.popStyle()
+        })
+
+        // Open popup on the map and bind to the layer
+        layer.bindPopup(popup).openPopup()
+      })
+
+      layer.on('mr-external-interaction:start-preview', () => {
+        styleableLayer.pushStyle(
+          Object.assign({}, HIGHLIGHT_STYLE),
+          'mr-external-interaction:start-preview'
+        )
+      })
+
+      layer.on('mr-external-interaction:end-preview', () => {
+        styleableLayer.popStyle('mr-external-interaction:start-preview')
+      })
+    } else {
+      const popup = L.popup().setContent(popupContent(layer, () => {}))
+      layer.bindPopup(popup)
+    }
+  })
+
+  return layerGroup
+}
 
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
@@ -133,7 +150,7 @@ const OSMDataLayer = createPathComponent(
       newLayers.eachLayer(layer => instance.addLayer(layer))
     }
   }
- )
+)
 
 export default injectIntl(OSMDataLayer)
 
