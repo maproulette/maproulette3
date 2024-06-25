@@ -11,6 +11,7 @@ import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
 import layerMessages from '../LayerToggle/Messages'
 import { createPathComponent } from '@react-leaflet/core'
+import { useMap } from 'react-leaflet'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
 const HIGHLIGHT_STYLE = {
@@ -19,38 +20,39 @@ const HIGHLIGHT_STYLE = {
   weight: 7,
 }
 
-const popupContent = (layer, onBack) => {
-  const properties = layer.feature.properties
-  const header = (
-    <a
-      target="_blank"
-      rel="noopener noreferrer"
-      href={`https://www.openstreetmap.org/${properties.type}/${properties.id}`}
-    >
-      {properties.type} {properties.id}
-    </a>
-  )
-
-  const contentElement = document.createElement('div')
-  ReactDOM.render(
-    <PropertyList
-      header={header}
-      featureProperties={_omit(layer.feature.properties, ['id', 'type'])}
-      onBack={onBack}
-    />,
-    contentElement
-  )
-  return contentElement
-}
-
-const generateElementStyles = props => {
+const generateLayer = props => {
+  const map = useMap()
+  const popupContent = (layer, onBack) => {
+    const properties = layer.feature.properties
+    const header = (
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={`https://www.openstreetmap.org/${properties.type}/${properties.id}`}
+      >
+        {properties.type} {properties.id}
+      </a>
+    )
+  
+    const contentElement = document.createElement('div')
+    ReactDOM.render(
+      <PropertyList
+        header={header}
+        featureProperties={_omit(layer.feature.properties, ['id', 'type'])}
+        onBack={onBack}
+      />,
+      contentElement
+    )
+    return contentElement
+  }
+  
   const globalStyleOptions = {
     // Set stroke weight to 3px when zoomed way in, then 2px and
     // finally down to 1px at zoom 15
     weight: props.zoom >= 18 ? 5 : props.zoom > 15 ? 4 : 2,
   }
 
-  return {
+  const generateElementStyles = {
     way: { ...globalStyleOptions, color: colors['orange-jaffa'] },
     area: {
       ...globalStyleOptions,
@@ -64,11 +66,9 @@ const generateElementStyles = props => {
     },
     changeset: { ...globalStyleOptions, color: colors.red },
   }
-}
 
-const generateLayer = props => {
   const layerGroup = new L.OSM.DataLayer(props.xmlData, {
-    styles: generateElementStyles(props),
+    styles: generateElementStyles,
     showNodes: props.showOSMElements.nodes,
     showWays: props.showOSMElements.ways,
     showAreas: props.showOSMElements.areas,
@@ -89,12 +89,13 @@ const generateLayer = props => {
         properties: layer.feature.properties,
       }
     }
-
-    if (props.externalInteractive) {
       const styleableLayer = AsStylableLayer(layer)
 
+    if (!props.externalInteractive) {
+      const popup = L.popup().setContent(popupContent(layer, () => {}))
+      layer.bindPopup(popup)
+    } else {
       layer.on('click', ({ latlng }) => {
-        debugger
         const popup = L.popup()
           .setLatLng(latlng)
           .setContent(popupContent(layer, () => {}))
@@ -108,22 +109,20 @@ const generateLayer = props => {
         })
 
         // Open popup on the map and bind to the layer
-        layer.bindPopup(popup).openPopup()
+        popup.openOn(map)
       })
 
       layer.on('mr-external-interaction:start-preview', () => {
-        styleableLayer.pushStyle(
-          Object.assign({}, HIGHLIGHT_STYLE),
+        styleableLayer.pushLeafletLayerSimpleStyles(
+          layer,
+          Object.assign(styleableLayer.markerSimplestyles(layer), HIGHLIGHT_SIMPLESTYLE),
           'mr-external-interaction:start-preview'
         )
       })
 
       layer.on('mr-external-interaction:end-preview', () => {
-        styleableLayer.popStyle('mr-external-interaction:start-preview')
+        styleableLayer.popLeafletLayerSimpleStyles(layer, 'mr-external-interaction:start-preview')
       })
-    } else {
-      const popup = L.popup().setContent(popupContent(layer, () => {}))
-      layer.bindPopup(popup)
     }
   })
 
