@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl } from 'react-intl'
+import { IntlProvider } from 'react-intl'
 import L from 'leaflet'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
@@ -36,11 +37,18 @@ const generateLayer = props => {
   
     const contentElement = document.createElement('div')
     ReactDOM.render(
-      <PropertyList
-        header={header}
-        featureProperties={_omit(layer.feature.properties, ['id', 'type'])}
-        onBack={onBack}
-      />,
+      <IntlProvider 
+        key={props.intl.locale} 
+        locale={props.intl.locale} 
+        messages={props.intl.messages}
+        textComponent="span" 
+      >
+        <PropertyList
+          header={header}
+          featureProperties={_omit(layer.feature.properties, ['id', 'type'])}
+          onBack={onBack}
+        />
+      </IntlProvider>,
       contentElement
     )
     return contentElement

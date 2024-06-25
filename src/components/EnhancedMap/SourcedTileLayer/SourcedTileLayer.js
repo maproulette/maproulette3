@@ -64,7 +64,6 @@ const SourcedTileLayer = (props) => {
         {...normalizedLayer}
         type="Aerial"
         attribution={attribution(normalizedLayer)}
-        {...props}
       />
     )
   }
