@@ -18,7 +18,7 @@ export default defineMessages({
 
   taskPropertyFiltersModalSubDescription: {
     id: "TaskPropertyFiltersModal.subDescription",
-    defaultMessage: "The Task Property filters will only apply if you are viewing tasks from a single challenge in the review table."
+    defaultMessage: "The Task Property filters will only apply if you are also filtering for a single challenge in the review table."
   },
 
   taskPropertyFiltersModalFilterListLabel: {

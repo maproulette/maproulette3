@@ -87,55 +87,45 @@ function TaskPropertyFiltersModal({isOpen, closeModal, savedTaskPropertyFilters,
   return (
     <React.Fragment>
       <External>
-        
-          {challengeFilterIds.length === 1 && challengeFilterIds[0] > 0 ? (
-            <Modal 
-              isActive={isOpen} 
-              onClose={closeModal} 
-              narrow
-            >
+        <Modal 
+          isActive={isOpen} 
+          onClose={closeModal} 
+          narrow
+        >
+          <div className='mr-space-y-4'>
+            <h3 className="mr-text-yellow mr-mb-4">
+              <FormattedMessage {...messages.taskPropertyFiltersModalTitle} />
+            </h3>
+            {challengeFilterIds.length === 1 && challengeFilterIds[0] > 0 ? (
+            <div className='mr-max-w-sm'>  
               <div>
-                <div className='mr-space-y-4'>
-                  <div className='mr-max-w-sm'>  
-                    <h3 className="mr-text-yellow mr-mb-4">
-                      <FormattedMessage {...messages.taskPropertyFiltersModalTitle} />
-                    </h3>
-                    <div className='mr-space-y-3'>
-                      <p className='mr-text-base'>
-                        <FormattedMessage {...messages.taskPropertyFiltersModalDescription} />
-                      </p>
-                      <p className='mr-text-sm mr-text-mango'>
-                        <FormattedMessage {...messages.taskPropertyFiltersModalSubDescription} />
-                      </p>
-                        {filterClearButton}
-                      </div>
+                <div className='mr-space-y-3'>
+                  <p className='mr-text-base'>
+                    <FormattedMessage {...messages.taskPropertyFiltersModalDescription} />
+                  </p>
+                  <p className='mr-text-sm mr-text-mango'>
+                    <FormattedMessage {...messages.taskPropertyFiltersModalSubDescription} />
+                  </p>
+                    {filterClearButton}
                   </div>
-                  <div className='mr-space-y-1 mr-p-4'>
-                    <ul>
-                      {savedTaskPropertyFilters ? savedFilterEntries : null}
-                    </ul>
-                  </div>
-                </div>
-                <button
-                  className="mr-button mr-col-span-2 mr-mt-8"
-                  onClick={closeModal}
-                >
-                  <FormattedMessage {...messages.doneLabel} />
-                </button>
               </div>
-            </Modal>
-          ): ( 
-            <Modal
-              isActive={isOpen} 
-              onClose={closeModal}
-              contentClassName="mr-top-5" 
-            >
-              <div>
+              <ul className='mr-p-4'>
+                {savedTaskPropertyFilters ? savedFilterEntries : null}
+              </ul>
+              <button
+                className="mr-button mr-col-span-2 mr-mt-8"
+                onClick={closeModal}
+              >
+                <FormattedMessage {...messages.doneLabel} />
+              </button>
+            </div>
+            ): (
+              <div className='mr-text-mango mr-text-md'>
                 <FormattedMessage {...messages.taskPropertyFiltersModalChallengeFilterRequirementAlertMessage} />
               </div>
-            </Modal>
-          )}
-        
+            )}
+          </div>
+        </Modal>
       </External>
     </React.Fragment>
   )
