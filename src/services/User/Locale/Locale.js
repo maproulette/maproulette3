@@ -20,6 +20,7 @@ export const unsortedLocale = {
   ko: "ko",
   nl: "nl",
   "pt-BR": "pt-BR",
+  "pt-PT": "pt-PT",
   "cs-CZ": "cs-CZ",
   "fa-IR": "fa-IR",
   "ru-RU": "ru-RU",
@@ -99,6 +100,11 @@ const LocaleImports = {
   [Locale["pt-BR"]]: () =>
     Promise.all([
       import("../../../lang/pt_BR.json"),
+      import("@formatjs/intl-relativetimeformat/locale-data/pt"),
+    ]),
+  [Locale["pt-PT"]]: () =>
+    Promise.all([
+      import("../../../lang/pt_PT.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/pt"),
     ]),
   [Locale["cs-CZ"]]: () =>

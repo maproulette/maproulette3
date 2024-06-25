@@ -6,8 +6,7 @@ import Calendar from 'react-calendar-heatmap'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
 import _reverse from 'lodash/reverse'
-import format from 'date-fns/format'
-import subMonths from 'date-fns/sub_months'
+import { subMonths, format } from 'date-fns'
 import messages from './Messages'
 import './CalendarHeatmap.scss'
 
@@ -36,7 +35,7 @@ export default class CalendarHeatmap extends Component {
       _compact(_map(_reverse(this.props.dailyMetrics), metrics =>
         metrics.value === 0 ? null :
         ({
-          date: format(metrics.day, 'YYYY-MM-DD'),
+          date: format(metrics.day, 'yyyy-MM-dd'),
           count: metrics.value,
         })
     ))

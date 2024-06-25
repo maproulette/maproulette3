@@ -339,8 +339,8 @@ const ViewTask = function(props) {
   if (!_isFinite(props.notification.challengeId)) {
     return null
   }
-
-  const path = props.notification.taskId
+  const taskSpecific = props.notification.taskId !== props.notification.challengeName && props.notification.taskId
+  const path = taskSpecific
     ? `challenge/${props.notification.challengeId}/task/${props.notification.taskId}`
     : `browse/challenges/${props.notification.challengeId}?tab=conversation`;
 
@@ -350,7 +350,7 @@ const ViewTask = function(props) {
     props.notification.notificationType === NotificationType.metaReview &&
     parseInt(props.notification.description, 10) === TaskReviewStatus.rejected
 
-  const label = props.notification.taskId ? messages.viewTaskLabel : messages.viewConversationLabel;
+  const label = taskSpecific ? messages.viewTaskLabel : messages.viewConversationLabel;
 
   return (
     <div className="mr-mt-8 mr-links-green-lighter">

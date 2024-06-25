@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, FormattedTime, FormattedDate, injectIntl }
        from 'react-intl'
-import parse from 'date-fns/parse'
-import isAfter from 'date-fns/is_after'
+import { isAfter, parseISO } from 'date-fns'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
 import _isEmpty from 'lodash/isEmpty'
@@ -177,8 +176,8 @@ OSMElementHistory.propTypes = {
 }
 
 const HistoryEntry = props => {
-  const timestamp = parse(props.timestamp)
-  const sourceDate = props.sourceDate ? parse(props.sourceDate) : new Date()
+  const timestamp = parseISO(props.timestamp)
+  const sourceDate = props.sourceDate ? parseISO(props.sourceDate) : new Date()
   const changesetComment = _find(
     _get(props, 'changeset.tag', []),
     tag => tag.k === "comment"

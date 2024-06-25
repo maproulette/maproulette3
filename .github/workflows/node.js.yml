@@ -7,26 +7,26 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16, 18, 20]
+        node-version: [18, 20]
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
         cache-dependency-path: 'yarn.lock'
 
     - name: Install dependencies
-      run: yarn install
+      # --frozen-lockfile: don't generate a lockfile and fail if an update is needed
+      run: yarn install --frozen-lockfile
 
     - name: Run build
       run: yarn run build
@@ -37,6 +37,6 @@ jobs:
       run: yarn test -- --coverage
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}

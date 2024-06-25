@@ -1,8 +1,6 @@
 import AsEditableChallenge from "../../../../../../interactions/Challenge/AsEditableChallenge";
 import messages from "../Messages";
 
-const STEP_ID = "OSMCommit";
-
 /**
  * Generates a JSON Schema describing OSM commit fields of Edit Challenge
  * workflow intended for consumption by react-jsonschema-form
@@ -36,6 +34,7 @@ export const jsSchema = (
     $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties,
+    required: ["checkinComment"],
   };
 
   // For new challenges, offer option to toggle #maproulette tag on commit comment.
@@ -75,13 +74,7 @@ export const uiSchema = (
   extraErrors,
   options = {}
 ) => {
-  const isCollapsed =
-    options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
-  const toggleCollapsed =
-    options.longForm && options.toggleCollapsed
-      ? () => options.toggleCollapsed(STEP_ID)
-      : undefined;
-
+ 
   const uiSchemaFields = {
     "ui:order": [
       "checkinComment",
@@ -91,20 +84,16 @@ export const uiSchema = (
     checkinComment: {
       "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.checkinCommentDescription),
-      "ui:collapsed": isCollapsed,
-      "ui:toggleCollapsed": toggleCollapsed,
       "ui:groupHeader": options.longForm
         ? intl.formatMessage(messages.osmCommitStepHeader)
         : undefined,
     },
     checkinSource: {
-      "ui:help": intl.formatMessage(messages.checkinSourceDescription),
-      "ui:collapsed": isCollapsed,
+      "ui:help": intl.formatMessage(messages.checkinSourceDescription)
     },
     includeCheckinHashtag: {
       "ui:field": "columnRadio",
-      "ui:help": intl.formatMessage(messages.includeCheckinHashtagDescription),
-      "ui:collapsed": isCollapsed,
+      "ui:help": intl.formatMessage(messages.includeCheckinHashtagDescription)
     }
   };
 

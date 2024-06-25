@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl'
 // import _isPlainObject from 'lodash/isPlainObject'
 // import { Link } from 'react-router-dom'
   // Disable till TopUserChallengesWidget is reimplemented
-// import subMonths from 'date-fns/sub_months'
+// import { subMonths } from 'date-fns'
 import { WidgetDataTarget, registerWidgetType }
        from '../../services/Widget/Widget'
 import QuickWidget from '../QuickWidget/QuickWidget'

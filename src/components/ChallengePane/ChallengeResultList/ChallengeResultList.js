@@ -110,13 +110,9 @@ export class ChallengeResultList extends Component {
         ? limitUserResults(challengeResultsUnbound)
         : challengeResultsUnbound;
   
-    const challengeResults = this.props.project?.id ? _filter(allChallenges, (challenge) => {
+    const challengeResults = this.props.project?.id && this.props.remainingChallengeOnly ? _filter(allChallenges, (challenge) => {
         return (isUsableChallengeStatus(challenge.status))
       }) : allChallenges
-  
-    const finishedChallengeResults = this.props.project?.id ? _filter(allChallenges, (challenge) => {
-        return (!isUsableChallengeStatus(challenge.status))
-      }) : []
   
     const uniqueParents = new Set();
 
@@ -281,7 +277,7 @@ export class ChallengeResultList extends Component {
     }
     
     let results = null
-    if (challengeResults.length === 0 && finishedChallengeResults.length == 0) {
+    if (challengeResults.length === 0) {
       if (!isFetching) {
         results = (
           <div className="mr-text-white mr-text-lg mr-pt-4">
@@ -306,32 +302,6 @@ export class ChallengeResultList extends Component {
           );
         }
       }))
-      if(finishedChallengeResults?.length > 0){
-        results.push(
-          <div className="mr-text-sm mr-text-yellow mr-uppercase mr-mb-4">
-          <FormattedMessage
-            {...messages.completedChallengeCount}
-            values={{
-              count: finishedChallengeResults.length,
-            }}
-          />
-        </div>,
-          ..._compact(_map(finishedChallengeResults, (result) => {
-            if (result.parent) {
-              return (
-                <ChallengeResultItem
-                  key={`challenge_${result.id}`}
-                  {...this.props}
-                  className="mr-mb-4"
-                  challenge={result}
-                  listRef={this.listRef}
-                  sort={search?.sort}
-                />
-              )
-            }
-          }))
-        )
-      }
     } else if (!this.props.excludeProjectResults && searchType === "projects" && projectResults) {
       results = _compact(_map(projectResults, (result) => {
           return (

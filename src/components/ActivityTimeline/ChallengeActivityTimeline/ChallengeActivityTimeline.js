@@ -9,7 +9,7 @@ import _reverse from 'lodash/reverse'
 import _sortBy from 'lodash/sortBy'
 import _take from 'lodash/take'
 import _isFinite from 'lodash/isFinite'
-import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 import { statusLabels,
          keysByStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
@@ -34,7 +34,7 @@ export class ChallengeActivityTimeline extends Component {
     // recent activity will show up first.
     const groupedByDate = _toPairs(_groupBy(this.props.activity, 'date'))
     const latestEntries = _reverse(
-      _sortBy(groupedByDate, (value) => parse(value[0]).getTime())
+      _sortBy(groupedByDate, (value) => parseISO(value[0]).getTime())
     )
 
     // Build timeline entries for each day, showing each (non-zero) type of
@@ -43,7 +43,7 @@ export class ChallengeActivityTimeline extends Component {
       const isoDate = entriesByDate[0]
       const statusEntries = entriesByDate[1]
 
-      const formattedDate = this.props.intl.formatDate(parse(isoDate),
+      const formattedDate = this.props.intl.formatDate(parseISO(isoDate),
                                                        {month: 'long', day: 'numeric'})
       const statuses = _compact(_map(statusEntries, entry => {
         if (entry.count === 0) {

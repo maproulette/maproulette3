@@ -78,6 +78,7 @@ const SupplementalMap = props => {
     <div className="task-map">
       <LayerToggle {...props} overlayOrder={overlayOrder} />
       <EnhancedMap
+        taskBundle={props.taskBundle}
         ref={mapRef}
         center={props.centerPoint}
         zoom={zoom}
@@ -86,6 +87,7 @@ const SupplementalMap = props => {
         maxZoom={maxZoom}
         worldCopyJump={true}
         overlayOrder={overlayOrder}
+        intl={props.intl}
       >
         <ZoomControl position='topright' />
         <SourcedTileLayer maxZoom={maxZoom} {...props} />

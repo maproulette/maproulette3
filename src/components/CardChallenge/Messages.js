@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "View Leaderboard",
   },
 
+  completedChallengeLabel: {
+    id: "Challenge.fields.completed.label",
+    defaultMessage: "Completed"
+  },
+
   vpListLabel: {
     id: "Challenge.fields.vpList.label",
     defaultMessage: "Also in matching virtual {count,plural, one{project} other{projects}}:"

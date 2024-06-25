@@ -1,5 +1,4 @@
-import addMinutes from 'date-fns/add_minutes'
-import isAfter from 'date-fns/is_after'
+import { addMinutes, isAfter } from 'date-fns'
 import { isJosmEditor, sendJOSMCommand } from '../Editor/Editor'
 import { fromLatLngBounds } from '../MapBounds/MapBounds'
 import _get from 'lodash/get'

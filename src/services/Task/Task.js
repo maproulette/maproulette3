@@ -20,14 +20,13 @@ import genericEntityReducer from '../Server/GenericEntityReducer'
 import { challengeSchema } from '../Challenge/Challenge'
 import { placeSchema, fetchPlace } from '../Place/Place'
 import { commentSchema, receiveComments } from '../Comment/Comment'
-import { addServerError, addError } from '../Error/Error'
+import { addServerError, addError, addErrorWithDetails } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import { ensureUserLoggedIn } from '../User/User'
 import { markReviewDataStale } from './TaskReview/TaskReview'
 import { receiveClusteredTasks } from './ClusteredTask'
 import { TaskStatus } from './TaskStatus/TaskStatus'
 import { generateSearchParametersString } from '../Search/Search'
-import { addErrorWithDetails } from '../Error/Error'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -470,10 +469,10 @@ export const addTaskBundleComment = function(bundleId, primaryTaskId, comment, t
 /**
  * Fetch task bundle with given id
  */
-export const fetchTaskBundle = function(bundleId) {
+export const fetchTaskBundle = function(bundleId, lockTasks) {
   return function(dispatch) {
     return new Endpoint(api.tasks.fetchBundle, {
-      variables: {bundleId},
+      variables: {bundleId}, params: {lockTasks}
     }).execute().catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
@@ -915,10 +914,10 @@ export const deleteTask = function(taskId) {
   }
 }
 
-export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") {
+export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bundleName="") {
   return function(dispatch) {
     return new Endpoint(api.tasks.bundle, {
-      json: {name: bundleName, taskIds},
+      json: {name: bundleName, primaryId, taskIds},
     }).execute().then(results => {
       return results
     }).catch(async error => {
@@ -935,6 +934,16 @@ export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") 
         }
 
         const errorMessage = await error.response.text()
+        if (errorMessage.includes('already assigned to bundle')) {
+          const numberPattern = /\d+/
+          const matchedNumber = errorMessage.match(numberPattern)
+          if (matchedNumber) {
+            const taskId = parseInt(matchedNumber[0])
+            dispatch(addErrorWithDetails(AppErrors.task.taskAlreadyBundled, [taskId]))
+          } else {
+            console.log("No task ID found in the error message.")
+          }
+        } 
         if (errorMessage.includes('task IDs were locked')) {
           const numberPattern = /\d+/g
           const matchedNumbers = errorMessage.match(numberPattern)
@@ -951,38 +960,41 @@ export const bundleTasks = function(taskIds, bundleTypeMismatch, bundleName="") 
     })
   }
 }
-// initialBundle, taskBundle props
-export const resetTaskBundle = function() {
-  return
-  // return function(dispatch) {
-  //   return new Endpoint(api.tasks.resetBundle, {
-  //     params: { initialBundle, taskBundle },
-  //   }).execute()
-  //     .then(results => {
-  //       return results
-  //     })
-  //     .catch(error => {
-  //       if (isSecurityError(error)) {
-  //         dispatch(ensureUserLoggedIn())
-  //           .then(() => dispatch(addError(AppErrors.user.unauthorized)))
-  //       } else {
-  //         dispatch(addError(AppErrors.task.bundleFailure))
-  //         console.log(error.response || error)
-  //       }
-  //     })
-  // }
-}
 
-export const deleteTaskBundle = function(bundleId, primaryTaskId) {
-  return function(dispatch) {
-    const params = {}
-    if (_isFinite(primaryTaskId)) {
-      params.primaryId = primaryTaskId
+  export const resetTaskBundle = function(initialBundle) {
+    const params = {};
+    const bundleId = initialBundle.bundleId;
+    let taskIdsArray = [];
+
+    if (initialBundle && initialBundle.taskIds) { 
+        taskIdsArray.push(...initialBundle.taskIds); 
+        params.taskIds = taskIdsArray;
     }
 
+    return function(dispatch) {
+      return new Endpoint(api.tasks.resetBundle, {
+        variables: {bundleId},
+        params
+      }).execute()
+        .then(results => {
+          return results
+        })
+        .catch(error => {
+          if (isSecurityError(error)) {
+            dispatch(ensureUserLoggedIn())
+              .then(() => dispatch(addError(AppErrors.user.unauthorized)))
+          } else {
+            dispatch(addError(AppErrors.task.bundleFailure))
+            console.log(error.response || error)
+          }
+        })
+    }
+  }
+
+export const deleteTaskBundle = function(bundleId) {
+  return function(dispatch) {
     return new Endpoint(api.tasks.deleteBundle, {
       variables: {bundleId},
-      params,
     }).execute().then(results => {
       return results
     }).catch(error => {
@@ -999,11 +1011,11 @@ export const deleteTaskBundle = function(bundleId, primaryTaskId) {
   }
 }
 
-export const removeTaskFromBundle = function (bundleId, taskIds) {
+export const removeTaskFromBundle = function (initialBundleTaskIds, bundleId, taskIds) {
   return function (dispatch) {
     return new Endpoint(api.tasks.removeTaskFromBundle, {
       variables: { id: bundleId },
-      params: { id: bundleId, taskIds: taskIds },
+      params: { id: bundleId, taskIds: taskIds, preventTaskIdUnlocks: initialBundleTaskIds || [] },
     })
       .execute()
       .then((results) => {

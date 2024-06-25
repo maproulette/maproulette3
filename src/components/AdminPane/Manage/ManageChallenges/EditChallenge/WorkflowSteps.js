@@ -179,19 +179,22 @@ const newChallengeSteps = {
     previous: 'DataSource',
   }),
   'Instructions': Object.assign({}, instructionsStep, {
-    next: 'AutomatedEditsCodeAgreement',
+    next: 'OSMCommit',
     previous: 'Description',
+  }),
+  'OSMCommit': Object.assign({}, osmCommitStep, { 
+    next: 'AutomatedEditsCodeAgreement',
+    previous: 'Instructions',
   }),
   'AutomatedEditsCodeAgreement': Object.assign({}, automatedEditsCodeAgreementStep, {
     next: 'AdvancedOptions',
-    previous: 'Instructions'
+    previous: 'OSMCommit',
   }),
   'AdvancedOptions': Object.assign({}, advancedOptionsStep, {
     next: [
       'Discoverability',
       'Priorities',
       'Zoom',
-      'OSMCommit',
       'Basemap',
       'Properties',
       'Tags',
@@ -211,11 +214,6 @@ const newChallengeSteps = {
     canFinish: true,
   }),
   'Zoom': Object.assign({}, zoomStep, {
-    next: 'AdvancedOptions',
-    previous: 'AdvancedOptions',
-    canFinish: true,
-  }),
-  'OSMCommit': Object.assign({}, osmCommitStep, {
     next: 'AdvancedOptions',
     previous: 'AdvancedOptions',
     canFinish: true,
@@ -249,10 +247,10 @@ const editChallengeSteps = {
       'DataSource',
       'Description',
       'Instructions',
+      'OSMCommit',
       'Discoverability',
       'Priorities',
       'Zoom',
-      'OSMCommit',
       'Basemap',
       'Properties',
       'Tags',
@@ -276,6 +274,11 @@ const editChallengeSteps = {
     previous: 'AllOptions',
     canFinish: true,
   }),
+  'OSMCommit': Object.assign({}, osmCommitStep, {
+    next: 'AllOptions',
+    previous: 'AllOptions',
+    canFinish: true,
+  }),
   'Discoverability': Object.assign({}, discoverabilityStep, {
     next: 'AllOptions',
     previous: 'AllOptions',
@@ -287,11 +290,6 @@ const editChallengeSteps = {
     canFinish: true,
   }),
   'Zoom': Object.assign({}, zoomStep, {
-    next: 'AllOptions',
-    previous: 'AllOptions',
-    canFinish: true,
-  }),
-  'OSMCommit': Object.assign({}, osmCommitStep, {
     next: 'AllOptions',
     previous: 'AllOptions',
     canFinish: true,

@@ -34,38 +34,34 @@
   }
 
   &--2-col .fieldset {
-    @screen md {
-      @apply mr-grid mr-grid-columns-2 mr-grid-gap-8;
+      @apply md:mr-grid md:mr-grid-columns-2 md:mr-grid-gap-8;
 
       legend {
-        @apply mr-col-span-2;
+        @apply md:mr-col-span-2;
       }
 
       .field {
-        @apply mr-mb-0;
+        @apply md:mr-mb-0;
       }
-    }
   }
 
   &--modified-2-col {
-
-    @screen md {
-      @apply mr-w-full;
+      @apply md:mr-w-full;
 
       .notification-email {
-        @apply mr-w-1/2 mr-pr-4;
+        @apply md:mr-w-1/2 md:mr-pr-4;
       }
   
       .notification-subscriptions {
         .fieldset {
-            @apply mr-grid mr-grid-cols-2 mr-gap-x-8 mr-grid-flow-row;
-          }
+          @apply md:mr-grid md:mr-grid-cols-2 md:mr-gap-x-8 md:mr-grid-flow-row;
+        }
 
-          .control-label {
-            @apply mr-cursor-default
-          }
+        .control-label {
+          @apply md:mr-cursor-default;
         }
       }
+      
     }
 
   .custom-basemaps-item {

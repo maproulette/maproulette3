@@ -6,7 +6,7 @@ import _find from "lodash/find";
 import _map from "lodash/map";
 import _isFinite from "lodash/isFinite";
 import _isUndefined from "lodash/isUndefined";
-import startOfDay from "date-fns/start_of_day";
+import { startOfDay } from 'date-fns'
 import { defaultRoutes as api, isSecurityError } from "../Server/Server";
 import Endpoint from "../Server/Endpoint";
 import RequestStatus from "../Server/RequestStatus";

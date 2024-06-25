@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import parse from 'date-fns/parse'
-import format from 'date-fns/format'
+import { parseISO,format } from 'date-fns'
 import _findIndex from 'lodash/findIndex'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
@@ -109,7 +108,7 @@ export default class OpenStreetCamViewer extends Component {
                    @{currentImage.username}
                  </div>
                  <div>
-                   {format(parse(currentImage.shotDate), 'YYYY-MM-DD')}
+                   {format(parseISO(currentImage.shotDate), 'yyyy-MM-dd')}
                  </div>
                </div>
               }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage, FormattedDate, injectIntl } from "react-intl";
-import parse from "date-fns/parse";
+import { parseISO } from "date-fns";
 import { Link } from "react-router-dom";
 import _get from "lodash/get";
 import {
@@ -136,7 +136,7 @@ export class ChallengeDashboard extends Component {
             <div className="mr-mt-6 mr-text-red-light">
               <FormattedMessage {...manageMessages.staleChallengeMessage1} />{" "}
               <FormattedDate
-                value={parse(this.props.challenge.systemArchivedAt)}
+                value={parseISO(this.props.challenge.systemArchivedAt)}
                 year="numeric"
                 month="long"
                 day="2-digit"

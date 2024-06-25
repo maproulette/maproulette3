@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
-import subYears from 'date-fns/sub_years'
+import { subYears } from 'date-fns'
 
 
 /**

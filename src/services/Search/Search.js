@@ -1,4 +1,4 @@
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import _uniqueId from 'lodash/uniqueId'
 import _cloneDeep from 'lodash/cloneDeep'
 import _clone from 'lodash/clone'
@@ -80,6 +80,7 @@ export const PARAMS_MAP = {
   reviewedBy: 'r',
   metaReviewedBy: 'mr',
   completedBy: 'm',
+  bundleId: 'bid',
   challengeId: 'cid',
   challenge: 'cs',
   projectId: 'pid',
@@ -90,6 +91,7 @@ export const PARAMS_MAP = {
   reviewStatus: 'trStatus',
   metaReviewStatus: 'mrStatus',
   id: 'tid',
+  featureId: 'fid',
   difficulty: 'cd',
   tags: 'tt',
   excludeTasks: 'tExcl',
@@ -270,19 +272,26 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
   }
   if (filters.reviewedAt) {
-    searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
-    searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
+    searchParameters.startDate = format(filters.reviewedAt, 'yyyy-MM-dd')
+    searchParameters.endDate = format(filters.reviewedAt, 'yyyy-MM-dd')
   }
   if (filters.mappedOn) {
-    searchParameters.mo = format(filters.mappedOn, 'YYYY-MM-DD')
+    searchParameters.mo = format(filters.mappedOn, 'yyyy-MM-dd')
   }
 
   if (filters.id) {
     searchParameters[PARAMS_MAP.id] = filters.id
   }
 
+  if (filters.featureId) {
+    searchParameters[PARAMS_MAP.featureId] = filters.featureId
+  }
+
   if (_isFinite(filters.difficulty)) {
     searchParameters[PARAMS_MAP.difficulty] = filters.difficulty
+  }
+  if (filters.bundleId) {
+    searchParameters[PARAMS_MAP.bundleId] = filters.bundleId
   }
 
   if (boundingBox) {

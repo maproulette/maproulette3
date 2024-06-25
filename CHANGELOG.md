@@ -7,7 +7,115 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.14.13] - 2023-3-12
+## [v3.15.6] - 2024-6-14
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
+
+## What's Changed
+* Bump @formatjs/intl-relativetimeformat from v6.0.2 to v11.2.14 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2364
+* Bump date-fns from v1.29.0 to v3.6.0 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2364
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.5...v3.15.6
+
+## [v3.15.5] - 2024-6-11
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
+
+## What's Changed
+* Prevent "ghost widget" from appearing in workspace widget layout editor by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2361
+* Upgrade tailwind to v3 by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2331
+* fix GeoJSON task creation/rebuild fails if number of tasks is divisible by 100 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2357
+
+## MR2 Changes v4.5.1 -> v4.5.3
+* update tasks_remaining column in challenge table by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1131
+* Remove quotes around HOCON substitutions by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1133
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.4...v3.15.5
+
+## [v3.15.4] - 2024-6-04
+Released with [maproulette-backend_v4.5.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.1)
+
+## What's Changed
+* unlock unbundled tasks on updated bundle submittion by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2349
+* add challenge filtering on browse projects page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2343
+
+## MR2 Changes
+* Store new API key instead of old API key on API key reset by @tsmock in https://github.com/maproulette/maproulette-backend/pull/1127
+* Introduce maproulette.secret.key conf and MAPROULETTE_SECRET_KEY env by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1128
+* update task caching for task bundling endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1126
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.3...v3.15.4
+
+## [v3.15.3] - 2024-5-28
+Released with [maproulette-backend_v4.5.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.0)
+
+## What's Changed
+* Readme update by @mvexel in https://github.com/maproulette/maproulette3/pull/2348
+* Fix undefined prop bug in task editor by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2347
+* Fix clone/edit challenge bug with url state by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2352
+
+## MR2 Changes
+* fix changeset submittion bug for tag fix tasks with relations by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1121
+* Introduce Java 17 to MapRoulette-backend CI tests by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1125
+* Update GH Action versions and test against PostGIS 13-3.3 and 16-3.4 by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1124
+* Remove 'connectionTestQuery' from application.conf by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1123
+* Update to Play 2.9 by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1122
+* Update to the latest Play 2.8.x by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1116
+* Migrate JTS package from vividsolutions to Eclipse Foundation by @ljdelight in https://github.com/maproulette/maproulette-backend/commit/ff2597c31d2aaa13278f6623877a50f5d9cb9302
+* Upgrade anorm, postgresql, and postgis-jdbc dependencies by @ljdelight in https://github.com/maproulette/maproulette-backend/commit/420ff21a88215ae4f3d91db685b62bc3b1e15ef8
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.2...v3.15.3
+
+## [v3.15.2] - 2024-5-15
+Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
+
+## What's Changed
+* Enable all other editors for bundles by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2339
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.1...v3.15.2
+
+## [v3.15.1] - 2024-5-14
+Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
+
+## What's Changed
+* Persist adjusted filters in next task review workflow by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2319
+* Add bundle resets on when user redirects away from bundle by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2291
+* Add map to bundling widget's bundled mode by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2291
+* Make changset description mandatory and fix instruction length condition in challenge editor by @tjaySchwarz24 in https://github.com/maproulette/maproulette3/pull/2326
+* Fix project manager user permissions auto suggest box by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2329
+* Add feature id table filter by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2307
+* Add support for overpass generated relations by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2301
+* Fix geometries undefined race condition by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2325
+* Support user-friendly task identifier in search result markers by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2322
+* Fix get in touch reporting format by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2318
+* Bump ejs from 3.1.9 to 3.1.10 by @dependabot in https://github.com/maproulette/maproulette3/pull/2327
+* Fix comments prop "name" undefined error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2321
+* Update GH actions versions and remove last node 16 refs by @ljdelight in https://github.com/maproulette/maproulette3/pull/2320
+* Refactor task clustering toggles and limits by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2333
+
+## MR2 Changes
+* Add feature id filter to search parameters by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1108
+* Add support for relations in overpass queries by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1106
+* Fix nearby task looping too hard tasks issue by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1110
+* Adjust bundling endpoints annd add resetTaskBundle endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1107
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.0...v3.15.1
+
+## [v3.15.0] - 2024-4-9
+Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
+
+## What's Changed
+* Bump follow-redirects from 1.15.4 to 1.15.6 by @dependabot in https://github.com/maproulette/maproulette3/pull/2298
+* add support for sr (Српски) language by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2302
+* Bump express from 4.18.2 to 4.19.2 by @dependabot in https://github.com/maproulette/maproulette3/pull/2310
+* Bump webpack-dev-middleware from 5.3.3 to 5.3.4 by @dependabot in https://github.com/maproulette/maproulette3/pull/2309
+* update rapid editor by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2304
+* fix initial zoom on tasks by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2303
+* reconfirgure project modal filtering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2308
+* fix challenge comments link by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2312
+* reduce spidering distance by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2313
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.13...v3.15.0
+
+## [v3.14.13] - 2024-3-12
 Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
 
 ## What's Changed
@@ -21,7 +129,7 @@ Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.12...v3.14.13
 
-## [v3.14.12] - 2023-2-29
+## [v3.14.12] - 2024-2-29
 Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
 
 ## What's Changed
@@ -29,7 +137,7 @@ Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.11...v3.14.12
 
-## [v3.14.11] - 2023-2-28
+## [v3.14.11] - 2024-2-28
 Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.15)
 
 ## What's Changed
@@ -38,7 +146,7 @@ Released with [maproulette-backend_v4.4.15](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.10...v3.14.11
 
-## [v3.14.10] - 2023-2-19
+## [v3.14.10] - 2024-2-19
 Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
 
 ## What's Changed
@@ -50,7 +158,7 @@ Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.9...v3.14.10
 
-## [v3.14.9] - 2023-2-14
+## [v3.14.9] - 2024-2-14
 Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.14)
 
 ## What's Changed
@@ -71,7 +179,7 @@ Released with [maproulette-backend_v4.4.14](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.8...v3.14.9
 
-## [v3.14.8] - 2023-2-02
+## [v3.14.8] - 2024-2-02
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
@@ -80,7 +188,7 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.7...v3.14.8
 
-## [v3.14.7] - 2023-1-30
+## [v3.14.7] - 2024-1-30
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
@@ -93,7 +201,7 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.6...v3.14.7
 
-## [v3.14.6] - 2023-1-17
+## [v3.14.6] - 2024-1-17
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
@@ -101,7 +209,7 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.5...v3.14.6
 
-## [v3.14.5] - 2023-1-14
+## [v3.14.5] - 2024-1-14
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
@@ -110,12 +218,12 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.14.4...v3.14.5
 
-## [v3.14.4] - 2023-1-9
+## [v3.14.4] - 2024-1-9
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
-* Add setState to prevent submitting twice before character count is reset by @CollinBeczak in  (https://github.com/maproulette/maproulette3/pull/2215)
-* Add grouping for challenge comment notifications  by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2216)
+* Add setState to prevent submitting twice before character count is reset by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2215)
+* Add grouping for challenge comment notifications by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2216)
 * Remove conflicting validation requirements by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2219)
 * Fix project metrics on finished challenges by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2227)
 * Add catches to leaderboard by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2228)

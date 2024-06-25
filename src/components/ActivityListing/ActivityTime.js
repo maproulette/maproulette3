@@ -3,12 +3,10 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {
   injectIntl,
-  FormattedRelativeTime,
   FormattedDate,
   FormattedTime
 } from 'react-intl'
-import { selectUnit } from '@formatjs/intl-utils'
-import parse from 'date-fns/parse'
+import { parseISO, formatDistanceToNow } from 'date-fns'
 
 /**
  * Displays the timestamp for an activity entry, either relative or exact
@@ -17,20 +15,10 @@ import parse from 'date-fns/parse'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const ActivityTime = props => {
-  const timestamp = parse(props.entry.created)
+  const timestamp = parseISO(props.entry.created)
   const created = `${props.intl.formatDate(timestamp)} ${props.intl.formatTime(timestamp)}`
-  const selectedUnit = selectUnit(timestamp, Date.now(),
-    {
-      second: 30,
-      minute: 60,
-      hour: 24,
-      day: 30
-    })
-  if (selectedUnit.unit === "second" ||
-      selectedUnit.unit === "minute" ||
-      selectedUnit.unit === "hour") {
-    selectedUnit.updateIntervalInSeconds = 30
-  }
+
+  const distanceToNow = formatDistanceToNow(timestamp, { addSuffix: true });
 
   return (
     <div
@@ -40,11 +28,11 @@ export const ActivityTime = props => {
       )}
       title={created}
     >
-      {(props.showExactDates || selectedUnit.unit === "year")?
+      {props.showExactDates ?
        <span>
          <FormattedDate value={props.entry.created} /> <FormattedTime value={props.entry.created} />
        </span> :
-       <FormattedRelativeTime {...selectedUnit} numeric="auto" />
+       <span>{distanceToNow}</span>
       }
     </div>
   )

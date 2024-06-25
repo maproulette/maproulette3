@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import differenceInHours from 'date-fns/difference_in_hours'
+import { differenceInHours } from 'date-fns'
 import _get from 'lodash/get'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'

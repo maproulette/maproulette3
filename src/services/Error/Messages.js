@@ -115,10 +115,13 @@ export default defineMessages({
     id: "Errors.task.cooperativeFailure",
     defaultMessage: "Failed to load cooperative task{details}",
   },
+  taskAlreadyBundled: {
+    id: "Errors.task.taskAlreadyBundled",
+    defaultMessage: "Task{details} is already in a bundle and can't be put into another bundle. There might be other tasks you tried to bundle that aren't mentioned here, but the ID given is for the first task we noticed is already bundled.",
+  },
   unableToBundleTasks: {
     id: "Errors.task.unableToBundleTasks",
-    defaultMessage: "The tasks with these IDs are locked by another user{details}. This most likely happened because a user completed or " +
-    "bundled a task while you've been looking at this task. Refresh the page to view only tasks that are unlocked.",
+    defaultMessage: "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
   },
   osmRequestTooLarge: {
     id: "Errors.osm.requestTooLarge",
@@ -208,6 +211,10 @@ export default defineMessages({
   challengeSaveInstructionFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveInstructionFailure",
     defaultMessage: "The 'DETAILED INSTRUCTIONS FOR MAPPERS' field must have more than {minLength} characters.",
+  },
+  challengeSaveChangesetDescriptionFailure: {
+    id: "Errors.challengeSaveFailure.challengeSaveChangesetDescriptionFailure",
+    defaultMessage: "The 'CHANGESET DESCRIPTION' field is required.",
   },
   challengeSaveEditPolicyAgreementFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveEditPolicyAgreementFailure",

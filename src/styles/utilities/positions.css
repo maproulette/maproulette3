@@ -1,4 +1,4 @@
-@responsive {
+@layer utilities {
   .mr-top-100 {
     top: 100%;
   }

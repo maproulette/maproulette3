@@ -29,23 +29,25 @@ const LassoSelectionLeafletControl = L.Control.extend({
     // build the control button, render it, and return it
     const controlContent = (
       <React.Fragment>
-        <button
-          onClick={() => {
-            deselecting = false
-            lasso.toggle()
-            this.options.onLassoInteraction && this.options.onLassoInteraction()
-          }}
-          className={classNames(
-            "mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-transition-normal-in-out-quad hover:mr-text-green-lighter",
-            this.options.onLassoDeselection ? "mr-rounded-t-sm mr-border-b mr-border-white-15" : "mr-rounded-sm"
-          )}
-        >
-          <SvgSymbol
-            sym={this.options.onLassoDeselection ? "lasso-add-icon" : "lasso-icon"}
-            className="mr-w-4 mr-h-4 mr-fill-current mr-stroke-current"
-            viewBox="0 0 512 512"
-          />
-        </button>
+        {this.options.onLassoSelection &&
+          <button
+            onClick={() => {
+              deselecting = false
+              lasso.toggle()
+              this.options.onLassoInteraction && this.options.onLassoInteraction()
+            }}
+            className={classNames(
+              "mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-transition-normal-in-out-quad hover:mr-text-green-lighter",
+              this.options.onLassoDeselection ? "mr-rounded-t-sm mr-border-b mr-border-white-15" : "mr-rounded-sm"
+            )}
+          >
+            <SvgSymbol
+              sym={this.options.onLassoDeselection ? "lasso-add-icon" : "lasso-icon"}
+              className="mr-w-4 mr-h-4 mr-fill-current mr-stroke-current"
+              viewBox="0 0 512 512"
+            />
+          </button>
+        }
         {this.options.onLassoDeselection &&
         <button
           onClick={() => {

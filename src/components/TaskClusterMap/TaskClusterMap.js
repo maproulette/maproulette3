@@ -191,6 +191,10 @@ export class TaskClusterMap extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if(!this.props.showAsClusters && this.props.totalTaskCount > UNCLUSTER_THRESHOLD) {
+      this.props.toggleShowAsClusters()
+    }
+
     if (this.props.taskMarkers && !this.props.delayMapLoad &&
        (!_isEqual(this.props.taskMarkers, prevProps.taskMarkers) ||
         this.props.selectedClusters !== prevProps.selectedClusters)) {
@@ -580,7 +584,7 @@ export class TaskClusterMap extends Component {
     const overlapping = _filter(allMarkers, otherMarker => {
       if (otherMarker === marker) return false
       const dist = this.markerDistanceDegrees(marker, otherMarker)
-      return dist <= iconSizeDegrees
+      return dist <= iconSizeDegrees / 2
     })
     return overlapping
   }
@@ -676,10 +680,12 @@ export class TaskClusterMap extends Component {
       }).reverse()
     }
 
-    const canClusterToggle = !!this.props.allowClusterToggle &&
+    const canClusterToggle = (
+      this.props.allowClusterToggle &&
       this.props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
       this.props.totalTaskCount > CLUSTER_POINTS &&
       this.currentZoom < MAX_ZOOM
+    )
 
     if (!this.currentBounds && this.state.mapMarkers) {
       // Set Current Bounds to the minimum bounding box of our markers
@@ -697,9 +703,16 @@ export class TaskClusterMap extends Component {
     else if (this.props.initialBounds) {
       this.currentBounds = this.props.initialBounds
     }
+
     const currentCenterpoint = AsMappableTask(this.props.task).calculateCenterPoint()
-    let selectionKit = this.props.hideLasso === true ? null : (
-      <>
+    
+    let selectionKit = (
+       <>
+        {this.props.clearSelectedSelector && (
+            <LassoSelectionControl
+              onLassoClear={this.props.resetSelectedTasks}
+            />
+        )}
         {this.props.showSelectMarkersInView && (
           <SelectMarkersInViewControl
             onSelectAllInView={this.props.onBulkTaskSelection}
@@ -746,6 +759,7 @@ export class TaskClusterMap extends Component {
         taskMarkers={this.props.taskMarkers}
         onClick={() => this.unspider()}
         onZoomOrMoveStart={this.debouncedUpdateBounds.cancel}
+        intl={this.props.intl}
       >
         <ZoomControl className="mr-z-10" position='topright' />
         {this.props.showScaleControl && <ScaleControl className="mr-z-10" position='bottomleft'/>}

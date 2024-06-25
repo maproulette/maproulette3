@@ -18,8 +18,7 @@ import _fromPairs from "lodash/fromPairs";
 import _isUndefined from "lodash/isUndefined";
 import _groupBy from "lodash/groupBy";
 import _join from "lodash/join";
-import parse from "date-fns/parse";
-import format from "date-fns/format";
+import { parseISO, format, startOfDay } from "date-fns";
 import { defaultRoutes as api, isSecurityError } from "../Server/Server";
 import Endpoint from "../Server/Endpoint";
 import RequestStatus from "../Server/RequestStatus";
@@ -44,7 +43,6 @@ import {
   generateSearchParametersString,
   PARAMS_MAP,
 } from "../Search/Search";
-import startOfDay from "date-fns/start_of_day";
 import geojsontoosm from 'geojsontoosm';
 
 /**
@@ -197,7 +195,7 @@ export const receiveChallenges = function (
 ) {
   _each(normalizedEntities.challenges, (c) => {
     if (c.dataOriginDate) {
-      c.dataOriginDate = format(parse(c.dataOriginDate), "YYYY-MM-DD");
+      c.dataOriginDate = format(parseISO(c.dataOriginDate), "yyyy-MM-dd");
     }
   });
 
@@ -1032,7 +1030,7 @@ export const fetchChallenges = function (
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
-        challengeData.dataOriginDate = parse(
+        challengeData.dataOriginDate = parseISO(
           challengeData.dataOriginDate
         ).toISOString();
       }
@@ -1041,7 +1039,8 @@ export const fetchChallenges = function (
       const {
         instruction,
         description,
-        name
+        name,
+        checkinComment
       } = challengeData;
 
       const instructionsMinLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
@@ -1052,7 +1051,9 @@ export const fetchChallenges = function (
           instruction.length < instructionsMinLength ||
           !description?.trim()?.length ||
           !name ||
-          name.length <= 3
+          name.length <= 3 ||
+          !checkinComment ||
+          checkinComment === '#maproulette'
         )
       ) {
         let errorMessage = '';
@@ -1063,10 +1064,12 @@ export const fetchChallenges = function (
           errorMessage = AppErrors.challengeSaveFailure.saveDescriptionFailure;
         } else if (
           instruction === undefined ||
-          instruction.length < 150
+          instruction.length < instructionsMinLength
         ) {
           errorMessage = AppErrors.challengeSaveFailure.saveInstructionsFailure;
           errorMessage.values = { minLength: `${instructionsMinLength}` };
+        } else if (checkinComment === undefined || checkinComment === '' || checkinComment === '#maproulette') {
+          errorMessage = AppErrors.challengeSaveFailure.saveChangesetDescriptionFailure;
         } else {
           errorMessage = AppErrors.challengeSaveFailure.saveDetailsFailure;
         }
@@ -1163,7 +1166,7 @@ export const uploadChallengeGeoJSON = function (
 
     if (dataOriginDate) {
       // Set the timestamp on the dataOriginDate so we get proper timezone info.
-      dataOriginDate = parse(dataOriginDate).toISOString();
+      dataOriginDate = parseISO(dataOriginDate).toISOString();
     }
 
     return new Endpoint(api.challenge.uploadGeoJSON, {
