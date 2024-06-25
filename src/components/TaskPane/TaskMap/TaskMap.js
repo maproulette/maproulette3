@@ -134,9 +134,9 @@ export const TaskMapContainer = (props) => {
   }
 
   const toggleOSMElements = element => {
-    const showOSMElements = _clone(showOSMElements)
-    showOSMElements[element] = !showOSMElements[element]
-    setShowOSMElements(showOSMElements)
+    const newShowOSMElements = _clone(showOSMElements)
+    newShowOSMElements[element] = !showOSMElements[element]
+    setShowOSMElements(newShowOSMElements)
   }
 
   /**

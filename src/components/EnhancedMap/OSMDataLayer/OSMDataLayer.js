@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { useMap } from 'react-leaflet'
-import { createLayerComponent, updateGridLayer } from '@react-leaflet/core'
 import { injectIntl } from 'react-intl'
 import L from 'leaflet'
+import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import AsStylableLayer from '../../../interactions/LeafletLayer/AsStyleableLayer'
 import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
+import layerMessages from '../LayerToggle/Messages'
+import { createPathComponent } from '@react-leaflet/core';
 
 const colors = resolveConfig(tailwindConfig).theme.colors
 const HIGHLIGHT_STYLE = {
@@ -21,10 +22,8 @@ const HIGHLIGHT_STYLE = {
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
  */
-const OSMDataLayer = (props) => {
+export const OSMDataLayer = () => {
   const [lastZoom, setLastZoom] = useState(null)
-  const map = useMap()
-
   const popupContent = (layer, onBack) => {
     const properties = layer.feature.properties
     const header = (
@@ -48,32 +47,29 @@ const OSMDataLayer = (props) => {
     return contentElement
   }
 
-  useEffect(() => {
-    setStyle(props)
-  }, [])
-  
-  createLayerComponent((props) => {  setLastZoom(props.zoom)
-    return this.generateLayer({
-      mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
-      ...props,
-    })}) 
+  createPathComponent(
+    (props) => {  setLastZoom(props.zoom)
+      return generateLayer({
+        mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
+        ...props,
+      })},
 
-    updateGridLayer((props) => {   setLastZoom(props.zoom)
+    (instance, props, prevProps) => {
       if (props.zoom !== lastZoom ||
-        !_isEqual(fromProps.showOSMElements, props.showOSMElements)) {
-      map.clearLayers()
-      const newLayers = generateLayer(props)
-      newLayers.eachLayer(layer => map.addLayer(layer))
-      setLastZoom(props.zoom)
+        !_isEqual(prevProps.showOSMElements, props.showOSMElements)) {
+          instance.clearLayers()
+        const newLayers = generateLayer()
+        newLayers.eachLayer(layer => instance.addLayer(layer))
+        setLastZoom(props.zoom)
+      }
     }
-  }) 
+  )
 
   const generateElementStyles = () => {
-    const zoom = map.getZoom()
     const globalStyleOptions = {
       // Set stroke weight to 3px when zoomed way in, then 2px and
       // finally down to 1px at zoom 15
-      weight: zoom >= 18 ? 3 : zoom > 15 ? 2 : 1,
+      weight: props.zoom >= 18 ? 3 : (props.zoom > 15 ? 2 : 1),
     }
 
     return {
@@ -81,13 +77,13 @@ const OSMDataLayer = (props) => {
       area: Object.assign({}, globalStyleOptions, { color: colors['pink-light'] }),
       node: Object.assign({}, globalStyleOptions, {
         color: '#C20534',
-        radius: zoom >= 18 ? 10 : 5, // shrink size when zoomed out
+        radius: props.zoom >= 18 ? 10 : 5, // shrink size when zoomed out
       }),
       changeset: Object.assign({}, globalStyleOptions, { color: colors.red }),
     }
   }
 
-  const generateLayer = (props) => {
+  const generateLayer = () => {
     const layerGroup = new L.OSM.DataLayer(props.xmlData, {
       styles: generateElementStyles(),
       showNodes: props.showOSMElements.nodes,
@@ -101,7 +97,7 @@ const OSMDataLayer = (props) => {
       layer.options.fill = false
       layer.options.pane = layerGroup.options.pane
       layer.originalToGeoJSON = layer.toGeoJSON
-      layer.toGeoJSON = (precision) => {
+      layer.toGeoJSON = precision => {
         const geojson = layer.originalToGeoJSON(precision)
         return {
           ...geojson.geometry,
@@ -138,6 +134,7 @@ const OSMDataLayer = (props) => {
 
     return layerGroup
   }
+  return null
 }
 
 export default injectIntl(OSMDataLayer)

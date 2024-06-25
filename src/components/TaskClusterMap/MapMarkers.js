@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Marker, Tooltip, Polyline, useMap } from 'react-leaflet';
+import { Marker, Tooltip, Polyline, useMap, useMapEvents } from 'react-leaflet';
 import _map from 'lodash/map';
 import _isEqual from 'lodash/isEqual';
 import _each from 'lodash/each';
@@ -89,6 +89,26 @@ const Markers = (props) => {
       }
     };
   }, [map, props.currentZoom, props.updateBounds]);
+
+  useMapEvents({
+    dragend: () => {
+      const handleMove = async () => {
+        const bounds = map.getBounds();
+        setCurrentSize(map.getSize());
+        props.setCurrentZoom(map.getZoom());
+        props.setCurrentBounds(bounds);
+        await props.updateBounds(bounds, props.currentZoom);
+      };
+
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+
+      timerRef.current = setTimeout(async () => {
+        await handleMove();
+      }, 500);
+    },
+  });
 
   useEffect(() => {
     if (!props.taskMarkers || props.delayMapLoad || !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) || props.selectedClusters !== prevProps.current.selectedClusters) {
