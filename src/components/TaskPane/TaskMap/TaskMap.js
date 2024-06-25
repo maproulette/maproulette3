@@ -63,14 +63,12 @@ const shortcutGroup = 'layers'
  */
 export const TaskMapContainer = (props) => {
   const map = useMap()
-  const [latestBounds, setLatestBounds] = useState(null)
   const [showTaskFeatures, setShowTaskFeatures] = useState(true)
   const [showOSMData, setShowOSMData] = useState(false)
   const [osmData, setOsmData] = useState(null)
   const [osmDataLoading, setOsmDataLoading] = useState(null)
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null)
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null)
-  const [latestZoom, setLatestZoom] = useState(null)
   const [directionalityIndicators, setDirectionalityIndicators] = useState(null)
   const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
   const animator = new MapAnimator()
@@ -162,7 +160,7 @@ export const TaskMapContainer = (props) => {
     if (!props.showMapillaryLayer) {
       props.setShowMapillaryLayer(challengeId, isVirtual, true)
       await props.fetchMapillaryImagery(
-        latestBounds ? latestBounds : props.mapBounds.bounds,
+        map.getBounds(),
         props.task
       )
     }
@@ -181,7 +179,7 @@ export const TaskMapContainer = (props) => {
       if (props.mapillaryTaskId !== props.taskId ||
           (!props.mapillaryImages && !props.mapillaryLoading)) {
         await props.fetchMapillaryImagery(
-          latestBounds ? latestBounds : props.mapBounds.bounds,
+          map.getBounds(),
           props.task
         )
       }
@@ -202,7 +200,7 @@ export const TaskMapContainer = (props) => {
     if (!props.showOpenStreetCamLayer) {
       props.setShowOpenStreetCamLayer(challengeId, isVirtual, true)
       await props.fetchOpenStreetCamImagery(
-        latestBounds ? latestBounds : props.mapBounds.bounds,
+        map.getBounds(),
         props.task
       )
     }
@@ -221,7 +219,7 @@ export const TaskMapContainer = (props) => {
       if (props.openStreetCamTaskId !== props.taskId ||
           (!props.openStreetCamImages && !props.openStreetCamLoading)) {
         await props.fetchOpenStreetCamImagery(
-          latestBounds ? latestBounds : props.mapBounds.bounds,
+          map.getBounds(),
           props.task
         )
       }
@@ -264,25 +262,6 @@ export const TaskMapContainer = (props) => {
       props.deactivateKeyboardShortcutGroup(shortcutGroup, handleKeyboardShortcuts);
     };
   }, []);
-
-
-  useEffect(() => {
-    const currentBounds = map.getBounds()
-    const currentZoom = map.getZoom()
-
-    if (props.task.id !== props.completingTask) {
-      props.setTaskMapBounds(props.task.id, currentBounds, currentZoom, false)
-      if (props.setWorkspaceContext) {
-        props.setWorkspaceContext({
-          taskMapTask: props.task,
-          taskMapBounds: currentBounds,
-          taskMapZoom: currentZoom
-        })
-      }
-    }
-    setLatestBounds(currentBounds)
-    setLatestZoom(currentZoom)
-  }, [map])
 
   const mapillaryImageMarkers = () => {
     return {
@@ -405,7 +384,6 @@ export const TaskMapContainer = (props) => {
       />
     )
   }
-    const zoom = _get(props.task, "parent.defaultZoom", DEFAULT_ZOOM)
     const maxZoom = _get(props.task, "parent.maxZoom", MAX_ZOOM)
     let overlayOrder = props.getUserAppSetting(props.user, 'mapOverlayOrder')
     if (_isEmpty(overlayOrder)) {
