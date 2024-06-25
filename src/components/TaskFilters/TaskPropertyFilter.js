@@ -1,13 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import Modal from '../Modal/Modal'
 import External from '../External/External'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import _get from 'lodash/get'
+import { preparePropertyRulesForForm } from '../TaskPropertyQueryBuilder/TaskPropertyRules'
 import WithSavedTaskPropertyFilters from '../HOCs/WithSavedTaskPropertyFilters/WithSavedTaskPropertyFilters'
 import TaskPropertyQueryBuilder
        from '../TaskPropertyQueryBuilder/TaskPropertyQueryBuilder'
 import TaskFilterIndicator from './TaskFilterIndicator'
+import SavedTaskPropertyFilterListEntry from '../TaskPropertyFiltersModal/SavedTaskPropertyFilterListEntry'
+import SavedTaskPropertyFilterRuleDisplayElement from '../TaskPropertyFiltersModal/TaskPropertyFilterRuleDisplayElement'
 import messages from './Messages'
 
 /**
@@ -80,29 +83,37 @@ export class TaskPropertyFilter extends Component {
                     </div>
                     {this.state.showSavedList && 
                       <div className='mr-bg-blue-firefly-75 mr-p-2'>
-                        <ul>
+                        <ul className='mr-w-full mr-pb-4'>
                           {savedPropertyRules && Object.keys(savedPropertyRules).length ?
-                            Object.keys(savedPropertyRules).map(ruleName => (
-                              <li className="mr-flex mr-space-x-3 mr-items-center" key={`${ruleName} - ${savedPropertyRules[ruleName]}`}>
-                                <button 
+                            Object.keys(savedPropertyRules).map(ruleName => {
+                              const savedRuleParam = new URLSearchParams(savedPropertyRules[ruleName])
+                              const savedRuleValue = savedRuleParam.get("filters.taskPropertySearch")
+                              const formattedRule = preparePropertyRulesForForm(JSON.parse(savedRuleValue))
+
+                              const filterApplyButton = 
+                                <button
                                   className="hover:mr-text-green-lighter" 
                                   onClick={() => {
-                                      const savedRuleParam = new URLSearchParams(savedPropertyRules[ruleName])
-                                      const savedRuleValue = savedRuleParam.get("filters.taskPropertySearch")
-                                      this.props.updateTaskPropertyCriteria(JSON.parse(savedRuleValue))
-                                    }
-                                  }
-                                >
+                                    this.props.updateTaskPropertyCriteria(JSON.parse(savedRuleValue))
+                                  }}
+                                 >
                                   {ruleName}
                                 </button>
-                                <button 
-                                  className='hover:mr-text-green-lighter mr-text-xs'
-                                  onClick={() => this.props.removeSelectedPropertyFilter(ruleName)}
-                                >
-                                  delete
-                                </button>
-                              </li>
-                            )) : null
+                                
+                              return (
+                                <li className="mr-flex mr-items-center mr-w-full" key={`${ruleName} - ${savedPropertyRules[ruleName]}`}>
+                                  <SavedTaskPropertyFilterListEntry applyButton={filterApplyButton}>
+                                    <SavedTaskPropertyFilterRuleDisplayElement formattedRule={formattedRule}/>
+                                  </SavedTaskPropertyFilterListEntry>
+                                  <button 
+                                    className='mr-text-green-lighter hover:mr-text-white mr-text-sm mr-ml-auto'
+                                    onClick={() => this.props.removeSelectedPropertyFilter(ruleName)}
+                                  >
+                                    delete
+                                  </button>
+                                </li>
+                              )}
+                            ) : null
                           }
                         </ul>
                       </div>

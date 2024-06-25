@@ -535,6 +535,7 @@ export class TaskReviewTable extends Component {
                   isOpen={this.state.isSavedTaskPropertyFiltersModalOpen}
                   closeModal={() => this.setState({isSavedTaskPropertyFiltersModalOpen: false})}
                   savedTaskPropertyFilters={this.props.savedTaskPropertyFilters}
+                  challengeFilterIds={this.state.challengeFilterIds}
                   {...this.props}
                 />
               </div>
