@@ -26,6 +26,11 @@ export default defineMessages({
     defaultMessage: "Current Filter Settings for this Workspace "
   },
 
+  taskPropertyFiltersModalChallengeFilterRequirementAlertMessage: {
+    id: "TaskPropertyFiltersModal.challengeFilterRequirementWarningMessage",
+    defaultMessage: "To view and apply task property filter rules, make sure you are filtering review table tasks from a single challenge."
+  },
+
   doneLabel: {
     id: "TaskPropertyFiltersModal.controls.done.label",
     defaultMessage: "Done"

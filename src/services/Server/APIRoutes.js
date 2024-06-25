@@ -114,7 +114,7 @@ const apiRoutes = (factory) => {
       nearbyReviewTasks: factory.get("/tasks/review/nearby/:taskId"),
       reviewMetrics: factory.get("/tasks/review/metrics"),
       reviewTagMetrics: factory.get("/tasks/review/tag/metrics"),
-      fetchReviewClusters: factory.get("/taskCluster/review"),
+      fetchReviewClusters: factory.put("/taskCluster/review"),
       inCluster: factory.get("/tasksInCluster/:clusterId"),
       bundle: factory.post("/taskBundle"),
       resetBundle: factory.post("/taskBundle/:bundleId/reset"),

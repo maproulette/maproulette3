@@ -345,6 +345,7 @@ export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) 
       return new Promise((resolve) => resolve());
     }
 
+    const filters = _get(criteria, 'filters', {})
     const type = determineType(reviewTasksType)
     const fetchId = uuidv1()
 
@@ -354,6 +355,8 @@ export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) 
       {
         schema: {tasks: [taskSchema()]},
         params: {reviewTasksType: type, points: 25, ...searchParameters},
+        json: filters.taskPropertySearch ? 
+          {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute().then(normalizedResults => {
       if (normalizedResults.result) {

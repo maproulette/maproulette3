@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import {FormattedMessage} from 'react-intl'
 import SavedTaskPropertyFilterRuleDisplayElement from './TaskPropertyFilterRuleDisplayElement'
+import SavedTaskPropertyFilterListEntry from './SavedTaskPropertyFilterListEntry'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -17,7 +18,7 @@ import messages from './Messages'
  * @author [Andrew Philbin](https://github.com/AndrewPhilbin)
  */
 
-function TaskPropertyFiltersModal({isOpen, closeModal, savedTaskPropertyFilters}) {
+function TaskPropertyFiltersModal({isOpen, closeModal, savedTaskPropertyFilters, challengeFilterIds}) {
   const history = useHistory()
   const currentSearchString = history.location.search
   const pathname = history.location.pathname
@@ -66,90 +67,78 @@ function TaskPropertyFiltersModal({isOpen, closeModal, savedTaskPropertyFilters}
             state: {refresh: true}
           })
         }}
-        title={taskPropertyURL}>
+      >
         {search}
       </button>
 
-    // Include only saved admin filters that have task property rules
-    if(taskPropertyParams.has("filters.taskPropertySearch")) {
-      const formattedRule = preparePropertyRulesForForm(JSON.parse(taskPropertySearchValue))
-      
-      return (
-        <li key={search + "-" + index}>
-          <div className='mr-flex mr-space-x-2 mr-items-center'>
-            <FilterListEntry applyButton={filterApplyButton}>
-              <SavedTaskPropertyFilterRuleDisplayElement formattedRule={formattedRule}/>
-            </FilterListEntry>
-          </div>
-        </li>
-      )
-    } 
+    const formattedRule = preparePropertyRulesForForm(JSON.parse(taskPropertySearchValue))
+    
+    return (
+      <li key={search + "-" + index}>
+        <div className='mr-flex mr-space-x-2 mr-items-center'>
+          <SavedTaskPropertyFilterListEntry applyButton={filterApplyButton}>
+            <SavedTaskPropertyFilterRuleDisplayElement formattedRule={formattedRule}/>
+          </SavedTaskPropertyFilterListEntry>
+        </div>
+      </li>
+    )
   })
   
   return (
     <React.Fragment>
       <External>
-        <Modal 
-          isActive={isOpen} 
-          onClose={closeModal} 
-          narrow
-        >
-          <div className='mr-space-y-4'>
-            <div className='mr-max-w-sm'>  
-              <h3 className="mr-text-yellow mr-mb-4">
-                <FormattedMessage {...messages.taskPropertyFiltersModalTitle} />
-              </h3>
-              <div className='mr-space-y-3'>
-                <p className='mr-text-base'>
-                  <FormattedMessage {...messages.taskPropertyFiltersModalDescription} />
-                </p>
-                <p className='mr-text-sm mr-text-mango'>
-                  <FormattedMessage {...messages.taskPropertyFiltersModalSubDescription} />
-                </p>
-                  {filterClearButton}
+        
+          {challengeFilterIds.length === 1 && challengeFilterIds[0] > 0 ? (
+            <Modal 
+              isActive={isOpen} 
+              onClose={closeModal} 
+              narrow
+            >
+              <div>
+                <div className='mr-space-y-4'>
+                  <div className='mr-max-w-sm'>  
+                    <h3 className="mr-text-yellow mr-mb-4">
+                      <FormattedMessage {...messages.taskPropertyFiltersModalTitle} />
+                    </h3>
+                    <div className='mr-space-y-3'>
+                      <p className='mr-text-base'>
+                        <FormattedMessage {...messages.taskPropertyFiltersModalDescription} />
+                      </p>
+                      <p className='mr-text-sm mr-text-mango'>
+                        <FormattedMessage {...messages.taskPropertyFiltersModalSubDescription} />
+                      </p>
+                        {filterClearButton}
+                      </div>
+                  </div>
+                  <div className='mr-space-y-1 mr-p-4'>
+                    <ul>
+                      {savedTaskPropertyFilters ? savedFilterEntries : null}
+                    </ul>
+                  </div>
                 </div>
-            </div>
-            <div className='mr-space-y-1 mr-p-4'>
-              <ul>
-                {savedTaskPropertyFilters ? savedFilterEntries : null}
-              </ul>
-            </div>
-          </div>
-          <button
-            className="mr-button mr-col-span-2 mr-mt-8"
-            onClick={closeModal}
-          >
-            <FormattedMessage {...messages.doneLabel} />
-          </button>
-        </Modal>
+                <button
+                  className="mr-button mr-col-span-2 mr-mt-8"
+                  onClick={closeModal}
+                >
+                  <FormattedMessage {...messages.doneLabel} />
+                </button>
+              </div>
+            </Modal>
+          ): ( 
+            <Modal
+              isActive={isOpen} 
+              onClose={closeModal}
+              contentClassName="mr-top-5" 
+            >
+              <div>
+                <FormattedMessage {...messages.taskPropertyFiltersModalChallengeFilterRequirementAlertMessage} />
+              </div>
+            </Modal>
+          )}
+        
       </External>
     </React.Fragment>
   )
 }
 
 export default TaskPropertyFiltersModal
-
-const FilterListEntry = ({applyButton, children}) => {
-  const [isExpanded, setIsExpanded] = useState(false)
-
-  return (
-    <div>
-      <div className='mr-flex mr-space-x-1 mr-items-center'>
-        {applyButton}
-        <button onClick={() => setIsExpanded(prev => !prev)}>
-          <SvgSymbol 
-            sym='icon-cheveron-right' 
-            viewBox="0 0 20 20"
-            className={`mr-fill-current hover:mr-fill-green-light mr-w-5 mr-h-5 ${isExpanded ? 'mr-rotate-90' : ''}`} 
-          />
-        </button>
-          
-      </div>
-      { isExpanded && 
-        <div className='mr-bg-blue-firefly-75 mr-p-2'>
-          {children}
-        </div>
-      }
-    </div>
-  )
-}
