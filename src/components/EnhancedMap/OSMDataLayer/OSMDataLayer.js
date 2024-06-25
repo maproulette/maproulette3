@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl } from 'react-intl'
 import L from 'leaflet'
@@ -10,7 +10,7 @@ import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
 import layerMessages from '../LayerToggle/Messages'
-import { createPathComponent } from '@react-leaflet/core';
+import { createPathComponent } from '@react-leaflet/core'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
 const HIGHLIGHT_STYLE = {
@@ -19,17 +19,13 @@ const HIGHLIGHT_STYLE = {
   weight: 7,
 }
 
-/**
- * Serves as a react-leaflet adapter for the leaflet-osm package
- */
-export const OSMDataLayer = () => {
-  const [lastZoom, setLastZoom] = useState(null)
   const popupContent = (layer, onBack) => {
     const properties = layer.feature.properties
     const header = (
-      <a target="_blank"
-         rel="noopener noreferrer"
-         href={`https://www.openstreetmap.org/${properties.type}/${properties.id}`}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={`https://www.openstreetmap.org/${properties.type}/${properties.id}`}
       >
         {properties.type} {properties.id}
       </a>
@@ -47,29 +43,11 @@ export const OSMDataLayer = () => {
     return contentElement
   }
 
-  createPathComponent(
-    (props) => {  setLastZoom(props.zoom)
-      return generateLayer({
-        mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
-        ...props,
-      })},
-
-    (instance, props, prevProps) => {
-      if (props.zoom !== lastZoom ||
-        !_isEqual(prevProps.showOSMElements, props.showOSMElements)) {
-          instance.clearLayers()
-        const newLayers = generateLayer()
-        newLayers.eachLayer(layer => instance.addLayer(layer))
-        setLastZoom(props.zoom)
-      }
-    }
-  )
-
-  const generateElementStyles = () => {
+  const generateElementStyles = props => {
     const globalStyleOptions = {
       // Set stroke weight to 3px when zoomed way in, then 2px and
       // finally down to 1px at zoom 15
-      weight: props.zoom >= 18 ? 3 : (props.zoom > 15 ? 2 : 1),
+      weight: props.zoom >= 18 ? 3 : props.zoom > 15 ? 2 : 1,
     }
 
     return {
@@ -83,9 +61,9 @@ export const OSMDataLayer = () => {
     }
   }
 
-  const generateLayer = () => {
+  const generateLayer = props => {
     const layerGroup = new L.OSM.DataLayer(props.xmlData, {
-      styles: generateElementStyles(),
+      styles: generateElementStyles(props),
       showNodes: props.showOSMElements.nodes,
       showWays: props.showOSMElements.ways,
       showAreas: props.showOSMElements.areas,
@@ -134,8 +112,28 @@ export const OSMDataLayer = () => {
 
     return layerGroup
   }
-  return null
-}
+
+/**
+ * Serves as a react-leaflet adapter for the leaflet-osm package
+ */
+const OSMDataLayer = createPathComponent(
+  (props, context) => {
+    return {
+      instance: generateLayer({
+        mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
+        ...props,
+      }),
+      context,
+    }
+  },
+  (instance, props, prevProps) => {
+    if (!_isEqual(prevProps.showOSMElements, props.showOSMElements)) {
+      instance.clearLayers()
+      const newLayers = generateLayer(props)
+      newLayers.eachLayer(layer => instance.addLayer(layer))
+    }
+  }
+ )
 
 export default injectIntl(OSMDataLayer)
 
