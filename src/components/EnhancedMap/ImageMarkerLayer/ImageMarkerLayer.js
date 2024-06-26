@@ -107,9 +107,7 @@ const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerL
         onMouseover={({target}) => target.openPopup()}
         eventHandlers={{
           click: () => {
-            if (onClick) {
-              imageClicked ? imageClicked(imageInfo.key) : null
-            }
+            imageClicked ? imageClicked(imageInfo.key) : null
           },
         }}
       >

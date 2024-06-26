@@ -21,8 +21,7 @@ const HIGHLIGHT_STYLE = {
   weight: 7,
 }
 
-const generateLayer = props => {
-  const map = useMap()
+const generateLayer = (props, map) => {
   const popupContent = (layer, onBack) => {
     const properties = layer.feature.properties
     const header = (
@@ -142,18 +141,19 @@ const generateLayer = props => {
  */
 const OSMDataLayer = createPathComponent(
   (props, context) => {
+    const map = useMap()
     return {
       instance: generateLayer({
         mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
         ...props,
-      }),
+      }, map),
       context,
     }
   },
   (instance, props, prevProps) => {
     if (!_isEqual(prevProps.showOSMElements, props.showOSMElements)) {
       instance.clearLayers()
-      const newLayers = generateLayer(props)
+      const newLayers = generateLayer(props, instance)
       newLayers.eachLayer(layer => instance.addLayer(layer))
     }
   }
