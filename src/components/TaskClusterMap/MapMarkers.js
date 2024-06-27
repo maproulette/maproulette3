@@ -103,8 +103,8 @@ const Markers = (props) => {
 
   useEffect(() => {
     // Fit bounds to initial tasks when they are loaded
-    if (!props.bundleCenter && !initialLoadComplete && mapMarkers && mapMarkers.length > 0) {
-      const bounds = toLatLngBounds(
+    if (!initialLoadComplete && mapMarkers && mapMarkers.length > 0) {
+      const bounds = props.centerBounds || toLatLngBounds(
         bbox({
           type: 'FeatureCollection',
           features: _map(mapMarkers, cluster =>
@@ -118,6 +118,7 @@ const Markers = (props) => {
           )
         })
       );
+      
       map.fitBounds(bounds);
       props.setCurrentBounds(bounds);
       setInitialLoadComplete(true);

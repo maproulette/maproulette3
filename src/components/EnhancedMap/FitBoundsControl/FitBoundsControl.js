@@ -48,7 +48,7 @@ const FitBoundsLeafletControl = Control.extend({
     }
 
     map.eachLayer(layer => {
-      if (layer.feature) {
+      if (layer.feature && layer.feature.type === "Feature") {
         geoJSONFeatures.addLayer(layer)
       }
     })
