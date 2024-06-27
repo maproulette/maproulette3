@@ -299,7 +299,7 @@ export const TaskClusterMap = (props) => {
       {props.showSearchControl &&
         <SearchControl
           {...props}
-          openSearch={() => setOpenSearch(true)}
+          openSearch={() => setSearchOpen(true)}
         />
       }
       {!searchOpen && props.externalOverlay}
