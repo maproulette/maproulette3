@@ -118,9 +118,9 @@ const Markers = (props) => {
           )
         })
       );
-      
-      map.fitBounds(bounds);
-      props.setCurrentBounds(bounds);
+
+      map.fitBounds(bounds.pad(0.2));
+      props.setCurrentBounds(bounds.pad(0.2));
       setInitialLoadComplete(true);
     }
   }, [mapMarkers, initialLoadComplete]);
