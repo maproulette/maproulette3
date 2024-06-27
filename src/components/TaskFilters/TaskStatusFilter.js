@@ -20,11 +20,7 @@ const VALID_TASK_BUNDLE_TASK_STATUSES = {
  */
 export default class TaskStatusFilter extends Component {
   render() {
-    const {isUsedInTaskBundleContext} = this.props
-    const taskStatusOptions = 
-      isUsedInTaskBundleContext ?
-      VALID_TASK_BUNDLE_TASK_STATUSES :
-      _keys(this.props.includeTaskStatuses)
+    const taskStatusOptions = _keys(this.props.includeTaskStatuses)
 
     const areFiltersActive = !Object.values(this.props.includeTaskStatuses).every(value => value) || 
       Object.keys(this.props.includeTaskStatuses).length < Object.keys(taskStatusOptions).length

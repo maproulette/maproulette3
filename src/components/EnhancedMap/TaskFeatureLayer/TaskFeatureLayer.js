@@ -28,6 +28,7 @@ const HIGHLIGHT_SIMPLESTYLE = {
  */
 const TaskFeatureLayer = props => {
   const [layer, setLayer] = useState(null)
+  const [numberOfFeatures, setNumberOfFeatures] = useState(0)
   const map = useMap()
 
   const propertyList = (featureProperties, onBack) => {
@@ -104,16 +105,19 @@ const TaskFeatureLayer = props => {
   }, [features.length])
 
   useEffect(() => {
-    const geoJSONFeatures = new FeatureGroup()
+    if(numberOfFeatures !== features.length) {
+      const geoJSONFeatures = new FeatureGroup()
 
-    map.eachLayer(layer => {
-      if (layer.feature) {
-        geoJSONFeatures.addLayer(layer)
+      map.eachLayer(layer => {
+        if (layer.feature && layer.options.mrLayerId === "task-features") {
+          geoJSONFeatures.addLayer(layer)
+        }
+      })
+
+      if (geoJSONFeatures.getLayers().length !== 0) {
+        map.fitBounds(geoJSONFeatures.getBounds())
       }
-    })
-
-    if (geoJSONFeatures.getLayers().length !== 0) {
-      map.fitBounds(geoJSONFeatures.getBounds())
+      setNumberOfFeatures(features.length)
     }
   }, [layer])
 

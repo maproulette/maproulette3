@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, LayerGroup, Pane, MapContainer, useMap } from 'react-leaflet'
+import { ZoomControl, LayerGroup, Pane, MapContainer, useMap, useMapEvents } from 'react-leaflet'
 import { featureCollection } from '@turf/helpers'
 import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
@@ -72,6 +72,23 @@ export const TaskMapContainer = (props) => {
   const [directionalityIndicators, setDirectionalityIndicators] = useState(null)
   const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
   const animator = new MapAnimator()
+
+  useMapEvents({
+    moveend: () => {
+      if (props.task.id !== props.completingTask) {
+        const bounds = map.getBounds()
+        const zoom = map.getZoom()
+        props.setTaskMapBounds(props.task.id, bounds, zoom, false)
+        if (props.setWorkspaceContext) {
+          props.setWorkspaceContext({
+            taskMapTask: props.task,
+            taskMapBounds: bounds,
+            taskMapZoom: zoom
+          })
+        }
+      }
+    },
+  })
 
   /** Process keyboard shortcuts for the layers */
   const handleKeyboardShortcuts = event => {
@@ -248,13 +265,11 @@ export const TaskMapContainer = (props) => {
   
   useEffect(() => {
     generateDirectionalityMarkers();
-    
   }, [props.task.geometries]);
 
   useEffect(() => {
     deactivateOSMDataLayer()
     generateDirectionalityMarkers();
-    
   }, [props.task.id]);
 
   useEffect(() => {

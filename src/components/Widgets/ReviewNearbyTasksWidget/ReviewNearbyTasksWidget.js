@@ -184,8 +184,6 @@ export default class ReviewNearbyTasksWidget extends Component {
         taskCenter={AsMappableTask(this.props.task).calculateCenterPoint()}
         boundingBox={_get(this.props, boundingBoxData)}
         initialBounds={toLatLngBounds(_get(this.props, boundingBoxData, []))}
-        hideSearchControl
-        hideLasso={true}
         showSelectMarkersInView
         selectedTasks={this.state.currentSelectedTasks}
       />

@@ -61,44 +61,20 @@ const Markers = (props) => {
   const timerRef = useRef(null);
   const prevProps = useRef({ ...props });
 
-  useEffect(() => {
-    const executeCode = async () => {
-      const bounds = map.getBounds();
-      setCurrentSize(map.getSize());
-      props.setCurrentZoom(map.getZoom());
-      props.setCurrentBounds(bounds);
-      await props.updateBounds(bounds, props.currentZoom);
-    };
-
-    const handleMapMove = () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-
-      timerRef.current = setTimeout(async () => {
-        await executeCode();
-      }, 500);
-    };
-
-    map.on('moveend', handleMapMove);
-
-    return () => {
-      map.off('moveend', handleMapMove);
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [map, props.currentZoom, props.updateBounds]);
+  const handleMove = async () => {
+    const zoom = map.getZoom()
+    const bounds = map.getBounds();
+    setCurrentSize(map.getSize());
+    props.setCurrentZoom(zoom);
+    props.setCurrentBounds(bounds);
+    await props.updateBounds(bounds, props.currentZoom);
+  };
 
   useMapEvents({
-    dragend: () => {
-      const handleMove = async () => {
-        const bounds = map.getBounds();
-        setCurrentSize(map.getSize());
-        props.setCurrentZoom(map.getZoom());
-        props.setCurrentBounds(bounds);
-        await props.updateBounds(bounds, props.currentZoom);
-      };
+    moveend: () => {
+      if(!initialLoadComplete) {
+        setInitialLoadComplete(true);
+      }
 
       if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -127,7 +103,7 @@ const Markers = (props) => {
 
   useEffect(() => {
     // Fit bounds to initial tasks when they are loaded
-    if (!initialLoadComplete && mapMarkers && mapMarkers.length > 0) {
+    if (!props.bundleCenter && !initialLoadComplete && mapMarkers && mapMarkers.length > 0) {
       const bounds = toLatLngBounds(
         bbox({
           type: 'FeatureCollection',
@@ -274,9 +250,7 @@ const Markers = (props) => {
   const markerClicked = async (marker) => {
     if (!props.loadingChallenge) {
       if (marker.options.bounding && marker.options.numberOfPoints > 1) {
-        const bounds = toLatLngBounds(bbox(marker.options.bounding));
-        map.fitBounds(bounds);
-        props.setCurrentBounds(bounds);
+        map.fitBounds(toLatLngBounds(bbox(marker.options.bounding)));
       }
     }
   };

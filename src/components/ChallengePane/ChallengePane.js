@@ -125,7 +125,7 @@ export class ChallengePane extends Component {
 
     const showMarkerPopup = (markerData) => {
       return (
-       <Popup offset={ [0.5, -5]}>
+       <Popup offset={[0.5, -5]}>
         <TaskChallengeMarkerContent
           marker={markerData}
           taskId={markerData.options.taskId}
@@ -180,10 +180,10 @@ export class ChallengePane extends Component {
                 onBulkClusterSelection={this.onBulkClusterSelection}
                 onBulkClusterDeselection={this.onBulkClusterDeselection}
                 resetSelectedClusters={this.resetSelectedClusters}
-                allowClusterToggle
-                showTaskCount
                 showClusterLasso
                 showFitWorld
+                showSearchControl
+                skipFitToBounds
                 externalOverlay={virtualChallengeMapOverlay}
                 {...this.props}
               />

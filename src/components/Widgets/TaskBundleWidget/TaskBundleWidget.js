@@ -8,6 +8,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _sum from 'lodash/sum'
 import _values from 'lodash/values'
 import _pick from 'lodash/pick'
+import _map from 'lodash/map'
 import bbox from '@turf/bbox'
 import { point, featureCollection } from '@turf/helpers'
 import { WidgetDataTarget, registerWidgetType }
@@ -324,9 +325,20 @@ const ActiveBundle = props => {
     )
   }
 
-  const boundingBoxData = props.criteria.boundingBox
-    ? 'criteria.boundingBox'
-    : 'workspaceContext.taskMapBounds'
+  const bundleCenter = toLatLngBounds(
+    bbox({
+      type: 'FeatureCollection',
+      features: _map(props.taskBundle.tasks, task =>
+        ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [task.location.coordinates[0], task.location.coordinates[1]]
+          }
+        })
+      )
+    })
+  );
 
   const map = (
     <ClusterMap
@@ -334,10 +346,9 @@ const ActiveBundle = props => {
       loadingTasks={props.loadingTasks}
       highlightPrimaryTask={props.task.id}
       showMarkerPopup={showMarkerPopup}
-      taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
-      boundingBox={_get(props, boundingBoxData)}
-      initialBounds={toLatLngBounds(_get(props, boundingBoxData, []))}
-      hideSearchControl
+      centerBounds={bundleCenter}
+      initialBounds={bundleCenter}
+      fitbBoundsControl
       selectedTasks={props.selectedTasks}
     />
   )
@@ -508,7 +519,6 @@ const BuildBundle = props => {
   const map =
     <ClusterMap
       {...props}
-      loadingTasks={props.loadingTasks}
       showMarkerPopup={showMarkerPopup}
       highlightPrimaryTask={props.task.id}
       taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
@@ -516,9 +526,7 @@ const BuildBundle = props => {
       initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
       onBulkTaskSelection={props.selectTasks}
       onBulkTaskDeselection={props.deselectTasks}
-      allowClusterToggle
-      hideSearchControl
-      showScaleControl
+      fitbBoundsControl
       showSelectMarkersInView
     />
 

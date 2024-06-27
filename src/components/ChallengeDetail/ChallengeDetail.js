@@ -429,7 +429,7 @@ export class ChallengeDetail extends Component {
 
         const showMarkerPopup = (markerData) => {
           return (
-            <Popup offset={ [0.5, -5]}>
+            <Popup offset={[0.5, -5]}>
             <TaskChallengeMarkerContent
               marker={markerData}
               taskId={markerData.options.taskId}
@@ -451,7 +451,6 @@ export class ChallengeDetail extends Component {
         className="split-pane"
         showMarkerPopup={showMarkerPopup}
         challenge={challenge}
-        allowClusterToggle
         criteria={{
           boundingBox: fromLatLngBounds(this.state.bounds),
           zoom: this.state.zoom,
@@ -459,12 +458,10 @@ export class ChallengeDetail extends Component {
         updateTaskFilterBounds={(bounds, zoom) =>
           this.setState({ bounds, zoom })
         }
-        skipRefreshTasks
         selectedClusters={this.state.selectedClusters}
         onBulkClusterSelection={this.onBulkClusterSelection}
         onBulkClusterDeselection={this.onBulkClusterDeselection}
         resetSelectedClusters={this.resetSelectedClusters}
-        showTaskCount
         showClusterLasso
         showFitWorld
         externalOverlay={virtualChallengeMapOverlay}
