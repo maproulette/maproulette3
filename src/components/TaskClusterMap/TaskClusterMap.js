@@ -251,10 +251,6 @@ export const TaskClusterMap = (props) => {
           <FormattedMessage {...messages.clusterTasksLabel} />
         </label>
       }
-      {props.showFitWorld && <FitWorldControl />}
-      {props.fitbBoundsControl &&
-        <FitBoundsControl key={props.taskCenter} centerPoint={props.taskCenter} centerBounds={props.centerBounds} />
-      }
       {!props.externalOverlay && !searchOpen &&
         !!props.mapZoomedOut &&
         <ZoomInMessage {...props} zoom={currentZoom} />
@@ -292,6 +288,10 @@ export const TaskClusterMap = (props) => {
         </div>
       }
       <ZoomControl className="mr-z-10" position='topright' />
+      {props.showFitWorld && <FitWorldControl />}
+      {props.fitbBoundsControl &&
+        <FitBoundsControl key={props.taskCenter} centerPoint={props.taskCenter} centerBounds={props.centerBounds} />
+      }
       <ScaleControl className="mr-z-10" position='bottomleft'/>
       <LayerToggle {...props} overlayOrder={overlayOrder} />
       <VisibleTileLayer {...props} zIndex={1} />
