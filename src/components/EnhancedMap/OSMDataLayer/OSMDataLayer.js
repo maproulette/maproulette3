@@ -21,6 +21,12 @@ const HIGHLIGHT_STYLE = {
   weight: 7,
 }
 
+const HOVER_HIGHLIGHT_STYLE = {
+  color: colors.gold,
+  fillColor: colors.gold,
+  weight: 14,
+}
+
 const generateLayer = (props, map) => {
   const popupContent = (layer, onBack) => {
     const properties = layer.feature.properties
@@ -69,7 +75,7 @@ const generateLayer = (props, map) => {
     node: {
       ...globalStyleOptions,
       color: '#C20534',
-      radius: props.zoom >= 18 ? 10 : 5, // shrink size when zoomed out
+      radius: props.zoom >= 18 ? 15 : 7.5, // shrink size when zoomed out
     },
     changeset: { ...globalStyleOptions, color: colors.red },
   }
@@ -119,10 +125,21 @@ const generateLayer = (props, map) => {
         popup.openOn(map)
       })
 
+      layer.on('mouseover', () => {
+        // Apply highlight style on hover
+        styleableLayer.pushStyle({ ...HOVER_HIGHLIGHT_STYLE });
+      });
+      
+      layer.on('mouseout', () => {
+        // Remove highlight style when mouse leaves the layer
+        styleableLayer.popStyle();
+      });
+      
+
       layer.on('mr-external-interaction:start-preview', () => {
         styleableLayer.pushLeafletLayerSimpleStyles(
           layer,
-          Object.assign(styleableLayer.markerSimplestyles(layer), HIGHLIGHT_SIMPLESTYLE),
+          Object.assign(styleableLayer.markerSimplestyles(layer), HIGHLIGHT_STYLE),
           'mr-external-interaction:start-preview'
         )
       })
