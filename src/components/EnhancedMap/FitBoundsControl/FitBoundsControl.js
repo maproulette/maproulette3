@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Control, Handler, DomUtil, DomEvent, FeatureGroup }
        from 'leaflet'
 import { injectIntl } from 'react-intl'
-import { MapControl, withLeaflet } from 'react-leaflet'
+import { createControlComponent } from '@react-leaflet/core'
 import _pick from 'lodash/pick'
 import _isEmpty from 'lodash/isEmpty'
 import WithKeyboardShortcuts
@@ -42,14 +42,19 @@ const FitBoundsLeafletControl = Control.extend({
       return
     }
 
+    if (this.options.centerBounds) {
+      map.fitBounds(this.options.centerBounds.pad(0.2))
+      return
+    }
+
     map.eachLayer(layer => {
-      if (layer.feature) {
+      if (layer.feature && layer.feature.type === "Feature") {
         geoJSONFeatures.addLayer(layer)
       }
     })
 
     if (geoJSONFeatures.getLayers().length !== 0) {
-      map.fitBounds(geoJSONFeatures.getBounds().pad(0.5))
+      map.fitBounds(geoJSONFeatures.getBounds().pad(0.2))
     }
   },
 
@@ -127,15 +132,9 @@ const keyboardHandler = function(key, controlFunction) {
 }
 
 /**
- * FitBoundsControl is a react-leaflet MapControl component intended to be used
- * as a child of a react-leaflet Map instance, such as EnhancedMap. When clicked,
- * the control fits the map to the bounds of the current features.
+ * FitBoundsControl is a react-leaflet Control component intended to be used
+ * as a child of a react-leaflet Map instance.
  */
-export class FitBoundsControl extends MapControl {
-  // props will be available as `options` field in the leaflet control
-  createLeafletElement(props) {
-    return new FitBoundsLeafletControl(props)
-  }
-}
+export const FitBoundsControl = createControlComponent((props) => new FitBoundsLeafletControl(props))
 
-export default WithKeyboardShortcuts(withLeaflet(injectIntl(FitBoundsControl)))
+export default WithKeyboardShortcuts(injectIntl(FitBoundsControl))

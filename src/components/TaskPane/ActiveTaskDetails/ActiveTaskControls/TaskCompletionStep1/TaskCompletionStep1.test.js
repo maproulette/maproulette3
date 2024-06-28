@@ -98,8 +98,6 @@ describe("TaskCompletionStep1", () => {
     const allowedProgressions = new Map();
     allowedProgressions.set(2);
 
-    console.log("huh", allowedProgressions)
-
     const { getByText, container } = global.withProvider(
       <ListMoreOptionsItems
         task={{}}
@@ -131,8 +129,6 @@ describe("TaskCompletionStep1", () => {
     const allowedProgressions = new Map();
     allowedProgressions.set(6);
 
-    console.log("huh", allowedProgressions)
-
     const { getByText, container } = global.withProvider(
       <ListMoreOptionsItems
         task={{}}
@@ -163,8 +159,6 @@ describe("TaskCompletionStep1", () => {
     const toggleDropdownVisible = jest.fn()
     const allowedProgressions = new Map();
     allowedProgressions.set(5);
-
-    console.log("huh", allowedProgressions)
 
     const { getByText, container } = global.withProvider(
       <ListMoreOptionsItems

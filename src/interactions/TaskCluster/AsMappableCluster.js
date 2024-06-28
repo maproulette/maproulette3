@@ -66,6 +66,7 @@ export class AsMappableCluster {
                                           name: this.rawData.title,
                                           taskId: this.rawData.id}))},
       icon: this.leafletMarkerIcon(monochromatic, selectedTasks, highlightPrimaryTask, selectedClusters, bundleConflict),
+      zIndexOffset: bundleConflict ? -10 : 0 ,
     }
   }
 

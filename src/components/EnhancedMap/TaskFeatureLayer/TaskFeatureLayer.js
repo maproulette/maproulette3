@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { GeoJSON, withLeaflet } from 'react-leaflet'
-import L from 'leaflet'
+import { GeoJSON, useMap } from 'react-leaflet'
+import L, { FeatureGroup } from 'leaflet'
 import { injectIntl } from 'react-intl'
 import { featureCollection } from '@turf/helpers'
 import _isFunction from 'lodash/isFunction'
-import _get from 'lodash/get'
 import _uniqueId from 'lodash/uniqueId'
-import AsSimpleStyleableFeature
-       from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
+import AsSimpleStyleableFeature from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
@@ -30,6 +28,8 @@ const HIGHLIGHT_SIMPLESTYLE = {
  */
 const TaskFeatureLayer = props => {
   const [layer, setLayer] = useState(null)
+  const [numberOfFeatures, setNumberOfFeatures] = useState(0)
+  const map = useMap()
 
   const propertyList = (featureProperties, onBack) => {
     const contentElement = document.createElement('div')
@@ -48,7 +48,6 @@ const TaskFeatureLayer = props => {
 
   const { features, mrLayerId, animator, externalInteractive } = props
   const layerLabel = props.intl.formatMessage(layerMessages.showTaskFeaturesLabel)
-  const pane = _get(props, 'leaflet.pane')
 
   useEffect(() => {
     setLayer(
@@ -58,33 +57,22 @@ const TaskFeatureLayer = props => {
         mrLayerLabel={layerLabel}
         data={featureCollection(features)}
         pointToLayer={(point, latLng) => {
-          return L.marker(latLng, {pane, mrLayerLabel: layerLabel, mrLayerId: mrLayerId})
+          return L.marker(latLng)
         }}
         onEachFeature={(feature, layer) => {
-          const styleableFeature =
-            _isFunction(feature.styleLeafletLayer) ?
-            feature :
-            AsSimpleStyleableFeature(feature)
+          const styleableFeature = _isFunction(feature.styleLeafletLayer) ? feature : AsSimpleStyleableFeature(feature)
 
           if (!externalInteractive) {
             layer.bindPopup(() => propertyList(feature.properties))
-          }
-          else {
-            layer.on('mr-external-interaction', ({map, latlng, onBack}) => {
-              // Ensure any orphaned preview styles get cleaned up
-              styleableFeature.popLeafletLayerSimpleStyles(layer, 'mr-external-interaction:start-preview')
-              const popup = L.popup({}, layer).setLatLng(latlng).setContent(propertyList(feature.properties, onBack))
-              // Highlight selected feature, preserving existing marker size (if a marker)
-              styleableFeature.pushLeafletLayerSimpleStyles(
-                layer,
-                Object.assign(styleableFeature.markerSimplestyles(layer), HIGHLIGHT_SIMPLESTYLE)
-              )
-              popup.on('remove', function() {
-                if (layer && layer._leaflet_events) {
-                  // Restore original styling when popup closes
-                  styleableFeature.popLeafletLayerSimpleStyles(layer)
-                }
+          } else {
+            layer.on('click', ({ latlng }) => {
+              const popup = L.popup({
+                offset: [1, -20], 
+                maxHeight: 300, 
               })
+                .setLatLng(latlng)
+                .setContent(propertyList(feature.properties))
+
               popup.openOn(map)
             })
 
@@ -114,9 +102,26 @@ const TaskFeatureLayer = props => {
         }}
       />
     )
-  }, [features, mrLayerId, pane, animator, externalInteractive, layerLabel])
+  }, [features.length])
+
+  useEffect(() => {
+    if(numberOfFeatures !== features.length) {
+      const geoJSONFeatures = new FeatureGroup()
+
+      map.eachLayer(layer => {
+        if (layer.feature && layer.feature.type === "Feature") {
+          geoJSONFeatures.addLayer(layer)
+        }
+      })
+
+      if (geoJSONFeatures.getLayers().length !== 0) {
+        map.fitBounds(geoJSONFeatures.getBounds().pad(0.2))
+      }
+      setNumberOfFeatures(features.length)
+    }
+  }, [layer])
 
   return layer
 }
 
-export default withLeaflet(injectIntl(TaskFeatureLayer))
+export default injectIntl(TaskFeatureLayer)
