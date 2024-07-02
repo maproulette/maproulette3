@@ -448,28 +448,18 @@ export class ActiveTaskControls extends Component {
                  needsRevised={needsRevised}
                />
              }
-             {(!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions) && !isEditingTask && (!isFinal || needsRevised) &&
-              <TaskCompletionStep1
-                {...this.props}
-                allowedEditors={this.allowedEditors()}
-                allowedProgressions={allowedProgressions}
-                pickEditor={this.pickEditor}
-                complete={this.initiateCompletion}
-                nextTask={this.next}
-                needsRevised={needsRevised}
-                editMode={editMode}
-              />
-             }
 
-             {isEditingTask && (!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions) &&
-              <TaskCompletionStep2
-                {...this.props}
-                allowedProgressions={allowedProgressions}
-                complete={this.initiateCompletion}
-                cancelEditing={this.cancelEditing}
-                needsRevised={needsRevised}
-                editMode={editMode}
-              />
+             {isEditingTask && (!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
+               <TaskCompletionStep1
+               {...this.props}
+               allowedEditors={this.allowedEditors()}
+               allowedProgressions={allowedProgressions}
+               pickEditor={this.pickEditor}
+               complete={this.initiateCompletion}
+               nextTask={this.next}
+               needsRevised={needsRevised}
+               editMode={editMode}
+             />
              }
 
              {!isEditingTask && isComplete && !needsRevised &&

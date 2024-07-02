@@ -55,10 +55,6 @@ export default class TaskCompletionStep1 extends Component {
           className="mr-mb-4"
         />
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
-          {(this.props.allowedProgressions.has(TaskStatus.fixed) || this.props.needsRevised) &&
-           <TaskEditControl {...this.props} />
-          }
-
           {this.props.allowedProgressions.has(TaskStatus.falsePositive) &&
             !this.props.needsRevised &&
            <TaskFalsePositiveControl {...this.props} />

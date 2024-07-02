@@ -10,6 +10,8 @@ import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
+import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
+import { TaskStatus } from '../../services/Task/TaskStatus/TaskStatus'
 
 export default class UserEditorSelector extends Component {
   state = {
@@ -68,6 +70,9 @@ export default class UserEditorSelector extends Component {
               />
            }
          />
+        }
+        {(this.props.allowedProgressions.has(TaskStatus.fixed) || this.props.needsRevised) &&
+          <TaskEditControl {...this.props} /> 
         }
       </div>
     )

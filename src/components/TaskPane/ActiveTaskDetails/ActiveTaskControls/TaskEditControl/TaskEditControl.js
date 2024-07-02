@@ -80,13 +80,13 @@ export default class TaskEditControl extends Component {
 
   render() {
     return (
-      <Button
-        className="mr-button--blue-fill"
+      <div
+        className="mr-text-green-lighter mr-ml-2 mr-cursor-pointer"
         title={this.props.intl.formatMessage(messages.editTooltip)}
         onClick={() => this.props.pickEditor({value: this.currentEditor()})}
       >
         <FormattedMessage {...messages.editLabel} />
-      </Button>
+      </div>
     )
   }
 }
