@@ -8,9 +8,9 @@ import TaskAlreadyFixedControl from '../TaskAlreadyFixedControl/TaskAlreadyFixed
 import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
 import TaskFalsePositiveControl from '../TaskFalsePositiveControl/TaskFalsePositiveControl'
 import TaskRevisedControl from '../TaskRevisedControl/TaskRevisedControl'
-import TaskCancelEditingControl from '../TaskCancelEditingControl/TaskCancelEditingControl'
 import Dropdown from '../../../../Dropdown/Dropdown'
 import './TaskCompletionStep2.scss'
+import UserEditorSelector from '../../../../UserEditorSelector/UserEditorSelector'
 
 /**
  * TaskCompletionStep2 presents controls for finishing up completion of a
@@ -33,6 +33,10 @@ export default class TaskCompletionStep2 extends Component {
     
     return (
       <div>
+        <UserEditorSelector
+          {...this.props}
+          className="mr-mb-4"
+        />
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           {this.props.allowedProgressions.has(TaskStatus.fixed) &&
             <TaskFixedControl {...this.props} complete={complete} />
@@ -68,8 +72,6 @@ export default class TaskCompletionStep2 extends Component {
         {this.props.needsRevised &&
           <TaskRevisedControl {...this.props} className="mr-mb-4" />
         }
-        
-        {!this.props.editMode ? <TaskCancelEditingControl {...this.props} className="" /> : null}
       </div>
     )
   }

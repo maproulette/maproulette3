@@ -5,13 +5,13 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   editLabel: {
-    id: 'Task.controls.edit.label',
-    defaultMessage: 'Edit',
+    id: 'Task.controls.openEdit.label',
+    defaultMessage: 'Open Editor',
   },
 
   editTooltip: {
-    id: 'Task.controls.edit.tooltip',
-    defaultMessage: 'Edit',
+    id: 'Task.controls.openEdit.tooltip',
+    defaultMessage: 'Open Editor',
   },
 })
 
