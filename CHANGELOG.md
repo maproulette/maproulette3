@@ -7,6 +7,18 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.7] - 2024-7-02
+Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
+
+## What's Changed
+* Bump various dependencies related to react-leaflet bump from v2.7.0 to v4.2.1 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
+* Make marker popups persist on rerender by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
+* Fixes for some of the warnings and errors in jest tests by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
+* Remove overlapping tasks marker to allow users to un-cluster overlapped tasks, spider them, and open their individual popups by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
+* Fix deleted parent filter by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1135
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.6...v3.15.7
+
 ## [v3.15.6] - 2024-6-14
 Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
 
