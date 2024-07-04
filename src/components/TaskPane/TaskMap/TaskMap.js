@@ -42,7 +42,7 @@ import WithKeyboardShortcuts
 import WithMapillaryImages from '../../HOCs/WithMapillaryImages/WithMapillaryImages'
 import WithOpenStreetCamImages
        from '../../HOCs/WithOpenStreetCamImages/WithOpenStreetCamImages'
-import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
+import { MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import AsSimpleStyleableFeature
