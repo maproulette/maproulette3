@@ -12,7 +12,7 @@ describe("TaskClusterMap", () => {
         taskMarkers={[]}
       />
     );
-    const text = getByText("Leaflet");
+    const text = getByText("3000 km");
     expect(text).toBeInTheDocument();
   });
 
