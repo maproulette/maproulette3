@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { ZoomControl, CircleMarker, Popup, MapContainer } from 'react-leaflet'
+import { ZoomControl, CircleMarker, Popup, MapContainer, AttributionControl } from 'react-leaflet'
 import { getCoord } from '@turf/invariant'
 import centroid from '@turf/centroid'
 import { differenceInHours, parseISO } from 'date-fns' 
@@ -82,9 +82,11 @@ export const ActivityMap = props => {
       <LayerToggle {...props} />
       <MapContainer
         center={latLng(5, 0)} 
-        zoom={2} 
-        minZoom={1} 
+        zoom={2}
+        attributionControl={false}
+        minZoom={1}
         maxZoom={18}
+        maxBounds={[[-90, -180], [90, 180]]} 
         setInitialBounds={false}
         zoomControl={false} 
         animate={true} 
@@ -93,6 +95,7 @@ export const ActivityMap = props => {
         noAttributionPrefix={props.noAttributionPrefix}
         intl={props.intl}
       >
+        <AttributionControl position="bottomleft" prefix={false} />
         <ZoomControl position='topright' />
         <VisibleTileLayer {...props} zIndex={1} noWrap bounds={toLatLngBounds(GLOBAL_MAPBOUNDS)} />
         {overlayLayers}

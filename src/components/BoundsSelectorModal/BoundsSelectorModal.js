@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import bbox from '@turf/bbox'
 import _split from 'lodash/split'
 import classNames from 'classnames'
-import { MapContainer, ZoomControl } from 'react-leaflet'
+import { MapContainer, ZoomControl, AttributionControl } from 'react-leaflet'
 import { toLatLngBounds, fromLatLngBounds }
        from '../../services/MapBounds/MapBounds'
 import SourcedTileLayer
@@ -82,7 +82,12 @@ export default class BoundsSelectorModal extends Component {
                       <MapContainer 
                         bounds={boundingBox}
                         zoomControl={false}
+                        minZoom={2}
+                        maxZoom={18}
+                        attributionControl={false}
+                        maxBounds={[[-90, -180], [90, 180]]} 
                       >
+                        <AttributionControl position="bottomleft" prefix={false} />
                         <ZoomControl className="mr-z-1000" position='topright' />
                         <SourcedTileLayer source={defaultLayerSource()} skipAttribution={true} />
                         <AreaSelect

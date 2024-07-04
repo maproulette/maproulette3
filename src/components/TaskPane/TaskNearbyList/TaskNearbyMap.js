@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import L from 'leaflet'
 import 'leaflet-vectoricon'
-import { ZoomControl, Marker, Tooltip, MapContainer } from 'react-leaflet'
+import { ZoomControl, Marker, Tooltip, MapContainer, AttributionControl } from 'react-leaflet'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
@@ -166,14 +166,17 @@ export class TaskNearbyMap extends Component {
         <LayerToggle {...this.props} />
         <MapContainer
           center={currentCenterpoint} 
-          zoom={12} 
-          minZoom={2} 
-          maxZoom={19}
+          zoom={12}
           zoomControl={false}
           animate={true}
           worldCopyJump={true}
           intl={this.props.intl}
+          attributionControl={false}
+          minZoom={2}
+          maxZoom={18}
+          maxBounds={[[-90, -180], [90, 180]]} 
         >
+          <AttributionControl position="bottomleft" prefix={false} />
           <ZoomControl position='topright' />
           <VisibleTileLayer {...this.props} zIndex={1} />
           {overlayLayers}

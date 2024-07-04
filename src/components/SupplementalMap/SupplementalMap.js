@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { ZoomControl, Pane, MapContainer, useMap } from 'react-leaflet'
+import { ZoomControl, Pane, MapContainer, useMap, AttributionControl } from 'react-leaflet'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isEmpty from 'lodash/isEmpty'
@@ -105,7 +105,10 @@ const SupplementalMap = (props) => {
         maxZoom={maxZoom}
         worldCopyJump={true}
         intl={props.intl}
+        attributionControl={false}
+        maxBounds={[[-90, -180], [90, 180]]} 
       >
+        <AttributionControl position="bottomleft" prefix={false} />
         <SupplementalMapContent {...props} />
       </MapContainer>
     </div>

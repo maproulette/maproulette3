@@ -70,6 +70,7 @@ const SourcedTileLayer = (props) => {
 
   return (
     <TileLayer
+      noWrap={true} 
       key={normalizedLayer.id}
       {...normalizedLayer}
       attribution={attribution(normalizedLayer)}

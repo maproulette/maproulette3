@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { MapContainer, Marker } from 'react-leaflet'
+import { MapContainer, Marker, AttributionControl } from 'react-leaflet'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import { layerSourceWithId,
          defaultLayerSource } from '../../services/VisibleLayer/LayerSources'
@@ -37,7 +37,9 @@ export default class InsetMap extends Component {
           worldCopyJump={true}
           attributionControl={false}
           whenCreated={this.mapRef}
+          maxBounds={[[-90, -180], [90, 180]]} 
         >
+          <AttributionControl position="bottomleft" prefix={false} />
           <SourcedTileLayer source={layerSource} skipAttribution={true} />
           <Marker
             position={this.props.centerPoint}

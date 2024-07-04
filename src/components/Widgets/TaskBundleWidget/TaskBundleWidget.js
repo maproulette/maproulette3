@@ -379,7 +379,7 @@ const ActiveBundle = props => {
 
   return (
     <div className="mr-h-full mr-rounded">
-      <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
+      <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px`}}>
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
@@ -477,7 +477,7 @@ const ActiveBundle = props => {
             />
           </div>
         </div>
-        {table}
+        <div className={"mr-px-4"}>{table}</div>
       </div>
     </div>
   )
@@ -532,7 +532,7 @@ const BuildBundle = props => {
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
-      <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
+      <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px`}}>
         {props.loading ?
           <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
           <MapPane showLasso>{map}</MapPane>
@@ -582,7 +582,7 @@ const BuildBundle = props => {
           />
         </div>
       </div>
-      <div className="mr-px-4 mr-h-half mr-overflow-y-auto">
+      <div className="mr-px-4">
         <TaskAnalysisTable
           {...props}
           taskData={_get(props, 'taskInfo.tasks')}

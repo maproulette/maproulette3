@@ -5,7 +5,7 @@ import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
 import classNames from 'classnames';
-import { ZoomControl, ScaleControl, MapContainer, LayerGroup, Rectangle } from 'react-leaflet';
+import { ZoomControl, ScaleControl, MapContainer, LayerGroup, Rectangle, AttributionControl } from 'react-leaflet';
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer';
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer';
 import WithIntersectingOverlays from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays';
@@ -230,10 +230,16 @@ export const TaskClusterMap = (props) => {
 
   return (
     <MapContainer
+      attributionControl={false}
+      center={props.center}
+      minZoom={2}
+      maxZoom={18}
+      maxBounds={[[-90, -180], [90, 180]]} 
       bounds = {props.initialBounds || [[-70, -120], [80, 120]]}
       className={classNames('taskcluster-map', { 'full-screen-map': props.isMobile }, props.className)}
       zoomControl={false}
     >
+      <AttributionControl position="bottomleft" prefix={false} />
       {(Boolean(props.loading) || Boolean(props.loadingChallenge)) && <BusySpinner mapMode xlarge />}
       {props.totalTaskCount && props.totalTaskCount <= UNCLUSTER_THRESHOLD && !searchOpen && !props.loading &&
         <label htmlFor="show-clusters-input" className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">

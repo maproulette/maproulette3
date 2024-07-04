@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, LayerGroup, Pane, MapContainer, useMap, useMapEvents } from 'react-leaflet'
+import { ZoomControl, LayerGroup, Pane, MapContainer, useMap, useMapEvents, AttributionControl } from 'react-leaflet'
 import { featureCollection } from '@turf/helpers'
 import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
@@ -531,9 +531,12 @@ const TaskMap = (props) => {
         center={props.centerPoint}
         zoom={DEFAULT_ZOOM}
         zoomControl={false}
-        minZoom={MIN_ZOOM}
-        maxZoom={MAX_ZOOM}
+        minZoom={2}
+        maxZoom={18}
+        attributionControl={false}
+        maxBounds={[[-90, -180], [90, 180]]} 
       >
+        <AttributionControl position="bottomleft" prefix={false} />
         <TaskMapContainer {...props} />
       </MapContainer>
     </div>
