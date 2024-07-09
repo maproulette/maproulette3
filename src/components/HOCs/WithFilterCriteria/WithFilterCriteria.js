@@ -297,7 +297,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
          return
        }
 
-       if (!_isEqual(prevState.criteria, this.state.criteria) && !this.props.skipRefreshTasks) {
+       if (!_isEqual(prevState.criteria, this.state.criteria)) {
          this.refreshTasks(typedCriteria)
        }
        else if (_get(prevProps, 'challenge.id') !== _get(this.props, 'challenge.id') ||

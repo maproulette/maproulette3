@@ -141,7 +141,7 @@ export class ViewChallengeTasks extends Component {
   showMarkerPopup = markerData => {
     const TaskData = WithLoadedTask(TaskMarkerContent)
     return (
-      <Popup>
+      <Popup offset={[0.5, -5]}>
         <div className="marker-popup-content">
           <TaskData marker={markerData} taskId={markerData.options.taskId} {...this.props} />
         </div>
@@ -233,10 +233,8 @@ export class ViewChallengeTasks extends Component {
           togglePriorityBounds={() => this.setState({showPriorityBounds: !this.state.showPriorityBounds})}
           showPriorityBounds={this.state.showPriorityBounds}
           priorityBounds={this.findPriorityBounds(this.props.challenge)}
-          allowClusterToggle
           initialBounds={this.state.boundsReset ?
             toLatLngBounds(_get(this.props, 'criteria.boundingBox')) : null}
-          allowSpidering
           {...this.props}
         />
 
@@ -377,8 +375,6 @@ ViewChallengeTasks.propTypes = {
   loadingChallenge: PropTypes.bool,
   /** Invoked to refresh the challenge and task data */
   refreshChallenge: PropTypes.func.isRequired,
-  /** Object enumerating whether each task status filter is on or off. */
-  includeTaskStatuses: PropTypes.object,
   /** Object enumerating whether each task review status filter is on or off. */
   includeTaskReviewStatuses: PropTypes.object,
   /** Object enumerating whether each meta review status filter is on or off. */

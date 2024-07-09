@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
@@ -46,8 +45,4 @@ export default class PlaceDescription extends Component {
       </div>
     )
   }
-}
-
-PlaceDescription.propTypes = {
-  address: PropTypes.object,
 }

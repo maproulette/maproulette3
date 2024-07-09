@@ -4,10 +4,8 @@ import { Popup } from 'react-leaflet'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isEqual from 'lodash/isEqual'
-import _omit from 'lodash/omit'
 import bbox from '@turf/bbox'
 import { point, featureCollection } from '@turf/helpers'
-
 import { WidgetDataTarget, registerWidgetType } from '../../../services/Widget/Widget'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
@@ -162,7 +160,7 @@ export default class ReviewNearbyTasksWidget extends Component {
   render() {
     const showMarkerPopup = (markerData) => {
       return (
-        <Popup key={markerData.options.taskId}>
+        <Popup key={markerData.options.taskId} offset={ [0.5, -5]}>
           <div className="marker-popup-content">
             <TaskMarkerContent
               {...this.props}
@@ -186,11 +184,7 @@ export default class ReviewNearbyTasksWidget extends Component {
         taskCenter={AsMappableTask(this.props.task).calculateCenterPoint()}
         boundingBox={_get(this.props, boundingBoxData)}
         initialBounds={toLatLngBounds(_get(this.props, boundingBoxData, []))}
-        hideSearchControl
-        allowSpidering
-        hideLasso={true}
         showSelectMarkersInView
-        {..._omit(this.props, 'className')}
         selectedTasks={this.state.currentSelectedTasks}
       />
     );

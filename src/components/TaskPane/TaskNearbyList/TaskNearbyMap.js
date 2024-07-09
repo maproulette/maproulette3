@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import L from 'leaflet'
 import 'leaflet-vectoricon'
-import { ZoomControl, Marker, Tooltip } from 'react-leaflet'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
+import { ZoomControl, Marker, Tooltip, MapContainer, AttributionControl } from 'react-leaflet'
+import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -12,7 +12,6 @@ import { buildLayerSources } from '../../../services/VisibleLayer/LayerSources'
 import { TaskStatusColors, messagesByStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { messagesByPriority } from '../../../services/Task/TaskPriority/TaskPriority'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
-import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
@@ -79,7 +78,9 @@ export class TaskNearbyMap extends Component {
    * Invoked when an individual task marker is clicked by the user
    */
   markerClicked = marker => {
-    if (this.props.onTaskClick) {
+    if(this.props.requestedNextTask === marker.options.taskId){
+      this.props.clearNextTask();
+    } else if (this.props.onTaskClick) {
       this.props.onTaskClick(marker.options.challengeId,
                              marker.options.isVirtualChallenge,
                              marker.options.taskId)
@@ -121,7 +122,11 @@ export class TaskNearbyMap extends Component {
             {...markerData}
             icon={markerIconSvg(_get(marker.options, 'priority', 0), markerStyle)}
             zIndexOffset={isRequestedMarker ? 1000 : undefined}
-            onClick={() => this.markerClicked(markerData)}
+            eventHandlers={{
+              click: () => {
+                this.markerClicked(markerData)
+              },
+            }}
           >
             <Tooltip>
               <div>
@@ -159,11 +164,19 @@ export class TaskNearbyMap extends Component {
     return (
       <div className="mr-h-full">
         <LayerToggle {...this.props} />
-        <EnhancedMap
-          onClick={this.props.clearNextTask}
-          center={currentCenterpoint} zoom={12} minZoom={2} maxZoom={19}
-          zoomControl={false} animate={true} worldCopyJump={true} intl={this.props.intl}
+        <MapContainer
+          center={currentCenterpoint} 
+          zoom={12}
+          zoomControl={false}
+          animate={true}
+          worldCopyJump={true}
+          intl={this.props.intl}
+          attributionControl={false}
+          minZoom={2}
+          maxZoom={18}
+          maxBounds={[[-90, -180], [90, 180]]} 
         >
+          <AttributionControl position="bottomleft" prefix={false} />
           <ZoomControl position='topright' />
           <VisibleTileLayer {...this.props} zIndex={1} />
           {overlayLayers}
@@ -171,13 +184,18 @@ export class TaskNearbyMap extends Component {
             position={currentCenterpoint}
             icon={starIconSvg}
             title={this.props.intl.formatMessage(messages.currentTaskTooltip)}
+            eventHandlers={{
+              click: () => {
+                this.props.clearNextTask();
+              },
+            }}
           />
           {coloredMarkers.length > 0 &&
            <MarkerClusterGroup key={Date.now()} maxClusterRadius={5}>
              {coloredMarkers}
            </MarkerClusterGroup>
           }
-        </EnhancedMap>
+        </MapContainer>
         {this.props.hasMoreToLoad &&
           <div className="mr-absolute mr-bottom-0 mr-mb-8 mr-w-full mr-text-center">
             <button

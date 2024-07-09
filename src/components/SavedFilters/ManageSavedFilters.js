@@ -27,7 +27,7 @@ export default class ManageSavedFilters extends Component {
     return (
       <React.Fragment>
         <External>
-          <Modal isActive={this.props.savingFilters}>
+          <Modal isActive={this.props.savingFilters || false}>
             <QuickTextBox
               text={this.state.savedFiltersName || ""}
               setText={savedFiltersName => this.setState({savedFiltersName})}
@@ -47,7 +47,7 @@ export default class ManageSavedFilters extends Component {
           </Modal>
         </External>
         <External data-react-clickout="exclude">
-          <Modal isActive={this.props.managingFilters}
+          <Modal isActive={this.props.managingFilters || false}
             onClose={this.props.cancelManagingFilters}>
             <div>
               <h3 className="mr-text-yellow mr-mb-4">Manage Saved Filters</h3>

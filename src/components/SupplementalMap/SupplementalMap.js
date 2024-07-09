@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import { ZoomControl, Pane } from 'react-leaflet'
+import React, { useEffect } from 'react'
+import { ZoomControl, Pane, MapContainer, useMap, AttributionControl } from 'react-leaflet'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isEmpty from 'lodash/isEmpty'
@@ -15,29 +15,28 @@ import WithTaskCenterPoint
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
-import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer
        from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import BusySpinner from '../BusySpinner/BusySpinner'
 
-const SupplementalMap = props => {
-  const mapRef = useRef(null)
+const SupplementalMapContent = props => {
+  const map = useMap()
   const { task, user, trackedBounds, trackedZoom, h, w } = props
 
   // Follow the tracked map, if provided
   useEffect(() => {
-    if (mapRef.current && trackedBounds) {
+    if (map && trackedBounds) {
       if (trackedBounds.isValid()) {
-        mapRef.current.leafletElement.setView(trackedBounds.getCenter(), trackedZoom)
+        map.setView(trackedBounds.getCenter(), trackedZoom)
       }
     }
   }, [trackedBounds, trackedZoom])
 
   // Inform Leaflet if our map size changes
   useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.leafletElement.invalidateSize()
+    if (map) {
+      map.invalidateSize()
     }
   }, [h, w])
 
@@ -45,9 +44,7 @@ const SupplementalMap = props => {
     return <BusySpinner />
   }
 
-  const zoom = _get(task.parent, "defaultZoom", DEFAULT_ZOOM)
-  const minZoom = _get(task.parent, "minZoom", MIN_ZOOM)
-  const maxZoom = _get(task.parent, "maxZoom", MAX_ZOOM)
+
   const renderId = _uniqueId()
   let overlayOrder = props.getUserAppSetting(user, 'mapOverlayOrder')
   if (_isEmpty(overlayOrder)) {
@@ -75,33 +72,45 @@ const SupplementalMap = props => {
   // map), or else leaflet won't autoscale if the zoom goes beyond the
   // capabilities of the layer.
   return (
-    <div className="task-map">
+    <>
       <LayerToggle {...props} overlayOrder={overlayOrder} />
-      <EnhancedMap
+      <ZoomControl position='topright' />
+      <SourcedTileLayer maxZoom={props.maxZoom} {...props} />
+      {_map(overlayLayers, (layer, index) => (
+        <Pane
+          key={`pane-${renderId}-${index}`}
+          name={`pane-${renderId}-${index}`}
+          style={{zIndex: 10 + index}}
+          className="custom-pane"
+        >
+          {layer.component}
+        </Pane>
+      ))}
+    </>
+  )
+}
+
+const SupplementalMap = (props) => {
+  const zoom = _get(props, "task.parent.defaultZoom", DEFAULT_ZOOM)
+  const minZoom = _get(props, "task.parent.minZoom", MIN_ZOOM)
+  const maxZoom = _get(props, "task.parent.maxZoom", MAX_ZOOM)
+  return (
+    <div className="task-map">
+      <MapContainer
         taskBundle={props.taskBundle}
-        ref={mapRef}
         center={props.centerPoint}
         zoom={zoom}
         zoomControl={false}
         minZoom={minZoom}
         maxZoom={maxZoom}
         worldCopyJump={true}
-        overlayOrder={overlayOrder}
         intl={props.intl}
+        attributionControl={false}
+        maxBounds={[[-90, -180], [90, 180]]} 
       >
-        <ZoomControl position='topright' />
-        <SourcedTileLayer maxZoom={maxZoom} {...props} />
-        {_map(overlayLayers, (layer, index) => (
-          <Pane
-            key={`pane-${renderId}-${index}`}
-            name={`pane-${renderId}-${index}`}
-            style={{zIndex: 10 + index}}
-            className="custom-pane"
-          >
-            {layer.component}
-          </Pane>
-        ))}
-      </EnhancedMap>
+        <AttributionControl position="bottomleft" prefix={false} />
+        <SupplementalMapContent {...props} />
+      </MapContainer>
     </div>
   )
 }

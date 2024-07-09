@@ -8,7 +8,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _sum from 'lodash/sum'
 import _values from 'lodash/values'
 import _pick from 'lodash/pick'
-import _omit from 'lodash/omit'
+import _map from 'lodash/map'
 import bbox from '@turf/bbox'
 import { point, featureCollection } from '@turf/helpers'
 import { WidgetDataTarget, registerWidgetType }
@@ -309,7 +309,7 @@ const calculateTasksInChallenge = props => {
 const ActiveBundle = props => {
   const showMarkerPopup = markerData => {
     return (
-      <Popup key={markerData.options.taskId}>
+      <Popup key={markerData.options.taskId} offset={props.task.id === markerData.options.taskId ? [0.5, -16] :  [0.5, -5]}>
         <div className="marker-popup-content">
           <TaskMarkerContent
             {...props}
@@ -325,9 +325,20 @@ const ActiveBundle = props => {
     )
   }
 
-  const boundingBoxData = props.criteria.boundingBox
-    ? 'criteria.boundingBox'
-    : 'workspaceContext.taskMapBounds'
+  const bundleCenter = toLatLngBounds(
+    bbox({
+      type: 'FeatureCollection',
+      features: _map(props.taskBundle.tasks, task =>
+        ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [task.location.coordinates[0], task.location.coordinates[1]]
+          }
+        })
+      )
+    })
+  );
 
   const map = (
     <ClusterMap
@@ -335,15 +346,10 @@ const ActiveBundle = props => {
       loadingTasks={props.loadingTasks}
       highlightPrimaryTask={props.task.id}
       showMarkerPopup={showMarkerPopup}
-      taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
-      boundingBox={_get(props, boundingBoxData)}
-      initialBounds={toLatLngBounds(_get(props, boundingBoxData, []))}
-      allowClusterToggle
-      hideSearchControl
-      allowSpidering
+      centerBounds={bundleCenter}
+      initialBounds={bundleCenter}
+      fitbBoundsControl
       selectedTasks={props.selectedTasks}
-      className={{}}
-      {..._omit(props, 'className')}
     />
   )
 
@@ -373,7 +379,7 @@ const ActiveBundle = props => {
 
   return (
     <div className="mr-h-full mr-rounded">
-      <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
+      <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px`}}>
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
@@ -471,7 +477,7 @@ const ActiveBundle = props => {
             />
           </div>
         </div>
-        {table}
+        <div className={"mr-px-4"}>{table}</div>
       </div>
     </div>
   )
@@ -498,7 +504,7 @@ const BuildBundle = props => {
 
   const showMarkerPopup = (markerData) => {
     return (
-      <Popup key={markerData.options.taskId}>
+      <Popup key={markerData.options.taskId} offset={props.task.id === markerData.options.taskId ? [0.5, -16] :  [0.5, -5]}>
         <div className="marker-popup-content">
           <TaskMarkerContent
             {...props}
@@ -512,7 +518,7 @@ const BuildBundle = props => {
 
   const map =
     <ClusterMap
-      loadingTasks={props.loadingTasks}
+      {...props}
       showMarkerPopup={showMarkerPopup}
       highlightPrimaryTask={props.task.id}
       taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
@@ -520,17 +526,13 @@ const BuildBundle = props => {
       initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
       onBulkTaskSelection={props.selectTasks}
       onBulkTaskDeselection={props.deselectTasks}
-      allowClusterToggle
-      hideSearchControl
-      allowSpidering
-      showScaleControl
+      fitbBoundsControl
       showSelectMarkersInView
-      {..._omit(props, 'className')}
     />
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
-      <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
+      <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px`}}>
         {props.loading ?
           <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
           <MapPane showLasso>{map}</MapPane>
@@ -580,7 +582,7 @@ const BuildBundle = props => {
           />
         </div>
       </div>
-      <div className="mr-px-4 mr-h-half mr-overflow-y-auto">
+      <div className="mr-px-4">
         <TaskAnalysisTable
           {...props}
           taskData={_get(props, 'taskInfo.tasks')}

@@ -125,7 +125,7 @@ export class ChallengePane extends Component {
 
     const showMarkerPopup = (markerData) => {
       return (
-       <Popup>
+       <Popup offset={[0.5, -5]}>
         <TaskChallengeMarkerContent
           marker={markerData}
           taskId={markerData.options.taskId}
@@ -165,11 +165,13 @@ export class ChallengePane extends Component {
                 challenge={this.props.browsedChallenge}
                 showMarkerPopup={showMarkerPopup}
                 initialBounds={this.state.fromUserAction ? this.state.bounds : null}
-                criteria={{boundingBox: fromLatLngBounds(this.state.bounds),
-                          zoom: this.state.zoom,
-                          filters: _get(this.props, 'searchCriteria.filters'),
-                          searchQuery: _get(this.props, 'searchCriteria.query'),
-                          challengeStatus}}
+                criteria={{
+                  boundingBox: fromLatLngBounds(this.state.bounds),
+                  zoom: this.state.zoom,
+                  filters: _get(this.props, 'searchCriteria.filters'),
+                  searchQuery: _get(this.props, 'searchCriteria.query'),
+                  challengeStatus
+                }}
                 updateTaskFilterBounds={(bounds, zoom, fromUserAction) => {
                   this.props.updateChallengeSearchMapBounds(bounds, fromUserAction)
                   this.resetSelectedClusters()
@@ -178,10 +180,10 @@ export class ChallengePane extends Component {
                 onBulkClusterSelection={this.onBulkClusterSelection}
                 onBulkClusterDeselection={this.onBulkClusterDeselection}
                 resetSelectedClusters={this.resetSelectedClusters}
-                allowClusterToggle
-                showTaskCount
                 showClusterLasso
                 showFitWorld
+                showSearchControl
+                skipFitToBounds
                 externalOverlay={virtualChallengeMapOverlay}
                 {...this.props}
               />

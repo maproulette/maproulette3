@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { ZoomControl, CircleMarker, Popup } from 'react-leaflet'
+import { ZoomControl, CircleMarker, Popup, MapContainer, AttributionControl } from 'react-leaflet'
 import { getCoord } from '@turf/invariant'
 import centroid from '@turf/centroid'
 import { differenceInHours, parseISO } from 'date-fns' 
@@ -13,7 +13,6 @@ import { toLatLngBounds, GLOBAL_MAPBOUNDS } from '../../services/MapBounds/MapBo
 import { buildLayerSources } from '../../services/VisibleLayer/LayerSources'
 import { TaskStatusColors } from '../../services/Task/TaskStatus/TaskStatus'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
-import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import ActivityDescription from '../ActivityListing/ActivityDescription'
@@ -54,7 +53,7 @@ export const ActivityMap = props => {
           stroke={false}
           options={{ title: `Task ${entry.task.id}` }}
         >
-          <Popup>
+          <Popup offset={[0.5, -5]}>
             <div className="mr-p-4 mr-pt-6 mr-lightmode">
               <ActivityDescription {...props} entry={entry} simplified />
             </div>
@@ -81,19 +80,27 @@ export const ActivityMap = props => {
   return (
     <div className="mr-w-full mr-h-full">
       <LayerToggle {...props} />
-      <EnhancedMap
-        center={latLng(5, 0)} zoom={2} minZoom={1} maxZoom={18}
+      <MapContainer
+        center={latLng(5, 0)} 
+        zoom={2}
+        attributionControl={false}
+        minZoom={1}
+        maxZoom={18}
+        maxBounds={[[-90, -180], [90, 180]]} 
         setInitialBounds={false}
-        zoomControl={false} animate={true} worldCopyJump={true}
+        zoomControl={false} 
+        animate={true} 
+        worldCopyJump={true}
         justFitFeatures
         noAttributionPrefix={props.noAttributionPrefix}
         intl={props.intl}
       >
+        <AttributionControl position="bottomleft" prefix={false} />
         <ZoomControl position='topright' />
         <VisibleTileLayer {...props} zIndex={1} noWrap bounds={toLatLngBounds(GLOBAL_MAPBOUNDS)} />
         {overlayLayers}
         {coloredMarkers}
-      </EnhancedMap>
+      </MapContainer>
     </div>
   )
 }
