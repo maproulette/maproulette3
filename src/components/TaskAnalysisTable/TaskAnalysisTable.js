@@ -346,6 +346,18 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     id: 'id',
     Header: props.intl.formatMessage(messages.idLabel),
     accessor: t => {
+      const taskLink = (
+        <div className="row-controls-column mr-links-green-lighter">
+          <Link 
+            to={`/challenge/${props.challenge?.id}/task/${t.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t.id}
+          </Link>
+        </div>
+      )
+      
       if (t.isBundlePrimary && t.id === props.task?.id) {
         return (
           <span className="mr-flex mr-items-center">
@@ -355,7 +367,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
               className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-2"
               title={props.intl.formatMessage(messages.multipleTasksTooltip)}
             />
-            {t.id}
+            {taskLink}
           </span>
         )
       }
@@ -368,12 +380,12 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
               className="mr-fill-current mr-w-4 mr-h-4 mr-absolute mr-left-0 mr--ml-2"
               title={props.intl.formatMessage(messages.bundleMemberTooltip)}
             />
-            {t.id}
+            {taskLink}
           </span>
         )
       }
       else {
-        return <span>{t.id}</span>
+        return <span>{taskLink}</span>
       }
     },
     exportable: t => t.id,

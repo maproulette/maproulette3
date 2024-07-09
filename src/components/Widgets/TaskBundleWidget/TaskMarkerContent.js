@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
 import { messagesByStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { messagesByPriority } from '../../../services/Task/TaskPriority/TaskPriority'
 import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
@@ -33,19 +34,49 @@ class TaskMarkerContent extends Component {
     return (
       <div className="mr-flex mr-justify-center">
         <div className="mr-flex-col mr-w-full">
-          {[
-            ['nameLabel', this.props.marker.options.name],
-            ['taskIdLabel', taskId],
-            ['statusLabel', statusMessage && this.props.intl.formatMessage(statusMessage)],
-            ['priorityLabel', priorityMessage && this.props.intl.formatMessage(priorityMessage)],
-          ].map(([labelMessageId, content]) => (
-            <div key={labelMessageId} className="mr-flex">
-              <div className="mr-w-1/2 mr-mr-2 mr-text-right">
-                <FormattedMessage {...messages[labelMessageId]} />
-              </div>
-              <div className="mr-w-1/2 mr-text-left">{content}</div>
+          <div className="mr-flex">
+            <div className="mr-w-1/2 mr-mr-2 mr-text-right">
+              <FormattedMessage {...messages.nameLabel} />
             </div>
-          ))}
+            <div className="mr-w-1/2 mr-text-left">{this.props.marker.options.name || this.props.marker.options.geometries?.features[0]?.id}</div>
+          </div>
+
+          <div className="mr-flex">
+            <div className="mr-w-1/2 mr-mr-2 mr-text-right">
+              <FormattedMessage {...messages.taskIdLabel} />
+            </div>
+            <div className="mr-w-1/2 mr-text-left">
+              <Link 
+                to={`/challenge/${this.props.challenge?.id}/task/${this.props.marker.options.taskId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {this.props.marker.options.taskId}
+              </Link>
+            </div>
+          </div>
+
+          {statusMessage && (
+            <div className="mr-flex">
+              <div className="mr-w-1/2 mr-mr-2 mr-text-right">
+                <FormattedMessage {...messages.statusLabel} />
+              </div>
+              <div className="mr-w-1/2 mr-text-left">
+                {this.props.intl.formatMessage(statusMessage)}
+              </div>
+            </div>
+          )}
+
+          {priorityMessage && (
+            <div className="mr-flex">
+              <div className="mr-w-1/2 mr-mr-2 mr-text-right">
+                <FormattedMessage {...messages.priorityLabel} />
+              </div>
+              <div className="mr-w-1/2 mr-text-left">
+                {this.props.intl.formatMessage(priorityMessage)}
+              </div>
+            </div>
+          )}
 
           <div className="mr-flex mr-justify-center mr-mt-2">
             <label>
