@@ -304,7 +304,7 @@ export const TaskMapContainer = (props) => {
       );
       map.fitBounds(layerGroup.getBounds().pad(0.2));
     }
-  }, [features.length]);
+  }, [props.taskBundle, props.taskId]);
 
   const mapillaryImageMarkers = () => {
     return {
