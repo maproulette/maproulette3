@@ -7,7 +7,6 @@ import _filter from 'lodash/filter';
 import _reject from 'lodash/reject';
 import _compact from 'lodash/compact';
 import _isEmpty from 'lodash/isEmpty';
-import _isFinite from 'lodash/isFinite';
 import _omit from 'lodash/omit';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isObject from 'lodash/isObject';
