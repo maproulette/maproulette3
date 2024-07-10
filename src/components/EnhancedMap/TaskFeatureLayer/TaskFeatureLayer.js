@@ -28,7 +28,6 @@ const HIGHLIGHT_SIMPLESTYLE = {
  */
 const TaskFeatureLayer = props => {
   const [layer, setLayer] = useState(null)
-  const [numberOfFeatures, setNumberOfFeatures] = useState(0)
   const map = useMap()
 
   const propertyList = (featureProperties, onBack) => {
