@@ -7,6 +7,7 @@ import _filter from 'lodash/filter';
 import _reject from 'lodash/reject';
 import _compact from 'lodash/compact';
 import _isEmpty from 'lodash/isEmpty';
+import _isFinite from 'lodash/isFinite';
 import _omit from 'lodash/omit';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isObject from 'lodash/isObject';
@@ -102,28 +103,13 @@ const Markers = (props) => {
   }, [props.currentZoom]);
 
   useEffect(() => {
-    // Fit bounds to initial tasks when they are loaded
-    if (!initialLoadComplete && mapMarkers && mapMarkers.length > 0) {
-      const bounds = props.centerBounds || toLatLngBounds(
-        bbox({
-          type: 'FeatureCollection',
-          features: _map(mapMarkers, cluster =>
-            ({
-              type: 'Feature',
-              geometry: {
-                type: 'Point',
-                coordinates: [cluster.props.position[1], cluster.props.position[0]]
-              }
-            })
-          )
-        })
-      );
-
-      map.fitBounds(bounds.pad(0.2));
-      props.setCurrentBounds(bounds.pad(0.2));
+    if (props.taskMarkers && !initialLoadComplete && props.initialBounds && _isFinite(props.initialBounds.getNorth())) {
       setInitialLoadComplete(true);
+      map.fitBounds(props.initialBounds)
+    } else if (props.taskCenter && !props.taskCenter.equals(prevProps.current.taskCenter)) {
+      map.panTo(props.taskCenter)
     }
-  }, [mapMarkers, initialLoadComplete]);
+  }, [props]);
 
   const refreshSpidered = () => {
     if (spidered.size === 0) {

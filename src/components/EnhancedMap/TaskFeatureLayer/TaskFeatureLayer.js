@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { GeoJSON, useMap } from 'react-leaflet'
-import L, { FeatureGroup } from 'leaflet'
+import L from 'leaflet'
 import { injectIntl } from 'react-intl'
 import { featureCollection } from '@turf/helpers'
 import _isFunction from 'lodash/isFunction'
@@ -103,23 +103,6 @@ const TaskFeatureLayer = props => {
       />
     )
   }, [features.length])
-
-  useEffect(() => {
-    if(numberOfFeatures !== features.length) {
-      const geoJSONFeatures = new FeatureGroup()
-
-      map.eachLayer(layer => {
-        if (layer.feature && layer.feature.type === "Feature") {
-          geoJSONFeatures.addLayer(layer)
-        }
-      })
-
-      if (geoJSONFeatures.getLayers().length !== 0) {
-        map.fitBounds(geoJSONFeatures.getBounds().pad(0.2))
-      }
-      setNumberOfFeatures(features.length)
-    }
-  }, [layer])
 
   return layer
 }
