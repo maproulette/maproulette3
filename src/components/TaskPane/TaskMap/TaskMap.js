@@ -539,7 +539,7 @@ const TaskMap = (props) => {
         zoom={DEFAULT_ZOOM}
         zoomControl={false}
         minZoom={2}
-        maxZoom={20}
+        maxZoom={MAX_ZOOM}
         attributionControl={false}
         maxBounds={[[-90, -180], [90, 180]]} 
       >
