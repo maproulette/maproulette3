@@ -349,7 +349,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const taskLink = (
         <div className="row-controls-column mr-links-green-lighter">
           <Link 
-            to={`/challenge/${props.challenge?.id}/task/${t.id}`}
+            to={`/challenge/${t.parentId}/task/${t.id}`}
             target="_blank"
             rel="noopener noreferrer"
           >

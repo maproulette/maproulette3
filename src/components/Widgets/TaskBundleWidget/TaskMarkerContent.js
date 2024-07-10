@@ -47,7 +47,7 @@ class TaskMarkerContent extends Component {
             </div>
             <div className="mr-w-1/2 mr-text-left">
               <Link 
-                to={`/challenge/${this.props.challenge?.id}/task/${this.props.marker.options.taskId}`}
+                to={`/challenge/${this.props.challengeId}/task/${this.props.marker.options.taskId}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
