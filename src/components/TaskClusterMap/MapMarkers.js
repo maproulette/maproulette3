@@ -103,13 +103,30 @@ const Markers = (props) => {
   }, [props.currentZoom]);
 
   useEffect(() => {
-    if (props.taskMarkers && !initialLoadComplete && props.initialBounds && _isFinite(props.initialBounds.getNorth())) {
-      setInitialLoadComplete(true);
-      map.fitBounds(props.initialBounds)
-    } else if (props.taskCenter && !props.taskCenter.equals(prevProps.current.taskCenter)) {
+ // Fit bounds to initial tasks when they are loaded
+    if (!initialLoadComplete && mapMarkers && mapMarkers.length > 0) {
+      const bounds = props.centerBounds || toLatLngBounds(
+        bbox({
+          type: 'FeatureCollection',
+          features: _map(mapMarkers, cluster =>
+            ({
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: [cluster.props.position[1], cluster.props.position[0]]
+              }
+            })
+          )
+        })
+      );
+
+      map.fitBounds(bounds.pad(0.2));
+      props.setCurrentBounds(bounds.pad(0.2));
+    } 
+    else if (props.taskCenter && !props.taskCenter.equals(prevProps.current.taskCenter)) {
       map.panTo(props.taskCenter)
     }
-  }, [props]);
+  }, [props, mapMarkers, initialLoadComplete]);
 
   const refreshSpidered = () => {
     if (spidered.size === 0) {
