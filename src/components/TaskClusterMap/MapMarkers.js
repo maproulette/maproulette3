@@ -102,7 +102,7 @@ const Markers = (props) => {
   }, [props.currentZoom]);
 
   useEffect(() => {
-    // Fit bounds to initial tasks when they are loaded
+ // Fit bounds to initial tasks when they are loaded
     if (!initialLoadComplete && mapMarkers && mapMarkers.length > 0) {
       const bounds = props.centerBounds || toLatLngBounds(
         bbox({
@@ -121,9 +121,11 @@ const Markers = (props) => {
 
       map.fitBounds(bounds.pad(0.2));
       props.setCurrentBounds(bounds.pad(0.2));
-      setInitialLoadComplete(true);
+    } 
+    else if (props.taskCenter && !props.taskCenter.equals(prevProps.current.taskCenter)) {
+      map.panTo(props.taskCenter)
     }
-  }, [mapMarkers, initialLoadComplete]);
+  }, [props, mapMarkers, initialLoadComplete]);
 
   const refreshSpidered = () => {
     if (spidered.size === 0) {
