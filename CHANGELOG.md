@@ -7,7 +7,15 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.15.7] - 2024-7-02
+## [v3.15.8] - 2024-7-10
+Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
+
+## What's Changed
+* Fix zoom and panning issues in maps by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2378
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.7...v3.15.8
+
+## [v3.15.7] - 2024-7-09
 Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
 
 ## What's Changed
