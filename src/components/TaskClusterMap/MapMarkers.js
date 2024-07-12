@@ -94,7 +94,7 @@ const Markers = (props) => {
       generateMarkers();
     }
     prevProps.current = { ...props, spidered: spidered };
-  }, [props.taskMarkers, spidered]);
+  }, [props.taskMarkers, props.selectedClusters, spidered]);
 
   useEffect(() => {
     setSpidered(new Map());
@@ -102,30 +102,36 @@ const Markers = (props) => {
   }, [props.currentZoom]);
 
   useEffect(() => {
- // Fit bounds to initial tasks when they are loaded
-    if (!initialLoadComplete && mapMarkers && mapMarkers.length > 0) {
+    // Fit bounds to initial tasks when they are loaded
+    if (!initialLoadComplete && props.taskMarkers && props.taskMarkers.length > 0) {
       const bounds = props.centerBounds || toLatLngBounds(
         bbox({
           type: 'FeatureCollection',
-          features: _map(mapMarkers, cluster =>
+          features: _map(props.taskMarkers, cluster =>
             ({
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [cluster.props.position[1], cluster.props.position[0]]
+                coordinates: [cluster.position[1], cluster.position[0]]
               }
             })
           )
         })
       );
 
-      map.fitBounds(bounds.pad(0.2));
-      props.setCurrentBounds(bounds.pad(0.2));
+      map.fitBounds(bounds);
+      props.setCurrentBounds(bounds);
+
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+      
+      setInitialLoadComplete(true);
     } 
     else if (props.taskCenter && !props.taskCenter.equals(prevProps.current.taskCenter)) {
       map.panTo(props.taskCenter)
     }
-  }, [props, mapMarkers, initialLoadComplete]);
+  }, [props.taskMarkers, props.taskCenter ]);
 
   const refreshSpidered = () => {
     if (spidered.size === 0) {
