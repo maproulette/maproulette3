@@ -117,7 +117,7 @@ export class WidgetGrid extends Component {
           cols={this.props.workspace.cols || 12}
           rowHeight={this.props.workspace.rowHeight || 30}
           layout={this.props.workspace.layout || []}
-          margin={[16, 16]}
+          margin={[10, 10]}
           isDraggable={this.props.isEditing}
           isResizable={this.props.isEditing}
           onLayoutChange={this.props.onLayoutChange}

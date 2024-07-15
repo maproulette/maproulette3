@@ -26,7 +26,7 @@
   }
 
   &__header {
-    @apply mr-py-2 mr-px-4;
+    @apply mr-py-1 mr-px-2;
 
     .mr-card-widget--padded & {
       @apply mr-px-6 mr-pt-6;
@@ -34,7 +34,7 @@
   }
 
   &__title {
-    @apply mr-font-bold mr-text-lg mr-text-matisse-blue mr-my-2;
+    @apply mr-font-bold mr-text-lg mr-text-matisse-blue mr-mt-2;
 
     &:after {
       content: '';
@@ -46,7 +46,7 @@
     }
 
     .mr-cards-inverse & {
-      @apply mr-text-yellow mr-text-md mr-font-normal mr-uppercase;
+      @apply mr-text-yellow mr-text-sm mr-font-normal mr-uppercase;
     }
   }
 
@@ -63,7 +63,7 @@
   }
 
   &__content {
-    @apply mr-text-sm mr-h-full mr-overflow-auto mr-px-4 mr-pb-4;
+    @apply mr-text-sm mr-h-full mr-overflow-auto mr-px-2 mr-pb-2;
 
     .mr-card-widget--padded & {
       @apply mr-px-6;
