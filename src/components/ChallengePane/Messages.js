@@ -37,5 +37,10 @@ export default defineMessages({
   showArchivedLabel: {
     id: "ChallengePane.controls.showArchived.label",
     defaultMessage: "Show Archived"
+  },
+
+  showGlobalLabel: {
+    id: "ChallengePane.controls.showGlobal.label",
+    defaultMessage: "Show Global Challenges"
   }
 })

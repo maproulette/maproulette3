@@ -31,7 +31,7 @@ import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 import StartVirtualChallenge from './StartVirtualChallenge/StartVirtualChallenge'
 import messages from './Messages'
 
-const ShowArchivedToggleInternal = (props) => {
+const ShowChallengeListTogglesInternal = (props) => {
   return (
     <div className="mr-flex">
       <input
@@ -43,11 +43,20 @@ const ShowArchivedToggleInternal = (props) => {
         }}
       />
       <div className="mr-text-sm mr-mx-1"><FormattedMessage {...messages.showArchivedLabel} /></div>
+      <input
+        type="checkbox"
+        className="mr-checkbox-toggle mr-mr-1 mr-mb-6 mr-ml-4"
+        checked={!props.filteringGlobal}
+        onChange={() => {
+          props.setSearchFilters({ filterGlobal: !props.filteringGlobal })
+        }}
+      />
+      <div className="mr-text-sm mr-mx-1"><FormattedMessage {...messages.showGlobalLabel} /></div>
     </div>
   )
 }
 
-const ShowArchivedToggle = WithChallengeSearch(ShowArchivedToggleInternal);
+const ShowChallengeListToggles = WithChallengeSearch(ShowChallengeListTogglesInternal);
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
@@ -118,6 +127,7 @@ export class ChallengePane extends Component {
 
   render() {
     const showingArchived = this.props.history.location.search.includes("archived=true");
+    const filteringGlobal = this.props.history.location.search.includes("filterGlobal") ? this.props.history.location.search.includes("filterGlobal=true") : true;
     const challengeStatus = [ChallengeStatus.ready,
                              ChallengeStatus.partiallyLoaded,
                              ChallengeStatus.none,
@@ -156,7 +166,7 @@ export class ChallengePane extends Component {
         <div className="mr-p-6 lg:mr-flex mr-cards-inverse">
           <div className="mr-flex-0">
             <LocationFilter {...this.props} />
-            <ShowArchivedToggle showingArchived={showingArchived} {...this.props} />
+            <ShowChallengeListToggles showingArchived={showingArchived} filteringGlobal={filteringGlobal} {...this.props} />
             <ChallengeResults {...this.props} />
           </div>
           <div className="mr-flex-1">
