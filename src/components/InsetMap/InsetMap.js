@@ -8,19 +8,6 @@ import { layerSourceWithId,
 import './InsetMap.scss'
 
 export default class InsetMap extends Component {
-  constructor(props) {
-    super(props)
-    this.mapRef = React.createRef()
-  }
-
-  componentDidUpdate(prevProps) {
-    // If our parent provides height and width and they change, invalidate map
-    // size so that Leaflet will re-render the tiles
-    if (prevProps.h !== this.props.h || prevProps.w !== this.props.w) {
-      this.mapRef.current.leafletElement.invalidateSize()
-    }
-  }
-
   render() {
     // Use requested layer source, otherwise the default source
     const layerSource =
@@ -36,7 +23,6 @@ export default class InsetMap extends Component {
           zoomControl={false} 
           worldCopyJump={true}
           attributionControl={false}
-          whenCreated={this.mapRef}
           maxBounds={[[-90, -180], [90, 180]]} 
         >
           <AttributionControl position="bottomleft" prefix={false} />
