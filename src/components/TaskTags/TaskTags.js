@@ -10,6 +10,7 @@ import KeywordAutosuggestInput
 import External from '../External/External'
 import Modal from '../Modal/Modal'
 import messages from './Messages'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 
 export class TaskTags extends Component {
   state = {
@@ -71,9 +72,18 @@ export class TaskTags extends Component {
         <External>
           <Modal isActive onClose={() => this.setState({edit: false})} allowOverflow>
             <div className="mr-w-full">
-              <h2 className="mr-text-yellow mr-text-4xl mr-mb-4">
+              <div className="mr-flex">
+              <h3 className="mr-text-yellow mr-text-3xl mr-mb-4">
                 <FormattedMessage {...messages.modifyTags} />
-              </h2>
+              </h3>
+              <a target="_blank" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="mr-ml-2">
+              <SvgSymbol
+                  sym="info-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-white mr-w-4 mr-h-4"
+                />
+              </a>
+            </div>
               <div className="mr-mt-2 mr-w-full">
                 <KeywordAutosuggestInput
                   handleChangeTags={this.handleChangeTags}
@@ -115,20 +125,34 @@ export class TaskTags extends Component {
           </div>
 
           {!disableEditTags ?
-           <div className="mr-links-green-lighter mr-flex-grow-0">
-             <a onClick={() => this.setState({edit: true})}>
-               <FormattedMessage {...messages.updateTags} />
-             </a>
-           </div> : null
+            <div className="mr-links-green-lighter mr-flex-grow-0 mr-flex">
+            <a onClick={() => this.setState({ edit: true })} className="mr-inline-block mr-mr-2">
+              <FormattedMessage {...messages.updateTags} />
+            </a>
+            <a target="_blank" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="">
+            <SvgSymbol
+                sym="info-icon"
+                viewBox="0 0 20 20"
+                className="mr-fill-white mr-w-3 mr-h-3"
+              />
+            </a>
+          </div> : null
           }
         </div>
       )
     }
     else if (!disableEditTags) {
       return (
-        <div className="mr-links-green-lighter">
+        <div className="mr-links-green-lighter mr-flex">
           <a onClick={() => this.setState({edit: true})}>
             <FormattedMessage {...messages.addTags} />
+          </a>
+          <a target="_blank" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="mr-ml-1">
+            <SvgSymbol
+              sym="info-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-white mr-w-3 mr-h-3"
+            />
           </a>
         </div>
       )
