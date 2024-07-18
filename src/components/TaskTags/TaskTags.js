@@ -76,7 +76,7 @@ export class TaskTags extends Component {
               <h3 className="mr-text-yellow mr-text-3xl mr-mb-4">
                 <FormattedMessage {...messages.modifyTags} />
               </h3>
-              <a target="_blank" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="mr-ml-2">
+              <a target="_blank" rel="noreferrer" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="mr-ml-2">
               <SvgSymbol
                   sym="info-icon"
                   viewBox="0 0 20 20"
@@ -129,7 +129,7 @@ export class TaskTags extends Component {
             <a onClick={() => this.setState({ edit: true })} className="mr-inline-block mr-mr-2">
               <FormattedMessage {...messages.updateTags} />
             </a>
-            <a target="_blank" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="">
+            <a target="_blank" rel="noreferrer" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="">
             <SvgSymbol
                 sym="info-icon"
                 viewBox="0 0 20 20"
@@ -147,7 +147,7 @@ export class TaskTags extends Component {
           <a onClick={() => this.setState({edit: true})}>
             <FormattedMessage {...messages.addTags} />
           </a>
-          <a target="_blank" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="mr-ml-1">
+          <a target="_blank" rel="noreferrer" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="mr-ml-1">
             <SvgSymbol
               sym="info-icon"
               viewBox="0 0 20 20"
