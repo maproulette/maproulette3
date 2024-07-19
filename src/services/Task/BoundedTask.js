@@ -126,9 +126,8 @@ export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispat
         } : null,
       }
     ).execute().then(normalizedResults => {
-      const totalCount = normalizedResults.result.total
-
-      let tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
+      let tasks = _values(_get(normalizedResults, 'result', {}))
+      const totalCount = tasks.length
       tasks = _map(tasks, task =>
         Object.assign(task, {}, task.pointReview)
       )
