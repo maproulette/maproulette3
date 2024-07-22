@@ -153,6 +153,12 @@ export class TaskNearbyMap extends Component {
         <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
     )
 
+    const ResizeMap = () => {
+      const map = useMap();
+      map.invalidateSize();
+      return null;
+    };
+
     if (!coloredMarkers) {
       return (
         <div className="mr-h-full">
@@ -176,6 +182,7 @@ export class TaskNearbyMap extends Component {
           maxZoom={18}
           maxBounds={[[-90, -180], [90, 180]]} 
         >
+          <ResizeMap />
           <AttributionControl position="bottomleft" prefix={false} />
           <ZoomControl position='topright' />
           <VisibleTileLayer {...this.props} zIndex={1} />
