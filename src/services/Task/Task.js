@@ -995,7 +995,7 @@ export const deleteTaskBundle = function(bundleId) {
   return function(dispatch) {
     return new Endpoint(api.tasks.deleteBundle, {
       variables: {bundleId},
-    }).execute().then(results => {
+    }).execute().then(() => {
       return true
     }).catch(error => {
       if (isSecurityError(error)) {
