@@ -232,7 +232,7 @@ export const TaskClusterMap = (props) => {
       const map = useMap();
       useEffect(() => {
         map.invalidateSize();
-      }, [props.widgetLayout.w, props.widgetLayout.h])
+      }, [props.widgetLayout?.w, props.widgetLayout?.h])
       return null;
     };
     
