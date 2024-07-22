@@ -44,7 +44,11 @@ const descriptor = {
 };
 
 const ClusterMap = WithChallengeTaskClusters(
-  WithTaskClusterMarkers(TaskClusterMap('taskBundling'))
+  WithTaskClusterMarkers(TaskClusterMap('taskBundling')),
+  true,
+  true,
+  false,
+  false
 );
 
 export default class ReviewNearbyTasksWidget extends Component {
@@ -178,6 +182,7 @@ export default class ReviewNearbyTasksWidget extends Component {
 
     const map = (
       <ClusterMap
+        {...this.props}
         loadingTasks={this.props.loadingTasks}
         highlightPrimaryTask={this.props.task.id}
         showMarkerPopup={showMarkerPopup}
