@@ -230,7 +230,9 @@ export const TaskClusterMap = (props) => {
 
     const ResizeMap = () => {
       const map = useMap();
-      map.invalidateSize();
+      useEffect(() => {
+        map.invalidateSize();
+      }, [props.widgetLayout.w, props.widgetLayout.h])
       return null;
     };
     
