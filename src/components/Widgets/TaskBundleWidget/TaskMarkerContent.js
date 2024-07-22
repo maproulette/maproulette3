@@ -22,6 +22,7 @@ class TaskMarkerContent extends Component {
     const bundlePrimary = this.props.taskBundle?.tasks.find(task => task.isBundlePrimary === true)
     const statusMessage = messagesByStatus[this.props.marker.options.status ?? this.props.marker.options.taskStatus]
     const priorityMessage = messagesByPriority[this.props.marker.options.priority ?? this.props.marker.options.taskPriority ]
+    const alreadyBundled = this.props.marker.options.bundleId && !this.props.taskBundle?.taskIds?.includes(this.props.marker.options.bundleId)
 
     const checkBoxEnabled =
       !this.props.bundling &&
@@ -80,7 +81,7 @@ class TaskMarkerContent extends Component {
 
           <div className="mr-flex mr-justify-center mr-mt-2">
             <label>
-              {checkBoxEnabled ? (
+              {alreadyBundled ? <FormattedMessage {...messages.alreadyBundledLabel} /> : checkBoxEnabled ? (
                 <input
                   type="checkbox"
                   className="mr-mr-1"

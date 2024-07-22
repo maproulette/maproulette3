@@ -306,7 +306,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: task => props.isTaskSelected(task.id),
     Cell: ({ value, original }) => {
       const status = original.status ?? original.taskStatus
+      const alreadyBundled = original.bundleId && !props.taskBundle?.id !== original.bundleId
       const enableSelecting =
+      !alreadyBundled &&
       !props.bundling &&
       !props.taskReadOnly &&
       [0, 3, 6].includes(status) &&
