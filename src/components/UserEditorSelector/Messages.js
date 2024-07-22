@@ -8,4 +8,9 @@ export default defineMessages({
     id: 'UserEditorSelector.currentEditor.label',
     defaultMessage: "Current Editor:",
   },
+
+  editLabel: {
+    id: 'UserEditorSelector.openEditor.label',
+    defaultMessage: "Open Editor",
+  },
 })

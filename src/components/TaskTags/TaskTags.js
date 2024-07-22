@@ -35,7 +35,9 @@ export class TaskTags extends Component {
       if ( !_isEmpty(tag) ) {
         return (
           <div className="mr-bg-white-10 mr-text-white mr-mr-2 mr-px-2 mr-rounded"
-               key={`tag-${index}`}>
+               key={`tag-${index}`}
+               style={{ maxHeight: "24px"}}
+          >
             {tag}
           </div>
         )
@@ -117,11 +119,9 @@ export class TaskTags extends Component {
     }
     else if (this.props.tags && this.props.tags !== "") {     
       return (
-        <div className="mr-flex mr-justify-between mr-items-center mr-mb-2">
-          <div className="mr-text-sm mr-text-white mr-flex mr-items-center mr-flex-grow">
-            <FormattedMessage
-              {...messages.taskTags}
-            /> {this.tagList()}
+        <div className="mr-flex mr-items-center mr-mt-2 mr-pb-4 mr-max-w-full mr-overflow-x-auto">
+          <div className="mr-text-sm mr-text-white mr-flex mr-items-center mr-whitespace-nowrap">
+            <FormattedMessage {...messages.taskTags} /> {this.tagList()}
           </div>
 
           {!disableEditTags ?
@@ -143,7 +143,7 @@ export class TaskTags extends Component {
     }
     else if (!disableEditTags) {
       return (
-        <div className="mr-links-green-lighter mr-flex">
+        <div className="mr-links-green-lighter mr-flex mr-mt-2 mr-pb-4">
           <a onClick={() => this.setState({edit: true})}>
             <FormattedMessage {...messages.addTags} />
           </a>

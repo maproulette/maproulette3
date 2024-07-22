@@ -1,7 +1,6 @@
 import "@testing-library/jest-dom";
 import * as React from "react";
 import { fireEvent, waitFor } from "@testing-library/react";
-import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCompletionStep1, { ListMoreOptionsItems } from "./TaskCompletionStep1";
 
 describe("TaskCompletionStep1", () => {
