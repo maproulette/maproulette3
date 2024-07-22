@@ -5,7 +5,6 @@ import WithTaskReview from '../../../../HOCs/WithTaskReview/WithTaskReview'
 import WithTaskTags from '../../../../HOCs/WithTaskTags/WithTaskTags'
 import WithKeyboardShortcuts
        from '../../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
-import Dropdown from '../../../../Dropdown/Dropdown'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import TaskFixedControl
        from '../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskFixedControl/TaskFixedControl'
