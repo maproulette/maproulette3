@@ -22,7 +22,7 @@ class TaskMarkerContent extends Component {
     const bundlePrimary = this.props.taskBundle?.tasks.find(task => task.isBundlePrimary === true)
     const statusMessage = messagesByStatus[this.props.marker.options.status ?? this.props.marker.options.taskStatus]
     const priorityMessage = messagesByPriority[this.props.marker.options.priority ?? this.props.marker.options.taskPriority ]
-    const alreadyBundled = this.props.marker.options.bundleId && !this.props.taskBundle?.taskIds?.includes(this.props.marker.options.bundleId)
+    const alreadyBundled = this.props.marker.options.bundleId && this.props.taskBundle?.bundleId !== this.props.marker.options.bundleId
 
     const checkBoxEnabled =
       !this.props.bundling &&

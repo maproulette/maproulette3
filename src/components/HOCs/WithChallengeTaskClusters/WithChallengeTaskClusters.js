@@ -209,7 +209,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     onBulkTaskSelection = taskIds => {
       const tasks = this.clustersAsTasks().filter(task => {
         const taskId = task.id || task.taskId
-        const alreadyBundled = task.bundleId && this.props.taskBundle?.id !== task.bundleId
+        const alreadyBundled = task.bundleId && this.props.taskBundle?.bundleId !== task.bundleId
         
         return taskIds.includes(taskId) && !alreadyBundled &&
           !(
