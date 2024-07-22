@@ -28,7 +28,7 @@ export function WithTaskBundle(WrappedComponent) {
     componentDidMount() {
       const { task } = this.props
       this.setState({ completingTask: null })
-
+      this.updateBundlingConditions()
       if (_isFinite(_get(task, 'bundleId'))){
         this.setupBundle(task.bundleId)
       }
@@ -40,6 +40,7 @@ export function WithTaskBundle(WrappedComponent) {
       const { initialBundle } = this.state
       const { task } = this.props
       if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
+        this.updateBundlingConditions()
         this.setState({ selectedTasks: [], initialBundle: null, taskBundle: null, loading: false, completingTask: null })
         if (_isFinite(_get(task, 'bundleId'))) {
           this.setupBundle(task.bundleId)
@@ -77,7 +78,7 @@ export function WithTaskBundle(WrappedComponent) {
       window.removeEventListener('beforeunload', this.handleBeforeUnload)
     }
 
-    setBundlingConditions = () => {
+    updateBundlingConditions = () => {
       const { task, taskReadOnly, workspace, user, name } = this.props
       const isCompletionWorkspace = workspace?.name === "taskCompletion" || name === "taskCompletion"
       const isReviewWorkspace = workspace?.name === "taskReview" || name === "taskReview"
@@ -155,7 +156,7 @@ export function WithTaskBundle(WrappedComponent) {
             }
           }
         }
-        const bundleEditsDisabled = this.setBundlingConditions()
+        const bundleEditsDisabled = this.updateBundlingConditions()
         this.setState({ bundleEditsDisabled, initialBundle: taskBundle, selectedTasks: taskBundle?.taskIds, taskBundle })
       })
       this.setState({ loading: false })
