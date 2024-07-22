@@ -32,8 +32,7 @@ import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithTaskFeatureProperties from '../../../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
-import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
-import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
+import TaskCompletionStep from './TaskCompletionStep/TaskCompletionStep'
 import CooperativeWorkControls from './CooperativeWorkControls/CooperativeWorkControls'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
 import TaskConfirmationModal
@@ -387,7 +386,7 @@ export class ActiveTaskControls extends Component {
       return (
         <div>
           {!isEditingTask && isComplete &&
-           <div className="mr-text-white mr-text-md mr-my-4 mr-links-green-lighter">
+           <div className="mr-text-white mr-text-md mr-mb-2 mr-links-green-lighter">
              <div className="mr-flex mr-justify-between mr-items-center">
                <span>
                  <FormattedMessage
@@ -449,8 +448,8 @@ export class ActiveTaskControls extends Component {
                />
              }
 
-             {isEditingTask && (!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
-               <TaskCompletionStep1
+             {(!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
+               <TaskCompletionStep
                {...this.props}
                allowedEditors={this.allowedEditors()}
                allowedProgressions={allowedProgressions}

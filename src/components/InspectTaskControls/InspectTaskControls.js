@@ -17,8 +17,6 @@ import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithKeyboardShortcuts
        from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithTaskFeatureProperties from '../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
-import TaskEditControl
-       from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import messages from './Messages'
@@ -123,16 +121,8 @@ export class InspectTaskControls extends Component {
          </div> :
          <UserEditorSelector {...this.props} className="mr-mb-4" />
         }
-        <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
-          {!this.props.taskReadOnly ?
-           <TaskEditControl
-             pickEditor={this.pickEditor}
-             className="active-task-controls__edit-control"
-             {..._omit(this.props, 'className')}
-           /> :
-           <div />
-          }
 
+        <div className="mr-my-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
           {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
            <Link
              to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
