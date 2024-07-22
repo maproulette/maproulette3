@@ -55,8 +55,7 @@ export function WithTaskBundle(WrappedComponent) {
           } else {
             // Whenever the user redirects, skips a task, or refreshes and there was 
             // no initial value, the bundle will be destroyed.
-            this.props.deleteTaskBundle(prevTaskBundle.bundleId)
-            this.clearActiveTaskBundle()
+            this.clearActiveTaskBundle(prevTaskBundle.bundleId)
           }
         } else if ((prevTaskBundle && prevInitialBundle) && prevTaskBundle !== prevInitialBundle && prevState.completingTask) {
           const tasksToUnlock = prevInitialBundle.taskIds.filter(taskId => !prevTaskBundle.taskIds.includes(taskId))
@@ -115,8 +114,7 @@ export function WithTaskBundle(WrappedComponent) {
           } else {
             // Whenever the user redirects, skips a task, or refreshes and there was 
             // no initial value, the bundle will be destroyed.
-            this.props.deleteTaskBundle(this.state.taskBundle.bundleId)
-            this.clearActiveTaskBundle()
+            this.clearActiveTaskBundle(this.state.taskBundle.bundleId)
           }
         }
       } else if (
@@ -184,8 +182,7 @@ export function WithTaskBundle(WrappedComponent) {
       ) {
         // The task id we pass to delete will be left locked, so it needs to be
         // the current task even if it's not the primary task in the bundle
-        this.props.deleteTaskBundle(bundleId)
-        this.clearActiveTaskBundle()
+        this.clearActiveTaskBundle(bundleId)
       }
     }
 
@@ -195,12 +192,11 @@ export function WithTaskBundle(WrappedComponent) {
       }
     }
 
-    removeTaskFromBundle = async (bundleId, taskId) => {
+    removeTaskFromBundle = (bundleId, taskId) => {
       const { initialBundle } = this.state
       this.setState({loading: true})
       if(this.state.taskBundle?.taskIds.length === 2 && !this.state.initialBundle && this.props.task.status === 0) {
-        this.props.deleteTaskBundle(bundleId)
-        this.clearActiveTaskBundle()
+        this.clearActiveTaskBundle(bundleId)
         this.setState({loading: false})
         return
       }
@@ -210,10 +206,12 @@ export function WithTaskBundle(WrappedComponent) {
       })
     }
 
-    clearActiveTaskBundle = () => {
-      this.setState({selectedTasks: [], taskBundle: null, loading: false})
-      this.resetSelectedTasks()
-
+    clearActiveTaskBundle = async (bundleId) => {
+      const bundleDeleted = await this.props.deleteTaskBundle(bundleId)
+      if(bundleDeleted) {
+        this.setState({selectedTasks: [], taskBundle: null, loading: false})
+        this.resetSelectedTasks()
+      }
     }
 
     setCompletingTask = task => {
