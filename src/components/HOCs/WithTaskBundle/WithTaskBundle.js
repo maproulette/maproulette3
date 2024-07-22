@@ -27,12 +27,9 @@ export function WithTaskBundle(WrappedComponent) {
 
     componentDidMount() {
       const { task } = this.props
-      this.setBundlingConditions()
       this.setState({ completingTask: null })
 
-      if (_isFinite(_get(task, 'bundleId')) && task?.status === 0) {
-        this.props.deleteTaskBundle(task.bundleId)
-      } else if (_isFinite(_get(task, 'bundleId'))){
+      if (_isFinite(_get(task, 'bundleId'))){
         this.setupBundle(task.bundleId)
       }
 
@@ -43,7 +40,6 @@ export function WithTaskBundle(WrappedComponent) {
       const { initialBundle } = this.state
       const { task } = this.props
       if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
-        this.setBundlingConditions()
         this.setState({ selectedTasks: [], initialBundle: null, taskBundle: null, loading: false, completingTask: null })
         if (_isFinite(_get(task, 'bundleId'))) {
           this.setupBundle(task.bundleId)
@@ -94,7 +90,7 @@ export function WithTaskBundle(WrappedComponent) {
       
       const bundleEditsDisabled = taskReadOnly || (!enableMapperEdits && !enableSuperUserEdits)
 
-      this.setState({ bundleEditsDisabled })
+      return bundleEditsDisabled
     }
 
     handleBeforeUnload = () => {
@@ -161,7 +157,8 @@ export function WithTaskBundle(WrappedComponent) {
             }
           }
         }
-        this.setState({ initialBundle: taskBundle, selectedTasks: taskBundle?.taskIds, taskBundle })
+        const bundleEditsDisabled = this.setBundlingConditions()
+        this.setState({ bundleEditsDisabled, initialBundle: taskBundle, selectedTasks: taskBundle?.taskIds, taskBundle })
       })
       this.setState({ loading: false })
     }
