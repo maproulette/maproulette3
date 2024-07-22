@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom";
 import * as React from "react";
 import { fireEvent, waitFor } from "@testing-library/react";
-import TaskCompletionStep1, { ListMoreOptionsItems } from "./TaskCompletionStep1";
+import TaskCompletionStep, { ListMoreOptionsItems } from "./TaskCompletionStep";
 
-describe("TaskCompletionStep1", () => {
+describe("TaskCompletionStep", () => {
   it("renders task completion step 1 with required props", () => {
     const { getByText } = global.withProvider(
-      <TaskCompletionStep1
+      <TaskCompletionStep
         task={{}}
         pickEditor={() => null}
         complete={() => null}
@@ -23,7 +23,7 @@ describe("TaskCompletionStep1", () => {
     allowedProgressions.set(1);
 
     const { getByText } = global.withProvider(
-      <TaskCompletionStep1
+      <TaskCompletionStep
         task={{}}
         pickEditor={() => null}
         complete={() => null}

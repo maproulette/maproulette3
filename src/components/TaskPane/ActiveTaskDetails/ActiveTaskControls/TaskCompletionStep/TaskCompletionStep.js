@@ -15,14 +15,14 @@ import messages from './Messages'
 import ErrorTagComment from '../../../../ErrorTagComment/ErrorTagComment'
 
 /**
- * TaskCompletionStep1 renders and manages controls and keyboard shortcuts for
+ * TaskCompletionStep renders and manages controls and keyboard shortcuts for
  * initiating editing a task (fix, skip, false positive).
  *
  * @see See ActiveTaskControls
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class TaskCompletionStep1 extends Component {
+export default class TaskCompletionStep extends Component {
   state = {
     moreOptionsOpen: false,
   }
@@ -83,7 +83,7 @@ export default class TaskCompletionStep1 extends Component {
   }
 }
 
-TaskCompletionStep1.propTypes = {
+TaskCompletionStep.propTypes = {
   /** The current active task */
   task: PropTypes.object.isRequired,
   /** The current map bounds (for editing) */
