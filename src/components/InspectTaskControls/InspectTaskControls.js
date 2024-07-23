@@ -121,7 +121,7 @@ export class InspectTaskControls extends Component {
          <UserEditorSelector {...this.props} className="mr-mb-4" />
         }
 
-        <div className="mr-my-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
+        <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
           {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
            <Link
              to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}

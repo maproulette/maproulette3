@@ -293,7 +293,7 @@ export class ReviewTaskControls extends Component {
           </div>
         }
 
-        <div className="mr-my-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
+        <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
 
           {
             isRevision 

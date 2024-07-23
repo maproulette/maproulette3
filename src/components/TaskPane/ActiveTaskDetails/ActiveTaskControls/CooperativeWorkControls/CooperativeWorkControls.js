@@ -34,11 +34,14 @@ export class CooperativeWorkControls extends Component {
     return (
       <div className="mr-pb-2">
         {this.props.loadingOSMData && <BusySpinner />}
-
-        <p className="mr-text-md mr-mb-2">
+        <UserEditorSelector
+          {...this.props}
+          className="mr-mb-4"
+        />
+        <p className="mr-text-md mr-mb-2 mr-mt-2">
           <FormattedMessage {...messages.prompt} />
         </p>
-        <div className="mr-my-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
+        <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
           {this.props.allowedProgressions.has(TaskStatus.fixed) &&
             <TaskFixedControl
               {...this.props}
@@ -53,22 +56,15 @@ export class CooperativeWorkControls extends Component {
             />
           }
         </div>
-        
-        <UserEditorSelector
-          {...this.props}
-          className="mr-mb-4"
-        />
-          <div className="mr-my-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
-          {this.props.allowedProgressions.has(TaskStatus.skipped) &&
-            <TaskSkipControl {...this.props} />
+          <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
+          {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
+            <TaskAlreadyFixedControl {...this.props} />
           }
-
           {this.props.allowedProgressions.has(TaskStatus.tooHard) &&
             <TaskTooHardControl {...this.props} />
           }
-
-          {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
-            <TaskAlreadyFixedControl {...this.props} />
+          {this.props.allowedProgressions.has(TaskStatus.skipped) &&
+            <TaskSkipControl {...this.props} />
           }
         </div>
       </div>
