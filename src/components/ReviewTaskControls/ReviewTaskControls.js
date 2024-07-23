@@ -326,7 +326,7 @@ export class ReviewTaskControls extends Component {
                   <FormattedMessage {...messages.approvedWithFixes} />
                 </button>
           }
-          <button className="mr-button mr-button--white mr-mb-2 mr-mr-2"
+          <button className="mr-button mr-button--white mr-px-1 mr-mb-2 mr-mr-2"
                   style={{ minWidth: '10rem'}}
                   onClick={() => this.skipReview()}>
             {this.props.asMetaReview ?
