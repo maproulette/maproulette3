@@ -40,7 +40,7 @@ export default class TaskRevisedControl extends Component {
 const MoreOptionsButton = function(props) {
   return (
     <button
-      className="mr-dropdown__button mr-button mr-text-green-lighter mr-mb-2 mr-mr-2"
+      className="mr-dropdown__button mr-button mr-text-green-lighter mr-mr-2"
       onClick={props.toggleDropdownVisible}
     >
       {props.intl.formatMessage(messages.revisedLabel)}&hellip;
