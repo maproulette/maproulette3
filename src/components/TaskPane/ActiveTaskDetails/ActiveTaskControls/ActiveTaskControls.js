@@ -386,8 +386,8 @@ export class ActiveTaskControls extends Component {
       return (
         <div>
           {!isEditingTask && isComplete &&
-           <div className="mr-text-white mr-text-md mr-mb-2 mr-links-green-lighter">
-             <div className="mr-flex mr-justify-between mr-items-center">
+           <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
+             <div className="mr-flex mr-text-sm mr-text-white mr-whitespace-nowrap">
                <span>
                  <FormattedMessage
                    {...messages.markedAs}
@@ -408,7 +408,7 @@ export class ActiveTaskControls extends Component {
              </div>
              {(this.props.task.reviewStatus === TaskReviewStatus.needed ||
                this.props.task.reviewStatus === TaskReviewStatus.disputed) &&
-                <div className="mr-text-yellow mr-text-sd mr-my-4">
+                <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
                   <FormattedMessage {...messages.awaitingReview} />
                 </div>
              }
@@ -450,15 +450,15 @@ export class ActiveTaskControls extends Component {
 
              {(!AsCooperativeWork(this.props.task).isTagType() || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
                <TaskCompletionStep
-               {...this.props}
-               allowedEditors={this.allowedEditors()}
-               allowedProgressions={allowedProgressions}
-               pickEditor={this.pickEditor}
-               complete={this.initiateCompletion}
-               nextTask={this.next}
-               needsRevised={needsRevised}
-               editMode={editMode}
-             />
+                {...this.props}
+                allowedEditors={this.allowedEditors()}
+                allowedProgressions={allowedProgressions}
+                pickEditor={this.pickEditor}
+                complete={this.initiateCompletion}
+                nextTask={this.next}
+                needsRevised={needsRevised}
+                editMode={editMode}
+              />
              }
 
              {!isEditingTask && isComplete && !needsRevised &&
