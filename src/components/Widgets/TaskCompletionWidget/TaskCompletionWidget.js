@@ -75,7 +75,7 @@ export default class TaskCompletionWidget extends Component {
         permanent
       >
         { taskCount > 0 &&
-         <div className="mr-text-pink-light mr-mb-2 mr-text-base">
+         <div className="mr-text-pink-light mr-text-base">
            <FormattedMessage
              {...messages.simultaneousTasks}
              values={{taskCount: taskCount}}
