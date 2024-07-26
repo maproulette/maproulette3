@@ -109,6 +109,7 @@ const SavedChallengeList = function(props) {
     }
   ))
 
+  
   return (
     challengeItems.length > 0 ?
     <ol className="mr-list-reset mr-links-green-lighter mr-pb-24">

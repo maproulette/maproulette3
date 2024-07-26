@@ -251,7 +251,9 @@ export const startTask = function(taskId) {
  * Unlocks a task.
  */
 export const releaseTask = function(taskId) {
+  debugger
   return function(dispatch) {
+    debugger
     return new Endpoint(api.task.release, {
       schema: taskSchema(),
       variables: {id: taskId}

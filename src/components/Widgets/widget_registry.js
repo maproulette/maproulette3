@@ -57,6 +57,8 @@ export { default as TopUserChallengesWidget }
        from '../TopUserChallenges/TopUserChallengesWidget'
 export { default as SavedChallengesWidget }
        from '../SavedChallenges/SavedChallengesWidget'
+export { default as LockedTasksWidget }
+       from '../LockedTasks/LockedTasksWidget'
 export { default as FeaturedChallengesWidget }
        from '../FeaturedChallenges/FeaturedChallengesWidget'
 export { default as PopularChallengesWidget }
