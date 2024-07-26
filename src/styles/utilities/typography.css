@@ -99,7 +99,7 @@ h4,
 }
 
 .mr-markdown {
-  @apply mr-text-sm;
+  @apply mr-text-sm mr-overflow-auto mr-break-words;
 
   h1,
   h2,

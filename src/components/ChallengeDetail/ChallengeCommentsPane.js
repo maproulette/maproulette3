@@ -14,12 +14,7 @@ import defaultPic from "../../static/images/user_no_image.png";
 const calcHeight = (offset) => {
   const variableHeight = window.innerHeight - offset;
   const minHeight = 300;
-
-  if (variableHeight < minHeight) {
-    return minHeight;
-  }
-
-  return variableHeight;
+  return variableHeight < minHeight ? minHeight : variableHeight;
 };
 
 const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
@@ -41,6 +36,7 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
       >
         <div
           className={classNames("mr-flex", isUser ? "mr-flex-row-reverse" : "")}
+          style={{maxWidth: '100%'}}
         >
           <div className="mr-px-2 mr-flex-0">
             <div className="mr-w-9">
@@ -57,9 +53,10 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
           </div>
           <div
             className={classNames(
-              "mr-p-1 mr-rounded mr-p-2 mr-flex-1",
+              "mr-p-1 mr-rounded mr-p-2 mr-flex-1 mr-w-full",
               isUser ? "mr-bg-blue-light" : "mr-bg-green-dark"
             )}
+            style={{maxWidth: '80%'}}
           >
             <div>
               <div className="mr-text-sm">
