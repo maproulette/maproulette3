@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FormattedDate, FormattedMessage, FormattedTime } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import _get from 'lodash/get';
 import _isFinite from 'lodash/isFinite';
 import { WidgetDataTarget, registerWidgetType } from '../../services/Widget/Widget';
