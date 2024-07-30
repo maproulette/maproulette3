@@ -86,7 +86,7 @@ const LockedTasks = (props) => {
                     {task.id}
                   </Link>
                 </div>
-                <div>Challenge: <Link to={`browse/challenges/${task.parent}`}>{task.challengeName}</Link></div>
+                <div>Challenge: <Link to={`browse/challenges/${task.parent}`}>{task.parentName}</Link></div>
               </div>
               <Dropdown
                 className="mr-dropdown--right"
