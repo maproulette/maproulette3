@@ -152,6 +152,7 @@ const WithLockedTask = function(WrappedComponent) {
           tryingLock={this.state.tryingLock}
           lockFailureDetails={this.state.failureDetails}
           tryLocking={this.lockTask}
+          unlockTask={this.unlockTask}
           refreshTaskLock={this.refreshTaskLock}
         />
       )

@@ -23,6 +23,7 @@ export const defaultWorkspaceSetup = function() {
     widgets: [
       widgetDescriptor('FeaturedChallengesWidget'),
       widgetDescriptor('SavedChallengesWidget'),
+      widgetDescriptor('LockedTasksWidget'),
       widgetDescriptor('TopUserChallengesWidget'),
       widgetDescriptor('UserActivityTimelineWidget'),
       widgetDescriptor('PopularChallengesWidget'),
