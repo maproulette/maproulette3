@@ -44,28 +44,40 @@ Note that this will create the development build and not the 'production' build.
 1. Install the back-end server using the instructions from the maproulette-backend
    project, if you haven't already
 
-2. Visit your [OpenStreetMap account](https://master.apis.dev.openstreetmap.org) and go
-   to My Settings -> oauth settings -> Register your application and setup a
-   new application for development. For the `Main Application URL` and
-   `Callback URL` settings, put in `http://127.0.0.1:9000` (assuming your
-   back-end server is running on the default port 9000). The only app
-   permission needed is to "read their user preferences". Take note of your new
-   app's consumer key and secret key, as you'll need them in the next step
+2. Create an account on [master.apis.dev.openstreetmap.org](https://master.apis.dev.openstreetmap.org),
+   or sign in if you already have one. This server runs a full copy of the OpenStreetMap
+   website stack and is intended for development purposes. It has its own database, so
+   your regular openstreetmap.org credentials won't work here.
 
-3. In your back-end server project, setup a .conf file that overrides properties
+3. Open your account settings (click profile name in upper right then "My Settings").
+   Then go to the "OAuth 2 applications" tab and choose "Register new application" to
+   create a new application for development. Choose a name for the application that will
+   help you remember what it's for, e.g. "My MapRoulette local dev environment". Set the
+   `Redirect URL` to `http://127.0.0.1:9000` (assuming your back-end server is running
+   on the default port 9000).
+
+   The required app permissions are:
+   - "Read user preferences" (`read_prefs`)
+   - "Modify user preferences" (`write_prefs`)
+   - "Modify the map" (`write_api`)
+
+   Copy your new app's Client ID and Client Secret. They will only be shown once!
+
+4. In your back-end server project, setup a .conf file that overrides properties
    as needed from `conf/application.conf` (unless you'd prefer to set explicit
    system properties on the command line when starting up the server). Refer
    to the `conf/application.conf` file, `conf/dev.conf` file and maproulette-backend
    docs for explanations of the various server configuration settings. At the
-   very least, you'll want to make sure your JDBC url is correct and your OAuth
-   consumer key and secret are set properly.
+   very least, you'll want to make sure your JDBC url is correct and set
+   `osm.consumerKey` to the Client ID and `osm.consumerSecret` to the Client Secret
+   from the previous step.
 
-4. Fire up your back-end server, specifying the path to your .conf file with
+5. Fire up your back-end server, specifying the path to your .conf file with
    `-Dconfig.resource` or explicitly specifying the various system properties
    on the command line. See the maproulette-backend docs for details on starting up
    the server
 
-5. Edit your `.env.development.local` file in your front-end project and set:
+6. Edit your `.env.development.local` file in your front-end project and set:
    ```
    REACT_APP_SERVER_OAUTH_URL='http://127.0.0.1:9000/auth/authenticate?redirect=http://127.0.0.1:3000'
    ```
