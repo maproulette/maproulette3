@@ -243,7 +243,7 @@ export default defineMessages({
     id: "Admin.EditChallenge.form.preferredTags.description",
     defaultMessage:
       "You can optionally provide a list of " +
-      "preferred tags that you want the user to use when completing a task.",
+      "preferred tags that you want the user to use when completing a task. [Learn More](https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/)",
   },
 
   preferredReviewTagsLabel: {
@@ -255,7 +255,7 @@ export default defineMessages({
     id: "Admin.EditChallenge.form.preferredReviewTags.description",
     defaultMessage:
       "You can optionally provide a list of " +
-      "preferred tags that you want the reviewer to use when reviewing a task.",
+      "preferred tags that you want the reviewer to use when reviewing a task. [Learn More](https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/)",
   },
 
   limitTagsDescription: {
