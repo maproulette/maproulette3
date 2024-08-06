@@ -77,13 +77,13 @@ export class TaskTags extends Component {
                 <FormattedMessage {...messages.modifyTags} />
               </h3>
               <a target="_blank" rel="noreferrer" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="mr-ml-2">
-              <SvgSymbol
-                  sym="info-icon"
-                  viewBox="0 0 20 20"
-                  className="mr-fill-white mr-w-4 mr-h-4"
-                />
-              </a>
-            </div>
+                <SvgSymbol
+                    sym="info-icon"
+                    viewBox="0 0 20 20"
+                    className="mr-fill-white mr-w-4 mr-h-4"
+                  />
+                </a>
+              </div>
               <div className="mr-mt-2 mr-w-full">
                 <KeywordAutosuggestInput
                   handleChangeTags={this.handleChangeTags}
@@ -130,13 +130,13 @@ export class TaskTags extends Component {
               <FormattedMessage {...messages.updateTags} />
             </a>
             <a target="_blank" rel="noreferrer" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="">
-            <SvgSymbol
-                sym="info-icon"
-                viewBox="0 0 20 20"
-                className="mr-fill-white mr-w-3 mr-h-3"
-              />
-            </a>
-          </div> : null
+              <SvgSymbol
+                  sym="info-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-white mr-w-3 mr-h-3"
+                />
+              </a>
+            </div> : null
           }
         </div>
       )
