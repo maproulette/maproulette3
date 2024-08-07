@@ -25,31 +25,39 @@ export function WithTaskBundle(WrappedComponent) {
       resetSelectedTasks: null
     }
 
-    componentDidMount() {
+    async componentDidMount() {
       const { task } = this.props
-      this.setState({ completingTask: null })
-      this.updateBundlingConditions()
-      if (_isFinite(_get(task, 'bundleId'))){
-        this.setupBundle(task.bundleId)
+      if (_isFinite(_get(task, 'bundleId'))) {
+        await this.setupBundle(task.bundleId)
+      } else {
+        this.updateBundlingConditions()
       }
 
       window.addEventListener('beforeunload', this.handleBeforeUnload)
     }
 
-    componentDidUpdate(prevProps, prevState) {
-      const { initialBundle } = this.state
+    async componentDidUpdate(prevProps, prevState) {
       const { task } = this.props
+
       if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
-        this.updateBundlingConditions()
-        this.setState({ selectedTasks: [], initialBundle: null, taskBundle: null, loading: false, completingTask: null })
+        this.setState({ 
+          selectedTasks: [], 
+          initialBundle: null, 
+          taskBundle: null, 
+          loading: false, 
+          completingTask: null 
+        })
+
         if (_isFinite(_get(task, 'bundleId'))) {
-          this.setupBundle(task.bundleId)
+          await this.setupBundle(task.bundleId)
+        } else {
+          this.updateBundlingConditions()
         }
 
         const prevInitialBundle = prevState.initialBundle
         const prevTaskBundle = prevState.taskBundle
         if ((prevTaskBundle || prevInitialBundle) && prevTaskBundle !== prevInitialBundle && !prevState.completingTask) {
-          if (initialBundle) {
+          if (prevInitialBundle) {
             // Whenever the user redirects, skips a task, or refreshes and there is a 
             // new bundle state, the bundle state needs to reset to its initial value.
             this.props.resetTaskBundle(prevInitialBundle)
@@ -59,92 +67,65 @@ export function WithTaskBundle(WrappedComponent) {
             this.clearActiveTaskBundle(prevTaskBundle.bundleId)
           }
         } else if ((prevTaskBundle && prevInitialBundle) && prevTaskBundle !== prevInitialBundle && prevState.completingTask) {
-          const tasksToUnlock = prevInitialBundle.taskIds.filter(taskId => !prevTaskBundle.taskIds.includes(taskId))
-          tasksToUnlock.map(taskId => {
-            this.props.releaseTask(taskId).then(() => {
-              // wait for lock to be cleared in db and provide some leeway 
-              // time with setTimeout before triggering storage event
-              setTimeout(() => localStorage.removeItem(`lock-${taskId}`), 1500)
-            }).catch(() => null)
-          })
+          await this.unlockTasks(prevTaskBundle, prevTaskBundle)
         }
       }
     }
 
     componentWillUnmount() {
       this.resetBundle()
-
-      this.setState({ selectedTasks: [], initialBundle: null, taskBundle: null, loading: false, completingTask: null })
       window.removeEventListener('beforeunload', this.handleBeforeUnload)
     }
 
     updateBundlingConditions = () => {
       const { task, taskReadOnly, workspace, user, name } = this.props
-      const isCompletionWorkspace = workspace?.name === "taskCompletion" || name === "taskCompletion"
-      const isReviewWorkspace = workspace?.name === "taskReview" || name === "taskReview"
-      
+      const isCompletionWorkspace = ["taskCompletion"].includes(workspace?.name || name)
+      const isReviewWorkspace = ["taskReview"].includes(workspace?.name || name)
       const completionStatus = isCompletionWorkspace && ([2].includes(task?.reviewStatus) || [0, 3, 6].includes(task?.status))
-      
       const enableMapperEdits = (!task?.completedBy || user.id === task.completedBy) && completionStatus && !isReviewWorkspace
       const enableSuperUserEdits = user.isSuperUser && (completionStatus || isReviewWorkspace)
-      
       const bundleEditsDisabled = taskReadOnly || (!enableMapperEdits && !enableSuperUserEdits)
 
-      return bundleEditsDisabled
+      this.setState({ bundleEditsDisabled })
     }
 
     handleBeforeUnload = () => {
       this.resetBundle()
-
-      this.setState({ selectedTasks: [], initialBundle: null, taskBundle: null, loading: false, completingTask: null })
     }
 
-    resetBundle = () => {
-      const { initialBundle } = this.state
-      if (!this.state.completingTask) {
+    resetBundle = async () => {
+      const { initialBundle, taskBundle, completingTask } = this.state
+      if (!completingTask) {
         this.resetSelectedTasks()
-        if (
-          (this.state.taskBundle || this.state.initialBundle) &&
-          this.state.taskBundle !== this.state.initialBundle &&
-          !this.state.completingTask
-        ) {
+        if (taskBundle || initialBundle && taskBundle !== initialBundle) {
           if (initialBundle) {
-            // Whenever the user redirects, skips a task, or refreshes and there is a 
-            // new bundle state, the bundle state needs to reset to its initial value.
-            this.props.resetTaskBundle(initialBundle)
-          } else {
-            // Whenever the user redirects, skips a task, or refreshes and there was 
-            // no initial value, the bundle will be destroyed.
-            this.clearActiveTaskBundle(this.state.taskBundle.bundleId)
+            await this.props.resetTaskBundle(initialBundle).catch(console.error)
+          } else if (taskBundle) {
+            await this.clearActiveTaskBundle(taskBundle.bundleId)
           }
         }
-      } else if (
-        this.state.taskBundle &&
-        this.state.initialBundle &&
-        this.state.taskBundle !== this.state.initialBundle &&
-        this.state.completingTask
-      ) {
-        const tasksToUnlock = this.state.initialBundle.taskIds.filter(
-          (taskId) => !this.state.taskBundle.taskIds.includes(taskId)
-        )
-        tasksToUnlock.map((taskId) => {
-          this.props.releaseTask(taskId).then(() => {
-            // wait for lock to be cleared in db and provide some leeway 
-            // time with setTimeout before triggering storage event
-            setTimeout(
-              () => localStorage.removeItem(`lock-${taskId}`),
-              1500
-            )
-          }).catch(() => null)
-        })
+      } else if (taskBundle || initialBundle &&taskBundle && initialBundle) {
+        await this.unlockTasks(initialBundle, taskBundle)
       }
     }
 
-    setupBundle = bundleId => {
+    unlockTasks = async (initialBundle, taskBundle) => {
+      const tasksToUnlock = initialBundle.taskIds.filter(taskId => !taskBundle.taskIds.includes(taskId))
+      await Promise.all(tasksToUnlock.map(taskId =>
+        this.props.releaseTask(taskId).then(() => {
+          // wait for lock to be cleared in db and provide some leeway 
+          // time with setTimeout before triggering storage event
+          setTimeout(() => localStorage.removeItem(`lock-${taskId}`), 1500)
+        }).catch(console.error)
+      ))
+    }
+
+    setupBundle = async (bundleId) => {
       const { task, workspace, history, fetchTaskBundle } = this.props
-      this.setState({ loading: true })
-      fetchTaskBundle(bundleId, !this.state.bundleEditsDisabled).then(taskBundle => {
-        if(taskBundle) {
+      this.setState({loading: true})
+      try {
+        const taskBundle = await fetchTaskBundle(bundleId, !this.state.bundleEditsDisabled)
+        if (taskBundle) {
           if (!task.isBundlePrimary) {
             const primaryTask = taskBundle.tasks.find(task => task.isBundlePrimary)
             const isMetaReview = history?.location?.pathname?.includes("meta-review")
@@ -156,34 +137,52 @@ export function WithTaskBundle(WrappedComponent) {
             }
           }
         }
-        const bundleEditsDisabled = this.updateBundlingConditions()
-        this.setState({ bundleEditsDisabled, initialBundle: taskBundle, selectedTasks: taskBundle?.taskIds, taskBundle })
-      })
-      this.setState({ loading: false })
-    }
-
-    createTaskBundle = (taskIds, bundleTypeMismatch, name) => {
-      this.setState({loading: true})
-      this.props.bundleTasks(this.props.taskId, taskIds, bundleTypeMismatch, name).then(taskBundle => {
-        this.setState({selectedTasks: taskBundle?.taskIds, taskBundle, loading: false})
-      })
-    }
-
-    resetToInitialTaskBundle = (bundleId) => {
-      const { initialBundle, taskBundle } = this.state
-      if(initialBundle && initialBundle !== taskBundle){
-        this.setState({loading: true})
-        this.props.resetTaskBundle(initialBundle).then(taskBundle => {
-          this.setState({selectedTasks: taskBundle?.taskIds, taskBundle, loading: false})
+        this.updateBundlingConditions()
+        this.setState({ 
+          initialBundle: taskBundle, 
+          selectedTasks: taskBundle?.taskIds || [], 
+          taskBundle
         })
-      } else if (
-        _isFinite(bundleId) &&
-        _get(this.state, 'taskBundle.bundleId') === bundleId &&
-        (this.props.task.status === 0)
-      ) {
-        // The task id we pass to delete will be left locked, so it needs to be
-        // the current task even if it's not the primary task in the bundle
-        this.clearActiveTaskBundle(bundleId)
+      } catch (error) {
+        console.error("Error setting up bundle:", error)
+        this.updateBundlingConditions()
+      } finally {
+        this.setState({ loading: false })
+      }
+    }
+
+    createTaskBundle = async (taskIds, bundleTypeMismatch, name) => {
+      this.setState({loading: true})
+      try {
+        const taskBundle = await this.props.bundleTasks(this.props.taskId, taskIds, bundleTypeMismatch, name)
+        this.setState({
+          selectedTasks: taskBundle?.taskIds || [],
+          taskBundle,
+          loading: false
+        })
+      } catch (error) {
+        console.error("Error creating task bundle:", error)
+        this.setState({loading: false})
+      }
+    }
+
+    resetToInitialTaskBundle = async (bundleId) => {
+      const { initialBundle, taskBundle } = this.state
+      if (initialBundle && initialBundle !== taskBundle) {
+        this.setState({loading: true})
+        try {
+          const taskBundle = await this.props.resetTaskBundle(initialBundle)
+          this.setState({
+            selectedTasks: taskBundle?.taskIds || [],
+            taskBundle,
+            loading: false
+          })
+        } catch (error) {
+          console.error("Error resetting to initial task bundle:", error)
+          this.setState({loading: false})
+        }
+      } else if (_isFinite(bundleId) && _get(this.state, 'taskBundle.bundleId') === bundleId && this.props.task.status === 0) {
+        await this.clearActiveTaskBundle(bundleId)
       }
     }
 
@@ -193,25 +192,41 @@ export function WithTaskBundle(WrappedComponent) {
       }
     }
 
-    removeTaskFromBundle = (bundleId, taskId) => {
-      const { initialBundle } = this.state
+    removeTaskFromBundle = async (bundleId, taskId) => {
+      const { initialBundle, taskBundle } = this.state
       this.setState({loading: true})
-      if(this.state.taskBundle?.taskIds.length === 2 && !this.state.initialBundle && this.props.task.status === 0) {
-        this.clearActiveTaskBundle(bundleId)
-        this.setState({loading: false})
-        return
-      }
+      try {
+        if (taskBundle?.taskIds.length === 2 && !initialBundle && this.props.task.status === 0) {
+          await this.clearActiveTaskBundle(bundleId)
+          this.setState({loading: false})
+          return
+        }
 
-      this.props.removeTaskFromBundle(initialBundle?.taskIds, bundleId, taskId).then(taskBundle => {
-        this.setState({taskBundle, loading: false})
-      })
+        const updatedTaskBundle = await this.props.removeTaskFromBundle(initialBundle?.taskIds, bundleId, taskId)
+        this.setState({
+          taskBundle: updatedTaskBundle,
+          loading: false
+        })
+      } catch (error) {
+        console.error("Error removing task from bundle:", error)
+        this.setState({loading: false})
+      }
     }
 
     clearActiveTaskBundle = async (bundleId) => {
-      const bundleDeleted = await this.props.deleteTaskBundle(bundleId)
-      if(bundleDeleted) {
-        this.setState({selectedTasks: [], taskBundle: null, loading: false})
-        this.resetSelectedTasks()
+      try {
+        const bundleDeleted = await this.props.deleteTaskBundle(bundleId)
+        if (bundleDeleted) {
+          this.setState({
+            selectedTasks: [], 
+            taskBundle: null, 
+            loading: false
+          })
+          this.resetSelectedTasks()
+        }
+      } catch (error) {
+        console.error("Error clearing active task bundle:", error)
+        this.setState({loading: false})
       }
     }
 
