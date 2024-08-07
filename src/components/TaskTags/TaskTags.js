@@ -54,12 +54,10 @@ export class TaskTags extends Component {
 
   render() {
     const disableEditTags = this.props.taskReadOnly || (
-      (this.props.task?.status !== 0 &&
-         (![0, 2, 4, 5].includes(this.props.task?.reviewStatus))) && 
-         ( 
-      this.props.task?.reviewRequestedBy !== this.props.user && 
+      ![0, 3, 6].includes(this.props.task?.status) &&
+      ![0, 2, 4, 5].includes(this.props.task?.reviewStatus) &&
+      this.props.task?.reviewRequestedBy !== this.props.user &&
       this.props.task?.reviewClaimedBy !== this.props.user
-      )
     )
 
     if (this.state.edit) {
