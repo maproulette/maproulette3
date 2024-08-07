@@ -306,7 +306,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: task => props.isTaskSelected(task.id),
     Cell: ({ value, original }) => {
       const status = original.status ?? original.taskStatus
+      const alreadyBundled = original.bundleId && !props.taskBundle?.bundleId !== original.bundleId
       const enableSelecting =
+      !alreadyBundled &&
       !props.bundling &&
       !props.taskReadOnly &&
       [0, 3, 6].includes(status) &&
@@ -419,14 +421,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Cell: ({ row }) => {
       const bundlePrimary = props.taskBundle?.tasks.find(task => task.isBundlePrimary)
       const isTaskSelected = row._original.id === (bundlePrimary?.id || props.task?.id)
-      const alreadyBundled = props.taskBundle?.taskIds?.includes(row._original.id)
+      const alreadyBundled = row._original.bundleId && props.taskBundle?.bundleId !== row._original.bundleId
       const enableBundleEdits = props.initialBundle?.taskIds?.includes(row._original.id) ||
-                                [0, 3, 6].includes(row._original.status) ||
-                                alreadyBundled      
+                                [0, 3, 6].includes(row._original.status)
 
       return (
         <div>
-          {!isTaskSelected && enableBundleEdits && alreadyBundled && (
+          {!isTaskSelected && enableBundleEdits && !alreadyBundled && (
             <button
               disabled={props.bundleEditsDisabled}
               className="mr-text-red-light"

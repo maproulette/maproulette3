@@ -529,8 +529,13 @@ export const TaskMapContainer = (props) => {
     )
   }
 
-
 const TaskMap = (props) => {
+  const ResizeMap = () => {
+    const map = useMap();
+    map.invalidateSize();
+    return null;
+  };
+
   return (
     <div className={classNames("task-map task", {"full-screen-map": props.isMobile})}>
       <MapContainer
@@ -543,6 +548,7 @@ const TaskMap = (props) => {
         attributionControl={false}
         maxBounds={[[-90, -180], [90, 180]]} 
       >
+        <ResizeMap />
         <AttributionControl position="bottomleft" prefix={false} />
         <TaskMapContainer {...props} />
       </MapContainer>

@@ -59,6 +59,11 @@ export default defineMessages({
     defaultMessage: "Selected",
   },
 
+  alreadyBundledLabel: {
+    id: "Widgets.TaskBundleWidget.popup.controls.alreadyBundled.label",
+    defaultMessage: "Already bundled by someone else.",
+  },
+
   bundleTasksLabel: {
     id: "Widgets.TaskBundleWidget.controls.startBundling.label",
     defaultMessage: "Start Bundling Tasks",

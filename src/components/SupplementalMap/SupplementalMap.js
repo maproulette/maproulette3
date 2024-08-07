@@ -90,6 +90,12 @@ const SupplementalMapContent = props => {
   )
 }
 
+const ResizeMap = () => {
+  const map = useMap();
+  map.invalidateSize();
+  return null;
+};
+
 const SupplementalMap = (props) => {
   const zoom = _get(props, "task.parent.defaultZoom", DEFAULT_ZOOM)
   const minZoom = _get(props, "task.parent.minZoom", MIN_ZOOM)
@@ -108,6 +114,7 @@ const SupplementalMap = (props) => {
         attributionControl={false}
         maxBounds={[[-90, -180], [90, 180]]} 
       >
+        <ResizeMap />
         <AttributionControl position="bottomleft" prefix={false} />
         <SupplementalMapContent {...props} />
       </MapContainer>
