@@ -96,16 +96,16 @@ export default class UserEditorSelector extends Component {
           <FormattedMessage {...messages.currentlyUsing} />
         </span>
         {this.state.isSaving ? <BusySpinner /> :
-          <Dropdown
-            className="mr-dropdown mr-dropdown--fixed"
-            dropdownButton={dropdown =>
-              <EditorButton
-                editorLabels={localizedEditorLabels}
-                userEditor={this.currentEditor()}
-                toggleDropdownVisible={dropdown.toggleDropdownVisible}
-              />
-            }
-            dropdownContent={dropdown =>
+         <Dropdown
+           className="mr-dropdown mr-dropdown--fixed"
+           dropdownButton={dropdown =>
+             <EditorButton
+               editorLabels={localizedEditorLabels}
+               userEditor={this.currentEditor()}
+               toggleDropdownVisible={dropdown.toggleDropdownVisible}
+             />
+           }
+           dropdownContent={dropdown =>
               <ListEditorItems
                 allowedEditors={this.props.allowedEditors}
                 editorLabels={localizedEditorLabels}
@@ -113,8 +113,8 @@ export default class UserEditorSelector extends Component {
                 chooseEditor={this.chooseEditor}
                 closeDropdown={dropdown.closeDropdown}
               />
-            }
-          />
+           }
+         />
         }
         <div className={"mr-flex"}>
           <Button
