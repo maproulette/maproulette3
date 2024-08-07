@@ -87,6 +87,12 @@ const Markers = (props) => {
   });
 
   useEffect(() => {
+    return () => {
+      clearTimeout(timerRef.current);
+    };
+  }, [map]);
+
+  useEffect(() => {
     if (!props.taskMarkers || props.delayMapLoad || !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) || props.selectedClusters !== prevProps.current.selectedClusters) {
       refreshSpidered();
       generateMarkers();
