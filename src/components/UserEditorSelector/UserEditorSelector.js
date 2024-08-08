@@ -63,7 +63,13 @@ export default class UserEditorSelector extends Component {
 
   currentEditor = () => {
     const configuredEditor = _get(this.props, 'user.settings.defaultEditor', Editor.none)
-    return configuredEditor === Editor.none ? DEFAULT_EDITOR : configuredEditor
+    let current = configuredEditor === Editor.none ? DEFAULT_EDITOR : configuredEditor
+
+    if (this.props.allowedEditors && this.props.allowedEditors.indexOf(current) === -1) {
+      current = this.props.allowedEditors[0]
+    }
+
+    return current
   }
 
   componentDidMount() {
