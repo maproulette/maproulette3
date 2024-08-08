@@ -11,7 +11,8 @@ import AppErrors from '../../../services/Error/AppErrors'
  * WithEditor provides an editor prop to its WrappedComponent that contains the
  * current open editor (if any) from the redux store and the user's currently
  * configured editor (or the system default editor if none is configured), as
- * well as functions for interacting with editors
+ * well as functions for interacting with editors. If the embedded Rapid Editor
+ * is running, it also provides access to the RapidContext.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
@@ -25,6 +26,7 @@ export const mapStateToProps = state => {
   return ({
     editor: state.openEditor,
     configuredEditor: _get(userEntity, 'settings.defaultEditor', DEFAULT_EDITOR),
+    rapidContext: _get(state, 'rapidEditor.context'),
   })
 }
 

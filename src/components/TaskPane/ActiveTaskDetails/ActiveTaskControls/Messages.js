@@ -33,4 +33,9 @@ export default defineMessages({
     id: "Task.controls.viewChangeset.label",
     defaultMessage: "View Changeset",
   },
+
+  rapidDiscardUnsavedChanges: {
+    id: "Widgets.TaskMapWidget.rapidDiscardUnsavedChanges",
+    defaultMessage: "You have unsaved changes in Rapid which will be discarded. Are you sure you want to proceed?",
+  },
 })
