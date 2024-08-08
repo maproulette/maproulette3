@@ -13,4 +13,14 @@ export default defineMessages({
     id: 'UserEditorSelector.openEditor.label',
     defaultMessage: "Open Editor",
   },
+
+  defaultEditor: {
+    id: 'UserEditorSelector.defaultEditor.label',
+    defaultMessage: "Set Default Editor:",
+  },
+
+  unsupportedEditor: {
+    id: 'UserEditorSelector.unsupportedEditor.label',
+    defaultMessage: "Open Unsupported Editor:",
+  },
 })
