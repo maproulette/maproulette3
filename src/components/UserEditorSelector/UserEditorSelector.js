@@ -118,44 +118,16 @@ export default class UserEditorSelector extends Component {
         }
         <div className={"mr-flex"}>
           <Button
-            className="mr-button--green-fill mr-ml-2 mr-px-4 mr-cursor-pointer mr-text-sm"
+            className="mr-button--green-fill mr-ml-2 mr-px-8 mr-cursor-pointer mr-text-sm"
             onClick={() => this.props.pickEditor({value: this.currentEditor()})}
           >
             <FormattedMessage {...messages.editLabel} />
           </Button>
-          <Dropdown
-            className="mr-dropdown--fixed mr-w-full"
-            dropdownButton={dropdown =>
-              <AllOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
-            }
-            dropdownContent={(dropdown) => 
-              <ListAllEditorItems 
-                {...this.props}
-                allowedEditors={this.props.allowedEditors}
-                editorLabels={localizedEditorLabels}
-                closeDropdown={dropdown.closeDropdown}
-              />
-            }
-          />
         </div>
       </div>
     )
   }
 }
-
-const AllOptionsButton = (props) => (
-  <button
-    className="mr-button--green-fill mr-px-2 mr-py-2 mr-cursor-pointer mr-text-sm"
-    onClick={props.toggleDropdownVisible}
-    title="Other editors"
-  >
-    <SvgSymbol
-      sym="icon-cheveron-down"
-      viewBox="0 0 20 20"
-      className="mr-fill-white mr-w-4 mr-h-4"
-    />
-  </button>
-)
 
 const EditorButton = (props) => (
   <button
@@ -172,76 +144,51 @@ const EditorButton = (props) => (
     </span>
   </button>
 )
+const ListEditorItems = ({
+  editorLabels,
+  allowedEditors,
+  activeEditor,
+  chooseEditor,
+  closeDropdown
+}) => {
+  const renderEditorItems = (isAllowed) =>
+    _compact(
+      _map(editorLabels, (label, key) => {
+        const editor = Editor[key]
+        if (editor === Editor.none) return null
 
-const ListAllEditorItems = (props) => {
-  const editorItems = _compact(_map(props.editorLabels, (label, key) => {
-    const editor = Editor[key]
-    // Don't offer 'none' option
-    if (editor === Editor.none) {
-      return null
-    }
+        const isEditorAllowed = !allowedEditors || allowedEditors.includes(editor)
+        if (isEditorAllowed !== isAllowed) return null
 
-
-      return (
-        <li
-        key={`${editor}-extra`}
-        className={"mr-text-sm"}
-      >
-        <a onClick={() => props.pickEditor({value: editor})}>
-          {label}
-        </a>
-      </li>
-      )
-  }))
-
-   return (
-    <ol className="mr-list-dropdown">
-      {editorItems}
-    </ol>
-  )
-}
-
-const ListEditorItems = (props) => {
-  const editorItems = _compact(_map(props.editorLabels, (label, key) => {
-    const editor = Editor[key]
-    // Don't offer 'none' option
-    if (editor === Editor.none) {
-      return null
-    }
-
-    if (props.listAllEditors) {
-      return (
-        <li
-        key={`${editor}-extra`}
-        className={"mr-text-sm"}
-      >
-        <a onClick={() => props.pickEditor({value: editor})}>
-          {label}
-        </a>
-      </li>
-      )
-    }
-
-    // Honor any restrictions on allowed editors
-    if (props.allowedEditors && props.allowedEditors.indexOf(editor) === -1) {
-      return null
-    }
-
-    return (
-      <li
-        key={editor}
-        className={classNames({"active": editor === props.activeEditor})}
-      >
-        <a onClick={() => props.chooseEditor(editor, props.closeDropdown)}>
-          {label}
-        </a>
-      </li>
+        return (
+          <li key={editor} className={classNames({ "active": editor === activeEditor })}>
+            <a onClick={() => chooseEditor(editor, closeDropdown)}>
+              {label}
+            </a>
+          </li>
+        )
+      })
     )
-  }))
+
+  const editorItems = renderEditorItems(true)
+  const notAllowedEditorItems = renderEditorItems(false)
 
   return (
     <ol className="mr-list-dropdown">
-      {editorItems}
+      {notAllowedEditorItems.length > 0 ? (
+        <div className="mr-mb-2">
+          Recommended Editors:
+          {editorItems}
+        </div>
+      ) : (
+        editorItems
+      )}
+      {notAllowedEditorItems.length > 0 && (
+        <div>
+          Unrecommended Editors:
+          {notAllowedEditorItems}
+        </div>
+      )}
     </ol>
   )
 }
