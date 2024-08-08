@@ -118,6 +118,7 @@ export default class UserEditorSelector extends Component {
                 activEditor={this.currentEditor()}
                 chooseEditor={this.chooseEditor}
                 closeDropdown={dropdown.closeDropdown}
+                pickEditor={this.props.pickEditor}
               />
            }
          />
@@ -155,7 +156,8 @@ const ListEditorItems = ({
   allowedEditors,
   activeEditor,
   chooseEditor,
-  closeDropdown
+  closeDropdown,
+  pickEditor
 }) => {
   const renderEditorItems = (isAllowed) =>
     _compact(
@@ -167,9 +169,18 @@ const ListEditorItems = ({
         if (isEditorAllowed !== isAllowed) return null
 
         return (
-          <li key={editor} className={classNames({ "active": editor === activeEditor })}>
-            <a onClick={() => chooseEditor(editor, closeDropdown)}>
-              {label}
+          <li key={editor} className={classNames({ "active": editor === activeEditor})}>
+            <a onClick={() => isEditorAllowed ? chooseEditor(editor, closeDropdown) : pickEditor({value: editor})}>
+              <div className="mr-flex mr-items-center">
+                {!isEditorAllowed ? (
+                  <SvgSymbol
+                    sym='link-icon'
+                    viewBox='0 0 20 20'
+                    className="mr-h-3 mr-w-3 mr-fill-current mr-mr-2"
+                  /> 
+                ) : null}
+                {label}
+              </div>
             </a>
           </li>
         )
@@ -177,22 +188,18 @@ const ListEditorItems = ({
     )
 
   const editorItems = renderEditorItems(true)
-  const notAllowedEditorItems = renderEditorItems(false)
+  const unsupportedEditorItems = renderEditorItems(false)
 
   return (
     <ol className="mr-list-dropdown">
-      {notAllowedEditorItems.length > 0 ? (
-        <div className="mr-mb-2">
-          Recommended Editors:
-          {editorItems}
-        </div>
-      ) : (
-        editorItems
-      )}
-      {notAllowedEditorItems.length > 0 && (
-        <div>
-          Unrecommended Editors:
-          {notAllowedEditorItems}
+      <div className="mr-mb-2">
+        <div className="mr-mb-2"> <FormattedMessage {...messages.defaultEditor} /></div>
+        {editorItems}
+      </div>
+      {unsupportedEditorItems.length > 0 && (
+        <div className="mr-text-sm">
+          <div className="mr-mb-2"> <FormattedMessage {...messages.unsupportedEditor} /></div>
+          {unsupportedEditorItems}
         </div>
       )}
     </ol>
