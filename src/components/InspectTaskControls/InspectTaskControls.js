@@ -121,20 +121,22 @@ export class InspectTaskControls extends Component {
          <UserEditorSelector {...this.props} className="mr-mb-4" />
         }
 
+        {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
+          <Link
+            to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
+            className="mr-button mr-mt-2"
+            style={{minWidth: '20.5rem'}}
+          >
+            <FormattedMessage {...messages.modifyTaskLabel} />
+          </Link> : <div />
+        }
+
         <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
-          {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
-           <Link
-             to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
-             className="mr-button"
-           >
-             <FormattedMessage {...messages.modifyTaskLabel} />
-           </Link> : <div />
-          }
-          <button className="mr-button mr-button--white" onClick={this.prevTask}>
+          <button className="mr-button mr-mr-2 mr-button--white"  style={{minWidth: '10rem'}} onClick={this.prevTask}>
             <FormattedMessage {...messages.previousTaskLabel} />
           </button>
 
-          <button className="mr-button mr-button--white" onClick={this.nextTask}>
+          <button className="mr-button mr-button--white"  style={{minWidth: '10rem'}} onClick={this.nextTask}>
             <FormattedMessage {...messages.nextTaskLabel} />
           </button>
         </div>
