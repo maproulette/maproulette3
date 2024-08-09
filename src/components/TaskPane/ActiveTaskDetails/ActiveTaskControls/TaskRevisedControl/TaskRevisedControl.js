@@ -41,6 +41,7 @@ const MoreOptionsButton = function(props) {
   return (
     <button
       className="mr-dropdown__button mr-button mr-text-green-lighter mr-mr-2"
+      style={{minWidth: '20.5rem'}}
       onClick={props.toggleDropdownVisible}
     >
       {props.intl.formatMessage(messages.revisedLabel)}&hellip;
