@@ -95,11 +95,6 @@ export class ActiveTaskControls extends Component {
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     const {task, taskFeatureProperties} = this.props
-    const allowed = this.allowedEditors()
-    // If the given editor isn't allowed, default to first allowed editor
-    if (allowed && allowed.indexOf(value) === -1) {
-      value = allowed[0]
-    }
 
     const comment = task.parent.checkinComment
     const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
