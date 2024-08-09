@@ -98,18 +98,27 @@ export default class UserEditorSelector extends Component {
 
     return (
       <div className="mr-text-xs mr-text-white mr-flex mr-whitespace-nowrap mr-items-center">
-        <span className="mr-mr-1 mr-text-sm">
-          <FormattedMessage {...messages.currentlyUsing} />
-        </span>
-        {this.state.isSaving ? <BusySpinner /> :
-         <Dropdown
-           className="mr-dropdown mr-dropdown--fixed"
+        <div className="mr-flex">
+          <Button
+            className="mr-button--green-fill mr-px-2 mr-cursor-pointer mr-text-sm"
+            onClick={() => this.props.pickEditor({value: this.currentEditor()})}
+            style={{minWidth: '11.5rem'}}
+          >
+            {localizedEditorLabels[keysByEditor[this.currentEditor()]]}
+          </Button>
+          <Dropdown
+           className="mr-dropdown mr-dropdown--fixed mr-left-0"
            dropdownButton={dropdown =>
-             <EditorButton
-               editorLabels={localizedEditorLabels}
-               userEditor={this.currentEditor()}
-               toggleDropdownVisible={dropdown.toggleDropdownVisible}
-             />
+            <button
+              className="mr-button--green-fill mr-cursor-pointer mr-p-2"
+              onClick={dropdown.toggleDropdownVisible}
+            >
+              <SvgSymbol
+                sym="icon-cheveron-down"
+                viewBox="0 0 20 20"
+                className="mr-fill-white mr-w-4 mr-h-4"
+              />
+            </button>
            }
            dropdownContent={dropdown =>
               <ListEditorItems
@@ -122,35 +131,12 @@ export default class UserEditorSelector extends Component {
               />
            }
          />
-        }
-        <div className={"mr-flex"}>
-          <Button
-            className="mr-button--green-fill mr-ml-2 mr-px-8 mr-cursor-pointer mr-text-sm"
-            onClick={() => this.props.pickEditor({value: this.currentEditor()})}
-          >
-            <FormattedMessage {...messages.editLabel} />
-          </Button>
         </div>
       </div>
     )
   }
 }
 
-const EditorButton = (props) => (
-  <button
-    className="mr-dropdown__button"
-    onClick={props.toggleDropdownVisible}
-  >
-    <span className="mr-flex">
-      <b className="mr-mr-1">{props.editorLabels[keysByEditor[props.userEditor]]}</b>
-      <SvgSymbol
-        sym="icon-cheveron-down"
-        viewBox="0 0 20 20"
-        className="mr-fill-green-lighter mr-w-4 mr-h-4"
-      />
-    </span>
-  </button>
-)
 const ListEditorItems = ({
   editorLabels,
   allowedEditors,
