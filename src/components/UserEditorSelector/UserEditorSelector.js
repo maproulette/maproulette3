@@ -103,7 +103,7 @@ export default class UserEditorSelector extends Component {
             onClick={() => this.props.pickEditor({value: this.currentEditor()})}
             style={{minWidth: '11.5rem'}}
           >
-            {localizedEditorLabels[keysByEditor[this.currentEditor()]]}
+            {localizedEditorLabels[keysByEditor[this.currentEditor()]] || <FormattedMessage {...messages.editLabel} />}
           </Button>
           <Dropdown
            className="mr-dropdown mr-dropdown--fixed mr-left-0"
