@@ -24,7 +24,8 @@ export default class TaskAlreadyFixedControl extends Component {
     else {
       return (
         <Button
-          className="mr-button--blue-fill"
+          className="mr-button--blue-fill mr-mb-2 mr-mr-2"
+          style={{ minWidth: '10rem'}}
           onClick={() => this.props.complete(TaskStatus.alreadyFixed)}
         >
           <FormattedMessage {...messages.alreadyFixedLabel} />

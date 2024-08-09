@@ -49,7 +49,8 @@ export default class TaskNextControl extends Component {
                 />
               </div>
               <button
-                className={classNames("mr-button mr-button--white mr-w-full", this.props.className)}
+                className={classNames("mr-button mr-button--white", this.props.className)}
+                style={{width: '24rem'}}
                 onClick={() => {
                   this.props.nextTask(this.props.task.parent.id, this.props.task.id)
                   this.setState({chooseNearbyTasks: false})
@@ -71,7 +72,8 @@ export default class TaskNextControl extends Component {
         {!this.state.chooseNearbyTasks &&
           <React.Fragment>
             <button
-              className={classNames("mr-button mr-button--white mr-w-full", this.props.className)}
+              className={classNames("mr-button mr-button--white", this.props.className)}
+              style={{width: '20.5rem'}}
               onClick={() => {
                 if (this.props.loadBy === TaskLoadMethod.proximity) {
                   this.setState({chooseNearbyTasks: true})
@@ -85,7 +87,7 @@ export default class TaskNextControl extends Component {
               <FormattedMessage {...messages.nextLabel} />
             </button>
 
-            <div className="mr-mt-6">
+            <div className="mr-mt-2">
               <div className="form">
                 <span className="mr-mr-4">
                   <FormattedMessage {...messages.loadByLabel} />

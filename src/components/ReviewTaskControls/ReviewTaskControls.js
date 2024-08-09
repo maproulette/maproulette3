@@ -18,7 +18,6 @@ import WithKeyboardShortcuts from '../HOCs/WithKeyboardShortcuts/WithKeyboardSho
 import WithEditor from '../HOCs/WithEditor/WithEditor'
 import WithTaskFeatureProperties from '../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
 import { replacePropertyTags } from '../../hooks/UsePropertyReplacement/UsePropertyReplacement'
-import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import TaskConfirmationModal from '../TaskConfirmationModal/TaskConfirmationModal'
@@ -190,7 +189,8 @@ export class ReviewTaskControls extends Component {
       return (
         <div className={classNames("review-task-controls", this.props.className)}>
           <h5>
-            <button className="mr-button mr-button--blue-fill mr-button--small"
+            <button className="mr-button mr-button--blue-fill mr-button--small mr-mb-2 mr-mr-2"
+                    style={{ minWidth: '12rem'}}
                     onClick={() => this.startReviewing()}>
               <FormattedMessage {...messages.startReview} />
             </button>
@@ -220,7 +220,7 @@ export class ReviewTaskControls extends Component {
 
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
-        <div className="mr-text-sm mr-text-white mr-mt-4 mr-whitespace-nowrap">
+        <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
           <FormattedMessage
             {...messages.currentTaskStatus}
           /> 
@@ -251,16 +251,17 @@ export class ReviewTaskControls extends Component {
             }
           </div>
         }
-
-        <TaskTags
-          user={this.props.user.id}
-          task={this.props.task}
-          tags={this.state.tags}
-          setTags={this.setTags}
-          onConfirm={this.onConfirm}
-          saveTaskTags={this.props.saveTaskTags}
-          taskReadOnly={this.props.taskReadOnly}
-        />
+        <div className="mr-mt-2">
+          <TaskTags
+            user={this.props.user.id}
+            task={this.props.task}
+            tags={this.state.tags}
+            setTags={this.setTags}
+            onConfirm={this.onConfirm}
+            saveTaskTags={this.props.saveTaskTags}
+            taskReadOnly={this.props.taskReadOnly}
+          />
+        </div>
 
         {
           errorTags
@@ -273,12 +274,12 @@ export class ReviewTaskControls extends Component {
             : null
         }
 
-        <div className="mr-my-4">
+        <div>
           <UserEditorSelector {...this.props} />
-          <div className="mr-mt-4 mr-mb-12 mr-grid mr-grid-columns-2 mr-grid-gap-4">
-            <TaskEditControl {...this.props} pickEditor={this.pickEditor} />
+          <div className="mr-grid mr-grid-columns-2 mr-grid-gap-4">
             {this.props.task.metaReviewStatus === TaskReviewStatus.rejected &&
-              <button className="mr-button mr-button--blue-fill"
+              <button className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"
+                      style={{ minWidth: '12rem'}}
                       onClick={() => this.updateReviewStatus(TaskReviewStatus.needed)}>
                 <FormattedMessage {...messages.requestMetaReReview} />
               </button>
@@ -292,34 +293,41 @@ export class ReviewTaskControls extends Component {
           </div>
         }
 
-        <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
+        <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
+
           {
             isRevision 
-              ?  <button className="mr-button mr-button--blue-fill"
+              ?  <button className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"
+                    style={{ minWidth: '12rem'}}
                     onClick={() => this.updateReviewStatus(TaskReviewStatus.approvedWithRevisions)}>
                   <FormattedMessage {...messages.approvedWithRevisions} />
                 </button>
-              : <button className="mr-button mr-button--blue-fill"
+              : <button className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"
+                    style={{ minWidth: '12rem'}}
                     onClick={() => this.updateReviewStatus(TaskReviewStatus.approved)}>
                   <FormattedMessage {...messages.approved} />
                 </button>
           }
-          <button className="mr-button mr-button--blue-fill"
+          <button className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"
+                  style={{ minWidth: '10rem'}}
                   onClick={() => this.updateReviewStatus(TaskReviewStatus.rejected)}>
             <FormattedMessage {...messages.rejected} />
           </button>
           {
             isRevision 
-              ?  <button className="mr-button mr-button--blue-fill"
+              ?  <button className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"
+                    style={{ minWidth: '12rem'}}
                     onClick={() => this.updateReviewStatus(TaskReviewStatus.approvedWithFixesAfterRevisions)}>
                   <FormattedMessage {...messages.approvedWithFixesAfterRevisions} />
                 </button>
-              : <button className="mr-button mr-button--blue-fill"
+              : <button className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"
+                    style={{ minWidth: '12rem'}}
                     onClick={() => this.updateReviewStatus(TaskReviewStatus.approvedWithFixes)}>
                   <FormattedMessage {...messages.approvedWithFixes} />
                 </button>
           }
-          <button className="mr-button mr-button--white"
+          <button className="mr-button mr-button--white mr-px-1 mr-mb-2 mr-mr-2"
+                  style={{ minWidth: '10rem'}}
                   onClick={() => this.skipReview()}>
             {this.props.asMetaReview ?
               <FormattedMessage {...messages.skipMetaReview} /> :
