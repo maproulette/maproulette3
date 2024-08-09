@@ -81,12 +81,12 @@ const LockedTasks = (props) => {
             <div key={task.id} className="mr-card-challenge mr-p-1 mr-mt-3 mr-mr-3 mr-w-full mr-flex mr-items-center" style={{maxWidth: '22rem'}}>
               <div className="mr-flex mr-flex-col mr-flex-grow">
                 <div className="mr-flex">Started: {calculateElapsedTime(task.startedAt)}</div>
-                <div>Task:
+                <div><FormattedMessage {...messages.taskLabel} /> 
                   <Link to={`/challenge/${task.parent}/task/${task.id}`}>
                     {task.id}
                   </Link>
                 </div>
-                <div>Challenge: <Link to={`browse/challenges/${task.parent}`}>{task.parentName}</Link></div>
+                <div><FormattedMessage {...messages.challengeLabel} /> <Link to={`browse/challenges/${task.parent}`}>{task.parentName}</Link></div>
               </div>
               <Dropdown
                 className="mr-dropdown--right"
@@ -105,7 +105,7 @@ const LockedTasks = (props) => {
                 dropdownContent={() => (
                   <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
                     <span className="mr-flex mr-items-baseline">
-                      Task locked
+                    <FormattedMessage {...messages.taskLockedLabel} />
                     </span>
                     <button
                       onClick={() => {
@@ -114,7 +114,7 @@ const LockedTasks = (props) => {
                       }}
                       className="mr-button mr-button--xsmall mr-ml-3"
                     >
-                      Unlock
+                      <FormattedMessage {...messages.unlockLabel} />
                     </button>
                   </div>
                 )}
@@ -142,7 +142,8 @@ const LockedTasks = (props) => {
         </div>
       }
     >
-      Tasks locked for more than an hour will be automatically unlocked within the next hour or might already be unlocked. <button className="mr-text-green-lighter" onClick={fetchLockedTasks}>Refresh list</button> to check.
+       <FormattedMessage {...messages.description} />
+      <button className="mr-text-green-lighter" onClick={fetchLockedTasks}><FormattedMessage {...messages.checkList} /></button>
       <LockedTasksListComponent {...props} />
     </QuickWidget>
   );
