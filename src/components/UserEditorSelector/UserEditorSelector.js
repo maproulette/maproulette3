@@ -9,6 +9,7 @@ import _isEmpty from 'lodash/isEmpty'
 import { DEFAULT_EDITOR, Editor, keysByEditor, editorLabels } from '../../services/Editor/Editor'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 import Button from '../Button/Button'
 
@@ -103,7 +104,10 @@ export default class UserEditorSelector extends Component {
             onClick={() => this.props.pickEditor({value: this.currentEditor()})}
             style={{minWidth: '11.5rem'}}
           >
-            {localizedEditorLabels[keysByEditor[this.currentEditor()]] || <FormattedMessage {...messages.editLabel} />}
+            {this.state.isSaving ? <BusySpinner /> : (
+              localizedEditorLabels[keysByEditor[this.currentEditor()]] || 
+              <FormattedMessage {...messages.editLabel} />
+            )}
           </Button>
           <Dropdown
            className="mr-dropdown mr-dropdown--fixed mr-left-0"
