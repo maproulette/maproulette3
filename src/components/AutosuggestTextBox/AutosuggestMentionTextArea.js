@@ -83,6 +83,10 @@ export default class AutosuggestMentionTextArea extends Component {
       const itemsLength = _get(items, 'length', 0)
 
       if (e.key === "Enter") {
+        if (this.state.highlightResult === -1) {
+          return
+        }
+    
         downshift.selectItem(items[this.state.highlightResult])
         this.setState({highlightResult: -1})
       }
