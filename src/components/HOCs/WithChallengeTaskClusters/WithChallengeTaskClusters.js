@@ -30,6 +30,8 @@ import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterM
 export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=false,
   showClusters=true, ignoreLocked=true, skipInitialFetch=false) {
   return class extends Component {
+    _isMounted = false
+
     state = {
       loading: false,
       fetchId: null,
@@ -151,6 +153,8 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     }
 
     componentDidMount() {
+      this._isMounted = true
+
       if (!skipInitialFetch) {
         this.debouncedFetchClusters(this.state.showAsClusters)
       }
@@ -163,8 +167,12 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       }
     }
 
+    componentWillUnmount() {
+      this._isMounted = false
+    }
+
     debouncedFetchClusters =
-      _debounce((showAsClusters) => this.fetchUpdatedClusters(showAsClusters), 800)
+      _debounce((showAsClusters) => {if(this._isMounted)this.fetchUpdatedClusters(showAsClusters), 800})
 
     componentDidUpdate(prevProps) {
       if (!_isEqual(_get(prevProps.criteria, 'searchQuery'), _get(this.props.criteria, 'searchQuery'))) {
