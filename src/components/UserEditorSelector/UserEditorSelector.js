@@ -9,7 +9,6 @@ import _isEmpty from 'lodash/isEmpty'
 import { DEFAULT_EDITOR, Editor, keysByEditor, editorLabels } from '../../services/Editor/Editor'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 import Button from '../Button/Button'
 
