@@ -16,7 +16,7 @@ describe("TaskCompletionStep", () => {
         deactivateKeyboardShortcutGroup={() => null}
       />
     );
-    const text = getByText("Current Editor:");
+    const text = getByText("Open Editor");
     expect(text).toBeInTheDocument();
   });
 
