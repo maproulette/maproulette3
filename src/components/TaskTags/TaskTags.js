@@ -117,14 +117,14 @@ export class TaskTags extends Component {
     }
     else if (this.props.tags && this.props.tags !== "") {     
       return (
-        <div className="mr-flex mr-items-center mr-mt-2 mr-pb-4 mr-max-w-full mr-overflow-x-auto">
+        <div className="mr-flex mr-items-center mr-pb-4 mr-max-w-full mr-overflow-x-auto">
           <div className="mr-text-sm mr-text-white mr-flex mr-items-center mr-whitespace-nowrap">
             <FormattedMessage {...messages.taskTags} /> {this.tagList()}
           </div>
 
           {!disableEditTags ?
             <div className="mr-links-green-lighter mr-flex-grow-0 mr-flex">
-            <a onClick={() => this.setState({ edit: true })} className="mr-inline-block mr-mr-2">
+            <a onClick={() => this.setState({ edit: true })} className="mr-inline-block mr-whitespace-nowrap mr-mr-2">
               <FormattedMessage {...messages.updateTags} />
             </a>
             <a target="_blank" rel="noreferrer" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="">
