@@ -386,8 +386,8 @@ export class ActiveTaskControls extends Component {
     return (
       <div>
         {isComplete &&
-          <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
-            <div className="mr-flex mr-mb-2 mr-text-sm mr-text-white mr-whitespace-nowrap">
+         <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
+           <div className="mr-flex mr-mb-2 mr-text-sm mr-text-white mr-whitespace-nowrap">
              <span>
                <FormattedMessage
                  {...messages.markedAs}
@@ -425,41 +425,41 @@ export class ActiveTaskControls extends Component {
           taskReadOnly={this.props.taskReadOnly}
         />
 
-          {this.props.taskReadOnly ?
-           <div>
-             <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
-               <FormattedMessage {...messages.readOnly} />
-             </div>
-             <Link to={`/browse/challenges/${this.props.challengeId}`}>
-               <button className="mr-mt-4 mr-button">
-                 <FormattedMessage {...messages.browseChallenge} />
-               </button>
-             </Link>
-           </div> :
-           <React.Fragment>
-             {isTagFix && (!isFinal || needsRevised) && this.props.user.settings.seeTagFixSuggestions &&
-               <CooperativeWorkControls
-                 {...this.props}
-                 allowedProgressions={allowedProgressions}
-                 pickEditor={this.pickEditor}
-                 complete={this.initiateCompletion}
-                 nextTask={this.next}
-                 needsRevised={needsRevised}
-               />
-             }
-
-             {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
-              <TaskCompletionStep
+        {this.props.taskReadOnly ?
+          <div>
+            <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
+              <FormattedMessage {...messages.readOnly} />
+            </div>
+            <Link to={`/browse/challenges/${this.props.challengeId}`}>
+              <button className="mr-mt-4 mr-button">
+                <FormattedMessage {...messages.browseChallenge} />
+              </button>
+            </Link>
+          </div> :
+          <React.Fragment>
+            {isTagFix && (!isFinal || needsRevised) && this.props.user.settings.seeTagFixSuggestions &&
+              <CooperativeWorkControls
                 {...this.props}
-                allowedEditors={this.allowedEditors()}
                 allowedProgressions={allowedProgressions}
                 pickEditor={this.pickEditor}
                 complete={this.initiateCompletion}
                 nextTask={this.next}
                 needsRevised={needsRevised}
-                editMode={editMode}
               />
-             }
+            }
+
+            {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
+            <TaskCompletionStep
+              {...this.props}
+              allowedEditors={this.allowedEditors()}
+              allowedProgressions={allowedProgressions}
+              pickEditor={this.pickEditor}
+              complete={this.initiateCompletion}
+              nextTask={this.next}
+              needsRevised={needsRevised}
+              editMode={editMode}
+            />
+            }
 
           {isComplete && !needsRevised &&
              <TaskNextControl
@@ -473,7 +473,7 @@ export class ActiveTaskControls extends Component {
                clearNextTask={this.clearNextTask}
                requestedNextTask={this.state.requestedNextTask}
              />
-             }
+           }
 
            {this.state.confirmingTask &&
              <TaskConfirmationModal
@@ -489,7 +489,7 @@ export class ActiveTaskControls extends Component {
                toggleNeedsReview={this.toggleNeedsReview}
                loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
                chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
-                                                      this.chooseLoadBy(load)}
+                                        this.chooseLoadBy(load)}
                chooseNextTask={this.chooseNextTask}
                clearNextTask={this.clearNextTask}
                requestedNextTask={this.state.requestedNextTask}
