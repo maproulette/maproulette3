@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import L from 'leaflet'
 import 'leaflet-vectoricon'
-import { ZoomControl, Marker, Tooltip, MapContainer, AttributionControl } from 'react-leaflet'
+import { ZoomControl, Marker, Tooltip, MapContainer, AttributionControl, useMap } from 'react-leaflet'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
@@ -153,6 +153,12 @@ export class TaskNearbyMap extends Component {
         <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
     )
 
+    const ResizeMap = () => {
+      const map = useMap();
+      map.invalidateSize();
+      return null;
+    };
+
     if (!coloredMarkers) {
       return (
         <div className="mr-h-full">
@@ -176,6 +182,7 @@ export class TaskNearbyMap extends Component {
           maxZoom={18}
           maxBounds={[[-90, -180], [90, 180]]} 
         >
+          <ResizeMap />
           <AttributionControl position="bottomleft" prefix={false} />
           <ZoomControl position='topright' />
           <VisibleTileLayer {...this.props} zIndex={1} />

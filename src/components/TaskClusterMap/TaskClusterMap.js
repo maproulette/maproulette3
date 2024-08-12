@@ -5,7 +5,7 @@ import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
 import classNames from 'classnames';
-import { ZoomControl, ScaleControl, MapContainer, LayerGroup, Rectangle, AttributionControl } from 'react-leaflet';
+import { ZoomControl, ScaleControl, MapContainer, LayerGroup, Rectangle, AttributionControl, useMap } from 'react-leaflet';
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer';
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer';
 import WithIntersectingOverlays from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays';
@@ -228,6 +228,14 @@ export const TaskClusterMap = (props) => {
       </>
     )
 
+    const ResizeMap = () => {
+      const map = useMap();
+      useEffect(() => {
+        map.invalidateSize();
+      }, [props.widgetLayout?.w, props.widgetLayout?.h])
+      return null;
+    };
+    
   return (
     <MapContainer
       attributionControl={false}
@@ -239,6 +247,7 @@ export const TaskClusterMap = (props) => {
       className={classNames('taskcluster-map', { 'full-screen-map': props.isMobile }, props.className)}
       zoomControl={false}
     >
+      <ResizeMap />
       <AttributionControl position="bottomleft" prefix={false} />
       {(Boolean(props.loading) || Boolean(props.loadingChallenge)) && <BusySpinner mapMode xlarge />}
       {props.totalTaskCount && props.totalTaskCount <= UNCLUSTER_THRESHOLD && !searchOpen && !props.loading &&
