@@ -24,9 +24,11 @@ Released with [maproulette-backend_v4.5.5](https://github.com/maproulette/maprou
 * fix bundling issues related to created status by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2387
 * Refactor completion widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2388
 * Show a warning when clicking 'I fixed it' if embedded Rapid editor has unsaved changes by @jake-low in https://github.com/maproulette/maproulette3/pull/2393
+* Update test snapshot for WithEditor HOC by @jake-low in https://github.com/maproulette/maproulette3/pull/2401
 
 ## MR2 Changes
 * add Retrieve a Users Locked Tasks endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1139
+* fix stale review_started_at column by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1138
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.8...v3.15.9
 
