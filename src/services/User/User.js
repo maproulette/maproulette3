@@ -419,6 +419,21 @@ export const fetchSavedChallenges = function(userId, limit=50) {
 }
 
 /**
+ * Fetch the saved challenges for the given user.
+ */
+export const fetchUsersLockedTasks = async (userId, limit=50) => {
+  return new Endpoint(
+    api.user.lockedTasks, {
+      variables: {userId},
+      params: {limit}
+    }
+  ).execute().then(normalizedChallenges => {
+    return normalizedChallenges
+  })
+}
+
+
+/**
  * Fetch the user's top challengs based on recent activity beginning at
  * the given startDate. If no date is given, then activity over the past
  * month is used.

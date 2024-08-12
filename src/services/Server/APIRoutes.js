@@ -179,6 +179,7 @@ const apiRoutes = (factory) => {
       unsaveChallenge: factory.delete("/user/:userId/unsave/:challengeId"),
       savedTasks: factory.get("/user/:userId/savedTasks"),
       saveTask: factory.post("/user/:userId/saveTask/:taskId"),
+      lockedTasks: factory.get("/user/:userId/lockedTasks"),
       unsaveTask: factory.delete("/user/:userId/unsaveTask/:taskId"),
       updateSettings: factory.put("/user/:userId"),
       notificationSubscriptions: factory.get(
