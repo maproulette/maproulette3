@@ -11,10 +11,13 @@ import { challengePassesCategorizationKeywordsFilter }
        from '../../../services/Challenge/ChallengeCategorizationKeywords/ChallengeCategorizationKeywords';
 import { challengePassesLocationFilter }
        from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
+import { challengePassesArchivedFilter }
+       from '../../../services/Challenge/ChallengeArchived/ChallengeArchived'
 import { challengePassesProjectFilter }
        from '../../../services/Challenge/ChallengeProject/ChallengeProject'
 
 const allFilters = [
+  challengePassesArchivedFilter,
   challengePassesDifficultyFilter,
   challengePassesKeywordFilter,
   challengePassesCategorizationKeywordsFilter,
