@@ -170,11 +170,10 @@ export class ActiveTaskControls extends Component {
   }
 
   initiateCompletion = (taskStatus, submitRevision) => {
-    const hasUnsavedRapidChanges = this.props.rapidContext?.systems.editor.hasChanges()
     const intl = this.props.intl
     const message = intl.formatMessage(messages.rapidDiscardUnsavedChanges)
 
-    if (!hasUnsavedRapidChanges || window.confirm(message)) {
+    if (!this.props.rapidEditorState.hasUnsavedChanges || window.confirm(message)) {
       this.setState({
         confirmingTask: this.props.task,
         osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,

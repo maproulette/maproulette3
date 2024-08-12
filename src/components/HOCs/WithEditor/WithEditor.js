@@ -26,7 +26,7 @@ export const mapStateToProps = state => {
   return ({
     editor: state.openEditor,
     configuredEditor: _get(userEntity, 'settings.defaultEditor', DEFAULT_EDITOR),
-    rapidContext: _get(state, 'rapidEditor.context'),
+    rapidEditorState: _get(state, 'rapidEditor'),
   })
 }
 

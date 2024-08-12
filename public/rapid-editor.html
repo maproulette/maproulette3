@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <!--
+      Adapted from Rapid's code examples at https://github.com/facebook/Rapid/tree/main/dist/examples
+
+      Copyright (c) 2024, Rapid Contributors
+
+      Permission to use, copy, modify, and/or distribute this software for any purpose
+      with or without fee is hereby granted, provided that the above copyright notice
+      and this permission notice appear in all copies.
+
+      THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+      REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+      AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+      INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+      OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+      TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+      THIS SOFTWARE.
+    -->
+    <title>Rapid</title>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.css'>
+
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'/>
+    <meta name='mobile-web-app-capable' content='yes'/>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'/>
+    <style type='text/css'>
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        /* disable elastic page bounce upon scroll */
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id='rapid-container'></div>
+
+    <script>
+      const container = document.getElementById('rapid-container');
+      const newScript = document.createElement('script');
+      newScript.type = 'text/javascript';
+      newScript.onload = checkScript;
+      newScript.onerror = checkScript;
+      newScript.src = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.js';
+
+      document.getElementsByTagName('head')[0].appendChild(newScript);
+
+      function checkScript() {
+        const params = new URLSearchParams(document.location.search);
+        const token = params.get('token');
+
+        console.log("token", token);
+
+        if (!token) {
+          console.error("Rapid iframe initialized without an OSM API access token");
+        }
+        
+        if (typeof Rapid === 'undefined' || !Rapid.utilDetect().support) {
+          container.innerHTML = 'Sorry, the Rapid editor does not support your web browser.';
+          container.style.padding = '20px';
+
+        } else {
+          const context = new Rapid.Context();
+          context.containerNode = container;
+          context.assetPath = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/';
+          context.buildID = '';
+          context.buildSHA = '';
+          context.buildDate = '';
+          context.preauth =  {
+            url: 'https://www.openstreetmap.org', // TODO: use REACT_APP_OSM_SERVER here?
+            apiUrl: 'https://api.openstreetmap.org',
+            access_token: token,
+          };
+          context.apiConnections = [context.preauth];
+
+          window.rapidContext = context;
+          context.initAsync();
+        }
+      }
+    </script>
+  </body>
+</html>
