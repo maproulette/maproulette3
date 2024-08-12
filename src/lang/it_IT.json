@@ -835,7 +835,7 @@
   "Dashboard.header.globally": "globalmente.",
   "Dashboard.header.jumpBackIn": "Torna indietro!",
   "Dashboard.header.pointsPrompt": ", guadagnato",
-  "Dashboard.header.rankPrompt": "e",
+  "Dashboard.header.rankPrompt": " e",
   "Dashboard.header.resume": "Riprendi la tua ultima sfida",
   "Dashboard.header.somethingNew": "qualcosa di nuovo",
   "Dashboard.header.userScore": "{points, number} punti",
