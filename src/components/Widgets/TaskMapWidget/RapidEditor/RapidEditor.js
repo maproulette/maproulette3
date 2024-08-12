@@ -138,7 +138,7 @@ const RapidEditor = ({
 }) => {
   const dispatch = useDispatch();
   const [rapidLoaded, setRapidLoaded] = useState(window.Rapid !== undefined);
-  const { context, dom } = useSelector((state) => state.rapidEditor.rapidContext);
+  const { context, dom } = useSelector((state) => state.rapidEditor);
   const windowInit = typeof window !== 'undefined';
 
   // This significantly reduces build time _and_ means different TM instances can share the same download of Rapid.

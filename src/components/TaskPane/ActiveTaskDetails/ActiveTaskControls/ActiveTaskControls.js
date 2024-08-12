@@ -183,12 +183,18 @@ export class ActiveTaskControls extends Component {
   }
 
   initiateCompletion = (taskStatus, submitRevision) => {
-    this.setState({
-      confirmingTask: this.props.task,
-      osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
-      confirmingStatus: taskStatus,
-      submitRevision,
-    })
+    const hasUnsavedRapidChanges = this.props.rapidContext?.systems.editor.hasChanges()
+    const intl = this.props.intl
+    const message = intl.formatMessage(messages.rapidDiscardUnsavedChanges)
+
+    if (!hasUnsavedRapidChanges || window.confirm(message)) {
+      this.setState({
+        confirmingTask: this.props.task,
+        osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
+        confirmingStatus: taskStatus,
+        submitRevision,
+      })
+    }
   }
 
   confirmCompletion = () => {
