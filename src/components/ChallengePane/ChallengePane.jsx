@@ -46,7 +46,7 @@ const ShowChallengeListTogglesInternal = (props) => {
       <input
         type="checkbox"
         className="mr-checkbox-toggle mr-mr-1 mr-mb-6 mr-ml-4"
-        checked={!props.filteringGlobal}
+        checked={props.filteringGlobal}
         onChange={() => {
           props.setSearchFilters({ filterGlobal: !props.filteringGlobal })
         }}
@@ -127,7 +127,7 @@ export class ChallengePane extends Component {
 
   render() {
     const showingArchived = this.props.history.location.search.includes("archived=true");
-    const filteringGlobal = this.props.history.location.search.includes("filterGlobal") ? this.props.history.location.search.includes("filterGlobal=true") : true;
+    const filteringGlobal = this.props.history.location.search.includes("filterGlobal=true")
     const challengeStatus = [ChallengeStatus.ready,
                              ChallengeStatus.partiallyLoaded,
                              ChallengeStatus.none,
