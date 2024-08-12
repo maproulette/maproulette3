@@ -426,53 +426,53 @@ export class ActiveTaskControls extends Component {
         />
 
         {this.props.taskReadOnly ?
-          <div>
-            <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
-              <FormattedMessage {...messages.readOnly} />
-            </div>
-            <Link to={`/browse/challenges/${this.props.challengeId}`}>
-              <button className="mr-mt-4 mr-button">
-                <FormattedMessage {...messages.browseChallenge} />
-              </button>
-            </Link>
-          </div> :
-          <React.Fragment>
-            {isTagFix && (!isFinal || needsRevised) && this.props.user.settings.seeTagFixSuggestions &&
-              <CooperativeWorkControls
-                {...this.props}
-                allowedProgressions={allowedProgressions}
-                pickEditor={this.pickEditor}
-                complete={this.initiateCompletion}
-                nextTask={this.next}
-                needsRevised={needsRevised}
-              />
-            }
-
-            {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
-            <TaskCompletionStep
+        <div>
+          <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
+            <FormattedMessage {...messages.readOnly} />
+          </div>
+          <Link to={`/browse/challenges/${this.props.challengeId}`}>
+            <button className="mr-mt-4 mr-button">
+              <FormattedMessage {...messages.browseChallenge} />
+            </button>
+          </Link>
+        </div> :
+        <React.Fragment>
+          {isTagFix && (!isFinal || needsRevised) && this.props.user.settings.seeTagFixSuggestions &&
+            <CooperativeWorkControls
               {...this.props}
-              allowedEditors={this.allowedEditors()}
               allowedProgressions={allowedProgressions}
               pickEditor={this.pickEditor}
               complete={this.initiateCompletion}
               nextTask={this.next}
               needsRevised={needsRevised}
-              editMode={editMode}
             />
-            }
+          }
 
-          {isComplete && !needsRevised &&
-             <TaskNextControl
-               {...this.props}
-               className="mr-mt-1"
-               nextTask={this.next}
-               loadBy={this.props.taskLoadBy}
-               chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
-                                        this.chooseLoadBy(load)}
-               chooseNextTask={this.chooseNextTask}
-               clearNextTask={this.clearNextTask}
-               requestedNextTask={this.state.requestedNextTask}
-             />
+          {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
+          <TaskCompletionStep
+            {...this.props}
+            allowedEditors={this.allowedEditors()}
+            allowedProgressions={allowedProgressions}
+            pickEditor={this.pickEditor}
+            complete={this.initiateCompletion}
+            nextTask={this.next}
+            needsRevised={needsRevised}
+            editMode={editMode}
+          />
+           }
+
+          {!isEditingTask && isComplete && !needsRevised &&
+           <TaskNextControl
+             {...this.props}
+             className="mr-mt-1"
+             nextTask={this.next}
+             loadBy={this.props.taskLoadBy}
+             chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
+                                      this.chooseLoadBy(load)}
+             chooseNextTask={this.chooseNextTask}
+             clearNextTask={this.clearNextTask}
+             requestedNextTask={this.state.requestedNextTask}
+           />
            }
 
            {this.state.confirmingTask &&
