@@ -439,17 +439,17 @@ export class ActiveTaskControls extends Component {
          <React.Fragment>
            {isTagFix && (!isFinal || needsRevised) && this.props.user.settings.seeTagFixSuggestions &&
              <CooperativeWorkControls
-              {...this.props}
-              allowedProgressions={allowedProgressions}
-              pickEditor={this.pickEditor}
-              complete={this.initiateCompletion}
-              nextTask={this.next}
-              needsRevised={needsRevised}
-            />
-          }
+               {...this.props}
+               allowedProgressions={allowedProgressions}
+               pickEditor={this.pickEditor}
+               complete={this.initiateCompletion}
+               nextTask={this.next}
+               needsRevised={needsRevised}
+             />
+           }
 
-          {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
-            <TaskCompletionStep
+           {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
+             <TaskCompletionStep
               {...this.props}
               allowedEditors={this.allowedEditors()}
               allowedProgressions={allowedProgressions}
@@ -489,7 +489,7 @@ export class ActiveTaskControls extends Component {
                toggleNeedsReview={this.toggleNeedsReview}
                loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
                chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
-                                        this.chooseLoadBy(load)}
+                                                      this.chooseLoadBy(load)}
                chooseNextTask={this.chooseNextTask}
                clearNextTask={this.clearNextTask}
                requestedNextTask={this.state.requestedNextTask}
