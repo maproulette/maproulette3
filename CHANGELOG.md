@@ -29,6 +29,9 @@ Released with [maproulette-backend_v4.5.5](https://github.com/maproulette/maprou
 ## MR2 Changes
 * add Retrieve a Users Locked Tasks endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1139
 * fix stale review_started_at column by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1138
+* add users.avatar_url constraint and default by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1141
+* Improve error message when OverpassQL query mistakenly specifies [out:xml] by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1142
+* Move from Java 11 to Java 17 compile and runtime by @ljdelight (closes https://github.com/maproulette/maproulette-backend/issues/1115)
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.8...v3.15.9
 
