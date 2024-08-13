@@ -100,13 +100,18 @@
     "@babel/eslint-parser": "^7.23.3",
     "@babel/helper-get-function-arity": "^7.16.7",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@eslint/js": "^9.9.0",
     "@openstreetmap/id-tagging-schema": "^3.0.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^12.1.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.7",
     "eslint": "^8.54.0",
+    "eslint-plugin-jest": "^28.8.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "extract-react-intl-messages": "^4.1.1",
+    "globals": "^15.9.0",
     "npm-run-all": "^4.1.1",
     "postcss": "^8.4.38",
     "postcss-cli": "^11.0.0",
@@ -139,6 +144,7 @@
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-leaflet)/\" --resetMocks=false --detectOpenHandles",
     "test:cov": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-leaflet)/\" --coverage --resetMocks=false",
     "test:cov-full": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-leaflet)/\" --coverage --watchAll --resetMocks=false",
+    "lint": "eslint src/",
     "eject": "react-scripts eject"
   },
   "browserslist": [
@@ -147,12 +153,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "resolutions": {
     "react-error-overlay": "6.0.9"
   }

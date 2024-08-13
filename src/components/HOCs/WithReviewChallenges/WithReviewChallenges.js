@@ -17,7 +17,7 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
  */
  export const WithReviewChallenges = function(WrappedComponent) {
    class _WithReviewChallenges extends Component {
-     componentIsMounted: false
+     componentIsMounted = false
 
      state = {
        reviewChallenges: {},
