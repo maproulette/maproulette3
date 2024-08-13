@@ -32,8 +32,7 @@ import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithTaskFeatureProperties from '../../../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
-import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
-import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
+import TaskCompletionStep from './TaskCompletionStep/TaskCompletionStep'
 import CooperativeWorkControls from './CooperativeWorkControls/CooperativeWorkControls'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
 import TaskConfirmationModal
@@ -96,11 +95,6 @@ export class ActiveTaskControls extends Component {
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     const {task, taskFeatureProperties} = this.props
-    const allowed = this.allowedEditors()
-    // If the given editor isn't allowed, default to first allowed editor
-    if (allowed && allowed.indexOf(value) === -1) {
-      value = allowed[0]
-    }
 
     const comment = task.parent.checkinComment
     const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
@@ -382,11 +376,6 @@ export class ActiveTaskControls extends Component {
 
     const needsRevised = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
-    const isEditingTask =
-      _get(this.props, 'editor.taskId') === this.props.task.id &&
-      _get(this.props, 'editor.success') === true || 
-      editMode
-
     const fromInbox = _get(this.props.history, 'location.state.fromInbox')
 
     const allowedProgressions =
@@ -396,9 +385,9 @@ export class ActiveTaskControls extends Component {
 
     return (
       <div>
-        {!isEditingTask && isComplete &&
-         <div className="mr-text-white mr-text-md mr-my-4 mr-links-green-lighter">
-           <div className="mr-flex mr-justify-between mr-items-center">
+        {isComplete &&
+         <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
+           <div className="mr-flex mr-mb-2 mr-text-sm mr-text-white mr-whitespace-nowrap">
              <span>
                <FormattedMessage
                  {...messages.markedAs}
@@ -419,7 +408,7 @@ export class ActiveTaskControls extends Component {
            </div>
            {(this.props.task.reviewStatus === TaskReviewStatus.needed ||
              this.props.task.reviewStatus === TaskReviewStatus.disputed) &&
-              <div className="mr-text-yellow mr-text-sd mr-my-4">
+              <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
                 <FormattedMessage {...messages.awaitingReview} />
               </div>
            }
@@ -458,8 +447,9 @@ export class ActiveTaskControls extends Component {
                needsRevised={needsRevised}
              />
            }
-           {!isEditingTask && (!isTagFix || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
-            <TaskCompletionStep1
+
+           {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) && (!isFinal || needsRevised) &&
+             <TaskCompletionStep
               {...this.props}
               allowedEditors={this.allowedEditors()}
               allowedProgressions={allowedProgressions}
@@ -471,25 +461,14 @@ export class ActiveTaskControls extends Component {
             />
            }
 
-           {isEditingTask && (!isTagFix || !this.props.user.settings.seeTagFixSuggestions) &&
-             <TaskCompletionStep2
-               {...this.props}
-               allowedProgressions={allowedProgressions}
-               complete={this.initiateCompletion}
-               cancelEditing={this.cancelEditing}
-               needsRevised={needsRevised}
-               editMode={editMode}
-             />
-           }
-
-           {!isEditingTask && isComplete && !needsRevised &&
+           {isComplete && !needsRevised &&
            <TaskNextControl
              {...this.props}
              className="mr-mt-1"
              nextTask={this.next}
              loadBy={this.props.taskLoadBy}
              chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
-                                      this.chooseLoadBy(load)}
+                                                    this.chooseLoadBy(load)}
              chooseNextTask={this.chooseNextTask}
              clearNextTask={this.clearNextTask}
              requestedNextTask={this.state.requestedNextTask}

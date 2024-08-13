@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _pick from 'lodash/pick'
-import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import BusySpinner from '../BusySpinner/BusySpinner'
@@ -17,8 +16,6 @@ import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithKeyboardShortcuts
        from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithTaskFeatureProperties from '../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
-import TaskEditControl
-       from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import messages from './Messages'
@@ -123,29 +120,23 @@ export class InspectTaskControls extends Component {
          </div> :
          <UserEditorSelector {...this.props} className="mr-mb-4" />
         }
-        <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
-          {!this.props.taskReadOnly ?
-           <TaskEditControl
-             pickEditor={this.pickEditor}
-             className="active-task-controls__edit-control"
-             {..._omit(this.props, 'className')}
-           /> :
-           <div />
-          }
 
-          {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
-           <Link
-             to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
-             className="mr-button"
-           >
-             <FormattedMessage {...messages.modifyTaskLabel} />
-           </Link> : <div />
-          }
-          <button className="mr-button mr-button--white" onClick={this.prevTask}>
+        {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
+          <Link
+            to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
+            className="mr-button mr-mt-2"
+            style={{minWidth: '20.5rem'}}
+          >
+            <FormattedMessage {...messages.modifyTaskLabel} />
+          </Link> : <div />
+        }
+
+        <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
+          <button className="mr-button mr-mr-2 mr-button--white"  style={{minWidth: '10rem'}} onClick={this.prevTask}>
             <FormattedMessage {...messages.previousTaskLabel} />
           </button>
 
-          <button className="mr-button mr-button--white" onClick={this.nextTask}>
+          <button className="mr-button mr-button--white"  style={{minWidth: '10rem'}} onClick={this.nextTask}>
             <FormattedMessage {...messages.nextTaskLabel} />
           </button>
         </div>

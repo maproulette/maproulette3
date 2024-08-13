@@ -35,7 +35,9 @@ export class TaskTags extends Component {
       if ( !_isEmpty(tag) ) {
         return (
           <div className="mr-bg-white-10 mr-text-white mr-mr-2 mr-px-2 mr-rounded"
-               key={`tag-${index}`}>
+               key={`tag-${index}`}
+               style={{ maxHeight: "24px"}}
+          >
             {tag}
           </div>
         )
@@ -52,12 +54,10 @@ export class TaskTags extends Component {
 
   render() {
     const disableEditTags = this.props.taskReadOnly || (
-      (this.props.task?.status !== 0 &&
-         (![0, 2, 4, 5].includes(this.props.task?.reviewStatus))) && 
-         ( 
-      this.props.task?.reviewRequestedBy !== this.props.user && 
+      ![0, 3, 6].includes(this.props.task?.status) &&
+      ![0, 2, 4, 5].includes(this.props.task?.reviewStatus) &&
+      this.props.task?.reviewRequestedBy !== this.props.user &&
       this.props.task?.reviewClaimedBy !== this.props.user
-      )
     )
 
     if (this.state.edit) {
@@ -117,16 +117,14 @@ export class TaskTags extends Component {
     }
     else if (this.props.tags && this.props.tags !== "") {     
       return (
-        <div className="mr-flex mr-justify-between mr-items-center mr-mb-2">
-          <div className="mr-text-sm mr-text-white mr-flex mr-items-center mr-flex-grow">
-            <FormattedMessage
-              {...messages.taskTags}
-            /> {this.tagList()}
+        <div className="mr-flex mr-items-center mr-pb-4 mr-max-w-full mr-overflow-x-auto">
+          <div className="mr-text-sm mr-text-white mr-flex mr-items-center mr-whitespace-nowrap">
+            <FormattedMessage {...messages.taskTags} /> {this.tagList()}
           </div>
 
           {!disableEditTags ?
             <div className="mr-links-green-lighter mr-flex-grow-0 mr-flex">
-            <a onClick={() => this.setState({ edit: true })} className="mr-inline-block mr-mr-2">
+            <a onClick={() => this.setState({ edit: true })} className="mr-inline-block mr-whitespace-nowrap mr-mr-2">
               <FormattedMessage {...messages.updateTags} />
             </a>
             <a target="_blank" rel="noreferrer" href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/" title="Learn more about Maproulette tags" className="">
@@ -143,7 +141,7 @@ export class TaskTags extends Component {
     }
     else if (!disableEditTags) {
       return (
-        <div className="mr-links-green-lighter mr-flex">
+        <div className="mr-links-green-lighter mr-flex mr-mt-2 mr-pb-4">
           <a onClick={() => this.setState({edit: true})}>
             <FormattedMessage {...messages.addTags} />
           </a>
