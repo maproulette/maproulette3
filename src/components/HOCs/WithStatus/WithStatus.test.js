@@ -1,5 +1,4 @@
-import { Component } from 'react'
-import { mapStateToProps, mapDispatchToProps } from './WithStatus'
+import { mapStateToProps } from './WithStatus'
 import { FETCHING_CHALLENGES_STATUS,
          CHECKING_LOGIN_STATUS }
        from '../../../services/Status/Status'

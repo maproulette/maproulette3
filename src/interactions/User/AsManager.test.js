@@ -1,6 +1,5 @@
 import AsManager from './AsManager'
 import _cloneDeep from 'lodash/cloneDeep'
-import { GUEST_USER_ID } from '../../services/User/User'
 import { Role, ROLE_SUPERUSER } from '../../services/Grant/Role'
 import { TargetType } from '../../services/Grant/TargetType'
 import { GranteeType } from '../../services/Grant/GranteeType'

@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import { WithSearchResults } from './WithSearchResults'
 
 let basicProps = null

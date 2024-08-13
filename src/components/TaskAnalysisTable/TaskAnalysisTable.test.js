@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { IntlProvider } from "react-intl";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { TaskAnalysisTableInternal as TaskAnalysisTable } from "./TaskAnalysisTable";
 
 jest.mock(

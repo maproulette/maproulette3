@@ -1,4 +1,3 @@
-import _each from 'lodash/each'
 import { setPreferences,
          removePreferences,
          currentPreferences,

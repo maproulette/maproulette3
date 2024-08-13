@@ -1,11 +1,9 @@
-import { Component } from 'react'
 import _values from 'lodash/values'
 import _size from 'lodash/size'
-import { mapStateToProps, mapDispatchToProps } from './WithChallenges'
+import { mapStateToProps } from './WithChallenges'
 import { denormalize } from 'normalizr'
 import { isUsableChallengeStatus }
        from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
-import { loadRandomTaskFromChallenge } from '../../../services/Task/Task'
 
 jest.mock('normalizr')
 jest.mock('../../../services/Challenge/ChallengeStatus/ChallengeStatus')

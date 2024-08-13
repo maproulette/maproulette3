@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { IntlProvider } from "react-intl";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { ChallengeDetail } from "./ChallengeDetail.js";
 import { format } from "date-fns";
 

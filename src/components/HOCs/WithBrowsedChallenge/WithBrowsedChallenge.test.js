@@ -1,15 +1,7 @@
-import { Component } from 'react'
 import { LatLngBounds } from 'leaflet'
-import _get from 'lodash/get'
-import _find from 'lodash/find'
 import _map from 'lodash/map'
 import _fromPairs from 'lodash/fromPairs'
-import { WithBrowsedChallenge,
-         mapStateToProps, mapDispatchToProps, } from './WithBrowsedChallenge'
-import AsEndUser from '../../../interactions/User/AsEndUser'
-import { denormalize } from 'normalizr'
-import { loadRandomTaskFromChallenge } from '../../../services/Task/Task'
-import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
+import { WithBrowsedChallenge } from './WithBrowsedChallenge'
 
 let basicState = null
 let challenge = null

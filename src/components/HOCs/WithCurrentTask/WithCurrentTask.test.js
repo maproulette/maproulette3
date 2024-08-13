@@ -1,9 +1,7 @@
-import { Component } from 'react'
 import { denormalize } from 'normalizr'
 import { mapStateToProps,
-         mapDispatchToProps,
-         visitNewTask } from './WithCurrentTask'
-import { taskDenormalizationSchema,
+         mapDispatchToProps } from './WithCurrentTask'
+import {
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
          addTaskComment,
@@ -12,7 +10,7 @@ import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import { fetchChallengeActions, fetchChallenge }
        from '../../../services/Challenge/Challenge'
-import { CHALLENGE_STATUS_READY, CHALLENGE_STATUS_FINISHED }
+import { CHALLENGE_STATUS_READY }
        from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 
 jest.mock('normalizr')

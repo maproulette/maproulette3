@@ -1,9 +1,6 @@
-import { Component } from 'react'
-import { addSearchCriteriaToRoute,
-         addBoundsToRoute, removeSearchCriteriaFromRoute,
+import {
         executeRouteSearch } from './WithSearchRoute'
-import { toLatLngBounds, fromLatLngBounds }
-      from '../../../services/MapBounds/MapBounds'
+
 import { WithSearchRoute } from './WithSearchRoute'
 
 let basicProps = {}

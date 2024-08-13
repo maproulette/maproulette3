@@ -1,7 +1,5 @@
-import { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps } from './WithErrors'
 import { addError,
-         removeError,
          clearErrors } from '../../../services/Error/Error'
 
 jest.mock('../../../services/Error/Error')
