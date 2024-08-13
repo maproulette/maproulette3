@@ -1,5 +1,4 @@
 import "@testing-library/jest-dom";
-import * as React from "react";
 import { IntlProvider } from "react-intl";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { ChallengeOwnerContactLinkInternal as ContactLink } from "./ChallengeOwnerContactLink.js";

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 const DashboardFilterToggle = (filterType, filterName) => {
   return class extends Component {

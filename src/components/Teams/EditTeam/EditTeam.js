@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/client'
 import Form from '@rjsf/core'

@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react'
+import { Component, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import L from 'leaflet'

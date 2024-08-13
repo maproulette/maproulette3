@@ -1,4 +1,3 @@
-import React from 'react'
 import AsManager from '../../../../interactions/User/AsManager'
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
 import messages from './Messages'

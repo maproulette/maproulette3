@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import WithSearch from '../../../../HOCs/WithSearch/WithSearch'
 import WithTaskReview from '../../../../HOCs/WithTaskReview/WithTaskReview'

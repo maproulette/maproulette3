@@ -1,4 +1,3 @@
-import * as React from "react";
 import WithPublicWidgetWorkspaces from "./WithPublicWidgetWorkspaces";
 
 describe("Public Widget Grid", () => {

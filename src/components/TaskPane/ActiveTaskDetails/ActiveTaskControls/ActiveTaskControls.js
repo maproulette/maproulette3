@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
@@ -421,7 +421,7 @@ export class ActiveTaskControls extends Component {
              </button>
            </Link>
          </div> :
-         <React.Fragment>
+         <Fragment>
            {isTagFix && (!isFinal || needsRevised) && this.props.user.settings.seeTagFixSuggestions &&
              <CooperativeWorkControls
                {...this.props}
@@ -484,10 +484,10 @@ export class ActiveTaskControls extends Component {
                fromInbox={fromInbox}
              />
            }
-         </React.Fragment>
+         </Fragment>
         }
       </div>
-    )
+    );
   }
 }
 

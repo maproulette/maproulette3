@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Popup } from 'react-leaflet'
@@ -308,7 +308,7 @@ const TaskMarkerContent = props => {
     `/challenge/${_get(props.challenge, 'id')}/task/${props.marker.options.taskId}`
 
   return (
-    <React.Fragment>
+    <Fragment>
       <div className="mr-text-center mr-mt-5">
         {
           props.intl.formatMessage(messages.nameLabel)
@@ -358,8 +358,8 @@ const TaskMarkerContent = props => {
           </div>
         }
       </div>
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 ViewChallengeTasks.propTypes = {

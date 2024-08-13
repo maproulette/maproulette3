@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Fragment, Component } from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, withRouter } from "react-router-dom";
 import MediaQuery from "react-responsive";
@@ -54,7 +54,7 @@ export class AdminPane extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <EmailRequirementNotice />
         <div className="admin mr-bg-gradient-r-green-dark-blue mr-text-white">
           <div className="admin-pane">
@@ -115,7 +115,7 @@ export class AdminPane extends Component {
         <MediaQuery query="(max-width: 1023px)">
           <ScreenTooNarrow />
         </MediaQuery>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

@@ -1,4 +1,3 @@
-import React from 'react'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithSystemNotices from '../HOCs/WithSystemNotices/WithSystemNotices'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'

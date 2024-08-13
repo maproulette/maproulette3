@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import _keys from 'lodash/keys'
 import _map from 'lodash/map'
 import { FormattedMessage } from 'react-intl'
@@ -37,7 +37,7 @@ export default class SavedFiltersList extends Component {
     })
 
     return (
-      <React.Fragment>
+      <Fragment>
         <li>
           <button className="mr-text-current"
                   onClick={() => {this.props.saveFilters(); this.props.afterClick()}}>
@@ -61,7 +61,7 @@ export default class SavedFiltersList extends Component {
           </li>
         }
         {listSearches}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }

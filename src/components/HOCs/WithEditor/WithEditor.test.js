@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps } from './WithEditor'
 import { editTask, closeEditor, JOSM } from '../../../services/Editor/Editor'
 

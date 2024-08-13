@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { addSearchCriteriaToRoute,
          addBoundsToRoute, removeSearchCriteriaFromRoute,
         executeRouteSearch } from './WithSearchRoute'

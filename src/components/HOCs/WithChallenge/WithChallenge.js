@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'

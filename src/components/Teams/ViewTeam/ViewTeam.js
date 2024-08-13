@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/client'
 import { FormattedMessage } from 'react-intl'
@@ -71,7 +71,7 @@ export const ViewTeam = props => {
       </ul>
 
       {invitedMembers.length > 0 &&
-       <React.Fragment>
+       <Fragment>
         <h5 className="mr-mt-6 mr-mb-2 mr-text-xs mr-uppercase mr-text-pink">
           <FormattedMessage {...messages.invitedMembersHeader} />
         </h5>
@@ -85,19 +85,19 @@ export const ViewTeam = props => {
              />
           )}
         </ul>
-       </React.Fragment>
+       </Fragment>
       }
 
       {userTeamMember.isTeamAdmin() &&
-       <React.Fragment>
+       <Fragment>
          <h5 className="mr-mt-6 mr-mb-2 mr-text-base mr-text-yellow">
            <FormattedMessage {...messages.addMembersHeader} />
          </h5>
          <AddTeamMember {...props} />
-       </React.Fragment>
+       </Fragment>
       }
     </div>
-  )
+  );
 }
 
 ViewTeam.propTypes = {

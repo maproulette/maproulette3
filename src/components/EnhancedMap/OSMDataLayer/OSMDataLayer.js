@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl } from 'react-intl'
 import { IntlProvider } from 'react-intl'

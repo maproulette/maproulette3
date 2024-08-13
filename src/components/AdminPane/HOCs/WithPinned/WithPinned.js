@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 /**
  * WithPinned provides the WrappedComponent with projects and challenges that

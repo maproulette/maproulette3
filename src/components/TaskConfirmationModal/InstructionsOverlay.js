@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import TaskInstructions from '../TaskPane/TaskInstructions/TaskInstructions'
 import messages from './Messages'

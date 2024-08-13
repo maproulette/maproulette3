@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 import { Control, Handler, DomUtil, DomEvent, FeatureGroup }
        from 'leaflet'

@@ -1,5 +1,4 @@
 import "@testing-library/jest-dom";
-import * as React from "react";
 import { AdminPane } from "./AdminPane";
 
 describe("AdminPane", () => {

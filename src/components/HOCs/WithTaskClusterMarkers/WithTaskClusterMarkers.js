@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _isEqual from 'lodash/isEqual'
 import _map from 'lodash/map'
 import AsMappableCluster

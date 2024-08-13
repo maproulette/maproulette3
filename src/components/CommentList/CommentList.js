@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage,
@@ -107,9 +107,7 @@ export default class CommentList extends Component {
       )
     )
 
-    return (
-      <React.Fragment>{commentItems}</React.Fragment>
-    )
+    return <Fragment>{commentItems}</Fragment>;
   }
 }
 

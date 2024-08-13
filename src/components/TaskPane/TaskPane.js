@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
@@ -328,7 +328,7 @@ export class TaskPane extends Component {
                     </button>
                   )}
                   dropdownContent={(dropdown) => (
-                    <React.Fragment>
+                    <Fragment>
                       <ul className="mr-list-dropdown">
                         {favoriteControl}
                       </ul>
@@ -367,7 +367,7 @@ export class TaskPane extends Component {
                       </ul>
 
                       {isManageable && !this.props.inspectTask && (
-                        <React.Fragment>
+                        <Fragment>
                           <hr className="mr-rule-dropdown" />
                           <ul className="mr-list-dropdown">
                             <li>
@@ -379,9 +379,9 @@ export class TaskPane extends Component {
                               </button>
                             </li>
                           </ul>
-                        </React.Fragment>
+                        </Fragment>
                       )}
-                    </React.Fragment>
+                    </Fragment>
                   )}
                 />
               </div>
@@ -415,7 +415,7 @@ export class TaskPane extends Component {
          <BasicDialog
            title={<FormattedMessage {...messages.lockFailedTitle} />}
             prompt={
-              <React.Fragment>
+              <Fragment>
                 <span>
                   {_get(
                     this.props,
@@ -424,12 +424,12 @@ export class TaskPane extends Component {
                   )}
                 </span>
                 <FormattedMessage {...messages.previewAvailable} />
-              </React.Fragment>
+              </Fragment>
             }
            icon="unlocked-icon"
            onClose={() => this.clearLockFailure()}
            controls = {
-             <React.Fragment>
+             <Fragment>
                <button
                  className="mr-button mr-button--green-light mr-mr-4"
                  onClick={() => this.clearLockFailure()}
@@ -453,12 +453,12 @@ export class TaskPane extends Component {
                >
                  <FormattedMessage {...messages.browseChallengeLabel} />
                </button>
-             </React.Fragment>
+             </Fragment>
            }
          />
         }
       </div>
-    )
+    );
   }
 }
 

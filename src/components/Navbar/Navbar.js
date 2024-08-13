@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import MediaQuery from 'react-responsive'
 import MobileMenu from 'react-burger-menu/lib/menus/slide'
 import classNames from 'classnames'
@@ -298,7 +298,7 @@ const ProfileImage = props => (
 )
 
 const Nav = props => (
-  <React.Fragment>
+  <Fragment>
     <LoggedInUser {...props}>
       <li className="mr-flex mr-flex-col mr-justify-center">
         <NavLink to="/dashboard" onClick={props.closeMobileMenu}>
@@ -348,11 +348,11 @@ const Nav = props => (
         <FormattedMessage {...messages.donate} />
       </a>
     </li>
-  </React.Fragment>
+  </Fragment>
 )
 
 const MobileNav = props => (
-  <React.Fragment>
+  <Fragment>
     <LoggedInUser {...props}>
       <Link to='/user/profile' onClick={props.closeMobileMenu}>
         <ProfileImage {...props} />
@@ -429,7 +429,7 @@ const MobileNav = props => (
         </li>
       </ol>
     </LoggedInUser>
-  </React.Fragment>
+  </Fragment>
 )
 
 const LoggedInUser = props => {

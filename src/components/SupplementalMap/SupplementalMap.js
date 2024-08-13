@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { ZoomControl, Pane, MapContainer, useMap, AttributionControl } from 'react-leaflet'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'

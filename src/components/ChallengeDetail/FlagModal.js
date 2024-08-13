@@ -1,4 +1,3 @@
-import React from "react";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
 import FlagCommentInput from "./FlagCommentInput";

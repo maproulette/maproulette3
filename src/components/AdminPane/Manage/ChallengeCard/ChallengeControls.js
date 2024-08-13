@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Fragment, Component } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { FormattedMessage } from "react-intl";
@@ -150,7 +150,7 @@ export default class ChallengeControls extends Component {
           </CopyToClipboard>
         )}
         {!inVirtualProject && manager.canWriteProject(parent) && (
-          <React.Fragment>
+          <Fragment>
             <Link
               to={{
                 pathname:
@@ -199,14 +199,14 @@ export default class ChallengeControls extends Component {
                   messages.deleteChallengeConfirm
                 )}
                 prompt={
-                  <React.Fragment>
+                  <Fragment>
                     <div className="mr-text-mango mr-mb-6 mr-text-lg">
                       {this.props.challenge.name}
                     </div>
                     <div>
                       <FormattedMessage {...messages.deleteChallengeWarn} />
                     </div>
-                  </React.Fragment>
+                  </Fragment>
                 }
               >
                 <a
@@ -260,7 +260,7 @@ export default class ChallengeControls extends Component {
                 onSelectProject={this.moveToProject}
               />
             )}
-          </React.Fragment>
+          </Fragment>
         )}
       </div>
     );

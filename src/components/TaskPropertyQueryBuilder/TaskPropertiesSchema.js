@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { TaskPropertySearchTypeString,
          TaskPropertySearchTypeNumber, messagesByPropertySearchType,
@@ -248,7 +248,7 @@ export function ArrayFieldTemplate(props) {
           <div className="mr-flex">
             {element.children}
             {props.items.length > 1 &&
-              <React.Fragment>
+              <Fragment>
                 <button type="button" className="mr-text-red-light mr-pb-4 mr-pl-2"
                         onClick={(event) => element.onDropIndexClick(index)(event)}>
                   <SvgSymbol
@@ -260,7 +260,7 @@ export function ArrayFieldTemplate(props) {
                 {props.items.length !== (index + 1) &&
                   <span className="mr-text-grey mr-ml-4 mr-align-bottom mr-pt-2">or</span>
                 }
-              </React.Fragment>
+              </Fragment>
             }
           </div>
           {props.canAdd && props.items.length === (index + 1) &&
@@ -272,7 +272,7 @@ export function ArrayFieldTemplate(props) {
       ))}
 
     </div>
-  )
+  );
 }
 
 /**

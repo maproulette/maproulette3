@@ -1,6 +1,5 @@
 import "@testing-library/jest-dom";
 import { screen } from "@testing-library/react";
-import * as React from "react";
 import { ProfileMenu } from "./Navbar";
 
 describe("Profile Menu", () => {

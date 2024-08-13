@@ -1,4 +1,3 @@
-import React from 'react'
 import _get from 'lodash/get'
 import ProgressStatus from '../ProgressStatus/ProgressStatus'
 import messages from './Messages'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { ChallengeBasemap }
        from '../Challenge/ChallengeBasemap/ChallengeBasemap'
 import { BING,

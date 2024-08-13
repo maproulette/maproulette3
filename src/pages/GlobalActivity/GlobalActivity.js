@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import { gql, useQuery } from '@apollo/client'
 import _find from 'lodash/find'

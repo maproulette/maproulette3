@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
@@ -188,7 +188,7 @@ export class TagDiffVisualization extends Component {
            </button>
           }
           {!this.props.compact && !this.state.editing &&
-           <React.Fragment>
+           <Fragment>
              <button
                className={classNames(
                  "mr-mr-4",
@@ -226,7 +226,7 @@ export class TagDiffVisualization extends Component {
                />
              </button>
              }
-           </React.Fragment>
+           </Fragment>
           }
           {this.props.compact &&
            <button className="mr-text-green-light" onClick={this.props.showDiffModal}>
@@ -334,7 +334,7 @@ export class TagDiffVisualization extends Component {
         key={`${change.name}_newvalue`}
       >
         {this.state.editing &&
-         <React.Fragment>
+         <Fragment>
            {change.status === 'removed' ?
             <button
               className="mr-button mr-button--xsmall"
@@ -342,7 +342,7 @@ export class TagDiffVisualization extends Component {
             >
               <FormattedMessage {...messages.keepTagLabel} />
             </button> :
-            <React.Fragment>
+            <Fragment>
               <input
                 ref={input => (this.newTagInput = input)} 
                 type="text"
@@ -361,9 +361,9 @@ export class TagDiffVisualization extends Component {
                   className="mr-transition mr-fill-current mr-w-4 mr-h-4"
                 />
               </button>
-           </React.Fragment>
+           </Fragment>
            }
-         </React.Fragment>
+         </Fragment>
         }
         {!this.state.editing &&
          <div

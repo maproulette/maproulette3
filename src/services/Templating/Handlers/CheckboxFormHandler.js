@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 
 /**
  * Expands checkbox shortcode containing label and name to a checkbox form
@@ -30,7 +30,7 @@ const CheckboxFormField = props => {
 
   const isChecked = Object.assign({}, props.completionResponses)[props.propertyName]
   return (
-    <React.Fragment>
+    <Fragment>
       <input
         id="checkbox-label"
         type="checkbox"
@@ -40,8 +40,8 @@ const CheckboxFormField = props => {
         onChange={() => props.setCompletionResponse(props.propertyName, !isChecked)}
       />
       <label htmlFor="checkbox-label" className="mr-pl-2">{props.label}</label>
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 export default CheckboxFormHandler

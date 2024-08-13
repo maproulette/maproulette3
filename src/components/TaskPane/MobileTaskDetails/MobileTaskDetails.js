@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _find from 'lodash/find'

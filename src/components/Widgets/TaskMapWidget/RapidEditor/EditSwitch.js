@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 /**
  * EditSwitch renders a simple switch, with optional label, that

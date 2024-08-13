@@ -1,5 +1,4 @@
 import "@testing-library/jest-dom";
-import * as React from "react";
 import { ProgressTooltip } from "./ChallengeProgress";
 
 describe("ProgressTooltip", () => {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
@@ -34,7 +34,7 @@ export default class TaskHistoryWidget extends Component {
     selectedTimestamps: [],
   }
 
-  commentInputRef = React.createRef()
+  commentInputRef = createRef()
 
   bbox = () => {
     return this.props.taskBundle ?

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
 import { useMutation } from '@apollo/client'

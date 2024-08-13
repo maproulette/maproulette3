@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Fragment, Component } from "react";
 import Form from "@rjsf/core";
 import classNames from "classnames";
 import _isObject from "lodash/isObject";
@@ -779,19 +779,19 @@ export class EditChallenge extends Component {
 
             tags: (props) => {
               return (
-                <React.Fragment>
+                <Fragment>
                   <LabelWithHelp {...props} />
                   <KeywordAutosuggestInput
                     {...props}
                     inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
                     dropdownInnerClassName="mr-bg-blue-darker"
                   />
-                </React.Fragment>
+                </Fragment>
               );
             },
             taskTags: injectIntl((props) => {
               return (
-                <React.Fragment>
+                <Fragment>
                   <LabelWithHelp {...props} />
                   <KeywordAutosuggestInput
                     {...props}
@@ -802,12 +802,12 @@ export class EditChallenge extends Component {
                     )}
                     tagType={props.uiSchema.tagType}
                   />
-                </React.Fragment>
+                </Fragment>
               );
             }),
             limitTags: injectIntl((props) => {
               return (
-                <React.Fragment>
+                <Fragment>
                   <div className="mr-mb-2">{props.uiSchema["ui:help"]}</div>
                   <div className="radio">
                     <input
@@ -835,7 +835,7 @@ export class EditChallenge extends Component {
                       <FormattedMessage {...messages.noLabel} />
                     </label>
                   </div>
-                </React.Fragment>
+                </Fragment>
               );
             }),
             configureCustomTaskStyles: (props) => {
@@ -993,7 +993,7 @@ export class EditChallenge extends Component {
 
 function configureCustomTaskStyles(props, configureTaskStyleRules) {
   return (
-    <React.Fragment>
+    <Fragment>
       <LabelWithHelp {...props} />
       <div>
         <div className="radio">
@@ -1037,7 +1037,7 @@ function configureCustomTaskStyles(props, configureTaskStyleRules) {
           </button>
         )}
       </div>
-    </React.Fragment>
+    </Fragment>
   );
 }
 

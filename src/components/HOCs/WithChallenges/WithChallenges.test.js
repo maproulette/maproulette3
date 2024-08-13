@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _values from 'lodash/values'
 import _size from 'lodash/size'
 import { mapStateToProps, mapDispatchToProps } from './WithChallenges'

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _find from 'lodash/find'

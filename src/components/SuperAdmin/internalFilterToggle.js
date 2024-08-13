@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 const internalFilterToggle = (filterName) => {
   return class extends Component {

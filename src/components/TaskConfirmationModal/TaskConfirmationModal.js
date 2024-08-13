@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Fragment, Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _kebabCase from 'lodash/kebabCase'
@@ -46,7 +46,7 @@ export class TaskConfirmationModal extends Component {
     criteria: {}
   }
 
-  commentInputRef = React.createRef()
+  commentInputRef = createRef()
 
   handleKeyboardShortcuts = event => {
     // Ignore if shortcut group is not active
@@ -215,7 +215,7 @@ export class TaskConfirmationModal extends Component {
                   }
 
                   {applyingTagChanges &&
-                   <React.Fragment>
+                   <Fragment>
                      <p className="mr-my-4 mr-text-grey-light mr-text-sm">
                        <FormattedMessage
                          {...messages.osmUploadNotice }
@@ -236,7 +236,7 @@ export class TaskConfirmationModal extends Component {
                         onChange={e => this.props.setOSMComment(e.target.value)}
                        />
                      </div>
-                   </React.Fragment>
+                   </Fragment>
                   }
                   {applyingTagChanges &&
                      <div className="mr-text-base mr-mt-4 mr-text-yellow">
@@ -360,7 +360,7 @@ export class TaskConfirmationModal extends Component {
                   }
 
                   { reviewConfirmation && _isUndefined(this.props.needsRevised) &&
-                    <React.Fragment>
+                    <Fragment>
                       <div className="mr-mt-8 mr-text-sm">
                         <div className="mr-mr-4">
                           <FormattedMessage {...messages.loadNextReviewLabel} />
@@ -427,7 +427,7 @@ export class TaskConfirmationModal extends Component {
                           <FormattedMessage {...messages.adjustFilters} />
                         </div>
                       </div>
-                    </React.Fragment>
+                    </Fragment>
                   }
 
                   { reviewConfirmation && !_isUndefined(this.props.needsRevised) && this.props.fromInbox &&
@@ -500,7 +500,7 @@ export class TaskConfirmationModal extends Component {
           }
         </Modal>
       </External>
-    )
+    );
   }
 }
 

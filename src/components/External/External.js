@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createContext, Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
@@ -11,7 +11,7 @@ const modalRoot = document.getElementById('external-root')
  * making use of react-clickout should check this context to see if any child
  * components wish to temporarily suspend clickouts
  */
-export const ExternalContext = React.createContext({
+export const ExternalContext = createContext({
   clickoutSuspended: false,
   suspendClickout(isSuspended) {
     this.clickoutSuspended = isSuspended

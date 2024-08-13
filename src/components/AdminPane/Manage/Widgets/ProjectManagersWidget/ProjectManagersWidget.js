@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import { WidgetDataTarget, registerWidgetType }
@@ -168,7 +168,7 @@ export default class ProjectManagersWidget extends Component {
             className="mr-flex mr-items-center mr-pr-4 mr-mt-4"
           >
             {isTeam ?
-             <React.Fragment>
+             <Fragment>
                <div className="mr-flex-grow-0 mr-mr-4">
                  <span className="mr-text-pink mr-text-xs mr-uppercase">
                    <FormattedMessage {...messages.teamIndicator} />
@@ -177,8 +177,8 @@ export default class ProjectManagersWidget extends Component {
                <div className="mr-flex-grow-0 mr-links-green-lighter mr-mr-2">
                 {manager.name}
                </div>
-             </React.Fragment> :
-             <React.Fragment>
+             </Fragment> :
+             <Fragment>
                <div className="mr-flex-grow-0 mr-mr-4">
                  <figure className="mr-w-8 mr-h-8">
                    <img
@@ -193,7 +193,7 @@ export default class ProjectManagersWidget extends Component {
                    {manager.displayName}
                  </Link>
                </div>
-             </React.Fragment>
+             </Fragment>
             }
 
             <div className="mr-flex-grow mr-border-b mr-border-white-15 mr-mr-4" />
@@ -201,7 +201,7 @@ export default class ProjectManagersWidget extends Component {
             <div className="mr-flex-grow-0">
               {this.state.updatingManagers.indexOf(isTeam ? manager.id : manager.osmId) !== -1 ?
                <BusySpinner /> :
-               <React.Fragment>
+               <Fragment>
                  {isLastAdmin || !user.canAdministrateProject(this.props.project) ?
                   <FormattedMessage {...messagesByRole[managerRole]} /> :
                   <select
@@ -212,11 +212,11 @@ export default class ProjectManagersWidget extends Component {
                     {dropdownOptions}
                   </select>
                  }
-               </React.Fragment>
+               </Fragment>
               }
             </div>
           </div>
-        )
+        );
       }
     )
 

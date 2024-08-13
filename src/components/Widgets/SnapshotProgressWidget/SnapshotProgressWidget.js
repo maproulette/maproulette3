@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import { FormattedMessage, FormattedDate } from 'react-intl'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
@@ -116,7 +116,7 @@ export default class SnapshotProgressWidget extends Component {
         rightHeaderControls={
           <div className="mr-flex mr-items-right mr-justify-start mr-items-center mr-my-2">
             {!this.state.showManageSnapshots &&
-              <React.Fragment>
+              <Fragment>
                 <Dropdown
                   className="mr-button mr-button--green-lighter mr-button--small mr-mr-4"
                   dropdownButton={dropdown => this.snapshotButton(dropdown, this.props)}
@@ -138,7 +138,7 @@ export default class SnapshotProgressWidget extends Component {
                     </button>
                   )}
                   dropdownContent={(dropdown) =>
-                    <React.Fragment>
+                    <Fragment>
                       <ul className="mr-list-dropdown">
                         <li>
                           <button
@@ -173,10 +173,10 @@ export default class SnapshotProgressWidget extends Component {
                           </a>
                         </li>
                       </ul>
-                    </React.Fragment>
+                    </Fragment>
                   }
                 />
-              </React.Fragment>
+              </Fragment>
             }
             {this.state.showManageSnapshots &&
               <div className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
@@ -202,7 +202,7 @@ export default class SnapshotProgressWidget extends Component {
          />
        }
       </QuickWidget>
-    )
+    );
   }
 }
 

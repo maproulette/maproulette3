@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
@@ -53,18 +53,18 @@ export default class ReviewStatusMetrics extends Component {
 
   buildToBeReviewed = metrics => {
     return (
-      <React.Fragment>
+      <Fragment>
         {buildMetric(metrics.reviewRequested, metrics.total,
           <FormattedMessage {...messages.awaitingReview} />)}
         {buildMetric(metrics.reviewDisputed, metrics.total,
           <FormattedMessage {...messages.disputedReview} />)}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 
   buildReviewedByMe = metrics => {
     return (
-      <React.Fragment>
+      <Fragment>
         {buildMetric(metrics.reviewApproved, metrics.total,
           <FormattedMessage {...messages.approvedReview} />)}
         {buildMetric(metrics.reviewRejected, metrics.total,
@@ -73,13 +73,13 @@ export default class ReviewStatusMetrics extends Component {
           <FormattedMessage {...messages.assistedReview} />)}
         {buildMetric(metrics.reviewDisputed, metrics.total,
           <FormattedMessage {...messages.disputedReview} />)}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 
   buildMyReviewTasks = metrics => {
     return (
-      <React.Fragment>
+      <Fragment>
         {buildMetric(metrics.reviewRequested, metrics.total,
           <FormattedMessage {...messages.awaitingReview} />)}
         {buildMetric(metrics.reviewApproved, metrics.total,
@@ -90,13 +90,13 @@ export default class ReviewStatusMetrics extends Component {
           <FormattedMessage {...messages.assistedReview} />)}
         {buildMetric(metrics.reviewDisputed, metrics.total,
           <FormattedMessage {...messages.disputedReview} />)}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 
   buildAllReviewedTasks = metrics => {
     return (
-      <React.Fragment>
+      <Fragment>
         {buildMetric(metrics.reviewRequested, metrics.total,
           <FormattedMessage {...messages.awaitingReview} />)}
         {buildMetric(metrics.reviewApproved, metrics.total,
@@ -107,13 +107,13 @@ export default class ReviewStatusMetrics extends Component {
           <FormattedMessage {...messages.assistedReview} />)}
         {buildMetric(metrics.reviewDisputed, metrics.total,
           <FormattedMessage {...messages.disputedReview} />)}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 
   buildAllReviewedTasksAsMetaReviewStatus = (metrics, metaReviewTotal) => {
     return (
-      <React.Fragment>
+      <Fragment>
         {buildMetric(metrics.metaReviewRequested, metaReviewTotal,
           <FormattedMessage {...messages.metaRequestedReview} />)}
         {buildMetric(metrics.metaReviewApproved, metaReviewTotal,
@@ -122,30 +122,30 @@ export default class ReviewStatusMetrics extends Component {
           <FormattedMessage {...messages.metaRejectedReview} />)}
         {buildMetric(metrics.metaReviewAssisted, metaReviewTotal,
           <FormattedMessage {...messages.metaAssistedReview} />)}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 
   buildMetaReviewTasks = metrics => {
     return (
-      <React.Fragment>
+      <Fragment>
         {buildMetric(metrics.reviewApproved, metrics.total,
           <FormattedMessage {...messages.approvedReview} />)}
         {buildMetric(metrics.reviewAssisted, metrics.total,
           <FormattedMessage {...messages.assistedReview} />)}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 
   buildMetaReviewTasksAsMetaReviewStatus = (metrics) => {
     return (
-      <React.Fragment>
+      <Fragment>
         {buildMetric((metrics.total - metrics.metaReviewRequested), metrics.total,
           <FormattedMessage {...messages.awaitingMetaReview} />)}
         {buildMetric(metrics.metaReviewRequested, metrics.total,
           <FormattedMessage {...messages.awaitingMetaReReview} />)}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 
   render() {

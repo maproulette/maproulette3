@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 import L from 'leaflet'
 import { injectIntl } from 'react-intl'

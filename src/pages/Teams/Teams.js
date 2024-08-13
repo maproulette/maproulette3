@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _isEmpty from 'lodash/isEmpty'

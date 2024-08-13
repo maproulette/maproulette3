@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import { useMutation } from '@apollo/client'
 import AppErrors from '../../../services/Error/AppErrors'

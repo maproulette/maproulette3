@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom'
-import * as React from 'react'
 import { SuperAdminPane } from './SuperAdmin'
 import { fireEvent } from '@testing-library/react'
 

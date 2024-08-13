@@ -1,4 +1,3 @@
-import React from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import SearchBox from '../SearchBox/SearchBox'
 import messages from './Messages'

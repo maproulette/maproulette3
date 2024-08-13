@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 /**
  * Wraps a grid block control with the appropriate CSS classes to ensure it

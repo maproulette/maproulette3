@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps,
          _WithSearch } from './WithSearch'
 import { setSort, removeSort,

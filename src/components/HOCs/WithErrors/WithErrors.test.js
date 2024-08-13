@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps } from './WithErrors'
 import { addError,
          removeError,

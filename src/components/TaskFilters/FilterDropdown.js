@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import _isFunction from 'lodash/isFunction'
@@ -24,14 +24,14 @@ export default class FilterDropdown extends Component {
           </button>
         )}
         dropdownContent={dropdown =>
-          <React.Fragment>
+          <Fragment>
             <ul className="mr-list-dropdown">
               {_isFunction(this.props.filters) ?
                 this.props.filters(dropdown) : this.props.filters
               }
             </ul>
             {this.props.secondaryFilterLabel &&
-              <React.Fragment>
+              <Fragment>
                 <h5 className="mr-text-mango mr-my-4 mr-pt-2 mr-border-t mr-border-grey mr-uppercase mr-text-normal">
                   {this.props.secondaryFilterLabel}
                 </h5>
@@ -40,11 +40,11 @@ export default class FilterDropdown extends Component {
                     this.props.secondaryFilters(dropdown) : this.props.secondaryFilters
                   }
                 </ul>
-              </React.Fragment>
+              </Fragment>
             }
-          </React.Fragment>
+          </Fragment>
         }
       />
-    )
+    );
   }
 }

@@ -1,5 +1,4 @@
 import "@testing-library/jest-dom";
-import * as React from "react";
 import { fireEvent } from "@testing-library/react";
 import { ChallengeActivityTimeline } from "./ChallengeActivityTimeline";
 

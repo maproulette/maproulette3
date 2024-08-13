@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
@@ -63,7 +63,7 @@ const limitUserResults = (challenges) => {
 export class ChallengeResultList extends Component {
     constructor(props) {
       super(props);
-      this.listRef = React.createRef();
+      this.listRef = createRef();
       this.state = { data: null, pauseFetch: true };
     }
   

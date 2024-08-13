@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _isEmpty from 'lodash/isEmpty'
 import _each from 'lodash/each'
 

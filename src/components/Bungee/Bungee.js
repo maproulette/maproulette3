@@ -1,7 +1,6 @@
 import 'fontsource-bungee'
 import 'fontsource-bungee-shade'
 import 'fontsource-bungee-inline'
-import React from 'react'
 import classNames from 'classnames'
 
 /**

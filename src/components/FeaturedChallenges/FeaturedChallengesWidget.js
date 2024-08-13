@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react'
+import { Component, useRef } from 'react'
 import { FormattedMessage } from 'react-intl'
 import Carousel, { consts } from 'react-elastic-carousel'
 import { Link } from 'react-router-dom'

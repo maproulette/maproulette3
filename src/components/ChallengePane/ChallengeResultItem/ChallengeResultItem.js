@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import _isObject from 'lodash/isObject'
@@ -33,7 +33,7 @@ import './ChallengeResultItem.scss'
 export class ChallengeResultItem extends Component {
   constructor(props) {
     super(props)
-    this.itemRef = React.createRef()
+    this.itemRef = createRef()
   }
 
   shouldComponentUpdate(nextProps) {

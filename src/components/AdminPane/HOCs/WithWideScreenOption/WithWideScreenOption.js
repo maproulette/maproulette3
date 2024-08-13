@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 /**
  * WithWideScreenOption passes down an isWideScreen prop to the wrapped component,

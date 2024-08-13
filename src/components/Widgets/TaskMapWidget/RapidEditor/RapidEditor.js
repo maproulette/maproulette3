@@ -1,6 +1,6 @@
 //credit https://github.com/hotosm/tasking-manager/blob/develop/frontend/src/components/rapidEditor.js for implementation guidance
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import _get from 'lodash/get'
 import { constructRapidURI } from '../../../../services/Editor/Editor.js';
 import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement.js';

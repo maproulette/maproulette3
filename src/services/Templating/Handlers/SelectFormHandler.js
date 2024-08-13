@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import _map from 'lodash/map'
 
 /**
@@ -41,7 +41,7 @@ const SelectFormField = props => {
 
   const currentValue = Object.assign({}, props.completionResponses)[props.propertyName]
   return (
-    <React.Fragment>
+    <Fragment>
       <select
         id="select-label" 
         onChange={e => props.setCompletionResponse(props.propertyName, e.target.value)}
@@ -53,8 +53,8 @@ const SelectFormField = props => {
         {_map(props.values, (value, i) => <option key={i} value={value}>{value}</option>)}
       </select>
       <label htmlFor="select-label" className="mr-pl-2">{props.label}</label>
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 export default SelectFormHandler

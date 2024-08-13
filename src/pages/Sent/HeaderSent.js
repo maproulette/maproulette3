@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import messages from './Messages'

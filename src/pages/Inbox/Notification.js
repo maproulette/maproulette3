@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, FormattedDate, FormattedTime }
@@ -19,7 +19,7 @@ import messages from './Messages'
 import ErrorTagComment from '../../components/ErrorTagComment/ErrorTagComment'
 
 class Notification extends Component {
-  chosenNotificationRef = React.createRef()
+  chosenNotificationRef = createRef()
 
   notificationBody = notification => {
     switch(notification.notificationType) {
@@ -123,7 +123,7 @@ class Notification extends Component {
 
 const MentionBody = function(props) {
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-mb-8 mr-text-base">
         <FormattedMessage {...messages.mentionNotificationLead} />
       </p>
@@ -131,8 +131,8 @@ const MentionBody = function(props) {
       <AttachedComment notification={props.notification} />
 
       <ViewTask notification={props.notification} />
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const ReviewBody = function(props) {
@@ -157,7 +157,7 @@ const ReviewBody = function(props) {
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-mb-8 mr-text-base">{lead}</p>
 
       {props.notification.errorTags
@@ -173,15 +173,15 @@ const ReviewBody = function(props) {
         notification={props.notification}
         review={reviewStatus === TaskReviewStatus.needed}
       />
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const ReviewRevisedBody = function(props) {
   const lead = <FormattedMessage {...messages.reviewRevisedNotificationLead} />
 
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-mb-8 mr-text-base">{lead}</p>
 
       <AttachedComment notification={props.notification} />
@@ -190,8 +190,8 @@ const ReviewRevisedBody = function(props) {
         notification={props.notification}
         review={true}
       />
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const MetaReviewBody = function(props) {
@@ -216,7 +216,7 @@ const MetaReviewBody = function(props) {
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-mb-8 mr-text-base">{lead}</p>
 
       <AttachedComment notification={props.notification} />
@@ -225,13 +225,13 @@ const MetaReviewBody = function(props) {
         notification={props.notification}
         review={reviewStatus === TaskReviewStatus.needed}
       />
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const ChallengeCompletionBody = function(props) {
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-mb-8 mr-text-base">
         <FormattedMessage {...messages.challengeCompleteNotificationLead} />
       </p>
@@ -239,13 +239,13 @@ const ChallengeCompletionBody = function(props) {
       <p className="mr-text-md mr-text-yellow">{props.notification.extra}</p>
 
       <ViewChallengeAdmin notification={props.notification} />
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const MapperChallengeCompletionBody = function(props) {
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-mb-8 mr-text-base">
         <FormattedMessage {...messages.mapperChallengeCompleteNotificationLead} />
       </p>
@@ -258,8 +258,8 @@ const MapperChallengeCompletionBody = function(props) {
         </Link>
       </div>
 
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const TeamBody = function(props) {
@@ -268,7 +268,7 @@ const TeamBody = function(props) {
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-mb-8 mr-text-base">
         <FormattedMessage {...messages.teamInviteNotificationLead} />
       </p>
@@ -280,8 +280,8 @@ const TeamBody = function(props) {
           <FormattedMessage {...messages.viewTeamsLabel} />
         </Link>
       </div>
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const FollowBody = function(props) {
@@ -290,7 +290,7 @@ const FollowBody = function(props) {
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-mb-8 mr-text-base">
         <FormattedMessage {...messages.followedNotificationLead} />
       </p>
@@ -300,13 +300,13 @@ const FollowBody = function(props) {
           {props.notification.fromUsername}
         </Link>
       </p>
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const ChallengeCommentBody = function(props) {
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-mb-8 mr-text-base">
         <FormattedMessage {...messages.commentedOnChallenge} />
       </p>
@@ -314,8 +314,8 @@ const ChallengeCommentBody = function(props) {
       <AttachedComment notification={props.notification} />
 
       <ViewTask notification={props.notification} />
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const AttachedComment = function(props) {
@@ -324,15 +324,15 @@ const AttachedComment = function(props) {
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       <p className="mr-text-xs">{props.notification.fromUsername}</p>
       <div className="mr-text-sm mr-rounded-sm mr-p-2 mr-bg-grey-lighter-10">
         <div className="mr-markdown mr-markdown--longtext">
           <Markdown allowShortCodes markdown={props.notification.extra} />
         </div>
       </div>
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const ViewTask = function(props) {

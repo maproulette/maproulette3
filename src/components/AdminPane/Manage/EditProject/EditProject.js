@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import Form from "@rjsf/core";
 import _merge from "lodash/merge";
 import _get from "lodash/get";

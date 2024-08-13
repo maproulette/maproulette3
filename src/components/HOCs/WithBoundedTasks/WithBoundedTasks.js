@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { LatLng } from 'leaflet'
 import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
 import _get from 'lodash/get'

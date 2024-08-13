@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react'
 import { Marker, Tooltip, Polyline, useMap, useMapEvents } from 'react-leaflet';
 import _map from 'lodash/map';
 import _isEqual from 'lodash/isEqual';

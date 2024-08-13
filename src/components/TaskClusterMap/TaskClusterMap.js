@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from 'react';
+import { useState, useEffect, useRef } from 'react'
 import _isEmpty from 'lodash/isEmpty'
 import _sortBy from 'lodash/sortBy'
 import _get from 'lodash/get'

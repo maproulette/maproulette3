@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { FormattedMessage }
@@ -41,23 +41,23 @@ class Notification extends Component {
 
 const CommentBody = function(props) {
   return (
-    <React.Fragment>
+    <Fragment>
       <AttachedComment text={props.text} />
       <ViewTask id={props.id} type={props.type}/>
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const AttachedComment = function(props) {
   return (
-    <React.Fragment>
+    <Fragment>
       <div className="mr-text-sm mr-rounded-sm mr-p-2 mr-bg-grey-lighter-10">
         <div className="mr-markdown mr-markdown--longtext">
           <Markdown allowShortCodes markdown={props.text} />
         </div>
       </div>
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const ViewTask = function(props) {

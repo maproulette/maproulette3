@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { cloneElement, Component } from 'react'
 import PropTypes from 'prop-types'
 
 /**
@@ -36,7 +36,7 @@ export default class IntervalRender extends Component {
   }
 
   render() {
-    return React.cloneElement(this.props.children)
+    return cloneElement(this.props.children);
   }
 }
 

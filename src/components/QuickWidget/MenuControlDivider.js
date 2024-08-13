@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 /**
  * Renders a divider between MenuControls in a grid block

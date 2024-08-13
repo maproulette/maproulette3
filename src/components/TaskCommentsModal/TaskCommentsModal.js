@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import WithTaskComments from '../HOCs/WithTaskComments/WithTaskComments'
@@ -14,7 +14,7 @@ export class TaskCommentsModal extends Component {
     comment: ""
   }
   
-  commentInputRef = React.createRef()
+  commentInputRef = createRef()
 
   setComment = comment => this.setState({comment})
 

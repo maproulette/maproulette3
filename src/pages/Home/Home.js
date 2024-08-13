@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import WithCurrentUser
        from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import Hero from './Hero'
@@ -9,13 +9,13 @@ import Featured from './Featured'
 export class Home extends Component {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Hero {...this.props} />
         <Intro {...this.props} />
         <Instructions {...this.props} />
         <Featured {...this.props} />
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 

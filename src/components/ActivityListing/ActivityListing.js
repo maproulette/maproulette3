@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _isEmpty from 'lodash/isEmpty'
@@ -23,9 +23,9 @@ export const Activity = props => {
     <div className="mr-text-white">
       {_isEmpty(props.activity) ?
        <FormattedMessage {...messages.noRecentActivity} /> :
-       <React.Fragment>
+       <Fragment>
          {props.toggleIsGrouped &&
-          <React.Fragment>
+          <Fragment>
             <input
               id="group-label"
               type="checkbox"
@@ -35,7 +35,7 @@ export const Activity = props => {
               onChange={() => null}
             />
             <label htmlFor="group-label" className="mr-ml-2"><FormattedMessage {...messages.groupLabel} /></label>
-          </React.Fragment>
+          </Fragment>
          }
          <div className="mr-timeline mr-links-green-lighter">
            {_map(groupedActivity, entry =>
@@ -46,10 +46,10 @@ export const Activity = props => {
              />
            )}
          </div>
-        </React.Fragment>
+        </Fragment>
       }
     </div>
-  )
+  );
 }
 
 Activity.propTypes = {

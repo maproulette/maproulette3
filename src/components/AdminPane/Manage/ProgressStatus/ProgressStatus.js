@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
@@ -28,18 +28,18 @@ export default class ProgressStatus extends Component {
 
             <div className="mr-white mr-text-lg">
               {_isFinite(this.props.progressItem.stepsCompleted) &&
-                <React.Fragment>
+                <Fragment>
                   {
                     this.props.progressItem.stepsCompleted
                   } <FormattedMessage {...this.props.progressDescription} />
-                </React.Fragment>
+                </Fragment>
               }
               <BusySpinner className="mr-mt-4" />
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import bbox from '@turf/bbox'
 import _split from 'lodash/split'
@@ -51,7 +51,7 @@ export default class BoundsSelectorModal extends Component {
       )
 
     return (
-      <React.Fragment>
+      <Fragment>
         <button className="mr-button mr-button mr-button--small mr-ml-4"
           onClick={(e) => {
             e.stopPropagation()
@@ -106,7 +106,7 @@ export default class BoundsSelectorModal extends Component {
             </Modal>
           </External>
         }
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }

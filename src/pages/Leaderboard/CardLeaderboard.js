@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, FormattedNumber } from 'react-intl'
@@ -70,17 +70,17 @@ class CardLeaderboard extends Component {
           </strong> <FormattedMessage {...messages.userPoints} />
         </h3>
         {!this.props.suppressTopChallenges &&
-         <React.Fragment>
+         <Fragment>
            <h4 className="mr-inline-block mr-text-md mr-pb-3 mr-mb-3 mr-border-b mr-border-white-40">
              <FormattedMessage {...messages.userTopChallenges} />
            </h4>
            <ol className="mr-list-reset mr-text-sm mr-links-green-lighter">
              {topChallengeItems}
            </ol>
-         </React.Fragment>
+         </Fragment>
         }
       </article>
-    )
+    );
   }
 }
 

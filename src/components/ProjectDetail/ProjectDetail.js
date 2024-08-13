@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import { FormattedMessage, FormattedDate, injectIntl }

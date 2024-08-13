@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
@@ -208,7 +208,7 @@ export class WidgetWorkspace extends Component {
     let editNameBox = null
     if (this.isEditing(this.props.currentConfiguration)) {
       editNameBox = (
-        <React.Fragment>
+        <Fragment>
           <label className="mr-text-greener mr-mr-2 mr-ml-8">
             <FormattedMessage {...messages.configurationNameLabel} />
           </label>
@@ -216,7 +216,7 @@ export class WidgetWorkspace extends Component {
                         text={this.state.newConfigurationName}
                         setText={this.setNewName}
           />
-        </React.Fragment>
+        </Fragment>
       )
     }
 
@@ -306,7 +306,7 @@ const ListLayoutItems = function(props) {
   })
 
   return (
-    <React.Fragment>
+    <Fragment>
       <h3 className="mr-text-base mr-font-bold mr-mb-2">
         <FormattedMessage {...messages.switchTo} />
       </h3>
@@ -381,8 +381,8 @@ const ListLayoutItems = function(props) {
           </li> : null 
         }
       </ol>
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 WidgetWorkspace.propTypes = {

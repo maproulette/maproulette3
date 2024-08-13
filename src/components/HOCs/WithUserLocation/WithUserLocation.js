@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import AppErrors from '../../../services/Error/AppErrors'

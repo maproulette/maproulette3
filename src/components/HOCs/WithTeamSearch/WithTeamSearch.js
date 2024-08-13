@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _isEmpty from 'lodash/isEmpty'
 import _filter from 'lodash/filter'
 import _startsWith from 'lodash/startsWith'

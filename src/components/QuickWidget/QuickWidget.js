@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react'
+import { Component, createRef } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'

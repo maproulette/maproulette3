@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _cloneDeep from 'lodash/cloneDeep'
 import _pullAt from 'lodash/pullAt'
 import _get from 'lodash/get'

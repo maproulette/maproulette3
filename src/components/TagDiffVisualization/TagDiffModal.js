@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import External from '../External/External'
 import Modal from '../Modal/Modal'

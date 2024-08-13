@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _get from 'lodash/get'
 import WithLoadedTask from '../HOCs/WithLoadedTask/WithLoadedTask'
 import messages from './Messages'

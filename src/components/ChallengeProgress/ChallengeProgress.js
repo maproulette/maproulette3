@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl'
@@ -113,15 +113,15 @@ export class ChallengeProgress extends Component {
                     className="mr-text-lg mr-min-w-8 mr-text-right mr-text-pink"
                   >
                     {this.props.prominentCounts ?
-                     <React.Fragment>
+                     <Fragment>
                        {stat[1].count >= 0 ? stat[1].count : '--'}
-                     </React.Fragment> :
-                     <React.Fragment>
+                     </Fragment> :
+                     <Fragment>
                        {isNaN(stat[1].percent) ? '--' :
                        /* eslint-disable-next-line react/style-prop-object */
                        <FormattedNumber style="percent" value={stat[1].percent / 100} />
                        }
-                     </React.Fragment>
+                     </Fragment>
                     }
                   </span>
                   <span
@@ -133,15 +133,15 @@ export class ChallengeProgress extends Component {
                     {stat[0]}{' '}
                     <span className={this.props.prominentCounts ? "mr-text-base" : "mr-text-xs"}>
                       {this.props.prominentCounts ?
-                       <React.Fragment>
+                       <Fragment>
                          ({isNaN(stat[1].percent) ? '--' :
                          /* eslint-disable-next-line react/style-prop-object */
                          <FormattedNumber style="percent" value={stat[1].percent / 100} />
                          })
-                       </React.Fragment> :
-                       <React.Fragment>
+                       </Fragment> :
+                       <Fragment>
                         ({stat[1].count >= 0 ? stat[1].count : '--'}/{taskActions.total >= 0 ? taskActions.total : '--'})
-                       </React.Fragment>
+                       </Fragment>
                       }
                     </span>
                   </span>
@@ -150,7 +150,7 @@ export class ChallengeProgress extends Component {
           </ul>
         ))}
       </div>
-    )
+    );
   }
 
   generateProgressBar(taskActions, completionData, statusColors, orderedKeys) {
@@ -322,7 +322,7 @@ export class ChallengeProgress extends Component {
     })
 
     return (
-      <React.Fragment>
+      <Fragment>
         {this.generatePercentages(taskActions, _chunk(Object.entries(challengeStats), 3))}
         {this.generateProgressBar(taskActions, completionData, statusColors, orderedKeys)}
         {this.generateProgressBarLabel(taskActions)}
@@ -351,8 +351,8 @@ export class ChallengeProgress extends Component {
           </div>
         }
         {this.props.showByPriority && prioritizedCompletionProgress}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 

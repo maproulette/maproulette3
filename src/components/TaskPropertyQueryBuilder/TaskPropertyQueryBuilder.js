@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react'
+import { Component, createRef } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import Form from '@rjsf/core'
 import { CustomSelectWidget }

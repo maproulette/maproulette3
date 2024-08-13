@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import Fuse from 'fuse.js'
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'

@@ -1,6 +1,5 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
-import * as React from "react";
 import { TaskClusterMap } from "./TaskClusterMap";
 import { labelOverlappingMarkers } from "./MapMarkers";
 

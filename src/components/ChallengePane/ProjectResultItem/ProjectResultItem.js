@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
@@ -22,7 +22,7 @@ import CardProject from '../../CardProject/CardProject'
 export class ProjectResultItem extends Component {
   constructor(props) {
     super(props)
-    this.itemRef = React.createRef()
+    this.itemRef = createRef()
   }
 
   shouldComponentUpdate(nextProps) {

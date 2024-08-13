@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReactTable from 'react-table-6'
 import { Link } from 'react-router-dom'
 import { FormattedDate, FormattedTime, injectIntl } from 'react-intl'

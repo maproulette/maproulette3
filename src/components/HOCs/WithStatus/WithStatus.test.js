@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps } from './WithStatus'
 import { FETCHING_CHALLENGES_STATUS,
          CHECKING_LOGIN_STATUS }

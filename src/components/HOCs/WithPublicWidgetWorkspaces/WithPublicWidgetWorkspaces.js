@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
 import _each from 'lodash/each'

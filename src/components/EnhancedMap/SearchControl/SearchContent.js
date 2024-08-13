@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
 import _map from 'lodash/map'
@@ -79,7 +79,7 @@ const SearchContent = props => {
         </div>
 
         {props.nominatimResults &&
-          <React.Fragment>
+          <Fragment>
             <hr className="mr-h-px mr-my-4 mr-bg-blue-light" />
             {resultItems.length === 0 ?
               <FormattedMessage {...messages.noResults } /> :
@@ -90,11 +90,11 @@ const SearchContent = props => {
                 {resultItems}
               </ol>
             }
-          </React.Fragment>
+          </Fragment>
         }
       </div>
     </div>
-  )
+  );
 }
 
 export default WithNominatimSearch(injectIntl(SearchContent))

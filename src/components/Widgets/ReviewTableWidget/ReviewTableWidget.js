@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import TasksReviewTable from '../../../pages/Review/TasksReview/TasksReviewTable'
