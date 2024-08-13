@@ -24,7 +24,7 @@ export default class TaskRevisedControl extends Component {
     else {
       return (
         <Dropdown
-          className={classNames("mr-dropdown--fixed mr-w-full")}
+          className={classNames("mr-dropdown--fixed")}
           dropdownButton={dropdown =>
             <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} {...this.props}/>
           }

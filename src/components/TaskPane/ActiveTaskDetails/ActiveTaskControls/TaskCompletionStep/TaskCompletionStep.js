@@ -51,34 +51,36 @@ export default class TaskCompletionStep extends Component {
           {...this.props}
           className="mr-mb-2"
         />
-        {this.props.needsRevised && (
+        <div className="breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto mr-items-center">
+          {this.props.needsRevised && (
             <div className="mr-mt-2">
               <TaskRevisedControl {...this.props} />
             </div>
-          )
-        }
-        <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
-          {this.props.allowedProgressions.has(TaskStatus.fixed) &&
-           <TaskFixedControl {...this.props} />
+            )
           }
+          <div className="mr-mt-2">
+            {this.props.allowedProgressions.has(TaskStatus.fixed) &&
+            <TaskFixedControl {...this.props} />
+            }
 
-          {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
-           <TaskAlreadyFixedControl {...this.props} />
-          }
+            {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
+            <TaskAlreadyFixedControl {...this.props} />
+            }
 
-          {this.props.allowedProgressions.has(TaskStatus.falsePositive) &&
-            !this.props.needsRevised &&
-           <TaskFalsePositiveControl {...this.props} />
-          }
+            {this.props.allowedProgressions.has(TaskStatus.falsePositive) &&
+              !this.props.needsRevised &&
+            <TaskFalsePositiveControl {...this.props} />
+            }
 
-          {this.props.allowedProgressions.has(TaskStatus.tooHard) &&
-           <TaskTooHardControl {...this.props} />
-          }
+            {this.props.allowedProgressions.has(TaskStatus.tooHard) &&
+            <TaskTooHardControl {...this.props} />
+            }
 
-          {this.props.allowedProgressions.has(TaskStatus.skipped) &&
-            !this.props.needsRevised &&
-           <TaskSkipControl {...this.props}/>
-          }
+            {this.props.allowedProgressions.has(TaskStatus.skipped) &&
+              !this.props.needsRevised &&
+            <TaskSkipControl {...this.props}/>
+            }
+          </div>
         </div>
       </div>
     )
