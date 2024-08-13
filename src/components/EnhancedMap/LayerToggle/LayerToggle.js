@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl'
@@ -104,7 +104,7 @@ export class LayerToggle extends Component {
           </button>
         }
         dropdownContent={() =>
-          <React.Fragment>
+          <Fragment>
             {layerListItems.length > 0 && <ol className="mr-o-2">{layerListItems}</ol>}
             {layerListItems.length > 0 && overlays.length > 0 &&
              <hr className="mr-h-px mr-my-4 mr-bg-white-15" />
@@ -167,10 +167,10 @@ export class LayerToggle extends Component {
                 </Droppable>
               </DragDropContext>
             </div>
-          </React.Fragment>
+          </Fragment>
         }
       />
-    )
+    );
   }
 }
 
@@ -294,21 +294,21 @@ const SimpleLayerToggle = props => {
 
 const OSMDataLayerToggle = props => {
   return (
-    <React.Fragment>
+    <Fragment>
       <SimpleLayerToggle
         toggleLayerActive={props.toggleOSMData}
         isLayerActive={props.showOSMData}
         layerLabel={
-          <React.Fragment>
+          <Fragment>
             <FormattedMessage
               {...messages.showOSMDataLabel}
             /> {props.osmDataLoading && <FormattedMessage {...messages.loading} />}
-          </React.Fragment>
+          </Fragment>
         }
       />
 
       {props.showOSMData && !props.osmDataLoading && props.toggleOSMElements &&
-       <React.Fragment>
+       <Fragment>
          {['nodes', 'ways', 'areas'].map(element => (
            <SimpleLayerToggle
              key={`osm-element-toggle-${element}`}
@@ -318,10 +318,10 @@ const OSMDataLayerToggle = props => {
              layerLabel={element}
            />
          ))}
-       </React.Fragment>
+       </Fragment>
       }
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 const MapillaryLayerToggle = props => {
@@ -330,7 +330,7 @@ const MapillaryLayerToggle = props => {
       toggleLayerActive={() => props.toggleMapillary()}
       isLayerActive={props.showMapillary || false}
       layerLabel={
-        <React.Fragment>
+        <Fragment>
           <FormattedMessage
             {...messages.showMapillaryLabel}
           /> {(props.showMapillary && !props.mapillaryLoading) &&
@@ -348,10 +348,10 @@ const MapillaryLayerToggle = props => {
               <FormattedMessage {...messages.moreLabel} />
             </button>
           }
-        </React.Fragment>
+        </Fragment>
       }
     />
-  )
+  );
 }
 
 const OpenStreetCamLayerToggle = props => {
@@ -360,7 +360,7 @@ const OpenStreetCamLayerToggle = props => {
       toggleLayerActive={() => props.toggleOpenStreetCam()}
       isLayerActive={props.showOpenStreetCam || false}
       layerLabel={
-        <React.Fragment>
+        <Fragment>
           <FormattedMessage
             {...messages.showOpenStreetCamLabel}
           /> {(props.showOpenStreetCam && !props.openStreetCamLoading) &&
@@ -378,10 +378,10 @@ const OpenStreetCamLayerToggle = props => {
               <FormattedMessage {...messages.moreLabel} />
             </button>
           }
-        </React.Fragment>
+        </Fragment>
       }
     />
-  )
+  );
 }
 
 export default WithVisibleLayer(WithLayerSources(LayerToggle))

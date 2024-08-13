@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { Fragment, useState } from 'react'
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'
@@ -141,29 +141,29 @@ export const CustomFieldTemplate = function(props) {
        </div>
       }
       {!isCollapsed &&
-       <React.Fragment>
+       <Fragment>
          <LabelWithHelp {...props} />
          {children}
          {errors}
          {description}
-       </React.Fragment>
+       </Fragment>
       }
     </div>
-  )
+  );
 }
 
 export const CustomNotificationFieldTemplate = function(props) {
   const {classNames, children, description, errors} = props
   return (
     <div className={classNames}>
-       <React.Fragment>
+       <Fragment>
          <LabelWithHelp {...props} control />
          {children}
          {errors}
          {description}
-       </React.Fragment>
+       </Fragment>
     </div>
-  )
+  );
 }
 
 
@@ -227,7 +227,7 @@ export const CustomTextWidget = function(props) {
 
 export const ColumnRadioField = function(props) {
   return (
-    <React.Fragment>
+    <Fragment>
       <LabelWithHelp {...props} />
       {props.schema.enum.map((option, index) =>
         <div key={option} className="mr-flex mr-items-center mr-my-2">
@@ -252,8 +252,8 @@ export const ColumnRadioField = function(props) {
           </label>
         </div>
       )}
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 /**
@@ -264,7 +264,7 @@ export const MarkdownEditField = props => {
   const [formValues, setFormValues] = useState({})
 
   return (
-    <React.Fragment>
+    <Fragment>
       <LabelWithHelp {...props} />
       <div className="mr-flex mr-items-center mr-mb-2 mr-leading-tight mr-text-xxs">
         <button
@@ -290,7 +290,7 @@ export const MarkdownEditField = props => {
       </div>
 
       {showingPreview ?
-       <React.Fragment>
+       <Fragment>
          {props.uiSchema["ui:previewNote"] &&
            <div className="mr-text-sm mr-text-grey-light mr-italic">
              {props.uiSchema["ui:previewNote"]}
@@ -316,15 +316,15 @@ export const MarkdownEditField = props => {
              allowPropertyReplacement
            />
          </div>
-       </React.Fragment> :
+       </Fragment> :
        <textarea
          className="form-control mr-font-mono mr-text-sm"
          onChange={e => props.onChange(e.target.value)}
          value={props.formData}
        />
       }
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 export const TagsInputField = props => {

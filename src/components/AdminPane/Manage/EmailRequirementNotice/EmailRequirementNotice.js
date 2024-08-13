@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { injectIntl } from 'react-intl'
 import WithCurrentUser from "../../../HOCs/WithCurrentUser/WithCurrentUser";

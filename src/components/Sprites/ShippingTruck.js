@@ -1,5 +1,3 @@
-import React from "react";
-
 const ShippingTruck = () => {
   return (
     <symbol id="shipping-truck" height="99" width="198">

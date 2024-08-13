@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage, FormattedDate, FormattedTime }
        from 'react-intl'
@@ -493,7 +493,7 @@ export class TaskReviewTable extends Component {
     );
     
     return (
-      <React.Fragment>
+      <Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
           <div className={IncludeMap === null ? 'sm:mr-flex sm:mr-items-center sm:mr-justify-between' : null}>
             <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
@@ -614,8 +614,8 @@ export class TaskReviewTable extends Component {
             onClose={() => this.setState({ showConfigureColumns: false })}
           />
         )}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 
@@ -785,11 +785,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
-            <React.Fragment key={reviewer + "-" + index}>
+            <Fragment key={reviewer + "-" + index}>
               <span style={{color: AsColoredHashable(reviewer.username).hashColor}}>{reviewer.username}</span>
               {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
-            </React.Fragment>
-          )
+            </Fragment>
+          );
         })}
       </div>
     ),

@@ -1,5 +1,4 @@
 import "@testing-library/jest-dom";
-import * as React from "react";
 import ChallengeListWidget from "./ChallengeListWidget";
 
 describe("ChallengeListWidget", () => {

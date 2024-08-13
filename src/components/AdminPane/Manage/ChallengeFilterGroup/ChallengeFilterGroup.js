@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Fragment, Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { messagesByFilter } from "../../../../services/Widget/ChallengeFilter/ChallengeFilter";
 import DashboardFilterToggle from "../DashboardFilterToggle/DashboardFilterToggle";
@@ -10,7 +10,7 @@ const ArchivedFilterToggle = DashboardFilterToggle("challenge", "archived");
 export default class ChallengeFilterGroup extends Component {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <VisibleFilterToggle
           {...this.props}
           dashboardEntityFilters={this.props.dashboardChallengeFilters}
@@ -31,7 +31,7 @@ export default class ChallengeFilterGroup extends Component {
             <FormattedMessage {...messagesByFilter.archived} />
           }
         />
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

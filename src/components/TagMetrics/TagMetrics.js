@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
@@ -56,7 +56,7 @@ export default class TagMetrics extends Component {
     const taskTags = _filter(tagMetrics, (t) => t.tagType === "tasks")
 
     return (
-      <React.Fragment>
+      <Fragment>
         <div className="mr-text-orange mr-my-2 heading">
           <FormattedMessage {...messages.reviewTags} />
         </div>
@@ -78,8 +78,8 @@ export default class TagMetrics extends Component {
             <FormattedMessage {...messages.noTags} />
           }
         </div>
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 

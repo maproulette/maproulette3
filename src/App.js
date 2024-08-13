@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { withRouter } from 'react-router'
 import Home from './pages/Home/Home'
@@ -101,7 +101,7 @@ export class App extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <TopNav />
         <SystemNotices />
         <FundraisingNotices />
@@ -153,8 +153,8 @@ export class App extends Component {
         <Footer />
         <ErrorModal />
         <Sprites />
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 

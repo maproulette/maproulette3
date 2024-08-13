@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
@@ -91,7 +91,7 @@ export class TaskAnalysisTableHeader extends Component {
         </div>
 
         {!this.props.suppressManagement &&
-          <React.Fragment>
+          <Fragment>
             <ManageSavedFilters {...this.props}
               searchFilters={this.props.criteria}
             />
@@ -107,7 +107,7 @@ export class TaskAnalysisTableHeader extends Component {
                   </button>
                 )}
                 dropdownContent={dropdown =>
-                  <React.Fragment>
+                  <Fragment>
                     <ul className="mr-list-dropdown">
                       <SavedFiltersList
                         searchFilters={this.props.criteria}
@@ -115,7 +115,7 @@ export class TaskAnalysisTableHeader extends Component {
                         {...this.props}
                       />
                     </ul>
-                  </React.Fragment>
+                  </Fragment>
                 }
               />
               <Dropdown className="mr-dropdown--right" key="gear-dropdown"
@@ -128,7 +128,7 @@ export class TaskAnalysisTableHeader extends Component {
                   </button>
                 )}
                 dropdownContent={(dropdown) =>
-                  <React.Fragment>
+                  <Fragment>
                     <ul className="mr-list-dropdown">
                       {manager.canWriteProject(this.props.challenge.parent) &&
                         <li>
@@ -310,14 +310,14 @@ export class TaskAnalysisTableHeader extends Component {
                         </a>
                       </li>
                     </ul>
-                  </React.Fragment>
+                  </Fragment>
                 }
               />
             </div>
-          </React.Fragment>
+          </Fragment>
         }
       </div>
-    )
+    );
   }
 }
 

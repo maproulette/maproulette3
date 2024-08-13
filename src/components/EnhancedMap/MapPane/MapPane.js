@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Children, cloneElement, Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import WithErrors from '../../HOCs/WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
@@ -29,9 +29,9 @@ export class MapPane extends Component {
       )
     }
 
-    const childrenWithProps = React.Children.map(
+    const childrenWithProps = Children.map(
       this.props.children,
-      child => React.cloneElement(child, {...this.props})
+      child => cloneElement(child, {...this.props})
     )
 
     return <div className="map-pane">{childrenWithProps}</div>

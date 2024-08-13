@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import ReactTable from 'react-table-6'
 import classNames from 'classnames'
 import Fuse from 'fuse.js'

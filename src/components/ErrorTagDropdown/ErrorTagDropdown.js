@@ -1,4 +1,3 @@
-import React from "react";
 import { FormattedMessage } from 'react-intl'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import useErrorTagOptions from "../../hooks/UseErrorTagOptions"

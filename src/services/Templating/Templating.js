@@ -1,4 +1,4 @@
-import React from 'react'
+import { cloneElement } from 'react'
 import _find from 'lodash/find'
 import _compact from 'lodash/compact'
 import _isEmpty from 'lodash/isEmpty'
@@ -37,7 +37,7 @@ const shortCodeRegex = /(\{\{\{[^}]+}}})|(\[[^\]]+\])(?=[^(]|$)/
  * supported templating expanded
  */
 export const expandTemplatingInJSX = function(jsxNode, props) {
-  return React.cloneElement(
+  return cloneElement(
     jsxNode,
     {},
     jsxNode.props.children ? _map(jsxNode.props.children, child => {
@@ -63,7 +63,7 @@ export const expandTemplatingInJSX = function(jsxNode, props) {
         return expandTemplatingInJSX(child, props)
       }
     }) : jsxNode.props.children
-  )
+  );
 }
 
 /**

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { connect } from 'react-redux'
 import _debounce from 'lodash/debounce'
 import _get from 'lodash/get'

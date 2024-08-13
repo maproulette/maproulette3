@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
@@ -44,7 +44,7 @@ export const Achievements = props => {
   )))
 
   return (
-    <React.Fragment>
+    <Fragment>
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-6">
         <div className="mr-bg-blue-dark mr-w-full mr-mt-8">
           <div className="mr-flex mr-justify-center mr-items-center mr-px-4 mr-h-48 mr-w-full">
@@ -87,8 +87,8 @@ export const Achievements = props => {
          </Modal>
        </External>
       }
-    </React.Fragment>
-  )
+    </Fragment>
+  );
 }
 
 export default WithTargetUser(Achievements)

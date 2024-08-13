@@ -1,4 +1,3 @@
-import React from 'react'
 import useMRProperties from '../../../hooks/UseMRProperties/UseMRProperties'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 

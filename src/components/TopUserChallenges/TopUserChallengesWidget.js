@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
   // Disable till TopUserChallengesWidget is reimplemented
 // import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'

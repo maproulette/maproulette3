@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage, FormattedDate, injectIntl } from "react-intl";
 import { parseISO } from "date-fns";

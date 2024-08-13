@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import _isObject from 'lodash/isObject'
 import _find from 'lodash/find'
@@ -42,11 +42,11 @@ export default class MenuList extends Component {
 
     const menuList = <ul className="menu-list">{menuItems}</ul>
     return !this.props.label ? menuList : (
-      <React.Fragment>
+      <Fragment>
         <p className="menu-label">{this.props.label}</p>
         {menuList}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 

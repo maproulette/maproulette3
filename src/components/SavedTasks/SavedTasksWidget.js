@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _map from 'lodash/map'
@@ -73,7 +73,7 @@ const SavedTaskList = function(props) {
       }
 
       return (
-        <React.Fragment key={task.id}>
+        <Fragment key={task.id}>
           <div className="mr-col-span-5">
             <Link to={`/challenge/${task.parent.id}/task/${task.id}`}>{task.name}</Link>
             <div className="mr-links-grey-light">
@@ -131,8 +131,8 @@ const SavedTaskList = function(props) {
               }
             />
           </div>
-        </React.Fragment>
-      )
+        </Fragment>
+      );
     }
   ))
 

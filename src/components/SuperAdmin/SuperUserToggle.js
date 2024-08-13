@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Endpoint from '../../services/Server/Endpoint'
 import { defaultRoutes as api } from "../../services/Server/Server";
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser';

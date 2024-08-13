@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import onClickOutside from 'react-onclickoutside'
 import _omit from 'lodash/omit'
 

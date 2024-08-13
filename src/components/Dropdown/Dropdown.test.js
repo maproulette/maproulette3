@@ -1,4 +1,3 @@
-import * as React from "react";
 import ReactDOM from "react-dom";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import Dropdown from "./Dropdown.js";

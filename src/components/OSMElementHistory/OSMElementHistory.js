@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, FormattedTime, FormattedDate, injectIntl }
        from 'react-intl'
@@ -261,7 +261,7 @@ const FeatureSelectionDropdown = props => {
       {...props}
       className="mr-dropdown"
       dropdownButton={dropdown => (
-        <React.Fragment>
+        <Fragment>
           <a className="mr-flex" onClick={dropdown.toggleDropdownVisible}>
             <div className="mr-mr-2">
               {props.selectedFeatureId}
@@ -272,7 +272,7 @@ const FeatureSelectionDropdown = props => {
               className="mr-fill-current mr-w-5 mr-h-5"
             />
           </a>
-        </React.Fragment>
+        </Fragment>
       )}
       dropdownContent={() =>
         <ol className="mr-list-dropdown">
@@ -280,7 +280,7 @@ const FeatureSelectionDropdown = props => {
         </ol>
       }
     />
-  )
+  );
 }
 
 export default injectIntl(OSMElementHistory)

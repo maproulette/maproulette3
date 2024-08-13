@@ -1,4 +1,3 @@
-import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _compact from 'lodash/compact'

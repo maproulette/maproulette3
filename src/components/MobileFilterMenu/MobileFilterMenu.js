@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import SimpleDropdown from '../Custom/SimpleDropdown'
 import Menu from '../Custom/Menu'

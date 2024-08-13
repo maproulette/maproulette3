@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import queryString from 'query-string'
 /**
  * WithMetricsFilter handles routes parsing/querying for super admin metrics.

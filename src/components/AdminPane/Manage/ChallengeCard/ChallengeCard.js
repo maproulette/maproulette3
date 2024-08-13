@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
@@ -25,7 +25,7 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeCard extends Component {
-  nameRef = React.createRef()
+  nameRef = createRef()
 
   render() {
     if (this.props.challenge.deleted) {
@@ -75,7 +75,7 @@ export class ChallengeCard extends Component {
                 </div>
               }
               {hasActions &&
-               <React.Fragment>
+               <Fragment>
                  <ChallengeProgressBorder
                    {...this.props}
                    dimensions={
@@ -86,7 +86,7 @@ export class ChallengeCard extends Component {
                  <div className="mr-absolute mr-bottom-0 mr-right-0 mr-z-50 mr-text-white mr-text-xxs">
                    {this.props.challenge.actions.total} <FormattedMessage {...messages.totalTasks} />
                  </div>
-               </React.Fragment>
+               </Fragment>
               }
             </div>
           </div>
@@ -152,7 +152,7 @@ export class ChallengeCard extends Component {
           }
         </div>
       </div>
-    )
+    );
   }
 }
 

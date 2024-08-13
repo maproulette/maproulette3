@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage, FormattedNumber } from 'react-intl'
 import _merge from 'lodash/merge'

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _unset from 'lodash/unset'
 import _map from 'lodash/map'
 import _get from 'lodash/get'

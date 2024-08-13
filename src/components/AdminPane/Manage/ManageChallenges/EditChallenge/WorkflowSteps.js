@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import _values from 'lodash/values'
 import _isArray from 'lodash/isArray'

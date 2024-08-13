@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import AsManageableChallenge from '../../../../interactions/Challenge/AsManageableChallenge'
@@ -111,7 +111,7 @@ export class RebuildTasksControl extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <a
           onClick={this.initiateConfirmation}
           className={this.props.controlClassName}
@@ -208,8 +208,8 @@ export class RebuildTasksControl extends Component {
             </article>
           </Modal>
         )}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 

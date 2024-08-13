@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _get from 'lodash/get'
@@ -98,12 +98,12 @@ export class WidgetGrid extends Component {
         <div className="widget-grid__controls">
           {GridFilters && <GridFilters {...this.props} />}
           {this.props.isEditing &&
-           <React.Fragment>
+           <Fragment>
              {this.props.editNameControl}
              <WidgetPicker {...this.props} isRight onWidgetSelected={this.props.addWidget} />
              {this.props.doneEditingControl}
              {this.props.cancelEditingControl}
-           </React.Fragment>
+           </Fragment>
           }
         </div>
         {this.props.subHeader &&
@@ -125,7 +125,7 @@ export class WidgetGrid extends Component {
           {widgetInstances}
         </GridLayout>
       </div>
-    )
+    );
   }
 }
 

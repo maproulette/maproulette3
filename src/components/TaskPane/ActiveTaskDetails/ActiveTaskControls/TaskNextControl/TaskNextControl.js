@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _noop from 'lodash/noop'
@@ -70,7 +70,7 @@ export default class TaskNextControl extends Component {
           loadNearbyModal
         }
         {!this.state.chooseNearbyTasks &&
-          <React.Fragment>
+          <Fragment>
             <button
               className={classNames("mr-button mr-button--white", this.props.className)}
               style={{width: '20.5rem'}}
@@ -120,10 +120,10 @@ export default class TaskNextControl extends Component {
               </div>
             </div>
 
-          </React.Fragment>
+          </Fragment>
         }
       </div>
-    )
+    );
   }
 }
 

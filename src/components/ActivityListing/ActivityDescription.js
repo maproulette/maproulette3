@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
@@ -70,17 +70,17 @@ export const ActivityDescription = props => {
         </Link> {
           props.entry.action === ActivityActionType.taskStatusSet &&
           _isFinite(props.entry.status) && 
-          <React.Fragment>
+          <Fragment>
             <FormattedMessage
               {...messages.statusTo}
             /> <FormattedMessage
               {...messagesByStatus[props.entry.status]}
             />
-          </React.Fragment>
+          </Fragment>
         }
       </div>
     </div>
-  )
+  );
 }
 
 ActivityDescription.propTypes = {

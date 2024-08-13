@@ -1,4 +1,3 @@
-import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'

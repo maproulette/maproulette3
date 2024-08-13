@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import Enzyme, { shallow, render, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { createBrowserHistory } from "history";

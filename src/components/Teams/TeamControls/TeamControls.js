@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { useMutation } from '@apollo/client'
@@ -31,7 +31,7 @@ export const TeamControls = props => {
        </a>
       }
       {isAdmin &&
-       <React.Fragment>
+       <Fragment>
          <li key="edit-team" className="mr-my-1">
            <a onClick={() => props.editTeam(props.teamMember.team)}>
              <FormattedMessage {...messages.editTeamLabel} />
@@ -55,7 +55,7 @@ export const TeamControls = props => {
              </a>
            </ConfirmAction>
          </li>
-       </React.Fragment>
+       </Fragment>
       }
       <AcceptInviteControlItem
         {...props}
@@ -78,7 +78,7 @@ export const TeamControls = props => {
        />
       }
     </ul>
-  )
+  );
 }
 
 TeamControls.propTypes = {

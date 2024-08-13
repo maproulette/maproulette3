@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { injectIntl } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
 import _indexOf from 'lodash/indexOf'

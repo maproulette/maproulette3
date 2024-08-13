@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import _noop from 'lodash/noop'
 import { WidgetDataTarget, registerWidgetType }

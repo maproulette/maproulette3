@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { connect } from 'react-redux'
 import { SuperAdminPane } from './SuperAdmin'
 import { fetchAdminChallenges } from '../../services/SuperAdmin/SuperAdminChallenges'

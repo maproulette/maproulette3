@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { fetchPlaceLocation } from '../../../services/Place/Place'
 import WithErrors from '../WithErrors/WithErrors'

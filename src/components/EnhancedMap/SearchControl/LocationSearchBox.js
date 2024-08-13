@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import _map from 'lodash/map'
 import { FormattedMessage } from 'react-intl'
 import WithNominatimSearch from '../../HOCs/WithNominatimSearch/WithNominatimSearch'
@@ -85,7 +85,7 @@ export class LocationSearchBox extends Component {
               isVisible
               dropdownButton={() => null}
               dropdownContent={() =>
-               <React.Fragment>
+               <Fragment>
                  <div className="mr-text-right">
                    <button
                      className="mr-top-0 mr-right-0 mr-transition mr-text-green-lighter hover:mr-text-white"
@@ -109,13 +109,13 @@ export class LocationSearchBox extends Component {
                     {resultItems}
                   </ol>
                  }
-               </React.Fragment>
+               </Fragment>
              }
             />
           }
         </div>
       </div>
-    )
+    );
   }
 }
 

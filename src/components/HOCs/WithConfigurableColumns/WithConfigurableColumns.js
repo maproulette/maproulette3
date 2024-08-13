@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _omit from 'lodash/omit'
 import _clone from 'lodash/clone'
 import _each from 'lodash/each'

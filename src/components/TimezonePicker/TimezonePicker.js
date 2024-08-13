@@ -1,4 +1,3 @@
-import React from 'react'
 import _map from 'lodash/map'
 import defaultTimezones from 'timezones.json'
 

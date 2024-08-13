@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'

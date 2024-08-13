@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactTable from 'react-table-6'
 import { FormattedMessage, FormattedDate,
@@ -214,7 +214,7 @@ export class TaskAnalysisTableInternal extends Component {
     const columns = this.getColumns(manager, taskBaseRoute, data)
 
     return (
-      <React.Fragment>
+      <Fragment>
         <section className="mr-my-4 mr-min-h-100 mr-fixed-containing-block">
           {!this.props.suppressHeader &&
            <header className="mr-mb-4">
@@ -291,8 +291,8 @@ export class TaskAnalysisTableInternal extends Component {
            onClose={() => this.setState({showConfigureColumns: false})}
          />
         }
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 
@@ -676,11 +676,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
-            <React.Fragment key={reviewer.username + "-" + index}>
+            <Fragment key={reviewer.username + "-" + index}>
               <span style={{color: AsColoredHashable(reviewer.username).hashColor}}>{reviewer.username}</span>
               {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
-            </React.Fragment>
-          )
+            </Fragment>
+          );
         })}
       </div>
     ),

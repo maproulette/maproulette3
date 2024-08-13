@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Fragment, Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { messagesByFilter } from "../../../../services/Widget/ProjectFilter/ProjectFilter";
 import DashboardFilterToggle from "../DashboardFilterToggle/DashboardFilterToggle";
@@ -11,7 +11,7 @@ const ArchivedFilterToggle = DashboardFilterToggle("project", "archived");
 export default class ProjectFilterGroup extends Component {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <PinnedFilterToggle
           {...this.props}
           dashboardEntityFilters={this.props.dashboardProjectFilters}
@@ -38,7 +38,7 @@ export default class ProjectFilterGroup extends Component {
             <FormattedMessage {...messagesByFilter.archived} />
           }
         />
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -73,7 +73,7 @@ const DashboardHeader = props => {
         <div className="mr-bg-black-25 mr-w-full mr-py-4 mr-pl-8 mr-rounded-b">
           <div className="mr-bg-lines mr-p-4 mr-pl-12 mr-flex mr-justify-between mr-items-center">
             {_isFinite(latestChallenge) ?
-             <React.Fragment>
+             <Fragment>
                <div className="mr-flex mr-items-center mr-mr-8">
                  <div className="mr-mr-4 mr-flex mr-flex-wrap">
                    <span className="mr-mr-1">
@@ -103,7 +103,7 @@ const DashboardHeader = props => {
                    </Link>
                  </div>
                </div>
-             </React.Fragment> :
+             </Fragment> :
              <Link to="/browse/challenges" className="mr-button">
                <FormattedMessage {...messages.findChallengeLabel} />
              </Link>
@@ -112,7 +112,7 @@ const DashboardHeader = props => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 DashboardHeader.propTypes = {

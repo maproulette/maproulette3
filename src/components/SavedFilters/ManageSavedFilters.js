@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import _keys from 'lodash/keys'
 import _map from 'lodash/map'
 import { FormattedMessage } from 'react-intl'
@@ -25,7 +25,7 @@ export default class ManageSavedFilters extends Component {
     const savedFilters = this.props.savedFilters
 
     return (
-      <React.Fragment>
+      <Fragment>
         <External>
           <Modal isActive={this.props.savingFilters || false}>
             <QuickTextBox
@@ -73,7 +73,7 @@ export default class ManageSavedFilters extends Component {
                         />
                       }
                       {this.state.renaming !== saved &&
-                        <React.Fragment>
+                        <Fragment>
                           <div className="mr-w-76 mr-mr-4 mr-mb-4 mr-text-mango">{saved}</div>
                           <div className="mr-text-left mr-mr-4 mr-w-full mr-mb-4">
                             {this.props.getBriefFilters(savedFilters[saved]).join(', ')}
@@ -88,10 +88,10 @@ export default class ManageSavedFilters extends Component {
                               <FormattedMessage {...messages.deleteLabel} />
                             </button>
                           </div>
-                        </React.Fragment>
+                        </Fragment>
                       }
                     </li>
-                  )
+                  );
                 })}
                 {_keys(savedFilters).length === 0 &&
                   <li>
@@ -110,7 +110,7 @@ export default class ManageSavedFilters extends Component {
             </div>
           </Modal>
         </External>
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }

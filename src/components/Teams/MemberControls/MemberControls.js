@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { MY_TEAMS } from '../TeamQueries'
 import RemoveMemberControlItem from './RemoveMemberControlItem'

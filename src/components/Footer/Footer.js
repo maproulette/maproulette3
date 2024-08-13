@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import WithNearbyTasks from '../../HOCs/WithNearbyTasks/WithNearbyTasks'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import BusySpinner from '../../BusySpinner/BusySpinner'

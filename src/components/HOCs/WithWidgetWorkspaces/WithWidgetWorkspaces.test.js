@@ -1,4 +1,3 @@
-import * as React from "react";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import {WithWidgetWorkspacesInternal as WithWidgetWorkspaces} from "./WithWidgetWorkspaces.js";
 import * as services from '../../../services/Widget/Widget'

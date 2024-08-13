@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'

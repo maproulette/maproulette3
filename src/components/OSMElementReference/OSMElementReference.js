@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import WithEditor from '../HOCs/WithEditor/WithEditor'
 import { Editor } from '../../services/Editor/Editor'

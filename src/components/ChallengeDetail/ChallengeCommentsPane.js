@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { FormattedDate, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
 import classNames from "classnames";

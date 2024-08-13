@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { GeoJSON, useMap } from 'react-leaflet'
 import L from 'leaflet'

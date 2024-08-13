@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 import L from 'leaflet'
@@ -28,7 +28,7 @@ const LassoSelectionLeafletControl = L.Control.extend({
 
     // build the control button, render it, and return it
     const controlContent = (
-      <React.Fragment>
+      <Fragment>
         {this.options.onLassoSelection &&
           <button
             onClick={() => {
@@ -82,7 +82,7 @@ const LassoSelectionLeafletControl = L.Control.extend({
            />
          </button>
         }
-      </React.Fragment>
+      </Fragment>
     )
 
     const controlContainer = L.DomUtil.create('div')

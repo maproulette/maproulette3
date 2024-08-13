@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
 import jsonLang from 'react-syntax-highlighter/dist/esm/languages/hljs/json'

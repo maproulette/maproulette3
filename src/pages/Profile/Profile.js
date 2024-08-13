@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import SignIn from '../../pages/SignIn/SignIn'

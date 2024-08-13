@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react'
 import _clone from 'lodash/clone'
 import _cloneDeep from 'lodash/cloneDeep'
 import _differenceBy from 'lodash/differenceBy'

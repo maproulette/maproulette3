@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { ReactComponent as ExpertImage } from "../../static/images/expert.svg";
 import { ReactComponent as FindImage } from "../../static/images/find.svg";

@@ -1,5 +1,4 @@
 import "@testing-library/jest-dom";
-import * as React from "react";
 import { ProjectDetail } from "./ProjectDetail";
 import { format } from "date-fns";
 

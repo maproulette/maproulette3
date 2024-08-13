@@ -1,5 +1,4 @@
 import "@testing-library/jest-dom";
-import * as React from "react";
 import TaskCompletionStep from "./TaskCompletionStep";
 
 describe("TaskCompletionStep", () => {

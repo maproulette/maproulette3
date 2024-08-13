@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
 import { Viewer } from 'mapillary-js';
 import { getAccessToken } from '../../services/Mapillary/Mapillary'
@@ -12,7 +12,7 @@ import Modal from '../Modal/Modal'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class MapillaryViewer extends Component {
-  containerRef = React.createRef();
+  containerRef = createRef();
   
 
   componentDidMount() {

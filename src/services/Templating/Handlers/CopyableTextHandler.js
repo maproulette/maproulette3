@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import _isEmpty from 'lodash/isEmpty'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
@@ -26,7 +26,7 @@ const CopyableTextHandler = {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         {match[1]}
         <CopyToClipboard text={match[1]}>
           <button
@@ -40,8 +40,8 @@ const CopyableTextHandler = {
             />
           </button>
         </CopyToClipboard>
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   },
 }
 

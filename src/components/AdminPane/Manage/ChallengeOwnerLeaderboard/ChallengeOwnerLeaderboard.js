@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedNumber, FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -58,19 +58,19 @@ export default class ChallengeOwnerLeaderboard extends Component {
                 <div className="mr-w-16 mr-ml-2">{leader.score}</div>
               }
               {showNumberTasks &&
-                <React.Fragment>
+                <Fragment>
                   <div className="mr-w-16 mr-ml-2">{leader.completedTasks}</div>
                   <div className="mr-w-16 mr-ml-2">{avgTimeSpent}</div>
-                </React.Fragment>
+                </Fragment>
               }
             </div>
           </li>
-        )
+        );
       }
     )
 
     return (
-      <React.Fragment>
+      <Fragment>
         {leaders.length > 0 &&
           <div className="mr-flex mr-justify-between mr-text-pink mr-mb-2">
             <div></div>
@@ -81,7 +81,7 @@ export default class ChallengeOwnerLeaderboard extends Component {
                 </div>
               }
               {showNumberTasks &&
-                <React.Fragment>
+                <Fragment>
                   <div className="mr-w-16 mr-ml-2">
                     {userType === USER_TYPE_REVIEWER ?
                       <FormattedMessage {...messages.reviewsCompletedLabel}/> :
@@ -92,7 +92,7 @@ export default class ChallengeOwnerLeaderboard extends Component {
                   <div className="mr-w-16 mr-ml-2">
                     <FormattedMessage {...messages.averageTimeLabel}/>
                   </div>
-                </React.Fragment>
+                </Fragment>
               }
             </div>
           </div>
@@ -100,8 +100,8 @@ export default class ChallengeOwnerLeaderboard extends Component {
         <ol className="mr-list-reset mr-links-green-lighter mr-text-lg">
           {leaders}
         </ol>
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 

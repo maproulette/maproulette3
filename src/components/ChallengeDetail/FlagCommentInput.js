@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import classNames from "classnames";
 import { FormattedMessage, injectIntl } from "react-intl";
 import MarkdownContent from "../MarkdownContent/MarkdownContent";

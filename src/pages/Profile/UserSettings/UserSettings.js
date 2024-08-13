@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Form from "@rjsf/core";
 import _each from "lodash/each";

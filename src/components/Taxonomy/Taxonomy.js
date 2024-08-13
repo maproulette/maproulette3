@@ -1,4 +1,3 @@
-import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import { isCooperative, messagesByCooperativeType }
        from '../../services/Challenge/CooperativeType/CooperativeType'

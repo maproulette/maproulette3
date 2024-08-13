@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage, FormattedDate } from 'react-intl'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'

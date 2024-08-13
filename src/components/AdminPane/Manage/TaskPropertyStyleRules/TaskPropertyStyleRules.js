@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _head from 'lodash/head'

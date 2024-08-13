@@ -1,4 +1,3 @@
-import React from "react";
 import ShippingTruck from "./ShippingTruck";
 import CatAndLaptop from "./CatAndLaptop";
 import "./Sprites.scss";

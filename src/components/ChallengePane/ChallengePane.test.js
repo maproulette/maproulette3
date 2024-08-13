@@ -1,5 +1,4 @@
 import "@testing-library/jest-dom";
-import * as React from "react";
 import { ChallengePane } from "./ChallengePane";
 
 describe("ChallengePane", () => {

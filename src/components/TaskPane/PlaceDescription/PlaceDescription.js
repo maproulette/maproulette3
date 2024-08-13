@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 /**
  * WithExportCsv handles CSV file formatting/downloading for challenges/projects/users table in super admin.
  */

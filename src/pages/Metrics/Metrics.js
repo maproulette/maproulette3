@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import SignIn from '../../pages/SignIn/SignIn'
@@ -113,7 +113,7 @@ class Metrics extends Component {
                 <FormattedMessage {...messages.userOptedOut} />
               </h3>
               :
-              <React.Fragment>
+              <Fragment>
               <div className="mr-mb-4 md:mr-mb-8 md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-2">
                 <div className="mr-mb-4 md:mr-mb-0 mr-p-8 mr-bg-blue mr-rounded mr-shadow mr-flex mr-items-center">
                   {!this.props.taskMetrics ?
@@ -167,12 +167,12 @@ class Metrics extends Component {
                     }/>
                 </div>
               }
-              </React.Fragment>
+              </Fragment>
             }
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

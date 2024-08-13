@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl'
 import _map from 'lodash/map'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'

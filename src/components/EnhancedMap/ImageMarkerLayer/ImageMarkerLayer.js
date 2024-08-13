@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component } from 'react'
+import { createRef, useState, useEffect, Component } from 'react'
 import PropTypes from 'prop-types'
 import { LayerGroup, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
@@ -61,7 +61,7 @@ ImageMarkerLayer.propTypes = {
 }
 
 class MapillaryViewer extends Component {
-  containerRef = React.createRef();
+  containerRef = createRef();
 
   componentDidMount() {
     this.viewer = new Viewer({

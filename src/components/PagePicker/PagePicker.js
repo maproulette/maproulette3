@@ -1,5 +1,3 @@
-import React from 'react'
-
 const PagePickerOptions = (props) => {
   if (props.numItems > props.itemLimit) {
     let options = [];

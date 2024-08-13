@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import Leaderboard from '../../../Leaderboard/Leaderboard'
 
 export default class ProjectLeaderboard extends Component {

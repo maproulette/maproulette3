@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage,
@@ -327,12 +327,12 @@ export class TaskHistoryList extends Component {
       </div>
 
     return (
-      <React.Fragment>
+      <Fragment>
         {contributorToggle}
         {this.state.listType === TIME_TOGGLE && historyEntries}
         {this.state.listType === USER_TOGGLE && contributorEntries}
-      </React.Fragment>
-    )
+      </Fragment>
+    );
   }
 }
 

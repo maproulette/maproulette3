@@ -1,4 +1,3 @@
-import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import _merge from 'lodash/merge'
 import _reduce from 'lodash/reduce'

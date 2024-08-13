@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import _indexOf from 'lodash/indexOf'
 import _isEqual from 'lodash/isEqual'

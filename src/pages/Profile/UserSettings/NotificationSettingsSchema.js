@@ -1,4 +1,3 @@
-import React from "react";
 import _map from "lodash/map";
 import _values from "lodash/values";
 import {

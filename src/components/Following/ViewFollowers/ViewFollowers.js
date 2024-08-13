@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/client'
 import { FormattedMessage } from 'react-intl'

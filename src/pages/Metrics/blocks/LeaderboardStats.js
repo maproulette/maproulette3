@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import messages from '../Messages'
 import QuickWidget from '../../../components/QuickWidget/QuickWidget'
