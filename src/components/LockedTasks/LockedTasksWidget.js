@@ -65,7 +65,7 @@ const LockedTasks = (props) => {
 
   useEffect(() => {
     fetchLockedTasks();
-  }, [props.user]);
+  }, []);
 
   const LockedTasksList = () => {
     const sortedLockedTasks = [...lockedTasks].sort((a, b) => new Date(a.startedAt) - new Date(b.startedAt));
