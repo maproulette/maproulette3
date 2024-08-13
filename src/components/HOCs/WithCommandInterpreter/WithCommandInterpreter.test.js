@@ -1,5 +1,3 @@
-import { Component } from 'react'
-import _findIndex from 'lodash/findIndex'
 import { executeCommand, executeMapSearch } from './WithCommandInterpreter'
 import { fetchPlaceLocation } from '../../../services/Place/Place'
 

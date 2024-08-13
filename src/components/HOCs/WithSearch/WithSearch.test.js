@@ -1,12 +1,9 @@
-import { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps,
          _WithSearch } from './WithSearch'
 import { setSort, removeSort,
          setFilters, removeFilters,
          setSearch, clearSearch,
          performSearch } from '../../../services/Search/Search'
-import { extendedFind } from '../../../services/Challenge/Challenge'
-import _isFunction from 'lodash/isFunction'
 import _cloneDeep from 'lodash/cloneDeep'
 
 jest.mock('../../../services/Search/Search')

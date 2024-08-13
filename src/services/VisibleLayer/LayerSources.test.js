@@ -2,11 +2,9 @@ import { ChallengeBasemap }
        from '../Challenge/ChallengeBasemap/ChallengeBasemap'
 import { BING,
          OPEN_STREET_MAP,
-         LayerSources,
          layerSourceWithId,
          createDynamicLayerSource,
-         basemapLayerSource,
-         defaultLayerSource } from './LayerSources'
+         basemapLayerSource } from './LayerSources'
 
 let layerId = null
 let layerUrl = null

@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps } from './WithCurrentUser'
 import AsEndUser from '../../../interactions/User/AsEndUser'
 import { denormalize } from 'normalizr'

@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import { shallow } from 'enzyme';
 import CardLeaderboard from './CardLeaderboard'
 import RowLeaderboard from './RowLeaderboard'

@@ -1,5 +1,3 @@
-import { Component } from 'react'
-import _findIndex from 'lodash/findIndex'
 import { sortChallenges } from './WithSortedChallenges'
 
 let basicProps = null

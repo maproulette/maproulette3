@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import { denormalize } from 'normalizr'
 import { mapStateToProps, mapDispatchToProps } from './WithProjects'
 import { fetchProjectChallenges }

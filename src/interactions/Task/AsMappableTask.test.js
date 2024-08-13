@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import { point, featureCollection } from '@turf/helpers'
 import AsMappableTask from './AsMappableTask'
 

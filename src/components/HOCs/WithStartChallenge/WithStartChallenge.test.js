@@ -1,12 +1,5 @@
-import { Component } from 'react'
 import { LatLngBounds } from 'leaflet'
-import _get from 'lodash/get'
-import _find from 'lodash/find'
-import { chooseVisibleTask, mapDispatchToProps, } from './WithStartChallenge'
-import AsEndUser from '../../../interactions/User/AsEndUser'
-import { denormalize } from 'normalizr'
-import { loadRandomTaskFromChallenge } from '../../../services/Task/Task'
-import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
+import { chooseVisibleTask } from './WithStartChallenge'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 
 jest.mock('../../../services/Task/Task')

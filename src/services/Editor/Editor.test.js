@@ -1,6 +1,5 @@
 import { Editor,
          osmObjectParams,
-         featureOSMId,
          josmLoadAndZoomURI,
          constructIdURI,
          constructLevel0URI,

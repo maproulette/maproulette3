@@ -1,7 +1,5 @@
-import { Component } from 'react'
 import { mapStateToProps,
-         mapDispatchToProps,
-         defaultLayer } from './WithVisibleLayer'
+         mapDispatchToProps } from './WithVisibleLayer'
 import { BING,
          OPEN_STREET_MAP,
          layerSourceWithId,
