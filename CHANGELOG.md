@@ -7,8 +7,36 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.15.8] - 2024-7-10
+## [v3.15.9] - 2024-8-13
 Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
+
+## What's Changed
+* add your locked tasks widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2389
+* fix archived filter on challenge result list by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2400
+* Fix the editor overwrite bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2399
+* fix user search bug in comments when pressing enter by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2396
+* fix errors related to map unmounting by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2394
+* Update DEVELOPMENT.md instructions for setting up OAuth2 for local backend by @jake-low in https://github.com/maproulette/maproulette3/pull/2393
+* fix comment overflow styles by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2390
+* add documentation links to mr tag features by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2386
+* fix reviewNearbyTasks widget undefined prop by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2381
+* remove leafletElement update in location widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2384
+* fix bundling issues related to created status by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2387
+* Refactor completion widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2388
+* Show a warning when clicking 'I fixed it' if embedded Rapid editor has unsaved changes by @jake-low in https://github.com/maproulette/maproulette3/pull/2393
+* Update test snapshot for WithEditor HOC by @jake-low in https://github.com/maproulette/maproulette3/pull/2401
+
+## MR2 Changes
+* add Retrieve a Users Locked Tasks endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1139
+* fix stale review_started_at column by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1138
+* add users.avatar_url constraint and default by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1141
+* Improve error message when OverpassQL query mistakenly specifies [out:xml] by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1142
+* Move from Java 11 to Java 17 compile and runtime by @ljdelight (closes https://github.com/maproulette/maproulette-backend/issues/1115)
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.8...v3.15.9
+
+## [v3.15.8] - 2024-7-10
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
 
 ## What's Changed
 * Fix zoom and panning issues in maps by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2378
@@ -16,7 +44,7 @@ Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maprou
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.7...v3.15.8
 
 ## [v3.15.7] - 2024-7-09
-Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
 
 ## What's Changed
 * Bump various dependencies related to react-leaflet bump from v2.7.0 to v4.2.1 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
@@ -26,9 +54,6 @@ Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maprou
 * Fixes for some of the warnings and errors in jest tests by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
 * Remove overlapping tasks marker to allow users to un-cluster overlapped tasks, spider them, and open their individual popups by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
 * add links to task ids in work on multiple tasks widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2372
-
-## MR2 Changes
-* Fix deleted parent filter by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1135
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.6...v3.15.7
 
