@@ -8,7 +8,7 @@ This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [v3.15.9] - 2024-8-13
-Released with [maproulette-backend_v4.5.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.5)
+Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
 
 ## What's Changed
 * add your locked tasks widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2389
@@ -36,7 +36,7 @@ Released with [maproulette-backend_v4.5.5](https://github.com/maproulette/maprou
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.8...v3.15.9
 
 ## [v3.15.8] - 2024-7-10
-Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
 
 ## What's Changed
 * Fix zoom and panning issues in maps by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2378
@@ -44,7 +44,7 @@ Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maprou
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.7...v3.15.8
 
 ## [v3.15.7] - 2024-7-09
-Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
 
 ## What's Changed
 * Bump various dependencies related to react-leaflet bump from v2.7.0 to v4.2.1 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
