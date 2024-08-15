@@ -47,7 +47,9 @@ export class ReviewTaskControls extends Component {
   setTags = tags => this.setState({tags})
 
   onConfirm = (alternateCriteria) => {
-    this.props.saveTaskTags(this.props.task, this.state.tags)
+    if(this.state.tags) {
+      this.props.saveTaskTags(this.props.task, this.state.tags)
+    }
     this.props.setCompletingTask(this.props.task.id)
 
     const history = _cloneDeep(this.props.history)
@@ -59,7 +61,7 @@ export class ReviewTaskControls extends Component {
     const errorTags = this.state.errorTags?.length ? this.state.errorTags : undefined
 
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
-                                     this.state.comment, "",
+                                     this.state.comment, null,
                                      this.state.loadBy, history,
                                      this.props.taskBundle, requestedNextTask, null, errorTags)
     this.setState({ confirmingTask: false, comment: "", errorTags: [] })
@@ -102,8 +104,6 @@ export class ReviewTaskControls extends Component {
 
   /** Save Review Status */
   updateReviewStatus = (reviewStatus) => {
-    this.props.saveTaskTags(this.props.task, this.state.tags)
-
     this.setState({reviewStatus, confirmingTask: true})
   }
 

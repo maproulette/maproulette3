@@ -143,7 +143,9 @@ export class ActiveTaskControls extends Component {
 
   /** Mark the task as complete with the given status */
   complete = taskStatus => {
-    this.props.saveTaskTags(this.props.task, this.state.tags)
+    if(this.state.tags) {
+      this.props.saveTaskTags(this.props.task, this.state.tags)
+    }
     this.props.setCompletingTask(this.props.task.id)
 
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected
@@ -153,7 +155,7 @@ export class ActiveTaskControls extends Component {
                                         this.state.comment, null,
                                         this.state.revisionLoadBy, this.props.history,
                                         this.props.taskBundle, this.state.requestedNextTask,
-                                        taskStatus)
+                                        taskStatus, null)
     }
     else {
       this.props.completeTask(this.props.task, this.props.task.parent.id,
