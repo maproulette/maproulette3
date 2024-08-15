@@ -150,14 +150,14 @@ export class ActiveTaskControls extends Component {
 
     if (!_isUndefined(this.state.submitRevision)) {
       this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
-                                        this.state.comment, "",
+                                        this.state.comment, null,
                                         this.state.revisionLoadBy, this.props.history,
                                         this.props.taskBundle, this.state.requestedNextTask,
                                         taskStatus)
     }
     else {
       this.props.completeTask(this.props.task, this.props.task.parent.id,
-                              taskStatus, this.state.comment, "",
+                              taskStatus, this.state.comment, null,
                               revisionSubmission ? null : this.props.taskLoadBy,
                               this.props.user.id,
                               revisionSubmission || this.state.needsReview,
