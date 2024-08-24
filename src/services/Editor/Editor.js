@@ -96,15 +96,15 @@ export const editTask = function (
 
       if (editor === ID) {
         editorWindowReference = window.open(
-          constructIdURI(task, mapBounds, options, taskBundle, replacedComment), '_blank', 'noopener,noreferrer'
+          constructIdURI(task, mapBounds, options, taskBundle, replacedComment)
         );
       } else if (editor === LEVEL0) {
         editorWindowReference = window.open(
-          constructLevel0URI(task, mapBounds, options, taskBundle, replacedComment), '_blank', 'noopener,noreferrer'
+          constructLevel0URI(task, mapBounds, options, taskBundle, replacedComment)
         );
       } else if (editor === RAPID) {
         editorWindowReference = window.open(
-          constructRapidURI(task, mapBounds, options, replacedComment), '_blank', 'noopener,noreferrer'
+          constructRapidURI(task, mapBounds, options, replacedComment)
         );
       }
 
