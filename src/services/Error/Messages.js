@@ -139,6 +139,14 @@ export default defineMessages({
     id: "Errors.osm.fetchFailure",
     defaultMessage: "Unable to fetch data from OpenStreetMap",
   },
+  textConversionFailure: {
+    id: "Errors.osm.textConversionFailure",
+    defaultMessage: "Unable to convert tag data from OpenStreetMap to text.",
+  },
+  parseFailure: {
+    id: "Errors.osm.parseFailure",
+    defaultMessage: "Unable to parse tag data from OpenStreetMap",
+  },
 
   mapillaryFetchFailure: {
     id: "Errors.mapillary.fetchFailure",

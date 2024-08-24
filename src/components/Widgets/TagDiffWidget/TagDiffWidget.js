@@ -30,6 +30,7 @@ export default class TagDiffWidget extends Component {
   }
 
   render() {
+    const editEnabled =  this.props.task.reviewStatus !== TaskReviewStatus.rejected && !isFinalStatus(this.props.task.status)
     return (
       <QuickWidget
         {...this.props}
@@ -40,24 +41,25 @@ export default class TagDiffWidget extends Component {
           <FormattedMessage {...messages.title} />
         }
         rightHeaderControls={
-          this.props.user.settings.seeTagFixSuggestions
-            ? <div className="mr-flex">
-                <button
-                  className="mr-button mr-button--xsmall mr-mr-4"
-                  onClick={() => this.setState({showDiffModal: true})}
-                >
-                  <FormattedMessage {...messages.viewAllTagsLabel} />
-                </button>
-
-                <button
-                  className="mr-button mr-button--xsmall"
-                  onClick={() => this.setState({showDiffModal: true, editMode: true})}
-                >
-                  <FormattedMessage {...messages.editTagsLabel} />
-                </button>
-              </div>
-            : null
-        }
+          <div className="mr-flex">
+            <button
+                className="mr-button mr-button--xsmall mr-mr-4"
+                onClick={() => this.setState({showDiffModal: true})}
+              >
+                <FormattedMessage {...messages.viewAllTagsLabel} />
+              </button> 
+              {this.props.user.settings.seeTagFixSuggestions && editEnabled ? 
+                <div className="mr-flex">
+                  <button
+                    className="mr-button mr-button--xsmall"
+                    onClick={() => this.setState({showDiffModal: true, editMode: true})}
+                  >
+                    <FormattedMessage {...messages.editTagsLabel} />
+                  </button>
+                </div> : null
+              }
+            </div>
+          }
       >
         <TagDiff {...this.props} />
 
@@ -65,6 +67,7 @@ export default class TagDiffWidget extends Component {
          <TagDiffModal
            {...this.props}
            editMode={this.state.editMode}
+           editEnabled={editEnabled}
            onClose={() => this.setState({showDiffModal: false, editMode: false})}
          />
         }
@@ -82,30 +85,25 @@ export const TagDiff = props => {
     )
   }
 
-  const needsRevised = props.task.reviewStatus === TaskReviewStatus.rejected
-  if (AsCooperativeWork(props.task).isTagType() && (!isFinalStatus(props.task.status) || needsRevised)) {
-    if (props.loadingOSMData) {
-      return (
-        <div className="mr-mb-4">
-          <BusySpinner />
-        </div>
-      )
-    }
-
+  if (props.loadingOSMData) {
     return (
       <div className="mr-mb-4">
-        <TagDiffVisualization
-          {...props}
-          compact
-          suppressToolbar
-          onlyChanges
-          tagDiff={_get(props, 'tagDiffs[0]')}
-        />
+        <BusySpinner />
       </div>
     )
   }
 
-  return null
+  return (
+    <div className="mr-mb-4">
+      <TagDiffVisualization
+        {...props}
+        compact
+        suppressToolbar
+        onlyChanges
+        tagDiff={_get(props, 'tagDiffs[0]')}
+      />
+    </div>
+  )
 }
 
 /**

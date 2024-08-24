@@ -78,9 +78,7 @@ const WithLoadedTask = function(WrappedComponent, forReview) {
     componentDidUpdate(prevProps) {
       if (this.props.taskId !== prevProps.taskId) {
         // Only fetch if task data is missing or stale
-        if (!this.props.task || isStale(this.props.task, TASK_STALE)) {
-          this.loadNeededTask(this.props)
-        }
+        this.loadNeededTask(this.props)
       }
     }
 

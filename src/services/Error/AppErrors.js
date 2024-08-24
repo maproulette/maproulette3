@@ -48,6 +48,8 @@ export default {
     bandwidthExceeded: messages.osmBandwidthExceeded,
     elementMissing: messages.osmElementMissing,
     fetchFailure: messages.osmFetchFailure,
+    textConversionFailure: messages.textConversionFailure,
+    parseFailure: messages.parseFailure,
   },
 
   mapillary: {

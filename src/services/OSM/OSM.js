@@ -54,18 +54,25 @@ export const fetchOSMElement = function(idString, asXML=false) {
     fetch(osmURI).then(response => {
       if (response.ok) {
         response.text().then(rawXML => {
-          const parser = new DOMParser()
-          const xmlDoc = parser.parseFromString(rawXML, "application/xml")
+            try {
+              const parser = new DOMParser()
+              const xmlDoc = parser.parseFromString(rawXML, "application/xml")
 
-          if (asXML) {
-            resolve(xmlDoc)
-            return
-          }
+              if (asXML) {
+                resolve(xmlDoc)
+                return
+              }
 
-          const osmJSON = normalizeAttributes(xmlToJSON.parseXML(xmlDoc))
-          const elementType = idString.split('/')[0]
-          resolve(_get(osmJSON, `osm[0].${elementType}[0]`))
-        })
+              const osmJSON = normalizeAttributes(xmlToJSON.parseXML(xmlDoc))
+              const elementType = idString.split('/')[0]
+              resolve(_get(osmJSON, `osm[0].${elementType}[0]`))
+            } catch (e) {
+              reject(AppErrors.osm.parseFailure)
+            }
+          })
+          .catch(() => {
+            reject(AppErrors.osm.textConversionFailure)
+          })
       }
       else if (response.status === 400) {
         reject(AppErrors.osm.requestTooLarge)
@@ -76,14 +83,12 @@ export const fetchOSMElement = function(idString, asXML=false) {
       else if (response.status === 509) {
         reject(AppErrors.osm.bandwidthExceeded)
       }
-    }).catch(error => {
-      if (error.id && error.defaultMessage) {
-        reject(error)
-      }
       else {
-        console.log(error)
         reject(AppErrors.osm.fetchFailure)
       }
+    })
+    .catch(() => {
+      reject(AppErrors.osm.fetchFailure)
     })
   })
 }

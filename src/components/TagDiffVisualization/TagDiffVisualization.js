@@ -213,7 +213,8 @@ export class TagDiffVisualization extends Component {
              >
                <span className="mr-transition">&lt;/&gt;</span>
              </button>
-             <button
+             {this.props.editEnabled && 
+              <button
                className="mr-mr-4 mr-text-green-light"
                onClick={() => this.beginEditing()}
                title={this.props.intl.formatMessage(messages.editTagsTooltip)}
@@ -224,6 +225,7 @@ export class TagDiffVisualization extends Component {
                  className="mr-transition mr-fill-current mr-w-4 mr-h-4"
                />
              </button>
+             }
            </React.Fragment>
           }
           {this.props.compact &&
