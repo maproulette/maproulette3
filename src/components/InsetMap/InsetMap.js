@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { MapContainer, Marker, AttributionControl, useMap} from 'react-leaflet'
@@ -15,7 +15,9 @@ export default class InsetMap extends Component {
 
     const ResizeMap = () => {
       const map = useMap();
-      map.invalidateSize();
+      useEffect(() => {
+        map.invalidateSize();
+      }, [map]);
       return null;
     };
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import L from 'leaflet'
@@ -155,7 +155,9 @@ export class TaskNearbyMap extends Component {
 
     const ResizeMap = () => {
       const map = useMap();
-      map.invalidateSize();
+      useEffect(() => {
+        map.invalidateSize();
+      }, [map]);
       return null;
     };
 

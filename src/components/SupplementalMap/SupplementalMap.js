@@ -92,7 +92,9 @@ const SupplementalMapContent = props => {
 
 const ResizeMap = () => {
   const map = useMap();
-  map.invalidateSize();
+  useEffect(() => {
+    map.invalidateSize();
+  }, [map]);
   return null;
 };
 
