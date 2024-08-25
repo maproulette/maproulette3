@@ -31,7 +31,6 @@ import WithTaskTags from '../../../HOCs/WithTaskTags/WithTaskTags'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithTaskFeatureProperties from '../../../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
-import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep from './TaskCompletionStep/TaskCompletionStep'
 import CooperativeWorkControls from './CooperativeWorkControls/CooperativeWorkControls'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
