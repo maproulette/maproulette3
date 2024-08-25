@@ -127,7 +127,7 @@ export default class UserEditorSelector extends Component {
               <ListEditorItems
                 allowedEditors={this.props.allowedEditors}
                 editorLabels={localizedEditorLabels}
-                activEditor={this.currentEditor()}
+                activeEditor={this.currentEditor()}
                 chooseEditor={this.chooseEditor}
                 closeDropdown={dropdown.closeDropdown}
                 pickEditor={this.props.pickEditor}

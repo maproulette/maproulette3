@@ -54,7 +54,6 @@ const hiddenShortcuts = ['skip', 'falsePositive', 'fixed', 'tooHard', 'alreadyFi
  */
 export class ActiveTaskControls extends Component {
   state = {
-    taskBeingCompleted: null,
     confirmingTask: null,
     confirmingStatus: null,
     osmComment: "",
@@ -99,7 +98,6 @@ export class ActiveTaskControls extends Component {
     const comment = task.parent.checkinComment
     const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
 
-    this.setState({taskBeingCompleted: this.props.task.id})
     this.props.editTask(
       value,
       this.props.task,
@@ -133,12 +131,6 @@ export class ActiveTaskControls extends Component {
 
   clearNextTask = () => {
     this.setState({requestedNextTask: null})
-  }
-
-  /** Indicate the editor has been closed without completing the task */
-  cancelEditing = () => {
-    this.setState({taskBeingCompleted: null, requestedNextTask: null})
-    this.props.closeEditor()
   }
 
   /** Mark the task as complete with the given status */
@@ -353,14 +345,6 @@ export class ActiveTaskControls extends Component {
 
     if (!this.props.task) {
       return null
-    }
-
-    const editorLoading =
-      _get(this.props, 'editor.taskId') !== this.props.task.id &&
-           this.state.taskBeingCompleted === this.props.task.id
-
-    if (editorLoading) {
-      return <BusySpinner />
     }
 
     const isCooperative = AsCooperativeWork(this.props.task).isCooperative()
