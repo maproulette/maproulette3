@@ -40,20 +40,27 @@ export class RebuildTasksControl extends Component {
     })
   }
 
-  proceed = () => {
-    const removeUnmatched = this.state.removeUnmatchedTasks
-    const updatedFile = this.state.localFile ? this.state.localFile.file : null
+  proceed = async () => {
+    const { removeUnmatchedTasks, localFile, dataOriginDate } = this.state
+    const { challenge, recordSnapshot, deleteIncompleteTasks, rebuildChallenge, refreshChallenge } = this.props
+  
+    const updatedFile = localFile ? localFile.file : null
+  
     this.resetState()
-
-    this.props.recordSnapshot(this.props.challenge.id)
-
-    const deleteStepIfRequested = removeUnmatched ?
-                                  this.props.deleteIncompleteTasks(this.props.challenge) :
-                                  Promise.resolve()
-
-    deleteStepIfRequested.then(() => {
-      this.props.rebuildChallenge(this.props.challenge, updatedFile, this.state.dataOriginDate)
-    })
+    recordSnapshot(challenge.id)
+  
+    try {
+      if (removeUnmatchedTasks) {
+        await deleteIncompleteTasks(challenge)
+      }
+  
+      await rebuildChallenge(challenge, updatedFile, dataOriginDate)
+  
+    } catch (error) {
+      console.error('Error during proceed:', error)
+    }
+  
+    refreshChallenge()
   }
 
   render() {
