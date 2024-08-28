@@ -275,7 +275,7 @@ export class ReviewTaskControls extends Component {
         }
 
         <div>
-          <UserEditorSelector {...this.props} />
+          <UserEditorSelector {...this.props} pickEditor={this.pickEditor} />
           <div className="mr-grid mr-grid-columns-2 mr-grid-gap-4">
             {this.props.task.metaReviewStatus === TaskReviewStatus.rejected &&
               <button className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"

@@ -118,7 +118,7 @@ export class InspectTaskControls extends Component {
          <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
            <FormattedMessage {...messages.readOnly} />
          </div> :
-         <UserEditorSelector {...this.props} className="mr-mb-4" />
+         <UserEditorSelector {...this.props} pickEditor={this.pickEditor} className="mr-mb-4" />
         }
 
         {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
