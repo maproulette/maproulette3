@@ -1,3 +1,4 @@
+import AsEditableChallenge from "../../../../../../interactions/Challenge/AsEditableChallenge";
 import messages from "../Messages";
 
 const STEP_ID = "Properties";
@@ -66,6 +67,7 @@ export const uiSchema = (
   extraErrors,
   options = {}
 ) => {
+  const sourceReadOnly = AsEditableChallenge(challengeData)
   const isCollapsed =
     options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
   const toggleCollapsed =
@@ -91,6 +93,8 @@ export const uiSchema = (
       "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.osmIdPropertyDescription),
       "ui:collapsed": isCollapsed,
+      "ui:description": intl.formatMessage(messages.disableOsmIdProperty),
+      "ui:readonly": sourceReadOnly,
     },
     customTaskStyles: {
       "ui:field": "configureCustomTaskStyles",

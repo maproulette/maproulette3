@@ -652,6 +652,11 @@ will not be able to make sense of it.
       "(https://learn.maproulette.org/documentation/setting-external-task-identifiers/).",
   },
 
+  disableOsmIdProperty: {
+    id: "Admin.EditChallenge.form.disableOsmIdProperty",
+    defaultMessage: "This ID cannot be edited after challenge creation, this is to prevent task duplication. [Learn more](https://learn.maproulette.org/documentation/setting-external-task-identifiers/)."
+  },
+
   customTaskStyleLabel: {
     id: "Admin.EditChallenge.form.customTaskStyles.label",
     defaultMessage: "Customize Task Property Styles",
