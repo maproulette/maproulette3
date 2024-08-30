@@ -23,6 +23,7 @@ export class RebuildTasksControl extends Component {
     removeUnmatchedTasks: false,
     localFilename: null,
     localFile: null,
+    dataOriginDate: null,
   }
 
   initiateConfirmation = () => this.setState({ confirming: true })
@@ -37,6 +38,7 @@ export class RebuildTasksControl extends Component {
       removeUnmatchedTasks: false,
       localFilename: null,
       localFile: null,
+      dataOriginDate: null,
     })
   }
 
@@ -45,6 +47,7 @@ export class RebuildTasksControl extends Component {
     const { challenge, recordSnapshot, deleteIncompleteTasks, rebuildChallenge, refreshChallenge } = this.props
   
     const updatedFile = localFile ? localFile.file : null
+    const originDate = dataOriginDate || challenge.dataOriginDate
   
     this.resetState()
     recordSnapshot(challenge.id)
@@ -54,7 +57,7 @@ export class RebuildTasksControl extends Component {
         await deleteIncompleteTasks(challenge)
       }
   
-      await rebuildChallenge(challenge, updatedFile, dataOriginDate)
+      await rebuildChallenge(challenge, updatedFile, originDate)
   
     } catch (error) {
       console.error('Error during proceed:', error)
@@ -64,14 +67,12 @@ export class RebuildTasksControl extends Component {
   }
 
   render() {
-    if (!this.props.challenge) {
-      return null
-    }
+    const { challenge, intl } = this.props
 
-    const challenge = AsManageableChallenge(this.props.challenge)
+    const manageableChallenge = AsManageableChallenge(challenge)
 
     let fileUploadArea = null
-    if (challenge.dataSource() === 'local') {
+    if (manageableChallenge.dataSource() === 'local') {
       const uploadContext = {}
       fileUploadArea = DropzoneTextUpload({
         id: 'geojson',
@@ -79,7 +80,7 @@ export class RebuildTasksControl extends Component {
         readonly: false,
         formContext: uploadContext,
         dropAreaClassName: "mr-text-green-white mr-border-matisse-blue mr-border-2 mr-rounded mr-text-sm mr-p-4 mr-cursor-pointer",
-        onChange: filename => {
+        onChange: (filename) => {
           this.setState({
             localFilename: filename,
             localFile: uploadContext.geojson,
@@ -91,7 +92,7 @@ export class RebuildTasksControl extends Component {
     let originDateField = null
     // Only offer an option to change the source origin date if it's a local file
     // we are uploading.
-    if (challenge.dataSource() === 'local') {
+    if (manageableChallenge.dataSource() === 'local') {
       originDateField = (
         <div>
           <label htmlFor="data-origin-date-input" className="mr-text-orange mr-mr-2">
@@ -131,14 +132,12 @@ export class RebuildTasksControl extends Component {
               <div className="mr-text-white">
                 <div>
                   <p>
-                    <FormattedMessage {...messages[challenge.dataSource()]} />
+                    <FormattedMessage {...messages[manageableChallenge.dataSource()]} />
                   </p>
 
                   <div>
                     <MarkdownContent
-                      markdown={this.props.intl.formatMessage(
-                        messages.explanation
-                      )}
+                      markdown={intl.formatMessage(messages.explanation)}
                     />
                   </div>
 
@@ -200,7 +199,7 @@ export class RebuildTasksControl extends Component {
 
                   <button
                     className="mr-button mr-button--danger"
-                    onClick={this.proceed}
+                    onClick={() => this.proceed()}
                   >
                     <FormattedMessage {...messages.proceed} />
                   </button>
@@ -217,6 +216,11 @@ export class RebuildTasksControl extends Component {
 RebuildTasksControl.propTypes = {
   challenge: PropTypes.object.isRequired,
   rebuildChallenge: PropTypes.func.isRequired,
+  recordSnapshot: PropTypes.func.isRequired,
+  deleteIncompleteTasks: PropTypes.func.isRequired,
+  refreshChallenge: PropTypes.func.isRequired,
+  controlClassName: PropTypes.string,
+  intl: PropTypes.object.isRequired,
 }
 
 export default injectIntl(RebuildTasksControl)
