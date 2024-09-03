@@ -26,21 +26,21 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
       tasksReviewerDateRange: [],
     }
 
-    updateAllMetrics(props) {
-      this.setState({loading: true})
-
-      if ( this.props[userProp] &&
+    async updateAllMetrics() {
+      if (this.props[userProp] &&
           (!_get(this.props[userProp], 'settings.leaderboardOptOut') ||
            _get(this.props[userProp], 'id') === _get(this.props.currentUser, 'userId'))) {
-        this.props.fetchLeaderboardForUser(this.props[userProp].id, 0, -1).then(userLeaderboard => {
-          this.setState({loading: false, leaderboardMetrics: userLeaderboard[0]})
-        })
 
-        this.updateUserMetrics(props)
+        this.setState({loading: true})
+
+        const userLeaderboard = await this.props.fetchLeaderboardForUser(this.props[userProp].id, 0, -1);
+        this.setState({loading: false, leaderboardMetrics: userLeaderboard[0]});
+
+        await this.updateUserMetrics();
       }
     }
 
-    updateUserMetrics() {
+    async updateUserMetrics() {
       if (!_get(this.props[userProp], 'settings.leaderboardOptOut') ||
            _get(this.props[userProp], 'id') === _get(this.props.currentUser, 'userId')) {
 
@@ -62,18 +62,21 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
         const reviewerEnd = _get(this.state.tasksReviewerDateRange, 'length', 0) === 2 ?
           format(this.state.tasksReviewerDateRange[1], 'yyyy-MM-dd') : null
 
-        fetchUserMetrics(this.props[userProp].id,
-           this.state.tasksCompletedMonthsPast,
-           this.state.tasksReviewedMonthsPast,
-           this.state.tasksReviewerMonthsPast,
-           startDate, endDate,
-           reviewStart, reviewEnd,
-           reviewerStart, reviewerEnd
-        ).then(metrics => {
-          this.setState({taskMetrics: metrics.tasks,
-                         reviewMetrics: metrics.reviewTasks,
-                         reviewerMetrics: metrics.asReviewerTasks})
-        })
+        const metrics = await fetchUserMetrics(
+          this.props[userProp].id,
+          this.state.tasksCompletedMonthsPast,
+          this.state.tasksReviewedMonthsPast,
+          this.state.tasksReviewerMonthsPast,
+          startDate, endDate,
+          reviewStart, reviewEnd,
+          reviewerStart, reviewerEnd
+        );
+
+        this.setState({
+          taskMetrics: metrics.tasks,
+          reviewMetrics: metrics.reviewTasks,
+          reviewerMetrics: metrics.asReviewerTasks
+        });
       }
     }
 
@@ -126,34 +129,28 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
     }
 
     componentDidMount() {
-      if (this.props[userProp]?.score) {
-        this.updateAllMetrics(this.props)
-      }
+      this.updateAllMetrics()
     }
 
     componentDidUpdate(prevProps, prevState) {
-      const { userProp } = this.props
-    
-      if (prevProps[userProp]?.score) {
-        const scoreChanged = prevProps[userProp]?.score !== this.props[userProp]?.score
-        const { tasksCompletedMonthsPast, tasksReviewedMonthsPast, tasksReviewerMonthsPast,
-          tasksCompletedDateRange, tasksReviewedDateRange, tasksReviewerDateRange } = this.state
-    
-        if (scoreChanged) {
-          this.updateAllMetrics(this.props)
-        } else if (tasksReviewedMonthsPast !== CUSTOM_RANGE && (
-            prevState.tasksCompletedMonthsPast !== tasksCompletedMonthsPast ||
-            prevState.tasksReviewedMonthsPast !== tasksReviewedMonthsPast ||
-            prevState.tasksReviewerMonthsPast !== tasksReviewerMonthsPast
-          )) {
-          this.updateUserMetrics(this.props)
-        } else if (tasksCompletedMonthsPast === CUSTOM_RANGE && (
-            prevState.tasksCompletedDateRange !== tasksCompletedDateRange ||
-            prevState.tasksReviewedDateRange !== tasksReviewedDateRange ||
-            prevState.tasksReviewerDateRange !== tasksReviewerDateRange
-          )) {
-          this.updateUserMetrics(this.props)
-        }
+      const scoreChanged = prevProps[userProp]?.score !== this.props[userProp]?.score
+      const { tasksCompletedMonthsPast, tasksReviewedMonthsPast, tasksReviewerMonthsPast,
+        tasksCompletedDateRange, tasksReviewedDateRange, tasksReviewerDateRange } = this.state
+
+      if (scoreChanged) {
+        this.updateAllMetrics()
+      } else if (tasksReviewedMonthsPast !== CUSTOM_RANGE && (
+          prevState.tasksCompletedMonthsPast !== tasksCompletedMonthsPast ||
+          prevState.tasksReviewedMonthsPast !== tasksReviewedMonthsPast ||
+          prevState.tasksReviewerMonthsPast !== tasksReviewerMonthsPast
+        )) {
+        this.updateUserMetrics()
+      } else if (tasksCompletedMonthsPast === CUSTOM_RANGE && (
+          prevState.tasksCompletedDateRange !== tasksCompletedDateRange ||
+          prevState.tasksReviewedDateRange !== tasksReviewedDateRange ||
+          prevState.tasksReviewerDateRange !== tasksReviewerDateRange
+        )) {
+        this.updateUserMetrics()
       }
     }
 
