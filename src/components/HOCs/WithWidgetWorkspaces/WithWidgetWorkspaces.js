@@ -38,23 +38,6 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
   return class extends Component {
     state = {
       currentConfigurationId: null,
-      currentConfiguration: {}
-    }
-
-    componentDidMount() {
-      if(this.props.user){
-        const configurations = this.workspaceConfigurations()
-        const currentConfiguration = this.currentConfiguration(configurations)
-        this.setState({currentConfiguration})
-      }
-    }
-
-    componentDidUpdate(prevProps) {
-      if(this.props.user && this.props.user.id !== prevProps.user?.id) {
-        const configurations = this.workspaceConfigurations()
-        const currentConfiguration = this.currentConfiguration(configurations)
-        this.setState({currentConfiguration})
-      }
     }
 
     /**
@@ -385,7 +368,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
       }
 
       const configurations = this.workspaceConfigurations()
-      const currentConfiguration = this.state.currentConfiguration
+      const currentConfiguration = this.currentConfiguration(configurations)
       const remainingConfigurations = currentConfiguration ?
                                       _omit(configurations, [currentConfiguration.id]) :
                                       configurations
