@@ -51,10 +51,10 @@
       document.getElementsByTagName('head')[0].appendChild(newScript);
 
       function checkScript() {
-        const params = new URLSearchParams(document.location.search);
+        const params = new URLSearchParams(document.location.hash.slice(1));
         const token = params.get('token');
-
-        console.log("token", token);
+        params.delete('token');
+        document.location.hash = params.toString();
 
         if (!token) {
           console.error("Rapid iframe initialized without an OSM API access token");

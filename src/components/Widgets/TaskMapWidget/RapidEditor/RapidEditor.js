@@ -51,7 +51,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
     <iframe
       id="rapid-container-root"
       style={{ width: '100%', height: '100%' }}
-      src={`/rapid-editor.html?token=${token}#${initialHash}`}
+      src={`/rapid-editor.html${initialHash}&token=${token}`}
       onLoad={async (event) => {
         let iframe = event.target;
         iframe.contentWindow.token = token;
