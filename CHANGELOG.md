@@ -7,6 +7,24 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.10] - 2024-9-10
+Released with [maproulette-backend_v4.5.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.5)
+
+## What's Changed
+* fix empy mr tag bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2413
+* fix infinite loader on user dashboard by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2428
+* Fix bug when fetching user metrics for dashboard header by @jake-low in https://github.com/maproulette/maproulette3/pull/2411
+* resolve ResizeMap errors by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2416
+* revert "Fix the editor overwrite bug." by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2418
+* fix pickEditor undefined bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2419
+* TBD
+
+## MR2 Changes
+* TBD
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.9...v3.15.10
+
+
 ## [v3.15.9] - 2024-8-13
 Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
 
