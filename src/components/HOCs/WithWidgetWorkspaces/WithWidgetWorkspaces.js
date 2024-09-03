@@ -38,6 +38,23 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
   return class extends Component {
     state = {
       currentConfigurationId: null,
+      currentConfiguration: {}
+    }
+
+    componentDidMount() {
+      if(this.props.user){
+        const configurations = this.workspaceConfigurations()
+        const currentConfiguration = this.currentConfiguration(configurations)
+        this.setState({currentConfiguration})
+      }
+    }
+
+    componentDidUpdate(prevProps) {
+      if(this.props.user && this.props.user.id !== prevProps.user?.id) {
+        const configurations = this.workspaceConfigurations()
+        const currentConfiguration = this.currentConfiguration(configurations)
+        this.setState({currentConfiguration})
+      }
     }
 
     /**
@@ -311,28 +328,18 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
      * there is no active configuration
      */
     currentConfiguration = configurations => {
-      let currentWorkspace = configurations[this.state.currentConfigurationId]
-
-      // if no current workspace, find last selected workspace from a previous session
+      let currentWorkspace =
+        configurations[this.state.currentConfigurationId] ||
+        _find(configurations, config => config.active && !config.isBroken) ||
+        _find(configurations, config => !config.isBroken)
+    
+      // If no working workspace is found, create and save a fresh default
       if (!currentWorkspace) {
-        currentWorkspace = _find(configurations, configuration => {
-          return configuration.active && !configuration.isBroken;
-        })
+        currentWorkspace = this.setupWorkspace(defaultConfiguration)
+        this.saveWorkspaceConfiguration(currentWorkspace)
       }
-
-      // If no previously active workspace, or it's broken, find a working one
-      if (!currentWorkspace) {
-        currentWorkspace = _find(configurations, configuration => !configuration.isBroken)
-      }
-
-      // If no working workspace, create a fresh default. Once the save is
-      // complete, we should get rerendered and have it available, so do not
-      // assign it to currentWorkspace.
-      if (!currentWorkspace) {
-        this.saveWorkspaceConfiguration(this.setupWorkspace(defaultConfiguration))
-      }
-
-      return !currentWorkspace ? null : this.completeWorkspaceConfiguration(currentWorkspace)
+    
+      return this.completeWorkspaceConfiguration(currentWorkspace)
     }
 
     /**
@@ -378,7 +385,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
       }
 
       const configurations = this.workspaceConfigurations()
-      const currentConfiguration = this.currentConfiguration(configurations)
+      const currentConfiguration = this.state.currentConfiguration
       const remainingConfigurations = currentConfiguration ?
                                       _omit(configurations, [currentConfiguration.id]) :
                                       configurations
