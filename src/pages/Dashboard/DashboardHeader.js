@@ -45,21 +45,15 @@ const DashboardHeader = props => {
               : messages.getStarted)}
           />
         </p>
-      );
-    } else if (completedTasks === 0) {
-      return (
-        <p>
-          <FormattedMessage
-            {...(userScore > NEWBIE_POINTS_THRESHOLD
-              ? messages.encouragement
-              : messages.getStarted)}
-          />
-        </p>
-      );
-    } else {
-      return <BusySpinner />;
+      )
     }
-  };
+  
+    return _isFinite(completedTasks) ? (
+      <FormattedMessage {...messages.getStarted} />
+    ) : (
+      <BusySpinner />
+    )
+  }
 
   return (
     <div className="mr-mx-4 mr-mt-12">
