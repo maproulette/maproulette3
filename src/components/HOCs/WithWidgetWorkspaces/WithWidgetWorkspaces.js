@@ -38,6 +38,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
   return class extends Component {
     state = {
       currentConfigurationId: null,
+      defaultWorkspace: null
     }
 
     /**
@@ -313,18 +314,20 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
     currentConfiguration = configurations => {
       let currentWorkspace =
         configurations[this.state.currentConfigurationId] ||
-        _find(configurations, config => config.active && !config.isBroken) ||
-        _find(configurations, config => !config.isBroken)
+        _find(configurations, ({ active, isBroken }) => active && !isBroken) ||
+        _find(configurations, ({ isBroken }) => !isBroken) ||
+        this.state.defaultWorkspace
     
-      // If no working workspace is found, create and save a fresh default
       if (!currentWorkspace) {
-        currentWorkspace = this.setupWorkspace(defaultConfiguration)
-        this.saveWorkspaceConfiguration(currentWorkspace)
+        const defaultWorkspace = this.setupWorkspace(defaultConfiguration)
+        this.saveWorkspaceConfiguration(defaultWorkspace)
+        this.setState({ defaultWorkspace })
+        currentWorkspace = defaultWorkspace
       }
     
-      return this.completeWorkspaceConfiguration(currentWorkspace)
+      return currentWorkspace ? this.completeWorkspaceConfiguration(currentWorkspace) : null
     }
-
+    
     /**
      * Add a new, default workspace configuration
      */
