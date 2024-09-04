@@ -2,23 +2,7 @@
 <html>
   <head>
     <meta charset='utf-8'>
-    <!--
-      Adapted from Rapid's code examples at https://github.com/facebook/Rapid/tree/main/dist/examples
-
-      Copyright (c) 2024, Rapid Contributors
-
-      Permission to use, copy, modify, and/or distribute this software for any purpose
-      with or without fee is hereby granted, provided that the above copyright notice
-      and this permission notice appear in all copies.
-
-      THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-      REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-      AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-      INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
-      OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
-      TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
-      THIS SOFTWARE.
-    -->
+    <!-- Adapted from Rapid's code examples at https://github.com/facebook/Rapid/tree/main/dist/examples -->
     <title>Rapid</title>
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.css'>
 
@@ -42,45 +26,52 @@
 
     <script>
       const container = document.getElementById('rapid-container');
-      const newScript = document.createElement('script');
-      newScript.type = 'text/javascript';
-      newScript.onload = checkScript;
-      newScript.onerror = checkScript;
-      newScript.src = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.js';
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.onload = setupRapid;
+      script.onerror = setupRapid;
+      script.src = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.js';
 
-      document.getElementsByTagName('head')[0].appendChild(newScript);
+      document.getElementsByTagName('head')[0].appendChild(script);
 
-      function checkScript() {
+      function setupRapid() {
+        if (typeof Rapid === 'undefined' || !Rapid.utilDetect().support) {
+          container.innerHTML = 'Sorry, the Rapid editor does not support your web browser.';
+          container.style.padding = '20px';
+          return;
+        }
+
+        // Get the token passed in from the parent window. May be null in dev mode.
         const params = new URLSearchParams(document.location.hash.slice(1));
         const token = params.get('token');
         params.delete('token');
         document.location.hash = params.toString();
 
-        if (!token) {
-          console.error("Rapid iframe initialized without an OSM API access token");
-        }
-        
-        if (typeof Rapid === 'undefined' || !Rapid.utilDetect().support) {
-          container.innerHTML = 'Sorry, the Rapid editor does not support your web browser.';
-          container.style.padding = '20px';
+        // Create and configure the main editor Context
+        const context = new Rapid.Context();
+        context.containerNode = container;
+        context.assetPath = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/';
 
-        } else {
-          const context = new Rapid.Context();
-          context.containerNode = container;
-          context.assetPath = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/';
-          context.buildID = '';
-          context.buildSHA = '';
-          context.buildDate = '';
+        if (token) {
           context.preauth =  {
-            url: 'https://www.openstreetmap.org', // TODO: use REACT_APP_OSM_SERVER here?
+            // TODO: use REACT_APP_OSM_SERVER and REACT_APP_OSM_API_SERVER here?
+            // Although Rapid also hardcodes these URLs internally. See:
+            // https://github.com/facebook/Rapid/issues/1341
+            // ...probably best to match those for now (weird bugs will occur otherwise)
+            url: 'https://www.openstreetmap.org',
             apiUrl: 'https://api.openstreetmap.org',
             access_token: token,
           };
           context.apiConnections = [context.preauth];
-
-          window.rapidContext = context;
-          context.initAsync();
+        } else {
+          console.warn(
+            "MapRoulette has initialized the Rapid iframe without an OSM API access token; "
+            + "this should only happen in dev mode."
+          );
         }
+
+        window.rapidContext = context; // allow parent window to access context
+        context.initAsync();
       }
     </script>
   </body>

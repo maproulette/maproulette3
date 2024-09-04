@@ -44,14 +44,27 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
 
   useEffect(() => {
     // when this component unmounts, reset the rapid editor state fields in our Redux store
-    return () =>  dispatch({ type: SET_RAPIDEDITOR, context: { isRunning: false, hasUnsavedChanges: false } });
+    const cleanup = () => {
+      dispatch({ type: SET_RAPIDEDITOR, context: { isRunning: false, hasUnsavedChanges: false } });
+    };
+    return cleanup;
   }, []);
+
+  if (process.env.REACT_APP_OSM_API_SERVER === "https://api.openstreetmap.org") {
+    // Only pass auth token to Rapid if it's for the production OSM API (not the dev API)
+    // since Rapid assumes any token it's given is valid on api.openstreetmap.org.
+    // See: https://github.com/facebook/Rapid/issues/1341
+
+    // NOTE: the assumption here is that REACT_APP_OSM_API_SERVER is the same as
+    // the maproulette-backend's config.osm.server; fix your configs if they differ!
+    initialHash += `&token=${token}`;
+  }
 
   return (
     <iframe
       id="rapid-container-root"
       style={{ width: '100%', height: '100%' }}
-      src={`/rapid-editor.html${initialHash}&token=${token}`}
+      src={`/rapid-editor.html${initialHash}`}
       onLoad={async (event) => {
         let iframe = event.target;
         iframe.contentWindow.token = token;
