@@ -38,8 +38,8 @@ export class ProjectDetail extends Component {
   }
 
   render() {
-    const project = this.props.project
-    if (!_isObject(project)) {
+    const { project, owner } = this.props;
+    if (!_isObject(project) || !_isObject(owner)) {
       return (
         <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50 mr-items-center mr-justify-center lg:mr-flex mr-text-center mr-py-8">
           <BusySpinner />
@@ -116,20 +116,27 @@ export class ProjectDetail extends Component {
                     <ol className="mr-card-challenge__meta">
                       <li>
                         <strong className="mr-text-yellow">
-                          <FormattedMessage
-                            {...messages.createdOnLabel}
-                          />
-                          :
+                          <FormattedMessage {...messages.ownerLabel} />:
+                        </strong>{' '}
+                        <a
+                          className="mr-text-green-lighter hover:mr-text-white"
+                          href={process.env.REACT_APP_OSM_SERVER + '/user/' + owner.osmProfile.displayName}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          {owner.osmProfile.displayName}
+                        </a>
+                      </li>
+                      <li>
+                        <strong className="mr-text-yellow">
+                          <FormattedMessage {...messages.createdOnLabel} />:
                         </strong>{' '}
                         <FormattedDate value={parseISO(project.created)}
                                         year='numeric' month='long' day='2-digit' />
                       </li>
                       <li>
                         <strong className="mr-text-yellow">
-                          <FormattedMessage
-                            {...messages.modifiedOnLabel}
-                          />
-                          :
+                          <FormattedMessage {...messages.modifiedOnLabel} />:
                         </strong>{' '}
                         <FormattedDate value={parseISO(project.modified)}
                                         year='numeric' month='long' day='2-digit' />
@@ -196,6 +203,6 @@ export default WithCurrentUser(
           )
         )
       )
-    ), {includeChallenges: true}
+    ), {includeChallenges: true, includeOwner: true}
   )
 )

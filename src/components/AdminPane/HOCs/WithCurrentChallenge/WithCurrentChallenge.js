@@ -10,6 +10,7 @@ import { challengeDenormalizationSchema,
          fetchChallengeComments,
          fetchChallengeActivity,
          fetchChallengeActions } from '../../../../services/Challenge/Challenge'
+import { fetchBasicUser } from '../../../../services/User/User'
 import { addError } from '../../../../services/Error/Error'
 import AppErrors from '../../../../services/Error/AppErrors'
 import AsManageableChallenge
@@ -47,6 +48,7 @@ const WithCurrentChallenge = function(WrappedComponent) {
 
             if (this.props.user) {
               Promise.all([
+                this.props.fetchUser(challenge.owner),
                 this.props.fetchChallengeComments(challengeId),
                 this.props.fetchChallengeActivity(challengeId, new Date(challenge?.created)),
                 this.props.fetchChallengeActions(challengeId),
@@ -71,6 +73,7 @@ const WithCurrentChallenge = function(WrappedComponent) {
     render() {
       const challengeId = this.currentChallengeId()
       let challenge = null
+      let owner = null
       let clusteredTasks = null
 
       if (_isFinite(challengeId)) {
@@ -79,10 +82,13 @@ const WithCurrentChallenge = function(WrappedComponent) {
                       challengeDenormalizationSchema(),
                       this.props.entities)
         )
+        owner = Object.values(this.props.entities.users)
+          .find(user => user.osmProfile.id === challenge.owner);
       }
 
       return <WrappedComponent key={challengeId}
                                challenge={challenge}
+                               owner={owner}
                                clusteredTasks={clusteredTasks}
                                loadingChallenge={this.state.loadingChallenge}
                                refreshChallenge={this.loadChallenge}
@@ -121,9 +127,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchChallengeActivity: (challengeId, startDate, endDate) =>
     dispatch(fetchChallengeActivity(challengeId, startDate, endDate)),
 
-  fetchChallengeActions: (challengeId, suppressReceive, criteria) => {
-    return dispatch(fetchChallengeActions(challengeId, suppressReceive, criteria))
-  },
+  fetchChallengeActions: (challengeId, suppressReceive, criteria) =>
+    dispatch(fetchChallengeActions(challengeId, suppressReceive, criteria)),
+
+  fetchUser: userId => dispatch(fetchBasicUser(userId)),
 })
 
 export default (WrappedComponent) =>

@@ -46,6 +46,11 @@ export default defineMessages({
     defaultMessage: "Featured",
   },
 
+  ownerLabel: {
+    id: "ProjectDetails.fields.owner.label",
+    defaultMessage: "Owner",
+  },
+
   createdOnLabel: {
     id: "ProjectDetails.fields.created.label",
     defaultMessage: "Created",

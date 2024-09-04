@@ -29,6 +29,7 @@ describe("ChallengeDetail", () => {
           lastTaskRefresh: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
           dataOriginDate: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx").slice(0, 10),
         }}
+        owner={{ id: 2, osmProfile: { displayName: "Somebody" } }}
         intl={{
           formatMessage: () => '',
           formatDate: () => '',
@@ -59,6 +60,7 @@ describe("ChallengeDetail", () => {
           dataOriginDate: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx").slice(0, 10),
           enabled: true,
         }}
+        owner={{ id: 2, osmProfile: { displayName: "Somebody" } }}
         intl={{
           formatMessage: () => '',
           formatDate: () => '',

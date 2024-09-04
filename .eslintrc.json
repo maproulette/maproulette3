@@ -10,6 +10,7 @@
     "react/jsx-no-duplicate-props": "warn",
     "react/jsx-no-target-blank": "warn",
     "react/no-unknown-property": "warn",
+    "react/jsx-no-target-blank": 0,
     "react/prop-types": 0
   },
   "overrides": [

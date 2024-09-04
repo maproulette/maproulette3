@@ -8,6 +8,7 @@ describe("ProjectDetail", () => {
     const { getByText } = global.withProvider(
       <ProjectDetail
         project={{ id: 1, created: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"), modified: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx") }}
+        owner={{ id: 2, osmProfile: { displayName: "Somebody" } }}
         unfilteredChallenges={[]}
       />
     );

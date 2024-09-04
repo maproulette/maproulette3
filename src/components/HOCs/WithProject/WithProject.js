@@ -11,6 +11,7 @@ import { fetchProject } from '../../../services/Project/Project'
 import { fetchProjectChallenges,
          fetchProjectChallengeActions }
        from '../../../services/Challenge/Challenge'
+import { fetchBasicUser } from '../../../services/User/User'
 import { PROJECT_CHALLENGE_LIMIT } from '../../../services/Project/Project'
 
 
@@ -57,6 +58,12 @@ const WithProject = function(WrappedComponent, options={}) {
             const project = normalizedProject.entities.projects[normalizedProject.result]
             this.setState({project: project})
 
+            if (options.includeOwner) {
+              let normalizedOwner = await props.fetchUser(project.owner);
+              let owner = normalizedOwner.entities.users[normalizedOwner.result];
+              this.setState({ owner })
+            }
+
             if (options.includeChallenges) {
               const retrievals = []
               retrievals.push(props.fetchProjectChallenges(projectId))
@@ -97,10 +104,17 @@ const WithProject = function(WrappedComponent, options={}) {
         challenges = this.challengeProjects(this.state.project.id, this.props)
       }
 
+      let owner = this.props.owner
+      if (options.includeOwner) {
+        owner = this.state.owner
+      }
+
       return <WrappedComponent {..._omit(this.props, ['fetchProject',
                                                       'fetchProjectChallenges',
-                                                      'fetchProjectChallengeActions'])}
+                                                      'fetchProjectChallengeActions',
+                                                      'fetchUser'])}
                                project={this.state.project}
+                               owner={owner}
                                challenges={challenges} />
     }
   }
@@ -116,6 +130,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(fetchProjectChallenges(projectId, -1)),
   fetchProjectChallengeActions: projectId =>
     dispatch(fetchProjectChallengeActions(projectId, false, false)),
+  fetchUser: userId => dispatch(fetchBasicUser(userId)),
 })
 
 export default (WrappedComponent, options) =>
