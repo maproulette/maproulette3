@@ -397,7 +397,7 @@ export class ChallengeDetail extends Component {
   }
 
   render() {
-    const { challenge, owner } = this.props;
+    const { browsedChallenge: challenge, owner } = this.props;
     if (!_isObject(challenge) || !_isObject(owner) || this.props.loadingBrowsedChallenge) {
       return (
         <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50 mr-items-center mr-justify-center lg:mr-flex mr-text-center mr-py-8">
