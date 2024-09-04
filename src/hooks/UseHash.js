@@ -22,7 +22,7 @@ const useHash = () => {
   const updateHash = useCallback(
     (newHash) => {
       if (newHash !== hash) {
-        window.location.hash = newHash;
+        history.replaceState(null, null, newHash);
       }
     },
     [hash],
