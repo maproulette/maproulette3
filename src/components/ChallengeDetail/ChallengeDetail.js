@@ -397,8 +397,8 @@ export class ChallengeDetail extends Component {
   }
 
   render() {
-    const challenge = this.props.browsedChallenge;
-    if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
+    const { challenge, owner } = this.props;
+    if (!_isObject(challenge) || !_isObject(owner) || this.props.loadingBrowsedChallenge) {
       return (
         <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50 mr-items-center mr-justify-center lg:mr-flex mr-text-center mr-py-8">
           <BusySpinner />
@@ -562,6 +562,19 @@ export class ChallengeDetail extends Component {
                           day="2-digit"
                         />
                       </li>
+                      <li>
+                        <strong className="mr-text-yellow">
+                          <FormattedMessage {...messages.ownerLabel} />:
+                        </strong>{' '}
+                        <a
+                          className="mr-text-green-lighter hover:mr-text-white"
+                          href={process.env.REACT_APP_OSM_SERVER + '/user/' + owner.osmProfile.displayName}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          {owner.osmProfile.displayName}
+                        </a>
+                      </li>
                       {/* Disable Link tell project leaderboard page is reimplemented */}
                       {/* <li>
                         <Link
@@ -589,7 +602,11 @@ export class ChallengeDetail extends Component {
 export default WithCurrentUser(
   WithClusteredTasks(
     WithStartChallenge(
-      WithBrowsedChallenge(WithCurrentChallenge(injectIntl(ChallengeDetail)))
+      WithBrowsedChallenge(
+        WithCurrentChallenge(
+          injectIntl(ChallengeDetail)
+        )
+      )
     )
   )
 )

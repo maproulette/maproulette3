@@ -54,6 +54,11 @@ export default defineMessages({
     defaultMessage: "Task Data Sourced",
   },
 
+  ownerLabel: {
+    id: 'ChallengeDetails.fields.owner.label',
+    defaultMessage: 'Owner',
+  },
+
   dataOriginDateLabel: {
     id: "ChallengeDetails.fields.lastChallengeDetails.DataOriginDate.label",
     defaultMessage: "Tasks built on {refreshDate} from data sourced on {sourceDate}.",
