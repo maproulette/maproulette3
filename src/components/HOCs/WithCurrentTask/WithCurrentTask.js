@@ -39,7 +39,6 @@ import AppErrors from '../../../services/Error/AppErrors'
 import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 import AsMappableBundle from '../../../interactions/TaskBundle/AsMappableBundle'
 
-const TASK_STALE = 30000 // 30 seconds
 const CHALLENGE_STALE = 300000 // 5 minutes
 const PROJECT_STALE = 300000 // 5 minutes
 
@@ -78,9 +77,7 @@ const WithLoadedTask = function(WrappedComponent, forReview) {
     componentDidUpdate(prevProps) {
       if (this.props.taskId !== prevProps.taskId) {
         // Only fetch if task data is missing or stale
-        if (!this.props.task || isStale(this.props.task, TASK_STALE)) {
-          this.loadNeededTask(this.props)
-        }
+        this.loadNeededTask(this.props)
       }
     }
 

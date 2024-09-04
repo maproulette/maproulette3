@@ -147,6 +147,10 @@ export class AsCooperativeWork {
                 diffEntry.newValue = tagComponents[1]
                 diffEntry.status = 'changed'
               }
+              else {
+                diffEntry.newValue = tagComponents[1]
+                diffEntry.status = 'resolved'
+              }
             })
             break
           case 'unsetTags':
@@ -156,6 +160,10 @@ export class AsCooperativeWork {
                 // Delete tag
                 diffEntry.newValue = null
                 diffEntry.status = 'removed'
+              }
+              else {
+                diffEntry.newValue = null
+                diffEntry.status = 'resolved'
               }
             })
             break

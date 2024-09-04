@@ -470,8 +470,8 @@ TaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    WithCooperativeWork(
-      WithLockedTask(
+    WithLockedTask(
+      WithCooperativeWork(
         WithTaskBundle(
           injectIntl(TaskPane)
         )
