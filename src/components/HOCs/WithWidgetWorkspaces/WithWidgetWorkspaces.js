@@ -38,6 +38,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
   return class extends Component {
     state = {
       currentConfigurationId: null,
+      defaultWorkspace: null
     }
 
     /**
@@ -311,30 +312,22 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
      * there is no active configuration
      */
     currentConfiguration = configurations => {
-      let currentWorkspace = configurations[this.state.currentConfigurationId]
-
-      // if no current workspace, find last selected workspace from a previous session
+      let currentWorkspace =
+        configurations[this.state.currentConfigurationId] ||
+        _find(configurations, ({ active, isBroken }) => active && !isBroken) ||
+        _find(configurations, ({ isBroken }) => !isBroken) ||
+        this.state.defaultWorkspace
+    
       if (!currentWorkspace) {
-        currentWorkspace = _find(configurations, configuration => {
-          return configuration.active && !configuration.isBroken;
-        })
+        const defaultWorkspace = this.setupWorkspace(defaultConfiguration)
+        this.saveWorkspaceConfiguration(defaultWorkspace)
+        this.setState({ defaultWorkspace })
+        currentWorkspace = defaultWorkspace
       }
-
-      // If no previously active workspace, or it's broken, find a working one
-      if (!currentWorkspace) {
-        currentWorkspace = _find(configurations, configuration => !configuration.isBroken)
-      }
-
-      // If no working workspace, create a fresh default. Once the save is
-      // complete, we should get rerendered and have it available, so do not
-      // assign it to currentWorkspace.
-      if (!currentWorkspace) {
-        this.saveWorkspaceConfiguration(this.setupWorkspace(defaultConfiguration))
-      }
-
-      return !currentWorkspace ? null : this.completeWorkspaceConfiguration(currentWorkspace)
+    
+      return currentWorkspace ? this.completeWorkspaceConfiguration(currentWorkspace) : null
     }
-
+    
     /**
      * Add a new, default workspace configuration
      */
