@@ -66,13 +66,21 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
       style={{ width: '100%', height: '100%' }}
       src={`/rapid-editor.html${initialHash}`}
       onLoad={async (event) => {
+        console.log("[MAIN] Rapid iframe onload() event fired");
         let iframe = event.target;
         iframe.contentWindow.token = token;
         
         let context = iframe.contentWindow.rapidContext;
 
+        if (!context) {
+          console.warn("[MAIN] iframe finished loading but no Rapid context found");
+          return;
+        }
+
         // Wait for Rapid to finish initializing
+        console.log("[MAIN] waiting for Rapid to initialize (await context.initAsync())");
         await context.initAsync();
+        console.log("[MAIN] context.initAsync() completed");
         
         dispatch({ type: SET_RAPIDEDITOR, context: { isRunning: true } });
 

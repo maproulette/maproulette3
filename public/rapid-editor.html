@@ -63,9 +63,11 @@
         }
 
         window.rapidContext = context; // allow parent window to access context
-        context.initAsync();
+        console.log("[IFRAME] Rapid context created; calling initAsync() in child");
+        context.initAsync().then(() => console.log("[IFRAME] Rapid finished initializing asynchronously"));
       }
 
+      console.log("[IFRAME] nitializing Rapid...");
       const container = document.getElementById('rapid-container');
       setupRapid(container);
     </script>
