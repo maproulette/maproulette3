@@ -22,40 +22,20 @@ const descriptor = {
 }
 
 export default class TaskMapWidget extends Component {
-  state = {
-    counter: 0
-  }
-
   componentWillUnmount = () => {
     this.props.resumeKeyboardShortcuts()
   }
 
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.task.id !== this.props.task.id) {
-      this.setState({ counter: this.state.counter + 1 })
-    }
-
-    if (this.state.counter % 2) {
-      this.setState({ counter: this.state.counter + 1 })
-    }
-
-    this.handlePauseShortcuts()
-  }
-
-  handlePauseShortcuts = () => {
-    const editMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
-
-    if (editMode) {
-      this.props.pauseKeyboardShortcuts()
-    } else {
-      this.props.resumeKeyboardShortcuts()
+  componentDidUpdate(prevProps) {
+    const prevEditMode = prevProps.getUserAppSetting ? prevProps.getUserAppSetting(prevProps.user, 'isEditMode') : false;
+    const currentEditMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
+  
+    if (currentEditMode !== prevEditMode) {
+      currentEditMode ? this.props.pauseKeyboardShortcuts() : this.props.resumeKeyboardShortcuts();
     }
   }
 
   handleRenderRapid = () => {
-    if (this.state.counter % 2) {
-      return null
-    } else {
       return (
         <RapidEditor
           token={this.props.user.osmProfile.requestToken}
@@ -63,7 +43,6 @@ export default class TaskMapWidget extends Component {
           comment={this.props.task?.parent?.checkinComment ?? "#mapRoulette"}
         />
       )
-    }
   }
 
   render() {
