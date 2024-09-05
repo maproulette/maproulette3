@@ -9,8 +9,7 @@ import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/Chall
 import WithSearch from '../../../HOCs/WithSearch/WithSearch.js';
 import useHash from '../../../../hooks/UseHash.js';
 import { SET_RAPIDEDITOR } from '../../../../services/RapidEditor/RapidEditor.js';
-import { FormattedMessage } from 'react-intl';
-import messages from './Messages.js';
+import BusySpinner from '../../../BusySpinner/BusySpinner.js'
 
 /**
  * Generate the initial URL hash for the Rapid editor.
@@ -66,8 +65,8 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       {isLoading && (
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.8)', zIndex: 1000 }}>
-          <FormattedMessage {...messages.loadingRapid} />
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+          <BusySpinner xlarge />
         </div>
       )}
       <iframe
