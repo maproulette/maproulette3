@@ -3,7 +3,8 @@
   <head>
     <meta charset='utf-8'>
     <!-- Adapted from Rapid's code examples at https://github.com/facebook/Rapid/tree/main/dist/examples -->
-    <title>Rapid</title>
+    <title>Rapid Editor</title>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.js'></script>
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.css'>
 
     <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'/>
@@ -25,16 +26,7 @@
     <div id='rapid-container'></div>
 
     <script>
-      const container = document.getElementById('rapid-container');
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.onload = setupRapid;
-      script.onerror = setupRapid;
-      script.src = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.js';
-
-      document.getElementsByTagName('head')[0].appendChild(script);
-
-      function setupRapid() {
+      function setupRapid(container) {
         if (typeof Rapid === 'undefined' || !Rapid.utilDetect().support) {
           container.innerHTML = 'Sorry, the Rapid editor does not support your web browser.';
           container.style.padding = '20px';
@@ -73,6 +65,9 @@
         window.rapidContext = context; // allow parent window to access context
         context.initAsync();
       }
+
+      const container = document.getElementById('rapid-container');
+      setupRapid(container);
     </script>
   </body>
 </html>
