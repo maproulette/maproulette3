@@ -13,7 +13,8 @@ jest.mock('../../../interactions/User/AsEndUser')
 const schema = {foo: "bar"}
 let basicState = null
 
-denormalize.mockImplementation((user, schema, entities) => user)
+// denormalize.mockImplementation((user, schema, entities) => user)
+denormalize.mockImplementation((user) => user)
 userDenormalizationSchema.mockImplementation(() => schema)
 
 const isLoggedIn = jest.fn()

@@ -12,7 +12,7 @@ let taskInBoundsCreated = null
 let taskInBoundsSkipped = null
 let taskOutOfBounds = null
 let clusteredTasks = null
-let WrappedComponent = null
+// let WrappedComponent = null
 
 beforeEach(() => {
   challenge = {id: 123}

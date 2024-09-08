@@ -7,7 +7,7 @@ import { setPreferences,
 
 let challengeId = null
 let challengePreferences = null
-let basicState = null
+// let basicState = null
 
 beforeEach(() => {
   challengeId = 123

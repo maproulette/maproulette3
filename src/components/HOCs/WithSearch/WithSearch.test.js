@@ -13,7 +13,7 @@ let basicState = null
 let WrappedComponent = null
 let WrappedChallengesComponent = null
 
-let SEARCH_NAME = 'challenges'
+// let SEARCH_NAME = 'challenges'
 
 beforeEach(() => {
   basicState = {
@@ -225,7 +225,8 @@ test("moving the map does perform new search if filtering within map bounds", ()
   const newState = _cloneDeep(basicState)
   newState.currentSearch.challenges.mapBounds = {bounds: [0,0,0,1]}
 
-  const didNewSearch = wrapper.instance().componentDidUpdate(newState)
+  // const didNewSearch = wrapper.instance().componentDidUpdate(newState)
+  wrapper.instance().componentDidUpdate(newState)
 
   //expect(didNewSearch).toBe(true)
 })
@@ -236,7 +237,8 @@ test("changing filters performs new search", () => {
   )
 
   const newState = {currentSearch: {challenges: {filters: {difficulty: 'easy'}}}}
-  const didNewSearch = wrapper.instance().componentDidUpdate(newState)
+  // const didNewSearch = wrapper.instance().componentDidUpdate(newState)
+  wrapper.instance().componentDidUpdate(newState)
 
   //expect(didNewSearch).toBe(true)
 })
