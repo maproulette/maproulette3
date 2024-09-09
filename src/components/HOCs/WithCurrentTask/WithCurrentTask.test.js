@@ -17,7 +17,6 @@ jest.mock('normalizr')
 jest.mock('../../../services/Task/Task')
 jest.mock('../../../services/Challenge/Challenge')
 
-// denormalize.mockImplementation((challenge, schema, entities) => challenge)
 denormalize.mockImplementation((challenge) => challenge)
 
 let task = null
@@ -78,7 +77,6 @@ test("mapStateToProps maps task from the taskId in the route", () => {
 
 test("mapDispatchToProps maps some functions", () => {
   const dispatch = jest.fn(() => Promise.resolve())
-  // const mappedProps = mapDispatchToProps(dispatch, {})
   mapDispatchToProps(dispatch, {})
 })
 

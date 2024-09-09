@@ -9,7 +9,6 @@ let challenges = null
 let WrappedComponent = null
 let history = null
 let match = null
-// let fetchTasks = null
 let loadChallenge = null
 let loadChallengeActions = null
 
@@ -54,7 +53,6 @@ beforeEach(() => {
     push: jest.fn(),
   }
 
-  // fetchTasks = jest.fn()
   loadChallenge = jest.fn()
   loadChallengeActions = jest.fn()
 
