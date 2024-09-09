@@ -6,7 +6,6 @@ import { fetchProjectChallenges }
 jest.mock('normalizr')
 jest.mock('../../../services/Challenge/Challenge')
 
-// denormalize.mockImplementation((project, schema, entities) => project)
 denormalize.mockImplementation((project) => project)
 
 let basicState = null

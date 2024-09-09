@@ -26,6 +26,7 @@ const project456 = {id: 456, grants: [readGrant456]}
 const project789 = {id: 789, grants: [adminGrant789]}
 const project101 = {id: 101, grants: [adminGrant101], owner: 987654321}
 const project102 = {id: 102, grants: [adminGrant102, writeGrant102, readGrant102]}
+// test needs to be added for this case:
 // const project103 = {id: 103, grants: []}
 
 const challenge123_1 = {id: 1231, parent: 123}

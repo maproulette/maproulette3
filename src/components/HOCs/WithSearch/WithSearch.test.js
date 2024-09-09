@@ -13,7 +13,7 @@ let basicState = null
 let WrappedComponent = null
 let WrappedChallengesComponent = null
 
-// let SEARCH_NAME = 'challenges'
+let SEARCH_NAME = 'challenges'
 
 beforeEach(() => {
   basicState = {
@@ -217,28 +217,62 @@ test("moving the map doesn't signal challenges updates if not filtering on map b
 })
 
 test("moving the map does perform new search if filtering within map bounds", () => {
-  basicState.searchFilters = {location: 'withinMapBounds'}
-  const wrapper = shallow(
-    <WrappedChallengesComponent {...basicState} />
-  )
+  const mockSearchFunction = jest.fn()
+  const WrappedComponent = _WithSearch(() => <div />, SEARCH_NAME, mockSearchFunction)
+  
+  const initialProps = {
+    currentSearch: {
+      challenges: {
+        filters: { location: 'withinMapBounds' },
+        mapBounds: { bounds: [0,0,0,0] }
+      }
+    },
+    searchFilters: { location: 'withinMapBounds' }
+  }
+  
+  const wrapper = shallow(<WrappedComponent {...initialProps} />)
 
-  const newState = _cloneDeep(basicState)
-  newState.currentSearch.challenges.mapBounds = {bounds: [0,0,0,1]}
+  const nextProps = {
+    ...initialProps,
+    currentSearch: {
+      challenges: {
+        ...initialProps.currentSearch.challenges,
+        mapBounds: { bounds: [0,0,0,1] }
+      }
+    }
+  }
 
-  // const didNewSearch = wrapper.instance().componentDidUpdate(newState)
-  wrapper.instance().componentDidUpdate(newState)
-
-  //expect(didNewSearch).toBe(true)
+  wrapper.setProps(nextProps)
+  
+  expect(mockSearchFunction).toHaveBeenCalledTimes(1)
+  expect(mockSearchFunction).toHaveBeenCalledWith(nextProps)
 })
 
 test("changing filters performs new search", () => {
-  const wrapper = shallow(
-    <WrappedChallengesComponent {...basicState} />
-  )
+  const mockSearchFunction = jest.fn()
+  const WrappedComponent = _WithSearch(() => <div />, SEARCH_NAME, mockSearchFunction)
+  
+  const initialProps = {
+    currentSearch: {
+      challenges: {
+        filters: { difficulty: 'hard' }
+      }
+    }
+  }
+  
+  const wrapper = shallow(<WrappedComponent {...initialProps} />)
 
-  const newState = {currentSearch: {challenges: {filters: {difficulty: 'easy'}}}}
-  // const didNewSearch = wrapper.instance().componentDidUpdate(newState)
-  wrapper.instance().componentDidUpdate(newState)
+  const nextProps = {
+    ...initialProps,
+    currentSearch: {
+      challenges: {
+        filters: { difficulty: 'easy' }
+      }
+    }
+  }
 
-  //expect(didNewSearch).toBe(true)
+  wrapper.setProps(nextProps)
+  
+  expect(mockSearchFunction).toHaveBeenCalledTimes(1)
+  expect(mockSearchFunction).toHaveBeenCalledWith(nextProps)
 })

@@ -12,7 +12,6 @@ jest.mock("../ViewTask/ViewTask", () => () => <div>ViewTask</div>);
 
 describe("TaskAnalysisTable", () => {
   it("doesn't break if given some basic props", () => {
-    // const { getByText, debug } = render(
     const { getByText } = render(
       <IntlProvider locale="en">
         <TaskAnalysisTable

@@ -19,8 +19,7 @@ beforeEach(() => {
 test("executeRouteSearch clears old redux values first", () => {
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?query=test"}}
-
-  // const wrapper = shallow(
+ 
   shallow(
     <WrappedComponent {...basicProps} />
   )
@@ -33,7 +32,6 @@ test("executeRouteSearch executes setSearch when passed query=", () => {
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?query=test"}}
 
-  // const wrapper = shallow(
   shallow(
     <WrappedComponent {...basicProps} />
   )
@@ -45,7 +43,6 @@ test("executeRouteSearch executes setSearchSort when passed sort=", () => {
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?sort=name"}}
 
-  // const wrapper = shallow(
   shallow(
     <WrappedComponent {...basicProps} />
   )
@@ -56,7 +53,6 @@ test("executeRouteSearch executes setSearchFilters when passed difficulty=", () 
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?difficulty=1"}}
 
-  // const wrapper = shallow(
   shallow(
     <WrappedComponent {...basicProps} />
   )
@@ -68,7 +64,6 @@ test("executeRouteSearch executes setKeywordFilter when passed keywords=", () =>
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?keywords=water,road"}}
 
-  // const wrapper = shallow(
   shallow(
     <WrappedComponent {...basicProps} />
   )
@@ -79,7 +74,6 @@ test("executeRouteSearch executes setSearchFilters when passed location=", () =>
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?location=in-bounds"}}
 
-  // const wrapper = shallow(
   shallow(
     <WrappedComponent {...basicProps} />
   )
@@ -90,7 +84,6 @@ test("executeRouteSearch executes setChallengeSearchMapBounds when passed challe
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?challengeSearch=1,2,3,4"}}
 
-  // const wrapper = shallow(
   shallow(
     <WrappedComponent {...basicProps} />
   )
