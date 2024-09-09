@@ -24,8 +24,6 @@ const routerHistory = createBrowserHistory();
 
 global.withProvider = (
   ui,
-  // initial state is another prop you can include in the tests, example implementation:
-  // { initialState, store = reduxStore, ...renderOptions } = {}
   { store = reduxStore, ...renderOptions } = {}
 ) => {
   function Wrapper({ children }) {
