@@ -19,8 +19,8 @@ beforeEach(() => {
 test("executeRouteSearch clears old redux values first", () => {
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?query=test"}}
-
-  const wrapper = shallow(
+ 
+  shallow(
     <WrappedComponent {...basicProps} />
   )
   expect(basicProps.clearSearchFilters).toHaveBeenCalled()
@@ -32,7 +32,7 @@ test("executeRouteSearch executes setSearch when passed query=", () => {
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?query=test"}}
 
-  const wrapper = shallow(
+  shallow(
     <WrappedComponent {...basicProps} />
   )
   expect(basicProps.setSearch).toHaveBeenCalledWith("test")
@@ -43,7 +43,7 @@ test("executeRouteSearch executes setSearchSort when passed sort=", () => {
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?sort=name"}}
 
-  const wrapper = shallow(
+  shallow(
     <WrappedComponent {...basicProps} />
   )
   expect(basicProps.setSearchSort).toHaveBeenCalledWith({"sortBy": "name"})
@@ -53,7 +53,7 @@ test("executeRouteSearch executes setSearchFilters when passed difficulty=", () 
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?difficulty=1"}}
 
-  const wrapper = shallow(
+  shallow(
     <WrappedComponent {...basicProps} />
   )
   expect(basicProps.setSearchFilters).toHaveBeenCalledWith({difficulty:1})
@@ -64,7 +64,7 @@ test("executeRouteSearch executes setKeywordFilter when passed keywords=", () =>
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?keywords=water,road"}}
 
-  const wrapper = shallow(
+  shallow(
     <WrappedComponent {...basicProps} />
   )
   expect(basicProps.setKeywordFilter).toHaveBeenCalledWith(["water", "road"])
@@ -74,7 +74,7 @@ test("executeRouteSearch executes setSearchFilters when passed location=", () =>
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?location=in-bounds"}}
 
-  const wrapper = shallow(
+  shallow(
     <WrappedComponent {...basicProps} />
   )
   expect(basicProps.setSearchFilters).toHaveBeenCalledWith({location: "in-bounds"})
@@ -84,7 +84,7 @@ test("executeRouteSearch executes setChallengeSearchMapBounds when passed challe
   const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?challengeSearch=1,2,3,4"}}
 
-  const wrapper = shallow(
+  shallow(
     <WrappedComponent {...basicProps} />
   )
   expect(basicProps.setChallengeSearchMapBounds).toHaveBeenCalledWith(

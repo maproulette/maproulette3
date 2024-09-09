@@ -68,7 +68,7 @@ describe('OSM Service Functions', () => {
       { xml: `<osm><unknown id="1"></unknown></osm>`, expectedLength: 1 },
     ]
     
-    testXMLResponses.forEach(({ xml, expectedLength }) => {
+    testXMLResponses.forEach(({ expectedLength }) => {
       test(`should resolve with XML response of length ${expectedLength}`, async () => {
         const emptyXML = '<osm></osm>'
         global.fetch.mockResolvedValueOnce({

@@ -161,8 +161,8 @@ describe("preparePriorityRuleGroupForForm", () => {
   let literalCommaFirstTagSavedRule = null
   let containsOperatorSavedRule = null
   let emptyOperatorSavedRule = null
-  let eqOperatorSavedRule = null
-  let lteOperatorSavedRule = null
+  // let eqOperatorSavedRule = null
+  // let lteOperatorSavedRule = null
 
   beforeEach(() => {
     equalsOperatorSavedRule = {
@@ -201,17 +201,17 @@ describe("preparePriorityRuleGroupForForm", () => {
       value: "thirdTag. ",
     }
 
-    eqOperatorSavedRule = {
-      type: "integer",
-      operator: "==",
-      value: "fourthTag.123",
-    }
+    // eqOperatorSavedRule = {
+    //   type: "integer",
+    //   operator: "==",
+    //   value: "fourthTag.123",
+    // }
 
-    lteOperatorSavedRule = {
-      type: "integer",
-      operator: "<=",
-      value: "fifthTag.456",
-    }
+    // lteOperatorSavedRule = {
+    //   type: "integer",
+    //   operator: "<=",
+    //   value: "fifthTag.456",
+    // }
 
     basicSavedGroup = {
       condition: 'AND',

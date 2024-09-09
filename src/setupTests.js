@@ -24,7 +24,7 @@ const routerHistory = createBrowserHistory();
 
 global.withProvider = (
   ui,
-  { initialState, store = reduxStore, ...renderOptions } = {}
+  { store = reduxStore, ...renderOptions } = {}
 ) => {
   function Wrapper({ children }) {
     return (

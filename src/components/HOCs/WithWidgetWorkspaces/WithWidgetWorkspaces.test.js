@@ -143,7 +143,7 @@ describe("WithWidgetWorkspaces", () => {
       )
     }
     const TestWrapped = WithWidgetWorkspaces(TestComponent, null, 'userDashboard', defaultDashboardSetup)
-    const {getByText} = global.withProvider(
+    global.withProvider(
       <TestWrapped
         history={{ location: { pathname: "", search: "" } }}
         getUserAppSetting={(state, obj) => state[obj]}

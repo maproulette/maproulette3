@@ -1,7 +1,6 @@
 import { sortChallenges } from './WithSortedChallenges'
 
 let basicProps = null
-let WrappedComponent = null
 let normalChallenge = null
 let featuredChallenge = null
 let savedChallenge = null

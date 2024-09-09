@@ -9,7 +9,7 @@ jest.mock('normalizr')
 jest.mock('../../../services/Challenge/ChallengeStatus/ChallengeStatus')
 jest.mock('../../../services/Task/Task')
 
-denormalize.mockImplementation((challenge, schema, entities) => challenge)
+denormalize.mockImplementation((challenge) => challenge)
 
 let basicState = null
 
