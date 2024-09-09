@@ -1,12 +1,7 @@
 import { Component } from 'react'
 import _get from 'lodash/get'
 import _find from 'lodash/find'
-import _isArray from 'lodash/isArray'
-import _isFinite from 'lodash/isFinite'
-import _each from 'lodash/each'
-import _map from 'lodash/map'
 import _omit from 'lodash/omit'
-import _assign from 'lodash/assign'
 import {
   generateWidgetId,
   nextAvailableConfigurationLabel,
@@ -39,6 +34,16 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
     state = {
       currentConfigurationId: null,
       defaultWorkspace: null
+    }
+
+    componentDidMount() {
+      if(this.props.user) {
+        const configurations = this.workspaceConfigurations()
+        const currentWorkspace = this.currentConfiguration(configurations)
+        if (!currentWorkspace) {
+          this.setState({ defaultWorkspace: this.setupWorkspace(defaultConfiguration)})
+        }
+      }
     }
 
     /**
@@ -90,7 +95,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
      * @private
      */
     workspaceConfigurationLabels = () => {
-      return _map(this.workspaceConfigurations(), 'label')
+      return Object.values(this.workspaceConfigurations()).map(conf => conf.label)
     }
 
     /**
@@ -100,9 +105,9 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
      * @private
      */
     completeWorkspaceConfiguration = initialWorkspace => {
-      let configuration = _assign({
+      let configuration = Object.assign({
         id: generateWidgetId(),
-        targets: _isArray(targets) ? targets : [targets], // store as array
+        targets: Array.isArray(targets) ? targets : [targets], // store as array
         cols: 12,
         rowHeight: 30,
         widgets: [],
@@ -112,7 +117,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
       // Generate a simple layout if none provided, with one widget per row
       if (configuration.layout.length === 0) {
         let nextY = 0
-        _each(configuration.widgets, widgetConf => {
+        configuration.widgets.forEach(widgetConf => {
           configuration.layout.push({
             i: generateWidgetId(),
             x: 0, y: nextY,
@@ -130,7 +135,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
       else {
         // A layout was provided. If heights and/or widths were omitted or don't meet
         // current minimums, fill them in from the widget descriptors
-        _each(configuration.layout, (widgetLayout, index) => {
+        configuration.layout.forEach((widgetLayout, index) => {
           if (!configuration.widgets || !configuration.widgets[index]) {
             return
           }
@@ -140,17 +145,17 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
             return
           }
 
-          if (!_isFinite(widgetLayout.w)) {
+          if (!Number.isFinite(widgetLayout.w)) {
             widgetLayout.w = descriptor.defaultWidth
           }
-          else if ((_isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth)) {
+          else if (Number.isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth) {
             widgetLayout.w = descriptor.minWidth
           }
 
-          if (!_isFinite(widgetLayout.h)) {
+          if (!Number.isFinite(widgetLayout.h)) {
             widgetLayout.h = descriptor.defaultHeight
           }
-          else if ((_isFinite(descriptor.minHeight) && widgetLayout.h < descriptor.minHeight)) {
+          else if (Number.isFinite(descriptor.minHeight) && widgetLayout.h < descriptor.minHeight) {
             widgetLayout.h = descriptor.minHeight
           }
         })
@@ -312,18 +317,11 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
      * there is no active configuration
      */
     currentConfiguration = configurations => {
-      let currentWorkspace =
+      const currentWorkspace =
         configurations[this.state.currentConfigurationId] ||
         _find(configurations, ({ active, isBroken }) => active && !isBroken) ||
         _find(configurations, ({ isBroken }) => !isBroken) ||
         this.state.defaultWorkspace
-    
-      if (!currentWorkspace) {
-        const defaultWorkspace = this.setupWorkspace(defaultConfiguration)
-        this.saveWorkspaceConfiguration(defaultWorkspace)
-        this.setState({ defaultWorkspace })
-        currentWorkspace = defaultWorkspace
-      }
     
       return currentWorkspace ? this.completeWorkspaceConfiguration(currentWorkspace) : null
     }
@@ -362,7 +360,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
         return (
           this.props.checkingLoginStatus ?
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
-           <BusySpinner />
+            <BusySpinner />
           </div> :
           ((this.props.match.path !== '/challenge/:challengeId/task/:taskId' && this.props.match.path !== '/task/:taskId') ?
           <SignIn {...this.props} /> :
