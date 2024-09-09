@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <!-- Adapted from Rapid's code examples at https://github.com/facebook/Rapid/tree/main/dist/examples -->
+    <title>Rapid Editor</title>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.js'></script>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/rapid.min.css'>
+
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'/>
+    <meta name='mobile-web-app-capable' content='yes'/>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'/>
+    <style type='text/css'>
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        /* disable elastic page bounce upon scroll */
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id='rapid-container'></div>
+
+    <script>
+      function setupRapid(container) {
+        if (typeof Rapid === 'undefined' || !Rapid.utilDetect().support) {
+          container.innerHTML = 'Sorry, the Rapid editor does not support your web browser.';
+          container.style.padding = '20px';
+          return;
+        }
+
+        // Get the token passed in from the parent window. May be null in dev mode.
+        const params = new URLSearchParams(document.location.hash.slice(1));
+        const token = params.get('token');
+        params.delete('token');
+        document.location.hash = params.toString();
+
+        // Create and configure the main editor Context
+        const context = new Rapid.Context();
+        context.containerNode = container;
+        context.assetPath = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2/dist/';
+
+        if (token) {
+          context.preauth =  {
+            // TODO: use REACT_APP_OSM_SERVER and REACT_APP_OSM_API_SERVER here?
+            // Although Rapid also hardcodes these URLs internally. See:
+            // https://github.com/facebook/Rapid/issues/1341
+            // ...probably best to match those for now (weird bugs will occur otherwise)
+            url: 'https://www.openstreetmap.org',
+            apiUrl: 'https://api.openstreetmap.org',
+            access_token: token,
+          };
+          context.apiConnections = [context.preauth];
+        } else {
+          console.warn(
+            "MapRoulette has initialized the Rapid iframe without an OSM API access token; "
+            + "this should only happen in dev mode."
+          );
+        }
+
+        window.rapidContext = context; // allow parent window to access context
+        context.initAsync();
+      }
+
+      const container = document.getElementById('rapid-container');
+      setupRapid(container);
+    </script>
+  </body>
+</html>
