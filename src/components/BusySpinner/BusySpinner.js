@@ -1,42 +1,56 @@
-import { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import './BusySpinner.scss'
 
 /**
- * BusySpinner displays a simple busy spinner. By default it's shown centered
+ * BusySpinner displays a simple busy spinner. By default, it's shown centered
  * in a block, but the `inline` prop can be given to display it inline.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class BusySpinner extends Component {
-  render() {
-    return (
-      <div className={classNames('busy-spinner', {
-                                   'has-centered-children': this.props.inline !== true,
-                                   'inline': this.props.inline,
-                                 }, this.props.className)}>
-        <SvgSymbol
-          sym="spinner-icon"
-          className={classNames(
-            {
-              "mr-w-5 mr-h-5": !this.props.big && !this.props.xlarge,
-              "mr-w-10 mr-h-10": this.props.big,
-              "mr-w-16 mr-h-16": this.props.xlarge,
-              "mr-fill-green-lighter": !this.props.lightMode && !this.props.mapMode,
-              "mr-fill-green-light": this.props.lightMode,
-              "mr-fill-grey": this.props.mapMode,
-            }
-          )}
-          viewBox="0 0 20 20"
-        />
-      </div>
-    )
-  }
+
+const BusySpinner = ({ inline, big, xlarge, lightMode, mapMode, className }) => {
+  const sizeClass = big ? 'size-medium' : xlarge ? 'size-large' : 'size-small';
+  const colorClass = lightMode ? 'color-dark' : mapMode ? 'color-grey' : 'color-light';
+
+  return (
+    <div
+      className={classNames('busy-spinner', {
+        'has-centered-children': !inline,
+        'inline': inline,
+      }, className)}
+      aria-live="polite"
+      aria-busy="true" 
+    >
+      <div
+        className={classNames(
+          'spinner',
+          sizeClass,
+          colorClass
+        )}
+      />
+    </div>
+  );
 }
 
 BusySpinner.propTypes = {
   /** display spinner inline, as opposed to a centered block */
   inline: PropTypes.bool,
+  big: PropTypes.bool,
+  xlarge: PropTypes.bool,
+  lightMode: PropTypes.bool,
+  mapMode: PropTypes.bool,
+  className: PropTypes.string,
 }
+
+BusySpinner.defaultProps = {
+  inline: false,
+  big: false,
+  xlarge: false,
+  lightMode: false,
+  mapMode: false,
+  className: '',
+}
+
+export default BusySpinner

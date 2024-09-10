@@ -3,10 +3,52 @@
 .busy-spinner {
   &.inline {
     display: inline-block;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 0 5px;
   }
 
-  .busy-spinner-icon {
+  .spinner {
+    border-radius: 50%;
+    border-top: solid;
+    border-color: transparent;
+    animation: spin 1.2s linear infinite;
+
+    &.size-small {
+      width: 20px;
+      height: 20px;
+      border-width: 2px;
+    }
+    &.size-medium {
+      width: 40px;
+      height: 40px;
+      border-width: 3px;
+    }
+    &.size-large {
+      width: 60px;
+      height: 60px;
+      border-width: 6px;
+    }
+    &.color-light {
+      border-top-color:  $green-neon;
+    }
+    &.color-dark {
+      border-top-color:  $green;
+    }
+    &.color-grey {
+      border-top-color: $grey;
+    }
   }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.has-centered-children { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+.inline { 
+  display: inline-flex; 
 }
