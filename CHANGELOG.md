@@ -7,6 +7,34 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.10] - 2024-9-10
+Released with [maproulette-backend_v4.5.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.5)
+
+## What's Changed
+* fix empy mr tag bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2413
+* fix infinite loader on user dashboard by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2428
+* Fix bug when fetching user metrics for dashboard header by @jake-low in https://github.com/maproulette/maproulette3/pull/2411
+* resolve ResizeMap errors by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2416
+* revert "Fix the editor overwrite bug." commit by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2418
+* fix pickEditor undefined bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2419
+* Fix infinite loop for users without a widget layout by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2427
+* Prevent OSM/external ID updates in challenge edit forms by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2423
+* Refresh challenge on rebuild by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2422
+* Fix tag widget rendering bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2420
+* Show owner name on challenge and project pages by @jake-low in https://github.com/maproulette/maproulette3/pull/2429
+* Migrate to new ESLint config format and fix some lint errors by @jake-low in https://github.com/maproulette/maproulette3/pull/2412
+* Resolve setState error on user dashboard by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2431
+* Bump micromatch from 4.0.5 to 4.0.8 by dependabot in https://github.com/maproulette/maproulette3/pull/2425
+* Bump webpack from 5.89.0 to 5.94.0 by dependabot in https://github.com/maproulette/maproulette3/pull/2424
+* Refactor Rapid integration to load the editor in an iframe by @jake-low https://github.com/maproulette/maproulette3/pull/2403
+
+
+## MR2 Changes
+* Fix deleted parent filter by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1135
+* add test and prevent null values on task name setup by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1147
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.9...v3.15.10
+
 ## [v3.15.9] - 2024-8-13
 Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
 
