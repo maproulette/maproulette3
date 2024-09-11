@@ -36,8 +36,12 @@
         // Get the token passed in from the parent window. May be null in dev mode.
         const params = new URLSearchParams(document.location.hash.slice(1));
         const token = params.get('token');
-        params.delete('token');
-        document.location.hash = params.toString();
+        // FIXME: can't safely delete the token from the string because
+        // URLSearchParams.toString() mangles spaces ("%20" becomes "+").
+        // So I guess we'll just leave it in and hope that Rapid doesn't
+        // mind an unexpected parameter.
+        // params.delete('token');
+        // document.location.hash = params.toString();
 
         // Create and configure the main editor Context
         const context = new Rapid.Context();
