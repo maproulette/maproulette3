@@ -86,49 +86,48 @@ export const TaskMapContainer = (props) => {
   const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
   const [shouldAnimate, setShouldAnimate] = useState(true);
 
-  const taskFeatures = () => {
-    if (_get(props, 'taskBundle.tasks.length', 0) > 0) {
-      return featureCollection(
-        _flatten(_compact(_map(props.taskBundle.tasks,
-                               task => _get(task, 'geometries.features'))))
-      ).features
-    }
-
-    // If current OSM data is available, show the feature's current OSM tags
-    // instead of those bundled with the GeoJSON. We preserve any simplestyle
-    // properties, allowing display colors and what not to be customized
-    if (_get(props, 'osmElements.size', 0) > 0) {
-      return AsMappableTask(props.task).featuresWithTags(
-        _get(props.task, 'geometries.features'),
-        props.osmElements,
-        true,
-        supportedSimplestyles,
-      )
-    }
-
-    return _get(props.task, 'geometries.features')
-  }
-  const features = taskFeatures()
   const animator = new MapAnimator()
 
-  useMapEvents({
-    moveend: () => {
-      if (props.task.id !== props.completingTask) {
-        const bounds = map.getBounds()
-        const zoom = map.getZoom()
-        props.setTaskMapBounds(props.task.id, bounds, zoom, false)
-        if (props.setWorkspaceContext) {
-          props.setWorkspaceContext({
-            taskMapTask: props.task,
-            taskMapBounds: bounds,
-            taskMapZoom: zoom
-          })
-        }
-      }
-    },
-  })
+  useEffect(() => {
+    props.activateKeyboardShortcutGroup(
+      _pick(props.keyboardShortcutGroups, shortcutGroup),
+      handleKeyboardShortcuts
+    );
+  
+    loadMapillaryIfNeeded();
+    loadOpenStreetCamIfNeeded();
+    generateDirectionalityMarkers();
+    animator.setAnimationFunction(animateFeatures)
+    setShouldAnimate(true)
 
-  /** Process keyboard shortcuts for the layers */
+    map.on('click', handleMapClick)
+  
+    return () => {
+      props.deactivateKeyboardShortcutGroup(shortcutGroup, handleKeyboardShortcuts);
+      animator.reset()
+      map.off('click', handleMapClick)
+    };
+  }, []);
+
+  useEffect(() => {
+    generateDirectionalityMarkers();
+  }, [props.task.geometries]);
+
+  useEffect(() => {
+    deactivateOSMDataLayer()
+    generateDirectionalityMarkers();
+  }, [props.task.id]);
+
+  useEffect(() => {
+    if (features.length !== 0) {
+      const layerGroup = L.featureGroup(
+        features.map(feature => L.geoJSON(feature))
+      );
+      map.fitBounds(layerGroup.getBounds().pad(0.2));
+    }
+    setShouldAnimate(true)
+  }, [props.taskBundle, props.taskId]);
+
   const handleKeyboardShortcuts = event => {
     // Ignore if shortcut group is not active
     if (_isEmpty(props.activeKeyboardShortcuts[shortcutGroup])) {
@@ -159,19 +158,11 @@ export const TaskMapContainer = (props) => {
     }
   }
 
-  /**
-   * Invoked by LayerToggle when the user wishes to toggle visibility of
-   * task features on or off.
-   */
   const toggleTaskFeatureVisibility = () => {
     setShowTaskFeatures(prevState => !prevState);
     setShouldAnimate(true)
   }
 
-  /**
-   * Invoked by LayerToggle when the user wishes to toggle visibility of
-   * OSM data on or off.
-   */
   const toggleOSMDataVisibility = () => {
     if (!showOSMData && !osmData && !osmDataLoading) {
       setOsmDataLoading(true)
@@ -193,19 +184,12 @@ export const TaskMapContainer = (props) => {
     setShowOSMElements(newShowOSMElements)
   }
 
-  /**
-   * Ensures the OSM Data Layer is deactivated
-   */
   const deactivateOSMDataLayer = () => {
     setShowOSMData(false)
     setOsmData(null)
     setOsmDataLoading(false)
   }
 
-  /**
-   * Invoked by LayerToggle when the user wishes to toggle visibility of
-   * Mapillary markers on or off.
-   */
   const toggleMapillaryVisibility = async () => {
     const isVirtual = _isFinite(props.virtualChallengeId)
     const challengeId = isVirtual ? props.virtualChallengeId :
@@ -225,9 +209,6 @@ export const TaskMapContainer = (props) => {
     }
   }
 
-  /**
-   * Reloads the task data with mapillary image info requested if needed
-   */
   const loadMapillaryIfNeeded = async () => {
     // If we're supposed to show mapillary images but don't have them for
     // this task, go ahead and fetch them
@@ -242,10 +223,6 @@ export const TaskMapContainer = (props) => {
     }
   }
 
-  /**
-   * Invoked by LayerToggle when the user wishes to toggle visibility of
-   * OpenStreetCam markers on or off.
-   */
   const toggleOpenStreetCamVisibility = async () => {
     const isVirtual = _isFinite(props.virtualChallengeId)
     const challengeId = isVirtual ? props.virtualChallengeId :
@@ -265,9 +242,6 @@ export const TaskMapContainer = (props) => {
     }
   }
 
-  /**
-   * Reloads the task data with OpenStreetCam image info requested if needed
-   */
   const loadOpenStreetCamIfNeeded = async () => {
     // If we're supposed to show openStreetCam images but don't have them for
     // this task, go ahead and fetch them
@@ -282,11 +256,7 @@ export const TaskMapContainer = (props) => {
     }
   }
 
-   /**
-   * Determines if a click was within a marker's icon, which could potentially
-   * extend far beyond our PIXEL_MARGIN from the marker's represened point
-   */
-    const isClickOnMarker = (clickPolygon, marker) => {
+  const isClickOnMarker = (clickPolygon, marker) => {
     const icon = marker.getIcon()
     const iconOptions = Object.assign({}, Object.getPrototypeOf(icon).options, icon.options)
     const markerPoint = map.containerPointToLayerPoint(
@@ -311,11 +281,6 @@ export const TaskMapContainer = (props) => {
     return !booleanDisjoint(clickBounds, markerPolygon)
   }
 
-
-  /**
-   * Return bounding polygon centered around clicked layer point, with
-   * PIXEL_MARGIN on each side of the point
-   */
   const getClickPolygon = clickEvent => {
     const center = clickEvent.layerPoint
     const nw = map.layerPointToLatLng(new Point(center.x - PIXEL_MARGIN, center.y - PIXEL_MARGIN))
@@ -323,11 +288,6 @@ export const TaskMapContainer = (props) => {
     return bboxPolygon([nw.lng, se.lat, se.lng, nw.lat])
   }
 
-  
-  /**
-   * Returns a promise that resolves to the full length of the SVG path once it
-   * has finished rendering.
-   */
   const pathComplete = (path, priorLength, subsequentCheck = false) => {
     return new Promise(resolve => {
       const currentLength = path.getTotalLength()
@@ -342,11 +302,6 @@ export const TaskMapContainer = (props) => {
     })
   }
 
-  /**
-   * Performs simple animation of SVG paths and markers to provide a visual cue
-   * to the user that new paths/markers have been rendered on the map, and to
-   * call attention to them.
-   */
   const animateFeatures = () => {
     // Animate paths
     const paths = document.querySelectorAll('.task-map .leaflet-pane path.leaflet-interactive')
@@ -380,39 +335,35 @@ export const TaskMapContainer = (props) => {
     }
   }
 
-/**
-   * Simple sorting of multiple related feature layers (such as all in a single map
-   * layer) by geometry type into order of: points, lineStrings, surrounded polygons,
-   * surrounding polygons. Each layer should be an object with a `geometry` field
-   */
-const orderedFeatureLayers = (layers) => {
-  if (!layers || layers.length < 2) {
-    return layers // nothing to do
+  const orderedFeatureLayers = (layers) => {
+    if (!layers || layers.length < 2) {
+      return layers // nothing to do
+    }
+
+    // We'll process polygons separately
+    const geometryOrder = ['Point', 'MultiPoint', 'LineString', 'MultiLineString']
+    const orderedLayers = _sortBy(
+      _filter(layers, l => geometryOrder.indexOf(l.geometry.type) !== -1), // no polygons yet
+      l => geometryOrder.indexOf(l.geometry.type)
+    )
+
+    // Now order any polygons by number of enclosing polygons, so enclosed will come
+    // before enclosing
+    const polygonLayers = _filter(layers, l => l.geometry.type === 'Polygon' || l.geometry.type === 'MultiPolygon')
+    const orderedPolygons = polygonLayers.length < 2 ? polygonLayers : _sortBy(
+      polygonLayers,
+      l => _reduce(
+        polygonLayers,
+        (count, other) => {
+          return booleanContains(other.geometry, l.geometry) ? count + 1 : count
+        },
+        0
+      )
+    ).reverse()
+
+    return orderedLayers.concat(orderedPolygons)
   }
 
-  // We'll process polygons separately
-  const geometryOrder = ['Point', 'MultiPoint', 'LineString', 'MultiLineString']
-  const orderedLayers = _sortBy(
-    _filter(layers, l => geometryOrder.indexOf(l.geometry.type) !== -1), // no polygons yet
-    l => geometryOrder.indexOf(l.geometry.type)
-  )
-
-  // Now order any polygons by number of enclosing polygons, so enclosed will come
-  // before enclosing
-  const polygonLayers = _filter(layers, l => l.geometry.type === 'Polygon' || l.geometry.type === 'MultiPolygon')
-  const orderedPolygons = polygonLayers.length < 2 ? polygonLayers : _sortBy(
-    polygonLayers,
-    l => _reduce(
-      polygonLayers,
-      (count, other) => {
-        return booleanContains(other.geometry, l.geometry) ? count + 1 : count
-      },
-      0
-    )
-  ).reverse()
-
-  return orderedLayers.concat(orderedPolygons)
-}
   const popupLayerSelectionList = (layers, latlng) => {
     const contentElement = document.createElement('div')
     ReactDOM.render(
@@ -444,111 +395,74 @@ const orderedFeatureLayers = (layers) => {
     }).setLatLng(latlng).setContent(contentElement).openOn(map)
   }
 
-  useEffect(() => {
-    props.activateKeyboardShortcutGroup(
-      _pick(props.keyboardShortcutGroups, shortcutGroup),
-      handleKeyboardShortcuts
-    );
-  
-    loadMapillaryIfNeeded();
-    loadOpenStreetCamIfNeeded();
-    generateDirectionalityMarkers();
-    animator.setAnimationFunction(animateFeatures)
-    setShouldAnimate(true)
-
-    map.on('click', e => {
-      const clickBounds = getClickPolygon(e)
-      const candidateLayers = new Map()
-      map.eachLayer(layer => {
-        if (!_isEmpty(layer._layers)) {
-          // multiple features in a layer could match. Detect them and then
-          // put them into an intuitive order
-          const intraLayerMatches = []
-          _each(layer._layers, featureLayer => {
-            if (featureLayer.toGeoJSON) {
-              const featureGeojson = featureLayer.toGeoJSON()
-              // Look for an overlap between the click and the feature. However, since marker
-              // layers are represented by an icon (which could extend far beyond the feature
-              // plus our usual pixel margin), check for a click on the marker itself as well
-              if ((featureLayer.getIcon && isClickOnMarker(clickBounds, featureLayer)) ||
-                  !booleanDisjoint(clickBounds, featureGeojson)) {
-                const featureId = AsIdentifiableFeature(featureGeojson).normalizedTypeAndId()
-                const featureName = _get(featureGeojson, 'properties.name')
-                let layerDescription =
-                  (featureLayer.options.mrLayerLabel || '') + (featureId ? `: ${featureId}` : '')
-                if (!layerDescription) {
-                  // worst case, fall back to a layer id (ours, preferably, or leaflet's)
-                  layerDescription = `Layer ${featureLayer.mrLayerId || featureLayer._leaflet_id}`
-                }
-
-                const layerLabel = featureName ? (
-                  <React.Fragment>
-                    <div>{layerDescription}</div>
-                    <div className="mr-text-grey-light mr-text-xs">{featureName}</div>
-                  </React.Fragment>
-                ) : layerDescription
-
-                intraLayerMatches.push({
-                  mrLayerId: featureLayer.options.mrLayerId,
-                  description: layerDescription,
-                  label: layerLabel,
-                  geometry: featureGeojson,
-                  layer: featureLayer,
-                })
+  const handleMapClick = (e) => {
+    const clickBounds = getClickPolygon(e)
+    const candidateLayers = new Map()
+    map.eachLayer(layer => {
+      if (!_isEmpty(layer._layers)) {
+        // multiple features in a layer could match. Detect them and then
+        // put them into an intuitive order
+        const intraLayerMatches = []
+        _each(layer._layers, featureLayer => {
+          if (featureLayer.toGeoJSON) {
+            const featureGeojson = featureLayer.toGeoJSON()
+            // Look for an overlap between the click and the feature. However, since marker
+            // layers are represented by an icon (which could extend far beyond the feature
+            // plus our usual pixel margin), check for a click on the marker itself as well
+            if ((featureLayer.getIcon && isClickOnMarker(clickBounds, featureLayer)) ||
+                !booleanDisjoint(clickBounds, featureGeojson)) {
+              const featureId = AsIdentifiableFeature(featureGeojson).normalizedTypeAndId()
+              const featureName = _get(featureGeojson, 'properties.name')
+              let layerDescription =
+                (featureLayer.options.mrLayerLabel || '') + (featureId ? `: ${featureId}` : '')
+              if (!layerDescription) {
+                // worst case, fall back to a layer id (ours, preferably, or leaflet's)
+                layerDescription = `Layer ${featureLayer.mrLayerId || featureLayer._leaflet_id}`
               }
+
+              const layerLabel = featureName ? (
+                <React.Fragment>
+                  <div>{layerDescription}</div>
+                  <div className="mr-text-grey-light mr-text-xs">{featureName}</div>
+                </React.Fragment>
+              ) : layerDescription
+
+              intraLayerMatches.push({
+                mrLayerId: featureLayer.options.mrLayerId,
+                description: layerDescription,
+                label: layerLabel,
+                geometry: featureGeojson,
+                layer: featureLayer,
+              })
             }
-          })
-
-          if (intraLayerMatches.length > 0) {
-            orderedFeatureLayers(intraLayerMatches).forEach(match => {
-              candidateLayers.set(match.description, match)
-            })
           }
-        }
-      })
-
-      if (candidateLayers.size === 1) {
-        candidateLayers.values().next().value.layer.fire('mr-external-interaction', {
-          map: map,
-          latlng: e.latlng,
         })
-      }
-      else if (candidateLayers.size > 1) {
-        let layers = [...candidateLayers.entries()]
-        if (props.overlayOrder && props.overlayOrder.length > 0) {
-          layers = _sortBy(layers, layerEntry => {
-            const position = props.overlayOrder.indexOf(layerEntry[1].mrLayerId)
-            return position === -1 ? Number.MAX_SAFE_INTEGER : position
+
+        if (intraLayerMatches.length > 0) {
+          orderedFeatureLayers(intraLayerMatches).forEach(match => {
+            candidateLayers.set(match.description, match)
           })
         }
-        popupLayerSelectionList(layers, e.latlng)
       }
     })
-  
-    return () => {
-      props.deactivateKeyboardShortcutGroup(shortcutGroup, handleKeyboardShortcuts);
-      animator.reset()
-    };
-  }, []);
 
-  useEffect(() => {
-    generateDirectionalityMarkers();
-  }, [props.task.geometries]);
-
-  useEffect(() => {
-    deactivateOSMDataLayer()
-    generateDirectionalityMarkers();
-  }, [props.task.id]);
-
-  useEffect(() => {
-    if (features.length !== 0) {
-      const layerGroup = L.featureGroup(
-        features.map(feature => L.geoJSON(feature))
-      );
-      map.fitBounds(layerGroup.getBounds().pad(0.2));
+    if (candidateLayers.size === 1) {
+      candidateLayers.values().next().value.layer.fire('mr-external-interaction', {
+        map: map,
+        latlng: e.latlng,
+      })
     }
-    setShouldAnimate(true)
-  }, [props.taskBundle, props.taskId]);
+    else if (candidateLayers.size > 1) {
+      let layers = [...candidateLayers.entries()]
+      if (props.overlayOrder && props.overlayOrder.length > 0) {
+        layers = _sortBy(layers, layerEntry => {
+          const position = props.overlayOrder.indexOf(layerEntry[1].mrLayerId)
+          return position === -1 ? Number.MAX_SAFE_INTEGER : position
+        })
+      }
+      popupLayerSelectionList(layers, e.latlng)
+    }
+  }
 
   const mapillaryImageMarkers = () => {
     return {
@@ -648,20 +562,71 @@ const orderedFeatureLayers = (layers) => {
       />
     )
   }
-    const maxZoom = _get(props.task, "parent.maxZoom", MAX_ZOOM)
-    const renderId = _uniqueId()
+
+  const sortOverlayLayers = (layers) => {
     let overlayOrder = props.getUserAppSetting(props.user, 'mapOverlayOrder')
     if (_isEmpty(overlayOrder)) {
       overlayOrder = DEFAULT_OVERLAY_ORDER
     }
 
-    animator.reset()
-
-    if (!props.task || !_isObject(props.task.parent)) {
-      return <BusySpinner />
+    // Sort the overlays according to the user's preferences. We then reverse
+    // that order because the layer rendered on the map last will be on top
+    if (overlayOrder && overlayOrder.length > 0) {
+      return _sortBy(layers, layer => {
+        const position = overlayOrder.indexOf(layer.id)
+        return position === -1 ? Number.MAX_SAFE_INTEGER : position
+      }).reverse()
     }
 
-    let overlayLayers = buildLayerSources(
+    return layers
+  }
+
+  const maxZoom = _get(props.task, "parent.maxZoom", MAX_ZOOM)
+  const renderId = _uniqueId()
+
+  const taskFeatures = () => {
+    if (_get(props, 'taskBundle.tasks.length', 0) > 0) {
+      return featureCollection(
+        _flatten(_compact(_map(props.taskBundle.tasks,
+                               task => _get(task, 'geometries.features'))))
+      ).features
+    }
+
+    // If current OSM data is available, show the feature's current OSM tags
+    // instead of those bundled with the GeoJSON. We preserve any simplestyle
+    // properties, allowing display colors and what not to be customized
+    if (_get(props, 'osmElements.size', 0) > 0) {
+      return AsMappableTask(props.task).featuresWithTags(
+        _get(props.task, 'geometries.features'),
+        props.osmElements,
+        true,
+        supportedSimplestyles,
+      )
+    }
+
+    return _get(props.task, 'geometries.features')
+  }
+  const features = taskFeatures()
+
+  const taskFeatureLayer = useMemo(() => {
+    return {
+      id: "task-features",
+      component: (
+        <TaskFeatureLayer
+          key="task-features"
+          mrLayerId="task-features"
+          features={applyStyling(features)}
+          animator={animator}
+          shouldAnimate={shouldAnimate}
+          setShouldAnimate={setShouldAnimate}
+          externalInteractive
+        />
+      )
+    }
+  }, [features, props.challenge.taskStyles, shouldAnimate]);
+
+  const overlayLayers = useMemo(() => {
+    let layers = buildLayerSources(
       props.visibleOverlays, _get(props, 'user.settings.customBasemaps'),
       (layerId, index, layerSource) => ({
         id: layerId,
@@ -669,37 +634,20 @@ const orderedFeatureLayers = (layers) => {
       })
     )
 
-    const taskFeatureLayer = useMemo(() => {
-      return {
-        id: "task-features",
-        component: (
-          <TaskFeatureLayer
-            key="task-features"
-            mrLayerId="task-features"
-            features={applyStyling(features)}
-            animator={animator}
-            shouldAnimate={shouldAnimate}
-            setShouldAnimate={setShouldAnimate}
-            externalInteractive
-          />
-        )
-      }
-    }, [features, props.challenge.taskStyles, shouldAnimate]);
-
     if (showTaskFeatures) {
-      overlayLayers.push(taskFeatureLayer);
+      layers.push(taskFeatureLayer);
     }
 
     if (props.showMapillaryLayer) {
-      overlayLayers.push(mapillaryImageMarkers())
+      layers.push(mapillaryImageMarkers())
     }
 
     if (props.showOpenStreetCamLayer) {
-      overlayLayers.push(openStreetCamImageMarkers())
+      layers.push(openStreetCamImageMarkers())
     }
 
     if (showOSMData && osmData) {
-      overlayLayers.push({
+      layers.push({
         id: "osm-data",
         component: (
           <OSMDataLayer
@@ -716,68 +664,48 @@ const orderedFeatureLayers = (layers) => {
     }
 
     if (showTaskFeatures && !_isEmpty(directionalityIndicators)) {
-      overlayLayers.push(directionalityIndicators)
+      layers.push(directionalityIndicators)
     }
 
-    // Sort the overlays according to the user's preferences. We then reverse
-    // that order because the layer rendered on the map last will be on top
-    if (overlayOrder && overlayOrder.length > 0) {
-      overlayLayers = _sortBy(overlayLayers, layer => {
-        const position = overlayOrder.indexOf(layer.id)
-        return position === -1 ? Number.MAX_SAFE_INTEGER : position
-      }).reverse()
-    }
+    return sortOverlayLayers(layers)
+  }, [showTaskFeatures, props.showMapillaryLayer, props.showOpenStreetCamLayer, showOSMData, osmData, directionalityIndicators])
 
-    // Note: we need to also pass maxZoom to the tile layer (in addition to the
-    // map), or else leaflet won't autoscale if the zoom goes beyond the
-    // capabilities of the layer.
-
-    return (
-      <div className={classNames("task-map task", {"full-screen-map": props.isMobile})}>
-        <LayerToggle
-          {...props}
-          showTaskFeatures={showTaskFeatures}
-          toggleTaskFeatures={toggleTaskFeatureVisibility}
-          showOSMData={showOSMData}
-          toggleOSMData={toggleOSMDataVisibility}
-          showOSMElements={showOSMElements}
-          toggleOSMElements={toggleOSMElements}
-          osmDataLoading={osmDataLoading}
-          toggleMapillary={props.isMapillaryEnabled() ? toggleMapillaryVisibility : undefined}
-          showMapillary={props.showMapillaryLayer}
-          mapillaryCount={_get(props, 'mapillaryImages.length', 0)}
-          toggleOpenStreetCam={props.isOpenStreetCamEnabled() ? toggleOpenStreetCamVisibility : undefined}
-          showOpenStreetCam={props.showOpenStreetCamLayer}
-          openStreetCamCount={_get(props, 'openStreetCamImages.length', 0)}
-          overlayOrder={overlayOrder}
-        />
-        <ZoomControl position='topright' />
-        <FitBoundsControl features={features} />
-        <SourcedTileLayer maxZoom={maxZoom} {...props} />
-        {_map(overlayLayers, (layer, index) => (
-          <Pane
-          key={`pane-${index}`}
-          name={`pane-${index}`}
-          style={{zIndex: 10 + index}}
-            className="custom-pane"
-          >
-            {layer.component}
-          </Pane>
-        ))}
-
-        {mapillaryViewerImage && renderMapillaryViewer()}
-
-        {openStreetCamViewerImage &&
-         <OpenStreetCamViewer
-            key={Date.now()}
-            images={props.openStreetCamImages}
-            initialImageKey={openStreetCamViewerImage}
-            onClose={() => setOpenStreetCamViewerImage(null)}
-         />
-        }
-      </div>
-    )
+  if (!props.task || !_isObject(props.task.parent)) {
+    return <BusySpinner />
   }
+
+  return (
+    <div className={classNames("task-map task", {"full-screen-map": props.isMobile})}>
+      <LayerToggle
+        {...props}
+        showTaskFeatures={showTaskFeatures}
+        toggleTaskFeatures={toggleTaskFeatureVisibility}
+        showOSMData={showOSMData}
+        toggleOSMData={toggleOSMDataVisibility}
+        showOSMElements={showOSMElements}
+        toggleOSMElements={toggleOSMElements}
+        osmDataLoading={osmDataLoading}
+        toggleMapillary={props.isMapillaryEnabled() ? toggleMapillaryVisibility : undefined}
+        showMapillary={props.showMapillaryLayer}
+        mapillaryCount={_get(props, 'mapillaryImages.length', 0)}
+        toggleOpenStreetCam={props.isOpenStreetCamEnabled() ? toggleOpenStreetCamVisibility : undefined}
+        showOpenStreetCam={props.showOpenStreetCamLayer}
+        openStreetCamCount={_get(props, 'openStreetCamImages.length', 0)}
+        overlayOrder={props.getUserAppSetting(props.user, 'mapOverlayOrder')}
+      />
+      <ZoomControl position='topright' />
+      <FitBoundsControl features={features} />
+      <SourcedTileLayer maxZoom={maxZoom} {...props} />
+      {overlayLayers.map((layer, index) => (
+        <Pane key={`pane-${index}`} name={`pane-${index}`} style={{zIndex: 10 + index}} className="custom-pane">
+          {layer.component}
+        </Pane>
+      ))}
+      {mapillaryViewerImage && renderMapillaryViewer()}
+      {openStreetCamViewerImage && <OpenStreetCamViewer key={Date.now()} images={props.openStreetCamImages} initialImageKey={openStreetCamViewerImage} onClose={() => setOpenStreetCamViewerImage(null)} />}
+    </div>
+  )
+}
 
 const TaskMap = (props) => {
   const ResizeMap = () => {
