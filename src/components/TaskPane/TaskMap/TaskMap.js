@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { ZoomControl, LayerGroup, Pane, MapContainer, useMap, useMapEvents, AttributionControl } from 'react-leaflet'
@@ -7,7 +8,7 @@ import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
 import _isObject from 'lodash/isObject'
 import _uniqueId from 'lodash/uniqueId'
-import L from 'leaflet'
+import L, { Point } from 'leaflet'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
@@ -18,6 +19,9 @@ import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
 import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
+import _filter from 'lodash/filter'
+import _reduce from 'lodash/reduce'
+import _omit from 'lodash/omit'
 import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
        from '../../../services/VisibleLayer/LayerSources'
 import DirectionalIndicationMarker
@@ -53,7 +57,14 @@ import { supportedSimplestyles }
        from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import './TaskMap.scss'
-
+import booleanDisjoint from '@turf/boolean-disjoint'
+import bboxPolygon from '@turf/bbox-polygon'
+import AsIdentifiableFeature from '../../../interactions/TaskFeature/AsIdentifiableFeature'
+import booleanContains from '@turf/boolean-contains'
+import messages from './Messages'
+import { IntlProvider } from 'react-intl'
+import PropertyList from '../../EnhancedMap/PropertyList/PropertyList'
+const PIXEL_MARGIN = 10
 const shortcutGroup = 'layers'
 
 /**
@@ -73,6 +84,8 @@ export const TaskMapContainer = (props) => {
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null)
   const [directionalityIndicators, setDirectionalityIndicators] = useState({})
   const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
+  const [shouldAnimate, setShouldAnimate] = useState(true);
+
   const taskFeatures = () => {
     if (_get(props, 'taskBundle.tasks.length', 0) > 0) {
       return featureCollection(
@@ -151,7 +164,8 @@ export const TaskMapContainer = (props) => {
    * task features on or off.
    */
   const toggleTaskFeatureVisibility = () => {
-    setShowTaskFeatures(!showTaskFeatures)
+    setShowTaskFeatures(prevState => !prevState);
+    setShouldAnimate(true)
   }
 
   /**
@@ -268,6 +282,168 @@ export const TaskMapContainer = (props) => {
     }
   }
 
+   /**
+   * Determines if a click was within a marker's icon, which could potentially
+   * extend far beyond our PIXEL_MARGIN from the marker's represened point
+   */
+    const isClickOnMarker = (clickPolygon, marker) => {
+    const icon = marker.getIcon()
+    const iconOptions = Object.assign({}, Object.getPrototypeOf(icon).options, icon.options)
+    const markerPoint = map.containerPointToLayerPoint(
+      map.latLngToContainerPoint(marker.getLatLng())
+    )
+
+    // We need an iconAnchor and iconSize to continue
+    if (!_isArray(iconOptions.iconAnchor) || !_isArray(iconOptions.iconSize)) {
+      return false
+    }
+
+    const nw = map.layerPointToLatLng(new Point(
+      markerPoint.x - iconOptions.iconAnchor[0],
+      markerPoint.y - iconOptions.iconAnchor[1]
+    ))
+    const se = map.layerPointToLatLng(new Point(
+      markerPoint.x + (iconOptions.iconSize[0] - iconOptions.iconAnchor[0]),
+      markerPoint.y + (iconOptions.iconSize[1] - iconOptions.iconAnchor[1])
+    ))
+    const markerPolygon = bboxPolygon([nw.lng, se.lat, se.lng, nw.lat])
+
+    return !booleanDisjoint(clickBounds, markerPolygon)
+  }
+
+
+  /**
+   * Return bounding polygon centered around clicked layer point, with
+   * PIXEL_MARGIN on each side of the point
+   */
+  const getClickPolygon = clickEvent => {
+    const center = clickEvent.layerPoint
+    const nw = map.layerPointToLatLng(new Point(center.x - PIXEL_MARGIN, center.y - PIXEL_MARGIN))
+    const se = map.layerPointToLatLng(new Point(center.x + PIXEL_MARGIN, center.y + PIXEL_MARGIN))
+    return bboxPolygon([nw.lng, se.lat, se.lng, nw.lat])
+  }
+
+  
+  /**
+   * Returns a promise that resolves to the full length of the SVG path once it
+   * has finished rendering.
+   */
+  const pathComplete = (path, priorLength, subsequentCheck = false) => {
+    return new Promise(resolve => {
+      const currentLength = path.getTotalLength()
+      if (subsequentCheck && currentLength === priorLength) {
+        resolve(currentLength)
+        return
+      }
+
+      setTimeout(() => {
+        pathComplete(path, currentLength, true).then(length => resolve(length))
+      }, 100)
+    })
+  }
+
+  /**
+   * Performs simple animation of SVG paths and markers to provide a visual cue
+   * to the user that new paths/markers have been rendered on the map, and to
+   * call attention to them.
+   */
+  const animateFeatures = () => {
+    // Animate paths
+    const paths = document.querySelectorAll('.task-map .leaflet-pane path.leaflet-interactive')
+    if (paths.length > 0) {
+      for (let path of paths) {
+        pathComplete(path).then(pathLength => {
+          path.style.strokeDasharray = `${pathLength} ${pathLength}`
+          path.style.strokeDashoffset = pathLength
+
+          // reset to normal after transition completes
+          path.addEventListener("transitionend", () => {
+            path.style.strokeDasharray = 'none';
+          })
+
+          // kick off transition
+          path.getBoundingClientRect()
+          path.style.transition = 'stroke-dashoffset 1s ease-in-out'
+          path.style.strokeDashoffset = '0'
+          path.style.opacity = '1';
+        })
+      }
+    }
+
+    // Animate markers
+    const markers = document.querySelectorAll('.task-map .leaflet-marker-pane')
+    if (markers) {
+      for (let marker of markers) {
+        marker.classList.remove('animated')
+        setTimeout(() => marker.classList.add('animated'), 100)
+      }
+    }
+  }
+
+/**
+   * Simple sorting of multiple related feature layers (such as all in a single map
+   * layer) by geometry type into order of: points, lineStrings, surrounded polygons,
+   * surrounding polygons. Each layer should be an object with a `geometry` field
+   */
+const orderedFeatureLayers = (layers) => {
+  if (!layers || layers.length < 2) {
+    return layers // nothing to do
+  }
+
+  // We'll process polygons separately
+  const geometryOrder = ['Point', 'MultiPoint', 'LineString', 'MultiLineString']
+  const orderedLayers = _sortBy(
+    _filter(layers, l => geometryOrder.indexOf(l.geometry.type) !== -1), // no polygons yet
+    l => geometryOrder.indexOf(l.geometry.type)
+  )
+
+  // Now order any polygons by number of enclosing polygons, so enclosed will come
+  // before enclosing
+  const polygonLayers = _filter(layers, l => l.geometry.type === 'Polygon' || l.geometry.type === 'MultiPolygon')
+  const orderedPolygons = polygonLayers.length < 2 ? polygonLayers : _sortBy(
+    polygonLayers,
+    l => _reduce(
+      polygonLayers,
+      (count, other) => {
+        return booleanContains(other.geometry, l.geometry) ? count + 1 : count
+      },
+      0
+    )
+  ).reverse()
+
+  return orderedLayers.concat(orderedPolygons)
+}
+  const popupLayerSelectionList = (layers, latlng) => {
+    const contentElement = document.createElement('div')
+    ReactDOM.render(
+      <div className="mr-text-base mr-px-4 mr-links-blue-light">
+        <h3>{props.intl.formatMessage(messages.layerSelectionHeader)}</h3>
+        <ol>
+          {layers.map(([description, layerInfo], index) => {
+            return (
+              <IntlProvider
+                key={`${description}-${index}`}  // Ensure unique key for each item
+                locale={props.intl.locale}
+                messages={props.intl.messages}
+                textComponent="span"
+              >
+                <PropertyList
+                  header={description}
+                  featureProperties={_omit(layerInfo?.geometry?.properties, ['id', 'type'])}
+                />
+              </IntlProvider>
+            );
+          })}
+        </ol>
+      </div>,
+      contentElement
+    );
+    
+    L.popup({
+      closeOnEscapeKey: false, // Otherwise our links won't get a onMouseLeave event
+    }).setLatLng(latlng).setContent(contentElement).openOn(map)
+  }
+
   useEffect(() => {
     props.activateKeyboardShortcutGroup(
       _pick(props.keyboardShortcutGroups, shortcutGroup),
@@ -277,17 +453,84 @@ export const TaskMapContainer = (props) => {
     loadMapillaryIfNeeded();
     loadOpenStreetCamIfNeeded();
     generateDirectionalityMarkers();
+    animator.setAnimationFunction(animateFeatures)
+    setShouldAnimate(true)
+
+    map.on('click', e => {
+      const clickBounds = getClickPolygon(e)
+      const candidateLayers = new Map()
+      map.eachLayer(layer => {
+        if (!_isEmpty(layer._layers)) {
+          // multiple features in a layer could match. Detect them and then
+          // put them into an intuitive order
+          const intraLayerMatches = []
+          _each(layer._layers, featureLayer => {
+            if (featureLayer.toGeoJSON) {
+              const featureGeojson = featureLayer.toGeoJSON()
+              // Look for an overlap between the click and the feature. However, since marker
+              // layers are represented by an icon (which could extend far beyond the feature
+              // plus our usual pixel margin), check for a click on the marker itself as well
+              if ((featureLayer.getIcon && isClickOnMarker(clickBounds, featureLayer)) ||
+                  !booleanDisjoint(clickBounds, featureGeojson)) {
+                const featureId = AsIdentifiableFeature(featureGeojson).normalizedTypeAndId()
+                const featureName = _get(featureGeojson, 'properties.name')
+                let layerDescription =
+                  (featureLayer.options.mrLayerLabel || '') + (featureId ? `: ${featureId}` : '')
+                if (!layerDescription) {
+                  // worst case, fall back to a layer id (ours, preferably, or leaflet's)
+                  layerDescription = `Layer ${featureLayer.mrLayerId || featureLayer._leaflet_id}`
+                }
+
+                const layerLabel = featureName ? (
+                  <React.Fragment>
+                    <div>{layerDescription}</div>
+                    <div className="mr-text-grey-light mr-text-xs">{featureName}</div>
+                  </React.Fragment>
+                ) : layerDescription
+
+                intraLayerMatches.push({
+                  mrLayerId: featureLayer.options.mrLayerId,
+                  description: layerDescription,
+                  label: layerLabel,
+                  geometry: featureGeojson,
+                  layer: featureLayer,
+                })
+              }
+            }
+          })
+
+          if (intraLayerMatches.length > 0) {
+            orderedFeatureLayers(intraLayerMatches).forEach(match => {
+              candidateLayers.set(match.description, match)
+            })
+          }
+        }
+      })
+
+      if (candidateLayers.size === 1) {
+        candidateLayers.values().next().value.layer.fire('mr-external-interaction', {
+          map: map,
+          latlng: e.latlng,
+        })
+      }
+      else if (candidateLayers.size > 1) {
+        let layers = [...candidateLayers.entries()]
+        if (props.overlayOrder && props.overlayOrder.length > 0) {
+          layers = _sortBy(layers, layerEntry => {
+            const position = props.overlayOrder.indexOf(layerEntry[1].mrLayerId)
+            return position === -1 ? Number.MAX_SAFE_INTEGER : position
+          })
+        }
+        popupLayerSelectionList(layers, e.latlng)
+      }
+    })
   
     return () => {
       props.deactivateKeyboardShortcutGroup(shortcutGroup, handleKeyboardShortcuts);
+      animator.reset()
     };
   }, []);
 
-  useEffect(() => {
-    loadMapillaryIfNeeded();
-    loadOpenStreetCamIfNeeded();
-  }, [props]);
-  
   useEffect(() => {
     generateDirectionalityMarkers();
   }, [props.task.geometries]);
@@ -304,6 +547,7 @@ export const TaskMapContainer = (props) => {
       );
       map.fitBounds(layerGroup.getBounds().pad(0.2));
     }
+    setShouldAnimate(true)
   }, [props.taskBundle, props.taskId]);
 
   const mapillaryImageMarkers = () => {
@@ -425,8 +669,8 @@ export const TaskMapContainer = (props) => {
       })
     )
 
-    if (showTaskFeatures) {
-      overlayLayers.push({
+    const taskFeatureLayer = useMemo(() => {
+      return {
         id: "task-features",
         component: (
           <TaskFeatureLayer
@@ -434,10 +678,16 @@ export const TaskMapContainer = (props) => {
             mrLayerId="task-features"
             features={applyStyling(features)}
             animator={animator}
+            shouldAnimate={shouldAnimate}
+            setShouldAnimate={setShouldAnimate}
             externalInteractive
           />
         )
-      })
+      }
+    }, [features, props.challenge.taskStyles, shouldAnimate]);
+
+    if (showTaskFeatures) {
+      overlayLayers.push(taskFeatureLayer);
     }
 
     if (props.showMapillaryLayer) {
@@ -506,8 +756,8 @@ export const TaskMapContainer = (props) => {
         <SourcedTileLayer maxZoom={maxZoom} {...props} />
         {_map(overlayLayers, (layer, index) => (
           <Pane
-          key={`pane-${renderId}-${index}`}
-          name={`pane-${renderId}-${index}`}
+          key={`pane-${index}`}
+          name={`pane-${index}`}
           style={{zIndex: 10 + index}}
             className="custom-pane"
           >
