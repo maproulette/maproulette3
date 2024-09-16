@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
@@ -21,6 +21,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
 import _filter from 'lodash/filter'
 import _reduce from 'lodash/reduce'
+import _isArray from 'lodash/isArray'
 import _omit from 'lodash/omit'
 import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
        from '../../../services/VisibleLayer/LayerSources'
@@ -102,39 +103,8 @@ const animateFeatures = () => {
   }
 }
 
-const popupLayerSelectionList = (layers, latlng) => {
-  const contentElement = document.createElement('div')
-  ReactDOM.render(
-    <div className="mr-text-base mr-px-4 mr-links-blue-light">
-      <h3>{props.intl.formatMessage(messages.layerSelectionHeader)}</h3>
-      <ol>
-        {layers.map(([description, layerInfo], index) => {
-          return (
-            <IntlProvider
-              key={`${description}-${index}`}  // Ensure unique key for each item
-              locale={props.intl.locale}
-              messages={props.intl.messages}
-              textComponent="span"
-            >
-              <PropertyList
-                header={description}
-                featureProperties={_omit(layerInfo?.geometry?.properties, ['id', 'type'])}
-              />
-            </IntlProvider>
-          );
-        })}
-      </ol>
-    </div>,
-    contentElement
-  );
-  
-  L.popup({
-    closeOnEscapeKey: false, // Otherwise our links won't get a onMouseLeave event
-  }).setLatLng(latlng).setContent(contentElement).openOn(map)
-}
-
 // 3. Helper Functions
-const isClickOnMarker = (clickPolygon, marker, map) => {
+const isClickOnMarker = (clickBounds, marker, map) => {
   const icon = marker.getIcon()
   const iconOptions = Object.assign({}, Object.getPrototypeOf(icon).options, icon.options)
   const markerPoint = map.containerPointToLayerPoint(
@@ -240,7 +210,6 @@ export const TaskMapContainer = (props) => {
     loadOpenStreetCamIfNeeded();
     generateDirectionalityMarkers();
     animator.setAnimationFunction(animateFeatures)
-    setShouldAnimate(true)
 
     map.on('click', handleMapClick)
   
@@ -267,7 +236,6 @@ export const TaskMapContainer = (props) => {
       );
       map.fitBounds(layerGroup.getBounds().pad(0.2));
     }
-    setShouldAnimate(true)
   }, [props.taskBundle, props.taskId]);
 
   const handleKeyboardShortcuts = event => {
@@ -369,6 +337,37 @@ export const TaskMapContainer = (props) => {
     }
   }
 
+  const popupLayerSelectionList = (layers, latlng) => {
+    const contentElement = document.createElement('div')
+    ReactDOM.render(
+      <div className="mr-text-base mr-px-4 mr-links-blue-light">
+        <h3>{props.intl.formatMessage(messages.layerSelectionHeader)}</h3>
+        <ol>
+          {layers.map(([description, layerInfo], index) => {
+            return (
+              <IntlProvider
+                key={`${description}-${index}`}  // Ensure unique key for each item
+                locale={props.intl.locale}
+                messages={props.intl.messages}
+                textComponent="span"
+              >
+                <PropertyList
+                  header={description}
+                  featureProperties={_omit(layerInfo?.geometry?.properties, ['id', 'type'])}
+                />
+              </IntlProvider>
+            );
+          })}
+        </ol>
+      </div>,
+      contentElement
+    );
+    
+    L.popup({
+      closeOnEscapeKey: false, // Otherwise our links won't get a onMouseLeave event
+    }).setLatLng(latlng).setContent(contentElement).openOn(map)
+  }
+  
   const toggleTaskFeatureVisibility = () => {
     setShowTaskFeatures(prevState => !prevState);
     setShouldAnimate(true)
@@ -626,9 +625,9 @@ export const TaskMapContainer = (props) => {
         />
       )
     }
-  }, [features, props.challenge.taskStyles, shouldAnimate]);
+  }, [features, shouldAnimate]);
 
-  const overlayLayers = useMemo(() => {
+  const overlayLayers = () => {
     let layers = buildLayerSources(
       props.visibleOverlays, _get(props, 'user.settings.customBasemaps'),
       (layerId, index, layerSource) => ({
@@ -671,7 +670,7 @@ export const TaskMapContainer = (props) => {
     }
 
     return sortOverlayLayers(layers)
-  }, [showTaskFeatures, props.showMapillaryLayer, props.showOpenStreetCamLayer, showOSMData, osmData, directionalityIndicators])
+  }
 
   if (!props.task || !_isObject(props.task.parent)) {
     return <BusySpinner />
@@ -699,7 +698,7 @@ export const TaskMapContainer = (props) => {
       <ZoomControl position='topright' />
       <FitBoundsControl features={features} />
       <SourcedTileLayer maxZoom={maxZoom} {...props} />
-      {overlayLayers.map((layer, index) => (
+      {overlayLayers().map((layer, index) => (
         <Pane key={`pane-${index}`} name={`pane-${index}`} style={{zIndex: 10 + index}} className="custom-pane">
           {layer.component}
         </Pane>
