@@ -68,7 +68,6 @@ export default class TaskCompletionStep extends Component {
             }
 
             {this.props.allowedProgressions.has(TaskStatus.falsePositive) &&
-              !this.props.needsRevised &&
             <TaskFalsePositiveControl {...this.props} />
             }
 
