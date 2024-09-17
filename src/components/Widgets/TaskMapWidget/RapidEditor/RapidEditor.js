@@ -41,6 +41,7 @@ function generateStartingHash({ mapBounds, task, comment }) {
 const RapidEditor = ({ token, task, mapBounds, comment }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   let initialHash = generateStartingHash({ task, mapBounds, comment });
   let [, setHash] = useHash();
 
@@ -69,43 +70,39 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
           <BusySpinner xlarge />
         </div>
       )}
+      {error && (
+        <div>Error: {error.message}</div>
+      )}
       <iframe
         id="rapid-container-root"
         style={{ width: '100%', height: '100%' }}
         src={`/static/rapid-editor.html${initialHash}`}
         onLoad={async (event) => {
           let iframe = event.target;
-          iframe.contentWindow.token = token;
 
-          let context = iframe.contentWindow.rapidContext;
+          try {
+            let context = await iframe.contentWindow.setupRapid();
 
-          if (!context) {
-            console.warn(
-              "Embedded Rapid iframe finished loading but no Rapid Context found afterwards; "
-              + "Rapid may not have initialized successfully."
-            );
-            return;
+            dispatch({ type: SET_RAPIDEDITOR, context: { isRunning: true } });
+
+            // When Rapid re-renders its map, it updates the URL hash of the iframe window.
+            // We listen for this event and update the parent window's hash to match.
+            context.systems.map.on('draw', () => {
+              setHash(iframe.contentWindow.location.hash);
+            });
+
+            // When the user makes an edit, the 'stablechange' event fires. When that happens
+            // we update the 'hasUnsavedChanges' property in our Redux store so that the
+            // MapRoulette UI can change depending on whether the user has unsaved edits.
+            context.systems.editor.on('stablechange', () => {
+              let hasUnsavedChanges = context.systems.editor.hasChanges();
+              dispatch({ type: SET_RAPIDEDITOR, context: { hasUnsavedChanges }});
+            });
+          } catch (err) {
+            setError(err);
+          } finally {
+            setIsLoading(false);
           }
-
-          // Wait for Rapid to finish initializing
-          await context.initAsync();
-          dispatch({ type: SET_RAPIDEDITOR, context: { isRunning: true } });
-
-          // When Rapid re-renders its map, it updates the URL hash of the iframe window.
-          // We listen for this event and update the parent window's hash to match.
-          context.systems.map.on('draw', () => {
-            setHash(iframe.contentWindow.location.hash);
-          });
-
-          // When the user makes an edit, the 'stablechange' event fires. When that happens
-          // we update the 'hasUnsavedChanges' property in our Redux store so that the
-          // MapRoulette UI can change depending on whether the user has unsaved edits.
-          context.systems.editor.on('stablechange', () => {
-            let hasUnsavedChanges = context.systems.editor.hasChanges();
-            dispatch({ type: SET_RAPIDEDITOR, context: { hasUnsavedChanges }});
-          });
-
-          setIsLoading(false);
         }}
       />
     </div>
