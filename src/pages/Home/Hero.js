@@ -1,8 +1,7 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
-import { ReactComponent as WorldMapImage }
-       from '../../static/images/bg-map.svg'
+import worldMapImage from "../../static/images/bg-map.svg"
 import messages from './Messages'
 import homePaneMessages from '../../components/HomePane/Messages'
 
@@ -21,7 +20,7 @@ export default class Hero extends Component {
           </div>
         </div>
         <div className="mr-w-1/2 mr-h-64">
-          <WorldMapImage viewBox="0 0 687 350" className="mr-w-auto mr-h-64" />
+          <img src={worldMapImage} className="mr-w-auto mr-h-64" />
         </div>
       </div>
     )

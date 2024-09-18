@@ -11,7 +11,7 @@ import EditTeam from '../../components/Teams/EditTeam/EditTeam'
 import SvgSymbol from '../../components/SvgSymbol/SvgSymbol'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import SignIn from '../SignIn/SignIn'
-import { ReactComponent as TeamsImage } from '../../static/images/teams.svg'
+import teamsImage from '../../static/images/teams.svg'
 import messages from '../../components/Widgets/TeamsWidget/Messages'
 
 export const Teams = props => {
@@ -117,7 +117,7 @@ export const Teams = props => {
               </button>
             </div>
             <div className="mr-w-1/2 mr-h-100 mr-absolute mr-top-0 mr-right-0 mr--mt-20">
-              <TeamsImage viewBox="0 0 687 350" className="mr-w-full mr-h-full" />
+              <img src={teamsImage} className="mr-w-full mr-h-full" />
             </div>
           </div>
         </div>
