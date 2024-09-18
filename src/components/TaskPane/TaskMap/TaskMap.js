@@ -2,14 +2,14 @@ import React, { useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, LayerGroup, Pane, MapContainer, useMap, useMapEvents, AttributionControl } from 'react-leaflet'
+import { ZoomControl, LayerGroup, Pane, MapContainer, useMap, AttributionControl } from 'react-leaflet'
 import { featureCollection } from '@turf/helpers'
 import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
 import _isObject from 'lodash/isObject'
-import _uniqueId from 'lodash/uniqueId'
-import L, { Point } from 'leaflet'
+import L from 'leaflet'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
@@ -17,11 +17,7 @@ import _each from 'lodash/each'
 import _sortBy from 'lodash/sortBy'
 import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
-import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
-import _filter from 'lodash/filter'
-import _reduce from 'lodash/reduce'
-import _isArray from 'lodash/isArray'
 import _omit from 'lodash/omit'
 import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
        from '../../../services/VisibleLayer/LayerSources'
@@ -59,125 +55,14 @@ import { supportedSimplestyles }
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import './TaskMap.scss'
 import booleanDisjoint from '@turf/boolean-disjoint'
-import bboxPolygon from '@turf/bbox-polygon'
 import AsIdentifiableFeature from '../../../interactions/TaskFeature/AsIdentifiableFeature'
-import booleanContains from '@turf/boolean-contains'
 import messages from './Messages'
 import { IntlProvider } from 'react-intl'
 import PropertyList from '../../EnhancedMap/PropertyList/PropertyList'
+import { orderedFeatureLayers, animateFeatures, getClickPolygon, isClickOnMarker } from './helperFunctions'
 
-const PIXEL_MARGIN = 10
 const shortcutGroup = 'layers'
 
-
-const animateFeatures = () => {
-  // Animate paths
-  const paths = document.querySelectorAll('.task-map .leaflet-pane path.leaflet-interactive')
-  if (paths.length > 0) {
-    for (let path of paths) {
-      pathComplete(path).then(pathLength => {
-        path.style.strokeDasharray = `${pathLength} ${pathLength}`
-        path.style.strokeDashoffset = pathLength
-
-        // reset to normal after transition completes
-        path.addEventListener("transitionend", () => {
-          path.style.strokeDasharray = 'none';
-        })
-
-        // kick off transition
-        path.getBoundingClientRect()
-        path.style.transition = 'stroke-dashoffset 1s ease-in-out'
-        path.style.strokeDashoffset = '0'
-        path.style.opacity = '1';
-      })
-    }
-  }
-
-  // Animate markers
-  const markers = document.querySelectorAll('.task-map .leaflet-marker-pane')
-  if (markers) {
-    for (let marker of markers) {
-      marker.classList.remove('animated')
-      setTimeout(() => marker.classList.add('animated'), 100)
-    }
-  }
-}
-
-// 3. Helper Functions
-const isClickOnMarker = (clickBounds, marker, map) => {
-  const icon = marker.getIcon()
-  const iconOptions = Object.assign({}, Object.getPrototypeOf(icon).options, icon.options)
-  const markerPoint = map.containerPointToLayerPoint(
-    map.latLngToContainerPoint(marker.getLatLng())
-  )
-
-  // We need an iconAnchor and iconSize to continue
-  if (!_isArray(iconOptions.iconAnchor) || !_isArray(iconOptions.iconSize)) {
-    return false
-  }
-
-  const nw = map.layerPointToLatLng(new Point(
-    markerPoint.x - iconOptions.iconAnchor[0],
-    markerPoint.y - iconOptions.iconAnchor[1]
-  ))
-  const se = map.layerPointToLatLng(new Point(
-    markerPoint.x + (iconOptions.iconSize[0] - iconOptions.iconAnchor[0]),
-    markerPoint.y + (iconOptions.iconSize[1] - iconOptions.iconAnchor[1])
-  ))
-  const markerPolygon = bboxPolygon([nw.lng, se.lat, se.lng, nw.lat])
-
-  return !booleanDisjoint(clickBounds, markerPolygon)
-}
-
-const getClickPolygon = (clickEvent, map) => {
-  const center = clickEvent.layerPoint
-  const nw = map.layerPointToLatLng(new Point(center.x - PIXEL_MARGIN, center.y - PIXEL_MARGIN))
-  const se = map.layerPointToLatLng(new Point(center.x + PIXEL_MARGIN, center.y + PIXEL_MARGIN))
-  return bboxPolygon([nw.lng, se.lat, se.lng, nw.lat])
-}
-
-const pathComplete = (path, priorLength, subsequentCheck = false) => {
-  return new Promise(resolve => {
-    const currentLength = path.getTotalLength()
-    if (subsequentCheck && currentLength === priorLength) {
-      resolve(currentLength)
-      return
-    }
-
-    setTimeout(() => {
-      pathComplete(path, currentLength, true).then(length => resolve(length))
-    }, 100)
-  })
-}
-
-const orderedFeatureLayers = (layers) => {
-  if (!layers || layers.length < 2) {
-    return layers // nothing to do
-  }
-
-  // We'll process polygons separately
-  const geometryOrder = ['Point', 'MultiPoint', 'LineString', 'MultiLineString']
-  const orderedLayers = _sortBy(
-    _filter(layers, l => geometryOrder.indexOf(l.geometry.type) !== -1), // no polygons yet
-    l => geometryOrder.indexOf(l.geometry.type)
-  )
-
-  // Now order any polygons by number of enclosing polygons, so enclosed will come
-  // before enclosing
-  const polygonLayers = _filter(layers, l => l.geometry.type === 'Polygon' || l.geometry.type === 'MultiPolygon')
-  const orderedPolygons = polygonLayers.length < 2 ? polygonLayers : _sortBy(
-    polygonLayers,
-    l => _reduce(
-      polygonLayers,
-      (count, other) => {
-        return booleanContains(other.geometry, l.geometry) ? count + 1 : count
-      },
-      0
-    )
-  ).reverse()
-
-  return orderedLayers.concat(orderedPolygons)
-}
 
 /**
  * TaskMap renders a map (and controls) appropriate for the given task,
@@ -186,7 +71,7 @@ const orderedFeatureLayers = (layers) => {
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const TaskMapContainer = (props) => {
+export const TaskMapContent = (props) => {
   const map = useMap()
   const [showTaskFeatures, setShowTaskFeatures] = useState(true)
   const [showOSMData, setShowOSMData] = useState(false)
@@ -196,7 +81,6 @@ export const TaskMapContainer = (props) => {
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null)
   const [directionalityIndicators, setDirectionalityIndicators] = useState({})
   const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
-  const [shouldAnimate, setShouldAnimate] = useState(true);
 
   const animator = new MapAnimator()
 
@@ -268,6 +152,37 @@ export const TaskMapContainer = (props) => {
     }
   }
 
+  const popupLayerSelectionList = (layers, latlng) => {
+    const contentElement = document.createElement('div')
+    ReactDOM.render(
+      <div className="mr-text-base mr-px-4 mr-links-blue-light">
+        <h3>{props.intl.formatMessage(messages.layerSelectionHeader)}</h3>
+        <ol>
+          {layers.map(([description, layerInfo], index) => {
+            return (
+              <IntlProvider
+                key={`${description}-${index}`}  // Ensure unique key for each item
+                locale={props.intl.locale}
+                messages={props.intl.messages}
+                textComponent="span"
+              >
+                <PropertyList
+                  header={description}
+                  featureProperties={_omit(layerInfo?.geometry?.properties, ['id', 'type'])}
+                />
+              </IntlProvider>
+            );
+          })}
+        </ol>
+      </div>,
+      contentElement
+    );
+    
+    L.popup({
+      closeOnEscapeKey: false, // Otherwise our links won't get a onMouseLeave event
+    }).setLatLng(latlng).setContent(contentElement).openOn(map)
+  }
+  
   const handleMapClick = (e) => {
     const clickBounds = getClickPolygon(e, map)
     const candidateLayers = new Map()
@@ -337,40 +252,8 @@ export const TaskMapContainer = (props) => {
     }
   }
 
-  const popupLayerSelectionList = (layers, latlng) => {
-    const contentElement = document.createElement('div')
-    ReactDOM.render(
-      <div className="mr-text-base mr-px-4 mr-links-blue-light">
-        <h3>{props.intl.formatMessage(messages.layerSelectionHeader)}</h3>
-        <ol>
-          {layers.map(([description, layerInfo], index) => {
-            return (
-              <IntlProvider
-                key={`${description}-${index}`}  // Ensure unique key for each item
-                locale={props.intl.locale}
-                messages={props.intl.messages}
-                textComponent="span"
-              >
-                <PropertyList
-                  header={description}
-                  featureProperties={_omit(layerInfo?.geometry?.properties, ['id', 'type'])}
-                />
-              </IntlProvider>
-            );
-          })}
-        </ol>
-      </div>,
-      contentElement
-    );
-    
-    L.popup({
-      closeOnEscapeKey: false, // Otherwise our links won't get a onMouseLeave event
-    }).setLatLng(latlng).setContent(contentElement).openOn(map)
-  }
-  
   const toggleTaskFeatureVisibility = () => {
     setShowTaskFeatures(prevState => !prevState);
-    setShouldAnimate(true)
   }
 
   const toggleOSMDataVisibility = () => {
@@ -619,13 +502,11 @@ export const TaskMapContainer = (props) => {
           mrLayerId="task-features"
           features={applyStyling(features)}
           animator={animator}
-          shouldAnimate={shouldAnimate}
-          setShouldAnimate={setShouldAnimate}
           externalInteractive
         />
       )
     }
-  }, [features, shouldAnimate]);
+  }, [props.taskBundle, props.taskId]);
 
   const overlayLayers = () => {
     let layers = buildLayerSources(
@@ -723,8 +604,8 @@ const TaskMap = (props) => {
       <MapContainer
         taskBundle={props.taskBundle}
         center={props.centerPoint}
-        zoom={DEFAULT_ZOOM}
         zoomControl={false}
+        zoom={DEFAULT_ZOOM}
         minZoom={2}
         maxZoom={MAX_ZOOM}
         attributionControl={false}
@@ -732,7 +613,7 @@ const TaskMap = (props) => {
       >
         <ResizeMap />
         <AttributionControl position="bottomleft" prefix={false} />
-        <TaskMapContainer {...props} />
+        <TaskMapContent {...props} />
       </MapContainer>
     </div>
   );

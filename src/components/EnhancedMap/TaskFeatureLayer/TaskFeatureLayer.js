@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { GeoJSON, useMap } from 'react-leaflet'
 import L from 'leaflet'
@@ -31,7 +31,6 @@ const HIGHLIGHT_SIMPLESTYLE = {
 const TaskFeatureLayer = props => {
   const [layer, setLayer] = useState(null)
   const map = useMap()
-  const geoJsonLayerRef = useRef(null)
 
   const propertyList = (featureProperties, onBack) => {
     const contentElement = document.createElement('div')
@@ -48,18 +47,14 @@ const TaskFeatureLayer = props => {
     return contentElement
   }
 
-  const { features, mrLayerId, animator, externalInteractive, shouldAnimate } = props
+  const { features, mrLayerId, animator, externalInteractive } = props
   const layerLabel = props.intl.formatMessage(layerMessages.showTaskFeaturesLabel)
   const pane = _get(props, 'leaflet.pane')
 
   useEffect(() => {
-    if (geoJsonLayerRef.current) {
-      geoJsonLayerRef.current.clearLayers()
-    }
 
     const newLayer = (
       <GeoJSON
-        ref={geoJsonLayerRef}
         key={_uniqueId()}
         mrLayerId={mrLayerId}
         mrLayerLabel={layerLabel}
@@ -95,7 +90,10 @@ const TaskFeatureLayer = props => {
                 if (layer._map) {
                   styleableFeature.pushLeafletLayerSimpleStyles(
                     layer,
-                    Object.assign(styleableFeature.markerSimplestyles(layer), HIGHLIGHT_SIMPLESTYLE),
+                    {
+                      ...styleableFeature.markerSimplestyles(layer),
+                      ...HIGHLIGHT_SIMPLESTYLE,
+                    },
                     'mr-external-interaction:popup-open'
                   )
                 }
@@ -121,7 +119,10 @@ const TaskFeatureLayer = props => {
 
                 styleableFeature.pushLeafletLayerSimpleStyles(
                   layer,
-                  Object.assign(styleableFeature.markerSimplestyles(layer), HIGHLIGHT_SIMPLESTYLE),
+                  {
+                    ...styleableFeature.markerSimplestyles(layer),
+                    ...HIGHLIGHT_SIMPLESTYLE,
+                  },
                   'mr-external-interaction:start-preview'
                 )
 
@@ -151,7 +152,7 @@ const TaskFeatureLayer = props => {
     )
 
     setLayer(newLayer)
-  }, [features, mrLayerId, pane, animator, externalInteractive, layerLabel, shouldAnimate, map])
+  }, [features, mrLayerId, pane, animator, externalInteractive, layerLabel, map])
 
   return layer
 }
