@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl, LayerGroup, Pane, MapContainer, useMap, AttributionControl } from 'react-leaflet'
+import { ZoomControl, LayerGroup, Pane, MapContainer, useMap, useMapEvents, AttributionControl } from 'react-leaflet'
 import { featureCollection } from '@turf/helpers'
 import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
@@ -83,6 +83,23 @@ export const TaskMapContent = (props) => {
   const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
 
   const animator = new MapAnimator()
+
+  useMapEvents({
+    moveend: () => {
+      if (props.task.id !== props.completingTask) {
+        const bounds = map.getBounds()
+        const zoom = map.getZoom()
+        props.setTaskMapBounds(props.task.id, bounds, zoom, false)
+        if (props.setWorkspaceContext) {
+          props.setWorkspaceContext({
+            taskMapTask: props.task,
+            taskMapBounds: bounds,
+            taskMapZoom: zoom
+          })
+        }
+      }
+    },
+  })
 
   useEffect(() => {
     props.activateKeyboardShortcutGroup(
