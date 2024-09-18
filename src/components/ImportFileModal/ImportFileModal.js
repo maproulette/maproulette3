@@ -7,6 +7,7 @@ import Modal from "../Modal/Modal";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
+import catAndLaptop from "../../static/images/cat-and-laptop.svg";
 
 export default class ImportLayoutModal extends Component {
   state = {
@@ -19,13 +20,7 @@ export default class ImportLayoutModal extends Component {
         <Modal narrow isActive onClose={this.props.onCancel}>
           <div>
             <div className="mr-flex mr-justify-center mr-my-8">
-              <SvgSymbol
-                sym="cat-and-laptop"
-                style={{
-                  height: 131,
-                  width: 185,
-                }}
-              />
+              <img src={catAndLaptop}  style={{ height: 131, width: 185 }} />
             </div>
             <div className="mr-w-full">
               <h2 className="mr-text-white mr-text-4xl mr-mb-4">
