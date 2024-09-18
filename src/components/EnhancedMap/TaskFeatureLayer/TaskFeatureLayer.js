@@ -52,7 +52,6 @@ const TaskFeatureLayer = props => {
   const pane = _get(props, 'leaflet.pane')
 
   useEffect(() => {
-
     const newLayer = (
       <GeoJSON
         key={_uniqueId()}

@@ -9,7 +9,6 @@ import { point } from '@turf/helpers'
 import _isObject from 'lodash/isObject'
 import L from 'leaflet'
 import _get from 'lodash/get'
-import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
@@ -17,6 +16,7 @@ import _each from 'lodash/each'
 import _sortBy from 'lodash/sortBy'
 import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
+import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
 import _omit from 'lodash/omit'
 import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
@@ -63,7 +63,6 @@ import { orderedFeatureLayers, animateFeatures, getClickPolygon, isClickOnMarker
 
 const shortcutGroup = 'layers'
 
-
 /**
  * TaskMap renders a map (and controls) appropriate for the given task,
  * including the various map-related features and configuration options set on
@@ -81,7 +80,29 @@ export const TaskMapContent = (props) => {
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null)
   const [directionalityIndicators, setDirectionalityIndicators] = useState({})
   const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
+  const taskFeatures = () => {
+    if (_get(props, 'taskBundle.tasks.length', 0) > 0) {
+      return featureCollection(
+        _flatten(_compact(_map(props.taskBundle.tasks,
+                               task => _get(task, 'geometries.features'))))
+      ).features
+    }
 
+    // If current OSM data is available, show the feature's current OSM tags
+    // instead of those bundled with the GeoJSON. We preserve any simplestyle
+    // properties, allowing display colors and what not to be customized
+    if (_get(props, 'osmElements.size', 0) > 0) {
+      return AsMappableTask(props.task).featuresWithTags(
+        _get(props.task, 'geometries.features'),
+        props.osmElements,
+        true,
+        supportedSimplestyles,
+      )
+    }
+
+    return _get(props.task, 'geometries.features')
+  }
+  const features = taskFeatures()
   const animator = new MapAnimator()
 
   useMapEvents({
@@ -100,74 +121,6 @@ export const TaskMapContent = (props) => {
       }
     },
   })
-
-  useEffect(() => {
-    props.activateKeyboardShortcutGroup(
-      _pick(props.keyboardShortcutGroups, shortcutGroup),
-      handleKeyboardShortcuts
-    );
-  
-    loadMapillaryIfNeeded();
-    loadOpenStreetCamIfNeeded();
-    generateDirectionalityMarkers();
-    animator.setAnimationFunction(animateFeatures)
-
-    map.on('click', handleMapClick)
-  
-    return () => {
-      props.deactivateKeyboardShortcutGroup(shortcutGroup, handleKeyboardShortcuts);
-      animator.reset()
-      map.off('click', handleMapClick)
-    };
-  }, []);
-
-  useEffect(() => {
-    deactivateOSMDataLayer()
-    generateDirectionalityMarkers();
-  }, [props.task.id, props.task.geometries]);
-
-  useEffect(() => {
-    animator.setAnimationFunction(animateFeatures)
-  }, [props]);
-
-  useEffect(() => {
-    if (features.length !== 0) {
-      const layerGroup = L.featureGroup(
-        features.map(feature => L.geoJSON(feature))
-      );
-      map.fitBounds(layerGroup.getBounds().pad(0.2));
-    }
-  }, [props.taskBundle, props.taskId]);
-
-  const handleKeyboardShortcuts = event => {
-    // Ignore if shortcut group is not active
-    if (_isEmpty(props.activeKeyboardShortcuts[shortcutGroup])) {
-      return
-    }
-
-    if (props.textInputActive(event)) { // ignore typing in inputs
-      return
-    }
-
-    // Ignore if modifier keys were pressed
-    if (event.metaKey || event.altKey || event.ctrlKey) {
-      return
-    }
-    
-    const layerShortcuts = props.keyboardShortcutGroups[shortcutGroup]
-    switch(event.key) {
-      case layerShortcuts.layerOSMData.key:
-        toggleOSMDataVisibility()
-        break
-      case layerShortcuts.layerTaskFeatures.key:
-        toggleTaskFeatureVisibility()
-        break
-      case layerShortcuts.layerMapillary.key:
-        toggleMapillaryVisibility()
-        break
-      default:
-    }
-  }
 
   const popupLayerSelectionList = (layers, latlng) => {
     const contentElement = document.createElement('div')
@@ -269,10 +222,18 @@ export const TaskMapContent = (props) => {
     }
   }
 
+  /**
+   * Invoked by LayerToggle when the user wishes to toggle visibility of
+   * task features on or off.
+   */
   const toggleTaskFeatureVisibility = () => {
     setShowTaskFeatures(prevState => !prevState);
   }
 
+  /**
+   * Invoked by LayerToggle when the user wishes to toggle visibility of
+   * OSM data on or off.
+   */
   const toggleOSMDataVisibility = () => {
     if (!showOSMData && !osmData && !osmDataLoading) {
       setOsmDataLoading(true)
@@ -294,12 +255,19 @@ export const TaskMapContent = (props) => {
     setShowOSMElements(newShowOSMElements)
   }
 
+  /**
+   * Ensures the OSM Data Layer is deactivated
+   */
   const deactivateOSMDataLayer = () => {
     setShowOSMData(false)
     setOsmData(null)
     setOsmDataLoading(false)
   }
 
+  /**
+   * Invoked by LayerToggle when the user wishes to toggle visibility of
+   * Mapillary markers on or off.
+   */
   const toggleMapillaryVisibility = async () => {
     const isVirtual = _isFinite(props.virtualChallengeId)
     const challengeId = isVirtual ? props.virtualChallengeId :
@@ -319,6 +287,9 @@ export const TaskMapContent = (props) => {
     }
   }
 
+  /**
+   * Reloads the task data with mapillary image info requested if needed
+   */
   const loadMapillaryIfNeeded = async () => {
     // If we're supposed to show mapillary images but don't have them for
     // this task, go ahead and fetch them
@@ -333,6 +304,10 @@ export const TaskMapContent = (props) => {
     }
   }
 
+  /**
+   * Invoked by LayerToggle when the user wishes to toggle visibility of
+   * OpenStreetCam markers on or off.
+   */
   const toggleOpenStreetCamVisibility = async () => {
     const isVirtual = _isFinite(props.virtualChallengeId)
     const challengeId = isVirtual ? props.virtualChallengeId :
@@ -352,6 +327,9 @@ export const TaskMapContent = (props) => {
     }
   }
 
+  /**
+   * Reloads the task data with OpenStreetCam image info requested if needed
+   */
   const loadOpenStreetCamIfNeeded = async () => {
     // If we're supposed to show openStreetCam images but don't have them for
     // this task, go ahead and fetch them
@@ -363,6 +341,74 @@ export const TaskMapContent = (props) => {
           props.task
         )
       }
+    }
+  }
+
+  useEffect(() => {
+    props.activateKeyboardShortcutGroup(
+      _pick(props.keyboardShortcutGroups, shortcutGroup),
+      handleKeyboardShortcuts
+    );
+  
+    loadMapillaryIfNeeded();
+    loadOpenStreetCamIfNeeded();
+    generateDirectionalityMarkers();
+    animator.setAnimationFunction(animateFeatures)
+
+    map.on('click', handleMapClick)
+  
+    return () => {
+      props.deactivateKeyboardShortcutGroup(shortcutGroup, handleKeyboardShortcuts);
+      animator.reset()
+      map.off('click', handleMapClick)
+    };
+  }, []);
+
+  useEffect(() => {
+    deactivateOSMDataLayer()
+    generateDirectionalityMarkers();
+  }, [props.task.id, props.task.geometries]);
+
+  useEffect(() => {
+    animator.setAnimationFunction(animateFeatures)
+  }, [props]);
+
+  useEffect(() => {
+    if (features.length !== 0) {
+      const layerGroup = L.featureGroup(
+        features.map(feature => L.geoJSON(feature))
+      );
+      map.fitBounds(layerGroup.getBounds().pad(0.2));
+    }
+  }, [props.taskBundle, props.taskId]);
+
+  const handleKeyboardShortcuts = event => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
+    if (props.textInputActive(event)) { // ignore typing in inputs
+      return
+    }
+
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
+    const layerShortcuts = props.keyboardShortcutGroups[shortcutGroup]
+    switch(event.key) {
+      case layerShortcuts.layerOSMData.key:
+        toggleOSMDataVisibility()
+        break
+      case layerShortcuts.layerTaskFeatures.key:
+        toggleTaskFeatureVisibility()
+        break
+      case layerShortcuts.layerMapillary.key:
+        toggleMapillaryVisibility()
+        break
+      default:
     }
   }
 
@@ -474,29 +520,6 @@ export const TaskMapContent = (props) => {
   }
 
   const maxZoom = _get(props.task, "parent.maxZoom", MAX_ZOOM)
-
-  const taskFeatures = () => {
-    if (_get(props, 'taskBundle.tasks.length', 0) > 0) {
-      return featureCollection(
-        _flatten(_compact(_map(props.taskBundle.tasks,
-                               task => _get(task, 'geometries.features'))))
-      ).features
-    }
-
-    // If current OSM data is available, show the feature's current OSM tags
-    // instead of those bundled with the GeoJSON. We preserve any simplestyle
-    // properties, allowing display colors and what not to be customized
-    if (_get(props, 'osmElements.size', 0) > 0) {
-      return AsMappableTask(props.task).featuresWithTags(
-        _get(props.task, 'geometries.features'),
-        props.osmElements,
-        true,
-        supportedSimplestyles,
-      )
-    }
-
-    return _get(props.task, 'geometries.features')
-  }
   
   const renderMapillaryViewer = () => {
     return (
@@ -507,8 +530,6 @@ export const TaskMapContent = (props) => {
       />
     )
   }
-
-  const features = taskFeatures()
 
   const taskFeatureLayer = useMemo(() => {
     return {
