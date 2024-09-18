@@ -401,6 +401,8 @@ export const TaskMapContent = (props) => {
   }, [props.task.id, props.task.geometries]);
 
   useEffect(() => {
+    loadMapillaryIfNeeded();
+    loadOpenStreetCamIfNeeded();
     animator.setAnimationFunction(animateFeatures)
   }, [props]);
 
