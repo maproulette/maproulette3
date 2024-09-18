@@ -122,6 +122,37 @@ export const TaskMapContent = (props) => {
     },
   })
 
+   /** Process keyboard shortcuts for the layers */
+  const handleKeyboardShortcuts = event => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
+    if (props.textInputActive(event)) { // ignore typing in inputs
+      return
+    }
+
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+    
+    const layerShortcuts = props.keyboardShortcutGroups[shortcutGroup]
+    switch(event.key) {
+      case layerShortcuts.layerOSMData.key:
+        toggleOSMDataVisibility()
+        break
+      case layerShortcuts.layerTaskFeatures.key:
+        toggleTaskFeatureVisibility()
+        break
+      case layerShortcuts.layerMapillary.key:
+        toggleMapillaryVisibility()
+        break
+      default:
+    }
+  }
+
   const popupLayerSelectionList = (layers, latlng) => {
     const contentElement = document.createElement('div')
     ReactDOM.render(
@@ -382,36 +413,6 @@ export const TaskMapContent = (props) => {
     }
     map.closePopup()
   }, [props.taskBundle, props.taskId]);
-
-  const handleKeyboardShortcuts = event => {
-    // Ignore if shortcut group is not active
-    if (_isEmpty(props.activeKeyboardShortcuts[shortcutGroup])) {
-      return
-    }
-
-    if (props.textInputActive(event)) { // ignore typing in inputs
-      return
-    }
-
-    // Ignore if modifier keys were pressed
-    if (event.metaKey || event.altKey || event.ctrlKey) {
-      return
-    }
-    
-    const layerShortcuts = props.keyboardShortcutGroups[shortcutGroup]
-    switch(event.key) {
-      case layerShortcuts.layerOSMData.key:
-        toggleOSMDataVisibility()
-        break
-      case layerShortcuts.layerTaskFeatures.key:
-        toggleTaskFeatureVisibility()
-        break
-      case layerShortcuts.layerMapillary.key:
-        toggleMapillaryVisibility()
-        break
-      default:
-    }
-  }
 
   const generateDirectionalityMarkers = () => {
     const markers = []
