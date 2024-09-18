@@ -380,6 +380,7 @@ export const TaskMapContent = (props) => {
       );
       map.fitBounds(layerGroup.getBounds().pad(0.2));
     }
+    map.closePopup()
   }, [props.taskBundle, props.taskId]);
 
   const handleKeyboardShortcuts = event => {
