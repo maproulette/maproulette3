@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
-import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
+import shippingTruck from "../../static/images/shipping-truck.svg";
 
 export default class ExportLayoutModal extends Component {
   state = {
@@ -21,13 +21,7 @@ export default class ExportLayoutModal extends Component {
         <Modal narrow isActive onClose={this.props.onCancel}>
           <div>
             <div className="mr-flex mr-justify-center mr-my-8">
-              <SvgSymbol
-                sym="shipping-truck"
-                style={{
-                  height: 99,
-                  width: 198,
-                }}
-              />
+              <img src={shippingTruck} style={{ height: 99, width: 198 }} />
             </div>
             <div className="mr-w-full">
               <h2 className="mr-text-white mr-text-4xl mr-mb-4">
