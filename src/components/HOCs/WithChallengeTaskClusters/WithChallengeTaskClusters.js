@@ -17,7 +17,7 @@ import { fromLatLngBounds, boundsWithinAllowedMaxDegrees }
        from '../../../services/MapBounds/MapBounds'
 import { fetchTaskClusters, clearTaskClusters }
        from '../../../services/Task/TaskClusters'
-import { fetchBoundedTasks, clearBoundedTasks }
+import { fetchBoundedTaskMarkers, fetchBoundedTasks, clearBoundedTasks }
        from '../../../services/Task/BoundedTask'
 import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterMap'
 
@@ -109,7 +109,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         searchCriteria.page = 0
 
         // Fetch up to threshold+1 individual tasks (eg. 1001 tasks)
-        this.props.fetchBoundedTasks(searchCriteria, UNCLUSTER_THRESHOLD + 1, !storeTasks, ignoreLocked, true).then(results => {
+        this.props.fetchBoundedTaskMarkers(searchCriteria, UNCLUSTER_THRESHOLD + 1, !storeTasks, ignoreLocked).then(results => {
           if (currentFetchId >= this.state.fetchId) {
             // If we retrieved 1001 tasks then there might be more tasks and
             // they should be clustered. So fetch as clusters
@@ -256,7 +256,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
 
 export const mapDispatchToProps = dispatch => Object.assign(
   {},
-  bindActionCreators({ fetchTaskClusters, fetchBoundedTasks }, dispatch),
+  bindActionCreators({ fetchTaskClusters, fetchBoundedTaskMarkers, fetchBoundedTasks }, dispatch),
   {
     clearTasksAndClusters: () => {
       dispatch(clearBoundedTasks())
