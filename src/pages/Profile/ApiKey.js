@@ -9,7 +9,7 @@ import messages from './Messages'
 export default class ApiKey extends Component {
   render() {
     return (
-      <section className="mr-section">
+      <section className="mr-section" id="apikey">
         <header className="mr-section__header mr-flex mr-items-center mr-justify-between mr-mb-8">
           <h2 className="mr-h4 mr-text-white">
             <FormattedMessage {...messages.apiKey} />
