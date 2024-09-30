@@ -73,13 +73,15 @@ const shortcutGroup = 'layers'
 export const TaskMapContent = (props) => {
   const map = useMap()
   const [showTaskFeatures, setShowTaskFeatures] = useState(true)
-  const [showOSMData, setShowOSMData] = useState(false)
   const [osmData, setOsmData] = useState(null)
+  const [showOSMData, setShowOSMData] = useState(false)
+  const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
   const [osmDataLoading, setOsmDataLoading] = useState(null)
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null)
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null)
   const [directionalityIndicators, setDirectionalityIndicators] = useState({})
-  const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
+  const [selectedImageKey, setSelectedImageKey] = useState(null)
+
   const taskFeatures = () => {
     if (_get(props, 'taskBundle.tasks.length', 0) > 0) {
       return featureCollection(
@@ -102,6 +104,7 @@ export const TaskMapContent = (props) => {
 
     return _get(props.task, 'geometries.features')
   }
+
   const features = taskFeatures()
   const animator = new MapAnimator()
 
@@ -122,35 +125,21 @@ export const TaskMapContent = (props) => {
     },
   })
 
-   /** Process keyboard shortcuts for the layers */
+  /** Process keyboard shortcuts for the layers */
   const handleKeyboardShortcuts = event => {
-    // Ignore if shortcut group is not active
-    if (_isEmpty(props.activeKeyboardShortcuts[shortcutGroup])) {
-      return
-    }
-
-    if (props.textInputActive(event)) { // ignore typing in inputs
-      return
-    }
-
-    // Ignore if modifier keys were pressed
-    if (event.metaKey || event.altKey || event.ctrlKey) {
-      return
-    }
-    
     const layerShortcuts = props.keyboardShortcutGroups[shortcutGroup]
-    switch(event.key) {
-      case layerShortcuts.layerOSMData.key:
-        toggleOSMDataVisibility()
-        break
-      case layerShortcuts.layerTaskFeatures.key:
-        toggleTaskFeatureVisibility()
-        break
-      case layerShortcuts.layerMapillary.key:
-        toggleMapillaryVisibility()
-        break
-      default:
+    if (_isEmpty(layerShortcuts) || props.textInputActive(event) || event.metaKey || event.altKey || event.ctrlKey) {
+      return
     }
+
+    const actions = {
+      [layerShortcuts.layerOSMData.key]: toggleOSMDataVisibility,
+      [layerShortcuts.layerTaskFeatures.key]: toggleTaskFeatureVisibility,
+      [layerShortcuts.layerMapillary.key]: toggleMapillaryVisibility
+    }
+
+    const action = actions[event.key]
+    if (action) action()
   }
 
   const popupLayerSelectionList = (layers, latlng) => {
@@ -287,15 +276,6 @@ export const TaskMapContent = (props) => {
   }
 
   /**
-   * Ensures the OSM Data Layer is deactivated
-   */
-  const deactivateOSMDataLayer = () => {
-    setShowOSMData(false)
-    setOsmData(null)
-    setOsmDataLoading(false)
-  }
-
-  /**
    * Invoked by LayerToggle when the user wishes to toggle visibility of
    * Mapillary markers on or off.
    */
@@ -380,7 +360,6 @@ export const TaskMapContent = (props) => {
       _pick(props.keyboardShortcutGroups, shortcutGroup),
       handleKeyboardShortcuts
     );
-  
     loadMapillaryIfNeeded();
     loadOpenStreetCamIfNeeded();
     generateDirectionalityMarkers();
@@ -396,11 +375,6 @@ export const TaskMapContent = (props) => {
   }, []);
 
   useEffect(() => {
-    deactivateOSMDataLayer()
-    generateDirectionalityMarkers();
-  }, [props.task.id, props.task.geometries]);
-
-  useEffect(() => {
     loadMapillaryIfNeeded();
     loadOpenStreetCamIfNeeded();
     animator.setAnimationFunction(animateFeatures)
@@ -413,6 +387,12 @@ export const TaskMapContent = (props) => {
       );
       map.fitBounds(layerGroup.getBounds().pad(0.2));
     }
+
+    setShowOSMData(false)
+    setOsmData(null)
+    setOsmDataLoading(false)
+    generateDirectionalityMarkers();
+
     map.closePopup()
   }, [props.taskBundle, props.taskId]);
 
@@ -471,6 +451,7 @@ export const TaskMapContent = (props) => {
           markerColor="#39AF64"
           imageClicked={imageKey => setMapillaryViewerImage(imageKey)}
           imageAlt="Mapillary"
+          setSelectedImageKey={setSelectedImageKey}
         />
       ),
     }
@@ -487,6 +468,7 @@ export const TaskMapContent = (props) => {
         markerColor="#C851E0"
         imageClicked={imageKey => setOpenStreetCamViewerImage(imageKey)}
         imageAlt="OpenStreetCam"
+        setSelectedImageKey={setSelectedImageKey}
       />
     ),
   })

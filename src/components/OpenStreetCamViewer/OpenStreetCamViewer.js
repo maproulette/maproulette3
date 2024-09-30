@@ -1,6 +1,6 @@
-import { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { parseISO,format } from 'date-fns'
+import { parseISO, format } from 'date-fns'
 import _findIndex from 'lodash/findIndex'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
@@ -12,57 +12,42 @@ import BusySpinner from '../BusySpinner/BusySpinner'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class OpenStreetCamViewer extends Component {
-  state = {
-    currentIndex: -1,
-    imageLoaded: false,
-  }
+const OpenStreetCamViewer = ({ images, initialImageKey, onClose }) => {
+	const [currentIndex, setCurrentIndex] = useState(-1)
+	const [imageLoaded, setImageLoaded] = useState(false)
 
-  hasNextImage = () => {
-    return this.state.currentIndex !== -1 &&
-           this.state.currentIndex < this.props.images.length - 1
-  }
+	useEffect(() => {
+		setCurrentIndex(_findIndex(images, { key: initialImageKey }))
+	}, [images, initialImageKey])
 
-  nextImage = () => {
-    this.setState({
-      currentIndex: this.state.currentIndex + 1,
-      imageLoaded: false
-    })
-  }
+	const hasNextImage = () => currentIndex !== -1 && currentIndex < images.length - 1
+	const hasPriorImage = () => currentIndex !== -1 && currentIndex > 0
 
-  hasPriorImage = () => {
-    return this.state.currentIndex !== -1 &&
-           this.state.currentIndex > 0
-  }
+	const nextImage = () => {
+		if (hasNextImage()) {
+			setCurrentIndex(currentIndex + 1)
+			setImageLoaded(false)
+		}
+	}
 
-  priorImage = () => {
-    this.setState({
-      currentIndex: this.state.currentIndex - 1,
-      imageLoaded: false,
-    })
-  }
+	const priorImage = () => {
+		if (hasPriorImage()) {
+			setCurrentIndex(currentIndex - 1)
+			setImageLoaded(false)
+		}
+	}
 
-  componentDidMount() {
-    this.setState({
-      currentIndex: _findIndex(this.props.images, {key: this.props.initialImageKey}),
-    })
-  }
-
-  render() {
-    const currentImage =
-      this.state.currentIndex === -1 ?
-      null :
-      this.props.images[this.state.currentIndex]
+	const currentImage = currentIndex === -1 ? null : images[currentIndex]
 
     return (
       <External>
-        <Modal isActive onClose={this.props.onClose}>
+        <Modal isActive onClose={onClose}>
           <div className="mr-flex mr-flex-col mr-justify-center">
             <div className="mr-flex mr-justify-center">
               <div className="mr-flex mr-justify-between mr-bg-black-15 mr-rounded mr-p-2">
                 <div>
-                  {this.hasPriorImage() &&
-                   <button onClick={this.priorImage}>
+                  {hasPriorImage() &&
+                   <button onClick={priorImage}>
                      <SvgSymbol
                        sym="arrow-left-icon"
                        viewBox='0 0 20 20'
@@ -75,8 +60,8 @@ export default class OpenStreetCamViewer extends Component {
                 <div className="mr-w-4" />
 
                 <div>
-                  {this.hasNextImage() &&
-                   <button onClick={this.nextImage}>
+                  {hasNextImage() &&
+                   <button onClick={nextImage}>
                      <SvgSymbol
                        sym="arrow-right-icon"
                        viewBox='0 0 20 20'
@@ -88,20 +73,19 @@ export default class OpenStreetCamViewer extends Component {
               </div>
             </div>
 
-            <div>
+			<div className="mr-mt-2">
               {currentImage &&
-               <div>
-                 <img
-                   src={currentImage.url}
-                   onLoad={() => this.setState({imageLoaded: true})}
-                   alt=""
-                 />
-               </div>
+				<img
+				 src={currentImage.url}
+				 onLoad={() => setImageLoaded(true)}
+				 alt=""
+				 className="mr-w-full mr-h-auto mr-rounded mr-shadow"
+				/>
               }
 
             </div>
             <div className="mr-flex mr-justify-center mr-mt-2 mr-min-h-4 mr-text-sm mr-text-white">
-              {!this.state.imageLoaded ?
+              {!imageLoaded ?
                <BusySpinner /> :
                <div className="mr-flex mr-items-center">
                  <div className="mr-pr-4 mr-mr-4 mr-leading-tight mr-border-r mr-border-grey">
@@ -117,10 +101,11 @@ export default class OpenStreetCamViewer extends Component {
         </Modal>
       </External>
     )
-  }
 }
 
 OpenStreetCamViewer.propTypes = {
   images: PropTypes.array.isRequired,
   onClose: PropTypes.func,
 }
+
+export default OpenStreetCamViewer
