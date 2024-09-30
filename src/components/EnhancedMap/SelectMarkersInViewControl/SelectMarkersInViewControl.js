@@ -56,17 +56,3 @@ const SelectMarkersInViewLeafletControl = L.Control.extend({
 export const SelectMarkersInViewControl = createControlComponent((props) => new SelectMarkersInViewLeafletControl(props))
 
 export default injectIntl(SelectMarkersInViewControl)
-
-
-
-
-
-
-
-
-
-
-
-     
- 
-

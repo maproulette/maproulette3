@@ -1,0 +1,4 @@
+.popup-content {
+  max-height: 300px; /* Set your desired max height */
+  overflow-y: auto;  /* Enable vertical scrolling */
+}
