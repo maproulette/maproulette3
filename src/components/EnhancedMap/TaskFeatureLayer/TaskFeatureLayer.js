@@ -5,7 +5,6 @@ import L from 'leaflet'
 import { injectIntl } from 'react-intl'
 import { featureCollection } from '@turf/helpers'
 import _isFunction from 'lodash/isFunction'
-import _get from 'lodash/get'
 import _uniqueId from 'lodash/uniqueId'
 import AsSimpleStyleableFeature
        from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
