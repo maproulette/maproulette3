@@ -1,4 +1,4 @@
-.popup-content {
-  max-height: 300px; /* Set your desired max height */
-  overflow-y: auto;  /* Enable vertical scrolling */
+.task-popup-content {
+  max-height: 300px;
+  overflow-y: auto; 
 }

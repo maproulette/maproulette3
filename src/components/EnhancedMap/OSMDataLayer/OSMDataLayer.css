@@ -1,0 +1,4 @@
+.osm-popup-content {
+  max-height: 300px !important; /* Set your desired max height */
+  overflow-y: auto !important;  /* Enable vertical scrolling */
+}

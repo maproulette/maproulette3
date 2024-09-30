@@ -25,6 +25,7 @@ import AsIdentifiableFeature
        from '../../interactions/TaskFeature/AsIdentifiableFeature'
 import messages from './Messages'
 import PropertyList from './PropertyList/PropertyList'
+import './EnhancedMap.css' // Import the CSS file
 
 const PIXEL_MARGIN = 10 // number of pixels on each side of a click to consider
 
@@ -101,7 +102,7 @@ const EnhancedMapContent = (props) => {
    */
   const animateFeatures = () => {
     // Animate paths
-    const paths = document.querySelectorAll('.task-map.leaflet-pane path.leaflet-interactive')
+    const paths = document.querySelectorAll('.task-map .leaflet-pane path.leaflet-interactive')
     if (paths.length > 0) {
       for (let path of paths) {
         pathComplete(path).then(pathLength => {
@@ -375,6 +376,7 @@ const EnhancedMapContent = (props) => {
 
   const popupLayerSelectionList = (layers, latlng) => {
     const contentElement = document.createElement('div')
+    contentElement.className = 'popup-layer-selection-content' // Apply the updated CSS class
     ReactDOM.render(
       <div className="mr-text-base mr-px-4 mr-links-blue-light">
         <h3>{props.intl.formatMessage(messages.layerSelectionHeader)}</h3>
