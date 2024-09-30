@@ -34,6 +34,12 @@ export default class MapillaryViewer extends Component {
     return nextProps.initialImageKey !== this.props.initialImageKey
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.initialImageKey !== this.props.initialImageKey) {
+      this.viewer.setImageId(this.props.initialImageKey)
+    }
+  }
+
   render() {
     return (
       <External>
