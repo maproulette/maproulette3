@@ -155,6 +155,7 @@ export const TaskMapContent = (props) => {
 
   const popupLayerSelectionList = (layers, latlng) => {
     const contentElement = document.createElement('div')
+    contentElement.style.maxHeight = '300px';
     ReactDOM.render(
       <div className="mr-text-base mr-px-4 mr-links-blue-light">
         <h3>{props.intl.formatMessage(messages.layerSelectionHeader)}</h3>

@@ -41,6 +41,7 @@ const generateLayer = (props, map) => {
     )
   
     const contentElement = document.createElement('div')
+    contentElement.style.maxHeight = '300px';
     ReactDOM.render(
       <IntlProvider 
         key={props.intl.locale} 

@@ -5,10 +5,8 @@ import L from 'leaflet'
 import { injectIntl } from 'react-intl'
 import { featureCollection } from '@turf/helpers'
 import _isFunction from 'lodash/isFunction'
-import _get from 'lodash/get'
 import _uniqueId from 'lodash/uniqueId'
-import AsSimpleStyleableFeature
-       from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
+import AsSimpleStyleableFeature from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
@@ -36,6 +34,7 @@ const TaskFeatureLayer = props => {
 
   const propertyList = (featureProperties, onBack) => {
     const contentElement = document.createElement('div')
+    contentElement.style.maxHeight = '300px';
     ReactDOM.render(
       <IntlProvider key={props.intl.locale} 
                     locale={props.intl.locale} 
