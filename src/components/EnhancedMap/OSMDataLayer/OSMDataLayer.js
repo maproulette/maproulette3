@@ -10,23 +10,24 @@ import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
 import layerMessages from '../LayerToggle/Messages'
-import { createPathComponent } from '@react-leaflet/core'
+import { createPathComponent, useLeafletContext } from '@react-leaflet/core'
 import { useMap } from 'react-leaflet'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
-const HIGHLIGHT_STYLE = {
-  color: colors.gold,
-  fillColor: colors.gold,
-  weight: 7,
-}
-
-const HOVER_HIGHLIGHT_STYLE = {
-  color: colors.gold,
-  fillColor: colors.gold,
-  weight: 14,
-}
 
 const generateLayer = (props, map) => {
+  const HIGHLIGHT_STYLE = {
+    color: colors.gold,
+    fillColor: colors.gold,
+    weight: props.zoom >= 18 ? 8 : props.zoom > 15 ? 6 : 4,
+  }
+  
+  const HOVER_HIGHLIGHT_STYLE = {
+    color: colors.gold,
+    fillColor: colors.gold,
+    weight: props.zoom >= 18 ? 8 : props.zoom > 15 ? 6 : 4,
+  }
+  
   const popupContent = (layer, onBack) => {
     const properties = layer.feature.properties
     const header = (
@@ -78,13 +79,13 @@ const generateLayer = (props, map) => {
     },
     changeset: { ...globalStyleOptions, color: colors.red },
   }
-
+  const leaflet = useLeafletContext()
   const layerGroup = new L.OSM.DataLayer(props.xmlData, {
     styles: generateElementStyles,
     showNodes: props.showOSMElements.nodes,
     showWays: props.showOSMElements.ways,
     showAreas: props.showOSMElements.areas,
-    pane: _get(props, 'leaflet.pane'),
+    pane: leaflet.pane,
   })
 
   layerGroup.eachLayer(layer => {
