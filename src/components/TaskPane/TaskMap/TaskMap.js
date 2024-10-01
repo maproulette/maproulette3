@@ -279,6 +279,7 @@ export const TaskMapContent = (props) => {
       })
     }
     setShowOSMData(!showOSMData)
+    setOsmDataLoading(false)
   }
 
   const toggleOSMElements = element => {
