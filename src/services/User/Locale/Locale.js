@@ -161,7 +161,7 @@ export const loadTranslatedMessages = async function (locale) {
   }
 
   const [messages] = await LocaleImports[locale]();
-  return messages;
+  return messages.default;
 };
 
 /**
