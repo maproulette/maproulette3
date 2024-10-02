@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { IntlProvider } from "react-intl";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
-import { ChallengeOwnerContactLinkInternal as ContactLink } from "./ChallengeOwnerContactLink.js";
+import { ChallengeOwnerContactLinkInternal as ContactLink } from "./ChallengeOwnerContactLink";
 
 const generateMockTask = (id, challengeOwnerId) => {
   return {

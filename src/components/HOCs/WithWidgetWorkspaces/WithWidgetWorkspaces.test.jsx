@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import {WithWidgetWorkspacesInternal as WithWidgetWorkspaces} from "./WithWidgetWorkspaces.js";
+import {WithWidgetWorkspacesInternal as WithWidgetWorkspaces} from "./WithWidgetWorkspaces";
 import * as services from '../../../services/Widget/Widget'
 
 const testWorkspaces = {
