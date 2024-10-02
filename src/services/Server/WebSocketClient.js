@@ -110,7 +110,7 @@ export default class WebSocketClient {
       this.websocket.close()
     }
 
-    this.websocket = new WebSocket(process.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL)
+    this.websocket = new WebSocket(import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL)
     this.websocket.onopen = e => this.handleOpen(e)
     this.websocket.onmessage = e => this.handleMessage(e)
     this.websocket.onclose = e => this.handleClose(e)

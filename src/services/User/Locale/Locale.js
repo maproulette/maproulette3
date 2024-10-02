@@ -169,7 +169,7 @@ export const loadTranslatedMessages = async function (locale) {
  * no default is configured or if the configured locale isn't supported.
  */
 export const defaultLocale = function () {
-  const configured = process.env.REACT_APP_DEFAULT_LOCALE;
+  const configured = import.meta.env.VITE_DEFAULT_LOCALE;
 
   return isSupportedLocale(configured) ? configured : Locale.enUS;
 };

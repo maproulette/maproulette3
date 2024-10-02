@@ -49,9 +49,9 @@ const ClusterMap =
 
 const ProjectPicker = WithManageableProjects(ProjectPickerModal);
 
-const FLAG_REPO_NAME = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
-const FLAG_REPO_OWNER = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
-const FLAG_TOKEN = process.env.REACT_APP_GITHUB_ISSUES_API_TOKEN
+const FLAG_REPO_NAME = import.meta.env.VITE_GITHUB_ISSUES_API_REPO
+const FLAG_REPO_OWNER = import.meta.env.VITE_GITHUB_ISSUES_API_OWNER
+const FLAG_TOKEN = import.meta.env.VITE_GITHUB_ISSUES_API_TOKEN
 const FLAGGING_ACTIVE = FLAG_REPO_NAME && FLAG_REPO_OWNER && FLAG_TOKEN
 
 const DETAIL_TABS = {
@@ -127,8 +127,8 @@ export class ChallengeDetail extends Component {
   queryForIssue = async (id) => {
     this.setState({ flagLoading: true });
 
-    const owner = process.env.REACT_APP_GITHUB_ISSUES_API_OWNER
-    const repo = process.env.REACT_APP_GITHUB_ISSUES_API_REPO
+    const owner = import.meta.env.VITE_GITHUB_ISSUES_API_OWNER
+    const repo = import.meta.env.VITE_GITHUB_ISSUES_API_REPO
     const query = `q='Reported+Challenge+${encodeURIComponent('#') + id}'+in:title+state:open+repo:${owner}/${repo}`;
     const response = await fetch(`https://api.github.com/search/issues?${query}`, {
       method: 'GET',
@@ -569,7 +569,7 @@ export class ChallengeDetail extends Component {
                         </strong>{' '}
                         <a
                           className="mr-text-green-lighter hover:mr-text-white"
-                          href={process.env.REACT_APP_OSM_SERVER + '/user/' + owner.osmProfile.displayName}
+                          href={import.meta.env.VITE_OSM_SERVER + '/user/' + owner.osmProfile.displayName}
                           target="_blank"
                           rel="noopener"
                         >

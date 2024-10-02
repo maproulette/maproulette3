@@ -74,7 +74,6 @@
     "react-responsive": "^9.0.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^5.0.1",
     "react-share": "^4.2.0",
     "react-syntax-highlighter": "^15.4.3",
     "react-table-6": "^6.11.0",
@@ -103,6 +102,8 @@
     "@openstreetmap/id-tagging-schema": "^3.0.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^12.1.2",
+    "@vitejs/plugin-react": "^4.3.2",
+    "@vitejs/plugin-react-swc": "^3.7.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.7",
     "eslint": "^8.54.0",
@@ -127,7 +128,8 @@
     "tailwindcss-owl": "^2.0.0",
     "tailwindcss-transforms": "^2.2.0",
     "tailwindcss-transition": "^1.0.5",
-    "tailwindcss-visuallyhidden": "^1.0.2"
+    "tailwindcss-visuallyhidden": "^1.0.2",
+    "vite": "^5.4.8"
   },
   "scripts": {
     "build-postcss": "postcss src/styles/index.css -o src/index.css",

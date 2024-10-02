@@ -7,7 +7,7 @@ import { injectIntl } from 'react-intl';
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 
-export const REACT_APP_TITLE = 'MapRoulette'
+export const VITE_TITLE = 'MapRoulette'
 
 const capitalize  = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -62,7 +62,7 @@ export const formatTitle = (props) => {
 
     pathArr.reverse();
 
-    const newTitle = _isEmpty(pathArr) ? REACT_APP_TITLE : pathArr.join(' - ') + ' - ' +  REACT_APP_TITLE
+    const newTitle = _isEmpty(pathArr) ? VITE_TITLE : pathArr.join(' - ') + ' - ' +  VITE_TITLE
     return newTitle
   }
 }
