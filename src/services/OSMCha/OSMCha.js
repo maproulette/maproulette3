@@ -38,6 +38,6 @@ export const buildOSMChaUrl = (bboxArray, earliestDate, participantUsernames) =>
     filterParams.push(`"users":[${userList.join(',')}]`)
   }
 
-  return `${process.env.REACT_APP_OSMCHA_SERVER}/?filters=` +
+  return `${import.meta.env.VITE_OSMCHA_SERVER}/?filters=` +
          encodeURIComponent(`{${filterParams.join(',')}}`)
 }

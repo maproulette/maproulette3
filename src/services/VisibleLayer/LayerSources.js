@@ -66,9 +66,9 @@ export const LayerSources = _sortBy(
 
 // Load any API keys from .env file
 let layerAPIKeys = {}
-if (_get(process.env, 'REACT_APP_MAP_LAYER_API_KEYS', '').length > 0) {
+if (_get(import.meta.env, 'VITE_MAP_LAYER_API_KEYS', '').length > 0) {
   try {
-    layerAPIKeys = JSON.parse(process.env.REACT_APP_MAP_LAYER_API_KEYS)
+    layerAPIKeys = JSON.parse(import.meta.env.VITE_MAP_LAYER_API_KEYS)
   }
   catch(e) {
     console.log("Failed to parse map layer API keys. Ignoring.")
@@ -132,7 +132,7 @@ export const normalizeLayer = function(layer) {
  * has been specified.
  */
 export const defaultLayerSource = function() {
-  const configuredDefault = _find(LayerSources, {id: process.env.REACT_APP_DEFAULT_MAP_LAYER_ID})
+  const configuredDefault = _find(LayerSources, {id: import.meta.env.VITE_DEFAULT_MAP_LAYER_ID})
   return configuredDefault ? configuredDefault : LayerSources[0]
 }
 

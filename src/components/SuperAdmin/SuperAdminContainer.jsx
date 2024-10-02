@@ -27,7 +27,7 @@ const WrappedSuperAdminPane = WithCurrentUser(
 
 class SuperAdminContainer extends Component {
   componentDidMount() {
-    if (process.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS !== 'true') {
+    if (import.meta.env.VITE_DISABLE_SUPER_ADMIN_METRICS !== 'true') {
       if (AsManager(this.props.user).isSuperUser()) {
         const searchQuery = { onlyEnabled: false }
         this.props.fetchAdminChallenges(searchQuery)
@@ -38,7 +38,7 @@ class SuperAdminContainer extends Component {
   }
 
   render() {
-    if (process.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS === 'true') {
+    if (import.meta.env.VITE_DISABLE_SUPER_ADMIN_METRICS === 'true') {
       return <div>Super Admin Metrics is currently disabled</div>
     }
 

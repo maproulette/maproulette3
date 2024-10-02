@@ -64,7 +64,7 @@ const ALL_COLUMNS =
     reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
     reviewDuration:{group:"review"}, controls:{permanent: true},
     comments:{}, tags:{}, additionalReviewers:{group:"review"}},
-    process.env.REACT_APP_FEATURE_META_QC === 'enabled' ?
+    import.meta.env.VITE_FEATURE_META_QC === 'enabled' ?
       {metaReviewStatus:{group:"review"}, metaReviewedBy:{group:"review"},
        metaReviewedAt:{group:"review"}} : null
   )

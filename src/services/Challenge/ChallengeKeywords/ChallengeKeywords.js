@@ -54,7 +54,7 @@ export const ChallengeCategoryKeywords = {
  * }
  */
 export let customCategoryKeywords = {}
-const customCategoryJson = _get(process.env, 'REACT_APP_CUSTOM_KEYWORD_CATEGORIES')
+const customCategoryJson = _get(import.meta.env, 'VITE_CUSTOM_KEYWORD_CATEGORIES')
 if (!_isEmpty(customCategoryJson)) {
   try {
     customCategoryKeywords = JSON.parse(customCategoryJson)

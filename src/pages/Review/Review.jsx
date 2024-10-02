@@ -206,7 +206,7 @@ export class ReviewTasksDashboard extends Component {
       )
     }
 
-    const metaReviewEnabled = process.env.REACT_APP_FEATURE_META_QC === 'enabled'
+    const metaReviewEnabled = import.meta.env.VITE_FEATURE_META_QC === 'enabled'
 
     const showType = this.state.showType
 

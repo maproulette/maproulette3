@@ -18,14 +18,14 @@ import _isEmpty from 'lodash/isEmpty'
 import RouteFactory from './RouteFactory'
 import apiRoutes from './APIRoutes'
 
-const baseURL = process.env.REACT_APP_MAP_ROULETTE_SERVER_URL
-const apiKey = process.env.REACT_APP_SERVER_API_KEY
+const baseURL = import.meta.env.VITE_MAP_ROULETTE_SERVER_URL
+const apiKey = import.meta.env.VITE_SERVER_API_KEY
 
 // In development mode, be less strict about CORS so that the frontend and
 // backend can run on separate servers/ports. Otherwise insist on same-origin
 // policy
 export const credentialsPolicy =
-  process.env.NODE_ENV === 'development' ? 'include' : 'same-origin'
+  import.meta.env.NODE_ENV === 'development' ? 'include' : 'same-origin'
 
 export const serverRouteFactory = new RouteFactory(baseURL)
 export const defaultRoutes = Object.freeze(apiRoutes(serverRouteFactory))

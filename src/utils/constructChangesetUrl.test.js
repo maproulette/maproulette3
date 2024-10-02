@@ -1,15 +1,15 @@
 import { constructChangesetUrl } from "./constructChangesetUrl";
 
 describe("constructChangesetUrl", () => {
-  const cachedEnv = process.env;
+  const cachedEnv = import.meta.env;
 
   beforeEach(() => {
     jest.resetModules();
-    process.env = { ...cachedEnv, REACT_APP_CHANGESET_URL: "enabled", REACT_APP_SHORT_URL: '', REACT_APP_SHORT_PATH: 'disabled' };
+    import.meta.env = { ...cachedEnv, VITE_CHANGESET_URL: "enabled", VITE_SHORT_URL: '', VITE_SHORT_PATH: 'disabled' };
   });
 
   afterAll(() => {
-    process.env = cachedEnv;
+    import.meta.env = cachedEnv;
   });
 
   it("returns empty string if no task is provided", () => {
@@ -17,7 +17,7 @@ describe("constructChangesetUrl", () => {
   });
 
   it("returns empty string if env variable is disabled", () => {
-    process.env.REACT_APP_CHANGESET_URL = "disabled";
+    import.meta.env.VITE_CHANGESET_URL = "disabled";
     const task = { parent: { enabled: true, id: 1 }, id: 2 };
     expect(constructChangesetUrl(task)).toBe("");
   });
@@ -39,18 +39,18 @@ describe("constructChangesetUrl", () => {
     );
   });
 
-  it("returns short root url if REACT_APP_SHORT_URL is provided", () => {
-    process.env.REACT_APP_SHORT_URL = "mpr.lt";
-    process.env.REACT_APP_SHORT_PATH = "disabled";
+  it("returns short root url if VITE_SHORT_URL is provided", () => {
+    import.meta.env.VITE_SHORT_URL = "mpr.lt";
+    import.meta.env.VITE_SHORT_PATH = "disabled";
     const task = { parent: { enabled: true, parent: { enabled: true }, id: 1 }, id: 2 };
     expect(constructChangesetUrl(task)).toBe(
       " mpr.lt/challenge/1/task/2"
     );
   });
 
-  it("returns short root url and short path if REACT_APP_SHORT_URL is provided and REACT_APP_SHORT_PATH is enabled", () => {
-    process.env.REACT_APP_SHORT_URL = "mpr.lt";
-    process.env.REACT_APP_SHORT_PATH = "enabled";
+  it("returns short root url and short path if VITE_SHORT_URL is provided and VITE_SHORT_PATH is enabled", () => {
+    import.meta.env.VITE_SHORT_URL = "mpr.lt";
+    import.meta.env.VITE_SHORT_PATH = "enabled";
     const task = { parent: { enabled: true, parent: { enabled: true }, id: 1 }, id: 2 };
     expect(constructChangesetUrl(task)).toBe(
       " mpr.lt/c/1/t/2"
