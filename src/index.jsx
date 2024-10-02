@@ -22,7 +22,7 @@ import { setCheckingLoginStatus,
          clearCheckingLoginStatus } from './services/Status/Status'
 import WithUserLocale from './components/HOCs/WithUserLocale/WithUserLocale'
 import './theme.scss'
-import './index.css'
+import './styles/index.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 

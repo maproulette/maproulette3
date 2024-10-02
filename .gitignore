@@ -3,9 +3,6 @@
 # dependencies
 /node_modules
 
-# Built by tailwind
-src/index.css
-
 # Imagery
 src/imagery.json
 src/defaultLayers.json
