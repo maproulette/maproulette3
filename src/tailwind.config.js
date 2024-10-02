@@ -7,6 +7,7 @@ import transforms from 'tailwindcss-transforms';
 
 export default {
   content: [
+    './index.html',
     './public/**/*.html',
     './src/components/**/*.{js,jsx,ts,tsx}',
     './src/pages/**/*.{js,jsx,ts,tsx}'
