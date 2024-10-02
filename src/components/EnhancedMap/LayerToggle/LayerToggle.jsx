@@ -244,7 +244,7 @@ const overlayToggles = props => {
   }
 
   if (props.toggleOSMData &&
-      _get(process.env, 'REACT_APP_OSM_DATA_OVERLAY', 'enabled') !== 'disabled') {
+      _get(import.meta.env, 'VITE_OSM_DATA_OVERLAY', 'enabled') !== 'disabled') {
     toggles.push({
       id: "osm-data",
       label: <FormattedMessage {...messages.showOSMDataLabel} />,

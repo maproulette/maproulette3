@@ -20,7 +20,7 @@ import AppErrors from '../../../services/Error/AppErrors'
  * WithMapBoundedTasks retrieves map-bounded task clusters (regardless of
  * challenge) within the given mapBounds bounding box when it's of an
  * appropriately small size as determiend by the
- * REACT_APP_BOUNDED_TASKS_MAX_DIMENSION .env setting.
+ * VITE_BOUNDED_TASKS_MAX_DIMENSION .env setting.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */

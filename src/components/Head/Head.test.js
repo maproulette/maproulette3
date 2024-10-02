@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { formatTitle, REACT_APP_TITLE } from "./Head";
+import { formatTitle, VITE_TITLE } from "./Head";
 
 describe("formatTitle", () => {
   it("doesn't break if no path is provided", () => {
@@ -9,7 +9,7 @@ describe("formatTitle", () => {
 
   it("returns App title", () => {
     const title = formatTitle({ match: { path: "/" } });
-    expect(title).toBe(REACT_APP_TITLE);
+    expect(title).toBe(VITE_TITLE);
   });
 
   it("replaces route ids appropriately", () => {
@@ -34,6 +34,6 @@ describe("formatTitle", () => {
         }
       } 
     });
-    expect(title).toBe('5 - 2 - User - 3 - Project Name - Bar - Foo - ' + REACT_APP_TITLE);
+    expect(title).toBe('5 - 2 - User - 3 - Project Name - Bar - Foo - ' + VITE_TITLE);
   });
 });

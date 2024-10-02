@@ -288,8 +288,8 @@ export const executePlaceSearch = (props, query, setLoading) => {
  * Returns the bouding box from the given centerpoint coordinates
  */
 const determineBoundingBox = (centerpointLong, centerpointLat) => {
-  const bboxWidth = parseFloat(process.env.REACT_APP_NEARBY_LONGITUDE_LENGTH)
-  const bboxHeight = parseFloat(process.env.REACT_APP_NEARBY_LATITUDE_LENGTH)
+  const bboxWidth = parseFloat(import.meta.env.VITE_NEARBY_LONGITUDE_LENGTH)
+  const bboxHeight = parseFloat(import.meta.env.VITE_NEARBY_LATITUDE_LENGTH)
 
   // Build WSEN bounds array
   return ([

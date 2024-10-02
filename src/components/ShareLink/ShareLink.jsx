@@ -12,7 +12,7 @@ import './ShareLink.scss'
 /**
  * ShareLink presents a link icon that toggles a small dropdown
  * presenting the given share link (made into an absolute URL using the
- * REACT_APP_URL .env variable) with an option to copy the link to the user's
+ * VITE_URL .env variable) with an option to copy the link to the user's
  * clipboard.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
@@ -59,7 +59,7 @@ export class ShareLink extends Component {
 ShareLink.propTypes = {
   /**
    * Relative link to be shared. The link will be made absolute using
-   * REACT_APP_URL .env variable.
+   * VITE_URL .env variable.
    */
   link: PropTypes.string.isRequired,
 }

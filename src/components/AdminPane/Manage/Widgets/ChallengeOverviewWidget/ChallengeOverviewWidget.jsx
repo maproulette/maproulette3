@@ -74,7 +74,7 @@ export default class ChallengeOverviewWidget extends Component {
           {this.props.challenge.enabled && this.props.challenge.parent && !this.props.challenge.parent.enabled &&
           <div className="mr-text-red-light mr-flex mr-items-center mr-text-base mr-uppercase mr-mt-2">
              <a
-               href={`${process.env.REACT_APP_DOCS_URL}/documentation/challenge-visibility-and-discovery/`}
+               href={`${import.meta.env.VITE_DOCS_URL}/documentation/challenge-visibility-and-discovery/`}
                className="mr-mr-2 mr-flex mr-items-center"
                target="_blank"
                rel="noopener noreferrer"

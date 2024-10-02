@@ -39,7 +39,7 @@ export const jsSchema = (
     required: ["name"],
   };
 
-  if (process.env.REACT_APP_EMAIL_ENFORCEMENT === "required") {
+  if (import.meta.env.VITE_EMAIL_ENFORCEMENT === "required") {
     if (!user?.settings?.email) {
       schema.properties.email = {
         title: intl.formatMessage(messages.emailLabel),

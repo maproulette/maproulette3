@@ -29,7 +29,7 @@ export const jsSchema = (intl) => {
         type: "number",
         enum: ZOOM_LEVELS,
         default: numericEnvSetting(
-                   'REACT_APP_INITIAL_CHALLENGE_DEFAULT_ZOOM',
+                   'VITE_INITIAL_CHALLENGE_DEFAULT_ZOOM',
                    DEFAULT_ZOOM),
       },
       minZoom: {
@@ -37,7 +37,7 @@ export const jsSchema = (intl) => {
         type: "number",
         enum: ZOOM_LEVELS,
         default: numericEnvSetting(
-                   'REACT_APP_INITIAL_CHALLENGE_MIN_ZOOM',
+                   'VITE_INITIAL_CHALLENGE_MIN_ZOOM',
                    MIN_ZOOM),
       },
       maxZoom: {
@@ -45,7 +45,7 @@ export const jsSchema = (intl) => {
         type: "number",
         enum: ZOOM_LEVELS,
         default: numericEnvSetting(
-                  'REACT_APP_INITIAL_CHALLENGE_MAX_ZOOM',
+                  'VITE_INITIAL_CHALLENGE_MAX_ZOOM',
                   MAX_ZOOM),
       }
     },
@@ -93,6 +93,6 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
  * necessary
  */
 export const numericEnvSetting = (settingName, defaultValue) => {
-  const setting = _get(process.env, settingName, defaultValue)
+  const setting = _get(import.meta.env, settingName, defaultValue)
   return _isString(setting) ? parseInt(setting, 10) : setting
 }

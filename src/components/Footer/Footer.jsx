@@ -17,7 +17,7 @@ class Footer extends Component {
   }
 
   renderMyData(){
-    fetch(`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
+    fetch(`${import.meta.env.VITE_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
         .then((response) => response.json())
         .then((responseJson) => {
           this.setState({ data : responseJson })
@@ -39,9 +39,9 @@ class Footer extends Component {
                 <FormattedMessage {...messages.versionLabel} />{' '}
                 <span className="mr-text-green-light mr-font-mono mr-text-base">
                   <a
-                    href={`https://github.com/maproulette/maproulette3/releases/tag/v${process.env.REACT_APP_VERSION_SEMVER}`}
+                    href={`https://github.com/maproulette/maproulette3/releases/tag/v${import.meta.env.VITE_VERSION_SEMVER}`}
                   >
-                    v{process.env.REACT_APP_VERSION_SEMVER}
+                    v{import.meta.env.VITE_VERSION_SEMVER}
                   </a>
                 </span>
               </h3>
@@ -64,14 +64,14 @@ class Footer extends Component {
               <ul className="mr-list-reset mr-text-sm">
                 <li>
                   <a
-                    href={process.env.REACT_APP_DOCS_URL}
+                    href={import.meta.env.VITE_DOCS_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                   ><FormattedMessage {...messages.getHelp} /></a>
                 </li>
                 <li>
                   <a
-                    href={process.env.REACT_APP_BLOG_URL}
+                    href={import.meta.env.VITE_BLOG_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                   ><FormattedMessage {...messages.viewBlog} /></a>

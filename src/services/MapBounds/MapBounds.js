@@ -23,11 +23,11 @@ export const GLOBAL_MAPBOUNDS = [-180, -85, 180, 85]
 
 /**
  * Maximum allowed size, in degrees, of the bounding box for
- * task-browsing to be enabled. Uses the REACT_APP_BOUNDED_TASKS_MAX_DIMENSION
+ * task-browsing to be enabled. Uses the VITE_BOUNDED_TASKS_MAX_DIMENSION
  * .env setting or a system default if that hasn't been set.
  */
 export const maxAllowedTaskBrowsingDegrees =
-  _get(process.env, 'REACT_APP_BOUNDED_TASKS_MAX_DIMENSION', 70) // degrees
+  _get(import.meta.env, 'VITE_BOUNDED_TASKS_MAX_DIMENSION', 70) // degrees
 
 // utility functions
 

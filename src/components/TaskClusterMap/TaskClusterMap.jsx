@@ -270,7 +270,7 @@ export const TaskClusterMap = (props) => {
         !!props.mapZoomedOut &&
         <ZoomInMessage {...props} zoom={currentZoom} />
       }
-      {props.delayMapLoad && !searchOpen && !process.env.REACT_APP_DISABLE_TASK_CLUSTERS &&
+      {props.delayMapLoad && !searchOpen && !import.meta.env.VITE_DISABLE_TASK_CLUSTERS &&
         <div className="mr-absolute mr-top-0 mr-mt-3 mr-w-full mr-flex mr-justify-center"
           onClick={() => props.forceMapLoad()}>
           <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
@@ -280,7 +280,7 @@ export const TaskClusterMap = (props) => {
           </div>
         </div>
       }
-      {process.env.REACT_APP_DISABLE_TASK_CLUSTERS && props.onClickFetchClusters && !props.mapZoomedOut &&
+      {import.meta.env.VITE_DISABLE_TASK_CLUSTERS && props.onClickFetchClusters && !props.mapZoomedOut &&
         <div className="mr-absolute mr-bottom-0 mr-mb-3 mr-w-full mr-flex mr-justify-center"
           onClick={() => {
             props.onClickFetchClusters()

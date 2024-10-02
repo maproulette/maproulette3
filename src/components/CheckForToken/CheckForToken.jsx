@@ -18,7 +18,7 @@ export const CheckForToken = ({ children }) => {
     if (authCode) {
       const storedState = localStorage.getItem('state')
 
-      if (storedState === state || process.env.NODE_ENV === 'development') {
+      if (storedState === state || import.meta.env.NODE_ENV === 'development') {
         setVerifying(true)
         callback(authCode, dispatch, push).then(() => {
           const queryParams = new URLSearchParams(location.search)

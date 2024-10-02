@@ -1,7 +1,7 @@
 import { FormattedDate } from 'react-intl'
 import SuperUserToggle from './SuperUserToggle'
 
-const OSM_USER_LINK = `${process.env.REACT_APP_OSM_SERVER}/user/`
+const OSM_USER_LINK = `${import.meta.env.VITE_OSM_SERVER}/user/`
 
 const setChallengeTab = () => {
   return [
