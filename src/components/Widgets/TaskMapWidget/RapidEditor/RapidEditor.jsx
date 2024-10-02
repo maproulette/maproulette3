@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import _get from 'lodash/get';
 
-import { constructRapidURI } from '../../../../services/Editor/Editor.js';
-import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement.js';
-import AsMappableTask from '../../../../interactions/Task/AsMappableTask.js';
-import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/ChallengeZoom.js';
-import WithSearch from '../../../HOCs/WithSearch/WithSearch.js';
-import useHash from '../../../../hooks/UseHash.js';
-import { SET_RAPIDEDITOR } from '../../../../services/RapidEditor/RapidEditor.js';
-import BusySpinner from '../../../BusySpinner/BusySpinner.js'
+import { constructRapidURI } from '../../../../services/Editor/Editor';
+import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement';
+import AsMappableTask from '../../../../interactions/Task/AsMappableTask';
+import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/ChallengeZoom';
+import WithSearch from '../../../HOCs/WithSearch/WithSearch';
+import useHash from '../../../../hooks/UseHash';
+import { SET_RAPIDEDITOR } from '../../../../services/RapidEditor/RapidEditor';
+import BusySpinner from '../../../BusySpinner/BusySpinner';
 
 /**
  * Generate the initial URL hash for the Rapid editor.

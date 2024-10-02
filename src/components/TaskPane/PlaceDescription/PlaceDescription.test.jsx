@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
-import PlaceDescription from "./PlaceDescription.js";
+import PlaceDescription from "./PlaceDescription";
 
 describe("PlaceDescription", () => {
   it("doesn't break if no props are provided", () => {
