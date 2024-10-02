@@ -1,7 +1,7 @@
 import {
   ProjectDashboardInternal as ProjectDashboard,
   defaultDashboardSetup,
-} from "./ProjectDashboard.js";
+} from "./ProjectDashboard";
 
 describe("defaultDashboardSetup", () => {
   it("returns an object of dashboard settings with a name", () => {

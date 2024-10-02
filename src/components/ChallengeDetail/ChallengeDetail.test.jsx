@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { IntlProvider } from "react-intl";
 import { render } from "@testing-library/react";
-import { ChallengeDetail } from "./ChallengeDetail.js";
+import { ChallengeDetail } from "./ChallengeDetail";
 import { format } from "date-fns";
 
 describe("ChallengeDetail", () => {

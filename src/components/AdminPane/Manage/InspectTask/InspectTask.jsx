@@ -6,7 +6,7 @@ import WithCurrentProject from '../../HOCs/WithCurrentProject/WithCurrentProject
 import WithCurrentChallenge from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithCurrentTask from '../../../HOCs/WithCurrentTask/WithCurrentTask'
 import WithTaskInspect from '../../HOCs/WithTaskInspect/WithTaskInspect'
-import TaskPane from '../../../TaskPane/TaskPane.js'
+import TaskPane from '../../../TaskPane/TaskPane'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import manageMessages from '../Messages'
 import messages from './Messages'
