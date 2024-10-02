@@ -123,6 +123,7 @@
     "react-test-renderer": "^16.2.0",
     "redux-mock-store": "^1.4.0",
     "shelljs": "^0.8.5",
+    "source-map-explorer": "^2.5.3",
     "tailwindcss": "^3.4.1",
     "tailwindcss-gradients": "^2.3.0",
     "tailwindcss-grid": "^1.2.0",
@@ -133,20 +134,19 @@
     "vite": "^5.4.8"
   },
   "scripts": {
-    "build-postcss": "postcss src/styles/index.css -o src/index.css",
-    "watch-postcss": "postcss src/styles/index.css -o src/index.css -w",
     "build-intl": "NODE_ENV=production yarn run extract-messages -l=en-US -o src/lang/ -d en-US --flat -f json 'src/**/!(*.test).js'",
     "update-layers": "node scripts/update_layers.js",
     "update-layers-prod": "NODE_ENV=production node scripts/update_layers.js",
     "update-presets": "node scripts/update_presets.js",
-    "start-js": "react-scripts --max_old_space_size=4096 start",
-    "start": "npm-run-all -p update-layers watch-postcss start-js",
-    "build": "yarn run build-intl && yarn run update-layers-prod && yarn run build-postcss && react-scripts --max_old_space_size=4096 build",
+    "start-js": "vite",
+    "start": "npm-run-all -p update-layers start-js",
+    "build-js": "vite build",
+    "build": "yarn run build-intl && yarn run update-layers-prod && yarn run build-js",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-leaflet)/\" --resetMocks=false --detectOpenHandles",
     "test:cov": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-leaflet)/\" --coverage --resetMocks=false",
     "test:cov-full": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-leaflet)/\" --coverage --watchAll --resetMocks=false",
     "lint": "eslint src/",
-    "eject": "react-scripts eject"
+    "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'"
   },
   "browserslist": [
     ">0.2%",
