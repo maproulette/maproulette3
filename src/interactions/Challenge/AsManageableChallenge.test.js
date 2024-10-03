@@ -1,3 +1,4 @@
+import { describe, expect } from "vitest";
 import { ChallengeStatus }
        from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import AsManageableChallenge, { SOURCE_OVERPASS, SOURCE_REMOTE, SOURCE_LOCAL }

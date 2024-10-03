@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`mapStateToProps maps currentErrors to errors 1`] = `
-Object {
-  "errors": Array [
-    Object {
+{
+  "errors": [
+    {
       "defaultMessage": "A foo bar baz error.",
       "id": "Errors.foo.bar.baz",
     },

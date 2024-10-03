@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import "@testing-library/jest-dom";
 import { IntlProvider } from "react-intl";
 import { render } from "@testing-library/react";

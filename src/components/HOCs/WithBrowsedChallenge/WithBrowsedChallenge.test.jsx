@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { LatLngBounds } from 'leaflet'
 import _map from 'lodash/map'
 import _fromPairs from 'lodash/fromPairs'
@@ -50,11 +51,11 @@ beforeEach(() => {
   }
 
   history = {
-    push: jest.fn(),
+    push: vi.fn(),
   }
 
-  loadChallenge = jest.fn()
-  loadChallengeActions = jest.fn()
+  loadChallenge = vi.fn()
+  loadChallengeActions = vi.fn()
 
   WrappedComponent = WithBrowsedChallenge(() => <div className="child" />)
 })

@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import AsAvatarUser from './AsAvatarUser'
 import defaultPic from '../../static/images/user_no_image.png'
 

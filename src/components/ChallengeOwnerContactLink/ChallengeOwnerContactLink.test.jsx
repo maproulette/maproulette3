@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from "vitest";
 import "@testing-library/jest-dom";
 import { IntlProvider } from "react-intl";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
@@ -62,7 +63,7 @@ describe("ChallengeOwnerContactLinkInternal", () => {
   });
 
   it("calls addError if task owner not found", () => {
-    const addError = jest.fn();
+    const addError = vi.fn();
 
     render(
       <IntlProvider locale="en">

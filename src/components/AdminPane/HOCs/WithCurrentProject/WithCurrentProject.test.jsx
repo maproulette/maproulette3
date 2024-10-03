@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from "vitest";
 import "@testing-library/jest-dom";
 import { waitFor } from "@testing-library/react";
 import { WithCurrentProject } from "./WithCurrentProject";
@@ -20,7 +21,7 @@ describe("WithCurrentProject", () => {
   });
 
   it("calls redirectUser if user is not a project manager", async () => {
-    const redirectUser = jest.fn()
+    const redirectUser = vi.fn()
     const TestComponent = (props) => {
       return <div>projectId: {props.routedProjectId}</div>
     }
@@ -36,7 +37,7 @@ describe("WithCurrentProject", () => {
   });
 
   it("does not redirect user if allowNonManagers is true", async () => {
-    const redirectUser = jest.fn()
+    const redirectUser = vi.fn()
     const TestComponent = (props) => {
       return <div>projectId: {props.routedProjectId}</div>
     }
