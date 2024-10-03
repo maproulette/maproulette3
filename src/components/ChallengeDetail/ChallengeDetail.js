@@ -398,7 +398,7 @@ export class ChallengeDetail extends Component {
 
   render() {
     const { browsedChallenge: challenge, owner } = this.props;
-    if (!_isObject(challenge) || !_isObject(owner) || this.props.loadingBrowsedChallenge) {
+    if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
       return (
         <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50 mr-items-center mr-justify-center lg:mr-flex mr-text-center mr-py-8">
           <BusySpinner />
@@ -562,6 +562,7 @@ export class ChallengeDetail extends Component {
                           day="2-digit"
                         />
                       </li>
+                      {_isObject(owner) ?
                       <li>
                         <strong className="mr-text-yellow">
                           <FormattedMessage {...messages.ownerLabel} />:
@@ -575,6 +576,7 @@ export class ChallengeDetail extends Component {
                           {owner.osmProfile.displayName}
                         </a>
                       </li>
+                      : null}
                       {/* Disable Link tell project leaderboard page is reimplemented */}
                       {/* <li>
                         <Link
