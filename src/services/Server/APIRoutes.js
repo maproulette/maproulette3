@@ -195,7 +195,7 @@ const apiRoutes = (factory) => {
       challengeLeaderboard: factory.get("/data/user/challengeLeaderboard"),
       projectLeaderboard: factory.get("/data/user/projectLeaderboard"),
       challengeLeaderboardForUser: factory.get("/data/user/:userId/challengeLeaderboard"),
-      projectLeaderboardForUser: factory.get("/data/user/:userId/projectLeaderboard")
+      // projectLeaderboardForUser: factory.get("/data/user/:userId/projectLeaderboard")
     },
     teams: {
       find: factory.get("/teams/find"),

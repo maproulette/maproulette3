@@ -96,7 +96,7 @@ export const fetchLeaderboardForUser = (userId, bracket=0, numberMonths=1,
       let results;
 
       if (forProjects && forProjects.length > 0) {
-        //disabling project user ranks for now
+        //disabling project user ranks for now, as it's not supported by the backend
         //const projectId = forProjects[0];
         //results = await new Endpoint(api.user.projectLeaderboardForUser, { params: { ...params, projectId }, variables: { userId } }).execute()
         return []
