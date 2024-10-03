@@ -181,7 +181,7 @@ export class ChallengeProgress extends Component {
                       tooltip={(input) => <ProgressTooltip input={input} />}
                       theme={theme(this.props.lightMode)}
         />
-        {taskActions.total > 0 && taskActions.available === 0 &&
+        {taskActions.total > 0 && taskActions.available === 0 && taskActions.skipped === 0 &&
          <SvgSymbol
            sym='check-icon'
            viewBox='0 0 20 20'
