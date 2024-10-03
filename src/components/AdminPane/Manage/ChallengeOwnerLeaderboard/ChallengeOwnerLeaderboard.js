@@ -14,14 +14,9 @@ export default class ChallengeOwnerLeaderboard extends Component {
   render() {
     const userType = this.props.userType
 
-    if(userType === "mapper") return (
-      <div className="mr-mt-8 mr-text-red"> <FormattedMessage {...messages.challengeOwnerLeaderboardDisabled}/></div>
-   )
-
     if (!this.props.leaderboard) {
       return null
     }
-
 
     const showNumberTasks = this.props.leaderboard.length > 0 ?
       this.props.leaderboard[0].completedTasks > 0 : false
