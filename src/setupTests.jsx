@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import "@testing-library/jest-dom";
 import { Fragment } from "react";
 import Enzyme, { shallow, render, mount } from "enzyme";
@@ -16,7 +17,7 @@ Enzyme.configure({ adapter: new Adapter() });
 global.shallow = shallow;
 global.render = render;
 global.mount = mount;
-global.scrollTo = jest.fn();
+global.scrollTo = vi.fn();
 
 // React testing library methods
 const reduxStore = initializeStore();
@@ -41,30 +42,31 @@ global.withProvider = (
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 };
 
-jest.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
+vi.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
   __esModule: true,
 }));
 
-jest.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
-  __esModule: true,
-  default: () => null
-}));
-
-jest.mock('@rjsf/core/lib/components/widgets/TextWidget', () => ({
+vi.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
   __esModule: true,
   default: () => null
 }));
 
-jest.mock('@rjsf/core/lib/components/widgets/CheckboxWidget', () => ({
+vi.mock('@rjsf/core/lib/components/widgets/TextWidget', () => ({
   __esModule: true,
   default: () => null
 }));
 
-jest.mock('react-syntax-highlighter/dist/esm/languages/hljs/json', () => ({
+vi.mock('@rjsf/core/lib/components/widgets/CheckboxWidget', () => ({
   __esModule: true,
+  default: () => null
 }));
 
-jest.mock('react-syntax-highlighter/dist/esm/styles/hljs/agate', () => ({
+vi.mock('react-syntax-highlighter/dist/esm/languages/hljs/json', () => ({
+  __esModule: true,
+  default: () => null
+}));
+
+vi.mock('react-syntax-highlighter/dist/esm/styles/hljs/agate', () => ({
   __esModule: true,
   default: {
     hljs: {
@@ -73,20 +75,20 @@ jest.mock('react-syntax-highlighter/dist/esm/styles/hljs/agate', () => ({
   }
 }));
 
-jest.mock('react-syntax-highlighter', () => ({
+vi.mock('react-syntax-highlighter', () => ({
   Light: {
     registerLanguage: () => null
   }
 }))
 
-jest.mock('react-syntax-highlighter/dist/esm/languages/hljs/xml', () => ({
+vi.mock('react-syntax-highlighter/dist/esm/languages/hljs/xml', () => ({
   __esModule: true,
   default: {
     xmlLang: ""
   }
 }));
 
-jest.mock('@nivo/bar', () => ({
+vi.mock('@nivo/bar', () => ({
   __esModule: true,
   ResponsiveBar: () => null
 }));

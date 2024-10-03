@@ -1,12 +1,13 @@
+import { describe, it, expect, vi } from "vitest";
 import React from 'react'
 import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import { IntlProvider } from 'react-intl'
 import { RebuildTasksControl } from './RebuildTasksControl'
 import { act } from 'react-dom/test-utils'
 
-jest.mock('../../../../interactions/Challenge/AsManageableChallenge', () => ({
+vi.mock('../../../../interactions/Challenge/AsManageableChallenge', () => ({
   __esModule: true,
-  default: jest.fn().mockImplementation((challenge) => ({
+  default: vi.fn().mockImplementation((challenge) => ({
     ...challenge,
     dataSource: () => 'local',
   })),
@@ -21,13 +22,13 @@ describe('RebuildTasksControl', () => {
         id: 1,
         dataOriginDate: '2024-01-01',
       },
-      recordSnapshot: jest.fn(),
-      deleteIncompleteTasks: jest.fn(),
-      rebuildChallenge: jest.fn(),
-      refreshChallenge: jest.fn(),
+      recordSnapshot: vi.fn(),
+      deleteIncompleteTasks: vi.fn(),
+      rebuildChallenge: vi.fn(),
+      refreshChallenge: vi.fn(),
       intl: {
-        formatMessage: jest.fn().mockImplementation(({ id }) => id),
-        formatDate: jest.fn(),
+        formatMessage: vi.fn().mockImplementation(({ id }) => id),
+        formatDate: vi.fn(),
       },
     }
   })
@@ -126,8 +127,8 @@ describe('RebuildTasksControl', () => {
   })
 
   it('logs an error during proceed if an error occurs', async () => {
-    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
-    props.rebuildChallenge = jest.fn().mockImplementation(() => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    props.rebuildChallenge = vi.fn().mockImplementation(() => {
       throw new Error('Simulated error')
     })
 

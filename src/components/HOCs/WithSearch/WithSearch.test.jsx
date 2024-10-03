@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { mapStateToProps, mapDispatchToProps,
          _WithSearch } from './WithSearch'
 import { setSort, removeSort,
@@ -6,8 +7,8 @@ import { setSort, removeSort,
          performSearch } from '../../../services/Search/Search'
 import _cloneDeep from 'lodash/cloneDeep'
 
-jest.mock('../../../services/Search/Search')
-jest.mock('../../../services/Challenge/Challenge')
+vi.mock('../../../services/Search/Search')
+vi.mock('../../../services/Challenge/Challenge')
 
 let basicState = null
 let WrappedComponent = null
@@ -36,20 +37,20 @@ beforeEach(() => {
       },
       searchQueryTest: "searchQueryValue",
     },
-    setChallengeSearchMapBounds: jest.fn(),
-    performSearch: jest.fn(),
+    setChallengeSearchMapBounds: vi.fn(),
+    performSearch: vi.fn(),
   }
 
   WrappedComponent = _WithSearch(
     () => <div className="child" />,
     "searchQueryTest",
-    jest.fn()
+    vi.fn()
   )
 
   WrappedChallengesComponent = _WithSearch(
     () => <div className="child" />,
     "challenges",
-    jest.fn()
+    vi.fn()
   )
 })
 
@@ -70,7 +71,7 @@ test("mapStateToProps maps 'sortBy', 'direction', to searchSort", () => {
 })
 
 test("mapDispatchToProps maps call setSearchFilters", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch, basicState, 'challenges')
   const filterSetting = {difficulty: 1}
 
@@ -80,7 +81,7 @@ test("mapDispatchToProps maps call setSearchFilters", () => {
 })
 
 test("mapDispatchToProps maps call removeSearchFilters", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch, basicState, 'challenges')
   const filterSetting = {a: 1}
 
@@ -90,7 +91,7 @@ test("mapDispatchToProps maps call removeSearchFilters", () => {
 })
 
 test("mapDispatchToProps maps call setKeywordFilter", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch, basicState, 'challenges')
   const keywords = ["foo", "bar"]
 
@@ -101,7 +102,7 @@ test("mapDispatchToProps maps call setKeywordFilter", () => {
 })
 
 test("mapDispatchToProps maps call setSearchSort: 'name' sort gets an 'asc' direction", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch, basicState, 'challenges')
   const sortSetting = {sortBy: 'name'}
 
@@ -111,7 +112,7 @@ test("mapDispatchToProps maps call setSearchSort: 'name' sort gets an 'asc' dire
 })
 
 test("mapDispatchToProps maps call setSearchSort: 'created' sort gets an 'desc' direction", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch, basicState, 'challenges')
   const sortSetting = {sortBy: 'created'}
 
@@ -121,7 +122,7 @@ test("mapDispatchToProps maps call setSearchSort: 'created' sort gets an 'desc' 
 })
 
 test("mapDispatchToProps maps call setSearchSort: 'xxx' sort is set to null", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch, basicState, 'challenges')
   const sortSetting = {sortBy: 'xxx'}
 
@@ -131,7 +132,7 @@ test("mapDispatchToProps maps call setSearchSort: 'xxx' sort is set to null", ()
 })
 
 test("mapDispatchToProps maps call removeSearchFilters", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch, basicState, 'challenges')
   const sortSetting = {a: 1}
 
@@ -160,7 +161,7 @@ test("mapStateToProps maps currentSearch", () => {
 })
 
 test("mapDispatchToProps maps function setSearch", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {}, 'challenges')
 
   mappedProps.setSearch("query", "searchGroup")
@@ -171,7 +172,7 @@ test("mapDispatchToProps maps function setSearch", () => {
 })
 
 test("mapDispatchToProps maps function clearSearch", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {}, 'challenges')
 
   mappedProps.clearSearch("searchGroup")
@@ -192,7 +193,7 @@ test("searchQueries.searchGroup is passed through to the wrapped component", () 
 })
 
 test("mapDispatchToProps maps function performSearch", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {}, "searchGroup")
   const someProps = {foo: "foo"}
 
@@ -217,7 +218,7 @@ test("moving the map doesn't signal challenges updates if not filtering on map b
 })
 
 test("moving the map does perform new search if filtering within map bounds", () => {
-  const mockSearchFunction = jest.fn()
+  const mockSearchFunction = vi.fn()
   const WrappedComponent = _WithSearch(() => <div />, SEARCH_NAME, mockSearchFunction)
   
   const initialProps = {
@@ -249,7 +250,7 @@ test("moving the map does perform new search if filtering within map bounds", ()
 })
 
 test("changing filters performs new search", () => {
-  const mockSearchFunction = jest.fn()
+  const mockSearchFunction = vi.fn()
   const WrappedComponent = _WithSearch(() => <div />, SEARCH_NAME, mockSearchFunction)
   
   const initialProps = {

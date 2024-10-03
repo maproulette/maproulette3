@@ -1,10 +1,11 @@
+import { vi } from "vitest";
 import { LatLngBounds } from 'leaflet'
 import { chooseVisibleTask } from './WithStartChallenge'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 
-jest.mock('../../../services/Task/Task')
-jest.mock('../../../services/VisibleLayer/VisibleLayer')
-jest.mock('../../../services/Error/Error')
+vi.mock('../../../services/Task/Task')
+vi.mock('../../../services/VisibleLayer/VisibleLayer')
+vi.mock('../../../services/Error/Error')
 
 let basicState = null
 let challenge = null

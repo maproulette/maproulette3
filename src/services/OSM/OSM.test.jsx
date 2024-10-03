@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from "vitest";
 import { osmUserProfileURL, fetchOSMData, fetchOSMElement, fetchOSMElementHistory, fetchOSMChangesets, fetchOSMUser } from './OSM'
 import AppErrors from '../Error/AppErrors'
 import xmltojson from 'xmltojson'
@@ -8,9 +9,9 @@ describe('OSM Service Functions', () => {
 
   beforeEach(() => {
     originalConsoleError = console.error
-    console.error = jest.fn()
-    global.fetch = jest.fn()
-    parseXMLSpy = jest.spyOn(xmltojson, 'parseXML')
+    console.error = vi.fn()
+    global.fetch = vi.fn()
+    parseXMLSpy = vi.spyOn(xmltojson, 'parseXML')
   })
 
   afterEach(() => {
@@ -73,7 +74,7 @@ describe('OSM Service Functions', () => {
         const emptyXML = '<osm></osm>'
         global.fetch.mockResolvedValueOnce({
           ok: true,
-          text: jest.fn().mockResolvedValue(emptyXML),
+          text: vi.fn().mockResolvedValue(emptyXML),
         })
       
         const result = await fetchOSMData('0,0,1,1')
@@ -133,7 +134,7 @@ describe('OSM Service Functions', () => {
       for (const { xml, elementId, expected, asXML } of testCases) {
         global.fetch.mockResolvedValueOnce({
           ok: true,
-          text: jest.fn().mockResolvedValue(xml),
+          text: vi.fn().mockResolvedValue(xml),
         })
 
         const result = await fetchOSMElement(elementId, asXML)
@@ -148,7 +149,7 @@ describe('OSM Service Functions', () => {
     test('should handle empty responses', async () => {
       global.fetch.mockResolvedValueOnce({
         ok: true,
-        text: jest.fn().mockResolvedValue('<xml></xml>'),
+        text: vi.fn().mockResolvedValue('<xml></xml>'),
       })
       const result = await fetchOSMElement('way/12345')
       expect(result).toBeUndefined()
@@ -157,7 +158,7 @@ describe('OSM Service Functions', () => {
     test('should handle malformed XML gracefully', async () => {
       global.fetch.mockResolvedValueOnce({
         ok: true,
-        text: jest.fn().mockResolvedValue('<xml><malformed>'),
+        text: vi.fn().mockResolvedValue('<xml><malformed>'),
       })
       const result = await fetchOSMElement('way/12345')
       expect(result).toBeUndefined()
@@ -181,8 +182,8 @@ describe('OSM Service Functions', () => {
     testCases.forEach(({ history, changesetsXML, expectedLength }) => {
       test('should handle changesets correctly', async () => {
         global.fetch
-          .mockResolvedValueOnce({ ok: true, json: jest.fn().mockResolvedValue(history) })
-          .mockResolvedValueOnce({ ok: true, text: jest.fn().mockResolvedValue(changesetsXML) })
+          .mockResolvedValueOnce({ ok: true, json: vi.fn().mockResolvedValue(history) })
+          .mockResolvedValueOnce({ ok: true, text: vi.fn().mockResolvedValue(changesetsXML) })
 
         const result = await fetchOSMElementHistory('way/12345', true)
         expect(result).toHaveLength(expectedLength)
@@ -207,11 +208,11 @@ describe('OSM Service Functions', () => {
       global.fetch
         .mockResolvedValueOnce({
           ok: true,
-          json: jest.fn().mockResolvedValue(mockHistory),
+          json: vi.fn().mockResolvedValue(mockHistory),
         })
         .mockResolvedValueOnce({
           ok: true,
-          text: jest.fn().mockResolvedValue('<osm></osm>'),
+          text: vi.fn().mockResolvedValue('<osm></osm>'),
         })
 
       const history = await fetchOSMElementHistory('way/12345', true)
@@ -246,7 +247,7 @@ describe('OSM Service Functions', () => {
       const changesetXML = '<osm><changeset id="1" details="details 1"></changeset></osm>'
       global.fetch.mockResolvedValueOnce({
         ok: true,
-        text: jest.fn().mockResolvedValue(changesetXML),
+        text: vi.fn().mockResolvedValue(changesetXML),
       })
     
       const result = await fetchOSMChangesets(['123'])
@@ -258,7 +259,7 @@ describe('OSM Service Functions', () => {
     test('should handle empty changesets response', async () => {
       global.fetch.mockResolvedValueOnce({
         ok: true,
-        text: jest.fn().mockResolvedValue('<osm></osm>'),
+        text: vi.fn().mockResolvedValue('<osm></osm>'),
       })
 
       const result = await fetchOSMChangesets(['123'])
@@ -268,7 +269,7 @@ describe('OSM Service Functions', () => {
     test('should handle malformed XML gracefully', async () => {
       global.fetch.mockResolvedValueOnce({
         ok: true,
-        text: jest.fn().mockResolvedValue('<xml><malformed>'),
+        text: vi.fn().mockResolvedValue('<xml><malformed>'),
       })
 
       const result = await fetchOSMChangesets(['123'])
@@ -282,7 +283,7 @@ describe('OSM Service Functions', () => {
   
       global.fetch.mockResolvedValueOnce({
         ok: true,
-        text: jest.fn().mockResolvedValue(xmlResponse),
+        text: vi.fn().mockResolvedValue(xmlResponse),
       })
   
       const result = await fetchOSMUser(osmUserId)
@@ -295,7 +296,7 @@ describe('OSM Service Functions', () => {
   
       global.fetch.mockResolvedValueOnce({
         ok: true,
-        text: jest.fn().mockResolvedValue(xmlResponse),
+        text: vi.fn().mockResolvedValue(xmlResponse),
       })
   
       const result = await fetchOSMUser(osmUserId)

@@ -1,3 +1,4 @@
+import { describe, expect } from "vitest";
 import { ChallengeBasemap }
        from '../Challenge/ChallengeBasemap/ChallengeBasemap'
 import { BING,

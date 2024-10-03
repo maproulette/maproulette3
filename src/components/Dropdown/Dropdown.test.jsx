@@ -1,10 +1,11 @@
+import { describe, it, expect, vi } from "vitest";
 import ReactDOM from "react-dom";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import Dropdown from "./Dropdown";
 
 describe("Dropdown", () => {
   beforeAll(() => {
-    ReactDOM.createPortal = jest.fn((element) => {
+    ReactDOM.createPortal = vi.fn((element) => {
       return element;
     });
   });

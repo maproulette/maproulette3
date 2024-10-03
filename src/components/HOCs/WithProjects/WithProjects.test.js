@@ -1,10 +1,11 @@
+import { vi } from "vitest";
 import { denormalize } from 'normalizr'
 import { mapStateToProps, mapDispatchToProps } from './WithProjects'
 import { fetchProjectChallenges }
        from '../../../services/Challenge/Challenge'
 
-jest.mock('normalizr')
-jest.mock('../../../services/Challenge/Challenge')
+vi.mock('normalizr')
+vi.mock('../../../services/Challenge/Challenge')
 
 denormalize.mockImplementation((project) => project)
 
@@ -35,7 +36,7 @@ test("mapStateToProps maps projects", () => {
 })
 
 test("mapDispatchToProps maps function fetchProjectChallenges", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {})
 
   mappedProps.fetchProjectChallenges("someProjectId")

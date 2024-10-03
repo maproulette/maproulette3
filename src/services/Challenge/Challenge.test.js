@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from "vitest";
 import { exportOSMData } from "./Challenge";
 
 const mockGeojson = {
@@ -22,7 +23,7 @@ describe("exportOSMData", () => {
     const headers = new Map();
     headers.set('content-type', 'application/json')
 
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         json: () => mockGeojson,
         status: 200,

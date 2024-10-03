@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import WithPublicWidgetWorkspaces from "./WithPublicWidgetWorkspaces";
 
 describe("Public Widget Grid", () => {

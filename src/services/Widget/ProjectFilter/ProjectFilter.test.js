@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import { ProjectFilter, defaultProjectFilters } from "./ProjectFilter";
 
 describe("ProjectFilter", () => {

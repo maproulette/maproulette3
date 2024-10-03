@@ -1,14 +1,15 @@
+import { describe, it, expect, vi } from "vitest";
 import "@testing-library/jest-dom";
 import { IntlProvider } from "react-intl";
 import { render } from "@testing-library/react";
 import { TaskAnalysisTableInternal as TaskAnalysisTable } from "./TaskAnalysisTable";
 
-jest.mock(
+vi.mock(
   "../../components/KeywordAutosuggestInput/InTableTagFilter",
-  () => ({})
+  () => ({ default: {} })
 );
-jest.mock("./TaskAnalysisTableHeader", () => () => <div>Header</div>);
-jest.mock("../ViewTask/ViewTask", () => () => <div>ViewTask</div>);
+vi.mock("./TaskAnalysisTableHeader", () => ({ default: () => <div>Header</div> }));
+vi.mock("../ViewTask/ViewTask", () => ({ default: () => <div>ViewTask</div> }));
 
 describe("TaskAnalysisTable", () => {
   it("doesn't break if given some basic props", () => {

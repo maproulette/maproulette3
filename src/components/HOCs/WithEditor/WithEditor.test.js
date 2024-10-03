@@ -1,7 +1,8 @@
+import { vi } from "vitest";
 import { mapStateToProps, mapDispatchToProps } from './WithEditor'
 import { editTask, closeEditor, JOSM } from '../../../services/Editor/Editor'
 
-jest.mock('../../../services/Editor/Editor')
+vi.mock('../../../services/Editor/Editor')
 
 let basicState = null
 
@@ -20,7 +21,7 @@ test("mapStateToProps provides an editor prop with the current open editor", () 
 })
 
 test("mapDispatchToProps makes the closeEditor() function available", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.closeEditor()
@@ -29,7 +30,7 @@ test("mapDispatchToProps makes the closeEditor() function available", () => {
 })
 
 test("mapDispatchToProps makes the editTask() function available", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch)
 
   const editor = JOSM

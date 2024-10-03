@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
         executeRouteSearch } from './WithSearchRoute'
 
@@ -6,14 +7,14 @@ import { WithSearchRoute } from './WithSearchRoute'
 let basicProps = {}
 
 beforeEach(() => {
-  basicProps.setSearch = jest.fn()
-  basicProps.setChallengeSearchMapBounds = jest.fn()
-  basicProps.setSearchFilters = jest.fn()
-  basicProps.setSearchSort = jest.fn()
-  basicProps.setKeywordFilter = jest.fn()
-  basicProps.clearSearchDispatch = jest.fn()
-  basicProps.clearSearchFilters = jest.fn()
-  basicProps.clearMapBounds = jest.fn()
+  basicProps.setSearch = vi.fn()
+  basicProps.setChallengeSearchMapBounds = vi.fn()
+  basicProps.setSearchFilters = vi.fn()
+  basicProps.setSearchSort = vi.fn()
+  basicProps.setKeywordFilter = vi.fn()
+  basicProps.clearSearchDispatch = vi.fn()
+  basicProps.clearSearchFilters = vi.fn()
+  basicProps.clearMapBounds = vi.fn()
 })
 
 test("executeRouteSearch clears old redux values first", () => {
@@ -92,7 +93,7 @@ test("executeRouteSearch executes setChallengeSearchMapBounds when passed challe
 })
 
 test("executeRouteSearch executes a the given function for the correct key", () => {
-  const routeCriteria = {myKey: jest.fn()}
+  const routeCriteria = {myKey: vi.fn()}
   executeRouteSearch(routeCriteria, "?myKey=test")
   expect(routeCriteria.myKey).toHaveBeenCalledWith("test")
 })

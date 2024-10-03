@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from "vitest";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import {WithWidgetWorkspacesInternal as WithWidgetWorkspaces} from "./WithWidgetWorkspaces";
 import * as services from '../../../services/Widget/Widget'
@@ -162,7 +163,7 @@ describe("WithWidgetWorkspaces", () => {
       expect(screen.getByText("Current config: View Challenge")).toBeInTheDocument();
     });
 
-    jest.spyOn(services, "importWorkspaceConfiguration").mockReturnValue(Promise.resolve(importedConfig));
+    vi.spyOn(services, "importWorkspaceConfiguration").mockReturnValue(Promise.resolve(importedConfig));
     fireEvent.click(screen.getByText("Import Config"));
 
     await waitFor(() => {

@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import { fromLatLngBounds, toLatLngBounds } from './MapBounds'
 import L from 'leaflet'
 

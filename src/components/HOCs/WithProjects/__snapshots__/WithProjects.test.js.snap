@@ -1,13 +1,13 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`mapStateToProps maps projects 1`] = `
-Object {
-  "projects": Array [
-    Object {
+{
+  "projects": [
+    {
       "id": "123",
       "name": "first",
     },
-    Object {
+    {
       "id": "456",
       "name": "second",
     },
