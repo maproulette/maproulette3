@@ -262,6 +262,18 @@ export const TaskMapContent = (props) => {
     setShowTaskFeatures(prevState => !prevState);
   }
 
+  const fetchOSMData = () => {
+    setOsmDataLoading(true)
+    props.fetchOSMData(
+      map.getBounds().toBBoxString()
+    ).then(xmlData => {
+         // Indicate the map should skip fitting to bounds as the OSM data could
+        // extend beyond the current view and we don't want the map to zoom out
+      setOsmData(xmlData)
+      setOsmDataLoading(false)
+    })
+  }
+
   /**
    * Invoked by LayerToggle when the user wishes to toggle visibility of
    * OSM data on or off.
@@ -269,14 +281,7 @@ export const TaskMapContent = (props) => {
   const toggleOSMDataVisibility = () => {
     if (!showOSMData && !osmData && !osmDataLoading) {
       setOsmDataLoading(true)
-      props.fetchOSMData(
-        map.getBounds().toBBoxString()
-      ).then(xmlData => {
-        // Indicate the map should skip fitting to bounds as the OSM data could
-        // extend beyond the current view and we don't want the map to zoom out
-        setOsmData(xmlData)
-        setOsmDataLoading(false)
-      })
+      fetchOSMData()
     }
     setShowOSMData(!showOSMData)
     setOsmDataLoading(false)
@@ -287,16 +292,6 @@ export const TaskMapContent = (props) => {
     newShowOSMElements[element] = !showOSMElements[element]
     setShowOSMElements(newShowOSMElements)
   }
-
-  /**
-   * Ensures the OSM Data Layer is deactivated
-   */
-  const deactivateOSMDataLayer = () => {
-    setShowOSMData(false)
-    setOsmData(null)
-    setOsmDataLoading(false)
-  }
-
   /**
    * Invoked by LayerToggle when the user wishes to toggle visibility of
    * Mapillary markers on or off.
@@ -398,15 +393,17 @@ export const TaskMapContent = (props) => {
   }, []);
 
   useEffect(() => {
-    deactivateOSMDataLayer()
-    generateDirectionalityMarkers();
-  }, [props.task.id, props.task.geometries]);
+    setOsmData(null)
+  }, [props.task.id, props.task.geometries])
 
   useEffect(() => {
     loadMapillaryIfNeeded();
     loadOpenStreetCamIfNeeded();
     animator.setAnimationFunction(animateFeatures)
-  }, [props]);
+    if (showOSMData && !osmData) {
+      fetchOSMData()
+    }
+  }, [props, osmData]);
 
   useEffect(() => {
     if (features.length !== 0) {
