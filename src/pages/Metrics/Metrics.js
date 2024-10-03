@@ -15,6 +15,7 @@ import _omit from 'lodash/omit'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 import messages from './Messages'
 import messagesAsReviewer from './MessagesAsReviewer'
+import illustrationCompletedTasks from '../../static/images/illustration-completed-tasks.svg'
 
 const ProfileImage = props => {
 
@@ -120,11 +121,7 @@ class Metrics extends Component {
                     <div className="mr-flex-grow mr-text-center"><BusySpinner /></div> :
                     <div className="mr-flex-grow mr-flex mr-flex-col mr-items-center">
                       <div className="mr-mb-6">
-                        <SvgSymbol
-                          sym="illustration-completed-tasks"
-                          className="mr-w-32 mr-h-auto"
-                          viewBox="0 0 183 120"
-                        />
+                        <img src={illustrationCompletedTasks}  style={{ height: 80, width: 120}} />
                       </div>
                       <span className="mr-ticker mr-mb-6 mr-text-5xl lg:mr-text-6xl">
                         {this.digitBoxes(totalTasks, 4)}
