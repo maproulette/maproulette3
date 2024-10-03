@@ -117,7 +117,7 @@ export const Teams = props => {
               </button>
             </div>
             <div className="mr-w-1/2 mr-h-100 mr-absolute mr-top-0 mr-right-0 mr--mt-20">
-              <img src={teamsImage} className="mr-w-full mr-h-full" />
+              <img src={teamsImage} className="mr-w-60 mr-h-60" />
             </div>
           </div>
         </div>
