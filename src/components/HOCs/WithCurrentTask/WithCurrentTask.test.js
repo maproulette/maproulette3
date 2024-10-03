@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { denormalize } from 'normalizr'
 import { mapStateToProps,
          mapDispatchToProps } from './WithCurrentTask'
@@ -13,9 +14,9 @@ import { fetchChallengeActions, fetchChallenge }
 import { CHALLENGE_STATUS_READY }
        from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 
-jest.mock('normalizr')
-jest.mock('../../../services/Task/Task')
-jest.mock('../../../services/Challenge/Challenge')
+vi.mock('normalizr')
+vi.mock('../../../services/Task/Task')
+vi.mock('../../../services/Challenge/Challenge')
 
 denormalize.mockImplementation((challenge) => challenge)
 
@@ -60,7 +61,7 @@ beforeEach(() => {
 
   loadRandomTaskFromChallenge.mockReset()
   loadRandomTaskFromVirtualChallenge.mockReset()
-  jest.useFakeTimers()
+  vi.useFakeTimers()
 })
 
 test("mapStateToProps maps task from the taskId in the route", () => {
@@ -76,14 +77,14 @@ test("mapStateToProps maps task from the taskId in the route", () => {
 })
 
 test("mapDispatchToProps maps some functions", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   mapDispatchToProps(dispatch, {})
 })
 
 test("mapDispatchToProps completeTask calls completeTask", () => {
-  const dispatch  = jest.fn(() => Promise.resolve())
+  const dispatch  = vi.fn(() => Promise.resolve())
   const history = {
-   push: jest.fn(),
+   push: vi.fn(),
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
@@ -95,9 +96,9 @@ test("mapDispatchToProps completeTask calls completeTask", () => {
 
 test("completeTask calls addComment if comment present",  async () => {
   const comment = "A Comment"
-  const dispatch  = jest.fn(() => Promise.resolve())
+  const dispatch  = vi.fn(() => Promise.resolve())
   const history = {
-   push: jest.fn(),
+   push: vi.fn(),
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
@@ -109,9 +110,9 @@ test("completeTask calls addComment if comment present",  async () => {
 test("completeTask does not call addComment if no comment", async () => {
   addTaskComment.mockClear()
 
-  const dispatch  = jest.fn(() => Promise.resolve())
+  const dispatch  = vi.fn(() => Promise.resolve())
   const history = {
-   push: jest.fn(),
+   push: vi.fn(),
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
@@ -121,9 +122,9 @@ test("completeTask does not call addComment if no comment", async () => {
 })
 
 test("completeTask calls loadRandomTaskFromChallenge without proximate task by default",  async () => {
-  const dispatch  = jest.fn(() => Promise.resolve())
+  const dispatch  = vi.fn(() => Promise.resolve())
   const history = {
-   push: jest.fn(),
+   push: vi.fn(),
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
@@ -133,9 +134,9 @@ test("completeTask calls loadRandomTaskFromChallenge without proximate task by d
 })
 
 test("completeTask calls loadRandomTaskFromChallenge with task if proximate load method", async () => {
-  const dispatch  = jest.fn(() => Promise.resolve())
+  const dispatch  = vi.fn(() => Promise.resolve())
   const history = {
-   push: jest.fn(),
+   push: vi.fn(),
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
@@ -145,14 +146,14 @@ test("completeTask calls loadRandomTaskFromChallenge with task if proximate load
 })
 
 test("completeTask calls fetchChallengeActions", () => {
-  const dispatch  = jest.fn(() => Promise.resolve())
+  const dispatch  = vi.fn(() => Promise.resolve())
   const history = {
-   push: jest.fn(),
+   push: vi.fn(),
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
   mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
-  jest.runOnlyPendingTimers()
+  vi.runOnlyPendingTimers()
 
   expect(fetchChallengeActions).toBeCalledWith(challenge.id)
 })
@@ -162,9 +163,9 @@ test("completeTask routes the user to the new task if there is one", async () =>
 
   completeTask.mockReturnValueOnce(Promise.resolve())
   loadRandomTaskFromChallenge.mockReturnValueOnce(Promise.resolve(nextTask))
-  const dispatch = jest.fn(value => value)
+  const dispatch = vi.fn(value => value)
   const history = {
-    push: jest.fn(),
+    push: vi.fn(),
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
@@ -178,9 +179,9 @@ test("completeTask routes the user to the new task in a virtual challenge", asyn
 
   completeTask.mockReturnValueOnce(Promise.resolve())
   loadRandomTaskFromVirtualChallenge.mockReturnValueOnce(Promise.resolve(nextTask))
-  const dispatch = jest.fn(value => value)
+  const dispatch = vi.fn(value => value)
   const history = {
-    push: jest.fn(),
+    push: vi.fn(),
   }
 
   const mappedProps =
@@ -206,9 +207,9 @@ test("completeTask routes the user to challenge page if the next task isn't new"
     },
     result: "123",
   }))
-  const dispatch = jest.fn(value => value)
+  const dispatch = vi.fn(value => value)
   const history = {
-    push: jest.fn(),
+    push: vi.fn(),
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
@@ -231,9 +232,9 @@ test("completeTask routes the user to challenge page if there is no next task", 
     },
     result: "123",
   }))
-  const dispatch = jest.fn(value => value)
+  const dispatch = vi.fn(value => value)
   const history = {
-    push: jest.fn(),
+    push: vi.fn(),
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history})

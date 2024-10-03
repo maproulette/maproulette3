@@ -1,8 +1,9 @@
+import { vi } from "vitest";
 import { mapStateToProps, mapDispatchToProps } from './WithErrors'
 import { addError,
          clearErrors } from '../../../services/Error/Error'
 
-jest.mock('../../../services/Error/Error')
+vi.mock('../../../services/Error/Error')
 
 let basicState = null
 let anError = null
@@ -26,7 +27,7 @@ test("mapStateToProps maps currentErrors to errors", () => {
 })
 
 test("mapDispatchToProps maps function addError", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {})
 
   mappedProps.addError(anError)
@@ -35,7 +36,7 @@ test("mapDispatchToProps maps function addError", () => {
 })
 
 test("mapDispatchToProps maps function clearErrors", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {})
 
   mappedProps.clearErrors()

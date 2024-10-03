@@ -1,16 +1,17 @@
+import { vi } from "vitest";
 import { executeCommand, executeMapSearch } from './WithCommandInterpreter'
 import { fetchPlaceLocation } from '../../../services/Place/Place'
 
-jest.mock('../../../services/Place/Place')
+vi.mock('../../../services/Place/Place')
 fetchPlaceLocation.mockImplementation(() => new Promise(() => {}))
 
 let basicProps = {}
 
 beforeEach(() => {
-  basicProps.setSearch = jest.fn()
-  basicProps.clearSearch = jest.fn()
-  basicProps.removeSearchFilters = jest.fn()
-  basicProps.updateChallengeSearchMapBounds = jest.fn()
+  basicProps.setSearch = vi.fn()
+  basicProps.clearSearch = vi.fn()
+  basicProps.removeSearchFilters = vi.fn()
+  basicProps.updateChallengeSearchMapBounds = vi.fn()
 })
 
 

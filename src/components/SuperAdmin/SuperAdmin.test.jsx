@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from "vitest";
 import '@testing-library/jest-dom'
 import { SuperAdminPane } from './SuperAdmin'
 import { fireEvent } from '@testing-library/react'
@@ -88,7 +89,7 @@ describe('SuperAdminPane', () => {
   })
 
   it('can switch tab', () => {
-    const clearSearch = jest.fn()
+    const clearSearch = vi.fn()
     const { container } = global.withProvider(
       <SuperAdminPane
         user={props.user}
@@ -120,7 +121,7 @@ describe('SuperAdminPane', () => {
   })
 
   it('can toggle for challenge table', () => {
-    const toggleFilter = jest.fn()
+    const toggleFilter = vi.fn()
     const { container } = global.withProvider(
       <SuperAdminPane
         user={props.user}

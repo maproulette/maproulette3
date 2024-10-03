@@ -1,3 +1,4 @@
+import { describe, expect } from "vitest";
 import { point, featureCollection } from '@turf/helpers'
 import AsMappableTask from './AsMappableTask'
 

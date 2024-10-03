@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from "vitest";
 import "@testing-library/jest-dom";
 import { fireEvent } from "@testing-library/react";
 import { VisibilitySwitch } from "./VisibilitySwitch";
@@ -12,7 +13,7 @@ describe("Visibility Switch", () => {
   });
 
   it("input onClick event does not call updateEnabled", () => {
-    const updateEnabled = jest.fn();
+    const updateEnabled = vi.fn();
     const { container } = global.withProvider(
       <VisibilitySwitch updateEnabled={() => updateEnabled()} challenge={{ enabled: false }} />
     );
