@@ -80,7 +80,6 @@ export const TaskMapContent = (props) => {
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null)
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null)
   const [directionalityIndicators, setDirectionalityIndicators] = useState({})
-  const [selectedImageKey, setSelectedImageKey] = useState(null)
 
   const taskFeatures = () => {
     if (_get(props, 'taskBundle.tasks.length', 0) > 0) {
@@ -465,7 +464,6 @@ export const TaskMapContent = (props) => {
           markerColor="#39AF64"
           imageClicked={imageKey => setMapillaryViewerImage(imageKey)}
           imageAlt="Mapillary"
-          setSelectedImageKey={setSelectedImageKey}
         />
       ),
     }
@@ -482,7 +480,6 @@ export const TaskMapContent = (props) => {
         markerColor="#C851E0"
         imageClicked={imageKey => setOpenStreetCamViewerImage(imageKey)}
         imageAlt="OpenStreetCam"
-        setSelectedImageKey={setSelectedImageKey}
       />
     ),
   })
