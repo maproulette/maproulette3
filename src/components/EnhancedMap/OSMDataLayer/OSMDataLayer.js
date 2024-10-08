@@ -19,13 +19,7 @@ const generateLayer = (props, map, leaflet) => {
   const HIGHLIGHT_STYLE = {
     color: colors.gold,
     fillColor: colors.gold,
-    weight: props.zoom >= 18 ? 5 : props.zoom > 15 ? 3 : 2,
-  }
-  
-  const HOVER_HIGHLIGHT_STYLE = {
-    color: colors.gold,
-    fillColor: colors.gold,
-    weight: props.zoom >= 18 ? 5 : props.zoom > 15 ? 3 : 2,
+    weight: props.zoom >= 18 ? 7 : props.zoom > 15 ? 6 : 3,
   }
   
   const popupContent = (layer, onBack) => {
@@ -86,7 +80,7 @@ const generateLayer = (props, map, leaflet) => {
     showNodes: props.showOSMElements.nodes,
     showWays: props.showOSMElements.ways,
     showAreas: props.showOSMElements.areas,
-    pane: props.leaflet.pane,
+    pane: props.leaflet?.pane,
   })
 
   layerGroup.eachLayer(layer => {
@@ -128,7 +122,7 @@ const generateLayer = (props, map, leaflet) => {
 
       layer.on('mouseover', () => {
         // Apply highlight style on hover
-        styleableLayer.pushStyle({ ...HOVER_HIGHLIGHT_STYLE });
+        styleableLayer.pushStyle({ ...HIGHLIGHT_STYLE });
       });
       
       layer.on('mouseout', () => {

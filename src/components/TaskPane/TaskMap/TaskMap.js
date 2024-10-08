@@ -267,8 +267,8 @@ export const TaskMapContent = (props) => {
     props.fetchOSMData(
       map.getBounds().toBBoxString()
     ).then(xmlData => {
-         // Indicate the map should skip fitting to bounds as the OSM data could
-        // extend beyond the current view and we don't want the map to zoom out
+      // Indicate the map should skip fitting to bounds as the OSM data could
+      // extend beyond the current view and we don't want the map to zoom out
       setOsmData(xmlData)
       setOsmDataLoading(false)
     })
