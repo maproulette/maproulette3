@@ -30,7 +30,7 @@ const ImageMarkerLayer = props => {
   const [imageMarkers, setImageMarkers] = useState([])
   const map = useMap()
 
-  const { images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel, style } = props
+  const { images, markerColor = colors["blue-leaflet"], imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel, style } = props
 
   useEffect(() => {
     try {
@@ -52,7 +52,7 @@ const ImageMarkerLayer = props => {
     } catch (error) {
       console.error('Error creating map markers:', error)
     }
-  }, [images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel, map])
+  }, [images, markerColor, imageClicked, icon, mrLayerId, mrLayerLabel, map])
 
   return (
     <LayerGroup style={style}>
@@ -64,11 +64,14 @@ const ImageMarkerLayer = props => {
 ImageMarkerLayer.propTypes = {
   layerKey: PropTypes.string,
   images: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    url: PropTypes.string,
-    position: PropTypes.object,
-  })),
-  imageClicked: PropTypes.func,
+    key: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    position: PropTypes.shape({
+      lat: PropTypes.number.isRequired,
+      lon: PropTypes.number.isRequired,
+    }).isRequired,
+  })).isRequired,
+  imageClicked: PropTypes.func.isRequired,
   imageAlt: PropTypes.string,
   buildIcon: PropTypes.func,
   markerColor: PropTypes.string,
@@ -91,7 +94,6 @@ const MapillaryViewer = ({ initialImageKey }) => {
         return;
       }
 
-     
       if (imageCache.has(initialImageKey)) {
         viewer = imageCache.get(initialImageKey);
       } else {
