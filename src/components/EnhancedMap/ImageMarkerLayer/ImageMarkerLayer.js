@@ -28,7 +28,6 @@ const imageCache = new Map();
  */
 const ImageMarkerLayer = props => {
   const [imageMarkers, setImageMarkers] = useState([])
-  const [selectedImageKey, setSelectedImageKey] = useState(null)
   const map = useMap()
 
   const { images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel, style } = props
@@ -47,8 +46,7 @@ const ImageMarkerLayer = props => {
           markerColor,
           imageClicked,
           mrLayerId,
-          mrLayerLabel,
-          setSelectedImageKey
+          mrLayerLabel
         )
       )
     } catch (error) {
@@ -59,7 +57,6 @@ const ImageMarkerLayer = props => {
   return (
     <LayerGroup style={style}>
       {imageMarkers}
-      {selectedImageKey && <MapillaryViewer initialImageKey={selectedImageKey} />}
     </LayerGroup>
   )
 }
@@ -127,7 +124,7 @@ const MapillaryViewer = ({ initialImageKey }) => {
   )
 }
 
-const buildImageMarkers = (images, icon, markerColor, imageClicked, layerId, layerLabel, setSelectedImageKey) => {
+const buildImageMarkers = (images, icon, markerColor, imageClicked, layerId, layerLabel) => {
   try {
     if (!images || images.length === 0) {
       return []
@@ -167,7 +164,6 @@ const buildImageMarkers = (images, icon, markerColor, imageClicked, layerId, lay
                 transition: 'background-color 0.3s, color 0.3s'
               }}
               onClick={() => {
-                setSelectedImageKey(imageInfo.key)
                 imageClicked(imageInfo.key)
               }}
               onMouseEnter={e => {
