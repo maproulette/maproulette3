@@ -30,7 +30,7 @@ export class SignInButton extends Component {
 
     this.setState({clicked: true});
 
-    const loginUrl = `${import.meta.env.VITE_SERVER_OAUTH_URL}${encodeURIComponent(
+    const loginUrl = `${import.meta.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
       this.props.history?.location?.pathname + this.props.history?.location?.search)}`
 
     fetch(loginUrl).then(async (result) => {

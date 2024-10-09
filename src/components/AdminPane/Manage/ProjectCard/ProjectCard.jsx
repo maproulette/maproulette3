@@ -132,7 +132,7 @@ export class ProjectCard extends Component {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${import.meta.env.VITE_MAP_ROULETTE_SERVER_URL}/api/v2/project/${this.props.project.id}/tasks/extract`}
+                  href={`${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/project/${this.props.project.id}/tasks/extract`}
                   className="mr-flex mr-items-center"
                 >
                   <SvgSymbol

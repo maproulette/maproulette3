@@ -31,7 +31,7 @@ export default class TaskStatusIndicator extends Component {
 
             {this.props.task.changesetId > 0 &&
              <a
-               href={`${import.meta.env.VITE_OSM_API_SERVER}/changeset/${this.props.task.changesetId}`}
+               href={`${import.meta.env.REACT_APP_OSM_API_SERVER}/changeset/${this.props.task.changesetId}`}
                target="_blank"
                rel="noopener noreferrer"
                className={`task-status__view-changeset-link ${this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"}`}

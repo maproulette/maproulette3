@@ -7,6 +7,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
+  envPrefix: 'REACT_APP_',
   plugins: [react()]
 })
 

@@ -2,7 +2,7 @@ import AppErrors from '../Error/AppErrors'
 import xmlToJSON from 'xmltojson'
 import { get, transform, map, each, isPlainObject } from 'lodash'
 
-const API_SERVER = import.meta.env.VITE_OSM_API_SERVER
+const API_SERVER = import.meta.env.REACT_APP_OSM_API_SERVER
 
 const OSM_ERRORS = {
   400: AppErrors.osm.requestTooLarge,
@@ -59,7 +59,7 @@ const fetchXMLData = async (uri) => {
  * Generates a URL to the given user's OSM profile page
  */
 export const osmUserProfileURL = (osmUsername) => {
-  return `${import.meta.env.VITE_OSM_SERVER}/user/${encodeURIComponent(osmUsername)}`
+  return `${import.meta.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(osmUsername)}`
 }
 
 /**

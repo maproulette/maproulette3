@@ -153,7 +153,7 @@ export class RebuildTasksControl extends Component {
                       <FormattedMessage {...messages.warning} />
                       <div className="mr-my-4 mr-links-green-light">
                         <a
-                          href={`${import.meta.env.VITE_DOCS_URL}/documentation/rebuilding-challenge-tasks/`}
+                          href={`${import.meta.env.REACT_APP_DOCS_URL}/documentation/rebuilding-challenge-tasks/`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >

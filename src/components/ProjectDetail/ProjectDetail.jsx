@@ -120,7 +120,7 @@ export class ProjectDetail extends Component {
                         </strong>{' '}
                         <a
                           className="mr-text-green-lighter hover:mr-text-white"
-                          href={import.meta.env.VITE_OSM_SERVER + '/user/' + owner.osmProfile.displayName}
+                          href={import.meta.env.REACT_APP_OSM_SERVER + '/user/' + owner.osmProfile.displayName}
                           target="_blank"
                           rel="noopener"
                         >

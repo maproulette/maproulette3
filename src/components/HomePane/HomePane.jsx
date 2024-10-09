@@ -13,7 +13,7 @@ export default class HomePane extends Component {
   getStarted = () => this.props.history.push('/browse/challenges')
 
   render() {
-    const version = `v${import.meta.env.VITE_VERSION_SEMVER}`
+    const version = `v${import.meta.env.REACT_APP_VERSION_SEMVER}`
     return (
       <div className="home-pane full-screen-height no-subnav">
         <div className='home-pane__content'>
@@ -63,7 +63,7 @@ export default class HomePane extends Component {
           <div className='home-pane__footer'>
             <p>
               MapRoulette <a target="_blank" rel="noopener noreferrer" href={
-                `${import.meta.env.VITE_GIT_REPOSITORY_URL}/releases/tag/${version}`
+                `${import.meta.env.REACT_APP_GIT_REPOSITORY_URL}/releases/tag/${version}`
               }>
                 {version}
               </a>
