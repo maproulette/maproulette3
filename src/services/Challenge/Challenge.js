@@ -88,7 +88,7 @@ export const buildLinkToExportCSV = function (
 
   const queryFilters = buildQueryFilters(criteria);
   return (
-    `${import.meta.env.VITE_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/` +
+    `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/` +
     `${challengeId}/tasks/extract?${queryFilters}&timezone=${encodeURIComponent(
       timezone
     )}${pageString}`
@@ -106,7 +106,7 @@ export const buildLinkToExportGeoJSON = function (
 ) {
   const queryFilters = buildQueryFilters(criteria);
   return (
-    `${import.meta.env.VITE_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/` +
+    `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/` +
     `${challengeId}?${queryFilters}&timezone=${encodeURIComponent(
       timezone
     )}&filename=${encodeURIComponent(filename)}`
@@ -1043,7 +1043,7 @@ export const fetchChallenges = function (
         checkinComment
       } = challengeData;
 
-      const instructionsMinLength = import.meta.env.VITE_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
+      const instructionsMinLength = import.meta.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
       if (
         challengeData.parent != undefined && 
         (

@@ -17,7 +17,7 @@ import messages from './Messages'
 const descriptor = {
   widgetKey: 'MetaReviewStatusMetricsWidget',
   label: messages.metaReviewlabel,
-  targets: import.meta.env.VITE_FEATURE_META_QC === 'enabled' ?
+  targets: import.meta.env.REACT_APP_FEATURE_META_QC === 'enabled' ?
     [WidgetDataTarget.review, WidgetDataTarget.challenge,
      WidgetDataTarget.challenges] : [],
   minWidth: 2,
@@ -99,7 +99,7 @@ export default class MetaReviewStatusMetricsWidget extends Component {
  * false as to whether it should be hidden given the current workspace props
  */
 MetaReviewStatusMetricsWidget.hideWidget = function() {
-  return import.meta.env.VITE_FEATURE_META_QC !== 'enabled'
+  return import.meta.env.REACT_APP_FEATURE_META_QC !== 'enabled'
 }
 
 
