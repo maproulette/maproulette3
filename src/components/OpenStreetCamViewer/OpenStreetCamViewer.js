@@ -39,73 +39,72 @@ const OpenStreetCamViewer = ({ images, initialImageKey, onClose }) => {
 
 	const currentImage = currentIndex === -1 ? null : images[currentIndex]
 
-    return (
-      <External>
-        <Modal isActive onClose={onClose}>
-          <div className="mr-flex mr-flex-col mr-justify-center">
-            <div className="mr-flex mr-justify-center">
-              <div className="mr-flex mr-justify-between mr-bg-black-15 mr-rounded mr-p-2">
-                <div>
-                  {hasPriorImage() &&
-                   <button onClick={priorImage}>
-                     <SvgSymbol
-                       sym="arrow-left-icon"
-                       viewBox='0 0 20 20'
-                       className="mr-h-4 mr-w-4 mr-fill-current"
-                     />
-                   </button>
-                  }
-                </div>
+	return (
+		<External>
+			<Modal isActive onClose={onClose}>
+				<div className="mr-flex mr-flex-col mr-justify-center">
+					<div className="mr-flex mr-justify-center">
+						<div className="mr-flex mr-justify-between mr-bg-black-15 mr-rounded mr-p-2">
+							<div>
+								{hasPriorImage() &&
+									<button onClick={priorImage}>
+										<SvgSymbol
+											sym="arrow-left-icon"
+											viewBox='0 0 20 20'
+											className="mr-h-4 mr-w-4 mr-fill-current"
+										/>
+									</button>
+								}
+							</div>
 
-                <div className="mr-w-4" />
+							<div className="mr-w-4" />
 
-                <div>
-                  {hasNextImage() &&
-                   <button onClick={nextImage}>
-                     <SvgSymbol
-                       sym="arrow-right-icon"
-                       viewBox='0 0 20 20'
-                       className="mr-h-4 mr-w-4 mr-fill-current"
-                     />
-                   </button>
-                  }
-                </div>
-              </div>
-            </div>
+							<div>
+								{hasNextImage() &&
+									<button onClick={nextImage}>
+										<SvgSymbol
+											sym="arrow-right-icon"
+											viewBox='0 0 20 20'
+											className="mr-h-4 mr-w-4 mr-fill-current"
+										/>
+									</button>
+								}
+							</div>
+						</div>
+					</div>
 
-			<div className="mr-mt-2">
-              {currentImage &&
-				<img
-				 src={currentImage.url}
-				 onLoad={() => setImageLoaded(true)}
-				 alt=""
-				 className="mr-w-full mr-h-auto mr-rounded mr-shadow"
-				/>
-              }
-
-            </div>
-            <div className="mr-flex mr-justify-center mr-mt-2 mr-min-h-4 mr-text-sm mr-text-white">
-              {!imageLoaded ?
-               <BusySpinner /> :
-               <div className="mr-flex mr-items-center">
-                 <div className="mr-pr-4 mr-mr-4 mr-leading-tight mr-border-r mr-border-grey">
-                   @{currentImage.username}
-                 </div>
-                 <div>
-                   {format(parseISO(currentImage.shotDate), 'yyyy-MM-dd')}
-                 </div>
-               </div>
-              }
-            </div>
-          </div>
-        </Modal>
-      </External>
-    )
+					<div className="mr-mt-2">
+						{currentImage &&
+							<img
+								src={currentImage.url}
+								onLoad={() => setImageLoaded(true)}
+								alt=""
+								className="mr-w-full mr-h-auto mr-rounded mr-shadow"
+							/>
+						}
+					</div>
+					<div className="mr-flex mr-justify-center mr-mt-2 mr-min-h-4 mr-text-sm mr-text-white">
+						{!imageLoaded ?
+							<BusySpinner /> :
+							<div className="mr-flex mr-items-center">
+								<div className="mr-pr-4 mr-mr-4 mr-leading-tight mr-border-r mr-border-grey">
+									@{currentImage.username}
+								</div>
+								<div>
+									{format(parseISO(currentImage.shotDate), 'yyyy-MM-dd')}
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			</Modal>
+		</External>
+	)
 }
 
 OpenStreetCamViewer.propTypes = {
-  images: PropTypes.array.isRequired,
-  onClose: PropTypes.func,
+	images: PropTypes.array.isRequired,
+	onClose: PropTypes.func,
 }
 
 export default OpenStreetCamViewer
