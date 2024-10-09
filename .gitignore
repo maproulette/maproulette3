@@ -14,6 +14,7 @@ chimp.js
 
 # production
 /build
+/dist
 /MR3React.tgz
 
 # misc
