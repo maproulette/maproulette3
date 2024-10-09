@@ -29,6 +29,7 @@ describe("TaskAnalysisTable", () => {
           intl={{ formatMessage: () => null }}
           getUserAppSetting={() => null}
           selectedTaskCount={() => null}
+          updateCriteria={() => null}
         />
       </IntlProvider>
     );

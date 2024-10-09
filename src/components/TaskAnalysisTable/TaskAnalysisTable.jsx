@@ -788,6 +788,7 @@ TaskAnalysisTableInternal.propTypes = {
   selectedTasks: PropTypes.object.isRequired,
   /** Invoked to toggle selection of a task */
   toggleTaskSelection: PropTypes.func.isRequired,
+  updateCriteria: PropTypes.func.isRequired,
 }
 
 export default injectIntl(
