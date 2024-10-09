@@ -5,7 +5,7 @@
  * (https://github.com/openstreetmap/id-tagging-schema) npm module, which must
  * be installed prior to running this script
  */
-const shell = require('shelljs')
+import shell from 'shelljs';
 shell.config.silent = true
 
 // This script should be run from the project root. Let's just make sure
