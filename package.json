@@ -137,7 +137,6 @@
     "build-intl": "NODE_ENV=production extract-messages -l=en-US -o src/lang/ -d en-US --flat -f json 'src/**/!(*.test).js'",
     "update-layers": "node scripts/update_layers.js",
     "update-layers-prod": "NODE_ENV=production node scripts/update_layers.js",
-    "update-presets": "node scripts/update_presets.js",
     "start-js": "vite",
     "start": "npm-run-all -p update-layers start-js",
     "build-js": "vite build",
