@@ -4,7 +4,7 @@ import _isFinite from 'lodash/isFinite'
 
 const EMBED_URI_V4='https://www.mapillary.com/embed'
 const IMAGES_URI_V4='https://graph.mapillary.com/images'
-const ACCESS_TOKEN = import.meta.env.VITE_MAPILLARY_CLIENT_TOKEN
+const ACCESS_TOKEN = import.meta.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
 
 /**
  * Returns true if Mapillary support is enabled (a Mapillary client token has been

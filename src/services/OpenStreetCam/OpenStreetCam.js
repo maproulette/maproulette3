@@ -8,7 +8,7 @@ const API_URI='https://openstreetcam.org/1.0'
  * configured), false if not
  */
 export const isOpenStreetCamEnabled = function() {
-  return import.meta.env.VITE_IMAGERY_OPENSTREETCAM === 'enabled'
+  return import.meta.env.REACT_APP_IMAGERY_OPENSTREETCAM === 'enabled'
 }
 
 /**

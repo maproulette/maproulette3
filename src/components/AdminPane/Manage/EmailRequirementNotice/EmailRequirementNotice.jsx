@@ -6,7 +6,7 @@ import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
 import messages from "../Messages";
 
 const EmailRequirementNotice = (props) => {
-  if (import.meta.env.VITE_EMAIL_ENFORCEMENT === "required") {
+  if (import.meta.env.REACT_APP_EMAIL_ENFORCEMENT === "required") {
     if (!props.user?.settings?.email) {
       return (
         <ul className="mr-bg-gradient-b-blue-darker-blue-dark mr-text-white mr-w-full">

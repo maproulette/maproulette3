@@ -9,7 +9,6 @@ export default defineConfig({
       "src/setupTests.jsx",
     ],
   },
-  plugins: [
-    react(),
-  ],
+  envPrefix: 'REACT_APP_',
+  plugins: [react()],
 });
