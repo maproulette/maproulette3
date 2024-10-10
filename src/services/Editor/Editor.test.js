@@ -1,3 +1,4 @@
+import { describe, expect, vi } from "vitest";
 import { Editor,
          osmObjectParams,
          josmLoadAndZoomURI,
@@ -21,7 +22,7 @@ let centerPoint = null
 let mapBounds = null
 
 beforeEach(() => {
-  dispatch = jest.fn()
+  dispatch = vi.fn()
 
   basicFeature = {
     type: 'Feature',
@@ -107,9 +108,9 @@ beforeEach(() => {
 
   mapBounds = {
     bounds: {
-      getSouthWest: jest.fn(() => southWestCorner),
-      getNorthEast: jest.fn(() => northEastCorner),
-      getCenter: jest.fn(() => centerPoint),
+      getSouthWest: vi.fn(() => southWestCorner),
+      getNorthEast: vi.fn(() => northEastCorner),
+      getCenter: vi.fn(() => centerPoint),
     },
     zoom: 17,
   }

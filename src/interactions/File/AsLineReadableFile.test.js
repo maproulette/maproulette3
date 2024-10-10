@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import AsLineReadableFile from './AsLineReadableFile'
 
 const threeLines = "abc\ndef\nghi"
