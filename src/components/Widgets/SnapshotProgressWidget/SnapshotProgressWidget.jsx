@@ -165,7 +165,7 @@ export default class SnapshotProgressWidget extends Component {
                         <li onClick={dropdown.toggleDropdownVisible}>
                           <a target="_blank"
                               rel="noopener noreferrer"
-                              href={`${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/snapshot/challenge/${_get(this.props, 'challenge.id')}/export`}
+                              href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/snapshot/challenge/${_get(this.props, 'challenge.id')}/export`}
                               className="mr-flex mr-items-center"
                           >
                               <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />

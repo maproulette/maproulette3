@@ -30,7 +30,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 const graphqlClient = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    uri: import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL,
+    uri: window.env.REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL,
     credentials: 'include',
   })
 })
@@ -39,16 +39,16 @@ const graphqlClient = new ApolloClient({
 // with 3rd-party libraries. If the user has configured Matomo/PIWIK for
 // analytics, we'll hook it up here.
 let routerHistory = createBrowserHistory({
-  basename: !_isEmpty(import.meta.env.REACT_APP_BASE_PATH) ?
-            import.meta.env.REACT_APP_BASE_PATH :
+  basename: !_isEmpty(window.env.REACT_APP_BASE_PATH) ?
+            window.env.REACT_APP_BASE_PATH :
             undefined,
 })
 
-if (!_isEmpty(import.meta.env.REACT_APP_MATOMO_URL) &&
-    !_isEmpty(import.meta.env.REACT_APP_MATOMO_SITE_ID)) {
+if (!_isEmpty(window.env.REACT_APP_MATOMO_URL) &&
+    !_isEmpty(window.env.REACT_APP_MATOMO_SITE_ID)) {
   const piwik = PiwikReactRouter({
-    url: import.meta.env.REACT_APP_MATOMO_URL,
-    siteId: import.meta.env.REACT_APP_MATOMO_SITE_ID
+    url: window.env.REACT_APP_MATOMO_URL,
+    siteId: window.env.REACT_APP_MATOMO_SITE_ID
   })
 
   routerHistory = piwik.connectToHistory(routerHistory)
@@ -115,11 +115,11 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-if (!_isEmpty(import.meta.env.REACT_APP_TITLE)) {
-  document.title = import.meta.env.REACT_APP_TITLE
+if (!_isEmpty(window.env.REACT_APP_TITLE)) {
+  document.title = window.env.REACT_APP_TITLE
 }
 
-if (import.meta.env.REACT_APP_DEBUG === 'enabled') {
+if (window.env.REACT_APP_DEBUG === 'enabled') {
   // eslint-disable-next-line
   store.subscribe(() => {
     console.log('')

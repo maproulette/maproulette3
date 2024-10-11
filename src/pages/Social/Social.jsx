@@ -95,7 +95,7 @@ const ChallengeList = props => {
 
 const ChallengeItem = props => {
   const shareTitle = `${props.lead} ${props.challenge.name}`
-  const shareUrl = `${import.meta.env.REACT_APP_URL}/browse/challenges/${props.challenge.id}`
+  const shareUrl = `${window.env.REACT_APP_URL}/browse/challenges/${props.challenge.id}`
 
   return (
     <li

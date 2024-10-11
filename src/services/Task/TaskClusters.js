@@ -49,7 +49,7 @@ export const clearTaskClusters = function() {
  */
 export const fetchTaskClusters = function(challengeId, criteria, points=25, overrideDisable=false) {
   return function(dispatch) {
-    if (import.meta.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true' && !overrideDisable) {
+    if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true' && !overrideDisable) {
       return new Promise((resolve) => resolve());
     }
 

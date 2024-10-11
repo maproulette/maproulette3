@@ -235,7 +235,7 @@ export default class ChallengeListWidget extends Component {
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}` +
+                    href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}` +
                           `/api/v2/project/${_get(this.props, 'project.id')}` +
                           `/tasks/extract?${cId}&timezone=` +
                           `${encodeURIComponent(

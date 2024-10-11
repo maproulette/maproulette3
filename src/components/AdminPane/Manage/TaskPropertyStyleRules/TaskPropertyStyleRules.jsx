@@ -140,7 +140,7 @@ export default class TaskPropertyStyleRules extends Component {
         </div>
         <div className="mr-mb-6 mr-links-green-light">
           <a
-            href={`${import.meta.env.REACT_APP_DOCS_URL}/documentation/styling-task-features/`}
+            href={`${window.env.REACT_APP_DOCS_URL}/documentation/styling-task-features/`}
             target="_blank"
             rel="noopener noreferrer"
           >
