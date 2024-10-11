@@ -8,7 +8,8 @@ import { Router } from "react-router-dom";
 import { render as rtlRender } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { IntlProvider } from "react-intl";
-import { initializeStore } from "./PersistedStore";
+
+import env from "../public/env.json";
 
 // React 16 Enzyme adapter
 Enzyme.configure({ adapter: new Adapter() });
@@ -18,6 +19,15 @@ global.shallow = shallow;
 global.render = render;
 global.mount = mount;
 global.scrollTo = vi.fn();
+
+// Make env vars available on the global window object. (In the app,
+// this is handled by an inline script in index.html)
+global.env = env;
+
+// Import PersistedStore asynchronously, otherwise it would load before
+// we had a chance to set global.env above, and references to window.env
+// in the app source code would break.
+const { initializeStore } = await import("./PersistedStore");
 
 // React testing library methods
 const reduxStore = initializeStore();

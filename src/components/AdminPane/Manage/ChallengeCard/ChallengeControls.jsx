@@ -20,7 +20,7 @@ import ConfirmAction from "../../../ConfirmAction/ConfirmAction";
 import messages from "../ChallengeDashboard/Messages";
 
 const isEmailRequired = (user) => {
-  if (import.meta.env.REACT_APP_EMAIL_ENFORCEMENT === "required") {
+  if (window.env.REACT_APP_EMAIL_ENFORCEMENT === "required") {
     if (!user?.settings?.email) {
       return true;
     }
@@ -33,7 +33,7 @@ const handleTasksNeedRebuild = (dateString) => {
   if (dateString) {
     const lastRefreshDate = new Date(dateString);
     const today = new Date();
-    const staleMonths = Number(import.meta.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6
+    const staleMonths = Number(window.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6
     const staleDate = today.setMonth(today.getMonth() - staleMonths);
 
     return lastRefreshDate < staleDate;
@@ -136,7 +136,7 @@ export default class ChallengeControls extends Component {
           )}
         {this.props.includeCopyURL && (
           <CopyToClipboard
-            text={`${import.meta.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`}
+            text={`${window.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`}
             onCopy={this.props.onControlComplete}
           >
             <div

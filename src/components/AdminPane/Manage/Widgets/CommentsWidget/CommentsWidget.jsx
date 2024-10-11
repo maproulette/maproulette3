@@ -39,7 +39,7 @@ export default class CommentsWidget extends Component {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href={`${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
+          href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
           className="mr-button mr-button--green-lighter mr-button--small mr-button--with-icon mr-text-sm"
         >
           <SvgSymbol

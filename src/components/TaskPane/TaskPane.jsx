@@ -337,7 +337,7 @@ export class TaskPane extends Component {
                         {_isFinite(this.props.virtualChallengeId) &&
                           <li>
                             <CopyToClipboard
-                              text={`${import.meta.env.REACT_APP_URL}/browse/virtual/${this.props.virtualChallengeId}`}
+                              text={`${window.env.REACT_APP_URL}/browse/virtual/${this.props.virtualChallengeId}`}
                               onCopy={() => dropdown.closeDropdown()}
                             >
                               <a>

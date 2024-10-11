@@ -84,7 +84,7 @@ class Leaderboard extends Component {
               </h3>
             </div>
             {
-              !import.meta.env.REACT_APP_DISABLE_USER_LEADERBOARD_CONFIGS
+              !window.env.REACT_APP_DISABLE_USER_LEADERBOARD_CONFIGS
                 ? <div className="mr-flex mr-justify-center mr-mb-2">
                     <PastDurationSelector
                       className="mr-button mr-mr-8"
@@ -95,7 +95,7 @@ class Leaderboard extends Component {
                       customStartDate={this.props.startDate ? new Date(this.props.startDate) : null}
                       customEndDate={this.props.endDate ? new Date(this.props.endDate) : null}
                     />
-                    {!this.props.suppressCountrySelection && !import.meta.env.REACT_APP_DISABLE_COUNTRY_LEADERBOARD_CONFIG &&
+                    {!this.props.suppressCountrySelection && !window.env.REACT_APP_DISABLE_COUNTRY_LEADERBOARD_CONFIG &&
                     <CountrySelector
                       className="mr-button"
                       currentCountryCode={this.props.countryCode}

@@ -53,8 +53,8 @@ const WithUserLocation = function(WrappedComponent) {
           return
         }
 
-        const bboxWidth = parseFloat(import.meta.env.REACT_APP_NEARBY_LONGITUDE_LENGTH)
-        const bboxHeight = parseFloat(import.meta.env.REACT_APP_NEARBY_LATITUDE_LENGTH)
+        const bboxWidth = parseFloat(window.env.REACT_APP_NEARBY_LONGITUDE_LENGTH)
+        const bboxHeight = parseFloat(window.env.REACT_APP_NEARBY_LATITUDE_LENGTH)
 
         // Build WSEN bounds array
         resolve([

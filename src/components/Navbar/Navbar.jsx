@@ -257,7 +257,7 @@ export const ProfileMenu = function(props) {
         </NavLink>
       </li>
       {
-        isSuperUser && import.meta.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS !== 'true'
+        isSuperUser && window.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS !== 'true'
           ? <li>
               <NavLink to="/superadmin" onClick={props.closeDropdown}>
                 <FormattedMessage {...messages.superAdmin} />
@@ -321,7 +321,7 @@ const Nav = props => (
 
     <li className="mr-flex mr-flex-col mr-justify-center">
       <a
-        href={import.meta.env.REACT_APP_DOCS_URL}
+        href={window.env.REACT_APP_DOCS_URL}
         target="_blank"
         rel="noopener noreferrer"
         onClick={props.closeMobileMenu}>
