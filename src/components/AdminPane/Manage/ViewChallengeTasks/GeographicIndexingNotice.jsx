@@ -16,7 +16,7 @@ import messages from './Messages'
 export default class GeographicIndexingNotice extends Component {
   render() {
     const reindexingDelay =
-      _get(import.meta.env, 'VITE_GEOGRAPHIC_INDEXING_DELAY', 0)
+      _get(import.meta.env, 'REACT_APP_GEOGRAPHIC_INDEXING_DELAY', 0)
 
     // If enough time has passed, nothing to show
     if (differenceInHours(Date.now(), _get(this.props, 'challenge.lastTaskRefresh', 0)) >

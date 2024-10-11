@@ -58,7 +58,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
     // since Rapid assumes any token it's given is valid on api.openstreetmap.org.
     // See: https://github.com/facebook/Rapid/issues/1341
 
-    // NOTE: the assumption here is that VITE_OSM_API_SERVER is the same as
+    // NOTE: the assumption here is that REACT_APP_OSM_API_SERVER is the same as
     // the maproulette-backend's config.osm.server; fix your configs if they differ!
     initialHash += `&token=${token}`;
   }

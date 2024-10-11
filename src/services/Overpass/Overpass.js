@@ -67,7 +67,7 @@ export const viewAtticOverpass = (selectedEditor, actionDate, bounds, ignoreAtti
  */
 const offsetAtticDateMoment = actionDate => {
   return addMinutes(actionDate,
-                    _get(import.meta.env, 'VITE_ATTIC_QUERY_OFFSET_MINUTES', 10))
+                    _get(import.meta.env, 'REACT_APP_ATTIC_QUERY_OFFSET_MINUTES', 10))
 }
 
 /**
