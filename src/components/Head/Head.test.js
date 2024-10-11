@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import "@testing-library/jest-dom";
-import { formatTitle, VITE_TITLE } from "./Head";
+import { formatTitle, REACT_APP_TITLE } from "./Head";
 
 describe("formatTitle", () => {
   it("doesn't break if no path is provided", () => {
@@ -10,7 +10,7 @@ describe("formatTitle", () => {
 
   it("returns App title", () => {
     const title = formatTitle({ match: { path: "/" } });
-    expect(title).toBe(VITE_TITLE);
+    expect(title).toBe(REACT_APP_TITLE);
   });
 
   it("replaces route ids appropriately", () => {
@@ -35,6 +35,6 @@ describe("formatTitle", () => {
         }
       } 
     });
-    expect(title).toBe('5 - 2 - User - 3 - Project Name - Bar - Foo - ' + VITE_TITLE);
+    expect(title).toBe('5 - 2 - User - 3 - Project Name - Bar - Foo - ' + REACT_APP_TITLE);
   });
 });

@@ -66,7 +66,7 @@ export const LayerSources = _sortBy(
 
 // Load any API keys from .env file
 let layerAPIKeys = {}
-if (_get(import.meta.env, 'VITE_MAP_LAYER_API_KEYS', '').length > 0) {
+if (_get(import.meta.env, 'REACT_APP_MAP_LAYER_API_KEYS', '').length > 0) {
   try {
     layerAPIKeys = JSON.parse(import.meta.env.REACT_APP_MAP_LAYER_API_KEYS)
   }

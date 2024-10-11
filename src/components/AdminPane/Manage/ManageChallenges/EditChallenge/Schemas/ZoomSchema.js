@@ -29,7 +29,7 @@ export const jsSchema = (intl) => {
         type: "number",
         enum: ZOOM_LEVELS,
         default: numericEnvSetting(
-                   'VITE_INITIAL_CHALLENGE_DEFAULT_ZOOM',
+                   'REACT_APP_INITIAL_CHALLENGE_DEFAULT_ZOOM',
                    DEFAULT_ZOOM),
       },
       minZoom: {
@@ -37,7 +37,7 @@ export const jsSchema = (intl) => {
         type: "number",
         enum: ZOOM_LEVELS,
         default: numericEnvSetting(
-                   'VITE_INITIAL_CHALLENGE_MIN_ZOOM',
+                   'REACT_APP_INITIAL_CHALLENGE_MIN_ZOOM',
                    MIN_ZOOM),
       },
       maxZoom: {
@@ -45,7 +45,7 @@ export const jsSchema = (intl) => {
         type: "number",
         enum: ZOOM_LEVELS,
         default: numericEnvSetting(
-                  'VITE_INITIAL_CHALLENGE_MAX_ZOOM',
+                  'REACT_APP_INITIAL_CHALLENGE_MAX_ZOOM',
                   MAX_ZOOM),
       }
     },

@@ -40,8 +40,8 @@ const WithUserLocation = function(WrappedComponent) {
 
     /**
      * Retrieves a bounding box around the user's location based on the user's
-     * centerpoint and the `VITE_NEARBY_LONGITUDE_LENGTH` and
-     * `VITE_NEARBY_LATITIDE_LENGTH` .env configuration variables. Returns
+     * centerpoint and the `REACT_APP_NEARBY_LONGITUDE_LENGTH` and
+     * `REACT_APP_NEARBY_LATITIDE_LENGTH` .env configuration variables. Returns
      * a promise that resolves to an WSEN array if a user centerpoint is
      * available, or rejects with an error if not.
      */
