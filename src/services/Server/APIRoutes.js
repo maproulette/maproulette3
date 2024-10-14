@@ -191,7 +191,11 @@ const apiRoutes = (factory) => {
       notifications: factory.get("/user/:userId/notifications"),
       markNotificationsRead: factory.put("/user/:userId/notifications"),
       deleteNotifications: factory.put("/user/:userId/notifications/delete"),
-      announcements: factory.get("/user/announcements")
+      announcements: factory.get("/user/announcements"),
+      challengeLeaderboard: factory.get("/data/user/challengeLeaderboard"),
+      projectLeaderboard: factory.get("/data/user/projectLeaderboard"),
+      challengeLeaderboardForUser: factory.get("/data/user/:userId/challengeLeaderboard"),
+      // projectLeaderboardForUser: factory.get("/data/user/:userId/projectLeaderboard")
     },
     teams: {
       find: factory.get("/teams/find"),

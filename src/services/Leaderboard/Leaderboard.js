@@ -3,7 +3,6 @@ import _isArray from 'lodash/isArray'
 import Endpoint from '../Server/Endpoint'
 import { startOfMonth, endOfDay } from 'date-fns'
 import { CHALLENGE_INCLUDE_LOCAL } from '../Challenge/Challenge'
-import { setupCustomCache } from '../../utils/setupCustomCache'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 
@@ -27,8 +26,6 @@ const CACHE_TIME = 60 * 60 * 1000;
 const GLOBAL_LEADERBOARD_CACHE = "globalLeaderboard";
 const USER_LEADERBOARD_CACHE = "userLeaderboard";
 
-const leaderboardCache = setupCustomCache(CACHE_TIME);
-
 /**
  * Retrieve leaderboard data from the server for the given date range and
  * filters, returning a Promise that resolves to the leaderboard data. Note
@@ -47,17 +44,17 @@ export const fetchLeaderboard = (numberMonths=null, onlyEnabled=true,
     initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
     forUsers, forCountries, startDate, endDate)
 
-    const cachedLeaderboard = leaderboardCache.get({}, params, GLOBAL_LEADERBOARD_CACHE);
-
-    if (cachedLeaderboard) {
-      return cachedLeaderboard;
-    }
-
     try {
-      const results = await new Endpoint(api.users.leaderboard, { params }).execute()
+      let results;
 
-      if (results) {
-        leaderboardCache.set({}, params, results, GLOBAL_LEADERBOARD_CACHE)
+      if (forProjects && forProjects.length > 0) {
+        const projectId = forProjects[0];
+        results = await new Endpoint(api.user.projectLeaderboard, { params: { ...params, projectId } }).execute()
+      } else if (forChallenges && forChallenges.length > 0) {
+        const challengeId = forChallenges[0];
+        results = await new Endpoint(api.user.challengeLeaderboard, { params: { ...params, challengeId } }).execute()
+      } else {
+        results = await new Endpoint(api.users.leaderboard, { params }).execute()
       }
 
       return results
@@ -95,17 +92,19 @@ export const fetchLeaderboardForUser = (userId, bracket=0, numberMonths=1,
   initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges,
                               null, forCountries, startDate, endDate)
 
-  const cachedLeaderboard = leaderboardCache.get(variables, params, USER_LEADERBOARD_CACHE);
-
-  if (cachedLeaderboard) {
-    return cachedLeaderboard;
-  }
-
     try {
-      const results = await new Endpoint(api.users.userLeaderboard, {variables, params}).execute()
+      let results;
 
-      if (results) {
-        leaderboardCache.set(variables, params, results, USER_LEADERBOARD_CACHE)
+      if (forProjects && forProjects.length > 0) {
+        //disabling project user ranks for now, as it's not supported by the backend
+        //const projectId = forProjects[0];
+        //results = await new Endpoint(api.user.projectLeaderboardForUser, { params: { ...params, projectId }, variables: { userId } }).execute()
+        return []
+      } else if (forChallenges && forChallenges.length > 0) {
+        const challengeId = forChallenges[0];
+        results = await new Endpoint(api.user.challengeLeaderboardForUser, { params: { ...params, challengeId }, variables: { userId } }).execute()
+      } else {
+        results = await new Endpoint(api.users.userLeaderboard, {variables, params}).execute()
       }
 
       return results;

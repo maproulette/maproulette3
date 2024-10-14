@@ -141,8 +141,7 @@ export class ProjectDetail extends Component {
                         <FormattedDate value={parseISO(project.modified)}
                                         year='numeric' month='long' day='2-digit' />
                       </li>
-                      {/* Disable Link tell project leaderboard page is reimplemented */}
-                      {/* {_get(this.props, 'challenges.length', 0) > 0 &&
+                      {_get(this.props, 'challenges.length', 0) > 0 &&
                         <li>
                           <Link
                             className="mr-text-green-lighter hover:mr-text-white"
@@ -151,7 +150,7 @@ export class ProjectDetail extends Component {
                             <FormattedMessage {...messages.viewLeaderboard} />
                           </Link>
                         </li>
-                      } */}
+                      }
                     </ol>
 
                     <div className="mr-card-challenge__description">
