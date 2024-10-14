@@ -914,7 +914,7 @@ export const deleteTask = function(taskId) {
   }
 }
 
-export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bundleName="") {
+export const bundleTasks = function(primaryId, taskIds, bundleName="") {
   return function(dispatch) {
     return new Endpoint(api.tasks.bundle, {
       json: {name: bundleName, primaryId, taskIds},
@@ -927,12 +927,6 @@ export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bund
         )
       }
       else {
-        if (bundleTypeMismatch === "cooperative") {
-          dispatch(addError(AppErrors.task.bundleCooperative))
-        } else if (bundleTypeMismatch === "notCooperative") {
-          dispatch(addError(AppErrors.task.bundleNotCooperative))
-        }
-
         const errorMessage = await error.response.text()
         if (errorMessage.includes('already assigned to bundle')) {
           const numberPattern = /\d+/
@@ -961,18 +955,12 @@ export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bund
   }
 }
 
-  export const resetTaskBundle = function(initialBundle) {
-    const params = {};
+  export const updateTaskBundle = function(initialBundle, taskIds) {
+    const params = {taskIds: taskIds};
     const bundleId = initialBundle.bundleId;
-    let taskIdsArray = [];
-
-    if (initialBundle && initialBundle.taskIds) { 
-        taskIdsArray.push(...initialBundle.taskIds); 
-        params.taskIds = taskIdsArray;
-    }
 
     return function(dispatch) {
-      return new Endpoint(api.tasks.resetBundle, {
+      return new Endpoint(api.tasks.updateBundle, {
         variables: {bundleId},
         params
       }).execute()
