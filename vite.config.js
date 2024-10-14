@@ -7,6 +7,9 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
+  server: {
+    port: 3000
+  },
   envPrefix: 'REACT_APP_',
   plugins: [react()]
 })
