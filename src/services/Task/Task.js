@@ -983,9 +983,7 @@ export const deleteTaskBundle = function(bundleId) {
   return function(dispatch) {
     return new Endpoint(api.tasks.deleteBundle, {
       variables: {bundleId},
-    }).execute().then(() => {
-      return true
-    }).catch(error => {
+    }).execute().catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -995,7 +993,6 @@ export const deleteTaskBundle = function(bundleId) {
         dispatch(addError(AppErrors.task.bundleFailure))
         console.log(error.response || error)
       }
-      return false
     })
   }
 }

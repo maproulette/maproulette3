@@ -139,6 +139,7 @@ export class ActiveTaskControls extends Component {
     if(this.state.tags) {
       this.props.saveTaskTags(this.props.task, this.state.tags)
     }
+
     this.props.setCompletingTask(this.props.task.id)
 
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected

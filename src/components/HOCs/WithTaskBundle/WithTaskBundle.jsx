@@ -168,9 +168,7 @@ export function WithTaskBundle(WrappedComponent) {
 
     updateTaskBundle = async () => {
       const { taskBundle, initialBundle } = this.state
-      debugger
       if (taskBundle || initialBundle) {
-        debugger
         if(!taskBundle && initialBundle) {
           await this.props.deleteTaskBundle(initialBundle.bundleId)
           return null
