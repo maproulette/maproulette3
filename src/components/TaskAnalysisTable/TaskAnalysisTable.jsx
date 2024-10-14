@@ -425,10 +425,10 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const alreadyBundled = row._original.bundleId && props.taskBundle?.bundleId !== row._original.bundleId
       const enableBundleEdits = props.initialBundle?.taskIds?.includes(row._original.id) ||
                                 [0, 3, 6].includes(row._original.status)
-
+      const isInActiveBundle = props.taskBundle?.taskIds?.includes(row._original.id)
       return (
         <div>
-          {!isTaskSelected && enableBundleEdits && !alreadyBundled && (
+          {!isTaskSelected && enableBundleEdits && !alreadyBundled && isInActiveBundle && (
             <button
               disabled={props.bundleEditsDisabled}
               className="mr-text-red-light"

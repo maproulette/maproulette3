@@ -78,56 +78,44 @@ export default class TaskBundleWidget extends Component {
     if(_get(this.props, 'taskBundle.tasks.length', 0) > 0 || this.props.bundleEditsDisabled){
       return
     }
-    
+
     const selectedArray = Array.from(this.props.selectedTasks.selected.values());
-    let bundleTypeMismatch = "";
-    
-    if (selectedArray.length > 1) {
-      if (AsCooperativeWork(this.props.task).isCooperative()) {
-        selectedArray.forEach(item => {
-          if (!AsCooperativeWork(item).isCooperative()) {
-            bundleTypeMismatch = "cooperative"
-          }
-        });
-      } else {
-        selectedArray.forEach(item => {
-          if (AsCooperativeWork(item).isCooperative()) {
-            bundleTypeMismatch = "notCooperative"
-          }
-        })
+    const isCooperative = AsCooperativeWork(this.props.task).isCooperative();
+
+    selectedArray.forEach(item => {
+      if (AsCooperativeWork(item).isCooperative() !== isCooperative) {
+        throw new Error("Bundle type mismatch, not all tasks are of the same type");
       }
-    }
-  
-    // Because there's no way to select all tasks (TriState checkbox is
-    // suppressed on the TaskAnalysisTables), we only need to worry about
-    // explicitly selected tasks
-    this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()], bundleTypeMismatch)
+    });
+
+    this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()]);
   }
 
   handleKeyboardShortcuts = (event) => {
-    // Ignore if shortcut group is not active
-    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
-      return
-    }
-
-    if (this.props.textInputActive(event)) { // ignore typing in inputs
-      return
-    }
-
-    // Ignore if modifier keys were pressed
-    if (event.metaKey || event.altKey || event.ctrlKey) {
-      return
-    }
+    const { activeKeyboardShortcuts, textInputActive, taskReadOnly, keyboardShortcutGroups } = this.props;
     
-    //Ignore if in read only mode
-    if (this.props.taskReadOnly) {
-      return
+    // Return early if any of the following conditions are met:
+    // - Shortcut group is not active
+    // - Typing in inputs
+    // - Modifier keys are pressed
+    // - Task is in read-only mode
+    if (_isEmpty(activeKeyboardShortcuts[shortcutGroup]) || 
+        textInputActive(event) || 
+        event.metaKey || event.altKey || event.ctrlKey || 
+        taskReadOnly) {
+      return;
     }
 
-    const shortcuts = this.props.keyboardShortcutGroups.taskEditing
+    const shortcuts = keyboardShortcutGroups.taskEditing;
     if (event.key === shortcuts.completeTogether.key) {
-      this.bundleTasks()
+      this.bundleTasks();
     }
+  }
+
+  unbundleTask = (task) => {
+    const taskId = task.id ?? task.taskId 
+    this.props.removeTaskFromBundle(taskId)
+    this.props.toggleTaskSelection(task)
   }
 
   /**
@@ -149,16 +137,6 @@ export default class TaskBundleWidget extends Component {
        (challengeId !== _get(prevProps.task, 'parent.id'))) {
       this.props.subscribeToChallengeTaskMessages(challengeId)
     }
-  }
-
-  unbundleTasks = async () => {
-    this.props.resetToInitialTaskBundle(this.props.taskBundle.bundleId)
-  }
-
-  unbundleTask = (task) => {
-    const taskId = task.id ?? task.taskId 
-    this.props.removeTaskFromBundle(this.props.taskBundle.bundleId, taskId)
-    this.props.toggleTaskSelection(task)
   }
 
   updateBounds = (challengeId, bounds, zoom) => {
@@ -184,11 +162,7 @@ export default class TaskBundleWidget extends Component {
       taskList.map(t => point([t.point.lng, t.point.lat]))
     ))
 
-    this.updateBounds(
-      this.props.challengeId,
-      nearbyBounds,
-      _get(this.props, 'mapBounds.zoom', 18)
-    )
+    this.props.updateTaskFilterBounds(nearbyBounds, _get(this.props, 'mapBounds.zoom', 18))
   }
 
   saveFilters = () => {
@@ -289,7 +263,6 @@ export default class TaskBundleWidget extends Component {
           updateBounds={this.updateBounds}
           bundleTasks={this.bundleTasks}
           unbundleTask={this.unbundleTask}
-          unbundleTasks={this.unbundleTasks}
           loading={this.props.loading}
         />
       </QuickWidget>
@@ -402,6 +375,7 @@ const ActiveBundle = props => {
               values={{ taskCount: props.taskBundle.taskIds.length }}
             />
           </h3>
+          {props.initialBundle &&
           <button
             disabled={(props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length))}
             className="mr-button mr-button--green-lighter mr-button--small"
@@ -409,13 +383,21 @@ const ActiveBundle = props => {
               cursor: (props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 'default' : 'pointer',
               opacity:(props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 0.3 : 1
             }}
-            onClick={() => props.unbundleTasks()}
+            onClick={() => props.resetTaskBundle()}
           >
-            {!props.initialBundle ? (
-              <FormattedMessage {...messages.unbundleTasksLabel} />
-            ) : (
               <FormattedMessage {...messages.resetBundleLabel} />
-            )}
+          </button>
+}
+          <button
+            disabled={(props.bundleEditsDisabled)}
+            className="mr-button mr-button--green-lighter mr-button--small"
+            style={{
+              cursor: 'pointer',
+              opacity: 1
+            }}
+            onClick={() => props.clearActiveTaskBundle()}
+          >
+              <FormattedMessage {...messages.unbundleTasksLabel} />
           </button>
         </div>
         <div

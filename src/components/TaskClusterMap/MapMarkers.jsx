@@ -92,15 +92,16 @@ const Markers = (props) => {
     };
   }, []);
 
+
   useEffect(() => {
-    if (!props.taskMarkers || props.delayMapLoad || !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) || props.selectedClusters !== prevProps.current.selectedClusters) {
+    if ((props.taskMarkers && mapMarkers.length === 0) || props.delayMapLoad || (props.bundledOnly !== prevProps.current.bundledOnly) || !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) || props.selectedClusters !== prevProps.current.selectedClusters) {
       refreshSpidered();
       generateMarkers();
     } else if (!_isEqual(spidered, prevProps.current.spidered)) {
       generateMarkers();
     }
     prevProps.current = { ...props, spidered: spidered };
-  }, [props.taskMarkers, props.selectedClusters, spidered]);
+  }, [props.taskMarkers, props.selectedClusters, spidered, props.taskBundle, props.bundledOnly]);
 
   useEffect(() => {
     setSpidered(new Map());
@@ -272,6 +273,9 @@ const Markers = (props) => {
 
   const generateMarkers = () => {
     let consolidatedMarkers = consolidateMarkers(props.taskMarkers);
+    if(props.taskBundle && props.bundledOnly) {
+      consolidatedMarkers = consolidatedMarkers.filter(m => props.taskBundle.taskIds.includes(m.options.taskId));
+    }
 
     if (spidered.size > 0) {
       consolidatedMarkers = _reject(consolidatedMarkers, (m) => spidered.has(m.options.taskId));
