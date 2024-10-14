@@ -97,10 +97,6 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         _set(searchCriteria, 'filters.archived', true)
       }
 
-      if (this.props.taskBundle && this.props.bundledOnly ){
-        _set(searchCriteria, 'filters.bundleId', this.props.taskBundle.bundleId)
-      }
-
       if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
         return this.setState({ loading: false })
       }
@@ -181,10 +177,6 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       }
       else if (!_isEqual(_omit(prevProps.criteria, ['page', 'pageSize']),
             _omit(this.props.criteria, ['page', 'pageSize']))) {
-        this.debouncedFetchClusters(this.state.showAsClusters)
-      } else if(this.props.taskBundle && 
-        (this.props.bundledOnly !== prevProps.bundledOnly || 
-        this.props.taskBundle !== prevProps.taskBundle)){
         this.debouncedFetchClusters(this.state.showAsClusters)
       }
     }

@@ -133,7 +133,9 @@ export class ActiveTaskControls extends Component {
   }
 
   /** Mark the task as complete with the given status */
-  complete = taskStatus => {
+  complete = async taskStatus => {
+    const taskBundle = await this.props.updateTaskBundle()
+
     if(this.state.tags) {
       this.props.saveTaskTags(this.props.task, this.state.tags)
     }
@@ -142,14 +144,14 @@ export class ActiveTaskControls extends Component {
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
     if (!_isUndefined(this.state.submitRevision)) {
-      this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
+     await this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
                                         this.state.comment, null,
                                         this.state.revisionLoadBy, this.props.history,
-                                        this.props.taskBundle, this.state.requestedNextTask,
+                                        taskBundle, this.state.requestedNextTask,
                                         taskStatus, null)
     }
     else {
-      this.props.completeTask(this.props.task, this.props.task.parent.id,
+      await this.props.completeTask(this.props.task, this.props.task.parent.id,
                               taskStatus, this.state.comment, null,
                               revisionSubmission ? null : this.props.taskLoadBy,
                               this.props.user.id,
@@ -157,7 +159,7 @@ export class ActiveTaskControls extends Component {
                               this.state.requestedNextTask,
                               this.state.osmComment,
                               this.props.tagEdits,
-                              this.props.taskBundle)
+                              taskBundle)
       if (revisionSubmission) {
         if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
           this.props.history.push('/inbox')
