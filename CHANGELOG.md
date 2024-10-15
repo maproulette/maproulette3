@@ -7,6 +7,32 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.15.11] - 2024-10-15
+Released with [maproulette-backend_v4.5.6](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.6)
+
+## What's Changed
+* Fix Rapid editor iframe changeset comment formatting (hotfix) by @jake-low in https://github.com/maproulette/maproulette3/pull/2435
+* Pin Rapid editor version to 2.3 via jsDelivr CDN URL by @jake-low in https://github.com/maproulette/maproulette3/pull/2436
+* Properly pin Rapid editor to 2.3 by @jake-low in https://github.com/maproulette/maproulette3/pull/2437
+* allow 'not an issue' status change for revisions by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2439
+* fix feature animation and hover styles by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2440
+* Profile: Add dom id to api key section by @jake-low in https://github.com/maproulette/maproulette3/pull/2448
+* Update caniuse-lite db by @jake-low in https://github.com/maproulette/maproulette3/pull/2443
+* Prevent codecov from polluting PRs with useless comments by @jake-low in https://github.com/maproulette/maproulette3/pull/2445
+* Run svgo on static svgs to reduce file size by @jake-low in https://github.com/maproulette/maproulette3/pull/2442
+* Improve error messages when Rapid editor fails to load by @jake-low in https://github.com/maproulette/maproulette3/pull/2441
+* fix infinite loading screen on challenge browse page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2456
+* fix challenge completion indicator by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2457
+* Enable Challenge and Project leaderboards by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2461
+
+## MR2 Changes
+* Add challenge and project leaderboard endpoints by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1152
+* Add link to OSM US Code of Conduct by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1151
+* Fix remaining task total in challenges by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1150
+* Swagger: How to get the API Key; Other notes by @tordans in https://github.com/maproulette/maproulette-backend/pull/1149
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.10...v3.15.11
+
 ## [v3.15.10] - 2024-9-10
 Released with [maproulette-backend_v4.5.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.5)
 
