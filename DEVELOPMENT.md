@@ -1,6 +1,11 @@
 # MapRoulette Development
 
-This is the repository that holds the front-end code. The back-end and API are developed in parallel in a separate repo: [maproulette-backend](https://github.com/maproulette/maproulette-backend). Both need to be deployed together for a working setup. We advise you use Docker for production deployments. [This repo](https://github.com/maproulette/maproulette2-docker) will help you set that up easily.
+This is the repository that holds the front-end code. The back-end and API
+are developed in parallel in a separate repo: [maproulette-backend](https://
+github.com/maproulette/maproulette-backend). Both need to be deployed together
+for a working setup. We advise you use Docker for production deployments. [This
+repo](https://github.com/maproulette/maproulette2-docker) will help you set that
+up easily.
 
 ### Basic Dependencies:
 
@@ -19,8 +24,10 @@ This is the repository that holds the front-end code. The back-end and API are d
 
 3. `yarn run start` to fire up the front-end development server
 
-A back-end server from the [maproulette-backend](https://github.com/maproulette/maproulette-backend) project is also required. You can either install and configure it locally or, if you have access to a pre-existing server, connect directly to it by using your API key for that
-server.
+A back-end server from the [maproulette-backend](https://github.com/maproulette/
+maproulette-backend) project is also required. You can either install and
+configure it locally or, if you have access to a pre-existing server, connect
+directly to it by using your API key for that server.
 
 #### Run the UI from Docker
 
@@ -32,12 +39,10 @@ Note that this will create the development build and not the 'production' build.
    ```
    REACT_APP_URL='http://127.0.0.1:3000'
    REACT_APP_SERVER_OAUTH_URL='http://127.0.0.1:9000/auth/authenticate?redirect=http://127.0.0.1:3000'
-   REACT_APP_FEATURE_CHALLENGE_ANALYSIS_TABLE='enabled'
-   REACT_APP_FEATURE_MOBILE_DEVICES='enabled'
    ```
 
-1. Build the image using `docker build --pull -t maproulette-ui .`
-1. Start a container from the image using `docker run -itd -p 127.0.0.1:3000:3000 --name maproulette-ui maproulette-ui`
+2. Build the image using `docker build --pull -t maproulette-ui .`
+3. Start a container from the image using `docker run -itd -p 127.0.0.1:3000:3000 --name maproulette-ui maproulette-ui`
 
 #### Developing with a local back-end server
 
