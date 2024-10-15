@@ -10,23 +10,18 @@ import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
 import layerMessages from '../LayerToggle/Messages'
-import { createPathComponent } from '@react-leaflet/core'
+import { createPathComponent, useLeafletContext } from '@react-leaflet/core'
 import { useMap } from 'react-leaflet'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
-const HIGHLIGHT_STYLE = {
-  color: colors.gold,
-  fillColor: colors.gold,
-  weight: 7,
-}
 
-const HOVER_HIGHLIGHT_STYLE = {
-  color: colors.gold,
-  fillColor: colors.gold,
-  weight: 14,
-}
-
-const generateLayer = (props, map) => {
+const generateLayer = (props, map, leaflet) => {
+  const HIGHLIGHT_STYLE = {
+    color: colors.gold,
+    fillColor: colors.gold,
+    weight: props.zoom >= 18 ? 7 : props.zoom > 15 ? 6 : 3,
+  }
+  
   const popupContent = (layer, onBack) => {
     const properties = layer.feature.properties
     const header = (
@@ -40,6 +35,7 @@ const generateLayer = (props, map) => {
     )
   
     const contentElement = document.createElement('div')
+    contentElement.style.maxHeight = '300px';
     ReactDOM.render(
       <IntlProvider 
         key={props.intl.locale} 
@@ -84,7 +80,7 @@ const generateLayer = (props, map) => {
     showNodes: props.showOSMElements.nodes,
     showWays: props.showOSMElements.ways,
     showAreas: props.showOSMElements.areas,
-    pane: _get(props, 'leaflet.pane'),
+    pane: props.leaflet?.pane,
   })
 
   layerGroup.eachLayer(layer => {
@@ -101,7 +97,7 @@ const generateLayer = (props, map) => {
         properties: layer.feature.properties,
       }
     }
-      const styleableLayer = AsStylableLayer(layer)
+    const styleableLayer = AsStylableLayer(layer)
 
     if (!props.externalInteractive) {
       const popup = L.popup().setContent(popupContent(layer, () => {}))
@@ -126,7 +122,7 @@ const generateLayer = (props, map) => {
 
       layer.on('mouseover', () => {
         // Apply highlight style on hover
-        styleableLayer.pushStyle({ ...HOVER_HIGHLIGHT_STYLE });
+        styleableLayer.pushStyle({ ...HIGHLIGHT_STYLE });
       });
       
       layer.on('mouseout', () => {
@@ -155,7 +151,7 @@ const generateLayer = (props, map) => {
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
  */
-const OSMDataLayer = createPathComponent(
+const OSMDataLayerComponent = createPathComponent(
   (props, context) => {
     const map = useMap()
     return {
@@ -174,6 +170,11 @@ const OSMDataLayer = createPathComponent(
     }
   }
 )
+
+const OSMDataLayer = (props) => {
+  const leaflet = useLeafletContext()
+  return <OSMDataLayerComponent {...props} leaflet={leaflet} />
+}
 
 export default injectIntl(OSMDataLayer)
 
