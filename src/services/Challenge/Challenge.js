@@ -126,7 +126,7 @@ export const exportOSMData = function (url, filename) {
       const pom = document.createElement('a');
       const bb = new Blob([osmData], {type: 'text/plain'});
 
-      if (import.meta.env.NODE_ENV !== 'test') {
+      if (process.env.NODE_ENV !== 'test') {
         pom.setAttribute('href', window.URL.createObjectURL(bb));
       }
       pom.setAttribute('download', file);
