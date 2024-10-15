@@ -25,7 +25,7 @@ const apiKey = import.meta.env.REACT_APP_SERVER_API_KEY
 // backend can run on separate servers/ports. Otherwise insist on same-origin
 // policy
 export const credentialsPolicy =
-  import.meta.env.NODE_ENV === 'development' ? 'include' : 'same-origin'
+  process.env.NODE_ENV === 'development' ? 'include' : 'same-origin'
 
 export const serverRouteFactory = new RouteFactory(baseURL)
 export const defaultRoutes = Object.freeze(apiRoutes(serverRouteFactory))
