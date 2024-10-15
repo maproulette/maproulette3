@@ -4,7 +4,15 @@ import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
-import { bundleTasks, deleteTaskBundle, removeTaskFromBundle, fetchTaskBundle, updateTaskBundle,releaseTask, startTask } from '../../../services/Task/Task'
+import { 
+  bundleTasks, 
+  deleteTaskBundle, 
+  removeTaskFromBundle, 
+  fetchTaskBundle, 
+  updateTaskBundle, 
+  releaseTask, 
+  startTask 
+} from '../../../services/Task/Task'
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -24,16 +32,22 @@ export function WithTaskBundle(WrappedComponent) {
       resetSelectedTasks: null
     }
 
-    handlePrimaryTaskRedirect = (taskBundle, task, workspace, history) => {
-      if (!task.isBundlePrimary) {
-        const primaryTask = taskBundle.tasks.find(task => task.isBundlePrimary)
-        const isMetaReview = history?.location?.pathname?.includes("meta-review")
-        const location = workspace?.name === "taskReview" ? (isMetaReview ? "/meta-review" : "/review") : ""
-        if (primaryTask) {
-          history.push(`/challenge/${primaryTask.parent}/task/${primaryTask.id}${location}`)
-        } else {
-          console.error("Primary task not found in task bundle.")
+    async componentDidMount() {
+      const { task } = this.props
+      if (_isFinite(_get(task, 'bundleId'))) {
+        await this.fetchBundle(task.bundleId)
+      }
+      this.updateBundlingConditions()
+    }
+
+    async componentDidUpdate(prevProps) {
+      const { task } = this.props
+      if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
+        this.setState({ selectedTasks: [], taskBundle: null, initialBundle: null, loading: false, completingTask: null })
+        if (_isFinite(_get(task, 'bundleId'))) {
+          await this.fetchBundle(task.bundleId)
         }
+        this.updateBundlingConditions()
       }
     }
 
@@ -67,22 +81,16 @@ export function WithTaskBundle(WrappedComponent) {
       this.setState({ bundleEditsDisabled })
     }
 
-    async componentDidMount() {
-      const { task } = this.props
-      if (_isFinite(_get(task, 'bundleId'))) {
-        await this.fetchBundle(task.bundleId)
-      }
-      this.updateBundlingConditions()
-    }
-
-    async componentDidUpdate(prevProps) {
-      const { task } = this.props
-      if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
-        this.setState({ selectedTasks: [], taskBundle: null, initialBundle: null, loading: false, completingTask: null })
-        if (_isFinite(_get(task, 'bundleId'))) {
-          await this.fetchBundle(task.bundleId)
+    handlePrimaryTaskRedirect = (taskBundle, task, workspace, history) => {
+      if (!task.isBundlePrimary) {
+        const primaryTask = taskBundle.tasks.find(task => task.isBundlePrimary)
+        const isMetaReview = history?.location?.pathname?.includes("meta-review")
+        const location = workspace?.name === "taskReview" ? (isMetaReview ? "/meta-review" : "/review") : ""
+        if (primaryTask) {
+          history.push(`/challenge/${primaryTask.parent}/task/${primaryTask.id}${location}`)
+        } else {
+          console.error("Primary task not found in task bundle.")
         }
-        this.updateBundlingConditions()
       }
     }
 
@@ -122,7 +130,6 @@ export function WithTaskBundle(WrappedComponent) {
           this.lockTask(taskId)
         ))
 
-        console.log("updatedTasks", updatedTasks)
         this.setState({ taskBundle: { ...this.state.taskBundle, tasks: updatedTasks, taskIds } })
       } catch (error) {
         console.error("Failed to create task bundle due to locking error:", error)
@@ -169,7 +176,7 @@ export function WithTaskBundle(WrappedComponent) {
     updateTaskBundle = async () => {
       const { taskBundle, initialBundle } = this.state
       if (taskBundle || initialBundle) {
-        if(!taskBundle && initialBundle) {
+        if (!taskBundle && initialBundle) {
           await this.props.deleteTaskBundle(initialBundle.bundleId)
           return null
         } else if (taskBundle && initialBundle) {
@@ -181,6 +188,7 @@ export function WithTaskBundle(WrappedComponent) {
       return taskBundle
     }
 
+    // Render method
     render() {
       return (
         <WrappedComponent
