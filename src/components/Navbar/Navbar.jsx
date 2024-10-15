@@ -97,9 +97,9 @@ export default class Navbar extends Component {
                  </div>
                </Link>
               }
-              <a href="/leaderboard">
+              <Link to="/leaderboard">
                 <PointsTicker user={this.props.user} className="mr-mr-8" />
-              </a>
+              </Link>
               <Dropdown
                 className="mr-dropdown--right"
                 dropdownButton={dropdown =>
