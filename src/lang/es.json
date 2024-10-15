@@ -989,7 +989,7 @@
   "HomePane.filterDifficultyIntro": "Trabaje a su propio nivel, desde principiante hasta experto.",
   "HomePane.filterLocationIntro": "Haga arreglos en las áreas locales que le interesan.",
   "HomePane.filterTagIntro": "Encuentre tareas que aborden los esfuerzos importantes para usted.",
-  "HomePane.header": "Sea un colaborador de los mapas del mundo.",
+  "Home.Hero.headline": "Sea un colaborador de los mapas del mundo.",
   "HomePane.subheader": "Comenzar",
   "ImportFileModal.controls.cancel.label": "Cancelar",
   "ImportFileModal.controls.upload.label": "Haga clic para cargar archivo",

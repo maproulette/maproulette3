@@ -989,7 +989,7 @@
   "HomePane.filterDifficultyIntro": "초보자부터 전문가까지, 자신의 수준에 맞는 작업을 하세요.",
   "HomePane.filterLocationIntro": "관심 있는 지역에 있는 문제를 고치세요.",
   "HomePane.filterTagIntro": "당신에게 중요한 작업을 찾으세요.",
-  "HomePane.header": "세계 지도에 즉시 기여해보세요",
+  "Home.Hero.headline": "세계 지도에 즉시 기여해보세요",
   "HomePane.subheader": "시작",
   "ImportFileModal.controls.cancel.label": "취소하기",
   "ImportFileModal.controls.upload.label": "클릭해서 파일 업로드하기",

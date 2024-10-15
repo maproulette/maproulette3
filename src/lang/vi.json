@@ -989,7 +989,7 @@
   "HomePane.filterDifficultyIntro": "Work at your own level, from novice to expert.",
   "HomePane.filterLocationIntro": "Make fixes in local areas you care about.",
   "HomePane.filterTagIntro": "Find tasks that address efforts important to you.",
-  "HomePane.header": "Be an instant contributor to the world’s maps",
+  "Home.Hero.headline": "Be an instant contributor to the world’s maps",
   "HomePane.subheader": "Get Started",
   "ImportFileModal.controls.cancel.label": "Cancel",
   "ImportFileModal.controls.upload.label": "Click to Upload File",

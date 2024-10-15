@@ -989,7 +989,7 @@
   "HomePane.filterDifficultyIntro": "Aufgaben in verschiedenen Schwierigkeiten, vom Anfänger bis zum Experten.",
   "HomePane.filterLocationIntro": "Verbessere Fehler in Gegenden, die dir wichtig sind.",
   "HomePane.filterTagIntro": "Finde Aufgaben zu Themen, die Dir wichtig sind.",
-  "HomePane.header": "Werde in wenigen Klicks zum Kartographen offener Weltkarten",
+  "Home.Hero.headline": "Werde in wenigen Klicks zum Kartographen offener Weltkarten",
   "HomePane.subheader": "Los geht's",
   "ImportFileModal.controls.cancel.label": "Abbrechen",
   "ImportFileModal.controls.upload.label": "Klicken um Datei hochzuladen",

@@ -989,7 +989,7 @@
   "HomePane.filterDifficultyIntro": "Travaillez à votre niveau, de novice à expert.",
   "HomePane.filterLocationIntro": "Effectuez des corrections qui vous tiennent à cœur près de chez vous",
   "HomePane.filterTagIntro": "Trouvez des tâches qui vous demandent des efforts importants",
-  "HomePane.header": "Contribuez dès à présent à la carte du Monde",
+  "Home.Hero.headline": "Contribuez dès à présent à la carte du Monde",
   "HomePane.subheader": "Démarrer",
   "ImportFileModal.controls.cancel.label": "Annuler",
   "ImportFileModal.controls.upload.label": "Cliquez pour télécharger le fichier",

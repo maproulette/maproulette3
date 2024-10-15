@@ -989,7 +989,7 @@
   "HomePane.filterDifficultyIntro": "Yeni başlayanlardan uzmana kadar kendi seviyenizde çalışın.",
   "HomePane.filterLocationIntro": "Önemsediğiniz yerel alanlarda düzeltmeler yapın.",
   "HomePane.filterTagIntro": "Senin için önemli görevleri bul.",
-  "HomePane.header": "Dünya haritalarına anında katkıda bulunun",
+  "Home.Hero.headline": "Dünya haritalarına anında katkıda bulunun",
   "HomePane.subheader": "Başla",
   "ImportFileModal.controls.cancel.label": "Cancel",
   "ImportFileModal.controls.upload.label": "Click to Upload File",

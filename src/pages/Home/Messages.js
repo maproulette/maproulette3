@@ -4,6 +4,11 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with Home page and sub-components
  */
 export default defineMessages({
+  headline: {
+    id: "Home.Hero.headline",
+    defaultMessage: "Be an instant contributor to the world’s maps",
+  },
+  
   getStartedLabel: {
     id: "Home.Hero.controls.getStarted.label",
     defaultMessage: "Get Started",
