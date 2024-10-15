@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import "@testing-library/jest-dom";
 import { formatTitle, REACT_APP_TITLE } from "./Head";
 

@@ -21,11 +21,6 @@ export const USER_TYPE_MAPPER = "mapper"
 // User Type 'reviewer'
 export const USER_TYPE_REVIEWER = "reviewer"
 
-// one hour
-const CACHE_TIME = 60 * 60 * 1000;
-const GLOBAL_LEADERBOARD_CACHE = "globalLeaderboard";
-const USER_LEADERBOARD_CACHE = "userLeaderboard";
-
 /**
  * Retrieve leaderboard data from the server for the given date range and
  * filters, returning a Promise that resolves to the leaderboard data. Note

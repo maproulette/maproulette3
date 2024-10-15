@@ -1,3 +1,4 @@
+import { describe, expect, vi } from "vitest";
 import { mapStateToProps,
          mapDispatchToProps } from './WithVisibleLayer'
 import { BING,
@@ -9,8 +10,8 @@ import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
 import { ChallengeBasemap }
          from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 
-jest.mock('../../../services/VisibleLayer/LayerSources')
-jest.mock('../../../services/VisibleLayer/VisibleLayer')
+vi.mock('../../../services/VisibleLayer/LayerSources')
+vi.mock('../../../services/VisibleLayer/VisibleLayer')
 
 let basicState = null
 let challenge = null
@@ -167,8 +168,8 @@ describe("mapDispatchToProps", () => {
   let setVisibleMapLayer = null
 
   beforeEach(() => {
-    dispatch = jest.fn()
-    setVisibleMapLayer = jest.fn()
+    dispatch = vi.fn()
+    setVisibleMapLayer = vi.fn()
   })
 
   test("changeLayer sets the challenge visible layer if a challenge is given", () => {

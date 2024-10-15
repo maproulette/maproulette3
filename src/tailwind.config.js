@@ -1,5 +1,13 @@
-module.exports = {
+import visuallyHidden from 'tailwindcss-visuallyhidden';
+import owl from 'tailwindcss-owl';
+import grid from 'tailwindcss-grid';
+import transition from 'tailwindcss-transition';
+import gradients from 'tailwindcss-gradients';
+import transforms from 'tailwindcss-transforms';
+
+export default {
   content: [
+    './index.html',
     './public/**/*.html',
     './src/components/**/*.{js,jsx,ts,tsx}',
     './src/pages/**/*.{js,jsx,ts,tsx}'
@@ -187,7 +195,7 @@ module.exports = {
       '8': '8px',
     },
 
-    borderColor: theme => global.Object.assign(
+    borderColor: theme => Object.assign(
       { DEFAULT: theme('colors.grey-light') },
       theme('colors')
     ),
@@ -493,7 +501,7 @@ module.exports = {
       '100': '1',
     },
 
-    fill: theme => global.Object.assign(
+    fill: theme => Object.assign(
       { current: 'currentColor' },
       theme('colors')
     ),
@@ -549,11 +557,11 @@ module.exports = {
   },
 
   plugins: [
-    require('tailwindcss-visuallyhidden')({
+    visuallyHidden({
       variants: ['responsive', 'hover'],
     }),
-    require('tailwindcss-owl'),
-    require('tailwindcss-grid')({
+    owl,
+    grid({
       grids: [2, 3, 5, 6, 8, 10, 12],
       gaps: {
         0: '0',
@@ -564,7 +572,7 @@ module.exports = {
       },
       variants: ['responsive'],
     }),
-    require('tailwindcss-transition')({
+    transition({
       standard: 'all .3s ease',
       transitions: {
         slow: 'all 2s ease',
@@ -573,7 +581,7 @@ module.exports = {
       },
       variants: ['responsive', 'hover'],
     }),
-    require('tailwindcss-gradients')(),
-    require('tailwindcss-transforms')(),
+    gradients(),
+    transforms(),
   ],
 }

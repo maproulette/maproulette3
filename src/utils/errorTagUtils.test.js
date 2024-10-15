@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import { formatErrorTags } from "./errorTagUtils";
 
 describe("formatErrorTags", () => {

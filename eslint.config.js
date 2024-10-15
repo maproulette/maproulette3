@@ -1,12 +1,12 @@
-const eslint = require('@eslint/js');
-const globals = require('globals');
+import eslint from '@eslint/js';
+import globals from 'globals';
 
-const react = require('eslint-plugin-react');
-const reactHooks = require('eslint-plugin-react-hooks')
-const jest = require('eslint-plugin-jest')
-const unusedImports = require('eslint-plugin-unused-imports')
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import jest from 'eslint-plugin-jest';
+import unusedImports from 'eslint-plugin-unused-imports';
 
-module.exports = [
+export default [
   // eslint.configs.recommended,
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
