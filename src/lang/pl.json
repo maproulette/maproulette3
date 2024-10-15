@@ -960,7 +960,7 @@
   "HomePane.filterDifficultyIntro": "Pracuj na własnym poziomie, od nowicjusza do eksperta.",
   "HomePane.filterLocationIntro": "Wprowadzaj poprawki w rejonach, na których Ci zależy.",
   "HomePane.filterTagIntro": "Znajdź zadania, które są ważne dla Ciebie.",
-  "HomePane.header": "Zostań natychmiast współtwórcą map świata",
+  "Home.Hero.headline": "Zostań natychmiast współtwórcą map świata",
   "HomePane.subheader": "Zacznij",
   "ImportFileModal.controls.cancel.label": "Anuluj",
   "ImportFileModal.controls.upload.label": "Kliknij aby wgrać plik",

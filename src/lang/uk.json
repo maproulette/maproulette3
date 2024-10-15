@@ -960,7 +960,7 @@
   "HomePane.filterDifficultyIntro": "Обирайте завдання відповідно до вашого досвіду.",
   "HomePane.filterLocationIntro": "Виправляйте вади у місцевості, якою ви опікуєтесь.",
   "HomePane.filterTagIntro": "Знайдіть завдання, які стосуються ваших інтересів.",
-  "HomePane.header": "Розпочніть створювати мапу світу зараз",
+  "Home.Hero.headline": "Розпочніть створювати мапу світу зараз",
   "HomePane.subheader": "Розпочати",
   "ImportFileModal.controls.cancel.label": "Скасувати",
   "ImportFileModal.controls.upload.label": "Натисніть для надсилання файлу",

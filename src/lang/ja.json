@@ -960,7 +960,7 @@
   "HomePane.filterDifficultyIntro": "初心者から上級者まで、レベルに応じた作業が可能",
   "HomePane.filterLocationIntro": "Make fixes in local areas you care about.",
   "HomePane.filterTagIntro": "あなたにとって重要なタスクを探します",
-  "HomePane.header": "Be an instant contributor to the world’s maps",
+  "Home.Hero.headline": "Be an instant contributor to the world’s maps",
   "HomePane.subheader": "始める",
   "ImportFileModal.controls.cancel.label": "キャンセル",
   "ImportFileModal.controls.upload.label": "ファイルをアップロード",

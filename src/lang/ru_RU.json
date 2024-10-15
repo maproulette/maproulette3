@@ -960,7 +960,7 @@
   "HomePane.filterDifficultyIntro": "Работайте на своем уровне, от новичка до эксперта.",
   "HomePane.filterLocationIntro": "Вносите правки в местах, о которых вы заботитесь.",
   "HomePane.filterTagIntro": "Find tasks that address efforts important to you.",
-  "HomePane.header": "Be an instant contributor to the world’s maps",
+  "Home.Hero.headline": "Be an instant contributor to the world’s maps",
   "HomePane.subheader": "Начать",
   "ImportFileModal.controls.cancel.label": "Cancel",
   "ImportFileModal.controls.upload.label": "Click to Upload File",

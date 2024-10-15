@@ -960,7 +960,7 @@
   "HomePane.filterDifficultyIntro": "Lavora al tuo livello, da principiante a esperto.",
   "HomePane.filterLocationIntro": "Apporta correzioni nelle aree locali che ti interessano.",
   "HomePane.filterTagIntro": "Trova compiti significativi per te.",
-  "HomePane.header": "Contribuisci istantaneamente alle mappe del mondo",
+  "Home.Hero.headline": "Contribuisci istantaneamente alle mappe del mondo",
   "HomePane.subheader": "Iniziare",
   "ImportFileModal.controls.cancel.label": "Cancella",
   "ImportFileModal.controls.upload.label": "Fare clic per caricare il file",
