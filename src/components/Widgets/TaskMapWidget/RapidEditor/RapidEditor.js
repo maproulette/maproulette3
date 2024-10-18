@@ -53,7 +53,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
     return cleanup;
   }, []);
 
-  if (process.env.REACT_APP_OSM_API_SERVER === "https://api.openstreetmap.org") {
+  if (process.env.REACT_APP_OSM_API_SERVER === "https://api.openstreetmap.org" && token) {
     // Only pass auth token to Rapid if it's for the production OSM API (not the dev API)
     // since Rapid assumes any token it's given is valid on api.openstreetmap.org.
     // See: https://github.com/facebook/Rapid/issues/1341
@@ -81,22 +81,28 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
           let iframe = event.target;
 
           try {
-            let context = await iframe.contentWindow.setupRapid();
+            // Listen for the setupRapidComplete event directly on the iframe's contentWindow
+            iframe.contentWindow.addEventListener('setupRapidComplete', async (event) => {
+              let context = event.detail.context;
+              dispatch({ type: SET_RAPIDEDITOR, context: { isRunning: true } });
 
-            dispatch({ type: SET_RAPIDEDITOR, context: { isRunning: true } });
+              // When Rapid re-renders its map, it updates the URL hash of the iframe window.
+              // We listen for this event and update the parent window's hash to match.
+              context.systems.map.on('draw', () => {
+                setHash(iframe.contentWindow.location.hash);
+              });
 
-            // When Rapid re-renders its map, it updates the URL hash of the iframe window.
-            // We listen for this event and update the parent window's hash to match.
-            context.systems.map.on('draw', () => {
-              setHash(iframe.contentWindow.location.hash);
+              // When the user makes an edit, the 'stablechange' event fires. When that happens
+              // we update the 'hasUnsavedChanges' property in our Redux store so that the
+              // MapRoulette UI can change depending on whether the user has unsaved edits.
+              context.systems.editor.on('stablechange', () => {
+                let hasUnsavedChanges = context.systems.editor.hasChanges();
+                dispatch({ type: SET_RAPIDEDITOR, context: { hasUnsavedChanges } });
+              });
             });
 
-            // When the user makes an edit, the 'stablechange' event fires. When that happens
-            // we update the 'hasUnsavedChanges' property in our Redux store so that the
-            // MapRoulette UI can change depending on whether the user has unsaved edits.
-            context.systems.editor.on('stablechange', () => {
-              let hasUnsavedChanges = context.systems.editor.hasChanges();
-              dispatch({ type: SET_RAPIDEDITOR, context: { hasUnsavedChanges }});
+            iframe.contentWindow.addEventListener('setupRapidError', async (event) => {
+              setError(event.detail.error);
             });
           } catch (err) {
             setError(err);
