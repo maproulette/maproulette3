@@ -53,7 +53,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
     return cleanup;
   }, []);
 
-  if (process.env.REACT_APP_OSM_API_SERVER === "https://api.openstreetmap.org") {
+  if (process.env.REACT_APP_OSM_API_SERVER === "https://api.openstreetmap.org" && token) {
     // Only pass auth token to Rapid if it's for the production OSM API (not the dev API)
     // since Rapid assumes any token it's given is valid on api.openstreetmap.org.
     // See: https://github.com/facebook/Rapid/issues/1341
@@ -80,8 +80,9 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
         onLoad={async (event) => {
           let iframe = event.target;
 
-          try {
-            let context = await iframe.contentWindow.setupRapid();
+          // Listen for the setupRapidComplete event directly on the iframe's contentWindow
+          iframe.contentWindow.addEventListener('setupRapidComplete', async (event) => {
+            let context = event.detail.context;
 
             dispatch({ type: SET_RAPIDEDITOR, context: { isRunning: true } });
 
@@ -96,13 +97,15 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
             // MapRoulette UI can change depending on whether the user has unsaved edits.
             context.systems.editor.on('stablechange', () => {
               let hasUnsavedChanges = context.systems.editor.hasChanges();
-              dispatch({ type: SET_RAPIDEDITOR, context: { hasUnsavedChanges }});
+              dispatch({ type: SET_RAPIDEDITOR, context: { hasUnsavedChanges } });
             });
-          } catch (err) {
-            setError(err);
-          } finally {
             setIsLoading(false);
-          }
+          });
+
+          iframe.contentWindow.addEventListener('setupRapidError', async (event) => {
+            setError(event.detail.error);
+            setIsLoading(false);
+          });
         }}
       />
     </div>

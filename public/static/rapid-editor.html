@@ -84,7 +84,12 @@
         return context;
       }
 
-      window.setupRapid = () => setupRapid(document.getElementById('rapid-container'));
+      try {
+        const context = await setupRapid(document.getElementById('rapid-container'));
+        window.dispatchEvent(new CustomEvent('setupRapidComplete', { detail: { context }  }));
+      } catch (error) {
+        window.dispatchEvent(new CustomEvent('setupRapidError', { detail: { error }  }));
+      }
     </script>
   </body>
 </html>
