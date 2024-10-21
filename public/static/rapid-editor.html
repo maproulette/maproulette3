@@ -34,11 +34,11 @@
       stylesheet.href = RAPID_CDN_URL + 'rapid.min.css';
       document.head.append(stylesheet);
 
-      // load Rapid JS (this is a compiled bundle, not an ES module;
-      // window.Rapid will be defined after it executes)
-      await import(RAPID_CDN_URL + 'rapid.min.js');
-
       async function setupRapid(container) {
+        // load Rapid JS (this is a compiled bundle, not an ES module;
+        // window.Rapid will be defined after it executes)
+        await import(RAPID_CDN_URL + 'rapid.min.js');
+
         if (typeof Rapid === 'undefined') {
           throw new Error(`The bundle loaded from ${RAPID_CDN_URL} did not set window.Rapid`);
         }
