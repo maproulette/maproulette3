@@ -38,6 +38,10 @@ const SelectOptions = (props) => {
 const ErrorTagDropdown = (props) => {
   const options = useErrorTagOptions();
 
+  if (options.data) {
+    options.data = options.data.filter(option => option.active)
+  }
+
   return (
     <div className="mr-mt-4">
       {props.errorTags?.length ? props.errorTags.map((rt, index) => {
