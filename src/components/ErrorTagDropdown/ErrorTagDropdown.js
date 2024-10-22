@@ -39,7 +39,7 @@ const ErrorTagDropdown = (props) => {
   const options = useErrorTagOptions();
 
   if (options.data) {
-    options.data = options.data.filter(option => option.active)
+    options.data = options.data.filter(option => option.active !== false)
   }
 
   return (
