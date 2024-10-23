@@ -142,7 +142,7 @@ export class ChallengeDashboard extends Component {
                 day="2-digit"
               />{" "}
               <FormattedMessage {...manageMessages.staleChallengeMessage2} />
-              {` ${Number(import.meta.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6} `}
+              {` ${Number(window.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6} `}
               <FormattedMessage {...manageMessages.staleChallengeMessage3} />
             </div>
           )}
@@ -160,7 +160,7 @@ export class ChallengeDashboard extends Component {
           challenges={[this.props.challenge]}
           pageId="ChallengeDashboard"
           metaReviewEnabled={
-            import.meta.env.REACT_APP_FEATURE_META_QC === "enabled"
+            window.env.REACT_APP_FEATURE_META_QC === "enabled"
           }
         />
       </div>

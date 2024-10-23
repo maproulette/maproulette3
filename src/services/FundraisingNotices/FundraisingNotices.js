@@ -2,7 +2,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import { isFuture, parseISO } from 'date-fns'
 
-const NOTICES_URL = import.meta.env.REACT_APP_FUNDRAISING_NOTICES_URL
+const NOTICES_URL = window.env.REACT_APP_FUNDRAISING_NOTICES_URL
 
 export const fetchActiveFundraisingNotices = async function () {
   if (_isEmpty(NOTICES_URL)) {

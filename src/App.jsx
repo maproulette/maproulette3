@@ -92,7 +92,7 @@ export class App extends Component {
   render() {
     // We don't currently support mobile devices. Unless the mobile feature
     // is explicitly enabled, inform user that mobile is not supported.
-    if (import.meta.env.REACT_APP_FEATURE_MOBILE_DEVICES !== 'enabled') {
+    if (window.env.REACT_APP_FEATURE_MOBILE_DEVICES !== 'enabled') {
       // This is a pretty simplistic check, but it should catch most cases.
       if (/iPhone|iPad|iPod|BlackBerry|IEMobile|Fennec|Android|Mobile|Tablet/i.test(navigator.userAgent)) {
         return <MobileNotSupported />

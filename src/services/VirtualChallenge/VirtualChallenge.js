@@ -23,7 +23,7 @@ export const virtualChallengeSchema = function() {
  * nothing is specified in the .env file.
  */
 export const DEFAULT_EXPIRATION_DURATION=
-  parseInt(_get(import.meta.env, 'REACT_APP_VIRTUAL_CHALLENGE_DURATION', 36), 10)
+  parseInt(_get(window.env, 'REACT_APP_VIRTUAL_CHALLENGE_DURATION', 36), 10)
 
 // redux actions
 const RECEIVE_VIRTUAL_CHALLENGES = 'RECEIVE_VIRTUAL_CHALLENGES'

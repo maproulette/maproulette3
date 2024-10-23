@@ -138,23 +138,23 @@ export const receiveReviewProjects = function(reviewProjects, status=RequestStat
 export const buildLinkToMapperExportCSV = function(criteria) {
   const queryFilters = generateReviewSearch(criteria)
 
-  return `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/mappers/export?${queryString.stringify(queryFilters)}`
+  return `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/mappers/export?${queryString.stringify(queryFilters)}`
 }
 
 export const buildLinkToReviewTableExportCSV = function(criteria, addedColumns) {
   const queryFilters = buildQueryFilters(criteria, addedColumns);
 
-  return `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/reviewTable/export?${queryFilters}`
+  return `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/reviewTable/export?${queryFilters}`
 }
 
 export const buildLinkToReviewerMetaExportCSV = function(criteria) {
   const queryFilters = generateReviewSearch(criteria)
 
-  return `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/metareview/reviewers/export?${queryString.stringify(queryFilters)}`
+  return `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/metareview/reviewers/export?${queryString.stringify(queryFilters)}`
 }
 
 export const buildLinkTaskReviewHistoryCSV = function(challengeId) {
-  return `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${challengeId}/extractReviewHistory`
+  return `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${challengeId}/extractReviewHistory`
 }
 
 const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTasksType.allReviewedTasks, userId)  {
@@ -341,7 +341,7 @@ export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) 
                                                           null,
                                                           _get(criteria, 'invertFields', {}))
   return function(dispatch) {
-    if (import.meta.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true') {
+    if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true') {
       return new Promise((resolve) => resolve());
     }
 

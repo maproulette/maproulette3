@@ -25,7 +25,7 @@ import messages from './Messages'
 import './ChallengeResultList.scss'
 
 const limitUserResults = (challenges) => {
-  const ownerLimit = Number(import.meta.env.REACT_APP_BROWSE_CHALLENGES_OWNER_LIMIT);
+  const ownerLimit = Number(window.env.REACT_APP_BROWSE_CHALLENGES_OWNER_LIMIT);
 
   if (ownerLimit) {
     const userDictionary = {};
@@ -85,7 +85,7 @@ export class ChallengeResultList extends Component {
         
         if (query) {
           try {
-            const response = await fetch(`${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${query}`);
+            const response = await fetch(`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${query}`);
             const responseJson = await response.json();
             this.setState({ data: responseJson });
           } catch (error) {

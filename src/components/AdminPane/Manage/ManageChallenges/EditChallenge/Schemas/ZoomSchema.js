@@ -93,6 +93,6 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
  * necessary
  */
 export const numericEnvSetting = (settingName, defaultValue) => {
-  const setting = _get(import.meta.env, settingName, defaultValue)
+  const setting = _get(window.env, settingName, defaultValue)
   return _isString(setting) ? parseInt(setting, 10) : setting
 }

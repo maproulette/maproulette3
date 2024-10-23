@@ -21,6 +21,7 @@ chimp.js
 .DS_Store
 .env.local
 .env.*.local
+/public/env.json
 
 npm-debug.log*
 yarn-debug.log*

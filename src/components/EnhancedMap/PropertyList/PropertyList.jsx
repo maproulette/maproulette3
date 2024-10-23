@@ -16,7 +16,7 @@ import messages from './Messages'
 const PropertyList = props => {
   // Default is lightMode -- only do darkMode if the value is present and false
   const darkMode = props.lightMode === false
-  const tagInfo = import.meta.env.REACT_APP_TAGINFO_SERVER_URL
+  const tagInfo = window.env.REACT_APP_TAGINFO_SERVER_URL
   const header = (
     <h3 className="mr-flex mr-items-center">
       {props.onBack && <a onClick={props.onBack} className="mr-mr-4">
