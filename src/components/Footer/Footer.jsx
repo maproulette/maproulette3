@@ -3,6 +3,8 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
+import { version } from '../../../package.json'
+
 class Footer extends Component {
   constructor(props) {
     super(props);
@@ -39,9 +41,9 @@ class Footer extends Component {
                 <FormattedMessage {...messages.versionLabel} />{' '}
                 <span className="mr-text-green-light mr-font-mono mr-text-base">
                   <a
-                    href={`https://github.com/maproulette/maproulette3/releases/tag/v${import.meta.env.REACT_APP_VERSION_SEMVER}`}
+                    href={`https://github.com/maproulette/maproulette3/releases/tag/v${version}`}
                   >
-                    v{import.meta.env.REACT_APP_VERSION_SEMVER}
+                    v{version}
                   </a>
                 </span>
               </h3>
