@@ -1,10 +1,10 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`challenges are denormalized before being passed through 1`] = `
-Object {
-  "challenges": Array [
-    Object {
-      "actions": Object {
+{
+  "challenges": [
+    {
+      "actions": {
         "available": 3,
       },
       "difficulty": "hard",
@@ -13,8 +13,8 @@ Object {
       "name": "challenge1",
       "parent": 987,
     },
-    Object {
-      "actions": Object {
+    {
+      "actions": {
         "available": 6,
       },
       "difficulty": "easy",
@@ -23,8 +23,8 @@ Object {
       "name": "challenge2",
       "parent": 987,
     },
-    Object {
-      "actions": Object {
+    {
+      "actions": {
         "available": 1,
       },
       "difficulty": "easy",
@@ -38,10 +38,10 @@ Object {
 `;
 
 exports[`mapStateToProps maps all entities.challenges when allStatuses prop is true 1`] = `
-Object {
-  "challenges": Array [
-    Object {
-      "actions": Object {
+{
+  "challenges": [
+    {
+      "actions": {
         "available": 3,
       },
       "difficulty": "hard",
@@ -50,8 +50,8 @@ Object {
       "name": "challenge1",
       "parent": 987,
     },
-    Object {
-      "actions": Object {
+    {
+      "actions": {
         "available": 6,
       },
       "difficulty": "easy",
@@ -60,8 +60,8 @@ Object {
       "name": "challenge2",
       "parent": 987,
     },
-    Object {
-      "actions": Object {
+    {
+      "actions": {
         "available": 1,
       },
       "difficulty": "easy",
@@ -75,10 +75,10 @@ Object {
 `;
 
 exports[`only challenges with a usable status are normally passed through 1`] = `
-Object {
-  "challenges": Array [
-    Object {
-      "actions": Object {
+{
+  "challenges": [
+    {
+      "actions": {
         "available": 6,
       },
       "difficulty": "easy",
@@ -87,8 +87,8 @@ Object {
       "name": "challenge2",
       "parent": 987,
     },
-    Object {
-      "actions": Object {
+    {
+      "actions": {
         "available": 1,
       },
       "difficulty": "easy",
@@ -102,16 +102,16 @@ Object {
 `;
 
 exports[`only challenges with enabled project are normally passed through 1`] = `
-Object {
-  "challenges": Array [],
+{
+  "challenges": [],
 }
 `;
 
 exports[`only enabled challenges are normally passed through 1`] = `
-Object {
-  "challenges": Array [
-    Object {
-      "actions": Object {
+{
+  "challenges": [
+    {
+      "actions": {
         "available": 6,
       },
       "difficulty": "easy",
@@ -120,8 +120,8 @@ Object {
       "name": "challenge2",
       "parent": 987,
     },
-    Object {
-      "actions": Object {
+    {
+      "actions": {
         "available": 1,
       },
       "difficulty": "easy",

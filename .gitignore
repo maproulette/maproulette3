@@ -3,9 +3,6 @@
 # dependencies
 /node_modules
 
-# Built by tailwind
-src/index.css
-
 # Imagery
 src/imagery.json
 src/defaultLayers.json
@@ -17,17 +14,13 @@ chimp.js
 
 # production
 /build
+/dist
 /MR3React.tgz
 
 # misc
 .DS_Store
 .env.local
-.env.development
-.env.development.local
-.env.test
-.env.test.local
-.env.production
-.env.production.local
+.env.*.local
 
 npm-debug.log*
 yarn-debug.log*

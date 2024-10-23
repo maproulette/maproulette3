@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { mapStateToProps,
          mapDispatchToProps } from './WithChallengePreferences'
 import { TaskLoadMethod }
@@ -9,7 +10,7 @@ import { setPreferences,
          VIRTUAL_CHALLENGES_PREFERENCE_GROUP }
        from '../../../services/Preferences/Preferences'
 
-jest.mock('../../../services/Preferences/Preferences')
+vi.mock('../../../services/Preferences/Preferences')
 
 let challengeId = null
 let virtualChallengeId = null
@@ -167,7 +168,7 @@ test("maps virtual challenge visibleMapLayer to current visibleMapLayer preferen
 })
 
 test("setChallengeMinimization with virtual false updates the challenge minimize preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.setChallengeMinimization(challengeId, false, true)
@@ -177,7 +178,7 @@ test("setChallengeMinimization with virtual false updates the challenge minimize
 })
 
 test("setChallengeMinimization with virtual true updates the virtual challenge minimize preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.setChallengeMinimization(challengeId, true, true)
@@ -187,7 +188,7 @@ test("setChallengeMinimization with virtual true updates the virtual challenge m
 })
 
 test("setInstructionsCollapsed with virtual false updates the challenge collapseInstructions preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.setInstructionsCollapsed(challengeId, false, true)
@@ -197,7 +198,7 @@ test("setInstructionsCollapsed with virtual false updates the challenge collapse
 })
 
 test("setInstructionsCollapsed with virtual true updates the virtual challenge collapseInstructions preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.setInstructionsCollapsed(challengeId, true, true)
@@ -207,7 +208,7 @@ test("setInstructionsCollapsed with virtual true updates the virtual challenge c
 })
 
 test("setLoadTasksBy with virtual false updates the challenge taskLoadMethod preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.setTaskLoadBy(challengeId, false, TaskLoadMethod.proximity)
@@ -219,7 +220,7 @@ test("setLoadTasksBy with virtual false updates the challenge taskLoadMethod pre
 })
 
 test("setLoadTasksBy with virtual true updates the virtual challenge taskLoadMethod preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.setTaskLoadBy(challengeId, true, TaskLoadMethod.proximity)
@@ -231,7 +232,7 @@ test("setLoadTasksBy with virtual true updates the virtual challenge taskLoadMet
 })
 
 test("setVisibleMapLayer with virtual false updates the challenge visibleMapLayer preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.setVisibleMapLayer(challengeId, false, BING)
@@ -243,7 +244,7 @@ test("setVisibleMapLayer with virtual false updates the challenge visibleMapLaye
 })
 
 test("setVisibleMapLayer with virtual true updates the virtual challenge visibleMapLayer preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
+  const dispatch = vi.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.setVisibleMapLayer(challengeId, true, BING)

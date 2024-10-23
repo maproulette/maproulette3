@@ -1,4 +1,4 @@
-import idPresets from '../../../../../preset_categories.json'
+import idPresets from '@openstreetmap/id-tagging-schema/dist/preset_categories.json'
 import _isEmpty from 'lodash/isEmpty'
 import _reduce from 'lodash/reduce'
 import _each from 'lodash/each'

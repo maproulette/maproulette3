@@ -82,7 +82,7 @@ export const editTask = function (
   replacedComment = null
 ) {
   return function (dispatch) {
-    if (options && process.env.REACT_APP_FEATURE_EDITOR_IMAGERY !== "enabled") {
+    if (options && import.meta.env.REACT_APP_FEATURE_EDITOR_IMAGERY !== "enabled") {
       delete options.imagery;
     }
 
@@ -258,7 +258,7 @@ export const taskCenterPoint = function (mapBounds, task, taskBundle) {
  * Builds a Id editor URI for editing of the given task
  */
 export const constructIdURI = function (task, mapBounds, options, taskBundle, replacedComment) {
-  const baseUriComponent = `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id`;
+  const baseUriComponent = `${import.meta.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id`;
 
   const centerPoint = taskCenterPoint(mapBounds, task, taskBundle);
   const mapUriComponent =
@@ -322,7 +322,7 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle, re
  * Builds a RapiD editor URI for editing of the given task
  */
 export const constructRapidURI = function (task, mapBounds, options, replacedComment) {
-  const baseUriComponent = `${process.env.REACT_APP_RAPID_EDITOR_SERVER_URL}#`;
+  const baseUriComponent = `${import.meta.env.REACT_APP_RAPID_EDITOR_SERVER_URL}#`;
   const centerPoint = taskCenterPoint(mapBounds, task);
   const mapUriComponent =
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join("/");
@@ -380,7 +380,7 @@ export const constructLevel0URI = function (
   taskBundle,
   replacedComment
 ) {
-  const baseUriComponent = `${process.env.REACT_APP_LEVEL0_EDITOR_SERVER_URL}?`;
+  const baseUriComponent = `${import.meta.env.REACT_APP_LEVEL0_EDITOR_SERVER_URL}?`;
 
   const centerPoint = taskCenterPoint(mapBounds, task, taskBundle);
   const mapCenterComponent =
@@ -694,7 +694,7 @@ export const josmImportCooperative = function (
     task,
     mapBounds,
     taskBundle,
-    `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/cooperative/change/task_${task.id}_change.osc`,
+    `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/cooperative/change/task_${task.id}_change.osc`,
     { layerName: `MR Task ${task.id} Changes` }
   );
 };
@@ -726,7 +726,7 @@ export const josmImportReferenceLayers = function (
       task,
       mapBounds,
       taskBundle,
-      `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/attachment/${layer.id}/data/${filename}`,
+      `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/attachment/${layer.id}/data/${filename}`,
       {
         layerName: layer.name || `MR Task ${task.id} Reference`,
         layerLocked: _get(layer, "settings.layerLocked", true),

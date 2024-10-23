@@ -321,7 +321,7 @@ export const fetchBasicUser = function(userId) {
  */
 export const callback = async (authCode, dispatch, push) => {
   const resetURI =
-  `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`
+  `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`
 
   // Since we're bypassing Endpoint and manually performing an update, we
   // need to also manually reset the request cache.
@@ -794,7 +794,7 @@ export const updateUserAppSetting = function(userId, appId, appSetting) {
 export const resetAPIKey = function(userId) {
   return function(dispatch) {
     const resetURI =
-      `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/generateAPIKey?userId=${userId}`
+      `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/generateAPIKey?userId=${userId}`
 
     // Since we're bypassing Endpoint and manually performing an update, we
     // need to also manually reset the request cache.
@@ -894,7 +894,7 @@ export const logoutUser = function(userId) {
     localStorage.setItem('state', state)
   }
 
-  const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
+  const logoutURI = `${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
 
   if (_isFinite(userId) && userId !== GUEST_USER_ID) {
     unsubscribeFromUserUpdates(userId)

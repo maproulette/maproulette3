@@ -1,3 +1,4 @@
+import { describe, expect } from "vitest";
 import AsIdentifiableFeature from './AsIdentifiableFeature'
 
 let basicFeature = null

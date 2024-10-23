@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#23395B">
+    <meta name="title" content="MapRoulette" />
+    <meta name="description" content="Be an instant contributor to the world’s maps." />
+    <meta property="og:image" content="https://openstreetmap.us/img/pages/maproulette/sign.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MapRoulette" />
+    <meta property="og:description" content="Be an instant contributor to the world’s maps." />
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
+          integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ=="
+          crossorigin=""/>
+    <link
+      href="https://unpkg.com/mapillary-js@4.0.0/dist/mapillary.css"
+      rel="stylesheet"
+    />
+
+    <title>MapRoulette</title>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <div id="external-root"></div>
+    <div id="dropdown"></div>
+
+    <script type="module" src="/src/index.jsx"></script>
+  </body>
+</html>

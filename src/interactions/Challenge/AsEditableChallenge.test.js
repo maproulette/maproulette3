@@ -1,3 +1,4 @@
+import { describe, expect } from "vitest";
 import AsEditableChallenge from './AsEditableChallenge'
 
 let challenge = null

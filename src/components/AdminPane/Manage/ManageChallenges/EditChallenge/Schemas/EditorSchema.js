@@ -4,7 +4,7 @@ import _fromPairs from 'lodash/fromPairs'
 import _startCase from 'lodash/startCase'
 import _isUndefined from 'lodash/isUndefined'
 import _intersection from 'lodash/intersection'
-import idPresets from '../../../../../../preset_categories.json'
+import idPresets from '@openstreetmap/id-tagging-schema/dist/preset_categories.json'
 import AsEditableChallenge from "../../../../../../interactions/Challenge/AsEditableChallenge";
 import { DropzoneTextUpload } from "../../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import { ChallengeReviewSetting } from '../../../../../../services/Challenge/ChallengeReviewSetting/ChallengeReviewSetting'

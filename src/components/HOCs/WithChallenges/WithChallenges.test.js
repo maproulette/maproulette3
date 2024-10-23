@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import _values from 'lodash/values'
 import _size from 'lodash/size'
 import { mapStateToProps } from './WithChallenges'
@@ -5,9 +6,9 @@ import { denormalize } from 'normalizr'
 import { isUsableChallengeStatus }
        from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 
-jest.mock('normalizr')
-jest.mock('../../../services/Challenge/ChallengeStatus/ChallengeStatus')
-jest.mock('../../../services/Task/Task')
+vi.mock('normalizr')
+vi.mock('../../../services/Challenge/ChallengeStatus/ChallengeStatus')
+vi.mock('../../../services/Task/Task')
 
 denormalize.mockImplementation((challenge) => challenge)
 

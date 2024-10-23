@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { mapStateToProps, mapDispatchToProps } from './WithCurrentUser'
 import AsEndUser from '../../../interactions/User/AsEndUser'
 import { denormalize } from 'normalizr'
@@ -6,9 +7,9 @@ import { logoutUser,
          saveTask, unsaveTask,
          userDenormalizationSchema } from '../../../services/User/User'
 
-jest.mock('normalizr')
-jest.mock('../../../services/User/User')
-jest.mock('../../../interactions/User/AsEndUser')
+vi.mock('normalizr')
+vi.mock('../../../services/User/User')
+vi.mock('../../../interactions/User/AsEndUser')
 
 const schema = {foo: "bar"}
 let basicState = null
@@ -16,10 +17,10 @@ let basicState = null
 denormalize.mockImplementation((user) => user)
 userDenormalizationSchema.mockImplementation(() => schema)
 
-const isLoggedIn = jest.fn()
-const isSuperUser = jest.fn()
-const hasUnreadNotifications = jest.fn()
-const unreadNotificationCount = jest.fn()
+const isLoggedIn = vi.fn()
+const isSuperUser = vi.fn()
+const hasUnreadNotifications = vi.fn()
+const unreadNotificationCount = vi.fn()
 AsEndUser.mockImplementation(() => ({
   isLoggedIn,
   isSuperUser,
@@ -81,7 +82,7 @@ test("maps the user to null if there is no current user", () => {
 })
 
 test("mapDispatchToProps makes the logoutUser() function available", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch)
 
   mappedProps.logoutUser()
@@ -90,7 +91,7 @@ test("mapDispatchToProps makes the logoutUser() function available", () => {
 })
 
 test("mapDispatchToProps makes the saveChallengeForUser() function available", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch)
 
   const userId = 123
@@ -102,7 +103,7 @@ test("mapDispatchToProps makes the saveChallengeForUser() function available", (
 })
 
 test("mapDispatchToProps makes the unsaveChallengeForUser() function available", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch)
 
   const userId = 123
@@ -114,7 +115,7 @@ test("mapDispatchToProps makes the unsaveChallengeForUser() function available",
 })
 
 test("mapDispatchToProps makes the saveTask() function available", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch)
 
   const userId = 123
@@ -126,7 +127,7 @@ test("mapDispatchToProps makes the saveTask() function available", () => {
 })
 
 test("mapDispatchToProps makes the unsaveTask() function available", () => {
-  const dispatch = jest.fn()
+  const dispatch = vi.fn()
   const mappedProps = mapDispatchToProps(dispatch)
 
   const userId = 123

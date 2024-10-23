@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import AsEndUser from './AsEndUser'
 import { GUEST_USER_ID } from '../../services/User/User'
 import { ROLE_SUPERUSER } from '../../services/Grant/Role'
