@@ -221,8 +221,8 @@ export class TaskConfirmationModal extends Component {
 
                   {applyingTagChanges &&
                    <Fragment>
-                     <div className="mr-border mr-border-gray-300 mr-shadow-md mr-p-4 mr-mt-4"> {/* Added border and padding */}
-                       <p className="mr-mb-2 mr-text-white mr-text-md mr-font-bold mr-bg-blue-600 mr-rounded"> {/* Increased font size, weight, and added background */}
+                     <div className="mr-border mr-border-gray-300 mr-shadow-md mr-p-4 mr-mt-4">
+                       <p className="mr-mb-2 mr-text-white mr-text-md mr-font-bold mr-bg-blue-600 mr-rounded">
                          <FormattedMessage
                            {...messages.osmUploadNotice }
                          />
@@ -243,8 +243,8 @@ export class TaskConfirmationModal extends Component {
 
                        <div className="mr-bg-blue-dark shadow-md">
                          <div className="mr-flex mr-justify-between">
-                           <ul className="mr-w-1/3 mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm"> {/* Added border and shadow */}
-                             <li className="mr-font-bold mr-py-1 mr-text-sm">Tag Name</li> {/* Increased font size */}
+                           <ul className="mr-w-1/3 mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm">
+                             <li className="mr-font-bold mr-py-1 mr-text-sm">Tag Name</li>
                              {_get(this.props, 'tagDiffs[0]') && Object.keys(_get(this.props, 'tagDiffs[0]')).map(tagName => {
                                const tagChange = _get(this.props, 'tagDiffs[0]')[tagName];
                                if (['changed', 'removed', 'added'].includes(tagChange.status)) {
@@ -254,7 +254,7 @@ export class TaskConfirmationModal extends Component {
                                      'mr-text-lavender-rose': tagChange.status === 'removed',
                                      'mr-text-picton-blue': tagChange.status === 'added',
                                    })}>
-                                     <strong className="mr-text-sm">{tagName}</strong> {/* Increased font size */}
+                                     <strong className="mr-text-sm">{tagName}</strong>
                                    </li>
                                  );
                                }
