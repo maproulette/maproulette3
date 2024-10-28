@@ -44,102 +44,102 @@ export const Locale = Object.freeze(Object.keys(unsortedLocale).sort().reduce(
 const LocaleImports = {
   [Locale.enUS]: () =>
     Promise.all([
-      import("../../../lang/en-US.json"),
+      import("../../../../lang/en-US.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/en"),
     ]),
   [Locale.es]: () =>
     Promise.all([
-      import("../../../lang/es.json"),
+      import("../../../../lang/es.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/es"),
     ]),
   [Locale.fr]: () =>
     Promise.all([
-      import("../../../lang/fr.json"),
+      import("../../../../lang/fr.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/fr"),
     ]),
   [Locale.de]: () =>
     Promise.all([
-      import("../../../lang/de.json"),
+      import("../../../../lang/de.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/de"),
     ]),
   [Locale.it]: () =>
     Promise.all([
-      import("../../../lang/it_IT.json"),
+      import("../../../../lang/it_IT.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/it"),
     ]),
   [Locale.af]: () =>
     Promise.all([
-      import("../../../lang/af.json"),
+      import("../../../../lang/af.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/af"),
     ]),
   [Locale.ja]: () =>
     Promise.all([
-      import("../../../lang/ja.json"),
+      import("../../../../lang/ja.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/ja"),
     ]),
   [Locale.ko]: () =>
     Promise.all([
-      import("../../../lang/ko.json"),
+      import("../../../../lang/ko.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/ko"),
     ]),
   [Locale.nl]: () =>
     Promise.all([
-      import("../../../lang/nl.json"),
+      import("../../../../lang/nl.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/nl"),
     ]),
   [Locale.uk]: () =>
     Promise.all([
-      import("../../../lang/uk.json"),
+      import("../../../../lang/uk.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/uk"),
     ]),
   [Locale.vi]: () =>
     Promise.all([
-      import("../../../lang/vi.json"),
+      import("../../../../lang/vi.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/vi"),
     ]),
   [Locale["pt-BR"]]: () =>
     Promise.all([
-      import("../../../lang/pt_BR.json"),
+      import("../../../../lang/pt_BR.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/pt"),
     ]),
   [Locale["pt-PT"]]: () =>
     Promise.all([
-      import("../../../lang/pt_PT.json"),
+      import("../../../../lang/pt_PT.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/pt"),
     ]),
   [Locale["cs-CZ"]]: () =>
     Promise.all([
-      import("../../../lang/cs_CZ.json"),
+      import("../../../../lang/cs_CZ.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/cs"),
     ]),
   [Locale["fa-IR"]]: () =>
     Promise.all([
-      import("../../../lang/fa_IR.json"),
+      import("../../../../lang/fa_IR.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/fa"),
     ]),
   [Locale["ru-RU"]]: () =>
     Promise.all([
-      import("../../../lang/ru_RU.json"),
+      import("../../../../lang/ru_RU.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/ru"),
     ]),
   [Locale.tr]: () =>
     Promise.all([
-      import("../../../lang/tr.json"),
+      import("../../../../lang/tr.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/tr"),
     ]),
   [Locale.sr]: () =>
     Promise.all([
-      import("../../../lang/sr.json"),
+      import("../../../../lang/sr.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/sr"),
     ]),
   [Locale.pl]: () =>
     Promise.all([
-      import("../../../lang/pl.json"),
+      import("../../../../lang/pl.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/pl"),
     ]),
   [Locale["zh-TW"]]: () =>
     Promise.all([
-      import("../../../lang/zh_TW.json"),
+      import("../../../../lang/zh_TW.json"),
       import("@formatjs/intl-relativetimeformat/locale-data/zh"),
     ]),
 };

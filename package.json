@@ -135,7 +135,7 @@
     "vitest": "^2.1.2"
   },
   "scripts": {
-    "build-intl": "NODE_ENV=production extract-messages -l=en-US -o src/lang/ -d en-US --flat -f json 'src/**/!(*.test).js'",
+    "build-intl": "NODE_ENV=production extract-messages -l=en-US -o lang/ -d en-US --flat -f json 'src/**/!(*.test).js'",
     "update-layers": "node scripts/update_layers.js",
     "update-layers-prod": "NODE_ENV=production node scripts/update_layers.js",
     "start-js": "vite",

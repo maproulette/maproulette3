@@ -21,7 +21,7 @@ decisions it does, the config file is a good place to start.
 
 
 ### Pulling the latest translation files from Transifex
-Updated and new translation files will be pulled into the `src/lang/`
+Updated and new translation files will be pulled into the `lang/`
 directory. They should then be added and committed to the source repo like
 normal.
 
