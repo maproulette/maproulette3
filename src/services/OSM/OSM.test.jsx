@@ -24,11 +24,11 @@ describe('OSM Service Functions', () => {
     const baseURL = 'https://example.com'
 
     beforeAll(() => {
-      import.meta.env.REACT_APP_OSM_SERVER = baseURL
+      window.env.REACT_APP_OSM_SERVER = baseURL
     })
 
     afterAll(() => {
-      delete import.meta.env.REACT_APP_OSM_SERVER
+      delete window.env.REACT_APP_OSM_SERVER
     })
 
     it('should construct URLs correctly', () => {

@@ -47,7 +47,7 @@ export class StartVirtualChallenge extends Component {
   /** Invoked to cancel editing of the name */
   cancelEditing = () => this.setState({editingName: false, challengeName: ''})
 
-  maxAllowedTasks = () => parseInt(_get(import.meta.env, 'REACT_APP_VIRTUAL_CHALLENGE_MAX_TASKS', 10000))
+  maxAllowedTasks = () => parseInt(_get(window.env, 'REACT_APP_VIRTUAL_CHALLENGE_MAX_TASKS', 10000))
 
   render() {
     const taskCount =

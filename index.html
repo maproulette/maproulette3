@@ -16,6 +16,8 @@
     -->
     <link rel="manifest" href="/manifest.json">
 
+    <link rel="preload" href="/env.json" as="fetch" type="application/json"/>
+
     <!-- App Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
@@ -42,6 +44,11 @@
     <div id="external-root"></div>
     <div id="dropdown"></div>
 
-    <script type="module" src="/src/index.jsx"></script>
+    <script type="module">
+      fetch("/env.json")
+        .then(res => res.json())
+        .then(env => { window.env = env; })
+        .then(() => import("/src/index.jsx"));
+    </script>
   </body>
 </html>

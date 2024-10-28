@@ -25,9 +25,9 @@ export class FlagCommentInput extends Component {
       this.props.handleCheckboxError()
     } else {
       const challenge = this.props.challenge
-      const owner = import.meta.env.REACT_APP_GITHUB_ISSUES_API_OWNER
-      const repo = import.meta.env.REACT_APP_GITHUB_ISSUES_API_REPO
-      const body = `Challenge: [#${challenge.id} - ${challenge.name}](${import.meta.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${encodeURIComponent(this.props.user.osmProfile.displayName)})\n\n${this.state.value}`
+      const owner = window.env.REACT_APP_GITHUB_ISSUES_API_OWNER
+      const repo = window.env.REACT_APP_GITHUB_ISSUES_API_REPO
+      const body = `Challenge: [#${challenge.id} - ${challenge.name}](${window.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${encodeURIComponent(this.props.user.osmProfile.displayName)})\n\n${this.state.value}`
       const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
         method: 'POST',
         body: JSON.stringify({
@@ -38,7 +38,7 @@ export class FlagCommentInput extends Component {
           state: 'open'
         }),
         headers: {
-          'Authorization': `token ${import.meta.env.REACT_APP_GITHUB_ISSUES_API_TOKEN}`,
+          'Authorization': `token ${window.env.REACT_APP_GITHUB_ISSUES_API_TOKEN}`,
           'Content-Type': 'application/json',
           'Accept': 'application/vnd.github.v3+json',
         },
@@ -48,7 +48,7 @@ export class FlagCommentInput extends Component {
         const responseBody = await response.json()
         this.props.onModalSubmit(responseBody)
         const issue_link = responseBody.html_url
-        const comment = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${import.meta.env.REACT_APP_URL}/browse/challenges/${challenge.id}) in project [#${challenge.parent.id} - ${challenge.parent.displayName}](${import.meta.env.REACT_APP_URL}/browse/projects/${challenge.parent.id}), has been reported by [${this.props.user.osmProfile.displayName}](${import.meta.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(this.props.user.osmProfile.displayName)}). Please use [this GitHub issue](${issue_link}) to discuss. \n\n Report Content: \n ${this.state.value}`
+        const comment = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${window.env.REACT_APP_URL}/browse/challenges/${challenge.id}) in project [#${challenge.parent.id} - ${challenge.parent.displayName}](${window.env.REACT_APP_URL}/browse/projects/${challenge.parent.id}), has been reported by [${this.props.user.osmProfile.displayName}](${window.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(this.props.user.osmProfile.displayName)}). Please use [this GitHub issue](${issue_link}) to discuss. \n\n Report Content: \n ${this.state.value}`
         await postChallengeComment(challenge.id, comment)
         this.props.handleViewCommentsSubmit()
       }

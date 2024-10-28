@@ -1,22 +1,22 @@
-FROM node:18-bullseye
+FROM node:18-alpine AS builder
 
-WORKDIR /src
+WORKDIR /maproulette3
+RUN apk update && apk add curl git jq
 
-RUN \
-    apt-get update && \
-    apt-get install -y \
-        jq \
-    && \
-    rm -rf /var/lib/apt/lists/*
+COPY package.json yarn.lock ./
+RUN yarn install
 
-# Add this file to make sure it exists. Without overrides, the app doesn't work.
-ADD .env.development.local .
 COPY . .
 
 ENV NODE_OPTIONS="--max-old-space-size=8192"
-RUN \
-    yarn && \
-    yarn run build
+RUN yarn run build
 
-EXPOSE 3000
-CMD [ "yarn", "run", "start" ]
+FROM nginx:1.25-alpine
+
+RUN apk update && apk add jq
+
+COPY --from=builder /maproulette3/dist /srv/www
+COPY docker/nginx.conf /etc/nginx/templates/default.conf.template
+COPY docker/90-write-env-to-json.sh /docker-entrypoint.d
+
+EXPOSE 80

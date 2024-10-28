@@ -27,7 +27,7 @@ import AppErrors from '../../../services/Error/AppErrors'
    return class extends Component {
      render() {
        return <WrappedComponent
-        metaReviewEnabled={import.meta.env.REACT_APP_FEATURE_META_QC === 'enabled'}
+        metaReviewEnabled={window.env.REACT_APP_FEATURE_META_QC === 'enabled'}
         asMetaReview={asMetaReview(this.props)} {...this.props} />
      }
    }

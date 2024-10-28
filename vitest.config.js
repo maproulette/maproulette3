@@ -8,6 +8,5 @@ export default defineConfig({
     globals: true,
     setupFiles: ['src/setupTests.jsx'],
   },
-  envPrefix: 'REACT_APP_',
   plugins: [react()],
 });

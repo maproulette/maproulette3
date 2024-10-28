@@ -101,7 +101,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         _set(searchCriteria, 'filters.bundleId', this.props.taskBundle.bundleId)
       }
 
-      if (import.meta.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
+      if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
         return this.setState({ loading: false })
       }
 
@@ -159,7 +159,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         this.debouncedFetchClusters(this.state.showAsClusters)
       }
 
-      if (import.meta.env.REACT_APP_DISABLE_TASK_CLUSTERS) {
+      if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS) {
         const bounds = _get(this.props.criteria, 'boundingBox')
         if (!bounds || !boundsWithinAllowedMaxDegrees(bounds)) {
           this.setState({ mapZoomedOut: true })

@@ -32,7 +32,7 @@ const validateMinLength = val => {
 }
 
 export const jsSchema = (intl) => {
-  const minLengthEnvValue = import.meta.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH
+  const minLengthEnvValue = window.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH
   const instructionsMinLength = validateMinLength(minLengthEnvValue)
 
   const schemaFields = {

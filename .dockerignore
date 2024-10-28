@@ -1,5 +1,6 @@
 .git
 .github
 /build
+/dist
 /coverage
 /node_modules

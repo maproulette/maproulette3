@@ -19,7 +19,7 @@ class Footer extends Component {
   }
 
   renderMyData(){
-    fetch(`${import.meta.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
+    fetch(`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
         .then((response) => response.json())
         .then((responseJson) => {
           this.setState({ data : responseJson })
@@ -66,14 +66,14 @@ class Footer extends Component {
               <ul className="mr-list-reset mr-text-sm">
                 <li>
                   <a
-                    href={import.meta.env.REACT_APP_DOCS_URL}
+                    href={window.env.REACT_APP_DOCS_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                   ><FormattedMessage {...messages.getHelp} /></a>
                 </li>
                 <li>
                   <a
-                    href={import.meta.env.REACT_APP_BLOG_URL}
+                    href={window.env.REACT_APP_BLOG_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                   ><FormattedMessage {...messages.viewBlog} /></a>

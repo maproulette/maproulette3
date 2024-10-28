@@ -20,7 +20,7 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 
-const OSM_SERVER = import.meta.env.REACT_APP_OSM_SERVER
+const OSM_SERVER = window.env.REACT_APP_OSM_SERVER
 
 const OSMElementHistory = props => {
   const [selectedFeatureId, setSelectedFeatureId] = useState(null)
