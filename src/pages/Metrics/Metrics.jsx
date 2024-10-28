@@ -14,7 +14,7 @@ import _omit from 'lodash/omit'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 import messages from './Messages'
 import messagesAsReviewer from './MessagesAsReviewer'
-import illustrationCompletedTasks from '../../static/images/illustration-completed-tasks.svg'
+import illustrationCompletedTasks from '../../../images/illustration-completed-tasks.svg'
 
 const ProfileImage = props => {
 

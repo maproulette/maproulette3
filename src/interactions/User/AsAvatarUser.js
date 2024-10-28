@@ -1,6 +1,6 @@
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
-import defaultPic from '../../static/images/user_no_image.png'
+import defaultPic from '../../../images/user_no_image.png'
 
 /**
  * AsAvatarUser adds functionality to a User related to a general user.

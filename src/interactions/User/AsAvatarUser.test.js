@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import AsAvatarUser from './AsAvatarUser'
-import defaultPic from '../../static/images/user_no_image.png'
+import defaultPic from '../../../images/user_no_image.png'
 
 describe('profilePic', () => {
   it("returns default pic if user has empty avatar URL", () => {
