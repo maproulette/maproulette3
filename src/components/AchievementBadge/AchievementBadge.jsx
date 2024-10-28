@@ -15,7 +15,7 @@ import messages from './Messages'
 const badgeSettings = Object.freeze({
   [Achievement.fixedTask]: {
     id: Achievement.fixedTask,
-    image: () => import('../../static/images/rocket.svg'),
+    image: () => import('../../../images/rocket.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.fixedTaskTitle} />,
     description: <FormattedMessage {...messages.fixedTaskDescription} />
@@ -23,7 +23,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.fixedCoopTask]: {
     id: Achievement.fixedCoopTask,
-    image: () => import('../../static/images/high-five.svg'),
+    image: () => import('../../../images/high-five.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.fixedCoopTaskTitle} />,
     description: <FormattedMessage {...messages.fixedCoopTaskDescription} />
@@ -31,7 +31,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.challengeCompleted]: {
     id: Achievement.challengeCompleted,
-    image: () => import('../../static/images/mountain-flag.svg'),
+    image: () => import('../../../images/mountain-flag.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.challengeCompletedTitle} />,
     description: <FormattedMessage {...messages.challengeCompletedDescription} />
@@ -39,7 +39,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.fixedFinalTask]: {
     id: Achievement.fixedFinalTask,
-    image: () => import('../../static/images/unicorn.svg'),
+    image: () => import('../../../images/unicorn.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.fixedFinalTaskTitle} />,
     description: <FormattedMessage {...messages.fixedFinalTaskDescription} />
@@ -47,7 +47,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.mappedRoads]: {
     id: Achievement.mappedRoads,
-    image: () => import('../../static/images/roads.svg'),
+    image: () => import('../../../images/roads.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.mappedRoadsTitle} />,
     description: <FormattedMessage {...messages.mappedRoadsDescription} />
@@ -55,7 +55,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.mappedWater]: {
     id: Achievement.mappedWater,
-    image: () => import('../../static/images/water.svg'),
+    image: () => import('../../../images/water.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.mappedWaterTitle} />,
     description: <FormattedMessage {...messages.mappedWaterDescription} />
@@ -63,7 +63,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.mappedTransit]: {
     id: Achievement.mappedTransit,
-    image: () => import('../../static/images/transit.svg'),
+    image: () => import('../../../images/transit.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.mappedTransitTitle} />,
     description: <FormattedMessage {...messages.mappedTransitDescription} />
@@ -71,7 +71,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.mappedLanduse]: {
     id: Achievement.mappedLanduse,
-    image: () => import('../../static/images/landuse.svg'),
+    image: () => import('../../../images/landuse.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.mappedLanduseTitle} />,
     description: <FormattedMessage {...messages.mappedLanduseDescription} />
@@ -79,7 +79,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.mappedBuildings]: {
     id: Achievement.mappedBuildings,
-    image: () => import('../../static/images/buildings.svg'),
+    image: () => import('../../../images/buildings.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.mappedBuildingsTitle} />,
     description: <FormattedMessage {...messages.mappedBuildingsDescription} />
@@ -87,7 +87,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.mappedPoi]: {
     id: Achievement.mappedPoi,
-    image: () => import('../../static/images/poi.svg'),
+    image: () => import('../../../images/poi.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.mappedPoiTitle} />,
     description: <FormattedMessage {...messages.mappedPoiDescription} />
@@ -95,7 +95,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.reviewedTask]: {
     id: Achievement.reviewedTask,
-    image: () => import('../../static/images/nyan-cat.svg'),
+    image: () => import('../../../images/nyan-cat.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.reviewedTaskTitle} />,
     description: <FormattedMessage {...messages.reviewedTaskDescription} />
@@ -103,7 +103,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.createdChallenge]: {
     id: Achievement.createdChallenge,
-    image: () => import('../../static/images/godzilla.svg'),
+    image: () => import('../../../images/godzilla.svg'),
     overlay: null,
     title: <FormattedMessage {...messages.createdChallengeTitle} />,
     description: <FormattedMessage {...messages.createdChallengeDescription} />
@@ -111,7 +111,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.points100]: {
     id: Achievement.points100,
-    image: () => import('../../static/images/points100.svg'),
+    image: () => import('../../../images/points100.svg'),
     overlay: {
       text: <FormattedNumber value={100} />,
       baseColor: "yellow",
@@ -134,7 +134,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.points500]: {
     id: Achievement.points500,
-    image: () => import('../../static/images/points500.svg'),
+    image: () => import('../../../images/points500.svg'),
     overlay: {
       text: <FormattedNumber value={500} />,
       baseColor: "green-dark",
@@ -157,7 +157,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.points1000]: {
     id: Achievement.points1000,
-    image: () => import('../../static/images/points1000.svg'),
+    image: () => import('../../../images/points1000.svg'),
     overlay: {
       text: <FormattedNumber value={1000} />,
       baseColor: "blue-sttropaz",
@@ -181,7 +181,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.points5000]: {
     id: Achievement.points5000,
-    image: () => import('../../static/images/points5000.svg'),
+    image: () => import('../../../images/points5000.svg'),
     overlay: {
       text: <FormattedNumber value={5000} />,
       baseColor: "blue-rhino",
@@ -205,7 +205,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.points10000]: {
     id: Achievement.points10000,
-    image: () => import('../../static/images/points10000.svg'),
+    image: () => import('../../../images/points10000.svg'),
     overlay: {
       text: <FormattedNumber value={10000} />,
       baseColor: "cerise",
@@ -229,7 +229,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.points50000]: {
     id: Achievement.points50000,
-    image: () => import('../../static/images/points50000.svg'),
+    image: () => import('../../../images/points50000.svg'),
     overlay: {
       text: <FormattedNumber value={50000} />,
       baseColor: "yellow",
@@ -253,7 +253,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.points100k]: {
     id: Achievement.points100k,
-    image: () => import('../../static/images/points100k.svg'),
+    image: () => import('../../../images/points100k.svg'),
     overlay: {
       text: <FormattedMessage {...messages.pointsK} values={{points: 100}} />,
       baseColor: "turquoise",
@@ -276,7 +276,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.points500k]: {
     id: Achievement.points500k,
-    image: () => import('../../static/images/points500k.svg'),
+    image: () => import('../../../images/points500k.svg'),
     overlay: {
       text: <FormattedMessage {...messages.pointsK} values={{points: 500}} />,
       baseColor: "pink-light",
@@ -299,7 +299,7 @@ const badgeSettings = Object.freeze({
 
   [Achievement.points1m]: {
     id: Achievement.points1m,
-    image: () => import('../../static/images/points1m.svg'),
+    image: () => import('../../../images/points1m.svg'),
     overlay: {
       text: <FormattedMessage {...messages.pointsM} values={{points: 1}} />,
       baseColor: "yellow",

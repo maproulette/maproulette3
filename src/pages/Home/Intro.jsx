@@ -1,8 +1,8 @@
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
-import expertImage from "../../static/images/expert.svg";
-import findImage from "../../static/images/find.svg";
-import teamsImage from "../../static/images/teams.svg";
+import expertImage from "../../../images/expert.svg";
+import findImage from "../../../images/find.svg";
+import teamsImage from "../../../images/teams.svg";
 import messages from "./Messages";
 class Intro extends Component {
   render() {

@@ -9,7 +9,7 @@ import {
   postChallengeComment,
 } from "../../services/Challenge/ChallengeComments";
 import { UseRouter } from "../../hooks/UseRouter/UseRouter";
-import defaultPic from "../../static/images/user_no_image.png";
+import defaultPic from "../../../images/user_no_image.png";
 
 const calcHeight = (offset) => {
   const variableHeight = window.innerHeight - offset;

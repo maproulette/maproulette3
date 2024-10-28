@@ -4,7 +4,7 @@ import { FormattedMessage } from "react-intl";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
 import messages from "./Messages";
-import shippingTruck from "../../static/images/shipping-truck.svg";
+import shippingTruck from "../../../images/shipping-truck.svg";
 
 export default class ExportLayoutModal extends Component {
   state = {

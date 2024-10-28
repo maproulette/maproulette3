@@ -7,7 +7,7 @@ import Modal from "../Modal/Modal";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
-import catAndLaptop from "../../static/images/cat-and-laptop.svg";
+import catAndLaptop from "../../../images/cat-and-laptop.svg";
 
 export default class ImportLayoutModal extends Component {
   state = {

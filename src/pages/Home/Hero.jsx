@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
-import worldMapImage from "../../static/images/bg-map.svg"
+import worldMapImage from "../../../images/bg-map.svg"
 import messages from './Messages'
 
 export default class Hero extends Component {

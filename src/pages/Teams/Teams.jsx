@@ -11,7 +11,7 @@ import EditTeam from '../../components/Teams/EditTeam/EditTeam'
 import SvgSymbol from '../../components/SvgSymbol/SvgSymbol'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import SignIn from '../SignIn/SignIn'
-import teamsImage from '../../static/images/teams.svg'
+import teamsImage from '../../../images/teams.svg'
 import messages from '../../components/Widgets/TeamsWidget/Messages'
 
 export const Teams = props => {

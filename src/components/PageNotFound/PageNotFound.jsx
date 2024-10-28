@@ -2,7 +2,7 @@ import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import messages from './Messages'
-import Illustration404 from '../../static/images/404-illustration.svg'
+import Illustration404 from '../../../images/404-illustration.svg'
 
 /**
  * PageNotFound displays a 404 message.
