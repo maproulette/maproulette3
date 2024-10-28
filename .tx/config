@@ -2,8 +2,8 @@
 host = https://www.transifex.com
 
 [o:osmlab:p:maproulette3:r:en-us-json]
-file_filter  = src/lang/<lang>.json
-source_file  = src/lang/en-US.json
+file_filter  = lang/<lang>.json
+source_file  = lang/en-US.json
 source_lang  = en
 type         = KEYVALUEJSON
 minimum_perc = 10
