@@ -70,8 +70,8 @@ export default defineMessages({
   },
 
   osmUploadNotice: {
-    id: 'TaskConfirmationModal.osmUploadNotice',
-    defaultMessage: "These changes will be uploaded to OpenStreetMap on your behalf",
+    id: 'TaskConfirmationModal.osmUploadNotices',
+    defaultMessage: "On submission, a changeset will be submitted to OpenStreetMap with your tag changes.",
   },
 
   osmViewChangesetLabel: {

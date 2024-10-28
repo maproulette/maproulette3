@@ -134,6 +134,11 @@ export class TaskConfirmationModal extends Component {
                   this.state.criteria)
   }
 
+  handleConfirm = () => {
+    // Ensure tagDiffs are included in the confirmation process
+    this.props.onConfirm(this.currentFilters(), this.props.tagDiffs);
+  }
+
   render() {
     const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised)
     const loadingNearby = this.props.loadBy === TaskLoadMethod.proximity ||
@@ -216,25 +221,73 @@ export class TaskConfirmationModal extends Component {
 
                   {applyingTagChanges &&
                    <Fragment>
-                     <p className="mr-my-4 mr-text-grey-light mr-text-sm">
-                       <FormattedMessage
-                         {...messages.osmUploadNotice }
-                       />
-                     </p>
+                     <div className="mr-border mr-border-gray-300 mr-shadow-md mr-p-4 mr-mt-4"> {/* Added border and padding */}
+                       <p className="mr-mb-2 mr-text-white mr-text-md mr-font-bold mr-bg-blue-600 mr-rounded"> {/* Increased font size, weight, and added background */}
+                         <FormattedMessage
+                           {...messages.osmUploadNotice }
+                         />
+                       </p>
+                       <div className="mr-text-base mr-mt-2 mr-text-yellow">
+                         <FormattedMessage {...messages.osmCommentHeader} />
+                       </div>
 
-                     <div className="mr-text-base mr-mt-2 mr-text-yellow">
-                       <FormattedMessage {...messages.osmCommentHeader} />
-                     </div>
+                       <div>
+                         <textarea
+                           ref={this.commentInputRef}
+                           className="mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-my-1"
+                           rows={2}
+                           value={this.props.osmComment}
+                           onChange={e => this.props.setOSMComment(e.target.value)}
+                         />
+                       </div>
 
-                     <div>
-                       <textarea
-                         ref={this.commentInputRef}
-                         className="mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-mt-1"
-                         rows={2}
-                         cols="1"
-                         value={this.props.osmComment}
-                        onChange={e => this.props.setOSMComment(e.target.value)}
-                       />
+                       <div className="mr-bg-blue-dark shadow-md">
+                         <div className="mr-flex mr-justify-between">
+                           <ul className="mr-w-1/3 mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm"> {/* Added border and shadow */}
+                             <li className="mr-font-bold mr-py-1 mr-text-sm">Tag Name</li> {/* Increased font size */}
+                             {_get(this.props, 'tagDiffs[0]') && Object.keys(_get(this.props, 'tagDiffs[0]')).map(tagName => {
+                               const tagChange = _get(this.props, 'tagDiffs[0]')[tagName];
+                               if (['changed', 'removed', 'added'].includes(tagChange.status)) {
+                                 return (
+                                   <li key={tagName} className={classNames('mr-mb-2  mr-rounded', {
+                                     'mr-text-orange': tagChange.status === 'changed',
+                                     'mr-text-lavender-rose': tagChange.status === 'removed',
+                                     'mr-text-picton-blue': tagChange.status === 'added',
+                                   })}>
+                                     <strong className="mr-text-sm">{tagName}</strong> {/* Increased font size */}
+                                   </li>
+                                 );
+                               }
+                             })}
+                           </ul>
+                           <ul className="mr-w-1/3 mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm"> 
+                             <li className="mr-font-bold mr-py-1 mr-text-sm">Current Value</li> 
+                             {_get(this.props, 'tagDiffs[0]') && Object.keys(_get(this.props, 'tagDiffs[0]')).map(tagName => {
+                               const tagChange = _get(this.props, 'tagDiffs[0]')[tagName];
+                               if (['changed', 'removed', 'added'].includes(tagChange.status)) {
+                                 return (
+                                   <li key={tagName} className="mr-mb-2 mr-text-sm"> 
+                                     {tagChange.value || '—'} 
+                                   </li>
+                                 );
+                               }
+                             })}
+                           </ul>
+                           <ul className="mr-w-1/3 mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm"> 
+                             <li className="mr-font-bold mr-py-1 mr-text-sm">Requested New Value</li> 
+                             {_get(this.props, 'tagDiffs[0]') && Object.keys(_get(this.props, 'tagDiffs[0]')).map(tagName => {
+                               const tagChange = _get(this.props, 'tagDiffs[0]')[tagName];
+                               if (['changed', 'removed', 'added'].includes(tagChange.status)) {
+                                 return (
+                                   <li key={tagName} className="mr-mb-2 mr-text-sm"> 
+                                     <span className="mr-font-semibold">{tagChange.newValue || '—'}</span> 
+                                   </li>
+                                 );
+                               }
+                             })}
+                           </ul>
+                         </div>
+                       </div>
                      </div>
                    </Fragment>
                   }
@@ -313,7 +366,7 @@ export class TaskConfirmationModal extends Component {
 
                     <button
                       className="mr-button mr-px-8"
-                      onClick={() => this.props.onConfirm(this.currentFilters())}
+                      onClick={this.handleConfirm} // Use the new handleConfirm method
                     >
                       <FormattedMessage {...messages.submitLabel} />
                     </button>
