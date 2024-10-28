@@ -186,7 +186,8 @@ export class TaskConfirmationModal extends Component {
                         <FormattedMessage {...messages.inMetaReviewHeader} /> :
                         <FormattedMessage {...messages.inReviewHeader} />
                       ) :
-                      _isUndefined(this.props.needsRevised) ?
+                      _isUndefined(this.props.needsRevised) ? applyingTagChanges ?
+                        <FormattedMessage {...messages.reviewChangesHeader} /> :
                         <FormattedMessage {...messages.header} /> :
                         (this.props.needsRevised === TaskReviewStatus.needed ?
                           <FormattedMessage {...messages.submitRevisionHeader} /> :

@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Please Confirm",
   },
 
+  reviewChangesHeader: {
+    id: 'TaskConfirmationModal.reviewChangesHeader',
+    defaultMessage: "Review Your Changes",
+  },
+
   submitRevisionHeader: {
     id: 'TaskConfirmationModal.submitRevisionHeader',
     defaultMessage: "Please Confirm Revision",
@@ -71,7 +76,7 @@ export default defineMessages({
 
   osmUploadNotice: {
     id: 'TaskConfirmationModal.osmUploadNotices',
-    defaultMessage: "On submission, a changeset will be submitted to OpenStreetMap with your tag changes.",
+    defaultMessage: "You are about to edit OpenStreetMap. The following changes will be published and become visible to everyone:",
   },
 
   osmViewChangesetLabel: {
