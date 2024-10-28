@@ -100,8 +100,11 @@ export function WithTaskBundle(WrappedComponent) {
       }
     }
 
-    unlockTasks = async (initialBundle, taskBundle) => {
-      const tasksToUnlock = initialBundle.taskIds.filter(taskId => !taskBundle.taskIds.includes(taskId))
+    unlockTasks = async (taskBundle,initialBundle) => {
+      const tasksToUnlock = taskBundle.taskIds
+      if(initialBundle){
+        tasksToUnlock.filter(taskId => !initialBundle.taskIds.includes(taskId))
+      }
       await Promise.all(tasksToUnlock.map(taskId =>
         this.props.releaseTask(taskId).then(() => {
           setTimeout(() => localStorage.removeItem(`lock-${taskId}`), 1500)
@@ -116,6 +119,8 @@ export function WithTaskBundle(WrappedComponent) {
         return task.entities.tasks[taskId]
       } catch (error) {
         console.error(`Failed to lock task ${taskId}:`, error)
+        dispatch(addError(`Failed to lock task ${taskId}:`, error))
+        dispatch(addError(AppErrors.challenge.rebuildFailure));
         throw error
       }
     }
@@ -161,9 +166,11 @@ export function WithTaskBundle(WrappedComponent) {
       this.setState({ taskBundle: updatedTaskBundle })
     }
 
-    clearActiveTaskBundle = () => {
-      this.setState({
-        selectedTasks: [],
+    clearActiveTaskBundle = async () => {
+      const { taskBundle, initialBundle } = this.state
+        await this.unlockTasks(taskBundle, initialBundle)
+        this.setState({
+          selectedTasks: [],
         taskBundle: null,
       })
       this.resetSelectedTasks()
