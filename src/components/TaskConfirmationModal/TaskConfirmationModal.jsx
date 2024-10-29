@@ -135,7 +135,6 @@ export class TaskConfirmationModal extends Component {
   }
 
   handleConfirm = () => {
-    // Ensure tagDiffs are included in the confirmation process
     this.props.onConfirm(this.currentFilters(), this.props.tagDiffs);
   }
 
@@ -367,7 +366,7 @@ export class TaskConfirmationModal extends Component {
 
                     <button
                       className="mr-button mr-px-8"
-                      onClick={this.handleConfirm} // Use the new handleConfirm method
+                      onClick={this.handleConfirm}
                     >
                       <FormattedMessage {...messages.submitLabel} />
                     </button>
