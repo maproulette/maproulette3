@@ -21,7 +21,6 @@ import { resetCache } from '../Server/RequestCache'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
-import { Locale } from './Locale/Locale'
 import { challengeSchema, receiveChallenges, fetchChallenges }
        from '../Challenge/Challenge'
 import { taskSchema,
@@ -988,7 +987,7 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
 
     // Normalize server's default `en` locale to `en-US`
     if (_get(entity, 'settings.locale') === 'en') {
-      mergedState[entity.id].settings.locale = Locale.enUS
+      mergedState[entity.id].settings.locale = "en-US"
     }
   }
 }

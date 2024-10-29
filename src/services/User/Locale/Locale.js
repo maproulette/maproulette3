@@ -1,147 +1,59 @@
-import "@formatjs/intl-relativetimeformat/polyfill";
-import _map from "lodash/map";
-import _isString from "lodash/isString";
-import _fromPairs from "lodash/fromPairs";
-import messages from "./Messages";
-
-// To add support for a new locale, add it to both `Locale` and `LocaleImports`
-// in this file, and then add a description of the new locale to the
-// `Messages.js` file in this directory
-
-// Supported locales
-export const unsortedLocale = {
-  enUS: "en-US",
-  es: "es",
-  fr: "fr",
-  de: "de",
-  it: "it",
-  af: "af",
-  ja: "ja",
-  ko: "ko",
-  nl: "nl",
-  "pt-BR": "pt-BR",
-  "pt-PT": "pt-PT",
-  "cs-CZ": "cs-CZ",
-  "fa-IR": "fa-IR",
-  "ru-RU": "ru-RU",
-  uk: "uk",
-  vi: "vi",
-  tr: "tr",
-  sr: "sr",
-  pl: "pl",
-  "zh-TW": "zh-TW"
+// Functions which load translated strings for a particular language when called.
+// It's important that (1) these aren't imported at the top level (we don't want
+// to bloat the main bundle with all strings for every language) but also that
+// the argument to the import() function is a literal string (so that our bundler
+// can analyze it and include those assets in the output dist/ directory).
+const LOCALE_LOADERS = {
+  "af": () => import("../../../../lang/af.json"),
+  "cs-CZ": () => import("../../../../lang/cs_CZ.json"),
+  "de": () => import("../../../../lang/de.json"),
+  "en-US": () => import("../../../../lang/en-US.json"),
+  "es": () => import("../../../../lang/es.json"),
+  "fa-IR": () => import("../../../../lang/fa_IR.json"),
+  "fr": () => import("../../../../lang/fr.json"),
+  "it": () => import("../../../../lang/it_IT.json"),
+  "ja": () => import("../../../../lang/ja.json"),
+  "ko": () => import("../../../../lang/ko.json"),
+  "nl": () => import("../../../../lang/nl.json"),
+  "pl": () => import("../../../../lang/pl.json"),
+  "pt-BR": () => import("../../../../lang/pt_BR.json"),
+  "pt-PT": () => import("../../../../lang/pt_PT.json"),
+  "ru-RU": () => import("../../../../lang/ru_RU.json"),
+  "sr": () => import("../../../../lang/sr.json"),
+  "tr": () => import("../../../../lang/tr.json"),
+  "uk": () => import("../../../../lang/uk.json"),
+  "vi": () => import("../../../../lang/vi.json"),
+  "zh-TW": () => import("../../../../lang/zh_TW.json"),
 };
 
-export const Locale = Object.freeze(Object.keys(unsortedLocale).sort().reduce(
-  (obj, key) => { 
-    obj[key] = unsortedLocale[key]; 
-    return obj;
-  }, 
-  {}
-));
+// Array of supported locale identifiers
+export const SUPPORTED_LOCALES = Object.keys(LOCALE_LOADERS);
 
-// Dynamic imports to load locale data and translation files
-const LocaleImports = {
-  [Locale.enUS]: () =>
-    Promise.all([
-      import("../../../../lang/en-US.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/en"),
-    ]),
-  [Locale.es]: () =>
-    Promise.all([
-      import("../../../../lang/es.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/es"),
-    ]),
-  [Locale.fr]: () =>
-    Promise.all([
-      import("../../../../lang/fr.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/fr"),
-    ]),
-  [Locale.de]: () =>
-    Promise.all([
-      import("../../../../lang/de.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/de"),
-    ]),
-  [Locale.it]: () =>
-    Promise.all([
-      import("../../../../lang/it_IT.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/it"),
-    ]),
-  [Locale.af]: () =>
-    Promise.all([
-      import("../../../../lang/af.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/af"),
-    ]),
-  [Locale.ja]: () =>
-    Promise.all([
-      import("../../../../lang/ja.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/ja"),
-    ]),
-  [Locale.ko]: () =>
-    Promise.all([
-      import("../../../../lang/ko.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/ko"),
-    ]),
-  [Locale.nl]: () =>
-    Promise.all([
-      import("../../../../lang/nl.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/nl"),
-    ]),
-  [Locale.uk]: () =>
-    Promise.all([
-      import("../../../../lang/uk.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/uk"),
-    ]),
-  [Locale.vi]: () =>
-    Promise.all([
-      import("../../../../lang/vi.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/vi"),
-    ]),
-  [Locale["pt-BR"]]: () =>
-    Promise.all([
-      import("../../../../lang/pt_BR.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/pt"),
-    ]),
-  [Locale["pt-PT"]]: () =>
-    Promise.all([
-      import("../../../../lang/pt_PT.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/pt"),
-    ]),
-  [Locale["cs-CZ"]]: () =>
-    Promise.all([
-      import("../../../../lang/cs_CZ.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/cs"),
-    ]),
-  [Locale["fa-IR"]]: () =>
-    Promise.all([
-      import("../../../../lang/fa_IR.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/fa"),
-    ]),
-  [Locale["ru-RU"]]: () =>
-    Promise.all([
-      import("../../../../lang/ru_RU.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/ru"),
-    ]),
-  [Locale.tr]: () =>
-    Promise.all([
-      import("../../../../lang/tr.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/tr"),
-    ]),
-  [Locale.sr]: () =>
-    Promise.all([
-      import("../../../../lang/sr.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/sr"),
-    ]),
-  [Locale.pl]: () =>
-    Promise.all([
-      import("../../../../lang/pl.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/pl"),
-    ]),
-  [Locale["zh-TW"]]: () =>
-    Promise.all([
-      import("../../../../lang/zh_TW.json"),
-      import("@formatjs/intl-relativetimeformat/locale-data/zh"),
-    ]),
+// Locale names are shown in the language picker alongside the ISO codes. These
+// are intentionally NOT localized, so that if a user is "stuck" in a language
+// they don't understand, they'll still be able to recognize their own language
+// in this list.
+export const LOCALE_NAMES = {
+  "af": "Afrikaans",
+  "cs-CZ": "Čeština",
+  "de": "Deutsch",
+  "en-US": "English (U.S.)",
+  "es": "Español",
+  "fa-IR": "فارسی",
+  "fr": "Français",
+  "it": "Italiano",
+  "ja": "日本語",
+  "ko": "한국어",
+  "nl": "Nederlands",
+  "pl": "Polski",
+  "pt-BR": "Português Brasileiro",
+  "pt-PT": "Português Portugal",
+  "ru-RU": "Русский",
+  "sr": "Српски",
+  "tr": "Türkçe",
+  "uk": "Українська",
+  "vi": "tiếng Việt",
+  "zh-TW": "國語",
 };
 
 /**
@@ -149,7 +61,7 @@ const LocaleImports = {
  * otherwise.
  */
 export const isSupportedLocale = function (locale) {
-  return _isString(locale) && _isString(Locale[locale]);
+  return SUPPORTED_LOCALES.includes(locale);
 };
 
 /**
@@ -160,35 +72,18 @@ export const loadTranslatedMessages = async function (locale) {
     locale = defaultLocale();
   }
 
-  const [messages] = await LocaleImports[locale]();
-  return messages.default;
+  // load the locale data asynchronously
+  const loader = LOCALE_LOADERS[locale];
+  const module = await loader();
+  // loader returns a module, the JSON data is in its default export
+  return module.default;
 };
 
 /**
- * Returns the default locale configured in the .env file, or U.S.  English if
+ * Returns the default locale configured in the .env file, or U.S. English if
  * no default is configured or if the configured locale isn't supported.
  */
 export const defaultLocale = function () {
   const configured = window.env.REACT_APP_DEFAULT_LOCALE;
-
-  return isSupportedLocale(configured) ? configured : Locale.enUS;
+  return isSupportedLocale(configured) ? configured : Locales["en-US"];
 };
-
-/**
- * Returns an object mapping label messages for locale values to raw
- * internationalized messages suitable for use with FormattedMessage or
- * formatMessage.
- *
- * > Note that these are the messages for the locale labels themselves (like
- * > 'U.S. English' for en-US or 'Spanish' for es), not to be confused with
- * > translated messages for a locale.
- */
-export const labelMessagesByLocale = _fromPairs(
-  _map(messages, (message, key) => [Locale[key], message])
-);
-
-/** Returns object containing localized labels  */
-export const localeLabels = (intl) =>
-  _fromPairs(
-    _map(messages, (message, key) => [key, intl.formatMessage(message)])
-  );
