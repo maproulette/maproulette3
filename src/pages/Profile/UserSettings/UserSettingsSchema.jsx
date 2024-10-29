@@ -2,7 +2,7 @@ import _map from 'lodash/map'
 import _values from 'lodash/values'
 import _filter from 'lodash/filter'
 import AsManager from '../../../interactions/User/AsManager'
-import { Locale, localeLabels, defaultLocale }
+import { SUPPORTED_LOCALES, LOCALE_NAMES, defaultLocale }
        from '../../../services/User/Locale/Locale'
 import { Editor, editorLabels } from '../../../services/Editor/Editor'
 import { ChallengeBasemap, basemapLayerLabels }
@@ -24,7 +24,6 @@ import messages from '../Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl, user, editor) => {
-  const localizedLocaleLabels = localeLabels(intl)
   const localizedEditorLabels = editorLabels(intl)
   const localizedBasemapLabels = basemapLayerLabels(intl)
 
@@ -78,8 +77,8 @@ export const jsSchema = (intl, user, editor) => {
       locale: {
         title: intl.formatMessage(messages.localeLabel),
         type: "string",
-        enum: _values(Locale),
-        enumNames: _map(Locale, value => localizedLocaleLabels[value]),
+        enum: SUPPORTED_LOCALES,
+        enumNames: SUPPORTED_LOCALES.map(locale => LOCALE_NAMES[locale]),
         default: defaultLocale(),
       },
       defaultBasemap: {
