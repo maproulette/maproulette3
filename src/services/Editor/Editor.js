@@ -340,6 +340,10 @@ export const constructRapidURI = function (task, mapBounds, options, replacedCom
   const sourceComponent =
     "source=" + encodeURIComponent(task.parent.checkinSource);
 
+  const datasetUrl = _get(task.parent, "datasetUrl")
+    ? `data=${task.parent.datasetUrl}`
+    : null;
+
   const presetsComponent = _isEmpty(task.parent.presets)
     ? null
     : "presets=" + encodeURIComponent(task.parent.presets.join(","));
@@ -366,6 +370,7 @@ export const constructRapidURI = function (task, mapBounds, options, replacedCom
       presetsComponent,
       photoOverlayComponent,
       mapUriComponent,
+      datasetUrl
     ]).join("&")
   );
 };

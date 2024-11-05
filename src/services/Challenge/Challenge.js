@@ -930,7 +930,7 @@ export const fetchChallenges = function (
   return function (dispatch) {
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData);
-    
+
     if (_isArray(challengeData.tags)) {
       challengeData.tags = challengeData.tags.map(t => t.trim()).join(",");
     } else if (challengeData.tags) {
@@ -1007,6 +1007,7 @@ export const fetchChallenges = function (
           "overpassQL",
           "overpassTargetType",
           "parent",
+          "datasetUrl",
           "remoteGeoJson",
           "status",
           "tags",

@@ -600,6 +600,17 @@ will not be able to make sense of it.
       "Insert a custom base map URL here. E.g. `https://'{s}'.tile.openstreetmap.org/'{z}'/'{x}'/'{y}'.png`",
   },
 
+  datasetUrlLabel: {
+    id: "Admin.EditChallenge.form.datasetUrl.label",
+    defaultMessage: "Rapid Dataset URL",
+  },
+
+  datasetUrlDescription: {
+    id: "Admin.EditChallenge.form.datasetUrl.description",
+    defaultMessage:
+      "Optionally include a Rapid Editor dataset URL. Datasets can be used to provide geospatial data layers that can be overlaid, analyzed, and edited to create or update maps accurately",
+  },
+
   exportablePropertiesLabel: {
     id: "Admin.EditChallenge.form.exportableProperties.label",
     defaultMessage: "Properties to export in CSV",
