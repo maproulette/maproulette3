@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with TaskUploadingProgress
+ * Internationalized messages for use with testEnvironmentNotice
  */
 export default defineMessages({
   title: {
