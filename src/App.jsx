@@ -49,6 +49,7 @@ import MobileNotSupported
 import CheckForToken from './components/CheckForToken/CheckForToken'
 import './components/Widgets/widget_registry'
 import './App.scss'
+import TestEnvironmentBanner from './components/TestEnvironmentBanner/TestEnvironmentBanner.jsx'
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
@@ -102,6 +103,7 @@ export class App extends Component {
     return (
       <Fragment>
         <TopNav />
+        <TestEnvironmentBanner />
         <SystemNotices />
         <FundraisingNotices />
         <CheckForToken>
