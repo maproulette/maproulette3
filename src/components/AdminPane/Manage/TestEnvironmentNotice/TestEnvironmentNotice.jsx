@@ -4,8 +4,9 @@ import messages from "./Messages";
 import MarkdownContent from "../../../MarkdownContent/MarkdownContent";
 
 const TestEnvironmentNotice = (props) => {
-    const environment = window.env.REACT_APP_ENVIRONMENT;
-    if(environment === 'production'){
+  const environment = window.env.REACT_APP_ENVIRONMENT;
+  
+  if(environment === 'production'){
     return (
         <ul className="mr-bg-gradient-b-blue-darker-blue-dark mr-text-white mr-w-full">
         <li className="mr-flex mr-justify-between mr-items-center mr-w-full mr-py-2 mr-px-16">
