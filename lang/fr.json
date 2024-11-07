@@ -949,6 +949,7 @@
   "Home.Featured.browse": "Explorer",
   "Home.Featured.header": "Défi phare",
   "Home.Hero.controls.getStarted.label": "C'est parti",
+  "Home.Hero.headline": "Be an instant contributor to the world’s maps",
   "Home.Instructions.controls.findChallenges.label": "Trouver des défis",
   "Home.Instructions.firstParagraph": "Des dizaines de défis MapRoulette sont créés par des contributeurs bénévoles. Chaque défi vise à améliorer un volet spécifique d'OSM. Vous voulez ajouter des passages piétons ? Corriger des ponts ? Ajouter les horaires d'ouverture des magasins ? Il y a un défi pour ça. Et chaque défi comporte des milliers de tâches différentes.",
   "Home.Instructions.header": "Trouvez votre défi",
