@@ -134,10 +134,6 @@ export class TaskConfirmationModal extends Component {
                   this.state.criteria)
   }
 
-  handleConfirm = () => {
-    this.props.onConfirm(this.currentFilters(), this.props.tagDiffs);
-  }
-
   render() {
     const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised)
     const loadingNearby = this.props.loadBy === TaskLoadMethod.proximity ||
@@ -356,7 +352,7 @@ export class TaskConfirmationModal extends Component {
 
                     <button
                       className="mr-button mr-px-8"
-                      onClick={this.handleConfirm}
+                      onClick={() => this.props.onConfirm(this.currentFilters())}
                     >
                       <FormattedMessage {...messages.submitLabel} />
                     </button>
