@@ -43,8 +43,7 @@ const ERROR_TAG_STATUSES = [
 
 export class TaskConfirmationModal extends Component {
   state = {
-    criteria: {},
-    disableChangeset: false // State for the checkbox
+    criteria: {}
   }
 
   commentInputRef = createRef()
@@ -137,10 +136,6 @@ export class TaskConfirmationModal extends Component {
 
   handleConfirm = () => {
     this.props.onConfirm(this.currentFilters(), this.props.tagDiffs);
-  }
-
-  toggleDisableChangeset = () => {
-    this.setState(prevState => ({ disableChangeset: !prevState.disableChangeset }));
   }
 
   render() {
@@ -239,13 +234,10 @@ export class TaskConfirmationModal extends Component {
                        <div>
                          <textarea
                            ref={this.commentInputRef}
-                           className={classNames("mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-my-1", {
-                             'mr-opacity-50': this.state.disableChangeset // Grey out if disabled
-                           })}
+                           className="mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-my-1"
                            rows={2}
                            value={this.props.osmComment}
                            onChange={e => this.props.setOSMComment(e.target.value)}
-                           disabled={this.state.disableChangeset} // Disable if checkbox is checked
                          />
                        </div>
 
