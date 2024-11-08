@@ -43,7 +43,8 @@ const ERROR_TAG_STATUSES = [
 
 export class TaskConfirmationModal extends Component {
   state = {
-    criteria: {}
+    criteria: {},
+    disableChangeset: false // State for the checkbox
   }
 
   commentInputRef = createRef()
@@ -136,6 +137,10 @@ export class TaskConfirmationModal extends Component {
 
   handleConfirm = () => {
     this.props.onConfirm(this.currentFilters(), this.props.tagDiffs);
+  }
+
+  toggleDisableChangeset = () => {
+    this.setState(prevState => ({ disableChangeset: !prevState.disableChangeset }));
   }
 
   render() {
@@ -234,58 +239,51 @@ export class TaskConfirmationModal extends Component {
                        <div>
                          <textarea
                            ref={this.commentInputRef}
-                           className="mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-my-1"
+                           className={classNames("mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-my-1", {
+                             'mr-opacity-50': this.state.disableChangeset // Grey out if disabled
+                           })}
                            rows={2}
                            value={this.props.osmComment}
                            onChange={e => this.props.setOSMComment(e.target.value)}
+                           disabled={this.state.disableChangeset} // Disable if checkbox is checked
                          />
                        </div>
 
                        <div className="mr-bg-blue-dark shadow-md">
                          <div className="mr-flex mr-justify-between">
-                           <ul className="mr-w-1/3 mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm">
-                             <li className="mr-font-bold mr-py-1 mr-text-sm">Tag Name</li>
+                           <table className="mr-w-full mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm">
+                             <thead>
+                               <tr>
+                                 <th className="mr-font-bold mr-py-1 mr-text-sm mr-border mr-border-gray-300 text-center" style={{ width: '33%' }}>
+                                   <FormattedMessage {...messages.tagNameLabel} />
+                                 </th>
+                                 <th className="mr-font-bold mr-py-1 mr-text-sm mr-border mr-border-gray-300 text-center" style={{ width: '33%' }}>
+                                   <FormattedMessage {...messages.oldValueLabel} />
+                                 </th>
+                                 <th className="mr-font-bold mr-py-1 mr-text-sm mr-border mr-border-gray-300 text-center" style={{ width: '33%' }}>
+                                   <FormattedMessage {...messages.newValueLabel} />
+                                 </th>
+                               </tr>
+                             </thead>
+                             <tbody>
                              {_get(this.props, 'tagDiffs[0]') && Object.keys(_get(this.props, 'tagDiffs[0]')).map(tagName => {
                                const tagChange = _get(this.props, 'tagDiffs[0]')[tagName];
                                if (['changed', 'removed', 'added'].includes(tagChange.status)) {
                                  return (
-                                   <li key={tagName} className={classNames('mr-mb-2  mr-rounded', {
+                                   <tr key={tagName} className={classNames('mr-mb-2  mr-rounded', {
                                      'mr-text-orange': tagChange.status === 'changed',
                                      'mr-text-lavender-rose': tagChange.status === 'removed',
                                      'mr-text-picton-blue': tagChange.status === 'added',
                                    })}>
-                                     <strong className="mr-text-sm">{tagName}</strong>
-                                   </li>
+                                     <td className="mr-border mr-border-gray-300 mr-text-center" style={{ width: '33%' }}><strong>{tagName}</strong></td>
+                                     <td className="mr-border mr-border-gray-300 mr-text-center mr-text-red-light" style={{ width: '33%' }}>{tagChange.value || '—'}</td>
+                                     <td className="mr-border mr-border-gray-300 mr-text-center mr-text-green-lighter" style={{ width: '33%' }}><span className="mr-font-semibold">{tagChange.newValue || '—'}</span></td>
+                                   </tr>
                                  );
                                }
                              })}
-                           </ul>
-                           <ul className="mr-w-1/3 mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm"> 
-                             <li className="mr-font-bold mr-py-1 mr-text-sm">Current Value</li> 
-                             {_get(this.props, 'tagDiffs[0]') && Object.keys(_get(this.props, 'tagDiffs[0]')).map(tagName => {
-                               const tagChange = _get(this.props, 'tagDiffs[0]')[tagName];
-                               if (['changed', 'removed', 'added'].includes(tagChange.status)) {
-                                 return (
-                                   <li key={tagName} className="mr-mb-2 mr-text-sm"> 
-                                     {tagChange.value || '—'} 
-                                   </li>
-                                 );
-                               }
-                             })}
-                           </ul>
-                           <ul className="mr-w-1/3 mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm"> 
-                             <li className="mr-font-bold mr-py-1 mr-text-sm">Requested New Value</li> 
-                             {_get(this.props, 'tagDiffs[0]') && Object.keys(_get(this.props, 'tagDiffs[0]')).map(tagName => {
-                               const tagChange = _get(this.props, 'tagDiffs[0]')[tagName];
-                               if (['changed', 'removed', 'added'].includes(tagChange.status)) {
-                                 return (
-                                   <li key={tagName} className="mr-mb-2 mr-text-sm"> 
-                                     <span className="mr-font-semibold">{tagChange.newValue || '—'}</span> 
-                                   </li>
-                                 );
-                               }
-                             })}
-                           </ul>
+                             </tbody>
+                           </table>
                          </div>
                        </div>
                      </div>

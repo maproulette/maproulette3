@@ -177,5 +177,20 @@ export default defineMessages({
   metaReviewRequestedLabel: {
     id: 'TaskConfirmationModal.metaReviewRequested.label',
     defaultMessage: "Meta-Review Requested",
+  },
+
+  tagNameLabel: {
+    id: 'TaskConfirmationModal.tagName.label',
+    defaultMessage: "Tag Name",
+  },
+
+  oldValueLabel: {
+    id: 'TaskConfirmationModal.oldValue.label',
+    defaultMessage: "Old Value",
+  },
+
+  newValueLabel: {
+    id: 'TaskConfirmationModal.newValue.label',
+    defaultMessage: "New Value",
   }
 })
