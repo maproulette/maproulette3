@@ -36,6 +36,7 @@ import AsManager from '../../interactions/User/AsManager'
 import AsColoredHashable from '../../interactions/Hashable/AsColoredHashable'
 import WithLoadedTask from '../HOCs/WithLoadedTask/WithLoadedTask'
 import WithConfigurableColumns from '../HOCs/WithConfigurableColumns/WithConfigurableColumns'
+import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
 import { intlTableProps } from '../../components/IntlTable/IntlTable'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -515,7 +516,14 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
         className="row-user-column"
         style={{color: AsColoredHashable(_get(row._original.completedBy, 'username') || row._original.completedBy).hashColor}}
       >
-        {_get(row._original.completedBy, 'username') || row._original.completedBy}
+        <a
+          className="mr-mx-4"
+          href={props.targetUserOSMProfileUrl()}
+          target='_blank'
+          rel="noopener noreferrer"
+        >
+          {_get(row._original.completedBy, 'username') || row._original.completedBy}
+        </a>
       </div>
     ),
   }
@@ -792,10 +800,12 @@ TaskAnalysisTableInternal.propTypes = {
 }
 
 export default injectIntl(
-  WithConfigurableColumns(
-    TaskAnalysisTableInternal,
-    ALL_COLUMNS,
-    DEFAULT_COLUMNS,
-    messages
+  WithTargetUser(
+    WithConfigurableColumns(
+      TaskAnalysisTableInternal,
+      ALL_COLUMNS,
+      DEFAULT_COLUMNS,
+      messages
+    )
   )
 )
