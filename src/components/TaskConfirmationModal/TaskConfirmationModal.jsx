@@ -222,7 +222,7 @@ export class TaskConfirmationModal extends Component {
                   {applyingTagChanges &&
                    <Fragment>
                      <div className="mr-border mr-border-gray-300 mr-shadow-md mr-p-4 mr-mt-4">
-                       <p className="mr-mb-2 mr-text-white mr-text-md mr-font-bold mr-bg-blue-600 mr-rounded">
+                       <p className="mr-mb-2 mr-text-white mr-font-bold mr-bg-blue-600 mr-rounded">
                          <FormattedMessage
                            {...messages.osmUploadNotice }
                          />
