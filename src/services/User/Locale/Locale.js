@@ -85,5 +85,5 @@ export const loadTranslatedMessages = async function (locale) {
  */
 export const defaultLocale = function () {
   const configured = window.env.REACT_APP_DEFAULT_LOCALE;
-  return isSupportedLocale(configured) ? configured : Locales["en-US"];
+  return isSupportedLocale(configured) ? configured : "en-US";
 };
