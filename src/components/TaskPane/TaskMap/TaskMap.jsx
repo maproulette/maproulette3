@@ -321,7 +321,7 @@ export const TaskMapContent = (props) => {
       }
     }
   }
-  
+
   /**
    * Invoked by LayerToggle when the user wishes to toggle visibility of
    * OpenStreetCam markers on or off.
