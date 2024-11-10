@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Please Confirm",
   },
 
+  reviewChangesHeader: {
+    id: 'TaskConfirmationModal.reviewChangesHeader',
+    defaultMessage: "Review Your Changes",
+  },
+
   submitRevisionHeader: {
     id: 'TaskConfirmationModal.submitRevisionHeader',
     defaultMessage: "Please Confirm Revision",
@@ -70,8 +75,8 @@ export default defineMessages({
   },
 
   osmUploadNotice: {
-    id: 'TaskConfirmationModal.osmUploadNotice',
-    defaultMessage: "These changes will be uploaded to OpenStreetMap on your behalf",
+    id: 'TaskConfirmationModal.osmUploadNotices',
+    defaultMessage: "You are about to edit OpenStreetMap. The following changes will be published and become visible to everyone:",
   },
 
   osmViewChangesetLabel: {
@@ -172,5 +177,20 @@ export default defineMessages({
   metaReviewRequestedLabel: {
     id: 'TaskConfirmationModal.metaReviewRequested.label',
     defaultMessage: "Meta-Review Requested",
+  },
+
+  tagNameLabel: {
+    id: 'TaskConfirmationModal.tagName.label',
+    defaultMessage: "Tag Name",
+  },
+
+  oldValueLabel: {
+    id: 'TaskConfirmationModal.oldValue.label',
+    defaultMessage: "Old Value",
+  },
+
+  newValueLabel: {
+    id: 'TaskConfirmationModal.newValue.label',
+    defaultMessage: "New Value",
   }
 })

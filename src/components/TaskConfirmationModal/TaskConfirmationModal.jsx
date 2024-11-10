@@ -181,7 +181,8 @@ export class TaskConfirmationModal extends Component {
                         <FormattedMessage {...messages.inMetaReviewHeader} /> :
                         <FormattedMessage {...messages.inReviewHeader} />
                       ) :
-                      _isUndefined(this.props.needsRevised) ?
+                      _isUndefined(this.props.needsRevised) ? applyingTagChanges ?
+                        <FormattedMessage {...messages.reviewChangesHeader} /> :
                         <FormattedMessage {...messages.header} /> :
                         (this.props.needsRevised === TaskReviewStatus.needed ?
                           <FormattedMessage {...messages.submitRevisionHeader} /> :
@@ -216,25 +217,63 @@ export class TaskConfirmationModal extends Component {
 
                   {applyingTagChanges &&
                    <Fragment>
-                     <p className="mr-my-4 mr-text-grey-light mr-text-sm">
-                       <FormattedMessage
-                         {...messages.osmUploadNotice }
-                       />
-                     </p>
+                     <div className="mr-border mr-border-gray-300 mr-shadow-md mr-p-4 mr-mt-4">
+                       <p className="mr-mb-2 mr-text-white mr-font-bold mr-bg-blue-600 mr-rounded">
+                         <FormattedMessage
+                           {...messages.osmUploadNotice }
+                         />
+                       </p>
+                       <div className="mr-text-base mr-mt-2 mr-text-yellow">
+                         <FormattedMessage {...messages.osmCommentHeader} />
+                       </div>
 
-                     <div className="mr-text-base mr-mt-2 mr-text-yellow">
-                       <FormattedMessage {...messages.osmCommentHeader} />
-                     </div>
+                       <div>
+                         <textarea
+                           ref={this.commentInputRef}
+                           className="mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-my-1"
+                           rows={2}
+                           value={this.props.osmComment}
+                           onChange={e => this.props.setOSMComment(e.target.value)}
+                         />
+                       </div>
 
-                     <div>
-                       <textarea
-                         ref={this.commentInputRef}
-                         className="mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-mt-1"
-                         rows={2}
-                         cols="1"
-                         value={this.props.osmComment}
-                        onChange={e => this.props.setOSMComment(e.target.value)}
-                       />
+                       <div className="mr-bg-blue-dark shadow-md">
+                         <div className="mr-flex mr-justify-between">
+                           <table className="mr-w-full mr-px-2 mr-border mr-border-gray-300 mr-shadow-sm">
+                             <thead>
+                               <tr>
+                                 <th className="mr-font-bold mr-py-1 mr-text-sm mr-border mr-border-gray-300 text-center" style={{ width: '33%' }}>
+                                   <FormattedMessage {...messages.tagNameLabel} />
+                                 </th>
+                                 <th className="mr-font-bold mr-py-1 mr-text-sm mr-border mr-border-gray-300 text-center" style={{ width: '33%' }}>
+                                   <FormattedMessage {...messages.oldValueLabel} />
+                                 </th>
+                                 <th className="mr-font-bold mr-py-1 mr-text-sm mr-border mr-border-gray-300 text-center" style={{ width: '33%' }}>
+                                   <FormattedMessage {...messages.newValueLabel} />
+                                 </th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                             {_get(this.props, 'tagDiffs[0]') && Object.keys(_get(this.props, 'tagDiffs[0]')).map(tagName => {
+                               const tagChange = _get(this.props, 'tagDiffs[0]')[tagName];
+                               if (['changed', 'removed', 'added'].includes(tagChange.status)) {
+                                 return (
+                                   <tr key={tagName} className={classNames('mr-mb-2  mr-rounded', {
+                                     'mr-text-orange': tagChange.status === 'changed',
+                                     'mr-text-lavender-rose': tagChange.status === 'removed',
+                                     'mr-text-picton-blue': tagChange.status === 'added',
+                                   })}>
+                                     <td className="mr-border mr-border-gray-300 mr-text-center" style={{ width: '33%' }}><strong>{tagName}</strong></td>
+                                     <td className="mr-border mr-border-gray-300 mr-text-center mr-text-red-light" style={{ width: '33%' }}>{tagChange.value || '—'}</td>
+                                     <td className="mr-border mr-border-gray-300 mr-text-center mr-text-green-lighter" style={{ width: '33%' }}><span className="mr-font-semibold">{tagChange.newValue || '—'}</span></td>
+                                   </tr>
+                                 );
+                               }
+                             })}
+                             </tbody>
+                           </table>
+                         </div>
+                       </div>
                      </div>
                    </Fragment>
                   }
