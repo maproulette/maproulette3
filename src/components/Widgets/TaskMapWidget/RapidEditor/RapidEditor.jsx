@@ -10,8 +10,9 @@ import WithSearch from '../../../HOCs/WithSearch/WithSearch';
 import useHash from '../../../../hooks/UseHash';
 import { SET_RAPIDEDITOR } from '../../../../services/RapidEditor/RapidEditor';
 import BusySpinner from '../../../BusySpinner/BusySpinner';
-import messages from './../Messages';
 import { FormattedMessage } from 'react-intl';
+import messages from './../Messages';
+
 /**
  * Generate the initial URL hash for the Rapid editor.
  */
