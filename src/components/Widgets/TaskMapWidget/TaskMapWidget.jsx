@@ -1,13 +1,12 @@
-import { Component } from 'react'
-import { WidgetDataTarget, registerWidgetType }
-       from '../../../services/Widget/Widget'
+import React, { useEffect, useRef } from 'react'
+import { WidgetDataTarget, registerWidgetType } from '../../../services/Widget/Widget'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import TaskMap from '../../TaskPane/TaskMap/TaskMap'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
 import { FormattedMessage } from 'react-intl'
 import EditSwitch from './RapidEditor/EditSwitch'
-import RapidEditor from './RapidEditor/RapidEditor';
+import RapidEditor from './RapidEditor/RapidEditor'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 
@@ -21,98 +20,103 @@ const descriptor = {
   defaultHeight: 19,
 }
 
-export default class TaskMapWidget extends Component {
-  componentWillUnmount = () => {
-    this.props.resumeKeyboardShortcuts()
-  }
+const TaskMapWidget = (props) => {
+  const iframeRef = useRef(null);
+  const { user, task, getUserAppSetting, resumeKeyboardShortcuts, pauseKeyboardShortcuts } = props
 
-  componentDidUpdate(prevProps) {
-    const prevEditMode = prevProps.getUserAppSetting ? prevProps.getUserAppSetting(prevProps.user, 'isEditMode') : false;
-    const currentEditMode = this.props.getUserAppSetting ? this.props.getUserAppSetting(this.props.user, 'isEditMode') : false;
-  
+  useEffect(() => {
+    return () => {
+      resumeKeyboardShortcuts()
+    }
+  }, [resumeKeyboardShortcuts])
+
+  useEffect(() => {
+    const prevEditMode = getUserAppSetting ? getUserAppSetting(user, 'isEditMode') : false
+    const currentEditMode = getUserAppSetting ? getUserAppSetting(user, 'isEditMode') : false
+
     if (currentEditMode !== prevEditMode) {
-      currentEditMode ? this.props.pauseKeyboardShortcuts() : this.props.resumeKeyboardShortcuts();
+      currentEditMode ? pauseKeyboardShortcuts() : resumeKeyboardShortcuts()
     }
+  }, [getUserAppSetting, user, pauseKeyboardShortcuts, resumeKeyboardShortcuts])
+
+  const handleRenderRapid = () => {
+    return (
+      <RapidEditor
+        token={user.osmProfile.requestToken}
+        task={task}
+        comment={task?.parent?.checkinComment ?? "#mapRoulette"}
+      />
+    )
   }
 
-  handleRenderRapid = () => {
-      return (
-        <RapidEditor
-          token={this.props.user.osmProfile.requestToken}
-          task={this.props.task}
-          comment={this.props.task?.parent?.checkinComment ?? "#mapRoulette"}
-        />
-      )
-  }
+  const cooperative = AsCooperativeWork(task).isTagType() || task.cooperativeWork
+  const isReviewing = task?.reviewClaimedBy === user?.id && task?.reviewStatus === 0
+  const disableRapid = cooperative ||
+    props.taskReadOnly || (
+      ![0, 3, 6].includes(task?.status) &&
+      ![2, 4, 5].includes(task?.reviewStatus) &&
+      !isReviewing &&
+      !props.asMetaReview
+    )
 
-  render() {
-    const cooperative = AsCooperativeWork(this.props.task).isTagType() || this.props.task.cooperativeWork
-    const isReviewing = this.props.task?.reviewClaimedBy === this.props.user?.id && this.props.task?.reviewStatus === 0
-    const disableRapid =  cooperative ||
-                          this.props.taskReadOnly || ( 
-                          ![0, 3, 6].includes(this.props.task?.status) && 
-                          ![2, 4, 5].includes(this.props.task?.reviewStatus) 
-                          && !isReviewing 
-                          && !this.props.asMetaReview
-                          )
+  const editMode = disableRapid ?
+    false :
+    getUserAppSetting ?
+      getUserAppSetting(user, 'isEditMode') :
+      false
 
-    const editMode = disableRapid ? 
-                     false : 
-                     this.props.getUserAppSetting ? 
-                     this.props.getUserAppSetting(this.props.user, 'isEditMode') : 
-                     false
-
-    if(!this.props.task.geometries.features){
-      return  (
-        <QuickWidget
-          {...this.props}
-          className="task-map-widget"
-          noMain
-          permanent
-        >
-          <div className="mr-text-lg mr-text-red-light mr-flex">
-            <FormattedMessage {...messages.rapidFailed} />
-          </div>
-        </QuickWidget>
-      )
-    }
-    
+  if (!task.geometries.features) {
     return (
       <QuickWidget
-        {...this.props}
+        {...props}
         className="task-map-widget"
         noMain
         permanent
       >
-        <div
-          className="mr-mt-2"
-          style={{height: "calc(100% - 3rem)"}}
-        >
-          {
-            this.props.getUserAppSetting 
-              ? <>
-                  <div className="mr-flex mr-items-center ">
-                    <div className="mr-text-yellow mr-mr-1 mr-mt-1 mr-mb-2">
-                      <FormattedMessage {...messages.editMode}/>
-                    </div>
-                      <div className="mr-mt-1 mr-mb-2">
-                        <EditSwitch {...this.props} disableRapid={disableRapid} editMode={editMode} />
-                      </div>
-                    </div>
-                </>
-              : null
-          }
-          {
-            editMode
-              ? this.handleRenderRapid()
-              : <MapPane {...this.props}>
-                  <TaskMap {...this.props} challenge={this.props.task.parent} />
-                </MapPane>
-          }
+        <div className="mr-text-lg mr-text-red-light mr-flex">
+          <FormattedMessage {...messages.rapidFailed} />
         </div>
       </QuickWidget>
     )
   }
+
+  return (
+    <QuickWidget
+      {...props}
+      className="task-map-widget"
+      noMain
+      permanent
+    >
+      <div
+        className="mr-mt-2"
+        style={{ height: "calc(100% - 3rem)" }}
+      >
+        {
+          getUserAppSetting ?
+            <>
+              <div className="mr-flex mr-items-center ">
+                <div className="mr-text-yellow mr-mr-1 mr-mt-1 mr-mb-2">
+                  <FormattedMessage {...messages.editMode} />
+                </div>
+                <div className="mr-mt-1 mr-mb-2">
+                  <EditSwitch {...props} disableRapid={disableRapid} editMode={editMode} />
+                </div>
+              </div>
+            </>
+            : null
+        }
+        {
+          editMode
+            ? handleRenderRapid()
+            : <MapPane {...props}>
+                <TaskMap {...props} challenge={task.parent} />
+              </MapPane>
+        }
+      </div>
+    </QuickWidget>
+  )
 }
 
 registerWidgetType(WithKeyboardShortcuts(TaskMapWidget), descriptor)
+
+export default TaskMapWidget

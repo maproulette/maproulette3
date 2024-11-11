@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import _get from 'lodash/get';
 
@@ -42,6 +42,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const iframeRef = useRef(null); // Create a ref for the iframe
   let initialHash = generateStartingHash({ task, mapBounds, comment });
   let [, setHash] = useHash();
 
@@ -63,8 +64,15 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
     initialHash += `&token=${token}`;
   }
 
+  const handleReselectHash = () => {
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow.location.hash = initialHash;
+    }
+  };
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <button onClick={handleReselectHash}>Reselect Initial Hash</button>
       {isLoading && (
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
           <BusySpinner xlarge />
@@ -74,6 +82,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
         <div>Error: {error.message}</div>
       )}
       <iframe
+        ref={iframeRef}
         id="rapid-container-root"
         style={{ width: '100%', height: '100%' }}
         src={`/static/rapid-editor.html${initialHash}`}
