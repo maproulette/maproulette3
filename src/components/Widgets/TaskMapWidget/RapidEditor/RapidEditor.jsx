@@ -10,7 +10,8 @@ import WithSearch from '../../../HOCs/WithSearch/WithSearch';
 import useHash from '../../../../hooks/UseHash';
 import { SET_RAPIDEDITOR } from '../../../../services/RapidEditor/RapidEditor';
 import BusySpinner from '../../../BusySpinner/BusySpinner';
-
+import messages from './../Messages';
+import { FormattedMessage } from 'react-intl';
 /**
  * Generate the initial URL hash for the Rapid editor.
  */
@@ -72,7 +73,13 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <button onClick={handleReselectHash}>Reselect Initial Hash</button>
+      <button 
+        onClick={handleReselectHash} 
+        className="mr-ml-auto mr-button mr-button--small mr-px-2"
+        style={{ position: 'absolute', right: '0px', top: '-40px' }}
+      >
+        <FormattedMessage {...messages.reselectTask} />
+      </button>
       {isLoading && (
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
           <BusySpinner xlarge />
