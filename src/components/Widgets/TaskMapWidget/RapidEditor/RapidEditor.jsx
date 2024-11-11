@@ -65,7 +65,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
     initialHash += `&token=${token}`;
   }
 
-  const handleReselectHash = () => {
+  const handleResetHash = () => {
     if (iframeRef.current) {
       iframeRef.current.contentWindow.location.hash = initialHash;
     }
@@ -74,7 +74,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <button 
-        onClick={handleReselectHash} 
+        onClick={handleResetHash} 
         className="mr-ml-auto mr-button mr-button--small mr-px-2"
         style={{ position: 'absolute', right: '0px', top: '-40px' }}
       >
