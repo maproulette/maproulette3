@@ -68,6 +68,7 @@ const shortcutGroup = 'taskEditing'
 export default class TaskBundleWidget extends Component {
   state = {
     shortcutActive: false,
+    bundleButtonDisabled: false,
   }
 
   handleKeyboardShortcuts = (event) => {
@@ -114,7 +115,7 @@ export default class TaskBundleWidget extends Component {
 
   bundleTasks = () => {
     if (this.props.taskBundle || this.props.bundleEditsDisabled) {
-      return
+      return;
     }
 
     const selectedArray = Array.from(this.props.selectedTasks.selected.values());
@@ -126,7 +127,12 @@ export default class TaskBundleWidget extends Component {
       }
     });
 
+    this.setState({ bundleButtonDisabled: true });
     this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()]);
+
+    setTimeout(() => {
+      this.setState({ bundleButtonDisabled: false });
+    }, 5000);
   }
 
   unbundleTask = (task) => {
@@ -221,6 +227,10 @@ export default class TaskBundleWidget extends Component {
         this.setBoundsToNearbyTask()
       }
     }
+
+    if (this.props.selectedTasks.selected.size !== prevProps.selectedTasks.selected.size) {
+      this.setState({ bundleButtonDisabled: false });
+    }
   }
 
   componentWillUnmount() {
@@ -234,7 +244,7 @@ export default class TaskBundleWidget extends Component {
   }
 
   render() {
-    const WidgetContent = this.props.taskBundle ? ActiveBundle : BuildBundle
+    const WidgetContent = this.props.taskBundle ? ActiveBundle : BuildBundle;
     return (
       <QuickWidget
         {...this.props}
@@ -246,6 +256,7 @@ export default class TaskBundleWidget extends Component {
       >
         <WidgetContent
           {...this.props}
+          errorMessage={this.props.errorMessage}
           saveFilters={this.saveFilters}
           revertFilters={this.revertFilters}
           bundleTasks={this.bundleTasks}
@@ -334,7 +345,7 @@ const ActiveBundle = props => {
       defaultPageSize={5}
     />
   )
-console.log(props)
+
   return (
     <div className="mr-h-full mr-rounded">
       <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px` }}>
@@ -342,6 +353,9 @@ console.log(props)
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
           <MapPane>{map}</MapPane>
+        )}
+        {props.errorMessage && (
+          <div className="mr-text-red">{props.errorMessage}</div>
         )}
         <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4">
           <FormattedMessage
@@ -507,7 +521,9 @@ const BuildBundle = props => {
           <MapPane showLasso>{map}</MapPane>
         }
       </div>
-
+      {props.errorMessage && (
+          <div className="mr-text-red">{props.errorMessage}</div>
+        )}
       <div className={props.widgetLayout && props.widgetLayout?.w === 4 ? "mr-my-4 mr-px-4 mr-space-y-3" : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"}>
         {props.initialBundle && (
           <button

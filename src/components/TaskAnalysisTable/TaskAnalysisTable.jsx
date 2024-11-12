@@ -420,15 +420,17 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: 'remove',
     minWidth: 110,
     Cell: ({ row }) => {
-      const bundlePrimary = props.taskBundle?.tasks.find(task => task.isBundlePrimary)
-      const isTaskSelected = row._original.id === (bundlePrimary?.id || props.task?.id)
-      const alreadyBundled = row._original.bundleId && props.taskBundle?.bundleId !== row._original.bundleId
-      const enableBundleEdits = props.initialBundle?.taskIds?.includes(row._original.id) ||
-                                [0, 3, 6].includes(row._original.status)
-      const isInActiveBundle = props.taskBundle?.taskIds?.includes(row._original.id)
+      const { taskBundle, task, initialBundle } = props;
+      const { id: taskId, bundleId, status } = row._original;
+
+      const isTaskSelected = taskId === task?.id
+      const isInActiveBundle = taskBundle?.taskIds?.includes(taskId);
+      const alreadyBundled = bundleId && taskBundle?.bundleId !== bundleId;
+      const enableBundleEdits = initialBundle?.taskIds?.includes(taskId) || [0, 3, 6].includes(status) && !alreadyBundled
+
       return (
         <div>
-          {!isTaskSelected && enableBundleEdits && !alreadyBundled && isInActiveBundle && (
+          {!isTaskSelected && enableBundleEdits && isInActiveBundle && (
             <button
               disabled={props.bundleEditsDisabled}
               className="mr-text-red-light"
