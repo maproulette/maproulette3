@@ -6,8 +6,7 @@ import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { 
   bundleTasks, 
-  deleteTaskBundle, 
-  removeTaskFromBundle, 
+  deleteTaskBundle,
   fetchTaskBundle, 
   updateTaskBundle, 
   releaseTask, 
@@ -29,7 +28,8 @@ export function WithTaskBundle(WrappedComponent) {
       taskBundle: null,
       completingTask: null,
       selectedTasks: [],
-      resetSelectedTasks: null
+      resetSelectedTasks: null,
+      errorMessage: null
     }
 
     async componentDidMount() {
@@ -71,12 +71,14 @@ export function WithTaskBundle(WrappedComponent) {
 
     updateBundlingConditions = () => {
       const { task, taskReadOnly, workspace, user, name } = this.props
-      const isCompletionWorkspace = ["taskCompletion"].includes(workspace?.name || name)
-      const isReviewWorkspace = ["taskReview"].includes(workspace?.name || name)
+      const workspaceName = workspace?.name || name
+      const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName)
+      const isReviewWorkspace = ["taskReview"].includes(workspaceName)
+
       const completionStatus = isCompletionWorkspace && ([2].includes(task?.reviewStatus) || [0, 3, 6].includes(task?.status))
-      const enableMapperEdits = (!task?.completedBy || user.id === task.completedBy) && completionStatus && !isReviewWorkspace
+      const enableMapperEdits = !task?.completedBy || user.id === task.completedBy
       const enableSuperUserEdits = user.isSuperUser && (completionStatus || isReviewWorkspace)
-      const bundleEditsDisabled = taskReadOnly || (!enableMapperEdits && !enableSuperUserEdits)
+      const bundleEditsDisabled = taskReadOnly || !(enableMapperEdits && completionStatus) && !enableSuperUserEdits
 
       this.setState({ bundleEditsDisabled })
     }
@@ -113,15 +115,17 @@ export function WithTaskBundle(WrappedComponent) {
     }
 
     lockTask = async (taskId) => {
+      this.setState({ loading: true });
       try {
-        const task = await this.props.startTask(taskId)
-        setTimeout(() => localStorage.removeItem(`lock-${taskId}`), 1500)
-        return task.entities.tasks[taskId]
+        const task = await this.props.startTask(taskId, true);
+        setTimeout(() => localStorage.removeItem(`lock-${taskId}`), 1500);
+        return task.entities.tasks[taskId];
       } catch (error) {
-        console.error(`Failed to lock task ${taskId}:`, error)
-        dispatch(addError(`Failed to lock task ${taskId}:`, error))
-        dispatch(addError(AppErrors.challenge.rebuildFailure));
-        throw error
+        console.error(`Failed to lock task ${taskId}:`, error);
+        this.setState({ errorMessage: `Failed to lock task ${taskId}. Please try again.` });
+        throw error;
+      } finally {
+        this.setState({ loading: false });
       }
     }
 
@@ -215,6 +219,7 @@ export function WithTaskBundle(WrappedComponent) {
           bundleEditsDisabled={this.state.bundleEditsDisabled}
           setResetSelectedTasksAccessor={(f) => this.setState({ resetSelectedTasks: f })}
           resetSelectedTasks={this.resetSelectedTasks}
+          errorMessage={this.state.errorMessage}
         />
       )
     }
@@ -224,7 +229,6 @@ export function WithTaskBundle(WrappedComponent) {
 export const mapDispatchToProps = dispatch => bindActionCreators({
   fetchTaskBundle,
   bundleTasks,
-  removeTaskFromBundle,
   deleteTaskBundle,
   updateTaskBundle,
   releaseTask,
