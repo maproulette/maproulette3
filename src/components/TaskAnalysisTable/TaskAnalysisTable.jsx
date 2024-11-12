@@ -520,7 +520,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
           className="mr-mx-4"
           href={props.targetUserOSMProfileUrl()}
           target='_blank'
-          rel="noopener noreferrer"
+          rel="noopener"
         >
           {_get(row._original.completedBy, 'username') || row._original.completedBy}
         </a>
