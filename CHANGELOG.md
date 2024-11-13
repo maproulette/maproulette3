@@ -32,6 +32,8 @@ Released with [maproulette-backend_v4.6.1](https://github.com/maproulette/maprou
 * add filter for active error tags by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2474
 * Fix race condition when loading Rapid editor by @jake-low in https://github.com/maproulette/maproulette3/pull/2472
 * Re-enable view challenge leaderboard link by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2465
+* Add OSM profile link to mapper column in task tables by @tjayschwarz4 in https://github.com/maproulette/maproulette3/pull/2487
+* Rename .env file to fix overrides not being applied by @jake-low in https://github.com/maproulette/maproulette3/pull/2495
 
 ## MR2 Changes
 * Add GH Actions workflow to publish container image to GHCR by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1158
