@@ -34,8 +34,11 @@ Released with [maproulette-backend_v4.6.1](https://github.com/maproulette/maprou
 * Re-enable view challenge leaderboard link by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2465
 * Add OSM profile link to mapper column in task tables by @tjayschwarz4 in https://github.com/maproulette/maproulette3/pull/2487
 * Rename .env file to fix overrides not being applied by @jake-low in https://github.com/maproulette/maproulette3/pull/2495
+* Challenge Rapid Dataset support by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2494
+* add re-select task button in rapid iframe by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2490
 
 ## MR2 Changes
+* Challenge Rapid Dataset support by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1159
 * Add GH Actions workflow to publish container image to GHCR by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1158
 * Mention env variable config overrides in README by @jake-low 
 * Allow overriding MR frontend URL with env variable by @jake-low 
