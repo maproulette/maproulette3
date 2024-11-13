@@ -139,7 +139,7 @@
     "update-layers-prod": "NODE_ENV=production node scripts/update_layers.js",
     "start-js": "vite",
     "start": "npm-run-all -p build-env update-layers start-js",
-    "build-env": "dotenv -c development -- jq -n 'env | with_entries(select(.key | startswith(\"REACT_APP_\")))' > public/env.json",
+    "build-env": "dotenv -c -- jq -n 'env | with_entries(select(.key | startswith(\"REACT_APP_\")))' > public/env.json",
     "build-js": "vite build",
     "build": "yarn run build-env && yarn run build-intl && yarn run update-layers-prod && yarn run build-js",
     "test": "vitest",
