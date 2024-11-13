@@ -23,4 +23,9 @@ export default defineMessages({
     id: "Widgets.TaskMapWidget.rapidFailed",
     defaultMessage: "Widget Failed! Geometries Null!",
   },
+
+  reselectTask: {
+    id: "Widgets.TaskMapWidget.reselectTask",
+    defaultMessage: "Re-Select Task",
+  },
 })
