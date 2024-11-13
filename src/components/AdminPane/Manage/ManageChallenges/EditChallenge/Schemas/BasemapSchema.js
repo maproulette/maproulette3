@@ -43,6 +43,11 @@ export const jsSchema = (intl) => {
         enumNames: _map(defaultBasemapChoices, 'name'),
         default: ChallengeBasemap.none.toString(),
       },
+      datasetUrl: {
+        title: intl.formatMessage(messages.datasetUrlLabel),
+        type: "string",
+        default: "",
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -87,7 +92,7 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
   const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
 
   return {
-    "ui:order": ["defaultBasemap", "customBasemap"],
+    "ui:order": ["defaultBasemap", "customBasemap", "datasetUrl"],
     defaultBasemap: {
       "ui:widget": "select",
       "ui:help": intl.formatMessage(messages.defaultBasemapDescription),
@@ -100,5 +105,11 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:help": intl.formatMessage(messages.customBasemapDescription),
       "ui:collapsed": isCollapsed,
     },
+    datasetUrl: {
+      "ui:emptyValue": "",
+      "ui:help": intl.formatMessage(messages.datasetUrlDescription),
+      "ui:collapsed": isCollapsed,
+      "ui:toggleCollapsed": toggleCollapsed
+    }
   }
 }
