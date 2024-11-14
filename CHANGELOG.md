@@ -7,6 +7,46 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.16.0] - 2024-11-12
+Released with [maproulette-backend_v4.6.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.6.1)
+
+## What's Changed
+* add review changes notice to tag fix completion modal  in https://github.com/maproulette/maproulette3/pull/2482
+* Fix defaultLocale() 'ReferenceError: Locales is not defined' by @jake-low in https://github.com/maproulette/maproulette3/pull/2488
+* add staging notice banner and test environment banners by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2485
+* Simplify loading of localization strings by @jake-low in https://github.com/maproulette/maproulette3/pull/2483
+* Move image files out of src/ by @jake-low 
+* Move translation files out of src/ by @jake-low 
+* Fix version numbers on workflow steps by @jake-low in https://github.com/maproulette/maproulette3/pull/2480
+* Add GitHub Actions workflow to publish official Docker image by @jake-low in https://github.com/maproulette/maproulette3/pull/2479
+* Enable runtime configuration by @jake-low in https://github.com/maproulette/maproulette3/pull/2475
+* Remove dead translation strings from HomePane component by @jake-low
+* Remove unused service worker by @jake-low
+* Read app version from package.json instead of env var by @jake-low
+* Remove unused HomePane component by @jake-low
+* Delete unused translations by @jake-low
+* Delete unused code by @jake-low
+* Bump path-to-regexp from 1.8.0 to 1.9.0 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2476
+* Switch from react-scripts (Create React App) to Vite by @jake-low in https://github.com/maproulette/maproulette3/pull/2462
+* Fix map feature ordering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2460
+* add filter for active error tags by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2474
+* Fix race condition when loading Rapid editor by @jake-low in https://github.com/maproulette/maproulette3/pull/2472
+* Re-enable view challenge leaderboard link by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2465
+* Add OSM profile link to mapper column in task tables by @tjayschwarz4 in https://github.com/maproulette/maproulette3/pull/2487
+* Rename .env file to fix overrides not being applied by @jake-low in https://github.com/maproulette/maproulette3/pull/2495
+* Challenge Rapid Dataset support by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2494
+* add re-select task button in rapid iframe by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2490
+
+## MR2 Changes
+* Challenge Rapid Dataset support by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1159
+* Add GH Actions workflow to publish container image to GHCR by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1158
+* Mention env variable config overrides in README by @jake-low 
+* Allow overriding MR frontend URL with env variable by @jake-low 
+* Add production-ready Dockerfile by @jake-low
+* Add active indicator column to tags table by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1154
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.11...v3.16.0
+
 ## [v3.15.11] - 2024-10-15
 Released with [maproulette-backend_v4.5.6](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.6)
 
