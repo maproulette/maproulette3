@@ -3,7 +3,7 @@ name: Trigger Redeploy
 on:
   # run whenever a new maproulette/maproulette-frontend package is published to GHCR
   registry_package:
-    types: [published]
+    types: [ published, updated ]
 
 jobs:
   trigger:
@@ -17,4 +17,4 @@ jobs:
             https://api.github.com/repos/maproulette/maproulette-deploy/dispatches \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -d '{"event_type": "trigger-workflow" }'
+            -d '{ "event_type": "trigger-workflow" }'
