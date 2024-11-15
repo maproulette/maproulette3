@@ -44,7 +44,7 @@
     "leaflet-vectoricon": "https://github.com/CollinBeczak/Leaflet.VectorIcon",
     "leaflet.markercluster": "^1.5.3",
     "lodash": "4.17.21",
-    "mapillary-js": "^4.1.0",
+    "mapillary-js": "^4.1.2",
     "normalize.css": "^7.0.0",
     "normalizr": "^3.6.0",
     "piwik-react-router": "^0.12.1",
