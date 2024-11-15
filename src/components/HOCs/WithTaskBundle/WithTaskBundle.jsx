@@ -22,14 +22,13 @@ import {
 export function WithTaskBundle(WrappedComponent) {
   return class extends Component {
     state = {
-      loading: false,
-      bundleEditsDisabled: false,
       initialBundle: null,
       taskBundle: null,
-      completingTask: null,
+      bundleEditsDisabled: false,
       selectedTasks: [],
       resetSelectedTasks: null,
-      errorMessage: null
+      errorMessage: null,
+      loading: false,
     }
 
     async componentDidMount() {
@@ -43,7 +42,7 @@ export function WithTaskBundle(WrappedComponent) {
     async componentDidUpdate(prevProps) {
       const { task } = this.props
       if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
-        this.setState({ selectedTasks: [], taskBundle: null, initialBundle: null, loading: false, completingTask: null })
+        this.setState({ selectedTasks: [], taskBundle: null, initialBundle: null, loading: false })
         if (_isFinite(_get(task, 'bundleId'))) {
           await this.fetchBundle(task.bundleId)
         }
@@ -180,10 +179,6 @@ export function WithTaskBundle(WrappedComponent) {
       this.resetSelectedTasks()
     }
 
-    setCompletingTask = task => {
-      this.setState({ selectedTasks: [], completingTask: task })
-    }
-
     updateTaskBundle = async () => {
       const { taskBundle, initialBundle } = this.state
       if (taskBundle || initialBundle) {
@@ -207,8 +202,6 @@ export function WithTaskBundle(WrappedComponent) {
           taskBundle={this.state.taskBundle}
           initialBundle={this.state.initialBundle}
           taskBundleLoading={this.state.loading}
-          setCompletingTask={this.setCompletingTask}
-          completingTask={this.props.completingTask}
           createTaskBundle={this.createTaskBundle}
           updateTaskBundle={this.updateTaskBundle}
           resetTaskBundle={this.resetTaskBundle}

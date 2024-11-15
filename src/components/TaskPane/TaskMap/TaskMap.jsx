@@ -107,17 +107,15 @@ export const TaskMapContent = (props) => {
 
   useMapEvents({
     moveend: () => {
-      if (props.task.id !== props.completingTask) {
-        const bounds = map.getBounds()
-        const zoom = map.getZoom()
-        props.setTaskMapBounds(props.task.id, bounds, zoom, false)
-        if (props.setWorkspaceContext) {
-          props.setWorkspaceContext({
-            taskMapTask: props.task,
-            taskMapBounds: bounds,
-            taskMapZoom: zoom
-          })
-        }
+      const bounds = map.getBounds()
+      const zoom = map.getZoom()
+      props.setTaskMapBounds(props.task.id, bounds, zoom, false)
+      if (props.setWorkspaceContext) {
+        props.setWorkspaceContext({
+          taskMapTask: props.task,
+          taskMapBounds: bounds,
+          taskMapZoom: zoom
+        })
       }
     },
   })

@@ -127,16 +127,7 @@ export class TaskPane extends Component {
                   needsReview, requestedNextTask, osmComment, tagEdits, taskBundle) => {
     this.props.completeTask(task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
                             needsReview, requestedNextTask, osmComment, tagEdits,
-                            this.state.completionResponses, taskBundle).then(() => {
-      this.clearCompletingTask()
-    })
-  }
-
-  clearCompletingTask = () => {
-    // Clear on next tick to give our animation transition a chance to clean up.
-    setTimeout(() => {
-      this.props.setCompletingTask(null)
-    }, 0)
+                            this.state.completionResponses, taskBundle)
   }
 
   setCompletionResponse = (propertyName, value) => {
@@ -387,23 +378,15 @@ export class TaskPane extends Component {
               </div>
             }
             completeTask={this.completeTask}
-            completingTask={this.props.completingTask}
             setCompletionResponse={this.setCompletionResponse}
             setNeedsResponses={this.setNeedsResponses}
             completionResponses={completionResponses}
             needsResponses={this.state.needsResponses}
             templateRevision={isCompletionStatus(this.props.task.status)}
           />
-          {this.props.completingTask && this.props.completingTask === this.props.task.id &&
-           <div
-             className="mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200 mr-bg-blue-firefly-75 mr-flex mr-justify-center mr-items-center"
-           >
-             <BusySpinner big inline />
-           </div>
-          }
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
-          <MapPane completingTask={this.props.completingTask}>
+          <MapPane>
             <TaskMap isMobile
                      task={this.props.task}
                      challenge={this.props.task.parent}

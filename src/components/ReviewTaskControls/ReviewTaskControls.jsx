@@ -50,7 +50,6 @@ export class ReviewTaskControls extends Component {
     if(this.state.tags) {
       this.props.saveTaskTags(this.props.task, this.state.tags)
     }
-    this.props.setCompletingTask(this.props.task.id)
 
     const history = _cloneDeep(this.props.history)
     _merge(_get(history, 'location.state', {}), alternateCriteria)
