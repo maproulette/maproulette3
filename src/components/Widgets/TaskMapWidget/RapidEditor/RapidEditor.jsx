@@ -81,11 +81,14 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
       >
         <FormattedMessage {...messages.reselectTask} />
       </button>
-      {isLoading && (
+      {/* FIXME: disabled because setupRapid() is taking an absurdly long time (>60s)
+        * to complete all of a sudden, even though the editor appears to have loaded and
+        * be ready to use.
+        isLoading && (
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
           <BusySpinner xlarge />
         </div>
-      )}
+      ) */}
       {error && (
         <div>Error: {error.message}</div>
       )}
