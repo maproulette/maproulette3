@@ -143,7 +143,7 @@ export class ActiveTaskControls extends Component {
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
     if (!_isUndefined(this.state.submitRevision)) {
-     await this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
+      await this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
                                         this.state.comment, null,
                                         this.state.revisionLoadBy, this.props.history,
                                         taskBundle, this.state.requestedNextTask,
