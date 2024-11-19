@@ -92,7 +92,6 @@ const Markers = (props) => {
     };
   }, []);
 
-
   useEffect(() => {
     if ((props.taskMarkers && mapMarkers.length === 0) || props.delayMapLoad || (props.bundledOnly !== prevProps.current.bundledOnly) || !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) || props.selectedClusters !== prevProps.current.selectedClusters) {
       refreshSpidered();
