@@ -14,21 +14,15 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 import './OSMElementData.scss'
+import { useQuery } from 'react-query'
 
 const OSM_SERVER = window.env.REACT_APP_OSM_SERVER
 
 const OSMElementData = props => {
-  const [selectedFeatureId, setSelectedFeatureId] = useState(null)
-  const [element, setElement] = useState(null)
-  const [fetchingElement, setFetchingElement] = useState(null)
-  const [fetchedElement, setFetchedElement] = useState(null)
-  const [failedElement, setFailedElement] = useState(null)
-  const [fetchErr, setFetchErr] = useState(null)
-
   const { fetchOSMElement, taskBundle, task: primaryTask } = props
 
   const featureIds = useMemo(() => {
-  const allTasks = taskBundle ? taskBundle.tasks : [primaryTask]
+    const allTasks = taskBundle ? taskBundle.tasks : [primaryTask]
     return _flatten(_compact(_map(allTasks, task => {
       const geometries = AsMappableTask(task).normalizedGeometries()
       return geometries ? _compact(_map(
@@ -38,52 +32,20 @@ const OSMElementData = props => {
     })))
   }, [primaryTask, taskBundle])
 
-  // If there is no selected feature or it is no longer available (e.g. because a task bundle
-  // was unbundled), then update the selection
-  useEffect(() => {
-    if (!selectedFeatureId || featureIds.indexOf(selectedFeatureId) === -1) {
-      setSelectedFeatureId(featureIds[0] ?? null)
-    }
-  }, [featureIds, selectedFeatureId])
+  const [selectedFeatureId, setSelectedFeatureId] = useState(featureIds[0] ?? null)
 
-  // Fetch and process the OSM Data
-  useEffect(() => {
-    if (selectedFeatureId === null) {
-      // No features to fetch, cleanup existing to ensure consistency
-      setElement(null)
-      setFetchedElement(null)
-      return
-    }
+  if (!selectedFeatureId) {
+    return (
+      <FormattedMessage {...messages.noOSMElements} />
+    )
+  }
 
-    // If we're already fetching data for the active feature, or if the fetch failed, or if we already have its data,
-    // there's nothing to do
-    if (fetchingElement === selectedFeatureId || failedElement === selectedFeatureId || fetchedElement === selectedFeatureId) {
-      return
-    }
+  const { isLoading, isError, error: fetchErr, data: element } = useQuery({
+    queryKey: ['OSMElement', selectedFeatureId],
+    queryFn: () => fetchOSMElement(selectedFeatureId)
+  })
 
-    setFetchingElement(selectedFeatureId)
-    setFailedElement(null)
-    setFetchErr(null)
-    fetchOSMElement(selectedFeatureId).then(element => {
-      // If for some reason we don't get any element entries, record a failure
-      // to prevent further attempts to refetch
-      if (!element) { // TODO Can this happen ?
-        setFailedElement(selectedFeatureId)
-        setFetchingElement(null)
-        return
-      }
-
-      setFetchedElement(selectedFeatureId)
-      setElement(element)
-      setFetchingElement(null)
-    }).catch(err => {
-      setFailedElement(selectedFeatureId)
-      setFetchErr(err)
-      setFetchingElement(null)
-    })
-  }, [selectedFeatureId, fetchingElement, failedElement, fetchedElement, fetchOSMElement])
-
-  if (fetchingElement) {
+  if (isLoading) {
     return (
       <div className="mr-flex mr-justify-center mr-items-center mr-w-full mr-h-full">
         <BusySpinner />
@@ -91,35 +53,31 @@ const OSMElementData = props => {
     )
   }
 
-  const activeFeatureId = selectedFeatureId ? selectedFeatureId : featureIds[0]
-  if (failedElement === activeFeatureId) {
+  if (isError) {
     return (
       <div className="mr-flex mr-flex-col mr-text-red-light">
-        <FormattedMessage {...messages.elementFetchFailed} values={{element: activeFeatureId}} />
+        <FormattedMessage {...messages.elementFetchFailed} values={{element: selectedFeatureId}} />
         {fetchErr && fetchErr.defaultMessage && <FormattedMessage {...fetchErr} />}
       </div>
     )
   }
 
-  if (!element) {
-    return (
-      <FormattedMessage {...messages.noOSMElements} />
-    )
-  }
-
-  const tagsValues = _map(element.tag, tag => <Fragment key={tag.k}><dt>{tag.k}</dt><dd>{tag.v}</dd></Fragment>)
+  const tagsValues = _map(
+    element.tag,
+    ({k, v}) => <Fragment key={k}><dt>{k}</dt><dd>{v}</dd></Fragment>
+  )
 
   return (
     <div className="mr-mr-4">
       <div className="mr-flex mr-justify-between mr-links-green-lighter mr-mb-4">
         <FeatureSelectionDropdown
           featureIds={featureIds}
-          selectedFeatureId={activeFeatureId}
+          selectedFeatureId={selectedFeatureId}
           selectFeatureId={setSelectedFeatureId}
         />
         <a
           className="mr-button mr-button--xsmall"
-          href={`${OSM_SERVER}/${activeFeatureId}`}
+          href={`${OSM_SERVER}/${selectedFeatureId}`}
           target="_blank"
           rel="noopener noreferrer"
         >
