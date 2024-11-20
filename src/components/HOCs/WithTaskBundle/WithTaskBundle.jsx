@@ -14,7 +14,7 @@ import {
   startTask 
 } from '../../../services/Task/Task'
 
-const LOCK_REFRESH_INTERVAL = 600000;
+const LOCK_REFRESH_INTERVAL = 600000
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -34,7 +34,7 @@ export function WithTaskBundle(WrappedComponent) {
       loading: false,
     }
 
-    refreshLockInterval = null;
+    refreshLockInterval = null
 
     async componentDidMount() {
       const { task } = this.props
@@ -42,30 +42,33 @@ export function WithTaskBundle(WrappedComponent) {
         await this.fetchBundle(task.bundleId)
       }
       this.updateBundlingConditions()
-      this.startLockRefresh()
     }
 
-    async componentDidUpdate(prevProps, prevState) {
+    async componentDidUpdate(prevProps) {
       const { task } = this.props
-      const { taskBundle } = this.state
-      const { taskBundle: prevTaskBundle } = prevState
+
       if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
+        if (this.state.taskBundle) {
+          this.unlockTasks(this.state.taskBundle, null)
+        }
+        
         this.setState({ selectedTasks: [], taskBundle: null, initialBundle: null, loading: false, errorMessage: null })
         if (_isFinite(_get(task, 'bundleId'))) {
           await this.fetchBundle(task.bundleId)
         }
         this.updateBundlingConditions()
       }
-      if (taskBundle !== prevTaskBundle) {
-        this.startLockRefresh()
-      }
     }
 
     componentWillUnmount() {
       this.stopLockRefresh()
+      if (this.state.taskBundle) {
+        this.unlockTasks(this.state.taskBundle, null)
+      }
     }
 
     startLockRefresh = () => {
+      this.stopLockRefresh()
       this.refreshLockInterval = setInterval(() => {
         const { taskBundle } = this.state
         if (taskBundle) {
@@ -92,6 +95,7 @@ export function WithTaskBundle(WrappedComponent) {
           selectedTasks: taskBundle?.taskIds || [], 
           bundleEditsDisabled: this.updateBundlingConditions() 
         })
+        this.startLockRefresh()
       } catch (error) {
         console.error("Error fetching bundle:", error)
         this.setState({ errorMessage: "Failed to fetch task bundle. Please try again." })
@@ -133,39 +137,56 @@ export function WithTaskBundle(WrappedComponent) {
       }
     }
 
-    unlockTasks = async (taskBundle,initialBundle) => {
-      const tasksToUnlock = taskBundle.taskIds
-      if(initialBundle){
-        tasksToUnlock.filter(taskId => !initialBundle.taskIds.includes(taskId))
-      }
-      await Promise.all(tasksToUnlock.map(taskId =>
-        this.props.releaseTask(taskId).then(() => {
-          setTimeout(() => localStorage.removeItem(`lock-${taskId}`), 1500)
-        }).catch(console.error)
+    unlockTasks = async (taskBundle, initialBundle) => {
+      const { task } = this.props
+      const tasksToUnlock = taskBundle.taskIds.filter(taskId => 
+        !initialBundle?.taskIds.includes(taskId) && taskId !== task.id
+      )
+
+      await Promise.all(tasksToUnlock.map(taskId => 
+        this.props.releaseTask(taskId).catch(console.error)
       ))
     }
 
     lockTask = async (taskId) => {
-      this.setState({ loading: true });
+      const { task } = this.props
+      if (task.id === taskId) {
+        return task
+      }
+
+      this.setState({ loading: true })
       try {
-        const task = await this.props.startTask(taskId, true);
-        setTimeout(() => localStorage.removeItem(`lock-${taskId}`), 1500);
-        return task.entities.tasks[taskId];
+        const task = await this.props.startTask(taskId, true)
+        return task.entities.tasks[taskId]
       } catch (error) {
-        console.error(`Failed to lock task ${taskId}:`, error);
-        this.setState({ errorMessage: `Failed to lock task ${taskId}. Please try again.` });
-        throw error;
+        console.error(`Failed to lock task ${taskId}:`, error)
+        this.setState({ errorMessage: `Failed to lock task ${taskId}. Please try again.` })
+        throw error
       } finally {
-        this.setState({ loading: false });
+        this.setState({ loading: false })
       }
     }
 
-    clearActiveTaskBundle = async () => {
-      await this.unlockTasks()
-      this.setState({ selectedTasks: [], taskBundle: null })
+    createTaskBundle = async (taskIds, bundleTypeMismatch) => {
+      if (bundleTypeMismatch) {
+        throw new Error("Bundle type mismatch")
+      }
+
+      try {
+        const updatedTasks = await Promise.all(taskIds.map(this.lockTask))
+        this.setState({ taskBundle: { ...this.state.taskBundle, tasks: updatedTasks, taskIds } })
+        this.startLockRefresh()
+      } catch (error) {
+        console.error("Failed to create task bundle due to locking error:", error)
+      }
     }
 
     refreshTaskLock = async (taskId) => {
+      const { task } = this.props
+      if (task.id === taskId) {
+        return
+      }
+
       try {
         await this.props.refreshTaskLock(taskId)
       } catch (error) {
@@ -174,20 +195,14 @@ export function WithTaskBundle(WrappedComponent) {
       }
     }
   
-    createTaskBundle = async (taskIds, bundleTypeMismatch) => {
-      if (bundleTypeMismatch) {
-        throw new Error("Bundle type mismatch")
-      }
-
-      try {
-        const updatedTasks = await Promise.all(taskIds.map(taskId => 
-          this.lockTask(taskId)
-        ))
-
-        this.setState({ taskBundle: { ...this.state.taskBundle, tasks: updatedTasks, taskIds } })
-      } catch (error) {
-        console.error("Failed to create task bundle due to locking error:", error)
-      }
+    clearActiveTaskBundle = async () => {
+      const { taskBundle, initialBundle } = this.state
+      await this.unlockTasks(taskBundle, initialBundle)
+      this.setState({
+        selectedTasks: [],
+        taskBundle: null,
+      })
+      this.resetSelectedTasks()
     }
 
     resetTaskBundle = () => {
@@ -198,7 +213,7 @@ export function WithTaskBundle(WrappedComponent) {
     }
 
     removeTaskFromBundle = async (taskId) => {
-      const { taskBundle } = this.state
+      const { taskBundle, initialBundle } = this.state
       if (taskBundle?.taskIds.length === 2) {
         this.setState({ taskBundle: null })
         return
@@ -207,19 +222,12 @@ export function WithTaskBundle(WrappedComponent) {
       const updatedTaskIds = taskBundle.taskIds.filter(id => id !== taskId)
       const updatedTasks = taskBundle.tasks.filter(task => task.id !== taskId)
       const updatedTaskBundle = { ...taskBundle, taskIds: updatedTaskIds, tasks: updatedTasks }
-      await this.unlockTasks(updatedTaskBundle, taskBundle)
+
+      if (initialBundle && !initialBundle.taskIds.includes(taskId)) {
+        await this.unlockTasks(updatedTaskBundle, taskBundle)
+      }
 
       this.setState({ taskBundle: updatedTaskBundle })
-    }
-
-    clearActiveTaskBundle = async () => {
-      const { taskBundle, initialBundle } = this.state
-        await this.unlockTasks(taskBundle, initialBundle)
-        this.setState({
-          selectedTasks: [],
-        taskBundle: null,
-      })
-      this.resetSelectedTasks()
     }
 
     updateTaskBundle = async () => {
