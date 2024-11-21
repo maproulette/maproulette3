@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, useMemo } from 'react'
+import { Fragment, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl }
        from 'react-intl'
@@ -13,12 +13,12 @@ import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
-import './OSMElementData.scss'
+import './OSMElementTags.scss'
 import { useQuery } from 'react-query'
 
 const OSM_SERVER = window.env.REACT_APP_OSM_SERVER
 
-const OSMElementData = props => {
+const OSMElementTags = props => {
   const { fetchOSMElement, taskBundle, task: primaryTask } = props
 
   const featureIds = useMemo(() => {
@@ -32,13 +32,14 @@ const OSMElementData = props => {
     })))
   }, [primaryTask, taskBundle])
 
-  const [selectedFeatureId, setSelectedFeatureId] = useState(featureIds[0] ?? null)
-
-  if (!selectedFeatureId) {
+  if (featureIds.length === 0) {
     return (
       <FormattedMessage {...messages.noOSMElements} />
     )
   }
+
+  const [selectedFeatureId, setSelectedFeatureId] = useState(featureIds[0])
+  const widgetLayoutProps = { featureIds, selectedFeatureId, setSelectedFeatureId }
 
   const { isLoading, isError, error: fetchErr, data: element } = useQuery({
     queryKey: ['OSMElement', selectedFeatureId],
@@ -47,18 +48,22 @@ const OSMElementData = props => {
 
   if (isLoading) {
     return (
-      <div className="mr-flex mr-justify-center mr-items-center mr-w-full mr-h-full">
-        <BusySpinner />
-      </div>
+      <WidgetLayout {...widgetLayoutProps}>
+        <div className="mr-flex mr-justify-center mr-items-center mr-w-full mr-h-full">
+          <BusySpinner />
+        </div>
+      </WidgetLayout>
     )
   }
 
   if (isError) {
     return (
-      <div className="mr-flex mr-flex-col mr-text-red-light">
-        <FormattedMessage {...messages.elementFetchFailed} values={{element: selectedFeatureId}} />
-        {fetchErr && fetchErr.defaultMessage && <FormattedMessage {...fetchErr} />}
-      </div>
+      <WidgetLayout {...widgetLayoutProps}>
+        <div className="mr-flex mr-flex-col mr-text-red-light">
+          <FormattedMessage {...messages.elementFetchFailed} values={{element: selectedFeatureId}} />
+          {fetchErr && fetchErr.defaultMessage && <FormattedMessage {...fetchErr} />}
+        </div>
+      </WidgetLayout>
     )
   }
 
@@ -68,34 +73,40 @@ const OSMElementData = props => {
   )
 
   return (
-    <div className="mr-mr-4">
-      <div className="mr-flex mr-justify-between mr-links-green-lighter mr-mb-4">
-        <FeatureSelectionDropdown
-          featureIds={featureIds}
-          selectedFeatureId={selectedFeatureId}
-          selectFeatureId={setSelectedFeatureId}
-        />
-        <a
-          className="mr-button mr-button--xsmall"
-          href={`${OSM_SERVER}/${selectedFeatureId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FormattedMessage {...messages.viewOSMLabel} />
-        </a>
-      </div>
+    <WidgetLayout {...widgetLayoutProps}>
       <dl className='tag-list'>
         {tagsValues}
       </dl>
-    </div>
+    </WidgetLayout>
   )
 }
 
-OSMElementData.propTypes = {
+OSMElementTags.propTypes = {
   task: PropTypes.object,
   taskBundle: PropTypes.object,
   fetchOSMElement: PropTypes.func.isRequired,
 }
+
+const WidgetLayout = props =>(
+  <div className="mr-mr-4">
+    <div className="mr-flex mr-justify-between mr-links-green-lighter mr-mb-4">
+      <FeatureSelectionDropdown
+        featureIds={props.featureIds}
+        selectedFeatureId={props.selectedFeatureId}
+        selectFeatureId={props.setSelectedFeatureId}
+      />
+      <a
+        className="mr-button mr-button--xsmall"
+        href={`${OSM_SERVER}/${props.selectedFeatureId}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <FormattedMessage {...messages.viewOSMLabel} />
+      </a>
+    </div>
+    {props.children}
+  </div>
+)
 
 const FeatureSelectionDropdown = props => {
   if (props.featureIds.length === 0) {
@@ -129,8 +140,8 @@ const FeatureSelectionDropdown = props => {
           </a>
         </Fragment>
       )}
-      dropdownContent={() =>
-        <ol className="mr-list-dropdown">
+      dropdownContent={({closeDropdown}) =>
+        <ol className="mr-list-dropdown" onClick={closeDropdown}>
           {menuItems}
         </ol>
       }
@@ -138,4 +149,4 @@ const FeatureSelectionDropdown = props => {
   );
 }
 
-export default injectIntl(OSMElementData)
+export default injectIntl(OSMElementTags)

@@ -1,21 +1,21 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with OSMElementData
+ * Internationalized messages for use with OSMElementTags
  */
 export default defineMessages({
   noOSMElements: {
-    id: "OSMElementData.noOSMElements",
+    id: "OSMElementTags.noOSMElements",
     defaultMessage: "No OSM elements identified in task",
   },
 
   elementFetchFailed: {
-    id: "OSMElementData.elementFetchFailed",
+    id: "OSMElementTags.elementFetchFailed",
     defaultMessage: "Failed to fetch tags for {element}",
   },
 
   viewOSMLabel: {
-    id: "OSMElementData.controls.viewOSM.label",
+    id: "OSMElementTags.controls.viewOSM.label",
     defaultMessage: "View OSM",
   },
 })
