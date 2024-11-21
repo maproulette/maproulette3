@@ -95,7 +95,9 @@ export function WithTaskBundle(WrappedComponent) {
           selectedTasks: taskBundle?.taskIds || [], 
           bundleEditsDisabled: this.updateBundlingConditions() 
         })
-        this.startLockRefresh()
+        if(!this.props.taskReadOnly) {
+          this.startLockRefresh()
+        }
       } catch (error) {
         console.error("Error fetching bundle:", error)
         this.setState({ errorMessage: "Failed to fetch task bundle. Please try again." })
