@@ -42,6 +42,7 @@ export function WithTaskBundle(WrappedComponent) {
         await this.fetchBundle(task.bundleId)
       }
       this.updateBundlingConditions()
+      window.addEventListener('beforeunload', this.handleBeforeUnload)
     }
 
     async componentDidUpdate(prevProps) {
@@ -61,6 +62,14 @@ export function WithTaskBundle(WrappedComponent) {
     }
 
     componentWillUnmount() {
+      this.stopLockRefresh()
+      if (this.state.taskBundle) {
+        this.unlockTasks(this.state.taskBundle, null)
+      }
+      window.removeEventListener('beforeunload', this.handleBeforeUnload)
+    }
+
+    handleBeforeUnload = () => {
       this.stopLockRefresh()
       if (this.state.taskBundle) {
         this.unlockTasks(this.state.taskBundle, null)
