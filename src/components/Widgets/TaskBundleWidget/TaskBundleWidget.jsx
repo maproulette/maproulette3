@@ -11,14 +11,16 @@ import _pick from 'lodash/pick'
 import _map from 'lodash/map'
 import bbox from '@turf/bbox'
 import { point, featureCollection } from '@turf/helpers'
-import { WidgetDataTarget, registerWidgetType } from '../../../services/Widget/Widget'
-import { buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'
+import { WidgetDataTarget, registerWidgetType }
+       from '../../../services/Widget/Widget'
+       import { buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 import TaskPropertyFilter from '../../TaskFilters/TaskPropertyFilter'
 import TaskPriorityFilter from '../../TaskFilters/TaskPriorityFilter'
 import TaskStatusFilter from '../../TaskFilters/TaskStatusFilter'
-import WithSelectedClusteredTasks from '../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks'
+import WithSelectedClusteredTasks
+       from '../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks'
 import WithBrowsedChallenge from '../../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithNearbyTasks from '../../HOCs/WithNearbyTasks/WithNearbyTasks'
 import WithTaskClusterMarkers from '../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
@@ -27,11 +29,13 @@ import WithClusteredTasks from '../../HOCs/WithClusteredTasks/WithClusteredTasks
 import WithFilterCriteria from '../../HOCs/WithFilterCriteria/WithFilterCriteria'
 import WithTaskPropertyKeys from '../../HOCs/WithTaskPropertyKeys/WithTaskPropertyKeys'
 import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
-import WithFilteredClusteredTasks from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
+import WithFilteredClusteredTasks
+       from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import WithSavedFilters from '../../HOCs/WithSavedFilters/WithSavedFilters'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
-import WithWebSocketSubscriptions from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
+import WithWebSocketSubscriptions
+       from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
 import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -88,7 +92,7 @@ export default class TaskBundleWidget extends Component {
 
     const shortcuts = keyboardShortcutGroups.taskEditing;
     if (event.key === shortcuts.completeTogether.key) {
-      this.bundleTasks();
+      this.bundleTasks()
     }
   }
 
@@ -97,7 +101,7 @@ export default class TaskBundleWidget extends Component {
    * and initially within bounds of "nearby" tasks as a starting point for the
    * widget map
    */
-  initializeClusterFilters(prevProps = {}) {
+  initializeClusterFilters(prevProps={}) {
     // If the nearby tasks loaded, update bounds
     if (_get(this.props, 'nearbyTasks.tasks.length', 0) > 0 &&
         !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)) {
@@ -105,10 +109,9 @@ export default class TaskBundleWidget extends Component {
     }
   }
 
-  initializeWebsocketSubscription(prevProps = {}) {
+  initializeWebsocketSubscription(prevProps={}) {
     const challengeId = _get(this.props.task, 'parent.id')
-    if (_isFinite(challengeId) &&
-        (challengeId !== _get(prevProps.task, 'parent.id'))) {
+    if (_isFinite(challengeId) && (challengeId !== _get(prevProps.task, 'parent.id'))) {
       this.props.subscribeToChallengeTaskMessages(challengeId)
     }
   }
@@ -164,18 +167,18 @@ export default class TaskBundleWidget extends Component {
   }
 
   saveFilters = () => {
-    if (!this.props.criteria) return
+    if(!this.props.criteria) return
     const searchURL = buildSearchURL(this.props.criteria)
-    this.props.updateUserAppSetting(this.props.user.id, { 'taskBundleFilters': searchURL })
+    this.props.updateUserAppSetting(this.props.user.id, {'taskBundleFilters': searchURL})
   }
 
   revertFilters = () => {
-    if (this.props.clearAllFilters) {
+    if(this.props.clearAllFilters) {
       this.props.clearAllFilters()
     }
-
-    if (this.props.updateUserAppSetting) {
-      this.props.updateUserAppSetting(this.props.user.id, { 'taskBundleFilters': '' })
+    
+    if(this.props.updateUserAppSetting) {
+      this.props.updateUserAppSetting(this.props.user.id, {'taskBundleFilters': ''})
     }
   }
 
@@ -188,7 +191,7 @@ export default class TaskBundleWidget extends Component {
     if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
       this.props.selectTasks([this.props.task])
     }
-    if (this.props.taskBundle) {
+    if(this.props.taskBundle) {
       this.props.selectTasks(this.props.taskBundle.tasks)
       this.setBoundsToNearbyTask()
     }
@@ -207,7 +210,7 @@ export default class TaskBundleWidget extends Component {
         _pick(this.props.keyboardShortcutGroups.taskEditing, 'completeTogether'),
         this.handleKeyboardShortcuts
       )
-    } else if (this.state.shortcutActive === true && this.props.selectedTaskCount(this.props.taskInfo.totalCount) <= 1) {
+    } else if (this.state.shortcutActive === true && this.props.selectedTaskCount(this.props.taskInfo.totalCount) <= 1){
       this.setState({ shortcutActive: false })
       this.props.deactivateKeyboardShortcut(shortcutGroup, 'completeTogether', this.handleKeyboardShortcuts)
     }
@@ -217,19 +220,16 @@ export default class TaskBundleWidget extends Component {
         this.props.task.id !== prevProps.task.id) {
       this.props.resetSelectedTasks()
       this.setBoundsToNearbyTask()
-    } else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
+    }
+    else if (this.props.task && this.props.selectedTasks && !this.props.isTaskSelected(this.props.task.id)) {
       this.props.selectTasks([this.props.task])
     }
-    if (this.props.taskBundle && this.props.taskBundle !== prevProps.taskBundle) {
+    if(this.props.taskBundle && this.props.taskBundle !== prevProps.taskBundle) {
       await this.props.resetSelectedTasks()
       this.props.selectTasks(this.props.taskBundle.tasks)
-      if (!prevProps.taskBundle) {
+      if(!prevProps.taskBundle){
         this.setBoundsToNearbyTask()
       }
-    }
-
-    if (this.props.selectedTasks.selected.size !== prevProps.selectedTasks.selected.size) {
-      this.setState({ bundleButtonDisabled: false });
     }
   }
 
@@ -280,7 +280,7 @@ const calculateTasksInChallenge = props => {
 const ActiveBundle = props => {
   const showMarkerPopup = markerData => {
     return (
-      <Popup key={markerData.options.taskId} offset={props.task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]}>
+      <Popup key={markerData.options.taskId} offset={props.task.id === markerData.options.taskId ? [0.5, -16] :  [0.5, -5]}>
         <div className="marker-popup-content">
           <TaskMarkerContent
             {...props}
@@ -299,13 +299,15 @@ const ActiveBundle = props => {
   const bundleCenter = toLatLngBounds(
     bbox({
       type: 'FeatureCollection',
-      features: _map(props.taskBundle.tasks, task => ({
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [task.location.coordinates[0], task.location.coordinates[1]]
-        }
-      }))
+      features: _map(props.taskBundle.tasks, task =>
+        ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [task.location.coordinates[0], task.location.coordinates[1]]
+          }
+        })
+      )
     })
   );
 
@@ -326,7 +328,7 @@ const ActiveBundle = props => {
     <TaskAnalysisTable
       {...props}
       selectedTasks={new Map()}
-      taskData={props.bundledOnly && props.taskBundle ? _get(props, 'taskBundle.tasks') : _get(props, 'taskInfo.tasks')}
+      taskData={props.bundledOnly && props.taskBundle ? _get(props, 'taskBundle.tasks'): _get(props, 'taskInfo.tasks')}
       totalTaskCount={
         _get(props, 'taskInfo.totalCount') ||
         _get(props, 'taskInfo.tasks.length')
@@ -348,7 +350,7 @@ const ActiveBundle = props => {
 
   return (
     <div className="mr-h-full mr-rounded">
-      <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px` }}>
+      <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px`}}>
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
@@ -476,17 +478,17 @@ const BuildBundle = props => {
 
   const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
   const bundleButton = !props.taskReadOnly && props.selectedTaskCount(totalTaskCount) > 1 && !props.bundleEditsDisabled ? (
-    <button
-      className="mr-button mr-button--green-lighter mr-button--small"
-      onClick={props.bundleTasks}
-    >
-      <FormattedMessage {...messages.bundleTasksLabel} />
-    </button>
+      <button
+        className="mr-button mr-button--green-lighter mr-button--small"
+        onClick={props.bundleTasks}
+      >
+        <FormattedMessage {...messages.bundleTasksLabel} />
+      </button>
   ) : null
 
   const showMarkerPopup = (markerData) => {
     return (
-      <Popup key={markerData.options.taskId} offset={props.task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]}>
+      <Popup key={markerData.options.taskId} offset={props.task.id === markerData.options.taskId ? [0.5, -16] :  [0.5, -5]}>
         <div className="marker-popup-content">
           <TaskMarkerContent
             {...props}
@@ -498,7 +500,7 @@ const BuildBundle = props => {
     )
   }
 
-  const map = (
+  const map =
     <ClusterMap
       {...props}
       showMarkerPopup={showMarkerPopup}
@@ -511,11 +513,10 @@ const BuildBundle = props => {
       fitbBoundsControl
       showSelectMarkersInView
     />
-  )
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
-      <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px` }}>
+      <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px`}}>
         {props.loading ?
           <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
           <MapPane showLasso>{map}</MapPane>
@@ -550,11 +551,11 @@ const BuildBundle = props => {
             </li>
           </ul>
         </div>
-
+        
         <div className={`mr-flex mr-space-x-3 mr-items-center ${props.widgetLayout && props.widgetLayout?.w === 4 ? 'mr-justify-between' : 'mr-justify-end'}`}>
-          {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
+        {<ClearFiltersControl clearFilters={props.clearAllFilters}/>}
           <Dropdown
-            className="mr-flex mr-items-center"
+          className="mr-flex mr-items-center"
             dropdownButton={(dropdown) => (
               <button
                 onClick={dropdown.toggleDropdownVisible}
@@ -569,8 +570,8 @@ const BuildBundle = props => {
             )}
             dropdownContent={(dropdown) => (
               <div className='mr-flex mr-flex-col mr-space-y-2'>
-                <SaveFiltersControl saveFilters={props.saveFilters} closeDropdown={dropdown.closeDropdown} />
-                <RevertFiltersControl revertFilters={props.revertFilters} />
+                <SaveFiltersControl saveFilters={props.saveFilters} closeDropdown={dropdown.closeDropdown}/>
+                <RevertFiltersControl revertFilters={props.revertFilters}/>
               </div>
             )}
           />
@@ -581,7 +582,7 @@ const BuildBundle = props => {
           {...props}
           taskData={_get(props, 'taskInfo.tasks')}
           totalTaskCount={totalTaskCount}
-          totalTasksInChallenge={calculateTasksInChallenge(props)}
+          totalTasksInChallenge={ calculateTasksInChallenge(props) }
           showColumns={['selected', 'featureId', 'id', 'status', 'priority', 'comments']}
           customHeaderControls={bundleButton}
           suppressManagement
@@ -629,8 +630,8 @@ registerWidgetType(
   ), descriptor
 )
 
-const RevertFiltersControl = ({ revertFilters }) => {
-  const handleClick = () => { revertFilters() }
+const RevertFiltersControl = ({revertFilters}) => {
+  const handleClick = () => {revertFilters()}
   return (
     <button className="mr-flex mr-items-center mr-text-current hover:mr-text-green-lighter mr-transition-colors"
       onClick={handleClick}>
@@ -639,9 +640,9 @@ const RevertFiltersControl = ({ revertFilters }) => {
   )
 }
 
-const SaveFiltersControl = ({ saveFilters, closeDropdown }) => {
+const SaveFiltersControl = ({saveFilters, closeDropdown}) => {
   const handleClick = () => {
-    saveFilters()
+    saveFilters() 
     closeDropdown()
   }
   return (
@@ -652,7 +653,7 @@ const SaveFiltersControl = ({ saveFilters, closeDropdown }) => {
   )
 }
 
-const ClearFiltersControl = ({ clearFilters }) => (
+const ClearFiltersControl = ({clearFilters}) => (
   <button className="mr-flex mr-items-center mr-text-green-lighter"
     onClick={clearFilters}>
     <SvgSymbol sym="close-icon"
