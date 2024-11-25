@@ -256,13 +256,17 @@ export default class TaskBundleWidget extends Component {
       >
         <WidgetContent
           {...this.props}
-          errorMessage={this.props.errorMessage}
           saveFilters={this.saveFilters}
           revertFilters={this.revertFilters}
           bundleTasks={this.bundleTasks}
           unbundleTask={this.unbundleTask}
           loading={this.props.loading}
         />
+        {this.props.errorMessage && (
+          <div className="mr-text-red">
+            <FormattedMessage id={this.props.errorMessage} defaultMessage={this.props.errorMessage} />
+          </div>
+        )}
       </QuickWidget>
     )
   }
@@ -357,7 +361,9 @@ const ActiveBundle = props => {
           <MapPane>{map}</MapPane>
         )}
         {props.errorMessage && (
-          <div className="mr-text-red">{props.errorMessage}</div>
+          <div className="mr-text-red">
+            <FormattedMessage {...messages[props.errorMessage]} />
+          </div>
         )}
         <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4">
           <FormattedMessage
@@ -523,8 +529,10 @@ const BuildBundle = props => {
         }
       </div>
       {props.errorMessage && (
-          <div className="mr-text-red">{props.errorMessage}</div>
-        )}
+        <div className="mr-text-red">
+          <FormattedMessage {...messages[props.errorMessage]} />
+        </div>
+      )}
       <div className={props.widgetLayout && props.widgetLayout?.w === 4 ? "mr-my-4 mr-px-4 mr-space-y-3" : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"}>
         {props.initialBundle && (
           <button

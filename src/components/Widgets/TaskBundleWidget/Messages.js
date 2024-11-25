@@ -134,4 +134,24 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.readOnly",
     defaultMessage: "Previewing task in read-only mode",
   },
+
+  fetchBundleError: {
+    id: "Widgets.TaskBundleWidget.fetchBundleError",
+    defaultMessage: "Failed to fetch task bundle. Please try again.",
+  },
+
+  lockTaskError: {
+    id: "Widgets.TaskBundleWidget.lockTaskError",
+    defaultMessage: "Failed to lock task {taskId}. Please try again.",
+  },
+
+  refreshTaskLockError: {
+    id: "Widgets.TaskBundleWidget.refreshTaskLockError",
+    defaultMessage: "Failed to refresh task lock. Please try again.",
+  },
+
+  updateTaskBundleError: {
+    id: "Widgets.TaskBundleWidget.updateTaskBundleError",
+    defaultMessage: "Failed to update task bundle. Please try again.",
+  },
 })

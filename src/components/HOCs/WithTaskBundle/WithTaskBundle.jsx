@@ -109,7 +109,7 @@ export function WithTaskBundle(WrappedComponent) {
         }
       } catch (error) {
         console.error("Error fetching bundle:", error)
-        this.setState({ errorMessage: "Failed to fetch task bundle. Please try again." })
+        this.setState({ errorMessage: {fetchBundleError} })
       } finally {
         this.setState({ loading: false })
       }
@@ -171,7 +171,7 @@ export function WithTaskBundle(WrappedComponent) {
         return task.entities.tasks[taskId]
       } catch (error) {
         console.error(`Failed to lock task ${taskId}:`, error)
-        this.setState({ errorMessage: `Failed to lock task ${taskId}. Please try again.` })
+        this.setState({ errorMessage: {lockTaskError, values: { taskId }} })
         throw error
       } finally {
         this.setState({ loading: false })
