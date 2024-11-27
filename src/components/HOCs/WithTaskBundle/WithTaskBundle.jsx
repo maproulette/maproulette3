@@ -241,6 +241,17 @@ export function WithTaskBundle(WrappedComponent) {
       this.setState({ taskBundle: updatedTaskBundle })
     }
 
+    addTaskToBundle = async (taskId) => {
+      const { taskBundle } = this.state
+      const task =  await this.lockTask(taskId)
+      const updatedTaskBundle = { 
+        ...taskBundle, 
+        taskIds: [...taskBundle.taskIds, taskId], 
+        tasks: [...taskBundle.tasks, task] 
+      }
+      this.setState({ taskBundle: updatedTaskBundle })
+    }
+
     updateTaskBundle = async () => {
       const { taskBundle, initialBundle } = this.state
       if (taskBundle || initialBundle) {
@@ -272,6 +283,7 @@ export function WithTaskBundle(WrappedComponent) {
           updateTaskBundle={this.updateTaskBundle}
           resetTaskBundle={this.resetTaskBundle}
           removeTaskFromBundle={this.removeTaskFromBundle}
+          addTaskToBundle={this.addTaskToBundle}
           clearActiveTaskBundle={this.clearActiveTaskBundle}
           setSelectedTasks={(selectedTasks) => this.setState({ selectedTasks })}
           selectedTasks={this.state.selectedTasks}

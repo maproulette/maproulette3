@@ -62,7 +62,7 @@ const descriptor = {
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap('taskBundling')),
   true,
-  true,
+  false,
   false,
   false
 )
@@ -92,7 +92,7 @@ export default class TaskBundleWidget extends Component {
 
     const shortcuts = keyboardShortcutGroups.taskEditing;
     if (event.key === shortcuts.completeTogether.key) {
-      this.bundleTasks()
+      this.createBundle()
     }
   }
 
@@ -116,7 +116,7 @@ export default class TaskBundleWidget extends Component {
     }
   }
 
-  bundleTasks = () => {
+  createBundle = () => {
     if (this.props.taskBundle || this.props.bundleEditsDisabled) {
       return;
     }
@@ -141,6 +141,12 @@ export default class TaskBundleWidget extends Component {
   unbundleTask = (task) => {
     const taskId = task.id ?? task.taskId 
     this.props.removeTaskFromBundle(taskId)
+    this.props.toggleTaskSelection(task)
+  }
+
+  bundleTask = (task) => {
+    const taskId = task.id ?? task.taskId 
+    this.props.addTaskToBundle(taskId)
     this.props.toggleTaskSelection(task)
   }
 
@@ -258,8 +264,9 @@ export default class TaskBundleWidget extends Component {
           {...this.props}
           saveFilters={this.saveFilters}
           revertFilters={this.revertFilters}
-          bundleTasks={this.bundleTasks}
+          createBundle={this.createBundle}
           unbundleTask={this.unbundleTask}
+          bundleTask={this.bundleTask}
           loading={this.props.loading}
         />
         {this.props.errorMessage && (
@@ -486,7 +493,7 @@ const BuildBundle = props => {
   const bundleButton = !props.taskReadOnly && props.selectedTaskCount(totalTaskCount) > 1 && !props.bundleEditsDisabled ? (
       <button
         className="mr-button mr-button--green-lighter mr-button--small"
-        onClick={props.bundleTasks}
+        onClick={props.createBundle}
       >
         <FormattedMessage {...messages.bundleTasksLabel} />
       </button>

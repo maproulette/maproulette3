@@ -119,7 +119,21 @@ class TaskMarkerContent extends Component {
                     >
                       <FormattedMessage {...messages.removeFromBundle} />
                     </button>
-                  ) : null}
+                  ) : (
+                    !alreadyBundled && (
+                      <button
+                        disabled={this.props.bundleEditsDisabled}
+                        onClick={() => this.props.bundleTask(this.props.marker.options)}
+                        className="mr-text-green mr-border-solid mr-border mr-border-green mr-px-2 mr-mb-1"
+                        style={{
+                          cursor: this.props.bundleEditsDisabled ? 'default' : 'pointer',
+                          opacity: this.props.bundleEditsDisabled ? 0.3 : 1,
+                        }}
+                      >
+                        <FormattedMessage {...messages.addToBundle} />
+                      </button>
+                    )
+                  )}
                 </div>
               ) : null}
             </label>

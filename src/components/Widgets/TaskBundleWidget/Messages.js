@@ -93,6 +93,11 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.removeFromBundle",
     defaultMessage: "Remove from bundle",
   },
+  
+  addToBundle: {
+    id: "Widgets.TaskBundleWidget.addToBundle",
+    defaultMessage: "Add to bundle",
+  },
 
   unbundleTasksLabel: {
     id: "Widgets.TaskBundleWidget.controls.stopBundlinsg.label",
