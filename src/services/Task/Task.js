@@ -997,29 +997,6 @@ export const deleteTaskBundle = function(bundleId) {
   }
 }
 
-export const removeTaskFromBundle = function (initialBundleTaskIds, bundleId, taskIds) {
-  return function (dispatch) {
-    return new Endpoint(api.tasks.removeTaskFromBundle, {
-      variables: { id: bundleId },
-      params: { id: bundleId, taskIds: taskIds, preventTaskIdUnlocks: initialBundleTaskIds || [] },
-    })
-      .execute()
-      .then((results) => {
-        return results;
-      })
-      .catch((error) => {
-        if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
-          );
-        } else {
-          dispatch(addError(AppErrors.task.removeTaskFromBundleFailure));
-          console.log(error.response || error);
-        }
-      });
-  };
-};
-
 /**
  * Retrieve and process a single task retrieval from the given endpoint (next
  * task, previous task, random task, etc).

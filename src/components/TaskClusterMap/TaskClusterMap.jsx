@@ -62,7 +62,7 @@ export const TaskClusterMap = (props) => {
 
   useEffect(() => {
     // Check condition for toggling showAsClusters
-    if (!props.showAsClusters && props.totalTaskCount > UNCLUSTER_THRESHOLD) {
+    if (!props.showAsClusters && props.totalTaskCount > UNCLUSTER_THRESHOLD && !props.createTaskBundle) {
       props.toggleShowAsClusters();
     }
 
@@ -250,7 +250,7 @@ export const TaskClusterMap = (props) => {
       <ResizeMap />
       <AttributionControl position="bottomleft" prefix={false} />
       {(Boolean(props.loading) || Boolean(props.loadingChallenge)) && <BusySpinner mapMode xlarge />}
-      {props.totalTaskCount && props.totalTaskCount <= UNCLUSTER_THRESHOLD && !searchOpen && !props.loading &&
+      {props.totalTaskCount && props.totalTaskCount <= UNCLUSTER_THRESHOLD && !searchOpen && !props.loading && !props.createTaskBundle &&
         <label htmlFor="show-clusters-input" className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
           <input
             id="show-clusters-input"
