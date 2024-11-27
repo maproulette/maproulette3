@@ -255,6 +255,7 @@ export class TaskAnalysisTableInternal extends Component {
               <ViewTaskSubComponent taskId={props.original.id} />
             }
             unbundleTask={this.props.unbundleTask}
+            bundleTask={this.props.bundleTask}
             collapseOnDataChange={false}
             minRows={1}
             manual
@@ -444,6 +445,23 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
               <FormattedMessage {...messages.unbundle} />
             </button>
           )}
+
+
+          {!isActiveTask && validBundlingStatus && !isInActiveBundle && !alreadyBundled && (
+            <button
+              disabled={props.bundleEditsDisabled}
+              className="mr-text-green-lighter"
+              style={{
+                cursor: props.bundleEditsDisabled ? 'default' : 'pointer',
+                opacity: props.bundleEditsDisabled ? 0.3 : 1,
+                pointerEvents: props.bundleEditsDisabled ? 'none' : 'auto'
+              }}
+              onClick={() => props.bundleTask(row._original)}
+            >
+              <FormattedMessage {...messages.bundle} />
+            </button>
+          )}
+  
   
           {isActiveTask && <div className="mr-text-yellow">Primary Task</div>}
         </div>
