@@ -116,9 +116,8 @@ const apiRoutes = (factory) => {
       fetchReviewClusters: factory.get("/taskCluster/review"),
       inCluster: factory.get("/tasksInCluster/:clusterId"),
       bundle: factory.post("/taskBundle"),
-      resetBundle: factory.post("/taskBundle/:bundleId/reset"),
+      updateBundle: factory.post("/taskBundle/:bundleId/update"),
       deleteBundle: factory.delete("/taskBundle/:bundleId"),
-      removeTaskFromBundle: factory.post("/taskBundle/:id/unbundle"),
       fetchBundle: factory.post("/taskBundle/:bundleId"),
       bundled: {
         updateStatus: factory.put("/taskBundle/:bundleId/:status"),
