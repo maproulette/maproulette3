@@ -38,7 +38,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
        query: param => this.props.setSearch(param),
        challengeSearch: param => this.props.setChallengeSearchMapBounds(toLatLngBounds(param), true),
        archived: param => this.props.setSearchFilters({ archived: param === "true" }),
-       filterGlobal: param => this.props.setSearchFilters({ filterGlobal: param === "true" })
+       global: param => this.props.setSearchFilters({ global: param === "true" })
     }
 
     state = {

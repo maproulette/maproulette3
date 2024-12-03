@@ -1,5 +1,5 @@
 export const challengePassesGlobalFilter = function(filter, challenge) {
-  if (filter.filterGlobal) {
+  if (filter.global) {
     return challenge.isGlobal === false
   }
 

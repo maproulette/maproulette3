@@ -443,8 +443,8 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
       queryParams.ca = filters.archived;
     }
 
-    if (filters.filterGlobal) {
-      queryParams.fg = filters.filterGlobal;
+    if (filters.global) {
+      queryParams.cg = filters.global;
     }
 
     // Keywords/tags can come from both the the query and the filter, so we need to

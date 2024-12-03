@@ -46,9 +46,9 @@ const ShowChallengeListTogglesInternal = (props) => {
       <input
         type="checkbox"
         className="mr-checkbox-toggle mr-mr-1 mr-mb-6 mr-ml-4"
-        checked={props.filteringGlobal}
+        checked={props.showingGlobal}
         onChange={() => {
-          props.setSearchFilters({ filterGlobal: !props.filteringGlobal })
+          props.setSearchFilters({ global: !props.showingGlobal })
         }}
       />
       <div className="mr-text-sm mr-mx-1"><FormattedMessage {...messages.showGlobalLabel} /></div>
@@ -127,7 +127,7 @@ export class ChallengePane extends Component {
 
   render() {
     const showingArchived = this.props.history.location.search.includes("archived=true");
-    const filteringGlobal = this.props.history.location.search.includes("filterGlobal=true")
+    const showingGlobal = this.props.history.location.search.includes("global=true")
     const challengeStatus = [ChallengeStatus.ready,
                              ChallengeStatus.partiallyLoaded,
                              ChallengeStatus.none,
@@ -166,7 +166,7 @@ export class ChallengePane extends Component {
         <div className="mr-p-6 lg:mr-flex mr-cards-inverse">
           <div className="mr-flex-0">
             <LocationFilter {...this.props} />
-            <ShowChallengeListToggles showingArchived={showingArchived} filteringGlobal={filteringGlobal} {...this.props} />
+            <ShowChallengeListToggles showingArchived={showingArchived} showingGlobal={showingGlobal} {...this.props} />
             <ChallengeResults {...this.props} />
           </div>
           <div className="mr-flex-1">

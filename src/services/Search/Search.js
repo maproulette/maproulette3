@@ -96,7 +96,7 @@ export const PARAMS_MAP = {
   tags: 'tt',
   excludeTasks: 'tExcl',
   archived: "ca",
-  filterGlobal: "fg"
+  global: "cg"
 }
 
 
@@ -159,8 +159,8 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
   if (filters.archived) {
     searchParameters[PARAMS_MAP.archived] = filters.archived;
   }
-  if (filters.filterGlobal) {
-    searchParameters[PARAMS_MAP.filterGlobal] = filters.filterGlobal;
+  if (filters.global) {
+    searchParameters[PARAMS_MAP.global] = filters.global;
   }
   if (filters.reviewRequestedBy) {
     searchParameters[PARAMS_MAP.reviewRequestedBy] = filters.reviewRequestedBy
