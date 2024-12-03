@@ -66,7 +66,7 @@ export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispat
     const searchParameters = generateSearchParametersString(
       filters,
       null,
-      _get(criteria, 'savedChallengesOnly'),
+      criteria.savedChallengesOnly,
       null,
       null,
       _get(criteria, 'invertFields')
