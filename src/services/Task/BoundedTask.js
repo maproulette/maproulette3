@@ -9,7 +9,6 @@ import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import _get from 'lodash/get'
 import _values from 'lodash/values'
-import _isArray from 'lodash/isArray'
 import _isUndefined from 'lodash/isUndefined'
 import _map from 'lodash/map'
 import { generateSearchParametersString } from '../Search/Search'
@@ -93,7 +92,7 @@ export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispat
     // If we are searching within map bounds we need to ensure the parent
     // challenge is also within those bounds
     if (filters.location === CHALLENGE_LOCATION_WITHIN_MAPBOUNDS) {
-      if (_isArray(criteria.boundingBox)) {
+      if (Array.isArray(criteria.boundingBox)) {
         searchParameters.bb = criteria.boundingBox.join(',')
       } else {
         searchParameters.bb = criteria.boundingBox
@@ -200,7 +199,7 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
     // If we are searching within map bounds we need to ensure the parent
     // challenge is also within those bounds
     if (filters.location === CHALLENGE_LOCATION_WITHIN_MAPBOUNDS) {
-      if (_isArray(criteria.boundingBox)) {
+      if (Array.isArray(criteria.boundingBox)) {
         searchParameters.bb = criteria.boundingBox.join(',')
       }
       else {
@@ -276,7 +275,7 @@ export const currentBoundedTasks = function(state={}, action) {
           updatedTasks.loading = true
         }
         else {
-          updatedTasks.tasks = _isArray(action.tasks) ? action.tasks : []
+          updatedTasks.tasks = Array.isArray(action.tasks) ? action.tasks : []
           updatedTasks.loading = false
           updatedTasks.totalCount = action.totalCount
         }
