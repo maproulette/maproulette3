@@ -111,10 +111,11 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         // Fetch up to threshold+1 individual tasks (eg. 1001 tasks)
         this.props.fetchBoundedTaskMarkers(searchCriteria, UNCLUSTER_THRESHOLD + 1, !storeTasks, ignoreLocked).then(results => {
           if (currentFetchId >= this.state.fetchId) {
+            const totalCount = results.length
             // If we retrieved 1001 tasks then there might be more tasks and
             // they should be clustered. So fetch as clusters
             // (unless we are zoomed all the way in already)
-            if (results.totalCount > UNCLUSTER_THRESHOLD &&
+            if (totalCount > UNCLUSTER_THRESHOLD &&
                 _get(this.props, 'criteria.zoom', 0) < MAX_ZOOM) {
               this.props.fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable
               ).then(results => {
@@ -127,8 +128,8 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
               })
             }
             else {
-              this.setState({clusters: results.tasks, loading: false,
-                             taskCount: results.totalCount})
+              this.setState({clusters: results, loading: false,
+                             taskCount: totalCount})
             }
           }
         }).catch(error => {

@@ -124,17 +124,13 @@ export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispat
       }
     ).execute().then(({ result }) => {
       let tasks = result ? Object.values(result) : [];
-      const totalCount = tasks.length
       tasks = tasks.map(task => Object.assign(task, task.pointReview))
 
       if (!skipDispatch) {
-        dispatch(receiveBoundedTasks(tasks, RequestStatus.success, fetchId, totalCount))
+        dispatch(receiveBoundedTasks(tasks, RequestStatus.success, fetchId, tasks.length))
       }
 
-      return {
-        tasks,
-        totalCount
-      }
+      return tasks
     }).catch(error => {
       dispatch(receiveBoundedTasks([], RequestStatus.error, fetchId))
       dispatch(addError(AppErrors.boundedTask.fetchFailure))
