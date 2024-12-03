@@ -123,8 +123,8 @@ export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispat
           taskPropertySearch: filters.taskPropertySearch
         } : null,
       }
-    ).execute().then(normalizedResults => {
-      let tasks = _values(_get(normalizedResults, 'result', {}))
+    ).execute().then(({ result }) => {
+      let tasks = result ? Object.values(result) : [];
       const totalCount = tasks.length
       tasks = _map(tasks, task =>
         Object.assign(task, {}, task.pointReview)
