@@ -126,11 +126,11 @@ export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispat
     ).execute().then(({ result }) => {
       let tasks = result ? Object.values(result) : [];
       const totalCount = tasks.length
-      tasks = _map(tasks, task =>
-        Object.assign(task, {}, task.pointReview)
-      )
+      tasks = tasks.map(task => Object.assign(task, task.pointReview))
 
-      !skipDispatch && dispatch(receiveBoundedTasks(tasks, RequestStatus.success, fetchId, totalCount))
+      if (!skipDispatch) {
+        dispatch(receiveBoundedTasks(tasks, RequestStatus.success, fetchId, totalCount))
+      }
 
       return {
         tasks,
