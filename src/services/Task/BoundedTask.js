@@ -62,7 +62,7 @@ export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispat
       return null
     }
 
-    const filters = _get(criteria, 'filters', {})
+    const filters = criteria.filters ?? {};
     const searchParameters = generateSearchParametersString(
       filters,
       null,
