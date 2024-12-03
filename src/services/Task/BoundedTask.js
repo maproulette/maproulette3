@@ -73,9 +73,7 @@ export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispat
     )
 
     if (!filters.challengeId) {
-      const onlyEnabled = _isUndefined(criteria.onlyEnabled) ?
-        true :
-        criteria.onlyEnabled
+      const onlyEnabled = criteria.onlyEnabled ?? true;
       const challengeStatus = criteria.challengeStatus
       if (challengeStatus) {
         searchParameters.cStatus = challengeStatus.join(',')
