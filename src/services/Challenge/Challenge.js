@@ -443,6 +443,10 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
       queryParams.ca = filters.archived;
     }
 
+    if (filters.global) {
+      queryParams.cg = filters.global;
+    }
+
     // Keywords/tags can come from both the the query and the filter, so we need to
     // combine them into a single keywords array.
     const keywords = queryParts.tagTokens.concat(
