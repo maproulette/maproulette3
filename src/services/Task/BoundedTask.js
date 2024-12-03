@@ -69,7 +69,7 @@ export const fetchBoundedTaskMarkers = function(criteria, limit = 50, skipDispat
       criteria.savedChallengesOnly,
       null,
       null,
-      _get(criteria, 'invertFields')
+      criteria.invertFields
     )
 
     if (!filters.challengeId) {
