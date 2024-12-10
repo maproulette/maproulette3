@@ -2,12 +2,13 @@ import React, { useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { IntlProvider } from 'react-intl'
 import { ZoomControl, LayerGroup, Pane, MapContainer, useMap, useMapEvents, AttributionControl } from 'react-leaflet'
-import { featureCollection } from '@turf/helpers'
-import { coordAll } from '@turf/meta'
-import { point } from '@turf/helpers'
-import _isObject from 'lodash/isObject'
 import L from 'leaflet'
+import { featureCollection, point } from '@turf/helpers'
+import { coordAll } from '@turf/meta'
+import booleanDisjoint from '@turf/boolean-disjoint'
+import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
@@ -19,47 +20,33 @@ import _flatten from 'lodash/flatten'
 import _isEmpty from 'lodash/isEmpty'
 import _clone from 'lodash/clone'
 import _omit from 'lodash/omit'
-import { buildLayerSources, DEFAULT_OVERLAY_ORDER }
-       from '../../../services/VisibleLayer/LayerSources'
-import DirectionalIndicationMarker
-       from '../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker'
+import { buildLayerSources, DEFAULT_OVERLAY_ORDER } from '../../../services/VisibleLayer/LayerSources'
+import { MAX_ZOOM, DEFAULT_ZOOM } from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
+import AsMappableTask from '../../../interactions/Task/AsMappableTask'
+import AsSimpleStyleableFeature, { supportedSimplestyles } from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
+import AsIdentifiableFeature from '../../../interactions/TaskFeature/AsIdentifiableFeature'
+import DirectionalIndicationMarker from '../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker'
 import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'
 import OpenStreetCamViewer from '../../OpenStreetCamViewer/OpenStreetCamViewer'
-import SourcedTileLayer
-       from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
+import SourcedTileLayer from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import OSMDataLayer from '../../EnhancedMap/OSMDataLayer/OSMDataLayer'
 import ImageMarkerLayer from '../../EnhancedMap/ImageMarkerLayer/ImageMarkerLayer'
 import TaskFeatureLayer from '../../EnhancedMap/TaskFeatureLayer/TaskFeatureLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
-import FitBoundsControl
-       from '../../EnhancedMap/FitBoundsControl/FitBoundsControl'
+import FitBoundsControl from '../../EnhancedMap/FitBoundsControl/FitBoundsControl'
 import MapAnimator from '../../EnhancedMap/MapAnimator/MapAnimator'
-import WithTaskCenterPoint
-       from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
+import WithTaskCenterPoint from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
 import WithSearch from '../../HOCs/WithSearch/WithSearch'
-import WithIntersectingOverlays
-       from '../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
+import WithIntersectingOverlays from '../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
-import WithKeyboardShortcuts
-       from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithMapillaryImages from '../../HOCs/WithMapillaryImages/WithMapillaryImages'
-import WithOpenStreetCamImages
-       from '../../HOCs/WithOpenStreetCamImages/WithOpenStreetCamImages'
-import { MAX_ZOOM, DEFAULT_ZOOM }
-       from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
-import AsMappableTask from '../../../interactions/Task/AsMappableTask'
-import AsSimpleStyleableFeature
-       from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
-import { supportedSimplestyles }
-       from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
+import WithOpenStreetCamImages from '../../HOCs/WithOpenStreetCamImages/WithOpenStreetCamImages'
 import BusySpinner from '../../BusySpinner/BusySpinner'
-import './TaskMap.scss'
-import booleanDisjoint from '@turf/boolean-disjoint'
-import AsIdentifiableFeature from '../../../interactions/TaskFeature/AsIdentifiableFeature'
-import messages from './Messages'
-import { IntlProvider } from 'react-intl'
 import PropertyList from '../../EnhancedMap/PropertyList/PropertyList'
 import { orderedFeatureLayers, animateFeatures, getClickPolygon, isClickOnMarker } from './helperFunctions'
+import messages from './Messages'
+import './TaskMap.scss'
 
 const shortcutGroup = 'layers'
 
@@ -73,18 +60,18 @@ const shortcutGroup = 'layers'
 export const TaskMapContent = (props) => {
   const map = useMap()
   const [showTaskFeatures, setShowTaskFeatures] = useState(true)
-  const [showOSMData, setShowOSMData] = useState(false)
   const [osmData, setOsmData] = useState(null)
-  const [osmDataLoading, setOsmDataLoading] = useState(null)
+  const [showOSMData, setShowOSMData] = useState(false)
+  const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
+  const [osmDataLoading, setOsmDataLoading] = useState(false)
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null)
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null)
   const [directionalityIndicators, setDirectionalityIndicators] = useState({})
-  const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
+
   const taskFeatures = () => {
     if (_get(props, 'taskBundle.tasks.length', 0) > 0) {
       return featureCollection(
-        _flatten(_compact(_map(props.taskBundle.tasks,
-                               task => _get(task, 'geometries.features'))))
+        _flatten(_compact(_map(props.taskBundle.tasks, task => _get(task, 'geometries.features'))))
       ).features
     }
 
@@ -102,6 +89,7 @@ export const TaskMapContent = (props) => {
 
     return _get(props.task, 'geometries.features')
   }
+
   const features = taskFeatures()
   const animator = new MapAnimator()
 
@@ -122,35 +110,21 @@ export const TaskMapContent = (props) => {
     },
   })
 
-   /** Process keyboard shortcuts for the layers */
+  /** Process keyboard shortcuts for the layers */
   const handleKeyboardShortcuts = event => {
-    // Ignore if shortcut group is not active
-    if (_isEmpty(props.activeKeyboardShortcuts[shortcutGroup])) {
-      return
-    }
-
-    if (props.textInputActive(event)) { // ignore typing in inputs
-      return
-    }
-
-    // Ignore if modifier keys were pressed
-    if (event.metaKey || event.altKey || event.ctrlKey) {
-      return
-    }
-    
     const layerShortcuts = props.keyboardShortcutGroups[shortcutGroup]
-    switch(event.key) {
-      case layerShortcuts.layerOSMData.key:
-        toggleOSMDataVisibility()
-        break
-      case layerShortcuts.layerTaskFeatures.key:
-        toggleTaskFeatureVisibility()
-        break
-      case layerShortcuts.layerMapillary.key:
-        toggleMapillaryVisibility()
-        break
-      default:
+    if (_isEmpty(layerShortcuts) || props.textInputActive(event) || event.metaKey || event.altKey || event.ctrlKey) {
+      return
     }
+
+    const actions = {
+      [layerShortcuts.layerOSMData.key]: toggleOSMDataVisibility,
+      [layerShortcuts.layerTaskFeatures.key]: toggleTaskFeatureVisibility,
+      [layerShortcuts.layerMapillary.key]: toggleMapillaryVisibility
+    }
+
+    const action = actions[event.key]
+    if (action) action()
   }
 
   const popupLayerSelectionList = (layers, latlng) => {
@@ -160,21 +134,19 @@ export const TaskMapContent = (props) => {
       <div className="mr-text-base mr-px-4 mr-links-blue-light">
         <h3>{props.intl.formatMessage(messages.layerSelectionHeader)}</h3>
         <ol>
-          {layers.map(([description, layerInfo], index) => {
-            return (
-              <IntlProvider
-                key={`${description}-${index}`}  // Ensure unique key for each item
-                locale={props.intl.locale}
-                messages={props.intl.messages}
-                textComponent="span"
-              >
-                <PropertyList
-                  header={description}
-                  featureProperties={_omit(layerInfo?.geometry?.properties, ['id', 'type'])}
-                />
-              </IntlProvider>
-            );
-          })}
+          {layers.map(([description, layerInfo], index) => (
+            <IntlProvider
+              key={`${description}-${index}`}
+              locale={props.intl.locale}
+              messages={props.intl.messages}
+              textComponent="span"
+            >
+              <PropertyList
+                header={description}
+                featureProperties={_omit(layerInfo?.geometry?.properties, ['id', 'type'])}
+              />
+            </IntlProvider>
+          ))}
         </ol>
       </div>,
       contentElement
@@ -279,12 +251,29 @@ export const TaskMapContent = (props) => {
    * OSM data on or off.
    */
   const toggleOSMDataVisibility = () => {
-    if (!showOSMData && !osmData && !osmDataLoading) {
-      setOsmDataLoading(true)
-      fetchOSMData()
+    if (osmDataLoading) {
+      return;
     }
-    setShowOSMData(!showOSMData)
-    setOsmDataLoading(false)
+
+    const loadOSMData = !showOSMData;
+    setOsmDataLoading(true);
+    setShowOSMData(loadOSMData);
+
+    if (loadOSMData) {
+      props.fetchOSMData(map.getBounds().toBBoxString())
+        .then(xmlData => {
+          setOsmData(xmlData);
+        })
+        .catch(error => {
+          console.error("Error fetching OSM data:", error);
+        })
+        .finally(() => {
+          setOsmDataLoading(false);
+        });
+    } else {
+      setOsmData(null);
+      setOsmDataLoading(false);
+    }
   }
 
   const toggleOSMElements = element => {
@@ -292,25 +281,26 @@ export const TaskMapContent = (props) => {
     newShowOSMElements[element] = !showOSMElements[element]
     setShowOSMElements(newShowOSMElements)
   }
+
   /**
    * Invoked by LayerToggle when the user wishes to toggle visibility of
    * Mapillary markers on or off.
    */
   const toggleMapillaryVisibility = async () => {
     const isVirtual = _isFinite(props.virtualChallengeId)
-    const challengeId = isVirtual ? props.virtualChallengeId :
-                                    props.challenge.id
+    const challengeId = isVirtual ? props.virtualChallengeId : props.challenge.id
+
     // If enabling layer, fetch fresh data. This allows users to toggle the
     // layer off and on to refresh the data, e.g. if they have moved the map
     // and wish to expand coverage of mapillary imagery
     if (!props.showMapillaryLayer) {
       props.setShowMapillaryLayer(challengeId, isVirtual, true)
-      await props.fetchMapillaryImagery(
-        map.getBounds(),
-        props.task
-      )
-    }
-    else {
+      try {
+        await props.fetchMapillaryImagery(map.getBounds(), props.task)
+      } catch (error) {
+        console.error("Error fetching Mapillary imagery:", error);
+      }
+    } else {
       props.setShowMapillaryLayer(challengeId, isVirtual, !props.showMapillaryLayer)
     }
   }
@@ -322,12 +312,12 @@ export const TaskMapContent = (props) => {
     // If we're supposed to show mapillary images but don't have them for
     // this task, go ahead and fetch them
     if (props.task && props.showMapillaryLayer) {
-      if (props.mapillaryTaskId !== props.taskId ||
-          (!props.mapillaryImages && !props.mapillaryLoading)) {
-        await props.fetchMapillaryImagery(
-          map.getBounds(),
-          props.task
-        )
+      if (props.mapillaryTaskId !== props.taskId || (!props.mapillaryImages && !props.mapillaryLoading)) {
+        try {
+          await props.fetchMapillaryImagery(map.getBounds(), props.task)
+        } catch (error) {
+          console.error("Error loading Mapillary imagery:", error);
+        }
       }
     }
   }
@@ -338,19 +328,18 @@ export const TaskMapContent = (props) => {
    */
   const toggleOpenStreetCamVisibility = async () => {
     const isVirtual = _isFinite(props.virtualChallengeId)
-    const challengeId = isVirtual ? props.virtualChallengeId :
-                                    props.challenge.id
+    const challengeId = isVirtual ? props.virtualChallengeId : props.challenge.id
     // If enabling layer, fetch fresh data. This allows users to toggle the
     // layer off and on to refresh the data, e.g. if they have moved the map
     // and wish to expand coverage of OpenStreetCam imagery
     if (!props.showOpenStreetCamLayer) {
       props.setShowOpenStreetCamLayer(challengeId, isVirtual, true)
-      await props.fetchOpenStreetCamImagery(
-        map.getBounds(),
-        props.task
-      )
-    }
-    else {
+      try {
+        await props.fetchOpenStreetCamImagery(map.getBounds(), props.task)
+      } catch (error) {
+        console.error("Error fetching OpenStreetCam imagery:", error);
+      }
+    } else {
       props.setShowOpenStreetCamLayer(challengeId, isVirtual, !props.showOpenStreetCamLayer)
     }
   }
@@ -362,12 +351,12 @@ export const TaskMapContent = (props) => {
     // If we're supposed to show openStreetCam images but don't have them for
     // this task, go ahead and fetch them
     if (props.task && props.showOpenStreetCamLayer) {
-      if (props.openStreetCamTaskId !== props.taskId ||
-          (!props.openStreetCamImages && !props.openStreetCamLoading)) {
-        await props.fetchOpenStreetCamImagery(
-          map.getBounds(),
-          props.task
-        )
+      if (props.openStreetCamTaskId !== props.taskId || (!props.openStreetCamImages && !props.openStreetCamLoading)) {
+        try {
+          await props.fetchOpenStreetCamImagery(map.getBounds(), props.task)
+        } catch (error) {
+          console.error("Error loading OpenStreetCam imagery:", error);
+        }
       }
     }
   }
@@ -377,7 +366,6 @@ export const TaskMapContent = (props) => {
       _pick(props.keyboardShortcutGroups, shortcutGroup),
       handleKeyboardShortcuts
     );
-  
     loadMapillaryIfNeeded();
     loadOpenStreetCamIfNeeded();
     generateDirectionalityMarkers();
@@ -412,6 +400,12 @@ export const TaskMapContent = (props) => {
       );
       map.fitBounds(layerGroup.getBounds().pad(0.2));
     }
+
+    setShowOSMData(false)
+    setOsmData(null)
+    setOsmDataLoading(false)
+    generateDirectionalityMarkers();
+
     map.closePopup()
   }, [props.taskBundle, props.taskId]);
 
@@ -423,8 +417,7 @@ export const TaskMapContent = (props) => {
         return
       }
 
-      const styles =
-        AsSimpleStyleableFeature(feature, _get(props, 'challenge.taskStyles')).getFinalLayerStyles()
+      const styles = AsSimpleStyleableFeature(feature, _get(props, 'challenge.taskStyles')).getFinalLayerStyles()
       const coords = coordAll(feature)
       if (["yes", "true", "1"].indexOf(feature.properties.oneway) !== -1) {
         for (let i = 0; i < coords.length - 1; i++) {
@@ -662,19 +655,13 @@ const TaskMap = (props) => {
 
 TaskMap.propTypes = {
   taskBundle: PropTypes.object,
-  centerPoint: PropTypes.object.isRequired,
-};
-
-TaskMap.propTypes = {
-  /** The task for which to display the map */
-  task: PropTypes.object,
-  /** Invoked when the bounds of the map are modified by the user */
-  setTaskMapBounds: PropTypes.func.isRequired,
   /**
    * The desired centerpoint of the map in (Lat, Lng).
    * @see See WithTaskCenterpoint HOC
    */
   centerPoint: PropTypes.object.isRequired,
+  task: PropTypes.object,
+  setTaskMapBounds: PropTypes.func.isRequired,
 }
 
 export default WithSearch(
