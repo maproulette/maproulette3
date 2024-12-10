@@ -1,13 +1,24 @@
 import { fetchOpenStreetCamImages } from './OpenStreetCam'
 
 describe('OpenStreetCam Service Functions', () => {
+  const cachedEnv = window.env;
+
   beforeEach(() => {
-    jest.clearAllMocks()
-    process.env.REACT_APP_IMAGERY_OPENSTREETCAM = 'enabled'
+    vi.resetModules();
+    window.env = { ...cachedEnv, REACT_APP_IMAGERY_OPENSTREETCAM: 'disabled' };
+  });
+
+  afterAll(() => {
+    window.env = cachedEnv;
+  });
+
+  beforeEach(() => {
+    vitest.clearAllMocks()
+    window.env.REACT_APP_IMAGERY_OPENSTREETCAM = 'enabled'
   })
 
   it('should throw an error if OpenStreetCam is not enabled', async () => {
-    process.env.REACT_APP_IMAGERY_OPENSTREETCAM = 'disabled'
+    window.env.REACT_APP_IMAGERY_OPENSTREETCAM = 'disabled'
     await expect(fetchOpenStreetCamImages('0,0,1,1')).rejects.toThrow("OpenStreetCam is not enabled")
   })
 

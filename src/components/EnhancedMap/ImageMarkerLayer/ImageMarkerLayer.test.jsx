@@ -5,7 +5,7 @@ import ImageMarkerLayer from './ImageMarkerLayer'
 
 describe('ImageMarkerLayer Component', () => {
   beforeAll(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    vitest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   afterAll(() => {

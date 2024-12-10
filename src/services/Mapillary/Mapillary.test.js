@@ -12,21 +12,26 @@ const mockFetch = vitest.fn()
 global.fetch = mockFetch
 
 describe('Mapillary Service Functions', () => {
+  const cachedEnv = window.env;
+
   beforeAll(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    vi.resetModules();
+    window.env = { ...cachedEnv, REACT_APP_MAPILLARY_CLIENT_TOKEN: 'mockToken' };
+    vitest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   afterAll(() => {
     console.error.mockRestore()
+    window.env = cachedEnv;
   })
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    process.env.REACT_APP_MAPILLARY_CLIENT_TOKEN = 'mockToken'
+    vitest.clearAllMocks()
+    window.env.REACT_APP_MAPILLARY_CLIENT_TOKEN = 'mockToken'
   })
 
   afterEach(() => {
-    delete process.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
+    delete window.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
     imageCache.clear()
   })
 
@@ -36,14 +41,14 @@ describe('Mapillary Service Functions', () => {
     })
 
     it('should return false if the Mapillary client token is not set', () => {
-      delete process.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
+      delete window.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
       expect(isMapillaryEnabled()).toBe(false)
     })
   })
 
   describe('fetchMapillaryImages', () => {
     it('should throw an error if Mapillary is not enabled', async () => {
-      delete process.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
+      delete window.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
       await expect(fetchMapillaryImages('0,0,1,1')).rejects.toThrow("Missing Mapillary client token")
     })
 
@@ -77,7 +82,7 @@ describe('Mapillary Service Functions', () => {
 
   describe('getAccessToken', () => {
     it('should return the access token', () => {
-      expect(getAccessToken()).toBe(process.env.REACT_APP_MAPILLARY_CLIENT_TOKEN)
+      expect(getAccessToken()).toBe(window.env.REACT_APP_MAPILLARY_CLIENT_TOKEN)
     })
   })
 })

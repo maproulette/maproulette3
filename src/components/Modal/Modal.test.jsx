@@ -4,7 +4,7 @@ import Modal from './Modal'
 
 describe('Modal Component', () => {
   beforeAll(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    vitest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   afterAll(() => {

@@ -4,7 +4,7 @@ import OpenStreetCamViewer from './OpenStreetCamViewer'
 
 describe('OpenStreetCamViewer Component', () => {
   beforeAll(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    vitest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   afterAll(() => {
