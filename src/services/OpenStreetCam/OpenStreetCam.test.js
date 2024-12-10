@@ -13,7 +13,7 @@ describe('OpenStreetCam Service Functions', () => {
 
   it('should fetch OpenStreetCam images correctly', async () => {
     const mockResponse = { currentPageItems: [], totalFilteredItems: [0] }
-    const mockFetch = jest.fn().mockResolvedValueOnce({ ok: true, json: jest.fn().mockResolvedValue(mockResponse) })
+    const mockFetch = vitest.fn().mockResolvedValueOnce({ ok: true, json: vitest.fn().mockResolvedValue(mockResponse) })
     global.fetch = mockFetch
 
     const result = await fetchOpenStreetCamImages('0,0,1,1')

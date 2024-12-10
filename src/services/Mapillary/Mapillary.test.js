@@ -8,7 +8,7 @@ import {
     imageCache,
 } from './Mapillary'
 
-const mockFetch = jest.fn()
+const mockFetch = vitest.fn()
 global.fetch = mockFetch
 
 describe('Mapillary Service Functions', () => {

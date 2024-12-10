@@ -2,18 +2,18 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import MapillaryViewer from './MapillaryViewer'
 
-jest.mock('mapillary-js', () => { 
+vitest.mock('mapillary-js', () => { 
   return {
-    Viewer: jest.fn().mockImplementation(() => ({
-      setImageId: jest.fn(),
-      remove: jest.fn(),
+    Viewer: vitest.fn().mockImplementation(() => ({
+      setImageId: vitest.fn(),
+      remove: vitest.fn(),
     })),
   }
 })
 
 describe('MapillaryViewer Component', () => {
   beforeAll(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    vitest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   afterAll(() => {

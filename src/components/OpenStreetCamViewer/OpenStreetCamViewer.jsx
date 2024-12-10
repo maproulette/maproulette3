@@ -20,22 +20,8 @@ const OpenStreetCamViewer = ({ images, initialImageKey, onClose }) => {
     setCurrentIndex(_findIndex(images, { key: initialImageKey }))
   }, [images, initialImageKey])
 
-  const hasNextImage = () => currentIndex !== -1 && currentIndex < images.length - 1
-  const hasPriorImage = () => currentIndex !== -1 && currentIndex > 0
-
-  const nextImage = () => {
-    if (hasNextImage()) {
-      setCurrentIndex(currentIndex + 1)
-      setImageLoaded(false)
-    }
-  }
-
-  const priorImage = () => {
-    if (hasPriorImage()) {
-      setCurrentIndex(currentIndex - 1)
-      setImageLoaded(false)
-    }
-  }
+  const hasNextImage = currentIndex !== -1 && currentIndex < images.length - 1
+  const hasPriorImage = currentIndex !== -1 && currentIndex > 0
 
   const currentImage = currentIndex === -1 ? null : images[currentIndex]
 
@@ -46,46 +32,47 @@ const OpenStreetCamViewer = ({ images, initialImageKey, onClose }) => {
           <div className="mr-flex mr-justify-center">
             <div className="mr-flex mr-justify-between mr-bg-black-15 mr-rounded mr-p-2">
               <div>
-                {hasPriorImage() &&
-                  <button onClick={priorImage}>
+                {hasPriorImage && (
+                  <button onClick={() => hasPriorImage && setCurrentIndex(currentIndex - 1)}>
                     <SvgSymbol
                       sym="arrow-left-icon"
                       viewBox='0 0 20 20'
                       className="mr-h-4 mr-w-4 mr-fill-current"
                     />
                   </button>
-                }
+                )}
               </div>
 
               <div className="mr-w-4" />
 
               <div>
-                {hasNextImage() &&
-                  <button onClick={nextImage}>
+                {hasNextImage && (
+                  <button onClick={() => hasNextImage && setCurrentIndex(currentIndex + 1)}>
                     <SvgSymbol
                       sym="arrow-right-icon"
                       viewBox='0 0 20 20'
                       className="mr-h-4 mr-w-4 mr-fill-current"
                     />
                   </button>
-                }
+                )}
               </div>
             </div>
           </div>
 
           <div className="mr-mt-2">
-            {currentImage &&
+            {currentImage && (
               <img
                 src={currentImage.url}
                 onLoad={() => setImageLoaded(true)}
                 alt=""
                 className="mr-w-full mr-h-auto mr-rounded mr-shadow"
               />
-            }
+            )}
           </div>
           <div className="mr-flex mr-justify-center mr-mt-2 mr-min-h-4 mr-text-sm mr-text-white">
-            {!imageLoaded ?
-              <BusySpinner /> :
+            {!imageLoaded ? (
+              <BusySpinner />
+            ) : (
               <div className="mr-flex mr-items-center">
                 <div className="mr-pr-4 mr-mr-4 mr-leading-tight mr-border-r mr-border-grey">
                   @{currentImage.username}
@@ -94,7 +81,7 @@ const OpenStreetCamViewer = ({ images, initialImageKey, onClose }) => {
                   {format(parseISO(currentImage.shotDate), 'yyyy-MM-dd')}
                 </div>
               </div>
-            }
+            )}
           </div>
         </div>
       </Modal>
