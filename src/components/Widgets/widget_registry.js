@@ -9,6 +9,8 @@ export { default as SupplementalMapWidget }
        from './SupplementalMapWidget/SupplementalMapWidget'
 export { default as CustomUrlWidget }
        from './CustomUrlWidget/CustomUrlWidget'
+export { default as OSMElementTagsWidget }
+       from './OSMElementTags/OSMElementTagsWidget'
 export { default as OSMHistoryWidget }
        from './OSMHistoryWidget/OSMHistoryWidget'
 export { default as ActivityListingWidget }
