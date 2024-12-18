@@ -95,7 +95,8 @@ export const PARAMS_MAP = {
   difficulty: 'cd',
   tags: 'tt',
   excludeTasks: 'tExcl',
-  archived: "ca"
+  archived: "ca",
+  global: "cg"
 }
 
 
@@ -157,6 +158,9 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
 
   if (filters.archived) {
     searchParameters[PARAMS_MAP.archived] = filters.archived;
+  }
+  if (filters.global) {
+    searchParameters[PARAMS_MAP.global] = filters.global;
   }
   if (filters.reviewRequestedBy) {
     searchParameters[PARAMS_MAP.reviewRequestedBy] = filters.reviewRequestedBy
