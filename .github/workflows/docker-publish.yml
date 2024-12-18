@@ -67,7 +67,7 @@ jobs:
       - name: Send trigger-workflow webhook to maproulette-deploy repository
         run: |
           curl -X POST https://api.github.com/repos/maproulette/maproulette-deploy/dispatches \
-            --fail --location \
+            --fail --silent --show-error --location \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.DEPLOY_REPO_TOKEN }}" \
-            -d '{ "event_type": "deploy maproulette-frontend@${{ github.ref }} (${{ github.sha }})" }'
+            -d '{ "event_type": "deploy maproulette-frontend@${{ github.ref_name }} (${{ github.sha }})" }'
