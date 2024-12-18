@@ -3,26 +3,16 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
-import { version } from '../../../package.json'
-
 class Footer extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data : null
-    };
-  }
+  state = {
+    serviceInfo: null
+  };
 
   componentDidMount() {
-    this.renderMyData();
-  }
-
-  renderMyData(){
     fetch(`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
-        .then((response) => response.json())
-        .then((responseJson) => {
-          this.setState({ data : responseJson })
+        .then((res) => res.json())
+        .then((serviceInfo) => {
+          this.setState({ serviceInfo });
         })
         .catch((error) => {
           console.error(error);
@@ -30,36 +20,38 @@ class Footer extends Component {
   }
   
   render() {
+    let frontendVersion = __GIT_TAG__ !== '' ? __GIT_TAG__ : __GIT_SHA__.slice(0, 7);
+    let frontendVersionUrl = __GIT_TAG__ !== ''
+      ? `https://github.com/maproulette/maproulette3/releases/tag/${__GIT_TAG__}`
+      : `https://github.com/maproulette/maproulette3/commit/${__GIT_SHA__}`;
+
+    let info = this.state.serviceInfo?.compiletime;
+    let backendVersion = info?.version === info?.gitHeadCommit
+      ? info?.gitHeadCommit.slice(0, 7)
+      : info?.version;
+    let backendVersionUrl = info?.version === info?.gitHeadCommit
+      ? `https://github.com/maproulette/maproulette-backend/commit/${info?.gitHeadCommit}`
+      : `https://github.com/maproulette/maproulette-backend/releases/tag/v${info?.version}`;
+
     return (
-      <footer
-        className="mr-px-4 mr-py-12 md:mr-py-24 mr-links-green-lighter"
-      >
+      <footer className="mr-px-4 mr-py-12 md:mr-py-24 mr-links-green-lighter">
         <div className="mr-max-w-3xl mr-mx-auto mr-overflow-hidden">
           <div className="md:mr-flex md:mr--mx-4">
             <div className="mr-mb-8 md:mr-mb-0 md:mr-px-4 md:mr-flex-1">
               <h3 className="mr-text-white mr-text-md mr-mb-2">
                 <FormattedMessage {...messages.versionLabel} />{' '}
                 <span className="mr-text-green-light mr-font-mono mr-text-base">
-                  <a
-                    href={`https://github.com/maproulette/maproulette3/releases/tag/v${version}`}
-                  >
-                    v{version}
-                  </a>
+                  <a href={frontendVersionUrl}>{frontendVersion}</a>
                 </span>
               </h3>
-             { this.state.data ? 
+             { this.state.serviceInfo && (
               <h3 className="mr-text-white mr-text-md mr-mb-2">
                   <FormattedMessage {...messages.APIVersionLabel} />{' '}
                   <span className="mr-text-green-light mr-font-mono mr-text-base">
-                    <a
-                      href={`https://github.com/maproulette/maproulette-backend/releases/tag/v${this.state.data.compiletime.version}`}
-                    >
-                      v{this.state.data.compiletime.version}
-                    </a>
+                    <a href={backendVersionUrl}>{backendVersion}</a>
                   </span>
-                </h3> : 
-                null 
-              }
+                </h3>
+              )}
             </div>
 
             <div className="mr-mb-8 md:mr-mb-0 md:mr-px-4 md:mr-flex-1">
