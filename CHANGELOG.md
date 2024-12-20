@@ -4,8 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-This project adheres to
-[Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+## [v3.16.1] - 2024-12-20
+
+- add OSM Element Tags widget (by @homersimpsons in #2499)
 
 ## [v3.16.0] - 2024-11-12
 Released with [maproulette-backend_v4.6.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.6.1)
