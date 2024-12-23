@@ -4,14 +4,14 @@ import _isFinite from 'lodash/isFinite'
 
 const EMBED_URI_V4='https://www.mapillary.com/embed'
 const IMAGES_URI_V4='https://graph.mapillary.com/images'
-const ACCESS_TOKEN = window.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
+export const imageCache = new Map()
 
 /**
  * Returns true if Mapillary support is enabled (a Mapillary client token has been
  * configured), false if not
  */
 export const isMapillaryEnabled = function() {
-  return !_isEmpty(ACCESS_TOKEN)
+  return !_isEmpty(window.env.REACT_APP_MAPILLARY_CLIENT_TOKEN)
 }
 
 /**
@@ -28,23 +28,35 @@ export const fetchMapillaryImages = async function(bbox, point=null, radius=250,
     throw new Error("Missing Mapillary client token")
   }
 
-  // bbox and point can be either arrays or strings with comma-separated coordinates
-  const params = [`bbox=${_isArray(bbox) ? bbox.join(',') : bbox}`]
-  if (point) {
-    params.push(`closeto=${_isArray(point) ? point.join(',') : point}`)
-
-    if (_isFinite(radius)) {
-      params.push(`radius=${radius}`)
-    }
-
-    if (lookAt) {
-      params.push(`lookat=${_isArray(point) ? point.join(',') : point}`)
-    }
+  const cacheKey = JSON.stringify({ bbox, point, radius, lookAt, pageSize })
+  if (imageCache.has(cacheKey)) {
+    return imageCache.get(cacheKey)
   }
-  params.push(`limit=${pageSize}`)
-  params.push(`access_token=${ACCESS_TOKEN}`)
 
-  return executeMapillaryImageFetch(`${IMAGES_URI_V4}?${params.join('&')}`)
+  try {
+    // bbox and point can be either arrays or strings with comma-separated coordinates
+    const params = [`bbox=${_isArray(bbox) ? bbox.join(',') : bbox}`]
+    if (point) {
+      params.push(`closeto=${_isArray(point) ? point.join(',') : point}`)
+
+      if (_isFinite(radius)) {
+        params.push(`radius=${radius}`)
+      }
+
+      if (lookAt) {
+        params.push(`lookat=${_isArray(point) ? point.join(',') : point}`)
+      }
+    }
+    params.push(`limit=${pageSize}`)
+    params.push(`access_token=${window.env.REACT_APP_MAPILLARY_CLIENT_TOKEN}`)
+
+    const result = await executeMapillaryImageFetch(`${IMAGES_URI_V4}?${params.join('&')}`)
+    imageCache.set(cacheKey, result) // Cache the result
+    return result
+  } catch (error) {
+    console.error('Error fetching Mapillary images:', error)
+    throw new Error('Unable to fetch Mapillary images. Please try again.')
+  }
 }
 
 /**
@@ -63,12 +75,17 @@ export const hasMoreMapillaryResults = function(resultContext) {
  * passed to this method on the subsequent call
  */
 export const nextMapillaryPage = async function(resultContext) {
-  const nextPageUrl = nextMapillaryPageUrl(resultContext)
-  if (!nextPageUrl) {
-    return null
-  }
+  try {
+    const nextPageUrl = nextMapillaryPageUrl(resultContext);
+    if (!nextPageUrl) {
+      return null;
+    }
 
-  return executeMapillaryImageFetch(nextPageUrl)
+    return await executeMapillaryImageFetch(nextPageUrl);
+  } catch (error) {
+    console.error('Error fetching next Mapillary page:', error);
+    throw new Error('Unable to fetch next page of Mapillary images.');
+  }
 }
 
 /**
@@ -84,42 +101,49 @@ export const mapillaryImageUrl = function(imageId) {
  * context object and return it, or null if there is no next page of results
  */
 export const nextMapillaryPageUrl = function(resultContext) {
-  if (!resultContext || !resultContext.link) {
-    return null
-  }
-
-  const parseLinkHeader = (linkHeader) => {
-    const links = {}
-
-    if (linkHeader) {
-      linkHeader.split(',').forEach(link => {
-        const match = link.match(/<([^>]+)>;\s*rel="([^"]+)"/)
-        if (match) {
-          const url = match[1]
-          const rel = match[2]
-          links[rel] = { url }
-        }
-      });
+  try {
+    if (!resultContext || !resultContext.link) {
+      return null;
     }
 
-    return links
+    const parseLinkHeader = (linkHeader) => {
+      const links = {};
+      console.log('Link Header:', linkHeader);
+
+      if (linkHeader) {
+        linkHeader.split(',').forEach(link => {
+          const match = link.match(/<([^>]+)>\s*rel="([^"]+)"/);
+          if (match) {
+            const url = match[1];
+            const rel = match[2];
+            links[rel] = { url };
+          }
+        });
+      }
+
+      console.log('Parsed Links:', links);
+      return links;
+    };
+
+    const linkHeader = resultContext.link;
+    const links = parseLinkHeader(linkHeader);
+
+    if (!links.next) {
+      return null;
+    }
+
+    return links.next.url;
+  } catch (error) {
+    console.error('Error extracting next Mapillary page URL:', error);
+    return null;
   }
-
-  const linkHeader = resultContext.link
-  const links = parseLinkHeader(linkHeader)
-
-  if (!links.next) {
-    return null
-  }
-
-  return links.next.url
-};
+}
 
 /**
  * Retrieve the active access token
  */
 export const getAccessToken = function() {
-  return ACCESS_TOKEN
+  return window.env.REACT_APP_MAPILLARY_CLIENT_TOKEN
 }
 
 /**
@@ -127,8 +151,13 @@ export const getAccessToken = function() {
  * with `geojson` and `context` fields on success
  */
 const executeMapillaryImageFetch = async function(mapillaryUrl) {
-  const response = await fetch(mapillaryUrl)
-  if (response.ok) {
+  try {
+    const response = await fetch(mapillaryUrl)
+    if (!response.ok) {
+      const errorDetails = await response.text()
+      console.error(`Failed to fetch data from Mapillary: ${response.status} - ${errorDetails}`)
+      throw new Error(`Failed to fetch data from Mapillary: ${response.status}`)
+    }
     const result = {
       context: {
         link: response.headers.get('link'), // used for pagination
@@ -136,8 +165,8 @@ const executeMapillaryImageFetch = async function(mapillaryUrl) {
       geojson: await response.json(),
     }
     return result
-  }
-  else {
-    throw new Error("Failed to fetch data from Mapillary")
+  } catch (error) {
+    console.error('Error executing Mapillary image fetch:', error)
+    throw new Error('Unable to fetch data from Mapillary. Please check the URL or your network connection.')
   }
 }
