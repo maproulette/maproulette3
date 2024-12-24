@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo } from 'react'
+import { Fragment, useState, useMemo, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl }
        from 'react-intl'
@@ -39,11 +39,17 @@ const OSMElementTags = props => {
   }
 
   const [selectedFeatureId, setSelectedFeatureId] = useState(featureIds[0])
+  
+  useEffect(() => {
+    setSelectedFeatureId(featureIds[0])
+  }, [featureIds])
+
   const widgetLayoutProps = { featureIds, selectedFeatureId, setSelectedFeatureId }
 
   const { isLoading, isError, error: fetchErr, data: element } = useQuery({
     queryKey: ['OSMElement', selectedFeatureId],
-    queryFn: () => fetchOSMElement(selectedFeatureId)
+    queryFn: () => fetchOSMElement(selectedFeatureId),
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {
