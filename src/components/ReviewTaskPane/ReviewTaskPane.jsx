@@ -168,7 +168,7 @@ export class ReviewTaskPane extends Component {
         />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
-          <MapPane completingTask={this.state.completingTask}>
+          <MapPane>
             <TaskMap isMobile
                      task={this.props.task}
                      challenge={this.props.task.parent}

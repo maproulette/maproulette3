@@ -93,10 +93,15 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.removeFromBundle",
     defaultMessage: "Remove from bundle",
   },
+  
+  addToBundle: {
+    id: "Widgets.TaskBundleWidget.addToBundle",
+    defaultMessage: "Add to bundle",
+  },
 
   unbundleTasksLabel: {
-    id: "Widgets.TaskBundleWidget.controls.stopBundling.label",
-    defaultMessage: "Stop Bundling Tasks",
+    id: "Widgets.TaskBundleWidget.controls.stopBundlinsg.label",
+    defaultMessage: "Delete Bundle",
   },
 
   resetBundleLabel: {
@@ -133,5 +138,30 @@ export default defineMessages({
   readOnly: {
     id: "Widgets.TaskBundleWidget.readOnly",
     defaultMessage: "Previewing task in read-only mode",
+  },
+
+  fetchBundleError: {
+    id: "Widgets.TaskBundleWidget.fetchBundleError",
+    defaultMessage: "Failed to fetch task bundle. Please try again.",
+  },
+
+  lockTaskError: {
+    id: "Widgets.TaskBundleWidget.lockTaskError",
+    defaultMessage: "Failed to lock task {taskId}. Please try again.",
+  },
+
+  refreshTaskLockError: {
+    id: "Widgets.TaskBundleWidget.refreshTaskLockError",
+    defaultMessage: "Failed to refresh task lock. Please try again.",
+  },
+
+  updateTaskBundleError: {
+    id: "Widgets.TaskBundleWidget.updateTaskBundleError",
+    defaultMessage: "Failed to update task bundle. Please try again.",
+  },
+
+  tooManyTasks: {
+    id: "Widgets.TaskBundleWidget.tooManyTasks",
+    defaultMessage: "Initial bundle cannot exceed 50 tasks",
   },
 })
