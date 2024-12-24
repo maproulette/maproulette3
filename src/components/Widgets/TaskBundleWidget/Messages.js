@@ -159,4 +159,9 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.updateTaskBundleError",
     defaultMessage: "Failed to update task bundle. Please try again.",
   },
+
+  tooManyTasks: {
+    id: "Widgets.TaskBundleWidget.tooManyTasks",
+    defaultMessage: "Initial bundle cannot exceed 50 tasks",
+  },
 })
