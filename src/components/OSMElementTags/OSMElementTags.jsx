@@ -48,7 +48,8 @@ const OSMElementTags = props => {
 
   const { isLoading, isError, error: fetchErr, data: element } = useQuery({
     queryKey: ['OSMElement', selectedFeatureId],
-    queryFn: () => fetchOSMElement(selectedFeatureId)
+    queryFn: () => fetchOSMElement(selectedFeatureId),
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {
