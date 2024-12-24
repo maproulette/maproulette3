@@ -203,8 +203,10 @@ export const fetchTask = function(taskId, suppressReceive=false, includeMapillar
       if (!suppressReceive) {
         dispatch(receiveTasks(normalizedResults.entities))
       }
-
       return normalizedResults
+    }).catch(error => {
+      dispatch(addError(AppErrors.task.fetchFailure))
+      console.error("Error fetching task:", error)
     })
   }
 }
@@ -283,6 +285,61 @@ export const refreshTaskLock = function(taskId) {
     }).execute()
   }
 }
+
+/**
+ * Refreshes an active task lock owned by the current user
+ */
+export const refreshTasksLocks = function(taskIds) {
+  return function() {
+    return new Endpoint(api.task.refreshLock, {
+      schema: taskSchema(),
+      variables: {taskIds: taskIds}
+    }).execute().then(response => {
+      const lockedTasks = response.locked || [];
+      const notLockedTasks = taskIds.filter(id => !lockedTasks.includes(id));
+      return { lockedTasks, notLockedTasks };
+    }).catch(error => {
+      console.error("Error refreshing task locks:", error);
+      throw error;
+    });
+  }
+}
+
+/**
+ * Refreshes an active task lock owned by the current user
+ */
+export const unlockTasks = function(taskIds) {
+  return function() {
+    return new Endpoint(api.task.refreshBunledTasksLocks, {
+      schema: taskSchema(),
+      variables: {taskIds: taskIds}
+    }).execute().catch(error => {
+      console.error("Error unlocking tasks:", error);
+      throw error;
+    });
+  }
+}
+
+/**
+ * Refreshes an active task lock owned by the current user
+ */
+export const lockTasks = function(taskIds) {
+  return function() {
+    return new Endpoint(api.task.refreshBunledTasksLocks, {
+      schema: taskSchema(),
+      variables: {taskIds: taskIds}
+    }).execute().then(response => {
+      const lockedTasks = response.locked || [];
+      const notLockedTasks = taskIds.filter(id => !lockedTasks.includes(id));
+      return { lockedTasks, notLockedTasks };
+    }).catch(error => {
+      console.error("Error locking tasks:", error);
+      throw error;
+    });
+  }
+}
+
+
 
 /**
  * Mark the given task as completed with the given status.

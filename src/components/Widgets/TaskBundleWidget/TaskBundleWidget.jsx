@@ -117,7 +117,7 @@ export default class TaskBundleWidget extends Component {
   }
 
   createBundle = () => {
-    if (this.props.taskBundle || this.props.bundleEditsDisabled) {
+    if (this.props.taskBundle || this.props.bundleEditsDisabled || this.props.selectedTasks.selected.size > 50) {
       return;
     }
 
@@ -492,10 +492,11 @@ const BuildBundle = props => {
   const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
   const bundleButton = !props.taskReadOnly && props.selectedTaskCount(totalTaskCount) > 1 && !props.bundleEditsDisabled ? (
       <button
-        className="mr-button mr-button--green-lighter mr-button--small"
+        className={`mr-button mr-button--green-lighter mr-button--small ${props.selectedTasks.selected.size > 50 ? 'mr-opacity-50 mr-cursor-not-allowed' : ''}`}
+        disabled={props.selectedTasks.selected.size > 50}
         onClick={props.createBundle}
       >
-        <FormattedMessage {...messages.bundleTasksLabel} />
+        {props.selectedTasks.selected.size > 50 ? <FormattedMessage {...messages.tooManyTasks} /> : <FormattedMessage {...messages.bundleTasksLabel} />}
       </button>
   ) : null
 
