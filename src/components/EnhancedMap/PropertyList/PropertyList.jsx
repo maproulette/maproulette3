@@ -59,8 +59,8 @@ const PropertyList = props => {
 
     return (
       <tr key={key} className="property">
-        <td className={classNames("name", {"mr-border-none mr-links-green-lighter mr-pr-3": darkMode})}>{link}</td>
-        <td className={classNames("value", {"mr-border-none mr-pb-1": darkMode})}>{value}</td>
+        <td className={classNames("name", {"mr-border-none mr-break-words mr-links-green-lighter mr-pr-3": darkMode})}>{link}</td>
+        <td className={classNames("value", {"mr-border-none mr-break-words mr-pb-1": darkMode})}>{value}</td>
       </tr>
     )
   }))
@@ -68,7 +68,7 @@ const PropertyList = props => {
   return (
     <div className="feature-properties mr-ml-4" style={{ maxHeight: "300px", overflow: "auto" }}>
       {!props.hideHeader && header}
-      <table className={classNames("property-list", {"mr-bg-transparent mr-text-white": darkMode, "table": !darkMode})}>
+      <table className={classNames("property-list", {"mr-bg-transparent mr-text-white": darkMode, "table": !darkMode})} style={{ width: "100%", tableLayout: "fixed" }}>
         <tbody>{rows}</tbody>
       </table>
     </div>
