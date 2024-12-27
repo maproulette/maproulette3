@@ -30,28 +30,23 @@ const ImageMarkerLayer = props => {
   const [imageMarkers, setImageMarkers] = useState([])
   const map = useMap()
 
-  const { images, markerColor = colors["blue-leaflet"], imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel, style } = props
+  const { images, markerColor = colors["blue-leaflet"], imageClicked, icon, mrLayerId, mrLayerLabel, style } = props
 
   useEffect(() => {
-    try {
-      if (!map.getPane('mapillaryPopups')) {
-        map.createPane('mapillaryPopups')
-        map.getPane('mapillaryPopups').style.zIndex = 700
-      }
-
-      setImageMarkers(
-        buildImageMarkers(
-          images,
-          icon ? icon : circleIcon(markerColor),
-          markerColor,
-          imageClicked,
-          mrLayerId,
-          mrLayerLabel
-        )
-      )
-    } catch (error) {
-      console.error('Error creating map markers:', error)
+    if (!map.getPane('mapillaryPopups')) {
+      map.createPane('mapillaryPopups').style.zIndex = 700
     }
+
+    setImageMarkers(
+      buildImageMarkers(
+        images,
+        icon || circleIcon(markerColor),
+        markerColor,
+        imageClicked,
+        mrLayerId,
+        mrLayerLabel
+      )
+    )
   }, [images, markerColor, imageClicked, icon, mrLayerId, mrLayerLabel, map])
 
   return (
@@ -66,14 +61,8 @@ ImageMarkerLayer.propTypes = {
   images: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
-    position: PropTypes.shape({
-      lat: PropTypes.number.isRequired,
-      lon: PropTypes.number.isRequired,
-    }).isRequired,
   })).isRequired,
   imageClicked: PropTypes.func.isRequired,
-  imageAlt: PropTypes.string,
-  buildIcon: PropTypes.func,
   markerColor: PropTypes.string,
 }
 
@@ -81,42 +70,18 @@ const MapillaryViewer = ({ initialImageKey }) => {
   const containerRef = useRef()
 
   useEffect(() => {
-    if (!initialImageKey) {
-      console.error('Initial image key is null or undefined')
-      return
-    }
+    const accessToken = getAccessToken();
 
-    let viewer
-    try {
-      const accessToken = getAccessToken();
-      if (!accessToken) {
-        console.error('Access token is not available');
-        return;
-      }
+    if (!initialImageKey || !accessToken) return
 
-      if (imageCache.has(initialImageKey)) {
-        viewer = imageCache.get(initialImageKey);
-      } else {
-        viewer = new Viewer({
-          accessToken: accessToken,
-          container: containerRef.current,
-          imageId: initialImageKey,
-        });
-        imageCache.set(initialImageKey, viewer);
-      }
-    } catch (error) {
-      console.error('Error initializing Mapillary viewer:', error)
-    }
+    const viewer = imageCache.has(initialImageKey) ? imageCache.get(initialImageKey) : new Viewer({
+      accessToken,
+      container: containerRef.current,
+      imageId: initialImageKey,
+    });
+    imageCache.set(initialImageKey, viewer);
 
-    return () => {
-      try {
-        if (viewer) {
-          viewer.remove()
-        }
-      } catch (error) {
-        console.error('Error removing Mapillary viewer:', error)
-      }
-    }
+    return () => viewer && viewer.remove();
   }, [initialImageKey])
 
   return (
@@ -126,6 +91,12 @@ const MapillaryViewer = ({ initialImageKey }) => {
   )
 }
 
+const getLatLng = (imageInfo) => {
+  const lat = imageInfo.position?.lat !== undefined ? imageInfo.position.lat : imageInfo.lat;
+  const lon = imageInfo.position?.lon !== undefined ? imageInfo.position.lon : imageInfo.lon;
+  return (lat !== undefined && lon !== undefined) ? [lat, lon] : null;
+}
+
 const buildImageMarkers = (images, icon, markerColor, imageClicked, layerId, layerLabel) => {
   try {
     if (!images || images.length === 0) {
@@ -133,8 +104,14 @@ const buildImageMarkers = (images, icon, markerColor, imageClicked, layerId, lay
     }
 
     return _map(images, imageInfo => {
-      if (!imageInfo || (!imageInfo.position?.lat || !imageInfo.position?.lon) && (!imageInfo.lat || !imageInfo.lon)) {
+      const imageLatLon = getLatLng(imageInfo);
+      if (!imageInfo || !imageLatLon) {
         console.error(`Invalid position for image key: ${imageInfo?.key}`, imageInfo)
+        return null
+      }
+
+      if (imageLatLon.lat === undefined || imageLatLon.lon === undefined) {
+        console.error(`Invalid coordinates for image key: ${imageInfo?.key}`, imageInfo)
         return null
       }
 
@@ -143,12 +120,14 @@ const buildImageMarkers = (images, icon, markerColor, imageClicked, layerId, lay
         return null
       }
 
+      const [lat, lon] = imageLatLon;
+
       return (
         <Marker
           key={imageInfo.key}
           mrLayerId={layerId}
           mrLayerLabel={layerLabel}
-          position={[imageInfo.position?.lat || imageInfo.lat, imageInfo.position?.lon || imageInfo.lon]}
+          position={[lat, lon]}
           icon={icon}
         >
           <Popup pane="mapillaryPopups" maxWidth="351px" offset={[0, 5]}>
