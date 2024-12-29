@@ -289,11 +289,11 @@ export const refreshTaskLock = function(taskId) {
 /**
  * Refreshes an active task lock owned by the current user
  */
-export const refreshTasksLocks = function(taskIds) {
+export const refreshMultipleTaskLocks = function(taskIds) {
   return function() {
-    return new Endpoint(api.task.refreshLock, {
+    return new Endpoint(api.task.refreshMultipleTaskLocks, {
       schema: taskSchema(),
-      variables: {taskIds: taskIds}
+      params: {taskIds: taskIds}
     }).execute().then(response => {
       const lockedTasks = response.locked || [];
       const notLockedTasks = taskIds.filter(id => !lockedTasks.includes(id));
@@ -308,30 +308,41 @@ export const refreshTasksLocks = function(taskIds) {
 /**
  * Refreshes an active task lock owned by the current user
  */
-export const unlockTasks = function(taskIds) {
+export const releaseMultipleTasks = function(taskIds) {
   return function() {
-    return new Endpoint(api.task.refreshBunledTasksLocks, {
-      schema: taskSchema(),
-      variables: {taskIds: taskIds}
-    }).execute().catch(error => {
-      console.error("Error unlocking tasks:", error);
-      throw error;
-    });
+    return new Endpoint(api.task.releaseMultipleTasks, {
+      schema: [taskSchema()],
+      params: {taskIds: taskIds}
+    }).execute().then(normalizedResults => {
+      dispatch(receiveTasks(normalizedResults.entities))
+      return normalizedResults
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        ).catch(() => null)
+      }
+      else {
+        dispatch(addError(AppErrors.task.lockReleaseFailure))
+        console.log(error.response || error)
+      }
+    })
   }
 }
 
 /**
  * Refreshes an active task lock owned by the current user
  */
-export const lockTasks = function(taskIds) {
+export const startMultipleTasks = function(taskIds) {
   return function() {
-    return new Endpoint(api.task.refreshBunledTasksLocks, {
-      schema: taskSchema(),
-      variables: {taskIds: taskIds}
-    }).execute().then(response => {
-      const lockedTasks = response.locked || [];
-      const notLockedTasks = taskIds.filter(id => !lockedTasks.includes(id));
-      return { lockedTasks, notLockedTasks };
+    return new Endpoint(api.task.startMultipleTasks, {
+      schema: {tasks: [taskSchema()], locked: Boolean},
+      params: {taskIds: taskIds}
+    }).execute().then(normalizedResults => {
+      
+      const tasks = normalizedResults.result[0]
+      const locked = normalizedResults.result[1]
+      return {tasks, locked};
     }).catch(error => {
       console.error("Error locking tasks:", error);
       throw error;
