@@ -153,7 +153,9 @@ const apiRoutes = (factory) => {
       updateCompletionResponses: factory.put("/task/:id/responses"),
       lockBundle: factory.post("/task/bundle/lock"),
       unlockBundle: factory.post("/task/bundle/unlock"),
-      refreshBundleLocks: factory.post("/task/bundle/refresh"),
+      refreshMultipleTaskLocks: factory.post("/task/bundle/refresh"),
+      startMultipleTasks: factory.post("/task/bundle/lock"),
+      releaseMultipleTasks: factory.post("/task/bundle/unlock"),
     },
     keywords: {
       find: factory.get("/keywords"),
