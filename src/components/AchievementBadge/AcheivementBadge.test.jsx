@@ -1,5 +1,5 @@
 import { act } from "@testing-library/react";
-import {AchievementBadge} from "./AchievementBadge";
+import AchievementBadge from "./AchievementBadge";
 
 describe("AchievementBadge", () => {
   it("renders with achievement 16", async () => {
@@ -10,3 +10,4 @@ describe("AchievementBadge", () => {
     )
   });
 });
+

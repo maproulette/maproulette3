@@ -321,7 +321,7 @@ const badgeSettings = Object.freeze({
   },
 })
 
-export const AchievementBadge = props => {
+const AchievementBadge = props => {
   const [badgeInfo, setBadgeInfo] = useState(null)
   const [badgeImage, setBadgeImage] = useState(null)
   const { achievement, size } = props
