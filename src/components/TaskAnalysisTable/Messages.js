@@ -253,4 +253,14 @@ export default defineMessages({
     id: "Admin.TaskAnalysisTable.confirmActionWarning",
     defaultMessage: "This process can take awhile, depending on the challenge size, and cannot be undone.",
   },
+
+  lockTaskError: {
+    id: "Widgets.TaskBundleWidget.lockTaskError",
+    defaultMessage: "Failed to lock task {taskId}. Please try again.",
+  },
+
+  failedLockError: {
+    id: "Widgets.TaskBundleWidget.failedLockError",
+    defaultMessage: "Failed to lock one or more tasks. Please try again.",
+  },
 })
