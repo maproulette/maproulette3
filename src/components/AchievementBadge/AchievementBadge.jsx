@@ -321,19 +321,44 @@ const badgeSettings = Object.freeze({
   },
 })
 
-export const AchievementBadge = props => {
+const AchievementBadge = props => {
   const [badgeInfo, setBadgeInfo] = useState(null)
   const [badgeImage, setBadgeImage] = useState(null)
   const { achievement, size } = props
 
   useEffect(() => {
+    let isMounted = true
+
     const merged = _merge({}, badgeSettings[achievement], badgeSettings[achievement][size])
-    setBadgeInfo(merged)
+    if (isMounted) {
+      setBadgeInfo(merged)
+    }
+
+    return () => {
+      isMounted = false
+    }
   }, [achievement, size])
 
   useEffect(() => {
-    if (badgeInfo) {
-      badgeInfo.image().then(module => setBadgeImage(module.default))
+    let isMounted = true
+
+    const loadImage = async () => {
+      if (badgeInfo) {
+        try {
+          const image = await badgeInfo.image()
+          if (isMounted) {
+            setBadgeImage(image.default)
+          }
+        } catch (error) {
+          console.error("Error loading badge image", error)
+        }
+      }
+    }
+
+    loadImage()
+
+    return () => {
+      isMounted = false
     }
   }, [badgeInfo])
 
