@@ -14,7 +14,7 @@ import { useMap } from 'react-leaflet'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
 
-const generateLayer = (props, map, leaflet) => {
+const generateLayer = (props, map, _leaflet) => {
   const HIGHLIGHT_STYLE = {
     color: colors.gold,
     fillColor: colors.gold,
