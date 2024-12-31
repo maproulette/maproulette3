@@ -11,7 +11,7 @@ describe("ChallengePane", () => {
         locateMapToUser={() => {}}
         unfilteredChallenges={[]}
         history={{ location: { pathname: "", search: "" } }}
-      />
+      />,
     );
     const text = getByText("Sort by");
     expect(text).toBeInTheDocument();

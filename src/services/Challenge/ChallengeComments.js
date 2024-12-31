@@ -25,7 +25,7 @@ export const fetchChallengeComments = function (challengeId) {
           const challengeComments = _values(rawChallengeComments?.result);
           const allComments = taskComments.concat(challengeComments);
           const sortedComments = allComments.sort(
-            (a, b) => new Date(a.created) - new Date(b.created)
+            (a, b) => new Date(a.created) - new Date(b.created),
           );
 
           return sortedComments;
@@ -49,7 +49,7 @@ export const postChallengeComment = function (challengeId, comment) {
   })
     .execute()
     .catch((error) => {
-      dispatch(addError(AppErrors.task.addCommentFailure))
+      dispatch(addError(AppErrors.task.addCommentFailure));
       console.log(error.response || error);
     });
 };

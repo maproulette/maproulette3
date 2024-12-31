@@ -39,7 +39,10 @@ export class TaskCommentInput extends Component {
   componentDidUpdate(prevProps) {
     // Update our character count as needed
     if (this.props.value !== prevProps.value) {
-      this.setState({ characterCount: _get(this.props.value, "length", 0), isSubmitActionPerformed: false });
+      this.setState({
+        characterCount: _get(this.props.value, "length", 0),
+        isSubmitActionPerformed: false,
+      });
     }
   }
 
@@ -51,9 +54,7 @@ export class TaskCommentInput extends Component {
             <button
               className={classNames(
                 "mr-pr-2 mr-mr-2 mr-border-r mr-border-green mr-uppercase mr-font-medium",
-                this.state.showingPreview
-                  ? "mr-text-green-lighter"
-                  : "mr-text-white"
+                this.state.showingPreview ? "mr-text-green-lighter" : "mr-text-white",
               )}
               onClick={() => this.setState({ showingPreview: false })}
             >
@@ -62,9 +63,7 @@ export class TaskCommentInput extends Component {
             <button
               className={classNames(
                 "mr-uppercase mr-font-medium",
-                !this.state.showingPreview
-                  ? "mr-text-green-lighter"
-                  : "mr-text-white"
+                !this.state.showingPreview ? "mr-text-green-lighter" : "mr-text-white",
               )}
               onClick={() => this.setState({ showingPreview: true })}
             >
@@ -76,8 +75,7 @@ export class TaskCommentInput extends Component {
               "mr-text-dark-yellow":
                 this.state.characterCount < this.props.maxCharacterCount &&
                 this.state.characterCount > this.props.maxCharacterCount * 0.9,
-              "mr-text-red-light":
-                this.state.characterCount >= this.props.maxCharacterCount,
+              "mr-text-red-light": this.state.characterCount >= this.props.maxCharacterCount,
             })}
           >
             {this.state.characterCount}/{this.props.maxCharacterCount}
@@ -113,10 +111,7 @@ export class TaskCommentInput extends Component {
         )}
         {this.props.submitComment && (
           <div className="mr-my-1 mr-flex mr-justify-end">
-            <button
-              className="mr-button mr-button--link"
-              onClick={this.handleSubmit}
-            >
+            <button className="mr-button mr-button--link" onClick={this.handleSubmit}>
               <FormattedMessage {...messages.submitCommentLabel} />
             </button>
           </div>

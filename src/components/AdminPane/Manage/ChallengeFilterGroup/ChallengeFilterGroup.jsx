@@ -27,9 +27,7 @@ export default class ChallengeFilterGroup extends Component {
           {...this.props}
           dashboardEntityFilters={this.props.dashboardChallengeFilters}
           toggleEntityFilter={this.props.toggleDashboardChallengeFilter}
-          filterToggleLabel={
-            <FormattedMessage {...messagesByFilter.archived} />
-          }
+          filterToggleLabel={<FormattedMessage {...messagesByFilter.archived} />}
         />
       </Fragment>
     );

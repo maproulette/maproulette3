@@ -1,14 +1,14 @@
-import { createRef, useState, useEffect, Component } from 'react'
-import PropTypes from 'prop-types'
-import { LayerGroup, Marker, Popup } from 'react-leaflet'
-import L from 'leaflet'
-import _map from 'lodash/map'
-import { Viewer } from 'mapillary-js'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import { getAccessToken } from '../../../services/Mapillary/Mapillary'
-import tailwindConfig from '../../../tailwind.config.js'
+import { createRef, useState, useEffect, Component } from "react";
+import PropTypes from "prop-types";
+import { LayerGroup, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
+import _map from "lodash/map";
+import { Viewer } from "mapillary-js";
+import resolveConfig from "tailwindcss/resolveConfig";
+import { getAccessToken } from "../../../services/Mapillary/Mapillary";
+import tailwindConfig from "../../../tailwind.config.js";
 
-const colors = resolveConfig(tailwindConfig).theme.colors
+const colors = resolveConfig(tailwindConfig).theme.colors;
 
 /**
  * ImageMarkerLayer renders a layer of positioned image markers that, on hover,
@@ -23,10 +23,11 @@ const colors = resolveConfig(tailwindConfig).theme.colors
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const ImageMarkerLayer = props => {
-  const [imageMarkers, setImageMarkers] = useState([])
+const ImageMarkerLayer = (props) => {
+  const [imageMarkers, setImageMarkers] = useState([]);
 
-  const {images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel, style} = props
+  const { images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel, style } =
+    props;
   useEffect(() => {
     setImageMarkers(
       buildImageMarkers(
@@ -35,30 +36,28 @@ const ImageMarkerLayer = props => {
         imageClicked,
         imageAlt,
         mrLayerId,
-        mrLayerLabel
-      )
-    )
-  }, [images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel])
+        mrLayerLabel,
+      ),
+    );
+  }, [images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel]);
 
-  return (
-    <LayerGroup style={style}>
-      {imageMarkers}
-    </LayerGroup>
-  )
-}
+  return <LayerGroup style={style}>{imageMarkers}</LayerGroup>;
+};
 
 ImageMarkerLayer.propTypes = {
   layerKey: PropTypes.string,
-  images: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    url: PropTypes.string,
-    position: PropTypes.object,
-  })),
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string,
+      url: PropTypes.string,
+      position: PropTypes.object,
+    }),
+  ),
   imageClicked: PropTypes.func,
   imageAlt: PropTypes.string,
   buildIcon: PropTypes.func,
   markerColor: PropTypes.string,
-}
+};
 
 class MapillaryViewer extends Component {
   containerRef = createRef();
@@ -69,7 +68,7 @@ class MapillaryViewer extends Component {
       container: this.containerRef.current,
       imageId: this.props.initialImageKey,
       component: { cover: false },
-    })
+    });
   }
 
   componentWillUnmount() {
@@ -79,24 +78,28 @@ class MapillaryViewer extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.initialImageKey !== this.props.initialImageKey
+    return nextProps.initialImageKey !== this.props.initialImageKey;
   }
 
   render() {
     return (
       <div className="mr-p-2 mr-pt-4 mr-relative">
-        <div ref={this.containerRef} id="mapillary-viewer" style={{ width: 335, height: 263 }}></div>
+        <div
+          ref={this.containerRef}
+          id="mapillary-viewer"
+          style={{ width: 335, height: 263 }}
+        ></div>
       </div>
-    )
+    );
   }
 }
 
 const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerLabel) => {
   if (!images || images.length === 0) {
-    return []
+    return [];
   }
 
-  return _map(images, imageInfo => {
+  return _map(images, (imageInfo) => {
     return (
       <Marker
         key={imageInfo.key}
@@ -104,14 +107,14 @@ const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerL
         mrLayerLabel={layerLabel}
         position={[imageInfo.lat, imageInfo.lon]}
         icon={icon}
-        onMouseover={({target}) => target.openPopup()}
+        onMouseover={({ target }) => target.openPopup()}
         eventHandlers={{
           click: () => {
-            imageClicked ? imageClicked(imageInfo.key) : null
+            imageClicked ? imageClicked(imageInfo.key) : null;
           },
         }}
       >
-        <Popup maxWidth="351px" offset={ [0.5, -5]}>
+        <Popup maxWidth="351px" offset={[0.5, -5]}>
           <div style={{ width: 351, marginTop: 20 }}>
             <MapillaryViewer
               key={Date.now()}
@@ -127,19 +130,19 @@ const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerL
           </div>
         </Popup>
       </Marker>
-    )
-  })
-}
+    );
+  });
+};
 
 const circleIcon = (color = colors["blue-leaflet"]) => {
   return L.vectorIcon({
     svgHeight: 12,
     svgWidth: 12,
-    viewBox: '0 0 12 12',
-    type: 'circle',
+    viewBox: "0 0 12 12",
+    type: "circle",
     shape: { r: 6, cx: 6, cy: 6 },
     style: { fill: color },
-  })
-}
+  });
+};
 
-export default ImageMarkerLayer
+export default ImageMarkerLayer;

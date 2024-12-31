@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskAnalysisTable
@@ -96,12 +96,14 @@ export default defineMessages({
 
   reviewApprovedWithFixesNotificationLead: {
     id: "Inbox.reviewApprovedWithFixesNotification.lead",
-    defaultMessage: "Your task work has been approved (with some fixes made for you by the reviewer).",
+    defaultMessage:
+      "Your task work has been approved (with some fixes made for you by the reviewer).",
   },
 
   reviewRejectedNotificationLead: {
     id: "Inbox.reviewRejectedNotification.lead",
-    defaultMessage: "Following a review of your task, the reviewer has determined that it needs some additional work.",
+    defaultMessage:
+      "Following a review of your task, the reviewer has determined that it needs some additional work.",
   },
 
   reviewAgainNotificationLead: {
@@ -121,22 +123,26 @@ export default defineMessages({
 
   metaReviewApprovedWithFixesNotificationLead: {
     id: "Inbox.metaReviewApprovedWithFixesNotification.lead",
-    defaultMessage: "Your task review been approved (with some fixes made for you by the meta-reviewer).",
+    defaultMessage:
+      "Your task review been approved (with some fixes made for you by the meta-reviewer).",
   },
 
   metaReviewRejectedNotificationLead: {
     id: "Inbox.metaReviewRejectedNotification.lead",
-    defaultMessage: "Following a meta-review of your task review, the meta-reviewer has determined that it needs some additional work.",
+    defaultMessage:
+      "Following a meta-review of your task review, the meta-reviewer has determined that it needs some additional work.",
   },
 
   metaReviewAgainNotificationLead: {
     id: "Inbox.metaReviewAgainNotification.lead",
-    defaultMessage: "The reviewer has revised their review and is requesting an additional meta-review.",
+    defaultMessage:
+      "The reviewer has revised their review and is requesting an additional meta-review.",
   },
 
   challengeCompleteNotificationLead: {
     id: "Inbox.challengeCompleteNotification.lead",
-    defaultMessage: "A challenge you manage has been completed. Have a look at some of the tasks and comments in your challenge to see if users understood the instructions you provided and to make sure there are no inappropriate contributions / vandalism. This step will help make your challenges even better.",
+    defaultMessage:
+      "A challenge you manage has been completed. Have a look at some of the tasks and comments in your challenge to see if users understood the instructions you provided and to make sure there are no inappropriate contributions / vandalism. This step will help make your challenges even better.",
   },
 
   mapperChallengeCompleteNotificationLead: {
@@ -166,7 +172,7 @@ export default defineMessages({
 
   viewConversationLabel: {
     id: "Inbox.notification.controls.viewConversation.label",
-    defaultMessage: "View Conversation"
+    defaultMessage: "View Conversation",
   },
 
   reviewTaskLabel: {
@@ -191,11 +197,11 @@ export default defineMessages({
 
   appliedErrorTags: {
     id: "Inbox.notification.appliedErrorTags",
-    defaultMessage: "The following error tags have been applied to your task"
+    defaultMessage: "The following error tags have been applied to your task",
   },
 
   commentedOnChallenge: {
     id: "Inbox.notification.commentedOnChallenge",
-    defaultMessage: "Someone commented on your challenge."
-  }
-})
+    defaultMessage: "Someone commented on your challenge.",
+  },
+});

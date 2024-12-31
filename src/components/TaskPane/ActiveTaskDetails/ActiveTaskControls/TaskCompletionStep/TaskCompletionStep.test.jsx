@@ -13,12 +13,11 @@ describe("TaskCompletionStep", () => {
         keyboardShortcutGroups={{}}
         activateKeyboardShortcutGroup={() => null}
         deactivateKeyboardShortcutGroup={() => null}
-      />
+      />,
     );
     const text = getByText("Open Editor");
     expect(text).toBeInTheDocument();
   });
-
 
   it("shows Edit button if allowedProgressions includes 1", () => {
     const allowedProgressions = new Map();
@@ -34,7 +33,7 @@ describe("TaskCompletionStep", () => {
         keyboardShortcutGroups={{}}
         activateKeyboardShortcutGroup={() => null}
         deactivateKeyboardShortcutGroup={() => null}
-      />
+      />,
     );
     const text = getByText("Open Editor");
     expect(text).toBeInTheDocument();

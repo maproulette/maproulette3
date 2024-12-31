@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeDifficulty.
@@ -19,6 +19,5 @@ export default defineMessages({
   any: {
     id: "Challenge.difficulty.any",
     defaultMessage: "Any",
-  }
-})
-
+  },
+});

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Sort.
@@ -34,10 +34,10 @@ export default defineMessages({
   },
   score: {
     id: "User.sort.numOfChallenges",
-    defaultMessage: "Score"
+    defaultMessage: "Score",
   },
   default: {
     id: "Challenge.sort.default",
     defaultMessage: "Default",
   },
-})
+});

@@ -1,4 +1,4 @@
-const DEFAULT_CHUNK_SIZE = 1024 * 1024 // 1 MB
+const DEFAULT_CHUNK_SIZE = 1024 * 1024; // 1 MB
 
 /**
  * AsLineReadableFile wraps a given File and provides methods for reading
@@ -7,21 +7,21 @@ const DEFAULT_CHUNK_SIZE = 1024 * 1024 // 1 MB
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class AsLineReadableFile {
-  constructor(file, options={}) {
-    Object.assign(this, {file, chunkSize: DEFAULT_CHUNK_SIZE}, options)
-    this.filePos = 0
-    this.buffer = ''
-    this.eof = false
-    this.chunkReader = new FileReader()
+  constructor(file, options = {}) {
+    Object.assign(this, { file, chunkSize: DEFAULT_CHUNK_SIZE }, options);
+    this.filePos = 0;
+    this.buffer = "";
+    this.eof = false;
+    this.chunkReader = new FileReader();
   }
 
   /**
    * Rewind back to beginning of file
    */
   rewind() {
-    this.buffer = ''
-    this.filePos = 0
-    this.eof = false
+    this.buffer = "";
+    this.filePos = 0;
+    this.eof = false;
   }
 
   /**
@@ -31,18 +31,18 @@ export class AsLineReadableFile {
    */
   loadChunk() {
     return new Promise((resolve) => {
-      const nextChunk = this.file.slice(this.filePos, this.filePos + this.chunkSize)
+      const nextChunk = this.file.slice(this.filePos, this.filePos + this.chunkSize);
       if (nextChunk.size < this.chunkSize) {
-        this.eof = true
+        this.eof = true;
       }
 
       this.chunkReader.onloadend = () => {
-        this.buffer = this.buffer + this.chunkReader.result
-        this.filePos += this.chunkSize
-        resolve(this.buffer)
-      }
-      this.chunkReader.readAsText(nextChunk)
-    })
+        this.buffer = this.buffer + this.chunkReader.result;
+        this.filePos += this.chunkSize;
+        resolve(this.buffer);
+      };
+      this.chunkReader.readAsText(nextChunk);
+    });
   }
 
   /**
@@ -53,28 +53,27 @@ export class AsLineReadableFile {
   async nextLine() {
     if (this.eof && this.buffer.length === 0) {
       // Nothing left to read
-      return null
+      return null;
     }
 
-    let lineBreakIndex = this.buffer.indexOf('\n')
+    let lineBreakIndex = this.buffer.indexOf("\n");
     while (lineBreakIndex === -1) {
       if (this.eof) {
         // Last line doesn't end in newline, use what remains
-        const line = this.buffer
-        this.buffer = ''
-        return line
+        const line = this.buffer;
+        this.buffer = "";
+        return line;
       }
 
-      await this.loadChunk()
-      lineBreakIndex = this.buffer.indexOf('\n')
+      await this.loadChunk();
+      lineBreakIndex = this.buffer.indexOf("\n");
     }
 
-    const line = this.buffer.slice(0, lineBreakIndex)
-    this.buffer = this.buffer.slice(lineBreakIndex + 1)
+    const line = this.buffer.slice(0, lineBreakIndex);
+    this.buffer = this.buffer.slice(lineBreakIndex + 1);
 
-    return line
+    return line;
   }
-
 
   /**
    * Read the desired number of lines, returning a promise
@@ -83,11 +82,11 @@ export class AsLineReadableFile {
    * with null values
    */
   async readLines(count) {
-    const lines = []
+    const lines = [];
     for (let i = 0; i < count; i++) {
-      lines.push(await this.nextLine())
+      lines.push(await this.nextLine());
     }
-    return lines
+    return lines;
   }
 
   /**
@@ -97,11 +96,11 @@ export class AsLineReadableFile {
    * of the array will be filled null values
    */
   async forEach(lineCount, callback) {
-    let allLinesRead = false
+    let allLinesRead = false;
     while (!allLinesRead) {
-      const lines = await this.readLines(lineCount)
-      allLinesRead = lines[lines.length - 1] === null
-      callback(lines)
+      const lines = await this.readLines(lineCount);
+      allLinesRead = lines[lines.length - 1] === null;
+      callback(lines);
     }
   }
 
@@ -109,18 +108,18 @@ export class AsLineReadableFile {
    * Reads all lines from the file into memory and returns them as an array
    */
   async allLines() {
-    const lines = []
-    let line = null
+    const lines = [];
+    let line = null;
 
     do {
-      line = await this.nextLine()
+      line = await this.nextLine();
       if (line !== null) {
-        lines.push(line)
+        lines.push(line);
       }
-    } while (line !== null)
+    } while (line !== null);
 
-    return lines
+    return lines;
   }
 }
 
-export default (file, options) => new AsLineReadableFile(file, options)
+export default (file, options) => new AsLineReadableFile(file, options);

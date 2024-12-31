@@ -1,70 +1,60 @@
-import { WithSearchResults } from './WithSearchResults'
+import { WithSearchResults } from "./WithSearchResults";
 
-let basicProps = null
-let WrappedComponent = null
+let basicProps = null;
+let WrappedComponent = null;
 
 beforeEach(() => {
   basicProps = {
     searchCriteria: {
-      query: ""
+      query: "",
     },
     myItems: [
       {
         name: "first item",
-        tags: ["foo"]
+        tags: ["foo"],
       },
       {
-        name: "second item"
+        name: "second item",
       },
       {
         name: "third item",
-        tags: ["bar", "baz"]
-      }
-    ]
-  }
+        tags: ["bar", "baz"],
+      },
+    ],
+  };
 
-  WrappedComponent = WithSearchResults(
-    () => <div className="child" />,
-    "mySearchName",
-    "myItems"
-  )
-})
+  WrappedComponent = WithSearchResults(() => <div className="child" />, "mySearchName", "myItems");
+});
 
 test("Search query is passed to wrapped component", () => {
-  const wrapper = shallow(
-    <WrappedComponent {...basicProps} />
-  )
+  const wrapper = shallow(<WrappedComponent {...basicProps} />);
 
-  expect(wrapper.props().searchCriteria.query).toBe("")
-  expect(wrapper.props().myItems.length).toBe(basicProps.myItems.length)
+  expect(wrapper.props().searchCriteria.query).toBe("");
+  expect(wrapper.props().myItems.length).toBe(basicProps.myItems.length);
 
-  expect(wrapper).toMatchSnapshot()
-})
+  expect(wrapper).toMatchSnapshot();
+});
 
 test("Search Results with tags are passed first in search results", () => {
-  basicProps.searchCriteria.query = "#bar"
+  basicProps.searchCriteria.query = "#bar";
 
-  const wrapper = shallow(
-    <WrappedComponent {...basicProps} />
-  )
+  const wrapper = shallow(<WrappedComponent {...basicProps} />);
 
-  expect(wrapper.props().myItems[0].name).toBe('third item')
-  expect(wrapper.props().myItems[0].tags[0]).toBe('bar')
-  expect(wrapper).toMatchSnapshot()
-})
+  expect(wrapper.props().myItems[0].name).toBe("third item");
+  expect(wrapper.props().myItems[0].tags[0]).toBe("bar");
+  expect(wrapper).toMatchSnapshot();
+});
 
 test("Search Results are passed back as the 'outputProp' if provided", () => {
   WrappedComponent = WithSearchResults(
     () => <div className="child" />,
     "mySearchName",
     "myItems",
-    "myOutput"
-  )
+    "myOutput",
+  );
 
-  const wrapper = shallow(
-    <WrappedComponent {...basicProps} />
-  )
+  const wrapper = shallow(<WrappedComponent {...basicProps} />);
 
-  expect(wrapper.props().myOutput.length).toBe(basicProps.myItems.length)
-  expect(wrapper).toMatchSnapshot()
-})
+  expect(wrapper.props().myOutput.length).toBe(basicProps.myItems.length);
+  expect(wrapper).toMatchSnapshot();
+});

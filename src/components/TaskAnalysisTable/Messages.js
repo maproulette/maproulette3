@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskAnalysisTable
@@ -251,6 +251,7 @@ export default defineMessages({
 
   confirmActionWarning: {
     id: "Admin.TaskAnalysisTable.confirmActionWarning",
-    defaultMessage: "This process can take awhile, depending on the challenge size, and cannot be undone.",
+    defaultMessage:
+      "This process can take awhile, depending on the challenge size, and cannot be undone.",
   },
-})
+});

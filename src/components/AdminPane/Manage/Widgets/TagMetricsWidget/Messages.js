@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TagMetricsWidget
@@ -11,5 +11,5 @@ export default defineMessages({
   title: {
     id: "Widgets.TagMetricsWidget.title",
     defaultMessage: "Tag Metrics",
-  }
-})
+  },
+});

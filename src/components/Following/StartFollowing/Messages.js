@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with StartFollowing
@@ -16,7 +16,6 @@ export default defineMessages({
 
   osmUsername: {
     id: "StartFollowing.controls.chooseOSMUser.placeholder",
-    defaultMessage: "OpenStreetMap username"
+    defaultMessage: "OpenStreetMap username",
   },
-})
-
+});

@@ -59,7 +59,7 @@ export default defineMessages({
   challengeComment: {
     id: "Notification.type.challengeComment",
     defaultMessage: "Challenge Comment",
-  }
+  },
 });
 
 export const subscriptionCountMessages = defineMessages({

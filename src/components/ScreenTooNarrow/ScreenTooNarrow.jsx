@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { FormattedMessage } from 'react-intl'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import messages from './Messages'
+import { useState } from "react";
+import { FormattedMessage } from "react-intl";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 /**
  * ScreenTooNarrow displays a message indicating that the user's screen/window
@@ -10,7 +10,7 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 const ScreenTooNarrow = () => {
-  const [minimized, setMinimized] = useState(false)
+  const [minimized, setMinimized] = useState(false);
 
   if (minimized) {
     return (
@@ -19,7 +19,7 @@ const ScreenTooNarrow = () => {
           <FormattedMessage {...messages.header} />
         </h1>
       </div>
-    )
+    );
   }
 
   return (
@@ -50,7 +50,7 @@ const ScreenTooNarrow = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ScreenTooNarrow
+export default ScreenTooNarrow;

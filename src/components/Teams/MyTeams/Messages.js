@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with MyTeams
@@ -8,4 +8,4 @@ export default defineMessages({
     id: "Team.noTeams",
     defaultMessage: "You are not a member of any teams",
   },
-})
+});

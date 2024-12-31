@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 const USER_IDENTITY = gql`
   fragment UserIdentity on User {
@@ -9,7 +9,7 @@ const USER_IDENTITY = gql`
       avatarURL
     }
   }
-`
+`;
 const USER_WITH_FOLLOW_DATA = gql`
   fragment UserWithFollowData on User {
     ...UserIdentity
@@ -25,7 +25,7 @@ const USER_WITH_FOLLOW_DATA = gql`
   }
 
   ${USER_IDENTITY}
-`
+`;
 
 export const USER = gql`
   query User($id: Long!) {
@@ -33,7 +33,7 @@ export const USER = gql`
   }
 
   ${USER_WITH_FOLLOW_DATA}
-`
+`;
 
 export const FOLLOW_USER = gql`
   mutation FollowUser($userId: Long!) {
@@ -41,7 +41,7 @@ export const FOLLOW_USER = gql`
   }
 
   ${USER_WITH_FOLLOW_DATA}
-`
+`;
 
 export const UNFOLLOW_USER = gql`
   mutation UnfollowUser($userId: Long!) {
@@ -49,7 +49,7 @@ export const UNFOLLOW_USER = gql`
   }
 
   ${USER_WITH_FOLLOW_DATA}
-`
+`;
 
 export const BLOCK_USER = gql`
   mutation BlockUser($userId: Long!) {
@@ -57,7 +57,7 @@ export const BLOCK_USER = gql`
   }
 
   ${USER_WITH_FOLLOW_DATA}
-`
+`;
 
 export const UNBLOCK_USER = gql`
   mutation unblockUser($userId: Long!) {
@@ -65,7 +65,7 @@ export const UNBLOCK_USER = gql`
   }
 
   ${USER_WITH_FOLLOW_DATA}
-`
+`;
 
 export const RECENT_ACTIVITY = gql`
   query Activity($osmIds: [Long!], $limit: Int, $page: Int) {
@@ -98,4 +98,4 @@ export const RECENT_ACTIVITY = gql`
   }
 
   ${USER_IDENTITY}
-`
+`;

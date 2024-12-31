@@ -7,20 +7,20 @@ const PagePickerOptions = (props) => {
       options.push(
         <option key={i} value={i}>
           Page {i + 1}
-        </option>
-      )
+        </option>,
+      );
     }
 
     return options;
   }
 
   return null;
-}
+};
 
-const PagePicker = props => {
+const PagePicker = (props) => {
   return (
     <select
-      onChange={e => props.changePage(e.target.value)}
+      onChange={(e) => props.changePage(e.target.value)}
       defaultValue={-1}
       className="mr-w-24 mr-select mr-text-xs mr-pr-5"
     >
@@ -29,7 +29,7 @@ const PagePicker = props => {
       </option>
       <PagePickerOptions {...props} />
     </select>
-  )
-}
+  );
+};
 
-export default PagePicker
+export default PagePicker;

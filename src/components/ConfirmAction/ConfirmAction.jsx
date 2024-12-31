@@ -93,17 +93,11 @@ export default class ConfirmAction extends Component {
             </div>
 
             <div className="mr-mt-16 mr-bg-blue-cloudburst mr-p-8 mr-flex mr-justify-center mr-items-center">
-              <button
-                className="mr-button mr-button--green-lighter mr-mr-8"
-                onClick={this.cancel}
-              >
+              <button className="mr-button mr-button--green-lighter mr-mr-8" onClick={this.cancel}>
                 <FormattedMessage {...messages.cancel} />
               </button>
 
-              <button
-                className="mr-button mr-button--danger"
-                onClick={this.proceed}
-              >
+              <button className="mr-button mr-button--danger" onClick={this.proceed}>
                 <FormattedMessage {...messages.proceed} />
               </button>
             </div>

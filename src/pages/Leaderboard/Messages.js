@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Leaderboard
@@ -31,7 +31,7 @@ export default defineMessages({
 | Already Fixed | 3      |
 | Can't Complete| 1      |
 | Skipped       | 0      |
-`
+`,
   },
 
   userPoints: {
@@ -63,4 +63,4 @@ export default defineMessages({
     id: "Leaderboard.updatedDaily",
     defaultMessage: "Updated every 24 hours",
   },
-})
+});

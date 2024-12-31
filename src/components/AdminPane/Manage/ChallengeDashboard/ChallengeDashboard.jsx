@@ -77,20 +77,12 @@ export class ChallengeDashboard extends Component {
       return <BusySpinner />;
     }
 
-    const isDeletingTasks = _get(
-      this.props,
-      "progress.deletingTasks.inProgress",
-      false
-    );
+    const isDeletingTasks = _get(this.props, "progress.deletingTasks.inProgress", false);
     if (isDeletingTasks) {
       return <TaskDeletingProgress {...this.props} />;
     }
 
-    const isUploadingTasks = _get(
-      this.props,
-      "progress.creatingTasks.inProgress",
-      false
-    );
+    const isUploadingTasks = _get(this.props, "progress.creatingTasks.inProgress", false);
     if (isUploadingTasks) {
       return <TaskUploadingProgress {...this.props} />;
     }
@@ -131,21 +123,20 @@ export class ChallengeDashboard extends Component {
           onChallengeDashboard
         />
 
-        {this.props.challenge.isArchived &&
-          this.props.challenge.systemArchivedAt && (
-            <div className="mr-mt-6 mr-text-red-light">
-              <FormattedMessage {...manageMessages.staleChallengeMessage1} />{" "}
-              <FormattedDate
-                value={parseISO(this.props.challenge.systemArchivedAt)}
-                year="numeric"
-                month="long"
-                day="2-digit"
-              />{" "}
-              <FormattedMessage {...manageMessages.staleChallengeMessage2} />
-              {` ${Number(window.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6} `}
-              <FormattedMessage {...manageMessages.staleChallengeMessage3} />
-            </div>
-          )}
+        {this.props.challenge.isArchived && this.props.challenge.systemArchivedAt && (
+          <div className="mr-mt-6 mr-text-red-light">
+            <FormattedMessage {...manageMessages.staleChallengeMessage1} />{" "}
+            <FormattedDate
+              value={parseISO(this.props.challenge.systemArchivedAt)}
+              year="numeric"
+              month="long"
+              day="2-digit"
+            />{" "}
+            <FormattedMessage {...manageMessages.staleChallengeMessage2} />
+            {` ${Number(window.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6} `}
+            <FormattedMessage {...manageMessages.staleChallengeMessage3} />
+          </div>
+        )}
       </div>
     );
 
@@ -159,9 +150,7 @@ export class ChallengeDashboard extends Component {
           workspaceEyebrow={pageHeader}
           challenges={[this.props.challenge]}
           pageId="ChallengeDashboard"
-          metaReviewEnabled={
-            window.env.REACT_APP_FEATURE_META_QC === "enabled"
-          }
+          metaReviewEnabled={window.env.REACT_APP_FEATURE_META_QC === "enabled"}
         />
       </div>
     );
@@ -191,16 +180,16 @@ export default WithManageableProjects(
               WithFilteredClusteredTasks(
                 WithChallengeMetrics(injectIntl(ChallengeDashboard)),
                 "clusteredTasks",
-                "filteredClusteredTasks"
-              )
-            )
+                "filteredClusteredTasks",
+              ),
+            ),
           ),
           WidgetDataTarget.challenge,
           DASHBOARD_NAME,
-          defaultDashboardSetup
-        )
+          defaultDashboardSetup,
+        ),
       ),
-      "challengeOwner"
-    )
-  )
+      "challengeOwner",
+    ),
+  ),
 );

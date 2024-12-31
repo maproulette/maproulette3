@@ -1,91 +1,91 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Navbar.
  */
 export default defineMessages({
   blog: {
-    id: 'Navbar.links.blog',
+    id: "Navbar.links.blog",
     defaultMessage: "Blog",
   },
 
   donate: {
-    id: 'Navbar.links.donate',
+    id: "Navbar.links.donate",
     defaultMessage: "Donate",
   },
 
   dashboard: {
-    id: 'Navbar.links.dashboard',
+    id: "Navbar.links.dashboard",
     defaultMessage: "Dashboard",
   },
 
   results: {
-    id: 'Navbar.links.challengeResults',
+    id: "Navbar.links.challengeResults",
     defaultMessage: "Find Challenges",
   },
 
   leaderboard: {
-    id: 'Navbar.links.leaderboard',
+    id: "Navbar.links.leaderboard",
     defaultMessage: "Leaderboard",
   },
 
   inbox: {
-    id: 'Navbar.links.inbox',
+    id: "Navbar.links.inbox",
     defaultMessage: "Inbox",
   },
 
   sent: {
-    id: 'Navbar.links.sent',
+    id: "Navbar.links.sent",
     defaultMessage: "Sent",
   },
 
   review: {
-    id: 'Navbar.links.review',
+    id: "Navbar.links.review",
     defaultMessage: "Review",
   },
 
   adminCreate: {
-    id: 'Navbar.links.admin',
+    id: "Navbar.links.admin",
     defaultMessage: "Create & Manage",
   },
 
   help: {
-    id: 'Navbar.links.help',
+    id: "Navbar.links.help",
     defaultMessage: "Learn",
   },
 
   profile: {
-    id: 'Navbar.links.userProfile',
+    id: "Navbar.links.userProfile",
     defaultMessage: "User Settings",
   },
 
   metrics: {
-    id: 'Navbar.links.userMetrics',
+    id: "Navbar.links.userMetrics",
     defaultMessage: "User Metrics",
   },
 
   superAdmin: {
-    id: 'Navbar.links.superAdminMetrics',
+    id: "Navbar.links.superAdminMetrics",
     defaultMessage: "Super Admin Settings",
   },
 
   achievements: {
-    id: 'Navbar.links.userAchievements',
+    id: "Navbar.links.userAchievements",
     defaultMessage: "Achievements",
   },
 
   teams: {
-    id: 'Navbar.links.teams',
+    id: "Navbar.links.teams",
     defaultMessage: "Teams",
   },
 
   globalActivity: {
-    id: 'Navbar.links.globalActivity',
+    id: "Navbar.links.globalActivity",
     defaultMessage: "Global Activity",
   },
 
   signout: {
-    id: 'Navbar.links.signout',
+    id: "Navbar.links.signout",
     defaultMessage: "Sign out",
   },
-})
+});

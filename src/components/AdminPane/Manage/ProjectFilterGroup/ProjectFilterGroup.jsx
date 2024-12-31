@@ -34,9 +34,7 @@ export default class ProjectFilterGroup extends Component {
           {...this.props}
           dashboardEntityFilters={this.props.dashboardProjectFilters}
           toggleEntityFilter={this.props.toggleDashboardProjectFilter}
-          filterToggleLabel={
-            <FormattedMessage {...messagesByFilter.archived} />
-          }
+          filterToggleLabel={<FormattedMessage {...messagesByFilter.archived} />}
         />
       </Fragment>
     );

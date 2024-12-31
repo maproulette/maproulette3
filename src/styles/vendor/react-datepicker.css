@@ -1,7 +1,8 @@
-@import 'react-datepicker/dist/react-datepicker';
+@import "react-datepicker/dist/react-datepicker";
 
-.react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle, .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::before {
-  border-bottom-color: theme('colors.blue-darker');
+.react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle,
+.react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::before {
+  border-bottom-color: theme("colors.blue-darker");
 }
 
 .react-datepicker {
@@ -19,18 +20,18 @@
   }
 
   &__navigation--previous {
-    border-right-color: theme('colors.green-lighter');
+    border-right-color: theme("colors.green-lighter");
 
     &:hover {
-      border-right-color: theme('colors.white');
+      border-right-color: theme("colors.white");
     }
   }
 
   &__navigation--next {
-    border-left-color: theme('colors.green-lighter');
+    border-left-color: theme("colors.green-lighter");
 
     &:hover {
-      border-left-color: theme('colors.white');
+      border-left-color: theme("colors.white");
     }
   }
 

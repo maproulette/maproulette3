@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeProgressBorder
@@ -6,6 +6,6 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   available: {
     id: "ChallengeProgressBorder.available",
-    defaultMessage: "Available"
+    defaultMessage: "Available",
   },
-})
+});

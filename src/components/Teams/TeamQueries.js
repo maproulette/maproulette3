@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 const TEAM_USER_FIELDS = gql`
   fragment TeamUserFields on TeamUser {
@@ -11,7 +11,7 @@ const TEAM_USER_FIELDS = gql`
       role
     }
   }
-`
+`;
 
 export const MY_TEAMS = gql`
   query MyTeams($userId: Long!) {
@@ -33,7 +33,7 @@ export const MY_TEAMS = gql`
   }
 
   ${TEAM_USER_FIELDS}
-`
+`;
 
 export const TEAM_USERS = gql`
   query TeamUsers($teamId: Long!) {
@@ -46,7 +46,7 @@ export const TEAM_USERS = gql`
   }
 
   ${TEAM_USER_FIELDS}
-`
+`;
 
 export const CREATE_TEAM = gql`
   mutation CreateTeam($name: String!, $description: String!) {
@@ -56,7 +56,7 @@ export const CREATE_TEAM = gql`
       description
     }
   }
-`
+`;
 
 export const UPDATE_TEAM = gql`
   mutation UpdateTeam($id: Long!, $name: String, $description: String) {
@@ -66,7 +66,7 @@ export const UPDATE_TEAM = gql`
       description
     }
   }
-`
+`;
 
 export const INVITE_USER = gql`
   mutation InviteUser($teamId: Long!, $userId: Long!, $role: Int!) {
@@ -74,7 +74,7 @@ export const INVITE_USER = gql`
       id
     }
   }
-`
+`;
 
 export const ACCEPT_INVITE = gql`
   mutation AcceptInvite($teamId: Long!) {
@@ -82,13 +82,13 @@ export const ACCEPT_INVITE = gql`
       id
     }
   }
-`
+`;
 
 export const DECLINE_INVITE = gql`
   mutation DeclineInvite($teamId: Long!) {
     declineTeamInvite(id: $teamId) 
   }
-`
+`;
 
 export const UPDATE_ROLE = gql`
   mutation UpdateRole($teamId: Long!, $userId: Long!, $role: Int!) {
@@ -96,16 +96,16 @@ export const UPDATE_ROLE = gql`
       id
     }
   }
-`
+`;
 
 export const REMOVE_USER = gql`
   mutation RemoveUser($teamId: Long!, $userId: Long!) {
     removeTeamUser(id: $teamId, userId: $userId)
   }
-`
+`;
 
 export const DELETE_TEAM = gql`
   mutation DeleteTeam($teamId: Long!) {
     deleteTeam(id: $teamId) 
   }
-`
+`;

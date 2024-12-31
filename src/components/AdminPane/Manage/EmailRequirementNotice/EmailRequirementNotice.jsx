@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { injectIntl } from 'react-intl'
+import { injectIntl } from "react-intl";
 import WithCurrentUser from "../../../HOCs/WithCurrentUser/WithCurrentUser";
 import MarkdownContent from "../../../MarkdownContent/MarkdownContent";
 import SvgSymbol from "../../../SvgSymbol/SvgSymbol";

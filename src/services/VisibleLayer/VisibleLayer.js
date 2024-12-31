@@ -1,7 +1,7 @@
-import _cloneDeep from 'lodash/cloneDeep'
+import _cloneDeep from "lodash/cloneDeep";
 
 // redux actions
-const CHANGE_VISIBLE_LAYER = 'ChangeVisibleLayer'
+const CHANGE_VISIBLE_LAYER = "ChangeVisibleLayer";
 
 // redux action creators
 
@@ -16,27 +16,25 @@ const CHANGE_VISIBLE_LAYER = 'ChangeVisibleLayer'
  *
  * @see See VisibleLayer/LayerSources
  */
-export const changeVisibleLayer = function(layerId, mapType) {
+export const changeVisibleLayer = function (layerId, mapType) {
   return {
     type: CHANGE_VISIBLE_LAYER,
     layerId,
-    mapType
-  }
-}
+    mapType,
+  };
+};
 
 // redux reducers
-export const visibleLayer = function(state=null, action) {
+export const visibleLayer = function (state = null, action) {
   if (action.type === CHANGE_VISIBLE_LAYER) {
-    const newState = _cloneDeep(state) || {}
+    const newState = _cloneDeep(state) || {};
     if (action.mapType) {
-      newState[action.mapType] = {id: action.layerId}
+      newState[action.mapType] = { id: action.layerId };
+    } else {
+      newState.id = action.layerId;
     }
-    else {
-      newState.id = action.layerId
-    }
-    return newState
+    return newState;
+  } else {
+    return state;
   }
-  else {
-    return state
-  }
-}
+};

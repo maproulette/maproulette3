@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with BurndownChart
@@ -13,5 +13,4 @@ export default defineMessages({
     id: "BurndownChart.tooltip",
     defaultMessage: "Tasks Remaining",
   },
-})
-
+});

@@ -1,8 +1,6 @@
 import messages from "../Messages";
 
-export const jsSchema = (
-  intl
-) => {
+export const jsSchema = (intl) => {
   return {
     $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -15,13 +13,9 @@ export const jsSchema = (
   };
 };
 
-export const uiSchema = (
-  intl
-) => {
+export const uiSchema = (intl) => {
   return {
-    "ui:order": [
-      "exportableProperties",
-    ],
+    "ui:order": ["exportableProperties"],
     exportableProperties: {
       "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.exportablePropertiesDescription),

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskAnalysisTable
@@ -86,31 +86,31 @@ export default defineMessages({
 
   byPriorityToggle: {
     id: "ReviewStatus.metrics.priority.toggle",
-    defaultMessage: "View by Task Priority"
+    defaultMessage: "View by Task Priority",
   },
 
   priorityLabel: {
     id: "ReviewStatus.metrics.priority.label",
-    defaultMessage: "{priority} Priority Tasks"
+    defaultMessage: "{priority} Priority Tasks",
   },
 
   byTaskStatusToggle: {
     id: "ReviewStatus.metrics.byTaskStatus.toggle",
-    defaultMessage: "View by Task Status"
+    defaultMessage: "View by Task Status",
   },
 
   taskStatusLabel: {
     id: "ReviewStatus.metrics.taskStatus.label",
-    defaultMessage: "{status} Tasks"
+    defaultMessage: "{status} Tasks",
   },
 
   avgTimeSpent: {
     id: "ReviewStatus.metrics.averageTime.label",
-    defaultMessage: "Avg time per review:"
+    defaultMessage: "Avg time per review:",
   },
 
   loadMetricsLabel: {
     id: "ReviewStatus.metrics.controls.loadMetrics.label",
-    defaultMessage: "Load Metrics"
+    defaultMessage: "Load Metrics",
   },
-})
+});

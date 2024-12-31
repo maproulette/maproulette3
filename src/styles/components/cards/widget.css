@@ -13,7 +13,7 @@
     @apply mr-select-none mr-cursor-move;
 
     .mr-cards-inverse & {
-      @apply  mr-border-t-0;
+      @apply mr-border-t-0;
     }
   }
 
@@ -37,7 +37,7 @@
     @apply mr-font-bold mr-text-lg mr-text-matisse-blue mr-my-2;
 
     &:after {
-      content: '';
+      content: "";
       @apply mr-block mr-my-1 mr-w-20 mr-h-3px mr-bg-blue-light;
 
       .mr-cards-inverse & {
@@ -70,7 +70,6 @@
     }
 
     .mr-cards-inverse & {
-
       a::not(.mr-text-green-light) {
         @apply mr-text-green-lighter;
 
@@ -79,6 +78,5 @@
         }
       }
     }
-
   }
 }

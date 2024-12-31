@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with StepNavigation
@@ -18,5 +18,4 @@ export default defineMessages({
     id: "StepNavigation.controls.finish.label",
     defaultMessage: "Finish",
   },
-})
-
+});

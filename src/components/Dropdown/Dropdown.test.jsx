@@ -16,7 +16,7 @@ describe("Dropdown", () => {
 
   it("doesn't break if only required props are provided", () => {
     const { getByTestId } = render(
-      <Dropdown dropdownButton={() => null} dropdownContent={() => null} />
+      <Dropdown dropdownButton={() => null} dropdownContent={() => null} />,
     );
     const component = getByTestId("mr-dropdown");
     expect(component).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe("Dropdown", () => {
           </div>
         )}
         dropdownContent={() => <div>Content</div>}
-      />
+      />,
     );
 
     fireEvent.click(screen.getByText("Icon"));

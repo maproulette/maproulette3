@@ -21,8 +21,7 @@ export default defineMessages({
 
   staleChallengeMessage2: {
     id: "Admin.Challenge.controls.stale2",
-    defaultMessage:
-      "because the tasks are more than",
+    defaultMessage: "because the tasks are more than",
   },
 
   staleChallengeMessage3: {
@@ -33,13 +32,11 @@ export default defineMessages({
 
   emailNoticeBanner: {
     id: "Admin.manage.emailBanner",
-    defaultMessage:
-      "Please provide your email so mappers can contact you with any feedback.",
+    defaultMessage: "Please provide your email so mappers can contact you with any feedback.",
   },
 
   emailNoticeSettings: {
     id: "Admin.manage.emailSettings",
-    defaultMessage:
-      "Go to Settings.",
-  }
+    defaultMessage: "Go to Settings.",
+  },
 });

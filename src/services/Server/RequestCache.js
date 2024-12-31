@@ -1,4 +1,4 @@
-import Cache from 'stale-lru-cache'
+import Cache from "stale-lru-cache";
 
 /**
  * The primary purpose of the cache is simply to reduce duplicate requests to
@@ -9,8 +9,8 @@ import Cache from 'stale-lru-cache'
 export const cache = new Cache({
   maxSize: 100,
   maxAge: 10, // seconds
-})
+});
 
 export const resetCache = () => {
-  cache.reset()
-}
+  cache.reset();
+};

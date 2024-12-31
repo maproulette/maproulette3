@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with CustomUrlList
@@ -36,7 +36,8 @@ export default defineMessages({
 
   urlDescription: {
     id: "CustomUrlList.url.description",
-    defaultMessage: "The full URL, using [mustache tags](https://learn.maproulette.org/documentation/mustache-tag-replacement/) for property replacement. Note that URLs referencing missing or unavailable mustache tags will be automatically disabled to prevent accidental creation of malformed or erroneous URLs",
+    defaultMessage:
+      "The full URL, using [mustache tags](https://learn.maproulette.org/documentation/mustache-tag-replacement/) for property replacement. Note that URLs referencing missing or unavailable mustache tags will be automatically disabled to prevent accidental creation of malformed or erroneous URLs",
   },
 
   addLabel: {
@@ -63,4 +64,4 @@ export default defineMessages({
     id: "CustomUrlList.controls.cancel.label",
     defaultMessage: "Cancel",
   },
-})
+});

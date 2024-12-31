@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ViewChallengeTasks.
@@ -46,12 +46,13 @@ export default defineMessages({
 
   geographicIndexingNotice: {
     id: "Admin.ManageTasks.geographicIndexingNotice",
-    defaultMessage: "Please note that it can take up to {delay} hours " +
-                    "to geographically index new or modified challenges. " +
-                    "Your challenge (and tasks) may not appear as " +
-                    "expected in location-specific browsing or " +
-                    "searches until indexing is complete, nor " +
-                    "when browsing map to choose location-based priority rules."
+    defaultMessage:
+      "Please note that it can take up to {delay} hours " +
+      "to geographically index new or modified challenges. " +
+      "Your challenge (and tasks) may not appear as " +
+      "expected in location-specific browsing or " +
+      "searches until indexing is complete, nor " +
+      "when browsing map to choose location-based priority rules.",
   },
 
   changePriorityLabel: {
@@ -66,7 +67,7 @@ export default defineMessages({
 
   filterListLabel: {
     id: "Admin.manageTasks.controls.filterList.label",
-    defaultMessage: "Filter By:"
+    defaultMessage: "Filter By:",
   },
 
   clearFiltersLabel: {
@@ -127,5 +128,5 @@ export default defineMessages({
   actionDisabled: {
     id: "Admin.Task.fields.actions.disabled",
     defaultMessage: "Disabled",
-  }
-})
+  },
+});

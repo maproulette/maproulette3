@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with CommentList
@@ -6,11 +6,11 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   viewTaskLabel: {
     id: "CommentList.controls.viewTask.label",
-    defaultMessage: "View Task"
+    defaultMessage: "View Task",
   },
 
   noComments: {
     id: "CommentList.noComments.label",
-    defaultMessage: "No Comments"
+    defaultMessage: "No Comments",
   },
-})
+});

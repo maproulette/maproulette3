@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with FollowingWidget
@@ -43,4 +43,4 @@ export default defineMessages({
     id: "Widgets.FollowersWidget.controls.toggleExactDates.label",
     defaultMessage: "Show Exact Dates",
   },
-})
+});

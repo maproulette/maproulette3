@@ -14,7 +14,7 @@ export default {
     updateFailure: messages.userUpdateFailure,
     fetchFailure: messages.userFetchFailure,
     notFound: messages.userNotFound,
-    followFailure: messages.userFollowFailure
+    followFailure: messages.userFollowFailure,
   },
 
   leaderboard: {
@@ -84,7 +84,7 @@ export default {
     archiveFailure: messages.challengeArchiveFailure,
     rebuildFailure: messages.challengeRebuildFailure,
     doesNotExist: messages.challengeDoesNotExist,
-    moveFailure: messages.challengeMoveFailure
+    moveFailure: messages.challengeMoveFailure,
   },
 
   challengeSaveFailure: {
