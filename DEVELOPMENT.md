@@ -194,6 +194,10 @@ Unit tests are built with [Jest](https://facebook.github.io/jest/) +
 
 `yarn test` to run them in watch mode.
 
+## Linting and formatting
+
+Run `yarn format` to format your code. Run `yarn lint` to check for lint errors.
+
 ## CSS Styling and Naming
 
 We are using SASS and [Tailwind
