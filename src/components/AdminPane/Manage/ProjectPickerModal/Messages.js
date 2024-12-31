@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ProjectPickerModal
@@ -6,11 +6,11 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   chooseProject: {
     id: "ProjectPickerModal.chooseProject",
-    defaultMessage: "Choose a Project"
+    defaultMessage: "Choose a Project",
   },
 
   noProjects: {
     id: "ProjectPickerModal.noProjects",
-    defaultMessage: "No projects found"
+    defaultMessage: "No projects found",
   },
-})
+});

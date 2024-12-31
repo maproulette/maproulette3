@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with WidgetWorkspace
@@ -92,5 +92,5 @@ export default defineMessages({
   useRecommendedLayoutLabel: {
     id: "WidgetWorkspace.useRecommendedLayoutLabel.label",
     defaultMessage: "Use Recommended Layout",
-  }
-})
+  },
+});

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeLocation
@@ -20,4 +20,4 @@ export default defineMessages({
     id: "Challenge.location.any",
     defaultMessage: "Anywhere",
   },
-})
+});

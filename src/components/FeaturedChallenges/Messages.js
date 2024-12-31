@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with FeaturedChallenges
@@ -11,16 +11,16 @@ export default defineMessages({
 
   nothingFeatured: {
     id: "FeaturedChallenges.noFeatured",
-    defaultMessage: "Nothing currently featured"
+    defaultMessage: "Nothing currently featured",
   },
 
   projectIndicatorLabel: {
     id: "FeaturedChallenges.projectIndicator.label",
-    defaultMessage: "Project"
+    defaultMessage: "Project",
   },
 
   browseFeaturedLabel: {
     id: "FeaturedChallenges.browse",
     defaultMessage: "Explore",
   },
-})
+});

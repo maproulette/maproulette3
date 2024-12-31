@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskPane
@@ -56,12 +56,12 @@ export default defineMessages({
 
   genericLockFailure: {
     id: "Task.pane.lockFailedDialog.genericLockFailure",
-    defaultMessage: "Task lock could not be acquired"
+    defaultMessage: "Task lock could not be acquired",
   },
 
   previewAvailable: {
     id: "Task.pane.lockFailedDialog.previewAvailable",
-    defaultMessage: ". A read-only preview is available."
+    defaultMessage: ". A read-only preview is available.",
   },
 
   saveChangesLabel: {
@@ -78,4 +78,4 @@ export default defineMessages({
     id: "Task.pane.controls.copyVirtualShareLink.label",
     defaultMessage: "Copy Virtual Challenge Share Link",
   },
-})
+});

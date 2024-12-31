@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ViewFollowers
@@ -48,4 +48,4 @@ export default defineMessages({
     id: "Followers.ViewFollowers.noBlockedFollowers",
     defaultMessage: "You have not blocked any followers",
   },
-})
+});

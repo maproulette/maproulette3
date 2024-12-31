@@ -1,6 +1,6 @@
-import messages from './Messages'
+import messages from "./Messages";
 
-const overpassTurboShortcutRegex = /{{2}[^}]+}{2}/
+const overpassTurboShortcutRegex = /{{2}[^}]+}{2}/;
 
 /**
  * Provides methods related to validating Overpass queries.
@@ -9,7 +9,7 @@ const overpassTurboShortcutRegex = /{{2}[^}]+}{2}/
  */
 export class AsValidatableOverpass {
   constructor(overpassQuery) {
-    this.overpassQuery = overpassQuery
+    this.overpassQuery = overpassQuery;
   }
 
   /**
@@ -17,16 +17,16 @@ export class AsValidatableOverpass {
    * such as inclusion of Overpass Turbo query shortcuts (mustache tags).
    */
   validate() {
-    const errors = []
+    const errors = [];
 
     if (overpassTurboShortcutRegex.test(this.overpassQuery)) {
       errors.push({
-        message: messages.noOverpassTurboShortcuts
-      })
+        message: messages.noOverpassTurboShortcuts,
+      });
     }
 
-    return errors
+    return errors;
   }
 }
 
-export default overpassQuery => new AsValidatableOverpass(overpassQuery)
+export default (overpassQuery) => new AsValidatableOverpass(overpassQuery);

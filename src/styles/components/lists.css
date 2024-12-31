@@ -4,7 +4,7 @@
   li {
     &:not(:last-of-type) {
       @apply mr-mr-6;
-      
+
       @apply xl:mr-mr-8;
     }
 
@@ -62,7 +62,7 @@
       @apply mr-flex mr-items-center mr-py-3;
 
       &.active::before {
-        content: '•';
+        content: "•";
         @apply mr-text-xl mr-leading-none mr-text-yellow mr-mr-1;
       }
     }

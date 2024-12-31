@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ConfigureColumnsModal
@@ -33,4 +33,4 @@ export default defineMessages({
     id: "ConfigureColumnsModal.controls.done.label",
     defaultMessage: "Done",
   },
-})
+});

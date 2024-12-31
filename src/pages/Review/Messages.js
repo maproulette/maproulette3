@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskAnalysisTable
@@ -53,4 +53,4 @@ export default defineMessages({
     id: "Review.Dashboard.asMetaReviewer.label",
     defaultMessage: "Meta-Reviewer",
   },
-})
+});

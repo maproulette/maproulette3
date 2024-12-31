@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with RJSFFormFieldAdapter.
@@ -25,27 +25,27 @@ export default defineMessages({
   },
 
   writeLabel: {
-    id: 'Form.controls.markdownField.write.label',
+    id: "Form.controls.markdownField.write.label",
     defaultMessage: "Write",
   },
 
   previewLabel: {
-    id: 'Form.controls.markdownField.preview.label',
+    id: "Form.controls.markdownField.preview.label",
     defaultMessage: "Preview",
   },
 
   uploadErrorGeoJSON: {
-    id: 'Form.controls.markdownField.uploadErrorGeoJSON.label',
+    id: "Form.controls.markdownField.uploadErrorGeoJSON.label",
     defaultMessage: "Upload Failed! File must have '.json' or .geojson' extension.",
   },
 
   uploadErrorJSON: {
-    id: 'Form.controls.markdownField.uploadErrorJSON.label',
+    id: "Form.controls.markdownField.uploadErrorJSON.label",
     defaultMessage: "Upload Failed! File must have '.json' extension.",
   },
 
   formatErrorJSON: {
-    id: 'Form.controls.markdownField.formatErrorJSON.label',
+    id: "Form.controls.markdownField.formatErrorJSON.label",
     defaultMessage: "Upload Failed! Layout must be exported from the task completion flow.",
-  }
-})
+  },
+});

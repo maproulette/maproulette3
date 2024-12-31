@@ -1,9 +1,9 @@
-import { createRef, Component } from 'react'
-import PropTypes from 'prop-types'
-import { Viewer } from 'mapillary-js';
-import { getAccessToken } from '../../services/Mapillary/Mapillary'
-import External from '../External/External'
-import Modal from '../Modal/Modal'
+import { createRef, Component } from "react";
+import PropTypes from "prop-types";
+import { Viewer } from "mapillary-js";
+import { getAccessToken } from "../../services/Mapillary/Mapillary";
+import External from "../External/External";
+import Modal from "../Modal/Modal";
 
 /**
  * Renders a [Mapillary Viewer](https://mapillary.github.io/mapillary-js/)
@@ -13,7 +13,6 @@ import Modal from '../Modal/Modal'
  */
 export default class MapillaryViewer extends Component {
   containerRef = createRef();
-  
 
   componentDidMount() {
     this.viewer = new Viewer({
@@ -21,7 +20,7 @@ export default class MapillaryViewer extends Component {
       container: this.containerRef.current,
       imageId: this.props.initialImageKey,
       component: { cover: false },
-    })
+    });
   }
 
   componentWillUnmount() {
@@ -31,7 +30,7 @@ export default class MapillaryViewer extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.initialImageKey !== this.props.initialImageKey
+    return nextProps.initialImageKey !== this.props.initialImageKey;
   }
 
   render() {
@@ -39,15 +38,19 @@ export default class MapillaryViewer extends Component {
       <External>
         <Modal isActive onClose={this.props.onClose}>
           <div className="mr-p-2 mr-pt-4 mr-relative mr-m-auto" style={{ width: 640 }}>
-            <div ref={this.containerRef} id="mapillary-viewer" style={{ width: 640, height: 480 }}></div>
+            <div
+              ref={this.containerRef}
+              id="mapillary-viewer"
+              style={{ width: 640, height: 480 }}
+            ></div>
           </div>
         </Modal>
       </External>
-    )
+    );
   }
 }
 
 MapillaryViewer.propTypes = {
   initialImageKey: PropTypes.string.isRequired,
   onClose: PropTypes.func,
-}
+};

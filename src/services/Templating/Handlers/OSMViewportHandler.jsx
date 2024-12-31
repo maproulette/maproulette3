@@ -1,6 +1,4 @@
-import OSMViewportReference
-       from '../../../components/OSMViewportReference/OSMViewportReference'
-
+import OSMViewportReference from "../../../components/OSMViewportReference/OSMViewportReference";
 
 /**
  * Expands viewport shortcodes containing zoom/lat/lon to links to
@@ -16,30 +14,32 @@ const OSMViewportHandler = {
   osmMapRegex: "https?://(www.openstreetmap.org)/?#map=(\\d+)\\/(-?[\\.\\d]+)\\/(-?[\\.\\d]+)",
 
   handlesShortCode(shortCode) {
-    return new RegExp(this.osmViewportRegex).test(shortCode) ||
-           new RegExp(this.osmMapRegex).test(shortCode)
+    return (
+      new RegExp(this.osmViewportRegex).test(shortCode) ||
+      new RegExp(this.osmMapRegex).test(shortCode)
+    );
   },
 
   expandShortCode(shortCode) {
-    const viewport = new RegExp(this.osmViewportRegex).test(shortCode) ?
-                     this.extractViewport(new RegExp(this.osmViewportRegex), shortCode) :
-                     this.extractViewport(new RegExp(this.osmMapRegex), shortCode) 
+    const viewport = new RegExp(this.osmViewportRegex).test(shortCode)
+      ? this.extractViewport(new RegExp(this.osmViewportRegex), shortCode)
+      : this.extractViewport(new RegExp(this.osmMapRegex), shortCode);
 
-    return viewport ? <OSMViewportReference {...viewport} /> : shortCode
+    return viewport ? <OSMViewportReference {...viewport} /> : shortCode;
   },
 
   extractViewport(regex, shortCode) {
-    const match = regex.exec(shortCode.slice(1, -1))
+    const match = regex.exec(shortCode.slice(1, -1));
     if (!match) {
-      return null
+      return null;
     }
 
     return {
       zoom: match[2],
       lat: match[3],
       lon: match[4],
-    }
+    };
   },
-}
+};
 
-export default OSMViewportHandler
+export default OSMViewportHandler;

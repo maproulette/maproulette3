@@ -42,11 +42,7 @@ export const mapStateToProps = (state) => {
   const userId = _get(state, "currentUser.userId");
   const userEntity = _get(state, `entities.users.${userId}`);
   if (userEntity) {
-    props.user = denormalize(
-      userEntity,
-      userDenormalizationSchema(),
-      state.entities
-    );
+    props.user = denormalize(userEntity, userDenormalizationSchema(), state.entities);
 
     if (props.user) {
       const endUser = AsEndUser(props.user);
@@ -78,7 +74,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       fetchTopChallenges,
       fetchUserActivity,
     },
-    dispatch
+    dispatch,
   );
 
   actions.updateUserAppSetting = _debounce((userId, setting) => {

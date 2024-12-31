@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with StatusRadarWidget
@@ -18,4 +18,4 @@ export default defineMessages({
     id: "Widgets.StatusRadarWidget.controls.loadStats.label",
     defaultMessage: "Load Completion Stats",
   },
-})
+});

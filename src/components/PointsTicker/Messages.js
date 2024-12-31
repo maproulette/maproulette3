@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with PointsTicker
@@ -8,4 +8,4 @@ export default defineMessages({
     id: "PointsTicker.label",
     defaultMessage: "My Points",
   },
-})
+});

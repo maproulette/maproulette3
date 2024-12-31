@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with OSMElementHistory
@@ -38,4 +38,4 @@ export default defineMessages({
     id: "OSMElementHistory.controls.viewOSM.label",
     defaultMessage: "View OSM",
   },
-})
+});

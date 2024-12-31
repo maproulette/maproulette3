@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with FitWorldControl
@@ -6,7 +6,6 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   tooltip: {
     id: "FitWorldControl.tooltip",
-    defaultMessage: "Worldwide view"
+    defaultMessage: "Worldwide view",
   },
-})
-
+});

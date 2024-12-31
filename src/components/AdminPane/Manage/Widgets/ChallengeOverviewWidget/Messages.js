@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeOverviewWidget
@@ -63,4 +63,4 @@ export default defineMessages({
     id: "Widgets.ChallengeOverviewWidget.projectDisabledWarning",
     defaultMessage: "project not discoverable",
   },
-})
+});

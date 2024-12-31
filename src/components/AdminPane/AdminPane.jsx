@@ -100,16 +100,8 @@ export class AdminPane extends Component {
                 path="/admin/virtual/project/:projectId/challenges/manage"
                 component={ManageChallengeList}
               />
-              <CustomRoute
-                exact
-                path="/admin/projects"
-                component={ProjectsDashboard}
-              />
-              <CustomRoute
-                exact
-                path="/admin/project/:projectId"
-                component={ProjectDashboard}
-              />
+              <CustomRoute exact path="/admin/projects" component={ProjectsDashboard} />
+              <CustomRoute exact path="/admin/project/:projectId" component={ProjectDashboard} />
               <CustomRoute component={ProjectsDashboard} />
             </Switch>
           </div>
@@ -129,16 +121,18 @@ AdminPane.propTypes = {
 
 export const CustomRoute = ({ component: Component, ...rest }) => {
   return (
-    <Route {...rest}
-      render={props => {
+    <Route
+      {...rest}
+      render={(props) => {
         return (
           <>
             <HeadTitle />
             <Component {...props} />
           </>
-        )
-      }} />
-  )
-}
+        );
+      }}
+    />
+  );
+};
 
 export default WithStatus(WithCurrentUser(withRouter(AdminPane)));

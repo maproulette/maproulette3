@@ -1,4 +1,4 @@
-@import 'react-table-6/react-table';
+@import "react-table-6/react-table";
 
 .ReactTable {
   @apply mr-border-none mr-text-white;
@@ -22,11 +22,11 @@
       line-height: 1rem;
 
       &.-sort-asc {
-        box-shadow: inset 0 2px 0 0 theme('colors.white');
+        box-shadow: inset 0 2px 0 0 theme("colors.white");
       }
 
       &.-sort-desc {
-        box-shadow: inset 0 -2px 0 0 theme('colors.white');
+        box-shadow: inset 0 -2px 0 0 theme("colors.white");
       }
     }
 
@@ -66,7 +66,7 @@
 
     .-btn {
       @apply mr-py-2 mr-px-4 mr-rounded mr-border-2 mr-bg-transparent mr-font-medium mr-text-green-lighter mr-transition;
-      border: theme('borderWidth.2') solid theme('colors.current');
+      border: theme("borderWidth.2") solid theme("colors.current");
 
       &[disabled] {
         @apply mr-opacity-25;
@@ -77,7 +77,8 @@
       }
     }
 
-    input, select {
+    input,
+    select {
       @apply mr-bg-black-15 mr-border-none mr-rounded mr-shadow-inner;
     }
 
@@ -94,7 +95,7 @@
 
   .rt-expander {
     &:after {
-      border-top-color: #FFF;
+      border-top-color: #fff;
     }
   }
 

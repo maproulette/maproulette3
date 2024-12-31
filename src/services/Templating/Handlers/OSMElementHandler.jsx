@@ -1,6 +1,4 @@
-import OSMElementReference
-       from '../../../components/OSMElementReference/OSMElementReference'
-
+import OSMElementReference from "../../../components/OSMElementReference/OSMElementReference";
 
 /**
  * Expands OSM element reference shortcodes to nodes, ways, and references,
@@ -17,36 +15,38 @@ const OSMElementHandler = {
   osmElementRegex: "(n|w|r|node|way|rel|relation)[/ ]?(\\d+)[,\\s]*",
 
   elementTypeMap: {
-    'n': 'node',
-    'node': 'node',
-    'w': 'way',
-    'way': 'way',
-    'r': 'relation',
-    'rel': 'relation',
-    'relation': 'relation',
+    n: "node",
+    node: "node",
+    w: "way",
+    way: "way",
+    r: "relation",
+    rel: "relation",
+    relation: "relation",
   },
 
   handlesShortCode(shortCode) {
     // Add opening short-code bracket to test to help prevent false positives
-    return new RegExp("\\[" + this.osmElementRegex).test(shortCode)
+    return new RegExp("\\[" + this.osmElementRegex).test(shortCode);
   },
 
   expandShortCode(shortCode) {
-    const matchedElements = []
+    const matchedElements = [];
 
-    const regex = RegExp(this.osmElementRegex, 'g')
-    let osmElementMatch = null
+    const regex = RegExp(this.osmElementRegex, "g");
+    let osmElementMatch = null;
     while ((osmElementMatch = regex.exec(shortCode.slice(1, -1)))) {
       matchedElements.push({
         elementType: this.elementTypeMap[osmElementMatch[1]],
         osmId: osmElementMatch[2],
-      })
+      });
     }
 
-    return matchedElements.length > 0 ?
-           <OSMElementReference osmElements={matchedElements} /> :
-           shortCode
-  }
-}
+    return matchedElements.length > 0 ? (
+      <OSMElementReference osmElements={matchedElements} />
+    ) : (
+      shortCode
+    );
+  },
+};
 
-export default OSMElementHandler
+export default OSMElementHandler;

@@ -1,4 +1,4 @@
-import messages from './Messages'
+import messages from "./Messages";
 
 /**
  * Keyboard shortcut mappings. Top-level should be functional groupings, with
@@ -14,36 +14,36 @@ import messages from './Messages'
  */
 export default {
   openEditor: {
-    editId: {key: 'e', label: messages.editId},
-    editJosm: {key: 'r', label: messages.editJosm},
-    editJosmLayer: {key: 't', label: messages.editJosmLayer},
-    editJosmFeatures: {key: 'y', label: messages.editJosmFeatures},
-    editLevel0: {key: 'v', label: messages.editLevel0},
-    editRapid: {key: 'a', label: messages.editRapid},
+    editId: { key: "e", label: messages.editId },
+    editJosm: { key: "r", label: messages.editJosm },
+    editJosmLayer: { key: "t", label: messages.editJosmLayer },
+    editJosmFeatures: { key: "y", label: messages.editJosmFeatures },
+    editLevel0: { key: "v", label: messages.editLevel0 },
+    editRapid: { key: "a", label: messages.editRapid },
   },
   taskEditing: {
-    cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel},
-    fitBounds: {key: '0', label: messages.fitBounds},
-    completeTogether: {key: 'b', label: messages.completeTogether}
+    cancel: { key: "Escape", label: messages.cancel, keyLabel: messages.escapeLabel },
+    fitBounds: { key: "0", label: messages.fitBounds },
+    completeTogether: { key: "b", label: messages.completeTogether },
   },
   layers: {
-    layerOSMData: {key: 'o', label: messages.layerOSMData},
-    layerTaskFeatures: {key: 's', label: messages.layerTaskFeatures},
-    layerMapillary: {key: 'm', label: messages.layerMapillary},
+    layerOSMData: { key: "o", label: messages.layerOSMData },
+    layerTaskFeatures: { key: "s", label: messages.layerTaskFeatures },
+    layerMapillary: { key: "m", label: messages.layerMapillary },
   },
   taskCompletion: {
-    skip: {key: 'w', label: messages.skip},
-    falsePositive: {key: 'q', label: messages.falsePositive},
-    fixed: {key: 'f', label: messages.fixed},
-    tooHard: {key: 'd', label: messages.tooHard},
-    alreadyFixed: {key: 'x', label: messages.alreadyFixed},
+    skip: { key: "w", label: messages.skip },
+    falsePositive: { key: "q", label: messages.falsePositive },
+    fixed: { key: "f", label: messages.fixed },
+    tooHard: { key: "d", label: messages.tooHard },
+    alreadyFixed: { key: "x", label: messages.alreadyFixed },
   },
   taskInspect: {
-    nextTask: {key: 'l', label: messages.nextTask},
-    prevTask: {key: 'h', label: messages.prevTask},
+    nextTask: { key: "l", label: messages.nextTask },
+    prevTask: { key: "h", label: messages.prevTask },
   },
   taskConfirmation: {
-    confirmSubmit: {key: 'Enter', label: messages.confirmSubmit},
-    cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel},
+    confirmSubmit: { key: "Enter", label: messages.confirmSubmit },
+    cancel: { key: "Escape", label: messages.cancel, keyLabel: messages.escapeLabel },
   },
-}
+};

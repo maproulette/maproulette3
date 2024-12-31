@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Role
@@ -16,4 +16,4 @@ export default defineMessages({
     id: "Grant.Role.read",
     defaultMessage: "Read",
   },
-})
+});

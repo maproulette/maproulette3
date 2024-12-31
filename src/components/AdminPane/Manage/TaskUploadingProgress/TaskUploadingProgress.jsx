@@ -1,6 +1,6 @@
-import _get from 'lodash/get'
-import ProgressStatus from '../ProgressStatus/ProgressStatus'
-import messages from './Messages'
+import _get from "lodash/get";
+import ProgressStatus from "../ProgressStatus/ProgressStatus";
+import messages from "./Messages";
 
 /**
  * TaskUploadingProgress displays a full-page busy spinner and shows
@@ -8,12 +8,12 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default function(props) {
+export default function (props) {
   return (
     <ProgressStatus
-      progressItem={_get(props, 'progress.creatingTasks')}
+      progressItem={_get(props, "progress.creatingTasks")}
       progressHeader={messages.creatingTasks}
       progressDescription={messages.tasksCreated}
     />
-  )
+  );
 }

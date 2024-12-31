@@ -1,7 +1,6 @@
-import _values from 'lodash/values'
-import { ChallengeDifficulty }
-       from '../../../../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
-import messages from '../Messages'
+import _values from "lodash/values";
+import { ChallengeDifficulty } from "../../../../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty";
+import messages from "../Messages";
 
 /**
  * Generates a JSON Schema describing instruction fields of Edit Challenge
@@ -17,33 +16,35 @@ import messages from '../Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 
-const validateMinLength = val => {
-  if(!val) {
+const validateMinLength = (val) => {
+  if (!val) {
     // Handle undefined. null and empty string case and default to 150:
-    if(typeof val === 'string' && val.length === 0) return 0
-    if(val === 0) return 0
-    return 150
+    if (typeof val === "string" && val.length === 0) return 0;
+    if (val === 0) return 0;
+    return 150;
   }
   // Handle 0 separately. Non-strict equals will be true for '0' string value:
-  if(val == 0) return 0
+  if (val == 0) return 0;
 
   // Bitwise operator coerces to number value:
-  return val | 0
-}
+  return val | 0;
+};
 
 export const jsSchema = (intl) => {
-  const minLengthEnvValue = window.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH
-  const instructionsMinLength = validateMinLength(minLengthEnvValue)
+  const minLengthEnvValue = window.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH;
+  const instructionsMinLength = validateMinLength(minLengthEnvValue);
 
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       instruction: {
         title: intl.formatMessage(messages.instructionLabel),
         type: "string",
         minLength: instructionsMinLength,
-        description: intl.formatMessage(messages.instructionsDescription, {minLength: `${instructionsMinLength}`})
+        description: intl.formatMessage(messages.instructionsDescription, {
+          minLength: `${instructionsMinLength}`,
+        }),
       },
       difficulty: {
         title: intl.formatMessage(messages.difficultyLabel),
@@ -58,10 +59,10 @@ export const jsSchema = (intl) => {
       },
     },
     required: ["instruction"],
-  }
+  };
 
-  return schemaFields
-}
+  return schemaFields;
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -73,20 +74,22 @@ export const jsSchema = (intl) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
   const uiSchemaFields = {
-    "ui:order": [ "instruction", "difficulty" ],
+    "ui:order": ["instruction", "difficulty"],
     instruction: {
       "ui:field": "markdown",
       "ui:help": intl.formatMessage(messages.instructionDescription),
       "ui:previewNote": intl.formatMessage(messages.addMustachePreviewNote),
-      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.instructionsStepHeader) : undefined,
+      "ui:groupHeader": options.longForm
+        ? intl.formatMessage(messages.instructionsStepHeader)
+        : undefined,
     },
     difficulty: {
       "ui:field": "columnRadio",
       "ui:help": intl.formatMessage(messages.difficultyDescription),
     },
-  }
+  };
 
-  return uiSchemaFields
-}
+  return uiSchemaFields;
+};

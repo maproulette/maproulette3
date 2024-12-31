@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskNearbyMap
@@ -28,4 +28,4 @@ export default defineMessages({
     id: "Widgets.TaskNearbyMap.tooltip.loadMoreTasks.control",
     defaultMessage: "Load More Tasks",
   },
-})
+});

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with StartVirtualChallenge
@@ -16,16 +16,16 @@ export default defineMessages({
 
   startLabel: {
     id: "VirtualChallenge.controls.start.label",
-    defaultMessage: 'Start',
+    defaultMessage: "Start",
   },
 
   tooManyTasks: {
     id: "VirtualChallenge.tooManyTasks",
-    defaultMessage: 'At most {max} tasks can be worked on at once',
+    defaultMessage: "At most {max} tasks can be worked on at once",
   },
 
   selectedCount: {
     id: "VirtualChallenge.selectedCount",
-    defaultMessage: 'You have {count} selected',
+    defaultMessage: "You have {count} selected",
   },
-})
+});

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskStatus.
@@ -6,34 +6,34 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   created: {
     id: "Task.status.created",
-    defaultMessage: "Created"
+    defaultMessage: "Created",
   },
   fixed: {
     id: "Task.status.fixed",
-    defaultMessage: "Fixed"
+    defaultMessage: "Fixed",
   },
   falsePositive: {
     id: "Task.status.falsePositive",
-    defaultMessage: "Not an Issue"
+    defaultMessage: "Not an Issue",
   },
   skipped: {
     id: "Task.status.skipped",
-    defaultMessage: "Skipped"
+    defaultMessage: "Skipped",
   },
   deleted: {
     id: "Task.status.deleted",
-    defaultMessage: "Deleted"
+    defaultMessage: "Deleted",
   },
   disabled: {
     id: "Task.status.disabled",
-    defaultMessage: "Disabled"
+    defaultMessage: "Disabled",
   },
   alreadyFixed: {
     id: "Task.status.alreadyFixed",
-    defaultMessage: "Already Fixed"
+    defaultMessage: "Already Fixed",
   },
   tooHard: {
     id: "Task.status.tooHard",
-    defaultMessage: "Can't Complete"
+    defaultMessage: "Can't Complete",
   },
-})
+});

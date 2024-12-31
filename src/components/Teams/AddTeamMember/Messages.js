@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with AddTeamMember
@@ -11,7 +11,6 @@ export default defineMessages({
 
   osmUsername: {
     id: "AddTeamMember.controls.chooseOSMUser.placeholder",
-    defaultMessage: "OpenStreetMap username"
+    defaultMessage: "OpenStreetMap username",
   },
-})
-
+});

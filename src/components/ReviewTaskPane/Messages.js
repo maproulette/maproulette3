@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ReviewTaskPane
@@ -13,4 +13,4 @@ export default defineMessages({
     id: "ReviewTaskPane.controls.unlock.label",
     defaultMessage: "Unlock",
   },
-})
+});

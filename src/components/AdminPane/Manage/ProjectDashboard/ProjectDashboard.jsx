@@ -158,9 +158,7 @@ export class ProjectDashboardInternal extends Component {
             </ConfirmAction>
           )}
 
-          {manager.canAdministrateProject(this.props.project) &&
-          !isArchived &&
-          !isVirtual ? (
+          {manager.canAdministrateProject(this.props.project) && !isArchived && !isVirtual ? (
             <>
               <a
                 onClick={this.archiveProject}
@@ -171,9 +169,7 @@ export class ProjectDashboardInternal extends Component {
             </>
           ) : null}
 
-          {manager.canAdministrateProject(this.props.project) &&
-          isArchived &&
-          !isVirtual ? (
+          {manager.canAdministrateProject(this.props.project) && isArchived && !isVirtual ? (
             <>
               <a
                 onClick={this.unarchiveProject}
@@ -188,10 +184,7 @@ export class ProjectDashboardInternal extends Component {
     );
 
     return (
-      <div
-        data-testid="project-dashboard"
-        className="admin__manage project-dashboard"
-      >
+      <div data-testid="project-dashboard" className="admin__manage project-dashboard">
         <WidgetWorkspace
           {...this.props}
           lightMode={false}
@@ -231,19 +224,19 @@ const ProjectDashboard = WithProjectManagement(
           "challenges",
           "pinnedChallenges",
           "challenges",
-          challengePassesFilters
+          challengePassesFilters,
         ),
         [WidgetDataTarget.project, WidgetDataTarget.challenges],
         DASHBOARD_NAME,
-        defaultDashboardSetup
+        defaultDashboardSetup,
       ),
       {
         restrictToGivenProjects: true,
         includeChallenges: true,
         includeComments: true,
-      }
-    )
-  )
+      },
+    ),
+  ),
 );
 
 export default ProjectDashboard;

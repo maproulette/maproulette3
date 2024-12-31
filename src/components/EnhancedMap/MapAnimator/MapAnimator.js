@@ -5,16 +5,16 @@
  */
 class MapAnimator {
   constructor(animationDelay = 250) {
-    this.animationDelay = animationDelay
-    this.animationFunction = null
-    this.animationHandle = null
+    this.animationDelay = animationDelay;
+    this.animationFunction = null;
+    this.animationHandle = null;
   }
 
   /**
    * Set the function to be invoked when animation executes
    */
   setAnimationFunction(func) {
-    this.animationFunction = func
+    this.animationFunction = func;
   }
 
   /**
@@ -22,8 +22,8 @@ class MapAnimator {
    * pending animations
    */
   reset() {
-    this.animationFunction = null
-    this.cancelPendingAnimation()
+    this.animationFunction = null;
+    this.cancelPendingAnimation();
   }
 
   /**
@@ -31,8 +31,8 @@ class MapAnimator {
    * cancelled prior to scheduling a new one
    */
   scheduleAnimation() {
-    this.cancelPendingAnimation()
-    this.animationHandle = setTimeout(() => this.executeAnimation(), this.animationDelay)
+    this.cancelPendingAnimation();
+    this.animationHandle = setTimeout(() => this.executeAnimation(), this.animationDelay);
   }
 
   /**
@@ -40,8 +40,8 @@ class MapAnimator {
    */
   cancelPendingAnimation() {
     if (this.animationHandle) {
-      clearTimeout(this.animationHandle)
-      this.animationHandle = null
+      clearTimeout(this.animationHandle);
+      this.animationHandle = null;
     }
   }
 
@@ -50,9 +50,9 @@ class MapAnimator {
    */
   executeAnimation() {
     if (this.animationFunction) {
-      this.animationFunction()
+      this.animationFunction();
     }
   }
 }
 
-export default MapAnimator
+export default MapAnimator;

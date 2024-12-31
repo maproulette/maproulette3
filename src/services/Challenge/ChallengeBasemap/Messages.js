@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeBasemap.
@@ -28,4 +28,4 @@ export default defineMessages({
     id: "Challenge.basemap.custom",
     defaultMessage: "Custom",
   },
-})
+});

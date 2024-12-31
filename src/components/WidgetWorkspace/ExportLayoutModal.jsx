@@ -35,9 +35,7 @@ export default class ExportLayoutModal extends Component {
                   type="text"
                   className="mr-input"
                   value={this.state.exportName}
-                  onChange={(e) =>
-                    this.setState({ exportName: e.target.value })
-                  }
+                  onChange={(e) => this.setState({ exportName: e.target.value })}
                 />
               </div>
 

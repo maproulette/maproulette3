@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with FitBoundsControl
@@ -6,7 +6,6 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   tooltip: {
     id: "FitBoundsControl.tooltip",
-    defaultMessage: "Fit map to task features"
+    defaultMessage: "Fit map to task features",
   },
-})
-
+});

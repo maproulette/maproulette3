@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with CooperativeType
@@ -16,4 +16,4 @@ export default defineMessages({
     id: "Challenge.cooperativeType.changeFile",
     defaultMessage: "Cooperative",
   },
-})
+});

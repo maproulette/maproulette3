@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 /**
  * Expands user mentions, such as `[@username]`, into links to the mentioned
@@ -16,22 +16,21 @@ const OSMUserMentionHandler = {
    * `[@foo]`
    */
   normalizeContent(content) {
-    return this.containsSimpleMention(content) ?
-           content.replace(new RegExp(this.simpleMentionRegex, 'g'), "$1[$2]") :
-           content
+    return this.containsSimpleMention(content)
+      ? content.replace(new RegExp(this.simpleMentionRegex, "g"), "$1[$2]")
+      : content;
   },
 
   handlesShortCode(shortCode) {
-    return new RegExp(this.mentionRegex).test(shortCode)
+    return new RegExp(this.mentionRegex).test(shortCode);
   },
 
   expandShortCode(shortCode) {
     if (new RegExp(this.mentionRegex).test(shortCode)) {
-      const username = shortCode.slice(2, -1)
-      return <Link to={`/user/metrics/${encodeURIComponent(username)}`}>@{username}</Link>
-    }
-    else {
-      return shortCode
+      const username = shortCode.slice(2, -1);
+      return <Link to={`/user/metrics/${encodeURIComponent(username)}`}>@{username}</Link>;
+    } else {
+      return shortCode;
     }
   },
 
@@ -40,8 +39,8 @@ const OSMUserMentionHandler = {
    * mentions, excluding the full short-code form (i.e. `@foo` but not `[@foo]`)
    */
   containsSimpleMention(content) {
-    return new RegExp(this.simpleMentionRegex).test(content)
+    return new RegExp(this.simpleMentionRegex).test(content);
   },
-}
+};
 
-export default OSMUserMentionHandler
+export default OSMUserMentionHandler;
