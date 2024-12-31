@@ -1,6 +1,6 @@
-import _map from "lodash/map";
-import _invert from "lodash/invert";
 import _fromPairs from "lodash/fromPairs";
+import _invert from "lodash/invert";
+import _map from "lodash/map";
 import messages, { subscriptionCountMessages } from "./Messages";
 
 // These statuses are defined on the server
@@ -58,7 +58,7 @@ export const keysWithCountTypes = Object.freeze(
   _invert({
     ...NotificationType,
     ...NotificationCountType,
-  })
+  }),
 );
 
 /**
@@ -66,26 +66,16 @@ export const keysWithCountTypes = Object.freeze(
  * messages suitable for use with FormattedMessage or formatMessage.
  */
 export const messagesByNotificationType = _fromPairs(
-  _map(messages, (message, key) => [NotificationType[key], message])
+  _map(messages, (message, key) => [NotificationType[key], message]),
 );
 
 export const messagesByNotificationCountType = _fromPairs(
-  _map(subscriptionCountMessages, (message, key) => [
-    NotificationType[key],
-    message,
-  ])
+  _map(subscriptionCountMessages, (message, key) => [NotificationType[key], message]),
 );
 
 /** Returns object containing localized labels  */
 export const notificationTypeLabels = (intl) =>
-  _fromPairs(
-    _map(messages, (message, key) => [key, intl.formatMessage(message)])
-  );
+  _fromPairs(_map(messages, (message, key) => [key, intl.formatMessage(message)]));
 
 export const notificationCountTypeLabels = (intl) =>
-  _fromPairs(
-    _map(subscriptionCountMessages, (message, key) => [
-      key,
-      intl.formatMessage(message),
-    ])
-  );
+  _fromPairs(_map(subscriptionCountMessages, (message, key) => [key, intl.formatMessage(message)]));

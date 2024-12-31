@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Sent Table
@@ -32,5 +32,5 @@ export default defineMessages({
   goToChallengeLabel: {
     id: "Sent.controls.goToChallenge.label",
     defaultMessage: "Go to Challenge",
-  }
-})
+  },
+});

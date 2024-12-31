@@ -1,26 +1,23 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import _noop from 'lodash/noop'
-import { WidgetDataTarget, registerWidgetType }
-       from '../../../../../services/Widget/Widget'
-import WithLeaderboard
-       from '../../../../../components/HOCs/WithLeaderboard/WithLeaderboard'
-import ChallengeOwnerLeaderboard
-       from '../../ChallengeOwnerLeaderboard/ChallengeOwnerLeaderboard'
-import PastDurationSelector
-       from '../../../../PastDurationSelector/PastDurationSelector'
+import _noop from "lodash/noop";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import WithLeaderboard from "../../../../../components/HOCs/WithLeaderboard/WithLeaderboard";
+import {
+  USER_TYPE_MAPPER,
+  USER_TYPE_REVIEWER,
+} from "../../../../../services/Leaderboard/Leaderboard";
+import { WidgetDataTarget, registerWidgetType } from "../../../../../services/Widget/Widget";
+import PastDurationSelector from "../../../../PastDurationSelector/PastDurationSelector";
 // CURRENT_MONTH removed untill endpoint can handle unique params
-import { CUSTOM_RANGE } 
-       from '../../../../PastDurationSelector/PastDurationSelector'
-import QuickWidget from '../../../../QuickWidget/QuickWidget'
-import { USER_TYPE_MAPPER, USER_TYPE_REVIEWER }
-       from '../../../../../services/Leaderboard/Leaderboard'
-import messages from './Messages'
+import { CUSTOM_RANGE } from "../../../../PastDurationSelector/PastDurationSelector";
+import QuickWidget from "../../../../QuickWidget/QuickWidget";
+import ChallengeOwnerLeaderboard from "../../ChallengeOwnerLeaderboard/ChallengeOwnerLeaderboard";
+import messages from "./Messages";
 
-const INITIAL_MONTHS_PAST = 1
+const INITIAL_MONTHS_PAST = 1;
 
 const descriptor = {
-  widgetKey: 'LeaderboardWidget',
+  widgetKey: "LeaderboardWidget",
   label: messages.label,
   targets: [WidgetDataTarget.challenges, WidgetDataTarget.challenge],
   minWidth: 3,
@@ -29,60 +26,65 @@ const descriptor = {
   defaultConfiguration: {
     monthsPast: 1,
   },
-}
+};
 
 export default class LeaderboardWidget extends Component {
-  setUserType = userType => {
+  setUserType = (userType) => {
     if (this.props.widgetConfiguration.userType !== userType) {
-      this.props.setUserType(userType,
+      this.props.setUserType(
+        userType,
         this.props.widgetConfiguration.monthsPast,
         this.props.widgetConfiguration.startDate,
-        this.props.widgetConfiguration.endDate)
+        this.props.widgetConfiguration.endDate,
+      );
 
-      this.props.updateWidgetConfiguration({userType})
+      this.props.updateWidgetConfiguration({ userType });
     }
-  }
+  };
 
-  setMonthsPast = monthsPast => {
-    this.props.setMonthsPast(monthsPast, true, this.props.widgetConfiguration.userType)
+  setMonthsPast = (monthsPast) => {
+    this.props.setMonthsPast(monthsPast, true, this.props.widgetConfiguration.userType);
 
     if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
-      this.props.updateWidgetConfiguration({monthsPast, startDate: null, endDate: null})
+      this.props.updateWidgetConfiguration({ monthsPast, startDate: null, endDate: null });
     }
-  }
+  };
 
   setDateRange = (startDate, endDate) => {
-    this.props.setDateRange(startDate, endDate, this.props.widgetConfiguration.userType)
+    this.props.setDateRange(startDate, endDate, this.props.widgetConfiguration.userType);
 
-    if (this.props.widgetConfiguration.startDate !== startDate ||
-        this.props.widgetConfiguration.endDate !== endDate) {
-      this.props.updateWidgetConfiguration({monthsPast: CUSTOM_RANGE,
-                                            startDate, endDate})
+    if (
+      this.props.widgetConfiguration.startDate !== startDate ||
+      this.props.widgetConfiguration.endDate !== endDate
+    ) {
+      this.props.updateWidgetConfiguration({ monthsPast: CUSTOM_RANGE, startDate, endDate });
     }
-  }
+  };
 
   componentDidMount() {
     if (this.props.widgetConfiguration.monthsPast !== CUSTOM_RANGE) {
-      this.props.setMonthsPast(this.props.widgetConfiguration.monthsPast,
-                               true,
-                               this.props.widgetConfiguration.userType)
-    }
-    else if (this.props.widgetConfiguration.startDate &&
-             this.props.widgetConfiguration.endDate) {
-      this.props.setDateRange(this.props.widgetConfiguration.startDate,
-                              this.props.widgetConfiguration.endDate,
-                              true,
-                              this.props.widgetConfiguration.userType)
+      this.props.setMonthsPast(
+        this.props.widgetConfiguration.monthsPast,
+        true,
+        this.props.widgetConfiguration.userType,
+      );
+    } else if (this.props.widgetConfiguration.startDate && this.props.widgetConfiguration.endDate) {
+      this.props.setDateRange(
+        this.props.widgetConfiguration.startDate,
+        this.props.widgetConfiguration.endDate,
+        true,
+        this.props.widgetConfiguration.userType,
+      );
     }
   }
 
   render() {
-    const monthsPast = this.props.widgetConfiguration.monthsPast
-    const startDate = this.props.widgetConfiguration.startDate
-    const endDate = this.props.widgetConfiguration.endDate
-    const userType = this.props.widgetConfiguration.userType || USER_TYPE_MAPPER
+    const monthsPast = this.props.widgetConfiguration.monthsPast;
+    const startDate = this.props.widgetConfiguration.startDate;
+    const endDate = this.props.widgetConfiguration.endDate;
+    const userType = this.props.widgetConfiguration.userType || USER_TYPE_MAPPER;
 
-    const selector =
+    const selector = (
       <PastDurationSelector
         className="mr-button mr-button--green-lighter mr-button--small mr-dropdown--right"
         // CURRENT_MONTH, and CUSTOM_RANGE removed untill endpoint can handle unique params
@@ -93,8 +95,9 @@ export default class LeaderboardWidget extends Component {
         customStartDate={startDate ? new Date(startDate) : null}
         customEndDate={endDate ? new Date(endDate) : null}
       />
+    );
 
-    const chooseUserType =
+    const chooseUserType = (
       <div className="mr-text-xs mr--mb-5">
         <span>
           <input
@@ -107,7 +110,7 @@ export default class LeaderboardWidget extends Component {
             onChange={_noop}
           />
           <label htmlFor="user-mapper-type-label" className="mr-ml-1 mr-mr-4">
-            <FormattedMessage {...messages[USER_TYPE_MAPPER]}/>
+            <FormattedMessage {...messages[USER_TYPE_MAPPER]} />
           </label>
         </span>
         <span>
@@ -121,10 +124,11 @@ export default class LeaderboardWidget extends Component {
             onChange={_noop}
           />
           <label htmlFor="user-reviewer-type-label" className="mr-ml-1 mr-mr-4">
-            <FormattedMessage {...messages[USER_TYPE_REVIEWER]}/>
+            <FormattedMessage {...messages[USER_TYPE_REVIEWER]} />
           </label>
         </span>
       </div>
+    );
 
     return (
       <QuickWidget
@@ -136,10 +140,15 @@ export default class LeaderboardWidget extends Component {
         {chooseUserType}
         <ChallengeOwnerLeaderboard {...this.props} userType={userType} />
       </QuickWidget>
-    )
+    );
   }
 }
 
-registerWidgetType(WithLeaderboard(LeaderboardWidget, INITIAL_MONTHS_PAST,
-                                   {ignoreUser: true, filterChallenges: true,
-                                    isWidget: true}), descriptor)
+registerWidgetType(
+  WithLeaderboard(LeaderboardWidget, INITIAL_MONTHS_PAST, {
+    ignoreUser: true,
+    filterChallenges: true,
+    isWidget: true,
+  }),
+  descriptor,
+);

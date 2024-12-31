@@ -1,11 +1,11 @@
-import _isArray from 'lodash/isArray'
-import _isFunction from 'lodash/isFunction'
-import _isObject from 'lodash/isObject'
-import _cloneDeep from 'lodash/cloneDeep'
-import _forOwn from 'lodash/forOwn'
-import _merge from 'lodash/merge'
-import _values from 'lodash/values'
-import RequestStatus from './RequestStatus'
+import _cloneDeep from "lodash/cloneDeep";
+import _forOwn from "lodash/forOwn";
+import _isArray from "lodash/isArray";
+import _isFunction from "lodash/isFunction";
+import _isObject from "lodash/isObject";
+import _merge from "lodash/merge";
+import _values from "lodash/values";
+import RequestStatus from "./RequestStatus";
 
 /**
  *
@@ -39,19 +39,20 @@ import RequestStatus from './RequestStatus'
  * @returns {function} a function that can be used as a redux reducer.
  */
 const genericEntityReducer = (actionTypes, entityName, reduceFurther) => {
-  const allowedActionTypes =
-    _isArray(actionTypes) ? actionTypes : [ actionTypes ]
+  const allowedActionTypes = _isArray(actionTypes) ? actionTypes : [actionTypes];
 
   return (state = {}, action) => {
-    if (allowedActionTypes.indexOf(action.type) === -1 ||
-        action.status !== RequestStatus.success ||
-        !_isObject(action.entities)) {
-      return state
+    if (
+      allowedActionTypes.indexOf(action.type) === -1 ||
+      action.status !== RequestStatus.success ||
+      !_isObject(action.entities)
+    ) {
+      return state;
     }
 
-    return entities(state, action, entityName, reduceFurther)
-  }
-}
+    return entities(state, action, entityName, reduceFurther);
+  };
+};
 
 /**
  * entities is a generic reducer function for entity data retrieved from the
@@ -63,29 +64,29 @@ const genericEntityReducer = (actionTypes, entityName, reduceFurther) => {
  *
  * @private
  */
-const entities = function(state = {}, action, entityName, reduceFurther) {
-  const newState = _cloneDeep(state)
-  const timestamp = Date.now()
+const entities = function (state = {}, action, entityName, reduceFurther) {
+  const newState = _cloneDeep(state);
+  const timestamp = Date.now();
 
   _forOwn(action.entities[entityName], (entity, entityId) => {
-    if (typeof entityId === 'undefined') {
-      return
+    if (typeof entityId === "undefined") {
+      return;
     }
 
     // Add a _meta object to each entity where we can store some application
     // meta data about the entity. Right now we just store a timestamp of
     // when the data was fetched so that we can measure the freshness of the
     // data.
-    entity._meta = {fetchedAt: timestamp}
+    entity._meta = { fetchedAt: timestamp };
 
-    newState[entityId] = _merge(newState[entityId], entity)
-  })
+    newState[entityId] = _merge(newState[entityId], entity);
+  });
 
   if (_isFunction(reduceFurther)) {
-    reduceFurther(newState, state, _values(action.entities[entityName]))
+    reduceFurther(newState, state, _values(action.entities[entityName]));
   }
 
-  return newState
-}
+  return newState;
+};
 
-export default genericEntityReducer
+export default genericEntityReducer;

@@ -1,9 +1,9 @@
-import { useRef, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { Viewer } from 'mapillary-js';
-import { getAccessToken } from '../../services/Mapillary/Mapillary'
-import External from '../External/External'
-import Modal from '../Modal/Modal'
+import { Viewer } from "mapillary-js";
+import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
+import { getAccessToken } from "../../services/Mapillary/Mapillary";
+import External from "../External/External";
+import Modal from "../Modal/Modal";
 
 /**
  * Renders a [Mapillary Viewer](https://mapillary.github.io/mapillary-js/)
@@ -40,11 +40,11 @@ const MapillaryViewer = ({ initialImageKey, onClose }) => {
       </Modal>
     </External>
   );
-}
+};
 
 MapillaryViewer.propTypes = {
   initialImageKey: PropTypes.string.isRequired,
   onClose: PropTypes.func,
-}
+};
 
 export default MapillaryViewer;

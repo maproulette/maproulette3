@@ -1,6 +1,6 @@
-import _isArray from 'lodash/isArray'
-import { isFuture, parseISO } from 'date-fns'
-import Endpoint from '../Server/Endpoint'
+import { isFuture, parseISO } from "date-fns";
+import _isArray from "lodash/isArray";
+import Endpoint from "../Server/Endpoint";
 import { defaultRoutes as api } from "../Server/Server";
 
 /**
@@ -33,21 +33,22 @@ import { defaultRoutes as api } from "../Server/Server";
 export const fetchActiveSystemNotices = () => {
   return new Endpoint(api.user.announcements)
     .execute()
-    .then(response => {
-      const systemNotices = response?.message?.notices
-      if (_isArray(systemNotices)) {    
-        return systemNotices.map(notice => {
-          // add Date instance for expiration timestamp
-          notice.expirationDate = parseISO(notice.expirationTimestamp)
-          return notice
-        }).filter(notice => isFuture(notice.expirationDate))
-      }
-      else {
+    .then((response) => {
+      const systemNotices = response?.message?.notices;
+      if (_isArray(systemNotices)) {
+        return systemNotices
+          .map((notice) => {
+            // add Date instance for expiration timestamp
+            notice.expirationDate = parseISO(notice.expirationTimestamp);
+            return notice;
+          })
+          .filter((notice) => isFuture(notice.expirationDate));
+      } else {
         // Allow server admin to delete file when not in use
-        return []
+        return [];
       }
     })
     .catch(() => {
-      return []
-    })
-}
+      return [];
+    });
+};

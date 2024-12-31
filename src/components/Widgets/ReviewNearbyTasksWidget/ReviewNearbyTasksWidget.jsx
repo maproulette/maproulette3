@@ -1,40 +1,40 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import { Popup } from 'react-leaflet'
-import _get from 'lodash/get'
-import _isFinite from 'lodash/isFinite'
-import _isEqual from 'lodash/isEqual'
-import bbox from '@turf/bbox'
-import { point, featureCollection } from '@turf/helpers'
-import { WidgetDataTarget, registerWidgetType } from '../../../services/Widget/Widget'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-import MapPane from '../../EnhancedMap/MapPane/MapPane'
-import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
-import TaskPropertyFilter from '../../TaskFilters/TaskPropertyFilter'
-import TaskPriorityFilter from '../../TaskFilters/TaskPriorityFilter'
-import TaskReviewStatusFilter from '../../TaskFilters/TaskReviewStatusFilter'
-import TaskStatusFilter from '../../TaskFilters/TaskStatusFilter'
-import WithSelectedClusteredTasks from '../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks'
-import WithBrowsedChallenge from '../../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
-import WithNearbyTasks from '../../HOCs/WithNearbyTasks/WithNearbyTasks'
-import WithTaskClusterMarkers from '../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
-import WithChallengeTaskClusters from '../../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
-import WithClusteredTasks from '../../HOCs/WithClusteredTasks/WithClusteredTasks'
-import WithFilterCriteria from '../../HOCs/WithFilterCriteria/WithFilterCriteria'
-import WithTaskPropertyKeys from '../../HOCs/WithTaskPropertyKeys/WithTaskPropertyKeys'
-import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
-import WithFilteredClusteredTasks from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
-import AsMappableTask from '../../../interactions/Task/AsMappableTask'
-import WithWebSocketSubscriptions from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
-import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
-import QuickWidget from '../../QuickWidget/QuickWidget'
-import BusySpinner from '../../BusySpinner/BusySpinner'
-import TaskMarkerContent from './TaskMarkerContent'
-import messages from './Messages'
-import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import bbox from "@turf/bbox";
+import { featureCollection, point } from "@turf/helpers";
+import _get from "lodash/get";
+import _isEqual from "lodash/isEqual";
+import _isFinite from "lodash/isFinite";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { Popup } from "react-leaflet";
+import AsMappableTask from "../../../interactions/Task/AsMappableTask";
+import { toLatLngBounds } from "../../../services/MapBounds/MapBounds";
+import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
+import BusySpinner from "../../BusySpinner/BusySpinner";
+import MapPane from "../../EnhancedMap/MapPane/MapPane";
+import WithBoundedTasks from "../../HOCs/WithBoundedTasks/WithBoundedTasks";
+import WithBrowsedChallenge from "../../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
+import WithChallengeTaskClusters from "../../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters";
+import WithClusteredTasks from "../../HOCs/WithClusteredTasks/WithClusteredTasks";
+import WithFilterCriteria from "../../HOCs/WithFilterCriteria/WithFilterCriteria";
+import WithFilteredClusteredTasks from "../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks";
+import WithKeyboardShortcuts from "../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
+import WithNearbyTasks from "../../HOCs/WithNearbyTasks/WithNearbyTasks";
+import WithSelectedClusteredTasks from "../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks";
+import WithTaskClusterMarkers from "../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers";
+import WithTaskPropertyKeys from "../../HOCs/WithTaskPropertyKeys/WithTaskPropertyKeys";
+import WithWebSocketSubscriptions from "../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions";
+import QuickWidget from "../../QuickWidget/QuickWidget";
+import SvgSymbol from "../../SvgSymbol/SvgSymbol";
+import TaskClusterMap from "../../TaskClusterMap/TaskClusterMap";
+import TaskPriorityFilter from "../../TaskFilters/TaskPriorityFilter";
+import TaskPropertyFilter from "../../TaskFilters/TaskPropertyFilter";
+import TaskReviewStatusFilter from "../../TaskFilters/TaskReviewStatusFilter";
+import TaskStatusFilter from "../../TaskFilters/TaskStatusFilter";
+import messages from "./Messages";
+import TaskMarkerContent from "./TaskMarkerContent";
 
 const descriptor = {
-  widgetKey: 'ReviewNearbyTasksWidget',
+  widgetKey: "ReviewNearbyTasksWidget",
   label: messages.label,
   targets: [WidgetDataTarget.task],
   minWidth: 8,
@@ -44,11 +44,11 @@ const descriptor = {
 };
 
 const ClusterMap = WithChallengeTaskClusters(
-  WithTaskClusterMarkers(TaskClusterMap('taskBundling')),
+  WithTaskClusterMarkers(TaskClusterMap("taskBundling")),
   true,
   true,
   false,
-  false
+  false,
 );
 
 export default class ReviewNearbyTasksWidget extends Component {
@@ -76,10 +76,7 @@ export default class ReviewNearbyTasksWidget extends Component {
 
   initializeWebsocketSubscription(prevProps = {}) {
     const challengeId = this.props.task?.parent?.id;
-    if (
-      _isFinite(challengeId) &&
-      challengeId !== (prevProps.task?.parent?.id)
-    ) {
+    if (_isFinite(challengeId) && challengeId !== prevProps.task?.parent?.id) {
       this.props.subscribeToChallengeTaskMessages(challengeId);
     }
   }
@@ -92,34 +89,24 @@ export default class ReviewNearbyTasksWidget extends Component {
     const taskList = this.props.nearbyTasks?.tasks;
     const mappableTask = AsMappableTask(this.props.task);
     mappableTask.point = mappableTask.calculateCenterPoint();
-    
+
     if (taskList) {
-      taskList?.push(mappableTask)
+      taskList?.push(mappableTask);
     }
-    
+
     if (!taskList || taskList.length === 0) {
-      return
+      return;
     }
 
     const nearbyBounds = bbox(
-      featureCollection(
-        taskList.map((t) => point([t.point.lng, t.point.lat]))
-      )
+      featureCollection(taskList.map((t) => point([t.point.lng, t.point.lat]))),
     );
 
-    this.updateBounds(
-      this.props.challengeId,
-      nearbyBounds,
-      this.props.mapBounds?.zoom ?? 18
-    );
+    this.updateBounds(this.props.challengeId, nearbyBounds, this.props.mapBounds?.zoom ?? 18);
   };
 
   componentDidMount() {
-    this.props.selectTasks(
-      this.props.taskBundle
-        ? this.props.taskBundle.tasks
-        : [this.props.task]
-    );
+    this.props.selectTasks(this.props.taskBundle ? this.props.taskBundle.tasks : [this.props.task]);
 
     if (!this.props.taskBundle) {
       this.initializeClusterFilters();
@@ -143,28 +130,25 @@ export default class ReviewNearbyTasksWidget extends Component {
       this.props.task.id !== prevProps.task.id
     ) {
       this.props.resetSelectedTasks();
-      this.setBoundsToNearbyTask()
-    } else if (
-      this.props.taskBundle &&
-      this.props.taskBundle !== prevProps.taskBundle
-    ) {
-      await this.props.resetSelectedTasks()
-      this.props.selectTasks(this.props.taskBundle.tasks)
+      this.setBoundsToNearbyTask();
+    } else if (this.props.taskBundle && this.props.taskBundle !== prevProps.taskBundle) {
+      await this.props.resetSelectedTasks();
+      this.props.selectTasks(this.props.taskBundle.tasks);
     }
-  }  
+  }
 
   componentWillUnmount() {
-    this.props.resetSelectedTasks()
-    const challengeId = this.props.task?.parent?.id
+    this.props.resetSelectedTasks();
+    const challengeId = this.props.task?.parent?.id;
     if (_isFinite(challengeId)) {
-      this.props.unsubscribeFromChallengeTaskMessages(challengeId)
+      this.props.unsubscribeFromChallengeTaskMessages(challengeId);
     }
   }
 
   render() {
     const showMarkerPopup = (markerData) => {
       return (
-        <Popup key={markerData.options.taskId} offset={ [0.5, -5]}>
+        <Popup key={markerData.options.taskId} offset={[0.5, -5]}>
           <div className="marker-popup-content">
             <TaskMarkerContent
               {...this.props}
@@ -177,8 +161,8 @@ export default class ReviewNearbyTasksWidget extends Component {
     };
 
     const boundingBoxData = this.props.criteria.boundingBox
-      ? 'criteria.boundingBox'
-      : 'workspaceContext.taskMapBounds';
+      ? "criteria.boundingBox"
+      : "workspaceContext.taskMapBounds";
 
     const map = (
       <ClusterMap
@@ -195,37 +179,39 @@ export default class ReviewNearbyTasksWidget extends Component {
     );
 
     const clearFiltersControl = (
-      <button className="mr-flex mr-items-center mr-text-green-lighter"
+      <button
+        className="mr-flex mr-items-center mr-text-green-lighter"
         onClick={() => {
-          this.props.clearAllFilters()
-        }}>
-        <SvgSymbol sym="close-icon"
-          viewBox='0 0 20 20'
-          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
+          this.props.clearAllFilters();
+        }}
+      >
+        <SvgSymbol
+          sym="close-icon"
+          viewBox="0 0 20 20"
+          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1"
+        />
         <FormattedMessage {...messages.clearFiltersLabel} />
       </button>
-    )
+    );
 
     return (
       <QuickWidget
         {...this.props}
         className=""
-        widgetTitle={
-          <FormattedMessage {...messages.title} />
-        }
+        widgetTitle={<FormattedMessage {...messages.title} />}
         noMain
       >
         <div className="mr-pb-2 mr-h-full mr-rounded">
-            {this.props.taskBundle ? (
-              <div className="mr-flex mr-justify-between mr-content-center mr-mb-2 mr-flex-1">
-                <h3 className="mr-text-lg mr-text-pink-light">
-                  <FormattedMessage
-                    {...messages.simultaneousTasks}
-                    values={{ taskCount: this.props.taskBundle.taskIds.length }}
-                  />
-                </h3>
-              </div>
-            ) : null}
+          {this.props.taskBundle ? (
+            <div className="mr-flex mr-justify-between mr-content-center mr-mb-2 mr-flex-1">
+              <h3 className="mr-text-lg mr-text-pink-light">
+                <FormattedMessage
+                  {...messages.simultaneousTasks}
+                  values={{ taskCount: this.props.taskBundle.taskIds.length }}
+                />
+              </h3>
+            </div>
+          ) : null}
           <div className="mr-h-2/5 mr-min-h-80 mr-max-h-100">
             {this.props.loading ? (
               <BusySpinner className="mr-h-full mr-flex mr-items-center" />
@@ -234,7 +220,7 @@ export default class ReviewNearbyTasksWidget extends Component {
             )}
           </div>
           <div className="mr-my-4 mr-px-4 xl:mr-justify-between xl:mr-flex mr-items-center">
-            <div className='mr-flex mr-items-center'>
+            <div className="mr-flex mr-items-center">
               <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
                 <FormattedMessage {...messages.filterListLabel} />
               </p>
@@ -253,9 +239,7 @@ export default class ReviewNearbyTasksWidget extends Component {
                 </li>
               </ul>
             </div>
-            <div className='mr-flex mr-justify-end'>
-              {clearFiltersControl}
-            </div>
+            <div className="mr-flex mr-justify-end">{clearFiltersControl}</div>
           </div>
         </div>
       </QuickWidget>
@@ -272,29 +256,27 @@ registerWidgetType(
             WithFilterCriteria(
               WithBoundedTasks(
                 WithBrowsedChallenge(
-                  WithWebSocketSubscriptions(
-                    WithKeyboardShortcuts(ReviewNearbyTasksWidget)
-                  )
+                  WithWebSocketSubscriptions(WithKeyboardShortcuts(ReviewNearbyTasksWidget)),
                 ),
-                'nearbyTasks',
-                'filteredClusteredTasks'
+                "nearbyTasks",
+                "filteredClusteredTasks",
               ),
               true,
               false,
               true,
-              false
-            )
+              false,
+            ),
           ),
-          'nearbyTasks',
+          "nearbyTasks",
           // 'taskClusters',
-          'filteredClusteredTasks',
+          "filteredClusteredTasks",
           {
             includeLocked: false,
           },
-          false
-        )
-      )
-    )
+          false,
+        ),
+      ),
+    ),
   ),
-  descriptor
+  descriptor,
 );

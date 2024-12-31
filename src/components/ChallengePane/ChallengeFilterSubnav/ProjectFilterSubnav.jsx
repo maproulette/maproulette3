@@ -1,13 +1,13 @@
-import { Component } from 'react'
-import { FormattedMessage, injectIntl } from 'react-intl'
-import WithChallengeSearch from '../../HOCs/WithSearch/WithChallengeSearch'
-import FilterByDifficulty from './FilterByDifficulty'
-import FilterByKeyword from './FilterByKeyword'
-import FilterByCategorizationKeywords from './FilterByCategorizationKeywords'
-import ClearFiltersControl from './ClearFiltersControl'
-import SortChallengesSelector from './SortChallengesSelector'
-import './ChallengeFilterSubnav.scss'
-import messages from './Messages'
+import { Component } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import WithChallengeSearch from "../../HOCs/WithSearch/WithChallengeSearch";
+import ClearFiltersControl from "./ClearFiltersControl";
+import FilterByCategorizationKeywords from "./FilterByCategorizationKeywords";
+import FilterByDifficulty from "./FilterByDifficulty";
+import FilterByKeyword from "./FilterByKeyword";
+import SortChallengesSelector from "./SortChallengesSelector";
+import "./ChallengeFilterSubnav.scss";
+import messages from "./Messages";
 
 /**
  * ProjectilterSubnav presents a navigation bar that contains options
@@ -20,13 +20,12 @@ import messages from './Messages'
  */
 export class ProjectilterSubnav extends Component {
   clearFilters = () => {
-    this.props.clearSearchFilters()
-    this.props.clearSearch()
-  }
+    this.props.clearSearchFilters();
+    this.props.clearSearch();
+  };
 
   render() {
-    const filtersActive =
-      this.props.unfilteredChallenges?.length > this.props.challenges?.length
+    const filtersActive = this.props.unfilteredChallenges?.length > this.props.challenges?.length;
 
     return (
       <header className="mr-bg-black-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-hidden lg:mr-flex mr-items-center mr-justify-between">
@@ -42,13 +41,11 @@ export class ProjectilterSubnav extends Component {
             <FilterByCategorizationKeywords {...this.props} />
           </div>
 
-          {filtersActive && (
-            <ClearFiltersControl clearFilters={this.clearFilters} />
-          )}
+          {filtersActive && <ClearFiltersControl clearFilters={this.clearFilters} />}
         </div>
       </header>
-    )
+    );
   }
 }
 
-export default WithChallengeSearch(injectIntl(ProjectilterSubnav))
+export default WithChallengeSearch(injectIntl(ProjectilterSubnav));

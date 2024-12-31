@@ -1,6 +1,6 @@
-import _map from "lodash/map";
-import _invert from "lodash/invert";
 import _fromPairs from "lodash/fromPairs";
+import _invert from "lodash/invert";
+import _map from "lodash/map";
 import messages, { subscriptionFrequencyMessages } from "./Messages";
 
 // These statuses are defined on the server
@@ -26,35 +26,25 @@ export const SubscriptionFrequencyType = Object.freeze({
 });
 
 export const keysBySubscriptionType = Object.freeze(_invert(SubscriptionType));
-export const keysBySubscriptionFrequencyType = Object.freeze(
-  _invert(SubscriptionFrequencyType)
-);
+export const keysBySubscriptionFrequencyType = Object.freeze(_invert(SubscriptionFrequencyType));
 
 /**
  * Returns an object mapping status values to raw internationalized
  * messages suitable for use with FormattedMessage or formatMessage.
  */
 export const messagesBySubscriptionType = _fromPairs(
-  _map(messages, (message, key) => [SubscriptionType[key], message])
+  _map(messages, (message, key) => [SubscriptionType[key], message]),
 );
 
 export const messagesBySubscriptionFrequencyType = _fromPairs(
-  _map(subscriptionFrequencyMessages, (message, key) => [
-    SubscriptionType[key],
-    message,
-  ])
+  _map(subscriptionFrequencyMessages, (message, key) => [SubscriptionType[key], message]),
 );
 
 /** Returns object containing localized labels  */
 export const subscriptionTypeLabels = (intl) =>
-  _fromPairs(
-    _map(messages, (message, key) => [key, intl.formatMessage(message)])
-  );
+  _fromPairs(_map(messages, (message, key) => [key, intl.formatMessage(message)]));
 
 export const subscriptionFrequencyTypeLabels = (intl) =>
   _fromPairs(
-    _map(subscriptionFrequencyMessages, (message, key) => [
-      key,
-      intl.formatMessage(message),
-    ])
+    _map(subscriptionFrequencyMessages, (message, key) => [key, intl.formatMessage(message)]),
   );

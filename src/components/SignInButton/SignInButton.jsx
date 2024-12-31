@@ -1,10 +1,10 @@
-import { Component } from 'react'
-import classNames from 'classnames'
-import { FormattedMessage } from 'react-intl'
-import WithStatus from '../HOCs/WithStatus/WithStatus'
-import BusySpinner from '../BusySpinner/BusySpinner'
-import messages from './Messages'
-import './SignInButton.scss'
+import classNames from "classnames";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import BusySpinner from "../BusySpinner/BusySpinner";
+import WithStatus from "../HOCs/WithStatus/WithStatus";
+import messages from "./Messages";
+import "./SignInButton.scss";
 
 /**
  * Renders a sign-in button that takes the user to OpenStreetMap oauth
@@ -19,54 +19,51 @@ import './SignInButton.scss'
 export class SignInButton extends Component {
   state = {
     clicked: false,
-    verifyingToken: false
-  }
+    verifyingToken: false,
+  };
 
   handleSignin = () => {
     //clear stale locks in localStorage
     localStorage.clear();
-    localStorage.setItem('isLoggedIn', 'true')
-    localStorage.setItem('redirect', window.location.pathname)
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("redirect", window.location.pathname);
 
-    this.setState({clicked: true});
+    this.setState({ clicked: true });
 
     const loginUrl = `${window.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
-      this.props.history?.location?.pathname + this.props.history?.location?.search)}`
+      this.props.history?.location?.pathname + this.props.history?.location?.search,
+    )}`;
 
-    fetch(loginUrl).then(async (result) => {
-      const jsonData = await result.json();
-      if (jsonData.state) {
-        localStorage.setItem('state', jsonData.state)
-        window.location.href = jsonData.redirect
-      }
-    }).catch(() => {
-      console.log("error logging in")
-      this.setState({ clicked: false })
-    })
-  }
+    fetch(loginUrl)
+      .then(async (result) => {
+        const jsonData = await result.json();
+        if (jsonData.state) {
+          localStorage.setItem("state", jsonData.state);
+          window.location.href = jsonData.redirect;
+        }
+      })
+      .catch(() => {
+        console.log("error logging in");
+        this.setState({ clicked: false });
+      });
+  };
 
   render() {
     if (this.props.checkingLoginStatus || this.state.clicked) {
-      return (
-        <BusySpinner
-          className={classNames("mr-mx-8", {"mr-mx-20": this.props.longForm})}
-        />
-      )
+      return <BusySpinner className={classNames("mr-mx-8", { "mr-mx-20": this.props.longForm })} />;
     }
 
     return (
-      <a
-        className={classNames("mr-button", this.props.className)}
-        onClick={this.handleSignin}
-      >
-        {this.props.children || (
-         this.props.longForm ?
-         <FormattedMessage {...messages.longLabel } /> :
-         <FormattedMessage {...messages.control} />
-        )}
+      <a className={classNames("mr-button", this.props.className)} onClick={this.handleSignin}>
+        {this.props.children ||
+          (this.props.longForm ? (
+            <FormattedMessage {...messages.longLabel} />
+          ) : (
+            <FormattedMessage {...messages.control} />
+          ))}
       </a>
-    )
+    );
   }
 }
 
-export default WithStatus(SignInButton)
+export default WithStatus(SignInButton);

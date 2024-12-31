@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { Component } from "react";
 
 /**
  * WithPinned provides the WrappedComponent with projects and challenges that
@@ -7,7 +7,7 @@ import { Component } from 'react'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithPinned = function(WrappedComponent) {
+export const WithPinned = function (WrappedComponent) {
   return class extends Component {
     /**
      * Retrieves all pinned entities from the user's app settings
@@ -15,15 +15,15 @@ export const WithPinned = function(WrappedComponent) {
      * @private
      */
     allPinnedEntities = () => {
-      return this.props.getUserAppSetting(this.props.user, 'pinned') || {}
-    }
+      return this.props.getUserAppSetting(this.props.user, "pinned") || {};
+    };
 
     /**
      * Retrieves pinned entities of the given entity type (projects, challenges, etc)
      *
      * @private
      */
-    pinned = entityType => this.allPinnedEntities()[entityType] || []
+    pinned = (entityType) => this.allPinnedEntities()[entityType] || [];
 
     /**
      * Updates the pins for an entity type.
@@ -32,11 +32,11 @@ export const WithPinned = function(WrappedComponent) {
      */
     updatePins = (entityType, newPins) => {
       this.props.updateUserAppSetting(this.props.user.id, {
-        'pinned': Object.assign({}, this.allPinnedEntities(), {
+        pinned: Object.assign({}, this.allPinnedEntities(), {
           [entityType]: newPins,
-        })
-      })
-    }
+        }),
+      });
+    };
 
     /**
      * Toggles the pinned status of the given entity
@@ -44,25 +44,28 @@ export const WithPinned = function(WrappedComponent) {
      * @private
      */
     togglePin = (entityType, entityId) => {
-      const newPins = new Set(this.pinned(entityType))
-      newPins.has(entityId) ? newPins.delete(entityId) : newPins.add(entityId)
-      this.updatePins(entityType, [...newPins])
-    }
+      const newPins = new Set(this.pinned(entityType));
+      newPins.has(entityId) ? newPins.delete(entityId) : newPins.add(entityId);
+      this.updatePins(entityType, [...newPins]);
+    };
 
     render() {
       // Don't render if we're still fetching user data
       if (this.props.checkingLoginStatus || !this.props.user.isLoggedIn) {
-        return null
+        return null;
       }
 
-      return <WrappedComponent
-              {...this.props}
-              pinnedProjects={this.pinned('projects')}
-              pinnedChallenges={this.pinned('challenges')}
-              toggleProjectPin={projectId => this.togglePin('projects', projectId)}
-              toggleChallengePin={challengeId => this.togglePin('challenges', challengeId)} />
+      return (
+        <WrappedComponent
+          {...this.props}
+          pinnedProjects={this.pinned("projects")}
+          pinnedChallenges={this.pinned("challenges")}
+          toggleProjectPin={(projectId) => this.togglePin("projects", projectId)}
+          toggleChallengePin={(challengeId) => this.togglePin("challenges", challengeId)}
+        />
+      );
     }
-  }
-}
+  };
+};
 
-export default WrappedComponent => WithPinned(WrappedComponent)
+export default (WrappedComponent) => WithPinned(WrappedComponent);

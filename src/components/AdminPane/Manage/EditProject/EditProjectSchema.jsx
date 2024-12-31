@@ -1,6 +1,6 @@
-import AsManager from '../../../../interactions/User/AsManager'
-import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
-import messages from './Messages'
+import AsManager from "../../../../interactions/User/AsManager";
+import MarkdownContent from "../../../MarkdownContent/MarkdownContent";
+import messages from "./Messages";
 
 /**
  * Generates a JSON Schema describing editable Project fields intended for
@@ -15,7 +15,7 @@ import messages from './Messages'
  */
 export const jsSchema = (intl, user, project) => {
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       displayName: {
@@ -34,7 +34,7 @@ export const jsSchema = (intl, user, project) => {
       },
     },
     required: ["displayName"],
-  }
+  };
 
   // Only show Featured option to superusers
   if (AsManager(user).isSuperUser()) {
@@ -42,7 +42,7 @@ export const jsSchema = (intl, user, project) => {
       title: intl.formatMessage(messages.featuredLabel),
       type: "boolean",
       default: false,
-    }
+    };
   }
 
   // Show 'isVirtual' option only if this is a new project
@@ -51,11 +51,11 @@ export const jsSchema = (intl, user, project) => {
       title: intl.formatMessage(messages.isVirtualLabel),
       type: "boolean",
       default: false,
-    }
+    };
   }
 
-  return schemaFields
-}
+  return schemaFields;
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -88,10 +88,8 @@ export const uiSchema = (intl) => {
       "ui:widget": "textarea",
       "ui:help": intl.formatMessage(messages.descriptionDescription),
     },
-    "ui:order": [
-      "featured", "displayName", "enabled", "description", "isVirtual"
-    ],
-  }
+    "ui:order": ["featured", "displayName", "enabled", "description", "isVirtual"],
+  };
 
-  return uiSchemaFields
-}
+  return uiSchemaFields;
+};

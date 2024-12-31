@@ -1,56 +1,57 @@
-import React, { useState, useEffect } from 'react'
-import ReactDOM from 'react-dom'
-import { GeoJSON, useMap } from 'react-leaflet'
-import L from 'leaflet'
-import { injectIntl } from 'react-intl'
-import { featureCollection } from '@turf/helpers'
-import _isFunction from 'lodash/isFunction'
-import _uniqueId from 'lodash/uniqueId'
-import AsSimpleStyleableFeature from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
-import PropertyList from '../PropertyList/PropertyList'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../../tailwind.config.js'
-import layerMessages from '../LayerToggle/Messages'
-import { IntlProvider } from 'react-intl'
-import { useLeafletContext } from '@react-leaflet/core'
+import { useLeafletContext } from "@react-leaflet/core";
+import { featureCollection } from "@turf/helpers";
+import L from "leaflet";
+import _isFunction from "lodash/isFunction";
+import _uniqueId from "lodash/uniqueId";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import { injectIntl } from "react-intl";
+import { IntlProvider } from "react-intl";
+import { GeoJSON, useMap } from "react-leaflet";
+import resolveConfig from "tailwindcss/resolveConfig";
+import AsSimpleStyleableFeature from "../../../interactions/TaskFeature/AsSimpleStyleableFeature";
+import tailwindConfig from "../../../tailwind.config.js";
+import layerMessages from "../LayerToggle/Messages";
+import PropertyList from "../PropertyList/PropertyList";
 
-const colors = resolveConfig(tailwindConfig).theme.colors
+const colors = resolveConfig(tailwindConfig).theme.colors;
 const HIGHLIGHT_SIMPLESTYLE = {
   "marker-color": colors.gold,
   stroke: colors.gold,
   "stroke-width": 7,
   fill: colors.gold,
-}
+};
 
 /**
  * TaskFeatureLayer renders a react-leaflet map layer representing the given
  * (GeoJSON) features, properly styled and with a popup for the feature
  * properties
  */
-const TaskFeatureLayer = props => {
-  const [layer, setLayer] = useState(null)
-  const map = useMap()
-  const leaflet = useLeafletContext()
+const TaskFeatureLayer = (props) => {
+  const [layer, setLayer] = useState(null);
+  const map = useMap();
+  const leaflet = useLeafletContext();
 
   const propertyList = (featureProperties, onBack) => {
-    const contentElement = document.createElement('div')
-    contentElement.style.maxHeight = '300px';
+    const contentElement = document.createElement("div");
+    contentElement.style.maxHeight = "300px";
     ReactDOM.render(
-      <IntlProvider key={props.intl.locale} 
-                    locale={props.intl.locale} 
-                    messages={props.intl.messages}
-                    textComponent="span" 
+      <IntlProvider
+        key={props.intl.locale}
+        locale={props.intl.locale}
+        messages={props.intl.messages}
+        textComponent="span"
       >
         <PropertyList featureProperties={featureProperties} onBack={onBack} />
       </IntlProvider>,
-      contentElement
-    )
-    return contentElement
-  }
+      contentElement,
+    );
+    return contentElement;
+  };
 
-  const { features, mrLayerId, animator, externalInteractive } = props
-  const layerLabel = props.intl.formatMessage(layerMessages.showTaskFeaturesLabel)
-  const pane = leaflet?.pane
+  const { features, mrLayerId, animator, externalInteractive } = props;
+  const layerLabel = props.intl.formatMessage(layerMessages.showTaskFeaturesLabel);
+  const pane = leaflet?.pane;
 
   useEffect(() => {
     const newLayer = (
@@ -60,16 +61,15 @@ const TaskFeatureLayer = props => {
         mrLayerLabel={layerLabel}
         data={featureCollection(features)}
         pointToLayer={(point, latLng) => {
-          return L.marker(latLng, {pane, mrLayerLabel: layerLabel, mrLayerId: mrLayerId})
+          return L.marker(latLng, { pane, mrLayerLabel: layerLabel, mrLayerId: mrLayerId });
         }}
         onEachFeature={(feature, layer) => {
-          const styleableFeature =
-            _isFunction(feature.styleLeafletLayer) ?
-            feature :
-            AsSimpleStyleableFeature(feature)
+          const styleableFeature = _isFunction(feature.styleLeafletLayer)
+            ? feature
+            : AsSimpleStyleableFeature(feature);
 
           if (externalInteractive) {
-            layer.on('click', (e) => {
+            layer.on("click", (e) => {
               if (!layer._map) return; // Check if layer is still on the map
 
               L.popup({}, layer)
@@ -83,7 +83,7 @@ const TaskFeatureLayer = props => {
                   ...styleableFeature.markerSimplestyles(layer),
                   ...HIGHLIGHT_SIMPLESTYLE,
                 },
-                'mr-external-interaction:popup-open'
+                "mr-external-interaction:popup-open",
               );
 
               const previewHandler = () => {
@@ -94,27 +94,36 @@ const TaskFeatureLayer = props => {
                       ...styleableFeature.markerSimplestyles(layer),
                       ...HIGHLIGHT_SIMPLESTYLE,
                     },
-                    'mr-external-interaction:popup-open'
-                  )
+                    "mr-external-interaction:popup-open",
+                  );
                 }
               };
 
-              layer.on('mr-external-interaction:start-preview', previewHandler);
+              layer.on("mr-external-interaction:start-preview", previewHandler);
 
               const popupCloseHandler = () => {
                 if (layer._map) {
-                  styleableFeature.popLeafletLayerSimpleStyles(layer, 'mr-external-interaction:popup-open');
-                  styleableFeature.popLeafletLayerSimpleStyles(layer, 'mr-external-interaction:start-preview');
+                  styleableFeature.popLeafletLayerSimpleStyles(
+                    layer,
+                    "mr-external-interaction:popup-open",
+                  );
+                  styleableFeature.popLeafletLayerSimpleStyles(
+                    layer,
+                    "mr-external-interaction:start-preview",
+                  );
                 }
-                map.off('popupclose', popupCloseHandler);
-                layer.off('mr-external-interaction:start-preview', previewHandler);
+                map.off("popupclose", popupCloseHandler);
+                layer.off("mr-external-interaction:start-preview", previewHandler);
               };
 
-              map.on('popupclose', popupCloseHandler);
+              map.on("popupclose", popupCloseHandler);
             });
 
-            if(feature.geometry.type !== 'Point' && feature.geometry.type !== 'GeometryCollection'){
-              layer.on('mouseover', () => {
+            if (
+              feature.geometry.type !== "Point" &&
+              feature.geometry.type !== "GeometryCollection"
+            ) {
+              layer.on("mouseover", () => {
                 if (!layer._map) return; // Check if layer is still on the map
 
                 styleableFeature.pushLeafletLayerSimpleStyles(
@@ -123,38 +132,41 @@ const TaskFeatureLayer = props => {
                     ...styleableFeature.markerSimplestyles(layer),
                     ...HIGHLIGHT_SIMPLESTYLE,
                   },
-                  'mr-external-interaction:start-preview'
-                )
+                  "mr-external-interaction:start-preview",
+                );
 
                 const mouseoutHandler = () => {
                   if (layer._map) {
-                    styleableFeature.popLeafletLayerSimpleStyles(layer, 'mr-external-interaction:start-preview')
+                    styleableFeature.popLeafletLayerSimpleStyles(
+                      layer,
+                      "mr-external-interaction:start-preview",
+                    );
                   }
-                  layer.off('mouseout', mouseoutHandler);
+                  layer.off("mouseout", mouseoutHandler);
                 };
 
-                layer.on('mouseout', mouseoutHandler);
+                layer.on("mouseout", mouseoutHandler);
               });
             }
           }
 
           if (animator) {
-            const oldOnAdd = layer.onAdd
-            layer.onAdd = map => {
-              oldOnAdd.call(layer, map)
-              animator.scheduleAnimation()
-            }
+            const oldOnAdd = layer.onAdd;
+            layer.onAdd = (map) => {
+              oldOnAdd.call(layer, map);
+              animator.scheduleAnimation();
+            };
           }
 
-          styleableFeature.styleLeafletLayer(layer) // Custom layer styling
+          styleableFeature.styleLeafletLayer(layer); // Custom layer styling
         }}
       />
-    )
+    );
 
-    setLayer(newLayer)
-  }, [features, mrLayerId, pane, animator, externalInteractive, layerLabel, map])
+    setLayer(newLayer);
+  }, [features, mrLayerId, pane, animator, externalInteractive, layerLabel, map]);
 
-  return layer
-}
+  return layer;
+};
 
-export default injectIntl(TaskFeatureLayer)
+export default injectIntl(TaskFeatureLayer);

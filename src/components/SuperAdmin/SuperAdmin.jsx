@@ -1,17 +1,17 @@
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import AsManager from '../../interactions/User/AsManager'
-import SignIn from '../../pages/SignIn/SignIn'
-import MetricsTable from './MetricsTable'
-import BusySpinner from '../BusySpinner/BusySpinner'
-import internalFilterToggle from './internalFilterToggle'
-import MetricsHeader from './MetricsHeader'
-import messages from './Messages'
-import { useEffect } from 'react'
-import queryString from 'query-string'
-import DatePicker from 'react-datepicker'
-import { useState } from 'react'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import PropTypes from "prop-types";
+import queryString from "query-string";
+import { useEffect } from "react";
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+import { FormattedMessage } from "react-intl";
+import AsManager from "../../interactions/User/AsManager";
+import SignIn from "../../pages/SignIn/SignIn";
+import BusySpinner from "../BusySpinner/BusySpinner";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
+import MetricsHeader from "./MetricsHeader";
+import MetricsTable from "./MetricsTable";
+import internalFilterToggle from "./internalFilterToggle";
 /**
  * SuperAdminPane is the top-level component for super administration functions. It has a
  * User/Project/Challenge metrics tab for management of users, projects and challenges, and display of various summary metrics.
@@ -19,141 +19,133 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
  *
  */
 export const SuperAdminPane = (props) => {
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
-  const params = queryString.parse(props.location.search)
-  const currentTab = params['tab'] ? params['tab'] : 'challenges'
+  const params = queryString.parse(props.location.search);
+  const currentTab = params["tab"] ? params["tab"] : "challenges";
 
   const formatDateFromTab = (date) => {
-    const offset = date.getTimezoneOffset()
-    date = new Date(date.getTime() + offset * 60 * 1000)
-    return date
-  }
+    const offset = date.getTimezoneOffset();
+    date = new Date(date.getTime() + offset * 60 * 1000);
+    return date;
+  };
 
-  const fromDateTab = params['from']
-    ? formatDateFromTab(new Date(params['from']))
-    : null
-  const endDateTab = params['to']
-    ? formatDateFromTab(new Date(params['to']))
-    : null
+  const fromDateTab = params["from"] ? formatDateFromTab(new Date(params["from"])) : null;
+  const endDateTab = params["to"] ? formatDateFromTab(new Date(params["to"])) : null;
 
   useEffect(() => {
-    if (props.location.search === '') {
-      props.clearSearch()
-      props.clearSearchFilters()
-      const searchQuery = `?tab=challenges&searchType=challenges`
+    if (props.location.search === "") {
+      props.clearSearch();
+      props.clearSearchFilters();
+      const searchQuery = `?tab=challenges&searchType=challenges`;
       props.history.push({
-        pathname: '/superadmin',
+        pathname: "/superadmin",
         search: searchQuery,
-      })
-      props.setSearchSort({ sortBy: 'default' })
+      });
+      props.setSearchSort({ sortBy: "default" });
     }
-    setStartDate(fromDateTab)
-    setEndDate(endDateTab)
-  }, [])
+    setStartDate(fromDateTab);
+    setEndDate(endDateTab);
+  }, []);
 
   //HOC
-  const VisibleFilterToggle = internalFilterToggle('visible')
-  const ArchivedFilterToggle = internalFilterToggle('archived')
-  const VirtualProjectFilterToggle = internalFilterToggle('virtual')
-  const manager = AsManager(props.user)
+  const VisibleFilterToggle = internalFilterToggle("visible");
+  const ArchivedFilterToggle = internalFilterToggle("archived");
+  const VirtualProjectFilterToggle = internalFilterToggle("virtual");
+  const manager = AsManager(props.user);
   if (!manager.isLoggedIn()) {
     return props.checkingLoginStatus ? (
-      <div className='admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue'>
+      <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
         <BusySpinner />
       </div>
     ) : (
       <SignIn {...props} />
-    )
+    );
   }
 
   const formatDate = (date) => {
-    const offset = date.getTimezoneOffset()
-    date = new Date(date.getTime() - offset * 60 * 1000)
-    return date.toISOString().split('T')[0]
-  }
+    const offset = date.getTimezoneOffset();
+    date = new Date(date.getTime() - offset * 60 * 1000);
+    return date.toISOString().split("T")[0];
+  };
 
   const handleStartDate = (date) => {
-    setStartDate(date)
-    const formattedDate = formatDate(date)
-    props.toggleStartDate(formattedDate)
-  }
+    setStartDate(date);
+    const formattedDate = formatDate(date);
+    props.toggleStartDate(formattedDate);
+  };
 
   const handleEndDate = (date) => {
-    setEndDate(date)
-    const formattedDate = formatDate(date)
-    props.toggleEndDate(formattedDate)
-  }
+    setEndDate(date);
+    const formattedDate = formatDate(date);
+    props.toggleEndDate(formattedDate);
+  };
 
   const clearDate = () => {
-    props.clearDateFilter()
-    setStartDate(null)
-    setEndDate(null)
-  }
+    props.clearDateFilter();
+    setStartDate(null);
+    setEndDate(null);
+  };
 
   return manager.isSuperUser() ? (
-    <div className='mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse'>
+    <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse">
       <MetricsHeader {...props} currentTab={currentTab} clearDate={clearDate} />
       {
-        <div className='mr-flex mr-justify-between mr-p-4 mr-pt-6'>
+        <div className="mr-flex mr-justify-between mr-p-4 mr-pt-6">
           <div>
-            <div className='mr-flex mr-items-center'>
-              <div className='mr-w-32'>
+            <div className="mr-flex mr-items-center">
+              <div className="mr-w-32">
                 <DatePicker
                   selected={startDate}
-                  placeholderText={'Start date'}
+                  placeholderText={"Start date"}
                   onChange={(date) => handleStartDate(date)}
                   maxDate={endDate}
                 />
               </div>
               <SvgSymbol
-                viewBox='0 0 20 20'
-                sym='arrow-right-icon'
-                className='mr-fill-current mr-w-4 mr-h-4 mr-ml-2 mr-mr-2'
+                viewBox="0 0 20 20"
+                sym="arrow-right-icon"
+                className="mr-fill-current mr-w-4 mr-h-4 mr-ml-2 mr-mr-2"
               />
-              <div className='mr-w-32'>
+              <div className="mr-w-32">
                 <DatePicker
                   selected={endDate}
-                  placeholderText={'End date'}
+                  placeholderText={"End date"}
                   onChange={(date) => handleEndDate(date)}
                   minDate={startDate}
                 />
               </div>
               <button
-                color='primary'
-                type='button'
-                className='mr-leading-none mr-button--dark mr-ml-4 mr-mr-1'
+                color="primary"
+                type="button"
+                className="mr-leading-none mr-button--dark mr-ml-4 mr-mr-1"
                 onClick={() => {
-                  clearDate()
+                  clearDate();
                 }}
               >
                 <FormattedMessage {...messages.clear} />
               </button>
             </div>
           </div>
-          <div className='mr-flex mr-items-center'>
-            {currentTab !== 'users' && (
+          <div className="mr-flex mr-items-center">
+            {currentTab !== "users" && (
               <VisibleFilterToggle
                 {...props}
                 dashboardEntityFilters={props.entityFilters}
                 toggleEntityFilter={props.toggleFilter}
-                filterToggleLabel={
-                  <FormattedMessage {...messages.hideUndiscoverable} />
-                }
+                filterToggleLabel={<FormattedMessage {...messages.hideUndiscoverable} />}
               />
             )}
-            {currentTab !== 'users' && (
+            {currentTab !== "users" && (
               <ArchivedFilterToggle
                 {...props}
                 dashboardEntityFilters={props.entityFilters}
                 toggleEntityFilter={props.toggleFilter}
-                filterToggleLabel={
-                  <FormattedMessage {...messages.hideArchived} />
-                }
+                filterToggleLabel={<FormattedMessage {...messages.hideArchived} />}
               />
             )}
-            {currentTab === 'projects' && (
+            {currentTab === "projects" && (
               <VirtualProjectFilterToggle
                 {...props}
                 dashboardEntityFilters={props.entityFilters}
@@ -162,11 +154,11 @@ export const SuperAdminPane = (props) => {
               />
             )}
             <button
-              color='primary'
-              type='button'
-              className='mr-leading-none mr-button--dark mr-ml-4 mr-mr-1'
+              color="primary"
+              type="button"
+              className="mr-leading-none mr-button--dark mr-ml-4 mr-mr-1"
               onClick={() => {
-                props.downloadCsv(currentTab, props)
+                props.downloadCsv(currentTab, props);
               }}
             >
               <FormattedMessage {...messages.download} />
@@ -178,10 +170,10 @@ export const SuperAdminPane = (props) => {
     </div>
   ) : (
     <div>You are not a super admin</div>
-  )
-}
+  );
+};
 
 SuperAdminPane.propTypes = {
   /** router location */
   location: PropTypes.object.isRequired,
-}
+};

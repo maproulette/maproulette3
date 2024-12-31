@@ -1,8 +1,7 @@
-import { Component } from 'react'
-import { connect } from 'react-redux'
-import { saveTask,
-         deleteTask } from '../../../../services/Task/Task'
-import WithLoadedTask from '../../../HOCs/WithLoadedTask/WithLoadedTask'
+import { Component } from "react";
+import { connect } from "react-redux";
+import { deleteTask, saveTask } from "../../../../services/Task/Task";
+import WithLoadedTask from "../../../HOCs/WithLoadedTask/WithLoadedTask";
 
 /**
  * WithCurrentTask makes available to the WrappedComponent the current task
@@ -10,26 +9,27 @@ import WithLoadedTask from '../../../HOCs/WithLoadedTask/WithLoadedTask'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithCurrentTask = function(WrappedComponent) {
+const WithCurrentTask = function (WrappedComponent) {
   return class extends Component {
     render() {
-      const taskId = parseInt(this.props.match?.params?.taskId, 10)
+      const taskId = parseInt(this.props.match?.params?.taskId, 10);
       return (
-        <WrappedComponent key={taskId}
-                                 taskId={taskId}
-                                 challengeId={parseInt(this.props.match?.params?.challengeId, 10)}
-                                 projectId={parseInt(this.props.match?.params?.projectId, 10)}
-                                 {...this.props} />
+        <WrappedComponent
+          key={taskId}
+          taskId={taskId}
+          challengeId={parseInt(this.props.match?.params?.challengeId, 10)}
+          projectId={parseInt(this.props.match?.params?.projectId, 10)}
+          {...this.props}
+        />
       );
     }
   };
-}
+};
 
-const mapDispatchToProps = dispatch => ({
-  saveTask: taskData => dispatch(saveTask(taskData)),
-  deleteTask: taskId => dispatch(deleteTask(taskId)),
-})
+const mapDispatchToProps = (dispatch) => ({
+  saveTask: (taskData) => dispatch(saveTask(taskData)),
+  deleteTask: (taskId) => dispatch(deleteTask(taskId)),
+});
 
-export default WrappedComponent =>
-  connect(null,
-          mapDispatchToProps)(WithCurrentTask(WithLoadedTask(WrappedComponent)))
+export default (WrappedComponent) =>
+  connect(null, mapDispatchToProps)(WithCurrentTask(WithLoadedTask(WrappedComponent)));

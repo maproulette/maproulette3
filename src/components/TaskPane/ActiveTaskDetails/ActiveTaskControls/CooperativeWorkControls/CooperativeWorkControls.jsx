@@ -1,85 +1,68 @@
-import { Component } from 'react'
-import { FormattedMessage, injectIntl } from 'react-intl'
-import WithSearch from '../../../../HOCs/WithSearch/WithSearch'
-import WithTaskReview from '../../../../HOCs/WithTaskReview/WithTaskReview'
-import WithTaskTags from '../../../../HOCs/WithTaskTags/WithTaskTags'
-import WithKeyboardShortcuts
-       from '../../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
-import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
-import TaskFixedControl
-       from '../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskFixedControl/TaskFixedControl'
-import TaskSkipControl
-       from '../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskSkipControl/TaskSkipControl'
-import TaskTooHardControl
-       from '../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskTooHardControl/TaskTooHardControl'
-import TaskFalsePositiveControl
-       from '../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskFalsePositiveControl/TaskFalsePositiveControl'
-import TaskAlreadyFixedControl
-       from '../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskAlreadyFixedControl/TaskAlreadyFixedControl'
-import BusySpinner from '../../../../BusySpinner/BusySpinner'
-import UserEditorSelector
-       from '../../../../UserEditorSelector/UserEditorSelector'
-import messages from './Messages'
+import { Component } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
+import BusySpinner from "../../../../BusySpinner/BusySpinner";
+import WithKeyboardShortcuts from "../../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
+import WithSearch from "../../../../HOCs/WithSearch/WithSearch";
+import WithTaskReview from "../../../../HOCs/WithTaskReview/WithTaskReview";
+import WithTaskTags from "../../../../HOCs/WithTaskTags/WithTaskTags";
+import TaskAlreadyFixedControl from "../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskAlreadyFixedControl/TaskAlreadyFixedControl";
+import TaskFalsePositiveControl from "../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskFalsePositiveControl/TaskFalsePositiveControl";
+import TaskFixedControl from "../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskFixedControl/TaskFixedControl";
+import TaskSkipControl from "../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskSkipControl/TaskSkipControl";
+import TaskTooHardControl from "../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskTooHardControl/TaskTooHardControl";
+import UserEditorSelector from "../../../../UserEditorSelector/UserEditorSelector";
+import messages from "./Messages";
 
 export class CooperativeWorkControls extends Component {
   state = {
     showDiffModal: false,
-  }
+  };
 
   render() {
     if (!this.props.task) {
-      return null
+      return null;
     }
 
     return (
       <div className="mr-pb-2">
         {this.props.loadingOSMData && <BusySpinner />}
-        <UserEditorSelector
-          {...this.props}
-          className="mr-mb-4"
-        />
+        <UserEditorSelector {...this.props} className="mr-mb-4" />
         <p className="mr-text-md mr-mb-2 mr-mt-2">
           <FormattedMessage {...messages.prompt} />
         </p>
         <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
-          {this.props.allowedProgressions.has(TaskStatus.fixed) &&
+          {this.props.allowedProgressions.has(TaskStatus.fixed) && (
             <TaskFixedControl
               {...this.props}
               fixedLabel={<FormattedMessage {...messages.confirmLabel} />}
             />
-          }
+          )}
 
-          {this.props.allowedProgressions.has(TaskStatus.falsePositive) &&
+          {this.props.allowedProgressions.has(TaskStatus.falsePositive) && (
             <TaskFalsePositiveControl
               {...this.props}
               falsePositiveLabel={<FormattedMessage {...messages.rejectLabel} />}
             />
-          }
+          )}
         </div>
-          <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
-          {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
+        <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
+          {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) && (
             <TaskAlreadyFixedControl {...this.props} />
-          }
-          {this.props.allowedProgressions.has(TaskStatus.tooHard) &&
+          )}
+          {this.props.allowedProgressions.has(TaskStatus.tooHard) && (
             <TaskTooHardControl {...this.props} />
-          }
-          {this.props.allowedProgressions.has(TaskStatus.skipped) &&
+          )}
+          {this.props.allowedProgressions.has(TaskStatus.skipped) && (
             <TaskSkipControl {...this.props} />
-          }
+          )}
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default
-  WithSearch(
-    WithTaskTags(
-      WithTaskReview(
-        WithKeyboardShortcuts(
-          injectIntl(CooperativeWorkControls)
-        )
-      )
-    ),
-    'task'
-  )
+export default WithSearch(
+  WithTaskTags(WithTaskReview(WithKeyboardShortcuts(injectIntl(CooperativeWorkControls)))),
+  "task",
+);

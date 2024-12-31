@@ -1,10 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { TaskStatus }
-       from '../../../../../services/Task/TaskStatus/TaskStatus'
-import Button from '../../../../Button/Button'
-import messages from './Messages'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
+import Button from "../../../../Button/Button";
+import messages from "./Messages";
 
 /**
  * TaskFixedControl displays a control for marking a task with a fixed status.
@@ -16,24 +15,27 @@ export default class TaskFixedControl extends Component {
     if (this.props.asLink) {
       return (
         <a onClick={() => this.props.complete(TaskStatus.fixed)}>
-          {this.props.fixedLabel ? this.props.fixedLabel :
-           <FormattedMessage {...messages.fixedLabel} />
-          }
+          {this.props.fixedLabel ? (
+            this.props.fixedLabel
+          ) : (
+            <FormattedMessage {...messages.fixedLabel} />
+          )}
         </a>
-      )
-    }
-    else {
+      );
+    } else {
       return (
         <Button
           className="mr-button--blue-fill mr-mb-2 mr-mr-2"
-          style={{ minWidth: '10rem'}}
+          style={{ minWidth: "10rem" }}
           onClick={() => this.props.complete(TaskStatus.fixed)}
         >
-          {this.props.fixedLabel ? this.props.fixedLabel :
-           <FormattedMessage {...messages.fixedLabel} />
-          }
+          {this.props.fixedLabel ? (
+            this.props.fixedLabel
+          ) : (
+            <FormattedMessage {...messages.fixedLabel} />
+          )}
         </Button>
-      )
+      );
     }
   }
 }
@@ -41,4 +43,4 @@ export default class TaskFixedControl extends Component {
 TaskFixedControl.propTypes = {
   /** Invoked to mark the task as already-fixed */
   complete: PropTypes.func.isRequired,
-}
+};

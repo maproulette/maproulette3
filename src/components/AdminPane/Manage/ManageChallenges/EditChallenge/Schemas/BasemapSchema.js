@@ -1,13 +1,14 @@
-import { ChallengeBasemap,
-         challengeOwnerBasemapLayerLabels }
-       from '../../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
-import { LayerSources } from '../../../../../../services/VisibleLayer/LayerSources'
-import _without from 'lodash/without'
-import _map from 'lodash/map'
-import _filter from 'lodash/filter'
-import messages from '../Messages'
+import _filter from "lodash/filter";
+import _map from "lodash/map";
+import _without from "lodash/without";
+import {
+  ChallengeBasemap,
+  challengeOwnerBasemapLayerLabels,
+} from "../../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap";
+import { LayerSources } from "../../../../../../services/VisibleLayer/LayerSources";
+import messages from "../Messages";
 
-const STEP_ID = "Basemap"
+const STEP_ID = "Basemap";
 
 /**
  * Generates a JSON Schema describing Basemap fields of Edit Challenge
@@ -23,24 +24,28 @@ const STEP_ID = "Basemap"
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl) => {
-  const localizedBasemapLabels = challengeOwnerBasemapLayerLabels(intl)
+  const localizedBasemapLabels = challengeOwnerBasemapLayerLabels(intl);
 
   const defaultBasemapChoices = [
-    { id: ChallengeBasemap.none.toString(), name: localizedBasemapLabels.none }
-  ].concat(_map(_filter(LayerSources, source => !source.overlay),
-                source => ({id: source.id.toString(), name: source.name}))).concat([
-    { id: ChallengeBasemap.custom.toString(), name: localizedBasemapLabels.custom }
-  ])
+    { id: ChallengeBasemap.none.toString(), name: localizedBasemapLabels.none },
+  ]
+    .concat(
+      _map(
+        _filter(LayerSources, (source) => !source.overlay),
+        (source) => ({ id: source.id.toString(), name: source.name }),
+      ),
+    )
+    .concat([{ id: ChallengeBasemap.custom.toString(), name: localizedBasemapLabels.custom }]);
 
   return {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       defaultBasemap: {
         title: intl.formatMessage(messages.defaultBasemapLabel),
         type: "string",
-        enum: _map(defaultBasemapChoices, 'id'),
-        enumNames: _map(defaultBasemapChoices, 'name'),
+        enum: _map(defaultBasemapChoices, "id"),
+        enumNames: _map(defaultBasemapChoices, "name"),
         default: ChallengeBasemap.none.toString(),
       },
       datasetUrl: {
@@ -49,15 +54,19 @@ export const jsSchema = (intl) => {
         default: "",
       },
     },
-    dependencies: { // Only show customBasemap if defaultBasemap set to Custom
+    dependencies: {
+      // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
         oneOf: [
           {
             properties: {
               defaultBasemap: {
-                enum: _without(_map(defaultBasemapChoices, 'id'), ChallengeBasemap.custom.toString()),
-              }
-            }
+                enum: _without(
+                  _map(defaultBasemapChoices, "id"),
+                  ChallengeBasemap.custom.toString(),
+                ),
+              },
+            },
           },
           {
             properties: {
@@ -69,13 +78,13 @@ export const jsSchema = (intl) => {
                 type: "string",
               },
             },
-            required: ['customBasemap']
-          }
-        ]
-      }
-    }
-  }
-}
+            required: ["customBasemap"],
+          },
+        ],
+      },
+    },
+  };
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -87,9 +96,12 @@ export const jsSchema = (intl) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
-  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1
-  const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
+  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
+  const toggleCollapsed =
+    options.longForm && options.toggleCollapsed
+      ? () => options.toggleCollapsed(STEP_ID)
+      : undefined;
 
   return {
     "ui:order": ["defaultBasemap", "customBasemap", "datasetUrl"],
@@ -98,7 +110,9 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:help": intl.formatMessage(messages.defaultBasemapDescription),
       "ui:collapsed": isCollapsed,
       "ui:toggleCollapsed": toggleCollapsed,
-      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.basemapStepHeader) : undefined,
+      "ui:groupHeader": options.longForm
+        ? intl.formatMessage(messages.basemapStepHeader)
+        : undefined,
     },
     customBasemap: {
       "ui:emptyValue": "",
@@ -109,7 +123,7 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.datasetUrlDescription),
       "ui:collapsed": isCollapsed,
-      "ui:toggleCollapsed": toggleCollapsed
-    }
-  }
-}
+      "ui:toggleCollapsed": toggleCollapsed,
+    },
+  };
+};

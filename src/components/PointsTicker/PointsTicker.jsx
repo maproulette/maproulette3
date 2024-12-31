@@ -1,27 +1,26 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import classNames from 'classnames'
-import _map from 'lodash/map'
-import messages from './Messages'
+import classNames from "classnames";
+import _map from "lodash/map";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import messages from "./Messages";
 
 class PointsTicker extends Component {
-  digitBoxes = (score, minBoxes=4) => {
-    const digits = score.toString().split('')
-    const totalBoxes = minBoxes > digits.length ? minBoxes : digits.length
-    const boxes = _map(digits, (digit, index) =>
-      <span key={totalBoxes - index}>{digit}</span>)
+  digitBoxes = (score, minBoxes = 4) => {
+    const digits = score.toString().split("");
+    const totalBoxes = minBoxes > digits.length ? minBoxes : digits.length;
+    const boxes = _map(digits, (digit, index) => <span key={totalBoxes - index}>{digit}</span>);
 
     while (boxes.length < minBoxes) {
-      boxes.unshift(<span key={totalBoxes - boxes.length} />)
+      boxes.unshift(<span key={totalBoxes - boxes.length} />);
     }
 
-    return boxes
-  }
+    return boxes;
+  };
 
   render() {
     if (!this.props.user) {
-      return null
+      return null;
     }
 
     return (
@@ -41,6 +40,6 @@ class PointsTicker extends Component {
 
 PointsTicker.propTypes = {
   user: PropTypes.object,
-}
+};
 
-export default PointsTicker
+export default PointsTicker;

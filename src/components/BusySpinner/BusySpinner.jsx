@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import './BusySpinner.scss'
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import React from "react";
+import "./BusySpinner.scss";
 
 /**
  * BusySpinner displays a simple busy spinner. By default, it's shown centered
@@ -11,28 +11,26 @@ import './BusySpinner.scss'
  */
 
 const BusySpinner = ({ inline, big, xlarge, lightMode, mapMode, className }) => {
-  const sizeClass = big ? 'size-medium' : xlarge ? 'size-large' : 'size-small';
-  const colorClass = lightMode ? 'color-dark' : mapMode ? 'color-grey' : 'color-light';
+  const sizeClass = big ? "size-medium" : xlarge ? "size-large" : "size-small";
+  const colorClass = lightMode ? "color-dark" : mapMode ? "color-grey" : "color-light";
 
   return (
     <div
-      className={classNames('busy-spinner', {
-        'has-centered-children': !inline,
-        'inline': inline,
-      }, className)}
+      className={classNames(
+        "busy-spinner",
+        {
+          "has-centered-children": !inline,
+          inline: inline,
+        },
+        className,
+      )}
       aria-live="polite"
-      aria-busy="true" 
+      aria-busy="true"
     >
-      <div
-        className={classNames(
-          'spinner',
-          sizeClass,
-          colorClass
-        )}
-      />
+      <div className={classNames("spinner", sizeClass, colorClass)} />
     </div>
   );
-}
+};
 
 BusySpinner.propTypes = {
   /** display spinner inline, as opposed to a centered block */
@@ -42,7 +40,7 @@ BusySpinner.propTypes = {
   lightMode: PropTypes.bool,
   mapMode: PropTypes.bool,
   className: PropTypes.string,
-}
+};
 
 BusySpinner.defaultProps = {
   inline: false,
@@ -50,7 +48,7 @@ BusySpinner.defaultProps = {
   xlarge: false,
   lightMode: false,
   mapMode: false,
-  className: '',
-}
+  className: "",
+};
 
-export default BusySpinner
+export default BusySpinner;

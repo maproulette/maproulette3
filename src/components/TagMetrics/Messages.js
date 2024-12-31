@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TagMetrics
@@ -23,4 +23,4 @@ export default defineMessages({
     id: "TagMetrics.controls.loadTagMetrics.label",
     defaultMessage: "Load Tag Metrics",
   },
-})
+});

@@ -1,18 +1,18 @@
-import { Component } from 'react'
-import { connect } from 'react-redux'
-import _isFinite from 'lodash/isFinite'
-import _omit from 'lodash/omit'
-import _isObject from 'lodash/isObject'
-import _values from 'lodash/values'
-import _filter from 'lodash/filter'
-import _find from 'lodash/find'
-import { fetchProject } from '../../../services/Project/Project'
-import { fetchProjectChallenges,
-         fetchProjectChallengeActions }
-       from '../../../services/Challenge/Challenge'
-import { fetchBasicUser } from '../../../services/User/User'
-import { PROJECT_CHALLENGE_LIMIT } from '../../../services/Project/Project'
-
+import _filter from "lodash/filter";
+import _find from "lodash/find";
+import _isFinite from "lodash/isFinite";
+import _isObject from "lodash/isObject";
+import _omit from "lodash/omit";
+import _values from "lodash/values";
+import { Component } from "react";
+import { connect } from "react-redux";
+import {
+  fetchProjectChallengeActions,
+  fetchProjectChallenges,
+} from "../../../services/Challenge/Challenge";
+import { fetchProject } from "../../../services/Project/Project";
+import { PROJECT_CHALLENGE_LIMIT } from "../../../services/Project/Project";
+import { fetchBasicUser } from "../../../services/User/User";
 
 /**
  * WithProject makes available to the WrappedComponent the
@@ -21,117 +21,119 @@ import { PROJECT_CHALLENGE_LIMIT } from '../../../services/Project/Project'
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-const WithProject = function(WrappedComponent, options={}) {
+const WithProject = function (WrappedComponent, options = {}) {
   return class extends Component {
     state = {
       project: null,
       loadingChallenges: options.includeChallenges,
-    }
+    };
 
-    currentProjectId = props =>
-      parseInt(props.match?.params?.projectId, 10)
+    currentProjectId = (props) => parseInt(props.match?.params?.projectId, 10);
 
     challengeProjects = (projectId) => {
-      const allChallenges = _values(this.props.entities?.challenges ?? {})
+      const allChallenges = _values(this.props.entities?.challenges ?? {});
       return _filter(allChallenges, (challenge) => {
-          const matchingVP =
-            _find(challenge.virtualParents, (vp) => {
-              return (_isObject(vp) ? vp.id === projectId : vp === projectId)
-            })
+        const matchingVP = _find(challenge.virtualParents, (vp) => {
+          return _isObject(vp) ? vp.id === projectId : vp === projectId;
+        });
 
-          return ((challenge.parent === projectId || matchingVP)
-                  && challenge.enabled)
-        })
-    }
+        return (challenge.parent === projectId || matchingVP) && challenge.enabled;
+      });
+    };
 
     loadProject = async (props) => {
-      const projectId = this.currentProjectId(props)
+      const projectId = this.currentProjectId(props);
 
       if (_isFinite(projectId)) {
         this.setState({
           loadingChallenges: options.includeChallenges,
-        })
+        });
 
-        props.fetchProject(projectId)
-          .then(async normalizedProject => {
-            const project = normalizedProject.entities.projects[normalizedProject.result]
-            this.setState({project: project})
+        props
+          .fetchProject(projectId)
+          .then(async (normalizedProject) => {
+            const project = normalizedProject.entities.projects[normalizedProject.result];
+            this.setState({ project: project });
 
             if (options.includeOwner) {
               let normalizedOwner = await props.fetchUser(project.owner);
               let owner = normalizedOwner.entities.users[normalizedOwner.result];
-              this.setState({ owner })
+              this.setState({ owner });
             }
 
             if (options.includeChallenges) {
-              const retrievals = []
-              retrievals.push(props.fetchProjectChallenges(projectId))
+              const retrievals = [];
+              retrievals.push(props.fetchProjectChallenges(projectId));
 
-              const challenges = await props.fetchProjectChallenges(projectId)
+              const challenges = await props.fetchProjectChallenges(projectId);
 
               if (challenges.result.length < PROJECT_CHALLENGE_LIMIT + 1) {
-                retrievals.push(props.fetchProjectChallengeActions(projectId))
+                retrievals.push(props.fetchProjectChallengeActions(projectId));
               }
 
               Promise.all(retrievals).then(() => {
-                this.setState({loadingChallenges: false})
-              })
+                this.setState({ loadingChallenges: false });
+              });
             }
           })
-          .catch(error => {
+          .catch((error) => {
             // Handle any errors that occurred during project fetching
-            console.error('Error fetching project:', error);
+            console.error("Error fetching project:", error);
             this.setState({ loadingChallenges: false });
           });
       }
-    }
+    };
 
     componentDidMount() {
-      this.loadProject(this.props)
+      this.loadProject(this.props);
     }
 
     componentDidUpdate(prevProps) {
       if (this.currentProjectId(this.props) !== this.currentProjectId(prevProps)) {
-        this.loadProject(this.props)
+        this.loadProject(this.props);
       }
     }
 
     render() {
-      let challenges = this.props.challenges // pass through challenges by default
+      let challenges = this.props.challenges; // pass through challenges by default
 
       if (options.includeChallenges && this.state.project) {
-        challenges = this.challengeProjects(this.state.project.id, this.props)
+        challenges = this.challengeProjects(this.state.project.id, this.props);
       }
 
-      let owner = this.props.owner
+      let owner = this.props.owner;
       if (options.includeOwner) {
-        owner = this.state.owner
+        owner = this.state.owner;
       }
 
-      return <WrappedComponent {..._omit(this.props, ['fetchProject',
-                                                      'fetchProjectChallenges',
-                                                      'fetchProjectChallengeActions',
-                                                      'fetchUser'])}
-                               project={this.state.project}
-                               owner={owner}
-                               challenges={challenges} />
+      return (
+        <WrappedComponent
+          {..._omit(this.props, [
+            "fetchProject",
+            "fetchProjectChallenges",
+            "fetchProjectChallengeActions",
+            "fetchUser",
+          ])}
+          project={this.state.project}
+          owner={owner}
+          challenges={challenges}
+        />
+      );
     }
   };
-}
+};
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   entities: state.entities,
-})
+});
 
-const mapDispatchToProps = dispatch => ({
-  fetchProject: projectId => dispatch(fetchProject(projectId)),
-  fetchProjectChallenges: projectId =>
-    dispatch(fetchProjectChallenges(projectId, -1)),
-  fetchProjectChallengeActions: projectId =>
+const mapDispatchToProps = (dispatch) => ({
+  fetchProject: (projectId) => dispatch(fetchProject(projectId)),
+  fetchProjectChallenges: (projectId) => dispatch(fetchProjectChallenges(projectId, -1)),
+  fetchProjectChallengeActions: (projectId) =>
     dispatch(fetchProjectChallengeActions(projectId, false, false)),
-  fetchUser: userId => dispatch(fetchBasicUser(userId)),
-})
+  fetchUser: (userId) => dispatch(fetchBasicUser(userId)),
+});
 
 export default (WrappedComponent, options) =>
-  connect(mapStateToProps,
-          mapDispatchToProps)(WithProject(WrappedComponent, options))
+  connect(mapStateToProps, mapDispatchToProps)(WithProject(WrappedComponent, options));

@@ -1,11 +1,11 @@
-import { connect } from 'react-redux'
-import _isFinite from 'lodash/isNumber'
-import { TaskLoadMethod }
-       from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
-import { setPreferences,
-         CHALLENGES_PREFERENCE_GROUP,
-         VIRTUAL_CHALLENGES_PREFERENCE_GROUP }
-       from '../../../services/Preferences/Preferences'
+import _isFinite from "lodash/isNumber";
+import { connect } from "react-redux";
+import {
+  CHALLENGES_PREFERENCE_GROUP,
+  VIRTUAL_CHALLENGES_PREFERENCE_GROUP,
+  setPreferences,
+} from "../../../services/Preferences/Preferences";
+import { TaskLoadMethod } from "../../../services/Task/TaskLoadMethod/TaskLoadMethod";
 
 /**
  * WithChallengePreferences passes down the user's preference settings for the
@@ -15,76 +15,88 @@ import { setPreferences,
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithChallengePreferences = WrappedComponent =>
-  connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
+const WithChallengePreferences = (WrappedComponent) =>
+  connect(mapStateToProps, mapDispatchToProps)(WrappedComponent);
 
 export const mapStateToProps = (state, ownProps) => {
-  const isVirtual = _isFinite(ownProps.virtualChallengeId)
-  const concreteChallengeId = ownProps?.challenge?.id ?? (ownProps.challengeId)
-  const challengeId = isVirtual ? ownProps.virtualChallengeId : concreteChallengeId
-  const taskLoadMethod = ownProps.user?.properties?.mr3Frontend?.settings?.loadMethod || TaskLoadMethod.random
-  const mappedProps = {}
+  const isVirtual = _isFinite(ownProps.virtualChallengeId);
+  const concreteChallengeId = ownProps?.challenge?.id ?? ownProps.challengeId;
+  const challengeId = isVirtual ? ownProps.virtualChallengeId : concreteChallengeId;
+  const taskLoadMethod =
+    ownProps.user?.properties?.mr3Frontend?.settings?.loadMethod || TaskLoadMethod.random;
+  const mappedProps = {};
 
   if (_isFinite(challengeId)) {
     mappedProps.minimizeChallenge =
-      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.minimize ?? false
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.minimize ?? false;
 
     // Instruction preferences are always tied to the concrete challenge.
     mappedProps.collapseInstructions =
-      state.currentPreferences?.[preferenceGroup(false)]?.[concreteChallengeId]?.collapseInstructions ?? false
+      state.currentPreferences?.[preferenceGroup(false)]?.[concreteChallengeId]
+        ?.collapseInstructions ?? false;
 
     mappedProps.collapseMoreOptions =
-      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.collapseMoreOptions ?? true
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.collapseMoreOptions ??
+      true;
 
     mappedProps.taskLoadBy =
-      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.taskLoadMethod ?? taskLoadMethod
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.taskLoadMethod ??
+      taskLoadMethod;
 
     mappedProps.visibleMapLayer =
-      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.visibleMapLayer
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.visibleMapLayer;
 
     mappedProps.showMapillaryLayer =
-      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.showMapillaryLayer
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.showMapillaryLayer;
 
     mappedProps.showOpenStreetCamLayer =
-      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.showOpenStreetCamLayer
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.showOpenStreetCamLayer;
   }
 
-  return mappedProps
-}
+  return mappedProps;
+};
 
-export const mapDispatchToProps = dispatch => ({
-  setChallengeMinimization: (challengeId, isVirtual, minimize=false) =>
-    dispatch(setPreferences(preferenceGroup(isVirtual),
-                            {[challengeId]: {minimize}})),
+export const mapDispatchToProps = (dispatch) => ({
+  setChallengeMinimization: (challengeId, isVirtual, minimize = false) =>
+    dispatch(setPreferences(preferenceGroup(isVirtual), { [challengeId]: { minimize } })),
 
-  setInstructionsCollapsed: (challengeId, isVirtual, collapseInstructions=false) =>
-    dispatch(setPreferences(preferenceGroup(isVirtual),
-                            {[challengeId]: {collapseInstructions}})),
+  setInstructionsCollapsed: (challengeId, isVirtual, collapseInstructions = false) =>
+    dispatch(
+      setPreferences(preferenceGroup(isVirtual), { [challengeId]: { collapseInstructions } }),
+    ),
 
-  setMoreOptionsCollapsed: (challengeId, isVirtual, collapseMoreOptions=true) =>
-    dispatch(setPreferences(preferenceGroup(isVirtual),
-                            {[challengeId]: {collapseMoreOptions}})),
+  setMoreOptionsCollapsed: (challengeId, isVirtual, collapseMoreOptions = true) =>
+    dispatch(
+      setPreferences(preferenceGroup(isVirtual), { [challengeId]: { collapseMoreOptions } }),
+    ),
 
   setTaskLoadBy: (challengeId, isVirtual, taskLoadMethod) =>
-    dispatch(setPreferences(preferenceGroup(isVirtual),
-                            {[challengeId]: {taskLoadMethod}})),
+    dispatch(setPreferences(preferenceGroup(isVirtual), { [challengeId]: { taskLoadMethod } })),
 
   setVisibleMapLayer: (challengeId, isVirtual, visibleMapLayerId) =>
-    dispatch(setPreferences(preferenceGroup(isVirtual),
-                            {[challengeId]: {visibleMapLayer: visibleMapLayerId}})),
+    dispatch(
+      setPreferences(preferenceGroup(isVirtual), {
+        [challengeId]: { visibleMapLayer: visibleMapLayerId },
+      }),
+    ),
 
   setShowMapillaryLayer: (challengeId, isVirtual, showMapillary) =>
-    dispatch(setPreferences(preferenceGroup(isVirtual),
-                            {[challengeId]: {showMapillaryLayer: showMapillary}})),
+    dispatch(
+      setPreferences(preferenceGroup(isVirtual), {
+        [challengeId]: { showMapillaryLayer: showMapillary },
+      }),
+    ),
 
   setShowOpenStreetCamLayer: (challengeId, isVirtual, showOpenStreetCam) =>
-    dispatch(setPreferences(preferenceGroup(isVirtual),
-                            {[challengeId]: {showOpenStreetCamLayer: showOpenStreetCam}})),
-})
+    dispatch(
+      setPreferences(preferenceGroup(isVirtual), {
+        [challengeId]: { showOpenStreetCamLayer: showOpenStreetCam },
+      }),
+    ),
+});
 
-export const preferenceGroup = function(isVirtualChallenge) {
-  return isVirtualChallenge ? VIRTUAL_CHALLENGES_PREFERENCE_GROUP :
-                              CHALLENGES_PREFERENCE_GROUP
-}
+export const preferenceGroup = function (isVirtualChallenge) {
+  return isVirtualChallenge ? VIRTUAL_CHALLENGES_PREFERENCE_GROUP : CHALLENGES_PREFERENCE_GROUP;
+};
 
-export default WithChallengePreferences
+export default WithChallengePreferences;

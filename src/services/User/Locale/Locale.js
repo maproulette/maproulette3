@@ -3,6 +3,8 @@
 // to bloat the main bundle with all strings for every language) but also that
 // the argument to the import() function is a literal string (so that our bundler
 // can analyze it and include those assets in the output dist/ directory).
+
+// biome-ignore format: don't unqoute keys
 const LOCALE_LOADERS = {
   "af": () => import("../../../../lang/af.json"),
   "cs-CZ": () => import("../../../../lang/cs_CZ.json"),
@@ -33,6 +35,8 @@ export const SUPPORTED_LOCALES = Object.keys(LOCALE_LOADERS);
 // are intentionally NOT localized, so that if a user is "stuck" in a language
 // they don't understand, they'll still be able to recognize their own language
 // in this list.
+
+// biome-ignore format: don't unqoute keys
 export const LOCALE_NAMES = {
   "af": "Afrikaans",
   "cs-CZ": "Čeština",

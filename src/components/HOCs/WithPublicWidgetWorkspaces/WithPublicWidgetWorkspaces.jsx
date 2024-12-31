@@ -1,13 +1,10 @@
-import { Component } from 'react'
-import _isArray from 'lodash/isArray'
-import _isFinite from 'lodash/isFinite'
-import _each from 'lodash/each'
-import _assign from 'lodash/assign'
-import {
-  generateWidgetId,
-  widgetDescriptor,
-} from '../../../services/Widget/Widget'
-import { Redirect } from 'react-router'
+import _assign from "lodash/assign";
+import _each from "lodash/each";
+import _isArray from "lodash/isArray";
+import _isFinite from "lodash/isFinite";
+import { Component } from "react";
+import { Redirect } from "react-router";
+import { generateWidgetId, widgetDescriptor } from "../../../services/Widget/Widget";
 
 /**
  * WithPublicWidgetWorkspaces provides the WrappedComponent with access to public task workspace configurations
@@ -17,7 +14,7 @@ export const WithPublicWidgetWorkspacesInternal = function (
   WrappedComponent,
   targets,
   workspaceName,
-  defaultConfiguration
+  defaultConfiguration,
 ) {
   return class extends Component {
     /**
@@ -25,10 +22,10 @@ export const WithPublicWidgetWorkspacesInternal = function (
      * function
      */
     setupWorkspace = (defaultConfiguration) => {
-      const conf = defaultConfiguration()
+      const conf = defaultConfiguration();
       // Ensure default layout honors properties from each widget's descriptor
       for (let i = 0; i < conf.widgets.length; i++) {
-        const widget = conf.widgets[i]
+        const widget = conf.widgets[i];
         if (widget) {
           conf.layout[i] = Object.assign(
             {},
@@ -38,13 +35,13 @@ export const WithPublicWidgetWorkspacesInternal = function (
               minH: widget.minHeight,
               maxH: widget.maxHeight,
             },
-            conf.layout[i]
-          )
+            conf.layout[i],
+          );
         }
       }
 
-      return conf
-    }
+      return conf;
+    };
 
     /**
      * Completes a given workspace configuration, filling in missing fields
@@ -62,12 +59,12 @@ export const WithPublicWidgetWorkspacesInternal = function (
           widgets: [],
           layout: [],
         },
-        initialWorkspace
-      )
+        initialWorkspace,
+      );
 
       // Generate a simple layout if none provided, with one widget per row
       if (configuration.layout.length === 0) {
-        let nextY = 0
+        let nextY = 0;
         _each(configuration.widgets, (widgetConf, index) => {
           configuration.layout.push({
             i: `${index}`,
@@ -79,64 +76,51 @@ export const WithPublicWidgetWorkspacesInternal = function (
             h: widgetConf.defaultHeight,
             minH: widgetConf.minHeight,
             maxH: widgetConf.maxHeight,
-          })
+          });
 
-          nextY += widgetConf.defaultHeight
-        })
+          nextY += widgetConf.defaultHeight;
+        });
       } else {
         // A layout was provided. If heights and/or widths were omitted or don't meet
         // current minimums, fill them in from the widget descriptors
         _each(configuration.layout, (widgetLayout, index) => {
           if (!configuration.widgets || !configuration.widgets[index]) {
-            return
+            return;
           }
 
-          const descriptor = widgetDescriptor(
-            configuration.widgets[index].widgetKey
-          )
+          const descriptor = widgetDescriptor(configuration.widgets[index].widgetKey);
           if (!descriptor) {
-            return
+            return;
           }
 
           if (!_isFinite(widgetLayout.w)) {
-            widgetLayout.w = descriptor.defaultWidth
-          } else if (
-            _isFinite(descriptor.minWidth) &&
-            widgetLayout.w < descriptor.minWidth
-          ) {
-            widgetLayout.w = descriptor.minWidth
+            widgetLayout.w = descriptor.defaultWidth;
+          } else if (_isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth) {
+            widgetLayout.w = descriptor.minWidth;
           }
 
           if (!_isFinite(widgetLayout.h)) {
-            widgetLayout.h = descriptor.defaultHeight
-          } else if (
-            _isFinite(descriptor.minHeight) &&
-            widgetLayout.h < descriptor.minHeight
-          ) {
-            widgetLayout.h = descriptor.minHeight
+            widgetLayout.h = descriptor.defaultHeight;
+          } else if (_isFinite(descriptor.minHeight) && widgetLayout.h < descriptor.minHeight) {
+            widgetLayout.h = descriptor.minHeight;
           }
-        })
+        });
       }
 
-      return configuration
-    }
+      return configuration;
+    };
 
     currentConfiguration = () => {
-
-      return this.completeWorkspaceConfiguration(
-        this.setupWorkspace(defaultConfiguration)
-      )
-    }
+      return this.completeWorkspaceConfiguration(this.setupWorkspace(defaultConfiguration));
+    };
 
     render() {
       //render regular TaskPane for logged in users.
-      const loggedIn = localStorage.getItem('isLoggedIn')
+      const loggedIn = localStorage.getItem("isLoggedIn");
       if (loggedIn) {
-        <Redirect
-          to={`/challenge/${this.props.challengeId}/task/${this.props.task?.id}`}
-        />
+        <Redirect to={`/challenge/${this.props.challengeId}/task/${this.props.task?.id}`} />;
       }
-      const currentConfiguration = this.currentConfiguration()
+      const currentConfiguration = this.currentConfiguration();
 
       return (
         <WrappedComponent
@@ -146,22 +130,22 @@ export const WithPublicWidgetWorkspacesInternal = function (
           defaultConfiguration={defaultConfiguration}
           currentConfiguration={currentConfiguration}
         />
-      )
+      );
     }
-  }
-}
+  };
+};
 
 const WithPublicWidgetWorkspaces = (
   WrappedComponent,
   targets,
   workspaceName,
-  defaultConfiguration
+  defaultConfiguration,
 ) =>
   WithPublicWidgetWorkspacesInternal(
     WrappedComponent,
     targets,
     workspaceName,
-    defaultConfiguration
-  )
+    defaultConfiguration,
+  );
 
-export default WithPublicWidgetWorkspaces
+export default WithPublicWidgetWorkspaces;

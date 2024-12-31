@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Footer
@@ -53,4 +53,4 @@ export default defineMessages({
     id: "Footer.email.donateButton",
     defaultMessage: "Donate to Maproulette",
   },
-})
+});

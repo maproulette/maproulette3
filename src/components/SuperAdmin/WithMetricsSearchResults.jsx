@@ -1,9 +1,9 @@
-import { Component } from 'react'
-import _isEmpty from 'lodash/isEmpty'
-import _filter from 'lodash/filter'
-import _omit from 'lodash/omit'
-import WithSearch from '../HOCs/WithSearch/WithSearch'
-import queryString from 'query-string'
+import _filter from "lodash/filter";
+import _isEmpty from "lodash/isEmpty";
+import _omit from "lodash/omit";
+import queryString from "query-string";
+import { Component } from "react";
+import WithSearch from "../HOCs/WithSearch/WithSearch";
 
 /**
  * WithMetricsSearchResults acts as a filter that applies the named search query to an
@@ -22,49 +22,45 @@ export const WithMetricsSearchResults = function (
   WrappedComponent,
   searchName,
   itemsProp,
-  outputProp
+  outputProp,
 ) {
   return class extends Component {
     /**
      * @private
      */
     render() {
-      const query = this.props.searchCriteria?.query ?? ''
-      let items, searchType
+      const query = this.props.searchCriteria?.query ?? "";
+      let items, searchType;
 
-      const params = queryString.parse(this.props.location.search)
-      searchType = params['searchType'] || 'challenges'
-      items = this.props[searchType]
+      const params = queryString.parse(this.props.location.search);
+      searchType = params["searchType"] || "challenges";
+      items = this.props[searchType];
 
-      let searchResults = this.props[searchType]
-      let searchActive = false
+      let searchResults = this.props[searchType];
+      let searchActive = false;
 
-      if (searchType === 'challenges' && query) {
+      if (searchType === "challenges" && query) {
         searchResults = _filter(
           items,
-          (item) => (item?.name ?? '').toLowerCase().indexOf(query) !== -1
-        )
-      } else if (searchType === 'projects' && query) {
+          (item) => (item?.name ?? "").toLowerCase().indexOf(query) !== -1,
+        );
+      } else if (searchType === "projects" && query) {
         searchResults = _filter(
           items,
-          (item) =>
-            (item?.displayName ?? '').toLowerCase().indexOf(query) !== -1
-        )
-      } else if (searchType === 'users' && query) {
+          (item) => (item?.displayName ?? "").toLowerCase().indexOf(query) !== -1,
+        );
+      } else if (searchType === "users" && query) {
         searchResults = _filter(
           items,
-          (item) =>
-            (item?.osmProfile?.displayName ?? '')
-              .toLowerCase()
-              .indexOf(query) !== -1
-        )
+          (item) => (item?.osmProfile?.displayName ?? "").toLowerCase().indexOf(query) !== -1,
+        );
       }
 
       if (_isEmpty(outputProp)) {
-        outputProp = itemsProp
+        outputProp = itemsProp;
       }
-      outputProp = searchType
-      searchName = searchType
+      outputProp = searchType;
+      searchName = searchType;
       return (
         <WrappedComponent
           {...{
@@ -73,25 +69,14 @@ export const WithMetricsSearchResults = function (
           }}
           {..._omit(this.props, outputProp)}
         />
-      )
+      );
     }
   };
-}
+};
 
-export default (
-  WrappedComponent,
-  searchName,
-  itemsProp,
-  outputProp,
-  searchFunction = null
-) =>
+export default (WrappedComponent, searchName, itemsProp, outputProp, searchFunction = null) =>
   WithSearch(
-    WithMetricsSearchResults(
-      WrappedComponent,
-      searchName,
-      itemsProp,
-      outputProp
-    ),
+    WithMetricsSearchResults(WrappedComponent, searchName, itemsProp, outputProp),
     searchName,
-    searchFunction
-  )
+    searchFunction,
+  );

@@ -1,22 +1,20 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import messages from '../Messages'
-import QuickWidget from '../../../components/QuickWidget/QuickWidget'
-import _map from 'lodash/map'
+import _map from "lodash/map";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import QuickWidget from "../../../components/QuickWidget/QuickWidget";
+import messages from "../Messages";
 
 export default class LeaderboardStats extends Component {
   render() {
     if (!this.props.leaderboardMetrics) {
-      return null
+      return null;
     }
 
     return (
       <QuickWidget
         {...this.props}
         className="mr-card-widget mr-card-widget--padded mr-mb-4"
-        widgetTitle={
-          <FormattedMessage {...messages.leaderboardTitle} />
-        }
+        widgetTitle={<FormattedMessage {...messages.leaderboardTitle} />}
         noMain
         permanent
       >
@@ -43,10 +41,10 @@ export default class LeaderboardStats extends Component {
               <li key={index} className="mr-mt-3">
                 <a href={"/browse/challenges/" + challenge.id}>{challenge.name}</a>
               </li>
-            )
+            );
           })}
         </ol>
       </QuickWidget>
-    )
+    );
   }
 }

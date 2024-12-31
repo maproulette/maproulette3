@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { TaskAction, zeroTaskActions } from "./TaskAction";
+import { describe, expect, it } from "vitest";
 import { TaskStatus } from "../TaskStatus/TaskStatus";
+import { TaskAction, zeroTaskActions } from "./TaskAction";
 
 describe("TaskAction", () => {
   it("returns specific object when ran", () => {

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with CooperativeWorkControls
@@ -23,4 +23,4 @@ export default defineMessages({
     id: "CooperativeWorkControls.controls.moreOptions.label",
     defaultMessage: "Other",
   },
-})
+});

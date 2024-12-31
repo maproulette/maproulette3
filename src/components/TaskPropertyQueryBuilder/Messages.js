@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskFilters
@@ -83,4 +83,4 @@ export default defineMessages({
     id: "TaskPropertyQueryBuilder.commaSeparateValues.label",
     defaultMessage: "Comma separate values",
   },
-})
+});

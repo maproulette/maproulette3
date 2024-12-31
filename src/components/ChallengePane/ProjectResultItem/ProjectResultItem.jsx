@@ -1,8 +1,8 @@
-import { createRef, Component } from 'react'
-import PropTypes from 'prop-types'
-import _isEqual from 'lodash/isEqual'
-import { injectIntl } from 'react-intl'
-import CardProject from '../../CardProject/CardProject'
+import _isEqual from "lodash/isEqual";
+import PropTypes from "prop-types";
+import { Component, createRef } from "react";
+import { injectIntl } from "react-intl";
+import CardProject from "../../CardProject/CardProject";
 
 /**
  * ProjectResultItem represents a single challenge result in a ChallengeResultList.
@@ -20,24 +20,24 @@ import CardProject from '../../CardProject/CardProject'
  */
 export class ProjectResultItem extends Component {
   constructor(props) {
-    super(props)
-    this.itemRef = createRef()
+    super(props);
+    this.itemRef = createRef();
   }
 
   shouldComponentUpdate(nextProps) {
     // Only re-render under specific conditions:
 
     // if the user has changed
-    if ((nextProps?.user?.id) !== (this.props.user?.id)) {
-      return true
+    if (nextProps?.user?.id !== this.props.user?.id) {
+      return true;
     }
 
     // if the project object itself changed
     if (!_isEqual(nextProps.project, this.props.project)) {
-      return true
+      return true;
     }
 
-    return false
+    return false;
   }
 
   /**
@@ -46,11 +46,8 @@ export class ProjectResultItem extends Component {
    * @private
    */
   browseProject = () => {
-    this.props.history.push(
-      `/browse/projects/${this.props.project.id}`,
-      { fromSearch: true }
-    )
-  }
+    this.props.history.push(`/browse/projects/${this.props.project.id}`, { fromSearch: true });
+  };
 
   render() {
     return (
@@ -73,6 +70,6 @@ ProjectResultItem.propTypes = {
   user: PropTypes.object,
   /** The project represented by this item */
   project: PropTypes.object.isRequired,
-}
+};
 
-export default injectIntl(ProjectResultItem)
+export default injectIntl(ProjectResultItem);

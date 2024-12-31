@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import "@testing-library/jest-dom";
-import { formatTitle, REACT_APP_TITLE } from "./Head";
+import { REACT_APP_TITLE, formatTitle } from "./Head";
 
 describe("formatTitle", () => {
   it("doesn't break if no path is provided", () => {
@@ -17,24 +17,24 @@ describe("formatTitle", () => {
     const title = formatTitle({
       user: {
         osmProfile: {
-          displayName: "User"
-        }
+          displayName: "User",
+        },
       },
       challenge: {
-        name: "Bar"
+        name: "Bar",
       },
       project: {
-        displayName: "Project Name"
+        displayName: "Project Name",
       },
-      match: { 
+      match: {
         path: "/foo/:challengeId/:projectId/:countryCode/:userId/:taskId/:showType",
         params: {
           taskId: 2,
           countryCode: 3,
-          showType: 5
-        }
-      } 
+          showType: 5,
+        },
+      },
     });
-    expect(title).toBe('5 - 2 - User - 3 - Project Name - Bar - Foo - ' + REACT_APP_TITLE);
+    expect(title).toBe("5 - 2 - User - 3 - Project Name - Bar - Foo - " + REACT_APP_TITLE);
   });
 });

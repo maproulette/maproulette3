@@ -31,17 +31,11 @@ const apiRoutes = (factory) => {
       activity: factory.get("/data/project/activity"),
       managers: factory.get("/user/project/:projectId"),
       comments: factory.get("/project/:id/comments"),
-      setManagerPermission: factory.put(
-        "/user/:userId/project/:projectId/:role"
-      ),
+      setManagerPermission: factory.put("/user/:userId/project/:projectId/:role"),
       removeManager: factory.delete("/user/:userId/project/:projectId/-1"),
       delete: factory.delete("/project/:id"),
-      addToVirtual: factory.post(
-        "/project/:projectId/challenge/:challengeId/add"
-      ),
-      removeFromVirtual: factory.post(
-        "/project/:projectId/challenge/:challengeId/remove"
-      ),
+      addToVirtual: factory.post("/project/:projectId/challenge/:challengeId/add"),
+      removeFromVirtual: factory.post("/project/:projectId/challenge/:challengeId/remove"),
     },
     challenges: {
       listing: factory.get("/challenges/listing"),
@@ -54,7 +48,7 @@ const apiRoutes = (factory) => {
       withReviewTasks: factory.get("/review/challenges"),
       tagMetrics: factory.get("/data/tag/metrics"),
       bulkArchive: factory.post("/challenges/bulkArchive"),
-      move: factory.post("/challenges/project/:projectId")
+      move: factory.post("/challenges/project/:projectId"),
     },
     challenge: {
       single: factory.get("/challenge/:id"),
@@ -68,12 +62,8 @@ const apiRoutes = (factory) => {
       prioritizedTask: factory.get("/challenge/:id/tasks/prioritizedTasks", {
         noCache: true,
       }),
-      previousSequentialTask: factory.get(
-        "/challenge/:challengeId/previousTask/:taskId"
-      ),
-      nextSequentialTask: factory.get(
-        "/challenge/:challengeId/nextTask/:taskId"
-      ),
+      previousSequentialTask: factory.get("/challenge/:challengeId/previousTask/:taskId"),
+      nextSequentialTask: factory.get("/challenge/:challengeId/nextTask/:taskId"),
       actions: factory.get("/data/challenge/:id"),
       activity: factory.get("/data/challenge/:id/activity"),
       comments: factory.get("/challenge/:id/comments"),
@@ -91,16 +81,14 @@ const apiRoutes = (factory) => {
       recordSnapshot: factory.get("/snapshot/challenge/:id/record"),
       removeSnapshot: factory.delete("/snapshot/:id"),
       snapshot: factory.get("/snapshot/:id"),
-      archive: factory.post("/challenge/:id/archive")
+      archive: factory.post("/challenge/:id/archive"),
     },
     virtualChallenge: {
       single: factory.get("/virtualchallenge/:id"),
       create: factory.post("/virtualchallenge"),
       edit: factory.put("/virtualchallenge/:id"),
       randomTask: factory.get("/virtualchallenge/:id/task", { noCache: true }),
-      nearbyTasks: factory.get(
-        "/virtualchallenge/:challengeId/tasksNearby/:taskId"
-      ),
+      nearbyTasks: factory.get("/virtualchallenge/:challengeId/tasksNearby/:taskId"),
     },
     tasks: {
       random: factory.get("/tasks/random", { noCache: true }),
@@ -125,9 +113,7 @@ const apiRoutes = (factory) => {
         updateStatus: factory.put("/taskBundle/:bundleId/:status"),
         addComment: factory.post("/taskBundle/:bundleId/comment"),
         updateReviewStatus: factory.put("/taskBundle/:bundleId/review/:status"),
-        updateMetaReviewStatus: factory.put(
-          "/taskBundle/:bundleId/metareview/:status"
-        ),
+        updateMetaReviewStatus: factory.put("/taskBundle/:bundleId/metareview/:status"),
       },
       removeReviewRequest: factory.put("/tasks/review/remove"),
     },
@@ -168,7 +154,7 @@ const apiRoutes = (factory) => {
       findPreferred: factory.get("/users/find"),
       all: factory.get("/users"),
       taskComments: factory.get("/comments/user/:id", { noCache: true }),
-      challengeComments: factory.get("/challengeComments/user/:id", { noCache: true })
+      challengeComments: factory.get("/challengeComments/user/:id", { noCache: true }),
     },
     user: {
       whoami: factory.get("/user/whoami"),
@@ -183,12 +169,8 @@ const apiRoutes = (factory) => {
       lockedTasks: factory.get("/user/:userId/lockedTasks"),
       unsaveTask: factory.delete("/user/:userId/unsaveTask/:taskId"),
       updateSettings: factory.put("/user/:userId"),
-      notificationSubscriptions: factory.get(
-        "/user/:userId/notificationSubscriptions"
-      ),
-      updateNotificationSubscriptions: factory.put(
-        "/user/:userId/notificationSubscriptions"
-      ),
+      notificationSubscriptions: factory.get("/user/:userId/notificationSubscriptions"),
+      updateNotificationSubscriptions: factory.put("/user/:userId/notificationSubscriptions"),
       notifications: factory.get("/user/:userId/notifications"),
       markNotificationsRead: factory.put("/user/:userId/notifications"),
       deleteNotifications: factory.put("/user/:userId/notifications/delete"),
@@ -208,8 +190,8 @@ const apiRoutes = (factory) => {
     },
     superUser: {
       addSuperUserGrant: factory.put("/superuser/:userId"),
-      deleteSuperUserGrant: factory.delete("/superuser/:userId")
-    }
+      deleteSuperUserGrant: factory.delete("/superuser/:userId"),
+    },
   };
 };
 

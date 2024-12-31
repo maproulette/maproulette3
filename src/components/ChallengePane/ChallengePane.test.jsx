@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import "@testing-library/jest-dom";
 import { ChallengePane } from "./ChallengePane";
 
@@ -11,7 +11,7 @@ describe("ChallengePane", () => {
         locateMapToUser={() => {}}
         unfilteredChallenges={[]}
         history={{ location: { pathname: "", search: "" } }}
-      />
+      />,
     );
     const text = getByText("Sort by");
     expect(text).toBeInTheDocument();

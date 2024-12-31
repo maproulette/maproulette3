@@ -1,10 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { TaskStatus }
-       from '../../../../../services/Task/TaskStatus/TaskStatus'
-import Button from '../../../../Button/Button'
-import messages from './Messages'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
+import Button from "../../../../Button/Button";
+import messages from "./Messages";
 
 /**
  * TaskSkipControl displays a control for marking a task with a skipped status.
@@ -18,18 +17,18 @@ export default class TaskSkipControl extends Component {
         <a onClick={() => this.props.complete(TaskStatus.skipped)}>
           <FormattedMessage {...messages.skipLabel} />
         </a>
-      )
+      );
     }
 
     return (
       <Button
         className="mr-button--blue-fill mr-mb-2 mr-mr-2"
-        style={{ minWidth: '10rem'}}
+        style={{ minWidth: "10rem" }}
         onClick={() => this.props.complete(TaskStatus.skipped)}
       >
         <FormattedMessage {...messages.skipLabel} />
       </Button>
-    )
+    );
   }
 }
 
@@ -46,9 +45,9 @@ TaskSkipControl.propTypes = {
   activateKeyboardShortcut: PropTypes.func.isRequired,
   /** Invoked when keyboard shortcuts should no longer be active  */
   deactivateKeyboardShortcut: PropTypes.func.isRequired,
-}
+};
 
 TaskSkipControl.defaultProps = {
   isMinimized: false,
   suppressIcon: false,
-}
+};

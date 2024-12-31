@@ -1,5 +1,5 @@
-import { Component } from 'react'
-import _upperFirst from 'lodash/upperFirst'
+import _upperFirst from "lodash/upperFirst";
+import { Component } from "react";
 
 /**
  * WithProgress manages an inProgress status for a named operation along with
@@ -7,16 +7,16 @@ import _upperFirst from 'lodash/upperFirst'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithProgress = function(WrappedComponent, operationName) {
+const WithProgress = function (WrappedComponent, operationName) {
   return class extends Component {
     state = {
       inProgress: false,
       stepsCompleted: 0,
-    }
+    };
 
     updateProgress = (inProgress, stepsCompleted) => {
-      this.setState({inProgress, stepsCompleted})
-    }
+      this.setState({ inProgress, stepsCompleted });
+    };
 
     render() {
       // Merge in any other progress statuses
@@ -24,14 +24,18 @@ const WithProgress = function(WrappedComponent, operationName) {
         [operationName]: {
           inProgress: this.state.inProgress,
           stepsCompleted: this.state.stepsCompleted,
-        }
-      })
+        },
+      });
 
-      return <WrappedComponent {...this.props}
-                               progress={allProgress}
-                               {...{[`update${_upperFirst(operationName)}Progress`]: this.updateProgress}} />
+      return (
+        <WrappedComponent
+          {...this.props}
+          progress={allProgress}
+          {...{ [`update${_upperFirst(operationName)}Progress`]: this.updateProgress }}
+        />
+      );
     }
-  }
-}
+  };
+};
 
-export default WithProgress
+export default WithProgress;

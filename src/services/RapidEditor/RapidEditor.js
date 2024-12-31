@@ -1,8 +1,8 @@
-export const SET_RAPIDEDITOR = 'SET_RAPIDEDITOR';
+export const SET_RAPIDEDITOR = "SET_RAPIDEDITOR";
 
-const initialState = { 
+const initialState = {
   isRunning: false,
-  hasUnsavedChanges: false
+  hasUnsavedChanges: false,
 };
 
 export function rapidEditor(state = initialState, action) {

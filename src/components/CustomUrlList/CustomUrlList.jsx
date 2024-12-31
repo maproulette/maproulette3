@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react'
-import { FormattedMessage } from 'react-intl'
-import _map from 'lodash/map'
-import _isEmpty from 'lodash/isEmpty'
-import { replacePropertyTags }
-       from '../../hooks/UsePropertyReplacement/UsePropertyReplacement'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import Dropdown from '../Dropdown/Dropdown'
-import messages from './Messages'
+import _isEmpty from "lodash/isEmpty";
+import _map from "lodash/map";
+import { useEffect, useState } from "react";
+import { FormattedMessage } from "react-intl";
+import { replacePropertyTags } from "../../hooks/UsePropertyReplacement/UsePropertyReplacement";
+import Dropdown from "../Dropdown/Dropdown";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 /**
  * Displays list of custom URLs as links, performing replacement of mustache
@@ -15,46 +14,45 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const CustomUrlList = props => {
-  const [urlItems, setUrlItems] = useState([])
-  const { urls, properties, editCustomUrl, deleteCustomUrl } = props
+const CustomUrlList = (props) => {
+  const [urlItems, setUrlItems] = useState([]);
+  const { urls, properties, editCustomUrl, deleteCustomUrl } = props;
 
   useEffect(() => {
     setUrlItems(
-      _map(urls, url => {
-        let disabled = false
-        let replacedUrl = null
-        let replacedDescription = null
-        let replacedName = null
+      _map(urls, (url) => {
+        let disabled = false;
+        let replacedUrl = null;
+        let replacedDescription = null;
+        let replacedName = null;
         try {
-          replacedUrl = replacePropertyTags(url.url, properties, true)
-          replacedDescription = replacePropertyTags(url.description, properties, true)
-          replacedName = replacePropertyTags(url.name, properties, true)
-        }
-        catch(err) {
-          disabled = true
+          replacedUrl = replacePropertyTags(url.url, properties, true);
+          replacedDescription = replacePropertyTags(url.description, properties, true);
+          replacedName = replacePropertyTags(url.name, properties, true);
+        } catch (err) {
+          disabled = true;
         }
 
         return (
-          <li
-            key={url.id}
-            className="mr-my-2 mr-flex mr-justify-between mr-items-center"
-          >
-            {disabled ?
-             <span className="mr-text-grey-light" title={replacedDescription}>{replacedName}</span> :
-             <a
-               href={encodeURI(replacedUrl)}
-               target="_blank"
-               rel="noopener noreferrer"
-               title={replacedDescription}
-             >
-               {replacedName}
-             </a>
-            }
+          <li key={url.id} className="mr-my-2 mr-flex mr-justify-between mr-items-center">
+            {disabled ? (
+              <span className="mr-text-grey-light" title={replacedDescription}>
+                {replacedName}
+              </span>
+            ) : (
+              <a
+                href={encodeURI(replacedUrl)}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={replacedDescription}
+              >
+                {replacedName}
+              </a>
+            )}
             <div className="mr-h-5">
               <Dropdown
                 className="mr-dropdown--right"
-                dropdownButton={dropdown => (
+                dropdownButton={(dropdown) => (
                   <button
                     onClick={dropdown.toggleDropdownVisible}
                     className="mr-flex mr-items-center mr-text-white-40"
@@ -66,7 +64,7 @@ const CustomUrlList = props => {
                     />
                   </button>
                 )}
-                dropdownContent={() =>
+                dropdownContent={() => (
                   <ul className="mr-list-dropdown mr-links-green-lighter">
                     <li>
                       <a onClick={() => editCustomUrl(url.id)}>
@@ -79,14 +77,14 @@ const CustomUrlList = props => {
                       </a>
                     </li>
                   </ul>
-                }
+                )}
               />
             </div>
           </li>
-        )
-      })
-    )
-  }, [urls, properties, editCustomUrl, deleteCustomUrl])
+        );
+      }),
+    );
+  }, [urls, properties, editCustomUrl, deleteCustomUrl]);
 
   if (_isEmpty(urlItems)) {
     return (
@@ -100,9 +98,9 @@ const CustomUrlList = props => {
           <FormattedMessage {...messages.addLabel} />
         </button>
       </div>
-    )
+    );
   }
-  return <ul className="mr-links-green-lighter mr-pb-24">{urlItems}</ul>
-}
+  return <ul className="mr-links-green-lighter mr-pb-24">{urlItems}</ul>;
+};
 
-export default CustomUrlList
+export default CustomUrlList;

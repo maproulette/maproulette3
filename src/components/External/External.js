@@ -1,8 +1,8 @@
-import { createContext, Component } from 'react'
-import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
+import { Component, createContext } from "react";
+import ReactDOM from "react-dom";
 
-const modalRoot = document.getElementById('external-root')
+const modalRoot = document.getElementById("external-root");
 
 /**
  * Context that can be used to temporarily suspend clickouts for components
@@ -14,26 +14,26 @@ const modalRoot = document.getElementById('external-root')
 export const ExternalContext = createContext({
   clickoutSuspended: false,
   suspendClickout(isSuspended) {
-    this.clickoutSuspended = isSuspended
-  }
-})
+    this.clickoutSuspended = isSuspended;
+  },
+});
 
 export default class External extends Component {
-  el = document.createElement('div')
+  el = document.createElement("div");
 
   componentDidMount() {
-    modalRoot?.appendChild(this.el)
+    modalRoot?.appendChild(this.el);
   }
 
   componentWillUnmount() {
-    modalRoot?.removeChild(this.el)
+    modalRoot?.removeChild(this.el);
   }
 
   render() {
-    return ReactDOM.createPortal(this.props.children, this.el)
+    return ReactDOM.createPortal(this.props.children, this.el);
   }
 }
 
 External.propTypes = {
   children: PropTypes.node.isRequired,
-}
+};

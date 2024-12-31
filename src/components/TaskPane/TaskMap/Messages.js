@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with EnhancedMap
@@ -6,6 +6,6 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   layerSelectionHeader: {
     id: "Map.layerSelectionList.header",
-    defaultMessage: "Select Desired Feature"
+    defaultMessage: "Select Desired Feature",
   },
-})
+});

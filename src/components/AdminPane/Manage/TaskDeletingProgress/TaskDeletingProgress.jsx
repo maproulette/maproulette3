@@ -1,5 +1,5 @@
-import ProgressStatus from '../ProgressStatus/ProgressStatus'
-import messages from './Messages'
+import ProgressStatus from "../ProgressStatus/ProgressStatus";
+import messages from "./Messages";
 
 /**
  * TaskDeletingProgress displays a full-page busy spinner and shows
@@ -7,7 +7,7 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default function(props) {
+export default function (props) {
   return (
     <ProgressStatus
       progressItem={props.progress?.deletingTasks}

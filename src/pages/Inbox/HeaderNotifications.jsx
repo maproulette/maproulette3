@@ -1,9 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import { FormattedMessage } from 'react-intl'
-import BusySpinner from '../../components/BusySpinner/BusySpinner'
-import messages from './Messages'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { Link } from "react-router-dom";
+import BusySpinner from "../../components/BusySpinner/BusySpinner";
+import messages from "./Messages";
 
 class HeaderNotifications extends Component {
   render() {
@@ -21,7 +21,8 @@ class HeaderNotifications extends Component {
                   className="mr-checkbox-toggle mr-mr-1"
                   checked={this.props.groupByTask}
                   onChange={this.props.toggleGroupByTask}
-                /> <FormattedMessage {...messages.groupByTaskLabel} />
+                />{" "}
+                <FormattedMessage {...messages.groupByTaskLabel} />
               </li>
               <li className="mr-mb-4 mr-text-grey-light">
                 <FormattedMessage {...messages.challengeGroupingNotice} />
@@ -34,15 +35,16 @@ class HeaderNotifications extends Component {
             </ul>
           </div>
           <div>
-            {this.props.notificationsLoading ?
-             <BusySpinner /> :
-             <button
-               className="mr-button mr-button--green-lighter mr-button--small"
-               onClick={this.props.refreshNotifications}
-             >
-               <FormattedMessage {...messages.refreshNotificationsLabel} />
-             </button>
-            }
+            {this.props.notificationsLoading ? (
+              <BusySpinner />
+            ) : (
+              <button
+                className="mr-button mr-button--green-lighter mr-button--small"
+                onClick={this.props.refreshNotifications}
+              >
+                <FormattedMessage {...messages.refreshNotificationsLabel} />
+              </button>
+            )}
           </div>
         </div>
         <div className="mr-flex mr-justify-end mr-items-center">
@@ -66,13 +68,13 @@ class HeaderNotifications extends Component {
           </ul>
         </div>
       </header>
-    )
+    );
   }
 }
 
 HeaderNotifications.propTypes = {
   markReadSelected: PropTypes.func.isRequired,
   deleteSelected: PropTypes.func.isRequired,
-}
+};
 
-export default HeaderNotifications
+export default HeaderNotifications;

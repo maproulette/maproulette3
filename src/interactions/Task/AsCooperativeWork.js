@@ -1,12 +1,11 @@
-import _compact from 'lodash/compact'
-import _map from 'lodash/map'
-import _toPairs from 'lodash/toPairs'
-import _each from 'lodash/each'
-import _isEmpty from 'lodash/isEmpty'
-import _values from 'lodash/values'
-import _isUndefined from 'lodash/isUndefined'
-import { CooperativeType }
-       from '../../services/Challenge/CooperativeType/CooperativeType'
+import _compact from "lodash/compact";
+import _each from "lodash/each";
+import _isEmpty from "lodash/isEmpty";
+import _isUndefined from "lodash/isUndefined";
+import _map from "lodash/map";
+import _toPairs from "lodash/toPairs";
+import _values from "lodash/values";
+import { CooperativeType } from "../../services/Challenge/CooperativeType/CooperativeType";
 
 /**
  * AsCooperativeWork adds functionality to a Task related to working
@@ -16,14 +15,14 @@ import { CooperativeType }
  */
 export class AsCooperativeWork {
   constructor(task) {
-    Object.assign(this, task)
+    Object.assign(this, task);
   }
 
   /**
    * Determines if this represents a cooperative task
    */
   isCooperative() {
-    return !_isUndefined(this.cooperativeWork)
+    return !_isUndefined(this.cooperativeWork);
   }
 
   /**
@@ -37,14 +36,14 @@ export class AsCooperativeWork {
    * Returns true if this is v1-formatted cooperative work
    */
   isVersion1() {
-    return this.cooperativeWorkVersion() === 1
+    return this.cooperativeWorkVersion() === 1;
   }
 
   /*
    * Returns true if this is v2-formatted cooperative work
    */
   isVersion2() {
-    return this.cooperativeWorkVersion() === 2
+    return this.cooperativeWorkVersion() === 2;
   }
 
   /**
@@ -53,7 +52,7 @@ export class AsCooperativeWork {
   workType() {
     // Version 1 didn't have a type and only supported tag fixes
     if (this.isVersion1()) {
-      return CooperativeType.tags
+      return CooperativeType.tags;
     }
 
     return this.cooperativeWork?.meta?.type;
@@ -63,22 +62,21 @@ export class AsCooperativeWork {
    * Returns true if this is a tag fix type
    */
   isTagType() {
-    return this.workType() === CooperativeType.tags
+    return this.workType() === CooperativeType.tags;
   }
 
   /**
    * Returns true if this includes a change file
    */
   isChangeFileType() {
-    return this.workType() === CooperativeType.changeFile
+    return this.workType() === CooperativeType.changeFile;
   }
 
   /**
    * Returns true if the task is a tag fix type with at least one operation
    */
   hasTagOperations() {
-    return this.isTagType() &&
-           (this.cooperativeWork?.operations?.length ?? 0) > 0;
+    return this.isTagType() && (this.cooperativeWork?.operations?.length ?? 0) > 0;
   }
 
   /**
@@ -87,92 +85,95 @@ export class AsCooperativeWork {
    */
   existingOSMElementIds() {
     if (!this.hasTagOperations()) {
-      return []
+      return [];
     }
 
-    return _compact(_map(this.cooperativeWork.operations, operation => {
-      switch(operation.operationType) {
-        case 'createElement':
-          return null
-        case 'modifyElement':
-        case 'deleteElement':
-          return operation?.data?.id;
-        default:
-          throw new Error(`unrecognized operation type: ${operation.operationType}`)
-      }
-    }));
+    return _compact(
+      _map(this.cooperativeWork.operations, (operation) => {
+        switch (operation.operationType) {
+          case "createElement":
+            return null;
+          case "modifyElement":
+          case "deleteElement":
+            return operation?.data?.id;
+          default:
+            throw new Error(`unrecognized operation type: ${operation.operationType}`);
+        }
+      }),
+    );
   }
 
   tagDiffs(osmElements) {
     if (!this.hasTagOperations()) {
-      return []
+      return [];
     }
 
-    return _compact(_map(this.cooperativeWork.operations, independentOperation => {
-      if (independentOperation.operationType !== 'modifyElement') {
-        return null
-      }
-
-      if (!osmElements.has(independentOperation.data.id)) {
-        throw new Error(`Unable to generate tag diff: OSM data not available for ${independentOperation.data.id}`)
-      }
-
-      const diff = {}
-      _each(osmElements.get(independentOperation.data.id).tag, tag => {
-        diff[tag.k] = {
-          name: tag.k,
-          value: tag.v,
-          newValue: tag.v,
-          status: 'unchanged',
+    return _compact(
+      _map(this.cooperativeWork.operations, (independentOperation) => {
+        if (independentOperation.operationType !== "modifyElement") {
+          return null;
         }
-      })
 
-      _each(independentOperation.data.operations, dependentOperation => {
-        switch(dependentOperation.operation) {
-          case 'setTags':
-            _each(_toPairs(dependentOperation.data), tagComponents => {
-              const diffEntry = diff[tagComponents[0]]
-              if (!diffEntry) {
-                // New tag
-                diff[tagComponents[0]] = {
-                  name: tagComponents[0],
-                  value: null,
-                  newValue: tagComponents[1],
-                  status: 'added',
+        if (!osmElements.has(independentOperation.data.id)) {
+          throw new Error(
+            `Unable to generate tag diff: OSM data not available for ${independentOperation.data.id}`,
+          );
+        }
+
+        const diff = {};
+        _each(osmElements.get(independentOperation.data.id).tag, (tag) => {
+          diff[tag.k] = {
+            name: tag.k,
+            value: tag.v,
+            newValue: tag.v,
+            status: "unchanged",
+          };
+        });
+
+        _each(independentOperation.data.operations, (dependentOperation) => {
+          switch (dependentOperation.operation) {
+            case "setTags":
+              _each(_toPairs(dependentOperation.data), (tagComponents) => {
+                const diffEntry = diff[tagComponents[0]];
+                if (!diffEntry) {
+                  // New tag
+                  diff[tagComponents[0]] = {
+                    name: tagComponents[0],
+                    value: null,
+                    newValue: tagComponents[1],
+                    status: "added",
+                  };
+                } else if (diffEntry.value !== tagComponents[1]) {
+                  // Modified tag
+                  diffEntry.newValue = tagComponents[1];
+                  diffEntry.status = "changed";
+                } else {
+                  diffEntry.newValue = tagComponents[1];
+                  diffEntry.status = "resolved";
                 }
-              }
-              else if (diffEntry.value !== tagComponents[1]) {
-                // Modified tag
-                diffEntry.newValue = tagComponents[1]
-                diffEntry.status = 'changed'
-              }
-              else {
-                diffEntry.newValue = tagComponents[1]
-                diffEntry.status = 'resolved'
-              }
-            })
-            break
-          case 'unsetTags':
-            _each(dependentOperation.data, tagName => {
-              const diffEntry = diff[tagName]
-              if (diffEntry) {
-                // Delete tag
-                diffEntry.newValue = null
-                diffEntry.status = 'removed'
-              }
-              else {
-                diffEntry.newValue = null
-                diffEntry.status = 'resolved'
-              }
-            })
-            break
-          default:
-            break
-        }
-      })
+              });
+              break;
+            case "unsetTags":
+              _each(dependentOperation.data, (tagName) => {
+                const diffEntry = diff[tagName];
+                if (diffEntry) {
+                  // Delete tag
+                  diffEntry.newValue = null;
+                  diffEntry.status = "removed";
+                } else {
+                  diffEntry.newValue = null;
+                  diffEntry.status = "resolved";
+                }
+              });
+              break;
+            default:
+              break;
+          }
+        });
 
-      return diff
-    }))
+        return diff;
+      }),
+    );
   }
 
   /**
@@ -180,53 +181,52 @@ export class AsCooperativeWork {
    * { osmId, osmType, updates, deletes }, taking into account the given tag
    * edits (if any)
    */
-  tagChangeSummary(tagEdits=null) {
+  tagChangeSummary(tagEdits = null) {
     if (!this.hasTagOperations()) {
-      return []
+      return [];
     }
 
-    return _compact(_map(this.cooperativeWork.operations, independentOperation => {
-      if (independentOperation.operationType !== 'modifyElement') {
-        return null
-      }
+    return _compact(
+      _map(this.cooperativeWork.operations, (independentOperation) => {
+        if (independentOperation.operationType !== "modifyElement") {
+          return null;
+        }
 
-      const idTokens = independentOperation.data.id.split('/')
-      const change = {
-        osmType: idTokens[0].toUpperCase(),
-        osmId: parseInt(idTokens[1]),
-        updates: {},
-        deletes: [],
-      }
+        const idTokens = independentOperation.data.id.split("/");
+        const change = {
+          osmType: idTokens[0].toUpperCase(),
+          osmId: parseInt(idTokens[1]),
+          updates: {},
+          deletes: [],
+        };
 
-      if (tagEdits) {
-        // Work from tag edits instead of dependent operations
-        _each(_values(tagEdits), edit => {
-          if (edit.status === 'added' || edit.status === 'changed') {
-            change.updates[edit.name] = edit.newValue
-          }
-          else if (edit.status === 'removed') {
-            change.deletes.push(edit.name)
-          }
-        })
-      }
-      else {
-        _each(independentOperation.data.operations, dependentOperation => {
-          if (dependentOperation.operation === 'setTags') {
-            change.updates = Object.assign(change.updates, dependentOperation.data)
-          }
-          else if (dependentOperation.operation === 'unsetTags') {
-            change.deletes = change.deletes.concat(dependentOperation.data)
-          }
-        })
-      }
+        if (tagEdits) {
+          // Work from tag edits instead of dependent operations
+          _each(_values(tagEdits), (edit) => {
+            if (edit.status === "added" || edit.status === "changed") {
+              change.updates[edit.name] = edit.newValue;
+            } else if (edit.status === "removed") {
+              change.deletes.push(edit.name);
+            }
+          });
+        } else {
+          _each(independentOperation.data.operations, (dependentOperation) => {
+            if (dependentOperation.operation === "setTags") {
+              change.updates = Object.assign(change.updates, dependentOperation.data);
+            } else if (dependentOperation.operation === "unsetTags") {
+              change.deletes = change.deletes.concat(dependentOperation.data);
+            }
+          });
+        }
 
-      if (_isEmpty(change.updates) && _isEmpty(change.deletes)) {
-        return null
-      }
+        if (_isEmpty(change.updates) && _isEmpty(change.deletes)) {
+          return null;
+        }
 
-      return change
-    }))
+        return change;
+      }),
+    );
   }
 }
 
-export default task => new AsCooperativeWork(task)
+export default (task) => new AsCooperativeWork(task);

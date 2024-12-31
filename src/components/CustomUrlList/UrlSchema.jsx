@@ -1,5 +1,5 @@
-import MarkdownContent from '../MarkdownContent/MarkdownContent'
-import messages from './Messages'
+import MarkdownContent from "../MarkdownContent/MarkdownContent";
+import messages from "./Messages";
 
 /**
  * Generates a JSON Schema describing Custom URL fields for consumption by
@@ -12,8 +12,8 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = intl => ({
-  "$schema": "http://json-schema.org/draft-07/schema#",
+export const jsSchema = (intl) => ({
+  $schema: "http://json-schema.org/draft-07/schema#",
   type: "object",
   properties: {
     name: {
@@ -29,7 +29,7 @@ export const jsSchema = intl => ({
       type: "string",
     },
   },
-})
+});
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -37,7 +37,7 @@ export const jsSchema = intl => ({
  *
  * @see See https://github.com/mozilla-services/react-jsonschema-form
  */
-export const uiSchema = intl => ({
+export const uiSchema = (intl) => ({
   name: {
     "ui:help": intl.formatMessage(messages.nameDescription),
   },
@@ -47,4 +47,4 @@ export const uiSchema = intl => ({
   url: {
     "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.urlDescription)} />,
   },
-})
+});

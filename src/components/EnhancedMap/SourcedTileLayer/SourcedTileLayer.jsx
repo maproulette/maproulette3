@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { injectIntl, FormattedMessage } from 'react-intl'
-import { TileLayer } from 'react-leaflet'
-import { BingLayer } from 'react-leaflet-bing-v2/src/index.js'
-import _isEmpty from 'lodash/isEmpty'
-import WithErrors from '../../HOCs/WithErrors/WithErrors'
-import AppErrors from '../../../services/Error/AppErrors'
-import { layerSourceShape, normalizeLayer, defaultLayerSource }
-       from '../../../services/VisibleLayer/LayerSources'
+import _isEmpty from "lodash/isEmpty";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import { TileLayer } from "react-leaflet";
+import { BingLayer } from "react-leaflet-bing-v2/src/index.js";
+import AppErrors from "../../../services/Error/AppErrors";
+import {
+  defaultLayerSource,
+  layerSourceShape,
+  normalizeLayer,
+} from "../../../services/VisibleLayer/LayerSources";
+import WithErrors from "../../HOCs/WithErrors/WithErrors";
 
 /**
  * SourcedTileLayer renders a react-leaflet TileLayer from the current
@@ -19,26 +22,26 @@ import { layerSourceShape, normalizeLayer, defaultLayerSource }
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 const SourcedTileLayer = (props) => {
-  const [layerRenderFailed, setLayerRenderFailed] = useState(false)
+  const [layerRenderFailed, setLayerRenderFailed] = useState(false);
 
-  const attribution = layer => {
+  const attribution = (layer) => {
     if (props.skipAttribution || _isEmpty(layer.attribution)) {
-      return null
+      return null;
     }
 
-    return layer.attribution.url ?
-           `<a href="${layer.attribution.url}">${layer.attribution.text}</a>` :
-           layer.attribution.text
-  }
+    return layer.attribution.url
+      ? `<a href="${layer.attribution.url}">${layer.attribution.text}</a>`
+      : layer.attribution.text;
+  };
 
   useEffect(() => {
     if (layerRenderFailed && currentLayer) {
-      setLayerRenderFailed(false)
+      setLayerRenderFailed(false);
     }
-  }, [props.source.id])
+  }, [props.source.id]);
 
   if (!props.source) {
-    return null
+    return null;
   }
 
   if (layerRenderFailed) {
@@ -46,18 +49,17 @@ const SourcedTileLayer = (props) => {
       return (
         <FormattedMessage
           {...AppErrors.map.renderFailure}
-          values={{details: 'fallback to default layer failed'}}
+          values={{ details: "fallback to default layer failed" }}
         />
-      )
-    }
-    else {
-      return <SourcedTileLayer source={defaultLayerSource()} fallbackLayer={true} />
+      );
+    } else {
+      return <SourcedTileLayer source={defaultLayerSource()} fallbackLayer={true} />;
     }
   }
 
-  const normalizedLayer = normalizeLayer(props.source)
+  const normalizedLayer = normalizeLayer(props.source);
 
-  if (normalizedLayer.type === 'bing') {
+  if (normalizedLayer.type === "bing") {
     return (
       <BingLayer
         key={normalizedLayer.id}
@@ -65,7 +67,7 @@ const SourcedTileLayer = (props) => {
         type="Aerial"
         attribution={attribution(normalizedLayer)}
       />
-    )
+    );
   }
 
   return (
@@ -75,18 +77,18 @@ const SourcedTileLayer = (props) => {
       attribution={attribution(normalizedLayer)}
       {...props}
     />
-  )
-}
+  );
+};
 
 SourcedTileLayer.propTypes = {
   /** LayerSource to use */
   source: layerSourceShape,
   /** Set to true to suppress display of source attribution */
   skipAttribution: PropTypes.bool,
-}
+};
 
 SourcedTileLayer.defaultProps = {
   skipAttribution: false,
-}
+};
 
-export default WithErrors(injectIntl(SourcedTileLayer))
+export default WithErrors(injectIntl(SourcedTileLayer));

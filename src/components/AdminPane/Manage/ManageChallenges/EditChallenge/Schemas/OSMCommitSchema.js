@@ -14,11 +14,7 @@ import messages from "../Messages";
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (
-  intl,
-  user,
-  challengeData,
-) => {
+export const jsSchema = (intl, user, challengeData) => {
   const properties = {
     checkinComment: {
       title: intl.formatMessage(messages.checkinCommentLabel),
@@ -28,7 +24,7 @@ export const jsSchema = (
       title: intl.formatMessage(messages.checkinSourceLabel),
       type: "string",
     },
-  }
+  };
 
   const schemaFields = {
     $schema: "http://json-schema.org/draft-07/schema#",
@@ -50,7 +46,10 @@ export const jsSchema = (
         intl.formatMessage(messages.includeCheckinHashtagTrueLabel),
         intl.formatMessage(messages.includeCheckinHashtagFalseLabel),
       ],
-      default: challengeData.checkinComment === undefined || challengeData.includeCheckinHashtag ? true : false,
+      default:
+        challengeData.checkinComment === undefined || challengeData.includeCheckinHashtag
+          ? true
+          : false,
     };
   }
 
@@ -67,20 +66,9 @@ export const jsSchema = (
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (
-  intl,
-  user,
-  challengeData,
-  extraErrors,
-  options = {}
-) => {
- 
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
   const uiSchemaFields = {
-    "ui:order": [
-      "checkinComment",
-      "includeCheckinHashtag",
-      "checkinSource",
-    ],
+    "ui:order": ["checkinComment", "includeCheckinHashtag", "checkinSource"],
     checkinComment: {
       "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.checkinCommentDescription),
@@ -89,12 +77,12 @@ export const uiSchema = (
         : undefined,
     },
     checkinSource: {
-      "ui:help": intl.formatMessage(messages.checkinSourceDescription)
+      "ui:help": intl.formatMessage(messages.checkinSourceDescription),
     },
     includeCheckinHashtag: {
       "ui:field": "columnRadio",
-      "ui:help": intl.formatMessage(messages.includeCheckinHashtagDescription)
-    }
+      "ui:help": intl.formatMessage(messages.includeCheckinHashtagDescription),
+    },
   };
 
   return uiSchemaFields;

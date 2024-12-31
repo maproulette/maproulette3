@@ -1,18 +1,15 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import { WidgetDataTarget, registerWidgetType }
-       from '../../../../../services/Widget/Widget'
-import CalendarHeatmap from '../../CalendarHeatmap/CalendarHeatmap'
-import PastDurationSelector
-       from '../../../../PastDurationSelector/PastDurationSelector'
-import QuickWidget from '../../../../QuickWidget/QuickWidget'
-import WithChallengeMetrics
-       from '../../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
-import messages from './Messages'
-import './CalendarHeatmapWidget.scss'
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { WidgetDataTarget, registerWidgetType } from "../../../../../services/Widget/Widget";
+import PastDurationSelector from "../../../../PastDurationSelector/PastDurationSelector";
+import QuickWidget from "../../../../QuickWidget/QuickWidget";
+import WithChallengeMetrics from "../../../HOCs/WithChallengeMetrics/WithChallengeMetrics";
+import CalendarHeatmap from "../../CalendarHeatmap/CalendarHeatmap";
+import messages from "./Messages";
+import "./CalendarHeatmapWidget.scss";
 
 const descriptor = {
-  widgetKey: 'CalendarHeatmapWidget',
+  widgetKey: "CalendarHeatmapWidget",
   label: messages.label,
   targets: [WidgetDataTarget.challenge],
   defaultWidth: 8,
@@ -21,25 +18,26 @@ const descriptor = {
   defaultConfiguration: {
     monthsPast: 12,
   },
-}
+};
 
 export default class CalendarHeatmapWidget extends Component {
-  setMonthsPast = monthsPast => {
+  setMonthsPast = (monthsPast) => {
     if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
-      this.props.updateWidgetConfiguration({monthsPast})
+      this.props.updateWidgetConfiguration({ monthsPast });
     }
-  }
+  };
 
   render() {
-    const monthsPast = this.props.widgetConfiguration.monthsPast || 12
+    const monthsPast = this.props.widgetConfiguration.monthsPast || 12;
 
-    const selector =
+    const selector = (
       <PastDurationSelector
         className="mr-button mr-button--green-lighter mr-button--small"
         pastMonthsOptions={[3, 6, 9, 12]}
         currentMonthsPast={monthsPast}
         selectDuration={this.setMonthsPast}
       />
+    );
 
     return (
       <QuickWidget
@@ -48,14 +46,10 @@ export default class CalendarHeatmapWidget extends Component {
         rightHeaderControls={<div className="mr-my-2">{selector}</div>}
         widgetTitle={<FormattedMessage {...messages.title} />}
       >
-        <CalendarHeatmap
-          {...this.props}
-          suppressHeading
-          months={monthsPast}
-        />
+        <CalendarHeatmap {...this.props} suppressHeading months={monthsPast} />
       </QuickWidget>
-    )
+    );
   }
 }
 
-registerWidgetType(WithChallengeMetrics(CalendarHeatmapWidget), descriptor)
+registerWidgetType(WithChallengeMetrics(CalendarHeatmapWidget), descriptor);

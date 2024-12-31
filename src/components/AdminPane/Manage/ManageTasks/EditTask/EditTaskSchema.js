@@ -1,8 +1,7 @@
-import { TaskStatus, messagesByStatus }
-       from '../../../../../services/Task/TaskStatus/TaskStatus'
-import _map from 'lodash/map'
-import _values from 'lodash/values'
-import messages from './Messages'
+import _map from "lodash/map";
+import _values from "lodash/values";
+import { TaskStatus, messagesByStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
+import messages from "./Messages";
 
 /**
  * Generates a JSON Schema describing editable Task fields intended for
@@ -16,14 +15,13 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl) => {
-  const allowedStatuses = _values(TaskStatus)
-  const allowedStatusLabels = _map(
-    allowedStatuses,
-    status => intl.formatMessage(messagesByStatus[status])
-  )
+  const allowedStatuses = _values(TaskStatus);
+  const allowedStatusLabels = _map(allowedStatuses, (status) =>
+    intl.formatMessage(messagesByStatus[status]),
+  );
 
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       name: {
@@ -48,13 +46,13 @@ export const jsSchema = (intl) => {
       },
       tags: {
         title: intl.formatMessage(messages.additionalTagsLabel),
-      }
+      },
     },
     required: ["name", "geometries"],
-  }
+  };
 
-  return schemaFields
-}
+  return schemaFields;
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -66,7 +64,7 @@ export const jsSchema = (intl) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup.
  */
-export const uiSchema = intl => ({
+export const uiSchema = (intl) => ({
   name: {
     "ui:help": intl.formatMessage(messages.nameDescription),
   },
@@ -86,4 +84,4 @@ export const uiSchema = intl => ({
     "ui:field": "tags",
     "ui:help": intl.formatMessage(messages.additionalTagsDescription),
   },
-})
+});

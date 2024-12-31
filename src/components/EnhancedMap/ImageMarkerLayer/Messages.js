@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with FitWorldControl
@@ -6,7 +6,6 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   openView: {
     id: "ImafeMarkerLayer.view",
-    defaultMessage: "Open 3D View"
+    defaultMessage: "Open 3D View",
   },
-})
-
+});

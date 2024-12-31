@@ -1,10 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { TaskStatus }
-       from '../../../../../services/Task/TaskStatus/TaskStatus'
-import Button from '../../../../Button/Button'
-import messages from './Messages'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
+import Button from "../../../../Button/Button";
+import messages from "./Messages";
 
 /**
  * TaskFalsePositiveControl displays a control for marking a task with a
@@ -17,25 +16,29 @@ export default class TaskFalsePositiveControl extends Component {
     if (this.props.asLink) {
       return (
         <a onClick={() => this.props.complete(TaskStatus.falsePositive)}>
-          {this.props.falsePositiveLabel ? this.props.falsePositiveLabel :
-           <FormattedMessage {...messages.falsePositiveLabel} />
-          }
+          {this.props.falsePositiveLabel ? (
+            this.props.falsePositiveLabel
+          ) : (
+            <FormattedMessage {...messages.falsePositiveLabel} />
+          )}
         </a>
-      )
+      );
     }
 
     return (
       <Button
         className="mr-button--blue-fill mr-mb-2 mr-mr-2"
-        style={{ minWidth: '10rem'}}
+        style={{ minWidth: "10rem" }}
         title={this.props.intl.formatMessage(messages.falsePositiveTooltip)}
         onClick={() => this.props.complete(TaskStatus.falsePositive)}
       >
-        {this.props.falsePositiveLabel ? this.props.falsePositiveLabel :
+        {this.props.falsePositiveLabel ? (
+          this.props.falsePositiveLabel
+        ) : (
           <FormattedMessage {...messages.falsePositiveLabel} />
-        }
+        )}
       </Button>
-    )
+    );
   }
 }
 
@@ -50,8 +53,8 @@ TaskFalsePositiveControl.propTypes = {
   activateKeyboardShortcut: PropTypes.func.isRequired,
   /** Invoked when keyboard shortcuts should no longer be active  */
   deactivateKeyboardShortcut: PropTypes.func.isRequired,
-}
+};
 
 TaskFalsePositiveControl.defaultProps = {
   isMinimized: false,
-}
+};

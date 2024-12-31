@@ -1,12 +1,12 @@
-import { Component } from 'react'
-import { Link } from 'react-router-dom'
-import WithChallenge from '../../components/HOCs/WithChallenge/WithChallenge'
-import Leaderboard from './Leaderboard'
+import { Component } from "react";
+import { Link } from "react-router-dom";
+import WithChallenge from "../../components/HOCs/WithChallenge/WithChallenge";
+import Leaderboard from "./Leaderboard";
 
 export class ChallengeLeaderboard extends Component {
   render() {
     if (!this.props.challenge) {
-      return null 
+      return null;
     }
 
     const challengeNameLink = (
@@ -18,15 +18,19 @@ export class ChallengeLeaderboard extends Component {
           {this.props.challenge.name}
         </Link>
       </span>
-    )
+    );
 
-    return <Leaderboard leaderboardOptions={{onlyEnabled: false, filterChallenges: true}}
-                        suppressTopChallenges
-                        suppressCountrySelection
-                        challenges={[{id: this.props.match.params.challengeId}]}
-                        displayName={challengeNameLink}
-                        {...this.props} />
+    return (
+      <Leaderboard
+        leaderboardOptions={{ onlyEnabled: false, filterChallenges: true }}
+        suppressTopChallenges
+        suppressCountrySelection
+        challenges={[{ id: this.props.match.params.challengeId }]}
+        displayName={challengeNameLink}
+        {...this.props}
+      />
+    );
   }
 }
 
-export default WithChallenge(ChallengeLeaderboard)
+export default WithChallenge(ChallengeLeaderboard);
