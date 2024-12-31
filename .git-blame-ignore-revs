@@ -1,0 +1,10 @@
+# This file lists commits which contain large but uninteresting changes (like
+# applying code auto-formatting), so that you can ignore them in `git blame`
+# output.
+#
+# To do this, run `git blame --ignore-revs-file .git-blame-ignore-revs`,
+# or `git config blame.ignoreRevsFile .git-blame-ignore-revs` to configure
+# git to do this by default.
+
+# Format entire codebase with Biome
+40ec714bd10a541ebc33e47e7dfb85ade4fe890c
