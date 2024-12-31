@@ -1,48 +1,55 @@
-import { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { fetchUserNotifications, markNotificationsRead, deleteNotifications }
-       from '../../../services/User/User'
+import { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+  deleteNotifications,
+  fetchUserNotifications,
+  markNotificationsRead,
+} from "../../../services/User/User";
 
-const WithUserNotifications = WrappedComponent =>
-  connect(mapStateToProps, mapDispatchToProps)(WithLoadedNotifications(WrappedComponent))
+const WithUserNotifications = (WrappedComponent) =>
+  connect(mapStateToProps, mapDispatchToProps)(WithLoadedNotifications(WrappedComponent));
 
 export const mapStateToProps = (state, ownProps) => {
   return {
     notifications: ownProps?.user?.notifications ?? [],
   };
-}
+};
 
-export const mapDispatchToProps = dispatch => bindActionCreators({
-  fetchUserNotifications,
-  markNotificationsRead,
-  deleteNotifications,
-}, dispatch)
+export const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      fetchUserNotifications,
+      markNotificationsRead,
+      deleteNotifications,
+    },
+    dispatch,
+  );
 
-export const WithLoadedNotifications = function(WrappedComponent) {
+export const WithLoadedNotifications = function (WrappedComponent) {
   return class extends Component {
     state = {
       notificationsLoading: false,
-    }
+    };
 
-    loadNotifications = user => {
+    loadNotifications = (user) => {
       if (!user) {
-        return
+        return;
       }
 
-      this.setState({notificationsLoading: true})
-      this.props.fetchUserNotifications(user.id).then(
-        () => this.setState({notificationsLoading: false})
-      )
-    }
+      this.setState({ notificationsLoading: true });
+      this.props
+        .fetchUserNotifications(user.id)
+        .then(() => this.setState({ notificationsLoading: false }));
+    };
 
     componentDidMount() {
-      this.loadNotifications(this.props.user)
+      this.loadNotifications(this.props.user);
     }
 
     componentDidUpdate(prevProps) {
-      if ((this.props.user?.id) !== (prevProps?.user?.id)) {
-        this.loadNotifications(this.props.user)
+      if (this.props.user?.id !== prevProps?.user?.id) {
+        this.loadNotifications(this.props.user);
       }
     }
 
@@ -53,9 +60,9 @@ export const WithLoadedNotifications = function(WrappedComponent) {
           notificationsLoading={this.state.notificationsLoading}
           refreshNotifications={() => this.loadNotifications(this.props.user)}
         />
-      )
+      );
     }
   };
-}
+};
 
-export default WithUserNotifications
+export default WithUserNotifications;

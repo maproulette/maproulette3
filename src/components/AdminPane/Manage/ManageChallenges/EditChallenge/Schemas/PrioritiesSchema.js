@@ -1,11 +1,12 @@
-import { TaskPriority,
-         taskPriorityLabels }
-       from '../../../../../../services/Task/TaskPriority/TaskPriority'
-import _map from 'lodash/map'
-import _values from 'lodash/values'
-import messages from '../Messages'
+import _map from "lodash/map";
+import _values from "lodash/values";
+import {
+  TaskPriority,
+  taskPriorityLabels,
+} from "../../../../../../services/Task/TaskPriority/TaskPriority";
+import messages from "../Messages";
 
-const STEP_ID = "Priorities"
+const STEP_ID = "Priorities";
 
 /**
  * Generates a JSON Schema describing priority fields of Edit
@@ -21,10 +22,10 @@ const STEP_ID = "Priorities"
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl) => {
-  const localizedPriorityLabels = taskPriorityLabels(intl)
+  const localizedPriorityLabels = taskPriorityLabels(intl);
 
   return {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     definitions: {
       tagRule: {
@@ -37,11 +38,13 @@ export const jsSchema = (intl) => {
             enumNames: ["string", "integer", "double", "long", "nested rule", "location rule"],
           },
         },
-        required: [ "valueType" ],
-        dependencies: { // Show operators appropriate to value type
+        required: ["valueType"],
+        dependencies: {
+          // Show operators appropriate to value type
           valueType: {
             oneOf: [
-              { // nested rules
+              {
+                // nested rules
                 properties: {
                   valueType: {
                     enum: ["nested rule"],
@@ -49,7 +52,8 @@ export const jsSchema = (intl) => {
                   ruleGroup: { $ref: "#/definitions/priorityRuleGroup" },
                 },
               },
-              { // string values
+              {
+                // string values
                 properties: {
                   valueType: {
                     enum: ["string"],
@@ -61,12 +65,22 @@ export const jsSchema = (intl) => {
                   operator: {
                     title: "Operator",
                     type: "string",
-                    enum: ["equal", "not_equal",
-                          "contains", "not_contains",
-                          "is_empty", "is_not_empty"],
-                    enumNames: ["equals", "doesn't equal",
-                                "contains", "doesn't contain",
-                                "is empty", "isn't empty"],
+                    enum: [
+                      "equal",
+                      "not_equal",
+                      "contains",
+                      "not_contains",
+                      "is_empty",
+                      "is_not_empty",
+                    ],
+                    enumNames: [
+                      "equals",
+                      "doesn't equal",
+                      "contains",
+                      "doesn't contain",
+                      "is empty",
+                      "isn't empty",
+                    ],
                     default: "equal",
                   },
                   value: {
@@ -75,7 +89,8 @@ export const jsSchema = (intl) => {
                   },
                 },
               },
-              { // numeric values
+              {
+                // numeric values
                 properties: {
                   valueType: {
                     enum: ["integer", "double", "long"],
@@ -97,7 +112,8 @@ export const jsSchema = (intl) => {
                   },
                 },
               },
-              { // bounds values
+              {
+                // bounds values
                 properties: {
                   valueType: {
                     enum: ["bounds"],
@@ -112,12 +128,12 @@ export const jsSchema = (intl) => {
                   value: {
                     title: "Bounds Value",
                     type: "string",
-                    withButton: "map"
+                    withButton: "map",
                   },
                 },
-              }
-            ]
-          }
+              },
+            ],
+          },
         },
       },
       priorityRuleGroup: {
@@ -133,7 +149,7 @@ export const jsSchema = (intl) => {
           rules: {
             title: " ", // empty title
             type: "array",
-            items: { "$ref": "#/definitions/tagRule" }
+            items: { $ref: "#/definitions/tagRule" },
           },
         },
       },
@@ -151,26 +167,26 @@ export const jsSchema = (intl) => {
         title: intl.formatMessage(messages.highPriorityRulesLabel),
         type: "object",
         properties: {
-          ruleGroup: { "$ref": "#/definitions/priorityRuleGroup" },
+          ruleGroup: { $ref: "#/definitions/priorityRuleGroup" },
         },
       },
       mediumPriorityRules: {
         title: intl.formatMessage(messages.mediumPriorityRulesLabel),
         type: "object",
         properties: {
-          ruleGroup: { "$ref": "#/definitions/priorityRuleGroup" },
+          ruleGroup: { $ref: "#/definitions/priorityRuleGroup" },
         },
       },
       lowPriorityRules: {
         title: intl.formatMessage(messages.lowPriorityRulesLabel),
         type: "object",
         properties: {
-          ruleGroup: { "$ref": "#/definitions/priorityRuleGroup" },
+          ruleGroup: { $ref: "#/definitions/priorityRuleGroup" },
         },
       },
     },
-  }
-}
+  };
+};
 
 /**
  * react-jsonschema-form doesn't currently support uiSchema entries for
@@ -215,7 +231,8 @@ const priorityRuleGroupUISchema = (isCollapsed) => ({
         "ui:collapsed": isCollapsed,
       },
       ruleGroup: {
-        classNames: "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
+        classNames:
+          "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
         rules: {
           items: {
             key: {
@@ -229,7 +246,8 @@ const priorityRuleGroupUISchema = (isCollapsed) => ({
               "ui:collapsed": isCollapsed,
             },
             ruleGroup: {
-              classNames: "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
+              classNames:
+                "nested-rule-group mr-border mr-border-white-25 mr-p-2 mr-mt-4 mr-flex mr-w-full",
               rules: {
                 items: {
                   key: {
@@ -244,14 +262,14 @@ const priorityRuleGroupUISchema = (isCollapsed) => ({
                   },
                 },
               },
-            }
-          }
-        }
+            },
+          },
+        },
       },
-      "ui:order": [ "valueType", "key", "operator", "value", "*" ],
+      "ui:order": ["valueType", "key", "operator", "value", "*"],
     },
   },
-})
+});
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -263,9 +281,12 @@ const priorityRuleGroupUISchema = (isCollapsed) => ({
  * > in the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
-  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1
-  const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
+  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
+  const toggleCollapsed =
+    options.longForm && options.toggleCollapsed
+      ? () => options.toggleCollapsed(STEP_ID)
+      : undefined;
 
   return {
     defaultPriority: {
@@ -273,7 +294,9 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:help": intl.formatMessage(messages.defaultPriorityDescription),
       "ui:collapsed": isCollapsed,
       "ui:toggleCollapsed": toggleCollapsed,
-      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.prioritiesStepHeader) : undefined,
+      "ui:groupHeader": options.longForm
+        ? intl.formatMessage(messages.prioritiesStepHeader)
+        : undefined,
     },
     highPriorityRules: {
       ruleGroup: priorityRuleGroupUISchema(isCollapsed),
@@ -287,5 +310,5 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       ruleGroup: priorityRuleGroupUISchema(isCollapsed),
       "ui:collapsed": isCollapsed,
     },
-  }
-}
+  };
+};

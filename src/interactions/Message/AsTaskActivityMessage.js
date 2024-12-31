@@ -1,10 +1,8 @@
-import _isFinite from 'lodash/isFinite'
-import _uniqueId from 'lodash/uniqueId'
+import _isFinite from "lodash/isFinite";
+import _uniqueId from "lodash/uniqueId";
 
-import { ActivityActionType }
-       from '../../services/Activity/ActivityActionTypes/ActivityActionTypes'
-import { ActivityItemType }
-       from '../../services/Activity/ActivityItemTypes/ActivityItemTypes'
+import { ActivityActionType } from "../../services/Activity/ActivityActionTypes/ActivityActionTypes";
+import { ActivityItemType } from "../../services/Activity/ActivityItemTypes/ActivityItemTypes";
 
 /**
  * AsTaskActivityMessage adds functionality to make a websocket message about task
@@ -12,7 +10,7 @@ import { ActivityItemType }
  */
 export class AsTaskActivityMessage {
   constructor(message) {
-    Object.assign(this, message)
+    Object.assign(this, message);
   }
 
   /**
@@ -20,13 +18,13 @@ export class AsTaskActivityMessage {
    * if that's not possible for this particular message
    */
   asActivityItem() {
-    const itemAction = this.activityAction()
+    const itemAction = this.activityAction();
     if (!_isFinite(itemAction)) {
-      return null
+      return null;
     }
 
     return {
-      id: parseInt(_uniqueId('-')),  // use negative ids
+      id: parseInt(_uniqueId("-")), // use negative ids
       action: itemAction,
       typeId: ActivityItemType.task,
       created: this.meta.created,
@@ -36,20 +34,20 @@ export class AsTaskActivityMessage {
       status: this.data.task.status,
       task: this.data.task,
       user: this.activityUser(),
-    }
+    };
   }
 
   /**
    * Map message type to activity action when possible
    */
   activityAction() {
-    switch(this.messageType) {
-      case 'task-claimed':
-        return ActivityActionType.taskViewed
-      case 'task-completed':
-        return ActivityActionType.taskStatusSet
+    switch (this.messageType) {
+      case "task-claimed":
+        return ActivityActionType.taskViewed;
+      case "task-completed":
+        return ActivityActionType.taskStatusSet;
       default:
-        return null
+        return null;
     }
   }
 
@@ -64,8 +62,8 @@ export class AsTaskActivityMessage {
         displayName: this.data.byUser.displayName,
         avatarURL: this.data.byUser.avatarURL,
       },
-    }
+    };
   }
 }
 
-export default message => new AsTaskActivityMessage(message)
+export default (message) => new AsTaskActivityMessage(message);

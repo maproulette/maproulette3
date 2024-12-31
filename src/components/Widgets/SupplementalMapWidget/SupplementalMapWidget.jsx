@@ -1,15 +1,14 @@
-import { FormattedMessage } from 'react-intl'
-import { WidgetDataTarget, registerWidgetType }
-       from '../../../services/Widget/Widget'
-import MapPane from '../../EnhancedMap/MapPane/MapPane'
-import SupplementalMap from '../..//SupplementalMap/SupplementalMap'
-import QuickWidget from '../../QuickWidget/QuickWidget'
-import Dropdown from '../../Dropdown/Dropdown'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-import messages from './Messages'
+import { FormattedMessage } from "react-intl";
+import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
+import SupplementalMap from "../..//SupplementalMap/SupplementalMap";
+import Dropdown from "../../Dropdown/Dropdown";
+import MapPane from "../../EnhancedMap/MapPane/MapPane";
+import QuickWidget from "../../QuickWidget/QuickWidget";
+import SvgSymbol from "../../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 const descriptor = {
-  widgetKey: 'SupplementalMapWidget',
+  widgetKey: "SupplementalMapWidget",
   label: messages.label,
   targets: [WidgetDataTarget.task],
   minWidth: 4,
@@ -18,13 +17,13 @@ const descriptor = {
   defaultHeight: 10,
   defaultConfiguration: {
     trackTaskMap: true,
-  }
-}
+  },
+};
 
-const SupplementalMapWidget = props => {
-  const { task, workspaceContext } = props
-  const { trackTaskMap } = props.widgetConfiguration
-  const { h, w } = props.widgetLayout
+const SupplementalMapWidget = (props) => {
+  const { task, workspaceContext } = props;
+  const { trackTaskMap } = props.widgetConfiguration;
+  const { h, w } = props.widgetLayout;
 
   return (
     <QuickWidget
@@ -32,10 +31,10 @@ const SupplementalMapWidget = props => {
       className=""
       widgetTitle={<FormattedMessage {...messages.title} />}
       noMain
-      rightHeaderControls = {
+      rightHeaderControls={
         <Dropdown
           className="mr-dropdown--right"
-          dropdownButton={dropdown => (
+          dropdownButton={(dropdown) => (
             <button
               onClick={dropdown.toggleDropdownVisible}
               className="mr-flex mr-items-center mr-text-green-lighter"
@@ -52,13 +51,13 @@ const SupplementalMapWidget = props => {
               <li className="mr-my-2">
                 <a
                   className="mr-normal-case mr-flex"
-                  onClick={() => props.updateWidgetConfiguration({
-                    trackTaskMap: !trackTaskMap
-                  })}
+                  onClick={() =>
+                    props.updateWidgetConfiguration({
+                      trackTaskMap: !trackTaskMap,
+                    })
+                  }
                 >
-                  <div className="mr-text-white mr-w-4">
-                    {trackTaskMap && "✓"}
-                  </div>
+                  <div className="mr-text-white mr-w-4">{trackTaskMap && "✓"}</div>
                   <FormattedMessage {...messages.trackTaskMapLabel} />
                 </a>
               </li>
@@ -79,8 +78,8 @@ const SupplementalMapWidget = props => {
         />
       </MapPane>
     </QuickWidget>
-  )
-}
+  );
+};
 
-registerWidgetType(SupplementalMapWidget, descriptor)
-export default SupplementalMapWidget
+registerWidgetType(SupplementalMapWidget, descriptor);
+export default SupplementalMapWidget;

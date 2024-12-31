@@ -1,10 +1,9 @@
-import { Fragment, Component } from 'react'
-import WithCurrentUser
-       from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
-import Hero from './Hero'
-import Intro from './Intro'
-import Instructions from './Instructions'
-import Featured from './Featured'
+import { Component, Fragment } from "react";
+import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
+import Featured from "./Featured";
+import Hero from "./Hero";
+import Instructions from "./Instructions";
+import Intro from "./Intro";
 
 export class Home extends Component {
   render() {
@@ -19,4 +18,4 @@ export class Home extends Component {
   }
 }
 
-export default WithCurrentUser(Home)
+export default WithCurrentUser(Home);

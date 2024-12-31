@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 
-import { constructRapidURI } from '../../../../services/Editor/Editor';
-import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement';
-import AsMappableTask from '../../../../interactions/Task/AsMappableTask';
-import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/ChallengeZoom';
-import WithSearch from '../../../HOCs/WithSearch/WithSearch';
-import useHash from '../../../../hooks/UseHash';
-import { SET_RAPIDEDITOR } from '../../../../services/RapidEditor/RapidEditor';
 // import BusySpinner from '../../../BusySpinner/BusySpinner';
-import { FormattedMessage } from 'react-intl';
-import messages from './../Messages';
+import { FormattedMessage } from "react-intl";
+import useHash from "../../../../hooks/UseHash";
+import { replacePropertyTags } from "../../../../hooks/UsePropertyReplacement/UsePropertyReplacement";
+import AsMappableTask from "../../../../interactions/Task/AsMappableTask";
+import { DEFAULT_ZOOM } from "../../../../services/Challenge/ChallengeZoom/ChallengeZoom";
+import { constructRapidURI } from "../../../../services/Editor/Editor";
+import { SET_RAPIDEDITOR } from "../../../../services/RapidEditor/RapidEditor";
+import WithSearch from "../../../HOCs/WithSearch/WithSearch";
+import messages from "./../Messages";
 
 /**
  * Generate the initial URL hash for the Rapid editor.
@@ -72,11 +72,11 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <button 
-        onClick={handleResetHash} 
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <button
+        onClick={handleResetHash}
         className="mr-ml-auto mr-button mr-button--small mr-px-2"
-        style={{ position: 'absolute', right: '0px', top: '-40px' }}
+        style={{ position: "absolute", right: "0px", top: "-40px" }}
       >
         <FormattedMessage {...messages.reselectTask} />
       </button>
@@ -88,13 +88,11 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
           <BusySpinner xlarge />
         </div>
       ) */}
-      {error && (
-        <div>Error: {error.message}</div>
-      )}
+      {error && <div>Error: {error.message}</div>}
       <iframe
         ref={iframeRef}
         id="rapid-container-root"
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: "100%", height: "100%" }}
         src={`/static/rapid-editor.html${initialHash}`}
         onLoad={async (event) => {
           let iframe = event.target;
@@ -106,16 +104,16 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
 
             // When Rapid re-renders its map, it updates the URL hash of the iframe window.
             // We listen for this event and update the parent window's hash to match.
-            context.systems.map.on('draw', () => {
+            context.systems.map.on("draw", () => {
               setHash(iframe.contentWindow.location.hash);
             });
 
             // When the user makes an edit, the 'stablechange' event fires. When that happens
             // we update the 'hasUnsavedChanges' property in our Redux store so that the
             // MapRoulette UI can change depending on whether the user has unsaved edits.
-            context.systems.editor.on('stablechange', () => {
+            context.systems.editor.on("stablechange", () => {
               let hasUnsavedChanges = context.systems.editor.hasChanges();
-              dispatch({ type: SET_RAPIDEDITOR, context: { hasUnsavedChanges }});
+              dispatch({ type: SET_RAPIDEDITOR, context: { hasUnsavedChanges } });
             });
           } catch (err) {
             setError(err);

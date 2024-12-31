@@ -1,7 +1,7 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
-import { TaskReviewTable, setupColumnTypes, getFilterIds } from "./TasksReviewTable";
+import { TaskReviewTable, getFilterIds, setupColumnTypes } from "./TasksReviewTable";
 
 // reimplement when tests are updated
 // const testTableData = [
@@ -406,11 +406,11 @@ describe("TaskReviewTable", () => {
         location={{ search: "" }}
         intl={{
           formatMessage: () => null,
-          formatDate: () => ""
+          formatDate: () => "",
         }}
         isActive
         resetColumnChoices={() => null}
-      />
+      />,
     );
     const text = getByText("My Mapped Tasks after Review");
     expect(text).toBeInTheDocument();
@@ -419,24 +419,27 @@ describe("TaskReviewTable", () => {
 
 describe("setupColumnTypes", () => {
   it("renders a tag with the name test-tag", () => {
-    const columns = setupColumnTypes({ intl: { formatMessage: () => null } })
+    const columns = setupColumnTypes({ intl: { formatMessage: () => null } });
     const Cell = columns.tags.Cell;
 
     const { getByText } = render(
       <Cell
         row={{
-          _original: { 
-            tags: [{
-              "id": 5,
-              "name": "test-tag",
-              "description": "",
-              "created": "2022-12-11T17:44:11.019-05:00",
-              "modified": "2022-12-11T17:44:11.019-05:00",
-              "tagType": "review"
-          }]}
+          _original: {
+            tags: [
+              {
+                id: 5,
+                name: "test-tag",
+                description: "",
+                created: "2022-12-11T17:44:11.019-05:00",
+                modified: "2022-12-11T17:44:11.019-05:00",
+                tagType: "review",
+              },
+            ],
+          },
         }}
-      />
-    )
+      />,
+    );
 
     const text = getByText("test-tag");
     expect(text).toBeInTheDocument();
@@ -445,12 +448,18 @@ describe("setupColumnTypes", () => {
 
 describe("getChallengeFilterIds", () => {
   it("finds and returns and array of challenge ids in the url", () => {
-    const challengeIds = getFilterIds('http://127.0.0.1:3000/review/myReviewedTasks?filters.challenge=alskdjfalsdjfa+ioweiru&filters.challengeId=30%2C31&sortCriteria.sortBy=mappedOn&sortCriteria.direction=ASC&page=0&includeTags=true&excludeOtherReviewers=true&pageSize=20', 'filters.challengeId');
+    const challengeIds = getFilterIds(
+      "http://127.0.0.1:3000/review/myReviewedTasks?filters.challenge=alskdjfalsdjfa+ioweiru&filters.challengeId=30%2C31&sortCriteria.sortBy=mappedOn&sortCriteria.direction=ASC&page=0&includeTags=true&excludeOtherReviewers=true&pageSize=20",
+      "filters.challengeId",
+    );
     expect(challengeIds[0]).toBe(30);
   });
 
   it("returns [-2] if there's no challenge ids", () => {
-    const challengeIds = getFilterIds('http://127.0.0.1:3000/review/myReviewedTasks?sortCriteria.sortBy=mappedOn&sortCriteria.direction=ASC&page=0&includeTags=true&excludeOtherReviewers=true&pageSize=20', 'filters.challengeId');
+    const challengeIds = getFilterIds(
+      "http://127.0.0.1:3000/review/myReviewedTasks?sortCriteria.sortBy=mappedOn&sortCriteria.direction=ASC&page=0&includeTags=true&excludeOtherReviewers=true&pageSize=20",
+      "filters.challengeId",
+    );
     expect(challengeIds[0]).toBe(-2);
   });
 });

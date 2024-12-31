@@ -1,27 +1,25 @@
-import { createRef, Component } from 'react'
-import PropTypes from 'prop-types'
-import _map from 'lodash/map'
-import _filter from 'lodash/filter'
-import _compact from 'lodash/compact'
-import _clone from 'lodash/clone'
-import _findIndex from 'lodash/findIndex'
-import _isEmpty from 'lodash/isEmpty'
-import _omit from 'lodash/omit'
-import { Link } from 'react-router-dom'
-import { FormattedMessage, injectIntl } from 'react-intl'
-import { boundsWithinAllowedMaxDegrees }
-       from '../../../services/MapBounds/MapBounds'
-import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
-import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
-import WithPagedChallenges from '../../HOCs/WithPagedChallenges/WithPagedChallenges'
-import WithFeatured from '../../HOCs/WithFeatured/WithFeatured'
-import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
-import ProjectResultItem from '../ProjectResultItem/ProjectResultItem'
-import PageResultsButton from './PageResultsButton'
-import { isUsableChallengeStatus }
-       from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
-import messages from './Messages'
-import './ChallengeResultList.scss'
+import _clone from "lodash/clone";
+import _compact from "lodash/compact";
+import _filter from "lodash/filter";
+import _findIndex from "lodash/findIndex";
+import _isEmpty from "lodash/isEmpty";
+import _map from "lodash/map";
+import _omit from "lodash/omit";
+import PropTypes from "prop-types";
+import { Component, createRef } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import { Link } from "react-router-dom";
+import { isUsableChallengeStatus } from "../../../services/Challenge/ChallengeStatus/ChallengeStatus";
+import { boundsWithinAllowedMaxDegrees } from "../../../services/MapBounds/MapBounds";
+import WithCurrentUser from "../../HOCs/WithCurrentUser/WithCurrentUser";
+import WithFeatured from "../../HOCs/WithFeatured/WithFeatured";
+import WithPagedChallenges from "../../HOCs/WithPagedChallenges/WithPagedChallenges";
+import WithSortedChallenges from "../../HOCs/WithSortedChallenges/WithSortedChallenges";
+import ChallengeResultItem from "../ChallengeResultItem/ChallengeResultItem";
+import ProjectResultItem from "../ProjectResultItem/ProjectResultItem";
+import messages from "./Messages";
+import PageResultsButton from "./PageResultsButton";
+import "./ChallengeResultList.scss";
 
 const limitUserResults = (challenges) => {
   const ownerLimit = Number(window.env.REACT_APP_BROWSE_CHALLENGES_OWNER_LIMIT);
@@ -29,9 +27,9 @@ const limitUserResults = (challenges) => {
   if (ownerLimit) {
     const userDictionary = {};
 
-    const limitedChallenges = challenges.filter(challenge => {
+    const limitedChallenges = challenges.filter((challenge) => {
       const { owner } = challenge;
-  
+
       if (userDictionary[owner]) {
         userDictionary[owner]++;
         if (userDictionary[owner] > ownerLimit) {
@@ -40,15 +38,15 @@ const limitUserResults = (challenges) => {
       } else {
         userDictionary[owner] = 1;
       }
-  
+
       return true;
     });
-  
+
     return limitedChallenges;
   }
 
   return challenges;
-}
+};
 
 /**
  * ChallengeResultList applies the current challenge filters and the given
@@ -60,59 +58,68 @@ const limitUserResults = (challenges) => {
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeResultList extends Component {
-    constructor(props) {
-      super(props);
-      this.listRef = createRef();
-      this.state = { data: null, pauseFetch: true };
+  constructor(props) {
+    super(props);
+    this.listRef = createRef();
+    this.state = { data: null, pauseFetch: true };
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevQuery = prevProps.searchFilters.project || prevProps.searchFilters.task;
+    const currentQuery = this.props.searchFilters.project || this.props.searchFilters.task;
+    const searchType = this.props.searchFilters.searchType;
+
+    if (prevQuery !== currentQuery && !isNaN(currentQuery) && searchType === "task") {
+      this.fetchData();
     }
-  
-  
-    componentDidUpdate(prevProps) {
-      const prevQuery = prevProps.searchFilters.project || prevProps.searchFilters.task;
-      const currentQuery = this.props.searchFilters.project || this.props.searchFilters.task;
-      const searchType = this.props.searchFilters.searchType
-      
-      if (prevQuery !== currentQuery && !isNaN(currentQuery) && searchType === "task" ) {
-        this.fetchData();
-      }
-    }
-  
-    async fetchData() {
-      if (this.state.pauseFetch) {
-        this.setState({ pauseFetch: false });
-        const query = this.props.searchFilters.project || this.props.searchFilters.task;
-        
-        if (query) {
-          try {
-            const response = await fetch(`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${query}`);
-            const responseJson = await response.json();
-            this.setState({ data: responseJson });
-          } catch (error) {
-            console.error(error);
-            this.setState({ data: null });
-          }
+  }
+
+  async fetchData() {
+    if (this.state.pauseFetch) {
+      this.setState({ pauseFetch: false });
+      const query = this.props.searchFilters.project || this.props.searchFilters.task;
+
+      if (query) {
+        try {
+          const response = await fetch(
+            `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${query}`,
+          );
+          const responseJson = await response.json();
+          this.setState({ data: responseJson });
+        } catch (error) {
+          console.error(error);
+          this.setState({ data: null });
         }
-        
-        this.setState({ pauseFetch: true });
       }
+
+      this.setState({ pauseFetch: true });
     }
+  }
 
   render() {
-    const search = this.props.currentSearch?.challenges ?? {}
-    const query = search.query ? search.query : this.props.searchFilters.project ? this.props.searchFilters.project : this.props.searchFilters.task 
+    const search = this.props.currentSearch?.challenges ?? {};
+    const query = search.query
+      ? search.query
+      : this.props.searchFilters.project
+        ? this.props.searchFilters.project
+        : this.props.searchFilters.task;
 
     const challengeResultsUnbound = _clone(this.props.pagedChallenges);
-    const allChallenges = this.props.location?.pathname?.includes("browse/challenges") 
-      && (this.props.searchSort?.sortBy === "created"
-          || _isEmpty(this.props.searchSort) 
-          || this.props.location.search.includes("default"))
+    const allChallenges =
+      this.props.location?.pathname?.includes("browse/challenges") &&
+      (this.props.searchSort?.sortBy === "created" ||
+        _isEmpty(this.props.searchSort) ||
+        this.props.location.search.includes("default"))
         ? limitUserResults(challengeResultsUnbound)
         : challengeResultsUnbound;
-  
-    const challengeResults = this.props.project?.id && this.props.remainingChallengeOnly ? _filter(allChallenges, (challenge) => {
-        return (isUsableChallengeStatus(challenge.status))
-      }) : allChallenges
-  
+
+    const challengeResults =
+      this.props.project?.id && this.props.remainingChallengeOnly
+        ? _filter(allChallenges, (challenge) => {
+            return isUsableChallengeStatus(challenge.status);
+          })
+        : allChallenges;
+
     const uniqueParents = new Set();
 
     const projectResults = this.props.challenges?.reduce((result, challenge) => {
@@ -122,7 +129,6 @@ export class ChallengeResultList extends Component {
       }
       return result;
     }, []);
-    
 
     const uniqueParentIds = new Set();
 
@@ -134,40 +140,49 @@ export class ChallengeResultList extends Component {
       return result;
     }, []);
 
-    const isFetching = (this.props.fetchingChallenges ?? []).length > 0
-    const searchType = this.props.searchFilters.searchType
-    const bounds = search?.mapBounds?.bounds
-    const locationFilter = search?.filters?.location
-    const otherFilters = _omit(search.filters, ['location'])
+    const isFetching = (this.props.fetchingChallenges ?? []).length > 0;
+    const searchType = this.props.searchFilters.searchType;
+    const bounds = search?.mapBounds?.bounds;
+    const locationFilter = search?.filters?.location;
+    const otherFilters = _omit(search.filters, ["location"]);
     const unfiltered =
       _isEmpty(search.query) &&
       _isEmpty(otherFilters) &&
-      (_isEmpty(locationFilter) || !bounds || !boundsWithinAllowedMaxDegrees(bounds))
+      (_isEmpty(locationFilter) || !bounds || !boundsWithinAllowedMaxDegrees(bounds));
 
-    let matchedId = []
-    if(!isNaN(query) && query && !this.props.history.location.pathname.includes('browse/projects/')) {
-      if(this.props.searchFilters.searchType == "projects"){
+    let matchedId = [];
+    if (
+      !isNaN(query) &&
+      query &&
+      !this.props.history.location.pathname.includes("browse/projects/")
+    ) {
+      if (this.props.searchFilters.searchType == "projects") {
         matchedId = _filter(projectIdResults, (item) => item.id.toString() === query.toString());
       } else {
-        matchedId = _filter(this.props.unfilteredChallenges, (item) => item.id.toString() === query.toString());
+        matchedId = _filter(
+          this.props.unfilteredChallenges,
+          (item) => item.id.toString() === query.toString(),
+        );
       }
     }
 
     // If no filters are applied, inject any featured projects
     if (unfiltered && this.props.featuredProjects.length > 0) {
       // Try to locate them right above any featured challenges in the results
-      let featuredIndex = _findIndex(challengeResults, {featured: true})
+      let featuredIndex = _findIndex(challengeResults, { featured: true });
       if (featuredIndex === -1) {
         // No featured challenges. If no sorting is in play, inject at top (after any
         // saved challenges, if present)
         if (_isEmpty(search?.sort?.sortBy)) {
-          const savedChallenges = this.props.user?.savedChallenges ?? []
-          featuredIndex =
-            _findIndex(challengeResults, result => _findIndex(savedChallenges, {id: result.id}) === -1)
+          const savedChallenges = this.props.user?.savedChallenges ?? [];
+          featuredIndex = _findIndex(
+            challengeResults,
+            (result) => _findIndex(savedChallenges, { id: result.id }) === -1,
+          );
         }
       }
       if (featuredIndex !== -1) {
-        challengeResults.splice(featuredIndex, 0, ...this.props.featuredProjects)
+        challengeResults.splice(featuredIndex, 0, ...this.props.featuredProjects);
       }
     }
 
@@ -182,19 +197,23 @@ export class ChallengeResultList extends Component {
         </div>
       );
     }
-    
-    if (!isNaN(query) && query  && !this.props.history.location.pathname.includes('browse/projects/')) {
+
+    if (
+      !isNaN(query) &&
+      query &&
+      !this.props.history.location.pathname.includes("browse/projects/")
+    ) {
       // Filters for Task Id
       if (searchType === "task") {
         let matchedChallengeId = null;
 
-        
         if (this.state.data) {
-          matchedChallengeId = _filter(this.props.unfilteredChallenges, (item) =>
-            item.id.toString() === this.state.data.parent.toString()
+          matchedChallengeId = _filter(
+            this.props.unfilteredChallenges,
+            (item) => item.id.toString() === this.state.data.parent.toString(),
           );
         }
-      
+
         if (matchedChallengeId && matchedChallengeId.length > 0) {
           detectedIds = (
             <div>
@@ -233,7 +252,7 @@ export class ChallengeResultList extends Component {
               </span>
             </div>
           );
-        }      
+        }
       } else if (matchedId.length === 0) {
         detectedIds = (
           <div className="mr-text-white mr-text-lg mr-pt-4">
@@ -242,7 +261,7 @@ export class ChallengeResultList extends Component {
             </span>
           </div>
         );
-      // Filters for Challenge Id
+        // Filters for Challenge Id
       } else if (searchType === undefined || searchType === "challenges") {
         detectedIds = (
           <div>
@@ -257,7 +276,7 @@ export class ChallengeResultList extends Component {
             />
           </div>
         );
-      // Filters for Project Id
+        // Filters for Project Id
       } else if (searchType === "projects") {
         detectedIds = (
           <div>
@@ -274,8 +293,8 @@ export class ChallengeResultList extends Component {
         );
       }
     }
-    
-    let results = null
+
+    let results = null;
     if (challengeResults.length === 0) {
       if (!isFetching) {
         results = (
@@ -284,25 +303,32 @@ export class ChallengeResultList extends Component {
               <FormattedMessage {...messages.noResults} />
             </span>
           </div>
-        )
+        );
       }
-    } else if (this.props.history.location.pathname.includes('browse/projects/') || searchType === undefined || searchType === "challenges") {
-      results = _compact(_map(challengeResults, (result) => {
-        if (result.parent) {
-          return (
-            <ChallengeResultItem
-              key={`challenge_${result.id}`}
-              {...this.props}
-              className="mr-mb-4"
-              challenge={result}
-              listRef={this.listRef}
-              sort={search?.sort}
-            />
-          );
-        }
-      }))
+    } else if (
+      this.props.history.location.pathname.includes("browse/projects/") ||
+      searchType === undefined ||
+      searchType === "challenges"
+    ) {
+      results = _compact(
+        _map(challengeResults, (result) => {
+          if (result.parent) {
+            return (
+              <ChallengeResultItem
+                key={`challenge_${result.id}`}
+                {...this.props}
+                className="mr-mb-4"
+                challenge={result}
+                listRef={this.listRef}
+                sort={search?.sort}
+              />
+            );
+          }
+        }),
+      );
     } else if (!this.props.excludeProjectResults && searchType === "projects" && projectResults) {
-      results = _compact(_map(projectResults, (result) => {
+      results = _compact(
+        _map(projectResults, (result) => {
           return (
             <ProjectResultItem
               key={`project_${result.id}`}
@@ -311,12 +337,13 @@ export class ChallengeResultList extends Component {
               project={result}
               listRef={this.listRef}
             />
-          )
-      }))
+          );
+        }),
+      );
     } else {
-      results = null
+      results = null;
     }
-  
+
     return (
       <div
         ref={this.listRef}
@@ -330,10 +357,10 @@ export class ChallengeResultList extends Component {
                 matchedId && results
                   ? "mr-mt-6 mr-mb-6"
                   : matchedId
-                  ? "mr-mt-6"
-                  : !results
-                  ? "mr-mb-6"
-                  : "mr-mt-4 mr-mb-6"
+                    ? "mr-mt-6"
+                    : !results
+                      ? "mr-mb-6"
+                      : "mr-mt-4 mr-mb-6"
               }`}
             />
           </div>
@@ -341,13 +368,10 @@ export class ChallengeResultList extends Component {
         {results}
 
         <div className="after-results">
-          <PageResultsButton
-            {...this.props}
-            isLoading={this.props.isLoading || isFetching}
-          />
+          <PageResultsButton {...this.props} isLoading={this.props.isLoading || isFetching} />
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -363,14 +387,13 @@ ChallengeResultList.propTypes = {
 
   /** Remaining challenges after challenges have been paged */
   pagedChallenges: PropTypes.array.isRequired,
-}
+};
 
-export default
-  WithCurrentUser(
-    WithFeatured(
-      WithSortedChallenges(
-        WithPagedChallenges(injectIntl(ChallengeResultList), 'challenges', 'pagedChallenges')
-      ),
-      { excludeChallenges: true } // just featured projects; we already get challenges
-    )
-  )
+export default WithCurrentUser(
+  WithFeatured(
+    WithSortedChallenges(
+      WithPagedChallenges(injectIntl(ChallengeResultList), "challenges", "pagedChallenges"),
+    ),
+    { excludeChallenges: true }, // just featured projects; we already get challenges
+  ),
+);

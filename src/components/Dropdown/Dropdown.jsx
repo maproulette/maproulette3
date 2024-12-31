@@ -1,12 +1,15 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
 import classNames from "classnames";
+import PropTypes from "prop-types";
+import { useCallback, useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import UseEventListener from "../../hooks/UseEventListener";
 
 const Portal = ({ children, querySelector = "#dropdown" }) => {
-  return ReactDOM.createPortal(children, document.querySelector(querySelector) || document.createElement('div'));
+  return ReactDOM.createPortal(
+    children,
+    document.querySelector(querySelector) || document.createElement("div"),
+  );
 };
 
 const Dropdown = ({
@@ -31,35 +34,31 @@ const Dropdown = ({
       toggleVisible();
       setTimeout(() => setVisible(bool), 1);
     },
-    [toggleVisible]
+    [toggleVisible],
   );
 
-  const { styles, attributes, forceUpdate } = usePopper(
-    referenceRef.current,
-    popperRef.current,
-    {
-      placement: placement || "bottom-end",
-      modifiers: [
-        {
-          name: "preventOverflow",
-          options: {
-            rootBoundary: "viewport",
-            offset: [0, 10],
-          },
+  const { styles, attributes, forceUpdate } = usePopper(referenceRef.current, popperRef.current, {
+    placement: placement || "bottom-end",
+    modifiers: [
+      {
+        name: "preventOverflow",
+        options: {
+          rootBoundary: "viewport",
+          offset: [0, 10],
         },
-      ],
-    }
-  );
+      },
+    ],
+  });
 
   useEffect(() => {
     let timeoutId;
-  
+
     if (active && forceUpdate) {
       timeoutId = setTimeout(() => {
         forceUpdate();
       }, 0);
     }
-  
+
     return () => {
       clearTimeout(timeoutId);
     };
@@ -86,9 +85,7 @@ const Dropdown = ({
       return null;
     }
 
-    if (
-      document.getElementById("confirm-action-modal")?.contains(event.target)
-    ) {
+    if (document.getElementById("confirm-action-modal")?.contains(event.target)) {
       return null;
     }
 
@@ -123,9 +120,7 @@ const Dropdown = ({
                     "mr-fixed": fixedMenu,
                   })}
                 >
-                  <div className="mr-dropdown__content">
-                    {dropdownContent(renderFuncArgs)}
-                  </div>
+                  <div className="mr-dropdown__content">{dropdownContent(renderFuncArgs)}</div>
                 </div>
               </div>
             </div>

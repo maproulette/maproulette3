@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskMapWidget
@@ -28,4 +28,4 @@ export default defineMessages({
     id: "Widgets.TaskMapWidget.reselectTask",
     defaultMessage: "Re-Select Task",
   },
-})
+});

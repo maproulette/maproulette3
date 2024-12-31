@@ -1,9 +1,9 @@
-import { Component } from 'react'
-import _filter from 'lodash/filter'
-import _findIndex from 'lodash/findIndex'
-import WithManageableProjects from '../WithManageableProjects/WithManageableProjects'
-import WithChallenges from '../../../HOCs/WithChallenges/WithChallenges'
-import AsManager from '../../../../interactions/User/AsManager'
+import _filter from "lodash/filter";
+import _findIndex from "lodash/findIndex";
+import { Component } from "react";
+import AsManager from "../../../../interactions/User/AsManager";
+import WithChallenges from "../../../HOCs/WithChallenges/WithChallenges";
+import WithManageableProjects from "../WithManageableProjects/WithManageableProjects";
 
 /**
  * WithPermittedChallenges filters challenges so that only permitted challenges
@@ -12,22 +12,23 @@ import AsManager from '../../../../interactions/User/AsManager'
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-const WithPermittedChallenges = function(WrappedComponent) {
+const WithPermittedChallenges = function (WrappedComponent) {
   return class extends Component {
     render() {
       // By default, only pass through challenges that are enabled (and belong to
       // an enabled project), or belong to projects the user manages.
-      const usableChallenges = _filter(this.props.challenges, challenge => {
-        return AsManager(this.props.user).isSuperUser() ||
-              (challenge.enabled && (challenge?.parent?.enabled)) ||
-               _findIndex(this.props.projects,
-                 (p) => p.id === (challenge?.parent?.id)) !== -1;
-      })
+      const usableChallenges = _filter(this.props.challenges, (challenge) => {
+        return (
+          AsManager(this.props.user).isSuperUser() ||
+          (challenge.enabled && challenge?.parent?.enabled) ||
+          _findIndex(this.props.projects, (p) => p.id === challenge?.parent?.id) !== -1
+        );
+      });
 
-      return <WrappedComponent {...this.props} challenges={usableChallenges} />
+      return <WrappedComponent {...this.props} challenges={usableChallenges} />;
     }
   };
-}
+};
 
 export default (WrappedComponent) =>
-  WithManageableProjects(WithChallenges(WithPermittedChallenges(WrappedComponent)))
+  WithManageableProjects(WithChallenges(WithPermittedChallenges(WrappedComponent)));

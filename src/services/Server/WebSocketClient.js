@@ -1,14 +1,14 @@
 export default class WebSocketClient {
   constructor() {
-    this.websocket = null
-    this.reconnectionAttempts = 0
-    this.reconnectionHandle = null
-    this.pingHandle = null
-    this.subscriptionHandlers = new Map()
-    this.serverSubscriptions = new Map()
-    this.queuedMessages = []
+    this.websocket = null;
+    this.reconnectionAttempts = 0;
+    this.reconnectionHandle = null;
+    this.pingHandle = null;
+    this.subscriptionHandlers = new Map();
+    this.serverSubscriptions = new Map();
+    this.queuedMessages = [];
 
-    this.connect()
+    this.connect();
   }
 
   /**
@@ -16,15 +16,15 @@ export default class WebSocketClient {
    * and optional objectId
    */
   addServerSubscription(subscriptionType, objectId, handlerId, handler) {
-    const subscriptionName = this.canonicalSubscriptionName(subscriptionType, objectId)
+    const subscriptionName = this.canonicalSubscriptionName(subscriptionType, objectId);
     const subscribeMessage = {
       messageType: "subscribe",
-      data: { subscriptionName }
-    }
+      data: { subscriptionName },
+    };
 
-    this.serverSubscriptions.set(subscriptionName, subscribeMessage)
-    this.addSubscriptionHandler(subscriptionName, handlerId, handler)
-    this.sendMessage(subscribeMessage)
+    this.serverSubscriptions.set(subscriptionName, subscribeMessage);
+    this.addSubscriptionHandler(subscriptionName, handlerId, handler);
+    this.sendMessage(subscribeMessage);
   }
 
   /**
@@ -32,15 +32,15 @@ export default class WebSocketClient {
    * subscription type and optional objectId
    */
   removeServerSubscription(subscriptionType, objectId, handlerId) {
-    const subscriptionName = this.canonicalSubscriptionName(subscriptionType, objectId)
+    const subscriptionName = this.canonicalSubscriptionName(subscriptionType, objectId);
     const unsubscribeMessage = {
       messageType: "unsubscribe",
-      data: { subscriptionName }
-    }
+      data: { subscriptionName },
+    };
 
-    this.serverSubscriptions.delete(subscriptionName)
-    this.removeSubscriptionHandler(subscriptionName, handlerId)
-    this.sendMessage(unsubscribeMessage)
+    this.serverSubscriptions.delete(subscriptionName);
+    this.removeSubscriptionHandler(subscriptionName, handlerId);
+    this.sendMessage(unsubscribeMessage);
   }
 
   /**
@@ -50,14 +50,13 @@ export default class WebSocketClient {
    * is set to true, in which case the message is discarded if it cannot be
    * immediately transmitted
    */
-  sendMessage(messageObject, noQueue=false) {
-    const jsonMessage = JSON.stringify(messageObject)
+  sendMessage(messageObject, noQueue = false) {
+    const jsonMessage = JSON.stringify(messageObject);
 
     if (this.websocket && this.websocket.readyState === this.websocket.OPEN) {
-      this.websocket.send(jsonMessage)
-    }
-    else if (!noQueue) {
-      this.queuedMessages.push(jsonMessage)
+      this.websocket.send(jsonMessage);
+    } else if (!noQueue) {
+      this.queuedMessages.push(jsonMessage);
     }
   }
 
@@ -72,11 +71,13 @@ export default class WebSocketClient {
   connect() {
     if (!this.reconnectionHandle) {
       // Use exponential backoff
-      this.reconnectionAttempts++
-      const delay = 1000 // milliseconds
-      const backoffTime = Math.floor(Math.random() * Math.pow(2, this.reconnectionAttempts) * delay)
+      this.reconnectionAttempts++;
+      const delay = 1000; // milliseconds
+      const backoffTime = Math.floor(
+        Math.random() * Math.pow(2, this.reconnectionAttempts) * delay,
+      );
 
-      this.reconnectionHandle = setTimeout(() => this.open(), backoffTime)
+      this.reconnectionHandle = setTimeout(() => this.open(), backoffTime);
     }
   }
 
@@ -87,19 +88,19 @@ export default class WebSocketClient {
    * @private
    */
   open() {
-    this.reconnectionHandle = null
+    this.reconnectionHandle = null;
     if (this.websocket) {
-      this.websocket.close()
+      this.websocket.close();
     }
 
-    this.websocket = new WebSocket(window.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL)
-    this.websocket.onopen = e => this.handleOpen(e)
-    this.websocket.onmessage = e => this.handleMessage(e)
-    this.websocket.onclose = e => this.handleClose(e)
+    this.websocket = new WebSocket(window.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL);
+    this.websocket.onopen = (e) => this.handleOpen(e);
+    this.websocket.onmessage = (e) => this.handleMessage(e);
+    this.websocket.onclose = (e) => this.handleClose(e);
 
     if (!this.pingHandle) {
       // Ping the server every 45 seconds to avoid an idle timeout
-      this.pingHandle = setInterval(() => this.sendPing(), 45000)
+      this.pingHandle = setInterval(() => this.sendPing(), 45000);
     }
   }
 
@@ -111,16 +112,16 @@ export default class WebSocketClient {
    * @private
    */
   handleOpen() {
-    this.reconnectionAttempts = 0
+    this.reconnectionAttempts = 0;
 
     // Reactivate any active subscriptions
     for (let subscriptionMessage of this.serverSubscriptions.values()) {
-      this.sendMessage(subscriptionMessage)
+      this.sendMessage(subscriptionMessage);
     }
 
     // Transmit any queued messages
-    this.queuedMessages.forEach(message => this.websocket.send(message))
-    this.queuedMessages = []
+    this.queuedMessages.forEach((message) => this.websocket.send(message));
+    this.queuedMessages = [];
   }
 
   /**
@@ -130,16 +131,15 @@ export default class WebSocketClient {
    * @private
    */
   handleMessage(messageEvent) {
-    const messageObject = JSON.parse(messageEvent.data)
-    const subscriptionName = messageObject?.meta?.subscriptionName
+    const messageObject = JSON.parse(messageEvent.data);
+    const subscriptionName = messageObject?.meta?.subscriptionName;
 
     if (subscriptionName && this.subscriptionHandlers.has(subscriptionName)) {
       for (let handler of this.subscriptionHandlers.get(subscriptionName).values()) {
         try {
-          handler(messageObject)
-        }
-        catch(error) {
-          console.log(error)
+          handler(messageObject);
+        } catch (error) {
+          console.log(error);
         }
       }
     }
@@ -148,9 +148,9 @@ export default class WebSocketClient {
   sendPing() {
     const pingMessage = {
       messageType: "ping",
-    }
+    };
 
-    this.sendMessage(pingMessage, true)
+    this.sendMessage(pingMessage, true);
   }
 
   /**
@@ -159,7 +159,7 @@ export default class WebSocketClient {
    * @private
    */
   handleClose() {
-    this.connect()
+    this.connect();
   }
 
   /**
@@ -172,10 +172,10 @@ export default class WebSocketClient {
    */
   addSubscriptionHandler(subscriptionName, handlerId, handler) {
     if (!this.subscriptionHandlers.has(subscriptionName)) {
-      this.subscriptionHandlers.set(subscriptionName, new Map())
+      this.subscriptionHandlers.set(subscriptionName, new Map());
     }
 
-    this.subscriptionHandlers.get(subscriptionName).set(handlerId, handler)
+    this.subscriptionHandlers.get(subscriptionName).set(handlerId, handler);
   }
 
   /**
@@ -186,7 +186,7 @@ export default class WebSocketClient {
    */
   removeSubscriptionHandler(subscriptionName, handlerId) {
     if (this.subscriptionHandlers.has(subscriptionName)) {
-      this.subscriptionHandlers.get(subscriptionName).delete(handlerId)
+      this.subscriptionHandlers.get(subscriptionName).delete(handlerId);
     }
   }
 
@@ -197,6 +197,6 @@ export default class WebSocketClient {
    * @private
    */
   canonicalSubscriptionName(subscriptionType, objectId) {
-    return subscriptionType.toString() + (objectId ? `_${objectId}` : '')
+    return subscriptionType.toString() + (objectId ? `_${objectId}` : "");
   }
 }

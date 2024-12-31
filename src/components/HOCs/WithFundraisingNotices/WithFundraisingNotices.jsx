@@ -1,8 +1,8 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types';
-import { fetchActiveFundraisingNotices } from '../../../services/FundraisingNotices/FundraisingNotices';
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { fetchActiveFundraisingNotices } from "../../../services/FundraisingNotices/FundraisingNotices";
 
-const ACKNOWLEDGED_SETTING = 'acknowledgedFundraisingNotices';
+const ACKNOWLEDGED_SETTING = "acknowledgedFundraisingNotices";
 
 export const WithfundraisingNotices = (WrappedComponent) => {
   class _WithfundraisingNotices extends Component {
@@ -17,7 +17,7 @@ export const WithfundraisingNotices = (WrappedComponent) => {
           const activeNotices = await fetchActiveFundraisingNotices();
           this.setState({ fundraisingNotices: activeNotices });
         } catch (error) {
-          console.error('Error fetching fundraising notices:', error);
+          console.error("Error fetching fundraising notices:", error);
         }
       }
     }
@@ -43,7 +43,7 @@ export const WithfundraisingNotices = (WrappedComponent) => {
 
       const acknowledged = this.allAcknowledgedNotices();
       return this.state.fundraisingNotices.filter(
-        (notice) => acknowledged.indexOf(notice.uuid) === -1
+        (notice) => acknowledged.indexOf(notice.uuid) === -1,
       );
     };
 
@@ -62,7 +62,7 @@ export const WithfundraisingNotices = (WrappedComponent) => {
           [ACKNOWLEDGED_SETTING]: updatedAcknowledgements,
         });
       } catch (error) {
-        console.error('Error updating user app settings:', error);
+        console.error("Error updating user app settings:", error);
       }
     };
 

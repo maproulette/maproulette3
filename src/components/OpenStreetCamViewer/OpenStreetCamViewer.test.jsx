@@ -1,18 +1,18 @@
-import React from 'react'
-import { render } from '@testing-library/react'
-import OpenStreetCamViewer from './OpenStreetCamViewer'
+import { render } from "@testing-library/react";
+import React from "react";
+import OpenStreetCamViewer from "./OpenStreetCamViewer";
 
-describe('OpenStreetCamViewer Component', () => {
+describe("OpenStreetCamViewer Component", () => {
   beforeAll(() => {
-    vitest.spyOn(console, 'error').mockImplementation(() => {})
-  })
+    vitest.spyOn(console, "error").mockImplementation(() => {});
+  });
 
   afterAll(() => {
-    console.error.mockRestore()
-  })
+    console.error.mockRestore();
+  });
 
-  it('renders without crashing', () => {
-    const { container } = render(<OpenStreetCamViewer initialImageKey="xyz456" />)
-    expect(container).toBeInTheDocument()
-  })
-})
+  it("renders without crashing", () => {
+    const { container } = render(<OpenStreetCamViewer initialImageKey="xyz456" />);
+    expect(container).toBeInTheDocument();
+  });
+});

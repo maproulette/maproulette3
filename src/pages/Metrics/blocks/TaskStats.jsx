@@ -1,11 +1,14 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import messages from '../Messages'
-import QuickWidget from '../../../components/QuickWidget/QuickWidget'
-import ChallengeProgress from '../../../components/ChallengeProgress/ChallengeProgress'
-import PastDurationSelector from '../../../components/PastDurationSelector/PastDurationSelector'
-import {ALL_TIME, CURRENT_MONTH, CUSTOM_RANGE}
-       from '../../../components/PastDurationSelector/PastDurationSelector'
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import ChallengeProgress from "../../../components/ChallengeProgress/ChallengeProgress";
+import PastDurationSelector from "../../../components/PastDurationSelector/PastDurationSelector";
+import {
+  ALL_TIME,
+  CURRENT_MONTH,
+  CUSTOM_RANGE,
+} from "../../../components/PastDurationSelector/PastDurationSelector";
+import QuickWidget from "../../../components/QuickWidget/QuickWidget";
+import messages from "../Messages";
 
 export default class TaskStats extends Component {
   render() {
@@ -13,9 +16,7 @@ export default class TaskStats extends Component {
       <QuickWidget
         {...this.props}
         className="mr-card-widget mr-card-widget--padded mr-mb-4 md:mr-col-span-2"
-        widgetTitle={
-          <FormattedMessage {...messages.completedTasksTitle} />
-        }
+        widgetTitle={<FormattedMessage {...messages.completedTasksTitle} />}
         rightHeaderControls={
           <PastDurationSelector
             className="mr-button mr-button--small"
@@ -28,16 +29,16 @@ export default class TaskStats extends Component {
         noMain
         permanent
       >
-        {this.props.taskMetrics &&
-         <ChallengeProgress
-           className="mr-mt-4 mr-mb-12"
-           listClassName="mr-mt-3"
-           taskMetrics={this.props.taskMetrics}
-           prominentCounts
-           noteAvgExcludesSkip
-         />
-        }
+        {this.props.taskMetrics && (
+          <ChallengeProgress
+            className="mr-mt-4 mr-mb-12"
+            listClassName="mr-mt-3"
+            taskMetrics={this.props.taskMetrics}
+            prominentCounts
+            noteAvgExcludesSkip
+          />
+        )}
       </QuickWidget>
-    )
+    );
   }
 }

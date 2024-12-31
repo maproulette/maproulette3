@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ActiveTaskControls
@@ -37,5 +37,5 @@ export default defineMessages({
   addTagsPlaceholder: {
     id: "Task.taskTags.addTags.placeholder",
     defaultMessage: "Add MR Tags",
-  }
-})
+  },
+});

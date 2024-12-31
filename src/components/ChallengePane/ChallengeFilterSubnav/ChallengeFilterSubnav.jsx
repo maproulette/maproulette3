@@ -1,18 +1,18 @@
-import { Component } from 'react'
-import { FormattedMessage, injectIntl } from 'react-intl'
-import SearchBox from '../../SearchBox/SearchBox'
-import WithChallengeSearch from '../../HOCs/WithSearch/WithChallengeSearch'
-import WithCommandInterpreter from '../../HOCs/WithCommandInterpreter/WithCommandInterpreter'
-import FilterByDifficulty from './FilterByDifficulty'
-import FilterByKeyword from './FilterByKeyword'
-import FilterByCategorizationKeywords from './FilterByCategorizationKeywords'
-import ClearFiltersControl from './ClearFiltersControl'
-import SortChallengesSelector from './SortChallengesSelector'
-import './ChallengeFilterSubnav.scss'
-import messages from './Messages'
+import { Component } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import WithCommandInterpreter from "../../HOCs/WithCommandInterpreter/WithCommandInterpreter";
+import WithChallengeSearch from "../../HOCs/WithSearch/WithChallengeSearch";
+import SearchBox from "../../SearchBox/SearchBox";
+import ClearFiltersControl from "./ClearFiltersControl";
+import FilterByCategorizationKeywords from "./FilterByCategorizationKeywords";
+import FilterByDifficulty from "./FilterByDifficulty";
+import FilterByKeyword from "./FilterByKeyword";
+import SortChallengesSelector from "./SortChallengesSelector";
+import "./ChallengeFilterSubnav.scss";
+import messages from "./Messages";
 
 // Setup child components with necessary HOCs
-const CommandSearchBox = WithCommandInterpreter(SearchBox)
+const CommandSearchBox = WithCommandInterpreter(SearchBox);
 
 /**
  * ChallengeFilterSubnav presents a navigation bar that contains options
@@ -29,13 +29,12 @@ const CommandSearchBox = WithCommandInterpreter(SearchBox)
  */
 export class ChallengeFilterSubnav extends Component {
   clearFilters = () => {
-    this.props.clearSearchFilters()
-    this.props.clearSearch()
-  }
+    this.props.clearSearchFilters();
+    this.props.clearSearch();
+  };
 
   render() {
-    const filtersActive =
-      this.props.unfilteredChallenges?.length > this.props.challenges?.length
+    const filtersActive = this.props.unfilteredChallenges?.length > this.props.challenges?.length;
 
     return (
       <header className="mr-bg-black-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-hidden lg:mr-flex mr-items-center mr-justify-between">
@@ -52,21 +51,21 @@ export class ChallengeFilterSubnav extends Component {
             <CommandSearchBox
               {...this.props}
               className="mr-h-12"
-              placeholder={this.props.searchFilters.searchType !== "task" ? 
-                           this.props.intl.formatMessage(messages.searchLabel) : 
-                           this.props.intl.formatMessage(messages.searchLabelForId)}
+              placeholder={
+                this.props.searchFilters.searchType !== "task"
+                  ? this.props.intl.formatMessage(messages.searchLabel)
+                  : this.props.intl.formatMessage(messages.searchLabelForId)
+              }
               showSearchTypeFilter
               setSearch={this.props.setSearch}
             />
           </div>
 
-          {filtersActive && (
-            <ClearFiltersControl clearFilters={this.clearFilters} />
-          )}
+          {filtersActive && <ClearFiltersControl clearFilters={this.clearFilters} />}
         </div>
       </header>
-    )
+    );
   }
 }
 
-export default WithChallengeSearch(injectIntl(ChallengeFilterSubnav))
+export default WithChallengeSearch(injectIntl(ChallengeFilterSubnav));

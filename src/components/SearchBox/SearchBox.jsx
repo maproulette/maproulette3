@@ -1,11 +1,11 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import _isFunction from 'lodash/isFunction'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import BusySpinner from '../BusySpinner/BusySpinner'
-import SearchTypeFilter from '../SearchTypeFilter/SearchTypeFilter'
-import './SearchBox.scss'
+import classNames from "classnames";
+import _isFunction from "lodash/isFunction";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import BusySpinner from "../BusySpinner/BusySpinner";
+import SearchTypeFilter from "../SearchTypeFilter/SearchTypeFilter";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import "./SearchBox.scss";
 
 /**
  * SearchBox UI component that presents an unmanaged text input for entering
@@ -17,7 +17,6 @@ import './SearchBox.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class SearchBox extends Component {
-
   /**
    * Esc clears search, Enter signals completion
    *
@@ -26,53 +25,59 @@ export default class SearchBox extends Component {
   checkForSpecialKeys = (e) => {
     // Ignore if modifier keys were pressed
     if (e.metaKey || e.altKey || e.ctrlKey) {
-      return
+      return;
+    } else if (e.key === "Escape") {
+      this.props.clearSearch();
+    } else if (e.key === "Enter" && _isFunction(this.props.deactivate)) {
+      this.props.deactivate();
     }
-    else if (e.key === "Escape") {
-      this.props.clearSearch()
-    }
-    else if (e.key === "Enter" && _isFunction(this.props.deactivate)) {
-      this.props.deactivate()
-    }
-  }
+  };
 
   /**
    * @private
    */
   queryChanged = (e) => {
-    this.props.setSearch(e.target.value, this.getSearchType(this.props))
-  }
+    this.props.setSearch(e.target.value, this.getSearchType(this.props));
+  };
 
   getSearchType(props) {
     return props.searchFilters?.searchType;
   }
 
   getQuery(props) {
-    return (props.searchGroup ?
-        props.searchQueries?.[props.searchGroup]?.searchQuery?.query :
-        props.searchQuery?.query) || '';
+    return (
+      (props.searchGroup
+        ? props.searchQueries?.[props.searchGroup]?.searchQuery?.query
+        : props.searchQuery?.query) || ""
+    );
   }
 
   render() {
-    const query = this.getQuery(this.props)
-    const isLoading = this.props.searchQuery?.meta?.fetchingResults
+    const query = this.getQuery(this.props);
+    const isLoading = this.props.searchQuery?.meta?.fetchingResults;
 
     const clearButton =
-      query.length === 0 ? null :
-      <button className="search-box--clear-button delete" aria-label="delete"
-              onClick={this.props.clearSearch} />
+      query.length === 0 ? null : (
+        <button
+          className="search-box--clear-button delete"
+          aria-label="delete"
+          onClick={this.props.clearSearch}
+        />
+      );
 
     const doneButton =
-      (this.props.showDoneButton !== true || query.length === 0) ?
-      null :
-      <button className="button is-clear has-svg-icon search-box--done-button"
-              onClick={() => this.props.deactivate && this.props.deactivate()}>
-        <SvgSymbol
-          className={this.props.buttonClassName}
-          viewBox='0 0 20 20'
-          sym="outline-arrow-right-icon"
-        />
-      </button>
+      this.props.showDoneButton !== true || query.length === 0 ? null : (
+        <button
+          className="button is-clear has-svg-icon search-box--done-button"
+          onClick={() => this.props.deactivate && this.props.deactivate()}
+        >
+          <SvgSymbol
+            className={this.props.buttonClassName}
+            viewBox="0 0 20 20"
+            sym="outline-arrow-right-icon"
+          />
+        </button>
+      );
 
     return (
       <div
@@ -84,25 +89,29 @@ export default class SearchBox extends Component {
             "lg:ml-ml-6 xl:mr-ml-12": !this.props.leftAligned,
             "mr-py-2": !this.props.short,
           },
-          this.props.className
+          this.props.className,
         )}
       >
         <label className="mr-mr-2 mr-flex mr-items-center">
-          {!isLoading && !this.props.suppressIcon &&
-           <SvgSymbol
-             sym="search-icon"
-             title="Search"
-             viewBox="0 0 20 20"
-             className={this.props.iconClassName ? this.props.iconClassName : "mr-w-4 mr-h-4 mr-mr-2 mr-fill-white-50"}
-           />
-          }
+          {!isLoading && !this.props.suppressIcon && (
+            <SvgSymbol
+              sym="search-icon"
+              title="Search"
+              viewBox="0 0 20 20"
+              className={
+                this.props.iconClassName
+                  ? this.props.iconClassName
+                  : "mr-w-4 mr-h-4 mr-mr-2 mr-fill-white-50"
+              }
+            />
+          )}
           {isLoading && <BusySpinner inline />}
         </label>
         <input
           type="text"
           className={classNames(
             "mr-appearance-none mr-w-full mr-bg-transparent mr-outline-none mr-shadow-none mr-rounded-none mr-text-white mr-leading-normal",
-            this.props.inputClassName
+            this.props.inputClassName,
           )}
           placeholder={this.props.placeholder}
           maxLength="63"
@@ -113,11 +122,9 @@ export default class SearchBox extends Component {
 
         {doneButton}
         {clearButton}
-        {this.props.showSearchTypeFilter &&
-          <SearchTypeFilter {...this.props} />
-        }
+        {this.props.showSearchTypeFilter && <SearchTypeFilter {...this.props} />}
       </div>
-    )
+    );
   }
 }
 
@@ -138,9 +145,8 @@ SearchBox.propTypes = {
   suppressIcon: PropTypes.bool,
   /** Placeholder text in search box */
   placeHolder: PropTypes.string,
-
-}
+};
 
 SearchBox.defaultProps = {
   searchQuery: {},
-}
+};

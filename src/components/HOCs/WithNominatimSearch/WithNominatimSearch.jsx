@@ -1,8 +1,8 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { fetchPlaceLocation } from '../../../services/Place/Place'
-import WithErrors from '../WithErrors/WithErrors'
-import AppErrors from '../../../services/Error/AppErrors'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import AppErrors from "../../../services/Error/AppErrors";
+import { fetchPlaceLocation } from "../../../services/Place/Place";
+import WithErrors from "../WithErrors/WithErrors";
 
 /**
  * WithNominatimSearch makes nominatim query management and search methods
@@ -10,49 +10,51 @@ import AppErrors from '../../../services/Error/AppErrors'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithNominatimSearch = function(WrappedComponent) {
+const WithNominatimSearch = function (WrappedComponent) {
   class _WithNominatimSearch extends Component {
     state = {
-      query: '',
+      query: "",
       results: null,
       loading: false,
-    }
+    };
 
     /**
      * Update the current Nominatim query
      */
-    updateQuery = query => {
-      this.setState({query, results: null})
-    }
+    updateQuery = (query) => {
+      this.setState({ query, results: null });
+    };
 
     /**
      * Execute Nominatim search with the current query
      */
     search = () => {
-      this.setState({loading: true})
-      fetchPlaceLocation(this.state.query).then(results => {
-        this.setState({results, loading: false})
-      }).catch(() => {
-        this.setState({loading: false})
-        this.props.addError(AppErrors.nominatim.fetchFailure)
-      })
-    }
+      this.setState({ loading: true });
+      fetchPlaceLocation(this.state.query)
+        .then((results) => {
+          this.setState({ results, loading: false });
+        })
+        .catch(() => {
+          this.setState({ loading: false });
+          this.props.addError(AppErrors.nominatim.fetchFailure);
+        });
+    };
 
     /**
      * Clear all search results and rests the query
      */
     clearSearch = () => {
-      this.setState({query: '', results: null, loading: false})
-    }
+      this.setState({ query: "", results: null, loading: false });
+    };
 
     /**
      * Selects a specific search result, which will invoke the onResultSelected
      * prop with the result and then reset the search
      */
-    chooseResult = result => {
-      this.props.onResultSelected(result.bbox)
-      this.clearSearch()
-    }
+    chooseResult = (result) => {
+      this.props.onResultSelected(result.bbox);
+      this.clearSearch();
+    };
 
     render() {
       return (
@@ -66,15 +68,15 @@ const WithNominatimSearch = function(WrappedComponent) {
           chooseNominatimResult={this.chooseResult}
           nominatumSearching={this.state.loading}
         />
-      )
+      );
     }
   }
 
   _WithNominatimSearch.propTypes = {
     onResultSelected: PropTypes.func.isRequired,
-  }
+  };
 
-  return WithErrors(_WithNominatimSearch)
-}
+  return WithErrors(_WithNominatimSearch);
+};
 
-export default WithNominatimSearch
+export default WithNominatimSearch;

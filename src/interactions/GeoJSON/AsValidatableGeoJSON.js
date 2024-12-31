@@ -1,13 +1,13 @@
- import { isFeatureCollection } from 'geojson-validation';
-import _isString from 'lodash/isString'
-import _flatten from 'lodash/flatten'
-import _trim from 'lodash/trim'
-import { featureEach } from '@turf/meta'
-import { getGeom } from '@turf/invariant'
-import AsLineReadableFile from '../File/AsLineReadableFile'
-import messages from './Messages'
+import { getGeom } from "@turf/invariant";
+import { featureEach } from "@turf/meta";
+import { isFeatureCollection } from "geojson-validation";
+import _flatten from "lodash/flatten";
+import _isString from "lodash/isString";
+import _trim from "lodash/trim";
+import AsLineReadableFile from "../File/AsLineReadableFile";
+import messages from "./Messages";
 
-const RS = String.fromCharCode(0x1E) // RS (record separator) control char
+const RS = String.fromCharCode(0x1e); // RS (record separator) control char
 
 /**
  * Provides methods related to validating and linting GeoJSON.
@@ -21,12 +21,11 @@ export class AsValidatableGeoJSON {
    */
   constructor(geoJSON) {
     if (_isString(geoJSON)) {
-      this.geoJSONFile = null
-      this.geoJSONString = geoJSON
-    }
-    else {
-      this.geoJSONFile = AsLineReadableFile(geoJSON)
-      this.geoJSONString = null
+      this.geoJSONFile = null;
+      this.geoJSONString = geoJSON;
+    } else {
+      this.geoJSONFile = AsLineReadableFile(geoJSON);
+      this.geoJSONString = null;
     }
   }
 
@@ -36,20 +35,19 @@ export class AsValidatableGeoJSON {
    */
   async isLineByLine() {
     if (!this.geoJSONFile) {
-      return false
+      return false;
     }
 
     // Our detection approach here is pretty rudimentary, basically looking for
     // either RFC 7464 compliance or an open-brace at start of line and
     // close-brace at end of line (optionally followed by a newline) on the
     // first two lines
-    this.geoJSONFile.rewind()
-    const lines = await this.geoJSONFile.readLines(2)
-    this.geoJSONFile.rewind()
+    this.geoJSONFile.rewind();
+    const lines = await this.geoJSONFile.readLines(2);
+    this.geoJSONFile.rewind();
 
-    const re = /^\{[^\n]+\}(\r?\n|$)/
-    return this.isRFC7464Sequence(lines[0]) ||
-           (re.test(lines[0]) && re.test(lines[1]))
+    const re = /^\{[^\n]+\}(\r?\n|$)/;
+    return this.isRFC7464Sequence(lines[0]) || (re.test(lines[0]) && re.test(lines[1]));
   }
 
   /**
@@ -57,7 +55,7 @@ export class AsValidatableGeoJSON {
    * each line begins with a RS (record separator) control character
    */
   isRFC7464Sequence(line) {
-    return line && line.length > 1 && line[0] === RS
+    return line && line.length > 1 && line[0] === RS;
   }
 
   /**
@@ -65,53 +63,54 @@ export class AsValidatableGeoJSON {
    * of the line. This is safe to run on strings containing ordinary JSON as well
    */
   normalizeRFC7464Sequence(line) {
-    return line.replace(new RegExp(`^${RS}+`, 'g'), '')
+    return line.replace(new RegExp(`^${RS}+`, "g"), "");
   }
 
   /**
    * Performs validation on each line separately, ensuring each line represents
    * an individual GeoJSON entity.
-   */  
+   */
   async validateLineByLine() {
-    const allErrors = []
-    let lineNumber = 1
+    const allErrors = [];
+    let lineNumber = 1;
 
-    this.geoJSONFile.rewind()
-    await this.geoJSONFile.forEach(1, rawLine => {
-      const line = this.normalizeRFC7464Sequence(_trim(rawLine))
-      if (line.length > 0) { // Skip blank lines or pure whitespace
+    this.geoJSONFile.rewind();
+    await this.geoJSONFile.forEach(1, (rawLine) => {
+      const line = this.normalizeRFC7464Sequence(_trim(rawLine));
+      if (line.length > 0) {
+        // Skip blank lines or pure whitespace
         try {
-          const geoJSONObject = JSON.parse(line)
+          const geoJSONObject = JSON.parse(line);
           if (geoJSONObject) {
             try {
-              this.flagUnsupportedGeometries(geoJSONObject)
+              this.flagUnsupportedGeometries(geoJSONObject);
             } catch (errorMessage) {
               allErrors.push({
                 line: lineNumber,
                 message: errorMessage,
-              })
+              });
             }
 
-            const validationResult = isFeatureCollection(geoJSONObject)
-            if(validationResult.errors) {
+            const validationResult = isFeatureCollection(geoJSONObject);
+            if (validationResult.errors) {
               allErrors.push({
                 line: lineNumber,
-                message: 'Invalid GeoJSON geometry',
-              })
+                message: "Invalid GeoJSON geometry",
+              });
             }
           }
         } catch (parseError) {
           allErrors.push({
             line: lineNumber,
             message: `${parseError}`,
-          })
+          });
         }
 
-        lineNumber++
+        lineNumber++;
       }
-    })
+    });
 
-    return allErrors.length === 0 ? [] : _flatten(allErrors)
+    return allErrors.length === 0 ? [] : _flatten(allErrors);
   }
 
   /**
@@ -119,24 +118,24 @@ export class AsValidatableGeoJSON {
    */
   async validate() {
     if (await this.isLineByLine()) {
-      return this.validateLineByLine()
+      return this.validateLineByLine();
     }
 
-    let geoJSONObject = null
+    let geoJSONObject = null;
 
     // json-lint-lines, used by geojsonhint when parsing string data, seems
     // to struggle with certain geojson files. So we parse the json ourselves
     // and give an object to geojsonhint, which side-steps the issue. The
     // downside is that we lose line numbers when reporting errors.
     try {
-      let geoJSON = this.geoJSONString
+      let geoJSON = this.geoJSONString;
       if (geoJSON === null && this.geoJSONFile) {
-        let geoJSONLines = await this.geoJSONFile.allLines()
-        geoJSON = geoJSONLines.join('\n')
+        let geoJSONLines = await this.geoJSONFile.allLines();
+        geoJSON = geoJSONLines.join("\n");
       }
-      geoJSONObject = JSON.parse(geoJSON)
+      geoJSONObject = JSON.parse(geoJSON);
     } catch (parseError) {
-      return [{ message: `${parseError}` }]
+      return [{ message: `${parseError}` }];
     }
 
     if (geoJSONObject) {
@@ -148,14 +147,15 @@ export class AsValidatableGeoJSON {
     }
 
     const validationResult = isFeatureCollection(geoJSONObject);
-    
-    if( validationResult.errors ){
-    return validationResult.valid ? [] : validationResult.errors(error => ({
-      message: error,
-    }));
 
-  }
-    return []
+    if (validationResult.errors) {
+      return validationResult.valid
+        ? []
+        : validationResult.errors((error) => ({
+            message: error,
+          }));
+    }
+    return [];
   }
 
   /**
@@ -164,17 +164,17 @@ export class AsValidatableGeoJSON {
    * problematic behavior on the backend
    */
   flagUnsupportedGeometries(geoJSONObject) {
-    featureEach(geoJSONObject, feature => {
-      const geom = getGeom(feature)
+    featureEach(geoJSONObject, (feature) => {
+      const geom = getGeom(feature);
       if (!geom) {
-        throw messages.noNullGeometry
+        throw messages.noNullGeometry;
       }
 
       if (geom.type === "Point" && geom.coordinates.length > 2) {
-        throw messages.noZCoordinates
+        throw messages.noZCoordinates;
       }
-    })
+    });
   }
 }
 
-export default geoJSON => new AsValidatableGeoJSON(geoJSON)
+export default (geoJSON) => new AsValidatableGeoJSON(geoJSON);

@@ -1,28 +1,25 @@
-import { Component, useRef } from 'react'
-import { FormattedMessage } from 'react-intl'
-import Carousel, { consts } from 'react-elastic-carousel'
-import { Link } from 'react-router-dom'
-import _map from 'lodash/map'
-import { WidgetDataTarget, registerWidgetType }
-       from '../../services/Widget/Widget'
-import WithFeatured from '../HOCs/WithFeatured/WithFeatured'
-import CardChallenge from '../CardChallenge/CardChallenge'
-import CardProject from '../CardProject/CardProject'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import QuickWidget from '../QuickWidget/QuickWidget'
-import messages from './Messages'
+import _map from "lodash/map";
+import { Component, useRef } from "react";
+import Carousel, { consts } from "react-elastic-carousel";
+import { FormattedMessage } from "react-intl";
+import { Link } from "react-router-dom";
+import { WidgetDataTarget, registerWidgetType } from "../../services/Widget/Widget";
+import CardChallenge from "../CardChallenge/CardChallenge";
+import CardProject from "../CardProject/CardProject";
+import WithFeatured from "../HOCs/WithFeatured/WithFeatured";
+import QuickWidget from "../QuickWidget/QuickWidget";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 const descriptor = {
-  widgetKey: 'FeaturedChallengesWidget',
+  widgetKey: "FeaturedChallengesWidget",
   label: messages.header,
-  targets: [
-    WidgetDataTarget.user,
-  ],
+  targets: [WidgetDataTarget.user],
   minWidth: 4,
   defaultWidth: 6,
   minHeight: 12,
   defaultHeight: 12,
-}
+};
 
 export default class FeaturedChallengesWidget extends Component {
   render() {
@@ -32,30 +29,32 @@ export default class FeaturedChallengesWidget extends Component {
           <h2 className="mr-text-yellow mr-text-md mr-font-normal mr-uppercase mr-text-center mr-leading-normal mr-w-2/3">
             <FormattedMessage {...messages.header} />
           </h2>
-          <div className="mr-bg-globe mr-h-40 mr-w-40 mr-mt-12">
-          </div>
+          <div className="mr-bg-globe mr-h-40 mr-w-40 mr-mt-12"></div>
         </div>
 
-        <div className="mr-flex mr-h-full" style={{maxHeight: `${this.props.widgetLayout.h * 42}px`}}>
+        <div
+          className="mr-flex mr-h-full"
+          style={{ maxHeight: `${this.props.widgetLayout.h * 42}px` }}
+        >
           <div className="mr-w-56 mr-min-w-52 mr-max-w-56"></div>
           <FeaturedList {...this.props} />
         </div>
       </QuickWidget>
-    )
+    );
   }
 }
 
-const FeaturedList = props => {
-  const carouselRef = useRef(null)
+const FeaturedList = (props) => {
+  const carouselRef = useRef(null);
 
   const onNextStart = (currentItem, nextItem) => {
     if (currentItem.index === nextItem.index) {
       // we hit the last item, go to first item
       carouselRef.current.goTo(0);
     }
-  }
+  };
 
-  const projectCards = _map(props.featuredProjects.map, project =>
+  const projectCards = _map(props.featuredProjects.map, (project) => (
     <CardProject
       {...props}
       key={project.id}
@@ -63,13 +62,11 @@ const FeaturedList = props => {
       project={project}
       isExpanded
       permanentlyExpanded
-      startControl={
-        <BrowseControl featuredItem={project} itemType="projects" />
-      }
+      startControl={<BrowseControl featuredItem={project} itemType="projects" />}
     />
-  )
+  ));
 
-  const challengeCards = _map(props.featuredChallenges, challenge =>
+  const challengeCards = _map(props.featuredChallenges, (challenge) => (
     <CardChallenge
       {...props}
       key={challenge.id}
@@ -77,19 +74,17 @@ const FeaturedList = props => {
       challenge={challenge}
       isExpanded
       permanentlyExpanded
-      startControl={
-        <BrowseControl featuredItem={challenge} itemType="challenges" />
-      }
+      startControl={<BrowseControl featuredItem={challenge} itemType="challenges" />}
     />
-  )
+  ));
 
-  const featuredItems = projectCards.concat(challengeCards)
+  const featuredItems = projectCards.concat(challengeCards);
   if (featuredItems.length === 0) {
     return (
       <div className="mr-text-grey-lighter">
         <FormattedMessage {...messages.nothingFeatured} />
       </div>
-    )
+    );
   }
 
   return (
@@ -102,10 +97,10 @@ const FeaturedList = props => {
     >
       {featuredItems}
     </Carousel>
-  )
-}
+  );
+};
 
-const BrowseControl = props => {
+const BrowseControl = (props) => {
   return (
     <Link
       to={{
@@ -116,27 +111,23 @@ const BrowseControl = props => {
     >
       <FormattedMessage {...messages.browseFeaturedLabel} />
     </Link>
-  )
-}
+  );
+};
 
 const ArrowControl = ({ type, onClick }) => (
   <div className="mr-flex mr-flex-col mr-justify-center mr-items-center">
     <SvgSymbol
-      sym={
-        type === consts.PREV ?
-        "icon-cheveron-left" :
-        "icon-cheveron-right"
-      }
+      sym={type === consts.PREV ? "icon-cheveron-left" : "icon-cheveron-right"}
       viewBox="0 0 20 20"
       className="mr-fill-green-lighter mr-w-8 mr-h-8 mr-cursor-pointer"
       onClick={onClick}
     />
   </div>
-)
+);
 
 const PaginationControl = ({ pages, activePage, onClick }) => (
   <div className="mr-flex">
-    {pages.map(page => (
+    {pages.map((page) => (
       <SvgSymbol
         key={page}
         sym={page === activePage ? "circle-icon" : "circle-outline"}
@@ -146,6 +137,6 @@ const PaginationControl = ({ pages, activePage, onClick }) => (
       />
     ))}
   </div>
-)
+);
 
-registerWidgetType(WithFeatured(FeaturedChallengesWidget), descriptor)
+registerWidgetType(WithFeatured(FeaturedChallengesWidget), descriptor);

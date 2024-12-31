@@ -1,7 +1,7 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import Modal from '../Modal/Modal'
-import messages from './Messages'
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import Modal from "../Modal/Modal";
+import messages from "./Messages";
 
 /**
  * ChallengeEndModal presents a modal that displays a
@@ -12,16 +12,18 @@ import messages from './Messages'
 export default class ChallengeEndModal extends Component {
   state = {
     active: true,
-  }
+  };
 
-  dismiss = () => this.setState({active: false})
+  dismiss = () => this.setState({ active: false });
 
   render() {
     return (
-      <Modal className="challenge-end-modal"
-             contentClassName="mr-bg-blue-dark mr-w-sm"
-             isActive={this.state.active}
-             onClose={this.dismiss}>
+      <Modal
+        className="challenge-end-modal"
+        contentClassName="mr-bg-blue-dark mr-w-sm"
+        isActive={this.state.active}
+        onClose={this.dismiss}
+      >
         <div className="mr-bg-blue-dark mr-p-8">
           <div className="mr-bg-blue-dark mr-text-white mr-text-center">
             <div>
@@ -42,6 +44,6 @@ export default class ChallengeEndModal extends Component {
           </div>
         </div>
       </Modal>
-    )
+    );
   }
 }

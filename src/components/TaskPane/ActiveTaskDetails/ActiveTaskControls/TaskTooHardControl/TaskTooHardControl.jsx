@@ -1,10 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { TaskStatus }
-       from '../../../../../services/Task/TaskStatus/TaskStatus'
-import Button from '../../../../Button/Button'
-import messages from './Messages'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
+import Button from "../../../../Button/Button";
+import messages from "./Messages";
 
 /**
  * TaskTooHardControl displays a control for marking a task with a too-hard
@@ -19,18 +18,17 @@ export default class TaskTooHardControl extends Component {
         <a onClick={() => this.props.complete(TaskStatus.tooHard)}>
           <FormattedMessage {...messages.tooHardLabel} />
         </a>
-      )
-    }
-    else {
+      );
+    } else {
       return (
         <Button
           className="mr-button--blue-fill mr-mb-2 mr-mr-2"
-          style={{ minWidth: '10rem'}}
+          style={{ minWidth: "10rem" }}
           onClick={() => this.props.complete(TaskStatus.tooHard)}
         >
           <FormattedMessage {...messages.tooHardLabel} />
         </Button>
-      )
+      );
     }
   }
 }
@@ -38,4 +36,4 @@ export default class TaskTooHardControl extends Component {
 TaskTooHardControl.propTypes = {
   /** Invoked to mark the task as already-fixed */
   complete: PropTypes.func.isRequired,
-}
+};

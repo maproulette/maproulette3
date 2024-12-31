@@ -1,13 +1,16 @@
-import { Fragment } from 'react'
-import { FormattedMessage } from 'react-intl'
-import { TaskPropertySearchTypeString,
-         TaskPropertySearchTypeNumber, messagesByPropertySearchType,
-         TaskPropertyOperationType, messagesByPropertyOperationType }
-       from '../../services/Task/TaskProperty/TaskProperty'
-import _map from 'lodash/map'
-import _values from 'lodash/values'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import messages from './Messages'
+import _map from "lodash/map";
+import _values from "lodash/values";
+import { Fragment } from "react";
+import { FormattedMessage } from "react-intl";
+import {
+  TaskPropertyOperationType,
+  TaskPropertySearchTypeNumber,
+  TaskPropertySearchTypeString,
+  messagesByPropertyOperationType,
+  messagesByPropertySearchType,
+} from "../../services/Task/TaskProperty/TaskProperty";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 /**
  * Generates a JSON Schema describing compound rules for searching by
@@ -21,27 +24,25 @@ import messages from './Messages'
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const jsSchema = (intl, taskPropertyKeys) => {
-  const operationTypeMessages =
-    _map(TaskPropertyOperationType, opType =>
-      intl.formatMessage(messagesByPropertyOperationType[opType])
-    )
+  const operationTypeMessages = _map(TaskPropertyOperationType, (opType) =>
+    intl.formatMessage(messagesByPropertyOperationType[opType]),
+  );
 
-  const searchTypeStringMessages =
-    _map(TaskPropertySearchTypeString, type =>
-      intl.formatMessage(messagesByPropertySearchType[type])
-    )
+  const searchTypeStringMessages = _map(TaskPropertySearchTypeString, (type) =>
+    intl.formatMessage(messagesByPropertySearchType[type]),
+  );
 
-  let propertyKey = { enum: taskPropertyKeys }
+  let propertyKey = { enum: taskPropertyKeys };
   // If no task property keys are provided then we offer a free-form text field
   if (!taskPropertyKeys) {
     propertyKey = {
       title: "Key",
-      type: "string"
-    }
+      type: "string",
+    };
   }
 
   return {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     definitions: {
       tagRule: {
@@ -52,15 +53,19 @@ export const jsSchema = (intl, taskPropertyKeys) => {
             title: "Property Type ",
             type: "string",
             enum: ["string", "number", "compound rule"],
-            enumNames: [intl.formatMessage(messages.stringType),
-                        intl.formatMessage(messages.numberType),
-                        intl.formatMessage(messages.compoundRuleType)],
-          }
+            enumNames: [
+              intl.formatMessage(messages.stringType),
+              intl.formatMessage(messages.numberType),
+              intl.formatMessage(messages.compoundRuleType),
+            ],
+          },
         },
-        dependencies: { // Show operators appropriate to value type
+        dependencies: {
+          // Show operators appropriate to value type
           valueType: {
             oneOf: [
-              { // nested rules
+              {
+                // nested rules
                 properties: {
                   valueType: {
                     enum: ["compound rule"],
@@ -76,7 +81,8 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   right: { $ref: "#/definitions/tagRule" },
                 },
               },
-              { // string values
+              {
+                // string values
                 properties: {
                   valueType: {
                     enum: ["string"],
@@ -90,7 +96,8 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   },
                 },
               },
-              { // numeric values
+              {
+                // numeric values
                 properties: {
                   valueType: {
                     enum: ["number"],
@@ -106,38 +113,42 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                     title: "Value",
                     type: "array",
                     items: {
-                      type: "string"
+                      type: "string",
                     },
                   },
                 },
-              }
-            ]
+              },
+            ],
           },
           operator: {
             oneOf: [
               {
                 properties: {
                   operator: {
-                    enum: [TaskPropertySearchTypeString.equals,
-                           TaskPropertySearchTypeString.notEqual,
-                           TaskPropertySearchTypeString.contains],
+                    enum: [
+                      TaskPropertySearchTypeString.equals,
+                      TaskPropertySearchTypeString.notEqual,
+                      TaskPropertySearchTypeString.contains,
+                    ],
                   },
                   value: {
                     title: "Value",
                     type: "array",
                     items: {
-                      type: "string"
+                      type: "string",
                     },
                   },
-                }
+                },
               },
               {
                 properties: {
                   operator: {
-                    enum: [TaskPropertySearchTypeString.exists,
-                           TaskPropertySearchTypeString.missing],
+                    enum: [
+                      TaskPropertySearchTypeString.exists,
+                      TaskPropertySearchTypeString.missing,
+                    ],
                   },
-                }
+                },
               },
             ],
           },
@@ -148,7 +159,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   value: {
                     minItems: 2,
                   },
-                }
+                },
               },
               {
                 properties: {
@@ -161,23 +172,23 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                     default: false,
                   },
                 },
-              }
-            ]
-          }
+              },
+            ],
+          },
         },
-      }
+      },
     },
     properties: {
       propertyRules: {
         title: "",
         type: "object",
         properties: {
-          rootRule: { "$ref": "#/definitions/tagRule" },
+          rootRule: { $ref: "#/definitions/tagRule" },
         },
       },
     },
-  }
-}
+  };
+};
 
 /**
  * react-jsonschema-form doesn't currently support uiSchema entries for
@@ -188,28 +199,29 @@ export const jsSchema = (intl, taskPropertyKeys) => {
  * @private
  */
 function buildUISchema(deepness, taskPropertyKeys) {
-  if (deepness === 0 ) {
-    return {}
+  if (deepness === 0) {
+    return {};
   }
 
   let keyType = {
     classNames: "inline-selector mr-inline",
     "ui:widget": "select",
     "ui:options": { inline: true, label: false },
-  }
+  };
 
   // If no task property keys are provided then we offer a free-form text field
   if (!taskPropertyKeys) {
     keyType = {
       classNames: "inline-selector mr-inline",
       "ui:options": { inline: true, label: false },
-    }
+    };
   }
 
   return {
-    classNames: "property-rule mr-border-2 mr-border-white-10 mr-pt-2 mr-pb-3 mr-m-1 mr-pl-4 mr-flex",
+    classNames:
+      "property-rule mr-border-2 mr-border-white-10 mr-pt-2 mr-pb-3 mr-m-1 mr-pl-4 mr-flex",
     valueType: {
-      classNames:  "mr-text-green mr-w-48",
+      classNames: "mr-text-green mr-w-48",
       "ui:widget": "select",
       "ui:options": { inline: true, label: true },
     },
@@ -230,11 +242,11 @@ function buildUISchema(deepness, taskPropertyKeys) {
     },
     commaSeparate: {
       classNames: "inline-selector mr-inline",
-      "ui:options": { inline: true, },
+      "ui:options": { inline: true },
     },
     left: buildUISchema(deepness - 1),
     right: buildUISchema(deepness - 1),
-  }
+  };
 }
 
 /**
@@ -247,30 +259,36 @@ export function ArrayFieldTemplate(props) {
         <div key={index}>
           <div className="mr-flex">
             {element.children}
-            {props.items.length > 1 &&
+            {props.items.length > 1 && (
               <Fragment>
-                <button type="button" className="mr-text-red-light mr-pb-4 mr-pl-2"
-                        onClick={(event) => element.onDropIndexClick(index)(event)}>
+                <button
+                  type="button"
+                  className="mr-text-red-light mr-pb-4 mr-pl-2"
+                  onClick={(event) => element.onDropIndexClick(index)(event)}
+                >
                   <SvgSymbol
                     sym="trash-icon"
                     viewBox="0 0 20 20"
                     className="mr-transition mr-fill-current mr-w-4 mr-h-4"
                   />
                 </button>
-                {props.items.length !== (index + 1) &&
+                {props.items.length !== index + 1 && (
                   <span className="mr-text-grey mr-ml-4 mr-align-bottom mr-pt-2">or</span>
-                }
+                )}
               </Fragment>
-            }
+            )}
           </div>
-          {props.canAdd && props.items.length === (index + 1) &&
-            <button type="button" className="mr-text-green-lighter mr-mt-1"
-                    onClick={props.onAddClick}>
+          {props.canAdd && props.items.length === index + 1 && (
+            <button
+              type="button"
+              className="mr-text-green-lighter mr-mt-1"
+              onClick={props.onAddClick}
+            >
               <FormattedMessage {...messages.addValueButton} />
-            </button>}
+            </button>
+          )}
         </div>
       ))}
-
     </div>
   );
 }
@@ -289,4 +307,4 @@ export const uiSchema = (intl, taskPropertyKeys) => ({
   propertyRules: {
     rootRule: buildUISchema(7, taskPropertyKeys),
   },
-})
+});

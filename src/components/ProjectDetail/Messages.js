@@ -1,22 +1,22 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ProjectDetail
  */
 export default defineMessages({
   goBack: {
-    id: 'ProjectDetails.controls.goBack.label',
-    defaultMessage: 'Go Back',
+    id: "ProjectDetails.controls.goBack.label",
+    defaultMessage: "Go Back",
   },
 
   unsave: {
-    id: 'ProjectDetails.controls.unsave.label',
-    defaultMessage: 'Unsave',
+    id: "ProjectDetails.controls.unsave.label",
+    defaultMessage: "Unsave",
   },
 
   save: {
-    id: 'ProjectDetails.controls.save.label',
-    defaultMessage: 'Save',
+    id: "ProjectDetails.controls.save.label",
+    defaultMessage: "Save",
   },
 
   manageLabel: {
@@ -37,8 +37,8 @@ export default defineMessages({
   challengeCount: {
     id: "ProjectDetails.fields.challengeCount.label",
     defaultMessage:
-    "{count,plural,=0{No challenges} one{# challenge} other{# challenges}} " +
-    "remaining in {isVirtual,select, true{virtual } other{}}project"
+      "{count,plural,=0{No challenges} one{# challenge} other{# challenges}} " +
+      "remaining in {isVirtual,select, true{virtual } other{}}project",
   },
 
   featured: {
@@ -70,4 +70,4 @@ export default defineMessages({
     id: "ProjectDetails.fields.viewReviews.label",
     defaultMessage: "Review",
   },
-})
+});

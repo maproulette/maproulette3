@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TagDiffVisualization
@@ -88,4 +88,4 @@ export default defineMessages({
     id: "TagDiffVisualization.controls.tagName.placeholder",
     defaultMessage: "Tag Name",
   },
-})
+});

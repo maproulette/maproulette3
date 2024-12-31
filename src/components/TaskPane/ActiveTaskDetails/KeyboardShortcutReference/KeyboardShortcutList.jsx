@@ -1,11 +1,10 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import _map from 'lodash/map'
-import _flatten from 'lodash/flatten'
-import _values from 'lodash/values'
-import WithKeyboardShortcuts
-       from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
-import './KeyboardShortcutList.scss'
+import _flatten from "lodash/flatten";
+import _map from "lodash/map";
+import _values from "lodash/values";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import WithKeyboardShortcuts from "../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
+import "./KeyboardShortcutList.scss";
 
 /**
  * KeyboardShortcutList renders the given keyboard shortcuts as a definition
@@ -15,29 +14,23 @@ import './KeyboardShortcutList.scss'
  */
 export class KeyboardShortcutList extends Component {
   render() {
-    const flattenedShortcuts =
-      _flatten(_map(this.props.activeKeyboardShortcuts, group => _values(group)))
+    const flattenedShortcuts = _flatten(
+      _map(this.props.activeKeyboardShortcuts, (group) => _values(group)),
+    );
 
-    const shortcuts = _map(flattenedShortcuts, (value, operation) =>
+    const shortcuts = _map(flattenedShortcuts, (value, operation) => (
       <dl key={`shortcut-${operation}`}>
         <dt key={`term-${operation}`}>
-          {value.keyLabel ?
-            <FormattedMessage {...value.keyLabel} /> :
-            value.key
-          }
+          {value.keyLabel ? <FormattedMessage {...value.keyLabel} /> : value.key}
         </dt>
         <dd key={`def-${operation}`}>
           <FormattedMessage {...value.label} />
         </dd>
       </dl>
-    )
+    ));
 
-    return (
-      <div className="keyboard-shortcut-list">
-        {shortcuts}
-      </div>
-    )
+    return <div className="keyboard-shortcut-list">{shortcuts}</div>;
   }
 }
 
-export default WithKeyboardShortcuts(KeyboardShortcutList)
+export default WithKeyboardShortcuts(KeyboardShortcutList);

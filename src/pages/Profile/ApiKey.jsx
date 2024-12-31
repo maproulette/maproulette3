@@ -1,10 +1,10 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import Button from '../../components/Button/Button'
-import ConfirmAction from '../../components/ConfirmAction/ConfirmAction'
-import messages from './Messages'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { FormattedMessage } from "react-intl";
+import Button from "../../components/Button/Button";
+import ConfirmAction from "../../components/ConfirmAction/ConfirmAction";
+import messages from "./Messages";
 
 export default class ApiKey extends Component {
   render() {
@@ -38,11 +38,11 @@ export default class ApiKey extends Component {
           </ConfirmAction>
         </div>
       </section>
-    )
+    );
   }
 }
 
 ApiKey.propTypes = {
   user: PropTypes.object,
   resetAPIKey: PropTypes.func.isRequired,
-}
+};

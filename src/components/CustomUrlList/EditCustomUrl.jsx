@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
-import Form from '@rjsf/core'
-import { FormattedMessage } from 'react-intl'
-import { jsSchema, uiSchema } from './UrlSchema'
-import messages from './Messages'
+import Form from "@rjsf/core";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { FormattedMessage } from "react-intl";
+import messages from "./Messages";
+import { jsSchema, uiSchema } from "./UrlSchema";
 
 /**
  * Displays a form for creating or editing custom url fields
  */
-export const EditCustomUrl = props => {
-  const [urlFields, setUrlFields] = useState({})
+export const EditCustomUrl = (props) => {
+  const [urlFields, setUrlFields] = useState({});
 
   return (
     <Form
@@ -20,7 +20,7 @@ export const EditCustomUrl = props => {
       noHtml5Validate
       showErrorList={false}
       formData={Object.assign({}, props.url, urlFields)}
-      onChange={({formData}) => setUrlFields(formData)}
+      onChange={({ formData }) => setUrlFields(formData)}
     >
       <div className="mr-flex mr-justify-between mr-items-center">
         <button
@@ -40,11 +40,11 @@ export const EditCustomUrl = props => {
         </button>
       </div>
     </Form>
-  )
-}
+  );
+};
 
 EditCustomUrl.propTypes = {
   finish: PropTypes.func.isRequired,
-}
+};
 
-export default EditCustomUrl
+export default EditCustomUrl;

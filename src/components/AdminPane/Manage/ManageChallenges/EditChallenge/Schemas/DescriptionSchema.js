@@ -1,9 +1,10 @@
-import _map from 'lodash/map'
-import _keys from 'lodash/keys'
-import { ChallengeCategoryKeywords,
-         keywordLabels }
-       from '../../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
-import messages from '../Messages'
+import _keys from "lodash/keys";
+import _map from "lodash/map";
+import {
+  ChallengeCategoryKeywords,
+  keywordLabels,
+} from "../../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords";
+import messages from "../Messages";
 
 /**
  * Generates a JSON Schema describing description fields of Edit Challenge
@@ -19,10 +20,10 @@ import messages from '../Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl) => {
-  const localizedKeywordLabels = keywordLabels(intl)
+  const localizedKeywordLabels = keywordLabels(intl);
 
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       description: {
@@ -38,10 +39,10 @@ export const jsSchema = (intl) => {
       },
     },
     required: ["description"],
-  }
+  };
 
-  return schemaFields
-}
+  return schemaFields;
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -53,20 +54,22 @@ export const jsSchema = (intl) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
   const uiSchemaFields = {
-    "ui:order": [ "description", "category" ],
+    "ui:order": ["description", "category"],
     description: {
       "ui:field": "markdown",
       "ui:help": intl.formatMessage(messages.descriptionDescription),
       "ui:lightMode": true,
-      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.descriptionStepHeader) : undefined,
+      "ui:groupHeader": options.longForm
+        ? intl.formatMessage(messages.descriptionStepHeader)
+        : undefined,
     },
     category: {
       "ui:widget": "select",
       "ui:help": intl.formatMessage(messages.categoryDescription),
     },
-  }
+  };
 
-  return uiSchemaFields
-}
+  return uiSchemaFields;
+};

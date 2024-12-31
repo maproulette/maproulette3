@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with CompletionProgressWidget
@@ -23,4 +23,4 @@ export default defineMessages({
     id: "Widgets.CompletionProgressWidget.controls.loadStats.label",
     defaultMessage: "Load Completion Stats",
   },
-})
+});

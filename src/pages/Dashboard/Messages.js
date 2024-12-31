@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Dashboard
@@ -11,7 +11,7 @@ export default defineMessages({
 
   welcome: {
     id: "Dashboard.header.welcomeBack",
-    defaultMessage: "Welcome Back, {username}!"
+    defaultMessage: "Welcome Back, {username}!",
   },
 
   completionPrompt: {
@@ -88,4 +88,4 @@ export default defineMessages({
     id: "Dashboard.header.controls.findChallenge.label",
     defaultMessage: "Discover new Challenges",
   },
-})
+});

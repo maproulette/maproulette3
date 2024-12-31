@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with SnapshotProgressWidget
@@ -31,11 +31,11 @@ export default defineMessages({
 
   recordSnapshot: {
     id: "Widgets.SnapshotProgressWidget.record.label",
-    defaultMessage: "Record New Snapshot"
+    defaultMessage: "Record New Snapshot",
   },
 
   manageSnapshots: {
     id: "Widgets.SnapshotProgressWidget.manageSnapshots.label",
-    defaultMessage: "Manage Snapshots"
+    defaultMessage: "Manage Snapshots",
   },
-})
+});

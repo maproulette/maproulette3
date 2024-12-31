@@ -1,26 +1,23 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { Link } from 'react-router-dom'
-import _pick from 'lodash/pick'
-import _isEmpty from 'lodash/isEmpty'
-import BusySpinner from '../BusySpinner/BusySpinner'
-import { OPEN_STREET_MAP } from '../../services/VisibleLayer/LayerSources'
-import { replacePropertyTags } from '../../hooks/UsePropertyReplacement/UsePropertyReplacement'
-import AsManager from '../../interactions/User/AsManager'
-import WithSearch from '../HOCs/WithSearch/WithSearch'
-import WithChallengePreferences
-       from '../HOCs/WithChallengePreferences/WithChallengePreferences'
-import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
-import WithKeyboardShortcuts
-       from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
-import WithTaskFeatureProperties from '../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties'
-import UserEditorSelector
-       from '../UserEditorSelector/UserEditorSelector'
-import messages from './Messages'
-import './InspectTaskControls.scss'
+import _isEmpty from "lodash/isEmpty";
+import _pick from "lodash/pick";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { Link } from "react-router-dom";
+import { replacePropertyTags } from "../../hooks/UsePropertyReplacement/UsePropertyReplacement";
+import AsManager from "../../interactions/User/AsManager";
+import { OPEN_STREET_MAP } from "../../services/VisibleLayer/LayerSources";
+import BusySpinner from "../BusySpinner/BusySpinner";
+import WithChallengePreferences from "../HOCs/WithChallengePreferences/WithChallengePreferences";
+import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
+import WithSearch from "../HOCs/WithSearch/WithSearch";
+import WithTaskFeatureProperties from "../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties";
+import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
+import UserEditorSelector from "../UserEditorSelector/UserEditorSelector";
+import messages from "./Messages";
+import "./InspectTaskControls.scss";
 
-const shortcutGroup = 'taskInspect'
+const shortcutGroup = "taskInspect";
 
 /**
  * InspectTaskControls presents controls used during task inspect by a challenge
@@ -33,44 +30,44 @@ const shortcutGroup = 'taskInspect'
 export class InspectTaskControls extends Component {
   /** Navigate to the previous sequential task */
   prevTask = () => {
-    this.props.previousSequentialTask(this.props.task)
-  }
+    this.props.previousSequentialTask(this.props.task);
+  };
 
   /** Navigate to the next sequential task */
   nextTask = () => {
-    this.props.nextSequentialTask(this.props.task)
-  }
+    this.props.nextSequentialTask(this.props.task);
+  };
 
   /** Process keyboard shortcuts for the inspect controls */
   handleKeyboardShortcuts = (event) => {
     // Ignore if shortcut group is not active
     if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
-      return
+      return;
     }
 
-    if (this.props.textInputActive(event)) { // ignore typing in inputs
-      return
+    if (this.props.textInputActive(event)) {
+      // ignore typing in inputs
+      return;
     }
 
     // Ignore if modifier keys were pressed
     if (event.metaKey || event.altKey || event.ctrlKey) {
-      return
+      return;
     }
-    
-    const inspectShortcuts = this.props.keyboardShortcutGroups[shortcutGroup]
+
+    const inspectShortcuts = this.props.keyboardShortcutGroups[shortcutGroup];
     if (event.key === inspectShortcuts.prevTask.key) {
-      this.prevTask()
+      this.prevTask();
+    } else if (event.key === inspectShortcuts.nextTask.key) {
+      this.nextTask();
     }
-    else if (event.key === inspectShortcuts.nextTask.key) {
-      this.nextTask()
-    }
-  }
+  };
 
   /** Open the task in an editor */
   pickEditor = ({ value }) => {
-    const {task, taskFeatureProperties} = this.props
-    const comment = task.parent.checkinComment
-    const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false)
+    const { task, taskFeatureProperties } = this.props;
+    const comment = task.parent.checkinComment;
+    const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false);
 
     this.props.editTask(
       value,
@@ -78,64 +75,76 @@ export class InspectTaskControls extends Component {
       this.props.mapBounds,
       {
         imagery: this.props.source.id !== OPEN_STREET_MAP ? this.props.source : undefined,
-        photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null,
+        photoOverlay: this.props.showMapillaryLayer ? "mapillary" : null,
       },
       this.props.taskBundle,
-      replacedComment
-    )
-  }
+      replacedComment,
+    );
+  };
 
   modifyTaskRoute = () => {
-    return `/admin/project/${this.props.task.parent.parent.id}/` +
+    return (
+      `/admin/project/${this.props.task.parent.parent.id}/` +
       `challenge/${this.props.task.parent.id}/task/${this.props.task.id}/edit`
-  }
+    );
+  };
 
   componentDidMount() {
     this.props.activateKeyboardShortcutGroup(
       _pick(this.props.keyboardShortcutGroups, shortcutGroup),
-      this.handleKeyboardShortcuts
-    )
+      this.handleKeyboardShortcuts,
+    );
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcutGroup(shortcutGroup,
-                                               this.handleKeyboardShortcuts)
+    this.props.deactivateKeyboardShortcutGroup(shortcutGroup, this.handleKeyboardShortcuts);
   }
   render() {
-    const manager = AsManager(this.props.user)
+    const manager = AsManager(this.props.user);
     if (!this.props.task?.parent?.parent) {
       return (
         <div className="inspect-task-controls">
           <BusySpinner />
         </div>
-      )
+      );
     }
 
     return (
       <div className="inspect-task-controls">
-        {this.props.taskReadOnly ?
-         <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
-           <FormattedMessage {...messages.readOnly} />
-         </div> :
-         <UserEditorSelector {...this.props} pickEditor={this.pickEditor} className="mr-mb-4" />
-        }
+        {this.props.taskReadOnly ? (
+          <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
+            <FormattedMessage {...messages.readOnly} />
+          </div>
+        ) : (
+          <UserEditorSelector {...this.props} pickEditor={this.pickEditor} className="mr-mb-4" />
+        )}
 
-        {!this.props.taskReadOnly && manager.canWriteProject(this.props.task?.parent?.parent) ?
+        {!this.props.taskReadOnly && manager.canWriteProject(this.props.task?.parent?.parent) ? (
           <Link
-            to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
+            to={{ pathname: this.modifyTaskRoute(), state: { fromTaskInspect: true } }}
             className="mr-button mr-mt-2"
-            style={{minWidth: '20.5rem'}}
+            style={{ minWidth: "20.5rem" }}
           >
             <FormattedMessage {...messages.modifyTaskLabel} />
-          </Link> : <div />
-        }
+          </Link>
+        ) : (
+          <div />
+        )}
 
         <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
-          <button className="mr-button mr-mr-2 mr-button--white"  style={{minWidth: '10rem'}} onClick={this.prevTask}>
+          <button
+            className="mr-button mr-mr-2 mr-button--white"
+            style={{ minWidth: "10rem" }}
+            onClick={this.prevTask}
+          >
             <FormattedMessage {...messages.previousTaskLabel} />
           </button>
 
-          <button className="mr-button mr-button--white"  style={{minWidth: '10rem'}} onClick={this.nextTask}>
+          <button
+            className="mr-button mr-button--white"
+            style={{ minWidth: "10rem" }}
+            onClick={this.nextTask}
+          >
             <FormattedMessage {...messages.nextTaskLabel} />
           </button>
         </div>
@@ -151,17 +160,11 @@ InspectTaskControls.propTypes = {
   previousSequentialTask: PropTypes.func.isRequired,
   /** Invoked when the user clicks the next-task button */
   nextSequentialTask: PropTypes.func.isRequired,
-}
+};
 
 export default WithSearch(
   WithChallengePreferences(
-    WithVisibleLayer(
-      WithKeyboardShortcuts(
-        WithTaskFeatureProperties(
-          InspectTaskControls
-        )
-      )
-    )
+    WithVisibleLayer(WithKeyboardShortcuts(WithTaskFeatureProperties(InspectTaskControls))),
   ),
-  'task'
-)
+  "task",
+);

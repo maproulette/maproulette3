@@ -1,8 +1,8 @@
-import { Fragment, Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import _isFinite from 'lodash/isFinite'
-import BusySpinner from '../../../BusySpinner/BusySpinner'
+import _isFinite from "lodash/isFinite";
+import PropTypes from "prop-types";
+import { Component, Fragment } from "react";
+import { FormattedMessage } from "react-intl";
+import BusySpinner from "../../../BusySpinner/BusySpinner";
 
 /**
  * ProgressStatus displays a full-page busy spinner and shows
@@ -13,7 +13,7 @@ import BusySpinner from '../../../BusySpinner/BusySpinner'
 export default class ProgressStatus extends Component {
   render() {
     if (!this.props.progressItem) {
-      return null
+      return null;
     }
 
     // Show a message and busy spinner. If we also have completion/progress
@@ -27,13 +27,12 @@ export default class ProgressStatus extends Component {
             </div>
 
             <div className="mr-white mr-text-lg">
-              {_isFinite(this.props.progressItem.stepsCompleted) &&
+              {_isFinite(this.props.progressItem.stepsCompleted) && (
                 <Fragment>
-                  {
-                    this.props.progressItem.stepsCompleted
-                  } <FormattedMessage {...this.props.progressDescription} />
+                  {this.props.progressItem.stepsCompleted}{" "}
+                  <FormattedMessage {...this.props.progressDescription} />
                 </Fragment>
-              }
+              )}
               <BusySpinner className="mr-mt-4" />
             </div>
           </div>
@@ -45,4 +44,4 @@ export default class ProgressStatus extends Component {
 
 ProgressStatus.propTypes = {
   progressItem: PropTypes.object,
-}
+};

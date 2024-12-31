@@ -1,6 +1,6 @@
-import messages from '../Messages'
+import messages from "../Messages";
 
-const STEP_ID = "Tags"
+const STEP_ID = "Tags";
 
 /**
  * Generates a JSON Schema describing MR tag fields of Edit Challenge
@@ -17,7 +17,7 @@ const STEP_ID = "Tags"
  */
 export const jsSchema = (intl) => {
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       taskTags: {
@@ -27,10 +27,7 @@ export const jsSchema = (intl) => {
       limitTags: {
         type: "boolean",
         default: false,
-        enumNames: [
-          intl.formatMessage(messages.yesLabel),
-          intl.formatMessage(messages.noLabel),
-        ],
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
       },
       reviewTaskTags: {
         title: intl.formatMessage(messages.preferredReviewTagsLabel),
@@ -39,16 +36,13 @@ export const jsSchema = (intl) => {
       limitReviewTags: {
         type: "boolean",
         default: false,
-        enumNames: [
-          intl.formatMessage(messages.yesLabel),
-          intl.formatMessage(messages.noLabel),
-        ],
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
       },
     },
-  }
+  };
 
-  return schemaFields
-}
+  return schemaFields;
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -60,9 +54,12 @@ export const jsSchema = (intl) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
-  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1
-  const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
+  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
+  const toggleCollapsed =
+    options.longForm && options.toggleCollapsed
+      ? () => options.toggleCollapsed(STEP_ID)
+      : undefined;
 
   const uiSchemaFields = {
     taskTags: {
@@ -71,7 +68,7 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:collapsed": isCollapsed,
       "ui:toggleCollapsed": toggleCollapsed,
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.tagsStepHeader) : undefined,
-      "tagType": "tasks",
+      tagType: "tasks",
     },
     limitTags: {
       "ui:field": "limitTags",
@@ -81,7 +78,7 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
     reviewTaskTags: {
       "ui:field": "taskTags",
       "ui:help": intl.formatMessage(messages.preferredReviewTagsDescription),
-      "tagType": "review",
+      tagType: "review",
       "ui:collapsed": isCollapsed,
     },
     limitReviewTags: {
@@ -89,7 +86,7 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:help": intl.formatMessage(messages.limitReviewTagsDescription),
       "ui:collapsed": isCollapsed,
     },
-  }
+  };
 
-  return uiSchemaFields
-}
+  return uiSchemaFields;
+};

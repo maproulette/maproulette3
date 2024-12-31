@@ -134,11 +134,14 @@ h4,
     @apply mr-my-4;
   }
 
-  li > p, li > ul, li > ol {
+  li > p,
+  li > ul,
+  li > ol {
     @apply mr-my-2;
   }
 
-  li.task-list-item { /* checklist items */
+  li.task-list-item {
+    /* checklist items */
     @apply mr-list-none mr--ml-4;
   }
 
@@ -153,7 +156,8 @@ h4,
     @apply mr-bg-black-15;
   }
 
-  ol, ul {
+  ol,
+  ul {
     @apply mr-ml-6;
   }
 

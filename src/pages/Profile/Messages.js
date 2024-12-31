@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Profile
@@ -36,7 +36,8 @@ export default defineMessages({
 
   defaultEditorDescription: {
     id: "Profile.form.defaultEditor.description",
-    defaultMessage: "Select the default editor that you want to use when fixing tasks. By selecting this option you will be able to skip the editor selection dialog after clicking on edit in a task.",
+    defaultMessage:
+      "Select the default editor that you want to use when fixing tasks. By selecting this option you will be able to skip the editor selection dialog after clicking on edit in a task.",
   },
 
   defaultBasemapLabel: {
@@ -46,7 +47,8 @@ export default defineMessages({
 
   defaultBasemapDescription: {
     id: "Profile.form.defaultBasemap.description",
-    defaultMessage: "Select the default basemap to display on the map. Only a default challenge basemap will override the option selected here.",
+    defaultMessage:
+      "Select the default basemap to display on the map. Only a default challenge basemap will override the option selected here.",
   },
 
   customBasemapsLabel: {
@@ -56,7 +58,8 @@ export default defineMessages({
 
   customBasemapDescription: {
     id: "Profile.form.customBasemap.description",
-    defaultMessage: "Insert a custom base map here. E.g. `https://'{s}'.tile.openstreetmap.org/'{z}'/'{x}'/'{y}'.png`",
+    defaultMessage:
+      "Insert a custom base map here. E.g. `https://'{s}'.tile.openstreetmap.org/'{z}'/'{x}'/'{y}'.png`",
   },
 
   addCustomBasemapLabel: {
@@ -116,20 +119,17 @@ export default defineMessages({
 
   allowFollowingDescription: {
     id: "Profile.form.allowFollowing.description",
-    defaultMessage:
-    "If no, users will not be able to follow your MapRoulette activity."
+    defaultMessage: "If no, users will not be able to follow your MapRoulette activity.",
   },
 
   seeTagFixSuggestionsDescription: {
     id: "Profile.form.seeTagFixSuggestions.description",
-    defaultMessage:
-    "User will see tag fix suggestions if they are provided."
+    defaultMessage: "User will see tag fix suggestions if they are provided.",
   },
 
   seeTagFixSuggestionsLabel: {
     id: "Profile.form.seeTagFixSuggestions.label",
-    defaultMessage:
-    "See Tag Fix Suggestions"
+    defaultMessage: "See Tag Fix Suggestions",
   },
 
   apiKey: {
@@ -174,11 +174,12 @@ export default defineMessages({
 
   emailDescription: {
     id: "Profile.form.email.description",
-    defaultMessage: "If you request emails in your Notification Subscriptions, they " +
-    "will be sent here.\n\nDecide which MapRoulette notifications you would like to " +
-    "receive, along with whether you would like to be sent " +
-    "an email informing you of the notification (either immediately " +
-    "or as a daily digest)"
+    defaultMessage:
+      "If you request emails in your Notification Subscriptions, they " +
+      "will be sent here.\n\nDecide which MapRoulette notifications you would like to " +
+      "receive, along with whether you would like to be sent " +
+      "an email informing you of the notification (either immediately " +
+      "or as a daily digest)",
   },
 
   notificationLabel: {
@@ -203,15 +204,17 @@ export default defineMessages({
 
   notificationSubscriptionsDescription: {
     id: "Profile.form.notificationSubscriptions.description",
-    defaultMessage: "Decide which MapRoulette notifications you would like to " +
-                    "receive, along with whether you would like to be sent " +
-                    "an email informing you of the notification (either immediately " +
-                    "or as a daily digest)"
+    defaultMessage:
+      "Decide which MapRoulette notifications you would like to " +
+      "receive, along with whether you would like to be sent " +
+      "an email informing you of the notification (either immediately " +
+      "or as a daily digest)",
   },
 
   systemNotificationsDescription: {
     id: "Profile.form.systemNotifications.description",
-    defaultMessage: "Receive notifications for important MapRoulette system events, such as planned downtime.",
+    defaultMessage:
+      "Receive notifications for important MapRoulette system events, such as planned downtime.",
   },
 
   mentionNotificationsDescription: {
@@ -226,12 +229,14 @@ export default defineMessages({
 
   reviewRejectedNotificationsDescription: {
     id: "Profile.form.reviewRejectedNotifications.description",
-    defaultMessage: "Receive a notification when your task needs to be revisited following a review.",
+    defaultMessage:
+      "Receive a notification when your task needs to be revisited following a review.",
   },
 
   reviewAgainNotificationsDescription: {
     id: "Profile.form.reviewAgainNotifications.description",
-    defaultMessage: "Receive a notification when your review status is updated by the mapper whose task you have reviewed.",
+    defaultMessage:
+      "Receive a notification when your review status is updated by the mapper whose task you have reviewed.",
   },
 
   challengeCompletedNotificationsDescription: {
@@ -241,7 +246,8 @@ export default defineMessages({
 
   teamNotificationsDescription: {
     id: "Profile.form.teamNotifications.description",
-    defaultMessage: "Receive a notification when you have been invited by another user to join a team.",
+    defaultMessage:
+      "Receive a notification when you have been invited by another user to join a team.",
   },
 
   followNotificationsDescription: {
@@ -251,17 +257,20 @@ export default defineMessages({
 
   metaReviewNotificationsDescription: {
     id: "Profile.form.metaReviewNotifications.description",
-    defaultMessage: "Receive a notification when your review status is updated by another reviewer.",
+    defaultMessage:
+      "Receive a notification when your review status is updated by another reviewer.",
   },
 
   reviewCountNotificationsDescription: {
     id: "Profile.form.reviewCountNotifications.description",
-    defaultMessage: "Receive periodic notifications indicating how many task reviews you currently have pending.",
+    defaultMessage:
+      "Receive periodic notifications indicating how many task reviews you currently have pending.",
   },
 
   revisionCountNotificationsDescription: {
     id: "Profile.form.revisionCountNotifications.description",
-    defaultMessage: "Receive periodic notifications indicating how many task revisions you currently have pending.",
+    defaultMessage:
+      "Receive periodic notifications indicating how many task revisions you currently have pending.",
   },
 
   yesLabel: {
@@ -278,4 +287,4 @@ export default defineMessages({
     id: "Profile.form.mandatory.label",
     defaultMessage: "Mandatory",
   },
-})
+});

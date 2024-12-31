@@ -1,10 +1,10 @@
-import messages from '../Messages'
+import messages from "../Messages";
 
-const STEP_ID = "Tags"
+const STEP_ID = "Tags";
 
 export const jsSchema = (intl) => {
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       taskTags: {
@@ -12,27 +12,28 @@ export const jsSchema = (intl) => {
         type: "string",
       },
     },
-  }
+  };
 
-  return schemaFields
-}
+  return schemaFields;
+};
 
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
-  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1
-  const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
+  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) !== -1;
+  const toggleCollapsed =
+    options.longForm && options.toggleCollapsed
+      ? () => options.toggleCollapsed(STEP_ID)
+      : undefined;
 
   const uiSchemaFields = {
-    "ui:order": [
-      "taskTags",
-    ],
+    "ui:order": ["taskTags"],
     taskTags: {
       "ui:field": "taskTags",
       "ui:help": intl.formatMessage(messages.preferredTagsDescription),
       "ui:collapsed": isCollapsed,
       "ui:toggleCollapsed": toggleCollapsed,
-      "tagType": "tasks",
+      tagType: "tasks",
     },
-  }
+  };
 
-  return uiSchemaFields
-}
+  return uiSchemaFields;
+};

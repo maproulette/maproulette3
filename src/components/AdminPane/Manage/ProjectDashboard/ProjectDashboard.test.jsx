@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   ProjectDashboardInternal as ProjectDashboard,
   defaultDashboardSetup,
@@ -14,11 +14,7 @@ describe("defaultDashboardSetup", () => {
 describe("ProjectDashboard", () => {
   it("doesn't break if only required props are provided", () => {
     const { getByText } = global.withProvider(
-      <ProjectDashboard
-        name="project"
-        targets="foo"
-        defaultConfiguration={() => null}
-      />
+      <ProjectDashboard name="project" targets="foo" defaultConfiguration={() => null} />,
     );
     const component = getByText("Project Not Found");
     expect(component).toBeInTheDocument();
@@ -31,7 +27,7 @@ describe("ProjectDashboard", () => {
         targets="foo"
         defaultConfiguration={() => null}
         loadingProject
-      />
+      />,
     );
     const component = getByTestId("loading-indicator");
     expect(component).toBeInTheDocument();
@@ -44,7 +40,7 @@ describe("ProjectDashboard", () => {
         name="project"
         targets="foo"
         defaultConfiguration={() => null}
-      />
+      />,
     );
     const component = getByTestId("project-dashboard");
     expect(component).toBeInTheDocument();

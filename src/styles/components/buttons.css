@@ -2,7 +2,6 @@
 .btn {
   @apply mr-appearance-none mr-inline-block mr-text-center mr-text-base mr-font-medium mr-whitespace-nowrap mr-border-green-lighter mr-text-green-lighter mr-py-2 mr-px-6 mr-rounded-sm mr-border-2 mr-leading-normal mr-transition;
 
-
   &:hover {
     @apply mr-border-white mr-text-white;
   }
@@ -100,7 +99,6 @@
     }
   }
 
-
   &--with-icon {
     @apply mr-flex mr-items-center mr-justify-center;
   }
@@ -120,16 +118,16 @@ input[type="checkbox"].mr-checkbox-toggle {
 
   &:checked {
     &:after {
-      content: '';
+      content: "";
       @apply mr-w-2.5 mr-h-1.5 mr-absolute mr-top-0 mr-bg-transparent mr-border-2 mr-border-white mr-border-t-0 mr-border-r-0 mr-ml-2px;
       transform: rotate(-45deg);
-      margin-top: 1.75px
+      margin-top: 1.75px;
     }
   }
 
   &:indeterminate {
     &:after {
-      content: '';
+      content: "";
       @apply mr-w-2 mr-h-1.5 mr-absolute mr-top-0 mr-bg-transparent mr-border-b-2 mr-border-white mr-mt-2px mr-ml-3px;
     }
   }
@@ -143,7 +141,7 @@ input[type="radio"].mr-radio {
   }
 
   &:checked::after {
-    content: '';
+    content: "";
     @apply mr-w-2 mr-h-2 mr-absolute mr-top-0 mr-bg-white mr-rounded-full;
     margin-top: 0.1875rem;
     margin-left: 0.1875rem;

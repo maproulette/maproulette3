@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with CalendarHeatmapWidget
@@ -12,4 +12,4 @@ export default defineMessages({
     id: "Widgets.CalendarHeatmapWidget.title",
     defaultMessage: "Daily Heatmap: Task Completion",
   },
-})
+});

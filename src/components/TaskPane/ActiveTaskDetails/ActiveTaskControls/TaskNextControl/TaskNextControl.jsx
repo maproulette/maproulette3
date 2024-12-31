@@ -1,14 +1,16 @@
-import { Fragment, Component } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import _noop from 'lodash/noop'
-import External from '../../../../External/External'
-import Modal from '../../../../Modal/Modal'
-import { FormattedMessage } from 'react-intl'
-import { TaskLoadMethod, messagesByLoadMethod }
-       from '../../../../../services/Task/TaskLoadMethod/TaskLoadMethod'
-import TaskNearbyList from '../../../TaskNearbyList/TaskNearbyList'
-import messages from './Messages'
+import classNames from "classnames";
+import _noop from "lodash/noop";
+import PropTypes from "prop-types";
+import { Component, Fragment } from "react";
+import { FormattedMessage } from "react-intl";
+import {
+  TaskLoadMethod,
+  messagesByLoadMethod,
+} from "../../../../../services/Task/TaskLoadMethod/TaskLoadMethod";
+import External from "../../../../External/External";
+import Modal from "../../../../Modal/Modal";
+import TaskNearbyList from "../../../TaskNearbyList/TaskNearbyList";
+import messages from "./Messages";
 
 /**
  * TaskNextControl displays a control for loading a new task without altering
@@ -20,19 +22,19 @@ import messages from './Messages'
  */
 export default class TaskNextControl extends Component {
   state = {
-    chooseNearbyTasks: false
-  }
+    chooseNearbyTasks: false,
+  };
 
   render() {
-    const loadNearbyModal =
+    const loadNearbyModal = (
       <External>
         <Modal
           contentClassName="mr-pb-6"
           medium
           isActive
           onClose={() => {
-            this.props.clearNextTask()
-            this.setState({chooseNearbyTasks: false})
+            this.props.clearNextTask();
+            this.setState({ chooseNearbyTasks: false });
           }}
         >
           <div className="mr-flex mr-justify-center">
@@ -50,10 +52,10 @@ export default class TaskNextControl extends Component {
               </div>
               <button
                 className={classNames("mr-button mr-button--white", this.props.className)}
-                style={{width: '24rem'}}
+                style={{ width: "24rem" }}
                 onClick={() => {
-                  this.props.nextTask(this.props.task.parent.id, this.props.task.id)
-                  this.setState({chooseNearbyTasks: false})
+                  this.props.nextTask(this.props.task.parent.id, this.props.task.id);
+                  this.setState({ chooseNearbyTasks: false });
                 }}
                 title={this.props.intl.formatMessage(messages.nextTooltip)}
               >
@@ -63,23 +65,21 @@ export default class TaskNextControl extends Component {
           </div>
         </Modal>
       </External>
+    );
 
     return (
       <div>
-        {this.state.chooseNearbyTasks &&
-          loadNearbyModal
-        }
-        {!this.state.chooseNearbyTasks &&
+        {this.state.chooseNearbyTasks && loadNearbyModal}
+        {!this.state.chooseNearbyTasks && (
           <Fragment>
             <button
               className={classNames("mr-button mr-button--white", this.props.className)}
-              style={{width: '20.5rem'}}
+              style={{ width: "20.5rem" }}
               onClick={() => {
                 if (this.props.loadBy === TaskLoadMethod.proximity) {
-                  this.setState({chooseNearbyTasks: true})
-                }
-                else {
-                  this.props.nextTask(this.props.task.parent.id, this.props.task.id)
+                  this.setState({ chooseNearbyTasks: true });
+                } else {
+                  this.props.nextTask(this.props.task.parent.id, this.props.task.id);
                 }
               }}
               title={this.props.intl.formatMessage(messages.nextTooltip)}
@@ -119,9 +119,8 @@ export default class TaskNextControl extends Component {
                 </label>
               </div>
             </div>
-
           </Fragment>
-        }
+        )}
       </div>
     );
   }
@@ -132,4 +131,4 @@ TaskNextControl.propTypes = {
   task: PropTypes.object.isRequired,
   /** Invoked if the user desires to load a new task */
   nextTask: PropTypes.func.isRequired,
-}
+};

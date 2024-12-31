@@ -1,14 +1,14 @@
-import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
-import WithSystemNotices from '../HOCs/WithSystemNotices/WithSystemNotices'
-import MarkdownContent from '../MarkdownContent/MarkdownContent'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
+import WithSystemNotices from "../HOCs/WithSystemNotices/WithSystemNotices";
+import MarkdownContent from "../MarkdownContent/MarkdownContent";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
 
-const SystemNotices = function(props) {
+const SystemNotices = function (props) {
   if (!props.newSystemNotices || props.newSystemNotices.length === 0) {
-    return null
+    return null;
   }
 
-  const notices = props.newSystemNotices.map(notice => (
+  const notices = props.newSystemNotices.map((notice) => (
     <li
       key={notice.uuid}
       className="mr-flex mr-justify-between mr-items-center mr-w-full mr-py-4 mr-px-4"
@@ -22,24 +22,20 @@ const SystemNotices = function(props) {
 
         <MarkdownContent markdown={notice.message} className="mr-markdown--base" />
       </span>
-      {props.user?.isLoggedIn &&
-       <SvgSymbol
-         sym="close-outline-icon"
-         viewBox="0 0 20 20"
-         className="mr-fill-green-lighter mr-w-5 mr-w-5 mr-cursor-pointer"
-         onClick={() => props.acknowledgeNotice(notice)}
-       />
-      }
+      {props.user?.isLoggedIn && (
+        <SvgSymbol
+          sym="close-outline-icon"
+          viewBox="0 0 20 20"
+          className="mr-fill-green-lighter mr-w-5 mr-w-5 mr-cursor-pointer"
+          onClick={() => props.acknowledgeNotice(notice)}
+        />
+      )}
     </li>
-  ))
+  ));
 
   return (
-    <ul
-      className="mr-bg-gradient-b-blue-darker-blue-dark mr-text-white mr-w-full"
-    >
-      {notices}
-    </ul>
-  )
-}
+    <ul className="mr-bg-gradient-b-blue-darker-blue-dark mr-text-white mr-w-full">{notices}</ul>
+  );
+};
 
-export default WithCurrentUser(WithSystemNotices(SystemNotices))
+export default WithCurrentUser(WithSystemNotices(SystemNotices));

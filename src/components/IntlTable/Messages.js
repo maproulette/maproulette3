@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with IntlTable
@@ -6,51 +6,51 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   previousLabel: {
     id: "IntlTable.previous.label",
-    defaultMessage: 'Previous',
+    defaultMessage: "Previous",
   },
 
   nextLabel: {
     id: "IntlTable.next.label",
-    defaultMessage: 'Next',
+    defaultMessage: "Next",
   },
 
   loadingLabel: {
     id: "IntlTable.loading.label",
-    defaultMessage: 'Loading...',
+    defaultMessage: "Loading...",
   },
 
   totalLabel: {
     id: "IntlTable.total.label",
-    defaultMessage: 'Total: ',
+    defaultMessage: "Total: ",
   },
 
   noData: {
     id: "IntlTable.noData",
-    defaultMessage: 'No rows found',
+    defaultMessage: "No rows found",
   },
 
   pageLabel: {
     id: "IntlTable.page.label",
-    defaultMessage: 'Page',
+    defaultMessage: "Page",
   },
 
   of: {
     id: "IntlTable.of",
-    defaultMessage: 'of',
+    defaultMessage: "of",
   },
 
   rows: {
     id: "IntlTable.rows",
-    defaultMessage: 'rows',
+    defaultMessage: "rows",
   },
 
   jumpToPageLabel: {
     id: "IntlTable.jumpToPage.label",
-    defaultMessage: 'jump to page',
+    defaultMessage: "jump to page",
   },
 
   rowsPerPageLabel: {
     id: "IntlTable.rowsPerPage.label",
-    defaultMessage: 'rows per page',
+    defaultMessage: "rows per page",
   },
-})
+});

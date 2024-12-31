@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TeamsWidget
@@ -38,4 +38,4 @@ export default defineMessages({
     id: "Widgets.TeamsWidget.controls.createTeam.label",
     defaultMessage: "Start a Team",
   },
-})
+});

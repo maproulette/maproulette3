@@ -1,27 +1,26 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import _isEqual from 'lodash/isEqual'
-import messages from './Messages'
-import ChallengeProgress from './ChallengeProgress'
-import ReviewStatusMetrics from '../../pages/Review/Metrics/ReviewStatusMetrics'
+import _isEqual from "lodash/isEqual";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import ReviewStatusMetrics from "../../pages/Review/Metrics/ReviewStatusMetrics";
+import ChallengeProgress from "./ChallengeProgress";
+import messages from "./Messages";
 
 export class ChallengeSnapshotProgress extends Component {
   shouldComponentUpdate(nextProps) {
     // Only re-render if the challenge, metrics or visibility changes
     if (!_isEqual(nextProps.taskMetrics, this.props.taskMetrics)) {
-      return true
+      return true;
     }
 
-    if ((nextProps?.challenge?.id) !== (this.props.challenge?.id)) {
-      return true
+    if (nextProps?.challenge?.id !== this.props.challenge?.id) {
+      return true;
     }
 
     if (!_isEqual(this.props.showByPriority, nextProps.showByPriority)) {
-      return true
+      return true;
     }
-    return false
+    return false;
   }
-
 
   render() {
     return (
@@ -34,8 +33,8 @@ export class ChallengeSnapshotProgress extends Component {
           <ReviewStatusMetrics {...this.props} />
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default ChallengeSnapshotProgress
+export default ChallengeSnapshotProgress;

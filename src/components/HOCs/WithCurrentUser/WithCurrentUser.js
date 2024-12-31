@@ -1,25 +1,25 @@
+import _debounce from "lodash/debounce";
+import { denormalize } from "normalizr";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { denormalize } from "normalizr";
-import _debounce from "lodash/debounce";
+import AsEndUser from "../../../interactions/User/AsEndUser";
 import {
-  logoutUser,
-  fetchUser,
   fetchBasicUser,
-  loadCompleteUser,
-  saveChallengeForUser,
-  unsaveChallengeForUser,
-  saveTask,
-  unsaveTask,
-  fetchTopChallenges,
   fetchSavedChallenges,
   fetchSavedTasks,
+  fetchTopChallenges,
+  fetchUser,
   fetchUserActivity,
-  updateUserSettings,
+  loadCompleteUser,
+  logoutUser,
+  saveChallengeForUser,
+  saveTask,
+  unsaveChallengeForUser,
+  unsaveTask,
   updateUserAppSetting,
+  updateUserSettings,
   userDenormalizationSchema,
 } from "../../../services/User/User";
-import AsEndUser from "../../../interactions/User/AsEndUser";
 
 const APP_ID = "mr3Frontend";
 
@@ -41,11 +41,7 @@ export const mapStateToProps = (state) => {
   const userId = state.currentUser?.userId;
   const userEntity = state.entities?.users?.[userId];
   if (userEntity) {
-    props.user = denormalize(
-      userEntity,
-      userDenormalizationSchema(),
-      state.entities
-    );
+    props.user = denormalize(userEntity, userDenormalizationSchema(), state.entities);
 
     if (props.user) {
       const endUser = AsEndUser(props.user);
@@ -77,7 +73,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       fetchTopChallenges,
       fetchUserActivity,
     },
-    dispatch
+    dispatch,
   );
 
   actions.updateUserAppSetting = _debounce((userId, setting) => {

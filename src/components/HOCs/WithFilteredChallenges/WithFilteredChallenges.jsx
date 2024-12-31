@@ -1,22 +1,15 @@
-import { Component } from 'react'
-import _every from 'lodash/every'
-import _isEmpty from 'lodash/isEmpty'
-import _filter from 'lodash/filter'
-import _omit from 'lodash/omit'
-import { challengePassesDifficultyFilter }
-       from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
-import { challengePassesKeywordFilter }
-       from '../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
-import { challengePassesCategorizationKeywordsFilter } 
-       from '../../../services/Challenge/ChallengeCategorizationKeywords/ChallengeCategorizationKeywords';
-import { challengePassesLocationFilter }
-       from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
-import { challengePassesArchivedFilter }
-       from '../../../services/Challenge/ChallengeArchived/ChallengeArchived'
-import { challengePassesGlobalFilter }
-       from '../../../services/Challenge/ChallengeGlobal/ChallengeGlobal'
-import { challengePassesProjectFilter }
-       from '../../../services/Challenge/ChallengeProject/ChallengeProject'
+import _every from "lodash/every";
+import _filter from "lodash/filter";
+import _isEmpty from "lodash/isEmpty";
+import _omit from "lodash/omit";
+import { Component } from "react";
+import { challengePassesArchivedFilter } from "../../../services/Challenge/ChallengeArchived/ChallengeArchived";
+import { challengePassesCategorizationKeywordsFilter } from "../../../services/Challenge/ChallengeCategorizationKeywords/ChallengeCategorizationKeywords";
+import { challengePassesDifficultyFilter } from "../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty";
+import { challengePassesGlobalFilter } from "../../../services/Challenge/ChallengeGlobal/ChallengeGlobal";
+import { challengePassesKeywordFilter } from "../../../services/Challenge/ChallengeKeywords/ChallengeKeywords";
+import { challengePassesLocationFilter } from "../../../services/Challenge/ChallengeLocation/ChallengeLocation";
+import { challengePassesProjectFilter } from "../../../services/Challenge/ChallengeProject/ChallengeProject";
 
 const allFilters = [
   challengePassesArchivedFilter,
@@ -26,7 +19,7 @@ const allFilters = [
   challengePassesCategorizationKeywordsFilter,
   challengePassesLocationFilter,
   challengePassesProjectFilter,
-]
+];
 
 /**
  * The WithFilteredChallenges HOC applies all of the configured challenge
@@ -36,26 +29,34 @@ const allFilters = [
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default function WithFilteredChallenges(WrappedComponent,
-                                               challengesProp='challenges',
-                                               outputProp) {
+export default function WithFilteredChallenges(
+  WrappedComponent,
+  challengesProp = "challenges",
+  outputProp,
+) {
   return class extends Component {
     challengePassesAllFilters(challenge) {
-      return _every(allFilters,
-                    passes => passes(this.props.searchFilters, challenge, this.props))
+      return _every(allFilters, (passes) =>
+        passes(this.props.searchFilters, challenge, this.props),
+      );
     }
 
     render() {
-      const filteredChallenges = _filter(this.props[challengesProp],
-                                         challenge => this.challengePassesAllFilters(challenge))
+      const filteredChallenges = _filter(this.props[challengesProp], (challenge) =>
+        this.challengePassesAllFilters(challenge),
+      );
 
       if (_isEmpty(outputProp)) {
-        outputProp = challengesProp
+        outputProp = challengesProp;
       }
 
-      return <WrappedComponent {...{[outputProp]: filteredChallenges}}
-                               unfilteredChallenges={this.props[challengesProp]}
-                               {..._omit(this.props, outputProp)} />
+      return (
+        <WrappedComponent
+          {...{ [outputProp]: filteredChallenges }}
+          unfilteredChallenges={this.props[challengesProp]}
+          {..._omit(this.props, outputProp)}
+        />
+      );
     }
-  }
+  };
 }

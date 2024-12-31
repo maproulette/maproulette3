@@ -1,34 +1,34 @@
-import { connect } from "react-redux";
-import _map from "lodash/map";
-import _isObject from "lodash/isObject";
 import _compact from "lodash/compact";
-import bundleByTaskBundleId from "../../../../utils/bundleByTaskBundleId";
-import createBlob from "../../../../utils/createBlob";
+import _isObject from "lodash/isObject";
+import _map from "lodash/map";
+import { connect } from "react-redux";
+import AsLineReadableFile from "../../../../interactions/File/AsLineReadableFile";
+import AsValidatableGeoJSON from "../../../../interactions/GeoJSON/AsValidatableGeoJSON";
 import {
-  saveChallenge,
-  uploadChallengeGeoJSON,
-  setIsEnabled,
+  archiveChallenge,
+  deleteChallenge,
+  fetchChallenge,
+  fetchChallengeActions,
   moveChallenge,
   rebuildChallenge,
   removeChallenge,
-  fetchChallenge,
-  fetchChallengeActions,
-  deleteChallenge,
-  archiveChallenge,
+  saveChallenge,
+  setIsEnabled,
+  uploadChallengeGeoJSON,
 } from "../../../../services/Challenge/Challenge";
 import { recordChallengeSnapshot } from "../../../../services/Challenge/ChallengeSnapshot";
+import { ChallengeStatus } from "../../../../services/Challenge/ChallengeStatus/ChallengeStatus";
+import AppErrors from "../../../../services/Error/AppErrors";
+import { addError } from "../../../../services/Error/Error";
 import {
+  bulkTaskStatusChange,
   bulkUpdateTasks,
   deleteChallengeTasks,
-  bulkTaskStatusChange,
 } from "../../../../services/Task/Task";
-import { TaskStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
 import { removeReviewRequest } from "../../../../services/Task/TaskReview/TaskReview";
-import { addError } from "../../../../services/Error/Error";
-import AppErrors from "../../../../services/Error/AppErrors";
-import { ChallengeStatus } from "../../../../services/Challenge/ChallengeStatus/ChallengeStatus";
-import AsValidatableGeoJSON from "../../../../interactions/GeoJSON/AsValidatableGeoJSON";
-import AsLineReadableFile from "../../../../interactions/File/AsLineReadableFile";
+import { TaskStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
+import bundleByTaskBundleId from "../../../../utils/bundleByTaskBundleId";
+import createBlob from "../../../../utils/createBlob";
 import WithProgress from "../../../HOCs/WithProgress/WithProgress";
 
 /**
@@ -39,11 +39,8 @@ import WithProgress from "../../../HOCs/WithProgress/WithProgress";
  */
 const WithChallengeManagement = (WrappedComponent) =>
   WithProgress(
-    WithProgress(
-      connect(null, mapDispatchToProps)(WrappedComponent),
-      "creatingTasks"
-    ),
-    "deletingTasks"
+    WithProgress(connect(null, mapDispatchToProps)(WrappedComponent), "creatingTasks"),
+    "deletingTasks",
   );
 
 /**
@@ -61,7 +58,7 @@ async function rebuildPrebundle(challenge, localFile) {
 
         const bundled = bundleByTaskBundleId(
           JSON.parse(data).features,
-          challenge.taskBundleIdProperty
+          challenge.taskBundleIdProperty,
         );
 
         return createBlob(bundled);
@@ -88,9 +85,7 @@ async function convertAndBundleGeoJson(challenge) {
 
     if (challenge.taskBundleIdProperty) {
       if (challenge.remoteGeoJson) {
-        data = await fetch(challenge.remoteGeoJson).then((response) =>
-          response.json()
-        );
+        data = await fetch(challenge.remoteGeoJson).then((response) => response.json());
       } else if (challenge.lineByLineGeoJSON) {
         const lineFile = AsLineReadableFile(challenge.lineByLineGeoJSON);
         let allLinesRead = false;
@@ -119,10 +114,7 @@ async function convertAndBundleGeoJson(challenge) {
       }
 
       if (data.features?.length) {
-        const bundled = bundleByTaskBundleId(
-          data.features,
-          challenge.taskBundleIdProperty
-        );
+        const bundled = bundleByTaskBundleId(data.features, challenge.taskBundleIdProperty);
 
         return bundled;
       }
@@ -143,13 +135,7 @@ async function convertAndBundleGeoJson(challenge) {
  *
  * @private
  */
-async function uploadLineByLine(
-  dispatch,
-  ownProps,
-  challenge,
-  geoJSON,
-  dataOriginDate
-) {
+async function uploadLineByLine(dispatch, ownProps, challenge, geoJSON, dataOriginDate) {
   ownProps.updateCreatingTasksProgress(true, 0);
   const lineFile = AsLineReadableFile(geoJSON);
   let allLinesRead = false;
@@ -169,13 +155,7 @@ async function uploadLineByLine(
     }
 
     await dispatch(
-      uploadChallengeGeoJSON(
-        challenge.id,
-        taskLines.join("\n"),
-        true,
-        false,
-        dataOriginDate
-      )
+      uploadChallengeGeoJSON(challenge.id, taskLines.join("\n"), true, false, dataOriginDate),
     );
     totalTasksCreated += taskLines.length;
     ownProps.updateCreatingTasksProgress(true, totalTasksCreated);
@@ -197,10 +177,7 @@ async function deleteIncompleteTasks(dispatch, ownProps, challenge) {
   ownProps.updateDeletingTasksProgress(true, 0);
 
   // Initiate delete
-  await deleteChallengeTasks(challenge.id, [
-    TaskStatus.created,
-    TaskStatus.skipped,
-  ]);
+  await deleteChallengeTasks(challenge.id, [TaskStatus.created, TaskStatus.skipped]);
 
   // Check on deletion progress every 10 seconds for as long as tasks continue
   // to be deleted
@@ -210,29 +187,25 @@ async function deleteIncompleteTasks(dispatch, ownProps, challenge) {
     const updateDeleteProgress = () => {
       fetchChallengeActions(
         challenge.id,
-        true
+        true,
       )(dispatch).then((actionsResult) => {
         fetchChallenge(
           challenge.id,
-          true
+          true,
         )(dispatch).then((challengeResult) => {
-          const available = actionsResult?.entities?.challenges?.[challenge.id]?.actions?.available ?? latestAvailable;
+          const available =
+            actionsResult?.entities?.challenges?.[challenge.id]?.actions?.available ??
+            latestAvailable;
 
           const status = challengeResult?.entities?.challenges?.[challenge.id]?.status;
 
-          if (
-            available >= latestAvailable &&
-            status !== ChallengeStatus.deletingTasks
-          ) {
+          if (available >= latestAvailable && status !== ChallengeStatus.deletingTasks) {
             // Delete is complete
             ownProps.updateDeletingTasksProgress(false);
             resolve();
           } else {
             latestAvailable = available;
-            ownProps.updateDeletingTasksProgress(
-              true,
-              estimatedToDelete - latestAvailable
-            );
+            ownProps.updateDeletingTasksProgress(true, estimatedToDelete - latestAvailable);
             setTimeout(updateDeleteProgress, pollingFrequency);
           }
         });
@@ -263,12 +236,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       .then(async (challenge) => {
         // If we have line-by-line GeoJSON, we need to stream that separately
         if (_isObject(challenge) && challengeData.lineByLineGeoJSON) {
-          await uploadLineByLine(
-            dispatch,
-            ownProps,
-            challenge,
-            challengeData.lineByLineGeoJSON
-          );
+          await uploadLineByLine(dispatch, ownProps, challenge, challengeData.lineByLineGeoJSON);
           ownProps.updateCreatingTasksProgress(false);
         }
 
@@ -280,11 +248,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       });
   },
 
-  moveChallenge: (challengeId, toProjectId) =>
-    dispatch(moveChallenge(challengeId, toProjectId)),
+  moveChallenge: (challengeId, toProjectId) => dispatch(moveChallenge(challengeId, toProjectId)),
 
-  deleteIncompleteTasks: (challenge) =>
-    deleteIncompleteTasks(dispatch, ownProps, challenge),
+  deleteIncompleteTasks: (challenge) => deleteIncompleteTasks(dispatch, ownProps, challenge),
 
   recordSnapshot: (challengeId) => recordChallengeSnapshot(challengeId),
 
@@ -300,22 +266,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
       if (fileData) {
         if (await AsValidatableGeoJSON(fileData).isLineByLine()) {
-          await uploadLineByLine(
-            dispatch,
-            ownProps,
-            challenge,
-            fileData,
-            dataOriginDate
-          );
+          await uploadLineByLine(dispatch, ownProps, challenge, fileData, dataOriginDate);
         } else {
           await dispatch(
-            uploadChallengeGeoJSON(
-              challenge.id,
-              localFile,
-              false,
-              false,
-              dataOriginDate
-            )
+            uploadChallengeGeoJSON(challenge.id, localFile, false, false, dataOriginDate),
           );
         }
       } else {
@@ -344,20 +298,16 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(removeChallenge(challengeId));
 
     dispatch(deleteChallenge(challengeId)).then(() =>
-      ownProps.history.replace(`/admin/project/${projectId}`)
+      ownProps.history.replace(`/admin/project/${projectId}`),
     );
   },
 
   archiveChallenge: (projectId, challengeId, pathname) => {
-    dispatch(archiveChallenge(challengeId, true)).then(() =>
-      ownProps.history.replace(pathname)
-    );
+    dispatch(archiveChallenge(challengeId, true)).then(() => ownProps.history.replace(pathname));
   },
 
   unarchiveChallenge: (projectId, challengeId, pathname) => {
-    dispatch(archiveChallenge(challengeId, false)).then(() =>
-      ownProps.history.replace(pathname)
-    );
+    dispatch(archiveChallenge(challengeId, false)).then(() => ownProps.history.replace(pathname));
   },
 
   updateEnabled: (challengeId, isEnabled) => {
@@ -373,44 +323,20 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
           id: task.id.toString(), // bulk APIs want string ids
           name: task.name || task.title,
         },
-        changes
-      )
+        changes,
+      ),
     );
 
     return dispatch(bulkUpdateTasks(alteredTasks, true));
   },
 
-  applyBulkTaskStatusChange: (
-    newStatus,
-    challengeId,
-    searchCriteria,
-    excludeTaskIds
-  ) => {
-    return dispatch(
-      bulkTaskStatusChange(
-        newStatus,
-        challengeId,
-        searchCriteria,
-        excludeTaskIds
-      )
-    );
+  applyBulkTaskStatusChange: (newStatus, challengeId, searchCriteria, excludeTaskIds) => {
+    return dispatch(bulkTaskStatusChange(newStatus, challengeId, searchCriteria, excludeTaskIds));
   },
 
-  removeReviewRequest: (
-    challengeId,
-    taskIds,
-    searchCriteria,
-    excludeTaskIds,
-    asMetaReview
-  ) => {
+  removeReviewRequest: (challengeId, taskIds, searchCriteria, excludeTaskIds, asMetaReview) => {
     return dispatch(
-      removeReviewRequest(
-        challengeId,
-        taskIds,
-        searchCriteria,
-        excludeTaskIds,
-        asMetaReview
-      )
+      removeReviewRequest(challengeId, taskIds, searchCriteria, excludeTaskIds, asMetaReview),
     );
   },
 });

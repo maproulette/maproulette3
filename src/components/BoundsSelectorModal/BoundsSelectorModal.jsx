@@ -1,21 +1,18 @@
-import { Fragment, Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import bbox from '@turf/bbox'
-import _split from 'lodash/split'
-import classNames from 'classnames'
-import { MapContainer, ZoomControl, AttributionControl } from 'react-leaflet'
-import { toLatLngBounds, fromLatLngBounds }
-       from '../../services/MapBounds/MapBounds'
-import SourcedTileLayer
-       from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
-import Modal from '../Modal/Modal'
-import External from '../External/External'
-import MapPane from '../EnhancedMap/MapPane/MapPane'
-import AreaSelect from '../AreaSelect/AreaSelect'
-import { defaultLayerSource }
-       from '../../services/VisibleLayer/LayerSources'
-import { DEFAULT_MAP_BOUNDS } from '../../services/MapBounds/MapBounds'
-import messages from './Messages'
+import bbox from "@turf/bbox";
+import classNames from "classnames";
+import _split from "lodash/split";
+import { Component, Fragment } from "react";
+import { FormattedMessage } from "react-intl";
+import { AttributionControl, MapContainer, ZoomControl } from "react-leaflet";
+import { fromLatLngBounds, toLatLngBounds } from "../../services/MapBounds/MapBounds";
+import { DEFAULT_MAP_BOUNDS } from "../../services/MapBounds/MapBounds";
+import { defaultLayerSource } from "../../services/VisibleLayer/LayerSources";
+import AreaSelect from "../AreaSelect/AreaSelect";
+import MapPane from "../EnhancedMap/MapPane/MapPane";
+import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
+import External from "../External/External";
+import Modal from "../Modal/Modal";
+import messages from "./Messages";
 
 /**
  * BoundsSelectorModal presents a modal that displays a
@@ -28,40 +25,43 @@ export default class BoundsSelectorModal extends Component {
     active: false,
     lat: 0,
     lng: 0,
-  }
+  };
 
   dismiss = (defaultBounds) => {
-    this.setState({active: false})
+    this.setState({ active: false });
 
     if (this.state.mapBounds || defaultBounds) {
-      const bbox = fromLatLngBounds(this.state.mapBounds || defaultBounds)
+      const bbox = fromLatLngBounds(this.state.mapBounds || defaultBounds);
 
       if (bbox) {
-        this.props.onChange(bbox.join(','))
+        this.props.onChange(bbox.join(","));
       }
     }
-  }
+  };
 
   render() {
-    const boundingBox =
-      toLatLngBounds(
-        this.props.value && _split(this.props.value, ',').length === 4 ?
-          _split(this.props.value, ',') :
-          this.props.bounding ? bbox(this.props.bounding) : DEFAULT_MAP_BOUNDS
-      )
+    const boundingBox = toLatLngBounds(
+      this.props.value && _split(this.props.value, ",").length === 4
+        ? _split(this.props.value, ",")
+        : this.props.bounding
+          ? bbox(this.props.bounding)
+          : DEFAULT_MAP_BOUNDS,
+    );
 
     return (
       <Fragment>
-        <button className="mr-button mr-button mr-button--small mr-ml-4"
+        <button
+          className="mr-button mr-button mr-button--small mr-ml-4"
           onClick={(e) => {
-            e.stopPropagation()
-            e.preventDefault()
-            this.setState({active: true})
-          }}>
+            e.stopPropagation();
+            e.preventDefault();
+            this.setState({ active: true });
+          }}
+        >
           {this.props.buttonName}
         </button>
 
-        {this.state.active &&
+        {this.state.active && (
           <External>
             <Modal isActive wide onClose={() => this.dismiss()}>
               <div className="mr-overflow-y-auto mr-max-h-screen80">
@@ -75,24 +75,27 @@ export default class BoundsSelectorModal extends Component {
                         <FormattedMessage {...messages.primaryMessage} />
                       </p>
                     </div>
-
                   </div>
                   <div className={classNames("mr-bounds-selector-map", this.props.className)}>
                     <MapPane>
-                      <MapContainer 
+                      <MapContainer
                         bounds={boundingBox}
                         zoomControl={false}
                         minZoom={2}
                         maxZoom={18}
                         attributionControl={false}
-                        maxBounds={[[-90, -180], [90, 180]]} 
+                        maxBounds={[
+                          [-90, -180],
+                          [90, 180],
+                        ]}
                       >
                         <AttributionControl position="bottomleft" prefix={false} />
-                        <ZoomControl className="mr-z-1000" position='topright' />
+                        <ZoomControl className="mr-z-1000" position="topright" />
                         <SourcedTileLayer source={defaultLayerSource()} skipAttribution={true} />
                         <AreaSelect
                           bounds={boundingBox}
-                          onBoundsChanged={(mapBounds) => this.setState({mapBounds})} />
+                          onBoundsChanged={(mapBounds) => this.setState({ mapBounds })}
+                        />
                       </MapContainer>
                     </MapPane>
                   </div>
@@ -105,7 +108,7 @@ export default class BoundsSelectorModal extends Component {
               </div>
             </Modal>
           </External>
-        }
+        )}
       </Fragment>
     );
   }

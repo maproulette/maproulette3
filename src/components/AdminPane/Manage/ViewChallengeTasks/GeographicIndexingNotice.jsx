@@ -1,9 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { differenceInHours } from 'date-fns'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
-import messages from './Messages'
+import { differenceInHours } from "date-fns";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 /**
  * GeographicIndexingNotice display a notice to the challenge owner letting
@@ -14,13 +14,13 @@ import messages from './Messages'
  */
 export default class GeographicIndexingNotice extends Component {
   render() {
-    const reindexingDelay =
-      window.env?.REACT_APP_GEOGRAPHIC_INDEXING_DELAY ?? 0
+    const reindexingDelay = window.env?.REACT_APP_GEOGRAPHIC_INDEXING_DELAY ?? 0;
 
     // If enough time has passed, nothing to show
-    if (differenceInHours(Date.now(), this.props.challenge?.lastTaskRefresh ?? 0) >
-        reindexingDelay) {
-      return null
+    if (
+      differenceInHours(Date.now(), this.props.challenge?.lastTaskRefresh ?? 0) > reindexingDelay
+    ) {
+      return null;
     }
 
     return (
@@ -32,13 +32,13 @@ export default class GeographicIndexingNotice extends Component {
         />
         <FormattedMessage
           {...messages.geographicIndexingNotice}
-          values={{delay: reindexingDelay}}
+          values={{ delay: reindexingDelay }}
         />
       </div>
-    )
+    );
   }
 }
 
 GeographicIndexingNotice.propTypes = {
   challenge: PropTypes.object,
-}
+};

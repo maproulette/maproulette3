@@ -1,65 +1,64 @@
-import { FormattedDate } from 'react-intl'
-import SuperUserToggle from './SuperUserToggle'
+import { FormattedDate } from "react-intl";
+import SuperUserToggle from "./SuperUserToggle";
 
-const OSM_USER_LINK = `${window.env.REACT_APP_OSM_SERVER}/user/`
+const OSM_USER_LINK = `${window.env.REACT_APP_OSM_SERVER}/user/`;
 
 const setChallengeTab = () => {
   return [
     {
-      id: 'id',
-      Header: 'ID',
+      id: "id",
+      Header: "ID",
       maxWidth: 80,
       accessor: (challenge) => challenge.id,
     },
     {
-      id: 'name',
-      Header: 'NAME',
+      id: "name",
+      Header: "NAME",
       accessor: (challenge) => challenge.name,
       Cell: (props) => {
         if (props.value) {
           return (
             <a
               href={
-                `/admin/project/${props.original?.parent?.id}` +
-                `/challenge/${props.original.id}`
+                `/admin/project/${props.original?.parent?.id}` + `/challenge/${props.original.id}`
               }
-              target='_blank'
-              rel='noopener noreferrer'
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {props.value}
             </a>
-          )
+          );
         }
 
-        return null
+        return null;
       },
       maxWidth: 180,
       sortable: true,
     },
     {
-      id: 'owner',
-      Header: 'OWNER',
+      id: "owner",
+      Header: "OWNER",
       accessor: (challenge) => challenge.owner,
     },
     {
-      id: 'numOfTasks',
-      Header: 'TASKS REMAINING',
+      id: "numOfTasks",
+      Header: "TASKS REMAINING",
       accessor: (challenge) => challenge.tasksRemaining,
       maxWidth: 150,
     },
     {
-      id: 'tasksCompletionPercentage',
-      Header: '% COMPLETED TASKS',
+      id: "tasksCompletionPercentage",
+      Header: "% COMPLETED TASKS",
       accessor: (challenge) => {
-        return challenge.completionPercentage
+        return challenge.completionPercentage;
       },
       sortable: true,
       maxWidth: 180,
       Cell: (props) => <div>{props.value}%</div>,
     },
     {
-      id: 'project',
-      Header: 'PROJECT',
+      id: "project",
+      Header: "PROJECT",
       accessor: (challenge) => challenge.parent?.displayName,
       maxWidth: 120,
       sortable: true,
@@ -68,33 +67,33 @@ const setChallengeTab = () => {
           return (
             <a
               href={`/admin/project/${props.original?.parent?.id}`}
-              target='_blank'
-              rel='noopener noreferrer'
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {props.value}
             </a>
-          )
+          );
         }
-        return null
+        return null;
       },
     },
     {
-      id: 'discoverable',
-      Header: 'DISCOVERABLE',
+      id: "discoverable",
+      Header: "DISCOVERABLE",
       accessor: (challenge) => challenge.enabled.toString(),
       maxWidth: 150,
     },
     {
-      id: 'archived',
-      Header: 'ARCHIVED',
+      id: "archived",
+      Header: "ARCHIVED",
       accessor: (challenge) => challenge.isArchived.toString(),
       maxWidth: 120,
     },
     {
-      id: 'dateCreated',
-      Header: 'DATE CREATED',
+      id: "dateCreated",
+      Header: "DATE CREATED",
       accessor: (challenge) => {
-        return challenge.created
+        return challenge.created;
       },
       maxWidth: 150,
       sortable: true,
@@ -106,8 +105,8 @@ const setChallengeTab = () => {
         ),
     },
     {
-      id: 'dataOriginDate',
-      Header: 'DATA ORIGIN DATE',
+      id: "dataOriginDate",
+      Header: "DATA ORIGIN DATE",
       accessor: (challenge) => challenge.dataOriginDate,
       maxWidth: 180,
       sortable: true,
@@ -119,8 +118,8 @@ const setChallengeTab = () => {
         ),
     },
     {
-      id: 'lastTaskRefreshDate',
-      Header: 'LAST TASK REFRESH',
+      id: "lastTaskRefreshDate",
+      Header: "LAST TASK REFRESH",
       accessor: (challenge) => challenge.lastTaskRefresh,
       maxWidth: 180,
       sortable: true,
@@ -131,67 +130,67 @@ const setChallengeTab = () => {
           </span>
         ),
     },
-  ]
-}
+  ];
+};
 
 const setProjectTab = () => {
   return [
     {
-      id: 'id',
-      Header: 'ID',
+      id: "id",
+      Header: "ID",
       maxWidth: 80,
       accessor: (project) => project.id,
     },
     {
-      id: 'name',
-      Header: 'NAME',
+      id: "name",
+      Header: "NAME",
       accessor: (project) => project.displayName,
       Cell: (props) => {
         if (props.value) {
           return (
             <a
               href={`/admin/project/${props.original.id}`}
-              target='_blank'
-              rel='noopener noreferrer'
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {props.value}
             </a>
-          )
+          );
         }
-        return null
+        return null;
       },
       sortable: true,
       maxWidth: 180,
     },
     {
-      id: 'owner',
-      Header: 'OWNER',
+      id: "owner",
+      Header: "OWNER",
       accessor: (project) => project.owner,
       maxWidth: 120,
     },
     {
-      id: 'discoverable',
-      Header: 'DISCOVERABLE',
+      id: "discoverable",
+      Header: "DISCOVERABLE",
       accessor: (project) => project.enabled.toString(),
       maxWidth: 150,
     },
     {
-      id: 'archived',
-      Header: 'ARCHIVED',
+      id: "archived",
+      Header: "ARCHIVED",
       accessor: (project) => project.isArchived.toString(),
       maxWidth: 120,
     },
     {
-      id: 'Virtual',
-      Header: 'VIRTUAL',
+      id: "Virtual",
+      Header: "VIRTUAL",
       accessor: (project) => project.isVirtual.toString(),
       maxWidth: 120,
     },
     {
-      id: 'dateCreated',
-      Header: 'DATE CREATED',
+      id: "dateCreated",
+      Header: "DATE CREATED",
       accessor: (project) => {
-        return project.created
+        return project.created;
       },
       maxWidth: 150,
       sortable: true,
@@ -203,10 +202,10 @@ const setProjectTab = () => {
         ),
     },
     {
-      id: 'dateLastModified',
-      Header: 'DATE LAST MODIFIED',
+      id: "dateLastModified",
+      Header: "DATE LAST MODIFIED",
       accessor: (project) => {
-        return project.modified
+        return project.modified;
       },
       maxWidth: 150,
       sortable: true,
@@ -217,27 +216,23 @@ const setProjectTab = () => {
           </span>
         ),
     },
-  ]
-}
+  ];
+};
 
 const setUserTab = (userChanges, setUserChanges) => {
   return [
     {
-      id: 'id',
-      Header: 'ID',
+      id: "id",
+      Header: "ID",
       maxWidth: 80,
       accessor: (user) => user.id,
     },
     {
-      id: 'name',
-      Header: 'NAME',
+      id: "name",
+      Header: "NAME",
       accessor: (user) => user.displayName,
       Cell: (cell) => (
-        <a
-          href={OSM_USER_LINK + cell.value}
-          target='_blank'
-          rel='noopener noreferrer'
-        >
+        <a href={OSM_USER_LINK + cell.value} target="_blank" rel="noopener noreferrer">
           {cell.value}
         </a>
       ),
@@ -245,16 +240,16 @@ const setUserTab = (userChanges, setUserChanges) => {
       maxWidth: 180,
     },
     {
-      id: 'score',
-      Header: 'SCORE',
+      id: "score",
+      Header: "SCORE",
       accessor: (user) => user.score,
       maxWidth: 120,
     },
     {
-      id: 'dateCreated',
-      Header: 'DATE CREATED',
+      id: "dateCreated",
+      Header: "DATE CREATED",
       accessor: (user) => {
-        return user.created
+        return user.created;
       },
       maxWidth: 150,
       sortable: true,
@@ -266,10 +261,10 @@ const setUserTab = (userChanges, setUserChanges) => {
         ),
     },
     {
-      id: 'lastActive',
-      Header: 'DATE LAST ACTIVE',
+      id: "lastActive",
+      Header: "DATE LAST ACTIVE",
       accessor: (user) => {
-        return user.modified
+        return user.modified;
       },
       maxWidth: 150,
       sortable: true,
@@ -281,10 +276,10 @@ const setUserTab = (userChanges, setUserChanges) => {
         ),
     },
     {
-      id: 'superUser',
-      Header: 'ROLE',
+      id: "superUser",
+      Header: "ROLE",
       accessor: (user) => {
-        return user.superUser
+        return user.superUser;
       },
       maxWidth: 200,
       sortable: true,
@@ -296,10 +291,10 @@ const setUserTab = (userChanges, setUserChanges) => {
             userChanges={userChanges}
             setUserChanges={setUserChanges}
           />
-        )
-      }
+        );
+      },
     },
-  ]
-}
+  ];
+};
 
-export { setChallengeTab, setProjectTab, setUserTab }
+export { setChallengeTab, setProjectTab, setUserTab };

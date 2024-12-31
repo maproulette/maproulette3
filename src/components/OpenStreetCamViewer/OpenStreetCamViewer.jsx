@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { parseISO, format } from 'date-fns'
-import _findIndex from 'lodash/findIndex'
-import External from '../External/External'
-import Modal from '../Modal/Modal'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import BusySpinner from '../BusySpinner/BusySpinner'
+import { format, parseISO } from "date-fns";
+import _findIndex from "lodash/findIndex";
+import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
+import BusySpinner from "../BusySpinner/BusySpinner";
+import External from "../External/External";
+import Modal from "../Modal/Modal";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
 
 /**
  * Renders a viewer for OpenStreetCam imagery in a modal
@@ -13,17 +13,17 @@ import BusySpinner from '../BusySpinner/BusySpinner'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 const OpenStreetCamViewer = ({ images, initialImageKey, onClose }) => {
-  const [currentIndex, setCurrentIndex] = useState(-1)
-  const [imageLoaded, setImageLoaded] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(-1);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
-    setCurrentIndex(_findIndex(images, { key: initialImageKey }))
-  }, [images, initialImageKey])
+    setCurrentIndex(_findIndex(images, { key: initialImageKey }));
+  }, [images, initialImageKey]);
 
-  const hasNextImage = currentIndex !== -1 && currentIndex < images.length - 1
-  const hasPriorImage = currentIndex !== -1 && currentIndex > 0
+  const hasNextImage = currentIndex !== -1 && currentIndex < images.length - 1;
+  const hasPriorImage = currentIndex !== -1 && currentIndex > 0;
 
-  const currentImage = currentIndex === -1 ? null : images[currentIndex]
+  const currentImage = currentIndex === -1 ? null : images[currentIndex];
 
   return (
     <External>
@@ -36,7 +36,7 @@ const OpenStreetCamViewer = ({ images, initialImageKey, onClose }) => {
                   <button onClick={() => hasPriorImage && setCurrentIndex(currentIndex - 1)}>
                     <SvgSymbol
                       sym="arrow-left-icon"
-                      viewBox='0 0 20 20'
+                      viewBox="0 0 20 20"
                       className="mr-h-4 mr-w-4 mr-fill-current"
                     />
                   </button>
@@ -50,7 +50,7 @@ const OpenStreetCamViewer = ({ images, initialImageKey, onClose }) => {
                   <button onClick={() => hasNextImage && setCurrentIndex(currentIndex + 1)}>
                     <SvgSymbol
                       sym="arrow-right-icon"
-                      viewBox='0 0 20 20'
+                      viewBox="0 0 20 20"
                       className="mr-h-4 mr-w-4 mr-fill-current"
                     />
                   </button>
@@ -77,21 +77,19 @@ const OpenStreetCamViewer = ({ images, initialImageKey, onClose }) => {
                 <div className="mr-pr-4 mr-mr-4 mr-leading-tight mr-border-r mr-border-grey">
                   @{currentImage.username}
                 </div>
-                <div>
-                  {format(parseISO(currentImage.shotDate), 'yyyy-MM-dd')}
-                </div>
+                <div>{format(parseISO(currentImage.shotDate), "yyyy-MM-dd")}</div>
               </div>
             )}
           </div>
         </div>
       </Modal>
     </External>
-  )
-}
+  );
+};
 
 OpenStreetCamViewer.propTypes = {
   images: PropTypes.array.isRequired,
   onClose: PropTypes.func,
-}
+};
 
-export default OpenStreetCamViewer
+export default OpenStreetCamViewer;

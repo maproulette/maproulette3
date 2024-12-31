@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with SavedFilters
@@ -6,41 +6,41 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   doneLabel: {
     id: "SavedFilters.controls.done.label",
-    defaultMessage: "Done"
+    defaultMessage: "Done",
   },
 
   editLabel: {
     id: "SavedFilters.controls.edit.label",
-    defaultMessage: "edit"
+    defaultMessage: "edit",
   },
 
   deleteLabel: {
     id: "SavedFilters.controls.delete.label",
-    defaultMessage: "delete"
+    defaultMessage: "delete",
   },
 
   namePlaceholder: {
     id: "SavedFilters.placeholder.label",
-    defaultMessage: "Name your saved filters"
+    defaultMessage: "Name your saved filters",
   },
 
   saveFiltersLabel: {
     id: "SavedFilters.controls.saveFilters.label",
-    defaultMessage: "Save current filters"
+    defaultMessage: "Save current filters",
   },
 
   manageFiltersLabel: {
     id: "SavedFilters.controls.manageFilters.label",
-    defaultMessage: "Manage saved filters"
+    defaultMessage: "Manage saved filters",
   },
 
   savedFiltersTitle: {
     id: "SavedFilters.savedFilters.title",
-    defaultMessage: "Saved Filters"
+    defaultMessage: "Saved Filters",
   },
 
   noSavedFilters: {
     id: "SavedFilters.noSavedFilters.",
-    defaultMessage: "No Saved Filters"
+    defaultMessage: "No Saved Filters",
   },
-})
+});

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskBundleWidget
@@ -21,17 +21,17 @@ export default defineMessages({
 
   saveCurrentFiltersLabel: {
     id: "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label",
-    defaultMessage: "Save Current Filters"
+    defaultMessage: "Save Current Filters",
   },
 
   clearFiltersLabel: {
     id: "Widgets.TaskBundleWidget.controls.clearFilters.label",
-    defaultMessage: "Clear Filters"
+    defaultMessage: "Clear Filters",
   },
 
   filterListLabel: {
     id: "Widgets.TaskBundleWidget.controls.filterList.label",
-    defaultMessage: "Filter By:"
+    defaultMessage: "Filter By:",
   },
 
   taskIdLabel: {
@@ -68,7 +68,7 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.controls.startBundling.label",
     defaultMessage: "Start Bundling Tasks",
   },
-  
+
   displayAllTasksLabel: {
     id: "Widgets.TaskBundleWidget.controls.displayAllTasks.label",
     defaultMessage: "Display All Tasks In View",
@@ -83,7 +83,7 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.unableToSelect",
     defaultMessage: "Unable to select",
   },
-  
+
   cannotEditPrimaryTask: {
     id: "Widgets.TaskBundleWidget.cannotEditPrimaryTask",
     defaultMessage: "Cannot edit primary task",
@@ -116,8 +116,8 @@ export default defineMessages({
 
   disallowBundling: {
     id: "Widgets.TaskBundleWidget.disallowBundling",
-    defaultMessage: "You are working on a single task. " +
-                    "Task bundles cannot be created on this step.",
+    defaultMessage:
+      "You are working on a single task. " + "Task bundles cannot be created on this step.",
   },
 
   noCooperativeWork: {
@@ -127,11 +127,11 @@ export default defineMessages({
 
   noVirtualChallenges: {
     id: "Widgets.TaskBundleWidget.noVirtualChallenges",
-    defaultMessage: "Tasks in \"virtual\" challenges cannot be bundled together",
+    defaultMessage: 'Tasks in "virtual" challenges cannot be bundled together',
   },
 
   readOnly: {
     id: "Widgets.TaskBundleWidget.readOnly",
     defaultMessage: "Previewing task in read-only mode",
   },
-})
+});

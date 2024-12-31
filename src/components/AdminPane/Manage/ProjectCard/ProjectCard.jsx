@@ -1,16 +1,16 @@
-import { Component } from "react";
+import classNames from "classnames";
 import PropTypes from "prop-types";
+import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import classNames from "classnames";
-import AsManager from "../../../../interactions/User/AsManager";
 import AsManageableProject from "../../../../interactions/Project/AsManageableProject";
+import AsManager from "../../../../interactions/User/AsManager";
+import { buildLinkToMapperExportCSV } from "../../../../services/Task/TaskReview/TaskReview";
+import BusySpinner from "../../../BusySpinner/BusySpinner";
 import Dropdown from "../../../Dropdown/Dropdown";
 import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
-import BusySpinner from "../../../BusySpinner/BusySpinner";
-import ChallengeList from "../ChallengeList/ChallengeList";
-import { buildLinkToMapperExportCSV } from "../../../../services/Task/TaskReview/TaskReview";
 import WithProjectManagement from "../../HOCs/WithProjectManagement/WithProjectManagement";
+import ChallengeList from "../ChallengeList/ChallengeList";
 import messages from "./Messages";
 
 export class ProjectCard extends Component {
@@ -33,9 +33,7 @@ export class ProjectCard extends Component {
 
     let projectBody = null;
     if (this.props.showPreview) {
-      const matchingChallenges = project.childChallenges(
-        this.props.filteredChallenges
-      );
+      const matchingChallenges = project.childChallenges(this.props.filteredChallenges);
       projectBody =
         matchingChallenges.length === 0 ? null : (
           <div className="mr-pr-4">
@@ -71,10 +69,9 @@ export class ProjectCard extends Component {
 
     const menuOptions = (
       <div
-        className={classNames(
-          "mr-flex mr-justify-end mr-text-xxs mr-leading-0 mr-flex-grow-0",
-          { "mr-pr-2 mr-pt-2": this.props.isExpanded }
-        )}
+        className={classNames("mr-flex mr-justify-end mr-text-xxs mr-leading-0 mr-flex-grow-0", {
+          "mr-pr-2 mr-pt-2": this.props.isExpanded,
+        })}
       >
         <Dropdown
           className="mr-dropdown--right"
@@ -111,17 +108,11 @@ export class ProjectCard extends Component {
               {manager.canWriteProject(this.props.project) && (
                 <li>
                   {this.props.project.isVirtual ? (
-                    <Link
-                      to={`/admin/virtual/project/${this.props.project.id}/challenges/manage`}
-                    >
-                      <FormattedMessage
-                        {...messages.manageChallengeListLabel}
-                      />
+                    <Link to={`/admin/virtual/project/${this.props.project.id}/challenges/manage`}>
+                      <FormattedMessage {...messages.manageChallengeListLabel} />
                     </Link>
                   ) : (
-                    <Link
-                      to={`/admin/project/${this.props.project.id}/challenges/new`}
-                    >
+                    <Link to={`/admin/project/${this.props.project.id}/challenges/new`}>
                       <FormattedMessage {...messages.addChallengeLabel} />
                     </Link>
                   )}
@@ -147,7 +138,7 @@ export class ProjectCard extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                   href={`${buildLinkToMapperExportCSV(
-                    this.props.criteria
+                    this.props.criteria,
                   )}&pid=${this.props.project.id}`}
                   className="mr-flex mr-items-center"
                 >
@@ -163,10 +154,7 @@ export class ProjectCard extends Component {
               !this.props.project.isVirtual &&
               !isArchived ? (
                 <li>
-                  <a
-                    onClick={this.archiveProject}
-                    className={this.props.controlClassName}
-                  >
+                  <a onClick={this.archiveProject} className={this.props.controlClassName}>
                     <FormattedMessage {...messages.archiveProjectLabel} />
                   </a>
                 </li>
@@ -175,10 +163,7 @@ export class ProjectCard extends Component {
               !this.props.project.isVirtual &&
               isArchived ? (
                 <li>
-                  <a
-                    onClick={this.unarchiveProject}
-                    className={this.props.controlClassName}
-                  >
+                  <a onClick={this.unarchiveProject} className={this.props.controlClassName}>
                     <FormattedMessage {...messages.unarchiveProjectLabel} />
                   </a>
                 </li>
@@ -195,16 +180,14 @@ export class ProjectCard extends Component {
           "mr-mb-2",
           this.props.isExpanded
             ? "mr-bg-black-15 mr-w-96 mr-mr-4 mr-pb-6 mr-mb-6 mr-rounded"
-            : "mr-py-2"
+            : "mr-py-2",
         )}
       >
         {this.props.isExpanded && menuOptions}
         <div
           className={classNames(
             "mr-flex mr-justify-between mr-px-4",
-            this.props.isExpanded
-              ? "mr-items-start mr-h-14 mr-overflow-y-auto"
-              : "mr-items-center"
+            this.props.isExpanded ? "mr-items-start mr-h-14 mr-overflow-y-auto" : "mr-items-center",
           )}
         >
           <div className="mr-flex-grow-0 mr-flex mr-items-start">
@@ -234,9 +217,7 @@ export class ProjectCard extends Component {
                   </span>
                 ) : null}
               </Link>
-              {this.props.isExpanded && this.props.loadingChallenges && (
-                <BusySpinner inline />
-              )}
+              {this.props.isExpanded && this.props.loadingChallenges && <BusySpinner inline />}
             </div>
           </div>
 

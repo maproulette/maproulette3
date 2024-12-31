@@ -1,24 +1,24 @@
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { useMutation } from '@apollo/client'
-import AppErrors from '../../../services/Error/AppErrors'
-import BusySpinner from '../../BusySpinner/BusySpinner'
-import { ACCEPT_INVITE } from '../TeamQueries'
-import messages from './Messages'
+import { useMutation } from "@apollo/client";
+import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
+import AppErrors from "../../../services/Error/AppErrors";
+import BusySpinner from "../../BusySpinner/BusySpinner";
+import { ACCEPT_INVITE } from "../TeamQueries";
+import messages from "./Messages";
 
 /**
  * Control item for accepting an invitation to join a team
  */
-const AcceptInviteControlItem = props => {
-  const [acceptInvite, { loading: isSaving }] = useMutation(ACCEPT_INVITE)
+const AcceptInviteControlItem = (props) => {
+  const [acceptInvite, { loading: isSaving }] = useMutation(ACCEPT_INVITE);
 
   // The team member needs have an invitation and be the current user
   if (!props.teamMember.isInvited() || !props.teamMember.isUser(props.user)) {
-    return null
+    return null;
   }
 
   if (isSaving) {
-    return <BusySpinner />
+    return <BusySpinner />;
   }
 
   return (
@@ -28,26 +28,25 @@ const AcceptInviteControlItem = props => {
           acceptInvite({
             variables: { teamId: props.teamMember.team.id },
             refetchQueries: props.refetchQueries,
-          })
-          .catch(error => {
-            props.addErrorWithDetails(AppErrors.team.failure, error.message)
-          })
+          }).catch((error) => {
+            props.addErrorWithDetails(AppErrors.team.failure, error.message);
+          });
         }}
       >
         <FormattedMessage {...messages.acceptInviteLabel} />
       </a>
     </li>
-  )
-}
+  );
+};
 
 AcceptInviteControlItem.propTypes = {
   user: PropTypes.object.isRequired,
   teamMember: PropTypes.object.isRequired,
   refetchQueries: PropTypes.array,
-}
+};
 
 AcceptInviteControlItem.defaultProps = {
   refetchQueries: [],
-}
+};
 
-export default AcceptInviteControlItem
+export default AcceptInviteControlItem;

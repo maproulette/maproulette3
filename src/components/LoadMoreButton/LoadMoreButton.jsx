@@ -1,9 +1,8 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import BusySpinner from '../BusySpinner/BusySpinner'
-import './LoadMoreButton.scss'
-
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import BusySpinner from "../BusySpinner/BusySpinner";
+import "./LoadMoreButton.scss";
 
 /**
  * LoadMoreButton renders a 'load more' button that can be used
@@ -14,23 +13,22 @@ import './LoadMoreButton.scss'
 export default class LoadMoreButton extends Component {
   render() {
     if (this.props.isLoading) {
-      return <BusySpinner />
-    }
-    else if (!this.props.hasMoreResults) {
-      return null
+      return <BusySpinner />;
+    } else if (!this.props.hasMoreResults) {
+      return null;
     }
 
     return (
       <button
         className={classNames("mr-button", this.props.className)}
-        onClick={e => {
-          e.preventDefault()
-          this.props.loadMore()
+        onClick={(e) => {
+          e.preventDefault();
+          this.props.loadMore();
         }}
       >
         {this.props.children}
       </button>
-    )
+    );
   }
 }
 
@@ -41,4 +39,4 @@ LoadMoreButton.propTypes = {
   hasMoreResults: PropTypes.bool,
   /** Boolean flag indicating we should show a busy spinner */
   isLoading: PropTypes.bool,
-}
+};

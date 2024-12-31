@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with MemberControls
@@ -22,5 +22,5 @@ export default defineMessages({
   leaveTeamLabel: {
     id: "Team.member.controls.leave.label",
     defaultMessage: "Leave Team",
-  }
-})
+  },
+});

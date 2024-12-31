@@ -1,22 +1,21 @@
-import { Fragment, Component } from 'react'
-import PropTypes from 'prop-types'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { FormattedMessage } from 'react-intl'
-import classNames from 'classnames'
-import _map from 'lodash/map'
-import _noop from 'lodash/noop'
-import _filter from 'lodash/filter'
-import _sortBy from 'lodash/sortBy'
-import _clone from 'lodash/clone'
-import _isEmpty from 'lodash/isEmpty'
-import { DEFAULT_OVERLAY_ORDER }
-       from '../../../services/VisibleLayer/LayerSources'
-import AsEndUser from '../../../interactions/User/AsEndUser'
-import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
-import WithLayerSources from '../../HOCs/WithLayerSources/WithLayerSources'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-import Dropdown from '../../Dropdown/Dropdown'
-import messages from './Messages'
+import classNames from "classnames";
+import _clone from "lodash/clone";
+import _filter from "lodash/filter";
+import _isEmpty from "lodash/isEmpty";
+import _map from "lodash/map";
+import _noop from "lodash/noop";
+import _sortBy from "lodash/sortBy";
+import PropTypes from "prop-types";
+import { Component, Fragment } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { FormattedMessage } from "react-intl";
+import AsEndUser from "../../../interactions/User/AsEndUser";
+import { DEFAULT_OVERLAY_ORDER } from "../../../services/VisibleLayer/LayerSources";
+import Dropdown from "../../Dropdown/Dropdown";
+import WithLayerSources from "../../HOCs/WithLayerSources/WithLayerSources";
+import WithVisibleLayer from "../../HOCs/WithVisibleLayer/WithVisibleLayer";
+import SvgSymbol from "../../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 /**
  * LayerToggle presents a control for selecting the desired map layer/tiles.
@@ -26,137 +25,139 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class LayerToggle extends Component {
-  overlayVisible = layerId => {
-   const visibleOverlays = this.props.visibleOverlays || []
-    return visibleOverlays.indexOf(layerId) !== -1
-  }
-  toggleOverlay = layerId => {
-    this.overlayVisible(layerId) ? this.props.removeVisibleOverlay(layerId) :
-                                   this.props.addVisibleOverlay(layerId)
-  }
+  overlayVisible = (layerId) => {
+    const visibleOverlays = this.props.visibleOverlays || [];
+    return visibleOverlays.indexOf(layerId) !== -1;
+  };
+  toggleOverlay = (layerId) => {
+    this.overlayVisible(layerId)
+      ? this.props.removeVisibleOverlay(layerId)
+      : this.props.addVisibleOverlay(layerId);
+  };
 
   orderedOverlays = () => {
     let overlays = overlayToggles({
       ...this.props,
       overlayVisible: this.overlayVisible,
-      toggleOverlay: this.toggleOverlay
-    })
+      toggleOverlay: this.toggleOverlay,
+    });
 
-    const overlayOrder =
-      _isEmpty(this.props.overlayOrder) ?
-      DEFAULT_OVERLAY_ORDER :
-      this.props.overlayOrder
+    const overlayOrder = _isEmpty(this.props.overlayOrder)
+      ? DEFAULT_OVERLAY_ORDER
+      : this.props.overlayOrder;
 
     if (overlayOrder && overlayOrder.length > 0) {
-      overlays = _sortBy(overlays, layer => {
-        const position = overlayOrder.indexOf(layer.id)
-        return position === -1 ? Number.MAX_SAFE_INTEGER : position
-      })
+      overlays = _sortBy(overlays, (layer) => {
+        const position = overlayOrder.indexOf(layer.id);
+        return position === -1 ? Number.MAX_SAFE_INTEGER : position;
+      });
     }
 
-    return overlays
-  }
+    return overlays;
+  };
 
   overlayReordered = (overlays, result) => {
     if (!this.props.user || !this.props.updateUserAppSetting) {
-      return
+      return;
     }
 
     // dropped outside the list or on itself
     if (!result.destination || result.source.index === result.destination.index) {
-      return
+      return;
     }
 
-    const layers = _clone(overlays)
-    const movedLayer = layers.splice(result.source.index, 1)[0]
-    layers.splice(result.destination.index, 0, movedLayer)
+    const layers = _clone(overlays);
+    const movedLayer = layers.splice(result.source.index, 1)[0];
+    layers.splice(result.destination.index, 0, movedLayer);
 
     this.props.updateUserAppSetting(this.props.user.id, {
-      mapOverlayOrder: _map(layers, 'id'),
-    })
-  }
+      mapOverlayOrder: _map(layers, "id"),
+    });
+  };
 
   render() {
-    const baseSources = _filter(this.props.layerSources, source => !source.overlay)
+    const baseSources = _filter(this.props.layerSources, (source) => !source.overlay);
 
-    const layerListItems = _map(baseSources, layer => (
+    const layerListItems = _map(baseSources, (layer) => (
       <li key={layer.id}>
         <button
           className={
-            this.props.source.id === layer.id ? 'mr-text-current' : 'mr-text-green-lighter hover:mr-text-current'
+            this.props.source.id === layer.id
+              ? "mr-text-current"
+              : "mr-text-green-lighter hover:mr-text-current"
           }
           onClick={() => this.props.changeLayer(layer.id, this.props.mapType)}
         >
           {layer.name}
         </button>
       </li>
-    ))
+    ));
 
-    const overlays = this.orderedOverlays()
-    const canReorderLayers = AsEndUser(this.props.user).isLoggedIn() && this.props.updateUserAppSetting
+    const overlays = this.orderedOverlays();
+    const canReorderLayers =
+      AsEndUser(this.props.user).isLoggedIn() && this.props.updateUserAppSetting;
 
     return (
       <Dropdown
         className="mr-dropdown--right mr-absolute mr-z-10 mr-right-0 mr-top-0 mr-mr-2 mr-mt-2"
-        dropdownButton={dropdown =>
-          <button onClick={dropdown.toggleDropdownVisible} className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter" aria-haspopup="true"
-          aria-controls="dropdown-menu">
-            <SvgSymbol sym="layers-icon" className="mr-w-4 mr-h-4 mr-fill-current" viewBox="0 0 20 20" />
+        dropdownButton={(dropdown) => (
+          <button
+            onClick={dropdown.toggleDropdownVisible}
+            className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
+            aria-haspopup="true"
+            aria-controls="dropdown-menu"
+          >
+            <SvgSymbol
+              sym="layers-icon"
+              className="mr-w-4 mr-h-4 mr-fill-current"
+              viewBox="0 0 20 20"
+            />
           </button>
-        }
-        dropdownContent={() =>
+        )}
+        dropdownContent={() => (
           <Fragment>
             {layerListItems.length > 0 && <ol className="mr-o-2">{layerListItems}</ol>}
-            {layerListItems.length > 0 && overlays.length > 0 &&
-             <hr className="mr-h-px mr-my-4 mr-bg-white-15" />
-            }
+            {layerListItems.length > 0 && overlays.length > 0 && (
+              <hr className="mr-h-px mr-my-4 mr-bg-white-15" />
+            )}
             <div>
-              <DragDropContext onDragEnd={result => this.overlayReordered(overlays, result)}>
+              <DragDropContext onDragEnd={(result) => this.overlayReordered(overlays, result)}>
                 <Droppable
                   droppableId="overlay-droppable"
                   renderClone={(provided, snapshot, rubric) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                    >
+                    <div ref={provided.innerRef} {...provided.draggableProps}>
                       <div className="mr-relative mr-my-2 mr-flex mr-justify-between">
                         <div className="mr-text-sm">{overlays[rubric.source.index].component}</div>
-                        {canReorderLayers &&
-                         <div {...provided.dragHandleProps}>
-                           <SvgSymbol
-                             sym="reorder-icon"
-                             className="mr-mt-6px mr-w-6 mr-h-6 mr-fill-green-light"
-                             viewBox="0 0 96 96"
-                           />
-                         </div>
-                        }
+                        {canReorderLayers && (
+                          <div {...provided.dragHandleProps}>
+                            <SvgSymbol
+                              sym="reorder-icon"
+                              className="mr-mt-6px mr-w-6 mr-h-6 mr-fill-green-light"
+                              viewBox="0 0 96 96"
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
                 >
                   {(provided) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                    >
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
                       {_map(overlays, (overlay, index) => (
                         <Draggable key={overlay.id} draggableId={overlay.id} index={index}>
                           {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                            >
+                            <div ref={provided.innerRef} {...provided.draggableProps}>
                               <div className="mr-relative mr-my-2 mr-flex mr-justify-between">
                                 <div>{overlay.component}</div>
-                                {canReorderLayers &&
-                                 <div {...provided.dragHandleProps}>
-                                   <SvgSymbol
-                                     sym="reorder-icon"
-                                     className="mr-mt-6px mr-w-6 mr-h-6 mr-fill-green-light"
-                                     viewBox="0 0 96 96"
-                                   />
-                                 </div>
-                                }
+                                {canReorderLayers && (
+                                  <div {...provided.dragHandleProps}>
+                                    <SvgSymbol
+                                      sym="reorder-icon"
+                                      className="mr-mt-6px mr-w-6 mr-h-6 mr-fill-green-light"
+                                      viewBox="0 0 96 96"
+                                    />
+                                  </div>
+                                )}
                               </div>
                             </div>
                           )}
@@ -169,7 +170,7 @@ export class LayerToggle extends Component {
               </DragDropContext>
             </div>
           </Fragment>
-        }
+        )}
       />
     );
   }
@@ -198,10 +199,10 @@ LayerToggle.propTypes = {
   mapillaryCount: PropTypes.number,
   /** Invoked when the user toggles visibility of Mapillary layer */
   toggleMapillary: PropTypes.func,
-}
+};
 
-const overlayToggles = props => {
-  const toggles = _map(props.intersectingOverlays, layer => ({
+const overlayToggles = (props) => {
+  const toggles = _map(props.intersectingOverlays, (layer) => ({
     id: layer.id,
     label: layer.name,
     component: (
@@ -212,7 +213,7 @@ const overlayToggles = props => {
         layerLabel={layer.name}
       />
     ),
-  }))
+  }));
 
   if (props.togglePriorityBounds && props.priorityBounds.length > 0) {
     toggles.push({
@@ -226,7 +227,7 @@ const overlayToggles = props => {
           layerLabel={<FormattedMessage {...messages.showPriorityBoundsLabel} />}
         />
       ),
-    })
+    });
   }
 
   if (props.toggleTaskFeatures) {
@@ -241,16 +242,15 @@ const overlayToggles = props => {
           layerLabel={<FormattedMessage {...messages.showTaskFeaturesLabel} />}
         />
       ),
-    })
+    });
   }
 
-  if (props.toggleOSMData &&
-      (window.env?.REACT_APP_OSM_DATA_OVERLAY ?? 'enabled') !== 'disabled') {
+  if (props.toggleOSMData && (window.env?.REACT_APP_OSM_DATA_OVERLAY ?? "enabled") !== "disabled") {
     toggles.push({
       id: "osm-data",
       label: <FormattedMessage {...messages.showOSMDataLabel} />,
       component: <OSMDataLayerToggle key="osm-data" {...props} />,
-    })
+    });
   }
 
   if (props.toggleMapillary) {
@@ -258,7 +258,7 @@ const overlayToggles = props => {
       id: "mapillary",
       label: <FormattedMessage {...messages.showMapillaryLabel} />,
       component: <MapillaryLayerToggle key="mapillary" {...props} />,
-    })
+    });
   }
 
   if (props.toggleOpenStreetCam) {
@@ -266,18 +266,18 @@ const overlayToggles = props => {
       id: "openstreetcam",
       label: <FormattedMessage {...messages.showOpenStreetCamLabel} />,
       component: <OpenStreetCamLayerToggle key="openstreetcam" {...props} />,
-    })
+    });
   }
 
-  return toggles
-}
+  return toggles;
+};
 
-const SimpleLayerToggle = props => {
+const SimpleLayerToggle = (props) => {
   return (
     <div
       className={classNames(
         "mr-my-2 mr-flex mr-items-center mr-leading-none",
-        props.toggleClassName
+        props.toggleClassName,
       )}
       onClick={props.toggleLayerActive}
     >
@@ -288,12 +288,14 @@ const SimpleLayerToggle = props => {
         checked={props.isLayerActive}
         onChange={_noop}
       />
-      <label htmlFor={props.layerLabel} className="mr-ml-3 mr-text-orange">{props.layerLabel}</label>
+      <label htmlFor={props.layerLabel} className="mr-ml-3 mr-text-orange">
+        {props.layerLabel}
+      </label>
     </div>
-  )
-}
+  );
+};
 
-const OSMDataLayerToggle = props => {
+const OSMDataLayerToggle = (props) => {
   return (
     <Fragment>
       <SimpleLayerToggle
@@ -301,88 +303,90 @@ const OSMDataLayerToggle = props => {
         isLayerActive={props.showOSMData}
         layerLabel={
           <Fragment>
-            <FormattedMessage
-              {...messages.showOSMDataLabel}
-            /> {props.osmDataLoading && <FormattedMessage {...messages.loading} />}
+            <FormattedMessage {...messages.showOSMDataLabel} />{" "}
+            {props.osmDataLoading && <FormattedMessage {...messages.loading} />}
           </Fragment>
         }
       />
 
-      {props.showOSMData && !props.osmDataLoading && props.toggleOSMElements &&
-       <Fragment>
-         {['nodes', 'ways', 'areas'].map(element => (
-           <SimpleLayerToggle
-             key={`osm-element-toggle-${element}`}
-             toggleClassName="mr-ml-4"
-             toggleLayerActive={() => props.toggleOSMElements(element)}
-             isLayerActive={props.showOSMElements[element]}
-             layerLabel={element}
-           />
-         ))}
-       </Fragment>
-      }
+      {props.showOSMData && !props.osmDataLoading && props.toggleOSMElements && (
+        <Fragment>
+          {["nodes", "ways", "areas"].map((element) => (
+            <SimpleLayerToggle
+              key={`osm-element-toggle-${element}`}
+              toggleClassName="mr-ml-4"
+              toggleLayerActive={() => props.toggleOSMElements(element)}
+              isLayerActive={props.showOSMElements[element]}
+              layerLabel={element}
+            />
+          ))}
+        </Fragment>
+      )}
     </Fragment>
   );
-}
+};
 
-const MapillaryLayerToggle = props => {
+const MapillaryLayerToggle = (props) => {
   return (
     <SimpleLayerToggle
       toggleLayerActive={() => props.toggleMapillary()}
       isLayerActive={props.showMapillary || false}
       layerLabel={
         <Fragment>
-          <FormattedMessage
-            {...messages.showMapillaryLabel}
-          /> {(props.showMapillary && !props.mapillaryLoading) &&
-              <FormattedMessage {...messages.imageCount}
-                                values={{count: props.mapillaryCount}} />
-          } {props.mapillaryLoading && <FormattedMessage {...messages.loading} />
-          } {props.showMapillary && props.hasMoreMapillaryImagery && !props.mapillaryLoading &&
+          <FormattedMessage {...messages.showMapillaryLabel} />{" "}
+          {props.showMapillary && !props.mapillaryLoading && (
+            <FormattedMessage {...messages.imageCount} values={{ count: props.mapillaryCount }} />
+          )}{" "}
+          {props.mapillaryLoading && <FormattedMessage {...messages.loading} />}{" "}
+          {props.showMapillary && props.hasMoreMapillaryImagery && !props.mapillaryLoading && (
             <button
               className="mr-button mr-button--xsmall mr-ml-2"
-              onClick={e => {
-                e.stopPropagation()
-                props.fetchMoreMapillaryImagery()
+              onClick={(e) => {
+                e.stopPropagation();
+                props.fetchMoreMapillaryImagery();
               }}
             >
               <FormattedMessage {...messages.moreLabel} />
             </button>
-          }
+          )}
         </Fragment>
       }
     />
   );
-}
+};
 
-const OpenStreetCamLayerToggle = props => {
+const OpenStreetCamLayerToggle = (props) => {
   return (
     <SimpleLayerToggle
       toggleLayerActive={() => props.toggleOpenStreetCam()}
       isLayerActive={props.showOpenStreetCam || false}
       layerLabel={
         <Fragment>
-          <FormattedMessage
-            {...messages.showOpenStreetCamLabel}
-          /> {(props.showOpenStreetCam && !props.openStreetCamLoading) &&
-              <FormattedMessage {...messages.imageCount}
-                                values={{count: props.openStreetCamCount}} />
-          } {props.openStreetCamLoading && <FormattedMessage {...messages.loading} />
-          } {props.showOpenStreetCam && props.hasMoreOpenStreetCamImagery && !props.openStreetCamLoading &&
-            <button
-              className="mr-button mr-button--xsmall mr-ml-2"
-              onClick={e => {
-                e.stopPropagation()
-                props.fetchMoreOpenStreetCamImagery()
-              }}
-            >
-              <FormattedMessage {...messages.moreLabel} />
-            </button>
-          }
+          <FormattedMessage {...messages.showOpenStreetCamLabel} />{" "}
+          {props.showOpenStreetCam && !props.openStreetCamLoading && (
+            <FormattedMessage
+              {...messages.imageCount}
+              values={{ count: props.openStreetCamCount }}
+            />
+          )}{" "}
+          {props.openStreetCamLoading && <FormattedMessage {...messages.loading} />}{" "}
+          {props.showOpenStreetCam &&
+            props.hasMoreOpenStreetCamImagery &&
+            !props.openStreetCamLoading && (
+              <button
+                className="mr-button mr-button--xsmall mr-ml-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  props.fetchMoreOpenStreetCamImagery();
+                }}
+              >
+                <FormattedMessage {...messages.moreLabel} />
+              </button>
+            )}
         </Fragment>
       }
     />
   );
-}
+};
 
-export default WithVisibleLayer(WithLayerSources(LayerToggle))
+export default WithVisibleLayer(WithLayerSources(LayerToggle));

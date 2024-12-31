@@ -1,10 +1,10 @@
-import { Component } from 'react'
+import { Component } from "react";
 import {
-  isSupportedLocale,
   defaultLocale,
+  isSupportedLocale,
   loadTranslatedMessages,
-} from '../../../services/User/Locale/Locale'
-import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
+} from "../../../services/User/Locale/Locale";
+import WithCurrentUser from "../WithCurrentUser/WithCurrentUser";
 
 /**
  * WithUserLocale passes down the current user's locale, as well as translated
@@ -19,37 +19,37 @@ import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithUserLocale = function(WrappedComponent) {
+export const WithUserLocale = function (WrappedComponent) {
   return class extends Component {
     state = {
       localeMessages: null,
-    }
+    };
 
-    activeLocale = props => {
-      const userLocale = props.user?.settings?.locale
-      return isSupportedLocale(userLocale) ? userLocale : defaultLocale()
-    }
+    activeLocale = (props) => {
+      const userLocale = props.user?.settings?.locale;
+      return isSupportedLocale(userLocale) ? userLocale : defaultLocale();
+    };
 
     loadLocale = () => {
-      loadTranslatedMessages(this.activeLocale(this.props)).then(messages => {
-        this.setState({localeMessages: messages})
-      })
-    }
+      loadTranslatedMessages(this.activeLocale(this.props)).then((messages) => {
+        this.setState({ localeMessages: messages });
+      });
+    };
 
     componentDidMount() {
-      this.loadLocale()
+      this.loadLocale();
     }
 
     componentDidUpdate(prevProps) {
       if (this.activeLocale(this.props) !== this.activeLocale(prevProps)) {
-        this.loadLocale()
+        this.loadLocale();
       }
     }
 
     render() {
       // Wait until initial locale messages are loaded before showing content
       if (!this.state.localeMessages) {
-        return null
+        return null;
       }
 
       return (
@@ -58,10 +58,9 @@ export const WithUserLocale = function(WrappedComponent) {
           locale={this.activeLocale(this.props)}
           messages={this.state.localeMessages}
         />
-      )
+      );
     }
   };
-}
+};
 
-export default WrappedComponent =>
-  WithCurrentUser(WithUserLocale(WrappedComponent))
+export default (WrappedComponent) => WithCurrentUser(WithUserLocale(WrappedComponent));
