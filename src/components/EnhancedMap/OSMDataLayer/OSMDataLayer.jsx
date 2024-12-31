@@ -3,7 +3,6 @@ import { injectIntl } from 'react-intl'
 import { IntlProvider } from 'react-intl'
 import L from 'leaflet'
 import _isEqual from 'lodash/isEqual'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import AsStylableLayer from '../../../interactions/LeafletLayer/AsStyleableLayer'
 import PropertyList from '../PropertyList/PropertyList'
@@ -15,7 +14,7 @@ import { useMap } from 'react-leaflet'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
 
-const generateLayer = (props, map, leaflet) => {
+const generateLayer = (props, map, _leaflet) => {
   const HIGHLIGHT_STYLE = {
     color: colors.gold,
     fillColor: colors.gold,

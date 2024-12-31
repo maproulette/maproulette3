@@ -2,7 +2,7 @@ import React from "react";
 import { FormattedMessage, injectIntl } from 'react-intl';
 import messages from "./Messages";
 
-const TestEnvironmentBanner = (props) => {
+const TestEnvironmentBanner = (_props) => {
   // Check the current environment
   const environment = window.env.REACT_APP_ENVIRONMENT;
 

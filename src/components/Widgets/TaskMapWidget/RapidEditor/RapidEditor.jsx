@@ -9,7 +9,7 @@ import { DEFAULT_ZOOM } from '../../../../services/Challenge/ChallengeZoom/Chall
 import WithSearch from '../../../HOCs/WithSearch/WithSearch';
 import useHash from '../../../../hooks/UseHash';
 import { SET_RAPIDEDITOR } from '../../../../services/RapidEditor/RapidEditor';
-import BusySpinner from '../../../BusySpinner/BusySpinner';
+// import BusySpinner from '../../../BusySpinner/BusySpinner';
 import { FormattedMessage } from 'react-intl';
 import messages from './../Messages';
 
@@ -42,7 +42,7 @@ function generateStartingHash({ mapBounds, task, comment }) {
 
 const RapidEditor = ({ token, task, mapBounds, comment }) => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+  const [_isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const iframeRef = useRef(null); // Create a ref for the iframe
   let initialHash = generateStartingHash({ task, mapBounds, comment });
