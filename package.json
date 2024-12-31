@@ -3,6 +3,27 @@
   "version": "3.16.1",
   "type": "module",
   "private": true,
+  "scripts": {
+    "build-intl": "NODE_ENV=production extract-messages -l=en-US -o lang/ -d en-US --flat -f json 'src/**/!(*.test).js'",
+    "update-layers": "node scripts/update_layers.js",
+    "update-layers-prod": "NODE_ENV=production node scripts/update_layers.js",
+    "start-js": "vite",
+    "start": "npm-run-all -p build-env update-layers start-js",
+    "build-env": "dotenv -c -- jq -n 'env | with_entries(select(.key | startswith(\"REACT_APP_\")))' > public/env.json",
+    "build-js": "vite build",
+    "build": "yarn run build-env && yarn run build-intl && yarn run update-layers-prod && yarn run build-js",
+    "test": "vitest",
+    "test:cov": "vitest run --coverage",
+    "lint": "eslint src/",
+    "format": "biome format --write src/",
+    "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "dependencies": {
     "@apollo/client": "^3.5.4",
     "@changey/react-leaflet-markercluster": "^4.0.0-rc1",
@@ -134,27 +155,6 @@
     "vite": "^5.4.8",
     "vitest": "^2.1.2"
   },
-  "scripts": {
-    "build-intl": "NODE_ENV=production extract-messages -l=en-US -o lang/ -d en-US --flat -f json 'src/**/!(*.test).js'",
-    "update-layers": "node scripts/update_layers.js",
-    "update-layers-prod": "NODE_ENV=production node scripts/update_layers.js",
-    "start-js": "vite",
-    "start": "npm-run-all -p build-env update-layers start-js",
-    "build-env": "dotenv -c -- jq -n 'env | with_entries(select(.key | startswith(\"REACT_APP_\")))' > public/env.json",
-    "build-js": "vite build",
-    "build": "yarn run build-env && yarn run build-intl && yarn run update-layers-prod && yarn run build-js",
-    "test": "vitest",
-    "test:cov": "vitest run --coverage",
-    "lint": "eslint src/",
-    "format": "biome format --write src/",
-    "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "resolutions": {
     "react-error-overlay": "6.0.9"
   }
