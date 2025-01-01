@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
-import _get from 'lodash/get'
 import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
 import _merge from 'lodash/merge'
@@ -24,11 +23,11 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
     updateMetrics(props) {
       this.setState({updateAvailable: false, loading: true})
 
-      const filters = {challengeId: _get(props.challenge, 'id')}
-       _merge(filters, _get(props.searchFilters, 'filters'))
+      const filters = {challengeId: props.challenge?.id}
+       _merge(filters, props.searchFilters?.filters)
 
       const criteria = {filters}
-      criteria.invertFields = _get(props.searchCriteria, 'filters.invertFields')
+      criteria.invertFields = props.searchCriteria?.filters?.invertFields
 
       if (props.includeTaskStatuses) {
         criteria.filters.status = _keys(_pickBy(props.includeTaskStatuses, v => v)).join(',')
@@ -43,7 +42,7 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
         criteria.filters.priorities =_keys(_pickBy(props.includeTaskPriorities, v => v)).join(',')
       }
 
-      props.updateReviewMetrics(_get(props.user, 'id'), criteria).then((entity) => {
+      props.updateReviewMetrics(props.user?.id, criteria).then((entity) => {
         const reviewMetrics = entity
         this.setState({loading: false, reviewMetrics: reviewMetrics})
       })
@@ -54,7 +53,7 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
         return // nothing to do
       }
 
-      if (_get(prevProps.challenge, 'id') !== _get(this.props.challenge, 'id')) {
+      if ((prevProps.challenge?.id) !== (this.props.challenge?.id)) {
         this.setState({updateAvailable: true})
         return
       }
@@ -74,7 +73,7 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
         return
       }
 
-      if (_get(this.props.searchFilters, 'filters') !== _get(prevProps.searchFilters, 'filters')) {
+      if ((this.props.searchFilters?.filters) !== (prevProps.searchFilters?.filters)) {
         this.setState({updateAvailable: true})
         return
       }
@@ -91,13 +90,13 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
         />
       )
     }
-  }
+  };
 }
 
 const mapStateToProps = state => (
-  {reviewMetrics: _get(state, 'currentReviewTasks.metrics.reviewActions'),
-   reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions'),
-   reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') }
+  {reviewMetrics: state.currentReviewTasks?.metrics?.reviewActions,
+   reviewMetricsByPriority: state.currentReviewTasks?.metrics?.priorityReviewActions,
+   reviewMetricsByTaskStatus: state.currentReviewTasks?.metrics?.statusReviewActions }
 )
 
 const mapDispatchToProps = (dispatch) => ({

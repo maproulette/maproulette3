@@ -67,10 +67,10 @@ const OSMElementTags = props => {
       <WidgetLayout {...widgetLayoutProps}>
         <div className="mr-flex mr-flex-col mr-text-red-light">
           <FormattedMessage {...messages.elementFetchFailed} values={{element: selectedFeatureId}} />
-          {fetchErr && fetchErr.defaultMessage && <FormattedMessage {...fetchErr} />}
+          {fetchErr?.defaultMessage && <FormattedMessage {...fetchErr} />}
         </div>
       </WidgetLayout>
-    )
+    );
   }
 
   const tagsValues = _map(

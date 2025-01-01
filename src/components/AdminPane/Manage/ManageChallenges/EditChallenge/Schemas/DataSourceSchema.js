@@ -128,7 +128,7 @@ export const jsSchema = (
       default: "Overpass Query",
     };
 
-    if (extraErrors && extraErrors.localGeoJSON) {
+    if (extraErrors?.localGeoJSON) {
       schema.properties.ignoreSourceErrors = {
         title: intl.formatMessage(messages.ignoreSourceErrorsLabel),
         type: "boolean",

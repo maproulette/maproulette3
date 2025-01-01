@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
 import { fetchReviewMetrics, ReviewTasksType }
@@ -35,8 +34,8 @@ export const WithProjectReviewMetrics = function(WrappedComponent) {
       this.setState({updateAvailable: false, loading: true})
 
       const challengeIds = this.getChallengeIds(props)
-      props.refreshReviewMetrics(_get(props.user, 'id'), challengeIds,
-        _get(props.project, 'id')).then(() => {
+      props.refreshReviewMetrics(props.user?.id, challengeIds,
+        props.project?.id).then(() => {
         this.setState({loading: false, currentChallengeIds: challengeIds})
       })
     }
@@ -60,13 +59,13 @@ export const WithProjectReviewMetrics = function(WrappedComponent) {
         />
       )
     }
-  }
+  };
 }
 
 const mapStateToProps = state => (
-  {reviewMetrics: _get(state, 'currentReviewTasks.metrics.reviewActions'),
-   reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions'),
-   reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') }
+  {reviewMetrics: state.currentReviewTasks?.metrics?.reviewActions,
+   reviewMetricsByPriority: state.currentReviewTasks?.metrics?.priorityReviewActions,
+   reviewMetricsByTaskStatus: state.currentReviewTasks?.metrics?.statusReviewActions }
 )
 
 const mapDispatchToProps = (dispatch) => ({

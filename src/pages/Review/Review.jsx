@@ -6,7 +6,6 @@ import { injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
 import classNames from 'classnames'
 import _cloneDeep from 'lodash/cloneDeep'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _parseInt from 'lodash/parseInt'
 import _isUndefined from 'lodash/isUndefined'
@@ -82,25 +81,25 @@ export class ReviewTasksDashboard extends Component {
     const user = AsEndUser(this.props.user)
     
     if(user.isReviewer()) {
-      if (_isUndefined(_get(this.props, 'match.params.showType')) &&
+      if (_isUndefined(this.props.match?.params?.showType) &&
           this.state.showType !== ReviewTasksType.toBeReviewed ) {
         this.setState({showType:ReviewTasksType.toBeReviewed})
       }
-      else if (_get(this.props, 'match.params.showType') !== this.state.showType &&
-          !_isUndefined(_get(this.props, 'match.params.showType'))) {
-        this.setState({showType: _get(this.props, 'match.params.showType')})
+      else if ((this.props.match?.params?.showType) !== this.state.showType &&
+          !_isUndefined(this.props.match?.params?.showType)) {
+        this.setState({showType: this.props.match?.params?.showType})
       }
     }
 
     if (!this.state.filterSelected[this.state.showType]) {
-      if (_get(this.props.history, 'location.search')) {
+      if (this.props.history?.location?.search) {
         this.setSelectedFilters(
           buildSearchCriteriafromURL(this.props.history.location.search)
         )
         return
       }
 
-      if (!_isEmpty(_get(this.props.history, 'location.state.filters'))) {
+      if (!_isEmpty(this.props.history?.location?.state?.filters)) {
         // We already have filters set in our history, so let's just move
         // on to the table.
         return

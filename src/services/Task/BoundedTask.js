@@ -7,7 +7,6 @@ import { toLatLngBounds } from '../MapBounds/MapBounds'
 import { taskSchema } from './Task'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
-import _get from 'lodash/get'
 import _values from 'lodash/values'
 import _isUndefined from 'lodash/isUndefined'
 import _map from 'lodash/map'
@@ -159,17 +158,17 @@ export function fetchBoundedTasks(criteria, limit=50, skipDispatch=false, ignore
     }
 
     let includeGeometries = _isUndefined(withGeometries) ? (limit <= 100) : withGeometries
-    const page = _get(criteria, 'page', 0)
-    const sortBy = _get(criteria, 'sortCriteria.sortBy')
-    const direction = (_get(criteria, 'sortCriteria.direction') || 'ASC').toUpperCase()
+    const page = criteria?.page ?? 0
+    const sortBy = criteria?.sortCriteria?.sortBy
+    const direction = ((criteria?.sortCriteria?.direction) || 'ASC').toUpperCase()
 
-    const filters = _get(criteria, 'filters', {})
+    const filters = criteria?.filters ?? {}
     const searchParameters = generateSearchParametersString(filters,
                                                             null,
-                                                            _get(criteria, 'savedChallengesOnly'),
+                                                            criteria?.savedChallengesOnly,
                                                             null, null,
-                                                            _get(criteria, 'invertFields'))
-    const includeTags = _get(criteria, 'includeTags', false)
+                                                            criteria?.invertFields)
+    const includeTags = criteria?.includeTags ?? false
 
     // If we don't have a challenge Id then we need to do some limiting.
     if (!filters.challengeId) {
@@ -224,7 +223,7 @@ export function fetchBoundedTasks(criteria, limit=50, skipDispatch=false, ignore
     ).execute().then(normalizedResults => {
       const totalCount = normalizedResults.result.total
 
-      let tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
+      let tasks = _values(normalizedResults?.entities?.tasks ?? {})
       tasks = _map(tasks, task =>
         Object.assign(task, {}, task.pointReview)
       )
@@ -236,8 +235,8 @@ export function fetchBoundedTasks(criteria, limit=50, skipDispatch=false, ignore
       dispatch(receiveBoundedTasks([], RequestStatus.error, fetchId))
       dispatch(addError(AppErrors.boundedTask.fetchFailure))
       console.log(error.response || error)
-    })
-  }
+    });
+  };
 }
 
 /**

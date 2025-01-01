@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { Link } from 'react-router-dom'
 import AsBrowsableChallenge
@@ -18,20 +17,20 @@ import { constructChallengeLink } from '../../utils/constructChangesetUrl'
  */
 export default class ChallengeNameLink extends Component {
   render() {
-    const challenge = _get(this.props.task, 'parent') || this.props.challenge || {}
-    const project = _get(this.props.task, 'parent.parent') || this.props.project || {}
+    const challenge = (this.props.task?.parent) || this.props.challenge || {}
+    const project = (this.props.task?.parent?.parent) || this.props.project || {}
     const challengeBrowseRoute = AsBrowsableChallenge(challenge).browseURL()
     const challengeShareLink = constructChallengeLink(challenge?.id)
 
     return (
       <span className="mr-flex mr-items-baseline mr-relative mr-overflow-hidden">
         {_isFinite(this.props.virtualChallengeId) &&
-         <span title={_get(this.props, 'virtualChallenge.name')}>
+         <span title={this.props.virtualChallenge?.name}>
            <Link
              to={`/browse/virtual/${this.props.virtualChallengeId}`}
              className="mr-leading-normal mr-flex mr-items-baseline"
            >
-             {_get(this.props, 'virtualChallenge.name') ?
+             {this.props.virtualChallenge?.name ?
               <span className="mr-text-white hover:mr-text-green-lighter">
                 {this.props.virtualChallenge.name}
               </span> :
@@ -65,7 +64,7 @@ export default class ChallengeNameLink extends Component {
          <ShareLink link={challengeShareLink} {...this.props} />
         }
       </span>
-    )
+    );
   }
 }
 

@@ -1,6 +1,5 @@
 import { Fragment, useState } from 'react'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _map from 'lodash/map'
 import _isArray from 'lodash/isArray'
@@ -66,10 +65,10 @@ export const CustomArrayFieldTemplate = props => {
   const itemFields = _map(props.items, element =>
     <div
       key={element.index}
-      className={classNames("array-field__item", _get(props, 'uiSchema.items.classNames'))}
+      className={classNames("array-field__item", props.uiSchema?.items?.classNames)}
     >
       <div
-        className={classNames({"inline": _get(props, 'uiSchema.items.ui:options.inline')})}
+        className={classNames({"inline": props.uiSchema?.items?.["ui:options"]?.inline})}
       >
         {element.children}
         {element.hasRemove &&
@@ -110,13 +109,13 @@ export const CustomArrayFieldTemplate = props => {
 
 export const CustomFieldTemplate = function(props) {
   const {classNames, children, description, uiSchema, errors} = props
-  const isCollapsed = _get(uiSchema, "ui:collapsed", false)
+  const isCollapsed = uiSchema?.["ui:collapsed"] ?? false
   return (
     <div className={classNames}>
-      {uiSchema && uiSchema["ui:groupHeader"] &&
+      {uiSchema?.["ui:groupHeader"] &&
        <div className="mr-flex mr-justify-end mr-text-teal mr-text-lg mr-pt-4 mr-my-4 mr-border-t mr-border-teal-40">
          <span>{uiSchema["ui:groupHeader"]}</span>
-         {uiSchema && uiSchema["ui:toggleCollapsed"] &&
+         {uiSchema?.["ui:toggleCollapsed"] &&
            <button type="button" onClick={() => uiSchema["ui:toggleCollapsed"]()}>
              <SvgSymbol
                sym={isCollapsed ? "icon-cheveron-right" : "icon-cheveron-down"}
@@ -127,7 +126,7 @@ export const CustomFieldTemplate = function(props) {
          }
        </div>
       }
-      {uiSchema && uiSchema["ui:fieldGroupHeader"] && uiSchema["ui:toggleCollapsed"] &&
+      {uiSchema?.["ui:fieldGroupHeader"] && uiSchema["ui:toggleCollapsed"] &&
        <div
          className="mr-flex mr-text-mango mr-uppercase mr-text-md mr-mb-2 mr-cursor-pointer"
          onClick={() => uiSchema["ui:toggleCollapsed"]()}

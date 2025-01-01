@@ -8,7 +8,6 @@ import { coordAll } from '@turf/meta'
 import { point } from '@turf/helpers'
 import _isObject from 'lodash/isObject'
 import L from 'leaflet'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
@@ -81,26 +80,26 @@ export const TaskMapContent = (props) => {
   const [directionalityIndicators, setDirectionalityIndicators] = useState({})
   const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true })
   const taskFeatures = () => {
-    if (_get(props, 'taskBundle.tasks.length', 0) > 0) {
+    if ((props.taskBundle?.tasks?.length ?? 0) > 0) {
       return featureCollection(
         _flatten(_compact(_map(props.taskBundle.tasks,
-                               task => _get(task, 'geometries.features'))))
-      ).features
+                               task => task?.geometries?.features)))
+      ).features;
     }
 
     // If current OSM data is available, show the feature's current OSM tags
     // instead of those bundled with the GeoJSON. We preserve any simplestyle
     // properties, allowing display colors and what not to be customized
-    if (_get(props, 'osmElements.size', 0) > 0) {
+    if ((props.osmElements?.size ?? 0) > 0) {
       return AsMappableTask(props.task).featuresWithTags(
-        _get(props.task, 'geometries.features'),
+        props.task?.geometries?.features,
         props.osmElements,
         true,
         supportedSimplestyles,
-      )
+      );
     }
 
-    return _get(props.task, 'geometries.features')
+    return props.task?.geometries?.features;
   }
   const features = taskFeatures()
   const animator = new MapAnimator()
@@ -202,7 +201,7 @@ export const TaskMapContent = (props) => {
             if ((featureLayer.getIcon && isClickOnMarker(clickBounds, featureLayer, map)) ||
                 !booleanDisjoint(clickBounds, featureGeojson)) {
               const featureId = AsIdentifiableFeature(featureGeojson).normalizedTypeAndId()
-              const featureName = _get(featureGeojson, 'properties.name')
+              const featureName = featureGeojson?.properties?.name
               let layerDescription =
                 (featureLayer.options.mrLayerLabel || '') + (featureId ? `: ${featureId}` : '')
               if (!layerDescription) {
@@ -424,7 +423,7 @@ export const TaskMapContent = (props) => {
       }
 
       const styles =
-        AsSimpleStyleableFeature(feature, _get(props, 'challenge.taskStyles')).getFinalLayerStyles()
+        AsSimpleStyleableFeature(feature, props.challenge?.taskStyles).getFinalLayerStyles()
       const coords = coordAll(feature)
       if (["yes", "true", "1"].indexOf(feature.properties.oneway) !== -1) {
         for (let i = 0; i < coords.length - 1; i++) {
@@ -492,7 +491,7 @@ export const TaskMapContent = (props) => {
 
   const applyStyling = taskFeatures => {
     // If the challenge has conditional styles, apply those
-    const conditionalStyles = _get(props, 'challenge.taskStyles')
+    const conditionalStyles = props.challenge?.taskStyles
     if (conditionalStyles) {
       return _map(
         taskFeatures,
@@ -522,7 +521,7 @@ export const TaskMapContent = (props) => {
     return layers
   }
 
-  const maxZoom = _get(props.task, "parent.maxZoom", MAX_ZOOM)
+  const maxZoom = props.task?.parent?.maxZoom ?? MAX_ZOOM
   
   const renderMapillaryViewer = () => {
     return (
@@ -551,7 +550,7 @@ export const TaskMapContent = (props) => {
 
   const overlayLayers = () => {
     let layers = buildLayerSources(
-      props.visibleOverlays, _get(props, 'user.settings.customBasemaps'),
+      props.visibleOverlays, props.user?.settings?.customBasemaps,
       (layerId, index, layerSource) => ({
         id: layerId,
         component: <SourcedTileLayer key={layerId} source={layerSource} mrLayerId={layerId} />,
@@ -611,10 +610,10 @@ export const TaskMapContent = (props) => {
         osmDataLoading={osmDataLoading}
         toggleMapillary={props.isMapillaryEnabled() ? toggleMapillaryVisibility : undefined}
         showMapillary={props.showMapillaryLayer}
-        mapillaryCount={_get(props, 'mapillaryImages.length', 0)}
+        mapillaryCount={props.mapillaryImages?.length ?? 0}
         toggleOpenStreetCam={props.isOpenStreetCamEnabled() ? toggleOpenStreetCamVisibility : undefined}
         showOpenStreetCam={props.showOpenStreetCamLayer}
-        openStreetCamCount={_get(props, 'openStreetCamImages.length', 0)}
+        openStreetCamCount={props.openStreetCamImages?.length ?? 0}
         overlayOrder={props.getUserAppSetting(props.user, 'mapOverlayOrder')}
       />
       <ZoomControl position='topright' />
@@ -628,7 +627,7 @@ export const TaskMapContent = (props) => {
       {mapillaryViewerImage && renderMapillaryViewer()}
       {openStreetCamViewerImage && <OpenStreetCamViewer key={Date.now()} images={props.openStreetCamImages} initialImageKey={openStreetCamViewerImage} onClose={() => setOpenStreetCamViewerImage(null)} />}
     </div>
-  )
+  );
 }
 
 const TaskMap = (props) => {

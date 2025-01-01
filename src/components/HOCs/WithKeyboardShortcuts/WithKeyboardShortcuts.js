@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import {
   addKeyboardShortcutGroup,
   removeKeyboardShortcutGroup,
@@ -13,8 +12,8 @@ import KeyMappings from '../../../services/KeyboardShortcuts/KeyMappings'
 const mapStateToProps = state => {
   return {
     keyboardShortcutGroups: KeyMappings,
-    activeKeyboardShortcuts: _get(state, 'currentKeyboardShortcuts.groups', {}),
-  }
+    activeKeyboardShortcuts: state.currentKeyboardShortcuts?.groups ?? {},
+  };
 }
 const textInputActive = function(event) {
   if (event.target.type === 'text' || event.target.type === 'search') {

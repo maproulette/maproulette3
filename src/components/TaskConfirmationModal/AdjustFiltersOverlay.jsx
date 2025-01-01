@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
@@ -20,9 +19,9 @@ import messages from './Messages'
  */
 export default class AdjustFiltersOverlay extends Component {
   render() {
-    const currentFilters = _get(this.props.currentFilters, 'filters', {})
-    const challengeName = _get(this.props.challenge, 'name', '')
-    const invertFields = _get(this.props.currentFilters, 'invertFields', {})
+    const currentFilters = this.props.currentFilters?.filters ?? {}
+    const challengeName = this.props.challenge?.name ?? ''
+    const invertFields = this.props.currentFilters?.invertFields ?? {}
 
     const reviewStatusFilter =
       <div className="mr-mt-4">

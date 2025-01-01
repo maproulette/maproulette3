@@ -4,7 +4,6 @@ import classNames from "classnames";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import _get from "lodash/get";
 import _isObject from "lodash/isObject";
 import _isFinite from "lodash/isFinite";
 import _merge from "lodash/merge";
@@ -92,27 +91,23 @@ export default class ChallengeControls extends Component {
       parent = this.props.challenge.parent;
     } else if (
       _isFinite(this.props.challenge.parent) &&
-      this.props.challenge.parent === _get(this.props, "project.id")
+      this.props.challenge.parent === (this.props.project?.id)
     ) {
       parent = this.props.project;
     }
 
-    const inVirtualProject = _get(this.props, "project.isVirtual", false);
+    const inVirtualProject = this.props.project?.isVirtual ?? false;
     const manager = AsManager(this.props.user);
-    const projectId = _get(
-      this.props.challenge,
-      "parent.id",
-      this.props.challenge.parent
-    );
-    const status = _get(this.props.challenge, "status", ChallengeStatus.none);
-    const hasTasks = _get(this.props.challenge, "actions.total", 0) > 0;
-    const isArchived = _get(this.props.challenge, "isArchived");
+    const projectId = this.props.challenge?.parent?.id ?? (this.props.challenge.parent);
+    const status = this.props.challenge?.status ?? (ChallengeStatus.none);
+    const hasTasks = (this.props.challenge?.actions?.total ?? 0) > 0;
+    const isArchived = this.props.challenge?.isArchived;
     const requiresEmail = isEmailRequired(this.props.user);
     const tasksNeedRebuild = handleTasksNeedRebuild(
-      _get(this.props.challenge, "lastTaskRefresh")
+      this.props.challenge?.lastTaskRefresh
     );
     const disableUnarchive =
-      tasksNeedRebuild && _get(this.props.challenge, "systemArchivedAt");
+      tasksNeedRebuild && (this.props.challenge?.systemArchivedAt);
 
     if (requiresEmail) {
       return (
@@ -157,7 +152,7 @@ export default class ChallengeControls extends Component {
                   `/admin/project/${projectId}/` +
                   `challenge/${this.props.challenge.id}/edit`,
                 state: _merge(
-                  _get(this.props.searchCriteria, "filters"),
+                  this.props.searchCriteria?.filters,
                 )
               }}
               className={this.props.controlClassName}
@@ -185,7 +180,7 @@ export default class ChallengeControls extends Component {
                   `/admin/project/${projectId}/` +
                   `challenge/${this.props.challenge.id}/clone`,
                 state: _merge(
-                  _get(this.props.searchCriteria, "filters")
+                  this.props.searchCriteria?.filters
                 ),
               }}
               className={this.props.controlClassName}

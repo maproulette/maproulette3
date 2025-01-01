@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useQuery } from '@apollo/client'
-import _get from 'lodash/get'
 import _find from 'lodash/find'
 import _throttle from 'lodash/throttle'
 import { subscribeToFollowUpdates, unsubscribeFromFollowUpdates }
@@ -47,8 +46,8 @@ const FollowingWidget = props => {
     subscribeToFollowUpdates(message => {
       if (message.data.followedId === props.user.id ||
           message.data.followerId === props.user.id ||
-          _find(_get(data, 'user.followers'), f => f.user.id === message.data.followerId) ||
-          _find(_get(data, 'user.following'), {id: message.data.followedId})) {
+          _find(data?.user?.followers, f => f.user.id === message.data.followerId) ||
+          _find(data?.user?.following, {id: message.data.followedId})) {
         refetch()
       }
     }, "FollowingWidget")

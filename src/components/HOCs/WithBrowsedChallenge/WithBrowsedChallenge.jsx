@@ -38,7 +38,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
      * @private
      */
     standardChallengeId = props =>
-      parseInt(_get(props, 'match.params.challengeId'), 10)
+      parseInt(props.match?.params?.challengeId, 10)
 
     /**
      * Parses the virtual challenge id from the matched params of the route
@@ -46,7 +46,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
      * @private
      */
     virtualChallengeId = props =>
-      parseInt(_get(props, 'match.params.virtualChallengeId'), 10)
+      parseInt(props.match?.params?.virtualChallengeId, 10)
 
     /**
      * Determines whether this challenge is a virtual challenge
@@ -92,7 +92,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
       const isVirtual = this.isVirtualChallenge(props)
 
       if (_isFinite(challengeId)) {
-        if (_get(this.state, 'browsedChallenge.id') !== challengeId ||
+        if ((this.state.browsedChallenge?.id) !== challengeId ||
             this.state.isVirtual !== isVirtual ||
             _isFinite(this.state.loadingBrowsedChallenge)) {
           let challenge = this.denormalizedChallenge(props)
@@ -173,8 +173,8 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
       const isVirtual = this.isVirtualChallenge(this.props)
 
       let clusteredTasks = null
-      if (challengeId === _get(this.props, 'clusteredTasks.challengeId') &&
-          isVirtual === _get(this.props, 'clusteredTasks.isVirtualChallenge')) {
+      if (challengeId === (this.props.clusteredTasks?.challengeId) &&
+          isVirtual === (this.props.clusteredTasks?.isVirtualChallenge)) {
         clusteredTasks = this.props.clusteredTasks
       }
 

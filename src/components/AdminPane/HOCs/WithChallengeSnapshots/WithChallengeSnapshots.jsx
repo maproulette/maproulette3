@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { injectIntl } from 'react-intl'
-import _get from 'lodash/get'
 import _find from 'lodash/find'
 import _values from 'lodash/values'
 import { fetchChallengeSnapshotList,
@@ -17,7 +16,7 @@ const WithChallengeSnapshots = function(WrappedComponent) {
     }
 
     updateSnapshots(props) {
-      const challengeId =_get(props.challenge, 'id')
+      const challengeId =props.challenge?.id
       if (challengeId) {
         this.setState({loading: true})
 
@@ -31,7 +30,7 @@ const WithChallengeSnapshots = function(WrappedComponent) {
     }
 
     recordSnapshot(props) {
-      const challengeId =_get(props.challenge, 'id')
+      const challengeId =props.challenge?.id
 
       if (challengeId) {
         this.setState({loading: true})
@@ -66,8 +65,8 @@ const WithChallengeSnapshots = function(WrappedComponent) {
     }
 
     componentDidUpdate(prevProps) {
-      const challengeId =_get(this.props.challenge, 'id')
-      if (challengeId && challengeId !== _get(prevProps.challenge, 'id')) {
+      const challengeId =this.props.challenge?.id
+      if (challengeId && challengeId !== (prevProps.challenge?.id)) {
         this.updateSnapshots(this.props)
       }
     }
@@ -75,7 +74,7 @@ const WithChallengeSnapshots = function(WrappedComponent) {
     render() {
       // If we don't have a selectedSnapshot in our state then we want to show
       // the "current" metrics which are passed to us in our props.
-      const reviewActions = _get(this.state.selectedSnapshot, 'reviewActions')
+      const reviewActions = this.state.selectedSnapshot?.reviewActions
       const reviewMetrics = reviewActions ? {
         total: reviewActions.total,
         reviewRequested: reviewActions.requested,
@@ -86,22 +85,24 @@ const WithChallengeSnapshots = function(WrappedComponent) {
         avgReviewTime: reviewActions.avgReviewTime,
       } : this.props.reviewMetrics
 
-      return <WrappedComponent
-               {...this.props}
-               recordSnapshot={() => this.recordSnapshot(this.props)}
-               deleteSnapshot={(snapshotId) => this.deleteSnapshot(this.props, snapshotId)}
-               snapshotList={this.state.snapshotList}
-               setSelectedSnapshot={this.setSelectedSnapshot}
-               currentMetrics={this.props.taskMetrics}
-               taskMetrics =
-                 {_get(this.state.selectedSnapshot, 'actions') || this.props.taskMetrics}
-               taskMetricsByPriority =
-                 {_get(this.state.selectedSnapshot, 'priorityActions') || this.props.taskMetricsByPriority}
-               reviewMetrics={reviewMetrics}
-             />
+      return (
+        <WrappedComponent
+                 {...this.props}
+                 recordSnapshot={() => this.recordSnapshot(this.props)}
+                 deleteSnapshot={(snapshotId) => this.deleteSnapshot(this.props, snapshotId)}
+                 snapshotList={this.state.snapshotList}
+                 setSelectedSnapshot={this.setSelectedSnapshot}
+                 currentMetrics={this.props.taskMetrics}
+                 taskMetrics =
+                   {(this.state.selectedSnapshot?.actions) || this.props.taskMetrics}
+                 taskMetricsByPriority =
+                   {(this.state.selectedSnapshot?.priorityActions) || this.props.taskMetricsByPriority}
+                 reviewMetrics={reviewMetrics}
+               />
+      );
 
     }
-  }
+  };
 }
 
 

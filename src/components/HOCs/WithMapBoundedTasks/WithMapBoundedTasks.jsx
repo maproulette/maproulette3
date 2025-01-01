@@ -52,11 +52,11 @@ export const WithMapBoundedTasks = function(WrappedComponent,
         // If we have no mapBoundsTasks then we might be dealing with clusters.
         // If the clusters all represent individual tasks then these should be ok
         // to work on as a virtual challenge as well.
-        if (_get(mapBoundedTasks, 'tasks.length', 0) === 0) {
+        if ((mapBoundedTasks?.tasks?.length ?? 0) === 0) {
           const clusters = this.props.mapBoundedTaskClusters.clusters
           const areClustersAllTasks = !(_find(clusters, c => !c.taskId))
 
-          if (areClustersAllTasks && _get(clusters, 'length') > 0) {
+          if (areClustersAllTasks && (clusters?.length) > 0) {
             mapBoundedTasks = {tasks: _map(clusters, cluster => {
               return {id: cluster.taskId, parentId: cluster.challengeIds[0]}
             })}
@@ -64,7 +64,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
         }
       }
 
-      if (!matchChallenges || _get(mapBoundedTasks, 'tasks.length', 0) === 0) {
+      if (!matchChallenges || (mapBoundedTasks?.tasks?.length ?? 0) === 0) {
         return mapBoundedTasks
       }
 
@@ -84,7 +84,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
      * a virtual challenge.
      */
     startMapBoundedTasks = name => {
-      const tasks = _get(this.allowedTasks(), 'tasks')
+      const tasks = this.allowedTasks()?.tasks
       if (tasks && tasks.length > 0) {
         this.setState({creatingVirtualChallenge: true})
 
@@ -112,7 +112,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
                           {..._omit(this.props, ['mapBoundedTasks',
                                                  'startBoundedTasks'])} />)
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({

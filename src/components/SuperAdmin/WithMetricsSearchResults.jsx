@@ -43,19 +43,19 @@ export const WithMetricsSearchResults = function (
       if (searchType === 'challenges' && query) {
         searchResults = _filter(
           items,
-          (item) => _get(item, 'name', '').toLowerCase().indexOf(query) !== -1
+          (item) => (item?.name ?? '').toLowerCase().indexOf(query) !== -1
         )
       } else if (searchType === 'projects' && query) {
         searchResults = _filter(
           items,
           (item) =>
-            _get(item, 'displayName', '').toLowerCase().indexOf(query) !== -1
+            (item?.displayName ?? '').toLowerCase().indexOf(query) !== -1
         )
       } else if (searchType === 'users' && query) {
         searchResults = _filter(
           items,
           (item) =>
-            _get(item, 'osmProfile.displayName', '')
+            (item?.osmProfile?.displayName ?? '')
               .toLowerCase()
               .indexOf(query) !== -1
         )
@@ -76,7 +76,7 @@ export const WithMetricsSearchResults = function (
         />
       )
     }
-  }
+  };
 }
 
 export default (

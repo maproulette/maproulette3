@@ -1,7 +1,6 @@
 import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
 import _isEqual from 'lodash/isEqual'
-import _get from 'lodash/get'
 import { injectIntl } from 'react-intl'
 import CardProject from '../../CardProject/CardProject'
 
@@ -29,7 +28,7 @@ export class ProjectResultItem extends Component {
     // Only re-render under specific conditions:
 
     // if the user has changed
-    if (_get(nextProps, 'user.id') !== _get(this.props, 'user.id')) {
+    if ((nextProps?.user?.id) !== (this.props.user?.id)) {
       return true
     }
 
@@ -61,11 +60,11 @@ export class ProjectResultItem extends Component {
           project={this.props.project}
           isExpanded={false}
           cardClicked={this.browseProject}
-          projectQuery={_get(this.props, 'searchFilters.project')}
+          projectQuery={this.props.searchFilters?.project}
           excludeProjectId={this.props.excludeProjectId}
         />
       </div>
-    )
+    );
   }
 }
 

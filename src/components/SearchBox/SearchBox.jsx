@@ -45,18 +45,18 @@ export default class SearchBox extends Component {
   }
 
   getSearchType(props) {
-    return _get(props, 'searchFilters.searchType')
+    return props.searchFilters?.searchType;
   }
 
   getQuery(props) {
     return (props.searchGroup ?
         _get(props, `searchQueries.${props.searchGroup}.searchQuery.query`) :
-        _get(props, 'searchQuery.query')) || ''
+        props.searchQuery?.query) || '';
   }
 
   render() {
     const query = this.getQuery(this.props)
-    const isLoading = _get(this.props, 'searchQuery.meta.fetchingResults')
+    const isLoading = this.props.searchQuery?.meta?.fetchingResults
 
     const clearButton =
       query.length === 0 ? null :

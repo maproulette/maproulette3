@@ -20,7 +20,7 @@ const WithLoadedTask = function(WrappedComponent) {
       loading: false,
     }
 
-    parseTaskId = props => parseInt(_get(props, 'taskId'), 10)
+    parseTaskId = props => parseInt(props.taskId, 10)
 
     retrieveTask = props => {
       this.setState({loading: true})
@@ -61,7 +61,7 @@ const WithLoadedTask = function(WrappedComponent) {
                                                       'fetchTask',
                                                       'fetchTaskComments'])} />
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({

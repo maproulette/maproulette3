@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _omit from 'lodash/omit'
 import _isObject from 'lodash/isObject'
@@ -30,10 +29,10 @@ const WithProject = function(WrappedComponent, options={}) {
     }
 
     currentProjectId = props =>
-      parseInt(_get(props, 'match.params.projectId'), 10)
+      parseInt(props.match?.params?.projectId, 10)
 
     challengeProjects = (projectId) => {
-      const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
+      const allChallenges = _values(this.props.entities?.challenges ?? {})
       return _filter(allChallenges, (challenge) => {
           const matchingVP =
             _find(challenge.virtualParents, (vp) => {
@@ -117,7 +116,7 @@ const WithProject = function(WrappedComponent, options={}) {
                                owner={owner}
                                challenges={challenges} />
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({

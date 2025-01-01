@@ -1,21 +1,3 @@
-import _get from 'lodash/get'
-
-/**
- * Client for websocket messages to/from the server, which handles automatic
- * reconnection (with retransmission of server subscription messages)
- *
- * To receive messages, a service should register a message handler with this
- * client for the type of message it wishes to process
- *
- * The sendMessage function can be used to send messages to the server. If
- * messages are sent while the socket is not open, they will be queued and
- * transmitted when the the socket does open
- *
- * Services should use the addServerSubscription and removeServerSubscription
- * functions to handle subscribe/unsubscribe messages instead of sending them
- * directly. This allows the client to automatically refresh active
- * subscriptions in the event of a disconnect/reconnect.
- */
 export default class WebSocketClient {
   constructor() {
     this.websocket = null
@@ -149,7 +131,7 @@ export default class WebSocketClient {
    */
   handleMessage(messageEvent) {
     const messageObject = JSON.parse(messageEvent.data)
-    const subscriptionName = _get(messageObject, 'meta.subscriptionName')
+    const subscriptionName = messageObject?.meta?.subscriptionName
 
     if (subscriptionName && this.subscriptionHandlers.has(subscriptionName)) {
       for (let handler of this.subscriptionHandlers.get(subscriptionName).values()) {

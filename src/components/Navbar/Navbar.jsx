@@ -2,7 +2,6 @@ import { Fragment, Component } from 'react'
 import MediaQuery from 'react-responsive'
 import MobileMenu from 'react-burger-menu/lib/menus/slide'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import _last from 'lodash/last'
 import { Link, NavLink } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
@@ -55,7 +54,7 @@ export default class Navbar extends Component {
   }
 
   signout = () => {
-    this.props.logoutUser(_get(this.props, 'user.id'))
+    this.props.logoutUser(this.props.user?.id)
     this.closeMobileMenu()
   }
 
@@ -86,7 +85,7 @@ export default class Navbar extends Component {
         <MediaQuery minWidth={screens.lg}>
           <LoggedInUser {...this.props}>
             <div className="mr-flex mr-items-center">
-              {_get(this.props, 'user.achievements.length', 0) > 0 &&
+              {(this.props.user?.achievements?.length ?? 0) > 0 &&
                <Link className="mr-mx-4 mr-w-16" to="/user/achievements">
                  <div className="mr-relative mr-w-12">
                    <AchievementBadge
@@ -170,7 +169,7 @@ export default class Navbar extends Component {
           </button>
         </MediaQuery>
       </header>
-    )
+    );
   }
 }
 
@@ -433,9 +432,9 @@ const MobileNav = props => (
 )
 
 const LoggedInUser = props => {
-  return _get(props, 'user.isLoggedIn') ? props.children : null
+  return props.user?.isLoggedIn ? props.children : null;
 }
 
 const LoggedOutUser = props => {
-  return !_get(props, 'user.isLoggedIn') ? props.children : null
+  return !props.user?.isLoggedIn ? props.children : null;
 }

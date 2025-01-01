@@ -2,7 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import FormattedDuration, { TIMER_FORMAT } from 'react-intl-formatted-duration'
-import _get from 'lodash/get'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
@@ -85,7 +84,7 @@ export default class TaskBuildProgress extends Component {
       return null
     }
 
-    const taskCount = _get(this.props.challenge, 'actions.total', 0)
+    const taskCount = this.props.challenge?.actions?.total ?? 0
 
     if (this.props.challenge.statusMessage === TASKS_UPDATING_MESSAGE) {
       return (
@@ -116,11 +115,11 @@ export default class TaskBuildProgress extends Component {
               </span>
             </div>
             <div className="mr-text-lg mr-mt-3">
-              <TaskStatusOverview actions={_get(this.props.challenge, 'actions', {})} />
+              <TaskStatusOverview actions={this.props.challenge?.actions ?? {}} />
             </div>
           </div>
         </div>
-      )
+      );
     }
 
     return (

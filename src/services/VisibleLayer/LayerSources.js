@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import QueryString from 'query-string'
 import _find from 'lodash/find'
-import _get from 'lodash/get'
 import _sortBy from 'lodash/sortBy'
 import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
@@ -66,7 +65,7 @@ export const LayerSources = _sortBy(
 
 // Load any API keys from .env file
 let layerAPIKeys = {}
-if (_get(window.env, 'REACT_APP_MAP_LAYER_API_KEYS', '').length > 0) {
+if ((window.env?.REACT_APP_MAP_LAYER_API_KEYS ?? '').length > 0) {
   try {
     layerAPIKeys = JSON.parse(window.env.REACT_APP_MAP_LAYER_API_KEYS)
   }
@@ -207,7 +206,7 @@ export const basemapLayerSource = function(defaultBasemap, defaultBasemapId, cus
   } else if (_isFinite(defaultBasemap)) {
     const basemap = basemapLayerSources()[defaultBasemap]
     return layerSourceWithId(basemap)
-  } else if (defaultBasemap && defaultBasemap.url) {
+  } else if (defaultBasemap?.url) {
     return createDynamicLayerSource(
       defaultBasemap.name, defaultBasemap.name, defaultBasemap.url,
       defaultBasemap.overlay)

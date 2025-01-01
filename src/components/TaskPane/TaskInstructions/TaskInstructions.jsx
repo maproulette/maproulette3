@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import Button from '../../Button/Button'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
@@ -24,7 +23,7 @@ const TaskInstructions = props => {
   const mrProperties = useMRProperties(props.workspaceContext)
 
   const { task } = props
-  const challenge = _get(props, 'task.parent', {})
+  const challenge = props.task?.parent ?? {}
 
   useEffect(() => {
     setInstructions(!_isEmpty(task.instruction) ? task.instruction : challenge.instruction)

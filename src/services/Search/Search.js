@@ -540,7 +540,7 @@ export const performSearch = function(searchName, query, asyncSearchAction, prop
       return null
     }
 
-    const resultsPerPage = _get(query, 'page.resultsPerPage')
+    const resultsPerPage = query?.page?.resultsPerPage
     const actionToDo = asyncSearchAction(query, resultsPerPage, props)
 
     if (actionToDo) {
@@ -555,7 +555,7 @@ export const performSearch = function(searchName, query, asyncSearchAction, prop
         }
       })
     }
-  }
+  };
 }
 
 

@@ -19,8 +19,8 @@ const WithChallenges =
   WrappedComponent => connect(mapStateToProps)(WrappedComponent)
 
 export const mapStateToProps = (state, ownProps) => {
-  const challenges = _values(_get(state, 'entities.challenges')) || []
-  const showArchived = _get(state, 'currentSearch.challenges.filters.archived', false);
+  const challenges = _values(state.entities?.challenges) || []
+  const showArchived = state.currentSearch?.challenges?.filters?.archived ?? false;
   // By default, only pass through challenges that are enabled (and belong to
   // an enabled project), have some tasks, and are in a usable status (unless
   // the allStatuses prop is set to true).
@@ -29,9 +29,9 @@ export const mapStateToProps = (state, ownProps) => {
     usableChallenges = _filter(challenges, challenge => {
       const parent = _get(state, `entities.projects.${challenge.parent}`)
       return challenge.enabled &&
-             _get(parent, 'enabled', false) &&
+             (parent?.enabled ?? false) &&
              !challenge.deleted &&
-             isUsableChallengeStatus(challenge.status)
+             isUsableChallengeStatus(challenge.status);
     })
   }
 

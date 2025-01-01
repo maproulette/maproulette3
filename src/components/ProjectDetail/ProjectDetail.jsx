@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import { FormattedMessage, FormattedDate, injectIntl }
        from 'react-intl'
 import _isObject from 'lodash/isObject'
-import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import { parseISO } from 'date-fns'
 import messages from './Messages'
@@ -141,7 +140,7 @@ export class ProjectDetail extends Component {
                         <FormattedDate value={parseISO(project.modified)}
                                         year='numeric' month='long' day='2-digit' />
                       </li>
-                      {_get(this.props, 'challenges.length', 0) > 0 &&
+                      {(this.props.challenges?.length ?? 0) > 0 &&
                         <li>
                           <Link
                             className="mr-text-green-lighter hover:mr-text-white"
@@ -168,7 +167,7 @@ export class ProjectDetail extends Component {
 
                     <ul className="mr-card-challenge__actions mr-mt-4 mr-leading-none mr-text-base">
                       <li>
-                        {_get(this.props.user, 'settings.isReviewer') &&
+                        {(this.props.user?.settings?.isReviewer) &&
                           <Link
                             className={classNames(
                               "mr-text-green-lighter hover:mr-text-white mr-mr-4",
@@ -188,7 +187,7 @@ export class ProjectDetail extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

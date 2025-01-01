@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
 import _isEmpty from 'lodash/isEmpty'
@@ -10,7 +9,7 @@ import WithSearchResults
 import WithPagedProjects
        from '../../../HOCs/WithPagedProjects/WithPagedProjects'
 import SearchBox from '../../../SearchBox/SearchBox'
-import { get as levenshtein } from 'fast-levenshtein'; 
+import { get as levenshtein } from 'fast-levenshtein';
 import Modal from '../../../Modal/Modal'
 import messages from './Messages'
 
@@ -31,7 +30,7 @@ export class ProjectPickerModal extends Component {
       searchQuery: queryCriteria.query,
       page: 0,
       onlyEnabled: false
-    }, _get(queryCriteria, "page.resultsPerPage"))
+    }, queryCriteria?.page?.resultsPerPage)
   }
 
   render() {

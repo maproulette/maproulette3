@@ -76,7 +76,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
 
     setSearchSort = (sortCriteria) => {
       this.props.setSearchSort(sortCriteria)
-      addSearchCriteriaToRoute(this.props.history, {sort: _get(sortCriteria, 'sortBy')})
+      addSearchCriteriaToRoute(this.props.history, {sort: sortCriteria?.sortBy})
     }
 
     setSearchFilters = (filterCriteria) => {

@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import _get from 'lodash/get'
 import SignIn from '../../pages/SignIn/SignIn'
 import UserSettings from './UserSettings/UserSettings'
 import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
@@ -11,7 +10,7 @@ import messages from './Messages'
 class Profile extends Component {
   componentDidMount() {
     // Make sure our user is logged in
-    if (_get(this.props, 'user.isLoggedIn')) {
+    if (this.props.user?.isLoggedIn) {
       this.props.fetchUser(this.props.user.id)
     }
   }

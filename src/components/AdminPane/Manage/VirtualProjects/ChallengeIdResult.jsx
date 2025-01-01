@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { defaultRoutes as api } from "../../../../services/Server/Server";
 import Endpoint from "../../../../services/Server/Endpoint";
 import { challengeSchema } from "../../../../services/Challenge/Challenge";
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import AssociatedChallengeList from './AssociatedChallengeList';
 
@@ -42,7 +41,7 @@ const ChallengeIdResult = (props) => {
 }
 
 export const mapStateToProps = (state) => {
-  return { query: _get(state, 'currentSearch.adminChallengeList.query', '') }
+  return { query: state.currentSearch?.adminChallengeList?.query ?? '' };
 }
 
 export default connect(mapStateToProps)(ChallengeIdResult)

@@ -10,7 +10,6 @@ import _isFinite from "lodash/isFinite";
 import _omit from "lodash/omit";
 import _filter from "lodash/filter";
 import _difference from "lodash/difference";
-import _get from "lodash/get";
 import _remove from "lodash/remove";
 import _isEqual from "lodash/isEqual";
 import _merge from "lodash/merge";
@@ -108,7 +107,7 @@ export class EditChallenge extends Component {
    * challenge.
    */
   isCloningChallenge = () => {
-    return _get(this.props, "location.pathname").includes('clone') ? true : false
+    return (this.props.location?.pathname).includes('clone') ? true : false;
   }
 
   /**
@@ -116,7 +115,7 @@ export class EditChallenge extends Component {
    * is passed in from challengeDetail.js
    */
   getCloningProjectId = () => {
-    return _get(this.props, "location.state.projectId");
+    return this.props.location?.state?.projectId;
   }
 
   /**
@@ -369,7 +368,7 @@ export class EditChallenge extends Component {
    */
   prepareChallengeDataForForm = () => {
     let challengeData = Object.assign(
-      { parent: _get(this.props, "project.id") },
+      { parent: this.props.project?.id },
       _omit(this.props.challenge, ["activity", "comments"]),
       this.state.formData
     );
@@ -603,7 +602,7 @@ export class EditChallenge extends Component {
     // Note any old tags that are to be discarded. Right now a separate API
     // request will be needed to remove undesired tags.
     challengeData.removedTags = _difference(
-      _get(this.props, "challenge.tags", []),
+      this.props.challenge?.tags ?? [],
       challengeData.tags
     );
 
@@ -674,20 +673,16 @@ export class EditChallenge extends Component {
 
   hasTaskStyleRuleErrors = () => {
     const useCustom = !_isUndefined(
-      _get(this.state.formData, "customTaskStyles")
+      this.state.formData?.customTaskStyles
     )
-      ? _get(this.state.formData, "customTaskStyles")
-      : !_isEmpty(_get(this.props.challenge, "taskStyles"));
+      ? this.state.formData?.customTaskStyles
+      : !_isEmpty(this.props.challenge?.taskStyles);
 
     return useCustom && this.props.hasAnyStyleRuleErrors;
   };
 
   render() {
-    const isUploadingTasks = _get(
-      this.props,
-      "progress.creatingTasks.inProgress",
-      false
-    );
+    const isUploadingTasks = this.props.progress?.creatingTasks?.inProgress ?? false;
     if (isUploadingTasks) {
       return <TaskUploadingProgress {...this.props} />;
     }
@@ -948,7 +943,7 @@ export class EditChallenge extends Component {
                     showErrorList={false}
                     formData={challengeData}
                     formContext={_merge(this.state.formContext, {
-                      bounding: _get(challengeData, "bounding"),
+                      bounding: challengeData?.bounding,
                       buttonAction: BoundsSelectorModal,
                     })}
                     onChange={this.changeHandler}

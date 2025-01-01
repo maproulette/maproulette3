@@ -31,7 +31,7 @@ export const addServerError = function(error, serverError) {
 
       const detailedError = _cloneDeep(error)
 
-      if (serverError && serverError.response) {
+      if (serverError?.response) {
         serverError.response.json().then(json => {
           if (_isString(json.message)) {
             detailedError.values = {details: `: ${json.message}`}
@@ -43,8 +43,8 @@ export const addServerError = function(error, serverError) {
           resolve(detailedError)
         })
       }
-    })
-  }
+    });
+  };
 }
 
 /**

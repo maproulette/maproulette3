@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
@@ -21,7 +20,7 @@ const descriptor = {
 }
 
 const TaskPropertiesWidget = (props) => {
-  const taskList = _get(props.taskBundle, 'tasks') || [props.task];
+  const taskList = (props.taskBundle?.tasks) || [props.task];
   const [collapsed, setCollapsed] = useState();
 
   const toggleCollapsed = () => {

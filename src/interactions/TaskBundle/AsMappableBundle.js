@@ -1,7 +1,6 @@
 import { featureCollection } from '@turf/helpers'
 import center from '@turf/center'
 import bbox from '@turf/bbox'
-import _get from 'lodash/get'
 import _flatten from 'lodash/flatten'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
@@ -27,7 +26,7 @@ export class AsMappableBundle {
    * Returns the id of the primary task for this bundle
    */
   primaryTaskId() {
-    return _get(this.primaryTask(), 'id')
+    return this.primaryTask()?.id;
   }
 
   /**
@@ -36,9 +35,9 @@ export class AsMappableBundle {
   featureCollection() {
     return featureCollection(
       _flatten(_compact(
-        _map(this.tasks, task => _get(task, 'geometries.features'))
+        _map(this.tasks, task => task?.geometries?.features)
       ))
-    )
+    );
   }
 
   /**

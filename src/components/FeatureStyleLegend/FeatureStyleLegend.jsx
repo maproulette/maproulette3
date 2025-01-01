@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _map from 'lodash/map'
 import _join from 'lodash/join'
@@ -61,7 +60,7 @@ export class FeatureStyleLegend extends Component {
   }
 
   render() {
-    const challenge = this.props.challenge || _get(this.props, 'task.parent')
+    const challenge = this.props.challenge || (this.props.task?.parent)
     if (!challenge) {
       return null
     }

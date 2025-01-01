@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { LatLng } from 'leaflet'
-import _get from 'lodash/get'
 import _sample from 'lodash/sample'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
@@ -49,8 +48,8 @@ export const _WithStartChallenge = function(WrappedComponent) {
  * @private
  */
 export const chooseVisibleTask = (challenge, challengeBounds, clusteredTasks) => {
-  if (challenge.id !== _get(clusteredTasks, 'challengeId') ||
-      _get(clusteredTasks, 'tasks.length', 0) === 0) {
+  if (challenge.id !== (clusteredTasks?.challengeId) ||
+      (clusteredTasks?.tasks?.length ?? 0) === 0) {
     return null
   }
 
@@ -122,7 +121,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
     }
     else {
       const visibleTask = chooseVisibleTask(challenge,
-                                            _get(ownProps, 'mapBounds'),
+                                            ownProps?.mapBounds,
                                             ownProps.clusteredTasks)
       if (visibleTask) {
         ownProps.setActive(false)

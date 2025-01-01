@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { FormattedMessage, FormattedDate } from 'react-intl'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import { parseISO } from 'date-fns'
 import { ChallengeStatus, messagesByStatus }
@@ -30,7 +29,7 @@ export default class ChallengeOverviewWidget extends Component {
     }
 
     const manager = AsManager(this.props.user)
-    const status = _get(this.props, 'challenge.status', ChallengeStatus.none)
+    const status = this.props.challenge?.status ?? (ChallengeStatus.none)
 
     const lastTaskRefreshText = this.props.intl.formatMessage(messages.lastTaskRefresh);
 

@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _findIndex from 'lodash/findIndex'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
@@ -18,7 +17,7 @@ const FEATURED_POINTS = -1
 const SAVED_POINTS = -2
 
 export const sortChallenges = function(props, challengesProp='challenges', config) {
-  const sortCriteria = _get(props, 'searchSort.sortBy')
+  const sortCriteria = props.searchSort?.sortBy
   let sortedChallenges = props[challengesProp]
 
   if (sortCriteria === SORT_NAME) {
@@ -54,7 +53,7 @@ export const sortChallenges = function(props, challengesProp='challenges', confi
   else {
     // default sort. Prioritizes featured and user-saved challenges,
     // followed by popular challenges
-    const savedChallenges = _get(props, 'user.savedChallenges', [])
+    const savedChallenges = props.user?.savedChallenges ?? []
 
     sortedChallenges = _sortBy(sortedChallenges, [challenge => {
       let score = 0

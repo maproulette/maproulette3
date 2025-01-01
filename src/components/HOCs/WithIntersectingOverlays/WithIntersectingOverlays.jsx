@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _isEmpty from 'lodash/isEmpty'
 import { getGeom } from '@turf/invariant'
@@ -14,7 +13,7 @@ export const WithIntersectingOverlays = function(WrappedComponent) {
       // Include all overlays by default. Narrow it down to intersecting ones
       // if we get valid map bounds.
       let includedOverlays = _filter(this.props.layerSources, {overlay: true})
-      const mapBounds = _get(this.props, "mapBounds.bounds")
+      const mapBounds = this.props.mapBounds?.bounds
 
       if (mapBounds) {
         const boundsPoly = bboxPolygon([mapBounds.getWest(), mapBounds.getSouth(),
@@ -31,7 +30,7 @@ export const WithIntersectingOverlays = function(WrappedComponent) {
 
       return <WrappedComponent {...this.props} intersectingOverlays={includedOverlays} />
     }
-  }
+  };
 }
 
 export default (WrappedComponent, mapBoundsField) => WithSearch(

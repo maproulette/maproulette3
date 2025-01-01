@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import _isEmpty from 'lodash/isEmpty'
 import _sortBy from 'lodash/sortBy'
-import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
 import classNames from 'classnames';
@@ -96,7 +95,7 @@ export const TaskClusterMap = (props) => {
   }, [props.showAsClusters, props.totalTaskCount, props.toggleShowAsClusters, props.loading, displayTaskCount]);
 
   let overlayLayers = buildLayerSources(
-      props.visibleOverlays, _get(props, 'user.settings.customBasemaps'),
+      props.visibleOverlays, props.user?.settings?.customBasemaps,
       (layerId, index, layerSource) => ({
         id: layerId,
         component: <SourcedTileLayer key={layerId} source={layerSource} />,
@@ -137,8 +136,8 @@ export const TaskClusterMap = (props) => {
 
     const selectTasksInLayers = layers => {
       if (props.onBulkTaskSelection) {
-        const taskIds = _compact(_map(layers, layer => _get(layer, 'options.icon.options.taskData.taskId')))
-        const overlappingIds = _compact(_map(layers, layer => _get(layer, 'options.taskId')))
+        const taskIds = _compact(_map(layers, layer => layer?.options?.icon?.options?.taskData?.taskId))
+        const overlappingIds = _compact(_map(layers, layer => layer?.options?.taskId))
         const allIds = taskIds.concat(overlappingIds)
         props.onBulkTaskSelection(allIds)
       }
@@ -146,8 +145,8 @@ export const TaskClusterMap = (props) => {
   
     const deselectTasksInLayers = layers => {
       if (props.onBulkTaskDeselection) {
-        const taskIds = _compact(_map(layers, layer => _get(layer, 'options.icon.options.taskData.taskId')))
-        const overlappingIds = _compact(_map(layers, layer => _get(layer, 'options.taskId')))
+        const taskIds = _compact(_map(layers, layer => layer?.options?.icon?.options?.taskData?.taskId))
+        const overlappingIds = _compact(_map(layers, layer => layer?.options?.taskId))
         const allIds = taskIds.concat(overlappingIds)
         props.onBulkTaskDeselection(allIds)
       }
@@ -168,11 +167,11 @@ export const TaskClusterMap = (props) => {
     }
 
     const clusterDataFromLayer = layer => {
-      let clusterData = _get(layer, 'options.icon.options.clusterData')
+      let clusterData = layer?.options?.icon?.options?.clusterData
       if (!clusterData) {
         // Single-task markers will use `taskData` instead of `clusterData`, but
         // have fields compatible with clusterData
-        clusterData = _get(layer, 'options.icon.options.taskData')
+        clusterData = layer?.options?.icon?.options?.taskData
         if(!clusterData){
           return
         }

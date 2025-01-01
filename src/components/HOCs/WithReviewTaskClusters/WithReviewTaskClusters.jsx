@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
-import _get from 'lodash/get'
 import _cloneDeep from 'lodash/cloneDeep'
 import _isEmpty from 'lodash/isEmpty'
 import { fromLatLngBounds } from '../../../services/MapBounds/MapBounds'
@@ -70,7 +69,7 @@ export const WithReviewTaskClusters = function(WrappedComponent) {
     }
 
     render() {
-      const reviewBounds = _get(this.props, 'reviewCriteria.boundingBox', '')
+      const reviewBounds = this.props.reviewCriteria?.boundingBox ?? ''
       const bounds = _isEmpty(reviewBounds) ? null : reviewBounds.split(',')
 
       return (
@@ -85,10 +84,10 @@ export const WithReviewTaskClusters = function(WrappedComponent) {
         />
       )
     }
-  }
+  };
 }
 
-const mapStateToProps = state => ({ reviewClusters: _get(state, 'currentReviewTasks.clusters') })
+const mapStateToProps = state => ({ reviewClusters: state.currentReviewTasks?.clusters })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchClusteredReviewTasks,

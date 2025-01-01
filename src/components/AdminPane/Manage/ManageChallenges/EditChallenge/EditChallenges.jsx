@@ -4,7 +4,6 @@ import _isObject from "lodash/isObject";
 import _isEmpty from "lodash/isEmpty";
 import _omit from "lodash/omit";
 import _filter from "lodash/filter";
-import _get from "lodash/get";
 import _merge from "lodash/merge";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
@@ -151,7 +150,7 @@ export class EditChallenges extends Component {
    */
   prepareChallengeDataForForm = () => {
     let challengeData = Object.assign(
-      { parent: _get(this.props, "project.id") },
+      { parent: this.props.project?.id },
       _omit(this.props.challenge, ["activity", "comments"]),
       this.state.formData
     );
@@ -321,83 +320,81 @@ export class EditChallenges extends Component {
             })
           };
 
-          return (
-            <>
-              <BreadcrumbWrapper
-                {...this.props}
-                cancel={this.cancel}
-                isCloningChallenge={false}
-                isNewChallenge={false}
-                challengeState={this.challengeState}
-              >
-                <div className="mr-flex">
-                  <div className="mr-p-4 md:mr-p-8 mr-w-full">
-                    <Form
-                      schema={activeStep.jsSchema(
-                        this.props.intl,
-                        this.props.user,
-                        challengeData,
-                        this.state.extraErrors,
-                        {
-                          longForm: true,
-                        }
-                      )}
-                      uiSchema={activeStep.uiSchema(
-                        this.props.intl,
-                        this.props.user,
-                        challengeData,
-                        this.state.extraErrors,
-                        {
-                          longForm: true,
-                        }
-                      )}
-                      className="form"
-                      validate={(formData, errors) =>
-                        this.validate(formData, errors, activeStep)
+          return <>
+            <BreadcrumbWrapper
+              {...this.props}
+              cancel={this.cancel}
+              isCloningChallenge={false}
+              isNewChallenge={false}
+              challengeState={this.challengeState}
+            >
+              <div className="mr-flex">
+                <div className="mr-p-4 md:mr-p-8 mr-w-full">
+                  <Form
+                    schema={activeStep.jsSchema(
+                      this.props.intl,
+                      this.props.user,
+                      challengeData,
+                      this.state.extraErrors,
+                      {
+                        longForm: true,
                       }
-                      transformErrors={this.transformErrors(this.props.intl)}
-                      widgets={{
-                        SelectWidget: CustomSelectWidget,
-                        TextWidget: CustomTextWidget,
-                      }}
-                      ArrayFieldTemplate={CustomArrayFieldTemplate}
-                      FieldTemplate={CustomFieldTemplate}
-                      fields={customFields}
-                      tagType={"challenges"}
-                      noHtml5Validate
-                      showErrorList={false}
-                      formData={challengeData}
-                      formContext={_merge(this.state.formContext, {
-                        bounding: _get(challengeData, "bounding"),
-                        buttonAction: BoundsSelectorModal,
-                      })}
-                      onChange={this.changeHandler}
-                      onSubmit={(formData) => {
-                        this.toggleConfirmModal(formData)
-                      }}
-                      onError={() => null}
-                      extraErrors={this.state.extraErrors}
-                    >
-                    </Form>
-                  </div>
+                    )}
+                    uiSchema={activeStep.uiSchema(
+                      this.props.intl,
+                      this.props.user,
+                      challengeData,
+                      this.state.extraErrors,
+                      {
+                        longForm: true,
+                      }
+                    )}
+                    className="form"
+                    validate={(formData, errors) =>
+                      this.validate(formData, errors, activeStep)
+                    }
+                    transformErrors={this.transformErrors(this.props.intl)}
+                    widgets={{
+                      SelectWidget: CustomSelectWidget,
+                      TextWidget: CustomTextWidget,
+                    }}
+                    ArrayFieldTemplate={CustomArrayFieldTemplate}
+                    FieldTemplate={CustomFieldTemplate}
+                    fields={customFields}
+                    tagType={"challenges"}
+                    noHtml5Validate
+                    showErrorList={false}
+                    formData={challengeData}
+                    formContext={_merge(this.state.formContext, {
+                      bounding: challengeData?.bounding,
+                      buttonAction: BoundsSelectorModal,
+                    })}
+                    onChange={this.changeHandler}
+                    onSubmit={(formData) => {
+                      this.toggleConfirmModal(formData)
+                    }}
+                    onError={() => null}
+                    extraErrors={this.state.extraErrors}
+                  >
+                  </Form>
                 </div>
-              </BreadcrumbWrapper>
-              {
-                this.state.confirmModal
-                  ? <ConfirmationModal
-                      formData={this.state.confirmModal}
-                      submit={() => {
-                        this.toggleConfirmModal(false)
-                        this.handleSubmit()
-                      }}
-                      cancel={() => {
-                        this.toggleConfirmModal(false)
-                      }}
-                    />
-                  : null
-              }
-            </>
-          );
+              </div>
+            </BreadcrumbWrapper>
+            {
+              this.state.confirmModal
+                ? <ConfirmationModal
+                    formData={this.state.confirmModal}
+                    submit={() => {
+                      this.toggleConfirmModal(false)
+                      this.handleSubmit()
+                    }}
+                    cancel={() => {
+                      this.toggleConfirmModal(false)
+                    }}
+                  />
+                : null
+            }
+          </>;
         }}
       />
     );

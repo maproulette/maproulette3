@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import AppErrors from '../../../services/Error/AppErrors'
 
@@ -18,7 +17,7 @@ const WithUserLocation = function(WrappedComponent) {
      *
      * @private
      */
-    getOSMHomeLocation = user => _get(user, 'osmProfile.homeLocation')
+    getOSMHomeLocation = user => user?.osmProfile?.homeLocation
 
     /**
      * Retrieve user's location as returned by their browser, if supported and
@@ -71,7 +70,7 @@ const WithUserLocation = function(WrappedComponent) {
                                getUserBounds={this.getUserBounds}
                                {...this.props} />
     }
-  }
+  };
 }
 
 export default WithUserLocation

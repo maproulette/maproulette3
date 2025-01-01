@@ -1,4 +1,3 @@
-import _get from 'lodash/get'
 import ProgressStatus from '../ProgressStatus/ProgressStatus'
 import messages from './Messages'
 
@@ -11,9 +10,9 @@ import messages from './Messages'
 export default function(props) {
   return (
     <ProgressStatus
-      progressItem={_get(props, 'progress.creatingTasks')}
+      progressItem={props.progress?.creatingTasks}
       progressHeader={messages.creatingTasks}
       progressDescription={messages.tasksCreated}
     />
-  )
+  );
 }

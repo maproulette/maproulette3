@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _find from 'lodash/find'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _isFunction from 'lodash/isFunction'
 import CommentCountBadge
        from '../../CommentList/CommentCountBadge/CommentCountBadge'
@@ -77,7 +76,7 @@ export default class MobileTaskDetails extends Component {
     )
   }, { 
     name: "comments",
-    icon: props => <CommentCountBadge comments={_get(props, 'task.comments')} />,
+    icon: props => <CommentCountBadge comments={props.task?.comments} />,
     component: props => (
       <div className="mobile-task-details__comments">
         <CommentList comments={props.task.comments} />

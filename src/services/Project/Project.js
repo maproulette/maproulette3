@@ -208,14 +208,14 @@ export const searchProjects = function (
   searchCriteria,
   limit = RESULTS_PER_PAGE
 ) {
-  const query = _get(searchCriteria, "searchQuery");
+  const query = searchCriteria?.searchQuery;
   const onlyEnabled = _isUndefined(searchCriteria.onlyEnabled)
     ? true
     : searchCriteria.onlyEnabled;
 
   // We are just making sure the pqge passed in is a) present and b) a number
-  const page = _isFinite(_get(searchCriteria, "page"))
-    ? _get(searchCriteria, "page")
+  const page = _isFinite(searchCriteria?.page)
+    ? searchCriteria?.page
     : 0;
 
   return function (dispatch) {
@@ -471,10 +471,7 @@ export const addProjectManager = function (projectId, username, role) {
     return findUser(username)
       .then((matchingUsers) => {
         // We want an exact username match
-        const osmId = _get(
-          _find(matchingUsers, (match) => match.displayName === username),
-          "osmId"
-        );
+        const osmId = _find(matchingUsers, (match) => match.displayName === username)?.osmId;
 
         if (_isFinite(osmId)) {
           return setProjectManagerRole(projectId, osmId, true, role)(dispatch);

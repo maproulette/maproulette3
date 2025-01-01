@@ -33,7 +33,7 @@ const WithCurrentChallenge = function(WrappedComponent) {
     }
 
     currentChallengeId = () =>
-      parseInt(_get(this.props, 'match.params.challengeId'), 10)
+      parseInt(this.props.match?.params?.challengeId, 10)
 
     loadChallenge = () => {
       const challengeId = this.currentChallengeId()
@@ -98,7 +98,7 @@ const WithCurrentChallenge = function(WrappedComponent) {
                                                       'clusteredTasks',
                                                       'fetchChallengeActivity'])} />
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({
