@@ -1,5 +1,4 @@
 import { schema } from 'normalizr'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import _omit from 'lodash/omit'
@@ -133,8 +132,7 @@ export const renewVirtualChallenge = function(virtualChallengeId, expiration) {
 export const saveVirtualChallenge = function(dispatch, endpoint) {
   return endpoint.execute().then(normalizedResults => {
     dispatch(receiveVirtualChallenges(normalizedResults.entities))
-    return _get(normalizedResults,
-                `entities.virtualChallenges.${normalizedResults.result}`)
+    return normalizedResults?.entities?.virtualChallenges?.[normalizedResults.result];
   }).catch(serverError => {
     if (isSecurityError(serverError)) {
       dispatch(ensureUserLoggedIn()).then(() =>

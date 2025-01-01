@@ -1,5 +1,4 @@
 import { schema } from "normalizr";
-import _get from "lodash/get";
 import _isArray from "lodash/isArray";
 import _cloneDeep from "lodash/cloneDeep";
 import _find from "lodash/find";
@@ -264,10 +263,7 @@ export const saveProject = function (projectData, user) {
       .execute()
       .then((normalizedResults) => {
         dispatch(receiveProjects(normalizedResults.entities));
-        const project = _get(
-          normalizedResults,
-          `entities.projects.${normalizedResults.result}`
-        );
+        const project = normalizedResults?.entities?.projects?.[normalizedResults.result];
 
         // If we just created the project, we should refresh the user as they
         // almost certainly have new grants
@@ -305,10 +301,7 @@ export const archiveProject = (id, bool) => {
       .execute()
       .then((normalizedResults) => {
         dispatch(receiveProjects(normalizedResults.entities));
-        const project = _get(
-          normalizedResults,
-          `entities.projects.${normalizedResults.result}`
-        );
+        const project = normalizedResults?.entities?.projects?.[normalizedResults.result];
 
         return project;
       })

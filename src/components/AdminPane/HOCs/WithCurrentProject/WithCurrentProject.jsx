@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
@@ -216,7 +215,7 @@ export const WithCurrentProject = function(WrappedComponent, options={}) {
     render() {
       const projectId = this.currentProjectId(this.props)
       const project = !_isFinite(projectId) ? null :
-                      _get(this.props, `entities.projects.${projectId}`)
+                      this.props.entities?.projects?.[projectId]
       let challenges = this.props.challenges // pass through challenges by default
 
       if (options.includeChallenges && _isFinite(projectId)) {

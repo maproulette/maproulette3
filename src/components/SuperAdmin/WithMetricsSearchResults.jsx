@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _filter from 'lodash/filter'
 import _omit from 'lodash/omit'
@@ -30,7 +29,7 @@ export const WithMetricsSearchResults = function (
      * @private
      */
     render() {
-      const query = _get(this.props, `searchCriteria.query`, '')
+      const query = this.props.searchCriteria?.query ?? ''
       let items, searchType
 
       const params = queryString.parse(this.props.location.search)

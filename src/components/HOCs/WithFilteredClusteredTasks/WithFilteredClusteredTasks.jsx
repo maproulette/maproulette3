@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _filter from 'lodash/filter'
 import _fromPairs from 'lodash/fromPairs'
@@ -284,7 +283,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
       _each(["status", "reviewStatus", "metaReviewStatus", "priorities"], key => {
-        if (!_isUndefined(_get(criteria, `filters.${key}`)) && !this.props.taskId) {
+        if (!_isUndefined(criteria?.filters?.[key]) && !this.props.taskId) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
           }
@@ -292,7 +291,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
             criteria.filters[key] = [criteria.filters[key]]
           }
           useURLFilters = true
-        } else if (!_isUndefined(_get(criteria, `filters.${key}`)) && useSavedFilters) {
+        } else if (!_isUndefined(criteria?.filters?.[key]) && useSavedFilters) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
           }

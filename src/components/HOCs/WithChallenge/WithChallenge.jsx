@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _omit from 'lodash/omit'
@@ -81,17 +80,16 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           fetchChallenge(challengeId)
         ).then(normalizedResults => {
           if (!_isFinite(normalizedResults?.result) ||
-              _get(normalizedResults,
-                   `entities.challenges.${normalizedResults.result}.deleted`)) {
+              (normalizedResults?.entities?.challenges?.[normalizedResults.result]?.deleted)) {
             dispatch(addError(AppErrors.challenge.doesNotExist))
             ownProps.history.push('/browse/challenges')
           }
           else {
-            return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`)
+            return normalizedResults?.entities?.challenges?.[normalizedResults.result];
           }
-        })
+        });
       }
-  }
+  };
 }
 
 /**
@@ -100,7 +98,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
  */
 export const getChallenge = (challengeId, props, component) => {
   if ((component.state.challenge?.id) !== challengeId) {
-    let challenge = _get(props.entities, `challenges.${challengeId}`)
+    let challenge = props.entities?.challenges?.[challengeId]
 
     if (_isObject(challenge)) {
       component.setState({

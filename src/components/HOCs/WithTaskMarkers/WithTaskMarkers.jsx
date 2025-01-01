@@ -52,10 +52,11 @@ export default function WithTaskMarkers(WrappedComponent,
         }
       }
 
-      return <WrappedComponent taskMarkers={markers}
-                               tasksLoading={_get(this.props,
-                                                 `${tasksProp}.loading`, false)}
-                               {...this.props} />
+      return (
+        <WrappedComponent taskMarkers={markers}
+                                 tasksLoading={this.props[tasksProp]?.loading ?? false}
+                                 {...this.props} />
+      );
     }
   }
 

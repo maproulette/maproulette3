@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
@@ -95,7 +94,7 @@ export const mapStateToProps = (state, ownProps) => {
   const taskId = taskIdFromRoute(ownProps, ownProps.taskId)
   if (_isFinite(taskId)) {
     mappedProps.taskId = taskId
-    const taskEntity = _get(state, `entities.tasks.${taskId}`)
+    const taskEntity = state.entities?.tasks?.[taskId]
 
     if (taskEntity) {
       // denormalize task so that parent challenge is embedded.
@@ -121,8 +120,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         forReview ? fetchTaskForReview(taskId) : fetchTask(taskId)
       ).then(normalizedResults => {
         if (!_isFinite(normalizedResults.result) ||
-            _get(normalizedResults,
-                 `entities.tasks.${normalizedResults.result}.deleted`)) {
+            (normalizedResults?.entities?.tasks?.[normalizedResults.result]?.deleted)) {
           dispatch(addError(AppErrors.task.doesNotExist))
           ownProps.history.push('/browse/challenges')
           return
@@ -341,8 +339,8 @@ export const nextRequestedTask = function(dispatch, props, requestedTaskId) {
   return dispatch(fetchTask(requestedTaskId))
     .then(() => dispatch(startTask(requestedTaskId)))
     .then(normalizedResults =>
-      _get(normalizedResults, `entities.tasks.${normalizedResults.result}`)
-    )
+      normalizedResults?.entities?.tasks?.[normalizedResults.result]
+    );
 }
 
 /**

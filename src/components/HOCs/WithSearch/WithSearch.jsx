@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import _debounce from 'lodash/debounce'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isFunction from 'lodash/isFunction'
 import _isEmpty from 'lodash/isEmpty'
@@ -64,8 +63,8 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
         return
       }
 
-      let prevSearch = _omit(_get(prevProps, `currentSearch.${searchGroup}`), ['meta'])
-      let currentSearch = _omit(_get(this.props, `currentSearch.${searchGroup}`), ['meta'])
+      let prevSearch = _omit(prevProps?.currentSearch?.[searchGroup], ['meta'])
+      let currentSearch = _omit(this.props.currentSearch?.[searchGroup], ['meta'])
 
       if (!this.props.searchFilters?.location) {
         currentSearch = _omit(currentSearch, 'mapBounds')
@@ -83,13 +82,13 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
        const searchQueries =
          Object.assign({}, this.props.searchQueries ?? {}, {
            [searchGroup]: {
-             searchQuery: _get(this.props, `currentSearch.${searchGroup}`),
+             searchQuery: this.props.currentSearch?.[searchGroup],
              setSearch: this.setSearch,
              clearSearch: this.clearSearch,
            }
        })
 
-       const isLoading = _get(this.props, `currentSearch.${searchGroup}.meta.fetchingResults`) != null
+       const isLoading = (this.props.currentSearch?.[searchGroup]?.meta?.fetchingResults) != null
 
        return (
           <WrappedComponent searchGroup={searchGroup}
@@ -109,12 +108,11 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
 export const mapStateToProps = (state, searchGroup) => {
   return {
     currentSearch: state.currentSearch,
-    searchCriteria: _get(state, `currentSearch.${searchGroup}`),
-    searchFilters: _get(state, `currentSearch.${searchGroup}.filters`, {}),
-    searchSort: _get(state, `currentSearch.${searchGroup}.sort`, {}),
-    searchPage: _get(state, `currentSearch.${searchGroup}.page`, {}),
-    mapBounds: convertBounds(_get(state, `currentSearch.${searchGroup}.mapBounds`,
-                                  {bounds: DEFAULT_MAP_BOUNDS})),
+    searchCriteria: state.currentSearch?.[searchGroup],
+    searchFilters: state.currentSearch?.[searchGroup]?.filters ?? {},
+    searchSort: state.currentSearch?.[searchGroup]?.sort ?? {},
+    searchPage: state.currentSearch?.[searchGroup]?.page ?? {},
+    mapBounds: convertBounds(state.currentSearch?.[searchGroup]?.mapBounds ?? {bounds: DEFAULT_MAP_BOUNDS}),
   };
 }
 
