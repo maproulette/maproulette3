@@ -2,7 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _isFunction from 'lodash/isFunction'
-import _get from 'lodash/get'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import SearchTypeFilter from '../SearchTypeFilter/SearchTypeFilter'
@@ -50,7 +49,7 @@ export default class SearchBox extends Component {
 
   getQuery(props) {
     return (props.searchGroup ?
-        _get(props, `searchQueries.${props.searchGroup}.searchQuery.query`) :
+        props.searchQueries?.[props.searchGroup]?.searchQuery?.query :
         props.searchQuery?.query) || '';
   }
 

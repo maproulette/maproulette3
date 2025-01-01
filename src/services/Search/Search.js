@@ -3,7 +3,6 @@ import _uniqueId from 'lodash/uniqueId'
 import _cloneDeep from 'lodash/cloneDeep'
 import _clone from 'lodash/clone'
 import _set from 'lodash/set'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import _omit from 'lodash/omit'
@@ -585,7 +584,7 @@ export const currentSearch = function(state={}, action) {
     case RECEIVED_RESULTS:
       // If the fetchId of the action doesn't match the latest fetchId in the
       // state, ignore this action since we're still fetching other results.
-      if (action.fetchId !== _get(state, `${action.searchName}.meta.fetchingResults`)) {
+      if (action.fetchId !== (state[action.searchName]?.meta?.fetchingResults)) {
         return state
       }
       else {
@@ -597,40 +596,40 @@ export const currentSearch = function(state={}, action) {
     case SET_SORT:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.sort`,
-            Object.assign({}, _get(state, `${action.searchName}.sort`), action.sortCriteria))
+            Object.assign({}, state[action.searchName]?.sort, action.sortCriteria))
       _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
 
     case REMOVE_SORT:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.sort`,
-            Object.assign({}, _omit(_get(state, `${action.searchName}.sort`), action.criteriaNames)))
+            Object.assign({}, _omit(state[action.searchName]?.sort, action.criteriaNames)))
       _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
 
     case SET_PAGE:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.page`,
-            Object.assign({}, _get(state, `${action.searchName}.page`), action.page))
+            Object.assign({}, state[action.searchName]?.page, action.page))
       return mergedState
 
     case REMOVE_PAGE:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.page`,
-            Object.assign({}, _omit(_get(state, `${action.searchName}.page`))))
+            Object.assign({}, _omit(state[action.searchName]?.page)))
       return mergedState
 
     case SET_FILTERS:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.filters`,
-            Object.assign({}, _get(state, `${action.searchName}.filters`), action.filterCriteria))
+            Object.assign({}, state[action.searchName]?.filters, action.filterCriteria))
       _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
 
     case REMOVE_FILTERS:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.filters`,
-            Object.assign({}, _omit(_get(state, `${action.searchName}.filters`), action.criteriaNames)))
+            Object.assign({}, _omit(state[action.searchName]?.filters, action.criteriaNames)))
       _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
 
@@ -640,7 +639,7 @@ export const currentSearch = function(state={}, action) {
     case SET_CHALLENGE_SEARCH_MAP_BOUNDS:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.mapBounds`,
-            Object.assign({}, _get(state, `${action.searchName}.mapBounds`),
+            Object.assign({}, state[action.searchName]?.mapBounds,
               {
                 bounds: action.bounds,
                 fromUserAction: action.fromUserAction,
@@ -650,7 +649,7 @@ export const currentSearch = function(state={}, action) {
     case SET_CHALLENGE_BROWSE_MAP_BOUNDS:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.mapBounds`,
-            Object.assign({}, _get(state, `${action.searchName}.mapBounds`),
+            Object.assign({}, state[action.searchName]?.mapBounds,
               {
                 challengeId: action.challengeId,
                 bounds: action.bounds,
@@ -661,7 +660,7 @@ export const currentSearch = function(state={}, action) {
     case SET_TASK_MAP_BOUNDS:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.mapBounds`,
-            Object.assign({}, _get(state, `${action.searchName}.mapBounds`),
+            Object.assign({}, state[action.searchName]?.mapBounds,
               {
                 taskId: action.taskId,
                 bounds: action.bounds,
@@ -673,7 +672,7 @@ export const currentSearch = function(state={}, action) {
     case SET_CHALLENGE_OWNER_MAP_BOUNDS:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.mapBounds`,
-          Object.assign({}, _get(state, `${action.searchName}.mapBounds`),
+          Object.assign({}, state[action.searchName]?.mapBounds,
             {
               challengeId: action.challengeId,
               bounds: action.bounds,

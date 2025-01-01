@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import _get from 'lodash/get'
 import { editTask, closeEditor, loadObjectsIntoJOSM, zoomJOSM,
          josmHost, isJosmEditor, viewportToBBox, DEFAULT_EDITOR }
        from '../../../services/Editor/Editor'
@@ -21,7 +20,7 @@ const WithEditor =
 
 export const mapStateToProps = state => {
   const userId = state.currentUser?.userId
-  const userEntity = _get(state, `entities.users.${userId}`)
+  const userEntity = state.entities?.users?.[userId]
 
   return {
     editor: state.openEditor,

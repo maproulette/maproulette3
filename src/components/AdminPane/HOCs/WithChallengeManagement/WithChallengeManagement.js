@@ -1,6 +1,5 @@
 import { connect } from "react-redux";
 import _map from "lodash/map";
-import _get from "lodash/get";
 import _isObject from "lodash/isObject";
 import _compact from "lodash/compact";
 import bundleByTaskBundleId from "../../../../utils/bundleByTaskBundleId";
@@ -217,16 +216,9 @@ async function deleteIncompleteTasks(dispatch, ownProps, challenge) {
           challenge.id,
           true
         )(dispatch).then((challengeResult) => {
-          const available = _get(
-            actionsResult,
-            `entities.challenges.${challenge.id}.actions.available`,
-            latestAvailable
-          );
+          const available = actionsResult?.entities?.challenges?.[challenge.id]?.actions?.available ?? latestAvailable;
 
-          const status = _get(
-            challengeResult,
-            `entities.challenges.${challenge.id}.status`
-          );
+          const status = challengeResult?.entities?.challenges?.[challenge.id]?.status;
 
           if (
             available >= latestAvailable &&

@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { injectIntl } from 'react-intl'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _toPairs from 'lodash/toPairs'
 import _groupBy from 'lodash/groupBy'
@@ -59,7 +58,7 @@ const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
         props.fetchChallengeActions(challengeId, true, criteria).then((normalizedResults) => {
           let fetchedMetrics = null
           let fetchedPriorityMetrics = null
-          if (_get(normalizedResults, `entities.challenges.${challengeId}`)) {
+          if (normalizedResults?.entities?.challenges?.[challengeId]) {
             fetchedMetrics = (normalizedResults?.entities?.challenges)[challengeId].actions
             fetchedPriorityMetrics = (normalizedResults?.entities?.challenges)[challengeId].priorityActions
           }

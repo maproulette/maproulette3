@@ -2,7 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _debounce from 'lodash/debounce'
@@ -75,9 +74,9 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
 
       return isVirtual ?
              props.virtualChallenge : // nothing to denormalize for virtual challenges
-             denormalize(_get(props.entities, `challenges.${challengeId}`),
+             denormalize(props.entities?.challenges?.[challengeId],
                          challengeDenormalizationSchema(),
-                         props.entities)
+                         props.entities);
     }
 
     /**
@@ -211,19 +210,18 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           fetchChallenge(challengeId)
         ).then(normalizedResults => {
           if (!_isFinite(normalizedResults.result) ||
-              _get(normalizedResults,
-                   `entities.challenges.${normalizedResults.result}.deleted`)) {
+              (normalizedResults?.entities?.challenges?.[normalizedResults.result]?.deleted)) {
             dispatch(addError(AppErrors.challenge.doesNotExist))
             ownProps.history.push('/browse/challenges')
           }
           else {
             const projectId =
-              _get(normalizedResults, `entities.challenges.${normalizedResults.result}.parent`)
+              normalizedResults?.entities?.challenges?.[normalizedResults.result]?.parent
             if (_isFinite(projectId)) {
               dispatch(fetchProject(projectId))
             }
           }
-        })
+        });
       },
       5000,
       {leading: true},
@@ -232,7 +230,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     loadChallengeActions: challengeId => {
       return dispatch(fetchChallengeActions(challengeId, false, null, false))
     },
-  }
+  };
 }
 
 export default WrappedComponent =>

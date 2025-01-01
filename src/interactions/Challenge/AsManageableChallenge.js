@@ -1,7 +1,6 @@
 import _isEmpty from 'lodash/isEmpty'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
-import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _maxBy from 'lodash/maxBy'
 import { parseISO } from 'date-fns'
@@ -60,7 +59,7 @@ export class AsManageableChallenge {
 
   actionPercentage(action) {
     return percentage(this?.actions?.total,
-                      _get(this, `actions.${action}`, 0));
+                      this?.actions?.[action] ?? 0);
   }
 
   completionActivity() {

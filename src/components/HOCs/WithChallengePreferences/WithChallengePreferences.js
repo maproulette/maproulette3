@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isNumber'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
@@ -28,37 +27,26 @@ export const mapStateToProps = (state, ownProps) => {
 
   if (_isFinite(challengeId)) {
     mappedProps.minimizeChallenge =
-      _get(state.currentPreferences,
-           `${preferenceGroup(isVirtual)}.${challengeId}.minimize`,
-           false)
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.minimize ?? false
 
     // Instruction preferences are always tied to the concrete challenge.
     mappedProps.collapseInstructions =
-      _get(state.currentPreferences,
-           `${preferenceGroup(false)}.${concreteChallengeId}.collapseInstructions`,
-           false)
+      state.currentPreferences?.[preferenceGroup(false)]?.[concreteChallengeId]?.collapseInstructions ?? false
 
     mappedProps.collapseMoreOptions =
-      _get(state.currentPreferences,
-           `${preferenceGroup(isVirtual)}.${challengeId}.collapseMoreOptions`,
-           true)
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.collapseMoreOptions ?? true
 
     mappedProps.taskLoadBy =
-      _get(state.currentPreferences,
-           `${preferenceGroup(isVirtual)}.${challengeId}.taskLoadMethod`,
-           taskLoadMethod)
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.taskLoadMethod ?? taskLoadMethod
 
     mappedProps.visibleMapLayer =
-      _get(state.currentPreferences,
-           `${preferenceGroup(isVirtual)}.${challengeId}.visibleMapLayer`)
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.visibleMapLayer
 
     mappedProps.showMapillaryLayer =
-      _get(state.currentPreferences,
-           `${preferenceGroup(isVirtual)}.${challengeId}.showMapillaryLayer`)
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.showMapillaryLayer
 
     mappedProps.showOpenStreetCamLayer =
-      _get(state.currentPreferences,
-           `${preferenceGroup(isVirtual)}.${challengeId}.showOpenStreetCamLayer`)
+      state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.showOpenStreetCamLayer
   }
 
   return mappedProps

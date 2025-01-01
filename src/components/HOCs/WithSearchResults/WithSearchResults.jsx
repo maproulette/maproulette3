@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import Fuse from 'fuse.js'
-import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _isArray from 'lodash/isArray'
 import _isEmpty from 'lodash/isEmpty'
@@ -57,7 +56,7 @@ export const WithSearchResults = function(WrappedComponent, searchName,
     }
 
     render() {
-      const query = _get(this.props, `searchCriteria.query`, '')
+      const query = this.props.searchCriteria?.query ?? ''
       let items = this.props[itemsProp]
       let searchResults = this.props[itemsProp]
       let searchActive = false

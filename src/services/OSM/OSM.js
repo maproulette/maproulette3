@@ -1,6 +1,6 @@
 import AppErrors from '../Error/AppErrors'
 import xmlToJSON from 'xmltojson'
-import { get, transform, map, each, isPlainObject } from 'lodash'
+import { transform, map, each, isPlainObject } from 'lodash';
 
 const API_SERVER = window.env.REACT_APP_OSM_API_SERVER
 
@@ -86,7 +86,7 @@ export const fetchOSMElement = async (idString, asXML = false) => {
   if (asXML) return xmlDoc
 
   const osmJSON = normalizeAttributes(xmlToJSON.parseXML(xmlDoc))
-  return get(osmJSON, `osm[0].${idString.split('/')[0]}[0]`)
+  return osmJSON?.osm?.[0]?.[idString.split('/')[0]]?.[0];
 }
 
 /**

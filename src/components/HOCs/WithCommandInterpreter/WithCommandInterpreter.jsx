@@ -5,7 +5,6 @@ import _split from 'lodash/split'
 import _map from 'lodash/map'
 import _omit from 'lodash/omit'
 import _find from 'lodash/find'
-import _get from 'lodash/get'
 import _debounce from 'lodash/debounce'
 import _trim from 'lodash/trim'
 import _toNumber from 'lodash/toNumber'
@@ -86,7 +85,7 @@ const WithCommandInterpreter = function(WrappedComponent, acceptedCommands = nul
 
     render() {
       const query = this.state.commandString ? this.state.commandString : this.props.searchGroup ?
-        _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`) :
+        this.props.searchQueries?.[this.props.searchGroup]?.searchQuery?.query :
         this.props.searchQuery?.query
 
       const loading = (this.props.searchQuery?.meta?.fetchingResults) || this.state.mapLoading

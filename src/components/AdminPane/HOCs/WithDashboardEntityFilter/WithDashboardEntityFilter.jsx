@@ -49,8 +49,7 @@ const WithDashboardEntityFilter = function(WrappedComponent,
      */
     toggleDashboardEntityFilter = filterName => {
       const existingValue =
-        _get(this.props.currentConfiguration.filters,
-            `${this.filterFieldName()}.${filterName}`, false)
+        this.props.currentConfiguration.filters?.[this.filterFieldName()]?.[filterName] ?? false
 
       this.setDashboardEntityFilter(filterName, !existingValue)
     }

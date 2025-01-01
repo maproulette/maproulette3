@@ -1,5 +1,4 @@
 import { normalize, schema } from "normalizr";
-import _get from "lodash/get";
 import _each from "lodash/each";
 import _compact from "lodash/compact";
 import _pick from "lodash/pick";

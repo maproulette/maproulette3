@@ -1,6 +1,5 @@
 import { schema } from 'normalizr'
 import { v1 as uuidv1 } from 'uuid'
-import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
 import _keys from 'lodash/keys'
@@ -876,7 +875,7 @@ export const saveTask = function(originalTaskData) {
 
     return saveEndpoint.execute().then(normalizedResults => {
       dispatch(receiveTasks(normalizedResults.entities))
-      return _get(normalizedResults, `entities.tasks.${normalizedResults.result}`)
+      return normalizedResults?.entities?.tasks?.[normalizedResults.result];
     }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>

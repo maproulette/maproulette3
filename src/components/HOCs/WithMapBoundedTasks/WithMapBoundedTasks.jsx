@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _filter from 'lodash/filter'
 import _omit from 'lodash/omit'
@@ -36,7 +35,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
      * Ensure bounds are represented as LatLngBounds object.
      */
     normalizedBounds = props =>
-      toLatLngBounds(_get(props, `mapBounds.bounds`))
+      toLatLngBounds(props.mapBounds?.bounds)
 
     /**
      * Applies bounds and challenge filters to the map-bounded tasks, as

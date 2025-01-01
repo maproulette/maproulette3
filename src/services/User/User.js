@@ -1,5 +1,4 @@
 import { schema } from 'normalizr'
-import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
@@ -767,10 +766,10 @@ export const updateUserAppSetting = function(userId, appId, appSetting) {
         Object.assign({}, oldUser, {
           properties: Object.assign({}, oldUser?.properties, {
             [appId]: {
-              meta: Object.assign({}, _get(oldUser, `properties.${appId}.meta`), {
+              meta: Object.assign({}, oldUser?.properties?.[appId]?.meta, {
                 revision: Date.now(),
               }),
-              settings: Object.assign({}, _get(oldUser, `properties.${appId}.settings`), appSetting),
+              settings: Object.assign({}, oldUser?.properties?.[appId]?.settings, appSetting),
             }
           })
         })
@@ -998,7 +997,7 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
 export const userEntities = function(state, action) {
   if (action.type === ADD_SAVED_CHALLENGE) {
     const mergedState = _cloneDeep(state)
-    if (!_isArray(_get(mergedState, `${action.userId}.savedChallenges`))) {
+    if (!_isArray(mergedState?.[action.userId]?.savedChallenges)) {
       _set(mergedState, `${action.userId}.savedChallenges`, [])
     }
 
@@ -1012,7 +1011,7 @@ export const userEntities = function(state, action) {
   }
   else if (action.type === ADD_SAVED_TASK) {
     const mergedState = _cloneDeep(state)
-    if (!_isArray(_get(mergedState, `${action.userId}.savedTasks`))) {
+    if (!_isArray(mergedState?.[action.userId]?.savedTasks)) {
       _set(mergedState, `${action.userId}.savedTasks`, [])
     }
 

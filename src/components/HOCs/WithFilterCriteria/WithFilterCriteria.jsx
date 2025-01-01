@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _cloneDeep from 'lodash/cloneDeep'
 import _isEqual from 'lodash/isEqual'
 import _keys from 'lodash/keys'
@@ -203,7 +202,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
              criteria[key] = criteria[key].split(',').map(x => parseFloat(x))
            }
          }
-         else if (!_isUndefined(_get(criteria, `filters.${key}`))) {
+         else if (!_isUndefined(criteria?.filters?.[key])) {
            if (typeof criteria.filters[key] === "string") {
              criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
            }
@@ -240,7 +239,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
             criteria[key] = criteria[key].split(',').map(x => parseFloat(x))
            }
          }
-         else if (!_isUndefined(_get(criteria, `filters.${key}`))) {
+         else if (!_isUndefined(criteria?.filters?.[key])) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
           }
