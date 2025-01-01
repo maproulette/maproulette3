@@ -192,7 +192,7 @@ async function uploadLineByLine(
  * component
  */
 async function deleteIncompleteTasks(dispatch, ownProps, challenge) {
-  const estimatedToDelete = _get(challenge, "actions.available");
+  const estimatedToDelete = challenge?.actions?.available;
   let latestAvailable = estimatedToDelete;
 
   ownProps.updateDeletingTasksProgress(true, 0);

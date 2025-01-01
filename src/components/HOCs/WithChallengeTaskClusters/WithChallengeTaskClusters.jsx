@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
 import _cloneDeep from 'lodash/cloneDeep'
-import _get from 'lodash/get'
 import _isEqual from 'lodash/isEqual'
 import _uniqueId from 'lodash/uniqueId'
 import _sum from 'lodash/sum'
@@ -58,17 +57,17 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     }
 
     fetchUpdatedClusters(wantToShowAsClusters, overrideDisable = false) {
-      if (!!_get(this.props, 'nearbyTasks.loading')) {
+      if (!!this.props.nearbyTasks?.loading) {
         return
       }
-      const challengeId = _get(this.props, 'challenge.id', this.props.challengeId)
+      const challengeId = this.props.challenge?.id ?? (this.props.challengeId)
 
       // We need to fetch as clusters if any of the following:
       // 1. not at max zoom in and
       //    user wants to see clusters or our task count is greater than our
       //    threshold (eg. 1000 tasks)
       // 2. we have no bounding box
-      const showAsClusters = (_get(this.props, 'criteria.zoom', 0) < MAX_ZOOM &&
+      const showAsClusters = ((this.props.criteria?.zoom ?? 0) < MAX_ZOOM &&
         (wantToShowAsClusters || this.state.taskCount > UNCLUSTER_THRESHOLD)) ||
         !this.props.criteria.boundingBox
 
@@ -77,7 +76,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       // If we have no challengeId and no bounding box we need to make sure
       // we aren't searching the entire map.
       if (!challengeId) {
-        const bounds = _get(this.props.criteria, 'boundingBox')
+        const bounds = this.props.criteria?.boundingBox
         if (!bounds || !boundsWithinAllowedMaxDegrees(bounds)) {
           this.props.clearTasksAndClusters()
           this.setState({clusters: {}, loading: false, taskCount: 0, showAsClusters: true,
@@ -116,7 +115,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
             // they should be clustered. So fetch as clusters
             // (unless we are zoomed all the way in already)
             if (totalCount > UNCLUSTER_THRESHOLD &&
-                _get(this.props, 'criteria.zoom', 0) < MAX_ZOOM) {
+                (this.props.criteria?.zoom ?? 0) < MAX_ZOOM) {
               this.props.fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable
               ).then(results => {
                 const clusters = results.clusters
@@ -161,7 +160,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       }
 
       if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS) {
-        const bounds = _get(this.props.criteria, 'boundingBox')
+        const bounds = this.props.criteria?.boundingBox
         if (!bounds || !boundsWithinAllowedMaxDegrees(bounds)) {
           this.setState({ mapZoomedOut: true })
         }
@@ -176,7 +175,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       _debounce((showAsClusters) => {if(this._isMounted)this.fetchUpdatedClusters(showAsClusters), 800})
 
     componentDidUpdate(prevProps) {
-      if (!_isEqual(_get(prevProps.criteria, 'searchQuery'), _get(this.props.criteria, 'searchQuery'))) {
+      if (!_isEqual(prevProps.criteria?.searchQuery, this.props.criteria?.searchQuery)) {
         this.debouncedFetchClusters(this.state.showAsClusters)
       }
       else if (!_isEqual(_omit(prevProps.criteria, ['page', 'pageSize']),
@@ -232,7 +231,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     }
 
     render() {
-      const criteriaBounds = _get(this.props, 'criteria.boundingBox', '')
+      const criteriaBounds = this.props.criteria?.boundingBox ?? ''
 
       return (
         <WrappedComponent
@@ -252,7 +251,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         />
       )
     }
-  }
+  };
 }
 
 export const mapDispatchToProps = dispatch => Object.assign(

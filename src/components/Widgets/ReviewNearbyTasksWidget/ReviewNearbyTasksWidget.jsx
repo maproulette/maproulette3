@@ -67,7 +67,7 @@ export default class ReviewNearbyTasksWidget extends Component {
    */
   initializeClusterFilters(prevProps = {}) {
     if (
-      _get(this.props, 'nearbyTasks.tasks.length', 0) > 0 &&
+      (this.props.nearbyTasks?.tasks?.length ?? 0) > 0 &&
       !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)
     ) {
       this.setBoundsToNearbyTask();
@@ -75,10 +75,10 @@ export default class ReviewNearbyTasksWidget extends Component {
   }
 
   initializeWebsocketSubscription(prevProps = {}) {
-    const challengeId = _get(this.props.task, 'parent.id');
+    const challengeId = this.props.task?.parent?.id;
     if (
       _isFinite(challengeId) &&
-      challengeId !== _get(prevProps.task, 'parent.id')
+      challengeId !== (prevProps.task?.parent?.id)
     ) {
       this.props.subscribeToChallengeTaskMessages(challengeId);
     }
@@ -89,7 +89,7 @@ export default class ReviewNearbyTasksWidget extends Component {
   };
 
   setBoundsToNearbyTask = () => {
-    const taskList = _get(this.props, 'nearbyTasks.tasks');
+    const taskList = this.props.nearbyTasks?.tasks;
     const mappableTask = AsMappableTask(this.props.task);
     mappableTask.point = mappableTask.calculateCenterPoint();
     
@@ -110,7 +110,7 @@ export default class ReviewNearbyTasksWidget extends Component {
     this.updateBounds(
       this.props.challengeId,
       nearbyBounds,
-      _get(this.props, 'mapBounds.zoom', 18)
+      this.props.mapBounds?.zoom ?? 18
     );
   };
 
@@ -138,8 +138,8 @@ export default class ReviewNearbyTasksWidget extends Component {
     }
 
     if (
-      _isFinite(_get(this.props, 'task.id')) &&
-      _isFinite(_get(prevProps, 'task.id')) &&
+      _isFinite(this.props.task?.id) &&
+      _isFinite(prevProps?.task?.id) &&
       this.props.task.id !== prevProps.task.id
     ) {
       this.props.resetSelectedTasks();
@@ -155,7 +155,7 @@ export default class ReviewNearbyTasksWidget extends Component {
 
   componentWillUnmount() {
     this.props.resetSelectedTasks()
-    const challengeId = _get(this.props.task, 'parent.id')
+    const challengeId = this.props.task?.parent?.id
     if (_isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }

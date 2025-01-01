@@ -86,7 +86,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
  */
 export const virtualChallengeIdFromRoute = (props, defaultId) => {
   const virtualChallengeId =
-    parseInt(_get(props, 'match.params.virtualChallengeId'), 10)
+    parseInt(props.match?.params?.virtualChallengeId, 10)
 
   return _isFinite(virtualChallengeId) ? virtualChallengeId : defaultId
 }

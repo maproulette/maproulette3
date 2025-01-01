@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _flatMap from 'lodash/flatMap'
 import _compact from 'lodash/compact'
@@ -34,12 +33,12 @@ export default class CommentsWidget extends Component {
     let exportControl = null
 
     // Comments can only be exported for single challenges.
-    if (comments.length > 0 && _get(this.props, 'challenges.length', 0) === 1) {
+    if (comments.length > 0 && (this.props.challenges?.length ?? 0) === 1) {
       exportControl = (
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
+          href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${this.props.challenge?.id}/comments/extract`}
           className="mr-button mr-button--green-lighter mr-button--small mr-button--with-icon mr-text-sm"
         >
           <SvgSymbol
@@ -60,14 +59,14 @@ export default class CommentsWidget extends Component {
         rightHeaderControls={<div className="mr-my-2">{exportControl}</div>}
       >
         <CommentList
-          includeChallengeNames={_get(this.props, 'challenges.length', 0) > 1}
+          includeChallengeNames={(this.props.challenges?.length ?? 0) > 1}
           includeTaskLinks
           lightMode={this.props.lightMode}
           comments={comments}
           taskComments={taskComments}
         />
       </QuickWidget>
-    )
+    );
   }
 }
 

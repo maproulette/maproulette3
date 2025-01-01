@@ -44,12 +44,12 @@ export class AsManageableChallenge {
 
   isComplete() {
     return this.status === ChallengeStatus.finished ||
-           (_get(this, 'actions.total', 0) > 0 &&
-            _get(this, 'actions.available') === 0)
+           ((this?.actions?.total ?? 0) > 0 &&
+            (this?.actions?.available) === 0);
   }
 
   completionPercentage() {
-    if (_get(this, 'actions.total', 0) > 0) {
+    if ((this?.actions?.total ?? 0) > 0) {
       return percentage(this.actions.total,
                         this.actions.total - this.actions.available)
     }
@@ -59,8 +59,8 @@ export class AsManageableChallenge {
   }
 
   actionPercentage(action) {
-    return percentage(_get(this, 'actions.total'),
-                      _get(this, `actions.${action}`, 0))
+    return percentage(this?.actions?.total,
+                      _get(this, `actions.${action}`, 0));
   }
 
   completionActivity() {

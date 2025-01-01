@@ -102,7 +102,7 @@ export const mapStateToProps = (state, ownProps) => {
       mappedProps.task =
         denormalize(taskEntity, taskDenormalizationSchema(), state.entities)
 
-      mappedProps.challengeId = _get(mappedProps.task, 'parent.id')
+      mappedProps.challengeId = mappedProps.task?.parent?.id
     }
   }
 
@@ -130,13 +130,13 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
         const loadedTask = normalizedResults.entities.tasks[normalizedResults.result]
         // Load the parent challenge if missing or stale
-        if (!_isPlainObject(_get(existingTask, 'parent')) ||
+        if (!_isPlainObject(existingTask?.parent) ||
             isStale(existingTask.parent, CHALLENGE_STALE)) {
           dispatch(
             fetchChallenge(loadedTask.parent)
           ).then(normalizedChallengeResults => {
             // Load the parent project if missing or stale
-            if (!_isPlainObject(_get(existingTask, 'parent.parent')) ||
+            if (!_isPlainObject(existingTask?.parent?.parent) ||
                 isStale(existingTask.parent.parent, PROJECT_STALE)) {
               fetchParentProject(dispatch, normalizedChallengeResults)
             }
@@ -278,7 +278,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
     fetchOSMElementHistory,
     fetchOSMElement,
-  }
+  };
 }
 
 /**
@@ -286,7 +286,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
  * none is available.
  */
 export const taskIdFromRoute = (props, defaultId) => {
-  const taskId = parseInt(_get(props, 'match.params.taskId'), 10)
+  const taskId = parseInt(props.match?.params?.taskId, 10)
   return _isFinite(taskId) ? taskId : defaultId
 }
 
@@ -296,7 +296,7 @@ export const taskIdFromRoute = (props, defaultId) => {
  */
 export const challengeIdFromRoute = (props, defaultId) => {
   const challengeId =
-    parseInt(_get(props, 'match.params.challengeId'), 10)
+    parseInt(props.match?.params?.challengeId, 10)
 
   return _isFinite(challengeId) ? challengeId : defaultId
 }
@@ -306,7 +306,7 @@ export const challengeIdFromRoute = (props, defaultId) => {
  * the given entity was last fetched from the server, false otherwise
  */
 export const isStale = (entity, staleTime) => {
-  return Date.now() - _get(entity, '_meta.fetchedAt', 0) > staleTime
+  return Date.now() - (entity?._meta?.fetchedAt ?? 0) > staleTime;
 }
 
 /**

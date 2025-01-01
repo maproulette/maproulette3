@@ -2,7 +2,6 @@ import { Role, rolesImply, ROLE_SUPERUSER }
        from '../../services/Grant/Role'
 import { TargetType } from '../../services/Grant/TargetType'
 import { GranteeType } from '../../services/Grant/GranteeType'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isObject from 'lodash/isObject'
 import _filter from 'lodash/filter'
@@ -27,7 +26,7 @@ export class AsManager extends AsEndUser {
       return false
     }
 
-    const osmId = _get(this.user, 'osmProfile.id')
+    const osmId = this.user?.osmProfile?.id
     return (_isFinite(osmId) && osmId === project.owner)
   }
 
@@ -144,7 +143,7 @@ export class AsManager extends AsEndUser {
 
     _each(challenges, challenge => {
       // handle both normalized and denormalized challenges
-      if (projectIds.indexOf(_get(challenge, 'parent.id', challenge.parent)) !== -1) {
+      if (projectIds.indexOf(challenge?.parent?.id ?? (challenge.parent)) !== -1) {
         projectChallenges.add(challenge)
       }
 

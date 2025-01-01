@@ -4,7 +4,6 @@ import { injectIntl } from 'react-intl'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _isObject from 'lodash/isObject'
-import _get from 'lodash/get'
 import _reduce from 'lodash/reduce'
 import QuickTextBox from '../../QuickTextBox/QuickTextBox'
 import SignInButton from '../../SignInButton/SignInButton'
@@ -47,7 +46,7 @@ export class StartVirtualChallenge extends Component {
   /** Invoked to cancel editing of the name */
   cancelEditing = () => this.setState({editingName: false, challengeName: ''})
 
-  maxAllowedTasks = () => parseInt(_get(window.env, 'REACT_APP_VIRTUAL_CHALLENGE_MAX_TASKS', 10000))
+  maxAllowedTasks = () => parseInt(window.env?.REACT_APP_VIRTUAL_CHALLENGE_MAX_TASKS ?? 10000)
 
   render() {
     const taskCount =

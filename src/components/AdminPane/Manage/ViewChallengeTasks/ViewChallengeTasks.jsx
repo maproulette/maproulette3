@@ -2,7 +2,6 @@ import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Popup } from 'react-leaflet'
-import _get from 'lodash/get'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
@@ -189,7 +188,7 @@ export class ViewChallengeTasks extends Component {
       )
     }
 
-    if (_get(this.props, 'challenge.actions.total', 0) === 0) {
+    if ((this.props.challenge?.actions?.total ?? 0) === 0) {
       return (
         <div className="mr-flex mr-justify-center mr-text-grey-lighter">
           <h3>
@@ -234,7 +233,7 @@ export class ViewChallengeTasks extends Component {
           showPriorityBounds={this.state.showPriorityBounds}
           priorityBounds={this.findPriorityBounds(this.props.challenge)}
           initialBounds={this.state.boundsReset ?
-            toLatLngBounds(_get(this.props, 'criteria.boundingBox')) : null}
+            toLatLngBounds(this.props.criteria?.boundingBox) : null}
           {...this.props}
         />
 
@@ -278,24 +277,24 @@ export class ViewChallengeTasks extends Component {
         </div>
 
           <TaskAnalysisTable
-            taskData={_get(this.props, 'taskInfo.tasks')}
+            taskData={this.props.taskInfo?.tasks}
             changeStatus={this.changeStatus}
             removeReviewRequests={this.removeReviewRequests}
             removeMetaReviewRequests={this.removeMetaReviewRequests}
-            totalTaskCount={_get(this.props, 'taskInfo.totalCount')}
+            totalTaskCount={this.props.taskInfo?.totalCount}
             totalTasksInChallenge={ calculateTasksInChallenge(this.props) }
             loading={this.props.loadingChallenge}
             {...this.props}
           />
       </div>
-    )
+    );
   }
 }
 
 const calculateTasksInChallenge = props => {
-  const actions = _get(props, 'challenge.actions')
+  const actions = props.challenge?.actions
   if (!actions) {
-    return _get(props, 'taskInfo.totalCount')
+    return props.taskInfo?.totalCount;
   }
 
   return actions.total
@@ -305,7 +304,7 @@ const TaskMarkerContent = props => {
   const manager = AsManager(props.user)
   const taskBaseRoute =
     `/admin/project/${props.challenge.parent.id}` +
-    `/challenge/${_get(props.challenge, 'id')}/task/${props.marker.options.taskId}`
+    `/challenge/${props.challenge?.id}/task/${props.marker.options.taskId}`
 
   return (
     <Fragment>
@@ -313,7 +312,7 @@ const TaskMarkerContent = props => {
         {
           props.intl.formatMessage(messages.nameLabel)
         } {
-          (props.marker.options.name || _get(props.task, 'name') || _get(props.task, 'title'))
+          (props.marker.options.name || (props.task?.name) || (props.task?.title))
         }
       </div>
       <div className="mr-text-center">

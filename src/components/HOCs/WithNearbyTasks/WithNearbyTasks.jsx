@@ -2,7 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _omit from 'lodash/omit'
 import { fetchNearbyTasks } from '../../../services/Task/Task'
@@ -29,7 +28,7 @@ export const WithNearbyTasks = function(WrappedComponent) {
      * @private
      */
     standardChallengeId = props =>
-      parseInt(_get(props, 'match.params.challengeId'), 10)
+      parseInt(props.match?.params?.challengeId, 10)
 
     /**
      * Parses the virtual challenge id from the matched params of the route
@@ -37,7 +36,7 @@ export const WithNearbyTasks = function(WrappedComponent) {
      * @private
      */
     virtualChallengeId = props =>
-      parseInt(_get(props, 'match.params.virtualChallengeId'), 10)
+      parseInt(props.match?.params?.virtualChallengeId, 10)
 
     /**
      * Determines whether this challenge is a virtual challenge

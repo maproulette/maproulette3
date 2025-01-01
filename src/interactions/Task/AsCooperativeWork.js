@@ -1,4 +1,3 @@
-import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
 import _toPairs from 'lodash/toPairs'
@@ -31,7 +30,7 @@ export class AsCooperativeWork {
    * Retrieve the format version of the cooperative work
    */
   cooperativeWorkVersion() {
-    return _get(this.cooperativeWork, 'meta.version')
+    return this.cooperativeWork?.meta?.version;
   }
 
   /*
@@ -57,7 +56,7 @@ export class AsCooperativeWork {
       return CooperativeType.tags
     }
 
-    return _get(this.cooperativeWork, 'meta.type')
+    return this.cooperativeWork?.meta?.type;
   }
 
   /**
@@ -79,7 +78,7 @@ export class AsCooperativeWork {
    */
   hasTagOperations() {
     return this.isTagType() &&
-           _get(this.cooperativeWork, 'operations.length', 0) > 0
+           (this.cooperativeWork?.operations?.length ?? 0) > 0;
   }
 
   /**
@@ -97,11 +96,11 @@ export class AsCooperativeWork {
           return null
         case 'modifyElement':
         case 'deleteElement':
-          return _get(operation, 'data.id')
+          return operation?.data?.id;
         default:
           throw new Error(`unrecognized operation type: ${operation.operationType}`)
       }
-    }))
+    }));
   }
 
   tagDiffs(osmElements) {

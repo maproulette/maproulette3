@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import messages from './Messages'
 
 class PointsTicker extends Component {
@@ -32,11 +31,11 @@ class PointsTicker extends Component {
             <FormattedMessage {...messages.label} />
           </h3>
           <span className="mr-ticker mr-my-2 lg:mr-my-0">
-            {this.digitBoxes(_get(this.props.user, 'score', 0), 4)}
+            {this.digitBoxes(this.props.user?.score ?? 0, 4)}
           </span>
         </div>
       </div>
-    )
+    );
   }
 }
 

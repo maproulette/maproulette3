@@ -1,5 +1,4 @@
 import _isFinite from 'lodash/isFinite'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _isString from 'lodash/isString'
 import { ChallengeBasemap, ChallengeBasemapBulkEdit }
@@ -26,7 +25,7 @@ export class AsEditableChallenge {
    * Returns true if the challenge is determined to have zero tasks.
    */
   hasZeroTasks() {
-    return _get(this, 'actions.total', 0) === 0
+    return (this?.actions?.total ?? 0) === 0;
   }
 
   /**

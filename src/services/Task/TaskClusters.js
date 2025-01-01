@@ -2,7 +2,6 @@ import { v1 as uuidv1 } from 'uuid'
 import uuidTime from 'uuid-time'
 import RequestStatus from '../Server/RequestStatus'
 import _isArray from 'lodash/isArray'
-import _get from 'lodash/get'
 import _isUndefined from 'lodash/isUndefined'
 import { clearBoundedTasks } from './BoundedTask'
 import { generateSearchParametersString } from '../Search/Search'
@@ -58,13 +57,13 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25, over
     dispatch(clearBoundedTasks())
 
     const fetchId = uuidv1()
-    const filters = _get(criteria, 'filters', {})
+    const filters = criteria?.filters ?? {}
     const searchParameters = generateSearchParametersString(filters,
                                                             criteria.boundingBox,
-                                                            _get(criteria, 'savedChallengesOnly'),
+                                                            criteria?.savedChallengesOnly,
                                                             null,
                                                             criteria.searchQuery,
-                                                            _get(criteria, 'invertFields'))
+                                                            criteria?.invertFields)
     searchParameters.cid = challengeId
 
     // If we don't have a challenge Id then we need to do some limiting.
@@ -103,7 +102,7 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25, over
       console.log(error.response || error)
       throw error
     })
-  }
+  };
 }
 
 // redux reducers

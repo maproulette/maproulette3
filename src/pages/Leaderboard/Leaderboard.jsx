@@ -2,7 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
 import WithLeaderboard
@@ -39,7 +38,7 @@ class Leaderboard extends Component {
       )
     }
 
-    const loggedInUserId = _get(this.props, 'user.id')
+    const loggedInUserId = this.props.user?.id
 
     const topLeaderCards = _map(
       this.props.leaderboard.slice(0, this.props.topLeaderCount), leader =>
@@ -107,7 +106,7 @@ class Leaderboard extends Component {
             }
           </header>
 
-          {_get(this.props, "leaderboardOptions.filterCountry") &&
+          {(this.props.leaderboardOptions?.filterCountry) &&
             <LeaderboardMap {...this.props} className="mr-mb-8 mr-rounded mr-shadow" />
           }
 
@@ -124,7 +123,7 @@ class Leaderboard extends Component {
         </div>
         </div>
       </section>
-    )
+    );
   }
 }
 

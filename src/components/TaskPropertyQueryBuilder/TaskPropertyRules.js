@@ -5,7 +5,6 @@ import { TaskPropertySearchTypeNumber,
 import _values from 'lodash/values'
 import _slice from 'lodash/slice'
 import _filter from 'lodash/filter'
-import _get from 'lodash/get'
 import _each from  'lodash/each'
 
 export const PROPERTY_RULE_ERRORS = Object.freeze({
@@ -127,7 +126,7 @@ export const preparePropertyRulesForSaving = rule => {
   if (!rule.left) {
     if (rule.operator !== TaskPropertySearchTypeString.exists &&
         rule.operator !== TaskPropertySearchTypeString.missing) {
-      value = _get(rule.value, 'length', 0) < 1 ? null : rule.value[0]
+      value = (rule.value?.length ?? 0) < 1 ? null : rule.value[0]
     }
   }
 
@@ -161,7 +160,7 @@ export const preparePropertyRulesForForm = data => {
   if (!data.key && data.left && data.right) {
     const compactKey = (rule, values) => {
       if (rule.operationType === TaskPropertyOperationType.or) {
-        if (_get(rule, 'left.key') === _get(rule, 'right.key')) {
+        if ((rule?.left?.key) === (rule?.right?.key)) {
           if (rule.commaSeparate) {
             values[0] = values[0] ? (values[0] + ",") : ""
             values[0] = values[0] + rule.left.value + "," + rule.right.value
@@ -173,7 +172,7 @@ export const preparePropertyRulesForForm = data => {
           return rule.left.key
         }
 
-        if (_get(rule, 'left.key') === compactKey(rule.right, values)) {
+        if ((rule?.left?.key) === compactKey(rule.right, values)) {
           values.unshift(rule.left.value)
           return rule.left.key
         }

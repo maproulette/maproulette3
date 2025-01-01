@@ -20,14 +20,14 @@ const WithEditor =
   WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
 export const mapStateToProps = state => {
-  const userId = _get(state, 'currentUser.userId')
+  const userId = state.currentUser?.userId
   const userEntity = _get(state, `entities.users.${userId}`)
 
-  return ({
+  return {
     editor: state.openEditor,
-    configuredEditor: _get(userEntity, 'settings.defaultEditor', DEFAULT_EDITOR),
-    rapidEditorState: _get(state, 'rapidEditor'),
-  })
+    configuredEditor: userEntity?.settings?.defaultEditor ?? DEFAULT_EDITOR,
+    rapidEditorState: state.rapidEditor,
+  };
 }
 
 export const mapDispatchToProps = dispatch => {

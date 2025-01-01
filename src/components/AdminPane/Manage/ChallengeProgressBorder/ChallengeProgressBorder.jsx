@@ -2,7 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { injectIntl } from 'react-intl'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import { TaskStatus, TaskStatusColors, keysByStatus, statusLabels }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -45,8 +44,8 @@ export class ChallengeProgressBorder extends Component {
    */
   borderSegmentForTaskStatus(status, actions, localizedStatuses, maxWidth, context={}, overrides={}) {
     const actionCount = actions[overrides.action ? overrides.action : keysByStatus[status]]
-    const cumulativePercent = _get(context, 'cumulativePercent', 0)
-    const cumulativeWidth = _get(context, 'cumulativeWidth', 0)
+    const cumulativePercent = context?.cumulativePercent ?? 0
+    const cumulativeWidth = context?.cumulativeWidth ?? 0
     const currentPercent = this.percent(actionCount, actions.total)
     let segmentWidth = Math.floor(Math.max(maxWidth * (currentPercent / 100.0), MIN_SEGMENT_PX))
 

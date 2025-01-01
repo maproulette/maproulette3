@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _each from 'lodash/each'
 import _uniqBy from 'lodash/uniqBy'
@@ -15,7 +14,7 @@ import _isArray from 'lodash/isArray'
 const WithChallengeResultParents = function(WrappedComponent) {
   return class extends Component {
     projectsAndChallengeParents = () => {
-      if (_get(this.props, 'filteredChallenges.length', 0) === 0) {
+      if ((this.props.filteredChallenges?.length ?? 0) === 0) {
         return this.props.resultProjects
       }
 
@@ -42,7 +41,7 @@ const WithChallengeResultParents = function(WrappedComponent) {
       return <WrappedComponent {...this.props}
                                resultProjects={this.projectsAndChallengeParents()} />
     }
-  }
+  };
 }
 
 export default WrappedComponent => WithChallengeResultParents(WrappedComponent)

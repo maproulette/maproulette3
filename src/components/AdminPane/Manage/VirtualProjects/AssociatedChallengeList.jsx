@@ -2,7 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import PageResultsButton from '../../../LoadMoreButton/PageResultsButton'
 import messages from './Messages'
@@ -27,7 +26,7 @@ export default class AssociatedChallengeList extends Component {
           </div>
           <div className='mr-flex-grow mr-text-base mr-text-white'>
           {this.props.includeId &&  `(id: ${challenge.id})`}{" "}{challenge.name}
-            <div className='mr-text-xs mr-text-grey-light'>{_get(challenge.parent, 'displayName')}</div>
+            <div className='mr-text-xs mr-text-grey-light'>{challenge.parent?.displayName}</div>
           </div>
 
           <div className="mr-text-sm mr-text-green-lighter">

@@ -3,7 +3,6 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import Form from '@rjsf/core'
 import { CustomSelectWidget }
        from '../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _head from 'lodash/head'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -37,13 +36,13 @@ export class TaskPropertyQueryBuilder extends Component {
 
   /** Receive updates to the form data, along with any validation errors */
   changeHandler = ({formData}) => {
-    const rootRule = _cloneDeep(_get(formData, 'propertyRules.rootRule'))
+    const rootRule = _cloneDeep(formData?.propertyRules?.rootRule)
 
     const moveLeft = (data, prevData) => {
       // We've changed value type to compound rule so
       // let's move over any assigned key/values.
       if (data.valueType === "compound rule" &&
-          (prevData && _get(prevData, 'valueType') !== "compound rule")) {
+          (prevData && (prevData?.valueType) !== "compound rule")) {
         data.left = {
           valueType: prevData.valueType,
           key: prevData.key,
@@ -55,20 +54,20 @@ export class TaskPropertyQueryBuilder extends Component {
         data.operator = undefined
       }
       else if (data.valueType !== "compound rule" &&
-               _get(prevData, 'valueType') === "compound rule")
+               (prevData?.valueType) === "compound rule")
       {
-        data.key = _get(prevData, 'left.key')
-        data.value = _get(prevData, 'left.value')
-        data.operator = _get(prevData, 'left.operator')
+        data.key = prevData?.left?.key
+        data.value = prevData?.left?.value
+        data.operator = prevData?.left?.operator
         data.left = undefined
         data.right = undefined
       }
       else {
         if (data.left) {
-          moveLeft(data.left, _get(prevData, 'left'))
+          moveLeft(data.left, prevData?.left)
         }
         if (data.right) {
-          moveLeft(data.right, _get(prevData, 'right'))
+          moveLeft(data.right, prevData?.right)
         }
         if (data.valueType && data.valueType !== "compound rule") {
           data.value = data.value || [""]
@@ -77,7 +76,7 @@ export class TaskPropertyQueryBuilder extends Component {
       }
     }
 
-    moveLeft(rootRule, _get(this.state.formData, 'propertyRules.rootRule'))
+    moveLeft(rootRule, this.state.formData?.propertyRules?.rootRule)
     this.setState({formData: {propertyRules: {rootRule}}, errors: null})
 
     if (!!this.props.updateAsChange && rootRule) {
@@ -92,7 +91,7 @@ export class TaskPropertyQueryBuilder extends Component {
         if (rule.right) {
           checkForEmptyKeys(rule.right)
         }
-        if (_get(rule.value, 'length', 0) > 1) {
+        if ((rule.value?.length ?? 0) > 1) {
           if (!rule.key) {
             rule.key = ""
           }
@@ -114,7 +113,7 @@ export class TaskPropertyQueryBuilder extends Component {
     e.preventDefault()
     e.stopPropagation()
 
-    const rootRule = _get(this.state.formData, 'propertyRules.rootRule')
+    const rootRule = this.state.formData?.propertyRules?.rootRule
     const errors = validatePropertyRules(rootRule)
 
     if (errors.length === 0) {
@@ -206,7 +205,7 @@ export class TaskPropertyQueryBuilder extends Component {
     // We have to clear out any values defined if the operator is "exists" or
     // "missing" otherwise the schema for will erroneously show the
     // "comma separate values" checkbox
-    if (_get(data, 'propertyRules.rootRule')) {
+    if (data?.propertyRules?.rootRule) {
       const clearOutValues = (rule) => {
         if (rule.valueType === "compound rule") {
           rule.value = undefined

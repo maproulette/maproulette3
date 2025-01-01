@@ -5,7 +5,6 @@ import L from 'leaflet'
 import 'leaflet-vectoricon'
 import { ZoomControl, Marker, Tooltip, MapContainer, AttributionControl, useMap } from 'react-leaflet'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster/src/react-leaflet-markercluster'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _cloneDeep from 'lodash/cloneDeep'
 import { buildLayerSources } from '../../../services/VisibleLayer/LayerSources'
@@ -103,7 +102,7 @@ export class TaskNearbyMap extends Component {
 
     const currentCenterpoint = AsMappableTask(this.props.task).calculateCenterPoint()
 
-    const hasTaskMarkers = _get(this.props, 'taskMarkers.length', 0) > 0
+    const hasTaskMarkers = (this.props.taskMarkers?.length ?? 0) > 0
     let coloredMarkers = null
     if (hasTaskMarkers) {
       coloredMarkers = _map(this.props.taskMarkers, marker => {
@@ -111,7 +110,7 @@ export class TaskNearbyMap extends Component {
         const markerData = _cloneDeep(marker)
         markerData.options.title = `Task ${marker.options.taskId}`
         const markerStyle = {
-          fill: TaskStatusColors[_get(marker.options, 'status', 0)],
+          fill: TaskStatusColors[(marker.options?.status ?? 0)],
           stroke: isRequestedMarker ? colors.yellow : colors['grey-leaflet'],
           strokeWidth: isRequestedMarker ? 2 : 0.5,
         }
@@ -120,7 +119,7 @@ export class TaskNearbyMap extends Component {
           <Marker
             key={marker.options.taskId}
             {...markerData}
-            icon={markerIconSvg(_get(marker.options, 'priority', 0), markerStyle)}
+            icon={markerIconSvg(marker.options?.priority ?? 0, markerStyle)}
             zIndexOffset={isRequestedMarker ? 1000 : undefined}
             eventHandlers={{
               click: () => {
@@ -132,23 +131,23 @@ export class TaskNearbyMap extends Component {
               <div>
                 <FormattedMessage {...messages.priorityLabel} /> {
                   this.props.intl.formatMessage(
-                    messagesByPriority[_get(marker.options, 'priority', 0)])
+                    messagesByPriority[(marker.options?.priority ?? 0)])
                 }
               </div>
               <div>
                 <FormattedMessage {...messages.statusLabel} /> {
                   this.props.intl.formatMessage(
-                    messagesByStatus[_get(marker.options, 'status', 0)])
+                    messagesByStatus[(marker.options?.status ?? 0)])
                 }
               </div>
             </Tooltip>
           </Marker>
-        )
+        );
       })
     }
 
     const overlayLayers = buildLayerSources(
-      this.props.visibleOverlays, _get(this.props, 'user.settings.customBasemaps'),
+      this.props.visibleOverlays, this.props.user?.settings?.customBasemaps,
       (layerId, index, layerSource) =>
         <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
     )

@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _merge from 'lodash/merge'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -53,7 +52,7 @@ export class ReviewTaskControls extends Component {
     this.props.setCompletingTask(this.props.task.id)
 
     const history = _cloneDeep(this.props.history)
-    _merge(_get(history, 'location.state', {}), alternateCriteria)
+    _merge(history?.location?.state ?? {}, alternateCriteria)
 
     const requestedNextTask = !this.state.requestedNextTask ? null :
       {id: this.state.requestedNextTask, parent: this.state.requestedNextTaskParent}
@@ -210,7 +209,7 @@ export class ReviewTaskControls extends Component {
       )
     }
 
-    const fromInbox = _get(this.props.history, 'location.state.fromInbox')
+    const fromInbox = this.props.history?.location?.state?.fromInbox
     const errorTags = this.props.task.errorTags;
     const isMetaReview = this.props.history?.location?.pathname?.includes("meta-review")
     const reviewData = this.props.task?.review;

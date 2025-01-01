@@ -9,7 +9,6 @@ import ReviewStats from './blocks/ReviewStats'
 import TaskStats from './blocks/TaskStats'
 import LeaderboardStats from './blocks/LeaderboardStats'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 import messages from './Messages'
@@ -32,7 +31,7 @@ const ProfileImage = props => {
 class Metrics extends Component {
   componentDidMount() {
     // Make sure our user info is current
-    if (_get(this.props, 'targetUser.isLoggedIn')) {
+    if (this.props.targetUser?.isLoggedIn) {
       this.props.loadCompleteUser(this.props.targetUser.id)
     }
   }
@@ -68,10 +67,10 @@ class Metrics extends Component {
       }
     }
 
-    const totalTasks = _get(this.props.taskMetrics, 'total') || 0
+    const totalTasks = (this.props.taskMetrics?.total) || 0
 
-    const optedOut = _get(this.props.targetUser, 'settings.leaderboardOptOut') &&
-                          _get(this.props, 'targetUser.id') !== _get(this.props, 'currentUser.userId')
+    const optedOut = (this.props.targetUser?.settings?.leaderboardOptOut) &&
+                          (this.props.targetUser?.id) !== (this.props.currentUser?.userId)
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-6">
         <div className="mr-bg-world-map mr-bg-top mr-bg-no-repeat mr-px-6 md:mr-py-8 mr-min-h-screen">
@@ -156,7 +155,7 @@ class Metrics extends Component {
                     setTasksCustomRange={this.props.setTasksReviewerDateRange}
                     messages={messagesAsReviewer}
                     title={
-                      this.props.targetUser.id !== _get(this.props.user, 'id') ?
+                      this.props.targetUser.id !== (this.props.user?.id) ?
                       this.props.intl.formatMessage(
                         messagesAsReviewer.reviewerTitle, {username: this.props.targetUser.name}) :
                       this.props.intl.formatMessage(messagesAsReviewer.reviewerTitleYou)

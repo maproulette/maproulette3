@@ -1,4 +1,3 @@
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _reduce from 'lodash/reduce'
 import countryCodeBoundingBoxJSON from '../../countryCodeBoundingBox.json'
@@ -14,7 +13,7 @@ export const CountryBoundingBoxes =
 
 
 export const boundingBoxForCountry = function(countryCode) {
-  return _get(CountryBoundingBoxes[countryCode], 'boundingBox')
+  return CountryBoundingBoxes[countryCode]?.boundingBox;
 }
 
 export const supportedCountries = function() {

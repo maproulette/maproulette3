@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Popup } from 'react-leaflet'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isEqual from 'lodash/isEqual'
 import _isEmpty from 'lodash/isEmpty'
@@ -13,7 +12,7 @@ import bbox from '@turf/bbox'
 import { point, featureCollection } from '@turf/helpers'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
-       import { buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'
+import { buildSearchURL } from '../../../services/SearchCriteria/SearchCriteria'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 import TaskPropertyFilter from '../../TaskFilters/TaskPropertyFilter'
@@ -75,7 +74,7 @@ export default class TaskBundleWidget extends Component {
   }
 
   bundleTasks = () => {
-    if(_get(this.props, 'taskBundle.tasks.length', 0) > 0 || this.props.bundleEditsDisabled){
+    if((this.props.taskBundle?.tasks?.length ?? 0) > 0 || this.props.bundleEditsDisabled){
       return
     }
     
@@ -137,16 +136,16 @@ export default class TaskBundleWidget extends Component {
    */
   initializeClusterFilters(prevProps={}) {
     // If the nearby tasks loaded, update bounds
-    if (_get(this.props, 'nearbyTasks.tasks.length', 0) > 0 &&
+    if ((this.props.nearbyTasks?.tasks?.length ?? 0) > 0 &&
         !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)) {
       this.setBoundsToNearbyTask()
     }
   }
 
   initializeWebsocketSubscription(prevProps={}) {
-    const challengeId = _get(this.props.task, 'parent.id')
+    const challengeId = this.props.task?.parent?.id
     if (_isFinite(challengeId) &&
-       (challengeId !== _get(prevProps.task, 'parent.id'))) {
+       (challengeId !== (prevProps.task?.parent?.id))) {
       this.props.subscribeToChallengeTaskMessages(challengeId)
     }
   }
@@ -166,7 +165,7 @@ export default class TaskBundleWidget extends Component {
   }
 
   setBoundsToNearbyTask = () => {
-    const taskList = _get(this.props, 'nearbyTasks.tasks')
+    const taskList = this.props.nearbyTasks?.tasks
 
     // Add the current task to the task list so that it always shows
     // up in the bounds.
@@ -187,7 +186,7 @@ export default class TaskBundleWidget extends Component {
     this.updateBounds(
       this.props.challengeId,
       nearbyBounds,
-      _get(this.props, 'mapBounds.zoom', 18)
+      this.props.mapBounds?.zoom ?? 18
     )
   }
 
@@ -241,8 +240,8 @@ export default class TaskBundleWidget extends Component {
       this.handleKeyboardShortcuts)
     }
 
-    if (_isFinite(_get(this.props, 'task.id')) &&
-        _isFinite(_get(prevProps, 'task.id')) &&
+    if (_isFinite(this.props.task?.id) &&
+        _isFinite(prevProps?.task?.id) &&
         this.props.task.id !== prevProps.task.id) {
       this.props.resetSelectedTasks()
       this.setBoundsToNearbyTask()
@@ -261,7 +260,7 @@ export default class TaskBundleWidget extends Component {
 
   componentWillUnmount() {
     this.props.resetSelectedTasks()
-    const challengeId = _get(this.props.task, 'parent.id')
+    const challengeId = this.props.task?.parent?.id
     if (_isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
@@ -298,9 +297,9 @@ export default class TaskBundleWidget extends Component {
 }
 
 const calculateTasksInChallenge = props => {
-  const actions = _get(props, 'browsedChallenge.actions')
+  const actions = props.browsedChallenge?.actions
   if (!actions) {
-    return _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
+    return (props.taskInfo?.totalCount) || (props.taskInfo?.tasks?.length);
   }
 
   return _sum(_values(_pick(actions, VALID_STATUS_KEYS)))
@@ -315,14 +314,14 @@ const ActiveBundle = props => {
             {...props}
             marker={markerData}
             taskId={markerData.options.taskId}
-            taskBundleData={_get(props, 'taskBundle.tasks')}
+            taskBundleData={props.taskBundle?.tasks}
             bundling
             unbundleTask={props.unbundleTask}
             bundleTask={props.bundleTask}
           />
         </div>
       </Popup>
-    )
+    );
   }
 
   const bundleCenter = toLatLngBounds(
@@ -357,10 +356,10 @@ const ActiveBundle = props => {
     <TaskAnalysisTable
       {...props}
       selectedTasks={new Map()}
-      taskData={props.bundledOnly && props.taskBundle ? _get(props, 'taskBundle.tasks'): _get(props, 'taskInfo.tasks')}
+      taskData={props.bundledOnly && props.taskBundle ? props.taskBundle?.tasks: props.taskInfo?.tasks}
       totalTaskCount={
-        _get(props, 'taskInfo.totalCount') ||
-        _get(props, 'taskInfo.tasks.length')
+        (props.taskInfo?.totalCount) ||
+        (props.taskInfo?.tasks?.length)
       }
       totalTasksInChallenge={calculateTasksInChallenge(props)}
       showColumns={[
@@ -492,7 +491,7 @@ const BuildBundle = props => {
     )
   }
 
-  const totalTaskCount = _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
+  const totalTaskCount = (props.taskInfo?.totalCount) || (props.taskInfo?.tasks?.length)
   const bundleButton = !props.taskReadOnly && props.selectedTaskCount(totalTaskCount) > 1 && !props.bundleEditsDisabled ? (
       <button
         className="mr-button mr-button--green-lighter mr-button--small"
@@ -522,8 +521,8 @@ const BuildBundle = props => {
       showMarkerPopup={showMarkerPopup}
       highlightPrimaryTask={props.task.id}
       taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
-      boundingBox={_get(props, 'criteria.boundingBox')}
-      initialBounds={toLatLngBounds(_get(props, 'criteria.boundingBox', []))}
+      boundingBox={props.criteria?.boundingBox}
+      initialBounds={toLatLngBounds(props.criteria?.boundingBox ?? [])}
       onBulkTaskSelection={props.selectTasks}
       onBulkTaskDeselection={props.deselectTasks}
       fitbBoundsControl
@@ -585,7 +584,7 @@ const BuildBundle = props => {
       <div className="mr-px-4">
         <TaskAnalysisTable
           {...props}
-          taskData={_get(props, 'taskInfo.tasks')}
+          taskData={props.taskInfo?.tasks}
           totalTaskCount={totalTaskCount}
           totalTasksInChallenge={ calculateTasksInChallenge(props) }
           showColumns={['selected', 'featureId', 'id', 'status', 'priority', 'comments']}
@@ -599,7 +598,7 @@ const BuildBundle = props => {
         />
       </div>
     </div>
-  )
+  );
 }
 
 registerWidgetType(

@@ -144,7 +144,7 @@ export const exportOSMData = function (url, filename) {
 
 // Helper function to build query filters for export links
 const buildQueryFilters = function (criteria) {
-  const filters = _get(criteria, "filters", {});
+  const filters = criteria?.filters ?? {};
   const taskId = filters.id;
   const reviewRequestedBy = filters.reviewRequestedBy;
   const reviewedBy = filters.reviewedBy;
@@ -345,17 +345,17 @@ export const performChallengeSearch = function (
   searchObject,
   limit = RESULTS_PER_PAGE
 ) {
-  const sortCriteria = _get(searchObject, "sort", {});
-  const archived = _get(searchObject, "archived", false);
-  const filters = _get(searchObject, "filters", {});
-  const queryString = _get(searchObject, "query");
-  const page = _get(searchObject, "page.currentPage");
-  const onlyEnabled = _get(searchObject, "onlyEnabled", true);
-  const admin = _get(searchObject, "admin", false);
+  const sortCriteria = searchObject?.sort ?? {};
+  const archived = searchObject?.archived ?? false;
+  const filters = searchObject?.filters ?? {};
+  const queryString = searchObject?.query;
+  const page = searchObject?.page?.currentPage;
+  const onlyEnabled = searchObject?.onlyEnabled ?? true;
+  const admin = searchObject?.admin ?? false;
   let bounds = null;
 
   if (filters && !_isUndefined(filters.location)) {
-    bounds = _get(searchObject, "mapBounds.bounds");
+    bounds = searchObject?.mapBounds?.bounds;
   }
 
   const challengeStatus = [
@@ -400,9 +400,9 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
     : criteria.onlyEnabled;
 
   const bounds = criteria.bounds;
-  const sortBy = _get(criteria, "sortCriteria.sortBy", SortOptions.popular);
+  const sortBy = criteria?.sortCriteria?.sortBy ?? (SortOptions.popular);
   const direction = (
-    _get(criteria, "sortCriteria.direction") || "DESC"
+    (criteria?.sortCriteria?.direction) || "DESC"
   ).toUpperCase();
   const sort = sortBy ? `${sortBy}` : null;
   const page = _isFinite(criteria.page) ? criteria.page : 0;
@@ -505,12 +505,12 @@ export const fetchChallengeActions = function (
   let searchParameters = {};
   if (criteria) {
     searchParameters = generateSearchParametersString(
-      _get(criteria, "filters", {}),
+      criteria?.filters ?? {},
       criteria.boundingBox,
       false,
       false,
       null,
-      _get(criteria, "invertFields", {})
+      criteria?.invertFields ?? {}
     );
   }
 
@@ -604,12 +604,12 @@ export const fetchTagMetrics = function (userId, criteria) {
 
   if (criteria) {
     searchParameters = generateSearchParametersString(
-      _get(criteria, "filters", {}),
+      criteria?.filters ?? {},
       criteria.boundingBox,
       false,
       false,
       null,
-      _get(criteria, "invertFields", {})
+      criteria?.invertFields ?? {}
     );
   }
 
@@ -833,7 +833,7 @@ export const fetchPropertyKeys = function (challengeId) {
   })
     .execute()
     .then((normalizedResults) => {
-      return _get(normalizedResults, "result.keys", []);
+      return normalizedResults?.result?.keys ?? [];
     })
     .catch((error) => {
       console.log(error.response || error);

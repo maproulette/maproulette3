@@ -6,7 +6,6 @@ import classNames from 'classnames'
 import { parseISO } from 'date-fns'
 import _isUndefined from 'lodash/isUndefined'
 import _noop from 'lodash/noop'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isEmpty from 'lodash/isEmpty'
 import { messagesByDifficulty }
@@ -28,7 +27,7 @@ export class CardChallenge extends Component {
     // If we are searching for a project name let's also surface matching
     // virtual projects.
     if (this.props.challenge.parent && this.props.projectQuery) {
-      const virtualParents = _get(this.props.challenge, 'virtualParents', [])
+      const virtualParents = this.props.challenge?.virtualParents ?? []
       for (let i = 0; i < virtualParents.length; i++) {
         const vp = virtualParents[i]
         if (_isObject(vp) && vp.enabled && vp.id !== this.props.excludeProjectId) {
@@ -107,14 +106,14 @@ export class CardChallenge extends Component {
                onClick={(e) => {e.stopPropagation()}}
                to={`/browse/projects/${this.props.challenge.parent.id}`}
              >
-               {_get(this.props, 'challenge.parent.displayName')}
+               {this.props.challenge?.parent?.displayName}
              </Link>
             }
             {vpList.length > 0 &&
               <div className="mr-mt-2 mr-leading-none">
                 <span className="mr-mr-1 mr-text-yellow mr-text-xs">
                   <FormattedMessage {...messages.vpListLabel}
-                    values={{count:_get(vpList, 'length', 0)}} />
+                    values={{count:vpList?.length ?? 0}} />
                 </span>
                 {vpList}
               </div>
@@ -183,7 +182,7 @@ export class CardChallenge extends Component {
          </div>
         }
       </article>
-    )
+    );
   }
 }
 

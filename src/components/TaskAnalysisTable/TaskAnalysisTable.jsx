@@ -102,7 +102,7 @@ export class TaskAnalysisTableInternal extends Component {
 
     this.props.updateCriteria({sortCriteria, filters, page: tableState.page,
       boundingBox: this.props.boundingBox,
-      includeTags: !!_get(this.props.addedColumns, 'tags')})
+      includeTags: !!this.props.addedColumns?.tags})
 
     // Use pick instead of cloneDeep, as cloning the entire tableState seems to cause an error
     // when any column with a "makeInvertable" header is present.
@@ -129,7 +129,7 @@ export class TaskAnalysisTableInternal extends Component {
             Header: key,
             Cell: ({row}) => {
               let valueToDisplay = ""
-              if (_get(row._original.geometries, 'features.length', 0) > 0) {
+              if ((row._original.geometries?.features?.length ?? 0) > 0) {
                 valueToDisplay = _get(row._original.geometries.features[0].properties, key)
               }
               return (
@@ -137,7 +137,7 @@ export class TaskAnalysisTableInternal extends Component {
               )
             },
             sortable: false,
-          }
+          };
         }
         else {
           return columnTypes[column]
@@ -152,8 +152,8 @@ export class TaskAnalysisTableInternal extends Component {
   componentDidUpdate(prevProps) {
     // If we've added the "tag" column, we need to update the table to fetch
     // the tag data.
-    if (!_get(prevProps.addedColumns, 'tags') &&
-        _get(this.props.addedColumns, 'tags') &&
+    if (!prevProps.addedColumns?.tags &&
+        (this.props.addedColumns?.tags) &&
         this.state.lastTableState) {
       this.updateTasks(this.state.lastTableState)
     }
@@ -175,13 +175,13 @@ export class TaskAnalysisTableInternal extends Component {
     }
     const pageSize = this.props.pageSize
     const page = this.props.page
-    const totalPages = Math.ceil(_get(this.props, 'totalTaskCount', 0) / pageSize)
+    const totalPages = Math.ceil((this.props.totalTaskCount ?? 0) / pageSize)
 
-    let data = _get(this.props, 'taskData', [])
+    let data = this.props.taskData ?? []
     let defaultSorted = [{id: 'name', desc: false}]
     let defaultFiltered = []
 
-    if (_get(this.props, 'criteria.sortCriteria.sortBy')) {
+    if (this.props.criteria?.sortCriteria?.sortBy) {
       defaultSorted = [{id: this.props.criteria.sortCriteria.sortBy,
                         desc: this.props.criteria.sortCriteria.direction === "DESC"}]
 
@@ -204,7 +204,7 @@ export class TaskAnalysisTableInternal extends Component {
       }
     }
 
-    if (_get(this.props, 'criteria.filters')) {
+    if (this.props.criteria?.filters) {
       defaultFiltered = _map(
         this.props.criteria.filters,
         (value, key) => ({id: key, value})
@@ -504,17 +504,17 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     id: 'completedBy',
     Header: makeInvertable(props.intl.formatMessage(messages.reviewRequestedByLabel),
                            () => props.invertField('completedBy'),
-                           _get(props.criteria, 'invertFields.completedBy')),
+                           props.criteria?.invertFields?.completedBy),
 
     accessor: 'completedBy',
     sortable: true,
     filterable: true,
-    exportable: t => _get(t.completedBy, 'username') || t.completedBy,
+    exportable: t => (t.completedBy?.username) || t.completedBy,
     maxWidth: 180,
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.completedBy, 'username') || row._original.completedBy).hashColor}}
+        style={{color: AsColoredHashable((row._original.completedBy?.username) || row._original.completedBy).hashColor}}
       >
         <a
           className="mr-mx-4"
@@ -522,7 +522,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
           target='_blank'
           rel="noopener"
         >
-          {_get(row._original.completedBy, 'username') || row._original.completedBy}
+          {(row._original.completedBy?.username) || row._original.completedBy}
         </a>
       </div>
     ),
@@ -590,11 +590,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     id: 'reviewedBy',
     Header: makeInvertable(props.intl.formatMessage(messages.reviewedByLabel),
                            () => props.invertField('reviewedBy'),
-                           _get(props.criteria, 'invertFields.reviewedBy')),
+                           props.criteria?.invertFields?.reviewedBy),
     accessor: 'reviewedBy',
     filterable: true,
     sortable: true,
-    exportable: t => _get(t.reviewedBy, 'username') || t.reviewedBy,
+    exportable: t => (t.reviewedBy?.username) || t.reviewedBy,
     maxWidth: 180,
     Cell: ({row}) => (
       !row._original.reviewedBy ?
@@ -612,11 +612,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     id: 'metaReviewedBy',
     Header: makeInvertable(props.intl.formatMessage(messages.metaReviewedByLabel),
                            () => props.invertField('metaReviewedBy'),
-                           _get(props.criteria, 'invertFields.metaReviewedBy')),
+                           props.criteria?.invertFields?.metaReviewedBy),
     accessor: 'metaReviewedBy',
     filterable: true,
     sortable: true,
-    exportable: t => _get(t.metaReviewedBy, 'username') || t.metaReviewedBy,
+    exportable: t => (t.metaReviewedBy?.username) || t.metaReviewedBy,
     maxWidth: 180,
     Cell: ({row}) => (
       !row._original.metaReviewedBy ?
@@ -680,13 +680,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.completedBy, 'username') || row._original.completedBy).hashColor}}
+        style={{color: AsColoredHashable((row._original.completedBy?.username) || row._original.completedBy).hashColor}}
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
             <Fragment key={reviewer.username + "-" + index}>
               <span style={{color: AsColoredHashable(reviewer.username).hashColor}}>{reviewer.username}</span>
-              {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
+              {(index + 1) !== (row._original.additionalReviewers?.length) ? ", " : ""}
             </Fragment>
           );
         })}
@@ -763,8 +763,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     },
     Filter: ({filter, onChange}) => {
       const preferredTags =
-        _filter(_split(_get(props, 'challenge.preferredTags'), ',').concat(
-                _split(_get(props, 'challenge.preferredReviewTags'), ',')),
+        _filter(_split(props.challenge?.preferredTags, ',').concat(
+                _split(props.challenge?.preferredReviewTags, ',')),
                 (result) => !_isEmpty(result))
 
       return (
@@ -772,9 +772,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
           {...props}
           preferredTags={preferredTags}
           onChange={onChange}
-          value={_get(filter, 'value') ?? ""}
+          value={(filter?.value) ?? ""}
         />
-      )
+      );
     }
   }
 

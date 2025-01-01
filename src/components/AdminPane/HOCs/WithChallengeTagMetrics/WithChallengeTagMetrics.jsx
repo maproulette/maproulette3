@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
-import _get from 'lodash/get'
 import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
 import _merge from 'lodash/merge'
@@ -23,11 +22,11 @@ export const WithChallengeTagMetrics = function(WrappedComponent) {
     updateMetrics(props) {
       this.setState({loading: true})
 
-      const filters = {challengeId: _get(props.challenge, 'id')}
-       _merge(filters, _get(props.searchFilters, 'filters'))
+      const filters = {challengeId: props.challenge?.id}
+       _merge(filters, props.searchFilters?.filters)
 
       const criteria = {filters}
-      criteria.invertFields = _get(props.searchCriteria, 'filters.invertFields')
+      criteria.invertFields = props.searchCriteria?.filters?.invertFields
 
       if (props.includeTaskStatuses) {
         criteria.filters.status = _keys(_pickBy(props.includeTaskStatuses, v => v)).join(',')
@@ -39,7 +38,7 @@ export const WithChallengeTagMetrics = function(WrappedComponent) {
         criteria.filters.priorities =_keys(_pickBy(props.includeTaskPriorities, v => v)).join(',')
       }
 
-      props.updateTagMetrics(_get(props.user, 'id'), criteria).then((entity) => {
+      props.updateTagMetrics(props.user?.id, criteria).then((entity) => {
         this.setState({loading: false, tagMetrics: entity})
       })
     }
@@ -49,7 +48,7 @@ export const WithChallengeTagMetrics = function(WrappedComponent) {
     }
 
     componentDidUpdate(prevProps) {
-      if (_get(prevProps.challenge, 'id') !== _get(this.props.challenge, 'id')) {
+      if ((prevProps.challenge?.id) !== (this.props.challenge?.id)) {
         return this.updateMetrics(this.props)
       }
 
@@ -69,7 +68,7 @@ export const WithChallengeTagMetrics = function(WrappedComponent) {
         return this.updateMetrics(this.props)
       }
 
-      if (_get(this.props.searchFilters, 'filters') !== _get(prevProps.searchFilters, 'filters')) {
+      if ((this.props.searchFilters?.filters) !== (prevProps.searchFilters?.filters)) {
         return this.updateMetrics(this.props)
       }
     }
@@ -77,11 +76,12 @@ export const WithChallengeTagMetrics = function(WrappedComponent) {
     render() {
       return (
         <WrappedComponent tagMetrics = {this.state.tagMetrics}
-                          totalTasks = {_get(this.props, 'filteredClusteredTasks.totalCount')}
+                          totalTasks = {this.props.filteredClusteredTasks?.totalCount}
                           loading={this.state.loading}
-                          {..._omit(this.props, ['updateTagMetrics'])} />)
+                          {..._omit(this.props, ['updateTagMetrics'])} />
+      );
     }
-  }
+  };
 }
 
 const mapDispatchToProps = (dispatch) => ({

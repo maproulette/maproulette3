@@ -39,7 +39,7 @@ const WithCurrentUser = (WrappedComponent) =>
 export const mapStateToProps = (state) => {
   const props = { user: null, allUsers: null };
 
-  const userId = _get(state, "currentUser.userId");
+  const userId = state.currentUser?.userId;
   const userEntity = _get(state, `entities.users.${userId}`);
   if (userEntity) {
     props.user = denormalize(
@@ -57,7 +57,7 @@ export const mapStateToProps = (state) => {
     }
   }
 
-  props.allUsers = _get(state, "entities.users");
+  props.allUsers = state.entities?.users;
   return props;
 };
 

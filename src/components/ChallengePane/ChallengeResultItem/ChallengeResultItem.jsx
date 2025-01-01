@@ -5,7 +5,6 @@ import _isObject from 'lodash/isObject'
 import _findIndex from 'lodash/findIndex'
 import _isEqual from 'lodash/isEqual'
 import _isFinite from 'lodash/isFinite'
-import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { messagesByDifficulty }
        from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
@@ -40,13 +39,13 @@ export class ChallengeResultItem extends Component {
     // Only re-render under specific conditions:
 
     // if the user has changed
-    if (_get(nextProps, 'user.id') !== _get(this.props, 'user.id')) {
+    if ((nextProps?.user?.id) !== (this.props.user?.id)) {
       return true
     }
 
     // if the user's savedChallenges have changed
-    if (_get(nextProps.user, 'savedChallenges.length') !==
-        _get(this.props.user, 'savedChallenges.length')) {
+    if ((nextProps.user?.savedChallenges?.length) !==
+        (this.props.user?.savedChallenges?.length)) {
       return true
     }
 
@@ -131,7 +130,7 @@ export class ChallengeResultItem extends Component {
           unsaveControl={unsaveChallengeControl}
           manageControl={manageControl}
           sort={this.props.sort}
-          projectQuery={_get(this.props, 'searchFilters.project')}
+          projectQuery={this.props.searchFilters?.project}
           excludeProjectId={this.props.excludeProjectId}
           info={
             <div className="mr-break-words">
@@ -161,7 +160,7 @@ export class ChallengeResultItem extends Component {
           }
         />
       </div>
-    )
+    );
   }
 }
 

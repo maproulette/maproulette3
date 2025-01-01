@@ -5,7 +5,6 @@ import MediaQuery from 'react-responsive'
 import { Link } from 'react-router-dom'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import _findIndex from 'lodash/findIndex'
 import _isFinite from 'lodash/isFinite'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
@@ -143,7 +142,7 @@ export class TaskPane extends Component {
     const responses =
       this.state.completionResponses ?
       Object.assign({}, this.state.completionResponses) :
-      JSON.parse(_get(this.props, 'task.completionResponses', '{}'))
+      JSON.parse(this.props.task?.completionResponses ?? '{}')
 
     responses[propertyName] = value
     this.setState({completionResponses: responses})
@@ -178,7 +177,7 @@ export class TaskPane extends Component {
       window.scrollTo(0, 0)
     }
 
-    if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
+    if ((this.props.task?.id) !== (prevProps?.task?.id)) {
       this.setState({completionResponses: null})
     }
 
@@ -199,7 +198,7 @@ export class TaskPane extends Component {
       )
     }
 
-    if (!_get(this.props, 'task.parent.parent')) {
+    if (!this.props.task?.parent?.parent) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
@@ -212,10 +211,10 @@ export class TaskPane extends Component {
       `challenge/${this.props.task.parent.id}/task/${this.props.task.id}/inspect`
 
     const isManageable =
-      AsManager(this.props.user).canManageChallenge(_get(this.props, 'task.parent'))
+      AsManager(this.props.user).canManageChallenge(this.props.task?.parent)
 
     const completionResponses = this.state.completionResponses ||
-                                JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
+                                JSON.parse(this.props.task?.completionResponses ?? null) || {}
 
     // Setup favorite/unfavorite links
     const challenge = this.props.task.parent
@@ -301,7 +300,7 @@ export class TaskPane extends Component {
                            to={
                              _isFinite(this.props.virtualChallengeId) ?
                              `/browse/virtual/${this.props.virtualChallengeId}` :
-                             `/browse/challenges/${_get(this.props.task, 'parent.id', this.props.task.parent)}`
+                             `/browse/challenges/${this.props.task?.parent?.id ?? (this.props.task.parent)}`
                            }
                            className="mr-button mr-button--xsmall mr-ml-3"
                          >
@@ -417,11 +416,7 @@ export class TaskPane extends Component {
             prompt={
               <Fragment>
                 <span>
-                  {_get(
-                    this.props,
-                    'lockFailureDetails.message',
-                    this.props.intl.formatMessage(messages.genericLockFailure)
-                  )}
+                  {this.props.lockFailureDetails?.message ?? this.props.intl.formatMessage(messages.genericLockFailure)}
                 </span>
                 <FormattedMessage {...messages.previewAvailable} />
               </Fragment>
@@ -448,7 +443,7 @@ export class TaskPane extends Component {
                <button
                  className="mr-button mr-button--white"
                  onClick={() => {
-                   this.props.history.push(`/browse/challenges/${_get(this.props.task, 'parent.id', this.props.task.parent)}`)
+                   this.props.history.push(`/browse/challenges/${this.props.task?.parent?.id ?? (this.props.task.parent)}`)
                  }}
                >
                  <FormattedMessage {...messages.browseChallengeLabel} />

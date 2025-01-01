@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
@@ -57,7 +56,7 @@ export default function(WrappedComponent) {
 
         for (let challenge of challenges) {
           totalChallenges += 1
-          const totalTasks = _get(challenge, 'actions.total', 0)
+          const totalTasks = challenge?.actions?.total ?? 0
 
           if (totalTasks > 0) {
             this.updateTotals(challenge.actions, totalTasks, taskMetrics)
@@ -79,7 +78,7 @@ export default function(WrappedComponent) {
 
           for (let challenge of challenges) {
             totalChallenges += 1
-            const totalTasks = _get(challenge, 'actions.total', 0)
+            const totalTasks = challenge?.actions?.total ?? 0
 
             if (totalTasks > 0 && challenge.priorityActions) {
               this.updateTotals(challenge.priorityActions[priority], totalTasks, taskMetricsByPriority[priority])

@@ -1,6 +1,5 @@
 import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _filter from 'lodash/filter'
 import _compact from 'lodash/compact'
@@ -99,7 +98,7 @@ export class ChallengeResultList extends Component {
     }
 
   render() {
-    const search = _get(this.props, 'currentSearch.challenges', {})
+    const search = this.props.currentSearch?.challenges ?? {}
     const query = search.query ? search.query : this.props.searchFilters.project ? this.props.searchFilters.project : this.props.searchFilters.task 
 
     const challengeResultsUnbound = _clone(this.props.pagedChallenges);
@@ -135,10 +134,10 @@ export class ChallengeResultList extends Component {
       return result;
     }, []);
 
-    const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
+    const isFetching = (this.props.fetchingChallenges ?? []).length > 0
     const searchType = this.props.searchFilters.searchType
-    const bounds = _get(search, 'mapBounds.bounds')
-    const locationFilter = _get(search, 'filters.location')
+    const bounds = search?.mapBounds?.bounds
+    const locationFilter = search?.filters?.location
     const otherFilters = _omit(search.filters, ['location'])
     const unfiltered =
       _isEmpty(search.query) &&
@@ -161,8 +160,8 @@ export class ChallengeResultList extends Component {
       if (featuredIndex === -1) {
         // No featured challenges. If no sorting is in play, inject at top (after any
         // saved challenges, if present)
-        if (_isEmpty(_get(search, 'sort.sortBy'))) {
-          const savedChallenges = _get(this.props, 'user.savedChallenges', [])
+        if (_isEmpty(search?.sort?.sortBy)) {
+          const savedChallenges = this.props.user?.savedChallenges ?? []
           featuredIndex =
             _findIndex(challengeResults, result => _findIndex(savedChallenges, {id: result.id}) === -1)
         }

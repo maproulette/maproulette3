@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import _cloneDeep from 'lodash/cloneDeep'
 import _pullAt from 'lodash/pullAt'
-import _get from 'lodash/get'
 import _isEqual from 'lodash/isEqual'
 import _each from 'lodash/each'
 import _isEmpty from 'lodash/isEmpty'
@@ -98,7 +97,7 @@ export const WithTaskPropertyStyleRules = function(WrappedComponent) {
     }
 
     componentDidMount() {
-      if (_get(this.props.challenge, 'taskStyles')) {
+      if (this.props.challenge?.taskStyles) {
         let taskStyles = _cloneDeep(this.props.challenge.taskStyles)
         if (_isEmpty(taskStyles)) {
           taskStyles.push(_cloneDeep(EMPTY_STYLE_RULE))
@@ -110,8 +109,8 @@ export const WithTaskPropertyStyleRules = function(WrappedComponent) {
     }
 
     componentDidUpdate(prevProps) {
-      if (!_isEqual(_get(this.props.challenge, 'taskStyles'),
-                    _get(prevProps.challenge, 'taskStyles'))) {
+      if (!_isEqual(this.props.challenge?.taskStyles,
+                    prevProps.challenge?.taskStyles)) {
         let taskStyles = _cloneDeep(this.props.challenge.taskStyles)
         if (_isEmpty(taskStyles)) {
           taskStyles.push(_cloneDeep(EMPTY_STYLE_RULE))
@@ -158,7 +157,7 @@ export const WithTaskPropertyStyleRules = function(WrappedComponent) {
               removeStyle={this.removeStyle}
              />
     }
-  }
+  };
 }
 
 export default WrappedComponent => WithTaskPropertyStyleRules(WrappedComponent)

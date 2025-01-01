@@ -1,7 +1,6 @@
 import { Component } from "react";
 import Form from "@rjsf/core";
 import _merge from "lodash/merge";
-import _get from "lodash/get";
 import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _snakeCase from "lodash/snakeCase";
@@ -91,11 +90,7 @@ export class EditProject extends Component {
             {_isObject(this.props.project) && (
               <li>
                 <Link to={`/admin/project/${this.props.project.id}`}>
-                  {_get(
-                    this.props,
-                    "project.displayName",
-                    this.props.project.name
-                  )}
+                  {this.props.project?.displayName ?? (this.props.project.name)}
                 </Link>
               </li>
             )}

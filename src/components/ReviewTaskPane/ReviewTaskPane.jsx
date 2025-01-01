@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import MediaQuery from 'react-responsive'
 import { FormattedMessage } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
-import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
 import WithWidgetWorkspaces
@@ -74,7 +73,7 @@ export class ReviewTaskPane extends Component {
       window.scrollTo(0, 0)
     }
 
-    if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
+    if ((this.props.task?.id) !== (prevProps?.task?.id)) {
       this.setState({completionResponses: null})
     }
   }
@@ -83,14 +82,14 @@ export class ReviewTaskPane extends Component {
     const responses =
       this.state.completionResponses ?
       Object.assign({}, this.state.completionResponses) :
-      JSON.parse(_get(this.props, 'task.completionResponses', '{}'))
+      JSON.parse(this.props.task?.completionResponses ?? '{}')
 
     responses[propertyName] = value
     this.setState({completionResponses: responses})
   }
 
   render() {
-    if (!_isFinite(_get(this.props, 'task.id'))) {
+    if (!_isFinite(this.props.task?.id)) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
@@ -107,7 +106,7 @@ export class ReviewTaskPane extends Component {
     }
 
     const completionResponses = this.state.completionResponses ||
-                                JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
+                                JSON.parse(this.props.task?.completionResponses ?? null) || {}
 
     return (
       <div className='task-pane'>
@@ -159,7 +158,7 @@ export class ReviewTaskPane extends Component {
             }
             subheader={
               <div className="mr-text-xs mr-links-green-lighter mr-mt-1">
-                {_get(this.props.task, 'parent.parent.displayName')}
+                {this.props.task?.parent?.parent?.displayName}
               </div>
             }
             setCompletionResponse={this.setCompletionResponse}
@@ -177,7 +176,7 @@ export class ReviewTaskPane extends Component {
           <MobileTabBar {...this.props} />
         </MediaQuery>
       </div>
-    )
+    );
   }
 }
 

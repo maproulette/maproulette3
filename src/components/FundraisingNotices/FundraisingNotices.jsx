@@ -27,7 +27,7 @@ const FundraisingNotices = function (props) {
           className='mr-markdown--base'
         />
       </span>
-      {props.user && props.user.isLoggedIn && (
+      {props.user?.isLoggedIn && (
         <SvgSymbol
           sym='close-outline-icon'
           viewBox='0 0 20 20'

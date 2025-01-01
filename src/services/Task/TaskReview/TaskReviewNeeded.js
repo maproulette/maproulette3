@@ -1,4 +1,3 @@
-import _get from 'lodash/get'
 import _snakeCase from 'lodash/snakeCase'
 import _map from 'lodash/map'
 import { defaultRoutes as api } from '../../Server/Server'
@@ -35,16 +34,16 @@ export const receiveReviewNeededTasks = function(tasks,
  * Retrieve all tasks (up to the given limit) that need to be reviewed
  */
 export const fetchReviewNeededTasks = function(criteria, limit=50) {
-  const sortBy = _get(criteria, 'sortCriteria.sortBy')
-  const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
+  const sortBy = criteria?.sortCriteria?.sortBy
+  const order = ((criteria?.sortCriteria?.direction) || 'DESC').toUpperCase()
   const sort = sortBy ? _snakeCase(sortBy) : null
-  const page = _get(criteria, 'page', 0)
-  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+  const page = criteria?.page ?? 0
+  const searchParameters = generateSearchParametersString(criteria?.filters ?? {},
                                                           criteria.boundingBox,
-                                                          _get(criteria, 'savedChallengesOnly'),
-                                                          _get(criteria, 'excludeOtherReviewers'),
+                                                          criteria?.savedChallengesOnly,
+                                                          criteria?.excludeOtherReviewers,
                                                           null,
-                                                          _get(criteria, 'invertFields', {}))
+                                                          criteria?.invertFields ?? {})
   const includeTags = criteria.includeTags
 
   return function(dispatch) {
@@ -57,7 +56,7 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
                  includeTags},
       }
     ).execute().then(normalizedResults => {
-      const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})
+      const unsortedTaskMap = normalizedResults?.entities?.tasks ?? {}
       const tasks = _map(normalizedResults.result.tasks, (id) => unsortedTaskMap[id])
       dispatch(receiveReviewNeededTasks(tasks, RequestStatus.success,
                                         normalizedResults.result.total))
@@ -66,6 +65,6 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
       dispatch(receiveReviewNeededTasks([], RequestStatus.error))
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
       console.log(error.response || error)
-    })
-  }
+    });
+  };
 }

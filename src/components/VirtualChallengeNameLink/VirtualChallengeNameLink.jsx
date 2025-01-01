@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { Link } from 'react-router-dom'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -34,12 +33,12 @@ export class VirtualChallengeNameLink extends Component {
             className="mr-fill-current mr-w-4 mr-h-4"
           />
           <span className="mr-mx-2">
-            {_get(this.props, 'virtualChallenge.name')}
+            {this.props.virtualChallenge?.name}
           </span>
         </Link>
         <ShareLink {...this.props} link={virtualChallengeBrowseRoute} />
       </div>
-    )
+    );
   }
 }
 

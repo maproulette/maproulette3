@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
 import _noop from 'lodash/noop'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _omit from 'lodash/omit'
 import AsManager from '../../interactions/User/AsManager'
@@ -42,8 +41,8 @@ export class TaskAnalysisTableHeader extends Component {
   render() {
     const {countShown, configureColumns} = this.props
 
-    const totalTaskCount = _get(this.props, 'totalTaskCount') || countShown || 0
-    const totalTasksInChallenge = _get(this.props, 'totalTasksInChallenge', 0)
+    const totalTaskCount = (this.props.totalTaskCount) || countShown || 0
+    const totalTasksInChallenge = this.props.totalTasksInChallenge ?? 0
     const percentShown =
       totalTasksInChallenge > 0 ?
       Math.round(totalTaskCount / totalTasksInChallenge * 100.0) :
@@ -54,7 +53,7 @@ export class TaskAnalysisTableHeader extends Component {
     return (
       <div className="mr-flex mr-justify-between">
         <div className="mr-flex mr-items-center">
-          {_get(this.props, 'taskInfo.tasks.length', 0) > 0 &&
+          {(this.props.taskInfo?.tasks?.length ?? 0) > 0 &&
               <div className="mr-mr-4 mr-ml-12.8">
                 {!this.props.suppressTriState &&
                  <div title={this.props.intl.formatMessage(messages.bulkSelectionTooltip)}>
@@ -226,10 +225,9 @@ export class TaskAnalysisTableHeader extends Component {
                     </div>
                     <ul className="mr-list-dropdown">
                       <li>
-                        <form method="post" action={buildLinkToExportCSV(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone, this.state.csvPage, CSV_ITEM_LIMIT)}>
+                        <form method="post" action={buildLinkToExportCSV(this.props.challenge?.id, this.props.criteria, this.props.currentTimezone, this.state.csvPage, CSV_ITEM_LIMIT)}>
                           <input type="hidden" name="taskPropertySearch"
-                            value={JSON.stringify(_get(this.props,
-                              'criteria.filters.taskPropertySearch', {}))}
+                            value={JSON.stringify(this.props.criteria?.filters?.taskPropertySearch ?? {})}
                           />
                           <div className="mr-flex">
                             <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top mr-pb-2">
@@ -249,10 +247,9 @@ export class TaskAnalysisTableHeader extends Component {
                     </ul>
                     <ul className="mr-list-dropdown">
                       <li>
-                        <form method="post" action={buildLinkToExportGeoJSON(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone, `challenge_${_get(this.props, 'challenge.id')}.geojson`)}>
+                        <form method="post" action={buildLinkToExportGeoJSON(this.props.challenge?.id, this.props.criteria, this.props.currentTimezone, `challenge_${this.props.challenge?.id}.geojson`)}>
                           <input type="hidden" name="taskPropertySearch"
-                            value={JSON.stringify(_get(this.props,
-                              'criteria.filters.taskPropertySearch', {}))}
+                            value={JSON.stringify(this.props.criteria?.filters?.taskPropertySearch ?? {})}
                           />
                           <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top">
                             <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
@@ -263,10 +260,9 @@ export class TaskAnalysisTableHeader extends Component {
                     </ul>
                     <ul className="mr-list-dropdown mr-mt-2">
                       <li>
-                        <div onClick={() => exportOSMData(buildLinkToExportGeoJSON(_get(this.props, 'challenge.id'), this.props.criteria, this.props.currentTimezone, `challenge_${_get(this.props, 'challenge.id')}.geojson`), `Challenge_${_get(this.props, 'challenge.id')}`)}>
+                        <div onClick={() => exportOSMData(buildLinkToExportGeoJSON(this.props.challenge?.id, this.props.criteria, this.props.currentTimezone, `challenge_${this.props.challenge?.id}.geojson`), `Challenge_${this.props.challenge?.id}`)}>
                           <input type="hidden" name="taskPropertySearch"
-                            value={JSON.stringify(_get(this.props,
-                              'criteria.filters.taskPropertySearch', {}))}
+                            value={JSON.stringify(this.props.criteria?.filters?.taskPropertySearch ?? {})}
                           />
                           <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top">
                             <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
@@ -279,7 +275,7 @@ export class TaskAnalysisTableHeader extends Component {
                       <li className="mr-mt-2">
                         <a target="_blank"
                            rel="noopener noreferrer"
-                           href={`${buildLinkToMapperExportCSV(this.props.criteria)}&cid=${_get(this.props, 'challenge.id')}`}
+                           href={`${buildLinkToMapperExportCSV(this.props.criteria)}&cid=${this.props.challenge?.id}`}
                            className="mr-flex mr-items-center">
                           <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                           <FormattedMessage {...messages.exportMapperReviewCSVLabel} />
@@ -291,7 +287,7 @@ export class TaskAnalysisTableHeader extends Component {
                         <li className="mr-mt-2">
                           <a target="_blank"
                              rel="noopener noreferrer"
-                             href={`${buildLinkToReviewerMetaExportCSV(this.props.criteria)}&cid=${_get(this.props, 'challenge.id')}`}
+                             href={`${buildLinkToReviewerMetaExportCSV(this.props.criteria)}&cid=${this.props.challenge?.id}`}
                              className="mr-flex mr-items-center">
                             <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                             <FormattedMessage {...messages.exportReviewerMetaCSVLabel} />
@@ -303,7 +299,7 @@ export class TaskAnalysisTableHeader extends Component {
                       <li className="mr-mt-2">
                         <a target="_blank"
                             rel="noopener noreferrer"
-                            href={`${buildLinkTaskReviewHistoryCSV(_get(this.props, 'challenge.id'))}`}
+                            href={`${buildLinkTaskReviewHistoryCSV(this.props.challenge?.id)}`}
                             className="mr-flex mr-items-center">
                           <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                           <FormattedMessage {...messages.exportTaskReviewHistoryLabel} />

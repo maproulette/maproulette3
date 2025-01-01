@@ -7,7 +7,6 @@ import _isBoolean from 'lodash/isBoolean'
 import _map from 'lodash/map'
 import _isEqualWith from 'lodash/isEqualWith'
 import _clone from 'lodash/clone'
-import _get from 'lodash/get'
 import _merge from 'lodash/merge'
 import _uniqueId from 'lodash/uniqueId'
 import queryString from 'query-string'
@@ -99,14 +98,14 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
           if (currentFetch >= this.state.fetchId) {
             this.setState({leaderboard})
 
-            const userId = _get(this.props, 'user.id')
+            const userId = this.props.user?.id
             // The reason for using _get is that the structure of the props may vary
             // depending on where this component is used, and accessing the user's score
             // directly through `this.props.user.score` may result in runtime errors if
             // the `user` object or the `score` property is not available in certain contexts.
             // By using `_get`, we safely handle cases where the expected property may be missing
             // or nested within a deeper structure. 
-            const userScore = _get(this.props, 'user.score')
+            const userScore = this.props.user?.score
             if (userScore && userId && !options.ignoreUser && userType !== USER_TYPE_REVIEWER) {
               this.props.fetchLeaderboardForUser(userId, 1,
                 ...this.leaderboardParams(numberMonths, countryCode),
@@ -167,7 +166,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
     }
 
     monthsPast = () => {
-      const urlParams = queryString.parse(_get(this.props, 'location.search'))
+      const urlParams = queryString.parse(this.props.location?.search)
       if (urlParams.monthsPast)
         return parseInt(urlParams.monthsPast, 10)
       else
@@ -177,7 +176,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
 
     startDate = () => {
       if (this.monthsPast() === CUSTOM_RANGE) {
-        const urlParams = queryString.parse(_get(this.props, 'location.search'))
+        const urlParams = queryString.parse(this.props.location?.search)
         if (urlParams.startDate)
           return urlParams.startDate
         else
@@ -187,7 +186,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
 
     endDate = () => {
       if (this.monthsPast() === CUSTOM_RANGE) {
-        const urlParams = queryString.parse(_get(this.props, 'location.search'))
+        const urlParams = queryString.parse(this.props.location?.search)
         if (urlParams.endDate)
           return urlParams.endDate
         else
@@ -207,9 +206,9 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       if (this.props.monthsPast !== prevProps.monthsPast ||
           this.props.countryCode !== prevProps.countryCode ||
           !_isEqualWith(this.props.challenges, prevProps.challenges,
-                        (a, b) => _get(a, 'id') === _get(b, 'id')) ||
+                        (a, b) => (a?.id) === (b?.id)) ||
           !_isEqualWith(this.props.projects, prevProps.projects,
-                        (a, b) => _get(a, 'id') === _get(b, 'id'))) {
+                        (a, b) => (a?.id) === (b?.id))) {
         this.updateLeaderboard(this.monthsPast(), this.props.countryCode, false, this.startDate(), this.endDate())
       }
     }
@@ -232,7 +231,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
                                hasMoreResults={moreResults}
                                {...this.props} />
     }
-  }
+  };
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchLeaderboard, fetchLeaderboardForUser, fetchReviewerLeaderboard }, dispatch)

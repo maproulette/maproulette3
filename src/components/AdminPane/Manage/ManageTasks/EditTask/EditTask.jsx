@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import Form from '@rjsf/core'
 import _merge from 'lodash/merge'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _filter from 'lodash/filter'
@@ -56,7 +55,7 @@ export class EditTask extends Component {
    * from there, or to View Challenge if not.
    */
   rerouteAfterCompletion = () => {
-    if (_get(this.props, 'location.state.fromTaskInspect')) {
+    if (this.props.location?.state?.fromTaskInspect) {
       this.props.history.push({
         pathname: `/admin/project/${this.props.projectId}/` +
           `challenge/${this.props.challengeId}/task/${this.props.task.id}/inspect`,
@@ -99,8 +98,8 @@ export class EditTask extends Component {
   render() {
     // We may have a task id lying around in redux, but at least make sure we
     // have a task status and geometries before proceeding to load the form
-    if (!_isFinite(_get(this.props, 'task.status')) ||
-        !_isObject(_get(this.props, 'task.geometries')) ||
+    if (!_isFinite(this.props.task?.status) ||
+        !_isObject(this.props.task?.geometries) ||
         !this.props.challenge || !this.props.project) {
       return (
         <div className="admin__manage edit-task">
@@ -128,7 +127,7 @@ export class EditTask extends Component {
       tags: (props) => {
         const preferredTags =
           _filter(
-            _split(_get(this.props.task, 'parent.preferredTags'), ','),
+            _split(this.props.task?.parent?.preferredTags, ','),
             (result) => !_isEmpty(result)
           )
 

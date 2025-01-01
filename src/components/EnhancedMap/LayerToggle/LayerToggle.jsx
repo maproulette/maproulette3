@@ -8,7 +8,6 @@ import _noop from 'lodash/noop'
 import _filter from 'lodash/filter'
 import _sortBy from 'lodash/sortBy'
 import _clone from 'lodash/clone'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import { DEFAULT_OVERLAY_ORDER }
        from '../../../services/VisibleLayer/LayerSources'
@@ -246,7 +245,7 @@ const overlayToggles = props => {
   }
 
   if (props.toggleOSMData &&
-      _get(window.env, 'REACT_APP_OSM_DATA_OVERLAY', 'enabled') !== 'disabled') {
+      (window.env?.REACT_APP_OSM_DATA_OVERLAY ?? 'enabled') !== 'disabled') {
     toggles.push({
       id: "osm-data",
       label: <FormattedMessage {...messages.showOSMDataLabel} />,

@@ -292,7 +292,7 @@ const setUserTab = (userChanges, setUserChanges) => {
         return (
           <SuperUserToggle
             initialValue={props.value}
-            userId={props?.original?.id}
+            userId={props.original?.id}
             userChanges={userChanges}
             setUserChanges={setUserChanges}
           />

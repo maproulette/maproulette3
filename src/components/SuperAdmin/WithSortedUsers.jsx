@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _isEmpty from 'lodash/isEmpty'
@@ -14,7 +13,7 @@ import {
 } from '../../services/Search/Search'
 
 export const sortUsers = function (props, usersProp = 'users') {
-  const sortCriteria = _get(props, 'searchSort.sortBy')
+  const sortCriteria = props.searchSort?.sortBy
   let sortedUsers = props[usersProp]
   if (sortCriteria === SORT_NAME) {
     sortedUsers = _sortBy(sortedUsers, (u) => _toLower(u.name))

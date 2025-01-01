@@ -1,12 +1,11 @@
 import { Component } from 'react'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isString from 'lodash/isString'
 
 export default class PlaceDescription extends Component {
   render() {
-    const addr = _get(this.props, 'address')
+    const addr = this.props.address
     const scaleDescriptions = []
 
     if (_isObject(addr)) {

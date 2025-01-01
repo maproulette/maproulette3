@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _sortBy from 'lodash/sortBy'
 import { fetchPropertyKeys } from '../../../services/Challenge/Challenge'
 
@@ -15,7 +14,7 @@ export const WithTaskPropertyKeys = function(WrappedComponent) {
      }
 
      getTaskPropertyKeys = () => {
-       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
+       const challengeId = (this.props.challenge?.id) || this.props.challengeId
 
        if (challengeId && !this.state.loadingPropertyKeys){
          this.setState({loadingPropertyKeys: true})
@@ -34,19 +33,19 @@ export const WithTaskPropertyKeys = function(WrappedComponent) {
      }
 
      componentDidMount() {
-       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
+       const challengeId = (this.props.challenge?.id) || this.props.challengeId
        if (challengeId) {
          this.getTaskPropertyKeys()
        }
      }
 
      componentDidUpdate(prevProps) {
-       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
+       const challengeId = (this.props.challenge?.id) || this.props.challengeId
        if (!challengeId) {
          return
        }
 
-       if (_get(this.props, 'challenge.id') !== _get(prevProps, 'challenge.id') ||
+       if ((this.props.challenge?.id) !== (prevProps?.challenge?.id) ||
            this.props.challengeId !== prevProps.challengeId) {
          this.getTaskPropertyKeys()
        }
@@ -60,7 +59,7 @@ export const WithTaskPropertyKeys = function(WrappedComponent) {
          />
        )
      }
-   }
+   };
  }
 
 export default WrappedComponent => WithTaskPropertyKeys(WrappedComponent)

@@ -4,7 +4,6 @@ import { injectIntl } from 'react-intl'
 import { createControlComponent } from '@react-leaflet/core'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import messages from './Messages'
 
@@ -20,7 +19,7 @@ const SelectMarkersInViewLeafletControl = L.Control.extend({
   onAdd: function(map) {
     const handleSelectAllInViewClick = () => {
       if(!map || !map._layers) return
-      const taskIds = _compact(_map(map._layers, layer => _get(layer, 'options.icon.options.taskData.taskId')))
+      const taskIds = _compact(_map(map._layers, layer => layer?.options?.icon?.options?.taskData?.taskId))
       // Disallow use if cannot populate taskIds from map
       if(!taskIds.length) return
       this.options.onSelectAllInView(taskIds)

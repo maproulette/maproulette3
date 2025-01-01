@@ -1,4 +1,3 @@
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import defaultPic from '../../../images/user_no_image.png'
 
@@ -11,7 +10,7 @@ export class AsAvatarUser {
   }
 
   rawAvatarURL() {
-    return this.avatarURL || _get(this.osmProfile, 'avatarURL')
+    return this.avatarURL || (this.osmProfile?.avatarURL);
   }
 
   profilePic(size) {

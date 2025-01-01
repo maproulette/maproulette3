@@ -108,13 +108,13 @@ export const unsubscribeFromFollowUpdates = function(handle) {
 const onUserUpdate = function(dispatch, userId, messageObject) {
   switch(messageObject.messageType) {
     case "notification-new":
-      if (_get(messageObject, 'data.userId') === userId) {
+      if ((messageObject?.data?.userId) === userId) {
         // Refresh user's notifications from server
         dispatch(fetchUserNotifications(userId))
       }
       break
     case "achievement-awarded":
-      if (_get(messageObject, 'data.userId') === userId) {
+      if ((messageObject?.data?.userId) === userId) {
         // Refresh user
         dispatch(fetchUser(userId))
       }
@@ -405,7 +405,7 @@ export const fetchSavedChallenges = function(userId, limit=50) {
         params: {limit}
       }
     ).execute().then(normalizedChallenges => {
-      const challenges = _get(normalizedChallenges, 'entities.challenges')
+      const challenges = normalizedChallenges?.entities?.challenges
       const user = {id: userId}
       user.savedChallenges = _isObject(challenges) ?
                              _keys(challenges).map(key => parseInt(key, 10)) : []
@@ -413,8 +413,8 @@ export const fetchSavedChallenges = function(userId, limit=50) {
       dispatch(receiveChallenges(normalizedChallenges.entities))
       dispatch(receiveUsers(simulatedEntities(user)))
       return normalizedChallenges
-    })
-  }
+    });
+  };
 }
 
 /**
@@ -464,7 +464,7 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
         params,
       }
     ).execute().then(normalizedChallenges => {
-      const challenges = _get(normalizedChallenges, 'entities.challenges')
+      const challenges = normalizedChallenges?.entities?.challenges
       const user = {id: userId, topChallenges: []}
 
       // Store the top challenge ids in order, sorted by user activity (descending)
@@ -487,8 +487,8 @@ export const fetchTopChallenges = function(userId, startDate, limit=5) {
       dispatch(receiveUsers(simulatedEntities(user)))
 
       return normalizedChallenges
-    })
-  }
+    });
+  };
 }
 
 /**
@@ -501,7 +501,7 @@ export const fetchSavedTasks = function(userId, limit=50, includeChallenges=true
       variables: {userId},
       params: {limit}
     }).execute().then(normalizedTasks => {
-      const tasks = _get(normalizedTasks, 'entities.tasks')
+      const tasks = normalizedTasks?.entities?.tasks
       const user = {id: userId}
       user.savedTasks = []
       if (_isObject(tasks)) {
@@ -515,8 +515,8 @@ export const fetchSavedTasks = function(userId, limit=50, includeChallenges=true
       dispatch(receiveTasks(normalizedTasks.entities))
       dispatch(receiveUsers(simulatedEntities(user)))
       return normalizedTasks
-    })
-  }
+    });
+  };
 }
 
 /**
@@ -765,7 +765,7 @@ export const updateUserAppSetting = function(userId, appId, appSetting) {
       // }
       const userData =
         Object.assign({}, oldUser, {
-          properties: Object.assign({}, _get(oldUser, 'properties'), {
+          properties: Object.assign({}, oldUser?.properties, {
             [appId]: {
               meta: Object.assign({}, _get(oldUser, `properties.${appId}.meta`), {
                 revision: Date.now(),
@@ -783,8 +783,8 @@ export const updateUserAppSetting = function(userId, appId, appSetting) {
         variables: { userId },
         json: userData,
       }).execute()
-    })
-  })
+    });
+  });
 }
 
 /**
@@ -981,12 +981,12 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
     }
 
     // Always completely replace customBasemaps
-    if (_isArray(_get(entity, 'settings.customBasemaps'))) {
+    if (_isArray(entity?.settings?.customBasemaps)) {
       mergedState[entity.id].settings.customBasemaps = entity.settings.customBasemaps
     }
 
     // Normalize server's default `en` locale to `en-US`
-    if (_get(entity, 'settings.locale') === 'en') {
+    if ((entity?.settings?.locale) === 'en') {
       mergedState[entity.id].settings.locale = "en-US"
     }
   }
@@ -1007,7 +1007,7 @@ export const userEntities = function(state, action) {
   }
   else if (action.type === REMOVE_SAVED_CHALLENGE) {
     const mergedState = _cloneDeep(state)
-    _pull(_get(mergedState[action.userId], 'savedChallenges', []), action.challengeId)
+    _pull(mergedState[action.userId]?.savedChallenges ?? [], action.challengeId)
     return mergedState
   }
   else if (action.type === ADD_SAVED_TASK) {
@@ -1021,7 +1021,7 @@ export const userEntities = function(state, action) {
   }
   else if (action.type === REMOVE_SAVED_TASK) {
     const mergedState = _cloneDeep(state)
-    _pull(_get(mergedState[action.userId], 'savedTasks', []), action.taskId)
+    _pull(mergedState[action.userId]?.savedTasks ?? [], action.taskId)
     return mergedState
   }
   else {

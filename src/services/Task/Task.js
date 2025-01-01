@@ -107,7 +107,7 @@ const onChallengeTaskMessage = function(dispatch, messageObject) {
   let task = messageObject.data.task
   switch(messageObject.messageType) {
     case "task-claimed":
-      task = Object.assign({}, task, {lockedBy: _get(messageObject, 'data.byUser.userId')})
+      task = Object.assign({}, task, {lockedBy: messageObject?.data?.byUser?.userId})
       dispatchTaskUpdateNotification(dispatch, task)
       break
     case "task-released":
@@ -346,13 +346,13 @@ export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
  */
 export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, excludeTaskIds) {
   return function(dispatch) {
-    const filters = _get(criteria, 'filters', {})
+    const filters = criteria?.filters ?? {}
     const searchParameters = generateSearchParametersString(filters,
                                                             criteria.boundingBox,
-                                                            _get(criteria, 'savedChallengesOnly'),
+                                                            criteria?.savedChallengesOnly,
                                                             null,
                                                             criteria.searchQuery,
-                                                            _get(criteria, 'invertFields'),
+                                                            criteria?.invertFields,
                                                             excludeTaskIds)
     searchParameters.cid = challengeId
 
@@ -375,7 +375,7 @@ export const bulkTaskStatusChange = function(newStatus, challengeId, criteria, e
         console.log(error.response || error)
       }
     })
-  }
+  };
 }
 
 /**
@@ -662,7 +662,7 @@ export const fetchNearbyTasks = function(challengeId, isVirtualChallenge, taskId
       challengeId,
       isVirtualChallenge,
       loading: false,
-      tasks: _map(_values(_get(normalizedResults, 'entities.tasks', {})), task => {
+      tasks: _map(_values(normalizedResults?.entities?.tasks ?? {}), task => {
         if (task.location) {
           // match clusteredTasks response, which returns a point with lat/lng fields
           task.point = {
@@ -673,8 +673,8 @@ export const fetchNearbyTasks = function(challengeId, isVirtualChallenge, taskId
 
         return task
       })
-    }))
-  }
+    }));
+  };
 }
 
 /**
@@ -811,17 +811,17 @@ export const fetchCooperativeTagFixChangeset = function(cooperativeWorkSummary) 
 export const fetchTaskPlace = function(task) {
   return function(dispatch) {
     return dispatch(
-      fetchPlace(_get(task, 'location.coordinates[1]', 0),
-                 _get(task, 'location.coordinates[0]', 0))
+      fetchPlace(task?.location?.coordinates?.[1] ?? 0,
+                 task?.location?.coordinates?.[0] ?? 0)
     ).then(normalizedPlaceResults => {
       // Tasks have no natural reference to places, so inject the place id into
       // the task so that later denormalization will work properly.
       return dispatch(receiveTasks(simulatedEntities({
         id: task.id,
-        place: _get(normalizedPlaceResults, 'result'),
-      })))
-    })
-  }
+        place: normalizedPlaceResults?.result,
+      })));
+    });
+  };
 }
 
 /**
@@ -966,7 +966,7 @@ export const bundleTasks = function(primaryId, taskIds, bundleTypeMismatch, bund
     const bundleId = initialBundle.bundleId;
     let taskIdsArray = [];
 
-    if (initialBundle && initialBundle.taskIds) { 
+    if (initialBundle?.taskIds) { 
         taskIdsArray.push(...initialBundle.taskIds); 
         params.taskIds = taskIdsArray;
     }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import _get from 'lodash/get';
 
 import { constructRapidURI } from '../../../../services/Editor/Editor';
 import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement';
@@ -31,7 +30,7 @@ function generateStartingHash({ mapBounds, task, comment }) {
     }
 
     if (!mapBounds.zoom) {
-      mapBounds.zoom = _get(task, 'parent.defaultZoom', DEFAULT_ZOOM);
+      mapBounds.zoom = task?.parent?.defaultZoom ?? DEFAULT_ZOOM;
     }
   }
 

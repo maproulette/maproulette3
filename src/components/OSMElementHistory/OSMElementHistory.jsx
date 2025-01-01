@@ -8,7 +8,6 @@ import _compact from 'lodash/compact'
 import _isEmpty from 'lodash/isEmpty'
 import _sortBy from 'lodash/sortBy'
 import _find from 'lodash/find'
-import _get from 'lodash/get'
 import _flatten from 'lodash/flatten'
 import AsMappableTask
        from '../../interactions/Task/AsMappableTask'
@@ -110,9 +109,9 @@ const OSMElementHistory = props => {
     return (
       <div className="mr-flex mr-flex-col mr-text-red-light">
         <FormattedMessage {...messages.elementFetchFailed} values={{element: activeFeatureId}} />
-        {fetchErr && fetchErr.defaultMessage && <FormattedMessage {...fetchErr} />}
+        {fetchErr?.defaultMessage && <FormattedMessage {...fetchErr} />}
       </div>
-    )
+    );
   }
 
   if (!history) {
@@ -126,7 +125,7 @@ const OSMElementHistory = props => {
   }) || {}
   const featureChangeset =
     featureProperties.osmVersion || featureProperties.last_edit_changeset
-  const sourceDate = _get(primaryTask, 'parent.dataOriginDate') // all tasks from same challenge
+  const sourceDate = primaryTask?.parent?.dataOriginDate // all tasks from same challenge
 
   const entries = _map(history, entry =>
     <HistoryEntry
@@ -179,7 +178,7 @@ const HistoryEntry = props => {
   const timestamp = parseISO(props.timestamp)
   const sourceDate = props.sourceDate ? parseISO(props.sourceDate) : new Date()
   const changesetComment = _find(
-    _get(props, 'changeset.tag', []),
+    props.changeset?.tag ?? [],
     tag => tag.k === "comment"
   )
 

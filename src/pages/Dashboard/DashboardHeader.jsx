@@ -2,7 +2,6 @@ import { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import AsUserActivity from '../../interactions/Activity/AsUserActivity'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
@@ -12,9 +11,9 @@ const NEWBIE_POINTS_THRESHOLD = 49
 
 const DashboardHeader = props => {
   const latestChallenge = AsUserActivity(props.user.activity).recentChallengeId()
-  const completedTasks = _get(props.taskMetrics, 'total', 0)
-  const userScore = _get(props.leaderboardMetrics, 'score')
-  const rank = _get(props.leaderboardMetrics, 'rank')
+  const completedTasks = props.taskMetrics?.total ?? 0
+  const userScore = props.leaderboardMetrics?.score
+  const rank = props.leaderboardMetrics?.rank
 
   const welcomeBackInterface = () => {
     if (_isFinite(userScore)) {
