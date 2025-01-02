@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import {
@@ -356,7 +355,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
 
     render() {
       // Render public task page if user is not logged in.
-      if (!_get(this.props, 'user.isLoggedIn')) {
+      if (!this.props.user?.isLoggedIn) {
         return (
           this.props.checkingLoginStatus ?
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
@@ -393,7 +392,7 @@ export const WithWidgetWorkspacesInternal = function(WrappedComponent,
                deleteWorkspaceConfiguration={this.deleteWorkspaceConfiguration}
              />
     }
-  }
+  };
 }
 
 const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultConfiguration) =>

@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import Fuse from 'fuse.js'
 import { FormattedMessage, FormattedDate, FormattedTime, injectIntl }
        from 'react-intl'
-import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _remove from 'lodash/remove'
 import _reject from 'lodash/reject'
@@ -140,7 +139,7 @@ const Inbox = props => {
           loading={props.notificationsLoading}
           getTrProps={(state, rowInfo) => {
             const styles = {}
-            if (!_get(rowInfo, 'row._original.isRead', false)) {
+            if (!(rowInfo?.row?._original?.isRead ?? false)) {
               styles.fontWeight = 700
             }
             return {style: styles}
@@ -169,7 +168,7 @@ const Inbox = props => {
         />
       }
     </div>
-  )
+  );
 }
 
 const columns = tableProps => [{

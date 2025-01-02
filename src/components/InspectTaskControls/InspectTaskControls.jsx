@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _pick from 'lodash/pick'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import { OPEN_STREET_MAP } from '../../services/VisibleLayer/LayerSources'
@@ -104,7 +103,7 @@ export class InspectTaskControls extends Component {
   }
   render() {
     const manager = AsManager(this.props.user)
-    if (!_get(this.props, 'task.parent.parent')) {
+    if (!this.props.task?.parent?.parent) {
       return (
         <div className="inspect-task-controls">
           <BusySpinner />
@@ -121,7 +120,7 @@ export class InspectTaskControls extends Component {
          <UserEditorSelector {...this.props} pickEditor={this.pickEditor} className="mr-mb-4" />
         }
 
-        {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
+        {!this.props.taskReadOnly && manager.canWriteProject(this.props.task?.parent?.parent) ?
           <Link
             to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
             className="mr-button mr-mt-2"
@@ -141,7 +140,7 @@ export class InspectTaskControls extends Component {
           </button>
         </div>
       </div>
-    )
+    );
   }
 }
 

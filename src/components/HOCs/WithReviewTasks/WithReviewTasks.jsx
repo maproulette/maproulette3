@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 import { format } from 'date-fns'
 import _omit from 'lodash/omit'
-import _get from 'lodash/get'
 import _merge from 'lodash/merge'
 import _isUndefined from 'lodash/isUndefined'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -72,27 +71,27 @@ export const WithReviewTasks = function(WrappedComponent) {
 
     update(props, criteria, skipURLUpdate = false) {
       const searchOnCriteria = _cloneDeep(criteria)
-      const userId = _get(props, 'user.id')
-      const pageSize = _get(this.state.criteria[props.reviewTasksType], 'pageSize') || DEFAULT_PAGE_SIZE
+      const userId = props.user?.id
+      const pageSize = (this.state.criteria[props.reviewTasksType]?.pageSize) || DEFAULT_PAGE_SIZE
 
       if (!criteria.invertFields) {
         searchOnCriteria.invertFields = this.state.criteria[props.reviewTasksType].invertFields
       }
 
       if (_isUndefined(searchOnCriteria.savedChallengesOnly)) {
-        searchOnCriteria.savedChallengesOnly = _get(this.state.criteria[this.props.reviewTasksType], "savedChallengesOnly")
+        searchOnCriteria.savedChallengesOnly = this.state.criteria[this.props.reviewTasksType]?.savedChallengesOnly
       }
       if (_isUndefined(searchOnCriteria.excludeOtherReviewers)) {
         // Exclude reviews assigned to other reviewers by default
-        searchOnCriteria.excludeOtherReviewers = _get(this.state.criteria[this.props.reviewTasksType], "excludeOtherReviewers", true)
+        searchOnCriteria.excludeOtherReviewers = this.state.criteria[this.props.reviewTasksType]?.excludeOtherReviewers ?? true
       }
 
       // We need to update our list of challenges since some challenges may
       // have been excluded on initial fetch because the list was limited to
       // taskStatus 'fixed' and 'excludeOtherReviewers' by default.
       if (searchOnCriteria.excludeOtherReviewers === false ||
-          _get(searchOnCriteria, 'filters.status') !==
-            _get(this.state.criteria[this.props.reviewTasksType], "filters.status")) {
+          (searchOnCriteria?.filters?.status) !==
+            (this.state.criteria[this.props.reviewTasksType]?.filters?.status)) {
         this.props.updateReviewChallenges(this.props.reviewTasksType)
       }
 
@@ -159,13 +158,13 @@ export const WithReviewTasks = function(WrappedComponent) {
 
       // The criteria filters use 'project' but on the url it can also be
       // referenced as 'projectName'
-      if (_get(criteria, 'filters.project') == null) {
+      if ((criteria?.filters?.project) == null) {
         _omit(searchCriteria, 'filters.projectName')
       }
 
       // The criteria filters use 'challenge' but on the url it can also be
       // referenced as 'challengeName'
-      if (_get(criteria, 'filters.challenge') == null) {
+      if ((criteria?.filters?.challenge) == null) {
         _omit(searchCriteria.filters, 'challengeName')
       }
 
@@ -176,7 +175,7 @@ export const WithReviewTasks = function(WrappedComponent) {
       const searchParams = this.props.history.location.state
       const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props))
 
-      let pageSize = _get(searchParams, 'pageSize') || criteria.pageSize || DEFAULT_PAGE_SIZE
+      let pageSize = (searchParams?.pageSize) || criteria.pageSize || DEFAULT_PAGE_SIZE
       criteria.pageSize = pageSize
 
       const stateCriteria = this.state.criteria
@@ -228,8 +227,7 @@ export const WithReviewTasks = function(WrappedComponent) {
       }
 
       const criteria = this.state.criteria[this.props.reviewTasksType] || this.buildDefaultCriteria(this.props)
-      const projectId = _get(this.state.criteria[this.props.reviewTasksType],
-                             'filters.projectId')
+      const projectId = this.state.criteria[this.props.reviewTasksType]?.filters?.projectId
 
       // Filter available challenges to ones in selected project if applicable
       const reviewChallenges = !projectId ?
@@ -256,7 +254,7 @@ export const WithReviewTasks = function(WrappedComponent) {
                           invertField={this.invertField}
                           {..._omit(this.props, ['updateReviewTasks'])} />)
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({ currentReviewTasks: state.currentReviewTasks })

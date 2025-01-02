@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
 import _isObject from 'lodash/isObject'
@@ -76,7 +75,7 @@ export const dynamicLayerWithId = (layerId, ownProps) => {
 }
 
 export const mapStateToProps = (state, ownProps) => {
-  const challengeId = _get(ownProps, 'challenge.id')
+  const challengeId = ownProps?.challenge?.id
   let source = null
 
   if (_isFinite(challengeId)) {
@@ -118,7 +117,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     changeLayer: (layerId, mapType = null) => {
       const isVirtual = _isFinite(ownProps.virtualChallengeId)
       const challengeId = isVirtual ? ownProps.virtualChallengeId :
-                                      _get(ownProps, 'challenge.id')
+                                      ownProps?.challenge?.id
 
       if (_isFinite(challengeId) && ownProps.setVisibleMapLayer) {
         ownProps.setVisibleMapLayer(challengeId, isVirtual, layerId)
@@ -130,7 +129,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
     addVisibleOverlay: layerId => dispatch(addVisibleOverlay(layerId)),
     removeVisibleOverlay: layerId => dispatch(removeVisibleOverlay(layerId)),
-  }
+  };
 }
 
 export default WithVisibleLayer

@@ -2,7 +2,6 @@ import { Fragment, Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
@@ -67,8 +66,8 @@ export default class SavedTasksWidget extends Component {
 
 const SavedTaskList = function(props) {
   const taskItems =
-    _compact(_map(_get(props, 'user.savedTasks', []), task => {
-      if (!_isFinite(_get(task, 'parent.id'))) {
+    _compact(_map(props.user?.savedTasks ?? [], task => {
+      if (!_isFinite(task?.parent?.id)) {
         return null
       }
 

@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
@@ -52,10 +51,10 @@ export const WithCurrentProject = function(WrappedComponent, options={}) {
     }
 
     routedProjectId = props =>
-      parseInt(_get(props, 'match.params.projectId'), 10)
+      parseInt(props.match?.params?.projectId, 10)
 
     routedChallengeId = props =>
-      parseInt(_get(props, 'match.params.challengeId'), 10)
+      parseInt(props.match?.params?.challengeId, 10)
 
     currentProjectId = props => {
       let projectId = this.routedProjectId(props)
@@ -65,7 +64,7 @@ export const WithCurrentProject = function(WrappedComponent, options={}) {
       // use that project.
       if (!_isFinite(projectId) &&
           options.defaultToOnlyProject &&
-          _get(props, 'projects.length', 0) === 1) {
+          (props.projects?.length ?? 0) === 1) {
         projectId = props.projects[0].id
       }
       else if (_isFinite(projectId) && options.restrictToGivenProjects) {
@@ -78,7 +77,7 @@ export const WithCurrentProject = function(WrappedComponent, options={}) {
     }
 
     challengeProjects = (projectId) => {
-      const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
+      const allChallenges = _values(this.props.entities?.challenges ?? {})
       return _filter(allChallenges, (challenge) => {
                       return challenge.parent === projectId ||
                         _find(challenge.virtualParents, (vp) => {
@@ -145,7 +144,7 @@ export const WithCurrentProject = function(WrappedComponent, options={}) {
             // the child challenges have parent projects that haven't been
             // fetched yet. We need to fetch those so we can show their names.
             const missingProjects = []
-            _each(_get(result, 'entities.challenges'), (challenge) => {
+            _each(result?.entities?.challenges, (challenge) => {
               if (!_isObject(challenge.parent)) {
                 if (!this.props.entities.projects[challenge.parent]) {
                   missingProjects.push(challenge.parent)
@@ -216,7 +215,7 @@ export const WithCurrentProject = function(WrappedComponent, options={}) {
     render() {
       const projectId = this.currentProjectId(this.props)
       const project = !_isFinite(projectId) ? null :
-                      _get(this.props, `entities.projects.${projectId}`)
+                      this.props.entities?.projects?.[projectId]
       let challenges = this.props.challenges // pass through challenges by default
 
       if (options.includeChallenges && _isFinite(projectId)) {
@@ -230,7 +229,7 @@ export const WithCurrentProject = function(WrappedComponent, options={}) {
           {..._omit(this.props, ['entities', 'notManagerError', 'fetchProject', 'fetchProjectChallenges'])}
           project={project}
           challenges={challenges}
-          activity={_get(project, 'activity')}
+          activity={project?.activity}
           routedProjectId={this.routedProjectId(this.props)}
           loadingProject={this.state.loadingProject}
           loadingChallenges={this.state.loadingChallenges}
@@ -239,9 +238,9 @@ export const WithCurrentProject = function(WrappedComponent, options={}) {
           loadChallengeStats={this.loadChallengeStats}
           challengeStatsAvailable={this.state.challengeStatsAvailable}
         />
-      )
+      );
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({

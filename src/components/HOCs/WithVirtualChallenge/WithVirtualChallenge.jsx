@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import _debounce from 'lodash/debounce'
@@ -53,7 +52,7 @@ export const mapStateToProps = (state, ownProps) => {
   if (_isFinite(virtualChallengeId)) {
     mappedProps.virtualChallengeId = virtualChallengeId
     mappedProps.virtualChallenge =
-      _get(state, `entities.virtualChallenges.${virtualChallengeId}`)
+      state.entities?.virtualChallenges?.[virtualChallengeId]
   }
 
   return mappedProps
@@ -86,7 +85,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
  */
 export const virtualChallengeIdFromRoute = (props, defaultId) => {
   const virtualChallengeId =
-    parseInt(_get(props, 'match.params.virtualChallengeId'), 10)
+    parseInt(props.match?.params?.virtualChallengeId, 10)
 
   return _isFinite(virtualChallengeId) ? virtualChallengeId : defaultId
 }

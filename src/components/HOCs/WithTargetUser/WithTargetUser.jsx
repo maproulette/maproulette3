@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import _get from 'lodash/get'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import _toNumber from 'lodash/toNumber'
@@ -30,10 +29,10 @@ const WithTargetUser = function(WrappedComponent, limitToSuperUsers) {
       targetUser: null,
     }
 
-    getTargetUserId = props => _get(props, 'match.params.userId')
+    getTargetUserId = props => props.match?.params?.userId
 
     loadTargetUser = props => {
-      if ((!_get(this.state.currentUser, 'isSuperUser')) && limitToSuperUsers) {
+      if ((!this.state.currentUser?.isSuperUser) && limitToSuperUsers) {
         return
       }
 
@@ -65,14 +64,14 @@ const WithTargetUser = function(WrappedComponent, limitToSuperUsers) {
 
       if (!targetUser) {
         targetUser = _find(props.allUsers, (user) => {
-         return _get(user, 'osmProfile.id') === _toNumber(this.state.showingUserId)
+         return (user?.osmProfile?.id) === _toNumber(this.state.showingUserId);
         })
       }
 
       if (!targetUser) {
        targetUser = _find(props.allUsers, (user) => {
-         return (_get(user, 'osmProfile.displayName') || '').toLowerCase() ===
-                    (_get(this.state, 'showingUserId') || '').toLowerCase()
+         return ((user?.osmProfile?.displayName) || '').toLowerCase() ===
+                    ((this.state.showingUserId) || '').toLowerCase();
        })
       }
 
@@ -80,7 +79,7 @@ const WithTargetUser = function(WrappedComponent, limitToSuperUsers) {
         targetUser = props.user
       }
 
-      const avatarURL = _get(targetUser, 'osmProfile.avatarURL')
+      const avatarURL = targetUser?.osmProfile?.avatarURL
       if (avatarURL && avatarURL.indexOf('?') !== -1) {
         const avatarUrlBase = avatarURL.substring(avatarURL.indexOf('?'), 0)
         const avatarUrlParams = avatarURL.substring(avatarURL.indexOf('?') + 1)
@@ -124,12 +123,12 @@ const WithTargetUser = function(WrappedComponent, limitToSuperUsers) {
         targetUserOSMChaProfileUrl={() => buildOSMChaUrl(null, null, [targetUser.osmProfile.displayName])}
       />
     }
-  }
+  };
 }
 
 export const mapStateToProps = state => {
-  return {allUsers: _get(state, "entities.users"),
-          currentUser: _get(state, "currentUser")}
+  return {allUsers: state.entities?.users,
+          currentUser: state.currentUser};
 }
 
 export const mapDispatchToProps = dispatch => {

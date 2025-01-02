@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from "react-router-dom";
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { FormattedMessage } from 'react-intl'
 import BusySpinner from '../BusySpinner/BusySpinner'
@@ -26,7 +25,7 @@ export class ChallengeOwnerContactLinkInternal extends Component {
   }
 
   updateContactOwnerUrl = () => {
-    const ownerOSMId = _get(this.props, 'task.parent.owner') || _get(this.props, 'task.parent.parent.owner')
+    const ownerOSMId = (this.props.task?.parent?.owner) || (this.props.task?.parent?.parent?.owner)
     if (_isFinite(ownerOSMId) && ownerOSMId > 0) {
       this.setState({updatingUrl: true})
       this.props.fetchOSMUser(ownerOSMId).then(osmUserData => {
@@ -46,8 +45,8 @@ export class ChallengeOwnerContactLinkInternal extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (_get(prevProps, 'task.parent.owner') !==
-        _get(this.props, 'task.parent.owner')) {
+    if ((prevProps?.task?.parent?.owner) !==
+        (this.props.task?.parent?.owner)) {
       this.setState({
         contactUrl: null,
         osmUsername: null,

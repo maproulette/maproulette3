@@ -5,7 +5,6 @@ import _split from 'lodash/split'
 import _map from 'lodash/map'
 import _omit from 'lodash/omit'
 import _find from 'lodash/find'
-import _get from 'lodash/get'
 import _debounce from 'lodash/debounce'
 import _trim from 'lodash/trim'
 import _toNumber from 'lodash/toNumber'
@@ -65,31 +64,31 @@ const WithCommandInterpreter = function(WrappedComponent, acceptedCommands = nul
     }
 
     componentDidUpdate(prevProps) {
-      if (_get(prevProps, 'searchQuery.filters.searchType') !==
-            _get(this.props, 'searchQuery.filters.searchType')) {
+      if ((prevProps?.searchQuery?.filters?.searchType) !==
+            (this.props.searchQuery?.filters?.searchType)) {
         // Happens when clearing filters, we are no longer searching projects
         if (this.state.commandString) {
           this.setState({commandString: null, searchType: null})
         }
-        else if(_get(this.props, 'searchQuery.filters.project')) {
+        else if(this.props.searchQuery?.filters?.project) {
           // Happens when project query is on url route
-          this.setState({commandString: _get(this.props, 'searchQuery.filters.project'),
-                         searchType: _get(this.props, 'searchQuery.filters.searchType')})
+          this.setState({commandString: this.props.searchQuery?.filters?.project,
+                         searchType: this.props.searchQuery?.filters?.searchType})
         } 
         else {
           // Happens when task query is on url route
-          this.setState({commandString: _get(this.props, 'searchQuery.filters.task'),
-                         searchType: _get(this.props, 'searchQuery.filters.searchType')})
+          this.setState({commandString: this.props.searchQuery?.filters?.task,
+                         searchType: this.props.searchQuery?.filters?.searchType})
         }
       }
     }
 
     render() {
       const query = this.state.commandString ? this.state.commandString : this.props.searchGroup ?
-        _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`) :
-        _get(this.props, 'searchQuery.query')
+        this.props.searchQueries?.[this.props.searchGroup]?.searchQuery?.query :
+        this.props.searchQuery?.query
 
-      const loading = _get(this.props, 'searchQuery.meta.fetchingResults') || this.state.mapLoading
+      const loading = (this.props.searchQuery?.meta?.fetchingResults) || this.state.mapLoading
 
       return <WrappedComponent {..._omit(this.props, ['searchQuery', 'clearSearch',
                                           'executeSearch', 'searchGroup'])}
@@ -99,7 +98,7 @@ const WithCommandInterpreter = function(WrappedComponent, acceptedCommands = nul
                                showDoneButton={!this.state.searchActive}
                                deactivate={this.deactivate} />
     }
-  }
+  };
 }
 
 /**

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import _isObject from 'lodash/isObject'
-import _get from 'lodash/get'
 import { loadPreviousSequentialTaskFromChallenge,
          loadNextSequentialTaskFromChallenge }
        from '../../../../services/Task/Task'
@@ -56,7 +55,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
  * challenge page.
  */
 export const inspectNewTask = function(currentTask, newTask, history) {
-  const projectId = _get(currentTask, 'parent.parent.id', currentTask.parent.parent)
+  const projectId = currentTask?.parent?.parent?.id ?? (currentTask.parent.parent)
   const challengeId = currentTask.parent.id
 
   if (_isObject(newTask) && newTask.id !== currentTask.id) {

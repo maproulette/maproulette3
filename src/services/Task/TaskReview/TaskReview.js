@@ -1,6 +1,5 @@
 import { v1 as uuidv1 } from 'uuid'
 import uuidTime from 'uuid-time'
-import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -158,12 +157,12 @@ export const buildLinkTaskReviewHistoryCSV = function(challengeId) {
 }
 
 const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTasksType.allReviewedTasks, userId)  {
-  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+  const searchParameters = generateSearchParametersString(criteria?.filters ?? {},
                                                        criteria.boundingBox,
-                                                       _get(criteria, 'savedChallengesOnly'),
-                                                       _get(criteria, 'excludeOtherReviewers'),
+                                                       criteria?.savedChallengesOnly,
+                                                       criteria?.excludeOtherReviewers,
                                                        null,
-                                                       _get(criteria, 'invertFields', {}))
+                                                       criteria?.invertFields ?? {})
 
   const mappers = (reviewTasksType === ReviewTasksType.myReviewedTasks) ? [userId] : []
   const reviewers = (reviewTasksType === ReviewTasksType.reviewedByMe) ? [userId] : []
@@ -173,7 +172,7 @@ const generateReviewSearch = function(criteria = {}, reviewTasksType = ReviewTas
 
 const buildQueryFilters = function (criteria, addedColumns) {
   //Sort criteria filtering
-  const sortCriteria =  _get(criteria, 'sortCriteria', {})
+  const sortCriteria =  criteria?.sortCriteria ?? {}
   const direction = sortCriteria.direction
   let sortBy = sortCriteria.sortBy //Set and fix sort by values
   sortBy = sortBy == "mappedOn" ? "mapped_on" : sortBy
@@ -183,7 +182,7 @@ const buildQueryFilters = function (criteria, addedColumns) {
   sortBy = sortBy == "metaReviewedAt" ? "meta_reviewed_at" : sortBy
 
   //Main Filters
-  const filters = _get(criteria, "filters", {});
+  const filters = criteria?.filters ?? {};
   const taskId = filters.id;
   const featureId = filters.featureId;
   const challengeId = filters.challengeId;
@@ -287,59 +286,59 @@ const buildQueryFilters = function (criteria, addedColumns) {
 /**
  * Retrieve metrics for a given review tasks type and filter criteria
  */
- export const fetchReviewMetrics = function(userId, reviewTasksType, criteria) {
-  const type = determineType(reviewTasksType)
-  const params = generateReviewSearch(criteria, reviewTasksType, userId)
+export const fetchReviewMetrics = function(userId, reviewTasksType, criteria) {
+ const type = determineType(reviewTasksType)
+ const params = generateReviewSearch(criteria, reviewTasksType, userId)
 
-  return function(dispatch) {
-    return new Endpoint(
-      api.tasks.reviewMetrics,
-      {
-        params: {reviewTasksType: type, ...params,
-                 includeByPriority: true, includeByTaskStatus: true},
-      }
-    ).execute().then(normalizedResults => {
-      dispatch(receiveReviewMetrics(normalizedResults, RequestStatus.success))
-      return normalizedResults
-    }).catch((error) => {
-      console.log(error.response || error)
-    })
-  }
+ return function(dispatch) {
+   return new Endpoint(
+     api.tasks.reviewMetrics,
+     {
+       params: {reviewTasksType: type, ...params,
+                includeByPriority: true, includeByTaskStatus: true},
+     }
+   ).execute().then(normalizedResults => {
+     dispatch(receiveReviewMetrics(normalizedResults, RequestStatus.success))
+     return normalizedResults
+   }).catch((error) => {
+     console.log(error.response || error)
+   })
+ }
 }
 
 /**
  * Retrieve metrics for a given review tasks type and filter criteria
  */
- export const fetchReviewTagMetrics = function(userId, reviewTasksType, criteria) {
-  const type = determineType(reviewTasksType)
-  const params = generateReviewSearch(criteria, reviewTasksType, userId)
+export const fetchReviewTagMetrics = function(userId, reviewTasksType, criteria) {
+ const type = determineType(reviewTasksType)
+ const params = generateReviewSearch(criteria, reviewTasksType, userId)
 
-  return function(dispatch) {
-    return new Endpoint(
-      api.tasks.reviewTagMetrics,
-      {
-        schema: null,
-        params: {reviewTasksType: type, ...params},
-      }
-    ).execute().then(normalizedResults => {
-      dispatch(receiveReviewTagMetrics(normalizedResults, RequestStatus.success))
-      return normalizedResults
-    }).catch((error) => {
-      console.log(error.response || error)
-    })
-  }
+ return function(dispatch) {
+   return new Endpoint(
+     api.tasks.reviewTagMetrics,
+     {
+       schema: null,
+       params: {reviewTasksType: type, ...params},
+     }
+   ).execute().then(normalizedResults => {
+     dispatch(receiveReviewTagMetrics(normalizedResults, RequestStatus.success))
+     return normalizedResults
+   }).catch((error) => {
+     console.log(error.response || error)
+   })
+ }
 }
 
 /**
  * Retrieve clustered tasks for given review criteria
  */
 export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) {
-  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+  const searchParameters = generateSearchParametersString(criteria?.filters ?? {},
                                                           criteria.boundingBox,
-                                                          _get(criteria, 'savedChallengesOnly'),
-                                                          _get(criteria, 'excludeOtherReviewers'),
+                                                          criteria?.savedChallengesOnly,
+                                                          criteria?.excludeOtherReviewers,
                                                           null,
-                                                          _get(criteria, 'invertFields', {}))
+                                                          criteria?.invertFields ?? {})
   return function(dispatch) {
     if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS === 'true') {
       return new Promise((resolve) => resolve());
@@ -391,12 +390,12 @@ const determineType = (reviewTasksType) => {
  */
 export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5, asMetaReview=false) {
   return function() {
-    const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+    const searchParameters = generateSearchParametersString(criteria?.filters ?? {},
                                                          criteria.boundingBox,
-                                                         _get(criteria, 'savedChallengesOnly'),
-                                                         _get(criteria, 'excludeOtherReviewers'),
+                                                         criteria?.savedChallengesOnly,
+                                                         criteria?.excludeOtherReviewers,
                                                          null,
-                                                         _get(criteria, 'invertFields', {}))
+                                                         criteria?.invertFields ?? {})
 
     const params = {limit, ...searchParameters, asMetaReview}
 
@@ -409,7 +408,7 @@ export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5, asM
       }
     ).execute().then(normalizedResults => ({
       loading: false,
-      tasks: _map(_values(_get(normalizedResults, 'entities.tasks', {})), task => {
+      tasks: _map(_values(normalizedResults?.entities?.tasks ?? {}), task => {
         if (task.location) {
           // match clusteredTasks response, which returns a point with lat/lng fields
           task.point = {
@@ -419,8 +418,8 @@ export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5, asM
         }
         return task
       })
-    }))
-  }
+    }));
+  };
 }
 
 
@@ -428,15 +427,15 @@ export const fetchNearbyReviewTasks = function(taskId, criteria={}, limit=5, asM
  * Retrieve the next task to review with the given sort and filter criteria
  */
 export const loadNextReviewTask = function(criteria={}, lastTaskId, asMetaReview) {
-  const sortBy = _get(criteria, 'sortCriteria.sortBy')
-  const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
+  const sortBy = criteria?.sortCriteria?.sortBy
+  const order = ((criteria?.sortCriteria?.direction) || 'DESC').toUpperCase()
   const sort = sortBy ? `${_snakeCase(sortBy)}` : null
-  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+  const searchParameters = generateSearchParametersString(criteria?.filters ?? {},
                                                        criteria.boundingBox,
-                                                       _get(criteria, 'savedChallengesOnly'),
-                                                       _get(criteria, 'excludeOtherReviewers'),
+                                                       criteria?.savedChallengesOnly,
+                                                       criteria?.excludeOtherReviewers,
                                                        null,
-                                                       _get(criteria, 'invertFields', {}))
+                                                       criteria?.invertFields ?? {})
 
   return function(dispatch) {
     const params = {sort, order, ...searchParameters, asMetaReview}
@@ -504,7 +503,7 @@ export const cancelReviewClaim = function(taskId) {
 
 export const removeReviewRequest = function(challengeId, taskIds, criteria, excludeTaskIds, asMetaReview) {
   return function(dispatch) {
-    const filters = _get(criteria, 'filters', {})
+    const filters = criteria?.filters ?? {}
     const searchParameters = !criteria ? {} :
       generateSearchParametersString(filters,
                                      criteria.boundingBox,
@@ -533,7 +532,7 @@ export const removeReviewRequest = function(challengeId, taskIds, criteria, excl
         console.log(error.response || error)
       }
     })
-  }
+  };
 }
 
 /**

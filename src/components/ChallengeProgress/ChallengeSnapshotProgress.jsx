@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import _isEqual from 'lodash/isEqual'
-import _get from 'lodash/get'
 import messages from './Messages'
 import ChallengeProgress from './ChallengeProgress'
 import ReviewStatusMetrics from '../../pages/Review/Metrics/ReviewStatusMetrics'
@@ -13,7 +12,7 @@ export class ChallengeSnapshotProgress extends Component {
       return true
     }
 
-    if (_get(nextProps, 'challenge.id') !== _get(this.props, 'challenge.id')) {
+    if ((nextProps?.challenge?.id) !== (this.props.challenge?.id)) {
       return true
     }
 

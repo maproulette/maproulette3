@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _isEqual from 'lodash/isEqual'
-import _get from 'lodash/get'
 import _uniqBy from 'lodash/uniqBy'
 import _differenceBy from 'lodash/differenceBy'
 import { Popup } from 'react-leaflet'
@@ -115,9 +114,9 @@ export class ChallengePane extends Component {
   resetSelectedClusters = () => this.setState({selectedClusters: []})
 
   componentDidUpdate() {
-    if (!_isEqual(this.state.bounds, _get(this.props, 'mapBounds.bounds'))) {
-      this.setState({bounds: _get(this.props, 'mapBounds.bounds'),
-                     fromUserAction: _get(this.props, 'mapBounds.fromUserAction')})
+    if (!_isEqual(this.state.bounds, this.props.mapBounds?.bounds)) {
+      this.setState({bounds: this.props.mapBounds?.bounds,
+                     fromUserAction: this.props.mapBounds?.fromUserAction})
     }
   }
 
@@ -154,12 +153,12 @@ export class ChallengePane extends Component {
 
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50">
-        {_get(this.props, 'history.location.state.congratulate', false) &&
-         !_get(this.props, 'history.location.state.warn', false) &&
+        {(this.props.history?.location?.state?.congratulate ?? false) &&
+         !(this.props.history?.location?.state?.warn ?? false) &&
           <CongratulateModal />
         }
-        {_get(this.props, 'history.location.state.warn', false) &&
-         !_get(this.props, 'history.location.state.congratulate', false) &&
+        {(this.props.history?.location?.state?.warn ?? false) &&
+         !(this.props.history?.location?.state?.congratulate ?? false) &&
           <ChallengeEndModal />
         }
         <ChallengeFilterSubnav {...this.props} />
@@ -178,8 +177,8 @@ export class ChallengePane extends Component {
                 criteria={{
                   boundingBox: fromLatLngBounds(this.state.bounds),
                   zoom: this.state.zoom,
-                  filters: _get(this.props, 'searchCriteria.filters'),
-                  searchQuery: _get(this.props, 'searchCriteria.query'),
+                  filters: this.props.searchCriteria?.filters,
+                  searchQuery: this.props.searchCriteria?.query,
                   challengeStatus
                 }}
                 updateTaskFilterBounds={(bounds, zoom, fromUserAction) => {
@@ -201,7 +200,7 @@ export class ChallengePane extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

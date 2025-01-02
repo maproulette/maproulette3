@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _findIndex from 'lodash/findIndex'
 import WithManageableProjects from '../WithManageableProjects/WithManageableProjects'
@@ -20,14 +19,14 @@ const WithPermittedChallenges = function(WrappedComponent) {
       // an enabled project), or belong to projects the user manages.
       const usableChallenges = _filter(this.props.challenges, challenge => {
         return AsManager(this.props.user).isSuperUser() ||
-              (challenge.enabled && _get(challenge, 'parent.enabled')) ||
+              (challenge.enabled && (challenge?.parent?.enabled)) ||
                _findIndex(this.props.projects,
-                 (p) => p.id === _get(challenge, 'parent.id')) !== -1
+                 (p) => p.id === (challenge?.parent?.id)) !== -1;
       })
 
       return <WrappedComponent {...this.props} challenges={usableChallenges} />
     }
-  }
+  };
 }
 
 export default (WrappedComponent) =>

@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { denormalize } from 'normalizr'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import { fetchTaskComments, addTaskComment, taskDenormalizationSchema }
@@ -15,7 +14,7 @@ export const mapStateToProps = (state, ownProps) => {
   const mappedProps = {}
 
   if (_isFinite(ownProps.taskId)) {
-    const taskEntity = _get(state, `entities.tasks.${ownProps.taskId}`)
+    const taskEntity = state.entities?.tasks?.[ownProps.taskId]
 
     if (taskEntity) {
       // denormalize task so that comments are embedded

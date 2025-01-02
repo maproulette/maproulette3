@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
-import _get from 'lodash/get'
 import _uniq from 'lodash/uniq'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
@@ -36,16 +35,16 @@ export default class TaskCompletionWidget extends Component {
       this.props.inspectTask ?
       <InspectTaskControls {...this.props} /> :
       <ActiveTaskControls
-        challenge={_get(this.props, 'task.parent')}
+        challenge={this.props.task?.parent}
         {...this.props}
       />
 
-    let taskCount = _get(this.props, 'taskBundle.taskIds.length', 0)
+    let taskCount = this.props.taskBundle?.taskIds?.length ?? 0
 
     // If we have selected Tasks but no tasks in bundle, a bundle was started
     // but not created with server
     if (!this.props.taskReadOnly &&
-        _get(this.props, 'selectedTasks.selected.size') > 0 && taskCount === 0) {
+        (this.props.selectedTasks?.selected?.size) > 0 && taskCount === 0) {
       taskCount = this.props.selectedTasks.selected.size
       if (!this.props.selectedTasks.selected.has(this.props.task.id)) {
         taskCount += 1 // Count the current task if needed

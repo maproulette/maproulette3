@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _filter from 'lodash/filter'
 import _split from 'lodash/split'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _map from 'lodash/map'
 import KeywordAutosuggestInput
@@ -63,10 +62,10 @@ export class TaskTags extends Component {
     if (this.state.edit) {
       const preferredTags =
         _filter(
-          _split(_get(this.props.task.parent, 'preferredTags'), ','),
+          _split(this.props.task.parent?.preferredTags, ','),
           (result) => !_isEmpty(result)
         )
-      const limitTags = !!_get(this.props.task.parent, 'limitTags')
+      const limitTags = !!this.props.task.parent?.limitTags
       
       return (
         <External>

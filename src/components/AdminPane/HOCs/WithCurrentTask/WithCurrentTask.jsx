@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import { saveTask,
          deleteTask } from '../../../../services/Task/Task'
 import WithLoadedTask from '../../../HOCs/WithLoadedTask/WithLoadedTask'
@@ -14,14 +13,16 @@ import WithLoadedTask from '../../../HOCs/WithLoadedTask/WithLoadedTask'
 const WithCurrentTask = function(WrappedComponent) {
   return class extends Component {
     render() {
-      const taskId = parseInt(_get(this.props, 'match.params.taskId'), 10)
-      return <WrappedComponent key={taskId}
-                               taskId={taskId}
-                               challengeId={parseInt(_get(this.props, 'match.params.challengeId'), 10)}
-                               projectId={parseInt(_get(this.props, 'match.params.projectId'), 10)}
-                               {...this.props} />
+      const taskId = parseInt(this.props.match?.params?.taskId, 10)
+      return (
+        <WrappedComponent key={taskId}
+                                 taskId={taskId}
+                                 challengeId={parseInt(this.props.match?.params?.challengeId, 10)}
+                                 projectId={parseInt(this.props.match?.params?.projectId, 10)}
+                                 {...this.props} />
+      );
     }
-  }
+  };
 }
 
 const mapDispatchToProps = dispatch => ({

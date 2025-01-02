@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { FormattedMessage, FormattedDate, injectIntl } from "react-intl";
 import classNames from "classnames";
 import _isObject from "lodash/isObject";
-import _get from "lodash/get";
 import _findIndex from "lodash/findIndex";
 import _merge from "lodash/merge";
 import _uniqBy from "lodash/uniqBy";
@@ -191,7 +190,7 @@ export class ChallengeDetail extends Component {
         `challenge/${this.props.challenge.id}/clone`,
       state: _merge(
         { projectId: project.id },
-        _get(this.props.searchCriteria, 'filters')
+        this.props.searchCriteria?.filters
       ),
     })
   }
@@ -370,7 +369,7 @@ export class ChallengeDetail extends Component {
               )}
               <li>
                 {!challenge.isVirtual &&
-                  _get(this.props.user, "settings.isReviewer") && (
+                  (this.props.user?.settings?.isReviewer) && (
                     <Link
                       className={classNames(
                         "mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-leading-none",
@@ -392,7 +391,7 @@ export class ChallengeDetail extends Component {
               </li>
             </ul>
           </Fragment>
-      )
+        );
     }
   }
 
@@ -478,7 +477,7 @@ export class ChallengeDetail extends Component {
           <div className="mr-h-content mr-overflow-auto">
             <div className="mr-max-w-md mr-mx-auto">
               <div className="mr-py-6 mr-px-8">
-                {_get(this.props, "history.location.state.fromSearch") && (
+                {(this.props.history?.location?.state?.fromSearch) && (
                   <div className="mr-mb-4">
                     <button
                       className="mr-text-green-lighter mr-text-sm hover:mr-text-white"

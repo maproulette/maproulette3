@@ -2,7 +2,6 @@ import { Fragment, Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import messages from './Messages'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import { TaskPriority, keysByPriority, taskPriorityLabels }
@@ -166,7 +165,7 @@ export default class ReviewStatusMetrics extends Component {
     const type = this.props.reviewTasksType || ReviewTasksType.allReviewedTasks
 
     const prioritizedReviewStats = _map(TaskPriority, (priority) => {
-      if (reviewMetricsByPriority && reviewMetricsByPriority[priority]) {
+      if (reviewMetricsByPriority?.[priority]) {
         const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
 
         return (
@@ -189,7 +188,7 @@ export default class ReviewStatusMetrics extends Component {
     })
 
     const byStatusReviewStats = _map(TaskStatus, (status) => {
-      if (reviewMetricsByTaskStatus && reviewMetricsByTaskStatus[status]) {
+      if (reviewMetricsByTaskStatus?.[status]) {
         const localizedStatusLabels = statusLabels(this.props.intl)
 
         return (
@@ -212,7 +211,7 @@ export default class ReviewStatusMetrics extends Component {
     })
 
     let averageTime = null
-    if (_get(metrics, 'avgReviewTime', 0) > 0) {
+    if ((metrics?.avgReviewTime ?? 0) > 0) {
       const seconds = metrics.avgReviewTime / 1000
       averageTime =
         <div className="mr-mt-4">

@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
 import _values from 'lodash/values'
@@ -125,7 +124,7 @@ export const WithCooperativeWork = function(WrappedComponent) {
     }
 
     componentDidUpdate(prevProps) {
-      if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
+      if ((this.props.task?.id) !== (prevProps?.task?.id)) {
         this.loadOSMElements(this.props.task)
       }
     }
@@ -145,7 +144,7 @@ export const WithCooperativeWork = function(WrappedComponent) {
               loadingChangeset={this.state.loadingChangeset}
             />
     }
-  }
+  };
 }
 
 export const mapDispatchToProps = dispatch =>

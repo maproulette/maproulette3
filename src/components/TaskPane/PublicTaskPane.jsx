@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import {
   WidgetDataTarget,
   widgetDescriptor,
@@ -73,7 +72,7 @@ export class PublicTaskPane extends Component {
       )
     }
 
-    if (!_get(this.props, 'task.parent.parent')) {
+    if (!this.props.task?.parent?.parent) {
       return (
         <div className='pane-loading full-screen-height'>
           <BusySpinner />

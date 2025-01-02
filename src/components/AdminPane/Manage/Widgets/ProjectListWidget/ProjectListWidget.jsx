@@ -2,7 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import { searchProjects, fetchManageableProjects } from '../../../../../services/Project/Project'
@@ -43,9 +42,9 @@ const ProjectAndChallengeSearch = WithComboSearch(SearchBox, {
         return null
       }
       return searchProjects({searchQuery: queryCriteria.query,
-                             page: _get(queryCriteria, "page.currentPage"),
+                             page: queryCriteria?.page?.currentPage,
                              onlyEnabled: false},
-                             _get(queryCriteria, "page.resultsPerPage"))
+                             queryCriteria?.page?.resultsPerPage);
     },
   'adminChallenges': queryCriteria => {
       // If no query is present then we don't need to search
@@ -53,9 +52,9 @@ const ProjectAndChallengeSearch = WithComboSearch(SearchBox, {
         return null
       }
       return extendedFind({searchQuery: queryCriteria.query,
-                           page: _get(queryCriteria, "page.currentPage"),
+                           page: queryCriteria?.page?.currentPage,
                            onlyEnabled: false},
-                           _get(queryCriteria, "page.resultsPerPage"))
+                           queryCriteria?.page?.resultsPerPage);
     },
 })
 
@@ -145,13 +144,13 @@ const Widget =
         return null
       }
 
-      const filters = _get(props, 'currentConfiguration.filters.projectFilters', {})
+      const filters = props.currentConfiguration?.filters?.projectFilters ?? {}
       return fetchManageableProjects(
-        _get(queryCriteria, 'page.currentPage'),
-        _get(queryCriteria, 'page.resultsPerPage'),
+        queryCriteria?.page?.currentPage,
+        queryCriteria?.page?.resultsPerPage,
         filters.owner,
         filters.visible
-       )
+       );
     },
   )
 

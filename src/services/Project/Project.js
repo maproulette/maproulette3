@@ -1,5 +1,4 @@
 import { schema } from "normalizr";
-import _get from "lodash/get";
 import _isArray from "lodash/isArray";
 import _cloneDeep from "lodash/cloneDeep";
 import _find from "lodash/find";
@@ -208,14 +207,14 @@ export const searchProjects = function (
   searchCriteria,
   limit = RESULTS_PER_PAGE
 ) {
-  const query = _get(searchCriteria, "searchQuery");
+  const query = searchCriteria?.searchQuery;
   const onlyEnabled = _isUndefined(searchCriteria.onlyEnabled)
     ? true
     : searchCriteria.onlyEnabled;
 
   // We are just making sure the pqge passed in is a) present and b) a number
-  const page = _isFinite(_get(searchCriteria, "page"))
-    ? _get(searchCriteria, "page")
+  const page = _isFinite(searchCriteria?.page)
+    ? searchCriteria?.page
     : 0;
 
   return function (dispatch) {
@@ -264,10 +263,7 @@ export const saveProject = function (projectData, user) {
       .execute()
       .then((normalizedResults) => {
         dispatch(receiveProjects(normalizedResults.entities));
-        const project = _get(
-          normalizedResults,
-          `entities.projects.${normalizedResults.result}`
-        );
+        const project = normalizedResults?.entities?.projects?.[normalizedResults.result];
 
         // If we just created the project, we should refresh the user as they
         // almost certainly have new grants
@@ -305,10 +301,7 @@ export const archiveProject = (id, bool) => {
       .execute()
       .then((normalizedResults) => {
         dispatch(receiveProjects(normalizedResults.entities));
-        const project = _get(
-          normalizedResults,
-          `entities.projects.${normalizedResults.result}`
-        );
+        const project = normalizedResults?.entities?.projects?.[normalizedResults.result];
 
         return project;
       })
@@ -471,10 +464,7 @@ export const addProjectManager = function (projectId, username, role) {
     return findUser(username)
       .then((matchingUsers) => {
         // We want an exact username match
-        const osmId = _get(
-          _find(matchingUsers, (match) => match.displayName === username),
-          "osmId"
-        );
+        const osmId = _find(matchingUsers, (match) => match.displayName === username)?.osmId;
 
         if (_isFinite(osmId)) {
           return setProjectManagerRole(projectId, osmId, true, role)(dispatch);

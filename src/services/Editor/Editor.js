@@ -5,7 +5,6 @@ import _map from "lodash/map";
 import _find from "lodash/find";
 import _filter from "lodash/filter";
 import _invert from "lodash/invert";
-import _get from "lodash/get";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isFinite from "lodash/isFinite";
@@ -188,7 +187,7 @@ export const editTask = function (
         }
       }
 
-      if (options && options.imagery) {
+      if (options?.imagery) {
         josmCommands.push(() =>
           sendJOSMCommand(josmImageryURI(options.imagery))
         );
@@ -288,7 +287,7 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle, re
     ? null
     : "presets=" + encodeURIComponent(task.parent.presets.join(","));
 
-  const imageryComponent = _get(options, "imagery")
+  const imageryComponent = options?.imagery
     ? `background=${
         options.imagery.isDynamic
           ? "custom:" + encodeURIComponent(options.imagery.url)
@@ -296,7 +295,7 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle, re
       }`
     : null;
 
-  const photoOverlayComponent = _get(options, "photoOverlay")
+  const photoOverlayComponent = options?.photoOverlay
     ? "photo_overlay=" + options.photoOverlay
     : null;
 
@@ -340,7 +339,7 @@ export const constructRapidURI = function (task, mapBounds, options, replacedCom
   const sourceComponent =
     "source=" + encodeURIComponent(task.parent.checkinSource);
 
-  const datasetUrl = _get(task.parent, "datasetUrl")
+  const datasetUrl = task.parent?.datasetUrl
     ? "data=" + encodeURIComponent(task.parent.datasetUrl)
     : null;
 
@@ -348,7 +347,7 @@ export const constructRapidURI = function (task, mapBounds, options, replacedCom
     ? null
     : "presets=" + encodeURIComponent(task.parent.presets.join(","));
 
-  const imageryComponent = _get(options, "imagery")
+  const imageryComponent = options?.imagery
     ? `background=${
         options.imagery.isDynamic
           ? "custom:" + encodeURIComponent(options.imagery.url)
@@ -356,7 +355,7 @@ export const constructRapidURI = function (task, mapBounds, options, replacedCom
       }`
     : null;
 
-  const photoOverlayComponent = _get(options, "photoOverlay")
+  const photoOverlayComponent = options?.photoOverlay
     ? "photo_overlay=" + options.photoOverlay
     : null;
 
@@ -400,7 +399,7 @@ export const constructLevel0URI = function (
     constructChangesetUrl(task);
 
   const urlComponent =
-    "url=" + osmObjectParams(_get(taskBundle, "tasks", task), true);
+    "url=" + osmObjectParams(taskBundle?.tasks ?? task, true);
 
   const result =
     baseUriComponent +
@@ -433,7 +432,7 @@ export const osmObjectParams = function (
   const allTasks = _isArray(task) ? task : [task];
   let objects = [];
   allTasks.forEach((task) => {
-    if (task.geometries && task.geometries.features) {
+    if (task.geometries?.features) {
       objects = objects.concat(
         _compact(
           task.geometries.features.map((feature) => {
@@ -592,16 +591,14 @@ export const josmLoadAndZoomURI = function (
   taskBundle,
   options
 ) {
-  return (
-    josmHost() +
-    "load_and_zoom?" +
-    [
-      josmBoundsParams(task, mapBounds, taskBundle, options),
-      josmLayerParams(task, editor === JOSM_LAYER, taskBundle, options),
-      josmChangesetParams(task, options),
-      `select=${osmObjectParams(_get(taskBundle, "tasks", task), options)}`,
-    ].join("&")
-  );
+  return josmHost() +
+  "load_and_zoom?" +
+  [
+    josmBoundsParams(task, mapBounds, taskBundle, options),
+    josmLayerParams(task, editor === JOSM_LAYER, taskBundle, options),
+    josmChangesetParams(task, options),
+    `select=${osmObjectParams(taskBundle?.tasks ?? task, options)}`,
+  ].join("&");
 };
 
 /*
@@ -628,7 +625,7 @@ export const josmLoadObjectURI = function (
   taskBundle,
   options
 ) {
-  const objects = osmObjectParams(_get(taskBundle, "tasks", task), options);
+  const objects = osmObjectParams(taskBundle?.tasks ?? task, options);
 
   // We can't load objects if there are none. This is usually because the
   // task features are missing OSM ids
@@ -715,7 +712,7 @@ export const josmImportReferenceLayers = function (
   taskBundle
 ) {
   const referenceLayers = _filter(
-    _get(task, "geometries.attachments", []),
+    task?.geometries?.attachments ?? [],
     (attachment) => attachment.kind === "referenceLayer"
   );
 
@@ -734,9 +731,9 @@ export const josmImportReferenceLayers = function (
       `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/attachment/${layer.id}/data/${filename}`,
       {
         layerName: layer.name || `MR Task ${task.id} Reference`,
-        layerLocked: _get(layer, "settings.layerLocked", true),
-        uploadPolicy: _get(layer, "settings.uploadPolicy", "never"),
-        downloadPolicy: _get(layer, "settings.downloadPolicy", "never"),
+        layerLocked: layer?.settings?.layerLocked ?? true,
+        uploadPolicy: layer?.settings?.uploadPolicy ?? "never",
+        downloadPolicy: layer?.settings?.downloadPolicy ?? "never",
       }
     );
   });

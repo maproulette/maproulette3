@@ -12,7 +12,6 @@ import _pick from 'lodash/pick'
 import _merge from 'lodash/merge'
 import _filter from 'lodash/filter'
 import _flatten from 'lodash/flatten'
-import _get from 'lodash/get'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../tailwind.config.js'
 import AsFilterableFeature from './AsFilterableFeature'
@@ -98,10 +97,10 @@ export class AsSimpleStyleableFeature {
     if (layer.setStyle) {
       layer.setStyle(priorStyle.style)
     }
-    else if (_get(layer, 'options.icon.options.mrSvgMarker')) {
+    else if (layer?.options?.icon?.options?.mrSvgMarker) {
       // Restore icon, either SVG or original Leaflet
       layer._removeIcon()
-      if (_get(priorStyle.icon, 'options.mrSvgMarker')) {
+      if (priorStyle.icon?.options?.mrSvgMarker) {
         layer.setIcon(L.vectorIcon(priorStyle.icon.options))
       }
       else {
@@ -200,7 +199,7 @@ export class AsSimpleStyleableFeature {
 
     // If the layer already has one of our svg markers, make sure to clean it
     // up or else Leaflet has a tendencey to render dup markers
-    if (_get(layer, 'options.icon.options.mrSvgMarker')) {
+    if (layer?.options?.icon?.options?.mrSvgMarker) {
       layer._removeIcon()
 
       if (!useCustomMarker) {
@@ -219,7 +218,7 @@ export class AsSimpleStyleableFeature {
    */
   markerSimplestyles(layer) {
     const styles = {}
-    if (_get(layer, 'options.icon.options.mrSvgMarker')) {
+    if (layer?.options?.icon?.options?.mrSvgMarker) {
       styles["marker-color"] = layer.options.icon.options.style.fill
 
       switch(layer.options.icon.options.svgHeight) {

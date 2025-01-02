@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl'
 import Modal from '../Modal/Modal'
 import External from '../External/External'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import _get from 'lodash/get'
 import TaskPropertyQueryBuilder
        from '../TaskPropertyQueryBuilder/TaskPropertyQueryBuilder'
 import TaskFilterIndicator from './TaskFilterIndicator'
@@ -23,7 +22,7 @@ export default class TaskPropertyFilter extends Component {
     const formSearch =
       <TaskPropertyQueryBuilder
         {...this.props}
-        taskPropertyQuery={_get(this.props, 'criteria.filters.taskPropertySearch')}
+        taskPropertyQuery={this.props.criteria?.filters?.taskPropertySearch}
         clearTaskPropertyQuery={this.props.clearTaskPropertyCriteria}
         updateTaskPropertyQuery={(data) => {
           this.setState({showForm: false})
@@ -31,7 +30,7 @@ export default class TaskPropertyFilter extends Component {
         }}
       />
     
-    const currentTaskPropertyFilters = _get(this.props, 'criteria.filters.taskPropertySearch')
+    const currentTaskPropertyFilters = this.props.criteria?.filters?.taskPropertySearch
     const areTaskPropertyFiltersActive = currentTaskPropertyFilters ? Object.keys(currentTaskPropertyFilters).length > 0 : false
 
     return (

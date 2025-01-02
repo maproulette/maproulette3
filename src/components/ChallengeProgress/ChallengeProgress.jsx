@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl'
 import { ResponsiveBar } from '@nivo/bar'
 import _isObject from 'lodash/isObject'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _each from 'lodash/each'
 import _chunk from 'lodash/chunk'
@@ -86,12 +85,12 @@ export class ChallengeProgress extends Component {
       return true
     }
 
-    if (_get(nextProps, 'challenge.id') !== _get(this.props, 'challenge.id')) {
+    if ((nextProps?.challenge?.id) !== (this.props.challenge?.id)) {
       return true
     }
 
-    if (!_isEqual(_get(nextProps, 'challenge.actions', {}),
-                  _get(this.props, 'challenge.actions', {}))) {
+    if (!_isEqual(nextProps?.challenge?.actions ?? {},
+                  this.props.challenge?.actions ?? {})) {
       return true
     }
 
@@ -250,11 +249,11 @@ export class ChallengeProgress extends Component {
 
     let calculatedSeconds = null
     let averageTime = null
-    if (_get(taskActions, 'tasksWithTime', 0) > 0 &&
-        _get(taskActions, 'totalTimeSpent', 0) > 0) {
+    if ((taskActions?.tasksWithTime ?? 0) > 0 &&
+        (taskActions?.totalTimeSpent ?? 0) > 0) {
       calculatedSeconds = taskActions.totalTimeSpent / taskActions.tasksWithTime / 1000
     }
-    else if (_get(taskActions, 'avgTimeSpent', 0) > 0) {
+    else if ((taskActions?.avgTimeSpent ?? 0) > 0) {
       calculatedSeconds = taskActions.avgTimeSpent / 1000
     }
 
@@ -293,7 +292,7 @@ export class ChallengeProgress extends Component {
     const challengeStats = this.calculateChallengeStats(taskActions, orderedStatuses, localizedStatuses)
 
     const prioritizedCompletionProgress = _map(TaskPriority, (priority) => {
-      if (taskPriorityActions && taskPriorityActions[priority]) {
+      if (taskPriorityActions?.[priority]) {
         const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
         const pActions = taskPriorityActions[priority]
 

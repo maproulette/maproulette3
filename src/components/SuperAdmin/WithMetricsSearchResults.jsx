@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _filter from 'lodash/filter'
 import _omit from 'lodash/omit'
@@ -30,7 +29,7 @@ export const WithMetricsSearchResults = function (
      * @private
      */
     render() {
-      const query = _get(this.props, `searchCriteria.query`, '')
+      const query = this.props.searchCriteria?.query ?? ''
       let items, searchType
 
       const params = queryString.parse(this.props.location.search)
@@ -43,19 +42,19 @@ export const WithMetricsSearchResults = function (
       if (searchType === 'challenges' && query) {
         searchResults = _filter(
           items,
-          (item) => _get(item, 'name', '').toLowerCase().indexOf(query) !== -1
+          (item) => (item?.name ?? '').toLowerCase().indexOf(query) !== -1
         )
       } else if (searchType === 'projects' && query) {
         searchResults = _filter(
           items,
           (item) =>
-            _get(item, 'displayName', '').toLowerCase().indexOf(query) !== -1
+            (item?.displayName ?? '').toLowerCase().indexOf(query) !== -1
         )
       } else if (searchType === 'users' && query) {
         searchResults = _filter(
           items,
           (item) =>
-            _get(item, 'osmProfile.displayName', '')
+            (item?.osmProfile?.displayName ?? '')
               .toLowerCase()
               .indexOf(query) !== -1
         )
@@ -76,7 +75,7 @@ export const WithMetricsSearchResults = function (
         />
       )
     }
-  }
+  };
 }
 
 export default (

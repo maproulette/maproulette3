@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
-import _get from 'lodash/get'
 import { fetchReviewMetrics }
        from '../../../services/Task/TaskReview/TaskReview'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
@@ -21,7 +20,7 @@ export const WithReviewMetrics = function(WrappedComponent) {
     updateMetrics(props) {
       this.setState({updateAvailable: false, loading: true})
 
-      props.updateReviewMetrics(_get(props.user, 'id'),
+      props.updateReviewMetrics(props.user?.id,
                                 props.reviewTasksType,
                                 props.reviewCriteria).then(() => {
         this.setState({loading: false})
@@ -54,13 +53,13 @@ export const WithReviewMetrics = function(WrappedComponent) {
         />
       )
     }
-  }
+  };
 }
 
 const mapStateToProps = state => {
-  return ({ reviewMetrics: _get(state, 'currentReviewTasks.metrics.reviewActions'),
-            reviewMetricsByPriority: _get(state, 'currentReviewTasks.metrics.priorityReviewActions'),
-            reviewMetricsByTaskStatus: _get(state, 'currentReviewTasks.metrics.statusReviewActions') })
+  return { reviewMetrics: state.currentReviewTasks?.metrics?.reviewActions,
+            reviewMetricsByPriority: state.currentReviewTasks?.metrics?.priorityReviewActions,
+            reviewMetricsByTaskStatus: state.currentReviewTasks?.metrics?.statusReviewActions };
 }
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import _get from 'lodash/get'
 import _values from 'lodash/values'
 import _omit from 'lodash/omit'
 import _each from 'lodash/each'
@@ -43,7 +42,7 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
     }
 
     getProjectFilters(props) {
-      return _get(props, 'currentConfiguration.filters.projectFilters', {})
+      return props.currentConfiguration?.filters?.projectFilters ?? {};
     }
 
     loadProjects() {
@@ -99,13 +98,13 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
       const manager = AsManager(this.props.user)
 
       const manageableProjects =
-        manager.manageableProjects(_values(_get(this.props, 'entities.projects')))
+        manager.manageableProjects(_values(this.props.entities?.projects))
 
       let manageableChallenges = []
       if (includeChallenges) {
         manageableChallenges = manager.manageableChallenges(
           manageableProjects,
-          _values(_get(this.props, 'entities.challenges'))
+          _values(this.props.entities?.challenges)
         )
       }
 
@@ -117,7 +116,7 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
                                loadingProjects={this.state.loadingProjects}
                                loadingChallenges={this.state.loadingChallenges} />
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({

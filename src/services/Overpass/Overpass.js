@@ -1,7 +1,6 @@
 import { addMinutes, isAfter } from 'date-fns'
 import { isJosmEditor, sendJOSMCommand } from '../Editor/Editor'
 import { fromLatLngBounds } from '../MapBounds/MapBounds'
-import _get from 'lodash/get'
 
 /**
  * View the AOI defined by the given bounds (either LatLngBounds or an array)
@@ -36,28 +35,28 @@ export const viewAtticOverpass = (selectedEditor, actionDate, bounds, ignoreAtti
  * View augmented diff in achavi of the AOI defined by the given bounds (either
  * LatLngBounds or an array) for the two given dates
  */
- export const viewDiffOverpass = (bounds, firstDate, secondDate) => {
-   // order firstDate and secondDate into earlierDate and laterDate
-   let earlierDate = new Date(firstDate)
-   let laterDate = new Date(secondDate)
+export const viewDiffOverpass = (bounds, firstDate, secondDate) => {
+  // order firstDate and secondDate into earlierDate and laterDate
+  let earlierDate = new Date(firstDate)
+  let laterDate = new Date(secondDate)
 
-   if (isAfter(earlierDate, laterDate)) {
-     earlierDate = new Date(secondDate)
-     laterDate = new Date(firstDate)
-   }
+  if (isAfter(earlierDate, laterDate)) {
+    earlierDate = new Date(secondDate)
+    laterDate = new Date(firstDate)
+  }
 
-   const bbox = overpassBBox(bounds).join(',')
-   const query =
-     `[out:xml][timeout:25][bbox:${bbox}]` +
-     `[adiff:"${earlierDate.toISOString()}","${offsetAtticDateMoment(laterDate).toISOString()}"];` +
-     `( node(${bbox}); <; >; );` +
-     'out meta geom qt;'
+  const bbox = overpassBBox(bounds).join(',')
+  const query =
+    `[out:xml][timeout:25][bbox:${bbox}]` +
+    `[adiff:"${earlierDate.toISOString()}","${offsetAtticDateMoment(laterDate).toISOString()}"];` +
+    `( node(${bbox}); <; >; );` +
+    'out meta geom qt;'
 
-   // Send users to achavi for visualization of augmented diff
-   const overpassURL = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query)
-   const achaviURL = 'https://overpass-api.de/achavi/?url=' + encodeURIComponent(overpassURL)
-   window.open(achaviURL)
- }
+  // Send users to achavi for visualization of augmented diff
+  const overpassURL = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query)
+  const achaviURL = 'https://overpass-api.de/achavi/?url=' + encodeURIComponent(overpassURL)
+  window.open(achaviURL)
+}
 
 
 /**
@@ -67,7 +66,7 @@ export const viewAtticOverpass = (selectedEditor, actionDate, bounds, ignoreAtti
  */
 const offsetAtticDateMoment = actionDate => {
   return addMinutes(actionDate,
-                    _get(window.env, 'REACT_APP_ATTIC_QUERY_OFFSET_MINUTES', 10))
+                    window.env?.REACT_APP_ATTIC_QUERY_OFFSET_MINUTES ?? 10);
 }
 
 /**

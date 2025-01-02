@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import VirtualChallengeNameLink
        from '../VirtualChallengeNameLink/VirtualChallengeNameLink'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
@@ -28,7 +27,7 @@ export default class ChallengeInfoSummary extends Component {
         <ul className="mr-list-ruled mr-text-grey-light mr-text-xs">
           <li>
             <span className="mr-text-current">
-              {_get(this.props.task, 'parent.parent.displayName')}
+              {this.props.task?.parent?.parent?.displayName}
             </span>
           </li>
 
@@ -41,7 +40,7 @@ export default class ChallengeInfoSummary extends Component {
           </li>
         </ul>
       </div>
-    )
+    );
   }
 }
 

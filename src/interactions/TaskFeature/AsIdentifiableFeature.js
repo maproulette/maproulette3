@@ -1,5 +1,4 @@
 import _find from 'lodash/find'
-import _get from 'lodash/get'
 import _isUndefined from 'lodash/isUndefined'
 
 /**
@@ -70,7 +69,7 @@ export class AsIdentifiableFeature {
         (this.properties["@type"] || this.properties["@osm_type"])
       if (!typeRe.test(featureType)) {
         // No luck finding an explicit type. Try to infer from the geometry
-        const geometryType = _get(this, 'geometry.type')
+        const geometryType = this?.geometry?.type
         if (geometryType === "Point") {
           featureType = "node"
         }

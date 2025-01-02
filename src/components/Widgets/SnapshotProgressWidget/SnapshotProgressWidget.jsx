@@ -1,7 +1,6 @@
 import { Fragment, Component } from 'react'
 import { FormattedMessage, FormattedDate } from 'react-intl'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import ChallengeSnapshotProgress from '../../ChallengeProgress/ChallengeSnapshotProgress'
@@ -165,7 +164,7 @@ export default class SnapshotProgressWidget extends Component {
                         <li onClick={dropdown.toggleDropdownVisible}>
                           <a target="_blank"
                               rel="noopener noreferrer"
-                              href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/snapshot/challenge/${_get(this.props, 'challenge.id')}/export`}
+                              href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/snapshot/challenge/${this.props.challenge?.id}/export`}
                               className="mr-flex mr-items-center"
                           >
                               <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />

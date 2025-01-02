@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from "react-router-dom";
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
 import _isEmpty from 'lodash/isEmpty'
@@ -78,7 +77,7 @@ export class ActiveTaskControls extends Component {
     }
 
     return !_isUndefined(this.state.needsReview) ? this.state.needsReview :
-      _get(this.props, 'user.settings.needsReview')
+      this.props.user?.settings?.needsReview;
   }
 
   allowedEditors = () => {
@@ -250,11 +249,11 @@ export class ActiveTaskControls extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
+    if ((this.props.task?.id) !== (prevProps?.task?.id)) {
       return this.resetConfirmation()
     }
 
-    if (this.state.tags === null && _get(this.props, 'task.tags')) {
+    if (this.state.tags === null && (this.props.task?.tags)) {
       const unfilteredTags = _cloneDeep(this.props.task.tags)
       _remove(unfilteredTags, t => {
         if (_isEmpty(t)) {
@@ -281,7 +280,7 @@ export class ActiveTaskControls extends Component {
 
     // Let's set default revisionLoadBy to inbox if we are coming from inbox
     // and not changing revisionLoadBy state
-    if (_get(this.props.history, 'location.state.fromInbox') &&
+    if ((this.props.history?.location?.state?.fromInbox) &&
         this.state.revisionLoadBy !== TaskReviewLoadMethod.inbox &&
         !this.state.doneLoadByFromHistory) {
       return this.setState({revisionLoadBy: TaskReviewLoadMethod.inbox,
@@ -332,7 +331,7 @@ export class ActiveTaskControls extends Component {
 
   render() {
     // If the user is not logged in, show a sign-in button instead of controls.
-    if (!_get(this.props, 'user.isLoggedIn')) {
+    if (!this.props.user?.isLoggedIn) {
       return (
         <div className={classNames('active-task-controls',
                                    {'is-minimized': this.props.isMinimized})}>
@@ -360,7 +359,7 @@ export class ActiveTaskControls extends Component {
 
     const needsRevised = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
-    const fromInbox = _get(this.props.history, 'location.state.fromInbox')
+    const fromInbox = this.props.history?.location?.state?.fromInbox
 
     const allowedProgressions =
       allowedStatusProgressions(this.props.task.status, false, needsRevised)

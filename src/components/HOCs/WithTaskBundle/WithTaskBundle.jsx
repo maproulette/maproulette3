@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { bundleTasks, deleteTaskBundle, resetTaskBundle, removeTaskFromBundle, fetchTaskBundle } from '../../../services/Task/Task'
 import { releaseTask } from '../../../services/Task/Task'
@@ -27,7 +26,7 @@ export function WithTaskBundle(WrappedComponent) {
 
     async componentDidMount() {
       const { task } = this.props
-      if (_isFinite(_get(task, 'bundleId'))) {
+      if (_isFinite(task?.bundleId)) {
         await this.setupBundle(task.bundleId)
       } else {
         this.updateBundlingConditions()
@@ -39,7 +38,7 @@ export function WithTaskBundle(WrappedComponent) {
     async componentDidUpdate(prevProps, prevState) {
       const { task } = this.props
 
-      if (_get(task, 'id') !== _get(prevProps, 'task.id')) {
+      if ((task?.id) !== (prevProps?.task?.id)) {
         this.setState({ 
           selectedTasks: [], 
           initialBundle: null, 
@@ -48,7 +47,7 @@ export function WithTaskBundle(WrappedComponent) {
           completingTask: null 
         })
 
-        if (_isFinite(_get(task, 'bundleId'))) {
+        if (_isFinite(task?.bundleId)) {
           await this.setupBundle(task.bundleId)
         } else {
           this.updateBundlingConditions()
@@ -181,7 +180,7 @@ export function WithTaskBundle(WrappedComponent) {
           console.error("Error resetting to initial task bundle:", error)
           this.setState({loading: false})
         }
-      } else if (_isFinite(bundleId) && _get(this.state, 'taskBundle.bundleId') === bundleId && this.props.task.status === 0) {
+      } else if (_isFinite(bundleId) && (this.state.taskBundle?.bundleId) === bundleId && this.props.task.status === 0) {
         await this.clearActiveTaskBundle(bundleId)
       }
     }
@@ -255,7 +254,7 @@ export function WithTaskBundle(WrappedComponent) {
         />
       )
     }
-  }
+  };
 }
 
 export const mapDispatchToProps = dispatch => bindActionCreators({

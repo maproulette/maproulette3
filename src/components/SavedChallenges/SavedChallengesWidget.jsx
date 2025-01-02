@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import _isFinite from 'lodash/isFinite'
 import _isPlainObject from 'lodash/isPlainObject'
@@ -48,8 +47,8 @@ export class SavedChallengesWidget extends Component {
 
 const SavedChallengeList = function(props) {
   const challengeItems =
-    _compact(_map(_get(props, 'user.savedChallenges', []), challenge => {
-      if (!_isFinite(_get(challenge, 'id'))) {
+    _compact(_map(props.user?.savedChallenges ?? [], challenge => {
+      if (!_isFinite(challenge?.id)) {
         return null
       }
 

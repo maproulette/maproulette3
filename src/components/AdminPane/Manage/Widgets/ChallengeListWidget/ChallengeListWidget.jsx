@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from "react-router-dom";
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _difference from 'lodash/difference'
 import _join from 'lodash/join'
@@ -44,12 +43,12 @@ const descriptor = {
 // Setup child components with needed HOCs.
 class ChallengeSearchBox extends Component {
   componentDidUpdate(prevProps) {
-    if (_get(this.props, 'searchQuery.query') !==
-        _get(prevProps, 'searchQuery.query')) {
-      if (!_get(this.props, 'searchQuery.query')) {
+    if ((this.props.searchQuery?.query) !==
+        (prevProps?.searchQuery?.query)) {
+      if (!this.props.searchQuery?.query) {
         this.props.toggleSearchTallies(this.props.projectId)
       }
-      else if (!_get(prevProps, 'searchQuery.query')) {
+      else if (!prevProps?.searchQuery?.query) {
         this.props.toggleSearchTallies(this.props.projectId, _map(this.props.challenges, (c) => c.id))
       }
     }
@@ -236,10 +235,10 @@ export default class ChallengeListWidget extends Component {
                     target="_blank"
                     rel="noopener noreferrer"
                     href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}` +
-                          `/api/v2/project/${_get(this.props, 'project.id')}` +
+                          `/api/v2/project/${this.props.project?.id}` +
                           `/tasks/extract?${cId}&timezone=` +
                           `${encodeURIComponent(
-                              _get(this.props.widgetConfiguration, 'timezoneOffset', '')
+                              this.props.widgetConfiguration?.timezoneOffset ?? ''
                              )}`}
                     className="mr-flex mr-items-center"
                   >

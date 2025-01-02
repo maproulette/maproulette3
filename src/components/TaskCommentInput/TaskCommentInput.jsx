@@ -2,7 +2,6 @@ import { Component } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { FormattedMessage, injectIntl } from "react-intl";
-import _get from "lodash/get";
 import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import AutosuggestMentionTextArea from "../AutosuggestTextBox/AutosuggestMentionTextArea";
 import WithOSMUserSearch from "../HOCs/WithOSMUserSearch/WithOSMUserSearch";
@@ -39,7 +38,7 @@ export class TaskCommentInput extends Component {
   componentDidUpdate(prevProps) {
     // Update our character count as needed
     if (this.props.value !== prevProps.value) {
-      this.setState({ characterCount: _get(this.props.value, "length", 0), isSubmitActionPerformed: false });
+      this.setState({ characterCount: this.props.value?.length ?? 0, isSubmitActionPerformed: false });
     }
   }
 

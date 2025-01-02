@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'
 import _isEmpty from 'lodash/isEmpty'
@@ -30,9 +29,9 @@ const ChallengeSearch = WithSearch(
   WithCommandInterpreter(SearchBox, ['p', 'i']),
   'adminChallengeList',
   searchCriteria => {
-    if (!_isEmpty(_get(searchCriteria, 'filters'))) {
-      return extendedFind({filters: _get(searchCriteria, 'filters', {}),
-                           onlyEnabled: false}, 1000)
+    if (!_isEmpty(searchCriteria?.filters)) {
+      return extendedFind({filters: searchCriteria?.filters ?? {},
+                           onlyEnabled: false}, 1000);
     }
     else {
       return extendedFind({searchQuery: searchCriteria.query,
@@ -82,7 +81,7 @@ export class manageChallengeList extends Component {
       />
     )
 
-    const projectName = _get(this.props, 'project.displayName')
+    const projectName = this.props.project?.displayName
     const listTitle =
       `${this.props.intl.formatMessage(messages.currentChallengesLabel)} ${projectName}`
 
@@ -102,7 +101,7 @@ export class manageChallengeList extends Component {
           {_isObject(this.props.project) &&
           <li>
             <Link to={`/admin/project/${this.props.project.id}`}>
-              {_get(this.props, 'project.displayName', this.props.project.name)}
+              {this.props.project?.displayName ?? (this.props.project.name)}
             </Link>
           </li>
           }

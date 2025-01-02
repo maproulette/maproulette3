@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _filter from 'lodash/filter'
 import _fromPairs from 'lodash/fromPairs'
@@ -45,16 +44,12 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
   return class extends Component {
     defaultFilters = () => {
       return {
-        includeStatuses: _get(initialFilters, 'statuses',
-                              _fromPairs(_map(TaskStatus, status => [status, true]))),
-        includeReviewStatuses: _get(initialFilters, 'reviewStatuses',
-                                    _fromPairs(_map(TaskReviewStatusWithUnset, status => [status, true]))),
-        includeMetaReviewStatuses: _get(initialFilters, 'metaReviewStatuses',
-                                        _fromPairs(_map(TaskMetaReviewStatusWithUnset, status => [status, true]))),
-        includePriorities: _get(initialFilters, 'priorities',
-                                _fromPairs(_map(TaskPriority, priority => [priority, true]))),
-        includeLocked: _get(initialFilters, 'includeLocked', true),
-      }
+        includeStatuses: initialFilters?.statuses ?? _fromPairs(_map(TaskStatus, status => [status, true])),
+        includeReviewStatuses: initialFilters?.reviewStatuses ?? _fromPairs(_map(TaskReviewStatusWithUnset, status => [status, true])),
+        includeMetaReviewStatuses: initialFilters?.metaReviewStatuses ?? _fromPairs(_map(TaskMetaReviewStatusWithUnset, status => [status, true])),
+        includePriorities: initialFilters?.priorities ?? _fromPairs(_map(TaskPriority, priority => [priority, true])),
+        includeLocked: initialFilters?.includeLocked ?? true,
+      };
     }
 
     state = Object.assign({}, this.defaultFilters(), {
@@ -215,7 +210,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     filterTasks = (includeStatuses, includeReviewStatuses, includeMetaReviewStatuses,
                    includePriorities, includeLocked) => {
       let results = {tasks: []}
-      let tasks = _cloneDeep(_get(this.props[tasksProp], 'tasks'))
+      let tasks = _cloneDeep(this.props[tasksProp]?.tasks)
       if (_isArray(tasks)) {
         results = Object.assign({}, this.props[tasksProp], {
           tasks: _filter(tasks, task =>
@@ -233,14 +228,12 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      */
     taskPassesFilters = (task, includeStatuses, includeReviewStatuses, includeMetaReviewStatuses,
                          includePriorities, includeLocked) => {
-      return (
-        includeStatuses[task.status] && includePriorities[task.priority] &&
-        ((_isUndefined(task.reviewStatus) && includeReviewStatuses[REVIEW_STATUS_NOT_SET]) ||
-          includeReviewStatuses[task.reviewStatus]) &&
-        ((_isUndefined(task.metaReviewStatus) && includeMetaReviewStatuses[META_REVIEW_STATUS_NOT_SET]) ||
-          includeMetaReviewStatuses[task.metaReviewStatus]) &&
-        (includeLocked || !_isFinite(task.lockedBy) || task.lockedBy === _get(this.props, 'user.id'))
-      )
+      return includeStatuses[task.status] && includePriorities[task.priority] &&
+      ((_isUndefined(task.reviewStatus) && includeReviewStatuses[REVIEW_STATUS_NOT_SET]) ||
+        includeReviewStatuses[task.reviewStatus]) &&
+      ((_isUndefined(task.metaReviewStatus) && includeMetaReviewStatuses[META_REVIEW_STATUS_NOT_SET]) ||
+        includeMetaReviewStatuses[task.metaReviewStatus]) &&
+      (includeLocked || !_isFinite(task.lockedBy) || task.lockedBy === (this.props.user?.id));
     }
 
     clearAllFilters = () => {
@@ -290,7 +283,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
       _each(["status", "reviewStatus", "metaReviewStatus", "priorities"], key => {
-        if (!_isUndefined(_get(criteria, `filters.${key}`)) && !this.props.taskId) {
+        if (!_isUndefined(criteria?.filters?.[key]) && !this.props.taskId) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
           }
@@ -298,7 +291,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
             criteria.filters[key] = [criteria.filters[key]]
           }
           useURLFilters = true
-        } else if (!_isUndefined(_get(criteria, `filters.${key}`)) && useSavedFilters) {
+        } else if (!_isUndefined(criteria?.filters?.[key]) && useSavedFilters) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
           }
@@ -324,8 +317,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         const includeStatuses = 
           useSavedFilters && savedFilters && savedFilters.length > 0?
           _fromPairs(_map(criteria.filters.status, status => [status, false])) :
-          _get(initialFilters, 'statuses',
-            _fromPairs(_map(TaskStatus, status => [status, false])))
+          initialFilters?.statuses ?? _fromPairs(_map(TaskStatus, status => [status, false]))
         
         _each(criteria.filters.status, status => {
          includeStatuses[status] = true
@@ -356,8 +348,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     }
 
     componentDidUpdate(prevProps) {
-      if (!_isEqual(_get(prevProps[tasksProp], 'tasks'), _get(this.props[tasksProp], 'tasks')) ||
-          _get(prevProps[tasksProp], 'fetchId') !== _get(this.props[tasksProp], 'fetchId')) {
+      if (!_isEqual(prevProps[tasksProp]?.tasks, this.props[tasksProp]?.tasks) ||
+          (prevProps[tasksProp]?.fetchId) !== (this.props[tasksProp]?.fetchId)) {
         this.refreshFilteredTasks()
       }
     }
@@ -382,5 +374,5 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         {..._omit(this.props, outputProp)}
       />
     }
-  }
+  };
 }

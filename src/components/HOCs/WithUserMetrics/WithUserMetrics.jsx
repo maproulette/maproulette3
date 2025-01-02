@@ -3,7 +3,6 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _omit from 'lodash/omit'
-import _get from 'lodash/get'
 import { fetchLeaderboardForUser } from '../../../services/Leaderboard/Leaderboard'
 import { fetchUserMetrics } from '../../../services/User/User'
 import { CUSTOM_RANGE, ALL_TIME }
@@ -28,8 +27,8 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
 
     async updateAllMetrics() {
       if (this.props[userProp] &&
-          (!_get(this.props[userProp], 'settings.leaderboardOptOut') ||
-           _get(this.props[userProp], 'id') === _get(this.props.currentUser, 'userId'))) {
+          (!this.props[userProp]?.settings?.leaderboardOptOut ||
+           (this.props[userProp]?.id) === (this.props.currentUser?.userId))) {
 
         this.setState({loading: true})
 
@@ -41,25 +40,25 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
     }
 
     async updateUserMetrics() {
-      if (!_get(this.props[userProp], 'settings.leaderboardOptOut') ||
-           _get(this.props[userProp], 'id') === _get(this.props.currentUser, 'userId')) {
+      if (!this.props[userProp]?.settings?.leaderboardOptOut ||
+           (this.props[userProp]?.id) === (this.props.currentUser?.userId)) {
 
-        const startDate = _get(this.state.tasksCompletedDateRange, 'length', 0) === 2 ?
+        const startDate = (this.state.tasksCompletedDateRange?.length ?? 0) === 2 ?
           format(this.state.tasksCompletedDateRange[0], 'yyyy-MM-dd') : null
 
-        const endDate = _get(this.state.tasksCompletedDateRange, 'length', 0) === 2 ?
+        const endDate = (this.state.tasksCompletedDateRange?.length ?? 0) === 2 ?
           format(this.state.tasksCompletedDateRange[1], 'yyyy-MM-dd') : null
 
-        const reviewStart = _get(this.state.tasksReviewedDateRange, 'length', 0) === 2 ?
+        const reviewStart = (this.state.tasksReviewedDateRange?.length ?? 0) === 2 ?
           format(this.state.tasksReviewedDateRange[0], 'yyyy-MM-dd') : null
 
-        const reviewEnd = _get(this.state.tasksReviewedDateRange, 'length', 0) === 2 ?
+        const reviewEnd = (this.state.tasksReviewedDateRange?.length ?? 0) === 2 ?
           format(this.state.tasksReviewedDateRange[1], 'yyyy-MM-dd') : null
 
-        const reviewerStart = _get(this.state.tasksReviewerDateRange, 'length', 0) === 2 ?
+        const reviewerStart = (this.state.tasksReviewerDateRange?.length ?? 0) === 2 ?
           format(this.state.tasksReviewerDateRange[0], 'yyyy-MM-dd') : null
 
-        const reviewerEnd = _get(this.state.tasksReviewerDateRange, 'length', 0) === 2 ?
+        const reviewerEnd = (this.state.tasksReviewerDateRange?.length ?? 0) === 2 ?
           format(this.state.tasksReviewerDateRange[1], 'yyyy-MM-dd') : null
 
         const metrics = await fetchUserMetrics(
@@ -172,7 +171,7 @@ export const WithUserMetrics = function(WrappedComponent, userProp) {
                           loading={this.state.loading}
                           {..._omit(this.props, ['updateLeaderboardMetrics', 'fetchLeaderboardForUser'])} />)
     }
-  }
+  };
 }
 
 const mapStateToProps = () => ({})

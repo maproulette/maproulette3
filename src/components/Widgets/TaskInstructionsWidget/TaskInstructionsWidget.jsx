@@ -2,7 +2,6 @@ import { Component } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import classNames from "classnames";
-import _get from "lodash/get";
 import _isFinite from "lodash/isFinite";
 import {
   WidgetDataTarget,
@@ -46,7 +45,7 @@ export default class TaskInstructionsWidget extends Component {
    */
   toggleMinimized = () => {
     this.setState({ collapsing: true });
-    const challengeId = _get(this.props.task, "parent.id");
+    const challengeId = this.props.task?.parent?.id;
     if (_isFinite(challengeId)) {
       if (!this.props.collapseInstructions) {
         // Save our current height before collapsing so that we can restore it

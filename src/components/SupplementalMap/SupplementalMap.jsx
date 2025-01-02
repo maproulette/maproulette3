@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { ZoomControl, Pane, MapContainer, useMap, AttributionControl } from 'react-leaflet'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isEmpty from 'lodash/isEmpty'
 import _sortBy from 'lodash/sortBy'
@@ -52,7 +51,7 @@ const SupplementalMapContent = props => {
   }
 
   let overlayLayers = buildLayerSources(
-    props.visibleOverlays, _get(user, 'settings.customBasemaps'),
+    props.visibleOverlays, user?.settings?.customBasemaps,
     (layerId, index, layerSource) => ({
       id: layerId,
       component: <SourcedTileLayer key={layerId} source={layerSource} mrLayerId={layerId} />,
@@ -99,9 +98,9 @@ const ResizeMap = () => {
 };
 
 const SupplementalMap = (props) => {
-  const zoom = _get(props, "task.parent.defaultZoom", DEFAULT_ZOOM)
-  const minZoom = _get(props, "task.parent.minZoom", MIN_ZOOM)
-  const maxZoom = _get(props, "task.parent.maxZoom", MAX_ZOOM)
+  const zoom = props.task?.parent?.defaultZoom ?? DEFAULT_ZOOM
+  const minZoom = props.task?.parent?.minZoom ?? MIN_ZOOM
+  const maxZoom = props.task?.parent?.maxZoom ?? MAX_ZOOM
   return (
     <div className="task-map">
       <MapContainer

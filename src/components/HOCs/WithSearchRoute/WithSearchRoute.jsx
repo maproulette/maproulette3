@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _each from 'lodash/each'
 import _debounce from 'lodash/debounce'
@@ -76,15 +75,15 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
 
     setSearchSort = (sortCriteria) => {
       this.props.setSearchSort(sortCriteria)
-      addSearchCriteriaToRoute(this.props.history, {sort: _get(sortCriteria, 'sortBy')})
+      addSearchCriteriaToRoute(this.props.history, {sort: sortCriteria?.sortBy})
     }
 
     setSearchFilters = (filterCriteria) => {
       this.props.setSearchFilters(filterCriteria)
       addSearchCriteriaToRoute(this.props.history, filterCriteria)
 
-      const bounds = _get(this.props, `currentSearch.${searchGroup}.mapBounds.bounds`) ||
-                     _get(this.props, `mapBounds.bounds`)
+      const bounds = (this.props.currentSearch?.[searchGroup]?.mapBounds?.bounds) ||
+                     (this.props.mapBounds?.bounds)
       updateBoundsOnRoute(this.props, searchGroup, bounds, filterCriteria.location, false)
     }
 
@@ -117,7 +116,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
     updateChallengeSearchMapBounds = (bounds, fromUserAction=false) => {
       this.props.setChallengeSearchMapBounds(bounds, fromUserAction)
 
-      const locationFilter = _get(this.props, `currentSearch.${searchGroup}.filters.location`)
+      const locationFilter = this.props.currentSearch?.[searchGroup]?.filters?.location
       updateBoundsOnRoute(this.props, searchGroup, bounds, locationFilter, true)
     }
 
@@ -187,7 +186,7 @@ export const updateBoundsOnRoute = (props, searchGroup, bounds, locationFilter, 
   // If our app is still loading then we don't want to mess with the URL route
   // and we only want to add the map bounds if they are relevant to the
   // challenge search results. (ie. 'withinMapBounds' or 'intersectingMapBounds')
-  if (!props.isLoading && _get(props, `currentSearch.${searchGroup}`)) {
+  if (!props.isLoading && (props.currentSearch?.[searchGroup])) {
     if ( locationFilter === 'withinMapBounds' || locationFilter === 'intersectingMapBounds') {
       addBoundsToRoute(props.history, 'challengeSearch', bounds, locationFilter)
     }

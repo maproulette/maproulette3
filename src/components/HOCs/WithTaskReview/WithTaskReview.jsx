@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 import _merge from 'lodash/merge'
 import _isString from 'lodash/isString'
-import _get from 'lodash/get'
 import { completeReview,
          completeBundleReview,
          cancelReviewClaim,
@@ -23,15 +22,15 @@ import AppErrors from '../../../services/Error/AppErrors'
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
- export const WithTaskReview = WrappedComponent => {
-   return class extends Component {
-     render() {
-       return <WrappedComponent
-        metaReviewEnabled={window.env.REACT_APP_FEATURE_META_QC === 'enabled'}
-        asMetaReview={asMetaReview(this.props)} {...this.props} />
-     }
-   }
- }
+export const WithTaskReview = WrappedComponent => {
+  return class extends Component {
+    render() {
+      return <WrappedComponent
+       metaReviewEnabled={window.env.REACT_APP_FEATURE_META_QC === 'enabled'}
+       asMetaReview={asMetaReview(this.props)} {...this.props} />
+    }
+  }
+}
 
 function asMetaReview(props) {
  return props.history.location.pathname.endsWith("meta-review")
@@ -148,8 +147,8 @@ export const parseSearchCriteria = url => {
   }
 
   if (searchParams.sortCriteria) {
-    sortBy = _get(searchParams, 'sortCriteria.sortBy')
-    direction = _get(searchParams, 'sortCriteria.direction')
+    sortBy = searchParams?.sortCriteria?.sortBy
+    direction = searchParams?.sortCriteria?.direction
   }
 
   return {
@@ -168,7 +167,7 @@ export const visitLoadBy = (loadBy, url, task, asMetaReview) => {
   if (task && (loadBy === TaskReviewLoadMethod.next ||
                loadBy === TaskReviewLoadMethod.nearby)) {
     url.push({
-      pathname:`/challenge/${_get(task, 'parent.id', task.parent)}/task/${task.id}/` +
+      pathname:`/challenge/${task?.parent?.id ?? (task.parent)}/task/${task.id}/` +
                (asMetaReview ? "meta-review" : "review"),
       state: newState
     })
