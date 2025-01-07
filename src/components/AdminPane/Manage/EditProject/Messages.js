@@ -101,4 +101,14 @@ export default defineMessages({
     id: 'Admin.EditProject.form.description.description',
     defaultMessage: "Description of the project",
   },
+
+  requireCommentLabel: {
+    id: 'Admin.EditProject.form.requireComment.label',
+    defaultMessage: "Require Comment",
+  },
+
+  requireCommentDescription: {
+    id: 'Admin.EditProject.form.requireComment.description',
+    defaultMessage: "Require mappers to provide a comment when fixing a task.  This will disable the ability for users to bypass the task confirmation modal when they click 'I fixed it!'",
+  },
 })

@@ -132,6 +132,18 @@ export default defineMessages({
     "See Tag Fix Suggestions"
   },
 
+  disableTaskConfirmDescription: {
+    id: "Profile.form.disableTaskConfirm.description",
+    defaultMessage:
+    "This will allow the user to bypass the task confirmation modal when a user clicks 'I fixed it!'. Be aware some projects and challenges won't allow this behavior."
+  },
+
+  disableTaskConfirmLabel: {
+    id: "Profile.form.disableTaskConfirm.label",
+    defaultMessage:
+    "Disable Task Confirmation Modal"
+  },
+
   apiKey: {
     id: "Profile.apiKey.header",
     defaultMessage: "API Key",

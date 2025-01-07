@@ -128,6 +128,15 @@ export const jsSchema = (intl, user, editor) => {
           intl.formatMessage(messages.yesLabel),
           intl.formatMessage(messages.noLabel),
         ],
+      },
+      disableTaskConfirm: {
+        title: intl.formatMessage(messages.disableTaskConfirmLabel),
+        type: "boolean",
+        default: false,
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
       }
     },
   }
@@ -210,9 +219,14 @@ export const uiSchema = (intl, user, editor) => {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.seeTagFixSuggestionsDescription),
     },
+    disableTaskConfirm: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.disableTaskConfirmDescription),
+    },
     "ui:order": [
       "locale", "allowFollowing", "defaultEditor", "leaderboardOptOut",
-      "defaultBasemap", "isReviewer", "customBasemaps", "seeTagFixSuggestions"
+      "defaultBasemap", "isReviewer", "customBasemaps", "seeTagFixSuggestions",
+      "disableTaskConfirm"
     ],
   }
 

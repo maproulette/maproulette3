@@ -174,12 +174,25 @@ export class ActiveTaskControls extends Component {
     const message = intl.formatMessage(messages.rapidDiscardUnsavedChanges)
 
     if (!this.props.rapidEditorState.hasUnsavedChanges || window.confirm(message)) {
-      this.setState({
-        confirmingTask: this.props.task,
-        osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
-        confirmingStatus: taskStatus,
-        submitRevision,
-      })
+      const requireComment = this.props.challenge.requireComment || this.props.challenge.parent.requireComment;
+      const disableTaskConfirm = !requireComment && this.props.user.settings.disableTaskConfirm
+
+      if (disableTaskConfirm) {
+        this.setState({
+          osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
+          confirmingStatus: taskStatus,
+          submitRevision,
+        }, () => {
+          this.confirmCompletion()
+        })
+      } else {
+        this.setState({
+          confirmingTask: this.props.task,
+          osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
+          confirmingStatus: taskStatus,
+          submitRevision,
+        })
+      }
     }
   }
 
@@ -331,6 +344,7 @@ export class ActiveTaskControls extends Component {
   }
 
   render() {
+    console.log(this.props.user.settings, this.props.user.settings.disableTaskConfirm)
     // If the user is not logged in, show a sign-in button instead of controls.
     if (!_get(this.props, 'user.isLoggedIn')) {
       return (

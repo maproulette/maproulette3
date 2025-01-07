@@ -779,6 +779,16 @@ will not be able to make sense of it.
     defaultMessage: "Yes",
   },
 
+  requireCommentLabel: {
+    id: 'Admin.EditProject.form.requireComment.label',
+    defaultMessage: "Require Comment",
+  },
+
+  requireCommentDescription: {
+    id: 'Admin.EditProject.form.requireComment.description',
+    defaultMessage: "Require mappers to provide a comment when fixing a task.  This will disable the ability for users to bypass the task confirmation modal when they click 'I fixed it!'",
+  },
+
   instructionsDescription: {
     id: "Admin.EditChallenge.form.instructionsDescription",
     defaultMessage: "Instructions must be longer than {minLength} characters.",

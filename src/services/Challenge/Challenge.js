@@ -1022,6 +1022,7 @@ export const fetchChallenges = function (
           "limitTags",
           "limitReviewTags",
           "taskStyles",
+          "requireComment",
           "requiresLocal",
           "reviewSetting",
           "taskWidgetLayout",

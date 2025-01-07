@@ -32,6 +32,11 @@ export const jsSchema = (intl, user, project) => {
         title: intl.formatMessage(messages.descriptionLabel),
         type: "string",
       },
+      requireComment: {
+        title: intl.formatMessage(messages.requireCommentLabel),
+        type: "boolean",
+        default: false,
+      }
     },
     required: ["displayName"],
   }
@@ -88,8 +93,12 @@ export const uiSchema = (intl) => {
       "ui:widget": "textarea",
       "ui:help": intl.formatMessage(messages.descriptionDescription),
     },
+    requireComment: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.requireCommentDescription),
+    },
     "ui:order": [
-      "featured", "displayName", "enabled", "description", "isVirtual"
+      "featured", "displayName", "enabled", "description", "requireComment", "isVirtual"
     ],
   }
 

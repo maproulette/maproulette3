@@ -47,6 +47,16 @@ export const jsSchema = (intl) => {
         ],
         default: ChallengeReviewSetting.notRequired,
       },
+      requireComment: {
+        title: intl.formatMessage(messages.requireCommentLabel),
+        type: "boolean",
+        enum: [true, false],
+        enumNames: [
+          intl.formatMessage(messages.yesLabel),
+          intl.formatMessage(messages.noLabel),
+        ],
+        default: false,
+      },
       presets: {
         title: intl.formatMessage(messages.presetsLabel),
         type: "boolean",
@@ -123,6 +133,13 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
     reviewSetting: {
       "ui:groupHeader": options.longForm ? intl.formatMessage(messages.editorStepHeader) : undefined,
       "ui:help": intl.formatMessage(messages.reviewSettingDescription),
+      "ui:collapsed": isGroupCollapsed,
+      "ui:toggleCollapsed": toggleGroupCollapsed,
+      "ui:widget": "radio",
+    },
+    requireComment: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.requireCommentDescription),
       "ui:collapsed": isGroupCollapsed,
       "ui:toggleCollapsed": toggleGroupCollapsed,
       "ui:widget": "radio",
