@@ -14,7 +14,7 @@ import {
   releaseMultipleTasks
 } from '../../../services/Task/Task'
 
-const LOCK_REFRESH_INTERVAL = 600000
+const LOCK_REFRESH_INTERVAL = 600000 // 10 minutes
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
