@@ -308,7 +308,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: task => props.isTaskSelected(task.id),
     Cell: ({ value, original }) => {
       const status = original.status ?? original.taskStatus
-      const alreadyBundled = original.bundleId && !props.taskBundle?.bundleId !== original.bundleId
+      const alreadyBundled = original.bundleId && props.initialBundle?.bundleId !== original.bundleId
       const enableSelecting =
       !alreadyBundled &&
       !props.bundling &&
@@ -317,10 +317,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       original.taskId !== props.task?.id &&
       props.workspace.name !== 'taskReview' &&
       !AsCooperativeWork(props.task).isTagType()
-    
 
       return (
-        props.highlightPrimaryTask && original.id === props.task?.id && !original.bundleId ?
+        props.highlightPrimaryTask && original.id === props.task?.id && !alreadyBundled ?
           <span className="mr-text-green-lighter">✓</span> :
           enableSelecting ?
             <input
@@ -426,7 +425,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
       const isActiveTask = taskId === task?.id
       const isInActiveBundle = taskBundle?.taskIds?.includes(taskId);
-      const alreadyBundled = bundleId && taskBundle?.bundleId !== bundleId;
+      const alreadyBundled = bundleId && initialBundle?.bundleId !== bundleId;
       const validBundlingStatus = initialBundle?.taskIds?.includes(taskId) || [0, 3, 6].includes(status)
 
       return (

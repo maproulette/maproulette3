@@ -64,6 +64,8 @@ export const TaskClusterMap = (props) => {
     // Check condition for toggling showAsClusters
     if (!props.showAsClusters && props.totalTaskCount > UNCLUSTER_THRESHOLD && !props.createTaskBundle) {
       props.toggleShowAsClusters();
+    } else if (props.showAsClusters && props.totalTaskCount <= UNCLUSTER_THRESHOLD && props.createTaskBundle) {
+      props.toggleShowAsClusters();
     }
 
     // Handle loading state changes

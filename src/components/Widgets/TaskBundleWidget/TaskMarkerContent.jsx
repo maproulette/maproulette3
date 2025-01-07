@@ -22,7 +22,7 @@ class TaskMarkerContent extends Component {
     const bundlePrimary = this.props.taskBundle?.tasks.find(task => task.isBundlePrimary === true)
     const statusMessage = messagesByStatus[this.props.marker.options.status ?? this.props.marker.options.taskStatus]
     const priorityMessage = messagesByPriority[this.props.marker.options.priority ?? this.props.marker.options.taskPriority ]
-    const alreadyBundled = this.props.marker.options.bundleId && this.props.taskBundle?.bundleId !== this.props.marker.options.bundleId
+    const alreadyBundled = this.props.marker.options.bundleId && this.props.initialBundle?.bundleId !== this.props.marker.options.bundleId
 
     const checkBoxEnabled =
       !this.props.bundling &&
@@ -88,11 +88,11 @@ class TaskMarkerContent extends Component {
                   checked={selected}
                   onChange={this.toggleSelection}
                 />
-              ) : !this.props.bundling && !this.props.marker.options.bundleId && this.props.marker.options.taskId === this.props.task.id ? (
+              ) : !this.props.bundling && !alreadyBundled && this.props.marker.options.taskId === this.props.task.id ? (
                 <span className="mr-mr-1">✓</span>
               ) : !this.props.bundling ? <span className="mr-mr-1"><FormattedMessage {...messages.unableToSelect} /></span> : null}
 
-              {!this.props.bundling && !this.props.marker.options.bundleId && (checkBoxEnabled || this.props.marker.options.taskId === this.props.task.id) && (
+              {!this.props.bundling && !alreadyBundled && (checkBoxEnabled || this.props.marker.options.taskId === this.props.task.id) && (
                 <span>
                   <FormattedMessage {...messages.selectedLabel} />
                   {this.props.marker.options.taskId === this.props.task.id && (
