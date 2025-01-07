@@ -73,6 +73,7 @@ export default class TaskBundleWidget extends Component {
   state = {
     shortcutActive: false,
     bundleButtonDisabled: false,
+    errors: new Set()
   }
 
   handleKeyboardShortcuts = (event) => {
@@ -237,6 +238,36 @@ export default class TaskBundleWidget extends Component {
         this.setBoundsToNearbyTask()
       }
     }
+
+    // Handle error states from WithTaskBundle using Set operations
+    const newErrors = new Set()
+
+    // Add errors if they're new
+    if (this.props.failedLocks) {
+      newErrors.add('lockError')
+    }
+    if (this.props.failedUnlocks) {
+      newErrors.add('unlockError')
+    }
+    if (this.props.failedRefreshTasks) {
+      newErrors.add('refreshError')
+    }
+    if (this.props.bundleTypeMismatchError) {
+      newErrors.add('bundleTypeError')
+    }
+    if (this.props.fetchBundleError) {
+      newErrors.add('fetchBundleError')
+    }
+    if (this.props.updateTaskBundleError) {
+      newErrors.add('updateTaskBundleError')
+    }
+
+
+    // Only update state if errors have changed
+    if (newErrors.size !== this.state.errors.size || 
+        [...newErrors].some(error => !this.state.errors.has(error))) {
+      this.setState({ errors: newErrors })
+    }
   }
 
   componentWillUnmount() {
@@ -268,12 +299,8 @@ export default class TaskBundleWidget extends Component {
           unbundleTask={this.unbundleTask}
           bundleTask={this.bundleTask}
           loading={this.props.loading}
+          errors={this.state.errors}
         />
-        {this.props.errorMessage && (
-          <div className="mr-text-red">
-            <FormattedMessage id={this.props.errorMessage} defaultMessage={this.props.errorMessage} />
-          </div>
-        )}
       </QuickWidget>
     )
   }
@@ -360,127 +387,131 @@ const ActiveBundle = props => {
   )
 
   return (
-    <div className="mr-h-full mr-rounded">
+    <div className="mr-pb-2 mr-h-full mr-rounded">
       <div className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80" style={{ maxHeight: `${props.widgetLayout.w * 80}px`}}>
-        {props.loading ? (
-          <BusySpinner className="mr-h-full mr-flex mr-items-center" />
-        ) : (
+        {props.loading ?
+          <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
           <MapPane>{map}</MapPane>
-        )}
-        {props.errorMessage && (
-          <div className="mr-text-red">
-            <FormattedMessage {...messages[props.errorMessage]} />
-          </div>
-        )}
-        <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4">
-          <FormattedMessage
-            {...messages.simultaneousTasks}
-            values={{ taskCount: props.taskBundle.taskIds.length }}
-          />
-        </h3>
-        <div className="mr-flex mr-justify-between mr-content-center mr-my-4">
-          <button
-            className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
-            onClick={() => props.setBundledOnly(!props.bundledOnly)}
-          >
-            {props.bundledOnly ? (
-              <FormattedMessage {...messages.displayAllTasksLabel} />
-            ) : (
-              <FormattedMessage {...messages.displayBundledTasksLabel} />
-            )}
-          </button>
-          {props.initialBundle && (
-            <button
-              disabled={(props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length))}
-              className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
-              style={{
-                cursor: (props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 'default' : 'pointer',
-                opacity: (props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 0.3 : 1
-              }}
-              onClick={() => props.resetTaskBundle()}
-            >
-              <FormattedMessage {...messages.resetBundleLabel} />
-            </button>
+        }
+      </div>
+      {props.errors.size > 0 && (
+        <div className="mr-text-red mr-mt-4 mr-text-center mr-space-y-2">
+          {[...props.errors].map(errorType => (
+            <div key={errorType}>
+              <FormattedMessage {...messages[errorType]} />
+            </div>
+          ))}
+        </div>
+      )}
+      <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4">
+        <FormattedMessage
+          {...messages.simultaneousTasks}
+          values={{ taskCount: props.taskBundle.taskIds.length }}
+        />
+      </h3>
+      <div className="mr-flex mr-justify-between mr-content-center mr-my-4">
+        <button
+          className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
+          onClick={() => props.setBundledOnly(!props.bundledOnly)}
+        >
+          {props.bundledOnly ? (
+            <FormattedMessage {...messages.displayAllTasksLabel} />
+          ) : (
+            <FormattedMessage {...messages.displayBundledTasksLabel} />
           )}
+        </button>
+        {props.initialBundle && (
           <button
-            disabled={(props.bundleEditsDisabled)}
-            className="mr-button mr-button--green-lighter mr-button--small"
+            disabled={(props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length))}
+            className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
             style={{
-              cursor: props.bundleEditsDisabled ? 'default' : 'pointer',
-              opacity: props.bundleEditsDisabled ? 0.3 : 1
+              cursor: (props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 'default' : 'pointer',
+              opacity: (props.bundleEditsDisabled || (props.initialBundle && props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)) ? 0.3 : 1
             }}
-
-            onClick={() => props.clearActiveTaskBundle()}
+            onClick={() => props.resetTaskBundle()}
           >
-            <FormattedMessage {...messages.unbundleTasksLabel} />
+            <FormattedMessage {...messages.resetBundleLabel} />
           </button>
+        )}
+        <button
+          disabled={(props.bundleEditsDisabled)}
+          className="mr-button mr-button--green-lighter mr-button--small"
+          style={{
+            cursor: props.bundleEditsDisabled ? 'default' : 'pointer',
+            opacity: props.bundleEditsDisabled ? 0.3 : 1
+          }}
+
+          onClick={() => props.clearActiveTaskBundle()}
+        >
+          <FormattedMessage {...messages.unbundleTasksLabel} />
+        </button>
+      </div>
+      <div
+        className={
+          props.widgetLayout && props.widgetLayout?.w === 4
+            ? "mr-my-4 mr-px-4 mr-space-y-3"
+            : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
+        }
+      >
+        <div className="mr-flex mr-items-center">
+          <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
+            <FormattedMessage {...messages.filterListLabel} />
+          </p>
+          <ul className="md:mr-flex">
+            <li className="md:mr-mr-8">
+              <TaskStatusFilter {...props} />
+            </li>
+            <li className="md:mr-mr-8">
+              <TaskPriorityFilter {...props} />
+            </li>
+            <li>
+              <TaskPropertyFilter {...props} />
+            </li>
+          </ul>
         </div>
         <div
-          className={
+          className={`mr-flex mr-space-x-3 mr-items-center ${
             props.widgetLayout && props.widgetLayout?.w === 4
-              ? "mr-my-4 mr-px-4 mr-space-y-3"
-              : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
-          }
+              ? 'mr-justify-between'
+              : 'mr-justify-end'
+          }`}
         >
-          <div className="mr-flex mr-items-center">
-            <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
-              <FormattedMessage {...messages.filterListLabel} />
-            </p>
-            <ul className="md:mr-flex">
-              <li className="md:mr-mr-8">
-                <TaskStatusFilter {...props} />
-              </li>
-              <li className="md:mr-mr-8">
-                <TaskPriorityFilter {...props} />
-              </li>
-              <li>
-                <TaskPropertyFilter {...props} />
-              </li>
-            </ul>
-          </div>
-          <div
-            className={`mr-flex mr-space-x-3 mr-items-center ${
-              props.widgetLayout && props.widgetLayout?.w === 4
-                ? 'mr-justify-between'
-                : 'mr-justify-end'
-            }`}
-          >
-            {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
-            <Dropdown
-              className="mr-flex mr-items-center"
-              dropdownButton={dropdown => (
-                <button
-                  onClick={dropdown.toggleDropdownVisible}
-                  className="mr-flex mr-items-center mr-text-green-lighter"
-                >
-                  <SvgSymbol
-                    sym="filter-icon"
-                    viewBox="0 0 20 20"
-                    className="mr-fill-current mr-w-5 mr-h-5"
-                  />
-                </button>
-              )}
-              dropdownContent={dropdown => (
-                <div className="mr-flex mr-flex-col mr-space-y-2">
-                  <SaveFiltersControl
-                    saveFilters={props.saveFilters}
-                    closeDropdown={dropdown.closeDropdown}
-                  />
-                  <RevertFiltersControl
-                    revertFilters={props.revertFilters}
-                  />
-                </div>
-              )}
-            />
-          </div>
+          {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
+          <Dropdown
+            className="mr-flex mr-items-center"
+            dropdownButton={dropdown => (
+              <button
+                onClick={dropdown.toggleDropdownVisible}
+                className="mr-flex mr-items-center mr-text-green-lighter"
+              >
+                <SvgSymbol
+                  sym="filter-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-5 mr-h-5"
+                />
+              </button>
+            )}
+            dropdownContent={dropdown => (
+              <div className="mr-flex mr-flex-col mr-space-y-2">
+                <SaveFiltersControl
+                  saveFilters={props.saveFilters}
+                  closeDropdown={dropdown.closeDropdown}
+                />
+                <RevertFiltersControl
+                  revertFilters={props.revertFilters}
+                />
+              </div>
+            )}
+          />
         </div>
-        <div className={"mr-px-4"}>{table}</div>
       </div>
+      <div className={"mr-px-4"}>{table}</div>
     </div>
   )
 }
 
 const BuildBundle = props => {
+  console.log(props.errors)
   if (props.virtualChallenge || _isFinite(props.virtualChallengeId)) {
     return (
       <div className="mr-text-base">
@@ -536,9 +567,13 @@ const BuildBundle = props => {
           <MapPane showLasso>{map}</MapPane>
         }
       </div>
-      {props.errorMessage && (
-        <div className="mr-text-red">
-          <FormattedMessage {...messages[props.errorMessage]} />
+      {props.errors.size > 0 && (
+        <div className="mr-text-red mr-mt-4 mr-text-center mr-space-y-2">
+          {[...props.errors].map(errorType => (
+            <div key={errorType}>
+              <FormattedMessage {...messages[errorType]} />
+            </div>
+          ))}
         </div>
       )}
       <div className={props.widgetLayout && props.widgetLayout?.w === 4 ? "mr-my-4 mr-px-4 mr-space-y-3" : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"}>

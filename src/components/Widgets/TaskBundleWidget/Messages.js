@@ -164,4 +164,29 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.tooManyTasks",
     defaultMessage: "Initial bundle cannot exceed 50 tasks",
   },
+
+  bundleLimitError: {
+    id: "Widgets.TaskBundleWidget.bundleLimitError",
+    defaultMessage: "Cannot create bundle with more than 50 tasks",
+  },
+
+  lockError: {
+    id: "Widgets.TaskBundleWidget.lockError", 
+    defaultMessage: "Failed to lock tasks. Please try again.",
+  },
+
+  unlockError: {
+    id: "Widgets.TaskBundleWidget.unlockError",
+    defaultMessage: "Failed to unlock tasks. Please try again.", 
+  },
+
+  refreshError: {
+    id: "Widgets.TaskBundleWidget.refreshError",
+    defaultMessage: "Failed to refresh task locks. Please try again.",
+  },
+
+  bundleTypeError: {
+    id: "Widgets.TaskBundleWidget.bundleTypeError", 
+    defaultMessage: "Cannot bundle tasks of different types together",
+  },
 })

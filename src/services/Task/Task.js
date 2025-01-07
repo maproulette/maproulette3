@@ -309,7 +309,7 @@ export const refreshMultipleTaskLocks = function(taskIds) {
  * Refreshes an active task lock owned by the current user
  */
 export const releaseMultipleTasks = function(taskIds) {
-  return function() {
+  return function(dispatch) {
     return new Endpoint(api.task.releaseMultipleTasks, {
       schema: [taskSchema()],
       params: {taskIds: taskIds}
