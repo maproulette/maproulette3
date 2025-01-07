@@ -57,7 +57,6 @@ const ImageMarkerLayer = props => {
 }
 
 ImageMarkerLayer.propTypes = {
-  layerKey: PropTypes.string,
   images: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
@@ -92,14 +91,14 @@ const MapillaryViewer = ({ initialImageKey }) => {
 }
 
 const getLatLng = (imageInfo) => {
-  const lat = imageInfo.position?.lat !== undefined ? imageInfo.position.lat : imageInfo.lat;
-  const lon = imageInfo.position?.lon !== undefined ? imageInfo.position.lon : imageInfo.lon;
+  const lat = imageInfo.position?.lat ?? imageInfo.lat;
+  const lon = imageInfo.position?.lon ?? imageInfo.lon;
   return (lat !== undefined && lon !== undefined) ? [lat, lon] : null;
 }
 
 const buildImageMarkers = (images, icon, markerColor, imageClicked, layerId, layerLabel) => {
   try {
-    if (!images || images.length === 0) {
+    if (!images?.length) {
       return []
     }
 
@@ -107,11 +106,6 @@ const buildImageMarkers = (images, icon, markerColor, imageClicked, layerId, lay
       const imageLatLon = getLatLng(imageInfo);
       if (!imageInfo || !imageLatLon) {
         console.error(`Invalid position for image key: ${imageInfo?.key}`, imageInfo)
-        return null
-      }
-
-      if (imageLatLon.lat === undefined || imageLatLon.lon === undefined) {
-        console.error(`Invalid coordinates for image key: ${imageInfo?.key}`, imageInfo)
         return null
       }
 
