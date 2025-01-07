@@ -261,8 +261,6 @@ export default class TaskBundleWidget extends Component {
     if (this.props.updateTaskBundleError) {
       newErrors.add('updateTaskBundleError')
     }
-
-
     // Only update state if errors have changed
     if (newErrors.size !== this.state.errors.size || 
         [...newErrors].some(error => !this.state.errors.has(error))) {
@@ -399,6 +397,11 @@ const ActiveBundle = props => {
           {[...props.errors].map(errorType => (
             <div key={errorType}>
               <FormattedMessage {...messages[errorType]} />
+              {errorType === 'lockError' && props.failedLocks && (
+                <span className="mr-ml-2">
+                  ({props.failedLocks.join(', ')})
+                </span>
+              )}
             </div>
           ))}
         </div>
@@ -511,7 +514,6 @@ const ActiveBundle = props => {
 }
 
 const BuildBundle = props => {
-  console.log(props.errors)
   if (props.virtualChallenge || _isFinite(props.virtualChallengeId)) {
     return (
       <div className="mr-text-base">
@@ -572,6 +574,11 @@ const BuildBundle = props => {
           {[...props.errors].map(errorType => (
             <div key={errorType}>
               <FormattedMessage {...messages[errorType]} />
+              {errorType === 'lockError' && props.failedLocks && (
+                <span className="mr-ml-2">
+                  ({props.failedLocks.join(', ')})
+                </span>
+              )}
             </div>
           ))}
         </div>
