@@ -583,16 +583,18 @@ const BuildBundle = props => {
           ))}
         </div>
       )}
-      <div className={props.widgetLayout && props.widgetLayout?.w === 4 ? "mr-my-4 mr-px-4 mr-space-y-3" : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"}>
+        <div className="mr-flex mr-justify-end mr-mt-2">
         {props.initialBundle && (
           <button
-            className={`mr-button mr-button--red mr-button--small ${props.bundleEditsDisabled ? 'mr-text-grey-light mr-cursor-default' : 'mr-text-green-lighter'}`} // Conditional classes
+            className={`mr-button mr-button--red mr-button--small mr-mt-2 mr-float-right ${props.bundleEditsDisabled ? 'mr-text-grey-light mr-cursor-default' : 'mr-text-green-lighter'}`}
             onClick={props.resetTaskBundle}
             disabled={props.bundleEditsDisabled}
           >
             <FormattedMessage {...messages.resetBundleLabel} />
           </button>
         )}
+        </div>
+      <div className={props.widgetLayout && props.widgetLayout?.w === 4 ? "mr-my-4 mr-px-4 mr-space-y-3" : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"}>
         <div className="mr-flex mr-items-center">
           <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
             <FormattedMessage {...messages.filterListLabel} />
