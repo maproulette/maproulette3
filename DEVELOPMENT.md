@@ -198,10 +198,20 @@ Unit tests are built with [Jest](https://facebook.github.io/jest/) +
 
 Run `yarn format` to format your code. Run `yarn lint` to check for lint errors.
 
+If you want, you can enable a pre-commit hook to check for linting and formatting
+issues automatically when you run `git commit`. To enable the check, run this
+command in the root of the repository:
+
+```
+git config core.hooksPath hooks
+```
+
+If you want to skip the check for a particular commit (for work-in-progress commits
+for example), run `git commit --no-verify`.
+
 ## CSS Styling and Naming
 
-We are using SASS and [Tailwind
-CSS](https://tailwindcss.com) with PostCSS.
+We are using SASS and [Tailwind CSS](https://tailwindcss.com) with PostCSS.
 
 Tailwind configuration is controlled with the `src/tailwind.config.js` file.
 New CSS classes can be found in `src/styles/`
