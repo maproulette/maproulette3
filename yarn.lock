@@ -5145,7 +5145,7 @@ map-obj@^4.0.0:
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-4.3.0.tgz#9304f906e93faae70880da102a9f1df0ea8bb05a"
   integrity sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==
 
-mapillary-js@^4.1.0:
+mapillary-js@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/mapillary-js/-/mapillary-js-4.1.2.tgz#ed4df0e0926a6af6f46d28b73181e154cc429b67"
   integrity sha512-LYj6xbp/Y9wfBkr/prRwgJGb3+KwvzUri0yl5QEpMEH7oC1p52ErshWmPXysKefmm6JaFML4D7FJ89viwJ4T5g==

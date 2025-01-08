@@ -27,8 +27,10 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class LayerToggle extends Component {
-  overlayVisible = layerId => this.props.visibleOverlays.indexOf(layerId) !== -1
-
+  overlayVisible = layerId => {
+   const visibleOverlays = this.props.visibleOverlays || []
+    return visibleOverlays.indexOf(layerId) !== -1
+  }
   toggleOverlay = layerId => {
     this.overlayVisible(layerId) ? this.props.removeVisibleOverlay(layerId) :
                                    this.props.addVisibleOverlay(layerId)
@@ -182,7 +184,7 @@ LayerToggle.propTypes = {
   /** Invoked when the user chooses a new layer source */
   changeLayer: PropTypes.func.isRequired,
   /** Array of overlay layers currently visible */
-  visibleOverlays: PropTypes.array.isRequired,
+  visibleOverlays: PropTypes.array,
   /** Invoked to add an overlay layer to the visible overlays */
   addVisibleOverlay: PropTypes.func.isRequired,
   /** Invoked to remove an overlay layer from the visible overlays */
