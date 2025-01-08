@@ -29,12 +29,6 @@ const MapillaryViewer = ({ initialImageKey, onClose }) => {
       // Cleanup if necessary
       viewerRef.current = null;
     };
-  }, []);
-
-  useEffect(() => {
-    if (viewerRef.current) {
-      viewerRef.current.moveTo(initialImageKey);
-    }
   }, [initialImageKey]);
 
   return (
