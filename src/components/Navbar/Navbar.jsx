@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import _last from "lodash/last";
 import { Component, Fragment } from "react";
 import MobileMenu from "react-burger-menu/lib/menus/slide";
 import { FormattedMessage } from "react-intl";
@@ -91,7 +90,9 @@ export default class Navbar extends Component {
                   <div className="mr-relative mr-w-12">
                     <AchievementBadge
                       size="small"
-                      achievement={_last(this.props.user.achievements)}
+                      achievement={
+                        this.props.user.achievements[this.props.user.achievements.length - 1]
+                      }
                       stackDepth={Math.min(3, this.props.user.achievements.length - 1)}
                     />
                   </div>
