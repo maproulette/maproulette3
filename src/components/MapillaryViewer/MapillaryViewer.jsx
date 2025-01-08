@@ -33,7 +33,7 @@ const MapillaryViewer = ({ initialImageKey, onClose }) => {
 
   useEffect(() => {
     if (viewerRef.current) {
-      viewerRef.current.setImageId(initialImageKey);
+      viewerRef.current.moveTo(initialImageKey);
     }
   }, [initialImageKey]);
 
