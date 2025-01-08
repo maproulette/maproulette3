@@ -5,7 +5,6 @@ import _toLower from 'lodash/toLower'
 import _filter from 'lodash/filter'
 import _cloneDeep from 'lodash/cloneDeep'
 import _merge from 'lodash/merge'
-import _get from 'lodash/get'
 import BusySpinner from '../../../components/BusySpinner/BusySpinner'
 import WithReviewChallenges from '../../../components/HOCs/WithReviewChallenges/WithReviewChallenges'
 import SearchBox from '../../../components/SearchBox/SearchBox'
@@ -32,9 +31,7 @@ class TasksReviewChallenges extends Component {
   }
 
   matchesQuery(value, queryType) {
-    const searchString = _get(this.state.searchQuery,
-                              `${this.props.reviewTasksType}.${queryType}`,
-                              "")
+    const searchString = this.state.searchQuery?.[this.props.reviewTasksType]?.[queryType] ?? ""
     return _toLower(value).includes(_toLower(searchString))
   }
 
@@ -89,16 +86,14 @@ class TasksReviewChallenges extends Component {
       <SearchBox
         setSearch={(search) => this.performSearch(search, "project")}
         clearSearch={() => this.performSearch(null, "project")}
-        searchQuery={{query: _get(this.state.searchQuery,
-                                  `${this.props.reviewTasksType}.project`)}}
+        searchQuery={{query: this.state.searchQuery?.[this.props.reviewTasksType]?.project}}
       />
 
     const challengeSearchBox =
       <SearchBox
         setSearch={(search) => this.performSearch(search, "challenge")}
         clearSearch={() => this.performSearch(null, "challenge")}
-        searchQuery={{query: _get(this.state.searchQuery,
-                                  `${this.props.reviewTasksType}.challenge`)}}
+        searchQuery={{query: this.state.searchQuery?.[this.props.reviewTasksType]?.challenge}}
       />
 
     return (

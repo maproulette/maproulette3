@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import _cloneDeep from 'lodash/cloneDeep'
 import _isEqual from 'lodash/isEqual'
 import _keys from 'lodash/keys'
@@ -142,7 +141,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
      }
 
      refreshTasks = (typedCriteria) => {
-       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
+       const challengeId = (this.props.challenge?.id) || this.props.challengeId
 
 
        if (!ignoreURL) {
@@ -203,14 +202,14 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
              criteria[key] = criteria[key].split(',').map(x => parseFloat(x))
            }
          }
-         else if (!_isUndefined(_get(criteria, `filters.${key}`))) {
+         else if (!_isUndefined(criteria?.filters?.[key])) {
            if (typeof criteria.filters[key] === "string") {
              criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
            }
          }
        })
 
-       if (!_get(criteria, 'filters.status')) {
+       if (!criteria?.filters?.status) {
          this.updateIncludedFilters(props)
        }
        else {
@@ -240,14 +239,14 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
             criteria[key] = criteria[key].split(',').map(x => parseFloat(x))
            }
          }
-         else if (!_isUndefined(_get(criteria, `filters.${key}`))) {
+         else if (!_isUndefined(criteria?.filters?.[key])) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(',').map(x => _toInteger(x))
           }
          }
       })
 
-      if (!_get(criteria, 'filters.status')) {
+      if (!criteria?.filters?.status) {
         this.updateIncludedFilters(props)
       }
       else {
@@ -268,12 +267,12 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
      }
 
      componentDidUpdate(prevProps, prevState) {
-       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
+       const challengeId = (this.props.challenge?.id) || this.props.challengeId
        if (!challengeId) {
          return
        }
 
-       if (!ignoreURL && _get(this.props.history.location, 'state.refresh')) {
+       if (!ignoreURL && (this.props.history.location?.state?.refresh)) {
          this.props.history.push({
            pathname: this.props.history.location.pathname,
            search: this.props.history.location.search,
@@ -300,11 +299,11 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
        if (!_isEqual(prevState.criteria, this.state.criteria)) {
          this.refreshTasks(typedCriteria)
        }
-       else if (_get(prevProps, 'challenge.id') !== _get(this.props, 'challenge.id') ||
+       else if ((prevProps?.challenge?.id) !== (this.props.challenge?.id) ||
                 this.props.challengeId !== prevProps.challengeId) {
          this.refreshTasks(typedCriteria)
        }
-       else if (_get(this.props.history.location, 'state.refreshAfterSave')) {
+       else if (this.props.history.location?.state?.refreshAfterSave) {
         this.refreshTasks(typedCriteria)
         this.props.history.push({
           pathname: this.props.history.location.pathname,
@@ -336,7 +335,7 @@ export const WithFilterCriteria = function(WrappedComponent, ignoreURL = true,
                              this.setState({bundledOnly})}}
                            {..._omit(this.props, ['loadingChallenge', 'clearAllFilters'])} />)
      }
-   }
+   };
  }
 
 export default (WrappedComponent, ignoreURL, ignoreLocked, skipInitialFetch, usePersistedFilters, savedFilterSettingName) =>

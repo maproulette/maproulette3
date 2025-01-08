@@ -1,7 +1,6 @@
 import { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isFunction from 'lodash/isFunction'
 import ReactGridLayout, { WidthProvider } from 'react-grid-layout'
@@ -83,14 +82,14 @@ export class WidgetGrid extends Component {
             <WidgetComponent
               {...this.props}
               widgetLayout={widgetLayout}
-              widgetConfiguration={_get(widgetConfiguration, 'defaultConfiguration', {})}
+              widgetConfiguration={widgetConfiguration?.defaultConfiguration ?? {}}
               updateWidgetConfiguration={conf => this.props.updateWidgetConfiguration(index, conf)}
               widgetHidden={widgetHidden}
               widgetPermanent={widgetPermanent}
               removeWidget={() => this.props.removeWidget(index)}
             />
           </div>
-        )
+        );
       })
 
     return (

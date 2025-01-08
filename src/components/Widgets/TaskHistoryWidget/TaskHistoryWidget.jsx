@@ -13,7 +13,6 @@ import SignInButton  from '../../SignInButton/SignInButton'
 import { viewDiffOverpass } from '../../../services/Overpass/Overpass'
 import { viewOSMCha } from '../../../services/OSMCha/OSMCha'
 import messages from './Messages'
-import _get from 'lodash/get'
 import _remove from 'lodash/remove'
 import _indexOf from 'lodash/indexOf'
 import _each from 'lodash/each'
@@ -73,7 +72,7 @@ export default class TaskHistoryWidget extends Component {
         earliestDate = log.timestamp
       }
 
-      const username = _get(log, 'user.username')
+      const username = log?.user?.username
       if (username && usernames.indexOf(username) === -1) {
         usernames.push(username)
       }
@@ -83,7 +82,7 @@ export default class TaskHistoryWidget extends Component {
   }
 
   getEditor = () => {
-    return _get(this.props, 'user.settings.defaultEditor')
+    return this.props.user?.settings?.defaultEditor;
   }
 
   setComment = comment => this.setState({comment})

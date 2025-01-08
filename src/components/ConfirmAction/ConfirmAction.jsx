@@ -1,7 +1,6 @@
 import { cloneElement, Fragment, Component } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
-import _get from "lodash/get";
 import _cloneDeep from "lodash/cloneDeep";
 import Modal from "../Modal/Modal";
 import External from "../External/External";
@@ -115,7 +114,7 @@ export default class ConfirmAction extends Component {
 
   render() {
     const action = this.props.action ? this.props.action : "onClick";
-    this.originalAction = _get(this.props.children, `props.${action}`);
+    this.originalAction = this.props.children?.props?.[action];
 
     const ControlWithConfirmation = cloneElement(this.props.children, {
       [action]: this.initiateConfirmation,

@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import Downshift from 'downshift'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _split from 'lodash/split'
 import _difference from 'lodash/difference'
@@ -68,7 +67,7 @@ export default class AutosuggestTextBox extends Component {
 
     if (dropdown.isDropdownVisible) {
       const items = _concat(this.getPreferredResults(), this.getSearchResults())
-      const itemsLength = _get(items, 'length', 0)
+      const itemsLength = items?.length ?? 0
 
       if (e.key === "Enter") {
         downshift.selectItem(items[this.state.highlightResult])
@@ -217,7 +216,7 @@ export default class AutosuggestTextBox extends Component {
       >
         {downshift => {
           const openOnFocus = this.props.openOnFocus ||
-                              _get(this.props.preferredResults, 'length', 0) > 0
+                              (this.props.preferredResults?.length ?? 0) > 0
           const resultItems = this.dropdownItems(downshift.getItemProps, downshift.inputValue)
           const show = this.state.textBoxActive || (downshift.isOpen && downshift.inputValue.length > 0)
 
@@ -271,7 +270,7 @@ export default class AutosuggestTextBox extends Component {
           )
         }}
       </Downshift>
-    )
+    );
   }
 }
 

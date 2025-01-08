@@ -1,5 +1,4 @@
 import _isArray from 'lodash/isArray'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _fromPairs from 'lodash/fromPairs'
 import _flatten from 'lodash/flatten'
@@ -54,7 +53,7 @@ export const ChallengeCategoryKeywords = {
  * }
  */
 export let customCategoryKeywords = {}
-const customCategoryJson = _get(window.env, 'REACT_APP_CUSTOM_KEYWORD_CATEGORIES')
+const customCategoryJson = window.env?.REACT_APP_CUSTOM_KEYWORD_CATEGORIES
 if (!_isEmpty(customCategoryJson)) {
   try {
     customCategoryKeywords = JSON.parse(customCategoryJson)

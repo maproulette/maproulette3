@@ -2,7 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import {
   sortLabels,
   SORT_DEFAULT,
@@ -23,7 +22,7 @@ export class SortUsersSelector extends Component {
 
   render() {
     const localizedLabels = sortLabels(this.props.intl)
-    const currentSortCriteria = _get(this.props, 'searchSort.sortBy')
+    const currentSortCriteria = this.props.searchSort?.sortBy
     const activeLabel = currentSortCriteria
       ? localizedLabels[currentSortCriteria]
       : localizedLabels[SORT_DEFAULT]

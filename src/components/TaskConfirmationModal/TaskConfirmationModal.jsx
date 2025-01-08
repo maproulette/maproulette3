@@ -5,7 +5,6 @@ import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
 import _noop from 'lodash/noop'
 import _split from 'lodash/split'
-import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _isEmpty from 'lodash/isEmpty'
 import _merge from 'lodash/merge'
@@ -124,14 +123,14 @@ export class TaskConfirmationModal extends Component {
   
   updateHistory = () => {
     const { criteria } = this.state
-    const currentState = _get(this.props.history, 'location.state', {})
+    const currentState = this.props.history?.location?.state ?? {}
     const newState = _merge({}, currentState, criteria)
     this.props.history.replace({ ...this.props.history.location, state: newState })
   }
 
   currentFilters = () => {
-    return _merge({}, _get(this.props.history, 'location.state', {}),
-                  this.state.criteria)
+    return _merge({}, this.props.history?.location?.state ?? {},
+                  this.state.criteria);
   }
 
   render() {
@@ -143,18 +142,18 @@ export class TaskConfirmationModal extends Component {
     const preferredTags =
       !reviewConfirmation ?
         _filter(
-          _split(_get(this.props.task.parent, 'preferredTags'), ','),
+          _split(this.props.task.parent?.preferredTags, ','),
           (result) => !_isEmpty(result)
         ) :
         _filter(
-          _split(_get(this.props.task.parent, 'preferredReviewTags'), ','),
+          _split(this.props.task.parent?.preferredReviewTags, ','),
           (result) => !_isEmpty(result)
         )
 
     const limitTags =
       !reviewConfirmation ?
-        !!_get(this.props.task.parent, 'limitTags') :
-        !!_get(this.props.task.parent, 'limitReviewTags')
+        !!this.props.task.parent?.limitTags :
+        !!this.props.task.parent?.limitReviewTags
 
     const TasksNearby = reviewConfirmation ? TaskReviewNearbyList : TaskNearbyList
 
@@ -254,8 +253,8 @@ export class TaskConfirmationModal extends Component {
                                </tr>
                              </thead>
                              <tbody>
-                             {_get(this.props, 'tagDiffs[0]') && Object.keys(_get(this.props, 'tagDiffs[0]')).map(tagName => {
-                               const tagChange = _get(this.props, 'tagDiffs[0]')[tagName];
+                             {(this.props.tagDiffs?.[0]) && Object.keys(this.props.tagDiffs?.[0]).map(tagName => {
+                               const tagChange = (this.props.tagDiffs?.[0])[tagName];
                                if (['changed', 'removed', 'added'].includes(tagChange.status)) {
                                  return (
                                    <tr key={tagName} className={classNames('mr-mb-2  mr-rounded', {

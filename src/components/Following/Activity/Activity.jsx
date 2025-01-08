@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useQuery } from '@apollo/client'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
 import _map from 'lodash/map'
@@ -25,7 +24,7 @@ export const Activity = props => {
   const [page, setPage] = useState(0)
   const [hasMore, setHasMore] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const following = _get(props.data, 'user.following')
+  const following = props.data?.user?.following
   const followingIds = new Set(_map(following, 'id'))
 
   const { loading, error, data, refetch } = useQuery(RECENT_ACTIVITY, {

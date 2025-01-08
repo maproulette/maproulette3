@@ -5,7 +5,6 @@ import { getCoord } from '@turf/invariant'
 import centroid from '@turf/centroid'
 import { differenceInHours, parseISO } from 'date-fns'
 import _isString from 'lodash/isString'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import { latLng } from 'leaflet'
 import { toLatLngBounds, GLOBAL_MAPBOUNDS } from '../../services/MapBounds/MapBounds'
@@ -26,7 +25,7 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const ActivityMap = props => {
-  const hasTaskMarkers = _get(props, 'activity.length', 0) > 0
+  const hasTaskMarkers = (props.activity?.length ?? 0) > 0
   let coloredMarkers = null
   if (hasTaskMarkers) {
     coloredMarkers = _map(props.activity, entry => {
@@ -63,7 +62,7 @@ export const ActivityMap = props => {
   }
 
   const overlayLayers = buildLayerSources(
-    props.visibleOverlays, _get(props, 'user.settings.customBasemaps'),
+    props.visibleOverlays, props.user?.settings?.customBasemaps,
     (layerId, index, layerSource) =>
       <SourcedTileLayer key={layerId} source={layerSource} zIndex={index + 2} />
   )

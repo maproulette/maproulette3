@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
-import _get from 'lodash/get'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import { isFinalStatus }
@@ -100,10 +99,10 @@ export const TagDiff = props => {
         compact
         suppressToolbar
         onlyChanges
-        tagDiff={_get(props, 'tagDiffs[0]')}
+        tagDiff={props.tagDiffs?.[0]}
       />
     </div>
-  )
+  );
 }
 
 /**

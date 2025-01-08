@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import AsManageableChallenge
@@ -37,11 +36,11 @@ export class ChallengeCard extends Component {
       parent = this.props.challenge.parent
     }
     else if (_isFinite(this.props.challenge.parent) &&
-             this.props.challenge.parent === _get(this.props, 'project.id')) {
+             this.props.challenge.parent === (this.props.project?.id)) {
       parent = this.props.project
     }
 
-    const hasActions = _isFinite(_get(this.props.challenge, 'actions.total'))
+    const hasActions = _isFinite(this.props.challenge?.actions?.total)
 
     const ChallengeIcon = AsManageableChallenge(this.props.challenge).isComplete() ?
                           CompleteIcon : VisibilityIcon
@@ -71,7 +70,7 @@ export class ChallengeCard extends Component {
               </Link>
               {this.props.showProjectName &&
                 <div className="mr-text-xs mr-text-grey-light">
-                  {_get(parent, 'displayName')}
+                  {parent?.displayName}
                 </div>
               }
               {hasActions &&

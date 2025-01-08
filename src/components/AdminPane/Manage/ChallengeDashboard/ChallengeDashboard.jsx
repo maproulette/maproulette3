@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { FormattedMessage, FormattedDate, injectIntl } from "react-intl";
 import { parseISO } from "date-fns";
 import { Link } from "react-router-dom";
-import _get from "lodash/get";
 import {
   generateWidgetId,
   WidgetDataTarget,
@@ -77,25 +76,17 @@ export class ChallengeDashboard extends Component {
       return <BusySpinner />;
     }
 
-    const isDeletingTasks = _get(
-      this.props,
-      "progress.deletingTasks.inProgress",
-      false
-    );
+    const isDeletingTasks = this.props.progress?.deletingTasks?.inProgress ?? false;
     if (isDeletingTasks) {
       return <TaskDeletingProgress {...this.props} />;
     }
 
-    const isUploadingTasks = _get(
-      this.props,
-      "progress.creatingTasks.inProgress",
-      false
-    );
+    const isUploadingTasks = this.props.progress?.creatingTasks?.inProgress ?? false;
     if (isUploadingTasks) {
       return <TaskUploadingProgress {...this.props} />;
     }
 
-    const projectId = _get(this.props, "challenge.parent.id");
+    const projectId = this.props.challenge?.parent?.id;
 
     const pageHeader = (
       <div className="admin__manage__header admin__manage__header--flush">
@@ -108,8 +99,8 @@ export class ChallengeDashboard extends Component {
             </li>
             <li>
               <Link to={`/admin/project/${projectId}`}>
-                {_get(this.props, "challenge.parent.displayName") ||
-                  _get(this.props, "challenge.parent.name")}
+                {(this.props.challenge?.parent?.displayName) ||
+                  (this.props.challenge?.parent?.name)}
               </Link>
             </li>
             <li className="is-active">

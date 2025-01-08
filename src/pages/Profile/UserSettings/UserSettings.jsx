@@ -2,7 +2,6 @@ import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Form from "@rjsf/core";
 import _each from "lodash/each";
-import _get from "lodash/get";
 import _pick from "lodash/pick";
 import _merge from "lodash/merge";
 import _map from "lodash/map";
@@ -87,20 +86,16 @@ class UserSettings extends Component {
         // Make sure the correct defaultBasemapId is set on the form.
         // If a custom basemap was removed that was also set as the default,
         // then this would be set back to None by the normalizeDefaultBasemap().
-        const updatedUser = _get(results, "entities.users", [])[
+        const updatedUser = (results?.entities?.users ?? [])[
           this.props.user.id
         ];
         const settingsFormData = _cloneDeep(this.state.settingsFormData);
-        settingsFormData.defaultBasemap = _get(
-          updatedUser,
-          "settings.defaultBasemapId",
-          "-1"
-        );
+        settingsFormData.defaultBasemap = updatedUser?.settings?.defaultBasemapId ?? "-1";
 
         // If we have new customBasemaps data in our state then we need to update any
         // matching new mappings with the server generated id.
-        if (_get(updatedUser, "settings.customBasemaps")) {
-          const serverBasemaps = _get(updatedUser, "settings.customBasemaps");
+        if (updatedUser?.settings?.customBasemaps) {
+          const serverBasemaps = updatedUser?.settings?.customBasemaps;
           _each(settingsFormData.customBasemaps, (basemap) => {
             if (
               !basemap.id &&
@@ -210,13 +205,13 @@ class UserSettings extends Component {
 
   componentDidMount() {
     // Make sure our user info is current
-    if (_get(this.props, "user.isLoggedIn")) {
+    if (this.props.user?.isLoggedIn) {
       this.props.loadCompleteUser(this.props.user.id);
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.user && this.props.user.id !== _get(prevProps, "user.id")) {
+    if (this.props.user && this.props.user.id !== (prevProps?.user?.id)) {
       if (this.props.user.isLoggedIn) {
         this.props.loadCompleteUser(this.props.user.id);
       }

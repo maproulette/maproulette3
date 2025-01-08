@@ -1,4 +1,3 @@
-import _get from 'lodash/get'
 import _includes from 'lodash/includes'
 import _isEmpty from 'lodash/isEmpty'
 import _isObject from 'lodash/isObject'
@@ -11,11 +10,11 @@ import _isObject from 'lodash/isObject'
  */
 export const challengePassesProjectFilter = function(challengeFilters, challenge) {
   if (!_isEmpty(challengeFilters.project)) {
-    if (!_get(challenge, 'parent.displayName')) {
+    if (!challenge?.parent?.displayName) {
       return false
     }
 
-    const virtualParents = _get(challenge, 'virtualParents', [])
+    const virtualParents = challenge?.virtualParents ?? []
     for (let i = 0; i < virtualParents.length; i++) {
       const vp = virtualParents[i]
       if (_isObject(vp) && vp.enabled) {

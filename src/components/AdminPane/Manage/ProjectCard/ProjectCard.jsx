@@ -1,7 +1,6 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage, injectIntl } from "react-intl";
-import _get from "lodash/get";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import AsManager from "../../../../interactions/User/AsManager";
@@ -30,7 +29,7 @@ export class ProjectCard extends Component {
 
     const manager = AsManager(this.props.user);
     const project = AsManageableProject(this.props.project);
-    const isArchived = _get(project, "isArchived");
+    const isArchived = project?.isArchived;
 
     let projectBody = null;
     if (this.props.showPreview) {

@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isEmpty from 'lodash/isEmpty'
 import _slice from 'lodash/slice'
@@ -25,8 +24,8 @@ export default function(WrappedComponent,
         pageSearchGroup :
         (this.props.adminChallengesSearchActive ? "adminProjects" : "adminProjectList")
 
-      const currentPage = _get(this.props, `currentSearch.${pageGroup}.page.currentPage`, 0)
-      const resultsPerPage = _get(this.props, `currentSearch.${pageGroup}.page.resultsPerPage`, RESULTS_PER_PAGE)
+      const currentPage = this.props.currentSearch?.[pageGroup]?.page?.currentPage ?? 0
+      const resultsPerPage = this.props.currentSearch?.[pageGroup]?.page?.resultsPerPage ?? RESULTS_PER_PAGE
       const numberResultsToShow = (currentPage + 1) * resultsPerPage
 
       let pagedProjects = this.props[projectsProp]

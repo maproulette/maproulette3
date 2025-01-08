@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { denormalize } from 'normalizr'
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import { taskDenormalizationSchema, fetchTask, fetchTaskComments }
        from '../../../services/Task/Task'
@@ -20,7 +19,7 @@ const WithLoadedTask = function(WrappedComponent) {
       loading: false,
     }
 
-    parseTaskId = props => parseInt(_get(props, 'taskId'), 10)
+    parseTaskId = props => parseInt(props.taskId, 10)
 
     retrieveTask = props => {
       this.setState({loading: true})
@@ -51,7 +50,7 @@ const WithLoadedTask = function(WrappedComponent) {
       const taskId = this.parseTaskId(this.props)
 
       const task = isNaN(taskId) ? null :
-        denormalize(_get(this.props, `entities.tasks.${taskId}`),
+        denormalize(this.props.entities?.tasks?.[taskId],
                     taskDenormalizationSchema(),
                     this.props.entities)
 
@@ -61,7 +60,7 @@ const WithLoadedTask = function(WrappedComponent) {
                                                       'fetchTask',
                                                       'fetchTaskComments'])} />
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({

@@ -14,7 +14,7 @@ export default function WithLayerSources(WrappedComponent) {
       const challengeBasemapLayer =
         AsMappableChallenge(this.props.challenge).defaultLayerSource()
 
-      if (challengeBasemapLayer && challengeBasemapLayer.isDynamic) {
+      if (challengeBasemapLayer?.isDynamic) {
         challengeBasemapLayer.name = this.props.intl.formatMessage(messages.challengeDefault)
         allLayerSources.push(challengeBasemapLayer)
       }

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/client'
 import { FormattedMessage } from 'react-intl'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import AppErrors from '../../../services/Error/AppErrors'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -22,7 +21,7 @@ export const ViewFollowing = props => {
 
   return (
     <div>
-      {_isEmpty(_get(props.data, 'user.following')) ?
+      {_isEmpty(props.data?.user?.following) ?
        <FormattedMessage {...messages.notFollowing} /> :
        <FollowList
          {...props}
@@ -50,7 +49,7 @@ export const ViewFollowing = props => {
         <StartFollowing {...props} />
       </div>
     </div>
-  )
+  );
 }
 
 ViewFollowing.propTypes = {

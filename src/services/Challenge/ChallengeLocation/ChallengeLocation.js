@@ -2,7 +2,6 @@ import bbox from '@turf/bbox'
 import _map from 'lodash/map'
 import _fromPairs from 'lodash/fromPairs'
 import _isEmpty from 'lodash/isEmpty'
-import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _concat from 'lodash/concat'
 import _indexOf from 'lodash/indexOf'
@@ -46,7 +45,7 @@ export const challengePassesLocationFilter = function(challengeFilters,
     return true
   }
 
-  if (_isEmpty(_get(props.searchCriteria, 'mapBounds.bounds'))) {
+  if (_isEmpty(props.searchCriteria?.mapBounds?.bounds)) {
     return true
   }
 
@@ -54,11 +53,11 @@ export const challengePassesLocationFilter = function(challengeFilters,
 
   // Or if the challenge is listed in the TaskClusters or in the Map Bounded Tasks
   let validChallenges = []
-  _each(_get(props, 'mapBoundedTasks.tasks'), (task) => {
+  _each(props.mapBoundedTasks?.tasks, (task) => {
     validChallenges = _concat(validChallenges, task.parentId)
   })
 
-  _each(_get(props, 'taskClusters.clusters'), (cluster) => {
+  _each(props.taskClusters?.clusters, (cluster) => {
     validChallenges = _concat(validChallenges, cluster.challengeIds)
   })
 

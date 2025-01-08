@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
-import _get from 'lodash/get'
 import _takeRight from 'lodash/takeRight'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
@@ -25,10 +24,10 @@ export default class RecentActivityWidget extends Component {
                   className="recent-activity-widget"
                   widgetTitle={<FormattedMessage {...messages.title} />}>
         <ChallengeActivityTimeline activity={
-          _takeRight(_get(this.props, 'challenge.activity', []), 90)
+          _takeRight(this.props.challenge?.activity ?? [], 90)
         } maxEntries={14} invertBadges={false} />
       </QuickWidget>
-    )
+    );
   }
 }
 

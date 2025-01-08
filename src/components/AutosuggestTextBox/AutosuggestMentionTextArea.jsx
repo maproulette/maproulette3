@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import Downshift from 'downshift'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _differenceBy from 'lodash/differenceBy'
 import _noop from 'lodash/noop'
@@ -30,7 +29,7 @@ export default class AutosuggestMentionTextArea extends Component {
   inputChanged = (inputText, downshift) => {
     if (!this.props.disableShowSuggestions) {
       const searchOn = this.findMatch(inputText,
-        _get(this.props.inputRef, 'current.selectionStart'))
+        this.props.inputRef?.current?.selectionStart)
       if (searchOn !== undefined && searchOn !== null) {
         this.props.search(searchOn)
         this.setState({showSuggestions: true})
@@ -58,7 +57,7 @@ export default class AutosuggestMentionTextArea extends Component {
     // null item
     if (item && downshift.selectedItem) {
       downshift.clearSelection()
-      const cursor = _get(this.props.inputRef, 'current.selectionStart')
+      const cursor = this.props.inputRef?.current?.selectionStart
       const newValue = this.replaceMatch(this.props.inputValue, item.displayName, cursor)
       this.props.onInputValueChange(newValue)
     }
@@ -80,7 +79,7 @@ export default class AutosuggestMentionTextArea extends Component {
       }
 
       const items = _concat(this.props.preferredResults, this.getSearchResults())
-      const itemsLength = _get(items, 'length', 0)
+      const itemsLength = items?.length ?? 0
 
       if (e.key === "Enter") {
         if (this.state.highlightResult === -1) {
@@ -205,7 +204,7 @@ export default class AutosuggestMentionTextArea extends Component {
       >
         {downshift => {
           const searchOn = this.findMatch(downshift.inputValue,
-            _get(this.props.inputRef, 'current.selectionStart'))
+            this.props.inputRef?.current?.selectionStart)
           const resultItems = (searchOn !== undefined && searchOn !== null) ?
             this.dropdownItems(downshift.getItemProps, searchOn) : null
 
@@ -266,7 +265,7 @@ export default class AutosuggestMentionTextArea extends Component {
           )
         }}
       </Downshift>
-    )
+    );
   }
 }
 

@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _omit from 'lodash/omit'
@@ -29,7 +28,7 @@ const WithChallenge = function(WrappedComponent) {
      * @private
      */
     parseChallengeId = props =>
-      parseInt(_get(props, 'match.params.challengeId'), 10)
+      parseInt(props.match?.params?.challengeId, 10)
 
     /**
      * Updates the local state to set the challenge to that indicated in
@@ -41,7 +40,7 @@ const WithChallenge = function(WrappedComponent) {
       let challengeId = this.parseChallengeId(props);
 
       if (!challengeId) {
-        const taskId = parseInt(_get(props, 'match.params.taskId'), 10)
+        const taskId = parseInt(props.match?.params?.taskId, 10)
 
         if (taskId) {
           getChallengeFromTask(taskId, props, this)
@@ -67,7 +66,7 @@ const WithChallenge = function(WrappedComponent) {
                           {..._omit(this.props, ['loadChallenge'])} />
       )
     }
-  }
+  };
 }
 
 const mapStateToProps = () => ({
@@ -81,17 +80,16 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           fetchChallenge(challengeId)
         ).then(normalizedResults => {
           if (!_isFinite(normalizedResults?.result) ||
-              _get(normalizedResults,
-                   `entities.challenges.${normalizedResults.result}.deleted`)) {
+              (normalizedResults?.entities?.challenges?.[normalizedResults.result]?.deleted)) {
             dispatch(addError(AppErrors.challenge.doesNotExist))
             ownProps.history.push('/browse/challenges')
           }
           else {
-            return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`)
+            return normalizedResults?.entities?.challenges?.[normalizedResults.result];
           }
-        })
+        });
       }
-  }
+  };
 }
 
 /**
@@ -99,8 +97,8 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
  * It has been externalized from the component to aid in testing.
  */
 export const getChallenge = (challengeId, props, component) => {
-  if (_get(component.state, 'challenge.id') !== challengeId) {
-    let challenge = _get(props.entities, `challenges.${challengeId}`)
+  if ((component.state.challenge?.id) !== challengeId) {
+    let challenge = props.entities?.challenges?.[challengeId]
 
     if (_isObject(challenge)) {
       component.setState({

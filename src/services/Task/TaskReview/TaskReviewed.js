@@ -4,7 +4,6 @@ import RequestStatus from '../../Server/RequestStatus'
 import { taskSchema } from '.././Task'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _snakeCase from 'lodash/snakeCase'
 import { generateSearchParametersString } from '../../Search/Search'
@@ -39,16 +38,16 @@ export const receiveReviewedTasks = function(tasks,
  */
 export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
   asMapper=false, asMetaReviewer=false, limit=50, asMetaReview=false) {
-  const sortBy = _get(criteria, 'sortCriteria.sortBy')
-  const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
+  const sortBy = criteria?.sortCriteria?.sortBy
+  const order = ((criteria?.sortCriteria?.direction) || 'DESC').toUpperCase()
   const sort = sortBy ? _snakeCase(sortBy) : null
-  const page = _get(criteria, 'page', 0)
+  const page = criteria?.page ?? 0
 
   const searchParameters =
-    generateSearchParametersString(_get(criteria, 'filters', {}),
+    generateSearchParametersString(criteria?.filters ?? {},
                                    criteria.boundingBox,
                                    false, false, null,
-                                   _get(criteria, 'invertFields', {}))
+                                   criteria?.invertFields ?? {})
   const mappers = asMapper ? [userId] : []
   const reviewers = asReviewer ? [userId] : []
   const metaReviewers = asMetaReviewer ? [userId] : []
@@ -76,7 +75,7 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
                  allowReviewNeeded: (!asReviewer && !asMetaReviewer && !asMetaReview)},
       }
     ).execute().then(normalizedResults => {
-      const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})
+      const unsortedTaskMap = normalizedResults?.entities?.tasks ?? {}
       const tasks = _map(normalizedResults.result.tasks, (id) => unsortedTaskMap[id])
 
       dispatch(receiveReviewedTasks(tasks, dispatchType,
@@ -87,6 +86,6 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false,
         RequestStatus.error))
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
       console.log(error.response || error)
-    })
-  }
+    });
+  };
 }

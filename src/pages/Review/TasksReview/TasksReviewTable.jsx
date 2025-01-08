@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import { FormattedMessage, FormattedDate, FormattedTime }
        from 'react-intl'
 import { parseISO } from 'date-fns'
-import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
@@ -127,7 +126,7 @@ export class TaskReviewTable extends Component {
       this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
       this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
         boundingBox: this.props.reviewCriteria.boundingBox,
-        includeTags: !!_get(this.props.addedColumns, 'tags')})
+        includeTags: !!this.props.addedColumns?.tags})
     }
   }
 
@@ -209,8 +208,8 @@ export class TaskReviewTable extends Component {
 
     // If we've added the "tag" column, we need to update the table to fetch
     // the tag data.
-    else if (!_get(prevProps.addedColumns, 'tags') &&
-        _get(this.props.addedColumns, 'tags') &&
+    else if (!prevProps.addedColumns?.tags &&
+        (this.props.addedColumns?.tags) &&
         this.state.lastTableState) {
       this.updateTasks(this.state.lastTableState)
     }
@@ -381,7 +380,7 @@ export class TaskReviewTable extends Component {
 
   render() {
     // Setup tasks table. See react-table docs for details.
-    const data = _get(this.props, 'reviewData.tasks', [])
+    const data = this.props.reviewData?.tasks ?? []
     const pageSize = this.props.pageSize
     const columnTypes = setupColumnTypes({
                             ...this.props, 
@@ -393,7 +392,7 @@ export class TaskReviewTable extends Component {
                            taskId => this.setState({openComments: taskId}),
                            data, this.props.reviewCriteria, pageSize)
 
-    const totalRows = _get(this.props, 'reviewData.totalCount', 0)
+    const totalRows = this.props.reviewData?.totalCount ?? 0
     const totalPages = Math.ceil(totalRows / pageSize)
 
     let subheader = null
@@ -401,11 +400,11 @@ export class TaskReviewTable extends Component {
     let defaultSorted = [{id: 'mappedOn', desc: false}]
     let defaultFiltered = []
 
-    if (_get(this.props, 'reviewCriteria.sortCriteria.sortBy')) {
+    if (this.props.reviewCriteria?.sortCriteria?.sortBy) {
       defaultSorted = [{id: this.props.reviewCriteria.sortCriteria.sortBy,
                         desc: this.props.reviewCriteria.sortCriteria.direction === "DESC"}]
     }
-    if (_get(this.props, 'reviewCriteria.filters')) {
+    if (this.props.reviewCriteria?.filters) {
       const reviewFilters = _cloneDeep(this.props.reviewCriteria.filters)
 
       // If we don't have a challenge name, make sure to populate it so
@@ -413,8 +412,7 @@ export class TaskReviewTable extends Component {
       if (this.props.reviewChallenges && !reviewFilters.challenge) {
         if (reviewFilters.challengeId || reviewFilters.challengeName) {
           reviewFilters.challenge = reviewFilters.challengeId ?
-            _get(this.props.reviewChallenges[reviewFilters.challengeId],
-                 'name') : reviewFilters.challengeName
+            this.props.reviewChallenges[reviewFilters.challengeId]?.name : reviewFilters.challengeName
         }
       }
 
@@ -423,8 +421,7 @@ export class TaskReviewTable extends Component {
       if (this.props.reviewProjects && !reviewFilters.project) {
         if (reviewFilters.projectId || reviewFilters.projectName) {
           reviewFilters.project = reviewFilters.projectId ?
-            _get(this.props.reviewProjects[reviewFilters.projectId],
-                 'displayName') : reviewFilters.projectName
+            this.props.reviewProjects[reviewFilters.projectId]?.displayName : reviewFilters.projectName
         }
       }
 
@@ -529,8 +526,8 @@ export class TaskReviewTable extends Component {
                 </button>
                 <button
                   className={classNames("mr-button mr-button-small", {
-                    "mr-button--green-lighter": !_get(this.props, 'reviewData.dataStale', false),
-                    "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
+                    "mr-button--green-lighter": !(this.props.reviewData?.dataStale ?? false),
+                    "mr-button--orange": this.props.reviewData?.dataStale ?? false
                   })}
                   onClick={() => this.props.refresh()}
                 >
@@ -669,7 +666,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'status',
     Header: makeInvertable(props.intl.formatMessage(messages.statusLabel),
                            () => props.invertField('status'),
-                           _get(criteria, 'invertFields.status')),
+                           criteria?.invertFields?.status),
     accessor: 'status',
     sortable: true,
     filterable: true,
@@ -713,7 +710,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'priority',
     Header: makeInvertable(props.intl.formatMessage(messages.priorityLabel),
                            () => props.invertField('priority'),
-                           _get(criteria, 'invertFields.priority')),
+                           criteria?.invertFields?.priority),
     accessor: 'priority',
     sortable: true,
     filterable: true,
@@ -755,18 +752,18 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'reviewRequestedBy',
     Header: makeInvertable(props.intl.formatMessage(messages.reviewRequestedByLabel),
                            () => props.invertField('reviewRequestedBy'),
-                           _get(criteria, 'invertFields.reviewRequestedBy')),
+                           criteria?.invertFields?.reviewRequestedBy),
     accessor: 'reviewRequestedBy',
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.reviewRequestedBy, 'username'),
+    exportable: t => t.reviewRequestedBy?.username,
     maxWidth: 180,
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.reviewRequestedBy, 'username')).hashColor}}
+        style={{color: AsColoredHashable(row._original.reviewRequestedBy?.username).hashColor}}
       >
-        {_get(row._original.reviewRequestedBy, 'username')}
+        {row._original.reviewRequestedBy?.username}
       </div>
     ),
   }
@@ -781,13 +778,13 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.completedBy, 'username') || row._original.completedBy).hashColor}}
+        style={{color: AsColoredHashable((row._original.completedBy?.username) || row._original.completedBy).hashColor}}
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
             <Fragment key={reviewer + "-" + index}>
               <span style={{color: AsColoredHashable(reviewer.username).hashColor}}>{reviewer.username}</span>
-              {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
+              {(index + 1) !== (row._original.additionalReviewers?.length) ? ", " : ""}
             </Fragment>
           );
         })}
@@ -811,11 +808,11 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'challenge',
     Header: makeInvertable(props.intl.formatMessage(messages.challengeLabel),
                            () => props.invertField('challenge'),
-                           _get(criteria, 'invertFields.challenge')),
+                           criteria?.invertFields?.challenge),
     accessor: 'parent',
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.parent, 'name'),
+    exportable: t => t.parent?.name,
     minWidth: 120,
     Cell: ({row}) => {
       return (
@@ -841,7 +838,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               multiselect={props.challengeFilterIds}
             />
           </div>
-          {props.challengeFilterIds && props.challengeFilterIds.length && props.challengeFilterIds?.[0] !== -2 ? (
+          {props.challengeFilterIds?.length && props.challengeFilterIds?.[0] !== -2 ? (
             <button 
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
               onClick={() => {
@@ -853,7 +850,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
             </button>
           ) : null}
         </div>
-      )
+      );
     }
   }
 
@@ -873,10 +870,10 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'project',
     Header: makeInvertable(props.intl.formatMessage(messages.projectLabel),
                            () => props.invertField('project'),
-                           _get(criteria, 'invertFields.project')),
+                           criteria?.invertFields?.project),
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.parent, 'parent.displayName'),
+    exportable: t => t.parent?.parent?.displayName,
     minWidth: 120,
     Cell: ({row}) => {
       return (
@@ -902,7 +899,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               multiselect={props.projectFilterIds}
             />
           </div>
-            {props.projectFilterIds && props.projectFilterIds.length && props.projectFilterIds?.[0] !== -2 ? (
+            {props.projectFilterIds?.length && props.projectFilterIds?.[0] !== -2 ? (
               <button 
                 className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
                 onClick={() => {
@@ -914,7 +911,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               </button>
             ) : null}
         </div>
-      )
+      );
     }
   }
 
@@ -938,7 +935,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       )
     },
     Filter: () => {
-      let mappedOn = _get(criteria, 'filters.mappedOn')
+      let mappedOn = criteria?.filters?.mappedOn
 
       if (typeof mappedOn === "string" && mappedOn !== "") {
         mappedOn = parseISO(mappedOn)
@@ -987,7 +984,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       )
     },
     Filter: () => {
-      let reviewedAt = _get(criteria, 'filters.reviewedAt')
+      let reviewedAt = criteria?.filters?.reviewedAt
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
         reviewedAt = parseISO(reviewedAt)
       }
@@ -1040,16 +1037,16 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'reviewedBy',
     Header: makeInvertable(props.intl.formatMessage(messages.reviewedByLabel),
                            () => props.invertField('reviewedBy'),
-                           _get(criteria, 'invertFields.reviewedBy')),
+                           criteria?.invertFields?.reviewedBy),
     accessor: 'reviewedBy',
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.reviewedBy, 'username'),
+    exportable: t => t.reviewedBy?.username,
     maxWidth: 180,
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.reviewedBy, 'username')).hashColor}}
+        style={{color: AsColoredHashable(row._original.reviewedBy?.username).hashColor}}
       >
         {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
       </div>
@@ -1060,7 +1057,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'reviewStatus',
     Header: makeInvertable(props.intl.formatMessage(messages.reviewStatusLabel),
                            () => props.invertField('reviewStatus'),
-                           _get(criteria, 'invertFields.reviewStatus')),
+                           criteria?.invertFields?.reviewStatus),
     accessor: 'reviewStatus',
     sortable: true,
     filterable: true,
@@ -1129,7 +1126,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'metaReviewStatus',
     Header: makeInvertable(props.intl.formatMessage(messages.metaReviewStatusLabel),
                            () => props.invertField('metaReviewStatus'),
-                           _get(criteria, 'invertFields.metaReviewStatus')),
+                           criteria?.invertFields?.metaReviewStatus),
     accessor: 'metaReviewStatus',
     sortable: true,
     filterable: true,
@@ -1187,16 +1184,16 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     id: 'metaReviewedBy',
     Header: makeInvertable(props.intl.formatMessage(messages.metaReviewedByLabel),
                            () => props.invertField('metaReviewedBy'),
-                           _get(criteria, 'invertFields.metaReviewedBy')),
+                           criteria?.invertFields?.metaReviewedBy),
     accessor: 'metaReviewedBy',
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.metaReviewedBy, 'username'),
+    exportable: t => t.metaReviewedBy?.username,
     maxWidth: 180,
     Cell: ({row}) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.metaReviewedBy, 'username')).hashColor}}
+        style={{color: AsColoredHashable(row._original.metaReviewedBy?.username).hashColor}}
       >
         {row._original.metaReviewedBy ? row._original.metaReviewedBy.username : ""}
       </div>
@@ -1404,9 +1401,9 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         <InTableTagFilter
           {...props}
           onChange={onChange}
-          value={filter ? _get(filter, 'value') : ''}
+          value={filter ? filter?.value : ''}
         />
-      )
+      );
     }
   }
 

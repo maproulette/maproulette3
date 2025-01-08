@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import _get from 'lodash/get'
 import { fetchUserNotifications, markNotificationsRead, deleteNotifications }
        from '../../../services/User/User'
 
@@ -10,8 +9,8 @@ const WithUserNotifications = WrappedComponent =>
 
 export const mapStateToProps = (state, ownProps) => {
   return {
-    notifications: _get(ownProps, 'user.notifications', []),
-  }
+    notifications: ownProps?.user?.notifications ?? [],
+  };
 }
 
 export const mapDispatchToProps = dispatch => bindActionCreators({
@@ -42,7 +41,7 @@ export const WithLoadedNotifications = function(WrappedComponent) {
     }
 
     componentDidUpdate(prevProps) {
-      if (_get(this.props, 'user.id') !== _get(prevProps, 'user.id')) {
+      if ((this.props.user?.id) !== (prevProps?.user?.id)) {
         this.loadNotifications(this.props.user)
       }
     }
@@ -56,7 +55,7 @@ export const WithLoadedNotifications = function(WrappedComponent) {
         />
       )
     }
-  }
+  };
 }
 
 export default WithUserNotifications

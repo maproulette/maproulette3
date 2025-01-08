@@ -3,7 +3,6 @@ import { point } from '@turf/helpers'
 import center from '@turf/center'
 import bbox from '@turf/bbox'
 import nearestPointOnLine from '@turf/nearest-point-on-line'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _map from 'lodash/map'
@@ -93,7 +92,7 @@ export class AsMappableTask {
     let allProperties = {}
 
     features.forEach(feature => {
-      if (feature && feature.properties) {
+      if (feature?.properties) {
         allProperties = Object.assign(allProperties, feature.properties)
       }
     })
@@ -118,7 +117,7 @@ export class AsMappableTask {
       let allProperties = []
   
       features.forEach(feature => {
-        if (feature && feature.properties) {
+        if (feature?.properties) {
           allProperties.push(feature);
         }
       })
@@ -151,7 +150,7 @@ export class AsMappableTask {
    * (0, 0)
    */
   rawCenterPoint() {
-    let centerPoint = _get(this, 'location.coordinates')
+    let centerPoint = this?.location?.coordinates
 
     if (!centerPoint && _isObject(this.point)) {
       centerPoint = [this.point.lng, this.point.lat]
@@ -161,7 +160,7 @@ export class AsMappableTask {
     // one ourselves based on the task features.
     if (!centerPoint && this.hasGeometries()) {
       try {
-        centerPoint = _get(center(this.geometries), 'geometry.coordinates')
+        centerPoint = center(this.geometries)?.geometry?.coordinates
       }
       catch(e) {} // Bad geometry can cause turf to blow up
     }

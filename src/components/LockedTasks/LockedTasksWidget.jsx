@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { FormattedMessage } from 'react-intl';
-import _get from 'lodash/get';
 import _isFinite from 'lodash/isFinite';
 import { WidgetDataTarget, registerWidgetType } from '../../services/Widget/Widget';
 import { fetchUsersLockedTasks } from '../../services/User/User';
@@ -73,7 +72,7 @@ const LockedTasks = (props) => {
     return sortedLockedTasks.length > 0 ? (
       <div className="mr-flex mr-flex-wrap mr-links-green-lighter">
         {sortedLockedTasks.map(task => {
-          if (!_isFinite(_get(task, 'id'))) {
+          if (!_isFinite(task?.id)) {
             return null;
           }
 

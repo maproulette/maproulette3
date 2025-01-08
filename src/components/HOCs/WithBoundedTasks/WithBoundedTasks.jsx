@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { LatLng } from 'leaflet'
 import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
-import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _isArray from 'lodash/isArray'
 import _isEmpty from 'lodash/isEmpty'
@@ -15,7 +14,7 @@ export const WithBoundedTasks = function(WrappedComponent,
       localMapBounds: null,
     }
 
-    currentChallengeId = () => _get(this.props, 'challenge.id', this.props.challengeId)
+    currentChallengeId = () => this.props.challenge?.id ?? (this.props.challengeId)
 
     componentDidUpdate() {
       if (this.state.localMapBounds &&
@@ -47,7 +46,7 @@ export const WithBoundedTasks = function(WrappedComponent,
         mapZoom = this.props.mapBounds.zoom
       }
 
-      if (mapBounds && _isArray(_get(boundedTasks, 'tasks'))) {
+      if (mapBounds && _isArray(boundedTasks?.tasks)) {
         boundedTasks = Object.assign({}, boundedTasks, {
           tasks: _filter(boundedTasks.tasks, task =>
             task.point &&
@@ -66,7 +65,7 @@ export const WithBoundedTasks = function(WrappedComponent,
                                updateLocalMapBounds={this.updateLocalMapBounds}
                                {..._omit(this.props, [outputProp, 'mapBounds'])} />
     }
-  }
+  };
 }
 
 export default (WrappedComponent, tasksProp='clusteredTasks', outputProp) =>

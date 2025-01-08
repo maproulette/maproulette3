@@ -7,7 +7,6 @@ import _merge from 'lodash/merge'
 import _cloneDeep from 'lodash/cloneDeep'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _find from 'lodash/find'
 import { TaskStatusColors }
       from '../../services/Task/TaskStatus/TaskStatus'
@@ -77,7 +76,7 @@ export class AsMappableCluster {
   leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask=false, selectedClusters=null, bundleConflict=false) {
     const count = _isFunction(this.rawData.getChildCount) ?
                   this.rawData.getChildCount() :
-                  _get(this.options, 'numberOfPoints', this.numberOfPoints)
+                  this.options?.numberOfPoints ?? (this.numberOfPoints)
     if (count > 1) {
       const clusterData = !_isEmpty(this.rawData.options) ? this.rawData.options : this.rawData
       const isSelected = !!selectedClusters && !!_find(selectedClusters, {clusterId: clusterData.clusterId})

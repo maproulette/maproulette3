@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isEmpty from 'lodash/isEmpty'
 import _slice from 'lodash/slice'
@@ -12,8 +11,8 @@ export default function(WrappedComponent,
                         outputProp) {
   class WithPagedChallenges extends Component {
     render() {
-      const currentPage = _get(this.props, 'searchPage.currentPage') || 0
-      const resultsPerPage = _get(this.props, 'searchPage.resultsPerPage') || RESULTS_PER_PAGE
+      const currentPage = (this.props.searchPage?.currentPage) || 0
+      const resultsPerPage = (this.props.searchPage?.resultsPerPage) || RESULTS_PER_PAGE
       const numberResultsToShow = (currentPage + 1) * resultsPerPage
 
       let pagedChallenges = _differenceBy(this.props[challengesProp],

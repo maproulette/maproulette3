@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import _get from 'lodash/get'
 import {
   isSupportedLocale,
   defaultLocale,
@@ -27,7 +26,7 @@ export const WithUserLocale = function(WrappedComponent) {
     }
 
     activeLocale = props => {
-      const userLocale = _get(props, 'user.settings.locale')
+      const userLocale = props.user?.settings?.locale
       return isSupportedLocale(userLocale) ? userLocale : defaultLocale()
     }
 
@@ -61,7 +60,7 @@ export const WithUserLocale = function(WrappedComponent) {
         />
       )
     }
-  }
+  };
 }
 
 export default WrappedComponent =>

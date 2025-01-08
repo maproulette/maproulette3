@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { denormalize } from 'normalizr'
 import { connect } from 'react-redux'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import { challengeDenormalizationSchema,
@@ -33,7 +32,7 @@ const WithCurrentChallenge = function(WrappedComponent) {
     }
 
     currentChallengeId = () =>
-      parseInt(_get(this.props, 'match.params.challengeId'), 10)
+      parseInt(this.props.match?.params?.challengeId, 10)
 
     loadChallenge = () => {
       const challengeId = this.currentChallengeId()
@@ -78,7 +77,7 @@ const WithCurrentChallenge = function(WrappedComponent) {
 
       if (_isFinite(challengeId)) {
         challenge = AsManageableChallenge(
-          denormalize(_get(this.props, `entities.challenges.${challengeId}`),
+          denormalize(this.props.entities?.challenges?.[challengeId],
                       challengeDenormalizationSchema(),
                       this.props.entities)
         )
@@ -98,7 +97,7 @@ const WithCurrentChallenge = function(WrappedComponent) {
                                                       'clusteredTasks',
                                                       'fetchChallengeActivity'])} />
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({
@@ -111,14 +110,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       fetchChallenge(challengeId)
     ).then(normalizedResults => {
       if (!_isFinite(normalizedResults.result) ||
-          _get(normalizedResults,
-                `entities.challenges.${normalizedResults.result}.deleted`)) {
+          (normalizedResults?.entities?.challenges?.[normalizedResults.result]?.deleted)) {
         dispatch(addError(AppErrors.challenge.doesNotExist))
         ownProps.history.push('/admin/projects')
       }
 
       return normalizedResults
-    })
+    });
   },
 
   fetchChallengeComments: challengeId =>

@@ -4,7 +4,6 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser';
 import WithCurrentProject from '../AdminPane/HOCs/WithCurrentProject/WithCurrentProject';
 import WithCurrentChallenge from '../AdminPane/HOCs/WithCurrentChallenge/WithCurrentChallenge';
 import { injectIntl } from 'react-intl';
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 
 export const REACT_APP_TITLE = 'MapRoulette'
@@ -26,15 +25,15 @@ const findCurrentUserName = (props) => {
 }
 
 const findCurrentCountryCode = (props) => {
-  return _get(props, 'match.params.countryCode')
+  return props?.match?.params?.countryCode;
 }
 
 const findCurrentTaskId = (props) => {
-  return _get(props, 'match.params.taskId')
+  return props?.match?.params?.taskId;
 }
 
 const findReviewType = (props) => {
-  return _get(props, 'match.params.showType')
+  return props?.match?.params?.showType;
 }
 
 /* parse names from url path into array, replace id params with names, and then concatenate with - for title */

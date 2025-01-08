@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { startTask, releaseTask, refreshTaskLock }
        from '../../../services/Task/Task'
-import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 
 // Used for lock storage events. Users will be locked from other task tabs
@@ -121,7 +120,7 @@ const WithLockedTask = function(WrappedComponent) {
     }
 
     componentDidUpdate(prevProps) {
-      if (_get(prevProps, 'task.id') !== _get(this.props, 'task.id')) {
+      if ((prevProps?.task?.id) !== (this.props.task?.id)) {
         if (prevProps.task) {
           this.unlockTask(prevProps.task)
         }
@@ -157,7 +156,7 @@ const WithLockedTask = function(WrappedComponent) {
         />
       )
     }
-  }
+  };
 }
 
 export const mapDispatchToProps = dispatch =>

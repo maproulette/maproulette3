@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _compact from 'lodash/compact'
 import _isEmpty from 'lodash/isEmpty'
@@ -62,7 +61,7 @@ export default class UserEditorSelector extends Component {
   }
 
   currentEditor = () => {
-    const configuredEditor = _get(this.props, 'user.settings.defaultEditor', Editor.none)
+    const configuredEditor = this.props.user?.settings?.defaultEditor ?? (Editor.none)
     let current = configuredEditor === Editor.none ? DEFAULT_EDITOR : configuredEditor
 
     if (this.props.allowedEditors && this.props.allowedEditors.indexOf(current) === -1) {

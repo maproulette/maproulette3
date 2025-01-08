@@ -6,7 +6,6 @@ import { FormattedMessage,
          FormattedTime,
          injectIntl } from 'react-intl'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import _kebabCase from 'lodash/kebabCase'
 import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
@@ -90,12 +89,12 @@ export class TaskHistoryList extends Component {
       switch(log.actionType) {
         case TaskHistoryAction.comment:
           logEntry = commentEntry(log, this.props, index)
-          username = _get(log, 'user.username')
+          username = log?.user?.username
           break
         case TaskHistoryAction.review:
         case TaskHistoryAction.metaReview:
           if (log.reviewStatus === TaskReviewStatus.needed) {
-            username = TaskHistoryAction.review === log.actionType ? _get(log, 'reviewRequestedBy.username') : _get(log, 'metaReviewRequestedBy.username') 
+            username = TaskHistoryAction.review === log.actionType ? log?.reviewRequestedBy?.username : log?.metaReviewRequestedBy?.username 
             logEntry = reviewEntry(log, this.props, index)
           } else {
             logEntry = null
@@ -113,7 +112,7 @@ export class TaskHistoryList extends Component {
                 />
             username = (log.reviewStatus === TaskReviewStatus.disputed ||
                         log.reviewStatus === TaskReviewStatus.needed) ?
-              _get(log, 'reviewRequestedBy.username') : _get(log, 'reviewedBy.username')
+              log?.reviewRequestedBy?.username : log?.reviewedBy?.username
             userType = log.actionType === TaskHistoryAction.metaReview ? META_REVIEWER_TYPE : REVIEWER_TYPE
             errorTags = log.errorTags
             if (log.startedAt) {
@@ -141,12 +140,12 @@ export class TaskHistoryList extends Component {
           break
         case TaskHistoryAction.update:
           logEntry = updateEntry(log, this.props, index)
-          username = _get(log, 'user.username')
+          username = log?.user?.username
           break
         case TaskHistoryAction.status:
         default:
           logEntry = null
-          username = _get(log, 'user.username')
+          username = log?.user?.username
           userType = MAPPER_TYPE
           updatedStatus = statusEntry(log, this.props, index)
           if (log.startedAt || log.oldStatus === TASK_STATUS_CREATED) {
