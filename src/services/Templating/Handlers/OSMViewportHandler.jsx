@@ -11,7 +11,7 @@ import OSMViewportReference from "../../../components/OSMViewportReference/OSMVi
 const OSMViewportHandler = {
   osmViewportRegex: "(v|viewport)[/ ]?(\\d+)\\/(-?[\\.\\d]+)\\/(-?[\\.\\d]+)",
 
-  osmMapRegex: "https?://(www.openstreetmap.org)/?#map=(\\d+)\\/(-?[\\.\\d]+)\\/(-?[\\.\\d]+)",
+  osmMapRegex: "https?://(www\\.openstreetmap\\.org)/?#map=(\\d+)\\/(-?[\\.\\d]+)\\/(-?[\\.\\d]+)",
 
   handlesShortCode(shortCode) {
     return (
