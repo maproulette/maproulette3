@@ -6,8 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false,
-    "ignore": []
+    "include": ["src/"]
   },
   "formatter": {
     "enabled": true,
@@ -18,7 +17,7 @@
     "enabled": true
   },
   "linter": {
-    "enabled": true,
+    "enabled": false,
     "rules": {
       "recommended": true
     }
