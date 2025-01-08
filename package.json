@@ -15,7 +15,8 @@
     "test": "vitest",
     "test:cov": "vitest run --coverage",
     "lint": "eslint src/",
-    "format": "biome format --write src/",
+    "format": "biome format --write",
+    "check": "biome ci && eslint src/",
     "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'"
   },
   "browserslist": [
