@@ -1,5 +1,4 @@
 import { addHours } from "date-fns";
-import _head from "lodash/head";
 import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
@@ -83,7 +82,7 @@ export const createVirtualChallenge = function (name, taskIds, expiration, clust
   return function (dispatch) {
     let searchParameters = null;
     if (clusters && clusters.length > 0) {
-      searchParameters = _omit(_head(clusters).params, [
+      searchParameters = _omit(clusters[0].params, [
         "location",
         "taskTagConjunction",
         "challengeTagConjunction",
