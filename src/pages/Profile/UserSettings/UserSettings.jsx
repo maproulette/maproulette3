@@ -6,7 +6,6 @@ import _each from "lodash/each";
 import _find from "lodash/find";
 import _findLastIndex from "lodash/findLastIndex";
 import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
 import _pick from "lodash/pick";
@@ -226,7 +225,7 @@ class UserSettings extends Component {
     // doesn't use the layer index string identifiers, then we convert the
     // numeric id to an appropriate string identifier here (assuming it is
     // specifying a default layer at all).
-    if (_isUndefined(this.state.settingsFormData.defaultBasemap)) {
+    if (this.state.settingsFormData.defaultBasemap === undefined) {
       if (!_isEmpty(userSettings.defaultBasemapId)) {
         // layer index string
         userSettings.defaultBasemap = userSettings.defaultBasemapId;

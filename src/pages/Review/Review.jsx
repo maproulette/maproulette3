@@ -2,7 +2,6 @@ import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isUndefined from "lodash/isUndefined";
 import _merge from "lodash/merge";
 import _omit from "lodash/omit";
 import _omitBy from "lodash/omitBy";
@@ -75,13 +74,13 @@ export class ReviewTasksDashboard extends Component {
 
     if (user.isReviewer()) {
       if (
-        _isUndefined(this.props.match?.params?.showType) &&
+        this.props.match?.params?.showType === undefined &&
         this.state.showType !== ReviewTasksType.toBeReviewed
       ) {
         this.setState({ showType: ReviewTasksType.toBeReviewed });
       } else if (
         this.props.match?.params?.showType !== this.state.showType &&
-        !_isUndefined(this.props.match?.params?.showType)
+        this.props.match?.params?.showType !== undefined
       ) {
         this.setState({ showType: this.props.match?.params?.showType });
       }
@@ -136,8 +135,9 @@ export class ReviewTasksDashboard extends Component {
     }
 
     // Remove any undefined filters
-    filterSelected[this.state.showType] = _omitBy(filterSelected[this.state.showType], (f) =>
-      _isUndefined(f),
+    filterSelected[this.state.showType] = _omitBy(
+      filterSelected[this.state.showType],
+      (f) => f === undefined,
     );
 
     // Check for a valid challenge id

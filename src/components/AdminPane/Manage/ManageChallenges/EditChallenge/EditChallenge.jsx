@@ -9,7 +9,6 @@ import _isEqual from "lodash/isEqual";
 import _isNumber from "lodash/isNumber";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
 import _omit from "lodash/omit";
@@ -425,7 +424,7 @@ export class EditChallenge extends Component {
     // doesn't use the layer index string identifiers, then we convert the
     // numeric id to an appropriate string identifier here (assuming it is
     // specifying a default layer at all).
-    if (_isUndefined(this.state.formData.defaultBasemap)) {
+    if (this.state.formData.defaultBasemap === undefined) {
       if (!_isEmpty(challengeData.defaultBasemapId)) {
         // layer index string
         challengeData.defaultBasemap = challengeData.defaultBasemapId;
@@ -460,7 +459,7 @@ export class EditChallenge extends Component {
       );
     }
 
-    if (_isUndefined(this.state.formData.presets)) {
+    if (this.state.formData.presets === undefined) {
       challengeData = preparePresetsForForm(challengeData);
     }
 
@@ -488,7 +487,7 @@ export class EditChallenge extends Component {
       ? challengeData.reviewTaskTags
       : challengeData.preferredReviewTags;
 
-    if (_isUndefined(challengeData.customTaskStyles)) {
+    if (challengeData.customTaskStyles === undefined) {
       challengeData.customTaskStyles = !_isEmpty(challengeData.taskStyles);
     }
 
@@ -654,9 +653,10 @@ export class EditChallenge extends Component {
   };
 
   hasTaskStyleRuleErrors = () => {
-    const useCustom = !_isUndefined(this.state.formData?.customTaskStyles)
-      ? this.state.formData?.customTaskStyles
-      : !_isEmpty(this.props.challenge?.taskStyles);
+    const useCustom =
+      this.state.formData?.customTaskStyles !== undefined
+        ? this.state.formData?.customTaskStyles
+        : !_isEmpty(this.props.challenge?.taskStyles);
 
     return useCustom && this.props.hasAnyStyleRuleErrors;
   };

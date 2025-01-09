@@ -1,7 +1,6 @@
 import _compact from "lodash/compact";
 import _each from "lodash/each";
 import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _toPairs from "lodash/toPairs";
 import _values from "lodash/values";
@@ -22,7 +21,7 @@ export class AsCooperativeWork {
    * Determines if this represents a cooperative task
    */
   isCooperative() {
-    return !_isUndefined(this.cooperativeWork);
+    return this.cooperativeWork !== undefined;
   }
 
   /**
