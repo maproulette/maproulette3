@@ -2,7 +2,6 @@ import { parseISO } from "date-fns";
 import _compact from "lodash/compact";
 import _flatten from "lodash/flatten";
 import _groupBy from "lodash/groupBy";
-import _indexOf from "lodash/indexOf";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
@@ -29,7 +28,7 @@ const WithChallengeMetrics = function (WrappedComponent, applyFilters = false) {
     };
 
     isFiltering(includesFiltersArray) {
-      return _indexOf(_values(includesFiltersArray), false) !== -1;
+      return _values(includesFiltersArray).indexOf(false) !== -1;
     }
 
     updateMetrics(props) {
