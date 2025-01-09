@@ -3,7 +3,6 @@ import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
 import _findIndex from "lodash/findIndex";
 import _fromPairs from "lodash/fromPairs";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
@@ -191,7 +190,7 @@ export const generateSearchParametersString = (
   }
 
   if (filters.challengeId) {
-    searchParameters.cid = !_isArray(filters.challengeId)
+    searchParameters.cid = !Array.isArray(filters.challengeId)
       ? filters.challengeId
       : (searchParameters[PARAMS_MAP.challengeId] = filters.challengeId.join(","));
 
@@ -299,14 +298,14 @@ export const generateSearchParametersString = (
     // If we are searching within map bounds we need to ensure the parent
     // challenge is also within those bounds
     if (filters.location === CHALLENGE_LOCATION_WITHIN_MAPBOUNDS) {
-      if (_isArray(boundingBox)) {
+      if (Array.isArray(boundingBox)) {
         searchParameters.bb = boundingBox.join(",");
       } else {
         searchParameters.bb = boundingBox;
       }
     } else {
       //tbb =>  [left, bottom, right, top]  W/S/E/N
-      if (_isArray(boundingBox)) {
+      if (Array.isArray(boundingBox)) {
         searchParameters.tbb = boundingBox.join(",");
       } else {
         searchParameters.tbb = boundingBox;
@@ -328,7 +327,7 @@ export const generateSearchParametersString = (
     // Keywords/tags can come from both the the query and the filter, so we need to
     // combine them into a single keywords array.
     const keywords = queryParts.tagTokens.concat(
-      _isArray(filters.keywords) ? filters.keywords : [],
+      Array.isArray(filters.keywords) ? filters.keywords : [],
     );
 
     if (keywords.length > 0) {

@@ -2,7 +2,6 @@ import { parseISO } from "date-fns";
 import _compact from "lodash/compact";
 import _flatten from "lodash/flatten";
 import _groupBy from "lodash/groupBy";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 import _keys from "lodash/keys";
@@ -131,7 +130,7 @@ const WithChallengeMetrics = function (WrappedComponent, applyFilters = false) {
       ) {
         tasksAvailable = _sumBy(this.props.challenges, "actions.available");
         if (Number.isFinite(tasksAvailable)) {
-          let allActivity = _isArray(this.props.activity)
+          let allActivity = Array.isArray(this.props.activity)
             ? this.props.activity
             : _compact(_flatten(_map(this.props.challenges, "activity")));
 

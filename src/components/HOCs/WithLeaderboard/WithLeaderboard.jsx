@@ -1,5 +1,4 @@
 import _clone from "lodash/clone";
-import _isArray from "lodash/isArray";
 import _isEqualWith from "lodash/isEqualWith";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
@@ -60,11 +59,11 @@ const WithLeaderboard = function (WrappedComponent, initialMonthsPast = 1, initi
           params.set("onlyEnabled", leaderboardOptions.onlyEnabled);
         }
 
-        if (leaderboardOptions.filterChallenges && _isArray(this.props.challenges)) {
+        if (leaderboardOptions.filterChallenges && Array.isArray(this.props.challenges)) {
           params.set("forChallenges", [_map(this.props.challenges, "id")]);
         }
 
-        if (leaderboardOptions.filterProjects && _isArray(this.props.projects)) {
+        if (leaderboardOptions.filterProjects && Array.isArray(this.props.projects)) {
           params.set("forProjects", [_map(this.props.projects, "id")]);
         }
 
@@ -95,7 +94,7 @@ const WithLeaderboard = function (WrappedComponent, initialMonthsPast = 1, initi
       const options = _merge({}, initialOptions, this.props.leaderboardOptions);
       if (
         options.filterChallenges &&
-        _isArray(this.props.challenges) &&
+        Array.isArray(this.props.challenges) &&
         this.props.challenges.length < 1
       ) {
         return;

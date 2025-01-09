@@ -1,5 +1,4 @@
 import _cloneDeep from "lodash/cloneDeep";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
@@ -1189,7 +1188,7 @@ export const retrieveChallengeTask = function (dispatch, endpoint) {
         return null;
       }
 
-      const retrievedTaskId = _isArray(normalizedTaskResults.result)
+      const retrievedTaskId = Array.isArray(normalizedTaskResults.result)
         ? normalizedTaskResults.result[0]
         : normalizedTaskResults.result;
 
@@ -1246,7 +1245,7 @@ const reduceTasksFurther = function (mergedState, oldState, taskEntities) {
   // The generic reduction will merge arrays and objects, but for some fields
   // we want to simply overwrite with the latest data.
   taskEntities.forEach((entity) => {
-    if (_isArray(entity.tags)) {
+    if (Array.isArray(entity.tags)) {
       mergedState[entity.id].tags = entity.tags;
     }
   });

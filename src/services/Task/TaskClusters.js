@@ -1,4 +1,3 @@
-import _isArray from "lodash/isArray";
 import { v1 as uuidv1 } from "uuid";
 import uuidTime from "uuid-time";
 import { CHALLENGE_EXCLUDE_LOCAL, CHALLENGE_INCLUDE_LOCAL } from "../Challenge/Challenge";
@@ -111,7 +110,7 @@ export const currentTaskClusters = function (state = {}, action) {
 
     if (fetchTime >= lastFetch) {
       const merged = {
-        clusters: _isArray(action.clusters) ? action.clusters : [],
+        clusters: Array.isArray(action.clusters) ? action.clusters : [],
         fetchId: action.fetchId,
       };
       return merged;

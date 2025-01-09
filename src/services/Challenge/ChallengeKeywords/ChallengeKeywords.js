@@ -2,7 +2,6 @@ import _find from "lodash/find";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
 import _intersection from "lodash/intersection";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -109,7 +108,7 @@ export const rawCategoryKeywords = _flatten(_values(ChallengeCategoryKeywords));
  * custom keyword categories in the search as well.
  */
 export const categoryMatchingKeywords = function (keywords, includeCustom = false) {
-  const keywordArray = _isArray(keywords) ? keywords : [keywords];
+  const keywordArray = Array.isArray(keywords) ? keywords : [keywords];
 
   let matchingCategory = _find(
     _keys(ChallengeCategoryKeywords),
@@ -133,7 +132,7 @@ export const categoryMatchingKeywords = function (keywords, includeCustom = fals
  * Determines if the given challenge passes the given keywords filter.
  */
 export const challengePassesKeywordFilter = function (filter, challenge) {
-  if (_isArray(filter.keywords)) {
+  if (Array.isArray(filter.keywords)) {
     // Any matching keyword is a pass
     return _intersection(filter.keywords, challenge.tags).length > 0;
   }

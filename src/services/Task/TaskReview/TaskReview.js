@@ -1,5 +1,4 @@
 import _cloneDeep from "lodash/cloneDeep";
-import _isArray from "lodash/isArray";
 import _join from "lodash/join";
 import _map from "lodash/map";
 import _set from "lodash/set";
@@ -801,7 +800,7 @@ const updateReduxState = function (state = {}, action, listName) {
   if (action.status === RequestStatus.success) {
     const updatedTasks = {};
 
-    updatedTasks.tasks = _isArray(action.tasks) ? action.tasks : [];
+    updatedTasks.tasks = Array.isArray(action.tasks) ? action.tasks : [];
     updatedTasks.totalCount = action.totalCount;
     updatedTasks.dataStale = false;
 

@@ -1,5 +1,4 @@
 import { endOfDay, startOfMonth } from "date-fns";
-import _isArray from "lodash/isArray";
 import { CHALLENGE_INCLUDE_LOCAL } from "../Challenge/Challenge";
 import AppErrors from "../Error/AppErrors";
 import { addError } from "../Error/Error";
@@ -211,19 +210,19 @@ export const initializeLeaderboardParams = function (
     params.monthDuration = numberMonths || CURRENT_MONTH;
   }
 
-  if (_isArray(forProjects)) {
+  if (Array.isArray(forProjects)) {
     params.projectIds = forProjects.join(",");
   }
 
-  if (_isArray(forChallenges)) {
+  if (Array.isArray(forChallenges)) {
     params.challengeIds = forChallenges.join(",");
   }
 
-  if (_isArray(forUsers)) {
+  if (Array.isArray(forUsers)) {
     params.userIds = forUsers.join(",");
   }
 
-  if (_isArray(forCountries)) {
+  if (Array.isArray(forCountries)) {
     params.countryCodes = forCountries.join(",");
   }
 

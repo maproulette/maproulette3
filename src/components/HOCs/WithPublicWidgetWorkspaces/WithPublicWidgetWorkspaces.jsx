@@ -1,6 +1,5 @@
 import _assign from "lodash/assign";
 import _each from "lodash/each";
-import _isArray from "lodash/isArray";
 import { Component } from "react";
 import { Redirect } from "react-router";
 import { generateWidgetId, widgetDescriptor } from "../../../services/Widget/Widget";
@@ -52,7 +51,7 @@ export const WithPublicWidgetWorkspacesInternal = function (
       let configuration = _assign(
         {
           id: generateWidgetId(),
-          targets: _isArray(targets) ? targets : [targets], // store as array
+          targets: Array.isArray(targets) ? targets : [targets], // store as array
           cols: 12,
           rowHeight: 30,
           widgets: [],
