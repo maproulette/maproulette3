@@ -2,7 +2,6 @@ import bbox from "@turf/bbox";
 import _concat from "lodash/concat";
 import _each from "lodash/each";
 import _fromPairs from "lodash/fromPairs";
-import _indexOf from "lodash/indexOf";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import { boundsWithinAllowedMaxDegrees, toLatLngBounds } from "../../MapBounds/MapBounds";
@@ -58,7 +57,7 @@ export const challengePassesLocationFilter = function (challengeFilters, challen
     validChallenges = _concat(validChallenges, cluster.challengeIds);
   });
 
-  if (_indexOf(validChallenges, challenge.id) > -1) {
+  if (validChallenges.indexOf(challenge.id) > -1) {
     return true;
   }
 

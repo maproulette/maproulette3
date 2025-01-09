@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import _each from "lodash/each";
 import _find from "lodash/find";
-import _indexOf from "lodash/indexOf";
 import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
 import _map from "lodash/map";
@@ -296,7 +295,7 @@ export class TaskHistoryList extends Component {
                 <input
                   className="mr-checkbox-toggle"
                   type="checkbox"
-                  checked={_indexOf(this.props.selectedTimestamps, log.timestamp.toString()) !== -1}
+                  checked={this.props.selectedTimestamps.indexOf(log.timestamp.toString()) !== -1}
                   onChange={() => this.props.toggleSelection(log.timestamp)}
                 />
               )}

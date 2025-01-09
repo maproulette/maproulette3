@@ -1,4 +1,3 @@
-import _indexOf from "lodash/indexOf";
 import _isEqual from "lodash/isEqual";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
@@ -39,18 +38,18 @@ export default class MetaReviewStatusMetricsWidget extends Component {
   };
 
   setupReviewMetricsHOC = (targets) => {
-    if (targets === WidgetDataTarget.review || _indexOf(targets, WidgetDataTarget.review) > -1) {
+    if (targets === WidgetDataTarget.review || targets.indexOf(WidgetDataTarget.review) > -1) {
       return WithReviewMetrics(ReviewStatusMetrics);
     }
 
     if (
       targets === WidgetDataTarget.challenge ||
-      _indexOf(targets, WidgetDataTarget.challenge) > -1
+      targets.indexOf(WidgetDataTarget.challenge) > -1
     ) {
       return WithChallengeReviewMetrics(ReviewStatusMetrics);
     }
 
-    if (targets === WidgetDataTarget.project || _indexOf(targets, WidgetDataTarget.project) > -1) {
+    if (targets === WidgetDataTarget.project || targets.indexOf(WidgetDataTarget.project) > -1) {
       return WithProjectReviewMetrics(ReviewStatusMetrics);
     }
   };

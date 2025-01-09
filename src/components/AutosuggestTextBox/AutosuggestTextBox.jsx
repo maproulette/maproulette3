@@ -4,7 +4,6 @@ import _clone from "lodash/clone";
 import _concat from "lodash/concat";
 import _difference from "lodash/difference";
 import _filter from "lodash/filter";
-import _indexOf from "lodash/indexOf";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _split from "lodash/split";
@@ -210,7 +209,7 @@ export default class AutosuggestTextBox extends Component {
     // Filter out any of our original preferredResults tags so they don't show in the list twice.
     return _filter(
       this.props.searchResults,
-      (t) => _indexOf(this.props.preferredResults, t.name) === -1,
+      (t) => this.props.preferredResults.indexOf(t.name) === -1,
     );
   };
 
