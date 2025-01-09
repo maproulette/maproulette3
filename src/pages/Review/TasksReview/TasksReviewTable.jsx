@@ -5,7 +5,6 @@ import _debounce from "lodash/debounce";
 import _each from "lodash/each";
 import _isEqual from "lodash/isEqual";
 import _isObject from "lodash/isObject";
-import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -1325,7 +1324,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     exportable: (t) => props.intl.formatMessage(messagesByMetaReviewStatus[t.metaReviewStatus]),
     maxWidth: 180,
     Cell: (props) =>
-      _isUndefined(props.value) ? (
+      props.value === undefined ? (
         ""
       ) : (
         <StatusLabel

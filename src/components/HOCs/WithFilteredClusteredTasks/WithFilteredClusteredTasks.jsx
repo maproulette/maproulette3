@@ -6,7 +6,6 @@ import _fromPairs from "lodash/fromPairs";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _toInteger from "lodash/toInteger";
@@ -266,9 +265,9 @@ export default function WithFilteredClusteredTasks(
       return (
         includeStatuses[task.status] &&
         includePriorities[task.priority] &&
-        ((_isUndefined(task.reviewStatus) && includeReviewStatuses[REVIEW_STATUS_NOT_SET]) ||
+        ((task.reviewStatus === undefined && includeReviewStatuses[REVIEW_STATUS_NOT_SET]) ||
           includeReviewStatuses[task.reviewStatus]) &&
-        ((_isUndefined(task.metaReviewStatus) &&
+        ((task.metaReviewStatus === undefined &&
           includeMetaReviewStatuses[META_REVIEW_STATUS_NOT_SET]) ||
           includeMetaReviewStatuses[task.metaReviewStatus]) &&
         (includeLocked || !Number.isFinite(task.lockedBy) || task.lockedBy === this.props.user?.id)
@@ -328,14 +327,14 @@ export default function WithFilteredClusteredTasks(
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
       _each(["status", "reviewStatus", "metaReviewStatus", "priorities"], (key) => {
-        if (!_isUndefined(criteria?.filters?.[key]) && !this.props.taskId) {
+        if (criteria?.filters?.[key] !== undefined && !this.props.taskId) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
           } else if (Number.isFinite(criteria.filters[key])) {
             criteria.filters[key] = [criteria.filters[key]];
           }
           useURLFilters = true;
-        } else if (!_isUndefined(criteria?.filters?.[key]) && useSavedFilters) {
+        } else if (criteria?.filters?.[key] !== undefined && useSavedFilters) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
           } else if (Number.isFinite(criteria.filters[key])) {

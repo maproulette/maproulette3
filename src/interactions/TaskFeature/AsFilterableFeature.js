@@ -1,5 +1,4 @@
 import _isString from "lodash/isString";
-import _isUndefined from "lodash/isUndefined";
 import _toFinite from "lodash/toFinite";
 import _trim from "lodash/trim";
 
@@ -100,7 +99,7 @@ s   */
     // If property is undefined or empty, return true for NOT_EQUAL comparator
     // and false for everything else
     if (
-      _isUndefined(this.properties[rule.key]) ||
+      this.properties[rule.key] === undefined ||
       this.properties[rule.key] === null ||
       _trim(this.properties[rule.key]) === ""
     ) {

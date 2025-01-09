@@ -1,4 +1,3 @@
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _values from "lodash/values";
 import { v1 as uuidv1 } from "uuid";
@@ -169,7 +168,7 @@ export function fetchBoundedTasks(
       return null;
     }
 
-    let includeGeometries = _isUndefined(withGeometries) ? limit <= 100 : withGeometries;
+    let includeGeometries = withGeometries === undefined ? limit <= 100 : withGeometries;
     const page = criteria?.page ?? 0;
     const sortBy = criteria?.sortCriteria?.sortBy;
     const direction = (criteria?.sortCriteria?.direction || "ASC").toUpperCase();
@@ -188,7 +187,7 @@ export function fetchBoundedTasks(
     // If we don't have a challenge Id then we need to do some limiting.
     if (!filters.challengeId) {
       includeGeometries = false;
-      const onlyEnabled = _isUndefined(criteria.onlyEnabled) ? true : criteria.onlyEnabled;
+      const onlyEnabled = criteria.onlyEnabled === undefined ? true : criteria.onlyEnabled;
       const challengeStatus = criteria.challengeStatus;
       if (challengeStatus) {
         searchParameters.cStatus = challengeStatus.join(",");

@@ -2,7 +2,6 @@ import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
 import _remove from "lodash/remove";
@@ -77,7 +76,7 @@ export class ActiveTaskControls extends Component {
       return true;
     }
 
-    return !_isUndefined(this.state.needsReview)
+    return this.state.needsReview !== undefined
       ? this.state.needsReview
       : this.props.user?.settings?.needsReview;
   };
@@ -141,7 +140,7 @@ export class ActiveTaskControls extends Component {
 
       const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
-      if (!_isUndefined(this.state.submitRevision)) {
+      if (this.state.submitRevision !== undefined) {
         await this.props.updateTaskReviewStatus(
           this.props.task,
           this.state.submitRevision,
