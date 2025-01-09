@@ -2,7 +2,6 @@ import { startOfDay } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _find from "lodash/find";
 import _isArray from "lodash/isArray";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import { schema } from "normalizr";
 import { setupCustomCache } from "../../utils/setupCustomCache";
@@ -204,7 +203,7 @@ export const fetchProjectsById = function (projectIds) {
  */
 export const searchProjects = function (searchCriteria, limit = RESULTS_PER_PAGE) {
   const query = searchCriteria?.searchQuery;
-  const onlyEnabled = _isUndefined(searchCriteria.onlyEnabled) ? true : searchCriteria.onlyEnabled;
+  const onlyEnabled = searchCriteria.onlyEnabled === undefined ? true : searchCriteria.onlyEnabled;
 
   // We are just making sure the pqge passed in is a) present and b) a number
   const page = Number.isFinite(searchCriteria?.page) ? searchCriteria?.page : 0;

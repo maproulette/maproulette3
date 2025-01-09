@@ -5,7 +5,6 @@ import _findIndex from "lodash/findIndex";
 import _fromPairs from "lodash/fromPairs";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _set from "lodash/set";
@@ -217,7 +216,7 @@ export const generateSearchParametersString = (
       invf.push(PARAMS_MAP.project);
     }
   }
-  if (!_isUndefined(filters.status) && filters.status !== "all") {
+  if (filters.status !== undefined && filters.status !== "all") {
     if (Array.isArray(filters.status)) {
       searchParameters[PARAMS_MAP.status] = filters.status.join(",");
     } else {
@@ -227,13 +226,13 @@ export const generateSearchParametersString = (
       invf.push(PARAMS_MAP.status);
     }
   }
-  if (!_isUndefined(filters.priority) && filters.priority !== "all") {
+  if (filters.priority !== undefined && filters.priority !== "all") {
     searchParameters[PARAMS_MAP.priority] = filters.priority;
     if (invertFields.priority) {
       invf.push(PARAMS_MAP.priority);
     }
   }
-  if (!_isUndefined(filters.priorities) && filters.priorities !== "all") {
+  if (filters.priorities !== undefined && filters.priorities !== "all") {
     if (Array.isArray(filters.priorities)) {
       searchParameters[PARAMS_MAP.priorities] = filters.priorities.join(",");
     } else {
@@ -243,7 +242,7 @@ export const generateSearchParametersString = (
       invf.push(PARAMS_MAP.priorities);
     }
   }
-  if (!_isUndefined(filters.reviewStatus) && filters.reviewStatus !== "all") {
+  if (filters.reviewStatus !== undefined && filters.reviewStatus !== "all") {
     if (Array.isArray(filters.reviewStatus)) {
       searchParameters[PARAMS_MAP.reviewStatus] = filters.reviewStatus.join(",");
     } else {
@@ -253,7 +252,7 @@ export const generateSearchParametersString = (
       invf.push(PARAMS_MAP.reviewStatus);
     }
   }
-  if (!_isUndefined(filters.metaReviewStatus) && filters.metaReviewStatus !== "all") {
+  if (filters.metaReviewStatus !== undefined && filters.metaReviewStatus !== "all") {
     if (Array.isArray(filters.metaReviewStatus)) {
       let metaReviewStatuses = _clone(filters.metaReviewStatus);
       const reviewStatus = Array.isArray(filters.reviewStatus)

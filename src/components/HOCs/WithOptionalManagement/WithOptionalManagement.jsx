@@ -1,4 +1,3 @@
-import _isUndefined from "lodash/isUndefined";
 import _omit from "lodash/omit";
 import { Component } from "react";
 
@@ -14,7 +13,7 @@ const WithOptionalManagement = function (WrappedComponent) {
       isActive: false,
     };
 
-    isSelfManaged = () => _isUndefined(this.props.isActive);
+    isSelfManaged = () => this.props.isActive === undefined;
 
     isActive = () => (this.isSelfManaged() ? this.state.isActive : this.props.isActive);
 

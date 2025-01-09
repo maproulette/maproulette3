@@ -11,7 +11,6 @@ import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
-import _isUndefined from "lodash/isUndefined";
 import _join from "lodash/join";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -328,7 +327,7 @@ export const performChallengeSearch = function (searchObject, limit = RESULTS_PE
   const admin = searchObject?.admin ?? false;
   let bounds = null;
 
-  if (filters && !_isUndefined(filters.location)) {
+  if (filters && filters.location !== undefined) {
     bounds = searchObject?.mapBounds?.bounds;
   }
 
@@ -369,7 +368,7 @@ export const performChallengeSearch = function (searchObject, limit = RESULTS_PE
 export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin = false) {
   const queryString = criteria.searchQuery;
   const filters = criteria.filters || {};
-  const onlyEnabled = _isUndefined(criteria.onlyEnabled) ? true : criteria.onlyEnabled;
+  const onlyEnabled = criteria.onlyEnabled === undefined ? true : criteria.onlyEnabled;
 
   const bounds = criteria.bounds;
   const sortBy = criteria?.sortCriteria?.sortBy ?? SortOptions.popular;
@@ -819,7 +818,7 @@ export const fetchChallenge = function (challengeId, suppressReceive = false) {
 
         // If there are no virtual parents then this field will not be set by server
         // so we need to indicate it's empty.
-        if (_isUndefined(challenge.virtualParents)) {
+        if (challenge.virtualParents === undefined) {
           challenge.virtualParents = [];
         }
 
@@ -859,7 +858,7 @@ export const fetchChallenges = function (challengeIds, suppressReceive = false) 
         // If a challenge has no virtual parents then the field will not be set
         // by server, so we need to indicate it's empty
         _each(normalizedResults.entities.challenges, (challenge) => {
-          if (_isUndefined(challenge.virtualParents)) {
+          if (challenge.virtualParents === undefined) {
             challenge.virtualParents = [];
           }
         });

@@ -3,7 +3,6 @@ import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
-import _isUndefined from "lodash/isUndefined";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
@@ -1194,7 +1193,7 @@ export const retrieveChallengeTask = function (dispatch, endpoint) {
         ? normalizedTaskResults.result[0]
         : normalizedTaskResults.result;
 
-      if (!_isUndefined(retrievedTaskId)) {
+      if (retrievedTaskId !== undefined) {
         // Some API requests give back the parent as `parentId` instead
         // of `parent`, and the geometries back as `geometry` instead of
         // `geometries`. Normalize these.

@@ -1,5 +1,4 @@
 import _find from "lodash/find";
-import _isUndefined from "lodash/isUndefined";
 
 /**
  * The names of feature and property fields that may be used to identify a
@@ -120,7 +119,7 @@ export class AsIdentifiableFeature {
   }
 
   isValidId(id) {
-    if (_isUndefined(id)) {
+    if (id === undefined) {
       return false;
     }
 

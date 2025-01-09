@@ -1,7 +1,6 @@
 import _cloneDeep from "lodash/cloneDeep";
 import _each from "lodash/each";
 import _isString from "lodash/isString";
-import _isUndefined from "lodash/isUndefined";
 import _keys from "lodash/keys";
 import _toInteger from "lodash/toInteger";
 import _values from "lodash/values";
@@ -52,7 +51,7 @@ export function buildSearchURL(searchCriteria) {
         params.boundingBox = _values(searchCriteria.boundingBox).join();
       } else {
         _each(_keys(searchCriteria[key]), (subkey) => {
-          if (!_isUndefined(searchCriteria[key][subkey]) && searchCriteria[key][subkey] !== null) {
+          if (searchCriteria[key][subkey] !== undefined && searchCriteria[key][subkey] !== null) {
             // taskPropertySearch is a json object
             if (subkey === "taskPropertySearch") {
               params[`${key}.${subkey}`] = JSON.stringify(searchCriteria[key][subkey]);
@@ -62,7 +61,7 @@ export function buildSearchURL(searchCriteria) {
           }
         });
       }
-    } else if (!_isUndefined(searchCriteria[key]) && searchCriteria[key] !== null) {
+    } else if (searchCriteria[key] !== undefined && searchCriteria[key] !== null) {
       params[key] = searchCriteria[key];
     }
   });
