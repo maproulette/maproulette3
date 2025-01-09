@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import _isFunction from "lodash/isFunction";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import BusySpinner from "../BusySpinner/BusySpinner";
@@ -28,8 +27,8 @@ export default class SearchBox extends Component {
       return;
     } else if (e.key === "Escape") {
       this.props.clearSearch();
-    } else if (e.key === "Enter" && _isFunction(this.props.deactivate)) {
-      this.props.deactivate();
+    } else if (e.key === "Enter") {
+      this.props.deactivate?.();
     }
   };
 
