@@ -1,6 +1,5 @@
 import _clone from "lodash/clone";
 import _isArray from "lodash/isArray";
-import _isBoolean from "lodash/isBoolean";
 import _isEqualWith from "lodash/isEqualWith";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
@@ -57,7 +56,7 @@ const WithLeaderboard = function (WrappedComponent, initialMonthsPast = 1, initi
       ]);
       const leaderboardOptions = _merge({}, initialOptions, this.props.leaderboardOptions);
       if (leaderboardOptions) {
-        if (_isBoolean(leaderboardOptions.onlyEnabled)) {
+        if (typeof leaderboardOptions.onlyEnabled === "boolean") {
           params.set("onlyEnabled", leaderboardOptions.onlyEnabled);
         }
 
