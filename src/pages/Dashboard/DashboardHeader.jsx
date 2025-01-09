@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
 import { FormattedMessage } from "react-intl";
@@ -16,7 +15,7 @@ const DashboardHeader = (props) => {
   const rank = props.leaderboardMetrics?.rank;
 
   const welcomeBackInterface = () => {
-    if (_isFinite(userScore)) {
+    if (Number.isFinite(userScore)) {
       return (
         <p>
           <FormattedMessage {...messages.completionPrompt} />
@@ -41,7 +40,7 @@ const DashboardHeader = (props) => {
       );
     }
 
-    return _isFinite(completedTasks) ? (
+    return Number.isFinite(completedTasks) ? (
       <FormattedMessage {...messages.getStarted} />
     ) : (
       <BusySpinner />
@@ -65,7 +64,7 @@ const DashboardHeader = (props) => {
         </div>
         <div className="mr-bg-black-25 mr-w-full mr-py-4 mr-pl-8 mr-rounded-b">
           <div className="mr-bg-lines mr-p-4 mr-pl-12 mr-flex mr-justify-between mr-items-center">
-            {_isFinite(latestChallenge) ? (
+            {Number.isFinite(latestChallenge) ? (
               <Fragment>
                 <div className="mr-flex mr-items-center mr-mr-8">
                   <div className="mr-mr-4 mr-flex mr-flex-wrap">

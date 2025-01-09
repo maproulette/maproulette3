@@ -4,7 +4,6 @@ import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
 import _each from "lodash/each";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
@@ -750,7 +749,7 @@ export class TaskReviewTable extends Component {
             />
           </div>
         </div>
-        {_isFinite(this.state.openComments) && (
+        {Number.isFinite(this.state.openComments) && (
           <TaskCommentsModal
             taskId={this.state.openComments}
             onClose={() => this.setState({ openComments: null })}

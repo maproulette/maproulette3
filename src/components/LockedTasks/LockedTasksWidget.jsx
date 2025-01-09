@@ -1,5 +1,4 @@
 import { differenceInMinutes, formatDistanceToNow, parseISO } from "date-fns";
-import _isFinite from "lodash/isFinite";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
@@ -72,7 +71,7 @@ const LockedTasks = (props) => {
     return sortedLockedTasks.length > 0 ? (
       <div className="mr-flex mr-flex-wrap mr-links-green-lighter">
         {sortedLockedTasks.map((task) => {
-          if (!_isFinite(task?.id)) {
+          if (!Number.isFinite(task?.id)) {
             return null;
           }
 

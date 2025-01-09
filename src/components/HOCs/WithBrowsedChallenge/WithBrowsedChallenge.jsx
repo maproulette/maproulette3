@@ -1,5 +1,4 @@
 import _debounce from "lodash/debounce";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _omit from "lodash/omit";
 import { denormalize } from "normalizr";
@@ -52,7 +51,7 @@ export const WithBrowsedChallenge = function (WrappedComponent) {
      *
      * @private
      */
-    isVirtualChallenge = (props) => _isFinite(this.virtualChallengeId(props));
+    isVirtualChallenge = (props) => Number.isFinite(this.virtualChallengeId(props));
 
     /**
      * Parses the current standard or virtual challenge id from the matched params
@@ -95,11 +94,11 @@ export const WithBrowsedChallenge = function (WrappedComponent) {
       const challengeId = this.currentChallengeId(props);
       const isVirtual = this.isVirtualChallenge(props);
 
-      if (_isFinite(challengeId)) {
+      if (Number.isFinite(challengeId)) {
         if (
           this.state.browsedChallenge?.id !== challengeId ||
           this.state.isVirtual !== isVirtual ||
-          _isFinite(this.state.loadingBrowsedChallenge)
+          Number.isFinite(this.state.loadingBrowsedChallenge)
         ) {
           let challenge = this.denormalizedChallenge(props);
           if (_isObject(challenge)) {
@@ -115,7 +114,7 @@ export const WithBrowsedChallenge = function (WrappedComponent) {
               loadingBrowsedChallenge: null,
               isVirtual,
             });
-          } else if (!isVirtual && !_isFinite(this.state.loadingBrowsedChallenge)) {
+          } else if (!isVirtual && !Number.isFinite(this.state.loadingBrowsedChallenge)) {
             // We don't have the challenge available (and we're not in the middle
             // of loading it), so fetch it.
             this.setState({
@@ -218,7 +217,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       (challengeId) => {
         return dispatch(fetchChallenge(challengeId)).then((normalizedResults) => {
           if (
-            !_isFinite(normalizedResults.result) ||
+            !Number.isFinite(normalizedResults.result) ||
             normalizedResults?.entities?.challenges?.[normalizedResults.result]?.deleted
           ) {
             dispatch(addError(AppErrors.challenge.doesNotExist));
@@ -226,7 +225,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           } else {
             const projectId =
               normalizedResults?.entities?.challenges?.[normalizedResults.result]?.parent;
-            if (_isFinite(projectId)) {
+            if (Number.isFinite(projectId)) {
               dispatch(fetchProject(projectId));
             }
           }

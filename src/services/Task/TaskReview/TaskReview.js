@@ -1,6 +1,5 @@
 import _cloneDeep from "lodash/cloneDeep";
 import _isArray from "lodash/isArray";
-import _isFinite from "lodash/isFinite";
 import _join from "lodash/join";
 import _map from "lodash/map";
 import _set from "lodash/set";
@@ -473,7 +472,7 @@ export const loadNextReviewTask = function (criteria = {}, lastTaskId, asMetaRev
 
   return function (dispatch) {
     const params = { sort, order, ...searchParameters, asMetaReview };
-    if (_isFinite(lastTaskId)) {
+    if (Number.isFinite(lastTaskId)) {
       params.lastTaskId = lastTaskId;
     }
 

@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _isString from "lodash/isString";
 import _isUndefined from "lodash/isUndefined";
 import _toFinite from "lodash/toFinite";
@@ -110,12 +109,12 @@ s   */
 
     // Make sure we're dealing with finite numbers
     const propertyValue = _toFinite(this.properties[rule.key]);
-    if (!_isFinite(propertyValue)) {
+    if (!Number.isFinite(propertyValue)) {
       return false;
     }
 
     const ruleValue = _toFinite(rule.value);
-    if (!_isFinite(ruleValue)) {
+    if (!Number.isFinite(ruleValue)) {
       return false;
     }
 

@@ -5,7 +5,6 @@ import _groupBy from "lodash/groupBy";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _pickBy from "lodash/pickBy";
@@ -131,7 +130,7 @@ const WithChallengeMetrics = function (WrappedComponent, applyFilters = false) {
         (taskMetrics?.total ?? 0) > 0
       ) {
         tasksAvailable = _sumBy(this.props.challenges, "actions.available");
-        if (_isFinite(tasksAvailable)) {
+        if (Number.isFinite(tasksAvailable)) {
           let allActivity = _isArray(this.props.activity)
             ? this.props.activity
             : _compact(_flatten(_map(this.props.challenges, "activity")));

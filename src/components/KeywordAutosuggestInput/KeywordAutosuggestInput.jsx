@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import { Component } from "react";
 import { injectIntl } from "react-intl";
 import AutosuggestTextBox from "../AutosuggestTextBox/AutosuggestTextBox";
@@ -19,7 +18,7 @@ export class KeywordAutosuggestInput extends Component {
   };
 
   keywordClassName = (keyword) => {
-    return _isFinite(keyword.id) ? "existing-keyword" : "new-keyword";
+    return Number.isFinite(keyword.id) ? "existing-keyword" : "new-keyword";
   };
 
   /**

@@ -3,7 +3,6 @@ import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _merge from "lodash/merge";
 import _split from "lodash/split";
@@ -94,7 +93,7 @@ export class EditTask extends Component {
     // We may have a task id lying around in redux, but at least make sure we
     // have a task status and geometries before proceeding to load the form
     if (
-      !_isFinite(this.props.task?.status) ||
+      !Number.isFinite(this.props.task?.status) ||
       !_isObject(this.props.task?.geometries) ||
       !this.props.challenge ||
       !this.props.project

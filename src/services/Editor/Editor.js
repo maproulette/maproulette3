@@ -6,7 +6,6 @@ import _fromPairs from "lodash/fromPairs";
 import _invert from "lodash/invert";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _snakeCase from "lodash/snakeCase";
 import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
@@ -475,7 +474,7 @@ export const josmImageryURI = function (imagery) {
         ? `attribution-text=${encodeURIComponent(imagery.attribution.text)}`
         : null,
       imagery.attribution ? `attribution-url=${encodeURIComponent(imagery.attribution.url)}` : null,
-      _isFinite(imagery.max_zoom) ? `max_zoom=${imagery.max_zoom}` : null,
+      Number.isFinite(imagery.max_zoom) ? `max_zoom=${imagery.max_zoom}` : null,
       `url=${encodeURIComponent(imagery.url)}`, // must come last per JOSM docs
     ]).join("&")
   );

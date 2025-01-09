@@ -1,7 +1,6 @@
 import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _find from "lodash/find";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
@@ -64,12 +63,12 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
       // project and the defaultToOnlyProject option is true, then go ahead and
       // use that project.
       if (
-        !_isFinite(projectId) &&
+        !Number.isFinite(projectId) &&
         options.defaultToOnlyProject &&
         (props.projects?.length ?? 0) === 1
       ) {
         projectId = props.projects[0].id;
-      } else if (_isFinite(projectId) && options.restrictToGivenProjects) {
+      } else if (Number.isFinite(projectId) && options.restrictToGivenProjects) {
         if (!_find(props.projects, { id: projectId })) {
           projectId = null;
         }
@@ -98,7 +97,7 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
       let projectId = this.currentProjectId(props);
 
       if (
-        _isFinite(this.routedProjectId(props)) &&
+        Number.isFinite(this.routedProjectId(props)) &&
         projectId === null &&
         !this.state.loadingProject
       ) {
@@ -111,7 +110,7 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
         projectId = this.routedProjectId(props);
       }
 
-      if (_isFinite(projectId)) {
+      if (Number.isFinite(projectId)) {
         this.setState({
           loadingProject: true,
           loadingChallenges: options.includeChallenges,
@@ -127,7 +126,7 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
               if (!manager.canManage(project)) {
                 // If we have a challenge id too, route to the browse url for the challenge
                 const challengeId = this.routedChallengeId(this.props);
-                if (_isFinite(challengeId)) {
+                if (Number.isFinite(challengeId)) {
                   props.history.replace(`/browse/challenges/${challengeId}`);
                 } else {
                   this.props.notManagerError();
@@ -219,17 +218,19 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
       }
 
       const nextProjectId = this.currentProjectId(this.props);
-      if (_isFinite(nextProjectId) && nextProjectId !== this.currentProjectId(prevProps)) {
+      if (Number.isFinite(nextProjectId) && nextProjectId !== this.currentProjectId(prevProps)) {
         this.loadProject(this.props);
       }
     }
 
     render() {
       const projectId = this.currentProjectId(this.props);
-      const project = !_isFinite(projectId) ? null : this.props.entities?.projects?.[projectId];
+      const project = !Number.isFinite(projectId)
+        ? null
+        : this.props.entities?.projects?.[projectId];
       let challenges = this.props.challenges; // pass through challenges by default
 
-      if (options.includeChallenges && _isFinite(projectId)) {
+      if (options.includeChallenges && Number.isFinite(projectId)) {
         challenges = _map(this.challengeProjects(projectId, this.props), (challenge) =>
           denormalize(challenge, challengeDenormalizationSchema(), this.props.entities),
         );

@@ -6,7 +6,6 @@ import _each from "lodash/each";
 import _find from "lodash/find";
 import _findLastIndex from "lodash/findLastIndex";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
@@ -231,7 +230,7 @@ class UserSettings extends Component {
       if (!_isEmpty(userSettings.defaultBasemapId)) {
         // layer index string
         userSettings.defaultBasemap = userSettings.defaultBasemapId;
-      } else if (_isFinite(userSettings.defaultBasemap)) {
+      } else if (Number.isFinite(userSettings.defaultBasemap)) {
         // numeric identifier
         // Convert to corresponding layer-index string identifier for form if
         // possible. Otherwise just go with string representation of numerical

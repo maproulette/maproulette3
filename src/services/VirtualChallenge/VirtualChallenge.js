@@ -1,5 +1,4 @@
 import { addHours } from "date-fns";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import { schema } from "normalizr";
@@ -58,7 +57,7 @@ export const fetchVirtualChallenge = function (virtualChallengeId) {
     })
       .execute()
       .then((normalizedResults) => {
-        if (_isFinite(normalizedResults.result)) {
+        if (Number.isFinite(normalizedResults.result)) {
           // Mark that the challenge is virtual.
           normalizedResults.entities.virtualChallenges[normalizedResults.result].isVirtual = true;
         }

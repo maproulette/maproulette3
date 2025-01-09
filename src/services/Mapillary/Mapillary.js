@@ -1,6 +1,5 @@
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 
 const EMBED_URI_V4 = "https://www.mapillary.com/embed";
 const IMAGES_URI_V4 = "https://graph.mapillary.com/images";
@@ -45,7 +44,7 @@ export const fetchMapillaryImages = async function (
     if (point) {
       params.push(`closeto=${_isArray(point) ? point.join(",") : point}`);
 
-      if (_isFinite(radius)) {
+      if (Number.isFinite(radius)) {
         params.push(`radius=${radius}`);
       }
 

@@ -1,7 +1,6 @@
 import _cloneDeep from "lodash/cloneDeep";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
 import _isUndefined from "lodash/isUndefined";
@@ -462,7 +461,7 @@ export const updateCompletionResponses = function (taskId, completionResponses) 
 export const addTaskComment = function (taskId, comment, taskStatus) {
   return function (dispatch) {
     const params = {};
-    if (_isFinite(taskStatus)) {
+    if (Number.isFinite(taskStatus)) {
       params.actionId = taskStatus;
     }
 
@@ -496,7 +495,7 @@ export const addTaskComment = function (taskId, comment, taskStatus) {
 export const addTaskBundleComment = function (bundleId, primaryTaskId, comment, taskStatus) {
   return function (dispatch) {
     const params = {};
-    if (_isFinite(taskStatus)) {
+    if (Number.isFinite(taskStatus)) {
       params.actionId = taskStatus;
     }
     return new Endpoint(api.tasks.bundled.addComment, {
@@ -620,7 +619,7 @@ export const loadRandomTaskFromChallenge = function (
       schema: [taskSchema()],
       variables: { id: challengeId },
       params: {
-        proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+        proximity: Number.isFinite(priorTaskId) ? priorTaskId : undefined,
         mapillary: includeMapillary,
       },
     });
@@ -649,7 +648,7 @@ export const loadRandomTaskFromVirtualChallenge = function (
         schema: taskSchema(),
         variables: { id: virtualChallengeId },
         params: {
-          proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+          proximity: Number.isFinite(priorTaskId) ? priorTaskId : undefined,
           mapillary: includeMapillary,
         },
       }),
@@ -971,11 +970,14 @@ export const saveTask = function (originalTaskData) {
 
     // Setup the save function to either edit or create the task
     // depending on whether it has an id.
-    const saveEndpoint = new Endpoint(_isFinite(taskData.id) ? api.task.edit : api.task.create, {
-      schema: taskSchema(),
-      variables: { id: taskData.id },
-      json: taskData,
-    });
+    const saveEndpoint = new Endpoint(
+      Number.isFinite(taskData.id) ? api.task.edit : api.task.create,
+      {
+        schema: taskSchema(),
+        variables: { id: taskData.id },
+        json: taskData,
+      },
+    );
 
     return saveEndpoint
       .execute()
@@ -1156,7 +1158,7 @@ export const retrieveChallengeTask = function (dispatch, endpoint) {
     .then((normalizedTaskResults) => {
       if (
         !normalizedTaskResults ||
-        (!_isFinite(normalizedTaskResults.result) && _isEmpty(normalizedTaskResults.result))
+        (!Number.isFinite(normalizedTaskResults.result) && _isEmpty(normalizedTaskResults.result))
       ) {
         return null;
       }
@@ -1170,7 +1172,7 @@ export const retrieveChallengeTask = function (dispatch, endpoint) {
         // of `parent`, and the geometries back as `geometry` instead of
         // `geometries`. Normalize these.
         const taskEntity = normalizedTaskResults.entities.tasks[retrievedTaskId];
-        if (!_isFinite(taskEntity.parent)) {
+        if (!Number.isFinite(taskEntity.parent)) {
           taskEntity.parent = taskEntity.parentId;
         }
 
