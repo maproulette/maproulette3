@@ -1,7 +1,6 @@
 import { LatLng, LatLngBounds } from "leaflet";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFunction from "lodash/isFunction";
 import _isString from "lodash/isString";
 import _max from "lodash/max";
 import _split from "lodash/split";
@@ -46,7 +45,7 @@ export const maxAllowedTaskBrowsingDegrees =
 export const fromLatLngBounds = function (boundsObject) {
   if (_isEmpty(boundsObject)) {
     return null;
-  } else if (_isFunction(boundsObject.toBBoxString)) {
+  } else if (typeof boundsObject.toBBoxString === "function") {
     return [
       boundsObject.getWest(),
       boundsObject.getSouth(),
@@ -82,7 +81,7 @@ export const toLatLngBounds = function (arrayBounds) {
     const southWest = new LatLng(arrayBounds[1], arrayBounds[0]);
     const northEast = new LatLng(arrayBounds[3], arrayBounds[2]);
     return new LatLngBounds(southWest, northEast);
-  } else if (_isFunction(arrayBounds.toBBoxString)) {
+  } else if (typeof arrayBounds.toBBoxString === "function") {
     // they gave us a LatLngBounds. Just return it.
     return arrayBounds;
   } else if (_isString(arrayBounds)) {
