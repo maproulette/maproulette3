@@ -17,7 +17,8 @@
     "lint": "eslint src/",
     "format": "biome format --write",
     "check": "biome ci && eslint src/",
-    "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'"
+    "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'",
+    "test:e2e": "playwright test --ui"
   },
   "browserslist": [
     ">0.2%",
