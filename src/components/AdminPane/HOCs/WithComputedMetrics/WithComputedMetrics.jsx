@@ -1,6 +1,5 @@
 import _each from "lodash/each";
 import _fromPairs from "lodash/fromPairs";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
@@ -42,7 +41,7 @@ export default function (WrappedComponent) {
 
     render() {
       const challenges =
-        _isArray(this.props.challenges) && this.props.challenges.length > 0
+        Array.isArray(this.props.challenges) && this.props.challenges.length > 0
           ? this.props.challenges
           : _isObject(this.props.challenge)
             ? [this.props.challenge]

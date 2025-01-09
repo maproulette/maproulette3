@@ -7,7 +7,6 @@ import _each from "lodash/each";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
 import _groupBy from "lodash/groupBy";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
@@ -165,7 +164,7 @@ const buildQueryFilters = function (criteria) {
  * > first challenge entity is returned.
  */
 export const challengeResultEntity = function (normalizedChallengeResults) {
-  const challengeId = _isArray(normalizedChallengeResults.result)
+  const challengeId = Array.isArray(normalizedChallengeResults.result)
     ? normalizedChallengeResults.result[0]
     : normalizedChallengeResults.result;
 
@@ -291,7 +290,7 @@ export const fetchProjectChallengeListing = function (projectIds, onlyEnabled = 
     return new Endpoint(api.challenges.listing, {
       schema: [challengeSchema()],
       params: {
-        projectIds: _isArray(projectIds) ? projectIds.join(",") : projectIds,
+        projectIds: Array.isArray(projectIds) ? projectIds.join(",") : projectIds,
         onlyEnabled,
         limit,
       },
@@ -417,7 +416,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
     // Keywords/tags can come from both the the query and the filter, so we need to
     // combine them into a single keywords array.
     const keywords = queryParts.tagTokens.concat(
-      _isArray(filters.keywords) ? filters.keywords : [],
+      Array.isArray(filters.keywords) ? filters.keywords : [],
     );
 
     if (keywords.length > 0) {
@@ -845,7 +844,7 @@ export const fetchChallenge = function (challengeId, suppressReceive = false) {
  */
 export const fetchChallenges = function (challengeIds, suppressReceive = false) {
   return function (dispatch) {
-    if (!_isArray(challengeIds) || challengeIds.length === 0) {
+    if (!Array.isArray(challengeIds) || challengeIds.length === 0) {
       return Promise.success();
     }
 
@@ -890,19 +889,19 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData);
 
-    if (_isArray(challengeData.tags)) {
+    if (Array.isArray(challengeData.tags)) {
       challengeData.tags = challengeData.tags.map((t) => t.trim()).join(",");
     } else if (challengeData.tags) {
       challengeData.tags = challengeData.tags.trim();
     }
 
-    if (_isArray(challengeData.preferredTags)) {
+    if (Array.isArray(challengeData.preferredTags)) {
       challengeData.preferredTags = challengeData.preferredTags.map((t) => t.trim()).join(",");
     } else if (challengeData.preferredTags) {
       challengeData.preferredTags = challengeData.preferredTags.trim();
     }
 
-    if (_isArray(challengeData.preferredReviewTags)) {
+    if (Array.isArray(challengeData.preferredReviewTags)) {
       challengeData.preferredReviewTags = challengeData.preferredReviewTags
         .map((t) => t.trim())
         .join(",");
@@ -1334,7 +1333,7 @@ export const fetchParentProject = function (dispatch, normalizedChallengeResults
  * results.
  */
 export const findKeyword = function (keywordPrefix, tagType = null) {
-  const tagTypes = _isArray(tagType) ? tagType.join(",") : tagType;
+  const tagTypes = Array.isArray(tagType) ? tagType.join(",") : tagType;
   return new Endpoint(api.keywords.find, {
     params: { prefix: keywordPrefix, tagTypes },
   }).execute();
@@ -1384,7 +1383,7 @@ const reduceChallengesFurther = function (mergedState, oldState, challengeEntiti
       return;
     }
 
-    if (_isArray(entity.tags)) {
+    if (Array.isArray(entity.tags)) {
       mergedState[entity.id].tags = entity.tags;
     }
 
@@ -1400,19 +1399,19 @@ const reduceChallengesFurther = function (mergedState, oldState, challengeEntiti
       mergedState[entity.id].lowPriorityRule = entity.lowPriorityRule;
     }
 
-    if (_isArray(entity.activity)) {
+    if (Array.isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity;
     }
 
-    if (_isArray(entity.virtualParents)) {
+    if (Array.isArray(entity.virtualParents)) {
       mergedState[entity.id].virtualParents = entity.virtualParents;
     }
 
-    if (_isArray(entity.taskStyles)) {
+    if (Array.isArray(entity.taskStyles)) {
       mergedState[entity.id].taskStyles = entity.taskStyles;
     }
 
-    if (_isArray(entity.presets)) {
+    if (Array.isArray(entity.presets)) {
       mergedState[entity.id].presets = entity.presets;
     }
   });

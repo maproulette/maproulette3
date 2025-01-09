@@ -5,7 +5,6 @@ import _debounce from "lodash/debounce";
 import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _get from "lodash/get";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
 import _kebabCase from "lodash/kebabCase";
@@ -145,7 +144,7 @@ export class TaskAnalysisTableInternal extends Component {
       this.setState({ openComments: taskId }),
     );
 
-    if (_isArray(this.props.showColumns) && this.props.showColumns.length > 0) {
+    if (Array.isArray(this.props.showColumns) && this.props.showColumns.length > 0) {
       return _compact(_map(this.props.showColumns, (columnId) => columnTypes[columnId]));
     } else {
       const findColumn = (column) => {
@@ -190,7 +189,10 @@ export class TaskAnalysisTableInternal extends Component {
     let taskBaseRoute = null;
 
     // if management controls are to be shown, then a challenge object is required
-    if (!_isArray(this.props.showColumns) || this.props.showColumns.indexOf("controls") !== -1) {
+    if (
+      !Array.isArray(this.props.showColumns) ||
+      this.props.showColumns.indexOf("controls") !== -1
+    ) {
       if (!_isObject(this.props.challenge) || !_isObject(this.props.challenge.parent)) {
         return null;
       }

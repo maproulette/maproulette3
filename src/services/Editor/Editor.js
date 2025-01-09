@@ -4,7 +4,6 @@ import _filter from "lodash/filter";
 import _find from "lodash/find";
 import _fromPairs from "lodash/fromPairs";
 import _invert from "lodash/invert";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _snakeCase from "lodash/snakeCase";
@@ -350,7 +349,7 @@ export const osmObjectParams = function (
   entitySeparator = "",
   joinSeparator = ",",
 ) {
-  const allTasks = _isArray(task) ? task : [task];
+  const allTasks = Array.isArray(task) ? task : [task];
   let objects = [];
   allTasks.forEach((task) => {
     if (task.geometries?.features) {

@@ -1,7 +1,6 @@
 import idPresets from "@openstreetmap/id-tagging-schema/dist/preset_categories.json";
 import _each from "lodash/each";
 import _find from "lodash/find";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _reduce from "lodash/reduce";
 import _toPairs from "lodash/toPairs";
@@ -61,7 +60,7 @@ export const definedPresetCategories = (challengeData) => {
   return _reduce(
     idPresets,
     (definedCategories, presetCategory, categoryName) => {
-      if (_isArray(challengeData[categoryName])) {
+      if (Array.isArray(challengeData[categoryName])) {
         definedCategories.push(categoryName);
       }
 
@@ -109,7 +108,7 @@ export const categorizePresetStrings = (presetStrings) => {
     }
 
     const categoryName = parentCategory[0];
-    if (!_isArray(categorized[categoryName])) {
+    if (!Array.isArray(categorized[categoryName])) {
       categorized[categoryName] = [];
     }
     categorized[categoryName].push(preset);
