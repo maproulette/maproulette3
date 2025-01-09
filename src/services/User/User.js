@@ -1,7 +1,6 @@
 import { startOfDay, subMonths } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _each from "lodash/each";
-import _isArray from "lodash/isArray";
 import _isObject from "lodash/isObject";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -968,27 +967,27 @@ const reduceUsersFurther = function (mergedState, oldState, userEntities) {
   // We also normalize the locale, as the server will default to `en` whereas
   // we use `en-US`
   for (let entity of userEntities) {
-    if (_isArray(entity.groups)) {
+    if (Array.isArray(entity.groups)) {
       mergedState[entity.id].groups = entity.groups;
     }
 
-    if (_isArray(entity.activity)) {
+    if (Array.isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity;
     }
 
-    if (_isArray(entity.savedChallenges)) {
+    if (Array.isArray(entity.savedChallenges)) {
       mergedState[entity.id].savedChallenges = entity.savedChallenges;
     }
 
-    if (_isArray(entity.topChallenges)) {
+    if (Array.isArray(entity.topChallenges)) {
       mergedState[entity.id].topChallenges = entity.topChallenges;
     }
 
-    if (_isArray(entity.savedTasks)) {
+    if (Array.isArray(entity.savedTasks)) {
       mergedState[entity.id].savedTasks = entity.savedTasks;
     }
 
-    if (_isArray(entity.notifications)) {
+    if (Array.isArray(entity.notifications)) {
       mergedState[entity.id].notifications = entity.notifications;
     }
 
@@ -998,7 +997,7 @@ const reduceUsersFurther = function (mergedState, oldState, userEntities) {
     }
 
     // Always completely replace customBasemaps
-    if (_isArray(entity?.settings?.customBasemaps)) {
+    if (Array.isArray(entity?.settings?.customBasemaps)) {
       mergedState[entity.id].settings.customBasemaps = entity.settings.customBasemaps;
     }
 
@@ -1015,7 +1014,7 @@ const reduceUsersFurther = function (mergedState, oldState, userEntities) {
 export const userEntities = function (state, action) {
   if (action.type === ADD_SAVED_CHALLENGE) {
     const mergedState = _cloneDeep(state);
-    if (!_isArray(mergedState?.[action.userId]?.savedChallenges)) {
+    if (!Array.isArray(mergedState?.[action.userId]?.savedChallenges)) {
       _set(mergedState, `${action.userId}.savedChallenges`, []);
     }
 
@@ -1027,7 +1026,7 @@ export const userEntities = function (state, action) {
     return mergedState;
   } else if (action.type === ADD_SAVED_TASK) {
     const mergedState = _cloneDeep(state);
-    if (!_isArray(mergedState?.[action.userId]?.savedTasks)) {
+    if (!Array.isArray(mergedState?.[action.userId]?.savedTasks)) {
       _set(mergedState, `${action.userId}.savedTasks`, []);
     }
 

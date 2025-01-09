@@ -8,7 +8,6 @@ import _cloneDeep from "lodash/cloneDeep";
 import _every from "lodash/every";
 import _find from "lodash/find";
 import _fromPairs from "lodash/fromPairs";
-import _isArray from "lodash/isArray";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
@@ -34,7 +33,7 @@ export class AsMappableTask {
 
     // There are some tasks that have a FeatureCollection with null features,
     // so check for that here.
-    if (this.geometries.type === "FeatureCollection" && !_isArray(this.geometries.features)) {
+    if (this.geometries.type === "FeatureCollection" && !Array.isArray(this.geometries.features)) {
       return false;
     }
 
@@ -50,7 +49,7 @@ export class AsMappableTask {
       return false;
     }
 
-    const allowedTypes = _isArray(allowedFeatureTypes)
+    const allowedTypes = Array.isArray(allowedFeatureTypes)
       ? allowedFeatureTypes
       : [allowedFeatureTypes];
 
@@ -208,7 +207,7 @@ export class AsMappableTask {
    * FeatureCollection type
    */
   normalizedGeometries() {
-    if (_isArray(this.geometries?.features) && !this.geometries?.type) {
+    if (Array.isArray(this.geometries?.features) && !this.geometries?.type) {
       return Object.assign({ type: "FeatureCollection" }, this.geometries);
     }
 

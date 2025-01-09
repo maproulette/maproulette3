@@ -3,7 +3,6 @@ import booleanContains from "@turf/boolean-contains";
 import booleanDisjoint from "@turf/boolean-disjoint";
 import { Point } from "leaflet";
 import _filter from "lodash/filter";
-import _isArray from "lodash/isArray";
 import _reduce from "lodash/reduce";
 import _sortBy from "lodash/sortBy";
 
@@ -45,7 +44,7 @@ export const isClickOnMarker = (clickBounds, marker, map) => {
     map.latLngToContainerPoint(marker.getLatLng()),
   );
 
-  if (!_isArray(iconOptions.iconAnchor) || !_isArray(iconOptions.iconSize)) {
+  if (!Array.isArray(iconOptions.iconAnchor) || !Array.isArray(iconOptions.iconSize)) {
     return false;
   }
 

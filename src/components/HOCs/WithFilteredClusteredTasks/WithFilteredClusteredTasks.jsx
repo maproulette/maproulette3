@@ -3,7 +3,6 @@ import _cloneDeep from "lodash/cloneDeep";
 import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _fromPairs from "lodash/fromPairs";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 import _map from "lodash/map";
@@ -233,7 +232,7 @@ export default function WithFilteredClusteredTasks(
     ) => {
       let results = { tasks: [] };
       let tasks = _cloneDeep(this.props[tasksProp]?.tasks);
-      if (_isArray(tasks)) {
+      if (Array.isArray(tasks)) {
         results = Object.assign({}, this.props[tasksProp], {
           tasks: _filter(tasks, (task) =>
             this.taskPassesFilters(

@@ -1,6 +1,5 @@
 import _each from "lodash/each";
 import _get from "lodash/get";
-import _isArray from "lodash/isArray";
 import _isObject from "lodash/isObject";
 import { Component } from "react";
 import AsMappableTask from "../../../interactions/Task/AsMappableTask";
@@ -29,7 +28,7 @@ export default function WithTaskMarkers(WrappedComponent, tasksProp = "clustered
 
       const markers = [];
       if (_isObject(challengeTasks)) {
-        if (_isArray(challengeTasks.tasks) && challengeTasks.tasks.length > 0) {
+        if (Array.isArray(challengeTasks.tasks) && challengeTasks.tasks.length > 0) {
           _each(challengeTasks.tasks, (task) => {
             if (allowedStatuses.indexOf(task.status) === -1) {
               return;

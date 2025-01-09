@@ -1,5 +1,4 @@
 import { LatLng, LatLngBounds } from "leaflet";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isString from "lodash/isString";
 import _max from "lodash/max";
@@ -52,7 +51,7 @@ export const fromLatLngBounds = function (boundsObject) {
       boundsObject.getEast(),
       boundsObject.getNorth(),
     ];
-  } else if (_isArray(boundsObject) && boundsObject.length === 4) {
+  } else if (Array.isArray(boundsObject) && boundsObject.length === 4) {
     // They gave us an array of bounds. Just return it.
     return boundsObject;
   } else {
@@ -77,7 +76,7 @@ export const fromLatLngBounds = function (boundsObject) {
 export const toLatLngBounds = function (arrayBounds) {
   if (_isEmpty(arrayBounds)) {
     return null;
-  } else if (_isArray(arrayBounds) && arrayBounds.length === 4) {
+  } else if (Array.isArray(arrayBounds) && arrayBounds.length === 4) {
     const southWest = new LatLng(arrayBounds[1], arrayBounds[0]);
     const northEast = new LatLng(arrayBounds[3], arrayBounds[2]);
     return new LatLngBounds(southWest, northEast);

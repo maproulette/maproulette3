@@ -1,6 +1,5 @@
 import _cloneDeep from "lodash/cloneDeep";
 import _forOwn from "lodash/forOwn";
-import _isArray from "lodash/isArray";
 import _isObject from "lodash/isObject";
 import _merge from "lodash/merge";
 import _values from "lodash/values";
@@ -38,7 +37,7 @@ import RequestStatus from "./RequestStatus";
  * @returns {function} a function that can be used as a redux reducer.
  */
 const genericEntityReducer = (actionTypes, entityName, reduceFurther) => {
-  const allowedActionTypes = _isArray(actionTypes) ? actionTypes : [actionTypes];
+  const allowedActionTypes = Array.isArray(actionTypes) ? actionTypes : [actionTypes];
 
   return (state = {}, action) => {
     if (

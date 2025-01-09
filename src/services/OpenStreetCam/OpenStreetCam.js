@@ -1,5 +1,4 @@
 import _each from "lodash/each";
-import _isArray from "lodash/isArray";
 
 const API_URI = "https://openstreetcam.org/1.0";
 
@@ -26,7 +25,7 @@ export const fetchOpenStreetCamImages = async function (bbox, pageSize = 1000, p
   }
 
   // bbox and point can be either arrays or strings with comma-separated coordinates
-  const bounds = _isArray(bbox) ? bbox : bbox.split(",");
+  const bounds = Array.isArray(bbox) ? bbox : bbox.split(",");
   const formData = new FormData();
   formData.append("bbBottomRight", `${bounds[1]},${bounds[2]}`);
   formData.append("bbTopLeft", `${bounds[3]},${bounds[0]}`);

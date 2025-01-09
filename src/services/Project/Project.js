@@ -1,7 +1,6 @@
 import { startOfDay } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _find from "lodash/find";
-import _isArray from "lodash/isArray";
 import _map from "lodash/map";
 import { schema } from "normalizr";
 import { setupCustomCache } from "../../utils/setupCustomCache";
@@ -181,7 +180,7 @@ export const fetchProjectsById = function (projectIds) {
     return new Endpoint(api.project.multiple, {
       schema: [projectSchema()],
       params: {
-        projectIds: _isArray(projectIds) ? projectIds.join(",") : projectIds,
+        projectIds: Array.isArray(projectIds) ? projectIds.join(",") : projectIds,
       },
     })
       .execute()
@@ -520,15 +519,15 @@ const reduceProjectsFurther = function (mergedState, oldState, projectEntities) 
       return;
     }
 
-    if (_isArray(entity.activity)) {
+    if (Array.isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity;
     }
 
-    if (_isArray(entity.managers)) {
+    if (Array.isArray(entity.managers)) {
       mergedState[entity.id].managers = entity.managers;
     }
 
-    if (_isArray(entity.teamManagers)) {
+    if (Array.isArray(entity.teamManagers)) {
       mergedState[entity.id].teamManagers = entity.teamManagers;
     }
   });
