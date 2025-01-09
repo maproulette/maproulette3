@@ -9,7 +9,6 @@ import _fromPairs from "lodash/fromPairs";
 import _groupBy from "lodash/groupBy";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
 import _isUndefined from "lodash/isUndefined";
@@ -171,7 +170,7 @@ export const challengeResultEntity = function (normalizedChallengeResults) {
     ? normalizedChallengeResults.result[0]
     : normalizedChallengeResults.result;
 
-  return _isFinite(challengeId)
+  return Number.isFinite(challengeId)
     ? normalizedChallengeResults.entities.challenges[challengeId]
     : null;
 };
@@ -376,7 +375,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
   const sortBy = criteria?.sortCriteria?.sortBy ?? SortOptions.popular;
   const direction = (criteria?.sortCriteria?.direction || "DESC").toUpperCase();
   const sort = sortBy ? `${sortBy}` : null;
-  const page = _isFinite(criteria.page) ? criteria.page : 0;
+  const page = Number.isFinite(criteria.page) ? criteria.page : 0;
   const challengeStatus = criteria.challengeStatus;
 
   return function (dispatch) {
@@ -398,7 +397,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
       cLocal: onlyEnabled ? CHALLENGE_EXCLUDE_LOCAL : CHALLENGE_INCLUDE_LOCAL,
     };
 
-    if (_isFinite(filters.difficulty)) {
+    if (Number.isFinite(filters.difficulty)) {
       queryParams.cd = filters.difficulty;
     }
 
@@ -485,7 +484,7 @@ export const fetchChallengeActions = function (
 
   return function (dispatch) {
     const challengeActionsEndpoint = new Endpoint(
-      _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
+      Number.isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
       {
         schema: [challengeSchema()],
         variables: { id: challengeId },
@@ -499,7 +498,7 @@ export const fetchChallengeActions = function (
         // If we requested actions on a specific challenge and got nothing back,
         // replace the results with a zeroed-out actions object so our app can
         // know the challenge has no actions.
-        if (_isFinite(challengeId) && _isEmpty(normalizedResults.result)) {
+        if (Number.isFinite(challengeId) && _isEmpty(normalizedResults.result)) {
           normalizedResults.result = [challengeId];
           normalizedResults.entities = {
             challenges: {
@@ -1033,7 +1032,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
       // Agreement box should be checked, but if it passes as true the property should not be included
       // in the data sent to server.
       if (
-        !_isFinite(challengeData.id) &&
+        !Number.isFinite(challengeData.id) &&
         Object.hasOwn(challengeData, "automatedEditsCodeAgreement")
       ) {
         if (!challengeData.automatedEditsCodeAgreement) {
@@ -1048,7 +1047,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
       // Setup the save function to either edit or create the challenge
       // depending on whether it has an id.
       const saveEndpoint = new Endpoint(
-        _isFinite(challengeData.id) ? api.challenge.edit : api.challenge.create,
+        Number.isFinite(challengeData.id) ? api.challenge.edit : api.challenge.create,
         {
           schema: challengeSchema(),
           variables: { id: challengeData.id },
@@ -1352,7 +1351,7 @@ export const findKeyword = function (keywordPrefix, tagType = null) {
  */
 const removeChallengeKeywords = function (challengeId, oldKeywords = []) {
   // If no challenge id, nothing to do
-  if (!_isFinite(challengeId)) {
+  if (!Number.isFinite(challengeId)) {
     return Promise.resolve();
   }
 

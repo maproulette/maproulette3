@@ -2,7 +2,6 @@ import { startOfDay, subMonths } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _each from "lodash/each";
 import _isArray from "lodash/isArray";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -368,7 +367,7 @@ export const ensureUserLoggedIn = function (squelchError = false) {
       .execute()
       .then((normalizedResults) => {
         const userId = normalizedResults.result;
-        if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+        if (Number.isFinite(userId) && userId !== GUEST_USER_ID) {
           localStorage.setItem("isLoggedIn", "true");
         }
         dispatch(receiveUsers(normalizedResults.entities));
@@ -671,7 +670,7 @@ export const fetchUserMetrics = async (
  */
 export const loadCompleteUser = function (userId, savedChallengesLimit = 50, savedTasksLimit = 50) {
   return function (dispatch) {
-    if (!_isFinite(userId) || userId === GUEST_USER_ID) {
+    if (!Number.isFinite(userId) || userId === GUEST_USER_ID) {
       return null;
     }
 
@@ -685,7 +684,7 @@ export const loadCompleteUser = function (userId, savedChallengesLimit = 50, sav
         fetchNotificationSubscriptions(userId)(dispatch);
       })
       .then(() => {
-        if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+        if (Number.isFinite(userId) && userId !== GUEST_USER_ID) {
           localStorage.setItem("isLoggedIn", "true");
         }
         dispatch(setCurrentUser(userId));
@@ -916,7 +915,7 @@ export const logoutUser = function (userId) {
 
   const logoutURI = `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`;
 
-  if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+  if (Number.isFinite(userId) && userId !== GUEST_USER_ID) {
     unsubscribeFromUserUpdates(userId);
   }
 

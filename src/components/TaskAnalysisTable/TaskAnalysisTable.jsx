@@ -7,7 +7,6 @@ import _filter from "lodash/filter";
 import _get from "lodash/get";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
@@ -313,7 +312,7 @@ export class TaskAnalysisTableInternal extends Component {
             {...intlTableProps(this.props.intl)}
           />
         </section>
-        {_isFinite(this.state.openComments) && (
+        {Number.isFinite(this.state.openComments) && (
           <TaskCommentsModal
             taskId={this.state.openComments}
             onClose={() => this.setState({ openComments: null })}
@@ -406,7 +405,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
             {taskLink}
           </span>
         );
-      } else if (_isFinite(t.bundleId) && t.bundleId && t.bundleId == props.taskBundle?.bundleId) {
+      } else if (
+        Number.isFinite(t.bundleId) &&
+        t.bundleId &&
+        t.bundleId == props.taskBundle?.bundleId
+      ) {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol

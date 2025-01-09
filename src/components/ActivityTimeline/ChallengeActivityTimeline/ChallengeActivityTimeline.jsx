@@ -1,7 +1,6 @@
 import { parseISO } from "date-fns";
 import _compact from "lodash/compact";
 import _groupBy from "lodash/groupBy";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _reverse from "lodash/reverse";
 import _sortBy from "lodash/sortBy";
@@ -69,7 +68,7 @@ export class ChallengeActivityTimeline extends Component {
     );
 
     // If a limit on timeline entries has been given, honor it.
-    if (_isFinite(this.props.maxEntries)) {
+    if (Number.isFinite(this.props.maxEntries)) {
       timelineItems = _take(timelineItems, this.props.maxEntries);
     }
 

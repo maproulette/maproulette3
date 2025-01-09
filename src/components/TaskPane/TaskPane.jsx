@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _findIndex from "lodash/findIndex";
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -334,7 +333,7 @@ export class TaskPane extends Component {
                           </span>
                           <Link
                             to={
-                              _isFinite(this.props.virtualChallengeId)
+                              Number.isFinite(this.props.virtualChallengeId)
                                 ? `/browse/virtual/${this.props.virtualChallengeId}`
                                 : `/browse/challenges/${
                                     this.props.task?.parent?.id ?? this.props.task.parent
@@ -369,7 +368,7 @@ export class TaskPane extends Component {
                       <ul className="mr-list-dropdown">{favoriteControl}</ul>
                       <hr className="mr-rule-dropdown" />
                       <ul className="mr-list-dropdown">
-                        {_isFinite(this.props.virtualChallengeId) && (
+                        {Number.isFinite(this.props.virtualChallengeId) && (
                           <li>
                             <CopyToClipboard
                               text={`${window.env.REACT_APP_URL}/browse/virtual/${this.props.virtualChallengeId}`}

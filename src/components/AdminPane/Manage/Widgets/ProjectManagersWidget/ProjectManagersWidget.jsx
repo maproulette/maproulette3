@@ -1,5 +1,4 @@
 import _filter from "lodash/filter";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _without from "lodash/without";
 import { Component, Fragment } from "react";
@@ -58,7 +57,7 @@ export default class ProjectManagersWidget extends Component {
       return;
     }
 
-    const isTeam = _isFinite(manager.groupType);
+    const isTeam = Number.isFinite(manager.groupType);
     const managerId = isTeam ? manager.id : manager.osmId;
     this.setState({
       updatingManagers: this.state.updatingManagers.concat([managerId]),
@@ -76,7 +75,7 @@ export default class ProjectManagersWidget extends Component {
   };
 
   removeManager = (manager) => {
-    const isTeam = _isFinite(manager.groupType);
+    const isTeam = Number.isFinite(manager.groupType);
     const managerId = isTeam ? manager.id : manager.osmId;
     this.setState({
       updatingManagers: this.state.updatingManagers.concat([managerId]),
@@ -94,7 +93,7 @@ export default class ProjectManagersWidget extends Component {
   };
 
   addManager = (role) => {
-    if (!_isFinite(parseInt(role, 10))) {
+    if (!Number.isFinite(parseInt(role, 10))) {
       return;
     }
 
@@ -141,7 +140,7 @@ export default class ProjectManagersWidget extends Component {
     let managers = _map(
       this.props.project.managers.concat(this.props.project.teamManagers),
       (manager) => {
-        const isTeam = _isFinite(manager.groupType);
+        const isTeam = Number.isFinite(manager.groupType);
         const managerRole = mostPrivilegedRole(manager.roles);
         const isLastAdmin = managerRole === Role.admin && adminManagers.length < 2;
 

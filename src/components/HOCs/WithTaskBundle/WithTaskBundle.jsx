@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _omit from "lodash/omit";
 import { Component } from "react";
 import { connect } from "react-redux";
@@ -32,7 +31,7 @@ export function WithTaskBundle(WrappedComponent) {
 
     async componentDidMount() {
       const { task } = this.props;
-      if (_isFinite(task?.bundleId)) {
+      if (Number.isFinite(task?.bundleId)) {
         await this.setupBundle(task.bundleId);
       } else {
         this.updateBundlingConditions();
@@ -53,7 +52,7 @@ export function WithTaskBundle(WrappedComponent) {
           completingTask: null,
         });
 
-        if (_isFinite(task?.bundleId)) {
+        if (Number.isFinite(task?.bundleId)) {
           await this.setupBundle(task.bundleId);
         } else {
           this.updateBundlingConditions();
@@ -214,7 +213,7 @@ export function WithTaskBundle(WrappedComponent) {
           this.setState({ loading: false });
         }
       } else if (
-        _isFinite(bundleId) &&
+        Number.isFinite(bundleId) &&
         this.state.taskBundle?.bundleId === bundleId &&
         this.props.task.status === 0
       ) {

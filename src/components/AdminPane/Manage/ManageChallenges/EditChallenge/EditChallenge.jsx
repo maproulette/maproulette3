@@ -6,7 +6,6 @@ import _difference from "lodash/difference";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _isNumber from "lodash/isNumber";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
@@ -430,7 +429,7 @@ export class EditChallenge extends Component {
       if (!_isEmpty(challengeData.defaultBasemapId)) {
         // layer index string
         challengeData.defaultBasemap = challengeData.defaultBasemapId;
-      } else if (_isFinite(challengeData.defaultBasemap)) {
+      } else if (Number.isFinite(challengeData.defaultBasemap)) {
         // numeric identifier
         // Convert to corresponding layer-index string identifier for form if
         // possible. Otherwise just go with string representation of numerical

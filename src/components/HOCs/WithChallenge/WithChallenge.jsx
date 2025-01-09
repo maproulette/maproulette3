@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _omit from "lodash/omit";
 import { Component } from "react";
@@ -76,7 +75,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     loadChallenge: (challengeId) => {
       return dispatch(fetchChallenge(challengeId)).then((normalizedResults) => {
         if (
-          !_isFinite(normalizedResults?.result) ||
+          !Number.isFinite(normalizedResults?.result) ||
           normalizedResults?.entities?.challenges?.[normalizedResults.result]?.deleted
         ) {
           dispatch(addError(AppErrors.challenge.doesNotExist));

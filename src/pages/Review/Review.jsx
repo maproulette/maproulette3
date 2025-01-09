@@ -2,7 +2,6 @@ import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _isUndefined from "lodash/isUndefined";
 import _merge from "lodash/merge";
 import _omit from "lodash/omit";
@@ -144,7 +143,7 @@ export class ReviewTasksDashboard extends Component {
     // Check for a valid challenge id
     const challengeId = filterSelected[this.state.showType].filters.challengeId;
     if (challengeId) {
-      if (!_isFinite(_parseInt(challengeId))) {
+      if (!Number.isFinite(_parseInt(challengeId))) {
         filterSelected[this.state.showType] = _omit(filterSelected[this.state.showType], [
           "challengeId",
           "challenge",
@@ -156,7 +155,7 @@ export class ReviewTasksDashboard extends Component {
     // Check for a valid project id
     const projectId = filterSelected[this.state.showType].filters.projectId;
     if (projectId) {
-      if (!_isFinite(_parseInt(projectId))) {
+      if (!Number.isFinite(_parseInt(projectId))) {
         filterSelected[this.state.showType] = _omit(filterSelected[this.state.showType], [
           "projectId",
           "project",

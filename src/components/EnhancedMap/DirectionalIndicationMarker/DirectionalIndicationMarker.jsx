@@ -4,7 +4,6 @@ import "leaflet-vectoricon";
 import bearing from "@turf/bearing";
 import { getCoord } from "@turf/invariant";
 import midpoint from "@turf/midpoint";
-import _isFinite from "lodash/isFinite";
 import { Marker } from "react-leaflet";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../../../tailwind.config.js";
@@ -20,7 +19,7 @@ const colors = resolveConfig(tailwindConfig).theme.colors;
  * if atMidpoint is given (otherwise the position prop will be used)
  */
 export const DirectionalIndicationMarker = function (props) {
-  if (_isFinite(props.heading)) {
+  if (Number.isFinite(props.heading)) {
     const icon = createDirectionalIndicatorIcon(props.heading, props.styles);
     return <Marker position={props.position} icon={icon} />;
   } else if (props.betweenPoints) {

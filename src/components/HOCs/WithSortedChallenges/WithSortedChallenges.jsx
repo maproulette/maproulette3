@@ -1,6 +1,5 @@
 import _findIndex from "lodash/findIndex";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _omit from "lodash/omit";
 import _reverse from "lodash/reverse";
 import _sortBy from "lodash/sortBy";
@@ -46,7 +45,7 @@ export const sortChallenges = function (props, challengesProp = "challenges", co
     sortedChallenges = _sortBy(sortedChallenges, (c) => (c.tasksRemaining ? c.tasksRemaining : ""));
   } else if (sortCriteria === SORT_POPULARITY) {
     sortedChallenges = _reverse(
-      _sortBy(sortedChallenges, (c) => (_isFinite(c.popularity) ? c.popularity : 0)),
+      _sortBy(sortedChallenges, (c) => (Number.isFinite(c.popularity) ? c.popularity : 0)),
     );
   } else if (sortCriteria === SORT_COOPERATIVE_WORK) {
     sortedChallenges = _sortBy(sortedChallenges, (c) => (isCooperative(c.cooperativeType) ? 0 : 1));

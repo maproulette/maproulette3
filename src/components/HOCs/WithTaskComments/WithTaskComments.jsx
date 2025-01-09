@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _omit from "lodash/omit";
 import { denormalize } from "normalizr";
 import { Component } from "react";
@@ -16,7 +15,7 @@ const WithTaskComments = (WrappedComponent) =>
 export const mapStateToProps = (state, ownProps) => {
   const mappedProps = {};
 
-  if (_isFinite(ownProps.taskId)) {
+  if (Number.isFinite(ownProps.taskId)) {
     const taskEntity = state.entities?.tasks?.[ownProps.taskId];
 
     if (taskEntity) {
@@ -47,7 +46,7 @@ export const WithLoadedComments = function (WrappedComponent) {
     };
 
     loadComments = (taskId) => {
-      if (!_isFinite(taskId)) {
+      if (!Number.isFinite(taskId)) {
         return;
       }
 

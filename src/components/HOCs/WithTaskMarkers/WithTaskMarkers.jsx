@@ -1,7 +1,6 @@
 import _each from "lodash/each";
 import _get from "lodash/get";
 import _isArray from "lodash/isArray";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import { Component } from "react";
 import AsMappableTask from "../../../interactions/Task/AsMappableTask";
@@ -43,7 +42,7 @@ export default function WithTaskMarkers(WrappedComponent, tasksProp = "clustered
                 nearestToCenter.geometry.coordinates[0],
               ],
               options: {
-                challengeId: _isFinite(challengeTasks.challengeId)
+                challengeId: Number.isFinite(challengeTasks.challengeId)
                   ? challengeTasks.challengeId
                   : task.challengeId || task.parentId || task.parent,
                 isVirtualChallenge: challengeTasks.isVirtualChallenge,
