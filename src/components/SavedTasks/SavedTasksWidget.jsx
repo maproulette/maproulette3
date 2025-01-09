@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _compact from "lodash/compact";
-import _isFinite from "lodash/isFinite";
 import _kebabCase from "lodash/kebabCase";
 import _map from "lodash/map";
 import { Component, Fragment } from "react";
@@ -50,7 +49,7 @@ export default class SavedTasksWidget extends Component {
           {...this.props}
           openComments={(taskId) => this.setState({ openComments: taskId })}
         />
-        {_isFinite(this.state.openComments) && (
+        {Number.isFinite(this.state.openComments) && (
           <TaskCommentsModal
             taskId={this.state.openComments}
             onClose={() => this.setState({ openComments: null })}
@@ -64,7 +63,7 @@ export default class SavedTasksWidget extends Component {
 const SavedTaskList = function (props) {
   const taskItems = _compact(
     _map(props.user?.savedTasks ?? [], (task) => {
-      if (!_isFinite(task?.parent?.id)) {
+      if (!Number.isFinite(task?.parent?.id)) {
         return null;
       }
 
@@ -90,7 +89,7 @@ const SavedTaskList = function (props) {
               `mr-review-${_kebabCase(keysByReviewStatus[task.reviewStatus])}`,
             )}
           >
-            {_isFinite(task.reviewStatus) ? (
+            {Number.isFinite(task.reviewStatus) ? (
               <FormattedMessage {...messagesByReviewStatus[task.reviewStatus]} />
             ) : (
               <span />

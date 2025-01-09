@@ -1,6 +1,5 @@
 import _filter from "lodash/filter";
 import _find from "lodash/find";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _omit from "lodash/omit";
 import _values from "lodash/values";
@@ -44,7 +43,7 @@ const WithProject = function (WrappedComponent, options = {}) {
     loadProject = async (props) => {
       const projectId = this.currentProjectId(props);
 
-      if (_isFinite(projectId)) {
+      if (Number.isFinite(projectId)) {
         this.setState({
           loadingChallenges: options.includeChallenges,
         });

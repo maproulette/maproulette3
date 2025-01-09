@@ -5,7 +5,6 @@ import _findIndex from "lodash/findIndex";
 import _fromPairs from "lodash/fromPairs";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
@@ -290,7 +289,7 @@ export const generateSearchParametersString = (
     searchParameters[PARAMS_MAP.featureId] = filters.featureId;
   }
 
-  if (_isFinite(filters.difficulty)) {
+  if (Number.isFinite(filters.difficulty)) {
     searchParameters[PARAMS_MAP.difficulty] = filters.difficulty;
   }
   if (filters.bundleId) {

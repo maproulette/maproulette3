@@ -1,6 +1,5 @@
 import _findIndex from "lodash/findIndex";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import PropTypes from "prop-types";
 import { Component, createRef } from "react";
@@ -128,7 +127,7 @@ export class ChallengeResultItem extends Component {
           excludeProjectId={this.props.excludeProjectId}
           info={
             <div className="mr-break-words">
-              {_isFinite(this.props.challenge.difficulty) && (
+              {Number.isFinite(this.props.challenge.difficulty) && (
                 <div className="mr-text-sm">
                   <strong className="mr-text-yellow mr-uppercase">
                     <FormattedMessage {...messages.difficulty} />:

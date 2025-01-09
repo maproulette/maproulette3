@@ -1,7 +1,6 @@
 import _assign from "lodash/assign";
 import _each from "lodash/each";
 import _isArray from "lodash/isArray";
-import _isFinite from "lodash/isFinite";
 import { Component } from "react";
 import { Redirect } from "react-router";
 import { generateWidgetId, widgetDescriptor } from "../../../services/Widget/Widget";
@@ -93,15 +92,18 @@ export const WithPublicWidgetWorkspacesInternal = function (
             return;
           }
 
-          if (!_isFinite(widgetLayout.w)) {
+          if (!Number.isFinite(widgetLayout.w)) {
             widgetLayout.w = descriptor.defaultWidth;
-          } else if (_isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth) {
+          } else if (Number.isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth) {
             widgetLayout.w = descriptor.minWidth;
           }
 
-          if (!_isFinite(widgetLayout.h)) {
+          if (!Number.isFinite(widgetLayout.h)) {
             widgetLayout.h = descriptor.defaultHeight;
-          } else if (_isFinite(descriptor.minHeight) && widgetLayout.h < descriptor.minHeight) {
+          } else if (
+            Number.isFinite(descriptor.minHeight) &&
+            widgetLayout.h < descriptor.minHeight
+          ) {
             widgetLayout.h = descriptor.minHeight;
           }
         });

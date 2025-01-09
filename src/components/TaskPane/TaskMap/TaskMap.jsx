@@ -8,7 +8,6 @@ import _compact from "lodash/compact";
 import _each from "lodash/each";
 import _flatten from "lodash/flatten";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
@@ -339,7 +338,7 @@ export const TaskMapContent = (props) => {
    * Mapillary markers on or off.
    */
   const toggleMapillaryVisibility = async () => {
-    const isVirtual = _isFinite(props.virtualChallengeId);
+    const isVirtual = Number.isFinite(props.virtualChallengeId);
     const challengeId = isVirtual ? props.virtualChallengeId : props.challenge.id;
 
     // If enabling layer, fetch fresh data. This allows users to toggle the
@@ -382,7 +381,7 @@ export const TaskMapContent = (props) => {
    * OpenStreetCam markers on or off.
    */
   const toggleOpenStreetCamVisibility = async () => {
-    const isVirtual = _isFinite(props.virtualChallengeId);
+    const isVirtual = Number.isFinite(props.virtualChallengeId);
     const challengeId = isVirtual ? props.virtualChallengeId : props.challenge.id;
     // If enabling layer, fetch fresh data. This allows users to toggle the
     // layer off and on to refresh the data, e.g. if they have moved the map

@@ -6,7 +6,6 @@ import _fromPairs from "lodash/fromPairs";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
@@ -272,7 +271,7 @@ export default function WithFilteredClusteredTasks(
         ((_isUndefined(task.metaReviewStatus) &&
           includeMetaReviewStatuses[META_REVIEW_STATUS_NOT_SET]) ||
           includeMetaReviewStatuses[task.metaReviewStatus]) &&
-        (includeLocked || !_isFinite(task.lockedBy) || task.lockedBy === this.props.user?.id)
+        (includeLocked || !Number.isFinite(task.lockedBy) || task.lockedBy === this.props.user?.id)
       );
     };
 
@@ -332,14 +331,14 @@ export default function WithFilteredClusteredTasks(
         if (!_isUndefined(criteria?.filters?.[key]) && !this.props.taskId) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
-          } else if (_isFinite(criteria.filters[key])) {
+          } else if (Number.isFinite(criteria.filters[key])) {
             criteria.filters[key] = [criteria.filters[key]];
           }
           useURLFilters = true;
         } else if (!_isUndefined(criteria?.filters?.[key]) && useSavedFilters) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
-          } else if (_isFinite(criteria.filters[key])) {
+          } else if (Number.isFinite(criteria.filters[key])) {
             criteria.filters[key] = [criteria.filters[key]];
           }
           loadFromSavedFilters = true;

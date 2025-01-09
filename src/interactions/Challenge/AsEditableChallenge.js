@@ -1,5 +1,4 @@
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isString from "lodash/isString";
 import {
   ChallengeBasemap,
@@ -20,7 +19,7 @@ export class AsEditableChallenge {
    * Returns true if the challenge is new (lacks and id)
    */
   isNew() {
-    return !_isFinite(this.id);
+    return !Number.isFinite(this.id);
   }
 
   /**
@@ -85,7 +84,7 @@ export class AsEditableChallenge {
     if (Number(this.defaultBasemap) === ChallengeBasemapBulkEdit.unchanged) {
       delete this.defaultBasemapId;
       delete this.defaultBasemap;
-    } else if (_isFinite(Number(this.defaultBasemap))) {
+    } else if (Number.isFinite(Number(this.defaultBasemap))) {
       this.defaultBasemapId = "";
       this.defaultBasemap = Number(this.defaultBasemap);
     } else if (_isString(this.defaultBasemap) && this.defaultBasemap.length > 0) {

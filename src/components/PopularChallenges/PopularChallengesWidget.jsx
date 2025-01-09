@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _isPlainObject from "lodash/isPlainObject";
 import _map from "lodash/map";
 import _reverse from "lodash/reverse";
@@ -40,7 +39,7 @@ const PopularChallengeList = function (props) {
   const popularChallenges = _take(
     _reverse(
       _sortBy(props.challenges, (challenge) =>
-        _isFinite(challenge.popularity) ? challenge.popularity : 0,
+        Number.isFinite(challenge.popularity) ? challenge.popularity : 0,
       ),
     ),
     5,

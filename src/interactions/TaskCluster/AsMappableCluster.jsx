@@ -4,7 +4,6 @@ import _cloneDeep from "lodash/cloneDeep";
 import _find from "lodash/find";
 import _fromPairs from "lodash/fromPairs";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isFunction from "lodash/isFunction";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
@@ -159,7 +158,7 @@ export class AsMappableCluster {
         icon.options.style.fill = `rgba(${red}, ${green}, ${blue}, 0.4)`;
       }
 
-      if (_isFinite(highlightPrimaryTask) && highlightPrimaryTask === markerData.taskId) {
+      if (Number.isFinite(highlightPrimaryTask) && highlightPrimaryTask === markerData.taskId) {
         // Make marker for current task larger
         icon = _cloneDeep(primaryTaskStatusIcons[markerData.taskStatus]);
         icon.options.svgHeight = 40;

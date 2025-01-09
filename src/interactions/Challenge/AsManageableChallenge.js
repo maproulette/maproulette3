@@ -1,7 +1,6 @@
 import { parseISO } from "date-fns";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _maxBy from "lodash/maxBy";
 import { ChallengeStatus } from "../../services/Challenge/ChallengeStatus/ChallengeStatus";
@@ -22,7 +21,7 @@ export class AsManageableChallenge {
 
   isRebuildable() {
     return (
-      _isFinite(this.status) &&
+      Number.isFinite(this.status) &&
       this.status !== ChallengeStatus.none &&
       this.status !== ChallengeStatus.building &&
       this.status !== ChallengeStatus.deletingTasks
@@ -81,7 +80,7 @@ export class AsManageableChallenge {
  */
 export const percentage = function (total, value) {
   let percentage = 0;
-  if (_isFinite(total) && total > 0) {
+  if (Number.isFinite(total) && total > 0) {
     percentage = (value / total) * 100.0;
   }
 

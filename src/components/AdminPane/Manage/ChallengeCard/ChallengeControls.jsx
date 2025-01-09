@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _merge from "lodash/merge";
 import PropTypes from "prop-types";
@@ -82,7 +81,7 @@ export default class ChallengeControls extends Component {
     if (_isObject(this.props.challenge.parent)) {
       parent = this.props.challenge.parent;
     } else if (
-      _isFinite(this.props.challenge.parent) &&
+      Number.isFinite(this.props.challenge.parent) &&
       this.props.challenge.parent === this.props.project?.id
     ) {
       parent = this.props.project;

@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { connect } from "react-redux";
@@ -9,7 +8,7 @@ const _LoadRandomVirtualChallengeTask = class extends Component {
   componentDidMount() {
     const virtualChallengeId = parseInt(this.props.match?.params?.virtualChallengeId, 10);
 
-    if (_isFinite(virtualChallengeId)) {
+    if (Number.isFinite(virtualChallengeId)) {
       this.props
         .loadRandomTaskFromVirtualChallenge(virtualChallengeId)
         .then((task) =>

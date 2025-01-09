@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
@@ -111,7 +110,7 @@ export class ActiveTaskControls extends Component {
   };
 
   chooseLoadBy = (loadMethod) => {
-    const isVirtual = _isFinite(this.props.virtualChallengeId);
+    const isVirtual = Number.isFinite(this.props.virtualChallengeId);
     const challengeId = isVirtual ? this.props.virtualChallengeId : this.props.challengeId;
     this.props.updateUserAppSetting(this.props.user.id, {
       loadMethod: loadMethod,

@@ -1,5 +1,4 @@
 import _each from "lodash/each";
-import _isFinite from "lodash/isFinite";
 import _isPlainObject from "lodash/isPlainObject";
 import _isString from "lodash/isString";
 import _omit from "lodash/omit";
@@ -67,7 +66,7 @@ const WithCurrentTask = (WrappedComponent, forReview = false) =>
 const WithLoadedTask = function (WrappedComponent, forReview) {
   return class extends Component {
     loadNeededTask = (props) => {
-      if (_isFinite(props.taskId)) {
+      if (Number.isFinite(props.taskId)) {
         props.loadTask(props.taskId, props.task, forReview);
       }
     };
@@ -95,7 +94,7 @@ export const mapStateToProps = (state, ownProps) => {
   const mappedProps = { task: null };
 
   const taskId = taskIdFromRoute(ownProps, ownProps.taskId);
-  if (_isFinite(taskId)) {
+  if (Number.isFinite(taskId)) {
     mappedProps.taskId = taskId;
     const taskEntity = state.entities?.tasks?.[taskId];
 
@@ -121,7 +120,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(forReview ? fetchTaskForReview(taskId) : fetchTask(taskId))
         .then((normalizedResults) => {
           if (
-            !_isFinite(normalizedResults.result) ||
+            !Number.isFinite(normalizedResults.result) ||
             normalizedResults?.entities?.tasks?.[normalizedResults.result]?.deleted
           ) {
             dispatch(addError(AppErrors.task.doesNotExist));
@@ -217,7 +216,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           parallelTasks.push(dispatch(fetchChallengeActions(challengeId)));
 
           // Renew virtual challenge if needed
-          if (_isFinite(ownProps.virtualChallengeId)) {
+          if (Number.isFinite(ownProps.virtualChallengeId)) {
             parallelTasks.push(dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)));
           }
 
@@ -227,7 +226,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           // Handle next task loading - this needs to be sequential
           if (taskLoadBy) {
             // Start loading the next task from the challenge.
-            const loadNextTask = _isFinite(requestedNextTask)
+            const loadNextTask = Number.isFinite(requestedNextTask)
               ? await nextRequestedTask(dispatch, ownProps, requestedNextTask)
               : await nextRandomTask(dispatch, ownProps, taskId, taskLoadBy);
 
@@ -343,7 +342,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
  */
 export const taskIdFromRoute = (props, defaultId) => {
   const taskId = parseInt(props.match?.params?.taskId, 10);
-  return _isFinite(taskId) ? taskId : defaultId;
+  return Number.isFinite(taskId) ? taskId : defaultId;
 };
 
 /**
@@ -353,7 +352,7 @@ export const taskIdFromRoute = (props, defaultId) => {
 export const challengeIdFromRoute = (props, defaultId) => {
   const challengeId = parseInt(props.match?.params?.challengeId, 10);
 
-  return _isFinite(challengeId) ? challengeId : defaultId;
+  return Number.isFinite(challengeId) ? challengeId : defaultId;
 };
 
 /**
@@ -371,7 +370,7 @@ export const isStale = (entity, staleTime) => {
 export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
   // We need to make different requests depending on whether we're working on a
   // virtual challenge or a standard challenge.
-  if (_isFinite(props.virtualChallengeId)) {
+  if (Number.isFinite(props.virtualChallengeId)) {
     return dispatch(
       loadRandomTaskFromVirtualChallenge(
         props.virtualChallengeId,
@@ -405,7 +404,7 @@ export const visitNewTask = function (dispatch, props, currentTaskId, newTask) {
   if (_isPlainObject(newTask) && newTask.id !== currentTaskId) {
     // The route we use is different for virtual challenges vs standard
     // challenges.
-    if (_isFinite(props.virtualChallengeId)) {
+    if (Number.isFinite(props.virtualChallengeId)) {
       props.history.push(`/virtual/${props.virtualChallengeId}/task/${newTask.id}`);
     } else {
       const challengeId = challengeIdFromRoute(props, props.challengeId);
@@ -414,7 +413,7 @@ export const visitNewTask = function (dispatch, props, currentTaskId, newTask) {
     return Promise.resolve();
   } else {
     // If challenge is complete, redirect home with note to congratulate user
-    if (_isFinite(props.virtualChallengeId)) {
+    if (Number.isFinite(props.virtualChallengeId)) {
       // We don't get a status for virtual challenges, so just assume we're done
       props.history.push("/browse/challenges", {
         congratulate: true,
