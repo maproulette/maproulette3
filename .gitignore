@@ -21,8 +21,7 @@ chimp.js
 .DS_Store
 .env.local
 .env.*.local
-.env.test
-.env.*.test
+.env.playwright
 /public/env.json
 
 npm-debug.log*

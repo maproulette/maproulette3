@@ -1,0 +1,42 @@
+{
+  "cookies": [
+    {
+      "name": "_osm_session",
+      "value": "8eb311c79f659b0d09c4a5f594263958",
+      "domain": "master.apis.dev.openstreetmap.org",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://127.0.0.1:3000",
+      "localStorage": [
+        {
+          "name": "reactQueryDevtoolsSortFn",
+          "value": "\"Status > Last Updated\""
+        }
+      ]
+    },
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "isLoggedIn",
+          "value": "true"
+        },
+        {
+          "name": "redirect",
+          "value": "/"
+        },
+        {
+          "name": "state",
+          "value": "vx9qVl9IWhWL1KDKpv8B54aVRdB3DwlV4x5eIgQ3lEBOZ9uy"
+        }
+      ]
+    }
+  ]
+}
