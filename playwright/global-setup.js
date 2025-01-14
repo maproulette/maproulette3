@@ -1,11 +1,9 @@
-import { chromium, expect } from '@playwright/test';
+import { chromium } from '@playwright/test';
 
 async function globalSetup(config) {
   const { storageState } = config.projects[0].use;
   const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext({
-    viewport: { width: 1280, height: 720 }
-  });
+  const context = await browser.newContext();
   const page = await context.newPage();
   
   try {
