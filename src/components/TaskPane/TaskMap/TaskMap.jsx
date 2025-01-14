@@ -162,6 +162,7 @@ export const TaskMapContent = (props) => {
               key={`${description}-${index}`}
               locale={props.intl.locale}
               messages={props.intl.messages}
+              onError={() => {}} // Suppress errors in the console
               textComponent="span"
             >
               <PropertyList

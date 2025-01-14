@@ -40,6 +40,7 @@ const TaskFeatureLayer = (props) => {
         key={props.intl.locale}
         locale={props.intl.locale}
         messages={props.intl.messages}
+        onError={() => {}} // Suppress errors in the console
         textComponent="span"
       >
         <PropertyList featureProperties={featureProperties} onBack={onBack} />
@@ -61,7 +62,11 @@ const TaskFeatureLayer = (props) => {
         mrLayerLabel={layerLabel}
         data={featureCollection(features)}
         pointToLayer={(point, latLng) => {
-          return L.marker(latLng, { pane, mrLayerLabel: layerLabel, mrLayerId: mrLayerId });
+          return L.marker(latLng, {
+            pane,
+            mrLayerLabel: layerLabel,
+            mrLayerId: mrLayerId,
+          });
         }}
         onEachFeature={(feature, layer) => {
           const styleableFeature = _isFunction(feature.styleLeafletLayer)
