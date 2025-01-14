@@ -37,7 +37,10 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
 
-  globalSetup: './playwright/global-setup.js', // Changed to direct path
+  // Add testMatch pattern to explicitly match test files
+  testMatch: '**/*.spec.js',
+  
+  globalSetup: './playwright/global-setup.js',
   use: {
     baseURL: process.env.REACT_APP_PLAYWRIGHT_URL,
     navigationTimeout: 30000,
@@ -51,10 +54,11 @@ export default defineConfig({
   projects: [
     {
       name: 'setup',
-      testMatch: /global-setup\.js/ // Updated extension
+      testMatch: /global-setup\.js/,
     },
     {
       name: 'chromium',
+      testMatch: '**/*.spec.js', 
       use: { 
         ...devices['Desktop Chrome'],
         storageState: 'state.json',
