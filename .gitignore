@@ -11,7 +11,10 @@ src/customLayers.json
 # testing
 /coverage
 chimp.js
-
+state.json
+/state.json
+**/state.json
+./state.json
 # production
 /build
 /dist

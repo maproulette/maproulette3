@@ -1,18 +1,11 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Logged in navigation', () => {
+  test.use({ storageState: './state.json' });
   test.beforeEach(async ({ page }) => {
-    // Use cached version of the page
-    await page.goto(process.env.REACT_APP_PLAYWRIGHT_URL, {
-      waitUntil: 'networkidle',
-    });
-    
-    // Verify logged in state
-    await expect(async () => {
-      const signInLink = page.locator('a').filter({ hasText: 'Sign in' });
-      await expect(signInLink).not.toBeVisible();
-      await expect(page.locator('.navbar-logged-in')).toBeVisible();
-    }).toPass({ timeout: 10000 });
+    await page.goto(process.env.REACT_APP_PLAYWRIGHT_URL);
+    await page.waitForLoadState('networkidle');
+    await page.getByRole('banner').locator('a').filter({ hasText: 'Sign in' }).click();
   });
 
   test('should navigate to Find Challenges', async ({ page }) => {

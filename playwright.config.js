@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-dotenv.config({ path: path.resolve(__dirname, '.env.playwright') });
+dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
 // Validate required environment variables
 const requiredEnvVars = ['REACT_APP_PLAYWRIGHT_USERNAME', 'REACT_APP_PLAYWRIGHT_PASSWORD', 'REACT_APP_PLAYWRIGHT_URL'];
@@ -40,25 +40,11 @@ export default defineConfig({
   globalSetup: './playwright/global-setup.js', // Changed to direct path
   use: {
     baseURL: process.env.REACT_APP_PLAYWRIGHT_URL,
-    storageState: 'state.json',
-    
-    // Enable caching
-    contextOptions: {
-      serviceWorkers: 'allow'
-    },
-
-    // Automatically wait for network to be idle
     navigationTimeout: 30000,
     actionTimeout: 15000,
-
-    // Cache storage state
     trace: 'on-first-retry',
-
-    // Add environment variables to be available in tests
-    env: {
-      REACT_APP_PLAYWRIGHT_USERNAME: process.env.REACT_APP_PLAYWRIGHT_USERNAME,
-      REACT_APP_PLAYWRIGHT_PASSWORD: process.env.REACT_APP_PLAYWRIGHT_PASSWORD,
-    },
+    // Apply storage state for all tests
+    storageState: 'state.json'
   },
 
   /* Configure projects for major browsers */
