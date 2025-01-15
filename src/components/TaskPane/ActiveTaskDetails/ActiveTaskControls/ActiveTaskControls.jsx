@@ -41,6 +41,7 @@ import messages from './Messages'
 import { constructChangesetUrl } from '../../../../utils/constructChangesetUrl'
 import { replacePropertyTags } from '../../../../hooks/UsePropertyReplacement/UsePropertyReplacement'
 import './ActiveTaskControls.scss'
+import { TASK_STATUS_FIXED } from '../../../../services/Task/TaskStatus/TaskStatus';
 
 const hiddenShortcutGroup = 'taskCompletion'
 const hiddenShortcuts = ['skip', 'falsePositive', 'fixed', 'tooHard', 'alreadyFixed']
@@ -174,10 +175,10 @@ export class ActiveTaskControls extends Component {
     const message = intl.formatMessage(messages.rapidDiscardUnsavedChanges)
 
     if (!this.props.rapidEditorState.hasUnsavedChanges || window.confirm(message)) {
-      const requireComment = this.props.challenge.requireComment || this.props.challenge.parent.requireComment;
-      const disableTaskConfirm = !requireComment && this.props.user.settings.disableTaskConfirm
+      const requireConfirmation = this.props.challenge.requireConfirmation || this.props.challenge.parent.requireConfirmation;
+      const disableTaskConfirm = !requireConfirmation && this.props.user.settings.disableTaskConfirm
 
-      if (disableTaskConfirm) {
+      if (taskStatus === TASK_STATUS_FIXED && disableTaskConfirm) {
         this.setState({
           osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
           confirmingStatus: taskStatus,
