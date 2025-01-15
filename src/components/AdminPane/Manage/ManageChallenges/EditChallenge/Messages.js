@@ -779,14 +779,14 @@ will not be able to make sense of it.
     defaultMessage: "Yes",
   },
 
-  requireCommentLabel: {
-    id: 'Admin.EditProject.form.requireComment.label',
-    defaultMessage: "Require Comment",
+  requireConfirmationLabel: {
+    id: 'Admin.EditProject.form.requireConfirmation.label',
+    defaultMessage: "Require Confirmation",
   },
 
-  requireCommentDescription: {
-    id: 'Admin.EditProject.form.requireComment.description',
-    defaultMessage: "Require mappers to provide a comment when fixing a task.  This will disable the ability for users to bypass the task confirmation modal when they click 'I fixed it!'",
+  requireConfirmationDescription: {
+    id: 'Admin.EditProject.form.requireConfirmation.description',
+    defaultMessage: "This will disable the option for users to bypass the task confirmation modal when they click 'I fixed it!'",
   },
 
   instructionsDescription: {

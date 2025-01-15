@@ -47,8 +47,8 @@ export const jsSchema = (intl) => {
         ],
         default: ChallengeReviewSetting.notRequired,
       },
-      requireComment: {
-        title: intl.formatMessage(messages.requireCommentLabel),
+      requireConfirmation: {
+        title: intl.formatMessage(messages.requireConfirmationLabel),
         type: "boolean",
         enum: [true, false],
         enumNames: [
@@ -137,9 +137,9 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:toggleCollapsed": toggleGroupCollapsed,
       "ui:widget": "radio",
     },
-    requireComment: {
+    requireConfirmation: {
       "ui:widget": "radio",
-      "ui:help": intl.formatMessage(messages.requireCommentDescription),
+      "ui:help": intl.formatMessage(messages.requireConfirmationDescription),
       "ui:collapsed": isGroupCollapsed,
       "ui:toggleCollapsed": toggleGroupCollapsed,
       "ui:widget": "radio",
