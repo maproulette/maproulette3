@@ -1,8 +1,6 @@
 import messages from "../Messages";
 
-export const jsSchema = (
-  intl,
-) => {
+export const jsSchema = (intl) => {
   const schema = {
     $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -18,15 +16,11 @@ export const jsSchema = (
   return schema;
 };
 
-export const uiSchema = (
-  intl,
-) => {
+export const uiSchema = (intl) => {
   return {
     dataOriginDate: {
       "ui:help": intl.formatMessage(messages.dataOriginDateDescription),
     },
-    "ui:order": [
-      "dataOriginDate",
-    ],
+    "ui:order": ["dataOriginDate"],
   };
 };

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Teams
@@ -33,4 +33,4 @@ export default defineMessages({
     id: "Team.controls.cancel.label",
     defaultMessage: "Cancel",
   },
-})
+});

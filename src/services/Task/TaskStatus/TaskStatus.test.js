@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { messagesByStatus, isReviewableStatus } from "./TaskStatus";
+import { describe, expect, it } from "vitest";
+import { isReviewableStatus, messagesByStatus } from "./TaskStatus";
 
 describe("isMetaReviewStatus", () => {
   it("returns specific object when ran", () => {

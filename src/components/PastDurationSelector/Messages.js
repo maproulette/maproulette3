@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with PastDurationSelector
@@ -38,4 +38,4 @@ export default defineMessages({
     id: "PastDurationSelector.customRange.controls.search.label",
     defaultMessage: "Search",
   },
-})
+});

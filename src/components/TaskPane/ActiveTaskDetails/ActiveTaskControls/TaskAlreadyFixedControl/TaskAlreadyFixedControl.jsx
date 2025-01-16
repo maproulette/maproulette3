@@ -1,10 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { TaskStatus }
-       from '../../../../../services/Task/TaskStatus/TaskStatus'
-import Button from '../../../../Button/Button'
-import messages from './Messages'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
+import Button from "../../../../Button/Button";
+import messages from "./Messages";
 
 /**
  * TaskAlreadyFixedControl displays the a control for marking a task with an
@@ -19,18 +18,17 @@ export default class TaskAlreadyFixedControl extends Component {
         <a onClick={() => this.props.complete(TaskStatus.alreadyFixed)}>
           <FormattedMessage {...messages.alreadyFixedLabel} />
         </a>
-      )
-    }
-    else {
+      );
+    } else {
       return (
         <Button
           className="mr-button--blue-fill mr-mb-2 mr-mr-2"
-          style={{ minWidth: '10rem'}}
+          style={{ minWidth: "10rem" }}
           onClick={() => this.props.complete(TaskStatus.alreadyFixed)}
         >
           <FormattedMessage {...messages.alreadyFixedLabel} />
         </Button>
-      )
+      );
     }
   }
 }
@@ -38,4 +36,4 @@ export default class TaskAlreadyFixedControl extends Component {
 TaskAlreadyFixedControl.propTypes = {
   /** Invoked to mark the task as already-fixed */
   complete: PropTypes.func.isRequired,
-}
+};

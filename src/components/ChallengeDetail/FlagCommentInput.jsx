@@ -1,60 +1,60 @@
-import { Component } from "react";
 import classNames from "classnames";
+import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import MarkdownContent from "../MarkdownContent/MarkdownContent";
-import AutosuggestMentionTextArea from "../AutosuggestTextBox/AutosuggestMentionTextArea";
 import { postChallengeComment } from "../../services/Challenge/ChallengeComments";
+import AutosuggestMentionTextArea from "../AutosuggestTextBox/AutosuggestMentionTextArea";
+import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import messages from "./Messages";
 
 export class FlagCommentInput extends Component {
   state = {
     showingPreview: false,
     characterCount: 0,
-    value: '',
+    value: "",
     checked: false,
-    emailValue: this.props.user.settings.email || '',
-    submittingFlag: false
+    emailValue: this.props.user.settings.email || "",
+    submittingFlag: false,
   };
 
   handleSubmit = async () => {
-    this.setState({ submittingFlag: true })
+    this.setState({ submittingFlag: true });
 
     if (this.state.characterCount < 100) {
-      this.props.handleInputError()
+      this.props.handleInputError();
     } else if (!this.state.checked) {
-      this.props.handleCheckboxError()
+      this.props.handleCheckboxError();
     } else {
-      const challenge = this.props.challenge
-      const owner = window.env.REACT_APP_GITHUB_ISSUES_API_OWNER
-      const repo = window.env.REACT_APP_GITHUB_ISSUES_API_REPO
-      const body = `Challenge: [#${challenge.id} - ${challenge.name}](${window.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${encodeURIComponent(this.props.user.osmProfile.displayName)})\n\n${this.state.value}`
+      const challenge = this.props.challenge;
+      const owner = window.env.REACT_APP_GITHUB_ISSUES_API_OWNER;
+      const repo = window.env.REACT_APP_GITHUB_ISSUES_API_REPO;
+      const body = `Challenge: [#${challenge.id} - ${challenge.name}](${window.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${encodeURIComponent(this.props.user.osmProfile.displayName)})\n\n${this.state.value}`;
       const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
           owner,
           repo,
           body,
-          state: 'open'
+          state: "open",
         }),
         headers: {
-          'Authorization': `token ${window.env.REACT_APP_GITHUB_ISSUES_API_TOKEN}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/vnd.github.v3+json',
+          Authorization: `token ${window.env.REACT_APP_GITHUB_ISSUES_API_TOKEN}`,
+          "Content-Type": "application/json",
+          Accept: "application/vnd.github.v3+json",
         },
-      })
+      });
 
       if (response.ok) {
-        const responseBody = await response.json()
-        this.props.onModalSubmit(responseBody)
-        const issue_link = responseBody.html_url
-        const comment = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${window.env.REACT_APP_URL}/browse/challenges/${challenge.id}) in project [#${challenge.parent.id} - ${challenge.parent.displayName}](${window.env.REACT_APP_URL}/browse/projects/${challenge.parent.id}), has been reported by [${this.props.user.osmProfile.displayName}](${window.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(this.props.user.osmProfile.displayName)}). Please use [this GitHub issue](${issue_link}) to discuss. \n\n Report Content: \n ${this.state.value}`
-        await postChallengeComment(challenge.id, comment)
-        this.props.handleViewCommentsSubmit()
+        const responseBody = await response.json();
+        this.props.onModalSubmit(responseBody);
+        const issue_link = responseBody.html_url;
+        const comment = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${window.env.REACT_APP_URL}/browse/challenges/${challenge.id}) in project [#${challenge.parent.id} - ${challenge.parent.displayName}](${window.env.REACT_APP_URL}/browse/projects/${challenge.parent.id}), has been reported by [${this.props.user.osmProfile.displayName}](${window.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(this.props.user.osmProfile.displayName)}). Please use [this GitHub issue](${issue_link}) to discuss. \n\n Report Content: \n ${this.state.value}`;
+        await postChallengeComment(challenge.id, comment);
+        this.props.handleViewCommentsSubmit();
       }
     }
 
-    this.setState({ submittingFlag: false })
+    this.setState({ submittingFlag: false });
   };
 
   handleChange = (val) => {
@@ -64,26 +64,32 @@ export class FlagCommentInput extends Component {
   };
 
   handleToggle = () => {
-    this.setState({ checked: !this.state.checked })
+    this.setState({ checked: !this.state.checked });
   };
 
   render() {
-    const maxCharacterCount = 1000
-    const minCharacterCount = 100
+    const maxCharacterCount = 1000;
+    const minCharacterCount = 100;
     return (
       <div className="mr-mt-2">
         <label htmlFor="root_email" className="mr-text-white-50">
-        <FormattedMessage {...messages.email} />
+          <FormattedMessage {...messages.email} />
         </label>
-        <input className="form-control mr-mb-4" type="email" id="root_email" label="Email address" placeholder="Enter your email" value={this.state.emailValue} onChange={(event) => this.setState({ emailValue: event.target.value })} />
+        <input
+          className="form-control mr-mb-4"
+          type="email"
+          id="root_email"
+          label="Email address"
+          placeholder="Enter your email"
+          value={this.state.emailValue}
+          onChange={(event) => this.setState({ emailValue: event.target.value })}
+        />
         <div className="mr-flex mr-justify-between mr-mb-2 mr-leading-tight mr-text-xxs">
           <div className="mr-flex mr-items-center">
             <button
               className={classNames(
                 "mr-pr-2 mr-mr-2 mr-border-r mr-border-green mr-uppercase mr-font-medium",
-                this.state.showingPreview
-                  ? "mr-text-green-lighter"
-                  : "mr-text-white"
+                this.state.showingPreview ? "mr-text-green-lighter" : "mr-text-white",
               )}
               onClick={() => this.setState({ showingPreview: false })}
             >
@@ -92,9 +98,7 @@ export class FlagCommentInput extends Component {
             <button
               className={classNames(
                 "mr-uppercase mr-font-medium",
-                !this.state.showingPreview
-                  ? "mr-text-green-lighter"
-                  : "mr-text-white"
+                !this.state.showingPreview ? "mr-text-green-lighter" : "mr-text-white",
               )}
               onClick={() => this.setState({ showingPreview: true })}
             >
@@ -107,7 +111,8 @@ export class FlagCommentInput extends Component {
                 this.state.characterCount < maxCharacterCount &&
                 this.state.characterCount > maxCharacterCount * 0.9,
               "mr-text-red-light":
-                this.state.characterCount >= maxCharacterCount || this.state.characterCount < minCharacterCount
+                this.state.characterCount >= maxCharacterCount ||
+                this.state.characterCount < minCharacterCount,
             })}
           >
             {this.state.characterCount}/{maxCharacterCount}
@@ -131,7 +136,7 @@ export class FlagCommentInput extends Component {
             cols="1"
             inputValue={this.state.value}
             onInputValueChange={this.handleChange}
-            placeholder='Enter text here'
+            placeholder="Enter text here"
             disableResize={true}
             search={() => null}
             disableShowSuggestions
@@ -149,14 +154,16 @@ export class FlagCommentInput extends Component {
             <FormattedMessage {...messages.review} />
           </label>
         </div>
-        {this.props.displayInputError &&
+        {this.props.displayInputError && (
           <div className="mr-text-red">
             <FormattedMessage {...messages.textInputError} />
-          </div>}
-        {this.props.displayCheckboxError &&
+          </div>
+        )}
+        {this.props.displayCheckboxError && (
           <div className="mr-text-red">
             <FormattedMessage {...messages.checkboxError} />
-          </div>}
+          </div>
+        )}
         <div className="mr-flex mr-items-center mr-mt-6">
           <button
             className="mr-button mr-button--white mr-mr-12 mr-px-8"

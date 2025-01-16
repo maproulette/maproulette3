@@ -1,12 +1,11 @@
-import _find from 'lodash/find'
-import _get from 'lodash/get'
-import _isUndefined from 'lodash/isUndefined'
+import _find from "lodash/find";
+import _isUndefined from "lodash/isUndefined";
 
 /**
  * The names of feature and property fields that may be used to identify a
  * feature representing an OSM element
  */
-export const featureIdFields = ['@id', 'osmid', 'osmIdentifier', 'id']
+export const featureIdFields = ["@id", "osmid", "osmIdentifier", "id"];
 
 /**
  * AsIdentifiableFeature adds functionality to a Task feature related to
@@ -15,7 +14,7 @@ export const featureIdFields = ['@id', 'osmid', 'osmIdentifier', 'id']
  */
 export class AsIdentifiableFeature {
   constructor(feature) {
-    Object.assign(this, feature)
+    Object.assign(this, feature);
   }
 
   /**
@@ -24,19 +23,20 @@ export class AsIdentifiableFeature {
    */
   rawFeatureId() {
     if (!this.properties) {
-      return null
+      return null;
     }
 
     // Look on the feature itself first, then on its properties
-    let idProp = _find(featureIdFields, name => this[name] &&
-                                                this.isValidId(this[name]))
+    let idProp = _find(featureIdFields, (name) => this[name] && this.isValidId(this[name]));
     if (idProp) {
-      return this[idProp]
+      return this[idProp];
     }
 
-    idProp = _find(featureIdFields, name => this.properties[name] &&
-                                            this.isValidId(this.properties[name]))
-    return idProp ? this.properties[idProp] : null
+    idProp = _find(
+      featureIdFields,
+      (name) => this.properties[name] && this.isValidId(this.properties[name]),
+    );
+    return idProp ? this.properties[idProp] : null;
   }
 
   /**
@@ -44,16 +44,16 @@ export class AsIdentifiableFeature {
    * the feature isn't identifiable or a numerical id could not be extracted
    */
   osmId() {
-    const featureId = this.rawFeatureId()
+    const featureId = this.rawFeatureId();
     if (!featureId) {
-      return null
+      return null;
     }
 
     // feature ids may contain additional information, such as a representation
     // of the feature type (way, node, etc). We want to return just the the
     // numerical OSM id
-    const match = /(\d+)/.exec(featureId)
-    return (match && match.length > 1) ? match[1] : null
+    const match = /(\d+)/.exec(featureId);
+    return match && match.length > 1 ? match[1] : null;
   }
 
   /**
@@ -62,111 +62,111 @@ export class AsIdentifiableFeature {
    * 'relation', or null if no type is detected
    */
   osmType() {
-    const typeRe = /^(node|way|relation|n|r|w)/
+    const typeRe = /^(node|way|relation|n|r|w)/;
 
-    let featureType = this.rawFeatureId()
+    let featureType = this.rawFeatureId();
     if (!typeRe.test(featureType)) {
-      featureType = this.properties.type ? this.properties.type :
-        (this.properties["@type"] || this.properties["@osm_type"])
+      featureType = this.properties.type
+        ? this.properties.type
+        : this.properties["@type"] || this.properties["@osm_type"];
       if (!typeRe.test(featureType)) {
         // No luck finding an explicit type. Try to infer from the geometry
-        const geometryType = _get(this, 'geometry.type')
+        const geometryType = this?.geometry?.type;
         if (geometryType === "Point") {
-          featureType = "node"
-        }
-        else if (geometryType === "LineString") {
-          featureType = "way"
+          featureType = "node";
+        } else if (geometryType === "LineString") {
+          featureType = "way";
         }
       }
     }
 
-    const match = typeRe.exec(featureType)
+    const match = typeRe.exec(featureType);
     if (match) {
       switch (match[0]) {
-        case 'node':
-        case 'n':
-          return 'node'
-        case 'way':
-        case 'w':
-          return 'way'
-        case 'relation':
-        case 'r':
-          return 'relation'
+        case "node":
+        case "n":
+          return "node";
+        case "way":
+        case "w":
+          return "way";
+        case "relation":
+        case "r":
+          return "relation";
         default:
-          return null
+          return null;
       }
     }
 
-    return null
+    return null;
   }
 
   /**
    * Returns the type and id in the form of `type id`, or just id if no type
    * can be found. Returns null if no id can be found
    */
-  normalizedTypeAndId(requireType=false, separator=' ') {
-    const osmId = this.osmId()
+  normalizedTypeAndId(requireType = false, separator = " ") {
+    const osmId = this.osmId();
     if (!osmId) {
       // We must have at least an id
-      return null
+      return null;
     }
 
-    const osmType = this.osmType()
+    const osmType = this.osmType();
     if (requireType && !osmType) {
-      return null
+      return null;
     }
 
-    return (osmType ? `${osmType}${separator}` : '') + osmId
+    return (osmType ? `${osmType}${separator}` : "") + osmId;
   }
 
   isValidId(id) {
     if (_isUndefined(id)) {
-      return false
+      return false;
     }
 
     // Ids that are only numeric or start with node/way/relation (eg. 'node/12345')
     // or start with just a character n/r/w (eg. 'n12345')
-    const re = new RegExp(/^(node|way|relation|n|r|w)?\/?\d+$/)
-    return !!re.exec(id)
+    const re = new RegExp(/^(node|way|relation|n|r|w)?\/?\d+$/);
+    return !!re.exec(id);
   }
 
   // check whether osm types are consistent if there are multiple Ids
   checkValidTypeMultipleIds(type) {
-    const typeRe = /^(node|way|relation|n|r|w)/
+    const typeRe = /^(node|way|relation|n|r|w)/;
     for (let i = 0; i < featureIdFields.length; i++) {
-      const match = typeRe.exec(this.properties[featureIdFields[i]])
-      let currentType
+      const match = typeRe.exec(this.properties[featureIdFields[i]]);
+      let currentType;
 
       if (match) {
         switch (match[0]) {
-          case 'node':
-          case 'n':
-            currentType = 'node'
-            break
-          case 'way':
-          case 'w':
-            currentType = 'way'
-            break
-          case 'relation':
-          case 'r':
-            currentType = 'relation'
-            break
+          case "node":
+          case "n":
+            currentType = "node";
+            break;
+          case "way":
+          case "w":
+            currentType = "way";
+            break;
+          case "relation":
+          case "r":
+            currentType = "relation";
+            break;
           default:
-            currentType = null
+            currentType = null;
         }
       } else {
-        currentType = null
+        currentType = null;
       }
 
       if (!currentType) {
-        continue
+        continue;
       } else if (currentType != type) {
-        return false
+        return false;
       }
     }
 
-    return true
+    return true;
   }
 }
 
-export default feature => new AsIdentifiableFeature(feature)
+export default (feature) => new AsIdentifiableFeature(feature);

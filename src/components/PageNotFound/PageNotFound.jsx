@@ -1,8 +1,8 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import { Link } from 'react-router-dom'
-import messages from './Messages'
-import Illustration404 from '../../../images/404-illustration.svg'
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { Link } from "react-router-dom";
+import Illustration404 from "../../../images/404-illustration.svg";
+import messages from "./Messages";
 
 /**
  * PageNotFound displays a 404 message.
@@ -23,6 +23,6 @@ export default class PageNotFound extends Component {
           </Link>
         </div>
       </div>
-    )
+    );
   }
 }

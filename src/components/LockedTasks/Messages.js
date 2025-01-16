@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with SavedChallenges.
@@ -20,13 +20,14 @@ export default defineMessages({
   },
 
   challengeLabel: {
-    id: 'TaskConfirmationModal.challenge.label',
+    id: "TaskConfirmationModal.challenge.label",
     defaultMessage: "Challenge:",
   },
 
   description: {
     id: "SavedChallenges.widget.description",
-    defaultMessage: "Tasks locked for more than an hour will be automatically unlocked within the next hour or might already be unlocked. ",
+    defaultMessage:
+      "Tasks locked for more than an hour will be automatically unlocked within the next hour or might already be unlocked. ",
   },
 
   checkList: {
@@ -43,4 +44,4 @@ export default defineMessages({
     id: "ReviewTaskPane.indicators.locked.label",
     defaultMessage: "Task locked",
   },
-})
+});

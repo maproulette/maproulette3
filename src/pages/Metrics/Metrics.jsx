@@ -1,24 +1,22 @@
-import { Fragment, Component } from 'react'
-import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
-import BusySpinner from '../../components/BusySpinner/BusySpinner'
-import SignIn from '../../pages/SignIn/SignIn'
-import WithStatus from '../../components/HOCs/WithStatus/WithStatus'
-import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
-import WithUserMetrics from '../../components/HOCs/WithUserMetrics/WithUserMetrics'
-import ReviewStats from './blocks/ReviewStats'
-import TaskStats from './blocks/TaskStats'
-import LeaderboardStats from './blocks/LeaderboardStats'
-import _map from 'lodash/map'
-import _get from 'lodash/get'
-import _omit from 'lodash/omit'
-import AsAvatarUser from '../../interactions/User/AsAvatarUser'
-import messages from './Messages'
-import messagesAsReviewer from './MessagesAsReviewer'
-import illustrationCompletedTasks from '../../../images/illustration-completed-tasks.svg'
+import _map from "lodash/map";
+import _omit from "lodash/omit";
+import { Component, Fragment } from "react";
+import { FormattedDate, FormattedMessage, injectIntl } from "react-intl";
+import illustrationCompletedTasks from "../../../images/illustration-completed-tasks.svg";
+import BusySpinner from "../../components/BusySpinner/BusySpinner";
+import WithStatus from "../../components/HOCs/WithStatus/WithStatus";
+import WithTargetUser from "../../components/HOCs/WithTargetUser/WithTargetUser";
+import WithUserMetrics from "../../components/HOCs/WithUserMetrics/WithUserMetrics";
+import AsAvatarUser from "../../interactions/User/AsAvatarUser";
+import SignIn from "../../pages/SignIn/SignIn";
+import messages from "./Messages";
+import messagesAsReviewer from "./MessagesAsReviewer";
+import LeaderboardStats from "./blocks/LeaderboardStats";
+import ReviewStats from "./blocks/ReviewStats";
+import TaskStats from "./blocks/TaskStats";
 
-const ProfileImage = props => {
-
-  const osmProfile = AsAvatarUser(props.targetUser.osmProfile)
+const ProfileImage = (props) => {
+  const osmProfile = AsAvatarUser(props.targetUser.osmProfile);
 
   return (
     <img
@@ -26,29 +24,28 @@ const ProfileImage = props => {
       src={osmProfile.profilePic(256)}
       alt={osmProfile.displayName}
     />
-  )
-}
+  );
+};
 
 class Metrics extends Component {
   componentDidMount() {
     // Make sure our user info is current
-    if (_get(this.props, 'targetUser.isLoggedIn')) {
-      this.props.loadCompleteUser(this.props.targetUser.id)
+    if (this.props.targetUser?.isLoggedIn) {
+      this.props.loadCompleteUser(this.props.targetUser.id);
     }
   }
 
-  digitBoxes = (score, minBoxes=4) => {
-    const digits = score.toString().split('')
-    const totalBoxes = minBoxes > digits.length ? minBoxes : digits.length
-    const boxes = _map(digits, (digit, index) =>
-      <span key={totalBoxes - index}>{digit}</span>)
+  digitBoxes = (score, minBoxes = 4) => {
+    const digits = score.toString().split("");
+    const totalBoxes = minBoxes > digits.length ? minBoxes : digits.length;
+    const boxes = _map(digits, (digit, index) => <span key={totalBoxes - index}>{digit}</span>);
 
     while (boxes.length < minBoxes) {
-      boxes.unshift(<span key={totalBoxes - boxes.length}>&nbsp;</span>)
+      boxes.unshift(<span key={totalBoxes - boxes.length}>&nbsp;</span>);
     }
 
-    return boxes
-  }
+    return boxes;
+  };
 
   render() {
     if (!this.props.targetUser) {
@@ -57,32 +54,32 @@ class Metrics extends Component {
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-gradient-r-green-dark-blue">
             <BusySpinner />
           </div>
-        )
-      }
-      else {
+        );
+      } else {
         return this.props.checkingLoginStatus ? (
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-gradient-r-green-dark-blue">
             <BusySpinner />
           </div>
-        ) : <SignIn {...this.props} />
+        ) : (
+          <SignIn {...this.props} />
+        );
       }
     }
 
-    const totalTasks = _get(this.props.taskMetrics, 'total') || 0
+    const totalTasks = this.props.taskMetrics?.total || 0;
 
-    const optedOut = _get(this.props.targetUser, 'settings.leaderboardOptOut') &&
-                          _get(this.props, 'targetUser.id') !== _get(this.props, 'currentUser.userId')
+    const optedOut =
+      this.props.targetUser?.settings?.leaderboardOptOut &&
+      this.props.targetUser?.id !== this.props.currentUser?.userId;
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-6">
         <div className="mr-bg-world-map mr-bg-top mr-bg-no-repeat mr-px-6 md:mr-py-8 mr-min-h-screen">
           <div className="mr-max-w-xl mr-mx-auto mr-cards-inverse">
             <header className="mr-text-center mr-mb-4 md:mr-mb-8">
               <ProfileImage {...this.props} user={this.props.targetUser} />
-              <h1 className="mr-h3 mr-mb-1">
-                {this.props.targetUser.osmProfile.displayName}
-              </h1>
+              <h1 className="mr-h3 mr-mb-1">{this.props.targetUser.osmProfile.displayName}</h1>
               <p className="mr-text-grey-light mr-text-sm mr-font-mono">
-                <FormattedMessage {...messages.userSince} />{' '}
+                <FormattedMessage {...messages.userSince} />{" "}
                 <FormattedDate
                   month="long"
                   year="numeric"
@@ -93,7 +90,7 @@ class Metrics extends Component {
                 <a
                   className="mr-mx-4"
                   href={this.props.targetUserOSMProfileUrl()}
-                  target='_blank'
+                  target="_blank"
                   rel="noopener noreferrer"
                 >
                   <FormattedMessage {...messages.osmProfileLabel} />
@@ -101,70 +98,82 @@ class Metrics extends Component {
                 <a
                   className="mr-mx-4"
                   href={this.props.targetUserOSMChaProfileUrl()}
-                  target='_blank'
+                  target="_blank"
                   rel="noopener noreferrer"
                 >
                   <FormattedMessage {...messages.osmChaLabel} />
                 </a>
               </div>
             </header>
-            {optedOut ?
+            {optedOut ? (
               <h3 className="mr-text-center mr-text-yellow mr-mt-8">
                 <FormattedMessage {...messages.userOptedOut} />
               </h3>
-              :
+            ) : (
               <Fragment>
-              <div className="mr-mb-4 md:mr-mb-8 md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-2">
-                <div className="mr-mb-4 md:mr-mb-0 mr-p-8 mr-bg-blue mr-rounded mr-shadow mr-flex mr-items-center">
-                  {!this.props.taskMetrics ?
-                    <div className="mr-flex-grow mr-text-center"><BusySpinner /></div> :
-                    <div className="mr-flex-grow mr-flex mr-flex-col mr-items-center">
-                      <div className="mr-mb-6">
-                        <img src={illustrationCompletedTasks}  style={{ height: 80, width: 120}} />
+                <div className="mr-mb-4 md:mr-mb-8 md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-2">
+                  <div className="mr-mb-4 md:mr-mb-0 mr-p-8 mr-bg-blue mr-rounded mr-shadow mr-flex mr-items-center">
+                    {!this.props.taskMetrics ? (
+                      <div className="mr-flex-grow mr-text-center">
+                        <BusySpinner />
                       </div>
-                      <span className="mr-ticker mr-mb-6 mr-text-5xl lg:mr-text-6xl">
-                        {this.digitBoxes(totalTasks, 4)}
-                      </span>
-                      <h3 className="mr-h3">
-                        <FormattedMessage {...messages.totalCompletedTasksTitle} />
-                      </h3>
-                    </div>
-                  }
+                    ) : (
+                      <div className="mr-flex-grow mr-flex mr-flex-col mr-items-center">
+                        <div className="mr-mb-6">
+                          <img
+                            src={illustrationCompletedTasks}
+                            style={{ height: 80, width: 120 }}
+                          />
+                        </div>
+                        <span className="mr-ticker mr-mb-6 mr-text-5xl lg:mr-text-6xl">
+                          {this.digitBoxes(totalTasks, 4)}
+                        </span>
+                        <h3 className="mr-h3">
+                          <FormattedMessage {...messages.totalCompletedTasksTitle} />
+                        </h3>
+                      </div>
+                    )}
+                  </div>
+                  <ReviewStats
+                    {...this.props}
+                    messages={messages}
+                    title={this.props.intl.formatMessage(messages.reviewedTasksTitle)}
+                    tasksMonthsPast={this.props.tasksReviewedMonthsPast}
+                    setTasksMonthsPast={this.props.setTasksReviewedMonthsPast}
+                    setTasksCustomRange={this.props.setTasksReviewedDateRange}
+                  />
                 </div>
-                <ReviewStats {...this.props}
-                  messages={messages}
-                  title={this.props.intl.formatMessage(messages.reviewedTasksTitle)}
-                  tasksMonthsPast={this.props.tasksReviewedMonthsPast}
-                  setTasksMonthsPast={this.props.setTasksReviewedMonthsPast}
-                  setTasksCustomRange={this.props.setTasksReviewedDateRange}
-                />
-              </div>
-              <div className="md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-3">
-                <TaskStats {...this.props} />
-                <LeaderboardStats {...this.props} />
-              </div>
-              {this.props.reviewerMetrics &&
-                <div className="mr-mt-8">
-                  <ReviewStats {...this.props}
-                    asReviewer
-                    reviewMetrics={_omit(this.props.reviewerMetrics, ['requested'])}
-                    totalReviews={(this.props.reviewerMetrics.approved +
-                                   this.props.reviewerMetrics.assisted +
-                                   this.props.reviewerMetrics.rejected)}
-                    tasksMonthsPast={this.props.tasksReviewerMonthsPast}
-                    setTasksMonthsPast={this.props.setTasksReviewerMonthsPast}
-                    setTasksCustomRange={this.props.setTasksReviewerDateRange}
-                    messages={messagesAsReviewer}
-                    title={
-                      this.props.targetUser.id !== _get(this.props.user, 'id') ?
-                      this.props.intl.formatMessage(
-                        messagesAsReviewer.reviewerTitle, {username: this.props.targetUser.name}) :
-                      this.props.intl.formatMessage(messagesAsReviewer.reviewerTitleYou)
-                    }/>
+                <div className="md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-3">
+                  <TaskStats {...this.props} />
+                  <LeaderboardStats {...this.props} />
                 </div>
-              }
+                {this.props.reviewerMetrics && (
+                  <div className="mr-mt-8">
+                    <ReviewStats
+                      {...this.props}
+                      asReviewer
+                      reviewMetrics={_omit(this.props.reviewerMetrics, ["requested"])}
+                      totalReviews={
+                        this.props.reviewerMetrics.approved +
+                        this.props.reviewerMetrics.assisted +
+                        this.props.reviewerMetrics.rejected
+                      }
+                      tasksMonthsPast={this.props.tasksReviewerMonthsPast}
+                      setTasksMonthsPast={this.props.setTasksReviewerMonthsPast}
+                      setTasksCustomRange={this.props.setTasksReviewerDateRange}
+                      messages={messagesAsReviewer}
+                      title={
+                        this.props.targetUser.id !== this.props.user?.id
+                          ? this.props.intl.formatMessage(messagesAsReviewer.reviewerTitle, {
+                              username: this.props.targetUser.name,
+                            })
+                          : this.props.intl.formatMessage(messagesAsReviewer.reviewerTitleYou)
+                      }
+                    />
+                  </div>
+                )}
               </Fragment>
-            }
+            )}
           </div>
         </div>
       </div>
@@ -172,4 +181,4 @@ class Metrics extends Component {
   }
 }
 
-export default WithStatus(WithTargetUser(WithUserMetrics(injectIntl(Metrics)), false))
+export default WithStatus(WithTargetUser(WithUserMetrics(injectIntl(Metrics)), false));

@@ -1,7 +1,6 @@
-import { Component } from 'react'
-import _get from 'lodash/get'
-import _isFinite from 'lodash/isFinite'
-import AppErrors from '../../../services/Error/AppErrors'
+import _isFinite from "lodash/isFinite";
+import { Component } from "react";
+import AppErrors from "../../../services/Error/AppErrors";
 
 /**
  * WithUserLocation provides the wrapped component with functions that can be
@@ -11,14 +10,14 @@ import AppErrors from '../../../services/Error/AppErrors'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithUserLocation = function(WrappedComponent) {
+const WithUserLocation = function (WrappedComponent) {
   return class extends Component {
     /**
      * Retrieve user's home location as setup in their OSM profile
      *
      * @private
      */
-    getOSMHomeLocation = user => _get(user, 'osmProfile.homeLocation')
+    getOSMHomeLocation = (user) => user?.osmProfile?.homeLocation;
 
     /**
      * Retrieve user's location as returned by their browser, if supported and
@@ -26,17 +25,18 @@ const WithUserLocation = function(WrappedComponent) {
      * have latitude and longitude fields if a location is available, or will
      * be undefined or empty if not.
      */
-    getUserCenterpoint = user => new Promise((resolve) => {
-      if (!navigator || !navigator.geolocation) {
-        // No browser geolocation service available
-        resolve(this.getOSMHomeLocation(user))
-      }
+    getUserCenterpoint = (user) =>
+      new Promise((resolve) => {
+        if (!navigator || !navigator.geolocation) {
+          // No browser geolocation service available
+          resolve(this.getOSMHomeLocation(user));
+        }
 
-      navigator.geolocation.getCurrentPosition(
-        position => resolve(position.coords),        // success
-        () => resolve(this.getOSMHomeLocation(user)) // failure
-      )
-    })
+        navigator.geolocation.getCurrentPosition(
+          (position) => resolve(position.coords), // success
+          () => resolve(this.getOSMHomeLocation(user)), // failure
+        );
+      });
 
     /**
      * Retrieves a bounding box around the user's location based on the user's
@@ -45,33 +45,41 @@ const WithUserLocation = function(WrappedComponent) {
      * a promise that resolves to an WSEN array if a user centerpoint is
      * available, or rejects with an error if not.
      */
-    getUserBounds = user => new Promise((resolve, reject) => {
-      this.getUserCenterpoint(user).then(centerpoint => {
-        if (!centerpoint ||
-            !_isFinite(centerpoint.latitude) || !_isFinite(centerpoint.longitude)) {
-          reject(AppErrors.user.missingHomeLocation)
-          return
-        }
+    getUserBounds = (user) =>
+      new Promise((resolve, reject) => {
+        this.getUserCenterpoint(user).then((centerpoint) => {
+          if (
+            !centerpoint ||
+            !_isFinite(centerpoint.latitude) ||
+            !_isFinite(centerpoint.longitude)
+          ) {
+            reject(AppErrors.user.missingHomeLocation);
+            return;
+          }
 
-        const bboxWidth = parseFloat(window.env.REACT_APP_NEARBY_LONGITUDE_LENGTH)
-        const bboxHeight = parseFloat(window.env.REACT_APP_NEARBY_LATITUDE_LENGTH)
+          const bboxWidth = parseFloat(window.env.REACT_APP_NEARBY_LONGITUDE_LENGTH);
+          const bboxHeight = parseFloat(window.env.REACT_APP_NEARBY_LATITUDE_LENGTH);
 
-        // Build WSEN bounds array
-        resolve([
-          centerpoint.longitude - (bboxWidth / 2.0),
-          centerpoint.latitude - (bboxHeight / 2.0),
-          centerpoint.longitude + (bboxWidth / 2.0),
-          centerpoint.latitude + (bboxHeight / 2.0)
-        ])
-      })
-    })
+          // Build WSEN bounds array
+          resolve([
+            centerpoint.longitude - bboxWidth / 2.0,
+            centerpoint.latitude - bboxHeight / 2.0,
+            centerpoint.longitude + bboxWidth / 2.0,
+            centerpoint.latitude + bboxHeight / 2.0,
+          ]);
+        });
+      });
 
     render() {
-      return <WrappedComponent getUserCenterpoint={this.getUserCenterpoint}
-                               getUserBounds={this.getUserBounds}
-                               {...this.props} />
+      return (
+        <WrappedComponent
+          getUserCenterpoint={this.getUserCenterpoint}
+          getUserBounds={this.getUserBounds}
+          {...this.props}
+        />
+      );
     }
-  }
-}
+  };
+};
 
-export default WithUserLocation
+export default WithUserLocation;

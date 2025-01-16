@@ -1,10 +1,10 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import _get from 'lodash/get'
-import VirtualChallengeNameLink
-       from '../VirtualChallengeNameLink/VirtualChallengeNameLink'
-import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
-import OwnerContactLink, { JoinChallengeDiscussionLink } from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import ChallengeNameLink from "../ChallengeNameLink/ChallengeNameLink";
+import OwnerContactLink, {
+  JoinChallengeDiscussionLink,
+} from "../ChallengeOwnerContactLink/ChallengeOwnerContactLink";
+import VirtualChallengeNameLink from "../VirtualChallengeNameLink/VirtualChallengeNameLink";
 
 /**
  * ChallengeInfoSummary displays various pieces of summary information about
@@ -27,9 +27,7 @@ export default class ChallengeInfoSummary extends Component {
 
         <ul className="mr-list-ruled mr-text-grey-light mr-text-xs">
           <li>
-            <span className="mr-text-current">
-              {_get(this.props.task, 'parent.parent.displayName')}
-            </span>
+            <span className="mr-text-current">{this.props.task?.parent?.parent?.displayName}</span>
           </li>
 
           <li className="mr-links-green-lighter">
@@ -41,10 +39,10 @@ export default class ChallengeInfoSummary extends Component {
           </li>
         </ul>
       </div>
-    )
+    );
   }
 }
 
 ChallengeInfoSummary.propTypes = {
   task: PropTypes.object,
-}
+};

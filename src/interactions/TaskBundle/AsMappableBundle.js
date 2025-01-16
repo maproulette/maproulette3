@@ -1,33 +1,32 @@
-import { featureCollection } from '@turf/helpers'
-import center from '@turf/center'
-import bbox from '@turf/bbox'
-import _get from 'lodash/get'
-import _flatten from 'lodash/flatten'
-import _compact from 'lodash/compact'
-import _map from 'lodash/map'
-import _find from 'lodash/find'
-import { latLng } from 'leaflet'
+import bbox from "@turf/bbox";
+import center from "@turf/center";
+import { featureCollection } from "@turf/helpers";
+import { latLng } from "leaflet";
+import _compact from "lodash/compact";
+import _find from "lodash/find";
+import _flatten from "lodash/flatten";
+import _map from "lodash/map";
 
 /**
  * AsMappableBundle adds functionality to a TaskBundle related to mapping
  */
 export class AsMappableBundle {
   constructor(taskBundle) {
-    Object.assign(this, taskBundle)
+    Object.assign(this, taskBundle);
   }
 
   /**
    * Returns the primary task for this bundle
    */
   primaryTask() {
-    return _find(this.tasks, {isBundlePrimary: true})
+    return _find(this.tasks, { isBundlePrimary: true });
   }
 
   /**
    * Returns the id of the primary task for this bundle
    */
   primaryTaskId() {
-    return _get(this.primaryTask(), 'id')
+    return this.primaryTask()?.id;
   }
 
   /**
@@ -35,17 +34,15 @@ export class AsMappableBundle {
    */
   featureCollection() {
     return featureCollection(
-      _flatten(_compact(
-        _map(this.tasks, task => _get(task, 'geometries.features'))
-      ))
-    )
+      _flatten(_compact(_map(this.tasks, (task) => task?.geometries?.features))),
+    );
   }
 
   /**
    * Calculates and returns the bounding box of the task
    */
   calculateBBox() {
-    return bbox(this.featureCollection())
+    return bbox(this.featureCollection());
   }
 
   /**
@@ -53,15 +50,14 @@ export class AsMappableBundle {
    * centerpoint can't be determined it will default to (0, 0)
    */
   calculateCenterPoint() {
-    const centerPoint = center(this.featureCollection())
+    const centerPoint = center(this.featureCollection());
     if (centerPoint) {
       // GeoJSON use lng,lat but Leaflet wants lat,lng so swap coordinates
-      return latLng(centerPoint.geometry.coordinates[1],
-                    centerPoint.geometry.coordinates[0])
+      return latLng(centerPoint.geometry.coordinates[1], centerPoint.geometry.coordinates[0]);
     }
 
-    return latLng(0, 0)
+    return latLng(0, 0);
   }
 }
 
-export default taskBundle => new AsMappableBundle(taskBundle)
+export default (taskBundle) => new AsMappableBundle(taskBundle);

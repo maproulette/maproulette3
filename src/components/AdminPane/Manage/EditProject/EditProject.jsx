@@ -1,19 +1,18 @@
-import { Component } from "react";
 import Form from "@rjsf/core";
-import _merge from "lodash/merge";
-import _get from "lodash/get";
+import classNames from "classnames";
 import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
+import _merge from "lodash/merge";
 import _snakeCase from "lodash/snakeCase";
-import classNames from "classnames";
+import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { CustomSelectWidget } from "../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
-import WithManageableProjects from "../../HOCs/WithManageableProjects/WithManageableProjects";
-import WithCurrentProject from "../../HOCs/WithCurrentProject/WithCurrentProject";
 import BusySpinner from "../../../BusySpinner/BusySpinner";
-import { jsSchema, uiSchema } from "./EditProjectSchema";
+import { CustomSelectWidget } from "../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
+import WithCurrentProject from "../../HOCs/WithCurrentProject/WithCurrentProject";
+import WithManageableProjects from "../../HOCs/WithManageableProjects/WithManageableProjects";
 import manageMessages from "../Messages";
+import { jsSchema, uiSchema } from "./EditProjectSchema";
 import messages from "./Messages";
 import "./EditProject.scss";
 
@@ -44,10 +43,7 @@ export class EditProject extends Component {
       // For new projects, generate a project name based on the display name.
       // It cannot start with "home_".
       if (!_isFinite(formData.id)) {
-        formData.name = _snakeCase(formData.displayName).replace(
-          /^home_/,
-          "project_"
-        );
+        formData.name = _snakeCase(formData.displayName).replace(/^home_/, "project_");
       }
 
       this.props.saveProject(formData, this.props.user).then((project) => {
@@ -91,11 +87,7 @@ export class EditProject extends Component {
             {_isObject(this.props.project) && (
               <li>
                 <Link to={`/admin/project/${this.props.project.id}`}>
-                  {_get(
-                    this.props,
-                    "project.displayName",
-                    this.props.project.name
-                  )}
+                  {this.props.project?.displayName ?? this.props.project.name}
                 </Link>
               </li>
             )}
@@ -114,16 +106,8 @@ export class EditProject extends Component {
 
         <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
           <Form
-            schema={jsSchema(
-              this.props.intl,
-              this.props.user,
-              this.props.project
-            )}
-            uiSchema={uiSchema(
-              this.props.intl,
-              this.props.user,
-              this.props.project
-            )}
+            schema={jsSchema(this.props.intl, this.props.user, this.props.project)}
+            uiSchema={uiSchema(this.props.intl, this.props.user, this.props.project)}
             widgets={{ SelectWidget: CustomSelectWidget }}
             className="form"
             liveValidate
@@ -143,10 +127,9 @@ export class EditProject extends Component {
               </button>
 
               <button
-                className={classNames(
-                  "mr-button mr-button--green-lighter mr-ml-4",
-                  { "is-loading": this.state.isSaving }
-                )}
+                className={classNames("mr-button mr-button--green-lighter mr-ml-4", {
+                  "is-loading": this.state.isSaving,
+                })}
                 onClick={this.props.finish}
               >
                 <FormattedMessage {...messages.save} />
@@ -160,5 +143,5 @@ export class EditProject extends Component {
 }
 
 export default WithManageableProjects(
-  WithCurrentProject(injectIntl(EditProject), { restrictToGivenProjects: true })
+  WithCurrentProject(injectIntl(EditProject), { restrictToGivenProjects: true }),
 );

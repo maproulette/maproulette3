@@ -1,32 +1,29 @@
-import { Component } from 'react'
-import Form from '@rjsf/core'
-import _merge from 'lodash/merge'
-import _get from 'lodash/get'
-import _isObject from 'lodash/isObject'
-import _isFinite from 'lodash/isFinite'
-import _filter from 'lodash/filter'
-import _isEmpty from 'lodash/isEmpty'
-import _split from 'lodash/split'
-import _cloneDeep from 'lodash/cloneDeep'
-import classNames from 'classnames'
-import { FormattedMessage, injectIntl } from 'react-intl'
-import { Link } from 'react-router-dom'
-import { CustomSelectWidget,
-         MarkdownDescriptionField,
-         MarkdownEditField }
-       from '../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
-import KeywordAutosuggestInput
-      from '../../../../KeywordAutosuggestInput/KeywordAutosuggestInput'
-import WithCurrentProject
-       from '../../../HOCs/WithCurrentProject/WithCurrentProject'
-import WithCurrentChallenge
-       from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
-import WithCurrentTask from '../../../HOCs/WithCurrentTask/WithCurrentTask'
-import WithTaskTags from '../../../../HOCs/WithTaskTags/WithTaskTags'
-import BusySpinner from '../../../../BusySpinner/BusySpinner'
-import { jsSchema, uiSchema } from './EditTaskSchema'
-import manageMessages from '../../Messages'
-import messages from './Messages'
+import Form from "@rjsf/core";
+import classNames from "classnames";
+import _cloneDeep from "lodash/cloneDeep";
+import _filter from "lodash/filter";
+import _isEmpty from "lodash/isEmpty";
+import _isFinite from "lodash/isFinite";
+import _isObject from "lodash/isObject";
+import _merge from "lodash/merge";
+import _split from "lodash/split";
+import { Component } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import { Link } from "react-router-dom";
+import BusySpinner from "../../../../BusySpinner/BusySpinner";
+import {
+  CustomSelectWidget,
+  MarkdownDescriptionField,
+  MarkdownEditField,
+} from "../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
+import WithTaskTags from "../../../../HOCs/WithTaskTags/WithTaskTags";
+import KeywordAutosuggestInput from "../../../../KeywordAutosuggestInput/KeywordAutosuggestInput";
+import WithCurrentChallenge from "../../../HOCs/WithCurrentChallenge/WithCurrentChallenge";
+import WithCurrentProject from "../../../HOCs/WithCurrentProject/WithCurrentProject";
+import WithCurrentTask from "../../../HOCs/WithCurrentTask/WithCurrentTask";
+import manageMessages from "../../Messages";
+import { jsSchema, uiSchema } from "./EditTaskSchema";
+import messages from "./Messages";
 
 /**
  * EditTask provies a simple form for creating/editing a Task. We
@@ -41,67 +38,67 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class EditTask extends Component {
-  challengeState = null
+  challengeState = null;
 
   state = {
     formData: {},
     isSaving: false,
-  }
+  };
 
   /** Receive updates to the form data, along with any validation errors */
-  changeHandler = ({formData}) => this.setState({formData})
+  changeHandler = ({ formData }) => this.setState({ formData });
 
   /**
    * Reroute after challenge owner is done, either to Task Inspect if we came
    * from there, or to View Challenge if not.
    */
   rerouteAfterCompletion = () => {
-    if (_get(this.props, 'location.state.fromTaskInspect')) {
+    if (this.props.location?.state?.fromTaskInspect) {
       this.props.history.push({
-        pathname: `/admin/project/${this.props.projectId}/` +
+        pathname:
+          `/admin/project/${this.props.projectId}/` +
           `challenge/${this.props.challengeId}/task/${this.props.task.id}/inspect`,
-        state: this.challengeState
-      })
-    }
-    else {
-      const challengeState = _cloneDeep(this.challengeState)
+        state: this.challengeState,
+      });
+    } else {
+      const challengeState = _cloneDeep(this.challengeState);
       if (challengeState) {
-        challengeState.refreshAfterSave = true
+        challengeState.refreshAfterSave = true;
       }
 
       this.props.history.push({
-        pathname:`/admin/project/${this.props.projectId}/` +
-          `challenge/${this.props.challengeId}`,
-        state: challengeState
-      })
+        pathname: `/admin/project/${this.props.projectId}/` + `challenge/${this.props.challengeId}`,
+        state: challengeState,
+      });
     }
-  }
+  };
 
   /** Save modified task data */
-  finish = ({formData, errors}) => {
+  finish = ({ formData, errors }) => {
     if (!this.state.isSaving && errors.length === 0) {
-      this.setState({isSaving: true})
+      this.setState({ isSaving: true });
 
-      this.props.saveTask(formData).then(() =>
-        this.rerouteAfterCompletion()
-      )
+      this.props.saveTask(formData).then(() => this.rerouteAfterCompletion());
     }
-  }
+  };
 
   /** Cancel editing */
-  cancel = () => this.rerouteAfterCompletion()
+  cancel = () => this.rerouteAfterCompletion();
 
   componentDidMount() {
-    this.challengeState = this.props.history.location.state
-    window.scrollTo(0, 0)
+    this.challengeState = this.props.history.location.state;
+    window.scrollTo(0, 0);
   }
 
   render() {
     // We may have a task id lying around in redux, but at least make sure we
     // have a task status and geometries before proceeding to load the form
-    if (!_isFinite(_get(this.props, 'task.status')) ||
-        !_isObject(_get(this.props, 'task.geometries')) ||
-        !this.props.challenge || !this.props.project) {
+    if (
+      !_isFinite(this.props.task?.status) ||
+      !_isObject(this.props.task?.geometries) ||
+      !this.props.challenge ||
+      !this.props.project
+    ) {
       return (
         <div className="admin__manage edit-task">
           <div className="admin__manage__pane-wrapper">
@@ -110,14 +107,14 @@ export class EditTask extends Component {
             </div>
           </div>
         </div>
-      )
+      );
     }
 
-    const taskData = _merge({}, this.props.task, this.state.formData)
+    const taskData = _merge({}, this.props.task, this.state.formData);
 
     // Present the geometries as a string rather than object
     if (_isObject(taskData.geometries)) {
-      taskData.geometries = JSON.stringify(taskData.geometries)
+      taskData.geometries = JSON.stringify(taskData.geometries);
     }
 
     // Override the standard form-field description renderer with our own that
@@ -126,11 +123,10 @@ export class EditTask extends Component {
       DescriptionField: MarkdownDescriptionField,
       markdown: MarkdownEditField,
       tags: (props) => {
-        const preferredTags =
-          _filter(
-            _split(_get(this.props.task, 'parent.preferredTags'), ','),
-            (result) => !_isEmpty(result)
-          )
+        const preferredTags = _filter(
+          _split(this.props.task?.parent?.preferredTags, ","),
+          (result) => !_isEmpty(result),
+        );
 
         return (
           <KeywordAutosuggestInput
@@ -140,9 +136,9 @@ export class EditTask extends Component {
             preferredResults={preferredTags}
             placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
           />
-        )
+        );
       },
-    }
+    };
 
     return (
       <div className="admin__manage edit-task">
@@ -152,33 +148,34 @@ export class EditTask extends Component {
               <nav className="breadcrumb" aria-label="breadcrumbs">
                 <ul>
                   <li className="nav-title">
-                    <Link to='/admin/projects'>
+                    <Link to="/admin/projects">
                       <FormattedMessage {...manageMessages.manageHeader} />
                     </Link>
                   </li>
                   <li>
                     <Link to={`/admin/project/${this.props.project.id}`}>
-                      {this.props.project.displayName ||
-                      this.props.project.name}
+                      {this.props.project.displayName || this.props.project.name}
                     </Link>
                   </li>
-                  {_isObject(this.props.challenge) &&
+                  {_isObject(this.props.challenge) && (
                     <li>
-                      <Link to={{
-                        pathname: `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`,
-                        state: this.challengeState
-                      }}>
+                      <Link
+                        to={{
+                          pathname: `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`,
+                          state: this.challengeState,
+                        }}
+                      >
                         {this.props.challenge.name}
                       </Link>
                     </li>
-                  }
+                  )}
                   <li className="is-active">
                     <a aria-current="page">
-                      {
-                        _isObject(this.props.task) ?
-                        <FormattedMessage {...messages.editTask} /> :
+                      {_isObject(this.props.task) ? (
+                        <FormattedMessage {...messages.editTask} />
+                      ) : (
                         <FormattedMessage {...messages.newTask} />
-                      }
+                      )}
                     </a>
                     {this.props.loading && <BusySpinner inline />}
                   </li>
@@ -190,7 +187,7 @@ export class EditTask extends Component {
               <Form
                 schema={jsSchema(this.props.intl, this.props.task)}
                 uiSchema={uiSchema(this.props.intl)}
-                widgets={{SelectWidget: CustomSelectWidget}}
+                widgets={{ SelectWidget: CustomSelectWidget }}
                 className="form"
                 fields={customFields}
                 liveValidate
@@ -211,10 +208,9 @@ export class EditTask extends Component {
                   </button>
 
                   <button
-                    className={classNames(
-                      "mr-button mr-button--green-lighter mr-ml-4",
-                      {"is-loading": this.state.isSaving}
-                    )}
+                    className={classNames("mr-button mr-button--green-lighter mr-ml-4", {
+                      "is-loading": this.state.isSaving,
+                    })}
                     onClick={this.props.finish}
                   >
                     <FormattedMessage {...messages.save} />
@@ -225,13 +221,10 @@ export class EditTask extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
 export default WithCurrentProject(
-  WithCurrentChallenge(
-    WithCurrentTask(
-      WithTaskTags(injectIntl(EditTask)))
-  )
-)
+  WithCurrentChallenge(WithCurrentTask(WithTaskTags(injectIntl(EditTask)))),
+);

@@ -1,21 +1,21 @@
 import _map from "lodash/map";
 import _values from "lodash/values";
-import {
-  NotificationSubscriptionType,
-  NotificationCountType,
-  notificationTypeLabels,
-  notificationCountTypeLabels,
-  NOTIFICATION_TYPE_REVISION_COUNT,
-} from "../../../services/Notification/NotificationType/NotificationType";
-import {
-  SubscriptionType,
-  SubscriptionFrequencyType,
-  subscriptionTypeLabels,
-  subscriptionFrequencyTypeLabels,
-} from "../../../services/Notification/NotificationSubscription/NotificationSubscription";
+import { CustomNotificationFieldTemplate } from "../../../components/Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import MarkdownContent from "../../../components/MarkdownContent/MarkdownContent";
+import {
+  SubscriptionFrequencyType,
+  SubscriptionType,
+  subscriptionFrequencyTypeLabels,
+  subscriptionTypeLabels,
+} from "../../../services/Notification/NotificationSubscription/NotificationSubscription";
+import {
+  NOTIFICATION_TYPE_REVISION_COUNT,
+  NotificationCountType,
+  NotificationSubscriptionType,
+  notificationCountTypeLabels,
+  notificationTypeLabels,
+} from "../../../services/Notification/NotificationType/NotificationType";
 import messages from "../Messages";
-import { CustomNotificationFieldTemplate } from '../../../components/Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter';
 
 const createSubscriptionInput = (
   name,
@@ -26,30 +26,29 @@ const createSubscriptionInput = (
   defaultSelection,
 ) => {
   return {
-      name: name,
-        title: `${
-          notificationLabels[`${name}Long`] || notificationLabels[name]
-        } ${intl.formatMessage(messages.notificationLabel)}`,
-        type: "number",
-        enum: _values(subscriptionTypes),
-        enumNames: _map(subscriptionTypes, (value, key) => subscriptionLabels[key]),
-        default: defaultSelection,
-      
-    }
-  }
+    name: name,
+    title: `${
+      notificationLabels[`${name}Long`] || notificationLabels[name]
+    } ${intl.formatMessage(messages.notificationLabel)}`,
+    type: "number",
+    enum: _values(subscriptionTypes),
+    enumNames: _map(subscriptionTypes, (value, key) => subscriptionLabels[key]),
+    default: defaultSelection,
+  };
+};
 export const transformErrors = (intl) => (errors) => {
-  return errors.map(error => {
+  return errors.map((error) => {
     if (error.name === "format") {
-      const formatMessage = intl.formatMessage(messages.errorFormatMessage)
+      const formatMessage = intl.formatMessage(messages.errorFormatMessage);
 
       if (error.params?.format === "email") {
-        const emailMessage = intl.formatMessage(messages.errorFormatEmail)
+        const emailMessage = intl.formatMessage(messages.errorFormatEmail);
         error.message = `${formatMessage} "${emailMessage}"`;
       }
     }
     return error;
   });
-}
+};
 
 /**
  * Generates a JSON Schema describing editable Notification Settings fields
@@ -66,8 +65,7 @@ export const jsSchema = (intl) => {
   const localizedNotificationLabels = notificationTypeLabels(intl);
   const localizedNotificationCountLabels = notificationCountTypeLabels(intl);
   const localizedSubscriptionLabels = subscriptionTypeLabels(intl);
-  const localizedSubscriptionFrequencyLabels =
-    subscriptionFrequencyTypeLabels(intl);
+  const localizedSubscriptionFrequencyLabels = subscriptionFrequencyTypeLabels(intl);
 
   const items = new Array(NOTIFICATION_TYPE_REVISION_COUNT).fill({});
 
@@ -93,11 +91,13 @@ export const jsSchema = (intl) => {
     );
   });
 
-  // items are generated as array from all subscription and count types 
-  const notificationObject = {}
-  items.filter(item => Boolean(item.name)).forEach((item) => {
-    notificationObject[item.name] = item
-  })
+  // items are generated as array from all subscription and count types
+  const notificationObject = {};
+  items
+    .filter((item) => Boolean(item.name))
+    .forEach((item) => {
+      notificationObject[item.name] = item;
+    });
 
   return {
     $schema: "http://json-schema.org/draft-07/schema#",
@@ -118,7 +118,7 @@ export const jsSchema = (intl) => {
           metaReview: notificationObject.metaReview,
           reviewCount: notificationObject.reviewCount,
           revisionCount: notificationObject.revisionCount,
-        }
+        },
       },
 
       email: {
@@ -141,18 +141,13 @@ export const jsSchema = (intl) => {
  * > proper markup.
  */
 export const uiSchema = (intl) => {
- 
   return {
     email: {
       classNames: "notification-email",
       "ui:emptyValue": "",
-      "ui:help": (
-        <MarkdownContent
-          markdown={intl.formatMessage(messages.emailDescription)}
-        />
-      ),
+      "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.emailDescription)} />,
     },
-    
+
     notificationSubscriptions: {
       classNames: "no-legend notification-subscriptions",
       system: {
@@ -164,7 +159,7 @@ export const uiSchema = (intl) => {
         "ui:FieldTemplate": CustomNotificationFieldTemplate,
       },
       reviewApproved: {
-         "ui:help": intl.formatMessage(messages.reviewApprovedNotificationsDescription),
+        "ui:help": intl.formatMessage(messages.reviewApprovedNotificationsDescription),
         "ui:FieldTemplate": CustomNotificationFieldTemplate,
       },
       reviewRejected: {
@@ -200,7 +195,7 @@ export const uiSchema = (intl) => {
         "ui:FieldTemplate": CustomNotificationFieldTemplate,
       },
     },
-          
+
     "ui:options": {
       orderable: false,
       removable: false,
@@ -209,5 +204,3 @@ export const uiSchema = (intl) => {
     "ui:showTitle": false,
   };
 };
-
-

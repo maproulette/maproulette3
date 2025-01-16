@@ -1,18 +1,18 @@
-import { useState } from 'react'
-import WithSortedChallenges from '../HOCs/WithSortedChallenges/WithSortedChallenges'
-import WithMetricsSearchResults from './WithMetricsSearchResults'
-import WithSortedProjects from './WithSortedProjects'
-import WithSortedUsers from './WithSortedUsers'
-import ReactTable from 'react-table-6'
-import { setChallengeTab, setProjectTab, setUserTab } from './MetricsData'
-import { injectIntl } from 'react-intl'
-import BusySpinner from '../BusySpinner/BusySpinner'
+import { useState } from "react";
+import { injectIntl } from "react-intl";
+import ReactTable from "react-table-6";
+import BusySpinner from "../BusySpinner/BusySpinner";
+import WithSortedChallenges from "../HOCs/WithSortedChallenges/WithSortedChallenges";
+import { setChallengeTab, setProjectTab, setUserTab } from "./MetricsData";
+import WithMetricsSearchResults from "./WithMetricsSearchResults";
+import WithSortedProjects from "./WithSortedProjects";
+import WithSortedUsers from "./WithSortedUsers";
 
 const MetricsTable = (props) => {
-  const [userChanges, setUserChanges] = useState({})
-  let data
+  const [userChanges, setUserChanges] = useState({});
+  let data;
   const constructHeader = () => {
-    if (props.currentTab === 'challenges') {
+    if (props.currentTab === "challenges") {
       data = props.challenges.map((c) => ({
         id: c.id,
         name: c.name,
@@ -25,10 +25,10 @@ const MetricsTable = (props) => {
         created: c.created,
         dataOriginDate: c.dataOriginDate,
         lastTaskRefresh: c.lastTaskRefresh,
-      }))
+      }));
 
-      return setChallengeTab(props)
-    } else if (props.currentTab === 'projects') {
+      return setChallengeTab(props);
+    } else if (props.currentTab === "projects") {
       data = props.projects.map((p) => ({
         id: p.id,
         displayName: p.displayName,
@@ -38,44 +38,44 @@ const MetricsTable = (props) => {
         isVirtual: p.isVirtual,
         created: p.created,
         modified: p.modified,
-      }))
+      }));
 
-      return setProjectTab(props)
-    } else if (props.currentTab === 'users') {
+      return setProjectTab(props);
+    } else if (props.currentTab === "users") {
       data = props.users.map((u) => ({
         id: u.id,
         displayName: u.osmProfile.displayName,
         score: u.score,
         created: u.created,
         modified: u.modified,
-        superUser: Boolean(u.grants?.find(grant => grant.role === -1))
-      }))
+        superUser: Boolean(u.grants?.find((grant) => grant.role === -1)),
+      }));
 
-      return setUserTab(userChanges, setUserChanges)
+      return setUserTab(userChanges, setUserChanges);
     }
-  }
+  };
 
   return !props.isloadingCompleted ? (
-    <div className='admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue'>
+    <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
       <BusySpinner />
     </div>
   ) : (
     <ReactTable columns={constructHeader()} data={data} defaultPageSize={50} />
-  )
-}
+  );
+};
 
 export default WithMetricsSearchResults(
   WithSortedUsers(
     WithSortedProjects(
-      WithSortedChallenges(injectIntl(MetricsTable), 'challenges', null, {
+      WithSortedChallenges(injectIntl(MetricsTable), "challenges", null, {
         frontendSearch: true,
       }),
-      'projects',
-      null
+      "projects",
+      null,
     ),
-    'users',
-    null
+    "users",
+    null,
   ),
-  'challenges',
-  'challenges'
-)
+  "challenges",
+  "challenges",
+);

@@ -1,7 +1,7 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import TaskInstructions from '../TaskPane/TaskInstructions/TaskInstructions'
-import messages from './Messages'
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import TaskInstructions from "../TaskPane/TaskInstructions/TaskInstructions";
+import messages from "./Messages";
 
 /**
  * InstructionsOverlay shows a box with the task instructions and will
@@ -22,14 +22,11 @@ export default class InstructionsOverlay extends Component {
           </div>
         </div>
         <div className="mr-w-full mr-text-center mr-absolute mr-bottom-0">
-          <button
-            onClick={() => this.props.close()}
-            className="mr-button mr-w-4/5 mr-mb-8"
-          >
+          <button onClick={() => this.props.close()} className="mr-button mr-w-4/5 mr-mb-8">
             <FormattedMessage {...this.props.closeMessage} />
           </button>
         </div>
       </div>
-    )
+    );
   }
 }

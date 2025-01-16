@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import ReactDOM from "react-dom";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import Dropdown from "./Dropdown";
 
 describe("Dropdown", () => {
@@ -16,7 +16,7 @@ describe("Dropdown", () => {
 
   it("doesn't break if only required props are provided", () => {
     const { getByTestId } = render(
-      <Dropdown dropdownButton={() => null} dropdownContent={() => null} />
+      <Dropdown dropdownButton={() => null} dropdownContent={() => null} />,
     );
     const component = getByTestId("mr-dropdown");
     expect(component).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe("Dropdown", () => {
           </div>
         )}
         dropdownContent={() => <div>Content</div>}
-      />
+      />,
     );
 
     fireEvent.click(screen.getByText("Icon"));

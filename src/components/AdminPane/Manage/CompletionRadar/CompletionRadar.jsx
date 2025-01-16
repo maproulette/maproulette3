@@ -1,18 +1,19 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import { FormattedMessage, injectIntl } from 'react-intl'
-import { ResponsiveRadar } from '@nivo/radar'
-import { TaskStatus,
-         keysByStatus,
-         statusLabels }
-       from '../../../../services/Task/TaskStatus/TaskStatus'
-import _map from 'lodash/map'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../../../tailwind.config.js'
-import messages from './Messages'
+import { ResponsiveRadar } from "@nivo/radar";
+import classNames from "classnames";
+import _map from "lodash/map";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import resolveConfig from "tailwindcss/resolveConfig";
+import {
+  TaskStatus,
+  keysByStatus,
+  statusLabels,
+} from "../../../../services/Task/TaskStatus/TaskStatus";
+import tailwindConfig from "../../../../tailwind.config.js";
+import messages from "./Messages";
 
-const colors = resolveConfig(tailwindConfig).theme.colors
+const colors = resolveConfig(tailwindConfig).theme.colors;
 
 /**
  * Renders a radar chart displaying relative completion statuses of tasks.
@@ -25,37 +26,36 @@ export class CompletionRadar extends Component {
       keysByStatus[TaskStatus.skipped],
       keysByStatus[TaskStatus.alreadyFixed],
       keysByStatus[TaskStatus.fixed],
-    ]
+    ];
 
-    const localizedLabels = statusLabels(this.props.intl)
+    const localizedLabels = statusLabels(this.props.intl);
 
-    let totalEvaluated = 0
-    const metrics = _map(statusesToChart, status => {
-      totalEvaluated += this.props.taskMetrics[status] || 0
+    let totalEvaluated = 0;
+    const metrics = _map(statusesToChart, (status) => {
+      totalEvaluated += this.props.taskMetrics[status] || 0;
 
       return {
         status: localizedLabels[status],
         tasks: this.props.taskMetrics[status] || 0,
-      }
-    })
+      };
+    });
 
     return (
       <div className={classNames("completion-radar-chart", this.props.className)}>
-        {!this.props.suppressHeading &&
-         <p className="subheading">
-           <FormattedMessage {...messages.heading}
-                             values={{taskCount: totalEvaluated}} />
-         </p>
-        }
+        {!this.props.suppressHeading && (
+          <p className="subheading">
+            <FormattedMessage {...messages.heading} values={{ taskCount: totalEvaluated }} />
+          </p>
+        )}
         <ResponsiveRadar
           data={metrics}
           theme={{
-            textColor: '#FFF',
+            textColor: "#FFF",
             tooltip: {
               container: {
                 background: colors["blue-darker"],
-                color: '#FFF',
-              }
+                color: "#FFF",
+              },
             },
           }}
           colors={[colors["blue-dark"]]}
@@ -89,13 +89,13 @@ export class CompletionRadar extends Component {
           isInteractive={true}
         />
       </div>
-    )
+    );
   }
 }
 
 CompletionRadar.propTypes = {
   taskMetrics: PropTypes.object.isRequired,
   suppressHeading: PropTypes.bool,
-}
+};
 
-export default injectIntl(CompletionRadar)
+export default injectIntl(CompletionRadar);

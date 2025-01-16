@@ -1,22 +1,21 @@
-import { FormattedMessage } from 'react-intl'
-import { WidgetDataTarget, registerWidgetType }
-       from '../../../services/Widget/Widget'
-import QuickWidget from '../../QuickWidget/QuickWidget'
-import MapPane from '../../EnhancedMap/MapPane/MapPane'
-import ActivityMap from '../../ActivityMap/ActivityMap'
-import messages from './Messages'
+import { FormattedMessage } from "react-intl";
+import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
+import ActivityMap from "../../ActivityMap/ActivityMap";
+import MapPane from "../../EnhancedMap/MapPane/MapPane";
+import QuickWidget from "../../QuickWidget/QuickWidget";
+import messages from "./Messages";
 
 const descriptor = {
-  widgetKey: 'ActivityMapWidget',
+  widgetKey: "ActivityMapWidget",
   label: messages.title,
   targets: [WidgetDataTarget.activity],
   minWidth: 3,
   defaultWidth: 8,
   minHeight: 5,
   defaultHeight: 12,
-}
+};
 
-export const ActivityMapWidget = props => {
+export const ActivityMapWidget = (props) => {
   return (
     <QuickWidget
       {...props}
@@ -25,15 +24,12 @@ export const ActivityMapWidget = props => {
       widgetTitle={<FormattedMessage {...messages.title} />}
     >
       <MapPane {...props}>
-        <ActivityMap
-          {...props}
-          noAttributionPrefix={props.widgetLayout.w < 4}
-        />
+        <ActivityMap {...props} noAttributionPrefix={props.widgetLayout.w < 4} />
       </MapPane>
     </QuickWidget>
-  )
-}
+  );
+};
 
-registerWidgetType(ActivityMapWidget, descriptor)
+registerWidgetType(ActivityMapWidget, descriptor);
 
-export default ActivityMapWidget
+export default ActivityMapWidget;

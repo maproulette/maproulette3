@@ -25,7 +25,7 @@ export default [
       },
     },
     rules: {
-      "no-unused-vars": "warn",
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
       "react/jsx-uses-react": "error",
       "react/jsx-uses-vars": "error",
       "unused-imports/no-unused-imports": "error",

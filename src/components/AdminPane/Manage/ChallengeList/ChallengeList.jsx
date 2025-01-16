@@ -1,10 +1,10 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import _map from 'lodash/map'
-import _sortBy from 'lodash/sortBy'
-import ChallengeCard from '../ChallengeCard/ChallengeCard'
-import messages from './Messages'
+import _map from "lodash/map";
+import _sortBy from "lodash/sortBy";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import ChallengeCard from "../ChallengeCard/ChallengeCard";
+import messages from "./Messages";
 
 /**
  * ChallengeList renders the given challenges as a list. If a selectedProject
@@ -17,11 +17,10 @@ export default class ChallengeList extends Component {
   render() {
     // Show pinned challenges first
     const challengeCards = _sortBy(
-      _map(this.props.challenges, challenge => {
-        const link =
-          this.props.project.isVirtual ?
-          `/browse/challenges/${challenge.id}` :
-          `/admin/project/${this.props.project.id}/challenge/${challenge.id}`
+      _map(this.props.challenges, (challenge) => {
+        const link = this.props.project.isVirtual
+          ? `/browse/challenges/${challenge.id}`
+          : `/admin/project/${this.props.project.id}/challenge/${challenge.id}`;
 
         return (
           <ChallengeCard
@@ -35,26 +34,26 @@ export default class ChallengeList extends Component {
             link={link}
             includeCopyURL
           />
-        )
+        );
       }),
-      challengeCard => !challengeCard.props.isPinned
-    )
+      (challengeCard) => !challengeCard.props.isPinned,
+    );
 
     return (
       <div className="mr-text-base mr-pb-1 mr-pb-36">
-
-        {!this.props.loadingChallenges && challengeCards.length === 0 ?
-         <div className="mr-flex mr-justify-center mr-text-grey-light">
-           <FormattedMessage {...messages.noChallenges} />
-         </div> :
-         challengeCards
-        }
+        {!this.props.loadingChallenges && challengeCards.length === 0 ? (
+          <div className="mr-flex mr-justify-center mr-text-grey-light">
+            <FormattedMessage {...messages.noChallenges} />
+          </div>
+        ) : (
+          challengeCards
+        )}
       </div>
-    )
+    );
   }
 }
 
 ChallengeList.propTypes = {
   challenges: PropTypes.array.isRequired,
   suppressControls: PropTypes.bool,
-}
+};

@@ -1,15 +1,13 @@
-import { Role, rolesImply, ROLE_SUPERUSER }
-       from '../../services/Grant/Role'
-import { TargetType } from '../../services/Grant/TargetType'
-import { GranteeType } from '../../services/Grant/GranteeType'
-import _get from 'lodash/get'
-import _map from 'lodash/map'
-import _isObject from 'lodash/isObject'
-import _filter from 'lodash/filter'
-import _isFinite from 'lodash/isFinite'
-import _each from 'lodash/each'
-import _uniq from 'lodash/uniq'
-import { AsEndUser } from './AsEndUser'
+import _each from "lodash/each";
+import _filter from "lodash/filter";
+import _isFinite from "lodash/isFinite";
+import _isObject from "lodash/isObject";
+import _map from "lodash/map";
+import _uniq from "lodash/uniq";
+import { GranteeType } from "../../services/Grant/GranteeType";
+import { ROLE_SUPERUSER, Role, rolesImply } from "../../services/Grant/Role";
+import { TargetType } from "../../services/Grant/TargetType";
+import { AsEndUser } from "./AsEndUser";
 
 /**
  * Provides methods specific to project and challenge management
@@ -24,11 +22,11 @@ export class AsManager extends AsEndUser {
    */
   isProjectOwner(project) {
     if (!project) {
-      return false
+      return false;
     }
 
-    const osmId = _get(this.user, 'osmProfile.id')
-    return (_isFinite(osmId) && osmId === project.owner)
+    const osmId = this.user?.osmProfile?.id;
+    return _isFinite(osmId) && osmId === project.owner;
   }
 
   /**
@@ -36,28 +34,31 @@ export class AsManager extends AsEndUser {
    */
   projectRoles(project) {
     if (!this.user || !project) {
-      return []
+      return [];
     }
 
     // Combine the grants on the user with those on the project. This is
     // potentially more lenient, but helps prevent erroneous security errors in
     // the event of stale data (and the server will stop anything if the user
     // actually lacks permission)
-    const userGrants = _filter(this.user.grants, grant =>
-      grant.role === ROLE_SUPERUSER || (
-        grant.target &&
-        grant.target.objectType === TargetType.project &&
-        grant.target.objectId === project.id
-      )
-    )
+    const userGrants = _filter(
+      this.user.grants,
+      (grant) =>
+        grant.role === ROLE_SUPERUSER ||
+        (grant.target &&
+          grant.target.objectType === TargetType.project &&
+          grant.target.objectId === project.id),
+    );
 
-    const projectGrants = _filter(project.grants, grant =>
-      grant.grantee &&
-      grant.grantee.granteeType === GranteeType.user &&
-      grant.grantee.granteeId === this.user.id
-    )
+    const projectGrants = _filter(
+      project.grants,
+      (grant) =>
+        grant.grantee &&
+        grant.grantee.granteeType === GranteeType.user &&
+        grant.grantee.granteeId === this.user.id,
+    );
 
-    return _uniq(_map(userGrants.concat(projectGrants), 'role'))
+    return _uniq(_map(userGrants.concat(projectGrants), "role"));
   }
 
   /**
@@ -66,10 +67,10 @@ export class AsManager extends AsEndUser {
    */
   satisfiesProjectRole(project, role) {
     if (!this.isLoggedIn()) {
-      return false
+      return false;
     }
 
-    return rolesImply(role, this.projectRoles(project))
+    return rolesImply(role, this.projectRoles(project));
   }
 
   /**
@@ -78,7 +79,7 @@ export class AsManager extends AsEndUser {
    * @returns true if the user has read access, false otherwise.
    */
   canReadProject(project) {
-    return this.satisfiesProjectRole(project, Role.read)
+    return this.satisfiesProjectRole(project, Role.read);
   }
 
   /**
@@ -88,7 +89,7 @@ export class AsManager extends AsEndUser {
    * @returns true if the user has read access, false otherwise.
    */
   canWriteProject(project) {
-    return this.satisfiesProjectRole(project, Role.write)
+    return this.satisfiesProjectRole(project, Role.write);
   }
 
   /**
@@ -98,7 +99,7 @@ export class AsManager extends AsEndUser {
    * @returns true if the user can manage the project, false otherwise.
    */
   canManage(project) {
-    return this.satisfiesProjectRole(project, Role.read)
+    return this.satisfiesProjectRole(project, Role.read);
   }
 
   /**
@@ -108,7 +109,7 @@ export class AsManager extends AsEndUser {
    * @returns true if the user can administrate the project, false otherwise.
    */
   canAdministrateProject(project) {
-    return this.satisfiesProjectRole(project, Role.admin)
+    return this.satisfiesProjectRole(project, Role.admin);
   }
 
   /**
@@ -119,10 +120,10 @@ export class AsManager extends AsEndUser {
    */
   canManageChallenge(challenge) {
     if (!_isObject(challenge.parent)) {
-      return false
+      return false;
     }
 
-    return this.canManage(challenge.parent)
+    return this.canManage(challenge.parent);
   }
 
   /**
@@ -130,7 +131,7 @@ export class AsManager extends AsEndUser {
    * permission to manage.
    */
   manageableProjects(projects) {
-    return _filter(projects, project => this.canManage(project))
+    return _filter(projects, (project) => this.canManage(project));
   }
 
   /**
@@ -138,25 +139,25 @@ export class AsManager extends AsEndUser {
    * has permission to manage.
    */
   manageableChallenges(projects, challenges) {
-    const projectIds = _map(this.manageableProjects(projects), 'id')
+    const projectIds = _map(this.manageableProjects(projects), "id");
 
-    const projectChallenges = new Set()
+    const projectChallenges = new Set();
 
-    _each(challenges, challenge => {
+    _each(challenges, (challenge) => {
       // handle both normalized and denormalized challenges
-      if (projectIds.indexOf(_get(challenge, 'parent.id', challenge.parent)) !== -1) {
-        projectChallenges.add(challenge)
+      if (projectIds.indexOf(challenge?.parent?.id ?? challenge.parent) !== -1) {
+        projectChallenges.add(challenge);
       }
 
       _each(challenge.virtualParents, (vp) => {
         if (projectIds.indexOf(_isObject(vp) ? vp.id : vp) !== -1) {
           if (!projectChallenges.has(challenge)) {
-            projectChallenges.add(challenge)
+            projectChallenges.add(challenge);
           }
         }
-      })
-    })
-    return [...projectChallenges]
+      });
+    });
+    return [...projectChallenges];
   }
 
   /**
@@ -164,16 +165,18 @@ export class AsManager extends AsEndUser {
    */
   groupRoles(group) {
     if (!this.user || !group) {
-      return []
+      return [];
     }
 
     return _map(
-      _filter(this.user.grants, grant =>
-        grant.role === ROLE_SUPERUSER ||
-        (grant.target.objectType === TargetType.group && grant.target.objectId === group.id)
+      _filter(
+        this.user.grants,
+        (grant) =>
+          grant.role === ROLE_SUPERUSER ||
+          (grant.target.objectType === TargetType.group && grant.target.objectId === group.id),
       ),
-      'role'
-    )
+      "role",
+    );
   }
 
   /**
@@ -182,10 +185,10 @@ export class AsManager extends AsEndUser {
    */
   satisfiesGroupRole(group, role) {
     if (!this.isLoggedIn()) {
-      return false
+      return false;
     }
 
-    return rolesImply(role, this.groupRoles(group))
+    return rolesImply(role, this.groupRoles(group));
   }
 
   /**
@@ -194,15 +197,15 @@ export class AsManager extends AsEndUser {
    * @returns true if the user can administrate the group, false otherwise.
    */
   canAdministrateGroup(group) {
-    return this.satisfiesGroupRole(group, Role.admin)
+    return this.satisfiesGroupRole(group, Role.admin);
   }
 
   /**
    * Alias for canAdministrateGroup, as teams are groups
    */
   canAdministrateTeam(team) {
-    return this.canAdministrateGroup(team)
+    return this.canAdministrateGroup(team);
   }
 }
 
-export default user => new AsManager(user)
+export default (user) => new AsManager(user);

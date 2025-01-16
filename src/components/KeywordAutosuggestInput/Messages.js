@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with KeywordAutosuggestInput
@@ -6,21 +6,21 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   addKeywordPlaceholder: {
     id: "KeywordAutosuggestInput.controls.addKeyword.placeholder",
-    defaultMessage: "Add keyword"
+    defaultMessage: "Add keyword",
   },
 
   filterTags: {
     id: "KeywordAutosuggestInput.controls.filterTags.placeholder",
-    defaultMessage: "Filter Tags"
+    defaultMessage: "Filter Tags",
   },
 
   chooseTags: {
     id: "KeywordAutosuggestInput.controls.chooseTags.placeholder",
-    defaultMessage: "Choose Tags"
+    defaultMessage: "Choose Tags",
   },
 
   search: {
     id: "KeywordAutosuggestInput.controls.search.placeholder",
-    defaultMessage: "Search"
+    defaultMessage: "Search",
   },
-})
+});

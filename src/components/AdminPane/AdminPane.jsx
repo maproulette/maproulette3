@@ -1,24 +1,24 @@
-import { Fragment, Component } from "react";
 import PropTypes from "prop-types";
-import { Switch, Route, withRouter } from "react-router-dom";
+import { Component, Fragment } from "react";
 import MediaQuery from "react-responsive";
+import { Route, Switch, withRouter } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
 import SignIn from "../../pages/SignIn/SignIn";
-import WithStatus from "../HOCs/WithStatus/WithStatus";
+import BusySpinner from "../BusySpinner/BusySpinner";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
+import WithStatus from "../HOCs/WithStatus/WithStatus";
+import HeadTitle from "../Head/Head";
 import ScreenTooNarrow from "../ScreenTooNarrow/ScreenTooNarrow";
+import ChallengeDashboard from "./Manage/ChallengeDashboard/ChallengeDashboard";
+import EditProject from "./Manage/EditProject/EditProject";
+import EmailRequirementNotice from "./Manage/EmailRequirementNotice/EmailRequirementNotice";
+import InspectTask from "./Manage/InspectTask/InspectTask";
 import EditChallenge from "./Manage/ManageChallenges/EditChallenge/EditChallenge";
 import EditChallenges from "./Manage/ManageChallenges/EditChallenge/EditChallenges";
-import EditProject from "./Manage/EditProject/EditProject";
-import ManageChallengeList from "./Manage/VirtualProjects/ManageChallengeList";
 import EditTask from "./Manage/ManageTasks/EditTask/EditTask";
-import InspectTask from "./Manage/InspectTask/InspectTask";
-import ProjectsDashboard from "./Manage/ProjectsDashboard/ProjectsDashboard";
 import ProjectDashboard from "./Manage/ProjectDashboard/ProjectDashboard";
-import ChallengeDashboard from "./Manage/ChallengeDashboard/ChallengeDashboard";
-import BusySpinner from "../BusySpinner/BusySpinner";
-import EmailRequirementNotice from "./Manage/EmailRequirementNotice/EmailRequirementNotice";
-import HeadTitle from "../Head/Head";
+import ProjectsDashboard from "./Manage/ProjectsDashboard/ProjectsDashboard";
+import ManageChallengeList from "./Manage/VirtualProjects/ManageChallengeList";
 import "./Manage/Widgets/widget_registry.js";
 import "./AdminPane.scss";
 import TestEnvironmentNotice from "./Manage/TestEnvironmentNotice/TestEnvironmentNotice";
@@ -100,16 +100,8 @@ export class AdminPane extends Component {
                 path="/admin/virtual/project/:projectId/challenges/manage"
                 component={ManageChallengeList}
               />
-              <CustomRoute
-                exact
-                path="/admin/projects"
-                component={ProjectsDashboard}
-              />
-              <CustomRoute
-                exact
-                path="/admin/project/:projectId"
-                component={ProjectDashboard}
-              />
+              <CustomRoute exact path="/admin/projects" component={ProjectsDashboard} />
+              <CustomRoute exact path="/admin/project/:projectId" component={ProjectDashboard} />
               <CustomRoute component={ProjectsDashboard} />
             </Switch>
           </div>
@@ -129,16 +121,18 @@ AdminPane.propTypes = {
 
 export const CustomRoute = ({ component: Component, ...rest }) => {
   return (
-    <Route {...rest}
-      render={props => {
+    <Route
+      {...rest}
+      render={(props) => {
         return (
           <>
             <HeadTitle />
             <Component {...props} />
           </>
-        )
-      }} />
-  )
-}
+        );
+      }}
+    />
+  );
+};
 
 export default WithStatus(WithCurrentUser(withRouter(AdminPane)));

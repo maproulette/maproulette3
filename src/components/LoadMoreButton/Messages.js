@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with LoadMoreButton.
@@ -8,4 +8,4 @@ export default defineMessages({
     id: "General.controls.moreResults.label",
     defaultMessage: "More Results",
   },
-})
+});

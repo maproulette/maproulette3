@@ -1,8 +1,8 @@
-import { Component } from 'react'
-import { connect } from 'react-redux'
-import queryString from 'query-string'
-import _omit from 'lodash/omit'
-import { addError } from '../../../services/Error/Error'
+import _omit from "lodash/omit";
+import queryString from "query-string";
+import { Component } from "react";
+import { connect } from "react-redux";
+import { addError } from "../../../services/Error/Error";
 
 /**
  * WithExternalError generates an error on mount passed via `errormsg` query
@@ -13,30 +13,29 @@ import { addError } from '../../../services/Error/Error'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithExternalError = function(WrappedComponent) {
+export const WithExternalError = function (WrappedComponent) {
   return class extends Component {
     componentDidMount() {
-      const params = queryString.parse(this.props.location.search)
+      const params = queryString.parse(this.props.location.search);
 
       if (params.errormsg) {
-        this.props.addExternalError(params.errormsg)
-      }
-      else {
-        this.props.addExternalError("An unknown error occurred.")
+        this.props.addExternalError(params.errormsg);
+      } else {
+        this.props.addExternalError("An unknown error occurred.");
       }
     }
 
     render() {
-      return <WrappedComponent {..._omit(this.props, 'addExternalError')} />
+      return <WrappedComponent {..._omit(this.props, "addExternalError")} />;
     }
-  }
-}
+  };
+};
 
-const mapDispatchToProps = dispatch => ({
-  addExternalError: message => {
-    dispatch(addError({id: "Errors.external", defaultMessage: message}))
-  }
-})
+const mapDispatchToProps = (dispatch) => ({
+  addExternalError: (message) => {
+    dispatch(addError({ id: "Errors.external", defaultMessage: message }));
+  },
+});
 
-export default WrappedComponent =>
-  connect(null, mapDispatchToProps)(WithExternalError(WrappedComponent))
+export default (WrappedComponent) =>
+  connect(null, mapDispatchToProps)(WithExternalError(WrappedComponent));

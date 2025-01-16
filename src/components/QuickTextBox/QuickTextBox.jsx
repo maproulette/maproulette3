@@ -1,9 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import { FormattedMessage } from 'react-intl'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import messages from './Messages'
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 /**
  * QuickTextBox renders a simple text input field with icon-only done/cancel
@@ -26,15 +26,13 @@ export default class QuickTextBox extends Component {
   checkForSpecialKeys = (e) => {
     // Ignore if modifier keys were pressed
     if (e.metaKey || e.altKey || e.ctrlKey) {
-      return
+      return;
+    } else if (e.key === "Escape" && !this.props.suppressControls) {
+      this.props.cancel();
+    } else if (e.key === "Enter" && !this.props.suppressControls) {
+      this.props.done();
     }
-    else if (e.key === "Escape" && !this.props.suppressControls) {
-      this.props.cancel()
-    }
-    else if (e.key === "Enter" && !this.props.suppressControls) {
-      this.props.done()
-    }
-  }
+  };
 
   render() {
     return (
@@ -50,20 +48,17 @@ export default class QuickTextBox extends Component {
             onKeyDown={this.checkForSpecialKeys}
             value={this.props.text}
           />
-          {!this.props.suppressControls &&
+          {!this.props.suppressControls && (
             <button
               className={classNames("mr-button", this.props.doneButtonClassName)}
               onClick={this.props.done}
             >
               {this.props.doneLabel || <FormattedMessage {...messages.saveLabel} />}
             </button>
-          }
+          )}
         </div>
-        {!this.props.suppressControls &&
-          <button
-            className="mr-ml-4"
-            onClick={this.props.cancel}
-          >
+        {!this.props.suppressControls && (
+          <button className="mr-ml-4" onClick={this.props.cancel}>
             <SvgSymbol
               sym="icon-close"
               viewBox="0 0 20 20"
@@ -71,9 +66,9 @@ export default class QuickTextBox extends Component {
               aria-hidden
             />
           </button>
-        }
+        )}
       </div>
-    )
+    );
   }
 }
 
@@ -92,9 +87,9 @@ QuickTextBox.propTypes = {
   small: PropTypes.bool,
   /** Set to true to suppress done/cancel button and keyboard controls */
   suppressControls: PropTypes.bool,
-}
+};
 
 QuickTextBox.defaultProps = {
   small: false,
   suppressControls: false,
-}
+};

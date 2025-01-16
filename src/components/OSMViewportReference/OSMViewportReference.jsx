@@ -1,6 +1,6 @@
-import { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import WithEditor from '../HOCs/WithEditor/WithEditor'
+import PropTypes from "prop-types";
+import { PureComponent } from "react";
+import WithEditor from "../HOCs/WithEditor/WithEditor";
 
 /**
  * Renders a zoom/lat/lon viewport reference as an OSM map link but on click
@@ -10,29 +10,33 @@ import WithEditor from '../HOCs/WithEditor/WithEditor'
 export class OSMViewportReference extends PureComponent {
   zoomJOSMIfActive(clickEvent) {
     if (!this.props.isJosmEditor(this.props.configuredEditor)) {
-      return
+      return;
     }
 
-    clickEvent.preventDefault()
-    const bbox = this.props.viewportToBBox(this.props.zoom, this.props.lat, this.props.lon,
-                                           window.innerWidth, window.innerHeight)
-    this.props.zoomJOSM(bbox)
+    clickEvent.preventDefault();
+    const bbox = this.props.viewportToBBox(
+      this.props.zoom,
+      this.props.lat,
+      this.props.lon,
+      window.innerWidth,
+      window.innerHeight,
+    );
+    this.props.zoomJOSM(bbox);
   }
 
   render() {
-    const osmUrl =
-      `https://www.openstreetmap.org/#map=${this.props.zoom}/${this.props.lat}/${this.props.lon}`
+    const osmUrl = `https://www.openstreetmap.org/#map=${this.props.zoom}/${this.props.lat}/${this.props.lon}`;
 
     return (
       <a
         href={osmUrl}
         target="_blank"
         rel="noopener noreferrer nofollow"
-        onClick={e => this.zoomJOSMIfActive(e)}
+        onClick={(e) => this.zoomJOSMIfActive(e)}
       >
         {this.props.zoom}/{this.props.lat}/{this.props.lon}
       </a>
-    )
+    );
   }
 }
 
@@ -40,6 +44,6 @@ OSMViewportReference.propTypes = {
   zoom: PropTypes.string.isRequired,
   lat: PropTypes.string.isRequired,
   lon: PropTypes.string.isRequired,
-}
+};
 
-export default WithEditor(OSMViewportReference)
+export default WithEditor(OSMViewportReference);

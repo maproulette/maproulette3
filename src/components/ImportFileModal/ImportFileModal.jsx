@@ -1,13 +1,13 @@
-import { Component } from "react";
 import PropTypes from "prop-types";
+import { Component } from "react";
 import Dropzone from "react-dropzone";
 import { FormattedMessage } from "react-intl";
+import catAndLaptop from "../../../images/cat-and-laptop.svg";
+import BusySpinner from "../BusySpinner/BusySpinner";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
-import BusySpinner from "../BusySpinner/BusySpinner";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
-import catAndLaptop from "../../../images/cat-and-laptop.svg";
 
 export default class ImportLayoutModal extends Component {
   state = {
@@ -20,12 +20,10 @@ export default class ImportLayoutModal extends Component {
         <Modal narrow isActive onClose={this.props.onCancel}>
           <div>
             <div className="mr-flex mr-justify-center mr-my-8">
-              <img src={catAndLaptop}  style={{ height: 131, width: 185 }} />
+              <img src={catAndLaptop} style={{ height: 131, width: 185 }} />
             </div>
             <div className="mr-w-full">
-              <h2 className="mr-text-white mr-text-4xl mr-mb-4">
-                {this.props.header}
-              </h2>
+              <h2 className="mr-text-white mr-text-4xl mr-mb-4">{this.props.header}</h2>
               <div className="mr-mt-2">
                 {this.state.importingFiles ? (
                   <BusySpinner />
@@ -75,10 +73,7 @@ export default class ImportLayoutModal extends Component {
                       }}
                     </Dropzone>
                     <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
-                      <button
-                        className="mr-button mr-button--white"
-                        onClick={this.props.onCancel}
-                      >
+                      <button className="mr-button mr-button--white" onClick={this.props.onCancel}>
                         <FormattedMessage {...messages.cancelLabel} />
                       </button>
                     </div>

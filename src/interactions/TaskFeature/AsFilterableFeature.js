@@ -1,17 +1,18 @@
-import _toFinite from 'lodash/toFinite'
-import _isFinite from 'lodash/isFinite'
-import _trim from 'lodash/trim'
-import _isString from 'lodash/isString'
-import _isUndefined from 'lodash/isUndefined'
+import _isFinite from "lodash/isFinite";
+import _isString from "lodash/isString";
+import _isUndefined from "lodash/isUndefined";
+import _toFinite from "lodash/toFinite";
+import _trim from "lodash/trim";
 
-import {TaskPropertySearchTypeString,
-        TaskPropertySearchTypeNumber,
-        TaskPropertyOperationType} from
-       '../../services/Task/TaskProperty/TaskProperty'
+import {
+  TaskPropertyOperationType,
+  TaskPropertySearchTypeNumber,
+  TaskPropertySearchTypeString,
+} from "../../services/Task/TaskProperty/TaskProperty";
 
 // value types (data types)
-const STRING = "string"
-const NUMBER = "number"
+const STRING = "string";
+const NUMBER = "number";
 
 /**
  * AsFilterableFeature adds functionality for determining if a feature matches
@@ -19,7 +20,7 @@ const NUMBER = "number"
  */
 export class AsFilterableFeature {
   constructor(feature) {
-    Object.assign(this, feature)
+    Object.assign(this, feature);
   }
 
   /**
@@ -27,7 +28,7 @@ export class AsFilterableFeature {
    */
   matchesPropertyFilter(rules) {
     if (!rules) {
-      return false
+      return false;
     }
 
     // If there is an operationType then that means we're AND'ing or OR'ing
@@ -35,22 +36,22 @@ export class AsFilterableFeature {
     if (rules.operationType) {
       switch (rules.operationType.toLowerCase()) {
         case TaskPropertyOperationType.and:
-          return this.matchesPropertyFilter(rules.left) && this.matchesPropertyFilter(rules.right)
+          return this.matchesPropertyFilter(rules.left) && this.matchesPropertyFilter(rules.right);
         case TaskPropertyOperationType.or:
-          return this.matchesPropertyFilter(rules.left) || this.matchesPropertyFilter(rules.right)
+          return this.matchesPropertyFilter(rules.left) || this.matchesPropertyFilter(rules.right);
         default:
-          throw new Error(`Unrecognized filter rule operation type: ${rules.operationType}`)
+          throw new Error(`Unrecognized filter rule operation type: ${rules.operationType}`);
       }
     }
 
     // Otherwise evaluate the filter based on the value type (data type)
     switch (rules.valueType.toLowerCase()) {
       case STRING:
-        return this.matchesStringFilter(rules)
+        return this.matchesStringFilter(rules);
       case NUMBER:
-        return this.matchesNumberFilter(rules)
+        return this.matchesNumberFilter(rules);
       default:
-        throw new Error(`Unsupported value type: ${rules.valueType}`)
+        throw new Error(`Unsupported value type: ${rules.valueType}`);
     }
   }
 
@@ -58,29 +59,33 @@ export class AsFilterableFeature {
    * Determine if these properties match the given string type filter
    */
   matchesStringFilter(rule) {
-    if (rule.searchType.toLowerCase() !== TaskPropertySearchTypeString.exists &&
-        rule.searchType.toLowerCase() !== TaskPropertySearchTypeString.missing) {
+    if (
+      rule.searchType.toLowerCase() !== TaskPropertySearchTypeString.exists &&
+      rule.searchType.toLowerCase() !== TaskPropertySearchTypeString.missing
+    ) {
       if (!_isString(rule.value)) {
-        return false
+        return false;
       }
     }
 
     // searchType represents the comparison operation to perform
     switch (rule.searchType.toLowerCase()) {
       case TaskPropertySearchTypeString.equals:
-        return this.properties[rule.key] === rule.value
+        return this.properties[rule.key] === rule.value;
       case TaskPropertySearchTypeString.contains:
-        return _isString(this.properties[rule.key]) &&
-               rule.value.length > 0 &&
-               this.properties[rule.key].includes(rule.value)
+        return (
+          _isString(this.properties[rule.key]) &&
+          rule.value.length > 0 &&
+          this.properties[rule.key].includes(rule.value)
+        );
       case TaskPropertySearchTypeString.notEqual:
-        return this.properties[rule.key] !== rule.value
+        return this.properties[rule.key] !== rule.value;
       case TaskPropertySearchTypeString.exists:
-        return this.properties[rule.key]
+        return this.properties[rule.key];
       case TaskPropertySearchTypeString.missing:
-        return !this.properties[rule.key]
+        return !this.properties[rule.key];
       default:
-        throw new Error(`Unsupported string operator: ${rule.searchType}`)
+        throw new Error(`Unsupported string operator: ${rule.searchType}`);
     }
   }
 
@@ -90,43 +95,44 @@ s   */
   matchesNumberFilter(rule) {
     // No empty rule values allowed for numeric comparison
     if (_trim(rule.value) === "") {
-      return false
+      return false;
     }
 
     // If property is undefined or empty, return true for NOT_EQUAL comparator
     // and false for everything else
-    if (_isUndefined(this.properties[rule.key]) ||
-        this.properties[rule.key] === null ||
-        _trim(this.properties[rule.key]) === "") {
-
-      return rule.searchType.toLowerCase() === TaskPropertySearchTypeString.notEqual
+    if (
+      _isUndefined(this.properties[rule.key]) ||
+      this.properties[rule.key] === null ||
+      _trim(this.properties[rule.key]) === ""
+    ) {
+      return rule.searchType.toLowerCase() === TaskPropertySearchTypeString.notEqual;
     }
 
     // Make sure we're dealing with finite numbers
-    const propertyValue = _toFinite(this.properties[rule.key])
+    const propertyValue = _toFinite(this.properties[rule.key]);
     if (!_isFinite(propertyValue)) {
-      return false
+      return false;
     }
 
-    const ruleValue = _toFinite(rule.value)
+    const ruleValue = _toFinite(rule.value);
     if (!_isFinite(ruleValue)) {
-      return false
+      return false;
     }
 
     // searchType represents the comparison operation to perform
     switch (rule.searchType.toLowerCase()) {
       case TaskPropertySearchTypeNumber.equals:
-        return propertyValue === ruleValue
+        return propertyValue === ruleValue;
       case TaskPropertySearchTypeNumber.notEquals:
-        return propertyValue !== ruleValue
-      case  TaskPropertySearchTypeNumber.greaterThan:
-        return propertyValue > ruleValue
-      case  TaskPropertySearchTypeNumber.lessThan:
-        return propertyValue < ruleValue
+        return propertyValue !== ruleValue;
+      case TaskPropertySearchTypeNumber.greaterThan:
+        return propertyValue > ruleValue;
+      case TaskPropertySearchTypeNumber.lessThan:
+        return propertyValue < ruleValue;
       default:
-        throw new Error(`Unsupported numeric operator: ${rule.searchType}`)
+        throw new Error(`Unsupported numeric operator: ${rule.searchType}`);
     }
   }
 }
 
-export default feature => new AsFilterableFeature(feature)
+export default (feature) => new AsFilterableFeature(feature);

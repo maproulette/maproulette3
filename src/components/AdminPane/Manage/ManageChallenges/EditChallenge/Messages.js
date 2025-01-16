@@ -100,8 +100,7 @@ export default defineMessages({
 
   emailDescription: {
     id: "Admin.EditChallenge.form.email.description",
-    defaultMessage:
-      "Please provide an email for mappers to contact you with feedback",
+    defaultMessage: "Please provide an email for mappers to contact you with feedback",
   },
 
   descriptionLabel: {
@@ -152,8 +151,7 @@ export default defineMessages({
 
   addMustachePreviewNote: {
     id: "Form.controls.addMustachePreview.note",
-    defaultMessage:
-      "Note: all mustache property tags evaluate to empty in preview",
+    defaultMessage: "Note: all mustache property tags evaluate to empty in preview",
   },
 
   checkinCommentLabel: {
@@ -163,8 +161,7 @@ export default defineMessages({
 
   checkinCommentDescription: {
     id: "Admin.EditChallenge.form.checkinComment.description",
-    defaultMessage:
-      "Comment to be associated with changes made by users in editor",
+    defaultMessage: "Comment to be associated with changes made by users in editor",
   },
 
   checkinSourceLabel: {
@@ -174,14 +171,12 @@ export default defineMessages({
 
   checkinSourceDescription: {
     id: "Admin.EditChallenge.form.checkinSource.description",
-    defaultMessage:
-      "Source to be associated with changes made by users in editor",
+    defaultMessage: "Source to be associated with changes made by users in editor",
   },
 
   includeCheckinHashtagTrueLabel: {
     id: "Admin.EditChallenge.form.includeCheckinHashtag.value.true.label",
-    defaultMessage:
-      "Automatically append `#maproulette` hashtag (highly recommended)",
+    defaultMessage: "Automatically append `#maproulette` hashtag (highly recommended)",
   },
 
   includeCheckinHashtagFalseLabel: {
@@ -441,9 +436,7 @@ will not be able to make sense of it.
 
   dataOriginDateDescription: {
     id: "Admin.EditChallenge.form.dataOriginDate.description",
-    defaultMessage:
-      "Age of the data. The date the data was " +
-      "downloaded, generated, etc. ",
+    defaultMessage: "Age of the data. The date the data was " + "downloaded, generated, etc. ",
   },
 
   ignoreSourceErrorsLabel: {
@@ -665,7 +658,8 @@ will not be able to make sense of it.
 
   disableOsmIdProperty: {
     id: "Admin.EditChallenge.form.disableOsmIdProperty",
-    defaultMessage: "This ID cannot be edited after challenge creation, this is to prevent task duplication. [Learn more](https://learn.maproulette.org/documentation/setting-external-task-identifiers/)."
+    defaultMessage:
+      "This ID cannot be edited after challenge creation, this is to prevent task duplication. [Learn more](https://learn.maproulette.org/documentation/setting-external-task-identifiers/).",
   },
 
   customTaskStyleLabel: {
@@ -675,14 +669,12 @@ will not be able to make sense of it.
 
   customTaskStylesDescription: {
     id: "Admin.EditChallenge.form.customTaskStyles.description",
-    defaultMessage:
-      "Enable custom task styling based on specific task feature properties.",
+    defaultMessage: "Enable custom task styling based on specific task feature properties.",
   },
 
   customTaskStylesError: {
     id: "Admin.EditChallenge.form.customTaskStyles.error",
-    defaultMessage:
-      "Task property style rules are invalid. Please fix before continuing.",
+    defaultMessage: "Task property style rules are invalid. Please fix before continuing.",
   },
 
   customTaskStyleButton: {
@@ -760,13 +752,13 @@ will not be able to make sense of it.
 
   bulkEditWarningLabel: {
     id: "Admin.EditChallenge.form.bulkSubmit.label",
-    defaultMessage: "The following changes will be applied to all selected challenges.  This process is not reversible, so please review before submitting.",
+    defaultMessage:
+      "The following changes will be applied to all selected challenges.  This process is not reversible, so please review before submitting.",
   },
 
   reviewSettingDescription: {
     id: "Admin.EditChallenge.form.reviewSetting.description",
-    defaultMessage: 
-    "This will pre-check the users request review box when submitting a task.",
+    defaultMessage: "This will pre-check the users request review box when submitting a task.",
   },
 
   reviewSettingNotRequired: {
@@ -796,7 +788,7 @@ will not be able to make sense of it.
 
   nameDescription: {
     id: "Admin.EditChallenge.form.nameDescription",
-    defaultMessage: "The challenge name is required and must be more than 3 characters long."
+    defaultMessage: "The challenge name is required and must be more than 3 characters long.",
   },
 
   showLongformTooltip: {
@@ -886,8 +878,7 @@ will not be able to make sense of it.
 
   changesetUrlTitle: {
     id: "Admin.EditChallenge.form.steps.changesetUrl.title",
-    defaultMessage:
-      "Add Changeset URL",
+    defaultMessage: "Add Changeset URL",
   },
 
   basemapStepHeader: {
@@ -959,29 +950,29 @@ will not be able to make sense of it.
 
   automatedEditsCodeLabel: {
     id: "Admin.EditChallenge.form.automatedEditsCode.label",
-    defaultMessage: 'Automated Edits Code of Conduct Agreement'
+    defaultMessage: "Automated Edits Code of Conduct Agreement",
   },
 
   automatedEditsCodeDescription: {
     id: "Admin.EditChallenge.form.automatedEditsCode.description",
-    defaultMessage: 
-      "You are about to create a MapRoulette challenge. " + 
-      "With this power comes responsibility. Make sure that " + 
-      "your Challenge is designed to encourage careful human " + 
-      "attention to each task, in the spirit of OpenStreetMap's " + 
-      "[Automated Edits code of conduct](https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct). " + 
-      "Please read this document " + 
-      "carefully. By checking the box below, you acknowledge that " + 
-      "you understand and accept this responsibility."
+    defaultMessage:
+      "You are about to create a MapRoulette challenge. " +
+      "With this power comes responsibility. Make sure that " +
+      "your Challenge is designed to encourage careful human " +
+      "attention to each task, in the spirit of OpenStreetMap's " +
+      "[Automated Edits code of conduct](https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct). " +
+      "Please read this document " +
+      "carefully. By checking the box below, you acknowledge that " +
+      "you understand and accept this responsibility.",
   },
 
   automatedEditsCodeStepHeader: {
     id: "Admin.EditChallenge.form.steps.automatedEditsCode.header",
-    defaultMessage: "OSM Automated Edits Code of Conduct"
+    defaultMessage: "OSM Automated Edits Code of Conduct",
   },
 
   automatedEditsCodeUICheckboxLabel: {
     id: "Admin.EditChallenge.form.automatedEditsCode.UICheckboxLabel",
-    defaultMessage: "I have read and understand the OSM Automated Edits code of conduct"
-  }
+    defaultMessage: "I have read and understand the OSM Automated Edits code of conduct",
+  },
 });

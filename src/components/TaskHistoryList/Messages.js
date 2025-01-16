@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskAnalysisTable
@@ -26,37 +26,36 @@ export default defineMessages({
 
   listByTime: {
     id: "TaskHistory.controls.listByTime.label",
-    defaultMessage: "Entries"
+    defaultMessage: "Entries",
   },
 
   listByUser: {
     id: "TaskHistory.controls.listByUser.label",
-    defaultMessage: "Contributors"
+    defaultMessage: "Contributors",
   },
 
   reviewerType: {
     id: "TaskHistory.fields.userType.reviewer",
-    defaultMessage: "Reviewer"
+    defaultMessage: "Reviewer",
   },
 
   metaReviewerType: {
     id: "TaskHistory.fields.userType.metaReviewer",
-    defaultMessage: "Meta-Reviewer"
+    defaultMessage: "Meta-Reviewer",
   },
 
   mapperType: {
     id: "TaskHistory.fields.userType.mapper",
-    defaultMessage: "Mapper"
+    defaultMessage: "Mapper",
   },
 
   metaReviewLabel: {
     id: "TaskHistory.metaReview.label",
-    defaultMessage: "Meta-Review"
+    defaultMessage: "Meta-Review",
   },
 
   errorTagsLabel: {
     id: "TaskHistory.errorTags.label",
-    defaultMessage: "Error Tags"
-  }
-
-})
+    defaultMessage: "Error Tags",
+  },
+});

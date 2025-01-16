@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ActivityListingWidget
@@ -13,4 +13,4 @@ export default defineMessages({
     id: "Widgets.ActivityListingWidget.controls.toggleExactDates.label",
     defaultMessage: "Show Exact Dates",
   },
-})
+});

@@ -1,29 +1,28 @@
-import ReactDOM from 'react-dom'
-import { injectIntl } from 'react-intl'
-import { IntlProvider } from 'react-intl'
-import L from 'leaflet'
-import _isEqual from 'lodash/isEqual'
-import _get from 'lodash/get'
-import _omit from 'lodash/omit'
-import AsStylableLayer from '../../../interactions/LeafletLayer/AsStyleableLayer'
-import PropertyList from '../PropertyList/PropertyList'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../../tailwind.config.js'
-import layerMessages from '../LayerToggle/Messages'
-import { createPathComponent, useLeafletContext } from '@react-leaflet/core'
-import { useMap } from 'react-leaflet'
+import { createPathComponent, useLeafletContext } from "@react-leaflet/core";
+import L from "leaflet";
+import _isEqual from "lodash/isEqual";
+import _omit from "lodash/omit";
+import ReactDOM from "react-dom";
+import { injectIntl } from "react-intl";
+import { IntlProvider } from "react-intl";
+import { useMap } from "react-leaflet";
+import resolveConfig from "tailwindcss/resolveConfig";
+import AsStylableLayer from "../../../interactions/LeafletLayer/AsStyleableLayer";
+import tailwindConfig from "../../../tailwind.config.js";
+import layerMessages from "../LayerToggle/Messages";
+import PropertyList from "../PropertyList/PropertyList";
 
-const colors = resolveConfig(tailwindConfig).theme.colors
+const colors = resolveConfig(tailwindConfig).theme.colors;
 
-const generateLayer = (props, map, leaflet) => {
+const generateLayer = (props, map, _leaflet) => {
   const HIGHLIGHT_STYLE = {
     color: colors.gold,
     fillColor: colors.gold,
     weight: props.zoom >= 18 ? 7 : props.zoom > 15 ? 6 : 3,
-  }
-  
+  };
+
   const popupContent = (layer, onBack) => {
-    const properties = layer.feature.properties
+    const properties = layer.feature.properties;
     const header = (
       <a
         target="_blank"
@@ -32,48 +31,48 @@ const generateLayer = (props, map, leaflet) => {
       >
         {properties.type} {properties.id}
       </a>
-    )
-  
-    const contentElement = document.createElement('div')
-    contentElement.style.maxHeight = '300px';
+    );
+
+    const contentElement = document.createElement("div");
+    contentElement.style.maxHeight = "300px";
     ReactDOM.render(
-      <IntlProvider 
-        key={props.intl.locale} 
-        locale={props.intl.locale} 
+      <IntlProvider
+        key={props.intl.locale}
+        locale={props.intl.locale}
         messages={props.intl.messages}
-        textComponent="span" 
+        textComponent="span"
       >
         <PropertyList
           header={header}
-          featureProperties={_omit(layer.feature.properties, ['id', 'type'])}
+          featureProperties={_omit(layer.feature.properties, ["id", "type"])}
           onBack={onBack}
         />
       </IntlProvider>,
-      contentElement
-    )
-    return contentElement
-  }
-  
+      contentElement,
+    );
+    return contentElement;
+  };
+
   const globalStyleOptions = {
     // Set stroke weight to 3px when zoomed way in, then 2px and
     // finally down to 1px at zoom 15
     weight: props.zoom >= 18 ? 5 : props.zoom > 15 ? 4 : 2,
-  }
+  };
 
   const generateElementStyles = {
-    way: { ...globalStyleOptions, color: colors['orange-jaffa'] },
+    way: { ...globalStyleOptions, color: colors["orange-jaffa"] },
     area: {
       ...globalStyleOptions,
-      color: colors['pink-light'],
-      fillColor: 'rgba(255, 192, 203, 0.5)', // Pink color with 50% transparency
+      color: colors["pink-light"],
+      fillColor: "rgba(255, 192, 203, 0.5)", // Pink color with 50% transparency
     },
     node: {
       ...globalStyleOptions,
-      color: '#C20534',
+      color: "#C20534",
       radius: props.zoom >= 18 ? 15 : 7.5, // shrink size when zoomed out
     },
     changeset: { ...globalStyleOptions, color: colors.red },
-  }
+  };
 
   const layerGroup = new L.OSM.DataLayer(props.xmlData, {
     styles: generateElementStyles,
@@ -81,102 +80,102 @@ const generateLayer = (props, map, leaflet) => {
     showWays: props.showOSMElements.ways,
     showAreas: props.showOSMElements.areas,
     pane: props.leaflet?.pane,
-  })
+  });
 
-  layerGroup.eachLayer(layer => {
-    layer.options.mrLayerLabel = props.intl.formatMessage(
-      layerMessages.showOSMDataLabel
-    )
-    layer.options.fill = false
-    layer.options.pane = layerGroup.options.pane
-    layer.originalToGeoJSON = layer.toGeoJSON
-    layer.toGeoJSON = precision => {
-      const geojson = layer.originalToGeoJSON(precision)
+  layerGroup.eachLayer((layer) => {
+    layer.options.mrLayerLabel = props.intl.formatMessage(layerMessages.showOSMDataLabel);
+    layer.options.fill = false;
+    layer.options.pane = layerGroup.options.pane;
+    layer.originalToGeoJSON = layer.toGeoJSON;
+    layer.toGeoJSON = (precision) => {
+      const geojson = layer.originalToGeoJSON(precision);
       return {
         ...geojson.geometry,
         properties: layer.feature.properties,
-      }
-    }
-    const styleableLayer = AsStylableLayer(layer)
+      };
+    };
+    const styleableLayer = AsStylableLayer(layer);
 
     if (!props.externalInteractive) {
-      const popup = L.popup().setContent(popupContent(layer, () => {}))
-      layer.bindPopup(popup)
+      const popup = L.popup().setContent(popupContent(layer, () => {}));
+      layer.bindPopup(popup);
     } else {
-      layer.on('click', ({ latlng }) => {
+      layer.on("click", ({ latlng }) => {
         const popup = L.popup()
           .setLatLng(latlng)
-          .setContent(popupContent(layer, () => {}))
+          .setContent(popupContent(layer, () => {}));
 
         // Highlight selected feature
-        styleableLayer.pushStyle({ ...HIGHLIGHT_STYLE })
+        styleableLayer.pushStyle({ ...HIGHLIGHT_STYLE });
 
         // Remove highlight style when popup is closed
-        popup.on('remove', () => {
-          styleableLayer.popStyle()
-        })
+        popup.on("remove", () => {
+          styleableLayer.popStyle();
+        });
 
         // Open popup on the map and bind to the layer
-        popup.openOn(map)
-      })
+        popup.openOn(map);
+      });
 
-      layer.on('mouseover', () => {
+      layer.on("mouseover", () => {
         // Apply highlight style on hover
         styleableLayer.pushStyle({ ...HIGHLIGHT_STYLE });
       });
-      
-      layer.on('mouseout', () => {
+
+      layer.on("mouseout", () => {
         // Remove highlight style when mouse leaves the layer
         styleableLayer.popStyle();
       });
-      
 
-      layer.on('mr-external-interaction:start-preview', () => {
+      layer.on("mr-external-interaction:start-preview", () => {
         styleableLayer.pushLeafletLayerSimpleStyles(
           layer,
           Object.assign(styleableLayer.markerSimplestyles(layer), HIGHLIGHT_STYLE),
-          'mr-external-interaction:start-preview'
-        )
-      })
+          "mr-external-interaction:start-preview",
+        );
+      });
 
-      layer.on('mr-external-interaction:end-preview', () => {
-        styleableLayer.popLeafletLayerSimpleStyles(layer, 'mr-external-interaction:start-preview')
-      })
+      layer.on("mr-external-interaction:end-preview", () => {
+        styleableLayer.popLeafletLayerSimpleStyles(layer, "mr-external-interaction:start-preview");
+      });
     }
-  })
+  });
 
-  return layerGroup
-}
+  return layerGroup;
+};
 
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
  */
 const OSMDataLayerComponent = createPathComponent(
   (props, context) => {
-    const map = useMap()
+    const map = useMap();
     return {
-      instance: generateLayer({
-        mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
-        ...props,
-      }, map),
+      instance: generateLayer(
+        {
+          mrLayerLabel: props.intl.formatMessage(layerMessages.showOSMDataLabel),
+          ...props,
+        },
+        map,
+      ),
       context,
-    }
+    };
   },
   (instance, props, prevProps) => {
     if (!_isEqual(prevProps.showOSMElements, props.showOSMElements)) {
-      instance.clearLayers()
-      const newLayers = generateLayer(props, instance)
-      newLayers.eachLayer(layer => instance.addLayer(layer))
+      instance.clearLayers();
+      const newLayers = generateLayer(props, instance);
+      newLayers.eachLayer((layer) => instance.addLayer(layer));
     }
-  }
-)
+  },
+);
 
 const OSMDataLayer = (props) => {
-  const leaflet = useLeafletContext()
-  return <OSMDataLayerComponent {...props} leaflet={leaflet} />
-}
+  const leaflet = useLeafletContext();
+  return <OSMDataLayerComponent {...props} leaflet={leaflet} />;
+};
 
-export default injectIntl(OSMDataLayer)
+export default injectIntl(OSMDataLayer);
 
 // The below code (with a couple minor linter fixes) comes from the
 // [leaflet-osm](https://github.com/openstreetmap/leaflet-osm) project's
@@ -193,9 +192,30 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
     showWays: true,
     showAreas: true,
     showChangesets: true,
-    areaTags: ['area', 'building', 'leisure', 'tourism', 'ruins', 'historic', 'landuse', 'military', 'natural', 'sport'],
-    uninterestingTags: ['source', 'source_ref', 'source:ref', 'history', 'attribution', 'created_by', 'tiger:county', 'tiger:tlid', 'tiger:upload_uuid'],
-    styles: {}
+    areaTags: [
+      "area",
+      "building",
+      "leisure",
+      "tourism",
+      "ruins",
+      "historic",
+      "landuse",
+      "military",
+      "natural",
+      "sport",
+    ],
+    uninterestingTags: [
+      "source",
+      "source_ref",
+      "source:ref",
+      "history",
+      "attribution",
+      "created_by",
+      "tiger:county",
+      "tiger:tlid",
+      "tiger:upload_uuid",
+    ],
+    styles: {},
   },
 
   initialize: function (xml, options) {
@@ -214,7 +234,8 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
     }
 
     for (var i = 0; i < features.length; i++) {
-      var feature = features[i], layer;
+      var feature = features[i],
+        layer;
 
       if (feature.type === "changeset") {
         if (this.options.showChangesets) {
@@ -250,8 +271,8 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
             id: feature.id,
             type: feature.type,
             ...feature.tags,
-          }
-        }
+          },
+        };
       }
     }
   },
@@ -307,8 +328,7 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
     }
 
     for (i = 0; i < relations.length; i++) {
-      if (relations[i].members.indexOf(node) >= 0)
-        return true;
+      if (relations[i].members.indexOf(node) >= 0) return true;
     }
 
     for (var key in node.tags) {
@@ -318,7 +338,7 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
     }
 
     return false;
-  }
+  },
 });
 
 L.Util.extend(L.OSM, {
@@ -327,14 +347,16 @@ L.Util.extend(L.OSM, {
 
     var nodes = xml.getElementsByTagName("changeset");
     for (var i = 0; i < nodes.length; i++) {
-      var node = nodes[i], id = node.getAttribute("id");
+      var node = nodes[i],
+        id = node.getAttribute("id");
       result.push({
         id: id,
         type: "changeset",
         latLngBounds: L.latLngBounds(
           [node.getAttribute("min_lat"), node.getAttribute("min_lon")],
-          [node.getAttribute("max_lat"), node.getAttribute("max_lon")]),
-        tags: this.getTags(node)
+          [node.getAttribute("max_lat"), node.getAttribute("max_lon")],
+        ),
+        tags: this.getTags(node),
       });
     }
 
@@ -346,14 +368,13 @@ L.Util.extend(L.OSM, {
 
     var nodes = xml.getElementsByTagName("node");
     for (var i = 0; i < nodes.length; i++) {
-      var node = nodes[i], id = node.getAttribute("id");
+      var node = nodes[i],
+        id = node.getAttribute("id");
       result[id] = {
         id: id,
         type: "node",
-        latLng: L.latLng(node.getAttribute("lat"),
-                         node.getAttribute("lon"),
-                         true),
-        tags: this.getTags(node)
+        latLng: L.latLng(node.getAttribute("lat"), node.getAttribute("lon"), true),
+        tags: this.getTags(node),
       };
     }
 
@@ -365,13 +386,14 @@ L.Util.extend(L.OSM, {
 
     var ways = xml.getElementsByTagName("way");
     for (var i = 0; i < ways.length; i++) {
-      var way = ways[i], nds = way.getElementsByTagName("nd");
+      var way = ways[i],
+        nds = way.getElementsByTagName("nd");
 
       var way_object = {
         id: way.getAttribute("id"),
         type: "way",
         nodes: new Array(nds.length),
-        tags: this.getTags(way)
+        tags: this.getTags(way),
       };
 
       for (var j = 0; j < nds.length; j++) {
@@ -389,20 +411,21 @@ L.Util.extend(L.OSM, {
 
     var rels = xml.getElementsByTagName("relation");
     for (var i = 0; i < rels.length; i++) {
-      var rel = rels[i], members = rel.getElementsByTagName("member");
+      var rel = rels[i],
+        members = rel.getElementsByTagName("member");
 
       var rel_object = {
         id: rel.getAttribute("id"),
         type: "relation",
         members: new Array(members.length),
-        tags: this.getTags(rel)
+        tags: this.getTags(rel),
       };
 
       for (var j = 0; j < members.length; j++) {
         if (members[j].getAttribute("type") === "node")
           rel_object.members[j] = nodes[members[j].getAttribute("ref")];
-        else // relation-way and relation-relation membership not implemented
-          rel_object.members[j] = null;
+        // relation-way and relation-relation membership not implemented
+        else rel_object.members[j] = null;
       }
 
       result.push(rel_object);
@@ -420,5 +443,5 @@ L.Util.extend(L.OSM, {
     }
 
     return result;
-  }
+  },
 });

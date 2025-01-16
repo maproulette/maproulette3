@@ -1,23 +1,19 @@
-import { Fragment, Component } from 'react'
-import { FormattedMessage, FormattedDate } from 'react-intl'
-import _map from 'lodash/map'
-import _get from 'lodash/get'
-import { WidgetDataTarget, registerWidgetType }
-       from '../../../services/Widget/Widget'
-import ChallengeSnapshotProgress from '../../ChallengeProgress/ChallengeSnapshotProgress'
-import WithChallengeSnapshots from '../../AdminPane/HOCs/WithChallengeSnapshots/WithChallengeSnapshots'
-import ManageChallengeSnapshots from '../../AdminPane/Manage/ManageChallengeSnapshots/ManageChallengeSnapshots'
-import QuickWidget from '../../QuickWidget/QuickWidget'
-import Dropdown from '../../Dropdown/Dropdown'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-import messages from './Messages'
+import _map from "lodash/map";
+import { Component, Fragment } from "react";
+import { FormattedDate, FormattedMessage } from "react-intl";
+import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
+import WithChallengeSnapshots from "../../AdminPane/HOCs/WithChallengeSnapshots/WithChallengeSnapshots";
+import ManageChallengeSnapshots from "../../AdminPane/Manage/ManageChallengeSnapshots/ManageChallengeSnapshots";
+import ChallengeSnapshotProgress from "../../ChallengeProgress/ChallengeSnapshotProgress";
+import Dropdown from "../../Dropdown/Dropdown";
+import QuickWidget from "../../QuickWidget/QuickWidget";
+import SvgSymbol from "../../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 const descriptor = {
-  widgetKey: 'SnapshotProgressWidget',
+  widgetKey: "SnapshotProgressWidget",
   label: messages.label,
-  targets: [
-    WidgetDataTarget.challenge
-  ],
+  targets: [WidgetDataTarget.challenge],
   minWidth: 3,
   defaultWidth: 4,
   minHeight: 2,
@@ -25,30 +21,28 @@ const descriptor = {
   defaultConfiguration: {
     showByPriority: false,
   },
-}
+};
 
 export default class SnapshotProgressWidget extends Component {
   state = {
     chosenSnapshot: null,
-    showManageSnapshots: false
-  }
+    showManageSnapshots: false,
+  };
 
-  setShowByPriority = showByPriority => {
-    this.props.updateWidgetConfiguration({showByPriority: !!showByPriority})
-  }
+  setShowByPriority = (showByPriority) => {
+    this.props.updateWidgetConfiguration({ showByPriority: !!showByPriority });
+  };
 
   snapshotButton = (dropdown) => {
     return (
-      <button
-        className="mr-dropdown__button"
-        onClick={dropdown.toggleDropdownVisible}
-      >
+      <button className="mr-dropdown__button" onClick={dropdown.toggleDropdownVisible}>
         <span className="mr-flex">
           <span className="mr-mr-2">
-            {!this.state.chosenSnapshot ?
-              <FormattedMessage {...messages.current} /> :
+            {!this.state.chosenSnapshot ? (
+              <FormattedMessage {...messages.current} />
+            ) : (
               this.formatDate(this.state.chosenSnapshot.created)
-            }
+            )}
           </span>
           <SvgSymbol
             sym="icon-cheveron-down"
@@ -57,56 +51,49 @@ export default class SnapshotProgressWidget extends Component {
           />
         </span>
       </button>
-    )
-  }
+    );
+  };
 
   viewSnapshot = (props, snapshot) => {
-    props.setSelectedSnapshot(snapshot.id)
-    this.setState({chosenSnapshot: snapshot, showManageSnapshots: false})
-  }
+    props.setSelectedSnapshot(snapshot.id);
+    this.setState({ chosenSnapshot: snapshot, showManageSnapshots: false });
+  };
 
   snapshotMenuItems = (dropdown, props) => {
-    const menuItems = _map(props.snapshotList, snapshot => (
+    const menuItems = _map(props.snapshotList, (snapshot) => (
       <li key={snapshot.id}>
-        <a onClick={() => {
-          dropdown.closeDropdown()
-          this.viewSnapshot(props, snapshot)
-        }}>
+        <a
+          onClick={() => {
+            dropdown.closeDropdown();
+            this.viewSnapshot(props, snapshot);
+          }}
+        >
           {this.formatDate(snapshot.created)}
         </a>
       </li>
     )).concat(
       <li key="current">
-        <a onClick={() => {
-          props.setSelectedSnapshot(null)
-          dropdown.closeDropdown()
-          this.setState({chosenSnapshot: null})
-        }}>
+        <a
+          onClick={() => {
+            props.setSelectedSnapshot(null);
+            dropdown.closeDropdown();
+            this.setState({ chosenSnapshot: null });
+          }}
+        >
           <FormattedMessage {...messages.current} />
         </a>
-      </li>
-    )
+      </li>,
+    );
 
-    return (
-      <ol className="mr-list-dropdown">
-        {menuItems}
-      </ol>
-    )
-  }
+    return <ol className="mr-list-dropdown">{menuItems}</ol>;
+  };
 
   formatDate(date) {
-    return (
-      <FormattedDate
-          value={date}
-          day="2-digit"
-          month="2-digit"
-          year="numeric"
-      />
-    )
+    return <FormattedDate value={date} day="2-digit" month="2-digit" year="numeric" />;
   }
 
   render() {
-    const challenge = this.props.challenge
+    const challenge = this.props.challenge;
 
     return (
       <QuickWidget
@@ -115,17 +102,17 @@ export default class SnapshotProgressWidget extends Component {
         widgetTitle={<FormattedMessage {...messages.title} />}
         rightHeaderControls={
           <div className="mr-flex mr-items-right mr-justify-start mr-items-center mr-my-2">
-            {!this.state.showManageSnapshots &&
+            {!this.state.showManageSnapshots && (
               <Fragment>
                 <Dropdown
                   className="mr-button mr-button--green-lighter mr-button--small mr-mr-4"
-                  dropdownButton={dropdown => this.snapshotButton(dropdown, this.props)}
-                  dropdownContent={dropdown => this.snapshotMenuItems(dropdown, this.props)}
+                  dropdownButton={(dropdown) => this.snapshotButton(dropdown, this.props)}
+                  dropdownContent={(dropdown) => this.snapshotMenuItems(dropdown, this.props)}
                 />
 
                 <Dropdown
                   className="mr-dropdown--right mr-pt-3"
-                  dropdownButton={dropdown => (
+                  dropdownButton={(dropdown) => (
                     <button
                       onClick={dropdown.toggleDropdownVisible}
                       className="mr-flex mr-items-center mr-text-green-lighter"
@@ -137,15 +124,15 @@ export default class SnapshotProgressWidget extends Component {
                       />
                     </button>
                   )}
-                  dropdownContent={(dropdown) =>
+                  dropdownContent={(dropdown) => (
                     <Fragment>
                       <ul className="mr-list-dropdown">
                         <li>
                           <button
                             className="mr-text-current"
                             onClick={() => {
-                              this.props.recordSnapshot()
-                              dropdown.toggleDropdownVisible()
+                              this.props.recordSnapshot();
+                              dropdown.toggleDropdownVisible();
                             }}
                           >
                             <FormattedMessage {...messages.recordSnapshot} />
@@ -155,56 +142,60 @@ export default class SnapshotProgressWidget extends Component {
                           <button
                             className="mr-text-current"
                             onClick={() => {
-                              this.setState({showManageSnapshots: true})
-                              dropdown.toggleDropdownVisible()
+                              this.setState({ showManageSnapshots: true });
+                              dropdown.toggleDropdownVisible();
                             }}
                           >
                             <FormattedMessage {...messages.manageSnapshots} />
                           </button>
                         </li>
                         <li onClick={dropdown.toggleDropdownVisible}>
-                          <a target="_blank"
-                              rel="noopener noreferrer"
-                              href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/snapshot/challenge/${_get(this.props, 'challenge.id')}/export`}
-                              className="mr-flex mr-items-center"
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/snapshot/challenge/${this.props.challenge?.id}/export`}
+                            className="mr-flex mr-items-center"
                           >
-                              <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
-                              <FormattedMessage {...messages.exportCSVLabel} />
+                            <SvgSymbol
+                              sym="download-icon"
+                              viewBox="0 0 20 20"
+                              className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                            />
+                            <FormattedMessage {...messages.exportCSVLabel} />
                           </a>
                         </li>
                       </ul>
                     </Fragment>
-                  }
+                  )}
                 />
               </Fragment>
-            }
-            {this.state.showManageSnapshots &&
-              <div className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
-                onClick={() => this.setState({showManageSnapshots: false})}>
+            )}
+            {this.state.showManageSnapshots && (
+              <div
+                className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+                onClick={() => this.setState({ showManageSnapshots: false })}
+              >
                 <FormattedMessage {...messages.done} />
               </div>
-            }
+            )}
           </div>
         }
       >
-      {this.state.showManageSnapshots &&
-        <ManageChallengeSnapshots
-          viewSnapshot={this.viewSnapshot}
-          {...this.props} />
-      }
-      {!this.state.showManageSnapshots &&
-         <ChallengeSnapshotProgress
-           {...this.props}
-           className=""
-           challenge={challenge}
-           showByPriority={this.props.widgetConfiguration.showByPriority}
-           setShowByPriority={this.setShowByPriority}
-         />
-       }
+        {this.state.showManageSnapshots && (
+          <ManageChallengeSnapshots viewSnapshot={this.viewSnapshot} {...this.props} />
+        )}
+        {!this.state.showManageSnapshots && (
+          <ChallengeSnapshotProgress
+            {...this.props}
+            className=""
+            challenge={challenge}
+            showByPriority={this.props.widgetConfiguration.showByPriority}
+            setShowByPriority={this.setShowByPriority}
+          />
+        )}
       </QuickWidget>
     );
   }
 }
 
-
-registerWidgetType(WithChallengeSnapshots(SnapshotProgressWidget), descriptor)
+registerWidgetType(WithChallengeSnapshots(SnapshotProgressWidget), descriptor);

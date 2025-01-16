@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IntlProvider } from "react-intl";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { ChallengeOwnerContactLinkInternal as ContactLink } from "./ChallengeOwnerContactLink";
 
 const generateMockTask = (id, challengeOwnerId) => {
@@ -28,7 +28,7 @@ describe("ChallengeOwnerContactLinkInternal", () => {
     const { getByText } = render(
       <IntlProvider locale="en">
         <ContactLink fetchOSMUser={() => null} />
-      </IntlProvider>
+      </IntlProvider>,
     );
     const text = getByText("Contact Challenge Owner");
     expect(text).toBeInTheDocument();
@@ -37,11 +37,8 @@ describe("ChallengeOwnerContactLinkInternal", () => {
   it("renders a link to OSM if a contactUrl is generated, and resets if the task data changes", async () => {
     const { rerender } = render(
       <IntlProvider locale="en">
-        <ContactLink
-          task={generateMockTask(1)}
-          fetchOSMUser={fetchOSMUserSuccess}
-        />
-      </IntlProvider>
+        <ContactLink task={generateMockTask(1)} fetchOSMUser={fetchOSMUserSuccess} />
+      </IntlProvider>,
     );
 
     fireEvent.click(screen.getByText("Contact Challenge Owner"));
@@ -52,11 +49,8 @@ describe("ChallengeOwnerContactLinkInternal", () => {
 
     rerender(
       <IntlProvider locale="en">
-        <ContactLink
-          task={generateMockTask(2)}
-          fetchOSMUser={fetchOSMUserSuccess}
-        />
-      </IntlProvider>
+        <ContactLink task={generateMockTask(2)} fetchOSMUser={fetchOSMUserSuccess} />
+      </IntlProvider>,
     );
 
     expect(screen.getByText("Contact Challenge Owner")).toBeInTheDocument();
@@ -67,12 +61,8 @@ describe("ChallengeOwnerContactLinkInternal", () => {
 
     render(
       <IntlProvider locale="en">
-        <ContactLink
-          fetchOSMUser={() => null}
-          task={generateMockTask(0)}
-          addError={addError}
-        />
-      </IntlProvider>
+        <ContactLink fetchOSMUser={() => null} task={generateMockTask(0)} addError={addError} />
+      </IntlProvider>,
     );
 
     fireEvent.click(screen.getByText("Contact Challenge Owner"));
@@ -90,11 +80,8 @@ describe("ChallengeOwnerContactLinkInternal", () => {
 
     render(
       <IntlProvider locale="en">
-        <ContactLink
-          fetchOSMUser={fetchOSMUserFail}
-          task={generateMockTask(1)}
-        />
-      </IntlProvider>
+        <ContactLink fetchOSMUser={fetchOSMUserFail} task={generateMockTask(1)} />
+      </IntlProvider>,
     );
 
     fireEvent.click(screen.getByText("Contact Challenge Owner"));
@@ -107,11 +94,8 @@ describe("ChallengeOwnerContactLinkInternal", () => {
   it("renders a link to OSM if challenge owner id is missing, but project owner id is found", async () => {
     render(
       <IntlProvider locale="en">
-        <ContactLink
-          task={generateMockTask(undefined, 1)}
-          fetchOSMUser={fetchOSMUserSuccess}
-        />
-      </IntlProvider>
+        <ContactLink task={generateMockTask(undefined, 1)} fetchOSMUser={fetchOSMUserSuccess} />
+      </IntlProvider>,
     );
 
     fireEvent.click(screen.getByText("Contact Challenge Owner"));

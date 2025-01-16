@@ -1,5 +1,5 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
+import { Component } from "react";
 
 class Header extends Component {
   render() {
@@ -15,7 +15,7 @@ class Header extends Component {
         </div>
         {this.props.subheader}
       </header>
-    )
+    );
   }
 }
 
@@ -24,6 +24,6 @@ Header.propTypes = {
   title: PropTypes.node.isRequired,
   info: PropTypes.node,
   actions: PropTypes.node,
-}
+};
 
-export default Header
+export default Header;

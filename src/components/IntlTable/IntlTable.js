@@ -1,10 +1,10 @@
-import messages from './Messages'
+import messages from "./Messages";
 
 /**
  * Return intl properties required for react-table-6 to ensure the various
  * buttons and messages it renders are properly localized
  */
-export const intlTableProps = intl => ({
+export const intlTableProps = (intl) => ({
   previousText: intl.formatMessage(messages.previousLabel),
   nextText: intl.formatMessage(messages.nextLabel),
   loadingText: intl.formatMessage(messages.loadingLabel),
@@ -15,4 +15,4 @@ export const intlTableProps = intl => ({
   pageJumpText: intl.formatMessage(messages.jumpToPageLabel),
   rowsSelectorText: intl.formatMessage(messages.rowsPerPageLabel),
   totalText: intl.formatMessage(messages.totalLabel),
-})
+});

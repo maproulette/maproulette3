@@ -1,45 +1,38 @@
-import { Fragment, Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { Popup } from 'react-leaflet'
-import _get from 'lodash/get'
-import { ChallengeStatus }
-       from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
-import { TaskStatus,
-         messagesByStatus }
-       from '../../../../services/Task/TaskStatus/TaskStatus'
-import { messagesByPriority, TaskPriority }
-       from '../../../../services/Task/TaskPriority/TaskPriority'
-import { toLatLngBounds } from '../../../../services/MapBounds/MapBounds'
-import AsManager from '../../../../interactions/User/AsManager'
-import WithBoundedTasks
-       from '../../../HOCs/WithBoundedTasks/WithBoundedTasks'
-import WithFilterCriteria
-      from '../../../HOCs/WithFilterCriteria/WithFilterCriteria'
-import WithTaskPropertyKeys
-      from '../../../HOCs/WithTaskPropertyKeys/WithTaskPropertyKeys'
-import WithChallengeTaskClusters
-      from '../../../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
-import WithTaskClusterMarkers
-      from '../../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
-import WithLoadedTask
-      from '../../../HOCs/WithLoadedTask/WithLoadedTask'
-import TaskClusterMap from '../../../TaskClusterMap/TaskClusterMap'
-import MapPane from '../../../EnhancedMap/MapPane/MapPane'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
-import BusySpinner from '../../../BusySpinner/BusySpinner'
-import IntervalRender from '../../../IntervalRender/IntervalRender'
-import TaskAnalysisTable from '../../../TaskAnalysisTable/TaskAnalysisTable'
-import TaskPriorityFilter from '../../../TaskFilters/TaskPriorityFilter'
-import TaskStatusFilter from '../../../TaskFilters/TaskStatusFilter'
-import TaskReviewStatusFilter from '../../../TaskFilters/TaskReviewStatusFilter'
-import TaskPropertyFilter from '../../../TaskFilters/TaskPropertyFilter'
-import TaskBuildProgress from './TaskBuildProgress'
-import GeographicIndexingNotice from './GeographicIndexingNotice'
-import messages from './Messages'
+import PropTypes from "prop-types";
+import { Component, Fragment } from "react";
+import { FormattedMessage } from "react-intl";
+import { Popup } from "react-leaflet";
+import AsManager from "../../../../interactions/User/AsManager";
+import { ChallengeStatus } from "../../../../services/Challenge/ChallengeStatus/ChallengeStatus";
+import { toLatLngBounds } from "../../../../services/MapBounds/MapBounds";
+import {
+  TaskPriority,
+  messagesByPriority,
+} from "../../../../services/Task/TaskPriority/TaskPriority";
+import { TaskStatus, messagesByStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
+import BusySpinner from "../../../BusySpinner/BusySpinner";
+import MapPane from "../../../EnhancedMap/MapPane/MapPane";
+import WithBoundedTasks from "../../../HOCs/WithBoundedTasks/WithBoundedTasks";
+import WithChallengeTaskClusters from "../../../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters";
+import WithFilterCriteria from "../../../HOCs/WithFilterCriteria/WithFilterCriteria";
+import WithLoadedTask from "../../../HOCs/WithLoadedTask/WithLoadedTask";
+import WithTaskClusterMarkers from "../../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers";
+import WithTaskPropertyKeys from "../../../HOCs/WithTaskPropertyKeys/WithTaskPropertyKeys";
+import IntervalRender from "../../../IntervalRender/IntervalRender";
+import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
+import TaskAnalysisTable from "../../../TaskAnalysisTable/TaskAnalysisTable";
+import TaskClusterMap from "../../../TaskClusterMap/TaskClusterMap";
+import TaskPriorityFilter from "../../../TaskFilters/TaskPriorityFilter";
+import TaskPropertyFilter from "../../../TaskFilters/TaskPropertyFilter";
+import TaskReviewStatusFilter from "../../../TaskFilters/TaskReviewStatusFilter";
+import TaskStatusFilter from "../../../TaskFilters/TaskStatusFilter";
+import GeographicIndexingNotice from "./GeographicIndexingNotice";
+import messages from "./Messages";
+import TaskBuildProgress from "./TaskBuildProgress";
 
 const ClusterMap = WithChallengeTaskClusters(
-                     WithTaskClusterMarkers(TaskClusterMap('challengeOwner')))
+  WithTaskClusterMarkers(TaskClusterMap("challengeOwner")),
+);
 
 /**
  * ViewChallengeTasks displays challenge tasks as both a map and a table,
@@ -52,127 +45,141 @@ export class ViewChallengeTasks extends Component {
     bulkUpdating: false,
     boundsReset: false,
     showPriorityBounds: false,
-  }
+  };
 
   changeStatus = (selectedTasks, newStatus = TaskStatus.created) => {
     if (!selectedTasks.allSelected && selectedTasks.selected.size === 0) {
-      return // Nothing to do
+      return; // Nothing to do
     }
 
-    this.setState({bulkUpdating: true})
+    this.setState({ bulkUpdating: true });
     // If all tasks are selected (so beyond what is being viewed on current page)
     if (selectedTasks.allSelected) {
-      this.props.applyBulkTaskStatusChange(
-        parseInt(newStatus),
+      this.props
+        .applyBulkTaskStatusChange(
+          parseInt(newStatus),
+          this.props.challenge.id,
+          this.props.criteria,
+          [...selectedTasks.deselected.keys()],
+        )
+        .then(() => {
+          this.props.refreshChallenge();
+          this.props.refreshTasks();
+          this.setState({ bulkUpdating: false });
+        });
+    } else {
+      // Otherwise only apply to selected tasks
+      this.props
+        .applyBulkTaskChanges([...this.props.selectedTasks.selected.values()], {
+          status: parseInt(newStatus),
+          mappedOn: null,
+          reviewStatus: null,
+          reviewRequestedBy: null,
+          reviewedBy: null,
+          reviewedAt: null,
+        })
+        .then(() => {
+          this.props.refreshChallenge();
+          this.props.refreshTasks();
+          this.setState({ bulkUpdating: false });
+        });
+    }
+  };
+
+  removeReviewRequests = (selectedTasks) => {
+    if (!selectedTasks.allSelected && selectedTasks.selected.size === 0) {
+      return; // Nothing to do
+    }
+
+    this.setState({ bulkUpdating: true });
+    this.props
+      .removeReviewRequest(
         this.props.challenge.id,
+        selectedTasks.allSelected ? null : [...selectedTasks.selected.keys()],
         this.props.criteria,
-        [...selectedTasks.deselected.keys()]
-      ).then(() => {
-        this.props.refreshChallenge()
-        this.props.refreshTasks()
-        this.setState({bulkUpdating: false})
-      })
-    }
-    else { // Otherwise only apply to selected tasks
-      this.props.applyBulkTaskChanges([...this.props.selectedTasks.selected.values()], {
-        status: parseInt(newStatus),
-        mappedOn: null,
-        reviewStatus: null,
-        reviewRequestedBy: null,
-        reviewedBy: null,
-        reviewedAt: null
-      }).then(() => {
-        this.props.refreshChallenge()
-        this.props.refreshTasks()
-        this.setState({bulkUpdating: false})
-      })
-    }
-  }
+        selectedTasks.allSelected ? [...selectedTasks.deselected.keys()] : null,
+        false,
+      )
+      .then(() => {
+        this.props.refreshChallenge();
+        this.props.refreshTasks();
+        this.setState({ bulkUpdating: false });
+      });
+  };
 
-  removeReviewRequests = selectedTasks => {
+  removeMetaReviewRequests = (selectedTasks) => {
     if (!selectedTasks.allSelected && selectedTasks.selected.size === 0) {
-      return // Nothing to do
+      return; // Nothing to do
     }
 
-    this.setState({bulkUpdating: true})
-    this.props.removeReviewRequest(
-      this.props.challenge.id,
-      selectedTasks.allSelected ? null : [...selectedTasks.selected.keys()],
-      this.props.criteria,
-      selectedTasks.allSelected ? [...selectedTasks.deselected.keys()] : null,
-      false
-    ).then(() => {
-      this.props.refreshChallenge()
-      this.props.refreshTasks()
-      this.setState({bulkUpdating: false})
-    })
-  }
-
-  removeMetaReviewRequests = selectedTasks => {
-    if (!selectedTasks.allSelected && selectedTasks.selected.size === 0) {
-      return // Nothing to do
-    }
-
-    this.setState({bulkUpdating: true})
-    this.props.removeReviewRequest(
-      this.props.challenge.id,
-      selectedTasks.allSelected ? null : [...selectedTasks.selected.keys()],
-      this.props.criteria,
-      selectedTasks.allSelected ? [...selectedTasks.deselected.keys()] : null,
-      true
-    ).then(() => {
-      this.props.refreshChallenge()
-      this.props.refreshTasks()
-      this.setState({bulkUpdating: false})
-    })
-  }
+    this.setState({ bulkUpdating: true });
+    this.props
+      .removeReviewRequest(
+        this.props.challenge.id,
+        selectedTasks.allSelected ? null : [...selectedTasks.selected.keys()],
+        this.props.criteria,
+        selectedTasks.allSelected ? [...selectedTasks.deselected.keys()] : null,
+        true,
+      )
+      .then(() => {
+        this.props.refreshChallenge();
+        this.props.refreshTasks();
+        this.setState({ bulkUpdating: false });
+      });
+  };
 
   resetMapBounds = () => {
-    this.setState({boundsReset: true})
-    this.props.clearMapBounds(this.props.searchGroup)
-  }
+    this.setState({ boundsReset: true });
+    this.props.clearMapBounds(this.props.searchGroup);
+  };
 
   mapBoundsUpdated = (challengeId, bounds, zoom) => {
-    this.props.setChallengeOwnerMapBounds(challengeId, bounds, zoom)
-    this.props.updateTaskFilterBounds(bounds, zoom)
-    this.setState({boundsReset: false})
-  }
+    this.props.setChallengeOwnerMapBounds(challengeId, bounds, zoom);
+    this.props.updateTaskFilterBounds(bounds, zoom);
+    this.setState({ boundsReset: false });
+  };
 
-  showMarkerPopup = markerData => {
-    const TaskData = WithLoadedTask(TaskMarkerContent)
+  showMarkerPopup = (markerData) => {
+    const TaskData = WithLoadedTask(TaskMarkerContent);
     return (
       <Popup offset={[0.5, -5]}>
         <div className="marker-popup-content">
           <TaskData marker={markerData} taskId={markerData.options.taskId} {...this.props} />
         </div>
       </Popup>
-    )
-  }
+    );
+  };
 
   // Finds all the 'bounds' type rules on the challenge to show as
   // bounding box overlays on the map.
-  findPriorityBounds = challenge => {
+  findPriorityBounds = (challenge) => {
     const parseBoundsRule = (rule, priorityLevel, priorityBounds) => {
       if (rule.rules) {
-        return rule.rules.map((r) => parseBoundsRule(r, priorityLevel, priorityBounds))
+        return rule.rules.map((r) => parseBoundsRule(r, priorityLevel, priorityBounds));
       }
       if (rule.type === "bounds") {
-        return priorityBounds.push(
-          {boundingBox: rule.value.replace("location.", ""), priorityLevel})
+        return priorityBounds.push({
+          boundingBox: rule.value.replace("location.", ""),
+          priorityLevel,
+        });
       }
-    }
+    };
 
-    let priorityBounds = []
-    parseBoundsRule(challenge.highPriorityRule, TaskPriority.high, priorityBounds)
-    parseBoundsRule(challenge.mediumPriorityRule, TaskPriority.medium, priorityBounds)
-    parseBoundsRule(challenge.lowPriorityRule, TaskPriority.low, priorityBounds)
+    let priorityBounds = [];
+    parseBoundsRule(challenge.highPriorityRule, TaskPriority.high, priorityBounds);
+    parseBoundsRule(challenge.mediumPriorityRule, TaskPriority.medium, priorityBounds);
+    parseBoundsRule(challenge.lowPriorityRule, TaskPriority.low, priorityBounds);
 
-    return priorityBounds
-  }
+    return priorityBounds;
+  };
 
   render() {
     if (this.props.challenge.status === ChallengeStatus.building) {
-      return <IntervalRender><TaskBuildProgress {...this.props} /></IntervalRender>
+      return (
+        <IntervalRender>
+          <TaskBuildProgress {...this.props} />
+        </IntervalRender>
+      );
     }
 
     if (this.props.challenge.status === ChallengeStatus.failed) {
@@ -182,21 +189,19 @@ export class ViewChallengeTasks extends Component {
             <FormattedMessage {...messages.tasksFailed} />
           </h3>
 
-          <pre className="mr-text-grey-light">
-            {this.props.challenge.statusMessage}
-          </pre>
+          <pre className="mr-text-grey-light">{this.props.challenge.statusMessage}</pre>
         </div>
-      )
+      );
     }
 
-    if (_get(this.props, 'challenge.actions.total', 0) === 0) {
+    if ((this.props.challenge?.actions?.total ?? 0) === 0) {
       return (
         <div className="mr-flex mr-justify-center mr-text-grey-lighter">
           <h3>
             <FormattedMessage {...messages.tasksNone} />
           </h3>
         </div>
-      )
+      );
     }
 
     if (this.state.bulkUpdating) {
@@ -204,55 +209,61 @@ export class ViewChallengeTasks extends Component {
         <div className="pane-loading">
           <BusySpinner />
         </div>
-      )
+      );
     }
 
     const clearFiltersControl = (
-      <button className="mr-flex mr-items-center mr-text-green-lighter"
+      <button
+        className="mr-flex mr-items-center mr-text-green-lighter"
         onClick={() => {
-          this.props.clearAllFilters()
-          this.resetMapBounds()
-        }}>
-        <SvgSymbol sym="close-icon"
-          viewBox='0 0 20 20'
-          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
-          <span>
-            <FormattedMessage {...messages.clearFiltersLabel} />
-          </span>
-      </button>
-    )
-
-    const map =
-        <ClusterMap
-          showLasso
-          updateBounds={this.mapBoundsUpdated}
-          onBulkTaskSelection={this.props.selectTasks}
-          onBulkTaskDeselection={this.props.deselectTasks}
-          loadingTasks={this.props.loadingTasks}
-          showMarkerPopup={this.showMarkerPopup}
-          togglePriorityBounds={() => this.setState({showPriorityBounds: !this.state.showPriorityBounds})}
-          showPriorityBounds={this.state.showPriorityBounds}
-          priorityBounds={this.findPriorityBounds(this.props.challenge)}
-          initialBounds={this.state.boundsReset ?
-            toLatLngBounds(_get(this.props, 'criteria.boundingBox')) : null}
-          {...this.props}
+          this.props.clearAllFilters();
+          this.resetMapBounds();
+        }}
+      >
+        <SvgSymbol
+          sym="close-icon"
+          viewBox="0 0 20 20"
+          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1"
         />
+        <span>
+          <FormattedMessage {...messages.clearFiltersLabel} />
+        </span>
+      </button>
+    );
 
-    this.boundsReset = false
+    const map = (
+      <ClusterMap
+        showLasso
+        updateBounds={this.mapBoundsUpdated}
+        onBulkTaskSelection={this.props.selectTasks}
+        onBulkTaskDeselection={this.props.deselectTasks}
+        loadingTasks={this.props.loadingTasks}
+        showMarkerPopup={this.showMarkerPopup}
+        togglePriorityBounds={() =>
+          this.setState({ showPriorityBounds: !this.state.showPriorityBounds })
+        }
+        showPriorityBounds={this.state.showPriorityBounds}
+        priorityBounds={this.findPriorityBounds(this.props.challenge)}
+        initialBounds={
+          this.state.boundsReset ? toLatLngBounds(this.props.criteria?.boundingBox) : null
+        }
+        {...this.props}
+      />
+    );
+
+    this.boundsReset = false;
 
     return (
-      <div className='admin__manage-tasks'>
+      <div className="admin__manage-tasks">
         <GeographicIndexingNotice challenge={this.props.challenge} />
 
         <div className="mr-h-100">
-          <MapPane>
-            {map}
-          </MapPane>
+          <MapPane>{map}</MapPane>
         </div>
 
         <div className="mr-my-4 mr-space-y-3">
-          <div className='xl:mr-flex xl:mr-justify-between xl:mr-flex-1 mr-px-2 xl:mr-px-4'>
-            <div className='mr-flex'>
+          <div className="xl:mr-flex xl:mr-justify-between xl:mr-flex-1 mr-px-2 xl:mr-px-4">
+            <div className="mr-flex">
               <p className="mr-text-center mr-text-base mr-uppercase mr-text-mango mr-mr-8">
                 <FormattedMessage {...messages.filterListLabel} />
               </p>
@@ -271,96 +282,93 @@ export class ViewChallengeTasks extends Component {
                 </li>
               </ul>
             </div>
-              <div className='mr-flex mr-justify-end'>
-                {clearFiltersControl}
-              </div>
+            <div className="mr-flex mr-justify-end">{clearFiltersControl}</div>
           </div>
         </div>
 
-          <TaskAnalysisTable
-            taskData={_get(this.props, 'taskInfo.tasks')}
-            changeStatus={this.changeStatus}
-            removeReviewRequests={this.removeReviewRequests}
-            removeMetaReviewRequests={this.removeMetaReviewRequests}
-            totalTaskCount={_get(this.props, 'taskInfo.totalCount')}
-            totalTasksInChallenge={ calculateTasksInChallenge(this.props) }
-            loading={this.props.loadingChallenge}
-            {...this.props}
-          />
+        <TaskAnalysisTable
+          taskData={this.props.taskInfo?.tasks}
+          changeStatus={this.changeStatus}
+          removeReviewRequests={this.removeReviewRequests}
+          removeMetaReviewRequests={this.removeMetaReviewRequests}
+          totalTaskCount={this.props.taskInfo?.totalCount}
+          totalTasksInChallenge={calculateTasksInChallenge(this.props)}
+          loading={this.props.loadingChallenge}
+          {...this.props}
+        />
       </div>
-    )
+    );
   }
 }
 
-const calculateTasksInChallenge = props => {
-  const actions = _get(props, 'challenge.actions')
+const calculateTasksInChallenge = (props) => {
+  const actions = props.challenge?.actions;
   if (!actions) {
-    return _get(props, 'taskInfo.totalCount')
+    return props.taskInfo?.totalCount;
   }
 
-  return actions.total
-}
+  return actions.total;
+};
 
-const TaskMarkerContent = props => {
-  const manager = AsManager(props.user)
+const TaskMarkerContent = (props) => {
+  const manager = AsManager(props.user);
   const taskBaseRoute =
     `/admin/project/${props.challenge.parent.id}` +
-    `/challenge/${_get(props.challenge, 'id')}/task/${props.marker.options.taskId}`
+    `/challenge/${props.challenge?.id}/task/${props.marker.options.taskId}`;
 
   return (
     <Fragment>
       <div className="mr-text-center mr-mt-5">
-        {
-          props.intl.formatMessage(messages.nameLabel)
-        } {
-          (props.marker.options.name || _get(props.task, 'name') || _get(props.task, 'title'))
-        }
+        {props.intl.formatMessage(messages.nameLabel)}{" "}
+        {props.marker.options.name || props.task?.name || props.task?.title}
       </div>
       <div className="mr-text-center">
-        {
-          props.intl.formatMessage(messages.statusLabel)
-        } {
-          props.intl.formatMessage(messagesByStatus[props.marker.options.taskStatus])
-        }
+        {props.intl.formatMessage(messages.statusLabel)}{" "}
+        {props.intl.formatMessage(messagesByStatus[props.marker.options.taskStatus])}
       </div>
       <div className="mr-text-center">
-        {
-          props.intl.formatMessage(messages.priorityLabel)
-        }: {
-          props.intl.formatMessage(messagesByPriority[props.marker.options.taskPriority])
-        }
+        {props.intl.formatMessage(messages.priorityLabel)}:{" "}
+        {props.intl.formatMessage(messagesByPriority[props.marker.options.taskPriority])}
       </div>
 
-      {props.loading &&
+      {props.loading && (
         <div>
           <BusySpinner />
         </div>
-      }
+      )}
 
       <div className="marker-popup-content__links">
         <div>
-          <a onClick={() => props.history.push({
-            pathname: `${taskBaseRoute}/inspect`,
-            state: props.criteria
-          })}>
+          <a
+            onClick={() =>
+              props.history.push({
+                pathname: `${taskBaseRoute}/inspect`,
+                state: props.criteria,
+              })
+            }
+          >
             {props.intl.formatMessage(messages.inspectTaskLabel)}
           </a>
         </div>
 
-        {manager.canWriteProject(props.challenge.parent) &&
+        {manager.canWriteProject(props.challenge.parent) && (
           <div>
-            <a onClick={() => props.history.push({
-              pathname: `${taskBaseRoute}/edit`,
-              state: props.criteria
-            })}>
+            <a
+              onClick={() =>
+                props.history.push({
+                  pathname: `${taskBaseRoute}/edit`,
+                  state: props.criteria,
+                })
+              }
+            >
               {props.intl.formatMessage(messages.editTaskLabel)}
             </a>
           </div>
-        }
+        )}
       </div>
     </Fragment>
   );
-}
+};
 
 ViewChallengeTasks.propTypes = {
   /** The tasks to display */
@@ -393,17 +401,14 @@ ViewChallengeTasks.propTypes = {
   setChallengeOwnerMapBounds: PropTypes.func.isRequired,
   /** Clears any applied filters */
   clearAllFilters: PropTypes.func.isRequired,
-}
+};
 
 ViewChallengeTasks.defaultProps = {
   loadingChallenge: false,
-}
+};
 
-export default
-WithBoundedTasks(
-  WithTaskPropertyKeys(
-    WithFilterCriteria(ViewChallengeTasks, false)
-  ),
-  'filteredClusteredTasks',
-  'taskInfo'
-)
+export default WithBoundedTasks(
+  WithTaskPropertyKeys(WithFilterCriteria(ViewChallengeTasks, false)),
+  "filteredClusteredTasks",
+  "taskInfo",
+);

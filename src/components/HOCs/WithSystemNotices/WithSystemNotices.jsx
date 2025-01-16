@@ -1,9 +1,8 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { fetchActiveSystemNotices }
-       from '../../../services/SystemNotices/SystemNotices'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { fetchActiveSystemNotices } from "../../../services/SystemNotices/SystemNotices";
 
-const ACKNOWLEDGED_SETTING = 'acknowledgedNotices'
+const ACKNOWLEDGED_SETTING = "acknowledgedNotices";
 
 /**
  * WithSystemNotices provides the WrappedComponent with an array of active,
@@ -11,18 +10,18 @@ const ACKNOWLEDGED_SETTING = 'acknowledgedNotices'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithSystemNotices = function(WrappedComponent) {
+export const WithSystemNotices = function (WrappedComponent) {
   class _WithSystemNotices extends Component {
     state = {
       systemNotices: null,
       unacknowledgedNotices: [],
-    }
+    };
 
     async componentDidMount() {
       if (!this.state.systemNotices) {
-        const activeNotices = await fetchActiveSystemNotices()
+        const activeNotices = await fetchActiveSystemNotices();
 
-        this.setState({systemNotices: activeNotices})
+        this.setState({ systemNotices: activeNotices });
       }
     }
 
@@ -33,11 +32,11 @@ export const WithSystemNotices = function(WrappedComponent) {
      */
     allAcknowledgedNotices = () => {
       if (!this.props.user) {
-        return []
+        return [];
       }
 
-      return this.props.getUserAppSetting(this.props.user, ACKNOWLEDGED_SETTING) || []
-    }
+      return this.props.getUserAppSetting(this.props.user, ACKNOWLEDGED_SETTING) || [];
+    };
 
     /**
      * Retrieves array of notices that have not yet been acknowledged by the
@@ -47,38 +46,38 @@ export const WithSystemNotices = function(WrappedComponent) {
      */
     unacknowledgedNotices = () => {
       if (!this.state.systemNotices) {
-        return []
+        return [];
       }
 
-      const acknowledged = this.allAcknowledgedNotices()
-      return this.state.systemNotices.filter(
-        notice => acknowledged.indexOf(notice.uuid) === -1
-      )
-    }
+      const acknowledged = this.allAcknowledgedNotices();
+      return this.state.systemNotices.filter((notice) => acknowledged.indexOf(notice.uuid) === -1);
+    };
 
     /**
      * Acknowledges the given notice
      */
     acknowledgeNotice = async (notice) => {
       if (!this.props.user || !notice.uuid) {
-        return
+        return;
       }
 
-      const updatedAcknowledgements = this.allAcknowledgedNotices().slice()
-      updatedAcknowledgements.push(notice.uuid)
+      const updatedAcknowledgements = this.allAcknowledgedNotices().slice();
+      updatedAcknowledgements.push(notice.uuid);
       await this.props.updateUserAppSetting(this.props.user.id, {
         [ACKNOWLEDGED_SETTING]: updatedAcknowledgements,
-      })
-    }
+      });
+    };
 
     render() {
-      const remainingNotices = this.unacknowledgedNotices(this.state.systemNotices)
-      return <WrappedComponent
-               {...this.props}
-               allSystemNotices={this.state.systemNotices}
-               newSystemNotices={remainingNotices}
-               acknowledgeNotice={notice => this.acknowledgeNotice(notice)}
-             />
+      const remainingNotices = this.unacknowledgedNotices(this.state.systemNotices);
+      return (
+        <WrappedComponent
+          {...this.props}
+          allSystemNotices={this.state.systemNotices}
+          newSystemNotices={remainingNotices}
+          acknowledgeNotice={(notice) => this.acknowledgeNotice(notice)}
+        />
+      );
     }
   }
 
@@ -86,9 +85,9 @@ export const WithSystemNotices = function(WrappedComponent) {
     user: PropTypes.object,
     getUserAppSetting: PropTypes.func.isRequired,
     updateUserAppSetting: PropTypes.func.isRequired,
-  }
+  };
 
-  return _WithSystemNotices
-}
+  return _WithSystemNotices;
+};
 
-export default WrappedComponent => WithSystemNotices(WrappedComponent)
+export default (WrappedComponent) => WithSystemNotices(WrappedComponent);

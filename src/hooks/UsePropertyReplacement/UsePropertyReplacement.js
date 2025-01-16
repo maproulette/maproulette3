@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import _get from 'lodash/get'
+import _get from "lodash/get";
+import { useEffect, useState } from "react";
 
 /**
  * Replaces mustache tags (e.g. `{{foo}}`) found in content with values found
@@ -7,31 +7,27 @@ import _get from 'lodash/get'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const usePropertyReplacement = (content, properties, allowPropertyReplacement=true) => {
-  const [replacedContent, setReplacedContent] = useState(null)
+const usePropertyReplacement = (content, properties, allowPropertyReplacement = true) => {
+  const [replacedContent, setReplacedContent] = useState(null);
 
   useEffect(() => {
     if (content && allowPropertyReplacement) {
-      setReplacedContent(replacePropertyTags(content, properties))
+      setReplacedContent(replacePropertyTags(content, properties));
+    } else {
+      setReplacedContent(content);
     }
-    else {
-      setReplacedContent(content)
+  }, [content, properties, allowPropertyReplacement]);
+
+  return replacedContent;
+};
+
+export const replacePropertyTags = (content, properties, errOnMissing = false) => {
+  return content.replace(/(^|[^{])\{\{([^{][^}]*)}}/g, (matched, firstChar, tagName) => {
+    if (errOnMissing && !properties[tagName]) {
+      throw new Error(`Missing replacement property: ${tagName}`);
     }
-  }, [content, properties, allowPropertyReplacement])
+    return firstChar + _get(properties, tagName, "");
+  });
+};
 
-  return replacedContent
-}
-
-export const replacePropertyTags = (content, properties, errOnMissing=false) => {
-  return content.replace(
-    /(^|[^{])\{\{([^{][^}]*)}}/g,
-    (matched, firstChar, tagName) => {
-      if (errOnMissing && !properties[tagName]) {
-        throw new Error(`Missing replacement property: ${tagName}`)
-      }
-      return firstChar + _get(properties, tagName, '')
-    }
-  )
-}
-
-export default usePropertyReplacement
+export default usePropertyReplacement;

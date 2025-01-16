@@ -1,9 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import _findIndex from 'lodash/findIndex'
-import _noop from 'lodash/noop'
-import messages from './Messages'
+import _findIndex from "lodash/findIndex";
+import _noop from "lodash/noop";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import messages from "./Messages";
 
 /**
  * TaskTrackControls displays a checkbox for toggling tracking of the current
@@ -13,22 +13,20 @@ import messages from './Messages'
  */
 export default class TaskTrackControls extends Component {
   taskIsTracked = () => {
-    return _findIndex(this.props.user.savedTasks,
-                      {id: this.props.task.id}) !== -1
-  }
+    return _findIndex(this.props.user.savedTasks, { id: this.props.task.id }) !== -1;
+  };
 
   toggleSaved = () => {
     if (this.taskIsTracked()) {
-      this.props.unsaveTask(this.props.user.id, this.props.task.id)
+      this.props.unsaveTask(this.props.user.id, this.props.task.id);
+    } else {
+      this.props.saveTask(this.props.user.id, this.props.task.id);
     }
-    else {
-      this.props.saveTask(this.props.user.id, this.props.task.id)
-    }
-  }
+  };
 
   render() {
     if (!this.props.user || !this.props.task) {
-      return null
+      return null;
     }
 
     return (
@@ -42,11 +40,11 @@ export default class TaskTrackControls extends Component {
             checked={this.taskIsTracked()}
           />
           <label htmlFor="task-track-checkbox">
-            <FormattedMessage {...messages.trackLabel } />
+            <FormattedMessage {...messages.trackLabel} />
           </label>
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -59,4 +57,4 @@ TaskTrackControls.propTypes = {
   saveTask: PropTypes.func.isRequired,
   /** Invoked if the user decides to unsave/untrack the task */
   unsaveTask: PropTypes.func.isRequired,
-}
+};

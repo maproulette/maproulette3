@@ -1,7 +1,7 @@
-import { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import WithEditor from '../HOCs/WithEditor/WithEditor'
-import { Editor } from '../../services/Editor/Editor'
+import PropTypes from "prop-types";
+import { PureComponent } from "react";
+import { Editor } from "../../services/Editor/Editor";
+import WithEditor from "../HOCs/WithEditor/WithEditor";
 
 /**
  * Renders a reference to an OSM element (such as a node or way) as an Overpass
@@ -11,46 +11,44 @@ import { Editor } from '../../services/Editor/Editor'
  */
 export class OSMElementReference extends PureComponent {
   overpassQuery() {
-    const elementStatements = this.props.osmElements.map(
-      osmElement => `${osmElement.elementType}(${osmElement.osmId});`
-    ).join('')
+    const elementStatements = this.props.osmElements
+      .map((osmElement) => `${osmElement.elementType}(${osmElement.osmId});`)
+      .join("");
 
-    return `(${elementStatements});(._;>;);out;`
+    return `(${elementStatements});(._;>;);out;`;
   }
 
   description() {
-    return this.props.osmElements.map(
-      osmElement => `${osmElement.elementType} ${osmElement.osmId}`
-    ).join(', ')
+    return this.props.osmElements
+      .map((osmElement) => `${osmElement.elementType} ${osmElement.osmId}`)
+      .join(", ");
   }
 
   loadInJOSMIfActive(clickEvent) {
     if (!this.props.isJosmEditor(this.props.configuredEditor)) {
-      return
+      return;
     }
 
-    clickEvent.preventDefault()
+    clickEvent.preventDefault();
     const josmObjectIds = this.props.osmElements.map(
-      osmElement => `${osmElement.elementType[0]}${osmElement.osmId}`
-    )
-    this.props.loadObjectsIntoJOSM(josmObjectIds,
-                                   this.props.configuredEditor === Editor.josmLayer)
+      (osmElement) => `${osmElement.elementType[0]}${osmElement.osmId}`,
+    );
+    this.props.loadObjectsIntoJOSM(josmObjectIds, this.props.configuredEditor === Editor.josmLayer);
   }
 
   render() {
-    const overpassUrl =
-      `https://overpass-turbo.eu/map.html?Q=${encodeURIComponent(this.overpassQuery())}`
+    const overpassUrl = `https://overpass-turbo.eu/map.html?Q=${encodeURIComponent(this.overpassQuery())}`;
 
     return (
       <a
         href={overpassUrl}
         target="_blank"
         rel="noopener noreferrer nofollow"
-        onClick={e => this.loadInJOSMIfActive(e)}
+        onClick={(e) => this.loadInJOSMIfActive(e)}
       >
         {this.description()}
       </a>
-    )
+    );
   }
 }
 
@@ -59,8 +57,8 @@ OSMElementReference.propTypes = {
     PropTypes.shape({
       elementType: PropTypes.string.isRequired,
       osmId: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
-}
+};
 
-export default WithEditor(OSMElementReference)
+export default WithEditor(OSMElementReference);

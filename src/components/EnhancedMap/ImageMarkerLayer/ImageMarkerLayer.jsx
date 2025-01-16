@@ -1,14 +1,17 @@
-import { createRef, useState, useEffect, Component } from 'react'
-import PropTypes from 'prop-types'
-import { LayerGroup, Marker, Popup } from 'react-leaflet'
-import L from 'leaflet'
-import _map from 'lodash/map'
-import { Viewer } from 'mapillary-js'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import { getAccessToken } from '../../../services/Mapillary/Mapillary'
-import tailwindConfig from '../../../tailwind.config.js'
+import L from "leaflet";
+import _map from "lodash/map";
+import { Viewer } from "mapillary-js";
+import PropTypes from "prop-types";
+import React, { useState, useEffect, useRef } from "react";
+import { FormattedMessage } from "react-intl";
+import { LayerGroup, Marker, Popup, useMap } from "react-leaflet";
+import resolveConfig from "tailwindcss/resolveConfig";
+import { getAccessToken } from "../../../services/Mapillary/Mapillary";
+import tailwindConfig from "../../../tailwind.config.js";
+import messages from "./Messages.js";
 
-const colors = resolveConfig(tailwindConfig).theme.colors
+const colors = resolveConfig(tailwindConfig).theme.colors;
+const imageCache = new Map();
 
 /**
  * ImageMarkerLayer renders a layer of positioned image markers that, on hover,
@@ -23,123 +26,159 @@ const colors = resolveConfig(tailwindConfig).theme.colors
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const ImageMarkerLayer = props => {
-  const [imageMarkers, setImageMarkers] = useState([])
+const ImageMarkerLayer = (props) => {
+  const [imageMarkers, setImageMarkers] = useState([]);
+  const map = useMap();
 
-  const {images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel, style} = props
+  const {
+    images,
+    markerColor = colors["blue-leaflet"],
+    imageClicked,
+    icon,
+    mrLayerId,
+    mrLayerLabel,
+    style,
+  } = props;
+
   useEffect(() => {
+    if (!map.getPane("mapillaryPopups")) {
+      map.createPane("mapillaryPopups").style.zIndex = 700;
+    }
+
     setImageMarkers(
       buildImageMarkers(
         images,
-        icon ? icon : circleIcon(markerColor),
+        icon || circleIcon(markerColor),
+        markerColor,
         imageClicked,
-        imageAlt,
         mrLayerId,
-        mrLayerLabel
-      )
-    )
-  }, [images, markerColor, imageAlt, imageClicked, icon, mrLayerId, mrLayerLabel])
+        mrLayerLabel,
+      ),
+    );
+  }, [images, markerColor, imageClicked, icon, mrLayerId, mrLayerLabel, map]);
 
-  return (
-    <LayerGroup style={style}>
-      {imageMarkers}
-    </LayerGroup>
-  )
-}
+  return <LayerGroup style={style}>{imageMarkers}</LayerGroup>;
+};
 
 ImageMarkerLayer.propTypes = {
-  layerKey: PropTypes.string,
-  images: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    url: PropTypes.string,
-    position: PropTypes.object,
-  })),
-  imageClicked: PropTypes.func,
-  imageAlt: PropTypes.string,
-  buildIcon: PropTypes.func,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  imageClicked: PropTypes.func.isRequired,
   markerColor: PropTypes.string,
-}
+};
 
-class MapillaryViewer extends Component {
-  containerRef = createRef();
+const MapillaryViewer = ({ initialImageKey }) => {
+  const containerRef = useRef();
 
-  componentDidMount() {
-    this.viewer = new Viewer({
-      accessToken: getAccessToken(),
-      container: this.containerRef.current,
-      imageId: this.props.initialImageKey,
-      component: { cover: false },
-    })
-  }
+  useEffect(() => {
+    const accessToken = getAccessToken();
 
-  componentWillUnmount() {
-    if (this.viewer) {
-      this.viewer.remove();
+    if (!initialImageKey || !accessToken) return;
+
+    const viewer = imageCache.has(initialImageKey)
+      ? imageCache.get(initialImageKey)
+      : new Viewer({
+          accessToken,
+          container: containerRef.current,
+          imageId: initialImageKey,
+        });
+    imageCache.set(initialImageKey, viewer);
+
+    return () => viewer && viewer.remove();
+  }, [initialImageKey]);
+
+  return (
+    <div className="mr-p-2 mr-pt-4 mr-relative">
+      <div ref={containerRef} id="mapillary-viewer" className="mr-w-full mr-h-64"></div>
+    </div>
+  );
+};
+
+const getLatLng = (imageInfo) => {
+  const lat = imageInfo.position?.lat ?? imageInfo.lat;
+  const lon = imageInfo.position?.lon ?? imageInfo.lon;
+  return lat !== undefined && lon !== undefined ? [lat, lon] : null;
+};
+
+const buildImageMarkers = (images, icon, markerColor, imageClicked, layerId, layerLabel) => {
+  try {
+    if (!images?.length) {
+      return [];
     }
-  }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.initialImageKey !== this.props.initialImageKey
-  }
+    return _map(images, (imageInfo) => {
+      const imageLatLon = getLatLng(imageInfo);
+      if (!imageInfo || !imageLatLon) {
+        console.error(`Invalid position for image key: ${imageInfo?.key}`, imageInfo);
+        return null;
+      }
 
-  render() {
-    return (
-      <div className="mr-p-2 mr-pt-4 mr-relative">
-        <div ref={this.containerRef} id="mapillary-viewer" style={{ width: 335, height: 263 }}></div>
-      </div>
-    )
-  }
-}
+      if (!imageInfo.url) {
+        console.error(`Invalid URL for image key: ${imageInfo.key}`, imageInfo);
+        return null;
+      }
 
-const buildImageMarkers = (images, icon, imageClicked, imageAlt, layerId, layerLabel) => {
-  if (!images || images.length === 0) {
-    return []
-  }
+      const [lat, lon] = imageLatLon;
 
-  return _map(images, imageInfo => {
-    return (
-      <Marker
-        key={imageInfo.key}
-        mrLayerId={layerId}
-        mrLayerLabel={layerLabel}
-        position={[imageInfo.lat, imageInfo.lon]}
-        icon={icon}
-        onMouseover={({target}) => target.openPopup()}
-        eventHandlers={{
-          click: () => {
-            imageClicked ? imageClicked(imageInfo.key) : null
-          },
-        }}
-      >
-        <Popup maxWidth="351px" offset={ [0.5, -5]}>
-          <div style={{ width: 351, marginTop: 20 }}>
-            <MapillaryViewer
-              key={Date.now()}
-              initialImageKey={imageInfo.key}
-              onClose={() => null}
-            />
-          </div>
-          <div
-            className="mr-w-full mr-text-center mr-text-green mr-cursor-pointer mr-text-lg"
-            onClick={() => imageClicked(imageInfo.key)}
-          >
-            Enlarge
-          </div>
-        </Popup>
-      </Marker>
-    )
-  })
-}
+      return (
+        <Marker
+          key={imageInfo.key}
+          mrLayerId={layerId}
+          mrLayerLabel={layerLabel}
+          position={[lat, lon]}
+          icon={icon}
+        >
+          <Popup pane="mapillaryPopups" maxWidth="351px" offset={[0, 5]}>
+            <div style={{ width: 351, marginTop: 5 }}>
+              <MapillaryViewer initialImageKey={imageInfo.key} />
+            </div>
+            <div
+              style={{
+                width: "100%",
+                textAlign: "center",
+                color: markerColor,
+                cursor: "pointer",
+                fontSize: "1.25rem",
+                padding: "8px",
+                transition: "background-color 0.3s, color 0.3s",
+              }}
+              onClick={() => {
+                imageClicked(imageInfo.key);
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = markerColor;
+                e.currentTarget.style.color = "white";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.color = markerColor;
+              }}
+            >
+              <FormattedMessage {...messages.openView} />
+            </div>
+          </Popup>
+        </Marker>
+      );
+    }).filter(Boolean);
+  } catch (error) {
+    console.error("Error building image markers:", error);
+    return [];
+  }
+};
 
 const circleIcon = (color = colors["blue-leaflet"]) => {
   return L.vectorIcon({
     svgHeight: 12,
     svgWidth: 12,
-    viewBox: '0 0 12 12',
-    type: 'circle',
+    viewBox: "0 0 12 12",
+    type: "circle",
     shape: { r: 6, cx: 6, cy: 6 },
     style: { fill: color },
-  })
-}
+  });
+};
 
-export default ImageMarkerLayer
+export default ImageMarkerLayer;

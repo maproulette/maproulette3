@@ -1,15 +1,14 @@
-import _isFinite from 'lodash/isFinite'
-import _isString from 'lodash/isString'
-import _find from 'lodash/find'
-import { ChallengeBasemap }
-       from '../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import _find from "lodash/find";
+import _isFinite from "lodash/isFinite";
+import _isString from "lodash/isString";
+import { ChallengeBasemap } from "../../services/Challenge/ChallengeBasemap/ChallengeBasemap";
 
 /**
  * AsEditableUser adds functionality to a User related to editing.
  */
 export class AsEditableUser {
   constructor(user) {
-    Object.assign(this, user)
+    Object.assign(this, user);
   }
 
   /**
@@ -24,27 +23,26 @@ export class AsEditableUser {
    */
   normalizeDefaultBasemap(layerSources, customBasemaps) {
     if (_isFinite(Number(this.defaultBasemap))) {
-      this.defaultBasemapId = ''
-      this.defaultBasemap = Number(this.defaultBasemap)
-    }
-    else if (_isString(this.defaultBasemap) && this.defaultBasemap.length > 0) {
+      this.defaultBasemapId = "";
+      this.defaultBasemap = Number(this.defaultBasemap);
+    } else if (_isString(this.defaultBasemap) && this.defaultBasemap.length > 0) {
       // Check to make sure our defaultBasemap is in our valid list of basemaps
       // If not found then set the default basemap to none.
-      if (!_find(customBasemaps, (basemap) => basemap.name === this.defaultBasemap) &&
-          !_find(layerSources, (basemap) => basemap.id === this.defaultBasemap)) {
-        this.defaultBasemapId = ''
-        this.defaultBasemap = ChallengeBasemap.none
+      if (
+        !_find(customBasemaps, (basemap) => basemap.name === this.defaultBasemap) &&
+        !_find(layerSources, (basemap) => basemap.id === this.defaultBasemap)
+      ) {
+        this.defaultBasemapId = "";
+        this.defaultBasemap = ChallengeBasemap.none;
+      } else {
+        this.defaultBasemapId = this.defaultBasemap;
+        this.defaultBasemap = ChallengeBasemap.identified;
       }
-      else {
-        this.defaultBasemapId = this.defaultBasemap
-        this.defaultBasemap = ChallengeBasemap.identified
-      }
-    }
-    else {
-      this.defaultBasemapId = ''
-      this.defaultBasemap = ChallengeBasemap.none
+    } else {
+      this.defaultBasemapId = "";
+      this.defaultBasemap = ChallengeBasemap.none;
     }
   }
 }
 
-export default user => new AsEditableUser(user)
+export default (user) => new AsEditableUser(user);

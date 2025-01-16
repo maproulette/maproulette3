@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TasksWidget
@@ -16,7 +16,7 @@ export default defineMessages({
 
   filterListLabel: {
     id: "Widgets.ReviewNearbyTasksWidget.controls.filterList.label",
-    defaultMessage: "Filter By:"
+    defaultMessage: "Filter By:",
   },
 
   clearFiltersLabel: {
@@ -48,4 +48,4 @@ export default defineMessages({
     id: "Widgets.ReviewNearbyTasksWidget.simultaneousTasks",
     defaultMessage: "Working on {taskCount, number} tasks together",
   },
-})
+});

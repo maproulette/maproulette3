@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from "react";
 
 /*
  * React hook to observe and change the hash component of the browser window's URL.
@@ -13,9 +13,9 @@ const useHash = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener('hashchange', onHashChange);
+    window.addEventListener("hashchange", onHashChange);
     return () => {
-      window.removeEventListener('hashchange', onHashChange);
+      window.removeEventListener("hashchange", onHashChange);
     };
   }, []);
 

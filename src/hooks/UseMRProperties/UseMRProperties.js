@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
-import AsMappableTask from '../../interactions/Task/AsMappableTask'
-import AsIdentifiableFeature
-       from '../../interactions/TaskFeature/AsIdentifiableFeature'
+import { useEffect, useState } from "react";
+import AsMappableTask from "../../interactions/Task/AsMappableTask";
+import AsIdentifiableFeature from "../../interactions/TaskFeature/AsIdentifiableFeature";
 
 /**
  * useMRProperties hook returns an object containing substitution properties
@@ -14,26 +13,27 @@ import AsIdentifiableFeature
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const useMRProperties = workspaceContext => {
-  const [properties, setProperties] = useState({})
+const useMRProperties = (workspaceContext) => {
+  const [properties, setProperties] = useState({});
 
   useEffect(() => {
-    if(!workspaceContext){
-      return null
+    if (!workspaceContext) {
+      return null;
     }
 
     const mrProperties = {
-      '#mapZoom': workspaceContext['taskMapZoom'],
-    }
+      "#mapZoom": workspaceContext["taskMapZoom"],
+    };
 
-    const task = workspaceContext['taskMapTask']
+    const task = workspaceContext["taskMapTask"];
     if (task) {
-      const primaryFeature =
-        AsIdentifiableFeature(AsMappableTask(task).normalizedGeometries().features[0])
+      const primaryFeature = AsIdentifiableFeature(
+        AsMappableTask(task).normalizedGeometries().features[0],
+      );
 
-      mrProperties['#mrTaskId'] = task.id
-      mrProperties['#osmId'] = primaryFeature.osmId()
-      mrProperties['#osmType'] = primaryFeature.osmType()
+      mrProperties["#mrTaskId"] = task.id;
+      mrProperties["#osmId"] = primaryFeature.osmId();
+      mrProperties["#osmType"] = primaryFeature.osmType();
 
       //map the task specific properties to the workspace properties
       const { properties } = primaryFeature;
@@ -45,21 +45,21 @@ const useMRProperties = workspaceContext => {
       }
     }
 
-    const mapBounds = workspaceContext['taskMapBounds']
+    const mapBounds = workspaceContext["taskMapBounds"];
     if (mapBounds) {
-      mrProperties['#mapLat'] = mapBounds.getCenter().lat
-      mrProperties['#mapLon'] = mapBounds.getCenter().lng
-      mrProperties['#mapBBox'] = mapBounds.toBBoxString()
-      mrProperties['#mapWest'] = mapBounds.getWest()
-      mrProperties['#mapSouth'] = mapBounds.getSouth()
-      mrProperties['#mapEast'] = mapBounds.getEast()
-      mrProperties['#mapNorth'] = mapBounds.getNorth()
+      mrProperties["#mapLat"] = mapBounds.getCenter().lat;
+      mrProperties["#mapLon"] = mapBounds.getCenter().lng;
+      mrProperties["#mapBBox"] = mapBounds.toBBoxString();
+      mrProperties["#mapWest"] = mapBounds.getWest();
+      mrProperties["#mapSouth"] = mapBounds.getSouth();
+      mrProperties["#mapEast"] = mapBounds.getEast();
+      mrProperties["#mapNorth"] = mapBounds.getNorth();
     }
 
-    setProperties(mrProperties)
-  }, [workspaceContext])
+    setProperties(mrProperties);
+  }, [workspaceContext]);
 
-  return properties
-}
+  return properties;
+};
 
-export default useMRProperties
+export default useMRProperties;
