@@ -56,10 +56,7 @@ export const jsSchema = (intl) => {
         title: intl.formatMessage(messages.requireConfirmationLabel),
         type: "boolean",
         enum: [true, false],
-        enumNames: [
-          intl.formatMessage(messages.yesLabel),
-          intl.formatMessage(messages.noLabel),
-        ],
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
         default: false,
       },
       presets: {
@@ -175,8 +172,8 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) =
         "ui:readonly": sourceReadOnly,
         "ui:collapsed": isGroupCollapsed,
       },
-      presetUiSchemas
-    }
+      presetUiSchemas,
+    },
   );
 
   return uiSchemaFields;

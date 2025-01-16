@@ -135,13 +135,12 @@ export default defineMessages({
   disableTaskConfirmDescription: {
     id: "Profile.form.disableTaskConfirm.description",
     defaultMessage:
-    "This will allow the user to bypass the task confirmation modal when a user clicks 'I fixed it!'. Be aware some projects and challenges won't allow this behavior."
+      "This will allow the user to bypass the task confirmation modal when a user clicks 'I fixed it!'. Be aware some projects and challenges won't allow this behavior.",
   },
 
   disableTaskConfirmLabel: {
     id: "Profile.form.disableTaskConfirm.label",
-    defaultMessage:
-    "Disable Task Confirmation Modal"
+    defaultMessage: "Disable Task Confirmation Modal",
   },
 
   apiKey: {

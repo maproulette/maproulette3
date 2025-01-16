@@ -106,12 +106,13 @@ export default defineMessages({
   },
 
   requireConfirmationLabel: {
-    id: 'Admin.EditProject.form.requireConfirmation.label',
+    id: "Admin.EditProject.form.requireConfirmation.label",
     defaultMessage: "Require Confirmation",
   },
 
   requireConfirmationDescription: {
-    id: 'Admin.EditProject.form.requireConfirmation.description',
-    defaultMessage: "This will disable the option for users to bypass the task confirmation modal when they click 'I fixed it!'",
+    id: "Admin.EditProject.form.requireConfirmation.description",
+    defaultMessage:
+      "This will disable the option for users to bypass the task confirmation modal when they click 'I fixed it!'",
   },
-})
+});
