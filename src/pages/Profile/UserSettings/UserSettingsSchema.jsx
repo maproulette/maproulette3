@@ -127,20 +127,14 @@ export const jsSchema = (intl, user, editor) => {
         title: intl.formatMessage(messages.seeTagFixSuggestionsLabel),
         type: "boolean",
         default: true,
-        enumNames: [
-          intl.formatMessage(messages.yesLabel),
-          intl.formatMessage(messages.noLabel),
-        ],
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
       },
       disableTaskConfirm: {
         title: intl.formatMessage(messages.disableTaskConfirmLabel),
         type: "boolean",
         default: false,
-        enumNames: [
-          intl.formatMessage(messages.yesLabel),
-          intl.formatMessage(messages.noLabel),
-        ],
-      }
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
+      },
     },
   };
 
@@ -236,9 +230,15 @@ export const uiSchema = (intl, user, editor) => {
       "ui:help": intl.formatMessage(messages.disableTaskConfirmDescription),
     },
     "ui:order": [
-      "locale", "allowFollowing", "defaultEditor", "leaderboardOptOut",
-      "defaultBasemap", "isReviewer", "customBasemaps", "seeTagFixSuggestions",
-      "disableTaskConfirm"
+      "locale",
+      "allowFollowing",
+      "defaultEditor",
+      "leaderboardOptOut",
+      "defaultBasemap",
+      "isReviewer",
+      "customBasemaps",
+      "seeTagFixSuggestions",
+      "disableTaskConfirm",
     ],
   };
 

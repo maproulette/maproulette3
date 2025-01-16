@@ -12,14 +12,6 @@ import { Component, Fragment } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import _get from "lodash/get";
-import _map from "lodash/map";
-import _pick from "lodash/pick";
-import _isEmpty from "lodash/isEmpty";
-import _remove from "lodash/remove";
-import _cloneDeep from "lodash/cloneDeep";
-import _isObject from "lodash/isObject";
-import _isFinite from "lodash/isFinite";
-import _isUndefined from "lodash/isUndefined";
 import { TaskStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
 import {
   allowedStatusProgressions,
