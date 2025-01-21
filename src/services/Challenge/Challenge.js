@@ -4,6 +4,7 @@ import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
 import _compact from "lodash/compact";
 import _each from "lodash/each";
+import _get from "lodash/get";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
 import _groupBy from "lodash/groupBy";
