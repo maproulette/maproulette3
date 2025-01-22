@@ -83,6 +83,7 @@ export class TaskHistoryList extends Component {
             username: username,
             status: updatedStatus,
             userType: userType,
+            errorTags: errorTags,
           });
           if (startedAtEntry) {
             combinedLogs.push(startedAtEntry);
@@ -92,6 +93,7 @@ export class TaskHistoryList extends Component {
           updatedStatus = null;
           duration = null;
           userType = null;
+          errorTags = null;
         }
         lastTimestamp = new Date(log.timestamp);
 
@@ -313,7 +315,7 @@ export class TaskHistoryList extends Component {
             {log.errorTags ? (
               <div className="mr-text-red">
                 <FormattedMessage {...messages.errorTagsLabel} />:{" "}
-                <ErrorTagComment errorTags={errorTags} />
+                <ErrorTagComment errorTags={log.errorTags} />
               </div>
             ) : null}
           </ol>

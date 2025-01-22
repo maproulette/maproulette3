@@ -34,6 +34,11 @@ export default defineMessages({
     defaultMessage: "Please Confirm Meta-Review",
   },
 
+  updateErrorTags: {
+    id: "TaskConfirmationModal.updateErrorTags",
+    defaultMessage: "Update Error Tags",
+  },
+
   commentLabel: {
     id: "TaskConfirmationModal.comment.label",
     defaultMessage: "Leave optional comment",
