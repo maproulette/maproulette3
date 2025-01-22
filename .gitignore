@@ -11,7 +11,6 @@ src/customLayers.json
 # testing
 /coverage
 chimp.js
-state.json
 error.png
 
 # production
@@ -45,3 +44,5 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+playwright/.auth/

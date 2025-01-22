@@ -1,14 +1,14 @@
 import { chromium } from '@playwright/test';
 
 async function globalSetup(config) {
-  const { storageState } = config.projects[0].use;
-  const browser = await chromium.launch({ headless: false });
+  const storageState = './playwright/.auth/state.json'; 
+  const browser = await chromium.launch();
   const context = await browser.newContext();
   const page = await context.newPage();
   
   try {
     // Navigate and sign in
-    await page.goto(process.env.REACT_APP_PLAYWRIGHT_URL);
+    await page.goto(process.env.REACT_APP_PLAYWRIGHT_URL || 'http://localhost:3000');
     await page.locator('a').filter({ hasText: 'Sign in' }).click();
     
     // Handle OSM login

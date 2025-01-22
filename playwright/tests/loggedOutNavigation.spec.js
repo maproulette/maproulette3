@@ -6,7 +6,7 @@ test.describe('Logged out navigation', () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
   test.beforeEach(async ({ page }) => { 
-    await page.goto(process.env.REACT_APP_PLAYWRIGHT_URL);
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     await expect(page).toHaveTitle(/MapRoulette/);
   });

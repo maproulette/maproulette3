@@ -13,11 +13,20 @@ const __dirname = path.dirname(__filename);
  */
 dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
+// Simplified environment variable handling
+const requiredEnvVars = {
+  REACT_APP_USERNAME: process.env.REACT_APP_PLAYWRIGHT_USERNAME || process.env.REACT_APP_USERNAME,
+  REACT_APP_PASSWORD: process.env.REACT_APP_PLAYWRIGHT_PASSWORD || process.env.REACT_APP_PASSWORD,
+  REACT_APP_MAP_ROULETTE_SERVER_URL: process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_URL || process.env.REACT_APP_MAP_ROULETTE_SERVER_URL,
+  REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL: process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_WEBSOCKET_URL || process.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL,
+  REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL: process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_GRAPHQL_URL || process.env.REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL,
+  REACT_APP_SERVER_API_KEY: process.env.REACT_APP_PLAYWRIGHT_SERVER_API_KEY || process.env.REACT_APP_SERVER_API_KEY,
+};
+
 // Validate required environment variables
-const requiredEnvVars = ['REACT_APP_PLAYWRIGHT_USERNAME', 'REACT_APP_PLAYWRIGHT_PASSWORD', 'REACT_APP_PLAYWRIGHT_URL'];
-requiredEnvVars.forEach(envVar => {
-  if (!process.env[envVar]) {
-    throw new Error(`Required environment variable ${envVar} is missing. Please add it to .env.local`);
+Object.entries(requiredEnvVars).forEach(([key, value]) => {
+  if (!value) {
+    throw new Error(`Required environment variable ${key} is missing. Please add it to .env.local`);
   }
 });
 
@@ -26,64 +35,49 @@ requiredEnvVars.forEach(envVar => {
  */
 export default defineConfig({
   testDir: './playwright/tests',
-  /* Run tests in files in parallel */
+  headless: true, // Run in headless mode for faster execution
   fullyParallel: false,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  workers: 1,
   reporter: 'html',
-
-  // Add testMatch pattern to explicitly match test files
-  testMatch: '**/*.spec.js',
-  
   globalSetup: './playwright/global-setup.js',
+
   use: {
-    baseURL: process.env.REACT_APP_PLAYWRIGHT_URL,
+    baseURL: process.env.REACT_APP_PLAYWRIGHT_URL || 'http://localhost:3000',
+    trace: 'on-first-retry',
     navigationTimeout: 30000,
     actionTimeout: 15000,
-    trace: 'on-first-retry',
-    // Apply storage state for all tests
-    storageState: 'state.json'
   },
 
-  /* Configure projects for major browsers */
   projects: [
     {
-      name: 'setup',
-      testMatch: /global-setup\.js/,
-    },
-    {
       name: 'chromium',
-      testMatch: '**/*.spec.js', 
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
-        storageState: 'state.json',
-        // Enable persistent browser context
-        launchOptions: {
-          args: ['--disk-cache-size=104857600'] // 100MB cache
-        }
+        storageState: './playwright/.auth/state.json',
       },
-      dependencies: ['setup']
     },
-
     {
       name: 'firefox',
-      use: { 
+      use: {
         ...devices['Desktop Firefox'],
-        storageState: 'state.json',
+        storageState: './playwright/.auth/state.json',
       },
     },
-
     {
       name: 'webkit',
-      use: { 
+      use: {
         ...devices['Desktop Safari'],
-        storageState: 'state.json',
+        storageState: './playwright/.auth/state.json',
       },
     },
   ],
+  
+  webServer: {
+    command: 'yarn run start',
+    url: process.env.REACT_APP_PLAYWRIGHT_URL || 'http://localhost:3000',
+    reuseExistingServer: true,
+    env: requiredEnvVars
+  },
 });

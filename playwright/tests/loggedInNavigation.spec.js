@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Logged in navigation', () => {
-  test.use({ storageState: './state.json' });
   test.beforeEach(async ({ page }) => {
-    await page.goto(process.env.REACT_APP_PLAYWRIGHT_URL);
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     await page.getByRole('banner').locator('a').filter({ hasText: 'Sign in' }).click();
   });
