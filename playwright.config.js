@@ -19,8 +19,7 @@ const requiredEnvVars = {
   REACT_APP_PASSWORD: process.env.REACT_APP_PLAYWRIGHT_PASSWORD || process.env.REACT_APP_PASSWORD,
   REACT_APP_MAP_ROULETTE_SERVER_URL: process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_URL || process.env.REACT_APP_MAP_ROULETTE_SERVER_URL,
   REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL: process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_WEBSOCKET_URL || process.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL,
-  REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL: process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_GRAPHQL_URL || process.env.REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL,
-  REACT_APP_SERVER_API_KEY: process.env.REACT_APP_PLAYWRIGHT_SERVER_API_KEY || process.env.REACT_APP_SERVER_API_KEY,
+  REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL: process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_GRAPHQL_URL || process.env.REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL
 };
 
 // Validate required environment variables
@@ -45,6 +44,7 @@ export default defineConfig({
 
   use: {
     baseURL: process.env.REACT_APP_PLAYWRIGHT_URL || 'http://localhost:3000',
+    storageState: './playwright/.auth/state.json',
     trace: 'on-first-retry',
     navigationTimeout: 30000,
     actionTimeout: 15000,
@@ -55,21 +55,18 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: './playwright/.auth/state.json',
       },
     },
     {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
-        storageState: './playwright/.auth/state.json',
       },
     },
     {
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
-        storageState: './playwright/.auth/state.json',
       },
     },
   ],
