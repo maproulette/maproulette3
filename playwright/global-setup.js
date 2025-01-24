@@ -11,8 +11,6 @@ async function globalSetup(config) {
     await page.goto(process.env.REACT_APP_URL || "http://localhost:3000");
     await page.locator("a").filter({ hasText: "Sign in" }).click();
 
-    console.log(process.env.REACT_APP_USERNAME);
-    console.log(process.env.REACT_APP_PASSWORD);
     // Handle OSM login
     await page.locator("#username").fill(process.env.REACT_APP_USERNAME);
     await page.locator("#password").fill(process.env.REACT_APP_PASSWORD);
@@ -27,7 +25,7 @@ async function globalSetup(config) {
       if (authorizeButton) {
         await authorizeButton.click();
       }
-    } catch (e) {} // Ignore if no authorization needed
+    } catch (e) {}
 
     await context.storageState({ path: storageState });
   } finally {

@@ -1,8 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-// Create a new test fixture that doesn't use the stored auth state
 test.describe("Logged out navigation", () => {
-  // Use a new context for these tests without the stored auth state
   test.use({ storageState: { cookies: [], origins: [] } });
 
   test.beforeEach(async ({ page }) => {
