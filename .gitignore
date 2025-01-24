@@ -22,7 +22,6 @@ error.png
 .DS_Store
 .env.local
 .env.*.local
-.env.playwright
 /public/env.json
 
 npm-debug.log*
@@ -39,10 +38,8 @@ yarn-error.log*
 
 #vscode
 /.vscode
-node_modules/
+
+# playwright
 /test-results/
 /playwright-report/
-/blob-report/
-/playwright/.cache/
-
 playwright/.auth/

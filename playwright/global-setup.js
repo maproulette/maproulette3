@@ -1,7 +1,14 @@
 import { chromium } from "@playwright/test";
+import fs from "fs";
+import path from "path";
 
-async function globalSetup(config) {
+async function globalSetup() {
   const storageState = "./playwright/.auth/state.json";
+  const storageDir = path.dirname(storageState);
+
+  if (!fs.existsSync(storageDir)) {
+    fs.mkdirSync(storageDir, { recursive: true });
+  }
   const browser = await chromium.launch();
   const context = await browser.newContext();
   const page = await context.newPage();
