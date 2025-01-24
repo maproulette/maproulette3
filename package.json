@@ -18,7 +18,7 @@
     "format": "biome format --write",
     "check": "biome ci && eslint src/",
     "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'",
-    "test:e2e:start": "yarn run build && npx serve dist",
+    "test:e2e:start": "NODE_ENV=development yarn run build && npx serve dist",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug"

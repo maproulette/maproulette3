@@ -15,19 +15,9 @@ dotenv.config({ path: path.resolve(__dirname, ".env.local") });
 
 // Simplified environment variable handling
 const requiredEnvVars = {
-  REACT_APP_USERNAME:
-    process.env.REACT_APP_PLAYWRIGHT_USERNAME || process.env.REACT_APP_USERNAME,
-  REACT_APP_PASSWORD:
-    process.env.REACT_APP_PLAYWRIGHT_PASSWORD || process.env.REACT_APP_PASSWORD,
-  REACT_APP_MAP_ROULETTE_SERVER_URL:
-    process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_URL ||
-    process.env.REACT_APP_MAP_ROULETTE_SERVER_URL,
-  REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL:
-    process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_WEBSOCKET_URL ||
-    process.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL,
-  REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL:
-    process.env.REACT_APP_PLAYWRIGHT_MAP_ROULETTE_SERVER_GRAPHQL_URL ||
-    process.env.REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL,
+  REACT_APP_USERNAME: process.env.REACT_APP_USERNAME,
+  REACT_APP_PASSWORD: process.env.REACT_APP_PASSWORD,
+  REACT_APP_URL: process.env.REACT_APP_URL,
 };
 
 // Validate required environment variables
@@ -53,7 +43,7 @@ export default defineConfig({
   globalSetup: "./playwright/global-setup.js",
 
   use: {
-    baseURL: process.env.REACT_APP_PLAYWRIGHT_URL || "http://localhost:3000",
+    baseURL: process.env.REACT_APP_URL || "http://localhost:3000",
     storageState: "./playwright/.auth/state.json",
     trace: "on-first-retry",
     navigationTimeout: 30000,
@@ -79,13 +69,19 @@ export default defineConfig({
         ...devices["Desktop Safari"],
       },
     },
+    {
+      name: "edge",
+      use: {
+        ...devices["Desktop Edge"],
+      },
+    },
   ],
 
   webServer: {
     command: "yarn run test:e2e:start",
-    url: process.env.REACT_APP_PLAYWRIGHT_URL || "http://localhost:3000",
+    url: process.env.REACT_APP_URL || "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
-    timeout: 30000, // Increase timeout for build process
+    timeout: 30000,
     env: requiredEnvVars,
   },
 });
