@@ -9,6 +9,9 @@ test.describe("Logged in navigation", () => {
       .locator("a")
       .filter({ hasText: "Sign in" })
       .click();
+    await page
+      .getByRole("link", { name: "My Points" })
+      .waitFor({ state: "visible", timeout: 5000 });
   });
 
   test("should navigate to Find Challenges", async ({ page }) => {
