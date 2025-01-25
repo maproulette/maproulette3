@@ -130,29 +130,30 @@ export class ActiveTaskControls extends Component {
   };
 
   /** Mark the task as complete with the given status */
-  complete = (taskStatus) => {
+  complete = async (taskStatus) => {
+    const taskBundle = await this.props.updateTaskBundle();
+
     if (this.state.tags) {
       this.props.saveTaskTags(this.props.task, this.state.tags);
     }
-    this.props.setCompletingTask(this.props.task.id);
 
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
     if (!_isUndefined(this.state.submitRevision)) {
-      this.props.updateTaskReviewStatus(
+      await this.props.updateTaskReviewStatus(
         this.props.task,
         this.state.submitRevision,
         this.state.comment,
         null,
         this.state.revisionLoadBy,
         this.props.history,
-        this.props.taskBundle,
+        taskBundle,
         this.state.requestedNextTask,
         taskStatus,
         null,
       );
     } else {
-      this.props.completeTask(
+      await this.props.completeTask(
         this.props.task,
         this.props.task.parent.id,
         taskStatus,
@@ -164,7 +165,7 @@ export class ActiveTaskControls extends Component {
         this.state.requestedNextTask,
         this.state.osmComment,
         this.props.tagEdits,
-        this.props.taskBundle,
+        taskBundle,
       );
       if (revisionSubmission) {
         if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
@@ -183,7 +184,9 @@ export class ActiveTaskControls extends Component {
     if (!this.props.rapidEditorState.hasUnsavedChanges || window.confirm(message)) {
       this.setState({
         confirmingTask: this.props.task,
-        osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
+        osmComment: `${
+          this.props.task.parent.checkinComment
+        }${constructChangesetUrl(this.props.task)}`,
         confirmingStatus: taskStatus,
         submitRevision,
       });
@@ -355,7 +358,9 @@ export class ActiveTaskControls extends Component {
     if (!this.props.user?.isLoggedIn) {
       return (
         <div
-          className={classNames("active-task-controls", { "is-minimized": this.props.isMinimized })}
+          className={classNames("active-task-controls", {
+            "is-minimized": this.props.isMinimized,
+          })}
         >
           <div className="has-centered-children">
             <SignInButton className="active-task-controls--signin" {...this.props} />

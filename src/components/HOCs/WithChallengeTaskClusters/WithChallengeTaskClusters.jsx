@@ -114,10 +114,6 @@ export const WithChallengeTaskClusters = function (
         _set(searchCriteria, "filters.archived", true);
       }
 
-      if (this.props.taskBundle && this.props.bundledOnly) {
-        _set(searchCriteria, "filters.bundleId", this.props.taskBundle.bundleId);
-      }
-
       if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
         return this.setState({ loading: false });
       }
@@ -155,7 +151,11 @@ export const WithChallengeTaskClusters = function (
                     }
                   });
               } else {
-                this.setState({ clusters: results, loading: false, taskCount: totalCount });
+                this.setState({
+                  clusters: results,
+                  loading: false,
+                  taskCount: totalCount,
+                });
               }
             }
           })
@@ -180,7 +180,12 @@ export const WithChallengeTaskClusters = function (
           })
           .catch((error) => {
             console.log(error);
-            this.setState({ clusters: {}, loading: false, taskCount: 0, showAsClusters: true });
+            this.setState({
+              clusters: {},
+              loading: false,
+              taskCount: 0,
+              showAsClusters: true,
+            });
           });
       }
     }
@@ -218,12 +223,6 @@ export const WithChallengeTaskClusters = function (
         )
       ) {
         this.debouncedFetchClusters(this.state.showAsClusters);
-      } else if (
-        this.props.taskBundle &&
-        (this.props.bundledOnly !== prevProps.bundledOnly ||
-          this.props.taskBundle !== prevProps.taskBundle)
-      ) {
-        this.debouncedFetchClusters(this.state.showAsClusters);
       }
     }
 
@@ -249,17 +248,13 @@ export const WithChallengeTaskClusters = function (
     onBulkTaskSelection = (taskIds) => {
       const tasks = this.clustersAsTasks().filter((task) => {
         const taskId = task.id || task.taskId;
-        const alreadyBundled = task.bundleId && this.props.taskBundle?.bundleId !== task.bundleId;
+        const alreadyBundled =
+          task.bundleId && this.props.initialBundle?.bundleId !== task.bundleId;
 
         return (
           taskIds.includes(taskId) &&
           !alreadyBundled &&
-          !(
-            this.props.task &&
-            ![0, 3, 6].includes(task.taskStatus || task.status) &&
-            !this.props.taskBundle?.taskIds?.includes(taskId) &&
-            !this.props.initialBundle?.taskIds?.includes(taskId)
-          ) &&
+          !(this.props.task && ![0, 3, 6].includes(task.taskStatus || task.status)) &&
           taskId
         );
       });

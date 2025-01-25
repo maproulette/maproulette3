@@ -79,7 +79,11 @@ export const TaskMapContent = (props) => {
   const [showTaskFeatures, setShowTaskFeatures] = useState(true);
   const [osmData, setOsmData] = useState(null);
   const [showOSMData, setShowOSMData] = useState(false);
-  const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true });
+  const [showOSMElements, setShowOSMElements] = useState({
+    nodes: true,
+    ways: true,
+    areas: true,
+  });
   const [osmDataLoading, setOsmDataLoading] = useState(false);
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null);
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null);
@@ -112,17 +116,15 @@ export const TaskMapContent = (props) => {
 
   useMapEvents({
     moveend: () => {
-      if (props.task.id !== props.completingTask) {
-        const bounds = map.getBounds();
-        const zoom = map.getZoom();
-        props.setTaskMapBounds(props.task.id, bounds, zoom, false);
-        if (props.setWorkspaceContext) {
-          props.setWorkspaceContext({
-            taskMapTask: props.task,
-            taskMapBounds: bounds,
-            taskMapZoom: zoom,
-          });
-        }
+      const bounds = map.getBounds();
+      const zoom = map.getZoom();
+      props.setTaskMapBounds(props.task.id, bounds, zoom, false);
+      if (props.setWorkspaceContext) {
+        props.setWorkspaceContext({
+          taskMapTask: props.task,
+          taskMapBounds: bounds,
+          taskMapZoom: zoom,
+        });
       }
     },
   });
@@ -625,7 +627,11 @@ export const TaskMapContent = (props) => {
   }
 
   return (
-    <div className={classNames("task-map task", { "full-screen-map": props.isMobile })}>
+    <div
+      className={classNames("task-map task", {
+        "full-screen-map": props.isMobile,
+      })}
+    >
       <LayerToggle
         {...props}
         showTaskFeatures={showTaskFeatures}
@@ -681,7 +687,11 @@ const TaskMap = (props) => {
   };
 
   return (
-    <div className={classNames("task-map task", { "full-screen-map": props.isMobile })}>
+    <div
+      className={classNames("task-map task", {
+        "full-screen-map": props.isMobile,
+      })}
+    >
       <MapContainer
         taskBundle={props.taskBundle}
         center={props.centerPoint}

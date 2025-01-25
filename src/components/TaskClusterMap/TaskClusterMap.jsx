@@ -62,13 +62,26 @@ export const TaskClusterMap = (props) => {
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
-  const prevProps = useRef({ showAsClusters: props.showAsClusters, loading: props.loading });
+  const prevProps = useRef({
+    showAsClusters: props.showAsClusters,
+    loading: props.loading,
+  });
   const timerHandle = useRef(null);
   const [displayTaskCount, setDisplayTaskCount] = useState(false);
 
   useEffect(() => {
     // Check condition for toggling showAsClusters
-    if (!props.showAsClusters && props.totalTaskCount > UNCLUSTER_THRESHOLD) {
+    if (
+      !props.showAsClusters &&
+      props.totalTaskCount > UNCLUSTER_THRESHOLD &&
+      !props.createTaskBundle
+    ) {
+      props.toggleShowAsClusters();
+    } else if (
+      props.showAsClusters &&
+      props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
+      props.createTaskBundle
+    ) {
       props.toggleShowAsClusters();
     }
 
@@ -91,7 +104,10 @@ export const TaskClusterMap = (props) => {
     }
 
     // Update previous props
-    prevProps.current = { showAsClusters: props.showAsClusters, loading: props.loading };
+    prevProps.current = {
+      showAsClusters: props.showAsClusters,
+      loading: props.loading,
+    };
 
     // Clean up timer on component unmount
     return () => {
@@ -276,7 +292,8 @@ export const TaskClusterMap = (props) => {
       {props.totalTaskCount &&
         props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
         !searchOpen &&
-        !props.loading && (
+        !props.loading &&
+        !props.createTaskBundle && (
           <label
             htmlFor="show-clusters-input"
             className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center"
