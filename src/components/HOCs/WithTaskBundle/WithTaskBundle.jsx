@@ -7,10 +7,10 @@ import {
   bundleTasks,
   deleteTaskBundle,
   fetchTaskBundle,
-  updateTaskBundle,
   refreshMultipleTaskLocks,
-  startMultipleTasks,
   releaseMultipleTasks,
+  startMultipleTasks,
+  updateTaskBundle,
 } from "../../../services/Task/Task";
 
 const LOCK_REFRESH_INTERVAL = 600000; // 10 minutes

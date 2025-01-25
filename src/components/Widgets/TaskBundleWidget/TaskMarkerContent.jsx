@@ -1,9 +1,9 @@
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
-import { messagesByStatus } from "../../../services/Task/TaskStatus/TaskStatus";
-import { messagesByPriority } from "../../../services/Task/TaskPriority/TaskPriority";
 import AsCooperativeWork from "../../../interactions/Task/AsCooperativeWork";
+import { messagesByPriority } from "../../../services/Task/TaskPriority/TaskPriority";
+import { messagesByStatus } from "../../../services/Task/TaskStatus/TaskStatus";
 import messages from "./Messages";
 
 /**
