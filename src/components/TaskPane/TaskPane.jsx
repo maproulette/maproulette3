@@ -10,7 +10,11 @@ import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
 import { isCompletionStatus } from "../../services/Task/TaskStatus/TaskStatus";
-import { WidgetDataTarget, generateWidgetId, widgetDescriptor } from "../../services/Widget/Widget";
+import {
+  WidgetDataTarget,
+  generateWidgetId,
+  widgetDescriptor,
+} from "../../services/Widget/Widget";
 import { constructChallengeLink } from "../../utils/constructChangesetUrl";
 import BasicDialog from "../BasicDialog/BasicDialog";
 import BusySpinner from "../BusySpinner/BusySpinner";
@@ -136,7 +140,7 @@ export class TaskPane extends Component {
     requestedNextTask,
     osmComment,
     tagEdits,
-    taskBundle,
+    taskBundle
   ) => {
     try {
       await this.props.completeTask(
@@ -152,7 +156,7 @@ export class TaskPane extends Component {
         osmComment,
         tagEdits,
         this.state.completionResponses,
-        taskBundle,
+        taskBundle
       );
       this.clearCompletingTask();
     } catch (error) {
@@ -241,7 +245,9 @@ export class TaskPane extends Component {
       `/admin/project/${this.props.task.parent.parent.id}/` +
       `challenge/${this.props.task.parent.id}/task/${this.props.task.id}/inspect`;
 
-    const isManageable = AsManager(this.props.user).canManageChallenge(this.props.task?.parent);
+    const isManageable = AsManager(this.props.user).canManageChallenge(
+      this.props.task?.parent
+    );
 
     const completionResponses =
       this.state.completionResponses ||
@@ -252,15 +258,19 @@ export class TaskPane extends Component {
     const challenge = this.props.task.parent;
     let favoriteControl = null;
     if (!challenge.isVirtual) {
-      const isFavorited = _findIndex(this.props.user.savedChallenges, { id: challenge.id }) !== -1;
+      const isFavorited =
+        _findIndex(this.props.user.savedChallenges, { id: challenge.id }) !==
+        -1;
       favoriteControl = (
         <li>
           <a
             className="mr-normal-case mr-flex"
             onClick={() =>
-              (isFavorited ? this.props.unsaveChallengeForUser : this.props.saveChallengeForUser)(
+              (isFavorited
+                ? this.props.unsaveChallengeForUser
+                : this.props.saveChallengeForUser)(
                 this.props.user.id,
-                challenge.id,
+                challenge.id
               )
             }
           >
@@ -280,12 +290,16 @@ export class TaskPane extends Component {
               "mr-bg-gradient-r-green-dark-blue mr-text-white mr-pb-8 mr-cards-inverse",
               {
                 "mr-pt-2": !this.props.inspectTask,
-              },
+              }
             )}
             workspaceTitle={
               <div className="mr-flex mr-items-baseline mr-mt-4">
                 <h2 className="mr-text-xl mr-my-0 mr-mr-2 mr-links-inverse">
-                  <ChallengeNameLink {...this.props} includeProject suppressShareLink />
+                  <ChallengeNameLink
+                    {...this.props}
+                    includeProject
+                    suppressShareLink
+                  />
                 </h2>
 
                 {this.props.tryingLock ? (
@@ -337,7 +351,8 @@ export class TaskPane extends Component {
                               _isFinite(this.props.virtualChallengeId)
                                 ? `/browse/virtual/${this.props.virtualChallengeId}`
                                 : `/browse/challenges/${
-                                    this.props.task?.parent?.id ?? this.props.task.parent
+                                    this.props.task?.parent?.id ??
+                                    this.props.task.parent
                                   }`
                             }
                             className="mr-button mr-button--xsmall mr-ml-3"
@@ -376,7 +391,9 @@ export class TaskPane extends Component {
                               onCopy={() => dropdown.closeDropdown()}
                             >
                               <a>
-                                <FormattedMessage {...messages.copyVirtualShareLinkLabel} />
+                                <FormattedMessage
+                                  {...messages.copyVirtualShareLinkLabel}
+                                />
                               </a>
                             </CopyToClipboard>
                           </li>
@@ -387,7 +404,9 @@ export class TaskPane extends Component {
                             onCopy={() => dropdown.closeDropdown()}
                           >
                             <a>
-                              <FormattedMessage {...messages.copyShareLinkLabel} />
+                              <FormattedMessage
+                                {...messages.copyShareLinkLabel}
+                              />
                             </a>
                           </CopyToClipboard>
                         </li>
@@ -408,7 +427,9 @@ export class TaskPane extends Component {
                             <li>
                               <button
                                 className="mr-transition mr-text-green-lighter hover:mr-text-current"
-                                onClick={() => this.props.history.push(taskInspectRoute)}
+                                onClick={() =>
+                                  this.props.history.push(taskInspectRoute)
+                                }
                               >
                                 <FormattedMessage {...messages.inspectLabel} />
                               </button>
@@ -422,7 +443,6 @@ export class TaskPane extends Component {
               </div>
             }
             completeTask={this.completeTask}
-            completingTask={this.props.completingTask}
             setCompletionResponse={this.setCompletionResponse}
             setNeedsResponses={this.setNeedsResponses}
             completionResponses={completionResponses}
@@ -479,7 +499,9 @@ export class TaskPane extends Component {
                   className="mr-button mr-button--white"
                   onClick={() => {
                     this.props.history.push(
-                      `/browse/challenges/${this.props.task?.parent?.id ?? this.props.task.parent}`,
+                      `/browse/challenges/${
+                        this.props.task?.parent?.id ?? this.props.task.parent
+                      }`
                     );
                   }}
                 >
@@ -504,6 +526,6 @@ export default WithChallengePreferences(
     WithLockedTask(WithCooperativeWork(WithTaskBundle(injectIntl(TaskPane)))),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
-    defaultWorkspaceSetup,
-  ),
+    defaultWorkspaceSetup
+  )
 );

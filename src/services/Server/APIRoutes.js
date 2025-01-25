@@ -105,9 +105,8 @@ const apiRoutes = (factory) => {
       fetchReviewClusters: factory.get("/taskCluster/review"),
       inCluster: factory.get("/tasksInCluster/:clusterId"),
       bundle: factory.post("/taskBundle"),
-      resetBundle: factory.post("/taskBundle/:bundleId/reset"),
+      updateBundle: factory.post("/taskBundle/:bundleId/update"),
       deleteBundle: factory.delete("/taskBundle/:bundleId"),
-      removeTaskFromBundle: factory.post("/taskBundle/:id/unbundle"),
       fetchBundle: factory.post("/taskBundle/:bundleId"),
       bundled: {
         updateStatus: factory.put("/taskBundle/:bundleId/:status"),
@@ -139,6 +138,11 @@ const apiRoutes = (factory) => {
       testCooperativeWork: factory.post("/change/test"),
       applyTagFix: factory.post("/task/:id/fix/apply"),
       updateCompletionResponses: factory.put("/task/:id/responses"),
+      lockBundle: factory.post("/task/bundle/lock"),
+      unlockBundle: factory.post("/task/bundle/unlock"),
+      refreshMultipleTaskLocks: factory.post("/task/bundle/refresh"),
+      startMultipleTasks: factory.post("/task/bundle/lock"),
+      releaseMultipleTasks: factory.post("/task/bundle/unlock"),
     },
     keywords: {
       find: factory.get("/keywords"),
@@ -155,7 +159,9 @@ const apiRoutes = (factory) => {
       findPreferred: factory.get("/users/find"),
       all: factory.get("/users"),
       taskComments: factory.get("/comments/user/:id", { noCache: true }),
-      challengeComments: factory.get("/challengeComments/user/:id", { noCache: true }),
+      challengeComments: factory.get("/challengeComments/user/:id", {
+        noCache: true,
+      }),
     },
     user: {
       whoami: factory.get("/user/whoami"),
