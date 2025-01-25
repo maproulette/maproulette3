@@ -47,14 +47,16 @@ export class ReviewTaskControls extends Component {
     if (this.state.tags) {
       this.props.saveTaskTags(this.props.task, this.state.tags);
     }
-    this.props.setCompletingTask(this.props.task.id);
 
     const history = _cloneDeep(this.props.history);
     _merge(history?.location?.state ?? {}, alternateCriteria);
 
     const requestedNextTask = !this.state.requestedNextTask
       ? null
-      : { id: this.state.requestedNextTask, parent: this.state.requestedNextTaskParent };
+      : {
+          id: this.state.requestedNextTask,
+          parent: this.state.requestedNextTaskParent,
+        };
 
     const errorTags = this.state.errorTags?.length ? this.state.errorTags : undefined;
 
@@ -100,7 +102,10 @@ export class ReviewTaskControls extends Component {
   };
 
   chooseNextTask = (challengeId, isVirtual, taskId) => {
-    this.setState({ requestedNextTask: taskId, requestedNextTaskParent: challengeId });
+    this.setState({
+      requestedNextTask: taskId,
+      requestedNextTaskParent: challengeId,
+    });
   };
 
   clearNextTask = () => {

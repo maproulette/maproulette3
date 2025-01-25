@@ -107,7 +107,9 @@ const onChallengeTaskMessage = function (dispatch, messageObject) {
   let task = messageObject.data.task;
   switch (messageObject.messageType) {
     case "task-claimed":
-      task = Object.assign({}, task, { lockedBy: messageObject?.data?.byUser?.userId });
+      task = Object.assign({}, task, {
+        lockedBy: messageObject?.data?.byUser?.userId,
+      });
       dispatchTaskUpdateNotification(dispatch, task);
       break;
     case "task-released":
@@ -139,7 +141,10 @@ const dispatchTaskUpdateNotification = function (dispatch, task) {
           ]),
           {
             parentId: task.parent,
-            point: { lng: task.location.coordinates[0], lat: task.location.coordinates[1] },
+            point: {
+              lng: task.location.coordinates[0],
+              lat: task.location.coordinates[1],
+            },
             title: task.name,
             type: 2,
           },
@@ -216,8 +221,11 @@ export const fetchTask = function (taskId, suppressReceive = false, includeMapil
         if (!suppressReceive) {
           dispatch(receiveTasks(normalizedResults.entities));
         }
-
         return normalizedResults;
+      })
+      .catch((error) => {
+        dispatch(addError(AppErrors.task.fetchFailure));
+        console.error("Error fetching task:", error);
       });
   };
 };
@@ -227,7 +235,10 @@ export const fetchTask = function (taskId, suppressReceive = false, includeMapil
  */
 export const fetchTaskTags = function (taskId) {
   return function (dispatch) {
-    return new Endpoint(api.task.tags, { schema: {}, variables: { id: taskId } })
+    return new Endpoint(api.task.tags, {
+      schema: {},
+      variables: { id: taskId },
+    })
       .execute()
       .then((normalizedTags) => {
         if (_isObject(normalizedTags.result)) {
@@ -301,6 +312,77 @@ export const refreshTaskLock = function (taskId) {
       schema: taskSchema(),
       variables: { id: taskId },
     }).execute();
+  };
+};
+
+/**
+ * Refreshes an active task lock owned by the current user
+ */
+export const refreshMultipleTaskLocks = function (taskIds) {
+  return function () {
+    return new Endpoint(api.task.refreshMultipleTaskLocks, {
+      schema: taskSchema(),
+      params: { taskIds: taskIds },
+    })
+      .execute()
+      .then((response) => {
+        const lockedTasks = response.locked || [];
+        const notLockedTasks = taskIds.filter((id) => !lockedTasks.includes(id));
+        return { lockedTasks, notLockedTasks };
+      })
+      .catch((error) => {
+        console.error("Error refreshing task locks:", error);
+        throw error;
+      });
+  };
+};
+
+/**
+ * Refreshes an active task lock owned by the current user
+ */
+export const releaseMultipleTasks = function (taskIds) {
+  return function (dispatch) {
+    return new Endpoint(api.task.releaseMultipleTasks, {
+      schema: [taskSchema()],
+      params: { taskIds: taskIds },
+    })
+      .execute()
+      .then((normalizedResults) => {
+        dispatch(receiveTasks(normalizedResults.entities));
+        return normalizedResults;
+      })
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn())
+            .then(() => dispatch(addError(AppErrors.user.unauthorized)))
+            .catch(() => null);
+        } else {
+          dispatch(addError(AppErrors.task.lockReleaseFailure));
+          console.log(error.response || error);
+        }
+      });
+  };
+};
+
+/**
+ * Refreshes an active task lock owned by the current user
+ */
+export const startMultipleTasks = function (taskIds) {
+  return function () {
+    return new Endpoint(api.task.startMultipleTasks, {
+      schema: { tasks: [taskSchema()], locked: Boolean },
+      params: { taskIds: taskIds },
+    })
+      .execute()
+      .then((normalizedResults) => {
+        const tasks = normalizedResults.result[0];
+        const locked = normalizedResults.result[1];
+        return { tasks, locked };
+      })
+      .catch((error) => {
+        console.error("Error locking tasks:", error);
+        throw error;
+      });
   };
 };
 
@@ -577,7 +659,10 @@ export const fetchTaskBundle = function (bundleId, lockTasks) {
  */
 export const fetchTaskComments = function (taskId) {
   return function (dispatch) {
-    return new Endpoint(api.task.comments, { schema: [commentSchema()], variables: { id: taskId } })
+    return new Endpoint(api.task.comments, {
+      schema: [commentSchema()],
+      variables: { id: taskId },
+    })
       .execute()
       .then((normalizedComments) => {
         dispatch(receiveComments(normalizedComments.entities));
@@ -606,7 +691,10 @@ export const fetchTaskComments = function (taskId) {
  */
 export const fetchTaskHistory = function (taskId) {
   return function (dispatch) {
-    return new Endpoint(api.task.history, { schema: {}, variables: { id: taskId } })
+    return new Endpoint(api.task.history, {
+      schema: {},
+      variables: { id: taskId },
+    })
       .execute()
       .then((normalizedHistory) => {
         if (_isObject(normalizedHistory.result)) {
@@ -1044,7 +1132,7 @@ export const deleteTask = function (taskId) {
   };
 };
 
-export const bundleTasks = function (primaryId, taskIds, bundleTypeMismatch, bundleName = "") {
+export const bundleTasks = function (primaryId, taskIds, bundleName = "") {
   return function (dispatch) {
     return new Endpoint(api.tasks.bundle, {
       json: { name: bundleName, primaryId, taskIds },
@@ -1059,12 +1147,6 @@ export const bundleTasks = function (primaryId, taskIds, bundleTypeMismatch, bun
             dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
-          if (bundleTypeMismatch === "cooperative") {
-            dispatch(addError(AppErrors.task.bundleCooperative));
-          } else if (bundleTypeMismatch === "notCooperative") {
-            dispatch(addError(AppErrors.task.bundleNotCooperative));
-          }
-
           const errorMessage = await error.response.text();
           if (errorMessage.includes("already assigned to bundle")) {
             const numberPattern = /\d+/;
@@ -1093,18 +1175,12 @@ export const bundleTasks = function (primaryId, taskIds, bundleTypeMismatch, bun
   };
 };
 
-export const resetTaskBundle = function (initialBundle) {
-  const params = {};
+export const updateTaskBundle = function (initialBundle, taskIds) {
+  const params = { taskIds: taskIds };
   const bundleId = initialBundle.bundleId;
-  let taskIdsArray = [];
-
-  if (initialBundle?.taskIds) {
-    taskIdsArray.push(...initialBundle.taskIds);
-    params.taskIds = taskIdsArray;
-  }
 
   return function (dispatch) {
-    return new Endpoint(api.tasks.resetBundle, {
+    return new Endpoint(api.tasks.updateBundle, {
       variables: { bundleId },
       params,
     })
@@ -1131,9 +1207,6 @@ export const deleteTaskBundle = function (bundleId) {
       variables: { bundleId },
     })
       .execute()
-      .then(() => {
-        return true;
-      })
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
@@ -1141,30 +1214,6 @@ export const deleteTaskBundle = function (bundleId) {
           );
         } else {
           dispatch(addError(AppErrors.task.bundleFailure));
-          console.log(error.response || error);
-        }
-        return false;
-      });
-  };
-};
-
-export const removeTaskFromBundle = function (initialBundleTaskIds, bundleId, taskIds) {
-  return function (dispatch) {
-    return new Endpoint(api.tasks.removeTaskFromBundle, {
-      variables: { id: bundleId },
-      params: { id: bundleId, taskIds: taskIds, preventTaskIdUnlocks: initialBundleTaskIds || [] },
-    })
-      .execute()
-      .then((results) => {
-        return results;
-      })
-      .catch((error) => {
-        if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized)),
-          );
-        } else {
-          dispatch(addError(AppErrors.task.removeTaskFromBundleFailure));
           console.log(error.response || error);
         }
       });

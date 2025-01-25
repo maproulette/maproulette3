@@ -85,7 +85,6 @@ export const PARAMS_MAP = {
   reviewedBy: "r",
   metaReviewedBy: "mr",
   completedBy: "m",
-  bundleId: "bid",
   challengeId: "cid",
   challenge: "cs",
   projectId: "pid",
@@ -292,9 +291,6 @@ export const generateSearchParametersString = (
 
   if (_isFinite(filters.difficulty)) {
     searchParameters[PARAMS_MAP.difficulty] = filters.difficulty;
-  }
-  if (filters.bundleId) {
-    searchParameters[PARAMS_MAP.bundleId] = filters.bundleId;
   }
 
   if (boundingBox) {
