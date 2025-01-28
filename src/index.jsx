@@ -57,6 +57,7 @@ const ConnectedIntl = WithUserLocale((props) => (
     key={props.locale}
     locale={props.locale}
     messages={props.messages}
+    onError={() => {}} // Suppress errors in the console
     textComponent="span"
   >
     {props.children}
