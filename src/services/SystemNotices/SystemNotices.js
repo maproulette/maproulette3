@@ -1,5 +1,4 @@
 import { isFuture, parseISO } from "date-fns";
-import _isArray from "lodash/isArray";
 import Endpoint from "../Server/Endpoint";
 import { defaultRoutes as api } from "../Server/Server";
 
@@ -35,7 +34,7 @@ export const fetchActiveSystemNotices = () => {
     .execute()
     .then((response) => {
       const systemNotices = response?.message?.notices;
-      if (_isArray(systemNotices)) {
+      if (Array.isArray(systemNotices)) {
         return systemNotices
           .map((notice) => {
             // add Date instance for expiration timestamp

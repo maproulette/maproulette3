@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import _isUndefined from "lodash/isUndefined";
 import _noop from "lodash/noop";
 import PropTypes from "prop-types";
 import { Component } from "react";
@@ -38,7 +37,6 @@ export class CardProject extends Component {
             </h3>
           </div>
         </header>
-
         {this.props.isExpanded && (
           <div className="mr-card-project__content">
             {/* Disable Link tell project leaderboard page is reimplemented */}
@@ -58,10 +56,10 @@ export class CardProject extends Component {
             </div>
 
             <ul className="mr-card-project__actions">
-              {!_isUndefined(this.props.startControl) && (
+              {this.props.startControl !== undefined && (
                 <li>{this.props.isLoading ? <BusySpinner inline /> : this.props.startControl}</li>
               )}
-              {!_isUndefined(this.props.manageControl) && <li>{this.props.manageControl}</li>}
+              {this.props.manageControl !== undefined && <li>{this.props.manageControl}</li>}
             </ul>
           </div>
         )}

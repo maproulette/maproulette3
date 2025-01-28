@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import PropTypes from "prop-types";
 import { Component, Fragment, createRef } from "react";
@@ -32,13 +31,13 @@ export class ChallengeCard extends Component {
     if (_isObject(this.props.challenge.parent)) {
       parent = this.props.challenge.parent;
     } else if (
-      _isFinite(this.props.challenge.parent) &&
+      Number.isFinite(this.props.challenge.parent) &&
       this.props.challenge.parent === this.props.project?.id
     ) {
       parent = this.props.project;
     }
 
-    const hasActions = _isFinite(this.props.challenge?.actions?.total);
+    const hasActions = Number.isFinite(this.props.challenge?.actions?.total);
 
     const ChallengeIcon = AsManageableChallenge(this.props.challenge).isComplete()
       ? CompleteIcon

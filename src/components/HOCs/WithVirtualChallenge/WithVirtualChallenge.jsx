@@ -1,5 +1,4 @@
 import _debounce from "lodash/debounce";
-import _isFinite from "lodash/isFinite";
 import _omit from "lodash/omit";
 import { Component } from "react";
 import { connect } from "react-redux";
@@ -21,7 +20,7 @@ const WithVirtualChallenge = (WrappedComponent) =>
 const WithLoadedVirtualChallenge = function (WrappedComponent) {
   return class extends Component {
     loadNeededVirtualChallenge = (props) => {
-      if (_isFinite(props.virtualChallengeId)) {
+      if (Number.isFinite(props.virtualChallengeId)) {
         props.loadVirtualChallenge(props.virtualChallengeId);
       }
     };
@@ -48,7 +47,7 @@ export const mapStateToProps = (state, ownProps) => {
   const mappedProps = { virtualChallenge: null };
 
   const virtualChallengeId = virtualChallengeIdFromRoute(ownProps, ownProps.virtualChallengeId);
-  if (_isFinite(virtualChallengeId)) {
+  if (Number.isFinite(virtualChallengeId)) {
     mappedProps.virtualChallengeId = virtualChallengeId;
     mappedProps.virtualChallenge = state.entities?.virtualChallenges?.[virtualChallengeId];
   }
@@ -84,7 +83,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 export const virtualChallengeIdFromRoute = (props, defaultId) => {
   const virtualChallengeId = parseInt(props.match?.params?.virtualChallengeId, 10);
 
-  return _isFinite(virtualChallengeId) ? virtualChallengeId : defaultId;
+  return Number.isFinite(virtualChallengeId) ? virtualChallengeId : defaultId;
 };
 
 export default WithVirtualChallenge;

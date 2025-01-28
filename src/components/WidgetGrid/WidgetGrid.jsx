@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import _isFunction from "lodash/isFunction";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
@@ -43,7 +42,7 @@ export class WidgetGrid extends Component {
 
       // Hide conditional widgets that shouldn't be shown
       if (conditionalWidgets.indexOf(widgetConfiguration.widgetKey) !== -1) {
-        if (_isFunction(WidgetComponent.hideWidget) && WidgetComponent.hideWidget(this.props)) {
+        if (WidgetComponent.hideWidget?.(this.props)) {
           widgetHidden = true;
           if (widgetLayout.h > 0) {
             widgetConfiguration.priorHeight = widgetLayout.h;

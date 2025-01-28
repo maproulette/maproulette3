@@ -1,9 +1,6 @@
 import { startOfDay } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _find from "lodash/find";
-import _isArray from "lodash/isArray";
-import _isFinite from "lodash/isFinite";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import { schema } from "normalizr";
 import { setupCustomCache } from "../../utils/setupCustomCache";
@@ -92,7 +89,7 @@ export const fetchManageableProjects = function (
   onlyOwned = false,
   onlyEnabled = false,
 ) {
-  const pageToFetch = _isFinite(page) ? page : 0;
+  const pageToFetch = Number.isFinite(page) ? page : 0;
 
   return function (dispatch) {
     return new Endpoint(api.projects.managed, {
@@ -126,7 +123,7 @@ export const fetchFeaturedProjects = function (
   page = null,
 ) {
   return function (dispatch) {
-    const pageToFetch = _isFinite(page) ? page : 0;
+    const pageToFetch = Number.isFinite(page) ? page : 0;
     const params = { onlyEnabled, limit, page: pageToFetch };
     const cachedFeaturedProjects = projectCache.get({}, params, FEATURED_PROJECTS_CACHE);
 
@@ -183,7 +180,7 @@ export const fetchProjectsById = function (projectIds) {
     return new Endpoint(api.project.multiple, {
       schema: [projectSchema()],
       params: {
-        projectIds: _isArray(projectIds) ? projectIds.join(",") : projectIds,
+        projectIds: Array.isArray(projectIds) ? projectIds.join(",") : projectIds,
       },
     })
       .execute()
@@ -205,10 +202,10 @@ export const fetchProjectsById = function (projectIds) {
  */
 export const searchProjects = function (searchCriteria, limit = RESULTS_PER_PAGE) {
   const query = searchCriteria?.searchQuery;
-  const onlyEnabled = _isUndefined(searchCriteria.onlyEnabled) ? true : searchCriteria.onlyEnabled;
+  const onlyEnabled = searchCriteria.onlyEnabled === undefined ? true : searchCriteria.onlyEnabled;
 
   // We are just making sure the pqge passed in is a) present and b) a number
-  const page = _isFinite(searchCriteria?.page) ? searchCriteria?.page : 0;
+  const page = Number.isFinite(searchCriteria?.page) ? searchCriteria?.page : 0;
 
   return function (dispatch) {
     return new Endpoint(api.projects.search, {
@@ -241,7 +238,7 @@ export const saveProject = function (projectData, user) {
   return function (dispatch) {
     // Setup the save endpoint to either edit or create the project depending
     // on whether it has an id.
-    const areCreating = !_isFinite(projectData.id);
+    const areCreating = !Number.isFinite(projectData.id);
 
     const saveEndpoint = new Endpoint(areCreating ? api.project.create : api.project.edit, {
       schema: projectSchema(),
@@ -446,7 +443,7 @@ export const addProjectManager = function (projectId, username, role) {
         // We want an exact username match
         const osmId = _find(matchingUsers, (match) => match.displayName === username)?.osmId;
 
-        if (_isFinite(osmId)) {
+        if (Number.isFinite(osmId)) {
           return setProjectManagerRole(projectId, osmId, true, role)(dispatch);
         } else {
           dispatch(addError(AppErrors.user.notFound));
@@ -522,15 +519,15 @@ const reduceProjectsFurther = function (mergedState, oldState, projectEntities) 
       return;
     }
 
-    if (_isArray(entity.activity)) {
+    if (Array.isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity;
     }
 
-    if (_isArray(entity.managers)) {
+    if (Array.isArray(entity.managers)) {
       mergedState[entity.id].managers = entity.managers;
     }
 
-    if (_isArray(entity.teamManagers)) {
+    if (Array.isArray(entity.teamManagers)) {
       mergedState[entity.id].teamManagers = entity.teamManagers;
     }
   });

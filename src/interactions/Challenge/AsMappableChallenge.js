@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import { basemapLayerSource } from "../../services/VisibleLayer/LayerSources";
 
 /**
@@ -10,7 +9,7 @@ export class AsMappableChallenge {
   }
 
   defaultLayerSource() {
-    if (!_isFinite(this.id)) {
+    if (!Number.isFinite(this.id)) {
       return null;
     }
 

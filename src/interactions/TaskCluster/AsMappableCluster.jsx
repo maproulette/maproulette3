@@ -4,8 +4,6 @@ import _cloneDeep from "lodash/cloneDeep";
 import _find from "lodash/find";
 import _fromPairs from "lodash/fromPairs";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
-import _isFunction from "lodash/isFunction";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
 import resolveConfig from "tailwindcss/resolveConfig";
@@ -97,9 +95,10 @@ export class AsMappableCluster {
     selectedClusters = null,
     bundleConflict = false,
   ) {
-    const count = _isFunction(this.rawData.getChildCount)
-      ? this.rawData.getChildCount()
-      : (this.options?.numberOfPoints ?? this.numberOfPoints);
+    const count =
+      typeof this.rawData.getChildCount === "function"
+        ? this.rawData.getChildCount()
+        : (this.options?.numberOfPoints ?? this.numberOfPoints);
     if (count > 1) {
       const clusterData = !_isEmpty(this.rawData.options) ? this.rawData.options : this.rawData;
       const isSelected =
@@ -159,7 +158,7 @@ export class AsMappableCluster {
         icon.options.style.fill = `rgba(${red}, ${green}, ${blue}, 0.4)`;
       }
 
-      if (_isFinite(highlightPrimaryTask) && highlightPrimaryTask === markerData.taskId) {
+      if (Number.isFinite(highlightPrimaryTask) && highlightPrimaryTask === markerData.taskId) {
         // Make marker for current task larger
         icon = _cloneDeep(primaryTaskStatusIcons[markerData.taskStatus]);
         icon.options.svgHeight = 40;

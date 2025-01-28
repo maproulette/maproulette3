@@ -4,9 +4,7 @@ import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
 import _each from "lodash/each";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
-import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -750,7 +748,7 @@ export class TaskReviewTable extends Component {
             />
           </div>
         </div>
-        {_isFinite(this.state.openComments) && (
+        {Number.isFinite(this.state.openComments) && (
           <TaskCommentsModal
             taskId={this.state.openComments}
             onClose={() => this.setState({ openComments: null })}
@@ -1326,7 +1324,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     exportable: (t) => props.intl.formatMessage(messagesByMetaReviewStatus[t.metaReviewStatus]),
     maxWidth: 180,
     Cell: (props) =>
-      _isUndefined(props.value) ? (
+      props.value === undefined ? (
         ""
       ) : (
         <StatusLabel

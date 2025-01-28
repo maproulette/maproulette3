@@ -1,4 +1,3 @@
-import _first from "lodash/first";
 import _isEmpty from "lodash/isEmpty";
 import _keys from "lodash/keys";
 import _without from "lodash/without";
@@ -57,7 +56,7 @@ export class FilterByKeyword extends Component {
     // manually entered ("other") keyword
     const otherKeyword =
       activeCategory === CHALLENGE_CATEGORY_OTHER
-        ? _first(this.props.searchFilters.keywords)
+        ? (this.props.searchFilters.keywords?.[0] ?? null)
         : null;
 
     const notFiltering = _isEmpty(this.props.searchFilters.keywords);

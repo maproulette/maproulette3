@@ -1,5 +1,4 @@
 import _find from "lodash/find";
-import _isFinite from "lodash/isFinite";
 import _isString from "lodash/isString";
 import { ChallengeBasemap } from "../../services/Challenge/ChallengeBasemap/ChallengeBasemap";
 
@@ -22,7 +21,7 @@ export class AsEditableUser {
    *
    */
   normalizeDefaultBasemap(layerSources, customBasemaps) {
-    if (_isFinite(Number(this.defaultBasemap))) {
+    if (Number.isFinite(Number(this.defaultBasemap))) {
       this.defaultBasemapId = "";
       this.defaultBasemap = Number(this.defaultBasemap);
     } else if (_isString(this.defaultBasemap) && this.defaultBasemap.length > 0) {

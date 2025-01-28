@@ -1,4 +1,3 @@
-import _head from "lodash/head";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import { Component } from "react";
@@ -114,7 +113,6 @@ export default class TaskPropertyStyleRules extends Component {
               </div>
             </div>
           </div>
-
           {buildStyleNameAndValues(rule, index)}
           <button
             onClick={() => this.props.addNewStyle(index)}
@@ -126,9 +124,7 @@ export default class TaskPropertyStyleRules extends Component {
           {formSearch}
           {!_isEmpty(this.props.styleRuleErrors[index]) && (
             <div className="mr-ml-4 mr-mb-4 mr-text-red-light">
-              {this.props.intl.formatMessage(
-                errorMessages[_head(this.props.styleRuleErrors[index])],
-              )}
+              {this.props.intl.formatMessage(errorMessages[this.props.styleRuleErrors[index][0]])}
             </div>
           )}
         </div>
