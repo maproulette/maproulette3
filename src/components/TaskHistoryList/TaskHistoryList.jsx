@@ -9,7 +9,7 @@ import _noop from "lodash/noop";
 import _reverse from "lodash/reverse";
 import _sortBy from "lodash/sortBy";
 import PropTypes from "prop-types";
-import { Component, Fragment } from "react";
+import { Component, Fragment, useState, useEffect } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import AsColoredHashable from "../../interactions/Hashable/AsColoredHashable";
 import { viewAtticOverpass } from "../../services/Overpass/Overpass";
@@ -29,6 +29,8 @@ import ErrorTagComment from "../ErrorTagComment/ErrorTagComment";
 import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
+import TaskCommentInput from "../TaskCommentInput/TaskCommentInput";
+import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 
 // Constants for userType
 const REVIEWER_TYPE = "reviewer";
@@ -381,17 +383,87 @@ const reviewEntry = (entry, props, index) => {
   );
 };
 
-const commentEntry = (entry, props, index) => {
+const CommentEntry = ({ entry, props, index }) => {
+  const [isRecent, setIsRecent] = useState(
+    entry.timestamp && (new Date() - new Date(entry.timestamp)) < (5 * 60 * 1000) // 5 minutes
+  );
+  const isOwnComment = entry.user?.id === props.user?.id;
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedComment, setEditedComment] = useState(entry.comment);
+
+  useEffect(() => {
+    const checkRecent = () => {
+      if (entry.timestamp) {
+        const isStillRecent = (new Date() - new Date(entry.timestamp)) < (5 * 60 * 1000);
+        setIsRecent(isStillRecent);
+      }
+    };
+
+    const timer = setInterval(checkRecent, 30000);
+
+    checkRecent();
+
+    return () => clearInterval(timer);
+  }, [entry.timestamp]);
+
+  const submitEditComment = () => {
+    props.editComment(entry.entryId, editedComment);
+    setIsEditing(false);
+  }
+
+  const updateComment = (comment) => setEditedComment(comment);
+
+  const cancelComment = () => {
+    setIsEditing(false);
+  }
+
+  const handleIsEditing = () => {
+    setIsEditing(true);
+    setEditedComment(entry.comment)
+  }
+
+  if (isEditing) {
+    return (
+      <li key={index} className="">
+        <TaskCommentInput
+          value={editedComment}
+          commentChanged={updateComment}
+          submitComment={submitEditComment}
+          taskId={props.task.id}
+          cancelComment={cancelComment}
+        />
+      </li>
+    );
+  }
+
   return (
-    <li key={index} className="mr-flex">
+    <li key={index} className="mr-flex mr-items-center">
       <SvgSymbol
         sym="comments-icon"
         viewBox="0 0 20 20"
-        className="mr-fill-current mr-flex-shrink-0 mr-w-4 mr-h-4 mr-mt-3 mr-mr-2"
+        className="mr-fill-current mr-flex-shrink-0 mr-w-4 mr-h-4 mr-mr-2"
       />
-      <MarkdownContent allowShortCodes markdown={entry.comment} />
+      {isRecent && isOwnComment && (
+        <button 
+          className="mr-text-green-lighter mr-text-xs mr-flex mr-items-center"
+          onClick={handleIsEditing}
+        >
+          <SvgSymbol
+            sym="edit-icon"
+            viewBox="0 0 20 20"
+            className="mr-fill-current mr-flex-shrink-0 mr-w-4 mr-h-4 mr-mr-2"
+          />
+        </button>
+      )}
+      <div className="mr-flex-grow">
+        <MarkdownContent allowShortCodes markdown={`${entry.comment}${entry.edited ? " *(edited)*" : ""}`} />
+      </div>
     </li>
   );
+};
+
+const commentEntry = (entry, props, index) => {
+  return <CommentEntry entry={entry} props={props} index={index} />;
 };
 
 const statusEntry = (entry, props) => {
@@ -454,4 +526,4 @@ TaskHistoryList.defaultProps = {
   taskHistory: [],
 };
 
-export default injectIntl(TaskHistoryList);
+export default WithCurrentUser(injectIntl(TaskHistoryList));

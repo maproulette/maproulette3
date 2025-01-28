@@ -129,6 +129,7 @@ const apiRoutes = (factory) => {
       updateMetaReviewStatus: factory.put("/task/:id/metareview/:status"),
       comments: factory.get("/task/:id/comments"),
       addComment: factory.post("/task/:id/comment"),
+      editComment: factory.put("/comment/:id"),
       create: factory.post("/task"),
       edit: factory.put("/task/:id"),
       history: factory.get("/task/:id/history"),
