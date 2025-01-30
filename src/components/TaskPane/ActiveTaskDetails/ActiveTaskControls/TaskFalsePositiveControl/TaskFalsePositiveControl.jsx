@@ -4,7 +4,6 @@ import { FormattedMessage } from "react-intl";
 import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
 import Button from "../../../../Button/Button";
 import messages from "./Messages";
-import classNames from "classnames";
 
 /**
  * TaskFalsePositiveControl displays a control for marking a task with a
