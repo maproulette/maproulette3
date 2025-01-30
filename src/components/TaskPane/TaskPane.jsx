@@ -123,7 +123,7 @@ export class TaskPane extends Component {
    * WithCurrentTask, but we intercept the call so that we can manage our
    * transition animation as the task prepares to complete.
    */
-  completeTask = (
+  completeTask = async (
     task,
     challengeId,
     taskStatus,
@@ -137,7 +137,7 @@ export class TaskPane extends Component {
     tagEdits,
     taskBundle,
   ) => {
-    this.props.completeTask(
+    await this.props.completeTask(
       task,
       challengeId,
       taskStatus,

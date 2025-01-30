@@ -28,52 +28,50 @@ export default class TaskCompletionStep extends Component {
 
   render() {
     return (
-      <div className="mr-items-center mr-justify-center">
-        {this.props.needsRevised && (
-          <div
-            className={`${this.props.task?.errorTags ? "mr-text-red" : "mr-text-white"} mr-text-md`}
-          >
-            <div>
-              <FormattedMessage {...messages.revisionNeeded} />{" "}
-              {this.props.task?.errorTags ? (
-                <>
-                  <FormattedMessage {...messages.errorTagsApplied} />:{" "}
-                  <ErrorTagComment errorTags={this.props.task.errorTags} />{" "}
-                </>
-              ) : (
-                ""
-              )}
-              <FormattedMessage {...messages.checkComments} />
-            </div>
-          </div>
-        )}
-
-        <UserEditorSelector {...this.props} className="mr-mb-2" />
-        <div className="breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto mr-items-center">
-          {this.props.needsRevised && (
-            <div className="mr-mt-2">
-              <TaskRevisedControl {...this.props} />
-            </div>
+      <div className="mr-my-4">
+        <div className="mr-mb-4">
+          {!this.props.editMode && (
+            <UserEditorSelector
+              {...this.props}
+              className="mr-mb-4"
+              onChange={this.props.pickEditor}
+            />
           )}
+
           <div className="mr-mt-2">
             {this.props.allowedProgressions.has(TaskStatus.fixed) && (
-              <TaskFixedControl {...this.props} />
+              <TaskFixedControl
+                {...this.props}
+                disabled={this.props.disabled || this.state.isCompleting || this.props.isCompleting}
+              />
             )}
 
             {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) && (
-              <TaskAlreadyFixedControl {...this.props} />
+              <TaskAlreadyFixedControl
+                {...this.props}
+                disabled={this.props.disabled || this.state.isCompleting || this.props.isCompleting}
+              />
             )}
 
             {this.props.allowedProgressions.has(TaskStatus.falsePositive) && (
-              <TaskFalsePositiveControl {...this.props} />
+              <TaskFalsePositiveControl
+                {...this.props}
+                disabled={this.props.disabled || this.state.isCompleting || this.props.isCompleting}
+              />
             )}
 
             {this.props.allowedProgressions.has(TaskStatus.tooHard) && (
-              <TaskTooHardControl {...this.props} />
+              <TaskTooHardControl
+                {...this.props}
+                disabled={this.props.disabled || this.state.isCompleting || this.props.isCompleting}
+              />
             )}
 
             {this.props.allowedProgressions.has(TaskStatus.skipped) && !this.props.needsRevised && (
-              <TaskSkipControl {...this.props} />
+              <TaskSkipControl
+                {...this.props}
+                disabled={this.props.disabled || this.state.isCompleting || this.props.isCompleting}
+              />
             )}
           </div>
         </div>
@@ -91,4 +89,6 @@ TaskCompletionStep.propTypes = {
   pickEditor: PropTypes.func.isRequired,
   /** Invoked if the user immediately completes the task (false positive) */
   complete: PropTypes.func.isRequired,
+  /** Whether the task completion step is disabled */
+  disabled: PropTypes.bool,
 };
