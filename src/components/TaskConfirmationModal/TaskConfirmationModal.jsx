@@ -29,6 +29,7 @@ import {
   messagesByStatus,
 } from "../../services/Task/TaskStatus/TaskStatus";
 import { needsReviewType } from "../../services/User/User";
+import BusySpinner from "../BusySpinner/BusySpinner";
 import ErrorTagDropdown from "../ErrorTagDropdown/ErrorTagDropdown";
 import External from "../External/External";
 import KeywordAutosuggestInput from "../KeywordAutosuggestInput/KeywordAutosuggestInput";
@@ -39,7 +40,6 @@ import TaskReviewNearbyList from "../TaskPane/TaskNearbyList/TaskReviewNearbyLis
 import AdjustFiltersOverlay from "./AdjustFiltersOverlay";
 import InstructionsOverlay from "./InstructionsOverlay";
 import messages from "./Messages";
-import BusySpinner from "../BusySpinner/BusySpinner";
 
 const shortcutGroup = "taskConfirmation";
 

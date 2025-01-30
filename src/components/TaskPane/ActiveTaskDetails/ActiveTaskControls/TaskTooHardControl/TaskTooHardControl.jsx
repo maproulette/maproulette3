@@ -1,9 +1,9 @@
+import classNames from "classnames";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
 import Button from "../../../../Button/Button";
 import messages from "./Messages";
-import classNames from "classnames";
 
 /**
  * TaskTooHardControl displays a control for marking a task with a too-hard
