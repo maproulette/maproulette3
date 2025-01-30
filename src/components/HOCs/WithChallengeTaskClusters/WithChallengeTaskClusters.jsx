@@ -79,7 +79,8 @@ export const WithChallengeTaskClusters = function (
       const showAsClusters =
         ((this.props.criteria?.zoom ?? 0) < MAX_ZOOM &&
           (wantToShowAsClusters || this.state.taskCount > UNCLUSTER_THRESHOLD)) ||
-        !this.props.criteria.boundingBox;
+        !this.props.criteria.boundingBox ||
+        (!this.props.createTaskBundle && this.state.taskCount > UNCLUSTER_THRESHOLD);
 
       const currentFetchId = _uniqueId();
 

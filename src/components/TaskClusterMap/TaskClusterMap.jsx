@@ -62,66 +62,6 @@ export const TaskClusterMap = (props) => {
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
-  const prevProps = useRef({
-    showAsClusters: props.showAsClusters,
-    loading: props.loading,
-  });
-  const timerHandle = useRef(null);
-  const [displayTaskCount, setDisplayTaskCount] = useState(false);
-
-  useEffect(() => {
-    // Check condition for toggling showAsClusters
-    if (
-      !props.showAsClusters &&
-      props.totalTaskCount > UNCLUSTER_THRESHOLD &&
-      !props.createTaskBundle
-    ) {
-      props.toggleShowAsClusters();
-    } else if (
-      props.showAsClusters &&
-      props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
-      props.createTaskBundle
-    ) {
-      props.toggleShowAsClusters();
-    }
-
-    // Handle loading state changes
-    if (!props.loading && prevProps.current.loading) {
-      // No longer loading. Kick off timer to hide task count message
-      if (timerHandle.current) {
-        clearTimeout(timerHandle.current);
-      }
-      timerHandle.current = setTimeout(() => {
-        setDisplayTaskCount(false);
-      }, 3000);
-      setDisplayTaskCount(true);
-    } else if (props.loading && displayTaskCount) {
-      setDisplayTaskCount(false);
-      if (timerHandle.current) {
-        clearTimeout(timerHandle.current);
-        timerHandle.current = null;
-      }
-    }
-
-    // Update previous props
-    prevProps.current = {
-      showAsClusters: props.showAsClusters,
-      loading: props.loading,
-    };
-
-    // Clean up timer on component unmount
-    return () => {
-      if (timerHandle.current) {
-        clearTimeout(timerHandle.current);
-      }
-    };
-  }, [
-    props.showAsClusters,
-    props.totalTaskCount,
-    props.toggleShowAsClusters,
-    props.loading,
-    displayTaskCount,
-  ]);
 
   let overlayLayers = buildLayerSources(
     props.visibleOverlays,
@@ -343,7 +283,7 @@ export const TaskClusterMap = (props) => {
             </div>
           </div>
         )}
-      {displayTaskCount && !props.mapZoomedOut && (
+      {props.displayTaskCount && !props.mapZoomedOut && (
         <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
           <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
             <div className="mr-py-2 mr-px-3 mr-text-center">
