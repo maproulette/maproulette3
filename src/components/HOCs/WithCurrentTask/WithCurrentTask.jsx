@@ -1,3 +1,4 @@
+import { waitFor } from "@testing-library/react";
 import _each from "lodash/each";
 import _isFinite from "lodash/isFinite";
 import _isPlainObject from "lodash/isPlainObject";
@@ -43,7 +44,6 @@ import { TaskLoadMethod } from "../../../services/Task/TaskLoadMethod/TaskLoadMe
 import { fetchTaskForReview } from "../../../services/Task/TaskReview/TaskReview";
 import { fetchUser } from "../../../services/User/User";
 import { renewVirtualChallenge } from "../../../services/VirtualChallenge/VirtualChallenge";
-import { waitFor } from "@testing-library/react";
 
 const CHALLENGE_STALE = 300000; // 5 minutes
 const PROJECT_STALE = 300000; // 5 minutes
