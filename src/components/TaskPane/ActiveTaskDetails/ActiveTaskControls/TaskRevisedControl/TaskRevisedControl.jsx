@@ -10,14 +10,11 @@ import messages from "./Messages";
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-const MoreOptionsButton = ({ toggleDropdownVisible, intl, disabled }) => (
+const MoreOptionsButton = ({ toggleDropdownVisible, intl }) => (
   <button
-    className={classNames("mr-dropdown__button mr-button mr-text-green-lighter mr-mr-2", {
-      "mr-opacity-50 mr-cursor-not-allowed": disabled,
-    })}
+    className="mr-dropdown__button mr-button mr-text-green-lighter mr-mr-2"
     style={{ minWidth: "20.5rem" }}
-    onClick={disabled ? null : toggleDropdownVisible}
-    disabled={disabled}
+    onClick={toggleDropdownVisible}
   >
     {intl.formatMessage(messages.revisedLabel)}&hellip;
   </button>
@@ -38,13 +35,10 @@ const ListMoreOptionsItems = ({ complete, task }) => (
   </ol>
 );
 
-const TaskRevisedControl = ({ complete, asLink, intl, task, disabled }) => {
+const TaskRevisedControl = ({ complete, asLink, intl, task }) => {
   if (asLink) {
     return (
-      <a
-        onClick={disabled ? null : () => complete(TaskReviewStatus.needed)}
-        className={disabled ? "mr-cursor-not-allowed mr-opacity-50" : ""}
-      >
+      <a onClick={() => complete(TaskReviewStatus.needed)}>
         <FormattedMessage {...messages.revisedLabel} />
       </a>
     );
@@ -60,7 +54,9 @@ const TaskRevisedControl = ({ complete, asLink, intl, task, disabled }) => {
           disabled={disabled}
         />
       )}
-      dropdownContent={() => <ListMoreOptionsItems complete={complete} task={task} />}
+      dropdownContent={() => (
+        <ListMoreOptionsItems complete={complete} task={task} />
+      )}
     />
   );
 };

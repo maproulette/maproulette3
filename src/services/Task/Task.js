@@ -398,8 +398,8 @@ export const completeTask = function (
   osmComment,
   completionResponses,
 ) {
-  return function (dispatch) {
-    return updateTaskStatus(
+  return async function (dispatch) {
+    return await updateTaskStatus(
       dispatch,
       taskId,
       taskStatus,
@@ -415,7 +415,7 @@ export const completeTask = function (
 /**
  * Mark all tasks in the given bundle as completed with the given status
  */
-export const completeTaskBundle = function (
+export const completeTaskBundle = async function (
   bundleId,
   primaryTaskId,
   taskStatus,
@@ -425,8 +425,8 @@ export const completeTaskBundle = function (
   osmComment,
   completionResponses,
 ) {
-  return function (dispatch) {
-    return updateBundledTasksStatus(
+  return async function (dispatch) {
+    return await updateBundledTasksStatus(
       dispatch,
       bundleId,
       primaryTaskId,

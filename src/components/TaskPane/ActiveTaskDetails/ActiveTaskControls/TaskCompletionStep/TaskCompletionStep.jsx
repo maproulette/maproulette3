@@ -33,7 +33,9 @@ export default class TaskCompletionStep extends Component {
       <div className="mr-items-center mr-justify-center">
         {this.props.needsRevised && (
           <div
-            className={`${this.props.task?.errorTags ? "mr-text-red" : "mr-text-white"} mr-text-md`}
+            className={`${
+              this.props.task?.errorTags ? "mr-text-red" : "mr-text-white"
+            } mr-text-md`}
           >
             <div>
               <FormattedMessage {...messages.revisionNeeded} />{" "}
@@ -58,7 +60,8 @@ export default class TaskCompletionStep extends Component {
           )}
 
           <div className="mr-mt-2">
-            {(this.props.allowedProgressions.has(TaskStatus.fixed) || this.props.isCompleting) && (
+            {(this.props.allowedProgressions.has(TaskStatus.fixed) ||
+              this.props.isCompleting) && (
               <TaskFixedControl {...this.props} disabled={disabled} />
             )}
 
@@ -79,7 +82,9 @@ export default class TaskCompletionStep extends Component {
 
             {((this.props.allowedProgressions.has(TaskStatus.skipped) &&
               !this.props.needsRevised) ||
-              this.props.isCompleting) && <TaskSkipControl {...this.props} disabled={disabled} />}
+              this.props.isCompleting) && (
+              <TaskSkipControl {...this.props} disabled={disabled} />
+            )}
           </div>
         </div>
       </div>

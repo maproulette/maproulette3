@@ -1,3 +1,4 @@
+import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -5,7 +6,12 @@ import React from "react";
 /**
  * Basic button component that includes proper styling for disabled state
  */
-export default function Button({ className, disabled = false, children, ...otherProps }) {
+export default function Button({
+  className,
+  disabled = false,
+  children,
+  ...otherProps
+}) {
   return (
     <button
       className={classNames("mr-button", className, {
