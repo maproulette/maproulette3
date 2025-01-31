@@ -109,9 +109,7 @@ describe("WebSocketClient", () => {
 
       // Advance time to trigger ping
       vi.advanceTimersByTime(45000);
-      expect(mockWebSocket.send).toHaveBeenCalledWith(
-        JSON.stringify({ messageType: "ping" })
-      );
+      expect(mockWebSocket.send).toHaveBeenCalledWith(JSON.stringify({ messageType: "ping" }));
     });
   });
 
@@ -130,7 +128,7 @@ describe("WebSocketClient", () => {
         JSON.stringify({
           messageType: "subscribe",
           data: { subscriptionName: "testType_123" },
-        })
+        }),
       );
     });
 
@@ -145,7 +143,7 @@ describe("WebSocketClient", () => {
         JSON.stringify({
           messageType: "unsubscribe",
           data: { subscriptionName: "testType_123" },
-        })
+        }),
       );
     });
 
