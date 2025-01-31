@@ -41,9 +41,7 @@ describe("WebSocketClient", () => {
       expect(global.WebSocket).toHaveBeenCalled();
 
       vi.advanceTimersByTime(45000);
-      expect(mockWebSocket.send).toHaveBeenCalledWith(
-        JSON.stringify({ messageType: "ping" })
-      );
+      expect(mockWebSocket.send).toHaveBeenCalledWith(JSON.stringify({ messageType: "ping" }));
     });
 
     it("handles reconnection", () => {
@@ -68,7 +66,7 @@ describe("WebSocketClient", () => {
         JSON.stringify({
           messageType: "subscribe",
           data: { subscriptionName },
-        })
+        }),
       );
 
       // Handle message
@@ -86,7 +84,7 @@ describe("WebSocketClient", () => {
         JSON.stringify({
           messageType: "unsubscribe",
           data: { subscriptionName },
-        })
+        }),
       );
     });
 
