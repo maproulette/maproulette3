@@ -7,6 +7,7 @@ export default class WebSocketClient {
     this.subscriptionHandlers = new Map();
     this.serverSubscriptions = new Map();
     this.queuedMessages = [];
+    this.isCleanedUp = false;
 
     this.connect();
   }
@@ -88,6 +89,10 @@ export default class WebSocketClient {
    * @private
    */
   open() {
+    if (this.isCleanedUp) {
+      return;
+    }
+
     this.reconnectionHandle = null;
     if (this.websocket) {
       this.websocket.close();
@@ -106,14 +111,23 @@ export default class WebSocketClient {
             send() {}
           };
 
-    this.websocket = new WebSocketClass(window.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL);
-    this.websocket.onopen = (e) => this.handleOpen(e);
-    this.websocket.onmessage = (e) => this.handleMessage(e);
-    this.websocket.onclose = (e) => this.handleClose(e);
+    // Use a default URL if window.env is not available (test environment)
+    const wsUrl =
+      (typeof window !== "undefined" && window.env?.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL) ||
+      "ws://localhost:9000/ws";
 
-    if (!this.pingHandle) {
-      // Ping the server every 45 seconds to avoid an idle timeout
-      this.pingHandle = setInterval(() => this.sendPing(), 45000);
+    try {
+      this.websocket = new WebSocketClass(wsUrl);
+      this.websocket.onopen = (e) => !this.isCleanedUp && this.handleOpen(e);
+      this.websocket.onmessage = (e) => !this.isCleanedUp && this.handleMessage(e);
+      this.websocket.onclose = (e) => !this.isCleanedUp && this.handleClose(e);
+
+      if (!this.pingHandle && !this.isCleanedUp) {
+        // Ping the server every 45 seconds to avoid an idle timeout
+        this.pingHandle = setInterval(() => this.sendPing(), 45000);
+      }
+    } catch (error) {
+      console.warn("WebSocket initialization failed:", error);
     }
   }
 
@@ -170,8 +184,17 @@ export default class WebSocketClient {
    * Cleanup websocket connection and intervals
    */
   cleanup() {
+    this.isCleanedUp = true;
+
     if (this.websocket) {
-      this.websocket.close();
+      try {
+        this.websocket.onopen = null;
+        this.websocket.onmessage = null;
+        this.websocket.onclose = null;
+        this.websocket.close();
+      } catch (error) {
+        console.warn("WebSocket cleanup error:", error);
+      }
       this.websocket = null;
     }
 
@@ -194,7 +217,11 @@ export default class WebSocketClient {
    *
    * @private
    */
-  handleClose() {
+  handleClose(e) {
+    if (this.isCleanedUp) {
+      return;
+    }
+
     // Clear ping interval on close
     if (this.pingHandle) {
       clearInterval(this.pingHandle);

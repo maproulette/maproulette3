@@ -107,6 +107,13 @@ export class TaskAnalysisTableInternal extends Component {
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100);
 
+  componentWillUnmount() {
+    // Cancel any pending debounced calls
+    if (this.debouncedUpdateTasks) {
+      this.debouncedUpdateTasks.cancel();
+    }
+  }
+
   updateTasks(tableState) {
     const sortCriteria = {
       sortBy: tableState.sorted[0].id,
@@ -128,7 +135,9 @@ export class TaskAnalysisTableInternal extends Component {
 
     // Use pick instead of cloneDeep, as cloning the entire tableState seems to cause an error
     // when any column with a "makeInvertable" header is present.
-    this.setState({ lastTableState: _pick(tableState, ["sorted", "filtered", "page"]) });
+    this.setState({
+      lastTableState: _pick(tableState, ["sorted", "filtered", "page"]),
+    });
   }
 
   configureColumns() {
@@ -228,7 +237,10 @@ export class TaskAnalysisTableInternal extends Component {
     }
 
     if (this.props.criteria?.filters) {
-      defaultFiltered = _map(this.props.criteria.filters, (value, key) => ({ id: key, value }));
+      defaultFiltered = _map(this.props.criteria.filters, (value, key) => ({
+        id: key,
+        value,
+      }));
     }
 
     const manager = AsManager(this.props.user);
@@ -725,7 +737,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
             <Fragment key={reviewer.username + "-" + index}>
-              <span style={{ color: AsColoredHashable(reviewer.username).hashColor }}>
+              <span
+                style={{
+                  color: AsColoredHashable(reviewer.username).hashColor,
+                }}
+              >
                 {reviewer.username}
               </span>
               {index + 1 !== row._original.additionalReviewers?.length ? ", " : ""}
