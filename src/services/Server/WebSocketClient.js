@@ -154,11 +154,40 @@ export default class WebSocketClient {
   }
 
   /**
+   * Cleanup websocket connection and intervals
+   */
+  cleanup() {
+    if (this.websocket) {
+      this.websocket.close();
+      this.websocket = null;
+    }
+
+    if (this.pingHandle) {
+      clearInterval(this.pingHandle);
+      this.pingHandle = null;
+    }
+
+    if (this.reconnectionHandle) {
+      clearTimeout(this.reconnectionHandle);
+      this.reconnectionHandle = null;
+    }
+
+    this.reconnectionAttempts = 0;
+    this.queuedMessages = [];
+  }
+
+  /**
    * Handles websocket close events, attempting to reconnect
    *
    * @private
    */
   handleClose() {
+    // Clear ping interval on close
+    if (this.pingHandle) {
+      clearInterval(this.pingHandle);
+      this.pingHandle = null;
+    }
+
     this.connect();
   }
 
