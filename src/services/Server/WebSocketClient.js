@@ -93,7 +93,20 @@ export default class WebSocketClient {
       this.websocket.close();
     }
 
-    this.websocket = new WebSocket(window.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL);
+    // Check if we're in a test environment and use a mock WebSocket if needed
+    const WebSocketClass =
+      typeof WebSocket !== "undefined"
+        ? WebSocket
+        : class MockWebSocket {
+            constructor() {
+              this.OPEN = 1;
+              this.readyState = this.OPEN;
+            }
+            close() {}
+            send() {}
+          };
+
+    this.websocket = new WebSocketClass(window.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL);
     this.websocket.onopen = (e) => this.handleOpen(e);
     this.websocket.onmessage = (e) => this.handleMessage(e);
     this.websocket.onclose = (e) => this.handleClose(e);
