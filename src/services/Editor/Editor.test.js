@@ -23,7 +23,7 @@ let northEastCorner = null;
 let centerPoint = null;
 let mapBounds = null;
 
-beforeEach(() => {
+beforeAll(() => {
   global.WebSocket = class MockWebSocket {
     constructor() {
       this.onopen = null;
@@ -35,7 +35,13 @@ beforeEach(() => {
     send() {}
     close() {}
   };
+});
 
+afterAll(() => {
+  delete global.WebSocket;
+});
+
+beforeEach(() => {
   dispatch = vi.fn();
 
   basicFeature = {
@@ -132,10 +138,6 @@ beforeEach(() => {
     },
     zoom: 17,
   };
-});
-
-afterEach(() => {
-  delete global.WebSocket;
 });
 
 describe("osmObjectParams", () => {
