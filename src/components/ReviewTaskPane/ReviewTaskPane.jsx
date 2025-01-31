@@ -92,7 +92,7 @@ export class ReviewTaskPane extends Component {
       );
     }
 
-    if (this.props.task.isBundlePrimary && !this.props.taskBundle) {
+    if (this.props.task.isBundlePrimary && !this.props.initialBundle) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
