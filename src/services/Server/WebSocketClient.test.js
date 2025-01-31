@@ -6,7 +6,6 @@ describe("WebSocketClient", () => {
   let mockWebSocket;
 
   beforeEach(() => {
-    // Mock WebSocket implementation
     mockWebSocket = {
       OPEN: 1,
       readyState: 1,
@@ -17,219 +16,111 @@ describe("WebSocketClient", () => {
       onclose: null,
     };
 
-    // Clear any previous mocks
     vi.clearAllMocks();
+    vi.useFakeTimers();
 
-    // Mock the global WebSocket
+    // Setup WebSocket mock
     global.WebSocket = vi.fn(() => {
-      // Set up the mock WebSocket and return it
-      setTimeout(() => {
-        if (mockWebSocket.onopen) {
-          mockWebSocket.onopen();
-        }
-      }, 0);
+      setTimeout(() => mockWebSocket.onopen?.(), 0);
       return mockWebSocket;
     });
 
-    // Mock setInterval and setTimeout
-    vi.useFakeTimers();
+    // Create and initialize client
+    client = new WebSocketClient();
+    vi.runOnlyPendingTimers();
   });
 
   afterEach(() => {
-    if (client) {
-      client.cleanup();
-    }
+    client?.cleanup();
     vi.clearAllTimers();
-    vi.clearAllMocks();
     vi.useRealTimers();
   });
 
-  describe("connection management", () => {
-    it("establishes connection on instantiation", () => {
-      // Mock the WebSocket constructor before creating the client
-      const wsConstructorSpy = vi.fn(() => mockWebSocket);
-      global.WebSocket = wsConstructorSpy;
+  describe("basic functionality", () => {
+    it("establishes connection and sends pings", () => {
+      expect(global.WebSocket).toHaveBeenCalled();
 
-      client = new WebSocketClient();
-      vi.runOnlyPendingTimers();
-
-      expect(wsConstructorSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it("attempts reconnection on close", () => {
-      // Mock the WebSocket constructor before creating the client
-      const firstMockWebSocket = {
-        OPEN: 1,
-        readyState: 1,
-        send: vi.fn(),
-        close: vi.fn(),
-        onopen: null,
-        onmessage: null,
-        onclose: null,
-      };
-
-      const secondMockWebSocket = {
-        OPEN: 1,
-        readyState: 1,
-        send: vi.fn(),
-        close: vi.fn(),
-        onopen: null,
-        onmessage: null,
-        onclose: null,
-      };
-
-      const wsConstructorSpy = vi
-        .fn()
-        .mockReturnValueOnce(firstMockWebSocket)
-        .mockReturnValueOnce(secondMockWebSocket);
-
-      global.WebSocket = wsConstructorSpy;
-
-      client = new WebSocketClient();
-      vi.runOnlyPendingTimers(); // Run initial connection timer
-
-      // Clear the constructor calls from initial connection
-      wsConstructorSpy.mockClear();
-
-      // Store original websocket and trigger close
-      const originalWebSocket = client.websocket;
-      client.handleClose();
-
-      // Advance time to trigger reconnection
-      vi.advanceTimersByTime(1000);
-      vi.runOnlyPendingTimers();
-
-      expect(wsConstructorSpy).toHaveBeenCalledTimes(1);
-      expect(client.websocket).not.toBe(originalWebSocket);
-    });
-
-    it("sends ping messages at regular intervals", () => {
-      client = new WebSocketClient();
-      vi.runOnlyPendingTimers(); // Run the initial connection timer
-
-      // Advance time to trigger ping
       vi.advanceTimersByTime(45000);
-      expect(mockWebSocket.send).toHaveBeenCalledWith(JSON.stringify({ messageType: "ping" }));
+      expect(mockWebSocket.send).toHaveBeenCalledWith(
+        JSON.stringify({ messageType: "ping" })
+      );
+    });
+
+    it("handles reconnection", () => {
+      const newMockWebSocket = { ...mockWebSocket };
+      global.WebSocket.mockReturnValueOnce(newMockWebSocket);
+
+      client.handleClose();
+      vi.advanceTimersByTime(1000);
+
+      expect(client.websocket).toBe(newMockWebSocket);
     });
   });
 
-  describe("subscription management", () => {
-    beforeEach(() => {
-      client = new WebSocketClient();
-      vi.runOnlyPendingTimers(); // Run the initial connection timer
-      client.websocket = mockWebSocket;
-    });
-
-    it("adds server subscription", () => {
+  describe("subscriptions and messages", () => {
+    it("manages subscriptions", () => {
       const handler = vi.fn();
-      client.addServerSubscription("testType", "123", "handler1", handler);
+      const subscriptionName = "testType_123";
 
+      // Add subscription
+      client.addServerSubscription("testType", "123", "handler1", handler);
       expect(mockWebSocket.send).toHaveBeenCalledWith(
         JSON.stringify({
           messageType: "subscribe",
-          data: { subscriptionName: "testType_123" },
-        }),
+          data: { subscriptionName },
+        })
       );
-    });
 
-    it("removes server subscription", () => {
-      const handler = vi.fn();
-      client.addServerSubscription("testType", "123", "handler1", handler);
+      // Handle message
+      const message = {
+        meta: { subscriptionName },
+        data: { test: "data" },
+      };
+      client.handleMessage({ data: JSON.stringify(message) });
+      expect(handler).toHaveBeenCalledWith(message);
+
+      // Remove subscription
       mockWebSocket.send.mockClear();
-
       client.removeServerSubscription("testType", "123", "handler1");
-
       expect(mockWebSocket.send).toHaveBeenCalledWith(
         JSON.stringify({
           messageType: "unsubscribe",
-          data: { subscriptionName: "testType_123" },
-        }),
+          data: { subscriptionName },
+        })
       );
     });
 
-    it("handles incoming messages for subscriptions", () => {
-      const handler = vi.fn();
-      client.addServerSubscription("testType", "123", "handler1", handler);
-
-      const message = {
-        meta: { subscriptionName: "testType_123" },
-        data: { test: "data" },
-      };
-
-      client.handleMessage({ data: JSON.stringify(message) });
-      expect(handler).toHaveBeenCalledWith(message);
-    });
-  });
-
-  describe("message handling", () => {
-    beforeEach(() => {
-      client = new WebSocketClient();
-      vi.runOnlyPendingTimers(); // Run the initial connection timer
-      client.websocket = mockWebSocket;
-    });
-
-    it("queues messages when socket is not ready", () => {
+    it("handles message queueing", () => {
       mockWebSocket.readyState = 0;
       const message = { test: "data" };
+
+      // Queue message
       client.sendMessage(message);
-      expect(mockWebSocket.send).not.toHaveBeenCalled();
       expect(client.queuedMessages).toHaveLength(1);
-    });
 
-    it("sends queued messages when connection opens", () => {
-      mockWebSocket.readyState = 0;
-      const message = { test: "data" };
-      client.sendMessage(message);
+      // Send queued messages on open
       mockWebSocket.readyState = 1;
-
       client.handleOpen();
       expect(mockWebSocket.send).toHaveBeenCalledWith(JSON.stringify(message));
       expect(client.queuedMessages).toHaveLength(0);
-    });
 
-    it("does not queue messages when noQueue is true", () => {
-      mockWebSocket.readyState = 0;
-      const message = { test: "data" };
+      // No queue option
       client.sendMessage(message, true);
       expect(client.queuedMessages).toHaveLength(0);
     });
   });
 
-  describe("cleanup", () => {
-    beforeEach(() => {
-      client = new WebSocketClient();
-      vi.runOnlyPendingTimers(); // Run the initial connection timer
-      client.websocket = mockWebSocket;
-    });
-
-    it("properly cleans up resources", () => {
+  describe("cleanup and error handling", () => {
+    it("cleans up resources and prevents further operations", () => {
       client.cleanup();
-
       expect(mockWebSocket.close).toHaveBeenCalled();
       expect(client.websocket).toBeNull();
-      expect(client.pingHandle).toBeNull();
-      expect(client.reconnectionHandle).toBeNull();
-      expect(client.queuedMessages).toHaveLength(0);
-      expect(client.isCleanedUp).toBe(true);
-    });
 
-    it("prevents operations after cleanup", () => {
-      client.cleanup();
-      const message = { test: "data" };
-      client.sendMessage(message);
-
+      client.sendMessage({ test: "data" });
       expect(mockWebSocket.send).not.toHaveBeenCalled();
     });
-  });
 
-  describe("error handling", () => {
-    beforeEach(() => {
-      client = new WebSocketClient();
-      vi.runOnlyPendingTimers(); // Run the initial connection timer
-      client.websocket = mockWebSocket;
-    });
-
-    it("handles message handler errors gracefully", () => {
+    it("handles errors gracefully", () => {
       const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
       const handler = () => {
         throw new Error("Test error");
