@@ -27,7 +27,11 @@ export class CooperativeWorkControls extends Component {
     return (
       <div className="mr-pb-2">
         {this.props.loadingOSMData && <BusySpinner />}
-        <UserEditorSelector {...this.props} className="mr-mb-4" />
+        <UserEditorSelector
+          {...this.props}
+          className="mr-mb-4"
+          disabled={this.props.disabled || this.props.isCompleting}
+        />
         <p className="mr-text-md mr-mb-2 mr-mt-2">
           <FormattedMessage {...messages.prompt} />
         </p>
@@ -36,6 +40,7 @@ export class CooperativeWorkControls extends Component {
             <TaskFixedControl
               {...this.props}
               fixedLabel={<FormattedMessage {...messages.confirmLabel} />}
+              disabled={this.props.disabled || this.props.isCompleting}
             />
           )}
 
@@ -43,18 +48,28 @@ export class CooperativeWorkControls extends Component {
             <TaskFalsePositiveControl
               {...this.props}
               falsePositiveLabel={<FormattedMessage {...messages.rejectLabel} />}
+              disabled={this.props.disabled || this.props.isCompleting}
             />
           )}
         </div>
         <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
           {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) && (
-            <TaskAlreadyFixedControl {...this.props} />
+            <TaskAlreadyFixedControl
+              {...this.props}
+              disabled={this.props.disabled || this.props.isCompleting}
+            />
           )}
           {this.props.allowedProgressions.has(TaskStatus.tooHard) && (
-            <TaskTooHardControl {...this.props} />
+            <TaskTooHardControl
+              {...this.props}
+              disabled={this.props.disabled || this.props.isCompleting}
+            />
           )}
           {this.props.allowedProgressions.has(TaskStatus.skipped) && (
-            <TaskSkipControl {...this.props} />
+            <TaskSkipControl
+              {...this.props}
+              disabled={this.props.disabled || this.props.isCompleting}
+            />
           )}
         </div>
       </div>

@@ -92,7 +92,7 @@ export class ReviewTaskPane extends Component {
       );
     }
 
-    if (this.props.task.isBundlePrimary && !this.props.taskBundle) {
+    if (this.props.task.isBundlePrimary && !this.props.initialBundle) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
@@ -167,7 +167,7 @@ export class ReviewTaskPane extends Component {
           />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
-          <MapPane completingTask={this.state.completingTask}>
+          <MapPane>
             <TaskMap
               isMobile
               task={this.props.task}

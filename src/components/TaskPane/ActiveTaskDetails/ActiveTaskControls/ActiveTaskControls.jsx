@@ -60,6 +60,7 @@ export class ActiveTaskControls extends Component {
     revisionLoadBy: TaskReviewLoadMethod.all,
     doneLoadByFromHistory: false,
     needsReview: this.props.challenge.reviewSetting === 1 ? true : undefined,
+    completingTask: false,
   };
 
   setComment = (comment) => this.setState({ comment });
@@ -130,49 +131,51 @@ export class ActiveTaskControls extends Component {
   };
 
   /** Mark the task as complete with the given status */
-  complete = (taskStatus) => {
-    if (this.state.tags) {
-      this.props.saveTaskTags(this.props.task, this.state.tags);
-    }
-    this.props.setCompletingTask(this.props.task.id);
+  complete = async (taskStatus) => {
+    this.setState({ completingTask: true });
+    try {
+      const taskBundle = await this.props.updateTaskBundle();
 
-    const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
-
-    if (!_isUndefined(this.state.submitRevision)) {
-      this.props.updateTaskReviewStatus(
-        this.props.task,
-        this.state.submitRevision,
-        this.state.comment,
-        null,
-        this.state.revisionLoadBy,
-        this.props.history,
-        this.props.taskBundle,
-        this.state.requestedNextTask,
-        taskStatus,
-        null,
-      );
-    } else {
-      this.props.completeTask(
-        this.props.task,
-        this.props.task.parent.id,
-        taskStatus,
-        this.state.comment,
-        null,
-        revisionSubmission ? null : this.props.taskLoadBy,
-        this.props.user.id,
-        revisionSubmission || this.state.needsReview,
-        this.state.requestedNextTask,
-        this.state.osmComment,
-        this.props.tagEdits,
-        this.props.taskBundle,
-      );
-      if (revisionSubmission) {
-        if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
-          this.props.history.push("/inbox");
-        } else {
-          this.props.history.push("/review");
-        }
+      if (this.state.tags) {
+        this.props.saveTaskTags(this.props.task, this.state.tags);
       }
+
+      const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
+
+      if (!_isUndefined(this.state.submitRevision)) {
+        await this.props.updateTaskReviewStatus(
+          this.props.task,
+          this.state.submitRevision,
+          this.state.comment,
+          null,
+          this.state.revisionLoadBy,
+          this.props.history,
+          taskBundle,
+          this.state.requestedNextTask,
+          taskStatus,
+          null,
+        );
+      } else {
+        await this.props.completeTask(
+          this.props.task,
+          this.props.task.parent.id,
+          taskStatus,
+          this.state.comment,
+          null,
+          revisionSubmission ? null : this.props.taskLoadBy,
+          this.props.user.id,
+          revisionSubmission || this.state.needsReview,
+          this.state.requestedNextTask,
+          this.state.osmComment,
+          this.props.tagEdits,
+          taskBundle,
+        );
+      }
+    } catch (error) {
+      this.setState({ completingTask: false });
+      throw error;
+    } finally {
+      this.setState({ completingTask: false });
     }
   };
 
@@ -183,7 +186,9 @@ export class ActiveTaskControls extends Component {
     if (!this.props.rapidEditorState.hasUnsavedChanges || window.confirm(message)) {
       this.setState({
         confirmingTask: this.props.task,
-        osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
+        osmComment: `${
+          this.props.task.parent.checkinComment
+        }${constructChangesetUrl(this.props.task)}`,
         confirmingStatus: taskStatus,
         submitRevision,
       });
@@ -355,7 +360,9 @@ export class ActiveTaskControls extends Component {
     if (!this.props.user?.isLoggedIn) {
       return (
         <div
-          className={classNames("active-task-controls", { "is-minimized": this.props.isMinimized })}
+          className={classNames("active-task-controls", {
+            "is-minimized": this.props.isMinimized,
+          })}
         >
           <div className="has-centered-children">
             <SignInButton className="active-task-controls--signin" {...this.props} />
@@ -431,7 +438,8 @@ export class ActiveTaskControls extends Component {
           setTags={this.setTags}
           onConfirm={this.confirmCompletion}
           saveTaskTags={this.props.saveTaskTags}
-          taskReadOnly={this.props.taskReadOnly}
+          taskReadOnly={this.props.taskReadOnly || this.state.completingTask}
+          disabled={this.state.completingTask}
         />
 
         {this.props.taskReadOnly ? (
@@ -457,6 +465,8 @@ export class ActiveTaskControls extends Component {
                   complete={this.initiateCompletion}
                   nextTask={this.next}
                   needsRevised={needsRevised}
+                  disabled={this.state.completingTask}
+                  isCompleting={this.state.completingTask}
                 />
               )}
 
@@ -471,6 +481,8 @@ export class ActiveTaskControls extends Component {
                   nextTask={this.next}
                   needsRevised={needsRevised}
                   editMode={editMode}
+                  disabled={this.state.completingTask}
+                  isCompleting={this.state.completingTask}
                 />
               )}
 
@@ -486,6 +498,8 @@ export class ActiveTaskControls extends Component {
                 chooseNextTask={this.chooseNextTask}
                 clearNextTask={this.clearNextTask}
                 requestedNextTask={this.state.requestedNextTask}
+                disabled={this.state.completingTask}
+                isCompleting={this.state.completingTask}
               />
             )}
 
@@ -512,6 +526,8 @@ export class ActiveTaskControls extends Component {
                 onCancel={this.resetConfirmation}
                 needsRevised={this.state.submitRevision}
                 fromInbox={fromInbox}
+                disabled={this.state.completingTask}
+                isCompleting={this.state.completingTask}
               />
             )}
           </Fragment>
