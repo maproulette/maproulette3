@@ -1064,7 +1064,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
             dispatch(receiveChallenges(normalizedResults.entities));
           }
 
-          return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`);
+          return normalizedResults?.entities?.challenges?.[normalizedResults.result];
         })
         .catch((serverError) => {
           if (isSecurityError(serverError)) {
@@ -1444,7 +1444,10 @@ const ADMIN_CHALLENGES_INITIAL_STATE = {
 export const adminChallengeEntities = function (state = ADMIN_CHALLENGES_INITIAL_STATE, action) {
   switch (action.type) {
     case SET_ADMIN_CHALLENGES:
-      return { data: action.payload, loadingCompleted: action.loadingCompleted };
+      return {
+        data: action.payload,
+        loadingCompleted: action.loadingCompleted,
+      };
     default:
       return state;
   }
