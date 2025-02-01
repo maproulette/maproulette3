@@ -54,7 +54,7 @@ export const jsSchema = (intl, user, challengeData) => {
  * > proper markup
  */
 export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
-  const sourceReadOnly = !AsEditableChallenge(challengeData).hasZeroTasks();
+  const sourceReadOnly = !AsEditableChallenge(challengeData);
   const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
   const toggleCollapsed =
     options.longForm && options.toggleCollapsed

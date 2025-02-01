@@ -1064,7 +1064,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
             dispatch(receiveChallenges(normalizedResults.entities));
           }
 
-          return normalizedResults?.entities?.challenges?.[normalizedResults.result];
+          return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`);
         })
         .catch((serverError) => {
           if (isSecurityError(serverError)) {

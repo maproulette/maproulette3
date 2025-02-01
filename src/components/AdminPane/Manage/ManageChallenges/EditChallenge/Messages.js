@@ -659,7 +659,7 @@ will not be able to make sense of it.
   disableOsmIdProperty: {
     id: "Admin.EditChallenge.form.disableOsmIdProperty",
     defaultMessage:
-      "This ID cannot be edited after a challenge has successfuly created tasks, this is to prevent task duplication. [Learn more](https://learn.maproulette.org/documentation/setting-external-task-identifiers/).",
+      "This ID cannot be edited after challenge creation, this is to prevent task duplication. [Learn more](https://learn.maproulette.org/documentation/setting-external-task-identifiers/).",
   },
 
   customTaskStyleLabel: {
