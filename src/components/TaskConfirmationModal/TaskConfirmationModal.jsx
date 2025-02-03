@@ -148,7 +148,7 @@ export class TaskConfirmationModal extends Component {
 
   getHeaderMessage = (applyingTagChanges) => {
     if (this.props.isUpdatingErrorTags) {
-      return <FormattedMessage {...messages.updateErrorTags} />
+      return <FormattedMessage {...messages.updateErrorTags} />;
     }
 
     if (this.props.inReview) {
@@ -191,8 +191,6 @@ export class TaskConfirmationModal extends Component {
       : !!this.props.task.parent?.limitReviewTags;
 
     const TasksNearby = reviewConfirmation ? TaskReviewNearbyList : TaskNearbyList;
-
-    console.log(this.props)
 
     return (
       <External>

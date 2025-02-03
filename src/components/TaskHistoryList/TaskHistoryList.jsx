@@ -385,7 +385,7 @@ const reviewEntry = (entry, props, index) => {
 
 const CommentEntry = ({ entry, props, index }) => {
   const [isRecent, setIsRecent] = useState(
-    entry.timestamp && (new Date() - new Date(entry.timestamp)) < (5 * 60 * 1000) // 5 minutes
+    entry.timestamp && new Date() - new Date(entry.timestamp) < 5 * 60 * 1000, // 5 minutes
   );
   const isOwnComment = entry.user?.id === props.user?.id;
   const [isEditing, setIsEditing] = useState(false);
@@ -394,7 +394,7 @@ const CommentEntry = ({ entry, props, index }) => {
   useEffect(() => {
     const checkRecent = () => {
       if (entry.timestamp) {
-        const isStillRecent = (new Date() - new Date(entry.timestamp)) < (5 * 60 * 1000);
+        const isStillRecent = new Date() - new Date(entry.timestamp) < 5 * 60 * 1000;
         setIsRecent(isStillRecent);
       }
     };
@@ -409,18 +409,18 @@ const CommentEntry = ({ entry, props, index }) => {
   const submitEditComment = () => {
     props.editComment(entry.entryId, editedComment);
     setIsEditing(false);
-  }
+  };
 
   const updateComment = (comment) => setEditedComment(comment);
 
   const cancelComment = () => {
     setIsEditing(false);
-  }
+  };
 
   const handleIsEditing = () => {
     setIsEditing(true);
-    setEditedComment(entry.comment)
-  }
+    setEditedComment(entry.comment);
+  };
 
   if (isEditing) {
     return (
@@ -444,7 +444,7 @@ const CommentEntry = ({ entry, props, index }) => {
         className="mr-fill-current mr-flex-shrink-0 mr-w-4 mr-h-4 mr-mr-2"
       />
       {isRecent && isOwnComment && (
-        <button 
+        <button
           className="mr-text-green-lighter mr-text-xs mr-flex mr-items-center"
           onClick={handleIsEditing}
         >
@@ -456,7 +456,10 @@ const CommentEntry = ({ entry, props, index }) => {
         </button>
       )}
       <div className="mr-flex-grow">
-        <MarkdownContent allowShortCodes markdown={`${entry.comment}${entry.edited ? " *(edited)*" : ""}`} />
+        <MarkdownContent
+          allowShortCodes
+          markdown={`${entry.comment}${entry.edited ? " *(edited)*" : ""}`}
+        />
       </div>
     </li>
   );

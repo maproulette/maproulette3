@@ -110,7 +110,7 @@ export class ReviewTaskControls extends Component {
   /** Save Review Status */
   updateReviewStatus = (reviewStatus, type) => {
     if (type === "UPDATING_ERROR_TAGS") {
-      this.setState({ errorTags: this.props.task.errorTags.split(',').map(Number) })
+      this.setState({ errorTags: this.props.task.errorTags.split(",").map(Number) });
     }
 
     this.setState({ reviewStatus, confirmingTask: true, type });
@@ -324,17 +324,17 @@ export class ReviewTaskControls extends Component {
               <FormattedMessage {...messages.approved} />
             </button>
           )}
-          {
-            (isRevision || isMetaReview) && errorTags ? (
-              <button
-                className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"
-                style={{ minWidth: "12rem" }}
-                onClick={() => this.updateReviewStatus(TaskReviewStatus.rejected, "UPDATING_ERROR_TAGS")}
-              >
-                <FormattedMessage {...messages.modify} />
-              </button>
-            ) : null
-          }
+          {(isRevision || isMetaReview) && errorTags ? (
+            <button
+              className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"
+              style={{ minWidth: "12rem" }}
+              onClick={() =>
+                this.updateReviewStatus(TaskReviewStatus.rejected, "UPDATING_ERROR_TAGS")
+              }
+            >
+              <FormattedMessage {...messages.modify} />
+            </button>
+          ) : null}
           <button
             className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2"
             style={{ minWidth: "10rem" }}
