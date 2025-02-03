@@ -9,7 +9,7 @@ import _noop from "lodash/noop";
 import _reverse from "lodash/reverse";
 import _sortBy from "lodash/sortBy";
 import PropTypes from "prop-types";
-import { Component, Fragment, useState, useEffect } from "react";
+import { Component, Fragment, useEffect, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import AsColoredHashable from "../../interactions/Hashable/AsColoredHashable";
 import { viewAtticOverpass } from "../../services/Overpass/Overpass";
@@ -26,11 +26,11 @@ import {
   messagesByStatus,
 } from "../../services/Task/TaskStatus/TaskStatus";
 import ErrorTagComment from "../ErrorTagComment/ErrorTagComment";
+import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import messages from "./Messages";
 import TaskCommentInput from "../TaskCommentInput/TaskCommentInput";
-import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
+import messages from "./Messages";
 
 // Constants for userType
 const REVIEWER_TYPE = "reviewer";

@@ -22,9 +22,9 @@ import {
 import {
   addTaskBundleComment,
   addTaskComment,
-  editTaskComment,
   completeTask,
   completeTaskBundle,
+  editTaskComment,
   fetchTask,
   fetchTaskBundle,
   fetchTaskComments,

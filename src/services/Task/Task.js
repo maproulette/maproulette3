@@ -506,7 +506,7 @@ export const editTaskComment = function (taskId, commentId, newComment) {
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.task.editCommentFailure));
