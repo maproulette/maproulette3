@@ -3,7 +3,7 @@ import _compact from "lodash/compact";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import {
   AttributionControl,
