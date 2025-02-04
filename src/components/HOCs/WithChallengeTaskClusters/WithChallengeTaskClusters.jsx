@@ -66,7 +66,7 @@ export const WithChallengeTaskClusters = function (
     };
 
     fetchUpdatedClusters(wantToShowAsClusters, overrideDisable = false) {
-      if (!!this.props.nearbyTasks?.loading) {
+      if (!!this.props.nearbyTasks?.loading && !this.props.taskBundle) {
         return;
       }
       const challengeId = this.props.challenge?.id ?? this.props.challengeId;

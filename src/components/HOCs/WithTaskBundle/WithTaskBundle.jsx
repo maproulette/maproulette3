@@ -52,7 +52,7 @@ export function WithTaskBundle(WrappedComponent) {
     async componentDidUpdate(prevProps) {
       const { task } = this.props;
 
-      if (task?.id !== prevProps?.task?.id) {
+      if (task?.id !== prevProps?.task?.id || this.props.taskReadOnly !== prevProps.taskReadOnly) {
         if (this.state.taskBundle) {
           this.unlockTasks(this.state.taskBundle.taskIds);
         }
@@ -129,15 +129,14 @@ export function WithTaskBundle(WrappedComponent) {
       const { task, taskReadOnly, workspace, user, name } = this.props;
       const workspaceName = workspace?.name || name;
       const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
-      const isReviewWorkspace = ["taskReview"].includes(workspaceName);
 
-      const completionStatus =
-        isCompletionWorkspace &&
-        ([2].includes(task?.reviewStatus) || [0, 3, 6].includes(task?.status));
+      const completionStatus = [2].includes(task?.reviewStatus) || [0, 3, 6].includes(task?.status);
       const enableMapperEdits = !task?.completedBy || user.id === task.completedBy;
-      const enableSuperUserEdits = user.isSuperUser && (completionStatus || isReviewWorkspace);
+      const enableSuperUserEdits = user.isSuperUser && completionStatus;
       const bundleEditsDisabled =
-        taskReadOnly || (!(enableMapperEdits && completionStatus) && !enableSuperUserEdits);
+        taskReadOnly ||
+        !isCompletionWorkspace ||
+        (!(enableMapperEdits && completionStatus) && !enableSuperUserEdits);
 
       return bundleEditsDisabled;
     };

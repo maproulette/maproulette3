@@ -103,10 +103,26 @@ export default class TaskBundleWidget extends Component {
    * widget map
    */
   initializeClusterFilters(prevProps = {}) {
-    // If the nearby tasks loaded, update bounds
-    if (
+    if (this.props.taskBundle) {
+      const bundleBounds = bbox({
+        type: "FeatureCollection",
+        features: _map(this.props.taskBundle.tasks, (task) => ({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
+          },
+        })),
+      });
+
+      const bounds = toLatLngBounds(bundleBounds);
+      const zoom = this.props.criteria?.zoom || 18;
+
+      this.props.updateTaskFilterBounds(bounds, zoom);
+    } else if (
       (this.props.nearbyTasks?.tasks?.length || 0) > 0 &&
-      !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)
+      !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks) &&
+      !this.props.taskBundle
     ) {
       this.setBoundsToNearbyTask();
     }
@@ -176,7 +192,9 @@ export default class TaskBundleWidget extends Component {
       featureCollection(taskList.map((t) => point([t.point.lng, t.point.lat]))),
     );
 
-    this.props.updateTaskFilterBounds(nearbyBounds, this.props.mapBounds?.zoom || 18);
+    // Preserve existing zoom or default to 18
+    const zoom = this.props.criteria?.zoom || 18;
+    this.props.updateTaskFilterBounds(toLatLngBounds(nearbyBounds), zoom);
   };
 
   saveFilters = () => {
@@ -199,73 +217,31 @@ export default class TaskBundleWidget extends Component {
     }
   };
 
-  componentDidMount() {
-    if (!this.props.taskBundle) {
+  async componentDidMount() {
+    this.initializeClusterFilters();
+    await this.props.resetSelectedTasks();
+    this.props.selectTasks(this.props.taskBundle?.tasks || [this.props.task]);
+    if (this.props.taskBundle || this.props.nearbyTasks) {
       this.initializeClusterFilters();
       this.initializeWebsocketSubscription();
-    }
-
-    if (
-      this.props.task &&
-      this.props.selectedTasks &&
-      !this.props.isTaskSelected(this.props.task.id)
-    ) {
-      this.props.selectTasks([this.props.task]);
-    }
-    if (this.props.taskBundle) {
-      this.props.selectTasks(this.props.taskBundle.tasks);
-      this.setBoundsToNearbyTask();
     }
   }
 
   async componentDidUpdate(prevProps) {
-    if (!this.props.taskBundle) {
+    if (
+      this.props.task?.id !== prevProps.task?.id ||
+      this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId
+    ) {
+      await this.props.resetSelectedTasks();
+      this.props.selectTasks(this.props.taskBundle?.tasks || [this.props.task]);
+    }
+
+    if (
+      this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId ||
+      this.props.nearbyTasks !== prevProps.nearbyTasks
+    ) {
       this.initializeClusterFilters(prevProps);
       this.initializeWebsocketSubscription(prevProps);
-    }
-
-    if (
-      this.props.selectedTaskCount(this.props.taskInfo?.totalCount) > 1 &&
-      this.state.shortcutActive === false
-    ) {
-      this.setState({ shortcutActive: true });
-      this.props.activateKeyboardShortcut(
-        shortcutGroup,
-        _pick(this.props.keyboardShortcutGroups.taskEditing, "completeTogether"),
-        this.handleKeyboardShortcuts,
-      );
-    } else if (
-      this.state.shortcutActive === true &&
-      this.props.selectedTaskCount(this.props.taskInfo?.totalCount) <= 1
-    ) {
-      this.setState({ shortcutActive: false });
-      this.props.deactivateKeyboardShortcut(
-        shortcutGroup,
-        "completeTogether",
-        this.handleKeyboardShortcuts,
-      );
-    }
-
-    if (
-      _isFinite(this.props.task?.id) &&
-      _isFinite(prevProps.task?.id) &&
-      this.props.task.id !== prevProps.task.id
-    ) {
-      this.props.resetSelectedTasks();
-      this.setBoundsToNearbyTask();
-    } else if (
-      this.props.task &&
-      this.props.selectedTasks &&
-      !this.props.isTaskSelected(this.props.task.id)
-    ) {
-      this.props.selectTasks([this.props.task]);
-    }
-    if (this.props.taskBundle && this.props.taskBundle !== prevProps.taskBundle) {
-      await this.props.resetSelectedTasks();
-      this.props.selectTasks(this.props.taskBundle.tasks);
-      if (!prevProps.taskBundle) {
-        this.setBoundsToNearbyTask();
-      }
     }
 
     // Handle error states from WithTaskBundle using Set operations
@@ -296,6 +272,28 @@ export default class TaskBundleWidget extends Component {
       [...newErrors].some((error) => !this.state.errors.has(error))
     ) {
       this.setState({ errors: newErrors });
+    }
+
+    if (
+      this.props.selectedTaskCount(this.props.taskInfo?.totalCount) > 1 &&
+      this.state.shortcutActive === false
+    ) {
+      this.setState({ shortcutActive: true });
+      this.props.activateKeyboardShortcut(
+        shortcutGroup,
+        _pick(this.props.keyboardShortcutGroups.taskEditing, "completeTogether"),
+        this.handleKeyboardShortcuts,
+      );
+    } else if (
+      this.state.shortcutActive === true &&
+      this.props.selectedTaskCount(this.props.taskInfo?.totalCount) <= 1
+    ) {
+      this.setState({ shortcutActive: false });
+      this.props.deactivateKeyboardShortcut(
+        shortcutGroup,
+        "completeTogether",
+        this.handleKeyboardShortcuts,
+      );
     }
   }
 
