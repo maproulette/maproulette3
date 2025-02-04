@@ -1,17 +1,13 @@
 import PropTypes from "prop-types";
 import { Component } from "react";
-import { FormattedMessage } from "react-intl";
 import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
 import UserEditorSelector from "../../../../UserEditorSelector/UserEditorSelector";
 import TaskAlreadyFixedControl from "../TaskAlreadyFixedControl/TaskAlreadyFixedControl";
 import TaskFalsePositiveControl from "../TaskFalsePositiveControl/TaskFalsePositiveControl";
 import TaskFixedControl from "../TaskFixedControl/TaskFixedControl";
-import TaskRevisedControl from "../TaskRevisedControl/TaskRevisedControl";
 import TaskSkipControl from "../TaskSkipControl/TaskSkipControl";
 import TaskTooHardControl from "../TaskTooHardControl/TaskTooHardControl";
 import "./TaskCompletionStep.scss";
-import ErrorTagComment from "../../../../ErrorTagComment/ErrorTagComment";
-import messages from "./Messages";
 
 /**
  * TaskCompletionStep renders and manages controls and keyboard shortcuts for
