@@ -32,6 +32,11 @@ export const jsSchema = (intl, user, project) => {
         title: intl.formatMessage(messages.descriptionLabel),
         type: "string",
       },
+      requireConfirmation: {
+        title: intl.formatMessage(messages.requireConfirmationLabel),
+        type: "boolean",
+        default: false,
+      },
     },
     required: ["displayName"],
   };
@@ -88,7 +93,18 @@ export const uiSchema = (intl) => {
       "ui:widget": "textarea",
       "ui:help": intl.formatMessage(messages.descriptionDescription),
     },
-    "ui:order": ["featured", "displayName", "enabled", "description", "isVirtual"],
+    requireConfirmation: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.requireConfirmationDescription),
+    },
+    "ui:order": [
+      "featured",
+      "displayName",
+      "enabled",
+      "description",
+      "requireConfirmation",
+      "isVirtual",
+    ],
   };
 
   return uiSchemaFields;
