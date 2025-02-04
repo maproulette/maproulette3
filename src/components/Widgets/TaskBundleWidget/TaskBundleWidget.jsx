@@ -57,7 +57,7 @@ const descriptor = {
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("taskBundling")),
   true,
-  true,
+  false,
   false,
   false,
 );
@@ -67,62 +67,33 @@ const shortcutGroup = "taskEditing";
 export default class TaskBundleWidget extends Component {
   state = {
     shortcutActive: false,
-  };
-
-  bundleTasks = () => {
-    if ((this.props.taskBundle?.tasks?.length ?? 0) > 0 || this.props.bundleEditsDisabled) {
-      return;
-    }
-
-    const selectedArray = Array.from(this.props.selectedTasks.selected.values());
-    let bundleTypeMismatch = "";
-
-    if (selectedArray.length > 1) {
-      if (AsCooperativeWork(this.props.task).isCooperative()) {
-        selectedArray.forEach((item) => {
-          if (!AsCooperativeWork(item).isCooperative()) {
-            bundleTypeMismatch = "cooperative";
-          }
-        });
-      } else {
-        selectedArray.forEach((item) => {
-          if (AsCooperativeWork(item).isCooperative()) {
-            bundleTypeMismatch = "notCooperative";
-          }
-        });
-      }
-    }
-
-    // Because there's no way to select all tasks (TriState checkbox is
-    // suppressed on the TaskAnalysisTables), we only need to worry about
-    // explicitly selected tasks
-    this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()], bundleTypeMismatch);
+    bundleButtonDisabled: false,
+    errors: new Set(),
   };
 
   handleKeyboardShortcuts = (event) => {
-    // Ignore if shortcut group is not active
-    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+    const { activeKeyboardShortcuts, textInputActive, taskReadOnly, keyboardShortcutGroups } =
+      this.props;
+
+    // Return early if any of the following conditions are met:
+    // - Shortcut group is not active
+    // - Typing in inputs
+    // - Modifier keys are pressed
+    // - Task is in read-only mode
+    if (
+      _isEmpty(activeKeyboardShortcuts[shortcutGroup]) ||
+      textInputActive(event) ||
+      event.metaKey ||
+      event.altKey ||
+      event.ctrlKey ||
+      taskReadOnly
+    ) {
       return;
     }
 
-    if (this.props.textInputActive(event)) {
-      // ignore typing in inputs
-      return;
-    }
-
-    // Ignore if modifier keys were pressed
-    if (event.metaKey || event.altKey || event.ctrlKey) {
-      return;
-    }
-
-    //Ignore if in read only mode
-    if (this.props.taskReadOnly) {
-      return;
-    }
-
-    const shortcuts = this.props.keyboardShortcutGroups.taskEditing;
+    const shortcuts = keyboardShortcutGroups.taskEditing;
     if (event.key === shortcuts.completeTogether.key) {
-      this.bundleTasks();
+      this.createBundle();
     }
   };
 
@@ -132,10 +103,26 @@ export default class TaskBundleWidget extends Component {
    * widget map
    */
   initializeClusterFilters(prevProps = {}) {
-    // If the nearby tasks loaded, update bounds
-    if (
-      (this.props.nearbyTasks?.tasks?.length ?? 0) > 0 &&
-      !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)
+    if (this.props.taskBundle) {
+      const bundleBounds = bbox({
+        type: "FeatureCollection",
+        features: _map(this.props.taskBundle.tasks, (task) => ({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
+          },
+        })),
+      });
+
+      const bounds = toLatLngBounds(bundleBounds);
+      const zoom = this.props.criteria?.zoom || 18;
+
+      this.props.updateTaskFilterBounds(bounds, zoom);
+    } else if (
+      (this.props.nearbyTasks?.tasks?.length || 0) > 0 &&
+      !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks) &&
+      !this.props.taskBundle
     ) {
       this.setBoundsToNearbyTask();
     }
@@ -148,18 +135,42 @@ export default class TaskBundleWidget extends Component {
     }
   }
 
-  unbundleTasks = async () => {
-    this.props.resetToInitialTaskBundle(this.props.taskBundle.bundleId);
+  createBundle = () => {
+    if (
+      this.props.taskBundle ||
+      this.props.bundleEditsDisabled ||
+      this.props.selectedTasks.selected.size > 50
+    ) {
+      return;
+    }
+
+    const selectedArray = Array.from(this.props.selectedTasks.selected.values());
+    const isCooperative = AsCooperativeWork(this.props.task).isCooperative();
+
+    selectedArray.forEach((item) => {
+      if (AsCooperativeWork(item).isCooperative() !== isCooperative) {
+        throw new Error("Bundle type mismatch, not all tasks are of the same type");
+      }
+    });
+
+    this.setState({ bundleButtonDisabled: true });
+    this.props.createTaskBundle([...this.props.selectedTasks.selected.keys()]);
+
+    setTimeout(() => {
+      this.setState({ bundleButtonDisabled: false });
+    }, 5000);
   };
 
   unbundleTask = (task) => {
     const taskId = task.id ?? task.taskId;
-    this.props.removeTaskFromBundle(this.props.taskBundle.bundleId, taskId);
+    this.props.removeTaskFromBundle(taskId);
     this.props.toggleTaskSelection(task);
   };
 
-  updateBounds = (challengeId, bounds, zoom) => {
-    this.props.updateTaskFilterBounds(bounds, zoom);
+  bundleTask = (task) => {
+    const taskId = task.id ?? task.taskId;
+    this.props.addTaskToBundle(taskId);
+    this.props.toggleTaskSelection(task);
   };
 
   setBoundsToNearbyTask = () => {
@@ -181,13 +192,17 @@ export default class TaskBundleWidget extends Component {
       featureCollection(taskList.map((t) => point([t.point.lng, t.point.lat]))),
     );
 
-    this.updateBounds(this.props.challengeId, nearbyBounds, this.props.mapBounds?.zoom ?? 18);
+    // Preserve existing zoom or default to 18
+    const zoom = this.props.criteria?.zoom || 18;
+    this.props.updateTaskFilterBounds(toLatLngBounds(nearbyBounds), zoom);
   };
 
   saveFilters = () => {
     if (!this.props.criteria) return;
     const searchURL = buildSearchURL(this.props.criteria);
-    this.props.updateUserAppSetting(this.props.user.id, { taskBundleFilters: searchURL });
+    this.props.updateUserAppSetting(this.props.user.id, {
+      taskBundleFilters: searchURL,
+    });
   };
 
   revertFilters = () => {
@@ -196,37 +211,71 @@ export default class TaskBundleWidget extends Component {
     }
 
     if (this.props.updateUserAppSetting) {
-      this.props.updateUserAppSetting(this.props.user.id, { taskBundleFilters: "" });
+      this.props.updateUserAppSetting(this.props.user.id, {
+        taskBundleFilters: "",
+      });
     }
   };
 
-  componentDidMount() {
-    if (!this.props.taskBundle) {
+  async componentDidMount() {
+    this.initializeClusterFilters();
+    await this.props.resetSelectedTasks();
+    this.props.selectTasks(this.props.taskBundle?.tasks || [this.props.task]);
+    if (this.props.taskBundle || this.props.nearbyTasks) {
       this.initializeClusterFilters();
       this.initializeWebsocketSubscription();
-    }
-
-    if (
-      this.props.task &&
-      this.props.selectedTasks &&
-      !this.props.isTaskSelected(this.props.task.id)
-    ) {
-      this.props.selectTasks([this.props.task]);
-    }
-    if (this.props.taskBundle) {
-      this.props.selectTasks(this.props.taskBundle.tasks);
-      this.setBoundsToNearbyTask();
     }
   }
 
   async componentDidUpdate(prevProps) {
-    if (!this.props.taskBundle) {
+    if (
+      this.props.task?.id !== prevProps.task?.id ||
+      this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId
+    ) {
+      await this.props.resetSelectedTasks();
+      this.props.selectTasks(this.props.taskBundle?.tasks || [this.props.task]);
+    }
+
+    if (
+      this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId ||
+      this.props.nearbyTasks !== prevProps.nearbyTasks
+    ) {
       this.initializeClusterFilters(prevProps);
       this.initializeWebsocketSubscription(prevProps);
     }
 
+    // Handle error states from WithTaskBundle using Set operations
+    const newErrors = new Set();
+
+    // Add errors if they're new
+    if (this.props.failedLocks) {
+      newErrors.add("lockError");
+    }
+    if (this.props.failedUnlocks) {
+      newErrors.add("unlockError");
+    }
+    if (this.props.failedRefreshTasks) {
+      newErrors.add("refreshError");
+    }
+    if (this.props.bundleTypeMismatchError) {
+      newErrors.add("bundleTypeError");
+    }
+    if (this.props.fetchBundleError) {
+      newErrors.add("fetchBundleError");
+    }
+    if (this.props.updateTaskBundleError) {
+      newErrors.add("updateTaskBundleError");
+    }
+    // Only update state if errors have changed
     if (
-      this.props.selectedTaskCount(this.props.taskInfo.totalCount) > 1 &&
+      newErrors.size !== this.state.errors.size ||
+      [...newErrors].some((error) => !this.state.errors.has(error))
+    ) {
+      this.setState({ errors: newErrors });
+    }
+
+    if (
+      this.props.selectedTaskCount(this.props.taskInfo?.totalCount) > 1 &&
       this.state.shortcutActive === false
     ) {
       this.setState({ shortcutActive: true });
@@ -237,7 +286,7 @@ export default class TaskBundleWidget extends Component {
       );
     } else if (
       this.state.shortcutActive === true &&
-      this.props.selectedTaskCount(this.props.taskInfo.totalCount) <= 1
+      this.props.selectedTaskCount(this.props.taskInfo?.totalCount) <= 1
     ) {
       this.setState({ shortcutActive: false });
       this.props.deactivateKeyboardShortcut(
@@ -245,28 +294,6 @@ export default class TaskBundleWidget extends Component {
         "completeTogether",
         this.handleKeyboardShortcuts,
       );
-    }
-
-    if (
-      _isFinite(this.props.task?.id) &&
-      _isFinite(prevProps?.task?.id) &&
-      this.props.task.id !== prevProps.task.id
-    ) {
-      this.props.resetSelectedTasks();
-      this.setBoundsToNearbyTask();
-    } else if (
-      this.props.task &&
-      this.props.selectedTasks &&
-      !this.props.isTaskSelected(this.props.task.id)
-    ) {
-      this.props.selectTasks([this.props.task]);
-    }
-    if (this.props.taskBundle && this.props.taskBundle !== prevProps.taskBundle) {
-      await this.props.resetSelectedTasks();
-      this.props.selectTasks(this.props.taskBundle.tasks);
-      if (!prevProps.taskBundle) {
-        this.setBoundsToNearbyTask();
-      }
     }
   }
 
@@ -297,11 +324,11 @@ export default class TaskBundleWidget extends Component {
           {...this.props}
           saveFilters={this.saveFilters}
           revertFilters={this.revertFilters}
-          updateBounds={this.updateBounds}
-          bundleTasks={this.bundleTasks}
+          createBundle={this.createBundle}
           unbundleTask={this.unbundleTask}
-          unbundleTasks={this.unbundleTasks}
+          bundleTask={this.bundleTask}
           loading={this.props.loading}
+          errors={this.state.errors}
         />
       </QuickWidget>
     );
@@ -383,40 +410,54 @@ const ActiveBundle = (props) => {
   );
 
   return (
-    <div className="mr-h-full mr-rounded">
+    <div className="mr-pb-2 mr-h-full mr-rounded">
       <div
         className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80"
-        style={{ maxHeight: `${props.widgetLayout.w * 80}px` }}
+        style={{ maxHeight: `${props.widgetLayout?.w * 80}px` }}
       >
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
           <MapPane>{map}</MapPane>
         )}
-        <div className="mr-flex mr-justify-between mr-content-center mr-my-4">
-          <button
-            className="mr-button mr-button--green-lighter mr-button--small"
-            onClick={() => props.setBundledOnly(!props.bundledOnly)}
-          >
-            {props.bundledOnly ? (
-              <FormattedMessage {...messages.displayAllTasksLabel} />
-            ) : (
-              <FormattedMessage {...messages.displayBundledTasksLabel} />
-            )}
-          </button>
-          <h3 className="mr-text-lg mr-text-center mr-text-pink-light">
-            <FormattedMessage
-              {...messages.simultaneousTasks}
-              values={{ taskCount: props.taskBundle.taskIds.length }}
-            />
-          </h3>
+      </div>
+      {props.errors.size > 0 && (
+        <div className="mr-text-red mr-mt-4 mr-text-center mr-space-y-2">
+          {[...props.errors].map((errorType) => (
+            <div key={errorType}>
+              <FormattedMessage {...messages[errorType]} />
+              {errorType === "lockError" && props.failedLocks && (
+                <span className="mr-ml-2">({props.failedLocks.join(", ")})</span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4">
+        <FormattedMessage
+          {...messages.simultaneousTasks}
+          values={{ taskCount: props.taskBundle?.taskIds.length }}
+        />
+      </h3>
+      <div className="mr-flex mr-justify-between mr-content-center mr-my-4">
+        <button
+          className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
+          onClick={() => props.setBundledOnly(!props.bundledOnly)}
+        >
+          {props.bundledOnly ? (
+            <FormattedMessage {...messages.displayAllTasksLabel} />
+          ) : (
+            <FormattedMessage {...messages.displayBundledTasksLabel} />
+          )}
+        </button>
+        {props.initialBundle && (
           <button
             disabled={
               props.bundleEditsDisabled ||
               (props.initialBundle &&
                 props.initialBundle?.taskIds?.length === props.taskBundle?.taskIds?.length)
             }
-            className="mr-button mr-button--green-lighter mr-button--small"
+            className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
             style={{
               cursor:
                 props.bundleEditsDisabled ||
@@ -431,74 +472,81 @@ const ActiveBundle = (props) => {
                   ? 0.3
                   : 1,
             }}
-            onClick={() => props.unbundleTasks()}
+            onClick={() => props.resetTaskBundle()}
           >
-            {!props.initialBundle ? (
-              <FormattedMessage {...messages.unbundleTasksLabel} />
-            ) : (
-              <FormattedMessage {...messages.resetBundleLabel} />
-            )}
+            <FormattedMessage {...messages.resetBundleLabel} />
           </button>
+        )}
+        <button
+          disabled={props.bundleEditsDisabled}
+          className="mr-button mr-button--green-lighter mr-button--small"
+          style={{
+            cursor: props.bundleEditsDisabled ? "default" : "pointer",
+            opacity: props.bundleEditsDisabled ? 0.3 : 1,
+          }}
+          onClick={() => props.clearActiveTaskBundle()}
+        >
+          <FormattedMessage {...messages.unbundleTasksLabel} />
+        </button>
+      </div>
+      <div
+        className={
+          props.widgetLayout && props.widgetLayout?.w === 4
+            ? "mr-my-4 mr-px-4 mr-space-y-3"
+            : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
+        }
+      >
+        <div className="mr-flex mr-items-center">
+          <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
+            <FormattedMessage {...messages.filterListLabel} />
+          </p>
+          <ul className="md:mr-flex">
+            <li className="md:mr-mr-8">
+              <TaskStatusFilter {...props} />
+            </li>
+            <li className="md:mr-mr-8">
+              <TaskPriorityFilter {...props} />
+            </li>
+            <li>
+              <TaskPropertyFilter {...props} />
+            </li>
+          </ul>
         </div>
         <div
-          className={
+          className={`mr-flex mr-space-x-3 mr-items-center ${
             props.widgetLayout && props.widgetLayout?.w === 4
-              ? "mr-my-4 mr-px-4 mr-space-y-3"
-              : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
-          }
+              ? "mr-justify-between"
+              : "mr-justify-end"
+          }`}
         >
-          <div className="mr-flex mr-items-center">
-            <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
-              <FormattedMessage {...messages.filterListLabel} />
-            </p>
-            <ul className="md:mr-flex">
-              <li className="md:mr-mr-8">
-                <TaskStatusFilter {...props} />
-              </li>
-              <li className="md:mr-mr-8">
-                <TaskPriorityFilter {...props} />
-              </li>
-              <li>
-                <TaskPropertyFilter {...props} />
-              </li>
-            </ul>
-          </div>
-          <div
-            className={`mr-flex mr-space-x-3 mr-items-center ${
-              props.widgetLayout && props.widgetLayout?.w === 4
-                ? "mr-justify-between"
-                : "mr-justify-end"
-            }`}
-          >
-            {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
-            <Dropdown
-              className="mr-flex mr-items-center"
-              dropdownButton={(dropdown) => (
-                <button
-                  onClick={dropdown.toggleDropdownVisible}
-                  className="mr-flex mr-items-center mr-text-green-lighter"
-                >
-                  <SvgSymbol
-                    sym="filter-icon"
-                    viewBox="0 0 20 20"
-                    className="mr-fill-current mr-w-5 mr-h-5"
-                  />
-                </button>
-              )}
-              dropdownContent={(dropdown) => (
-                <div className="mr-flex mr-flex-col mr-space-y-2">
-                  <SaveFiltersControl
-                    saveFilters={props.saveFilters}
-                    closeDropdown={dropdown.closeDropdown}
-                  />
-                  <RevertFiltersControl revertFilters={props.revertFilters} />
-                </div>
-              )}
-            />
-          </div>
+          {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
+          <Dropdown
+            className="mr-flex mr-items-center"
+            dropdownButton={(dropdown) => (
+              <button
+                onClick={dropdown.toggleDropdownVisible}
+                className="mr-flex mr-items-center mr-text-green-lighter"
+              >
+                <SvgSymbol
+                  sym="filter-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-5 mr-h-5"
+                />
+              </button>
+            )}
+            dropdownContent={(dropdown) => (
+              <div className="mr-flex mr-flex-col mr-space-y-2">
+                <SaveFiltersControl
+                  saveFilters={props.saveFilters}
+                  closeDropdown={dropdown.closeDropdown}
+                />
+                <RevertFiltersControl revertFilters={props.revertFilters} />
+              </div>
+            )}
+          />
         </div>
-        <div className={"mr-px-4"}>{table}</div>
       </div>
+      <div className={"mr-px-4"}>{table}</div>
     </div>
   );
 };
@@ -518,10 +566,17 @@ const BuildBundle = (props) => {
     props.selectedTaskCount(totalTaskCount) > 1 &&
     !props.bundleEditsDisabled ? (
       <button
-        className="mr-button mr-button--green-lighter mr-button--small"
-        onClick={props.bundleTasks}
+        className={`mr-button mr-button--green-lighter mr-button--small ${
+          props.selectedTasks.selected.size > 50 ? "mr-opacity-50 mr-cursor-not-allowed" : ""
+        }`}
+        disabled={props.selectedTasks.selected.size > 50}
+        onClick={props.createBundle}
       >
-        <FormattedMessage {...messages.bundleTasksLabel} />
+        {props.selectedTasks.selected.size > 50 ? (
+          <FormattedMessage {...messages.tooManyTasks} />
+        ) : (
+          <FormattedMessage {...messages.bundleTasksLabel} />
+        )}
       </button>
     ) : null;
 
@@ -545,7 +600,7 @@ const BuildBundle = (props) => {
       highlightPrimaryTask={props.task.id}
       taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
       boundingBox={props.criteria?.boundingBox}
-      initialBounds={toLatLngBounds(props.criteria?.boundingBox ?? [])}
+      initialBounds={toLatLngBounds(props.criteria?.boundingBox || [])}
       onBulkTaskSelection={props.selectTasks}
       onBulkTaskDeselection={props.deselectTasks}
       fitbBoundsControl
@@ -557,7 +612,7 @@ const BuildBundle = (props) => {
     <div className="mr-pb-2 mr-h-full mr-rounded">
       <div
         className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80"
-        style={{ maxHeight: `${props.widgetLayout.w * 80}px` }}
+        style={{ maxHeight: `${props.widgetLayout?.w * 80}px` }}
       >
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
@@ -565,7 +620,33 @@ const BuildBundle = (props) => {
           <MapPane showLasso>{map}</MapPane>
         )}
       </div>
-
+      {props.errors.size > 0 && (
+        <div className="mr-text-red mr-mt-4 mr-text-center mr-space-y-2">
+          {[...props.errors].map((errorType) => (
+            <div key={errorType}>
+              <FormattedMessage {...messages[errorType]} />
+              {errorType === "lockError" && props.failedLocks && (
+                <span className="mr-ml-2">({props.failedLocks.join(", ")})</span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      <div className="mr-flex mr-justify-end mr-mt-2">
+        {props.initialBundle && (
+          <button
+            className={`mr-button mr-button--red mr-button--small mr-mt-2 mr-float-right ${
+              props.bundleEditsDisabled
+                ? "mr-text-grey-light mr-cursor-default"
+                : "mr-text-green-lighter"
+            }`}
+            onClick={props.resetTaskBundle}
+            disabled={props.bundleEditsDisabled}
+          >
+            <FormattedMessage {...messages.resetBundleLabel} />
+          </button>
+        )}
+      </div>
       <div
         className={
           props.widgetLayout && props.widgetLayout?.w === 4
@@ -591,7 +672,11 @@ const BuildBundle = (props) => {
         </div>
 
         <div
-          className={`mr-flex mr-space-x-3 mr-items-center ${props.widgetLayout && props.widgetLayout?.w === 4 ? "mr-justify-between" : "mr-justify-end"}`}
+          className={`mr-flex mr-space-x-3 mr-items-center ${
+            props.widgetLayout && props.widgetLayout?.w === 4
+              ? "mr-justify-between"
+              : "mr-justify-end"
+          }`}
         >
           {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
           <Dropdown

@@ -83,6 +83,7 @@ export default class TaskNextControl extends Component {
                 }
               }}
               title={this.props.intl.formatMessage(messages.nextTooltip)}
+              disabled={this.props.disabled || this.props.isCompleting}
             >
               <FormattedMessage {...messages.nextLabel} />
             </button>
@@ -100,6 +101,7 @@ export default class TaskNextControl extends Component {
                   checked={this.props.loadBy === TaskLoadMethod.random}
                   onClick={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
                   onChange={_noop}
+                  disabled={this.props.disabled || this.props.isCompleting}
                 />
                 <label className="mr-ml-1 mr-mr-4" htmlFor="randomnessPreference-random">
                   <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
@@ -113,6 +115,7 @@ export default class TaskNextControl extends Component {
                   checked={this.props.loadBy === TaskLoadMethod.proximity}
                   onClick={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
                   onChange={_noop}
+                  disabled={this.props.disabled || this.props.isCompleting}
                 />
                 <label className="mr-ml-1" htmlFor="randomnessPreference-proximity">
                   <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
