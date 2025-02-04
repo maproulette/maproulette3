@@ -24,6 +24,7 @@ import {
   addTaskComment,
   completeTask,
   completeTaskBundle,
+  editTaskComment,
   fetchTask,
   fetchTaskBundle,
   fetchTaskComments,
@@ -281,6 +282,13 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      */
     postTaskComment: (task, comment) => {
       return dispatch(addTaskComment(task.id, comment));
+    },
+
+    /**
+     * Edit a comment on the task
+     */
+    editTaskComment: (task, commentId, newComment) => {
+      return dispatch(editTaskComment(task.id, commentId, newComment));
     },
 
     /**

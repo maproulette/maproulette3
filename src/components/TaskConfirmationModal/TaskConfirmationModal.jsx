@@ -146,6 +146,32 @@ export class TaskConfirmationModal extends Component {
     return _merge({}, this.props.history?.location?.state ?? {}, this.state.criteria);
   };
 
+  getHeaderMessage = (applyingTagChanges) => {
+    if (this.props.isUpdatingErrorTags) {
+      return <FormattedMessage {...messages.updateErrorTags} />;
+    }
+
+    if (this.props.inReview) {
+      if (this.props.asMetaReview) {
+        return <FormattedMessage {...messages.inMetaReviewHeader} />;
+      }
+      return <FormattedMessage {...messages.inReviewHeader} />;
+    }
+
+    if (_isUndefined(this.props.needsRevised)) {
+      if (applyingTagChanges) {
+        return <FormattedMessage {...messages.reviewChangesHeader} />;
+      }
+      return <FormattedMessage {...messages.header} />;
+    }
+
+    if (this.props.needsRevised === TaskReviewStatus.needed) {
+      return <FormattedMessage {...messages.submitRevisionHeader} />;
+    }
+
+    return <FormattedMessage {...messages.disputeRevisionHeader} />;
+  };
+
   render() {
     const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised);
     const loadingNearby =
@@ -188,25 +214,9 @@ export class TaskConfirmationModal extends Component {
               <div className={classNames("mr-flex mr-flex-col mr-items-center")}>
                 <div className="mr-w-full">
                   <h2 className="mr-text-grey-light-more mr-text-4xl mr-mt-4">
-                    {this.props.inReview ? (
-                      this.props.asMetaReview ? (
-                        <FormattedMessage {...messages.inMetaReviewHeader} />
-                      ) : (
-                        <FormattedMessage {...messages.inReviewHeader} />
-                      )
-                    ) : _isUndefined(this.props.needsRevised) ? (
-                      applyingTagChanges ? (
-                        <FormattedMessage {...messages.reviewChangesHeader} />
-                      ) : (
-                        <FormattedMessage {...messages.header} />
-                      )
-                    ) : this.props.needsRevised === TaskReviewStatus.needed ? (
-                      <FormattedMessage {...messages.submitRevisionHeader} />
-                    ) : (
-                      <FormattedMessage {...messages.disputeRevisionHeader} />
-                    )}
+                    {this.getHeaderMessage(applyingTagChanges)}
                   </h2>
-                  {this.props.inReview && (
+                  {this.props.inReview && !this.props.isUpdatingErrorTags && (
                     <div
                       className={classNames(
                         "mr-uppercase mr-tracking-wide",

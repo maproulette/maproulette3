@@ -490,6 +490,33 @@ export const addTaskComment = function (taskId, comment, taskStatus) {
 };
 
 /**
+ * Edit an existing comment on the given task
+ */
+export const editTaskComment = function (taskId, commentId, newComment) {
+  return function (dispatch) {
+    return new Endpoint(api.task.editComment, {
+      variables: { id: commentId },
+      json: { comment: newComment },
+    })
+      .execute()
+      .then(() => {
+        fetchTaskComments(taskId)(dispatch);
+        fetchTask(taskId)(dispatch); // Refresh task data
+      })
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn()).then(() =>
+            dispatch(addError(AppErrors.user.unauthorized)),
+          );
+        } else {
+          dispatch(addError(AppErrors.task.editCommentFailure));
+          console.log(error.response || error);
+        }
+      });
+  };
+};
+
+/**
  * Add a comment to tasks in the given bundle, associating the given task
  * status if provided
  */

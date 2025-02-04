@@ -106,6 +106,10 @@ export default defineMessages({
     id: "Errors.task.addCommentFailure",
     defaultMessage: "Comment was unable to be saved. An empty string was most likely submitted.",
   },
+  editCommentFailure: {
+    id: "Errors.task.editCommentFailure",
+    defaultMessage: "Comment was unable to be edited.",
+  },
   taskBundleNotCooperative: {
     id: "Errors.task.bundleNotCooperative",
     defaultMessage: "The main task is not Cooperative. No selected tasks can be Cooperative.",
