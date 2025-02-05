@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
+import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
 import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
@@ -11,20 +12,26 @@ import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { replacePropertyTags } from "../../../../hooks/UsePropertyReplacement/UsePropertyReplacement";
 import AsCooperativeWork from "../../../../interactions/Task/AsCooperativeWork";
 import { Editor } from "../../../../services/Editor/Editor";
+import { OPEN_STREET_MAP } from "../../../../services/VisibleLayer/LayerSources";
 import { TaskReviewLoadMethod } from "../../../../services/Task/TaskReview/TaskReviewLoadMethod";
 import { TaskReviewStatus } from "../../../../services/Task/TaskReview/TaskReviewStatus";
 import { TaskStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
+import { TASK_STATUS_FIXED } from "../../../../services/Task/TaskStatus/TaskStatus";
 import {
-  allowedStatusProgressions,
-  isCompletionStatus,
-  isFinalStatus,
-  messagesByStatus,
+	allowedStatusProgressions,
+	isCompletionStatus,
+	isFinalStatus,
+	messagesByStatus,
 } from "../../../../services/Task/TaskStatus/TaskStatus";
-import { OPEN_STREET_MAP } from "../../../../services/VisibleLayer/LayerSources";
-import { constructChangesetUrl } from "../../../../utils/constructChangesetUrl";
+import CooperativeWorkControls from "./CooperativeWorkControls/CooperativeWorkControls";
+import messages from "./Messages";
+import SignInButton from "../../../SignInButton/SignInButton";
+import TaskCompletionStep from "./TaskCompletionStep/TaskCompletionStep";
+import TaskConfirmationModal from "../../../TaskConfirmationModal/TaskConfirmationModal";
+import TaskNextControl from "./TaskNextControl/TaskNextControl";
+import TaskTags from "../../../TaskTags/TaskTags";
 import WithChallengePreferences from "../../../HOCs/WithChallengePreferences/WithChallengePreferences";
 import WithKeyboardShortcuts from "../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
 import WithSearch from "../../../HOCs/WithSearch/WithSearch";
@@ -32,13 +39,8 @@ import WithTaskFeatureProperties from "../../../HOCs/WithTaskFeatureProperties/W
 import WithTaskReview from "../../../HOCs/WithTaskReview/WithTaskReview";
 import WithTaskTags from "../../../HOCs/WithTaskTags/WithTaskTags";
 import WithVisibleLayer from "../../../HOCs/WithVisibleLayer/WithVisibleLayer";
-import SignInButton from "../../../SignInButton/SignInButton";
-import TaskConfirmationModal from "../../../TaskConfirmationModal/TaskConfirmationModal";
-import TaskTags from "../../../TaskTags/TaskTags";
-import CooperativeWorkControls from "./CooperativeWorkControls/CooperativeWorkControls";
-import messages from "./Messages";
-import TaskCompletionStep from "./TaskCompletionStep/TaskCompletionStep";
-import TaskNextControl from "./TaskNextControl/TaskNextControl";
+import { constructChangesetUrl } from "../../../../utils/constructChangesetUrl";
+import { replacePropertyTags } from "../../../../hooks/UsePropertyReplacement/UsePropertyReplacement";
 import "./ActiveTaskControls.scss";
 
 const hiddenShortcutGroup = "taskCompletion";
@@ -181,12 +183,30 @@ export class ActiveTaskControls extends Component {
     const message = intl.formatMessage(messages.rapidDiscardUnsavedChanges);
 
     if (!this.props.rapidEditorState.hasUnsavedChanges || window.confirm(message)) {
-      this.setState({
-        confirmingTask: this.props.task,
-        osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
-        confirmingStatus: taskStatus,
-        submitRevision,
-      });
+      const requireConfirmation =
+        this.props.challenge.requireConfirmation || this.props.challenge.parent.requireConfirmation;
+      const disableTaskConfirm =
+        !requireConfirmation && this.props.user.settings.disableTaskConfirm;
+
+      if (taskStatus === TASK_STATUS_FIXED && disableTaskConfirm) {
+        this.setState(
+          {
+            osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
+            confirmingStatus: taskStatus,
+            submitRevision,
+          },
+          () => {
+            this.confirmCompletion();
+          },
+        );
+      } else {
+        this.setState({
+          confirmingTask: this.props.task,
+          osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
+          confirmingStatus: taskStatus,
+          submitRevision,
+        });
+      }
     }
   };
 
@@ -351,6 +371,7 @@ export class ActiveTaskControls extends Component {
   }
 
   render() {
+    console.log(this.props.user.settings, this.props.user.settings.disableTaskConfirm);
     // If the user is not logged in, show a sign-in button instead of controls.
     if (!this.props.user?.isLoggedIn) {
       return (

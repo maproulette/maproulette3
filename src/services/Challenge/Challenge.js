@@ -4,6 +4,7 @@ import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
 import _compact from "lodash/compact";
 import _each from "lodash/each";
+import _get from "lodash/get";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
 import _groupBy from "lodash/groupBy";
@@ -982,6 +983,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "limitTags",
           "limitReviewTags",
           "taskStyles",
+          "requireConfirmation",
           "requiresLocal",
           "reviewSetting",
           "taskWidgetLayout",

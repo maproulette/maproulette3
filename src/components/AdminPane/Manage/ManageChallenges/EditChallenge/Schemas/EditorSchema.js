@@ -52,6 +52,13 @@ export const jsSchema = (intl) => {
         ],
         default: ChallengeReviewSetting.notRequired,
       },
+      requireConfirmation: {
+        title: intl.formatMessage(messages.requireConfirmationLabel),
+        type: "boolean",
+        enum: [true, false],
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
+        default: false,
+      },
       presets: {
         title: intl.formatMessage(messages.presetsLabel),
         type: "boolean",
@@ -153,13 +160,20 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) =
         "ui:widget": "radio",
         "ui:help": intl.formatMessage(messages.presetsDescription),
       },
+      requireConfirmation: {
+        "ui:widget": "radio",
+        "ui:help": intl.formatMessage(messages.requireConfirmationDescription),
+        "ui:collapsed": isGroupCollapsed,
+        "ui:toggleCollapsed": toggleGroupCollapsed,
+        "ui:widget": "radio",
+      },
       taskWidgetLayout: {
         "ui:widget": DropzoneTextUpload,
         "ui:readonly": sourceReadOnly,
         "ui:collapsed": isGroupCollapsed,
       },
+      presetUiSchemas,
     },
-    presetUiSchemas,
   );
 
   return uiSchemaFields;
