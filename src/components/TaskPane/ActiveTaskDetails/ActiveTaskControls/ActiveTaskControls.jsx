@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
+import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
 import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
@@ -11,37 +12,36 @@ import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import _get from "lodash/get";
-import { TaskStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
-import {
-  allowedStatusProgressions,
-  isCompletionStatus,
-  isFinalStatus,
-  messagesByStatus,
-} from "../../../../services/Task/TaskStatus/TaskStatus";
-import { TaskReviewStatus } from "../../../../services/Task/TaskReview/TaskReviewStatus";
-import { TaskReviewLoadMethod } from "../../../../services/Task/TaskReview/TaskReviewLoadMethod";
+import AsCooperativeWork from "../../../../interactions/Task/AsCooperativeWork";
 import { Editor } from "../../../../services/Editor/Editor";
 import { OPEN_STREET_MAP } from "../../../../services/VisibleLayer/LayerSources";
-import AsCooperativeWork from "../../../../interactions/Task/AsCooperativeWork";
+import { TaskReviewLoadMethod } from "../../../../services/Task/TaskReview/TaskReviewLoadMethod";
+import { TaskReviewStatus } from "../../../../services/Task/TaskReview/TaskReviewStatus";
+import { TaskStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
+import { TASK_STATUS_FIXED } from "../../../../services/Task/TaskStatus/TaskStatus";
+import {
+	allowedStatusProgressions,
+	isCompletionStatus,
+	isFinalStatus,
+	messagesByStatus,
+} from "../../../../services/Task/TaskStatus/TaskStatus";
+import CooperativeWorkControls from "./CooperativeWorkControls/CooperativeWorkControls";
+import messages from "./Messages";
 import SignInButton from "../../../SignInButton/SignInButton";
-import WithSearch from "../../../HOCs/WithSearch/WithSearch";
+import TaskCompletionStep from "./TaskCompletionStep/TaskCompletionStep";
+import TaskConfirmationModal from "../../../TaskConfirmationModal/TaskConfirmationModal";
+import TaskNextControl from "./TaskNextControl/TaskNextControl";
+import TaskTags from "../../../TaskTags/TaskTags";
 import WithChallengePreferences from "../../../HOCs/WithChallengePreferences/WithChallengePreferences";
-import WithVisibleLayer from "../../../HOCs/WithVisibleLayer/WithVisibleLayer";
+import WithKeyboardShortcuts from "../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
+import WithSearch from "../../../HOCs/WithSearch/WithSearch";
+import WithTaskFeatureProperties from "../../../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties";
 import WithTaskReview from "../../../HOCs/WithTaskReview/WithTaskReview";
 import WithTaskTags from "../../../HOCs/WithTaskTags/WithTaskTags";
-import WithKeyboardShortcuts from "../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
-import WithTaskFeatureProperties from "../../../HOCs/WithTaskFeatureProperties/WithTaskFeatureProperties";
-import TaskCompletionStep from "./TaskCompletionStep/TaskCompletionStep";
-import CooperativeWorkControls from "./CooperativeWorkControls/CooperativeWorkControls";
-import TaskNextControl from "./TaskNextControl/TaskNextControl";
-import TaskConfirmationModal from "../../../TaskConfirmationModal/TaskConfirmationModal";
-import TaskTags from "../../../TaskTags/TaskTags";
-import messages from "./Messages";
+import WithVisibleLayer from "../../../HOCs/WithVisibleLayer/WithVisibleLayer";
 import { constructChangesetUrl } from "../../../../utils/constructChangesetUrl";
 import { replacePropertyTags } from "../../../../hooks/UsePropertyReplacement/UsePropertyReplacement";
 import "./ActiveTaskControls.scss";
-import { TASK_STATUS_FIXED } from "../../../../services/Task/TaskStatus/TaskStatus";
 
 const hiddenShortcutGroup = "taskCompletion";
 const hiddenShortcuts = ["skip", "falsePositive", "fixed", "tooHard", "alreadyFixed"];
