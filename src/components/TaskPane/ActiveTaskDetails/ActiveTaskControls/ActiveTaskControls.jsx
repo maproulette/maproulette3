@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
-import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
 import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
@@ -191,7 +190,9 @@ export class ActiveTaskControls extends Component {
       if (taskStatus === TASK_STATUS_FIXED && disableTaskConfirm) {
         this.setState(
           {
-            osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
+            osmComment: `${
+              this.props.task.parent.checkinComment
+            }${constructChangesetUrl(this.props.task)}`,
             confirmingStatus: taskStatus,
             submitRevision,
           },
@@ -202,7 +203,9 @@ export class ActiveTaskControls extends Component {
       } else {
         this.setState({
           confirmingTask: this.props.task,
-          osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
+          osmComment: `${
+            this.props.task.parent.checkinComment
+          }${constructChangesetUrl(this.props.task)}`,
           confirmingStatus: taskStatus,
           submitRevision,
         });
@@ -376,7 +379,9 @@ export class ActiveTaskControls extends Component {
     if (!this.props.user?.isLoggedIn) {
       return (
         <div
-          className={classNames("active-task-controls", { "is-minimized": this.props.isMinimized })}
+          className={classNames("active-task-controls", {
+            "is-minimized": this.props.isMinimized,
+          })}
         >
           <div className="has-centered-children">
             <SignInButton className="active-task-controls--signin" {...this.props} />
