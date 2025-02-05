@@ -4,6 +4,7 @@ import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
 import _compact from "lodash/compact";
 import _each from "lodash/each";
+import _get from "lodash/get";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
 import _groupBy from "lodash/groupBy";
@@ -982,6 +983,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "limitTags",
           "limitReviewTags",
           "taskStyles",
+          "requireConfirmation",
           "requiresLocal",
           "reviewSetting",
           "taskWidgetLayout",
@@ -1064,7 +1066,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
             dispatch(receiveChallenges(normalizedResults.entities));
           }
 
-          return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`);
+          return normalizedResults?.entities?.challenges?.[normalizedResults.result];
         })
         .catch((serverError) => {
           if (isSecurityError(serverError)) {
@@ -1444,7 +1446,10 @@ const ADMIN_CHALLENGES_INITIAL_STATE = {
 export const adminChallengeEntities = function (state = ADMIN_CHALLENGES_INITIAL_STATE, action) {
   switch (action.type) {
     case SET_ADMIN_CHALLENGES:
-      return { data: action.payload, loadingCompleted: action.loadingCompleted };
+      return {
+        data: action.payload,
+        loadingCompleted: action.loadingCompleted,
+      };
     default:
       return state;
   }

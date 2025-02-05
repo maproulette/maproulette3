@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.16.1",
+  "version": "3.16.2",
   "type": "module",
   "private": true,
   "scripts": {
@@ -17,7 +17,11 @@
     "lint": "eslint src/",
     "format": "biome format --write",
     "check": "biome ci && eslint src/",
-    "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'"
+    "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'",
+    "test:e2e:start": "NODE_ENV=development yarn run build && npx serve dist",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug"
   },
   "browserslist": [
     ">0.2%",
@@ -120,8 +124,10 @@
     "@biomejs/biome": "1.9.4",
     "@eslint/js": "^9.9.0",
     "@openstreetmap/id-tagging-schema": "^3.0.0",
+    "@playwright/test": "^1.49.1",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^12.1.2",
+    "@types/node": "^22.10.5",
     "@vitejs/plugin-react-swc": "^3.7.1",
     "@vitest/coverage-v8": "^2.1.2",
     "dotenv": "^16.4.5",
