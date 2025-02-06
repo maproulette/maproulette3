@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.3] - 2025-02-06
+Released with [maproulette-backend_v4.7.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.1)
+
+## What's Changed
+* add disable task confirmation feature by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2516
+* conditionalize challenge result list filters for find challenge page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2535
+* fix global challenge filtering bug on find challenge page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2534
+* fix import formatting in ActiveTaskControls.jsx by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2533
+
+## MR2 Changes
+* fix isArchived and isGlobal filtering in extendFind endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1168
+* add disable task confirmation feature by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1162
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.2...v3.16.3
+
 ## [v3.16.2] - 2025-02-03
 
 ## What's Changed
