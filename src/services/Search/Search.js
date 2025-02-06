@@ -166,9 +166,7 @@ export const generateSearchParametersString = (
   if (filters.archived) {
     searchParameters[PARAMS_MAP.archived] = filters.archived;
   }
-  if (filters.global) {
-    searchParameters[PARAMS_MAP.global] = filters.global;
-  }
+
   if (filters.reviewRequestedBy) {
     searchParameters[PARAMS_MAP.reviewRequestedBy] = filters.reviewRequestedBy;
     if (invertFields.reviewRequestedBy) {
