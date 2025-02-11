@@ -43,13 +43,7 @@ import TaskNextControl from "./TaskNextControl/TaskNextControl";
 import "./ActiveTaskControls.scss";
 
 const hiddenShortcutGroup = "taskCompletion";
-const hiddenShortcuts = [
-  "skip",
-  "falsePositive",
-  "fixed",
-  "tooHard",
-  "alreadyFixed",
-];
+const hiddenShortcuts = ["skip", "falsePositive", "fixed", "tooHard", "alreadyFixed"];
 
 /**
  * ActiveTaskControls renders the appropriate controls for the given
@@ -101,33 +95,24 @@ export class ActiveTaskControls extends Component {
     const { task, taskFeatureProperties } = this.props;
 
     const comment = task.parent.checkinComment;
-    const replacedComment = replacePropertyTags(
-      comment,
-      taskFeatureProperties,
-      false
-    );
+    const replacedComment = replacePropertyTags(comment, taskFeatureProperties, false);
 
     this.props.editTask(
       value,
       this.props.task,
       this.props.mapBounds,
       {
-        imagery:
-          this.props.source.id !== OPEN_STREET_MAP
-            ? this.props.source
-            : undefined,
+        imagery: this.props.source.id !== OPEN_STREET_MAP ? this.props.source : undefined,
         photoOverlay: this.props.showMapillaryLayer ? "mapillary" : null,
       },
       this.props.taskBundle,
-      replacedComment
+      replacedComment,
     );
   };
 
   chooseLoadBy = (loadMethod) => {
     const isVirtual = _isFinite(this.props.virtualChallengeId);
-    const challengeId = isVirtual
-      ? this.props.virtualChallengeId
-      : this.props.challengeId;
+    const challengeId = isVirtual ? this.props.virtualChallengeId : this.props.challengeId;
     this.props.updateUserAppSetting(this.props.user.id, {
       loadMethod: loadMethod,
     });
@@ -155,8 +140,7 @@ export class ActiveTaskControls extends Component {
       }
       this.props.setCompletingTask(this.props.task.id);
 
-      const revisionSubmission =
-        this.props.task.reviewStatus === TaskReviewStatus.rejected;
+      const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
       if (!_isUndefined(this.state.submitRevision)) {
         await this.props.updateTaskReviewStatus(
@@ -169,7 +153,7 @@ export class ActiveTaskControls extends Component {
           this.props.taskBundle,
           this.state.requestedNextTask,
           taskStatus,
-          null
+          null,
         );
       } else {
         await this.props.completeTask(
@@ -184,7 +168,7 @@ export class ActiveTaskControls extends Component {
           this.state.requestedNextTask,
           this.state.osmComment,
           this.props.tagEdits,
-          this.props.taskBundle
+          this.props.taskBundle,
         );
         if (revisionSubmission) {
           if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
@@ -206,13 +190,9 @@ export class ActiveTaskControls extends Component {
     const intl = this.props.intl;
     const message = intl.formatMessage(messages.rapidDiscardUnsavedChanges);
 
-    if (
-      !this.props.rapidEditorState.hasUnsavedChanges ||
-      window.confirm(message)
-    ) {
+    if (!this.props.rapidEditorState.hasUnsavedChanges || window.confirm(message)) {
       const requireConfirmation =
-        this.props.challenge.requireConfirmation ||
-        this.props.challenge.parent.requireConfirmation;
+        this.props.challenge.requireConfirmation || this.props.challenge.parent.requireConfirmation;
       const disableTaskConfirm =
         !requireConfirmation && this.props.user.settings.disableTaskConfirm;
 
@@ -227,7 +207,7 @@ export class ActiveTaskControls extends Component {
           },
           () => {
             this.confirmCompletion();
-          }
+          },
         );
       } else {
         this.setState({
@@ -265,7 +245,7 @@ export class ActiveTaskControls extends Component {
       taskId,
       this.props.taskLoadBy,
       this.state.comment,
-      this.state.requestedNextTask
+      this.state.requestedNextTask,
     );
   };
 
@@ -331,7 +311,7 @@ export class ActiveTaskControls extends Component {
       const tagsArray = _map(this.props.task.tags, (tag) => tag.name);
       const filteredTagsArray = tagsArray.filter((tag) => tag !== "");
       const uniqueTagsArray = filteredTagsArray.filter(
-        (value, index, self) => self.indexOf(value) === index
+        (value, index, self) => self.indexOf(value) === index,
       );
       const tags = uniqueTagsArray.join(",");
 
@@ -365,15 +345,12 @@ export class ActiveTaskControls extends Component {
       const editMode = this.props.getUserAppSetting
         ? this.props.getUserAppSetting(this.props.user, "isEditMode")
         : false;
-      if (
-        !_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
-        editMode
-      ) {
+      if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) && editMode) {
         hiddenShortcuts.forEach((shortcut) => {
           this.props.deactivateKeyboardShortcut(
             hiddenShortcutGroup,
             shortcut,
-            this.handleKeyboardShortcuts
+            this.handleKeyboardShortcuts,
           );
         });
       } else if (
@@ -386,7 +363,7 @@ export class ActiveTaskControls extends Component {
           this.props.activateKeyboardShortcut(
             hiddenShortcutGroup,
             _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
-            this.handleKeyboardShortcuts
+            this.handleKeyboardShortcuts,
           );
         });
       }
@@ -399,7 +376,7 @@ export class ActiveTaskControls extends Component {
         this.props.deactivateKeyboardShortcut(
           hiddenShortcutGroup,
           shortcut,
-          this.handleKeyboardShortcuts
+          this.handleKeyboardShortcuts,
         );
       });
     }
@@ -415,10 +392,7 @@ export class ActiveTaskControls extends Component {
           })}
         >
           <div className="has-centered-children">
-            <SignInButton
-              className="active-task-controls--signin"
-              {...this.props}
-            />
+            <SignInButton className="active-task-controls--signin" {...this.props} />
           </div>
         </div>
       );
@@ -440,18 +414,17 @@ export class ActiveTaskControls extends Component {
     const editMode = disableRapid
       ? false
       : this.props.getUserAppSetting
-      ? this.props.getUserAppSetting(this.props.user, "isEditMode")
-      : false;
+        ? this.props.getUserAppSetting(this.props.user, "isEditMode")
+        : false;
 
-    const needsRevised =
-      this.props.task.reviewStatus === TaskReviewStatus.rejected;
+    const needsRevised = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
     const fromInbox = this.props.history?.location?.state?.fromInbox;
 
     const allowedProgressions = allowedStatusProgressions(
       this.props.task.status,
       false,
-      needsRevised
+      needsRevised,
     );
     const isComplete = isCompletionStatus(this.props.task.status);
     const isFinal = isFinalStatus(this.props.task.status);
@@ -463,9 +436,7 @@ export class ActiveTaskControls extends Component {
             <div className="mr-flex mr-mb-2 mr-text-sm mr-text-white mr-whitespace-nowrap">
               <span>
                 <FormattedMessage {...messages.markedAs} />{" "}
-                <FormattedMessage
-                  {...messagesByStatus[this.props.task.status]}
-                />
+                <FormattedMessage {...messagesByStatus[this.props.task.status]} />
               </span>
               {this.props.task.changesetId > 0 && (
                 <a
@@ -549,9 +520,7 @@ export class ActiveTaskControls extends Component {
                 nextTask={this.next}
                 loadBy={this.props.taskLoadBy}
                 chooseLoadBy={(load) =>
-                  needsRevised
-                    ? this.chooseRevisionLoadBy(load)
-                    : this.chooseLoadBy(load)
+                  needsRevised ? this.chooseRevisionLoadBy(load) : this.chooseLoadBy(load)
                 }
                 chooseNextTask={this.chooseNextTask}
                 clearNextTask={this.clearNextTask}
@@ -573,15 +542,9 @@ export class ActiveTaskControls extends Component {
                 setTags={this.setTags}
                 needsReview={this.getNeedsReviewSetting()}
                 toggleNeedsReview={this.toggleNeedsReview}
-                loadBy={
-                  needsRevised
-                    ? this.state.revisionLoadBy
-                    : this.props.taskLoadBy
-                }
+                loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
                 chooseLoadBy={(load) =>
-                  needsRevised
-                    ? this.chooseRevisionLoadBy(load)
-                    : this.chooseLoadBy(load)
+                  needsRevised ? this.chooseRevisionLoadBy(load) : this.chooseLoadBy(load)
                 }
                 chooseNextTask={this.chooseNextTask}
                 clearNextTask={this.clearNextTask}
@@ -619,12 +582,10 @@ export default WithSearch(
     WithVisibleLayer(
       WithTaskTags(
         WithTaskReview(
-          WithKeyboardShortcuts(
-            WithTaskFeatureProperties(injectIntl(ActiveTaskControls))
-          )
-        )
-      )
-    )
+          WithKeyboardShortcuts(WithTaskFeatureProperties(injectIntl(ActiveTaskControls))),
+        ),
+      ),
+    ),
   ),
-  "task"
+  "task",
 );
