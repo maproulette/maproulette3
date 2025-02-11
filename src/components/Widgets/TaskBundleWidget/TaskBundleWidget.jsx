@@ -147,7 +147,13 @@ export default class TaskBundleWidget extends Component {
       throw new Error("Bundle type mismatch, not all tasks are of the same type");
     }
 
-    this.props.createTaskBundle([...selectedTasks.selected.keys()]);
+    // Get selected task IDs and ensure current task is included
+    const selectedIds = [...selectedTasks.selected.keys()];
+    if (!selectedIds.includes(task.id)) {
+      selectedIds.push(task.id);
+    }
+
+    this.props.createTaskBundle(selectedIds);
   };
 
   unbundleTask = (task) => {
