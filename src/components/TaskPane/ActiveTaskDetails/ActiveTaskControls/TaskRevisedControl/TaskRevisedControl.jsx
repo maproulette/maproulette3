@@ -10,11 +10,17 @@ import messages from "./Messages";
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-const MoreOptionsButton = ({ toggleDropdownVisible, intl }) => (
+const MoreOptionsButton = ({ toggleDropdownVisible, intl, disabled }) => (
   <button
-    className="mr-dropdown__button mr-button mr-text-green-lighter mr-mr-2"
+    className={classNames(
+      "mr-dropdown__button mr-button mr-text-green-lighter mr-mr-2",
+      {
+        "mr-opacity-50 mr-cursor-not-allowed": disabled,
+      }
+    )}
     style={{ minWidth: "20.5rem" }}
-    onClick={toggleDropdownVisible}
+    onClick={disabled ? null : toggleDropdownVisible}
+    disabled={disabled}
   >
     {intl.formatMessage(messages.revisedLabel)}&hellip;
   </button>
@@ -35,10 +41,13 @@ const ListMoreOptionsItems = ({ complete, task }) => (
   </ol>
 );
 
-const TaskRevisedControl = ({ complete, asLink, intl, task }) => {
+const TaskRevisedControl = ({ complete, asLink, intl, task, disabled }) => {
   if (asLink) {
     return (
-      <a onClick={() => complete(TaskReviewStatus.needed)}>
+      <a
+        onClick={disabled ? null : () => complete(TaskReviewStatus.needed)}
+        className={disabled ? "mr-cursor-not-allowed mr-opacity-50" : ""}
+      >
         <FormattedMessage {...messages.revisedLabel} />
       </a>
     );
