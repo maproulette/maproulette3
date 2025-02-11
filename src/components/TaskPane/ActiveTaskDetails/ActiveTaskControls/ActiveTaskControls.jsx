@@ -12,9 +12,9 @@ import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
+import { replacePropertyTags } from "../../../../hooks/UsePropertyReplacement/UsePropertyReplacement";
 import AsCooperativeWork from "../../../../interactions/Task/AsCooperativeWork";
 import { Editor } from "../../../../services/Editor/Editor";
-import { OPEN_STREET_MAP } from "../../../../services/VisibleLayer/LayerSources";
 import { TaskReviewLoadMethod } from "../../../../services/Task/TaskReview/TaskReviewLoadMethod";
 import { TaskReviewStatus } from "../../../../services/Task/TaskReview/TaskReviewStatus";
 import { TaskStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
@@ -25,13 +25,8 @@ import {
 	isFinalStatus,
 	messagesByStatus,
 } from "../../../../services/Task/TaskStatus/TaskStatus";
-import CooperativeWorkControls from "./CooperativeWorkControls/CooperativeWorkControls";
-import messages from "./Messages";
-import SignInButton from "../../../SignInButton/SignInButton";
-import TaskCompletionStep from "./TaskCompletionStep/TaskCompletionStep";
-import TaskConfirmationModal from "../../../TaskConfirmationModal/TaskConfirmationModal";
-import TaskNextControl from "./TaskNextControl/TaskNextControl";
-import TaskTags from "../../../TaskTags/TaskTags";
+import { OPEN_STREET_MAP } from "../../../../services/VisibleLayer/LayerSources";
+import { constructChangesetUrl } from "../../../../utils/constructChangesetUrl";
 import WithChallengePreferences from "../../../HOCs/WithChallengePreferences/WithChallengePreferences";
 import WithKeyboardShortcuts from "../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
 import WithSearch from "../../../HOCs/WithSearch/WithSearch";
@@ -39,8 +34,13 @@ import WithTaskFeatureProperties from "../../../HOCs/WithTaskFeatureProperties/W
 import WithTaskReview from "../../../HOCs/WithTaskReview/WithTaskReview";
 import WithTaskTags from "../../../HOCs/WithTaskTags/WithTaskTags";
 import WithVisibleLayer from "../../../HOCs/WithVisibleLayer/WithVisibleLayer";
-import { constructChangesetUrl } from "../../../../utils/constructChangesetUrl";
-import { replacePropertyTags } from "../../../../hooks/UsePropertyReplacement/UsePropertyReplacement";
+import SignInButton from "../../../SignInButton/SignInButton";
+import TaskConfirmationModal from "../../../TaskConfirmationModal/TaskConfirmationModal";
+import TaskTags from "../../../TaskTags/TaskTags";
+import CooperativeWorkControls from "./CooperativeWorkControls/CooperativeWorkControls";
+import messages from "./Messages";
+import TaskCompletionStep from "./TaskCompletionStep/TaskCompletionStep";
+import TaskNextControl from "./TaskNextControl/TaskNextControl";
 import "./ActiveTaskControls.scss";
 
 const hiddenShortcutGroup = "taskCompletion";
