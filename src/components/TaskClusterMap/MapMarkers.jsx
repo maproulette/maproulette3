@@ -93,7 +93,6 @@ const Markers = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(props.taskMarkers);
     if (
       (props.taskMarkers && mapMarkers.length === 0) ||
       props.delayMapLoad ||
@@ -115,7 +114,6 @@ const Markers = (props) => {
   }, [props.currentZoom]);
 
   useEffect(() => {
-    console.log(props.taskMarkers);
     // Fit bounds to initial tasks when they are loaded
     if (!initialLoadComplete && props.taskMarkers && props.taskMarkers.length > 0) {
       const bounds =
