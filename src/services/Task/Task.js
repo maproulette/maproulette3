@@ -583,12 +583,18 @@ export const fetchTaskHistory = function (taskId) {
       .execute()
       .then((normalizedHistory) => {
         if (_isObject(normalizedHistory.result)) {
+          // Transform history entries to ensure they have actionType
+          const formattedHistory = _values(normalizedHistory.result).map((entry) => ({
+            ...entry,
+            actionType: entry.action || "UNKNOWN", // Ensure actionType exists
+          }));
+
           // Inject history into task
           dispatch(
             receiveTasks(
               simulatedEntities({
                 id: taskId,
-                history: _values(normalizedHistory.result),
+                history: formattedHistory,
               }),
             ),
           );
