@@ -111,9 +111,9 @@ export function WithTaskBundle(WrappedComponent) {
           taskBundle,
           initialBundle: taskBundle,
           selectedTasks: taskBundle?.taskIds || [],
-          bundleEditsDisabled: this.updateBundlingConditions(),
           fetchBundleError: false,
         });
+        this.updateBundlingConditions();
         if (!this.props.taskReadOnly && taskBundle) {
           this.startLockRefresh(taskBundle.taskIds);
         }
@@ -138,7 +138,7 @@ export function WithTaskBundle(WrappedComponent) {
         !isCompletionWorkspace ||
         (!(enableMapperEdits && completionStatus) && !enableSuperUserEdits);
 
-      return bundleEditsDisabled;
+      this.setState({ bundleEditsDisabled });
     };
 
     handlePrimaryTaskRedirect = (taskBundle, task, workspace, history) => {
