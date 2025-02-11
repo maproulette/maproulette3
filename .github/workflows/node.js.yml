@@ -9,37 +9,112 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgis:
+        image: postgis/postgis:13-3.3
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: mr_test
+          POSTGRES_USER: osm
+          POSTGRES_PASSWORD: osm
+
     strategy:
       matrix:
         node-version: [18, 20]
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-        cache-dependency-path: 'yarn.lock'
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install dependencies
-      # --frozen-lockfile: don't generate a lockfile and fail if an update is needed
-      run: yarn install --frozen-lockfile
-      
-    - name: Check for formatting and linting errors
-      run: yarn run check
+      - name: Checkout backend repository
+        uses: actions/checkout@v4
+        with:
+          repository: "maproulette/maproulette-backend"
+          path: "backend"
 
-    - name: Run build
-      run: yarn run build
-      env:
-        NODE_OPTIONS: --max-old-space-size=4096      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: "temurin"
+          cache: sbt
 
-    - name: Run the tests
-      run: yarn test -- --coverage
+      - name: Setup SBT
+        uses: sbt/setup-sbt@v1
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Create backend dev.conf
+        run: |
+          touch ./backend/conf/dev.conf
+          echo 'include "application.conf"' >> ./backend/conf/dev.conf
+          echo 'maproulette {' >> ./backend/conf/dev.conf
+          echo '  debug=true' >> ./backend/conf/dev.conf
+          echo '  bootstrap=true' >> ./backend/conf/dev.conf
+          echo '}' >> ./backend/conf/dev.conf
+
+      - name: Start backend server
+        env:
+          APPLICATION_SECRET: $(openssl rand -base64 32)
+          CI: true
+          SBT_OPTS: "-Xms512M -Xmx1024M -Xss2M -XX:MaxMetaspaceSize=1024M"
+          MR_SUPER_KEY: 1234
+          MR_DATABASE_URL: "jdbc:postgresql://localhost:5432/mr_test"
+          MR_DATABASE_USERNAME: "osm"
+          MR_DATABASE_PASSWORD: "osm"
+        run: |
+          cd backend
+          sbt -Dsbt.log.format=false -Dconfig.file=./conf/dev.conf run &
+          sleep 10
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+          cache-dependency-path: "yarn.lock"
+
+      - name: Install dependencies
+        # --frozen-lockfile: don't generate a lockfile and fail if an update is needed
+        run: yarn install --frozen-lockfile
+
+      - name: Check for formatting and linting errors
+        run: yarn run check
+
+      - name: Run build
+        run: yarn run build
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Run the tests
+        run: yarn test -- --coverage
+        env:
+          REACT_APP_SERVER_URL: "http://localhost:9000"
+          REACT_APP_MAP_ROULETTE_SERVER_URL: "http://localhost:9000"
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Build for E2E tests
+        run: yarn run build
+        env:
+          NODE_ENV: development
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Run Playwright tests
+        run: |
+          yarn test:e2e:start & 
+          sleep 5
+          yarn test:e2e
+
+      - name: Upload Playwright test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ matrix.node-version }}
+          path: playwright-report/
+          retention-days: 30
