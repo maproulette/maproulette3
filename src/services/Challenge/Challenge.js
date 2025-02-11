@@ -6,7 +6,6 @@ import _compact from "lodash/compact";
 import _each from "lodash/each";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
-import _get from "lodash/get";
 import _groupBy from "lodash/groupBy";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
