@@ -161,7 +161,9 @@ const dispatchTaskUpdateNotification = function (dispatch, task) {
 // redux actions
 const RECEIVE_TASKS = "RECEIVE_TASKS";
 const CLEAR_TASKS = "CLEAR_TASKS";
+const CLEAR_TASK_BUNDLE = "CLEAR_TASK_BUNDLE";
 const REMOVE_TASK = "REMOVE_TASK";
+const REMOVE_TASK_FROM_BUNDLE = "REMOVE_TASK_FROM_BUNDLE";
 
 // redux action creators
 
@@ -190,11 +192,34 @@ export const clearTasks = function (challengeId) {
 };
 
 /**
+ * Clear task data for a given bundle from the redux store
+ */
+export const clearTaskBundle = function (bundleId) {
+  return {
+    type: CLEAR_TASK_BUNDLE,
+    status: RequestStatus.success,
+    bundleId: bundleId,
+    receivedAt: Date.now(),
+  };
+};
+
+/**
  * Remove a task from the redux store
  */
 export const removeTask = function (taskId) {
   return {
     type: REMOVE_TASK,
+    taskId,
+    receivedAt: Date.now(),
+  };
+};
+
+/**
+ * Remove a task from a bundle in the redux store
+ */
+export const removeTaskFromBundle = function (taskId) {
+  return {
+    type: REMOVE_TASK_FROM_BUNDLE,
     taskId,
     receivedAt: Date.now(),
   };
@@ -1179,6 +1204,9 @@ export const updateTaskBundle = function (initialBundle, taskIds) {
   const params = { taskIds: taskIds };
   const bundleId = initialBundle.bundleId;
 
+  // Find tasks that were removed from the bundle
+  const removedTaskIds = initialBundle.taskIds.filter((id) => !taskIds.includes(id));
+
   return function (dispatch) {
     return new Endpoint(api.tasks.updateBundle, {
       variables: { bundleId },
@@ -1186,6 +1214,10 @@ export const updateTaskBundle = function (initialBundle, taskIds) {
     })
       .execute()
       .then((results) => {
+        // Dispatch remove action for each removed task
+        removedTaskIds.forEach((taskId) => {
+          dispatch(removeTaskFromBundle(taskId));
+        });
         return results;
       })
       .catch((error) => {
@@ -1207,6 +1239,10 @@ export const deleteTaskBundle = function (bundleId) {
       variables: { bundleId },
     })
       .execute()
+      .then(() => {
+        // After successful deletion, clear the bundleId from tasks
+        dispatch(clearTaskBundle(bundleId));
+      })
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
@@ -1308,6 +1344,14 @@ export const taskEntities = function (state, action) {
     return mergedState;
   } else if (action.type === CLEAR_TASKS) {
     return _remove(_cloneDeep(state), (x) => (x ? x.parent === action.challengeId : false));
+  } else if (action.type === CLEAR_TASK_BUNDLE) {
+    return _remove(_cloneDeep(state), (x) => (x ? x.bundleId === action.bundleId : false));
+  } else if (action.type === REMOVE_TASK_FROM_BUNDLE) {
+    const mergedState = _cloneDeep(state);
+    if (mergedState[action.taskId]) {
+      mergedState[action.taskId].bundleId = null;
+    }
+    return mergedState;
   } else {
     return genericEntityReducer(RECEIVE_TASKS, "tasks", reduceTasksFurther)(state, action);
   }
