@@ -20,10 +20,10 @@ import { TaskReviewStatus } from "../../../../services/Task/TaskReview/TaskRevie
 import { TaskStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
 import { TASK_STATUS_FIXED } from "../../../../services/Task/TaskStatus/TaskStatus";
 import {
-	allowedStatusProgressions,
-	isCompletionStatus,
-	isFinalStatus,
-	messagesByStatus,
+  allowedStatusProgressions,
+  isCompletionStatus,
+  isFinalStatus,
+  messagesByStatus,
 } from "../../../../services/Task/TaskStatus/TaskStatus";
 import { OPEN_STREET_MAP } from "../../../../services/VisibleLayer/LayerSources";
 import { constructChangesetUrl } from "../../../../utils/constructChangesetUrl";
