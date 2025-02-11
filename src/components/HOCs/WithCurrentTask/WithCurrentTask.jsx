@@ -166,7 +166,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark a task as complete with the given status
      */
-    completeTask: (
+    completeTask: async (
       task,
       challengeId,
       taskStatus,
@@ -184,77 +184,79 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       const taskId = task.id;
 
       // Work to be done after the status is set
-      const doAfter = () => {
-        if (_isString(comment) && comment.length > 0) {
-          if (taskBundle) {
-            dispatch(
-              addTaskBundleComment(
-                taskBundle.bundleId,
-                AsMappableBundle(taskBundle).primaryTaskId() || taskId,
-                comment,
-                taskStatus,
-              ),
-            );
-          } else {
-            dispatch(addTaskComment(taskId, comment, taskStatus));
+      const doAfter = () =>
+        new Promise(async (resolve) => {
+          if (_isString(comment) && comment.length > 0) {
+            if (taskBundle) {
+              await dispatch(
+                addTaskBundleComment(
+                  taskBundle.bundleId,
+                  AsMappableBundle(taskBundle).primaryTaskId() || taskId,
+                  comment,
+                  taskStatus,
+                ),
+              );
+            } else {
+              await dispatch(addTaskComment(taskId, comment, taskStatus));
+            }
           }
-        }
 
-        // Update the user in the background to get their latest score
-        setTimeout(() => dispatch(fetchUser(userId)), 100);
+          // Update the user in the background to get their latest score
+          await dispatch(fetchUser(userId));
 
-        // Updating the challenge actions will allow us to show more accurate
-        // completion progress, but this can be done in the background
-        setTimeout(() => dispatch(fetchChallengeActions(challengeId)), 500);
+          // Updating the challenge actions will allow us to show more accurate
+          // completion progress
+          await dispatch(fetchChallengeActions(challengeId));
 
-        // If working on a virtual challenge, renew it (extend its expiration)
-        // since we've seen some activity, but this can be done in the
-        // background
-        if (_isFinite(ownProps.virtualChallengeId)) {
-          setTimeout(() => dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)), 1000);
-        }
+          // If working on a virtual challenge, renew it (extend its expiration)
+          if (_isFinite(ownProps.virtualChallengeId)) {
+            await dispatch(renewVirtualChallenge(ownProps.virtualChallengeId));
+          }
 
-        if (taskLoadBy) {
-          // Start loading the next task from the challenge.
-          const loadNextTask = _isFinite(requestedNextTask)
-            ? nextRequestedTask(dispatch, ownProps, requestedNextTask)
-            : nextRandomTask(dispatch, ownProps, taskId, taskLoadBy);
+          if (taskLoadBy) {
+            // Start loading the next task from the challenge.
+            const loadNextTask = _isFinite(requestedNextTask)
+              ? await nextRequestedTask(dispatch, ownProps, requestedNextTask)
+              : await nextRandomTask(dispatch, ownProps, taskId, taskLoadBy);
 
-          return loadNextTask
-            .then((newTask) => visitNewTask(dispatch, ownProps, taskId, newTask))
-            .catch(() => {
+            try {
+              await visitNewTask(dispatch, ownProps, taskId, loadNextTask);
+            } catch (error) {
               ownProps.history.push(`/browse/challenges/${challengeId}`);
-            });
-        }
-      };
+            }
+          }
+          resolve();
+        });
 
       let cooperativeWorkSummary = null;
       if (AsCooperativeWork(task).isTagType()) {
         cooperativeWorkSummary = AsCooperativeWork(task).tagChangeSummary(tagEdits);
       }
 
-      return dispatch(
-        taskBundle
-          ? completeTaskBundle(
-              taskBundle.bundleId,
-              AsMappableBundle(taskBundle).primaryTaskId() || taskId,
-              taskStatus,
-              needsReview,
-              tags,
-              cooperativeWorkSummary,
-              osmComment,
-              completionResponses,
-            )
-          : completeTask(
-              taskId,
-              taskStatus,
-              needsReview,
-              tags,
-              cooperativeWorkSummary,
-              osmComment,
-              completionResponses,
-            ),
-      ).then(() => doAfter());
+      const completeAction = taskBundle
+        ? completeTaskBundle(
+            taskBundle.bundleId,
+            AsMappableBundle(taskBundle).primaryTaskId() || taskId,
+            taskStatus,
+            needsReview,
+            tags,
+            cooperativeWorkSummary,
+            osmComment,
+            completionResponses,
+          )
+        : completeTask(
+            taskId,
+            taskStatus,
+            needsReview,
+            tags,
+            cooperativeWorkSummary,
+            osmComment,
+            completionResponses,
+          );
+
+      await dispatch(completeAction);
+      const afterResult = await doAfter();
+      return afterResult;
     },
 
     /**
@@ -401,16 +403,25 @@ export const visitNewTask = function (dispatch, props, currentTaskId, newTask) {
     // If challenge is complete, redirect home with note to congratulate user
     if (_isFinite(props.virtualChallengeId)) {
       // We don't get a status for virtual challenges, so just assume we're done
-      props.history.push("/browse/challenges", { congratulate: true, warn: false });
+      props.history.push("/browse/challenges", {
+        congratulate: true,
+        warn: false,
+      });
       return Promise.resolve();
     } else {
       const challengeId = challengeIdFromRoute(props, props.challengeId);
       return dispatch(fetchChallenge(challengeId)).then((normalizedResults) => {
         const challenge = normalizedResults.entities.challenges[normalizedResults.result];
         if (challenge.status === CHALLENGE_STATUS_FINISHED) {
-          props.history.push("/browse/challenges", { congratulate: true, warn: false });
+          props.history.push("/browse/challenges", {
+            congratulate: true,
+            warn: false,
+          });
         } else {
-          props.history.push("/browse/challenges", { warn: true, congratulate: false });
+          props.history.push("/browse/challenges", {
+            warn: true,
+            congratulate: false,
+          });
         }
       });
     }
