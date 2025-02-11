@@ -186,33 +186,41 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       // Work to be done after the status is set
       const doAfter = () =>
         new Promise(async (resolve) => {
+          const parallelTasks = [];
+
+          // Handle comment
           if (_isString(comment) && comment.length > 0) {
             if (taskBundle) {
-              await dispatch(
-                addTaskBundleComment(
-                  taskBundle.bundleId,
-                  AsMappableBundle(taskBundle).primaryTaskId() || taskId,
-                  comment,
-                  taskStatus,
+              parallelTasks.push(
+                dispatch(
+                  addTaskBundleComment(
+                    taskBundle.bundleId,
+                    AsMappableBundle(taskBundle).primaryTaskId() || taskId,
+                    comment,
+                    taskStatus,
+                  ),
                 ),
               );
             } else {
-              await dispatch(addTaskComment(taskId, comment, taskStatus));
+              parallelTasks.push(dispatch(addTaskComment(taskId, comment, taskStatus)));
             }
           }
 
           // Update the user in the background to get their latest score
-          await dispatch(fetchUser(userId));
+          parallelTasks.push(dispatch(fetchUser(userId)));
 
-          // Updating the challenge actions will allow us to show more accurate
-          // completion progress
-          await dispatch(fetchChallengeActions(challengeId));
+          // Updating the challenge actions
+          parallelTasks.push(dispatch(fetchChallengeActions(challengeId)));
 
-          // If working on a virtual challenge, renew it (extend its expiration)
+          // Renew virtual challenge if needed
           if (_isFinite(ownProps.virtualChallengeId)) {
-            await dispatch(renewVirtualChallenge(ownProps.virtualChallengeId));
+            parallelTasks.push(dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)));
           }
 
+          // Wait for all parallel tasks to complete
+          await Promise.all(parallelTasks);
+
+          // Handle next task loading - this needs to be sequential
           if (taskLoadBy) {
             // Start loading the next task from the challenge.
             const loadNextTask = _isFinite(requestedNextTask)
