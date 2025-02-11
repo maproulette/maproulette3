@@ -163,6 +163,9 @@ export default class TaskBundleWidget extends Component {
 
   unbundleTask = (task) => {
     const taskId = task.id ?? task.taskId;
+    if (taskId === this.props.task.id) {
+      return;
+    }
     this.props.removeTaskFromBundle(taskId);
     this.props.toggleTaskSelection(task);
   };
@@ -220,7 +223,11 @@ export default class TaskBundleWidget extends Component {
   async componentDidMount() {
     this.initializeClusterFilters();
     await this.props.resetSelectedTasks();
-    this.props.selectTasks(this.props.taskBundle?.tasks || [this.props.task]);
+    const tasksToSelect = this.props.taskBundle?.tasks || [this.props.task];
+    if (!tasksToSelect.find((t) => t.id === this.props.task.id)) {
+      tasksToSelect.push(this.props.task);
+    }
+    this.props.selectTasks(tasksToSelect);
     if (this.props.taskBundle || this.props.nearbyTasks) {
       this.initializeClusterFilters();
       this.initializeWebsocketSubscription();
@@ -233,7 +240,11 @@ export default class TaskBundleWidget extends Component {
       this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId
     ) {
       await this.props.resetSelectedTasks();
-      this.props.selectTasks(this.props.taskBundle?.tasks || [this.props.task]);
+      const tasksToSelect = this.props.taskBundle?.tasks || [this.props.task];
+      if (!tasksToSelect.find((t) => t.id === this.props.task.id)) {
+        tasksToSelect.push(this.props.task);
+      }
+      this.props.selectTasks(tasksToSelect);
     }
 
     if (
@@ -602,7 +613,10 @@ const BuildBundle = (props) => {
       boundingBox={props.criteria?.boundingBox}
       initialBounds={toLatLngBounds(props.criteria?.boundingBox || [])}
       onBulkTaskSelection={props.selectTasks}
-      onBulkTaskDeselection={props.deselectTasks}
+      onBulkTaskDeselection={(tasks) => {
+        const tasksToDeselect = tasks.filter((t) => t.id !== props.task.id);
+        props.deselectTasks(tasksToDeselect);
+      }}
       fitbBoundsControl
       showSelectMarkersInView
     />

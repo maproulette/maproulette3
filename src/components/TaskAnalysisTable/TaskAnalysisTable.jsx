@@ -352,7 +352,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
         !alreadyBundled &&
         !props.bundling &&
         !props.taskReadOnly &&
-        ([0, 3, 6].includes(status) || props.initialBundle?.bundleId === original.bundleId) &&
+        ([0, 3, 6].includes(status) ||
+          (props.initialBundle?.bundleId && props.initialBundle?.bundleId === original.bundleId)) &&
         original.taskId !== props.task?.id &&
         props.workspace.name !== "taskReview" &&
         !AsCooperativeWork(props.task).isTagType();

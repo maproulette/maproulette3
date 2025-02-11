@@ -36,7 +36,8 @@ class TaskMarkerContent extends Component {
       !this.props.bundling &&
       !this.props.taskReadOnly &&
       ([0, 3, 6].includes(taskStatus) ||
-        this.props.initialBundle?.bundleId === this.props.marker.options.bundleId) &&
+        (this.props.initialBundle?.bundleId &&
+          this.props.initialBundle?.bundleId === this.props.marker.options.bundleId)) &&
       this.props.workspace.name !== "taskReview" &&
       !AsCooperativeWork(this.props.task).isTagType() &&
       this.props.marker.options.taskId !== this.props.task.id;
