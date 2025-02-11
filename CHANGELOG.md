@@ -4,9 +4,61 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.3] - 2025-02-06
+Released with [maproulette-backend_v4.7.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.1)
+
+## What's Changed
+* add disable task confirmation feature by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2516
+* conditionalize challenge result list filters for find challenge page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2535
+* fix global challenge filtering bug on find challenge page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2534
+* fix import formatting in ActiveTaskControls.jsx by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2533
+
+## MR2 Changes
+* fix isArchived and isGlobal filtering in extendFind endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1168
+* add disable task confirmation feature by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1162
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.2...v3.16.3
+
+## [v3.16.2] - 2025-02-03
+
+## What's Changed
+* Improve footer version info by @jake-low in https://github.com/maproulette/maproulette3/pull/2508
+* Fix OSM Element Tags widget not updating when switching to next task by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2510
+* Fix memory leak warning in the Achievement Badge Test by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2511
+* Fix docker build (.git directory is required now) by @jake-low in https://github.com/maproulette/maproulette3/pull/2512
+* Make tasks in task properties widget collapsible by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2502
+* Connect to new endpoint for fetching specifically task markers by @CollinBeczak, @jake-low in https://github.com/maproulette/maproulette3/pull/2356
+* Add global toggle to find challenge page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2382
+* Fix mapillary infinite loop and improve UI by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2455
+* Replace many lodash _.get() calls with native ES expressions by @jake-low in https://github.com/maproulette/maproulette3/pull/2515
+
+## Development Changes
+* Add Biome code formatter by @jake-low
+* Fix SCSS syntax errors for Biome by @jake-low
+* Fix unused variable warnings by @jake-low
+* Reorganize package.json by @jake-low
+* Format all source files with Biome by @jake-low
+* Add .git-blame-ignore-revs file by @jake-low
+* Disable Biome linter (still using eslint for now) by @jake-low
+* Add pre-commit hook for linting/formatting by @jake-low
+* Update developer instructions to mention pre-commit hook by @jake-low
+* Check for formatting and linting errors in CI by @jake-low
+* Fix CodeQL warning about unescaped '.' in regex by @jake-low, @CollinBeczak
+
+## Testing Improvements
+* Add boilerplate for playwright e2e testing by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2519
+* Remove obsolete snapshots and fix websocket undefined error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2523
+
+## Bug Fixes
+* Remove intl errors from selected context by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2520
+* Fix save challenge returning undefined bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2527
+* Fix external id editing conditions by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2528
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.1...v3.16.2
+
 ## [v3.16.1] - 2024-12-20
 
-- add OSM Element Tags widget (by @homersimpsons in #2499)
+* add OSM Element Tags widget (by @homersimpsons in #2499)
 
 ## [v3.16.0] - 2024-11-12
 Released with [maproulette-backend_v4.6.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.6.1)

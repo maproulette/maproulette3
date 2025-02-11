@@ -17,6 +17,7 @@ import { Editor } from "../../../../services/Editor/Editor";
 import { TaskReviewLoadMethod } from "../../../../services/Task/TaskReview/TaskReviewLoadMethod";
 import { TaskReviewStatus } from "../../../../services/Task/TaskReview/TaskReviewStatus";
 import { TaskStatus } from "../../../../services/Task/TaskStatus/TaskStatus";
+import { TASK_STATUS_FIXED } from "../../../../services/Task/TaskStatus/TaskStatus";
 import {
   allowedStatusProgressions,
   isCompletionStatus,
@@ -181,12 +182,34 @@ export class ActiveTaskControls extends Component {
     const message = intl.formatMessage(messages.rapidDiscardUnsavedChanges);
 
     if (!this.props.rapidEditorState.hasUnsavedChanges || window.confirm(message)) {
-      this.setState({
-        confirmingTask: this.props.task,
-        osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(this.props.task)}`,
-        confirmingStatus: taskStatus,
-        submitRevision,
-      });
+      const requireConfirmation =
+        this.props.challenge.requireConfirmation || this.props.challenge.parent.requireConfirmation;
+      const disableTaskConfirm =
+        !requireConfirmation && this.props.user.settings.disableTaskConfirm;
+
+      if (taskStatus === TASK_STATUS_FIXED && disableTaskConfirm) {
+        this.setState(
+          {
+            osmComment: `${
+              this.props.task.parent.checkinComment
+            }${constructChangesetUrl(this.props.task)}`,
+            confirmingStatus: taskStatus,
+            submitRevision,
+          },
+          () => {
+            this.confirmCompletion();
+          },
+        );
+      } else {
+        this.setState({
+          confirmingTask: this.props.task,
+          osmComment: `${
+            this.props.task.parent.checkinComment
+          }${constructChangesetUrl(this.props.task)}`,
+          confirmingStatus: taskStatus,
+          submitRevision,
+        });
+      }
     }
   };
 
@@ -351,11 +374,14 @@ export class ActiveTaskControls extends Component {
   }
 
   render() {
+    console.log(this.props.user.settings, this.props.user.settings.disableTaskConfirm);
     // If the user is not logged in, show a sign-in button instead of controls.
     if (!this.props.user?.isLoggedIn) {
       return (
         <div
-          className={classNames("active-task-controls", { "is-minimized": this.props.isMinimized })}
+          className={classNames("active-task-controls", {
+            "is-minimized": this.props.isMinimized,
+          })}
         >
           <div className="has-centered-children">
             <SignInButton className="active-task-controls--signin" {...this.props} />

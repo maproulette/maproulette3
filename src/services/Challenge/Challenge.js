@@ -414,9 +414,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
       queryParams.ca = filters.archived;
     }
 
-    if (filters.global) {
-      queryParams.cg = filters.global;
-    }
+    queryParams.cg = Boolean(filters.global);
 
     // Keywords/tags can come from both the the query and the filter, so we need to
     // combine them into a single keywords array.
@@ -982,6 +980,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "limitTags",
           "limitReviewTags",
           "taskStyles",
+          "requireConfirmation",
           "requiresLocal",
           "reviewSetting",
           "taskWidgetLayout",
@@ -1064,7 +1063,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
             dispatch(receiveChallenges(normalizedResults.entities));
           }
 
-          return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`);
+          return normalizedResults?.entities?.challenges?.[normalizedResults.result];
         })
         .catch((serverError) => {
           if (isSecurityError(serverError)) {
