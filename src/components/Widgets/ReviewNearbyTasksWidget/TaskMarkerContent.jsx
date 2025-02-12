@@ -1,6 +1,6 @@
-import _isFinite from "lodash/isFinite";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
+import { Link } from "react-router-dom";
 import { messagesByPriority } from "../../../services/Task/TaskPriority/TaskPriority";
 import { messagesByStatus } from "../../../services/Task/TaskStatus/TaskStatus";
 import messages from "./Messages";
@@ -11,16 +11,10 @@ import messages from "./Messages";
 class TaskMarkerContent extends Component {
   render() {
     const statusMessage =
-      messagesByStatus[
-        _isFinite(this.props.marker.options.taskStatus)
-          ? this.props.marker.options.taskStatus
-          : this.props.marker.options.status
-      ];
+      messagesByStatus[this.props.marker.options.status ?? this.props.marker.options.taskStatus];
     const priorityMessage =
       messagesByPriority[
-        _isFinite(this.props.marker.options.taskPriority)
-          ? this.props.marker.options.taskPriority
-          : this.props.marker.options.priority
+        this.props.marker.options.priority ?? this.props.marker.options.taskPriority
       ];
 
     return (
@@ -31,31 +25,47 @@ class TaskMarkerContent extends Component {
               <FormattedMessage {...messages.nameLabel} />
             </div>
             <div className="mr-w-1/2 mr-text-left">
-              {this.props.marker.options.geometries.features[0].id}
+              {this.props.marker.options.name ||
+                this.props.marker.options.geometries?.features[0]?.id}
             </div>
           </div>
+
           <div className="mr-flex">
             <div className="mr-w-1/2 mr-mr-2 mr-text-right">
               <FormattedMessage {...messages.taskIdLabel} />
             </div>
-            <div className="mr-w-1/2 mr-text-left">{this.props.marker.options.taskId}</div>
-          </div>
-          <div className="mr-flex">
-            <div className="mr-w-1/2 mr-mr-2 mr-text-right">
-              <FormattedMessage {...messages.statusLabel} />
-            </div>
             <div className="mr-w-1/2 mr-text-left">
-              {statusMessage ? this.props.intl.formatMessage(statusMessage) : null}
+              <Link
+                to={`/challenge/${this.props.challengeId}/task/${this.props.marker.options.taskId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {this.props.marker.options.taskId}
+              </Link>
             </div>
           </div>
-          <div className="mr-flex">
-            <div className="mr-w-1/2 mr-mr-2 mr-text-right">
-              <FormattedMessage {...messages.priorityLabel} />
+
+          {statusMessage && (
+            <div className="mr-flex">
+              <div className="mr-w-1/2 mr-mr-2 mr-text-right">
+                <FormattedMessage {...messages.statusLabel} />
+              </div>
+              <div className="mr-w-1/2 mr-text-left">
+                {this.props.intl.formatMessage(statusMessage)}
+              </div>
             </div>
-            <div className="mr-w-1/2 mr-text-left">
-              {priorityMessage ? this.props.intl.formatMessage(priorityMessage) : null}
+          )}
+
+          {priorityMessage && (
+            <div className="mr-flex">
+              <div className="mr-w-1/2 mr-mr-2 mr-text-right">
+                <FormattedMessage {...messages.priorityLabel} />
+              </div>
+              <div className="mr-w-1/2 mr-text-left">
+                {this.props.intl.formatMessage(priorityMessage)}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     );
