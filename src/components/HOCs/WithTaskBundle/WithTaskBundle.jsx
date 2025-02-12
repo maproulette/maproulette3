@@ -247,20 +247,31 @@ export function WithTaskBundle(WrappedComponent) {
         await this.unlockTasks([taskId]);
       }
 
-      if (taskBundle?.taskIds.length === 2) {
-        this.setState({ taskBundle: null });
+      if (taskBundle?.taskIds.length <= 2) {
+        this.stopLockRefresh();
+        this.setState({
+          taskBundle: null,
+          selectedTasks: [],
+        });
         return;
       }
 
       const updatedTaskIds = taskBundle.taskIds.filter((id) => id !== taskId);
       const updatedTasks = taskBundle.tasks.filter((task) => task.id !== taskId);
+
       const updatedTaskBundle = {
         ...taskBundle,
         taskIds: updatedTaskIds,
         tasks: updatedTasks,
       };
 
-      this.setState({ taskBundle: updatedTaskBundle });
+      this.stopLockRefresh();
+      this.startLockRefresh(updatedTaskIds);
+
+      this.setState({
+        taskBundle: updatedTaskBundle,
+        selectedTasks: updatedTaskIds,
+      });
     };
 
     clearActiveTaskBundle = async () => {

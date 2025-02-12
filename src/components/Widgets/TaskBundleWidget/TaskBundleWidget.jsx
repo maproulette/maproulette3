@@ -144,16 +144,31 @@ export default class TaskBundleWidget extends Component {
     const isCooperative = AsCooperativeWork(task).isCooperative();
 
     if (selectedArray.some((item) => AsCooperativeWork(item).isCooperative() !== isCooperative)) {
-      throw new Error("Bundle type mismatch, not all tasks are of the same type");
+      this.setState((prevState) => ({
+        errors: new Set([...prevState.errors, "bundleTypeMismatchError"]),
+      }));
+      return;
     }
 
     // Get selected task IDs and ensure current task is included
-    const selectedIds = [...selectedTasks.selected.keys()];
+    const selectedIds = Array.from(selectedTasks.selected.keys());
     if (!selectedIds.includes(task.id)) {
-      selectedIds.push(task.id);
+      this.props.selectTasks([task]);
     }
 
     this.props.createTaskBundle(selectedIds);
+  };
+
+  resetTaskBundle = async () => {
+    await this.props.resetTaskBundle();
+    await this.props.resetSelectedTasks();
+    // Select the main task and all tasks from the initial bundle
+    if (this.props.initialBundle?.tasks) {
+      this.props.selectTasks(this.props.initialBundle.tasks);
+    } else if (this.props.task) {
+      // If no initial bundle, at least select the main task
+      this.props.selectTasks([this.props.task]);
+    }
   };
 
   unbundleTask = (task) => {
@@ -162,13 +177,13 @@ export default class TaskBundleWidget extends Component {
       return;
     }
     this.props.removeTaskFromBundle(taskId);
-    this.props.toggleTaskSelection(task);
+    this.props.deselectTasks([task]);
   };
 
   bundleTask = (task) => {
     const taskId = task.id ?? task.taskId;
     this.props.addTaskToBundle(taskId);
-    this.props.toggleTaskSelection(task);
+    this.props.selectTasks([task]);
   };
 
   setBoundsToNearbyTask = () => {
@@ -218,11 +233,19 @@ export default class TaskBundleWidget extends Component {
   async componentDidMount() {
     this.initializeClusterFilters();
     await this.props.resetSelectedTasks();
-    const tasksToSelect = this.props.taskBundle?.tasks || [this.props.task];
-    if (!tasksToSelect.find((t) => t.id === this.props.task.id)) {
-      tasksToSelect.push(this.props.task);
+    // Always select the main task
+    if (this.props.task) {
+      this.props.selectTasks([this.props.task]);
     }
-    this.props.selectTasks(tasksToSelect);
+    // Then add any additional bundle tasks
+    if (this.props.taskBundle?.tasks) {
+      const additionalTasks = this.props.taskBundle.tasks.filter(
+        (t) => t.id !== this.props.task?.id,
+      );
+      if (additionalTasks.length > 0) {
+        this.props.selectTasks(additionalTasks);
+      }
+    }
     if (this.props.taskBundle || this.props.nearbyTasks) {
       this.initializeClusterFilters();
       this.initializeWebsocketSubscription();
@@ -235,11 +258,19 @@ export default class TaskBundleWidget extends Component {
 
     if (taskChanged || bundleChanged) {
       await this.props.resetSelectedTasks();
-      const tasksToSelect = this.props.taskBundle?.tasks || [this.props.task];
-      if (!tasksToSelect.find((t) => t.id === this.props.task.id)) {
-        tasksToSelect.push(this.props.task);
+      // Always select the main task first
+      if (this.props.task) {
+        this.props.selectTasks([this.props.task]);
       }
-      this.props.selectTasks(tasksToSelect);
+      // Then add any additional bundle tasks
+      if (this.props.taskBundle?.tasks) {
+        const additionalTasks = this.props.taskBundle.tasks.filter(
+          (t) => t.id !== this.props.task?.id,
+        );
+        if (additionalTasks.length > 0) {
+          this.props.selectTasks(additionalTasks);
+        }
+      }
     }
 
     if (bundleChanged || this.props.nearbyTasks !== prevProps.nearbyTasks) {
@@ -319,6 +350,7 @@ export default class TaskBundleWidget extends Component {
           saveFilters={this.saveFilters}
           revertFilters={this.revertFilters}
           createBundle={this.createBundle}
+          resetTaskBundle={this.resetTaskBundle}
           unbundleTask={this.unbundleTask}
           bundleTask={this.bundleTask}
           loading={this.props.loading}
@@ -587,7 +619,14 @@ const BuildBundle = (props) => {
       taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
       boundingBox={props.criteria?.boundingBox}
       initialBounds={toLatLngBounds(props.criteria?.boundingBox || [])}
-      onBulkTaskSelection={props.selectTasks}
+      onBulkTaskSelection={(tasks) => {
+        // Ensure main task stays selected
+        if (!props.selectedTasks.selected.has(props.task.id)) {
+          props.selectTasks([props.task]);
+        }
+        const tasksToSelect = tasks.filter((t) => t.id !== props.task.id);
+        props.selectTasks(tasksToSelect);
+      }}
       onBulkTaskDeselection={(tasks) => {
         const tasksToDeselect = tasks.filter((t) => t.id !== props.task.id);
         props.deselectTasks(tasksToDeselect);
