@@ -13,10 +13,7 @@ import AsMappableTask from "../../../interactions/Task/AsMappableTask";
 import { toLatLngBounds } from "../../../services/MapBounds/MapBounds";
 import { buildSearchURL } from "../../../services/SearchCriteria/SearchCriteria";
 import { TaskAction } from "../../../services/Task/TaskAction/TaskAction";
-import {
-  WidgetDataTarget,
-  registerWidgetType,
-} from "../../../services/Widget/Widget";
+import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import Dropdown from "../../Dropdown/Dropdown";
 import MapPane from "../../EnhancedMap/MapPane/MapPane";
@@ -42,11 +39,7 @@ import TaskStatusFilter from "../../TaskFilters/TaskStatusFilter";
 import messages from "./Messages";
 import TaskMarkerContent from "./TaskMarkerContent";
 
-const VALID_STATUS_KEYS = [
-  TaskAction.available,
-  TaskAction.skipped,
-  TaskAction.tooHard,
-];
+const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard];
 
 const descriptor = {
   widgetKey: "ReviewNearbyTasksWidget",
@@ -63,7 +56,7 @@ const ClusterMap = WithChallengeTaskClusters(
   true,
   false,
   false,
-  false
+  false,
 );
 
 export default class ReviewNearbyTasksWidget extends Component {
@@ -80,10 +73,7 @@ export default class ReviewNearbyTasksWidget extends Component {
           type: "Feature",
           geometry: {
             type: "Point",
-            coordinates: [
-              task.location.coordinates[0],
-              task.location.coordinates[1],
-            ],
+            coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
           },
         })),
       });
@@ -124,7 +114,7 @@ export default class ReviewNearbyTasksWidget extends Component {
     }
 
     const nearbyBounds = bbox(
-      featureCollection(taskList.map((t) => point([t.point.lng, t.point.lat])))
+      featureCollection(taskList.map((t) => point([t.point.lng, t.point.lat]))),
     );
 
     // Preserve existing zoom or default to 18
@@ -162,7 +152,7 @@ export default class ReviewNearbyTasksWidget extends Component {
     // Then add any additional bundle tasks
     if (this.props.taskBundle?.tasks) {
       const additionalTasks = this.props.taskBundle.tasks.filter(
-        (t) => t.id !== this.props.task?.id
+        (t) => t.id !== this.props.task?.id,
       );
       if (additionalTasks.length > 0) {
         this.props.selectTasks(additionalTasks);
@@ -176,8 +166,7 @@ export default class ReviewNearbyTasksWidget extends Component {
 
   async componentDidUpdate(prevProps) {
     const taskChanged = this.props.task?.id !== prevProps.task?.id;
-    const bundleChanged =
-      this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId;
+    const bundleChanged = this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId;
 
     if (taskChanged || bundleChanged) {
       await this.props.resetSelectedTasks();
@@ -188,7 +177,7 @@ export default class ReviewNearbyTasksWidget extends Component {
       // Then add any additional bundle tasks
       if (this.props.taskBundle?.tasks) {
         const additionalTasks = this.props.taskBundle.tasks.filter(
-          (t) => t.id !== this.props.task?.id
+          (t) => t.id !== this.props.task?.id,
         );
         if (additionalTasks.length > 0) {
           this.props.selectTasks(additionalTasks);
@@ -240,13 +229,11 @@ const calculateTasksInChallenge = (props) => {
 };
 
 const ActiveBundle = (props) => {
-  const { task, taskBundle, bundleEditsDisabled, initialBundle, widgetLayout } =
-    props;
+  const { task, taskBundle, bundleEditsDisabled, initialBundle, widgetLayout } = props;
   const disabled =
     props.bundleEditsDisabled ||
     (props.initialBundle &&
-      props.initialBundle?.taskIds?.sort() ===
-        props.taskBundle?.taskIds?.sort());
+      props.initialBundle?.taskIds?.sort() === props.taskBundle?.taskIds?.sort());
 
   const showMarkerPopup = (markerData) => {
     return (
@@ -276,13 +263,10 @@ const ActiveBundle = (props) => {
         type: "Feature",
         geometry: {
           type: "Point",
-          coordinates: [
-            task.location.coordinates[0],
-            task.location.coordinates[1],
-          ],
+          coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
         },
       })),
-    })
+    }),
   );
 
   const map = (
@@ -313,11 +297,7 @@ const ActiveBundle = (props) => {
           onClick={() => props.setBundledOnly(!props.bundledOnly)}
         >
           <FormattedMessage
-            {...messages[
-              props.bundledOnly
-                ? "displayAllTasksLabel"
-                : "displayBundledTasksLabel"
-            ]}
+            {...messages[props.bundledOnly ? "displayAllTasksLabel" : "displayBundledTasksLabel"]}
           />
         </button>
         <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4 mr-ml-4 mr-mb-2">
@@ -352,9 +332,7 @@ const ActiveBundle = (props) => {
         </div>
         <div
           className={`mr-flex mr-space-x-3 mr-items-center ${
-            widgetLayout && widgetLayout?.w === 4
-              ? "mr-justify-between"
-              : "mr-justify-end"
+            widgetLayout && widgetLayout?.w === 4 ? "mr-justify-between" : "mr-justify-end"
           }`}
         >
           {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
@@ -412,16 +390,10 @@ const BuildBundle = (props) => {
     return (
       <Popup
         key={markerData.options.taskId}
-        offset={
-          props.task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]
-        }
+        offset={props.task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]}
       >
         <div className="marker-popup-content">
-          <TaskMarkerContent
-            {...props}
-            marker={markerData}
-            taskId={markerData.options.taskId}
-          />
+          <TaskMarkerContent {...props} marker={markerData} taskId={markerData.options.taskId} />
         </div>
       </Popup>
     );
@@ -520,19 +492,17 @@ registerWidgetType(
               WithFilterCriteria(
                 WithBoundedTasks(
                   WithBrowsedChallenge(
-                    WithWebSocketSubscriptions(
-                      WithKeyboardShortcuts(ReviewNearbyTasksWidget)
-                    )
+                    WithWebSocketSubscriptions(WithKeyboardShortcuts(ReviewNearbyTasksWidget)),
                   ),
                   "filteredClusteredTasks",
-                  "taskInfo"
+                  "taskInfo",
                 ),
                 true,
                 false,
                 true,
                 true,
-                "taskBundleFilters"
-              )
+                "taskBundleFilters",
+              ),
             ),
             "clusteredTasks",
             "filteredClusteredTasks",
@@ -540,13 +510,13 @@ registerWidgetType(
               includeLocked: false,
             },
             true,
-            "taskBundleFilters"
-          )
-        )
-      )
-    )
+            "taskBundleFilters",
+          ),
+        ),
+      ),
+    ),
   ),
-  descriptor
+  descriptor,
 );
 
 const RevertFiltersControl = ({ revertFilters }) => {
@@ -579,10 +549,7 @@ const SaveFiltersControl = ({ saveFilters, closeDropdown }) => {
 };
 
 const ClearFiltersControl = ({ clearFilters }) => (
-  <button
-    className="mr-flex mr-items-center mr-text-green-lighter"
-    onClick={clearFilters}
-  >
+  <button className="mr-flex mr-items-center mr-text-green-lighter" onClick={clearFilters}>
     <SvgSymbol
       sym="close-icon"
       viewBox="0 0 20 20"
