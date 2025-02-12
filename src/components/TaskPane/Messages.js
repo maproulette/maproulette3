@@ -78,9 +78,4 @@ export default defineMessages({
     id: "Task.pane.controls.copyVirtualShareLink.label",
     defaultMessage: "Copy Virtual Challenge Share Link",
   },
-
-  savingTask: {
-    id: "Task.pane.controls.saving.label",
-    defaultMessage: "Saving Task",
-  },
 });

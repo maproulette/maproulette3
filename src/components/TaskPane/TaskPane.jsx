@@ -422,30 +422,16 @@ export class TaskPane extends Component {
               </div>
             }
             completeTask={this.completeTask}
-            completingTask={this.state.completingTaskId}
+            completingTask={this.state.completingTask}
             setCompletionResponse={this.setCompletionResponse}
             setNeedsResponses={this.setNeedsResponses}
             completionResponses={completionResponses}
             needsResponses={this.state.needsResponses}
             templateRevision={isCompletionStatus(this.props.task.status)}
           />
-          {this.state.completingTaskId && (
-            <div className="mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200 mr-bg-blue-firefly-90 mr-flex mr-flex-col mr-justify-center mr-items-center">
-              <div className="mr-flex mr-items-center mr-bg-black-10 mr-rounded-lg mr-px-12 mr-py-8 mr-shadow-lg">
-                <div className="mr-text-yellow mr-text-xl mr-font-medium mr-mr-6">
-                  <FormattedMessage {...messages.savingTask} />
-                </div>
-                <BusySpinner
-                  big
-                  inline
-                  className="mr-w-16 mr-h-16 mr-fill-current mr-text-yellow"
-                />
-              </div>
-            </div>
-          )}
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
-          <MapPane completingTask={this.state.completingTaskId}>
+          <MapPane>
             <TaskMap
               isMobile
               task={this.props.task}
