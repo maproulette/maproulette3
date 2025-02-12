@@ -8,10 +8,7 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import AsCooperativeWork from "../../../interactions/Task/AsCooperativeWork";
 import AsMappableBundle from "../../../interactions/TaskBundle/AsMappableBundle";
-import {
-  fetchChallenge,
-  fetchParentProject,
-} from "../../../services/Challenge/Challenge";
+import { fetchChallenge, fetchParentProject } from "../../../services/Challenge/Challenge";
 import { fetchChallengeActions } from "../../../services/Challenge/Challenge";
 import { CHALLENGE_STATUS_FINISHED } from "../../../services/Challenge/ChallengeStatus/ChallengeStatus";
 import AppErrors from "../../../services/Error/AppErrors";
@@ -59,10 +56,7 @@ const PROJECT_STALE = 300000; // 5 minutes
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 const WithCurrentTask = (WrappedComponent, forReview = false) =>
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(WithLoadedTask(WrappedComponent, forReview));
+  connect(mapStateToProps, mapDispatchToProps)(WithLoadedTask(WrappedComponent, forReview));
 
 /**
  * WithLoadedTask is a private HOC used to fetch an up-to-date copy of the task
@@ -107,11 +101,7 @@ export const mapStateToProps = (state, ownProps) => {
 
     if (taskEntity) {
       // denormalize task so that parent challenge is embedded.
-      mappedProps.task = denormalize(
-        taskEntity,
-        taskDenormalizationSchema(),
-        state.entities
-      );
+      mappedProps.task = denormalize(taskEntity, taskDenormalizationSchema(), state.entities);
 
       mappedProps.challengeId = mappedProps.task?.parent?.id;
     }
@@ -132,8 +122,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         .then((normalizedResults) => {
           if (
             !_isFinite(normalizedResults.result) ||
-            normalizedResults?.entities?.tasks?.[normalizedResults.result]
-              ?.deleted
+            normalizedResults?.entities?.tasks?.[normalizedResults.result]?.deleted
           ) {
             dispatch(addError(AppErrors.task.doesNotExist));
             if (ownProps.match.params.challengeId) {
@@ -144,24 +133,21 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             return;
           }
 
-          const loadedTask =
-            normalizedResults.entities.tasks[normalizedResults.result];
+          const loadedTask = normalizedResults.entities.tasks[normalizedResults.result];
           // Load the parent challenge if missing or stale
           if (
             !_isPlainObject(existingTask?.parent) ||
             isStale(existingTask.parent, CHALLENGE_STALE)
           ) {
-            dispatch(fetchChallenge(loadedTask.parent)).then(
-              (normalizedChallengeResults) => {
-                // Load the parent project if missing or stale
-                if (
-                  !_isPlainObject(existingTask?.parent?.parent) ||
-                  isStale(existingTask.parent.parent, PROJECT_STALE)
-                ) {
-                  fetchParentProject(dispatch, normalizedChallengeResults);
-                }
+            dispatch(fetchChallenge(loadedTask.parent)).then((normalizedChallengeResults) => {
+              // Load the parent project if missing or stale
+              if (
+                !_isPlainObject(existingTask?.parent?.parent) ||
+                isStale(existingTask.parent.parent, PROJECT_STALE)
+              ) {
+                fetchParentProject(dispatch, normalizedChallengeResults);
               }
-            );
+            });
           }
 
           // Fetch the task comments and location data, but don't wait for them
@@ -197,7 +183,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       osmComment,
       tagEdits,
       completionResponses,
-      taskBundle
+      taskBundle,
     ) => {
       const taskId = task.id;
 
@@ -215,14 +201,12 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
                     taskBundle.bundleId,
                     AsMappableBundle(taskBundle).primaryTaskId() || taskId,
                     comment,
-                    taskStatus
-                  )
-                )
+                    taskStatus,
+                  ),
+                ),
               );
             } else {
-              parallelTasks.push(
-                dispatch(addTaskComment(taskId, comment, taskStatus))
-              );
+              parallelTasks.push(dispatch(addTaskComment(taskId, comment, taskStatus)));
             }
           }
 
@@ -234,9 +218,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
           // Renew virtual challenge if needed
           if (_isFinite(ownProps.virtualChallengeId)) {
-            parallelTasks.push(
-              dispatch(renewVirtualChallenge(ownProps.virtualChallengeId))
-            );
+            parallelTasks.push(dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)));
           }
 
           // Wait for all parallel tasks to complete
@@ -260,8 +242,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
       let cooperativeWorkSummary = null;
       if (AsCooperativeWork(task).isTagType()) {
-        cooperativeWorkSummary =
-          AsCooperativeWork(task).tagChangeSummary(tagEdits);
+        cooperativeWorkSummary = AsCooperativeWork(task).tagChangeSummary(tagEdits);
       }
 
       const completeAction = taskBundle
@@ -273,7 +254,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             tags,
             cooperativeWorkSummary,
             osmComment,
-            completionResponses
+            completionResponses,
           )
         : completeTask(
             taskId,
@@ -282,7 +263,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             tags,
             cooperativeWorkSummary,
             osmComment,
-            completionResponses
+            completionResponses,
           );
 
       await dispatch(completeAction);
@@ -300,12 +281,12 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       }
 
       if (taskLoadBy === TaskLoadMethod.proximity && requestedNextTask) {
-        nextRequestedTask(dispatch, ownProps, requestedNextTask).then(
-          (newTask) => visitNewTask(dispatch, ownProps, taskId, newTask)
+        nextRequestedTask(dispatch, ownProps, requestedNextTask).then((newTask) =>
+          visitNewTask(dispatch, ownProps, taskId, newTask),
         );
       } else {
         nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then((newTask) =>
-          visitNewTask(dispatch, ownProps, taskId, newTask)
+          visitNewTask(dispatch, ownProps, taskId, newTask),
         );
       }
     },
@@ -394,15 +375,15 @@ export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
     return dispatch(
       loadRandomTaskFromVirtualChallenge(
         props.virtualChallengeId,
-        taskLoadBy === TaskLoadMethod.proximity ? currentTaskId : undefined
-      )
+        taskLoadBy === TaskLoadMethod.proximity ? currentTaskId : undefined,
+      ),
     );
   } else {
     return dispatch(
       loadRandomTaskFromChallenge(
         challengeIdFromRoute(props, props.challengeId),
-        taskLoadBy === TaskLoadMethod.proximity ? currentTaskId : undefined
-      )
+        taskLoadBy === TaskLoadMethod.proximity ? currentTaskId : undefined,
+      ),
     );
   }
 };
@@ -413,10 +394,7 @@ export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
 export const nextRequestedTask = function (dispatch, props, requestedTaskId) {
   return dispatch(fetchTask(requestedTaskId))
     .then(() => dispatch(startTask(requestedTaskId)))
-    .then(
-      (normalizedResults) =>
-        normalizedResults?.entities?.tasks?.[normalizedResults.result]
-    );
+    .then((normalizedResults) => normalizedResults?.entities?.tasks?.[normalizedResults.result]);
 };
 
 /**
@@ -428,9 +406,7 @@ export const visitNewTask = function (dispatch, props, currentTaskId, newTask) {
     // The route we use is different for virtual challenges vs standard
     // challenges.
     if (_isFinite(props.virtualChallengeId)) {
-      props.history.push(
-        `/virtual/${props.virtualChallengeId}/task/${newTask.id}`
-      );
+      props.history.push(`/virtual/${props.virtualChallengeId}/task/${newTask.id}`);
     } else {
       const challengeId = challengeIdFromRoute(props, props.challengeId);
       props.history.push(`/challenge/${challengeId}/task/${newTask.id}`);
@@ -448,8 +424,7 @@ export const visitNewTask = function (dispatch, props, currentTaskId, newTask) {
     } else {
       const challengeId = challengeIdFromRoute(props, props.challengeId);
       return dispatch(fetchChallenge(challengeId)).then((normalizedResults) => {
-        const challenge =
-          normalizedResults.entities.challenges[normalizedResults.result];
+        const challenge = normalizedResults.entities.challenges[normalizedResults.result];
         if (challenge.status === CHALLENGE_STATUS_FINISHED) {
           props.history.push("/browse/challenges", {
             congratulate: true,

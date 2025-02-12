@@ -12,12 +12,9 @@ import messages from "./Messages";
  */
 const MoreOptionsButton = ({ toggleDropdownVisible, intl, disabled }) => (
   <button
-    className={classNames(
-      "mr-dropdown__button mr-button mr-text-green-lighter mr-mr-2",
-      {
-        "mr-opacity-50 mr-cursor-not-allowed": disabled,
-      }
-    )}
+    className={classNames("mr-dropdown__button mr-button mr-text-green-lighter mr-mr-2", {
+      "mr-opacity-50 mr-cursor-not-allowed": disabled,
+    })}
     style={{ minWidth: "20.5rem" }}
     onClick={disabled ? null : toggleDropdownVisible}
     disabled={disabled}
@@ -63,9 +60,7 @@ const TaskRevisedControl = ({ complete, asLink, intl, task, disabled }) => {
           disabled={disabled}
         />
       )}
-      dropdownContent={() => (
-        <ListMoreOptionsItems complete={complete} task={task} />
-      )}
+      dropdownContent={() => <ListMoreOptionsItems complete={complete} task={task} />}
     />
   );
 };
