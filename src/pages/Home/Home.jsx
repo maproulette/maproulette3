@@ -1,21 +1,19 @@
-import { Component, Fragment } from "react";
+import { memo } from "react";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import Featured from "./Featured";
 import Hero from "./Hero";
 import Instructions from "./Instructions";
 import Intro from "./Intro";
 
-export class Home extends Component {
-  render() {
-    return (
-      <Fragment>
-        <Hero {...this.props} />
-        <Intro {...this.props} />
-        <Instructions {...this.props} />
-        <Featured {...this.props} />
-      </Fragment>
-    );
-  }
-}
+const Home = memo(function Home(props) {
+  return (
+    <>
+      <Hero {...props} />
+      <Intro {...props} />
+      <Instructions {...props} />
+      <Featured {...props} />
+    </>
+  );
+});
 
 export default WithCurrentUser(Home);
