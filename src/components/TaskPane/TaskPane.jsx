@@ -414,7 +414,7 @@ export class TaskPane extends Component {
               </div>
             }
             completeTask={this.completeTask}
-            completingTask={this.state.completingTask}
+            completingTask={this.props.completingTask}
             setCompletionResponse={this.setCompletionResponse}
             setNeedsResponses={this.setNeedsResponses}
             completionResponses={completionResponses}

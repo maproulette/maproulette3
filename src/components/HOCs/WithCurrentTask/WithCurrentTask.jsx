@@ -242,7 +242,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       }
 
       const completeAction = taskBundle
-        ? completeTaskBundle(
+        ? await completeTaskBundle(
             taskBundle.bundleId,
             AsMappableBundle(taskBundle).primaryTaskId() || taskId,
             taskStatus,
@@ -252,7 +252,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             osmComment,
             completionResponses,
           )
-        : completeTask(
+        : await completeTask(
             taskId,
             taskStatus,
             needsReview,
@@ -262,7 +262,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             completionResponses,
           );
 
-      await dispatch(completeAction);
+      dispatch(completeAction);
       const afterResult = await doAfter();
       return afterResult;
     },
