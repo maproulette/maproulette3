@@ -20,12 +20,7 @@ import _sortBy from "lodash/sortBy";
 import _split from "lodash/split";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
-import {
-  FormattedDate,
-  FormattedMessage,
-  FormattedTime,
-  injectIntl,
-} from "react-intl";
+import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import ReactTable from "react-table-6";
 import ConfigureColumnsModal from "../../components/ConfigureColumnsModal/ConfigureColumnsModal";
@@ -40,10 +35,7 @@ import {
   keysByReviewStatus,
   messagesByReviewStatus,
 } from "../../services/Task/TaskReview/TaskReviewStatus";
-import {
-  keysByStatus,
-  messagesByStatus,
-} from "../../services/Task/TaskStatus/TaskStatus";
+import { keysByStatus, messagesByStatus } from "../../services/Task/TaskStatus/TaskStatus";
 import WithConfigurableColumns from "../HOCs/WithConfigurableColumns/WithConfigurableColumns";
 import WithLoadedTask from "../HOCs/WithLoadedTask/WithLoadedTask";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
@@ -52,11 +44,7 @@ import messages from "./Messages";
 import "./TaskAnalysisTable.scss";
 import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
 import TaskAnalysisTableHeader from "./TaskAnalysisTableHeader";
-import {
-  StatusLabel,
-  ViewCommentsButton,
-  makeInvertable,
-} from "./TaskTableHelpers";
+import { StatusLabel, ViewCommentsButton, makeInvertable } from "./TaskTableHelpers";
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask);
@@ -87,7 +75,7 @@ const ALL_COLUMNS = Object.assign(
         metaReviewedBy: { group: "review" },
         metaReviewedAt: { group: "review" },
       }
-    : null
+    : null,
 );
 
 const DEFAULT_COLUMNS = [
@@ -150,18 +138,12 @@ export class TaskAnalysisTableInternal extends Component {
   }
 
   getColumns = (manager, taskBaseRoute, data) => {
-    const columnTypes = setupColumnTypes(
-      this.props,
-      taskBaseRoute,
-      manager,
-      data,
-      (taskId) => this.setState({ openComments: taskId })
+    const columnTypes = setupColumnTypes(this.props, taskBaseRoute, manager, data, (taskId) =>
+      this.setState({ openComments: taskId }),
     );
 
     if (_isArray(this.props.showColumns) && this.props.showColumns.length > 0) {
-      return _compact(
-        _map(this.props.showColumns, (columnId) => columnTypes[columnId])
-      );
+      return _compact(_map(this.props.showColumns, (columnId) => columnTypes[columnId]));
     } else {
       const findColumn = (column) => {
         if (column.startsWith(":")) {
@@ -172,14 +154,9 @@ export class TaskAnalysisTableInternal extends Component {
             Cell: ({ row }) => {
               let valueToDisplay = "";
               if ((row._original.geometries?.features?.length ?? 0) > 0) {
-                valueToDisplay = _get(
-                  row._original.geometries.features[0].properties,
-                  key
-                );
+                valueToDisplay = _get(row._original.geometries.features[0].properties, key);
               }
-              return !row._original ? null : (
-                <div className="">{valueToDisplay}</div>
-              );
+              return !row._original ? null : <div className="">{valueToDisplay}</div>;
             },
             sortable: false,
           };
@@ -189,10 +166,7 @@ export class TaskAnalysisTableInternal extends Component {
       };
       return _concat(
         [columnTypes.selected],
-        _filter(
-          _map(_keys(this.props.addedColumns), findColumn),
-          (c) => !_isUndefined(c)
-        )
+        _filter(_map(_keys(this.props.addedColumns), findColumn), (c) => !_isUndefined(c)),
       );
     }
   };
@@ -213,14 +187,8 @@ export class TaskAnalysisTableInternal extends Component {
     let taskBaseRoute = null;
 
     // if management controls are to be shown, then a challenge object is required
-    if (
-      !_isArray(this.props.showColumns) ||
-      this.props.showColumns.indexOf("controls") !== -1
-    ) {
-      if (
-        !_isObject(this.props.challenge) ||
-        !_isObject(this.props.challenge.parent)
-      ) {
+    if (!_isArray(this.props.showColumns) || this.props.showColumns.indexOf("controls") !== -1) {
+      if (!_isObject(this.props.challenge) || !_isObject(this.props.challenge.parent)) {
         return null;
       }
 
@@ -251,10 +219,7 @@ export class TaskAnalysisTableInternal extends Component {
           if (!t.reviewedAt || !t.reviewStartedAt) {
             return 0;
           }
-          return differenceInSeconds(
-            parseISO(t.reviewedAt),
-            parseISO(t.reviewStartedAt)
-          );
+          return differenceInSeconds(parseISO(t.reviewedAt), parseISO(t.reviewStartedAt));
         });
       } else {
         data = _sortBy(data, defaultSorted[0].id);
@@ -319,9 +284,7 @@ export class TaskAnalysisTableInternal extends Component {
                 </div>
               );
             }}
-            SubComponent={(props) => (
-              <ViewTaskSubComponent taskId={props.original.id} />
-            )}
+            SubComponent={(props) => <ViewTaskSubComponent taskId={props.original.id} />}
             unbundleTask={this.props.unbundleTask}
             bundleTask={this.props.bundleTask}
             collapseOnDataChange={false}
@@ -333,9 +296,7 @@ export class TaskAnalysisTableInternal extends Component {
             defaultPageSize={this.props.defaultPageSize}
             pageSize={pageSize}
             pages={totalPages}
-            onFetchData={(state, instance) =>
-              this.debouncedUpdateTasks(state, instance)
-            }
+            onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
             onPageSizeChange={(pageSize) => this.props.changePageSize(pageSize)}
             page={page}
             getTheadFilterThProps={() => {
@@ -369,13 +330,7 @@ export class TaskAnalysisTableInternal extends Component {
 }
 
 // Setup tasks table. See react-table docs for details
-const setupColumnTypes = (
-  props,
-  taskBaseRoute,
-  manager,
-  data,
-  openComments
-) => {
+const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => {
   const columns = {};
 
   columns.selected = {
@@ -385,22 +340,18 @@ const setupColumnTypes = (
     Cell: ({ value, original }) => {
       const status = original.status ?? original.taskStatus;
       const alreadyBundled =
-        original.bundleId &&
-        props.initialBundle?.bundleId !== original.bundleId;
+        original.bundleId && props.initialBundle?.bundleId !== original.bundleId;
       const enableSelecting =
         !alreadyBundled &&
         !props.bundling &&
         !props.taskReadOnly &&
         ([0, 3, 6].includes(status) ||
-          (props.initialBundle?.bundleId &&
-            props.initialBundle?.bundleId === original.bundleId)) &&
+          (props.initialBundle?.bundleId && props.initialBundle?.bundleId === original.bundleId)) &&
         original.taskId !== props.task?.id &&
         props.workspace.name !== "taskReview" &&
         !AsCooperativeWork(props.task).isTagType();
 
-      return props.highlightPrimaryTask &&
-        original.id === props.task?.id &&
-        !alreadyBundled ? (
+      return props.highlightPrimaryTask && original.id === props.task?.id && !alreadyBundled ? (
         <span className="mr-text-green-lighter">✓</span>
       ) : enableSelecting ? (
         <input
@@ -456,11 +407,7 @@ const setupColumnTypes = (
             {taskLink}
           </span>
         );
-      } else if (
-        _isFinite(t.bundleId) &&
-        t.bundleId &&
-        t.bundleId == props.taskBundle?.bundleId
-      ) {
+      } else if (_isFinite(t.bundleId) && t.bundleId && t.bundleId == props.taskBundle?.bundleId) {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
@@ -516,41 +463,35 @@ const setupColumnTypes = (
 
       return (
         <div>
-          {!isActiveTask &&
-            validBundlingStatus &&
-            isInActiveBundle &&
-            !alreadyBundled && (
-              <button
-                disabled={props.bundleEditsDisabled}
-                className="mr-text-red-light"
-                style={{
-                  cursor: props.bundleEditsDisabled ? "default" : "pointer",
-                  opacity: props.bundleEditsDisabled ? 0.3 : 1,
-                  pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
-                }}
-                onClick={() => props.unbundleTask(row._original)}
-              >
-                <FormattedMessage {...messages.unbundle} />
-              </button>
-            )}
+          {!isActiveTask && validBundlingStatus && isInActiveBundle && !alreadyBundled && (
+            <button
+              disabled={props.bundleEditsDisabled}
+              className="mr-text-red-light"
+              style={{
+                cursor: props.bundleEditsDisabled ? "default" : "pointer",
+                opacity: props.bundleEditsDisabled ? 0.3 : 1,
+                pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
+              }}
+              onClick={() => props.unbundleTask(row._original)}
+            >
+              <FormattedMessage {...messages.unbundle} />
+            </button>
+          )}
 
-          {!isActiveTask &&
-            validBundlingStatus &&
-            !isInActiveBundle &&
-            !alreadyBundled && (
-              <button
-                disabled={props.bundleEditsDisabled}
-                className="mr-text-green-lighter"
-                style={{
-                  cursor: props.bundleEditsDisabled ? "default" : "pointer",
-                  opacity: props.bundleEditsDisabled ? 0.3 : 1,
-                  pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
-                }}
-                onClick={() => props.bundleTask(row._original)}
-              >
-                <FormattedMessage {...messages.bundle} />
-              </button>
-            )}
+          {!isActiveTask && validBundlingStatus && !isInActiveBundle && !alreadyBundled && (
+            <button
+              disabled={props.bundleEditsDisabled}
+              className="mr-text-green-lighter"
+              style={{
+                cursor: props.bundleEditsDisabled ? "default" : "pointer",
+                opacity: props.bundleEditsDisabled ? 0.3 : 1,
+                pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
+              }}
+              onClick={() => props.bundleTask(row._original)}
+            >
+              <FormattedMessage {...messages.bundle} />
+            </button>
+          )}
           {isActiveTask && <div className="mr-text-yellow">Primary Task</div>}
         </div>
       );
@@ -582,8 +523,7 @@ const setupColumnTypes = (
     Cell: (props) =>
       !props.value ? null : (
         <span>
-          <FormattedDate value={props.value} />{" "}
-          <FormattedTime value={props.value} />
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
       ),
   };
@@ -614,7 +554,7 @@ const setupColumnTypes = (
     Header: makeInvertable(
       props.intl.formatMessage(messages.reviewRequestedByLabel),
       () => props.invertField("completedBy"),
-      props.criteria?.invertFields?.completedBy
+      props.criteria?.invertFields?.completedBy,
     ),
 
     accessor: "completedBy",
@@ -626,9 +566,8 @@ const setupColumnTypes = (
       <div
         className="row-user-column"
         style={{
-          color: AsColoredHashable(
-            row._original.completedBy?.username || row._original.completedBy
-          ).hashColor,
+          color: AsColoredHashable(row._original.completedBy?.username || row._original.completedBy)
+            .hashColor,
         }}
       >
         <a
@@ -655,8 +594,7 @@ const setupColumnTypes = (
     Cell: (props) =>
       !props.value ? null : (
         <span>
-          <FormattedDate value={props.value} />{" "}
-          <FormattedTime value={props.value} />
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
       ),
   };
@@ -673,8 +611,7 @@ const setupColumnTypes = (
     Cell: (props) =>
       !props.value ? null : (
         <span>
-          <FormattedDate value={props.value} />{" "}
-          <FormattedTime value={props.value} />
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
       ),
   };
@@ -688,12 +625,11 @@ const setupColumnTypes = (
     maxWidth: 120,
     minWidth: 120,
     Cell: ({ row }) => {
-      if (!row._original.reviewedAt || !row._original.reviewStartedAt)
-        return null;
+      if (!row._original.reviewedAt || !row._original.reviewStartedAt) return null;
 
       const seconds = differenceInSeconds(
         parseISO(row._original.reviewedAt),
-        parseISO(row._original.reviewStartedAt)
+        parseISO(row._original.reviewStartedAt),
       );
       return (
         <span>
@@ -708,7 +644,7 @@ const setupColumnTypes = (
     Header: makeInvertable(
       props.intl.formatMessage(messages.reviewedByLabel),
       () => props.invertField("reviewedBy"),
-      props.criteria?.invertFields?.reviewedBy
+      props.criteria?.invertFields?.reviewedBy,
     ),
     accessor: "reviewedBy",
     filterable: true,
@@ -720,9 +656,8 @@ const setupColumnTypes = (
         <div
           className="row-user-column"
           style={{
-            color: AsColoredHashable(
-              row._original.reviewedBy.username || row._original.reviewedBy
-            ).hashColor,
+            color: AsColoredHashable(row._original.reviewedBy.username || row._original.reviewedBy)
+              .hashColor,
           }}
         >
           {row._original.reviewedBy.username || row._original.reviewedBy}
@@ -735,7 +670,7 @@ const setupColumnTypes = (
     Header: makeInvertable(
       props.intl.formatMessage(messages.metaReviewedByLabel),
       () => props.invertField("metaReviewedBy"),
-      props.criteria?.invertFields?.metaReviewedBy
+      props.criteria?.invertFields?.metaReviewedBy,
     ),
     accessor: "metaReviewedBy",
     filterable: true,
@@ -748,13 +683,11 @@ const setupColumnTypes = (
           className="row-user-column"
           style={{
             color: AsColoredHashable(
-              row._original.metaReviewedBy.username ||
-                row._original.metaReviewedBy
+              row._original.metaReviewedBy.username || row._original.metaReviewedBy,
             ).hashColor,
           }}
         >
-          {row._original.metaReviewedBy.username ||
-            row._original.metaReviewedBy}
+          {row._original.metaReviewedBy.username || row._original.metaReviewedBy}
         </div>
       ),
   };
@@ -764,8 +697,7 @@ const setupColumnTypes = (
     Header: props.intl.formatMessage(messages.reviewStatusLabel),
     accessor: (x) => (_isUndefined(x.reviewStatus) ? -1 : x.reviewStatus),
     sortable: true,
-    exportable: (t) =>
-      props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
+    exportable: (t) => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
     maxWidth: 180,
     minWidth: 155,
     defaultSortDesc: true,
@@ -782,11 +714,9 @@ const setupColumnTypes = (
   columns.metaReviewStatus = {
     id: "metaReviewStatus",
     Header: props.intl.formatMessage(messages.metaReviewStatusLabel),
-    accessor: (x) =>
-      _isUndefined(x.metaReviewStatus) ? -1 : x.metaReviewStatus,
+    accessor: (x) => (_isUndefined(x.metaReviewStatus) ? -1 : x.metaReviewStatus),
     sortable: true,
-    exportable: (t) =>
-      props.intl.formatMessage(messagesByReviewStatus[t.metaReviewStatus]),
+    exportable: (t) => props.intl.formatMessage(messagesByReviewStatus[t.metaReviewStatus]),
     maxWidth: 180,
     minWidth: 155,
     defaultSortDesc: true,
@@ -811,9 +741,8 @@ const setupColumnTypes = (
       <div
         className="row-user-column"
         style={{
-          color: AsColoredHashable(
-            row._original.completedBy?.username || row._original.completedBy
-          ).hashColor,
+          color: AsColoredHashable(row._original.completedBy?.username || row._original.completedBy)
+            .hashColor,
         }}
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
@@ -826,9 +755,7 @@ const setupColumnTypes = (
               >
                 {reviewer.username}
               </span>
-              {index + 1 !== row._original.additionalReviewers?.length
-                ? ", "
-                : ""}
+              {index + 1 !== row._original.additionalReviewers?.length ? ", " : ""}
             </Fragment>
           );
         })}
@@ -866,13 +793,8 @@ const setupColumnTypes = (
         {!_isUndefined(row._original.reviewStatus) && (
           <Link
             to={{
-              pathname:
-                `/challenge/${props.challenge.id}/task/` +
-                `${row._original.id}/review`,
-              state: _merge(
-                { filters: { challengeId: props.challenge.id } },
-                props.criteria
-              ),
+              pathname: `/challenge/${props.challenge.id}/task/` + `${row._original.id}/review`,
+              state: _merge({ filters: { challengeId: props.challenge.id } }, props.criteria),
             }}
             className="mr-mr-2"
           >
@@ -892,11 +814,7 @@ const setupColumnTypes = (
     accessor: "commentID",
     maxWidth: 110,
     sortable: false,
-    Cell: (props) => (
-      <ViewCommentsButton
-        onClick={() => openComments(props.row._original.id)}
-      />
-    ),
+    Cell: (props) => <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
   };
 
   columns.tags = {
@@ -917,7 +835,7 @@ const setupColumnTypes = (
               >
                 {t.name}
               </div>
-            )
+            ),
           )}
         </div>
       );
@@ -925,9 +843,9 @@ const setupColumnTypes = (
     Filter: ({ filter, onChange }) => {
       const preferredTags = _filter(
         _split(props.challenge?.preferredTags, ",").concat(
-          _split(props.challenge?.preferredReviewTags, ",")
+          _split(props.challenge?.preferredReviewTags, ","),
         ),
-        (result) => !_isEmpty(result)
+        (result) => !_isEmpty(result),
       );
 
       return (
@@ -964,11 +882,6 @@ TaskAnalysisTableInternal.propTypes = {
 
 export default injectIntl(
   WithTargetUser(
-    WithConfigurableColumns(
-      TaskAnalysisTableInternal,
-      ALL_COLUMNS,
-      DEFAULT_COLUMNS,
-      messages
-    )
-  )
+    WithConfigurableColumns(TaskAnalysisTableInternal, ALL_COLUMNS, DEFAULT_COLUMNS, messages),
+  ),
 );
