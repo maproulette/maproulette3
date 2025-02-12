@@ -414,7 +414,7 @@ export const startMultipleTasks = function (taskIds) {
 /**
  * Mark the given task as completed with the given status.
  */
-export const completeTask = function (
+export const completeTask = async function (
   taskId,
   taskStatus,
   needsReview,
