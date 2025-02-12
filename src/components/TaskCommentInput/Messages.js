@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Submit",
   },
 
+  cancelCommentLabel: {
+    id: "Task.comments.comment.controls.cancel.label",
+    defaultMessage: "Cancel",
+  },
+
   writeLabel: {
     id: "Task.controls.completionComment.write.label",
     defaultMessage: "Write",

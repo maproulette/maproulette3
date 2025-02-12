@@ -71,6 +71,11 @@ export default defineMessages({
     defaultMessage: "Reject",
   },
 
+  modify: {
+    id: "Admin.TaskReview.controls.modify",
+    defaultMessage: "Update Error Tags",
+  },
+
   next: {
     id: "Admin.TaskReview.controls.next",
     defaultMessage: "Review next task",

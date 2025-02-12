@@ -79,6 +79,7 @@ export const fetchTaskClusters = function (
       // pe: limit to enabled projects
       searchParameters.ce = onlyEnabled ? "true" : "false";
       searchParameters.pe = onlyEnabled ? "true" : "false";
+      searchParameters.cg = Boolean(filters.global);
 
       // if we are restricting to onlyEnabled challenges then let's
       // not show 'local' challenges either.

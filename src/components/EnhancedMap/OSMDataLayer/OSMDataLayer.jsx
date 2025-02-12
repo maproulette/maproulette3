@@ -40,6 +40,7 @@ const generateLayer = (props, map, _leaflet) => {
         key={props.intl.locale}
         locale={props.intl.locale}
         messages={props.intl.messages}
+        onError={() => {}} // Suppress errors in the console
         textComponent="span"
       >
         <PropertyList

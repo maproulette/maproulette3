@@ -659,7 +659,7 @@ will not be able to make sense of it.
   disableOsmIdProperty: {
     id: "Admin.EditChallenge.form.disableOsmIdProperty",
     defaultMessage:
-      "This ID cannot be edited after challenge creation, this is to prevent task duplication. [Learn more](https://learn.maproulette.org/documentation/setting-external-task-identifiers/).",
+      "This ID cannot be edited after a challenge has successfully created tasks, this is to prevent task duplication. [Learn more](https://learn.maproulette.org/documentation/setting-external-task-identifiers/).",
   },
 
   customTaskStyleLabel: {
@@ -769,6 +769,17 @@ will not be able to make sense of it.
   reviewSettingRequested: {
     id: "Challenge.reviewSetting.requested",
     defaultMessage: "Yes",
+  },
+
+  requireConfirmationLabel: {
+    id: "Admin.EditProject.form.requireConfirmation.label",
+    defaultMessage: "Require Confirmation",
+  },
+
+  requireConfirmationDescription: {
+    id: "Admin.EditProject.form.requireConfirmation.description",
+    defaultMessage:
+      "This will disable the option for users to bypass the task confirmation modal when they click 'I fixed it!'",
   },
 
   instructionsDescription: {

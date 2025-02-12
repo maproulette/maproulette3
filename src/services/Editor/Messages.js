@@ -30,6 +30,6 @@ export default defineMessages({
   },
   rapid: {
     id: "Editor.rapid.label",
-    defaultMessage: "Edit in RapiD",
+    defaultMessage: "Edit in Rapid",
   },
 });

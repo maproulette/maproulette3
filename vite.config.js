@@ -18,4 +18,18 @@ export default defineConfig({
     __GIT_SHA__: JSON.stringify(execSync('git rev-parse HEAD').toString()),
     __GIT_TAG__: JSON.stringify(execSync('git describe --tags --exact-match 2>/dev/null || true').toString()),
   },
+  test: {
+    exclude: ['**/playwright/**', '**/node_modules/**', '**/dist/**'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        '**/playwright/**',
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/*.test.*',
+        '**/*.spec.*'
+      ]
+    }
+  },
 });

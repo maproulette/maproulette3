@@ -11,6 +11,7 @@ src/customLayers.json
 # testing
 /coverage
 chimp.js
+error.png
 
 # production
 /build
@@ -37,3 +38,8 @@ yarn-error.log*
 
 #vscode
 /.vscode
+
+# playwright
+/test-results/
+/playwright-report/
+playwright/.auth/

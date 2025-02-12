@@ -23,6 +23,7 @@ import {
   addTaskComment,
   completeTask,
   completeTaskBundle,
+  editTaskComment,
   fetchTask,
   fetchTaskBundle,
   fetchTaskComments,
@@ -164,7 +165,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark a task as complete with the given status
      */
-    completeTask: (
+    completeTask: async (
       task,
       challengeId,
       taskStatus,
@@ -182,77 +183,87 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       const taskId = task.id;
 
       // Work to be done after the status is set
-      const doAfter = () => {
-        if (_isString(comment) && comment.length > 0) {
-          if (taskBundle) {
-            dispatch(
-              addTaskBundleComment(
-                taskBundle.bundleId,
-                AsMappableBundle(taskBundle).primaryTaskId() || taskId,
-                comment,
-                taskStatus,
-              ),
-            );
-          } else {
-            dispatch(addTaskComment(taskId, comment, taskStatus));
+      const doAfter = () =>
+        new Promise(async (resolve) => {
+          const parallelTasks = [];
+
+          // Handle comment
+          if (_isString(comment) && comment.length > 0) {
+            if (taskBundle) {
+              parallelTasks.push(
+                dispatch(
+                  addTaskBundleComment(
+                    taskBundle.bundleId,
+                    AsMappableBundle(taskBundle).primaryTaskId() || taskId,
+                    comment,
+                    taskStatus,
+                  ),
+                ),
+              );
+            } else {
+              parallelTasks.push(dispatch(addTaskComment(taskId, comment, taskStatus)));
+            }
           }
-        }
 
-        // Update the user in the background to get their latest score
-        setTimeout(() => dispatch(fetchUser(userId)), 100);
+          // Update the user in the background to get their latest score
+          parallelTasks.push(dispatch(fetchUser(userId)));
 
-        // Updating the challenge actions will allow us to show more accurate
-        // completion progress, but this can be done in the background
-        setTimeout(() => dispatch(fetchChallengeActions(challengeId)), 500);
+          // Updating the challenge actions
+          parallelTasks.push(dispatch(fetchChallengeActions(challengeId)));
 
-        // If working on a virtual challenge, renew it (extend its expiration)
-        // since we've seen some activity, but this can be done in the
-        // background
-        if (Number.isFinite(ownProps.virtualChallengeId)) {
-          setTimeout(() => dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)), 1000);
-        }
+          // Renew virtual challenge if needed
+          if (Number.isFinite(ownProps.virtualChallengeId)) {
+            parallelTasks.push(dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)));
+          }
 
-        if (taskLoadBy) {
-          // Start loading the next task from the challenge.
-          const loadNextTask = Number.isFinite(requestedNextTask)
-            ? nextRequestedTask(dispatch, ownProps, requestedNextTask)
-            : nextRandomTask(dispatch, ownProps, taskId, taskLoadBy);
+          // Wait for all parallel tasks to complete
+          await Promise.all(parallelTasks);
 
-          return loadNextTask
-            .then((newTask) => visitNewTask(dispatch, ownProps, taskId, newTask))
-            .catch(() => {
+          // Handle next task loading - this needs to be sequential
+          if (taskLoadBy) {
+            // Start loading the next task from the challenge.
+            const loadNextTask = Number.isFinite(requestedNextTask)
+              ? await nextRequestedTask(dispatch, ownProps, requestedNextTask)
+              : await nextRandomTask(dispatch, ownProps, taskId, taskLoadBy);
+
+            try {
+              await visitNewTask(dispatch, ownProps, taskId, loadNextTask);
+            } catch (error) {
               ownProps.history.push(`/browse/challenges/${challengeId}`);
-            });
-        }
-      };
+            }
+          }
+          resolve();
+        });
 
       let cooperativeWorkSummary = null;
       if (AsCooperativeWork(task).isTagType()) {
         cooperativeWorkSummary = AsCooperativeWork(task).tagChangeSummary(tagEdits);
       }
 
-      return dispatch(
-        taskBundle
-          ? completeTaskBundle(
-              taskBundle.bundleId,
-              AsMappableBundle(taskBundle).primaryTaskId() || taskId,
-              taskStatus,
-              needsReview,
-              tags,
-              cooperativeWorkSummary,
-              osmComment,
-              completionResponses,
-            )
-          : completeTask(
-              taskId,
-              taskStatus,
-              needsReview,
-              tags,
-              cooperativeWorkSummary,
-              osmComment,
-              completionResponses,
-            ),
-      ).then(() => doAfter());
+      const completeAction = taskBundle
+        ? completeTaskBundle(
+            taskBundle.bundleId,
+            AsMappableBundle(taskBundle).primaryTaskId() || taskId,
+            taskStatus,
+            needsReview,
+            tags,
+            cooperativeWorkSummary,
+            osmComment,
+            completionResponses,
+          )
+        : completeTask(
+            taskId,
+            taskStatus,
+            needsReview,
+            tags,
+            cooperativeWorkSummary,
+            osmComment,
+            completionResponses,
+          );
+
+      await dispatch(completeAction);
+      const afterResult = await doAfter();
+      return afterResult;
     },
 
     /**
@@ -280,6 +291,13 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      */
     postTaskComment: (task, comment) => {
       return dispatch(addTaskComment(task.id, comment));
+    },
+
+    /**
+     * Edit a comment on the task
+     */
+    editTaskComment: (task, commentId, newComment) => {
+      return dispatch(editTaskComment(task.id, commentId, newComment));
     },
 
     /**
@@ -392,16 +410,25 @@ export const visitNewTask = function (dispatch, props, currentTaskId, newTask) {
     // If challenge is complete, redirect home with note to congratulate user
     if (Number.isFinite(props.virtualChallengeId)) {
       // We don't get a status for virtual challenges, so just assume we're done
-      props.history.push("/browse/challenges", { congratulate: true, warn: false });
+      props.history.push("/browse/challenges", {
+        congratulate: true,
+        warn: false,
+      });
       return Promise.resolve();
     } else {
       const challengeId = challengeIdFromRoute(props, props.challengeId);
       return dispatch(fetchChallenge(challengeId)).then((normalizedResults) => {
         const challenge = normalizedResults.entities.challenges[normalizedResults.result];
         if (challenge.status === CHALLENGE_STATUS_FINISHED) {
-          props.history.push("/browse/challenges", { congratulate: true, warn: false });
+          props.history.push("/browse/challenges", {
+            congratulate: true,
+            warn: false,
+          });
         } else {
-          props.history.push("/browse/challenges", { warn: true, congratulate: false });
+          props.history.push("/browse/challenges", {
+            warn: true,
+            congratulate: false,
+          });
         }
       });
     }

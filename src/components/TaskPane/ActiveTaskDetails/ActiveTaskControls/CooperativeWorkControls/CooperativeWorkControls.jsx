@@ -20,6 +20,7 @@ export class CooperativeWorkControls extends Component {
   };
 
   render() {
+    const disabled = this.props.disabled || this.props.isCompleting;
     if (!this.props.task) {
       return null;
     }
@@ -27,7 +28,7 @@ export class CooperativeWorkControls extends Component {
     return (
       <div className="mr-pb-2">
         {this.props.loadingOSMData && <BusySpinner />}
-        <UserEditorSelector {...this.props} className="mr-mb-4" />
+        <UserEditorSelector {...this.props} className="mr-mb-4" disabled={disabled} />
         <p className="mr-text-md mr-mb-2 mr-mt-2">
           <FormattedMessage {...messages.prompt} />
         </p>
@@ -36,6 +37,7 @@ export class CooperativeWorkControls extends Component {
             <TaskFixedControl
               {...this.props}
               fixedLabel={<FormattedMessage {...messages.confirmLabel} />}
+              disabled={disabled}
             />
           )}
 
@@ -43,18 +45,19 @@ export class CooperativeWorkControls extends Component {
             <TaskFalsePositiveControl
               {...this.props}
               falsePositiveLabel={<FormattedMessage {...messages.rejectLabel} />}
+              disabled={disabled}
             />
           )}
         </div>
         <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
           {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) && (
-            <TaskAlreadyFixedControl {...this.props} />
+            <TaskAlreadyFixedControl {...this.props} disabled={disabled} />
           )}
           {this.props.allowedProgressions.has(TaskStatus.tooHard) && (
-            <TaskTooHardControl {...this.props} />
+            <TaskTooHardControl {...this.props} disabled={disabled} />
           )}
           {this.props.allowedProgressions.has(TaskStatus.skipped) && (
-            <TaskSkipControl {...this.props} />
+            <TaskSkipControl {...this.props} disabled={disabled} />
           )}
         </div>
       </div>

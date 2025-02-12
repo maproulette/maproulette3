@@ -90,6 +90,12 @@ export default class TaskHistoryWidget extends Component {
     this.setComment("");
   };
 
+  editComment = (commentId, comment) => {
+    this.props.editTaskComment(this.props.task, commentId, comment).then(() => {
+      this.props.reloadHistory();
+    });
+  };
+
   render() {
     const loggedIn = localStorage.getItem("isLoggedIn");
 
@@ -156,6 +162,7 @@ export default class TaskHistoryWidget extends Component {
           selectDiffs={this.state.diffSelectionActive}
           toggleSelection={this.toggleSelection}
           selectedTimestamps={this.state.selectedTimestamps}
+          editComment={this.editComment}
         />
       </QuickWidget>
     );

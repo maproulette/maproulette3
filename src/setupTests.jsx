@@ -38,7 +38,7 @@ global.withProvider = (ui, { store = reduxStore, ...renderOptions } = {}) => {
     return (
       <Fragment>
         <Provider store={store}>
-          <IntlProvider locale="en">
+          <IntlProvider locale="en" onError={() => {}}>
             <Router history={routerHistory}>{children}</Router>
           </IntlProvider>
         </Provider>

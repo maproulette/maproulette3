@@ -1,5 +1,5 @@
 export const challengePassesGlobalFilter = function (filter, challenge) {
-  if (!filter.global) {
+  if (location.pathname === "/browse/challenges" && !filter.global) {
     return challenge.isGlobal === false;
   }
 

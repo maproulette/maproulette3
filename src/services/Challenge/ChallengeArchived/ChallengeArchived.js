@@ -1,5 +1,5 @@
 export const challengePassesArchivedFilter = function (filter, challenge) {
-  if (!filter.archived) {
+  if (filter.archived === false) {
     return challenge.isArchived === false;
   }
 

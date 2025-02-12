@@ -31,7 +31,7 @@ export default defineMessages({
 
   editRapid: {
     id: "KeyMapping.openEditor.editRapid",
-    defaultMessage: "Edit in RapiD",
+    defaultMessage: "Edit in Rapid",
   },
 
   layerOSMData: {
