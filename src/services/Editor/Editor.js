@@ -260,7 +260,7 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle, re
 };
 
 /**
- * Builds a RapiD editor URI for editing of the given task
+ * Builds a Rapid editor URI for editing of the given task
  */
 export const constructRapidURI = function (task, mapBounds, options, replacedComment) {
   const baseUriComponent = `${window.env.REACT_APP_RAPID_EDITOR_SERVER_URL}#`;
