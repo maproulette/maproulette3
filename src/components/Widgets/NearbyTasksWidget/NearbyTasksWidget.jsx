@@ -42,7 +42,7 @@ import TaskMarkerContent from "./TaskMarkerContent";
 const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard];
 
 const descriptor = {
-  widgetKey: "ReviewNearbyTasksWidget",
+  widgetKey: "NearbyTasksWidget",
   label: messages.label,
   targets: [WidgetDataTarget.task],
   minWidth: 4,
@@ -59,7 +59,7 @@ const ClusterMap = WithChallengeTaskClusters(
   false,
 );
 
-export default class ReviewNearbyTasksWidget extends Component {
+export default class NearbyTasksWidget extends Component {
   /**
    * Initialize the cluster filters to include tasks from the current challenge
    * and initially within bounds of "nearby" tasks as a starting point for the
@@ -167,8 +167,11 @@ export default class ReviewNearbyTasksWidget extends Component {
   async componentDidUpdate(prevProps) {
     const taskChanged = this.props.task?.id !== prevProps.task?.id;
     const bundleChanged = this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId;
+    const bundleTasksChanged =
+      this.props.taskBundle?.tasks?.length !== prevProps.taskBundle?.tasks?.length ||
+      this.props.taskBundle?.taskIds?.some((id) => !prevProps.taskBundle?.taskIds?.includes(id));
 
-    if (taskChanged || bundleChanged) {
+    if (taskChanged || bundleChanged || bundleTasksChanged) {
       await this.props.resetSelectedTasks();
       // Always select the main task first
       if (this.props.task) {
@@ -185,7 +188,7 @@ export default class ReviewNearbyTasksWidget extends Component {
       }
     }
 
-    if (bundleChanged || this.props.nearbyTasks !== prevProps.nearbyTasks) {
+    if (bundleChanged || bundleTasksChanged || this.props.nearbyTasks !== prevProps.nearbyTasks) {
       this.initializeClusterFilters(prevProps);
       this.initializeWebsocketSubscription(prevProps);
     }
@@ -492,7 +495,7 @@ registerWidgetType(
               WithFilterCriteria(
                 WithBoundedTasks(
                   WithBrowsedChallenge(
-                    WithWebSocketSubscriptions(WithKeyboardShortcuts(ReviewNearbyTasksWidget)),
+                    WithWebSocketSubscriptions(WithKeyboardShortcuts(NearbyTasksWidget)),
                   ),
                   "filteredClusteredTasks",
                   "taskInfo",

@@ -68,7 +68,6 @@ export const defaultWorkspaceSetup = function () {
     excludeWidgets: [
       // Cannot be added to workspace
       "TaskReviewWidget",
-      "ReviewNearbyTasksWidget",
     ],
     conditionalWidgets: [
       // conditionally displayed
