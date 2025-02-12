@@ -28,11 +28,7 @@ export class CooperativeWorkControls extends Component {
     return (
       <div className="mr-pb-2">
         {this.props.loadingOSMData && <BusySpinner />}
-        <UserEditorSelector
-          {...this.props}
-          className="mr-mb-4"
-          disabled={disabled}
-        />
+        <UserEditorSelector {...this.props} className="mr-mb-4" disabled={disabled} />
         <p className="mr-text-md mr-mb-2 mr-mt-2">
           <FormattedMessage {...messages.prompt} />
         </p>
@@ -48,9 +44,7 @@ export class CooperativeWorkControls extends Component {
           {this.props.allowedProgressions.has(TaskStatus.falsePositive) && (
             <TaskFalsePositiveControl
               {...this.props}
-              falsePositiveLabel={
-                <FormattedMessage {...messages.rejectLabel} />
-              }
+              falsePositiveLabel={<FormattedMessage {...messages.rejectLabel} />}
               disabled={disabled}
             />
           )}
@@ -72,8 +66,6 @@ export class CooperativeWorkControls extends Component {
 }
 
 export default WithSearch(
-  WithTaskTags(
-    WithTaskReview(WithKeyboardShortcuts(injectIntl(CooperativeWorkControls)))
-  ),
-  "task"
+  WithTaskTags(WithTaskReview(WithKeyboardShortcuts(injectIntl(CooperativeWorkControls)))),
+  "task",
 );

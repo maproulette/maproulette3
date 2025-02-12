@@ -68,16 +68,12 @@ export class TaskConfirmationModal extends Component {
     }
 
     if (
-      event.key ===
-        this.props.keyboardShortcutGroups.taskConfirmation.confirmSubmit.key &&
+      event.key === this.props.keyboardShortcutGroups.taskConfirmation.confirmSubmit.key &&
       event.shiftKey
     ) {
       this.props.onConfirm(this.currentFilters());
       event.preventDefault();
-    } else if (
-      event.key ===
-      this.props.keyboardShortcutGroups.taskConfirmation.cancel.key
-    ) {
+    } else if (event.key === this.props.keyboardShortcutGroups.taskConfirmation.cancel.key) {
       this.props.onCancel();
       event.preventDefault();
     }
@@ -92,7 +88,7 @@ export class TaskConfirmationModal extends Component {
     this.props.activateKeyboardShortcut(
       shortcutGroup,
       this.props.keyboardShortcutGroups.taskConfirmation,
-      this.handleKeyboardShortcuts
+      this.handleKeyboardShortcuts,
     );
 
     if (
@@ -108,15 +104,13 @@ export class TaskConfirmationModal extends Component {
     this.props.deactivateKeyboardShortcut(
       shortcutGroup,
       "confirmSubmit",
-      this.handleKeyboardShortcuts
+      this.handleKeyboardShortcuts,
     );
     this.props.resumeKeyboardShortcuts();
   }
 
   handleAddTag = (value) => {
-    this.props.setTags(
-      !this.props.tags ? value : this.props.tags + "," + value
-    );
+    this.props.setTags(!this.props.tags ? value : this.props.tags + "," + value);
   };
 
   handleChangeTags = (value) => {
@@ -153,11 +147,7 @@ export class TaskConfirmationModal extends Component {
   };
 
   currentFilters = () => {
-    return _merge(
-      {},
-      this.props.history?.location?.state ?? {},
-      this.state.criteria
-    );
+    return _merge({}, this.props.history?.location?.state ?? {}, this.state.criteria);
   };
 
   getHeaderMessage = (applyingTagChanges) => {
@@ -187,31 +177,24 @@ export class TaskConfirmationModal extends Component {
   };
 
   render() {
-    const reviewConfirmation =
-      this.props.inReview || !_isUndefined(this.props.needsRevised);
+    const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised);
     const loadingNearby =
       this.props.loadBy === TaskLoadMethod.proximity ||
       this.props.loadBy === TaskReviewLoadMethod.nearby;
     const applyingTagChanges =
-      AsCooperativeWork(this.props.task).isTagType() &&
-      this.props.status === TaskStatus.fixed;
+      AsCooperativeWork(this.props.task).isTagType() && this.props.status === TaskStatus.fixed;
     const preferredTags = !reviewConfirmation
-      ? _filter(
-          _split(this.props.task.parent?.preferredTags, ","),
-          (result) => !_isEmpty(result)
-        )
+      ? _filter(_split(this.props.task.parent?.preferredTags, ","), (result) => !_isEmpty(result))
       : _filter(
           _split(this.props.task.parent?.preferredReviewTags, ","),
-          (result) => !_isEmpty(result)
+          (result) => !_isEmpty(result),
         );
 
     const limitTags = !reviewConfirmation
       ? !!this.props.task.parent?.limitTags
       : !!this.props.task.parent?.limitReviewTags;
 
-    const TasksNearby = reviewConfirmation
-      ? TaskReviewNearbyList
-      : TaskNearbyList;
+    const TasksNearby = reviewConfirmation ? TaskReviewNearbyList : TaskNearbyList;
     const disabled = this.props.disabled || this.props.isCompleting;
 
     return (
@@ -230,12 +213,10 @@ export class TaskConfirmationModal extends Component {
               className={classNames(
                 "mr-flex",
                 { "mr-pr-12": loadingNearby },
-                { "mr-justify-center": !loadingNearby }
+                { "mr-justify-center": !loadingNearby },
               )}
             >
-              <div
-                className={classNames("mr-flex mr-flex-col mr-items-center")}
-              >
+              <div className={classNames("mr-flex mr-flex-col mr-items-center")}>
                 <div className="mr-w-full">
                   <h2 className="mr-text-grey-light-more mr-text-4xl mr-mt-4">
                     {this.getHeaderMessage(applyingTagChanges)}
@@ -244,19 +225,13 @@ export class TaskConfirmationModal extends Component {
                     <div
                       className={classNames(
                         "mr-uppercase mr-tracking-wide",
-                        `mr-status-${_kebabCase(
-                          keysByReviewStatus[this.props.status]
-                        )}`
+                        `mr-status-${_kebabCase(keysByReviewStatus[this.props.status])}`,
                       )}
                     >
                       {this.props.status === TaskReviewStatus.needed ? (
-                        <FormattedMessage
-                          {...messages.metaReviewRequestedLabel}
-                        />
+                        <FormattedMessage {...messages.metaReviewRequestedLabel} />
                       ) : (
-                        <FormattedMessage
-                          {...messagesByReviewStatus[this.props.status]}
-                        />
+                        <FormattedMessage {...messagesByReviewStatus[this.props.status]} />
                       )}
                     </div>
                   )}
@@ -264,14 +239,10 @@ export class TaskConfirmationModal extends Component {
                     <div
                       className={classNames(
                         "mr-uppercase mr-tracking-wide",
-                        `mr-status-${_kebabCase(
-                          keysByStatus[this.props.status]
-                        )}`
+                        `mr-status-${_kebabCase(keysByStatus[this.props.status])}`,
                       )}
                     >
-                      <FormattedMessage
-                        {...messagesByStatus[this.props.status]}
-                      />
+                      <FormattedMessage {...messagesByStatus[this.props.status]} />
                     </div>
                   )}
 
@@ -291,9 +262,7 @@ export class TaskConfirmationModal extends Component {
                             className="mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-my-1"
                             rows={2}
                             value={this.props.osmComment}
-                            onChange={(e) =>
-                              this.props.setOSMComment(e.target.value)
-                            }
+                            onChange={(e) => this.props.setOSMComment(e.target.value)}
                           />
                         </div>
 
@@ -306,83 +275,62 @@ export class TaskConfirmationModal extends Component {
                                     className="mr-font-bold mr-py-1 mr-text-sm mr-border mr-border-gray-300 text-center"
                                     style={{ width: "33%" }}
                                   >
-                                    <FormattedMessage
-                                      {...messages.tagNameLabel}
-                                    />
+                                    <FormattedMessage {...messages.tagNameLabel} />
                                   </th>
                                   <th
                                     className="mr-font-bold mr-py-1 mr-text-sm mr-border mr-border-gray-300 text-center"
                                     style={{ width: "33%" }}
                                   >
-                                    <FormattedMessage
-                                      {...messages.oldValueLabel}
-                                    />
+                                    <FormattedMessage {...messages.oldValueLabel} />
                                   </th>
                                   <th
                                     className="mr-font-bold mr-py-1 mr-text-sm mr-border mr-border-gray-300 text-center"
                                     style={{ width: "33%" }}
                                   >
-                                    <FormattedMessage
-                                      {...messages.newValueLabel}
-                                    />
+                                    <FormattedMessage {...messages.newValueLabel} />
                                   </th>
                                 </tr>
                               </thead>
                               <tbody>
                                 {this.props.tagDiffs?.[0] &&
-                                  Object.keys(this.props.tagDiffs?.[0]).map(
-                                    (tagName) => {
-                                      const tagChange =
-                                        (this.props.tagDiffs?.[0])[tagName];
-                                      if (
-                                        [
-                                          "changed",
-                                          "removed",
-                                          "added",
-                                        ].includes(tagChange.status)
-                                      ) {
-                                        return (
-                                          <tr
-                                            key={tagName}
-                                            className={classNames(
-                                              "mr-mb-2  mr-rounded",
-                                              {
-                                                "mr-text-orange":
-                                                  tagChange.status ===
-                                                  "changed",
-                                                "mr-text-lavender-rose":
-                                                  tagChange.status ===
-                                                  "removed",
-                                                "mr-text-picton-blue":
-                                                  tagChange.status === "added",
-                                              }
-                                            )}
+                                  Object.keys(this.props.tagDiffs?.[0]).map((tagName) => {
+                                    const tagChange = (this.props.tagDiffs?.[0])[tagName];
+                                    if (
+                                      ["changed", "removed", "added"].includes(tagChange.status)
+                                    ) {
+                                      return (
+                                        <tr
+                                          key={tagName}
+                                          className={classNames("mr-mb-2  mr-rounded", {
+                                            "mr-text-orange": tagChange.status === "changed",
+                                            "mr-text-lavender-rose": tagChange.status === "removed",
+                                            "mr-text-picton-blue": tagChange.status === "added",
+                                          })}
+                                        >
+                                          <td
+                                            className="mr-border mr-border-gray-300 mr-text-center"
+                                            style={{ width: "33%" }}
                                           >
-                                            <td
-                                              className="mr-border mr-border-gray-300 mr-text-center"
-                                              style={{ width: "33%" }}
-                                            >
-                                              <strong>{tagName}</strong>
-                                            </td>
-                                            <td
-                                              className="mr-border mr-border-gray-300 mr-text-center mr-text-red-light"
-                                              style={{ width: "33%" }}
-                                            >
-                                              {tagChange.value || "—"}
-                                            </td>
-                                            <td
-                                              className="mr-border mr-border-gray-300 mr-text-center mr-text-green-lighter"
-                                              style={{ width: "33%" }}
-                                            >
-                                              <span className="mr-font-semibold">
-                                                {tagChange.newValue || "—"}
-                                              </span>
-                                            </td>
-                                          </tr>
-                                        );
-                                      }
+                                            <strong>{tagName}</strong>
+                                          </td>
+                                          <td
+                                            className="mr-border mr-border-gray-300 mr-text-center mr-text-red-light"
+                                            style={{ width: "33%" }}
+                                          >
+                                            {tagChange.value || "—"}
+                                          </td>
+                                          <td
+                                            className="mr-border mr-border-gray-300 mr-text-center mr-text-green-lighter"
+                                            style={{ width: "33%" }}
+                                          >
+                                            <span className="mr-font-semibold">
+                                              {tagChange.newValue || "—"}
+                                            </span>
+                                          </td>
+                                        </tr>
+                                      );
                                     }
-                                  )}
+                                  })}
                               </tbody>
                             </table>
                           </div>
@@ -395,9 +343,7 @@ export class TaskConfirmationModal extends Component {
                       <FormattedMessage {...messages.mrCommentHeader} />
                     </div>
                   )}
-                  <div
-                    className={classNames({ "mr-mt-2": !applyingTagChanges })}
-                  >
+                  <div className={classNames({ "mr-mt-2": !applyingTagChanges })}>
                     <div className={applyingTagChanges ? "mr-mt-1" : "mr-mt-6"}>
                       <TaskCommentInput
                         inputRef={this.commentInputRef}
@@ -407,9 +353,7 @@ export class TaskConfirmationModal extends Component {
                         placeholder={
                           applyingTagChanges
                             ? ""
-                            : this.props.intl.formatMessage(
-                                messages.placeholder
-                              )
+                            : this.props.intl.formatMessage(messages.placeholder)
                         }
                         value={this.props.comment}
                         commentChanged={this.props.setComment}
@@ -424,9 +368,7 @@ export class TaskConfirmationModal extends Component {
                       tagType={"tasks"}
                       preferredResults={preferredTags}
                       limitToPreferred={limitTags}
-                      placeholder={this.props.intl.formatMessage(
-                        messages.addTagsPlaceholder
-                      )}
+                      placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
                     />
 
                     {this.props.submitComment && (
@@ -451,8 +393,7 @@ export class TaskConfirmationModal extends Component {
                     )}
                   {this.props.status !== TaskStatus.skipped &&
                     !reviewConfirmation &&
-                    this.props.user.settings.needsReview !==
-                      needsReviewType.mandatory && (
+                    this.props.user.settings.needsReview !== needsReviewType.mandatory && (
                       <div className="form mr-flex mr-items-baseline">
                         <input
                           id="review-input"
@@ -462,10 +403,7 @@ export class TaskConfirmationModal extends Component {
                           onClick={this.props.toggleNeedsReview}
                           onChange={_noop}
                         />
-                        <label
-                          htmlFor="review-input"
-                          className="mr-text-white-50"
-                        >
+                        <label htmlFor="review-input" className="mr-text-white-50">
                           <FormattedMessage {...messages.reviewLabel} />
                         </label>
                       </div>
@@ -482,9 +420,7 @@ export class TaskConfirmationModal extends Component {
 
                     <button
                       className="mr-button mr-px-8"
-                      onClick={() =>
-                        this.props.onConfirm(this.currentFilters())
-                      }
+                      onClick={() => this.props.onConfirm(this.currentFilters())}
                       disabled={disabled}
                     >
                       {this.props.isCompleting ? (
@@ -507,19 +443,12 @@ export class TaskConfirmationModal extends Component {
                           name="randomnessPreference"
                           className="mr-radio mr-mr-1"
                           checked={this.props.loadBy === TaskLoadMethod.random}
-                          onClick={() =>
-                            this.props.chooseLoadBy(TaskLoadMethod.random)
-                          }
+                          onClick={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
                           onChange={_noop}
                           disabled={disabled}
                         />
-                        <label
-                          htmlFor="load-method-random-input"
-                          className="mr-ml-1 mr-mr-4"
-                        >
-                          <FormattedMessage
-                            {...messagesByLoadMethod[TaskLoadMethod.random]}
-                          />
+                        <label htmlFor="load-method-random-input" className="mr-ml-1 mr-mr-4">
+                          <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
                         </label>
 
                         <input
@@ -527,22 +456,13 @@ export class TaskConfirmationModal extends Component {
                           type="radio"
                           name="randomnessPreference"
                           className="mr-radio mr-mr-1"
-                          checked={
-                            this.props.loadBy === TaskLoadMethod.proximity
-                          }
-                          onClick={() =>
-                            this.props.chooseLoadBy(TaskLoadMethod.proximity)
-                          }
+                          checked={this.props.loadBy === TaskLoadMethod.proximity}
+                          onClick={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
                           onChange={_noop}
                           disabled={disabled}
                         />
-                        <label
-                          htmlFor="load-method-proximity-input"
-                          className="mr-ml-1"
-                        >
-                          <FormattedMessage
-                            {...messagesByLoadMethod[TaskLoadMethod.proximity]}
-                          />
+                        <label htmlFor="load-method-proximity-input" className="mr-ml-1">
+                          <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
                         </label>
                       </div>
                       <div className="mr-text-green-lighter mr-text-center mr-mt-4 hover:mr-text-white mr-cursor-pointer mr-text-xs">
@@ -560,130 +480,88 @@ export class TaskConfirmationModal extends Component {
                     </div>
                   )}
 
-                  {reviewConfirmation &&
-                    _isUndefined(this.props.needsRevised) && (
-                      <Fragment>
-                        <div className="mr-mt-8 mr-text-sm">
+                  {reviewConfirmation && _isUndefined(this.props.needsRevised) && (
+                    <Fragment>
+                      <div className="mr-mt-8 mr-text-sm">
+                        <div className="mr-mr-4">
+                          <FormattedMessage {...messages.loadNextReviewLabel} />
+                        </div>
+                        <div className="mr-flex mr-flex-wrap mr-mt-2">
                           <div className="mr-mr-4">
-                            <FormattedMessage
-                              {...messages.loadNextReviewLabel}
+                            <input
+                              type="radio"
+                              name="loadReviewPreference"
+                              className="mr-mr-2"
+                              checked={this.props.loadBy === TaskReviewLoadMethod.next}
+                              onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
+                              onChange={_noop}
+                              disabled={disabled}
                             />
+                            <label>
+                              <FormattedMessage
+                                {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]}
+                              />
+                            </label>
                           </div>
-                          <div className="mr-flex mr-flex-wrap mr-mt-2">
+                          <div className="mr-mr-4">
+                            <input
+                              type="radio"
+                              name="loadReviewPreference"
+                              className="mr-mr-2"
+                              checked={this.props.loadBy === TaskReviewLoadMethod.nearby}
+                              onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.nearby)}
+                              onChange={_noop}
+                              disabled={disabled}
+                            />
+                            <label>
+                              <FormattedMessage
+                                {...messagesByReviewLoadMethod[TaskReviewLoadMethod.nearby]}
+                              />
+                            </label>
+                          </div>
+                          {this.props.fromInbox && (
                             <div className="mr-mr-4">
                               <input
                                 type="radio"
                                 name="loadReviewPreference"
                                 className="mr-mr-2"
-                                checked={
-                                  this.props.loadBy ===
-                                  TaskReviewLoadMethod.next
-                                }
-                                onClick={() =>
-                                  this.props.chooseLoadBy(
-                                    TaskReviewLoadMethod.next
-                                  )
-                                }
+                                checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
+                                onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
                                 onChange={_noop}
                                 disabled={disabled}
                               />
                               <label>
                                 <FormattedMessage
-                                  {...messagesByReviewLoadMethod[
-                                    TaskReviewLoadMethod.next
-                                  ]}
+                                  {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]}
                                 />
                               </label>
                             </div>
-                            <div className="mr-mr-4">
-                              <input
-                                type="radio"
-                                name="loadReviewPreference"
-                                className="mr-mr-2"
-                                checked={
-                                  this.props.loadBy ===
-                                  TaskReviewLoadMethod.nearby
-                                }
-                                onClick={() =>
-                                  this.props.chooseLoadBy(
-                                    TaskReviewLoadMethod.nearby
-                                  )
-                                }
-                                onChange={_noop}
-                                disabled={disabled}
+                          )}
+                          <div>
+                            <input
+                              type="radio"
+                              name="loadReviewPreference"
+                              className="mr-mr-2"
+                              checked={this.props.loadBy === TaskReviewLoadMethod.all}
+                              onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                              onChange={_noop}
+                              disabled={disabled}
+                            />
+                            <label>
+                              <FormattedMessage
+                                {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]}
                               />
-                              <label>
-                                <FormattedMessage
-                                  {...messagesByReviewLoadMethod[
-                                    TaskReviewLoadMethod.nearby
-                                  ]}
-                                />
-                              </label>
-                            </div>
-                            {this.props.fromInbox && (
-                              <div className="mr-mr-4">
-                                <input
-                                  type="radio"
-                                  name="loadReviewPreference"
-                                  className="mr-mr-2"
-                                  checked={
-                                    this.props.loadBy ===
-                                    TaskReviewLoadMethod.inbox
-                                  }
-                                  onClick={() =>
-                                    this.props.chooseLoadBy(
-                                      TaskReviewLoadMethod.inbox
-                                    )
-                                  }
-                                  onChange={_noop}
-                                  disabled={disabled}
-                                />
-                                <label>
-                                  <FormattedMessage
-                                    {...messagesByReviewLoadMethod[
-                                      TaskReviewLoadMethod.inbox
-                                    ]}
-                                  />
-                                </label>
-                              </div>
-                            )}
-                            <div>
-                              <input
-                                type="radio"
-                                name="loadReviewPreference"
-                                className="mr-mr-2"
-                                checked={
-                                  this.props.loadBy === TaskReviewLoadMethod.all
-                                }
-                                onClick={() =>
-                                  this.props.chooseLoadBy(
-                                    TaskReviewLoadMethod.all
-                                  )
-                                }
-                                onChange={_noop}
-                                disabled={disabled}
-                              />
-                              <label>
-                                <FormattedMessage
-                                  {...messagesByReviewLoadMethod[
-                                    TaskReviewLoadMethod.all
-                                  ]}
-                                />
-                              </label>
-                            </div>
+                            </label>
                           </div>
                         </div>
-                        <div className="mr-text-green-lighter mr-text-center mr-mt-4 hover:mr-text-white mr-cursor-pointer">
-                          <div
-                            onClick={() =>
-                              this.setState({ showReviewFilters: true })
-                            }
-                          >
-                            <FormattedMessage {...messages.adjustFilters} />
-                          </div>
+                      </div>
+                      <div className="mr-text-green-lighter mr-text-center mr-mt-4 hover:mr-text-white mr-cursor-pointer">
+                        <div onClick={() => this.setState({ showReviewFilters: true })}>
+                          <FormattedMessage {...messages.adjustFilters} />
                         </div>
-                      </Fragment>
-                    )}
+                      </div>
+                    </Fragment>
+                  )}
 
                   {reviewConfirmation &&
                     !_isUndefined(this.props.needsRevised) &&
@@ -696,23 +574,14 @@ export class TaskConfirmationModal extends Component {
                           type="radio"
                           name="loadReviewPreference"
                           className="mr-mr-2"
-                          checked={
-                            this.props.loadBy === TaskReviewLoadMethod.inbox
-                          }
-                          onClick={() =>
-                            this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)
-                          }
+                          checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
+                          onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
                           onChange={_noop}
                           disabled={disabled}
                         />
-                        <label
-                          htmlFor="review-load-method-input"
-                          className="mr-mr-4"
-                        >
+                        <label htmlFor="review-load-method-input" className="mr-mr-4">
                           <FormattedMessage
-                            {...messagesByReviewLoadMethod[
-                              TaskReviewLoadMethod.inbox
-                            ]}
+                            {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]}
                           />
                         </label>
                         <input
@@ -720,20 +589,14 @@ export class TaskConfirmationModal extends Component {
                           type="radio"
                           name="loadReviewPreference"
                           className="mr-mr-2"
-                          checked={
-                            this.props.loadBy === TaskReviewLoadMethod.all
-                          }
-                          onClick={() =>
-                            this.props.chooseLoadBy(TaskReviewLoadMethod.all)
-                          }
+                          checked={this.props.loadBy === TaskReviewLoadMethod.all}
+                          onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
                           onChange={_noop}
                           disabled={disabled}
                         />
                         <label>
                           <FormattedMessage
-                            {...messagesByReviewLoadMethod[
-                              TaskReviewLoadMethod.all
-                            ]}
+                            {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]}
                           />
                         </label>
                       </div>

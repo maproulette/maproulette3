@@ -53,16 +53,10 @@ export default class TaskNextControl extends Component {
                 />
               </div>
               <button
-                className={classNames(
-                  "mr-button mr-button--white",
-                  this.props.className
-                )}
+                className={classNames("mr-button mr-button--white", this.props.className)}
                 style={{ width: "24rem" }}
                 onClick={() => {
-                  this.props.nextTask(
-                    this.props.task.parent.id,
-                    this.props.task.id
-                  );
+                  this.props.nextTask(this.props.task.parent.id, this.props.task.id);
                   this.setState({ chooseNearbyTasks: false });
                 }}
                 title={this.props.intl.formatMessage(messages.nextTooltip)}
@@ -81,19 +75,13 @@ export default class TaskNextControl extends Component {
         {!this.state.chooseNearbyTasks && (
           <Fragment>
             <button
-              className={classNames(
-                "mr-button mr-button--white",
-                this.props.className
-              )}
+              className={classNames("mr-button mr-button--white", this.props.className)}
               style={{ width: "20.5rem" }}
               onClick={() => {
                 if (this.props.loadBy === TaskLoadMethod.proximity) {
                   this.setState({ chooseNearbyTasks: true });
                 } else {
-                  this.props.nextTask(
-                    this.props.task.parent.id,
-                    this.props.task.id
-                  );
+                  this.props.nextTask(this.props.task.parent.id, this.props.task.id);
                 }
               }}
               title={this.props.intl.formatMessage(messages.nextTooltip)}
@@ -117,13 +105,8 @@ export default class TaskNextControl extends Component {
                   onChange={_noop}
                   disabled={disabled}
                 />
-                <label
-                  className="mr-ml-1 mr-mr-4"
-                  htmlFor="randomnessPreference-random"
-                >
-                  <FormattedMessage
-                    {...messagesByLoadMethod[TaskLoadMethod.random]}
-                  />
+                <label className="mr-ml-1 mr-mr-4" htmlFor="randomnessPreference-random">
+                  <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
                 </label>
 
                 <input
@@ -132,19 +115,12 @@ export default class TaskNextControl extends Component {
                   id="randomnessPreference-proximity"
                   className="mr-radio mr-mr-1"
                   checked={this.props.loadBy === TaskLoadMethod.proximity}
-                  onClick={() =>
-                    this.props.chooseLoadBy(TaskLoadMethod.proximity)
-                  }
+                  onClick={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
                   onChange={_noop}
                   disabled={disabled}
                 />
-                <label
-                  className="mr-ml-1"
-                  htmlFor="randomnessPreference-proximity"
-                >
-                  <FormattedMessage
-                    {...messagesByLoadMethod[TaskLoadMethod.proximity]}
-                  />
+                <label className="mr-ml-1" htmlFor="randomnessPreference-proximity">
+                  <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
                 </label>
               </div>
             </div>
