@@ -61,6 +61,7 @@ export class ActiveTaskControls extends Component {
     revisionLoadBy: TaskReviewLoadMethod.all,
     doneLoadByFromHistory: false,
     needsReview: this.props.challenge.reviewSetting === 1 ? true : undefined,
+    completingTask: false,
   };
 
   setComment = (comment) => this.setState({ comment });
@@ -132,6 +133,7 @@ export class ActiveTaskControls extends Component {
 
   /** Mark the task as complete with the given status */
   complete = async (taskStatus) => {
+    this.setState({ completingTask: true });
     try {
       const taskBundle = await this.props.updateTaskBundle();
 
@@ -178,7 +180,10 @@ export class ActiveTaskControls extends Component {
         }
       }
     } catch (error) {
+      this.setState({ completingTask: false });
       throw error;
+    } finally {
+      this.setState({ completingTask: false });
     }
   };
 
@@ -427,7 +432,7 @@ export class ActiveTaskControls extends Component {
 
     return (
       <div>
-        {!this.props.completingTask && isComplete && (
+        {!this.state.completingTask && isComplete && (
           <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
             <div className="mr-flex mr-mb-2 mr-text-sm mr-text-white mr-whitespace-nowrap">
               <span>
@@ -461,8 +466,8 @@ export class ActiveTaskControls extends Component {
           setTags={this.setTags}
           onConfirm={this.confirmCompletion}
           saveTaskTags={this.props.saveTaskTags}
-          taskReadOnly={this.props.taskReadOnly || this.props.completingTask}
-          disabled={this.props.completingTask}
+          taskReadOnly={this.props.taskReadOnly || this.state.completingTask}
+          disabled={this.state.completingTask}
         />
 
         {this.props.taskReadOnly ? (
@@ -479,7 +484,7 @@ export class ActiveTaskControls extends Component {
         ) : (
           <Fragment>
             {isTagFix &&
-              (!isFinal || needsRevised || this.props.completingTask) &&
+              (!isFinal || needsRevised || this.state.completingTask) &&
               this.props.user.settings.seeTagFixSuggestions && (
                 <CooperativeWorkControls
                   {...this.props}
@@ -488,13 +493,13 @@ export class ActiveTaskControls extends Component {
                   complete={this.initiateCompletion}
                   nextTask={this.next}
                   needsRevised={needsRevised}
-                  disabled={this.props.completingTask}
-                  isCompleting={this.props.completingTask}
+                  disabled={this.state.completingTask}
+                  isCompleting={this.state.completingTask}
                 />
               )}
 
             {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) &&
-              (!isFinal || needsRevised || this.props.completingTask) && (
+              (!isFinal || needsRevised || this.state.completingTask) && (
                 <TaskCompletionStep
                   {...this.props}
                   allowedEditors={this.allowedEditors()}
@@ -504,12 +509,12 @@ export class ActiveTaskControls extends Component {
                   nextTask={this.next}
                   needsRevised={needsRevised}
                   editMode={editMode}
-                  disabled={this.props.completingTask}
-                  isCompleting={this.props.completingTask}
+                  disabled={this.state.completingTask}
+                  isCompleting={this.state.completingTask}
                 />
               )}
 
-            {!this.props.completingTask && isComplete && !needsRevised && (
+            {!this.state.completingTask && isComplete && !needsRevised && (
               <TaskNextControl
                 {...this.props}
                 className="mr-mt-1"
@@ -521,8 +526,8 @@ export class ActiveTaskControls extends Component {
                 chooseNextTask={this.chooseNextTask}
                 clearNextTask={this.clearNextTask}
                 requestedNextTask={this.state.requestedNextTask}
-                disabled={this.props.completingTask}
-                isCompleting={this.props.completingTask}
+                disabled={this.state.completingTask}
+                isCompleting={this.state.completingTask}
               />
             )}
 
@@ -549,8 +554,8 @@ export class ActiveTaskControls extends Component {
                 onCancel={this.resetConfirmation}
                 needsRevised={this.state.submitRevision}
                 fromInbox={fromInbox}
-                disabled={this.props.completingTask}
-                isCompleting={this.props.completingTask}
+                disabled={this.state.completingTask}
+                isCompleting={this.state.completingTask}
               />
             )}
           </Fragment>
