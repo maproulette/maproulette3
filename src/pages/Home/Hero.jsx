@@ -28,10 +28,7 @@ const Hero = memo(function Hero() {
             <h1 className="mr-text-3xl sm:mr-text-4xl md:mr-text-5xl lg:mr-text-6xl mr-font-bold mr-text-white mr-leading-tight mr-mb-8 mr-tracking-tight">
               <FormattedMessage {...messages.headline} />
             </h1>
-            <Link
-              to="/browse/challenges"
-              className="mr-button mr-w-full mr-max-w-[300px] mr-py-4"
-            >
+            <Link to="/browse/challenges" className="mr-button mr-w-full mr-max-w-[300px] mr-py-4">
               <FormattedMessage {...messages.getStartedLabel} />
             </Link>
           </div>
