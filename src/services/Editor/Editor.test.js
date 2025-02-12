@@ -363,7 +363,7 @@ describe("constructIdURI", () => {
 });
 
 describe("constructRapidURI", () => {
-  test("the uri specifies the RapiD editor", () => {
+  test("the uri specifies the Rapid editor", () => {
     const uri = constructRapidURI(task, mapBounds);
     expect(uri).toEqual(expect.stringContaining("rapid"));
   });

@@ -1611,7 +1611,7 @@ Release with [maproulette-backend_v4.3.1](https://github.com/maproulette/maproul
 ### Added
 - Completion and review of multiple tasks together
 - Templates for generating forms to be filled by mapper during task completion
-- RapiD editor option by @gaoxm
+- Rapid editor option by @gaoxm
 - Updated help links by @mvexel
 - Additional resiliency to missing task geometries
 - Option to include specific task properties as columns in CSV exports
