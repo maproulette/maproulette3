@@ -127,32 +127,72 @@ export function WithTaskBundle(WrappedComponent) {
 
     updateBundlingConditions = () => {
       const { task, taskReadOnly, workspace, user, name } = this.props;
+
+      // Check if read-only first
+      if (taskReadOnly) {
+        this.setState({ bundleEditsDisabled: true });
+        return;
+      }
+
+      // Check workspace type
       const workspaceName = workspace?.name || name;
       const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
+      if (!isCompletionWorkspace) {
+        this.setState({ bundleEditsDisabled: true });
+        return;
+      }
 
-      const completionStatus = [2].includes(task?.reviewStatus) || [0, 3, 6].includes(task?.status);
-      const enableMapperEdits = !task?.completedBy || user.id === task.completedBy;
-      const enableSuperUserEdits = user.isSuperUser && completionStatus;
-      const bundleEditsDisabled =
-        taskReadOnly ||
-        !isCompletionWorkspace ||
-        (!(enableMapperEdits && completionStatus) && !enableSuperUserEdits);
+      // Check completion status
+      const isReviewCompleted = task?.reviewStatus === 2;
+      const isTaskCompleted = [0, 3, 6].includes(task?.status);
+      const completionStatus = isReviewCompleted || isTaskCompleted;
 
-      this.setState({ bundleEditsDisabled });
+      // Check super user permissions
+      if (user.isSuperUser && completionStatus) {
+        this.setState({ bundleEditsDisabled: false });
+        return;
+      }
+
+      // Check mapper edit permissions
+      const hasNoCompletion = !task?.completedBy;
+      const isTaskCompleter = user.id === task.completedBy;
+      const enableMapperEdits = hasNoCompletion || isTaskCompleter;
+
+      if (enableMapperEdits && completionStatus) {
+        this.setState({ bundleEditsDisabled: false });
+        return;
+      }
+
+      // If none of the above conditions are met, disable edits
+      this.setState({ bundleEditsDisabled: true });
     };
 
     handlePrimaryTaskRedirect = (taskBundle, task, workspace, history) => {
-      if (!task.isBundlePrimary) {
-        const primaryTask = taskBundle.tasks.find((task) => task.isBundlePrimary);
-        const isMetaReview = history?.location?.pathname?.includes("meta-review");
-        const location =
-          workspace?.name === "taskReview" ? (isMetaReview ? "/meta-review" : "/review") : "";
-        if (primaryTask) {
-          history.push(`/challenge/${primaryTask.parent}/task/${primaryTask.id}${location}`);
-        } else {
-          console.error("Primary task not found in task bundle.");
-        }
+      // Exit early if this is already the primary task
+      if (task.isBundlePrimary) {
+        return;
       }
+
+      // Find the primary task
+      const primaryTask = taskBundle.tasks.find((task) => task.isBundlePrimary);
+      if (!primaryTask) {
+        console.error("Primary task not found in task bundle.");
+        return;
+      }
+
+      // Determine if we're in meta-review
+      const currentPath = history?.location?.pathname;
+      const isMetaReview = currentPath ? currentPath.includes("meta-review") : false;
+
+      // Determine the location suffix
+      let location = "";
+      if (workspace?.name === "taskReview") {
+        location = isMetaReview ? "/meta-review" : "/review";
+      }
+
+      // Perform the redirect
+      const redirectPath = `/challenge/${primaryTask.parent}/task/${primaryTask.id}${location}`;
+      history.push(redirectPath);
     };
 
     resetSelectedTasks = () => {
