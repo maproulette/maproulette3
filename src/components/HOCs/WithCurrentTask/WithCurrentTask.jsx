@@ -125,7 +125,6 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             normalizedResults?.entities?.tasks?.[normalizedResults.result]?.deleted
           ) {
             dispatch(addError(AppErrors.task.doesNotExist));
-            debugger;
             if (ownProps.match.params.challengeId) {
               ownProps.history.push(`/browse/challenges/${ownProps.match.params.challengeId}`);
             } else {
