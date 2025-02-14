@@ -4,13 +4,13 @@ import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import { Component, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
+import BusySpinner from "../../../BusySpinner/BusySpinner";
 import WithPagedProjects from "../../../HOCs/WithPagedProjects/WithPagedProjects";
 import WithSearch from "../../../HOCs/WithSearch/WithSearch";
 import WithSearchResults from "../../../HOCs/WithSearchResults/WithSearchResults";
 import Modal from "../../../Modal/Modal";
 import SearchBox from "../../../SearchBox/SearchBox";
 import messages from "./Messages";
-import BusySpinner from "../../../BusySpinner/BusySpinner";
 
 export function ProjectPickerModal(props) {
   const [isSearching, setIsSearching] = useState(false);
