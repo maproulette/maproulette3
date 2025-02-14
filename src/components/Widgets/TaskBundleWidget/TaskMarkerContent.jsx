@@ -30,12 +30,14 @@ class TaskMarkerContent extends Component {
       ];
     const alreadyBundled =
       this.props.marker.options.bundleId &&
-      this.props.taskBundle?.bundleId !== this.props.marker.options.bundleId;
+      this.props.initialBundle?.bundleId !== this.props.marker.options.bundleId;
 
     const checkBoxEnabled =
       !this.props.bundling &&
       !this.props.taskReadOnly &&
-      [0, 3, 6].includes(taskStatus) &&
+      ([0, 3, 6].includes(taskStatus) ||
+        (this.props.initialBundle?.bundleId &&
+          this.props.initialBundle?.bundleId === this.props.marker.options.bundleId)) &&
       this.props.workspace.name !== "taskReview" &&
       !AsCooperativeWork(this.props.task).isTagType() &&
       this.props.marker.options.taskId !== this.props.task.id;
@@ -102,7 +104,7 @@ class TaskMarkerContent extends Component {
                   onChange={this.toggleSelection}
                 />
               ) : !this.props.bundling &&
-                !this.props.marker.options.bundleId &&
+                !alreadyBundled &&
                 this.props.marker.options.taskId === this.props.task.id ? (
                 <span className="mr-mr-1">✓</span>
               ) : !this.props.bundling ? (
@@ -112,7 +114,7 @@ class TaskMarkerContent extends Component {
               ) : null}
 
               {!this.props.bundling &&
-                !this.props.marker.options.bundleId &&
+                !alreadyBundled &&
                 (checkBoxEnabled || this.props.marker.options.taskId === this.props.task.id) && (
                   <span>
                     <FormattedMessage {...messages.selectedLabel} />
@@ -141,7 +143,21 @@ class TaskMarkerContent extends Component {
                     >
                       <FormattedMessage {...messages.removeFromBundle} />
                     </button>
-                  ) : null}
+                  ) : (
+                    !alreadyBundled && (
+                      <button
+                        disabled={this.props.bundleEditsDisabled}
+                        onClick={() => this.props.bundleTask(this.props.marker.options)}
+                        className="mr-text-green mr-border-solid mr-border mr-border-green mr-px-2 mr-mb-1"
+                        style={{
+                          cursor: this.props.bundleEditsDisabled ? "default" : "pointer",
+                          opacity: this.props.bundleEditsDisabled ? 0.3 : 1,
+                        }}
+                      >
+                        <FormattedMessage {...messages.addToBundle} />
+                      </button>
+                    )
+                  )}
                 </div>
               ) : null}
             </label>

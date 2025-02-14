@@ -242,7 +242,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       }
 
       const completeAction = taskBundle
-        ? completeTaskBundle(
+        ? await completeTaskBundle(
             taskBundle.bundleId,
             AsMappableBundle(taskBundle).primaryTaskId() || taskId,
             taskStatus,
@@ -252,7 +252,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             osmComment,
             completionResponses,
           )
-        : completeTask(
+        : await completeTask(
             taskId,
             taskStatus,
             needsReview,
@@ -363,7 +363,7 @@ export const isStale = (entity, staleTime) => {
  * Load a new random task, handling the differences between standard challenges
  * and virtual challenges.
  */
-export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
+export const nextRandomTask = async (dispatch, props, currentTaskId, taskLoadBy) => {
   // We need to make different requests depending on whether we're working on a
   // virtual challenge or a standard challenge.
   if (_isFinite(props.virtualChallengeId)) {

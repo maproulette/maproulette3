@@ -135,10 +135,11 @@ export class ActiveTaskControls extends Component {
   complete = async (taskStatus) => {
     this.setState({ completingTask: true });
     try {
+      const taskBundle = await this.props.updateTaskBundle();
+
       if (this.state.tags) {
         this.props.saveTaskTags(this.props.task, this.state.tags);
       }
-      this.props.setCompletingTask(this.props.task.id);
 
       const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
@@ -150,7 +151,7 @@ export class ActiveTaskControls extends Component {
           null,
           this.state.revisionLoadBy,
           this.props.history,
-          this.props.taskBundle,
+          taskBundle,
           this.state.requestedNextTask,
           taskStatus,
           null,
@@ -168,7 +169,7 @@ export class ActiveTaskControls extends Component {
           this.state.requestedNextTask,
           this.state.osmComment,
           this.props.tagEdits,
-          this.props.taskBundle,
+          taskBundle,
         );
         if (revisionSubmission) {
           if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
