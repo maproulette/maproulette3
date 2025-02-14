@@ -21,21 +21,23 @@ export function ProjectPickerModal(props) {
     }
 
     setIsSearching(true);
-    props.searchProjects(
-      {
-        searchQuery: queryCriteria.query,
-        page: 0,
-        onlyEnabled: false,
-      },
-      queryCriteria?.page?.resultsPerPage
-    ).finally(() => {
-      setIsSearching(false);
-    });
+    props
+      .searchProjects(
+        {
+          searchQuery: queryCriteria.query,
+          page: 0,
+          onlyEnabled: false,
+        },
+        queryCriteria?.page?.resultsPerPage,
+      )
+      .finally(() => {
+        setIsSearching(false);
+      });
   };
 
   const ProjectSearch = useMemo(
     () => WithSearch(SearchBox, "projectPickerModal", (criteria) => executeSearch(criteria)),
-    [] // Empty dependency array since executeSearch only depends on props
+    [], // Empty dependency array since executeSearch only depends on props
   );
 
   return (
@@ -78,16 +80,16 @@ const CandidateProjectList = function (props) {
       if (searchQuery && (project.displayName || project.name)) {
         const projectName = (project.displayName || project.name).toLowerCase();
         const searchQueryLower = searchQuery.toLowerCase();
-        
+
         // Check if any word in the project name contains the search query
         const words = projectName.split(/\s+/);
-        const hasMatch = words.some(word => word.includes(searchQueryLower));
-        
+        const hasMatch = words.some((word) => word.includes(searchQueryLower));
+
         // Calculate Levenshtein distance for fuzzy matching
         const similarity = levenshtein(searchQueryLower, projectName);
-        
+
         // Prioritize direct substring matches, then use Levenshtein as fallback
-        index = hasMatch ? 1000 : (100 - similarity);
+        index = hasMatch ? 1000 : 100 - similarity;
       }
 
       return { project, index };
