@@ -7,12 +7,9 @@ import _each from "lodash/each";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
 import _groupBy from "lodash/groupBy";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
-import _isUndefined from "lodash/isUndefined";
 import _join from "lodash/join";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -167,11 +164,11 @@ const buildQueryFilters = function (criteria) {
  * > first challenge entity is returned.
  */
 export const challengeResultEntity = function (normalizedChallengeResults) {
-  const challengeId = _isArray(normalizedChallengeResults.result)
+  const challengeId = Array.isArray(normalizedChallengeResults.result)
     ? normalizedChallengeResults.result[0]
     : normalizedChallengeResults.result;
 
-  return _isFinite(challengeId)
+  return Number.isFinite(challengeId)
     ? normalizedChallengeResults.entities.challenges[challengeId]
     : null;
 };
@@ -293,7 +290,7 @@ export const fetchProjectChallengeListing = function (projectIds, onlyEnabled = 
     return new Endpoint(api.challenges.listing, {
       schema: [challengeSchema()],
       params: {
-        projectIds: _isArray(projectIds) ? projectIds.join(",") : projectIds,
+        projectIds: Array.isArray(projectIds) ? projectIds.join(",") : projectIds,
         onlyEnabled,
         limit,
       },
@@ -329,7 +326,7 @@ export const performChallengeSearch = function (searchObject, limit = RESULTS_PE
   const admin = searchObject?.admin ?? false;
   let bounds = null;
 
-  if (filters && !_isUndefined(filters.location)) {
+  if (filters && filters.location !== undefined) {
     bounds = searchObject?.mapBounds?.bounds;
   }
 
@@ -370,13 +367,13 @@ export const performChallengeSearch = function (searchObject, limit = RESULTS_PE
 export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin = false) {
   const queryString = criteria.searchQuery;
   const filters = criteria.filters || {};
-  const onlyEnabled = _isUndefined(criteria.onlyEnabled) ? true : criteria.onlyEnabled;
+  const onlyEnabled = criteria.onlyEnabled === undefined ? true : criteria.onlyEnabled;
 
   const bounds = criteria.bounds;
   const sortBy = criteria?.sortCriteria?.sortBy ?? SortOptions.popular;
   const direction = (criteria?.sortCriteria?.direction || "DESC").toUpperCase();
   const sort = sortBy ? `${sortBy}` : null;
-  const page = _isFinite(criteria.page) ? criteria.page : 0;
+  const page = Number.isFinite(criteria.page) ? criteria.page : 0;
   const challengeStatus = criteria.challengeStatus;
 
   return function (dispatch) {
@@ -398,7 +395,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
       cLocal: onlyEnabled ? CHALLENGE_EXCLUDE_LOCAL : CHALLENGE_INCLUDE_LOCAL,
     };
 
-    if (_isFinite(filters.difficulty)) {
+    if (Number.isFinite(filters.difficulty)) {
       queryParams.cd = filters.difficulty;
     }
 
@@ -419,7 +416,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
     // Keywords/tags can come from both the the query and the filter, so we need to
     // combine them into a single keywords array.
     const keywords = queryParts.tagTokens.concat(
-      _isArray(filters.keywords) ? filters.keywords : [],
+      Array.isArray(filters.keywords) ? filters.keywords : [],
     );
 
     if (keywords.length > 0) {
@@ -485,7 +482,7 @@ export const fetchChallengeActions = function (
 
   return function (dispatch) {
     const challengeActionsEndpoint = new Endpoint(
-      _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
+      Number.isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
       {
         schema: [challengeSchema()],
         variables: { id: challengeId },
@@ -499,7 +496,7 @@ export const fetchChallengeActions = function (
         // If we requested actions on a specific challenge and got nothing back,
         // replace the results with a zeroed-out actions object so our app can
         // know the challenge has no actions.
-        if (_isFinite(challengeId) && _isEmpty(normalizedResults.result)) {
+        if (Number.isFinite(challengeId) && _isEmpty(normalizedResults.result)) {
           normalizedResults.result = [challengeId];
           normalizedResults.entities = {
             challenges: {
@@ -820,7 +817,7 @@ export const fetchChallenge = function (challengeId, suppressReceive = false) {
 
         // If there are no virtual parents then this field will not be set by server
         // so we need to indicate it's empty.
-        if (_isUndefined(challenge.virtualParents)) {
+        if (challenge.virtualParents === undefined) {
           challenge.virtualParents = [];
         }
 
@@ -847,7 +844,7 @@ export const fetchChallenge = function (challengeId, suppressReceive = false) {
  */
 export const fetchChallenges = function (challengeIds, suppressReceive = false) {
   return function (dispatch) {
-    if (!_isArray(challengeIds) || challengeIds.length === 0) {
+    if (!Array.isArray(challengeIds) || challengeIds.length === 0) {
       return Promise.success();
     }
 
@@ -860,7 +857,7 @@ export const fetchChallenges = function (challengeIds, suppressReceive = false) 
         // If a challenge has no virtual parents then the field will not be set
         // by server, so we need to indicate it's empty
         _each(normalizedResults.entities.challenges, (challenge) => {
-          if (_isUndefined(challenge.virtualParents)) {
+          if (challenge.virtualParents === undefined) {
             challenge.virtualParents = [];
           }
         });
@@ -892,19 +889,19 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData);
 
-    if (_isArray(challengeData.tags)) {
+    if (Array.isArray(challengeData.tags)) {
       challengeData.tags = challengeData.tags.map((t) => t.trim()).join(",");
     } else if (challengeData.tags) {
       challengeData.tags = challengeData.tags.trim();
     }
 
-    if (_isArray(challengeData.preferredTags)) {
+    if (Array.isArray(challengeData.preferredTags)) {
       challengeData.preferredTags = challengeData.preferredTags.map((t) => t.trim()).join(",");
     } else if (challengeData.preferredTags) {
       challengeData.preferredTags = challengeData.preferredTags.trim();
     }
 
-    if (_isArray(challengeData.preferredReviewTags)) {
+    if (Array.isArray(challengeData.preferredReviewTags)) {
       challengeData.preferredReviewTags = challengeData.preferredReviewTags
         .map((t) => t.trim())
         .join(",");
@@ -1033,7 +1030,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
       // Agreement box should be checked, but if it passes as true the property should not be included
       // in the data sent to server.
       if (
-        !_isFinite(challengeData.id) &&
+        !Number.isFinite(challengeData.id) &&
         Object.hasOwn(challengeData, "automatedEditsCodeAgreement")
       ) {
         if (!challengeData.automatedEditsCodeAgreement) {
@@ -1048,7 +1045,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
       // Setup the save function to either edit or create the challenge
       // depending on whether it has an id.
       const saveEndpoint = new Endpoint(
-        _isFinite(challengeData.id) ? api.challenge.edit : api.challenge.create,
+        Number.isFinite(challengeData.id) ? api.challenge.edit : api.challenge.create,
         {
           schema: challengeSchema(),
           variables: { id: challengeData.id },
@@ -1336,7 +1333,7 @@ export const fetchParentProject = function (dispatch, normalizedChallengeResults
  * results.
  */
 export const findKeyword = function (keywordPrefix, tagType = null) {
-  const tagTypes = _isArray(tagType) ? tagType.join(",") : tagType;
+  const tagTypes = Array.isArray(tagType) ? tagType.join(",") : tagType;
   return new Endpoint(api.keywords.find, {
     params: { prefix: keywordPrefix, tagTypes },
   }).execute();
@@ -1352,7 +1349,7 @@ export const findKeyword = function (keywordPrefix, tagType = null) {
  */
 const removeChallengeKeywords = function (challengeId, oldKeywords = []) {
   // If no challenge id, nothing to do
-  if (!_isFinite(challengeId)) {
+  if (!Number.isFinite(challengeId)) {
     return Promise.resolve();
   }
 
@@ -1386,7 +1383,7 @@ const reduceChallengesFurther = function (mergedState, oldState, challengeEntiti
       return;
     }
 
-    if (_isArray(entity.tags)) {
+    if (Array.isArray(entity.tags)) {
       mergedState[entity.id].tags = entity.tags;
     }
 
@@ -1402,19 +1399,19 @@ const reduceChallengesFurther = function (mergedState, oldState, challengeEntiti
       mergedState[entity.id].lowPriorityRule = entity.lowPriorityRule;
     }
 
-    if (_isArray(entity.activity)) {
+    if (Array.isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity;
     }
 
-    if (_isArray(entity.virtualParents)) {
+    if (Array.isArray(entity.virtualParents)) {
       mergedState[entity.id].virtualParents = entity.virtualParents;
     }
 
-    if (_isArray(entity.taskStyles)) {
+    if (Array.isArray(entity.taskStyles)) {
       mergedState[entity.id].taskStyles = entity.taskStyles;
     }
 
-    if (_isArray(entity.presets)) {
+    if (Array.isArray(entity.presets)) {
       mergedState[entity.id].presets = entity.presets;
     }
   });

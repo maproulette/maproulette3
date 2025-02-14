@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { injectIntl } from "react-intl";
@@ -14,7 +13,7 @@ import SvgSymbol from "../SvgSymbol/SvgSymbol";
  */
 export class VirtualChallengeNameLink extends Component {
   render() {
-    if (!_isFinite(this.props.virtualChallengeId)) {
+    if (!Number.isFinite(this.props.virtualChallengeId)) {
       return null;
     }
 

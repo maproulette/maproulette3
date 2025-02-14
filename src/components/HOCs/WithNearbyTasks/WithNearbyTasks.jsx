@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _omit from "lodash/omit";
 import PropTypes from "prop-types";
 import { Component } from "react";
@@ -41,7 +40,7 @@ export const WithNearbyTasks = function (WrappedComponent) {
      *
      * @private
      */
-    isVirtualChallenge = (props) => _isFinite(this.virtualChallengeId(props));
+    isVirtualChallenge = (props) => Number.isFinite(this.virtualChallengeId(props));
 
     /**
      * Parses the current standard or virtual challenge id from the matched params
@@ -67,7 +66,7 @@ export const WithNearbyTasks = function (WrappedComponent) {
       const isVirtual = this.isVirtualChallenge(props);
       const excludeSelfLockedTasks = !!props.excludeSelfLockedTasks;
 
-      if (_isFinite(challengeId)) {
+      if (Number.isFinite(challengeId)) {
         this.setState({ nearbyTasks: { loading: true } });
         props
           .fetchNearbyTasks(

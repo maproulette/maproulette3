@@ -1,7 +1,6 @@
 import { useLeafletContext } from "@react-leaflet/core";
 import { featureCollection } from "@turf/helpers";
 import L from "leaflet";
-import _isFunction from "lodash/isFunction";
 import _uniqueId from "lodash/uniqueId";
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
@@ -69,9 +68,10 @@ const TaskFeatureLayer = (props) => {
           });
         }}
         onEachFeature={(feature, layer) => {
-          const styleableFeature = _isFunction(feature.styleLeafletLayer)
-            ? feature
-            : AsSimpleStyleableFeature(feature);
+          const styleableFeature =
+            typeof feature.styleLeafletLayer === "function"
+              ? feature
+              : AsSimpleStyleableFeature(feature);
 
           if (externalInteractive) {
             layer.on("click", (e) => {

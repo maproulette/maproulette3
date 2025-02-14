@@ -1,4 +1,3 @@
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isString from "lodash/isString";
 import _merge from "lodash/merge";
@@ -361,10 +360,10 @@ export const validateStepTransition = (activeStep, toStepId, allowedStep, transi
   if (toStepId) {
     if (_isString(allowedStep) && allowedStep !== toStepId) {
       throw transitionError;
-    } else if (_isArray(allowedStep) && allowedStep.indexOf(toStepId) === -1) {
+    } else if (Array.isArray(allowedStep) && allowedStep.indexOf(toStepId) === -1) {
       throw transitionError;
     }
-  } else if (_isArray(allowedStep)) {
+  } else if (Array.isArray(allowedStep)) {
     throw new Error(`Indeterminate transition for step ${activeStep.id}`);
   }
 };

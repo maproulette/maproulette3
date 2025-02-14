@@ -1,4 +1,3 @@
-import _isUndefined from "lodash/isUndefined";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { ChallengeLocation } from "../../services/Challenge/ChallengeLocation/ChallengeLocation";
@@ -35,7 +34,7 @@ export class ZoomInMessage extends Component {
       this.setState({ minimized: false });
     }
     // If minimized is undefined this is the first time this is loading
-    else if (_isUndefined(this.state.minimized)) {
+    else if (this.state.minimized === undefined) {
       this.setState({ minimized: this.props.zoom > MIN_ZOOM });
     }
   }

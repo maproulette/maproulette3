@@ -1,5 +1,3 @@
-import _isFinite from "lodash/isFinite";
-
 /**
  * AsBrowsableChallenge adds functionality to a Challenge related to browsing
  */
@@ -9,7 +7,7 @@ export class AsBrowsableChallenge {
   }
 
   browseURL() {
-    if (!_isFinite(this.id)) {
+    if (!Number.isFinite(this.id)) {
       return "/browse/challenges";
     }
     return `/browse/challenges/${this.id}`;

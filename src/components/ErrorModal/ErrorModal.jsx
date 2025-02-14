@@ -1,4 +1,3 @@
-import _isArray from "lodash/isArray";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
@@ -17,7 +16,7 @@ import messages from "./Messages";
  */
 export class ErrorModal extends Component {
   render() {
-    if (!_isArray(this.props.errors) || this.props.errors.length === 0) {
+    if (!Array.isArray(this.props.errors) || this.props.errors.length === 0) {
       return null;
     }
 

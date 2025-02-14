@@ -1,8 +1,6 @@
 import classNames from "classnames";
 import _each from "lodash/each";
 import _find from "lodash/find";
-import _indexOf from "lodash/indexOf";
-import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
 import _map from "lodash/map";
 import _noop from "lodash/noop";
@@ -296,7 +294,7 @@ export class TaskHistoryList extends Component {
                 <input
                   className="mr-checkbox-toggle"
                   type="checkbox"
-                  checked={_indexOf(this.props.selectedTimestamps, log.timestamp.toString()) !== -1}
+                  checked={this.props.selectedTimestamps.indexOf(log.timestamp.toString()) !== -1}
                   onChange={() => this.props.toggleSelection(log.timestamp)}
                 />
               )}
@@ -371,7 +369,7 @@ export class TaskHistoryList extends Component {
 const reviewEntry = (entry, props, index) => {
   return (
     <li key={index}>
-      {!_isUndefined(entry.reviewStatus) && (
+      {entry.reviewStatus !== undefined && (
         <ReviewStatusLabel
           {...props}
           isMetaReview={entry.actionType === TaskHistoryAction.metaReview}

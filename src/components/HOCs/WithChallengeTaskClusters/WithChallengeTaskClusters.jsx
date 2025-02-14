@@ -3,7 +3,6 @@ import _debounce from "lodash/debounce";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _set from "lodash/set";
@@ -234,7 +233,7 @@ export const WithChallengeTaskClusters = function (
 
       // Sometimes we have tasks, sometimes single-point clusters depending on
       // whether tasks have been unclustered. Either way, represent as tasks
-      return _isFinite(this.state.clusters[0].clusterId)
+      return Number.isFinite(this.state.clusters[0].clusterId)
         ? // clusters
           _map(this.state.clusters, (cluster) => ({
             id: cluster.taskId,

@@ -1,6 +1,5 @@
 import _each from "lodash/each";
 import _filter from "lodash/filter";
-import _isArray from "lodash/isArray";
 import _uniqBy from "lodash/uniqBy";
 import { Component } from "react";
 
@@ -19,7 +18,7 @@ const WithChallengeResultParents = function (WrappedComponent) {
       }
 
       // If there are pre-filtered projects, use those
-      const allProjects = _isArray(this.props.filteredProjects)
+      const allProjects = Array.isArray(this.props.filteredProjects)
         ? this.props.filteredProjects
         : this.props.projects;
 

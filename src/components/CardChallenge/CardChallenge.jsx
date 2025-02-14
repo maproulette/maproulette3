@@ -2,7 +2,6 @@ import classNames from "classnames";
 import { parseISO } from "date-fns";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
-import _isUndefined from "lodash/isUndefined";
 import _noop from "lodash/noop";
 import PropTypes from "prop-types";
 import { Component } from "react";
@@ -172,17 +171,16 @@ export class CardChallenge extends Component {
             <ChallengeProgress className="mr-mt-4 mr-mb-12" challenge={this.props.challenge} />
 
             <ul className="mr-card-challenge__actions">
-              {!_isUndefined(this.props.startControl) && (
+              {this.props.startControl !== undefined && (
                 <li>{this.props.isLoading ? <BusySpinner inline /> : this.props.startControl}</li>
               )}
-              {(!_isUndefined(this.props.saveControl) ||
-                !_isUndefined(this.props.unsaveControl)) && (
+              {(this.props.saveControl !== undefined || this.props.unsaveControl !== undefined) && (
                 <li>
                   {this.props.saveControl}
                   {this.props.unsaveControl}
                 </li>
               )}
-              {!_isUndefined(this.props.manageControl) && <li>{this.props.manageControl}</li>}
+              {this.props.manageControl !== undefined && <li>{this.props.manageControl}</li>}
             </ul>
           </div>
         )}

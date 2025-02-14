@@ -1,7 +1,6 @@
 import Fuse from "fuse.js";
 import _filter from "lodash/filter";
 import _find from "lodash/find";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isString from "lodash/isString";
 import _map from "lodash/map";
@@ -42,7 +41,7 @@ export const WithSearchResults = function (WrappedComponent, searchName, itemsPr
      */
     itemsMatchingTags = (items, tagTokens) => {
       return _filter(items, (item) => {
-        if (_isArray(item.tags)) {
+        if (Array.isArray(item.tags)) {
           for (let tag of item.tags) {
             if (_find(tagTokens, (token) => _startsWith(tag, token))) {
               return true;
@@ -72,7 +71,7 @@ export const WithSearchResults = function (WrappedComponent, searchName, itemsPr
           items,
           (item) => (item?.parent?.displayName ?? "").toLowerCase().indexOf(projectFilter) !== -1,
         );
-      } else if (_isString(query) && query.length > 0 && _isArray(items) && items.length > 0) {
+      } else if (_isString(query) && query.length > 0 && Array.isArray(items) && items.length > 0) {
         const queryParts = parseQueryString(query);
 
         // If there are tags, filter the items up-front.

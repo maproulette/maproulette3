@@ -2,7 +2,6 @@ import OriginalCheckboxWidget from "@rjsf/core/lib/components/widgets/CheckboxWi
 import OriginalSelectWidget from "@rjsf/core/lib/components/widgets/SelectWidget";
 import OriginalTextWidget from "@rjsf/core/lib/components/widgets/TextWidget";
 import classNames from "classnames";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
@@ -326,7 +325,7 @@ export const MarkdownEditField = (props) => {
 
 export const TagsInputField = (props) => {
   let tags = [];
-  if (_isArray(props.formData)) {
+  if (Array.isArray(props.formData)) {
     tags = _map(props.formData, (tag) => (tag.name ? tag.name : tag));
   } else if (_isString(props.formData) && props.formData !== "") {
     tags = props.formData.split(",");

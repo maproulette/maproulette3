@@ -10,7 +10,6 @@
  * @see See also Server/Endpoints
  */
 
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import { normalize } from "normalizr";
 import apiRoutes from "./APIRoutes";
@@ -79,7 +78,7 @@ export const fetchContent = function (url, normalizationSchema, options = {}) {
             // 404 is used by the scala server to indicate no results. Treat as
             // successful response with empty data
             if (error.response.status === 404) {
-              resolve(normalize(_isArray(normalizationSchema) ? [] : {}, normalizationSchema));
+              resolve(normalize(Array.isArray(normalizationSchema) ? [] : {}, normalizationSchema));
             } else {
               // Attach any details in the response body to the error
               parseJSON(error.response)
