@@ -5,15 +5,7 @@ import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
 import { useEffect, useRef, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import {
-  AttributionControl,
-  LayerGroup,
-  MapContainer,
-  Rectangle,
-  ScaleControl,
-  ZoomControl,
-  useMap,
-} from "react-leaflet";
+import { LayerGroup, Rectangle, ScaleControl } from "react-leaflet";
 import { toLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../BusySpinner/BusySpinner";
@@ -25,6 +17,7 @@ import SearchContent from "../EnhancedMap/SearchControl/SearchContent";
 import SearchControl from "../EnhancedMap/SearchControl/SearchControl";
 import SelectMarkersInViewControl from "../EnhancedMap/SelectMarkersInViewControl/SelectMarkersInViewControl";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
+import WithMapContainer from "../HOCs/WithMapContainer/WithMapContainer";
 import WithIntersectingOverlays from "../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
 import MapMarkers from "./MapMarkers";
@@ -62,7 +55,10 @@ export const TaskClusterMap = (props) => {
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
-  const prevProps = useRef({ showAsClusters: props.showAsClusters, loading: props.loading });
+  const prevProps = useRef({
+    showAsClusters: props.showAsClusters,
+    loading: props.loading,
+  });
   const timerHandle = useRef(null);
   const [displayTaskCount, setDisplayTaskCount] = useState(false);
 
@@ -91,7 +87,10 @@ export const TaskClusterMap = (props) => {
     }
 
     // Update previous props
-    prevProps.current = { showAsClusters: props.showAsClusters, loading: props.loading };
+    prevProps.current = {
+      showAsClusters: props.showAsClusters,
+      loading: props.loading,
+    };
 
     // Clean up timer on component unmount
     return () => {
@@ -237,39 +236,14 @@ export const TaskClusterMap = (props) => {
     </>
   );
 
-  const ResizeMap = () => {
-    const map = useMap();
-    useEffect(() => {
-      map.invalidateSize();
-    }, [props.widgetLayout?.w, props.widgetLayout?.h]);
-    return null;
-  };
-
   return (
-    <MapContainer
-      attributionControl={false}
-      center={props.center}
-      minZoom={2}
-      maxZoom={18}
-      maxBounds={[
-        [-90, -180],
-        [90, 180],
-      ]}
-      bounds={
-        props.initialBounds || [
-          [-70, -120],
-          [80, 120],
-        ]
-      }
+    <div
       className={classNames(
         "taskcluster-map",
         { "full-screen-map": props.isMobile },
         props.className,
       )}
-      zoomControl={false}
     >
-      <ResizeMap />
-      <AttributionControl position="bottomleft" prefix={false} />
       {(Boolean(props.loading) || Boolean(props.loadingChallenge)) && (
         <BusySpinner mapMode xlarge />
       )}
@@ -287,7 +261,6 @@ export const TaskClusterMap = (props) => {
               className="mr-mr-2"
               checked={props.showAsClusters}
               onChange={() => {
-                // Clear any existing selections when switching between tasks and clusters
                 props.toggleShowAsClusters();
                 props.resetSelectedClusters && props.resetSelectedClusters();
               }}
@@ -338,15 +311,6 @@ export const TaskClusterMap = (props) => {
           </div>
         </div>
       )}
-      <ZoomControl className="mr-z-10" position="topright" />
-      {props.showFitWorld && <FitWorldControl />}
-      {props.fitbBoundsControl && (
-        <FitBoundsControl
-          key={props.taskCenter}
-          centerPoint={props.taskCenter}
-          centerBounds={props.centerBounds}
-        />
-      )}
       <ScaleControl className="mr-z-10" position="bottomleft" />
       <LayerToggle {...props} overlayOrder={overlayOrder} />
       <VisibleTileLayer {...props} zIndex={1} />
@@ -373,8 +337,18 @@ export const TaskClusterMap = (props) => {
         currentZoom={currentZoom}
         setCurrentZoom={setCurrentZoom}
       />
-    </MapContainer>
+      {props.showFitWorld && <FitWorldControl />}
+      {props.fitbBoundsControl && (
+        <FitBoundsControl
+          key={props.taskCenter}
+          centerPoint={props.taskCenter}
+          centerBounds={props.centerBounds}
+        />
+      )}
+    </div>
   );
 };
 
-export default (searchName) => WithIntersectingOverlays(TaskClusterMap, searchName);
+// Compose the HOCs, with WithMapContainer as the outermost wrapper
+export default (searchName) =>
+  WithIntersectingOverlays(WithMapContainer(TaskClusterMap), searchName);

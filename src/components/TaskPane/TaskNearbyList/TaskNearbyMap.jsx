@@ -27,6 +27,7 @@ import WithIntersectingOverlays from "../../HOCs/WithIntersectingOverlays/WithIn
 import WithTaskMarkers from "../../HOCs/WithTaskMarkers/WithTaskMarkers";
 import WithVisibleLayer from "../../HOCs/WithVisibleLayer/WithVisibleLayer";
 import messages from "./Messages";
+import WithMapContainer from "../../HOCs/WithMapContainer/WithMapContainer";
 
 const colors = resolveConfig(tailwindConfig).theme.colors;
 
@@ -75,6 +76,33 @@ const markerIconSvg = (priority, styleOptions = {}) => {
     iconAnchor: [prioritizedWidth / 2, prioritizedHeight], // tip of marker
   });
 };
+
+const MapContent = (props) => {
+  console.log("MapContent props:", props);
+  return (
+    <>
+      <VisibleTileLayer {...props} zIndex={1} />
+      {props.overlayLayers}
+      <Marker
+        position={props.currentCenterpoint}
+        icon={starIconSvg}
+        title={props.intl.formatMessage(messages.currentTaskTooltip)}
+        eventHandlers={{
+          click: () => {
+            props.clearNextTask();
+          },
+        }}
+      />
+      {props.coloredMarkers.length > 0 && (
+        <MarkerClusterGroup key={Date.now()} maxClusterRadius={5}>
+          {props.coloredMarkers}
+        </MarkerClusterGroup>
+      )}
+    </>
+  );
+};
+
+const EnhancedMapContent = WithMapContainer(injectIntl(MapContent));
 
 /**
  * TaskNearbyMap allows the user to select a task that is geographically nearby
@@ -162,14 +190,6 @@ export class TaskNearbyMap extends Component {
       ),
     );
 
-    const ResizeMap = () => {
-      const map = useMap();
-      useEffect(() => {
-        map.invalidateSize();
-      }, [map]);
-      return null;
-    };
-
     if (!coloredMarkers) {
       return (
         <div className="mr-h-full">
@@ -181,42 +201,14 @@ export class TaskNearbyMap extends Component {
     return (
       <div className="mr-h-full">
         <LayerToggle {...this.props} />
-        <MapContainer
+        <EnhancedMapContent
           center={currentCenterpoint}
-          zoom={12}
-          zoomControl={false}
-          animate={true}
-          worldCopyJump={true}
+          coloredMarkers={coloredMarkers}
+          currentCenterpoint={currentCenterpoint}
+          overlayLayers={overlayLayers}
           intl={this.props.intl}
-          attributionControl={false}
-          minZoom={2}
-          maxZoom={18}
-          maxBounds={[
-            [-90, -180],
-            [90, 180],
-          ]}
-        >
-          <ResizeMap />
-          <AttributionControl position="bottomleft" prefix={false} />
-          <ZoomControl position="topright" />
-          <VisibleTileLayer {...this.props} zIndex={1} />
-          {overlayLayers}
-          <Marker
-            position={currentCenterpoint}
-            icon={starIconSvg}
-            title={this.props.intl.formatMessage(messages.currentTaskTooltip)}
-            eventHandlers={{
-              click: () => {
-                this.props.clearNextTask();
-              },
-            }}
-          />
-          {coloredMarkers.length > 0 && (
-            <MarkerClusterGroup key={Date.now()} maxClusterRadius={5}>
-              {coloredMarkers}
-            </MarkerClusterGroup>
-          )}
-        </MapContainer>
+          {...this.props}
+        />
         {this.props.hasMoreToLoad && (
           <div className="mr-absolute mr-bottom-0 mr-mb-8 mr-w-full mr-text-center">
             <button
@@ -227,7 +219,6 @@ export class TaskNearbyMap extends Component {
             </button>
           </div>
         )}
-
         {!!this.props.tasksLoading && <BusySpinner mapMode big />}
       </div>
     );

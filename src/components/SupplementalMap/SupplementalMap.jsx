@@ -4,7 +4,7 @@ import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
 import _uniqueId from "lodash/uniqueId";
 import { useEffect } from "react";
-import { AttributionControl, MapContainer, Pane, ZoomControl, useMap } from "react-leaflet";
+import { Pane, useMap } from "react-leaflet";
 import {
   DEFAULT_ZOOM,
   MAX_ZOOM,
@@ -14,6 +14,7 @@ import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/Visible
 import BusySpinner from "../BusySpinner/BusySpinner";
 import LayerToggle from "../EnhancedMap/LayerToggle/LayerToggle";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
+import WithMapContainer from "../HOCs/WithMapContainer/WithMapContainer";
 import WithIntersectingOverlays from "../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithTaskCenterPoint from "../HOCs/WithTaskCenterPoint/WithTaskCenterPoint";
 import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
@@ -66,13 +67,9 @@ const SupplementalMapContent = (props) => {
     }).reverse();
   }
 
-  // Note: we need to also pass maxZoom to the tile layer (in addition to the
-  // map), or else leaflet won't autoscale if the zoom goes beyond the
-  // capabilities of the layer.
   return (
     <>
       <LayerToggle {...props} overlayOrder={overlayOrder} />
-      <ZoomControl position="topright" />
       <SourcedTileLayer maxZoom={props.maxZoom} {...props} />
       {_map(overlayLayers, (layer, index) => (
         <Pane
@@ -88,41 +85,19 @@ const SupplementalMapContent = (props) => {
   );
 };
 
-const ResizeMap = () => {
-  const map = useMap();
-  useEffect(() => {
-    map.invalidateSize();
-  }, [map]);
-  return null;
-};
-
 const SupplementalMap = (props) => {
   const zoom = props.task?.parent?.defaultZoom ?? DEFAULT_ZOOM;
   const minZoom = props.task?.parent?.minZoom ?? MIN_ZOOM;
   const maxZoom = props.task?.parent?.maxZoom ?? MAX_ZOOM;
+
   return (
     <div className="task-map">
-      <MapContainer
-        taskBundle={props.taskBundle}
-        center={props.centerPoint}
-        zoom={zoom}
-        zoomControl={false}
-        minZoom={minZoom}
-        maxZoom={maxZoom}
-        worldCopyJump={true}
-        intl={props.intl}
-        attributionControl={false}
-        maxBounds={[
-          [-90, -180],
-          [90, 180],
-        ]}
-      >
-        <ResizeMap />
-        <AttributionControl position="bottomleft" prefix={false} />
-        <SupplementalMapContent {...props} />
-      </MapContainer>
+      <SupplementalMapContent {...props} />
     </div>
   );
 };
 
-export default WithTaskCenterPoint(WithVisibleLayer(WithIntersectingOverlays(SupplementalMap)));
+// Compose the HOCs, with WithMapContainer as the outermost wrapper
+export default WithTaskCenterPoint(
+  WithVisibleLayer(WithIntersectingOverlays(WithMapContainer(SupplementalMap))),
+);

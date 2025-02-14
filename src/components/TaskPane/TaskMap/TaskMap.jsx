@@ -18,21 +18,17 @@ import PropTypes from "prop-types";
 import React, { useState, useEffect, useMemo } from "react";
 import ReactDOM from "react-dom";
 import { IntlProvider } from "react-intl";
-import {
-  AttributionControl,
-  LayerGroup,
-  MapContainer,
-  Pane,
-  ZoomControl,
-  useMap,
-  useMapEvents,
-} from "react-leaflet";
+import { LayerGroup, Pane, ZoomControl, useMap, useMapEvents } from "react-leaflet";
 import AsMappableTask from "../../../interactions/Task/AsMappableTask";
 import AsIdentifiableFeature from "../../../interactions/TaskFeature/AsIdentifiableFeature";
 import AsSimpleStyleableFeature, {
   supportedSimplestyles,
 } from "../../../interactions/TaskFeature/AsSimpleStyleableFeature";
-import { DEFAULT_ZOOM, MAX_ZOOM } from "../../../services/Challenge/ChallengeZoom/ChallengeZoom";
+import {
+  DEFAULT_ZOOM,
+  MAX_ZOOM,
+  MIN_ZOOM,
+} from "../../../services/Challenge/ChallengeZoom/ChallengeZoom";
 import {
   DEFAULT_OVERLAY_ORDER,
   buildLayerSources,
@@ -64,6 +60,7 @@ import {
   orderedFeatureLayers,
 } from "./helperFunctions";
 import "./TaskMap.scss";
+import WithMapContainer from "../../HOCs/WithMapContainer/WithMapContainer";
 
 const shortcutGroup = "layers";
 
@@ -79,7 +76,11 @@ export const TaskMapContent = (props) => {
   const [showTaskFeatures, setShowTaskFeatures] = useState(true);
   const [osmData, setOsmData] = useState(null);
   const [showOSMData, setShowOSMData] = useState(false);
-  const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true });
+  const [showOSMElements, setShowOSMElements] = useState({
+    nodes: true,
+    ways: true,
+    areas: true,
+  });
   const [osmDataLoading, setOsmDataLoading] = useState(false);
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null);
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null);
@@ -625,7 +626,11 @@ export const TaskMapContent = (props) => {
   }
 
   return (
-    <div className={classNames("task-map task", { "full-screen-map": props.isMobile })}>
+    <div
+      className={classNames("task-map task", {
+        "full-screen-map": props.isMobile,
+      })}
+    >
       <LayerToggle
         {...props}
         showTaskFeatures={showTaskFeatures}
@@ -672,33 +677,13 @@ export const TaskMapContent = (props) => {
 };
 
 const TaskMap = (props) => {
-  const ResizeMap = () => {
-    const map = useMap();
-    useEffect(() => {
-      map.invalidateSize();
-    }, [map]);
-    return null;
-  };
-
   return (
-    <div className={classNames("task-map task", { "full-screen-map": props.isMobile })}>
-      <MapContainer
-        taskBundle={props.taskBundle}
-        center={props.centerPoint}
-        zoomControl={false}
-        zoom={DEFAULT_ZOOM}
-        minZoom={2}
-        maxZoom={MAX_ZOOM}
-        attributionControl={false}
-        maxBounds={[
-          [-90, -180],
-          [90, 180],
-        ]}
-      >
-        <ResizeMap />
-        <AttributionControl position="bottomleft" prefix={false} />
-        <TaskMapContent {...props} />
-      </MapContainer>
+    <div
+      className={classNames("task-map task", {
+        "full-screen-map": props.isMobile,
+      })}
+    >
+      <TaskMapContent zoom={DEFAULT_ZOOM} minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM} {...props} />
     </div>
   );
 };
@@ -718,7 +703,9 @@ export default WithSearch(
   WithMapillaryImages(
     WithOpenStreetCamImages(
       WithTaskCenterPoint(
-        WithVisibleLayer(WithIntersectingOverlays(WithKeyboardShortcuts(TaskMap), "task")),
+        WithVisibleLayer(
+          WithIntersectingOverlays(WithKeyboardShortcuts(WithMapContainer(TaskMap)), "task"),
+        ),
       ),
     ),
   ),
