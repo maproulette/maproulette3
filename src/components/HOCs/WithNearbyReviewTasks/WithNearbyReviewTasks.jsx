@@ -42,7 +42,11 @@ export const WithNearbyReviewTasks = function (WrappedComponent) {
         .then((nearbyTasks) => {
           const tasksLength = nearbyTasks.tasks.length;
           this.setState({
-            nearbyTasks: { ...nearbyTasks, nearTaskId: props.taskId, loading: false },
+            nearbyTasks: {
+              ...nearbyTasks,
+              nearTaskId: props.taskId,
+              loading: false,
+            },
             lastLoadLength: tasksLength,
             hasMoreToLoad: this.state.lastLoadLength !== tasksLength,
           });
@@ -76,7 +80,6 @@ export const WithNearbyReviewTasks = function (WrappedComponent) {
         <WrappedComponent
           {..._omit(this.props, ["fetchNearbyReviewTasks"])}
           nearbyTasks={this.state.nearbyTasks}
-          increaseTaskLimit={() => this.setState({ taskLimit: this.state.taskLimit + 5 })}
           hasMoreToLoad={this.state.hasMoreToLoad}
         />
       );

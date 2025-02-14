@@ -1,6 +1,6 @@
 import L from "leaflet";
 import PropTypes from "prop-types";
-import { Component, useEffect } from "react";
+import { Component, useEffect, useRef } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import "leaflet-vectoricon";
 import MarkerClusterGroup from "@changey/react-leaflet-markercluster/src/react-leaflet-markercluster";
@@ -74,6 +74,51 @@ const markerIconSvg = (priority, styleOptions = {}) => {
     iconSize: [prioritizedWidth, prioritizedHeight],
     iconAnchor: [prioritizedWidth / 2, prioritizedHeight], // tip of marker
   });
+};
+
+const MapBounds = ({ taskMarkers, setMapBounds, loadByNearbyTasks, setLoadByNearbyTasks }) => {
+  const map = useMap();
+  const prevMarkersLength = useRef(taskMarkers?.length || 0);
+  const initialBoundsSet = useRef(false);
+
+  // Only track map bounds changes
+  useEffect(() => {
+    const handleMoveEnd = () => {
+      const bounds = map.getBounds();
+      setMapBounds(bounds);
+    };
+
+    map.on("moveend", handleMoveEnd);
+
+    // Set initial bounds tracking
+    if (!initialBoundsSet.current) {
+      handleMoveEnd();
+      initialBoundsSet.current = true;
+    }
+
+    return () => {
+      map.off("moveend", handleMoveEnd);
+    };
+  }, [map, setMapBounds]);
+
+  // Separate effect for handling bounds fitting
+  useEffect(() => {
+    const currentLength = taskMarkers?.length || 0;
+
+    // Only fit bounds if explicitly loading by nearby tasks AND markers count changed
+    if (loadByNearbyTasks && currentLength > 0 && taskMarkers !== prevMarkersLength.current) {
+      debugger;
+      const bounds = L.latLngBounds(taskMarkers.map((marker) => marker.position));
+      map.fitBounds(bounds, {
+        padding: [40, 40],
+        maxZoom: 18,
+      });
+      prevMarkersLength.current = currentLength;
+      setLoadByNearbyTasks(false);
+    }
+  }, [map, taskMarkers, loadByNearbyTasks]);
+
+  return null;
 };
 
 /**
@@ -196,6 +241,12 @@ export class TaskNearbyMap extends Component {
             [90, 180],
           ]}
         >
+          <MapBounds
+            taskMarkers={this.props.taskMarkers}
+            setMapBounds={this.props.setMapBounds}
+            loadByNearbyTasks={this.props.loadByNearbyTasks}
+            setLoadByNearbyTasks={this.props.setLoadByNearbyTasks}
+          />
           <ResizeMap />
           <AttributionControl position="bottomleft" prefix={false} />
           <ZoomControl position="topright" />
@@ -217,16 +268,20 @@ export class TaskNearbyMap extends Component {
             </MarkerClusterGroup>
           )}
         </MapContainer>
-        {this.props.hasMoreToLoad && (
-          <div className="mr-absolute mr-bottom-0 mr-mb-8 mr-w-full mr-text-center">
-            <button
-              className="mr-button mr-button--small mr-button--blue-fill"
-              onClick={() => this.props.increaseTaskLimit()}
-            >
-              <FormattedMessage {...messages.loadMoreTasks} />
-            </button>
-          </div>
-        )}
+        <div className="mr-absolute mr-bottom-0 mr-mb-8 mr-w-full mr-text-center">
+          <button
+            className="mr-button mr-button--small mr-button--blue-fill"
+            onClick={() => this.props.updateNearbyTasks()}
+          >
+            <FormattedMessage {...messages.loadMoreTasks} />
+          </button>
+          <button
+            className="mr-button mr-button--small mr-button--blue-fill mr-ml-2"
+            onClick={() => this.props.loadTasksInView()}
+          >
+            <FormattedMessage {...messages.loadTasksInView} />
+          </button>
+        </div>
 
         {!!this.props.tasksLoading && <BusySpinner mapMode big />}
       </div>
@@ -245,6 +300,8 @@ TaskNearbyMap.propTypes = {
   onTaskClick: PropTypes.func,
   /** Invoked when the user clicks on the map instead of a maker */
   onMapClick: PropTypes.func,
+  setMapBounds: PropTypes.func,
+  mapBounds: PropTypes.object,
 };
 
 export default WithTaskMarkers(

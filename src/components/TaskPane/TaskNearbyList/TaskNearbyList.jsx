@@ -6,14 +6,6 @@ import TaskNearbyMap from "./TaskNearbyMap";
 
 export class TaskNearbyList extends Component {
   render() {
-    if (!this.props.task || !this.props.nearbyTasks) {
-      return null;
-    }
-
-    if (this.props.nearbyTasks.loading) {
-      return <BusySpinner />;
-    }
-
     return (
       <MapPane {...this.props}>
         <TaskNearbyMap {...this.props} />
