@@ -2,7 +2,7 @@ import { get as levenshtein } from "fast-levenshtein";
 import _compact from "lodash/compact";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
-import { Component, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import BusySpinner from "../../../BusySpinner/BusySpinner";
 import WithPagedProjects from "../../../HOCs/WithPagedProjects/WithPagedProjects";
