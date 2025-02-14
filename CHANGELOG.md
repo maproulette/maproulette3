@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.4] - 2025-02-13
+Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.2)
+
+## What's Changed
+* disable completion buttons by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2542
+* Scrub for RapiD -> Rapid brand update by @watmildon in https://github.com/maproulette/maproulette3/pull/2543
+* Error tag and comment editing by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2529
+
+## MR2 Changes
+* add ability to edit comments and show if edited by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1167
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.3...v3.16.4
+
 ## [v3.16.3] - 2025-02-06
 Released with [maproulette-backend_v4.7.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.1)
 
