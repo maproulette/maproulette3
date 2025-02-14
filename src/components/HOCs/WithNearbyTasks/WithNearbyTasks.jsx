@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchNearbyTasks } from "../../../services/Task/Task";
 import { fetchBoundedTaskMarkers } from "../../../services/Task/BoundedTask";
+import { fetchNearbyTasks } from "../../../services/Task/Task";
 
 /**
  * WithNearbyTasks provides tasks geographically closest to the current task
