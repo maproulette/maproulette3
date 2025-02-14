@@ -236,6 +236,7 @@ export default class AutosuggestMentionTextArea extends Component {
                     "mr-flex-grow mr-w-full mr-h-full mr-outline-none",
                     this.props.disableResize ? "mr-resize-none" : "mr-resize",
                   )}
+                  style={{ resize: "vertical" }}
                   onKeyDown={(e) => this.handleKeyDown(e, dropdown, downshift)}
                   onFocus={() => this.setState({ textBoxActive: true })}
                   onBlur={() => this.setState({ textBoxActive: false })}

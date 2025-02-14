@@ -8,44 +8,46 @@ class Modal extends Component {
     return (
       <div
         className={classNames(
+          "mr-fixed mr-inset-0 mr-flex mr-items-center mr-justify-center",
           { "mr-hidden": !this.props.isActive },
-          { "mr-flex": this.props.isActive },
           this.props.className,
         )}
       >
         <div
-          className={classNames("mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200", {
+          className={classNames("mr-fixed mr-inset-0 mr-z-200", {
             "mr-bg-blue-firefly-75": !this.props.transparentOverlay,
           })}
           onClick={() => this.props.onClose && this.props.onClose()}
         />
         <div
-          className={classNames("mr-z-250 mr-fixed mr-top-0 mr-left-0", {
+          className={classNames("mr-z-250 mr-relative", {
             "mr-max-w-screen80": !this.props.fullScreen,
             "mr-w-full mr-h-full": this.props.fullScreen,
-            "md:mr-w-4/5 md:mr-top-5 md:mr-left-16": this.props.extraWide,
-            "md:mr-w-2/3 md:mr-top-5 md:mr-left-16": this.props.wide,
-            "md:mr-min-w-1/3 md:mr-w-1/3 md:mr-top-5 md:mr-left-33": this.props.narrow,
-            "mr-w-full md:mr-w-1/4 md:mr-top-5 md:mr-left-37": this.props.extraNarrow,
-            "md:mr-min-w-2/5 md:mr-w-2/5 md:mr-top-15 md:mr-left-30": this.props.medium,
-            "md:mr-min-w-screen50 lg:mr-max-w-screen60 mr-w-full lg:mr-top-50 lg:mr-left-50 lg:mr--translate-1/2":
+            "mr-w-4/5": this.props.extraWide,
+            "mr-w-2/3": this.props.wide,
+            "mr-w-1/3": this.props.narrow,
+            "mr-w-1/4": this.props.extraNarrow,
+            "mr-w-2/5": this.props.medium,
+            [this.props.customWidth]: this.props.customWidth,
+            "mr-w-3/5":
               !this.props.extraWide &&
               !this.props.wide &&
               !this.props.narrow &&
               !this.props.fullScreen &&
               !this.props.extraNarrow &&
-              !this.props.medium,
+              !this.props.medium &&
+              !this.props.customWidth,
           })}
         >
           <div
             className={classNames(
+              "mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full mr-mx-auto mr-max-h-screen90",
               {
                 "mr-p-8": !this.props.fullBleed,
                 "mr-overflow-y-auto": !this.props.allowOverflow,
                 "mr-h-full": this.props.fullScreen,
                 "mr-overflow-visible": this.props.allowOverflow,
               },
-              "mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full mr-mx-auto mr-max-h-screen90 mr-min-w-72",
               this.props.contentClassName,
             )}
           >
@@ -78,7 +80,12 @@ Modal.propTypes = {
   transparentOverlay: PropTypes.bool,
   wide: PropTypes.bool,
   extraWide: PropTypes.bool,
+  narrow: PropTypes.bool,
+  extraNarrow: PropTypes.bool,
+  medium: PropTypes.bool,
+  fullScreen: PropTypes.bool,
   allowOverflow: PropTypes.bool,
+  customWidth: PropTypes.string,
 };
 
 Modal.defaultProps = {
