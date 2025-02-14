@@ -159,7 +159,7 @@
     "tailwindcss-transforms": "^2.2.0",
     "tailwindcss-transition": "^1.0.5",
     "tailwindcss-visuallyhidden": "^1.0.2",
-    "vite": "^5.4.8",
+    "vite": "^5.4.12",
     "vitest": "^2.1.2"
   },
   "resolutions": {
