@@ -2,7 +2,7 @@ import { get as levenshtein } from "fast-levenshtein";
 import _compact from "lodash/compact";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
-import { Component } from "react";
+import { Component, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import WithPagedProjects from "../../../HOCs/WithPagedProjects/WithPagedProjects";
 import WithSearch from "../../../HOCs/WithSearch/WithSearch";
@@ -10,47 +10,58 @@ import WithSearchResults from "../../../HOCs/WithSearchResults/WithSearchResults
 import Modal from "../../../Modal/Modal";
 import SearchBox from "../../../SearchBox/SearchBox";
 import messages from "./Messages";
+import BusySpinner from "../../../BusySpinner/BusySpinner";
 
-export class ProjectPickerModal extends Component {
-  ProjectSearch = WithSearch(SearchBox, "projectPickerModal", (criteria) =>
-    this.executeSearch(criteria),
-  );
+export function ProjectPickerModal(props) {
+  const [isSearching, setIsSearching] = useState(false);
 
-  executeSearch = (queryCriteria) => {
+  const executeSearch = (queryCriteria) => {
     if (!queryCriteria.query) {
       return; // nothing to do
     }
 
-    this.props.searchProjects(
+    setIsSearching(true);
+    props.searchProjects(
       {
         searchQuery: queryCriteria.query,
         page: 0,
         onlyEnabled: false,
       },
-      queryCriteria?.page?.resultsPerPage,
-    );
+      queryCriteria?.page?.resultsPerPage
+    ).finally(() => {
+      setIsSearching(false);
+    });
   };
 
-  render() {
-    return (
-      <Modal isActive narrow onClose={this.props.onCancel} contentClassName="mr-h-screen50">
-        <div className="mr-text-yellow mr-text-lg mr-mb-2 mr-mr-6">
-          <FormattedMessage {...messages.chooseProject} />
-        </div>
+  const ProjectSearch = useMemo(
+    () => WithSearch(SearchBox, "projectPickerModal", (criteria) => executeSearch(criteria)),
+    [] // Empty dependency array since executeSearch only depends on props
+  );
 
-        <div className="mr-w-64 mr-mb-6">
-          <this.ProjectSearch leftAligned />
-        </div>
+  return (
+    <Modal isActive narrow onClose={props.onCancel} contentClassName="mr-h-screen50">
+      <div className="mr-text-yellow mr-text-lg mr-mb-2 mr-mr-6">
+        <FormattedMessage {...messages.chooseProject} />
+      </div>
 
+      <div className="mr-w-64 mr-mb-6">
+        <ProjectSearch leftAligned />
+      </div>
+
+      {isSearching ? (
+        <div className="mr-text-center mr-my-4">
+          <BusySpinner />
+        </div>
+      ) : (
         <CandidateProjectList
-          projects={this.props.pagedCandidateProjects}
-          currentProjectId={this.props.currentProjectId}
-          onSelectProject={this.props.onSelectProject}
-          searchQuery={this.props.searchCriteria?.query}
+          projects={props.pagedCandidateProjects}
+          currentProjectId={props.currentProjectId}
+          onSelectProject={props.onSelectProject}
+          searchQuery={props.searchCriteria?.query}
         />
-      </Modal>
-    );
-  }
+      )}
+    </Modal>
+  );
 }
 
 const CandidateProjectList = function (props) {
@@ -65,12 +76,18 @@ const CandidateProjectList = function (props) {
       let index = 0;
 
       if (searchQuery && (project.displayName || project.name)) {
-        const nameLower = project.displayName
-          ? project.displayName.toLowerCase()
-          : project.name.toLowerCase();
+        const projectName = (project.displayName || project.name).toLowerCase();
         const searchQueryLower = searchQuery.toLowerCase();
-        const similarity = levenshtein(searchQueryLower, nameLower);
-        index = 100 - similarity;
+        
+        // Check if any word in the project name contains the search query
+        const words = projectName.split(/\s+/);
+        const hasMatch = words.some(word => word.includes(searchQueryLower));
+        
+        // Calculate Levenshtein distance for fuzzy matching
+        const similarity = levenshtein(searchQueryLower, projectName);
+        
+        // Prioritize direct substring matches, then use Levenshtein as fallback
+        index = hasMatch ? 1000 : (100 - similarity);
       }
 
       return { project, index };
