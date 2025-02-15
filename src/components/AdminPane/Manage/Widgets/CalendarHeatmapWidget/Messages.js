@@ -9,7 +9,7 @@ export default defineMessages({
     defaultMessage: "Daily Heatmap",
   },
   title: {
-    id: "Widgets.CalendarHeatmapWidget.title",
+    id: "CalendarHeatmap.heading",
     defaultMessage: "Daily Heatmap: Task Completion",
   },
 });

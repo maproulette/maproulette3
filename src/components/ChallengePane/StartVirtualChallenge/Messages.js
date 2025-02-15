@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   startLabel: {
-    id: "VirtualChallenge.controls.start.label",
+    id: "Admin.TaskAnalysisTable.controls.startTask.label",
     defaultMessage: "Start",
   },
 

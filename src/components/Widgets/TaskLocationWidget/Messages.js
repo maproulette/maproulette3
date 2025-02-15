@@ -5,17 +5,17 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   label: {
-    id: "Widgets.TaskLocationWidget.label",
+    id: "ChallengeFilterSubnav.filter.location.label",
     defaultMessage: "Location",
   },
 
   title: {
-    id: "Widgets.TaskLocationWidget.title",
+    id: "ChallengeFilterSubnav.filter.location.label",
     defaultMessage: "Location",
   },
 
   switchPrompt: {
-    id: "Widgets.TaskLocationWidget.switch",
+    id: "WidgetWorkspace.labels.switchTo",
     defaultMessage: "Switch to:",
   },
 

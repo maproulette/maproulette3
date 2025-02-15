@@ -20,7 +20,7 @@ export default defineMessages({
   },
 
   enabledTooltip: {
-    id: "Admin.Project.fields.enabled.tooltip",
+    id: "Admin.EditChallenge.form.visible.label",
     defaultMessage: "Discoverable",
   },
 
@@ -30,7 +30,7 @@ export default defineMessages({
   },
 
   editProjectTooltip: {
-    id: "Admin.ProjectCard.controls.editProject.tooltip",
+    id: "Admin.ProjectCard.controls.editProject.label",
     defaultMessage: "Edit Project",
   },
 
@@ -75,7 +75,7 @@ export default defineMessages({
   },
 
   virtualHeader: {
-    id: "Admin.Project.headers.virtual",
+    id: "Admin.EditProject.form.isVirtual.label",
     defaultMessage: "Virtual",
   },
 

@@ -762,12 +762,12 @@ will not be able to make sense of it.
   },
 
   reviewSettingNotRequired: {
-    id: "Challenge.reviewSetting.notRequired",
+    id: "Admin.EditChallenge.form.steps.no.label",
     defaultMessage: "No",
   },
 
   reviewSettingRequested: {
-    id: "Challenge.reviewSetting.requested",
+    id: "Admin.EditChallenge.form.steps.yes.label",
     defaultMessage: "Yes",
   },
 

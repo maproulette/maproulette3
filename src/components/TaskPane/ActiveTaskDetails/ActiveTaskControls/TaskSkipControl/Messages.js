@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   skipLabel: {
-    id: "Task.controls.skip.label",
+    id: "KeyMapping.taskCompletion.skip",
     defaultMessage: "Skip",
   },
   skipTooltip: {

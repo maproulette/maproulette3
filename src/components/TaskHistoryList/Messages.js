@@ -35,27 +35,27 @@ export default defineMessages({
   },
 
   reviewerType: {
-    id: "TaskHistory.fields.userType.reviewer",
+    id: "Review.Dashboard.asReviewer.label",
     defaultMessage: "Reviewer",
   },
 
   metaReviewerType: {
-    id: "TaskHistory.fields.userType.metaReviewer",
+    id: "Review.Dashboard.asMetaReviewer.label",
     defaultMessage: "Meta-Reviewer",
   },
 
   mapperType: {
-    id: "TaskHistory.fields.userType.mapper",
+    id: "Review.fields.requestedBy.label",
     defaultMessage: "Mapper",
   },
 
   metaReviewLabel: {
-    id: "TaskHistory.metaReview.label",
+    id: "Notification.type.metaReview",
     defaultMessage: "Meta-Review",
   },
 
   errorTagsLabel: {
-    id: "TaskHistory.errorTags.label",
+    id: "Admin.TaskReview.controls.errorTags",
     defaultMessage: "Error Tags",
   },
 });

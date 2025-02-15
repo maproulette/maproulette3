@@ -5,11 +5,11 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   nextLabel: {
-    id: "Task.controls.next.label",
+    id: "Admin.TaskInspect.controls.nextTask.label",
     defaultMessage: "Next Task",
   },
   nextTooltip: {
-    id: "Task.controls.next.tooltip",
+    id: "Admin.TaskInspect.controls.nextTask.label",
     defaultMessage: "Next Task",
   },
   loadByLabel: {

@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   cancelLabel: {
-    id: "ImportFileModal.controls.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 });

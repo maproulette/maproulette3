@@ -10,17 +10,17 @@ export default defineMessages({
   },
 
   confirmLabel: {
-    id: "CooperativeWorkControls.controls.confirm.label",
+    id: "Admin.EditChallenge.form.steps.yes.label",
     defaultMessage: "Yes",
   },
 
   rejectLabel: {
-    id: "CooperativeWorkControls.controls.reject.label",
+    id: "Admin.EditChallenge.form.steps.no.label",
     defaultMessage: "No",
   },
 
   moreOptionsLabel: {
-    id: "CooperativeWorkControls.controls.moreOptions.label",
+    id: "Challenge.keywords.other",
     defaultMessage: "Other",
   },
 });

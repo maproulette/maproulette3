@@ -9,7 +9,7 @@ export default defineMessages({
     defaultMessage: "Tag Metrics",
   },
   title: {
-    id: "Widgets.ReviewTagMetricsWidget.title",
+    id: "Widgets.ReviewTagMetricsWidget.label",
     defaultMessage: "Tag Metrics",
   },
 });

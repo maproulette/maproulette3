@@ -5,12 +5,12 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   falsePositiveLabel: {
-    id: "Task.controls.falsePositive.label",
+    id: "Admin.Task.fields.actions.notAnIssue",
     defaultMessage: "Not an Issue",
   },
 
   falsePositiveTooltip: {
-    id: "Task.controls.falsePositive.tooltip",
+    id: "Admin.Task.fields.actions.notAnIssue",
     defaultMessage: "Not an Issue",
   },
 });

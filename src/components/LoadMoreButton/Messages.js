@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   moreResultsLabel: {
-    id: "General.controls.moreResults.label",
+    id: "Challenge.controls.loadMore.label",
     defaultMessage: "More Results",
   },
 });

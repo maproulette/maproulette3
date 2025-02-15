@@ -17,11 +17,11 @@ export default defineMessages({
     defaultMessage: "Zoom in to view tasks",
   },
   nearMeLabel: {
-    id: "TaskClusterMap.message.nearMe.label",
+    id: "Challenge.location.nearMe",
     defaultMessage: "Near Me",
   },
   orLabel: {
-    id: "TaskClusterMap.message.or.label",
+    id: "Task.property.operationType.or",
     defaultMessage: "or",
   },
   taskCountLabel: {

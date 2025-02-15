@@ -5,12 +5,12 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   header: {
-    id: "ChallengeFilterSubnav.header",
+    id: "Admin.ProjectCard.tabs.challenges.label",
     defaultMessage: "Challenges",
   },
 
   difficultyLabel: {
-    id: "ChallengeFilterSubnav.filter.difficulty.label",
+    id: "Challenge.fields.difficulty.label",
     defaultMessage: "Difficulty",
   },
 
@@ -40,7 +40,7 @@ export default defineMessages({
   },
 
   clearFiltersLabel: {
-    id: "Challenge.controls.clearFilters.label",
+    id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",
   },
 
@@ -55,7 +55,7 @@ export default defineMessages({
   },
 
   anything: {
-    id: "ChallengeFilterSubnav.filter.categorization.anything",
+    id: "Challenge.keywords.any",
     defaultMessage: "Anything",
   },
 

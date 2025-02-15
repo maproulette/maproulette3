@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.TaskMoreOptionsWidget.title",
+    id: "Widgets.TaskMoreOptionsWidget.label",
     defaultMessage: "More Options",
   },
 });

@@ -29,7 +29,7 @@ export default defineMessages({
     defaultMessage: "Finished",
   },
   deletingTasks: {
-    id: "Challenge.status.deletingTasks",
+    id: "Admin.TaskDeletingProgress.deletingTasks.header",
     defaultMessage: "Deleting Tasks",
   },
 });

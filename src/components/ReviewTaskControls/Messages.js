@@ -92,7 +92,7 @@ export default defineMessages({
   },
 
   approvedWithFixesAfterRevisions: {
-    id: "Admin.TaskReview.controls.approvedWithFixesAfterRevisions",
+    id: "Admin.TaskReview.controls.approvedWithFixes",
     defaultMessage: "Approve (with fixes)",
   },
 

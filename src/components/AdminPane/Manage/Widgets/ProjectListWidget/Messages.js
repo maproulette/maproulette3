@@ -10,12 +10,12 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.ProjectListWidget.title",
+    id: "ChallengeFilterSubnav.query.searchType.project",
     defaultMessage: "Projects",
   },
 
   searchPlaceholder: {
-    id: "Widgets.ProjectListWidget.search.placeholder",
+    id: "Admin.VirtualProject.ChallengeList.search.placeholder",
     defaultMessage: "Search",
   },
 });

@@ -5,11 +5,11 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   label: {
-    id: "Widgets.TagMetricsWidget.label",
+    id: "Widgets.ReviewTagMetricsWidget.label",
     defaultMessage: "Tag Metrics",
   },
   title: {
-    id: "Widgets.TagMetricsWidget.title",
+    id: "Widgets.ReviewTagMetricsWidget.label",
     defaultMessage: "Tag Metrics",
   },
 });

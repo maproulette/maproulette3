@@ -5,27 +5,27 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   editProjectLabel: {
-    id: "Admin.ProjectDashboard.controls.edit.label",
+    id: "Admin.ProjectCard.controls.editProject.label",
     defaultMessage: "Edit Project",
   },
 
   deleteProjectLabel: {
-    id: "Admin.ProjectDashboard.controls.delete.label",
+    id: "Admin.Project.controls.delete.label",
     defaultMessage: "Delete Project",
   },
 
   archiveProjectLabel: {
-    id: "Admin.ProjectDashboard.controls.archive.label",
+    id: "Admin.ProjectCard.controls.archiveProject.label",
     defaultMessage: "Archive Project",
   },
 
   unarchiveProjectLabel: {
-    id: "Admin.ProjectDashboard.controls.unarchive.label",
+    id: "Admin.ProjectCard.controls.unarchiveProject.label",
     defaultMessage: "Unarchive Project",
   },
 
   addChallengeLabel: {
-    id: "Admin.ProjectDashboard.controls.addChallenge.label",
+    id: "Admin.Project.controls.addChallenge.label",
     defaultMessage: "Add Challenge",
   },
 
