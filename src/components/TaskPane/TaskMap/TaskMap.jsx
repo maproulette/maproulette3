@@ -79,7 +79,11 @@ export const TaskMapContent = (props) => {
   const [showTaskFeatures, setShowTaskFeatures] = useState(true);
   const [osmData, setOsmData] = useState(null);
   const [showOSMData, setShowOSMData] = useState(false);
-  const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true });
+  const [showOSMElements, setShowOSMElements] = useState({
+    nodes: true,
+    ways: true,
+    areas: true,
+  });
   const [osmDataLoading, setOsmDataLoading] = useState(false);
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null);
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null);
@@ -264,43 +268,62 @@ export const TaskMapContent = (props) => {
     setShowTaskFeatures((prevState) => !prevState);
   };
 
-  const fetchOSMData = () => {
-    setOsmDataLoading(true);
-    props.fetchOSMData(map.getBounds().toBBoxString()).then((xmlData) => {
-      // Indicate the map should skip fitting to bounds as the OSM data could
-      // extend beyond the current view and we don't want the map to zoom out
-      setOsmData(xmlData);
+  const fetchOSMData = async () => {
+    try {
+      if (showOSMData) {
+        const bounds = map.getBounds()?.toBBoxString();
+        if (!bounds) {
+          throw new Error("Invalid map bounds");
+        }
+
+        const xmlData = await props.fetchOSMData(bounds);
+        setOsmData(xmlData);
+        setShowOSMData(true);
+      } else {
+        setOsmData(null);
+        setShowOSMData(false);
+      }
+    } catch (error) {
+      console.error("Error handling OSM data:", error);
+      setOsmData(null);
+      setShowOSMData(false);
+    } finally {
       setOsmDataLoading(false);
-    });
+    }
   };
 
   /**
    * Invoked by LayerToggle when the user wishes to toggle visibility of
    * OSM data on or off.
    */
-  const toggleOSMDataVisibility = () => {
+  const toggleOSMDataVisibility = async () => {
+    // Prevent multiple requests while loading
     if (osmDataLoading) {
       return;
     }
 
     const loadOSMData = !showOSMData;
     setOsmDataLoading(true);
-    setShowOSMData(loadOSMData);
 
-    if (loadOSMData) {
-      props
-        .fetchOSMData(map.getBounds().toBBoxString())
-        .then((xmlData) => {
-          setOsmData(xmlData);
-        })
-        .catch((error) => {
-          console.error("Error fetching OSM data:", error);
-        })
-        .finally(() => {
-          setOsmDataLoading(false);
-        });
-    } else {
+    try {
+      if (loadOSMData) {
+        const bounds = map.getBounds()?.toBBoxString();
+        if (!bounds) {
+          throw new Error("Invalid map bounds");
+        }
+
+        const xmlData = await props.fetchOSMData(bounds);
+        setOsmData(xmlData);
+        setShowOSMData(true);
+      } else {
+        setOsmData(null);
+        setShowOSMData(false);
+      }
+    } catch (error) {
+      console.error("Error handling OSM data:", error);
       setOsmData(null);
+      setShowOSMData(false);
+    } finally {
       setOsmDataLoading(false);
     }
   };
@@ -426,7 +449,7 @@ export const TaskMapContent = (props) => {
     if (showOSMData && !osmData) {
       fetchOSMData();
     }
-  }, [props, osmData]);
+  }, [showOSMData, osmData]);
 
   useEffect(() => {
     if (features.length !== 0) {
@@ -625,7 +648,11 @@ export const TaskMapContent = (props) => {
   }
 
   return (
-    <div className={classNames("task-map task", { "full-screen-map": props.isMobile })}>
+    <div
+      className={classNames("task-map task", {
+        "full-screen-map": props.isMobile,
+      })}
+    >
       <LayerToggle
         {...props}
         showTaskFeatures={showTaskFeatures}
@@ -681,7 +708,11 @@ const TaskMap = (props) => {
   };
 
   return (
-    <div className={classNames("task-map task", { "full-screen-map": props.isMobile })}>
+    <div
+      className={classNames("task-map task", {
+        "full-screen-map": props.isMobile,
+      })}
+    >
       <MapContainer
         taskBundle={props.taskBundle}
         center={props.centerPoint}

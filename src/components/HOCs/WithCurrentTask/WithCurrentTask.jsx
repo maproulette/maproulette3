@@ -324,6 +324,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     fetchOSMData: (bbox) => {
       return fetchOSMData(bbox).catch((error) => {
         dispatch(addError(error));
+        throw error;
       });
     },
 
