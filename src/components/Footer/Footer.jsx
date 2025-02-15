@@ -46,6 +46,7 @@ class Footer extends Component {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mr-block hover:mr-opacity-90 mr-transition-opacity"
+                aria-label={<FormattedMessage {...messages.osmLink} />}
               >
                 <img src={img} alt="OpenStreetMap" className="mr-h-20 mr-w-auto" />
               </a>
@@ -53,7 +54,9 @@ class Footer extends Component {
 
             {/* Version Info Section */}
             <div className="md:mr-col-span-1">
-              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">VERSIONS</h3>
+              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">
+                <FormattedMessage {...messages.versionsHeading} />
+              </h3>
               <div className="mr-space-y-2">
                 <p className="mr-text-white mr-text-sm">
                   <FormattedMessage {...messages.versionLabel} />{" "}
@@ -80,7 +83,9 @@ class Footer extends Component {
 
             {/* Links Section */}
             <div className="md:mr-col-span-1">
-              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">RESOURCES</h3>
+              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">
+                <FormattedMessage {...messages.linksHeading} />
+              </h3>
               <ul className="mr-space-y-2">
                 <li>
                   <a
@@ -133,21 +138,28 @@ class Footer extends Component {
             {/* Donate Section */}
             <div className="md:mr-col-span-1">
               <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">
-                SUPPORT US
+                <FormattedMessage {...messages.donateHeading} />
               </h3>
               <a
                 href="https://openstreetmap.app.neoncrm.com/forms/maproulette"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mr-inline-block mr-text-sm mr-font-medium mr-text-white mr-bg-green-600 mr-rounded-md hover:mr-bg-green-500 mr-transition-colors mr-shadow-sm"
+                className="mr-inline-flex mr-items-center mr-text-white mr-text-sm hover:mr-text-green-300 mr-transition-colors"
               >
+                <SvgSymbol
+                  sym="icon-donation"
+                  viewBox="0 0 20 20"
+                  className="mr-w-4 mr-h-4 mr-mr-2 mr-fill-current"
+                />
                 <FormattedMessage {...messages.donateButton} />
               </a>
             </div>
 
             {/* Social Section */}
             <div className="md:mr-col-span-1">
-              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">FOLLOW US</h3>
+              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">
+                <FormattedMessage {...messages.socialHeading} />
+              </h3>
               <a
                 href="https://en.osm.town/@MapRoulette"
                 target="_blank"
@@ -156,10 +168,10 @@ class Footer extends Component {
               >
                 <SvgSymbol
                   sym="icon-mastodon"
-                  viewBox="0 0 30 24"
-                  className="mr-w-5 mr-h-5 mr-mr-2 mr-fill-current"
+                  viewBox="0 0 20 20"
+                  className="mr-w-4 mr-h-4 mr-mr-2 mr-fill-current"
                 />
-                <span>@maproulette</span>
+                <FormattedMessage {...messages.mastodonButton} />
               </a>
             </div>
           </div>

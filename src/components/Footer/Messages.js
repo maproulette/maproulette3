@@ -53,4 +53,28 @@ export default defineMessages({
     id: "Footer.email.donateButton",
     defaultMessage: "Donate to Maproulette",
   },
+
+  mastodonButton: {
+    id: "Footer.email.mastodonButton",
+    defaultMessage: "Mastodon @maproulette",
+  },
+
+  versionsHeading: {
+    id: "Footer.versions.heading",
+    defaultMessage: "VERSIONS",
+  },
+
+  linksHeading: {
+    id: "Footer.links.heading",
+    defaultMessage: "LINKS",
+  },
+
+  socialHeading: {
+    id: "Footer.social.heading",
+    defaultMessage: "FOLLOW US",
+  },
+  donateHeading: {
+    id: "Footer.donate.heading",
+    defaultMessage: "SUPPORT US",
+  },
 });
