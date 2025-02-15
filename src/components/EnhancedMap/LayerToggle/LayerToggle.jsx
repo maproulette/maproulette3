@@ -279,16 +279,19 @@ const SimpleLayerToggle = (props) => {
         "mr-my-2 mr-flex mr-items-center mr-leading-none",
         props.toggleClassName,
       )}
-      onClick={props.toggleLayerActive}
     >
       <input
         id={props.layerLabel}
         type="checkbox"
         className="mr-checkbox-toggle"
         checked={props.isLayerActive}
-        onChange={_noop}
+        onChange={props.toggleLayerActive}
       />
-      <label htmlFor={props.layerLabel} className="mr-ml-3 mr-text-orange">
+      <label
+        htmlFor={props.layerLabel}
+        className="mr-ml-3 mr-text-orange"
+        onClick={(e) => e.preventDefault()}
+      >
         {props.layerLabel}
       </label>
     </div>
