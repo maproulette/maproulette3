@@ -107,7 +107,6 @@ const MapBounds = ({ taskMarkers, setMapBounds, loadByNearbyTasks, setLoadByNear
 
     // Only fit bounds if explicitly loading by nearby tasks AND markers count changed
     if (loadByNearbyTasks && currentLength > 0 && taskMarkers !== prevMarkersLength.current) {
-      debugger;
       const bounds = L.latLngBounds(taskMarkers.map((marker) => marker.position));
       map.fitBounds(bounds, {
         padding: [40, 40],
