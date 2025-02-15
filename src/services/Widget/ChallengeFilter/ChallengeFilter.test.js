@@ -16,7 +16,7 @@ describe("messagesByFilter", () => {
       },
       visible: {
         defaultMessage: "Discoverable",
-        id: "Dashboard.ChallengeFilter.visible.label",
+        id: "Admin.EditChallenge.form.visible.label",
       },
     });
   });
