@@ -53,6 +53,7 @@ export default function Button({
         "mr-opacity-50 mr-cursor-not-allowed": disabled,
       })}
       disabled={disabled}
+      onClick={onClick}
       {...otherProps}
     >
       {children}
