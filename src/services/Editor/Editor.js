@@ -87,19 +87,9 @@ export const editTask = function (
         editorWindowReference.close();
       }
 
-      if (editor === ID) {
-        editorWindowReference = window.open(
-          constructIdURI(task, mapBounds, options, taskBundle, replacedComment),
-        );
-      } else if (editor === LEVEL0) {
-        editorWindowReference = window.open(
-          constructLevel0URI(task, mapBounds, options, taskBundle, replacedComment),
-        );
-      } else if (editor === RAPID) {
-        editorWindowReference = window.open(
-          constructRapidURI(task, mapBounds, options, replacedComment),
-        );
-      }
+      editorWindowReference = window.open(
+        constructEditorUri(editor, task, mapBounds, options, taskBundle, replacedComment),
+      );
 
       dispatch(editorOpened(editor, task.id, RequestStatus.success));
     } else if (isJosmEditor(editor)) {
@@ -746,4 +736,41 @@ export const firstTruthyValue = function (object, acceptableKeys) {
 
   const matchingKey = _find(acceptableKeys, (key) => object[key]);
   return matchingKey ? object[matchingKey] : undefined;
+};
+
+/**
+ * Constructs the appropriate editor URI based on the editor type
+ */
+export const constructEditorUri = (
+  editor,
+  task,
+  mapBounds,
+  options = {},
+  taskBundle = null,
+  comment = null,
+) => {
+  if (!task) return null;
+
+  switch (editor) {
+    case Editor.id:
+      return constructIdURI(task, mapBounds, options, taskBundle, comment);
+    case Editor.level0:
+      return constructLevel0URI(task, mapBounds, options, taskBundle, comment);
+    case Editor.rapid:
+      return constructRapidURI(task, mapBounds, options, comment);
+    default:
+      return null;
+  }
+};
+
+/**
+ * Gets the existing editor window reference
+ */
+export const getEditorWindowReference = () => editorWindowReference;
+
+/**
+ * Sets the editor window reference
+ */
+export const setEditorWindowReference = (windowRef) => {
+  editorWindowReference = windowRef;
 };

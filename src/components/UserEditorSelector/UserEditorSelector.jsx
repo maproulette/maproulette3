@@ -5,7 +5,14 @@ import _map from "lodash/map";
 import _pick from "lodash/pick";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
-import { DEFAULT_EDITOR, Editor, editorLabels, keysByEditor } from "../../services/Editor/Editor";
+import {
+  DEFAULT_EDITOR,
+  Editor,
+  constructEditorUri,
+  editorLabels,
+  keysByEditor,
+} from "../../services/Editor/Editor";
+import { OPEN_STREET_MAP } from "../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import Button from "../Button/Button";
 import Dropdown from "../Dropdown/Dropdown";
@@ -17,6 +24,21 @@ const shortcutGroup = "openEditor";
 export default class UserEditorSelector extends Component {
   state = {
     isSaving: false,
+  };
+
+  getEditorUri = (editor) => {
+    const { task, mapBounds, source, showMapillaryLayer, taskBundle, taskFeatureProperties } =
+      this.props;
+
+    if (!task) return null;
+
+    const comment = task.parent?.checkinComment;
+    const options = {
+      imagery: source?.id !== OPEN_STREET_MAP ? source : undefined,
+      photoOverlay: showMapillaryLayer ? "mapillary" : null,
+    };
+
+    return constructEditorUri(editor, task, mapBounds, options, taskBundle, comment);
   };
 
   /** Process keyboard shortcuts for the edit controls */
@@ -84,7 +106,9 @@ export default class UserEditorSelector extends Component {
   }
 
   chooseEditor = (editor, closeDropdown) => {
-    const updatedSettings = Object.assign({}, this.props.user.settings, { defaultEditor: editor });
+    const updatedSettings = Object.assign({}, this.props.user.settings, {
+      defaultEditor: editor,
+    });
 
     this.setState({ isSaving: true });
     this.props
@@ -95,19 +119,22 @@ export default class UserEditorSelector extends Component {
 
   render() {
     const localizedEditorLabels = editorLabels(this.props.intl);
+    const currentEditor = this.currentEditor();
+    const editorUri = this.getEditorUri(currentEditor);
 
     return (
       <div className="mr-text-xs mr-text-white mr-flex mr-whitespace-nowrap mr-items-center">
         <div className="mr-flex">
           <Button
             className="mr-button--green-fill mr-px-2 mr-cursor-pointer mr-text-sm"
-            onClick={() => this.props.pickEditor({ value: this.currentEditor() })}
+            onClick={() => this.props.pickEditor({ value: currentEditor })}
+            href={editorUri}
             style={{ minWidth: "11.5rem" }}
           >
             {this.state.isSaving ? (
               <BusySpinner />
             ) : (
-              localizedEditorLabels[keysByEditor[this.currentEditor()]] || (
+              localizedEditorLabels[keysByEditor[currentEditor]] || (
                 <FormattedMessage {...messages.editLabel} />
               )
             )}
@@ -128,12 +155,14 @@ export default class UserEditorSelector extends Component {
             )}
             dropdownContent={(dropdown) => (
               <ListEditorItems
+                {...this.props}
                 allowedEditors={this.props.allowedEditors}
                 editorLabels={localizedEditorLabels}
-                activeEditor={this.currentEditor()}
+                activeEditor={currentEditor}
                 chooseEditor={this.chooseEditor}
                 closeDropdown={dropdown.closeDropdown}
                 pickEditor={this.props.pickEditor}
+                getEditorUri={this.getEditorUri}
               />
             )}
           />
@@ -150,6 +179,7 @@ const ListEditorItems = ({
   chooseEditor,
   closeDropdown,
   pickEditor,
+  getEditorUri,
 }) => {
   const renderEditorItems = (isAllowed) =>
     _compact(
@@ -160,6 +190,8 @@ const ListEditorItems = ({
         const isEditorAllowed = !allowedEditors || allowedEditors.includes(editor);
         if (isEditorAllowed !== isAllowed) return null;
 
+        const editorUri = getEditorUri(editor);
+
         return (
           <li key={editor} className={classNames({ active: editor === activeEditor })}>
             <a
@@ -168,6 +200,9 @@ const ListEditorItems = ({
                   ? chooseEditor(editor, closeDropdown)
                   : pickEditor({ value: editor })
               }
+              href={editorUri}
+              target={editorUri ? "_blank" : undefined}
+              rel={editorUri ? "noopener noreferrer" : undefined}
             >
               <div className="mr-flex mr-items-center">
                 {!isEditorAllowed ? (
