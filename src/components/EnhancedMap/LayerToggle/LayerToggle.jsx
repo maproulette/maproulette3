@@ -3,7 +3,6 @@ import _clone from "lodash/clone";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
-import _noop from "lodash/noop";
 import _sortBy from "lodash/sortBy";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
