@@ -2,6 +2,7 @@ import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
+import img from "./openstreetmap-logo.png";
 
 class Footer extends Component {
   state = {
@@ -35,35 +36,79 @@ class Footer extends Component {
         : `https://github.com/maproulette/maproulette-backend/releases/tag/v${info?.version}`;
 
     return (
-      <footer className="mr-px-4 mr-py-12 md:mr-py-24 mr-links-green-lighter">
-        <div className="mr-max-w-3xl mr-mx-auto mr-overflow-hidden">
-          <div className="md:mr-flex md:mr--mx-4">
-            <div className="mr-mb-8 md:mr-mb-0 md:mr-px-4 md:mr-flex-1">
-              <h3 className="mr-text-white mr-text-md mr-mb-2">
-                <FormattedMessage {...messages.versionLabel} />{" "}
-                <span className="mr-text-green-light mr-font-mono mr-text-base">
-                  <a href={frontendVersionUrl}>{frontendVersion}</a>
-                </span>
-              </h3>
-              {this.state.serviceInfo && (
-                <h3 className="mr-text-white mr-text-md mr-mb-2">
-                  <FormattedMessage {...messages.APIVersionLabel} />{" "}
-                  <span className="mr-text-green-light mr-font-mono mr-text-base">
-                    <a href={backendVersionUrl}>{backendVersion}</a>
-                  </span>
-                </h3>
-              )}
+      <footer className="mr-px-4 mr-py-12 mr-bg-gradient-to-r mr-from-blue-900 mr-to-blue-800">
+        <div className="mr-max-w-6xl mr-mx-auto">
+          <div className="mr-grid md:mr-grid-cols-5 mr-gap-8 mr-items-start">
+            {/* Logo Section */}
+            <div className="md:mr-col-span-1">
+              <a
+                href="https://www.openstreetmap.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mr-block hover:mr-opacity-90 mr-transition-opacity"
+              >
+                <img src={img} alt="OpenStreetMap" className="mr-h-20 mr-w-auto" />
+              </a>
             </div>
 
-            <div className="mr-mb-8 md:mr-mb-0 md:mr-px-4 md:mr-flex-1">
-              <ul className="mr-list-reset mr-text-sm">
+            {/* Version Info Section */}
+            <div className="md:mr-col-span-1">
+              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">VERSIONS</h3>
+              <div className="mr-space-y-2">
+                <p className="mr-text-white mr-text-sm">
+                  <FormattedMessage {...messages.versionLabel} />{" "}
+                  <a
+                    href={frontendVersionUrl}
+                    className="mr-text-green-light mr-font-mono hover:mr-text-green-300 mr-transition-colors"
+                  >
+                    {frontendVersion}
+                  </a>
+                </p>
+                {this.state.serviceInfo && (
+                  <p className="mr-text-white mr-text-sm">
+                    <FormattedMessage {...messages.APIVersionLabel} />{" "}
+                    <a
+                      href={backendVersionUrl}
+                      className="mr-text-green-light mr-font-mono hover:mr-text-green-300 mr-transition-colors"
+                    >
+                      {backendVersion}
+                    </a>
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Links Section */}
+            <div className="md:mr-col-span-1">
+              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">RESOURCES</h3>
+              <ul className="mr-space-y-2">
                 <li>
-                  <a href={window.env.REACT_APP_DOCS_URL} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={window.env.REACT_APP_DOCS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mr-text-white mr-text-sm hover:mr-text-green-300 mr-transition-colors mr-flex mr-items-center"
+                  >
+                    <SvgSymbol
+                      sym="help-icon"
+                      viewBox="0 0 20 20"
+                      className="mr-w-4 mr-h-4 mr-mr-2 mr-fill-current"
+                    />
                     <FormattedMessage {...messages.getHelp} />
                   </a>
                 </li>
                 <li>
-                  <a href={window.env.REACT_APP_BLOG_URL} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={window.env.REACT_APP_BLOG_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mr-text-white mr-text-sm hover:mr-text-green-300 mr-transition-colors mr-flex mr-items-center"
+                  >
+                    <SvgSymbol
+                      sym="blog-icon"
+                      viewBox="0 0 20 20"
+                      className="mr-w-4 mr-h-4 mr-mr-2 mr-fill-current"
+                    />
                     <FormattedMessage {...messages.viewBlog} />
                   </a>
                 </li>
@@ -72,43 +117,50 @@ class Footer extends Component {
                     href="https://github.com/maproulette/maproulette3/issues"
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="mr-text-white mr-text-sm hover:mr-text-green-300 mr-transition-colors mr-flex mr-items-center"
                   >
+                    <SvgSymbol
+                      sym="github-icon"
+                      viewBox="0 0 20 20"
+                      className="mr-w-4 mr-h-4 mr-mr-2 mr-fill-current"
+                    />
                     <FormattedMessage {...messages.reportBug} />
                   </a>
                 </li>
               </ul>
             </div>
-            <div className="mr-mb-8 md:mr-mb-0 md:mr-px-4 md:mr-flex-1">
+
+            {/* Donate Section */}
+            <div className="md:mr-col-span-1">
+              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">
+                SUPPORT US
+              </h3>
               <a
                 href="https://openstreetmap.app.neoncrm.com/forms/maproulette"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mr-items-center"
+                className="mr-inline-block mr-text-sm mr-font-medium mr-text-white mr-bg-green-600 mr-rounded-md hover:mr-bg-green-500 mr-transition-colors mr-shadow-sm"
               >
-                <span className="mr-absolute mr-ml-8">
-                  <FormattedMessage {...messages.donateButton} />
-                </span>
+                <FormattedMessage {...messages.donateButton} />
               </a>
             </div>
-            <div className="md:mr-px-4 md:mr-flex-1 md:mr-flex md:mr-justify-end">
-              <div>
-                <h3 className="mr-mb-2 mr-text-xl mr-text-green-lighter">
-                  <FormattedMessage {...messages.followUs} />
-                </h3>
-                <a
-                  href="https://en.osm.town/@MapRoulette"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mr-inline-flex mr-items-center"
-                >
-                  <SvgSymbol
-                    sym="icon-mastodon"
-                    viewBox="0 0 30 24"
-                    className="mr-w-6 mr-h-auto mr-fill-twitter"
-                  />
-                  <span className="mr-ml-2">@maproulette</span>
-                </a>
-              </div>
+
+            {/* Social Section */}
+            <div className="md:mr-col-span-1">
+              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-4">FOLLOW US</h3>
+              <a
+                href="https://en.osm.town/@MapRoulette"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mr-inline-flex mr-items-center mr-text-white mr-text-sm hover:mr-text-green-300 mr-transition-colors"
+              >
+                <SvgSymbol
+                  sym="icon-mastodon"
+                  viewBox="0 0 30 24"
+                  className="mr-w-5 mr-h-5 mr-mr-2 mr-fill-current"
+                />
+                <span>@maproulette</span>
+              </a>
             </div>
           </div>
         </div>
