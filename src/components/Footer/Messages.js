@@ -66,7 +66,7 @@ export default defineMessages({
 
   linksHeading: {
     id: "Footer.links.heading",
-    defaultMessage: "LINKS",
+    defaultMessage: "INFO",
   },
 
   socialHeading: {
