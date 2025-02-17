@@ -113,10 +113,21 @@ export const fetchOSMElementHistory = async (idString, includeChangesets = false
       const history = await response.json();
       if (includeChangesets) {
         const changesetIds = map(history.elements, "changeset");
-        const changesetMap = new Map(await fetchOSMChangesets(changesetIds));
+        const changesetMap = await fetchOSMChangesets(changesetIds);
+        const mapfetchedIds = changesetMap.map((c) => c.id);
+        // Update each history element with its full changeset data
         each(history.elements, (entry) => {
-          if (changesetMap.has(entry.changeset))
-            entry.changeset = changesetMap.get(entry.changeset);
+          if (entry.changeset && mapfetchedIds.includes(entry.changeset)) {
+            // Store the changeset ID before overwriting
+            const changesetId = entry.changeset;
+            // Get the full changeset data
+            const changesetData = changesetMap.find((c) => c.id === changesetId);
+            // Merge the changeset data while preserving the ID
+            entry.changeset = {
+              id: changesetId,
+              ...changesetData,
+            };
+          }
         });
       }
       return history.elements;
