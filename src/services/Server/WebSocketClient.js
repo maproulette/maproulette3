@@ -89,35 +89,15 @@ export default class WebSocketClient {
    * @private
    */
   open() {
-    if (this.isCleanedUp) {
-      return;
-    }
+    if (this.isCleanedUp) return;
 
     this.reconnectionHandle = null;
     if (this.websocket) {
       this.websocket.close();
     }
 
-    // Check if we're in a test environment and use a mock WebSocket if needed
-    const WebSocketClass =
-      typeof WebSocket !== "undefined"
-        ? WebSocket
-        : class MockWebSocket {
-            constructor() {
-              this.OPEN = 1;
-              this.readyState = this.OPEN;
-            }
-            close() {}
-            send() {}
-          };
-
-    // Use a default URL if window.env is not available (test environment)
-    const wsUrl =
-      (typeof window !== "undefined" && window.env?.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL) ||
-      "ws://localhost:9000/ws";
-
     try {
-      this.websocket = new WebSocketClass(wsUrl);
+      this.websocket = new WebSocket(window.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL);
       this.websocket.onopen = (e) => !this.isCleanedUp && this.handleOpen(e);
       this.websocket.onmessage = (e) => !this.isCleanedUp && this.handleMessage(e);
       this.websocket.onclose = (e) => !this.isCleanedUp && this.handleClose(e);
