@@ -1263,3 +1263,26 @@ export const taskEntities = function (state, action) {
     return genericEntityReducer(RECEIVE_TASKS, "tasks", reduceTasksFurther)(state, action);
   }
 };
+
+/**
+ * Request unlock for the given taskId
+ */
+export const requestUnlock = function (taskId) {
+  return function (dispatch) {
+    return new Endpoint(api.task.requestUnlock, {
+      variables: { id: taskId },
+    })
+      .execute()
+      .then(() => ({ message: "success" }))
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn()).then(() =>
+            dispatch(addError(AppErrors.user.unauthorized)),
+          );
+        } else {
+          dispatch(addError(AppErrors.task.unlockFailure));
+          console.log(error.response || error);
+        }
+      });
+  };
+};

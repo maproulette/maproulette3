@@ -2,7 +2,12 @@ import _omit from "lodash/omit";
 import { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { refreshTaskLock, releaseTask, startTask } from "../../../services/Task/Task";
+import {
+  refreshTaskLock,
+  releaseTask,
+  startTask,
+  requestUnlock,
+} from "../../../services/Task/Task";
 
 // Used for lock storage events. Users will be locked from other task tabs
 // if logging out, signing back in, or have multiple tabs on one task
@@ -79,6 +84,10 @@ const WithLockedTask = function (WrappedComponent) {
           setTimeout(() => lockStorage.removeLock(task.id), 1500);
         })
         .catch(() => null);
+    };
+
+    requestUnlock = (taskId) => {
+      this.props.requestUnlock(taskId);
     };
 
     /**
@@ -160,6 +169,7 @@ const WithLockedTask = function (WrappedComponent) {
           tryLocking={this.lockTask}
           unlockTask={this.unlockTask}
           refreshTaskLock={this.refreshTaskLock}
+          requestUnlock={this.requestUnlock}
         />
       );
     }
@@ -167,7 +177,7 @@ const WithLockedTask = function (WrappedComponent) {
 };
 
 export const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ startTask, releaseTask, refreshTaskLock }, dispatch);
+  bindActionCreators({ startTask, releaseTask, refreshTaskLock, requestUnlock }, dispatch);
 
 export default (WrappedComponent) =>
   connect(null, mapDispatchToProps)(WithLockedTask(WrappedComponent));

@@ -45,6 +45,8 @@ class Notification extends Component {
         return <FollowBody notification={notification} />;
       case NotificationType.challengeComment:
         return <ChallengeCommentBody notification={notification} />;
+      case NotificationType.taskUnlockRequest:
+        return <TaskUnlockRequestBody notification={notification} />;
       default:
         return null;
     }
@@ -305,6 +307,23 @@ const ChallengeCommentBody = function (props) {
       <AttachedComment notification={props.notification} />
 
       <ViewTask notification={props.notification} />
+    </Fragment>
+  );
+};
+
+const TaskUnlockRequestBody = function (props) {
+  return (
+    <Fragment>
+      <p className="mr-mb-8 mr-text-base">
+        {props.notification.fromUsername} <FormattedMessage {...messages.taskUnlockRequest} />{" "}
+        {props.notification.taskId}
+      </p>
+
+      <p className="mr-links-green-lighter mr-text-md">
+        <Link to={`/task/${props.notification.taskId}}`}>
+          <FormattedMessage {...messages.viewTaskLabel} />
+        </Link>
+      </p>
     </Fragment>
   );
 };

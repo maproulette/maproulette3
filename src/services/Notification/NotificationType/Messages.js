@@ -60,6 +60,10 @@ export default defineMessages({
     id: "Notification.type.challengeComment",
     defaultMessage: "Challenge Comment",
   },
+  taskUnlockRequest: {
+    id: "Notification.type.taskUnlockRequest",
+    defaultMessage: "Task Unlock Request",
+  },
 });
 
 export const subscriptionCountMessages = defineMessages({
