@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import worldMapImage from "../../../images/bg-map.svg";
 import messages from "./Messages";
 
-const Hero = memo(function Hero() {
+const Hero = function Hero() {
   return (
     <div className="mr-relative mr-bg-cover mr-bg-hero mr-bg-gradient-to-br mr-from-gray-900 mr-to-black mr-overflow-hidden mr-h-[80vh]">
       {/* Background image */}
@@ -42,6 +42,6 @@ const Hero = memo(function Hero() {
       <div className="mr-absolute mr-inset-0 mr-bg-gradient-to-t mr-from-black/50 mr-via-transparent mr-to-black/30" />
     </div>
   );
-});
+};
 
 export default Hero;
