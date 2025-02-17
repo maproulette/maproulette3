@@ -5,8 +5,8 @@ import { bindActionCreators } from "redux";
 import {
   refreshTaskLock,
   releaseTask,
-  startTask,
   requestUnlock,
+  startTask,
 } from "../../../services/Task/Task";
 
 // Used for lock storage events. Users will be locked from other task tabs
