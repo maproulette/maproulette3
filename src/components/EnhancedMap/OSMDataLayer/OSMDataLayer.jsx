@@ -83,6 +83,19 @@ const generateLayer = (props, map, _leaflet) => {
     pane: props.leaflet?.pane,
   });
 
+  // Clear existing layers to ensure proper ordering
+  layerGroup.clearLayers();
+
+  // Get all features and sort them by type to ensure consistent ordering
+  const features = layerGroup.buildFeatures(props.xmlData);
+  const sortedFeatures = features.sort((a, b) => {
+    const typeOrder = { way: 1, area: 2, node: 3, changeset: 4 };
+    return typeOrder[a.type] - typeOrder[b.type];
+  });
+
+  // Add features in the sorted order
+  layerGroup.addData(sortedFeatures);
+
   layerGroup.eachLayer((layer) => {
     layer.options.mrLayerLabel = props.intl.formatMessage(layerMessages.showOSMDataLabel);
     layer.options.fill = false;
@@ -166,7 +179,8 @@ const OSMDataLayerComponent = createPathComponent(
     if (!_isEqual(prevProps.showOSMElements, props.showOSMElements)) {
       instance.clearLayers();
       const newLayers = generateLayer(props, instance);
-      newLayers.eachLayer((layer) => instance.addLayer(layer));
+      // Transfer all layers at once to maintain ordering
+      instance.addLayer(newLayers);
     }
   },
 );
