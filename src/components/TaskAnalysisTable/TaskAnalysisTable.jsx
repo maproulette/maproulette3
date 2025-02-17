@@ -107,6 +107,13 @@ export class TaskAnalysisTableInternal extends Component {
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100);
 
+  componentWillUnmount() {
+    // Cancel any pending debounced calls
+    if (this.debouncedUpdateTasks) {
+      this.debouncedUpdateTasks.cancel();
+    }
+  }
+
   updateTasks(tableState) {
     const sortCriteria = {
       sortBy: tableState.sorted[0].id,

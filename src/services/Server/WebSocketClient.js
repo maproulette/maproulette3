@@ -7,6 +7,7 @@ export default class WebSocketClient {
     this.subscriptionHandlers = new Map();
     this.serverSubscriptions = new Map();
     this.queuedMessages = [];
+    this.isCleanedUp = false;
 
     this.connect();
   }
@@ -88,19 +89,25 @@ export default class WebSocketClient {
    * @private
    */
   open() {
+    if (this.isCleanedUp) return;
+
     this.reconnectionHandle = null;
     if (this.websocket) {
       this.websocket.close();
     }
 
-    this.websocket = new WebSocket(window.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL);
-    this.websocket.onopen = (e) => this.handleOpen(e);
-    this.websocket.onmessage = (e) => this.handleMessage(e);
-    this.websocket.onclose = (e) => this.handleClose(e);
+    try {
+      this.websocket = new WebSocket(window.env.REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL);
+      this.websocket.onopen = (e) => !this.isCleanedUp && this.handleOpen(e);
+      this.websocket.onmessage = (e) => !this.isCleanedUp && this.handleMessage(e);
+      this.websocket.onclose = (e) => !this.isCleanedUp && this.handleClose(e);
 
-    if (!this.pingHandle) {
-      // Ping the server every 45 seconds to avoid an idle timeout
-      this.pingHandle = setInterval(() => this.sendPing(), 45000);
+      if (!this.pingHandle && !this.isCleanedUp) {
+        // Ping the server every 45 seconds to avoid an idle timeout
+        this.pingHandle = setInterval(() => this.sendPing(), 45000);
+      }
+    } catch (error) {
+      console.warn("WebSocket initialization failed:", error);
     }
   }
 
@@ -154,11 +161,53 @@ export default class WebSocketClient {
   }
 
   /**
+   * Cleanup websocket connection and intervals
+   */
+  cleanup() {
+    this.isCleanedUp = true;
+
+    if (this.websocket) {
+      try {
+        this.websocket.onopen = null;
+        this.websocket.onmessage = null;
+        this.websocket.onclose = null;
+        this.websocket.close();
+      } catch (error) {
+        console.warn("WebSocket cleanup error:", error);
+      }
+      this.websocket = null;
+    }
+
+    if (this.pingHandle) {
+      clearInterval(this.pingHandle);
+      this.pingHandle = null;
+    }
+
+    if (this.reconnectionHandle) {
+      clearTimeout(this.reconnectionHandle);
+      this.reconnectionHandle = null;
+    }
+
+    this.reconnectionAttempts = 0;
+    this.queuedMessages = [];
+  }
+
+  /**
    * Handles websocket close events, attempting to reconnect
    *
    * @private
    */
-  handleClose() {
+  handleClose(e) {
+    if (this.isCleanedUp) {
+      return;
+    }
+
+    // Clear ping interval on close
+    if (this.pingHandle) {
+      clearInterval(this.pingHandle);
+      this.pingHandle = null;
+    }
+
     this.connect();
   }
 
