@@ -14,10 +14,7 @@ import AsMappableTask from "../../../interactions/Task/AsMappableTask";
 import { toLatLngBounds } from "../../../services/MapBounds/MapBounds";
 import { buildSearchURL } from "../../../services/SearchCriteria/SearchCriteria";
 import { TaskAction } from "../../../services/Task/TaskAction/TaskAction";
-import {
-  WidgetDataTarget,
-  registerWidgetType,
-} from "../../../services/Widget/Widget";
+import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import Dropdown from "../../Dropdown/Dropdown";
 import MapPane from "../../EnhancedMap/MapPane/MapPane";
@@ -44,11 +41,7 @@ import TaskStatusFilter from "../../TaskFilters/TaskStatusFilter";
 import messages from "./Messages";
 import TaskMarkerContent from "./TaskMarkerContent";
 
-const VALID_STATUS_KEYS = [
-  TaskAction.available,
-  TaskAction.skipped,
-  TaskAction.tooHard,
-];
+const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard];
 
 const descriptor = {
   widgetKey: "TaskBundleWidget",
@@ -65,7 +58,7 @@ const ClusterMap = WithChallengeTaskClusters(
   true,
   false,
   false,
-  false
+  false,
 );
 
 const shortcutGroup = "taskEditing";
@@ -77,12 +70,8 @@ export default class TaskBundleWidget extends Component {
   };
 
   handleKeyboardShortcuts = (event) => {
-    const {
-      activeKeyboardShortcuts,
-      textInputActive,
-      taskReadOnly,
-      keyboardShortcutGroups,
-    } = this.props;
+    const { activeKeyboardShortcuts, textInputActive, taskReadOnly, keyboardShortcutGroups } =
+      this.props;
 
     // Return early if any of the following conditions are met:
     // - Shortcut group is not active
@@ -118,10 +107,7 @@ export default class TaskBundleWidget extends Component {
           type: "Feature",
           geometry: {
             type: "Point",
-            coordinates: [
-              task.location.coordinates[0],
-              task.location.coordinates[1],
-            ],
+            coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
           },
         })),
       });
@@ -141,10 +127,7 @@ export default class TaskBundleWidget extends Component {
 
   initializeWebsocketSubscription(prevProps = {}) {
     const challengeId = this.props.task?.parent?.id;
-    if (
-      Number.isFinite(challengeId) &&
-      challengeId !== prevProps.task?.parent?.id
-    ) {
+    if (Number.isFinite(challengeId) && challengeId !== prevProps.task?.parent?.id) {
       this.props.subscribeToChallengeTaskMessages(challengeId);
     }
   }
@@ -159,11 +142,7 @@ export default class TaskBundleWidget extends Component {
     const selectedArray = Array.from(selectedTasks.selected.values());
     const isCooperative = AsCooperativeWork(task).isCooperative();
 
-    if (
-      selectedArray.some(
-        (item) => AsCooperativeWork(item).isCooperative() !== isCooperative
-      )
-    ) {
+    if (selectedArray.some((item) => AsCooperativeWork(item).isCooperative() !== isCooperative)) {
       this.setState((prevState) => ({
         errors: new Set([...prevState.errors, "bundleTypeMismatchError"]),
       }));
@@ -222,7 +201,7 @@ export default class TaskBundleWidget extends Component {
     }
 
     const nearbyBounds = bbox(
-      featureCollection(taskList.map((t) => point([t.point.lng, t.point.lat])))
+      featureCollection(taskList.map((t) => point([t.point.lng, t.point.lat]))),
     );
 
     // Preserve existing zoom or default to 18
@@ -260,7 +239,7 @@ export default class TaskBundleWidget extends Component {
     // Then add any additional bundle tasks
     if (this.props.taskBundle?.tasks) {
       const additionalTasks = this.props.taskBundle.tasks.filter(
-        (t) => t.id !== this.props.task?.id
+        (t) => t.id !== this.props.task?.id,
       );
       if (additionalTasks.length > 0) {
         this.props.selectTasks(additionalTasks);
@@ -274,8 +253,7 @@ export default class TaskBundleWidget extends Component {
 
   async componentDidUpdate(prevProps) {
     const taskChanged = this.props.task?.id !== prevProps.task?.id;
-    const bundleChanged =
-      this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId;
+    const bundleChanged = this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId;
 
     if (taskChanged || bundleChanged) {
       await this.props.resetSelectedTasks();
@@ -286,7 +264,7 @@ export default class TaskBundleWidget extends Component {
       // Then add any additional bundle tasks
       if (this.props.taskBundle?.tasks) {
         const additionalTasks = this.props.taskBundle.tasks.filter(
-          (t) => t.id !== this.props.task?.id
+          (t) => t.id !== this.props.task?.id,
         );
         if (additionalTasks.length > 0) {
           this.props.selectTasks(additionalTasks);
@@ -327,11 +305,8 @@ export default class TaskBundleWidget extends Component {
       this.setState({ shortcutActive: true });
       this.props.activateKeyboardShortcut(
         shortcutGroup,
-        _pick(
-          this.props.keyboardShortcutGroups.taskEditing,
-          "completeTogether"
-        ),
-        this.handleKeyboardShortcuts
+        _pick(this.props.keyboardShortcutGroups.taskEditing, "completeTogether"),
+        this.handleKeyboardShortcuts,
       );
     } else if (
       this.state.shortcutActive === true &&
@@ -341,7 +316,7 @@ export default class TaskBundleWidget extends Component {
       this.props.deactivateKeyboardShortcut(
         shortcutGroup,
         "completeTogether",
-        this.handleKeyboardShortcuts
+        this.handleKeyboardShortcuts,
       );
     }
   }
@@ -356,7 +331,7 @@ export default class TaskBundleWidget extends Component {
     this.props.deactivateKeyboardShortcut(
       shortcutGroup,
       "completeTogether",
-      this.handleKeyboardShortcuts
+      this.handleKeyboardShortcuts,
     );
   }
 
@@ -395,13 +370,11 @@ const calculateTasksInChallenge = (props) => {
 };
 
 const ActiveBundle = (props) => {
-  const { task, taskBundle, bundleEditsDisabled, initialBundle, widgetLayout } =
-    props;
+  const { task, taskBundle, bundleEditsDisabled, initialBundle, widgetLayout } = props;
   const disabled =
     props.bundleEditsDisabled ||
     (props.initialBundle &&
-      props.initialBundle?.taskIds?.sort() ===
-        props.taskBundle?.taskIds?.sort());
+      props.initialBundle?.taskIds?.sort() === props.taskBundle?.taskIds?.sort());
 
   const showMarkerPopup = (markerData) => {
     return (
@@ -431,13 +404,10 @@ const ActiveBundle = (props) => {
         type: "Feature",
         geometry: {
           type: "Point",
-          coordinates: [
-            task.location.coordinates[0],
-            task.location.coordinates[1],
-          ],
+          coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
         },
       })),
-    })
+    }),
   );
 
   const map = (
@@ -457,14 +427,8 @@ const ActiveBundle = (props) => {
     <TaskAnalysisTable
       {...props}
       selectedTasks={new Map()}
-      taskData={
-        props.bundledOnly && taskBundle
-          ? taskBundle?.tasks
-          : props.taskInfo?.tasks
-      }
-      totalTaskCount={
-        props.taskInfo?.totalCount || props.taskInfo?.tasks?.length
-      }
+      taskData={props.bundledOnly && taskBundle ? taskBundle?.tasks : props.taskInfo?.tasks}
+      totalTaskCount={props.taskInfo?.totalCount || props.taskInfo?.tasks?.length}
       totalTasksInChallenge={calculateTasksInChallenge(props)}
       showColumns={["featureId", "id", "status", "priority", "editBundle"]}
       suppressHeader
@@ -492,9 +456,7 @@ const ActiveBundle = (props) => {
             <div key={errorType}>
               <FormattedMessage {...messages[errorType]} />
               {errorType === "lockError" && props.failedLocks && (
-                <span className="mr-ml-2">
-                  ({props.failedLocks.join(", ")})
-                </span>
+                <span className="mr-ml-2">({props.failedLocks.join(", ")})</span>
               )}
             </div>
           ))}
@@ -512,11 +474,7 @@ const ActiveBundle = (props) => {
           onClick={() => props.setBundledOnly(!props.bundledOnly)}
         >
           <FormattedMessage
-            {...messages[
-              props.bundledOnly
-                ? "displayAllTasksLabel"
-                : "displayBundledTasksLabel"
-            ]}
+            {...messages[props.bundledOnly ? "displayAllTasksLabel" : "displayBundledTasksLabel"]}
           />
         </button>
         {initialBundle && (
@@ -569,9 +527,7 @@ const ActiveBundle = (props) => {
         </div>
         <div
           className={`mr-flex mr-space-x-3 mr-items-center ${
-            widgetLayout && widgetLayout?.w === 4
-              ? "mr-justify-between"
-              : "mr-justify-end"
+            widgetLayout && widgetLayout?.w === 4 ? "mr-justify-between" : "mr-justify-end"
           }`}
         >
           {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
@@ -626,9 +582,7 @@ const BuildBundle = (props) => {
 
   const totalTaskCount = taskInfo?.totalCount || taskInfo?.tasks?.length;
   const showBundleButton =
-    !taskReadOnly &&
-    props.selectedTaskCount(totalTaskCount) > 1 &&
-    !bundleEditsDisabled;
+    !taskReadOnly && props.selectedTaskCount(totalTaskCount) > 1 && !bundleEditsDisabled;
   const isTooManyTasks = selectedTasks.selected.size > 50;
 
   const bundleButton = showBundleButton ? (
@@ -639,9 +593,7 @@ const BuildBundle = (props) => {
       disabled={isTooManyTasks}
       onClick={props.createBundle}
     >
-      <FormattedMessage
-        {...messages[isTooManyTasks ? "tooManyTasks" : "bundleTasksLabel"]}
-      />
+      <FormattedMessage {...messages[isTooManyTasks ? "tooManyTasks" : "bundleTasksLabel"]} />
     </button>
   ) : null;
 
@@ -649,16 +601,10 @@ const BuildBundle = (props) => {
     return (
       <Popup
         key={markerData.options.taskId}
-        offset={
-          props.task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]
-        }
+        offset={props.task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]}
       >
         <div className="marker-popup-content">
-          <TaskMarkerContent
-            {...props}
-            marker={markerData}
-            taskId={markerData.options.taskId}
-          />
+          <TaskMarkerContent {...props} marker={markerData} taskId={markerData.options.taskId} />
         </div>
       </Popup>
     );
@@ -707,9 +653,7 @@ const BuildBundle = (props) => {
             <div key={errorType}>
               <FormattedMessage {...messages[errorType]} />
               {errorType === "lockError" && props.failedLocks && (
-                <span className="mr-ml-2">
-                  ({props.failedLocks.join(", ")})
-                </span>
+                <span className="mr-ml-2">({props.failedLocks.join(", ")})</span>
               )}
             </div>
           ))}
@@ -719,9 +663,7 @@ const BuildBundle = (props) => {
         {props.initialBundle && (
           <button
             className={`mr-button mr-button--red mr-button--small mr-mt-2 mr-float-right ${
-              bundleEditsDisabled
-                ? "mr-text-grey-light mr-cursor-default"
-                : "mr-text-green-lighter"
+              bundleEditsDisabled ? "mr-text-grey-light mr-cursor-default" : "mr-text-green-lighter"
             }`}
             onClick={props.resetTaskBundle}
             disabled={bundleEditsDisabled}
@@ -794,14 +736,7 @@ const BuildBundle = (props) => {
           taskData={props.taskInfo?.tasks}
           totalTaskCount={totalTaskCount}
           totalTasksInChallenge={calculateTasksInChallenge(props)}
-          showColumns={[
-            "selected",
-            "featureId",
-            "id",
-            "status",
-            "priority",
-            "comments",
-          ]}
+          showColumns={["selected", "featureId", "id", "status", "priority", "comments"]}
           customHeaderControls={bundleButton}
           suppressManagement
           showSelectionCount
@@ -825,19 +760,17 @@ registerWidgetType(
               WithFilterCriteria(
                 WithBoundedTasks(
                   WithBrowsedChallenge(
-                    WithWebSocketSubscriptions(
-                      WithKeyboardShortcuts(TaskBundleWidget)
-                    )
+                    WithWebSocketSubscriptions(WithKeyboardShortcuts(TaskBundleWidget)),
                   ),
                   "filteredClusteredTasks",
-                  "taskInfo"
+                  "taskInfo",
                 ),
                 true,
                 false,
                 true,
                 true,
-                "taskBundleFilters"
-              )
+                "taskBundleFilters",
+              ),
             ),
             "clusteredTasks",
             "filteredClusteredTasks",
@@ -845,13 +778,13 @@ registerWidgetType(
               includeLocked: false,
             },
             true,
-            "taskBundleFilters"
-          )
-        )
-      )
-    )
+            "taskBundleFilters",
+          ),
+        ),
+      ),
+    ),
   ),
-  descriptor
+  descriptor,
 );
 
 const RevertFiltersControl = ({ revertFilters }) => {
@@ -884,10 +817,7 @@ const SaveFiltersControl = ({ saveFilters, closeDropdown }) => {
 };
 
 const ClearFiltersControl = ({ clearFilters }) => (
-  <button
-    className="mr-flex mr-items-center mr-text-green-lighter"
-    onClick={clearFilters}
-  >
+  <button className="mr-flex mr-items-center mr-text-green-lighter" onClick={clearFilters}>
     <SvgSymbol
       sym="close-icon"
       viewBox="0 0 20 20"
