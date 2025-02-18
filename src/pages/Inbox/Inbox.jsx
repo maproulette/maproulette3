@@ -226,20 +226,22 @@ const columns = (tableProps) => [
     sortable: true,
     filterable: true,
     maxWidth: 140,
-    Cell: ({ value, row }) => (
-      <span
-        onClick={() =>
-          tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
-        }
-        className={classNames(
-          "mr-cursor-pointer mr-text-sm mr-font-medium mr-uppercase",
-          `mr-notification-type-${_kebabCase(keysByNotificationType[value])}`,
-          { "mr-line-through mr-font-normal mr-opacity-50": row._original.isRead },
-        )}
-      >
-        <FormattedMessage {...messagesByNotificationType[value]} />
-      </span>
-    ),
+    Cell: ({ value, row }) => {
+      return (
+        <span
+          onClick={() =>
+            tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
+          }
+          className={classNames(
+            "mr-cursor-pointer mr-text-sm mr-font-medium mr-uppercase",
+            `mr-notification-type-${_kebabCase(keysByNotificationType[value])}`,
+            { "mr-line-through mr-font-normal mr-opacity-50": row._original.isRead },
+          )}
+        >
+          <FormattedMessage {...messagesByNotificationType[value]} />
+        </span>
+      );
+    },
     Filter: ({ filter, onChange }) => {
       const options = [
         <option key="all" value="all">

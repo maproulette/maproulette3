@@ -204,4 +204,9 @@ export default defineMessages({
     id: "Inbox.notification.commentedOnChallenge",
     defaultMessage: "Someone commented on your challenge.",
   },
+
+  taskUnlockRequest: {
+    id: "Inbox.notification.taskUnlockRequest",
+    defaultMessage: "is requesting you unlock task",
+  },
 });

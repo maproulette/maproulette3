@@ -42,6 +42,7 @@ export default {
     taskAlreadyBundled: messages.taskAlreadyBundled,
     lockReleaseFailure: messages.taskLockReleaseFailure,
     cooperativeFailure: messages.taskCooperativeFailure,
+    requestUnlockFailure: messages.requestUnlockFailure,
   },
 
   osm: {

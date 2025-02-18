@@ -64,6 +64,11 @@ export default defineMessages({
     defaultMessage: ". A read-only preview is available.",
   },
 
+  requestUnlock: {
+    id: "Task.pane.lockFailedDialog.requestUnlockLabel",
+    defaultMessage: "Request Unlock",
+  },
+
   saveChangesLabel: {
     id: "Task.pane.controls.saveChanges.label",
     defaultMessage: "Save Changes",
