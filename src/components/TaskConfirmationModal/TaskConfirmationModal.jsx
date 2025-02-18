@@ -2,7 +2,6 @@ import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
 import _merge from "lodash/merge";
 import _noop from "lodash/noop";
@@ -29,6 +28,7 @@ import {
   messagesByStatus,
 } from "../../services/Task/TaskStatus/TaskStatus";
 import { needsReviewType } from "../../services/User/User";
+import BusySpinner from "../BusySpinner/BusySpinner";
 import ErrorTagDropdown from "../ErrorTagDropdown/ErrorTagDropdown";
 import External from "../External/External";
 import KeywordAutosuggestInput from "../KeywordAutosuggestInput/KeywordAutosuggestInput";
@@ -139,15 +139,44 @@ export class TaskConfirmationModal extends Component {
     const { criteria } = this.state;
     const currentState = this.props.history?.location?.state ?? {};
     const newState = _merge({}, currentState, criteria);
-    this.props.history.replace({ ...this.props.history.location, state: newState });
+    this.props.history.replace({
+      ...this.props.history.location,
+      state: newState,
+    });
   };
 
   currentFilters = () => {
     return _merge({}, this.props.history?.location?.state ?? {}, this.state.criteria);
   };
 
+  getHeaderMessage = (applyingTagChanges) => {
+    if (this.props.isUpdatingErrorTags) {
+      return <FormattedMessage {...messages.updateErrorTags} />;
+    }
+
+    if (this.props.inReview) {
+      if (this.props.asMetaReview) {
+        return <FormattedMessage {...messages.inMetaReviewHeader} />;
+      }
+      return <FormattedMessage {...messages.inReviewHeader} />;
+    }
+
+    if (this.props.needsRevised === undefined) {
+      if (applyingTagChanges) {
+        return <FormattedMessage {...messages.reviewChangesHeader} />;
+      }
+      return <FormattedMessage {...messages.header} />;
+    }
+
+    if (this.props.needsRevised === TaskReviewStatus.needed) {
+      return <FormattedMessage {...messages.submitRevisionHeader} />;
+    }
+
+    return <FormattedMessage {...messages.disputeRevisionHeader} />;
+  };
+
   render() {
-    const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised);
+    const reviewConfirmation = this.props.inReview || this.props.needsRevised !== undefined;
     const loadingNearby =
       this.props.loadBy === TaskLoadMethod.proximity ||
       this.props.loadBy === TaskReviewLoadMethod.nearby;
@@ -165,6 +194,7 @@ export class TaskConfirmationModal extends Component {
       : !!this.props.task.parent?.limitReviewTags;
 
     const TasksNearby = reviewConfirmation ? TaskReviewNearbyList : TaskNearbyList;
+    const disabled = this.props.disabled || this.props.isCompleting;
 
     return (
       <External>
@@ -188,25 +218,9 @@ export class TaskConfirmationModal extends Component {
               <div className={classNames("mr-flex mr-flex-col mr-items-center")}>
                 <div className="mr-w-full">
                   <h2 className="mr-text-grey-light-more mr-text-4xl mr-mt-4">
-                    {this.props.inReview ? (
-                      this.props.asMetaReview ? (
-                        <FormattedMessage {...messages.inMetaReviewHeader} />
-                      ) : (
-                        <FormattedMessage {...messages.inReviewHeader} />
-                      )
-                    ) : _isUndefined(this.props.needsRevised) ? (
-                      applyingTagChanges ? (
-                        <FormattedMessage {...messages.reviewChangesHeader} />
-                      ) : (
-                        <FormattedMessage {...messages.header} />
-                      )
-                    ) : this.props.needsRevised === TaskReviewStatus.needed ? (
-                      <FormattedMessage {...messages.submitRevisionHeader} />
-                    ) : (
-                      <FormattedMessage {...messages.disputeRevisionHeader} />
-                    )}
+                    {this.getHeaderMessage(applyingTagChanges)}
                   </h2>
-                  {this.props.inReview && (
+                  {this.props.inReview && !this.props.isUpdatingErrorTags && (
                     <div
                       className={classNames(
                         "mr-uppercase mr-tracking-wide",
@@ -398,6 +412,7 @@ export class TaskConfirmationModal extends Component {
                     <button
                       className="mr-button mr-button--white mr-mr-12 mr-px-8"
                       onClick={this.props.onCancel}
+                      disabled={disabled}
                     >
                       <FormattedMessage {...messages.cancelLabel} />
                     </button>
@@ -405,8 +420,13 @@ export class TaskConfirmationModal extends Component {
                     <button
                       className="mr-button mr-px-8"
                       onClick={() => this.props.onConfirm(this.currentFilters())}
+                      disabled={disabled}
                     >
-                      <FormattedMessage {...messages.submitLabel} />
+                      {this.props.isCompleting ? (
+                        <BusySpinner inline />
+                      ) : (
+                        <FormattedMessage {...messages.submitLabel} />
+                      )}
                     </button>
                   </div>
 
@@ -424,6 +444,7 @@ export class TaskConfirmationModal extends Component {
                           checked={this.props.loadBy === TaskLoadMethod.random}
                           onClick={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
                           onChange={_noop}
+                          disabled={disabled}
                         />
                         <label htmlFor="load-method-random-input" className="mr-ml-1 mr-mr-4">
                           <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
@@ -437,6 +458,7 @@ export class TaskConfirmationModal extends Component {
                           checked={this.props.loadBy === TaskLoadMethod.proximity}
                           onClick={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
                           onChange={_noop}
+                          disabled={disabled}
                         />
                         <label htmlFor="load-method-proximity-input" className="mr-ml-1">
                           <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
@@ -445,7 +467,10 @@ export class TaskConfirmationModal extends Component {
                       <div className="mr-text-green-lighter mr-text-center mr-mt-4 hover:mr-text-white mr-cursor-pointer mr-text-xs">
                         <div
                           onClick={() =>
-                            this.setState({ showInstructions: true, instructionsContinue: false })
+                            this.setState({
+                              showInstructions: true,
+                              instructionsContinue: false,
+                            })
                           }
                         >
                           <FormattedMessage {...messages.viewInstructions} />
@@ -454,7 +479,7 @@ export class TaskConfirmationModal extends Component {
                     </div>
                   )}
 
-                  {reviewConfirmation && _isUndefined(this.props.needsRevised) && (
+                  {reviewConfirmation && this.props.needsRevised === undefined && (
                     <Fragment>
                       <div className="mr-mt-8 mr-text-sm">
                         <div className="mr-mr-4">
@@ -469,6 +494,7 @@ export class TaskConfirmationModal extends Component {
                               checked={this.props.loadBy === TaskReviewLoadMethod.next}
                               onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
                               onChange={_noop}
+                              disabled={disabled}
                             />
                             <label>
                               <FormattedMessage
@@ -484,6 +510,7 @@ export class TaskConfirmationModal extends Component {
                               checked={this.props.loadBy === TaskReviewLoadMethod.nearby}
                               onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.nearby)}
                               onChange={_noop}
+                              disabled={disabled}
                             />
                             <label>
                               <FormattedMessage
@@ -500,6 +527,7 @@ export class TaskConfirmationModal extends Component {
                                 checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
                                 onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
                                 onChange={_noop}
+                                disabled={disabled}
                               />
                               <label>
                                 <FormattedMessage
@@ -516,6 +544,7 @@ export class TaskConfirmationModal extends Component {
                               checked={this.props.loadBy === TaskReviewLoadMethod.all}
                               onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
                               onChange={_noop}
+                              disabled={disabled}
                             />
                             <label>
                               <FormattedMessage
@@ -534,7 +563,7 @@ export class TaskConfirmationModal extends Component {
                   )}
 
                   {reviewConfirmation &&
-                    !_isUndefined(this.props.needsRevised) &&
+                    this.props.needsRevised !== undefined &&
                     this.props.fromInbox && (
                       <div className="form mr-mt-8">
                         <span className="mr-mr-4">
@@ -547,6 +576,7 @@ export class TaskConfirmationModal extends Component {
                           checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
                           onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
                           onChange={_noop}
+                          disabled={disabled}
                         />
                         <label htmlFor="review-load-method-input" className="mr-mr-4">
                           <FormattedMessage
@@ -561,6 +591,7 @@ export class TaskConfirmationModal extends Component {
                           checked={this.props.loadBy === TaskReviewLoadMethod.all}
                           onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
                           onChange={_noop}
+                          disabled={disabled}
                         />
                         <label>
                           <FormattedMessage
@@ -601,11 +632,14 @@ export class TaskConfirmationModal extends Component {
           )}
           {!this.props.inReview &&
             this.state.showInstructions &&
-            _isUndefined(this.props.needsRevised) && (
+            this.props.needsRevised === undefined && (
               <InstructionsOverlay
                 {...this.props}
                 close={() =>
-                  this.setState({ showInstructions: false, instructionsContinue: false })
+                  this.setState({
+                    showInstructions: false,
+                    instructionsContinue: false,
+                  })
                 }
                 closeMessage={
                   this.state.instructionsContinue

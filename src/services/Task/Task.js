@@ -1,10 +1,7 @@
 import _cloneDeep from "lodash/cloneDeep";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
-import _isUndefined from "lodash/isUndefined";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
@@ -462,7 +459,7 @@ export const updateCompletionResponses = function (taskId, completionResponses) 
 export const addTaskComment = function (taskId, comment, taskStatus) {
   return function (dispatch) {
     const params = {};
-    if (_isFinite(taskStatus)) {
+    if (Number.isFinite(taskStatus)) {
       params.actionId = taskStatus;
     }
 
@@ -490,13 +487,40 @@ export const addTaskComment = function (taskId, comment, taskStatus) {
 };
 
 /**
+ * Edit an existing comment on the given task
+ */
+export const editTaskComment = function (taskId, commentId, newComment) {
+  return function (dispatch) {
+    return new Endpoint(api.task.editComment, {
+      variables: { id: commentId },
+      json: { comment: newComment },
+    })
+      .execute()
+      .then(() => {
+        fetchTaskComments(taskId)(dispatch);
+        fetchTask(taskId)(dispatch); // Refresh task data
+      })
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn()).then(() =>
+            dispatch(addError(AppErrors.user.unauthorized)),
+          );
+        } else {
+          dispatch(addError(AppErrors.task.editCommentFailure));
+          console.log(error.response || error);
+        }
+      });
+  };
+};
+
+/**
  * Add a comment to tasks in the given bundle, associating the given task
  * status if provided
  */
 export const addTaskBundleComment = function (bundleId, primaryTaskId, comment, taskStatus) {
   return function (dispatch) {
     const params = {};
-    if (_isFinite(taskStatus)) {
+    if (Number.isFinite(taskStatus)) {
       params.actionId = taskStatus;
     }
     return new Endpoint(api.tasks.bundled.addComment, {
@@ -620,7 +644,7 @@ export const loadRandomTaskFromChallenge = function (
       schema: [taskSchema()],
       variables: { id: challengeId },
       params: {
-        proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+        proximity: Number.isFinite(priorTaskId) ? priorTaskId : undefined,
         mapillary: includeMapillary,
       },
     });
@@ -649,7 +673,7 @@ export const loadRandomTaskFromVirtualChallenge = function (
         schema: taskSchema(),
         variables: { id: virtualChallengeId },
         params: {
-          proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+          proximity: Number.isFinite(priorTaskId) ? priorTaskId : undefined,
           mapillary: includeMapillary,
         },
       }),
@@ -971,11 +995,14 @@ export const saveTask = function (originalTaskData) {
 
     // Setup the save function to either edit or create the task
     // depending on whether it has an id.
-    const saveEndpoint = new Endpoint(_isFinite(taskData.id) ? api.task.edit : api.task.create, {
-      schema: taskSchema(),
-      variables: { id: taskData.id },
-      json: taskData,
-    });
+    const saveEndpoint = new Endpoint(
+      Number.isFinite(taskData.id) ? api.task.edit : api.task.create,
+      {
+        schema: taskSchema(),
+        variables: { id: taskData.id },
+        json: taskData,
+      },
+    );
 
     return saveEndpoint
       .execute()
@@ -1156,21 +1183,21 @@ export const retrieveChallengeTask = function (dispatch, endpoint) {
     .then((normalizedTaskResults) => {
       if (
         !normalizedTaskResults ||
-        (!_isFinite(normalizedTaskResults.result) && _isEmpty(normalizedTaskResults.result))
+        (!Number.isFinite(normalizedTaskResults.result) && _isEmpty(normalizedTaskResults.result))
       ) {
         return null;
       }
 
-      const retrievedTaskId = _isArray(normalizedTaskResults.result)
+      const retrievedTaskId = Array.isArray(normalizedTaskResults.result)
         ? normalizedTaskResults.result[0]
         : normalizedTaskResults.result;
 
-      if (!_isUndefined(retrievedTaskId)) {
+      if (retrievedTaskId !== undefined) {
         // Some API requests give back the parent as `parentId` instead
         // of `parent`, and the geometries back as `geometry` instead of
         // `geometries`. Normalize these.
         const taskEntity = normalizedTaskResults.entities.tasks[retrievedTaskId];
-        if (!_isFinite(taskEntity.parent)) {
+        if (!Number.isFinite(taskEntity.parent)) {
           taskEntity.parent = taskEntity.parentId;
         }
 
@@ -1218,7 +1245,7 @@ const reduceTasksFurther = function (mergedState, oldState, taskEntities) {
   // The generic reduction will merge arrays and objects, but for some fields
   // we want to simply overwrite with the latest data.
   taskEntities.forEach((entity) => {
-    if (_isArray(entity.tags)) {
+    if (Array.isArray(entity.tags)) {
       mergedState[entity.id].tags = entity.tags;
     }
   });

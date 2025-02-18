@@ -5,11 +5,8 @@ import _debounce from "lodash/debounce";
 import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _get from "lodash/get";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
-import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -107,6 +104,13 @@ export class TaskAnalysisTableInternal extends Component {
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100);
 
+  componentWillUnmount() {
+    // Cancel any pending debounced calls
+    if (this.debouncedUpdateTasks) {
+      this.debouncedUpdateTasks.cancel();
+    }
+  }
+
   updateTasks(tableState) {
     const sortCriteria = {
       sortBy: tableState.sorted[0].id,
@@ -140,7 +144,7 @@ export class TaskAnalysisTableInternal extends Component {
       this.setState({ openComments: taskId }),
     );
 
-    if (_isArray(this.props.showColumns) && this.props.showColumns.length > 0) {
+    if (Array.isArray(this.props.showColumns) && this.props.showColumns.length > 0) {
       return _compact(_map(this.props.showColumns, (columnId) => columnTypes[columnId]));
     } else {
       const findColumn = (column) => {
@@ -164,7 +168,7 @@ export class TaskAnalysisTableInternal extends Component {
       };
       return _concat(
         [columnTypes.selected],
-        _filter(_map(_keys(this.props.addedColumns), findColumn), (c) => !_isUndefined(c)),
+        _filter(_map(_keys(this.props.addedColumns), findColumn), (c) => c !== undefined),
       );
     }
   };
@@ -185,7 +189,10 @@ export class TaskAnalysisTableInternal extends Component {
     let taskBaseRoute = null;
 
     // if management controls are to be shown, then a challenge object is required
-    if (!_isArray(this.props.showColumns) || this.props.showColumns.indexOf("controls") !== -1) {
+    if (
+      !Array.isArray(this.props.showColumns) ||
+      this.props.showColumns.indexOf("controls") !== -1
+    ) {
       if (!_isObject(this.props.challenge) || !_isObject(this.props.challenge.parent)) {
         return null;
       }
@@ -306,7 +313,7 @@ export class TaskAnalysisTableInternal extends Component {
             {...intlTableProps(this.props.intl)}
           />
         </section>
-        {_isFinite(this.state.openComments) && (
+        {Number.isFinite(this.state.openComments) && (
           <TaskCommentsModal
             taskId={this.state.openComments}
             onClose={() => this.setState({ openComments: null })}
@@ -399,7 +406,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
             {taskLink}
           </span>
         );
-      } else if (_isFinite(t.bundleId) && t.bundleId && t.bundleId == props.taskBundle?.bundleId) {
+      } else if (
+        Number.isFinite(t.bundleId) &&
+        t.bundleId &&
+        t.bundleId == props.taskBundle?.bundleId
+      ) {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
@@ -672,14 +683,14 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   columns.reviewStatus = {
     id: "reviewStatus",
     Header: props.intl.formatMessage(messages.reviewStatusLabel),
-    accessor: (x) => (_isUndefined(x.reviewStatus) ? -1 : x.reviewStatus),
+    accessor: (x) => (x.reviewStatus === undefined ? -1 : x.reviewStatus),
     sortable: true,
     exportable: (t) => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
     maxWidth: 180,
     minWidth: 155,
     defaultSortDesc: true,
     Cell: (props) =>
-      !_isUndefined(props.value) && props.value !== -1 ? (
+      props.value !== undefined && props.value !== -1 ? (
         <StatusLabel
           {...props}
           intlMessage={messagesByReviewStatus[props.value]}
@@ -691,14 +702,14 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   columns.metaReviewStatus = {
     id: "metaReviewStatus",
     Header: props.intl.formatMessage(messages.metaReviewStatusLabel),
-    accessor: (x) => (_isUndefined(x.metaReviewStatus) ? -1 : x.metaReviewStatus),
+    accessor: (x) => (x.metaReviewStatus === undefined ? -1 : x.metaReviewStatus),
     sortable: true,
     exportable: (t) => props.intl.formatMessage(messagesByReviewStatus[t.metaReviewStatus]),
     maxWidth: 180,
     minWidth: 155,
     defaultSortDesc: true,
     Cell: (props) =>
-      !_isUndefined(props.value) && props.value !== -1 ? (
+      props.value !== undefined && props.value !== -1 ? (
         <StatusLabel
           {...props}
           intlMessage={messagesByReviewStatus[props.value]}
@@ -763,7 +774,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
             <FormattedMessage {...messages.editTaskLabel} />
           </Link>
         )}
-        {!_isUndefined(row._original.reviewStatus) && (
+        {row._original.reviewStatus !== undefined && (
           <Link
             to={{
               pathname: `/challenge/${props.challenge.id}/task/` + `${row._original.id}/review`,

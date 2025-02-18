@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { messagesByPriority } from "../../../services/Task/TaskPriority/TaskPriority";
@@ -12,13 +11,13 @@ class TaskMarkerContent extends Component {
   render() {
     const statusMessage =
       messagesByStatus[
-        _isFinite(this.props.marker.options.taskStatus)
+        Number.isFinite(this.props.marker.options.taskStatus)
           ? this.props.marker.options.taskStatus
           : this.props.marker.options.status
       ];
     const priorityMessage =
       messagesByPriority[
-        _isFinite(this.props.marker.options.taskPriority)
+        Number.isFinite(this.props.marker.options.taskPriority)
           ? this.props.marker.options.taskPriority
           : this.props.marker.options.priority
       ];

@@ -7,7 +7,6 @@ import _filter from "lodash/filter";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
 import _intersection from "lodash/intersection";
-import _isUndefined from "lodash/isUndefined";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
@@ -256,7 +255,7 @@ export class AsSimpleStyleableFeature {
     return _fromPairs(
       _compact(
         _map(supportedSimplestyles, (simplestyleProperty) =>
-          !_isUndefined(this.properties[simplestyleProperty])
+          this.properties[simplestyleProperty] !== undefined
             ? [simplestyleProperty, this.properties[simplestyleProperty]]
             : null,
         ),

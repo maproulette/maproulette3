@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
 import { Component } from "react";
@@ -26,7 +25,7 @@ export class FilterByDifficulty extends Component {
    * @private
    */
   updateFilter = (value, closeDropdown) => {
-    if (!_isFinite(value)) {
+    if (!Number.isFinite(value)) {
       this.props.removeSearchFilters(["difficulty"]);
     } else {
       this.props.setSearchFilters({ difficulty: value });
@@ -36,7 +35,7 @@ export class FilterByDifficulty extends Component {
 
   render() {
     const localizedDifficultyLabels = difficultyLabels(this.props.intl);
-    const notFiltering = !_isFinite(this.props.searchFilters.difficulty);
+    const notFiltering = !Number.isFinite(this.props.searchFilters.difficulty);
 
     return (
       <Dropdown

@@ -23,7 +23,7 @@ let northEastCorner = null;
 let centerPoint = null;
 let mapBounds = null;
 
-beforeEach(() => {
+beforeAll(() => {
   global.WebSocket = class MockWebSocket {
     constructor() {
       this.onopen = null;
@@ -35,7 +35,13 @@ beforeEach(() => {
     send() {}
     close() {}
   };
+});
 
+afterAll(() => {
+  delete global.WebSocket;
+});
+
+beforeEach(() => {
   dispatch = vi.fn();
 
   basicFeature = {
@@ -132,10 +138,6 @@ beforeEach(() => {
     },
     zoom: 17,
   };
-});
-
-afterEach(() => {
-  delete global.WebSocket;
 });
 
 describe("osmObjectParams", () => {
@@ -363,7 +365,7 @@ describe("constructIdURI", () => {
 });
 
 describe("constructRapidURI", () => {
-  test("the uri specifies the RapiD editor", () => {
+  test("the uri specifies the Rapid editor", () => {
     const uri = constructRapidURI(task, mapBounds);
     expect(uri).toEqual(expect.stringContaining("rapid"));
   });

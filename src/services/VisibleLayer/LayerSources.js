@@ -1,5 +1,4 @@
 import _find from "lodash/find";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
 import PropTypes from "prop-types";
@@ -206,7 +205,7 @@ export const basemapLayerSource = function (defaultBasemap, defaultBasemapId, cu
     // as "Challenge Default" under the User custom basemeps, but will be preselected
   } else if (defaultBasemap === ChallengeBasemap.custom && customMapUrl) {
     return createDynamicLayerSource(100, "Challenge Default", customMapUrl, false);
-  } else if (_isFinite(defaultBasemap)) {
+  } else if (Number.isFinite(defaultBasemap)) {
     const basemap = basemapLayerSources()[defaultBasemap];
     return layerSourceWithId(basemap);
   } else if (defaultBasemap?.url) {

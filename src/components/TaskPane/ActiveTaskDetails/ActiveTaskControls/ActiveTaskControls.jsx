@@ -1,9 +1,7 @@
 import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
 import _remove from "lodash/remove";
@@ -61,6 +59,7 @@ export class ActiveTaskControls extends Component {
     revisionLoadBy: TaskReviewLoadMethod.all,
     doneLoadByFromHistory: false,
     needsReview: this.props.challenge.reviewSetting === 1 ? true : undefined,
+    completingTask: false,
   };
 
   setComment = (comment) => this.setState({ comment });
@@ -77,7 +76,7 @@ export class ActiveTaskControls extends Component {
       return true;
     }
 
-    return !_isUndefined(this.state.needsReview)
+    return this.state.needsReview !== undefined
       ? this.state.needsReview
       : this.props.user?.settings?.needsReview;
   };
@@ -110,7 +109,7 @@ export class ActiveTaskControls extends Component {
   };
 
   chooseLoadBy = (loadMethod) => {
-    const isVirtual = _isFinite(this.props.virtualChallengeId);
+    const isVirtual = Number.isFinite(this.props.virtualChallengeId);
     const challengeId = isVirtual ? this.props.virtualChallengeId : this.props.challengeId;
     this.props.updateUserAppSetting(this.props.user.id, {
       loadMethod: loadMethod,
@@ -131,49 +130,57 @@ export class ActiveTaskControls extends Component {
   };
 
   /** Mark the task as complete with the given status */
-  complete = (taskStatus) => {
-    if (this.state.tags) {
-      this.props.saveTaskTags(this.props.task, this.state.tags);
-    }
-    this.props.setCompletingTask(this.props.task.id);
+  complete = async (taskStatus) => {
+    this.setState({ completingTask: true });
+    try {
+      if (this.state.tags) {
+        this.props.saveTaskTags(this.props.task, this.state.tags);
+      }
+      this.props.setCompletingTask(this.props.task.id);
 
-    const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
+      const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
-    if (!_isUndefined(this.state.submitRevision)) {
-      this.props.updateTaskReviewStatus(
-        this.props.task,
-        this.state.submitRevision,
-        this.state.comment,
-        null,
-        this.state.revisionLoadBy,
-        this.props.history,
-        this.props.taskBundle,
-        this.state.requestedNextTask,
-        taskStatus,
-        null,
-      );
-    } else {
-      this.props.completeTask(
-        this.props.task,
-        this.props.task.parent.id,
-        taskStatus,
-        this.state.comment,
-        null,
-        revisionSubmission ? null : this.props.taskLoadBy,
-        this.props.user.id,
-        revisionSubmission || this.state.needsReview,
-        this.state.requestedNextTask,
-        this.state.osmComment,
-        this.props.tagEdits,
-        this.props.taskBundle,
-      );
-      if (revisionSubmission) {
-        if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
-          this.props.history.push("/inbox");
-        } else {
-          this.props.history.push("/review");
+      if (this.state.submitRevision !== undefined) {
+        await this.props.updateTaskReviewStatus(
+          this.props.task,
+          this.state.submitRevision,
+          this.state.comment,
+          null,
+          this.state.revisionLoadBy,
+          this.props.history,
+          this.props.taskBundle,
+          this.state.requestedNextTask,
+          taskStatus,
+          null,
+        );
+      } else {
+        await this.props.completeTask(
+          this.props.task,
+          this.props.task.parent.id,
+          taskStatus,
+          this.state.comment,
+          null,
+          revisionSubmission ? null : this.props.taskLoadBy,
+          this.props.user.id,
+          revisionSubmission || this.state.needsReview,
+          this.state.requestedNextTask,
+          this.state.osmComment,
+          this.props.tagEdits,
+          this.props.taskBundle,
+        );
+        if (revisionSubmission) {
+          if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
+            this.props.history.push("/inbox");
+          } else {
+            this.props.history.push("/review");
+          }
         }
       }
+    } catch (error) {
+      this.setState({ completingTask: false });
+      throw error;
+    } finally {
+      this.setState({ completingTask: false });
     }
   };
 
@@ -374,7 +381,6 @@ export class ActiveTaskControls extends Component {
   }
 
   render() {
-    console.log(this.props.user.settings, this.props.user.settings.disableTaskConfirm);
     // If the user is not logged in, show a sign-in button instead of controls.
     if (!this.props.user?.isLoggedIn) {
       return (
@@ -423,7 +429,7 @@ export class ActiveTaskControls extends Component {
 
     return (
       <div>
-        {isComplete && (
+        {!this.state.completingTask && isComplete && (
           <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
             <div className="mr-flex mr-mb-2 mr-text-sm mr-text-white mr-whitespace-nowrap">
               <span>
@@ -457,7 +463,8 @@ export class ActiveTaskControls extends Component {
           setTags={this.setTags}
           onConfirm={this.confirmCompletion}
           saveTaskTags={this.props.saveTaskTags}
-          taskReadOnly={this.props.taskReadOnly}
+          taskReadOnly={this.props.taskReadOnly || this.state.completingTask}
+          disabled={this.state.completingTask}
         />
 
         {this.props.taskReadOnly ? (
@@ -474,7 +481,7 @@ export class ActiveTaskControls extends Component {
         ) : (
           <Fragment>
             {isTagFix &&
-              (!isFinal || needsRevised) &&
+              (!isFinal || needsRevised || this.state.completingTask) &&
               this.props.user.settings.seeTagFixSuggestions && (
                 <CooperativeWorkControls
                   {...this.props}
@@ -483,11 +490,13 @@ export class ActiveTaskControls extends Component {
                   complete={this.initiateCompletion}
                   nextTask={this.next}
                   needsRevised={needsRevised}
+                  disabled={this.state.completingTask}
+                  isCompleting={this.state.completingTask}
                 />
               )}
 
             {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) &&
-              (!isFinal || needsRevised) && (
+              (!isFinal || needsRevised || this.state.completingTask) && (
                 <TaskCompletionStep
                   {...this.props}
                   allowedEditors={this.allowedEditors()}
@@ -497,10 +506,12 @@ export class ActiveTaskControls extends Component {
                   nextTask={this.next}
                   needsRevised={needsRevised}
                   editMode={editMode}
+                  disabled={this.state.completingTask}
+                  isCompleting={this.state.completingTask}
                 />
               )}
 
-            {isComplete && !needsRevised && (
+            {!this.state.completingTask && isComplete && !needsRevised && (
               <TaskNextControl
                 {...this.props}
                 className="mr-mt-1"
@@ -512,6 +523,8 @@ export class ActiveTaskControls extends Component {
                 chooseNextTask={this.chooseNextTask}
                 clearNextTask={this.clearNextTask}
                 requestedNextTask={this.state.requestedNextTask}
+                disabled={this.state.completingTask}
+                isCompleting={this.state.completingTask}
               />
             )}
 
@@ -538,6 +551,8 @@ export class ActiveTaskControls extends Component {
                 onCancel={this.resetConfirmation}
                 needsRevised={this.state.submitRevision}
                 fromInbox={fromInbox}
+                disabled={this.state.completingTask}
+                isCompleting={this.state.completingTask}
               />
             )}
           </Fragment>

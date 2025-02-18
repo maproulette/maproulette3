@@ -29,6 +29,11 @@ export class TaskCommentInput extends Component {
     }
   };
 
+  handleCancel = () => {
+    this.setState({ isSubmitActionPerformed: false, showingPreview: false });
+    this.props.cancelComment();
+  };
+
   handleChange = (value) => {
     if (value.length <= this.props.maxCharacterCount) {
       this.props.commentChanged(value);
@@ -108,11 +113,18 @@ export class TaskCommentInput extends Component {
             disableResize={this.props.disableResize}
           />
         )}
-        {this.props.submitComment && (
-          <div className="mr-my-1 mr-flex mr-justify-end">
-            <button className="mr-button mr-button--link" onClick={this.handleSubmit}>
-              <FormattedMessage {...messages.submitCommentLabel} />
-            </button>
+        {(this.props.cancelComment || this.props.submitComment) && (
+          <div className="mr-my-1 mr-flex mr-justify-end mr-gap-4">
+            {this.props.cancelComment && (
+              <button className="mr-button mr-button--link" onClick={this.handleCancel}>
+                <FormattedMessage {...messages.cancelCommentLabel} />
+              </button>
+            )}
+            {this.props.submitComment && (
+              <button className="mr-button mr-button--link" onClick={this.handleSubmit}>
+                <FormattedMessage {...messages.submitCommentLabel} />
+              </button>
+            )}
           </div>
         )}
       </div>

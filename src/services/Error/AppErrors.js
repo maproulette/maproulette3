@@ -36,6 +36,7 @@ export default {
     removeTaskFromBundleFailure: messages.removeTaskFromBundleFailure,
     bundleCooperative: messages.taskBundleCooperative,
     addCommentFailure: messages.addCommentFailure,
+    editCommentFailure: messages.editCommentFailure,
     bundleNotCooperative: messages.taskBundleNotCooperative,
     unableToBundleTasks: messages.unableToBundleTasks,
     taskAlreadyBundled: messages.taskAlreadyBundled,

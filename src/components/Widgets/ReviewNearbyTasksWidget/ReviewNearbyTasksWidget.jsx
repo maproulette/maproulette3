@@ -2,7 +2,6 @@ import bbox from "@turf/bbox";
 import { featureCollection, point } from "@turf/helpers";
 import _get from "lodash/get";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { Popup } from "react-leaflet";
@@ -76,7 +75,7 @@ export default class ReviewNearbyTasksWidget extends Component {
 
   initializeWebsocketSubscription(prevProps = {}) {
     const challengeId = this.props.task?.parent?.id;
-    if (_isFinite(challengeId) && challengeId !== prevProps.task?.parent?.id) {
+    if (Number.isFinite(challengeId) && challengeId !== prevProps.task?.parent?.id) {
       this.props.subscribeToChallengeTaskMessages(challengeId);
     }
   }
@@ -125,8 +124,8 @@ export default class ReviewNearbyTasksWidget extends Component {
     }
 
     if (
-      _isFinite(this.props.task?.id) &&
-      _isFinite(prevProps?.task?.id) &&
+      Number.isFinite(this.props.task?.id) &&
+      Number.isFinite(prevProps?.task?.id) &&
       this.props.task.id !== prevProps.task.id
     ) {
       this.props.resetSelectedTasks();
@@ -140,7 +139,7 @@ export default class ReviewNearbyTasksWidget extends Component {
   componentWillUnmount() {
     this.props.resetSelectedTasks();
     const challengeId = this.props.task?.parent?.id;
-    if (_isFinite(challengeId)) {
+    if (Number.isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId);
     }
   }

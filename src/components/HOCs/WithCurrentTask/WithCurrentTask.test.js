@@ -78,7 +78,7 @@ test("mapDispatchToProps maps some functions", () => {
   mapDispatchToProps(dispatch, {});
 });
 
-test("mapDispatchToProps completeTask calls completeTask", () => {
+test("mapDispatchToProps completeTask calls completeTask", async () => {
   const dispatch = vi.fn(() => Promise.resolve());
   const history = {
     push: vi.fn(),
@@ -86,7 +86,7 @@ test("mapDispatchToProps completeTask calls completeTask", () => {
 
   const mappedProps = mapDispatchToProps(dispatch, { history });
 
-  mappedProps.completeTask(task, challenge.id, completionStatus);
+  await mappedProps.completeTask(task, challenge.id, completionStatus);
   expect(dispatch).toBeCalled();
   expect(completeTask).toBeCalled();
 });
@@ -124,7 +124,10 @@ test("completeTask calls loadRandomTaskFromChallenge without proximate task by d
     push: vi.fn(),
   };
 
-  const mappedProps = mapDispatchToProps(dispatch, { history, challengeId: challenge.id });
+  const mappedProps = mapDispatchToProps(dispatch, {
+    history,
+    challengeId: challenge.id,
+  });
 
   await mappedProps.completeTask(
     task,
@@ -143,7 +146,10 @@ test("completeTask calls loadRandomTaskFromChallenge with task if proximate load
     push: vi.fn(),
   };
 
-  const mappedProps = mapDispatchToProps(dispatch, { history, challengeId: challenge.id });
+  const mappedProps = mapDispatchToProps(dispatch, {
+    history,
+    challengeId: challenge.id,
+  });
 
   await mappedProps.completeTask(
     task,
@@ -179,7 +185,10 @@ test("completeTask routes the user to the new task if there is one", async () =>
     push: vi.fn(),
   };
 
-  const mappedProps = mapDispatchToProps(dispatch, { history, challengeId: challenge.id });
+  const mappedProps = mapDispatchToProps(dispatch, {
+    history,
+    challengeId: challenge.id,
+  });
 
   await mappedProps.completeTask(
     task,

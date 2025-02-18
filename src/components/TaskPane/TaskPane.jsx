@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _findIndex from "lodash/findIndex";
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -95,6 +94,7 @@ export class TaskPane extends Component {
     completionResponses: null,
     showLockFailureDialog: false,
     needsResponses: false,
+    completingTask: false,
   };
 
   tryLockingTask = () => {
@@ -123,7 +123,7 @@ export class TaskPane extends Component {
    * WithCurrentTask, but we intercept the call so that we can manage our
    * transition animation as the task prepares to complete.
    */
-  completeTask = (
+  completeTask = async (
     task,
     challengeId,
     taskStatus,
@@ -137,8 +137,8 @@ export class TaskPane extends Component {
     tagEdits,
     taskBundle,
   ) => {
-    this.props
-      .completeTask(
+    try {
+      await this.props.completeTask(
         task,
         challengeId,
         taskStatus,
@@ -152,10 +152,12 @@ export class TaskPane extends Component {
         tagEdits,
         this.state.completionResponses,
         taskBundle,
-      )
-      .then(() => {
-        this.clearCompletingTask();
-      });
+      );
+      this.clearCompletingTask();
+    } catch (error) {
+      console.error("Error completing task:", error);
+      throw error;
+    }
   };
 
   clearCompletingTask = () => {
@@ -331,9 +333,11 @@ export class TaskPane extends Component {
                           </span>
                           <Link
                             to={
-                              _isFinite(this.props.virtualChallengeId)
+                              Number.isFinite(this.props.virtualChallengeId)
                                 ? `/browse/virtual/${this.props.virtualChallengeId}`
-                                : `/browse/challenges/${this.props.task?.parent?.id ?? this.props.task.parent}`
+                                : `/browse/challenges/${
+                                    this.props.task?.parent?.id ?? this.props.task.parent
+                                  }`
                             }
                             className="mr-button mr-button--xsmall mr-ml-3"
                           >
@@ -364,7 +368,7 @@ export class TaskPane extends Component {
                       <ul className="mr-list-dropdown">{favoriteControl}</ul>
                       <hr className="mr-rule-dropdown" />
                       <ul className="mr-list-dropdown">
-                        {_isFinite(this.props.virtualChallengeId) && (
+                        {Number.isFinite(this.props.virtualChallengeId) && (
                           <li>
                             <CopyToClipboard
                               text={`${window.env.REACT_APP_URL}/browse/virtual/${this.props.virtualChallengeId}`}
@@ -424,14 +428,9 @@ export class TaskPane extends Component {
             needsResponses={this.state.needsResponses}
             templateRevision={isCompletionStatus(this.props.task.status)}
           />
-          {this.props.completingTask && this.props.completingTask === this.props.task.id && (
-            <div className="mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200 mr-bg-blue-firefly-75 mr-flex mr-justify-center mr-items-center">
-              <BusySpinner big inline />
-            </div>
-          )}
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
-          <MapPane completingTask={this.props.completingTask}>
+          <MapPane>
             <TaskMap
               isMobile
               task={this.props.task}

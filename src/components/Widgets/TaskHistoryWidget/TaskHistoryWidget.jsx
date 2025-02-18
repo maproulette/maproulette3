@@ -1,5 +1,4 @@
 import _each from "lodash/each";
-import _indexOf from "lodash/indexOf";
 import _remove from "lodash/remove";
 import { Component, createRef } from "react";
 import { FormattedMessage } from "react-intl";
@@ -42,7 +41,7 @@ export default class TaskHistoryWidget extends Component {
 
   toggleSelection = (timestamp) => {
     const diffTimestamps = this.state.selectedTimestamps;
-    if (_indexOf(diffTimestamps, timestamp.toString()) !== -1) {
+    if (diffTimestamps.indexOf(timestamp.toString()) !== -1) {
       _remove(diffTimestamps, timestamp);
     } else {
       diffTimestamps.push(timestamp.toString());
@@ -89,6 +88,12 @@ export default class TaskHistoryWidget extends Component {
       this.props.reloadHistory();
     });
     this.setComment("");
+  };
+
+  editComment = (commentId, comment) => {
+    this.props.editTaskComment(this.props.task, commentId, comment).then(() => {
+      this.props.reloadHistory();
+    });
   };
 
   render() {
@@ -157,6 +162,7 @@ export default class TaskHistoryWidget extends Component {
           selectDiffs={this.state.diffSelectionActive}
           toggleSelection={this.toggleSelection}
           selectedTimestamps={this.state.selectedTimestamps}
+          editComment={this.editComment}
         />
       </QuickWidget>
     );

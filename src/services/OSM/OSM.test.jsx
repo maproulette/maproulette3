@@ -60,7 +60,10 @@ describe("OSM Service Functions", () => {
 
     Object.entries(statusToError).forEach(([status, error]) => {
       test(`should handle ${status} error`, async () => {
-        global.fetch.mockResolvedValueOnce({ ok: false, status: Number(status) });
+        global.fetch.mockResolvedValueOnce({
+          ok: false,
+          status: Number(status),
+        });
         await expect(fetchOSMData("0,0,1,1")).rejects.toEqual(error);
       });
     });
@@ -72,7 +75,10 @@ describe("OSM Service Functions", () => {
 
     const testXMLResponses = [
       { xml: `<osm><node id="1"></node></osm>`, expectedLength: 1 },
-      { xml: `<?xml version="1.0" encoding="UTF-8"?><osm></osm>`, expectedLength: 1 },
+      {
+        xml: `<?xml version="1.0" encoding="UTF-8"?><osm></osm>`,
+        expectedLength: 1,
+      },
       { xml: `<osm><unknown id="1"></unknown></osm>`, expectedLength: 1 },
     ];
 
@@ -92,6 +98,22 @@ describe("OSM Service Functions", () => {
         expect(elements.length).toBe(expectedLength);
       });
     });
+
+    describe("handleOSMError", () => {
+      const errorCases = [
+        { status: 400, error: AppErrors.osm.requestTooLarge },
+        { status: 404, error: AppErrors.osm.elementMissing },
+        { status: 509, error: AppErrors.osm.bandwidthExceeded },
+        { status: 418, error: AppErrors.osm.fetchFailure }, // Unknown status
+      ];
+
+      errorCases.forEach(({ status, error }) => {
+        test(`should handle ${status} error`, async () => {
+          global.fetch.mockResolvedValueOnce({ ok: false, status });
+          await expect(fetchOSMData("0,0,1,1")).rejects.toEqual(error);
+        });
+      });
+    });
   });
 
   describe("fetchOSMElement", () => {
@@ -103,7 +125,10 @@ describe("OSM Service Functions", () => {
 
     Object.entries(statusToError).forEach(([status, error]) => {
       test(`should handle ${status} error`, async () => {
-        global.fetch.mockResolvedValueOnce({ ok: false, status: Number(status) });
+        global.fetch.mockResolvedValueOnce({
+          ok: false,
+          status: Number(status),
+        });
         await expect(fetchOSMElement("node/12345")).rejects.toEqual(error);
       });
     });
@@ -177,18 +202,21 @@ describe("OSM Service Functions", () => {
       {
         history: {
           elements: [
-            { id: "1", changeset: "100" },
-            { id: "2", changeset: "101" },
+            { id: "1", changeset: 100 },
+            { id: "2", changeset: 101 },
           ],
         },
-        changesetsXML: `<osm><changeset id="100" details="changeset 100 details"></changeset><changeset id="101" details="changeset 101 details"></changeset></osm>`,
+        changesetsXML: `<osm>
+          <changeset id="100" details="changeset 100 details"></changeset>
+          <changeset id="101" details="changeset 101 details"></changeset>
+        </osm>`,
         expectedLength: 2,
       },
       {
         history: {
           elements: [
-            { id: "1", changeset: "999" },
-            { id: "2", changeset: "888" },
+            { id: "1", changeset: 999 },
+            { id: "2", changeset: 888 },
           ],
         },
         changesetsXML: "<osm></osm>",
@@ -199,28 +227,44 @@ describe("OSM Service Functions", () => {
     testCases.forEach(({ history, changesetsXML, expectedLength }) => {
       test("should handle changesets correctly", async () => {
         global.fetch
-          .mockResolvedValueOnce({ ok: true, json: vi.fn().mockResolvedValue(history) })
-          .mockResolvedValueOnce({ ok: true, text: vi.fn().mockResolvedValue(changesetsXML) });
+          .mockResolvedValueOnce({
+            ok: true,
+            json: vi.fn().mockResolvedValue(history),
+          })
+          .mockResolvedValueOnce({
+            ok: true,
+            text: vi.fn().mockResolvedValue(changesetsXML),
+          });
 
         const result = await fetchOSMElementHistory("way/12345", true);
+
         expect(result).toHaveLength(expectedLength);
-        expect(result[0].changeset).toBe(history.elements[0].changeset);
-        expect(result[1].changeset).toBe(history.elements[1].changeset);
+
+        result.forEach((element, index) => {
+          const originalChangeset = history.elements[index].changeset;
+
+          // If the changeset was found in the XML response, it should be an object
+          const changesetInXML = changesetsXML.includes(`id="${originalChangeset}"`);
+          if (changesetInXML) {
+            expect(element.changeset).toEqual(
+              expect.objectContaining({
+                id: originalChangeset,
+                details: expect.any(String),
+              }),
+            );
+          } else {
+            // If not found in XML, it should remain as a number
+            expect(element.changeset).toBe(originalChangeset);
+          }
+        });
       });
     });
 
-    test("should handle 404 not found error", async () => {
-      global.fetch.mockResolvedValueOnce({ ok: false, status: 404 });
-      await expect(fetchOSMElementHistory("way/12345", true)).rejects.toEqual(
-        AppErrors.osm.elementMissing,
-      );
-    });
-
-    test("should handle invalid element IDs gracefully", async () => {
+    test("should handle missing changesets gracefully", async () => {
       const mockHistory = {
         elements: [
-          { id: "invalid_id", changeset: "100" },
-          { id: "another_invalid_id", changeset: "101" },
+          { id: "1", changeset: 100 },
+          { id: "2", changeset: 101 },
         ],
       };
 
@@ -237,8 +281,122 @@ describe("OSM Service Functions", () => {
       const history = await fetchOSMElementHistory("way/12345", true);
 
       expect(history).toHaveLength(2);
-      expect(history[0].changeset).toBe("100");
-      expect(history[1].changeset).toBe("101");
+      history.forEach((element, index) => {
+        // When no changeset data is found, the original number should be preserved
+        expect(element.changeset).toBe(mockHistory.elements[index].changeset);
+      });
+    });
+
+    test("should handle null changeset values", async () => {
+      const mockHistory = {
+        elements: [
+          { id: "1", changeset: null },
+          { id: "2", changeset: 101 },
+        ],
+      };
+
+      global.fetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: vi.fn().mockResolvedValue(mockHistory),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          text: vi
+            .fn()
+            .mockResolvedValue(
+              "<osm><changeset id='101' details='some details'></changeset></osm>",
+            ),
+        });
+
+      const history = await fetchOSMElementHistory("way/12345", true);
+
+      expect(history).toHaveLength(2);
+      expect(history[0].changeset).toBeNull();
+      expect(history[1].changeset).toEqual(
+        expect.objectContaining({
+          id: 101,
+          details: "some details",
+        }),
+      );
+    });
+
+    test("should handle malformed changeset response", async () => {
+      const mockHistory = {
+        elements: [
+          { id: "1", changeset: 100 },
+          { id: "2", changeset: 101 },
+        ],
+      };
+
+      // Mock a malformed XML response
+      global.fetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: vi.fn().mockResolvedValue(mockHistory),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          text: vi.fn().mockResolvedValue("<osm><malformed>"),
+        });
+
+      const history = await fetchOSMElementHistory("way/12345", true);
+      expect(history).toHaveLength(2);
+      // Changesets should remain as numbers when XML parsing fails
+      expect(history[0].changeset).toBe(100);
+      expect(history[1].changeset).toBe(101);
+    });
+
+    test("should handle empty changeset array", async () => {
+      const mockHistory = {
+        elements: [{ id: "1", changeset: 100 }],
+      };
+
+      global.fetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: vi.fn().mockResolvedValue(mockHistory),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          // Return valid XML but with no changesets
+          text: vi.fn().mockResolvedValue("<osm></osm>"),
+        });
+
+      const history = await fetchOSMElementHistory("way/12345", true);
+      expect(history).toHaveLength(1);
+      // Changeset should remain as number when no changeset data is found
+      expect(history[0].changeset).toBe(100);
+    });
+
+    test("should handle undefined elements in history response", async () => {
+      const mockHistory = {
+        elements: undefined,
+      };
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: vi.fn().mockResolvedValue(mockHistory),
+      });
+
+      await expect(fetchOSMElementHistory("way/12345", true)).rejects.toEqual(
+        AppErrors.osm.fetchFailure,
+      );
+    });
+
+    test("should handle empty elements array in history response", async () => {
+      const mockHistory = {
+        elements: [],
+      };
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: vi.fn().mockResolvedValue(mockHistory),
+      });
+
+      await expect(fetchOSMElementHistory("way/12345", true)).rejects.toEqual(
+        AppErrors.osm.fetchFailure,
+      );
     });
   });
 
@@ -252,7 +410,10 @@ describe("OSM Service Functions", () => {
 
     Object.entries(statusToError).forEach(([status, error]) => {
       test(`should handle ${status} error`, async () => {
-        global.fetch.mockResolvedValueOnce({ ok: false, status: Number(status) });
+        global.fetch.mockResolvedValueOnce({
+          ok: false,
+          status: Number(status),
+        });
         await expect(fetchOSMChangesets(["123"])).rejects.toEqual(error);
       });
     });
@@ -263,19 +424,26 @@ describe("OSM Service Functions", () => {
     });
 
     test("should handle valid changesets response", async () => {
-      const changesetXML = '<osm><changeset id="1" details="details 1"></changeset></osm>';
+      const changesetXML = `
+        <osm>
+          <changeset id="1" details="details 1" user="user1"/>
+          <changeset id="2" details="details 2" user="user2"/>
+        </osm>`;
+
       global.fetch.mockResolvedValueOnce({
         ok: true,
         text: vi.fn().mockResolvedValue(changesetXML),
       });
 
-      const result = await fetchOSMChangesets(["123"]);
-      expect(result.length).toBe(1);
-      expect(result[0].id.toString()).toBe("1");
-      expect(result[0].details).toBe("details 1");
+      const result = await fetchOSMChangesets([1, 2]);
+      expect(result).toHaveLength(2);
+      expect(result[0]).toHaveProperty("id", 1);
+      expect(result[0]).toHaveProperty("details", "details 1");
+      expect(result[1]).toHaveProperty("id", 2);
+      expect(result[1]).toHaveProperty("details", "details 2");
     });
 
-    test("should handle empty changesets response", async () => {
+    test("should return empty array for empty changesets response", async () => {
       global.fetch.mockResolvedValueOnce({
         ok: true,
         text: vi.fn().mockResolvedValue("<osm></osm>"),

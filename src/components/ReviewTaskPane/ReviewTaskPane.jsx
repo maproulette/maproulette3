@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
@@ -84,7 +83,7 @@ export class ReviewTaskPane extends Component {
   };
 
   render() {
-    if (!_isFinite(this.props.task?.id)) {
+    if (!Number.isFinite(this.props.task?.id)) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
@@ -167,7 +166,7 @@ export class ReviewTaskPane extends Component {
           />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
-          <MapPane completingTask={this.state.completingTask}>
+          <MapPane>
             <TaskMap
               isMobile
               task={this.props.task}

@@ -2,7 +2,6 @@ import bbox from "@turf/bbox";
 import { featureCollection, point } from "@turf/helpers";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
 import _sum from "lodash/sum";
@@ -143,7 +142,7 @@ export default class TaskBundleWidget extends Component {
 
   initializeWebsocketSubscription(prevProps = {}) {
     const challengeId = this.props.task?.parent?.id;
-    if (_isFinite(challengeId) && challengeId !== prevProps.task?.parent?.id) {
+    if (Number.isFinite(challengeId) && challengeId !== prevProps.task?.parent?.id) {
       this.props.subscribeToChallengeTaskMessages(challengeId);
     }
   }
@@ -248,8 +247,8 @@ export default class TaskBundleWidget extends Component {
     }
 
     if (
-      _isFinite(this.props.task?.id) &&
-      _isFinite(prevProps?.task?.id) &&
+      Number.isFinite(this.props.task?.id) &&
+      Number.isFinite(prevProps?.task?.id) &&
       this.props.task.id !== prevProps.task.id
     ) {
       this.props.resetSelectedTasks();
@@ -273,7 +272,7 @@ export default class TaskBundleWidget extends Component {
   componentWillUnmount() {
     this.props.resetSelectedTasks();
     const challengeId = this.props.task?.parent?.id;
-    if (_isFinite(challengeId)) {
+    if (Number.isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId);
     }
 
@@ -504,7 +503,7 @@ const ActiveBundle = (props) => {
 };
 
 const BuildBundle = (props) => {
-  if (props.virtualChallenge || _isFinite(props.virtualChallengeId)) {
+  if (props.virtualChallenge || Number.isFinite(props.virtualChallengeId)) {
     return (
       <div className="mr-text-base">
         <FormattedMessage {...messages.noVirtualChallenges} />

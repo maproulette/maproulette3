@@ -1,6 +1,5 @@
 import Form from "@rjsf/core";
 import classNames from "classnames";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _merge from "lodash/merge";
 import _snakeCase from "lodash/snakeCase";
@@ -42,7 +41,7 @@ export class EditProject extends Component {
 
       // For new projects, generate a project name based on the display name.
       // It cannot start with "home_".
-      if (!_isFinite(formData.id)) {
+      if (!Number.isFinite(formData.id)) {
         formData.name = _snakeCase(formData.displayName).replace(/^home_/, "project_");
       }
 
@@ -65,7 +64,7 @@ export class EditProject extends Component {
   render() {
     // If a project id was specified, but there is no project, don't render
     // the form.
-    if (_isFinite(this.props.routedProjectId) && !this.props.project) {
+    if (Number.isFinite(this.props.routedProjectId) && !this.props.project) {
       return (
         <h1>
           <FormattedMessage {...messages.projectUnavailable} />
