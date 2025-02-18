@@ -7,16 +7,16 @@ import TaskLatLon from "../../TaskPane/TaskLatLon/TaskLatLon";
 import messages from "./Messages";
 
 const descriptor = {
-  widgetKey: "TaskLocationWidget",
+  widgetKey: "LocationWidget",
   label: messages.label,
   targets: [WidgetDataTarget.task],
-  minWidth: 4,
+  minWidth: 2,
   defaultWidth: 4,
-  minHeight: 4,
-  defaultHeight: 4,
+  minHeight: 2,
+  defaultHeight: 3,
 };
 
-export default class TaskLocationWidget extends Component {
+export default class LocationWidget extends Component {
   toggleReverseLonLat = (reverseLonLat) => {
     this.props.updateUserAppSetting(this.props.user.id, {
       reverseLonLat: !reverseLonLat,
@@ -42,4 +42,4 @@ export default class TaskLocationWidget extends Component {
   }
 }
 
-registerWidgetType(TaskLocationWidget, descriptor);
+registerWidgetType(LocationWidget, descriptor);
