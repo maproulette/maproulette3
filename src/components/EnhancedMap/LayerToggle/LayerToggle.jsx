@@ -3,7 +3,6 @@ import _clone from "lodash/clone";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
-import _noop from "lodash/noop";
 import _sortBy from "lodash/sortBy";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
@@ -279,16 +278,14 @@ const SimpleLayerToggle = (props) => {
         "mr-my-2 mr-flex mr-items-center mr-leading-none",
         props.toggleClassName,
       )}
-      onClick={props.toggleLayerActive}
     >
-      <input
-        id={props.layerLabel}
-        type="checkbox"
-        className="mr-checkbox-toggle"
-        checked={props.isLayerActive}
-        onChange={_noop}
-      />
-      <label htmlFor={props.layerLabel} className="mr-ml-3 mr-text-orange">
+      <label className="mr-text-orange mr-cursor-pointer">
+        <input
+          type="checkbox"
+          className="mr-checkbox-toggle mr-mr-3"
+          checked={props.isLayerActive}
+          onChange={props.toggleLayerActive}
+        />
         {props.layerLabel}
       </label>
     </div>
