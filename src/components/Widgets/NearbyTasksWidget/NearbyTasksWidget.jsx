@@ -1,7 +1,6 @@
 import bbox from "@turf/bbox";
 import { featureCollection, point } from "@turf/helpers";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
 import _sum from "lodash/sum";
@@ -93,7 +92,7 @@ export default class NearbyTasksWidget extends Component {
 
   initializeWebsocketSubscription(prevProps = {}) {
     const challengeId = this.props.task?.parent?.id;
-    if (_isFinite(challengeId) && challengeId !== prevProps.task?.parent?.id) {
+    if (Number.isFinite(challengeId) && challengeId !== prevProps.task?.parent?.id) {
       this.props.subscribeToChallengeTaskMessages(challengeId);
     }
   }
@@ -197,7 +196,7 @@ export default class NearbyTasksWidget extends Component {
   componentWillUnmount() {
     this.props.resetSelectedTasks();
     const challengeId = this.props.task?.parent?.id;
-    if (_isFinite(challengeId)) {
+    if (Number.isFinite(challengeId)) {
       this.props.unsubscribeFromChallengeTaskMessages(challengeId);
     }
   }
@@ -379,7 +378,7 @@ const BuildBundle = (props) => {
     bundleEditsDisabled,
   } = props;
 
-  if (virtualChallenge || _isFinite(virtualChallengeId)) {
+  if (virtualChallenge || Number.isFinite(virtualChallengeId)) {
     return (
       <div className="mr-text-base">
         <FormattedMessage {...messages.noVirtualChallenges} />
