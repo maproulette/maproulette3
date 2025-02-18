@@ -125,7 +125,11 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             normalizedResults?.entities?.tasks?.[normalizedResults.result]?.deleted
           ) {
             dispatch(addError(AppErrors.task.doesNotExist));
-            ownProps.history.push("/browse/challenges");
+            if (ownProps.match.params.challengeId) {
+              ownProps.history.push(`/browse/challenges/${ownProps.match.params.challengeId}`);
+            } else {
+              ownProps.history.push("/browse/challenges");
+            }
             return;
           }
 
