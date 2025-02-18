@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import AsAvatarUser from "../../interactions/User/AsAvatarUser";
 import messages from "./Messages";
 import "./Leaderboard.scss";
+import SvgSymbol from "../../components/SvgSymbol/SvgSymbol";
 
 class CardLeaderboard extends Component {
   state = {
@@ -28,9 +29,27 @@ class CardLeaderboard extends Component {
     const topChallengeItems = this.props.suppressTopChallenges
       ? null
       : _map(leader.topChallenges.slice(0, this.props.maxTopChallenges), (challenge) => (
-          <li key={challenge.id}>
-            <Link to={`/browse/challenges/${challenge.id}`} title={challenge.name}>
+          <li
+            key={challenge.id}
+            className={
+              challenge.status === 5
+                ? "mr-text-green-lighter mr-flex mr-items-center mr-justify-center"
+                : "mr-flex mr-items-center mr-justify-center"
+            }
+          >
+            <Link
+              to={`/browse/challenges/${challenge.id}`}
+              title={challenge.name}
+              className="mr-flex mr-items-center mr-justify-center"
+            >
               {_truncate(challenge.name, { length: 35 })}
+              {challenge.status === 5 && (
+                <SvgSymbol
+                  sym="check-circled-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-4 mr-h-4 mr-ml-2 mr-text-green"
+                />
+              )}
             </Link>
           </li>
         ));
