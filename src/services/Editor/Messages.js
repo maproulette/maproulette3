@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Editor
@@ -6,30 +6,30 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   none: {
     id: "Editor.none.label",
-    defaultMessage: "None"
+    defaultMessage: "None",
   },
   id: {
     id: "Editor.id.label",
-    defaultMessage: "Edit in iD (web editor)"
+    defaultMessage: "Edit in iD (web editor)",
   },
   josm: {
     id: "Editor.josm.label",
-    defaultMessage: "Edit in JOSM"
+    defaultMessage: "Edit in JOSM",
   },
   josmLayer: {
     id: "Editor.josmLayer.label",
-    defaultMessage: "Edit in new JOSM layer"
+    defaultMessage: "Edit in new JOSM layer",
   },
   josmFeatures: {
     id: "Editor.josmFeatures.label",
-    defaultMessage: "Edit just features in JOSM"
+    defaultMessage: "Edit just features in JOSM",
   },
   level0: {
     id: "Editor.level0.label",
-    defaultMessage: "Edit in Level0"
+    defaultMessage: "Edit in Level0",
   },
   rapid: {
     id: "Editor.rapid.label",
-    defaultMessage: "Edit in RapiD"
-  }
-})
+    defaultMessage: "Edit in Rapid",
+  },
+});

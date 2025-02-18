@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ProjectManagersWidget
@@ -11,56 +11,56 @@ export default defineMessages({
 
   noManagers: {
     id: "Admin.ProjectManagers.noManagers",
-    defaultMessage: "No Managers"
+    defaultMessage: "No Managers",
   },
 
   addManager: {
     id: "Admin.ProjectManagers.addManager",
-    defaultMessage: "Add Project Manager"
+    defaultMessage: "Add Project Manager",
   },
 
   projectOwner: {
     id: "Admin.ProjectManagers.projectOwner",
-    defaultMessage: "Owner"
+    defaultMessage: "Owner",
   },
 
   removeManagerLabel: {
     id: "Admin.ProjectManagers.controls.removeManager.label",
-    defaultMessage: "Remove Manager"
+    defaultMessage: "Remove Manager",
   },
 
   removeManagerConfirmation: {
     id: "Admin.ProjectManagers.controls.removeManager.confirmation",
-    defaultMessage: "Are you sure you wish to remove this manager from the project?"
+    defaultMessage: "Are you sure you wish to remove this manager from the project?",
   },
 
   chooseRole: {
     id: "Admin.ProjectManagers.controls.selectRole.choose.label",
-    defaultMessage: "Choose Role"
+    defaultMessage: "Choose Role",
   },
 
   osmUsernamePlaceholder: {
     id: "Admin.ProjectManagers.controls.chooseOSMUser.placeholder",
-    defaultMessage: "OpenStreetMap username"
+    defaultMessage: "OpenStreetMap username",
   },
 
   teamNamePlaceholder: {
     id: "Admin.ProjectManagers.controls.chooseTeam.placeholder",
-    defaultMessage: "Team name"
+    defaultMessage: "Team name",
   },
 
   teamOption: {
     id: "Admin.ProjectManagers.options.teams.label",
-    defaultMessage: "Team"
+    defaultMessage: "Team",
   },
 
   userOption: {
     id: "Admin.ProjectManagers.options.users.label",
-    defaultMessage: "User"
+    defaultMessage: "User",
   },
 
   teamIndicator: {
     id: "Admin.ProjectManagers.team.indicator",
-    defaultMessage: "Team"
+    defaultMessage: "Team",
   },
-})
+});

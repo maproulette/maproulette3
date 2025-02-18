@@ -1,49 +1,46 @@
-import { Fragment, Component } from "react";
 import Form from "@rjsf/core";
-import _isObject from "lodash/isObject";
-import _isEmpty from "lodash/isEmpty";
-import _omit from "lodash/omit";
 import _filter from "lodash/filter";
-import _get from "lodash/get";
+import _isEmpty from "lodash/isEmpty";
+import _isObject from "lodash/isObject";
 import _merge from "lodash/merge";
+import _omit from "lodash/omit";
+import { Component, Fragment } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
+import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
+import jsonLang from "react-syntax-highlighter/dist/esm/languages/hljs/json";
+import highlightColors from "react-syntax-highlighter/dist/esm/styles/hljs/agate";
+import AsEditableChallenge from "../../../../../interactions/Challenge/AsEditableChallenge";
+import { ChallengeCategoryKeywords } from "../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords";
+import BoundsSelectorModal from "../../../../BoundsSelectorModal/BoundsSelectorModal";
+import BusySpinner from "../../../../BusySpinner/BusySpinner";
 import {
+  ColumnRadioField,
   CustomArrayFieldTemplate,
   CustomFieldTemplate,
   CustomSelectWidget,
   CustomTextWidget,
-  ColumnRadioField,
+  LabelWithHelp,
   MarkdownDescriptionField,
   MarkdownEditField,
-  LabelWithHelp,
 } from "../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
-import KeywordAutosuggestInput from "../../../../KeywordAutosuggestInput/KeywordAutosuggestInput";
-import BoundsSelectorModal from "../../../../BoundsSelectorModal/BoundsSelectorModal";
-import WithCurrentProject from "../../../HOCs/WithCurrentProject/WithCurrentProject";
-import WithChallengeManagement from "../../../HOCs/WithChallengeManagement/WithChallengeManagement";
+import External from "../../../../External/External";
 import WithCurrentUser from "../../../../HOCs/WithCurrentUser/WithCurrentUser";
+import KeywordAutosuggestInput from "../../../../KeywordAutosuggestInput/KeywordAutosuggestInput";
+import Modal from "../../../../Modal/Modal";
+import WithChallengeManagement from "../../../HOCs/WithChallengeManagement/WithChallengeManagement";
+import WithCurrentProject from "../../../HOCs/WithCurrentProject/WithCurrentProject";
 import WithTallied from "../../../HOCs/WithTallied/WithTallied";
 import WithTaskPropertyStyleRules from "../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules";
-import External from "../../../../External/External";
-import Modal from "../../../../Modal/Modal";
-import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
-import jsonLang from 'react-syntax-highlighter/dist/esm/languages/hljs/json'
-import highlightColors from 'react-syntax-highlighter/dist/esm/styles/hljs/agate'
-import {
-  ChallengeCategoryKeywords
-} from "../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords";
-import AsEditableChallenge from "../../../../../interactions/Challenge/AsEditableChallenge";
-import BusySpinner from "../../../../BusySpinner/BusySpinner";
-import BulkEditSteps from "./BulkEditSteps";
-import { preparePriorityRuleGroupForSaving } from "./PriorityRuleGroup";
 import manageMessages from "../../Messages";
+import BulkEditSteps from "./BulkEditSteps";
 import messages from "./Messages";
+import { preparePriorityRuleGroupForSaving } from "./PriorityRuleGroup";
 import "./EditChallenge.scss";
 
-SyntaxHighlighter.registerLanguage('json', jsonLang)
+SyntaxHighlighter.registerLanguage("json", jsonLang);
 
-highlightColors.hljs.background="rgba(0, 0, 0, 0.15)"
+highlightColors.hljs.background = "rgba(0, 0, 0, 0.15)";
 
 export class EditChallenges extends Component {
   challengeState = null;
@@ -66,13 +63,14 @@ export class EditChallenges extends Component {
     window.scrollTo(0, 0);
 
     if (this.props.project?.id) {
-      const tallied = this.props.user?.properties?.mr3Frontend?.settings?.tallied?.[(this.props.project?.id)];
+      const tallied =
+        this.props.user?.properties?.mr3Frontend?.settings?.tallied?.[this.props.project?.id];
 
       if (!tallied || !tallied.length) {
-        this.props.history.push(`/admin/project/${this.props.project?.id}`)
+        this.props.history.push(`/admin/project/${this.props.project?.id}`);
       }
     } else {
-      this.props.history.push(`/admin/projects`)
+      this.props.history.push(`/admin/projects`);
     }
   }
 
@@ -82,8 +80,9 @@ export class EditChallenges extends Component {
     this.setState({ isSaving: true });
 
     this.prepareFormDataForSaving().then(async (formData) => {
-      const tallied = this.props.user?.properties?.mr3Frontend?.settings?.tallied?.[(this.props.project.id)];
-      const challengesEditing = this.props.challenges.filter(c => tallied.includes(c.id));
+      const tallied =
+        this.props.user?.properties?.mr3Frontend?.settings?.tallied?.[this.props.project.id];
+      const challengesEditing = this.props.challenges.filter((c) => tallied.includes(c.id));
 
       for (let i = 0; i < challengesEditing.length; i++) {
         const result = await this.props.saveChallenge({
@@ -98,9 +97,11 @@ export class EditChallenges extends Component {
           defaultBasemapId: formData.defaultBasemapId,
           defaultPriority: formData.defaultPriority,
           dataOriginDate: formData.dataOriginDate,
-          highPriorityRule: formData.highPriorityRule === "{}" ? undefined : formData.highPriorityRule,
-          mediumPriorityRule: formData.mediumPriorityRule === "{}" ? undefined : formData.mediumPriorityRule,
-          lowPriorityRule: formData.lowPriorityRule === "{}" ? undefined : formData.lowPriorityRule
+          highPriorityRule:
+            formData.highPriorityRule === "{}" ? undefined : formData.highPriorityRule,
+          mediumPriorityRule:
+            formData.mediumPriorityRule === "{}" ? undefined : formData.mediumPriorityRule,
+          lowPriorityRule: formData.lowPriorityRule === "{}" ? undefined : formData.lowPriorityRule,
         });
 
         if (result?.id) {
@@ -111,7 +112,7 @@ export class EditChallenges extends Component {
       }
 
       this.setState({ challengeNumberSaving: 0, isSaving: false });
-      return this.props.history.push(`admin/project/${this.props.project.id}`)
+      return this.props.history.push(`admin/project/${this.props.project.id}`);
     });
   };
 
@@ -124,13 +125,13 @@ export class EditChallenges extends Component {
   };
 
   transformErrors = (intl) => (errors) => {
-    return errors.map(error => {
+    return errors.map((error) => {
       if (error.name === "required") {
         error.message = intl.formatMessage(messages.requiredErrorLabel);
       }
       return error;
     });
-  }
+  };
 
   /** Cancel editing */
   cancel = () => {
@@ -151,9 +152,9 @@ export class EditChallenges extends Component {
    */
   prepareChallengeDataForForm = () => {
     let challengeData = Object.assign(
-      { parent: _get(this.props, "project.id") },
+      { parent: this.props.project?.id },
       _omit(this.props.challenge, ["activity", "comments"]),
-      this.state.formData
+      this.state.formData,
     );
 
     return challengeData;
@@ -162,12 +163,12 @@ export class EditChallenges extends Component {
   toggleConfirmModal = (bool) => {
     if (bool) {
       this.prepareFormDataForSaving().then(async (formData) => {
-        this.setState({ confirmModal: formData })
-      })
+        this.setState({ confirmModal: formData });
+      });
     } else {
-      this.setState({ confirmModal: false })
+      this.setState({ confirmModal: false });
     }
-  }
+  };
 
   /**
    * Performs the reverse of prepareChallengeDataForForm, taking the form data
@@ -176,40 +177,33 @@ export class EditChallenges extends Component {
    */
   prepareFormDataForSaving = async () => {
     const challengeData = AsEditableChallenge(
-      Object.assign(
-        this.prepareChallengeDataForForm(this.props.challenge),
-        this.state.formData
-      )
+      Object.assign(this.prepareChallengeDataForForm(this.props.challenge), this.state.formData),
     );
 
     challengeData.normalizeDefaultBasemap();
 
     challengeData.highPriorityRule = preparePriorityRuleGroupForSaving(
-      challengeData.highPriorityRules.ruleGroup
+      challengeData.highPriorityRules.ruleGroup,
     );
     delete challengeData.highPriorityRules;
 
     challengeData.mediumPriorityRule = preparePriorityRuleGroupForSaving(
-      challengeData.mediumPriorityRules.ruleGroup
+      challengeData.mediumPriorityRules.ruleGroup,
     );
     delete challengeData.mediumPriorityRules;
 
     challengeData.lowPriorityRule = preparePriorityRuleGroupForSaving(
-      challengeData.lowPriorityRules.ruleGroup
+      challengeData.lowPriorityRules.ruleGroup,
     );
     delete challengeData.lowPriorityRules;
 
     challengeData.tags =
-      ChallengeCategoryKeywords[challengeData.category] ||
-      ChallengeCategoryKeywords.other;
+      ChallengeCategoryKeywords[challengeData.category] || ChallengeCategoryKeywords.other;
 
     if (!_isEmpty(challengeData.additionalKeywords)) {
       challengeData.tags = challengeData.tags.concat(
         // split on comma, and filter out any empty-string keywords
-        _filter(
-          challengeData.additionalKeywords.split(/,+/),
-          (keyword) => !_isEmpty(keyword)
-        )
+        _filter(challengeData.additionalKeywords.split(/,+/), (keyword) => !_isEmpty(keyword)),
       );
     }
 
@@ -218,7 +212,7 @@ export class EditChallenges extends Component {
       // empty-string tags.
       challengeData.preferredTags = _filter(
         challengeData.taskTags.split(/,+/),
-        (tag) => !_isEmpty(tag)
+        (tag) => !_isEmpty(tag),
       );
     }
 
@@ -226,15 +220,15 @@ export class EditChallenges extends Component {
   };
 
   render() {
-    const tallied = this.props.user?.properties?.mr3Frontend?.settings?.tallied?.[(this.props.project?.id)];
+    const tallied =
+      this.props.user?.properties?.mr3Frontend?.settings?.tallied?.[this.props.project?.id];
 
-    if (
-      !this.props.project ||
-      this.state.isSaving
-    ) {
+    if (!this.props.project || this.state.isSaving) {
       return (
         <div className="pane-loading full-screen-height mr-flex mr-justify-center mr-items-center">
-          {this.state.challengeNumberSaving ? `Saving ${this.state.challengeNumberSaving} of ${tallied?.length}` : ""}
+          {this.state.challengeNumberSaving
+            ? `Saving ${this.state.challengeNumberSaving} of ${tallied?.length}`
+            : ""}
           <BusySpinner big />
         </div>
       );
@@ -248,10 +242,7 @@ export class EditChallenges extends Component {
         isNewChallenge={false}
         finish={this.finish}
         isLongForm={true}
-        renderStep={({
-          activeStep
-        }) => {
-
+        renderStep={({ activeStep }) => {
           // Override the standard form-field description renderer with our own that
           // supports Markdown. We pass this in to the `fields` prop on the Form.
           const customFields = {
@@ -278,9 +269,7 @@ export class EditChallenges extends Component {
                     {...props}
                     inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
                     dropdownInnerClassName="mr-bg-blue-darker"
-                    placeholder={props.intl.formatMessage(
-                      messages.addMRTagsPlaceholder
-                    )}
+                    placeholder={props.intl.formatMessage(messages.addMRTagsPlaceholder)}
                     tagType={props.uiSchema.tagType}
                   />
                 </Fragment>
@@ -318,7 +307,7 @@ export class EditChallenges extends Component {
                   </div>
                 </Fragment>
               );
-            })
+            }),
           };
 
           return (
@@ -340,7 +329,7 @@ export class EditChallenges extends Component {
                         this.state.extraErrors,
                         {
                           longForm: true,
-                        }
+                        },
                       )}
                       uiSchema={activeStep.uiSchema(
                         this.props.intl,
@@ -349,12 +338,10 @@ export class EditChallenges extends Component {
                         this.state.extraErrors,
                         {
                           longForm: true,
-                        }
+                        },
                       )}
                       className="form"
-                      validate={(formData, errors) =>
-                        this.validate(formData, errors, activeStep)
-                      }
+                      validate={(formData, errors) => this.validate(formData, errors, activeStep)}
                       transformErrors={this.transformErrors(this.props.intl)}
                       widgets={{
                         SelectWidget: CustomSelectWidget,
@@ -368,34 +355,31 @@ export class EditChallenges extends Component {
                       showErrorList={false}
                       formData={challengeData}
                       formContext={_merge(this.state.formContext, {
-                        bounding: _get(challengeData, "bounding"),
+                        bounding: challengeData?.bounding,
                         buttonAction: BoundsSelectorModal,
                       })}
                       onChange={this.changeHandler}
                       onSubmit={(formData) => {
-                        this.toggleConfirmModal(formData)
+                        this.toggleConfirmModal(formData);
                       }}
                       onError={() => null}
                       extraErrors={this.state.extraErrors}
-                    >
-                    </Form>
+                    ></Form>
                   </div>
                 </div>
               </BreadcrumbWrapper>
-              {
-                this.state.confirmModal
-                  ? <ConfirmationModal
-                      formData={this.state.confirmModal}
-                      submit={() => {
-                        this.toggleConfirmModal(false)
-                        this.handleSubmit()
-                      }}
-                      cancel={() => {
-                        this.toggleConfirmModal(false)
-                      }}
-                    />
-                  : null
-              }
+              {this.state.confirmModal ? (
+                <ConfirmationModal
+                  formData={this.state.confirmModal}
+                  submit={() => {
+                    this.toggleConfirmModal(false);
+                    this.handleSubmit();
+                  }}
+                  cancel={() => {
+                    this.toggleConfirmModal(false);
+                  }}
+                />
+              ) : null}
             </>
           );
         }}
@@ -405,18 +389,29 @@ export class EditChallenges extends Component {
 }
 
 const BreadcrumbWrapper = (props) => {
-  const tallied = props.user?.properties?.mr3Frontend?.settings?.tallied?.[(props.project.id)];
-  const challengesEditing = props.challenges.filter(c => tallied.includes(c.id));
+  const tallied = props.user?.properties?.mr3Frontend?.settings?.tallied?.[props.project.id];
+  const challengesEditing = props.challenges.filter((c) => tallied.includes(c.id));
 
   const renderChallengeButtons = () => {
-    return challengesEditing.map(c => {
+    return challengesEditing.map((c) => {
       return (
-        <div className="mr-border-green-lighter mr-border-2 mr-text-green-lighter mr-mr-4 mr-mb-4 mr-py-1 mr-px-2 mr-rounded" key={c.id}>{c.name}{" "}
-          {challengesEditing.length > 1 ? <span className="mr-pl-2 mr-text-white hover:mr-text-red mr-cursor-pointer" onClick={() => props.toggleChallengeTally(props.project.id, c.id)}>X</span> : null}
+        <div
+          className="mr-border-green-lighter mr-border-2 mr-text-green-lighter mr-mr-4 mr-mb-4 mr-py-1 mr-px-2 mr-rounded"
+          key={c.id}
+        >
+          {c.name}{" "}
+          {challengesEditing.length > 1 ? (
+            <span
+              className="mr-pl-2 mr-text-white hover:mr-text-red mr-cursor-pointer"
+              onClick={() => props.toggleChallengeTally(props.project.id, c.id)}
+            >
+              X
+            </span>
+          ) : null}
         </div>
-      )
-    })
-  }
+      );
+    });
+  };
 
   return (
     <div className="admin__manage edit-challenge">
@@ -467,9 +462,7 @@ const BreadcrumbWrapper = (props) => {
             </nav>
           </div>
 
-          <div className="mr-flex mr-flex-wrap">
-            {renderChallengeButtons()}
-          </div>
+          <div className="mr-flex mr-flex-wrap">{renderChallengeButtons()}</div>
 
           <div className="mr-max-w-3xl mr-mx-auto mr-bg-blue-dark mr-mt-8 mr-rounded">
             {props.children}
@@ -483,77 +476,77 @@ const BreadcrumbWrapper = (props) => {
 const confirmationMap = () => {
   return [
     {
-      id: 'additionalKeywords',
-      displayName: <FormattedMessage {...messages.additionalKeywordsLabel} />
+      id: "additionalKeywords",
+      displayName: <FormattedMessage {...messages.additionalKeywordsLabel} />,
     },
     {
-      id: 'taskTags',
-      displayName: <FormattedMessage {...messages.preferredTagsLabel} />
+      id: "taskTags",
+      displayName: <FormattedMessage {...messages.preferredTagsLabel} />,
     },
     {
-      id: 'exportableProperties',
-      displayName: <FormattedMessage {...messages.exportablePropertiesLabel} />
+      id: "exportableProperties",
+      displayName: <FormattedMessage {...messages.exportablePropertiesLabel} />,
     },
     {
-      id: 'customBasemap',
-      displayName: <FormattedMessage {...messages.customBasemapLabel} />
+      id: "customBasemap",
+      displayName: <FormattedMessage {...messages.customBasemapLabel} />,
     },
     {
-      id: 'instruction',
+      id: "instruction",
       displayName: <FormattedMessage {...messages.instructionLabel} />,
       props: {
         wrapLines: true,
-        lineProps: { style: { wordBreak: 'break-all', whiteSpace: 'pre-wrap'} }
-      }
+        lineProps: { style: { wordBreak: "break-all", whiteSpace: "pre-wrap" } },
+      },
     },
     {
-      id: 'defaultBasemapId',
+      id: "defaultBasemapId",
       displayName: <FormattedMessage {...messages.defaultBasemapLabel} />,
     },
     {
-      id: 'defaultPriority',
+      id: "defaultPriority",
       displayName: <FormattedMessage {...messages.defaultPriorityLabel} />,
     },
     {
-      id: 'dataOriginDate',
+      id: "dataOriginDate",
       displayName: <FormattedMessage {...messages.dataOriginDateLabel} />,
     },
     {
-      id: 'highPriorityRule',
+      id: "highPriorityRule",
       default: "{}",
       json: true,
       displayName: <FormattedMessage {...messages.highPriorityRulesLabel} />,
     },
     {
-      id: 'mediumPriorityRule',
+      id: "mediumPriorityRule",
       default: "{}",
       json: true,
       displayName: <FormattedMessage {...messages.mediumPriorityRulesLabel} />,
     },
     {
-      id: 'lowPriorityRule',
+      id: "lowPriorityRule",
       default: "{}",
       json: true,
       displayName: <FormattedMessage {...messages.lowPriorityRulesLabel} />,
-    }
-  ]
-}
+    },
+  ];
+};
 
 class ConfirmationModal extends Component {
   render() {
-    const { formData } = this.props
+    const { formData } = this.props;
     return (
       <External>
-        <Modal
-          fullScreen
-          isActive={true}
-          onClose={this.props.onClose}
-        >
-          <h1 style={{ marginBottom: 10 }}><FormattedMessage {...messages.reviewAndSubmitLabel} /></h1>
-          <div className="mr-text-red mr-text-lg" style={{ marginBottom: 14 }}><FormattedMessage {...messages.bulkEditWarningLabel} /></div>
+        <Modal fullScreen isActive={true} onClose={this.props.onClose}>
+          <h1 style={{ marginBottom: 10 }}>
+            <FormattedMessage {...messages.reviewAndSubmitLabel} />
+          </h1>
+          <div className="mr-text-red mr-text-lg" style={{ marginBottom: 14 }}>
+            <FormattedMessage {...messages.bulkEditWarningLabel} />
+          </div>
           {confirmationMap().map((data) => {
             if (formData[data.id] && formData[data.id] !== data.default) {
-              const val = data.json ? JSON.parse(formData[data.id]) : formData[data.id]
+              const val = data.json ? JSON.parse(formData[data.id]) : formData[data.id];
               return (
                 <div key={data.id} style={{ marginBottom: 10 }}>
                   <div>{data.displayName || data.id}</div>
@@ -561,7 +554,7 @@ class ConfirmationModal extends Component {
                     {JSON.stringify(val, null, 4)}
                   </SyntaxHighlighter>
                 </div>
-              )
+              );
             }
           })}
           <button
@@ -580,15 +573,13 @@ class ConfirmationModal extends Component {
           </button>
         </Modal>
       </External>
-    )
+    );
   }
 }
 
 export default WithCurrentUser(
   WithCurrentProject(
-    (WithTaskPropertyStyleRules(
-      WithChallengeManagement(WithTallied(injectIntl(EditChallenges))))
-    ),
-    { includeChallenges: true }
-  )
+    WithTaskPropertyStyleRules(WithChallengeManagement(WithTallied(injectIntl(EditChallenges)))),
+    { includeChallenges: true },
+  ),
 );

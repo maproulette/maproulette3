@@ -1,15 +1,15 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import classNames from "classnames";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FormattedDate, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
-import classNames from "classnames";
-import TaskCommentInput from "../TaskCommentInput/TaskCommentInput";
-import MarkdownContent from "../MarkdownContent/MarkdownContent";
+import defaultPic from "../../../images/user_no_image.png";
+import { UseRouter } from "../../hooks/UseRouter/UseRouter";
 import {
   fetchChallengeComments,
   postChallengeComment,
 } from "../../services/Challenge/ChallengeComments";
-import { UseRouter } from "../../hooks/UseRouter/UseRouter";
-import defaultPic from "../../../images/user_no_image.png";
+import MarkdownContent from "../MarkdownContent/MarkdownContent";
+import TaskCommentInput from "../TaskCommentInput/TaskCommentInput";
 
 const calcHeight = (offset) => {
   const variableHeight = window.innerHeight - offset;
@@ -29,24 +29,17 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
     return (
       <div
         key={comment.id}
-        className={classNames(
-          "mr-flex mr-my-3",
-          isUser ? "mr-justify-end" : ""
-        )}
+        className={classNames("mr-flex mr-my-3", isUser ? "mr-justify-end" : "")}
       >
         <div
           className={classNames("mr-flex", isUser ? "mr-flex-row-reverse" : "")}
-          style={{maxWidth: '100%'}}
+          style={{ maxWidth: "100%" }}
         >
           <div className="mr-px-2 mr-flex-0">
             <div className="mr-w-9">
               <img
                 className="mr-block mr-w-9 mr-h-9 mr-rounded-full"
-                src={
-                  comment.avatarUrl.includes("user_no_image")
-                    ? defaultPic
-                    : comment.avatarUrl
-                }
+                src={comment.avatarUrl.includes("user_no_image") ? defaultPic : comment.avatarUrl}
                 alt=""
               />
             </div>
@@ -54,16 +47,13 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
           <div
             className={classNames(
               "mr-p-1 mr-rounded mr-p-2 mr-flex-1 mr-w-full",
-              isUser ? "mr-bg-blue-light" : "mr-bg-green-dark"
+              isUser ? "mr-bg-blue-light" : "mr-bg-green-dark",
             )}
-            style={{maxWidth: '80%'}}
+            style={{ maxWidth: "80%" }}
           >
             <div>
               <div className="mr-text-sm">
-                <Link
-                  className="mr-text-yellow"
-                  to={`/user/metrics/${comment.osm_username}`}
-                >
+                <Link className="mr-text-yellow" to={`/user/metrics/${comment.osm_username}`}>
                   {comment.osm_username}
                 </Link>
                 {isOwner && " (Owner)"}
@@ -71,32 +61,16 @@ const renderCommentList = ({ osmId, comments, tasksOn, owner }) => {
               {comment.taskId && (
                 <div className="mr-text-sm">
                   <span>Re: </span>
-                  <Link to={`/task/${comment.taskId}`}>
-                    Task {comment.taskId}
-                  </Link>
+                  <Link to={`/task/${comment.taskId}`}>Task {comment.taskId}</Link>
                 </div>
               )}
             </div>
             <div>
-              <MarkdownContent
-                className="mr-text-lg"
-                allowShortCodes
-                markdown={comment.comment}
-              />
+              <MarkdownContent className="mr-text-lg" allowShortCodes markdown={comment.comment} />
             </div>
             <div className="mr-text-sm">
-              <FormattedTime
-                value={comment.created}
-                hour="2-digit"
-                minute="2-digit"
-              />
-              ,{" "}
-              <FormattedDate
-                value={comment.created}
-                year="numeric"
-                month="long"
-                day="2-digit"
-              />
+              <FormattedTime value={comment.created} hour="2-digit" minute="2-digit" />,{" "}
+              <FormattedDate value={comment.created} year="numeric" month="long" day="2-digit" />
             </div>
           </div>
           <div className="mr-flex-0">
@@ -173,10 +147,7 @@ export const ChallengeCommentsPane = (props) => {
         id="challengeCommentsPaneHeightContainer"
         style={{ height: calcHeight(offset) }}
       >
-        <div
-          id="challenge-comments-container"
-          className="mr-p-3 mr-h-full mr-overflow-scroll"
-        >
+        <div id="challenge-comments-container" className="mr-p-3 mr-h-full mr-overflow-scroll">
           {status === DATA_STATUSES.LOADING
             ? "Loading..."
             : renderCommentList({

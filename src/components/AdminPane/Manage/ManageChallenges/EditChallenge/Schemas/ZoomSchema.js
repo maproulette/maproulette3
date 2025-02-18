@@ -1,10 +1,14 @@
-import { ZOOM_LEVELS, MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
-       from '../../../../../../services/Challenge/ChallengeZoom/ChallengeZoom'
-import _get from 'lodash/get'
-import _isString from 'lodash/isString'
-import messages from '../Messages'
+import _get from "lodash/get";
+import _isString from "lodash/isString";
+import {
+  DEFAULT_ZOOM,
+  MAX_ZOOM,
+  MIN_ZOOM,
+  ZOOM_LEVELS,
+} from "../../../../../../services/Challenge/ChallengeZoom/ChallengeZoom";
+import messages from "../Messages";
 
-const STEP_ID = "Zoom"
+const STEP_ID = "Zoom";
 
 /**
  * Generates a JSON Schema describing zoom fields of Edit Challenge
@@ -21,37 +25,30 @@ const STEP_ID = "Zoom"
  */
 export const jsSchema = (intl) => {
   return {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       defaultZoom: {
         title: intl.formatMessage(messages.defaultZoomLabel),
         type: "number",
         enum: ZOOM_LEVELS,
-        default: numericEnvSetting(
-                   'REACT_APP_INITIAL_CHALLENGE_DEFAULT_ZOOM',
-                   DEFAULT_ZOOM),
+        default: numericEnvSetting("REACT_APP_INITIAL_CHALLENGE_DEFAULT_ZOOM", DEFAULT_ZOOM),
       },
       minZoom: {
         title: intl.formatMessage(messages.minZoomLabel),
         type: "number",
         enum: ZOOM_LEVELS,
-        default: numericEnvSetting(
-                   'REACT_APP_INITIAL_CHALLENGE_MIN_ZOOM',
-                   MIN_ZOOM),
+        default: numericEnvSetting("REACT_APP_INITIAL_CHALLENGE_MIN_ZOOM", MIN_ZOOM),
       },
       maxZoom: {
         title: intl.formatMessage(messages.maxZoomLabel),
         type: "number",
         enum: ZOOM_LEVELS,
-        default: numericEnvSetting(
-                  'REACT_APP_INITIAL_CHALLENGE_MAX_ZOOM',
-                  MAX_ZOOM),
-      }
+        default: numericEnvSetting("REACT_APP_INITIAL_CHALLENGE_MAX_ZOOM", MAX_ZOOM),
+      },
     },
-  }
-  
-}
+  };
+};
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -63,9 +60,12 @@ export const jsSchema = (intl) => {
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => {
-  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1
-  const toggleCollapsed = options.longForm && options.toggleCollapsed ? () => options.toggleCollapsed(STEP_ID) : undefined
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
+  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
+  const toggleCollapsed =
+    options.longForm && options.toggleCollapsed
+      ? () => options.toggleCollapsed(STEP_ID)
+      : undefined;
 
   return {
     defaultZoom: {
@@ -85,14 +85,14 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options={}) => 
       "ui:help": intl.formatMessage(messages.maxZoomDescription),
       "ui:collapsed": isCollapsed,
     },
-  }
-}
+  };
+};
 
 /**
  * Returns a numeric .env file setting as a numeric, converting from string if
  * necessary
  */
 export const numericEnvSetting = (settingName, defaultValue) => {
-  const setting = _get(window.env, settingName, defaultValue)
-  return _isString(setting) ? parseInt(setting, 10) : setting
-}
+  const setting = _get(window.env, settingName, defaultValue);
+  return _isString(setting) ? parseInt(setting, 10) : setting;
+};

@@ -1,79 +1,73 @@
-import { useState } from 'react'
-import { injectIntl, FormattedMessage } from 'react-intl'
-import classNames from 'classnames'
-import _isEmpty from 'lodash/isEmpty'
-import WithCurrentUser
-       from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
-import WithErrors from '../../components/HOCs/WithErrors/WithErrors'
-import MyTeams from '../../components/Teams/MyTeams/MyTeams'
-import ViewTeam from '../../components/Teams/ViewTeam/ViewTeam'
-import EditTeam from '../../components/Teams/EditTeam/EditTeam'
-import SvgSymbol from '../../components/SvgSymbol/SvgSymbol'
-import BusySpinner from '../../components/BusySpinner/BusySpinner'
-import SignIn from '../SignIn/SignIn'
-import teamsImage from '../../../images/teams.svg'
-import messages from '../../components/Widgets/TeamsWidget/Messages'
+import classNames from "classnames";
+import _isEmpty from "lodash/isEmpty";
+import { useState } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import teamsImage from "../../../images/teams.svg";
+import BusySpinner from "../../components/BusySpinner/BusySpinner";
+import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
+import WithErrors from "../../components/HOCs/WithErrors/WithErrors";
+import SvgSymbol from "../../components/SvgSymbol/SvgSymbol";
+import EditTeam from "../../components/Teams/EditTeam/EditTeam";
+import MyTeams from "../../components/Teams/MyTeams/MyTeams";
+import ViewTeam from "../../components/Teams/ViewTeam/ViewTeam";
+import messages from "../../components/Widgets/TeamsWidget/Messages";
+import SignIn from "../SignIn/SignIn";
 
-export const Teams = props => {
-  const [editingTeam, setEditingTeam] = useState(null)
-  const [viewingTeam, setViewingTeam] = useState(null)
-  const [showCards, setShowCards] = useState(false)
+export const Teams = (props) => {
+  const [editingTeam, setEditingTeam] = useState(null);
+  const [viewingTeam, setViewingTeam] = useState(null);
+  const [showCards, setShowCards] = useState(false);
 
   if (!props.user) {
-    return (
-      props.checkingLoginStatus ?
+    return props.checkingLoginStatus ? (
       <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
         <BusySpinner />
-      </div> :
+      </div>
+    ) : (
       <SignIn {...props} />
-    )
+    );
   }
 
-  let subheader = messages.title
-  let headerControls = null
-  let currentView = null
+  let subheader = messages.title;
+  let headerControls = null;
+  let currentView = null;
 
   if (editingTeam) {
     currentView = (
       <EditTeam
         {...props}
         team={editingTeam}
-        finish={success => {
-          setEditingTeam(null)
+        finish={(success) => {
+          setEditingTeam(null);
           if (success) {
-            setViewingTeam(null)
+            setViewingTeam(null);
           }
         }}
       />
-    )
+    );
 
-    subheader =
-      _isEmpty(editingTeam) ?
-      messages.createTeamTitle :
-      messages.editTeamTitle
-  }
-  else if (viewingTeam) {
-    currentView = <ViewTeam {...props} team={viewingTeam} />
-    subheader = messages.viewTeamTitle
+    subheader = _isEmpty(editingTeam) ? messages.createTeamTitle : messages.editTeamTitle;
+  } else if (viewingTeam) {
+    currentView = <ViewTeam {...props} team={viewingTeam} />;
+    subheader = messages.viewTeamTitle;
     headerControls = (
       <div className="mr-links-green-lighter">
         <a className="mr-mb-4" onClick={() => setViewingTeam(null)}>
           &larr; <FormattedMessage {...messages.myTeamsLabel} />
         </a>
       </div>
-    )
-  }
-  else {
+    );
+  } else {
     currentView = (
       <MyTeams
         {...props}
-        viewTeam={team => setViewingTeam(team)}
-        editTeam={team => setEditingTeam(team)}
+        viewTeam={(team) => setViewingTeam(team)}
+        editTeam={(team) => setEditingTeam(team)}
         createTeam={() => setEditingTeam({})}
         showCards={showCards}
       />
-    )
-    subheader = messages.myTeamsTitle
+    );
+    subheader = messages.myTeamsTitle;
     headerControls = (
       <div className="mr-flex mr-justify-end mr-items-center mr-mb-4">
         <a onClick={() => setShowCards(true)}>
@@ -82,7 +76,7 @@ export const Teams = props => {
             viewBox="0 0 20 20"
             className={classNames(
               "mr-h-4 mr-w-4 mr-ml-4",
-              showCards ? "mr-fill-white" : "mr-fill-white-50"
+              showCards ? "mr-fill-white" : "mr-fill-white-50",
             )}
           />
         </a>
@@ -92,12 +86,12 @@ export const Teams = props => {
             viewBox="0 0 20 20"
             className={classNames(
               "mr-h-4 mr-w-4 mr-ml-4",
-              !showCards ? "mr-fill-white" : "mr-fill-white-50"
+              !showCards ? "mr-fill-white" : "mr-fill-white-50",
             )}
           />
         </a>
       </div>
-    )
+    );
   }
 
   return (
@@ -109,10 +103,7 @@ export const Teams = props => {
               <h2 className="mr-text-yellow mr-font-light mr-text-4xl mr-mb-8">
                 <FormattedMessage {...messages.title} />
               </h2>
-              <button
-                className="mr-button"
-                onClick={() => setEditingTeam({})}
-              >
+              <button className="mr-button" onClick={() => setEditingTeam({})}>
                 <FormattedMessage {...messages.createTeamLabel} />
               </button>
             </div>
@@ -132,7 +123,7 @@ export const Teams = props => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default WithErrors(WithCurrentUser(injectIntl(Teams)))
+export default WithErrors(WithCurrentUser(injectIntl(Teams)));

@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { Component } from "react";
 
 /**
  * WithTallied provides the WrappedComponent with challenges that
@@ -7,12 +7,12 @@ import { Component } from 'react'
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithTallied = function(WrappedComponent) {
+export const WithTallied = function (WrappedComponent) {
   return class extends Component {
     state = {
       searchActive: false,
-      searchTallies: {}
-    }
+      searchTallies: {},
+    };
 
     /**
      * Retrieves all tallied challenges from the user's app settings
@@ -21,10 +21,10 @@ export const WithTallied = function(WrappedComponent) {
      */
     allTalliedEntities = () => {
       if (this.state.searchActive) {
-          return this.state.searchTallies
+        return this.state.searchTallies;
       }
-      return this.props.getUserAppSetting(this.props.user, 'tallied') || {}
-    }
+      return this.props.getUserAppSetting(this.props.user, "tallied") || {};
+    };
 
     /**
      * Retrieves tallied challenges from the given parent
@@ -32,8 +32,8 @@ export const WithTallied = function(WrappedComponent) {
      * @private
      */
     tallied = (parentId) => {
-      return this.allTalliedEntities()[parentId]
-    }
+      return this.allTalliedEntities()[parentId];
+    };
 
     /**
      * Updates the tallyMarks for a parentId.
@@ -41,19 +41,18 @@ export const WithTallied = function(WrappedComponent) {
      * @private
      */
     updateTallyMarks = (parentId, newTallyMarks) => {
-      const newTallyStore =
-        Object.assign({}, this.allTalliedEntities(), {
-          [parentId]: newTallyMarks,
-        })
+      const newTallyStore = Object.assign({}, this.allTalliedEntities(), {
+        [parentId]: newTallyMarks,
+      });
 
       if (this.state.searchActive) {
-        this.setState({searchTallies: newTallyStore})
+        this.setState({ searchTallies: newTallyStore });
       } else {
         this.props.updateUserAppSetting(this.props.user.id, {
-          'tallied': newTallyStore
-        })
+          tallied: newTallyStore,
+        });
       }
-    }
+    };
 
     /**
      * clears the tallyMarks for a parentId.
@@ -61,8 +60,8 @@ export const WithTallied = function(WrappedComponent) {
      * @private
      */
     clearTallies = (parentId) => {
-      this.updateTallyMarks(parentId, [])
-    }
+      this.updateTallyMarks(parentId, []);
+    };
 
     /**
      * Toggles the tallied status of the given challenge
@@ -70,11 +69,12 @@ export const WithTallied = function(WrappedComponent) {
      * @private
      */
     toggleTallyMark = (parentId, challengeId) => {
-      const newTallyMarks = new Set(this.tallied(parentId))
-      newTallyMarks.has(challengeId) ? newTallyMarks.delete(challengeId) :
-                                    newTallyMarks.add(challengeId)
-      this.updateTallyMarks(parentId, [...newTallyMarks])
-    }
+      const newTallyMarks = new Set(this.tallied(parentId));
+      newTallyMarks.has(challengeId)
+        ? newTallyMarks.delete(challengeId)
+        : newTallyMarks.add(challengeId);
+      this.updateTallyMarks(parentId, [...newTallyMarks]);
+    };
 
     /**
      * Resets all tallyMarks for a project.
@@ -83,12 +83,11 @@ export const WithTallied = function(WrappedComponent) {
      */
     resetTallyMarks = (parentId) => {
       if (this.state.searchActive) {
-        this.setState({searchTallies: {}})
+        this.setState({ searchTallies: {} });
+      } else {
+        this.updateTallyMarks(parentId, []);
       }
-      else {
-        this.updateTallyMarks(parentId, [])
-      }
-    }
+    };
 
     /**
      * Toggles whether we are in searh mode. When in search
@@ -97,27 +96,24 @@ export const WithTallied = function(WrappedComponent) {
      * @private
      */
     toggleSearchTallies = (parentId, updateChallenges = null) => {
-      const newSearchActive = !this.state.searchActive
+      const newSearchActive = !this.state.searchActive;
       if (updateChallenges) {
-        const newTallyStore =
-            Object.assign({}, this.allTalliedEntities(), {
-              [parentId]: updateChallenges,
-            })
+        const newTallyStore = Object.assign({}, this.allTalliedEntities(), {
+          [parentId]: updateChallenges,
+        });
 
         if (newSearchActive) {
-          this.setState({searchActive: newSearchActive, searchTallies: newTallyStore})
-        }
-        else {
+          this.setState({ searchActive: newSearchActive, searchTallies: newTallyStore });
+        } else {
           this.props.updateUserAppSetting(this.props.user.id, {
-            'tallied': newTallyStore
-          })
-          this.setState({searchActive: newSearchActive})
+            tallied: newTallyStore,
+          });
+          this.setState({ searchActive: newSearchActive });
         }
+      } else {
+        this.setState({ searchActive: newSearchActive });
       }
-      else {
-        this.setState({searchActive: newSearchActive})
-      }
-    }
+    };
 
     /**
      * Returns whether this challenge is marked as tallied.
@@ -125,25 +121,28 @@ export const WithTallied = function(WrappedComponent) {
      * @private
      */
     showAsTallied = (parentId, challengeId) => {
-      return (this.tallied(parentId) || []).indexOf(challengeId) !== -1
-    }
+      return (this.tallied(parentId) || []).indexOf(challengeId) !== -1;
+    };
 
     render() {
       // Don't render if we're still fetching user data
       if (this.props.checkingLoginStatus || !this.props.user.isLoggedIn) {
-        return null
+        return null;
       }
 
-      return <WrappedComponent
-              {...this.props}
-              talliedChallenges={this.tallied}
-              toggleChallengeTally={this.toggleTallyMark}
-              updateTallyMarks={this.updateTallyMarks}
-              showAsTallied={this.showAsTallied}
-              toggleSearchTallies={this.toggleSearchTallies}
-              clearTallies={this.clearTallies} />
+      return (
+        <WrappedComponent
+          {...this.props}
+          talliedChallenges={this.tallied}
+          toggleChallengeTally={this.toggleTallyMark}
+          updateTallyMarks={this.updateTallyMarks}
+          showAsTallied={this.showAsTallied}
+          toggleSearchTallies={this.toggleSearchTallies}
+          clearTallies={this.clearTallies}
+        />
+      );
     }
-  }
-}
+  };
+};
 
-export default WrappedComponent => WithTallied(WrappedComponent)
+export default (WrappedComponent) => WithTallied(WrappedComponent);

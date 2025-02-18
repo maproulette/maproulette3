@@ -1,23 +1,17 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import { WidgetDataTarget, registerWidgetType }
-       from '../../../services/Widget/Widget'
-import ChallengeProgress from '../../ChallengeProgress/ChallengeProgress'
-import BusySpinner from '../../BusySpinner/BusySpinner'
-import QuickWidget from '../../QuickWidget/QuickWidget'
-import messages from './Messages'
-import WithChallengeMetrics
-       from '../../AdminPane/HOCs/WithChallengeMetrics/WithChallengeMetrics'
-import { PROJECT_CHALLENGE_LIMIT } from '../../../services/Project/Project'
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { PROJECT_CHALLENGE_LIMIT } from "../../../services/Project/Project";
+import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
+import WithChallengeMetrics from "../../AdminPane/HOCs/WithChallengeMetrics/WithChallengeMetrics";
+import BusySpinner from "../../BusySpinner/BusySpinner";
+import ChallengeProgress from "../../ChallengeProgress/ChallengeProgress";
+import QuickWidget from "../../QuickWidget/QuickWidget";
+import messages from "./Messages";
 
 const descriptor = {
-  widgetKey: 'CompletionProgressWidget',
+  widgetKey: "CompletionProgressWidget",
   label: messages.label,
-  targets: [
-    WidgetDataTarget.challenges,
-    WidgetDataTarget.challenge,
-    WidgetDataTarget.task
-  ],
+  targets: [WidgetDataTarget.challenges, WidgetDataTarget.challenge, WidgetDataTarget.task],
   minWidth: 3,
   defaultWidth: 5,
   minHeight: 2,
@@ -25,29 +19,30 @@ const descriptor = {
   defaultConfiguration: {
     showByPriority: false,
   },
-}
+};
 
-const ChallengeProgressWithMetrics = WithChallengeMetrics(ChallengeProgress, true)
+const ChallengeProgressWithMetrics = WithChallengeMetrics(ChallengeProgress, true);
 
 export default class CompletionProgressWidget extends Component {
-  setShowByPriority = showByPriority => {
-    this.props.updateWidgetConfiguration({showByPriority: !!showByPriority})
-  }
+  setShowByPriority = (showByPriority) => {
+    this.props.updateWidgetConfiguration({ showByPriority: !!showByPriority });
+  };
 
   render() {
-    const challenge = this.props.task ?
-                      this.props.task.parent :
-                      this.props.challenge
+    const challenge = this.props.task ? this.props.task.parent : this.props.challenge;
 
-    let content = null
+    let content = null;
     if (this.props.singleProject) {
       if (!this.props.project) {
-        content = <BusySpinner />
-      }
-      else if (this.props.challengeLimitExceeded) {
-        content = <div className="mr-text-red">Sorry, project statistics are not available for projects with more than {PROJECT_CHALLENGE_LIMIT} challenges.</div>
-      }
-      else if (!this.props.challengeStatsAvailable) {
+        content = <BusySpinner />;
+      } else if (this.props.challengeLimitExceeded) {
+        content = (
+          <div className="mr-text-red">
+            Sorry, project statistics are not available for projects with more than{" "}
+            {PROJECT_CHALLENGE_LIMIT} challenges.
+          </div>
+        );
+      } else if (!this.props.challengeStatsAvailable) {
         content = (
           <button
             type="button"
@@ -56,10 +51,9 @@ export default class CompletionProgressWidget extends Component {
           >
             <FormattedMessage {...messages.loadStatsLabel} />
           </button>
-        )
-      }
-      else if (this.props.loadingChallengeStats) {
-        content = <BusySpinner />
+        );
+      } else if (this.props.loadingChallengeStats) {
+        content = <BusySpinner />;
       }
     }
 
@@ -72,7 +66,7 @@ export default class CompletionProgressWidget extends Component {
           showByPriority={this.props.widgetConfiguration.showByPriority}
           setShowByPriority={this.setShowByPriority}
         />
-      )
+      );
     }
 
     return (
@@ -83,8 +77,8 @@ export default class CompletionProgressWidget extends Component {
       >
         {content}
       </QuickWidget>
-    )
+    );
   }
 }
 
-registerWidgetType(CompletionProgressWidget, descriptor)
+registerWidgetType(CompletionProgressWidget, descriptor);

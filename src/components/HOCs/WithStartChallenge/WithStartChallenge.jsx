@@ -1,20 +1,19 @@
-import { Component } from 'react'
-import { connect } from 'react-redux'
-import { LatLng } from 'leaflet'
-import _get from 'lodash/get'
-import _sample from 'lodash/sample'
-import _map from 'lodash/map'
-import _compact from 'lodash/compact'
-import _isEmpty from 'lodash/isEmpty'
-import { createVirtualChallenge }
-       from '../../../services/VirtualChallenge/VirtualChallenge'
-import { loadRandomTaskFromChallenge,
-         loadRandomTaskFromVirtualChallenge }
-       from '../../../services/Task/Task'
-import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
-import { addError } from '../../../services/Error/Error'
-import AppErrors from '../../../services/Error/AppErrors'
-import WithOptionalManagement from '../WithOptionalManagement/WithOptionalManagement'
+import { LatLng } from "leaflet";
+import _compact from "lodash/compact";
+import _isEmpty from "lodash/isEmpty";
+import _map from "lodash/map";
+import _sample from "lodash/sample";
+import { Component } from "react";
+import { connect } from "react-redux";
+import AppErrors from "../../../services/Error/AppErrors";
+import { addError } from "../../../services/Error/Error";
+import {
+  loadRandomTaskFromChallenge,
+  loadRandomTaskFromVirtualChallenge,
+} from "../../../services/Task/Task";
+import { TaskStatus } from "../../../services/Task/TaskStatus/TaskStatus";
+import { createVirtualChallenge } from "../../../services/VirtualChallenge/VirtualChallenge";
+import WithOptionalManagement from "../WithOptionalManagement/WithOptionalManagement";
 
 /**
  * WithStartChallenge passes down a startChallenge function that, when invoked,
@@ -25,21 +24,19 @@ import WithOptionalManagement from '../WithOptionalManagement/WithOptionalManage
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithStartChallenge = WrappedComponent => {
+export const WithStartChallenge = (WrappedComponent) => {
   return WithOptionalManagement(
-    connect(null, mapDispatchToProps)(_WithStartChallenge(WrappedComponent))
-  )
-}
+    connect(null, mapDispatchToProps)(_WithStartChallenge(WrappedComponent)),
+  );
+};
 
-export const _WithStartChallenge = function(WrappedComponent) {
-   return class extends Component {
-     render() {
-       return (
-         <WrappedComponent isStarting={this.props.isActive()} {...this.props} />
-       )
-     }
-   }
- }
+export const _WithStartChallenge = function (WrappedComponent) {
+  return class extends Component {
+    render() {
+      return <WrappedComponent isStarting={this.props.isActive()} {...this.props} />;
+    }
+  };
+};
 
 /**
  * Return a task within the given challenge that is visible within the
@@ -49,39 +46,35 @@ export const _WithStartChallenge = function(WrappedComponent) {
  * @private
  */
 export const chooseVisibleTask = (challenge, challengeBounds, clusteredTasks) => {
-  if (challenge.id !== _get(clusteredTasks, 'challengeId') ||
-      _get(clusteredTasks, 'tasks.length', 0) === 0) {
-    return null
+  if (challenge.id !== clusteredTasks?.challengeId || (clusteredTasks?.tasks?.length ?? 0) === 0) {
+    return null;
   }
 
   // If no bounds available, or they don't match this challenge, just go with
   // the first task
-  if (!challengeBounds || !challengeBounds.bounds ||
-      challengeBounds.challengeId !== challenge.id) {
-    return clusteredTasks[0]
+  if (!challengeBounds || !challengeBounds.bounds || challengeBounds.challengeId !== challenge.id) {
+    return clusteredTasks[0];
   }
 
-  const createdTasks = []
-  const skippedTasks = []
-  let task = null
+  const createdTasks = [];
+  const skippedTasks = [];
+  let task = null;
 
   for (let i = 0; i < clusteredTasks.tasks.length; i++) {
-    task = clusteredTasks.tasks[i]
+    task = clusteredTasks.tasks[i];
 
-    if (task.point &&
-        challengeBounds.bounds.contains(new LatLng(task.point.lat, task.point.lng))) {
+    if (task.point && challengeBounds.bounds.contains(new LatLng(task.point.lat, task.point.lng))) {
       if (task.status === TaskStatus.created) {
-        createdTasks.push(task)
-      }
-      else if(task.status === TaskStatus.skipped) {
-        skippedTasks.push(task)
+        createdTasks.push(task);
+      } else if (task.status === TaskStatus.skipped) {
+        skippedTasks.push(task);
       }
     }
   }
 
   // Choose created tasks over skipped tasks, when possible
-  return createdTasks.length > 0 ? _sample(createdTasks) : _sample(skippedTasks)
-}
+  return createdTasks.length > 0 ? _sample(createdTasks) : _sample(skippedTasks);
+};
 
 /**
  * Opens the given task to begin work on.
@@ -90,13 +83,12 @@ export const chooseVisibleTask = (challenge, challengeBounds, clusteredTasks) =>
  */
 export const openTask = (dispatch, challenge, task, history) => {
   if (task) {
-    history.push(`/challenge/${task.parent}/task/${task.id}`)
-  }
-  else {
+    history.push(`/challenge/${task.parent}/task/${task.id}`);
+  } else {
     // No tasks left in this challenge, back to challenges.
-    dispatch(addError(AppErrors.task.none))
+    dispatch(addError(AppErrors.task.none));
   }
-}
+};
 
 export const mapDispatchToProps = (dispatch, ownProps) => ({
   /**
@@ -104,40 +96,43 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
    * challenge, an attempt is made to start with a task that is visible within
    * the current challenge map bounds. Otherwise a random task is loaded.
    */
-  startChallenge: challenge => {
-    ownProps.setActive(true)
+  startChallenge: (challenge) => {
+    ownProps.setActive(true);
 
     if (challenge.isVirtual) {
-      dispatch(loadRandomTaskFromVirtualChallenge(challenge.id)).then(task => {
-        if (task) {
-          ownProps.history.push(`/virtual/${challenge.id}/task/${task.id}`)
-          window.scrollTo(0, 0)
-        }
-        else {
-          dispatch(addError(AppErrors.task.none))
-        }
-      }).then(() => {
-        ownProps.setActive(false)
-      })
-    }
-    else {
-      const visibleTask = chooseVisibleTask(challenge,
-                                            _get(ownProps, 'mapBounds'),
-                                            ownProps.clusteredTasks)
-      if (visibleTask) {
-        ownProps.setActive(false)
-        openTask(dispatch, challenge, visibleTask, ownProps.history)
-        window.scrollTo(0, 0)
-      }
-      else {
-        dispatch(loadRandomTaskFromChallenge(challenge.id)).then(task => {
-          ownProps.setActive(false)
-          openTask(dispatch, challenge, task, ownProps.history)
-          window.scrollTo(0, 0)
-        }).catch(() => {
-          dispatch(addError(AppErrors.task.fetchFailure))
-          ownProps.setActive(false)
+      dispatch(loadRandomTaskFromVirtualChallenge(challenge.id))
+        .then((task) => {
+          if (task) {
+            ownProps.history.push(`/virtual/${challenge.id}/task/${task.id}`);
+            window.scrollTo(0, 0);
+          } else {
+            dispatch(addError(AppErrors.task.none));
+          }
         })
+        .then(() => {
+          ownProps.setActive(false);
+        });
+    } else {
+      const visibleTask = chooseVisibleTask(
+        challenge,
+        ownProps?.mapBounds,
+        ownProps.clusteredTasks,
+      );
+      if (visibleTask) {
+        ownProps.setActive(false);
+        openTask(dispatch, challenge, visibleTask, ownProps.history);
+        window.scrollTo(0, 0);
+      } else {
+        dispatch(loadRandomTaskFromChallenge(challenge.id))
+          .then((task) => {
+            ownProps.setActive(false);
+            openTask(dispatch, challenge, task, ownProps.history);
+            window.scrollTo(0, 0);
+          })
+          .catch(() => {
+            dispatch(addError(AppErrors.task.fetchFailure));
+            ownProps.setActive(false);
+          });
       }
     }
   },
@@ -145,36 +140,37 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
   /** Invoked when user wants to start a challenge with a specific task */
   startChallengeWithTask: (challengeId, isVirtual, taskId) => {
     if (isVirtual) {
-      ownProps.history.push(`/virtual/${challengeId}/task/${taskId}`)
+      ownProps.history.push(`/virtual/${challengeId}/task/${taskId}`);
+    } else {
+      ownProps.history.push(`/challenge/${challengeId}/task/${taskId}`);
     }
-    else {
-      ownProps.history.push(`/challenge/${challengeId}/task/${taskId}`)
-    }
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   },
 
   createVirtualChallenge: (name, clusters) => {
-    const tasks = _compact(_map(clusters, c => c.isTask ? c.taskId : null))
+    const tasks = _compact(_map(clusters, (c) => (c.isTask ? c.taskId : null)));
     return dispatch(
-      createVirtualChallenge(name, _isEmpty(tasks) ? null : tasks, null, _isEmpty(tasks) ? clusters : null)
-    ).then(virtualChallenge => {
+      createVirtualChallenge(
+        name,
+        _isEmpty(tasks) ? null : tasks,
+        null,
+        _isEmpty(tasks) ? clusters : null,
+      ),
+    ).then((virtualChallenge) => {
       if (!virtualChallenge) {
         // The service will have dispatched an appropriate error message
-        return
+        return;
       }
 
-      dispatch(
-        loadRandomTaskFromVirtualChallenge(virtualChallenge.id)
-      ).then(task => {
+      dispatch(loadRandomTaskFromVirtualChallenge(virtualChallenge.id)).then((task) => {
         if (task) {
-          ownProps.history.push(`/virtual/${virtualChallenge.id}/task/${task.id}`)
+          ownProps.history.push(`/virtual/${virtualChallenge.id}/task/${task.id}`);
+        } else {
+          dispatch(addError(AppErrors.task.none));
         }
-        else {
-          dispatch(addError(AppErrors.task.none))
-        }
-      })
-    })
+      });
+    });
   },
-})
+});
 
-export default WithStartChallenge
+export default WithStartChallenge;

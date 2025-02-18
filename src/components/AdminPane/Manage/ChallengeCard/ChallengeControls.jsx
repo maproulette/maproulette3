@@ -1,23 +1,21 @@
-import { Fragment, Component } from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames";
+import _isObject from "lodash/isObject";
+import _merge from "lodash/merge";
+import PropTypes from "prop-types";
+import { Component, Fragment } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import _get from "lodash/get";
-import _isObject from "lodash/isObject";
-import _isFinite from "lodash/isFinite";
-import _merge from "lodash/merge";
-import AsManager from "../../../../interactions/User/AsManager";
 import AsManageableChallenge from "../../../../interactions/Challenge/AsManageableChallenge";
+import AsManager from "../../../../interactions/User/AsManager";
 import {
   ChallengeStatus,
   isUsableChallengeStatus,
 } from "../../../../services/Challenge/ChallengeStatus/ChallengeStatus";
-import RebuildTasksControl from "../RebuildTasksControl/RebuildTasksControl";
-import ProjectPickerModal from "../ProjectPickerModal/ProjectPickerModal";
 import ConfirmAction from "../../../ConfirmAction/ConfirmAction";
 import messages from "../ChallengeDashboard/Messages";
+import ProjectPickerModal from "../ProjectPickerModal/ProjectPickerModal";
+import RebuildTasksControl from "../RebuildTasksControl/RebuildTasksControl";
 
 const isEmailRequired = (user) => {
   if (window.env.REACT_APP_EMAIL_ENFORCEMENT === "required") {
@@ -33,7 +31,7 @@ const handleTasksNeedRebuild = (dateString) => {
   if (dateString) {
     const lastRefreshDate = new Date(dateString);
     const today = new Date();
-    const staleMonths = Number(window.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6
+    const staleMonths = Number(window.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6;
     const staleDate = today.setMonth(today.getMonth() - staleMonths);
 
     return lastRefreshDate < staleDate;
@@ -67,19 +65,11 @@ export default class ChallengeControls extends Component {
   };
 
   archiveChallenge = (parent) => {
-    this.props.archiveChallenge(
-      parent.id,
-      this.props.challenge.id,
-      this.props.location.pathname
-    );
+    this.props.archiveChallenge(parent.id, this.props.challenge.id, this.props.location.pathname);
   };
 
   unarchiveChallenge = (parent) => {
-    this.props.unarchiveChallenge(
-      parent.id,
-      this.props.challenge.id,
-      this.props.location.pathname
-    );
+    this.props.unarchiveChallenge(parent.id, this.props.challenge.id, this.props.location.pathname);
   };
 
   render() {
@@ -91,28 +81,21 @@ export default class ChallengeControls extends Component {
     if (_isObject(this.props.challenge.parent)) {
       parent = this.props.challenge.parent;
     } else if (
-      _isFinite(this.props.challenge.parent) &&
-      this.props.challenge.parent === _get(this.props, "project.id")
+      Number.isFinite(this.props.challenge.parent) &&
+      this.props.challenge.parent === this.props.project?.id
     ) {
       parent = this.props.project;
     }
 
-    const inVirtualProject = _get(this.props, "project.isVirtual", false);
+    const inVirtualProject = this.props.project?.isVirtual ?? false;
     const manager = AsManager(this.props.user);
-    const projectId = _get(
-      this.props.challenge,
-      "parent.id",
-      this.props.challenge.parent
-    );
-    const status = _get(this.props.challenge, "status", ChallengeStatus.none);
-    const hasTasks = _get(this.props.challenge, "actions.total", 0) > 0;
-    const isArchived = _get(this.props.challenge, "isArchived");
+    const projectId = this.props.challenge?.parent?.id ?? this.props.challenge.parent;
+    const status = this.props.challenge?.status ?? ChallengeStatus.none;
+    const hasTasks = (this.props.challenge?.actions?.total ?? 0) > 0;
+    const isArchived = this.props.challenge?.isArchived;
     const requiresEmail = isEmailRequired(this.props.user);
-    const tasksNeedRebuild = handleTasksNeedRebuild(
-      _get(this.props.challenge, "lastTaskRefresh")
-    );
-    const disableUnarchive =
-      tasksNeedRebuild && _get(this.props.challenge, "systemArchivedAt");
+    const tasksNeedRebuild = handleTasksNeedRebuild(this.props.challenge?.lastTaskRefresh);
+    const disableUnarchive = tasksNeedRebuild && this.props.challenge?.systemArchivedAt;
 
     if (requiresEmail) {
       return (
@@ -142,7 +125,7 @@ export default class ChallengeControls extends Component {
             <div
               className={classNames(
                 this.props.controlClassName,
-                "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer"
+                "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer",
               )}
             >
               <FormattedMessage {...messages.copyChallengeURLLabel} />
@@ -154,11 +137,8 @@ export default class ChallengeControls extends Component {
             <Link
               to={{
                 pathname:
-                  `/admin/project/${projectId}/` +
-                  `challenge/${this.props.challenge.id}/edit`,
-                state: _merge(
-                  _get(this.props.searchCriteria, "filters"),
-                )
+                  `/admin/project/${projectId}/` + `challenge/${this.props.challenge.id}/edit`,
+                state: _merge(this.props.searchCriteria?.filters),
               }}
               className={this.props.controlClassName}
             >
@@ -182,11 +162,8 @@ export default class ChallengeControls extends Component {
             <Link
               to={{
                 pathname:
-                  `/admin/project/${projectId}/` +
-                  `challenge/${this.props.challenge.id}/clone`,
-                state: _merge(
-                  _get(this.props.searchCriteria, "filters")
-                ),
+                  `/admin/project/${projectId}/` + `challenge/${this.props.challenge.id}/clone`,
+                state: _merge(this.props.searchCriteria?.filters),
               }}
               className={this.props.controlClassName}
             >
@@ -195,9 +172,7 @@ export default class ChallengeControls extends Component {
 
             {manager.canAdministrateProject(parent) && (
               <ConfirmAction
-                title={this.props.intl.formatMessage(
-                  messages.deleteChallengeConfirm
-                )}
+                title={this.props.intl.formatMessage(messages.deleteChallengeConfirm)}
                 prompt={
                   <Fragment>
                     <div className="mr-text-mango mr-mb-6 mr-text-lg">
@@ -231,17 +206,12 @@ export default class ChallengeControls extends Component {
               <>
                 {disableUnarchive ? (
                   <>
-  
-                    <a
-                      onClick={() => null}
-                      style={{ color: "grey", cursor: "default" }}
-                    >
+                    <a onClick={() => null} style={{ color: "grey", cursor: "default" }}>
                       <FormattedMessage {...messages.unarchiveChallengeLabel} />
                     </a>
                   </>
                 ) : (
                   <>
-  
                     <a
                       onClick={() => this.unarchiveChallenge(parent)}
                       className={this.props.controlClassName}

@@ -27,6 +27,9 @@ jobs:
     - name: Install dependencies
       # --frozen-lockfile: don't generate a lockfile and fail if an update is needed
       run: yarn install --frozen-lockfile
+      
+    - name: Check for formatting and linting errors
+      run: yarn run check
 
     - name: Run build
       run: yarn run build
@@ -35,8 +38,3 @@ jobs:
 
     - name: Run the tests
       run: yarn test -- --coverage
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}

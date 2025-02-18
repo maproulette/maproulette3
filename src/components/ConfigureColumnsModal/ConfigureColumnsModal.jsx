@@ -1,11 +1,11 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import _map from 'lodash/map'
-import External from '../External/External'
-import Modal from '../Modal/Modal'
-import { FormattedMessage } from 'react-intl'
-import messages from './Messages'
+import _map from "lodash/map";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { FormattedMessage } from "react-intl";
+import External from "../External/External";
+import Modal from "../Modal/Modal";
+import messages from "./Messages";
 
 /**
  * ConfigureColumnsModal renders a modal for configuring table columns
@@ -15,74 +15,61 @@ import messages from './Messages'
 export default class ConfigureColumnsModal extends Component {
   onDragEnd = (result) => {
     // dropped outside the list or on itself
-    if (!result.destination ||
-        result.source.index === result.destination.index ) {
-      return
+    if (!result.destination || result.source.index === result.destination.index) {
+      return;
     }
 
-    this.props.reorderAddedColumn(
-      result.source.index,
-      result.destination.index
-    )
-  }
+    this.props.reorderAddedColumn(result.source.index, result.destination.index);
+  };
 
   close = () => {
-    this.props.saveColumnSettings()
-    this.props.onClose()
-  }
+    this.props.saveColumnSettings();
+    this.props.onClose();
+  };
 
   buildDraggableColumnList() {
-    let index = -1
+    let index = -1;
     return _map(this.props.addedColumns, (column, key) => {
-        index += 1
-        return (
-          <Draggable key={`added-${key}`} draggableId={key} index={index}>
-            {(provided) => (
-              <div
-                 ref={provided.innerRef}
-                 {...provided.draggableProps}
-                 {...provided.dragHandleProps}
-               >
-                  <div className="mr-flex">
-                    <div className="mr-flex-grow mr-text-base mr-text-white mr-my-2">
-                      {column.message}
-                    </div>
+      index += 1;
+      return (
+        <Draggable key={`added-${key}`} draggableId={key} index={index}>
+          {(provided) => (
+            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+              <div className="mr-flex">
+                <div className="mr-flex-grow mr-text-base mr-text-white mr-my-2">
+                  {column.message}
+                </div>
 
-                    {!column.permanent &&
-                      <div className="mr-text-sm mr-text-green-lighter mr-my-2">
-                        <button
-                          className="mr-text-current"
-                          onClick={() => this.props.removeColumn(key)}
-                        >
-                          <FormattedMessage {...messages.removeLabel} />
-                        </button>
-                      </div>
-                    }
+                {!column.permanent && (
+                  <div className="mr-text-sm mr-text-green-lighter mr-my-2">
+                    <button
+                      className="mr-text-current"
+                      onClick={() => this.props.removeColumn(key)}
+                    >
+                      <FormattedMessage {...messages.removeLabel} />
+                    </button>
                   </div>
+                )}
               </div>
-            )}
-          </Draggable>
-        )
-      })
+            </div>
+          )}
+        </Draggable>
+      );
+    });
   }
 
   render() {
-    const availableColumns = _map(this.props.availableColumns, (column, key) =>
+    const availableColumns = _map(this.props.availableColumns, (column, key) => (
       <li key={`available-${key}`} className="mr-flex mr-my-4">
-        <div className="mr-flex-grow mr-text-base mr-text-white">
-          {column.message}
-        </div>
+        <div className="mr-flex-grow mr-text-base mr-text-white">{column.message}</div>
 
         <div className="mr-text-sm mr-text-green-lighter">
-          <button
-            className="mr-text-current"
-            onClick={() => this.props.addColumn(key)}
-          >
+          <button className="mr-text-current" onClick={() => this.props.addColumn(key)}>
             <FormattedMessage {...messages.addLabel} />
           </button>
         </div>
       </li>
-    )
+    ));
 
     return (
       <External>
@@ -116,19 +103,16 @@ export default class ConfigureColumnsModal extends Component {
                     </div>
                   </header>
                   <div className="mr-card-widget__content">
-                  <DragDropContext onDragEnd={this.onDragEnd}>
-                    <Droppable droppableId="added-column-droppable">
-                    {(provided) => (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                      >
-                        {this.buildDraggableColumnList(provided)}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                    </Droppable>
-                  </DragDropContext>
+                    <DragDropContext onDragEnd={this.onDragEnd}>
+                      <Droppable droppableId="added-column-droppable">
+                        {(provided) => (
+                          <div {...provided.droppableProps} ref={provided.innerRef}>
+                            {this.buildDraggableColumnList(provided)}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
                   </div>
                 </section>
               </div>
@@ -141,7 +125,7 @@ export default class ConfigureColumnsModal extends Component {
           </div>
         </Modal>
       </External>
-    )
+    );
   }
 }
 
@@ -151,4 +135,4 @@ ConfigureColumnsModal.propTypes = {
   addedColumns: PropTypes.object.isRequired,
   availableColumns: PropTypes.object.isRequired,
   reorderAddedColumn: PropTypes.func.isRequired,
-}
+};

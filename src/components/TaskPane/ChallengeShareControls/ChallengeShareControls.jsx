@@ -1,28 +1,28 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { Component } from "react";
 import {
-  FacebookShareButton,
-  FacebookIcon,
-  TwitterShareButton,
-  TwitterIcon,
-  EmailShareButton,
   EmailIcon,
-} from 'react-share'
-import './ChallengeShareControls.scss'
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+} from "react-share";
+import "./ChallengeShareControls.scss";
 
 export default class ChallengeShareControls extends Component {
   render() {
     if (!this.props.challenge) {
-      return null
+      return null;
     }
 
-    const shareUrl = `${window.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`
-    const title = this.props.title || window.env.REACT_APP_TITLE
-    const hashtag = 'maproulette'
+    const shareUrl = `${window.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`;
+    const title = this.props.title || window.env.REACT_APP_TITLE;
+    const hashtag = "maproulette";
 
     return (
-      <div className={classNames('challenge-share-controls', this.props.className)}>
+      <div className={classNames("challenge-share-controls", this.props.className)}>
         <div className="share-control">
           <FacebookShareButton url={shareUrl} quote={title}>
             <span className="share-icon">
@@ -47,10 +47,10 @@ export default class ChallengeShareControls extends Component {
           </EmailShareButton>
         </div>
       </div>
-    )
+    );
   }
 }
 
 ChallengeShareControls.propTypes = {
   challenge: PropTypes.object,
-}
+};

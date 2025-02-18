@@ -1,7 +1,7 @@
-import { DropzoneTextUpload } from "../../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
-import AsEditableChallenge from "../../../../../../interactions/Challenge/AsEditableChallenge";
 import _isEmpty from "lodash/isEmpty";
 import _omit from "lodash/omit";
+import AsEditableChallenge from "../../../../../../interactions/Challenge/AsEditableChallenge";
+import { DropzoneTextUpload } from "../../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import messages from "../Messages";
 
 /**
@@ -17,12 +17,7 @@ import messages from "../Messages";
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (
-  intl,
-  user,
-  challengeData,
-  extraErrors,
-) => {
+export const jsSchema = (intl, user, challengeData, extraErrors) => {
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly();
 
   const schema = {
@@ -33,7 +28,7 @@ export const jsSchema = (
         title: intl.formatMessage(messages.nameLabel),
         type: "string",
         minLength: 3,
-        description: intl.formatMessage(messages.nameDescription), 
+        description: intl.formatMessage(messages.nameDescription),
       },
     },
     required: ["name"],
@@ -57,9 +52,8 @@ export const jsSchema = (
       overpassQL: {
         title: " ",
         description:
-          (sourceReadOnly
-            ? intl.formatMessage(messages.overpassQLReadOnly) + "\n\n"
-            : "") + intl.formatMessage(messages.overpassQLDescription),
+          (sourceReadOnly ? intl.formatMessage(messages.overpassQLReadOnly) + "\n\n" : "") +
+          intl.formatMessage(messages.overpassQLDescription),
         type: "string",
       },
       overpassTargetType: {
@@ -82,9 +76,7 @@ export const jsSchema = (
       source: { enum: ["Local File"] },
       localGeoJSON: {
         title: " ",
-        description: sourceReadOnly
-          ? intl.formatMessage(messages.localGeoJsonReadOnly)
-          : undefined,
+        description: sourceReadOnly ? intl.formatMessage(messages.localGeoJsonReadOnly) : undefined,
         type: "string",
       },
       dataOriginDate: {
@@ -128,15 +120,12 @@ export const jsSchema = (
       default: "Overpass Query",
     };
 
-    if (extraErrors && extraErrors.localGeoJSON) {
+    if (extraErrors?.localGeoJSON) {
       schema.properties.ignoreSourceErrors = {
         title: intl.formatMessage(messages.ignoreSourceErrorsLabel),
         type: "boolean",
         default: false,
-        enumNames: [
-          intl.formatMessage(messages.yesLabel),
-          intl.formatMessage(messages.noLabel),
-        ],      
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
       };
     }
 
@@ -148,17 +137,17 @@ export const jsSchema = (
   } else if (!_isEmpty(challengeData.overpassQL)) {
     schema.properties = Object.assign(
       schema.properties,
-      _omit(overpass.properties, ["dataOriginDate"])
+      _omit(overpass.properties, ["dataOriginDate"]),
     );
   } else if (!_isEmpty(challengeData.remoteGeoJson)) {
     schema.properties = Object.assign(
       schema.properties,
-      _omit(remoteUrl.properties, ["source", "overpassTargetType"])
+      _omit(remoteUrl.properties, ["source", "overpassTargetType"]),
     );
   } else {
     schema.properties = Object.assign(
       schema.properties,
-      _omit(localUpload.properties, ["source", "overpassTargetType"])
+      _omit(localUpload.properties, ["source", "overpassTargetType"]),
     );
   }
 
@@ -175,13 +164,7 @@ export const jsSchema = (
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (
-  intl,
-  user,
-  challengeData,
-  extraErrors,
-  options = {}
-) => {
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly();
 
   return {

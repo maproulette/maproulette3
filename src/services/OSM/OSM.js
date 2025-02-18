@@ -1,75 +1,84 @@
-import AppErrors from '../Error/AppErrors'
-import xmlToJSON from 'xmltojson'
-import { get, transform, map, each, isPlainObject } from 'lodash'
+import { each, isPlainObject, map, transform } from "lodash";
+import xmlToJSON from "xmltojson";
+import AppErrors from "../Error/AppErrors";
 
-const API_SERVER = window.env.REACT_APP_OSM_API_SERVER
+const API_SERVER = window.env.REACT_APP_OSM_API_SERVER;
 
 const OSM_ERRORS = {
   400: AppErrors.osm.requestTooLarge,
   404: AppErrors.osm.elementMissing,
   509: AppErrors.osm.bandwidthExceeded,
-}
+};
 
 const handleOSMError = (response) => {
-  const error = OSM_ERRORS[response.status] || AppErrors.osm.fetchFailure
-  throw error
-}
+  const error = OSM_ERRORS[response.status] || AppErrors.osm.fetchFailure;
+  throw error;
+};
 
 const handleFetchError = (error) => {
-  console.error(error)
+  console.error(error);
   if (Object.values(OSM_ERRORS).includes(error)) {
-    throw error
+    throw error;
   } else {
-    throw AppErrors.osm.fetchFailure
+    throw AppErrors.osm.fetchFailure;
   }
-}
+};
 
 /**
  * Normalize the xmlToJSON representation of XML attributes into key/value
  * pairs that are a bit easier to use
  */
 const normalizeAttributes = (json) => {
-  if (Array.isArray(json)) return json.map(normalizeAttributes)
-  if (!isPlainObject(json)) return json
+  if (Array.isArray(json)) return json.map(normalizeAttributes);
+  if (!isPlainObject(json)) return json;
 
   return transform(json, (result, value, key) => {
-    if (key === '_attr') {
-      Object.assign(result, transform(value, (res, v, k) => { res[k] = v['_value'] }, {}))
-    } else if (key !== '_text') {
-      result[key] = normalizeAttributes(value)
+    if (key === "_attr") {
+      Object.assign(
+        result,
+        transform(
+          value,
+          (res, v, k) => {
+            res[k] = v["_value"];
+          },
+          {},
+        ),
+      );
+    } else if (key !== "_text") {
+      result[key] = normalizeAttributes(value);
     }
-  })
-}
+  });
+};
 
 const fetchXMLData = async (uri) => {
   try {
-    const response = await fetch(uri)
+    const response = await fetch(uri);
     if (response.ok) {
-      const rawXML = await response.text()
-      return new DOMParser().parseFromString(rawXML, 'application/xml')
+      const rawXML = await response.text();
+      return new DOMParser().parseFromString(rawXML, "application/xml");
     } else {
-      handleOSMError(response)
+      handleOSMError(response);
     }
   } catch (error) {
-    handleFetchError(error)
+    handleFetchError(error);
   }
-}
+};
 
 /**
  * Generates a URL to the given user's OSM profile page
  */
 export const osmUserProfileURL = (osmUsername) => {
-  return `${window.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(osmUsername)}`
-}
+  return `${window.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(osmUsername)}`;
+};
 
 /**
  * Retrieve the OpenStreetMap XML data with nodes/ways/relations for the given
  * WSEN (comma-separated) bounding box string
  */
 export const fetchOSMData = async (bbox) => {
-  const uri = `${API_SERVER}/api/0.6/map?bbox=${bbox}`
-  return fetchXMLData(uri)
-}
+  const uri = `${API_SERVER}/api/0.6/map?bbox=${bbox}`;
+  return fetchXMLData(uri);
+};
 
 /**
  * Retrieve the current OpenStreetMap data for the given element `<type>/<id>`
@@ -81,13 +90,13 @@ export const fetchOSMData = async (bbox) => {
  * from the JSON response)
  */
 export const fetchOSMElement = async (idString, asXML = false) => {
-  const uri = `${API_SERVER}/api/0.6/${idString}`
-  const xmlDoc = await fetchXMLData(uri)
-  if (asXML) return xmlDoc
+  const uri = `${API_SERVER}/api/0.6/${idString}`;
+  const xmlDoc = await fetchXMLData(uri);
+  if (asXML) return xmlDoc;
 
-  const osmJSON = normalizeAttributes(xmlToJSON.parseXML(xmlDoc))
-  return get(osmJSON, `osm[0].${idString.split('/')[0]}[0]`)
-}
+  const osmJSON = normalizeAttributes(xmlToJSON.parseXML(xmlDoc));
+  return osmJSON?.osm?.[0]?.[idString.split("/")[0]]?.[0];
+};
 
 /**
  * Retrieve the history for the given OpenStreetMap element string (e.g.
@@ -95,38 +104,50 @@ export const fetchOSMElement = async (idString, asXML = false) => {
  * well (requiring an additional API call)
  */
 export const fetchOSMElementHistory = async (idString, includeChangesets = false) => {
-  if (!idString) return null
+  if (!idString) return null;
 
-  const uri = `${API_SERVER}/api/0.6/${idString}/history.json`
+  const uri = `${API_SERVER}/api/0.6/${idString}/history.json`;
   try {
-    const response = await fetch(uri)
+    const response = await fetch(uri);
     if (response.ok) {
-      const history = await response.json()
+      const history = await response.json();
       if (includeChangesets) {
-        const changesetIds = map(history.elements, 'changeset')
-        const changesetMap = new Map(await fetchOSMChangesets(changesetIds))
+        const changesetIds = map(history.elements, "changeset");
+        const changesetMap = await fetchOSMChangesets(changesetIds);
+        const mapfetchedIds = changesetMap.map((c) => c.id);
+        // Update each history element with its full changeset data
         each(history.elements, (entry) => {
-          if (changesetMap.has(entry.changeset)) entry.changeset = changesetMap.get(entry.changeset)
-        })
+          if (entry.changeset && mapfetchedIds.includes(entry.changeset)) {
+            // Store the changeset ID before overwriting
+            const changesetId = entry.changeset;
+            // Get the full changeset data
+            const changesetData = changesetMap.find((c) => c.id === changesetId);
+            // Merge the changeset data while preserving the ID
+            entry.changeset = {
+              id: changesetId,
+              ...changesetData,
+            };
+          }
+        });
       }
-      return history.elements
+      return history.elements;
     } else {
-      handleOSMError(response)
+      handleOSMError(response);
     }
   } catch (error) {
-    handleFetchError(error)
+    handleFetchError(error);
   }
-}
+};
 
 /**
  * Retrieve the specified OpenStreetMap changesets
  */
 export const fetchOSMChangesets = async (changesetIds) => {
-  const uri = `${API_SERVER}/api/0.6/changesets?changesets=${changesetIds.join(',')}`
-  const xmlDoc = await fetchXMLData(uri)
-  const osmJSON = normalizeAttributes(xmlToJSON.parseXML(xmlDoc))
-  return osmJSON?.osm?.[0]?.changeset || []
-}
+  const uri = `${API_SERVER}/api/0.6/changesets?changesets=${changesetIds.join(",")}`;
+  const xmlDoc = await fetchXMLData(uri);
+  const osmJSON = normalizeAttributes(xmlToJSON.parseXML(xmlDoc));
+  return osmJSON?.osm?.[0]?.changeset || [];
+};
 
 /**
  * Retrieve OpenStreetMap user data for the user with the given OSM user id
@@ -134,19 +155,19 @@ export const fetchOSMChangesets = async (changesetIds) => {
  * redux store: it simply resolves the returned promise with the user data.
  */
 export const fetchOSMUser = async (osmUserId) => {
-  const osmUserURI = `${API_SERVER}/api/0.6/user/${osmUserId}`
+  const osmUserURI = `${API_SERVER}/api/0.6/user/${osmUserId}`;
   try {
-    const response = await fetch(osmUserURI)
+    const response = await fetch(osmUserURI);
     if (response.ok) {
-      const xmlData = await response.text()
-      const displayNameMatch = /display_name="([^"]+)"/.exec(xmlData)
-      return { id: osmUserId, displayName: displayNameMatch?.[1] || null }
+      const xmlData = await response.text();
+      const displayNameMatch = /display_name="([^"]+)"/.exec(xmlData);
+      return { id: osmUserId, displayName: displayNameMatch?.[1] || null };
     } else if (response.status === 404) {
-      return {}
+      return {};
     } else {
-      handleOSMError(response)
+      handleOSMError(response);
     }
   } catch (error) {
-    handleFetchError(error)
+    handleFetchError(error);
   }
-}
+};

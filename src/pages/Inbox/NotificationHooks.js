@@ -1,84 +1,70 @@
-import { useState, useCallback, useMemo } from 'react'
-import _each from 'lodash/each'
-import _find from 'lodash/find'
-import _groupBy from 'lodash/groupBy'
-import _map from 'lodash/map'
-import _isArray from 'lodash/isArray'
+import _each from "lodash/each";
+import _find from "lodash/find";
+import _groupBy from "lodash/groupBy";
+import _map from "lodash/map";
+import { useCallback, useMemo, useState } from "react";
 
-export const useNotificationSelection = notifications => {
-  notifications.forEach(notification => {
+export const useNotificationSelection = (notifications) => {
+  notifications.forEach((notification) => {
     if (!notification.taskId && notification.challengeId) {
       notification.taskId = notification.challengeName;
     }
   });
 
-  const [groupByTask, setGroupByTask] = useState(true)
-  const [selectedNotifications, setSelectedNotifications] = useState(new Set())
+  const [groupByTask, setGroupByTask] = useState(true);
+  const [selectedNotifications, setSelectedNotifications] = useState(new Set());
 
   const selectAll = useCallback(
-    () => setSelectedNotifications(new Set(_map(notifications, 'id'))),
-    [setSelectedNotifications, notifications]
-  )
+    () => setSelectedNotifications(new Set(_map(notifications, "id"))),
+    [setSelectedNotifications, notifications],
+  );
 
   const deselectAll = useCallback(
     () => setSelectedNotifications(new Set()),
-    [setSelectedNotifications]
-  )
+    [setSelectedNotifications],
+  );
 
   const allNotificationsSelected = useMemo(
-    () => (
-      selectedNotifications.size > 0 &&
-      selectedNotifications.size === notifications.length
-    ),
-    [selectedNotifications, notifications]
-  )
+    () => selectedNotifications.size > 0 && selectedNotifications.size === notifications.length,
+    [selectedNotifications, notifications],
+  );
 
   const allNotificationsInThreadSelected = useCallback(
-    thread => !_find(
-      thread,
-      notification => !selectedNotifications.has(notification.id)
-    ),
-    [selectedNotifications]
-  )
+    (thread) => !_find(thread, (notification) => !selectedNotifications.has(notification.id)),
+    [selectedNotifications],
+  );
 
   const toggleNotificationSelection = useCallback(
     (notification, thread) => {
-      const targetNotifications = _isArray(thread) ? thread : [notification]
-      const updatedSelections = new Set(selectedNotifications)
+      const targetNotifications = Array.isArray(thread) ? thread : [notification];
+      const updatedSelections = new Set(selectedNotifications);
       if (allNotificationsInThreadSelected(targetNotifications)) {
-        _each(targetNotifications, target => updatedSelections.delete(target.id))
-      }
-      else {
-        _each(targetNotifications, target => updatedSelections.add(target.id))
+        _each(targetNotifications, (target) => updatedSelections.delete(target.id));
+      } else {
+        _each(targetNotifications, (target) => updatedSelections.add(target.id));
       }
 
-      setSelectedNotifications(updatedSelections)
+      setSelectedNotifications(updatedSelections);
     },
-    [selectedNotifications, allNotificationsInThreadSelected]
-  )
+    [selectedNotifications, allNotificationsInThreadSelected],
+  );
 
   const toggleNotificationsSelected = useCallback(
-    () => allNotificationsSelected ? deselectAll() : selectAll(),
-    [allNotificationsSelected, selectAll, deselectAll]
-  )
+    () => (allNotificationsSelected ? deselectAll() : selectAll()),
+    [allNotificationsSelected, selectAll, deselectAll],
+  );
 
   const anyNotificationInThreadSelected = useCallback(
-    thread => !!_find(
-      thread,
-      notification => selectedNotifications.has(notification.id)
-    ),
-    [selectedNotifications]
-  )
+    (thread) => !!_find(thread, (notification) => selectedNotifications.has(notification.id)),
+    [selectedNotifications],
+  );
 
-  const toggleGroupByTask = useCallback(
-    () => setGroupByTask(groupByTask => !groupByTask),
-    []
-  )
+  const toggleGroupByTask = useCallback(() => setGroupByTask((groupByTask) => !groupByTask), []);
 
   const threads = useMemo(
-    () => groupByTask ? _groupBy(notifications, 'taskId') : {},
-    [groupByTask, notifications]
-  )
+    () => (groupByTask ? _groupBy(notifications, "taskId") : {}),
+    [groupByTask, notifications],
+  );
 
   return {
     groupByTask,
@@ -92,29 +78,29 @@ export const useNotificationSelection = notifications => {
     anyNotificationInThreadSelected,
     toggleGroupByTask,
     threads,
-  }
-}
+  };
+};
 
 export const useNotificationDisplay = () => {
-  const [openNotification, setOpenNotification] = useState(null)
+  const [openNotification, setOpenNotification] = useState(null);
 
   const displayNotification = useCallback(
-    notification => setOpenNotification(notification),
-    [setOpenNotification]
-  )
+    (notification) => setOpenNotification(notification),
+    [setOpenNotification],
+  );
 
   const closeNotification = useCallback(
-    notification => {
+    (notification) => {
       if (notification === openNotification) {
-        setOpenNotification(null)
+        setOpenNotification(null);
       }
     },
-    [openNotification, setOpenNotification]
-  )
+    [openNotification, setOpenNotification],
+  );
 
   return {
     openNotification,
     displayNotification,
     closeNotification,
-  }
-}
+  };
+};

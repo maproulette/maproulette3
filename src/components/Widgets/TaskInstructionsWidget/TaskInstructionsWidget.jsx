@@ -1,17 +1,12 @@
-import { Component } from "react";
-import PropTypes from "prop-types";
-import { FormattedMessage } from "react-intl";
 import classNames from "classnames";
-import _get from "lodash/get";
-import _isFinite from "lodash/isFinite";
-import {
-  WidgetDataTarget,
-  registerWidgetType,
-} from "../../../services/Widget/Widget";
-import TaskInstructions from "../../TaskPane/TaskInstructions/TaskInstructions";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
 import QuickWidget from "../../QuickWidget/QuickWidget";
-import messages from "./Messages";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
+import TaskInstructions from "../../TaskPane/TaskInstructions/TaskInstructions";
+import messages from "./Messages";
 
 const descriptor = {
   widgetKey: "TaskInstructionsWidget",
@@ -46,8 +41,8 @@ export default class TaskInstructionsWidget extends Component {
    */
   toggleMinimized = () => {
     this.setState({ collapsing: true });
-    const challengeId = _get(this.props.task, "parent.id");
-    if (_isFinite(challengeId)) {
+    const challengeId = this.props.task?.parent?.id;
+    if (Number.isFinite(challengeId)) {
       if (!this.props.collapseInstructions) {
         // Save our current height before collapsing so that we can restore it
         // later (as our actual height from the widget workspace will reflect
@@ -57,11 +52,7 @@ export default class TaskInstructionsWidget extends Component {
         });
       }
 
-      this.props.setInstructionsCollapsed(
-        challengeId,
-        false,
-        !this.props.collapseInstructions
-      );
+      this.props.setInstructionsCollapsed(challengeId, false, !this.props.collapseInstructions);
     }
 
     //this is not ideal, but it will prevent spam clicks until a more asynchronous flow is built for this toggle
@@ -69,23 +60,17 @@ export default class TaskInstructionsWidget extends Component {
   };
 
   adjustHeightForMinimization = () => {
-    if (
-      this.props.collapseInstructions &&
-      this.props.widgetLayout.h > descriptor.minHeight
-    ) {
-      this.props.updateWidgetHeight(
-        this.props.widgetLayout.i,
-        descriptor.minHeight
-      );
+    if (this.props.collapseInstructions && this.props.widgetLayout.h > descriptor.minHeight) {
+      this.props.updateWidgetHeight(this.props.widgetLayout.i, descriptor.minHeight);
     } else if (
       !this.props.collapseInstructions &&
       this.props.widgetLayout.h === descriptor.minHeight
     ) {
       this.props.updateWidgetHeight(
         this.props.widgetLayout.i,
-        _isFinite(this.props.widgetConfiguration.expandedHeight)
+        Number.isFinite(this.props.widgetConfiguration.expandedHeight)
           ? this.props.widgetConfiguration.expandedHeight
-          : descriptor.defaultHeight
+          : descriptor.defaultHeight,
       );
     }
   };
@@ -105,9 +90,7 @@ export default class TaskInstructionsWidget extends Component {
       //Users who spam clicked and have bad user settings need this check.
       //Ssomehow expandedHeight becomes the minHeight when a race condition occurs
       const height =
-        expandedHeight === descriptor.minHeight
-          ? descriptor.defaultHeight
-          : expandedHeight;
+        expandedHeight === descriptor.minHeight ? descriptor.defaultHeight : expandedHeight;
 
       return this.props.updateWidgetHeight(this.props.widgetLayout.i, height);
     }
@@ -141,9 +124,7 @@ export default class TaskInstructionsWidget extends Component {
         widgetTitle={<FormattedMessage {...messages.title} />}
         rightHeaderControls={minimizeControl}
       >
-        {!this.props.collapseInstructions && (
-          <TaskInstructions {...this.props} />
-        )}
+        {!this.props.collapseInstructions && <TaskInstructions {...this.props} />}
       </QuickWidget>
     );
   }

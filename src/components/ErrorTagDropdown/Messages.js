@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Error Tag Dropdown
@@ -12,5 +12,5 @@ export default defineMessages({
   addErrorTag: {
     id: "ErrorTagDropdown.addErrorTag",
     defaultMessage: "Add Error Tag",
-  }
-})
+  },
+});

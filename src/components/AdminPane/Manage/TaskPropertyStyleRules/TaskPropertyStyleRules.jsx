@@ -1,15 +1,12 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import _map from 'lodash/map'
-import _head from 'lodash/head'
-import _isEmpty from 'lodash/isEmpty'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
-import TaskPropertyQueryBuilder
-       from '../../../TaskPropertyQueryBuilder/TaskPropertyQueryBuilder'
-import { supportedSimplestyles } from
-  '../../../../interactions/TaskFeature/AsSimpleStyleableFeature'
-import errorMessages from '../../../TaskPropertyQueryBuilder/Messages'
-import messages from './Messages'
+import _isEmpty from "lodash/isEmpty";
+import _map from "lodash/map";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { supportedSimplestyles } from "../../../../interactions/TaskFeature/AsSimpleStyleableFeature";
+import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
+import errorMessages from "../../../TaskPropertyQueryBuilder/Messages";
+import TaskPropertyQueryBuilder from "../../../TaskPropertyQueryBuilder/TaskPropertyQueryBuilder";
+import messages from "./Messages";
 
 /**
  * TaskPropertyStyleRules provides a form for setting up task property styles.
@@ -18,24 +15,23 @@ import messages from './Messages'
  */
 export default class TaskPropertyStyleRules extends Component {
   render() {
-    const styleNameOptions = [
-        <option key="" value="">
-        </option>
-      ].concat(_map(supportedSimplestyles, (style) =>
+    const styleNameOptions = [<option key="" value=""></option>].concat(
+      _map(supportedSimplestyles, (style) => (
         <option key={style} value={style}>
           {style}
         </option>
-      ))
+      )),
+    );
 
     const buildStyleNameAndValues = (rule, index) => {
-      return _map(rule.styles, (style, position) =>
+      return _map(rule.styles, (style, position) => (
         <div className="mr-flex mr-mt-2" key={`${index}-${position}`}>
           <div className="mr-mr-4">
             <div className="form-select">
               <select
                 key={`name-${index}-${position}`}
                 className="form-select form-control mr-w-40"
-                onChange={e => this.props.setStyleName(e.target.value, index, position)}
+                onChange={(e) => this.props.setStyleName(e.target.value, index, position)}
                 value={style.styleName}
               >
                 {styleNameOptions}
@@ -61,7 +57,7 @@ export default class TaskPropertyStyleRules extends Component {
               onChange={(e) => this.props.setStyleValue(e.target.value, index, position)}
             />
           </div>
-          { rule.styles.length > 1 &&
+          {rule.styles.length > 1 && (
             <div className="mr-pt-2 mr-pl-4">
               <button
                 className="mr-ml-2 mr-text-red-light"
@@ -76,21 +72,24 @@ export default class TaskPropertyStyleRules extends Component {
                 />
               </button>
             </div>
-          }
+          )}
         </div>
-      )
-    }
+      ));
+    };
 
     const styleForms = _map(this.props.taskPropertyStyleRules, (rule, index) => {
-      const formSearch =
+      const formSearch = (
         <TaskPropertyQueryBuilder
           {...this.props}
           updateAsChange
           taskPropertyKeys={null}
           taskPropertyQuery={rule.propertySearch || {}}
           clearTaskPropertyQuery={() => this.props.removeStyleRule(index)}
-          updateTaskPropertyQuery={(data, errors) => this.props.updateStyleRule(data, index, errors)}
+          updateTaskPropertyQuery={(data, errors) =>
+            this.props.updateStyleRule(data, index, errors)
+          }
         />
+      );
 
       return (
         <div className="style-rule mr-mb-10" key={`style-rule-${index}`}>
@@ -114,24 +113,23 @@ export default class TaskPropertyStyleRules extends Component {
               </div>
             </div>
           </div>
-
           {buildStyleNameAndValues(rule, index)}
-           <button
-             onClick={() => this.props.addNewStyle(index)}
-             className="mr-button mr-button--small mr-button--green-lighter mr-mt-4 mr-mb-2"
-             title={this.props.intl.formatMessage(messages.addNewStyleTooltip)}
-           >
+          <button
+            onClick={() => this.props.addNewStyle(index)}
+            className="mr-button mr-button--small mr-button--green-lighter mr-mt-4 mr-mb-2"
+            title={this.props.intl.formatMessage(messages.addNewStyleTooltip)}
+          >
             <FormattedMessage {...messages.addNewStyle} />
           </button>
           {formSearch}
-          {!_isEmpty(this.props.styleRuleErrors[index]) &&
+          {!_isEmpty(this.props.styleRuleErrors[index]) && (
             <div className="mr-ml-4 mr-mb-4 mr-text-red-light">
-              {this.props.intl.formatMessage(errorMessages[_head(this.props.styleRuleErrors[index])])}
+              {this.props.intl.formatMessage(errorMessages[this.props.styleRuleErrors[index][0]])}
             </div>
-          }
+          )}
         </div>
-      )
-    })
+      );
+    });
 
     return (
       <div>
@@ -161,6 +159,6 @@ export default class TaskPropertyStyleRules extends Component {
         </div>
         {this.props.children}
       </div>
-    )
+    );
   }
 }

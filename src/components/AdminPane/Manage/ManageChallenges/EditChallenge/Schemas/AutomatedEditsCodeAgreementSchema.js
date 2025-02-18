@@ -1,13 +1,13 @@
-import messages from '../Messages'
+import messages from "../Messages";
 
 /**
- * Generates a JSON Schema describing fields of Automated Edits Policy Agreement 
+ * Generates a JSON Schema describing fields of Automated Edits Policy Agreement
  * workflow step for use with react-jsonschema-form
  */
 
 export const jsSchema = (intl) => {
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       automatedEditsCodeAgreement: {
@@ -16,29 +16,26 @@ export const jsSchema = (intl) => {
         default: false,
         enum: [true],
         agreementDescription: intl.formatMessage(messages.automatedEditsCodeDescription),
-        checkboxLabel: messages.automatedEditsCodeUICheckboxLabel
-      }
+        checkboxLabel: messages.automatedEditsCodeUICheckboxLabel,
+      },
     },
-    required: ["automatedEditsCodeAgreement"]
+    required: ["automatedEditsCodeAgreement"],
   };
 
-  return schemaFields
-}
+  return schemaFields;
+};
 
-export const uiSchema = (
-  intl,
-  user,
-  challengeData,
-  extraErrors,
-  options = {}) => {
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
   const uiSchemaFields = {
     automatedEditsCodeAgreement: {
       "ui:widget": "automatedEditsCheckbox",
       "ui:help": intl.formatMessage(messages.automatedEditsCodeDescription),
-      "ui:groupHeader": options.longForm ? intl.formatMessage(messages.automatedEditsCodeStepHeader) : undefined,
-      "ui:displayLabel": false
-    }
-  }
+      "ui:groupHeader": options.longForm
+        ? intl.formatMessage(messages.automatedEditsCodeStepHeader)
+        : undefined,
+      "ui:displayLabel": false,
+    },
+  };
 
-  return uiSchemaFields
+  return uiSchemaFields;
 };

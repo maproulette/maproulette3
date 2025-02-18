@@ -1,20 +1,16 @@
-import { createRef, Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import _isObject from 'lodash/isObject'
-import _findIndex from 'lodash/findIndex'
-import _isEqual from 'lodash/isEqual'
-import _isFinite from 'lodash/isFinite'
-import _get from 'lodash/get'
-import { FormattedMessage, injectIntl } from 'react-intl'
-import { messagesByDifficulty }
-       from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
-import AsManager
-       from '../../../interactions/User/AsManager'
-import CardChallenge from '../../CardChallenge/CardChallenge'
-import MarkdownContent from '../../MarkdownContent/MarkdownContent'
-import messages from './Messages'
-import './ChallengeResultItem.scss'
+import _findIndex from "lodash/findIndex";
+import _isEqual from "lodash/isEqual";
+import _isObject from "lodash/isObject";
+import PropTypes from "prop-types";
+import { Component, createRef } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import { Link } from "react-router-dom";
+import AsManager from "../../../interactions/User/AsManager";
+import { messagesByDifficulty } from "../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty";
+import CardChallenge from "../../CardChallenge/CardChallenge";
+import MarkdownContent from "../../MarkdownContent/MarkdownContent";
+import messages from "./Messages";
+import "./ChallengeResultItem.scss";
 
 /**
  * ChallengeResultItem represents a single challenge result in a ChallengeResultList.
@@ -32,30 +28,29 @@ import './ChallengeResultItem.scss'
  */
 export class ChallengeResultItem extends Component {
   constructor(props) {
-    super(props)
-    this.itemRef = createRef()
+    super(props);
+    this.itemRef = createRef();
   }
 
   shouldComponentUpdate(nextProps) {
     // Only re-render under specific conditions:
 
     // if the user has changed
-    if (_get(nextProps, 'user.id') !== _get(this.props, 'user.id')) {
-      return true
+    if (nextProps?.user?.id !== this.props.user?.id) {
+      return true;
     }
 
     // if the user's savedChallenges have changed
-    if (_get(nextProps.user, 'savedChallenges.length') !==
-        _get(this.props.user, 'savedChallenges.length')) {
-      return true
+    if (nextProps.user?.savedChallenges?.length !== this.props.user?.savedChallenges?.length) {
+      return true;
     }
 
     // if the challenge object itself changed
     if (!_isEqual(nextProps.challenge, this.props.challenge)) {
-      return true
+      return true;
     }
 
-    return false
+    return false;
   }
 
   /**
@@ -66,23 +61,22 @@ export class ChallengeResultItem extends Component {
   browseChallenge = () => {
     this.props.history.push(
       `/browse/${
-        this.props.challenge.isVirtual ? 'virtual' : 'challenges'
+        this.props.challenge.isVirtual ? "virtual" : "challenges"
       }/${this.props.challenge.id}`,
-      { fromSearch: true }
-    )
-  }
+      { fromSearch: true },
+    );
+  };
 
   render() {
     // Setup saved status and controls based on whether the user has saved this
     // challenge
-    let isSaved = false
-    let unsaveChallengeControl = null
-    let saveChallengeControl = null
+    let isSaved = false;
+    let unsaveChallengeControl = null;
+    let saveChallengeControl = null;
 
     if (_isObject(this.props.user) && !this.props.challenge.isVirtual) {
-      if (_findIndex(this.props.user.savedChallenges,
-                     {id: this.props.challenge.id}) !== -1) {
-        isSaved = true
+      if (_findIndex(this.props.user.savedChallenges, { id: this.props.challenge.id }) !== -1) {
+        isSaved = true;
         unsaveChallengeControl = (
           <Link
             to={{}}
@@ -91,9 +85,8 @@ export class ChallengeResultItem extends Component {
           >
             <FormattedMessage {...messages.unsave} />
           </Link>
-        )
-      }
-      else {
+        );
+      } else {
         saveChallengeControl = (
           <Link
             to={{}}
@@ -102,13 +95,12 @@ export class ChallengeResultItem extends Component {
           >
             <FormattedMessage {...messages.save} />
           </Link>
-        )
+        );
       }
     }
 
     // Does this user own (or can manage) the current challenge?
-    const isManageable =
-      AsManager(this.props.user).canManageChallenge(this.props.challenge)
+    const isManageable = AsManager(this.props.user).canManageChallenge(this.props.challenge);
 
     const manageControl = !isManageable ? null : (
       <Link
@@ -117,7 +109,7 @@ export class ChallengeResultItem extends Component {
       >
         <FormattedMessage {...messages.manageLabel} />
       </Link>
-    )
+    );
 
     return (
       <div ref={this.itemRef}>
@@ -131,22 +123,20 @@ export class ChallengeResultItem extends Component {
           unsaveControl={unsaveChallengeControl}
           manageControl={manageControl}
           sort={this.props.sort}
-          projectQuery={_get(this.props, 'searchFilters.project')}
+          projectQuery={this.props.searchFilters?.project}
           excludeProjectId={this.props.excludeProjectId}
           info={
             <div className="mr-break-words">
-              {_isFinite(this.props.challenge.difficulty) &&
-               <div className="mr-text-sm">
-                 <strong className="mr-text-yellow mr-uppercase">
-                   <FormattedMessage {...messages.difficulty} />:
-                 </strong>{' '}
-                 <span className="mr-text-white mr-font-medium">
-                   <FormattedMessage
-                     {...messagesByDifficulty[this.props.challenge.difficulty]}
-                   />
-                 </span>
-               </div>
-              }
+              {Number.isFinite(this.props.challenge.difficulty) && (
+                <div className="mr-text-sm">
+                  <strong className="mr-text-yellow mr-uppercase">
+                    <FormattedMessage {...messages.difficulty} />:
+                  </strong>{" "}
+                  <span className="mr-text-white mr-font-medium">
+                    <FormattedMessage {...messagesByDifficulty[this.props.challenge.difficulty]} />
+                  </span>
+                </div>
+              )}
               <MarkdownContent markdown={this.props.challenge.description} lightMode={false} />
               <div>
                 <button
@@ -161,7 +151,7 @@ export class ChallengeResultItem extends Component {
           }
         />
       </div>
-    )
+    );
   }
 }
 
@@ -170,6 +160,6 @@ ChallengeResultItem.propTypes = {
   user: PropTypes.object,
   /** The challenge represented by this item */
   challenge: PropTypes.object.isRequired,
-}
+};
 
-export default injectIntl(ChallengeResultItem)
+export default injectIntl(ChallengeResultItem);

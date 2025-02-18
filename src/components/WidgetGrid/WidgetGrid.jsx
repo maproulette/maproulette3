@@ -1,19 +1,16 @@
-import { Fragment, Component } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import _get from 'lodash/get'
-import _map from 'lodash/map'
-import _isFunction from 'lodash/isFunction'
-import ReactGridLayout, { WidthProvider } from 'react-grid-layout'
-import { widgetComponent } from '../../services/Widget/Widget'
-import WithWidgetManagement
-       from '../HOCs/WithWidgetManagement/WithWidgetManagement'
-import WidgetPicker from '../WidgetPicker/WidgetPicker'
-import "../../../node_modules/react-grid-layout/css/styles.css"
-import "../../../node_modules/react-resizable/css/styles.css"
-import './WidgetGrid.scss'
+import classNames from "classnames";
+import _map from "lodash/map";
+import PropTypes from "prop-types";
+import { Component, Fragment } from "react";
+import ReactGridLayout, { WidthProvider } from "react-grid-layout";
+import { widgetComponent } from "../../services/Widget/Widget";
+import WithWidgetManagement from "../HOCs/WithWidgetManagement/WithWidgetManagement";
+import WidgetPicker from "../WidgetPicker/WidgetPicker";
+import "../../../node_modules/react-grid-layout/css/styles.css";
+import "../../../node_modules/react-resizable/css/styles.css";
+import "./WidgetGrid.scss";
 
-const GridLayout = WidthProvider(ReactGridLayout)
+const GridLayout = WidthProvider(ReactGridLayout);
 
 export class WidgetGrid extends Component {
   render() {
@@ -27,90 +24,88 @@ export class WidgetGrid extends Component {
     // appear lower in the DOM, thus breaking drop-down menus that extend below
     // a widget
     const highestY = Math.max(
-      ..._map(this.props.workspace.widgets, (w, i) => this.props.workspace.layout[i].y)
-    )
+      ..._map(this.props.workspace.widgets, (w, i) => this.props.workspace.layout[i].y),
+    );
 
-    const GridFilters = this.props.filterComponent
-    const conditionalWidgets = this.props.workspace.conditionalWidgets || []
-    const permanentWidgets = this.props.workspace.permanentWidgets || []
-    const widgetInstances =
-      _map(this.props.workspace.widgets, (widgetConfiguration, index) => {
-        const widgetPermanent = permanentWidgets.indexOf(widgetConfiguration.widgetKey) !== -1
-        let widgetHidden = false
-        const WidgetComponent = widgetComponent(widgetConfiguration)
-        if (!WidgetComponent) {
-          throw new Error(`Missing component for widget: ${widgetConfiguration.widgetKey}`)
-        }
+    const GridFilters = this.props.filterComponent;
+    const conditionalWidgets = this.props.workspace.conditionalWidgets || [];
+    const permanentWidgets = this.props.workspace.permanentWidgets || [];
+    const widgetInstances = _map(this.props.workspace.widgets, (widgetConfiguration, index) => {
+      const widgetPermanent = permanentWidgets.indexOf(widgetConfiguration.widgetKey) !== -1;
+      let widgetHidden = false;
+      const WidgetComponent = widgetComponent(widgetConfiguration);
+      if (!WidgetComponent) {
+        throw new Error(`Missing component for widget: ${widgetConfiguration.widgetKey}`);
+      }
 
-        const widgetLayout = this.props.workspace.layout[index]
+      const widgetLayout = this.props.workspace.layout[index];
 
-        // Hide conditional widgets that shouldn't be shown
-        if (conditionalWidgets.indexOf(widgetConfiguration.widgetKey) !== -1) {
-          if (_isFunction(WidgetComponent.hideWidget) && WidgetComponent.hideWidget(this.props)) {
-            widgetHidden = true
-            if (widgetLayout.h > 0) {
-              widgetConfiguration.priorHeight = widgetLayout.h
-              widgetLayout.minH = 0
-              widgetLayout.h = 0
-            }
+      // Hide conditional widgets that shouldn't be shown
+      if (conditionalWidgets.indexOf(widgetConfiguration.widgetKey) !== -1) {
+        if (WidgetComponent.hideWidget?.(this.props)) {
+          widgetHidden = true;
+          if (widgetLayout.h > 0) {
+            widgetConfiguration.priorHeight = widgetLayout.h;
+            widgetLayout.minH = 0;
+            widgetLayout.h = 0;
           }
-          else if (widgetLayout.h === 0) {
-            widgetLayout.minH = widgetConfiguration.minHeight
-            widgetLayout.h = widgetConfiguration.priorHeight > 0 ?
-                             widgetConfiguration.priorHeight :
-                             widgetConfiguration.defaultHeight
-          }
+        } else if (widgetLayout.h === 0) {
+          widgetLayout.minH = widgetConfiguration.minHeight;
+          widgetLayout.h =
+            widgetConfiguration.priorHeight > 0
+              ? widgetConfiguration.priorHeight
+              : widgetConfiguration.defaultHeight;
         }
+      }
 
-        const widgetStyle = {
-          "zIndex": widgetHidden ? 0 : (highestY - widgetLayout.y), // higher values towards top of page
-        }
+      const widgetStyle = {
+        zIndex: widgetHidden ? 0 : highestY - widgetLayout.y, // higher values towards top of page
+      };
 
-        // Prevent the editing layout from rendering an empty resizable elememnt for "permanent but conditionally shown" widgets 
-        // that are currently hidden.
-        if(widgetHidden && widgetPermanent && this.props.isEditing) widgetStyle["display"] = "none" 
+      // Prevent the editing layout from rendering an empty resizable elememnt for "permanent but conditionally shown" widgets
+      // that are currently hidden.
+      if (widgetHidden && widgetPermanent && this.props.isEditing) widgetStyle["display"] = "none";
 
-        return (
-          <div
-            key={widgetLayout.i}
-            className={classNames(
-              "mr-card-widget", {
-                'mr-card-widget--editing': this.props.isEditing,
-                'mr-card-widget--top-row': widgetLayout.y === 0,
-              })}
-            style={widgetStyle}
-          >
-            <WidgetComponent
-              {...this.props}
-              widgetLayout={widgetLayout}
-              widgetConfiguration={_get(widgetConfiguration, 'defaultConfiguration', {})}
-              updateWidgetConfiguration={conf => this.props.updateWidgetConfiguration(index, conf)}
-              widgetHidden={widgetHidden}
-              widgetPermanent={widgetPermanent}
-              removeWidget={() => this.props.removeWidget(index)}
-            />
-          </div>
-        )
-      })
+      return (
+        <div
+          key={widgetLayout.i}
+          className={classNames("mr-card-widget", {
+            "mr-card-widget--editing": this.props.isEditing,
+            "mr-card-widget--top-row": widgetLayout.y === 0,
+          })}
+          style={widgetStyle}
+        >
+          <WidgetComponent
+            {...this.props}
+            widgetLayout={widgetLayout}
+            widgetConfiguration={widgetConfiguration?.defaultConfiguration ?? {}}
+            updateWidgetConfiguration={(conf) => this.props.updateWidgetConfiguration(index, conf)}
+            widgetHidden={widgetHidden}
+            widgetPermanent={widgetPermanent}
+            removeWidget={() => this.props.removeWidget(index)}
+          />
+        </div>
+      );
+    });
 
     return (
-      <div className={classNames("widget-grid", {"widget-grid--editing": this.props.isEditing})}>
+      <div className={classNames("widget-grid", { "widget-grid--editing": this.props.isEditing })}>
         <div className="widget-grid__controls">
           {GridFilters && <GridFilters {...this.props} />}
-          {this.props.isEditing &&
-           <Fragment>
-             {this.props.editNameControl}
-             <WidgetPicker {...this.props} isRight onWidgetSelected={this.props.addWidget} />
-             {this.props.doneEditingControl}
-             {this.props.cancelEditingControl}
-           </Fragment>
-          }
+          {this.props.isEditing && (
+            <Fragment>
+              {this.props.editNameControl}
+              <WidgetPicker {...this.props} isRight onWidgetSelected={this.props.addWidget} />
+              {this.props.doneEditingControl}
+              {this.props.cancelEditingControl}
+            </Fragment>
+          )}
         </div>
-        {this.props.subHeader &&
-         <div className={classNames({"mr-mt-24": this.props.isEditing})}>
-           {this.props.subHeader}
-         </div>
-        }
+        {this.props.subHeader && (
+          <div className={classNames({ "mr-mt-24": this.props.isEditing })}>
+            {this.props.subHeader}
+          </div>
+        )}
 
         <GridLayout
           className="widget-grid"
@@ -137,6 +132,6 @@ WidgetGrid.propTypes = {
     layout: PropTypes.array,
   }).isRequired,
   onLayoutChange: PropTypes.func.isRequired,
-}
+};
 
-export default WithWidgetManagement(WidgetGrid)
+export default WithWidgetManagement(WidgetGrid);

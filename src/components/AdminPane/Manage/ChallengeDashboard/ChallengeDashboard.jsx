@@ -1,31 +1,30 @@
-import { Component } from "react";
-import PropTypes from "prop-types";
-import { FormattedMessage, FormattedDate, injectIntl } from "react-intl";
 import { parseISO } from "date-fns";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedDate, FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import _get from "lodash/get";
 import {
-  generateWidgetId,
   WidgetDataTarget,
+  generateWidgetId,
   widgetDescriptor,
 } from "../../../../services/Widget/Widget";
-import WithManageableProjects from "../../HOCs/WithManageableProjects/WithManageableProjects";
-import WithCurrentProject from "../../HOCs/WithCurrentProject/WithCurrentProject";
-import WithCurrentChallenge from "../../HOCs/WithCurrentChallenge/WithCurrentChallenge";
-import WithWidgetWorkspaces from "../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
-import WithSelectedClusteredTasks from "../../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks";
-import WithFilteredClusteredTasks from "../../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks";
-import WithClusteredTasks from "../../../HOCs/WithClusteredTasks/WithClusteredTasks";
-import WithChallengeMetrics from "../../HOCs/WithChallengeMetrics/WithChallengeMetrics";
-import WithSearch from "../../../HOCs/WithSearch/WithSearch";
-import WidgetWorkspace from "../../../WidgetWorkspace/WidgetWorkspace";
-import TaskUploadingProgress from "../TaskUploadingProgress/TaskUploadingProgress";
-import TaskDeletingProgress from "../TaskDeletingProgress/TaskDeletingProgress";
-import ChallengeControls from "../ChallengeCard/ChallengeControls";
 import BusySpinner from "../../../BusySpinner/BusySpinner";
 import ChallengeNameLink from "../../../ChallengeNameLink/ChallengeNameLink";
+import WithClusteredTasks from "../../../HOCs/WithClusteredTasks/WithClusteredTasks";
+import WithFilteredClusteredTasks from "../../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks";
+import WithSearch from "../../../HOCs/WithSearch/WithSearch";
+import WithSelectedClusteredTasks from "../../../HOCs/WithSelectedClusteredTasks/WithSelectedClusteredTasks";
+import WithWidgetWorkspaces from "../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
 import ShareLink from "../../../ShareLink/ShareLink";
+import WidgetWorkspace from "../../../WidgetWorkspace/WidgetWorkspace";
+import WithChallengeMetrics from "../../HOCs/WithChallengeMetrics/WithChallengeMetrics";
+import WithCurrentChallenge from "../../HOCs/WithCurrentChallenge/WithCurrentChallenge";
+import WithCurrentProject from "../../HOCs/WithCurrentProject/WithCurrentProject";
+import WithManageableProjects from "../../HOCs/WithManageableProjects/WithManageableProjects";
+import ChallengeControls from "../ChallengeCard/ChallengeControls";
 import manageMessages from "../Messages";
+import TaskDeletingProgress from "../TaskDeletingProgress/TaskDeletingProgress";
+import TaskUploadingProgress from "../TaskUploadingProgress/TaskUploadingProgress";
 import "./ChallengeDashboard.scss";
 import { constructChallengeLink } from "../../../../utils/constructChangesetUrl";
 
@@ -77,25 +76,17 @@ export class ChallengeDashboard extends Component {
       return <BusySpinner />;
     }
 
-    const isDeletingTasks = _get(
-      this.props,
-      "progress.deletingTasks.inProgress",
-      false
-    );
+    const isDeletingTasks = this.props.progress?.deletingTasks?.inProgress ?? false;
     if (isDeletingTasks) {
       return <TaskDeletingProgress {...this.props} />;
     }
 
-    const isUploadingTasks = _get(
-      this.props,
-      "progress.creatingTasks.inProgress",
-      false
-    );
+    const isUploadingTasks = this.props.progress?.creatingTasks?.inProgress ?? false;
     if (isUploadingTasks) {
       return <TaskUploadingProgress {...this.props} />;
     }
 
-    const projectId = _get(this.props, "challenge.parent.id");
+    const projectId = this.props.challenge?.parent?.id;
 
     const pageHeader = (
       <div className="admin__manage__header admin__manage__header--flush">
@@ -108,8 +99,7 @@ export class ChallengeDashboard extends Component {
             </li>
             <li>
               <Link to={`/admin/project/${projectId}`}>
-                {_get(this.props, "challenge.parent.displayName") ||
-                  _get(this.props, "challenge.parent.name")}
+                {this.props.challenge?.parent?.displayName || this.props.challenge?.parent?.name}
               </Link>
             </li>
             <li className="is-active">
@@ -131,21 +121,20 @@ export class ChallengeDashboard extends Component {
           onChallengeDashboard
         />
 
-        {this.props.challenge.isArchived &&
-          this.props.challenge.systemArchivedAt && (
-            <div className="mr-mt-6 mr-text-red-light">
-              <FormattedMessage {...manageMessages.staleChallengeMessage1} />{" "}
-              <FormattedDate
-                value={parseISO(this.props.challenge.systemArchivedAt)}
-                year="numeric"
-                month="long"
-                day="2-digit"
-              />{" "}
-              <FormattedMessage {...manageMessages.staleChallengeMessage2} />
-              {` ${Number(window.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6} `}
-              <FormattedMessage {...manageMessages.staleChallengeMessage3} />
-            </div>
-          )}
+        {this.props.challenge.isArchived && this.props.challenge.systemArchivedAt && (
+          <div className="mr-mt-6 mr-text-red-light">
+            <FormattedMessage {...manageMessages.staleChallengeMessage1} />{" "}
+            <FormattedDate
+              value={parseISO(this.props.challenge.systemArchivedAt)}
+              year="numeric"
+              month="long"
+              day="2-digit"
+            />{" "}
+            <FormattedMessage {...manageMessages.staleChallengeMessage2} />
+            {` ${Number(window.env.REACT_APP_ARCHIVE_STALE_TIME_IN_MONTHS) || 6} `}
+            <FormattedMessage {...manageMessages.staleChallengeMessage3} />
+          </div>
+        )}
       </div>
     );
 
@@ -159,9 +148,7 @@ export class ChallengeDashboard extends Component {
           workspaceEyebrow={pageHeader}
           challenges={[this.props.challenge]}
           pageId="ChallengeDashboard"
-          metaReviewEnabled={
-            window.env.REACT_APP_FEATURE_META_QC === "enabled"
-          }
+          metaReviewEnabled={window.env.REACT_APP_FEATURE_META_QC === "enabled"}
         />
       </div>
     );
@@ -191,16 +178,16 @@ export default WithManageableProjects(
               WithFilteredClusteredTasks(
                 WithChallengeMetrics(injectIntl(ChallengeDashboard)),
                 "clusteredTasks",
-                "filteredClusteredTasks"
-              )
-            )
+                "filteredClusteredTasks",
+              ),
+            ),
           ),
           WidgetDataTarget.challenge,
           DASHBOARD_NAME,
-          defaultDashboardSetup
-        )
+          defaultDashboardSetup,
+        ),
       ),
-      "challengeOwner"
-    )
-  )
+      "challengeOwner",
+    ),
+  ),
 );

@@ -1,9 +1,9 @@
-import ReactDOM from 'react-dom'
-import L from 'leaflet'
-import { injectIntl } from 'react-intl'
-import { createControlComponent } from '@react-leaflet/core'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-import messages from './Messages'
+import { createControlComponent } from "@react-leaflet/core";
+import L from "leaflet";
+import ReactDOM from "react-dom";
+import { injectIntl } from "react-intl";
+import SvgSymbol from "../../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 /**
  * Leaflet control that zooms the map out to a worldwide view
@@ -13,7 +13,7 @@ import messages from './Messages'
  * @private
  */
 const FitWorldLeafletControl = L.Control.extend({
-  onAdd: function(map) {
+  onAdd: function (map) {
     // build the control button, render it, and return it
     const controlContent = (
       <button
@@ -27,18 +27,18 @@ const FitWorldLeafletControl = L.Control.extend({
           viewBox="0 0 20 20"
         />
       </button>
-    )
+    );
 
-    const controlContainer = L.DomUtil.create('div')
-    ReactDOM.render(controlContent, controlContainer)
-    return controlContainer
+    const controlContainer = L.DomUtil.create("div");
+    ReactDOM.render(controlContent, controlContainer);
+    return controlContainer;
   },
-})
+});
 
 /**
  * FitWorldControl is a react-leaflet Control component intended to be
  * used as a child of a react-leaflet MapContainer instance,.
  */
-export const FitWorldControl = createControlComponent((props) => new FitWorldLeafletControl(props))
+export const FitWorldControl = createControlComponent((props) => new FitWorldLeafletControl(props));
 
-export default injectIntl(FitWorldControl)
+export default injectIntl(FitWorldControl);

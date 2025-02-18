@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskInstructionsWidget
@@ -18,4 +18,4 @@ export default defineMessages({
     id: "Widgets.PublicTaskInstructionsWidget.label",
     defaultMessage: "Instructions",
   },
-})
+});

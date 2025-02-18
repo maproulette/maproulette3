@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import "@testing-library/jest-dom";
-import { IntlProvider } from "react-intl";
 import { render } from "@testing-library/react";
-import { ChallengeDetail } from "./ChallengeDetail";
 import { format } from "date-fns";
+import { IntlProvider } from "react-intl";
+import { ChallengeDetail } from "./ChallengeDetail";
 
 describe("ChallengeDetail", () => {
   it("doesn't break if only required props are provided", () => {
@@ -11,18 +11,18 @@ describe("ChallengeDetail", () => {
       <IntlProvider locale="en">
         <ChallengeDetail match={{ url: "", params: {} }} />
         <div>Test Passes</div>
-      </IntlProvider>
+      </IntlProvider>,
     );
     const text = getByText("Test Passes");
     expect(text).toBeInTheDocument();
   });
 
-  it('renders public challenge page when user is not logged in', () => {
+  it("renders public challenge page when user is not logged in", () => {
     const { queryByText } = global.withProvider(
       <ChallengeDetail
-        match={{ url: '', params: {} }}
-        history={{ location: { pathname: '', search: '' } }}
-        location={{ search: '' }}
+        match={{ url: "", params: {} }}
+        history={{ location: { pathname: "", search: "" } }}
+        location={{ search: "" }}
         browsedChallenge={{
           id: 1,
           parent: { id: 2 },
@@ -31,18 +31,18 @@ describe("ChallengeDetail", () => {
         }}
         owner={{ id: 2, osmProfile: { displayName: "Somebody" } }}
         intl={{
-          formatMessage: () => '',
-          formatDate: () => '',
+          formatMessage: () => "",
+          formatDate: () => "",
         }}
-      />
-    )
-    const text = queryByText('Sign in to participate')
-    expect(text).toBeInTheDocument()
-    const cloneText = queryByText('Clone Challenge')
-    expect(cloneText).not.toBeInTheDocument()
-  })
+      />,
+    );
+    const text = queryByText("Sign in to participate");
+    expect(text).toBeInTheDocument();
+    const cloneText = queryByText("Clone Challenge");
+    expect(cloneText).not.toBeInTheDocument();
+  });
 
-  it('renders clone challenge button for discoverable challenge', () => {
+  it("renders clone challenge button for discoverable challenge", () => {
     const { getByText } = global.withProvider(
       <ChallengeDetail
         checkingLoginStatus={false}
@@ -50,9 +50,9 @@ describe("ChallengeDetail", () => {
           isLoggedIn: true,
           id: 1,
         }}
-        match={{ url: '', params: {} }}
-        history={{ location: { pathname: '', search: '' } }}
-        location={{ search: '' }}
+        match={{ url: "", params: {} }}
+        history={{ location: { pathname: "", search: "" } }}
+        location={{ search: "" }}
         browsedChallenge={{
           id: 1,
           parent: { id: 2 },
@@ -62,12 +62,12 @@ describe("ChallengeDetail", () => {
         }}
         owner={{ id: 2, osmProfile: { displayName: "Somebody" } }}
         intl={{
-          formatMessage: () => '',
-          formatDate: () => '',
+          formatMessage: () => "",
+          formatDate: () => "",
         }}
-      />
-    )
-    const cloneText = getByText('Clone Challenge')
-    expect(cloneText).toBeInTheDocument()
-  })
+      />,
+    );
+    const cloneText = getByText("Clone Challenge");
+    expect(cloneText).toBeInTheDocument();
+  });
 });

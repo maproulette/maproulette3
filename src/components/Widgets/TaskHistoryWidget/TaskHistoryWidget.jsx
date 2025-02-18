@@ -1,137 +1,143 @@
-import { createRef, Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import { WidgetDataTarget, registerWidgetType }
-       from '../../../services/Widget/Widget'
-import TaskHistoryList from '../../TaskHistoryList/TaskHistoryList'
-import TaskCommentInput from '../../TaskCommentInput/TaskCommentInput'
-import WithTaskHistory from '../../HOCs/WithTaskHistory/WithTaskHistory'
-import WithSearch from '../../HOCs/WithSearch/WithSearch'
-import AsMappableTask from '../../../interactions/Task/AsMappableTask'
-import AsMappableBundle from '../../../interactions/TaskBundle/AsMappableBundle'
-import QuickWidget from '../../QuickWidget/QuickWidget'
-import SignInButton  from '../../SignInButton/SignInButton'
-import { viewDiffOverpass } from '../../../services/Overpass/Overpass'
-import { viewOSMCha } from '../../../services/OSMCha/OSMCha'
-import messages from './Messages'
-import _get from 'lodash/get'
-import _remove from 'lodash/remove'
-import _indexOf from 'lodash/indexOf'
-import _each from 'lodash/each'
+import _each from "lodash/each";
+import _remove from "lodash/remove";
+import { Component, createRef } from "react";
+import { FormattedMessage } from "react-intl";
+import AsMappableTask from "../../../interactions/Task/AsMappableTask";
+import AsMappableBundle from "../../../interactions/TaskBundle/AsMappableBundle";
+import { viewOSMCha } from "../../../services/OSMCha/OSMCha";
+import { viewDiffOverpass } from "../../../services/Overpass/Overpass";
+import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
+import WithSearch from "../../HOCs/WithSearch/WithSearch";
+import WithTaskHistory from "../../HOCs/WithTaskHistory/WithTaskHistory";
+import QuickWidget from "../../QuickWidget/QuickWidget";
+import SignInButton from "../../SignInButton/SignInButton";
+import TaskCommentInput from "../../TaskCommentInput/TaskCommentInput";
+import TaskHistoryList from "../../TaskHistoryList/TaskHistoryList";
+import messages from "./Messages";
 
 const descriptor = {
-  widgetKey: 'TaskHistoryWidget',
+  widgetKey: "TaskHistoryWidget",
   label: messages.label,
   targets: [WidgetDataTarget.task],
   minWidth: 3,
   defaultWidth: 4,
   minHeight: 3,
   defaultHeight: 6,
-}
+};
 
 export default class TaskHistoryWidget extends Component {
   state = {
     diffSelectionActive: false,
     selectedTimestamps: [],
-  }
+  };
 
-  commentInputRef = createRef()
+  commentInputRef = createRef();
 
   bbox = () => {
-    return this.props.taskBundle ?
-      AsMappableBundle(this.props.taskBundle).calculateBBox() :
-      AsMappableTask(this.props.task).calculateBBox()
-  }
+    return this.props.taskBundle
+      ? AsMappableBundle(this.props.taskBundle).calculateBBox()
+      : AsMappableTask(this.props.task).calculateBBox();
+  };
 
   toggleSelection = (timestamp) => {
-    const diffTimestamps = this.state.selectedTimestamps
-    if (_indexOf(diffTimestamps, timestamp.toString()) !== -1) {
-      _remove(diffTimestamps, timestamp)
-    }
-    else {
-      diffTimestamps.push(timestamp.toString())
+    const diffTimestamps = this.state.selectedTimestamps;
+    if (diffTimestamps.indexOf(timestamp.toString()) !== -1) {
+      _remove(diffTimestamps, timestamp);
+    } else {
+      diffTimestamps.push(timestamp.toString());
     }
 
-    if (diffTimestamps.length >= 2 ) {
-      viewDiffOverpass(this.bbox(), ...diffTimestamps.slice(-2))
-      this.setState({selectedTimestamps: [], diffSelectionActive: false})
+    if (diffTimestamps.length >= 2) {
+      viewDiffOverpass(this.bbox(), ...diffTimestamps.slice(-2));
+      this.setState({ selectedTimestamps: [], diffSelectionActive: false });
+    } else {
+      this.setState({ selectedTimestamps: diffTimestamps });
     }
-    else {
-      this.setState({selectedTimestamps: diffTimestamps})
-    }
-  }
+  };
 
   viewDiff = () => {
-    viewDiffOverpass(this.bbox(), ...this.state.selectedTimestamps)
-  }
+    viewDiffOverpass(this.bbox(), ...this.state.selectedTimestamps);
+  };
 
   viewOSMCha = () => {
-    let earliestDate = null
-    const usernames = []
+    let earliestDate = null;
+    const usernames = [];
 
     _each(this.props.task.history, (log) => {
       if (!earliestDate || log.timestamp < earliestDate) {
-        earliestDate = log.timestamp
+        earliestDate = log.timestamp;
       }
 
-      const username = _get(log, 'user.username')
+      const username = log?.user?.username;
       if (username && usernames.indexOf(username) === -1) {
-        usernames.push(username)
+        usernames.push(username);
       }
-    })
+    });
 
-    viewOSMCha(this.bbox(), earliestDate, usernames)
-  }
+    viewOSMCha(this.bbox(), earliestDate, usernames);
+  };
 
   getEditor = () => {
-    return _get(this.props, 'user.settings.defaultEditor')
-  }
+    return this.props.user?.settings?.defaultEditor;
+  };
 
-  setComment = comment => this.setState({comment})
+  setComment = (comment) => this.setState({ comment });
 
   postComment = () => {
     this.props.postTaskComment(this.props.task, this.state.comment).then(() => {
-        this.props.reloadHistory()
-    })
-    this.setComment("")
-  }
+      this.props.reloadHistory();
+    });
+    this.setComment("");
+  };
+
+  editComment = (commentId, comment) => {
+    this.props.editTaskComment(this.props.task, commentId, comment).then(() => {
+      this.props.reloadHistory();
+    });
+  };
 
   render() {
-    const loggedIn = localStorage.getItem('isLoggedIn')
+    const loggedIn = localStorage.getItem("isLoggedIn");
 
     return (
       <QuickWidget
         {...this.props}
         className="task-history-widget"
-        widgetTitle={
-          <FormattedMessage {...messages.title} />
-        }
+        widgetTitle={<FormattedMessage {...messages.title} />}
         rightHeaderControls={
           <div className="mr-flex mr-justify-between">
-            <button className="mr-button mr-button--small mr-mr-2"
-                    onClick={this.viewOSMCha}>
+            <button className="mr-button mr-button--small mr-mr-2" onClick={this.viewOSMCha}>
               <FormattedMessage {...messages.viewOSMCha} />
             </button>
-            {this.state.diffSelectionActive ?
-              <button className="mr-button mr-button--small"
-                      onClick={() => {
-                        this.setState({diffSelectionActive: !this.state.diffSelectionActive,
-                                       selectedTimestamps: []})}
-                      }>
+            {this.state.diffSelectionActive ? (
+              <button
+                className="mr-button mr-button--small"
+                onClick={() => {
+                  this.setState({
+                    diffSelectionActive: !this.state.diffSelectionActive,
+                    selectedTimestamps: [],
+                  });
+                }}
+              >
                 <FormattedMessage {...messages.cancelDiff} />
-              </button> :
-              <button className="mr-button mr-button--small"
-                      onClick={() => {
-                        this.setState({diffSelectionActive: !this.state.diffSelectionActive,
-                                       selectedTimestamps: []})}
-                      }>
+              </button>
+            ) : (
+              <button
+                className="mr-button mr-button--small"
+                onClick={() => {
+                  this.setState({
+                    diffSelectionActive: !this.state.diffSelectionActive,
+                    selectedTimestamps: [],
+                  });
+                }}
+              >
                 <FormattedMessage {...messages.startDiff} />
               </button>
-            }
+            )}
           </div>
         }
-       >
-
-        {loggedIn ? 
+      >
+        {loggedIn ? (
           <div className="mr-my-8 mr-mr-4">
             <TaskCommentInput
               value={this.state.comment}
@@ -140,12 +146,12 @@ export default class TaskHistoryWidget extends Component {
               taskId={this.props.task.id}
               inputRef={this.commentInputRef}
             />
-          </div> :
-          <div className='mr-flex mr-justify-center mr-my-4'>
-            <SignInButton {...this.props} longForm/>
           </div>
-          
-        }
+        ) : (
+          <div className="mr-flex mr-justify-center mr-my-4">
+            <SignInButton {...this.props} longForm />
+          </div>
+        )}
 
         <TaskHistoryList
           className="mr-px-4"
@@ -156,13 +162,11 @@ export default class TaskHistoryWidget extends Component {
           selectDiffs={this.state.diffSelectionActive}
           toggleSelection={this.toggleSelection}
           selectedTimestamps={this.state.selectedTimestamps}
+          editComment={this.editComment}
         />
       </QuickWidget>
-    )
+    );
   }
 }
 
-registerWidgetType(
-  WithSearch(WithTaskHistory(TaskHistoryWidget), 'task'),
-  descriptor
-)
+registerWidgetType(WithSearch(WithTaskHistory(TaskHistoryWidget), "task"), descriptor);

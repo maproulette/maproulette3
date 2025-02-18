@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ActivityItemType.
@@ -6,42 +6,42 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   project: {
     id: "Activity.item.project",
-    defaultMessage: "Project"
+    defaultMessage: "Project",
   },
   challenge: {
     id: "Activity.item.challenge",
-    defaultMessage: "Challenge"
+    defaultMessage: "Challenge",
   },
   task: {
     id: "Activity.item.task",
-    defaultMessage: "Task"
+    defaultMessage: "Task",
   },
   tag: {
     id: "Activity.item.tag",
-    defaultMessage: "Tag"
+    defaultMessage: "Tag",
   },
   survey: {
     id: "Activity.item.survey",
-    defaultMessage: "Survey"
+    defaultMessage: "Survey",
   },
   user: {
     id: "Activity.item.user",
-    defaultMessage: "User"
+    defaultMessage: "User",
   },
   group: {
     id: "Activity.item.group",
-    defaultMessage: "Group"
+    defaultMessage: "Group",
   },
   virtualChallenge: {
     id: "Activity.item.virtualChallenge",
-    defaultMessage: "Virtual Challenge"
+    defaultMessage: "Virtual Challenge",
   },
   bundle: {
     id: "Activity.item.bundle",
-    defaultMessage: "Bundle"
+    defaultMessage: "Bundle",
   },
   grant: {
     id: "Activity.item.grant",
-    defaultMessage: "Grant"
+    defaultMessage: "Grant",
   },
-})
+});

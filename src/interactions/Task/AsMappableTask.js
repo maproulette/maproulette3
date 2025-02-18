@@ -1,27 +1,25 @@
-import { getType } from '@turf/invariant'
-import { point } from '@turf/helpers'
-import center from '@turf/center'
-import bbox from '@turf/bbox'
-import nearestPointOnLine from '@turf/nearest-point-on-line'
-import _get from 'lodash/get'
-import _isObject from 'lodash/isObject'
-import _isArray from 'lodash/isArray'
-import _map from 'lodash/map'
-import _fromPairs from 'lodash/fromPairs'
-import _pick from 'lodash/pick'
-import _every from 'lodash/every'
-import _cloneDeep from 'lodash/cloneDeep'
-import _find from 'lodash/find'
-import { latLng } from 'leaflet'
-import AsIdentifiableFeature from '../TaskFeature/AsIdentifiableFeature'
-import { supportedSimplestyles } from '../TaskFeature/AsSimpleStyleableFeature'
+import bbox from "@turf/bbox";
+import center from "@turf/center";
+import { point } from "@turf/helpers";
+import { getType } from "@turf/invariant";
+import nearestPointOnLine from "@turf/nearest-point-on-line";
+import { latLng } from "leaflet";
+import _cloneDeep from "lodash/cloneDeep";
+import _every from "lodash/every";
+import _find from "lodash/find";
+import _fromPairs from "lodash/fromPairs";
+import _isObject from "lodash/isObject";
+import _map from "lodash/map";
+import _pick from "lodash/pick";
+import AsIdentifiableFeature from "../TaskFeature/AsIdentifiableFeature";
+import { supportedSimplestyles } from "../TaskFeature/AsSimpleStyleableFeature";
 
 /**
  * AsMappableTask adds functionality to a Task related to mapping.
  */
 export class AsMappableTask {
   constructor(task) {
-    Object.assign(this, task)
+    Object.assign(this, task);
   }
 
   /**
@@ -30,17 +28,16 @@ export class AsMappableTask {
    */
   hasGeometries() {
     if (!_isObject(this.geometries)) {
-      return false
+      return false;
     }
 
     // There are some tasks that have a FeatureCollection with null features,
     // so check for that here.
-    if (this.geometries.type === 'FeatureCollection' &&
-        !_isArray(this.geometries.features)) {
-      return false
+    if (this.geometries.type === "FeatureCollection" && !Array.isArray(this.geometries.features)) {
+      return false;
     }
 
-    return true
+    return true;
   }
 
   /**
@@ -49,15 +46,17 @@ export class AsMappableTask {
    */
   isFeatureType(allowedFeatureTypes) {
     if (!this.hasGeometries()) {
-      return false
+      return false;
     }
 
-    const allowedTypes = _isArray(allowedFeatureTypes) ?
-                         allowedFeatureTypes : [allowedFeatureTypes]
+    const allowedTypes = Array.isArray(allowedFeatureTypes)
+      ? allowedFeatureTypes
+      : [allowedFeatureTypes];
 
-    return _every(this.geometries.features, feature =>
-      allowedTypes.indexOf(getType(feature)) !== -1
-    )
+    return _every(
+      this.geometries.features,
+      (feature) => allowedTypes.indexOf(getType(feature)) !== -1,
+    );
   }
 
   /**
@@ -66,14 +65,15 @@ export class AsMappableTask {
    */
   propertiesForOSMFeature(osmId) {
     if (!osmId || !this.hasGeometries()) {
-      return {}
+      return {};
     }
 
-    const feature = _find(this.geometries.features, f =>
-      osmId === AsIdentifiableFeature(f).normalizedTypeAndId(true, '/')
-    )
+    const feature = _find(
+      this.geometries.features,
+      (f) => osmId === AsIdentifiableFeature(f).normalizedTypeAndId(true, "/"),
+    );
 
-    return feature ? feature.properties : {}
+    return feature ? feature.properties : {};
   }
 
   /**
@@ -83,48 +83,48 @@ export class AsMappableTask {
    */
   allFeatureProperties(features) {
     if (!this.hasGeometries()) {
-      return []
+      return [];
     }
 
     if (!features) {
-      features = this.geometries.features
+      features = this.geometries.features;
     }
 
-    let allProperties = {}
+    let allProperties = {};
 
-    features.forEach(feature => {
-      if (feature && feature.properties) {
-        allProperties = Object.assign(allProperties, feature.properties)
+    features.forEach((feature) => {
+      if (feature?.properties) {
+        allProperties = Object.assign(allProperties, feature.properties);
       }
-    })
+    });
 
-    return allProperties
+    return allProperties;
   }
 
-    /**
+  /**
    * Generates an array of property objects containing all feature properties found in the
    * task's geometries. Later properties will overwrite earlier properties with
    * the same name.
    */
-    allFeaturePropertiesArray(features) {
-      if (!this.hasGeometries()) {
-        return []
-      }
-  
-      if (!features) {
-        features = this.geometries.features
-      }
-  
-      let allProperties = []
-  
-      features.forEach(feature => {
-        if (feature && feature.properties) {
-          allProperties.push(feature);
-        }
-      })
-  
-      return allProperties
+  allFeaturePropertiesArray(features) {
+    if (!this.hasGeometries()) {
+      return [];
     }
+
+    if (!features) {
+      features = this.geometries.features;
+    }
+
+    let allProperties = [];
+
+    features.forEach((feature) => {
+      if (feature?.properties) {
+        allProperties.push(feature);
+      }
+    });
+
+    return allProperties;
+  }
 
   /**
    * Similar to allFeatureProperties, but uses current OSM tags for the feature
@@ -133,16 +133,16 @@ export class AsMappableTask {
    */
   osmFeatureProperties(osmElements) {
     if (!this.hasGeometries()) {
-      return []
+      return [];
     }
 
     if (!osmElements || osmElements.size === 0) {
-      return this.allFeaturePropertiesArray()
+      return this.allFeaturePropertiesArray();
     }
 
     return this.allFeaturePropertiesArray(
-      this.featuresWithTags(this.geometries.features, osmElements, true, supportedSimplestyles)
-    )
+      this.featuresWithTags(this.geometries.features, osmElements, true, supportedSimplestyles),
+    );
   }
 
   /**
@@ -151,27 +151,26 @@ export class AsMappableTask {
    * (0, 0)
    */
   rawCenterPoint() {
-    let centerPoint = _get(this, 'location.coordinates')
+    let centerPoint = this?.location?.coordinates;
 
     if (!centerPoint && _isObject(this.point)) {
-      centerPoint = [this.point.lng, this.point.lat]
+      centerPoint = [this.point.lng, this.point.lat];
     }
 
     // Not all tasks have a center-point. In that case, we try to calculate
     // one ourselves based on the task features.
     if (!centerPoint && this.hasGeometries()) {
       try {
-        centerPoint = _get(center(this.geometries), 'geometry.coordinates')
-      }
-      catch(e) {} // Bad geometry can cause turf to blow up
+        centerPoint = center(this.geometries)?.geometry?.coordinates;
+      } catch (e) {} // Bad geometry can cause turf to blow up
     }
 
     // If all our efforts failed, default to (0, 0).
     if (!centerPoint) {
-      centerPoint = [0, 0]
+      centerPoint = [0, 0];
     }
 
-    return centerPoint
+    return centerPoint;
   }
 
   /**
@@ -180,10 +179,10 @@ export class AsMappableTask {
    * default to (0, 0)
    */
   calculateCenterPoint() {
-    const centerPoint = this.rawCenterPoint()
+    const centerPoint = this.rawCenterPoint();
 
     // The raw centerpoint is (Lng, Lat), but Leaflet maps want (Lat, Lng)
-    return latLng(centerPoint[1], centerPoint[0])
+    return latLng(centerPoint[1], centerPoint[0]);
   }
 
   /**
@@ -192,16 +191,15 @@ export class AsMappableTask {
    * centerpoint is simply returned as a GeoJSON Point object
    */
   nearestPointToCenter() {
-    const centerPoint = this.rawCenterPoint()
+    const centerPoint = this.rawCenterPoint();
 
-    if (this.isFeatureType(['LineString', 'MultiLineString'])) {
+    if (this.isFeatureType(["LineString", "MultiLineString"])) {
       try {
-        return nearestPointOnLine(this.normalizedGeometries(), centerPoint)
-      }
-      catch(e) {} // Bad geometry can cause turf to blow up
+        return nearestPointOnLine(this.normalizedGeometries(), centerPoint);
+      } catch (e) {} // Bad geometry can cause turf to blow up
     }
 
-    return point(centerPoint)
+    return point(centerPoint);
   }
 
   /**
@@ -209,11 +207,11 @@ export class AsMappableTask {
    * FeatureCollection type
    */
   normalizedGeometries() {
-    if (_isArray(this.geometries?.features) && !this.geometries?.type) {
-      return Object.assign({type: "FeatureCollection"}, this.geometries)
+    if (Array.isArray(this.geometries?.features) && !this.geometries?.type) {
+      return Object.assign({ type: "FeatureCollection" }, this.geometries);
     }
 
-    return this.geometries
+    return this.geometries;
   }
 
   /**
@@ -222,14 +220,13 @@ export class AsMappableTask {
   calculateBBox() {
     try {
       if (this.hasGeometries()) {
-        return bbox(this.geometries)
+        return bbox(this.geometries);
       }
-    }
-    catch(e) {} // Bad geometry can cause turf to blow up
+    } catch (e) {} // Bad geometry can cause turf to blow up
 
     // Fall back to task centerpoint
-    const centerPoint = this.calculateCenterPoint()
-    return bbox(point([centerPoint.lng, centerPoint.lat]))
+    const centerPoint = this.calculateCenterPoint();
+    return bbox(point([centerPoint.lng, centerPoint.lat]));
   }
 
   /**
@@ -240,23 +237,23 @@ export class AsMappableTask {
    * property set. Specific original properties can also be preserved by
    * including their names in the preserveProperties array
    */
-  featuresWithTags(features, osmElements, includeId=true, preserveProperties=[]) {
-    return _map(features, originalFeature => {
-      const feature = _cloneDeep(originalFeature)
-      const elementId = AsIdentifiableFeature(feature).rawFeatureId()
+  featuresWithTags(features, osmElements, includeId = true, preserveProperties = []) {
+    return _map(features, (originalFeature) => {
+      const feature = _cloneDeep(originalFeature);
+      const elementId = AsIdentifiableFeature(feature).rawFeatureId();
       if (!elementId || !osmElements.has(elementId)) {
         // No id or no data for id, so return feature as-is
-        return feature
+        return feature;
       }
 
       feature.properties = Object.assign(
-        includeId ? {'@id': elementId} : {},
+        includeId ? { "@id": elementId } : {},
         this.tagsObjectFor(elementId, osmElements),
-        _pick(originalFeature.properties, preserveProperties)
-      )
+        _pick(originalFeature.properties, preserveProperties),
+      );
 
-      return feature
-    })
+      return feature;
+    });
   }
 
   /**
@@ -268,13 +265,11 @@ export class AsMappableTask {
    */
   tagsObjectFor(elementId, osmElements) {
     if (!osmElements.has(elementId)) {
-      return null
+      return null;
     }
 
-    return _fromPairs(
-      _map(osmElements.get(elementId).tag, tag => [tag.k, tag.v])
-    )
+    return _fromPairs(_map(osmElements.get(elementId).tag, (tag) => [tag.k, tag.v]));
   }
 }
 
-export default task => new AsMappableTask(task)
+export default (task) => new AsMappableTask(task);

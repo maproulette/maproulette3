@@ -1,52 +1,49 @@
-import { Component } from 'react'
-import onClickOutside from 'react-onclickoutside'
-import _omit from 'lodash/omit'
+import _omit from "lodash/omit";
+import { Component } from "react";
+import onClickOutside from "react-onclickoutside";
 
-export default function(WrappedComponent, initiallyActive=false) {
+export default function (WrappedComponent, initiallyActive = false) {
   class WithDeactivateOnOutsideClick extends Component {
-    state = {isActive: initiallyActive}
+    state = { isActive: initiallyActive };
 
     activate = () => {
-      this.setState({isActive: true})
-      this.props.enableOnClickOutside()
+      this.setState({ isActive: true });
+      this.props.enableOnClickOutside();
 
       if (this.props.onActivate) {
-        this.props.onActivate()
+        this.props.onActivate();
       }
-    }
+    };
 
     deactivate = () => {
-      this.setState({isActive: false})
-      this.props.disableOnClickOutside()
+      this.setState({ isActive: false });
+      this.props.disableOnClickOutside();
 
       if (this.props.onDeactivate) {
-        this.props.onDeactivate()
+        this.props.onDeactivate();
       }
-    }
+    };
 
-    toggleActive = () => this.state.isActive ? this.deactivate() : this.activate()
+    toggleActive = () => (this.state.isActive ? this.deactivate() : this.activate());
 
     handleClickOutside = () => {
       if (this.state.isActive) {
-        this.deactivate()
+        this.deactivate();
       }
-    }
+    };
 
     render() {
       return (
-        <WrappedComponent isActive={this.state.isActive}
-                          toggleActive={this.toggleActive}
-                          activate={this.activate}
-                          deactivate={this.deactivate}
-                          {..._omit(this.props, [
-                            'isActive',
-                            'toggleActive',
-                            'activate',
-                            'deactivate'
-                          ])} />
-      )
+        <WrappedComponent
+          isActive={this.state.isActive}
+          toggleActive={this.toggleActive}
+          activate={this.activate}
+          deactivate={this.deactivate}
+          {..._omit(this.props, ["isActive", "toggleActive", "activate", "deactivate"])}
+        />
+      );
     }
   }
 
-  return onClickOutside(WithDeactivateOnOutsideClick)
+  return onClickOutside(WithDeactivateOnOutsideClick);
 }

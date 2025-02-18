@@ -16,11 +16,7 @@ const STEP_ID = "Properties";
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (
-  intl,
-  user,
-  challengeData
-) => {
+export const jsSchema = (intl, user, challengeData) => {
   return {
     $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -37,10 +33,7 @@ export const jsSchema = (
         title: intl.formatMessage(messages.customTaskStyleLabel),
         type: "boolean",
         default: false,
-        enumNames: [
-          intl.formatMessage(messages.yesLabel),
-          intl.formatMessage(messages.noLabel),
-        ],
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
       },
       exportableProperties: {
         title: intl.formatMessage(messages.exportablePropertiesLabel),
@@ -60,16 +53,9 @@ export const jsSchema = (
  * > the form configuration will help the RJSFFormFieldAdapter generate the
  * > proper markup
  */
-export const uiSchema = (
-  intl,
-  user,
-  challengeData,
-  extraErrors,
-  options = {}
-) => {
-  const sourceReadOnly = AsEditableChallenge(challengeData)
-  const isCollapsed =
-    options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
+export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
+  const sourceReadOnly = !AsEditableChallenge(challengeData).hasZeroTasks();
+  const isCollapsed = options.longForm && (options.collapsedGroups || []).indexOf(STEP_ID) === -1;
   const toggleCollapsed =
     options.longForm && options.toggleCollapsed
       ? () => options.toggleCollapsed(STEP_ID)

@@ -1,13 +1,13 @@
 import { vi } from "vitest";
 import "@testing-library/jest-dom";
-import { Fragment } from "react";
+import { render as rtlRender } from "@testing-library/react";
 import Enzyme, { shallow, render, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { createBrowserHistory } from "history";
-import { Router } from "react-router-dom";
-import { render as rtlRender } from "@testing-library/react";
-import { Provider } from "react-redux";
+import { Fragment } from "react";
 import { IntlProvider } from "react-intl";
+import { Provider } from "react-redux";
+import { Router } from "react-router-dom";
 
 import env from "../public/env.json";
 
@@ -33,15 +33,12 @@ const { initializeStore } = await import("./PersistedStore");
 const reduxStore = initializeStore();
 const routerHistory = createBrowserHistory();
 
-global.withProvider = (
-  ui,
-  { store = reduxStore, ...renderOptions } = {}
-) => {
+global.withProvider = (ui, { store = reduxStore, ...renderOptions } = {}) => {
   function Wrapper({ children }) {
     return (
       <Fragment>
         <Provider store={store}>
-          <IntlProvider locale="en">
+          <IntlProvider locale="en" onError={() => {}}>
             <Router history={routerHistory}>{children}</Router>
           </IntlProvider>
         </Provider>
@@ -52,53 +49,53 @@ global.withProvider = (
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 };
 
-vi.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
+vi.mock("@rjsf/core/lib/components/widgets/SelectWidget", () => ({
   __esModule: true,
 }));
 
-vi.mock('@rjsf/core/lib/components/widgets/SelectWidget', () => ({
+vi.mock("@rjsf/core/lib/components/widgets/SelectWidget", () => ({
   __esModule: true,
-  default: () => null
+  default: () => null,
 }));
 
-vi.mock('@rjsf/core/lib/components/widgets/TextWidget', () => ({
+vi.mock("@rjsf/core/lib/components/widgets/TextWidget", () => ({
   __esModule: true,
-  default: () => null
+  default: () => null,
 }));
 
-vi.mock('@rjsf/core/lib/components/widgets/CheckboxWidget', () => ({
+vi.mock("@rjsf/core/lib/components/widgets/CheckboxWidget", () => ({
   __esModule: true,
-  default: () => null
+  default: () => null,
 }));
 
-vi.mock('react-syntax-highlighter/dist/esm/languages/hljs/json', () => ({
+vi.mock("react-syntax-highlighter/dist/esm/languages/hljs/json", () => ({
   __esModule: true,
-  default: () => null
+  default: () => null,
 }));
 
-vi.mock('react-syntax-highlighter/dist/esm/styles/hljs/agate', () => ({
+vi.mock("react-syntax-highlighter/dist/esm/styles/hljs/agate", () => ({
   __esModule: true,
   default: {
     hljs: {
-      background: ""
-    }
-  }
+      background: "",
+    },
+  },
 }));
 
-vi.mock('react-syntax-highlighter', () => ({
+vi.mock("react-syntax-highlighter", () => ({
   Light: {
-    registerLanguage: () => null
-  }
-}))
+    registerLanguage: () => null,
+  },
+}));
 
-vi.mock('react-syntax-highlighter/dist/esm/languages/hljs/xml', () => ({
+vi.mock("react-syntax-highlighter/dist/esm/languages/hljs/xml", () => ({
   __esModule: true,
   default: {
-    xmlLang: ""
-  }
+    xmlLang: "",
+  },
 }));
 
-vi.mock('@nivo/bar', () => ({
+vi.mock("@nivo/bar", () => ({
   __esModule: true,
-  ResponsiveBar: () => null
+  ResponsiveBar: () => null,
 }));

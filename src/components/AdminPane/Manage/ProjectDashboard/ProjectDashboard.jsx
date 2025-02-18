@@ -1,25 +1,25 @@
-import { Component } from "react";
 import PropTypes from "prop-types";
+import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import AsManager from "../../../../interactions/User/AsManager";
 import {
-  generateWidgetId,
-  WidgetDataTarget,
-  widgetDescriptor,
-} from "../../../../services/Widget/Widget";
-import {
   challengePassesFilters,
   defaultChallengeFilters,
 } from "../../../../services/Widget/ChallengeFilter/ChallengeFilter";
-import WithManageableProjects from "../../HOCs/WithManageableProjects/WithManageableProjects";
-import WithCurrentProject from "../../HOCs/WithCurrentProject/WithCurrentProject";
-import WithWidgetWorkspaces from "../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
-import WithDashboardEntityFilter from "../../HOCs/WithDashboardEntityFilter/WithDashboardEntityFilter";
-import WidgetWorkspace from "../../../WidgetWorkspace/WidgetWorkspace";
-import ChallengeFilterGroup from "../ChallengeFilterGroup/ChallengeFilterGroup";
-import ConfirmAction from "../../../ConfirmAction/ConfirmAction";
+import {
+  WidgetDataTarget,
+  generateWidgetId,
+  widgetDescriptor,
+} from "../../../../services/Widget/Widget";
 import BusySpinner from "../../../BusySpinner/BusySpinner";
+import ConfirmAction from "../../../ConfirmAction/ConfirmAction";
+import WithWidgetWorkspaces from "../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
+import WidgetWorkspace from "../../../WidgetWorkspace/WidgetWorkspace";
+import WithCurrentProject from "../../HOCs/WithCurrentProject/WithCurrentProject";
+import WithDashboardEntityFilter from "../../HOCs/WithDashboardEntityFilter/WithDashboardEntityFilter";
+import WithManageableProjects from "../../HOCs/WithManageableProjects/WithManageableProjects";
+import ChallengeFilterGroup from "../ChallengeFilterGroup/ChallengeFilterGroup";
 import manageMessages from "../Messages";
 import messages from "./Messages";
 import "./ProjectDashboard.scss";
@@ -158,9 +158,7 @@ export class ProjectDashboardInternal extends Component {
             </ConfirmAction>
           )}
 
-          {manager.canAdministrateProject(this.props.project) &&
-          !isArchived &&
-          !isVirtual ? (
+          {manager.canAdministrateProject(this.props.project) && !isArchived && !isVirtual ? (
             <>
               <a
                 onClick={this.archiveProject}
@@ -171,9 +169,7 @@ export class ProjectDashboardInternal extends Component {
             </>
           ) : null}
 
-          {manager.canAdministrateProject(this.props.project) &&
-          isArchived &&
-          !isVirtual ? (
+          {manager.canAdministrateProject(this.props.project) && isArchived && !isVirtual ? (
             <>
               <a
                 onClick={this.unarchiveProject}
@@ -188,10 +184,7 @@ export class ProjectDashboardInternal extends Component {
     );
 
     return (
-      <div
-        data-testid="project-dashboard"
-        className="admin__manage project-dashboard"
-      >
+      <div data-testid="project-dashboard" className="admin__manage project-dashboard">
         <WidgetWorkspace
           {...this.props}
           lightMode={false}
@@ -231,19 +224,19 @@ const ProjectDashboard = WithProjectManagement(
           "challenges",
           "pinnedChallenges",
           "challenges",
-          challengePassesFilters
+          challengePassesFilters,
         ),
         [WidgetDataTarget.project, WidgetDataTarget.challenges],
         DASHBOARD_NAME,
-        defaultDashboardSetup
+        defaultDashboardSetup,
       ),
       {
         restrictToGivenProjects: true,
         includeChallenges: true,
         includeComments: true,
-      }
-    )
-  )
+      },
+    ),
+  ),
 );
 
 export default ProjectDashboard;

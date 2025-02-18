@@ -1,8 +1,8 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import BusySpinner from '../../components/BusySpinner/BusySpinner'
-import messages from './Messages'
-import CommentType from '../../services/Comment/CommentType'
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import BusySpinner from "../../components/BusySpinner/BusySpinner";
+import CommentType from "../../services/Comment/CommentType";
+import messages from "./Messages";
 
 class HeaderSent extends Component {
   render() {
@@ -15,15 +15,16 @@ class HeaderSent extends Component {
             </h1>
           </div>
           <div>
-            {this.props.notificationsLoading ?
-             <BusySpinner /> :
-             <button
-              className="mr-button mr-button--green-lighter mr-button--small"
-              onClick={() => this.props.refreshData()}
-             >
-               <FormattedMessage {...messages.refreshCommentsLabel} />
-             </button>
-            }
+            {this.props.notificationsLoading ? (
+              <BusySpinner />
+            ) : (
+              <button
+                className="mr-button mr-button--green-lighter mr-button--small"
+                onClick={() => this.props.refreshData()}
+              >
+                <FormattedMessage {...messages.refreshCommentsLabel} />
+              </button>
+            )}
           </div>
         </div>
         <div className="mr-flex mr-justify-end mr-items-center">
@@ -49,8 +50,8 @@ class HeaderSent extends Component {
           </ul>
         </div>
       </header>
-    )
+    );
   }
 }
 
-export default HeaderSent
+export default HeaderSent;

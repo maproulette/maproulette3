@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { fetchUserComments } from '../../services/User/User';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { fetchUserComments } from "../../services/User/User";
 
 export const useSentComments = (commentType) => {
   const dispatch = useDispatch();
@@ -9,7 +9,11 @@ export const useSentComments = (commentType) => {
   const [error, setError] = useState("");
   const [count, setCount] = useState(0);
 
-  const fetch = async (userId, sort = { id: 'created', desc: true }, pagination = { page: 0, pageSize: 25 }) => {
+  const fetch = async (
+    userId,
+    sort = { id: "created", desc: true },
+    pagination = { page: 0, pageSize: 25 },
+  ) => {
     if (userId) {
       setError("");
       setLoading(true);
@@ -18,8 +22,8 @@ export const useSentComments = (commentType) => {
         sort: sort.id,
         order: sort.desc ? "DESC" : "ASC",
         page: pagination.page,
-        limit: pagination.pageSize
-      }
+        limit: pagination.pageSize,
+      };
 
       const result = await dispatch(fetchUserComments(userId, commentType, apiFilters));
 
@@ -29,12 +33,12 @@ export const useSentComments = (commentType) => {
         setCount(0);
       } else {
         setData(result);
-        setCount(result?.[0]?.fullCount || 0)
+        setCount(result?.[0]?.fullCount || 0);
       }
-  
+
       setLoading(false);
     }
-  }
+  };
 
   return { data, fetch, loading, error, count };
-}
+};

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with KeyMappings.
@@ -31,7 +31,7 @@ export default defineMessages({
 
   editRapid: {
     id: "KeyMapping.openEditor.editRapid",
-    defaultMessage: "Edit in RapiD",
+    defaultMessage: "Edit in Rapid",
   },
 
   layerOSMData: {
@@ -61,7 +61,7 @@ export default defineMessages({
 
   completeTogether: {
     id: "KeyMapping.taskEditing.completeTogether",
-    defaultMessage: "Complete Tasks Together"
+    defaultMessage: "Complete Tasks Together",
   },
 
   escapeLabel: {
@@ -108,4 +108,4 @@ export default defineMessages({
     id: "KeyMapping.taskCompletion.confirmSubmit",
     defaultMessage: "Submit",
   },
-})
+});

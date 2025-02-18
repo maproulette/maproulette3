@@ -1,12 +1,13 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import _isEmpty from 'lodash/isEmpty'
-import _noop from 'lodash/noop'
-import { injectIntl, FormattedMessage } from 'react-intl'
-import { ChallengeLocation,
-         locationLabels }
-       from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
-import messages from './Messages'
+import _isEmpty from "lodash/isEmpty";
+import _noop from "lodash/noop";
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import {
+  ChallengeLocation,
+  locationLabels,
+} from "../../../services/Challenge/ChallengeLocation/ChallengeLocation";
+import messages from "./Messages";
 
 /**
  * FilterByLocation displays radio buttons for filtering challenges by
@@ -23,30 +24,28 @@ export class FilterByLocation extends Component {
    */
   updateFilter = (value) => {
     if (_isEmpty(value)) {
-      this.props.removeSearchFilters(['location'])
-    }
-    else {
+      this.props.removeSearchFilters(["location"]);
+    } else {
       // For nearMe, we actually use the withinMapBounds setting -- we just
       // also set the map bounds to be near the user.
       if (value === ChallengeLocation.nearMe) {
         // Note: repositioning the map will automatically trigger an update of the
         // bounded challenges, so we don't need to request an update here.
-        this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
-        this.props.locateMapToUser(this.props.user)
-      }
-      else {
-        this.props.setSearchFilters({location: value})
+        this.props.setSearchFilters({ location: ChallengeLocation.intersectingMapBounds });
+        this.props.locateMapToUser(this.props.user);
+      } else {
+        this.props.setSearchFilters({ location: value });
       }
     }
-  }
+  };
 
-  componentDidMount(){
+  componentDidMount() {
     // Default to 'intersectingMapBounds'
-    this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
+    this.props.setSearchFilters({ location: ChallengeLocation.intersectingMapBounds });
   }
 
   render() {
-    const localizedLocationLabels = locationLabels(this.props.intl)
+    const localizedLocationLabels = locationLabels(this.props.intl);
 
     return (
       <div className="form mr-flex mr-items-center mr-mb-6">
@@ -82,7 +81,7 @@ export class FilterByLocation extends Component {
           </label>
         </span>
       </div>
-    )
+    );
   }
 }
 
@@ -99,10 +98,10 @@ FilterByLocation.propTypes = {
   searchFilters: PropTypes.object,
   /** The current logged-in user, if any */
   user: PropTypes.object,
-}
+};
 
 FilterByLocation.defaultProps = {
   searchFilters: {},
-}
+};
 
-export default injectIntl(FilterByLocation)
+export default injectIntl(FilterByLocation);

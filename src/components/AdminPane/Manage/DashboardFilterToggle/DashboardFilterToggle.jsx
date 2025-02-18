@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { Component } from "react";
 
 const DashboardFilterToggle = (filterType, filterName) => {
   return class extends Component {
@@ -10,11 +10,12 @@ const DashboardFilterToggle = (filterType, filterName) => {
             className="mr-checkbox-toggle mr-ml-4 mr-mr-1"
             checked={this.props.dashboardEntityFilters[filterName] || false}
             onChange={() => this.props.toggleEntityFilter(filterName)}
-          /> {this.props.filterToggleLabel}
+          />{" "}
+          {this.props.filterToggleLabel}
         </div>
-      )
+      );
     }
-  }
-}
+  };
+};
 
-export default DashboardFilterToggle
+export default DashboardFilterToggle;

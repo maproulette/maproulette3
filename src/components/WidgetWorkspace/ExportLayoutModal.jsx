@@ -1,10 +1,10 @@
-import { Component } from "react";
 import PropTypes from "prop-types";
+import { Component } from "react";
 import { FormattedMessage } from "react-intl";
+import shippingTruck from "../../../images/shipping-truck.svg";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
 import messages from "./Messages";
-import shippingTruck from "../../../images/shipping-truck.svg";
 
 export default class ExportLayoutModal extends Component {
   state = {
@@ -35,9 +35,7 @@ export default class ExportLayoutModal extends Component {
                   type="text"
                   className="mr-input"
                   value={this.state.exportName}
-                  onChange={(e) =>
-                    this.setState({ exportName: e.target.value })
-                  }
+                  onChange={(e) => this.setState({ exportName: e.target.value })}
                 />
               </div>
 

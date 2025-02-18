@@ -1,10 +1,9 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
-import { messagesByStatus, TaskStatus }
-       from '../../services/Task/TaskStatus/TaskStatus'
-import messages from './Messages'
-import './TaskStatusIndicator.scss'
+import PropTypes from "prop-types";
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { TaskStatus, messagesByStatus } from "../../services/Task/TaskStatus/TaskStatus";
+import messages from "./Messages";
+import "./TaskStatusIndicator.scss";
 
 /**
  * TaskStatusIndicator displays the current status of the given task.  By
@@ -18,9 +17,8 @@ import './TaskStatusIndicator.scss'
  */
 export default class TaskStatusIndicator extends Component {
   render() {
-    if (!this.props.showAnyStatus &&
-        this.props.task.status === TaskStatus.created) {
-      return null
+    if (!this.props.showAnyStatus && this.props.task.status === TaskStatus.created) {
+      return null;
     }
 
     return (
@@ -29,20 +27,20 @@ export default class TaskStatusIndicator extends Component {
           <div className="task-status__label mr-flex mr-justify-between">
             <FormattedMessage {...messagesByStatus[this.props.task.status]} />
 
-            {this.props.task.changesetId > 0 &&
-             <a
-               href={`${window.env.REACT_APP_OSM_API_SERVER}/changeset/${this.props.task.changesetId}`}
-               target="_blank"
-               rel="noopener noreferrer"
-               className={`task-status__view-changeset-link ${this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"}`}
-             >
-               <FormattedMessage {...messages.viewChangeset} />
-             </a>
-            }
+            {this.props.task.changesetId > 0 && (
+              <a
+                href={`${window.env.REACT_APP_OSM_API_SERVER}/changeset/${this.props.task.changesetId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`task-status__view-changeset-link ${this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"}`}
+              >
+                <FormattedMessage {...messages.viewChangeset} />
+              </a>
+            )}
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -53,4 +51,4 @@ TaskStatusIndicator.propTypes = {
   isMinimized: PropTypes.bool,
   /** Set to true to render regardless of task status. */
   showAnyStatus: PropTypes.bool,
-}
+};

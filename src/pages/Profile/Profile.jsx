@@ -1,36 +1,35 @@
-import { Component } from 'react'
-import { FormattedMessage, injectIntl } from 'react-intl'
-import _get from 'lodash/get'
-import SignIn from '../../pages/SignIn/SignIn'
-import UserSettings from './UserSettings/UserSettings'
-import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
-import BusySpinner from '../../components/BusySpinner/BusySpinner'
-import ApiKey from './ApiKey'
-import messages from './Messages'
+import { Component } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import BusySpinner from "../../components/BusySpinner/BusySpinner";
+import WithTargetUser from "../../components/HOCs/WithTargetUser/WithTargetUser";
+import SignIn from "../../pages/SignIn/SignIn";
+import ApiKey from "./ApiKey";
+import messages from "./Messages";
+import UserSettings from "./UserSettings/UserSettings";
 
 class Profile extends Component {
   componentDidMount() {
     // Make sure our user is logged in
-    if (_get(this.props, 'user.isLoggedIn')) {
-      this.props.fetchUser(this.props.user.id)
+    if (this.props.user?.isLoggedIn) {
+      this.props.fetchUser(this.props.user.id);
     }
   }
 
   render() {
     if (!this.props.user) {
-      return (
-        this.props.checkingLoginStatus ?
+      return this.props.checkingLoginStatus ? (
         <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
           <BusySpinner />
-        </div> :
+        </div>
+      ) : (
         <SignIn {...this.props} />
-      )
+      );
     }
 
-    let user = this.props.user
+    let user = this.props.user;
 
     if (this.props.showingUserId) {
-      user = this.props.targetUser
+      user = this.props.targetUser;
 
       // If no user then we are still loading
       if (!user) {
@@ -39,17 +38,18 @@ class Profile extends Component {
             <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
               <BusySpinner />
             </div>
-          )
-        }
-        else {
+          );
+        } else {
           // User supplied was not found so we will user our current user
           return (
             <div className="">
               <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
-                <h2><FormattedMessage {...messages.userNotFound} /></h2>
+                <h2>
+                  <FormattedMessage {...messages.userNotFound} />
+                </h2>
               </div>
             </div>
-          )
+          );
         }
       }
     }
@@ -62,13 +62,13 @@ class Profile extends Component {
           </h1>
         </header>
         <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-p-4 md:mr-p-8 mr-rounded mr-rounded-t-none">
-          <UserSettings {...this.props} user={user} editor={this.props.user}/>
+          <UserSettings {...this.props} user={user} editor={this.props.user} />
           <div className="mr-border-t-2 mr-border-white-15 mr-my-12" />
           <ApiKey {...this.props} user={user} />
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default WithTargetUser(injectIntl(Profile))
+export default WithTargetUser(injectIntl(Profile));

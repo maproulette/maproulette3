@@ -1,5 +1,5 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
+import { Component } from "react";
 
 /**
  * SvgSymbol renders an svg that utilizes a <use> tag to reference the
@@ -20,9 +20,9 @@ export default class SvgSymbol extends Component {
         onClick={this.props.onClick}
       >
         {this.props.title && <title>{this.props.title}</title>}
-        <use xlinkHref={'#' + this.props.sym} />
+        <use xlinkHref={"#" + this.props.sym} />
       </svg>
-    )
+    );
   }
 }
 
@@ -30,4 +30,4 @@ SvgSymbol.propTypes = {
   sym: PropTypes.string.isRequired,
   viewBox: PropTypes.string.isRequired,
   title: PropTypes.string,
-}
+};

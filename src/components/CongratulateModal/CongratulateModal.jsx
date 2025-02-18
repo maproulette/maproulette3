@@ -1,10 +1,10 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import Confetti from 'react-dom-confetti'
-import Modal from '../Modal/Modal'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import messages from './Messages'
-import './CongratulateModal.scss'
+import { Component } from "react";
+import Confetti from "react-dom-confetti";
+import { FormattedMessage } from "react-intl";
+import Modal from "../Modal/Modal";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
+import "./CongratulateModal.scss";
 
 /**
  * CongratulateModal presents a celebratory modal that displays a
@@ -16,12 +16,12 @@ export default class CongratulateModal extends Component {
   state = {
     confetti: false,
     active: true,
-  }
+  };
 
-  dismiss = () => this.setState({active: false})
+  dismiss = () => this.setState({ active: false });
 
   componentDidMount() {
-    setTimeout(() => this.setState({confetti: true}), 1000)
+    setTimeout(() => this.setState({ confetti: true }), 1000);
   }
 
   render() {
@@ -35,10 +35,17 @@ export default class CongratulateModal extends Component {
       >
         <div className="congratulate-modal__content mr-bg-blue-dark mr-text-white">
           <div className="congratulate-modal__message">
-            <SvgSymbol sym="trophy-icon" viewBox="0 0 20 20"
-                       className="congratulate-modal__message__trophy" />
-            <h2><FormattedMessage {...messages.header} /></h2>
-            <p><FormattedMessage {...messages.primaryMessage} /></p>
+            <SvgSymbol
+              sym="trophy-icon"
+              viewBox="0 0 20 20"
+              className="congratulate-modal__message__trophy"
+            />
+            <h2>
+              <FormattedMessage {...messages.header} />
+            </h2>
+            <p>
+              <FormattedMessage {...messages.primaryMessage} />
+            </p>
             <Confetti className="congratulate-modal__confetti" active={this.state.confetti} />
             <button className="mr-button mr-mt-8" onClick={this.dismiss}>
               <FormattedMessage {...messages.dismiss} />
@@ -46,6 +53,6 @@ export default class CongratulateModal extends Component {
           </div>
         </div>
       </Modal>
-    )
+    );
   }
 }

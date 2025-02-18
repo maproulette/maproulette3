@@ -1,27 +1,23 @@
-import { schema } from "normalizr";
-import _get from "lodash/get";
-import _isArray from "lodash/isArray";
+import { startOfDay } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _find from "lodash/find";
 import _map from "lodash/map";
-import _isFinite from "lodash/isFinite";
-import _isUndefined from "lodash/isUndefined";
-import { startOfDay } from 'date-fns'
-import { defaultRoutes as api, isSecurityError } from "../Server/Server";
-import Endpoint from "../Server/Endpoint";
-import RequestStatus from "../Server/RequestStatus";
-import genericEntityReducer from "../Server/GenericEntityReducer";
-import { RECEIVE_CHALLENGES } from "../Challenge/ChallengeActions";
-import { RESULTS_PER_PAGE } from "../Search/Search";
-import { addServerError, addError } from "../Error/Error";
-import AppErrors from "../Error/AppErrors";
-import { findUser, ensureUserLoggedIn, fetchUser } from "../User/User";
+import { schema } from "normalizr";
 import { setupCustomCache } from "../../utils/setupCustomCache";
+import { RECEIVE_CHALLENGES } from "../Challenge/ChallengeActions";
+import AppErrors from "../Error/AppErrors";
+import { addError, addServerError } from "../Error/Error";
+import { RESULTS_PER_PAGE } from "../Search/Search";
+import Endpoint from "../Server/Endpoint";
+import genericEntityReducer from "../Server/GenericEntityReducer";
+import RequestStatus from "../Server/RequestStatus";
+import { defaultRoutes as api, isSecurityError } from "../Server/Server";
+import { ensureUserLoggedIn, fetchUser, findUser } from "../User/User";
 
 // 5 minute cache
 const CACHE_TIME = 5 * 60 * 1000;
 const PROJECT_ACTIVITY_CACHE = "projectActivity";
-const FEATURED_PROJECTS_CACHE = 'featuredProjects';
+const FEATURED_PROJECTS_CACHE = "featuredProjects";
 const projectCache = setupCustomCache(CACHE_TIME);
 
 /** normalizr schema for projects */
@@ -33,7 +29,7 @@ export const projectSchema = function () {
 const RECEIVE_PROJECTS = "RECEIVE_PROJECTS";
 const REMOVE_PROJECT = "REMOVE_PROJECT";
 
-export const PROJECT_CHALLENGE_LIMIT = 100
+export const PROJECT_CHALLENGE_LIMIT = 100;
 
 // redux action creators
 
@@ -91,9 +87,9 @@ export const fetchManageableProjects = function (
   page = null,
   limit = RESULTS_PER_PAGE,
   onlyOwned = false,
-  onlyEnabled = false
+  onlyEnabled = false,
 ) {
-  const pageToFetch = _isFinite(page) ? page : 0;
+  const pageToFetch = Number.isFinite(page) ? page : 0;
 
   return function (dispatch) {
     return new Endpoint(api.projects.managed, {
@@ -108,7 +104,7 @@ export const fetchManageableProjects = function (
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.project.fetchFailure));
@@ -124,27 +120,27 @@ export const fetchManageableProjects = function (
 export const fetchFeaturedProjects = function (
   onlyEnabled = true,
   limit = RESULTS_PER_PAGE,
-  page = null
+  page = null,
 ) {
   return function (dispatch) {
-    const pageToFetch = _isFinite(page) ? page : 0;
-    const params = { onlyEnabled, limit, page: pageToFetch }
+    const pageToFetch = Number.isFinite(page) ? page : 0;
+    const params = { onlyEnabled, limit, page: pageToFetch };
     const cachedFeaturedProjects = projectCache.get({}, params, FEATURED_PROJECTS_CACHE);
 
     if (cachedFeaturedProjects) {
       return new Promise((resolve) => {
         dispatch(receiveProjects(cachedFeaturedProjects.entities));
-        resolve(cachedFeaturedProjects)
-      })
+        resolve(cachedFeaturedProjects);
+      });
     }
 
     return new Endpoint(api.projects.featured, {
       schema: [projectSchema()],
-      params
+      params,
     })
       .execute()
       .then((normalizedResults) => {
-        projectCache.set({}, params, normalizedResults, FEATURED_PROJECTS_CACHE)
+        projectCache.set({}, params, normalizedResults, FEATURED_PROJECTS_CACHE);
         dispatch(receiveProjects(normalizedResults.entities));
         return normalizedResults;
       })
@@ -184,7 +180,7 @@ export const fetchProjectsById = function (projectIds) {
     return new Endpoint(api.project.multiple, {
       schema: [projectSchema()],
       params: {
-        projectIds: _isArray(projectIds) ? projectIds.join(",") : projectIds,
+        projectIds: Array.isArray(projectIds) ? projectIds.join(",") : projectIds,
       },
     })
       .execute()
@@ -204,19 +200,12 @@ export const fetchProjectsById = function (projectIds) {
  *
  * @param {string} query - the search string
  */
-export const searchProjects = function (
-  searchCriteria,
-  limit = RESULTS_PER_PAGE
-) {
-  const query = _get(searchCriteria, "searchQuery");
-  const onlyEnabled = _isUndefined(searchCriteria.onlyEnabled)
-    ? true
-    : searchCriteria.onlyEnabled;
+export const searchProjects = function (searchCriteria, limit = RESULTS_PER_PAGE) {
+  const query = searchCriteria?.searchQuery;
+  const onlyEnabled = searchCriteria.onlyEnabled === undefined ? true : searchCriteria.onlyEnabled;
 
   // We are just making sure the pqge passed in is a) present and b) a number
-  const page = _isFinite(_get(searchCriteria, "page"))
-    ? _get(searchCriteria, "page")
-    : 0;
+  const page = Number.isFinite(searchCriteria?.page) ? searchCriteria?.page : 0;
 
   return function (dispatch) {
     return new Endpoint(api.projects.search, {
@@ -249,25 +238,19 @@ export const saveProject = function (projectData, user) {
   return function (dispatch) {
     // Setup the save endpoint to either edit or create the project depending
     // on whether it has an id.
-    const areCreating = !_isFinite(projectData.id);
+    const areCreating = !Number.isFinite(projectData.id);
 
-    const saveEndpoint = new Endpoint(
-      areCreating ? api.project.create : api.project.edit,
-      {
-        schema: projectSchema(),
-        variables: { id: projectData.id },
-        json: projectData,
-      }
-    );
+    const saveEndpoint = new Endpoint(areCreating ? api.project.create : api.project.edit, {
+      schema: projectSchema(),
+      variables: { id: projectData.id },
+      json: projectData,
+    });
 
     return saveEndpoint
       .execute()
       .then((normalizedResults) => {
         dispatch(receiveProjects(normalizedResults.entities));
-        const project = _get(
-          normalizedResults,
-          `entities.projects.${normalizedResults.result}`
-        );
+        const project = normalizedResults?.entities?.projects?.[normalizedResults.result];
 
         // If we just created the project, we should refresh the user as they
         // almost certainly have new grants
@@ -280,7 +263,7 @@ export const saveProject = function (projectData, user) {
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           console.log(error.response || error);
@@ -305,17 +288,14 @@ export const archiveProject = (id, bool) => {
       .execute()
       .then((normalizedResults) => {
         dispatch(receiveProjects(normalizedResults.entities));
-        const project = _get(
-          normalizedResults,
-          `entities.projects.${normalizedResults.result}`
-        );
+        const project = normalizedResults?.entities?.projects?.[normalizedResults.result];
 
         return project;
       })
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           console.log(error.response || error);
@@ -356,14 +336,14 @@ export const fetchProjectActivity = function (projectId, startDate, endDate) {
           },
         };
 
-        projectCache.set({}, params, normalizedResults, PROJECT_ACTIVITY_CACHE)
+        projectCache.set({}, params, normalizedResults, PROJECT_ACTIVITY_CACHE);
 
         return dispatch(receiveProjects(normalizedResults.entities));
       })
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.project.fetchFailure));
@@ -390,30 +370,25 @@ export const fetchProjectManagers = function (projectId) {
       new Endpoint(api.project.managers, { variables: { projectId } })
         .execute()
         .then(
-          (rawManagers) =>
-            (normalizedResults.entities.projects[
-              projectId
-            ].managers = rawManagers)
+          (rawManagers) => (normalizedResults.entities.projects[projectId].managers = rawManagers),
         ),
 
-      new Endpoint(api.teams.projectManagers, { variables: { projectId } })
-        .execute()
-        .then(
-          (rawManagers) =>
-            (normalizedResults.entities.projects[projectId].teamManagers = _map(
-              rawManagers,
-              (managingTeam) =>
-                Object.assign({}, managingTeam.team, {
-                  roles: _map(managingTeam.grants, "role"),
-                })
-            ))
-        ),
+      new Endpoint(api.teams.projectManagers, { variables: { projectId } }).execute().then(
+        (rawManagers) =>
+          (normalizedResults.entities.projects[projectId].teamManagers = _map(
+            rawManagers,
+            (managingTeam) =>
+              Object.assign({}, managingTeam.team, {
+                roles: _map(managingTeam.grants, "role"),
+              }),
+          )),
+      ),
     ])
       .then(() => dispatch(receiveProjects(normalizedResults.entities)))
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.project.fetchFailure));
@@ -426,12 +401,7 @@ export const fetchProjectManagers = function (projectId) {
 /**
  * Set role for user on project
  */
-export const setProjectManagerRole = function (
-  projectId,
-  userId,
-  isOSMUserId,
-  role
-) {
+export const setProjectManagerRole = function (projectId, userId, isOSMUserId, role) {
   return function (dispatch) {
     return new Endpoint(api.project.setManagerPermission, {
       variables: { userId, projectId, role },
@@ -452,7 +422,7 @@ export const setProjectManagerRole = function (
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.project.saveFailure));
@@ -471,12 +441,9 @@ export const addProjectManager = function (projectId, username, role) {
     return findUser(username)
       .then((matchingUsers) => {
         // We want an exact username match
-        const osmId = _get(
-          _find(matchingUsers, (match) => match.displayName === username),
-          "osmId"
-        );
+        const osmId = _find(matchingUsers, (match) => match.displayName === username)?.osmId;
 
-        if (_isFinite(osmId)) {
+        if (Number.isFinite(osmId)) {
           return setProjectManagerRole(projectId, osmId, true, role)(dispatch);
         } else {
           dispatch(addError(AppErrors.user.notFound));
@@ -503,7 +470,7 @@ export const removeProjectManager = function (projectId, userId, isOSMUserId) {
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.project.saveFailure));
@@ -530,7 +497,7 @@ export const deleteProject = function (projectId, immediate = false) {
 
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.project.deleteFailure));
@@ -542,11 +509,7 @@ export const deleteProject = function (projectId, immediate = false) {
 
 // redux reducers
 
-const reduceProjectsFurther = function (
-  mergedState,
-  oldState,
-  projectEntities
-) {
+const reduceProjectsFurther = function (mergedState, oldState, projectEntities) {
   // The generic reduction will merge arrays and objects, but for some
   // fields we want to simply overwrite with the latest data.
   projectEntities.forEach((entity) => {
@@ -556,15 +519,15 @@ const reduceProjectsFurther = function (
       return;
     }
 
-    if (_isArray(entity.activity)) {
+    if (Array.isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity;
     }
 
-    if (_isArray(entity.managers)) {
+    if (Array.isArray(entity.managers)) {
       mergedState[entity.id].managers = entity.managers;
     }
 
-    if (_isArray(entity.teamManagers)) {
+    if (Array.isArray(entity.teamManagers)) {
       mergedState[entity.id].teamManagers = entity.teamManagers;
     }
   });
@@ -581,7 +544,7 @@ export const projectEntities = function (state, action) {
     return genericEntityReducer(
       [RECEIVE_PROJECTS, RECEIVE_CHALLENGES],
       "projects",
-      reduceProjectsFurther
+      reduceProjectsFurther,
     )(state, action);
   }
 };

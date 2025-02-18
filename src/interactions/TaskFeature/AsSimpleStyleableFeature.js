@@ -1,44 +1,45 @@
-import L from 'leaflet'
-import 'leaflet-vectoricon'
-import { getType } from '@turf/invariant'
-import _isUndefined from 'lodash/isUndefined'
-import _each from 'lodash/each'
-import _map from 'lodash/map'
-import _compact from 'lodash/compact'
-import _fromPairs from 'lodash/fromPairs'
-import _intersection from 'lodash/intersection'
-import _keys from 'lodash/keys'
-import _pick from 'lodash/pick'
-import _merge from 'lodash/merge'
-import _filter from 'lodash/filter'
-import _flatten from 'lodash/flatten'
-import _get from 'lodash/get'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../tailwind.config.js'
-import AsFilterableFeature from './AsFilterableFeature'
+import L from "leaflet";
+import "leaflet-vectoricon";
+import { getType } from "@turf/invariant";
+import _compact from "lodash/compact";
+import _each from "lodash/each";
+import _filter from "lodash/filter";
+import _flatten from "lodash/flatten";
+import _fromPairs from "lodash/fromPairs";
+import _intersection from "lodash/intersection";
+import _keys from "lodash/keys";
+import _map from "lodash/map";
+import _merge from "lodash/merge";
+import _pick from "lodash/pick";
+import resolveConfig from "tailwindcss/resolveConfig";
+import tailwindConfig from "../../tailwind.config.js";
+import AsFilterableFeature from "./AsFilterableFeature";
 
-const colors = resolveConfig(tailwindConfig).theme.colors
+const colors = resolveConfig(tailwindConfig).theme.colors;
 
-const supportedSimplestylePointProperties = [
-  'marker-color', 'marker-size',
-]
+const supportedSimplestylePointProperties = ["marker-color", "marker-size"];
 
 const supportedSimplestyleLineProperties = [
-  'stroke', 'stroke-width', 'stroke-opacity', 'fill', 'fill-opacity',
-]
+  "stroke",
+  "stroke-width",
+  "stroke-opacity",
+  "fill",
+  "fill-opacity",
+];
 
 // Names of supported simplestyle properties
-export const supportedSimplestyles =
-  supportedSimplestyleLineProperties.concat(supportedSimplestylePointProperties)
+export const supportedSimplestyles = supportedSimplestyleLineProperties.concat(
+  supportedSimplestylePointProperties,
+);
 
 // Maps simplestyle line properties to corresponding leaflet style options
 const simplestyleLineToLeafletMapping = {
-  'stroke': 'color',
-  'stroke-width': 'weight',
-  'stroke-opacity': 'opacity',
-  'fill': 'fillColor',
-  'fill-opacity': 'fillOpacity',
-}
+  stroke: "color",
+  "stroke-width": "weight",
+  "stroke-opacity": "opacity",
+  fill: "fillColor",
+  "fill-opacity": "fillOpacity",
+};
 
 /**
  * AsSimpleStylableFeature adds functionality for interpreting
@@ -46,7 +47,7 @@ const simplestyleLineToLeafletMapping = {
  */
 export class AsSimpleStyleableFeature {
   constructor(feature, conditionalStyles) {
-    Object.assign(this, feature, {conditionalStyles})
+    Object.assign(this, feature, { conditionalStyles });
   }
 
   /**
@@ -54,7 +55,7 @@ export class AsSimpleStyleableFeature {
    * present on this feature
    */
   styleLeafletLayer(layer) {
-    this.styleLeafletLayerWithStyles(layer, this.getFinalLayerStyles(layer))
+    this.styleLeafletLayerWithStyles(layer, this.getFinalLayerStyles(layer));
   }
 
   /**
@@ -65,18 +66,27 @@ export class AsSimpleStyleableFeature {
    */
   pushLeafletLayerSimpleStyles(layer, simplestyles, identifier) {
     if (!this.originalLeafletStyles) {
-      this.originalLeafletStyles = []
+      this.originalLeafletStyles = [];
     }
     this.originalLeafletStyles.push({
       identifier,
       style: _pick(layer.options, [
-        'color', 'fillColor', 'fillOpacity', 'fillRule', 'stroke',
-        'lineCap', 'lineJoin', 'opacity', 'dashArray', 'dashOffset', 'weight',
+        "color",
+        "fillColor",
+        "fillOpacity",
+        "fillRule",
+        "stroke",
+        "lineCap",
+        "lineJoin",
+        "opacity",
+        "dashArray",
+        "dashOffset",
+        "weight",
       ]),
       icon: layer.options.icon,
-    })
+    });
 
-    this.styleLeafletLayerWithStyles(layer, simplestyles)
+    this.styleLeafletLayerWithStyles(layer, simplestyles);
   }
 
   /**
@@ -85,27 +95,27 @@ export class AsSimpleStyleableFeature {
    * to restore
    */
   popLeafletLayerSimpleStyles(layer, identifier) {
-    if (!this.originalLeafletStyles ||this.originalLeafletStyles.length === 0) {
-      return
+    if (!this.originalLeafletStyles || this.originalLeafletStyles.length === 0) {
+      return;
     }
 
-    if (identifier &&
-        this.originalLeafletStyles[this.originalLeafletStyles.length - 1].identifier !== identifier) {
-      return
+    if (
+      identifier &&
+      this.originalLeafletStyles[this.originalLeafletStyles.length - 1].identifier !== identifier
+    ) {
+      return;
     }
 
-    const priorStyle = this.originalLeafletStyles.pop()
+    const priorStyle = this.originalLeafletStyles.pop();
     if (layer.setStyle) {
-      layer.setStyle(priorStyle.style)
-    }
-    else if (_get(layer, 'options.icon.options.mrSvgMarker')) {
+      layer.setStyle(priorStyle.style);
+    } else if (layer?.options?.icon?.options?.mrSvgMarker) {
       // Restore icon, either SVG or original Leaflet
-      layer._removeIcon()
-      if (_get(priorStyle.icon, 'options.mrSvgMarker')) {
-        layer.setIcon(L.vectorIcon(priorStyle.icon.options))
-      }
-      else {
-        layer.setIcon(new L.Icon.Default())
+      layer._removeIcon();
+      if (priorStyle.icon?.options?.mrSvgMarker) {
+        layer.setIcon(L.vectorIcon(priorStyle.icon.options));
+      } else {
+        layer.setIcon(new L.Icon.Default());
       }
     }
   }
@@ -115,11 +125,10 @@ export class AsSimpleStyleableFeature {
    * simplestyle property names and desired values
    */
   styleLeafletLayerWithStyles(layer, simplestyles) {
-    if (getType(layer.feature) === 'Point') {
-      this.styleLeafletMarkerLayer(layer, simplestyles)
-    }
-    else {
-      this.styleLeafletPathLayer(layer, simplestyles)
+    if (getType(layer.feature) === "Point") {
+      this.styleLeafletMarkerLayer(layer, simplestyles);
+    } else {
+      this.styleLeafletPathLayer(layer, simplestyles);
     }
   }
 
@@ -128,12 +137,12 @@ export class AsSimpleStyleableFeature {
    */
   styleLeafletPathLayer(layer, lineStyles) {
     if (!layer.setStyle) {
-      return
+      return;
     }
 
     _each(lineStyles, (styleValue, styleName) => {
-      layer.setStyle({[simplestyleLineToLeafletMapping[styleName]]: styleValue})
-    })
+      layer.setStyle({ [simplestyleLineToLeafletMapping[styleName]]: styleValue });
+    });
   }
 
   /**
@@ -141,75 +150,76 @@ export class AsSimpleStyleableFeature {
    */
   styleLeafletMarkerLayer(layer, pointStyles) {
     if (!layer.setIcon) {
-      return
+      return;
     }
 
     const customMarker = {
       mrSvgMarker: true,
-      className: 'location-marker-icon',
-      viewBox: '0 0 20 20',
+      className: "location-marker-icon",
+      viewBox: "0 0 20 20",
       svgHeight: 40,
       svgWidth: 40,
-      type: 'path',
-      shape: { // zondicons "location" icon
-        d: "M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+      type: "path",
+      shape: {
+        // zondicons "location" icon
+        d: "M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
       },
       style: {
-        fill: colors['blue-leaflet'],
-        stroke: colors['grey-leaflet'],
+        fill: colors["blue-leaflet"],
+        stroke: colors["grey-leaflet"],
         strokeWidth: 0.5,
-        marginTop: '0px',
-        marginLeft: '0px',
+        marginTop: "0px",
+        marginLeft: "0px",
       },
       iconSize: [40, 40],
       iconAnchor: [20, 40], // tip of marker
-    }
+    };
 
-    let useCustomMarker = false
+    let useCustomMarker = false;
 
     _each(pointStyles, (styleValue, styleName) => {
       switch (styleName) {
-        case 'marker-color':
-          useCustomMarker = true
-          customMarker.style.fill = styleValue
-          break
-        case 'marker-size':
-          useCustomMarker = true
+        case "marker-color":
+          useCustomMarker = true;
+          customMarker.style.fill = styleValue;
+          break;
+        case "marker-size":
+          useCustomMarker = true;
           switch (styleValue) {
-            case 'small':
-              customMarker.svgHeight = 20
-              customMarker.svgWidth = 20
-              customMarker.iconAnchor = [10, 20]
-              customMarker.iconSize = [20, 20]
-              break
-            case 'large':
-              customMarker.svgHeight = 60
-              customMarker.svgWidth = 60
-              customMarker.iconAnchor = [30, 60]
-              customMarker.iconSize = [60, 60]
-              break
+            case "small":
+              customMarker.svgHeight = 20;
+              customMarker.svgWidth = 20;
+              customMarker.iconAnchor = [10, 20];
+              customMarker.iconSize = [20, 20];
+              break;
+            case "large":
+              customMarker.svgHeight = 60;
+              customMarker.svgWidth = 60;
+              customMarker.iconAnchor = [30, 60];
+              customMarker.iconSize = [60, 60];
+              break;
             default:
               // medium is already the default size
-              break
+              break;
           }
-          break
+          break;
         default:
-          break
+          break;
       }
-    })
+    });
 
     // If the layer already has one of our svg markers, make sure to clean it
     // up or else Leaflet has a tendencey to render dup markers
-    if (_get(layer, 'options.icon.options.mrSvgMarker')) {
-      layer._removeIcon()
+    if (layer?.options?.icon?.options?.mrSvgMarker) {
+      layer._removeIcon();
 
       if (!useCustomMarker) {
-        layer.setIcon(new L.Icon.Default())
+        layer.setIcon(new L.Icon.Default());
       }
     }
 
     if (useCustomMarker) {
-      layer.setIcon(L.vectorIcon(customMarker))
+      layer.setIcon(L.vectorIcon(customMarker));
     }
   }
 
@@ -218,35 +228,39 @@ export class AsSimpleStyleableFeature {
    * empty object if there are none for this layer
    */
   markerSimplestyles(layer) {
-    const styles = {}
-    if (_get(layer, 'options.icon.options.mrSvgMarker')) {
-      styles["marker-color"] = layer.options.icon.options.style.fill
+    const styles = {};
+    if (layer?.options?.icon?.options?.mrSvgMarker) {
+      styles["marker-color"] = layer.options.icon.options.style.fill;
 
-      switch(layer.options.icon.options.svgHeight) {
+      switch (layer.options.icon.options.svgHeight) {
         case 20:
-          styles["marker-size"] = 'small'
-          break
+          styles["marker-size"] = "small";
+          break;
         case 60:
-          styles["marker-size"] = 'large'
-          break
+          styles["marker-size"] = "large";
+          break;
         default:
-          styles["marker-size"] = 'medium'
-          break
+          styles["marker-size"] = "medium";
+          break;
       }
     }
 
-    return styles
+    return styles;
   }
 
   /**
    * Retrieves all simplestyle properties specified on this feature
    */
   simplestyleFeatureProperties() {
-    return _fromPairs(_compact(_map(supportedSimplestyles, simplestyleProperty => (
-      !_isUndefined(this.properties[simplestyleProperty]) ?
-      [simplestyleProperty, this.properties[simplestyleProperty]] :
-      null
-    ))))
+    return _fromPairs(
+      _compact(
+        _map(supportedSimplestyles, (simplestyleProperty) =>
+          this.properties[simplestyleProperty] !== undefined
+            ? [simplestyleProperty, this.properties[simplestyleProperty]]
+            : null,
+        ),
+      ),
+    );
   }
 
   /**
@@ -256,13 +270,11 @@ export class AsSimpleStyleableFeature {
    */
   getFinalLayerStyles(layer) {
     if (this.conditionalStyles) {
-      return this.getConditionalStyles(layer, this.conditionalStyles)
-    }
-    else if (this.properties) {
-      return this.getStyles(layer, this.simplestyleFeatureProperties(), false)
-    }
-    else {
-      return {}
+      return this.getConditionalStyles(layer, this.conditionalStyles);
+    } else if (this.properties) {
+      return this.getStyles(layer, this.simplestyleFeatureProperties(), false);
+    } else {
+      return {};
     }
   }
 
@@ -273,43 +285,45 @@ export class AsSimpleStyleableFeature {
    * simplestyle properties on this feature
    */
   getConditionalStyles(layer, conditionalStyles) {
-    const filterableFeature = AsFilterableFeature(this)
-    const matchingStyles = _filter(conditionalStyles, style =>
-      filterableFeature.matchesPropertyFilter(style.propertySearch)
-    )
+    const filterableFeature = AsFilterableFeature(this);
+    const matchingStyles = _filter(conditionalStyles, (style) =>
+      filterableFeature.matchesPropertyFilter(style.propertySearch),
+    );
 
     if (matchingStyles.length > 0) {
       // flatten all matching styles into a single object
-      const styleObject = _fromPairs(_flatten(_map(matchingStyles, match =>
-        _map(match.styles, style => [style.styleName, style.styleValue])
-      )))
+      const styleObject = _fromPairs(
+        _flatten(
+          _map(matchingStyles, (match) =>
+            _map(match.styles, (style) => [style.styleName, style.styleValue]),
+          ),
+        ),
+      );
 
-      return this.getStyles(layer, styleObject)
-    }
-    else {
-      return this.getStyles(layer)
+      return this.getStyles(layer, styleObject);
+    } else {
+      return this.getStyles(layer);
     }
   }
 
-  getStyles(layer, simplestyles, mergeWithFeatureProperties=true) {
-    const styles =
-      mergeWithFeatureProperties ?
-      _merge({}, this.simplestyleFeatureProperties(), simplestyles) :
-      simplestyles
+  getStyles(layer, simplestyles, mergeWithFeatureProperties = true) {
+    const styles = mergeWithFeatureProperties
+      ? _merge({}, this.simplestyleFeatureProperties(), simplestyles)
+      : simplestyles;
 
     // If we have a layer, only return styles applicable to that layer's type
     if (!layer) {
-      return styles
+      return styles;
     }
 
     const supportedStyles =
-      getType(layer.feature) === 'Point' ?
-      _intersection(_keys(styles), supportedSimplestylePointProperties) :
-      _intersection(_keys(styles), supportedSimplestyleLineProperties)
+      getType(layer.feature) === "Point"
+        ? _intersection(_keys(styles), supportedSimplestylePointProperties)
+        : _intersection(_keys(styles), supportedSimplestyleLineProperties);
 
-    return _pick(styles, supportedStyles)
+    return _pick(styles, supportedStyles);
   }
 }
 
 export default (feature, conditionalStyles) =>
-  new AsSimpleStyleableFeature(feature, conditionalStyles)
+  new AsSimpleStyleableFeature(feature, conditionalStyles);

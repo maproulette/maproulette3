@@ -1,10 +1,10 @@
-name: Build Docker Image, Push to GHCR
+name: Build Docker image, push to GHCR, and trigger redeploy
 
 on:
   push:
-    # Publish HEAD of main branch as :latest image tag
+    # Run whenever main branch changes
     branches: [ "main" ]
-    # Publish semver tags as named image tags
+    # ...or whenever a new semver release tag is published
     tags: [ 'v*.*.*' ]
 
 env:
@@ -58,3 +58,16 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  trigger-redeploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send trigger-workflow webhook to maproulette-deploy repository
+        run: |
+          curl -X POST https://api.github.com/repos/maproulette/maproulette-deploy/dispatches \
+            --fail --silent --show-error --location \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.DEPLOY_REPO_TOKEN }}" \
+            -d '{ "event_type": "deploy maproulette-frontend@${{ github.ref_name }} (${{ github.sha }})" }'

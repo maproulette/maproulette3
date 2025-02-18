@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with UserActivityTimelineWidget
@@ -8,5 +8,4 @@ export default defineMessages({
     id: "ActivityTimeline.UserActivityTimeline.header",
     defaultMessage: "Your Recent Contributions",
   },
-})
-
+});

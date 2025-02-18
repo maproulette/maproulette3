@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with PropertyList
@@ -13,4 +13,4 @@ export default defineMessages({
     id: "PropertyList.noProperties",
     defaultMessage: "No Properties",
   },
-})
+});

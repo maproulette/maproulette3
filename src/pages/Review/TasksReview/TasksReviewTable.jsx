@@ -1,69 +1,81 @@
-import { Fragment, Component } from 'react'
-import classNames from 'classnames'
-import { FormattedMessage, FormattedDate, FormattedTime }
-       from 'react-intl'
-import { parseISO } from 'date-fns'
-import _get from 'lodash/get'
-import _each from 'lodash/each'
-import _map from 'lodash/map'
-import _isFinite from 'lodash/isFinite'
-import _kebabCase from 'lodash/kebabCase'
-import _debounce from 'lodash/debounce'
-import _cloneDeep from 'lodash/cloneDeep'
-import _keys from 'lodash/keys'
-import _omit from 'lodash/omit'
-import _pull from 'lodash/pull'
-import _isEqual from 'lodash/isEqual'
-import _isObject from 'lodash/isObject'
-import _pick from 'lodash/pick'
-import _isUndefined from 'lodash/isUndefined'
-import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
-       from '../../../services/Task/TaskStatus/TaskStatus'
-import { TaskPriority, keysByPriority, messagesByPriority }
-      from '../../../services/Task/TaskPriority/TaskPriority'
-import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus,
-         messagesByMetaReviewStatus, isNeedsReviewStatus, isMetaReviewStatus }
-       from '../../../services/Task/TaskReview/TaskReviewStatus'
-import { ReviewTasksType, buildLinkToReviewTableExportCSV, buildLinkToMapperExportCSV } from '../../../services/Task/TaskReview/TaskReview'
-import AsColoredHashable from '../../../interactions/Hashable/AsColoredHashable'
-import { intlTableProps } from '../../../components/IntlTable/IntlTable'
-import IntlTablePagination from '../../../components/IntlTable/IntlTablePagination'
-import TaskCommentsModal
-       from '../../../components/TaskCommentsModal/TaskCommentsModal'
-import InTableTagFilter
-       from '../../../components/KeywordAutosuggestInput/InTableTagFilter'
-import ConfigureColumnsModal
-       from '../../../components/ConfigureColumnsModal/ConfigureColumnsModal'
-import FilterSuggestTextBox from './FilterSuggestTextBox'
-import { FILTER_SEARCH_ALL, FILTER_SEARCH_TEXT } from './FilterSuggestTextBox'
-import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
-import Dropdown from '../../../components/Dropdown/Dropdown'
-import IntlDatePicker from '../../../components/IntlDatePicker/IntlDatePicker'
-import WithConfigurableColumns from '../../../components/HOCs/WithConfigurableColumns/WithConfigurableColumns'
-import WithCurrentUser from '../../../components/HOCs/WithCurrentUser/WithCurrentUser'
-import messages from './Messages'
-import { ViewCommentsButton, StatusLabel, makeInvertable }
-  from '../../../components/TaskAnalysisTable/TaskTableHelpers'
-import WithSavedFilters from '../../../components/HOCs/WithSavedFilters/WithSavedFilters'
-import SavedFiltersList from '../../../components/SavedFilters/SavedFiltersList'
-import ManageSavedFilters from '../../../components/SavedFilters/ManageSavedFilters'
-import MapPane from '../../../components/EnhancedMap/MapPane/MapPane'
-import { Link } from 'react-router-dom'
-import ReactTable from 'react-table-6'
+import classNames from "classnames";
+import { parseISO } from "date-fns";
+import _cloneDeep from "lodash/cloneDeep";
+import _debounce from "lodash/debounce";
+import _each from "lodash/each";
+import _isEqual from "lodash/isEqual";
+import _isObject from "lodash/isObject";
+import _kebabCase from "lodash/kebabCase";
+import _keys from "lodash/keys";
+import _map from "lodash/map";
+import _omit from "lodash/omit";
+import _pick from "lodash/pick";
+import _pull from "lodash/pull";
+import { Component, Fragment } from "react";
+import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
+import { Link } from "react-router-dom";
+import ReactTable from "react-table-6";
+import ConfigureColumnsModal from "../../../components/ConfigureColumnsModal/ConfigureColumnsModal";
+import Dropdown from "../../../components/Dropdown/Dropdown";
+import MapPane from "../../../components/EnhancedMap/MapPane/MapPane";
+import WithConfigurableColumns from "../../../components/HOCs/WithConfigurableColumns/WithConfigurableColumns";
+import WithCurrentUser from "../../../components/HOCs/WithCurrentUser/WithCurrentUser";
+import WithSavedFilters from "../../../components/HOCs/WithSavedFilters/WithSavedFilters";
+import IntlDatePicker from "../../../components/IntlDatePicker/IntlDatePicker";
+import { intlTableProps } from "../../../components/IntlTable/IntlTable";
+import IntlTablePagination from "../../../components/IntlTable/IntlTablePagination";
+import InTableTagFilter from "../../../components/KeywordAutosuggestInput/InTableTagFilter";
+import ManageSavedFilters from "../../../components/SavedFilters/ManageSavedFilters";
+import SavedFiltersList from "../../../components/SavedFilters/SavedFiltersList";
+import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
+import {
+  StatusLabel,
+  ViewCommentsButton,
+  makeInvertable,
+} from "../../../components/TaskAnalysisTable/TaskTableHelpers";
+import TaskCommentsModal from "../../../components/TaskCommentsModal/TaskCommentsModal";
+import AsColoredHashable from "../../../interactions/Hashable/AsColoredHashable";
+import {
+  TaskPriority,
+  keysByPriority,
+  messagesByPriority,
+} from "../../../services/Task/TaskPriority/TaskPriority";
+import {
+  ReviewTasksType,
+  buildLinkToMapperExportCSV,
+  buildLinkToReviewTableExportCSV,
+} from "../../../services/Task/TaskReview/TaskReview";
+import {
+  TaskReviewStatus,
+  isMetaReviewStatus,
+  isNeedsReviewStatus,
+  keysByReviewStatus,
+  messagesByMetaReviewStatus,
+  messagesByReviewStatus,
+} from "../../../services/Task/TaskReview/TaskReviewStatus";
+import {
+  TaskStatus,
+  isReviewableStatus,
+  keysByStatus,
+  messagesByStatus,
+} from "../../../services/Task/TaskStatus/TaskStatus";
+import FilterSuggestTextBox from "./FilterSuggestTextBox";
+import { FILTER_SEARCH_ALL, FILTER_SEARCH_TEXT } from "./FilterSuggestTextBox";
+import messages from "./Messages";
 
 export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
   for (let pair of searchParams.entries()) {
     if (pair[0] === param && pair[1]) {
-      if (pair[1] === '0') {
-        return [FILTER_SEARCH_ALL]
+      if (pair[1] === "0") {
+        return [FILTER_SEARCH_ALL];
       }
-      return pair[1].split(',').map(n => Number(n))
+      return pair[1].split(",").map((n) => Number(n));
     }
   }
 
   return [FILTER_SEARCH_ALL];
-}
+};
 
 /**
  * TaskReviewTable displays tasks that need to be reviewed or have been reviewed
@@ -72,38 +84,43 @@ export const getFilterIds = (search, param) => {
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class TaskReviewTable extends Component {
-  componentIsMounted = false
+  componentIsMounted = false;
 
   state = {
-    displayMap: localStorage.getItem('displayMap') === 'true' ? true : false,    
+    displayMap: localStorage.getItem("displayMap") === "true" ? true : false,
     openComments: null,
     showConfigureColumns: false,
-    challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
-    projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId')
-  }
+    challengeFilterIds: getFilterIds(this.props.location.search, "filters.challengeId"),
+    projectFilterIds: getFilterIds(this.props.location.search, "filters.projectId"),
+  };
 
-  debouncedUpdateTasks = _debounce(this.updateTasks, 100)
+  debouncedUpdateTasks = _debounce(this.updateTasks, 100);
 
   updateTasks(tableState) {
     const sortCriteria = {
       sortBy: tableState.sorted[0].id,
       direction: tableState.sorted[0].desc ? "DESC" : "ASC",
-    }
+    };
 
-    const filters = {}
-    _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
+    const filters = {};
+    _each(tableState.filtered, (pair) => {
+      filters[pair.id] = pair.value;
+    });
 
     // Determine if we can search by challenge Id or do name search
     if (filters.challenge) {
       if (_isObject(filters.challenge)) {
-        if (!this.state.challengeFilterIds.includes(FILTER_SEARCH_TEXT) && !this.state.challengeFilterIds.includes(FILTER_SEARCH_ALL)) {
-          filters.challengeId = this.state.challengeFilterIds
-          filters.challenge = null
+        if (
+          !this.state.challengeFilterIds.includes(FILTER_SEARCH_TEXT) &&
+          !this.state.challengeFilterIds.includes(FILTER_SEARCH_ALL)
+        ) {
+          filters.challengeId = this.state.challengeFilterIds;
+          filters.challenge = null;
         } else if (filters.challenge.id === FILTER_SEARCH_ALL) {
           // Search all
-          filters.challengeId = null
-          filters.challenge = null
-          filters.challengeName = null
+          filters.challengeId = null;
+          filters.challenge = null;
+          filters.challengeName = null;
         }
       }
     }
@@ -111,310 +128,407 @@ export class TaskReviewTable extends Component {
     // Determine if we can search by project Id or do name search
     if (filters.project) {
       if (_isObject(filters.project)) {
-        if (!this.state.projectFilterIds.includes(FILTER_SEARCH_TEXT) && !this.state.projectFilterIds.includes(FILTER_SEARCH_ALL)) {
-          filters.projectId = this.state.projectFilterIds
-          filters.project = null
+        if (
+          !this.state.projectFilterIds.includes(FILTER_SEARCH_TEXT) &&
+          !this.state.projectFilterIds.includes(FILTER_SEARCH_ALL)
+        ) {
+          filters.projectId = this.state.projectFilterIds;
+          filters.project = null;
         } else if (filters.project.id === FILTER_SEARCH_ALL) {
           // Search all
-          filters.projectId = null
-          filters.project = null
-          filters.projectName = null
+          filters.projectId = null;
+          filters.project = null;
+          filters.projectName = null;
         }
       }
     }
-    
+
     if (this.componentIsMounted) {
-      this.setState({lastTableState: _pick(tableState, ["sorted", "filtered", "page"])})
-      this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
+      this.setState({ lastTableState: _pick(tableState, ["sorted", "filtered", "page"]) });
+      this.props.updateReviewTasks({
+        sortCriteria,
+        filters,
+        page: tableState.page,
         boundingBox: this.props.reviewCriteria.boundingBox,
-        includeTags: !!_get(this.props.addedColumns, 'tags')})
+        includeTags: !!this.props.addedColumns?.tags,
+      });
     }
   }
 
   startReviewing() {
-    this.props.startReviewing(this.props.history)
+    this.props.startReviewing(this.props.history);
   }
 
   startMetaReviewing() {
-    this.props.startReviewing(this.props.history, true)
+    this.props.startReviewing(this.props.history, true);
   }
 
   toggleShowFavorites() {
-    const reviewCriteria = _cloneDeep(this.props.reviewCriteria)
-    reviewCriteria.savedChallengesOnly = !reviewCriteria.savedChallengesOnly
-    this.props.updateReviewTasks(reviewCriteria)
+    const reviewCriteria = _cloneDeep(this.props.reviewCriteria);
+    reviewCriteria.savedChallengesOnly = !reviewCriteria.savedChallengesOnly;
+    this.props.updateReviewTasks(reviewCriteria);
   }
 
   toggleExcludeOthers() {
-    const reviewCriteria = _cloneDeep(this.props.reviewCriteria)
-    reviewCriteria.excludeOtherReviewers = !reviewCriteria.excludeOtherReviewers
-    this.props.updateReviewTasks(reviewCriteria)
+    const reviewCriteria = _cloneDeep(this.props.reviewCriteria);
+    reviewCriteria.excludeOtherReviewers = !reviewCriteria.excludeOtherReviewers;
+    this.props.updateReviewTasks(reviewCriteria);
   }
 
   updateChallengeFilterIds = (item) => {
-    let newIds = []
+    let newIds = [];
     if (item.id > 0) {
-      newIds = this.state.challengeFilterIds.filter(i => i > 0);
+      newIds = this.state.challengeFilterIds.filter((i) => i > 0);
       if (this.state.challengeFilterIds.includes(item.id)) {
-        newIds = newIds.filter(i => i !== item.id);
+        newIds = newIds.filter((i) => i !== item.id);
       } else {
-        newIds.push(item.id)
+        newIds.push(item.id);
       }
     } else {
-      newIds = [item.id]
+      newIds = [item.id];
     }
 
-    this.setState({ challengeFilterIds: newIds })
-  }
+    this.setState({ challengeFilterIds: newIds });
+  };
 
   updateProjectFilterIds = (item) => {
-    let newIds = []
+    let newIds = [];
     if (item.id > 0) {
-      newIds = this.state.projectFilterIds.filter(i => i > 0);
+      newIds = this.state.projectFilterIds.filter((i) => i > 0);
       if (this.state.projectFilterIds.includes(item.id)) {
-        newIds = newIds.filter(i => i !== item.id);
+        newIds = newIds.filter((i) => i !== item.id);
       } else {
-        newIds.push(item.id)
+        newIds.push(item.id);
       }
     } else {
-      newIds = [item.id]
+      newIds = [item.id];
     }
 
-    this.setState({ projectFilterIds: newIds })
-  }
+    this.setState({ projectFilterIds: newIds });
+  };
 
   componentWillUnmount() {
-    this.componentIsMounted = false
+    this.componentIsMounted = false;
   }
 
   componentDidMount() {
-    this.componentIsMounted = true
-    this.setupConfigurableColumns(this.props.reviewTasksType)
+    this.componentIsMounted = true;
+    this.setupConfigurableColumns(this.props.reviewTasksType);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
-      this.setupConfigurableColumns(this.props.reviewTasksType)
+      this.setupConfigurableColumns(this.props.reviewTasksType);
     }
 
     if (
-      !_isEqual(getFilterIds(this.props.location.search, 'filters.challengeId'), this.state.challengeFilterIds) ||
-      !_isEqual(getFilterIds(this.props.location.search, 'filters.projectId'), this.state.projectFilterIds)
+      !_isEqual(
+        getFilterIds(this.props.location.search, "filters.challengeId"),
+        this.state.challengeFilterIds,
+      ) ||
+      !_isEqual(
+        getFilterIds(this.props.location.search, "filters.projectId"),
+        this.state.projectFilterIds,
+      )
     ) {
-      setTimeout(() => this.setState({ 
-        challengeFilterIds: getFilterIds(this.props.location.search, 'filters.challengeId'),
-        projectFilterIds: getFilterIds(this.props.location.search, 'filters.projectId')
-      }), 100)
+      setTimeout(
+        () =>
+          this.setState({
+            challengeFilterIds: getFilterIds(this.props.location.search, "filters.challengeId"),
+            projectFilterIds: getFilterIds(this.props.location.search, "filters.projectId"),
+          }),
+        100,
+      );
     }
 
     // If we've added the "tag" column, we need to update the table to fetch
     // the tag data.
-    else if (!_get(prevProps.addedColumns, 'tags') &&
-        _get(this.props.addedColumns, 'tags') &&
-        this.state.lastTableState) {
-      this.updateTasks(this.state.lastTableState)
+    else if (
+      !prevProps.addedColumns?.tags &&
+      this.props.addedColumns?.tags &&
+      this.state.lastTableState
+    ) {
+      this.updateTasks(this.state.lastTableState);
     }
   }
 
   setupConfigurableColumns = (reviewTasksType) => {
-    let columns = {"id":{},
-                   "featureId":{},
-                   "reviewStatus":{permanent: true},
-                   "reviewRequestedBy":{},
-                   "challengeId":{},
-                   "challenge":{},
-                   "projectId":{},
-                   "project":{},
-                   "mappedOn":{},
-                   "reviewedBy":{},
-                   "reviewedAt":{},
-                   "status":{},
-                   "priority":{},
-                   "reviewCompleteControls":{permanent: true},
-                   "reviewerControls":{permanent: true},
-                   "mapperControls":{permanent: true},
-                   "viewComments":{},
-                   "tags":{},
-                   "additionalReviewers":{}}
+    let columns = {
+      id: {},
+      featureId: {},
+      reviewStatus: { permanent: true },
+      reviewRequestedBy: {},
+      challengeId: {},
+      challenge: {},
+      projectId: {},
+      project: {},
+      mappedOn: {},
+      reviewedBy: {},
+      reviewedAt: {},
+      status: {},
+      priority: {},
+      reviewCompleteControls: { permanent: true },
+      reviewerControls: { permanent: true },
+      mapperControls: { permanent: true },
+      viewComments: {},
+      tags: {},
+      additionalReviewers: {},
+    };
 
     if (this.props.metaReviewEnabled) {
-      columns.metaReviewStatus = {}
-      columns.metaReviewedBy = {}
-      columns.metaReviewedAt = {}
-      columns.metaReviewerControls = {permanent: true}
+      columns.metaReviewStatus = {};
+      columns.metaReviewedBy = {};
+      columns.metaReviewedAt = {};
+      columns.metaReviewerControls = { permanent: true };
     }
-    let defaultColumns = _keys(columns)
+    let defaultColumns = _keys(columns);
 
     // Remove any columns not relevant to the current tab.
-    switch(reviewTasksType) {
+    switch (reviewTasksType) {
       case ReviewTasksType.reviewedByMe:
-        columns = _omit(columns,  ["reviewerControls", "mapperControls", "metaReviewerControls"])
-        defaultColumns = _pull(defaultColumns, ...["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"])
+        columns = _omit(columns, ["reviewerControls", "mapperControls", "metaReviewerControls"]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"],
+        );
 
-        break
+        break;
       case ReviewTasksType.toBeReviewed:
-        columns = _omit(columns,  ["reviewCompleteControls", "mapperControls", "metaReviewerControls"])
-        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "mapperControls", "metaReviewerControls"])
+        columns = _omit(columns, [
+          "reviewCompleteControls",
+          "mapperControls",
+          "metaReviewerControls",
+        ]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...["reviewCompleteControls", "mapperControls", "metaReviewerControls"],
+        );
 
-        break
+        break;
       case ReviewTasksType.allReviewedTasks:
-        columns = _omit(columns,  ["reviewCompleteControls", "reviewerControls", "metaReviewerControls"])
-        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "reviewerControls", "metaReviewerControls"])
+        columns = _omit(columns, [
+          "reviewCompleteControls",
+          "reviewerControls",
+          "metaReviewerControls",
+        ]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...["reviewCompleteControls", "reviewerControls", "metaReviewerControls"],
+        );
 
-        break
+        break;
       case ReviewTasksType.metaReviewTasks:
-        columns = _omit(columns,  ["reviewCompleteControls", "reviewerControls", "mapperControls"])
-        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "reviewerControls", "mapperControls"])
+        columns = _omit(columns, ["reviewCompleteControls", "reviewerControls", "mapperControls"]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...["reviewCompleteControls", "reviewerControls", "mapperControls"],
+        );
 
-        break
+        break;
       case ReviewTasksType.myReviewedTasks:
       default:
-        columns = _omit(columns,  ["reviewRequestedBy", "reviewCompleteControls", "reviewerControls", "metaReviewerControls"])
-        defaultColumns = _pull(defaultColumns, ...["reviewRequestedBy", "reviewCompleteControls", "reviewerControls", "metaReviewerControls"])
+        columns = _omit(columns, [
+          "reviewRequestedBy",
+          "reviewCompleteControls",
+          "reviewerControls",
+          "metaReviewerControls",
+        ]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...[
+            "reviewRequestedBy",
+            "reviewCompleteControls",
+            "reviewerControls",
+            "metaReviewerControls",
+          ],
+        );
 
-        break
+        break;
     }
 
-    this.props.resetColumnChoices(columns, defaultColumns)
-  }
+    this.props.resetColumnChoices(columns, defaultColumns);
+  };
 
   filterDropdown = () => {
     return (
-      <Dropdown className="mr-dropdown--right"
-          dropdownButton={dropdown => (
-            <button onClick={dropdown.toggleDropdownVisible}
-              className="mr-text-green-lighter hover:mr-text-white mr-transition-colors">
+      <Dropdown
+        className="mr-dropdown--right"
+        dropdownButton={(dropdown) => (
+          <button
+            onClick={dropdown.toggleDropdownVisible}
+            className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
+          >
             <SvgSymbol
               sym="filter-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-5 mr-h-5" />
-            </button>
-          )}
-          dropdownContent={(dropdown) =>
-            <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
-              <SavedFiltersList
-                searchFilters={this.props.reviewCriteria}
-                afterClick={dropdown.toggleDropdownVisible}
-                {...this.props}
-              />
-            </ul>
-          }
+              className="mr-fill-current mr-w-5 mr-h-5"
+            />
+          </button>
+        )}
+        dropdownContent={(dropdown) => (
+          <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
+            <SavedFiltersList
+              searchFilters={this.props.reviewCriteria}
+              afterClick={dropdown.toggleDropdownVisible}
+              {...this.props}
+            />
+          </ul>
+        )}
       />
-    )
-  }
+    );
+  };
 
   gearDropdown = (reviewTasksType) => {
     return (
-      <Dropdown className="mr-dropdown--right"
-        dropdownButton={dropdown => (
-          <button onClick={dropdown.toggleDropdownVisible}
-            className="mr-text-green-lighter hover:mr-text-white mr-transition-colors">
-            <SvgSymbol sym="cog-icon"
+      <Dropdown
+        className="mr-dropdown--right"
+        dropdownButton={(dropdown) => (
+          <button
+            onClick={dropdown.toggleDropdownVisible}
+            className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
+          >
+            <SvgSymbol
+              sym="cog-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-5 mr-h-5" />
+              className="mr-fill-current mr-w-5 mr-h-5"
+            />
           </button>
         )}
-        dropdownContent={(dropdown) =>
+        dropdownContent={(dropdown) => (
           <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
             <li>
               <button
                 className="mr-text-current"
                 onClick={() => {
-                  this.setState({showConfigureColumns: true}) 
-                  dropdown.toggleDropdownVisible()}}
+                  this.setState({ showConfigureColumns: true });
+                  dropdown.toggleDropdownVisible();
+                }}
               >
                 <FormattedMessage {...messages.configureColumnsLabel} />
               </button>
             </li>
-            {(reviewTasksType === ReviewTasksType.allReviewedTasks || reviewTasksType === ReviewTasksType.toBeReviewed) &&
+            {(reviewTasksType === ReviewTasksType.allReviewedTasks ||
+              reviewTasksType === ReviewTasksType.toBeReviewed) && (
               <li>
-                {this.props.reviewCriteria.filters.project ?
-                  <a target="_blank"
+                {this.props.reviewCriteria.filters.project ? (
+                  <a
+                    target="_blank"
                     rel="noopener noreferrer"
-                    href={buildLinkToReviewTableExportCSV(this.props.reviewCriteria, this.props.addedColumns)}
+                    href={buildLinkToReviewTableExportCSV(
+                      this.props.reviewCriteria,
+                      this.props.addedColumns,
+                    )}
                     onClick={dropdown.toggleDropdownVisible}
-                    className="mr-flex mr-items-center">
-                    <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                    className="mr-flex mr-items-center"
+                  >
+                    <SvgSymbol
+                      sym="download-icon"
+                      viewBox="0 0 20 20"
+                      className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                    />
                     <FormattedMessage {...messages.exportReviewTableCSVLabel} />
-                  </a> : 
+                  </a>
+                ) : (
                   <div>
                     <div className="mr-flex mr-items-center mr-opacity-50">
-                      <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                      <SvgSymbol
+                        sym="download-icon"
+                        viewBox="0 0 20 20"
+                        className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                      />
                       <FormattedMessage {...messages.exportReviewTableCSVLabel} />
                     </div>
                     <div className="mr-text-grey-light">
-                      <FormattedMessage  {...messages.requiredForExport} />
+                      <FormattedMessage {...messages.requiredForExport} />
                       <div />
-                      <FormattedMessage  {...messages.requiredProject} />
+                      <FormattedMessage {...messages.requiredProject} />
                     </div>
                   </div>
-                }
-                <a target="_blank"
-                   rel="noopener noreferrer"
-                   href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
-                   onClick={dropdown.toggleDropdownVisible}
-                   className="mr-flex mr-items-center">
-                  <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                )}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
+                  onClick={dropdown.toggleDropdownVisible}
+                  className="mr-flex mr-items-center"
+                >
+                  <SvgSymbol
+                    sym="download-icon"
+                    viewBox="0 0 20 20"
+                    className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                  />
                   <FormattedMessage {...messages.exportMapperCSVLabel} />
                 </a>
               </li>
-            }
+            )}
           </ul>
-        }
+        )}
       />
-    )
-  }
+    );
+  };
 
   clearFiltersControl = () => {
     return (
-      <div className='mr-pb-2'>
-      <button className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
-        onClick={() => this.props.clearFilterCriteria()}>
-        <SvgSymbol sym="close-icon"
-          viewBox='0 0 20 20'
-          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
-        <FormattedMessage {...messages.clearFiltersLabel} />
-      </button>
+      <div className="mr-pb-2">
+        <button
+          className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
+          onClick={() => this.props.clearFilterCriteria()}
+        >
+          <SvgSymbol
+            sym="close-icon"
+            viewBox="0 0 20 20"
+            className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1"
+          />
+          <FormattedMessage {...messages.clearFiltersLabel} />
+        </button>
       </div>
-    )
-  }
+    );
+  };
 
   render() {
     // Setup tasks table. See react-table docs for details.
-    const data = _get(this.props, 'reviewData.tasks', [])
-    const pageSize = this.props.pageSize
-    const columnTypes = setupColumnTypes({
-                            ...this.props, 
-                            updateChallengeFilterIds: this.updateChallengeFilterIds,
-                            updateProjectFilterIds: this.updateProjectFilterIds,
-                            challengeFilterIds: this.state.challengeFilterIds,
-                            projectFilterIds: this.state.projectFilterIds
-                           },
-                           taskId => this.setState({openComments: taskId}),
-                           data, this.props.reviewCriteria, pageSize)
+    const data = this.props.reviewData?.tasks ?? [];
+    const pageSize = this.props.pageSize;
+    const columnTypes = setupColumnTypes(
+      {
+        ...this.props,
+        updateChallengeFilterIds: this.updateChallengeFilterIds,
+        updateProjectFilterIds: this.updateProjectFilterIds,
+        challengeFilterIds: this.state.challengeFilterIds,
+        projectFilterIds: this.state.projectFilterIds,
+      },
+      (taskId) => this.setState({ openComments: taskId }),
+      data,
+      this.props.reviewCriteria,
+      pageSize,
+    );
 
-    const totalRows = _get(this.props, 'reviewData.totalCount', 0)
-    const totalPages = Math.ceil(totalRows / pageSize)
+    const totalRows = this.props.reviewData?.totalCount ?? 0;
+    const totalPages = Math.ceil(totalRows / pageSize);
 
-    let subheader = null
-    const columns = _map(_keys(this.props.addedColumns), (column) => columnTypes[column])
-    let defaultSorted = [{id: 'mappedOn', desc: false}]
-    let defaultFiltered = []
+    let subheader = null;
+    const columns = _map(_keys(this.props.addedColumns), (column) => columnTypes[column]);
+    let defaultSorted = [{ id: "mappedOn", desc: false }];
+    let defaultFiltered = [];
 
-    if (_get(this.props, 'reviewCriteria.sortCriteria.sortBy')) {
-      defaultSorted = [{id: this.props.reviewCriteria.sortCriteria.sortBy,
-                        desc: this.props.reviewCriteria.sortCriteria.direction === "DESC"}]
+    if (this.props.reviewCriteria?.sortCriteria?.sortBy) {
+      defaultSorted = [
+        {
+          id: this.props.reviewCriteria.sortCriteria.sortBy,
+          desc: this.props.reviewCriteria.sortCriteria.direction === "DESC",
+        },
+      ];
     }
-    if (_get(this.props, 'reviewCriteria.filters')) {
-      const reviewFilters = _cloneDeep(this.props.reviewCriteria.filters)
+    if (this.props.reviewCriteria?.filters) {
+      const reviewFilters = _cloneDeep(this.props.reviewCriteria.filters);
 
       // If we don't have a challenge name, make sure to populate it so
       // that the table filter will show it.
       if (this.props.reviewChallenges && !reviewFilters.challenge) {
         if (reviewFilters.challengeId || reviewFilters.challengeName) {
-          reviewFilters.challenge = reviewFilters.challengeId ?
-            _get(this.props.reviewChallenges[reviewFilters.challengeId],
-                 'name') : reviewFilters.challengeName
+          reviewFilters.challenge = reviewFilters.challengeId
+            ? this.props.reviewChallenges[reviewFilters.challengeId]?.name
+            : reviewFilters.challengeName;
         }
       }
 
@@ -422,115 +536,141 @@ export class TaskReviewTable extends Component {
       // that the table filter will show it.
       if (this.props.reviewProjects && !reviewFilters.project) {
         if (reviewFilters.projectId || reviewFilters.projectName) {
-          reviewFilters.project = reviewFilters.projectId ?
-            _get(this.props.reviewProjects[reviewFilters.projectId],
-                 'displayName') : reviewFilters.projectName
+          reviewFilters.project = reviewFilters.projectId
+            ? this.props.reviewProjects[reviewFilters.projectId]?.displayName
+            : reviewFilters.projectName;
         }
       }
 
-      defaultFiltered = _map(reviewFilters,
-                             (value, key) => {return {id: key, value}})
+      defaultFiltered = _map(reviewFilters, (value, key) => {
+        return { id: key, value };
+      });
     }
 
-    switch( this.props.reviewTasksType ) {
+    switch (this.props.reviewTasksType) {
       case ReviewTasksType.reviewedByMe:
-        subheader = this.props.reviewTasksSubType === "meta-reviewer" ?
-          <FormattedMessage {...messages.tasksMetaReviewedByMe} /> :
-          <FormattedMessage {...messages.tasksReviewedByMe} />
-        break
+        subheader =
+          this.props.reviewTasksSubType === "meta-reviewer" ? (
+            <FormattedMessage {...messages.tasksMetaReviewedByMe} />
+          ) : (
+            <FormattedMessage {...messages.tasksReviewedByMe} />
+          );
+        break;
       case ReviewTasksType.toBeReviewed:
-        subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
-        break
+        subheader = <FormattedMessage {...messages.tasksToBeReviewed} />;
+        break;
       case ReviewTasksType.allReviewedTasks:
-        subheader = <FormattedMessage {...messages.allReviewedTasks} />
-        break
+        subheader = <FormattedMessage {...messages.allReviewedTasks} />;
+        break;
       case ReviewTasksType.metaReviewTasks:
-        subheader = <FormattedMessage {...messages.tasksToMetaReview} />
-        break
+        subheader = <FormattedMessage {...messages.tasksToMetaReview} />;
+        break;
       case ReviewTasksType.myReviewedTasks:
       default:
-        subheader = <FormattedMessage {...messages.myReviewTasks} />
-        break
+        subheader = <FormattedMessage {...messages.myReviewTasks} />;
+        break;
     }
 
+    const BrowseMap = this.props.BrowseMap;
 
-    
-    const BrowseMap = this.props.BrowseMap
-    
     const IncludeMap = this.state.displayMap ? (
       <div className="mr-h-100 mr-mb-8">
         <MapPane>
-          <BrowseMap {..._omit(this.props, ['className'])} />
+          <BrowseMap {..._omit(this.props, ["className"])} />
         </MapPane>
       </div>
     ) : null;
 
-    const checkBoxes = (
-      this.props.reviewTasksType === ReviewTasksType.toBeReviewed && (
-        <div className="xl:mr-flex mr-mr-4">
-          <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
-            <input
-              type="checkbox"
-              id="only-saved-challenges-checkbox"
-              className="mr-checkbox-toggle mr-mr-px"
-              checked={!!this.props.reviewCriteria.savedChallengesOnly}
-              onChange={() => null}
-            />
-            <label htmlFor="only-saved-challenges-checkbox"> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
-          </div>
-          <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
-            <input
-              type="checkbox"
-              id="exclude-other-reviewers-checkbox"
-              className="mr-checkbox-toggle mr-mr-px"
-              checked={!!this.props.reviewCriteria.excludeOtherReviewers}
-              onChange={() => null}
-            />
-            <label htmlFor="exclude-other-reviewers-checkbox"> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
-          </div>
+    const checkBoxes = this.props.reviewTasksType === ReviewTasksType.toBeReviewed && (
+      <div className="xl:mr-flex mr-mr-4">
+        <div
+          className="field favorites-only-switch mr-mt-2 mr-mr-4"
+          onClick={() => this.toggleShowFavorites()}
+        >
+          <input
+            type="checkbox"
+            id="only-saved-challenges-checkbox"
+            className="mr-checkbox-toggle mr-mr-px"
+            checked={!!this.props.reviewCriteria.savedChallengesOnly}
+            onChange={() => null}
+          />
+          <label htmlFor="only-saved-challenges-checkbox">
+            {" "}
+            {this.props.intl.formatMessage(messages.onlySavedChallenges)}
+          </label>
         </div>
-      )
+        <div
+          className="field favorites-only-switch mr-mt-2"
+          onClick={() => this.toggleExcludeOthers()}
+        >
+          <input
+            type="checkbox"
+            id="exclude-other-reviewers-checkbox"
+            className="mr-checkbox-toggle mr-mr-px"
+            checked={!!this.props.reviewCriteria.excludeOtherReviewers}
+            onChange={() => null}
+          />
+          <label htmlFor="exclude-other-reviewers-checkbox">
+            {" "}
+            {this.props.intl.formatMessage(messages.excludeOtherReviewers)}
+          </label>
+        </div>
+      </div>
     );
-    
+
     return (
       <Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
-          <div className={IncludeMap === null ? 'sm:mr-flex sm:mr-items-center sm:mr-justify-between' : null}>
+          <div
+            className={
+              IncludeMap === null ? "sm:mr-flex sm:mr-items-center sm:mr-justify-between" : null
+            }
+          >
             <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
               <div>
-                <h1 className={`mr-h2 mr-text-yellow md:mr-mr-4 ${BrowseMap === '' ? '' : 'mr-mb-4'}`}>
+                <h1
+                  className={`mr-h2 mr-text-yellow md:mr-mr-4 ${BrowseMap === "" ? "" : "mr-mb-4"}`}
+                >
                   {subheader}
                 </h1>
                 {IncludeMap === null ? checkBoxes : null}
               </div>
             </header>
             {IncludeMap}
-            <div className='sm:mr-flex sm:mr-items-center sm:mr-justify-between'>
+            <div className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
               {IncludeMap === null ? null : checkBoxes}
               <div className="mr-ml-auto">
                 {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 && (
-                  <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
+                  <button
+                    className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                    onClick={() => this.startReviewing()}
+                  >
                     <FormattedMessage {...messages.startReviewing} />
                   </button>
                 )}
-                {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 && (
-                  <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startMetaReviewing()}>
-                    <FormattedMessage {...messages.startMetaReviewing} />
-                  </button>
-                )}
-                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks &&
+                  data.length > 0 && (
+                    <button
+                      className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                      onClick={() => this.startMetaReviewing()}
+                    >
+                      <FormattedMessage {...messages.startMetaReviewing} />
+                    </button>
+                  )}
+                <button
+                  className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
                   onClick={() => {
                     const newDisplayMap = !this.state.displayMap;
-                    localStorage.setItem('displayMap', JSON.stringify(newDisplayMap));
-                    this.setState({ displayMap: newDisplayMap })
+                    localStorage.setItem("displayMap", JSON.stringify(newDisplayMap));
+                    this.setState({ displayMap: newDisplayMap });
                   }}
                 >
                   <FormattedMessage {...messages.toggleMap} />
                 </button>
                 <button
                   className={classNames("mr-button mr-button-small", {
-                    "mr-button--green-lighter": !_get(this.props, 'reviewData.dataStale', false),
-                    "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
+                    "mr-button--green-lighter": !(this.props.reviewData?.dataStale ?? false),
+                    "mr-button--orange": this.props.reviewData?.dataStale ?? false,
                   })}
                   onClick={() => this.props.refresh()}
                 >
@@ -562,11 +702,11 @@ export class TaskReviewTable extends Component {
               noDataText={<FormattedMessage {...messages.noTasks} />}
               pages={totalPages}
               onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
-              onPageSizeChange={pageSize => this.props.changePageSize(pageSize)}
+              onPageSizeChange={(pageSize) => this.props.changePageSize(pageSize)}
               getTheadFilterThProps={() => {
                 return { style: { position: "inherit", overflow: "inherit" } };
               }}
-              onFilteredChange={filtered => {
+              onFilteredChange={(filtered) => {
                 this.setState({ filtered });
                 if (this.fetchData) {
                   this.fetchData();
@@ -576,33 +716,39 @@ export class TaskReviewTable extends Component {
               {...intlTableProps(this.props.intl)}
               PaginationComponent={IntlTablePagination}
               FilterComponent={({ filter, onChange }) => {
-                const filterValue = filter ? filter.value : ''
-                const clearFilter = () => onChange('')
+                const filterValue = filter ? filter.value : "";
+                const clearFilter = () => onChange("");
                 return (
-                  <div className='mr-space-x-1'>
+                  <div className="mr-space-x-1">
                     <input
                       type="text"
                       style={{
-                        width: '100%',
+                        width: "100%",
                       }}
                       value={filterValue}
-                      onChange={event => {
-                        onChange(event.target.value)
+                      onChange={(event) => {
+                        onChange(event.target.value);
                       }}
                     />
                     {filterValue && (
-                      <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
-                        <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+                      <button
+                        className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                        onClick={clearFilter}
+                      >
+                        <SvgSymbol
+                          sym="icon-close"
+                          viewBox="0 0 20 20"
+                          className="mr-fill-current mr-w-2.5 mr-h-2.5"
+                        />
                       </button>
                     )}
                   </div>
-                  )
-                }
-              }
+                );
+              }}
             />
           </div>
         </div>
-        {_isFinite(this.state.openComments) && (
+        {Number.isFinite(this.state.openComments) && (
           <TaskCommentsModal
             taskId={this.state.openComments}
             onClose={() => this.setState({ openComments: null })}
@@ -621,22 +767,21 @@ export class TaskReviewTable extends Component {
 
 export const setupColumnTypes = (props, openComments, data, criteria) => {
   const handleClick = (e, linkTo) => {
-    e.preventDefault()
+    e.preventDefault();
     props.history.push({
       pathname: linkTo,
       criteria,
-    })
-  }
-  const columns = {}
+    });
+  };
+  const columns = {};
   columns.id = {
-    id: 'id',
+    id: "id",
     Header: props.intl.formatMessage(messages.idLabel),
     filterable: true,
-    accessor: t => {
+    accessor: (t) => {
       if (!t.isBundlePrimary) {
-        return <span>{t.id}</span>
-      }
-      else {
+        return <span>{t.id}</span>;
+      } else {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
@@ -647,35 +792,37 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
             />
             {t.id}
           </span>
-        )
+        );
       }
     },
     sortable: true,
-    exportable: t => t.id,
+    exportable: (t) => t.id,
     maxWidth: 120,
-  }
+  };
 
   columns.featureId = {
-    id: 'featureId',
+    id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
-    accessor: t => t.name || t.title,
-    exportable: t => t.name || t.title,
+    accessor: (t) => t.name || t.title,
+    exportable: (t) => t.name || t.title,
     sortable: false,
     filterable: true,
     maxWidth: 120,
-  }
+  };
 
   columns.status = {
-    id: 'status',
-    Header: makeInvertable(props.intl.formatMessage(messages.statusLabel),
-                           () => props.invertField('status'),
-                           _get(criteria, 'invertFields.status')),
-    accessor: 'status',
+    id: "status",
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.statusLabel),
+      () => props.invertField("status"),
+      criteria?.invertFields?.status,
+    ),
+    accessor: "status",
     sortable: true,
     filterable: true,
-    exportable: t => props.intl.formatMessage(messagesByStatus[t.status]),
+    exportable: (t) => props.intl.formatMessage(messagesByStatus[t.status]),
     maxWidth: 140,
-    Cell: props => (
+    Cell: (props) => (
       <StatusLabel
         {...props}
         intlMessage={messagesByStatus[props.value]}
@@ -684,42 +831,46 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     ),
     Filter: ({ filter, onChange }) => {
       const options = [
-        <option key="all" value="all">All</option>
-      ]
+        <option key="all" value="all">
+          All
+        </option>,
+      ];
 
       _each(TaskStatus, (status) => {
         if (isReviewableStatus(status)) {
           options.push(
             <option key={keysByStatus[status]} value={status}>
               {props.intl.formatMessage(messagesByStatus[status])}
-            </option>
-          )
+            </option>,
+          );
         }
-      })
+      });
 
       return (
         <select
-          onChange={event => onChange(event.target.value)}
+          onChange={(event) => onChange(event.target.value)}
           className={"mr-w-full"}
-          value={filter ? filter.value : 'all'}
+          value={filter ? filter.value : "all"}
         >
           {options}
         </select>
-      )
+      );
     },
-  }
+  };
 
   columns.priority = {
-    id: 'priority',
-    Header: makeInvertable(props.intl.formatMessage(messages.priorityLabel),
-                           () => props.invertField('priority'),
-                           _get(criteria, 'invertFields.priority')),
-    accessor: 'priority',
+    id: "priority",
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.priorityLabel),
+      () => props.invertField("priority"),
+      criteria?.invertFields?.priority,
+    ),
+    accessor: "priority",
     sortable: true,
     filterable: true,
-    exportable: t => props.intl.formatMessage(messagesByStatus[t.priority]),
+    exportable: (t) => props.intl.formatMessage(messagesByStatus[t.priority]),
     maxWidth: 140,
-    Cell: props => (
+    Cell: (props) => (
       <StatusLabel
         {...props}
         intlMessage={messagesByPriority[props.value]}
@@ -728,345 +879,379 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     ),
     Filter: ({ filter, onChange }) => {
       const options = [
-        <option key="all" value="all">All</option>
-      ]
+        <option key="all" value="all">
+          All
+        </option>,
+      ];
 
       _each(TaskPriority, (priority) => {
         options.push(
           <option key={keysByPriority[priority]} value={priority}>
             {props.intl.formatMessage(messagesByPriority[priority])}
-          </option>
-        )
-      })
+          </option>,
+        );
+      });
 
       return (
         <select
-          onChange={event => onChange(event.target.value)}
+          onChange={(event) => onChange(event.target.value)}
           className={"mr-w-full"}
-          value={filter ? filter.value : 'all'}
+          value={filter ? filter.value : "all"}
         >
           {options}
         </select>
-      )
+      );
     },
-  }
+  };
 
   columns.reviewRequestedBy = {
-    id: 'reviewRequestedBy',
-    Header: makeInvertable(props.intl.formatMessage(messages.reviewRequestedByLabel),
-                           () => props.invertField('reviewRequestedBy'),
-                           _get(criteria, 'invertFields.reviewRequestedBy')),
-    accessor: 'reviewRequestedBy',
+    id: "reviewRequestedBy",
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.reviewRequestedByLabel),
+      () => props.invertField("reviewRequestedBy"),
+      criteria?.invertFields?.reviewRequestedBy,
+    ),
+    accessor: "reviewRequestedBy",
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.reviewRequestedBy, 'username'),
+    exportable: (t) => t.reviewRequestedBy?.username,
     maxWidth: 180,
-    Cell: ({row}) => (
+    Cell: ({ row }) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.reviewRequestedBy, 'username')).hashColor}}
+        style={{ color: AsColoredHashable(row._original.reviewRequestedBy?.username).hashColor }}
       >
-        {_get(row._original.reviewRequestedBy, 'username')}
+        {row._original.reviewRequestedBy?.username}
       </div>
     ),
-  }
+  };
 
   columns.additionalReviewers = {
-    id: 'otherReviewers',
+    id: "otherReviewers",
     Header: props.intl.formatMessage(messages.additionalReviewersLabel),
-    accessor: 'additionalReviewers',
+    accessor: "additionalReviewers",
     sortable: false,
     filterable: false,
     maxWidth: 180,
-    Cell: ({row}) => (
+    Cell: ({ row }) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.completedBy, 'username') || row._original.completedBy).hashColor}}
+        style={{
+          color: AsColoredHashable(row._original.completedBy?.username || row._original.completedBy)
+            .hashColor,
+        }}
       >
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
             <Fragment key={reviewer + "-" + index}>
-              <span style={{color: AsColoredHashable(reviewer.username).hashColor}}>{reviewer.username}</span>
-              {(index + 1) !== _get(row._original.additionalReviewers, 'length') ? ", " : ""}
+              <span style={{ color: AsColoredHashable(reviewer.username).hashColor }}>
+                {reviewer.username}
+              </span>
+              {index + 1 !== row._original.additionalReviewers?.length ? ", " : ""}
             </Fragment>
           );
         })}
       </div>
     ),
-  }
+  };
 
   columns.challengeId = {
-    id: 'challengeId',
+    id: "challengeId",
     Header: props.intl.formatMessage(messages.challengeIdLabel),
-    accessor: t => {
-        return <span>{t.parent.id}</span>
+    accessor: (t) => {
+      return <span>{t.parent.id}</span>;
     },
-    exportable: t => t.id,
+    exportable: (t) => t.id,
     sortable: false,
     filterable: false,
     maxWidth: 120,
-  }
+  };
 
   columns.challenge = {
-    id: 'challenge',
-    Header: makeInvertable(props.intl.formatMessage(messages.challengeLabel),
-                           () => props.invertField('challenge'),
-                           _get(criteria, 'invertFields.challenge')),
-    accessor: 'parent',
+    id: "challenge",
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.challengeLabel),
+      () => props.invertField("challenge"),
+      criteria?.invertFields?.challenge,
+    ),
+    accessor: "parent",
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.parent, 'name'),
+    exportable: (t) => t.parent?.name,
     minWidth: 120,
-    Cell: ({row}) => {
-      return (
-        <div className="row-challenge-column mr-text-white">
-          {row._original.parent.name}
-        </div>
-      )
+    Cell: ({ row }) => {
+      return <div className="row-challenge-column mr-text-white">{row._original.parent.name}</div>;
     },
     Filter: ({ filter, onChange }) => {
       return (
-        <div className='mr-space-x-1'>
-          <div className='mr-inline-block'>
+        <div className="mr-space-x-1">
+          <div className="mr-inline-block">
             <FilterSuggestTextBox
               filterType={"challenge"}
               filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
               selectedItem={""}
               onChange={(item) => {
-                onChange(item)
-                setTimeout(() => props.updateChallengeFilterIds(item), 0)
+                onChange(item);
+                setTimeout(() => props.updateChallengeFilterIds(item), 0);
               }}
               value={filter ? filter.value : ""}
               itemList={props.reviewChallenges}
               multiselect={props.challengeFilterIds}
             />
           </div>
-          {props.challengeFilterIds && props.challengeFilterIds.length && props.challengeFilterIds?.[0] !== -2 ? (
-            <button 
+          {props.challengeFilterIds?.length && props.challengeFilterIds?.[0] !== -2 ? (
+            <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
               onClick={() => {
-                onChange({ id: -2, name: "All Challenges" })
-                setTimeout(() => props.updateChallengeFilterIds({ id: -2, name: "All Challenges" }), 0)
+                onChange({ id: -2, name: "All Challenges" });
+                setTimeout(
+                  () => props.updateChallengeFilterIds({ id: -2, name: "All Challenges" }),
+                  0,
+                );
               }}
             >
-              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
             </button>
           ) : null}
         </div>
-      )
-    }
-  }
+      );
+    },
+  };
 
   columns.projectId = {
-    id: 'projectId',
+    id: "projectId",
     Header: props.intl.formatMessage(messages.projectIdLabel),
-    accessor: t => {
-      return <span>{t.parent.parent.id}</span>
-  },
-  exportable: t => t.parent.parent.id,
-  sortable: false,
-  filterable: false,
-  maxWidth: 120,
-  }
+    accessor: (t) => {
+      return <span>{t.parent.parent.id}</span>;
+    },
+    exportable: (t) => t.parent.parent.id,
+    sortable: false,
+    filterable: false,
+    maxWidth: 120,
+  };
 
   columns.project = {
-    id: 'project',
-    Header: makeInvertable(props.intl.formatMessage(messages.projectLabel),
-                           () => props.invertField('project'),
-                           _get(criteria, 'invertFields.project')),
+    id: "project",
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.projectLabel),
+      () => props.invertField("project"),
+      criteria?.invertFields?.project,
+    ),
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.parent, 'parent.displayName'),
+    exportable: (t) => t.parent?.parent?.displayName,
     minWidth: 120,
-    Cell: ({row}) => {
-      return (
-        <div className="row-project-column">
-          {row._original.parent.parent.displayName}
-        </div>
-      )
+    Cell: ({ row }) => {
+      return <div className="row-project-column">{row._original.parent.parent.displayName}</div>;
     },
     Filter: ({ filter, onChange }) => {
       return (
-        <div className='mr-space-x-1'>
-          <div className='mr-inline-block'>
+        <div className="mr-space-x-1">
+          <div className="mr-inline-block">
             <FilterSuggestTextBox
               filterType={"project"}
               filterAllLabel={props.intl.formatMessage(messages.allProjects)}
               selectedItem={""}
               onChange={(item) => {
-                onChange(item)
-                setTimeout(() => props.updateProjectFilterIds(item), 0)
+                onChange(item);
+                setTimeout(() => props.updateProjectFilterIds(item), 0);
               }}
               value={filter ? filter.value : ""}
-              itemList={_map(props.reviewProjects, p => ({id: p.id, name: p.displayName}))}
+              itemList={_map(props.reviewProjects, (p) => ({ id: p.id, name: p.displayName }))}
               multiselect={props.projectFilterIds}
             />
           </div>
-            {props.projectFilterIds && props.projectFilterIds.length && props.projectFilterIds?.[0] !== -2 ? (
-              <button 
-                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-                onClick={() => {
-                  onChange({ id: -2, name: "All Projects" })
-                  setTimeout(() => props.updateProjectFilterIds({ id: -2, name: "All Projects" }), 0)
-                }}
-              >
-                <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
-              </button>
-            ) : null}
+          {props.projectFilterIds?.length && props.projectFilterIds?.[0] !== -2 ? (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => {
+                onChange({ id: -2, name: "All Projects" });
+                setTimeout(() => props.updateProjectFilterIds({ id: -2, name: "All Projects" }), 0);
+              }}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
+            </button>
+          ) : null}
         </div>
-      )
-    }
-  }
+      );
+    },
+  };
 
   columns.mappedOn = {
-    id: 'mappedOn',
+    id: "mappedOn",
     Header: props.intl.formatMessage(messages.mappedOnLabel),
-    accessor: 'mappedOn',
+    accessor: "mappedOn",
     sortable: true,
     filterable: true,
     defaultSortDesc: false,
-    exportable: t => t.mappedOn,
+    exportable: (t) => t.mappedOn,
     maxWidth: 180,
-    Cell: props => {
+    Cell: (props) => {
       if (!props.value) {
-        return null
+        return null;
       }
       return (
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
-      )
+      );
     },
     Filter: () => {
-      let mappedOn = _get(criteria, 'filters.mappedOn')
+      let mappedOn = criteria?.filters?.mappedOn;
 
       if (typeof mappedOn === "string" && mappedOn !== "") {
-        mappedOn = parseISO(mappedOn)
+        mappedOn = parseISO(mappedOn);
       }
 
-      const clearFilter = () => props.setFiltered("mappedOn", null)
-      
+      const clearFilter = () => props.setFiltered("mappedOn", null);
+
       return (
-        <div className='mr-space-x-1'>
+        <div className="mr-space-x-1">
           <IntlDatePicker
-              selected={mappedOn}
-              onChange={(value) => {
-                props.setFiltered("mappedOn", value)
-              }}
-              intl={props.intl}
+            selected={mappedOn}
+            onChange={(value) => {
+              props.setFiltered("mappedOn", value);
+            }}
+            intl={props.intl}
           />
           {mappedOn && (
-            <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
-              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={clearFilter}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
             </button>
           )}
         </div>
-      )
+      );
     },
-  }
+  };
 
   columns.reviewedAt = {
-    id: 'reviewedAt',
+    id: "reviewedAt",
     Header: props.intl.formatMessage(messages.reviewedAtLabel),
-    accessor: 'reviewedAt',
+    accessor: "reviewedAt",
     sortable: true,
     filterable: true,
     defaultSortDesc: false,
-    exportable: t => t.reviewedAt,
+    exportable: (t) => t.reviewedAt,
     minWidth: 180,
     maxWidth: 200,
-    Cell: props => {
+    Cell: (props) => {
       if (!props.value) {
-        return null
+        return null;
       }
 
       return (
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
-      )
+      );
     },
     Filter: () => {
-      let reviewedAt = _get(criteria, 'filters.reviewedAt')
+      let reviewedAt = criteria?.filters?.reviewedAt;
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
-        reviewedAt = parseISO(reviewedAt)
+        reviewedAt = parseISO(reviewedAt);
       }
 
-      const clearFilter = () => props.setFiltered("reviewedAt", null)
+      const clearFilter = () => props.setFiltered("reviewedAt", null);
 
       return (
-        <div className='mr-space-x-1'>
+        <div className="mr-space-x-1">
           <IntlDatePicker
-              selected={reviewedAt}
-              onChange={(value) => {
-                props.setFiltered("reviewedAt", value)
-              }}
-              intl={props.intl}
+            selected={reviewedAt}
+            onChange={(value) => {
+              props.setFiltered("reviewedAt", value);
+            }}
+            intl={props.intl}
           />
           {reviewedAt && (
-            <button className="mr-text-white hover:mr-text-green-lighter mr-transition-colors" onClick={clearFilter}>
-              <SvgSymbol sym="icon-close" viewBox="0 0 20 20" className="mr-fill-current mr-w-2.5 mr-h-2.5"/>
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={clearFilter}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
             </button>
           )}
         </div>
-      )
+      );
     },
-  }
+  };
 
   columns.metaReviewedAt = {
-    id: 'metaReviewedAt',
+    id: "metaReviewedAt",
     Header: props.intl.formatMessage(messages.metaReviewedAtLabel),
-    accessor: 'metaReviewedAt',
+    accessor: "metaReviewedAt",
     sortable: true,
     filterable: false,
     defaultSortDesc: false,
-    exportable: t => t.metaReviewedAt,
+    exportable: (t) => t.metaReviewedAt,
     minWidth: 180,
     maxWidth: 200,
-    Cell: props => {
+    Cell: (props) => {
       if (!props.value) {
-        return null
+        return null;
       }
 
       return (
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
-      )
-    }
-  }
+      );
+    },
+  };
 
   columns.reviewedBy = {
-    id: 'reviewedBy',
-    Header: makeInvertable(props.intl.formatMessage(messages.reviewedByLabel),
-                           () => props.invertField('reviewedBy'),
-                           _get(criteria, 'invertFields.reviewedBy')),
-    accessor: 'reviewedBy',
+    id: "reviewedBy",
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.reviewedByLabel),
+      () => props.invertField("reviewedBy"),
+      criteria?.invertFields?.reviewedBy,
+    ),
+    accessor: "reviewedBy",
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.reviewedBy, 'username'),
+    exportable: (t) => t.reviewedBy?.username,
     maxWidth: 180,
-    Cell: ({row}) => (
+    Cell: ({ row }) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.reviewedBy, 'username')).hashColor}}
+        style={{ color: AsColoredHashable(row._original.reviewedBy?.username).hashColor }}
       >
         {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
       </div>
     ),
-  }
+  };
 
   columns.reviewStatus = {
-    id: 'reviewStatus',
-    Header: makeInvertable(props.intl.formatMessage(messages.reviewStatusLabel),
-                           () => props.invertField('reviewStatus'),
-                           _get(criteria, 'invertFields.reviewStatus')),
-    accessor: 'reviewStatus',
+    id: "reviewStatus",
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.reviewStatusLabel),
+      () => props.invertField("reviewStatus"),
+      criteria?.invertFields?.reviewStatus,
+    ),
+    accessor: "reviewStatus",
     sortable: true,
     filterable: true,
-    exportable: t => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
+    exportable: (t) => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
     maxWidth: 180,
-    Cell: props => (
+    Cell: (props) => (
       <StatusLabel
         {...props}
         intlMessage={messagesByReviewStatus[props.value]}
@@ -1075,283 +1260,292 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     ),
     Filter: ({ filter, onChange }) => {
       const options = [
-        <option key="all" value="all">All</option>
-      ]
+        <option key="all" value="all">
+          All
+        </option>,
+      ];
 
       if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
-        _each([TaskReviewStatus.approved,
-               TaskReviewStatus.approvedWithFixes], status =>
+        _each([TaskReviewStatus.approved, TaskReviewStatus.approvedWithFixes], (status) =>
           options.push(
             <option key={keysByReviewStatus[status]} value={status}>
               {props.intl.formatMessage(messagesByReviewStatus[status])}
-            </option>
-          )
-        )
-      }
-      else if (props.reviewTasksType === ReviewTasksType.reviewedByMe ||
-          props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
-          props.reviewTasksType === ReviewTasksType.allReviewedTasks) {
+            </option>,
+          ),
+        );
+      } else if (
+        props.reviewTasksType === ReviewTasksType.reviewedByMe ||
+        props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
+        props.reviewTasksType === ReviewTasksType.allReviewedTasks
+      ) {
         _each(TaskReviewStatus, (status) => {
           if (status !== TaskReviewStatus.unnecessary) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
                 {props.intl.formatMessage(messagesByReviewStatus[status])}
-              </option>
-            )
+              </option>,
+            );
           }
-        })
-      }
-      else {
+        });
+      } else {
         _each(TaskReviewStatus, (status) => {
           if (isNeedsReviewStatus(status)) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
                 {props.intl.formatMessage(messagesByReviewStatus[status])}
-              </option>
-            )
+              </option>,
+            );
           }
-        })
+        });
       }
 
       return (
         <select
-          onChange={event => onChange(event.target.value)}
+          onChange={(event) => onChange(event.target.value)}
           className={"mr-w-full"}
-          value={filter ? filter.value : 'all'}
+          value={filter ? filter.value : "all"}
         >
           {options}
         </select>
-      )
+      );
     },
-  }
+  };
 
   columns.metaReviewStatus = {
-    id: 'metaReviewStatus',
-    Header: makeInvertable(props.intl.formatMessage(messages.metaReviewStatusLabel),
-                           () => props.invertField('metaReviewStatus'),
-                           _get(criteria, 'invertFields.metaReviewStatus')),
-    accessor: 'metaReviewStatus',
+    id: "metaReviewStatus",
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.metaReviewStatusLabel),
+      () => props.invertField("metaReviewStatus"),
+      criteria?.invertFields?.metaReviewStatus,
+    ),
+    accessor: "metaReviewStatus",
     sortable: true,
     filterable: true,
-    exportable: t => props.intl.formatMessage(messagesByMetaReviewStatus[t.metaReviewStatus]),
+    exportable: (t) => props.intl.formatMessage(messagesByMetaReviewStatus[t.metaReviewStatus]),
     maxWidth: 180,
-    Cell: props => (_isUndefined(props.value) ? "" :
-      <StatusLabel
-        {...props}
-        intlMessage={messagesByMetaReviewStatus[props.value]}
-        className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
-      />
-    ),
+    Cell: (props) =>
+      props.value === undefined ? (
+        ""
+      ) : (
+        <StatusLabel
+          {...props}
+          intlMessage={messagesByMetaReviewStatus[props.value]}
+          className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
+        />
+      ),
     Filter: ({ filter, onChange }) => {
-      const options = [
-      ]
+      const options = [];
 
       if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
-        options.push(<option key="all" value="0,-2">{props.intl.formatMessage(messages.allNeeded)}</option>)
-        options.push(<option key="none" value="-2">{props.intl.formatMessage(messages.metaUnreviewed)}</option>)
+        options.push(
+          <option key="all" value="0,-2">
+            {props.intl.formatMessage(messages.allNeeded)}
+          </option>,
+        );
+        options.push(
+          <option key="none" value="-2">
+            {props.intl.formatMessage(messages.metaUnreviewed)}
+          </option>,
+        );
         options.push(
           <option key={keysByReviewStatus[TaskReviewStatus.needed]} value={TaskReviewStatus.needed}>
             {props.intl.formatMessage(messagesByMetaReviewStatus[TaskReviewStatus.needed])}
-          </option>
-        )
-      }
-      else {
-        options.push(<option key="all" value="all">All</option>)
-        options.push(<option key="none" value="-2">{props.intl.formatMessage(messages.metaUnreviewed)}</option>)
+          </option>,
+        );
+      } else {
+        options.push(
+          <option key="all" value="all">
+            All
+          </option>,
+        );
+        options.push(
+          <option key="none" value="-2">
+            {props.intl.formatMessage(messages.metaUnreviewed)}
+          </option>,
+        );
         _each(TaskReviewStatus, (status) => {
-          if (status !== TaskReviewStatus.unnecessary &&
-              isMetaReviewStatus(status)) {
-
+          if (status !== TaskReviewStatus.unnecessary && isMetaReviewStatus(status)) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
                 {props.intl.formatMessage(messagesByMetaReviewStatus[status])}
-              </option>
-            )
+              </option>,
+            );
           }
-        })
+        });
       }
 
       return (
         <select
-          onChange={event => onChange(event.target.value)}
+          onChange={(event) => onChange(event.target.value)}
           className={"mr-w-full"}
-          value={filter ? filter.value : 'all'}
+          value={filter ? filter.value : "all"}
         >
           {options}
         </select>
-      )
+      );
     },
-  }
+  };
 
   columns.metaReviewedBy = {
-    id: 'metaReviewedBy',
-    Header: makeInvertable(props.intl.formatMessage(messages.metaReviewedByLabel),
-                           () => props.invertField('metaReviewedBy'),
-                           _get(criteria, 'invertFields.metaReviewedBy')),
-    accessor: 'metaReviewedBy',
+    id: "metaReviewedBy",
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.metaReviewedByLabel),
+      () => props.invertField("metaReviewedBy"),
+      criteria?.invertFields?.metaReviewedBy,
+    ),
+    accessor: "metaReviewedBy",
     filterable: true,
     sortable: false,
-    exportable: t => _get(t.metaReviewedBy, 'username'),
+    exportable: (t) => t.metaReviewedBy?.username,
     maxWidth: 180,
-    Cell: ({row}) => (
+    Cell: ({ row }) => (
       <div
         className="row-user-column"
-        style={{color: AsColoredHashable(_get(row._original.metaReviewedBy, 'username')).hashColor}}
+        style={{ color: AsColoredHashable(row._original.metaReviewedBy?.username).hashColor }}
       >
         {row._original.metaReviewedBy ? row._original.metaReviewedBy.username : ""}
       </div>
     ),
-  }
+  };
 
   columns.reviewerControls = {
-    id: 'controls',
+    id: "controls",
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
     maxWidth: 120,
     minWidth: 110,
     Cell: ({ row }) => {
-      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}/review`
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}/review`;
       let action = (
-        <Link 
-          to={linkTo} 
+        <Link
+          to={linkTo}
           onClick={(e) => handleClick(e, linkTo)}
           className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
         >
           <FormattedMessage {...messages.reviewTaskLabel} />
         </Link>
-      )
+      );
 
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action = (
-            <Link 
-              to={linkTo} 
+            <Link
+              to={linkTo}
               onClick={(e) => handleClick(e, linkTo)}
               className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
             >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </Link>
-          )
+          );
         } else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
           action = (
-            <Link 
-              to={linkTo} 
+            <Link
+              to={linkTo}
               onClick={(e) => handleClick(e, linkTo)}
               className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
             >
               <FormattedMessage {...messages.resolveTaskLabel} />
             </Link>
-          )
+          );
         }
       }
 
-      return (
-        <div className="row-controls-column">
-          {action}
-        </div>
-      )
-    }
-  }
+      return <div className="row-controls-column">{action}</div>;
+    },
+  };
 
   columns.reviewCompleteControls = {
-    id: 'controls',
+    id: "controls",
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
     maxWidth: 110,
     Cell: ({ row }) => {
-      let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
-      let message = <FormattedMessage {...messages.viewTaskLabel} />
+      let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`;
+      let message = <FormattedMessage {...messages.viewTaskLabel} />;
 
       // The mapper needs to rereview a contested task.
-      if (row._original.reviewStatus === TaskReviewStatus.disputed ||
-          row._original.metaReviewStatus === TaskReviewStatus.rejected) {
-        linkTo += "/review"
-        message = <FormattedMessage {...messages.resolveTaskLabel} />
+      if (
+        row._original.reviewStatus === TaskReviewStatus.disputed ||
+        row._original.metaReviewStatus === TaskReviewStatus.rejected
+      ) {
+        linkTo += "/review";
+        message = <FormattedMessage {...messages.resolveTaskLabel} />;
       }
 
       return (
         <div className="row-controls-column mr-links-green-lighter">
-          <Link
-            to={linkTo} 
-            onClick={(e) => handleClick(e, linkTo)}
-          >
+          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)}>
             {message}
           </Link>
         </div>
-      )
-    }
-  }
+      );
+    },
+  };
 
   columns.metaReviewerControls = {
-    id: 'controls',
+    id: "controls",
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
     maxWidth: 120,
     minWidth: 110,
-    Cell: ({row}) =>{
-      const linkTo =`/challenge/${row._original.parent.id}/task/${row._original.id}/meta-review`
-      let action =(
-        <Link 
-          to={linkTo} 
+    Cell: ({ row }) => {
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}/meta-review`;
+      let action = (
+        <Link
+          to={linkTo}
           onClick={(e) => handleClick(e, linkTo)}
           className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
         >
           <FormattedMessage {...messages.metaReviewTaskLabel} />
         </Link>
-      )
-  
+      );
+
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action = (
-            <Link 
-              to={linkTo}  
+            <Link
+              to={linkTo}
               onClick={(e) => handleClick(e, linkTo)}
               className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
             >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </Link>
-          )
-        } 
-        else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
+          );
+        } else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
           action = (
-            <Link 
-              to={linkTo}  
+            <Link
+              to={linkTo}
               onClick={(e) => handleClick(e, linkTo)}
               className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
             >
               <FormattedMessage {...messages.resolveTaskLabel} />
             </Link>
-          )
+          );
         }
       }
 
-      return <div className="row-controls-column">
-          {action}
-        </div>
-    }
-  }
+      return <div className="row-controls-column">{action}</div>;
+    },
+  };
 
   columns.mapperControls = {
-    id: 'controls',
+    id: "controls",
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
     minWidth: 90,
     maxWidth: 120,
     Cell: ({ row }) => {
-      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`;
       let message =
         row._original.reviewStatus === TaskReviewStatus.rejected ? (
           <FormattedMessage {...messages.fixTaskLabel} />
         ) : (
           <FormattedMessage {...messages.viewTaskLabel} />
-        )
-  
+        );
+
       return (
         <div className="row-controls-column mr-links-green-lighter">
-          <Link
-            to={linkTo}
-            onClick={(e) => handleClick(e, linkTo)}
-          >
+          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)}>
             {message}
           </Link>
           {!props.metaReviewEnabled &&
@@ -1367,53 +1561,60 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               </Link>
             )}
         </div>
-      )
-    }
-  }
-  
+      );
+    },
+  };
+
   columns.viewComments = {
-    id: 'viewComments',
+    id: "viewComments",
     Header: () => <FormattedMessage {...messages.viewCommentsLabel} />,
-    accessor: 'commentID',
+    accessor: "commentID",
     sortable: false,
     maxWidth: 110,
-    Cell: props =>
-      <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
-  }
+    Cell: (props) => <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
+  };
 
   columns.tags = {
-    id: 'tags',
+    id: "tags",
     Header: props.intl.formatMessage(messages.tagsLabel),
-    accessor: 'tags',
+    accessor: "tags",
     filterable: true,
     sortable: false,
     minWidth: 120,
-    Cell: ({row}) => {
+    Cell: ({ row }) => {
       return (
         <div className="row-challenge-column mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap">
-          {_map(row._original.tags, t => t.name === "" ? null : (
-            <div className="mr-inline mr-bg-white-10 mr-rounded mr-py-1 mr-px-2 mr-m-1" key={t.id}>
-              {t.name}
-            </div>
-          ))}
+          {_map(row._original.tags, (t) =>
+            t.name === "" ? null : (
+              <div
+                className="mr-inline mr-bg-white-10 mr-rounded mr-py-1 mr-px-2 mr-m-1"
+                key={t.id}
+              >
+                {t.name}
+              </div>
+            ),
+          )}
         </div>
-      )
+      );
     },
-    Filter: ({filter, onChange}) => {
+    Filter: ({ filter, onChange }) => {
       return (
-        <InTableTagFilter
-          {...props}
-          onChange={onChange}
-          value={filter ? _get(filter, 'value') : ''}
-        />
-      )
-    }
-  }
+        <InTableTagFilter {...props} onChange={onChange} value={filter ? filter?.value : ""} />
+      );
+    },
+  };
 
-  return columns
-}
+  return columns;
+};
 
-export default WithCurrentUser(WithConfigurableColumns(
-  WithSavedFilters(TaskReviewTable, "reviewSearchFilters"),
-  {}, [], messages, "reviewColumns", "reviewTasksType", false)
-)
+export default WithCurrentUser(
+  WithConfigurableColumns(
+    WithSavedFilters(TaskReviewTable, "reviewSearchFilters"),
+    {},
+    [],
+    messages,
+    "reviewColumns",
+    "reviewTasksType",
+    false,
+  ),
+);

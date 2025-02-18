@@ -1,8 +1,8 @@
-import { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { FormattedMessage } from 'react-intl'
-import worldMapImage from "../../../images/bg-map.svg"
-import messages from './Messages'
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { Link } from "react-router-dom";
+import worldMapImage from "../../../images/bg-map.svg";
+import messages from "./Messages";
 
 export default class Hero extends Component {
   render() {
@@ -22,6 +22,6 @@ export default class Hero extends Component {
           <img src={worldMapImage} className="mr-w-auto mr-h-64" />
         </div>
       </div>
-    )
+    );
   }
 }

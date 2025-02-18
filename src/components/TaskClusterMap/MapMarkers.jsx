@@ -1,26 +1,26 @@
-import { useEffect, useRef, useState } from 'react'
-import { Marker, Tooltip, Polyline, useMap, useMapEvents } from 'react-leaflet';
-import _map from 'lodash/map';
-import _isEqual from 'lodash/isEqual';
-import _each from 'lodash/each';
-import _filter from 'lodash/filter';
-import _reject from 'lodash/reject';
-import _compact from 'lodash/compact';
-import _isEmpty from 'lodash/isEmpty';
-import _omit from 'lodash/omit';
-import _cloneDeep from 'lodash/cloneDeep';
-import _isObject from 'lodash/isObject';
-import './TaskClusterMap.scss';
-import { toLatLngBounds } from '../../services/MapBounds/MapBounds';
-import bbox from '@turf/bbox';
-import AsMappableTask from '../../interactions/Task/AsMappableTask';
-import AsSpiderableMarkers from '../../interactions/TaskCluster/AsSpiderableMarkers';
-import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster';
-import AsColoredHashable from '../../interactions/Hashable/AsColoredHashable';
-import distance from '@turf/distance';
-import bboxPolygon from '@turf/bbox-polygon';
-import { geometryCollection } from '@turf/helpers';
-import centroid from '@turf/centroid';
+import _cloneDeep from "lodash/cloneDeep";
+import _compact from "lodash/compact";
+import _each from "lodash/each";
+import _filter from "lodash/filter";
+import _isEmpty from "lodash/isEmpty";
+import _isEqual from "lodash/isEqual";
+import _isObject from "lodash/isObject";
+import _map from "lodash/map";
+import _omit from "lodash/omit";
+import _reject from "lodash/reject";
+import { useEffect, useRef, useState } from "react";
+import { Marker, Polyline, Tooltip, useMap, useMapEvents } from "react-leaflet";
+import "./TaskClusterMap.scss";
+import bbox from "@turf/bbox";
+import bboxPolygon from "@turf/bbox-polygon";
+import centroid from "@turf/centroid";
+import distance from "@turf/distance";
+import { geometryCollection } from "@turf/helpers";
+import AsColoredHashable from "../../interactions/Hashable/AsColoredHashable";
+import AsMappableTask from "../../interactions/Task/AsMappableTask";
+import AsMappableCluster from "../../interactions/TaskCluster/AsMappableCluster";
+import AsSpiderableMarkers from "../../interactions/TaskCluster/AsSpiderableMarkers";
+import { toLatLngBounds } from "../../services/MapBounds/MapBounds";
 
 export const CLUSTER_POINTS = 25;
 export const CLUSTER_ICON_PIXELS = 40;
@@ -31,7 +31,7 @@ export const labelOverlappingMarkers = (markers) => {
 
   for (let i = 0; i < markers.length; i++) {
     const marker = markers[i];
-    const stringCoords = marker.position.join(',');
+    const stringCoords = marker.position.join(",");
     const count = uniqueCoords[stringCoords];
 
     if (count) {
@@ -43,7 +43,7 @@ export const labelOverlappingMarkers = (markers) => {
 
   for (let i = 0; i < markers.length; i++) {
     const marker = markers[i];
-    const stringCoords = marker.position.join(',');
+    const stringCoords = marker.position.join(",");
     const count = uniqueCoords[stringCoords];
 
     marker.overlappingCount = count;
@@ -62,7 +62,7 @@ const Markers = (props) => {
   const prevProps = useRef({ ...props });
 
   const handleMove = async () => {
-    const zoom = map.getZoom()
+    const zoom = map.getZoom();
     const bounds = map.getBounds();
     setCurrentSize(map.getSize());
     props.setCurrentZoom(zoom);
@@ -72,7 +72,7 @@ const Markers = (props) => {
 
   useMapEvents({
     moveend: () => {
-      if(!initialLoadComplete) {
+      if (!initialLoadComplete) {
         setInitialLoadComplete(true);
       }
 
@@ -93,7 +93,12 @@ const Markers = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!props.taskMarkers || props.delayMapLoad || !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) || props.selectedClusters !== prevProps.current.selectedClusters) {
+    if (
+      !props.taskMarkers ||
+      props.delayMapLoad ||
+      !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) ||
+      props.selectedClusters !== prevProps.current.selectedClusters
+    ) {
       refreshSpidered();
       generateMarkers();
     } else if (!_isEqual(spidered, prevProps.current.spidered)) {
@@ -110,20 +115,20 @@ const Markers = (props) => {
   useEffect(() => {
     // Fit bounds to initial tasks when they are loaded
     if (!initialLoadComplete && props.taskMarkers && props.taskMarkers.length > 0) {
-      const bounds = props.centerBounds || toLatLngBounds(
-        bbox({
-          type: 'FeatureCollection',
-          features: _map(props.taskMarkers, cluster =>
-            ({
-              type: 'Feature',
+      const bounds =
+        props.centerBounds ||
+        toLatLngBounds(
+          bbox({
+            type: "FeatureCollection",
+            features: _map(props.taskMarkers, (cluster) => ({
+              type: "Feature",
               geometry: {
-                type: 'Point',
-                coordinates: [cluster.position[1], cluster.position[0]]
-              }
-            })
-          )
-        })
-      );
+                type: "Point",
+                coordinates: [cluster.position[1], cluster.position[0]],
+              },
+            })),
+          }),
+        );
 
       map.fitBounds(bounds);
       props.setCurrentBounds(bounds);
@@ -131,13 +136,12 @@ const Markers = (props) => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
-      
+
       setInitialLoadComplete(true);
-    } 
-    else if (props.taskCenter && !props.taskCenter.equals(prevProps.current.taskCenter)) {
-      map.panTo(props.taskCenter)
+    } else if (props.taskCenter && !props.taskCenter.equals(prevProps.current.taskCenter)) {
+      map.panTo(props.taskCenter);
     }
-  }, [props.taskMarkers, props.taskCenter ]);
+  }, [props.taskMarkers, props.taskCenter]);
 
   const refreshSpidered = () => {
     if (spidered.size === 0) {
@@ -147,7 +151,10 @@ const Markers = (props) => {
     const refreshed = new Map();
     _each(props.taskMarkers, (marker) => {
       if (spidered.has(marker.options.taskId)) {
-        refreshed.set(marker.options.taskId, { ...spidered.get(marker.options.taskId), icon: marker.icon });
+        refreshed.set(marker.options.taskId, {
+          ...spidered.get(marker.options.taskId),
+          icon: marker.icon,
+        });
       }
     });
 
@@ -157,20 +164,20 @@ const Markers = (props) => {
   const markerDistanceDegrees = (first, second) => {
     const firstPosition = [first.options.point.lng, first.options.point.lat];
     const secondPosition = [second.options.point.lng, second.options.point.lat];
-    return distance(firstPosition, secondPosition, { units: 'degrees' });
+    return distance(firstPosition, secondPosition, { units: "degrees" });
   };
 
   const mapMetricsInDegrees = (iconSize = CLUSTER_ICON_PIXELS + 20) => {
-    const metrics = {}
-    if(props.currentBounds) {
-      metrics.heightDegrees = props.currentBounds.getNorth() - props.currentBounds.getSouth()
-      metrics.widthDegrees = props.currentBounds.getEast() - props.currentBounds.getWest()
-      metrics.degreesPerPixel = metrics.heightDegrees / currentSize.y
-      metrics.iconSizeDegrees = iconSize * metrics.degreesPerPixel
+    const metrics = {};
+    if (props.currentBounds) {
+      metrics.heightDegrees = props.currentBounds.getNorth() - props.currentBounds.getSouth();
+      metrics.widthDegrees = props.currentBounds.getEast() - props.currentBounds.getWest();
+      metrics.degreesPerPixel = metrics.heightDegrees / currentSize.y;
+      metrics.iconSizeDegrees = iconSize * metrics.degreesPerPixel;
     }
 
-    return metrics
-  }
+    return metrics;
+  };
 
   const overlappingTasks = (marker, allMarkers) => {
     const { iconSizeDegrees } = mapMetricsInDegrees(CLUSTER_ICON_PIXELS);
@@ -198,49 +205,86 @@ const Markers = (props) => {
 
   const spider = (clickedMarker, overlappingMarkers) => {
     const centerPointPx = map.latLngToLayerPoint(clickedMarker.position);
-    const updateSpidered = AsSpiderableMarkers(overlappingMarkers).spider(centerPointPx, CLUSTER_ICON_PIXELS);
+    const updateSpidered = AsSpiderableMarkers(overlappingMarkers).spider(
+      centerPointPx,
+      CLUSTER_ICON_PIXELS,
+    );
     _each([...updateSpidered.values()], (s) => (s.position = map.layerPointToLatLng(s.positionPx)));
     setSpidered(updateSpidered);
   };
 
-  const consolidateMarkers = markers => {
-    if (!(props.showAsClusters && props.totalTaskCount > CLUSTER_POINTS && markers && props.currentBounds && currentSize)) {
+  const consolidateMarkers = (markers) => {
+    if (
+      !(
+        props.showAsClusters &&
+        props.totalTaskCount > CLUSTER_POINTS &&
+        markers &&
+        props.currentBounds &&
+        currentSize
+      )
+    ) {
       return markers;
     }
 
     const { heightDegrees, widthDegrees, iconSizeDegrees } = mapMetricsInDegrees();
     const maxClusterSize = Math.max(heightDegrees, widthDegrees) / 4.0;
     const combinedClusters = new Map();
-  
+
     for (let i = 0; i < markers.length - 1; i++) {
       let currentCluster = markers[i];
-  
-      if (_isEmpty(currentCluster.options.bounding) || combinedClusters.has(currentCluster.options.clusterId)) {
+
+      if (
+        _isEmpty(currentCluster.options.bounding) ||
+        combinedClusters.has(currentCluster.options.clusterId)
+      ) {
         continue;
       }
-  
+
       for (let j = i + 1; j < markers.length; j++) {
-        if (combinedClusters.has(markers[j].options.clusterId) || _isEmpty(markers[j].options.bounding)) {
+        if (
+          combinedClusters.has(markers[j].options.clusterId) ||
+          _isEmpty(markers[j].options.bounding)
+        ) {
           continue;
         }
 
         try {
           if (markerDistanceDegrees(currentCluster, markers[j]) <= iconSizeDegrees) {
-            const combinedBounds = bbox(geometryCollection([currentCluster.options.bounding, markers[j].options.bounding]));
+            const combinedBounds = bbox(
+              geometryCollection([currentCluster.options.bounding, markers[j].options.bounding]),
+            );
 
-            if (combinedBounds[3] - combinedBounds[1] > maxClusterSize || combinedBounds[2] - combinedBounds[0] > maxClusterSize) {
+            if (
+              combinedBounds[3] - combinedBounds[1] > maxClusterSize ||
+              combinedBounds[2] - combinedBounds[0] > maxClusterSize
+            ) {
               continue;
             }
 
-            currentCluster = _omit(_cloneDeep(currentCluster), ['options.taskId', 'options.taskStatus', 'options.taskPriority']);
+            currentCluster = _omit(_cloneDeep(currentCluster), [
+              "options.taskId",
+              "options.taskStatus",
+              "options.taskPriority",
+            ]);
             currentCluster.options.bounding = bboxPolygon(combinedBounds).geometry;
             currentCluster.options.numberOfPoints += markers[j].options.numberOfPoints;
 
             const centerpoint = centroid(currentCluster.options.bounding);
-            currentCluster.options.point = { lat: centerpoint.geometry.coordinates[1], lng: centerpoint.geometry.coordinates[0] };
-            currentCluster.position = [currentCluster.options.point.lat, currentCluster.options.point.lng];
+            currentCluster.options.point = {
+              lat: centerpoint.geometry.coordinates[1],
+              lng: centerpoint.geometry.coordinates[0],
+            };
+            currentCluster.position = [
+              currentCluster.options.point.lat,
+              currentCluster.options.point.lng,
+            ];
 
-            currentCluster.icon = AsMappableCluster(currentCluster).leafletMarkerIcon(props.monochromaticClusters, null, false, props.selectedClusters);
+            currentCluster.icon = AsMappableCluster(currentCluster).leafletMarkerIcon(
+              props.monochromaticClusters,
+              null,
+              false,
+              props.selectedClusters,
+            );
           }
         } catch (error) {
           console.log(error);
@@ -248,14 +292,18 @@ const Markers = (props) => {
       }
     }
 
-    const finalClusters = _compact(_map(markers, (marker) => {
-      if (!combinedClusters.has(marker.options.clusterId)) {
-        return marker;
-      }
-  
-      return _isObject(combinedClusters.get(marker.options.clusterId)) ? combinedClusters.get(marker.options.clusterId) : null;
-    }));
-  
+    const finalClusters = _compact(
+      _map(markers, (marker) => {
+        if (!combinedClusters.has(marker.options.clusterId)) {
+          return marker;
+        }
+
+        return _isObject(combinedClusters.get(marker.options.clusterId))
+          ? combinedClusters.get(marker.options.clusterId)
+          : null;
+      }),
+    );
+
     return finalClusters;
   };
 
@@ -305,7 +353,10 @@ const Markers = (props) => {
       if (taskId && !spidered.has(taskId)) {
         const nearestToCenter = AsMappableTask(mark.options).nearestPointToCenter();
         if (nearestToCenter) {
-          position = [nearestToCenter.geometry.coordinates[1], nearestToCenter.geometry.coordinates[0]];
+          position = [
+            nearestToCenter.geometry.coordinates[1],
+            nearestToCenter.geometry.coordinates[0],
+          ];
         }
       }
 
@@ -313,7 +364,7 @@ const Markers = (props) => {
         !mark.options.clusterId && mark.overlappingCount > 1 && !spidered.has(mark.options.taskId);
 
       if (overlappingMark) {
-        const stringCoords = mark.position.join(',');
+        const stringCoords = mark.position.join(",");
 
         if (!uniqueCoords[stringCoords]) {
           uniqueCoords[stringCoords] = true;
@@ -394,7 +445,7 @@ const Markers = (props) => {
           color={AsColoredHashable(s.options.id).hashColor}
           weight={3}
           spideredId={s.options.id}
-          style={{padding: "30px" }}
+          style={{ padding: "30px" }}
           eventHandlers={{
             click: () => {
               setSpidered(new Map());

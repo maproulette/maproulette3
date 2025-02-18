@@ -1,7 +1,7 @@
-import { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
-import { Link } from 'react-router-dom'
-import messages from './Messages'
+import { Component } from "react";
+import { FormattedMessage } from "react-intl";
+import { Link } from "react-router-dom";
+import messages from "./Messages";
 
 class Instructions extends Component {
   render() {
@@ -29,8 +29,8 @@ class Instructions extends Component {
         </div>
         <div className="mr-bg-skyline mr-bg-repeat-x mr-w-full mr-h-half mr-absolute mr-bottom-0 mr-z-0"></div>
       </section>
-    )
+    );
   }
 }
 
-export default Instructions
+export default Instructions;

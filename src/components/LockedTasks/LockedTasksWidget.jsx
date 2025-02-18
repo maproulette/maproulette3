@@ -1,23 +1,19 @@
-import { useEffect, useState } from 'react'
-import { FormattedMessage } from 'react-intl';
-import _get from 'lodash/get';
-import _isFinite from 'lodash/isFinite';
-import { WidgetDataTarget, registerWidgetType } from '../../services/Widget/Widget';
-import { fetchUsersLockedTasks } from '../../services/User/User';
-import { Link } from 'react-router-dom';
-import messages from './Messages';
-import QuickWidget from '../QuickWidget/QuickWidget';
-import SvgSymbol from '../SvgSymbol/SvgSymbol';
-import Dropdown from '../Dropdown/Dropdown';
-import WithLockedTask from '../HOCs/WithLockedTask/WithLockedTask';
-import { differenceInMinutes, formatDistanceToNow, parseISO } from 'date-fns';
+import { differenceInMinutes, formatDistanceToNow, parseISO } from "date-fns";
+import { useEffect, useState } from "react";
+import { FormattedMessage } from "react-intl";
+import { Link } from "react-router-dom";
+import { fetchUsersLockedTasks } from "../../services/User/User";
+import { WidgetDataTarget, registerWidgetType } from "../../services/Widget/Widget";
+import Dropdown from "../Dropdown/Dropdown";
+import WithLockedTask from "../HOCs/WithLockedTask/WithLockedTask";
+import QuickWidget from "../QuickWidget/QuickWidget";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 const descriptor = {
-  widgetKey: 'LockedTasksWidget',
+  widgetKey: "LockedTasksWidget",
   label: messages.header,
-  targets: [
-    WidgetDataTarget.user,
-  ],
+  targets: [WidgetDataTarget.user],
   minWidth: 3,
   defaultWidth: 4,
   minHeight: 2,
@@ -42,11 +38,11 @@ const LockedTasks = (props) => {
     const distanceToNow = formatDistanceToNow(timestamp, { addSuffix: true });
     const minutesElapsed = differenceInMinutes(currentTime, timestamp);
 
-    let timeColor = '';
+    let timeColor = "";
     if (minutesElapsed > 60) {
-      timeColor = 'mr-text-red';
+      timeColor = "mr-text-red";
     } else if (minutesElapsed > 30) {
-      timeColor = 'mr-text-orange';
+      timeColor = "mr-text-orange";
     }
 
     return (
@@ -68,29 +64,37 @@ const LockedTasks = (props) => {
   }, []);
 
   const LockedTasksList = () => {
-    const sortedLockedTasks = [...lockedTasks].sort((a, b) => new Date(a.startedAt) - new Date(b.startedAt));
+    const sortedLockedTasks = [...lockedTasks].sort(
+      (a, b) => new Date(a.startedAt) - new Date(b.startedAt),
+    );
 
     return sortedLockedTasks.length > 0 ? (
       <div className="mr-flex mr-flex-wrap mr-links-green-lighter">
-        {sortedLockedTasks.map(task => {
-          if (!_isFinite(_get(task, 'id'))) {
+        {sortedLockedTasks.map((task) => {
+          if (!Number.isFinite(task?.id)) {
             return null;
           }
 
           return (
-            <div key={task.id} className="mr-card-challenge mr-p-1 mr-mt-3 mr-mr-3 mr-w-full mr-flex mr-items-center" style={{maxWidth: '22rem'}}>
+            <div
+              key={task.id}
+              className="mr-card-challenge mr-p-1 mr-mt-3 mr-mr-3 mr-w-full mr-flex mr-items-center"
+              style={{ maxWidth: "22rem" }}
+            >
               <div className="mr-flex mr-flex-col mr-flex-grow">
                 <div className="mr-flex">Started: {calculateElapsedTime(task.startedAt)}</div>
-                <div><FormattedMessage {...messages.taskLabel} /> 
-                  <Link to={`/challenge/${task.parent}/task/${task.id}`}>
-                    {task.id}
-                  </Link>
+                <div>
+                  <FormattedMessage {...messages.taskLabel} />
+                  <Link to={`/challenge/${task.parent}/task/${task.id}`}>{task.id}</Link>
                 </div>
-                <div><FormattedMessage {...messages.challengeLabel} /> <Link to={`browse/challenges/${task.parent}`}>{task.parentName}</Link></div>
+                <div>
+                  <FormattedMessage {...messages.challengeLabel} />{" "}
+                  <Link to={`browse/challenges/${task.parent}`}>{task.parentName}</Link>
+                </div>
               </div>
               <Dropdown
                 className="mr-dropdown--right"
-                dropdownButton={dropdown => (
+                dropdownButton={(dropdown) => (
                   <button
                     onClick={dropdown.toggleDropdownVisible}
                     className="mr-flex mr-items-center mr-text-green-lighter mr-mr-4"
@@ -105,12 +109,14 @@ const LockedTasks = (props) => {
                 dropdownContent={() => (
                   <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
                     <span className="mr-flex mr-items-baseline">
-                    <FormattedMessage {...messages.taskLockedLabel} />
+                      <FormattedMessage {...messages.taskLockedLabel} />
                     </span>
                     <button
                       onClick={() => {
                         props.unlockTask(task);
-                        setLockedTasks(prevTasks => prevTasks.filter(prevTask => prevTask.id !== task.id));
+                        setLockedTasks((prevTasks) =>
+                          prevTasks.filter((prevTask) => prevTask.id !== task.id),
+                        );
                       }}
                       className="mr-button mr-button--xsmall mr-ml-3"
                     >
@@ -142,8 +148,10 @@ const LockedTasks = (props) => {
         </div>
       }
     >
-       <FormattedMessage {...messages.description} />
-      <button className="mr-text-green-lighter" onClick={fetchLockedTasks}><FormattedMessage {...messages.checkList} /></button>
+      <FormattedMessage {...messages.description} />
+      <button className="mr-text-green-lighter" onClick={fetchLockedTasks}>
+        <FormattedMessage {...messages.checkList} />
+      </button>
       <LockedTasksListComponent {...props} />
     </QuickWidget>
   );

@@ -1,8 +1,8 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
+  hasBeenReviewed,
   isMetaReviewStatus,
   isNeeded,
-  hasBeenReviewed,
   isNeedsReviewStatus,
 } from "./TaskReviewStatus";
 

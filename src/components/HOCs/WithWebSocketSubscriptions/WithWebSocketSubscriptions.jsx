@@ -1,10 +1,11 @@
-import { Component } from 'react'
-import { connect } from 'react-redux'
-import { subscribeToReviewMessages,
-         unsubscribeFromReviewMessages,
-         subscribeToChallengeTaskMessages,
-         unsubscribeFromChallengeTaskMessages }
-       from '../../../services/Task/Task'
+import { Component } from "react";
+import { connect } from "react-redux";
+import {
+  subscribeToChallengeTaskMessages,
+  subscribeToReviewMessages,
+  unsubscribeFromChallengeTaskMessages,
+  unsubscribeFromReviewMessages,
+} from "../../../services/Task/Task";
 
 /**
  * WithWebSocketSubscriptions makes websocket subscription functions available
@@ -13,7 +14,7 @@ import { subscribeToReviewMessages,
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithWebSocketSubscriptions = function(WrappedComponent) {
+export const WithWebSocketSubscriptions = function (WrappedComponent) {
   return class extends Component {
     render() {
       return (
@@ -24,17 +25,19 @@ export const WithWebSocketSubscriptions = function(WrappedComponent) {
           subscribeToChallengeTaskMessages={this.props.subscribeToChallengeTaskMessages}
           unsubscribeFromChallengeTaskMessages={this.props.unsubscribeFromChallengeTaskMessages}
         />
-      )
+      );
     }
-  }
-}
+  };
+};
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   subscribeToReviewMessages: () => subscribeToReviewMessages(dispatch),
   unsubscribeFromReviewMessages: () => unsubscribeFromReviewMessages(),
-  subscribeToChallengeTaskMessages: challengeId => subscribeToChallengeTaskMessages(dispatch, challengeId),
-  unsubscribeFromChallengeTaskMessages: challengeId => unsubscribeFromChallengeTaskMessages(challengeId),
-})
+  subscribeToChallengeTaskMessages: (challengeId) =>
+    subscribeToChallengeTaskMessages(dispatch, challengeId),
+  unsubscribeFromChallengeTaskMessages: (challengeId) =>
+    unsubscribeFromChallengeTaskMessages(challengeId),
+});
 
-export default WrappedComponent =>
-  connect(null, mapDispatchToProps)(WithWebSocketSubscriptions(WrappedComponent))
+export default (WrappedComponent) =>
+  connect(null, mapDispatchToProps)(WithWebSocketSubscriptions(WrappedComponent));

@@ -1,68 +1,65 @@
-import { Fragment, Component } from "react";
 import Form from "@rjsf/core";
 import classNames from "classnames";
-import _isObject from "lodash/isObject";
-import _isNumber from "lodash/isNumber";
-import _isString from "lodash/isString";
-import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
-import _isFinite from "lodash/isFinite";
-import _omit from "lodash/omit";
-import _filter from "lodash/filter";
-import _difference from "lodash/difference";
-import _get from "lodash/get";
-import _remove from "lodash/remove";
-import _isEqual from "lodash/isEqual";
-import _merge from "lodash/merge";
-import _map from "lodash/map";
-import _without from "lodash/without";
 import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
+import _difference from "lodash/difference";
+import _filter from "lodash/filter";
+import _isEmpty from "lodash/isEmpty";
+import _isEqual from "lodash/isEqual";
+import _isNumber from "lodash/isNumber";
+import _isObject from "lodash/isObject";
+import _isString from "lodash/isString";
+import _map from "lodash/map";
+import _merge from "lodash/merge";
+import _omit from "lodash/omit";
+import _remove from "lodash/remove";
+import _without from "lodash/without";
+import { Component, Fragment } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import External from "../../../../External/External";
-import Modal from "../../../../Modal/Modal";
+import AsEditableChallenge from "../../../../../interactions/Challenge/AsEditableChallenge";
 import AsLineReadableFile from "../../../../../interactions/File/AsLineReadableFile";
-import StepNavigation from "../../StepNavigation/StepNavigation";
-import {
-  CustomArrayFieldTemplate,
-  CustomFieldTemplate,
-  CustomSelectWidget,
-  CustomTextWidget,
-  CustomCheckboxField,
-  ColumnRadioField,
-  MarkdownDescriptionField,
-  MarkdownEditField,
-  LabelWithHelp,
-} from "../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
-import KeywordAutosuggestInput from "../../../../KeywordAutosuggestInput/KeywordAutosuggestInput";
-import BoundsSelectorModal from "../../../../BoundsSelectorModal/BoundsSelectorModal";
-import WithCurrentProject from "../../../HOCs/WithCurrentProject/WithCurrentProject";
-import WithCurrentChallenge from "../../../HOCs/WithCurrentChallenge/WithCurrentChallenge";
-import WithCurrentUser from "../../../../HOCs/WithCurrentUser/WithCurrentUser";
-import WithTaskPropertyStyleRules from "../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules";
-import { EMPTY_STYLE_RULE } from "../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules";
+import AsValidatableGeoJSON from "../../../../../interactions/GeoJSON/AsValidatableGeoJSON";
+import AsValidatableOverpass from "../../../../../interactions/Overpass/AsValidatableOverpass";
+import { basemapLayerSources } from "../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap";
 import {
   ChallengeCategoryKeywords,
   categoryMatchingKeywords,
   rawCategoryKeywords,
 } from "../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords";
-import { basemapLayerSources } from "../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap";
-import AsEditableChallenge from "../../../../../interactions/Challenge/AsEditableChallenge";
-import AsValidatableGeoJSON from "../../../../../interactions/GeoJSON/AsValidatableGeoJSON";
-import AsValidatableOverpass from "../../../../../interactions/Overpass/AsValidatableOverpass";
-import TaskUploadingProgress from "../../TaskUploadingProgress/TaskUploadingProgress";
-import SvgSymbol from "../../../../SvgSymbol/SvgSymbol";
+import BoundsSelectorModal from "../../../../BoundsSelectorModal/BoundsSelectorModal";
 import BusySpinner from "../../../../BusySpinner/BusySpinner";
+import {
+  ColumnRadioField,
+  CustomArrayFieldTemplate,
+  CustomCheckboxField,
+  CustomFieldTemplate,
+  CustomSelectWidget,
+  CustomTextWidget,
+  LabelWithHelp,
+  MarkdownDescriptionField,
+  MarkdownEditField,
+} from "../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
+import External from "../../../../External/External";
+import WithCurrentUser from "../../../../HOCs/WithCurrentUser/WithCurrentUser";
+import KeywordAutosuggestInput from "../../../../KeywordAutosuggestInput/KeywordAutosuggestInput";
+import Modal from "../../../../Modal/Modal";
+import SvgSymbol from "../../../../SvgSymbol/SvgSymbol";
+import WithCurrentChallenge from "../../../HOCs/WithCurrentChallenge/WithCurrentChallenge";
+import WithCurrentProject from "../../../HOCs/WithCurrentProject/WithCurrentProject";
+import WithTaskPropertyStyleRules from "../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules";
+import { EMPTY_STYLE_RULE } from "../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules";
+import manageMessages from "../../Messages";
+import StepNavigation from "../../StepNavigation/StepNavigation";
 import TaskPropertyStyleRules from "../../TaskPropertyStyleRules/TaskPropertyStyleRules";
+import TaskUploadingProgress from "../../TaskUploadingProgress/TaskUploadingProgress";
+import messages from "./Messages";
+import { preparePresetsForForm, preparePresetsForSaving } from "./Presets";
 import {
   preparePriorityRuleGroupForForm,
   preparePriorityRuleGroupForSaving,
 } from "./PriorityRuleGroup";
-import { preparePresetsForSaving, preparePresetsForForm } from "./Presets";
 import WorkflowSteps from "./WorkflowSteps";
-import manageMessages from "../../Messages";
-import messages from "./Messages";
 import "./EditChallenge.scss";
 
 /**
@@ -108,23 +105,22 @@ export class EditChallenge extends Component {
    * challenge.
    */
   isCloningChallenge = () => {
-    return _get(this.props, "location.pathname").includes('clone') ? true : false
-  }
+    return (this.props.location?.pathname).includes("clone") ? true : false;
+  };
 
   /**
    * Returns the project Id of which the challenge is being cloned into. Project Id
    * is passed in from challengeDetail.js
    */
   getCloningProjectId = () => {
-    return _get(this.props, "location.state.projectId");
-  }
+    return this.props.location?.state?.projectId;
+  };
 
   /**
    * Returns true if all challenge fields should be displayed as a single,
    * long-form step based on the current user's preferences
    */
-  isLongForm = () =>
-    !!this.props.getUserAppSetting(this.props.user, "longFormChallenge");
+  isLongForm = () => !!this.props.getUserAppSetting(this.props.user, "longFormChallenge");
 
   /**
    * Update the current user's preferences as to whether all challenge fields
@@ -132,20 +128,17 @@ export class EditChallenge extends Component {
    * component to re-render with the updated settings
    */
   setIsLongForm = (isLongForm) => {
-    if(this.isFinishing) this.isFinishing = false
+    if (this.isFinishing) this.isFinishing = false;
     this.props.updateUserAppSetting(this.props.user.id, {
       longFormChallenge: isLongForm,
     });
-  }
+  };
   /**
    * Returns the list of challenge form groups that are to be rendered as
    * collapsed when in longform mode (does not affect stepped mode)
    */
   collapsedFormGroups = () =>
-    this.props.getUserAppSetting(
-      this.props.user,
-      "collapsedChallengeFormGroups"
-    ) || [];
+    this.props.getUserAppSetting(this.props.user, "collapsedChallengeFormGroups") || [];
 
   /**
    * Update the current user's preferences as to which challenge form groups
@@ -190,7 +183,7 @@ export class EditChallenge extends Component {
           __errors: _map(lintErrors, (e) =>
             _isObject(e.message)
               ? this.props.intl.formatMessage(e.message)
-              : `GeoJSON error: ${e.message}`
+              : `GeoJSON error: ${e.message}`,
           ),
         },
       };
@@ -240,13 +233,13 @@ export class EditChallenge extends Component {
   };
 
   transformErrors = (intl) => (errors) => {
-    return errors.map(error => {
+    return errors.map((error) => {
       if (error.name === "required") {
         error.message = intl.formatMessage(messages.requiredErrorLabel);
       }
       return error;
     });
-  }
+  };
 
   /**
    * Perform additional validation checks beyond schema validation. Primarily
@@ -270,9 +263,7 @@ export class EditChallenge extends Component {
       !_isEmpty(formData.localGeoJSON) &&
       !this.state.formContext["root_localGeoJSON"].validated
     ) {
-      response = await this.validateGeoJSON(
-        this.state.formContext["root_localGeoJSON"]
-      );
+      response = await this.validateGeoJSON(this.state.formContext["root_localGeoJSON"]);
     }
 
     if (response.errors) {
@@ -290,11 +281,11 @@ export class EditChallenge extends Component {
     (this.validationPromise || Promise.resolve())
       .then(() => {
         this.isFinishing ? this.finish() : nextStep();
-      window.scrollTo(0, 0);
+        window.scrollTo(0, 0);
         return false;
       })
       .catch((err) => {
-      console.log(err);
+        console.log(err);
       }); // Stay on current step if validation fails
 
     return false;
@@ -369,9 +360,9 @@ export class EditChallenge extends Component {
    */
   prepareChallengeDataForForm = () => {
     let challengeData = Object.assign(
-      { parent: _get(this.props, "project.id") },
+      { parent: this.props.project?.id },
       _omit(this.props.challenge, ["activity", "comments"]),
-      this.state.formData
+      this.state.formData,
     );
 
     // If we're cloning a challenge, reset the id, status, and name, and remove
@@ -382,8 +373,8 @@ export class EditChallenge extends Component {
       delete challengeData.status;
       delete challengeData.virtualParents;
 
-      if (challengeData.checkinComment.includes('#maproulette')) {
-        challengeData.includeCheckinHashtag = true
+      if (challengeData.checkinComment.includes("#maproulette")) {
+        challengeData.includeCheckinHashtag = true;
       }
 
       if (_isEmpty(this.state.formData.name)) {
@@ -398,20 +389,19 @@ export class EditChallenge extends Component {
         challengeData.overpassQL =
           `/*\nTHIS IS THE QUERY OF THE CHALLENGE YOU CLONED PLEASE ADAPT BEFORE USING TO AVOID CREATING DUPLICATE TASKS\n\n` +
           challengeData.overpassQL +
-          `\n*/`
+          `\n*/`;
       }
 
-      if (!_isEmpty(challengeData.overpassQL) && challengeData.overpassTargetType === '') {
-	      challengeData.overpassTargetType = 'none';
+      if (!_isEmpty(challengeData.overpassQL) && challengeData.overpassTargetType === "") {
+        challengeData.overpassTargetType = "none";
       }
 
       if (_isEmpty(this.state.formData.remoteGeoJson)) {
         delete challengeData.remoteGeoJson;
       }
 
-      challengeData.checkinComment = AsEditableChallenge(
-        challengeData
-      ).checkinCommentWithoutMaprouletteHashtag();
+      challengeData.checkinComment =
+        AsEditableChallenge(challengeData).checkinCommentWithoutMaprouletteHashtag();
     }
 
     if (this.state.formData.source === "Overpass Query") {
@@ -434,11 +424,11 @@ export class EditChallenge extends Component {
     // doesn't use the layer index string identifiers, then we convert the
     // numeric id to an appropriate string identifier here (assuming it is
     // specifying a default layer at all).
-    if (_isUndefined(this.state.formData.defaultBasemap)) {
+    if (this.state.formData.defaultBasemap === undefined) {
       if (!_isEmpty(challengeData.defaultBasemapId)) {
         // layer index string
         challengeData.defaultBasemap = challengeData.defaultBasemapId;
-      } else if (_isFinite(challengeData.defaultBasemap)) {
+      } else if (Number.isFinite(challengeData.defaultBasemap)) {
         // numeric identifier
         // Convert to corresponding layer-index string identifier for form if
         // possible. Otherwise just go with string representation of numerical
@@ -453,23 +443,23 @@ export class EditChallenge extends Component {
 
     if (!this.state.formData.highPriorityRules) {
       challengeData.highPriorityRules = preparePriorityRuleGroupForForm(
-        challengeData.highPriorityRule
+        challengeData.highPriorityRule,
       );
     }
 
     if (!this.state.formData.mediumPriorityRules) {
       challengeData.mediumPriorityRules = preparePriorityRuleGroupForForm(
-        challengeData.mediumPriorityRule
+        challengeData.mediumPriorityRule,
       );
     }
 
     if (!this.state.formData.lowPriorityRules) {
       challengeData.lowPriorityRules = preparePriorityRuleGroupForForm(
-        challengeData.lowPriorityRule
+        challengeData.lowPriorityRule,
       );
     }
 
-    if (_isUndefined(this.state.formData.presets)) {
+    if (this.state.formData.presets === undefined) {
       challengeData = preparePresetsForForm(challengeData);
     }
 
@@ -486,10 +476,7 @@ export class EditChallenge extends Component {
 
     // Only setup if not yet modified on the form
     if (!_isString(this.state.formData.additionalKeywords)) {
-      challengeData.additionalKeywords = _difference(
-        keywords,
-        rawCategoryKeywords
-      ).join(",");
+      challengeData.additionalKeywords = _difference(keywords, rawCategoryKeywords).join(",");
     }
 
     challengeData.taskTags = _isString(challengeData.taskTags)
@@ -500,7 +487,7 @@ export class EditChallenge extends Component {
       ? challengeData.reviewTaskTags
       : challengeData.preferredReviewTags;
 
-    if (_isUndefined(challengeData.customTaskStyles)) {
+    if (challengeData.customTaskStyles === undefined) {
       challengeData.customTaskStyles = !_isEmpty(challengeData.taskStyles);
     }
 
@@ -518,10 +505,7 @@ export class EditChallenge extends Component {
    */
   prepareFormDataForSaving = async () => {
     const challengeData = AsEditableChallenge(
-      Object.assign(
-        this.prepareChallengeDataForForm(this.props.challenge),
-        this.state.formData
-      )
+      Object.assign(this.prepareChallengeDataForForm(this.props.challenge), this.state.formData),
     );
 
     // Remove extraneous fields that should not be saved.
@@ -530,9 +514,7 @@ export class EditChallenge extends Component {
 
     if (this.props.challenge && challengeData.dataOriginDate) {
       // Don't update dataOriginDate if it hasn't changed (otherwise it's timezone could change)
-      if (
-        this.props.challenge.dataOriginDate === challengeData.dataOriginDate
-      ) {
+      if (this.props.challenge.dataOriginDate === challengeData.dataOriginDate) {
         delete challengeData.dataOriginDate;
       }
     }
@@ -552,33 +534,29 @@ export class EditChallenge extends Component {
     challengeData.normalizeDefaultBasemap();
 
     challengeData.highPriorityRule = preparePriorityRuleGroupForSaving(
-      challengeData.highPriorityRules.ruleGroup
+      challengeData.highPriorityRules.ruleGroup,
     );
     delete challengeData.highPriorityRules;
 
     challengeData.mediumPriorityRule = preparePriorityRuleGroupForSaving(
-      challengeData.mediumPriorityRules.ruleGroup
+      challengeData.mediumPriorityRules.ruleGroup,
     );
     delete challengeData.mediumPriorityRules;
 
     challengeData.lowPriorityRule = preparePriorityRuleGroupForSaving(
-      challengeData.lowPriorityRules.ruleGroup
+      challengeData.lowPriorityRules.ruleGroup,
     );
     delete challengeData.lowPriorityRules;
 
     preparePresetsForSaving(challengeData);
 
     challengeData.tags =
-      ChallengeCategoryKeywords[challengeData.category] ||
-      ChallengeCategoryKeywords.other;
+      ChallengeCategoryKeywords[challengeData.category] || ChallengeCategoryKeywords.other;
 
     if (!_isEmpty(challengeData.additionalKeywords)) {
       challengeData.tags = challengeData.tags.concat(
         // split on comma, and filter out any empty-string keywords
-        _filter(
-          challengeData.additionalKeywords.split(/,+/),
-          (keyword) => !_isEmpty(keyword)
-        )
+        _filter(challengeData.additionalKeywords.split(/,+/), (keyword) => !_isEmpty(keyword)),
       );
     }
 
@@ -587,7 +565,7 @@ export class EditChallenge extends Component {
       // empty-string tags.
       challengeData.preferredTags = _filter(
         challengeData.taskTags.split(/,+/),
-        (tag) => !_isEmpty(tag)
+        (tag) => !_isEmpty(tag),
       );
     }
 
@@ -596,16 +574,13 @@ export class EditChallenge extends Component {
       // empty-string tags.
       challengeData.preferredReviewTags = _filter(
         challengeData.reviewTaskTags.split(/,+/),
-        (tag) => !_isEmpty(tag)
+        (tag) => !_isEmpty(tag),
       );
     }
 
     // Note any old tags that are to be discarded. Right now a separate API
     // request will be needed to remove undesired tags.
-    challengeData.removedTags = _difference(
-      _get(this.props, "challenge.tags", []),
-      challengeData.tags
-    );
+    challengeData.removedTags = _difference(this.props.challenge?.tags ?? [], challengeData.tags);
 
     // We don't allow task source data to be modified for existing challenges
     // once it has been provided.
@@ -625,9 +600,9 @@ export class EditChallenge extends Component {
           challengeData.lineByLineGeoJSON = geoJSONFile;
           delete challengeData.localGeoJSON;
         } else {
-          challengeData.localGeoJSON = (
-            await AsLineReadableFile(geoJSONFile).allLines()
-          ).join("\n");
+          challengeData.localGeoJSON = (await AsLineReadableFile(geoJSONFile).allLines()).join(
+            "\n",
+          );
         }
       } else {
         // It's possible someone could have uploaded a file and then changed
@@ -637,9 +612,14 @@ export class EditChallenge extends Component {
     }
 
     if (challengeData.taskWidgetLayout) {
-      const geoJSONFile = this.state.formContext?.root_taskWidgetLayout?.file ?? this.state.formContext?.root?.file ?? null;
+      const geoJSONFile =
+        this.state.formContext?.root_taskWidgetLayout?.file ??
+        this.state.formContext?.root?.file ??
+        null;
       if (geoJSONFile) {
-          challengeData.taskWidgetLayout = (await AsLineReadableFile(geoJSONFile).allLines()).join("\n")
+        challengeData.taskWidgetLayout = (await AsLineReadableFile(geoJSONFile).allLines()).join(
+          "\n",
+        );
       }
     }
 
@@ -655,7 +635,7 @@ export class EditChallenge extends Component {
           (!rule.propertySearch.key &&
             !rule.propertySearch.value &&
             !rule.propertySearch.left &&
-            !rule.propertySearch.right)
+            !rule.propertySearch.right),
       );
       challengeData.taskStyles = styleRules;
     } else {
@@ -673,30 +653,21 @@ export class EditChallenge extends Component {
   };
 
   hasTaskStyleRuleErrors = () => {
-    const useCustom = !_isUndefined(
-      _get(this.state.formData, "customTaskStyles")
-    )
-      ? _get(this.state.formData, "customTaskStyles")
-      : !_isEmpty(_get(this.props.challenge, "taskStyles"));
+    const useCustom =
+      this.state.formData?.customTaskStyles !== undefined
+        ? this.state.formData?.customTaskStyles
+        : !_isEmpty(this.props.challenge?.taskStyles);
 
     return useCustom && this.props.hasAnyStyleRuleErrors;
   };
 
   render() {
-    const isUploadingTasks = _get(
-      this.props,
-      "progress.creatingTasks.inProgress",
-      false
-    );
+    const isUploadingTasks = this.props.progress?.creatingTasks?.inProgress ?? false;
     if (isUploadingTasks) {
       return <TaskUploadingProgress {...this.props} />;
     }
 
-    if (
-      !this.props.project ||
-      this.props.loadingChallenge ||
-      this.state.isSaving
-    ) {
+    if (!this.props.project || this.props.loadingChallenge || this.state.isSaving) {
       return (
         <div className="pane-loading full-screen-height mr-flex mr-justify-center mr-items-center">
           <BusySpinner big />
@@ -797,9 +768,7 @@ export class EditChallenge extends Component {
                     {...props}
                     inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
                     dropdownInnerClassName="mr-bg-blue-darker"
-                    placeholder={props.intl.formatMessage(
-                      messages.addMRTagsPlaceholder
-                    )}
+                    placeholder={props.intl.formatMessage(messages.addMRTagsPlaceholder)}
                     tagType={props.uiSchema.tagType}
                   />
                 </Fragment>
@@ -840,7 +809,7 @@ export class EditChallenge extends Component {
             }),
             configureCustomTaskStyles: (props) => {
               return configureCustomTaskStyles(props, () =>
-                this.setState({ showTaskStyleRules: true })
+                this.setState({ showTaskStyleRules: true }),
               );
             },
           };
@@ -869,9 +838,7 @@ export class EditChallenge extends Component {
                             this.props.clearStyleRules();
                           }}
                         >
-                          <FormattedMessage
-                            {...messages.taskPropertyStylesClear}
-                          />
+                          <FormattedMessage {...messages.taskPropertyStylesClear} />
                         </button>
                         {!this.props.hasAnyStyleRuleErrors && (
                           <button
@@ -880,9 +847,7 @@ export class EditChallenge extends Component {
                               this.setState({ showTaskStyleRules: false });
                             }}
                           >
-                            <FormattedMessage
-                              {...messages.taskPropertyStylesClose}
-                            />
+                            <FormattedMessage {...messages.taskPropertyStylesClose} />
                           </button>
                         )}
                       </TaskPropertyStyleRules>
@@ -914,7 +879,7 @@ export class EditChallenge extends Component {
                       this.state.extraErrors,
                       {
                         longForm: this.isLongForm(),
-                      }
+                      },
                     )}
                     uiSchema={activeStep.uiSchema(
                       this.props.intl,
@@ -927,18 +892,15 @@ export class EditChallenge extends Component {
                         toggleCollapsed: this.toggleCollapsedFormGroup,
                         expandedFieldGroups: this.state.expandedFieldGroups,
                         setFieldGroupExpanded: this.setFieldGroupExpanded,
-                      }
+                      },
                     )}
                     className="form"
-                    validate={(formData, errors) =>
-                      this.validate(formData, errors, activeStep)
-                    }
+                    validate={(formData, errors) => this.validate(formData, errors, activeStep)}
                     transformErrors={this.transformErrors(this.props.intl)}
                     widgets={{
                       SelectWidget: CustomSelectWidget,
                       TextWidget: CustomTextWidget,
                       automatedEditsCheckbox: CustomCheckboxField,
-
                     }}
                     ArrayFieldTemplate={CustomArrayFieldTemplate}
                     FieldTemplate={CustomFieldTemplate}
@@ -948,24 +910,19 @@ export class EditChallenge extends Component {
                     showErrorList={false}
                     formData={challengeData}
                     formContext={_merge(this.state.formContext, {
-                      bounding: _get(challengeData, "bounding"),
+                      bounding: challengeData?.bounding,
                       buttonAction: BoundsSelectorModal,
                     })}
                     onChange={this.changeHandler}
-                    onSubmit={(formData) =>
-                      this.handleSubmit(formData, nextStep)
-                    }
+                    onSubmit={(formData) => this.handleSubmit(formData, nextStep)}
                     onError={this.errorHandler}
                     extraErrors={this.state.extraErrors}
                   >
-                    {this.hasTaskStyleRuleErrors() &&
-                      activeStep.id === "Properties" && (
-                        <div className="mr-text-red-light mr-mb-4">
-                          <FormattedMessage
-                            {...messages.customTaskStylesError}
-                          />
-                        </div>
-                      )}
+                    {this.hasTaskStyleRuleErrors() && activeStep.id === "Properties" && (
+                      <div className="mr-text-red-light mr-mb-4">
+                        <FormattedMessage {...messages.customTaskStylesError} />
+                      </div>
+                    )}
 
                     <StepNavigation
                       activeStep={activeStep}
@@ -985,7 +942,6 @@ export class EditChallenge extends Component {
             </BreadcrumbWrapper>
           );
         }}
-        
       />
     );
   }
@@ -998,7 +954,7 @@ function configureCustomTaskStyles(props, configureTaskStyleRules) {
       <div>
         <div className="radio">
           <input
-            id="custom-task-style-default-label" 
+            id="custom-task-style-default-label"
             type="radio"
             name="no-styles"
             className="mr-mr-1.5"
@@ -1126,7 +1082,7 @@ const LongFormToggle = function (props) {
           viewBox="0 0 20 20"
           className={classNames(
             "mr-w-4 mr-h-4 mr-mr-4",
-            props.isLongForm ? "mr-fill-green-lighter" : "mr-fill-white"
+            props.isLongForm ? "mr-fill-green-lighter" : "mr-fill-white",
           )}
         />
       </button>
@@ -1140,7 +1096,7 @@ const LongFormToggle = function (props) {
           viewBox="0 0 20 20"
           className={classNames(
             "mr-w-4 mr-h-4",
-            !props.isLongForm ? "mr-fill-green-lighter" : "mr-fill-white"
+            !props.isLongForm ? "mr-fill-green-lighter" : "mr-fill-white",
           )}
         />
       </button>
@@ -1149,7 +1105,5 @@ const LongFormToggle = function (props) {
 };
 
 export default WithCurrentUser(
-  WithCurrentProject(
-    WithCurrentChallenge(WithTaskPropertyStyleRules(injectIntl(EditChallenge)))
-  )
+  WithCurrentProject(WithCurrentChallenge(WithTaskPropertyStyleRules(injectIntl(EditChallenge)))),
 );
