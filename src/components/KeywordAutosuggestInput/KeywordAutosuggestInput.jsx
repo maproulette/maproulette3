@@ -1,5 +1,3 @@
-import _indexOf from "lodash/indexOf";
-import _isFinite from "lodash/isFinite";
 import { Component } from "react";
 import { injectIntl } from "react-intl";
 import AutosuggestTextBox from "../AutosuggestTextBox/AutosuggestTextBox";
@@ -20,7 +18,7 @@ export class KeywordAutosuggestInput extends Component {
   };
 
   keywordClassName = (keyword) => {
-    return _isFinite(keyword.id) ? "existing-keyword" : "new-keyword";
+    return Number.isFinite(keyword.id) ? "existing-keyword" : "new-keyword";
   };
 
   /**
@@ -44,7 +42,7 @@ export class KeywordAutosuggestInput extends Component {
           if (keyword) {
             // We should not add the keyword if we are limiting tags to just preferred
             // and the keyword is not in the preferred list.
-            if (!props.limitToPreferred || _indexOf(props.preferredResults, keyword) >= 0) {
+            if (!props.limitToPreferred || props.preferredResults.indexOf(keyword) >= 0) {
               if (this.props.handleAddTag) {
                 this.props.handleAddTag(keyword.name || keyword);
               } else {

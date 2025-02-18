@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
@@ -24,7 +23,7 @@ export class ChallengeOwnerContactLinkInternal extends Component {
 
   updateContactOwnerUrl = () => {
     const ownerOSMId = this.props.task?.parent?.owner || this.props.task?.parent?.parent?.owner;
-    if (_isFinite(ownerOSMId) && ownerOSMId > 0) {
+    if (Number.isFinite(ownerOSMId) && ownerOSMId > 0) {
       this.setState({ updatingUrl: true });
       this.props
         .fetchOSMUser(ownerOSMId)

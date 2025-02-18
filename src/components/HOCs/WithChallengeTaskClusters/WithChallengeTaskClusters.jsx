@@ -3,7 +3,6 @@ import _debounce from "lodash/debounce";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _set from "lodash/set";
@@ -266,7 +265,7 @@ export const WithChallengeTaskClusters = function (
       }
 
       // Determine if we're dealing with clusters or individual tasks
-      const hasClusters = _isFinite(this.state.clusters[0].clusterId);
+      const hasClusters = Number.isFinite(this.state.clusters[0].clusterId);
 
       if (hasClusters) {
         // Convert clusters to task format

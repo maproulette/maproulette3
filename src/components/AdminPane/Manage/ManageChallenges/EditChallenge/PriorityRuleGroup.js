@@ -2,7 +2,6 @@ import _clone from "lodash/clone";
 import _compact from "lodash/compact";
 import _flatten from "lodash/flatten";
 import _groupBy from "lodash/groupBy";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _remove from "lodash/remove";
@@ -22,7 +21,7 @@ export const preparePriorityRuleGroupForForm = (ruleObject, isNested = false) =>
   }
 
   if (!_isEmpty(ruleObject)) {
-    if (_isArray(ruleObject.rules)) {
+    if (Array.isArray(ruleObject.rules)) {
       preparedGroup.ruleGroup.condition = ruleObject.condition;
       preparedGroup.ruleGroup.rules = combineRulesForForm(
         _map(ruleObject.rules, (rule) => preparePriorityRuleForForm(rule)),
@@ -47,7 +46,7 @@ export const preparePriorityRuleGroupForForm = (ruleObject, isNested = false) =>
  * expected by the edit form
  */
 export const preparePriorityRuleForForm = (rule) => {
-  if (_isArray(rule.rules)) {
+  if (Array.isArray(rule.rules)) {
     return preparePriorityRuleGroupForForm(rule, true);
   }
 

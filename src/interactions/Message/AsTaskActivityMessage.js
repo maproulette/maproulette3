@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _uniqueId from "lodash/uniqueId";
 
 import { ActivityActionType } from "../../services/Activity/ActivityActionTypes/ActivityActionTypes";
@@ -19,7 +18,7 @@ export class AsTaskActivityMessage {
    */
   asActivityItem() {
     const itemAction = this.activityAction();
-    if (!_isFinite(itemAction)) {
+    if (!Number.isFinite(itemAction)) {
       return null;
     }
 

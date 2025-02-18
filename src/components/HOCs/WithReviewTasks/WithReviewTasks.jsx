@@ -2,7 +2,6 @@ import { format } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _filter from "lodash/filter";
 import _isEqual from "lodash/isEqual";
-import _isUndefined from "lodash/isUndefined";
 import _merge from "lodash/merge";
 import _omit from "lodash/omit";
 import { Component } from "react";
@@ -83,11 +82,11 @@ export const WithReviewTasks = function (WrappedComponent) {
         searchOnCriteria.invertFields = this.state.criteria[props.reviewTasksType].invertFields;
       }
 
-      if (_isUndefined(searchOnCriteria.savedChallengesOnly)) {
+      if (searchOnCriteria.savedChallengesOnly === undefined) {
         searchOnCriteria.savedChallengesOnly =
           this.state.criteria[this.props.reviewTasksType]?.savedChallengesOnly;
       }
-      if (_isUndefined(searchOnCriteria.excludeOtherReviewers)) {
+      if (searchOnCriteria.excludeOtherReviewers === undefined) {
         // Exclude reviews assigned to other reviewers by default
         searchOnCriteria.excludeOtherReviewers =
           this.state.criteria[this.props.reviewTasksType]?.excludeOtherReviewers ?? true;

@@ -1,5 +1,4 @@
 import { isFuture, parseISO } from "date-fns";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 const NOTICES_URL = window.env.REACT_APP_FUNDRAISING_NOTICES_URL;
@@ -12,7 +11,7 @@ export const fetchActiveFundraisingNotices = async function () {
   const response = await fetch(NOTICES_URL);
   if (response.ok) {
     const fundraisingNotices = await response.json();
-    if (!fundraisingNotices || !_isArray(fundraisingNotices.notices)) {
+    if (!fundraisingNotices || !Array.isArray(fundraisingNotices.notices)) {
       return [];
     }
 

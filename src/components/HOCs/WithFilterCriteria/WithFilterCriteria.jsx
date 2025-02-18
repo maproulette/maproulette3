@@ -4,7 +4,6 @@ import _debounce from "lodash/debounce";
 import _each from "lodash/each";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isUndefined from "lodash/isUndefined";
 import _keys from "lodash/keys";
 import _merge from "lodash/merge";
 import _omit from "lodash/omit";
@@ -214,11 +213,11 @@ export const WithFilterCriteria = function (
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
       _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], (key) => {
-        if (!_isUndefined(criteria[key]) && key === "boundingBox") {
+        if (criteria[key] !== undefined && key === "boundingBox") {
           if (typeof criteria[key] === "string") {
             criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
           }
-        } else if (!_isUndefined(criteria?.filters?.[key])) {
+        } else if (criteria?.filters?.[key] !== undefined) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
           }
@@ -251,11 +250,11 @@ export const WithFilterCriteria = function (
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
       _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], (key) => {
-        if (!_isUndefined(criteria[key]) && key === "boundingBox") {
+        if (criteria[key] !== undefined && key === "boundingBox") {
           if (typeof criteria[key] === "string") {
             criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
           }
-        } else if (!_isUndefined(criteria?.filters?.[key])) {
+        } else if (criteria?.filters?.[key] !== undefined) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
           }

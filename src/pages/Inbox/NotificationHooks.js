@@ -1,7 +1,6 @@
 import _each from "lodash/each";
 import _find from "lodash/find";
 import _groupBy from "lodash/groupBy";
-import _isArray from "lodash/isArray";
 import _map from "lodash/map";
 import { useCallback, useMemo, useState } from "react";
 
@@ -37,7 +36,7 @@ export const useNotificationSelection = (notifications) => {
 
   const toggleNotificationSelection = useCallback(
     (notification, thread) => {
-      const targetNotifications = _isArray(thread) ? thread : [notification];
+      const targetNotifications = Array.isArray(thread) ? thread : [notification];
       const updatedSelections = new Set(selectedNotifications);
       if (allNotificationsInThreadSelected(targetNotifications)) {
         _each(targetNotifications, (target) => updatedSelections.delete(target.id));

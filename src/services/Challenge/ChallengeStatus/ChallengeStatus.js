@@ -1,5 +1,4 @@
 import _fromPairs from "lodash/fromPairs";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import messages from "./Messages";
 
@@ -51,6 +50,6 @@ export const isUsableChallengeStatus = function (status, allowFinishedStatus = f
     status === CHALLENGE_STATUS_PARTIALLY_LOADED ||
     status === CHALLENGE_STATUS_NONE ||
     (allowFinishedStatus && status === CHALLENGE_STATUS_FINISHED) ||
-    !_isFinite(status)
+    !Number.isFinite(status)
   ); // treat missing as NONE
 };

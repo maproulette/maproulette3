@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _omit from "lodash/omit";
 import { denormalize } from "normalizr";
 import { Component } from "react";
@@ -35,7 +34,7 @@ const WithCurrentChallenge = function (WrappedComponent) {
     loadChallenge = () => {
       const challengeId = this.currentChallengeId();
 
-      if (_isFinite(challengeId)) {
+      if (Number.isFinite(challengeId)) {
         this.setState({ loadingChallenge: true });
 
         // Start by fetching the challenge. Then fetch follow-up data.
@@ -74,7 +73,7 @@ const WithCurrentChallenge = function (WrappedComponent) {
       let owner = null;
       let clusteredTasks = null;
 
-      if (_isFinite(challengeId)) {
+      if (Number.isFinite(challengeId)) {
         challenge = AsManageableChallenge(
           denormalize(
             this.props.entities?.challenges?.[challengeId],
@@ -116,7 +115,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchChallenge: (challengeId) => {
     return dispatch(fetchChallenge(challengeId)).then((normalizedResults) => {
       if (
-        !_isFinite(normalizedResults.result) ||
+        !Number.isFinite(normalizedResults.result) ||
         normalizedResults?.entities?.challenges?.[normalizedResults.result]?.deleted
       ) {
         dispatch(addError(AppErrors.challenge.doesNotExist));
