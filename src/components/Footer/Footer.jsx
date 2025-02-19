@@ -1,8 +1,8 @@
 import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
+import img from "../../../images/openstreetmap-logo.svg";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
-import img from "../../../images/openstreetmap-logo.svg";
 
 class Footer extends Component {
   state = {
