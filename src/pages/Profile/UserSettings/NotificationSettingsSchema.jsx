@@ -93,11 +93,10 @@ export const jsSchema = (intl) => {
 
   // items are generated as array from all subscription and count types
   const notificationObject = {};
-  items
-    .filter((item) => Boolean(item.name))
-    .forEach((item) => {
-      notificationObject[item.name] = item;
-    });
+
+  for (const item of items.filter((item) => Boolean(item.name))) {
+    notificationObject[item.name] = item;
+  }
 
   return {
     $schema: "http://json-schema.org/draft-07/schema#",

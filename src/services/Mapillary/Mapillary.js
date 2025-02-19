@@ -115,14 +115,14 @@ export const nextMapillaryPageUrl = function (resultContext) {
       console.log("Link Header:", linkHeader);
 
       if (linkHeader) {
-        linkHeader.split(",").forEach((link) => {
+        for (const link of linkHeader.split(",")) {
           const match = link.match(/<([^>]+)>\s*rel="([^"]+)"/);
           if (match) {
             const url = match[1];
             const rel = match[2];
             links[rel] = { url };
           }
-        });
+        }
       }
 
       console.log("Parsed Links:", links);
