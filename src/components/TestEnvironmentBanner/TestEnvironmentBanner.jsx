@@ -11,15 +11,13 @@ const TestEnvironmentBanner = (_props) => {
 
   return (
     <ul className="mr-bg-gradient-b-blue-darker-blue-dark mr-text-white mr-w-full">
-      <li className="mr-flex mr-justify-between mr-items-center mr-w-full mr-py-2 mr-px-16">
-        <div className="mr-flex mr-space-x-4 mr-items-center">
-          <div className="mr-text-yellow mr-text-md mr-whitespace-nowrap">
-            {environment === "staging" ? (
-              <FormattedMessage {...messages.stagingTitle} />
-            ) : environment === "local" ? (
-              <FormattedMessage {...messages.localTitle} />
-            ) : null}
-          </div>
+      <li className="mr-flex mr-justify-center mr-items-center mr-w-full mr-py-2 mr-px-4">
+        <div className="mr-text-yellow mr-text-md mr-text-center mr-break-words">
+          {environment === "staging" ? (
+            <FormattedMessage {...messages.stagingTitle} />
+          ) : environment === "local" ? (
+            <FormattedMessage {...messages.localTitle} />
+          ) : null}
         </div>
       </li>
     </ul>
