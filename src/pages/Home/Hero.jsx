@@ -1,4 +1,3 @@
-import { memo } from "react";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import worldMapImage from "../../../images/bg-map.svg";
