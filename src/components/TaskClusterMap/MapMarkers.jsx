@@ -93,16 +93,26 @@ const Markers = (props) => {
   }, []);
 
   useEffect(() => {
+    const isInitialLoad = props.taskMarkers && mapMarkers.length === 0;
+    const isMapLoadDelayed = props.delayMapLoad;
+    const hasBundleFilterChanged = props.bundledOnly !== prevProps.current.bundledOnly;
+    const haveTaskMarkersChanged = !_isEqual(props.taskMarkers, prevProps.current.taskMarkers);
+    const hasTaskBundleChanged = !_isEqual(props.taskBundle, prevProps.current.taskBundle);
+    const haveSelectedClustersChanged =
+      props.selectedClusters !== prevProps.current.selectedClusters;
+    const hasSpideredStateChanged = !_isEqual(spidered, prevProps.current.spidered);
+
     if (
-      (props.taskMarkers && mapMarkers.length === 0) ||
-      props.delayMapLoad ||
-      props.bundledOnly !== prevProps.current.bundledOnly ||
-      !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) ||
-      props.selectedClusters !== prevProps.current.selectedClusters
+      isInitialLoad ||
+      isMapLoadDelayed ||
+      hasBundleFilterChanged ||
+      haveTaskMarkersChanged ||
+      hasTaskBundleChanged ||
+      haveSelectedClustersChanged
     ) {
       refreshSpidered();
       generateMarkers();
-    } else if (!_isEqual(spidered, prevProps.current.spidered)) {
+    } else if (hasSpideredStateChanged) {
       generateMarkers();
     }
     prevProps.current = { ...props, spidered: spidered };
