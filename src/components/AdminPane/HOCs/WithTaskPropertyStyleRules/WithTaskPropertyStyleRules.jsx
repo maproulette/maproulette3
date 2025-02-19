@@ -1,5 +1,4 @@
 import _cloneDeep from "lodash/cloneDeep";
-import _each from "lodash/each";
 import _fill from "lodash/fill";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
@@ -127,8 +126,8 @@ export const WithTaskPropertyStyleRules = function (WrappedComponent) {
 
     render() {
       const errors = this.state.validationErrors;
-      _each(this.state.styleRules, (rule, index) => {
-        _each(rule.styles, (style) => {
+      for (const [index, rule] of this.state.styleRules.entries()) {
+        for (const style of rule.styles) {
           if (style.styleName && !style.styleValue) {
             // Missing style value
             errors[index].push(PROPERTY_RULE_ERRORS.missingStyleValue);
@@ -136,15 +135,10 @@ export const WithTaskPropertyStyleRules = function (WrappedComponent) {
             // Missing syle name
             errors[index].push(PROPERTY_RULE_ERRORS.missingStyleName);
           }
-        });
-      });
-
-      let hasAnyStyleErrors = false;
-      _each(errors, (e) => {
-        if (!_isEmpty(e)) {
-          hasAnyStyleErrors = true;
         }
-      });
+      }
+
+      let hasAnyStyleErrors = errors.some((e) => !_isEmpty(e));
 
       return (
         <WrappedComponent

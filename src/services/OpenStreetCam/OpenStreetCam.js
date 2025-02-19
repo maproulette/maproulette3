@@ -1,5 +1,3 @@
-import _each from "lodash/each";
-
 const API_URI = "https://openstreetcam.org/1.0";
 
 /**
@@ -118,6 +116,8 @@ const formDataToObject = function (formData) {
  */
 const objectToFormData = function (serialized) {
   const formData = new FormData();
-  _each(serialized, (value, key) => formData.set(key, value));
+  for (const [key, value] of Object.entries(serialized)) {
+    formData.set(key, value);
+  }
   return formData;
 };

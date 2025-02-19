@@ -2,7 +2,6 @@ import L from "leaflet";
 import "leaflet-vectoricon";
 import { getType } from "@turf/invariant";
 import _compact from "lodash/compact";
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
@@ -140,9 +139,9 @@ export class AsSimpleStyleableFeature {
       return;
     }
 
-    _each(lineStyles, (styleValue, styleName) => {
+    for (const [styleName, styleValue] of Object.entries(lineStyles)) {
       layer.setStyle({ [simplestyleLineToLeafletMapping[styleName]]: styleValue });
-    });
+    }
   }
 
   /**
@@ -177,7 +176,7 @@ export class AsSimpleStyleableFeature {
 
     let useCustomMarker = false;
 
-    _each(pointStyles, (styleValue, styleName) => {
+    for (const [styleName, styleValue] of Object.entries(pointStyles)) {
       switch (styleName) {
         case "marker-color":
           useCustomMarker = true;
@@ -206,7 +205,7 @@ export class AsSimpleStyleableFeature {
         default:
           break;
       }
-    });
+    }
 
     // If the layer already has one of our svg markers, make sure to clean it
     // up or else Leaflet has a tendencey to render dup markers

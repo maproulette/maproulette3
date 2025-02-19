@@ -1,7 +1,6 @@
 import { ResponsiveBar } from "@nivo/bar";
 import classNames from "classnames";
 import _chunk from "lodash/chunk";
-import _each from "lodash/each";
 import _isEqual from "lodash/isEqual";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
@@ -224,12 +223,13 @@ export class ChallengeProgress extends Component {
 
   calculateChallengeStats(taskActions, orderedStatuses, localizedStatuses) {
     let challengeStats = {};
-    _each(orderedStatuses, (status) => {
+
+    for (const status of orderedStatuses) {
       challengeStats[localizedStatuses[keysByStatus[status]]] = {
         count: taskActions[keysByStatus[status]],
         percent: this.percent(taskActions[keysByStatus[status]], taskActions.total),
       };
-    });
+    }
 
     return challengeStats;
   }
@@ -240,12 +240,12 @@ export class ChallengeProgress extends Component {
       [availableLabel]: this.percent(taskActions.available, taskActions.total),
     };
 
-    _each(orderedStatuses, (status) => {
+    for (const status of orderedStatuses) {
       completionData[localizedStatuses[keysByStatus[status]]] = this.percent(
         taskActions[keysByStatus[status]],
         taskActions.total,
       );
-    });
+    }
 
     return completionData;
   }

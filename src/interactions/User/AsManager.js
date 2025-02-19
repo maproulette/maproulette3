@@ -1,4 +1,3 @@
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
@@ -142,20 +141,23 @@ export class AsManager extends AsEndUser {
 
     const projectChallenges = new Set();
 
-    _each(challenges, (challenge) => {
+    for (const challenge of challenges) {
       // handle both normalized and denormalized challenges
       if (projectIds.indexOf(challenge?.parent?.id ?? challenge.parent) !== -1) {
         projectChallenges.add(challenge);
       }
 
-      _each(challenge.virtualParents, (vp) => {
-        if (projectIds.indexOf(_isObject(vp) ? vp.id : vp) !== -1) {
-          if (!projectChallenges.has(challenge)) {
-            projectChallenges.add(challenge);
+      if (challenge.virtualParents) {
+        for (const vp of challenge.virtualParents) {
+          if (projectIds.indexOf(_isObject(vp) ? vp.id : vp) !== -1) {
+            if (!projectChallenges.has(challenge)) {
+              projectChallenges.add(challenge);
+            }
           }
         }
-      });
-    });
+      }
+    }
+
     return [...projectChallenges];
   }
 

@@ -1,5 +1,4 @@
 import _debounce from "lodash/debounce";
-import _each from "lodash/each";
 import _isEmpty from "lodash/isEmpty";
 import PropTypes from "prop-types";
 import queryString from "query-string";
@@ -159,11 +158,11 @@ export const WithSearchRoute = function (WrappedComponent, searchGroup) {
 
 export const executeRouteSearch = (routeCriteria, searchString) => {
   const searchCriteria = queryString.parse(searchString);
-  _each(searchCriteria, (value, key) => {
+  for (const [key, value] of Object.entries(searchCriteria)) {
     if (routeCriteria[key] && !_isEmpty(value)) {
       routeCriteria[key](value);
     }
-  });
+  }
 };
 
 /**
@@ -177,17 +176,9 @@ export const debouncedUpdateHistory = _debounce(
 );
 
 export const addSearchCriteriaToRoute = (history, newCriteria) => {
-  const searchCriteria = queryString.parse(history.location.search);
-
-  _each(newCriteria, (value, key) => {
-    if (value === undefined) {
-      delete searchCriteria[key];
-    } else {
-      searchCriteria[key] = value;
-    }
-  });
-
-  const newRoute = `${history.location.pathname}?${queryString.stringify(searchCriteria)}`;
+  const oldCriteria = queryString.parse(history.location.search);
+  const newQueryString = queryString.stringify({ ...oldCriteria, ...newCriteria });
+  const newRoute = `${history.location.pathname}?${newQueryString}`;
   debouncedUpdateHistory(history, newRoute);
 };
 
@@ -220,9 +211,9 @@ export const addBoundsToRoute = (history, boundsType, bounds, locationFilter) =>
 export const removeSearchCriteriaFromRoute = (history, criteriaKeys) => {
   const searchCriteria = queryString.parse(history.location.search);
 
-  _each(criteriaKeys, (key) => {
+  for (const key of criteriaKeys) {
     delete searchCriteria[key];
-  });
+  }
 
   const newRoute = `${history.location.pathname}?${queryString.stringify(searchCriteria)}`;
   history.replace(newRoute);
