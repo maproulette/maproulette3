@@ -1,6 +1,5 @@
 import _cloneDeep from "lodash/cloneDeep";
 import _compact from "lodash/compact";
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
@@ -160,14 +159,15 @@ const Markers = (props) => {
     }
 
     const refreshed = new Map();
-    _each(props.taskMarkers, (marker) => {
+
+    for (const marker of props.taskMarkers) {
       if (spidered.has(marker.options.taskId)) {
         refreshed.set(marker.options.taskId, {
           ...spidered.get(marker.options.taskId),
           icon: marker.icon,
         });
       }
-    });
+    }
 
     setSpidered(refreshed);
   };
@@ -220,7 +220,9 @@ const Markers = (props) => {
       centerPointPx,
       CLUSTER_ICON_PIXELS,
     );
-    _each([...updateSpidered.values()], (s) => (s.position = map.layerPointToLatLng(s.positionPx)));
+    for (const s of updateSpidered.values()) {
+      s.position = map.layerPointToLatLng(s.positionPx);
+    }
     setSpidered(updateSpidered);
   };
 

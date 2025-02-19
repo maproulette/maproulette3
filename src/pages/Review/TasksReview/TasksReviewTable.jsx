@@ -2,7 +2,6 @@ import classNames from "classnames";
 import { parseISO } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
-import _each from "lodash/each";
 import _isEqual from "lodash/isEqual";
 import _isObject from "lodash/isObject";
 import _kebabCase from "lodash/kebabCase";
@@ -102,10 +101,7 @@ export class TaskReviewTable extends Component {
       direction: tableState.sorted[0].desc ? "DESC" : "ASC",
     };
 
-    const filters = {};
-    _each(tableState.filtered, (pair) => {
-      filters[pair.id] = pair.value;
-    });
+    const filters = Object.fromEntries(tableState.filtered.map(({ id, value }) => [id, value]));
 
     // Determine if we can search by challenge Id or do name search
     if (filters.challenge) {
@@ -836,15 +832,15 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         </option>,
       ];
 
-      _each(TaskStatus, (status) => {
-        if (isReviewableStatus(status)) {
+      for (const [name, value] of Object.entries(TaskStatus)) {
+        if (isReviewableStatus(value)) {
           options.push(
-            <option key={keysByStatus[status]} value={status}>
-              {props.intl.formatMessage(messagesByStatus[status])}
+            <option key={name} value={value}>
+              {props.intl.formatMessage(messagesByStatus[value])}
             </option>,
           );
         }
-      });
+      }
 
       return (
         <select
@@ -884,13 +880,13 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         </option>,
       ];
 
-      _each(TaskPriority, (priority) => {
+      for (const [name, value] of Object.entries(TaskPriority)) {
         options.push(
-          <option key={keysByPriority[priority]} value={priority}>
-            {props.intl.formatMessage(messagesByPriority[priority])}
+          <option key={name} value={value}>
+            {props.intl.formatMessage(messagesByPriority[value])}
           </option>,
         );
-      });
+      }
 
       return (
         <select
@@ -1266,19 +1262,19 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       ];
 
       if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
-        _each([TaskReviewStatus.approved, TaskReviewStatus.approvedWithFixes], (status) =>
+        for (const status of [TaskReviewStatus.approved, TaskReviewStatus.approvedWithFixes]) {
           options.push(
             <option key={keysByReviewStatus[status]} value={status}>
               {props.intl.formatMessage(messagesByReviewStatus[status])}
             </option>,
-          ),
-        );
+          );
+        }
       } else if (
         props.reviewTasksType === ReviewTasksType.reviewedByMe ||
         props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
         props.reviewTasksType === ReviewTasksType.allReviewedTasks
       ) {
-        _each(TaskReviewStatus, (status) => {
+        for (const status of Object.values(TaskReviewStatus)) {
           if (status !== TaskReviewStatus.unnecessary) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
@@ -1286,9 +1282,9 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               </option>,
             );
           }
-        });
+        }
       } else {
-        _each(TaskReviewStatus, (status) => {
+        for (const status of Object.values(TaskReviewStatus)) {
           if (isNeedsReviewStatus(status)) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
@@ -1296,7 +1292,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               </option>,
             );
           }
-        });
+        }
       }
 
       return (
@@ -1363,7 +1359,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
             {props.intl.formatMessage(messages.metaUnreviewed)}
           </option>,
         );
-        _each(TaskReviewStatus, (status) => {
+        for (const status of Object.values(TaskReviewStatus)) {
           if (status !== TaskReviewStatus.unnecessary && isMetaReviewStatus(status)) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
@@ -1371,7 +1367,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
               </option>,
             );
           }
-        });
+        }
       }
 
       return (

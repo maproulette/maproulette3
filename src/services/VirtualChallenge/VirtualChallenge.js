@@ -166,7 +166,6 @@ const reduceVirtualChallengesFurther = function (mergedState, oldState, virtualC
     // Ignore deleted and expired virtual challenges
     if (entity.deleted || entity.expired < now) {
       delete mergedState[entity.id];
-      return;
     }
   }
 };

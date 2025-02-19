@@ -1,4 +1,3 @@
-import _each from "lodash/each";
 import _remove from "lodash/remove";
 import { Component, createRef } from "react";
 import { FormattedMessage } from "react-intl";
@@ -63,7 +62,7 @@ export default class TaskHistoryWidget extends Component {
     let earliestDate = null;
     const usernames = [];
 
-    _each(this.props.task.history, (log) => {
+    for (const log of this.props.task.history) {
       if (!earliestDate || log.timestamp < earliestDate) {
         earliestDate = log.timestamp;
       }
@@ -72,7 +71,7 @@ export default class TaskHistoryWidget extends Component {
       if (username && usernames.indexOf(username) === -1) {
         usernames.push(username);
       }
-    });
+    }
 
     viewOSMCha(this.bbox(), earliestDate, usernames);
   };

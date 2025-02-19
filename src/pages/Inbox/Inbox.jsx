@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import Fuse from "fuse.js";
-import _each from "lodash/each";
 import _kebabCase from "lodash/kebabCase";
 import _map from "lodash/map";
 import _reject from "lodash/reject";
@@ -249,13 +248,13 @@ const columns = (tableProps) => [
         </option>,
       ];
 
-      _each(NotificationType, (type) => {
+      for (const [name, value] of Object.entries(NotificationType)) {
         options.push(
-          <option key={keysByNotificationType[type]} value={type}>
-            {tableProps.intl.formatMessage(messagesByNotificationType[type])}
+          <option key={name} value={value}>
+            {tableProps.intl.formatMessage(messagesByNotificationType[value])}
           </option>,
         );
-      });
+      }
 
       return (
         <select

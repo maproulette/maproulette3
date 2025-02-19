@@ -1,7 +1,6 @@
 import { format } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
-import _each from "lodash/each";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 import _keys from "lodash/keys";
@@ -212,7 +211,14 @@ export const WithFilterCriteria = function (
 
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
-      _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], (key) => {
+      const keysToSplit = [
+        "status",
+        "reviewStatus",
+        "metaReviewStatus",
+        "priorities",
+        "boundingBox",
+      ];
+      for (const key of keysToSplit) {
         if (criteria[key] !== undefined && key === "boundingBox") {
           if (typeof criteria[key] === "string") {
             criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
@@ -222,7 +228,7 @@ export const WithFilterCriteria = function (
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
           }
         }
-      });
+      }
 
       if (!criteria?.filters?.status) {
         this.updateIncludedFilters(props);
@@ -249,7 +255,14 @@ export const WithFilterCriteria = function (
 
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
-      _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], (key) => {
+      const keysToSplit = [
+        "status",
+        "reviewStatus",
+        "metaReviewStatus",
+        "priorities",
+        "boundingBox",
+      ];
+      for (const key of keysToSplit) {
         if (criteria[key] !== undefined && key === "boundingBox") {
           if (typeof criteria[key] === "string") {
             criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
@@ -259,7 +272,7 @@ export const WithFilterCriteria = function (
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
           }
         }
-      });
+      }
 
       if (!criteria?.filters?.status) {
         this.updateIncludedFilters(props);

@@ -1,4 +1,3 @@
-import _each from "lodash/each";
 import _isEqual from "lodash/isEqual";
 import _omit from "lodash/omit";
 import _values from "lodash/values";
@@ -59,11 +58,13 @@ const WithManageableProjects = function (WrappedComponent, includeChallenges = f
           // Since we only fetched a small portion of the total projects in the
           // database we need to make sure we also fetch the projects that are pinned.
           let missingProjects = [];
-          _each(this.props.pinnedProjects, (pinnedProject) => {
+
+          for (const pinnedProject of this.props.pinnedProjects) {
             if (!this.props.entities.projects[pinnedProject]) {
               missingProjects.push(pinnedProject);
             }
-          });
+          }
+
           if (missingProjects.length > 0) {
             this.props.fetchProjectsById(missingProjects);
 

@@ -2,7 +2,6 @@ import { differenceInSeconds, parseISO } from "date-fns";
 import _compact from "lodash/compact";
 import _concat from "lodash/concat";
 import _debounce from "lodash/debounce";
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
@@ -117,10 +116,7 @@ export class TaskAnalysisTableInternal extends Component {
       direction: tableState.sorted[0].desc ? "DESC" : "ASC",
     };
 
-    const filters = {};
-    _each(tableState.filtered, (pair) => {
-      filters[pair.id] = pair.value;
-    });
+    const filters = Object.fromEntries(tableState.filtered.map(({ id, value }) => [id, value]));
 
     this.props.updateCriteria({
       sortCriteria,
