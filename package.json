@@ -15,7 +15,7 @@
     "test": "vitest",
     "test:cov": "vitest run --coverage",
     "lint": "eslint src/",
-    "format": "biome format --write",
+    "format": "biome check --formatter-enabled=true --linter-enabled=false --organize-imports-enabled=true --write",
     "check": "biome ci && eslint src/",
     "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'",
     "test:e2e:start": "NODE_ENV=development yarn run build && npx serve dist",
