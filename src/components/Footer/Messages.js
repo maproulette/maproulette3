@@ -77,4 +77,8 @@ export default defineMessages({
     id: "Footer.donate.heading",
     defaultMessage: "SUPPORT US",
   },
+  supportedByHeading: {
+    id: "Footer.supportedBy.heading",
+    defaultMessage: "SUPPORTED BY",
+  },
 });

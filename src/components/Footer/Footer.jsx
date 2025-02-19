@@ -2,7 +2,7 @@ import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
-import img from "./openstreetmap-logo.png";
+import img from "../../../images/openstreetmap-logo.svg";
 
 class Footer extends Component {
   state = {
@@ -41,14 +41,16 @@ class Footer extends Component {
           <div className="mr-grid md:mr-grid-cols-5 mr-gap-8 mr-items-start">
             {/* Logo Section */}
             <div className="md:mr-col-span-1">
+              <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-2">
+                <FormattedMessage {...messages.supportedByHeading} />
+              </h3>
               <a
                 href="https://www.openstreetmap.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mr-block hover:mr-opacity-90 mr-transition-opacity"
                 aria-label={<FormattedMessage {...messages.osmLink} />}
               >
-                <img src={img} alt="OpenStreetMap" className="mr-h-20 mr-w-auto" />
+                <img src={img} alt="OpenStreetMap" className="mr-max-w-xs" />
               </a>
             </div>
 
