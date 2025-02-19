@@ -5,11 +5,11 @@ import _map from "lodash/map";
 import { useCallback, useMemo, useState } from "react";
 
 export const useNotificationSelection = (notifications) => {
-  notifications.forEach((notification) => {
+  for (const notification of notifications) {
     if (!notification.taskId && notification.challengeId) {
       notification.taskId = notification.challengeName;
     }
-  });
+  }
 
   const [groupByTask, setGroupByTask] = useState(true);
   const [selectedNotifications, setSelectedNotifications] = useState(new Set());

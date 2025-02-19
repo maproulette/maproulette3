@@ -63,11 +63,11 @@ class UserSettings extends Component {
         editableUser.customBasemaps,
         (data) => _isEmpty(_trim(data.name)) || _isEmpty(_trim(data.url)),
       );
-      editableUser.customBasemaps.forEach((data) => {
+      for (const data of editableUser.customBasemaps) {
         if (!data.id) {
           data.id = -1;
         }
-      });
+      }
     }
 
     editableUser.normalizeDefaultBasemap(LayerSources, editableUser.customBasemaps);

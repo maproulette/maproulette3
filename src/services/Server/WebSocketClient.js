@@ -127,7 +127,9 @@ export default class WebSocketClient {
     }
 
     // Transmit any queued messages
-    this.queuedMessages.forEach((message) => this.websocket.send(message));
+    for (const message of this.queuedMessages) {
+      this.websocket.send(message);
+    }
     this.queuedMessages = [];
   }
 

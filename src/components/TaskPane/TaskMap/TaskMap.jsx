@@ -233,9 +233,9 @@ export const TaskMapContent = (props) => {
         });
 
         if (intraLayerMatches.length > 0) {
-          orderedFeatureLayers(intraLayerMatches).forEach((match) => {
+          for (const match of orderedFeatureLayers(intraLayerMatches)) {
             candidateLayers.set(match.description, match);
-          });
+          }
         }
       }
     });

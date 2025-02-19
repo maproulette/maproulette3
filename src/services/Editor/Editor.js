@@ -351,7 +351,7 @@ export const osmObjectParams = function (
 ) {
   const allTasks = Array.isArray(task) ? task : [task];
   let objects = [];
-  allTasks.forEach((task) => {
+  for (const task of allTasks) {
     if (task.geometries?.features) {
       objects = objects.concat(
         _compact(
@@ -395,7 +395,7 @@ export const osmObjectParams = function (
         ),
       );
     }
-  });
+  }
 
   return objects.join(joinSeparator);
 };
@@ -663,7 +663,9 @@ export const sendJOSMCommand = function (uri) {
 const executeJOSMBatch = async function (commands, transmissionDelay = 1000) {
   // For Safari we execute all the commands immediately
   if (window.safari) {
-    commands.forEach((command) => command());
+    for (const command of commands) {
+      command();
+    }
     return;
   }
 

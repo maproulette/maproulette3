@@ -130,7 +130,7 @@ export const WithWidgetWorkspacesInternal = function (
       // Generate a simple layout if none provided, with one widget per row
       if (configuration.layout.length === 0) {
         let nextY = 0;
-        configuration.widgets.forEach((widgetConf) => {
+        for (const widgetConf of configuration.widgets) {
           configuration.layout.push({
             i: generateWidgetId(),
             x: 0,
@@ -144,11 +144,11 @@ export const WithWidgetWorkspacesInternal = function (
           });
 
           nextY += widgetConf.defaultHeight;
-        });
+        }
       } else {
         // A layout was provided. If heights and/or widths were omitted or don't meet
         // current minimums, fill them in from the widget descriptors
-        configuration.layout.forEach((widgetLayout, index) => {
+        for (const [index, widgetLayout] of configuration.layout.entries()) {
           if (!configuration.widgets || !configuration.widgets[index]) {
             return;
           }
@@ -172,7 +172,7 @@ export const WithWidgetWorkspacesInternal = function (
           ) {
             widgetLayout.h = descriptor.minHeight;
           }
-        });
+        }
       }
 
       // Make sure workspace is upgraded to latest data model
