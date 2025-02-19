@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   inspectLabel: {
-    id: "Task.pane.controls.inspect.label",
+    id: "Admin.ChallengeTaskMap.controls.inspectTask.label",
     defaultMessage: "Inspect Task",
   },
 
@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   taskLockedLabel: {
-    id: "Task.pane.indicators.locked.label",
+    id: "ReviewTaskPane.indicators.locked.label",
     defaultMessage: "Task locked",
   },
 
@@ -25,7 +25,7 @@ export default defineMessages({
   },
 
   taskUnlockLabel: {
-    id: "Task.pane.controls.unlock.label",
+    id: "ReviewTaskPane.controls.unlock.label",
     defaultMessage: "Unlock",
   },
 

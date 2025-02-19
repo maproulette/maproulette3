@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   refresh: {
-    id: "Review.TaskAnalysisTable.refresh",
+    id: "Inbox.controls.refreshNotifications.label",
     defaultMessage: "Refresh",
   },
 
@@ -20,7 +20,7 @@ export default defineMessages({
   },
 
   clearFiltersLabel: {
-    id: "Review.TaskAnalysisTable.clearFilters",
+    id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",
   },
 
@@ -55,12 +55,12 @@ export default defineMessages({
   },
 
   tasksToBeReviewed: {
-    id: "Review.TaskAnalysisTable.tasksToBeReviewed",
+    id: "Review.Dashboard.tasksToBeReviewed",
     defaultMessage: "Tasks to be Reviewed",
   },
 
   tasksReviewedByMe: {
-    id: "Review.TaskAnalysisTable.tasksReviewedByMe",
+    id: "Review.Dashboard.tasksReviewedByMe",
     defaultMessage: "Tasks Reviewed by Me",
   },
 
@@ -75,7 +75,7 @@ export default defineMessages({
   },
 
   allReviewedTasks: {
-    id: "Review.TaskAnalysisTable.allReviewedTasks",
+    id: "Review.Dashboard.allReviewedTasks",
     defaultMessage: "All Review-related Tasks",
   },
 
@@ -120,32 +120,32 @@ export default defineMessages({
   },
 
   actionsColumnHeader: {
-    id: "Review.TaskAnalysisTable.columnHeaders.actions",
+    id: "Admin.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
 
   viewCommentsLabel: {
-    id: "Review.TaskAnalysisTable.columnHeaders.comments",
+    id: "Admin.TaskAnalysisTable.columnHeaders.comments",
     defaultMessage: "Comments",
   },
 
   mapperControlsLabel: {
-    id: "Review.TaskAnalysisTable.mapperControls.label",
+    id: "Admin.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
 
   reviewerControlsLabel: {
-    id: "Review.TaskAnalysisTable.reviewerControls.label",
+    id: "Admin.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
 
   metaReviewerControlsLabel: {
-    id: "Review.TaskAnalysisTable.metaReviewerControls.label",
+    id: "Admin.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
 
   reviewCompleteControlsLabel: {
-    id: "Review.TaskAnalysisTable.reviewCompleteControls.label",
+    id: "Admin.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
 
@@ -160,12 +160,12 @@ export default defineMessages({
   },
 
   statusLabel: {
-    id: "Review.fields.status.label",
+    id: "Admin.EditTask.form.status.label",
     defaultMessage: "Status",
   },
 
   priorityLabel: {
-    id: "Review.fields.priority.label",
+    id: "Admin.EditTask.form.priority.label",
     defaultMessage: "Priority",
   },
 
@@ -175,7 +175,7 @@ export default defineMessages({
   },
 
   reviewStatusLabel: {
-    id: "Review.fields.reviewStatus.label",
+    id: "ChallengeProgress.reviewStatus.label",
     defaultMessage: "Review Status",
   },
 
@@ -185,17 +185,17 @@ export default defineMessages({
   },
 
   reviewedByLabel: {
-    id: "Review.fields.reviewedBy.label",
+    id: "Review.Dashboard.asReviewer.label",
     defaultMessage: "Reviewer",
   },
 
   metaReviewedByLabel: {
-    id: "Review.fields.metaReviewedBy.label",
+    id: "Review.Dashboard.asMetaReviewer.label",
     defaultMessage: "Meta-Reviewer",
   },
 
   additionalReviewersLabel: {
-    id: "Review.fields.additionalReviewers.label",
+    id: "Admin.fields.additionalReviewers.label",
     defaultMessage: "Additional Reviewers",
   },
 
@@ -205,17 +205,17 @@ export default defineMessages({
   },
 
   reviewedAtLabel: {
-    id: "Review.fields.reviewedAt.label",
+    id: "Admin.fields.reviewedAt.label",
     defaultMessage: "Reviewed On",
   },
 
   metaReviewedAtLabel: {
-    id: "Review.fields.metaReviewedAt.label",
+    id: "Admin.fields.metaReviewedAt.label",
     defaultMessage: "Meta-Reviewed On",
   },
 
   reviewTaskLabel: {
-    id: "Review.TaskAnalysisTable.controls.reviewTask.label",
+    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
   },
 
@@ -250,7 +250,7 @@ export default defineMessages({
   },
 
   challengeLabel: {
-    id: "Review.fields.challenge.label",
+    id: "Activity.item.challenge",
     defaultMessage: "Challenge",
   },
 
@@ -260,7 +260,7 @@ export default defineMessages({
   },
 
   projectLabel: {
-    id: "Review.fields.project.label",
+    id: "Activity.item.project",
     defaultMessage: "Project",
   },
 
@@ -270,12 +270,12 @@ export default defineMessages({
   },
 
   tagsLabel: {
-    id: "Review.fields.tags.label",
+    id: "Admin.TaskAnalysisTable.columnHeaders.tags",
     defaultMessage: "Tags",
   },
 
   multipleTasksTooltip: {
-    id: "Review.multipleTasks.tooltip",
+    id: "Admin.TaskAnalysisTable.multipleTasks.tooltip",
     defaultMessage: "Multiple bundled tasks",
   },
 

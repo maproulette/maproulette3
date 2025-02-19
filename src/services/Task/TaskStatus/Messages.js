@@ -5,35 +5,35 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   created: {
-    id: "Task.status.created",
+    id: "Activity.action.created",
     defaultMessage: "Created",
   },
   fixed: {
-    id: "Task.status.fixed",
+    id: "Admin.Task.fields.actions.fixed",
     defaultMessage: "Fixed",
   },
   falsePositive: {
-    id: "Task.status.falsePositive",
+    id: "Admin.Task.fields.actions.notAnIssue",
     defaultMessage: "Not an Issue",
   },
   skipped: {
-    id: "Task.status.skipped",
+    id: "Admin.Task.fields.actions.skipped",
     defaultMessage: "Skipped",
   },
   deleted: {
-    id: "Task.status.deleted",
+    id: "Activity.action.deleted",
     defaultMessage: "Deleted",
   },
   disabled: {
-    id: "Task.status.disabled",
+    id: "Admin.Project.fields.disabled.tooltip",
     defaultMessage: "Disabled",
   },
   alreadyFixed: {
-    id: "Task.status.alreadyFixed",
+    id: "Admin.Task.fields.actions.alreadyFixed",
     defaultMessage: "Already Fixed",
   },
   tooHard: {
-    id: "Task.status.tooHard",
+    id: "Admin.Task.fields.actions.tooHard",
     defaultMessage: "Can't Complete",
   },
 });

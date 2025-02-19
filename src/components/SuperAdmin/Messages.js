@@ -8,15 +8,15 @@ export default defineMessages({
     defaultMessage: "Metrics",
   },
   discoverable: {
-    id: "Metrics.discoverable",
+    id: "Admin.EditChallenge.form.visible.label",
     defaultMessage: "Discoverable",
   },
   archived: {
-    id: "Metrics.archived",
+    id: "Dashboard.ChallengeFilter.archived.label",
     defaultMessage: "Archived",
   },
   virtual: {
-    id: "Metrics.virtual",
+    id: "Admin.EditProject.form.isVirtual.label",
     defaultMessage: "Virtual",
   },
   hideUndiscoverable: {
@@ -36,11 +36,11 @@ export default defineMessages({
     defaultMessage: "clear",
   },
   challengeLabel: {
-    id: "Metrics.challenges",
+    id: "Admin.ProjectCard.tabs.challenges.label",
     defaultMessage: "Challenges",
   },
   projectLabel: {
-    id: "Metrics.projects",
+    id: "ChallengeFilterSubnav.query.searchType.project",
     defaultMessage: "Projects",
   },
   userLabel: {

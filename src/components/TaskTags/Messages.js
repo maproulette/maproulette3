@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   addTags: {
-    id: "Task.taskTags.add.label",
+    id: "Admin.EditChallenge.form.addMRTags.placeholder",
     defaultMessage: "Add MR Tags",
   },
 
@@ -20,12 +20,12 @@ export default defineMessages({
   },
 
   saveTags: {
-    id: "Task.taskTags.save.label",
+    id: "Admin.EditProject.controls.save.label",
     defaultMessage: "Save",
   },
 
   cancelTags: {
-    id: "Task.taskTags.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
@@ -35,7 +35,7 @@ export default defineMessages({
   },
 
   addTagsPlaceholder: {
-    id: "Task.taskTags.addTags.placeholder",
+    id: "Admin.EditChallenge.form.addMRTags.placeholder",
     defaultMessage: "Add MR Tags",
   },
 });

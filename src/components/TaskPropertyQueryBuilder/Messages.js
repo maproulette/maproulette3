@@ -5,12 +5,12 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   searchButton: {
-    id: "TaskPropertyQueryBuilder.controls.search",
+    id: "Admin.VirtualProject.ChallengeList.search.placeholder",
     defaultMessage: "Search",
   },
 
   clearButton: {
-    id: "TaskPropertyQueryBuilder.controls.clear",
+    id: "Admin.EditChallenge.form.taskPropertyStyles.clear",
     defaultMessage: "Clear",
   },
 
@@ -20,12 +20,12 @@ export default defineMessages({
   },
 
   noneOption: {
-    id: "TaskPropertyQueryBuilder.options.none.label",
+    id: "Challenge.basemap.none",
     defaultMessage: "None",
   },
 
   missingRightRule: {
-    id: "TaskPropertyQueryBuilder.error.missingRightRule",
+    id: "TaskPropertyQueryBuilder.error.missingLeftRule",
     defaultMessage: "When using a compound rule both parts must be specified.",
   },
 

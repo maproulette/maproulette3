@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   revisedTooltip: {
-    id: "Task.controls.revised.tooltip",
+    id: "Task.controls.revised.label",
     defaultMessage: "Revision Complete",
   },
 

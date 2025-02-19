@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   editProject: {
-    id: "Admin.EditProject.edit.header",
+    id: "Admin.EditChallenge.edit.header",
     defaultMessage: "Edit",
   },
 
@@ -50,7 +50,7 @@ export default defineMessages({
   },
 
   enabledLabel: {
-    id: "Admin.EditProject.form.enabled.label",
+    id: "Admin.EditChallenge.form.visible.label",
     defaultMessage: "Discoverable",
   },
 
@@ -67,7 +67,7 @@ export default defineMessages({
   },
 
   featuredLabel: {
-    id: "Admin.EditProject.form.featured.label",
+    id: "Admin.EditChallenge.form.featured.label",
     defaultMessage: "Featured",
   },
 

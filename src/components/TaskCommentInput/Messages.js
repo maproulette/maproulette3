@@ -10,22 +10,22 @@ export default defineMessages({
   },
 
   submitCommentLabel: {
-    id: "Task.comments.comment.controls.submit.label",
+    id: "Footer.email.submit.label",
     defaultMessage: "Submit",
   },
 
   cancelCommentLabel: {
-    id: "Task.comments.comment.controls.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
   writeLabel: {
-    id: "Task.controls.completionComment.write.label",
+    id: "ChallengeDetails.controls.write.label",
     defaultMessage: "Write",
   },
 
   previewLabel: {
-    id: "Task.controls.completionComment.preview.label",
+    id: "ChallengeDetails.controls.preview.label",
     defaultMessage: "Preview",
   },
 });

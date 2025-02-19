@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   visible: {
-    id: "Dashboard.ChallengeFilter.visible.label",
+    id: "Admin.EditChallenge.form.visible.label",
     defaultMessage: "Discoverable",
   },
 

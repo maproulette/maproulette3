@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   none: {
-    id: "Challenge.cooperativeType.none",
+    id: "Challenge.basemap.none",
     defaultMessage: "None",
   },
   tags: {

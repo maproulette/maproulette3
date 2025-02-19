@@ -24,7 +24,7 @@ describe("messagesByReviewLoadMethod", () => {
       },
       undefined: {
         defaultMessage: "Unreviewed",
-        id: "Task.reviewStatus.meta-unset",
+        id: "Review.tableFilter.metaReviewStatus.metaUnreviewed",
       },
     });
   });

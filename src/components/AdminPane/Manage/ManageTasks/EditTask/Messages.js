@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   editTask: {
-    id: "Admin.EditTask.edit.header",
+    id: "Admin.ChallengeTaskMap.controls.editTask.label",
     defaultMessage: "Edit Task",
   },
 
@@ -20,17 +20,17 @@ export default defineMessages({
   },
 
   save: {
-    id: "Admin.EditTask.controls.save.label",
+    id: "Admin.EditProject.controls.save.label",
     defaultMessage: "Save",
   },
 
   cancel: {
-    id: "Admin.EditTask.controls.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
   nameLabel: {
-    id: "Admin.EditTask.form.name.label",
+    id: "Admin.EditProject.form.name.label",
     defaultMessage: "Name",
   },
 
@@ -93,7 +93,7 @@ export default defineMessages({
   },
 
   addTagsPlaceholder: {
-    id: "Admin.EditTask.form.additionalTags.placeholder",
+    id: "Admin.EditChallenge.form.addMRTags.placeholder",
     defaultMessage: "Add MR Tags",
   },
 });

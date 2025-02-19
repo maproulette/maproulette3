@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   header: {
-    id: "TaskCommentsModal.header",
+    id: "Admin.TaskAnalysisTable.columnHeaders.comments",
     defaultMessage: "Comments",
   },
 });

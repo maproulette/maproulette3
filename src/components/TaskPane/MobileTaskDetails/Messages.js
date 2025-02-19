@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   instructions: {
-    id: "MobileTask.subheading.instructions",
+    id: "Admin.EditTask.form.instruction.label",
     defaultMessage: "Instructions",
   },
 });

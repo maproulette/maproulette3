@@ -5,17 +5,17 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   title: {
-    id: "Widgets.TeamsWidget.label",
+    id: "Navbar.links.teams",
     defaultMessage: "Teams",
   },
 
   myTeamsTitle: {
-    id: "Widgets.TeamsWidget.myTeamsTitle",
+    id: "Widgets.TeamsWidget.controls.myTeams.label",
     defaultMessage: "My Teams",
   },
 
   editTeamTitle: {
-    id: "Widgets.TeamsWidget.editTeamTitle",
+    id: "Team.controls.edit.label",
     defaultMessage: "Edit Team",
   },
 

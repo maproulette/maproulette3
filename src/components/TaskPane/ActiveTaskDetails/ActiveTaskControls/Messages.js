@@ -20,7 +20,7 @@ export default defineMessages({
   },
 
   readOnly: {
-    id: "Task.readonly.message",
+    id: "Admin.TaskInspect.readonly.message",
     defaultMessage: "Previewing task in read-only mode",
   },
 
@@ -30,7 +30,7 @@ export default defineMessages({
   },
 
   viewChangesetLabel: {
-    id: "Task.controls.viewChangeset.label",
+    id: "ActiveTask.controls.viewChangset.label",
     defaultMessage: "View Changeset",
   },
 

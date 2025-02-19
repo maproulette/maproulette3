@@ -40,7 +40,7 @@ export default defineMessages({
   },
 
   emailAddressPlaceholder: {
-    id: "Footer.email.placeholder",
+    id: "Admin.EditChallenge.form.email.label",
     defaultMessage: "Email Address",
   },
 

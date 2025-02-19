@@ -36,7 +36,7 @@ export default defineMessages({
   },
 
   unlockLabel: {
-    id: "Task.pane.controls.unlock.label",
+    id: "ReviewTaskPane.controls.unlock.label",
     defaultMessage: "You have no locked tasks",
   },
 
