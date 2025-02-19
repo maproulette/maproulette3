@@ -345,39 +345,39 @@ export class ActiveTaskControls extends Component {
         ? this.props.getUserAppSetting(this.props.user, "isEditMode")
         : false;
       if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) && editMode) {
-        hiddenShortcuts.forEach((shortcut) => {
+        for (const shortcut of hiddenShortcuts) {
           this.props.deactivateKeyboardShortcut(
             hiddenShortcutGroup,
             shortcut,
             this.handleKeyboardShortcuts,
           );
-        });
+        }
       } else if (
         _isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
         this.props.keyboardShortcutGroups &&
         this.props.activateKeyboardShortcut &&
         !editMode
       ) {
-        hiddenShortcuts.forEach((shortcut) => {
+        for (const shortcut of hiddenShortcuts) {
           this.props.activateKeyboardShortcut(
             hiddenShortcutGroup,
             _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
             this.handleKeyboardShortcuts,
           );
-        });
+        }
       }
     }
   }
 
   componentWillUnmount() {
     if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
-      hiddenShortcuts.forEach((shortcut) => {
+      for (const shortcut of hiddenShortcuts) {
         this.props.deactivateKeyboardShortcut(
           hiddenShortcutGroup,
           shortcut,
           this.handleKeyboardShortcuts,
         );
-      });
+      }
     }
   }
 

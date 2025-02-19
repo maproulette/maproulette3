@@ -1212,9 +1212,9 @@ export const moveChallenges = function (challengeIds, toProjectId) {
     })
       .execute()
       .then(() => {
-        challengeIds.forEach((id) => {
+        for (const id of challengeIds) {
           fetchChallenge(id)(dispatch);
-        });
+        }
       })
       .catch((error) => {
         if (isSecurityError(error)) {
@@ -1376,7 +1376,7 @@ const removeChallengeKeywords = function (challengeId, oldKeywords = []) {
 const reduceChallengesFurther = function (mergedState, oldState, challengeEntities) {
   // The generic reduction will merge arrays and objects, but for some fields
   // we want to simply overwrite with the latest data.
-  challengeEntities.forEach((entity) => {
+  for (const entity of challengeEntities) {
     // Until we implement undelete, ignore deleted challenges.
     if (entity.deleted) {
       delete mergedState[entity.id];
@@ -1414,7 +1414,7 @@ const reduceChallengesFurther = function (mergedState, oldState, challengeEntiti
     if (Array.isArray(entity.presets)) {
       mergedState[entity.id].presets = entity.presets;
     }
-  });
+  }
 };
 
 // redux reducers
