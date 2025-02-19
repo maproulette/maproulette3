@@ -1,4 +1,3 @@
-import _values from "lodash/values";
 import { CooperativeType, isCooperative } from "./CooperativeType";
 
 describe("isCooperative", () => {
