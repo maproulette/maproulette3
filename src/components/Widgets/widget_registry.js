@@ -15,7 +15,7 @@ export { default as FollowingWidget } from "./FollowingWidget/FollowingWidget";
 export { default as MyTeamsWidget } from "./TeamsWidget/TeamsWidget";
 export { default as FeatureStyleLegendWidget } from "./FeatureStyleLegendWidget/FeatureStyleLegendWidget";
 export { default as TaskBundleWidget } from "./TaskBundleWidget/TaskBundleWidget";
-export { default as ReviewNearbyTasksWidget } from "./ReviewNearbyTasksWidget/ReviewNearbyTasksWidget";
+export { default as NearbyTasksWidget } from "./NearbyTasksWidget/NearbyTasksWidget";
 export { default as TagDiffWidget } from "./TagDiffWidget/TagDiffWidget";
 export { default as TaskMapWidget } from "./TaskMapWidget/TaskMapWidget";
 export { default as TaskInstructionsWidget } from "./TaskInstructionsWidget/TaskInstructionsWidget";

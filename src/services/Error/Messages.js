@@ -94,10 +94,6 @@ export default defineMessages({
     id: "Errors.task.bundleFailure",
     defaultMessage: "Unable to bundle tasks together",
   },
-  removeTaskFromBundleFailure: {
-    id: "Errors.task.removeTaskFromBundleFailure",
-    defaultMessage: "Unable to remove task from bundle",
-  },
   taskBundleCooperative: {
     id: "Errors.task.bundleCooperative",
     defaultMessage: "The main task is Cooperative. All selected tasks must be Cooperative.",
