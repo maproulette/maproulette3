@@ -20,22 +20,26 @@ class Modal extends Component {
           onClick={() => this.props.onClose && this.props.onClose()}
         />
         <div
-          className={classNames("mr-z-250 mr-fixed mr-top-0 mr-left-0", {
-            "mr-max-w-screen80": !this.props.fullScreen,
-            "mr-w-full mr-h-full": this.props.fullScreen,
-            "md:mr-w-4/5 md:mr-top-5 md:mr-left-16": this.props.extraWide,
-            "md:mr-w-2/3 md:mr-top-5 md:mr-left-16": this.props.wide,
-            "md:mr-min-w-1/3 md:mr-w-1/3 md:mr-top-5 md:mr-left-33": this.props.narrow,
-            "mr-w-full md:mr-w-1/4 md:mr-top-5 md:mr-left-37": this.props.extraNarrow,
-            "md:mr-min-w-2/5 md:mr-w-2/5 md:mr-top-15 md:mr-left-30": this.props.medium,
-            "md:mr-min-w-screen50 lg:mr-max-w-screen60 mr-w-full lg:mr-top-50 lg:mr-left-50 lg:mr--translate-1/2":
-              !this.props.extraWide &&
-              !this.props.wide &&
-              !this.props.narrow &&
-              !this.props.fullScreen &&
-              !this.props.extraNarrow &&
-              !this.props.medium,
-          })}
+          className={classNames(
+            "mr-z-250 mr-fixed",
+            "md:mr-top-50 md:mr-left-50 md:mr--translate-1/2",
+            {
+              "mr-max-w-screen80": !this.props.fullScreen,
+              "mr-w-full mr-h-full mr-top-0 mr-left-0": this.props.fullScreen,
+              "md:mr-w-4/5": this.props.extraWide,
+              "md:mr-w-2/3": this.props.wide,
+              "md:mr-min-w-1/3 md:mr-w-1/3": this.props.narrow,
+              "mr-w-full md:mr-w-1/4": this.props.extraNarrow,
+              "md:mr-min-w-2/5 md:mr-w-2/5": this.props.medium,
+              "md:mr-min-w-screen50 lg:mr-max-w-screen60 mr-w-full":
+                !this.props.extraWide &&
+                !this.props.wide &&
+                !this.props.narrow &&
+                !this.props.fullScreen &&
+                !this.props.extraNarrow &&
+                !this.props.medium,
+            },
+          )}
         >
           <div
             className={classNames(
