@@ -44,7 +44,7 @@ export default class ManageSavedFilters extends Component {
             />
           </Modal>
         </External>
-        <External data-react-clickout="exclude">
+        <External>
           <Modal
             isActive={this.props.managingFilters || false}
             onClose={this.props.cancelManagingFilters}
