@@ -10,7 +10,6 @@ import {
   AttributionControl,
   MapContainer,
   Marker,
-  ScaleControl,
   Tooltip,
   ZoomControl,
   useMap,
