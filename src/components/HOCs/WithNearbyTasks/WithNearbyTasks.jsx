@@ -7,6 +7,7 @@ import { fetchBoundedTaskMarkers } from "../../../services/Task/BoundedTask";
 import { fetchNearbyTasks } from "../../../services/Task/Task";
 import { fetchNearbyTasksInBoundingBox } from "../../../services/Task/Task";
 
+const MAX_NEARBY_TASK_LIMIT = 100;
 /**
  * WithNearbyTasks provides tasks geographically closest to the current task
  * to the wrapped component, utilizing the same object structure as
@@ -77,7 +78,9 @@ export const WithNearbyTasks = function (WrappedComponent) {
             isVirtual,
             this.props.taskId,
             excludeSelfLockedTasks,
-            100,
+            this.state.taskLimit < MAX_NEARBY_TASK_LIMIT
+              ? this.state.taskLimit
+              : MAX_NEARBY_TASK_LIMIT,
           );
 
           const tasksLength = nearbyTasks.tasks.length;
@@ -132,7 +135,7 @@ export const WithNearbyTasks = function (WrappedComponent) {
           this.props.taskId,
           excludeSelfLockedTasks,
           boundingBox,
-          100,
+          MAX_NEARBY_TASK_LIMIT,
         );
         const tasksLength = nearbyTasks.tasks?.length;
 

@@ -22,14 +22,14 @@ import { TaskStatusColors, messagesByStatus } from "../../../services/Task/TaskS
 import { buildLayerSources } from "../../../services/VisibleLayer/LayerSources";
 import tailwindConfig from "../../../tailwind.config.js";
 import BusySpinner from "../../BusySpinner/BusySpinner";
+import FitBoundsControl from "../../EnhancedMap/FitBoundsControl/FitBoundsControl";
+import FitWorldControl from "../../EnhancedMap/FitWorldControl/FitWorldControl";
 import LayerToggle from "../../EnhancedMap/LayerToggle/LayerToggle";
 import SourcedTileLayer from "../../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import WithIntersectingOverlays from "../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithTaskMarkers from "../../HOCs/WithTaskMarkers/WithTaskMarkers";
 import WithVisibleLayer from "../../HOCs/WithVisibleLayer/WithVisibleLayer";
 import messages from "./Messages";
-import FitBoundsControl from "../../EnhancedMap/FitBoundsControl/FitBoundsControl";
-import FitWorldControl from "../../EnhancedMap/FitWorldControl/FitWorldControl";
 
 const colors = resolveConfig(tailwindConfig).theme.colors;
 
