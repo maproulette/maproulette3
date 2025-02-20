@@ -10,6 +10,7 @@ import {
   AttributionControl,
   MapContainer,
   Marker,
+  ScaleControl,
   Tooltip,
   ZoomControl,
   useMap,
@@ -27,6 +28,8 @@ import WithIntersectingOverlays from "../../HOCs/WithIntersectingOverlays/WithIn
 import WithTaskMarkers from "../../HOCs/WithTaskMarkers/WithTaskMarkers";
 import WithVisibleLayer from "../../HOCs/WithVisibleLayer/WithVisibleLayer";
 import messages from "./Messages";
+import FitBoundsControl from "../../EnhancedMap/FitBoundsControl/FitBoundsControl";
+import FitWorldControl from "../../EnhancedMap/FitWorldControl/FitWorldControl";
 
 const colors = resolveConfig(tailwindConfig).theme.colors;
 
@@ -157,7 +160,6 @@ export class TaskNearbyMap extends Component {
     }
 
     const currentCenterpoint = AsMappableTask(this.props.task).calculateCenterPoint();
-
     const hasTaskMarkers = (this.props.taskMarkers?.length ?? 0) > 0;
     let coloredMarkers = null;
     if (hasTaskMarkers) {
@@ -249,6 +251,11 @@ export class TaskNearbyMap extends Component {
           <ResizeMap />
           <AttributionControl position="bottomleft" prefix={false} />
           <ZoomControl position="topright" />
+          <FitWorldControl />
+          <FitBoundsControl
+            centerPoint={currentCenterpoint}
+            centerBounds={this.props.task.boundingBox}
+          />
           <VisibleTileLayer {...this.props} zIndex={1} />
           {overlayLayers}
           <Marker
@@ -267,6 +274,21 @@ export class TaskNearbyMap extends Component {
             </MarkerClusterGroup>
           )}
         </MapContainer>
+
+        {/* Task Count Display */}
+        {hasTaskMarkers && (
+          <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
+            <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
+              <div className="mr-py-2 mr-px-3 mr-text-center">
+                <FormattedMessage
+                  {...messages.taskCountLabel}
+                  values={{ count: this.props.taskMarkers.length }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="mr-absolute mr-bottom-0 mr-mb-8 mr-w-full mr-text-center">
           <button
             className="mr-button mr-button--small mr-button--blue-fill"

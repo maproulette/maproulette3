@@ -33,4 +33,9 @@ export default defineMessages({
     id: "Widgets.TaskNearbyMap.tooltip.loadTasksInView.control",
     defaultMessage: "Load All Tasks in View",
   },
+
+  taskCountLabel: {
+    id: "Widgets.TaskNearbyMap.tooltip.taskCountLabel",
+    defaultMessage: "Tasks: {count}",
+  },
 });

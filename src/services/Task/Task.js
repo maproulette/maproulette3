@@ -781,6 +781,63 @@ export const fetchNearbyTasks = function (
 };
 
 /**
+ * Retrieve tasks geographically closest to the given task (up to the given
+ * limit) belonging to the given challenge or virtual challenge. Returns an
+ * object in clusteredTasks format with the tasks and meta data, including the
+ * challenge or virtual challenge id. Note that this does not add the results
+ * to the redux store, but simply returns them
+ */
+export const fetchNearbyTasksInBoundingBox = function (
+  challengeId,
+  isVirtualChallenge,
+  taskId,
+  excludeSelfLocked = false,
+  boundingBox,
+  limit = 5,
+) {
+  return function () {
+    const params = { limit, taskId };
+    if (excludeSelfLocked) {
+      params.excludeSelfLocked = "true";
+    }
+
+    return new Endpoint(
+      isVirtualChallenge
+        ? api.virtualChallenge.nearbyTasksWithinBoundingBox
+        : api.challenge.nearbyTasksWithinBoundingBox,
+      {
+        schema: [taskSchema()],
+        variables: {
+          challengeId,
+          left: boundingBox[0],
+          bottom: boundingBox[1],
+          right: boundingBox[2],
+          top: boundingBox[3],
+        },
+        params,
+      },
+    )
+      .execute()
+      .then((normalizedResults) => ({
+        challengeId,
+        isVirtualChallenge,
+        loading: false,
+        tasks: _map(_values(normalizedResults?.entities?.tasks ?? {}), (task) => {
+          if (task.location) {
+            // match clusteredTasks response, which returns a point with lat/lng fields
+            task.point = {
+              lng: task.location.coordinates[0],
+              lat: task.location.coordinates[1],
+            };
+          }
+
+          return task;
+        }),
+      }));
+  };
+};
+
+/**
  * Initiate deletion of tasks in the given statuses belonging to the given
  * challenge. Note that this does not wait until the tasks have been deleted
  * before resolving.
