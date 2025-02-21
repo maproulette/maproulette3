@@ -1,9 +1,6 @@
 import _compact from "lodash/compact";
-import _each from "lodash/each";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
-import _toPairs from "lodash/toPairs";
-import _values from "lodash/values";
 import { CooperativeType } from "../../services/Challenge/CooperativeType/CooperativeType";
 
 /**
@@ -120,41 +117,41 @@ export class AsCooperativeWork {
         }
 
         const diff = {};
-        _each(osmElements.get(independentOperation.data.id).tag, (tag) => {
+        for (const tag of osmElements.get(independentOperation.data.id).tag) {
           diff[tag.k] = {
             name: tag.k,
             value: tag.v,
             newValue: tag.v,
             status: "unchanged",
           };
-        });
+        }
 
-        _each(independentOperation.data.operations, (dependentOperation) => {
+        for (const dependentOperation of independentOperation.data.operations) {
           switch (dependentOperation.operation) {
             case "setTags":
-              _each(_toPairs(dependentOperation.data), (tagComponents) => {
-                const diffEntry = diff[tagComponents[0]];
+              for (const [key, value] of Object.entries(dependentOperation.data)) {
+                const diffEntry = diff[key];
                 if (!diffEntry) {
                   // New tag
-                  diff[tagComponents[0]] = {
-                    name: tagComponents[0],
+                  diff[key] = {
+                    name: key,
                     value: null,
-                    newValue: tagComponents[1],
+                    newValue: value,
                     status: "added",
                   };
-                } else if (diffEntry.value !== tagComponents[1]) {
+                } else if (diffEntry.value !== value) {
                   // Modified tag
-                  diffEntry.newValue = tagComponents[1];
+                  diffEntry.newValue = value;
                   diffEntry.status = "changed";
                 } else {
-                  diffEntry.newValue = tagComponents[1];
+                  diffEntry.newValue = value;
                   diffEntry.status = "resolved";
                 }
-              });
+              }
               break;
             case "unsetTags":
-              _each(dependentOperation.data, (tagName) => {
-                const diffEntry = diff[tagName];
+              for (const key of dependentOperation.data) {
+                const diffEntry = diff[key];
                 if (diffEntry) {
                   // Delete tag
                   diffEntry.newValue = null;
@@ -163,12 +160,12 @@ export class AsCooperativeWork {
                   diffEntry.newValue = null;
                   diffEntry.status = "resolved";
                 }
-              });
+              }
               break;
             default:
               break;
           }
-        });
+        }
 
         return diff;
       }),
@@ -201,21 +198,21 @@ export class AsCooperativeWork {
 
         if (tagEdits) {
           // Work from tag edits instead of dependent operations
-          _each(_values(tagEdits), (edit) => {
+          for (const edit of Object.values(tagEdits)) {
             if (edit.status === "added" || edit.status === "changed") {
               change.updates[edit.name] = edit.newValue;
             } else if (edit.status === "removed") {
               change.deletes.push(edit.name);
             }
-          });
+          }
         } else {
-          _each(independentOperation.data.operations, (dependentOperation) => {
+          for (const dependentOperation of independentOperation.data.operations) {
             if (dependentOperation.operation === "setTags") {
               change.updates = Object.assign(change.updates, dependentOperation.data);
             } else if (dependentOperation.operation === "unsetTags") {
               change.deletes = change.deletes.concat(dependentOperation.data);
             }
-          });
+          }
         }
 
         if (_isEmpty(change.updates) && _isEmpty(change.deletes)) {

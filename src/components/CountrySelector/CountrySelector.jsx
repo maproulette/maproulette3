@@ -1,6 +1,3 @@
-import _each from "lodash/each";
-import _map from "lodash/map";
-import _sortBy from "lodash/sortBy";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
@@ -63,14 +60,14 @@ const CountryButton = function (props) {
 };
 
 const ListCountryItems = function (props) {
-  const countryList = _sortBy(
-    _each(supportedCountries(), (country) => {
+  const countryList = supportedCountries()
+    .map((country) => {
       country.name = props.intl.formatMessage(countryMessages[country.countryCode]);
-    }),
-    "name",
-  );
+      return country;
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
-  const menuItems = _map(countryList, (country) => (
+  const menuItems = countryList.map((country) => (
     <li key={country.countryCode}>
       <a onClick={() => props.pickCountry(country.countryCode, props.closeDropdown)}>
         {country.name}

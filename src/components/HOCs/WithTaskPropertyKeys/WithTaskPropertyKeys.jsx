@@ -10,7 +10,8 @@ import { fetchPropertyKeys } from "../../../services/Challenge/Challenge";
 export const WithTaskPropertyKeys = function (WrappedComponent) {
   return class extends Component {
     state = {
-      taskPropertyKeys: null,
+      taskPropertyKeys: [],
+      loadingPropertyKeys: false,
     };
 
     getTaskPropertyKeys = () => {
@@ -21,15 +22,11 @@ export const WithTaskPropertyKeys = function (WrappedComponent) {
         fetchPropertyKeys(challengeId)
           .then((results) => {
             this.setState({ loadingPropertyKeys: false, taskPropertyKeys: _sortBy(results) });
-            return results;
           })
           .catch((error) => {
             console.log(error);
             this.setState({ loadingPropertyKeys: false, taskPropertyKeys: [] });
           });
-        return [];
-      } else {
-        return [];
       }
     };
 

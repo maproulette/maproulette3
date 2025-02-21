@@ -5,7 +5,6 @@ import classNames from "classnames";
 import L from "leaflet";
 import _clone from "lodash/clone";
 import _compact from "lodash/compact";
-import _each from "lodash/each";
 import _flatten from "lodash/flatten";
 import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
@@ -195,7 +194,8 @@ export const TaskMapContent = (props) => {
         // multiple features in a layer could match. Detect them and then
         // put them into an intuitive order
         const intraLayerMatches = [];
-        _each(layer._layers, (featureLayer) => {
+
+        for (const featureLayer of Object.values(layer._layers)) {
           if (featureLayer.toGeoJSON) {
             const featureGeojson = featureLayer.toGeoJSON();
             // Look for an overlap between the click and the feature. However, since marker
@@ -232,12 +232,12 @@ export const TaskMapContent = (props) => {
               });
             }
           }
-        });
+        }
 
         if (intraLayerMatches.length > 0) {
-          orderedFeatureLayers(intraLayerMatches).forEach((match) => {
+          for (const match of orderedFeatureLayers(intraLayerMatches)) {
             candidateLayers.set(match.description, match);
-          });
+          }
         }
       }
     });
@@ -467,9 +467,9 @@ export const TaskMapContent = (props) => {
   const generateDirectionalityMarkers = () => {
     const markers = [];
     const allFeatures = features;
-    _each(allFeatures, (feature, featureIndex) => {
+    for (const [featureIndex, feature] of allFeatures.entries()) {
       if (!feature.properties || !feature.properties.oneway) {
-        return;
+        continue;
       }
 
       const styles = AsSimpleStyleableFeature(
@@ -500,7 +500,7 @@ export const TaskMapContent = (props) => {
           );
         }
       }
-    });
+    }
 
     setDirectionalityIndicators({
       id: "directionality-indicators",

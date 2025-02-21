@@ -1,4 +1,3 @@
-import _each from "lodash/each";
 import _isPlainObject from "lodash/isPlainObject";
 import _isString from "lodash/isString";
 import _omit from "lodash/omit";
@@ -310,9 +309,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     saveTaskTags: (task, tags) => {
       if (task.bundleId) {
         dispatch(fetchTaskBundle(task.bundleId), false).then((taskBundle) => {
-          _each(taskBundle.tasks, (task) => {
+          for (const task of taskBundle.tasks) {
             dispatch(updateTaskTags(task.id, tags));
-          });
+          }
         });
       } else {
         dispatch(updateTaskTags(task.id, tags));

@@ -3,7 +3,6 @@ import geojsontoosm from "geojsontoosm";
 import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
 import _compact from "lodash/compact";
-import _each from "lodash/each";
 import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
 import _groupBy from "lodash/groupBy";
@@ -181,11 +180,13 @@ export const challengeResultEntity = function (normalizedChallengeResults) {
  * Add or update challenge data in the redux store
  */
 export const receiveChallenges = function (normalizedEntities, status = RequestStatus.success) {
-  _each(normalizedEntities.challenges, (c) => {
-    if (c.dataOriginDate) {
-      c.dataOriginDate = format(parseISO(c.dataOriginDate), "yyyy-MM-dd");
+  if (normalizedEntities.challenges) {
+    for (const c of Object.values(normalizedEntities.challenges)) {
+      if (c.dataOriginDate) {
+        c.dataOriginDate = format(parseISO(c.dataOriginDate), "yyyy-MM-dd");
+      }
     }
-  });
+  }
 
   return {
     type: RECEIVE_CHALLENGES,
@@ -253,9 +254,17 @@ export const fetchPreferredChallenges = function (limit = RESULTS_PER_PAGE) {
         const result = normalizedResults.result;
         const challenges = normalizedResults.entities.challenges;
 
-        _each(result.popular, (challenge) => (challenges[challenge].popular = true));
-        _each(result.newest, (challenge) => (challenges[challenge].newest = true));
-        _each(result.featured, (challenge) => (challenges[challenge].featured = true));
+        for (const challenge of result.popular) {
+          challenges[challenge].popular = true;
+        }
+
+        for (const challenge of result.newest) {
+          challenges[challenge].newest = true;
+        }
+
+        for (const challenge of result.featured) {
+          challenges[challenge].featured = true;
+        }
 
         dispatch(receiveChallenges(normalizedResults.entities));
 
@@ -854,13 +863,11 @@ export const fetchChallenges = function (challengeIds, suppressReceive = false) 
     })
       .execute()
       .then((normalizedResults) => {
-        // If a challenge has no virtual parents then the field will not be set
-        // by server, so we need to indicate it's empty
-        _each(normalizedResults.entities.challenges, (challenge) => {
+        for (const challenge of normalizedResults.entities.challenges) {
           if (challenge.virtualParents === undefined) {
             challenge.virtualParents = [];
           }
-        });
+        }
 
         if (!suppressReceive) {
           dispatch(receiveChallenges(normalizedResults.entities));
@@ -1212,9 +1219,9 @@ export const moveChallenges = function (challengeIds, toProjectId) {
     })
       .execute()
       .then(() => {
-        challengeIds.forEach((id) => {
+        for (const id of challengeIds) {
           fetchChallenge(id)(dispatch);
-        });
+        }
       })
       .catch((error) => {
         if (isSecurityError(error)) {
@@ -1376,7 +1383,7 @@ const removeChallengeKeywords = function (challengeId, oldKeywords = []) {
 const reduceChallengesFurther = function (mergedState, oldState, challengeEntities) {
   // The generic reduction will merge arrays and objects, but for some fields
   // we want to simply overwrite with the latest data.
-  challengeEntities.forEach((entity) => {
+  for (const entity of challengeEntities) {
     // Until we implement undelete, ignore deleted challenges.
     if (entity.deleted) {
       delete mergedState[entity.id];
@@ -1414,7 +1421,7 @@ const reduceChallengesFurther = function (mergedState, oldState, challengeEntiti
     if (Array.isArray(entity.presets)) {
       mergedState[entity.id].presets = entity.presets;
     }
-  });
+  }
 };
 
 // redux reducers

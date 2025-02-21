@@ -1,6 +1,5 @@
 import { startOfDay, subMonths } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
-import _each from "lodash/each";
 import _isObject from "lodash/isObject";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -471,13 +470,13 @@ export const fetchTopChallenges = function (userId, startDate, limit = 5) {
             _reverse(_sortBy(_toPairs(challenges), (idAndChallenge) => idAndChallenge[1].activity)),
             (idAndChallenge) => parseInt(idAndChallenge[0], 10),
           );
-        }
 
-        // Remove the user-specific activity score before adding this challenge
-        // to the general redux store.
-        _each(challenges, (challenge) => {
-          delete challenge.activity;
-        });
+          // Remove the user-specific activity score before adding this challenge
+          // to the general redux store.
+          for (const challenge of Object.values(challenges)) {
+            delete challenge.activity;
+          }
+        }
 
         userCache.set(
           variables,
