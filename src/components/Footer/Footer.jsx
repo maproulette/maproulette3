@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import img from "../../../images/openstreetmap-logo.svg";
+import img from "../../../images/osmus-logo.svg";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
 
