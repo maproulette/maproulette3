@@ -19,14 +19,14 @@ Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maprou
 * Configure Biome to organize imports when running 'yarn run format' by @jake-low in https://github.com/maproulette/maproulette3/pull/2570
 * Bump vitest from 2.1.2 to 2.1.9 by @dependabot in https://github.com/maproulette/maproulette3/pull/2537
 * Bump nanoid from 3.3.7 to 3.3.8 by @dependabot in https://github.com/maproulette/maproulette3/pull/2503
-* Add missing newline at EOF in src/styles/components/forms.css by jake-low
-* Replace lodash _isArray() with Array.isArray() by jake-low
-* Replace lodash _isUndefined() with normal equality check by jake-low
-* Replace lodash _isFunction() with typeof or ?.() by jake-low
-* Replace lodash _isBoolean() with typeof value === 'boolean' by jake-low
-* Replace lodash _isFinite() with Number.isFinite() by jake-low
-* Replace lodash _indexOf() with Array.prototype.indexOf() by jake-low
-* Replace lodash _first() and _last() with ordinary indexing by jake-low
+* Add missing newline at EOF in src/styles/components/forms.css by @jake-low
+* Replace lodash _isArray() with Array.isArray() by @jake-low
+* Replace lodash _isUndefined() with normal equality check by @jake-low
+* Replace lodash _isFunction() with typeof or ?.() by @jake-low
+* Replace lodash _isBoolean() with typeof value === 'boolean' by @jake-low
+* Replace lodash _isFinite() with Number.isFinite() by @jake-low
+* Replace lodash _indexOf() with Array.prototype.indexOf() by @jake-low
+* Replace lodash _first() and _last() with ordinary indexing by @jake-low
 * Bump vite from 5.4.8 to 5.4.12 by @dependabot in https://github.com/maproulette/maproulette3/pull/2522
 * fix project picker modal filtering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2553
 * add redirect to browse challenge page when task doesnt exist by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2554
