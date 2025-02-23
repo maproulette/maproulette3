@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.5] - 2025-02-23
+Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.2)
+
+## What's Changed
+* improve footer and add openstreetmaps image by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2561
+* remove unused property in WebSocketClient.js by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2574
+* Fix bug in autosuggest text box causing review widget to crash by @jake-low in https://github.com/maproulette/maproulette3/pull/2573
+* improve landing page hero by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2547
+* Refactor SuperAdmin dashboard table filtering by @jake-low in https://github.com/maproulette/maproulette3/pull/2572
+* add new location widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2555
+* Add .editorconfig and .prettierrc to fix formatting discrepancies in VSCode by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2566
+* replace duplicate string transifex by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2559
+* Configure Biome to organize imports when running 'yarn run format' by @jake-low in https://github.com/maproulette/maproulette3/pull/2570
+* Bump vitest from 2.1.2 to 2.1.9 by @dependabot in https://github.com/maproulette/maproulette3/pull/2537
+* Bump nanoid from 3.3.7 to 3.3.8 by @dependabot in https://github.com/maproulette/maproulette3/pull/2503
+* Add missing newline at EOF in src/styles/components/forms.css by @jake-low
+* Replace lodash _isArray() with Array.isArray() by @jake-low
+* Replace lodash _isUndefined() with normal equality check by @jake-low
+* Replace lodash _isFunction() with typeof or ?.() by @jake-low
+* Replace lodash _isBoolean() with typeof value === 'boolean' by @jake-low
+* Replace lodash _isFinite() with Number.isFinite() by @jake-low
+* Replace lodash _indexOf() with Array.prototype.indexOf() by @jake-low
+* Replace lodash _first() and _last() with ordinary indexing by @jake-low
+* Bump vite from 5.4.8 to 5.4.12 by @dependabot in https://github.com/maproulette/maproulette3/pull/2522
+* fix project picker modal filtering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2553
+* add redirect to browse challenge page when task doesnt exist by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2554
+* fix feature layer toggling bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2557
+* Change default textarea size to be 5.5 lines (125 px) by @watmildon in https://github.com/maproulette/maproulette3/pull/2562
+* fix osm data warning and fix infinite loop by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2556
+* fix changeset implementation in OSM History Widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2560
+* resolves websocket errors in tests by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2525 
+* remove codecov.yml by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2565
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.4...v3.16.5
+
 ## [v3.16.4] - 2025-02-13
 Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.2)
 
