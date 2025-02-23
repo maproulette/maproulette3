@@ -8,7 +8,7 @@ The format is based on
 Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.2)
 
 ## What's Changed
-* improve footer and add openstreetmaps image by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2561 collinbeczak
+* improve footer and add openstreetmaps image by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2561
 * remove unused property in WebSocketClient.js by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2574
 * Fix bug in autosuggest text box causing review widget to crash by @jake-low in https://github.com/maproulette/maproulette3/pull/2573
 * improve landing page hero by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2547
@@ -34,8 +34,8 @@ Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maprou
 * Change default textarea size to be 5.5 lines (125 px) by @watmildon in https://github.com/maproulette/maproulette3/pull/2562
 * fix osm data warning and fix infinite loop by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2556
 * fix changeset implementation in OSM History Widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2560
-* resolves websocket errors in tests by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2525 CollinBeczak
-* remove codecov.yml (#2565)
+* resolves websocket errors in tests by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2525 
+* remove codecov.yml by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2565
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.4...v3.16.5
 
