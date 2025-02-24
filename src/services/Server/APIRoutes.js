@@ -55,6 +55,9 @@ const apiRoutes = (factory) => {
       tasks: factory.get("/challenge/:id/tasks"),
       taskClusters: factory.put("/taskCluster"),
       nearbyTasks: factory.get("/challenge/:challengeId/tasksNearby/:taskId"),
+      nearbyTasksWithinBoundingBox: factory.get(
+        "/challenge/:challengeId/nearby/box/:left/:bottom/:right/:top",
+      ),
       deleteTasks: factory.delete("/challenge/:id/tasks"),
       randomTask: factory.get("/challenge/:id/tasks/randomTasks", {
         noCache: true,
@@ -89,6 +92,9 @@ const apiRoutes = (factory) => {
       edit: factory.put("/virtualchallenge/:id"),
       randomTask: factory.get("/virtualchallenge/:id/task", { noCache: true }),
       nearbyTasks: factory.get("/virtualchallenge/:challengeId/tasksNearby/:taskId"),
+      nearbyTasksWithinBoundingBox: factory.get(
+        "/virtualchallenge/:challengeId/nearby/box/:left/:bottom/:right/:top",
+      ),
     },
     tasks: {
       random: factory.get("/tasks/random", { noCache: true }),
