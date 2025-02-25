@@ -35,7 +35,7 @@ export default defineMessages({
   },
 
   deleteSelectedLabel: {
-    id: "Inbox.controls.deleteSelected.label",
+    id: "Admin.ManageChallengeSnapshots.deleteSnapshot.label",
     defaultMessage: "Delete",
   },
 
@@ -55,22 +55,22 @@ export default defineMessages({
   },
 
   challengeNameLabel: {
-    id: "Inbox.tableHeaders.challengeName",
+    id: "Activity.item.challenge",
     defaultMessage: "Challenge",
   },
 
   isReadLabel: {
-    id: "Inbox.tableHeaders.isRead",
+    id: "Grant.Role.read",
     defaultMessage: "Read",
   },
 
   taskIdLabel: {
-    id: "Inbox.tableHeaders.taskId",
+    id: "Activity.item.task",
     defaultMessage: "Task",
   },
 
   controlsLabel: {
-    id: "Inbox.tableHeaders.controls",
+    id: "Admin.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
 
@@ -161,12 +161,12 @@ export default defineMessages({
   },
 
   deleteNotificationLabel: {
-    id: "Inbox.notification.controls.deleteNotification.label",
+    id: "Admin.ManageChallengeSnapshots.deleteSnapshot.label",
     defaultMessage: "Delete",
   },
 
   viewTaskLabel: {
-    id: "Inbox.notification.controls.viewTask.label",
+    id: "CommentList.controls.viewTask.label",
     defaultMessage: "View Task",
   },
 

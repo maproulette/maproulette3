@@ -1,6 +1,5 @@
 import Form from "@rjsf/core";
 import _cloneDeep from "lodash/cloneDeep";
-import _head from "lodash/head";
 import _isEmpty from "lodash/isEmpty";
 import { Component, createRef } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
@@ -245,7 +244,7 @@ export class TaskPropertyQueryBuilder extends Component {
         >
           {this.state.errors && (
             <div className="mr-ml-4 mr-mb-4 mr-text-red-light">
-              {this.props.intl.formatMessage(messages[_head(this.state.errors)])}
+              {this.props.intl.formatMessage(messages[this.state.errors[0]])}
             </div>
           )}
           {!this.props.updateAsChange && (

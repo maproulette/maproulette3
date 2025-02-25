@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   otherOptions: {
-    id: "Task.controls.step1.otherOptions",
+    id: "Challenge.keywords.other",
     defaultMessage: "Other",
   },
 

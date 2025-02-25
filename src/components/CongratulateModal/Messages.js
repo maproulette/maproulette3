@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   dismiss: {
-    id: "CongratulateModal.control.dismiss.label",
+    id: "ChallengeEndModal.control.dismiss.label",
     defaultMessage: "Continue",
   },
 });

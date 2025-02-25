@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _kebabCase from "lodash/kebabCase";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
@@ -346,7 +345,7 @@ const AttachedComment = function (props) {
 };
 
 const ViewTask = function (props) {
-  if (!_isFinite(props.notification.challengeId)) {
+  if (!Number.isFinite(props.notification.challengeId)) {
     return null;
   }
   const taskSpecific =
@@ -386,7 +385,10 @@ const ViewTask = function (props) {
 };
 
 const ViewChallengeAdmin = function (props) {
-  if (!_isFinite(props.notification.challengeId) || !_isFinite(props.notification.projectId)) {
+  if (
+    !Number.isFinite(props.notification.challengeId) ||
+    !Number.isFinite(props.notification.projectId)
+  ) {
     return null;
   }
 

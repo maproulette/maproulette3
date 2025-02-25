@@ -6,7 +6,6 @@ import _find from "lodash/find";
 import _findIndex from "lodash/findIndex";
 import _intersection from "lodash/intersection";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
 import _map from "lodash/map";
@@ -147,7 +146,7 @@ export const migrateWidgetGridConfiguration = function (
 ) {
   // Grids lacking any version number cannot be migrated. Reset to default
   // configuration.
-  if (!_isFinite(originalConfiguration.dataModelVersion)) {
+  if (!Number.isFinite(originalConfiguration.dataModelVersion)) {
     return resetGridConfigurationToDefault(originalConfiguration, generateDefaultConfiguration);
   }
 

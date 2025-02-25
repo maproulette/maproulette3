@@ -34,7 +34,7 @@ export default defineMessages({
     defaultMessage: "No user found with that username.",
   },
   userFollowFailure: {
-    id: "Errors.user.genericFollowFailure",
+    id: "Errors.team.genericFailure",
     defaultMessage: "Failure{details}",
   },
 
@@ -58,7 +58,7 @@ export default defineMessages({
     defaultMessage: "No tasks remain in this challenge.",
   },
   taskSaveFailure: {
-    id: "Errors.task.saveFailure",
+    id: "Errors.project.saveFailure",
     defaultMessage: "Unable to save your changes{details}",
   },
   taskUpdateFailure: {

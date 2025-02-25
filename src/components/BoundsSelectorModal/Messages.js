@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   header: {
-    id: "BoundsSelectorModal.header",
+    id: "BoundsSelectorModal.control.dismiss.label",
     defaultMessage: "Select Bounds",
   },
 

@@ -8,7 +8,6 @@ import _compact from "lodash/compact";
 import _each from "lodash/each";
 import _flatten from "lodash/flatten";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
@@ -79,7 +78,11 @@ export const TaskMapContent = (props) => {
   const [showTaskFeatures, setShowTaskFeatures] = useState(true);
   const [osmData, setOsmData] = useState(null);
   const [showOSMData, setShowOSMData] = useState(false);
-  const [showOSMElements, setShowOSMElements] = useState({ nodes: true, ways: true, areas: true });
+  const [showOSMElements, setShowOSMElements] = useState({
+    nodes: true,
+    ways: true,
+    areas: true,
+  });
   const [osmDataLoading, setOsmDataLoading] = useState(false);
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null);
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null);
@@ -264,43 +267,62 @@ export const TaskMapContent = (props) => {
     setShowTaskFeatures((prevState) => !prevState);
   };
 
-  const fetchOSMData = () => {
-    setOsmDataLoading(true);
-    props.fetchOSMData(map.getBounds().toBBoxString()).then((xmlData) => {
-      // Indicate the map should skip fitting to bounds as the OSM data could
-      // extend beyond the current view and we don't want the map to zoom out
-      setOsmData(xmlData);
+  const fetchOSMData = async () => {
+    try {
+      if (showOSMData) {
+        const bounds = map.getBounds()?.toBBoxString();
+        if (!bounds) {
+          throw new Error("Invalid map bounds");
+        }
+
+        const xmlData = await props.fetchOSMData(bounds);
+        setOsmData(xmlData);
+        setShowOSMData(true);
+      } else {
+        setOsmData(null);
+        setShowOSMData(false);
+      }
+    } catch (error) {
+      console.error("Error handling OSM data:", error);
+      setOsmData(null);
+      setShowOSMData(false);
+    } finally {
       setOsmDataLoading(false);
-    });
+    }
   };
 
   /**
    * Invoked by LayerToggle when the user wishes to toggle visibility of
    * OSM data on or off.
    */
-  const toggleOSMDataVisibility = () => {
+  const toggleOSMDataVisibility = async () => {
+    // Prevent multiple requests while loading
     if (osmDataLoading) {
       return;
     }
 
     const loadOSMData = !showOSMData;
     setOsmDataLoading(true);
-    setShowOSMData(loadOSMData);
 
-    if (loadOSMData) {
-      props
-        .fetchOSMData(map.getBounds().toBBoxString())
-        .then((xmlData) => {
-          setOsmData(xmlData);
-        })
-        .catch((error) => {
-          console.error("Error fetching OSM data:", error);
-        })
-        .finally(() => {
-          setOsmDataLoading(false);
-        });
-    } else {
+    try {
+      if (loadOSMData) {
+        const bounds = map.getBounds()?.toBBoxString();
+        if (!bounds) {
+          throw new Error("Invalid map bounds");
+        }
+
+        const xmlData = await props.fetchOSMData(bounds);
+        setOsmData(xmlData);
+        setShowOSMData(true);
+      } else {
+        setOsmData(null);
+        setShowOSMData(false);
+      }
+    } catch (error) {
+      console.error("Error handling OSM data:", error);
       setOsmData(null);
+      setShowOSMData(false);
+    } finally {
       setOsmDataLoading(false);
     }
   };
@@ -316,7 +338,7 @@ export const TaskMapContent = (props) => {
    * Mapillary markers on or off.
    */
   const toggleMapillaryVisibility = async () => {
-    const isVirtual = _isFinite(props.virtualChallengeId);
+    const isVirtual = Number.isFinite(props.virtualChallengeId);
     const challengeId = isVirtual ? props.virtualChallengeId : props.challenge.id;
 
     // If enabling layer, fetch fresh data. This allows users to toggle the
@@ -359,7 +381,7 @@ export const TaskMapContent = (props) => {
    * OpenStreetCam markers on or off.
    */
   const toggleOpenStreetCamVisibility = async () => {
-    const isVirtual = _isFinite(props.virtualChallengeId);
+    const isVirtual = Number.isFinite(props.virtualChallengeId);
     const challengeId = isVirtual ? props.virtualChallengeId : props.challenge.id;
     // If enabling layer, fetch fresh data. This allows users to toggle the
     // layer off and on to refresh the data, e.g. if they have moved the map
@@ -426,7 +448,7 @@ export const TaskMapContent = (props) => {
     if (showOSMData && !osmData) {
       fetchOSMData();
     }
-  }, [props, osmData]);
+  }, [showOSMData, osmData]);
 
   useEffect(() => {
     if (features.length !== 0) {
@@ -625,7 +647,11 @@ export const TaskMapContent = (props) => {
   }
 
   return (
-    <div className={classNames("task-map task", { "full-screen-map": props.isMobile })}>
+    <div
+      className={classNames("task-map task", {
+        "full-screen-map": props.isMobile,
+      })}
+    >
       <LayerToggle
         {...props}
         showTaskFeatures={showTaskFeatures}
@@ -681,7 +707,11 @@ const TaskMap = (props) => {
   };
 
   return (
-    <div className={classNames("task-map task", { "full-screen-map": props.isMobile })}>
+    <div
+      className={classNames("task-map task", {
+        "full-screen-map": props.isMobile,
+      })}
+    >
       <MapContainer
         taskBundle={props.taskBundle}
         center={props.centerPoint}

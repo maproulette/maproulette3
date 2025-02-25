@@ -2,7 +2,6 @@ import _debounce from "lodash/debounce";
 import _includes from "lodash/includes";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFunction from "lodash/isFunction";
 import _omit from "lodash/omit";
 import { Component } from "react";
 import { connect } from "react-redux";
@@ -150,18 +149,14 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     // as well. The assumption is that they are configured to search
     // different entities (e.g. one searches projects and the other
     // searches challenges)
-    if (_isFunction(ownProps.setSearch)) {
-      ownProps.setSearch(query, searchName);
-    }
+    ownProps.setSearch?.(query, searchName);
   },
 
   clearSearch: (searchName) => {
     dispatch(clearSearch(searchName));
 
     // If multiple WithSearch HOCs are chained, pass it up
-    if (_isFunction(ownProps.clearSearch)) {
-      ownProps.clearSearch(searchName);
-    }
+    ownProps.clearSearch?.(searchName);
   },
 
   clearSearchDispatch: (searchName) => {
@@ -218,9 +213,7 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     // different entities (e.g. one pages projects and the other
     // pages challenges). We want to pass through the search groups that
     // we want setSearchPage to apply to.
-    if (_isFunction(ownProps.setSearchPage)) {
-      ownProps.setSearchPage(page, applyToSearchGroups);
-    }
+    ownProps.setSearchPage?.(page, applyToSearchGroups);
   },
 
   setSearchFilters: (filterCriteria) => {

@@ -10,17 +10,17 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.ReviewNearbyTasksWidget.reviewTaskTitle",
+    id: "Widgets.ReviewNearbyTasksWidget.label",
     defaultMessage: "Nearby Tasks",
   },
 
   filterListLabel: {
-    id: "Widgets.ReviewNearbyTasksWidget.controls.filterList.label",
+    id: "Admin.manageTasks.controls.filterList.label",
     defaultMessage: "Filter By:",
   },
 
   clearFiltersLabel: {
-    id: "Widgets.ReviewNearbyTasksWidget.controls.clearFilters.label",
+    id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",
   },
 
@@ -35,12 +35,12 @@ export default defineMessages({
   },
 
   statusLabel: {
-    id: "Widgets.ReviewNearbyTasksWidget.popup.fields.status.label",
+    id: "Admin.Task.fields.status.label",
     defaultMessage: "Status:",
   },
 
   priorityLabel: {
-    id: "Widgets.ReviewNearbyTasksWidget.popup.fields.priority.label",
+    id: "TaskConfirmationModal.priority.label",
     defaultMessage: "Priority:",
   },
 

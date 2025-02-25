@@ -5,12 +5,12 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   label: {
-    id: "Widgets.TagDiffWidget.label",
+    id: "Challenge.cooperativeType.tags",
     defaultMessage: "Tag Fix",
   },
 
   title: {
-    id: "Widgets.TagDiffWidget.title",
+    id: "TagDiffVisualization.justChangesHeader",
     defaultMessage: "Proposed OSM Tag Changes",
   },
 

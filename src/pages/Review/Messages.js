@@ -30,7 +30,7 @@ export default defineMessages({
   },
 
   volunteerAsReviewer: {
-    id: "Review.Dashboard.volunteerAsReviewer.label",
+    id: "Profile.form.isReviewer.label",
     defaultMessage: "Volunteer as a Reviewer",
   },
 

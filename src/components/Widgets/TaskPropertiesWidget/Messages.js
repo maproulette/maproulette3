@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.TaskPropertiesWidget.title",
+    id: "Widgets.TaskPropertiesWidget.label",
     defaultMessage: "Task Properties",
   },
 

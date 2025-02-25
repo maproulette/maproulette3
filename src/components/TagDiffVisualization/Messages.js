@@ -65,12 +65,12 @@ export default defineMessages({
   },
 
   saveLabel: {
-    id: "TagDiffVisualization.controls.saveEdits.label",
+    id: "Admin.EditChallenge.form.taskPropertyStyles.close",
     defaultMessage: "Done",
   },
 
   cancelLabel: {
-    id: "TagDiffVisualization.controls.cancelEdits.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 

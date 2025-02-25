@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   difficulty: {
-    id: "Challenge.result.difficulty.label",
+    id: "Challenge.fields.difficulty.label",
     defaultMessage: "Difficulty",
   },
 
@@ -15,12 +15,12 @@ export default defineMessages({
   },
 
   save: {
-    id: "Challenge.controls.save.label",
+    id: "Admin.EditProject.controls.save.label",
     defaultMessage: "Save",
   },
 
   start: {
-    id: "Challenge.controls.start.label",
+    id: "Admin.TaskAnalysisTable.controls.startTask.label",
     defaultMessage: "Start",
   },
 

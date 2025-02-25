@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isNumber";
 import { connect } from "react-redux";
 import {
   CHALLENGES_PREFERENCE_GROUP,
@@ -19,14 +18,14 @@ const WithChallengePreferences = (WrappedComponent) =>
   connect(mapStateToProps, mapDispatchToProps)(WrappedComponent);
 
 export const mapStateToProps = (state, ownProps) => {
-  const isVirtual = _isFinite(ownProps.virtualChallengeId);
+  const isVirtual = Number.isFinite(ownProps.virtualChallengeId);
   const concreteChallengeId = ownProps?.challenge?.id ?? ownProps.challengeId;
   const challengeId = isVirtual ? ownProps.virtualChallengeId : concreteChallengeId;
   const taskLoadMethod =
     ownProps.user?.properties?.mr3Frontend?.settings?.loadMethod || TaskLoadMethod.random;
   const mappedProps = {};
 
-  if (_isFinite(challengeId)) {
+  if (Number.isFinite(challengeId)) {
     mappedProps.minimizeChallenge =
       state.currentPreferences?.[preferenceGroup(isVirtual)]?.[challengeId]?.minimize ?? false;
 

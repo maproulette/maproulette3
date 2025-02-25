@@ -5,17 +5,17 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   label: {
-    id: "Widgets.ChallengeListWidget.label",
+    id: "Admin.ProjectCard.tabs.challenges.label",
     defaultMessage: "Challenges",
   },
 
   title: {
-    id: "Widgets.ChallengeListWidget.title",
+    id: "Admin.ProjectCard.tabs.challenges.label",
     defaultMessage: "Challenges",
   },
 
   searchPlaceholder: {
-    id: "Widgets.ChallengeListWidget.search.placeholder",
+    id: "Admin.VirtualProject.ChallengeList.search.placeholder",
     defaultMessage: "Search",
   },
 
@@ -25,12 +25,12 @@ export default defineMessages({
   },
 
   exportCSVLabel: {
-    id: "Admin.manageProjectChallenges.controls.exportCSV.label",
+    id: "Admin.Project.controls.export.label",
     defaultMessage: "Export CSV",
   },
 
   exportMapperReviewCSVLabel: {
-    id: "Admin.manageProjectChallenges.controls.exportReviewCSV.label",
+    id: "Admin.Project.controls.exportReviewCSV.label",
     defaultMessage: "Export Mapper Review CSV",
   },
 

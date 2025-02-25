@@ -2,7 +2,6 @@ import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
 import _merge from "lodash/merge";
 import _noop from "lodash/noop";
@@ -162,7 +161,7 @@ export class TaskConfirmationModal extends Component {
       return <FormattedMessage {...messages.inReviewHeader} />;
     }
 
-    if (_isUndefined(this.props.needsRevised)) {
+    if (this.props.needsRevised === undefined) {
       if (applyingTagChanges) {
         return <FormattedMessage {...messages.reviewChangesHeader} />;
       }
@@ -177,7 +176,7 @@ export class TaskConfirmationModal extends Component {
   };
 
   render() {
-    const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised);
+    const reviewConfirmation = this.props.inReview || this.props.needsRevised !== undefined;
     const loadingNearby =
       this.props.loadBy === TaskLoadMethod.proximity ||
       this.props.loadBy === TaskReviewLoadMethod.nearby;
@@ -480,7 +479,7 @@ export class TaskConfirmationModal extends Component {
                     </div>
                   )}
 
-                  {reviewConfirmation && _isUndefined(this.props.needsRevised) && (
+                  {reviewConfirmation && this.props.needsRevised === undefined && (
                     <Fragment>
                       <div className="mr-mt-8 mr-text-sm">
                         <div className="mr-mr-4">
@@ -564,7 +563,7 @@ export class TaskConfirmationModal extends Component {
                   )}
 
                   {reviewConfirmation &&
-                    !_isUndefined(this.props.needsRevised) &&
+                    this.props.needsRevised !== undefined &&
                     this.props.fromInbox && (
                       <div className="form mr-mt-8">
                         <span className="mr-mr-4">
@@ -633,7 +632,7 @@ export class TaskConfirmationModal extends Component {
           )}
           {!this.props.inReview &&
             this.state.showInstructions &&
-            _isUndefined(this.props.needsRevised) && (
+            this.props.needsRevised === undefined && (
               <InstructionsOverlay
                 {...this.props}
                 close={() =>

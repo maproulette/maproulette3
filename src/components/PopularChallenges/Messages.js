@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   noChallenges: {
-    id: "PopularChallenges.none",
+    id: "Admin.ChallengeList.noChallenges",
     defaultMessage: "No Challenges",
   },
 });

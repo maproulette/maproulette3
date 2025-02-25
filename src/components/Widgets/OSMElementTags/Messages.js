@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.OSMElementTagsWidget.title",
+    id: "Widgets.OSMElementTagsWidget.label",
     defaultMessage: "OSM Element Tags",
   },
 });

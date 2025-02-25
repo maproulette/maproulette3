@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import { Component } from "react";
 import AppErrors from "../../../services/Error/AppErrors";
 
@@ -50,8 +49,8 @@ const WithUserLocation = function (WrappedComponent) {
         this.getUserCenterpoint(user).then((centerpoint) => {
           if (
             !centerpoint ||
-            !_isFinite(centerpoint.latitude) ||
-            !_isFinite(centerpoint.longitude)
+            !Number.isFinite(centerpoint.latitude) ||
+            !Number.isFinite(centerpoint.longitude)
           ) {
             reject(AppErrors.user.missingHomeLocation);
             return;

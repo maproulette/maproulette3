@@ -10,12 +10,12 @@ export default defineMessages({
   },
 
   approved: {
-    id: "Task.reviewStatus.approved",
+    id: "Notification.type.review.approved",
     defaultMessage: "Approved",
   },
 
   rejected: {
-    id: "Task.reviewStatus.rejected",
+    id: "Task.reviewStatus.meta-rejected",
     defaultMessage: "Needs Revision",
   },
 
@@ -40,7 +40,7 @@ export default defineMessages({
   },
 
   unnecessary: {
-    id: "Task.reviewStatus.unnecessary",
+    id: "Task.reviewStatus.meta-unnecessary",
     defaultMessage: "Unnecessary",
   },
 
@@ -55,7 +55,7 @@ export default defineMessages({
   },
 
   metaApproved: {
-    id: "Task.reviewStatus.meta-approved",
+    id: "Notification.type.review.approved",
     defaultMessage: "Approved",
   },
 
@@ -65,7 +65,7 @@ export default defineMessages({
   },
 
   metaApprovedWithFixes: {
-    id: "Task.reviewStatus.meta-approvedWithFixes",
+    id: "Task.reviewStatus.approvedWithFixes",
     defaultMessage: "Approved with Fixes",
   },
 
@@ -75,7 +75,7 @@ export default defineMessages({
   },
 
   metaUnset: {
-    id: "Task.reviewStatus.meta-unset",
+    id: "Review.tableFilter.metaReviewStatus.metaUnreviewed",
     defaultMessage: "Unreviewed",
   },
 

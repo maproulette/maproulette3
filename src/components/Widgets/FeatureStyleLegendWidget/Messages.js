@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.FeatureStyleLegendWidget.title",
+    id: "Widgets.FeatureStyleLegendWidget.label",
     defaultMessage: "Feature Style Legend",
   },
 });

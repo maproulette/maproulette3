@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { connect } from "react-redux";
@@ -9,11 +8,11 @@ const _LoadRandomChallengeTask = class extends Component {
   componentDidMount() {
     const challengeId = parseInt(this.props.match?.params?.challengeId, 10);
 
-    if (_isFinite(challengeId)) {
+    if (Number.isFinite(challengeId)) {
       this.props
         .loadRandomTaskFromChallenge(challengeId)
         .then((task) => {
-          if (_isFinite(task?.id)) {
+          if (Number.isFinite(task?.id)) {
             this.props.history.replace(`/challenge/${challengeId}/task/${task.id}`);
           } else {
             this.props.history.push("/browse/challenges");

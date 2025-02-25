@@ -17,7 +17,7 @@ export default defineMessages({
     defaultMessage: "Expert",
   },
   any: {
-    id: "Challenge.difficulty.any",
+    id: "Admin.EditChallenge.form.overpassQL.target.none",
     defaultMessage: "Any",
   },
 });

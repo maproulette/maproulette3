@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   next: {
-    id: "StepNavigation.controls.next.label",
+    id: "IntlTable.next.label",
     defaultMessage: "Next",
   },
 

@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   fixedTooltip: {
-    id: "Task.controls.fixed.tooltip",
+    id: "Task.controls.fixed.label",
     defaultMessage: "I fixed it!",
   },
 });

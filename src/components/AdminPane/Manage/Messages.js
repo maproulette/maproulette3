@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   virtualHeader: {
-    id: "Admin.manage.virtual",
+    id: "Admin.EditProject.form.isVirtual.label",
     defaultMessage: "Virtual",
   },
 

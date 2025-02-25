@@ -1,6 +1,5 @@
 import _each from "lodash/each";
 import _filter from "lodash/filter";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _uniq from "lodash/uniq";
@@ -26,7 +25,7 @@ export class AsManager extends AsEndUser {
     }
 
     const osmId = this.user?.osmProfile?.id;
-    return _isFinite(osmId) && osmId === project.owner;
+    return Number.isFinite(osmId) && osmId === project.owner;
   }
 
   /**

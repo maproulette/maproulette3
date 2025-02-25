@@ -16,7 +16,7 @@ const FundraisingNotices = function (props) {
       <span className="mr-flex mr-items-center">
         <SvgSymbol
           sym="icon-donation"
-          viewBox="0 0 40 50"
+          viewBox="0 0 40 40"
           className="mr-w-10 mr-w-10 mr-cursor-pointer mr-mx-4"
         />
         <MarkdownContent markdown={notice.message} className="mr-markdown--base" />

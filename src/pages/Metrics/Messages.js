@@ -35,12 +35,12 @@ export default defineMessages({
   },
 
   reviewedTasksTitle: {
-    id: "Metrics.reviewedTasksTitle",
+    id: "ChallengeProgress.reviewStatus.label",
     defaultMessage: "Review Status",
   },
 
   leaderboardTitle: {
-    id: "Metrics.leaderboardTitle",
+    id: "Leaderboard.title",
     defaultMessage: "Leaderboard",
   },
 
@@ -55,7 +55,7 @@ export default defineMessages({
   },
 
   topChallenges: {
-    id: "Metrics.leaderboard.topChallenges.label",
+    id: "Leaderboard.user.topChallenges",
     defaultMessage: "Top Challenges",
   },
 

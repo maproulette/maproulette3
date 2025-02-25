@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
@@ -17,13 +16,13 @@ import "./TaskRandomnessControl.scss";
  */
 export default class TaskRandomnessControl extends Component {
   loadBy = (loadMethod) => {
-    const isVirtual = _isFinite(this.props.virtualChallengeId);
+    const isVirtual = Number.isFinite(this.props.virtualChallengeId);
     const challengeId = isVirtual ? this.props.virtualChallengeId : this.props.challengeId;
     this.props.setTaskLoadBy(challengeId, isVirtual, loadMethod);
   };
 
   render() {
-    if (!this.props.user || !this.props.task || !_isFinite(this.props.challengeId)) {
+    if (!this.props.user || !this.props.task || !Number.isFinite(this.props.challengeId)) {
       return null;
     }
 
