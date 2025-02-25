@@ -1,5 +1,3 @@
-import _each from "lodash/each";
-import _isEmpty from "lodash/isEmpty";
 import { Component } from "react";
 
 /**
@@ -41,7 +39,11 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
      * of tasks (or single-task clusters)
      */
     selectTasks = (tasks) => {
-      if (_isEmpty(tasks) || (this.state.allSelected && this.state.deselectedTasks.size === 0)) {
+      if (
+        !tasks ||
+        tasks.length === 0 ||
+        (this.state.allSelected && this.state.deselectedTasks.size === 0)
+      ) {
         // Nothing to do
         return;
       }
@@ -50,15 +52,19 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
       // otherwise we need to remove from the deselectedTasks map
       if (!this.state.allSelected) {
         const selectedTasks = new Map(this.state.selectedTasks);
-        _each(tasks, (task) => selectedTasks.set(task.id, task));
+
+        for (const task of tasks) {
+          selectedTasks.set(task.id, task);
+        }
+
         this.setState({ selectedTasks });
       } else {
         const deselectedTasks = new Map(this.state.deselectedTasks);
-        _each(tasks, (task) => {
-          if (deselectedTasks.has(task.id)) {
-            deselectedTasks.delete(task.id);
-          }
-        });
+
+        for (const task of tasks) {
+          deselectedTasks.delete(task.id);
+        }
+
         this.setState({ deselectedTasks });
       }
     };
@@ -68,7 +74,11 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
      * array of tasks (or single-task clusters)
      */
     deselectTasks = (tasks) => {
-      if (_isEmpty(tasks) || (!this.state.allSelected && this.state.selectedTasks.size === 0)) {
+      if (
+        !tasks ||
+        tasks.length === 0 ||
+        (this.state.allSelected && this.state.deselectedTasks.size === 0)
+      ) {
         // Nothing to do
         return;
       }
@@ -77,15 +87,19 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
       // otherwise we need to remove from the selectedTasks map
       if (this.state.allSelected) {
         const deselectedTasks = new Map(this.state.deselectedTasks);
-        _each(tasks, (task) => deselectedTasks.set(task.id, task));
+
+        for (const task of tasks) {
+          deselectedTasks.set(task.id, task);
+        }
+
         this.setState({ deselectedTasks });
       } else {
         const selectedTasks = new Map(this.state.selectedTasks);
-        _each(tasks, (task) => {
-          if (selectedTasks.has(task.id)) {
-            selectedTasks.delete(task.id);
-          }
-        });
+
+        for (const task of tasks) {
+          selectedTasks.delete(task.id);
+        }
+
         this.setState({ selectedTasks });
       }
     };

@@ -1,4 +1,3 @@
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _slice from "lodash/slice";
 import _values from "lodash/values";
@@ -276,11 +275,11 @@ export const validatePropertyRules = (rule, errors = []) => {
         }
 
         if (rule.valueType === "number") {
-          _each(rule.value, (v) => {
+          for (const v of Array.isArray(rule.value) ? rule.value : [rule.value]) {
             if (isNaN(v)) {
               errors.push(PROPERTY_RULE_ERRORS.notNumericValue);
             }
-          });
+          }
         }
       }
     }

@@ -1,5 +1,4 @@
 import _clone from "lodash/clone";
-import _each from "lodash/each";
 import _find from "lodash/find";
 import _get from "lodash/get";
 import _isEqual from "lodash/isEqual";
@@ -69,7 +68,8 @@ export default function (
       // allColumns that is not already in the addedColumn list.
       const availableColumns = {};
       let availableColumnsKeys = _pull(_keys(allColumns), ...addedColumnsKeys);
-      _each(availableColumnsKeys, (column) => {
+
+      for (const column of availableColumnsKeys) {
         availableColumns[column] = allColumns[column];
         let message = column;
 
@@ -79,28 +79,24 @@ export default function (
         }
 
         availableColumns[column].message = message;
-      });
+      }
 
       // Next if we are including task properties as columns we need to add those
       if (includeTaskPropertyKeys) {
-        // For all the task property keys we want to add them to the
-        // availableColumns if they are not already in the addedColumns.
-        // As we add them, we indicate they are a task property with a : in
-        // front (this lets us treat them as strings when necessary, such as in
-        // the user settings, but still lets us identify them as task properties).
-        _each(this.props.taskPropertyKeys, (propKey) => {
+        for (const propKey of this.props.taskPropertyKeys) {
           if (!_find(addedColumnsKeys, (k) => k === `:${propKey}`)) {
             // Task Properties get italicized to visually distinguish them
             availableColumns[`:${propKey}`] = {
               message: <span className="mr-italic">{propKey}</span>,
             };
           }
-        });
+        }
       }
 
       // Now we need to internalize the addedColumns as well.
       const addedColumns = {};
-      _each(addedColumnsKeys, (column) => {
+
+      for (const column of addedColumnsKeys) {
         if (allColumns[column]) {
           addedColumns[column] = allColumns[column];
           if (columnMessages[`${column}Label`]) {
@@ -118,7 +114,7 @@ export default function (
             addedColumns[column] = { message: column };
           }
         }
-      });
+      }
 
       // Store our newly setup columns.
       this.setState({ availableColumns, addedColumns });
@@ -156,7 +152,7 @@ export default function (
       // our key, then we will stick the columnKey on the end.
       let keyAdded = false;
 
-      _each(this.state.availableColumns, (value, key) => {
+      for (const [key, value] of Object.entries(this.state.availableColumns)) {
         // If our columnKey to add is not a task property column and we are
         // starting to copy over the :taskPropertyColumns in the list then
         // we insert our new columnKey first before continuing on.
@@ -165,7 +161,7 @@ export default function (
           keyAdded = true;
         }
         newColumns[key] = value;
-      });
+      }
 
       // if !keyAdded then the columnKey didn't get added in the list yet, either
       // because it's a task property column itself or the list doesn't contain
@@ -186,12 +182,12 @@ export default function (
 
       // Fetch the item from the originalIndex
       let savedItem = null;
-      _each(this.state.addedColumns, (column, key) => {
+      for (const [key, column] of Object.entries(this.state.addedColumns)) {
         if (index === originalIndex) {
           savedItem = { key: key, column: column };
         }
         index += 1;
-      });
+      }
 
       // Insert item at new index. To do this we will run through our column
       // list and copy each one to the newColumnMap. If we run across the
@@ -201,7 +197,7 @@ export default function (
       // moving item is being moved up or down.
       const newColumnMap = {};
       index = 0;
-      _each(this.state.addedColumns, (column, key) => {
+      for (const [key, column] of Object.entries(this.state.addedColumns)) {
         if (index === newIndex) {
           // Our item is being moved up in the list.
           if (newIndex < originalIndex) {
@@ -217,7 +213,7 @@ export default function (
           newColumnMap[key] = column;
         }
         index += 1;
-      });
+      }
 
       this.setState({ addedColumns: newColumnMap });
     };

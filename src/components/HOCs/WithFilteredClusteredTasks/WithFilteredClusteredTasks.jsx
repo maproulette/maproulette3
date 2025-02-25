@@ -1,6 +1,5 @@
 import _assignWith from "lodash/assignWith";
 import _cloneDeep from "lodash/cloneDeep";
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _fromPairs from "lodash/fromPairs";
 import _isEmpty from "lodash/isEmpty";
@@ -325,7 +324,8 @@ export default function WithFilteredClusteredTasks(
 
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
-      _each(["status", "reviewStatus", "metaReviewStatus", "priorities"], (key) => {
+      const keysToSplit = ["status", "reviewStatus", "metaReviewStatus", "priorities"];
+      for (const key of keysToSplit) {
         if (criteria?.filters?.[key] !== undefined && !this.props.taskId) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
@@ -341,7 +341,7 @@ export default function WithFilteredClusteredTasks(
           }
           loadFromSavedFilters = true;
         }
-      });
+      }
 
       if (useURLFilters || loadFromSavedFilters) {
         const filteredTasks = this.filterTasks(
@@ -362,9 +362,9 @@ export default function WithFilteredClusteredTasks(
             : (initialFilters?.statuses ??
               _fromPairs(_map(TaskStatus, (status) => [status, false])));
 
-        _each(criteria.filters.status, (status) => {
+        for (const status of criteria.filters.status) {
           includeStatuses[status] = true;
-        });
+        }
 
         this.setState(
           Object.assign(

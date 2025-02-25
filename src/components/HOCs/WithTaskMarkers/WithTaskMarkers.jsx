@@ -1,5 +1,3 @@
-import _each from "lodash/each";
-import _get from "lodash/get";
 import _isObject from "lodash/isObject";
 import { Component } from "react";
 import AsMappableTask from "../../../interactions/Task/AsMappableTask";
@@ -17,7 +15,7 @@ import { TaskStatus } from "../../../services/Task/TaskStatus/TaskStatus";
 export default function WithTaskMarkers(WrappedComponent, tasksProp = "clusteredTasks") {
   class _WithTaskMarkers extends Component {
     render() {
-      const challengeTasks = _get(this.props, tasksProp);
+      const challengeTasks = this.props[tasksProp];
 
       // Only create markers for allowed statuses OR [created, skipped, or too-hard tasks]
       const allowedStatuses = this.props.allowedStatuses || [
@@ -27,13 +25,9 @@ export default function WithTaskMarkers(WrappedComponent, tasksProp = "clustered
       ];
 
       const markers = [];
-      if (_isObject(challengeTasks)) {
-        if (Array.isArray(challengeTasks.tasks) && challengeTasks.tasks.length > 0) {
-          _each(challengeTasks.tasks, (task) => {
-            if (allowedStatuses.indexOf(task.status) === -1) {
-              return;
-            }
-
+      if (_isObject(challengeTasks) && Array.isArray(challengeTasks.tasks)) {
+        for (const task of challengeTasks.tasks) {
+          if (allowedStatuses.includes(task.status)) {
             const nearestToCenter = AsMappableTask(task).nearestPointToCenter();
             markers.push({
               position: [
@@ -52,7 +46,7 @@ export default function WithTaskMarkers(WrappedComponent, tasksProp = "clustered
                 reviewStatus: task.reviewStatus,
               },
             });
-          });
+          }
         }
       }
 

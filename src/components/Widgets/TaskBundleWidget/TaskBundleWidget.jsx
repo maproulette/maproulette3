@@ -78,17 +78,17 @@ export default class TaskBundleWidget extends Component {
 
     if (selectedArray.length > 1) {
       if (AsCooperativeWork(this.props.task).isCooperative()) {
-        selectedArray.forEach((item) => {
+        for (const item of selectedArray) {
           if (!AsCooperativeWork(item).isCooperative()) {
             bundleTypeMismatch = "cooperative";
           }
-        });
+        }
       } else {
-        selectedArray.forEach((item) => {
+        for (const item of selectedArray) {
           if (AsCooperativeWork(item).isCooperative()) {
             bundleTypeMismatch = "notCooperative";
           }
-        });
+        }
       }
     }
 

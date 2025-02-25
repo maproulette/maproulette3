@@ -1,5 +1,4 @@
 import _compact from "lodash/compact";
-import _each from "lodash/each";
 import _find from "lodash/find";
 import _isEmpty from "lodash/isEmpty";
 import _isString from "lodash/isString";
@@ -46,11 +45,12 @@ export const expandTemplatingInJSX = function (jsxNode, props) {
             // Let short-code handlers have an opportunity to normalize the content
             // prior to tokenization
             let content = child;
-            _each(shortCodeHandlers, (handler) => {
+
+            for (const handler of shortCodeHandlers) {
               if (handler.normalizeContent) {
                 content = handler.normalizeContent(content, props);
               }
-            });
+            }
 
             if (!containsShortCode(content)) {
               return child;

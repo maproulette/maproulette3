@@ -1,15 +1,14 @@
-import _each from "lodash/each";
 import _find from "lodash/find";
 import _groupBy from "lodash/groupBy";
 import _map from "lodash/map";
 import { useCallback, useMemo, useState } from "react";
 
 export const useNotificationSelection = (notifications) => {
-  notifications.forEach((notification) => {
+  for (const notification of notifications) {
     if (!notification.taskId && notification.challengeId) {
       notification.taskId = notification.challengeName;
     }
-  });
+  }
 
   const [groupByTask, setGroupByTask] = useState(true);
   const [selectedNotifications, setSelectedNotifications] = useState(new Set());
@@ -39,9 +38,13 @@ export const useNotificationSelection = (notifications) => {
       const targetNotifications = Array.isArray(thread) ? thread : [notification];
       const updatedSelections = new Set(selectedNotifications);
       if (allNotificationsInThreadSelected(targetNotifications)) {
-        _each(targetNotifications, (target) => updatedSelections.delete(target.id));
+        for (const target of targetNotifications) {
+          updatedSelections.delete(target.id);
+        }
       } else {
-        _each(targetNotifications, (target) => updatedSelections.add(target.id));
+        for (const target of targetNotifications) {
+          updatedSelections.add(target.id);
+        }
       }
 
       setSelectedNotifications(updatedSelections);
