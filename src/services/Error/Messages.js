@@ -329,4 +329,8 @@ export default defineMessages({
     id: "Errors.file.formatIncorrect",
     defaultMessage: "File format is unrecognized or unsupported for this operation",
   },
+  requestUnlockFailure: {
+    id: "Errors.task.requestUnlockFailure",
+    defaultMessage: "Unable to request unlock for this challenge.",
+  },
 });

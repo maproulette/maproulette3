@@ -95,6 +95,7 @@ export class TaskPane extends Component {
     showLockFailureDialog: false,
     needsResponses: false,
     completingTask: false,
+    unlockRequested: false,
   };
 
   tryLockingTask = () => {
@@ -484,6 +485,22 @@ export class TaskPane extends Component {
                 >
                   <FormattedMessage {...messages.browseChallengeLabel} />
                 </button>
+                {!this.state.unlockRequested ? (
+                  <button
+                    className={"mr-button mr-button--green-light mr-ml-4"}
+                    disabled={this.state.unlockRequested}
+                    onClick={() => {
+                      this.setState({ unlockRequested: true });
+                      this.props.requestUnlock(this.props.task.id);
+                    }}
+                  >
+                    <FormattedMessage {...messages.requestUnlock} />
+                  </button>
+                ) : (
+                  <div className="mr-ml-4">Request Sent!</div>
+                )}
+
+                <div />
               </Fragment>
             }
           />
