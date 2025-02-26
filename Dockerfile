@@ -3,13 +3,13 @@ FROM node:18-alpine AS builder
 WORKDIR /maproulette3
 RUN apk update && apk add curl git jq
 
-COPY package.json yarn.lock ./
-RUN yarn install
+COPY package.json package-lock.json ./
+RUN npm install
 
 COPY . .
 
 ENV NODE_OPTIONS="--max-old-space-size=8192"
-RUN yarn run build
+RUN npm run build
 
 FROM nginx:1.25-alpine
 
