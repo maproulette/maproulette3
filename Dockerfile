@@ -4,7 +4,7 @@ WORKDIR /maproulette3
 RUN apk update && apk add curl git jq
 
 COPY package.json package-lock.json ./
-RUN npm install --legacy-peer-deps
+RUN npm ci
 
 COPY . .
 
