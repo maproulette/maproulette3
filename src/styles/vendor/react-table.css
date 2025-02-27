@@ -3,21 +3,20 @@
 .ReactTable {
   @apply mr-border-none mr-text-white;
 
-  .rt-table {
+  table {
     @apply mr-mb-3;
   }
 
-  .rt-thead {
+  thead {
     &.-header {
       @apply mr-shadow-none mr-border-b mr-border-white-15;
     }
 
-    .rt-tr {
+    tr {
       @apply mr-text-left;
     }
 
-    .rt-th,
-    .rt-tb {
+    th {
       @apply mr-outline-none mr-border-none mr-p-4 mr-text-white mr-text-xs mr-font-medium mr-uppercase mr-tracking-wide;
       line-height: 1rem;
 
@@ -33,7 +32,7 @@
     &.-filters {
       @apply mr-border-none;
 
-      .rt-th {
+      th {
         @apply mr-border-none mr-pb-0 mr-pt-4;
       }
 
@@ -47,16 +46,16 @@
     }
   }
 
-  .rt-td {
+  td {
     @apply mr-p-3 mr-text-sm;
   }
 
-  .rt-tbody {
+  tbody {
     .rt-tr-group {
       @apply mr-border-white-15;
     }
 
-    .rt-td {
+    td {
       @apply mr-border-r-0 mr-p-4 mr-leading-normal;
     }
   }
