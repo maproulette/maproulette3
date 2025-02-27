@@ -5,6 +5,8 @@ import ReactTable from "react-table-6";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import { intlTableProps } from "../../components/IntlTable/IntlTable";
 import CommentType from "../../services/Comment/CommentType";
+import { keysByStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
+import { keysByReviewStatus } from "../../services/Task/TaskReview/TaskReviewStatus";
 import HeaderSent from "./HeaderSent";
 import Notification from "./Notification";
 import { useSentComments } from "./SentCommentsHooks";
@@ -58,13 +60,6 @@ const Sent = (props) => {
   return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
       <section className="mr-flex-grow mr-w-full mr-bg-black-15 mr-p-4 md:mr-p-8 mr-rounded">
-        <input
-          type="text"
-          placeholder="Search comments..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="mr-mb-4 mr-p-2 mr-rounded"
-        />
         <HeaderSent
           commentType={commentType}
           refreshData={() => comments.fetch(props.user?.id, sortCriteria, pagination, searchTerm)}
@@ -72,6 +67,8 @@ const Sent = (props) => {
             setCommentType(t);
             resetTable();
           }}
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
         />
        
         <ReactTable
@@ -163,6 +160,33 @@ const taskColumns = ({ setSelectedComment }) => [
         </button>
       );
     },
+    sortable: true
+  },
+  {
+    id: "task_status",
+    Header: "Task Status",
+    accessor: "taskStatus",
+    Cell: ({ value }) => {
+      const statusKey = keysByStatus[value];
+      const statusColor = TaskStatusColors[value];
+      return (
+        <span style={{ color: statusColor }}>
+          {statusKey ? statusKey.toUpperCase() : value}
+        </span>
+      );
+    },
+    maxWidth: 140,
+    sortable: true
+  },
+  {
+    id: "review_status",
+    Header: "Review Status",
+    accessor: "reviewStatus",
+    Cell: ({ value }) => {
+      const statusKey = keysByReviewStatus[value];
+      return statusKey ? statusKey.toUpperCase() : value;
+    },
+    maxWidth: 140,
     sortable: true
   },
 ];
