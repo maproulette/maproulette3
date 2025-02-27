@@ -268,7 +268,7 @@ export const fetchUsers = function (limit = 50) {
 export const fetchUserComments = function (
   userId,
   type = CommentType.TASK,
-  filters = { sort: "created", order: "DESC", page: 0, limit: 25 },
+  filters = { sort: "created", order: "DESC", page: 0, limit: 25, searchTerm: "" },
 ) {
   return function (dispatch) {
     const endpoint =

@@ -13,6 +13,7 @@ export const useSentComments = (commentType) => {
     userId,
     sort = { id: "created", desc: true },
     pagination = { page: 0, pageSize: 25 },
+    searchTerm = ""
   ) => {
     if (userId) {
       setError("");
@@ -23,6 +24,7 @@ export const useSentComments = (commentType) => {
         order: sort.desc ? "DESC" : "ASC",
         page: pagination.page,
         limit: pagination.pageSize,
+        searchTerm,
       };
 
       const result = await dispatch(fetchUserComments(userId, commentType, apiFilters));

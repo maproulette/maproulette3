@@ -25,9 +25,11 @@ const Sent = (props) => {
   const [sortCriteria, setSortCriteria] = useState(defaultSorted);
   const [pagination, setPagination] = useState(defaultPagination);
   const [selectedComment, setSelectedComment] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
   useEffect(() => {
-    comments.fetch(props.user?.id, sortCriteria, pagination);
+    comments.fetch(props.user?.id, sortCriteria, pagination, debouncedSearchTerm);
   }, [
     props.user?.id,
     commentType,
@@ -35,7 +37,18 @@ const Sent = (props) => {
     sortCriteria.desc,
     pagination.page,
     pagination.pageSize,
+    debouncedSearchTerm,
   ]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   const resetTable = () => {
     setSortCriteria(defaultSorted);
@@ -45,14 +58,22 @@ const Sent = (props) => {
   return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
       <section className="mr-flex-grow mr-w-full mr-bg-black-15 mr-p-4 md:mr-p-8 mr-rounded">
+        <input
+          type="text"
+          placeholder="Search comments..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="mr-mb-4 mr-p-2 mr-rounded"
+        />
         <HeaderSent
           commentType={commentType}
-          refreshData={() => comments.fetch(props.user?.id, sortCriteria, pagination)}
+          refreshData={() => comments.fetch(props.user?.id, sortCriteria, pagination, searchTerm)}
           setCommentType={(t) => {
             setCommentType(t);
             resetTable();
           }}
         />
+       
         <ReactTable
           data={comments.data}
           columns={
@@ -111,8 +132,7 @@ const taskColumns = ({ setSelectedComment }) => [
       </Link>
     ),
     maxWidth: 100,
-    sortable: true,
-    resizable: false,
+    sortable: true
   },
   {
     id: "created",
@@ -124,8 +144,7 @@ const taskColumns = ({ setSelectedComment }) => [
       </>
     ),
     maxWidth: 200,
-    sortable: true,
-    resizable: false,
+    sortable: true
   },
   {
     id: "comment",
@@ -144,8 +163,7 @@ const taskColumns = ({ setSelectedComment }) => [
         </button>
       );
     },
-    sortable: true,
-    resizable: false,
+    sortable: true
   },
 ];
 
