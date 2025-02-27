@@ -13,7 +13,7 @@ export const useSentComments = (commentType) => {
     userId,
     sort = { id: "created", desc: true },
     pagination = { page: 0, pageSize: 25 },
-    searchTerm = ""
+    searchTerm = "",
   ) => {
     if (userId) {
       setError("");

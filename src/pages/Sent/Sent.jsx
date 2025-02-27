@@ -5,8 +5,8 @@ import ReactTable from "react-table-6";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import { intlTableProps } from "../../components/IntlTable/IntlTable";
 import CommentType from "../../services/Comment/CommentType";
-import { keysByStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 import { keysByReviewStatus } from "../../services/Task/TaskReview/TaskReviewStatus";
+import { TaskStatusColors, keysByStatus } from "../../services/Task/TaskStatus/TaskStatus";
 import HeaderSent from "./HeaderSent";
 import Notification from "./Notification";
 import { useSentComments } from "./SentCommentsHooks";
@@ -70,7 +70,7 @@ const Sent = (props) => {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
-       
+
         <ReactTable
           data={comments.data}
           columns={
@@ -129,7 +129,7 @@ const taskColumns = ({ setSelectedComment }) => [
       </Link>
     ),
     maxWidth: 100,
-    sortable: true
+    sortable: true,
   },
   {
     id: "created",
@@ -141,7 +141,7 @@ const taskColumns = ({ setSelectedComment }) => [
       </>
     ),
     maxWidth: 200,
-    sortable: true
+    sortable: true,
   },
   {
     id: "comment",
@@ -160,7 +160,7 @@ const taskColumns = ({ setSelectedComment }) => [
         </button>
       );
     },
-    sortable: true
+    sortable: true,
   },
   {
     id: "task_status",
@@ -170,13 +170,11 @@ const taskColumns = ({ setSelectedComment }) => [
       const statusKey = keysByStatus[value];
       const statusColor = TaskStatusColors[value];
       return (
-        <span style={{ color: statusColor }}>
-          {statusKey ? statusKey.toUpperCase() : value}
-        </span>
+        <span style={{ color: statusColor }}>{statusKey ? statusKey.toUpperCase() : value}</span>
       );
     },
     maxWidth: 140,
-    sortable: true
+    sortable: true,
   },
   {
     id: "review_status",
@@ -187,7 +185,7 @@ const taskColumns = ({ setSelectedComment }) => [
       return statusKey ? statusKey.toUpperCase() : value;
     },
     maxWidth: 140,
-    sortable: true
+    sortable: true,
   },
 ];
 
