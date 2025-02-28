@@ -10,17 +10,17 @@ export default defineMessages({
   },
 
   refreshCommentsLabel: {
-    id: "Sent.controls.refreshComments.label",
+    id: "Inbox.controls.refreshNotifications.label",
     defaultMessage: "Refresh",
   },
 
   tasks: {
-    id: "Sent.controls.tasks.label",
+    id: "Admin.ManageTasks.header",
     defaultMessage: "Tasks",
   },
 
   challenges: {
-    id: "Sent.controls.challenges.label",
+    id: "Admin.ProjectCard.tabs.challenges.label",
     defaultMessage: "Challenges",
   },
 

@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.SupplementalMapWidget.title",
+    id: "Widgets.SupplementalMapWidget.label",
     defaultMessage: "Supplemental Map",
   },
 

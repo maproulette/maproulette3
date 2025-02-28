@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   copy: {
-    id: "ShareLink.controls.copy.label",
+    id: "Profile.apiKey.controls.copy.label",
     defaultMessage: "Copy",
   },
 });

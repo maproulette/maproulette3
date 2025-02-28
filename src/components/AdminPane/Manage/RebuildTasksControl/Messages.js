@@ -57,12 +57,12 @@ export default defineMessages({
   },
 
   cancel: {
-    id: "RebuildTasksControl.modal.controls.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
   proceed: {
-    id: "RebuildTasksControl.modal.controls.proceed.label",
+    id: "ConfirmAction.proceed",
     defaultMessage: "Proceed",
   },
 

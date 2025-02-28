@@ -10,17 +10,17 @@ export default defineMessages({
   },
 
   noTasksAvailableLabel: {
-    id: "Widgets.TaskNearbyMap.noTasksAvailable.label",
+    id: "ActivityMap.noTasksAvailable.label",
     defaultMessage: "No nearby tasks are available.",
   },
 
   priorityLabel: {
-    id: "Widgets.TaskNearbyMap.tooltip.priorityLabel",
+    id: "ActivityMap.tooltip.priorityLabel",
     defaultMessage: "Priority: ",
   },
 
   statusLabel: {
-    id: "Widgets.TaskNearbyMap.tooltip.statusLabel",
+    id: "ActivityMap.tooltip.statusLabel",
     defaultMessage: "Status: ",
   },
 

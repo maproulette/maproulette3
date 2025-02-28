@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   title: {
-    id: "ReviewStatus.metrics.title",
+    id: "ChallengeProgress.reviewStatus.label",
     defaultMessage: "Review Status",
   },
 
@@ -25,7 +25,7 @@ export default defineMessages({
   },
 
   approvedReview: {
-    id: "ReviewStatus.metrics.approvedReview",
+    id: "Metrics.reviewStats.approved.label",
     defaultMessage: "Reviewed tasks that passed",
   },
 
@@ -85,12 +85,12 @@ export default defineMessages({
   },
 
   byPriorityToggle: {
-    id: "ReviewStatus.metrics.priority.toggle",
+    id: "ChallengeProgress.priority.toggle",
     defaultMessage: "View by Task Priority",
   },
 
   priorityLabel: {
-    id: "ReviewStatus.metrics.priority.label",
+    id: "ChallengeProgress.priority.label",
     defaultMessage: "{priority} Priority Tasks",
   },
 

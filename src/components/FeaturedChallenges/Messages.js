@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   projectIndicatorLabel: {
-    id: "FeaturedChallenges.projectIndicator.label",
+    id: "Activity.item.project",
     defaultMessage: "Project",
   },
 

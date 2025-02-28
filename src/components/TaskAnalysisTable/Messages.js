@@ -10,22 +10,22 @@ export default defineMessages({
   },
 
   invertLabel: {
-    id: "TasksTable.invert.abel",
+    id: "TaskConfirmationModal.invert.label",
     defaultMessage: "invert",
   },
 
   invertedLabel: {
-    id: "TasksTable.inverted.label",
+    id: "TaskConfirmationModal.inverted.label",
     defaultMessage: "inverted",
   },
 
   idLabel: {
-    id: "Task.fields.id.label",
+    id: "Review.Task.fields.id.label",
     defaultMessage: "Internal Id",
   },
 
   featureIdLabel: {
-    id: "Task.fields.featureId.label",
+    id: "Review.Task.fields.featureId.label",
     defaultMessage: "Feature Id",
   },
 
@@ -35,32 +35,32 @@ export default defineMessages({
   },
 
   bundle: {
-    id: "Task.fields.bundle.label",
+    id: "Activity.item.bundle",
     defaultMessage: "Bundle",
   },
 
   statusLabel: {
-    id: "Task.fields.status.label",
+    id: "Admin.EditTask.form.status.label",
     defaultMessage: "Status",
   },
 
   priorityLabel: {
-    id: "Task.fields.priority.label",
+    id: "Admin.EditTask.form.priority.label",
     defaultMessage: "Priority",
   },
 
   mappedOnLabel: {
-    id: "Task.fields.mappedOn.label",
+    id: "Review.fields.mappedOn.label",
     defaultMessage: "Mapped On",
   },
 
   reviewStatusLabel: {
-    id: "Task.fields.reviewStatus.label",
+    id: "ChallengeProgress.reviewStatus.label",
     defaultMessage: "Review Status",
   },
 
   metaReviewStatusLabel: {
-    id: "Task.fields.metaReviewStatus.label",
+    id: "Review.fields.metaReviewStatus.label",
     defaultMessage: "Meta-Review Status",
   },
 
@@ -75,17 +75,17 @@ export default defineMessages({
   },
 
   reviewRequestedByLabel: {
-    id: "Task.fields.requestedBy.label",
+    id: "Review.fields.requestedBy.label",
     defaultMessage: "Mapper",
   },
 
   reviewedByLabel: {
-    id: "Task.fields.reviewedBy.label",
+    id: "Review.Dashboard.asReviewer.label",
     defaultMessage: "Reviewer",
   },
 
   metaReviewedByLabel: {
-    id: "Task.fields.metaReviewedBy.label",
+    id: "Review.Dashboard.asMetaReviewer.label",
     defaultMessage: "Meta-Reviewer",
   },
 
@@ -130,7 +130,7 @@ export default defineMessages({
   },
 
   editTaskLabel: {
-    id: "Admin.TaskAnalysisTable.controls.editTask.label",
+    id: "Admin.EditChallenge.edit.header",
     defaultMessage: "Edit",
   },
 
@@ -195,12 +195,12 @@ export default defineMessages({
   },
 
   exportTitle: {
-    id: "Admin.manageTasks.controls.export.title",
+    id: "Admin.manageProjectChallenges.controls.export.title",
     defaultMessage: "Export",
   },
 
   exportCSVLabel: {
-    id: "Admin.manageTasks.controls.exportCSV.label",
+    id: "Admin.Project.controls.export.label",
     defaultMessage: "Export CSV",
   },
 
@@ -215,7 +215,7 @@ export default defineMessages({
   },
 
   exportMapperReviewCSVLabel: {
-    id: "Admin.manageTasks.controls.exportMapperReviewCSV.label",
+    id: "Admin.Project.controls.exportReviewCSV.label",
     defaultMessage: "Export Mapper Review CSV",
   },
 
@@ -230,7 +230,7 @@ export default defineMessages({
   },
 
   timezoneLabel: {
-    id: "Admin.manageTasks.controls.timezone.label",
+    id: "Admin.manageProjectChallenges.controls.timezone.label",
     defaultMessage: "Timezone",
   },
 

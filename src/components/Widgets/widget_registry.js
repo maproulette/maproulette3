@@ -27,6 +27,7 @@ export { default as TaskMoreOptionsWidget } from "./TaskMoreOptionsWidget/TaskMo
 export { default as TaskPropertiesWidget } from "./TaskPropertiesWidget/TaskPropertiesWidget";
 export { default as KeyboardShortcutsWidget } from "./KeyboardShortcutsWidget/KeyboardShortcutsWidget";
 export { default as TaskLocationWidget } from "./TaskLocationWidget/TaskLocationWidget";
+export { default as LocationWidget } from "./LocationWidget/LocationWidget";
 export { default as TaskStatusWidget } from "./TaskStatusWidget/TaskStatusWidget";
 export { default as CompletionProgressWidget } from "./CompletionProgressWidget/CompletionProgressWidget";
 export { default as ChallengeShareWidget } from "./ChallengeShareWidget/ChallengeShareWidget";

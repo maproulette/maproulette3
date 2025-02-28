@@ -54,7 +54,7 @@ export const defaultWorkspaceSetup = function () {
     layout: [
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
       { i: generateWidgetId(), x: 4, y: 0, w: 8, h: 5 },
-      { i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19 },
+      { i: generateWidgetId(), x: 4, y: 5, w: 8, h: 21 },
       { i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7 },
       { i: generateWidgetId(), x: 0, y: 11, w: 4, h: 8 },
     ],
@@ -94,6 +94,7 @@ export class TaskPane extends Component {
     showLockFailureDialog: false,
     needsResponses: false,
     completingTask: false,
+    unlockRequested: false,
   };
 
   tryLockingTask = () => {
@@ -475,6 +476,22 @@ export class TaskPane extends Component {
                 >
                   <FormattedMessage {...messages.browseChallengeLabel} />
                 </button>
+                {!this.state.unlockRequested ? (
+                  <button
+                    className={"mr-button mr-button--green-light mr-ml-4"}
+                    disabled={this.state.unlockRequested}
+                    onClick={() => {
+                      this.setState({ unlockRequested: true });
+                      this.props.requestUnlock(this.props.task.id);
+                    }}
+                  >
+                    <FormattedMessage {...messages.requestUnlock} />
+                  </button>
+                ) : (
+                  <div className="mr-ml-4">Request Sent!</div>
+                )}
+
+                <div />
               </Fragment>
             }
           />

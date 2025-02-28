@@ -71,12 +71,12 @@ export default defineMessages({
   },
 
   instructionsFindChallengesLabel: {
-    id: "Home.Instructions.controls.findChallenges.label",
+    id: "Admin.VirtualProject.findChallenges.label",
     defaultMessage: "Find Challenges",
   },
 
   browseFeaturedLabel: {
-    id: "Home.Featured.browse",
+    id: "FeaturedChallenges.browse",
     defaultMessage: "Explore",
   },
 

@@ -197,7 +197,7 @@ export default class WebSocketClient {
    *
    * @private
    */
-  handleClose(e) {
+  handleClose() {
     if (this.isCleanedUp) {
       return;
     }

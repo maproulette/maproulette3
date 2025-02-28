@@ -143,6 +143,7 @@ const apiRoutes = (factory) => {
       refreshMultipleTaskLocks: factory.post("/task/bundle/refresh"),
       startMultipleTasks: factory.post("/task/bundle/lock"),
       releaseMultipleTasks: factory.post("/task/bundle/unlock"),
+      requestUnlock: factory.put("/task/:id/unlock/request"),
     },
     keywords: {
       find: factory.get("/keywords"),

@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   nameLabel: {
-    id: "Team.name.label",
+    id: "Admin.EditProject.form.name.label",
     defaultMessage: "Name",
   },
 
@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   descriptionLabel: {
-    id: "Team.description.label",
+    id: "Admin.EditProject.form.description.label",
     defaultMessage: "Description",
   },
 
@@ -25,12 +25,12 @@ export default defineMessages({
   },
 
   saveLabel: {
-    id: "Team.controls.save.label",
+    id: "Admin.EditProject.controls.save.label",
     defaultMessage: "Save",
   },
 
   cancelLabel: {
-    id: "Team.controls.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 });

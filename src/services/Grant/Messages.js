@@ -9,7 +9,7 @@ export default defineMessages({
     defaultMessage: "Admin",
   },
   write: {
-    id: "Grant.Role.write",
+    id: "ChallengeDetails.controls.write.label",
     defaultMessage: "Write",
   },
   read: {

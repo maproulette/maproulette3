@@ -15,12 +15,12 @@ export default defineMessages({
   },
 
   noChallenges: {
-    id: "SavedChallenges.widget.noChallenges",
+    id: "Admin.ChallengeList.noChallenges",
     defaultMessage: "No Challenges",
   },
 
   startChallenge: {
-    id: "SavedChallenges.widget.startChallenge",
+    id: "Admin.Challenge.controls.start.label",
     defaultMessage: "Start Challenge",
   },
 });

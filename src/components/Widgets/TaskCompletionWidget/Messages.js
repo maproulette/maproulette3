@@ -10,12 +10,12 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.TaskCompletionWidget.title",
+    id: "Widgets.TaskCompletionWidget.label",
     defaultMessage: "Completion",
   },
 
   inspectTitle: {
-    id: "Widgets.TaskCompletionWidget.inspectTitle",
+    id: "Admin.TaskAnalysisTable.controls.inspectTask.label",
     defaultMessage: "Inspect",
   },
 
@@ -25,7 +25,7 @@ export default defineMessages({
   },
 
   simultaneousTasks: {
-    id: "Widgets.TaskCompletionWidget.simultaneousTasks",
+    id: "Widgets.ReviewNearbyTasksWidget.simultaneousTasks",
     defaultMessage: "Working on {taskCount, number} tasks together",
   },
 

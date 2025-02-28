@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   noOSMElements: {
-    id: "OSMElementTags.noOSMElements",
+    id: "OSMElementHistory.noOSMElements",
     defaultMessage: "No OSM elements identified in task",
   },
 
@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   viewOSMLabel: {
-    id: "OSMElementTags.controls.viewOSM.label",
+    id: "OSMElementHistory.controls.viewOSM.label",
     defaultMessage: "View OSM",
   },
 });

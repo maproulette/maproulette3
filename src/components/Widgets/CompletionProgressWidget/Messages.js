@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.CompletionProgressWidget.title",
+    id: "Widgets.CompletionProgressWidget.label",
     defaultMessage: "Completion Progress",
   },
 
@@ -20,7 +20,7 @@ export default defineMessages({
   },
 
   loadStatsLabel: {
-    id: "Widgets.CompletionProgressWidget.controls.loadStats.label",
+    id: "Widgets.BurndownChartWidget.controls.loadStats.label",
     defaultMessage: "Load Completion Stats",
   },
 });

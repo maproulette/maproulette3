@@ -20,7 +20,7 @@ export default defineMessages({
   },
 
   search: {
-    id: "KeywordAutosuggestInput.controls.search.placeholder",
+    id: "Admin.VirtualProject.ChallengeList.search.placeholder",
     defaultMessage: "Search",
   },
 });

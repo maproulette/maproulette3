@@ -34,7 +34,7 @@ export default defineMessages({
     defaultMessage: "No user found with that username.",
   },
   userFollowFailure: {
-    id: "Errors.user.genericFollowFailure",
+    id: "Errors.team.genericFailure",
     defaultMessage: "Failure{details}",
   },
 
@@ -58,7 +58,7 @@ export default defineMessages({
     defaultMessage: "No tasks remain in this challenge.",
   },
   taskSaveFailure: {
-    id: "Errors.task.saveFailure",
+    id: "Errors.project.saveFailure",
     defaultMessage: "Unable to save your changes{details}",
   },
   taskUpdateFailure: {
@@ -324,5 +324,9 @@ export default defineMessages({
   fileFormatIncorrect: {
     id: "Errors.file.formatIncorrect",
     defaultMessage: "File format is unrecognized or unsupported for this operation",
+  },
+  requestUnlockFailure: {
+    id: "Errors.task.requestUnlockFailure",
+    defaultMessage: "Unable to request unlock for this challenge.",
   },
 });

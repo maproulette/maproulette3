@@ -15,17 +15,17 @@ export default defineMessages({
   },
 
   contains: {
-    id: "Task.property.searchType.contains",
+    id: "FeatureStyleLegend.comparators.contains.label",
     defaultMessage: "contains",
   },
 
   exists: {
-    id: "Task.property.searchType.exists",
+    id: "FeatureStyleLegend.comparators.exists.label",
     defaultMessage: "exists",
   },
 
   missing: {
-    id: "Task.property.searchType.missing",
+    id: "FeatureStyleLegend.comparators.missing.label",
     defaultMessage: "missing",
   },
 

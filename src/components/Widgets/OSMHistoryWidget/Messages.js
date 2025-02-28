@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.OSMHistoryWidget.title",
+    id: "Widgets.OSMHistoryWidget.label",
     defaultMessage: "OSM History",
   },
 });

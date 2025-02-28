@@ -25,32 +25,32 @@ export default defineMessages({
   },
 
   clearFiltersLabel: {
-    id: "Widgets.TaskBundleWidget.controls.clearFilters.label",
+    id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",
   },
 
   filterListLabel: {
-    id: "Widgets.TaskBundleWidget.controls.filterList.label",
+    id: "Admin.manageTasks.controls.filterList.label",
     defaultMessage: "Filter By:",
   },
 
   taskIdLabel: {
-    id: "Widgets.TaskBundleWidget.popup.fields.taskId.label",
+    id: "Widgets.ReviewNearbyTasksWidget.popup.fields.taskId.label",
     defaultMessage: "Internal Id:",
   },
 
   nameLabel: {
-    id: "Widgets.TaskBundleWidget.popup.fields.name.label",
+    id: "Widgets.ReviewNearbyTasksWidget.popup.fields.name.label",
     defaultMessage: "Feature Id:",
   },
 
   statusLabel: {
-    id: "Widgets.TaskBundleWidget.popup.fields.status.label",
+    id: "Admin.Task.fields.status.label",
     defaultMessage: "Status:",
   },
 
   priorityLabel: {
-    id: "Widgets.TaskBundleWidget.popup.fields.priority.label",
+    id: "TaskConfirmationModal.priority.label",
     defaultMessage: "Priority:",
   },
 
@@ -115,7 +115,7 @@ export default defineMessages({
   },
 
   simultaneousTasks: {
-    id: "Widgets.TaskBundleWidget.simultaneousTasks",
+    id: "Widgets.ReviewNearbyTasksWidget.simultaneousTasks",
     defaultMessage: "Working on {taskCount, number} tasks together",
   },
 
@@ -136,7 +136,7 @@ export default defineMessages({
   },
 
   readOnly: {
-    id: "Widgets.TaskBundleWidget.readOnly",
+    id: "Admin.TaskInspect.readonly.message",
     defaultMessage: "Previewing task in read-only mode",
   },
 
