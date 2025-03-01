@@ -93,19 +93,30 @@ const Markers = (props) => {
   }, []);
 
   useEffect(() => {
+    const isInitialLoad = props.taskMarkers && mapMarkers.length === 0;
+    const isMapLoadDelayed = props.delayMapLoad;
+    const hasBundleFilterChanged = props.bundledOnly !== prevProps.current.bundledOnly;
+    const haveTaskMarkersChanged = !_isEqual(props.taskMarkers, prevProps.current.taskMarkers);
+    const hasTaskBundleChanged = !_isEqual(props.taskBundle, prevProps.current.taskBundle);
+    const haveSelectedClustersChanged =
+      props.selectedClusters !== prevProps.current.selectedClusters;
+    const hasSpideredStateChanged = !_isEqual(spidered, prevProps.current.spidered);
+
     if (
-      !props.taskMarkers ||
-      props.delayMapLoad ||
-      !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) ||
-      props.selectedClusters !== prevProps.current.selectedClusters
+      isInitialLoad ||
+      isMapLoadDelayed ||
+      hasBundleFilterChanged ||
+      haveTaskMarkersChanged ||
+      hasTaskBundleChanged ||
+      haveSelectedClustersChanged
     ) {
       refreshSpidered();
       generateMarkers();
-    } else if (!_isEqual(spidered, prevProps.current.spidered)) {
+    } else if (hasSpideredStateChanged) {
       generateMarkers();
     }
     prevProps.current = { ...props, spidered: spidered };
-  }, [props.taskMarkers, props.selectedClusters, spidered]);
+  }, [props.taskMarkers, props.selectedClusters, spidered, props.taskBundle, props.bundledOnly]);
 
   useEffect(() => {
     setSpidered(new Map());
@@ -320,6 +331,11 @@ const Markers = (props) => {
 
   const generateMarkers = () => {
     let consolidatedMarkers = consolidateMarkers(props.taskMarkers);
+    if (props.taskBundle && props.bundledOnly && !props.showAsClusters) {
+      consolidatedMarkers = consolidatedMarkers.filter((m) =>
+        props.taskBundle.taskIds.includes(m.options.taskId),
+      );
+    }
 
     if (spidered.size > 0) {
       consolidatedMarkers = _reject(consolidatedMarkers, (m) => spidered.has(m.options.taskId));

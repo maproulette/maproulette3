@@ -34,15 +34,15 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
      */
     updateMapMarkers() {
       const markers = _map(this.props.taskClusters, (cluster) => {
-        const cluserStatus = cluster.status ?? cluster.taskStatus;
+        const clusterStatus = cluster.status ?? cluster.taskStatus;
         const clusterId = cluster.id ?? cluster.taskId;
         const alreadyBundled =
-          cluster.bundleId && !this.props.taskBundle?.bundleId !== cluster.bundleId;
+          cluster.bundleId && this.props.initialBundle?.bundleId !== cluster.bundleId;
 
         const bundleConflict = Boolean(
           (clusterId &&
             this.props.task &&
-            ![0, 3, 6].includes(cluserStatus) &&
+            ![0, 3, 6].includes(clusterStatus) &&
             !this.props.taskBundle?.taskIds?.includes(clusterId) &&
             !this.props.initialBundle?.taskIds?.includes(clusterId)) ||
             alreadyBundled,

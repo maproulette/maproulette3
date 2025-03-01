@@ -3,7 +3,7 @@ import _compact from "lodash/compact";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import {
   AttributionControl,
@@ -62,50 +62,6 @@ export const TaskClusterMap = (props) => {
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
-  const prevProps = useRef({ showAsClusters: props.showAsClusters, loading: props.loading });
-  const timerHandle = useRef(null);
-  const [displayTaskCount, setDisplayTaskCount] = useState(false);
-
-  useEffect(() => {
-    // Check condition for toggling showAsClusters
-    if (!props.showAsClusters && props.totalTaskCount > UNCLUSTER_THRESHOLD) {
-      props.toggleShowAsClusters();
-    }
-
-    // Handle loading state changes
-    if (!props.loading && prevProps.current.loading) {
-      // No longer loading. Kick off timer to hide task count message
-      if (timerHandle.current) {
-        clearTimeout(timerHandle.current);
-      }
-      timerHandle.current = setTimeout(() => {
-        setDisplayTaskCount(false);
-      }, 3000);
-      setDisplayTaskCount(true);
-    } else if (props.loading && displayTaskCount) {
-      setDisplayTaskCount(false);
-      if (timerHandle.current) {
-        clearTimeout(timerHandle.current);
-        timerHandle.current = null;
-      }
-    }
-
-    // Update previous props
-    prevProps.current = { showAsClusters: props.showAsClusters, loading: props.loading };
-
-    // Clean up timer on component unmount
-    return () => {
-      if (timerHandle.current) {
-        clearTimeout(timerHandle.current);
-      }
-    };
-  }, [
-    props.showAsClusters,
-    props.totalTaskCount,
-    props.toggleShowAsClusters,
-    props.loading,
-    displayTaskCount,
-  ]);
 
   let overlayLayers = buildLayerSources(
     props.visibleOverlays,
@@ -276,7 +232,8 @@ export const TaskClusterMap = (props) => {
       {props.totalTaskCount &&
         props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
         !searchOpen &&
-        !props.loading && (
+        !props.loading &&
+        !props.createTaskBundle && (
           <label
             htmlFor="show-clusters-input"
             className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center"
@@ -326,7 +283,7 @@ export const TaskClusterMap = (props) => {
             </div>
           </div>
         )}
-      {displayTaskCount && !props.mapZoomedOut && (
+      {props.displayTaskCount && !props.mapZoomedOut && (
         <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
           <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
             <div className="mr-py-2 mr-px-3 mr-text-center">

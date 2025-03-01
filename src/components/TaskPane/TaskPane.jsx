@@ -67,7 +67,6 @@ export const defaultWorkspaceSetup = function () {
     excludeWidgets: [
       // Cannot be added to workspace
       "TaskReviewWidget",
-      "ReviewNearbyTasksWidget",
     ],
     conditionalWidgets: [
       // conditionally displayed
@@ -154,18 +153,10 @@ export class TaskPane extends Component {
         this.state.completionResponses,
         taskBundle,
       );
-      this.clearCompletingTask();
     } catch (error) {
       console.error("Error completing task:", error);
       throw error;
     }
-  };
-
-  clearCompletingTask = () => {
-    // Clear on next tick to give our animation transition a chance to clean up.
-    setTimeout(() => {
-      this.props.setCompletingTask(null);
-    }, 0);
   };
 
   setCompletionResponse = (propertyName, value) => {
