@@ -283,7 +283,7 @@ export const TaskClusterMap = (props) => {
             </div>
           </div>
         )}
-      {props.displayTaskCount && !props.mapZoomedOut && (
+      {!props.mapZoomedOut && (
         <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
           <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
             <div className="mr-py-2 mr-px-3 mr-text-center">
