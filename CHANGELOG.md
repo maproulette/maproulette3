@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.6] - 2025-03-03
+Released with [maproulette-backend_v4.7.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.3)
+
+## What's Changed
+* set up way to request lockUser to unlock task by @jschwarz2030 in (#2567)
+* update bundling workflow and add task locking for bundles  by @CollinBeczak in (#2524)
+* fix task count not showing up  by @CollinBeczak in (#2583)
+
+## MR2 Changes
+* set up way to request lockUser to unlock task by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1169
+* Update Bundle Naming Convention and Add Task Locking Endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1163
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.5...v3.16.6
+
 ## [v3.16.5] - 2025-02-23
 Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.2)
 
