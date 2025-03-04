@@ -5,6 +5,8 @@ import ReactTable from "react-table-6";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import { intlTableProps } from "../../components/IntlTable/IntlTable";
 import CommentType from "../../services/Comment/CommentType";
+import { keysByReviewStatus } from "../../services/Task/TaskReview/TaskReviewStatus";
+import { TaskStatusColors, keysByStatus } from "../../services/Task/TaskStatus/TaskStatus";
 import HeaderSent from "./HeaderSent";
 import Notification from "./Notification";
 import { useSentComments } from "./SentCommentsHooks";
@@ -25,9 +27,11 @@ const Sent = (props) => {
   const [sortCriteria, setSortCriteria] = useState(defaultSorted);
   const [pagination, setPagination] = useState(defaultPagination);
   const [selectedComment, setSelectedComment] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
   useEffect(() => {
-    comments.fetch(props.user?.id, sortCriteria, pagination);
+    comments.fetch(props.user?.id, sortCriteria, pagination, debouncedSearchTerm);
   }, [
     props.user?.id,
     commentType,
@@ -35,7 +39,18 @@ const Sent = (props) => {
     sortCriteria.desc,
     pagination.page,
     pagination.pageSize,
+    debouncedSearchTerm,
   ]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   const resetTable = () => {
     setSortCriteria(defaultSorted);
@@ -47,12 +62,15 @@ const Sent = (props) => {
       <section className="mr-flex-grow mr-w-full mr-bg-black-15 mr-p-4 md:mr-p-8 mr-rounded">
         <HeaderSent
           commentType={commentType}
-          refreshData={() => comments.fetch(props.user?.id, sortCriteria, pagination)}
+          refreshData={() => comments.fetch(props.user?.id, sortCriteria, pagination, searchTerm)}
           setCommentType={(t) => {
             setCommentType(t);
             resetTable();
           }}
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
         />
+
         <ReactTable
           data={comments.data}
           columns={
@@ -112,7 +130,6 @@ const taskColumns = ({ setSelectedComment }) => [
     ),
     maxWidth: 100,
     sortable: true,
-    resizable: false,
   },
   {
     id: "created",
@@ -125,7 +142,6 @@ const taskColumns = ({ setSelectedComment }) => [
     ),
     maxWidth: 200,
     sortable: true,
-    resizable: false,
   },
   {
     id: "comment",
@@ -145,7 +161,31 @@ const taskColumns = ({ setSelectedComment }) => [
       );
     },
     sortable: true,
-    resizable: false,
+  },
+  {
+    id: "task_status",
+    Header: "Task Status",
+    accessor: "taskStatus",
+    Cell: ({ value }) => {
+      const statusKey = keysByStatus[value];
+      const statusColor = TaskStatusColors[value];
+      return (
+        <span style={{ color: statusColor }}>{statusKey ? statusKey.toUpperCase() : value}</span>
+      );
+    },
+    maxWidth: 140,
+    sortable: true,
+  },
+  {
+    id: "review_status",
+    Header: "Review Status",
+    accessor: "reviewStatus",
+    Cell: ({ value }) => {
+      const statusKey = keysByReviewStatus[value];
+      return statusKey ? statusKey.toUpperCase() : value;
+    },
+    maxWidth: 140,
+    sortable: true,
   },
 ];
 
