@@ -205,8 +205,9 @@ export default class AutosuggestTextBox extends Component {
       return [];
     }
 
-    // Filter out any of our original preferredResults tags so they don't show in the list twice.
-    return this.props.searchResults.filter((t) => !this.props.preferredResults?.contains(t.name));
+    return this.props.searchResults.filter(
+      (t) => !this.props.preferredResults?.some((pr) => pr === t.name),
+    );
   };
 
   render() {
