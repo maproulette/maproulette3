@@ -322,10 +322,8 @@ const Markers = (props) => {
    * Invoked when an individual task marker is clicked by the user.
    */
   const markerClicked = async (marker) => {
-    if (!props.loadingChallenge) {
-      if (marker.options.bounding && marker.options.numberOfPoints > 1) {
-        map.fitBounds(toLatLngBounds(bbox(marker.options.bounding)));
-      }
+    if (marker.options.bounding && marker.options.numberOfPoints > 1) {
+      map.fitBounds(toLatLngBounds(bbox(marker.options.bounding)));
     }
   };
 
