@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.7] - 2025-03-04
+Released with [maproulette-backend_v4.7.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.3)
+
+## What's Changed
+* fix autosuggest bug by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2585
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.6...v3.16.7
+
 ## [v3.16.6] - 2025-03-03
 Released with [maproulette-backend_v4.7.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.3)
 
