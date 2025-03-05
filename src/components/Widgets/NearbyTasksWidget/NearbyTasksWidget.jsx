@@ -2,16 +2,12 @@ import bbox from "@turf/bbox";
 import { featureCollection, point } from "@turf/helpers";
 import _isEqual from "lodash/isEqual";
 import _map from "lodash/map";
-import _pick from "lodash/pick";
-import _sum from "lodash/sum";
-import _values from "lodash/values";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { Popup } from "react-leaflet";
 import AsMappableTask from "../../../interactions/Task/AsMappableTask";
 import { toLatLngBounds } from "../../../services/MapBounds/MapBounds";
 import { buildSearchURL } from "../../../services/SearchCriteria/SearchCriteria";
-import { TaskAction } from "../../../services/Task/TaskAction/TaskAction";
 import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import Dropdown from "../../Dropdown/Dropdown";
@@ -37,8 +33,6 @@ import TaskPropertyFilter from "../../TaskFilters/TaskPropertyFilter";
 import TaskStatusFilter from "../../TaskFilters/TaskStatusFilter";
 import messages from "./Messages";
 import TaskMarkerContent from "./TaskMarkerContent";
-
-const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard];
 
 const descriptor = {
   widgetKey: "NearbyTasksWidget",
@@ -221,21 +215,8 @@ export default class NearbyTasksWidget extends Component {
   }
 }
 
-const calculateTasksInChallenge = (props) => {
-  const actions = props.browsedChallenge?.actions;
-  if (!actions) {
-    return props.taskInfo?.totalCount || props.taskInfo?.tasks?.length;
-  }
-
-  return _sum(_values(_pick(actions, VALID_STATUS_KEYS)));
-};
-
 const ActiveBundle = (props) => {
-  const { task, taskBundle, bundleEditsDisabled, initialBundle, widgetLayout } = props;
-  const disabled =
-    props.bundleEditsDisabled ||
-    (props.initialBundle &&
-      props.initialBundle?.taskIds?.sort() === props.taskBundle?.taskIds?.sort());
+  const { task, taskBundle, widgetLayout } = props;
 
   const showMarkerPopup = (markerData) => {
     return (
@@ -369,14 +350,7 @@ const ActiveBundle = (props) => {
 };
 
 const BuildBundle = (props) => {
-  const {
-    virtualChallenge,
-    virtualChallengeId,
-    taskInfo,
-    taskReadOnly,
-    selectedTasks,
-    bundleEditsDisabled,
-  } = props;
+  const { virtualChallenge, virtualChallengeId } = props;
 
   if (virtualChallenge || Number.isFinite(virtualChallengeId)) {
     return (
@@ -385,8 +359,6 @@ const BuildBundle = (props) => {
       </div>
     );
   }
-
-  const totalTaskCount = taskInfo?.totalCount || taskInfo?.tasks?.length;
 
   const showMarkerPopup = (markerData) => {
     return (
