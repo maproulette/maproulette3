@@ -105,7 +105,7 @@ export const WithWidgetWorkspacesInternal = function (
      * @private
      */
     workspaceConfigurationLabels = () => {
-      return Object.values(this.workspaceConfigurations()).map((conf) => conf.label);
+      return Object.values(this.workspaceConfigurations() || {}).map((conf) => conf.label);
     };
 
     /**

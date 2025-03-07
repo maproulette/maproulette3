@@ -81,7 +81,7 @@ const WithCurrentChallenge = function (WrappedComponent) {
             this.props.entities,
           ),
         );
-        owner = Object.values(this.props.entities.users).find(
+        owner = Object.values(this.props.entities.users || {}).find(
           (user) => user.osmProfile.id === challenge.owner,
         );
       }

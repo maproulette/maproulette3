@@ -473,7 +473,7 @@ export const fetchTopChallenges = function (userId, startDate, limit = 5) {
 
           // Remove the user-specific activity score before adding this challenge
           // to the general redux store.
-          for (const challenge of Object.values(challenges || [])) {
+          for (const challenge of Object.values(challenges)) {
             delete challenge.activity;
           }
         }

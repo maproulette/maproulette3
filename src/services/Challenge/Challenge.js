@@ -181,7 +181,7 @@ export const challengeResultEntity = function (normalizedChallengeResults) {
  */
 export const receiveChallenges = function (normalizedEntities, status = RequestStatus.success) {
   if (normalizedEntities.challenges) {
-    for (const c of Object.values(normalizedEntities.challenges || [])) {
+    for (const c of Object.values(normalizedEntities.challenges)) {
       if (c.dataOriginDate) {
         c.dataOriginDate = format(parseISO(c.dataOriginDate), "yyyy-MM-dd");
       }

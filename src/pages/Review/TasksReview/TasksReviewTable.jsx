@@ -1275,7 +1275,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
         props.reviewTasksType === ReviewTasksType.allReviewedTasks
       ) {
-        for (const status of Object.values(TaskReviewStatus) || []) {
+        for (const status of Object.values(TaskReviewStatus || {})) {
           if (status !== TaskReviewStatus.unnecessary) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
@@ -1285,7 +1285,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           }
         }
       } else {
-        for (const status of Object.values(TaskReviewStatus) || []) {
+        for (const status of Object.values(TaskReviewStatus || {})) {
           if (isNeedsReviewStatus(status)) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
@@ -1360,7 +1360,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
             {props.intl.formatMessage(messages.metaUnreviewed)}
           </option>,
         );
-        for (const status of Object.values(TaskReviewStatus) || []) {
+        for (const status of Object.values(TaskReviewStatus || {})) {
           if (status !== TaskReviewStatus.unnecessary && isMetaReviewStatus(status)) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>

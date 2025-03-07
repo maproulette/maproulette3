@@ -198,7 +198,7 @@ export class AsCooperativeWork {
 
         if (tagEdits) {
           // Work from tag edits instead of dependent operations
-          for (const edit of Object.values(tagEdits || [])) {
+          for (const edit of Object.values(tagEdits)) {
             if (edit.status === "added" || edit.status === "changed") {
               change.updates[edit.name] = edit.newValue;
             } else if (edit.status === "removed") {

@@ -26,7 +26,7 @@ export default class TaskReviewStatusFilter extends Component {
         Object.keys(TaskReviewStatusWithUnset).length;
 
     const currentTaskMetaReviewStatuses = this.props.metaReviewEnabled
-      ? Object.values(this.props.includeMetaReviewStatuses).every((value) => value)
+      ? Object.values(this.props.includeMetaReviewStatuses || {}).every((value) => value)
       : false;
 
     const taskMetaReviewStatusFiltersActive = this.props.metaReviewEnabled
