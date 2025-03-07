@@ -70,7 +70,7 @@ export default function (WrappedComponent) {
         taskMetricsByPriority.percentages = {};
         taskMetricsByPriority.averages = {};
 
-        for (const priority of Object.values(TaskPriority || {})) {
+        for (const priority of Object.values(TaskPriority)) {
           taskMetricsByPriority[priority] = { percentages: {}, averages: {} };
 
           for (let challenge of challenges) {

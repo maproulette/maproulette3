@@ -325,7 +325,7 @@ export default function WithFilteredClusteredTasks(
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
       const keysToSplit = ["status", "reviewStatus", "metaReviewStatus", "priorities"];
-      for (const key of keysToSplit || []) {
+      for (const key of keysToSplit) {
         if (criteria?.filters?.[key] !== undefined && !this.props.taskId) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));

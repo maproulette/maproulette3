@@ -218,7 +218,7 @@ export const WithFilterCriteria = function (
         "priorities",
         "boundingBox",
       ];
-      for (const key of keysToSplit || []) {
+      for (const key of keysToSplit) {
         if (criteria[key] !== undefined && key === "boundingBox") {
           if (typeof criteria[key] === "string") {
             criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
@@ -262,7 +262,7 @@ export const WithFilterCriteria = function (
         "priorities",
         "boundingBox",
       ];
-      for (const key of keysToSplit || []) {
+      for (const key of keysToSplit) {
         if (criteria[key] !== undefined && key === "boundingBox") {
           if (typeof criteria[key] === "string") {
             criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));

@@ -10,7 +10,7 @@ describe("isCooperative", () => {
   });
 
   test("returns true for valid, active types", () => {
-    for (const cooperativeType of Object.values(CooperativeType || {})) {
+    for (const cooperativeType of Object.values(CooperativeType)) {
       if (cooperativeType !== CooperativeType.none) {
         expect(isCooperative(cooperativeType)).toBe(true);
       }
