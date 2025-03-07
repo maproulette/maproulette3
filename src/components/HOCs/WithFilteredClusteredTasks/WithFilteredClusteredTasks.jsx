@@ -325,7 +325,7 @@ export default function WithFilteredClusteredTasks(
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
       const keysToSplit = ["status", "reviewStatus", "metaReviewStatus", "priorities"];
-      for (const key of keysToSplit) {
+      for (const key of keysToSplit || []) {
         if (criteria?.filters?.[key] !== undefined && !this.props.taskId) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
@@ -359,10 +359,9 @@ export default function WithFilteredClusteredTasks(
         const includeStatuses =
           useSavedFilters && savedFilters && savedFilters.length > 0
             ? _fromPairs(_map(criteria.filters.status, (status) => [status, false]))
-            : (initialFilters?.statuses ??
-              _fromPairs(_map(TaskStatus, (status) => [status, false])));
+            : initialFilters?.statuses ?? _fromPairs(_map(TaskStatus, (status) => [status, false]));
 
-        for (const status of criteria.filters.status) {
+        for (const status of criteria.filters.status || []) {
           includeStatuses[status] = true;
         }
 

@@ -59,7 +59,7 @@ const WithManageableProjects = function (WrappedComponent, includeChallenges = f
           // database we need to make sure we also fetch the projects that are pinned.
           let missingProjects = [];
 
-          for (const pinnedProject of this.props.pinnedProjects) {
+          for (const pinnedProject of this.props.pinnedProjects || []) {
             if (!this.props.entities.projects[pinnedProject]) {
               missingProjects.push(pinnedProject);
             }

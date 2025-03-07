@@ -248,7 +248,7 @@ const columns = (tableProps) => [
         </option>,
       ];
 
-      for (const [name, value] of Object.entries(NotificationType)) {
+      for (const [name, value] of Object.entries(NotificationType) || []) {
         options.push(
           <option key={name} value={value}>
             {tableProps.intl.formatMessage(messagesByNotificationType[value])}

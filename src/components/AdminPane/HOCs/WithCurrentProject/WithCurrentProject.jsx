@@ -152,7 +152,7 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
               // fetched yet. We need to fetch those so we can show their names.
               const missingProjects = [];
               if (result?.entities?.challenges) {
-                for (const challenge of Object.values(result.entities.challenges)) {
+                for (const challenge of Object.values(result.entities.challenges || [])) {
                   if (!_isObject(challenge.parent)) {
                     if (!this.props.entities.projects[challenge.parent]) {
                       missingProjects.push(challenge.parent);

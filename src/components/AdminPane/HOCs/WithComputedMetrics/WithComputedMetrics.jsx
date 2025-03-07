@@ -19,7 +19,7 @@ export default function (WrappedComponent) {
       _fromPairs(_map(metrics, (value, label) => [label, (1.0 * value) / total]));
 
     updateTotals = (actions, totalTasks, taskMetrics) => {
-      for (const [label, value] of Object.entries(actions)) {
+      for (const [label, value] of Object.entries(actions || [])) {
         if (label === "avgTimeSpent") {
           taskMetrics.totalTimeSpent = Number.isFinite(taskMetrics.totalTimeSpent)
             ? taskMetrics.totalTimeSpent + value * actions.tasksWithTime
@@ -70,7 +70,7 @@ export default function (WrappedComponent) {
         taskMetricsByPriority.percentages = {};
         taskMetricsByPriority.averages = {};
 
-        for (const priority of Object.values(TaskPriority)) {
+        for (const priority of Object.values(TaskPriority || [])) {
           taskMetricsByPriority[priority] = { percentages: {}, averages: {} };
 
           for (let challenge of challenges) {

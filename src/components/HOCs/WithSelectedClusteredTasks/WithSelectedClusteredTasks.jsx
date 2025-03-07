@@ -58,7 +58,7 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
       if (!this.state.allSelected) {
         const selectedTasks = new Map(this.state.selectedTasks);
 
-        for (const task of tasks) {
+        for (const task of tasks || []) {
           selectedTasks.set(task.id, task);
         }
 
@@ -70,7 +70,7 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
       } else {
         const deselectedTasks = new Map(this.state.deselectedTasks);
 
-        for (const task of tasks) {
+        for (const task of tasks || []) {
           deselectedTasks.delete(task.id);
         }
 
@@ -105,7 +105,7 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
       if (this.state.allSelected) {
         const deselectedTasks = new Map(this.state.deselectedTasks);
 
-        for (const task of tasksToDeselect) {
+        for (const task of tasksToDeselect || []) {
           deselectedTasks.set(task.id, task);
         }
 
@@ -113,7 +113,7 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
       } else {
         const selectedTasks = new Map(this.state.selectedTasks);
 
-        for (const task of tasksToDeselect) {
+        for (const task of tasksToDeselect || []) {
           selectedTasks.delete(task.id);
         }
 

@@ -92,7 +92,7 @@ export class AsMappableTask {
 
     let allProperties = {};
 
-    for (const feature of features) {
+    for (const feature of features || []) {
       if (feature?.properties) {
         allProperties = Object.assign(allProperties, feature.properties);
       }
@@ -117,7 +117,7 @@ export class AsMappableTask {
 
     let allProperties = [];
 
-    for (const feature of features) {
+    for (const feature of features || []) {
       if (feature?.properties) {
         allProperties.push(feature);
       }

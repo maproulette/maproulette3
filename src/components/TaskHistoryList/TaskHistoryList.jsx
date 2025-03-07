@@ -66,7 +66,7 @@ export class TaskHistoryList extends Component {
     let errorTags = null;
 
     const sortedLogs = _sortBy(this.props.taskHistory, (h) => new Date(h.timestamp));
-    for (const [index, log] of sortedLogs.entries()) {
+    for (const [index, log] of sortedLogs.entries() || []) {
       // We are moving on to a new set of actions so let's push
       // this set of entries
       if (
@@ -215,7 +215,7 @@ export class TaskHistoryList extends Component {
 
     const contributors = [];
 
-    for (const log of combinedLogs) {
+    for (const log of combinedLogs || []) {
       // Don't add a contributor twice
       if (
         log.userType &&

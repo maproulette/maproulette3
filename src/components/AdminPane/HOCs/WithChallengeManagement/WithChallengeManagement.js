@@ -103,7 +103,7 @@ async function convertAndBundleGeoJson(challenge) {
         data.features = [];
 
         if (allLines?.length) {
-          for (const taskLine of allLines) {
+          for (const taskLine of allLines || []) {
             data.features.push(...JSON.parse(taskLine).features);
           }
         }

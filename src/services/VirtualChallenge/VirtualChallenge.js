@@ -162,7 +162,7 @@ export const saveVirtualChallenge = function (dispatch, endpoint) {
  */
 const reduceVirtualChallengesFurther = function (mergedState, oldState, virtualChallengeEntities) {
   const now = Date.now();
-  for (const entity of virtualChallengeEntities) {
+  for (const entity of virtualChallengeEntities || []) {
     // Ignore deleted and expired virtual challenges
     if (entity.deleted || entity.expired < now) {
       delete mergedState[entity.id];

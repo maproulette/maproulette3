@@ -82,7 +82,7 @@ export const augmentClusteredTasks = function (
       ignoreLocked,
     )(dispatch).then((result) => {
       if (result) {
-        for (const task of result.tasks) {
+        for (const task of result.tasks || []) {
           task.parent = challengeId;
         }
 

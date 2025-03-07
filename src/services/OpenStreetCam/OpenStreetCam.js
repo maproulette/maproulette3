@@ -104,7 +104,7 @@ const executeOpenStreetCamImageFetch = async function (formData) {
  */
 const formDataToObject = function (formData) {
   const result = {};
-  for (const [key, value] of formData.entries()) {
+  for (const [key, value] of formData.entries() || []) {
     result[key] = value;
   }
 
@@ -116,7 +116,7 @@ const formDataToObject = function (formData) {
  */
 const objectToFormData = function (serialized) {
   const formData = new FormData();
-  for (const [key, value] of Object.entries(serialized)) {
+  for (const [key, value] of Object.entries(serialized || [])) {
     formData.set(key, value);
   }
   return formData;

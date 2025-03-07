@@ -62,7 +62,7 @@ export const WithPublicWidgetWorkspacesInternal = function (
       // Generate a simple layout if none provided, with one widget per row
       if (configuration.layout.length === 0) {
         let nextY = 0;
-        for (const [index, widgetConf] of configuration.widgets.entries()) {
+        for (const [index, widgetConf] of configuration.widgets.entries() || []) {
           configuration.layout.push({
             i: `${index}`,
             x: 0,
@@ -80,7 +80,7 @@ export const WithPublicWidgetWorkspacesInternal = function (
       } else {
         // A layout was provided. If heights and/or widths were omitted or don't meet
         // current minimums, fill them in from the widget descriptors
-        for (const [index, widgetLayout] of configuration.layout.entries()) {
+        for (const [index, widgetLayout] of configuration.layout.entries() || []) {
           if (!configuration.widgets || !configuration.widgets[index]) {
             return;
           }

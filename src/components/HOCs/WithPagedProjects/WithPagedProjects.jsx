@@ -57,7 +57,7 @@ export default function (
         // Now we want pinned projects first followed by the rest of the sorted projects
         pagedProjects = pinnedProjects.concat(pagedProjects);
       } else {
-        for (const c of this.props.filteredChallenges) {
+        for (const c of this.props.filteredChallenges || []) {
           const parent = _find(
             pagedProjects,
             (p) => p.id === (_isObject(c.parent) ? c.parent.id : c.parent),

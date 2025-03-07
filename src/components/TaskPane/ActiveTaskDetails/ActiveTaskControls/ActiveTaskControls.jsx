@@ -345,7 +345,7 @@ export class ActiveTaskControls extends Component {
         ? this.props.getUserAppSetting(this.props.user, "isEditMode")
         : false;
       if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) && editMode) {
-        for (const shortcut of hiddenShortcuts) {
+        for (const shortcut of hiddenShortcuts || []) {
           this.props.deactivateKeyboardShortcut(
             hiddenShortcutGroup,
             shortcut,
@@ -358,7 +358,7 @@ export class ActiveTaskControls extends Component {
         this.props.activateKeyboardShortcut &&
         !editMode
       ) {
-        for (const shortcut of hiddenShortcuts) {
+        for (const shortcut of hiddenShortcuts || []) {
           this.props.activateKeyboardShortcut(
             hiddenShortcutGroup,
             _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
@@ -371,7 +371,7 @@ export class ActiveTaskControls extends Component {
 
   componentWillUnmount() {
     if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
-      for (const shortcut of hiddenShortcuts) {
+      for (const shortcut of hiddenShortcuts || []) {
         this.props.deactivateKeyboardShortcut(
           hiddenShortcutGroup,
           shortcut,

@@ -351,7 +351,7 @@ export const osmObjectParams = function (
 ) {
   const allTasks = Array.isArray(task) ? task : [task];
   let objects = [];
-  for (const task of allTasks) {
+  for (const task of allTasks || []) {
     if (task.geometries?.features) {
       objects = objects.concat(
         _compact(
@@ -438,8 +438,8 @@ export const josmLayerParams = function (task, asNewLayer, taskBundle, options =
   const layerName = options.layerName
     ? options.layerName
     : taskBundle
-      ? `MR Bundle ${task.id} (${taskBundle.tasks.length} tasks)`
-      : `MR Task ${task.id}`;
+    ? `MR Bundle ${task.id} (${taskBundle.tasks.length} tasks)`
+    : `MR Task ${task.id}`;
 
   return `new_layer=${newLayer}&layer_name=${encodeURIComponent(layerName)}`;
 };
@@ -663,7 +663,7 @@ export const sendJOSMCommand = function (uri) {
 const executeJOSMBatch = async function (commands, transmissionDelay = 1000) {
   // For Safari we execute all the commands immediately
   if (window.safari) {
-    for (const command of commands) {
+    for (const command of commands || []) {
       command();
     }
     return;

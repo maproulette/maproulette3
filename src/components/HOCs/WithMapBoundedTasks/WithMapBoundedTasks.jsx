@@ -66,7 +66,7 @@ export const WithMapBoundedTasks = function (WrappedComponent, mapType, matchCha
 
       const allowedChallenges = new Set();
 
-      for (const challenge of this.props.challenges) {
+      for (const challenge of this.props.challenges || []) {
         allowedChallenges.add(challenge.id);
       }
 

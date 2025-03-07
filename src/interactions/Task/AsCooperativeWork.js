@@ -117,7 +117,7 @@ export class AsCooperativeWork {
         }
 
         const diff = {};
-        for (const tag of osmElements.get(independentOperation.data.id).tag) {
+        for (const tag of osmElements.get(independentOperation.data.id).tag || []) {
           diff[tag.k] = {
             name: tag.k,
             value: tag.v,
@@ -126,10 +126,10 @@ export class AsCooperativeWork {
           };
         }
 
-        for (const dependentOperation of independentOperation.data.operations) {
+        for (const dependentOperation of independentOperation.data.operations || []) {
           switch (dependentOperation.operation) {
             case "setTags":
-              for (const [key, value] of Object.entries(dependentOperation.data)) {
+              for (const [key, value] of Object.entries(dependentOperation.data || [])) {
                 const diffEntry = diff[key];
                 if (!diffEntry) {
                   // New tag
@@ -150,7 +150,7 @@ export class AsCooperativeWork {
               }
               break;
             case "unsetTags":
-              for (const key of dependentOperation.data) {
+              for (const key of dependentOperation.data || []) {
                 const diffEntry = diff[key];
                 if (diffEntry) {
                   // Delete tag
@@ -198,7 +198,7 @@ export class AsCooperativeWork {
 
         if (tagEdits) {
           // Work from tag edits instead of dependent operations
-          for (const edit of Object.values(tagEdits)) {
+          for (const edit of Object.values(tagEdits || [])) {
             if (edit.status === "added" || edit.status === "changed") {
               change.updates[edit.name] = edit.newValue;
             } else if (edit.status === "removed") {
@@ -206,7 +206,7 @@ export class AsCooperativeWork {
             }
           }
         } else {
-          for (const dependentOperation of independentOperation.data.operations) {
+          for (const dependentOperation of independentOperation.data.operations || []) {
             if (dependentOperation.operation === "setTags") {
               change.updates = Object.assign(change.updates, dependentOperation.data);
             } else if (dependentOperation.operation === "unsetTags") {

@@ -26,7 +26,7 @@ export default function WithTaskMarkers(WrappedComponent, tasksProp = "clustered
 
       const markers = [];
       if (_isObject(challengeTasks) && Array.isArray(challengeTasks.tasks)) {
-        for (const task of challengeTasks.tasks) {
+        for (const task of challengeTasks.tasks || []) {
           if (allowedStatuses.includes(task.status)) {
             const nearestToCenter = AsMappableTask(task).nearestPointToCenter();
             markers.push({

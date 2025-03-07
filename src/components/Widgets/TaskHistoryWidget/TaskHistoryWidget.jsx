@@ -62,7 +62,7 @@ export default class TaskHistoryWidget extends Component {
     let earliestDate = null;
     const usernames = [];
 
-    for (const log of this.props.task.history) {
+    for (const log of this.props.task.history || []) {
       if (!earliestDate || log.timestamp < earliestDate) {
         earliestDate = log.timestamp;
       }

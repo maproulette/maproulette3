@@ -23,11 +23,11 @@ const WithChallengeResultParents = function (WrappedComponent) {
 
       const projectsWithChallengeSearchResults = new Set();
 
-      for (const c of this.props.filteredChallenges) {
+      for (const c of this.props.filteredChallenges || []) {
         projectsWithChallengeSearchResults.add(c.parent);
 
         if (c.virtualParents) {
-          for (const vp of c.virtualParents) {
+          for (const vp of c.virtualParents || []) {
             projectsWithChallengeSearchResults.add(vp);
           }
         }

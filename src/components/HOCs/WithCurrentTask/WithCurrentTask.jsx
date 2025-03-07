@@ -309,7 +309,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     saveTaskTags: (task, tags) => {
       if (task.bundleId) {
         dispatch(fetchTaskBundle(task.bundleId), false).then((taskBundle) => {
-          for (const task of taskBundle.tasks) {
+          for (const task of taskBundle.tasks || []) {
             dispatch(updateTaskTags(task.id, tags));
           }
         });

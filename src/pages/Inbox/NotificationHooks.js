@@ -4,7 +4,7 @@ import _map from "lodash/map";
 import { useCallback, useMemo, useState } from "react";
 
 export const useNotificationSelection = (notifications) => {
-  for (const notification of notifications) {
+  for (const notification of notifications || []) {
     if (!notification.taskId && notification.challengeId) {
       notification.taskId = notification.challengeName;
     }
@@ -38,11 +38,11 @@ export const useNotificationSelection = (notifications) => {
       const targetNotifications = Array.isArray(thread) ? thread : [notification];
       const updatedSelections = new Set(selectedNotifications);
       if (allNotificationsInThreadSelected(targetNotifications)) {
-        for (const target of targetNotifications) {
+        for (const target of targetNotifications || []) {
           updatedSelections.delete(target.id);
         }
       } else {
-        for (const target of targetNotifications) {
+        for (const target of targetNotifications || []) {
           updatedSelections.add(target.id);
         }
       }

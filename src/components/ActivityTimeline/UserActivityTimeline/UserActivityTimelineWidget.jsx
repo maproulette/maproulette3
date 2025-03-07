@@ -84,12 +84,12 @@ export default class UserActivityTimelineWidget extends Component {
     // descriptions into a Map (tracking the total count of the dups), so we
     // can keep the timeline tidy and show a count instead of simply repeating
     // the same action multiple times for a challenge.
-    for (const dateGroup of groupedByDate) {
+    for (const dateGroup of groupedByDate || []) {
       // Group activities on this day by challenge
       const groupedByChallenge = _toPairs(_groupBy(dateGroup[1], "challengeId"));
 
       // Consolidate duplicate activities for each challenge into Map
-      for (const challengeGroup of groupedByChallenge) {
+      for (const challengeGroup of groupedByChallenge || []) {
         challengeGroup[1] = challengeGroup[1].reduce(
           (challengeEntries, entry) =>
             challengeEntries.set(

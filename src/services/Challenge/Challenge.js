@@ -181,7 +181,7 @@ export const challengeResultEntity = function (normalizedChallengeResults) {
  */
 export const receiveChallenges = function (normalizedEntities, status = RequestStatus.success) {
   if (normalizedEntities.challenges) {
-    for (const c of Object.values(normalizedEntities.challenges)) {
+    for (const c of Object.values(normalizedEntities.challenges || [])) {
       if (c.dataOriginDate) {
         c.dataOriginDate = format(parseISO(c.dataOriginDate), "yyyy-MM-dd");
       }
@@ -254,15 +254,15 @@ export const fetchPreferredChallenges = function (limit = RESULTS_PER_PAGE) {
         const result = normalizedResults.result;
         const challenges = normalizedResults.entities.challenges;
 
-        for (const challenge of result.popular) {
+        for (const challenge of result.popular || []) {
           challenges[challenge].popular = true;
         }
 
-        for (const challenge of result.newest) {
+        for (const challenge of result.newest || []) {
           challenges[challenge].newest = true;
         }
 
-        for (const challenge of result.featured) {
+        for (const challenge of result.featured || []) {
           challenges[challenge].featured = true;
         }
 
@@ -863,7 +863,7 @@ export const fetchChallenges = function (challengeIds, suppressReceive = false) 
     })
       .execute()
       .then((normalizedResults) => {
-        for (const challenge of normalizedResults.entities.challenges) {
+        for (const challenge of normalizedResults.entities.challenges || []) {
           if (challenge.virtualParents === undefined) {
             challenge.virtualParents = [];
           }
@@ -1219,7 +1219,7 @@ export const moveChallenges = function (challengeIds, toProjectId) {
     })
       .execute()
       .then(() => {
-        for (const id of challengeIds) {
+        for (const id of challengeIds || []) {
           fetchChallenge(id)(dispatch);
         }
       })
@@ -1383,7 +1383,7 @@ const removeChallengeKeywords = function (challengeId, oldKeywords = []) {
 const reduceChallengesFurther = function (mergedState, oldState, challengeEntities) {
   // The generic reduction will merge arrays and objects, but for some fields
   // we want to simply overwrite with the latest data.
-  for (const entity of challengeEntities) {
+  for (const entity of challengeEntities || []) {
     // Until we implement undelete, ignore deleted challenges.
     if (entity.deleted) {
       delete mergedState[entity.id];

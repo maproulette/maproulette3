@@ -43,12 +43,12 @@ export function buildSearchCriteria(searchParams, defaultCriteria) {
 export function buildSearchURL(searchCriteria) {
   const params = {};
 
-  for (const key of Object.keys(searchCriteria)) {
+  for (const key of Object.keys(searchCriteria || [])) {
     if (typeof searchCriteria[key] === "object") {
       if (key === "boundingBox") {
         params.boundingBox = _values(searchCriteria.boundingBox).join();
       } else {
-        for (const subkey of Object.keys(searchCriteria[key])) {
+        for (const subkey of Object.keys(searchCriteria[key] || [])) {
           if (searchCriteria[key][subkey] !== undefined && searchCriteria[key][subkey] !== null) {
             // taskPropertySearch is a json object
             if (subkey === "taskPropertySearch") {
@@ -85,7 +85,7 @@ export function buildSearchCriteriafromURL(searchURL) {
     return value;
   };
 
-  for (const key of Object.keys(parsedURL)) {
+  for (const key of Object.keys(parsedURL || [])) {
     const result = key.match(/(\w+)\.(\w+)/);
     if (result) {
       const primaryKey = result[1];

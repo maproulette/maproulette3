@@ -141,14 +141,14 @@ export class AsManager extends AsEndUser {
 
     const projectChallenges = new Set();
 
-    for (const challenge of challenges) {
+    for (const challenge of challenges || []) {
       // handle both normalized and denormalized challenges
       if (projectIds.indexOf(challenge?.parent?.id ?? challenge.parent) !== -1) {
         projectChallenges.add(challenge);
       }
 
       if (challenge.virtualParents) {
-        for (const vp of challenge.virtualParents) {
+        for (const vp of challenge.virtualParents || []) {
           if (projectIds.indexOf(_isObject(vp) ? vp.id : vp) !== -1) {
             if (!projectChallenges.has(challenge)) {
               projectChallenges.add(challenge);

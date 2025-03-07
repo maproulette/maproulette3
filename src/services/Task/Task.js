@@ -1329,7 +1329,7 @@ export const simulatedEntities = function (task) {
 const reduceTasksFurther = function (mergedState, oldState, taskEntities) {
   // The generic reduction will merge arrays and objects, but for some fields
   // we want to simply overwrite with the latest data.
-  for (const entity of taskEntities) {
+  for (const entity of taskEntities || []) {
     if (Array.isArray(entity.tags)) {
       mergedState[entity.id].tags = entity.tags;
     }

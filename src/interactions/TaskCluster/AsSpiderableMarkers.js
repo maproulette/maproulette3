@@ -30,7 +30,7 @@ export class AsSpiderableMarkers {
     const legLengthPx = circumferencePx / (Math.PI * 2); // radius from circumference
     const angleStep = (Math.PI * 2) / affectedMarkers.length;
 
-    for (const [index, marker] of affectedMarkers.entries()) {
+    for (const [index, marker] of affectedMarkers.entries() || []) {
       const relocatedMarker = _cloneDeep(marker);
       const angle = CIRCLE_START_ANGLE + index * angleStep;
       relocatedMarker.originalPosition = relocatedMarker.position;
@@ -50,7 +50,7 @@ export class AsSpiderableMarkers {
     let legLengthPx = SPIRAL_LENGTH_START;
     let angle = 0;
 
-    for (const [index, marker] of affectedMarkers.entries()) {
+    for (const [index, marker] of affectedMarkers.entries() || []) {
       const relocatedMarker = _cloneDeep(marker);
       angle += SPIRAL_FOOT_SEPARATION / legLengthPx + index * 0.0005;
       relocatedMarker.originalPosition = relocatedMarker.position;

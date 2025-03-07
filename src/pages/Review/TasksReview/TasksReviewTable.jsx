@@ -832,7 +832,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         </option>,
       ];
 
-      for (const [name, value] of Object.entries(TaskStatus)) {
+      for (const [name, value] of Object.entries(TaskStatus) || []) {
         if (isReviewableStatus(value)) {
           options.push(
             <option key={name} value={value}>
@@ -880,7 +880,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         </option>,
       ];
 
-      for (const [name, value] of Object.entries(TaskPriority)) {
+      for (const [name, value] of Object.entries(TaskPriority) || []) {
         options.push(
           <option key={name} value={value}>
             {props.intl.formatMessage(messagesByPriority[value])}
@@ -1262,7 +1262,8 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
       ];
 
       if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
-        for (const status of [TaskReviewStatus.approved, TaskReviewStatus.approvedWithFixes]) {
+        for (const status of [TaskReviewStatus.approved, TaskReviewStatus.approvedWithFixes] ||
+          []) {
           options.push(
             <option key={keysByReviewStatus[status]} value={status}>
               {props.intl.formatMessage(messagesByReviewStatus[status])}
@@ -1274,7 +1275,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
         props.reviewTasksType === ReviewTasksType.allReviewedTasks
       ) {
-        for (const status of Object.values(TaskReviewStatus)) {
+        for (const status of Object.values(TaskReviewStatus) || []) {
           if (status !== TaskReviewStatus.unnecessary) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
@@ -1284,7 +1285,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
           }
         }
       } else {
-        for (const status of Object.values(TaskReviewStatus)) {
+        for (const status of Object.values(TaskReviewStatus) || []) {
           if (isNeedsReviewStatus(status)) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>
@@ -1359,7 +1360,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
             {props.intl.formatMessage(messages.metaUnreviewed)}
           </option>,
         );
-        for (const status of Object.values(TaskReviewStatus)) {
+        for (const status of Object.values(TaskReviewStatus) || []) {
           if (status !== TaskReviewStatus.unnecessary && isMetaReviewStatus(status)) {
             options.push(
               <option key={keysByReviewStatus[status]} value={status}>

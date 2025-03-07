@@ -126,8 +126,8 @@ export const WithTaskPropertyStyleRules = function (WrappedComponent) {
 
     render() {
       const errors = this.state.validationErrors;
-      for (const [index, rule] of this.state.styleRules.entries()) {
-        for (const style of rule.styles) {
+      for (const [index, rule] of this.state.styleRules.entries() || []) {
+        for (const style of rule.styles || []) {
           if (style.styleName && !style.styleValue) {
             // Missing style value
             errors[index].push(PROPERTY_RULE_ERRORS.missingStyleValue);

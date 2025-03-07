@@ -224,7 +224,7 @@ export const pruneDecommissionedWidgets = (originalGridConfiguration) => {
 export const pruneWidgets = (gridConfiguration, widgetKeys) => {
   let prunedConfiguration = gridConfiguration;
 
-  for (const widgetKey of widgetKeys) {
+  for (const widgetKey of widgetKeys || []) {
     const widgetIndex = _findIndex(prunedConfiguration.widgets, { widgetKey });
     if (widgetIndex !== -1) {
       // If we haven't made a fresh copy of gridConfiguration yet, do so now
@@ -290,7 +290,7 @@ export const ensurePermanentWidgetsAdded = (gridConfiguration, defaultConfigurat
   let updatedConfiguration = gridConfiguration;
 
   if (gridConfiguration.permanentWidgets) {
-    for (const widgetKey of gridConfiguration.permanentWidgets) {
+    for (const widgetKey of gridConfiguration.permanentWidgets || []) {
       if (!_find(updatedConfiguration.widgets, { widgetKey })) {
         updatedConfiguration = addWidgetToGrid(
           updatedConfiguration,
@@ -332,7 +332,9 @@ export const exportWorkspaceConfiguration = (workspaceConfiguration, exportName)
   });
   FileSaver.saveAs(
     exportBlob,
-    `${_snakeCase(workspaceConfiguration.name)}-${_snakeCase(exportRepresentation.meta.exportName)}-layout.json`,
+    `${_snakeCase(workspaceConfiguration.name)}-${_snakeCase(
+      exportRepresentation.meta.exportName,
+    )}-layout.json`,
   );
 };
 
@@ -347,7 +349,7 @@ export const importRecommendedConfiguration = (recommendedLayout) => {
   );
   delete importedConfiguration.widgetKeys;
 
-  for (const taskWidgetLayout of importedConfiguration.layout) {
+  for (const taskWidgetLayout of importedConfiguration.layout || []) {
     taskWidgetLayout.i = generateWidgetId();
   }
 
@@ -398,7 +400,7 @@ export const importWorkspaceConfiguration = (workspaceName, importFile) => {
         );
         delete importedConfiguration.widgetKeys;
 
-        for (const widgetLayout of importedConfiguration.layout) {
+        for (const widgetLayout of importedConfiguration.layout || []) {
           widgetLayout.i = generateWidgetId();
         }
 

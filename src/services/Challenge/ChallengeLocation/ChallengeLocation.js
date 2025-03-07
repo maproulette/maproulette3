@@ -49,11 +49,11 @@ export const challengePassesLocationFilter = function (challengeFilters, challen
   // Or if the challenge is listed in the TaskClusters or in the Map Bounded Tasks
   let validChallenges = [];
 
-  for (const task of props.mapBoundedTasks?.tasks) {
+  for (const task of props.mapBoundedTasks?.tasks || []) {
     validChallenges = _concat(validChallenges, task.parentId);
   }
 
-  for (const cluster of props.taskClusters?.clusters) {
+  for (const cluster of props.taskClusters?.clusters || []) {
     validChallenges = _concat(validChallenges, cluster.challengeIds);
   }
 

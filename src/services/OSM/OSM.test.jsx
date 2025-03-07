@@ -45,7 +45,7 @@ describe("OSM Service Functions", () => {
         { username: "", expected: `${baseURL}/user/` },
       ];
 
-      for (const { username, expected } of testCases) {
+      for (const { username, expected } of testCases || []) {
         expect(osmUserProfileURL(username)).toBe(expected);
       }
     });
@@ -58,7 +58,7 @@ describe("OSM Service Functions", () => {
       500: AppErrors.osm.fetchFailure,
     };
 
-    for (const [status, error] of Object.entries(statusToError)) {
+    for (const [status, error] of Object.entries(statusToError || [])) {
       test(`should handle ${status} error`, async () => {
         global.fetch.mockResolvedValueOnce({
           ok: false,
@@ -82,7 +82,7 @@ describe("OSM Service Functions", () => {
       { xml: `<osm><unknown id="1"></unknown></osm>`, expectedLength: 1 },
     ];
 
-    for (const { expectedLength } of testXMLResponses) {
+    for (const { expectedLength } of testXMLResponses || []) {
       test(`should resolve with XML response of length ${expectedLength}`, async () => {
         const emptyXML = "<osm></osm>";
         global.fetch.mockResolvedValueOnce({
@@ -107,7 +107,7 @@ describe("OSM Service Functions", () => {
         { status: 418, error: AppErrors.osm.fetchFailure }, // Unknown status
       ];
 
-      for (const { status, error } of errorCases) {
+      for (const { status, error } of errorCases || []) {
         test(`should handle ${status} error`, async () => {
           global.fetch.mockResolvedValueOnce({ ok: false, status });
           await expect(fetchOSMData("0,0,1,1")).rejects.toEqual(error);
@@ -123,7 +123,7 @@ describe("OSM Service Functions", () => {
       500: AppErrors.osm.fetchFailure,
     };
 
-    for (const [status, error] of Object.entries(statusToError)) {
+    for (const [status, error] of Object.entries(statusToError || [])) {
       test(`should handle ${status} error`, async () => {
         global.fetch.mockResolvedValueOnce({
           ok: false,
@@ -163,7 +163,7 @@ describe("OSM Service Functions", () => {
         },
       ];
 
-      for (const { xml, elementId, expected, asXML } of testCases) {
+      for (const { xml, elementId, expected, asXML } of testCases || []) {
         global.fetch.mockResolvedValueOnce({
           ok: true,
           text: vi.fn().mockResolvedValue(xml),
@@ -224,7 +224,7 @@ describe("OSM Service Functions", () => {
       },
     ];
 
-    for (const { history, changesetsXML, expectedLength } of testCases) {
+    for (const { history, changesetsXML, expectedLength } of testCases || []) {
       test("should handle changesets correctly", async () => {
         global.fetch
           .mockResolvedValueOnce({
@@ -240,7 +240,7 @@ describe("OSM Service Functions", () => {
 
         expect(result).toHaveLength(expectedLength);
 
-        for (const [index, element] of result.entries()) {
+        for (const [index, element] of result.entries() || []) {
           const originalChangeset = history.elements[index].changeset;
 
           // If the changeset was found in the XML response, it should be an object
@@ -281,7 +281,7 @@ describe("OSM Service Functions", () => {
       const history = await fetchOSMElementHistory("way/12345", true);
 
       expect(history).toHaveLength(2);
-      for (const [index, element] of history.entries()) {
+      for (const [index, element] of history.entries() || []) {
         // When no changeset data is found, the original number should be preserved
         expect(element.changeset).toBe(mockHistory.elements[index].changeset);
       }
@@ -408,7 +408,7 @@ describe("OSM Service Functions", () => {
       500: AppErrors.osm.fetchFailure,
     };
 
-    for (const [status, error] of Object.entries(statusToError)) {
+    for (const [status, error] of Object.entries(statusToError || [])) {
       test(`should handle ${status} error`, async () => {
         global.fetch.mockResolvedValueOnce({
           ok: false,

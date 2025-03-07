@@ -512,7 +512,7 @@ export const deleteProject = function (projectId, immediate = false) {
 const reduceProjectsFurther = function (mergedState, oldState, projectEntities) {
   // The generic reduction will merge arrays and objects, but for some
   // fields we want to simply overwrite with the latest data.
-  for (const entity of projectEntities) {
+  for (const entity of projectEntities || []) {
     // Ignore deleted projects.
     if (entity.deleted) {
       delete mergedState[entity.id];

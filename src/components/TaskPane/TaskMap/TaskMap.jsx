@@ -193,7 +193,7 @@ export const TaskMapContent = (props) => {
         // put them into an intuitive order
         const intraLayerMatches = [];
 
-        for (const featureLayer of Object.values(layer._layers)) {
+        for (const featureLayer of Object.values(layer._layers || [])) {
           if (featureLayer.toGeoJSON) {
             const featureGeojson = featureLayer.toGeoJSON();
             // Look for an overlap between the click and the feature. However, since marker
@@ -233,7 +233,7 @@ export const TaskMapContent = (props) => {
         }
 
         if (intraLayerMatches.length > 0) {
-          for (const match of orderedFeatureLayers(intraLayerMatches)) {
+          for (const match of orderedFeatureLayers(intraLayerMatches) || []) {
             candidateLayers.set(match.description, match);
           }
         }
@@ -465,7 +465,7 @@ export const TaskMapContent = (props) => {
   const generateDirectionalityMarkers = () => {
     const markers = [];
     const allFeatures = features;
-    for (const [featureIndex, feature] of allFeatures.entries()) {
+    for (const [featureIndex, feature] of allFeatures.entries() || []) {
       if (!feature.properties || !feature.properties.oneway) {
         continue;
       }

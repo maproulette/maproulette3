@@ -160,7 +160,7 @@ const Markers = (props) => {
 
     const refreshed = new Map();
 
-    for (const marker of props.taskMarkers) {
+    for (const marker of props.taskMarkers || []) {
       if (spidered.has(marker.options.taskId)) {
         refreshed.set(marker.options.taskId, {
           ...spidered.get(marker.options.taskId),
@@ -220,7 +220,7 @@ const Markers = (props) => {
       centerPointPx,
       CLUSTER_ICON_PIXELS,
     );
-    for (const s of updateSpidered.values()) {
+    for (const s of updateSpidered.values() || []) {
       s.position = map.layerPointToLatLng(s.positionPx);
     }
     setSpidered(updateSpidered);

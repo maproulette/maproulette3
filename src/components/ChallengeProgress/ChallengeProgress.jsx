@@ -224,7 +224,7 @@ export class ChallengeProgress extends Component {
   calculateChallengeStats(taskActions, orderedStatuses, localizedStatuses) {
     let challengeStats = {};
 
-    for (const status of orderedStatuses) {
+    for (const status of orderedStatuses || []) {
       challengeStats[localizedStatuses[keysByStatus[status]]] = {
         count: taskActions[keysByStatus[status]],
         percent: this.percent(taskActions[keysByStatus[status]], taskActions.total),
@@ -240,7 +240,7 @@ export class ChallengeProgress extends Component {
       [availableLabel]: this.percent(taskActions.available, taskActions.total),
     };
 
-    for (const status of orderedStatuses) {
+    for (const status of orderedStatuses || []) {
       completionData[localizedStatuses[keysByStatus[status]]] = this.percent(
         taskActions[keysByStatus[status]],
         taskActions.total,

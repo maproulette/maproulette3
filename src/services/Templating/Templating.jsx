@@ -46,7 +46,7 @@ export const expandTemplatingInJSX = function (jsxNode, props) {
             // prior to tokenization
             let content = child;
 
-            for (const handler of shortCodeHandlers) {
+            for (const handler of shortCodeHandlers || []) {
               if (handler.normalizeContent) {
                 content = handler.normalizeContent(content, props);
               }

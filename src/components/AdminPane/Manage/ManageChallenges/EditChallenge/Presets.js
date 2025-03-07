@@ -85,7 +85,7 @@ export const definedPresets = (challengeData, definedCategories) => {
  * Remove preset category top-level fields from the challenge
  */
 export const prunePresetCategories = (challengeData, activeCategories) => {
-  for (const categoryName of activeCategories) {
+  for (const categoryName of activeCategories || []) {
     delete challengeData[categoryName];
   }
 };
@@ -97,7 +97,7 @@ export const prunePresetCategories = (challengeData, activeCategories) => {
 export const categorizePresetStrings = (presetStrings) => {
   const categorized = {};
 
-  for (const preset of presetStrings) {
+  for (const preset of presetStrings || []) {
     const parentCategory = Object.entries(idPresets).find(([_, category]) => {
       return category.members.includes(preset);
     });

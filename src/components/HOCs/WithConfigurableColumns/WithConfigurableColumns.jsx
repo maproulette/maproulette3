@@ -69,7 +69,7 @@ export default function (
       const availableColumns = {};
       let availableColumnsKeys = _pull(_keys(allColumns), ...addedColumnsKeys);
 
-      for (const column of availableColumnsKeys) {
+      for (const column of availableColumnsKeys || []) {
         availableColumns[column] = allColumns[column];
         let message = column;
 
@@ -83,7 +83,7 @@ export default function (
 
       // Next if we are including task properties as columns we need to add those
       if (includeTaskPropertyKeys) {
-        for (const propKey of this.props.taskPropertyKeys) {
+        for (const propKey of this.props.taskPropertyKeys || []) {
           if (!_find(addedColumnsKeys, (k) => k === `:${propKey}`)) {
             // Task Properties get italicized to visually distinguish them
             availableColumns[`:${propKey}`] = {
@@ -96,7 +96,7 @@ export default function (
       // Now we need to internalize the addedColumns as well.
       const addedColumns = {};
 
-      for (const column of addedColumnsKeys) {
+      for (const column of addedColumnsKeys || []) {
         if (allColumns[column]) {
           addedColumns[column] = allColumns[column];
           if (columnMessages[`${column}Label`]) {
@@ -152,7 +152,7 @@ export default function (
       // our key, then we will stick the columnKey on the end.
       let keyAdded = false;
 
-      for (const [key, value] of Object.entries(this.state.availableColumns)) {
+      for (const [key, value] of Object.entries(this.state.availableColumns || [])) {
         // If our columnKey to add is not a task property column and we are
         // starting to copy over the :taskPropertyColumns in the list then
         // we insert our new columnKey first before continuing on.
@@ -182,7 +182,7 @@ export default function (
 
       // Fetch the item from the originalIndex
       let savedItem = null;
-      for (const [key, column] of Object.entries(this.state.addedColumns)) {
+      for (const [key, column] of Object.entries(this.state.addedColumns || [])) {
         if (index === originalIndex) {
           savedItem = { key: key, column: column };
         }
@@ -197,7 +197,7 @@ export default function (
       // moving item is being moved up or down.
       const newColumnMap = {};
       index = 0;
-      for (const [key, column] of Object.entries(this.state.addedColumns)) {
+      for (const [key, column] of Object.entries(this.state.addedColumns || [])) {
         if (index === newIndex) {
           // Our item is being moved up in the list.
           if (newIndex < originalIndex) {

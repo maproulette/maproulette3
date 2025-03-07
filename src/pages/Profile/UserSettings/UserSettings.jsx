@@ -61,7 +61,7 @@ class UserSettings extends Component {
         editableUser.customBasemaps,
         (data) => _isEmpty(_trim(data.name)) || _isEmpty(_trim(data.url)),
       );
-      for (const data of editableUser.customBasemaps) {
+      for (const data of editableUser.customBasemaps || []) {
         if (!data.id) {
           data.id = -1;
         }
@@ -84,7 +84,7 @@ class UserSettings extends Component {
         const serverBasemaps = updatedUser?.settings?.customBasemaps;
 
         if (settingsFormData.customBasemaps) {
-          for (const basemap of settingsFormData.customBasemaps) {
+          for (const basemap of settingsFormData.customBasemaps || []) {
             let serverBasemap = serverBasemaps?.find((m) => m.name === basemap.name);
 
             if (!basemap.id && !_isEmpty(basemap.url) && !_isEmpty(basemap.name) && serverBasemap) {
@@ -130,7 +130,7 @@ class UserSettings extends Component {
   validate = (formData, errors) => {
     // Validates that all custom basemap names are unique.
     const basemapNames = _countBy(formData.customBasemaps, (bm) => bm.name);
-    for (const [name, count] of Object.entries(basemapNames)) {
+    for (const [name, count] of Object.entries(basemapNames || [])) {
       if (count > 1) {
         const badIndex = _findLastIndex(formData.customBasemaps, (bm) => bm.name === name);
         if (errors.customBasemaps[badIndex]) {
