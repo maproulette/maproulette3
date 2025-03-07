@@ -13,10 +13,10 @@ import WithSearch from "../../../HOCs/WithSearch/WithSearch";
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithComboSearch = (WrappedComponent, searches) => {
+const WithComboSearch = (WrappedComponent, searches = {}) => {
   let Combo = WrappedComponent;
 
-  for (const [searchName, searchFunction] of Object.entries(searches || [])) {
+  for (const [searchName, searchFunction] of Object.entries(searches)) {
     Combo = WithSearch(Combo, searchName, searchFunction);
   }
 

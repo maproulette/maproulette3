@@ -23,9 +23,7 @@ const requiredEnvVars = {
 // Validate required environment variables
 Object.entries(requiredEnvVars).forEach(([key, value]) => {
   if (!value) {
-    throw new Error(
-      `Required environment variable ${key} is missing. Please add it to .env.local`
-    );
+    throw new Error(`Required environment variable ${key} is missing. Please add it to .env.local`);
   }
 });
 

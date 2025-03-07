@@ -139,7 +139,7 @@ export class AsSimpleStyleableFeature {
       return;
     }
 
-    for (const [styleName, styleValue] of Object.entries(lineStyles || [])) {
+    for (const [styleName, styleValue] of Object.entries(lineStyles || {})) {
       layer.setStyle({ [simplestyleLineToLeafletMapping[styleName]]: styleValue });
     }
   }
@@ -176,7 +176,7 @@ export class AsSimpleStyleableFeature {
 
     let useCustomMarker = false;
 
-    for (const [styleName, styleValue] of Object.entries(pointStyles || [])) {
+    for (const [styleName, styleValue] of Object.entries(pointStyles || {})) {
       switch (styleName) {
         case "marker-color":
           useCustomMarker = true;

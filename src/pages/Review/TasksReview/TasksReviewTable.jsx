@@ -832,7 +832,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         </option>,
       ];
 
-      for (const [name, value] of Object.entries(TaskStatus) || []) {
+      for (const [name, value] of Object.entries(TaskStatus)) {
         if (isReviewableStatus(value)) {
           options.push(
             <option key={name} value={value}>
@@ -880,7 +880,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
         </option>,
       ];
 
-      for (const [name, value] of Object.entries(TaskPriority) || []) {
+      for (const [name, value] of Object.entries(TaskPriority)) {
         options.push(
           <option key={name} value={value}>
             {props.intl.formatMessage(messagesByPriority[value])}

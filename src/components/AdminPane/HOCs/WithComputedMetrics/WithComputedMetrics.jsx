@@ -18,8 +18,8 @@ export default function (WrappedComponent) {
     computeAverages = (metrics, total) =>
       _fromPairs(_map(metrics, (value, label) => [label, (1.0 * value) / total]));
 
-    updateTotals = (actions, totalTasks, taskMetrics) => {
-      for (const [label, value] of Object.entries(actions || [])) {
+    updateTotals = (actions = {}, totalTasks, taskMetrics) => {
+      for (const [label, value] of Object.entries(actions)) {
         if (label === "avgTimeSpent") {
           taskMetrics.totalTimeSpent = Number.isFinite(taskMetrics.totalTimeSpent)
             ? taskMetrics.totalTimeSpent + value * actions.tasksWithTime

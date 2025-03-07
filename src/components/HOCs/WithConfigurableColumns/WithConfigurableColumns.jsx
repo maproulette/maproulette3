@@ -152,7 +152,7 @@ export default function (
       // our key, then we will stick the columnKey on the end.
       let keyAdded = false;
 
-      for (const [key, value] of Object.entries(this.state.availableColumns || [])) {
+      for (const [key, value] of Object.entries(this.state.availableColumns || {})) {
         // If our columnKey to add is not a task property column and we are
         // starting to copy over the :taskPropertyColumns in the list then
         // we insert our new columnKey first before continuing on.
@@ -182,7 +182,7 @@ export default function (
 
       // Fetch the item from the originalIndex
       let savedItem = null;
-      for (const [key, column] of Object.entries(this.state.addedColumns || [])) {
+      for (const [key, column] of Object.entries(this.state.addedColumns || {})) {
         if (index === originalIndex) {
           savedItem = { key: key, column: column };
         }
@@ -197,7 +197,7 @@ export default function (
       // moving item is being moved up or down.
       const newColumnMap = {};
       index = 0;
-      for (const [key, column] of Object.entries(this.state.addedColumns || [])) {
+      for (const [key, column] of Object.entries(this.state.addedColumns || {})) {
         if (index === newIndex) {
           // Our item is being moved up in the list.
           if (newIndex < originalIndex) {

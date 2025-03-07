@@ -158,7 +158,7 @@ export const WithSearchRoute = function (WrappedComponent, searchGroup) {
 
 export const executeRouteSearch = (routeCriteria, searchString) => {
   const searchCriteria = queryString.parse(searchString);
-  for (const [key, value] of Object.entries(searchCriteria || [])) {
+  for (const [key, value] of Object.entries(searchCriteria)) {
     if (routeCriteria[key] && !_isEmpty(value)) {
       routeCriteria[key](value);
     }

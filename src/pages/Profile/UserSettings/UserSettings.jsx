@@ -129,8 +129,8 @@ class UserSettings extends Component {
 
   validate = (formData, errors) => {
     // Validates that all custom basemap names are unique.
-    const basemapNames = _countBy(formData.customBasemaps, (bm) => bm.name);
-    for (const [name, count] of Object.entries(basemapNames || [])) {
+    const basemapNames = _countBy(formData.customBasemaps || [], (bm) => bm.name);
+    for (const [name, count] of Object.entries(basemapNames)) {
       if (count > 1) {
         const badIndex = _findLastIndex(formData.customBasemaps, (bm) => bm.name === name);
         if (errors.customBasemaps[badIndex]) {

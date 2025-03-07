@@ -58,7 +58,7 @@ describe("OSM Service Functions", () => {
       500: AppErrors.osm.fetchFailure,
     };
 
-    for (const [status, error] of Object.entries(statusToError || [])) {
+    for (const [status, error] of Object.entries(statusToError)) {
       test(`should handle ${status} error`, async () => {
         global.fetch.mockResolvedValueOnce({
           ok: false,
@@ -123,7 +123,7 @@ describe("OSM Service Functions", () => {
       500: AppErrors.osm.fetchFailure,
     };
 
-    for (const [status, error] of Object.entries(statusToError || [])) {
+    for (const [status, error] of Object.entries(statusToError)) {
       test(`should handle ${status} error`, async () => {
         global.fetch.mockResolvedValueOnce({
           ok: false,
@@ -408,7 +408,7 @@ describe("OSM Service Functions", () => {
       500: AppErrors.osm.fetchFailure,
     };
 
-    for (const [status, error] of Object.entries(statusToError || [])) {
+    for (const [status, error] of Object.entries(statusToError)) {
       test(`should handle ${status} error`, async () => {
         global.fetch.mockResolvedValueOnce({
           ok: false,

@@ -129,7 +129,7 @@ export class AsCooperativeWork {
         for (const dependentOperation of independentOperation.data.operations || []) {
           switch (dependentOperation.operation) {
             case "setTags":
-              for (const [key, value] of Object.entries(dependentOperation.data || [])) {
+              for (const [key, value] of Object.entries(dependentOperation.data)) {
                 const diffEntry = diff[key];
                 if (!diffEntry) {
                   // New tag
