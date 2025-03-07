@@ -438,8 +438,8 @@ export const josmLayerParams = function (task, asNewLayer, taskBundle, options =
   const layerName = options.layerName
     ? options.layerName
     : taskBundle
-    ? `MR Bundle ${task.id} (${taskBundle.tasks.length} tasks)`
-    : `MR Task ${task.id}`;
+      ? `MR Bundle ${task.id} (${taskBundle.tasks.length} tasks)`
+      : `MR Task ${task.id}`;
 
   return `new_layer=${newLayer}&layer_name=${encodeURIComponent(layerName)}`;
 };

@@ -359,7 +359,8 @@ export default function WithFilteredClusteredTasks(
         const includeStatuses =
           useSavedFilters && savedFilters && savedFilters.length > 0
             ? _fromPairs(_map(criteria.filters.status, (status) => [status, false]))
-            : initialFilters?.statuses ?? _fromPairs(_map(TaskStatus, (status) => [status, false]));
+            : (initialFilters?.statuses ??
+              _fromPairs(_map(TaskStatus, (status) => [status, false])));
 
         for (const status of criteria.filters.status || []) {
           includeStatuses[status] = true;
