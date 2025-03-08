@@ -100,7 +100,11 @@ export const WithReviewTasks = function (WrappedComponent) {
         searchOnCriteria?.filters?.status !==
           this.state.criteria[this.props.reviewTasksType]?.filters?.status
       ) {
-        this.props.updateReviewChallenges(this.props.reviewTasksType);
+        this.props.updateReviewChallenges(
+          this.props.reviewTasksType,
+          searchOnCriteria.filters.project,
+          searchOnCriteria.filters.challenge,
+        );
       }
 
       const typedCriteria = _cloneDeep(this.state.criteria);
@@ -262,6 +266,7 @@ export const WithReviewTasks = function (WrappedComponent) {
           startReviewing={(url, asMetaReview = false) =>
             this.props.startNextReviewTask(criteria, url, criteria.pageSize, asMetaReview)
           }
+          updateReviewChallenges={this.props.updateReviewChallenges}
           loading={this.state.loading}
           reviewChallenges={reviewChallenges}
           reviewProjects={this.props.currentReviewTasks.reviewProjects}
@@ -303,8 +308,10 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
 
-  updateReviewChallenges: (reviewTasksType) => {
-    return dispatch(fetchReviewChallenges(reviewTasksType, null, false));
+  updateReviewChallenges: (reviewTasksType, projectSearch, challengeSearch) => {
+    return dispatch(
+      fetchReviewChallenges(reviewTasksType, null, false, projectSearch, challengeSearch, 20),
+    );
   },
 
   startNextReviewTask: (searchCriteria = {}, url, pageSize, asMetaReview) => {

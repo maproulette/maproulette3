@@ -1,4 +1,5 @@
 import _cloneDeep from "lodash/cloneDeep";
+import _debounce from "lodash/debounce";
 import _filter from "lodash/filter";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
@@ -21,6 +22,14 @@ class TasksReviewChallenges extends Component {
     searchQuery: {},
   };
 
+  componentDidMount() {
+    this.debouncedSearch = _debounce(this.executeSearch, 800);
+  }
+
+  componentWillUnmount() {
+    this.debouncedSearch.cancel();
+  }
+
   performSearch = (search, type) => {
     const searchQuery = _cloneDeep(this.state.searchQuery);
 
@@ -28,16 +37,30 @@ class TasksReviewChallenges extends Component {
       [type]: search,
     });
 
-    this.setState({ searchQuery });
+    this.setState({ searchQuery }, () => {
+      this.debouncedSearch(type);
+    });
   };
 
-  matchesQuery(value, queryType) {
-    const searchString = this.state.searchQuery?.[this.props.reviewTasksType]?.[queryType] ?? "";
-    return _toLower(value).includes(_toLower(searchString));
-  }
+  executeSearch = (type) => {
+    // Get the current search queries for both project and challenge
+    const projectSearchQuery =
+      this.state.searchQuery?.[this.props.reviewTasksType]?.project || null;
+
+    const challengeSearchQuery =
+      this.state.searchQuery?.[this.props.reviewTasksType]?.challenge || null;
+
+    // Always pass both search queries to ensure both filters are applied
+    this.props.updateReviewChallenges(
+      this.props.reviewTasksType,
+      projectSearchQuery,
+      challengeSearchQuery,
+    );
+  };
 
   render() {
-    if (!this.props.challenges) {
+    // Handle loading state or empty data gracefully
+    if (!this.props.challenges || this.props.loading) {
       return (
         <div className="mr-mt-8">
           <h3 className="mr-flex mr-justify-between mr-items-center mr-ml-8">
@@ -57,15 +80,18 @@ class TasksReviewChallenges extends Component {
       );
     }
 
-    const filteredChallenges = _filter(this.props.challenges, (challenge) =>
-      this.matchesQuery(challenge.name, "challenge"),
-    );
+    // Ensure we have arrays even if the data is missing
+    const challenges = this.props.challenges || [];
+    const projects =
+      _filter(
+        _map(challenges, (challenge) => ({
+          id: challenge.parentId,
+          displayName: challenge.parentName,
+        })),
+        (project, index, array) => index === array.findIndex((p) => p.id === project.id),
+      ) || [];
 
-    const filteredProjects = _filter(this.props.projects, (project) =>
-      this.matchesQuery(project.displayName, "project"),
-    );
-
-    const challengeList = _map(filteredChallenges, (challenge) => {
+    const challengeList = _map(challenges, (challenge) => {
       return (
         <div
           className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-mb-2"
@@ -77,7 +103,7 @@ class TasksReviewChallenges extends Component {
       );
     });
 
-    const projectList = _map(filteredProjects, (project) => {
+    const projectList = _map(projects, (project) => {
       return (
         <div
           className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-mb-2"

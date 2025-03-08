@@ -30,22 +30,31 @@ export const WithReviewChallenges = function (WrappedComponent) {
      *
      * @private
      */
-    updateReviewChallenges = (reviewTasksType) => {
+    updateReviewChallenges = (reviewTasksType, projectSearch, challengeSearch) => {
       const reviewChallenges = _cloneDeep(this.state.reviewChallenges);
-      reviewChallenges[reviewTasksType] = { loading: true };
+      reviewChallenges[reviewTasksType] = {
+        ...reviewChallenges[reviewTasksType],
+        loading: true,
+      };
       this.setState({ reviewChallenges });
 
       const includeStatuses =
         reviewTasksType === ReviewTasksType.toBeReviewed ? [TaskStatus.fixed] : null;
 
       this.props
-        .fetchReviewChallenges(reviewTasksType, includeStatuses, true)
+        .fetchReviewChallenges(
+          reviewTasksType,
+          includeStatuses,
+          true,
+          projectSearch,
+          challengeSearch,
+          20,
+        )
         .then((challenges) => {
           const loadedChallenges = _cloneDeep(this.state.reviewChallenges);
           loadedChallenges[reviewTasksType] = {
-            loading: true,
+            loading: false,
             challenges: _values(challenges?.entities?.challenges),
-            projects: _values(challenges?.entities?.projects),
           };
 
           if (this.componentIsMounted) {
@@ -56,18 +65,23 @@ export const WithReviewChallenges = function (WrappedComponent) {
 
     componentDidMount() {
       this.componentIsMounted = true;
-      this.updateReviewChallenges(this.props.reviewTasksType);
+      this.updateReviewChallenges(this.props.reviewTasksType, null, null);
     }
 
     componentDidUpdate(prevProps) {
       const reviewTasksType = this.props.reviewTasksType;
+
+      // Only update if the reviewTasksType has changed
       if (
-        this.state.reviewChallenges[reviewTasksType] &&
-        !this.state.reviewChallenges[reviewTasksType].loading
+        reviewTasksType !== prevProps.reviewTasksType &&
+        !this.state.reviewChallenges[reviewTasksType]?.challenges &&
+        !this.state.reviewChallenges[reviewTasksType]?.loading
       ) {
-        this.updateReviewChallenges(reviewTasksType);
-      } else if (reviewTasksType !== prevProps.reviewTasksType) {
-        this.updateReviewChallenges(reviewTasksType);
+        this.updateReviewChallenges(
+          reviewTasksType,
+          this.props.projectSearch,
+          this.props.challengeSearch,
+        );
       }
     }
 
@@ -79,8 +93,8 @@ export const WithReviewChallenges = function (WrappedComponent) {
       return (
         <WrappedComponent
           {..._omit(this.props, ["fetchReviewChallenges"])}
+          updateReviewChallenges={this.updateReviewChallenges}
           challenges={this.state.reviewChallenges[this.props.reviewTasksType]?.challenges}
-          projects={this.state.reviewChallenges[this.props.reviewTasksType]?.projects}
         />
       );
     }

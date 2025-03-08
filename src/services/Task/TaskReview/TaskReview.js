@@ -128,23 +128,6 @@ export const receiveReviewChallenges = function (
   };
 };
 
-/**
- * Add or replace the review projects in the redux store
- */
-export const receiveReviewProjects = function (
-  reviewProjects,
-  status = RequestStatus.success,
-  fetchId,
-) {
-  return {
-    type: RECEIVE_REVIEW_PROJECTS,
-    status,
-    reviewProjects,
-    receivedAt: Date.now(),
-    fetchId,
-  };
-};
-
 // utility functions
 /**
  * Builds a link to export CSV
@@ -647,6 +630,9 @@ export const fetchReviewChallenges = function (
   reviewTasksType,
   includeTaskStatuses = null,
   excludeOtherReviewers = true,
+  projectSearch = null,
+  challengeSearch = null,
+  limit = 20,
 ) {
   return function (dispatch) {
     const type = determineType(reviewTasksType);
@@ -655,14 +641,20 @@ export const fetchReviewChallenges = function (
 
     return new Endpoint(api.challenges.withReviewTasks, {
       schema: [challengeSchema()],
-      params: { reviewTasksType: type, excludeOtherReviewers, tStatus, limit: -1 },
+      params: {
+        reviewTasksType: type,
+        excludeOtherReviewers,
+        tStatus,
+        projectSearch,
+        challengeSearch,
+        limit,
+      },
     })
       .execute()
       .then((normalizedResults) => {
         dispatch(
           receiveReviewChallenges(normalizedResults.entities.challenges, RequestStatus.success),
         );
-        dispatch(receiveReviewProjects(normalizedResults.entities.projects, RequestStatus.success));
 
         return normalizedResults;
       })
