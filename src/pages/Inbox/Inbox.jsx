@@ -1,17 +1,14 @@
-import classNames from "classnames";
-import Fuse from "fuse.js";
 import _kebabCase from "lodash/kebabCase";
-import _map from "lodash/map";
 import _reject from "lodash/reject";
-import _remove from "lodash/remove";
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import React from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
-import ReactTable from "react-table-6";
+import { useFilters, usePagination, useSortBy, useTable } from "react-table";
 import BusySpinner from "../../components/BusySpinner/BusySpinner";
 import TriStateCheckbox from "../../components/Custom/TriStateCheckbox";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import WithUserNotifications from "../../components/HOCs/WithUserNotifications/WithUserNotifications";
-import { intlTableProps } from "../../components/IntlTable/IntlTable";
+import PaginationControl from "../../components/PaginationControl/PaginationControl";
 import SignInButton from "../../components/SignInButton/SignInButton";
 import {
   NotificationType,
@@ -23,8 +20,28 @@ import messages from "./Messages";
 import Notification from "./Notification";
 import { useNotificationDisplay, useNotificationSelection } from "./NotificationHooks";
 
+const DEFAULT_SORT_CRITERIA = {
+  id: "created",
+  desc: true,
+};
+
+const DEFAULT_PAGINATION = {
+  page: 0,
+  pageSize: 25,
+};
+
+const DefaultColumnFilter = ({ column: { filterValue, setFilter, Header } }) => (
+  <input
+    className="mr-input mr-w-full mr-px-2 mr-py-1"
+    value={filterValue || ""}
+    onChange={(e) => setFilter(e.target.value || undefined)}
+    placeholder={`Filter by ${Header}`}
+  />
+);
+
 const Inbox = (props) => {
   const { user, notifications, markNotificationsRead, deleteNotifications } = props;
+  const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 
   const {
     groupByTask,
@@ -48,7 +65,10 @@ const Inbox = (props) => {
       if (thread) {
         const unread = _reject(thread, { isRead: true });
         if (unread.length > 0) {
-          markNotificationsRead(user.id, _map(unread, "id"));
+          markNotificationsRead(
+            user.id,
+            unread.map((m) => m.id),
+          );
         }
       } else if (!notification.isRead) {
         markNotificationsRead(user.id, [notification.id]);
@@ -79,6 +99,184 @@ const Inbox = (props) => {
     }
   }, [user, selectedNotifications, deleteNotifications, deselectAll]);
 
+  const data = React.useMemo(() => {
+    if (!groupByTask) {
+      return notifications;
+    }
+
+    const workingNotifications = [...notifications];
+    const threadedNotifications = [];
+    const seen = new Set();
+
+    workingNotifications.sort((a, b) => {
+      return new Date(b.modified) - new Date(a.modified);
+    });
+
+    for (const notification of workingNotifications) {
+      if (!seen.has(notification.taskId)) {
+        seen.add(notification.taskId);
+        threadedNotifications.push({
+          ...notification,
+          thread: threads[notification.taskId],
+          threadCount: threads[notification.taskId].length,
+        });
+      }
+    }
+
+    return threadedNotifications;
+  }, [notifications, groupByTask, threads]);
+
+  const columns = useMemo(
+    () => [
+      {
+        id: "selected",
+        Header: () => (
+          <TriStateCheckbox
+            checked={allNotificationsSelected}
+            indeterminate={selectedNotifications.size > 0 && !allNotificationsSelected}
+            onChange={() => toggleNotificationsSelected()}
+          />
+        ),
+        Cell: ({ row }) => {
+          const thread = threads[row.original.taskId];
+          const isSelected = groupByTask
+            ? anyNotificationInThreadSelected(thread)
+            : selectedNotifications.has(row.original.id);
+          return (
+            <TriStateCheckbox
+              checked={isSelected}
+              indeterminate={groupByTask && isSelected && !allNotificationsInThreadSelected(thread)}
+              onChange={() => toggleNotificationSelection(row.original, thread)}
+            />
+          );
+        },
+        maxWidth: 25,
+      },
+      {
+        id: "taskId",
+        Header: props.intl.formatMessage(messages.taskIdLabel),
+        accessor: "taskId",
+        filter: "fuzzyText",
+        Cell: ({ value, row }) => {
+          const displayId = value === row.original.challengeName ? "" : value;
+          return (
+            <span>
+              {displayId}
+              {groupByTask && row.original.threadCount > 1 && (
+                <span className="mr-ml-2 mr-font-normal mr-text-white mr-text-xs mr-w-5 mr-h-5 mr-rounded-full mr-inline-flex mr-items-center mr-justify-center mr-bg-teal">
+                  {row.original.threadCount}
+                </span>
+              )}
+            </span>
+          );
+        },
+      },
+      {
+        id: "notificationType",
+        Header: props.intl.formatMessage(messages.notificationTypeLabel),
+        accessor: "notificationType",
+        Filter: ({ column: { setFilter } }) => (
+          <select
+            className="mr-select mr-w-full mr-px-2 mr-py-1"
+            onChange={(e) => setFilter(e.target.value === "all" ? null : +e.target.value)}
+          >
+            <option value="all">All</option>
+            {Object.values(NotificationType).map((type) => (
+              <option key={keysByNotificationType[type]} value={type}>
+                {props.intl.formatMessage(messagesByNotificationType[type])}
+              </option>
+            ))}
+          </select>
+        ),
+        Cell: ({ value, row }) => (
+          <span className={`mr-notification-type-${_kebabCase(keysByNotificationType[value])}`}>
+            <FormattedMessage {...messagesByNotificationType[value]} />
+          </span>
+        ),
+      },
+      {
+        id: "created",
+        Header: props.intl.formatMessage(messages.createdLabel),
+        accessor: "created",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <time dateTime={value}>
+            <FormattedDate value={value} /> <FormattedTime value={value} />
+          </time>
+        ),
+      },
+      {
+        id: "fromUsername",
+        Header: props.intl.formatMessage(messages.fromUsernameLabel),
+        accessor: "fromUsername",
+        filter: "fuzzyText",
+      },
+      {
+        id: "challengeName",
+        Header: props.intl.formatMessage(messages.challengeNameLabel),
+        accessor: "challengeName",
+        filter: "fuzzyText",
+      },
+      {
+        id: "controls",
+        Header: props.intl.formatMessage(messages.controlsLabel),
+        disableFilters: true,
+        Cell: ({ row }) => (
+          <ol className="mr-list-reset mr-links-green-lighter mr-inline-flex mr-justify-between mr-font-normal">
+            <li>
+              <a onClick={() => readNotification(row.original, threads[row.original.taskId])}>
+                <FormattedMessage {...messages.openNotificationLabel} />
+              </a>
+            </li>
+          </ol>
+        ),
+      },
+    ],
+    [
+      allNotificationsSelected,
+      selectedNotifications,
+      toggleNotificationsSelected,
+      groupByTask,
+      anyNotificationInThreadSelected,
+      allNotificationsInThreadSelected,
+      toggleNotificationSelection,
+      threads,
+      readNotification,
+      props.intl,
+    ],
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state: { sortBy },
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        sortBy: [DEFAULT_SORT_CRITERIA],
+        pageSize: DEFAULT_PAGINATION.pageSize,
+      },
+      defaultColumn: {
+        Filter: DefaultColumnFilter,
+      },
+      manualPagination: true,
+    },
+    useFilters,
+    useSortBy,
+    usePagination,
+  );
+
+  useEffect(() => {
+    if (sortBy && sortBy[0]) {
+      console.log("Sort changed:", sortBy[0]);
+    }
+  }, [sortBy]);
+
   if (!user) {
     return (
       <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
@@ -86,6 +284,8 @@ const Inbox = (props) => {
       </div>
     );
   }
+
+  const totalPages = Math.ceil(notifications.length / pagination.pageSize);
 
   return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
@@ -99,48 +299,66 @@ const Inbox = (props) => {
           deleteSelected={deleteSelected}
         />
 
-        <ReactTable
-          data={props.notifications}
-          columns={columns({
-            ...props,
-            threads,
-            groupByTask,
-            selectedNotifications,
-            toggleNotificationSelection,
-            toggleNotificationsSelected,
-            allNotificationsSelected,
-            anyNotificationInThreadSelected,
-            allNotificationsInThreadSelected,
-            openNotification,
-            readNotification,
-            closeNotification,
-          })}
-          defaultPageSize={props.defaultPageSize}
-          defaultSorted={[{ id: "created", desc: true }]}
-          minRows={1}
-          multiSort={false}
-          noDataText={<FormattedMessage {...messages.noNotifications} />}
-          loading={props.notificationsLoading}
-          getTrProps={(state, rowInfo) => {
-            const styles = {};
-            if (!(rowInfo?.row?._original?.isRead ?? false)) {
-              styles.fontWeight = 700;
-            }
-            return { style: styles };
-          }}
-          {...intlTableProps(props.intl)}
-        >
-          {(state, makeTable) => {
-            if (groupByTask) {
-              const groupedNotifications = threaded(state.sortedData);
-              // We need to modify the table's internal array, we can't replace it
-              state.pageRows.length = 0;
-              state.pageRows.push(...groupedNotifications.slice(state.startRow, state.endRow));
-            }
+        <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <>
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th
+                      className="mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10"
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                    >
+                      {column.render("Header")}
+                      {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
+                    </th>
+                  ))}
+                </tr>
+                <tr>
+                  {headerGroup.headers.map((column) => (
+                    <th className="mr-text-left mr-font-normal mr-px-2 mr-py-2 mr-border-b mr-border-white-10">
+                      {column.canFilter ? column.render("Filter") : null}
+                    </th>
+                  ))}
+                </tr>
+              </>
+            ))}
+          </thead>
 
-            return makeTable();
-          }}
-        </ReactTable>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr
+                  {...row.getRowProps()}
+                  className="mr-border-y mr-border-white-10 mr-cursor-pointer"
+                  style={{
+                    fontWeight: !row.original.isRead ? 700 : 400,
+                    textDecoration: !row.original.isRead ? "none" : "line-through",
+                    opacity: !row.original.isRead ? 1.0 : 0.5,
+                  }}
+                  onClick={() => readNotification(row.original, threads[row.original.taskId])}
+                >
+                  {row.cells.map((cell) => {
+                    return (
+                      <td className="mr-px-2" {...cell.getCellProps()}>
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        <PaginationControl
+          currentPage={pagination.page}
+          totalPages={totalPages}
+          pageSize={pagination.pageSize}
+          gotoPage={(page) => setPagination({ ...pagination, page })}
+          setPageSize={(pageSize) => setPagination({ ...pagination, pageSize })}
+        />
       </section>
 
       {openNotification && (
@@ -153,226 +371,6 @@ const Inbox = (props) => {
       )}
     </div>
   );
-};
-
-const columns = (tableProps) => [
-  {
-    id: "selected",
-    Header: () => {
-      return (
-        <TriStateCheckbox
-          checked={tableProps.allNotificationsSelected}
-          indeterminate={
-            tableProps.selectedNotifications.size > 0 && !tableProps.allNotificationsSelected
-          }
-          onChange={() => tableProps.toggleNotificationsSelected()}
-        />
-      );
-    },
-    accessor: (notification) => {
-      return tableProps.groupByTask
-        ? tableProps.anyNotificationInThreadSelected(tableProps.threads[notification.taskId])
-        : tableProps.selectedNotifications.has(notification.id);
-    },
-    Cell: ({ value, original }) => {
-      const thread = tableProps.threads[original.taskId];
-      return (
-        <TriStateCheckbox
-          checked={value}
-          indeterminate={
-            tableProps.groupByTask && value && !tableProps.allNotificationsInThreadSelected(thread)
-          }
-          onChange={() => tableProps.toggleNotificationSelection(original, thread)}
-        />
-      );
-    },
-    maxWidth: 25,
-    sortable: false,
-    resizable: false,
-  },
-  {
-    id: "taskId",
-    Header: tableProps.intl.formatMessage(messages.taskIdLabel),
-    accessor: "taskId",
-    minWidth: 100,
-    maxWidth: 125,
-    filterable: true,
-    Cell: ({ value, row }) => {
-      const displayId = value == row._original.challengeName ? "" : value;
-      return (
-        <span
-          className={classNames("mr-cursor-pointer", {
-            "mr-line-through mr-opacity-50": row._original.isRead,
-          })}
-          onClick={() =>
-            tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
-          }
-        >
-          {displayId}
-          {tableProps.groupByTask && tableProps.threads[value].length > 1 && (
-            <span className="mr-ml-2 mr-font-normal mr-text-white mr-text-xs mr-w-5 mr-h-5 mr-rounded-full mr-inline-flex mr-items-center mr-justify-center mr-bg-teal">
-              {tableProps.threads[value].length}
-            </span>
-          )}
-        </span>
-      );
-    },
-  },
-  {
-    id: "notificationType",
-    Header: tableProps.intl.formatMessage(messages.notificationTypeLabel),
-    accessor: "notificationType",
-    sortable: true,
-    filterable: true,
-    maxWidth: 140,
-    Cell: ({ value, row }) => {
-      return (
-        <span
-          onClick={() =>
-            tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
-          }
-          className={classNames(
-            "mr-cursor-pointer mr-text-sm mr-font-medium mr-uppercase",
-            `mr-notification-type-${_kebabCase(keysByNotificationType[value])}`,
-            { "mr-line-through mr-font-normal mr-opacity-50": row._original.isRead },
-          )}
-        >
-          <FormattedMessage {...messagesByNotificationType[value]} />
-        </span>
-      );
-    },
-    Filter: ({ filter, onChange }) => {
-      const options = [
-        <option key="all" value="all">
-          All
-        </option>,
-      ];
-
-      for (const [name, value] of Object.entries(NotificationType)) {
-        options.push(
-          <option key={name} value={value}>
-            {tableProps.intl.formatMessage(messagesByNotificationType[value])}
-          </option>,
-        );
-      }
-
-      return (
-        <select
-          onChange={(event) => onChange(event.target.value)}
-          style={{ width: "100%" }}
-          value={filter ? filter.value : "all"}
-        >
-          {options}
-        </select>
-      );
-    },
-    filterMethod: (filter, row) => {
-      return filter.value === "all" || row.notificationType === parseInt(filter.value, 10);
-    },
-  },
-  {
-    id: "created",
-    Header: tableProps.intl.formatMessage(messages.createdLabel),
-    accessor: "modified",
-    sortable: true,
-    defaultSortDesc: true,
-    maxWidth: 180,
-    Cell: ({ value, row }) => (
-      <span
-        className={classNames("mr-cursor-pointer", {
-          "mr-line-through mr-opacity-50": row._original.isRead,
-        })}
-        onClick={() =>
-          tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
-        }
-      >
-        <FormattedDate value={value} /> <FormattedTime value={value} />
-      </span>
-    ),
-  },
-  {
-    id: "fromUsername",
-    Header: tableProps.intl.formatMessage(messages.fromUsernameLabel),
-    accessor: "fromUsername",
-    maxWidth: 180,
-    filterable: true,
-    filterAll: true,
-    filterMethod: fuzzySearch,
-    Cell: ({ value, row }) => (
-      <span
-        className={classNames("mr-cursor-pointer", {
-          "mr-line-through mr-opacity-50": row._original.isRead,
-        })}
-        onClick={() =>
-          tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
-        }
-      >
-        {value}
-      </span>
-    ),
-  },
-  {
-    id: "challengeName",
-    Header: tableProps.intl.formatMessage(messages.challengeNameLabel),
-    accessor: "challengeName",
-    filterable: true,
-    filterAll: true,
-    filterMethod: fuzzySearch,
-    Cell: ({ value, row }) => (
-      <span
-        className={classNames("mr-cursor-pointer", {
-          "mr-line-through mr-opacity-50": row._original.isRead,
-        })}
-        onClick={() =>
-          tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
-        }
-      >
-        {value}
-      </span>
-    ),
-  },
-  {
-    id: "controls",
-    Header: tableProps.intl.formatMessage(messages.controlsLabel),
-    sortable: false,
-    minWidth: 90,
-    maxWidth: 120,
-    Cell: ({ row }) => {
-      return (
-        <ol className="mr-list-reset mr-links-green-lighter mr-inline-flex mr-justify-between mr-font-normal">
-          <li>
-            <a
-              onClick={() =>
-                tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
-              }
-            >
-              <FormattedMessage {...messages.openNotificationLabel} />
-            </a>
-          </li>
-        </ol>
-      );
-    },
-  },
-];
-
-const threaded = function (sortedNotifications) {
-  const workingNotifications = sortedNotifications.slice(); // clone
-  const threadedNotifications = [];
-  while (workingNotifications.length > 0) {
-    // Add the next notification and then remove all notifications from
-    // the same task
-    const nextNotification = workingNotifications.shift();
-    threadedNotifications.push(nextNotification);
-    _remove(workingNotifications, { taskId: nextNotification.taskId });
-  }
-
-  return threadedNotifications;
-};
-
-// Intended to be used as filterMethod on a column using filterAll
-const fuzzySearch = function (filter, rows) {
-  const fuzzySetup = new Fuse(rows, { keys: [filter.id] });
-  return _map(fuzzySetup.search(filter.value), "item");
 };
 
 export default WithCurrentUser(WithUserNotifications(injectIntl(Inbox)));

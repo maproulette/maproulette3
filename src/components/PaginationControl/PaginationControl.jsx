@@ -12,7 +12,7 @@ export default function PaginationControl({
   const nextPage = () => gotoPage(Math.min(currentPage + 1, totalPages - 1));
 
   return (
-    <div className="mr-mx-auto mr-flex mr-items-center mr-gap-3 mr-text-white">
+    <div className="mr-flex mr-justify-center mr-items-center mr-gap-3 mr-mt-6 mr-text-white">
       <button
         className="mr-button mr-button--small"
         onClick={() => gotoPage(0)}
