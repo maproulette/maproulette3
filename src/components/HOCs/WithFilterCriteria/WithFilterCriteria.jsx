@@ -9,7 +9,7 @@ import _omit from "lodash/omit";
 import _pickBy from "lodash/pickBy";
 import _toInteger from "lodash/toInteger";
 import { Component } from "react";
-import { GLOBAL_MAPBOUNDS, fromLatLngBounds } from "../../../services/MapBounds/MapBounds";
+import { fromLatLngBounds } from "../../../services/MapBounds/MapBounds";
 import {
   buildSearchCriteriafromURL,
   buildSearchURL,
@@ -181,15 +181,6 @@ export const WithFilterCriteria = function (
       const criteria = typedCriteria || _cloneDeep(this.state.criteria);
 
       criteria.filters.archived = true;
-
-      // If we don't have bounds yet, we still want results so let's fetch all
-      // tasks globally for this challenge.
-      if (!criteria.boundingBox) {
-        if (skipInitialFetch || !challengeId) {
-          return;
-        }
-        criteria.boundingBox = GLOBAL_MAPBOUNDS;
-      }
 
       this.debouncedTasksFetch(challengeId, criteria, this.state.criteria.pageSize);
     };
