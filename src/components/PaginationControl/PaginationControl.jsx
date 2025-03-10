@@ -34,7 +34,7 @@ export default function PaginationControl({
           type="number"
           min={1}
           max={totalPages}
-          defaultValue={currentPage + 1}
+          value={currentPage + 1}
           onChange={(e) => gotoPage(e.target.value ? Number(e.target.value) - 1 : 0)}
         />
         {" of "}
