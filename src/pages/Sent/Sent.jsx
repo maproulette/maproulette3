@@ -97,12 +97,15 @@ const Sent = (props) => {
           onSearchChange={setSearchTerm}
         />
 
-        <table className="mr-text-white mr-links-green-lighter" {...getTableProps()}>
+        <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th className="mr-px-2" {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <th
+                    className="mr-text-left mr-px-2"
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                  >
                     {column.render("Header")}
                     {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
                   </th>
@@ -128,15 +131,15 @@ const Sent = (props) => {
             })}
           </tbody>
         </table>
-      </section>
 
-      <PaginationControl
-        currentPage={pagination.page}
-        totalPages={totalPages}
-        pageSize={pagination.pageSize}
-        gotoPage={(page) => setPagination({ ...pagination, page })}
-        setPageSize={(pageSize) => setPagination({ ...pagination, pageSize })}
-      />
+        <PaginationControl
+          currentPage={pagination.page}
+          totalPages={totalPages}
+          pageSize={pagination.pageSize}
+          gotoPage={(page) => setPagination({ ...pagination, page })}
+          setPageSize={(pageSize) => setPagination({ ...pagination, pageSize })}
+        />
+      </section>
     </div>
   );
 };
