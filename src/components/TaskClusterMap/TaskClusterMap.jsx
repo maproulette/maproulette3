@@ -30,7 +30,10 @@ import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
 import MapMarkers from "./MapMarkers";
 import messages from "./Messages";
 import ZoomInMessage from "./ZoomInMessage";
-
+import ControlsToggleControl from "./ControlsToggleControl";
+// import StatusLegendControl from "./StatusLegendControl";
+// import LegendToggleControl from "./LegendToggleControl";
+import LegendControl from "./LegendControl";
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
 
 export const MAX_ZOOM = 18;
@@ -62,6 +65,8 @@ export const TaskClusterMap = (props) => {
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
+  const [controlsCollapsed, setControlsCollapsed] = useState(false);
+  const [legendCollapsed, setLegendCollapsed] = useState(false);
 
   let overlayLayers = buildLayerSources(
     props.visibleOverlays,
@@ -71,7 +76,7 @@ export const TaskClusterMap = (props) => {
       component: <SourcedTileLayer key={layerId} source={layerSource} />,
     }),
   );
-
+  console.log(props);
   if (props.showPriorityBounds) {
     overlayLayers.push({
       id: "priority-bounds",
@@ -164,14 +169,17 @@ export const TaskClusterMap = (props) => {
   let selectionKit = (
     <>
       {props.clearSelectedSelector && (
-        <LassoSelectionControl onLassoClear={props.resetSelectedTasks} />
-      )}
-      {props.showSelectMarkersInView && (
-        <SelectMarkersInViewControl onSelectAllInView={props.onBulkTaskSelection} />
+        <LassoSelectionControl
+          showSelectMarkersInView={props.showSelectMarkersInView}
+          onSelectAllInView={props.onBulkTaskSelection}
+          onLassoClear={props.resetSelectedTasks}
+        />
       )}
 
       {props.showClusterLasso && props.onBulkClusterSelection && !props.mapZoomedOut && (
         <LassoSelectionControl
+          showSelectMarkersInView={props.showSelectMarkersInView}
+          onSelectAllInView={props.onBulkTaskSelection}
           onLassoSelection={selectClustersInLayers}
           onLassoDeselection={deselectClustersInLayers}
           onLassoClear={props.resetSelectedClusters}
@@ -184,6 +192,8 @@ export const TaskClusterMap = (props) => {
         (!props.showAsClusters ||
           (!props.showClusterLasso && props.totalTaskCount <= CLUSTER_POINTS)) && (
           <LassoSelectionControl
+            showSelectMarkersInView={props.showSelectMarkersInView}
+            onSelectAllInView={props.onBulkTaskSelection}
             onLassoSelection={selectTasksInLayers}
             onLassoDeselection={deselectTasksInLayers}
             onLassoClear={props.resetSelectedTasks}
@@ -201,6 +211,14 @@ export const TaskClusterMap = (props) => {
     return null;
   };
 
+  const handleToggleControls = () => {
+    setControlsCollapsed((prevState) => !prevState);
+  };
+
+  const handleToggleLegend = () => {
+    setLegendCollapsed((prevState) => !prevState);
+  };
+  console.log("legendCollapsed", legendCollapsed);
   return (
     <MapContainer
       attributionControl={false}
@@ -295,22 +313,36 @@ export const TaskClusterMap = (props) => {
           </div>
         </div>
       )}
-      <ZoomControl className="mr-z-10" position="topright" />
-      {props.showFitWorld && <FitWorldControl />}
-      {props.fitbBoundsControl && (
-        <FitBoundsControl
-          key={props.taskCenter}
-          centerPoint={props.taskCenter}
-          centerBounds={props.centerBounds}
-        />
-      )}
-      <ScaleControl className="mr-z-10" position="bottomleft" />
+
       <LayerToggle {...props} overlayOrder={overlayOrder} />
-      <VisibleTileLayer {...props} zIndex={1} />
-      {selectionKit}
-      {props.showSearchControl && (
-        <SearchControl {...props} openSearch={() => setSearchOpen(true)} />
+      {/* Always show the ControlsToggle regardless of collapsed state */}
+      <ControlsToggleControl
+        position="topright"
+        isCollapsed={controlsCollapsed}
+        onToggle={handleToggleControls}
+      />
+
+      {!controlsCollapsed && (
+        <>
+          <ZoomControl className="mr-z-10" position="topright" />
+          {props.showFitWorld && <FitWorldControl />}
+          {props.fitbBoundsControl && (
+            <FitBoundsControl
+              key={props.taskCenter}
+              centerPoint={props.taskCenter}
+              centerBounds={props.centerBounds}
+            />
+          )}
+
+          {props.showSearchControl && (
+            <SearchControl {...props} openSearch={() => setSearchOpen(true)} />
+          )}
+          {selectionKit}
+        </>
       )}
+      <LegendControl position="topleft" activeFilters={props.includeTaskStatuses} />
+      <ScaleControl className="mr-z-10" position="bottomleft" />
+      <VisibleTileLayer {...props} zIndex={1} />
       {!searchOpen && props.externalOverlay}
       {searchOpen && (
         <SearchContent
