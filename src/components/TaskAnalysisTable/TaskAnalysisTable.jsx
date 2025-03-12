@@ -14,6 +14,7 @@ import WithTargetUser from "../../components/HOCs/WithTargetUser/WithTargetUser"
 import InTableTagFilter from "../../components/KeywordAutosuggestInput/InTableTagFilter";
 import TaskCommentsModal from "../../components/TaskCommentsModal/TaskCommentsModal";
 import AsColoredHashable from "../../interactions/Hashable/AsColoredHashable";
+import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
 import AsManager from "../../interactions/User/AsManager";
 import { messagesByPriority } from "../../services/Task/TaskPriority/TaskPriority";
 import {
@@ -23,12 +24,10 @@ import {
 import { keysByStatus, messagesByStatus } from "../../services/Task/TaskStatus/TaskStatus";
 import WithConfigurableColumns from "../HOCs/WithConfigurableColumns/WithConfigurableColumns";
 import WithLoadedTask from "../HOCs/WithLoadedTask/WithLoadedTask";
+import PaginationControl from "../PaginationControl/PaginationControl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import ViewTask from "../ViewTask/ViewTask";
 import messages from "./Messages";
-import "./TaskAnalysisTable.scss";
-import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
-import PaginationControl from "../PaginationControl/PaginationControl";
 import TaskAnalysisTableHeader from "./TaskAnalysisTableHeader";
 import { StatusLabel, ViewCommentsButton, makeInvertable } from "./TaskTableHelpers";
 

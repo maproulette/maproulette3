@@ -12,15 +12,16 @@ export const CHALLENGE_COLUMNS = [
     Header: "Name",
     accessor: "name",
     width: 10,
-    Cell: ({ row, value }) => value ? (
-      <a
-        href={`/admin/project/${row.original?.parent?.id}/challenge/${row.original.id}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {value}
-      </a>
-    ) : null,
+    Cell: ({ row, value }) =>
+      value ? (
+        <a
+          href={`/admin/project/${row.original?.parent?.id}/challenge/${row.original.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {value}
+        </a>
+      ) : null,
   },
   {
     Header: "Owner",
@@ -41,55 +42,59 @@ export const CHALLENGE_COLUMNS = [
     Header: "Project",
     accessor: "parent.displayName",
     width: 120,
-    Cell: ({ row, value }) => value ? (
-      <a
-        href={`/admin/project/${row.original?.parent?.id}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {value}
-      </a>
-    ) : null,
+    Cell: ({ row, value }) =>
+      value ? (
+        <a
+          href={`/admin/project/${row.original?.parent?.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {value}
+        </a>
+      ) : null,
   },
   {
     Header: "Discoverable",
-    accessor: row => row.enabled.toString(),
+    accessor: (row) => row.enabled.toString(),
     width: 150,
   },
   {
     Header: "Archived",
-    accessor: row => row.isArchived.toString(),
+    accessor: (row) => row.isArchived.toString(),
     width: 120,
   },
   {
     Header: "Created",
     accessor: "created",
     width: 150,
-    Cell: ({ value }) => value ? (
-      <span>
-        <FormattedDate value={value} />
-      </span>
-    ) : null,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
   },
   {
     Header: "Sourced",
     accessor: "dataOriginDate",
     width: 180,
-    Cell: ({ value }) => value ? (
-      <span>
-        <FormattedDate value={value} />
-      </span>
-    ) : null,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
   },
   {
     Header: "Refreshed",
     accessor: "lastTaskRefresh",
     width: 180,
-    Cell: ({ value }) => value ? (
-      <span>
-        <FormattedDate value={value} />
-      </span>
-    ) : null,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
   },
 ];
 
@@ -103,15 +108,12 @@ export const PROJECT_COLUMNS = [
     Header: "Name",
     accessor: "displayName",
     width: 180,
-    Cell: ({ row, value }) => value ? (
-      <a
-        href={`/admin/project/${row.original.id}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {value}
-      </a>
-    ) : null,
+    Cell: ({ row, value }) =>
+      value ? (
+        <a href={`/admin/project/${row.original.id}`} target="_blank" rel="noopener noreferrer">
+          {value}
+        </a>
+      ) : null,
   },
   {
     Header: "Owner",
@@ -120,38 +122,40 @@ export const PROJECT_COLUMNS = [
   },
   {
     Header: "Discoverable",
-    accessor: row => row.enabled.toString(),
+    accessor: (row) => row.enabled.toString(),
     width: 150,
   },
   {
     Header: "Archived",
-    accessor: row => row.isArchived.toString(),
+    accessor: (row) => row.isArchived.toString(),
     width: 120,
   },
   {
     Header: "Virtual",
-    accessor: row => row.isVirtual.toString(),
+    accessor: (row) => row.isVirtual.toString(),
     width: 120,
   },
   {
     Header: "Date Created",
     accessor: "created",
     width: 150,
-    Cell: ({ value }) => value ? (
-      <span>
-        <FormattedDate value={value} />
-      </span>
-    ) : null,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
   },
   {
     Header: "Date Last Modified",
     accessor: "modified",
     width: 150,
-    Cell: ({ value }) => value ? (
-      <span>
-        <FormattedDate value={value} />
-      </span>
-    ) : null,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
   },
 ];
 
@@ -180,28 +184,28 @@ export const USER_COLUMNS = [
     Header: "Date Created",
     accessor: "created",
     width: 150,
-    Cell: ({ value }) => value ? (
-      <span>
-        <FormattedDate value={value} />
-      </span>
-    ) : null,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
   },
   {
     Header: "Date Last Active",
     accessor: "modified",
     width: 150,
-    Cell: ({ value }) => value ? (
-      <span>
-        <FormattedDate value={value} />
-      </span>
-    ) : null,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
   },
   {
     Header: "Role",
     accessor: "superUser",
     width: 200,
-    Cell: ({ value }) => (
-      <div>{value ? "Super User" : "Basic User"}</div>
-    ),
+    Cell: ({ value }) => <div>{value ? "Super User" : "Basic User"}</div>,
   },
 ];
