@@ -140,7 +140,6 @@ export const TaskReviewTable = (props) => {
 
   // Setup table data and columns
   const data = props.reviewData?.tasks ?? [];
-  console.log("data", data);
   const columnTypes = useMemo(
     () =>
       setupColumnTypes(
