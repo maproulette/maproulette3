@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { injectIntl } from "react-intl";
-import { useTable, usePagination, useSortBy } from "react-table";
+import { usePagination, useSortBy, useTable } from "react-table";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import WithSortedChallenges from "../HOCs/WithSortedChallenges/WithSortedChallenges";
+import PaginationControl from "../PaginationControl/PaginationControl";
 import { CHALLENGE_COLUMNS, PROJECT_COLUMNS, USER_COLUMNS } from "./MetricsData";
 import WithMetricsSearchResults from "./WithMetricsSearchResults";
 import WithSortedProjects from "./WithSortedProjects";
 import WithSortedUsers from "./WithSortedUsers";
-import PaginationControl from "../PaginationControl/PaginationControl";
 const MetricsTable = (props) => {
   const data = useMemo(() => {
     if (props.currentTab === "challenges") {
@@ -44,7 +44,7 @@ const MetricsTable = (props) => {
         modified: u.modified,
         superUser: Boolean(u.grants?.find((grant) => grant.role === -1)),
       }));
-    } else { 
+    } else {
       return [];
     }
   }, [props.currentTab, props.challenges, props.projects, props.users]);
@@ -77,7 +77,7 @@ const MetricsTable = (props) => {
       pageCount: Math.ceil(data.length / 50),
     },
     useSortBy,
-    usePagination
+    usePagination,
   );
 
   if (!props.isloadingCompleted) {
@@ -125,12 +125,12 @@ const MetricsTable = (props) => {
         </tbody>
       </table>
       <PaginationControl
-          currentPage={pageIndex}
-          totalPages={Math.ceil(data.length / pageSize)}
-          pageSize={pageSize}
-          gotoPage={gotoPage}
-          setPageSize={setPageSize}
-        />
+        currentPage={pageIndex}
+        totalPages={Math.ceil(data.length / pageSize)}
+        pageSize={pageSize}
+        gotoPage={gotoPage}
+        setPageSize={setPageSize}
+      />
     </section>
   );
 };

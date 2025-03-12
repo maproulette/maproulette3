@@ -1,10 +1,7 @@
-export default function PaginationControl({
-  currentPage,
-  totalPages,
-  pageSize,
-  gotoPage,
-  setPageSize,
-}) {
+import { FormattedMessage, injectIntl } from "react-intl";
+import messages from "./Messages";
+
+function PaginationControl({ currentPage, totalPages, pageSize, gotoPage, setPageSize, intl }) {
   const canPreviousPage = currentPage > 0;
   const canNextPage = currentPage < totalPages - 1;
 
@@ -18,17 +15,19 @@ export default function PaginationControl({
         onClick={() => gotoPage(0)}
         disabled={!canPreviousPage}
       >
-        {"<< First"}
+        {"<< "}
+        <FormattedMessage {...messages.first} />
       </button>
       <button
         className="mr-button mr-button--small"
         onClick={() => previousPage()}
         disabled={!canPreviousPage}
       >
-        {"< Previous"}
+        {"< "}
+        <FormattedMessage {...messages.previous} />
       </button>
       <span>
-        {"Page "}
+        <FormattedMessage {...messages.page} />{" "}
         <input
           className="mr-input mr-px-1 mr-py-0 mr-w-16"
           type="number"
@@ -36,36 +35,35 @@ export default function PaginationControl({
           max={totalPages}
           value={currentPage + 1}
           onChange={(e) => gotoPage(e.target.value ? Number(e.target.value) - 1 : 0)}
-        />
-        {" of "}
-        {totalPages}
+        />{" "}
+        <FormattedMessage {...messages.of} /> {totalPages}
       </span>
       <button
         className="mr-button mr-button--small"
         onClick={() => nextPage()}
         disabled={!canNextPage}
       >
-        {"Next >"}
+        <FormattedMessage {...messages.next} />
+        {" >"}
       </button>
       <button
         className="mr-button mr-button--small"
         onClick={() => gotoPage(totalPages - 1)}
         disabled={!canNextPage}
       >
-        {"Last >>"}
+        <FormattedMessage {...messages.last} />
+        {" >>"}
       </button>
 
       {setPageSize && (
         <select
           className="mr-select mr-px-3"
           value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-          }}
+          onChange={(e) => setPageSize(Number(e.target.value))}
         >
-          {[25, 50, 100].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize} per page
+          {[25, 50, 100].map((number) => (
+            <option key={number} value={number}>
+              {intl.formatMessage(messages.showNumberPerPage, { number })}
             </option>
           ))}
         </select>
@@ -73,3 +71,5 @@ export default function PaginationControl({
     </div>
   );
 }
+
+export default injectIntl(PaginationControl);
