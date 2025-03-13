@@ -403,7 +403,10 @@ export const TaskReviewTable = (props) => {
                     <>
                       <tr {...headerGroup.getHeaderGroupProps()}>
                         {headerGroup.headers.map((column) => (
-                          <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                          <th
+                            className="mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10"
+                            {...column.getHeaderProps(column.getSortByToggleProps())}
+                          >
                             {column.render("Header")}
                             {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
                           </th>
@@ -423,7 +426,7 @@ export const TaskReviewTable = (props) => {
                   {page.map((row) => {
                     prepareRow(row);
                     return (
-                      <tr {...row.getRowProps()}>
+                      <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()}>
                         {row.cells.map((cell) => {
                           return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
                         })}
