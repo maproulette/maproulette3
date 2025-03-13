@@ -113,12 +113,13 @@ export const WithReviewTasks = function (WrappedComponent) {
       // update as we receive a second update when we change the URL.
       if (_isEqual(props.history.location.search, searchURL) && this.state.loading) {
         return;
-      } else if (!skipURLUpdate) {
+      }
+
+      if (!skipURLUpdate) {
         props.history.push({
           pathname: props.history.location.pathname,
           search: searchURL,
         });
-        return;
       }
 
       this.setState({ loading: true, criteria: typedCriteria });
