@@ -8,6 +8,7 @@ import { CHALLENGE_COLUMNS, PROJECT_COLUMNS, USER_COLUMNS } from "./MetricsData"
 import WithMetricsSearchResults from "./WithMetricsSearchResults";
 import WithSortedProjects from "./WithSortedProjects";
 import WithSortedUsers from "./WithSortedUsers";
+
 const MetricsTable = (props) => {
   const data = useMemo(() => {
     if (props.currentTab === "challenges") {
