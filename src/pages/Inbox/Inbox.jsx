@@ -1,6 +1,6 @@
 import _kebabCase from "lodash/kebabCase";
 import _reject from "lodash/reject";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import React from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { useFilters, usePagination, useSortBy, useTable } from "react-table";
@@ -41,7 +41,6 @@ const DefaultColumnFilter = ({ column: { filterValue, setFilter, Header } }) => 
 
 const Inbox = (props) => {
   const { user, notifications, markNotificationsRead, deleteNotifications } = props;
-  const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 
   const {
     groupByTask,
@@ -250,32 +249,28 @@ const Inbox = (props) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
     prepareRow,
-    state: { sortBy },
+    state: { sortBy, pageIndex, pageSize },
+    gotoPage,
+    setPageSize,
   } = useTable(
     {
       columns,
       data,
       initialState: {
         sortBy: [DEFAULT_SORT_CRITERIA],
+        pageIndex: DEFAULT_PAGINATION.page,
         pageSize: DEFAULT_PAGINATION.pageSize,
       },
       defaultColumn: {
         Filter: DefaultColumnFilter,
       },
-      manualPagination: true,
     },
     useFilters,
     useSortBy,
     usePagination,
   );
-
-  useEffect(() => {
-    if (sortBy && sortBy[0]) {
-      console.log("Sort changed:", sortBy[0]);
-    }
-  }, [sortBy]);
 
   if (!user) {
     return (
@@ -285,7 +280,7 @@ const Inbox = (props) => {
     );
   }
 
-  const totalPages = Math.ceil(notifications.length / pagination.pageSize);
+  const totalPages = Math.ceil(data.length / pageSize);
 
   return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
@@ -326,7 +321,7 @@ const Inbox = (props) => {
           </thead>
 
           <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
+            {page.map((row) => {
               prepareRow(row);
               return (
                 <tr
@@ -353,11 +348,11 @@ const Inbox = (props) => {
         </table>
 
         <PaginationControl
-          currentPage={pagination.page}
+          currentPage={pageIndex}
           totalPages={totalPages}
-          pageSize={pagination.pageSize}
-          gotoPage={(page) => setPagination({ ...pagination, page })}
-          setPageSize={(pageSize) => setPagination({ ...pagination, pageSize })}
+          pageSize={pageSize}
+          gotoPage={gotoPage}
+          setPageSize={setPageSize}
         />
       </section>
 
