@@ -370,11 +370,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
 
       if (row.original.isBundlePrimary && id === props.task?.id) {
         return (
-          <span className="mr-flex mr-items-center">
+          <span className="mr-flex mr-items-center mr-relative">
             <SvgSymbol
               sym="box-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-2"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-4"
               title={props.intl.formatMessage(messages.multipleTasksTooltip)}
             />
             {taskLink}
