@@ -1,4 +1,3 @@
-import _each from "lodash/each";
 import _isPlainObject from "lodash/isPlainObject";
 import _isString from "lodash/isString";
 import _omit from "lodash/omit";
@@ -245,7 +244,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       }
 
       const completeAction = taskBundle
-        ? completeTaskBundle(
+        ? await completeTaskBundle(
             taskBundle.bundleId,
             AsMappableBundle(taskBundle).primaryTaskId() || taskId,
             taskStatus,
@@ -255,7 +254,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             osmComment,
             completionResponses,
           )
-        : completeTask(
+        : await completeTask(
             taskId,
             taskStatus,
             needsReview,
@@ -310,9 +309,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     saveTaskTags: (task, tags) => {
       if (task.bundleId) {
         dispatch(fetchTaskBundle(task.bundleId), false).then((taskBundle) => {
-          _each(taskBundle.tasks, (task) => {
+          for (const task of taskBundle.tasks) {
             dispatch(updateTaskTags(task.id, tags));
-          });
+          }
         });
       } else {
         dispatch(updateTaskTags(task.id, tags));
@@ -367,7 +366,7 @@ export const isStale = (entity, staleTime) => {
  * Load a new random task, handling the differences between standard challenges
  * and virtual challenges.
  */
-export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
+export const nextRandomTask = async (dispatch, props, currentTaskId, taskLoadBy) => {
   // We need to make different requests depending on whether we're working on a
   // virtual challenge or a standard challenge.
   if (Number.isFinite(props.virtualChallengeId)) {

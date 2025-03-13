@@ -27,7 +27,16 @@ class HeaderSent extends Component {
             )}
           </div>
         </div>
-        <div className="mr-flex mr-justify-end mr-items-center">
+        <div className="mr-flex mr-justify-between mr-items-center">
+          <div className="mr-flex-1 mr-mr-4" style={{ maxWidth: "300px" }}>
+            <input
+              type="text"
+              placeholder="Search comments..."
+              value={this.props.searchTerm}
+              onChange={(e) => this.props.onSearchChange(e.target.value)}
+              className="mr-p-2 mr-rounded mr-w-full mr-bg-black-15 mr-text-white mr-border mr-border-grey-light focus:mr-border-green-lighter"
+            />
+          </div>
           <ul className="mr-list-reset mr-leading-tight mr-flex mr-items-center mr-text-white">
             <li className="mr-mr-3 mr-pr-3 mr-border-r mr-border-grey-light">
               <button

@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import { parseISO } from "date-fns";
-import _each from "lodash/each";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _reverse from "lodash/reverse";
@@ -33,20 +32,18 @@ export default class CommentList extends Component {
     // Show in descending order, with the most recent comment first.
     let sortedComments = [];
 
-    if (this.props.comments?.length !== 0) {
-      commentDates = new Map();
-      _each(this.props.comments, (comment) =>
-        commentDates.set(comment.id, parseISO(comment.created)),
+    if (this.props.comments?.length > 0) {
+      commentDates = new Map(
+        this.props.comments.map((comment) => [comment.id, parseISO(comment.created)]),
       );
 
       // Show in descending order, with the most recent comment first.
       sortedComments = _reverse(
         _sortBy(this.props.comments, (comment) => commentDates.get(comment.id).getTime()),
       );
-    } else {
-      commentDates = new Map();
-      _each(this.props.taskComments, (comment) =>
-        commentDates.set(comment.id, parseISO(comment.created)),
+    } else if (this.props.taskComments?.length > 0) {
+      commentDates = new Map(
+        this.props.taskComments.map((comment) => [comment.id, parseISO(comment.created)]),
       );
 
       // Show in descending order, with the most recent comment first.

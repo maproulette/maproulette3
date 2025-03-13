@@ -67,7 +67,6 @@ export const defaultWorkspaceSetup = function () {
     excludeWidgets: [
       // Cannot be added to workspace
       "TaskReviewWidget",
-      "ReviewNearbyTasksWidget",
     ],
     conditionalWidgets: [
       // conditionally displayed
@@ -95,6 +94,7 @@ export class TaskPane extends Component {
     showLockFailureDialog: false,
     needsResponses: false,
     completingTask: false,
+    unlockRequested: false,
   };
 
   tryLockingTask = () => {
@@ -153,18 +153,10 @@ export class TaskPane extends Component {
         this.state.completionResponses,
         taskBundle,
       );
-      this.clearCompletingTask();
     } catch (error) {
       console.error("Error completing task:", error);
       throw error;
     }
-  };
-
-  clearCompletingTask = () => {
-    // Clear on next tick to give our animation transition a chance to clean up.
-    setTimeout(() => {
-      this.props.setCompletingTask(null);
-    }, 0);
   };
 
   setCompletionResponse = (propertyName, value) => {
@@ -484,6 +476,22 @@ export class TaskPane extends Component {
                 >
                   <FormattedMessage {...messages.browseChallengeLabel} />
                 </button>
+                {!this.state.unlockRequested ? (
+                  <button
+                    className={"mr-button mr-button--green-light mr-ml-4"}
+                    disabled={this.state.unlockRequested}
+                    onClick={() => {
+                      this.setState({ unlockRequested: true });
+                      this.props.requestUnlock(this.props.task.id);
+                    }}
+                  >
+                    <FormattedMessage {...messages.requestUnlock} />
+                  </button>
+                ) : (
+                  <div className="mr-ml-4">Request Sent!</div>
+                )}
+
+                <div />
               </Fragment>
             }
           />

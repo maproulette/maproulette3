@@ -1,5 +1,3 @@
-import _each from "lodash/each";
-import _toPairs from "lodash/toPairs";
 import WithSearch from "../../../HOCs/WithSearch/WithSearch";
 
 /**
@@ -18,10 +16,9 @@ import WithSearch from "../../../HOCs/WithSearch/WithSearch";
 const WithComboSearch = (WrappedComponent, searches) => {
   let Combo = WrappedComponent;
 
-  _each(
-    _toPairs(searches),
-    (searchConfig) => (Combo = WithSearch(Combo, searchConfig[0], searchConfig[1])),
-  );
+  for (const [searchName, searchFunction] of Object.entries(searches)) {
+    Combo = WithSearch(Combo, searchName, searchFunction);
+  }
 
   return Combo;
 };

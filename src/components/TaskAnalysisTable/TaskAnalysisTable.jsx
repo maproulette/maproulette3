@@ -2,7 +2,6 @@ import { differenceInSeconds, parseISO } from "date-fns";
 import _compact from "lodash/compact";
 import _concat from "lodash/concat";
 import _debounce from "lodash/debounce";
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
@@ -117,10 +116,7 @@ export class TaskAnalysisTableInternal extends Component {
       direction: tableState.sorted[0].desc ? "DESC" : "ASC",
     };
 
-    const filters = {};
-    _each(tableState.filtered, (pair) => {
-      filters[pair.id] = pair.value;
-    });
+    const filters = Object.fromEntries(tableState.filtered.map(({ id, value }) => [id, value]));
 
     this.props.updateCriteria({
       sortCriteria,
@@ -132,7 +128,9 @@ export class TaskAnalysisTableInternal extends Component {
 
     // Use pick instead of cloneDeep, as cloning the entire tableState seems to cause an error
     // when any column with a "makeInvertable" header is present.
-    this.setState({ lastTableState: _pick(tableState, ["sorted", "filtered", "page"]) });
+    this.setState({
+      lastTableState: _pick(tableState, ["sorted", "filtered", "page"]),
+    });
   }
 
   configureColumns() {
@@ -235,7 +233,10 @@ export class TaskAnalysisTableInternal extends Component {
     }
 
     if (this.props.criteria?.filters) {
-      defaultFiltered = _map(this.props.criteria.filters, (value, key) => ({ id: key, value }));
+      defaultFiltered = _map(this.props.criteria.filters, (value, key) => ({
+        id: key,
+        value,
+      }));
     }
 
     const manager = AsManager(this.props.user);
@@ -288,6 +289,7 @@ export class TaskAnalysisTableInternal extends Component {
             }}
             SubComponent={(props) => <ViewTaskSubComponent taskId={props.original.id} />}
             unbundleTask={this.props.unbundleTask}
+            bundleTask={this.props.bundleTask}
             collapseOnDataChange={false}
             minRows={1}
             manual
@@ -340,17 +342,19 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: (task) => props.isTaskSelected(task.id),
     Cell: ({ value, original }) => {
       const status = original.status ?? original.taskStatus;
-      const alreadyBundled = original.bundleId && !props.taskBundle?.bundleId !== original.bundleId;
+      const alreadyBundled =
+        original.bundleId && props.initialBundle?.bundleId !== original.bundleId;
       const enableSelecting =
         !alreadyBundled &&
         !props.bundling &&
         !props.taskReadOnly &&
-        [0, 3, 6].includes(status) &&
+        ([0, 3, 6].includes(status) ||
+          (props.initialBundle?.bundleId && props.initialBundle?.bundleId === original.bundleId)) &&
         original.taskId !== props.task?.id &&
         props.workspace.name !== "taskReview" &&
         !AsCooperativeWork(props.task).isTagType();
 
-      return props.highlightPrimaryTask && original.id === props.task?.id && !original.bundleId ? (
+      return props.highlightPrimaryTask && original.id === props.task?.id && !alreadyBundled ? (
         <span className="mr-text-green-lighter">✓</span>
       ) : enableSelecting ? (
         <input
@@ -385,7 +389,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const taskLink = (
         <div className="row-controls-column mr-links-green-lighter">
           <Link
-            to={`/challenge/${t.parentId}/task/${t.id}`}
+            to={`/challenge/${t.parentId ?? t.parent}/task/${t.id}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -455,17 +459,18 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: "remove",
     minWidth: 110,
     Cell: ({ row }) => {
-      const bundlePrimary = props.taskBundle?.tasks.find((task) => task.isBundlePrimary);
-      const isTaskSelected = row._original.id === (bundlePrimary?.id || props.task?.id);
-      const alreadyBundled =
-        row._original.bundleId && props.taskBundle?.bundleId !== row._original.bundleId;
-      const enableBundleEdits =
-        props.initialBundle?.taskIds?.includes(row._original.id) ||
-        [0, 3, 6].includes(row._original.status);
+      const { taskBundle, task, initialBundle } = props;
+      const { id: taskId, bundleId, status } = row._original;
+
+      const isActiveTask = taskId === task?.id;
+      const isInActiveBundle = taskBundle?.taskIds?.includes(taskId);
+      const alreadyBundled = bundleId && initialBundle?.bundleId !== bundleId;
+      const validBundlingStatus =
+        initialBundle?.taskIds?.includes(taskId) || [0, 3, 6].includes(status);
 
       return (
         <div>
-          {!isTaskSelected && enableBundleEdits && !alreadyBundled && (
+          {!isActiveTask && validBundlingStatus && isInActiveBundle && !alreadyBundled && (
             <button
               disabled={props.bundleEditsDisabled}
               className="mr-text-red-light"
@@ -480,7 +485,21 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
             </button>
           )}
 
-          {isTaskSelected && <div className="mr-text-yellow">Primary Task</div>}
+          {!isActiveTask && validBundlingStatus && !isInActiveBundle && !alreadyBundled && (
+            <button
+              disabled={props.bundleEditsDisabled}
+              className="mr-text-green-lighter"
+              style={{
+                cursor: props.bundleEditsDisabled ? "default" : "pointer",
+                opacity: props.bundleEditsDisabled ? 0.3 : 1,
+                pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
+              }}
+              onClick={() => props.bundleTask(row._original)}
+            >
+              <FormattedMessage {...messages.bundle} />
+            </button>
+          )}
+          {isActiveTask && <div className="mr-text-yellow">Primary Task</div>}
         </div>
       );
     },
@@ -736,7 +755,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
         {_map(row._original.additionalReviewers, (reviewer, index) => {
           return (
             <Fragment key={reviewer.username + "-" + index}>
-              <span style={{ color: AsColoredHashable(reviewer.username).hashColor }}>
+              <span
+                style={{
+                  color: AsColoredHashable(reviewer.username).hashColor,
+                }}
+              >
                 {reviewer.username}
               </span>
               {index + 1 !== row._original.additionalReviewers?.length ? ", " : ""}

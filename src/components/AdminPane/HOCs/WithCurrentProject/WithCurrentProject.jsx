@@ -1,4 +1,3 @@
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _find from "lodash/find";
 import _isObject from "lodash/isObject";
@@ -152,13 +151,15 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
               // the child challenges have parent projects that haven't been
               // fetched yet. We need to fetch those so we can show their names.
               const missingProjects = [];
-              _each(result?.entities?.challenges, (challenge) => {
-                if (!_isObject(challenge.parent)) {
-                  if (!this.props.entities.projects[challenge.parent]) {
-                    missingProjects.push(challenge.parent);
+              if (result?.entities?.challenges) {
+                for (const challenge of Object.values(result.entities.challenges)) {
+                  if (!_isObject(challenge.parent)) {
+                    if (!this.props.entities.projects[challenge.parent]) {
+                      missingProjects.push(challenge.parent);
+                    }
                   }
                 }
-              });
+              }
               if (missingProjects.length > 0) {
                 this.props.fetchProjectsById(missingProjects);
               }

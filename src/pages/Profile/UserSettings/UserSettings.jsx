@@ -2,8 +2,6 @@ import Form from "@rjsf/core";
 import _cloneDeep from "lodash/cloneDeep";
 import _countBy from "lodash/countBy";
 import _debounce from "lodash/debounce";
-import _each from "lodash/each";
-import _find from "lodash/find";
 import _findLastIndex from "lodash/findLastIndex";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
@@ -63,11 +61,11 @@ class UserSettings extends Component {
         editableUser.customBasemaps,
         (data) => _isEmpty(_trim(data.name)) || _isEmpty(_trim(data.url)),
       );
-      editableUser.customBasemaps.forEach((data) => {
+      for (const data of editableUser.customBasemaps) {
         if (!data.id) {
           data.id = -1;
         }
-      });
+      }
     }
 
     editableUser.normalizeDefaultBasemap(LayerSources, editableUser.customBasemaps);
@@ -84,16 +82,16 @@ class UserSettings extends Component {
       // matching new mappings with the server generated id.
       if (updatedUser?.settings?.customBasemaps) {
         const serverBasemaps = updatedUser?.settings?.customBasemaps;
-        _each(settingsFormData.customBasemaps, (basemap) => {
-          if (
-            !basemap.id &&
-            !_isEmpty(basemap.url) &&
-            !_isEmpty(basemap.name) &&
-            _find(serverBasemaps, (m) => m.name === basemap.name)
-          ) {
-            basemap.id = _find(serverBasemaps, (m) => m.name === basemap.name).id;
+
+        if (settingsFormData.customBasemaps) {
+          for (const basemap of settingsFormData.customBasemaps) {
+            let serverBasemap = serverBasemaps?.find((m) => m.name === basemap.name);
+
+            if (!basemap.id && !_isEmpty(basemap.url) && !_isEmpty(basemap.name) && serverBasemap) {
+              basemap.id = serverBasemap.id;
+            }
           }
-        });
+        }
       }
 
       // Save the customBasemaps frmo the server in state so we we can match
@@ -132,7 +130,7 @@ class UserSettings extends Component {
   validate = (formData, errors) => {
     // Validates that all custom basemap names are unique.
     const basemapNames = _countBy(formData.customBasemaps, (bm) => bm.name);
-    _each(basemapNames, (count, name) => {
+    for (const [name, count] of Object.entries(basemapNames)) {
       if (count > 1) {
         const badIndex = _findLastIndex(formData.customBasemaps, (bm) => bm.name === name);
         if (errors.customBasemaps[badIndex]) {
@@ -141,7 +139,7 @@ class UserSettings extends Component {
           );
         }
       }
-    });
+    }
 
     return errors;
   };

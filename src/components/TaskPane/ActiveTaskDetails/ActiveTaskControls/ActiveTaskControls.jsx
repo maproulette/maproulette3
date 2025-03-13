@@ -133,10 +133,11 @@ export class ActiveTaskControls extends Component {
   complete = async (taskStatus) => {
     this.setState({ completingTask: true });
     try {
+      const taskBundle = await this.props.updateTaskBundle();
+
       if (this.state.tags) {
         this.props.saveTaskTags(this.props.task, this.state.tags);
       }
-      this.props.setCompletingTask(this.props.task.id);
 
       const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
@@ -148,7 +149,7 @@ export class ActiveTaskControls extends Component {
           null,
           this.state.revisionLoadBy,
           this.props.history,
-          this.props.taskBundle,
+          taskBundle,
           this.state.requestedNextTask,
           taskStatus,
           null,
@@ -166,7 +167,7 @@ export class ActiveTaskControls extends Component {
           this.state.requestedNextTask,
           this.state.osmComment,
           this.props.tagEdits,
-          this.props.taskBundle,
+          taskBundle,
         );
         if (revisionSubmission) {
           if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
@@ -344,39 +345,39 @@ export class ActiveTaskControls extends Component {
         ? this.props.getUserAppSetting(this.props.user, "isEditMode")
         : false;
       if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) && editMode) {
-        hiddenShortcuts.forEach((shortcut) => {
+        for (const shortcut of hiddenShortcuts) {
           this.props.deactivateKeyboardShortcut(
             hiddenShortcutGroup,
             shortcut,
             this.handleKeyboardShortcuts,
           );
-        });
+        }
       } else if (
         _isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
         this.props.keyboardShortcutGroups &&
         this.props.activateKeyboardShortcut &&
         !editMode
       ) {
-        hiddenShortcuts.forEach((shortcut) => {
+        for (const shortcut of hiddenShortcuts) {
           this.props.activateKeyboardShortcut(
             hiddenShortcutGroup,
             _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
             this.handleKeyboardShortcuts,
           );
-        });
+        }
       }
     }
   }
 
   componentWillUnmount() {
     if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
-      hiddenShortcuts.forEach((shortcut) => {
+      for (const shortcut of hiddenShortcuts) {
         this.props.deactivateKeyboardShortcut(
           hiddenShortcutGroup,
           shortcut,
           this.handleKeyboardShortcuts,
         );
-      });
+      }
     }
   }
 
