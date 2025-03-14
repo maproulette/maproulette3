@@ -44,9 +44,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   deleteChallenges: (challengeIds, callback = () => null) => {
     const projectId = ownProps.match.params.projectId;
 
-    challengeIds.forEach((id) => {
+    for (const id of challengeIds) {
       dispatch(deleteChallenge(id));
-    });
+    }
 
     callback(projectId);
   },

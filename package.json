@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.16.4",
+  "version": "3.16.7",
   "type": "module",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
     "test": "vitest",
     "test:cov": "vitest run --coverage",
     "lint": "eslint src/",
-    "format": "biome format --write",
+    "format": "biome check --formatter-enabled=true --linter-enabled=false --organize-imports-enabled=true --write",
     "check": "biome ci && eslint src/",
     "explore": "source-map-explorer --only-mapped --no-border-checks 'dist/**/*.js'",
     "test:e2e:start": "NODE_ENV=development yarn run build && npx serve dist",
@@ -129,7 +129,7 @@
     "@testing-library/react": "^12.1.2",
     "@types/node": "^22.10.5",
     "@vitejs/plugin-react-swc": "^3.7.1",
-    "@vitest/coverage-v8": "^2.1.2",
+    "@vitest/coverage-v8": "^2.1.9",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
     "enzyme": "^3.11.0",
@@ -159,8 +159,8 @@
     "tailwindcss-transforms": "^2.2.0",
     "tailwindcss-transition": "^1.0.5",
     "tailwindcss-visuallyhidden": "^1.0.2",
-    "vite": "^5.4.8",
-    "vitest": "^2.1.2"
+    "vite": "^5.4.12",
+    "vitest": "^2.1.9"
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"

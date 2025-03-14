@@ -1,8 +1,5 @@
 import classNames from "classnames";
-import _each from "lodash/each";
 import _find from "lodash/find";
-import _indexOf from "lodash/indexOf";
-import _isUndefined from "lodash/isUndefined";
 import _kebabCase from "lodash/kebabCase";
 import _map from "lodash/map";
 import _noop from "lodash/noop";
@@ -68,116 +65,79 @@ export class TaskHistoryList extends Component {
     let userType = null;
     let errorTags = null;
 
-    _each(
-      _sortBy(this.props.taskHistory, (h) => new Date(h.timestamp)),
-      (log, index) => {
-        // We are moving on to a new set of actions so let's push
-        // this set of entries
-        if (
-          lastTimestamp !== null &&
-          (entries.length > 0 || startedAtEntry) &&
-          Math.abs(new Date(log.timestamp) - lastTimestamp) > 1000
-        ) {
-          combinedLogs.push({
-            timestamp: lastTimestamp,
-            duration: duration,
-            entry: entries,
-            username: username,
-            status: updatedStatus,
-            userType: userType,
-            errorTags: errorTags,
-          });
-          if (startedAtEntry) {
-            combinedLogs.push(startedAtEntry);
-            startedAtEntry = null;
-          }
-          entries = [];
-          updatedStatus = null;
-          duration = null;
-          userType = null;
-          errorTags = null;
+    const sortedLogs = _sortBy(this.props.taskHistory, (h) => new Date(h.timestamp));
+    for (const [index, log] of sortedLogs.entries()) {
+      // We are moving on to a new set of actions so let's push
+      // this set of entries
+      if (
+        lastTimestamp !== null &&
+        (entries.length > 0 || startedAtEntry) &&
+        Math.abs(new Date(log.timestamp) - lastTimestamp) > 1000
+      ) {
+        combinedLogs.push({
+          timestamp: lastTimestamp,
+          duration: duration,
+          entry: entries,
+          username: username,
+          status: updatedStatus,
+          userType: userType,
+          errorTags: errorTags,
+        });
+        if (startedAtEntry) {
+          combinedLogs.push(startedAtEntry);
+          startedAtEntry = null;
         }
-        lastTimestamp = new Date(log.timestamp);
+        entries = [];
+        updatedStatus = null;
+        duration = null;
+        userType = null;
+        errorTags = null;
+      }
+      lastTimestamp = new Date(log.timestamp);
 
-        switch (log.actionType) {
-          case TaskHistoryAction.comment:
-            logEntry = commentEntry(log, this.props, index);
-            username = log?.user?.username;
-            break;
-          case TaskHistoryAction.review:
-          case TaskHistoryAction.metaReview:
-            if (log.reviewStatus === TaskReviewStatus.needed) {
-              username =
-                TaskHistoryAction.review === log.actionType
-                  ? log?.reviewRequestedBy?.username
-                  : log?.metaReviewRequestedBy?.username;
-              logEntry = reviewEntry(log, this.props, index);
-            } else {
-              logEntry = null;
-              const isMetaReview = log.actionType === TaskHistoryAction.metaReview;
-              updatedStatus = (
-                <ReviewStatusLabel
-                  {...this.props}
-                  isMetaReview={isMetaReview}
-                  intlMessage={
-                    isMetaReview
-                      ? messagesByMetaReviewStatus[log.reviewStatus]
-                      : messagesByReviewStatus[log.reviewStatus]
-                  }
-                  className={`mr-review-${_kebabCase(keysByReviewStatus[log.reviewStatus])}`}
-                  showDot
-                />
-              );
-              username =
-                log.reviewStatus === TaskReviewStatus.disputed ||
-                log.reviewStatus === TaskReviewStatus.needed
-                  ? log?.reviewRequestedBy?.username
-                  : log?.reviewedBy?.username;
-              userType =
-                log.actionType === TaskHistoryAction.metaReview
-                  ? META_REVIEWER_TYPE
-                  : REVIEWER_TYPE;
-              errorTags = log.errorTags;
-              if (log.startedAt) {
-                duration = new Date(log.timestamp) - new Date(log.startedAt);
-
-                //add an additional entry for when review was started
-                const startedReviewAtEntry = {
-                  timestamp: log.startedAt,
-                  ignoreAtticOffset: true,
-                  entry: [
-                    <li className="mr-mb-4" key={"start-" + index}>
-                      <div>
-                        <span
-                          className="mr-mr-2"
-                          style={{ color: AsColoredHashable(username).hashColor }}
-                        >
-                          {username}
-                        </span>{" "}
-                        <FormattedMessage {...messages.startedReviewOnLabel} />
-                      </div>
-                    </li>,
-                  ],
-                };
-
-                combinedLogs.push(startedReviewAtEntry);
-              }
-            }
-            break;
-          case TaskHistoryAction.update:
-            logEntry = updateEntry(log, this.props, index);
-            username = log?.user?.username;
-            break;
-          case TaskHistoryAction.status:
-          default:
+      switch (log.actionType) {
+        case TaskHistoryAction.comment:
+          logEntry = commentEntry(log, this.props, index);
+          username = log?.user?.username;
+          break;
+        case TaskHistoryAction.review:
+        case TaskHistoryAction.metaReview:
+          if (log.reviewStatus === TaskReviewStatus.needed) {
+            username =
+              TaskHistoryAction.review === log.actionType
+                ? log?.reviewRequestedBy?.username
+                : log?.metaReviewRequestedBy?.username;
+            logEntry = reviewEntry(log, this.props, index);
+          } else {
             logEntry = null;
-            username = log?.user?.username;
-            userType = MAPPER_TYPE;
-            updatedStatus = statusEntry(log, this.props, index);
-            if (log.startedAt || log.oldStatus === TASK_STATUS_CREATED) {
-              // Add a "Started At" entry into the history
-              startedAtEntry = {
-                timestamp: log.startedAt || log.timestamp,
+            const isMetaReview = log.actionType === TaskHistoryAction.metaReview;
+            updatedStatus = (
+              <ReviewStatusLabel
+                {...this.props}
+                isMetaReview={isMetaReview}
+                intlMessage={
+                  isMetaReview
+                    ? messagesByMetaReviewStatus[log.reviewStatus]
+                    : messagesByReviewStatus[log.reviewStatus]
+                }
+                className={`mr-review-${_kebabCase(keysByReviewStatus[log.reviewStatus])}`}
+                showDot
+              />
+            );
+            username =
+              log.reviewStatus === TaskReviewStatus.disputed ||
+              log.reviewStatus === TaskReviewStatus.needed
+                ? log?.reviewRequestedBy?.username
+                : log?.reviewedBy?.username;
+            userType =
+              log.actionType === TaskHistoryAction.metaReview ? META_REVIEWER_TYPE : REVIEWER_TYPE;
+            errorTags = log.errorTags;
+            if (log.startedAt) {
+              duration = new Date(log.timestamp) - new Date(log.startedAt);
+
+              //add an additional entry for when review was started
+              const startedReviewAtEntry = {
+                timestamp: log.startedAt,
                 ignoreAtticOffset: true,
                 entry: [
                   <li className="mr-mb-4" key={"start-" + index}>
@@ -188,21 +148,54 @@ export class TaskHistoryList extends Component {
                       >
                         {username}
                       </span>{" "}
-                      <FormattedMessage {...messages.startedOnLabel} />
+                      <FormattedMessage {...messages.startedReviewOnLabel} />
                     </div>
                   </li>,
                 ],
               };
-            }
 
-            if (log.startedAt) {
-              duration = new Date(log.timestamp) - new Date(log.startedAt);
+              combinedLogs.push(startedReviewAtEntry);
             }
-            break;
-        }
-        entries.unshift(logEntry);
-      },
-    );
+          }
+          break;
+        case TaskHistoryAction.update:
+          logEntry = updateEntry(log, this.props, index);
+          username = log?.user?.username;
+          break;
+        case TaskHistoryAction.status:
+        default:
+          logEntry = null;
+          username = log?.user?.username;
+          userType = MAPPER_TYPE;
+          updatedStatus = statusEntry(log, this.props, index);
+          if (log.startedAt || log.oldStatus === TASK_STATUS_CREATED) {
+            // Add a "Started At" entry into the history
+            startedAtEntry = {
+              timestamp: log.startedAt || log.timestamp,
+              ignoreAtticOffset: true,
+              entry: [
+                <li className="mr-mb-4" key={"start-" + index}>
+                  <div>
+                    <span
+                      className="mr-mr-2"
+                      style={{ color: AsColoredHashable(username).hashColor }}
+                    >
+                      {username}
+                    </span>{" "}
+                    <FormattedMessage {...messages.startedOnLabel} />
+                  </div>
+                </li>,
+              ],
+            };
+          }
+
+          if (log.startedAt) {
+            duration = new Date(log.timestamp) - new Date(log.startedAt);
+          }
+          break;
+      }
+      entries.unshift(logEntry);
+    }
 
     if (entries.length > 0) {
       combinedLogs.push({
@@ -221,7 +214,8 @@ export class TaskHistoryList extends Component {
     }
 
     const contributors = [];
-    _each(combinedLogs, (log) => {
+
+    for (const log of combinedLogs) {
       // Don't add a contributor twice
       if (
         log.userType &&
@@ -229,7 +223,7 @@ export class TaskHistoryList extends Component {
       ) {
         contributors.push(log);
       }
-    });
+    }
 
     const contributorEntries = (
       <ol className="mr-list-decimal mr-pl-4">
@@ -296,7 +290,7 @@ export class TaskHistoryList extends Component {
                 <input
                   className="mr-checkbox-toggle"
                   type="checkbox"
-                  checked={_indexOf(this.props.selectedTimestamps, log.timestamp.toString()) !== -1}
+                  checked={this.props.selectedTimestamps.indexOf(log.timestamp.toString()) !== -1}
                   onChange={() => this.props.toggleSelection(log.timestamp)}
                 />
               )}
@@ -371,7 +365,7 @@ export class TaskHistoryList extends Component {
 const reviewEntry = (entry, props, index) => {
   return (
     <li key={index}>
-      {!_isUndefined(entry.reviewStatus) && (
+      {entry.reviewStatus !== undefined && (
         <ReviewStatusLabel
           {...props}
           isMetaReview={entry.actionType === TaskHistoryAction.metaReview}

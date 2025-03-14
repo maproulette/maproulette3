@@ -1,6 +1,5 @@
 import { LatLng } from "leaflet";
 import _filter from "lodash/filter";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _omit from "lodash/omit";
 import { Component } from "react";
@@ -53,7 +52,7 @@ export const WithBoundedTasks = function (
         mapZoom = this.props.mapBounds.zoom;
       }
 
-      if (mapBounds && _isArray(boundedTasks?.tasks)) {
+      if (mapBounds && Array.isArray(boundedTasks?.tasks)) {
         boundedTasks = Object.assign({}, boundedTasks, {
           tasks: _filter(
             boundedTasks.tasks,

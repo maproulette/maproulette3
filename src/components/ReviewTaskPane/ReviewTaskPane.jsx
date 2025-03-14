@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
@@ -84,7 +83,7 @@ export class ReviewTaskPane extends Component {
   };
 
   render() {
-    if (!_isFinite(this.props.task?.id)) {
+    if (!Number.isFinite(this.props.task?.id)) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
@@ -92,7 +91,7 @@ export class ReviewTaskPane extends Component {
       );
     }
 
-    if (this.props.task.isBundlePrimary && !this.props.taskBundle) {
+    if (this.props.task.isBundlePrimary && !this.props.initialBundle) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />

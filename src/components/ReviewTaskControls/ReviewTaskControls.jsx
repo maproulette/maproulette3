@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
 import PropTypes from "prop-types";
@@ -47,14 +46,16 @@ export class ReviewTaskControls extends Component {
     if (this.state.tags) {
       this.props.saveTaskTags(this.props.task, this.state.tags);
     }
-    this.props.setCompletingTask(this.props.task.id);
 
     const history = _cloneDeep(this.props.history);
     _merge(history?.location?.state ?? {}, alternateCriteria);
 
     const requestedNextTask = !this.state.requestedNextTask
       ? null
-      : { id: this.state.requestedNextTask, parent: this.state.requestedNextTaskParent };
+      : {
+          id: this.state.requestedNextTask,
+          parent: this.state.requestedNextTaskParent,
+        };
 
     const errorTags = this.state.errorTags?.length ? this.state.errorTags : undefined;
 
@@ -100,7 +101,10 @@ export class ReviewTaskControls extends Component {
   };
 
   chooseNextTask = (challengeId, isVirtual, taskId) => {
-    this.setState({ requestedNextTask: taskId, requestedNextTaskParent: challengeId });
+    this.setState({
+      requestedNextTask: taskId,
+      requestedNextTaskParent: challengeId,
+    });
   };
 
   clearNextTask = () => {
@@ -251,16 +255,14 @@ export class ReviewTaskControls extends Component {
           <FormattedMessage {...messages.currentTaskStatus} />
           <FormattedMessage {...messagesByStatus[this.props.task.status]} />
         </div>
-
         <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
           <FormattedMessage {...messages.currentReviewStatus} />
           <FormattedMessage {...messagesByReviewStatus[this.props.task.reviewStatus]} />
         </div>
-
         {isMetaReview && (
           <div className="mr-text-sm mr-text-white mr-whitespace-nowrap">
             <FormattedMessage {...messages.currentMetaReviewStatus} />
-            {_isUndefined(this.props.task.metaReviewStatus) ? (
+            {this.props.task.metaReviewStatus === undefined ? (
               <span />
             ) : (
               <FormattedMessage {...messagesByReviewStatus[this.props.task.metaReviewStatus]} />
@@ -278,13 +280,11 @@ export class ReviewTaskControls extends Component {
             taskReadOnly={this.props.taskReadOnly}
           />
         </div>
-
         {errorTags ? (
           <div className="mr-text-red">
             <FormattedMessage {...messages.errorTags} />: <ErrorTagComment errorTags={errorTags} />
           </div>
         ) : null}
-
         <div>
           <UserEditorSelector {...this.props} pickEditor={this.pickEditor} />
           <div className="mr-grid mr-grid-columns-2 mr-grid-gap-4">
@@ -299,13 +299,11 @@ export class ReviewTaskControls extends Component {
             )}
           </div>
         </div>
-
         {this.props.task.metaReviewStatus === TaskReviewStatus.rejected && (
           <div className="mr-my-4 mr-text-yellow mr-text-mango mr-text-lg">
             <FormattedMessage {...messages.changeReview} />
           </div>
         )}
-
         <div className="mr-mt-2 breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto">
           {isRevision ? (
             <button
@@ -373,7 +371,6 @@ export class ReviewTaskControls extends Component {
             )}
           </button>
         </div>
-
         {this.state.confirmingTask && (
           <TaskConfirmationModal
             {...this.props}

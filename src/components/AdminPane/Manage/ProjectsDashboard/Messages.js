@@ -23,7 +23,7 @@ export default defineMessages({
   },
 
   addChallengeTooltip: {
-    id: "Admin.Project.controls.addChallenge.tooltip",
+    id: "Admin.EditChallenge.new.header",
     defaultMessage: "New Challenge",
   },
 

@@ -5,22 +5,22 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   goBack: {
-    id: "ProjectDetails.controls.goBack.label",
+    id: "ChallengeDetails.controls.goBack.label",
     defaultMessage: "Go Back",
   },
 
   unsave: {
-    id: "ProjectDetails.controls.unsave.label",
+    id: "Challenge.controls.unsave.label",
     defaultMessage: "Unsave",
   },
 
   save: {
-    id: "ProjectDetails.controls.save.label",
+    id: "Admin.EditProject.controls.save.label",
     defaultMessage: "Save",
   },
 
   manageLabel: {
-    id: "ProjectDetails.management.controls.manage.label",
+    id: "Challenge.management.controls.manage.label",
     defaultMessage: "Manage",
   },
 
@@ -30,7 +30,7 @@ export default defineMessages({
   },
 
   startLabel: {
-    id: "ProjectDetails.management.controls.start.label",
+    id: "Admin.TaskAnalysisTable.controls.startTask.label",
     defaultMessage: "Start",
   },
 
@@ -42,17 +42,17 @@ export default defineMessages({
   },
 
   featured: {
-    id: "ProjectDetails.fields.featured.label",
+    id: "Admin.EditChallenge.form.featured.label",
     defaultMessage: "Featured",
   },
 
   ownerLabel: {
-    id: "ProjectDetails.fields.owner.label",
+    id: "Admin.ProjectManagers.projectOwner",
     defaultMessage: "Owner",
   },
 
   createdOnLabel: {
-    id: "ProjectDetails.fields.created.label",
+    id: "Activity.action.created",
     defaultMessage: "Created",
   },
 
@@ -62,12 +62,12 @@ export default defineMessages({
   },
 
   viewLeaderboard: {
-    id: "ProjectDetails.fields.viewLeaderboard.label",
+    id: "Challenge.fields.viewLeaderboard.label",
     defaultMessage: "View Leaderboard",
   },
 
   viewReviews: {
-    id: "ProjectDetails.fields.viewReviews.label",
+    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
   },
 });

@@ -1,5 +1,4 @@
 import _compact from "lodash/compact";
-import _isFinite from "lodash/isFinite";
 import _isPlainObject from "lodash/isPlainObject";
 import _map from "lodash/map";
 import { Component } from "react";
@@ -45,7 +44,7 @@ export class SavedChallengesWidget extends Component {
 const SavedChallengeList = function (props) {
   const challengeItems = _compact(
     _map(props.user?.savedChallenges ?? [], (challenge) => {
-      if (!_isFinite(challenge?.id)) {
+      if (!Number.isFinite(challenge?.id)) {
         return null;
       }
 

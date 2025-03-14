@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _omit from "lodash/omit";
 import { Component } from "react";
 import { connect } from "react-redux";
@@ -26,7 +25,7 @@ export const WithLoadedTaskHistory = function (WrappedComponent) {
     };
 
     loadHistory = (taskId) => {
-      if (!_isFinite(taskId)) {
+      if (!Number.isFinite(taskId)) {
         return;
       }
 

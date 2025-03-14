@@ -5,12 +5,12 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   label: {
-    id: "Widgets.LeaderboardWidget.label",
+    id: "Leaderboard.title",
     defaultMessage: "Leaderboard",
   },
 
   title: {
-    id: "Widgets.LeaderboardWidget.title",
+    id: "Leaderboard.title",
     defaultMessage: "Leaderboard",
   },
 

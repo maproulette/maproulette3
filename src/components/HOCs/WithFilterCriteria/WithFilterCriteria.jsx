@@ -1,17 +1,15 @@
 import { format } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
-import _each from "lodash/each";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isUndefined from "lodash/isUndefined";
 import _keys from "lodash/keys";
 import _merge from "lodash/merge";
 import _omit from "lodash/omit";
 import _pickBy from "lodash/pickBy";
 import _toInteger from "lodash/toInteger";
 import { Component } from "react";
-import { GLOBAL_MAPBOUNDS, fromLatLngBounds } from "../../../services/MapBounds/MapBounds";
+import { fromLatLngBounds } from "../../../services/MapBounds/MapBounds";
 import {
   buildSearchCriteriafromURL,
   buildSearchURL,
@@ -184,15 +182,6 @@ export const WithFilterCriteria = function (
 
       criteria.filters.archived = true;
 
-      // If we don't have bounds yet, we still want results so let's fetch all
-      // tasks globally for this challenge.
-      if (!criteria.boundingBox) {
-        if (skipInitialFetch || !challengeId) {
-          return;
-        }
-        criteria.boundingBox = GLOBAL_MAPBOUNDS;
-      }
-
       this.debouncedTasksFetch(challengeId, criteria, this.state.criteria.pageSize);
     };
 
@@ -213,17 +202,24 @@ export const WithFilterCriteria = function (
 
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
-      _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], (key) => {
-        if (!_isUndefined(criteria[key]) && key === "boundingBox") {
+      const keysToSplit = [
+        "status",
+        "reviewStatus",
+        "metaReviewStatus",
+        "priorities",
+        "boundingBox",
+      ];
+      for (const key of keysToSplit) {
+        if (criteria[key] !== undefined && key === "boundingBox") {
           if (typeof criteria[key] === "string") {
             criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
           }
-        } else if (!_isUndefined(criteria?.filters?.[key])) {
+        } else if (criteria?.filters?.[key] !== undefined) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
           }
         }
-      });
+      }
 
       if (!criteria?.filters?.status) {
         this.updateIncludedFilters(props);
@@ -250,17 +246,24 @@ export const WithFilterCriteria = function (
 
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
-      _each(["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"], (key) => {
-        if (!_isUndefined(criteria[key]) && key === "boundingBox") {
+      const keysToSplit = [
+        "status",
+        "reviewStatus",
+        "metaReviewStatus",
+        "priorities",
+        "boundingBox",
+      ];
+      for (const key of keysToSplit) {
+        if (criteria[key] !== undefined && key === "boundingBox") {
           if (typeof criteria[key] === "string") {
             criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
           }
-        } else if (!_isUndefined(criteria?.filters?.[key])) {
+        } else if (criteria?.filters?.[key] !== undefined) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
           }
         }
-      });
+      }
 
       if (!criteria?.filters?.status) {
         this.updateIncludedFilters(props);

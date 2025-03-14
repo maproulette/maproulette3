@@ -10,22 +10,22 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.SnapshotProgressWidget.title",
+    id: "Widgets.SnapshotProgressWidget.label",
     defaultMessage: "Past Progress",
   },
 
   current: {
-    id: "Widgets.SnapshotProgressWidget.current.label",
+    id: "TagDiffVisualization.current.label",
     defaultMessage: "Current",
   },
 
   done: {
-    id: "Widgets.SnapshotProgressWidget.done.label",
+    id: "Admin.EditChallenge.form.taskPropertyStyles.close",
     defaultMessage: "Done",
   },
 
   exportCSVLabel: {
-    id: "Widgets.SnapshotProgressWidget.exportCSV.label",
+    id: "Admin.Project.controls.export.label",
     defaultMessage: "Export CSV",
   },
 

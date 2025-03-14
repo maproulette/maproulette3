@@ -1,7 +1,6 @@
 import { useMutation } from "@apollo/client";
 import Form from "@rjsf/core";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
@@ -52,7 +51,7 @@ export const EditTeam = (props) => {
             className="mr-button mr-button--green-lighter mr-ml-4"
             onClick={() => {
               if (!_isEmpty(teamFields)) {
-                if (_isFinite(teamFields.id)) {
+                if (Number.isFinite(teamFields.id)) {
                   updateTeam({ variables: teamFields });
                 } else {
                   createTeam({

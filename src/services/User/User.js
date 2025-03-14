@@ -1,8 +1,5 @@
 import { startOfDay, subMonths } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
-import _each from "lodash/each";
-import _isArray from "lodash/isArray";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
@@ -270,7 +267,7 @@ export const fetchUsers = function (limit = 50) {
 export const fetchUserComments = function (
   userId,
   type = CommentType.TASK,
-  filters = { sort: "created", order: "DESC", page: 0, limit: 25 },
+  filters = { sort: "created", order: "DESC", page: 0, limit: 25, searchTerm: "" },
 ) {
   return function (dispatch) {
     const endpoint =
@@ -368,7 +365,7 @@ export const ensureUserLoggedIn = function (squelchError = false) {
       .execute()
       .then((normalizedResults) => {
         const userId = normalizedResults.result;
-        if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+        if (Number.isFinite(userId) && userId !== GUEST_USER_ID) {
           localStorage.setItem("isLoggedIn", "true");
         }
         dispatch(receiveUsers(normalizedResults.entities));
@@ -473,13 +470,13 @@ export const fetchTopChallenges = function (userId, startDate, limit = 5) {
             _reverse(_sortBy(_toPairs(challenges), (idAndChallenge) => idAndChallenge[1].activity)),
             (idAndChallenge) => parseInt(idAndChallenge[0], 10),
           );
-        }
 
-        // Remove the user-specific activity score before adding this challenge
-        // to the general redux store.
-        _each(challenges, (challenge) => {
-          delete challenge.activity;
-        });
+          // Remove the user-specific activity score before adding this challenge
+          // to the general redux store.
+          for (const challenge of Object.values(challenges)) {
+            delete challenge.activity;
+          }
+        }
 
         userCache.set(
           variables,
@@ -671,7 +668,7 @@ export const fetchUserMetrics = async (
  */
 export const loadCompleteUser = function (userId, savedChallengesLimit = 50, savedTasksLimit = 50) {
   return function (dispatch) {
-    if (!_isFinite(userId) || userId === GUEST_USER_ID) {
+    if (!Number.isFinite(userId) || userId === GUEST_USER_ID) {
       return null;
     }
 
@@ -685,7 +682,7 @@ export const loadCompleteUser = function (userId, savedChallengesLimit = 50, sav
         fetchNotificationSubscriptions(userId)(dispatch);
       })
       .then(() => {
-        if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+        if (Number.isFinite(userId) && userId !== GUEST_USER_ID) {
           localStorage.setItem("isLoggedIn", "true");
         }
         dispatch(setCurrentUser(userId));
@@ -916,7 +913,7 @@ export const logoutUser = function (userId) {
 
   const logoutURI = `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`;
 
-  if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+  if (Number.isFinite(userId) && userId !== GUEST_USER_ID) {
     unsubscribeFromUserUpdates(userId);
   }
 
@@ -969,27 +966,27 @@ const reduceUsersFurther = function (mergedState, oldState, userEntities) {
   // We also normalize the locale, as the server will default to `en` whereas
   // we use `en-US`
   for (let entity of userEntities) {
-    if (_isArray(entity.groups)) {
+    if (Array.isArray(entity.groups)) {
       mergedState[entity.id].groups = entity.groups;
     }
 
-    if (_isArray(entity.activity)) {
+    if (Array.isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity;
     }
 
-    if (_isArray(entity.savedChallenges)) {
+    if (Array.isArray(entity.savedChallenges)) {
       mergedState[entity.id].savedChallenges = entity.savedChallenges;
     }
 
-    if (_isArray(entity.topChallenges)) {
+    if (Array.isArray(entity.topChallenges)) {
       mergedState[entity.id].topChallenges = entity.topChallenges;
     }
 
-    if (_isArray(entity.savedTasks)) {
+    if (Array.isArray(entity.savedTasks)) {
       mergedState[entity.id].savedTasks = entity.savedTasks;
     }
 
-    if (_isArray(entity.notifications)) {
+    if (Array.isArray(entity.notifications)) {
       mergedState[entity.id].notifications = entity.notifications;
     }
 
@@ -999,7 +996,7 @@ const reduceUsersFurther = function (mergedState, oldState, userEntities) {
     }
 
     // Always completely replace customBasemaps
-    if (_isArray(entity?.settings?.customBasemaps)) {
+    if (Array.isArray(entity?.settings?.customBasemaps)) {
       mergedState[entity.id].settings.customBasemaps = entity.settings.customBasemaps;
     }
 
@@ -1016,7 +1013,7 @@ const reduceUsersFurther = function (mergedState, oldState, userEntities) {
 export const userEntities = function (state, action) {
   if (action.type === ADD_SAVED_CHALLENGE) {
     const mergedState = _cloneDeep(state);
-    if (!_isArray(mergedState?.[action.userId]?.savedChallenges)) {
+    if (!Array.isArray(mergedState?.[action.userId]?.savedChallenges)) {
       _set(mergedState, `${action.userId}.savedChallenges`, []);
     }
 
@@ -1028,7 +1025,7 @@ export const userEntities = function (state, action) {
     return mergedState;
   } else if (action.type === ADD_SAVED_TASK) {
     const mergedState = _cloneDeep(state);
-    if (!_isArray(mergedState?.[action.userId]?.savedTasks)) {
+    if (!Array.isArray(mergedState?.[action.userId]?.savedTasks)) {
       _set(mergedState, `${action.userId}.savedTasks`, []);
     }
 

@@ -1,8 +1,5 @@
 import _cloneDeep from "lodash/cloneDeep";
-import _each from "lodash/each";
 import _isString from "lodash/isString";
-import _isUndefined from "lodash/isUndefined";
-import _keys from "lodash/keys";
 import _toInteger from "lodash/toInteger";
 import _values from "lodash/values";
 import queryString from "query-string";
@@ -46,13 +43,13 @@ export function buildSearchCriteria(searchParams, defaultCriteria) {
 export function buildSearchURL(searchCriteria) {
   const params = {};
 
-  _each(_keys(searchCriteria), (key) => {
+  for (const key of Object.keys(searchCriteria)) {
     if (typeof searchCriteria[key] === "object") {
       if (key === "boundingBox") {
         params.boundingBox = _values(searchCriteria.boundingBox).join();
       } else {
-        _each(_keys(searchCriteria[key]), (subkey) => {
-          if (!_isUndefined(searchCriteria[key][subkey]) && searchCriteria[key][subkey] !== null) {
+        for (const subkey of Object.keys(searchCriteria[key])) {
+          if (searchCriteria[key][subkey] !== undefined && searchCriteria[key][subkey] !== null) {
             // taskPropertySearch is a json object
             if (subkey === "taskPropertySearch") {
               params[`${key}.${subkey}`] = JSON.stringify(searchCriteria[key][subkey]);
@@ -60,12 +57,12 @@ export function buildSearchURL(searchCriteria) {
               params[`${key}.${subkey}`] = searchCriteria[key][subkey];
             }
           }
-        });
+        }
       }
-    } else if (!_isUndefined(searchCriteria[key]) && searchCriteria[key] !== null) {
+    } else if (searchCriteria[key] !== undefined && searchCriteria[key] !== null) {
       params[key] = searchCriteria[key];
     }
-  });
+  }
 
   return "?" + new URLSearchParams(params).toString();
 }
@@ -88,7 +85,7 @@ export function buildSearchCriteriafromURL(searchURL) {
     return value;
   };
 
-  _each(_keys(parsedURL), (key) => {
+  for (const key of Object.keys(parsedURL)) {
     const result = key.match(/(\w+)\.(\w+)/);
     if (result) {
       const primaryKey = result[1];
@@ -103,7 +100,7 @@ export function buildSearchCriteriafromURL(searchURL) {
     } else {
       searchCriteria[key] = massageValue(parsedURL[key]);
     }
-  });
+  }
 
   return searchCriteria;
 }

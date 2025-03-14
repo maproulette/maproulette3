@@ -1,6 +1,4 @@
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 
 const EMBED_URI_V4 = "https://www.mapillary.com/embed";
 const IMAGES_URI_V4 = "https://graph.mapillary.com/images";
@@ -41,16 +39,16 @@ export const fetchMapillaryImages = async function (
 
   try {
     // bbox and point can be either arrays or strings with comma-separated coordinates
-    const params = [`bbox=${_isArray(bbox) ? bbox.join(",") : bbox}`];
+    const params = [`bbox=${Array.isArray(bbox) ? bbox.join(",") : bbox}`];
     if (point) {
-      params.push(`closeto=${_isArray(point) ? point.join(",") : point}`);
+      params.push(`closeto=${Array.isArray(point) ? point.join(",") : point}`);
 
-      if (_isFinite(radius)) {
+      if (Number.isFinite(radius)) {
         params.push(`radius=${radius}`);
       }
 
       if (lookAt) {
-        params.push(`lookat=${_isArray(point) ? point.join(",") : point}`);
+        params.push(`lookat=${Array.isArray(point) ? point.join(",") : point}`);
       }
     }
     params.push(`limit=${pageSize}`);
@@ -117,14 +115,14 @@ export const nextMapillaryPageUrl = function (resultContext) {
       console.log("Link Header:", linkHeader);
 
       if (linkHeader) {
-        linkHeader.split(",").forEach((link) => {
+        for (const link of linkHeader.split(",")) {
           const match = link.match(/<([^>]+)>\s*rel="([^"]+)"/);
           if (match) {
             const url = match[1];
             const rel = match[2];
             links[rel] = { url };
           }
-        });
+        }
       }
 
       console.log("Parsed Links:", links);

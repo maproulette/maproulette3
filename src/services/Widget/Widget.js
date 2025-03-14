@@ -1,12 +1,10 @@
 import FileSaver from "file-saver";
 import _cloneDeep from "lodash/cloneDeep";
 import _compact from "lodash/compact";
-import _each from "lodash/each";
 import _find from "lodash/find";
 import _findIndex from "lodash/findIndex";
 import _intersection from "lodash/intersection";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
 import _map from "lodash/map";
@@ -147,7 +145,7 @@ export const migrateWidgetGridConfiguration = function (
 ) {
   // Grids lacking any version number cannot be migrated. Reset to default
   // configuration.
-  if (!_isFinite(originalConfiguration.dataModelVersion)) {
+  if (!Number.isFinite(originalConfiguration.dataModelVersion)) {
     return resetGridConfigurationToDefault(originalConfiguration, generateDefaultConfiguration);
   }
 
@@ -226,7 +224,7 @@ export const pruneDecommissionedWidgets = (originalGridConfiguration) => {
 export const pruneWidgets = (gridConfiguration, widgetKeys) => {
   let prunedConfiguration = gridConfiguration;
 
-  _each(widgetKeys, (widgetKey) => {
+  for (const widgetKey of widgetKeys) {
     const widgetIndex = _findIndex(prunedConfiguration.widgets, { widgetKey });
     if (widgetIndex !== -1) {
       // If we haven't made a fresh copy of gridConfiguration yet, do so now
@@ -237,7 +235,7 @@ export const pruneWidgets = (gridConfiguration, widgetKeys) => {
       prunedConfiguration.widgets.splice(widgetIndex, 1);
       prunedConfiguration.layout.splice(widgetIndex, 1);
     }
-  });
+  }
 
   return prunedConfiguration;
 };
@@ -291,11 +289,17 @@ export const addWidgetToGrid = (gridConfiguration, widgetKey, defaultConfigurati
 export const ensurePermanentWidgetsAdded = (gridConfiguration, defaultConfiguration) => {
   let updatedConfiguration = gridConfiguration;
 
-  _each(gridConfiguration.permanentWidgets, (widgetKey) => {
-    if (!_find(updatedConfiguration.widgets, { widgetKey })) {
-      updatedConfiguration = addWidgetToGrid(updatedConfiguration, widgetKey, defaultConfiguration);
+  if (gridConfiguration.permanentWidgets) {
+    for (const widgetKey of gridConfiguration.permanentWidgets) {
+      if (!_find(updatedConfiguration.widgets, { widgetKey })) {
+        updatedConfiguration = addWidgetToGrid(
+          updatedConfiguration,
+          widgetKey,
+          defaultConfiguration,
+        );
+      }
     }
-  });
+  }
 
   return updatedConfiguration;
 };
@@ -343,10 +347,10 @@ export const importRecommendedConfiguration = (recommendedLayout) => {
   );
   delete importedConfiguration.widgetKeys;
 
-  _each(
-    importedConfiguration.layout,
-    (taskWidgetLayout) => (taskWidgetLayout.i = generateWidgetId()),
-  );
+  for (const taskWidgetLayout of importedConfiguration.layout) {
+    taskWidgetLayout.i = generateWidgetId();
+  }
+
   return importedConfiguration;
 };
 
@@ -394,10 +398,10 @@ export const importWorkspaceConfiguration = (workspaceName, importFile) => {
         );
         delete importedConfiguration.widgetKeys;
 
-        _each(
-          importedConfiguration.layout,
-          (widgetLayout) => (widgetLayout.i = generateWidgetId()),
-        );
+        for (const widgetLayout of importedConfiguration.layout) {
+          widgetLayout.i = generateWidgetId();
+        }
+
         resolve(importedConfiguration);
       } catch (error) {
         reject(error);

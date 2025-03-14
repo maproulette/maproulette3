@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   start: {
-    id: "ChallengeDetails.controls.start.label",
+    id: "Admin.TaskAnalysisTable.controls.startTask.label",
     defaultMessage: "Start",
   },
 
@@ -35,17 +35,17 @@ export default defineMessages({
   },
 
   manageLabel: {
-    id: "ChallengeDetails.management.controls.manage.label",
+    id: "Challenge.management.controls.manage.label",
     defaultMessage: "Manage",
   },
 
   featured: {
-    id: "ChallengeDetails.Task.fields.featured.label",
+    id: "Admin.EditChallenge.form.featured.label",
     defaultMessage: "Featured",
   },
 
   difficulty: {
-    id: "ChallengeDetails.fields.difficulty.label",
+    id: "Challenge.fields.difficulty.label",
     defaultMessage: "Difficulty",
   },
 
@@ -55,7 +55,7 @@ export default defineMessages({
   },
 
   ownerLabel: {
-    id: "ChallengeDetails.fields.owner.label",
+    id: "Admin.ProjectManagers.projectOwner",
     defaultMessage: "Owner",
   },
 
@@ -65,12 +65,12 @@ export default defineMessages({
   },
 
   viewLeaderboard: {
-    id: "ChallengeDetails.fields.viewLeaderboard.label",
+    id: "Challenge.fields.viewLeaderboard.label",
     defaultMessage: "View Leaderboard",
   },
 
   viewReviews: {
-    id: "ChallengeDetails.fields.viewReviews.label",
+    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
   },
 
@@ -136,7 +136,7 @@ export default defineMessages({
   },
 
   cloneChallenge: {
-    id: "ChallengeDetails.controls.clone.challenge",
+    id: "Admin.Challenge.controls.clone.label",
     defaultMessage: "Clone Challenge",
   },
 });

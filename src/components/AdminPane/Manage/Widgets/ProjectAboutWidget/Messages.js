@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.ProjectAboutWidget.title",
+    id: "Widgets.ProjectAboutWidget.label",
     defaultMessage: "About Projects",
   },
 

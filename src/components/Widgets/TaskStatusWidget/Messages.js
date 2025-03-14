@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.TaskStatusWidget.title",
+    id: "Widgets.TaskStatusWidget.label",
     defaultMessage: "Task Status",
   },
 });

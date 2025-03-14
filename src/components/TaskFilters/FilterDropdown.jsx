@@ -1,4 +1,3 @@
-import _isFunction from "lodash/isFunction";
 import { Component, Fragment } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
@@ -24,7 +23,9 @@ export default class FilterDropdown extends Component {
         dropdownContent={(dropdown) => (
           <Fragment>
             <ul className="mr-list-dropdown">
-              {_isFunction(this.props.filters) ? this.props.filters(dropdown) : this.props.filters}
+              {typeof this.props.filters === "function"
+                ? this.props.filters(dropdown)
+                : this.props.filters}
             </ul>
             {this.props.secondaryFilterLabel && (
               <Fragment>
@@ -32,7 +33,7 @@ export default class FilterDropdown extends Component {
                   {this.props.secondaryFilterLabel}
                 </h5>
                 <ul className="mr-list-dropdown">
-                  {_isFunction(this.props.secondaryFilters)
+                  {typeof this.props.secondaryFilters === "function"
                     ? this.props.secondaryFilters(dropdown)
                     : this.props.secondaryFilters}
                 </ul>

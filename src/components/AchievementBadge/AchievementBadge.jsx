@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import _isFinite from "lodash/isFinite";
 import _merge from "lodash/merge";
 import _reverse from "lodash/reverse";
 import { useEffect, useState } from "react";
@@ -367,7 +366,7 @@ const AchievementBadge = (props) => {
 
   return (
     <div className="mr-relative">
-      {_isFinite(props.stackDepth) && <BadgeStack depth={props.stackDepth} />}
+      {Number.isFinite(props.stackDepth) && <BadgeStack depth={props.stackDepth} />}
       <div className={classNames("mr-flex mr-flex-col mr-items-center", props.className)}>
         <div className="mr-relative">
           {badgeImage ? (

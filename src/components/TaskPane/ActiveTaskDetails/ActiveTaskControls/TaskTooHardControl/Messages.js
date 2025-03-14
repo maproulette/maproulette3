@@ -5,12 +5,12 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   tooHardLabel: {
-    id: "Task.controls.tooHard.label",
+    id: "Admin.Task.fields.actions.tooHard",
     defaultMessage: "Can't Complete",
   },
 
   tooHardTooltip: {
-    id: "Task.controls.tooHard.tooltip",
+    id: "Admin.Task.fields.actions.tooHard",
     defaultMessage: "Can't Complete",
   },
 });

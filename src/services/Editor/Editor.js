@@ -4,9 +4,7 @@ import _filter from "lodash/filter";
 import _find from "lodash/find";
 import _fromPairs from "lodash/fromPairs";
 import _invert from "lodash/invert";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _snakeCase from "lodash/snakeCase";
 import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
@@ -341,9 +339,9 @@ export const osmObjectParams = function (
   entitySeparator = "",
   joinSeparator = ",",
 ) {
-  const allTasks = _isArray(task) ? task : [task];
+  const allTasks = Array.isArray(task) ? task : [task];
   let objects = [];
-  allTasks.forEach((task) => {
+  for (const task of allTasks) {
     if (task.geometries?.features) {
       objects = objects.concat(
         _compact(
@@ -387,7 +385,7 @@ export const osmObjectParams = function (
         ),
       );
     }
-  });
+  }
 
   return objects.join(joinSeparator);
 };
@@ -465,7 +463,7 @@ export const josmImageryURI = function (imagery) {
         ? `attribution-text=${encodeURIComponent(imagery.attribution.text)}`
         : null,
       imagery.attribution ? `attribution-url=${encodeURIComponent(imagery.attribution.url)}` : null,
-      _isFinite(imagery.max_zoom) ? `max_zoom=${imagery.max_zoom}` : null,
+      Number.isFinite(imagery.max_zoom) ? `max_zoom=${imagery.max_zoom}` : null,
       `url=${encodeURIComponent(imagery.url)}`, // must come last per JOSM docs
     ]).join("&")
   );
@@ -655,7 +653,9 @@ export const sendJOSMCommand = function (uri) {
 const executeJOSMBatch = async function (commands, transmissionDelay = 1000) {
   // For Safari we execute all the commands immediately
   if (window.safari) {
-    commands.forEach((command) => command());
+    for (const command of commands) {
+      command();
+    }
     return;
   }
 

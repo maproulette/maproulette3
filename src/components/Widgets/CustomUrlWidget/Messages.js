@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.CustomUrlWidget.title",
+    id: "Widgets.CustomUrlWidget.label",
     defaultMessage: "Custom URLs",
   },
 

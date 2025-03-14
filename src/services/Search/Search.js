@@ -3,10 +3,7 @@ import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
 import _findIndex from "lodash/findIndex";
 import _fromPairs from "lodash/fromPairs";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _set from "lodash/set";
@@ -85,7 +82,6 @@ export const PARAMS_MAP = {
   reviewedBy: "r",
   metaReviewedBy: "mr",
   completedBy: "m",
-  bundleId: "bid",
   challengeId: "cid",
   challenge: "cs",
   projectId: "pid",
@@ -193,7 +189,7 @@ export const generateSearchParametersString = (
   }
 
   if (filters.challengeId) {
-    searchParameters.cid = !_isArray(filters.challengeId)
+    searchParameters.cid = !Array.isArray(filters.challengeId)
       ? filters.challengeId
       : (searchParameters[PARAMS_MAP.challengeId] = filters.challengeId.join(","));
 
@@ -218,7 +214,7 @@ export const generateSearchParametersString = (
       invf.push(PARAMS_MAP.project);
     }
   }
-  if (!_isUndefined(filters.status) && filters.status !== "all") {
+  if (filters.status !== undefined && filters.status !== "all") {
     if (Array.isArray(filters.status)) {
       searchParameters[PARAMS_MAP.status] = filters.status.join(",");
     } else {
@@ -228,13 +224,13 @@ export const generateSearchParametersString = (
       invf.push(PARAMS_MAP.status);
     }
   }
-  if (!_isUndefined(filters.priority) && filters.priority !== "all") {
+  if (filters.priority !== undefined && filters.priority !== "all") {
     searchParameters[PARAMS_MAP.priority] = filters.priority;
     if (invertFields.priority) {
       invf.push(PARAMS_MAP.priority);
     }
   }
-  if (!_isUndefined(filters.priorities) && filters.priorities !== "all") {
+  if (filters.priorities !== undefined && filters.priorities !== "all") {
     if (Array.isArray(filters.priorities)) {
       searchParameters[PARAMS_MAP.priorities] = filters.priorities.join(",");
     } else {
@@ -244,7 +240,7 @@ export const generateSearchParametersString = (
       invf.push(PARAMS_MAP.priorities);
     }
   }
-  if (!_isUndefined(filters.reviewStatus) && filters.reviewStatus !== "all") {
+  if (filters.reviewStatus !== undefined && filters.reviewStatus !== "all") {
     if (Array.isArray(filters.reviewStatus)) {
       searchParameters[PARAMS_MAP.reviewStatus] = filters.reviewStatus.join(",");
     } else {
@@ -254,7 +250,7 @@ export const generateSearchParametersString = (
       invf.push(PARAMS_MAP.reviewStatus);
     }
   }
-  if (!_isUndefined(filters.metaReviewStatus) && filters.metaReviewStatus !== "all") {
+  if (filters.metaReviewStatus !== undefined && filters.metaReviewStatus !== "all") {
     if (Array.isArray(filters.metaReviewStatus)) {
       let metaReviewStatuses = _clone(filters.metaReviewStatus);
       const reviewStatus = Array.isArray(filters.reviewStatus)
@@ -290,25 +286,22 @@ export const generateSearchParametersString = (
     searchParameters[PARAMS_MAP.featureId] = filters.featureId;
   }
 
-  if (_isFinite(filters.difficulty)) {
+  if (Number.isFinite(filters.difficulty)) {
     searchParameters[PARAMS_MAP.difficulty] = filters.difficulty;
-  }
-  if (filters.bundleId) {
-    searchParameters[PARAMS_MAP.bundleId] = filters.bundleId;
   }
 
   if (boundingBox) {
     // If we are searching within map bounds we need to ensure the parent
     // challenge is also within those bounds
     if (filters.location === CHALLENGE_LOCATION_WITHIN_MAPBOUNDS) {
-      if (_isArray(boundingBox)) {
+      if (Array.isArray(boundingBox)) {
         searchParameters.bb = boundingBox.join(",");
       } else {
         searchParameters.bb = boundingBox;
       }
     } else {
       //tbb =>  [left, bottom, right, top]  W/S/E/N
-      if (_isArray(boundingBox)) {
+      if (Array.isArray(boundingBox)) {
         searchParameters.tbb = boundingBox.join(",");
       } else {
         searchParameters.tbb = boundingBox;
@@ -330,7 +323,7 @@ export const generateSearchParametersString = (
     // Keywords/tags can come from both the the query and the filter, so we need to
     // combine them into a single keywords array.
     const keywords = queryParts.tagTokens.concat(
-      _isArray(filters.keywords) ? filters.keywords : [],
+      Array.isArray(filters.keywords) ? filters.keywords : [],
     );
 
     if (keywords.length > 0) {

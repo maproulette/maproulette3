@@ -12,6 +12,19 @@ import messages from "./Messages";
 import MetricsHeader from "./MetricsHeader";
 import MetricsTable from "./MetricsTable";
 import internalFilterToggle from "./internalFilterToggle";
+
+const formatDateFromTab = (date) => {
+  const offset = date.getTimezoneOffset();
+  date = new Date(date.getTime() + offset * 60 * 1000);
+  return date;
+};
+
+const formatDate = (date) => {
+  const offset = date.getTimezoneOffset();
+  date = new Date(date.getTime() - offset * 60 * 1000);
+  return date.toISOString().split("T")[0];
+};
+
 /**
  * SuperAdminPane is the top-level component for super administration functions. It has a
  * User/Project/Challenge metrics tab for management of users, projects and challenges, and display of various summary metrics.
@@ -24,12 +37,6 @@ export const SuperAdminPane = (props) => {
 
   const params = queryString.parse(props.location.search);
   const currentTab = params["tab"] ? params["tab"] : "challenges";
-
-  const formatDateFromTab = (date) => {
-    const offset = date.getTimezoneOffset();
-    date = new Date(date.getTime() + offset * 60 * 1000);
-    return date;
-  };
 
   const fromDateTab = params["from"] ? formatDateFromTab(new Date(params["from"])) : null;
   const endDateTab = params["to"] ? formatDateFromTab(new Date(params["to"])) : null;
@@ -54,6 +61,7 @@ export const SuperAdminPane = (props) => {
   const ArchivedFilterToggle = internalFilterToggle("archived");
   const VirtualProjectFilterToggle = internalFilterToggle("virtual");
   const manager = AsManager(props.user);
+
   if (!manager.isLoggedIn()) {
     return props.checkingLoginStatus ? (
       <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
@@ -64,11 +72,9 @@ export const SuperAdminPane = (props) => {
     );
   }
 
-  const formatDate = (date) => {
-    const offset = date.getTimezoneOffset();
-    date = new Date(date.getTime() - offset * 60 * 1000);
-    return date.toISOString().split("T")[0];
-  };
+  if (!manager.isSuperUser()) {
+    return <div>You are not a super admin</div>;
+  }
 
   const handleStartDate = (date) => {
     setStartDate(date);
@@ -88,7 +94,7 @@ export const SuperAdminPane = (props) => {
     setEndDate(null);
   };
 
-  return manager.isSuperUser() ? (
+  return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse">
       <MetricsHeader {...props} currentTab={currentTab} clearDate={clearDate} />
       {
@@ -168,8 +174,6 @@ export const SuperAdminPane = (props) => {
       }
       <MetricsTable {...props} currentTab={currentTab} />
     </div>
-  ) : (
-    <div>You are not a super admin</div>
   );
 };
 

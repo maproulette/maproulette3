@@ -1,4 +1,3 @@
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _find from "lodash/find";
 import _map from "lodash/map";
@@ -66,7 +65,10 @@ export const WithMapBoundedTasks = function (WrappedComponent, mapType, matchCha
       }
 
       const allowedChallenges = new Set();
-      _each(this.props.challenges, (challenge) => allowedChallenges.add(challenge.id));
+
+      for (const challenge of this.props.challenges) {
+        allowedChallenges.add(challenge.id);
+      }
 
       const filteredTasks = _filter(mapBoundedTasks.tasks, (task) =>
         allowedChallenges.has(task.parentId),

@@ -1,13 +1,9 @@
 import _assignWith from "lodash/assignWith";
 import _cloneDeep from "lodash/cloneDeep";
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _fromPairs from "lodash/fromPairs";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _toInteger from "lodash/toInteger";
@@ -235,7 +231,7 @@ export default function WithFilteredClusteredTasks(
     ) => {
       let results = { tasks: [] };
       let tasks = _cloneDeep(this.props[tasksProp]?.tasks);
-      if (_isArray(tasks)) {
+      if (Array.isArray(tasks)) {
         results = Object.assign({}, this.props[tasksProp], {
           tasks: _filter(tasks, (task) =>
             this.taskPassesFilters(
@@ -267,12 +263,12 @@ export default function WithFilteredClusteredTasks(
       return (
         includeStatuses[task.status] &&
         includePriorities[task.priority] &&
-        ((_isUndefined(task.reviewStatus) && includeReviewStatuses[REVIEW_STATUS_NOT_SET]) ||
+        ((task.reviewStatus === undefined && includeReviewStatuses[REVIEW_STATUS_NOT_SET]) ||
           includeReviewStatuses[task.reviewStatus]) &&
-        ((_isUndefined(task.metaReviewStatus) &&
+        ((task.metaReviewStatus === undefined &&
           includeMetaReviewStatuses[META_REVIEW_STATUS_NOT_SET]) ||
           includeMetaReviewStatuses[task.metaReviewStatus]) &&
-        (includeLocked || !_isFinite(task.lockedBy) || task.lockedBy === this.props.user?.id)
+        (includeLocked || !Number.isFinite(task.lockedBy) || task.lockedBy === this.props.user?.id)
       );
     };
 
@@ -328,23 +324,24 @@ export default function WithFilteredClusteredTasks(
 
       // These values will come in as comma-separated strings and need to be turned
       // into number arrays
-      _each(["status", "reviewStatus", "metaReviewStatus", "priorities"], (key) => {
-        if (!_isUndefined(criteria?.filters?.[key]) && !this.props.taskId) {
+      const keysToSplit = ["status", "reviewStatus", "metaReviewStatus", "priorities"];
+      for (const key of keysToSplit) {
+        if (criteria?.filters?.[key] !== undefined && !this.props.taskId) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
-          } else if (_isFinite(criteria.filters[key])) {
+          } else if (Number.isFinite(criteria.filters[key])) {
             criteria.filters[key] = [criteria.filters[key]];
           }
           useURLFilters = true;
-        } else if (!_isUndefined(criteria?.filters?.[key]) && useSavedFilters) {
+        } else if (criteria?.filters?.[key] !== undefined && useSavedFilters) {
           if (typeof criteria.filters[key] === "string") {
             criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
-          } else if (_isFinite(criteria.filters[key])) {
+          } else if (Number.isFinite(criteria.filters[key])) {
             criteria.filters[key] = [criteria.filters[key]];
           }
           loadFromSavedFilters = true;
         }
-      });
+      }
 
       if (useURLFilters || loadFromSavedFilters) {
         const filteredTasks = this.filterTasks(
@@ -365,9 +362,9 @@ export default function WithFilteredClusteredTasks(
             : (initialFilters?.statuses ??
               _fromPairs(_map(TaskStatus, (status) => [status, false])));
 
-        _each(criteria.filters.status, (status) => {
+        for (const status of criteria.filters.status) {
           includeStatuses[status] = true;
-        });
+        }
 
         this.setState(
           Object.assign(

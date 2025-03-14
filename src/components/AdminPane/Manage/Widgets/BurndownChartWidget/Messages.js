@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.BurndownChartWidget.title",
+    id: "BurndownChart.heading",
     defaultMessage: "Tasks Remaining: {taskCount, number}",
   },
 

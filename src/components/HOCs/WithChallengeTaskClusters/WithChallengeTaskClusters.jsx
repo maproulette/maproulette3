@@ -3,7 +3,6 @@ import _debounce from "lodash/debounce";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _set from "lodash/set";
@@ -66,28 +65,18 @@ export const WithChallengeTaskClusters = function (
     };
 
     fetchUpdatedClusters(wantToShowAsClusters, overrideDisable = false) {
-      if (!!this.props.nearbyTasks?.loading) {
+      if (!!this.props.nearbyTasks?.loading && !this.props.taskBundle) {
         return;
       }
       const challengeId = this.props.challenge?.id ?? this.props.challengeId;
-
-      // We need to fetch as clusters if any of the following:
-      // 1. not at max zoom in and
-      //    user wants to see clusters or our task count is greater than our
-      //    threshold (eg. 1000 tasks)
-      // 2. we have no bounding box
-      const showAsClusters =
-        ((this.props.criteria?.zoom ?? 0) < MAX_ZOOM &&
-          (wantToShowAsClusters || this.state.taskCount > UNCLUSTER_THRESHOLD)) ||
-        !this.props.criteria.boundingBox;
-
-      const currentFetchId = _uniqueId();
 
       // If we have no challengeId and no bounding box we need to make sure
       // we aren't searching the entire map.
       if (!challengeId) {
         const bounds = this.props.criteria?.boundingBox;
-        if (!bounds || !boundsWithinAllowedMaxDegrees(bounds)) {
+        const isValidBounds = bounds && boundsWithinAllowedMaxDegrees(bounds);
+
+        if (!isValidBounds) {
           this.props.clearTasksAndClusters();
           this.setState({
             clusters: {},
@@ -99,6 +88,36 @@ export const WithChallengeTaskClusters = function (
           return;
         }
       }
+
+      // Determine whether to show tasks as clusters based on several conditions
+      const determineShowAsClusters = () => {
+        // Don't cluster if we have no bounding box
+        if (!this.props.criteria.boundingBox) {
+          return true;
+        }
+
+        // Don't cluster at max zoom level
+        if ((this.props.criteria?.zoom ?? 0) >= MAX_ZOOM) {
+          return false;
+        }
+
+        // Don't cluster when createTaskBundle exists (we're in a the task bundle widget)
+        if (this.props.createTaskBundle) {
+          return false;
+        }
+
+        // Always cluster if there are more tasks than our threshold
+        if (this.state.taskCount > UNCLUSTER_THRESHOLD) {
+          return true;
+        }
+
+        // Otherwise respect the user's clustering preference
+        return wantToShowAsClusters;
+      };
+
+      const showAsClusters = determineShowAsClusters();
+
+      const currentFetchId = _uniqueId();
 
       this.setState({
         loading: true,
@@ -112,10 +131,6 @@ export const WithChallengeTaskClusters = function (
       if (challengeId) {
         _set(searchCriteria, "filters.challengeId", challengeId);
         _set(searchCriteria, "filters.archived", true);
-      }
-
-      if (this.props.taskBundle && this.props.bundledOnly) {
-        _set(searchCriteria, "filters.bundleId", this.props.taskBundle.bundleId);
       }
 
       if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
@@ -155,7 +170,11 @@ export const WithChallengeTaskClusters = function (
                     }
                   });
               } else {
-                this.setState({ clusters: results, loading: false, taskCount: totalCount });
+                this.setState({
+                  clusters: results,
+                  loading: false,
+                  taskCount: totalCount,
+                });
               }
             }
           })
@@ -180,7 +199,12 @@ export const WithChallengeTaskClusters = function (
           })
           .catch((error) => {
             console.log(error);
-            this.setState({ clusters: {}, loading: false, taskCount: 0, showAsClusters: true });
+            this.setState({
+              clusters: {},
+              loading: false,
+              taskCount: 0,
+              showAsClusters: true,
+            });
           });
       }
     }
@@ -209,59 +233,84 @@ export const WithChallengeTaskClusters = function (
     });
 
     componentDidUpdate(prevProps) {
-      if (!_isEqual(prevProps.criteria?.searchQuery, this.props.criteria?.searchQuery)) {
+      // Check if search query has changed
+      const hasSearchQueryChanged = !_isEqual(
+        prevProps.criteria?.searchQuery,
+        this.props.criteria?.searchQuery,
+      );
+
+      if (hasSearchQueryChanged) {
         this.debouncedFetchClusters(this.state.showAsClusters);
-      } else if (
-        !_isEqual(
-          _omit(prevProps.criteria, ["page", "pageSize"]),
-          _omit(this.props.criteria, ["page", "pageSize"]),
-        )
-      ) {
-        this.debouncedFetchClusters(this.state.showAsClusters);
-      } else if (
-        this.props.taskBundle &&
-        (this.props.bundledOnly !== prevProps.bundledOnly ||
-          this.props.taskBundle !== prevProps.taskBundle)
-      ) {
+        return;
+      }
+
+      // Check if any criteria besides pagination has changed
+      const prevCriteriaWithoutPagination = _omit(prevProps.criteria, ["page", "pageSize"]);
+      const currentCriteriaWithoutPagination = _omit(this.props.criteria, ["page", "pageSize"]);
+
+      const hasCriteriaChanged = !_isEqual(
+        prevCriteriaWithoutPagination,
+        currentCriteriaWithoutPagination,
+      );
+
+      if (hasCriteriaChanged) {
         this.debouncedFetchClusters(this.state.showAsClusters);
       }
     }
 
     clustersAsTasks = () => {
+      // Return empty clusters as-is
       if (_isEmpty(this.state.clusters)) {
         return this.state.clusters;
       }
 
-      // Sometimes we have tasks, sometimes single-point clusters depending on
-      // whether tasks have been unclustered. Either way, represent as tasks
-      return _isFinite(this.state.clusters[0].clusterId)
-        ? // clusters
-          _map(this.state.clusters, (cluster) => ({
-            id: cluster.taskId,
-            status: cluster.taskStatus,
-            priority: cluster.taskPriority,
-            parentId: cluster.challengeIds[0],
-            geometries: cluster.geometries,
-          }))
-        : this.state.clusters; // tasks
+      // Determine if we're dealing with clusters or individual tasks
+      const hasClusters = Number.isFinite(this.state.clusters[0].clusterId);
+
+      if (hasClusters) {
+        // Convert clusters to task format
+        return _map(this.state.clusters, (cluster) => ({
+          id: cluster.taskId,
+          status: cluster.taskStatus,
+          priority: cluster.taskPriority,
+          parentId: cluster.challengeIds[0],
+          geometries: cluster.geometries,
+        }));
+      } else {
+        // Data is already in task format
+        return this.state.clusters;
+      }
     };
 
     onBulkTaskSelection = (taskIds) => {
       const tasks = this.clustersAsTasks().filter((task) => {
         const taskId = task.id || task.taskId;
-        const alreadyBundled = task.bundleId && this.props.taskBundle?.bundleId !== task.bundleId;
+        const alreadyBundled =
+          task.bundleId && this.props.initialBundle?.bundleId !== task.bundleId;
+        const taskStatus = task.taskStatus || task.status;
 
-        return (
-          taskIds.includes(taskId) &&
-          !alreadyBundled &&
-          !(
-            this.props.task &&
-            ![0, 3, 6].includes(task.taskStatus || task.status) &&
-            !this.props.taskBundle?.taskIds?.includes(taskId) &&
-            !this.props.initialBundle?.taskIds?.includes(taskId)
-          ) &&
-          taskId
-        );
+        // Skip if task has no ID
+        if (!taskId) {
+          return false;
+        }
+
+        // Skip if task is not in the selected taskIds
+        if (!taskIds.includes(taskId)) {
+          return false;
+        }
+
+        // Skip if task is already bundled in a different bundle
+        if (alreadyBundled) {
+          return false;
+        }
+
+        // Skip if task has an invalid status when this.props.task exists
+        // Valid statuses are: 0 (created), 3 (skipped), 6 (false positive)
+        if (this.props.task && ![0, 3, 6].includes(taskStatus)) {
+          return false;
+        }
+
+        return true;
       });
 
       this.props.onBulkTaskSelection(tasks);

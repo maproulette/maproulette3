@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   nameLabel: {
-    id: "CustomUrlList.name.label",
+    id: "Admin.EditProject.form.name.label",
     defaultMessage: "Name",
   },
 
@@ -20,7 +20,7 @@ export default defineMessages({
   },
 
   descriptionLabel: {
-    id: "CustomUrlList.description.label",
+    id: "Admin.EditProject.form.description.label",
     defaultMessage: "Description",
   },
 
@@ -46,22 +46,22 @@ export default defineMessages({
   },
 
   editLabel: {
-    id: "CustomUrlList.controls.edit.label",
+    id: "Admin.EditChallenge.edit.header",
     defaultMessage: "Edit",
   },
 
   saveLabel: {
-    id: "CustomUrlList.controls.save.label",
+    id: "Admin.EditProject.controls.save.label",
     defaultMessage: "Save",
   },
 
   deleteLabel: {
-    id: "CustomUrlList.controls.delete.label",
+    id: "Admin.ManageChallengeSnapshots.deleteSnapshot.label",
     defaultMessage: "Delete",
   },
 
   cancelLabel: {
-    id: "CustomUrlList.controls.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 });

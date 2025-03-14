@@ -35,7 +35,7 @@ export default defineMessages({
   },
 
   updateErrorTags: {
-    id: "TaskConfirmationModal.updateErrorTags",
+    id: "Admin.TaskReview.controls.modify",
     defaultMessage: "Update Error Tags",
   },
 
@@ -60,12 +60,12 @@ export default defineMessages({
   },
 
   cancelLabel: {
-    id: "TaskConfirmationModal.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
   submitLabel: {
-    id: "TaskConfirmationModal.submit.label",
+    id: "Footer.email.submit.label",
     defaultMessage: "Submit",
   },
 
@@ -116,7 +116,7 @@ export default defineMessages({
   },
 
   addTagsPlaceholder: {
-    id: "TaskConfirmationModal.addTags.placeholder",
+    id: "Admin.EditChallenge.form.addMRTags.placeholder",
     defaultMessage: "Add MR Tags",
   },
 
@@ -126,7 +126,7 @@ export default defineMessages({
   },
 
   doneLabel: {
-    id: "TaskConfirmationModal.done.label",
+    id: "Admin.EditChallenge.form.taskPropertyStyles.close",
     defaultMessage: "Done",
   },
 
@@ -136,12 +136,12 @@ export default defineMessages({
   },
 
   reviewStatusLabel: {
-    id: "TaskConfirmationModal.reviewStatus.label",
+    id: "Admin.TaskReview.controls.currentReviewStatus.label",
     defaultMessage: "Review Status:",
   },
 
   statusLabel: {
-    id: "TaskConfirmationModal.status.label",
+    id: "Admin.Task.fields.status.label",
     defaultMessage: "Status:",
   },
 
@@ -176,7 +176,7 @@ export default defineMessages({
   },
 
   instructionsContinueLabel: {
-    id: "TaskConfirmationModal.instructionsContinue.label",
+    id: "ChallengeEndModal.control.dismiss.label",
     defaultMessage: "Continue",
   },
 
@@ -186,7 +186,7 @@ export default defineMessages({
   },
 
   tagNameLabel: {
-    id: "TaskConfirmationModal.tagName.label",
+    id: "TagDiffVisualization.controls.tagName.placeholder",
     defaultMessage: "Tag Name",
   },
 

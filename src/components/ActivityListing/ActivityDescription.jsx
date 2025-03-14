@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
 import { FormattedMessage } from "react-intl";
@@ -63,7 +62,7 @@ export const ActivityDescription = (props) => {
         </div>
       )}
       <div>
-        {_isFinite(props.entry.count) && (
+        {Number.isFinite(props.entry.count) && (
           <span className="mr-badge mr-mr-2 mr-mt-1">{props.entry.count}</span>
         )}
         <span>
@@ -73,7 +72,7 @@ export const ActivityDescription = (props) => {
           <FormattedMessage {...messagesByType[props.entry.typeId]} />
         </Link>{" "}
         {props.entry.action === ActivityActionType.taskStatusSet &&
-          _isFinite(props.entry.status) && (
+          Number.isFinite(props.entry.status) && (
             <Fragment>
               <FormattedMessage {...messages.statusTo} />{" "}
               <FormattedMessage {...messagesByStatus[props.entry.status]} />

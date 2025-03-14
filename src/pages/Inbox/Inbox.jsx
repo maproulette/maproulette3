@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import Fuse from "fuse.js";
-import _each from "lodash/each";
 import _kebabCase from "lodash/kebabCase";
 import _map from "lodash/map";
 import _reject from "lodash/reject";
@@ -226,20 +225,22 @@ const columns = (tableProps) => [
     sortable: true,
     filterable: true,
     maxWidth: 140,
-    Cell: ({ value, row }) => (
-      <span
-        onClick={() =>
-          tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
-        }
-        className={classNames(
-          "mr-cursor-pointer mr-text-sm mr-font-medium mr-uppercase",
-          `mr-notification-type-${_kebabCase(keysByNotificationType[value])}`,
-          { "mr-line-through mr-font-normal mr-opacity-50": row._original.isRead },
-        )}
-      >
-        <FormattedMessage {...messagesByNotificationType[value]} />
-      </span>
-    ),
+    Cell: ({ value, row }) => {
+      return (
+        <span
+          onClick={() =>
+            tableProps.readNotification(row._original, tableProps.threads[row._original.taskId])
+          }
+          className={classNames(
+            "mr-cursor-pointer mr-text-sm mr-font-medium mr-uppercase",
+            `mr-notification-type-${_kebabCase(keysByNotificationType[value])}`,
+            { "mr-line-through mr-font-normal mr-opacity-50": row._original.isRead },
+          )}
+        >
+          <FormattedMessage {...messagesByNotificationType[value]} />
+        </span>
+      );
+    },
     Filter: ({ filter, onChange }) => {
       const options = [
         <option key="all" value="all">
@@ -247,13 +248,13 @@ const columns = (tableProps) => [
         </option>,
       ];
 
-      _each(NotificationType, (type) => {
+      for (const [name, value] of Object.entries(NotificationType)) {
         options.push(
-          <option key={keysByNotificationType[type]} value={type}>
-            {tableProps.intl.formatMessage(messagesByNotificationType[type])}
+          <option key={name} value={value}>
+            {tableProps.intl.formatMessage(messagesByNotificationType[value])}
           </option>,
         );
-      });
+      }
 
       return (
         <select

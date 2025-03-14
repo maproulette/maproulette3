@@ -1,5 +1,4 @@
 import _differenceBy from "lodash/differenceBy";
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _find from "lodash/find";
 import _isEmpty from "lodash/isEmpty";
@@ -58,10 +57,7 @@ export default function (
         // Now we want pinned projects first followed by the rest of the sorted projects
         pagedProjects = pinnedProjects.concat(pagedProjects);
       } else {
-        // Otherwise sort by the fuzzy search score. We want to promote high
-        // challenge scores to their parent projects so they show up in an
-        // appropriate place in the list
-        _each(this.props.filteredChallenges, (c) => {
+        for (const c of this.props.filteredChallenges) {
           const parent = _find(
             pagedProjects,
             (p) => p.id === (_isObject(c.parent) ? c.parent.id : c.parent),
@@ -69,7 +65,7 @@ export default function (
           if (parent && (!parent.score || c.score > parent.score)) {
             parent.score = c.score;
           }
-        });
+        }
 
         pagedProjects = _sortBy(pagedProjects, (p) => p.score);
         pagedProjects = _slice(pagedProjects, 0, numberResultsToShow);

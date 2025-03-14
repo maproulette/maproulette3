@@ -1,8 +1,6 @@
 import bbox from "@turf/bbox";
 import _concat from "lodash/concat";
-import _each from "lodash/each";
 import _fromPairs from "lodash/fromPairs";
-import _indexOf from "lodash/indexOf";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import { boundsWithinAllowedMaxDegrees, toLatLngBounds } from "../../MapBounds/MapBounds";
@@ -50,15 +48,20 @@ export const challengePassesLocationFilter = function (challengeFilters, challen
 
   // Or if the challenge is listed in the TaskClusters or in the Map Bounded Tasks
   let validChallenges = [];
-  _each(props.mapBoundedTasks?.tasks, (task) => {
-    validChallenges = _concat(validChallenges, task.parentId);
-  });
 
-  _each(props.taskClusters?.clusters, (cluster) => {
-    validChallenges = _concat(validChallenges, cluster.challengeIds);
-  });
+  if (props.mapBoundedTasks?.tasks) {
+    for (const task of props.mapBoundedTasks.tasks) {
+      validChallenges = _concat(validChallenges, task.parentId);
+    }
+  }
 
-  if (_indexOf(validChallenges, challenge.id) > -1) {
+  if (props.taskClusters?.clusters) {
+    for (const cluster of props.taskClusters.clusters) {
+      validChallenges = _concat(validChallenges, cluster.challengeIds);
+    }
+  }
+
+  if (validChallenges.indexOf(challenge.id) > -1) {
     return true;
   }
 

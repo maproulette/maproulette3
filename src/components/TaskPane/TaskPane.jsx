@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _findIndex from "lodash/findIndex";
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -55,7 +54,7 @@ export const defaultWorkspaceSetup = function () {
     layout: [
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
       { i: generateWidgetId(), x: 4, y: 0, w: 8, h: 5 },
-      { i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19 },
+      { i: generateWidgetId(), x: 4, y: 5, w: 8, h: 21 },
       { i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7 },
       { i: generateWidgetId(), x: 0, y: 11, w: 4, h: 8 },
     ],
@@ -68,7 +67,6 @@ export const defaultWorkspaceSetup = function () {
     excludeWidgets: [
       // Cannot be added to workspace
       "TaskReviewWidget",
-      "ReviewNearbyTasksWidget",
     ],
     conditionalWidgets: [
       // conditionally displayed
@@ -96,6 +94,7 @@ export class TaskPane extends Component {
     showLockFailureDialog: false,
     needsResponses: false,
     completingTask: false,
+    unlockRequested: false,
   };
 
   tryLockingTask = () => {
@@ -154,18 +153,10 @@ export class TaskPane extends Component {
         this.state.completionResponses,
         taskBundle,
       );
-      this.clearCompletingTask();
     } catch (error) {
       console.error("Error completing task:", error);
       throw error;
     }
-  };
-
-  clearCompletingTask = () => {
-    // Clear on next tick to give our animation transition a chance to clean up.
-    setTimeout(() => {
-      this.props.setCompletingTask(null);
-    }, 0);
   };
 
   setCompletionResponse = (propertyName, value) => {
@@ -334,7 +325,7 @@ export class TaskPane extends Component {
                           </span>
                           <Link
                             to={
-                              _isFinite(this.props.virtualChallengeId)
+                              Number.isFinite(this.props.virtualChallengeId)
                                 ? `/browse/virtual/${this.props.virtualChallengeId}`
                                 : `/browse/challenges/${
                                     this.props.task?.parent?.id ?? this.props.task.parent
@@ -369,7 +360,7 @@ export class TaskPane extends Component {
                       <ul className="mr-list-dropdown">{favoriteControl}</ul>
                       <hr className="mr-rule-dropdown" />
                       <ul className="mr-list-dropdown">
-                        {_isFinite(this.props.virtualChallengeId) && (
+                        {Number.isFinite(this.props.virtualChallengeId) && (
                           <li>
                             <CopyToClipboard
                               text={`${window.env.REACT_APP_URL}/browse/virtual/${this.props.virtualChallengeId}`}
@@ -485,6 +476,22 @@ export class TaskPane extends Component {
                 >
                   <FormattedMessage {...messages.browseChallengeLabel} />
                 </button>
+                {!this.state.unlockRequested ? (
+                  <button
+                    className={"mr-button mr-button--green-light mr-ml-4"}
+                    disabled={this.state.unlockRequested}
+                    onClick={() => {
+                      this.setState({ unlockRequested: true });
+                      this.props.requestUnlock(this.props.task.id);
+                    }}
+                  >
+                    <FormattedMessage {...messages.requestUnlock} />
+                  </button>
+                ) : (
+                  <div className="mr-ml-4">Request Sent!</div>
+                )}
+
+                <div />
               </Fragment>
             }
           />

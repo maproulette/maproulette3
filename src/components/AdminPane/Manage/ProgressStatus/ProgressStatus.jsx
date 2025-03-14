@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { FormattedMessage } from "react-intl";
@@ -27,7 +26,7 @@ export default class ProgressStatus extends Component {
             </div>
 
             <div className="mr-white mr-text-lg">
-              {_isFinite(this.props.progressItem.stepsCompleted) && (
+              {Number.isFinite(this.props.progressItem.stepsCompleted) && (
                 <Fragment>
                   {this.props.progressItem.stepsCompleted}{" "}
                   <FormattedMessage {...this.props.progressDescription} />

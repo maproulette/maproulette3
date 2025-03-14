@@ -25,12 +25,12 @@ export default defineMessages({
   },
 
   writeLabel: {
-    id: "Form.controls.markdownField.write.label",
+    id: "ChallengeDetails.controls.write.label",
     defaultMessage: "Write",
   },
 
   previewLabel: {
-    id: "Form.controls.markdownField.preview.label",
+    id: "ChallengeDetails.controls.preview.label",
     defaultMessage: "Preview",
   },
 

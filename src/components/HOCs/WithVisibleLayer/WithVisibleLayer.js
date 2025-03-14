@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
 import { connect } from "react-redux";
@@ -74,7 +73,7 @@ export const mapStateToProps = (state, ownProps) => {
   const challengeId = ownProps?.challenge?.id;
   let source = null;
 
-  if (_isFinite(challengeId)) {
+  if (Number.isFinite(challengeId)) {
     if (_isString(ownProps.visibleMapLayer)) {
       source = layerSourceWithId(ownProps.visibleMapLayer);
       if (!source) {
@@ -109,10 +108,10 @@ export const mapStateToProps = (state, ownProps) => {
 export const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     changeLayer: (layerId, mapType = null) => {
-      const isVirtual = _isFinite(ownProps.virtualChallengeId);
+      const isVirtual = Number.isFinite(ownProps.virtualChallengeId);
       const challengeId = isVirtual ? ownProps.virtualChallengeId : ownProps?.challenge?.id;
 
-      if (_isFinite(challengeId) && ownProps.setVisibleMapLayer) {
+      if (Number.isFinite(challengeId) && ownProps.setVisibleMapLayer) {
         ownProps.setVisibleMapLayer(challengeId, isVirtual, layerId);
       } else {
         dispatch(changeVisibleLayer(layerId, mapType));

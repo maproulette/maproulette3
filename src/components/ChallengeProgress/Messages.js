@@ -5,17 +5,17 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   available: {
-    id: "Task.fauxStatus.available",
+    id: "ChallengeProgressBorder.available",
     defaultMessage: "Available",
   },
 
   tooltipLabel: {
-    id: "ChallengeProgress.tooltip.label",
+    id: "Admin.ManageTasks.header",
     defaultMessage: "Tasks",
   },
 
   tasksRemaining: {
-    id: "ChallengeProgress.tasks.remaining",
+    id: "BurndownChart.heading",
     defaultMessage: "Tasks Remaining: {taskCount, number}",
   },
 

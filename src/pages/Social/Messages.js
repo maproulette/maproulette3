@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   featuredChallengesHeader: {
-    id: "Social.featuredChallenges.header",
+    id: "Home.Featured.header",
     defaultMessage: "Featured Challenges",
   },
 
@@ -25,7 +25,7 @@ export default defineMessages({
   },
 
   popularChallengesHeader: {
-    id: "Social.popularChallenges.header",
+    id: "PopularChallenges.header",
     defaultMessage: "Popular Challenges",
   },
 
@@ -40,7 +40,7 @@ export default defineMessages({
   },
 
   none: {
-    id: "Social.none",
+    id: "Challenge.basemap.none",
     defaultMessage: "None",
   },
 });

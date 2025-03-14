@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   cancel: {
-    id: "ConfirmAction.cancel",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
