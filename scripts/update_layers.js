@@ -1,5 +1,5 @@
 /**
- * This script is intended to be run via yarn scripts in package.json file.
+ * This script is intended to be run via npm scripts in package.json file.
  *
  * Retrieves the latest layer data from the [OSM Editor Layer
  * Index](https://github.com/osmlab/editor-layer-index) project, extracts
