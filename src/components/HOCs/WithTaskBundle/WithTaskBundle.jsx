@@ -154,7 +154,7 @@ export function WithTaskBundle(WrappedComponent) {
 
       // Check mapper edit permissions
       const hasNoCompletion = !task?.completedBy;
-      const isTaskCompleter = user.id === task.completedBy;
+      const isTaskCompleter = user.id === task?.completedBy;
       const enableMapperEdits = hasNoCompletion || isTaskCompleter;
 
       if (enableMapperEdits && completionStatus) {
