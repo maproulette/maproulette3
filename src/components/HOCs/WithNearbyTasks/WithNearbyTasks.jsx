@@ -122,9 +122,9 @@ export const WithNearbyTasks = function (WrappedComponent) {
 
       const bounds = this.state.mapBounds;
       const boundingBox = [
-        bounds.getEast(),
-        bounds.getSouth(),
         bounds.getWest(),
+        bounds.getSouth(),
+        bounds.getEast(),
         bounds.getNorth(),
       ];
 
