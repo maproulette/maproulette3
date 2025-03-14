@@ -10,6 +10,7 @@ import {
   Editor,
   constructEditorUri,
   editorLabels,
+  isWebEditor,
   keysByEditor,
 } from "../../services/Editor/Editor";
 import { OPEN_STREET_MAP } from "../../services/VisibleLayer/LayerSources";
@@ -30,7 +31,7 @@ export default class UserEditorSelector extends Component {
     const { task, mapBounds, source, showMapillaryLayer, taskBundle, taskFeatureProperties } =
       this.props;
 
-    if (!task) return null;
+    if (!task || !isWebEditor(editor)) return null;
 
     const comment = task.parent?.checkinComment;
     const options = {
@@ -200,9 +201,9 @@ const ListEditorItems = ({
                   ? chooseEditor(editor, closeDropdown)
                   : pickEditor({ value: editor })
               }
-              href={editorUri}
-              target={editorUri ? "_blank" : undefined}
-              rel={editorUri ? "noopener noreferrer" : undefined}
+              href={!isEditorAllowed ? editorUri : undefined}
+              target={!isEditorAllowed && editorUri ? "_blank" : undefined}
+              rel={!isEditorAllowed && editorUri ? "noopener noreferrer" : undefined}
             >
               <div className="mr-flex mr-items-center">
                 {!isEditorAllowed ? (

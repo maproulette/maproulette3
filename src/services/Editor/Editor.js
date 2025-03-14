@@ -759,7 +759,7 @@ export const constructEditorUri = (
     case Editor.rapid:
       return constructRapidURI(task, mapBounds, options, comment);
     default:
-      return null;
+      throw new Error(`Unsupported editor type: ${editor}`);
   }
 };
 
