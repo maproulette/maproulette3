@@ -42,7 +42,7 @@ export class ReviewTaskControls extends Component {
   setComment = (comment) => this.setState({ comment });
   setTags = (tags) => this.setState({ tags });
 
-  onConfirm = (alternateCriteria) => {
+  onConfirm = async (alternateCriteria) => {
     if (this.state.tags) {
       this.props.saveTaskTags(this.props.task, this.state.tags);
     }
@@ -59,19 +59,22 @@ export class ReviewTaskControls extends Component {
 
     const errorTags = this.state.errorTags?.length ? this.state.errorTags : undefined;
 
-    this.props.updateTaskReviewStatus(
-      this.props.task,
-      this.state.reviewStatus,
-      this.state.comment,
-      null,
-      this.state.loadBy,
-      history,
-      this.props.taskBundle,
-      requestedNextTask,
-      null,
-      errorTags,
-    );
-    this.setState({ confirmingTask: false, comment: "", errorTags: [] });
+    try {
+      await this.props.updateTaskReviewStatus(
+        this.props.task,
+        this.state.reviewStatus,
+        this.state.comment,
+        null,
+        this.state.loadBy,
+        history,
+        this.props.taskBundle,
+        requestedNextTask,
+        null,
+        errorTags,
+      );
+    } finally {
+      this.setState({ confirmingTask: false, comment: "", errorTags: [] });
+    }
   };
 
   handleChangeErrorTag = (e, i) => {

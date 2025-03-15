@@ -198,9 +198,9 @@ export class ActiveTaskControls extends Component {
       if (taskStatus === TASK_STATUS_FIXED && disableTaskConfirm) {
         this.setState(
           {
-            osmComment: `${
-              this.props.task.parent.checkinComment
-            }${constructChangesetUrl(this.props.task)}`,
+            osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(
+              this.props.task,
+            )}`,
             confirmingStatus: taskStatus,
             submitRevision,
           },
@@ -211,9 +211,9 @@ export class ActiveTaskControls extends Component {
       } else {
         this.setState({
           confirmingTask: this.props.task,
-          osmComment: `${
-            this.props.task.parent.checkinComment
-          }${constructChangesetUrl(this.props.task)}`,
+          osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(
+            this.props.task,
+          )}`,
           confirmingStatus: taskStatus,
           submitRevision,
         });
@@ -221,9 +221,12 @@ export class ActiveTaskControls extends Component {
     }
   };
 
-  confirmCompletion = () => {
-    this.complete(this.state.confirmingStatus);
-    this.resetConfirmation();
+  confirmCompletion = async () => {
+    try {
+      await this.complete(this.state.confirmingStatus);
+    } finally {
+      this.resetConfirmation();
+    }
   };
 
   resetConfirmation = () => {
