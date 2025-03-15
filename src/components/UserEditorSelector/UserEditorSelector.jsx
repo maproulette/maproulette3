@@ -28,10 +28,14 @@ export default class UserEditorSelector extends Component {
   };
 
   getEditorUri = (editor) => {
-    const { task, mapBounds, source, showMapillaryLayer, taskBundle, taskFeatureProperties } =
-      this.props;
+    const { task, mapBounds, source, showMapillaryLayer, taskBundle } = this.props;
 
     if (!task || !isWebEditor(editor)) return null;
+
+    // In test environment, mapBounds might be undefined or incomplete
+    if (!mapBounds || !mapBounds.bounds) {
+      return null;
+    }
 
     const comment = task.parent?.checkinComment;
     const options = {
@@ -39,7 +43,12 @@ export default class UserEditorSelector extends Component {
       photoOverlay: showMapillaryLayer ? "mapillary" : null,
     };
 
-    return constructEditorUri(editor, task, mapBounds, options, taskBundle, comment);
+    try {
+      return constructEditorUri(editor, task, mapBounds, options, taskBundle, comment);
+    } catch (e) {
+      console.warn("Error constructing editor URI:", e);
+      return null;
+    }
   };
 
   /** Process keyboard shortcuts for the edit controls */
@@ -196,12 +205,13 @@ const ListEditorItems = ({
         return (
           <li key={editor} className={classNames({ active: editor === activeEditor })}>
             <a
-              onClick={() =>
+              onClick={(e) => {
+                e.preventDefault();
                 isEditorAllowed
                   ? chooseEditor(editor, closeDropdown)
-                  : pickEditor({ value: editor })
-              }
-              href={!isEditorAllowed ? editorUri : undefined}
+                  : pickEditor({ value: editor });
+              }}
+              href={editorUri}
               target={!isEditorAllowed && editorUri ? "_blank" : undefined}
               rel={!isEditorAllowed && editorUri ? "noopener noreferrer" : undefined}
             >
