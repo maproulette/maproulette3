@@ -9,8 +9,10 @@ import Dropdown from "../../../Dropdown/Dropdown";
 import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
 import WithChallengeManagement from "../../HOCs/WithChallengeManagement/WithChallengeManagement";
 import ChallengeProgressBorder from "../ChallengeProgressBorder/ChallengeProgressBorder";
+import ProjectPickerModal from "../ProjectPickerModal/ProjectPickerModal";
 import ChallengeControls from "./ChallengeControls";
 import messages from "./Messages";
+import External from "../../../External/External";
 
 /**
  * ChallengeCard renders a single challenge item. Right now only list view is
@@ -20,7 +22,24 @@ import messages from "./Messages";
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeCard extends Component {
+  state = {
+    pickingProject: false,
+  };
+
   nameRef = createRef();
+
+  projectPickerCanceled = () => {
+    this.setState({ pickingProject: false });
+  };
+
+  moveToProject = (project) => {
+    this.setState({ pickingProject: false });
+    this.props.moveChallenge(this.props.challenge.id, project.id);
+  };
+
+  togglePickingProject = () => {
+    this.setState({ pickingProject: !this.state.pickingProject });
+  };
 
   render() {
     if (this.props.challenge.deleted) {
@@ -37,6 +56,7 @@ export class ChallengeCard extends Component {
       parent = this.props.project;
     }
 
+    const projectId = this.props.challenge?.parent?.id ?? this.props.challenge.parent;
     const hasActions = Number.isFinite(this.props.challenge?.actions?.total);
 
     const ChallengeIcon = AsManageableChallenge(this.props.challenge).isComplete()
@@ -141,11 +161,26 @@ export class ChallengeCard extends Component {
                   className="mr-flex mr-flex-col mr-links-green-lighter"
                   controlClassName="mr-my-1"
                   onControlComplete={() => dropdown.closeDropdown()}
+                  onPickProject={() => {
+                    this.togglePickingProject();
+                    dropdown.closeDropdown();
+                  }}
                 />
               )}
             />
           )}
         </div>
+
+        {this.state.pickingProject && (
+          <External>
+            <ProjectPickerModal
+              {...this.props}
+              currentProjectId={projectId}
+              onCancel={this.projectPickerCanceled}
+              onSelectProject={this.moveToProject}
+            />
+          </External>
+        )}
       </div>
     );
   }
