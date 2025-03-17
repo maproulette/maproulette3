@@ -6,13 +6,13 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import AsManageableChallenge from "../../../../interactions/Challenge/AsManageableChallenge";
 import Dropdown from "../../../Dropdown/Dropdown";
+import External from "../../../External/External";
 import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
 import WithChallengeManagement from "../../HOCs/WithChallengeManagement/WithChallengeManagement";
 import ChallengeProgressBorder from "../ChallengeProgressBorder/ChallengeProgressBorder";
 import ProjectPickerModal from "../ProjectPickerModal/ProjectPickerModal";
 import ChallengeControls from "./ChallengeControls";
 import messages from "./Messages";
-import External from "../../../External/External";
 
 /**
  * ChallengeCard renders a single challenge item. Right now only list view is
