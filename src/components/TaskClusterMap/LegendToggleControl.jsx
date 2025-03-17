@@ -1,8 +1,8 @@
 import { createControlComponent } from "@react-leaflet/core";
 import { Control, DomUtil } from "leaflet";
+import { Fragment } from "react";
 import ReactDOM from "react-dom";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import { Fragment } from "react";
 
 /**
  * Leaflet control for toggling the legend visibility

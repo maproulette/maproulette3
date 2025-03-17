@@ -1,7 +1,7 @@
 import { createControlComponent } from "@react-leaflet/core";
 import { Control, DomUtil } from "leaflet";
-import ReactDOM from "react-dom";
 import React from "react";
+import ReactDOM from "react-dom";
 import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 
 /**

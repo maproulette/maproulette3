@@ -1,9 +1,9 @@
 import { createControlComponent } from "@react-leaflet/core";
 import { Control, DomUtil } from "leaflet";
-import ReactDOM from "react-dom";
 import React, { Fragment } from "react";
-import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import ReactDOM from "react-dom";
 import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
 
 /**
  * Leaflet control for displaying a collapsible legend with task statuses

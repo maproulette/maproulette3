@@ -1,7 +1,7 @@
+import { createControlComponent } from "@react-leaflet/core";
 import L from "leaflet";
 import { Fragment } from "react";
 import ReactDOM from "react-dom";
-import { createControlComponent } from "@react-leaflet/core";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 
 /**

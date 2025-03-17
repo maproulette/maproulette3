@@ -27,13 +27,13 @@ import SelectMarkersInViewControl from "../EnhancedMap/SelectMarkersInViewContro
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import WithIntersectingOverlays from "../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
-import MapMarkers from "./MapMarkers";
-import messages from "./Messages";
-import ZoomInMessage from "./ZoomInMessage";
 import ControlsToggleControl from "./ControlsToggleControl";
 // import StatusLegendControl from "./StatusLegendControl";
 // import LegendToggleControl from "./LegendToggleControl";
 import LegendControl from "./LegendControl";
+import MapMarkers from "./MapMarkers";
+import messages from "./Messages";
+import ZoomInMessage from "./ZoomInMessage";
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
 
 export const MAX_ZOOM = 18;
