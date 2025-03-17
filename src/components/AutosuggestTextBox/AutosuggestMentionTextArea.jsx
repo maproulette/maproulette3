@@ -236,6 +236,7 @@ export default class AutosuggestMentionTextArea extends Component {
                     "mr-flex-grow mr-w-full mr-h-full mr-outline-none",
                     this.props.disableResize ? "mr-resize-none" : "mr-resize",
                   )}
+                  style={{ resize: "vertical" }}
                   onKeyDown={(e) => this.handleKeyDown(e, dropdown, downshift)}
                   onFocus={() => this.setState({ textBoxActive: true })}
                   onBlur={() => this.setState({ textBoxActive: false })}
@@ -258,7 +259,11 @@ export default class AutosuggestMentionTextArea extends Component {
                 }
 
                 return (
-                  <div {...downshift.getMenuProps({ className: "mr-link-list mr-links-inverse" })}>
+                  <div
+                    {...downshift.getMenuProps({
+                      className: "mr-link-list mr-links-inverse",
+                    })}
+                  >
                     {resultItems}
                     {(resultItems?.length === 0 || this.props.showNoResults) && (
                       <div className="mr-text-grey-lighter mr-p-4 mr-text-sm">
