@@ -19,6 +19,7 @@ Released with [maproulette-backend_v4.7.4](https://github.com/maproulette/maprou
 ## MR2 Changes
 * add nearbyTasksWithinBounds endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1170
 * Sent box enhancements by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1172
+* Add task (parent_id, location) index and simplify task marker/cluster queries by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1176
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.7...v3.16.8
 
