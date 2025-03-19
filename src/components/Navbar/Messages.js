@@ -69,6 +69,11 @@ export default defineMessages({
     defaultMessage: "Super Admin Settings",
   },
 
+  errorTagManagement: {
+    id: "Navbar.links.errorTagManagement",
+    defaultMessage: "Error Tag Management",
+  },
+
   achievements: {
     id: "Achievements.header",
     defaultMessage: "Achievements",

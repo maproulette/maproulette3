@@ -24,6 +24,7 @@ import ProjectDetail from "./components/ProjectDetail/ProjectDetail";
 import ReviewTaskPane from "./components/ReviewTaskPane/ReviewTaskPane";
 import Sprites from "./components/Sprites/Sprites";
 import SuperAdminContainer from "./components/SuperAdmin/SuperAdminContainer";
+import ErrorTagManager from "./components/ErrorTagManager/ErrorTagManager";
 import SystemNotices from "./components/SystemNotices/SystemNotices";
 import PublicTaskPane from "./components/TaskPane/PublicTaskPane";
 import TaskPane from "./components/TaskPane/TaskPane";
@@ -141,7 +142,8 @@ export class App extends Component {
               <CachedRoute path="/user/profile" component={Profile} />
               <CachedRoute path="/user/metrics/:userId" component={Metrics} />
               <CachedRoute path="/user/metrics" component={Metrics} />
-              <CachedRoute exact path="/superadmin" component={SuperAdminContainer} />
+              <CachedRoute exact path="/superadmin" component={SuperAdminContainer} />\
+              <CachedRoute exact path="/errorTags" component={ErrorTagManager} />
               <CachedRoute path="/user/achievements/:userId" component={Achievements} />
               <CachedRoute path="/user/achievements" component={Achievements} />
               <CachedRoute path="/dashboard" component={Dashboard} />
