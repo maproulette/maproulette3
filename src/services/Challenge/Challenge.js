@@ -863,6 +863,11 @@ export const fetchChallenges = function (challengeIds, suppressReceive = false) 
     })
       .execute()
       .then((normalizedResults) => {
+        // Check if we have challenges in the response
+        if (!normalizedResults.entities || !normalizedResults.entities.challenges) {
+          return normalizedResults;
+        }
+
         for (const challenge of normalizedResults.entities.challenges) {
           if (challenge.virtualParents === undefined) {
             challenge.virtualParents = [];
@@ -871,7 +876,10 @@ export const fetchChallenges = function (challengeIds, suppressReceive = false) 
 
         if (!suppressReceive) {
           dispatch(receiveChallenges(normalizedResults.entities));
-          dispatch(receiveProjects(normalizedResults.entities));
+          // Only dispatch receiveProjects if there are projects in the response
+          if (normalizedResults.entities.projects) {
+            dispatch(receiveProjects(normalizedResults.entities));
+          }
         }
 
         return normalizedResults;
