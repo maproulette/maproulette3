@@ -854,7 +854,7 @@ export const fetchChallenge = function (challengeId, suppressReceive = false) {
 export const fetchChallenges = function (challengeIds, suppressReceive = false) {
   return function (dispatch) {
     if (!Array.isArray(challengeIds) || challengeIds.length === 0) {
-      return Promise.resolve();
+      return Promise.success();
     }
 
     return new Endpoint(api.challenges.search, {
