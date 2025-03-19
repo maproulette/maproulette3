@@ -165,7 +165,8 @@ export function fetchBoundedTasks(
 
     const normalizedBounds = toLatLngBounds(criteria.boundingBox);
     if (!normalizedBounds) {
-      return null;
+      // Return a resolved promise with empty results instead of null
+      return Promise.resolve({ tasks: [], totalCount: 0 });
     }
 
     let includeGeometries = withGeometries === undefined ? limit <= 100 : withGeometries;
@@ -250,9 +251,12 @@ export function fetchBoundedTasks(
         return { tasks, totalCount };
       })
       .catch((error) => {
-        dispatch(receiveBoundedTasks([], RequestStatus.error, fetchId));
-        dispatch(addError(AppErrors.boundedTask.fetchFailure));
-        console.log(error.response || error);
+        console.error("Error fetching bounded tasks:", error);
+        !skipDispatch && dispatch(receiveBoundedTasks([], RequestStatus.error, fetchId));
+        !skipDispatch && dispatch(addError(AppErrors.boundedTask.fetchFailure));
+
+        // Return an empty result object instead of undefined
+        return { tasks: [], totalCount: 0 };
       });
   };
 }
