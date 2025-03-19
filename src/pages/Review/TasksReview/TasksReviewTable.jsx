@@ -397,7 +397,7 @@ export const TaskReviewTable = (props) => {
             </div>
           ) : (
             <>
-              <table {...getTableProps()} className="mr-table">
+              <table {...getTableProps()} className="mr-table mr-w-full">
                 <thead>
                   {headerGroups.map((headerGroup) => (
                     <>
