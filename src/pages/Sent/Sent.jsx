@@ -149,41 +149,44 @@ const TASK_COLUMNS = [
     id: "task_id",
     Header: "Task ID",
     accessor: "taskId",
-    Cell: ({ value }) => value ? <Link to={`task/${value}`}>{value}</Link> : null,
+    Cell: ({ value }) => (value ? <Link to={`task/${value}`}>{value}</Link> : null),
   },
   {
     id: "created",
     Header: "Date",
     accessor: "created",
-    Cell: ({ value }) => value ? (
-      <div className="mr-whitespace-nowrap">
-        <FormattedDate value={value} /> <FormattedTime value={value} />
-      </div>
-    ) : null,
+    Cell: ({ value }) =>
+      value ? (
+        <div className="mr-whitespace-nowrap">
+          <FormattedDate value={value} /> <FormattedTime value={value} />
+        </div>
+      ) : null,
   },
   {
     id: "comment",
     Header: "Comment",
     accessor: "comment",
-    Cell: ({ value }) => value ? <p>{value}</p> : null,
+    Cell: ({ value }) => (value ? <p>{value}</p> : null),
   },
   {
     id: "task_status",
     Header: "Task Status",
     accessor: "taskStatus",
     Cell: ({ value }) => {
-      const statusInt = value || 0
+      const statusInt = value || 0;
       const statusKey = keysByStatus[statusInt];
       const statusColor = TaskStatusColors[statusInt];
       return (
-        <span style={{ color: statusColor }}>{statusKey ? statusKey.toUpperCase() : statusInt}</span>
+        <span style={{ color: statusColor }}>
+          {statusKey ? statusKey.toUpperCase() : statusInt}
+        </span>
       );
     },
     maxWidth: 140,
   },
   {
     id: "review_status",
-    Header: "Review Status", 
+    Header: "Review Status",
     accessor: "reviewStatus",
     Cell: ({ value }) => {
       if (!value) return null;
@@ -201,7 +204,9 @@ const CHALLENGE_COLUMNS = [
     accessor: "challengeName",
     Cell: ({ value, row }) => {
       if (!value || !row.original?.challengeId) return null;
-      return <Link to={`browse/challenges/${row.original.challengeId}?tab=conversation`}>{value}</Link>;
+      return (
+        <Link to={`browse/challenges/${row.original.challengeId}?tab=conversation`}>{value}</Link>
+      );
     },
     maxWidth: 200,
   },
@@ -209,17 +214,18 @@ const CHALLENGE_COLUMNS = [
     id: "created",
     Header: "Date",
     accessor: "created",
-    Cell: ({ value }) => value ? (
-      <div className="mr-whitespace-nowrap">
-        <FormattedDate value={value} /> <FormattedTime value={value} />
-      </div>
-    ) : null,
+    Cell: ({ value }) =>
+      value ? (
+        <div className="mr-whitespace-nowrap">
+          <FormattedDate value={value} /> <FormattedTime value={value} />
+        </div>
+      ) : null,
   },
   {
     id: "comment",
     Header: "Comment",
     accessor: "comment",
-    Cell: ({ value }) => value ? <p>{value}</p> : null,
+    Cell: ({ value }) => (value ? <p>{value}</p> : null),
   },
 ];
 
