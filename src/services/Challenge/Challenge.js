@@ -868,7 +868,11 @@ export const fetchChallenges = function (challengeIds, suppressReceive = false) 
           return normalizedResults;
         }
 
-        for (const challenge of normalizedResults.entities.challenges) {
+        // Get challenges as an array of values since it's an object with IDs as keys
+        const challengeValues = Object.values(normalizedResults.entities.challenges);
+
+        // Process each challenge
+        for (const challenge of challengeValues) {
           if (challenge.virtualParents === undefined) {
             challenge.virtualParents = [];
           }
