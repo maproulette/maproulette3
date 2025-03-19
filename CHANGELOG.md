@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.10] - 2025-03-19
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* fix for loop in fetch challenge flows by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2603
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.9...v3.16.10
+
+## [v3.16.9] - 2025-03-19
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* conditionalize dispatches to prevent fetch failure modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2601
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.8...v3.16.9
+
 ## [v3.16.8] - 2025-03-16
 Released with [maproulette-backend_v4.7.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.4)
 
