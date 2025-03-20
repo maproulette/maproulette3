@@ -347,7 +347,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
   columns.featureId = {
     id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
-    accessor: "name",
+    accessor: (t) => t.name || t.title,
     Cell: ({ value }) => value || "",
   };
 
@@ -359,7 +359,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       const taskLink = (
         <div className="row-controls-column mr-links-green-lighter">
           <Link
-            to={`/challenge/${row.original.parentId}/task/${id}`}
+            to={`/challenge/${row.original.parentId ?? row.original.parent}/task/${id}`}
             target="_blank"
             rel="noopener noreferrer"
           >
