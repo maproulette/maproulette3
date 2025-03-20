@@ -4,18 +4,26 @@ import _cloneDeep from "lodash/cloneDeep";
 import _isEqual from "lodash/isEqual";
 import _isObject from "lodash/isObject";
 import _kebabCase from "lodash/kebabCase";
+import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
+import _pull from "lodash/pull";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
 import { useFilters, usePagination, useSortBy, useTable } from "react-table";
 import BusySpinner from "../../../components/BusySpinner/BusySpinner";
+import ConfigureColumnsModal from "../../../components/ConfigureColumnsModal/ConfigureColumnsModal";
+import Dropdown from "../../../components/Dropdown/Dropdown";
 import MapPane from "../../../components/EnhancedMap/MapPane/MapPane";
+import WithConfigurableColumns from "../../../components/HOCs/WithConfigurableColumns/WithConfigurableColumns";
 import WithCurrentUser from "../../../components/HOCs/WithCurrentUser/WithCurrentUser";
+import WithSavedFilters from "../../../components/HOCs/WithSavedFilters/WithSavedFilters";
 import IntlDatePicker from "../../../components/IntlDatePicker/IntlDatePicker";
 import InTableTagFilter from "../../../components/KeywordAutosuggestInput/InTableTagFilter";
 import PaginationControl from "../../../components/PaginationControl/PaginationControl";
+import ManageSavedFilters from "../../../components/SavedFilters/ManageSavedFilters";
+import SavedFiltersList from "../../../components/SavedFilters/SavedFiltersList";
 import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
 import {
   StatusLabel,
@@ -29,7 +37,11 @@ import {
   keysByPriority,
   messagesByPriority,
 } from "../../../services/Task/TaskPriority/TaskPriority";
-import { ReviewTasksType } from "../../../services/Task/TaskReview/TaskReview";
+import {
+  ReviewTasksType,
+  buildLinkToMapperExportCSV,
+  buildLinkToReviewTableExportCSV,
+} from "../../../services/Task/TaskReview/TaskReview";
 import {
   TaskReviewStatus,
   isMetaReviewStatus,
@@ -62,14 +74,6 @@ export const getFilterIds = (search, param) => {
   return [FILTER_SEARCH_ALL];
 };
 
-const DefaultColumnFilter = ({ column: { filterValue, setFilter } }) => (
-  <input
-    className="mr-w-full mr-px-2 mr-py-1 mr-text-sm mr-bg-black-15 mr-text-white mr-rounded mr-shadow-inner"
-    value={filterValue || ""}
-    onChange={(e) => setFilter(e.target.value || undefined)}
-  />
-);
-
 /**
  * TaskReviewTable displays tasks that need to be reviewed or have been reviewed
  * as a table.
@@ -79,6 +83,7 @@ const DefaultColumnFilter = ({ column: { filterValue, setFilter } }) => (
 export const TaskReviewTable = (props) => {
   const [showMap, setShowMap] = useState(localStorage.getItem("displayMap") === "true");
   const [openComments, setOpenComments] = useState(null);
+  const [showConfigureColumns, setShowConfigureColumns] = useState(false);
   const [challengeFilterIds, setChallengeFilterIds] = useState(
     getFilterIds(props.location.search, "filters.challengeId"),
   );
@@ -164,19 +169,10 @@ export const TaskReviewTable = (props) => {
       props.pageSize,
     ],
   );
+
   const columns = useMemo(
-    () => [
-      columnTypes.id,
-      columnTypes.status,
-      columnTypes.priority,
-      columnTypes.challenge,
-      columnTypes.project,
-      columnTypes.mappedOn,
-      columnTypes.reviewStatus,
-      columnTypes.reviewedBy,
-      columnTypes.reviewerControls,
-    ],
-    [columnTypes],
+    () => Object.keys(props.addedColumns ?? {}).map((column) => columnTypes[column]),
+    [props.addedColumns, columnTypes],
   );
 
   const {
@@ -193,7 +189,7 @@ export const TaskReviewTable = (props) => {
       columns,
       data,
       defaultColumn: {
-        Filter: DefaultColumnFilter,
+        Filter: false,
       },
       manualSortBy: true,
       manualFilters: true,
@@ -276,6 +272,14 @@ export const TaskReviewTable = (props) => {
 
     props.updateReviewTasks(updatedCriteria);
   }, [sortBy, filters, pageIndex]);
+
+  useEffect(() => {
+    const { columns, defaultColumns } = setupConfigurableColumns(
+      props.reviewTasksType,
+      props.metaReviewEnabled,
+    );
+    props.resetColumnChoices(columns, defaultColumns);
+  }, [props.reviewTasksType, props.metaReviewEnabled]);
 
   let subheader = null;
   switch (props.reviewTasksType) {
@@ -388,6 +392,19 @@ export const TaskReviewTable = (props) => {
             >
               <FormattedMessage {...messages.refresh} />
             </button>
+            <div className="mr-float-right mr-mt-2 mr-ml-3">
+              <div className="mr-flex mr-justify-start mr-ml-4 mr-items-center mr-space-x-4">
+                <ClearFiltersControl onClick={() => props.clearFilterCriteria()} />
+                <FilterDropdown reviewCriteria={props.reviewCriteria} />
+                <GearDropdown
+                  reviewCriteria={props.reviewCriteria}
+                  reviewTasksType={props.reviewTasksType}
+                  addedColumns={props.addedColumns}
+                  setShowConfigureColumns={setShowConfigureColumns}
+                />
+              </div>
+            </div>
+            <ManageSavedFilters searchFilters={props.reviewCriteria} {...props} />
           </div>
         </div>
         <div className="mr-mt-6 review">
@@ -450,7 +467,144 @@ export const TaskReviewTable = (props) => {
       {Number.isFinite(openComments) && (
         <TaskCommentsModal taskId={openComments} onClose={() => setOpenComments(null)} />
       )}
+      {showConfigureColumns && (
+        <ConfigureColumnsModal {...props} onClose={() => setShowConfigureColumns(false)} />
+      )}
     </Fragment>
+  );
+};
+
+const ClearFiltersControl = ({ onClick }) => {
+  return (
+    <div className="mr-pb-2">
+      <button
+        className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
+        onClick={onClick}
+      >
+        <SvgSymbol
+          sym="close-icon"
+          viewBox="0 0 20 20"
+          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1"
+        />
+        <FormattedMessage {...messages.clearFiltersLabel} />
+      </button>
+    </div>
+  );
+};
+
+const FilterDropdown = ({ reviewCriteria }) => {
+  return (
+    <Dropdown
+      className="mr-dropdown--right"
+      dropdownButton={(dropdown) => (
+        <button
+          onClick={dropdown.toggleDropdownVisible}
+          className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
+        >
+          <SvgSymbol
+            sym="filter-icon"
+            viewBox="0 0 20 20"
+            className="mr-fill-current mr-w-5 mr-h-5"
+          />
+        </button>
+      )}
+      dropdownContent={(dropdown) => (
+        <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
+          <SavedFiltersList
+            searchFilters={reviewCriteria}
+            afterClick={dropdown.toggleDropdownVisible}
+          />
+        </ul>
+      )}
+    />
+  );
+};
+
+const GearDropdown = ({
+  reviewCriteria,
+  reviewTasksType,
+  addedColumns,
+  setShowConfigureColumns,
+}) => {
+  console.log("reviewCriteria", reviewCriteria);
+  return (
+    <Dropdown
+      className="mr-dropdown--right"
+      dropdownButton={(dropdown) => (
+        <button
+          onClick={dropdown.toggleDropdownVisible}
+          className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
+        >
+          <SvgSymbol sym="cog-icon" viewBox="0 0 20 20" className="mr-fill-current mr-w-5 mr-h-5" />
+        </button>
+      )}
+      dropdownContent={(dropdown) => (
+        <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
+          <li>
+            <button
+              className="mr-text-current"
+              onClick={() => {
+                setShowConfigureColumns(true);
+                dropdown.toggleDropdownVisible();
+              }}
+            >
+              <FormattedMessage {...messages.configureColumnsLabel} />
+            </button>
+          </li>
+          {(reviewTasksType === ReviewTasksType.allReviewedTasks ||
+            reviewTasksType === ReviewTasksType.toBeReviewed) && (
+            <li>
+              {reviewCriteria.filters.projectId ? (
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={buildLinkToReviewTableExportCSV(reviewCriteria, addedColumns)}
+                  onClick={dropdown.toggleDropdownVisible}
+                  className="mr-flex mr-items-center"
+                >
+                  <SvgSymbol
+                    sym="download-icon"
+                    viewBox="0 0 20 20"
+                    className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                  />
+                  <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                </a>
+              ) : (
+                <div>
+                  <div className="mr-flex mr-items-center mr-opacity-50">
+                    <SvgSymbol
+                      sym="download-icon"
+                      viewBox="0 0 20 20"
+                      className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                    />
+                    <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                  </div>
+                  <div className="mr-text-grey-light">
+                    <FormattedMessage {...messages.requiredForExport} />
+                    <div />
+                    <FormattedMessage {...messages.requiredProject} />
+                  </div>
+                </div>
+              )}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={buildLinkToMapperExportCSV(reviewCriteria)}
+                onClick={dropdown.toggleDropdownVisible}
+                className="mr-flex mr-items-center"
+              >
+                <SvgSymbol
+                  sym="download-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                />
+                <FormattedMessage {...messages.exportMapperCSVLabel} />
+              </a>
+            </li>
+          )}
+        </ul>
+      )}
+    />
   );
 };
 
@@ -1200,4 +1354,111 @@ export const setupColumnTypes = (props, openComments, criteria) => {
   return columns;
 };
 
-export default WithCurrentUser(TaskReviewTable);
+const setupConfigurableColumns = (reviewTasksType, metaReviewEnabled) => {
+  let columns = {
+    id: {},
+    featureId: {},
+    reviewStatus: { permanent: true },
+    reviewRequestedBy: {},
+    challengeId: {},
+    challenge: {},
+    projectId: {},
+    project: {},
+    mappedOn: {},
+    reviewedBy: {},
+    reviewedAt: {},
+    status: {},
+    priority: {},
+    reviewCompleteControls: { permanent: true },
+    reviewerControls: { permanent: true },
+    mapperControls: { permanent: true },
+    viewComments: {},
+    tags: {},
+    additionalReviewers: {},
+  };
+
+  if (metaReviewEnabled) {
+    columns.metaReviewStatus = {};
+    columns.metaReviewedBy = {};
+    columns.metaReviewedAt = {};
+    columns.metaReviewerControls = { permanent: true };
+  }
+  let defaultColumns = _keys(columns);
+
+  // Remove any columns not relevant to the current tab.
+  switch (reviewTasksType) {
+    case ReviewTasksType.reviewedByMe:
+      columns = _omit(columns, ["reviewerControls", "mapperControls", "metaReviewerControls"]);
+      defaultColumns = _pull(
+        defaultColumns,
+        ...["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"],
+      );
+
+      break;
+    case ReviewTasksType.toBeReviewed:
+      columns = _omit(columns, [
+        "reviewCompleteControls",
+        "mapperControls",
+        "metaReviewerControls",
+      ]);
+      defaultColumns = _pull(
+        defaultColumns,
+        ...["reviewCompleteControls", "mapperControls", "metaReviewerControls"],
+      );
+
+      break;
+    case ReviewTasksType.allReviewedTasks:
+      columns = _omit(columns, [
+        "reviewCompleteControls",
+        "reviewerControls",
+        "metaReviewerControls",
+      ]);
+      defaultColumns = _pull(
+        defaultColumns,
+        ...["reviewCompleteControls", "reviewerControls", "metaReviewerControls"],
+      );
+
+      break;
+    case ReviewTasksType.metaReviewTasks:
+      columns = _omit(columns, ["reviewCompleteControls", "reviewerControls", "mapperControls"]);
+      defaultColumns = _pull(
+        defaultColumns,
+        ...["reviewCompleteControls", "reviewerControls", "mapperControls"],
+      );
+
+      break;
+    case ReviewTasksType.myReviewedTasks:
+    default:
+      columns = _omit(columns, [
+        "reviewRequestedBy",
+        "reviewCompleteControls",
+        "reviewerControls",
+        "metaReviewerControls",
+      ]);
+      defaultColumns = _pull(
+        defaultColumns,
+        ...[
+          "reviewRequestedBy",
+          "reviewCompleteControls",
+          "reviewerControls",
+          "metaReviewerControls",
+        ],
+      );
+
+      break;
+  }
+
+  return { columns, defaultColumns };
+};
+
+export default WithCurrentUser(
+  WithConfigurableColumns(
+    WithSavedFilters(TaskReviewTable, "reviewSearchFilters"),
+    {},
+    [],
+    messages,
+    "reviewColumns",
+    "reviewTasksType",
+    false,
+  ),
+);
