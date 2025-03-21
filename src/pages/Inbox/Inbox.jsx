@@ -1,6 +1,6 @@
 import _kebabCase from "lodash/kebabCase";
 import _reject from "lodash/reject";
-import { useCallback, useEffect, useMemo, useRef, useState, useLayoutEffect } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import React from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import {

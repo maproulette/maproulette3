@@ -12,12 +12,12 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
 import {
+  useBlockLayout,
   useFilters,
   usePagination,
+  useResizeColumns,
   useSortBy,
   useTable,
-  useResizeColumns,
-  useBlockLayout,
 } from "react-table";
 import BusySpinner from "../../../components/BusySpinner/BusySpinner";
 import ConfigureColumnsModal from "../../../components/ConfigureColumnsModal/ConfigureColumnsModal";
@@ -484,16 +484,9 @@ export const TaskReviewTable = (props) => {
                             overflow: "hidden",
                             textOverflow: "ellipsis",
                             whiteSpace: "nowrap",
-                            borderBottom: column.isSorted
-                              ? column.isSortedDesc
-                                ? "3px solid #fff"
-                                : "1px solid rgba(255, 255, 255, 0.1)"
-                              : "1px solid rgba(255, 255, 255, 0.1)",
-                            borderTop:
-                              column.isSorted && !column.isSortedDesc ? "3px solid #fff" : "none",
                           }}
                         >
-                          <div>
+                          <div className="mr-flex mr-items-center mr-justify-between">
                             <div className="mr-flex mr-items-center">
                               {column.render("Header")}
                               {!column.disableSortBy && (

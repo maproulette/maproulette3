@@ -8,13 +8,13 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import {
+  useBlockLayout,
   useExpanded,
   useFilters,
   usePagination,
+  useResizeColumns,
   useSortBy,
   useTable,
-  useResizeColumns,
-  useBlockLayout,
 } from "react-table";
 import BusySpinner from "../../components/BusySpinner/BusySpinner";
 import ConfigureColumnsModal from "../../components/ConfigureColumnsModal/ConfigureColumnsModal";
