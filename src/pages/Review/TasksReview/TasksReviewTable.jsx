@@ -11,7 +11,14 @@ import _pull from "lodash/pull";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
-import { useFilters, usePagination, useSortBy, useTable } from "react-table";
+import {
+  useFilters,
+  usePagination,
+  useSortBy,
+  useTable,
+  useResizeColumns,
+  useBlockLayout,
+} from "react-table";
 import BusySpinner from "../../../components/BusySpinner/BusySpinner";
 import ConfigureColumnsModal from "../../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import Dropdown from "../../../components/Dropdown/Dropdown";
@@ -91,6 +98,8 @@ export const TaskReviewTable = (props) => {
     getFilterIds(props.location.search, "filters.projectId"),
   );
   const [lastTableState, setLastTableState] = useState(null);
+  const [displayData, setDisplayData] = useState(props.reviewData?.tasks ?? []);
+  const [columnWidths, setColumnWidths] = useState({});
 
   const startReviewing = () => props.startReviewing(props.history);
   const startMetaReviewing = () => props.startReviewing(props.history, true);
@@ -143,8 +152,15 @@ export const TaskReviewTable = (props) => {
     }
   }, [props.location.search]);
 
+  // Update displayData when new data is loaded and not loading
+  useEffect(() => {
+    if (!props.loading && props.reviewData?.tasks) {
+      setDisplayData(props.reviewData.tasks);
+    }
+  }, [props.loading, props.reviewData]);
+
   // Setup table data and columns
-  const data = props.reviewData?.tasks ?? [];
+  const data = displayData;
   const columnTypes = useMemo(
     () =>
       setupColumnTypes(
@@ -171,8 +187,19 @@ export const TaskReviewTable = (props) => {
   );
 
   const columns = useMemo(
-    () => Object.keys(props.addedColumns ?? {}).map((column) => columnTypes[column]),
-    [props.addedColumns, columnTypes],
+    () =>
+      Object.keys(props.addedColumns ?? {}).map((column) => {
+        const col = columnTypes[column];
+        // Apply saved width if available
+        if (columnWidths[column]) {
+          return {
+            ...col,
+            width: columnWidths[column],
+          };
+        }
+        return col;
+      }),
+    [props.addedColumns, columnTypes, columnWidths],
   );
 
   const {
@@ -181,7 +208,7 @@ export const TaskReviewTable = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { sortBy, filters, pageIndex },
+    state: { sortBy, filters, pageIndex, columnResizing },
     gotoPage,
     setPageSize,
   } = useTable(
@@ -190,17 +217,36 @@ export const TaskReviewTable = (props) => {
       data,
       defaultColumn: {
         Filter: false,
+        minWidth: 80,
+        disableSortBy: true,
       },
       manualSortBy: true,
       manualFilters: true,
       manualPagination: true,
       pageCount: Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize),
       pageSize: props.pageSize,
+      disableMultiSort: true,
+      disableSortRemove: true,
     },
+    useBlockLayout,
+    useResizeColumns,
     useFilters,
     useSortBy,
     usePagination,
   );
+
+  // Save column widths when they change
+  useEffect(() => {
+    if (
+      columnResizing.isResizingColumn === null &&
+      Object.keys(columnResizing.columnWidths).length > 0
+    ) {
+      setColumnWidths((prev) => ({
+        ...prev,
+        ...columnResizing.columnWidths,
+      }));
+    }
+  }, [columnResizing]);
 
   // Handle table state updates
   useEffect(() => {
@@ -408,60 +454,133 @@ export const TaskReviewTable = (props) => {
           </div>
         </div>
         <div className="mr-mt-6 review">
-          {props.loading ? (
-            <div className="mr-my-8">
-              <BusySpinner big />
-            </div>
-          ) : (
-            <>
-              <table {...getTableProps()} className="mr-table mr-w-full">
-                <thead>
+          <div className="mr-relative">
+            {props.loading && (
+              <div className="mr-absolute mr-inset-0 mr-bg-black-50 mr-flex mr-items-center mr-justify-center mr-z-10">
+                <div className="mr-text-white mr-text-lg mr-flex mr-items-center">
+                  <BusySpinner className="mr-mr-2" />
+                  <span>Loading...</span>
+                </div>
+              </div>
+            )}
+            <div className="mr-overflow-x-auto">
+              <table
+                className="mr-w-full mr-text-left mr-text-white mr-border-collapse"
+                style={{ minWidth: "1200px" }}
+              >
+                <thead className="mr-bg-black-15">
                   {headerGroups.map((headerGroup) => (
-                    <>
-                      <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                          <th
-                            className="mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10"
-                            {...column.getHeaderProps(column.getSortByToggleProps())}
-                          >
-                            {column.render("Header")}
-                            {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
-                          </th>
-                        ))}
-                      </tr>
-                      <tr>
-                        {headerGroup.headers.map((column) => (
-                          <th className="mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10">
-                            {column.canFilter ? column.render("Filter") : null}
-                          </th>
-                        ))}
-                      </tr>
-                    </>
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((column) => (
+                        <th
+                          {...column.getHeaderProps(column.getSortByToggleProps())}
+                          className={`mr-p-2 mr-font-medium mr-relative mr-border-b mr-border-r mr-border-white-10 mr-text-white ${
+                            !column.disableSortBy ? "mr-cursor-pointer hover:mr-bg-black-10" : ""
+                          }`}
+                          style={{
+                            width: column.width,
+                            minWidth: column.minWidth,
+                            position: "relative",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            borderBottom: column.isSorted
+                              ? column.isSortedDesc
+                                ? "3px solid #fff"
+                                : "1px solid rgba(255, 255, 255, 0.1)"
+                              : "1px solid rgba(255, 255, 255, 0.1)",
+                            borderTop:
+                              column.isSorted && !column.isSortedDesc ? "3px solid #fff" : "none",
+                          }}
+                        >
+                          <div>
+                            <div className="mr-flex mr-items-center">
+                              {column.render("Header")}
+                              {!column.disableSortBy && (
+                                <span className="mr-ml-1">
+                                  {column.isSorted ? (
+                                    column.isSortedDesc ? (
+                                      <SvgSymbol
+                                        sym="arrow-down-icon"
+                                        viewBox="0 0 20 20"
+                                        className="mr-fill-current mr-w-3 mr-h-3"
+                                      />
+                                    ) : (
+                                      <SvgSymbol
+                                        sym="arrow-up-icon"
+                                        viewBox="0 0 20 20"
+                                        className="mr-fill-current mr-w-3 mr-h-3"
+                                      />
+                                    )
+                                  ) : (
+                                    <SvgSymbol
+                                      sym="sort-icon"
+                                      viewBox="0 0 20 20"
+                                      className="mr-fill-current mr-w-3 mr-h-3 mr-opacity-40"
+                                    />
+                                  )}
+                                </span>
+                              )}
+                            </div>
+                            {column.canFilter && (
+                              <div className="mr-mt-1" onClick={(e) => e.stopPropagation()}>
+                                {column.render("Filter")}
+                              </div>
+                            )}
+                          </div>
+                          {column.getResizerProps && (
+                            <div
+                              {...column.getResizerProps()}
+                              className={`mr-absolute mr-right-0 mr-top-0 mr-h-full mr-w-2 mr-bg-gray-400 mr-opacity-50 hover:mr-opacity-100 mr-cursor-col-resize ${
+                                column.isResizing ? "mr-opacity-100" : ""
+                              }`}
+                              style={{ touchAction: "none" }}
+                            />
+                          )}
+                        </th>
+                      ))}
+                    </tr>
                   ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
                   {page.map((row) => {
                     prepareRow(row);
                     return (
-                      <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()}>
+                      <tr {...row.getRowProps()}>
                         {row.cells.map((cell) => {
-                          return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                          const column = cell.column;
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              className="mr-p-2 mr-border-b mr-border-r mr-border-white-10"
+                              style={{
+                                width: column.width,
+                                minWidth: column.minWidth,
+                                maxWidth: column.width,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {cell.render("Cell")}
+                            </td>
+                          );
                         })}
                       </tr>
                     );
                   })}
                 </tbody>
               </table>
+            </div>
+          </div>
 
-              <PaginationControl
-                currentPage={pageIndex}
-                totalPages={Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize)}
-                pageSize={props.pageSize}
-                gotoPage={gotoPage}
-                setPageSize={setPageSize}
-              />
-            </>
-          )}
+          <PaginationControl
+            currentPage={pageIndex}
+            totalPages={Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize)}
+            pageSize={props.pageSize}
+            gotoPage={gotoPage}
+            setPageSize={setPageSize}
+          />
         </div>
       </div>
       {Number.isFinite(openComments) && (
@@ -526,7 +645,6 @@ const GearDropdown = ({
   addedColumns,
   setShowConfigureColumns,
 }) => {
-  console.log("reviewCriteria", reviewCriteria);
   return (
     <Dropdown
       className="mr-dropdown--right"
@@ -608,7 +726,7 @@ const GearDropdown = ({
   );
 };
 
-export const setupColumnTypes = (props, openComments, criteria) => {
+export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
   const handleClick = (e, linkTo) => {
     e.preventDefault();
     props.history.push({
@@ -617,36 +735,58 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     });
   };
 
+  // Define sortable columns
+  const sortableColumns = [
+    "id",
+    "status",
+    "priority",
+    "mappedOn",
+    "reviewedAt",
+    "metaReviewedAt",
+    "reviewStatus",
+    "metaReviewStatus",
+  ];
+
+  // Create column definitions as before
   const columns = {};
+
   columns.id = {
     id: "id",
-    Header: props.intl.formatMessage(messages.idLabel),
+    Header: makeInvertable(
+      props.intl.formatMessage(messages.idLabel),
+      () => props.invertField("id"),
+      criteria?.invertFields?.id,
+    ),
     accessor: "id",
-    Cell: ({ value, row }) => {
-      if (!row.original.isBundlePrimary) {
-        return <span>{value}</span>;
-      } else {
-        return (
-          <span className="mr-flex mr-items-center mr-relative">
+    Cell: ({ row }) => (
+      <div className="row-id-column">
+        {row.original.isBundlePrimary ? (
+          <span className="mr-flex mr-items-center">
             <SvgSymbol
               sym="box-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-4"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-2"
               title={props.intl.formatMessage(messages.multipleTasksTooltip)}
             />
-            {value}
+            {row.original.id}
           </span>
-        );
-      }
-    },
-    maxWidth: 120,
+        ) : (
+          <span>{row.original.id}</span>
+        )}
+      </div>
+    ),
+    disableSortBy: !sortableColumns.includes("id"),
+    width: 120,
+    minWidth: 80,
   };
 
   columns.featureId = {
     id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (row) => row.name || row.title,
-    maxWidth: 120,
+    width: 120,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("featureId"),
   };
 
   columns.status = {
@@ -664,7 +804,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         className={`mr-status-${_kebabCase(keysByStatus[value])}`}
       />
     ),
-    maxWidth: 140,
+    width: 140,
+    minWidth: 80,
     Filter: ({ column: { setFilter, filterValue } }) => {
       const options = [
         <option key="all" value="all">
@@ -692,6 +833,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </select>
       );
     },
+    disableSortBy: !sortableColumns.includes("status"),
   };
 
   columns.priority = {
@@ -709,7 +851,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         className={`mr-status-${_kebabCase(keysByPriority[value])}`}
       />
     ),
-    maxWidth: 140,
+    width: 140,
+    minWidth: 80,
     Filter: ({ column: { setFilter, filterValue } }) => {
       const options = [
         <option key="all" value="all">
@@ -735,6 +878,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </select>
       );
     },
+    disableSortBy: !sortableColumns.includes("priority"),
   };
 
   columns.reviewRequestedBy = {
@@ -750,7 +894,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         {value}
       </div>
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("reviewRequestedBy"),
   };
 
   columns.additionalReviewers = {
@@ -775,7 +921,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         ))}
       </div>
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("otherReviewers"),
   };
 
   columns.challengeId = {
@@ -783,7 +931,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Header: props.intl.formatMessage(messages.challengeIdLabel),
     accessor: "parent.id",
     Cell: ({ value }) => <span>{value}</span>,
-    maxWidth: 120,
+    width: 120,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("challengeId"),
   };
 
   columns.challenge = {
@@ -829,6 +979,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         ) : null}
       </div>
     ),
+    disableSortBy: !sortableColumns.includes("challenge"),
   };
 
   columns.projectId = {
@@ -836,7 +987,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Header: props.intl.formatMessage(messages.projectIdLabel),
     accessor: "parent.parent.id",
     Cell: ({ value }) => <span>{value}</span>,
-    maxWidth: 120,
+    width: 120,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("projectId"),
   };
 
   columns.project = {
@@ -882,6 +1035,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         ) : null}
       </div>
     ),
+    disableSortBy: !sortableColumns.includes("project"),
   };
 
   columns.mappedOn = {
@@ -896,7 +1050,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </span>
       );
     },
-    maxWidth: 180,
+    width: 180,
+    minWidth: 80,
     Filter: ({ column: { setFilter, filterValue } }) => {
       let mappedOn = filterValue;
       if (typeof mappedOn === "string" && mappedOn !== "") {
@@ -927,6 +1082,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </div>
       );
     },
+    disableSortBy: !sortableColumns.includes("mappedOn"),
   };
 
   columns.reviewedAt = {
@@ -941,8 +1097,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </span>
       );
     },
-    minWidth: 180,
-    maxWidth: 200,
+    width: 180,
+    minWidth: 80,
     Filter: ({ column: { setFilter, filterValue } }) => {
       let reviewedAt = filterValue;
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
@@ -973,6 +1129,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </div>
       );
     },
+    disableSortBy: !sortableColumns.includes("reviewedAt"),
   };
 
   columns.metaReviewedAt = {
@@ -987,8 +1144,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </span>
       );
     },
-    minWidth: 180,
-    maxWidth: 200,
+    width: 180,
+    disableSortBy: !sortableColumns.includes("metaReviewedAt"),
   };
 
   columns.reviewedBy = {
@@ -1007,7 +1164,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         {row.original.reviewedBy ? row.original.reviewedBy.username : "N/A"}
       </div>
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("reviewedBy"),
   };
 
   columns.reviewStatus = {
@@ -1025,7 +1184,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         className={`mr-review-${_kebabCase(keysByReviewStatus[value])}`}
       />
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 80,
     Filter: ({ column: { setFilter, filterValue } }) => {
       const options = [
         <option key="all" value="all">
@@ -1077,6 +1237,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </select>
       );
     },
+    disableSortBy: !sortableColumns.includes("reviewStatus"),
   };
 
   columns.metaReviewStatus = {
@@ -1097,7 +1258,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
           className={`mr-review-${_kebabCase(keysByReviewStatus[value])}`}
         />
       ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 80,
     Filter: ({ column: { setFilter, filterValue } }) => {
       const options = [];
 
@@ -1149,6 +1311,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </select>
       );
     },
+    disableSortBy: !sortableColumns.includes("metaReviewStatus"),
   };
 
   columns.metaReviewedBy = {
@@ -1167,7 +1330,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         {row.original.metaReviewedBy ? row.original.metaReviewedBy.username : ""}
       </div>
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("metaReviewedBy"),
   };
 
   columns.reviewerControls = {
@@ -1211,8 +1376,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return <div className="row-controls-column">{action}</div>;
     },
-    maxWidth: 120,
-    minWidth: 110,
+    width: 120,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("controls"),
   };
 
   columns.reviewCompleteControls = {
@@ -1239,6 +1405,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </div>
       );
     },
+    disableSortBy: !sortableColumns.includes("controls"),
   };
 
   columns.metaReviewerControls = {
@@ -1282,8 +1449,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return <div className="row-controls-column">{action}</div>;
     },
-    maxWidth: 120,
-    minWidth: 110,
+    width: 120,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("controls"),
   };
 
   columns.mapperControls = {
@@ -1318,8 +1486,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </div>
       );
     },
-    maxWidth: 120,
-    minWidth: 90,
+    width: 120,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("controls"),
   };
 
   columns.viewComments = {
@@ -1327,7 +1496,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Header: props.intl.formatMessage(messages.viewCommentsLabel),
     accessor: "commentID",
     Cell: (props) => <ViewCommentsButton onClick={() => openComments(props.row.original.id)} />,
-    maxWidth: 110,
+    width: 110,
+    minWidth: 80,
+    disableSortBy: !sortableColumns.includes("viewComments"),
   };
 
   columns.tags = {
@@ -1349,7 +1520,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Filter: ({ column: { setFilter, filterValue } }) => (
       <InTableTagFilter {...props} onChange={setFilter} value={filterValue || ""} />
     ),
+    disableSortBy: !sortableColumns.includes("tags"),
   };
+
+  // After all columns are defined, set disableSortBy property based on sortableColumns list
+  Object.keys(columns).forEach((columnId) => {
+    columns[columnId].disableSortBy = !sortableColumns.includes(columnId);
+  });
 
   return columns;
 };
