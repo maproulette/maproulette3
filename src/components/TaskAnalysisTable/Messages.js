@@ -264,4 +264,64 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.failedLockError",
     defaultMessage: "Failed to lock one or more tasks. Please try again.",
   },
+
+  sortAscending: {
+    id: "Admin.TaskAnalysisTable.controls.sortAscending.label",
+    defaultMessage: "Sort Ascending",
+  },
+
+  sortDescending: {
+    id: "Admin.TaskAnalysisTable.controls.sortDescending.label",
+    defaultMessage: "Sort Descending",
+  },
+
+  filterByReviewer: {
+    id: "Admin.TaskAnalysisTable.filters.byReviewer.placeholder",
+    defaultMessage: "Filter by reviewer",
+  },
+
+  allStatuses: {
+    id: "Admin.TaskAnalysisTable.filters.status.all",
+    defaultMessage: "All Statuses",
+  },
+
+  allPriorities: {
+    id: "Admin.TaskAnalysisTable.filters.priority.all",
+    defaultMessage: "All Priorities",
+  },
+
+  allReviewStatuses: {
+    id: "Admin.TaskAnalysisTable.filters.reviewStatus.all",
+    defaultMessage: "All Review Statuses",
+  },
+
+  allMetaReviewStatuses: {
+    id: "Admin.TaskAnalysisTable.filters.metaReviewStatus.all",
+    defaultMessage: "All Meta-Review Statuses",
+  },
+
+  metaUnreviewed: {
+    id: "Admin.TaskAnalysisTable.filters.metaReviewStatus.unreviewed",
+    defaultMessage: "Unreviewed",
+  },
+
+  clearDate: {
+    id: "Admin.TaskAnalysisTable.filters.date.clear",
+    defaultMessage: "Clear date",
+  },
+
+  filterByFeatureId: {
+    id: "Admin.TaskAnalysisTable.filters.byFeatureId.placeholder",
+    defaultMessage: "Filter by feature ID",
+  },
+
+  filterByInternalId: {
+    id: "Admin.TaskAnalysisTable.filters.byInternalId.placeholder",
+    defaultMessage: "Filter by internal ID",
+  },
+
+  filterByMapper: {
+    id: "Admin.TaskAnalysisTable.filters.byMapper.placeholder",
+    defaultMessage: "Filter by mapper",
+  },
 });
