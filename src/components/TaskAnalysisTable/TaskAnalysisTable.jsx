@@ -618,7 +618,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     accessor: "id",
     Cell: ({ value }) => (
       <Link
-        to={`/challenge/${props.challenge.id}/task/${value}`}
+        to={`/challenge/${props.challenge?.id || props.task?.parent?.id}/task/${value}`}
         className="mr-text-green-lighter hover:mr-text-white"
       >
         {value}
