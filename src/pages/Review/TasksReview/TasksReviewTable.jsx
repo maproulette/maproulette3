@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { parseISO } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
+import _debounce from "lodash/debounce";
 import _isEqual from "lodash/isEqual";
 import _isObject from "lodash/isObject";
 import _kebabCase from "lodash/kebabCase";
@@ -8,7 +9,7 @@ import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _pull from "lodash/pull";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
 import {
@@ -79,6 +80,70 @@ export const getFilterIds = (search, param) => {
   }
 
   return [FILTER_SEARCH_ALL];
+};
+
+const FilterInput = ({ column: { filterValue, setFilter, id }, placeholder }) => {
+  const inputRef = useRef(null);
+  const [value, setValue] = useState(filterValue || "");
+
+  useEffect(() => {
+    if (filterValue !== undefined && filterValue !== value) {
+      setValue(filterValue || "");
+    }
+  }, [filterValue]);
+
+  const debouncedSetFilter = useMemo(
+    () =>
+      _debounce((value) => {
+        if (id === "id" && value) {
+          const numValue = Number(value);
+          setFilter(!isNaN(numValue) ? numValue : undefined);
+        } else {
+          setFilter(value || undefined);
+        }
+      }, 1000),
+    [setFilter, id],
+  );
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    let newValue = e.target.value;
+
+    if (id === "id" && newValue) {
+      newValue = newValue.replace(/[^\d]/g, "");
+    }
+
+    setValue(newValue);
+    debouncedSetFilter(newValue);
+  };
+
+  const handleBlur = (e) => {
+    if (e.relatedTarget?.className?.includes("mr-input")) {
+      e.preventDefault();
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      debouncedSetFilter.flush();
+      debouncedSetFilter.cancel();
+    };
+  }, [debouncedSetFilter]);
+
+  return (
+    <input
+      ref={inputRef}
+      type={id === "id" ? "number" : "text"}
+      value={value}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      placeholder={placeholder}
+      className="mr-input mr-px-2 mr-py-1 mr-w-full"
+    />
+  );
 };
 
 /**
@@ -161,6 +226,8 @@ export const TaskReviewTable = (props) => {
 
   // Setup table data and columns
   const data = displayData;
+
+  // Memoize the column types setup to prevent unnecessary recalculations
   const columnTypes = useMemo(
     () =>
       setupColumnTypes(
@@ -175,15 +242,7 @@ export const TaskReviewTable = (props) => {
         props.reviewCriteria,
         props.pageSize,
       ),
-    [
-      props,
-      updateChallengeFilterIds,
-      updateProjectFilterIds,
-      challengeFilterIds,
-      projectFilterIds,
-      props.reviewCriteria,
-      props.pageSize,
-    ],
+    [],
   );
 
   const columns = useMemo(
@@ -474,8 +533,14 @@ export const TaskReviewTable = (props) => {
                       {headerGroup.headers.map((column) => (
                         <th
                           {...column.getHeaderProps(column.getSortByToggleProps())}
-                          className={`mr-p-2 mr-font-medium mr-relative mr-border-b mr-border-r mr-border-white-10 mr-text-white ${
+                          className={`mr-p-2 mr-font-medium mr-relative mr-border-r mr-border-white-10 mr-text-white ${
                             !column.disableSortBy ? "mr-cursor-pointer hover:mr-bg-black-10" : ""
+                          } ${
+                            column.isSorted
+                              ? column.isSortedDesc
+                                ? "mr-border-b-2 mr-border-b-green-lighter"
+                                : "mr-border-t-2 mr-border-t-green-lighter"
+                              : "mr-border-b mr-border-white-10"
                           }`}
                           style={{
                             width: column.width,
@@ -486,37 +551,14 @@ export const TaskReviewTable = (props) => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          <div className="mr-flex mr-items-center mr-justify-between">
-                            <div className="mr-flex mr-items-center">
-                              {column.render("Header")}
-                              {!column.disableSortBy && (
-                                <span className="mr-ml-1">
-                                  {column.isSorted ? (
-                                    column.isSortedDesc ? (
-                                      <SvgSymbol
-                                        sym="arrow-down-icon"
-                                        viewBox="0 0 20 20"
-                                        className="mr-fill-current mr-w-3 mr-h-3"
-                                      />
-                                    ) : (
-                                      <SvgSymbol
-                                        sym="arrow-up-icon"
-                                        viewBox="0 0 20 20"
-                                        className="mr-fill-current mr-w-3 mr-h-3"
-                                      />
-                                    )
-                                  ) : (
-                                    <SvgSymbol
-                                      sym="sort-icon"
-                                      viewBox="0 0 20 20"
-                                      className="mr-fill-current mr-w-3 mr-h-3 mr-opacity-40"
-                                    />
-                                  )}
-                                </span>
-                              )}
+                          <div className="mr-flex mr-flex-col">
+                            <div className="mr-flex mr-items-center mr-justify-between">
+                              <div className="mr-flex mr-items-center">
+                                {column.render("Header")}
+                              </div>
                             </div>
                             {column.canFilter && (
-                              <div className="mr-mt-1" onClick={(e) => e.stopPropagation()}>
+                              <div className="mr-mt-2" onClick={(e) => e.stopPropagation()}>
                                 {column.render("Filter")}
                               </div>
                             )}
@@ -545,7 +587,7 @@ export const TaskReviewTable = (props) => {
                           return (
                             <td
                               {...cell.getCellProps()}
-                              className="mr-p-2 mr-border-b mr-border-r mr-border-white-10"
+                              className="mr-px-2 mr-py-1 mr-border-b mr-border-r mr-border-white-10"
                               style={{
                                 width: column.width,
                                 minWidth: column.minWidth,
@@ -745,32 +787,28 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
 
   columns.id = {
     id: "id",
-    Header: makeInvertable(
-      props.intl.formatMessage(messages.idLabel),
-      () => props.invertField("id"),
-      criteria?.invertFields?.id,
-    ),
+    Header: props.intl.formatMessage(messages.idLabel),
     accessor: "id",
-    Cell: ({ row }) => (
-      <div className="row-id-column">
-        {row.original.isBundlePrimary ? (
-          <span className="mr-flex mr-items-center">
-            <SvgSymbol
-              sym="box-icon"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-2"
-              title={props.intl.formatMessage(messages.multipleTasksTooltip)}
-            />
-            {row.original.id}
-          </span>
-        ) : (
-          <span>{row.original.id}</span>
-        )}
-      </div>
+    Cell: ({ value, row }) => (
+      <Link
+        to={`/challenge/${row.original.parent.id}/task/${value}`}
+        className="mr-text-green-lighter hover:mr-text-white"
+      >
+        {value}
+      </Link>
     ),
-    disableSortBy: !sortableColumns.includes("id"),
+    Filter: ({ column }) => (
+      <FilterInput
+        column={column}
+        placeholder={props.intl.formatMessage({
+          id: "Review.TaskAnalysisTable.filterByInternalId",
+          defaultMessage: "Filter by ID",
+        })}
+      />
+    ),
     width: 120,
-    minWidth: 80,
+    minWidth: 90,
+    disableFilters: false,
   };
 
   columns.featureId = {
@@ -864,6 +902,8 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
       return (
         <select
           onChange={(event) => setFilter(event.target.value)}
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
           className={"mr-select mr-px-2 mr-py-1 mr-w-full"}
           value={filterValue || "all"}
         >
@@ -887,9 +927,19 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
         {value}
       </div>
     ),
+    Filter: ({ column }) => (
+      <FilterInput
+        column={column}
+        placeholder={props.intl.formatMessage({
+          id: "Review.TaskAnalysisTable.filterByMapper",
+          defaultMessage: "Filter by mapper",
+        })}
+      />
+    ),
     width: 180,
     minWidth: 80,
     disableSortBy: !sortableColumns.includes("reviewRequestedBy"),
+    disableFilters: false,
   };
 
   columns.additionalReviewers = {
@@ -1052,7 +1102,11 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
       }
 
       return (
-        <div className="mr-flex mr-gap-2">
+        <div
+          className="mr-flex mr-gap-2"
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
           <IntlDatePicker
             selected={mappedOn}
             onChange={(value) => {
@@ -1063,7 +1117,14 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
           {mappedOn && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter(null)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilter(null);
+              }}
+              title={props.intl.formatMessage({
+                id: "Review.TaskAnalysisTable.clearDate",
+                defaultMessage: "Clear date",
+              })}
             >
               <SvgSymbol
                 sym="icon-close"
@@ -1099,7 +1160,11 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
       }
 
       return (
-        <div className="mr-flex mr-gap-2">
+        <div
+          className="mr-flex mr-gap-2"
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
           <IntlDatePicker
             selected={reviewedAt}
             onChange={(value) => {
@@ -1110,7 +1175,14 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
           {reviewedAt && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter(null)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilter(null);
+              }}
+              title={props.intl.formatMessage({
+                id: "Review.TaskAnalysisTable.clearDate",
+                defaultMessage: "Clear date",
+              })}
             >
               <SvgSymbol
                 sym="icon-close"
@@ -1138,6 +1210,48 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
       );
     },
     width: 180,
+    minWidth: 80,
+    Filter: ({ column: { setFilter, filterValue } }) => {
+      let metaReviewedAt = filterValue;
+      if (typeof metaReviewedAt === "string" && metaReviewedAt !== "") {
+        metaReviewedAt = parseISO(metaReviewedAt);
+      }
+
+      return (
+        <div
+          className="mr-flex mr-gap-2"
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          <IntlDatePicker
+            selected={metaReviewedAt}
+            onChange={(value) => {
+              setFilter(value);
+            }}
+            intl={props.intl}
+          />
+          {metaReviewedAt && (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilter(null);
+              }}
+              title={props.intl.formatMessage({
+                id: "Review.TaskAnalysisTable.clearDate",
+                defaultMessage: "Clear date",
+              })}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
+            </button>
+          )}
+        </div>
+      );
+    },
     disableSortBy: !sortableColumns.includes("metaReviewedAt"),
   };
 
@@ -1157,9 +1271,19 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
         {row.original.reviewedBy ? row.original.reviewedBy.username : "N/A"}
       </div>
     ),
+    Filter: ({ column }) => (
+      <FilterInput
+        column={column}
+        placeholder={props.intl.formatMessage({
+          id: "Review.TaskAnalysisTable.filterByReviewer",
+          defaultMessage: "Filter by reviewer",
+        })}
+      />
+    ),
     width: 180,
     minWidth: 80,
     disableSortBy: !sortableColumns.includes("reviewedBy"),
+    disableFilters: false,
   };
 
   columns.reviewStatus = {
@@ -1223,6 +1347,8 @@ export const setupColumnTypes = (props, openComments, criteria, pageSize) => {
       return (
         <select
           onChange={(event) => setFilter(event.target.value)}
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
           className={"mr-select mr-px-2 mr-py-1 mr-w-full"}
           value={filterValue || "all"}
         >
