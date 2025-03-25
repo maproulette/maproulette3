@@ -35,7 +35,6 @@ export const WithFilterCriteria = function (
   WrappedComponent,
   ignoreURL = true,
   ignoreLocked = true,
-  skipInitialFetch = false,
   usePersistedFilters = false,
   savedFilterSettingName = undefined,
 ) {

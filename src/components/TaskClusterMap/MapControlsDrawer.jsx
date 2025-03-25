@@ -16,7 +16,6 @@ export const UNCLUSTER_THRESHOLD = 1000;
  */
 const MapControlsDrawer = (props) => {
   const map = useMap();
-  const [legendOpen, setLegendOpen] = useState(false);
   const [lasso, setLasso] = useState(null);
   const [deselecting, setDeselecting] = useState(false);
 
@@ -303,7 +302,7 @@ const MapControlsDrawer = (props) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .map-controls-drawer {
           position: absolute;
           top: 0px;

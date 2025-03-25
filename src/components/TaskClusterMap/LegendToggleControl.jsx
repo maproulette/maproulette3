@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import "leaflet-lasso/dist/leaflet-lasso.esm";
-import _compact from "lodash/compact";
-import _map from "lodash/map";
 import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 
 /**
@@ -84,7 +82,7 @@ export const LegendToggleControl = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .legend-content {
           position: absolute;
           bottom: 60px;

@@ -15,14 +15,12 @@ import {
 } from "react-leaflet";
 import { toLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { TaskPriorityColors } from "../../services/Task/TaskPriority/TaskPriority";
-import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import SearchContent from "../EnhancedMap/SearchControl/SearchContent";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import WithIntersectingOverlays from "../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
-import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import { LegendToggleControl } from "./LegendToggleControl";
 import MapControlsDrawer from "./MapControlsDrawer";
 import MapMarkers from "./MapMarkers";
@@ -62,7 +60,6 @@ export const TaskClusterMap = (props) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
   const [drawerOpen, setDrawerOpen] = useState(true);
-  const [legendOpen, setLegendOpen] = useState(false);
 
   let overlayLayers = buildLayerSources(
     props.visibleOverlays,
