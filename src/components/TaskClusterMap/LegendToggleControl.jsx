@@ -15,10 +15,7 @@ export const LegendToggleControl = () => {
       {/* Status Legend - Now toggleable */}
       <div className="legend-content">
         {legendOpen && (
-          <div className="status-legend mr-bg-green">
-            <div className="legend-header">
-              <h3 className="legend-title">Status Legend</h3>
-            </div>
+          <div className="status-legend">
             <ul className="legend-list">
               {[
                 {
@@ -88,26 +85,31 @@ export const LegendToggleControl = () => {
           bottom: 60px;
           left: 4px;
           z-index: 1000;
-          width: 130px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
         }
 
         .status-legend {
+          background-color: rgba(255, 255, 255, 0.95);
           line-height: 1;
           border-radius: 4px;
-          padding: 8px;
-          color: white;
-          width: 130px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .legend-header {
-          margin-bottom: 8px;
+          padding: 4px;
+          color: #333;
+          width: 115px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          max-height: 300px;
+          overflow-y: auto;
+          transition: all 0.2s ease;
         }
 
         .legend-title {
           margin: 0;
           font-size: 14px;
           font-weight: 600;
+          color: #444;
+          text-align: center;
         }
 
         .legend-list {
@@ -119,20 +121,41 @@ export const LegendToggleControl = () => {
         .legend-item {
           display: flex;
           align-items: center;
-          margin-bottom: 6px;
+          margin-bottom: 2px;
           font-size: 12px;
         }
 
         .legend-color-swatch {
-          width: 12px;
-          height: 12px;
+          width: 9px;
+          height: 9px;
           border-radius: 50%;
-          margin-right: 8px;
+          margin-right: 4px;
           flex-shrink: 0;
+          border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .legend-label {
           flex: 1;
+          font-weight: 500;
+        }
+
+        .legend-toggle-button {
+          background-color: white;
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          border-radius: 4px;
+          padding: 6px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          transition: all 0.2s ease;
+        }
+
+
+        .control-icon {
+          width: 20px;
+          height: 20px;
         }
       `}</style>
     </>
