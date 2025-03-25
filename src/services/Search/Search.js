@@ -271,11 +271,13 @@ export const generateSearchParametersString = (
     }
   }
   if (filters.reviewedAt) {
-    searchParameters.startDate = format(filters.reviewedAt, "yyyy-MM-dd");
-    searchParameters.endDate = format(filters.reviewedAt, "yyyy-MM-dd");
+    (searchParameters.startDate = filters.reviewedAt), "yyyy-MM-dd";
+    (searchParameters.endDate = filters.reviewedAt), "yyyy-MM-dd";
   }
+  
   if (filters.mappedOn) {
-    searchParameters.mo = format(filters.mappedOn, "yyyy-MM-dd");
+    // format on is converting filters.mappedOn: 2024-05-09 to searchParameters.mo: 2024-05-08
+    (searchParameters.mo = filters.mappedOn), "yyyy-MM-dd";
   }
 
   if (filters.id) {
@@ -344,7 +346,7 @@ export const generateSearchParametersString = (
   }
 
   searchParameters.invf = invf.join(",");
-
+  
   return searchParameters;
 };
 
