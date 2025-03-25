@@ -40,7 +40,8 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
           cluster.bundleId && this.props.initialBundle?.bundleId !== cluster.bundleId;
 
         const bundleConflict = Boolean(
-          (clusterId &&
+          (this.props.task &&
+            clusterId &&
             this.props.task &&
             ![0, 3, 6].includes(clusterStatus) &&
             !this.props.taskBundle?.taskIds?.includes(clusterId) &&

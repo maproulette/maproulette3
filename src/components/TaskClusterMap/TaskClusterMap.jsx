@@ -14,20 +14,20 @@ import {
   useMap,
 } from "react-leaflet";
 import { toLatLngBounds } from "../../services/MapBounds/MapBounds";
-import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
 import { TaskPriorityColors } from "../../services/Task/TaskPriority/TaskPriority";
+import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
+import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import SearchContent from "../EnhancedMap/SearchControl/SearchContent";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import WithIntersectingOverlays from "../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import { LegendToggleControl } from "./LegendToggleControl";
+import MapControlsDrawer from "./MapControlsDrawer";
 import MapMarkers from "./MapMarkers";
 import messages from "./Messages";
 import ZoomInMessage from "./ZoomInMessage";
-import MapControlsDrawer from "./MapControlsDrawer";
-import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
-import { LegendToggleControl } from "./LegendToggleControl";
-import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import "./TaskClusterMap.scss";
 
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
@@ -207,13 +207,12 @@ export const TaskClusterMap = (props) => {
           selectTasksInLayers={selectTasksInLayers}
           selectClustersInLayers={selectClustersInLayers}
           deselectClustersInLayers={deselectClustersInLayers}
-          onLassoClear={
-            props.showAsClusters ? props.resetSelectedClusters : props.resetSelectedTasks
-          }
+          onLassoClear={props.resetSelectedClusters || props.resetSelectedTasks}
           onLassoSelection={props.showAsClusters ? selectClustersInLayers : selectTasksInLayers}
           onLassoDeselection={
             props.showAsClusters ? deselectClustersInLayers : deselectTasksInLayers
           }
+          onSelectAllInView={props.onSelectAllInView}
           {...props}
         />
         <ResizeMap />

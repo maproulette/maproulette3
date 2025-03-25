@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useMap } from "react-leaflet";
-import classNames from "classnames";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import "leaflet-lasso/dist/leaflet-lasso.esm";
+import L from "leaflet";
 import _compact from "lodash/compact";
 import _map from "lodash/map";
-import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
-import L from "leaflet";
+import LayerToggle from "../EnhancedMap/LayerToggle/LayerToggle";
 
 export const CLUSTER_POINTS = 25;
 export const UNCLUSTER_THRESHOLD = 1000;
@@ -100,14 +99,6 @@ const MapControlsDrawer = (props) => {
     }
   };
 
-  // Handle layer toggle (simulate a click on the leaflet layers control)
-  const handleLayerToggle = () => {
-    const layerControl = document.querySelector(".leaflet-control-layers");
-    if (layerControl) {
-      layerControl.click();
-    }
-  };
-
   // Handle select all in view
   const handleSelectAllInViewClick = () => {
     if (!map || !map._layers) return;
@@ -136,18 +127,13 @@ const MapControlsDrawer = (props) => {
 
   // Determine if cluster lasso controls should be shown
   const shouldShowClusterLassoControls =
-    props.showClusterLasso &&
-    props.onBulkClusterSelection &&
-    !props.mapZoomedOut &&
-    props.showAsClusters;
+    props.showClusterLasso && props.onBulkClusterSelection && !props.mapZoomedOut;
 
   // Determine if task lasso controls should be shown
   const shouldShowTaskLassoControls =
     props.showLasso &&
     props.onBulkTaskSelection &&
-    (!props.showAsClusters ||
-      (!props.showClusterLasso && props.totalTaskCount <= CLUSTER_POINTS)) &&
-    !props.mapZoomedOut;
+    (!props.showAsClusters || (!props.showClusterLasso && props.totalTaskCount <= CLUSTER_POINTS));
 
   return (
     <>
@@ -173,16 +159,8 @@ const MapControlsDrawer = (props) => {
             <div className="control-group">
               {/* Layer Toggle Control */}
               <div className="control-item">
-                <button
-                  className="drawer-control-button"
-                  onClick={handleLayerToggle}
-                  title="Toggle Map Layers"
-                  aria-label="Toggle Map Layers"
-                >
-                  <SvgSymbol sym="layers-icon" viewBox="0 0 20 20" className="control-icon" />
-                </button>
+                <LayerToggle {...props} />
               </div>
-
               {/* Zoom Controls */}
               <div className="control-item">
                 <button
