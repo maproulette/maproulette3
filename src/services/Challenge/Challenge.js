@@ -985,6 +985,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "limitReviewTags",
           "taskStyles",
           "requireConfirmation",
+          "requireRejectReason",
           "requiresLocal",
           "reviewSetting",
           "taskWidgetLayout",

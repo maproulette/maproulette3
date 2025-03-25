@@ -194,6 +194,7 @@ export class TaskConfirmationModal extends Component {
       : !!this.props.task.parent?.limitReviewTags;
 
     const TasksNearby = reviewConfirmation ? TaskReviewNearbyList : TaskNearbyList;
+    const errorTagsRequired = ERROR_TAG_STATUSES.includes(this.props.status) && ((_isEmpty(this.props.errorTags) || this.props.errorTags.every(tag => tag === -1)) && this.props.challenge?.requireRejectReason);
     const disabled = this.props.disabled || this.props.isCompleting;
 
     return (
@@ -388,6 +389,7 @@ export class TaskConfirmationModal extends Component {
                         errorTags={this.props.errorTags}
                         addErrorTag={this.props.addErrorTag}
                         removeErrorTag={this.props.removeErrorTag}
+                        required={this.props.challenge?.requireRejectReason}
                       />
                     )}
                   {this.props.status !== TaskStatus.skipped &&
@@ -418,9 +420,11 @@ export class TaskConfirmationModal extends Component {
                     </button>
 
                     <button
-                      className="mr-button mr-px-8"
+                      className={classNames("mr-button mr-px-8", {
+                        "mr-opacity-50": disabled || errorTagsRequired
+                      })}
                       onClick={() => this.props.onConfirm(this.currentFilters())}
-                      disabled={disabled}
+                      disabled={disabled || errorTagsRequired}
                     >
                       {this.props.isCompleting ? (
                         <BusySpinner inline />
