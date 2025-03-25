@@ -9,18 +9,13 @@ const useErrorTagOptions = () => {
   );
 
   const toggleKeywordStatus = async (keywordId) => {
-    const response = await new Endpoint(
-      api.keywords.toggleStatus,
-      {
-        variables: { id: keywordId }
-      }
-    ).execute();
+    const response = await new Endpoint(api.keywords.toggleStatus, {
+      variables: { id: keywordId },
+    }).execute();
 
     if (response) {
       queryClient.setQueryData("errorTags", (oldData) => {
-        return oldData.map(tag => 
-          tag.id === keywordId ? response : tag
-        );
+        return oldData.map((tag) => (tag.id === keywordId ? response : tag));
       });
     }
 
@@ -28,13 +23,9 @@ const useErrorTagOptions = () => {
   };
 
   const addKeyword = async (data) => {
-    console.log(data)
-    const response = await new Endpoint(
-      api.keywords.add,
-      {
-        json: { ...data, tagType: "error", "active": true }
-      }
-    ).execute();
+    const response = await new Endpoint(api.keywords.add, {
+      json: { ...data, tagType: "error", active: true },
+    }).execute();
 
     if (response) {
       queryClient.setQueryData("errorTags", (oldData) => {
@@ -48,7 +39,7 @@ const useErrorTagOptions = () => {
   return {
     ...query,
     toggleKeywordStatus,
-    addKeyword
+    addKeyword,
   };
 };
 

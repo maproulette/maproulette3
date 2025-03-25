@@ -1,18 +1,18 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import useErrorTagOptions from "../../hooks/UseErrorTagOptions";
-import BusySpinner from "../BusySpinner/BusySpinner";
 import AsManager from "../../interactions/User/AsManager";
-import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import SignIn from "../../pages/SignIn/SignIn";
+import BusySpinner from "../BusySpinner/BusySpinner";
+import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import Modal from "../Modal/Modal";
 
 const ErrorTagManager = (props) => {
   const { data: errorTags, isLoading, toggleKeywordStatus, addKeyword } = useErrorTagOptions();
   const manager = AsManager(props.user);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newTagName, setNewTagName] = useState('');
-  const [newTagDescription, setNewTagDescription] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [newTagName, setNewTagName] = useState("");
+  const [newTagDescription, setNewTagDescription] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   if (!manager.isLoggedIn()) {
     return props.checkingLoginStatus ? (
@@ -28,15 +28,15 @@ const ErrorTagManager = (props) => {
     return <div>You are not a super admin</div>;
   }
 
-  const filteredTags = errorTags?.filter(tag => 
-    tag.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredTags = errorTags?.filter((tag) =>
+    tag.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleAddKeyword = async () => {
-    await addKeyword({ name: newTagName, description: newTagDescription })
+    await addKeyword({ name: newTagName, description: newTagDescription });
     setShowCreateModal(false);
-    setNewTagName('');
-  }
+    setNewTagName("");
+  };
 
   return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse">
@@ -77,28 +77,31 @@ const ErrorTagManager = (props) => {
               </tr>
             </thead>
             <tbody>
-              {filteredTags?.map(tag => (
-                <tr key={tag.id} className="mr-border-b mr-border-white-10 hover:mr-bg-black-10 mr-transition-colors">
+              {filteredTags?.map((tag) => (
+                <tr
+                  key={tag.id}
+                  className="mr-border-b mr-border-white-10 hover:mr-bg-black-10 mr-transition-colors"
+                >
                   <td className="mr-p-4">{tag.id}</td>
                   <td className="mr-p-4 mr-font-medium">{tag.name}</td>
                   <td className="mr-p-4">{tag.description}</td>
                   <td className="mr-p-4">
-                    <span className={`mr-px-2 mr-py-1 mr-rounded-full mr-text-sm ${
-                      tag.active ? 'mr-text-green' : 'mr-text-red'
-                    }`}>
-                      {tag.active ? 'Active' : 'Disabled'}
+                    <span
+                      className={`mr-px-2 mr-py-1 mr-rounded-full mr-text-sm ${
+                        tag.active ? "mr-text-green" : "mr-text-red"
+                      }`}
+                    >
+                      {tag.active ? "Active" : "Disabled"}
                     </span>
                   </td>
                   <td className="mr-p-4">
                     <button
                       onClick={() => toggleKeywordStatus(tag.id)}
                       className={`mr-button ${
-                        tag.active 
-                          ? 'mr-button--white' 
-                          : 'mr-button--green'
+                        tag.active ? "mr-button--white" : "mr-button--green"
                       } mr-px-4 mr-py-2`}
                     >
-                      {tag.active ? 'Disable' : 'Enable'}
+                      {tag.active ? "Disable" : "Enable"}
                     </button>
                   </td>
                 </tr>
@@ -109,11 +112,7 @@ const ErrorTagManager = (props) => {
       )}
 
       {showCreateModal && (
-        <Modal
-          isActive={showCreateModal}
-          onClose={() => setShowCreateModal(false)}
-          narrow
-        >
+        <Modal isActive={showCreateModal} onClose={() => setShowCreateModal(false)} narrow>
           <div className="mr-p-4">
             <h3 className="mr-text-white mr-text-xl mr-mb-4">Create New Error Tag</h3>
             <div className="mr-mb-4">
@@ -156,6 +155,6 @@ const ErrorTagManager = (props) => {
       )}
     </div>
   );
-}
+};
 
 export default WithCurrentUser(ErrorTagManager);

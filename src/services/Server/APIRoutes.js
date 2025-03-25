@@ -148,7 +148,7 @@ const apiRoutes = (factory) => {
     keywords: {
       find: factory.get("/keywords"),
       toggleStatus: factory.put("/keyword/:id/toggle"),
-      add: factory.post("/keyword")
+      add: factory.post("/keyword"),
     },
     users: {
       single: factory.get("/user/:id"),

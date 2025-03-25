@@ -194,7 +194,10 @@ export class TaskConfirmationModal extends Component {
       : !!this.props.task.parent?.limitReviewTags;
 
     const TasksNearby = reviewConfirmation ? TaskReviewNearbyList : TaskNearbyList;
-    const errorTagsRequired = ERROR_TAG_STATUSES.includes(this.props.status) && ((_isEmpty(this.props.errorTags) || this.props.errorTags.every(tag => tag === -1)) && this.props.challenge?.requireRejectReason);
+    const errorTagsRequired =
+      ERROR_TAG_STATUSES.includes(this.props.status) &&
+      (_isEmpty(this.props.errorTags) || this.props.errorTags.every((tag) => tag === -1)) &&
+      this.props.challenge?.requireRejectReason;
     const disabled = this.props.disabled || this.props.isCompleting;
 
     return (
@@ -421,7 +424,7 @@ export class TaskConfirmationModal extends Component {
 
                     <button
                       className={classNames("mr-button mr-px-8", {
-                        "mr-opacity-50": disabled || errorTagsRequired
+                        "mr-opacity-50": disabled || errorTagsRequired,
                       })}
                       onClick={() => this.props.onConfirm(this.currentFilters())}
                       disabled={disabled || errorTagsRequired}

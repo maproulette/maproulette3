@@ -1,8 +1,8 @@
+import classNames from "classnames";
 import { FormattedMessage } from "react-intl";
 import useErrorTagOptions from "../../hooks/UseErrorTagOptions";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
-import classNames from "classnames";
 
 const SelectOptions = (props) => {
   const defaultOption = [<option key="-1" value="-1" />];
@@ -76,7 +76,8 @@ const ErrorTagDropdown = (props) => {
         <div
           className={classNames("mr-underline mr-cursor-pointer", {
             "mr-text-red": props.required && (!props.errorTags || props.errorTags.length === 0),
-            "mr-text-green-light": !props.required || (props.errorTags && props.errorTags.length > 0)
+            "mr-text-green-light":
+              !props.required || (props.errorTags && props.errorTags.length > 0),
           })}
           onClick={props.addErrorTag}
         >
