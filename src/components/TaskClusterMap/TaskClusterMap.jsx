@@ -25,6 +25,9 @@ import MapMarkers from "./MapMarkers";
 import messages from "./Messages";
 import ZoomInMessage from "./ZoomInMessage";
 import MapControlsDrawer from "./MapControlsDrawer";
+import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
+import { LegendToggleControl } from "./LegendToggleControl";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import "./TaskClusterMap.scss";
 
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
@@ -59,6 +62,7 @@ export const TaskClusterMap = (props) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
   const [drawerOpen, setDrawerOpen] = useState(true);
+  const [legendOpen, setLegendOpen] = useState(false);
 
   let overlayLayers = buildLayerSources(
     props.visibleOverlays,
@@ -305,6 +309,8 @@ export const TaskClusterMap = (props) => {
           currentZoom={currentZoom}
           setCurrentZoom={setCurrentZoom}
         />
+
+        <LegendToggleControl />
       </MapContainer>
     </div>
   );

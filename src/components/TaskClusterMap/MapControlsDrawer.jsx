@@ -29,10 +29,8 @@ const MapControlsDrawer = (props) => {
 
       // Set up lasso finished event handler
       const handleLassoFinished = (event) => {
-        // Access the current deselecting state directly from the ref
-        const currentDeselecting = deselecting;
-
-        if (currentDeselecting) {
+        // Use the latest deselecting value
+        if (deselecting) {
           if (props.showAsClusters && props.onBulkClusterDeselection) {
             props.deselectClustersInLayers(event.layers);
           } else if (props.onBulkTaskDeselection) {
@@ -52,7 +50,6 @@ const MapControlsDrawer = (props) => {
       return () => {
         // Clean up event listener when component unmounts
         map.off("lasso.finished", handleLassoFinished);
-        // Also clean up the lasso instance
         if (lassoInstance && lassoInstance.disable) {
           lassoInstance.disable();
         }
@@ -103,19 +100,12 @@ const MapControlsDrawer = (props) => {
     }
   };
 
-  // Handle layer toggle
+  // Handle layer toggle (simulate a click on the leaflet layers control)
   const handleLayerToggle = () => {
-    // This would typically open a layer control panel
     const layerControl = document.querySelector(".leaflet-control-layers");
     if (layerControl) {
-      // Simulate a click on the layer control
       layerControl.click();
     }
-  };
-
-  // Toggle legend
-  const toggleLegend = () => {
-    setLegendOpen(!legendOpen);
   };
 
   // Handle select all in view
@@ -124,7 +114,6 @@ const MapControlsDrawer = (props) => {
     const taskIds = _compact(
       _map(map._layers, (layer) => layer?.options?.icon?.options?.taskData?.taskId),
     );
-    // Disallow use if cannot populate taskIds from map
     if (!taskIds.length) return;
     if (props.onSelectAllInView) {
       props.onSelectAllInView(taskIds);
@@ -145,36 +134,6 @@ const MapControlsDrawer = (props) => {
     props.onLassoInteraction && props.onLassoInteraction();
   };
 
-  // Define all possible status items for the legend
-  const legendItems = [
-    { id: TaskStatus.created, color: TaskStatusColors[TaskStatus.created], status: "Created" },
-    { id: TaskStatus.fixed, color: TaskStatusColors[TaskStatus.fixed], status: "Fixed" },
-    {
-      id: TaskStatus.falsePositive,
-      color: TaskStatusColors[TaskStatus.falsePositive],
-      status: "Not an Issue",
-    },
-    { id: TaskStatus.skipped, color: TaskStatusColors[TaskStatus.skipped], status: "Skipped" },
-    { id: TaskStatus.deleted, color: TaskStatusColors[TaskStatus.deleted], status: "Deleted" },
-    {
-      id: TaskStatus.alreadyFixed,
-      color: TaskStatusColors[TaskStatus.alreadyFixed],
-      status: "Already Fixed",
-    },
-    {
-      id: TaskStatus.tooHard,
-      color: TaskStatusColors[TaskStatus.tooHard],
-      status: "Can't Complete",
-    },
-    { id: TaskStatus.disabled, color: TaskStatusColors[TaskStatus.disabled], status: "Disabled" },
-  ];
-
-  // Filter legend items based on active filters if provided
-  const filteredLegendItems =
-    props.includeTaskStatuses && props.includeTaskStatuses.length > 0
-      ? legendItems.filter((item) => props.includeTaskStatuses.includes(item.id))
-      : legendItems;
-
   // Determine if cluster lasso controls should be shown
   const shouldShowClusterLassoControls =
     props.showClusterLasso &&
@@ -191,252 +150,191 @@ const MapControlsDrawer = (props) => {
     !props.mapZoomedOut;
 
   return (
-    <div className={classNames("map-controls-drawer", { open: props.isOpen })}>
-      {/* Toggle button with improved accessibility */}
-      <button
-        className="map-drawer-toggle"
-        onClick={() => props.handleToggleDrawer(!props.isOpen)}
-        aria-label={props.isOpen ? "Close controls drawer" : "Open controls drawer"}
-        title={props.isOpen ? "Close controls" : "Open controls"}
+    <>
+      {/* Main Controls Drawer - Remains on the right */}
+      <div
+        className={`map-controls-drawer ${props.isOpen ? "open" : ""}`}
+        onDoubleClick={(e) => e.stopPropagation()}
       >
-        {props.isOpen ? "▶" : "◀"}
-      </button>
+        {/* Toggle button with improved accessibility */}
+        <button
+          className="map-drawer-toggle"
+          onClick={() => props.handleToggleDrawer(!props.isOpen)}
+          aria-label={props.isOpen ? "Close controls drawer" : "Open controls drawer"}
+          title={props.isOpen ? "Close controls" : "Open controls"}
+        >
+          <div className="mr-text-black">{props.isOpen ? "▶" : "◀"}</div>
+        </button>
 
-      {/* Drawer content */}
-      <div className="map-drawer-content">
-        <div className="drawer-controls-container">
-          {/* Map Navigation Controls */}
-          <div className="control-group">
-            {/* Layer Toggle Control */}
-            <div className="control-item">
-              <button
-                className="drawer-control-button"
-                onClick={handleLayerToggle}
-                title="Toggle Map Layers"
-                aria-label="Toggle Map Layers"
-              >
-                <SvgSymbol sym="layers-icon" viewBox="0 0 20 20" className="control-icon" />
-              </button>
-            </div>
+        {/* Drawer content */}
+        <div className="map-drawer-content" onDoubleClick={(e) => e.stopPropagation()}>
+          <div className="drawer-controls-container" onDoubleClick={(e) => e.stopPropagation()}>
+            {/* Map Navigation Controls */}
+            <div className="control-group">
+              {/* Layer Toggle Control */}
+              <div className="control-item">
+                <button
+                  className="drawer-control-button"
+                  onClick={handleLayerToggle}
+                  title="Toggle Map Layers"
+                  aria-label="Toggle Map Layers"
+                >
+                  <SvgSymbol sym="layers-icon" viewBox="0 0 20 20" className="control-icon" />
+                </button>
+              </div>
 
-            {/* Legend Control */}
-            <div className="control-item">
-              <button
-                className={classNames("drawer-control-button", { active: legendOpen })}
-                onClick={toggleLegend}
-                title="Toggle Legend"
-                aria-label="Toggle Legend"
-                aria-pressed={legendOpen}
-              >
-                <SvgSymbol sym="info-icon" viewBox="0 0 20 20" className="control-icon" />
-              </button>
+              {/* Zoom Controls */}
+              <div className="control-item">
+                <button
+                  className="drawer-control-button zoom-button"
+                  onClick={handleZoomIn}
+                  title="Zoom In"
+                  aria-label="Zoom In"
+                >
+                  <SvgSymbol sym="plus-icon" viewBox="0 0 20 20" className="control-icon" />
+                </button>
+              </div>
+              <div className="control-item">
+                <button
+                  className="drawer-control-button zoom-button"
+                  onClick={handleZoomOut}
+                  title="Zoom Out"
+                  aria-label="Zoom Out"
+                >
+                  <SvgSymbol sym="minus-icon" viewBox="0 0 20 20" className="control-icon" />
+                </button>
+              </div>
 
-              {/* Legend Panel */}
-              {legendOpen && (
-                <div className="legend-panel">
-                  <h3 className="legend-title">Status Legend</h3>
-                  <ul className="legend-list">
-                    {filteredLegendItems.map((item, index) => (
-                      <li key={index} className="legend-item">
-                        <span
-                          className="legend-color-swatch"
-                          style={{ backgroundColor: item.color }}
-                        ></span>
-                        <span className="legend-label">{item.status}</span>
-                      </li>
-                    ))}
-                  </ul>
+              {props.showFitWorld && (
+                <div className="control-item">
+                  <button
+                    className="drawer-control-button"
+                    onClick={handleFitWorld}
+                    title="Fit World View"
+                    aria-label="Fit World View"
+                  >
+                    <SvgSymbol sym="globe-icon" viewBox="0 0 20 20" className="control-icon" />
+                  </button>
+                </div>
+              )}
+
+              {props.fitbBoundsControl && (
+                <div className="control-item">
+                  <button
+                    className="drawer-control-button"
+                    onClick={handleFitBounds}
+                    title="Fit to Task Bounds"
+                    aria-label="Fit to Task Bounds"
+                  >
+                    <SvgSymbol sym="target-icon" viewBox="0 0 20 20" className="control-icon" />
+                  </button>
                 </div>
               )}
             </div>
 
-            {/* Zoom Controls */}
-            <div className="control-item">
-              <button
-                className="drawer-control-button zoom-button"
-                onClick={handleZoomIn}
-                title="Zoom In"
-                aria-label="Zoom In"
-              >
-                <SvgSymbol sym="plus-icon" viewBox="0 0 20 20" className="control-icon" />
-              </button>
-            </div>
-            <div className="control-item">
-              <button
-                className="drawer-control-button zoom-button"
-                onClick={handleZoomOut}
-                title="Zoom Out"
-                aria-label="Zoom Out"
-              >
-                <SvgSymbol sym="minus-icon" viewBox="0 0 20 20" className="control-icon" />
-              </button>
-            </div>
-
-            {props.showFitWorld && (
-              <div className="control-item">
-                <button
-                  className="drawer-control-button"
-                  onClick={handleFitWorld}
-                  title="Fit World View"
-                  aria-label="Fit World View"
-                >
-                  <SvgSymbol sym="globe-icon" viewBox="0 0 20 20" className="control-icon" />
-                </button>
+            {/* Search Control */}
+            {props.showSearchControl && (
+              <div className="control-group">
+                <div className="control-item">
+                  <button
+                    className="drawer-control-button"
+                    onClick={handleSearch}
+                    title="Search"
+                    aria-label="Search"
+                  >
+                    <SvgSymbol sym="search-icon" viewBox="0 0 20 20" className="control-icon" />
+                  </button>
+                </div>
               </div>
             )}
 
-            {props.fitbBoundsControl && (
-              <div className="control-item">
-                <button
-                  className="drawer-control-button"
-                  onClick={handleFitBounds}
-                  title="Fit to Task Bounds"
-                  aria-label="Fit to Task Bounds"
-                >
-                  <SvgSymbol sym="target-icon" viewBox="0 0 20 20" className="control-icon" />
-                </button>
+            {/* Lasso Selection Controls */}
+            {(shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
+              <div className="control-group lasso-controls">
+                {props.onSelectAllInView && (
+                  <div className="control-item">
+                    <button
+                      className="drawer-control-button"
+                      onClick={handleSelectAllInViewClick}
+                      title="Select All In View"
+                      aria-label="Select All In View"
+                    >
+                      <SvgSymbol
+                        sym="check-circled-icon"
+                        className="control-icon"
+                        viewBox="0 0 512 512"
+                      />
+                    </button>
+                  </div>
+                )}
+
+                {/* Lasso Selection Button */}
+                {lasso && (
+                  <div className="control-item">
+                    <button
+                      onClick={handleLassoSelection}
+                      className="drawer-control-button"
+                      title="Lasso Select"
+                      aria-label="Lasso Select"
+                    >
+                      <SvgSymbol
+                        sym="lasso-add-icon"
+                        className="control-icon"
+                        viewBox="0 0 512 512"
+                      />
+                    </button>
+                  </div>
+                )}
+
+                {/* Lasso Deselection Button */}
+                {lasso && (shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
+                  <div className="control-item">
+                    <button
+                      onClick={handleLassoDeselection}
+                      className="drawer-control-button"
+                      title="Lasso Deselect"
+                      aria-label="Lasso Deselect"
+                    >
+                      <SvgSymbol
+                        sym="lasso-remove-icon"
+                        className="control-icon"
+                        viewBox="0 0 512 512"
+                      />
+                    </button>
+                  </div>
+                )}
+
+                {/* Clear Selection Button */}
+                {props.onLassoClear && (
+                  <div className="control-item">
+                    <button
+                      onClick={() => {
+                        props.onLassoClear();
+                        props.onLassoInteraction && props.onLassoInteraction();
+                      }}
+                      className="drawer-control-button"
+                      title="Clear Selection"
+                      aria-label="Clear Selection"
+                    >
+                      <SvgSymbol sym="cross-icon" className="control-icon" viewBox="0 0 20 20" />
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
-
-          {/* Search Control */}
-          {props.showSearchControl && (
-            <div className="control-group">
-              <div className="control-item">
-                <button
-                  className="drawer-control-button"
-                  onClick={handleSearch}
-                  title="Search"
-                  aria-label="Search"
-                >
-                  <SvgSymbol sym="search-icon" viewBox="0 0 20 20" className="control-icon" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Lasso Selection Controls */}
-          {(shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
-            <div className="control-group lasso-controls">
-              {props.onSelectAllInView && (
-                <div className="control-item">
-                  <button
-                    className="drawer-control-button"
-                    onClick={handleSelectAllInViewClick}
-                    title="Select All In View"
-                    aria-label="Select All In View"
-                  >
-                    <SvgSymbol
-                      sym="check-circled-icon"
-                      className="control-icon"
-                      viewBox="0 0 512 512"
-                    />
-                  </button>
-                </div>
-              )}
-
-              {/* Lasso Selection Button */}
-              {lasso && (
-                <div className="control-item">
-                  <button
-                    onClick={handleLassoSelection}
-                    className="drawer-control-button"
-                    title="Lasso Select"
-                    aria-label="Lasso Select"
-                  >
-                    <SvgSymbol
-                      sym="lasso-add-icon"
-                      className="control-icon"
-                      viewBox="0 0 512 512"
-                    />
-                  </button>
-                </div>
-              )}
-
-              {/* Lasso Deselection Button */}
-              {lasso && (shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
-                <div className="control-item">
-                  <button
-                    onClick={handleLassoDeselection}
-                    className="drawer-control-button"
-                    title="Lasso Deselect"
-                    aria-label="Lasso Deselect"
-                  >
-                    <SvgSymbol
-                      sym="lasso-remove-icon"
-                      className="control-icon"
-                      viewBox="0 0 512 512"
-                    />
-                  </button>
-                </div>
-              )}
-
-              {/* Clear Selection Button */}
-              {props.onLassoClear && (
-                <div className="control-item">
-                  <button
-                    onClick={() => {
-                      props.onLassoClear();
-                      props.onLassoInteraction && props.onLassoInteraction();
-                    }}
-                    className="drawer-control-button"
-                    title="Clear Selection"
-                    aria-label="Clear Selection"
-                  >
-                    <SvgSymbol sym="cross-icon" className="control-icon" viewBox="0 0 20 20" />
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Add CSS for the legend panel */}
       <style jsx>{`
-        .legend-panel {
+        .map-controls-drawer {
           position: absolute;
-          top: 100%;
-          left: 0;
+          top: 0px;
+          right: 0px;
           z-index: 1000;
-          width: 150px;
-          background-color: rgba(0, 0, 0, 0.7);
-          color: white;
-          border-radius: 4px;
-          padding: 10px;
-          margin-top: 5px;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        .legend-title {
-          font-size: 12px;
-          font-weight: bold;
-          margin: 0 0 8px 0;
-        }
-
-        .legend-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
-
-        .legend-item {
-          display: flex;
-          align-items: center;
-          margin-bottom: 5px;
-          font-size: 11px;
-        }
-
-        .legend-color-swatch {
-          display: inline-block;
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          margin-right: 5px;
-        }
-
-        .legend-label {
-          flex: 1;
+          background: rgba(0, 0, 0, 0.5);
+          padding: 5px;
+          transition: transform 0.3s ease-in-out;
         }
 
         /* Add styles for lasso icons */
@@ -464,7 +362,7 @@ const MapControlsDrawer = (props) => {
           border-radius: 50%;
         }
       `}</style>
-    </div>
+    </>
   );
 };
 

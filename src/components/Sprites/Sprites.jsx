@@ -293,6 +293,15 @@ export default function () {
           </g>
         </symbol>
 
+        <symbol id="legend-icon" viewBox="0 0 20 20">
+          {/* Top circle */}
+          <circle cx="10" cy="4" r="3.5" fill="#959DFF" />
+          {/* Bottom left circle */}
+          <circle cx="5" cy="14" r="3.5" fill="#E87CE0" />
+          {/* Bottom right circle */}
+          <circle cx="15" cy="14" r="3.5" fill="#FF5E63" />
+        </symbol>
+
         <symbol id="icon-menu" viewBox="0 0 20 20">
           <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
         </symbol>
