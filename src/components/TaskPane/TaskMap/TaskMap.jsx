@@ -21,7 +21,6 @@ import {
   LayerGroup,
   MapContainer,
   Pane,
-  ZoomControl,
   useMap,
   useMapEvents,
 } from "react-leaflet";
@@ -37,9 +36,7 @@ import {
 } from "../../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import DirectionalIndicationMarker from "../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker";
-import FitBoundsControl from "../../EnhancedMap/FitBoundsControl/FitBoundsControl";
 import ImageMarkerLayer from "../../EnhancedMap/ImageMarkerLayer/ImageMarkerLayer";
-import LayerToggle from "../../EnhancedMap/LayerToggle/LayerToggle";
 import MapAnimator from "../../EnhancedMap/MapAnimator/MapAnimator";
 import OSMDataLayer from "../../EnhancedMap/OSMDataLayer/OSMDataLayer";
 import PropertyList from "../../EnhancedMap/PropertyList/PropertyList";
