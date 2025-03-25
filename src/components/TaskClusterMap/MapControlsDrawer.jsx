@@ -183,6 +183,18 @@ const MapControlsDrawer = (props) => {
                 </button>
               </div>
 
+              {props.fitBoundsControl && (
+                <div className="control-item">
+                  <button
+                    className="drawer-control-button"
+                    onClick={handleFitBounds}
+                    title="Fit to Task Bounds"
+                    aria-label="Fit to Task Bounds"
+                  >
+                    <SvgSymbol sym="target-icon" viewBox="0 0 20 20" className="control-icon" />
+                  </button>
+                </div>
+              )}
               {props.showFitWorld && (
                 <div className="control-item">
                   <button
@@ -192,19 +204,6 @@ const MapControlsDrawer = (props) => {
                     aria-label="Fit World View"
                   >
                     <SvgSymbol sym="globe-icon" viewBox="0 0 20 20" className="control-icon" />
-                  </button>
-                </div>
-              )}
-
-              {props.fitbBoundsControl && (
-                <div className="control-item">
-                  <button
-                    className="drawer-control-button"
-                    onClick={handleFitBounds}
-                    title="Fit to Task Bounds"
-                    aria-label="Fit to Task Bounds"
-                  >
-                    <SvgSymbol sym="target-icon" viewBox="0 0 20 20" className="control-icon" />
                   </button>
                 </div>
               )}

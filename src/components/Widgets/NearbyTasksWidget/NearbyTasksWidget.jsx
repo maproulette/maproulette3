@@ -260,7 +260,8 @@ const ActiveBundle = (props) => {
       showMarkerPopup={showMarkerPopup}
       centerBounds={bundleCenter}
       initialBounds={bundleCenter}
-      fitbBoundsControl
+      fitBoundsControl
+      showSelectMarkersInView
       selectedTasks={props.selectedTasks}
     />
   );
@@ -381,7 +382,7 @@ const BuildBundle = (props) => {
       taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
       boundingBox={props.criteria?.boundingBox}
       initialBounds={toLatLngBounds(props.criteria?.boundingBox || [])}
-      fitbBoundsControl
+      fitBoundsControl
       showSelectMarkersInView
     />
   );

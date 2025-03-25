@@ -62,6 +62,9 @@ import {
   orderedFeatureLayers,
 } from "./helperFunctions";
 import "./TaskMap.scss";
+import bbox from "@turf/bbox";
+import { toLatLngBounds } from "../../../services/MapBounds/MapBounds";
+import MapControlsDrawer from "../../TaskClusterMap/MapControlsDrawer";
 
 const shortcutGroup = "layers";
 
@@ -86,6 +89,7 @@ export const TaskMapContent = (props) => {
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null);
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null);
   const [directionalityIndicators, setDirectionalityIndicators] = useState({});
+  const [showMapControlsDrawer, setShowMapControlsDrawer] = useState(true);
 
   const taskFeatures = () => {
     if ((props.taskBundle?.tasks?.length ?? 0) > 0) {
@@ -650,8 +654,9 @@ export const TaskMapContent = (props) => {
         "full-screen-map": props.isMobile,
       })}
     >
-      <LayerToggle
-        {...props}
+      <MapControlsDrawer
+        isOpen={showMapControlsDrawer}
+        handleToggleDrawer={() => setShowMapControlsDrawer(!showMapControlsDrawer)}
         showTaskFeatures={showTaskFeatures}
         toggleTaskFeatures={toggleTaskFeatureVisibility}
         showOSMData={showOSMData}
@@ -668,9 +673,22 @@ export const TaskMapContent = (props) => {
         showOpenStreetCam={props.showOpenStreetCamLayer}
         openStreetCamCount={props.openStreetCamImages?.length ?? 0}
         overlayOrder={props.getUserAppSetting(props.user, "mapOverlayOrder")}
+        centerBounds={toLatLngBounds(
+          bbox({
+            type: "FeatureCollection",
+            features: _map(features, (feature) => ({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [feature.geometry.coordinates[0], feature.geometry.coordinates[1]],
+              },
+            })),
+          }),
+        )}
+        fitBoundsControl={true}
+        showFitWorld={true}
+        {...props}
       />
-      <ZoomControl position="topright" />
-      <FitBoundsControl features={features} />
       <SourcedTileLayer maxZoom={maxZoom} {...props} />
       {overlayLayers().map((layer, index) => (
         <Pane

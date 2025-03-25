@@ -212,7 +212,7 @@ export const TaskClusterMap = (props) => {
           onLassoDeselection={
             props.showAsClusters ? deselectClustersInLayers : deselectTasksInLayers
           }
-          onSelectAllInView={props.onSelectAllInView}
+          onSelectAllInView={props.onSelectAllInView || props.showSelectMarkersInView}
           {...props}
         />
         <ResizeMap />
