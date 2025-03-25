@@ -199,18 +199,28 @@
     transition: all 0.2s ease;
     
     &:hover {
-      background-color: #f0f0f0;
+      background-color: #7EBC89;
+      border-color: #5a9c66;
+      
+      .control-icon {
+        fill: white;
+      }
     }
     
     &.active {
-      background-color: #e0e0e0;
-      border-color: #999;
+      background-color: #7EBC89;
+      border-color: #5a9c66;
+      
+      .control-icon {
+        fill: white;
+      }
     }
     
     .control-icon {
       width: 15px;
       height: 15px;
       fill: #555;
+      transition: fill 0.2s ease;
     }
   }
 }

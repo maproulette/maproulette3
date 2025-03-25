@@ -18,54 +18,7 @@ const MapControlsDrawer = (props) => {
   const map = useMap();
   const [lasso, setLasso] = useState(null);
   const [deselecting, setDeselecting] = useState(false);
-
-  // Initialize lasso when map is available
-  useEffect(() => {
-    if (map) {
-      const lassoInstance = L.lasso(map, {});
-      setLasso(lassoInstance);
-
-      // Set up lasso finished event handler
-      const handleLassoFinished = (event) => {
-        // Use the latest deselecting value
-        if (deselecting) {
-          if (props.showAsClusters && props.onBulkClusterDeselection) {
-            props.deselectClustersInLayers(event.layers);
-          } else if (props.onBulkTaskDeselection) {
-            props.deselectTasksInLayers(event.layers);
-          }
-        } else {
-          if (props.showAsClusters && props.onBulkClusterSelection) {
-            props.selectClustersInLayers(event.layers);
-          } else if (props.onBulkTaskSelection) {
-            props.selectTasksInLayers(event.layers);
-          }
-        }
-      };
-
-      map.on("lasso.finished", handleLassoFinished);
-
-      return () => {
-        // Clean up event listener when component unmounts
-        map.off("lasso.finished", handleLassoFinished);
-        if (lassoInstance && lassoInstance.disable) {
-          lassoInstance.disable();
-        }
-      };
-    }
-  }, [
-    map,
-    deselecting,
-    props.deselectClustersInLayers,
-    props.deselectTasksInLayers,
-    props.selectClustersInLayers,
-    props.selectTasksInLayers,
-    props.showAsClusters,
-    props.onBulkClusterDeselection,
-    props.onBulkTaskDeselection,
-    props.onBulkClusterSelection,
-    props.onBulkTaskSelection,
-  ]);
+  const [selecting, setSelecting] = useState(false);
 
   // Handle zoom in
   const handleZoomIn = () => {
@@ -113,15 +66,50 @@ const MapControlsDrawer = (props) => {
   // Handle lasso selection
   const handleLassoSelection = () => {
     setDeselecting(false);
-    lasso && lasso.toggle();
-    props.onLassoInteraction && props.onLassoInteraction();
+    setSelecting(true);
+    if (map) {
+      const lassoInstance = L.lasso(map, {});
+      setLasso(lassoInstance);
+      lassoInstance.enable();
+
+      // Set up lasso finished event handler
+      const handleLassoFinished = (event) => {
+        if (props.showAsClusters && props.onBulkClusterSelection) {
+          props.selectClustersInLayers(event.layers);
+        } else if (props.onBulkTaskSelection) {
+          props.selectTasksInLayers(event.layers);
+        }
+        setSelecting(false);
+      };
+
+      map.on("lasso.finished", handleLassoFinished);
+      props.onLassoInteraction && props.onLassoInteraction();
+    }
   };
 
   // Handle lasso deselection
   const handleLassoDeselection = () => {
     setDeselecting(true);
-    lasso && lasso.toggle();
-    props.onLassoInteraction && props.onLassoInteraction();
+    setSelecting(false);
+
+    if (map) {
+      const lassoInstance = L.lasso(map, {});
+      setLasso(lassoInstance);
+      lassoInstance.enable();
+
+      // Set up lasso finished event handler
+      const handleLassoFinished = (event) => {
+        if (props.showAsClusters && props.onBulkClusterDeselection) {
+          props.deselectClustersInLayers(event.layers);
+        } else if (props.onBulkTaskDeselection) {
+          props.deselectTasksInLayers(event.layers);
+        }
+        setDeselecting(false);
+      };
+
+      map.on("lasso.finished", handleLassoFinished);
+      props.onLassoInteraction && props.onLassoInteraction();
+    }
   };
 
   // Determine if cluster lasso controls should be shown
@@ -133,6 +121,26 @@ const MapControlsDrawer = (props) => {
     props.showLasso &&
     props.onBulkTaskSelection &&
     (!props.showAsClusters || (!props.showClusterLasso && props.totalTaskCount <= CLUSTER_POINTS));
+
+  // Determine if select all in view should be shown
+  const shouldShowSelectAllInView =
+    (props.onSelectAllInView || props.showSelectMarkersInView) && !props.mapZoomedOut;
+
+  // Initialize lasso when map is ready
+  useEffect(() => {
+    if (map && (shouldShowTaskLassoControls || shouldShowClusterLassoControls)) {
+      const lassoInstance = L.lasso(map, {});
+      setLasso(lassoInstance);
+
+      // Clean up when component unmounts
+      return () => {
+        map.off("lasso.finished");
+        if (lassoInstance && lassoInstance.disable) {
+          lassoInstance.disable();
+        }
+      };
+    }
+  }, [map, shouldShowTaskLassoControls, shouldShowClusterLassoControls]);
 
   return (
     <>
@@ -187,8 +195,8 @@ const MapControlsDrawer = (props) => {
                   <button
                     className="drawer-control-button"
                     onClick={handleFitBounds}
-                    title="Fit to Task Bounds"
-                    aria-label="Fit to Task Bounds"
+                    title="Fit to Features"
+                    aria-label="Fit to Features"
                   >
                     <SvgSymbol sym="target-icon" viewBox="0 0 20 20" className="control-icon" />
                   </button>
@@ -199,8 +207,8 @@ const MapControlsDrawer = (props) => {
                   <button
                     className="drawer-control-button"
                     onClick={handleFitWorld}
-                    title="Fit World View"
-                    aria-label="Fit World View"
+                    title="Fit World"
+                    aria-label="Fit World"
                   >
                     <SvgSymbol sym="globe-icon" viewBox="0 0 20 20" className="control-icon" />
                   </button>
@@ -227,7 +235,7 @@ const MapControlsDrawer = (props) => {
             {/* Lasso Selection Controls */}
             {(shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
               <div className="control-group lasso-controls">
-                {props.onSelectAllInView && (
+                {shouldShowSelectAllInView && (
                   <div className="control-item">
                     <button
                       className="drawer-control-button"
@@ -245,11 +253,11 @@ const MapControlsDrawer = (props) => {
                 )}
 
                 {/* Lasso Selection Button */}
-                {lasso && (
+                {(shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
                   <div className="control-item">
                     <button
                       onClick={handleLassoSelection}
-                      className="drawer-control-button"
+                      className={`drawer-control-button ${selecting ? "active" : ""}`}
                       title="Lasso Select"
                       aria-label="Lasso Select"
                     >
@@ -263,11 +271,11 @@ const MapControlsDrawer = (props) => {
                 )}
 
                 {/* Lasso Deselection Button */}
-                {lasso && (shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
+                {(shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
                   <div className="control-item">
                     <button
                       onClick={handleLassoDeselection}
-                      className="drawer-control-button"
+                      className={`drawer-control-button ${deselecting ? "active" : ""}`}
                       title="Lasso Deselect"
                       aria-label="Lasso Deselect"
                     >
@@ -281,21 +289,22 @@ const MapControlsDrawer = (props) => {
                 )}
 
                 {/* Clear Selection Button */}
-                {props.onLassoClear && (
-                  <div className="control-item">
-                    <button
-                      onClick={() => {
-                        props.onLassoClear();
-                        props.onLassoInteraction && props.onLassoInteraction();
-                      }}
-                      className="drawer-control-button"
-                      title="Clear Selection"
-                      aria-label="Clear Selection"
-                    >
-                      <SvgSymbol sym="cross-icon" className="control-icon" viewBox="0 0 20 20" />
-                    </button>
-                  </div>
-                )}
+                {props.onLassoClear &&
+                  (shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
+                    <div className="control-item">
+                      <button
+                        onClick={() => {
+                          props.onLassoClear();
+                          props.onLassoInteraction && props.onLassoInteraction();
+                        }}
+                        className="drawer-control-button"
+                        title="Clear Selection"
+                        aria-label="Clear Selection"
+                      >
+                        <SvgSymbol sym="cross-icon" className="control-icon" viewBox="0 0 20 20" />
+                      </button>
+                    </div>
+                  )}
               </div>
             )}
           </div>
