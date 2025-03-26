@@ -782,6 +782,17 @@ will not be able to make sense of it.
       "This will disable the option for users to bypass the task confirmation modal when they click 'I fixed it!'",
   },
 
+  requireRejectReasonLabel: {
+    id: "Admin.EditProject.form.requireRejectReason.label",
+    defaultMessage: "Require Reject Reason",
+  },
+
+  requireRejectReasonDescription: {
+    id: "Admin.EditProject.form.requireRejectReason.description",
+    defaultMessage:
+      "This will enforce a reviewer to include a reason for rejecting a task by making them include an error tag.",
+  },
+
   instructionsDescription: {
     id: "Admin.EditChallenge.form.instructionsDescription",
     defaultMessage: "Instructions must be longer than {minLength} characters.",
