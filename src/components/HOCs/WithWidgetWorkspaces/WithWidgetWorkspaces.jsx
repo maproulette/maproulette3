@@ -44,7 +44,40 @@ export const WithWidgetWorkspacesInternal = function (
         const configurations = this.workspaceConfigurations();
         const currentWorkspace = this.currentConfiguration(configurations);
         if (!currentWorkspace) {
-          this.setState({ defaultWorkspace: this.setupWorkspace(defaultConfiguration) });
+          const newWorkspace = this.setupWorkspace(defaultConfiguration);
+          this.setState({ defaultWorkspace: newWorkspace });
+          
+          // Save the default workspace if no configurations exist
+          if (Object.keys(configurations).length === 0) {
+            const newConfiguration = {...newWorkspace, 
+              name: workspaceName,
+              label: defaultConfiguration().label || "Default",
+              active: true
+            };
+            this.saveWorkspaceConfiguration(newConfiguration);
+          }
+        }
+      }
+    }
+    
+    componentDidUpdate(prevProps) {
+      // Handle case where user data loads after component mount
+      if (!prevProps.user && this.props.user) {
+        const configurations = this.workspaceConfigurations();
+        const currentWorkspace = this.currentConfiguration(configurations);
+        if (!currentWorkspace) {
+          const newWorkspace = this.setupWorkspace(defaultConfiguration);
+          this.setState({ defaultWorkspace: newWorkspace });
+          
+          // Save the default workspace if no configurations exist
+          if (Object.keys(configurations).length === 0) {
+            const newConfiguration = {...newWorkspace, 
+              name: workspaceName,
+              label: defaultConfiguration().label || "Default",
+              active: true
+            };
+            this.saveWorkspaceConfiguration(newConfiguration);
+          }
         }
       }
     }
@@ -330,11 +363,23 @@ export const WithWidgetWorkspacesInternal = function (
      * there is no active configuration
      */
     currentConfiguration = (configurations) => {
-      const currentWorkspace =
-        configurations[this.state.currentConfigurationId] ||
-        _find(configurations, ({ active, isBroken }) => active && !isBroken) ||
-        _find(configurations, ({ isBroken }) => !isBroken) ||
-        this.state.defaultWorkspace;
+      // First check if we have a specific configuration ID in state
+      let currentWorkspace = configurations[this.state.currentConfigurationId];
+
+      // If not, look for an active non-broken configuration
+      if (!currentWorkspace) {
+        currentWorkspace = _find(configurations, ({ active, isBroken }) => active && !isBroken);
+      }
+
+      // If still not found, look for any non-broken configuration
+      if (!currentWorkspace) {
+        currentWorkspace = _find(configurations, ({ isBroken }) => !isBroken);
+      }
+
+      // Finally, fall back to default workspace from state
+      if (!currentWorkspace) {
+        currentWorkspace = this.state.defaultWorkspace;
+      }
 
       return currentWorkspace ? this.completeWorkspaceConfiguration(currentWorkspace) : null;
     };
