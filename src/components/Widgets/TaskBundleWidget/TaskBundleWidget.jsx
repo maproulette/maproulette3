@@ -418,7 +418,8 @@ const ActiveBundle = (props) => {
       showMarkerPopup={showMarkerPopup}
       centerBounds={bundleCenter}
       initialBounds={bundleCenter}
-      fitbBoundsControl
+      fitBoundsControl
+      showSelectMarkersInView
       selectedTasks={props.selectedTasks}
     />
   );
@@ -630,7 +631,7 @@ const BuildBundle = (props) => {
         const tasksToDeselect = tasks.filter((t) => t.id !== props.task.id);
         props.deselectTasks(tasksToDeselect);
       }}
-      fitbBoundsControl
+      fitBoundsControl
       showSelectMarkersInView
     />
   );

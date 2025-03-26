@@ -25,10 +25,31 @@ const LassoSelectionLeafletControl = L.Control.extend({
         ? this.options.onLassoDeselection(event.layers)
         : this.options.onLassoSelection(event.layers);
     });
+    const handleSelectAllInViewClick = () => {
+      if (!map || !map._layers) return;
+      const taskIds = _compact(
+        _map(map._layers, (layer) => layer?.options?.icon?.options?.taskData?.taskId),
+      );
+      // Disallow use if cannot populate taskIds from map
+      if (!taskIds.length) return;
+      this.options.onSelectAllInView(taskIds);
+    };
 
     // build the control button, render it, and return it
     const controlContent = (
       <Fragment>
+        {this.options.showSelectMarkersInView && (
+          <button
+            className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-justify-center mr-rounded-t-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
+            onClick={handleSelectAllInViewClick}
+          >
+            <SvgSymbol
+              sym="check-circled-icon"
+              className="mr-w-4 mr-h-4 mr-fill-current mr-stroke-current"
+              viewBox="0 0 512 512"
+            />
+          </button>
+        )}
         {this.options.onLassoSelection && (
           <button
             onClick={() => {
