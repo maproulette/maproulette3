@@ -59,6 +59,7 @@ export const fetchReviewedTasks = function (
     null,
     criteria?.invertFields ?? {},
   );
+
   const mappers = asMapper ? [userId] : [];
   const reviewers = asReviewer ? [userId] : [];
   const metaReviewers = asMetaReviewer ? [userId] : [];

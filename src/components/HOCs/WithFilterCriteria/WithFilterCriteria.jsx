@@ -157,6 +157,10 @@ export const WithFilterCriteria = function (
         searchCriteria.filters.reviewedAt = format(searchCriteria.filters.reviewedAt, "yyyy-MM-dd");
       }
 
+      if (searchCriteria.filters.mappedOn && typeof searchCriteria.filters.mappedOn === "object") {
+        searchCriteria.filters.mappedOn = format(searchCriteria.filters.mappedOn, "yyyy-MM-dd");
+      }
+
       return buildSearchURL(searchCriteria);
     }
 

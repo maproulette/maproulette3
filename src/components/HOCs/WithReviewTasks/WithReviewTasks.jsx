@@ -165,6 +165,10 @@ export const WithReviewTasks = function (WrappedComponent) {
         searchCriteria.filters.reviewedAt = format(searchCriteria.filters.reviewedAt, "yyyy-MM-dd");
       }
 
+      if (searchCriteria.filters.mappedOn && typeof searchCriteria.filters.mappedOn === "object") {
+        searchCriteria.filters.mappedOn = format(searchCriteria.filters.mappedOn, "yyyy-MM-dd");
+      }
+
       // The criteria filters use 'project' but on the url it can also be
       // referenced as 'projectName'
       if (criteria?.filters?.project == null) {
