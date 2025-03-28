@@ -133,6 +133,15 @@ export function WithTaskBundle(WrappedComponent) {
         return;
       }
 
+      // Check if task is cooperative or tag fix type
+      if (
+        task &&
+        (AsCooperativeWork(task).isCooperative() || AsCooperativeWork(task).isTagType())
+      ) {
+        this.setState({ bundleEditsDisabled: true });
+        return;
+      }
+
       // Check workspace type
       const workspaceName = workspace?.name || name;
       const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);

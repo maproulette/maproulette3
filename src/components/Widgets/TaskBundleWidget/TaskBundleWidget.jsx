@@ -67,6 +67,8 @@ export default class TaskBundleWidget extends Component {
   state = {
     shortcutActive: false,
     errors: new Set(),
+    isBundling: false,
+    isUnbundling: false,
   };
 
   handleKeyboardShortcuts = (event) => {
@@ -135,16 +137,37 @@ export default class TaskBundleWidget extends Component {
   createBundle = () => {
     const { taskBundle, bundleEditsDisabled, selectedTasks, task } = this.props;
 
-    if (taskBundle || bundleEditsDisabled || selectedTasks.selected.size > 50) {
+    if (
+      taskBundle ||
+      bundleEditsDisabled ||
+      selectedTasks.selected.size > 50 ||
+      this.state.isBundling
+    ) {
       return;
     }
 
     const selectedArray = Array.from(selectedTasks.selected.values());
-    const isCooperative = AsCooperativeWork(task).isCooperative();
 
-    if (selectedArray.some((item) => AsCooperativeWork(item).isCooperative() !== isCooperative)) {
+    // Check if the current task is cooperative or tag fix type
+    const isCooperative = AsCooperativeWork(task).isCooperative();
+    const isTagFix = AsCooperativeWork(task).isTagType();
+
+    // Don't allow bundling for cooperative or tag fix tasks
+    if (isCooperative || isTagFix) {
       this.setState((prevState) => ({
-        errors: new Set([...prevState.errors, "bundleTypeMismatchError"]),
+        errors: new Set([...prevState.errors, "bundleTypeNotAllowed"]),
+      }));
+      return;
+    }
+
+    // Check if any selected task is cooperative or tag fix type
+    if (
+      selectedArray.some(
+        (item) => AsCooperativeWork(item).isCooperative() || AsCooperativeWork(item).isTagType(),
+      )
+    ) {
+      this.setState((prevState) => ({
+        errors: new Set([...prevState.errors, "bundleTypeNotAllowed"]),
       }));
       return;
     }
@@ -155,33 +178,43 @@ export default class TaskBundleWidget extends Component {
       this.props.selectTasks([task]);
     }
 
-    this.props.createTaskBundle(selectedIds);
+    this.setState({ isBundling: true });
+    this.props.createTaskBundle(selectedIds).finally(() => this.setState({ isBundling: false }));
   };
 
   resetTaskBundle = async () => {
-    await this.props.resetTaskBundle();
-    await this.props.resetSelectedTasks();
-    // Select the main task and all tasks from the initial bundle
-    if (this.props.initialBundle?.tasks) {
-      this.props.selectTasks(this.props.initialBundle.tasks);
-    } else if (this.props.task) {
-      // If no initial bundle, at least select the main task
-      this.props.selectTasks([this.props.task]);
+    this.setState({ isUnbundling: true });
+    try {
+      await this.props.resetTaskBundle();
+      await this.props.resetSelectedTasks();
+      // Select the main task and all tasks from the initial bundle
+      if (this.props.initialBundle?.tasks) {
+        this.props.selectTasks(this.props.initialBundle.tasks);
+      } else if (this.props.task) {
+        // If no initial bundle, at least select the main task
+        this.props.selectTasks([this.props.task]);
+      }
+    } finally {
+      this.setState({ isUnbundling: false });
     }
   };
 
   unbundleTask = (task) => {
     const taskId = task.id ?? task.taskId;
-    if (taskId === this.props.task.id) {
+    if (taskId === this.props.task.id || this.state.isUnbundling) {
       return;
     }
-    this.props.removeTaskFromBundle(taskId);
+    this.setState({ isUnbundling: true });
+    this.props.removeTaskFromBundle(taskId).finally(() => this.setState({ isUnbundling: false }));
     this.props.deselectTasks([task]);
   };
 
   bundleTask = (task) => {
+    if (this.state.isBundling) return;
+
     const taskId = task.id ?? task.taskId;
-    this.props.addTaskToBundle(taskId);
+    this.setState({ isBundling: true });
+    this.props.addTaskToBundle(taskId).finally(() => this.setState({ isBundling: false }));
     this.props.selectTasks([task]);
   };
 
@@ -226,6 +259,15 @@ export default class TaskBundleWidget extends Component {
       this.props.updateUserAppSetting(this.props.user.id, {
         taskBundleFilters: "",
       });
+    }
+  };
+
+  clearActiveTaskBundle = async () => {
+    this.setState({ isUnbundling: true });
+    try {
+      await this.props.clearActiveTaskBundle();
+    } finally {
+      this.setState({ isUnbundling: false });
     }
   };
 
@@ -352,8 +394,11 @@ export default class TaskBundleWidget extends Component {
           resetTaskBundle={this.resetTaskBundle}
           unbundleTask={this.unbundleTask}
           bundleTask={this.bundleTask}
+          clearActiveTaskBundle={this.clearActiveTaskBundle}
           loading={this.props.loading}
           errors={this.state.errors}
+          isBundling={this.state.isBundling}
+          isUnbundling={this.state.isUnbundling}
         />
       </QuickWidget>
     );
@@ -369,8 +414,57 @@ const calculateTasksInChallenge = (props) => {
   return _sum(_values(_pick(actions, VALID_STATUS_KEYS)));
 };
 
+const BundlingDisabledMessage = ({ task, workspace, taskReadOnly, user }) => {
+  // Determine the reason why bundling is disabled
+  let messageKey = null;
+
+  // Check if read-only first
+  if (taskReadOnly) {
+    messageKey = "bundlingDisabledReadOnly";
+  }
+  // Check if task is cooperative or tag fix type
+  else if (
+    task &&
+    (AsCooperativeWork(task).isCooperative() || AsCooperativeWork(task).isTagType())
+  ) {
+    messageKey = "bundlingDisabledTaskType";
+  }
+  // Check workspace type
+  else {
+    const workspaceName = workspace?.name;
+    const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
+    if (!isCompletionWorkspace) {
+      messageKey = "bundlingDisabledWorkspace";
+    } else {
+      // Check completion status
+      const isReviewCompleted = task?.reviewStatus === 2;
+      const isTaskCompleted = [0, 3, 6].includes(task?.status);
+      const completionStatus = isReviewCompleted || isTaskCompleted;
+
+      // Check mapper edit permissions
+      const hasNoCompletion = !task?.completedBy;
+      const isTaskCompleter = user.id === task?.completedBy;
+
+      if (!completionStatus) {
+        messageKey = "bundlingDisabledNotCompleted";
+      } else if (!hasNoCompletion && !isTaskCompleter && !user.isSuperUser) {
+        messageKey = "bundlingDisabledNotOwner";
+      } else {
+        messageKey = "bundlingDisabledGeneric";
+      }
+    }
+  }
+
+  return messageKey ? (
+    <div className="mr-bg-blue-dark mr-p-2 mr-mb-2 mr-rounded mr-text-white mr-text-center">
+      <FormattedMessage {...messages[messageKey]} />
+    </div>
+  ) : null;
+};
+
 const ActiveBundle = (props) => {
-  const { task, taskBundle, bundleEditsDisabled, initialBundle, widgetLayout } = props;
+  const { task, taskBundle, bundleEditsDisabled, initialBundle, widgetLayout, isUnbundling } =
+    props;
   const disabled =
     props.bundleEditsDisabled ||
     (props.initialBundle &&
@@ -440,6 +534,14 @@ const ActiveBundle = (props) => {
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
+      {bundleEditsDisabled && (
+        <BundlingDisabledMessage
+          task={task}
+          workspace={props.workspace}
+          taskReadOnly={props.taskReadOnly}
+          user={props.user}
+        />
+      )}
       <div
         className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80"
         style={{ maxHeight: `${widgetLayout?.w * 80}px` }}
@@ -447,7 +549,7 @@ const ActiveBundle = (props) => {
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
-          <MapPane>{map}</MapPane>
+          <MapPane showLasso={!bundleEditsDisabled}>{map}</MapPane>
         )}
       </div>
       {props.errors.size > 0 && (
@@ -479,27 +581,35 @@ const ActiveBundle = (props) => {
         </button>
         {initialBundle && (
           <button
-            disabled={disabled}
+            disabled={disabled || isUnbundling}
             className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
             style={{
-              cursor: disabled ? "default" : "pointer",
-              opacity: disabled ? 0.3 : 1,
+              cursor: disabled || isUnbundling ? "default" : "pointer",
+              opacity: disabled || isUnbundling ? 0.3 : 1,
             }}
             onClick={() => props.resetTaskBundle()}
           >
-            <FormattedMessage {...messages.resetBundleLabel} />
+            {isUnbundling ? (
+              <BusySpinner inline small />
+            ) : (
+              <FormattedMessage {...messages.resetBundleLabel} />
+            )}
           </button>
         )}
         <button
-          disabled={bundleEditsDisabled}
+          disabled={bundleEditsDisabled || isUnbundling}
           className="mr-button mr-button--green-lighter mr-button--small"
           style={{
-            cursor: bundleEditsDisabled ? "default" : "pointer",
-            opacity: bundleEditsDisabled ? 0.3 : 1,
+            cursor: bundleEditsDisabled || isUnbundling ? "default" : "pointer",
+            opacity: bundleEditsDisabled || isUnbundling ? 0.3 : 1,
           }}
           onClick={() => props.clearActiveTaskBundle()}
         >
-          <FormattedMessage {...messages.unbundleTasksLabel} />
+          {isUnbundling ? (
+            <BusySpinner inline small />
+          ) : (
+            <FormattedMessage {...messages.unbundleTasksLabel} />
+          )}
         </button>
       </div>
       <div
@@ -570,6 +680,8 @@ const BuildBundle = (props) => {
     taskReadOnly,
     selectedTasks,
     bundleEditsDisabled,
+    isBundling,
+    isUnbundling,
   } = props;
 
   if (virtualChallenge || Number.isFinite(virtualChallengeId)) {
@@ -588,12 +700,16 @@ const BuildBundle = (props) => {
   const bundleButton = showBundleButton ? (
     <button
       className={`mr-button mr-button--green-lighter mr-button--small ${
-        isTooManyTasks ? "mr-opacity-50 mr-cursor-not-allowed" : ""
+        isTooManyTasks || isBundling ? "mr-opacity-50 mr-cursor-not-allowed" : ""
       }`}
-      disabled={isTooManyTasks}
+      disabled={isTooManyTasks || isBundling}
       onClick={props.createBundle}
     >
-      <FormattedMessage {...messages[isTooManyTasks ? "tooManyTasks" : "bundleTasksLabel"]} />
+      {isBundling ? (
+        <BusySpinner inline small />
+      ) : (
+        <FormattedMessage {...messages[isTooManyTasks ? "tooManyTasks" : "bundleTasksLabel"]} />
+      )}
     </button>
   ) : null;
 
@@ -637,6 +753,14 @@ const BuildBundle = (props) => {
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
+      {bundleEditsDisabled && (
+        <BundlingDisabledMessage
+          task={props.task}
+          workspace={props.workspace}
+          taskReadOnly={taskReadOnly}
+          user={props.user}
+        />
+      )}
       <div
         className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80"
         style={{ maxHeight: `${props.widgetLayout?.w * 80}px` }}
@@ -644,7 +768,7 @@ const BuildBundle = (props) => {
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
-          <MapPane showLasso>{map}</MapPane>
+          <MapPane showLasso={!bundleEditsDisabled}>{map}</MapPane>
         )}
       </div>
       {props.errors.size > 0 && (
@@ -663,12 +787,18 @@ const BuildBundle = (props) => {
         {props.initialBundle && (
           <button
             className={`mr-button mr-button--red mr-button--small mr-mt-2 mr-float-right ${
-              bundleEditsDisabled ? "mr-text-grey-light mr-cursor-default" : "mr-text-green-lighter"
+              bundleEditsDisabled || isUnbundling
+                ? "mr-text-grey-light mr-cursor-default"
+                : "mr-text-green-lighter"
             }`}
             onClick={props.resetTaskBundle}
-            disabled={bundleEditsDisabled}
+            disabled={bundleEditsDisabled || isUnbundling}
           >
-            <FormattedMessage {...messages.resetBundleLabel} />
+            {isUnbundling ? (
+              <BusySpinner inline small />
+            ) : (
+              <FormattedMessage {...messages.resetBundleLabel} />
+            )}
           </button>
         )}
       </div>

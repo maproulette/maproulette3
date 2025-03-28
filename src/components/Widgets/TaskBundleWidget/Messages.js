@@ -189,4 +189,35 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.bundleTypeError",
     defaultMessage: "Cannot bundle tasks of different types together",
   },
+
+  bundleTypeNotAllowed: {
+    id: "TaskBundleWidget.error.bundleTypeNotAllowed",
+    defaultMessage: "Cooperative and tag fix tasks cannot be bundled",
+  },
+
+  bundlingDisabledReadOnly: {
+    id: "TaskBundleWidget.bundlingDisabledReadOnly",
+    defaultMessage: "Task bundling is disabled because you are in read-only mode.",
+  },
+  bundlingDisabledTaskType: {
+    id: "TaskBundleWidget.bundlingDisabledTaskType",
+    defaultMessage: "Task bundling is disabled for cooperative and tag fix tasks.",
+  },
+  bundlingDisabledWorkspace: {
+    id: "TaskBundleWidget.bundlingDisabledWorkspace",
+    defaultMessage: "Task bundling is only available in the task completion workspace.",
+  },
+  bundlingDisabledNotCompleted: {
+    id: "TaskBundleWidget.bundlingDisabledNotCompleted",
+    defaultMessage: "Task bundling is only available for completed tasks.",
+  },
+  bundlingDisabledNotOwner: {
+    id: "TaskBundleWidget.bundlingDisabledNotOwner",
+    defaultMessage:
+      "Task bundling is disabled because you are not the original mapper of this task.",
+  },
+  bundlingDisabledGeneric: {
+    id: "TaskBundleWidget.bundlingDisabledGeneric",
+    defaultMessage: "Task bundling is currently disabled.",
+  },
 });

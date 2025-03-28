@@ -283,6 +283,10 @@ export const WithChallengeTaskClusters = function (
     };
 
     onBulkTaskSelection = (taskIds) => {
+      if (!this.props.onBulkTaskSelection || typeof this.props.onBulkTaskSelection !== "function") {
+        return; // Early return if the function doesn't exist
+      }
+      
       const tasks = this.clustersAsTasks().filter((task) => {
         const taskId = task.id || task.taskId;
         const alreadyBundled =
@@ -317,6 +321,13 @@ export const WithChallengeTaskClusters = function (
     };
 
     onBulkTaskDeselection = (taskIds) => {
+      if (
+        !this.props.onBulkTaskDeselection ||
+        typeof this.props.onBulkTaskDeselection !== "function"
+      ) {
+        return; // Early return if the function doesn't exist
+      }
+      
       const tasks = _filter(this.clustersAsTasks(), (task) => taskIds.indexOf(task.id) !== -1);
       this.props.onBulkTaskDeselection(tasks);
     };

@@ -271,7 +271,7 @@ const ActiveBundle = (props) => {
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
-          <MapPane>{map}</MapPane>
+          <MapPane showLasso={false}>{map}</MapPane>
         )}
       </div>
       <div className="mr-flex mr-content-center mr-my-4">
@@ -392,7 +392,7 @@ const BuildBundle = (props) => {
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
-          <MapPane showLasso>{map}</MapPane>
+          <MapPane showLasso={false}>{map}</MapPane>
         )}
       </div>
       <div
