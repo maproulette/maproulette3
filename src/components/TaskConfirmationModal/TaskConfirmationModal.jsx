@@ -200,7 +200,6 @@ export class TaskConfirmationModal extends Component {
       <External>
         <Modal
           contentClassName="mr-pb-6"
-          fullScreen={loadingNearby}
           narrow={!loadingNearby}
           medium={reviewConfirmation && !loadingNearby}
           isActive
@@ -604,19 +603,21 @@ export class TaskConfirmationModal extends Component {
               </div>
             </div>
             {loadingNearby && (
-              <div className="mr-w-full mr-h-full mr-flex mr-flex-col">
-                <h4 className="mr-my-6 mr-text-yellow mr-pl-12">
+              <div className="mr-w-full mr-max-w-screen50 mr-flex mr-flex-col">
+                <h4 className="mr-mb-4 mr-text-yellow">
                   <FormattedMessage {...messages.nextNearbyLabel} />
                 </h4>
-                <div className="mr-border-l-2 mr-border-grey-lighter-10 mr-pl-12 mr-flex-grow">
+                <div className="mr-border-l-2 mr-border-grey-lighter-10 mr-pl-4 mr-flex-grow">
                   <div className="mr-h-full mr-w-full">
-                    <TasksNearby
-                      {...this.props}
-                      onTaskClick={this.props.chooseNextTask}
-                      onMapClick={this.props.clearNextTask}
-                      currentFilters={this.currentFilters()}
-                      excludeSelfLockedTasks
-                    />
+                    <div className="mr-w-full mr-h-full">
+                      <TasksNearby
+                        {...this.props}
+                        onTaskClick={this.props.chooseNextTask}
+                        onMapClick={this.props.clearNextTask}
+                        currentFilters={this.currentFilters()}
+                        excludeSelfLockedTasks
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

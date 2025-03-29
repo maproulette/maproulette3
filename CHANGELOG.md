@@ -4,6 +4,49 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.11] - 2025-03-26
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* fix widget layout configuration finder by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2608
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.10...v3.16.11
+
+## [v3.16.10] - 2025-03-19
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* fix for loop in fetch challenge flows by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2603
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.9...v3.16.10
+
+## [v3.16.9] - 2025-03-19
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* conditionalize dispatches to prevent fetch failure modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2601
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.8...v3.16.9
+
+## [v3.16.8] - 2025-03-16
+Released with [maproulette-backend_v4.7.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.4)
+
+## What's Changed
+* Rewrite all `Array.forEach` and lodash `_each` as plain for loops by @jake-low in https://github.com/maproulette/maproulette3/pull/2575
+* fix undefined variable in for loop bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2591
+* remove redundant expensive task/marker endpoint call by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2592
+* Fix broken links in DEVELOPMENT.md caused by hard wrapping by @jake-low in https://github.com/maproulette/maproulette3/pull/2589
+* enhance nearby task completion modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2552
+* fix initial challenge clusters clicking behavior by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2588
+* Fix completion state not being saved in completion workflow by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2595
+
+## MR2 Changes
+* add nearbyTasksWithinBounds endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1170
+* Sent box enhancements by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1172
+* Add task (parent_id, location) index and simplify task marker/cluster queries by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1176
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.7...v3.16.8
+
 ## [v3.16.7] - 2025-03-04
 Released with [maproulette-backend_v4.7.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.3)
 

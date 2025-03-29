@@ -150,12 +150,12 @@ export const WithWidgetWorkspacesInternal = function (
         // current minimums, fill them in from the widget descriptors
         for (const [index, widgetLayout] of configuration.layout.entries()) {
           if (!configuration.widgets || !configuration.widgets[index]) {
-            return;
+            continue; // Skip this layout item instead of returning
           }
 
           const descriptor = widgetDescriptor(configuration.widgets[index].widgetKey);
           if (!descriptor) {
-            return;
+            continue; // Skip this layout item instead of returning
           }
 
           if (!Number.isFinite(widgetLayout.w)) {

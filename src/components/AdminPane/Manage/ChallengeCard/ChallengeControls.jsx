@@ -14,7 +14,6 @@ import {
 } from "../../../../services/Challenge/ChallengeStatus/ChallengeStatus";
 import ConfirmAction from "../../../ConfirmAction/ConfirmAction";
 import messages from "../ChallengeDashboard/Messages";
-import ProjectPickerModal from "../ProjectPickerModal/ProjectPickerModal";
 import RebuildTasksControl from "../RebuildTasksControl/RebuildTasksControl";
 
 const isEmailRequired = (user) => {
@@ -41,21 +40,6 @@ const handleTasksNeedRebuild = (dateString) => {
 };
 
 export default class ChallengeControls extends Component {
-  state = {
-    pickingProject: false,
-  };
-
-  projectPickerCanceled = () => {
-    this.setState({ pickingProject: false });
-    this.props.onControlComplete && this.props.onControlComplete();
-  };
-
-  moveToProject = (project) => {
-    this.setState({ pickingProject: false });
-    this.props.moveChallenge(this.props.challenge.id, project.id);
-    this.props.onControlComplete && this.props.onControlComplete();
-  };
-
   deleteChallenge = (parent) => {
     this.props.deleteChallenge(parent.id, this.props.challenge.id);
   };
@@ -147,7 +131,7 @@ export default class ChallengeControls extends Component {
 
             {manager.canAdministrateProject(parent) && (
               <a
-                onClick={() => this.setState({ pickingProject: true })}
+                onClick={() => this.props.onPickProject && this.props.onPickProject()}
                 className={this.props.controlClassName}
               >
                 <FormattedMessage {...messages.moveChallengeLabel} />
@@ -222,14 +206,6 @@ export default class ChallengeControls extends Component {
                 )}
               </>
             ) : null}
-            {this.state.pickingProject && (
-              <ProjectPickerModal
-                {...this.props}
-                currentProjectId={projectId}
-                onCancel={this.projectPickerCanceled}
-                onSelectProject={this.moveToProject}
-              />
-            )}
           </Fragment>
         )}
       </div>
@@ -250,4 +226,6 @@ ChallengeControls.propTypes = {
   onControlComplete: PropTypes.func,
   /** Some controls are only available from the challenge dashboard */
   onChallengeDashboard: PropTypes.bool,
+  /** Callback when user wants to pick a project to move to */
+  onPickProject: PropTypes.func,
 };
