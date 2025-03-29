@@ -698,6 +698,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (row) => row.name || row.title,
     maxWidth: 120,
+    disableSortBy: true
   };
 
   columns.status = {
@@ -835,6 +836,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     accessor: "parent.id",
     Cell: ({ value }) => <span>{value}</span>,
     maxWidth: 120,
+    disableSortBy: true
   };
 
   columns.challenge = {
@@ -880,6 +882,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         ) : null}
       </div>
     ),
+    disableSortBy: true
   };
 
   columns.projectId = {
@@ -888,6 +891,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     accessor: "parent.parent.id",
     Cell: ({ value }) => <span>{value}</span>,
     maxWidth: 120,
+    disableSortBy: true
   };
 
   columns.project = {
@@ -933,6 +937,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         ) : null}
       </div>
     ),
+    disableSortBy: true
   };
 
   columns.mappedOn = {
@@ -1264,6 +1269,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     },
     maxWidth: 120,
     minWidth: 110,
+    disableSortBy: true
   };
 
   columns.reviewCompleteControls = {
@@ -1371,6 +1377,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     },
     maxWidth: 120,
     minWidth: 90,
+    disableSortBy: true,
   };
 
   columns.viewComments = {
@@ -1379,6 +1386,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     accessor: "commentID",
     Cell: (props) => <ViewCommentsButton onClick={() => openComments(props.row.original.id)} />,
     maxWidth: 110,
+    disableSortBy: true,
   };
 
   columns.tags = {
@@ -1400,6 +1408,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Filter: ({ column: { setFilter, filterValue } }) => (
       <InTableTagFilter {...props} onChange={setFilter} value={filterValue || ""} />
     ),
+    disableSortBy: true,
   };
 
   return columns;

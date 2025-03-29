@@ -72,6 +72,50 @@ const DEFAULT_COLUMNS = [
   "editBundle",
 ];
 
+const useDebounce = (callback, delay) => {
+  const [timer, setTimer] = useState(null);
+
+  return (value) => {
+    if (timer) clearTimeout(timer);
+    const newTimer = setTimeout(() => callback(value), delay);
+    setTimer(newTimer);
+  };
+};
+
+const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) => {
+  const [inputValue, setInputValue] = useState(filterValue || '');
+  const debouncedSetFilter = useDebounce(setFilter, 500);
+
+  return (
+    <div className="mr-flex mr-gap-2">
+      <input
+        className="mr-input mr-px-2 mr-py-1 mr-w-full"
+        value={inputValue}
+        onChange={e => {
+          setInputValue(e.target.value);
+          debouncedSetFilter(e.target.value || undefined);
+        }}
+        placeholder={placeholder}
+      />
+      {inputValue && (
+        <button
+          className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+          onClick={() => {
+            setInputValue('');
+            setFilter(undefined);
+          }}
+        >
+          <SvgSymbol
+            sym="icon-close"
+            viewBox="0 0 20 20"
+            className="mr-fill-current mr-w-2.5 mr-h-2.5"
+          />
+        </button>
+      )}
+    </div>
+  );
+};
+
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
  * performed from summary info, like that given by clusteredTasks, but an
@@ -89,7 +133,7 @@ export const TaskAnalysisTableInternal = (props) => {
 
   // When sort/filter/page changes, call updateCriteria to fetch new data
   const handleStateChange = useCallback(
-    ({ sortBy, pageIndex }) => {
+    ({ sortBy, filters, pageIndex }) => {
       const newCriteria = {
         sortCriteria:
           sortBy.length > 0
@@ -98,6 +142,10 @@ export const TaskAnalysisTableInternal = (props) => {
                 direction: sortBy[0].desc ? "DESC" : "ASC",
               }
             : undefined,
+        filters: filters.reduce((acc, filter) => ({
+          ...acc,
+          [filter.id]: filter.value
+        }), {}),
         page: pageIndex,
       };
 
@@ -195,7 +243,7 @@ export const TaskAnalysisTableInternal = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { sortBy },
+    state: { sortBy, filters },
   } = useTable(
     {
       columns,
@@ -203,6 +251,9 @@ export const TaskAnalysisTableInternal = (props) => {
       manualSortBy: true,
       manualFilters: true,
       manualPagination: true,
+      defaultColumn: {
+        Filter: () => null
+      },
     },
     useFilters,
     useSortBy,
@@ -212,8 +263,8 @@ export const TaskAnalysisTableInternal = (props) => {
 
   // Update parent when table state changes
   useEffect(() => {
-    handleStateChange({ sortBy, pageIndex: props.page });
-  }, [sortBy, handleStateChange]);
+    handleStateChange({ sortBy, filters, pageIndex: props.page });
+  }, [sortBy, filters, handleStateChange]);
 
   return (
     <Fragment>
@@ -240,17 +291,26 @@ export const TaskAnalysisTableInternal = (props) => {
             >
               <thead>
                 {headerGroups.map((headerGroup) => (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <th
-                        className="mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10"
-                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                      >
-                        {column.render("Header")}
-                        {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
-                      </th>
-                    ))}
-                  </tr>
+                  <Fragment key={headerGroup.id}>
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((column) => (
+                        <th
+                          className="mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10"
+                          {...column.getHeaderProps(column.getSortByToggleProps())}
+                        >
+                          {column.render("Header")}
+                          {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
+                        </th>
+                      ))}
+                    </tr>
+                    <tr>
+                      {headerGroup.headers.map((column) => (
+                        <th key={column.id}>
+                          {column.canFilter ? column.render("Filter") : null}
+                        </th>
+                      ))}
+                    </tr>
+                  </Fragment>
                 ))}
               </thead>
               <tbody {...getTableBodyProps()}>
@@ -283,7 +343,7 @@ export const TaskAnalysisTableInternal = (props) => {
               currentPage={props.page ?? 0}
               totalPages={Math.ceil((props.totalTaskCount ?? 0) / props.pageSize)}
               pageSize={props.pageSize}
-              gotoPage={(page) => handleStateChange({ sortBy, pageIndex: page })}
+              gotoPage={(page) => handleStateChange({ sortBy, filters, pageIndex: page })}
               setPageSize={props.changePageSize}
             />
           </>
@@ -349,6 +409,14 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (t) => t.name || t.title,
     Cell: ({ value }) => value || "",
+    Filter: ({ column: { filterValue, setFilter }}) => (
+      <SearchFilter
+        value={filterValue}
+        onChange={setFilter}
+        placeholder="Search feature ID..."
+      />
+    ),
+    disableSortBy: true
   };
 
   columns.id = {
@@ -400,6 +468,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         return <span>{taskLink}</span>;
       }
     },
+    Filter: ({ column: { filterValue, setFilter }}) => (
+      <SearchFilter
+        value={filterValue}
+        onChange={setFilter}
+        placeholder="Search ID..."
+      />
+    ),
     maxWidth: 120,
   };
 
@@ -453,6 +528,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     minWidth: 110,
+    disableSortBy: true
   };
 
   columns.priority = {
@@ -733,6 +809,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     ),
     width: 150,
     minWidth: 150,
+    disableSortBy: true
   };
 
   columns.comments = {
@@ -742,6 +819,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     Cell: ({ row }) => <ViewCommentsButton onClick={() => openComments(row.original.id)} />,
     width: 110,
     maxWidth: 110,
+    disableSortBy: true
   };
 
   columns.tags = {
