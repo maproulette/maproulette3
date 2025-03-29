@@ -92,6 +92,11 @@ export const TaskReviewTable = (props) => {
   );
   const [lastTableState, setLastTableState] = useState(null);
 
+  const initialSort = props.reviewCriteria?.sortCriteria ? {
+    sortBy: props.reviewCriteria.sortCriteria.sortBy,
+    direction: props.reviewCriteria.sortCriteria.direction
+  } : null;
+
   const startReviewing = () => props.startReviewing(props.history);
   const startMetaReviewing = () => props.startReviewing(props.history, true);
   const toggleShowFavorites = () => {
@@ -175,6 +180,21 @@ export const TaskReviewTable = (props) => {
     [props.addedColumns, columnTypes],
   );
 
+  const initialState = {
+    sortBy: initialSort ? [
+      {
+        id: initialSort.sortBy,
+        desc: initialSort.direction === 'DESC'
+      }
+    ] : [
+      {
+        id: 'mappedOn',
+        desc: false
+      }
+    ],
+    pageSize: props.pageSize
+  };
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -184,6 +204,8 @@ export const TaskReviewTable = (props) => {
     state: { sortBy, filters, pageIndex },
     gotoPage,
     setPageSize,
+    setAllFilters,
+    setSortBy,
   } = useTable(
     {
       columns,
@@ -196,11 +218,41 @@ export const TaskReviewTable = (props) => {
       manualPagination: true,
       pageCount: Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize),
       pageSize: props.pageSize,
+      initialState
     },
     useFilters,
     useSortBy,
     usePagination,
   );
+
+  const handleClearFilters = () => {
+    setAllFilters([]);
+    
+    setSortBy([{
+      id: 'mappedOn',
+      desc: false
+    }]);
+
+    setChallengeFilterIds([FILTER_SEARCH_ALL]);
+    setProjectFilterIds([FILTER_SEARCH_ALL]);
+    
+    const defaultSort = {
+      sortCriteria: {
+        sortBy: "mappedOn",
+        direction: "ASC"
+      },
+      filters: {},
+      page: 0,
+      boundingBox: props.reviewCriteria?.boundingBox,
+      includeTags: !!props.addedColumns?.tags,
+      savedChallengesOnly: false,
+      excludeOtherReviewers: false,
+      invertFields: {},
+    };
+    
+    props.updateReviewTasks(defaultSort);
+    props.clearFilterCriteria();
+  };
 
   // Handle table state updates
   useEffect(() => {
@@ -218,7 +270,7 @@ export const TaskReviewTable = (props) => {
           sortBy: sortBy[0].id,
           direction: sortBy[0].desc ? "DESC" : "ASC",
         }
-      : { sortBy: "mappedOn", direction: "ASC" };
+      : initialSort || { sortBy: "mappedOn", direction: "ASC" };
 
     const filterCriteria = Object.fromEntries(filters.map((filter) => [filter.id, filter.value]));
 
@@ -271,7 +323,7 @@ export const TaskReviewTable = (props) => {
     };
 
     props.updateReviewTasks(updatedCriteria);
-  }, [sortBy, filters, pageIndex]);
+  }, [sortBy, filters, pageIndex, initialSort]);
 
   useEffect(() => {
     const { columns, defaultColumns } = setupConfigurableColumns(
@@ -394,7 +446,7 @@ export const TaskReviewTable = (props) => {
             </button>
             <div className="mr-float-right mr-mt-2 mr-ml-3">
               <div className="mr-flex mr-justify-start mr-ml-4 mr-items-center mr-space-x-4">
-                <ClearFiltersControl onClick={() => props.clearFilterCriteria()} />
+                <ClearFiltersControl onClick={handleClearFilters} />
                 <FilterDropdown reviewCriteria={props.reviewCriteria} />
                 <GearDropdown
                   reviewCriteria={props.reviewCriteria}
@@ -526,7 +578,6 @@ const GearDropdown = ({
   addedColumns,
   setShowConfigureColumns,
 }) => {
-  console.log("reviewCriteria", reviewCriteria);
   return (
     <Dropdown
       className="mr-dropdown--right"

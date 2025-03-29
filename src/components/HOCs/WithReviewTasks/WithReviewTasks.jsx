@@ -182,10 +182,10 @@ export const WithReviewTasks = function (WrappedComponent) {
     }
 
     componentDidMount() {
-      const searchParams = this.props.history.location.state;
+      const searchParams = this.props.history.location.search;
       const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props));
 
-      let pageSize = searchParams?.pageSize || criteria.pageSize || DEFAULT_PAGE_SIZE;
+      let pageSize = criteria.pageSize || DEFAULT_PAGE_SIZE;
       criteria.pageSize = pageSize;
 
       const stateCriteria = this.state.criteria;
