@@ -104,27 +104,38 @@ export default class TaskBundleWidget extends Component {
    */
   initializeClusterFilters(prevProps = {}) {
     if (this.props.taskBundle) {
-      const bundleBounds = bbox({
-        type: "FeatureCollection",
-        features: _map(this.props.taskBundle.tasks, (task) => ({
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
-          },
-        })),
-      });
+      // Only set bounds if they haven't been set already or if the bundle has changed
+      const bundleChanged =
+        !prevProps.taskBundle || this.props.taskBundle.bundleId !== prevProps.taskBundle.bundleId;
+      const boundsNotSet =
+        !this.props.criteria?.boundingBox || this.props.criteria.boundingBox.length === 0;
 
-      const bounds = toLatLngBounds(bundleBounds);
-      const zoom = this.props.criteria?.zoom || 18;
+      if (boundsNotSet || bundleChanged) {
+        const bundleBounds = bbox({
+          type: "FeatureCollection",
+          features: _map(this.props.taskBundle.tasks, (task) => ({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
+            },
+          })),
+        });
 
-      this.props.updateTaskFilterBounds(bounds, zoom);
+        const bounds = toLatLngBounds(bundleBounds);
+        const zoom = this.props.criteria?.zoom || 18;
+
+        this.props.updateTaskFilterBounds(bounds, zoom);
+      }
     } else if (
       (this.props.nearbyTasks?.tasks?.length || 0) > 0 &&
       !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks) &&
       !this.props.taskBundle
     ) {
-      this.setBoundsToNearbyTask();
+      // Only set bounds if they haven't been set already
+      if (!this.props.criteria?.boundingBox || this.props.criteria.boundingBox.length === 0) {
+        this.setBoundsToNearbyTask();
+      }
     }
   }
 
@@ -576,7 +587,7 @@ const ActiveBundle = (props) => {
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
-          <MapPane showLasso={!bundleEditsDisabled}>{map}</MapPane>
+          <MapPane showLasso={false}>{map}</MapPane>
         )}
       </div>
       {props.errors.size > 0 && (
