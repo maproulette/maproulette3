@@ -45,6 +45,7 @@ export const WithChallengeTaskClusters = function (
       clusters: {},
       showAsClusters: showClusters,
       taskCount: 0,
+      error: null,
     };
 
     updateBounds = (bounds, zoom, fromUserAction = false) => {
@@ -65,9 +66,11 @@ export const WithChallengeTaskClusters = function (
     };
 
     fetchUpdatedClusters(wantToShowAsClusters, overrideDisable = false) {
-      if (!!this.props.nearbyTasks?.loading && !this.props.taskBundle) {
+      // Don't fetch clusters if nearby tasks are still loading and we don't have a task bundle
+      if (this.props.nearbyTasks?.loading && !this.props.taskBundle) {
         return;
       }
+
       const challengeId = this.props.challenge?.id ?? this.props.challengeId;
 
       // If we have no challengeId and no bounding box we need to make sure
@@ -256,6 +259,18 @@ export const WithChallengeTaskClusters = function (
       if (hasCriteriaChanged) {
         this.debouncedFetchClusters(this.state.showAsClusters);
       }
+
+      // Reset error state if challenge or filters change
+      if (
+        this.props.challenge?.id !== prevProps.challenge?.id ||
+        !_isEqual(this.props.taskFilters, prevProps.taskFilters)
+      ) {
+        this.setState({
+          taskClusters: null,
+          loading: false,
+          error: null, // Reset error state
+        });
+      }
     }
 
     clustersAsTasks = () => {
@@ -286,7 +301,7 @@ export const WithChallengeTaskClusters = function (
       if (!this.props.onBulkTaskSelection || typeof this.props.onBulkTaskSelection !== "function") {
         return; // Early return if the function doesn't exist
       }
-      
+
       const tasks = this.clustersAsTasks().filter((task) => {
         const taskId = task.id || task.taskId;
         const alreadyBundled =
@@ -327,7 +342,7 @@ export const WithChallengeTaskClusters = function (
       ) {
         return; // Early return if the function doesn't exist
       }
-      
+
       const tasks = _filter(this.clustersAsTasks(), (task) => taskIds.indexOf(task.id) !== -1);
       this.props.onBulkTaskDeselection(tasks);
     };

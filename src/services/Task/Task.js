@@ -340,28 +340,6 @@ export const refreshTaskLock = function (taskId) {
 /**
  * Refreshes an active task lock owned by the current user
  */
-export const refreshMultipleTaskLocks = function (taskIds) {
-  return function () {
-    return new Endpoint(api.task.refreshMultipleTaskLocks, {
-      schema: taskSchema(),
-      params: { taskIds: taskIds },
-    })
-      .execute()
-      .then((response) => {
-        const lockedTasks = response.locked || [];
-        const notLockedTasks = taskIds.filter((id) => !lockedTasks.includes(id));
-        return { lockedTasks, notLockedTasks };
-      })
-      .catch((error) => {
-        console.error("Error refreshing task locks:", error);
-        throw error;
-      });
-  };
-};
-
-/**
- * Refreshes an active task lock owned by the current user
- */
 export const releaseMultipleTasks = function (taskIds) {
   return function (dispatch) {
     return new Endpoint(api.task.releaseMultipleTasks, {
@@ -370,8 +348,9 @@ export const releaseMultipleTasks = function (taskIds) {
     })
       .execute()
       .then((normalizedResults) => {
-        dispatch(receiveTasks(normalizedResults.entities));
-        return normalizedResults;
+        const tasks = Object.values(normalizedResults.result);
+        dispatch(receiveTasks(tasks));
+        return tasks;
       })
       .catch((error) => {
         if (isSecurityError(error)) {
@@ -389,20 +368,62 @@ export const releaseMultipleTasks = function (taskIds) {
 /**
  * Refreshes an active task lock owned by the current user
  */
-export const startMultipleTasks = function (taskIds) {
-  return function () {
-    return new Endpoint(api.task.startMultipleTasks, {
+export const lockMultipleTasks = function (taskIds) {
+  return function (dispatch) {
+    // Don't make API call if no tasks to lock
+    if (!taskIds || taskIds.length === 0) {
+      return Promise.resolve([]);
+    }
+
+    return new Endpoint(api.task.lockMultipleTasks, {
       schema: { tasks: [taskSchema()], locked: Boolean },
       params: { taskIds: taskIds },
     })
       .execute()
       .then((normalizedResults) => {
-        const tasks = normalizedResults.result[0];
-        const locked = normalizedResults.result[1];
-        return { tasks, locked };
+        const tasks = Object.values(normalizedResults.result);
+        dispatch(receiveTasks(tasks));
+        return tasks;
       })
       .catch((error) => {
-        console.error("Error locking tasks:", error);
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn()).catch(() => null);
+        }
+
+        if (error.response) {
+          error.response
+            .text()
+            .then((responseText) => {
+              let errorMessage = responseText;
+
+              try {
+                // Try to parse the response as JSON
+                const jsonResponse = JSON.parse(responseText);
+                // Extract just the message part if it exists
+                if (jsonResponse && jsonResponse.message) {
+                  errorMessage = jsonResponse.message;
+                }
+              } catch (e) {
+                // If parsing fails, use the original text
+                console.log("Error parsing error response:", e);
+              }
+
+              dispatch(
+                addErrorWithDetails(
+                  AppErrors.task.lockFailure,
+                  errorMessage || error.defaultMessage,
+                ),
+              );
+            })
+            .catch((e) => {
+              // If text() fails, use a default error message
+              dispatch(addError(AppErrors.task.lockFailure));
+              console.error("Error reading error response:", e);
+            });
+        } else {
+          dispatch(addError(AppErrors.task.lockFailure));
+        }
+
         throw error;
       });
   };

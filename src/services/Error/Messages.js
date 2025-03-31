@@ -90,6 +90,10 @@ export default defineMessages({
     id: "Errors.task.lockReleaseFailure",
     defaultMessage: "Failed to release task lock. Your lock or your session may have expired.",
   },
+  taskLockFailure: {
+    id: "Errors.task.lockFailure",
+    defaultMessage: "Failed to lock task{details}",
+  },
   taskBundleFailure: {
     id: "Errors.task.bundleFailure",
     defaultMessage: "Unable to bundle tasks together",

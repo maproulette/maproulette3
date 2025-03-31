@@ -69,6 +69,7 @@ export default class TaskBundleWidget extends Component {
     errors: new Set(),
     isBundling: false,
     isUnbundling: false,
+    error: null,
   };
 
   handleKeyboardShortcuts = (event) => {
@@ -220,13 +221,12 @@ export default class TaskBundleWidget extends Component {
 
   setBoundsToNearbyTask = () => {
     const taskList = this.props.nearbyTasks?.tasks;
-
     // Add the current task to the task list so that it always shows
     // up in the bounds.
     const mappableTask = AsMappableTask(this.props.task);
     mappableTask.point = mappableTask.calculateCenterPoint();
     if (taskList) {
-      taskList?.push(mappableTask);
+      taskList.push(mappableTask);
     }
 
     if (!taskList || taskList.length === 0) {
@@ -274,10 +274,12 @@ export default class TaskBundleWidget extends Component {
   async componentDidMount() {
     this.initializeClusterFilters();
     await this.props.resetSelectedTasks();
+
     // Always select the main task
     if (this.props.task) {
       this.props.selectTasks([this.props.task]);
     }
+
     // Then add any additional bundle tasks
     if (this.props.taskBundle?.tasks) {
       const additionalTasks = this.props.taskBundle.tasks.filter(
@@ -361,6 +363,16 @@ export default class TaskBundleWidget extends Component {
         this.handleKeyboardShortcuts,
       );
     }
+
+    // Reset error state if task or bundle changes
+    if (
+      this.props.task?.id !== prevProps.task?.id ||
+      !_isEqual(this.props.taskBundle, prevProps.taskBundle)
+    ) {
+      this.setState({
+        error: null, // Reset error state
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -414,43 +426,57 @@ const calculateTasksInChallenge = (props) => {
   return _sum(_values(_pick(actions, VALID_STATUS_KEYS)));
 };
 
-const BundlingDisabledMessage = ({ task, workspace, taskReadOnly, user }) => {
-  // Determine the reason why bundling is disabled
-  let messageKey = null;
+const BundlingDisabledMessage = ({
+  task,
+  workspace,
+  taskReadOnly,
+  user,
+  bundlingDisabledReason,
+}) => {
+  // Use the reason provided by WithTaskBundle if available
+  let messageKey = bundlingDisabledReason
+    ? `bundlingDisabled${
+        bundlingDisabledReason.charAt(0).toUpperCase() + bundlingDisabledReason.slice(1)
+      }`
+    : null;
 
-  // Check if read-only first
-  if (taskReadOnly) {
-    messageKey = "bundlingDisabledReadOnly";
-  }
-  // Check if task is cooperative or tag fix type
-  else if (
-    task &&
-    (AsCooperativeWork(task).isCooperative() || AsCooperativeWork(task).isTagType())
-  ) {
-    messageKey = "bundlingDisabledTaskType";
-  }
-  // Check workspace type
-  else {
-    const workspaceName = workspace?.name;
-    const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
-    if (!isCompletionWorkspace) {
-      messageKey = "bundlingDisabledWorkspace";
-    } else {
-      // Check completion status
-      const isReviewCompleted = task?.reviewStatus === 2;
-      const isTaskCompleted = [0, 3, 6].includes(task?.status);
-      const completionStatus = isReviewCompleted || isTaskCompleted;
+  // Fallback to the old logic if no reason is provided
+  if (!messageKey) {
+    // Check if read-only first
+    if (taskReadOnly) {
+      messageKey = "bundlingDisabledReadOnly";
+    }
+    // Check if task is cooperative or tag fix type
+    else if (
+      task &&
+      (AsCooperativeWork(task).isCooperative() || AsCooperativeWork(task).isTagType())
+    ) {
+      messageKey = "bundlingDisabledTaskType";
+    }
+    // Check workspace type
+    else {
+      const workspaceName = workspace?.name;
+      const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
 
-      // Check mapper edit permissions
-      const hasNoCompletion = !task?.completedBy;
-      const isTaskCompleter = user.id === task?.completedBy;
-
-      if (!completionStatus) {
-        messageKey = "bundlingDisabledNotCompleted";
-      } else if (!hasNoCompletion && !isTaskCompleter && !user.isSuperUser) {
-        messageKey = "bundlingDisabledNotOwner";
+      if (!isCompletionWorkspace) {
+        messageKey = "bundlingDisabledWorkspace";
       } else {
-        messageKey = "bundlingDisabledGeneric";
+        // Check completion status
+        const isReviewCompleted = task?.reviewStatus === 2;
+        const isTaskCompleted = [0, 3, 6].includes(task?.status);
+        const completionStatus = isReviewCompleted || isTaskCompleted;
+
+        // Check mapper edit permissions
+        const hasNoCompletion = !task?.completedBy;
+        const isTaskCompleter = user.id === task?.completedBy;
+
+        if (!completionStatus) {
+          messageKey = "bundlingDisabledNotCompleted";
+        } else if (!hasNoCompletion && !isTaskCompleter && !user.isSuperUser) {
+          messageKey = "bundlingDisabledNotOwner";
+        } else {
+          messageKey = "bundlingDisabledGeneric";
+        }
       }
     }
   }
@@ -540,6 +566,7 @@ const ActiveBundle = (props) => {
           workspace={props.workspace}
           taskReadOnly={props.taskReadOnly}
           user={props.user}
+          bundlingDisabledReason={props.bundlingDisabledReason}
         />
       )}
       <div
@@ -751,6 +778,8 @@ const BuildBundle = (props) => {
     />
   );
 
+  const isLoading = props.loading || props.nearbyTasks?.loading;
+
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
       {bundleEditsDisabled && (
@@ -759,13 +788,14 @@ const BuildBundle = (props) => {
           workspace={props.workspace}
           taskReadOnly={taskReadOnly}
           user={props.user}
+          bundlingDisabledReason={props.bundlingDisabledReason}
         />
       )}
       <div
         className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80"
         style={{ maxHeight: `${props.widgetLayout?.w * 80}px` }}
       >
-        {props.loading ? (
+        {isLoading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
           <MapPane showLasso={!bundleEditsDisabled}>{map}</MapPane>

@@ -24,6 +24,8 @@ export const WithNearbyTasks = function (WrappedComponent) {
       mapBounds: null,
       loadByNearbyTasks: true,
       totalTasksInView: 0,
+      loading: false,
+      error: null,
     };
 
     /**
@@ -73,6 +75,9 @@ export const WithNearbyTasks = function (WrappedComponent) {
 
       if (Number.isFinite(challengeId) && this.props.fetchNearbyTasks) {
         try {
+          // Set loading state to true before fetching
+          this.setState({ loading: true, error: null });
+
           const nearbyTasks = await this.props.fetchNearbyTasks(
             challengeId,
             isVirtual,
@@ -92,11 +97,12 @@ export const WithNearbyTasks = function (WrappedComponent) {
             lastLoadLength: tasksLength,
             taskLimit: this.state.taskLimit + 5,
             loadByNearbyTasks: true,
-            lastLoadLength: tasksLength,
             hasMoreToLoad: this.state.lastLoadLength !== tasksLength,
+            loading: false, // Set loading to false after fetching
           });
         } catch (error) {
           console.error("Error fetching nearby tasks:", error);
+          this.setState({ loading: false, error: error }); // Ensure loading is set to false on error
         }
       }
     };
@@ -160,6 +166,20 @@ export const WithNearbyTasks = function (WrappedComponent) {
       this.updateNearbyTasks(this.props);
     }
 
+    componentDidUpdate(prevProps) {
+      // Reset error state if task or challenge changes
+      if (
+        this.props.task?.id !== prevProps.task?.id ||
+        this.props.challenge?.id !== prevProps.challenge?.id
+      ) {
+        this.setState({
+          nearbyTasks: null,
+          loading: false,
+          error: null, // Reset error state
+        });
+      }
+    }
+
     render() {
       return (
         <WrappedComponent
@@ -168,7 +188,11 @@ export const WithNearbyTasks = function (WrappedComponent) {
             "fetchBoundedTaskMarkers",
             "fetchNearbyTasksInBoundingBox",
           ])}
-          nearbyTasks={this.state.nearbyTasks}
+          nearbyTasks={{
+            ...this.state.nearbyTasks,
+            loading: this.state.loading,
+            error: this.state.error,
+          }}
           loadTasksInView={this.loadTasksInView}
           updateNearbyTasks={this.updateNearbyTasks}
           setMapBounds={this.setMapBounds}

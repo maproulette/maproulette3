@@ -118,6 +118,12 @@ const Markers = (props) => {
   }, [props.taskMarkers, props.selectedClusters, spidered, props.taskBundle, props.bundledOnly]);
 
   useEffect(() => {
+    if (props.error && props.error !== prevProps.current.error) {
+      handleMove();
+    }
+  }, [props.error]);
+
+  useEffect(() => {
     setSpidered(new Map());
     prevProps.current = { ...props, spidered: spidered };
   }, [props.currentZoom]);
@@ -140,6 +146,7 @@ const Markers = (props) => {
           }),
         );
 
+      // Add a small padding to ensure all markers are visible
       map.fitBounds(bounds);
       props.setCurrentBounds(bounds);
 
