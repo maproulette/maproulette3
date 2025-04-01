@@ -196,6 +196,12 @@ export const TaskReviewTable = (props) => {
             desc: false,
           },
         ],
+    filters: props.reviewCriteria?.filters
+      ? Object.entries(props.reviewCriteria.filters).map(([id, value]) => ({
+          id,
+          value: value,
+        }))
+      : [],
     pageSize: props.pageSize,
   };
 
