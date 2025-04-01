@@ -252,7 +252,18 @@ export const TaskAnalysisTableInternal = (props) => {
       manualFilters: true,
       manualPagination: true,
       defaultColumn: {
-        Filter: () => null
+        Filter: () => null,
+      },
+      initialState: {
+        filters: Object.entries(props.criteria.filters ?? {}).map(([id, value]) => ({ id, value })),
+        sortBy: props.criteria.sortCriteria
+          ? [
+              {
+                id: props.criteria.sortCriteria.sortBy,
+                desc: props.criteria.sortCriteria.direction === "DESC",
+              },
+            ]
+          : [],
       },
     },
     useFilters,
