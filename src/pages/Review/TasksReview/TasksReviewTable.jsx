@@ -92,10 +92,12 @@ export const TaskReviewTable = (props) => {
   );
   const [lastTableState, setLastTableState] = useState(null);
 
-  const initialSort = props.reviewCriteria?.sortCriteria ? {
-    sortBy: props.reviewCriteria.sortCriteria.sortBy,
-    direction: props.reviewCriteria.sortCriteria.direction
-  } : null;
+  const initialSort = props.reviewCriteria?.sortCriteria
+    ? {
+        sortBy: props.reviewCriteria.sortCriteria.sortBy,
+        direction: props.reviewCriteria.sortCriteria.direction,
+      }
+    : null;
 
   const startReviewing = () => props.startReviewing(props.history);
   const startMetaReviewing = () => props.startReviewing(props.history, true);
@@ -181,18 +183,20 @@ export const TaskReviewTable = (props) => {
   );
 
   const initialState = {
-    sortBy: initialSort ? [
-      {
-        id: initialSort.sortBy,
-        desc: initialSort.direction === 'DESC'
-      }
-    ] : [
-      {
-        id: 'mappedOn',
-        desc: false
-      }
-    ],
-    pageSize: props.pageSize
+    sortBy: initialSort
+      ? [
+          {
+            id: initialSort.sortBy,
+            desc: initialSort.direction === "DESC",
+          },
+        ]
+      : [
+          {
+            id: "mappedOn",
+            desc: false,
+          },
+        ],
+    pageSize: props.pageSize,
   };
 
   const {
@@ -218,7 +222,7 @@ export const TaskReviewTable = (props) => {
       manualPagination: true,
       pageCount: Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize),
       pageSize: props.pageSize,
-      initialState
+      initialState,
     },
     useFilters,
     useSortBy,
@@ -227,19 +231,21 @@ export const TaskReviewTable = (props) => {
 
   const handleClearFilters = () => {
     setAllFilters([]);
-    
-    setSortBy([{
-      id: 'mappedOn',
-      desc: false
-    }]);
+
+    setSortBy([
+      {
+        id: "mappedOn",
+        desc: false,
+      },
+    ]);
 
     setChallengeFilterIds([FILTER_SEARCH_ALL]);
     setProjectFilterIds([FILTER_SEARCH_ALL]);
-    
+
     const defaultSort = {
       sortCriteria: {
         sortBy: "mappedOn",
-        direction: "ASC"
+        direction: "ASC",
       },
       filters: {},
       page: 0,
@@ -249,7 +255,7 @@ export const TaskReviewTable = (props) => {
       excludeOtherReviewers: false,
       invertFields: {},
     };
-    
+
     props.updateReviewTasks(defaultSort);
     props.clearFilterCriteria();
   };
@@ -698,7 +704,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (row) => row.name || row.title,
     maxWidth: 120,
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.status = {
@@ -836,7 +842,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     accessor: "parent.id",
     Cell: ({ value }) => <span>{value}</span>,
     maxWidth: 120,
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.challenge = {
@@ -882,7 +888,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         ) : null}
       </div>
     ),
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.projectId = {
@@ -891,7 +897,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     accessor: "parent.parent.id",
     Cell: ({ value }) => <span>{value}</span>,
     maxWidth: 120,
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.project = {
@@ -937,7 +943,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         ) : null}
       </div>
     ),
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.mappedOn = {
@@ -1269,7 +1275,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     },
     maxWidth: 120,
     minWidth: 110,
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.reviewCompleteControls = {

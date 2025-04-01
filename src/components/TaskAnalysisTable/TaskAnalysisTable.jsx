@@ -83,7 +83,7 @@ const useDebounce = (callback, delay) => {
 };
 
 const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) => {
-  const [inputValue, setInputValue] = useState(filterValue || '');
+  const [inputValue, setInputValue] = useState(filterValue || "");
   const debouncedSetFilter = useDebounce(setFilter, 500);
 
   return (
@@ -91,7 +91,7 @@ const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) 
       <input
         className="mr-input mr-px-2 mr-py-1 mr-w-full"
         value={inputValue}
-        onChange={e => {
+        onChange={(e) => {
           setInputValue(e.target.value);
           debouncedSetFilter(e.target.value || undefined);
         }}
@@ -101,7 +101,7 @@ const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) 
         <button
           className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
           onClick={() => {
-            setInputValue('');
+            setInputValue("");
             setFilter(undefined);
           }}
         >
@@ -142,10 +142,13 @@ export const TaskAnalysisTableInternal = (props) => {
                 direction: sortBy[0].desc ? "DESC" : "ASC",
               }
             : undefined,
-        filters: filters.reduce((acc, filter) => ({
-          ...acc,
-          [filter.id]: filter.value
-        }), {}),
+        filters: filters.reduce(
+          (acc, filter) => ({
+            ...acc,
+            [filter.id]: filter.value,
+          }),
+          {},
+        ),
         page: pageIndex,
       };
 
@@ -316,9 +319,7 @@ export const TaskAnalysisTableInternal = (props) => {
                     </tr>
                     <tr>
                       {headerGroup.headers.map((column) => (
-                        <th key={column.id}>
-                          {column.canFilter ? column.render("Filter") : null}
-                        </th>
+                        <th key={column.id}>{column.canFilter ? column.render("Filter") : null}</th>
                       ))}
                     </tr>
                   </Fragment>
@@ -420,14 +421,10 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (t) => t.name || t.title,
     Cell: ({ value }) => value || "",
-    Filter: ({ column: { filterValue, setFilter }}) => (
-      <SearchFilter
-        value={filterValue}
-        onChange={setFilter}
-        placeholder="Search feature ID..."
-      />
+    Filter: ({ column: { filterValue, setFilter } }) => (
+      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search feature ID..." />
     ),
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.id = {
@@ -479,12 +476,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         return <span>{taskLink}</span>;
       }
     },
-    Filter: ({ column: { filterValue, setFilter }}) => (
-      <SearchFilter
-        value={filterValue}
-        onChange={setFilter}
-        placeholder="Search ID..."
-      />
+    Filter: ({ column: { filterValue, setFilter } }) => (
+      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search ID..." />
     ),
     maxWidth: 120,
   };
@@ -539,7 +532,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     minWidth: 110,
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.priority = {
@@ -820,7 +813,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     ),
     width: 150,
     minWidth: 150,
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.comments = {
@@ -830,7 +823,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     Cell: ({ row }) => <ViewCommentsButton onClick={() => openComments(row.original.id)} />,
     width: 110,
     maxWidth: 110,
-    disableSortBy: true
+    disableSortBy: true,
   };
 
   columns.tags = {
