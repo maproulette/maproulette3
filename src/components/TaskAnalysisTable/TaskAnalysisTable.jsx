@@ -255,6 +255,7 @@ export const TaskAnalysisTableInternal = (props) => {
       manualFilters: true,
       manualPagination: true,
       disableSortRemove: true,
+      autoResetExpanded: false,
       defaultColumn: {
         Filter: () => null,
       },
@@ -333,7 +334,7 @@ export const TaskAnalysisTableInternal = (props) => {
                 {page.map((row) => {
                   prepareRow(row);
                   return (
-                    <Fragment>
+                    <Fragment key={row.original.id}>
                       <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()}>
                         {row.cells.map((cell) => (
                           <td className="mr-px-2" {...cell.getCellProps()}>
