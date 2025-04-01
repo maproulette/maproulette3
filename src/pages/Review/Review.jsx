@@ -66,6 +66,10 @@ export class ReviewTasksDashboard extends Component {
       this.setState({ showType: ReviewTasksType.myReviewedTasks });
     }
 
+    if (this.props.history?.location?.search) {
+      this.setSelectedFilters(buildSearchCriteriafromURL(this.props.history.location.search));
+    }
+
     this.props.subscribeToReviewMessages();
   }
 
