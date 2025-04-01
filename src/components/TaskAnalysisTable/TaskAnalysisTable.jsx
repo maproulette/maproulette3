@@ -259,8 +259,11 @@ export const TaskAnalysisTableInternal = (props) => {
         Filter: () => null,
       },
       initialState: {
-        filters: Object.entries(props.criteria.filters ?? {}).map(([id, value]) => ({ id, value })),
-        sortBy: props.criteria.sortCriteria
+        filters: Object.entries(props.criteria?.filters ?? {}).map(([id, value]) => ({
+          id,
+          value,
+        })),
+        sortBy: props.criteria?.sortCriteria
           ? [
               {
                 id: props.criteria.sortCriteria.sortBy,
