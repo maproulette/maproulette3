@@ -254,6 +254,7 @@ export const TaskAnalysisTableInternal = (props) => {
       manualSortBy: true,
       manualFilters: true,
       manualPagination: true,
+      disableSortRemove: true,
       defaultColumn: {
         Filter: () => null,
       },

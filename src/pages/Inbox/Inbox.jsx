@@ -263,6 +263,7 @@ const Inbox = (props) => {
         pageIndex: DEFAULT_PAGINATION.page,
         pageSize: DEFAULT_PAGINATION.pageSize,
       },
+      disableSortRemove: true,
       defaultColumn: {
         Filter: DefaultColumnFilter,
       },

@@ -76,6 +76,7 @@ const MetricsTable = (props) => {
       data,
       initialState: { pageIndex: 0, pageSize: 50 },
       pageCount: Math.ceil(data.length / 50),
+      disableSortRemove: true,
     },
     useSortBy,
     usePagination,

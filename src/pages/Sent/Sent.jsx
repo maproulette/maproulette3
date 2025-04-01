@@ -44,6 +44,7 @@ const Sent = (props) => {
       columns,
       manualPagination: true,
       manualSortBy: true,
+      disableSortRemove: true,
       pageCount: comments.count,
     },
     useSortBy,

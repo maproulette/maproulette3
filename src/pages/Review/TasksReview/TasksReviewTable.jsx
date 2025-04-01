@@ -220,6 +220,7 @@ export const TaskReviewTable = (props) => {
       manualSortBy: true,
       manualFilters: true,
       manualPagination: true,
+      disableSortRemove: true,
       pageCount: Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize),
       pageSize: props.pageSize,
       initialState,
