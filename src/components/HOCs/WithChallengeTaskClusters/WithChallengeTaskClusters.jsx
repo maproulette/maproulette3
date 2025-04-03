@@ -329,6 +329,11 @@ export const WithChallengeTaskClusters = function (
           return false;
         }
 
+        // Skip if task is locked by another user
+        if (task.lockedBy && task.lockedBy !== this.props.user.id) {
+          return false;
+        }
+
         return true;
       });
 

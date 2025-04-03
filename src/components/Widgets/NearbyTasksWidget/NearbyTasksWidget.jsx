@@ -46,9 +46,9 @@ const descriptor = {
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("taskBundling")),
+  false,
+  false,
   true,
-  false,
-  false,
   false,
 );
 
@@ -472,7 +472,7 @@ registerWidgetType(
                   "taskInfo",
                 ),
                 true,
-                false,
+                true,
                 true,
                 true,
                 "taskBundleFilters",
@@ -481,7 +481,7 @@ registerWidgetType(
             "clusteredTasks",
             "filteredClusteredTasks",
             {
-              includeLocked: false,
+              includeLocked: true,
             },
             true,
             "taskBundleFilters",

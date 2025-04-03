@@ -55,9 +55,9 @@ const descriptor = {
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("taskBundling")),
+  false,
+  false,
   true,
-  false,
-  false,
   false,
 );
 
@@ -122,20 +122,16 @@ export default class TaskBundleWidget extends Component {
           })),
         });
 
-        const bounds = toLatLngBounds(bundleBounds);
+        const bounds = toLatLngBounds(bundleBounds).pad(20);
         const zoom = this.props.criteria?.zoom || 18;
 
         this.props.updateTaskFilterBounds(bounds, zoom);
       }
     } else if (
       (this.props.nearbyTasks?.tasks?.length || 0) > 0 &&
-      !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks) &&
-      !this.props.taskBundle
+      !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)
     ) {
-      // Only set bounds if they haven't been set already
-      if (!this.props.criteria?.boundingBox || this.props.criteria.boundingBox.length === 0) {
-        this.setBoundsToNearbyTask();
-      }
+      this.setBoundsToNearbyTask();
     }
   }
 
@@ -283,7 +279,6 @@ export default class TaskBundleWidget extends Component {
   };
 
   async componentDidMount() {
-    this.initializeClusterFilters();
     await this.props.resetSelectedTasks();
 
     // Always select the main task
@@ -309,25 +304,24 @@ export default class TaskBundleWidget extends Component {
   async componentDidUpdate(prevProps) {
     const taskChanged = this.props.task?.id !== prevProps.task?.id;
     const bundleChanged = this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId;
+    const bundleLoaded = !prevProps.taskBundle && this.props.taskBundle;
 
-    if (taskChanged || bundleChanged) {
+    if (taskChanged || bundleChanged || bundleLoaded) {
       await this.props.resetSelectedTasks();
+
       // Always select the main task first
       if (this.props.task) {
         this.props.selectTasks([this.props.task]);
       }
+
       // Then add any additional bundle tasks
       if (this.props.taskBundle?.tasks) {
-        const additionalTasks = this.props.taskBundle.tasks.filter(
-          (t) => t.id !== this.props.task?.id,
-        );
-        if (additionalTasks.length > 0) {
-          this.props.selectTasks(additionalTasks);
-        }
+        // Select all tasks in the bundle to ensure they're all selected
+        this.props.selectTasks(this.props.taskBundle.tasks);
       }
     }
 
-    if (bundleChanged || this.props.nearbyTasks !== prevProps.nearbyTasks) {
+    if (bundleChanged || bundleLoaded || this.props.nearbyTasks !== prevProps.nearbyTasks) {
       this.initializeClusterFilters(prevProps);
       this.initializeWebsocketSubscription(prevProps);
     }
@@ -477,17 +471,18 @@ const BundlingDisabledMessage = ({
         const isTaskCompleted = [0, 3, 6].includes(task?.status);
         const completionStatus = isReviewCompleted || isTaskCompleted;
 
+        if (!completionStatus) {
+          messageKey = "bundlingDisabledNotCompleted";
+        }
+
         // Check mapper edit permissions
         const hasNoCompletion = !task?.completedBy;
         const isTaskCompleter = user.id === task?.completedBy;
 
-        if (!completionStatus) {
-          messageKey = "bundlingDisabledNotCompleted";
-        } else if (!hasNoCompletion && !isTaskCompleter && !user.isSuperUser) {
-          messageKey = "bundlingDisabledNotOwner";
-        } else {
-          messageKey = "bundlingDisabledGeneric";
-        }
+        // if (task?.completedBy && !hasNoCompletion && !isTaskCompleter && !user.isSuperUser) {
+        //   debugger;
+        //   messageKey = "bundlingDisabledNotOwner";
+        // }
       }
     }
   }
@@ -502,10 +497,13 @@ const BundlingDisabledMessage = ({
 const ActiveBundle = (props) => {
   const { task, taskBundle, bundleEditsDisabled, initialBundle, widgetLayout, isUnbundling } =
     props;
+
+  // Fix the array comparison logic
   const disabled =
-    props.bundleEditsDisabled ||
-    (props.initialBundle &&
-      props.initialBundle?.taskIds?.sort() === props.taskBundle?.taskIds?.sort());
+    bundleEditsDisabled ||
+    (initialBundle &&
+      initialBundle?.taskIds?.length === taskBundle?.taskIds?.length &&
+      [...initialBundle?.taskIds].sort().join(",") === [...taskBundle?.taskIds].sort().join(","));
 
   const showMarkerPopup = (markerData) => {
     return (
@@ -937,7 +935,7 @@ registerWidgetType(
                   "taskInfo",
                 ),
                 true,
-                false,
+                true,
                 true,
                 true,
                 "taskBundleFilters",

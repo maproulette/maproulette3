@@ -220,4 +220,8 @@ export default defineMessages({
     id: "TaskBundleWidget.bundlingDisabledGeneric",
     defaultMessage: "Task bundling is currently disabled.",
   },
+  cannotEditLockedTask: {
+    id: "TaskBundleWidget.cannotEditLockedTask",
+    defaultMessage: "Task is locked by another user",
+  },
 });

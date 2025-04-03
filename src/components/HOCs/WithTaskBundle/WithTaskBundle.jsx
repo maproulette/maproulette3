@@ -43,6 +43,7 @@ export function WithTaskBundle(WrappedComponent) {
       if (Number.isFinite(task?.bundleId)) {
         await this.fetchBundle(task.bundleId);
       }
+
       this.updateBundlingConditions();
       window.addEventListener("beforeunload", this.handleBeforeUnload);
     }
@@ -50,7 +51,7 @@ export function WithTaskBundle(WrappedComponent) {
     async componentDidUpdate(prevProps) {
       const { task } = this.props;
 
-      if (task?.id !== prevProps?.task?.id || this.props.taskReadOnly !== prevProps.taskReadOnly) {
+      if (task && task?.id !== prevProps?.task?.id) {
         if (this.state.taskBundle) {
           this.unlockTasks(this.state.taskBundle.taskIds);
         }
@@ -67,45 +68,17 @@ export function WithTaskBundle(WrappedComponent) {
         }
         this.updateBundlingConditions();
       }
-
-      // Reset error state if task or challenge changes
-      if (
-        this.props.task?.id !== prevProps.task?.id ||
-        this.props.challenge?.id !== prevProps.challenge?.id
-      ) {
-        this.setState({
-          taskBundle: null,
-          loading: false,
-          error: null,
-        });
-      }
     }
 
     componentWillUnmount() {
       this.stopLockRefresh();
-      if (this.state.taskBundle) {
-        // Only unlock tasks that aren't the primary task
-        const tasksToUnlock = this.state.taskBundle.taskIds.filter(
-          (taskId) => taskId !== this.props.task.id,
-        );
-        if (tasksToUnlock.length > 0) {
-          this.unlockTasks(tasksToUnlock);
-        }
-      }
+      this.unlockBundleTasks();
       window.removeEventListener("beforeunload", this.handleBeforeUnload);
     }
 
     handleBeforeUnload = () => {
       this.stopLockRefresh();
-      if (this.state.taskBundle) {
-        // Only unlock tasks that aren't the primary task
-        const tasksToUnlock = this.state.taskBundle.taskIds.filter(
-          (taskId) => taskId !== this.props.task.id,
-        );
-        if (tasksToUnlock.length > 0) {
-          this.unlockTasks(tasksToUnlock);
-        }
-      }
+      this.unlockBundleTasks();
     };
 
     startLockRefresh = (taskIds) => {
@@ -135,12 +108,26 @@ export function WithTaskBundle(WrappedComponent) {
       try {
         const taskBundle = await fetchTaskBundle(bundleId, !this.state.bundleEditsDisabled);
         this.handlePrimaryTaskRedirect(taskBundle, task, workspace, history);
+
+        // Set the bundle state
         this.setState({
           taskBundle,
           initialBundle: taskBundle,
           selectedTasks: taskBundle?.taskIds || [],
           fetchBundleError: false,
         });
+
+        // Ensure tasks are selected in the UI
+        if (this.props.selectTasks && taskBundle?.tasks) {
+          // First reset any existing selections
+          if (this.props.resetSelectedTasks) {
+            await this.props.resetSelectedTasks();
+          }
+
+          // Select all tasks in the bundle
+          this.props.selectTasks(taskBundle.tasks);
+        }
+
         this.updateBundlingConditions();
         if (!this.props.taskReadOnly && taskBundle) {
           this.startLockRefresh(taskBundle.taskIds);
@@ -221,7 +208,7 @@ export function WithTaskBundle(WrappedComponent) {
         // If none of the above conditions are met, disable edits
         this.setState({
           bundleEditsDisabled: true,
-          bundlingDisabledReason: completionStatus ? "notOwner" : "notCompleted",
+          bundlingDisabledReason: "notOwner",
         });
       } catch (error) {
         console.error("Error in updateBundlingConditions:", error);
@@ -362,7 +349,7 @@ export function WithTaskBundle(WrappedComponent) {
     removeTaskFromBundle = async (taskId) => {
       const { taskBundle, initialBundle } = this.state;
 
-      if (initialBundle && !initialBundle?.taskIds.includes(taskId)) {
+      if ((this.props.task && !initialBundle) || !initialBundle?.taskIds.includes(taskId)) {
         try {
           await this.unlockTasks([taskId]);
         } catch (error) {
@@ -442,6 +429,18 @@ export function WithTaskBundle(WrappedComponent) {
         }
       }
       return null;
+    };
+
+    unlockBundleTasks = () => {
+      if (this.state.taskBundle) {
+        // Only unlock tasks that aren't the primary task
+        const tasksToUnlock = this.state.taskBundle.taskIds.filter(
+          (taskId) => taskId !== this.props.task.id,
+        );
+        if (tasksToUnlock.length > 0) {
+          this.unlockTasks(tasksToUnlock);
+        }
+      }
     };
 
     render() {
