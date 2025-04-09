@@ -338,35 +338,31 @@ export const refreshTaskLock = function (taskId) {
 };
 
 /**
- * Refreshes an active task lock owned by the current user
+ * Release multiple tasks at once
  */
 export const releaseMultipleTasks = function (taskIds) {
-  return function (dispatch) {
+  return function () {
+    // Don't make API call if no tasks to release
+    if (!taskIds || taskIds.length === 0) {
+      return Promise.resolve([]);
+    }
+
     return new Endpoint(api.task.releaseMultipleTasks, {
       schema: [taskSchema()],
       params: { taskIds: taskIds },
     })
       .execute()
-      .then((normalizedResults) => {
-        const tasks = Object.values(normalizedResults.result);
-        dispatch(receiveTasks(tasks));
-        return tasks;
-      })
       .catch((error) => {
-        if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn())
-            .then(() => dispatch(addError(AppErrors.user.unauthorized)))
-            .catch(() => null);
-        } else {
-          dispatch(addError(AppErrors.task.lockReleaseFailure));
-          console.log(error.response || error);
-        }
+        // Just log the error and don't throw - this allows the UI to continue
+        // even if some tasks couldn't be unlocked
+        console.warn("Error releasing multiple tasks:", error);
+        return []; // Return empty array to avoid breaking UI
       });
   };
 };
 
 /**
- * Refreshes an active task lock owned by the current user
+ * Lock multiple tasks at once
  */
 export const lockMultipleTasks = function (taskIds) {
   return function (dispatch) {
@@ -381,8 +377,14 @@ export const lockMultipleTasks = function (taskIds) {
     })
       .execute()
       .then((normalizedResults) => {
+        if (!normalizedResults || !normalizedResults.result) {
+          return []; // Handle empty results
+        }
+
         const tasks = Object.values(normalizedResults.result);
-        dispatch(receiveTasks(tasks));
+        if (tasks && tasks.length > 0) {
+          dispatch(receiveTasks(tasks));
+        }
         return tasks;
       })
       .catch((error) => {
@@ -390,41 +392,47 @@ export const lockMultipleTasks = function (taskIds) {
           dispatch(ensureUserLoggedIn()).catch(() => null);
         }
 
+        // Handle error but don't throw - try to continue UI experience
         if (error.response) {
-          error.response
-            .text()
-            .then((responseText) => {
-              let errorMessage = responseText;
+          try {
+            const errorMessage = error.response.text
+              ? error.response.text()
+              : Promise.resolve(error.message || "Lock failed");
 
-              try {
-                // Try to parse the response as JSON
-                const jsonResponse = JSON.parse(responseText);
-                // Extract just the message part if it exists
-                if (jsonResponse && jsonResponse.message) {
-                  errorMessage = jsonResponse.message;
+            errorMessage
+              .then((text) => {
+                let errorMessage = text;
+                try {
+                  // Try to parse the response as JSON
+                  const jsonResponse = JSON.parse(text);
+                  // Extract just the message part if it exists
+                  if (jsonResponse && jsonResponse.message) {
+                    errorMessage = jsonResponse.message;
+                  }
+                } catch (e) {
+                  // If parsing fails, use the original text
+                  console.log("Error parsing error response:", e);
                 }
-              } catch (e) {
-                // If parsing fails, use the original text
-                console.log("Error parsing error response:", e);
-              }
 
-              dispatch(
-                addErrorWithDetails(
-                  AppErrors.task.lockFailure,
-                  errorMessage || error.defaultMessage,
-                ),
-              );
-            })
-            .catch((e) => {
-              // If text() fails, use a default error message
-              dispatch(addError(AppErrors.task.lockFailure));
-              console.error("Error reading error response:", e);
-            });
+                dispatch(
+                  addErrorWithDetails(
+                    AppErrors.task.lockFailure,
+                    errorMessage || error.defaultMessage,
+                  ),
+                );
+              })
+              .catch(() => {
+                dispatch(addError(AppErrors.task.lockFailure));
+              });
+          } catch (e) {
+            dispatch(addError(AppErrors.task.lockFailure));
+          }
         } else {
           dispatch(addError(AppErrors.task.lockFailure));
         }
 
-        throw error;
+        // Return empty array instead of throwing to avoid breaking UI
+        return [];
       });
   };
 };

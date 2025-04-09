@@ -85,14 +85,22 @@ export function WithTaskBundle(WrappedComponent) {
       this.stopLockRefresh();
 
       // Filter out the primary task ID before setting up refresh
-      const tasksToRefresh = taskIds.filter((taskId) => taskId !== this.props.task.id);
+      // since the primary task is managed by WithLockedTask
+      const tasksToRefresh = taskIds.filter((taskId) => taskId !== this.props.task?.id);
 
       if (tasksToRefresh.length === 0) {
         return; // No tasks to refresh
       }
 
+      // Set initial locks before starting the interval
+      this.props.lockMultipleTasks(tasksToRefresh).catch((error) => {
+        console.log("Error refreshing task locks:", error);
+      });
+
       this.refreshLockInterval = setInterval(() => {
-        this.props.lockMultipleTasks(tasksToRefresh);
+        this.props.lockMultipleTasks(tasksToRefresh).catch((error) => {
+          console.log("Error refreshing task locks:", error);
+        });
       }, LOCK_REFRESH_INTERVAL);
     };
 
@@ -204,12 +212,6 @@ export function WithTaskBundle(WrappedComponent) {
           });
           return;
         }
-
-        // If none of the above conditions are met, disable edits
-        this.setState({
-          bundleEditsDisabled: true,
-          bundlingDisabledReason: "notOwner",
-        });
       } catch (error) {
         console.error("Error in updateBundlingConditions:", error);
         this.setState({
@@ -278,9 +280,14 @@ export function WithTaskBundle(WrappedComponent) {
     };
 
     unlockTasks = async (taskIds) => {
+      if (!taskIds || taskIds.length === 0) {
+        return; // Nothing to unlock
+      }
+
       try {
         await this.props.releaseMultipleTasks(taskIds);
       } catch (error) {
+        console.warn("Error unlocking tasks:", error);
         this.setState({ error: "unlockError" });
       }
     };
@@ -305,7 +312,7 @@ export function WithTaskBundle(WrappedComponent) {
       }
 
       this.setState({ loading: true, error: null }); // Reset error before new request
-      const tasksToLock = taskIds.filter((taskId) => taskId !== this.props.task.id);
+      const tasksToLock = taskIds.filter((taskId) => taskId !== this.props.task?.id);
       const tasks = await this.lockTasks(tasksToLock);
 
       // Check if we successfully locked the tasks
@@ -434,10 +441,14 @@ export function WithTaskBundle(WrappedComponent) {
     unlockBundleTasks = () => {
       if (this.state.taskBundle) {
         // Only unlock tasks that aren't the primary task
+        // since the primary task is managed by WithLockedTask
         const tasksToUnlock = this.state.taskBundle.taskIds.filter(
-          (taskId) => taskId !== this.props.task.id,
+          (taskId) => taskId !== this.props.task?.id,
         );
+
         if (tasksToUnlock.length > 0) {
+          // Log unlock attempt for debugging
+          console.log(`Unlocking ${tasksToUnlock.length} bundle tasks`);
           this.unlockTasks(tasksToUnlock);
         }
       }

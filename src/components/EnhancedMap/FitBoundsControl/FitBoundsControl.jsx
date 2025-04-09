@@ -95,18 +95,6 @@ const FitBoundsLeafletControl = Control.extend({
     ReactDOM.render(controlContent, controlContainer);
     return controlContainer;
   },
-
-  onRemove: function (map) {
-    // Remove and unregister the keyboard shortcut handler
-    if (map.fitBoundsKeyboardHandler) {
-      map.fitBoundsKeyboardHandler.disable();
-
-      this.options.removeExternalKeyboardShortcut(
-        shortcutGroup,
-        _pick(this.options.keyboardShortcutGroups.taskEditing, "fitBounds"),
-      );
-    }
-  },
 });
 
 /**

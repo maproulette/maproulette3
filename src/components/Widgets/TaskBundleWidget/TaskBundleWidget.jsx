@@ -122,7 +122,7 @@ export default class TaskBundleWidget extends Component {
           })),
         });
 
-        const bounds = toLatLngBounds(bundleBounds).pad(20);
+        const bounds = toLatLngBounds(bundleBounds).pad(1);
         const zoom = this.props.criteria?.zoom || 18;
 
         this.props.updateTaskFilterBounds(bounds, zoom);
@@ -320,7 +320,6 @@ export default class TaskBundleWidget extends Component {
         this.props.selectTasks(this.props.taskBundle.tasks);
       }
     }
-
     if (bundleChanged || bundleLoaded || this.props.nearbyTasks !== prevProps.nearbyTasks) {
       this.initializeClusterFilters(prevProps);
       this.initializeWebsocketSubscription(prevProps);
@@ -395,7 +394,6 @@ export default class TaskBundleWidget extends Component {
   }
 
   render() {
-    const WidgetContent = this.props.taskBundle ? ActiveBundle : BuildBundle;
     return (
       <QuickWidget
         {...this.props}
@@ -403,7 +401,7 @@ export default class TaskBundleWidget extends Component {
         widgetTitle={<FormattedMessage {...messages.title} />}
         noMain
       >
-        <WidgetContent
+        <BundleInterface
           {...this.props}
           saveFilters={this.saveFilters}
           revertFilters={this.revertFilters}
@@ -474,15 +472,6 @@ const BundlingDisabledMessage = ({
         if (!completionStatus) {
           messageKey = "bundlingDisabledNotCompleted";
         }
-
-        // Check mapper edit permissions
-        const hasNoCompletion = !task?.completedBy;
-        const isTaskCompleter = user.id === task?.completedBy;
-
-        // if (task?.completedBy && !hasNoCompletion && !isTaskCompleter && !user.isSuperUser) {
-        //   debugger;
-        //   messageKey = "bundlingDisabledNotOwner";
-        // }
       }
     }
   }
@@ -494,232 +483,28 @@ const BundlingDisabledMessage = ({
   ) : null;
 };
 
-const ActiveBundle = (props) => {
-  const { task, taskBundle, bundleEditsDisabled, initialBundle, widgetLayout, isUnbundling } =
-    props;
-
-  // Fix the array comparison logic
-  const disabled =
-    bundleEditsDisabled ||
-    (initialBundle &&
-      initialBundle?.taskIds?.length === taskBundle?.taskIds?.length &&
-      [...initialBundle?.taskIds].sort().join(",") === [...taskBundle?.taskIds].sort().join(","));
-
-  const showMarkerPopup = (markerData) => {
-    return (
-      <Popup
-        key={markerData.options.taskId}
-        offset={task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]}
-      >
-        <div className="marker-popup-content">
-          <TaskMarkerContent
-            {...props}
-            marker={markerData}
-            taskId={markerData.options.taskId}
-            taskBundleData={taskBundle?.tasks}
-            bundling
-            unbundleTask={props.unbundleTask}
-            bundleTask={props.bundleTask}
-          />
-        </div>
-      </Popup>
-    );
-  };
-
-  const bundleCenter = toLatLngBounds(
-    bbox({
-      type: "FeatureCollection",
-      features: _map(taskBundle.tasks, (task) => ({
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
-        },
-      })),
-    }),
-  );
-
-  const map = (
-    <ClusterMap
-      {...props}
-      loadingTasks={props.loadingTasks}
-      highlightPrimaryTask={task.id}
-      showMarkerPopup={showMarkerPopup}
-      centerBounds={bundleCenter}
-      initialBounds={bundleCenter}
-      fitbBoundsControl
-      selectedTasks={props.selectedTasks}
-    />
-  );
-
-  const table = (
-    <TaskAnalysisTable
-      {...props}
-      selectedTasks={new Map()}
-      taskData={props.bundledOnly && taskBundle ? taskBundle?.tasks : props.taskInfo?.tasks}
-      totalTaskCount={props.taskInfo?.totalCount || props.taskInfo?.tasks?.length}
-      totalTasksInChallenge={calculateTasksInChallenge(props)}
-      showColumns={["featureId", "id", "status", "priority", "editBundle"]}
-      suppressHeader
-      suppressManagement
-      suppressTriState
-      defaultPageSize={5}
-    />
-  );
-
-  return (
-    <div className="mr-pb-2 mr-h-full mr-rounded">
-      {bundleEditsDisabled && (
-        <BundlingDisabledMessage
-          task={task}
-          workspace={props.workspace}
-          taskReadOnly={props.taskReadOnly}
-          user={props.user}
-          bundlingDisabledReason={props.bundlingDisabledReason}
-        />
-      )}
-      <div
-        className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80"
-        style={{ maxHeight: `${widgetLayout?.w * 80}px` }}
-      >
-        {props.loading ? (
-          <BusySpinner className="mr-h-full mr-flex mr-items-center" />
-        ) : (
-          <MapPane showLasso={false}>{map}</MapPane>
-        )}
-      </div>
-      {props.errors.size > 0 && (
-        <div className="mr-text-red mr-mt-4 mr-text-center mr-space-y-2">
-          {[...props.errors].map((errorType) => (
-            <div key={errorType}>
-              <FormattedMessage {...messages[errorType]} />
-              {errorType === "lockError" && props.failedLocks && (
-                <span className="mr-ml-2">({props.failedLocks.join(", ")})</span>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-      <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4">
-        <FormattedMessage
-          {...messages.simultaneousTasks}
-          values={{ taskCount: taskBundle?.taskIds.length }}
-        />
-      </h3>
-      <div className="mr-flex mr-justify-between mr-content-center mr-my-4">
-        <button
-          className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
-          onClick={() => props.setBundledOnly(!props.bundledOnly)}
-        >
-          <FormattedMessage
-            {...messages[props.bundledOnly ? "displayAllTasksLabel" : "displayBundledTasksLabel"]}
-          />
-        </button>
-        {initialBundle && (
-          <button
-            disabled={disabled || isUnbundling}
-            className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
-            style={{
-              cursor: disabled || isUnbundling ? "default" : "pointer",
-              opacity: disabled || isUnbundling ? 0.3 : 1,
-            }}
-            onClick={() => props.resetTaskBundle()}
-          >
-            {isUnbundling ? (
-              <BusySpinner inline small />
-            ) : (
-              <FormattedMessage {...messages.resetBundleLabel} />
-            )}
-          </button>
-        )}
-        <button
-          disabled={bundleEditsDisabled || isUnbundling}
-          className="mr-button mr-button--green-lighter mr-button--small"
-          style={{
-            cursor: bundleEditsDisabled || isUnbundling ? "default" : "pointer",
-            opacity: bundleEditsDisabled || isUnbundling ? 0.3 : 1,
-          }}
-          onClick={() => props.clearActiveTaskBundle()}
-        >
-          {isUnbundling ? (
-            <BusySpinner inline small />
-          ) : (
-            <FormattedMessage {...messages.unbundleTasksLabel} />
-          )}
-        </button>
-      </div>
-      <div
-        className={
-          widgetLayout && widgetLayout?.w === 4
-            ? "mr-my-4 mr-px-4 mr-space-y-3"
-            : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
-        }
-      >
-        <div className="mr-flex mr-items-center">
-          <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
-            <FormattedMessage {...messages.filterListLabel} />
-          </p>
-          <ul className="md:mr-flex">
-            <li className="md:mr-mr-8">
-              <TaskStatusFilter {...props} />
-            </li>
-            <li className="md:mr-mr-8">
-              <TaskPriorityFilter {...props} />
-            </li>
-            <li>
-              <TaskPropertyFilter {...props} />
-            </li>
-          </ul>
-        </div>
-        <div
-          className={`mr-flex mr-space-x-3 mr-items-center ${
-            widgetLayout && widgetLayout?.w === 4 ? "mr-justify-between" : "mr-justify-end"
-          }`}
-        >
-          {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
-          <Dropdown
-            className="mr-flex mr-items-center"
-            dropdownButton={(dropdown) => (
-              <button
-                onClick={dropdown.toggleDropdownVisible}
-                className="mr-flex mr-items-center mr-text-green-lighter"
-              >
-                <SvgSymbol
-                  sym="filter-icon"
-                  viewBox="0 0 20 20"
-                  className="mr-fill-current mr-w-5 mr-h-5"
-                />
-              </button>
-            )}
-            dropdownContent={(dropdown) => (
-              <div className="mr-flex mr-flex-col mr-space-y-2">
-                <SaveFiltersControl
-                  saveFilters={props.saveFilters}
-                  closeDropdown={dropdown.closeDropdown}
-                />
-                <RevertFiltersControl revertFilters={props.revertFilters} />
-              </div>
-            )}
-          />
-        </div>
-      </div>
-      <div className={"mr-px-4"}>{table}</div>
-    </div>
-  );
-};
-
-const BuildBundle = (props) => {
+const BundleInterface = (props) => {
   const {
+    task,
+    taskBundle,
+    bundleEditsDisabled,
+    initialBundle,
+    widgetLayout,
+    isUnbundling,
+    isBundling,
+    selectedTasks,
     virtualChallenge,
     virtualChallengeId,
     taskInfo,
     taskReadOnly,
-    selectedTasks,
-    bundleEditsDisabled,
-    isBundling,
-    isUnbundling,
+    workspace,
+    user,
+    bundlingDisabledReason,
+    loadingTasks,
+    errors,
   } = props;
 
+  // Early return for virtual challenges
   if (virtualChallenge || Number.isFinite(virtualChallengeId)) {
     return (
       <div className="mr-text-base">
@@ -728,11 +513,24 @@ const BuildBundle = (props) => {
     );
   }
 
+  // Show bundling disabled message if applicable
+  const bundlingDisabledMessage = bundleEditsDisabled && (
+    <BundlingDisabledMessage
+      task={task}
+      workspace={workspace}
+      taskReadOnly={taskReadOnly}
+      user={user}
+      bundlingDisabledReason={bundlingDisabledReason}
+    />
+  );
+
+  // Determine if we can show the bundle button
   const totalTaskCount = taskInfo?.totalCount || taskInfo?.tasks?.length;
   const showBundleButton =
     !taskReadOnly && props.selectedTaskCount(totalTaskCount) > 1 && !bundleEditsDisabled;
   const isTooManyTasks = selectedTasks.selected.size > 50;
 
+  // Create bundle button if needed
   const bundleButton = showBundleButton ? (
     <button
       className={`mr-button mr-button--green-lighter mr-button--small ${
@@ -749,70 +547,235 @@ const BuildBundle = (props) => {
     </button>
   ) : null;
 
+  // Setup map popup content
   const showMarkerPopup = (markerData) => {
     return (
       <Popup
         key={markerData.options.taskId}
-        offset={props.task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]}
+        offset={task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]}
       >
         <div className="marker-popup-content">
-          <TaskMarkerContent {...props} marker={markerData} taskId={markerData.options.taskId} />
+          <TaskMarkerContent
+            {...props}
+            marker={markerData}
+            taskId={markerData.options.taskId}
+            taskBundleData={taskBundle?.tasks}
+            bundling={!!taskBundle}
+            unbundleTask={props.unbundleTask}
+            bundleTask={props.bundleTask}
+          />
         </div>
       </Popup>
     );
   };
 
+  // Calculate map bounds
+  let mapBounds;
+  if (taskBundle) {
+    mapBounds = toLatLngBounds(
+      bbox({
+        type: "FeatureCollection",
+        features: _map(taskBundle.tasks, (task) => ({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
+          },
+        })),
+      }),
+    );
+  } else {
+    mapBounds = toLatLngBounds(props.criteria?.boundingBox || []);
+  }
+
+  // Create map component
+  const taskCenter = AsMappableTask(props.task).calculateCenterPoint();
   const map = (
     <ClusterMap
       {...props}
+      loadingTasks={loadingTasks}
+      highlightPrimaryTask={task.id}
       showMarkerPopup={showMarkerPopup}
-      highlightPrimaryTask={props.task.id}
-      taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
-      boundingBox={props.criteria?.boundingBox}
-      initialBounds={toLatLngBounds(props.criteria?.boundingBox || [])}
-      onBulkTaskSelection={(tasks) => {
-        // Ensure main task stays selected
-        if (!props.selectedTasks.selected.has(props.task.id)) {
-          props.selectTasks([props.task]);
-        }
-        const tasksToSelect = tasks.filter((t) => t.id !== props.task.id);
-        props.selectTasks(tasksToSelect);
-      }}
-      onBulkTaskDeselection={(tasks) => {
-        const tasksToDeselect = tasks.filter((t) => t.id !== props.task.id);
-        props.deselectTasks(tasksToDeselect);
-      }}
+      taskCenter={taskCenter}
+      centerBounds={mapBounds}
+      initialBounds={mapBounds}
       fitbBoundsControl
-      showSelectMarkersInView
+      selectedTasks={selectedTasks}
+      onBulkTaskSelection={
+        !taskBundle
+          ? (tasks) => {
+              // Ensure main task stays selected
+              if (!props.selectedTasks.selected.has(props.task.id)) {
+                props.selectTasks([props.task]);
+              }
+              const tasksToSelect = tasks.filter((t) => t.id !== props.task.id);
+              props.selectTasks(tasksToSelect);
+            }
+          : undefined
+      }
+      onBulkTaskDeselection={
+        !taskBundle
+          ? (tasks) => {
+              const tasksToDeselect = tasks.filter((t) => t.id !== props.task.id);
+              props.deselectTasks(tasksToDeselect);
+            }
+          : undefined
+      }
+      showSelectMarkersInView={!taskBundle}
     />
   );
 
-  const isLoading = props.loading || props.nearbyTasks?.loading;
+  // Create action buttons
+  const actionButtons = (
+    <div className="mr-flex mr-justify-between mr-content-center mr-my-4">
+      {taskBundle && (
+        <button
+          className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
+          onClick={() => props.setBundledOnly(!props.bundledOnly)}
+        >
+          <FormattedMessage
+            {...messages[props.bundledOnly ? "displayAllTasksLabel" : "displayBundledTasksLabel"]}
+          />
+        </button>
+      )}
+      {initialBundle && (
+        <button
+          disabled={bundleEditsDisabled || isUnbundling}
+          className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
+          style={{
+            cursor: bundleEditsDisabled || isUnbundling ? "default" : "pointer",
+            opacity: bundleEditsDisabled || isUnbundling ? 0.3 : 1,
+          }}
+          onClick={() => props.resetTaskBundle()}
+        >
+          {isUnbundling ? (
+            <BusySpinner inline small />
+          ) : (
+            <FormattedMessage {...messages.resetBundleLabel} />
+          )}
+        </button>
+      )}
+      {taskBundle && (
+        <button
+          disabled={bundleEditsDisabled || isUnbundling}
+          className="mr-button mr-button--green-lighter mr-button--small"
+          style={{
+            cursor: bundleEditsDisabled || isUnbundling ? "default" : "pointer",
+            opacity: bundleEditsDisabled || isUnbundling ? 0.3 : 1,
+          }}
+          onClick={() => props.clearActiveTaskBundle()}
+        >
+          {isUnbundling ? (
+            <BusySpinner inline small />
+          ) : (
+            <FormattedMessage {...messages.unbundleTasksLabel} />
+          )}
+        </button>
+      )}
+    </div>
+  );
+
+  // Create filters section
+  const filters = (
+    <div
+      className={
+        widgetLayout && widgetLayout?.w === 4
+          ? "mr-my-4 mr-px-4 mr-space-y-3"
+          : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
+      }
+    >
+      <div className="mr-flex mr-items-center">
+        <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
+          <FormattedMessage {...messages.filterListLabel} />
+        </p>
+        <ul className="md:mr-flex">
+          <li className="md:mr-mr-8">
+            <TaskStatusFilter {...props} />
+          </li>
+          <li className="md:mr-mr-8">
+            <TaskPriorityFilter {...props} />
+          </li>
+          <li>
+            <TaskPropertyFilter {...props} />
+          </li>
+        </ul>
+      </div>
+      <div
+        className={`mr-flex mr-space-x-3 mr-items-center ${
+          widgetLayout && widgetLayout?.w === 4 ? "mr-justify-between" : "mr-justify-end"
+        }`}
+      >
+        {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
+        <Dropdown
+          className="mr-flex mr-items-center"
+          dropdownButton={(dropdown) => (
+            <button
+              onClick={dropdown.toggleDropdownVisible}
+              className="mr-flex mr-items-center mr-text-green-lighter"
+            >
+              <SvgSymbol
+                sym="filter-icon"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-5 mr-h-5"
+              />
+            </button>
+          )}
+          dropdownContent={(dropdown) => (
+            <div className="mr-flex mr-flex-col mr-space-y-2">
+              <SaveFiltersControl
+                saveFilters={props.saveFilters}
+                closeDropdown={dropdown.closeDropdown}
+              />
+              <RevertFiltersControl revertFilters={props.revertFilters} />
+            </div>
+          )}
+        />
+      </div>
+    </div>
+  );
+
+  // Create table component
+  const table = (
+    <div className="mr-px-4">
+      <TaskAnalysisTable
+        {...props}
+        taskData={taskBundle && props.bundledOnly ? taskBundle?.tasks : props.taskInfo?.tasks}
+        totalTaskCount={totalTaskCount}
+        totalTasksInChallenge={calculateTasksInChallenge(props)}
+        showColumns={
+          taskBundle
+            ? ["featureId", "id", "status", "priority", "editBundle"]
+            : ["selected", "featureId", "id", "status", "priority", "comments"]
+        }
+        customHeaderControls={!taskBundle ? bundleButton : null}
+        suppressManagement
+        showSelectionCount={!taskBundle}
+        highlightPrimaryTask={!taskBundle}
+        defaultPageSize={5}
+        forBundling={!taskBundle}
+        suppressTriState
+        suppressHeader={!!taskBundle}
+        selectedTasks={taskBundle ? new Map() : props.selectedTasks}
+      />
+    </div>
+  );
 
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
-      {bundleEditsDisabled && (
-        <BundlingDisabledMessage
-          task={props.task}
-          workspace={props.workspace}
-          taskReadOnly={taskReadOnly}
-          user={props.user}
-          bundlingDisabledReason={props.bundlingDisabledReason}
-        />
-      )}
+      {bundlingDisabledMessage}
       <div
         className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80"
-        style={{ maxHeight: `${props.widgetLayout?.w * 80}px` }}
+        style={{ maxHeight: `${widgetLayout?.w * 80}px` }}
       >
-        {isLoading ? (
+        {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
-          <MapPane showLasso={!bundleEditsDisabled}>{map}</MapPane>
+          <MapPane showLasso={!bundleEditsDisabled && !taskBundle}>{map}</MapPane>
         )}
       </div>
-      {props.errors.size > 0 && (
+      {errors.size > 0 && (
         <div className="mr-text-red mr-mt-4 mr-text-center mr-space-y-2">
-          {[...props.errors].map((errorType) => (
+          {[...errors].map((errorType) => (
             <div key={errorType}>
               <FormattedMessage {...messages[errorType]} />
               {errorType === "lockError" && props.failedLocks && (
@@ -822,99 +785,17 @@ const BuildBundle = (props) => {
           ))}
         </div>
       )}
-      <div className="mr-flex mr-justify-end mr-mt-2">
-        {props.initialBundle && (
-          <button
-            className={`mr-button mr-button--red mr-button--small mr-mt-2 mr-float-right ${
-              bundleEditsDisabled || isUnbundling
-                ? "mr-text-grey-light mr-cursor-default"
-                : "mr-text-green-lighter"
-            }`}
-            onClick={props.resetTaskBundle}
-            disabled={bundleEditsDisabled || isUnbundling}
-          >
-            {isUnbundling ? (
-              <BusySpinner inline small />
-            ) : (
-              <FormattedMessage {...messages.resetBundleLabel} />
-            )}
-          </button>
-        )}
-      </div>
-      <div
-        className={
-          props.widgetLayout && props.widgetLayout?.w === 4
-            ? "mr-my-4 mr-px-4 mr-space-y-3"
-            : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
-        }
-      >
-        <div className="mr-flex mr-items-center">
-          <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
-            <FormattedMessage {...messages.filterListLabel} />
-          </p>
-          <ul className="md:mr-flex">
-            <li className="md:mr-mr-8">
-              <TaskStatusFilter {...props} />
-            </li>
-            <li className="md:mr-mr-8">
-              <TaskPriorityFilter {...props} />
-            </li>
-            <li>
-              <TaskPropertyFilter {...props} />
-            </li>
-          </ul>
-        </div>
-
-        <div
-          className={`mr-flex mr-space-x-3 mr-items-center ${
-            props.widgetLayout && props.widgetLayout?.w === 4
-              ? "mr-justify-between"
-              : "mr-justify-end"
-          }`}
-        >
-          {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
-          <Dropdown
-            className="mr-flex mr-items-center"
-            dropdownButton={(dropdown) => (
-              <button
-                onClick={dropdown.toggleDropdownVisible}
-                className="mr-flex mr-items-center mr-text-green-lighter"
-              >
-                <SvgSymbol
-                  sym="filter-icon"
-                  viewBox="0 0 20 20"
-                  className="mr-fill-current mr-w-5 mr-h-5"
-                />
-              </button>
-            )}
-            dropdownContent={(dropdown) => (
-              <div className="mr-flex mr-flex-col mr-space-y-2">
-                <SaveFiltersControl
-                  saveFilters={props.saveFilters}
-                  closeDropdown={dropdown.closeDropdown}
-                />
-                <RevertFiltersControl revertFilters={props.revertFilters} />
-              </div>
-            )}
+      {taskBundle && (
+        <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4">
+          <FormattedMessage
+            {...messages.simultaneousTasks}
+            values={{ taskCount: taskBundle?.taskIds.length }}
           />
-        </div>
-      </div>
-      <div className="mr-px-4">
-        <TaskAnalysisTable
-          {...props}
-          taskData={props.taskInfo?.tasks}
-          totalTaskCount={totalTaskCount}
-          totalTasksInChallenge={calculateTasksInChallenge(props)}
-          showColumns={["selected", "featureId", "id", "status", "priority", "comments"]}
-          customHeaderControls={bundleButton}
-          suppressManagement
-          showSelectionCount
-          highlightPrimaryTask
-          defaultPageSize={5}
-          forBundling
-          suppressTriState
-        />
-      </div>
+        </h3>
+      )}
+      {actionButtons}
+      {filters}
+      {table}
     </div>
   );
 };
@@ -935,7 +816,7 @@ registerWidgetType(
                   "taskInfo",
                 ),
                 true,
-                true,
+                false,
                 true,
                 true,
                 "taskBundleFilters",
