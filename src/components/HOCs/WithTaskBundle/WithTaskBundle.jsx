@@ -2,13 +2,14 @@ import _omit from "lodash/omit";
 import { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import AsCooperativeWork from "../../../interactions/Task/AsCooperativeWork";
+import { addError } from "../../../services/Error/Error";
 import {
   bundleTasks,
   deleteTaskBundle,
   fetchTaskBundle,
-  refreshMultipleTaskLocks,
+  lockMultipleTasks,
   releaseMultipleTasks,
-  startMultipleTasks,
   updateTaskBundle,
 } from "../../../services/Task/Task";
 
@@ -26,14 +27,10 @@ export function WithTaskBundle(WrappedComponent) {
       initialBundle: null,
       taskBundle: null,
       bundleEditsDisabled: false,
+      bundlingDisabledReason: null,
       selectedTasks: [],
       resetSelectedTasks: null,
       loading: false,
-      failedLocks: null,
-      failedUnlocks: null,
-      failedRefreshTasks: null,
-      bundleTypeMismatchError: false,
-      fetchBundleError: false,
       updateTaskBundleError: false,
     };
 
@@ -44,6 +41,7 @@ export function WithTaskBundle(WrappedComponent) {
       if (Number.isFinite(task?.bundleId)) {
         await this.fetchBundle(task.bundleId);
       }
+
       this.updateBundlingConditions();
       window.addEventListener("beforeunload", this.handleBeforeUnload);
     }
@@ -51,7 +49,7 @@ export function WithTaskBundle(WrappedComponent) {
     async componentDidUpdate(prevProps) {
       const { task } = this.props;
 
-      if (task?.id !== prevProps?.task?.id || this.props.taskReadOnly !== prevProps.taskReadOnly) {
+      if (task && task?.id !== prevProps?.task?.id) {
         if (this.state.taskBundle) {
           this.unlockTasks(this.state.taskBundle.taskIds);
         }
@@ -72,25 +70,32 @@ export function WithTaskBundle(WrappedComponent) {
 
     componentWillUnmount() {
       this.stopLockRefresh();
-      if (this.state.taskBundle) {
-        this.unlockTasks(this.state.taskBundle.taskIds);
-      }
+      this.unlockBundleTasks();
       window.removeEventListener("beforeunload", this.handleBeforeUnload);
     }
 
     handleBeforeUnload = () => {
       this.stopLockRefresh();
-      if (this.state.taskBundle) {
-        this.unlockTasks(this.state.taskBundle.taskIds);
-      }
+      this.unlockBundleTasks();
     };
 
     startLockRefresh = (taskIds) => {
       this.stopLockRefresh();
+
+      // Filter out the primary task ID before setting up refresh
+      // since the primary task is managed by WithLockedTask
+      const tasksToRefresh = taskIds.filter((taskId) => taskId !== this.props.task?.id);
+
+      if (tasksToRefresh.length === 0) {
+        return;
+      }
+
+      this.props.lockMultipleTasks(tasksToRefresh).catch((error) => {
+        console.log("Error refreshing task locks:", error);
+      });
+
       this.refreshLockInterval = setInterval(() => {
-        this.props.refreshMultipleTaskLocks(
-          taskIds.filter((taskId) => taskId !== this.props.task.id),
-        );
+        this.props.lockMultipleTasks(tasksToRefresh);
       }, LOCK_REFRESH_INTERVAL);
     };
 
@@ -101,24 +106,32 @@ export function WithTaskBundle(WrappedComponent) {
 
     fetchBundle = async (bundleId) => {
       const { task, workspace, history, fetchTaskBundle } = this.props;
-      this.setState({ loading: true, fetchBundleError: false });
+      this.setState({ loading: true });
 
       try {
         const taskBundle = await fetchTaskBundle(bundleId, !this.state.bundleEditsDisabled);
         this.handlePrimaryTaskRedirect(taskBundle, task, workspace, history);
+
         this.setState({
           taskBundle,
           initialBundle: taskBundle,
           selectedTasks: taskBundle?.taskIds || [],
-          fetchBundleError: false,
         });
+
+        if (this.props.selectTasks && taskBundle?.tasks) {
+          if (this.props.resetSelectedTasks) {
+            await this.props.resetSelectedTasks();
+          }
+
+          this.props.selectTasks(taskBundle.tasks);
+        }
+
         this.updateBundlingConditions();
         if (!this.props.taskReadOnly && taskBundle) {
           this.startLockRefresh(taskBundle.taskIds);
         }
       } catch (error) {
         console.error("Error fetching bundle:", error);
-        this.setState({ fetchBundleError: true });
       } finally {
         this.setState({ loading: false });
       }
@@ -127,43 +140,69 @@ export function WithTaskBundle(WrappedComponent) {
     updateBundlingConditions = () => {
       const { task, taskReadOnly, workspace, user, name } = this.props;
 
-      // Check if read-only first
-      if (taskReadOnly) {
-        this.setState({ bundleEditsDisabled: true });
-        return;
+      try {
+        if (taskReadOnly) {
+          this.setState({
+            bundleEditsDisabled: true,
+            bundlingDisabledReason: "readOnly",
+          });
+          return;
+        }
+
+        if (task && AsCooperativeWork) {
+          const isCooperative = AsCooperativeWork(task).isCooperative();
+          const isTagFix = AsCooperativeWork(task).isTagType();
+
+          if (isCooperative || isTagFix) {
+            this.setState({
+              bundleEditsDisabled: true,
+              bundlingDisabledReason: "taskType",
+            });
+            return;
+          }
+        }
+
+        const workspaceName = workspace?.name || name;
+        const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
+        if (!isCompletionWorkspace) {
+          this.setState({
+            bundleEditsDisabled: true,
+            bundlingDisabledReason: "workspace",
+          });
+          return;
+        }
+
+        const isReviewCompleted = task?.reviewStatus === 2;
+        const isTaskCompleted = [0, 3, 6].includes(task?.status);
+        const completionStatus = isReviewCompleted || isTaskCompleted;
+
+        if (user.isSuperUser && completionStatus) {
+          this.setState({
+            bundleEditsDisabled: false,
+            bundlingDisabledReason: null,
+          });
+          return;
+        }
+
+        // Check mapper edit permissions
+        const hasNoCompletion = !task?.completedBy;
+        const isTaskCompleter = user.id === task?.completedBy;
+        const enableMapperEdits = hasNoCompletion || isTaskCompleter;
+
+        if (enableMapperEdits && completionStatus) {
+          this.setState({
+            bundleEditsDisabled: false,
+            bundlingDisabledReason: null,
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Error in updateBundlingConditions:", error);
+        this.setState({
+          bundleEditsDisabled: true,
+          bundlingDisabledReason: "error",
+        });
       }
-
-      // Check workspace type
-      const workspaceName = workspace?.name || name;
-      const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
-      if (!isCompletionWorkspace) {
-        this.setState({ bundleEditsDisabled: true });
-        return;
-      }
-
-      // Check completion status
-      const isReviewCompleted = task?.reviewStatus === 2;
-      const isTaskCompleted = [0, 3, 6].includes(task?.status);
-      const completionStatus = isReviewCompleted || isTaskCompleted;
-
-      // Check super user permissions
-      if (user.isSuperUser && completionStatus) {
-        this.setState({ bundleEditsDisabled: false });
-        return;
-      }
-
-      // Check mapper edit permissions
-      const hasNoCompletion = !task?.completedBy;
-      const isTaskCompleter = user.id === task?.completedBy;
-      const enableMapperEdits = hasNoCompletion || isTaskCompleter;
-
-      if (enableMapperEdits && completionStatus) {
-        this.setState({ bundleEditsDisabled: false });
-        return;
-      }
-
-      // If none of the above conditions are met, disable edits
-      this.setState({ bundleEditsDisabled: true });
     };
 
     handlePrimaryTaskRedirect = (taskBundle, task, workspace, history) => {
@@ -203,87 +242,142 @@ export function WithTaskBundle(WrappedComponent) {
     lockTasks = async (taskIds) => {
       const { task } = this.props;
 
-      this.setState({ loading: true, failedLocks: null });
+      const tasksToLock = taskIds.filter((taskId) => taskId !== task.id);
+
+      if (tasksToLock.length === 0) {
+        return [];
+      }
+
       try {
-        const tasks = await this.props.startMultipleTasks(
-          taskIds.filter((taskId) => taskId !== task.id),
-        );
-        return tasks;
+        const tasks = await this.props.lockMultipleTasks(tasksToLock);
+        return Array.isArray(tasks) ? tasks : [];
       } catch (error) {
-        this.setState({ failedLocks: taskIds });
-      } finally {
-        this.setState({ loading: false });
+        console.error("Error locking tasks:", error);
+        this.setState({
+          error: "lockError",
+        });
+        return [];
       }
     };
 
     unlockTasks = async (taskIds) => {
-      this.setState({ failedUnlocks: null });
+      if (!taskIds || taskIds.length === 0) {
+        return;
+      }
+
       try {
         await this.props.releaseMultipleTasks(taskIds);
       } catch (error) {
-        this.setState({ failedUnlocks: taskIds });
+        console.warn("Error unlocking tasks:", error);
+        this.setState({ error: "unlockError" });
       }
     };
 
     refreshTaskLock = async (taskIds) => {
       const { task } = this.props;
 
-      this.setState({ failedRefreshTasks: null });
-      try {
-        await this.props.refreshMultipleTaskLocks(taskIds.filter((taskId) => taskId !== task.id));
-      } catch (error) {
-        console.error("Error refreshing task lock:", error);
-        this.setState({ failedRefreshTasks: taskIds });
+      // Filter out the primary task ID before refreshing locks
+      const tasksToRefresh = taskIds.filter((taskId) => taskId !== task.id);
+
+      if (tasksToRefresh.length === 0) {
+        return; // No tasks to refresh
       }
+
+      await this.props.lockMultipleTasks(tasksToRefresh);
     };
 
     createTaskBundle = async (taskIds) => {
       if (taskIds.length > 50) {
         this.setState({ bundleLimitError: true });
-        return;
+        return false;
       }
-      const { tasks: lockedTasks, locked } = await this.lockTasks(
-        taskIds.filter((taskId) => taskId !== this.props.task.id),
-      );
 
-      if (locked) {
-        this.setState((prevState) => ({
-          failedLocks: null,
+      this.setState({ loading: true });
+
+      const tasksToLock = taskIds.filter((taskId) => taskId !== this.props.task?.id);
+
+      if (tasksToLock.length === 0) {
+        this.setState({ loading: false });
+        return false;
+      }
+
+      try {
+        const tasks = await this.lockTasks(tasksToLock);
+
+        // Check if we successfully locked the tasks
+        if (!tasks || tasks.length === 0) {
+          this.setState({
+            error: "lockError",
+            loading: false,
+          });
+          return false;
+        }
+
+        this.setState(() => ({
+          loading: false,
           taskBundle: {
-            ...prevState.taskBundle,
-            tasks: [this.props.task, ...lockedTasks],
+            tasks: [this.props.task, ...tasks],
             taskIds: taskIds,
           },
         }));
+
         this.startLockRefresh(taskIds);
-      } else {
-        this.setState({ failedLocks: lockedTasks });
+        return true;
+      } catch (error) {
+        console.error("Error creating task bundle:", error);
+        this.setState({
+          error: "lockError",
+          loading: false,
+        });
+        return false;
       }
     };
 
     addTaskToBundle = async (taskId) => {
-      const { tasks: lockedTasks, locked } = await this.lockTasks([taskId]);
+      this.setState({ loading: true });
 
-      if (locked) {
+      try {
+        const tasks = await this.lockTasks([taskId]);
+
+        if (!tasks || tasks.length === 0) {
+          this.setState({
+            error: "lockError",
+            loading: false,
+          });
+          return false;
+        }
+
         this.setState((prevState) => ({
-          failedLocks: null,
+          loading: false,
           taskBundle: {
             ...prevState.taskBundle,
-            tasks: [...prevState.taskBundle.tasks, ...lockedTasks],
+            tasks: [...prevState.taskBundle.tasks, ...tasks],
             taskIds: [...prevState.taskBundle.taskIds, taskId],
           },
         }));
+
         this.startLockRefresh([...this.state.taskBundle.taskIds, taskId]);
-      } else {
-        this.setState({ failedLocks: lockedTasks });
+        return true;
+      } catch (error) {
+        console.error("Error adding task to bundle:", error);
+        this.setState({
+          error: "lockError",
+          loading: false,
+        });
+        return false;
       }
     };
 
     removeTaskFromBundle = async (taskId) => {
       const { taskBundle, initialBundle } = this.state;
 
-      if (initialBundle && !initialBundle?.taskIds.includes(taskId)) {
-        await this.unlockTasks([taskId]);
+      if ((this.props.task && !initialBundle) || !initialBundle?.taskIds.includes(taskId)) {
+        try {
+          await this.unlockTasks([taskId]);
+        } catch (error) {
+          console.error("Error unlocking task:", error);
+          return false;
+        }
       }
 
       if (taskBundle?.taskIds.length <= 2) {
@@ -292,7 +386,7 @@ export function WithTaskBundle(WrappedComponent) {
           taskBundle: null,
           selectedTasks: [],
         });
-        return;
+        return true;
       }
 
       const updatedTaskIds = taskBundle.taskIds.filter((id) => id !== taskId);
@@ -311,12 +405,14 @@ export function WithTaskBundle(WrappedComponent) {
         taskBundle: updatedTaskBundle,
         selectedTasks: updatedTaskIds,
       });
+
+      return true;
     };
 
     clearActiveTaskBundle = async () => {
       const { taskBundle, initialBundle } = this.state;
       const taskIds = taskBundle.taskIds.filter(
-        (taskId) => !initialBundle?.taskIds.includes(taskId),
+        (taskId) => !initialBundle?.taskIds.includes(taskId) && taskId !== this.props.task.id,
       );
       await this.unlockTasks(taskIds);
       this.setState({
@@ -357,6 +453,22 @@ export function WithTaskBundle(WrappedComponent) {
       return null;
     };
 
+    unlockBundleTasks = () => {
+      if (this.state.taskBundle) {
+        // Only unlock tasks that aren't the primary task
+        // since the primary task is managed by WithLockedTask
+        const tasksToUnlock = this.state.taskBundle.taskIds.filter(
+          (taskId) => taskId !== this.props.task?.id,
+        );
+
+        if (tasksToUnlock.length > 0) {
+          // Log unlock attempt for debugging
+          console.log(`Unlocking ${tasksToUnlock.length} bundle tasks`);
+          this.unlockTasks(tasksToUnlock);
+        }
+      }
+    };
+
     render() {
       return (
         <WrappedComponent
@@ -381,12 +493,7 @@ export function WithTaskBundle(WrappedComponent) {
           setResetSelectedTasksAccessor={(f) => this.setState({ resetSelectedTasks: f })}
           resetSelectedTasks={this.resetSelectedTasks}
           error={this.state.error}
-          failedLocks={this.state.failedLocks}
-          failedUnlocks={this.state.failedUnlocks}
-          failedRefreshTasks={this.state.failedRefreshTasks}
-          bundleTypeMismatchError={this.state.bundleTypeMismatchError}
-          fetchBundleError={this.state.fetchBundleError}
-          updateTaskBundleError={this.state.updateTaskBundleError}
+          bundlingDisabledReason={this.state.bundlingDisabledReason}
         />
       );
     }
@@ -400,9 +507,9 @@ export const mapDispatchToProps = (dispatch) =>
       bundleTasks,
       deleteTaskBundle,
       updateTaskBundle,
-      refreshMultipleTaskLocks,
-      startMultipleTasks,
+      lockMultipleTasks,
       releaseMultipleTasks,
+      addError,
     },
     dispatch,
   );

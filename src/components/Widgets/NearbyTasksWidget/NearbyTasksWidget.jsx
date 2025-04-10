@@ -46,9 +46,9 @@ const descriptor = {
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("taskBundling")),
+  false,
+  false,
   true,
-  false,
-  false,
   false,
 );
 
@@ -271,7 +271,7 @@ const ActiveBundle = (props) => {
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
-          <MapPane>{map}</MapPane>
+          <MapPane showLasso={false}>{map}</MapPane>
         )}
       </div>
       <div className="mr-flex mr-content-center mr-my-4">
@@ -392,7 +392,7 @@ const BuildBundle = (props) => {
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
-          <MapPane showLasso>{map}</MapPane>
+          <MapPane showLasso={false}>{map}</MapPane>
         )}
       </div>
       <div
@@ -472,7 +472,7 @@ registerWidgetType(
                   "taskInfo",
                 ),
                 true,
-                false,
+                true,
                 true,
                 true,
                 "taskBundleFilters",
@@ -481,7 +481,7 @@ registerWidgetType(
             "clusteredTasks",
             "filteredClusteredTasks",
             {
-              includeLocked: false,
+              includeLocked: true,
             },
             true,
             "taskBundleFilters",

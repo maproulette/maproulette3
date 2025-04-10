@@ -65,9 +65,11 @@ export const WithChallengeTaskClusters = function (
     };
 
     fetchUpdatedClusters(wantToShowAsClusters, overrideDisable = false) {
-      if (!!this.props.nearbyTasks?.loading && !this.props.taskBundle) {
+      // Don't fetch clusters if nearby tasks are still loading and we don't have a task bundle
+      if (this.props.nearbyTasks?.loading && !this.props.taskBundle) {
         return;
       }
+
       const challengeId = this.props.challenge?.id ?? this.props.challengeId;
 
       // If we have no challengeId and no bounding box we need to make sure
@@ -283,6 +285,10 @@ export const WithChallengeTaskClusters = function (
     };
 
     onBulkTaskSelection = (taskIds) => {
+      if (!this.props.onBulkTaskSelection || typeof this.props.onBulkTaskSelection !== "function") {
+        return;
+      }
+
       const tasks = this.clustersAsTasks().filter((task) => {
         const taskId = task.id || task.taskId;
         const alreadyBundled =
@@ -310,6 +316,11 @@ export const WithChallengeTaskClusters = function (
           return false;
         }
 
+        // Skip if task is locked by another user
+        if (task.lockedBy && task.lockedBy !== this.props.user.id) {
+          return false;
+        }
+
         return true;
       });
 
@@ -317,6 +328,13 @@ export const WithChallengeTaskClusters = function (
     };
 
     onBulkTaskDeselection = (taskIds) => {
+      if (
+        !this.props.onBulkTaskDeselection ||
+        typeof this.props.onBulkTaskDeselection !== "function"
+      ) {
+        return;
+      }
+
       const tasks = _filter(this.clustersAsTasks(), (task) => taskIds.indexOf(task.id) !== -1);
       this.props.onBulkTaskDeselection(tasks);
     };

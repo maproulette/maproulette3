@@ -15,7 +15,29 @@ class TaskMarkerContent extends Component {
   };
 
   toggleSelection = () => {
-    this.props.toggleTaskSelection(this.props.marker.options);
+    // Don't allow selection if there's a bundle conflict
+    const taskId = this.props.marker.options.taskId ?? this.props.marker.options.id;
+    const taskStatus = this.props.marker.options.status ?? this.props.marker.options.taskStatus;
+    const alreadyBundled =
+      this.props.marker.options.bundleId &&
+      this.props.initialBundle?.bundleId !== this.props.marker.options.bundleId;
+    const lockedByOtherUser =
+      this.props.marker.options.lockedBy &&
+      this.props.marker.options.lockedBy !== this.props.user.id;
+
+    const hasBundleConflict = Boolean(
+      (this.props.task &&
+        taskId &&
+        ![0, 3, 6].includes(taskStatus) &&
+        !this.props.taskBundle?.taskIds?.includes(taskId) &&
+        !this.props.initialBundle?.taskIds?.includes(taskId)) ||
+        alreadyBundled ||
+        lockedByOtherUser,
+    );
+
+    if (!hasBundleConflict) {
+      this.props.toggleTaskSelection(this.props.marker.options);
+    }
   };
 
   handleBundleTask = async () => {
@@ -47,10 +69,25 @@ class TaskMarkerContent extends Component {
     const alreadyBundled =
       this.props.marker.options.bundleId &&
       this.props.initialBundle?.bundleId !== this.props.marker.options.bundleId;
+    
+    const lockedByOtherUser =
+      this.props.marker.options.lockedBy &&
+      this.props.marker.options.lockedBy !== this.props.user.id;
 
+    const hasBundleConflict = Boolean(
+      (this.props.task &&
+        taskId &&
+        ![0, 3, 6].includes(taskStatus) &&
+        !this.props.taskBundle?.taskIds?.includes(taskId) &&
+        !this.props.initialBundle?.taskIds?.includes(taskId)) ||
+        alreadyBundled ||
+        lockedByOtherUser,
+    );
+    
     const checkBoxEnabled =
       !this.props.bundling &&
       !this.props.taskReadOnly &&
+      !hasBundleConflict &&
       ([0, 3, 6].includes(taskStatus) ||
         (this.props.initialBundle?.bundleId &&
           this.props.initialBundle?.bundleId === this.props.marker.options.bundleId)) &&
@@ -124,9 +161,19 @@ class TaskMarkerContent extends Component {
                 this.props.marker.options.taskId === this.props.task.id ? (
                 <span className="mr-mr-1">✓</span>
               ) : !this.props.bundling ? (
-                <span className="mr-mr-1">
-                  <FormattedMessage {...messages.unableToSelect} />
-                </span>
+                lockedByOtherUser ? (
+                  <span className="mr-mr-1">
+                    <FormattedMessage {...messages.cannotEditLockedTask} />
+                  </span>
+                ) : hasBundleConflict ? (
+                  <span className="mr-mr-1">
+                    <FormattedMessage {...messages.unableToSelect} />
+                  </span>
+                ) : (
+                  <span className="mr-mr-1">
+                    <FormattedMessage {...messages.unableToSelect} />
+                  </span>
+                )
               ) : null}
 
               {!this.props.bundling &&
@@ -147,6 +194,8 @@ class TaskMarkerContent extends Component {
                   {bundlePrimary?.id === taskId ||
                   (!bundlePrimary && taskId === this.props.task?.id) ? (
                     <FormattedMessage {...messages.cannotEditPrimaryTask} />
+                  ) : lockedByOtherUser ? (
+                    <FormattedMessage {...messages.cannotEditLockedTask} />
                   ) : this.props.bundling && bundle.includes(taskId) ? (
                     <button
                       disabled={this.props.bundleEditsDisabled || this.state.isProcessing}
@@ -164,7 +213,7 @@ class TaskMarkerContent extends Component {
                       <FormattedMessage {...messages.removeFromBundle} />
                     </button>
                   ) : (
-                    !alreadyBundled && (
+                    !hasBundleConflict && (
                       <button
                         disabled={this.props.bundleEditsDisabled || this.state.isProcessing}
                         onClick={this.handleBundleTask}

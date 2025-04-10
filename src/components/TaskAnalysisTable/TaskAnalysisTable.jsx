@@ -345,6 +345,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const alreadyBundled =
         original.bundleId && props.initialBundle?.bundleId !== original.bundleId;
       const enableSelecting =
+        !original.lockedBy &&
         !alreadyBundled &&
         !props.bundling &&
         !props.taskReadOnly &&
@@ -467,39 +468,49 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       const alreadyBundled = bundleId && initialBundle?.bundleId !== bundleId;
       const validBundlingStatus =
         initialBundle?.taskIds?.includes(taskId) || [0, 3, 6].includes(status);
+      const isLocked = row._original.lockedBy && row._original.lockedBy !== props.user.id;
 
       return (
         <div>
-          {!isActiveTask && validBundlingStatus && isInActiveBundle && !alreadyBundled && (
-            <button
-              disabled={props.bundleEditsDisabled}
-              className="mr-text-red-light"
-              style={{
-                cursor: props.bundleEditsDisabled ? "default" : "pointer",
-                opacity: props.bundleEditsDisabled ? 0.3 : 1,
-                pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
-              }}
-              onClick={() => props.unbundleTask(row._original)}
-            >
-              <FormattedMessage {...messages.unbundle} />
-            </button>
-          )}
+          {!isActiveTask &&
+            validBundlingStatus &&
+            isInActiveBundle &&
+            !alreadyBundled &&
+            !isLocked && (
+              <button
+                disabled={props.bundleEditsDisabled}
+                className="mr-text-red-light"
+                style={{
+                  cursor: props.bundleEditsDisabled ? "default" : "pointer",
+                  opacity: props.bundleEditsDisabled ? 0.3 : 1,
+                  pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
+                }}
+                onClick={() => props.unbundleTask(row._original)}
+              >
+                <FormattedMessage {...messages.unbundle} />
+              </button>
+            )}
 
-          {!isActiveTask && validBundlingStatus && !isInActiveBundle && !alreadyBundled && (
-            <button
-              disabled={props.bundleEditsDisabled}
-              className="mr-text-green-lighter"
-              style={{
-                cursor: props.bundleEditsDisabled ? "default" : "pointer",
-                opacity: props.bundleEditsDisabled ? 0.3 : 1,
-                pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
-              }}
-              onClick={() => props.bundleTask(row._original)}
-            >
-              <FormattedMessage {...messages.bundle} />
-            </button>
-          )}
+          {!isActiveTask &&
+            validBundlingStatus &&
+            !isInActiveBundle &&
+            !alreadyBundled &&
+            !isLocked && (
+              <button
+                disabled={props.bundleEditsDisabled}
+                className="mr-text-green-lighter"
+                style={{
+                  cursor: props.bundleEditsDisabled ? "default" : "pointer",
+                  opacity: props.bundleEditsDisabled ? 0.3 : 1,
+                  pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
+                }}
+                onClick={() => props.bundleTask(row._original)}
+              >
+                <FormattedMessage {...messages.bundle} />
+              </button>
+            )}
           {isActiveTask && <div className="mr-text-yellow">Primary Task</div>}
+          {isLocked && <div className="mr-text-red-light">Locked</div>}
         </div>
       );
     },

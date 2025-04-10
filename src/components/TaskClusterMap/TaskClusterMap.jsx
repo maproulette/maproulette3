@@ -104,7 +104,7 @@ export const TaskClusterMap = (props) => {
   }
 
   const selectTasksInLayers = (layers) => {
-    if (props.onBulkTaskSelection) {
+    if (props.onBulkTaskSelection && typeof props.onBulkTaskSelection === "function") {
       const taskIds = _compact(
         _map(layers, (layer) => layer?.options?.icon?.options?.taskData?.taskId),
       );
@@ -115,7 +115,7 @@ export const TaskClusterMap = (props) => {
   };
 
   const deselectTasksInLayers = (layers) => {
-    if (props.onBulkTaskDeselection) {
+    if (props.onBulkTaskDeselection && typeof props.onBulkTaskDeselection === "function") {
       const taskIds = _compact(
         _map(layers, (layer) => layer?.options?.icon?.options?.taskData?.taskId),
       );
@@ -163,21 +163,24 @@ export const TaskClusterMap = (props) => {
 
   let selectionKit = (
     <>
-      {props.clearSelectedSelector && (
+      {props.showLasso && props.clearSelectedSelector && (
         <LassoSelectionControl onLassoClear={props.resetSelectedTasks} />
       )}
-      {props.showSelectMarkersInView && (
+      {props.showLasso && props.showSelectMarkersInView && props.onBulkTaskSelection && (
         <SelectMarkersInViewControl onSelectAllInView={props.onBulkTaskSelection} />
       )}
 
-      {props.showClusterLasso && props.onBulkClusterSelection && !props.mapZoomedOut && (
-        <LassoSelectionControl
-          onLassoSelection={selectClustersInLayers}
-          onLassoDeselection={deselectClustersInLayers}
-          onLassoClear={props.resetSelectedClusters}
-          onLassoInteraction={() => setSearchOpen(false)}
-        />
-      )}
+      {props.showLasso &&
+        props.showClusterLasso &&
+        props.onBulkClusterSelection &&
+        !props.mapZoomedOut && (
+          <LassoSelectionControl
+            onLassoSelection={selectClustersInLayers}
+            onLassoDeselection={deselectClustersInLayers}
+            onLassoClear={props.resetSelectedClusters}
+            onLassoInteraction={() => setSearchOpen(false)}
+          />
+        )}
 
       {props.showLasso &&
         props.onBulkTaskSelection &&
