@@ -69,7 +69,7 @@ class TaskMarkerContent extends Component {
     const alreadyBundled =
       this.props.marker.options.bundleId &&
       this.props.initialBundle?.bundleId !== this.props.marker.options.bundleId;
-    
+
     const lockedByOtherUser =
       this.props.marker.options.lockedBy &&
       this.props.marker.options.lockedBy !== this.props.user.id;
@@ -83,7 +83,7 @@ class TaskMarkerContent extends Component {
         alreadyBundled ||
         lockedByOtherUser,
     );
-    
+
     const checkBoxEnabled =
       !this.props.bundling &&
       !this.props.taskReadOnly &&
