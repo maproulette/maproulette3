@@ -16,6 +16,7 @@ import {
 } from "react-leaflet";
 import { toLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
+import { TaskPriorityColors } from "../../services/Task/TaskPriority/TaskPriority";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import FitBoundsControl from "../EnhancedMap/FitBoundsControl/FitBoundsControl";
 import FitWorldControl from "../EnhancedMap/FitWorldControl/FitWorldControl";
@@ -300,7 +301,7 @@ export const TaskClusterMap = (props) => {
       )}
       <ZoomControl className="mr-z-10" position="topright" />
       {props.showFitWorld && <FitWorldControl />}
-      {props.fitbBoundsControl && (
+      {props.fitBoundsControl && (
         <FitBoundsControl
           key={props.taskCenter}
           centerPoint={props.taskCenter}
