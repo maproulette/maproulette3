@@ -32,6 +32,7 @@ export function WithTaskBundle(WrappedComponent) {
       resetSelectedTasks: null,
       loading: false,
       updateTaskBundleError: false,
+      isDeletingBundle: false,
     };
 
     refreshLockInterval = null;
@@ -70,13 +71,17 @@ export function WithTaskBundle(WrappedComponent) {
 
     componentWillUnmount() {
       this.stopLockRefresh();
-      this.unlockBundleTasks();
+      if (!this.state.isDeletingBundle) {
+        this.unlockBundleTasks();
+      }
       window.removeEventListener("beforeunload", this.handleBeforeUnload);
     }
 
     handleBeforeUnload = () => {
       this.stopLockRefresh();
-      this.unlockBundleTasks();
+      if (!this.state.isDeletingBundle) {
+        this.unlockBundleTasks();
+      }
     };
 
     startLockRefresh = (taskIds) => {
@@ -434,6 +439,8 @@ export function WithTaskBundle(WrappedComponent) {
           this.setState({ updateTaskBundleError: false });
 
           if (!taskBundle && initialBundle) {
+            this.stopLockRefresh();
+            this.setState({ isDeletingBundle: true });
             await this.props.deleteTaskBundle(initialBundle?.bundleId);
             return null;
           }
