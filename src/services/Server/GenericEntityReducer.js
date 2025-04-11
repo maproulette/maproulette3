@@ -63,7 +63,25 @@ const genericEntityReducer = (actionTypes, entityName, reduceFurther) => {
  * @private
  */
 const entities = function (state = {}, action, entityName, reduceFurther) {
-  const newState = _cloneDeep(state);
+  // Before cloning, ensure we're working with a safe object structure
+  let safeState = state;
+
+  // Check if this is an array-like object that might cause problems
+  if (typeof state === "object" && state !== null) {
+    // For safety, create a new plain object with only the actual data
+    // This prevents issues with sparse arrays or array-like objects with large indices
+    safeState = {};
+
+    Object.keys(state).forEach((key) => {
+      // Skip length property or properties that would make it array-like
+      if (key !== "length" && state[key] !== undefined) {
+        safeState[key] = state[key];
+      }
+    });
+  }
+
+  // Now clone the sanitized state
+  const newState = _cloneDeep(safeState);
   const timestamp = Date.now();
 
   _forOwn(action.entities[entityName], (entity, entityId) => {
