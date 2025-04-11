@@ -15,8 +15,8 @@ import {
   useMap,
 } from "react-leaflet";
 import { toLatLngBounds } from "../../services/MapBounds/MapBounds";
-import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
 import { TaskPriorityColors } from "../../services/Task/TaskPriority/TaskPriority";
+import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import FitBoundsControl from "../EnhancedMap/FitBoundsControl/FitBoundsControl";
 import FitWorldControl from "../EnhancedMap/FitWorldControl/FitWorldControl";

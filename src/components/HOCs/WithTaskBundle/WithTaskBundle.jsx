@@ -143,73 +143,57 @@ export function WithTaskBundle(WrappedComponent) {
       try {
         const workspaceName = workspace?.name || name;
         const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
-        if (!isCompletionWorkspace) {
-          this.setState({
-            bundleEditsDisabled: true,
-            bundlingDisabledReason: "workspace",
-          });
-          return;
+        let reason = null;
+        let bundleEditsDisabled = false;
+
+        switch (true) {
+          case !isCompletionWorkspace:
+            reason = "workspace";
+            bundleEditsDisabled = true;
+            break;
+
+          case taskReadOnly === true:
+            reason = "readOnly";
+            bundleEditsDisabled = true;
+            break;
+
+          case task?.lockedBy && task.lockedBy !== user.id:
+            reason = "locked";
+            bundleEditsDisabled = true;
+            break;
+
+          case task &&
+            AsCooperativeWork &&
+            (AsCooperativeWork(task).isCooperative() || AsCooperativeWork(task).isTagType()):
+            reason = "taskType";
+            bundleEditsDisabled = true;
+            break;
+
+          case !(task?.reviewStatus === 2 || [0, 3, 6].includes(task?.status)):
+            reason = "doneOrReview";
+            bundleEditsDisabled = true;
+            break;
+
+          default:
+            // Check mapper edit permissions
+            const hasNoCompletion = !task?.completedBy;
+            const isTaskCompleter = user.id === task?.completedBy;
+            const enableMapperEdits = hasNoCompletion || isTaskCompleter || user.isSuperUser;
+            const isReviewCompleted = task?.reviewStatus === 2;
+            const isTaskCompleted = [0, 3, 6].includes(task?.status);
+            const completionStatus = isReviewCompleted || isTaskCompleted;
+
+            if (!(enableMapperEdits && completionStatus)) {
+              reason = "mapperEdits";
+              bundleEditsDisabled = true;
+            }
+            break;
         }
 
-        if (taskReadOnly) {
-          this.setState({
-            bundleEditsDisabled: true,
-            bundlingDisabledReason: "readOnly",
-          });
-          return;
-        }
-
-        // Check if the task is locked by someone else
-        if (task?.lockedBy && task.lockedBy !== user.id) {
-          this.setState({
-            bundleEditsDisabled: true,
-            bundlingDisabledReason: "locked",
-          });
-          return;
-        }
-
-        if (task && AsCooperativeWork) {
-          const isCooperative = AsCooperativeWork(task).isCooperative();
-          const isTagFix = AsCooperativeWork(task).isTagType();
-
-          if (isCooperative || isTagFix) {
-            this.setState({
-              bundleEditsDisabled: true,
-              bundlingDisabledReason: "taskType",
-            });
-            return;
-          }
-        }
-
-        const isReviewCompleted = task?.reviewStatus === 2;
-        const isTaskCompleted = [0, 3, 6].includes(task?.status);
-        const completionStatus = isReviewCompleted || isTaskCompleted;
-
-        if (!completionStatus && !isReviewCompleted) {
-          this.setState({
-            bundleEditsDisabled: true,
-            bundlingDisabledReason: "doneOrReview",
-          });
-          return;
-        }
-        // Check mapper edit permissions
-        const hasNoCompletion = !task?.completedBy;
-        const isTaskCompleter = user.id === task?.completedBy;
-        const enableMapperEdits = hasNoCompletion || isTaskCompleter || user.isSuperUser;
-
-        if (enableMapperEdits && completionStatus) {
-          this.setState({
-            bundleEditsDisabled: false,
-            bundlingDisabledReason: null,
-          });
-          return;
-        } else {
-          this.setState({
-            bundleEditsDisabled: true,
-            bundlingDisabledReason: "mapperEdits",
-          });
-          return;
-        }
+        this.setState({
+          bundleEditsDisabled,
+          bundlingDisabledReason: reason,
+        });
       } catch (error) {
         console.error("Error in updateBundlingConditions:", error);
         this.setState({
