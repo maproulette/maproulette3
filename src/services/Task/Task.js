@@ -1427,7 +1427,15 @@ export const taskEntities = function (state, action) {
   } else if (action.type === CLEAR_TASKS) {
     return _remove(_cloneDeep(state), (x) => (x ? x.parent === action.challengeId : false));
   } else if (action.type === CLEAR_TASK_BUNDLE) {
-    return _remove(_cloneDeep(state), (x) => (x ? x.bundleId === action.bundleId : false));
+    // Instead of removing tasks, update them to remove their bundle association
+    const mergedState = _cloneDeep(state);
+    Object.keys(mergedState).forEach((taskId) => {
+      if (mergedState[taskId] && mergedState[taskId].bundleId === action.bundleId) {
+        mergedState[taskId].bundleId = null;
+        mergedState[taskId].isBundlePrimary = null;
+      }
+    });
+    return mergedState;
   } else if (action.type === REMOVE_TASK_FROM_BUNDLE) {
     const mergedState = _cloneDeep(state);
     if (mergedState[action.taskId]) {
