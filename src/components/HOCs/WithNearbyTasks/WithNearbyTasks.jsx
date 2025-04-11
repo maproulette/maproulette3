@@ -24,6 +24,7 @@ export const WithNearbyTasks = function (WrappedComponent) {
       mapBounds: null,
       loadByNearbyTasks: true,
       totalTasksInView: 0,
+      loading: false,
     };
 
     /**
@@ -73,6 +74,8 @@ export const WithNearbyTasks = function (WrappedComponent) {
 
       if (Number.isFinite(challengeId) && this.props.fetchNearbyTasks) {
         try {
+          this.setState({ loading: true });
+
           const nearbyTasks = await this.props.fetchNearbyTasks(
             challengeId,
             isVirtual,
@@ -92,11 +95,12 @@ export const WithNearbyTasks = function (WrappedComponent) {
             lastLoadLength: tasksLength,
             taskLimit: this.state.taskLimit + 5,
             loadByNearbyTasks: true,
-            lastLoadLength: tasksLength,
             hasMoreToLoad: this.state.lastLoadLength !== tasksLength,
+            loading: false,
           });
         } catch (error) {
           console.error("Error fetching nearby tasks:", error);
+          this.setState({ loading: false });
         }
       }
     };
@@ -157,7 +161,16 @@ export const WithNearbyTasks = function (WrappedComponent) {
     };
 
     componentDidMount() {
-      this.updateNearbyTasks(this.props);
+      this.updateNearbyTasks();
+    }
+
+    componentDidUpdate(prevProps) {
+      if (this.props.task && this.props.task?.id !== prevProps.task?.id) {
+        this.setState({
+          taskLimit: 0,
+        });
+        this.updateNearbyTasks(this.props);
+      }
     }
 
     render() {
@@ -168,7 +181,10 @@ export const WithNearbyTasks = function (WrappedComponent) {
             "fetchBoundedTaskMarkers",
             "fetchNearbyTasksInBoundingBox",
           ])}
-          nearbyTasks={this.state.nearbyTasks}
+          nearbyTasks={{
+            ...this.state.nearbyTasks,
+            loading: this.state.loading,
+          }}
           loadTasksInView={this.loadTasksInView}
           updateNearbyTasks={this.updateNearbyTasks}
           setMapBounds={this.setMapBounds}
