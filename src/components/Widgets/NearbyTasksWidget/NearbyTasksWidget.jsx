@@ -1,6 +1,5 @@
 import bbox from "@turf/bbox";
 import { featureCollection, point } from "@turf/helpers";
-import _isEqual from "lodash/isEqual";
 import _map from "lodash/map";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
