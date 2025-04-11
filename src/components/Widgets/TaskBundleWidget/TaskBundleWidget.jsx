@@ -391,8 +391,12 @@ const BundlingDisabledMessage = ({
 
   // Fallback to the old logic if no reason is provided
   if (!messageKey) {
-    // Check if read-only first
-    if (taskReadOnly) {
+    // Check if the task is locked by someone else
+    if (task?.lockedBy && task.lockedBy !== user.id) {
+      messageKey = "bundlingDisabledLocked";
+    }
+    // Check if read-only
+    else if (taskReadOnly) {
       messageKey = "bundlingDisabledReadOnly";
     }
     // Check if task is cooperative or tag fix type
@@ -415,7 +419,9 @@ const BundlingDisabledMessage = ({
         const isTaskCompleted = [0, 3, 6].includes(task?.status);
         const completionStatus = isReviewCompleted || isTaskCompleted;
 
-        if (!completionStatus) {
+        if (!completionStatus && !isReviewCompleted) {
+          messageKey = "bundlingDisabledDoneOrReview";
+        } else if (!completionStatus) {
           messageKey = "bundlingDisabledNotCompleted";
         }
       }

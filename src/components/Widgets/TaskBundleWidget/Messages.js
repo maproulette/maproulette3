@@ -201,14 +201,32 @@ export default defineMessages({
     id: "TaskBundleWidget.bundlingDisabledNotCompleted",
     defaultMessage: "Task bundling is only available for completed tasks.",
   },
+  bundlingDisabledDoneOrReview: {
+    id: "TaskBundleWidget.bundlingDisabledDoneOrReview",
+    defaultMessage:
+      "Task bundling is only available for tasks that are either completed or have been reviewed.",
+  },
   bundlingDisabledNotOwner: {
     id: "TaskBundleWidget.bundlingDisabledNotOwner",
     defaultMessage:
       "Task bundling is disabled because you are not the original mapper of this task.",
   },
+  bundlingDisabledMapperEdits: {
+    id: "TaskBundleWidget.bundlingDisabledMapperEdits",
+    defaultMessage:
+      "Task bundling is disabled because you don't have the necessary permissions to edit this task.",
+  },
   bundlingDisabledGeneric: {
     id: "TaskBundleWidget.bundlingDisabledGeneric",
     defaultMessage: "Task bundling is currently disabled.",
+  },
+  bundlingDisabledLocked: {
+    id: "TaskBundleWidget.bundlingDisabledLocked",
+    defaultMessage: "Task bundling is disabled because the main task is locked by another user.",
+  },
+  notCompletedStatus: {
+    id: "TaskBundleWidget.notCompletedStatus",
+    defaultMessage: "Not completed (cannot bundle)",
   },
   cannotEditLockedTask: {
     id: "TaskBundleWidget.cannotEditLockedTask",

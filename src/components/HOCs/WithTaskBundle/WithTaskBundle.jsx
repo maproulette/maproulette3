@@ -141,10 +141,29 @@ export function WithTaskBundle(WrappedComponent) {
       const { task, taskReadOnly, workspace, user, name } = this.props;
 
       try {
+        const workspaceName = workspace?.name || name;
+        const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
+        if (!isCompletionWorkspace) {
+          this.setState({
+            bundleEditsDisabled: true,
+            bundlingDisabledReason: "workspace",
+          });
+          return;
+        }
+
         if (taskReadOnly) {
           this.setState({
             bundleEditsDisabled: true,
             bundlingDisabledReason: "readOnly",
+          });
+          return;
+        }
+
+        // Check if the task is locked by someone else
+        if (task?.lockedBy && task.lockedBy !== user.id) {
+          this.setState({
+            bundleEditsDisabled: true,
+            bundlingDisabledReason: "locked",
           });
           return;
         }
@@ -162,37 +181,32 @@ export function WithTaskBundle(WrappedComponent) {
           }
         }
 
-        const workspaceName = workspace?.name || name;
-        const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
-        if (!isCompletionWorkspace) {
-          this.setState({
-            bundleEditsDisabled: true,
-            bundlingDisabledReason: "workspace",
-          });
-          return;
-        }
-
         const isReviewCompleted = task?.reviewStatus === 2;
         const isTaskCompleted = [0, 3, 6].includes(task?.status);
         const completionStatus = isReviewCompleted || isTaskCompleted;
 
-        if (user.isSuperUser && completionStatus) {
+        if (!completionStatus && !isReviewCompleted) {
           this.setState({
-            bundleEditsDisabled: false,
-            bundlingDisabledReason: null,
+            bundleEditsDisabled: true,
+            bundlingDisabledReason: "doneOrReview",
           });
           return;
         }
-
         // Check mapper edit permissions
         const hasNoCompletion = !task?.completedBy;
         const isTaskCompleter = user.id === task?.completedBy;
-        const enableMapperEdits = hasNoCompletion || isTaskCompleter;
+        const enableMapperEdits = hasNoCompletion || isTaskCompleter || user.isSuperUser;
 
         if (enableMapperEdits && completionStatus) {
           this.setState({
             bundleEditsDisabled: false,
             bundlingDisabledReason: null,
+          });
+          return;
+        } else {
+          this.setState({
+            bundleEditsDisabled: true,
+            bundlingDisabledReason: "mapperEdits",
           });
           return;
         }
