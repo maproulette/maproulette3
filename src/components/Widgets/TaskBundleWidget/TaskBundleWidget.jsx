@@ -1,7 +1,6 @@
 import bbox from "@turf/bbox";
 import { featureCollection, point } from "@turf/helpers";
 import _isEmpty from "lodash/isEmpty";
-import _isEqual from "lodash/isEqual";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
 import _sum from "lodash/sum";
