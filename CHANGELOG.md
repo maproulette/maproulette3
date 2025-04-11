@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.12] - 2025-04-11
+Released with [maproulette-backend_v4.7.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.7)
+
+## What's Changed
+* fix task locking and improve task bundle widget functionality by @CollinBeczak in https://https://github.com/maproulette/maproulette3/pull/2619
+
+## MR2 Changes
+* Move bundling to transactions and return lockedBy datapoint in fetch markers/clusters endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1181
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.11...v3.16.12
+
 ## [v3.16.11] - 2025-03-26
 Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
 
