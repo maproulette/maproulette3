@@ -9,6 +9,7 @@ Released with [maproulette-backend_v4.7.7](https://github.com/maproulette/maprou
 
 ## What's Changed
 * fix task locking and improve task bundle widget functionality by @CollinBeczak in https://https://github.com/maproulette/maproulette3/pull/2619
+* fix state management when deleting bundles by @CollinBeczak in https://https://github.com/maproulette/maproulette3/pull/2621
 
 ## MR2 Changes
 * Move bundling to transactions and return lockedBy datapoint in fetch markers/clusters endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1181
