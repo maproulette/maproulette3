@@ -422,7 +422,7 @@ export const TaskAnalysisTableInternal = (props) => {
           .filter(Boolean),
       ];
     }
-  }, [props.showColumns?.length, columnTypes.selected, props.addedColumns]);
+  }, [props.showColumns?.length, props.addedColumns]);
 
   // Apply stored column widths to the columns config
   const columnsWithStoredWidths = useMemo(() => {
