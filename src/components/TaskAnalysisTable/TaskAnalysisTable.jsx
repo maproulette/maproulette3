@@ -605,8 +605,8 @@ export const TaskAnalysisTableInternal = (props) => {
                             cursor: isResizing
                               ? "col-resize"
                               : !column.disableSortBy
-                              ? "pointer"
-                              : "auto",
+                                ? "pointer"
+                                : "auto",
                             overflow: "hidden",
                           }}
                         >
