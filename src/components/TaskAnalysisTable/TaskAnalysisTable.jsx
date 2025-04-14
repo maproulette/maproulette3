@@ -7,7 +7,14 @@ import PropTypes from "prop-types";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { useExpanded, useFilters, usePagination, useSortBy, useTable } from "react-table";
+import {
+  useExpanded,
+  useFilters,
+  usePagination,
+  useResizeColumns,
+  useSortBy,
+  useTable,
+} from "react-table";
 import ConfigureColumnsModal from "../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import WithTargetUser from "../../components/HOCs/WithTargetUser/WithTargetUser";
 import InTableTagFilter from "../../components/KeywordAutosuggestInput/InTableTagFilter";
@@ -29,6 +36,136 @@ import ViewTask from "../ViewTask/ViewTask";
 import messages from "./Messages";
 import TaskAnalysisTableHeader from "./TaskAnalysisTableHeader";
 import { StatusLabel, ViewCommentsButton, makeInvertable } from "./TaskTableHelpers";
+
+// Add CSS styles for column resizing
+const tableStyles = `
+  .mr-resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+    z-index: 10;
+  }
+  
+  .mr-resizer:hover,
+  .mr-isResizing {
+    background: rgba(127, 209, 59, 0.8);
+  }
+  
+  .mr-table-header-cell {
+    overflow: visible;
+    position: relative;
+  }
+  
+  .mr-table-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* Ensure the table doesn't jump during resizing */
+  table {
+    table-layout: fixed;
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Add transparent overlay when resizing to prevent issues with mouse events */
+  body.react-resizing * {
+    cursor: col-resize !important;
+  }
+  
+  .mr-sortable-header {
+    cursor: pointer !important;
+  }
+  
+  .mr-sortable-header:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .mr-sortable-header span, 
+  .mr-sortable-header div:not(.mr-header-filter) {
+    cursor: pointer !important;
+  }
+  
+  /* Prevent text selection during resize */
+  .resizing-active {
+    user-select: none;
+    cursor: col-resize !important;
+  }
+  
+  .resizing-active * {
+    pointer-events: none;
+  }
+  
+  .resizing-active .mr-resizer {
+    pointer-events: auto !important;
+    z-index: 100;
+  }
+  
+  .resizing-active .mr-sortable-header {
+    background-color: transparent !important;
+    cursor: col-resize !important;
+  }
+  
+  .resizing-active .mr-header-filter,
+  .resizing-active .mr-filter-input,
+  .resizing-active .mr-filter-clear {
+    pointer-events: none !important;
+  }
+
+  .mr-header-filter {
+    margin-top: 0.25rem;
+  }
+
+  .mr-header-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mr-cell-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mr-filter-input {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    height: 1.5rem;
+    border-radius: 2px;
+  }
+
+  .mr-filter-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .mr-filter-clear {
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+  }
+
+  .mr-filter-clear:hover {
+    color: #7fd13b;
+  }
+`;
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask);
@@ -86,20 +223,25 @@ const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) 
   const debouncedSetFilter = useDebounce(setFilter, 500);
 
   return (
-    <div className="mr-flex mr-gap-2">
+    <div
+      className="mr-relative mr-w-full mr-flex mr-items-center"
+      onClick={(e) => e.stopPropagation()}
+    >
       <input
-        className="mr-input mr-px-2 mr-py-1 mr-w-full"
+        className="mr-filter-input"
         value={inputValue}
         onChange={(e) => {
           setInputValue(e.target.value);
           debouncedSetFilter(e.target.value || undefined);
         }}
         placeholder={placeholder}
+        onClick={(e) => e.stopPropagation()}
       />
       {inputValue && (
         <button
-          className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-          onClick={() => {
+          className="mr-filter-clear mr-ml-2"
+          onClick={(e) => {
+            e.stopPropagation();
             setInputValue("");
             setFilter(undefined);
           }}
@@ -107,7 +249,7 @@ const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) 
           <SvgSymbol
             sym="icon-close"
             viewBox="0 0 20 20"
-            className="mr-fill-current mr-w-2.5 mr-h-2.5"
+            className="mr-fill-current mr-w-2 mr-h-2"
           />
         </button>
       )}
@@ -129,6 +271,7 @@ const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) 
 export const TaskAnalysisTableInternal = (props) => {
   const [openComments, setOpenComments] = useState(null);
   const [showConfigureColumns, setShowConfigureColumns] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
 
   // When sort/filter/page changes, call updateCriteria to fetch new data
   const handleStateChange = useCallback(
@@ -186,11 +329,12 @@ export const TaskAnalysisTableInternal = (props) => {
 
   const columnTypes = useMemo(() => {
     let taskBaseRoute = null;
-
-    taskBaseRoute = `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`;
+    if (props.challenge?.parent.id && props.challenge?.id) {
+      taskBaseRoute = `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`;
+    }
 
     return setupColumnTypes(props, taskBaseRoute, AsManager(props.user), setOpenComments);
-  }, [props.challenge.parent.id, props.challenge.id, props.user?.id]);
+  }, [props.challenge?.parent?.id, props.challenge?.id, props.user?.id, props]);
 
   const columns = useMemo(() => {
     let taskBaseRoute = null;
@@ -217,7 +361,6 @@ export const TaskAnalysisTableInternal = (props) => {
               const display = row.original.geometries?.features?.[0]?.properties?.[key];
               return row.original ? <div>{display ?? ""}</div> : null;
             },
-            width: 120,
           };
         } else {
           return columnTypes[column];
@@ -238,7 +381,7 @@ export const TaskAnalysisTableInternal = (props) => {
           .filter(Boolean),
       ];
     }
-  }, [props, setOpenComments]);
+  }, []);
 
   const {
     getTableProps,
@@ -246,7 +389,7 @@ export const TaskAnalysisTableInternal = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { sortBy, filters },
+    state: { sortBy, filters, columnResizing },
   } = useTable(
     {
       columns,
@@ -258,6 +401,8 @@ export const TaskAnalysisTableInternal = (props) => {
       autoResetExpanded: false,
       defaultColumn: {
         Filter: () => null,
+        minWidth: 30,
+        width: 150,
       },
       initialState: {
         filters: Object.entries(props.criteria?.filters ?? {}).map(([id, value]) => ({
@@ -273,17 +418,51 @@ export const TaskAnalysisTableInternal = (props) => {
             ]
           : [],
       },
+      disableResizing: false,
+      disableMultiSort: true,
+      columnResizeMode: "onEnd",
     },
     useFilters,
     useSortBy,
+    useResizeColumns,
     useExpanded,
     usePagination,
   );
+
+  // Track resizing state
+  useEffect(() => {
+    setIsResizing(!!columnResizing.isResizingColumn);
+
+    // Add a class to the body during resizing to prevent other interactions
+    if (columnResizing.isResizingColumn) {
+      document.body.classList.add("resizing-active");
+    } else {
+      document.body.classList.remove("resizing-active");
+    }
+  }, [columnResizing.isResizingColumn]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove("resizing-active");
+    };
+  }, []);
 
   // Update parent when table state changes
   useEffect(() => {
     handleStateChange({ sortBy, filters, pageIndex: props.page });
   }, [sortBy, filters, handleStateChange]);
+
+  // Add a style element to the document head
+  useEffect(() => {
+    const styleElement = document.createElement("style");
+    styleElement.innerHTML = tableStyles;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }, []);
 
   return (
     <Fragment>
@@ -314,44 +493,91 @@ export const TaskAnalysisTableInternal = (props) => {
               {headerGroups.map((headerGroup) => (
                 <Fragment key={headerGroup.id}>
                   <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <th
-                        className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 mr-whitespace-nowrap ${
-                          !column.disableSortBy
-                            ? "mr-cursor-pointer hover:mr-bg-black-10 mr-relative"
-                            : ""
-                        }`}
-                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                        style={{
-                          ...column.getHeaderProps().style,
-                          width: column.width,
-                          minWidth: column.minWidth,
-                          maxWidth: column.maxWidth,
-                        }}
-                      >
-                        <div className="mr-flex mr-items-center">
-                          <span>{column.render("Header")}</span>
-                          {!column.disableSortBy && (
-                            <span className="mr-ml-1 mr-opacity-70">
-                              {column.isSorted ? (
-                                column.isSortedDesc ? (
-                                  " ▼"
-                                ) : (
-                                  " ▲"
-                                )
-                              ) : (
-                                <span className="mr-text-xs mr-opacity-50 mr-inline-block">↕</span>
-                              )}
-                            </span>
-                          )}
-                        </div>
-                      </th>
-                    ))}
-                  </tr>
-                  <tr>
-                    {headerGroup.headers.map((column) => (
-                      <th key={column.id}>{column.canFilter ? column.render("Filter") : null}</th>
-                    ))}
+                    {headerGroup.headers.map((column) => {
+                      // Create separate handlers for sorting and resizing
+                      const headerProps = column.getHeaderProps();
+                      const sortByProps = !column.disableSortBy
+                        ? column.getSortByToggleProps()
+                        : {};
+
+                      // Make sure to prevent click event conflicts
+                      const onHeaderClick = (e) => {
+                        if (
+                          !column.disableSortBy &&
+                          !columnResizing.isResizingColumn &&
+                          !isResizing
+                        ) {
+                          sortByProps.onClick(e);
+                        }
+                      };
+
+                      return (
+                        <th
+                          key={column.id}
+                          className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
+                            !column.disableSortBy && !isResizing ? "mr-sortable-header" : ""
+                          }`}
+                          {...headerProps}
+                          onClick={onHeaderClick}
+                          style={{
+                            ...headerProps.style,
+                            width: column.width,
+                            minWidth: column.minWidth,
+                            cursor: isResizing
+                              ? "col-resize"
+                              : !column.disableSortBy
+                              ? "pointer"
+                              : "auto",
+                          }}
+                        >
+                          <div className="mr-header-content">
+                            <div className="mr-flex mr-items-center mr-justify-between">
+                              <div
+                                className="mr-flex mr-items-center mr-whitespace-nowrap"
+                                style={{
+                                  cursor: !column.disableSortBy && !isResizing ? "pointer" : "auto",
+                                }}
+                              >
+                                <span>{column.render("Header")}</span>
+                                {!column.disableSortBy && (
+                                  <span className="mr-ml-1 mr-opacity-70">
+                                    {column.isSorted ? (
+                                      column.isSortedDesc ? (
+                                        " ▼"
+                                      ) : (
+                                        " ▲"
+                                      )
+                                    ) : (
+                                      <span className="mr-text-xs mr-opacity-50 mr-inline-block">
+                                        ↕
+                                      </span>
+                                    )}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            {column.canFilter && (
+                              <div
+                                className="mr-header-filter mr-mr-2"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {column.render("Filter")}
+                              </div>
+                            )}
+                            {!column.disableResizing && (
+                              <div
+                                className={`mr-resizer ${column.isResizing ? "mr-isResizing" : ""}`}
+                                {...column.getResizerProps()}
+                                onClick={(e) => {
+                                  // Stop propagation to prevent sorting when clicking resize handle
+                                  e.stopPropagation();
+                                }}
+                              />
+                            )}
+                          </div>
+                        </th>
+                      );
+                    })}
                   </tr>
                 </Fragment>
               ))}
@@ -364,16 +590,15 @@ export const TaskAnalysisTableInternal = (props) => {
                     <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()}>
                       {row.cells.map((cell) => (
                         <td
-                          className="mr-px-2 mr-truncate"
+                          className="mr-px-2 mr-py-2"
                           {...cell.getCellProps()}
                           style={{
                             ...cell.getCellProps().style,
                             width: cell.column.width,
                             minWidth: cell.column.minWidth,
-                            maxWidth: cell.column.maxWidth,
                           }}
                         >
-                          {cell.render("Cell")}
+                          <div className="mr-cell-content">{cell.render("Cell")}</div>
                         </td>
                       ))}
                     </tr>
@@ -452,7 +677,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
 
       return null;
     },
-    maxWidth: 25,
+    width: 40,
+    disableSortBy: true,
+    disableResizing: true,
   };
 
   columns.featureId = {
@@ -518,7 +745,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     Filter: ({ column: { filterValue, setFilter } }) => (
       <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search ID..." />
     ),
-    maxWidth: 120,
   };
 
   columns.status = {
@@ -598,7 +824,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         </span>
       );
     },
-    maxWidth: 180,
     minWidth: 150,
   };
 
@@ -644,7 +869,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         </div>
       );
     },
-    maxWidth: 180,
   };
 
   columns.reviewedAt = {
@@ -660,7 +884,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 150,
-    maxWidth: 180,
     minWidth: 150,
   };
 
@@ -677,7 +900,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 150,
-    maxWidth: 180,
     minWidth: 150,
   };
 
@@ -697,7 +919,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 120,
-    maxWidth: 120,
     minWidth: 120,
   };
 
@@ -720,7 +941,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 180,
-    maxWidth: 180,
   };
 
   columns.metaReviewedBy = {
@@ -742,7 +962,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 180,
-    maxWidth: 180,
   };
 
   columns.reviewStatus = {
@@ -760,7 +979,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 155,
-    maxWidth: 180,
+
     minWidth: 155,
   };
 
@@ -779,7 +998,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 155,
-    maxWidth: 180,
+
     minWidth: 155,
   };
 
@@ -806,7 +1025,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       </div>
     ),
     width: 180,
-    maxWidth: 180,
   };
 
   columns.controls = {
@@ -861,7 +1079,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     accessor: "commentID",
     Cell: ({ row }) => <ViewCommentsButton onClick={() => openComments(row.original.id)} />,
     width: 110,
-    maxWidth: 110,
+
     disableSortBy: true,
   };
 
