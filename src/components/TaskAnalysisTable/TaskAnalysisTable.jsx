@@ -129,17 +129,21 @@ const tableStyles = `
 
   .mr-header-filter {
     margin-top: 0.25rem;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .mr-header-content {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   .mr-cell-content {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-width: 100%;
   }
 
   .mr-filter-input {
@@ -164,6 +168,16 @@ const tableStyles = `
 
   .mr-filter-clear:hover {
     color: #7fd13b;
+  }
+  
+  /* Prevent multiple rows from showing in same cell */
+  .row-user-column,
+  .row-challenge-column,
+  .row-controls-column {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 
@@ -273,6 +287,23 @@ export const TaskAnalysisTableInternal = (props) => {
   const [showConfigureColumns, setShowConfigureColumns] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
+  // Create a storage key based on challenge ID if available
+  const storageKey = useMemo(() => {
+    return props.challenge?.id
+      ? `mrColumnWidths-challenge-${props.challenge.id}`
+      : "mrColumnWidths-default";
+  }, [props.challenge?.id]);
+
+  const [columnWidths, setColumnWidths] = useState(() => {
+    // Try to load saved column widths from localStorage
+    try {
+      const savedWidths = localStorage.getItem(storageKey);
+      return savedWidths ? JSON.parse(savedWidths) : {};
+    } catch (e) {
+      return {};
+    }
+  });
+
   // When sort/filter/page changes, call updateCriteria to fetch new data
   const handleStateChange = useCallback(
     ({ sortBy, filters, pageIndex }) => {
@@ -311,6 +342,7 @@ export const TaskAnalysisTableInternal = (props) => {
 
     const { sortBy, direction } = props.criteria.sortCriteria;
     const sorted = [...props.taskData].sort((a, b) => {
+      // Handle null/undefined values consistently in sorting
       if (sortBy === "name") {
         return (a.name || a.title)?.localeCompare(b.name || b.title) ?? 0;
       } else if (sortBy === "reviewDuration") {
@@ -329,15 +361,6 @@ export const TaskAnalysisTableInternal = (props) => {
 
   const columnTypes = useMemo(() => {
     let taskBaseRoute = null;
-    if (props.challenge?.parent.id && props.challenge?.id) {
-      taskBaseRoute = `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`;
-    }
-
-    return setupColumnTypes(props, taskBaseRoute, AsManager(props.user), setOpenComments);
-  }, [props.challenge?.parent?.id, props.challenge?.id, props.user?.id, props]);
-
-  const columns = useMemo(() => {
-    let taskBaseRoute = null;
 
     // if management controls are to be shown, then a challenge object is required
     if (!Array.isArray(props.showColumns) || props.showColumns.indexOf("controls") !== -1) {
@@ -348,9 +371,30 @@ export const TaskAnalysisTableInternal = (props) => {
       taskBaseRoute = `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`;
     }
 
+    return setupColumnTypes(props, taskBaseRoute, AsManager(props.user), setOpenComments);
+  }, [props]);
+
+  const columns = useMemo(() => {
+    const baseColumns = [
+      {
+        id: "expander",
+        Cell: ({ row }) => (
+          <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? "▼" : "▶"}</span>
+        ),
+        width: 40,
+        disableSortBy: true,
+        disableResizing: true,
+      },
+    ];
+
     if (Array.isArray(props.showColumns) && props.showColumns.length > 0) {
-      return props.showColumns.map((columnId) => columnTypes[columnId]).filter(Boolean);
+      // When explicit columns are specified, add expander first, then selected columns
+      return [
+        ...baseColumns,
+        ...props.showColumns.map((columnId) => columnTypes[columnId]).filter(Boolean),
+      ];
     } else {
+      // For default view, add expander, selected, and any custom columns
       const findColumn = (column) => {
         if (column.startsWith(":")) {
           const key = column.slice(1);
@@ -368,20 +412,27 @@ export const TaskAnalysisTableInternal = (props) => {
       };
 
       return [
-        {
-          // Special column for the row expander
-          id: "expander",
-          Cell: ({ row }) => (
-            <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? "▼" : "▶"}</span>
-          ),
-        },
+        ...baseColumns,
         columnTypes.selected,
         ...Object.keys(props.addedColumns || {})
           .map(findColumn)
           .filter(Boolean),
       ];
     }
-  }, []);
+  }, [props.showColumns, props.addedColumns, columnTypes]);
+
+  // Apply stored column widths to the columns config
+  const columnsWithStoredWidths = useMemo(() => {
+    return columns.map((column) => {
+      if (columnWidths[column.id]) {
+        return {
+          ...column,
+          width: columnWidths[column.id],
+        };
+      }
+      return column;
+    });
+  }, [columns, columnWidths]);
 
   const {
     getTableProps,
@@ -392,7 +443,7 @@ export const TaskAnalysisTableInternal = (props) => {
     state: { sortBy, filters, columnResizing },
   } = useTable(
     {
-      columns,
+      columns: columnsWithStoredWidths,
       data,
       manualSortBy: true,
       manualFilters: true,
@@ -429,17 +480,40 @@ export const TaskAnalysisTableInternal = (props) => {
     usePagination,
   );
 
-  // Track resizing state
+  // Track resizing state and save column widths when resizing ends
   useEffect(() => {
-    setIsResizing(!!columnResizing.isResizingColumn);
+    const isCurrentlyResizing = !!columnResizing.isResizingColumn;
+
+    // When resizing ends, store the new column widths
+    if (isResizing && !isCurrentlyResizing) {
+      const newColumnWidths = {};
+      headerGroups.forEach((headerGroup) => {
+        headerGroup.headers.forEach((column) => {
+          if (column.id) {
+            newColumnWidths[column.id] = column.width;
+          }
+        });
+      });
+      const updatedWidths = { ...columnWidths, ...newColumnWidths };
+      setColumnWidths(updatedWidths);
+
+      // Save to localStorage
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(updatedWidths));
+      } catch (e) {
+        console.warn("Failed to save column widths to localStorage", e);
+      }
+    }
+
+    setIsResizing(isCurrentlyResizing);
 
     // Add a class to the body during resizing to prevent other interactions
-    if (columnResizing.isResizingColumn) {
+    if (isCurrentlyResizing) {
       document.body.classList.add("resizing-active");
     } else {
       document.body.classList.remove("resizing-active");
     }
-  }, [columnResizing.isResizingColumn]);
+  }, [columnResizing.isResizingColumn, headerGroups, columnWidths, storageKey]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -523,11 +597,14 @@ export const TaskAnalysisTableInternal = (props) => {
                             ...headerProps.style,
                             width: column.width,
                             minWidth: column.minWidth,
+                            maxWidth: column.width,
+                            position: "relative",
                             cursor: isResizing
                               ? "col-resize"
                               : !column.disableSortBy
                               ? "pointer"
                               : "auto",
+                            overflow: "hidden",
                           }}
                         >
                           <div className="mr-header-content">
@@ -536,6 +613,8 @@ export const TaskAnalysisTableInternal = (props) => {
                                 className="mr-flex mr-items-center mr-whitespace-nowrap"
                                 style={{
                                   cursor: !column.disableSortBy && !isResizing ? "pointer" : "auto",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
                                 }}
                               >
                                 <span>{column.render("Header")}</span>
@@ -560,6 +639,10 @@ export const TaskAnalysisTableInternal = (props) => {
                               <div
                                 className="mr-header-filter mr-mr-2"
                                 onClick={(e) => e.stopPropagation()}
+                                style={{
+                                  overflow: "hidden",
+                                  maxWidth: "100%",
+                                }}
                               >
                                 {column.render("Filter")}
                               </div>
@@ -587,20 +670,26 @@ export const TaskAnalysisTableInternal = (props) => {
                 prepareRow(row);
                 return (
                   <Fragment key={row.original.id}>
-                    <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()}>
-                      {row.cells.map((cell) => (
-                        <td
-                          className="mr-px-2 mr-py-2"
-                          {...cell.getCellProps()}
-                          style={{
-                            ...cell.getCellProps().style,
-                            width: cell.column.width,
-                            minWidth: cell.column.minWidth,
-                          }}
-                        >
-                          <div className="mr-cell-content">{cell.render("Cell")}</div>
-                        </td>
-                      ))}
+                    <tr
+                      {...row.getRowProps()}
+                      className={`${row.isExpanded ? "mr-bg-black-10" : ""} hover:mr-bg-black-10`}
+                    >
+                      {row.cells.map((cell) => {
+                        return (
+                          <td
+                            {...cell.getCellProps()}
+                            className="mr-align-top mr-border-b mr-border-white-10"
+                            style={{
+                              ...cell.getCellProps().style,
+                              maxWidth: cell.column.width,
+                              minWidth: cell.column.minWidth,
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div className="mr-cell-content">{cell.render("Cell")}</div>
+                          </td>
+                        );
+                      })}
                     </tr>
 
                     {row.isExpanded ? (
@@ -648,7 +737,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       const alreadyBundled =
         row.original.bundleId && !props.taskBundle?.bundleId !== row.original.bundleId;
       const enableSelecting =
-        !original.lockedBy &&
+        !row.original.lockedBy &&
         !alreadyBundled &&
         !props.bundling &&
         !props.taskReadOnly &&
@@ -713,11 +802,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
 
       if (row.original.isBundlePrimary && id === props.task?.id) {
         return (
-          <span className="mr-flex mr-items-center mr-relative">
+          <span className="mr-flex mr-items-center">
             <SvgSymbol
               sym="box-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-4"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-mr-2"
               title={props.intl.formatMessage(messages.multipleTasksTooltip)}
             />
             {taskLink}
@@ -733,7 +822,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
             <SvgSymbol
               sym="puzzle-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-4 mr-h-4 mr-absolute mr-left-0 mr--ml-2"
+              className="mr-fill-current mr-w-4 mr-h-4 mr-mr-2"
               title={props.intl.formatMessage(messages.bundleMemberTooltip)}
             />
             {taskLink}
@@ -769,14 +858,14 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     accessor: "remove",
     Cell: ({ row }) => {
       const { taskBundle, task, initialBundle } = props;
-      const { id: taskId, bundleId, status } = row._original;
+      const { id: taskId, bundleId, status } = row.original;
 
       const isActiveTask = taskId === task?.id;
       const isInActiveBundle = taskBundle?.taskIds?.includes(taskId);
       const alreadyBundled = bundleId && initialBundle?.bundleId !== bundleId;
       const validBundlingStatus =
         initialBundle?.taskIds?.includes(taskId) || [0, 3, 6].includes(status);
-      const isLocked = row._original.lockedBy && row._original.lockedBy !== props.user.id;
+      const isLocked = row.original.lockedBy && row.original.lockedBy !== props.user.id;
 
       return (
         <div>
@@ -793,7 +882,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
                   opacity: props.bundleEditsDisabled ? 0.3 : 1,
                   pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
                 }}
-                onClick={() => props.unbundleTask(row._original)}
+                onClick={() => props.unbundleTask(row.original)}
               >
                 <FormattedMessage {...messages.unbundle} />
               </button>
@@ -812,7 +901,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
                   opacity: props.bundleEditsDisabled ? 0.3 : 1,
                   pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
                 }}
-                onClick={() => props.bundleTask(row._original)}
+                onClick={() => props.bundleTask(row.original)}
               >
                 <FormattedMessage {...messages.bundle} />
               </button>
