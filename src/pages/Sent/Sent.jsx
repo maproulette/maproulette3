@@ -8,8 +8,8 @@ import CommentType from "../../services/Comment/CommentType";
 import { keysByReviewStatus } from "../../services/Task/TaskReview/TaskReviewStatus";
 import { TaskStatusColors, keysByStatus } from "../../services/Task/TaskStatus/TaskStatus";
 import HeaderSent from "./HeaderSent";
-import { useSentComments } from "./SentCommentsHooks";
 import Notification from "./Notification";
+import { useSentComments } from "./SentCommentsHooks";
 
 // Add CSS styles for column resizing
 const tableStyles = `
