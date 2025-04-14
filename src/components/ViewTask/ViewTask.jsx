@@ -8,6 +8,7 @@ import BusySpinner from "../BusySpinner/BusySpinner";
 SyntaxHighlighter.registerLanguage("json", jsonLang);
 
 highlightColors.hljs.background = "rgba(0, 0, 0, 0.15)";
+highlightColors.hljs.margin = "0px";
 
 export default class ViewTask extends Component {
   render() {

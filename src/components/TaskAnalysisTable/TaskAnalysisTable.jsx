@@ -144,6 +144,9 @@ const tableStyles = `
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 100%;
+    display: flex;
+    align-items: center;
+    height: 100%;
   }
 
   .mr-filter-input {
@@ -419,7 +422,7 @@ export const TaskAnalysisTableInternal = (props) => {
           .filter(Boolean),
       ];
     }
-  }, [props.showColumns?.length]);
+  }, [props.showColumns?.length, columnTypes.selected, props.addedColumns]);
 
   // Apply stored column widths to the columns config
   const columnsWithStoredWidths = useMemo(() => {
@@ -678,12 +681,13 @@ export const TaskAnalysisTableInternal = (props) => {
                         return (
                           <td
                             {...cell.getCellProps()}
-                            className="mr-align-top mr-border-b mr-border-white-10"
+                            className="mr-px-1 mr-py-1 mr-align-middle mr-border-b mr-border-white-10"
                             style={{
                               ...cell.getCellProps().style,
                               maxWidth: cell.column.width,
                               minWidth: cell.column.minWidth,
                               overflow: "hidden",
+                              height: "40px",
                             }}
                           >
                             <div className="mr-cell-content">{cell.render("Cell")}</div>
