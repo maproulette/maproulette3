@@ -139,4 +139,14 @@ export default defineMessages({
     id: "Admin.Challenge.controls.clone.label",
     defaultMessage: "Clone Challenge",
   },
+
+  showMore: {
+    id: "ChallengeDetails.controls.showMore.label",
+    defaultMessage: "show more",
+  },
+
+  showLess: {
+    id: "ChallengeDetails.controls.showLess.label",
+    defaultMessage: "show less",
+  },
 });

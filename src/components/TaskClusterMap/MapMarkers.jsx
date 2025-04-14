@@ -71,10 +71,6 @@ const Markers = (props) => {
 
   useMapEvents({
     moveend: () => {
-      if (!initialLoadComplete) {
-        setInitialLoadComplete(true);
-      }
-
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
@@ -148,10 +144,19 @@ const Markers = (props) => {
       }
 
       setInitialLoadComplete(true);
-    } else if (props.taskCenter && !props.taskCenter.equals(prevProps.current.taskCenter)) {
+    } else if (
+      !initialLoadComplete &&
+      props.taskCenter &&
+      !props.taskCenter.equals(prevProps.current.taskCenter)
+    ) {
       map.panTo(props.taskCenter);
+      setInitialLoadComplete(true);
     }
-  }, [props.taskMarkers, props.taskCenter]);
+  }, [props.taskMarkers, props.taskCenter, props.centerBounds, initialLoadComplete]);
+
+  useEffect(() => {
+    setInitialLoadComplete(false);
+  }, [props.task?.id, props.taskBundle?.bundleId, props.nearbyTasks?.nearTaskId]);
 
   const refreshSpidered = () => {
     if (spidered.size === 0) {

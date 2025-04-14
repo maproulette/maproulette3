@@ -35,7 +35,6 @@ export default function WithFilterCriteria(
   WrappedComponent,
   ignoreURL = true,
   ignoreLocked = true,
-  skipInitialFetch = false,
   usePersistedFilters = false,
   savedFilterSettingName = undefined,
 ) {

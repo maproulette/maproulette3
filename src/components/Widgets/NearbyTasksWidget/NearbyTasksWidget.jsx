@@ -1,6 +1,5 @@
 import bbox from "@turf/bbox";
 import { featureCollection, point } from "@turf/helpers";
-import _isEqual from "lodash/isEqual";
 import _map from "lodash/map";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
@@ -46,9 +45,9 @@ const descriptor = {
 
 const ClusterMap = WithChallengeTaskClusters(
   WithTaskClusterMarkers(TaskClusterMap("taskBundling")),
+  false,
+  false,
   true,
-  false,
-  false,
   false,
 );
 
@@ -60,27 +59,36 @@ export default class NearbyTasksWidget extends Component {
    */
   initializeClusterFilters(prevProps = {}) {
     if (this.props.taskBundle) {
-      const bundleBounds = bbox({
-        type: "FeatureCollection",
-        features: _map(this.props.taskBundle.tasks, (task) => ({
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
-          },
-        })),
-      });
+      // Only set bounds if they haven't been set already or if the bundle has changed
+      const bundleChanged =
+        !prevProps.taskBundle || this.props.taskBundle.bundleId !== prevProps.taskBundle.bundleId;
+      if (bundleChanged) {
+        const bundleBounds = bbox({
+          type: "FeatureCollection",
+          features: _map(this.props.taskBundle.tasks, (task) => ({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
+            },
+          })),
+        });
 
-      const bounds = toLatLngBounds(bundleBounds);
-      const zoom = this.props.criteria?.zoom || 18;
+        const bounds = toLatLngBounds(bundleBounds).pad(0.2);
+        const zoom = this.props.criteria?.zoom || 18;
 
-      this.props.updateTaskFilterBounds(bounds, zoom);
-    } else if (
-      (this.props.nearbyTasks?.tasks?.length || 0) > 0 &&
-      !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks) &&
-      !this.props.taskBundle
-    ) {
-      this.setBoundsToNearbyTask();
+        this.props.updateTaskFilterBounds(bounds, zoom);
+      }
+    } else if ((this.props.nearbyTasks?.tasks?.length || 0) > 0) {
+      // Check if nearbyTasks has changed or if task has changed
+      const nearbyTasksChanged =
+        !prevProps.nearbyTasks ||
+        this.props.nearbyTasks.nearTaskId !== prevProps.nearbyTasks.nearTaskId;
+      const taskChanged = !prevProps.task || this.props.task?.id !== prevProps.task?.id;
+
+      if (nearbyTasksChanged || taskChanged) {
+        this.setBoundsToNearbyTask();
+      }
     }
   }
 
@@ -93,26 +101,25 @@ export default class NearbyTasksWidget extends Component {
 
   setBoundsToNearbyTask = () => {
     const taskList = this.props.nearbyTasks?.tasks;
-
     // Add the current task to the task list so that it always shows
     // up in the bounds.
     const mappableTask = AsMappableTask(this.props.task);
     mappableTask.point = mappableTask.calculateCenterPoint();
     if (taskList) {
-      taskList?.push(mappableTask);
+      taskList.push(mappableTask);
     }
 
     if (!taskList || taskList.length === 0) {
       return;
     }
 
-    const nearbyBounds = bbox(
-      featureCollection(taskList.map((t) => point([t.point.lng, t.point.lat]))),
+    const bounds = toLatLngBounds(
+      bbox(featureCollection(taskList.map((t) => point([t.point.lng, t.point.lat])))),
     );
 
     // Preserve existing zoom or default to 18
     const zoom = this.props.criteria?.zoom || 18;
-    this.props.updateTaskFilterBounds(toLatLngBounds(nearbyBounds), zoom);
+    this.props.updateTaskFilterBounds(bounds, zoom);
   };
 
   saveFilters = () => {
@@ -136,12 +143,13 @@ export default class NearbyTasksWidget extends Component {
   };
 
   async componentDidMount() {
-    this.initializeClusterFilters();
     await this.props.resetSelectedTasks();
+
     // Always select the main task
     if (this.props.task) {
       this.props.selectTasks([this.props.task]);
     }
+
     // Then add any additional bundle tasks
     if (this.props.taskBundle?.tasks) {
       const additionalTasks = this.props.taskBundle.tasks.filter(
@@ -160,28 +168,27 @@ export default class NearbyTasksWidget extends Component {
   async componentDidUpdate(prevProps) {
     const taskChanged = this.props.task?.id !== prevProps.task?.id;
     const bundleChanged = this.props.taskBundle?.bundleId !== prevProps.taskBundle?.bundleId;
-    const bundleTasksChanged =
-      this.props.taskBundle?.tasks?.length !== prevProps.taskBundle?.tasks?.length ||
-      this.props.taskBundle?.taskIds?.some((id) => !prevProps.taskBundle?.taskIds?.includes(id));
+    const nearbyTasksChanged =
+      this.props.nearbyTasks &&
+      this.props.nearbyTasks.nearTaskId !== prevProps.nearbyTasks.nearTaskId;
 
-    if (taskChanged || bundleChanged || bundleTasksChanged) {
+    if (taskChanged || bundleChanged) {
       await this.props.resetSelectedTasks();
+
       // Always select the main task first
       if (this.props.task) {
         this.props.selectTasks([this.props.task]);
       }
+
       // Then add any additional bundle tasks
       if (this.props.taskBundle?.tasks) {
-        const additionalTasks = this.props.taskBundle.tasks.filter(
-          (t) => t.id !== this.props.task?.id,
-        );
-        if (additionalTasks.length > 0) {
-          this.props.selectTasks(additionalTasks);
-        }
+        // Select all tasks in the bundle to ensure they're all selected
+        this.props.selectTasks(this.props.taskBundle.tasks);
       }
     }
 
-    if (bundleChanged || bundleTasksChanged || this.props.nearbyTasks !== prevProps.nearbyTasks) {
+    // If the task changed or nearby tasks were updated, update the map bounds
+    if (taskChanged || bundleChanged || nearbyTasksChanged) {
       this.initializeClusterFilters(prevProps);
       this.initializeWebsocketSubscription(prevProps);
     }
@@ -196,7 +203,6 @@ export default class NearbyTasksWidget extends Component {
   }
 
   render() {
-    const WidgetContent = this.props.taskBundle ? ActiveBundle : BuildBundle;
     return (
       <QuickWidget
         {...this.props}
@@ -204,7 +210,7 @@ export default class NearbyTasksWidget extends Component {
         widgetTitle={<FormattedMessage {...messages.title} />}
         noMain
       >
-        <WidgetContent
+        <BundleInterface
           {...this.props}
           saveFilters={this.saveFilters}
           revertFilters={this.revertFilters}
@@ -215,9 +221,30 @@ export default class NearbyTasksWidget extends Component {
   }
 }
 
-const ActiveBundle = (props) => {
-  const { task, taskBundle, widgetLayout } = props;
+const BundleInterface = (props) => {
+  const {
+    task,
+    taskBundle,
+    bundleEditsDisabled,
+    initialBundle,
+    widgetLayout,
+    isUnbundling,
+    selectedTasks,
+    virtualChallenge,
+    virtualChallengeId,
+    loadingTasks,
+  } = props;
 
+  // Early return for virtual challenges
+  if (virtualChallenge || Number.isFinite(virtualChallengeId)) {
+    return (
+      <div className="mr-text-base">
+        <FormattedMessage {...messages.noVirtualChallenges} />
+      </div>
+    );
+  }
+
+  // Setup map popup content
   const showMarkerPopup = (markerData) => {
     return (
       <Popup
@@ -230,7 +257,7 @@ const ActiveBundle = (props) => {
             marker={markerData}
             taskId={markerData.options.taskId}
             taskBundleData={taskBundle?.tasks}
-            bundling
+            bundling={!!taskBundle}
             unbundleTask={props.unbundleTask}
             bundleTask={props.bundleTask}
           />
@@ -239,31 +266,26 @@ const ActiveBundle = (props) => {
     );
   };
 
-  const bundleCenter = toLatLngBounds(
-    bbox({
-      type: "FeatureCollection",
-      features: _map(taskBundle.tasks, (task) => ({
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
-        },
-      })),
-    }),
-  );
+  // Calculate map bounds
+  let mapBounds;
+  if (taskBundle) {
+    mapBounds = toLatLngBounds(
+      bbox({
+        type: "FeatureCollection",
+        features: _map(taskBundle.tasks, (task) => ({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [task.location.coordinates[0], task.location.coordinates[1]],
+          },
+        })),
+      }),
+    );
+  } else {
+    mapBounds = toLatLngBounds(props.criteria?.boundingBox || []);
+  }
 
-  const map = (
-    <ClusterMap
-      {...props}
-      loadingTasks={props.loadingTasks}
-      highlightPrimaryTask={task.id}
-      showMarkerPopup={showMarkerPopup}
-      centerBounds={bundleCenter}
-      initialBounds={bundleCenter}
-      fitbBoundsControl
-      selectedTasks={props.selectedTasks}
-    />
-  );
+  const taskCenter = AsMappableTask(props.task).calculateCenterPoint();
 
   return (
     <div className="mr-flex mr-flex-col mr-h-full">
@@ -271,30 +293,100 @@ const ActiveBundle = (props) => {
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
-          <MapPane>{map}</MapPane>
+          <MapPane showLasso={false}>
+            <ClusterMap
+              {...props}
+              loadingTasks={loadingTasks}
+              highlightPrimaryTask={task.id}
+              showMarkerPopup={showMarkerPopup}
+              taskCenter={taskCenter}
+              centerBounds={mapBounds}
+              initialBounds={mapBounds}
+              fitBoundsControl
+              selectedTasks={selectedTasks}
+              onBulkTaskSelection={
+                !taskBundle
+                  ? (tasks) => {
+                      if (!props.selectedTasks.selected.has(props.task.id)) {
+                        props.selectTasks([props.task]);
+                      }
+                      const tasksToSelect = tasks.filter((t) => t.id !== props.task.id);
+                      props.selectTasks(tasksToSelect);
+                    }
+                  : undefined
+              }
+              onBulkTaskDeselection={
+                !taskBundle
+                  ? (tasks) => {
+                      const tasksToDeselect = tasks.filter((t) => t.id !== props.task.id);
+                      props.deselectTasks(tasksToDeselect);
+                    }
+                  : undefined
+              }
+              showSelectMarkersInView={!taskBundle}
+            />
+          </MapPane>
         )}
       </div>
-      <div className="mr-flex mr-content-center mr-my-4">
-        <button
-          className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
-          onClick={() => props.setBundledOnly(!props.bundledOnly)}
-        >
-          <FormattedMessage
-            {...messages[props.bundledOnly ? "displayAllTasksLabel" : "displayBundledTasksLabel"]}
-          />
-        </button>
-        <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4 mr-ml-4 mr-mb-2">
+      {taskBundle && (
+        <h3 className="mr-text-lg mr-text-center mr-text-pink-light mr-mt-4">
           <FormattedMessage
             {...messages.simultaneousTasks}
             values={{ taskCount: taskBundle?.taskIds.length }}
           />
         </h3>
+      )}
+      <div className="mr-flex mr-justify-between mr-content-center">
+        {taskBundle && (
+          <button
+            className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
+            onClick={() => props.setBundledOnly(!props.bundledOnly)}
+          >
+            <FormattedMessage
+              {...messages[props.bundledOnly ? "displayAllTasksLabel" : "displayBundledTasksLabel"]}
+            />
+          </button>
+        )}
+        {initialBundle && (
+          <button
+            disabled={bundleEditsDisabled || isUnbundling}
+            className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
+            style={{
+              cursor: bundleEditsDisabled || isUnbundling ? "default" : "pointer",
+              opacity: bundleEditsDisabled || isUnbundling ? 0.3 : 1,
+            }}
+            onClick={() => props.resetTaskBundle()}
+          >
+            {isUnbundling ? (
+              <BusySpinner inline small />
+            ) : (
+              <FormattedMessage {...messages.resetBundleLabel} />
+            )}
+          </button>
+        )}
+        {taskBundle && (
+          <button
+            disabled={bundleEditsDisabled || isUnbundling}
+            className="mr-button mr-button--green-lighter mr-button--small"
+            style={{
+              cursor: bundleEditsDisabled || isUnbundling ? "default" : "pointer",
+              opacity: bundleEditsDisabled || isUnbundling ? 0.3 : 1,
+            }}
+            onClick={() => props.clearActiveTaskBundle()}
+          >
+            {isUnbundling ? (
+              <BusySpinner inline small />
+            ) : (
+              <FormattedMessage {...messages.unbundleTasksLabel} />
+            )}
+          </button>
+        )}
       </div>
       <div
         className={
           widgetLayout && widgetLayout?.w === 4
-            ? "mr-px-4 mr-space-y-3"
-            : "mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
+            ? "mr-my-4 mr-px-4 mr-space-y-3"
+            : "mr-my-4 mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
         }
       >
         <div className="mr-flex mr-items-center">
@@ -349,113 +441,6 @@ const ActiveBundle = (props) => {
   );
 };
 
-const BuildBundle = (props) => {
-  const { virtualChallenge, virtualChallengeId } = props;
-
-  if (virtualChallenge || Number.isFinite(virtualChallengeId)) {
-    return (
-      <div className="mr-text-base">
-        <FormattedMessage {...messages.noVirtualChallenges} />
-      </div>
-    );
-  }
-
-  const showMarkerPopup = (markerData) => {
-    return (
-      <Popup
-        key={markerData.options.taskId}
-        offset={props.task.id === markerData.options.taskId ? [0.5, -16] : [0.5, -5]}
-      >
-        <div className="marker-popup-content">
-          <TaskMarkerContent {...props} marker={markerData} taskId={markerData.options.taskId} />
-        </div>
-      </Popup>
-    );
-  };
-
-  const map = (
-    <ClusterMap
-      {...props}
-      showMarkerPopup={showMarkerPopup}
-      highlightPrimaryTask={props.task.id}
-      taskCenter={AsMappableTask(props.task).calculateCenterPoint()}
-      boundingBox={props.criteria?.boundingBox}
-      initialBounds={toLatLngBounds(props.criteria?.boundingBox || [])}
-      fitbBoundsControl
-      showSelectMarkersInView
-    />
-  );
-
-  return (
-    <div className="mr-flex mr-flex-col mr-h-full">
-      <div className="mr-flex-grow mr-min-h-0">
-        {props.loading ? (
-          <BusySpinner className="mr-h-full mr-flex mr-items-center" />
-        ) : (
-          <MapPane showLasso>{map}</MapPane>
-        )}
-      </div>
-      <div
-        className={
-          props.widgetLayout && props.widgetLayout?.w === 4
-            ? "mr-px-4 mr-space-y-3"
-            : "mr-px-4 xl:mr-flex xl:mr-justify-between mr-items-center"
-        }
-      >
-        <div className="mr-flex mr-items-center">
-          <p className="mr-text-base mr-uppercase mr-text-mango mr-mr-8">
-            <FormattedMessage {...messages.filterListLabel} />
-          </p>
-          <ul className="md:mr-flex">
-            <li className="md:mr-mr-8">
-              <TaskStatusFilter {...props} />
-            </li>
-            <li className="md:mr-mr-8">
-              <TaskPriorityFilter {...props} />
-            </li>
-            <li>
-              <TaskPropertyFilter {...props} />
-            </li>
-          </ul>
-        </div>
-        <div
-          className={`mr-flex mr-space-x-3 mr-items-center ${
-            props.widgetLayout && props.widgetLayout?.w === 4
-              ? "mr-justify-between"
-              : "mr-justify-end"
-          }`}
-        >
-          {<ClearFiltersControl clearFilters={props.clearAllFilters} />}
-          <Dropdown
-            className="mr-flex mr-items-center"
-            dropdownButton={(dropdown) => (
-              <button
-                onClick={dropdown.toggleDropdownVisible}
-                className="mr-flex mr-items-center mr-text-green-lighter"
-              >
-                <SvgSymbol
-                  sym="filter-icon"
-                  viewBox="0 0 20 20"
-                  className="mr-fill-current mr-w-5 mr-h-5"
-                />
-              </button>
-            )}
-            dropdownContent={(dropdown) => (
-              <div className="mr-flex mr-flex-col mr-space-y-2">
-                <SaveFiltersControl
-                  saveFilters={props.saveFilters}
-                  closeDropdown={dropdown.closeDropdown}
-                />
-                <RevertFiltersControl revertFilters={props.revertFilters} />
-              </div>
-            )}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-
 registerWidgetType(
   WithSelectedClusteredTasks(
     WithNearbyTasks(
@@ -474,14 +459,13 @@ registerWidgetType(
                 true,
                 false,
                 true,
-                true,
                 "taskBundleFilters",
               ),
             ),
             "clusteredTasks",
             "filteredClusteredTasks",
             {
-              includeLocked: false,
+              includeLocked: true,
             },
             true,
             "taskBundleFilters",

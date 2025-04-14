@@ -42,6 +42,7 @@ export default {
     lockReleaseFailure: messages.taskLockReleaseFailure,
     cooperativeFailure: messages.taskCooperativeFailure,
     requestUnlockFailure: messages.requestUnlockFailure,
+    lockFailure: messages.taskLockFailure,
   },
 
   osm: {
