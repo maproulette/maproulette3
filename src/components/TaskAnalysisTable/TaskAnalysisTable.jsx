@@ -372,7 +372,7 @@ export const TaskAnalysisTableInternal = (props) => {
     }
 
     return setupColumnTypes(props, taskBaseRoute, AsManager(props.user), setOpenComments);
-  }, [props]);
+  }, [props.showColumns, props.challenge?.parent?.id, props.challenge?.id, props.taskBundle]);
 
   const columns = useMemo(() => {
     const baseColumns = [
@@ -419,7 +419,7 @@ export const TaskAnalysisTableInternal = (props) => {
           .filter(Boolean),
       ];
     }
-  }, [props.showColumns, props.addedColumns, columnTypes]);
+  }, [props.showColumns?.length]);
 
   // Apply stored column widths to the columns config
   const columnsWithStoredWidths = useMemo(() => {
