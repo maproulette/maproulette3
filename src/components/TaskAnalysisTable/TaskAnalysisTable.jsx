@@ -8,7 +8,6 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { useExpanded, useFilters, usePagination, useSortBy, useTable } from "react-table";
-import BusySpinner from "../../components/BusySpinner/BusySpinner";
 import ConfigureColumnsModal from "../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import WithTargetUser from "../../components/HOCs/WithTargetUser/WithTargetUser";
 import InTableTagFilter from "../../components/KeywordAutosuggestInput/InTableTagFilter";
@@ -185,6 +184,14 @@ export const TaskAnalysisTableInternal = (props) => {
     return direction === "DESC" ? sorted.reverse() : sorted;
   }, [props.taskData, props.criteria?.sortCriteria]);
 
+  const columnTypes = useMemo(() => {
+    let taskBaseRoute = null;
+
+    taskBaseRoute = `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`;
+
+    return setupColumnTypes(props, taskBaseRoute, AsManager(props.user), setOpenComments);
+  }, [props.challenge.parent.id, props.challenge.id, props.user?.id]);
+
   const columns = useMemo(() => {
     let taskBaseRoute = null;
 
@@ -196,13 +203,6 @@ export const TaskAnalysisTableInternal = (props) => {
 
       taskBaseRoute = `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`;
     }
-
-    const columnTypes = setupColumnTypes(
-      props,
-      taskBaseRoute,
-      AsManager(props.user),
-      setOpenComments,
-    );
 
     if (Array.isArray(props.showColumns) && props.showColumns.length > 0) {
       return props.showColumns.map((columnId) => columnTypes[columnId]).filter(Boolean);
@@ -287,7 +287,7 @@ export const TaskAnalysisTableInternal = (props) => {
 
   return (
     <Fragment>
-      <section className="mr-my-4 mr-min-h-100 mr-fixed-containing-block">
+      <section className="mr-my-4 mr-min-h-100 mr-fixed-containing-block mr-relative">
         {!props.suppressHeader && (
           <header className="mr-mb-4">
             <TaskAnalysisTableHeader
@@ -298,73 +298,107 @@ export const TaskAnalysisTableInternal = (props) => {
           </header>
         )}
 
-        {props.loadingTasks ? (
-          <div className="mr-my-8">
-            <BusySpinner big />
+        {props.loadingTasks && (
+          <div className="mr-absolute mr-inset-0 mr-flex mr-items-center mr-justify-center mr-bg-black-75 mr-z-10">
+            <div className="mr-text-white mr-text-lg">Loading...</div>
           </div>
-        ) : (
-          <>
-            <table
-              {...getTableProps()}
-              className="mr-table mr-w-full mr-text-white mr-links-green-lighter"
-            >
-              <thead>
-                {headerGroups.map((headerGroup) => (
-                  <Fragment key={headerGroup.id}>
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
-                        <th
-                          className="mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10"
-                          {...column.getHeaderProps(column.getSortByToggleProps())}
-                        >
-                          {column.render("Header")}
-                          {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
-                        </th>
-                      ))}
-                    </tr>
-                    <tr>
-                      {headerGroup.headers.map((column) => (
-                        <th key={column.id}>{column.canFilter ? column.render("Filter") : null}</th>
-                      ))}
-                    </tr>
-                  </Fragment>
-                ))}
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {page.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <Fragment key={row.original.id}>
-                      <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()}>
-                        {row.cells.map((cell) => (
-                          <td className="mr-px-2" {...cell.getCellProps()}>
-                            {cell.render("Cell")}
-                          </td>
-                        ))}
-                      </tr>
-
-                      {row.isExpanded ? (
-                        <tr>
-                          <td colSpan={columns.length}>
-                            <ViewTaskSubComponent taskId={row.original.id} />
-                          </td>
-                        </tr>
-                      ) : null}
-                    </Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-
-            <PaginationControl
-              currentPage={props.page ?? 0}
-              totalPages={Math.ceil((props.totalTaskCount ?? 0) / props.pageSize)}
-              pageSize={props.pageSize}
-              gotoPage={(page) => handleStateChange({ sortBy, filters, pageIndex: page })}
-              setPageSize={props.changePageSize}
-            />
-          </>
         )}
+
+        <div className="mr-w-full mr-overflow-x-auto">
+          <table
+            {...getTableProps()}
+            className="mr-table mr-w-full mr-text-white mr-links-green-lighter"
+            style={{ minWidth: "100%" }}
+          >
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <Fragment key={headerGroup.id}>
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 mr-whitespace-nowrap ${
+                          !column.disableSortBy
+                            ? "mr-cursor-pointer hover:mr-bg-black-10 mr-relative"
+                            : ""
+                        }`}
+                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                        style={{
+                          ...column.getHeaderProps().style,
+                          width: column.width,
+                          minWidth: column.minWidth,
+                          maxWidth: column.maxWidth,
+                        }}
+                      >
+                        <div className="mr-flex mr-items-center">
+                          <span>{column.render("Header")}</span>
+                          {!column.disableSortBy && (
+                            <span className="mr-ml-1 mr-opacity-70">
+                              {column.isSorted ? (
+                                column.isSortedDesc ? (
+                                  " ▼"
+                                ) : (
+                                  " ▲"
+                                )
+                              ) : (
+                                <span className="mr-text-xs mr-opacity-50 mr-inline-block">↕</span>
+                              )}
+                            </span>
+                          )}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    {headerGroup.headers.map((column) => (
+                      <th key={column.id}>{column.canFilter ? column.render("Filter") : null}</th>
+                    ))}
+                  </tr>
+                </Fragment>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row) => {
+                prepareRow(row);
+                return (
+                  <Fragment key={row.original.id}>
+                    <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()}>
+                      {row.cells.map((cell) => (
+                        <td
+                          className="mr-px-2 mr-truncate"
+                          {...cell.getCellProps()}
+                          style={{
+                            ...cell.getCellProps().style,
+                            width: cell.column.width,
+                            minWidth: cell.column.minWidth,
+                            maxWidth: cell.column.maxWidth,
+                          }}
+                        >
+                          {cell.render("Cell")}
+                        </td>
+                      ))}
+                    </tr>
+
+                    {row.isExpanded ? (
+                      <tr>
+                        <td colSpan={columns.length}>
+                          <ViewTaskSubComponent taskId={row.original.id} />
+                        </td>
+                      </tr>
+                    ) : null}
+                  </Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <PaginationControl
+          currentPage={props.page ?? 0}
+          totalPages={Math.ceil((props.totalTaskCount ?? 0) / props.pageSize)}
+          pageSize={props.pageSize}
+          gotoPage={(page) => handleStateChange({ sortBy, filters, pageIndex: page })}
+          setPageSize={props.changePageSize}
+        />
       </section>
 
       {Number.isFinite(openComments) && (
