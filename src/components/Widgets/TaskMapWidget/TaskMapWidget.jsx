@@ -44,6 +44,7 @@ export default class TaskMapWidget extends Component {
         token={this.props.user.osmProfile.requestToken}
         task={this.props.task}
         comment={this.props.task?.parent?.checkinComment ?? "#mapRoulette"}
+        configurationType={this.props.currentConfiguration?.type}
       />
     );
   };
@@ -78,9 +79,11 @@ export default class TaskMapWidget extends Component {
       );
     }
 
+    const altWorkspaceType = this.props.currentConfiguration?.type === "leftPanel" || this.props.currentConfiguration?.type === "rightPanel";
+
     return (
       <QuickWidget {...this.props} className="task-map-widget" noMain permanent>
-        <div className="mr-mt-2" style={{ height: "calc(100% - 3rem)" }}>
+        <div className="mr-mt-2" style={{ height: altWorkspaceType ? "auto" : "calc(100% - 3rem)" }}>
           {this.props.getUserAppSetting ? (
             <>
               <div className="mr-flex mr-items-center ">

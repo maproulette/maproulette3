@@ -88,6 +88,52 @@ export class WidgetGrid extends Component {
       );
     });
 
+    const workspaceType = this.props.currentConfiguration?.type;
+    const altWorkspaceType = workspaceType === "leftPanel" || workspaceType === "rightPanel";
+
+    if (altWorkspaceType) {
+      return (
+        <div className={classNames("widget-grid-left-panel", { "widget-grid--editing": this.props.isEditing })}>
+          <div className="widget-grid__header_left-panel">
+            {GridFilters && <GridFilters {...this.props} />}
+            {this.props.isEditing && (
+              <Fragment>
+                {this.props.editNameControl}
+                <WidgetPicker {...this.props} isRight onWidgetSelected={this.props.addWidget} />
+                {this.props.doneEditingControl}
+                {this.props.cancelEditingControl}
+              </Fragment>
+            )}
+          </div>
+          {this.props.subHeader && (
+            <div className={classNames({ "mr-mt-24": this.props.isEditing })}>
+              {this.props.subHeader}
+            </div>
+          )}
+
+          <div className="widget-grid__content_left-panel">
+            <div className="widget-grid__layout_left-panel" style={{ marginTop: 0 }}>
+              <GridLayout
+                className="widget-grid__grid_left-panel"
+                cols={1}
+                rowHeight={this.props.workspace.rowHeight || 30}
+                layout={this.props.workspace.layout || []}
+                margin={[16, 16]}
+                isDraggable={this.props.isEditing}
+                isResizable={this.props.isEditing}
+                onLayoutChange={this.props.isEditing ? this.props.onLayoutChange : () => null}
+              >
+                {widgetInstances}
+              </GridLayout>
+            </div>
+            <div className="widget-grid__enhanced-map">
+              {this.props.enhancedMapWidget}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className={classNames("widget-grid", { "widget-grid--editing": this.props.isEditing })}>
         <div className="widget-grid__controls">

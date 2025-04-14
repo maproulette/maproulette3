@@ -33,7 +33,7 @@ export class MapPane extends Component {
       cloneElement(child, { ...this.props }),
     );
 
-    return <div className="map-pane">{childrenWithProps}</div>;
+    return <div className="map-pane" style={{ height: "calc(100vh - 260px)" }}>{childrenWithProps}</div>;
   }
 }
 

@@ -30,20 +30,23 @@ import WidgetWorkspace from "../WidgetWorkspace/WidgetWorkspace";
 import messages from "./Messages";
 import MobileTaskDetails from "./MobileTaskDetails/MobileTaskDetails";
 import TaskMap from "./TaskMap/TaskMap";
-
+import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
+import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails);
+const EnhancedTaskMapWidget = WithKeyboardShortcuts(TaskMapWidget);
 
 const WIDGET_WORKSPACE_NAME = "taskCompletion";
 
 // How frequently the task lock should be refreshed
 const LOCK_REFRESH_INTERVAL = 600000; // 10 minutes
 
-export const defaultWorkspaceSetup = function () {
+export const defaultWorkspaceSetupClassic = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
     label: "Task Completion",
+    type: "classic",
     widgets: [
       widgetDescriptor("TaskInstructionsWidget"),
       widgetDescriptor("TagDiffWidget"),
@@ -70,6 +73,38 @@ export const defaultWorkspaceSetup = function () {
     ],
     conditionalWidgets: [
       // conditionally displayed
+      "TagDiffWidget",
+    ],
+  };
+};
+
+export const defaultWorkspaceSetupLeftPanel = function (type = "leftPanel") {
+  return {
+    dataModelVersion: 2,
+    name: WIDGET_WORKSPACE_NAME,
+    label: "Task Completion - Left Panel Layout",
+    type,
+    widgets: [
+      widgetDescriptor("TaskInstructionsWidget"),
+      widgetDescriptor("TagDiffWidget"),
+      widgetDescriptor("TaskCompletionWidget"),
+      widgetDescriptor("TaskLocationWidget"),
+    ],
+    layout: [
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 8 }, // Task Instructions
+      { i: generateWidgetId(), x: 0, y: 16, w: 4, h: 6 }, // Tag Diff
+      { i: generateWidgetId(), x: 0, y: 22, w: 4, h: 6 }, // Task Location
+      { i: generateWidgetId(), x: 0, y: 28, w: 4, h: 6 }, // Task Completion
+    ],
+    permanentWidgets: [
+      "TaskCompletionWidget",
+      "TagDiffWidget",
+    ],
+    excludeWidgets: [
+      "TaskReviewWidget",
+      "TaskMapWidget",
+    ],
+    conditionalWidgets: [
       "TagDiffWidget",
     ],
   };
@@ -262,6 +297,8 @@ export class TaskPane extends Component {
       );
     }
 
+    console.log("currentConfiguration", this.props.currentConfiguration?.type);
+
     return (
       <div className="mr-relative">
         <MediaQuery query="(min-width: 1024px)">
@@ -419,6 +456,7 @@ export class TaskPane extends Component {
             completionResponses={completionResponses}
             needsResponses={this.state.needsResponses}
             templateRevision={isCompletionStatus(this.props.task.status)}
+            // enhancedMapWidget={<EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />}
           />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
@@ -511,6 +549,7 @@ export default WithChallengePreferences(
     WithLockedTask(WithCooperativeWork(WithTaskBundle(injectIntl(TaskPane)))),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
-    defaultWorkspaceSetup,
+    defaultWorkspaceSetupClassic,
+    defaultWorkspaceSetupLeftPanel,
   ),
 );

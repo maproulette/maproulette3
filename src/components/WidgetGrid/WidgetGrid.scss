@@ -1,5 +1,78 @@
 @import '../../variables.scss';
 
+.widget-grid-left-panel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+
+  &__header_left-panel {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 10px;
+    margin-right: 2rem;
+    width: 100%;
+    flex-shrink: 0;
+
+    .dashboard__filter {
+      margin-right: 15px;
+    }
+  }
+
+  &__content_left-panel {
+    display: flex;
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    max-height: calc(100vh - 12em);
+  }
+
+  &__layout_left-panel {
+    max-width: 25%;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: auto;
+    margin-bottom: auto;
+    max-height: calc(100vh - 12em);
+
+    .mr-card-widget {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+
+  &__layout_enhanced-map {
+    width: 75%;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+
+    .task-map-widget {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .mr-card-widget__content {
+        flex: 1;
+        height: 100%;
+        overflow: hidden;
+      }
+    }
+  }
+
+  &__grid_left-panel {
+    height: 100%;
+    overflow-x: hidden;
+  }
+}
+
 .widget-grid {
   &__controls {
     display: flex;

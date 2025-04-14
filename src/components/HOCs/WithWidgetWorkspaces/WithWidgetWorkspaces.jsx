@@ -32,11 +32,13 @@ export const WithWidgetWorkspacesInternal = function (
   targets,
   workspaceName,
   defaultConfiguration,
+  defaultConfigurationAlt
 ) {
   return class extends Component {
     state = {
       currentConfigurationId: null,
       defaultWorkspace: null,
+      defaultWorkspaceAlt: null,
     };
 
     componentDidMount() {
@@ -54,6 +56,7 @@ export const WithWidgetWorkspacesInternal = function (
      * function
      */
     setupWorkspace = (defaultConfiguration) => {
+      console.log("setupWorkspace", defaultConfiguration);
       const conf = defaultConfiguration();
       // Ensure default layout honors properties from each widget's descriptor
       for (let i = 0; i < conf.widgets.length; i++) {
@@ -73,6 +76,40 @@ export const WithWidgetWorkspacesInternal = function (
       }
 
       return conf;
+    };
+
+    /**
+     * switch to alternative workspace default
+     */
+    setupWorkspaceAlt = () => {
+      const conf = defaultConfigurationAlt();
+      const currentConfig = this.currentConfiguration(this.workspaceConfigurations());
+
+      debugger;
+
+      const userWorkspaces = this.allUserWorkspaces();
+      userWorkspaces[conf.name] = Object.assign(
+        {},
+        userWorkspaces[conf.name],
+        { [currentConfig.id]: conf },
+      );
+
+      debugger;
+
+      this.props.updateUserAppSetting(this.props.user.id, {
+        workspaces: userWorkspaces,
+        dashboards: undefined, // clear out any legacy settings
+      });
+    };
+
+    /**
+     * switch to alternative workspace variant
+     */
+    switchWorkspaceAltVariant = (type = "rightPanel") => {
+      const currentConfig = this.currentConfiguration(this.workspaceConfigurations());
+      if (currentConfig) {
+        this.saveWorkspaceConfiguration(Object.assign({}, currentConfig, { type }));
+      }
     };
 
     /**
@@ -409,13 +446,15 @@ export const WithWidgetWorkspacesInternal = function (
           exportWorkspaceConfiguration={this.exportWorkspaceConfiguration}
           importWorkspaceConfiguration={this.importWorkspaceConfiguration}
           deleteWorkspaceConfiguration={this.deleteWorkspaceConfiguration}
+          setupWorkspaceAlt={this.setupWorkspaceAlt}
+          switchWorkspaceAltVariant={this.switchWorkspaceAltVariant}
         />
       );
     }
   };
 };
 
-const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultConfiguration) =>
+const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultConfiguration, defaultConfigurationAlt) =>
   WithStatus(
     WithCurrentUser(
       WithErrors(
@@ -424,6 +463,7 @@ const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultC
           targets,
           workspaceName,
           defaultConfiguration,
+          defaultConfigurationAlt
         ),
       ),
     ),

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 
-// import BusySpinner from '../../../BusySpinner/BusySpinner';
 import { FormattedMessage } from "react-intl";
 import useHash from "../../../../hooks/UseHash";
 import { replacePropertyTags } from "../../../../hooks/UsePropertyReplacement/UsePropertyReplacement";
@@ -39,7 +38,7 @@ function generateStartingHash({ mapBounds, task, comment }) {
   return rapidParams;
 }
 
-const RapidEditor = ({ token, task, mapBounds, comment }) => {
+const RapidEditor = ({ token, task, mapBounds, comment, configurationType }) => {
   const dispatch = useDispatch();
   const [_isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -71,6 +70,8 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
     }
   };
 
+  const altWorkspaceType = configurationType === "leftPanel" || configurationType === "rightPanel";
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <button
@@ -89,10 +90,10 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
         </div>
       ) */}
       {error && <div>Error: {error.message}</div>}
-      <iframe
+      {/* <iframe
         ref={iframeRef}
         id="rapid-container-root"
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%", height: altWorkspaceType ? "calc(100vh - 260px)" : "100%" }}
         src={`/static/rapid-editor.html${initialHash}`}
         onLoad={async (event) => {
           let iframe = event.target;
@@ -121,7 +122,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
             setIsLoading(false);
           }
         }}
-      />
+      /> */}
     </div>
   );
 };

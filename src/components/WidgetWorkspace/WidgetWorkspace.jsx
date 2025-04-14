@@ -195,6 +195,7 @@ export class WidgetWorkspace extends Component {
                 importConfiguration={this.importConfiguration}
                 deleteConfiguration={this.deleteConfiguration}
                 closeDropdown={dropdown.closeDropdown}
+                setupWorkspaceAlt={this.props.setupWorkspaceAlt}
               />
             )}
           ></Dropdown>
@@ -255,6 +256,7 @@ export class WidgetWorkspace extends Component {
           workspace={this.props.currentConfiguration}
           workspaceContext={this.state.workspaceContext}
           setWorkspaceContext={this.setWorkspaceContext}
+          enhancedMapWidget={this.props.enhancedMapWidget}
         />
         {this.state.isExportingLayout && (
           <ExportLayoutModal
@@ -403,6 +405,13 @@ const ListLayoutItems = function (props) {
                 <FormattedMessage {...messages.deleteConfigurationLabel} />
               </a>
             </ConfirmAction>
+          </li>
+        ) : null}
+        {props.setupWorkspaceAlt ? (
+          <li>
+            <a onClick={() => props.setupWorkspaceAlt(props.closeDropdown)}>
+              Static Map with Left Panel
+            </a>
           </li>
         ) : null}
       </ol>
