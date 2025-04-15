@@ -790,13 +790,14 @@ export const updateUserAppSetting = function (userId, appId, appSetting) {
         //   },
         //   ...
         // }
+        const newSettings = Object.assign({}, oldUser?.properties?.[appId]?.settings, appSetting)
         const userData = Object.assign({}, oldUser, {
           properties: Object.assign({}, oldUser?.properties, {
             [appId]: {
               meta: Object.assign({}, oldUser?.properties?.[appId]?.meta, {
                 revision: Date.now(),
               }),
-              settings: Object.assign({}, oldUser?.properties?.[appId]?.settings, appSetting),
+              settings: newSettings,
             },
           }),
         });

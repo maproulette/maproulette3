@@ -81,17 +81,18 @@ export const WithWidgetWorkspacesInternal = function (
     /**
      * switch to alternative workspace default
      */
-    setupWorkspaceAlt = (workspaceConfigurationId) => {
-      const oldConfiguration = this.workspaceConfigurations()[workspaceConfigurationId];
+    setupWorkspaceAlt = (currentConfig) => {
+      const newConfiguration = this.setupWorkspace(defaultConfigurationAlt);
+      newConfiguration.label = nextAvailableConfigurationLabel(
+        newConfiguration.label,
+        this.workspaceConfigurationLabels(),
+      );
 
-      if (oldConfiguration) {
-        const newConfiguration = this.setupWorkspace(defaultConfigurationAlt);
-        const thing = Object.assign({}, newConfiguration, {
-          id: workspaceConfigurationId,
-          label: oldConfiguration.label,
-        })
-        this.saveWorkspaceConfiguration(thing);
-      }
+      this.saveWorkspaceConfiguration(newConfiguration);
+      setTimeout(() => {
+        this.switchWorkspaceConfiguration(newConfiguration.id, currentConfig);
+      }, 500);
+      return newConfiguration;
     };
 
     /**
@@ -267,6 +268,26 @@ export const WithWidgetWorkspacesInternal = function (
         {},
         userWorkspaces[workspaceConfiguration.name],
         { [workspaceConfiguration.id]: workspaceConfiguration },
+      );
+
+      this.props.updateUserAppSetting(this.props.user.id, {
+        workspaces: userWorkspaces,
+        dashboards: undefined, // clear out any legacy settings
+      });
+    };
+
+    /**
+     * Persist the given workspace configuration object to the user's app
+     * settings.
+     */
+    saveWorkspaceConfigurationSlice = (name, workspaceId, workspaceConfigurationSlice) => {
+      // Assign an id if needed
+      
+      const userWorkspaces = this.allUserWorkspaces();
+      userWorkspaces[name] = Object.assign(
+        {},
+        userWorkspaces[workspaceConfigurationSlice.name],
+        { [workspaceConfigurationSlice.id]: workspaceConfigurationSlice },
       );
 
       this.props.updateUserAppSetting(this.props.user.id, {

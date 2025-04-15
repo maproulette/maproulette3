@@ -82,7 +82,7 @@ export const defaultWorkspaceSetupLeftPanel = function (type = "leftPanel") {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Task Completion",
+    label: "Task Completion - Static Map",
     type,
     widgets: [
       widgetDescriptor("TaskInstructionsWidget"),

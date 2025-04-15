@@ -151,7 +151,7 @@ export class WidgetWorkspace extends Component {
   };
 
   setupWorkspaceAlt = (closeDropdown) => {
-    this.props.setupWorkspaceAlt(this.props.currentConfiguration.id);
+    this.props.setupWorkspaceAlt(this.props.currentConfiguration);
     closeDropdown();
   };
 
