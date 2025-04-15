@@ -4,8 +4,6 @@ import _isEmpty from "lodash/isEmpty";
 import PiwikReactRouter from "piwik-react-router";
 import ReactDOM from "react-dom";
 import { IntlProvider } from "react-intl";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import App from "./App";
@@ -67,8 +65,6 @@ const ConnectedIntl = WithUserLocale((props) => (
 // Setup the redux store
 const store = initializeStore();
 
-const queryClient = new QueryClient();
-
 // Start with a default challenge search so users can easily 'load more'
 // results if desired
 const defaultSearch = {};
@@ -100,18 +96,15 @@ store
 
 // Render the app
 ReactDOM.render(
-  <QueryClientProvider client={queryClient}>
-    <Provider store={store}>
-      <ApolloProvider client={graphqlClient}>
-        <ConnectedIntl>
-          <Router history={routerHistory}>
-            <App />
-          </Router>
-        </ConnectedIntl>
-      </ApolloProvider>
-    </Provider>
-    <ReactQueryDevtools initialIsOpen={false} />
-  </QueryClientProvider>,
+  <Provider store={store}>
+    <ApolloProvider client={graphqlClient}>
+      <ConnectedIntl>
+        <Router history={routerHistory}>
+          <App />
+        </Router>
+      </ConnectedIntl>
+    </ApolloProvider>
+  </Provider>,
   document.getElementById("root"),
 );
 

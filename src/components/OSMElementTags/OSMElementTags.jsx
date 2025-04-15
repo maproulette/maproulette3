@@ -11,7 +11,6 @@ import Dropdown from "../Dropdown/Dropdown";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
 import "./OSMElementTags.scss";
-import { useQuery } from "react-query";
 
 const OSM_SERVER = window.env.REACT_APP_OSM_SERVER;
 
@@ -41,23 +40,35 @@ const OSMElementTags = (props) => {
   }
 
   const [selectedFeatureId, setSelectedFeatureId] = useState(featureIds[0]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [fetchErr, setFetchErr] = useState(null);
+  const [element, setElement] = useState(null);
 
   useEffect(() => {
     setSelectedFeatureId(featureIds[0]);
   }, [featureIds]);
 
-  const widgetLayoutProps = { featureIds, selectedFeatureId, setSelectedFeatureId };
+  useEffect(() => {
+    const fetchElement = async () => {
+      try {
+        setIsLoading(true);
+        setIsError(false);
+        setFetchErr(null);
+        const data = await fetchOSMElement(selectedFeatureId);
+        setElement(data);
+        setIsLoading(false);
+      } catch (error) {
+        setIsError(true);
+        setFetchErr(error);
+        setIsLoading(false);
+      }
+    };
 
-  const {
-    isLoading,
-    isError,
-    error: fetchErr,
-    data: element,
-  } = useQuery({
-    queryKey: ["OSMElement", selectedFeatureId],
-    queryFn: () => fetchOSMElement(selectedFeatureId),
-    refetchOnWindowFocus: false,
-  });
+    fetchElement();
+  }, [selectedFeatureId, fetchOSMElement]);
+
+  const widgetLayoutProps = { featureIds, selectedFeatureId, setSelectedFeatureId };
 
   if (isLoading) {
     return (
@@ -78,6 +89,16 @@ const OSMElementTags = (props) => {
             values={{ element: selectedFeatureId }}
           />
           {fetchErr?.defaultMessage && <FormattedMessage {...fetchErr} />}
+        </div>
+      </WidgetLayout>
+    );
+  }
+
+  if (!element) {
+    return (
+      <WidgetLayout {...widgetLayoutProps}>
+        <div className="mr-flex mr-justify-center mr-items-center mr-w-full mr-h-full">
+          <BusySpinner />
         </div>
       </WidgetLayout>
     );

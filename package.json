@@ -96,7 +96,6 @@
     "react-leaflet-bing-v2": "^5.2.3",
     "react-onclickoutside": "^6.6.3",
     "react-popper": "^2.2.4",
-    "react-query": "^3.34.2",
     "react-redux": "^7.2.6",
     "react-responsive": "^9.0.2",
     "react-router": "^5.2.0",
