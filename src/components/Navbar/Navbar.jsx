@@ -252,6 +252,13 @@ export const ProfileMenu = function (props) {
           </NavLink>
         </li>
       ) : null}
+      {isSuperUser ? (
+        <li>
+          <NavLink to="/errorTags" onClick={props.closeDropdown}>
+            <FormattedMessage {...messages.errorTagManagement} />
+          </NavLink>
+        </li>
+      ) : null}
       <li>
         <NavLink to="/user/achievements" onClick={props.closeDropdown}>
           <FormattedMessage {...messages.achievements} />

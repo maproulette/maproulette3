@@ -8,6 +8,7 @@ import ChallengeDetail from "./components/ChallengeDetail/ChallengeDetail";
 import ChallengePane from "./components/ChallengePane/ChallengePane";
 import CheckForToken from "./components/CheckForToken/CheckForToken";
 import ErrorModal from "./components/ErrorModal/ErrorModal";
+import ErrorTagManager from "./components/ErrorTagManager/ErrorTagManager";
 import Footer from "./components/Footer/Footer";
 import FundraisingNotices from "./components/FundraisingNotices/FundraisingNotices";
 import WithCurrentTask from "./components/HOCs/WithCurrentTask/WithCurrentTask";
@@ -141,7 +142,8 @@ export class App extends Component {
               <CachedRoute path="/user/profile" component={Profile} />
               <CachedRoute path="/user/metrics/:userId" component={Metrics} />
               <CachedRoute path="/user/metrics" component={Metrics} />
-              <CachedRoute exact path="/superadmin" component={SuperAdminContainer} />
+              <CachedRoute exact path="/superadmin" component={SuperAdminContainer} />\
+              <CachedRoute exact path="/errorTags" component={ErrorTagManager} />
               <CachedRoute path="/user/achievements/:userId" component={Achievements} />
               <CachedRoute path="/user/achievements" component={Achievements} />
               <CachedRoute path="/dashboard" component={Dashboard} />
