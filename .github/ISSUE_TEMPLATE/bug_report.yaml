@@ -1,0 +1,41 @@
+name: Bug report
+description: If you've found a bug in MapRoulette, please let us know!
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please read this first**
+        * If you're having issues with creating your own Challenges, please check the [documentation](https://learn.maproulette.org/documentation/) first
+        * For reporting concerns about other people's Challenges, see the docs on [reporting a challenge](https://learn.maproulette.org/en-US/documentation/reporting-a-challenge/)
+        * For problems with the MapRoulette API, please use the [maproulette-backend](https://github.com/maproulette/maproulette-backend/issues) repository
+
+  - type: textarea
+    id: describe-bug
+    attributes:
+      label: What happened?
+      description: A clear, concise description of the bug you encountered
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Describe in detail how to trigger the bug (e.g., "1. Go to X, 2. Click Y, 3. See Z")
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Your browser (including version) and operating system (e.g. "Chrome 137 on macOS")
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional information
+      description: Screenshots, console logs, or any other details that might help us understand the issue (optional)
