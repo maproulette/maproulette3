@@ -82,7 +82,7 @@ export const defaultWorkspaceSetupLeftPanel = function (type = "leftPanel") {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Task Completion - Left Panel Layout",
+    label: "Task Completion",
     type,
     widgets: [
       widgetDescriptor("TaskInstructionsWidget"),
@@ -456,7 +456,7 @@ export class TaskPane extends Component {
             completionResponses={completionResponses}
             needsResponses={this.state.needsResponses}
             templateRevision={isCompletionStatus(this.props.task.status)}
-            // enhancedMapWidget={<EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />}
+            enhancedMapWidget={<EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />}
           />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">

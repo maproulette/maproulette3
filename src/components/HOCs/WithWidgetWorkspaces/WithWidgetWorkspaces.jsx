@@ -81,25 +81,17 @@ export const WithWidgetWorkspacesInternal = function (
     /**
      * switch to alternative workspace default
      */
-    setupWorkspaceAlt = () => {
-      const conf = defaultConfigurationAlt();
-      const currentConfig = this.currentConfiguration(this.workspaceConfigurations());
+    setupWorkspaceAlt = (workspaceConfigurationId) => {
+      const oldConfiguration = this.workspaceConfigurations()[workspaceConfigurationId];
 
-      debugger;
-
-      const userWorkspaces = this.allUserWorkspaces();
-      userWorkspaces[conf.name] = Object.assign(
-        {},
-        userWorkspaces[conf.name],
-        { [currentConfig.id]: conf },
-      );
-
-      debugger;
-
-      this.props.updateUserAppSetting(this.props.user.id, {
-        workspaces: userWorkspaces,
-        dashboards: undefined, // clear out any legacy settings
-      });
+      if (oldConfiguration) {
+        const newConfiguration = this.setupWorkspace(defaultConfigurationAlt);
+        const thing = Object.assign({}, newConfiguration, {
+          id: workspaceConfigurationId,
+          label: oldConfiguration.label,
+        })
+        this.saveWorkspaceConfiguration(thing);
+      }
     };
 
     /**

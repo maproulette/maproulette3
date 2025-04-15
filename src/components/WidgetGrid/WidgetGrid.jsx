@@ -23,6 +23,9 @@ export class WidgetGrid extends Component {
     // page would be rendered on top of widgets higher on the page since they
     // appear lower in the DOM, thus breaking drop-down menus that extend below
     // a widget
+    const workspaceType = this.props.currentConfiguration?.type;
+    const altWorkspaceType = workspaceType === "leftPanel" || workspaceType === "rightPanel";
+
     const highestY = Math.max(
       ..._map(this.props.workspace.widgets, (w, i) => this.props.workspace.layout[i].y),
     );
@@ -30,7 +33,7 @@ export class WidgetGrid extends Component {
     const GridFilters = this.props.filterComponent;
     const conditionalWidgets = this.props.workspace.conditionalWidgets || [];
     const permanentWidgets = this.props.workspace.permanentWidgets || [];
-    const widgetInstances = _map(this.props.workspace.widgets, (widgetConfiguration, index) => {
+    const widgetInstances = _map(this.props.workspace.widgets, (widgetConfiguration, index) => {      
       const widgetPermanent = permanentWidgets.indexOf(widgetConfiguration.widgetKey) !== -1;
       let widgetHidden = false;
       const WidgetComponent = widgetComponent(widgetConfiguration);
@@ -88,13 +91,10 @@ export class WidgetGrid extends Component {
       );
     });
 
-    const workspaceType = this.props.currentConfiguration?.type;
-    const altWorkspaceType = workspaceType === "leftPanel" || workspaceType === "rightPanel";
-
     if (altWorkspaceType) {
       return (
         <div className={classNames("widget-grid-left-panel", { "widget-grid--editing": this.props.isEditing })}>
-          <div className="widget-grid__header_left-panel">
+          <div className="widget-grid-left-panel__header_left-panel">
             {GridFilters && <GridFilters {...this.props} />}
             {this.props.isEditing && (
               <Fragment>
@@ -111,10 +111,10 @@ export class WidgetGrid extends Component {
             </div>
           )}
 
-          <div className="widget-grid__content_left-panel">
-            <div className="widget-grid__layout_left-panel" style={{ marginTop: 0 }}>
+          <div className="widget-grid-left-panel__content_left-panel">
+            <div className="widget-grid-left-panel__layout_left-panel" style={{ marginTop: 0 }}>
               <GridLayout
-                className="widget-grid__grid_left-panel"
+                className="widget-grid-left-panel__grid_left-panel"
                 cols={1}
                 rowHeight={this.props.workspace.rowHeight || 30}
                 layout={this.props.workspace.layout || []}
@@ -126,7 +126,7 @@ export class WidgetGrid extends Component {
                 {widgetInstances}
               </GridLayout>
             </div>
-            <div className="widget-grid__enhanced-map">
+            <div className="widget-grid-left-panel__enhanced-map">
               {this.props.enhancedMapWidget}
             </div>
           </div>

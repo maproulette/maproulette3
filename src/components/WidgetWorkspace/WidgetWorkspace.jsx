@@ -150,6 +150,11 @@ export class WidgetWorkspace extends Component {
     closeDropdown();
   };
 
+  setupWorkspaceAlt = (closeDropdown) => {
+    this.props.setupWorkspaceAlt(this.props.currentConfiguration.id);
+    closeDropdown();
+  };
+
   switchConfiguration = (configurationId, closeDropdown) => {
     this.props.switchWorkspaceConfiguration(configurationId, this.props.currentConfiguration);
     closeDropdown();
@@ -195,7 +200,7 @@ export class WidgetWorkspace extends Component {
                 importConfiguration={this.importConfiguration}
                 deleteConfiguration={this.deleteConfiguration}
                 closeDropdown={dropdown.closeDropdown}
-                setupWorkspaceAlt={this.props.setupWorkspaceAlt}
+                setupWorkspaceAlt={this.setupWorkspaceAlt}
               />
             )}
           ></Dropdown>
