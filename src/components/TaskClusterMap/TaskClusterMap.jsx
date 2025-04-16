@@ -317,36 +317,35 @@ export const TaskClusterMap = (props) => {
               </div>
             </div>
           </div>
-      )}
-      <ZoomControl className="mr-z-10" position="topright" />
-      {props.showFitWorld && <FitWorldControl />}
-      {props.fitBoundsControl && (
-        <FitBoundsControl
-          key={props.taskCenter}
-          centerPoint={props.taskCenter}
-          centerBounds={props.centerBounds}
-        />
-      )}
-      <ScaleControl className="mr-z-10" position="bottomleft" />
-      <LayerToggle {...props} overlayOrder={overlayOrder} />
-      <VisibleTileLayer {...props} zIndex={1} />
-      {selectionKit}
-      {props.showSearchControl && (
-        <SearchControl {...props} openSearch={() => setSearchOpen(true)} />
-      )}
-      {!searchOpen && props.externalOverlay}
-      {searchOpen && (
-        <SearchContent
-          {...props}
-          allowSpidering
-          currentBounds={currentBounds}
-          setCurrentBounds={setCurrentBounds}
-          currentZoom={currentZoom}
-          setCurrentZoom={setCurrentZoom}
-        />
-      )}
+        )}
+        <ZoomControl className="mr-z-10" position="topright" />
+        {props.showFitWorld && <FitWorldControl />}
+        {props.fitBoundsControl && (
+          <FitBoundsControl
+            key={props.taskCenter}
+            centerPoint={props.taskCenter}
+            centerBounds={props.centerBounds}
+          />
+        )}
+        <ScaleControl className="mr-z-10" position="bottomleft" />
+        <LayerToggle {...props} overlayOrder={overlayOrder} />
+        <VisibleTileLayer {...props} zIndex={1} />
+        {selectionKit}
+        {props.showSearchControl && (
+          <SearchControl {...props} openSearch={() => setSearchOpen(true)} />
+        )}
+        {!searchOpen && props.externalOverlay}
+        {searchOpen && (
+          <SearchContent
+            {...props}
+            allowSpidering
+            currentBounds={currentBounds}
+            setCurrentBounds={setCurrentBounds}
+            currentZoom={currentZoom}
+            setCurrentZoom={setCurrentZoom}
+          />
+        )}
         <LegendToggleControl />
-
       </MapContainer>
     </div>
   );
