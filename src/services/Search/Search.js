@@ -274,7 +274,7 @@ export const generateSearchParametersString = (
     (searchParameters.startDate = filters.reviewedAt), "yyyy-MM-dd";
     (searchParameters.endDate = filters.reviewedAt), "yyyy-MM-dd";
   }
-  
+
   if (filters.mappedOn) {
     // format on is converting filters.mappedOn: 2024-05-09 to searchParameters.mo: 2024-05-08
     (searchParameters.mo = filters.mappedOn), "yyyy-MM-dd";
@@ -346,7 +346,7 @@ export const generateSearchParametersString = (
   }
 
   searchParameters.invf = invf.join(",");
-  
+
   return searchParameters;
 };
 
