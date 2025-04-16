@@ -159,41 +159,6 @@ export const TaskClusterMap = (props) => {
     return clusterData;
   };
 
-  let selectionKit = (
-    <>
-      {props.showLasso && props.clearSelectedSelector && (
-        <LassoSelectionControl onLassoClear={props.resetSelectedTasks} />
-      )}
-      {props.showLasso && props.showSelectMarkersInView && props.onBulkTaskSelection && (
-        <SelectMarkersInViewControl onSelectAllInView={props.onBulkTaskSelection} />
-      )}
-
-      {props.showLasso &&
-        props.showClusterLasso &&
-        props.onBulkClusterSelection &&
-        !props.mapZoomedOut && (
-          <LassoSelectionControl
-            onLassoSelection={selectClustersInLayers}
-            onLassoDeselection={deselectClustersInLayers}
-            onLassoClear={props.resetSelectedClusters}
-            onLassoInteraction={() => setSearchOpen(false)}
-          />
-        )}
-
-      {props.showLasso &&
-        props.onBulkTaskSelection &&
-        (!props.showAsClusters ||
-          (!props.showClusterLasso && props.totalTaskCount <= CLUSTER_POINTS)) && (
-          <LassoSelectionControl
-            onLassoSelection={selectTasksInLayers}
-            onLassoDeselection={deselectTasksInLayers}
-            onLassoClear={props.resetSelectedTasks}
-            onLassoInteraction={() => setSearchOpen(false)}
-          />
-        )}
-    </>
-  );
-
   const ResizeMap = () => {
     const map = useMap();
     useEffect(() => {
@@ -318,33 +283,28 @@ export const TaskClusterMap = (props) => {
             </div>
           </div>
         )}
-        <ZoomControl className="mr-z-10" position="topright" />
-        {props.showFitWorld && <FitWorldControl />}
-        {props.fitBoundsControl && (
-          <FitBoundsControl
-            key={props.taskCenter}
-            centerPoint={props.taskCenter}
-            centerBounds={props.centerBounds}
-          />
-        )}
+
         <ScaleControl className="mr-z-10" position="bottomleft" />
-        <LayerToggle {...props} overlayOrder={overlayOrder} />
         <VisibleTileLayer {...props} zIndex={1} />
-        {selectionKit}
-        {props.showSearchControl && (
-          <SearchControl {...props} openSearch={() => setSearchOpen(true)} />
-        )}
         {!searchOpen && props.externalOverlay}
         {searchOpen && (
           <SearchContent
             {...props}
-            allowSpidering
-            currentBounds={currentBounds}
-            setCurrentBounds={setCurrentBounds}
-            currentZoom={currentZoom}
-            setCurrentZoom={setCurrentZoom}
+            onResultSelected={(bounds) => {
+              setCurrentBounds(toLatLngBounds(bounds));
+              props.updateBounds(bounds);
+            }}
+            closeSearch={() => setSearchOpen(false)}
           />
         )}
+        <MapMarkers
+          {...props}
+          allowSpidering
+          currentBounds={currentBounds}
+          setCurrentBounds={setCurrentBounds}
+          currentZoom={currentZoom}
+          setCurrentZoom={setCurrentZoom}
+        />
         <LegendToggleControl />
       </MapContainer>
     </div>
