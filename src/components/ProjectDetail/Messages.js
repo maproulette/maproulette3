@@ -70,4 +70,14 @@ export default defineMessages({
     id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
   },
+
+  showMore: {
+    id: "ProjectDetails.controls.showMore.label",
+    defaultMessage: "show more",
+  },
+
+  showLess: {
+    id: "ProjectDetails.controls.showLess.label",
+    defaultMessage: "show less",
+  },
 });

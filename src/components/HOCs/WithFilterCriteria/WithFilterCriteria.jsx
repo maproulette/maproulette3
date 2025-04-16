@@ -35,7 +35,6 @@ export const WithFilterCriteria = function (
   WrappedComponent,
   ignoreURL = true,
   ignoreLocked = true,
-  skipInitialFetch = false,
   usePersistedFilters = false,
   savedFilterSettingName = undefined,
 ) {
@@ -372,7 +371,6 @@ export default (
   WrappedComponent,
   ignoreURL,
   ignoreLocked,
-  skipInitialFetch,
   usePersistedFilters,
   savedFilterSettingName,
 ) =>
@@ -380,7 +378,6 @@ export default (
     WrappedComponent,
     ignoreURL,
     ignoreLocked,
-    skipInitialFetch,
     usePersistedFilters,
     savedFilterSettingName,
   );
