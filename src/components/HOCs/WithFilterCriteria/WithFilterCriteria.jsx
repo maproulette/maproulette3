@@ -367,7 +367,6 @@ export default (
   WrappedComponent,
   ignoreURL,
   ignoreLocked,
-  skipInitialFetch,
   usePersistedFilters,
   savedFilterSettingName,
 ) =>
@@ -375,7 +374,6 @@ export default (
     WrappedComponent,
     ignoreURL,
     ignoreLocked,
-    skipInitialFetch,
     usePersistedFilters,
     savedFilterSettingName,
   );

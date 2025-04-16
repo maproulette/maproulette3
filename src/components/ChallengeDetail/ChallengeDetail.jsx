@@ -5,7 +5,7 @@ import _findIndex from "lodash/findIndex";
 import _isObject from "lodash/isObject";
 import _merge from "lodash/merge";
 import _uniqBy from "lodash/uniqBy";
-import { Component, Fragment } from "react";
+import { Component, Fragment, createRef } from "react";
 import { FormattedDate, FormattedMessage, injectIntl } from "react-intl";
 import { Popup } from "react-leaflet";
 import { Link } from "react-router-dom";
@@ -74,7 +74,11 @@ export class ChallengeDetail extends Component {
     submittingFlag: false,
     pickingProject: false,
     selectedClusters: [],
+    showMore: false,
+    hasOverflow: null,
   };
+
+  descriptionRef = createRef();
 
   onBulkClusterSelection = (clusters) => {
     if (!clusters || clusters.length === 0) {
@@ -121,6 +125,12 @@ export class ChallengeDetail extends Component {
     if (!_isObject(this.props.user) && this.state.detailTab === DETAIL_TABS.COMMENTS) {
       this.setState({ detailTab: DETAIL_TABS.OVERVIEW });
     }
+    // Check for overflow only when challenge changes
+    if (this.state.hasOverflow === null && this.descriptionRef.current?.clientHeight) {
+      const hasOverflow =
+        this.descriptionRef.current.scrollHeight > this.descriptionRef.current.clientHeight;
+      this.setState({ hasOverflow });
+    }
   }
 
   queryForIssue = async (id) => {
@@ -128,7 +138,9 @@ export class ChallengeDetail extends Component {
 
     const owner = window.env.REACT_APP_GITHUB_ISSUES_API_OWNER;
     const repo = window.env.REACT_APP_GITHUB_ISSUES_API_REPO;
-    const query = `q='Reported+Challenge+${encodeURIComponent("#") + id}'+in:title+state:open+repo:${owner}/${repo}`;
+    const query = `q='Reported+Challenge+${
+      encodeURIComponent("#") + id
+    }'+in:title+state:open+repo:${owner}/${repo}`;
     const response = await fetch(`https://api.github.com/search/issues?${query}`, {
       method: "GET",
       headers: {
@@ -328,9 +340,22 @@ export class ChallengeDetail extends Component {
 
         return (
           <Fragment>
-            <div className="mr-card-challenge__description">
+            <div
+              ref={this.descriptionRef}
+              className={`mr-card-challenge__description ${
+                this.state.showMore ? "mr-max-h-full" : ""
+              }`}
+            >
               <MarkdownContent markdown={challenge.description || challenge.blurb} />
             </div>
+            {this.state.hasOverflow && (
+              <button
+                className="mr-text-sm mr-text-green mr-mb-4"
+                onClick={() => this.setState({ showMore: !this.state.showMore })}
+              >
+                <FormattedMessage {...messages[this.state.showMore ? "showLess" : "showMore"]} />
+              </button>
+            )}
 
             <ChallengeProgress className="mr-my-4" challenge={challenge} />
 
@@ -463,7 +488,9 @@ export class ChallengeDetail extends Component {
                         <SvgSymbol
                           sym="flag-icon"
                           viewBox="0 0 20 20"
-                          className={`mr-w-4 mr-h-4 mr-fill-current mr-mr-2${this.state.issue ? " mr-fill-red-light mr-mt-4px" : ""}`}
+                          className={`mr-w-4 mr-h-4 mr-fill-current mr-mr-2${
+                            this.state.issue ? " mr-fill-red-light mr-mt-4px" : ""
+                          }`}
                         />
                         {this.state.issue && (
                           <div className="mr-text-red-light">

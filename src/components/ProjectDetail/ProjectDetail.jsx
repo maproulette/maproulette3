@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { parseISO } from "date-fns";
 import _filter from "lodash/filter";
 import _isObject from "lodash/isObject";
-import { Component } from "react";
+import { Component, createRef } from "react";
 import { FormattedDate, FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
@@ -33,7 +33,20 @@ const ProjectProgress = WithComputedMetrics(ChallengeProgress);
 export class ProjectDetail extends Component {
   state = {
     remainingChallengeOnly: true,
+    showMore: false,
+    hasOverflow: null,
   };
+
+  descriptionRef = createRef();
+
+  componentDidUpdate() {
+    // Check for overflow only when challenge changes
+    if (this.state.hasOverflow === null && this.descriptionRef.current?.clientHeight) {
+      const hasOverflow =
+        this.descriptionRef.current.scrollHeight > this.descriptionRef.current.clientHeight;
+      this.setState({ hasOverflow });
+    }
+  }
 
   render() {
     const { project, owner } = this.props;
@@ -167,9 +180,26 @@ export class ProjectDetail extends Component {
                       )}
                     </ol>
 
-                    <div className="mr-card-challenge__description">
-                      <MarkdownContent markdown={project.description} />
-                    </div>
+                    {project.description && (
+                      <div
+                        ref={this.descriptionRef}
+                        className={`mr-card-challenge__description ${
+                          this.state.showMore ? "mr-max-h-full" : ""
+                        }`}
+                      >
+                        <MarkdownContent markdown={project.description} />
+                      </div>
+                    )}
+                    {this.state.hasOverflow && (
+                      <button
+                        className="mr-text-sm mr-text-green mr-mb-4"
+                        onClick={() => this.setState({ showMore: !this.state.showMore })}
+                      >
+                        <FormattedMessage
+                          {...messages[this.state.showMore ? "showLess" : "showMore"]}
+                        />
+                      </button>
+                    )}
 
                     {this.props.challenges?.length > PROJECT_CHALLENGE_LIMIT ? (
                       <div className="mr-text-red">

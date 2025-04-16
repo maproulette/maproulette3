@@ -140,11 +140,6 @@ export default defineMessages({
     defaultMessage: "Previewing task in read-only mode",
   },
 
-  fetchBundleError: {
-    id: "Widgets.TaskBundleWidget.fetchBundleError",
-    defaultMessage: "Failed to fetch task bundle. Please try again.",
-  },
-
   lockTaskError: {
     id: "Widgets.TaskBundleWidget.lockTaskError",
     defaultMessage: "Failed to lock task {taskId}. Please try again.",
@@ -153,11 +148,6 @@ export default defineMessages({
   refreshTaskLockError: {
     id: "Widgets.TaskBundleWidget.refreshTaskLockError",
     defaultMessage: "Failed to refresh task lock. Please try again.",
-  },
-
-  updateTaskBundleError: {
-    id: "Widgets.TaskBundleWidget.updateTaskBundleError",
-    defaultMessage: "Failed to update task bundle. Please try again.",
   },
 
   tooManyTasks: {
@@ -188,5 +178,58 @@ export default defineMessages({
   bundleTypeError: {
     id: "Widgets.TaskBundleWidget.bundleTypeError",
     defaultMessage: "Cannot bundle tasks of different types together",
+  },
+
+  bundleTypeNotAllowed: {
+    id: "TaskBundleWidget.error.bundleTypeNotAllowed",
+    defaultMessage: "Cooperative and tag fix tasks cannot be bundled",
+  },
+
+  bundlingDisabledReadOnly: {
+    id: "TaskBundleWidget.bundlingDisabledReadOnly",
+    defaultMessage: "Task bundling is disabled because you are in read-only mode.",
+  },
+  bundlingDisabledTaskType: {
+    id: "TaskBundleWidget.bundlingDisabledTaskType",
+    defaultMessage: "Task bundling is disabled for cooperative and tag fix tasks.",
+  },
+  bundlingDisabledWorkspace: {
+    id: "TaskBundleWidget.bundlingDisabledWorkspace",
+    defaultMessage: "Task bundling is only available in the task completion workspace.",
+  },
+  bundlingDisabledNotCompleted: {
+    id: "TaskBundleWidget.bundlingDisabledNotCompleted",
+    defaultMessage: "Task bundling is only available for completed tasks.",
+  },
+  bundlingDisabledDoneOrReview: {
+    id: "TaskBundleWidget.bundlingDisabledDoneOrReview",
+    defaultMessage:
+      "Task bundling is only available for tasks that are either completed or have been reviewed.",
+  },
+  bundlingDisabledNotOwner: {
+    id: "TaskBundleWidget.bundlingDisabledNotOwner",
+    defaultMessage:
+      "Task bundling is disabled because you are not the original mapper of this task.",
+  },
+  bundlingDisabledMapperEdits: {
+    id: "TaskBundleWidget.bundlingDisabledMapperEdits",
+    defaultMessage:
+      "Task bundling is disabled because you don't have the necessary permissions to edit this task.",
+  },
+  bundlingDisabledGeneric: {
+    id: "TaskBundleWidget.bundlingDisabledGeneric",
+    defaultMessage: "Task bundling is currently disabled.",
+  },
+  bundlingDisabledLocked: {
+    id: "TaskBundleWidget.bundlingDisabledLocked",
+    defaultMessage: "Task bundling is disabled because the main task is locked by another user.",
+  },
+  notCompletedStatus: {
+    id: "TaskBundleWidget.notCompletedStatus",
+    defaultMessage: "Not completed (cannot bundle)",
+  },
+  cannotEditLockedTask: {
+    id: "TaskBundleWidget.cannotEditLockedTask",
+    defaultMessage: "Task is locked by another user",
   },
 });

@@ -38,6 +38,7 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
         const clusterId = cluster.id ?? cluster.taskId;
         const alreadyBundled =
           cluster.bundleId && this.props.initialBundle?.bundleId !== cluster.bundleId;
+        const locked = cluster.lockedBy && cluster.lockedBy !== this.props.user.id;
 
         const bundleConflict = Boolean(
           (this.props.task &&
@@ -46,8 +47,28 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
             ![0, 3, 6].includes(clusterStatus) &&
             !this.props.taskBundle?.taskIds?.includes(clusterId) &&
             !this.props.initialBundle?.taskIds?.includes(clusterId)) ||
-            alreadyBundled,
+            alreadyBundled ||
+            locked,
         );
+
+        // If this task has a bundle conflict and is currently selected, deselect it
+        if (
+          bundleConflict &&
+          this.props.selectedTasks &&
+          this.props.deselectTasks &&
+          // Check if task is selected - handle both Map and object implementations
+          ((this.props.selectedTasks.has && this.props.selectedTasks.has(clusterId)) ||
+            (this.props.selectedTasks.selected &&
+              this.props.selectedTasks.selected.has &&
+              this.props.selectedTasks.selected.has(clusterId))) &&
+          !this.props.taskBundle?.taskIds?.includes(clusterId) &&
+          !this.props.initialBundle?.taskIds?.includes(clusterId)
+        ) {
+          // Use setTimeout to avoid state updates during render
+          setTimeout(() => {
+            this.props.deselectTasks([{ id: clusterId }]);
+          }, 0);
+        }
 
         return AsMappableCluster(cluster).mapMarker(
           this.props.monochromaticClusters,
