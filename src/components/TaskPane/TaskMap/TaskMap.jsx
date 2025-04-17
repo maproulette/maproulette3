@@ -645,6 +645,8 @@ export const TaskMapContent = (props) => {
     return <BusySpinner />;
   }
 
+  const taskCenter = AsMappableTask(props.task).calculateCenterPoint();
+
   return (
     <div
       className={classNames("task-map task", {
@@ -670,20 +672,28 @@ export const TaskMapContent = (props) => {
         showOpenStreetCam={props.showOpenStreetCamLayer}
         openStreetCamCount={props.openStreetCamImages?.length ?? 0}
         overlayOrder={props.getUserAppSetting(props.user, "mapOverlayOrder")}
-        centerBounds={toLatLngBounds(
-          bbox({
-            type: "FeatureCollection",
-            features: _map(features, (feature) => ({
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: [feature.geometry.coordinates[0], feature.geometry.coordinates[1]],
-              },
-            })),
-          }),
-        )}
-        fitBoundsControl={true}
-        showFitWorld={true}
+        centerBounds={
+          props.taskBundle
+            ? toLatLngBounds(
+                bbox({
+                  type: "FeatureCollection",
+                  features: _map(features, (feature) => ({
+                    type: "Feature",
+                    geometry: {
+                      type: "Point",
+                      coordinates: [
+                        feature.geometry.coordinates[0],
+                        feature.geometry.coordinates[1],
+                      ],
+                    },
+                  })),
+                }),
+              )
+            : null
+        }
+        taskCenter={taskCenter}
+        fitBoundsControl
+        showFitWorld
         {...props}
       />
       <SourcedTileLayer maxZoom={maxZoom} {...props} />

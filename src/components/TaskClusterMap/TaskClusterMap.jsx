@@ -171,6 +171,15 @@ export const TaskClusterMap = (props) => {
     setDrawerOpen(isOpen);
   };
 
+  const selectAllTasksInView = (taskIds) => {
+    console.log("selectAllTasksInView called with", taskIds.length, "task IDs");
+    if (props.onBulkTaskSelection && typeof props.onBulkTaskSelection === "function") {
+      props.onBulkTaskSelection(taskIds);
+    } else {
+      console.warn("onBulkTaskSelection is not a function");
+    }
+  };
+
   return (
     <div className="taskcluster-map-container">
       <MapContainer
@@ -209,7 +218,7 @@ export const TaskClusterMap = (props) => {
           onLassoDeselection={
             props.showAsClusters ? deselectClustersInLayers : deselectTasksInLayers
           }
-          onSelectAllInView={props.onSelectAllInView || props.showSelectMarkersInView}
+          onSelectAllInView={selectAllTasksInView}
           {...props}
         />
         <ResizeMap />

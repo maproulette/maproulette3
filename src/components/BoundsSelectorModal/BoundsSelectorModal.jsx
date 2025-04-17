@@ -3,7 +3,7 @@ import classNames from "classnames";
 import _split from "lodash/split";
 import { Component, Fragment } from "react";
 import { FormattedMessage } from "react-intl";
-import { AttributionControl, MapContainer, ZoomControl } from "react-leaflet";
+import { AttributionControl, MapContainer } from "react-leaflet";
 import { fromLatLngBounds, toLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { DEFAULT_MAP_BOUNDS } from "../../services/MapBounds/MapBounds";
 import { defaultLayerSource } from "../../services/VisibleLayer/LayerSources";
@@ -12,6 +12,7 @@ import MapPane from "../EnhancedMap/MapPane/MapPane";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
+import MapControlsDrawer from "../TaskClusterMap/MapControlsDrawer";
 import messages from "./Messages";
 
 /**
@@ -25,6 +26,7 @@ export default class BoundsSelectorModal extends Component {
     active: false,
     lat: 0,
     lng: 0,
+    drawerOpen: true,
   };
 
   dismiss = (defaultBounds) => {
@@ -39,13 +41,17 @@ export default class BoundsSelectorModal extends Component {
     }
   };
 
+  handleToggleDrawer = (isOpen) => {
+    this.setState({ drawerOpen: isOpen });
+  };
+
   render() {
     const boundingBox = toLatLngBounds(
       this.props.value && _split(this.props.value, ",").length === 4
         ? _split(this.props.value, ",")
         : this.props.bounding
-          ? bbox(this.props.bounding)
-          : DEFAULT_MAP_BOUNDS,
+        ? bbox(this.props.bounding)
+        : DEFAULT_MAP_BOUNDS,
     );
 
     return (
@@ -89,8 +95,14 @@ export default class BoundsSelectorModal extends Component {
                           [90, 180],
                         ]}
                       >
+                        <MapControlsDrawer
+                          isOpen={this.state.drawerOpen}
+                          handleToggleDrawer={this.handleToggleDrawer}
+                          showSearchControl={false}
+                          showFitWorld
+                          fitBoundsControl
+                        />
                         <AttributionControl position="bottomleft" prefix={false} />
-                        <ZoomControl className="mr-z-1000" position="topright" />
                         <SourcedTileLayer source={defaultLayerSource()} skipAttribution={true} />
                         <AreaSelect
                           bounds={boundingBox}

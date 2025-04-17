@@ -16,7 +16,6 @@ export const UNCLUSTER_THRESHOLD = 1000;
  */
 const MapControlsDrawer = (props) => {
   const map = useMap();
-  const [lasso, setLasso] = useState(null);
   const [deselecting, setDeselecting] = useState(false);
   const [selecting, setSelecting] = useState(false);
 
@@ -38,9 +37,9 @@ const MapControlsDrawer = (props) => {
   // Handle fit bounds
   const handleFitBounds = () => {
     if (props.centerBounds) {
-      map.fitBounds(props.centerBounds);
+      map.fitBounds(props.centerBounds.pad(0.5));
     } else if (props.taskCenter) {
-      map.setView(props.taskCenter, 14);
+      map.panTo(props.taskCenter);
     }
   };
 
@@ -69,7 +68,6 @@ const MapControlsDrawer = (props) => {
     setSelecting(true);
     if (map) {
       const lassoInstance = L.lasso(map, {});
-      setLasso(lassoInstance);
       lassoInstance.enable();
 
       // Set up lasso finished event handler
@@ -94,7 +92,6 @@ const MapControlsDrawer = (props) => {
 
     if (map) {
       const lassoInstance = L.lasso(map, {});
-      setLasso(lassoInstance);
       lassoInstance.enable();
 
       // Set up lasso finished event handler
@@ -124,13 +121,12 @@ const MapControlsDrawer = (props) => {
 
   // Determine if select all in view should be shown
   const shouldShowSelectAllInView =
-    (props.onSelectAllInView || props.showSelectMarkersInView) && !props.mapZoomedOut;
+    typeof props.onSelectAllInView === "function" && !props.mapZoomedOut;
 
   // Initialize lasso when map is ready
   useEffect(() => {
     if (map && (shouldShowTaskLassoControls || shouldShowClusterLassoControls)) {
       const lassoInstance = L.lasso(map, {});
-      setLasso(lassoInstance);
 
       // Clean up when component unmounts
       return () => {

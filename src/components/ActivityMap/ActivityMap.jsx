@@ -5,19 +5,28 @@ import { latLng } from "leaflet";
 import _isString from "lodash/isString";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { AttributionControl, CircleMarker, MapContainer, Popup, ZoomControl } from "react-leaflet";
+import { AttributionControl, CircleMarker, MapContainer, Popup, useMap } from "react-leaflet";
 import { GLOBAL_MAPBOUNDS, toLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 import { buildLayerSources } from "../../services/VisibleLayer/LayerSources";
 import ActivityDescription from "../ActivityListing/ActivityDescription";
-import LayerToggle from "../EnhancedMap/LayerToggle/LayerToggle";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
+import MapControlsDrawer from "../TaskClusterMap/MapControlsDrawer";
 import messages from "./Messages";
 
 // Setup child components with necessary HOCs
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
+
+const ResizeMap = () => {
+  const map = useMap();
+  useEffect(() => {
+    map.invalidateSize();
+  }, [map]);
+  return null;
+};
 
 /**
  * ActivityMap displays MapRoulette task activity on a map
@@ -25,8 +34,14 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const ActivityMap = (props) => {
+  const [drawerOpen, setDrawerOpen] = useState(true);
   const hasTaskMarkers = (props.activity?.length ?? 0) > 0;
   let coloredMarkers = null;
+
+  const handleToggleDrawer = (isOpen) => {
+    setDrawerOpen(isOpen);
+  };
+
   if (hasTaskMarkers) {
     coloredMarkers = _map(props.activity, (entry) => {
       if (!entry?.task?.location) {
@@ -78,7 +93,6 @@ export const ActivityMap = (props) => {
 
   return (
     <div className="mr-w-full mr-h-full">
-      <LayerToggle {...props} />
       <MapContainer
         center={latLng(5, 0)}
         zoom={2}
@@ -97,8 +111,15 @@ export const ActivityMap = (props) => {
         noAttributionPrefix={props.noAttributionPrefix}
         intl={props.intl}
       >
+        <MapControlsDrawer
+          isOpen={drawerOpen}
+          handleToggleDrawer={handleToggleDrawer}
+          showSearchControl={false}
+          showFitWorld
+          {...props}
+        />
+        <ResizeMap />
         <AttributionControl position="bottomleft" prefix={false} />
-        <ZoomControl position="topright" />
         <VisibleTileLayer {...props} zIndex={1} noWrap bounds={toLatLngBounds(GLOBAL_MAPBOUNDS)} />
         {overlayLayers}
         {coloredMarkers}
