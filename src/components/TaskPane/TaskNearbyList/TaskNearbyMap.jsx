@@ -18,8 +18,8 @@ import SourcedTileLayer from "../../EnhancedMap/SourcedTileLayer/SourcedTileLaye
 import WithIntersectingOverlays from "../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithTaskMarkers from "../../HOCs/WithTaskMarkers/WithTaskMarkers";
 import WithVisibleLayer from "../../HOCs/WithVisibleLayer/WithVisibleLayer";
-import messages from "./Messages";
 import MapControlsDrawer from "../../TaskClusterMap/MapControlsDrawer.jsx";
+import messages from "./Messages";
 
 const colors = resolveConfig(tailwindConfig).theme.colors;
 

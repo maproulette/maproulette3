@@ -5,7 +5,7 @@ import { latLng } from "leaflet";
 import _isString from "lodash/isString";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { AttributionControl, CircleMarker, MapContainer, Popup, useMap } from "react-leaflet";
 import { GLOBAL_MAPBOUNDS, toLatLngBounds } from "../../services/MapBounds/MapBounds";
