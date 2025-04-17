@@ -50,15 +50,56 @@ const MapControlsDrawer = (props) => {
     }
   };
 
+  // Helper function to extract cluster data from a layer
+  const extractClusterDataFromLayer = (layer) => {
+    let clusterData = layer?.options?.icon?.options?.clusterData;
+    if (!clusterData) {
+      // Single-task markers will use `taskData` instead of `clusterData`, but
+      // have fields compatible with clusterData
+      clusterData = layer?.options?.icon?.options?.taskData;
+      if (!clusterData) {
+        return null;
+      }
+
+      // True tasks (versus clusters representing 1 task) won't have a
+      // numberOfPoints field set, so add that for compatibility and mark that
+      // it's actually a task
+      if (!clusterData.numberOfPoints) {
+        clusterData.numberOfPoints = 1;
+        clusterData.isTask = true;
+      }
+    }
+
+    return clusterData;
+  };
+
   // Handle select all in view
   const handleSelectAllInViewClick = () => {
     if (!map || !map._layers) return;
-    const taskIds = _compact(
-      _map(map._layers, (layer) => layer?.options?.icon?.options?.taskData?.taskId),
-    );
-    if (!taskIds.length) return;
-    if (props.onSelectAllInView) {
-      props.onSelectAllInView(taskIds);
+
+    if (props.showAsClusters && props.onBulkClusterSelection) {
+      // Select all clusters in view
+      const clusters = _compact(_map(map._layers, (layer) => extractClusterDataFromLayer(layer)));
+
+      if (clusters.length > 0) {
+        props.onBulkClusterSelection(clusters);
+        console.log(`Selecting ${clusters.length} clusters in view`);
+      }
+    } else if (props.onSelectAllInView || props.onBulkTaskSelection) {
+      // Select all tasks in view
+      const taskIds = _compact(
+        _map(map._layers, (layer) => layer?.options?.icon?.options?.taskData?.taskId),
+      );
+
+      // Handle different callback patterns
+      if (taskIds.length > 0) {
+        if (props.onSelectAllInView) {
+          props.onSelectAllInView(taskIds);
+        } else if (props.onBulkTaskSelection) {
+          props.onBulkTaskSelection(taskIds);
+        }
+        console.log(`Selecting ${taskIds.length} tasks in view`);
+      }
     }
   };
 
@@ -121,7 +162,10 @@ const MapControlsDrawer = (props) => {
 
   // Determine if select all in view should be shown
   const shouldShowSelectAllInView =
-    typeof props.onSelectAllInView === "function" && !props.mapZoomedOut;
+    (typeof props.onSelectAllInView === "function" ||
+      typeof props.onBulkTaskSelection === "function" ||
+      (props.showAsClusters && typeof props.onBulkClusterSelection === "function")) &&
+    !props.mapZoomedOut;
 
   // Initialize lasso when map is ready
   useEffect(() => {

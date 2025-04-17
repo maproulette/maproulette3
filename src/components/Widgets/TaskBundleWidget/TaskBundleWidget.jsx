@@ -129,7 +129,7 @@ export default class TaskBundleWidget extends Component {
       const taskChanged = !prevProps.task || this.props.task?.id !== prevProps.task?.id;
 
       this.setBoundsToNearbyTask();
-    } else if (this.props.task && this.props.task.id !== prevProps.task.id) {
+    } else if (this.props.task && this.props.task.id !== prevProps.task?.id) {
       // If there's no bundle and no nearby tasks, at least center on the current task
       this.centerOnCurrentTask();
     }
@@ -527,8 +527,6 @@ const BundleInterface = (props) => {
         })),
       }),
     );
-  } else {
-    mapBounds = toLatLngBounds(props.criteria?.boundingBox || []);
   }
 
   const taskCenter = AsMappableTask(props.task).calculateCenterPoint();

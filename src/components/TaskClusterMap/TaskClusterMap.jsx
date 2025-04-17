@@ -180,6 +180,15 @@ export const TaskClusterMap = (props) => {
     }
   };
 
+  const selectAllClustersInView = (clusters) => {
+    console.log("selectAllClustersInView called with", clusters.length, "clusters");
+    if (props.onBulkClusterSelection && typeof props.onBulkClusterSelection === "function") {
+      props.onBulkClusterSelection(clusters);
+    } else {
+      console.warn("onBulkClusterSelection is not a function");
+    }
+  };
+
   return (
     <div className="taskcluster-map-container">
       <MapContainer
@@ -218,7 +227,12 @@ export const TaskClusterMap = (props) => {
           onLassoDeselection={
             props.showAsClusters ? deselectClustersInLayers : deselectTasksInLayers
           }
-          onSelectAllInView={selectAllTasksInView}
+          onSelectAllInView={
+            props.showAsClusters
+              ? selectAllClustersInView
+              : selectAllTasksInView || props.onBulkTaskSelection
+          }
+          onBulkClusterSelection={props.onBulkClusterSelection}
           {...props}
         />
         <ResizeMap />
@@ -281,7 +295,7 @@ export const TaskClusterMap = (props) => {
             </div>
           )}
         {!props.mapZoomedOut && (
-          <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
+          <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center mr-pointer-events-none">
             <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
               <div className="mr-py-2 mr-px-3 mr-text-center">
                 <FormattedMessage
