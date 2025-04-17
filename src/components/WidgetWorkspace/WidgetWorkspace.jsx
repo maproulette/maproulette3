@@ -155,6 +155,11 @@ export class WidgetWorkspace extends Component {
     closeDropdown();
   };
 
+  switchWorkspaceAltVariant = (type = "rightPanel", closeDropdown) => {
+    this.props.switchWorkspaceAltVariant(this.props.currentConfiguration, type);
+    closeDropdown();
+  };
+
   switchConfiguration = (configurationId, closeDropdown) => {
     this.props.switchWorkspaceConfiguration(configurationId, this.props.currentConfiguration);
     closeDropdown();
@@ -201,6 +206,7 @@ export class WidgetWorkspace extends Component {
                 deleteConfiguration={this.deleteConfiguration}
                 closeDropdown={dropdown.closeDropdown}
                 setupWorkspaceAlt={this.setupWorkspaceAlt}
+                switchWorkspaceAltVariant={this.switchWorkspaceAltVariant}
               />
             )}
           ></Dropdown>
@@ -393,6 +399,27 @@ const ListLayoutItems = function (props) {
             <FormattedMessage {...messages.addConfigurationLabel} />
           </a>
         </li>
+        {props.setupWorkspaceAlt ? (
+          <li>
+            <a onClick={() => props.setupWorkspaceAlt(props.closeDropdown)}>
+              Add Static Map Layout
+            </a>
+          </li>
+        ) : null}
+        {props.setupWorkspaceAlt && props.currentConfiguration.type === 'leftPanel' ? (
+          <li>
+            <a onClick={() => props.switchWorkspaceAltVariant("rightPanel", props.closeDropdown)}>
+              Switch to Right Panel
+            </a>
+          </li>
+        ) : null}
+        {props.setupWorkspaceAlt && props.currentConfiguration.type === 'rightPanel' ? (
+          <li>
+            <a onClick={() => props.switchWorkspaceAltVariant("leftPanel", props.closeDropdown)}>
+              Switch to Left Panel
+            </a>
+          </li>
+        ) : null}
         <li>
           <a onClick={() => props.beginExportingConfiguration(props.closeDropdown)}>
             <FormattedMessage {...messages.exportConfigurationLabel} />
@@ -410,13 +437,6 @@ const ListLayoutItems = function (props) {
                 <FormattedMessage {...messages.deleteConfigurationLabel} />
               </a>
             </ConfirmAction>
-          </li>
-        ) : null}
-        {props.setupWorkspaceAlt ? (
-          <li>
-            <a onClick={() => props.setupWorkspaceAlt(props.closeDropdown)}>
-              Static Map with Left Panel
-            </a>
           </li>
         ) : null}
       </ol>

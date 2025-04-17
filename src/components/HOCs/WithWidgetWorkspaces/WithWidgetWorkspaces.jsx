@@ -98,11 +98,16 @@ export const WithWidgetWorkspacesInternal = function (
     /**
      * switch to alternative workspace variant
      */
-    switchWorkspaceAltVariant = (type = "rightPanel") => {
-      const currentConfig = this.currentConfiguration(this.workspaceConfigurations());
-      if (currentConfig) {
-        this.saveWorkspaceConfiguration(Object.assign({}, currentConfig, { type }));
-      }
+    switchWorkspaceAltVariant = (currentConfig, type = "rightPanel") => {
+      debugger;
+      const updatedConfig = {
+        ...currentConfig,
+        type: type
+      };
+
+      debugger;
+
+      this.saveWorkspaceConfiguration(updatedConfig);
     };
 
     /**
@@ -145,7 +150,7 @@ export const WithWidgetWorkspacesInternal = function (
      * @private
      */
     completeWorkspaceConfiguration = (initialWorkspace) => {
-      const defaultConfig = initialWorkspace.type === 'leftPanel' ? defaultConfigurationAlt : defaultConfiguration;
+      const defaultConfig = initialWorkspace.type === 'leftPanel' || initialWorkspace.type === 'rightPanel' ? defaultConfigurationAlt : defaultConfiguration;
 
       let configuration = Object.assign(
         {
