@@ -3,8 +3,8 @@ import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
 import _uniqueId from "lodash/uniqueId";
-import { useEffect } from "react";
-import { AttributionControl, MapContainer, Pane, ZoomControl, useMap } from "react-leaflet";
+import { useEffect, useState } from "react";
+import { AttributionControl, MapContainer, Pane, useMap } from "react-leaflet";
 import {
   DEFAULT_ZOOM,
   MAX_ZOOM,
@@ -12,15 +12,20 @@ import {
 } from "../../services/Challenge/ChallengeZoom/ChallengeZoom";
 import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../BusySpinner/BusySpinner";
-import LayerToggle from "../EnhancedMap/LayerToggle/LayerToggle";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import WithIntersectingOverlays from "../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithTaskCenterPoint from "../HOCs/WithTaskCenterPoint/WithTaskCenterPoint";
 import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
+import MapControlsDrawer from "../TaskClusterMap/MapControlsDrawer";
 
 const SupplementalMapContent = (props) => {
   const map = useMap();
   const { task, user, trackedBounds, trackedZoom, h, w } = props;
+  const [drawerOpen, setDrawerOpen] = useState(true);
+
+  const handleToggleDrawer = (isOpen) => {
+    setDrawerOpen(isOpen);
+  };
 
   // Follow the tracked map, if provided
   useEffect(() => {
@@ -71,8 +76,14 @@ const SupplementalMapContent = (props) => {
   // capabilities of the layer.
   return (
     <>
-      <LayerToggle {...props} overlayOrder={overlayOrder} />
-      <ZoomControl position="topright" />
+      <MapControlsDrawer
+        isOpen={drawerOpen}
+        handleToggleDrawer={handleToggleDrawer}
+        showSearchControl={false}
+        showFitWorld
+        overlayOrder={overlayOrder}
+        {...props}
+      />
       <SourcedTileLayer maxZoom={props.maxZoom} {...props} />
       {_map(overlayLayers, (layer, index) => (
         <Pane
@@ -100,6 +111,7 @@ const SupplementalMap = (props) => {
   const zoom = props.task?.parent?.defaultZoom ?? DEFAULT_ZOOM;
   const minZoom = props.task?.parent?.minZoom ?? MIN_ZOOM;
   const maxZoom = props.task?.parent?.maxZoom ?? MAX_ZOOM;
+
   return (
     <div className="task-map">
       <MapContainer

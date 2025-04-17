@@ -128,9 +128,10 @@ export default class TaskBundleWidget extends Component {
         this.props.nearbyTasks.nearTaskId !== prevProps.nearbyTasks.nearTaskId;
       const taskChanged = !prevProps.task || this.props.task?.id !== prevProps.task?.id;
 
-      if (nearbyTasksChanged || taskChanged) {
-        this.setBoundsToNearbyTask();
-      }
+      this.setBoundsToNearbyTask();
+    } else if (this.props.task && this.props.task.id !== prevProps.task?.id) {
+      // If there's no bundle and no nearby tasks, at least center on the current task
+      this.centerOnCurrentTask();
     }
   }
 
@@ -249,6 +250,26 @@ export default class TaskBundleWidget extends Component {
     } finally {
       this.setState({ isUnbundling: false });
     }
+  };
+
+  centerOnCurrentTask = () => {
+    if (!this.props.task) return;
+
+    const mappableTask = AsMappableTask(this.props.task);
+    mappableTask.point = mappableTask.calculateCenterPoint();
+
+    if (!mappableTask.point) return;
+
+    // Create a small bounds around the task point
+    const padding = 0.001; // Small padding around the point
+    const bounds = toLatLngBounds([
+      [mappableTask.point.lat - padding, mappableTask.point.lng - padding],
+      [mappableTask.point.lat + padding, mappableTask.point.lng + padding],
+    ]);
+
+    // Preserve existing zoom or default to 18
+    const zoom = this.props.criteria?.zoom || 18;
+    this.props.updateTaskFilterBounds(bounds, zoom);
   };
 
   async componentDidMount() {
@@ -506,8 +527,6 @@ const BundleInterface = (props) => {
         })),
       }),
     );
-  } else {
-    mapBounds = toLatLngBounds(props.criteria?.boundingBox || []);
   }
 
   const taskCenter = AsMappableTask(props.task).calculateCenterPoint();
@@ -539,6 +558,7 @@ const BundleInterface = (props) => {
               taskCenter={taskCenter}
               centerBounds={mapBounds}
               initialBounds={mapBounds}
+              fitBoundsOnChange={true}
               fitBoundsControl
               selectedTasks={selectedTasks}
               onBulkTaskSelection={

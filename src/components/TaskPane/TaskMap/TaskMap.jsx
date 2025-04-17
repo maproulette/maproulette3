@@ -21,7 +21,6 @@ import {
   LayerGroup,
   MapContainer,
   Pane,
-  ZoomControl,
   useMap,
   useMapEvents,
 } from "react-leaflet";
@@ -37,9 +36,7 @@ import {
 } from "../../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import DirectionalIndicationMarker from "../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker";
-import FitBoundsControl from "../../EnhancedMap/FitBoundsControl/FitBoundsControl";
 import ImageMarkerLayer from "../../EnhancedMap/ImageMarkerLayer/ImageMarkerLayer";
-import LayerToggle from "../../EnhancedMap/LayerToggle/LayerToggle";
 import MapAnimator from "../../EnhancedMap/MapAnimator/MapAnimator";
 import OSMDataLayer from "../../EnhancedMap/OSMDataLayer/OSMDataLayer";
 import PropertyList from "../../EnhancedMap/PropertyList/PropertyList";
@@ -62,6 +59,9 @@ import {
   orderedFeatureLayers,
 } from "./helperFunctions";
 import "./TaskMap.scss";
+import bbox from "@turf/bbox";
+import { toLatLngBounds } from "../../../services/MapBounds/MapBounds";
+import MapControlsDrawer from "../../TaskClusterMap/MapControlsDrawer";
 
 const shortcutGroup = "layers";
 
@@ -86,6 +86,7 @@ export const TaskMapContent = (props) => {
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null);
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null);
   const [directionalityIndicators, setDirectionalityIndicators] = useState({});
+  const [showMapControlsDrawer, setShowMapControlsDrawer] = useState(true);
 
   const taskFeatures = () => {
     if ((props.taskBundle?.tasks?.length ?? 0) > 0) {
@@ -644,14 +645,17 @@ export const TaskMapContent = (props) => {
     return <BusySpinner />;
   }
 
+  const taskCenter = AsMappableTask(props.task).calculateCenterPoint();
+
   return (
     <div
       className={classNames("task-map task", {
         "full-screen-map": props.isMobile,
       })}
     >
-      <LayerToggle
-        {...props}
+      <MapControlsDrawer
+        isOpen={showMapControlsDrawer}
+        handleToggleDrawer={() => setShowMapControlsDrawer(!showMapControlsDrawer)}
         showTaskFeatures={showTaskFeatures}
         toggleTaskFeatures={toggleTaskFeatureVisibility}
         showOSMData={showOSMData}
@@ -668,9 +672,30 @@ export const TaskMapContent = (props) => {
         showOpenStreetCam={props.showOpenStreetCamLayer}
         openStreetCamCount={props.openStreetCamImages?.length ?? 0}
         overlayOrder={props.getUserAppSetting(props.user, "mapOverlayOrder")}
+        centerBounds={
+          props.taskBundle
+            ? toLatLngBounds(
+                bbox({
+                  type: "FeatureCollection",
+                  features: _map(features, (feature) => ({
+                    type: "Feature",
+                    geometry: {
+                      type: "Point",
+                      coordinates: [
+                        feature.geometry.coordinates[0],
+                        feature.geometry.coordinates[1],
+                      ],
+                    },
+                  })),
+                }),
+              )
+            : null
+        }
+        taskCenter={taskCenter}
+        fitBoundsControl
+        showFitWorld
+        {...props}
       />
-      <ZoomControl position="topright" />
-      <FitBoundsControl features={features} />
       <SourcedTileLayer maxZoom={maxZoom} {...props} />
       {overlayLayers().map((layer, index) => (
         <Pane
