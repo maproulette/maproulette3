@@ -33,7 +33,7 @@ export class WidgetGrid extends Component {
     const GridFilters = this.props.filterComponent;
     const conditionalWidgets = this.props.workspace.conditionalWidgets || [];
     const permanentWidgets = this.props.workspace.permanentWidgets || [];
-    const widgetInstances = _map(this.props.workspace.widgets, (widgetConfiguration, index) => {      
+    const widgetInstances = _map(this.props.workspace.widgets, (widgetConfiguration, index) => {
       const widgetPermanent = permanentWidgets.indexOf(widgetConfiguration.widgetKey) !== -1;
       let widgetHidden = false;
       const WidgetComponent = widgetComponent(widgetConfiguration);
@@ -93,7 +93,11 @@ export class WidgetGrid extends Component {
 
     if (altWorkspaceType) {
       return (
-        <div className={classNames("widget-grid-left-panel", { "widget-grid--editing": this.props.isEditing })}>
+        <div
+          className={classNames("widget-grid-left-panel", {
+            "widget-grid--editing": this.props.isEditing,
+          })}
+        >
           <div className="widget-grid-left-panel__header_left-panel">
             {GridFilters && <GridFilters {...this.props} />}
             {this.props.isEditing && (
@@ -111,7 +115,10 @@ export class WidgetGrid extends Component {
             </div>
           )}
 
-          <div className="widget-grid-left-panel__content_left-panel">
+          <div
+            className="widget-grid-left-panel__content_left-panel"
+            style={{ flexDirection: workspaceType === "leftPanel" ? "row" : "row-reverse" }}
+          >
             <div className="widget-grid-left-panel__layout_left-panel" style={{ marginTop: 0 }}>
               <GridLayout
                 className="widget-grid-left-panel__grid_left-panel"

@@ -67,7 +67,7 @@ export const initializeStore = function () {
     rapidEditor,
   });
 
-  if(process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
     // Create the redux store, adding the thunk middleware so we can use

@@ -22,16 +22,16 @@ import MapPane from "../EnhancedMap/MapPane/MapPane";
 import WithChallengePreferences from "../HOCs/WithChallengePreferences/WithChallengePreferences";
 import WithCooperativeWork from "../HOCs/WithCooperativeWork/WithCooperativeWork";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
+import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
 import WithLockedTask from "../HOCs/WithLockedTask/WithLockedTask";
 import WithTaskBundle from "../HOCs/WithTaskBundle/WithTaskBundle";
 import WithWidgetWorkspaces from "../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import WidgetWorkspace from "../WidgetWorkspace/WidgetWorkspace";
+import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
 import messages from "./Messages";
 import MobileTaskDetails from "./MobileTaskDetails/MobileTaskDetails";
 import TaskMap from "./TaskMap/TaskMap";
-import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
-import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails);
 const EnhancedTaskMapWidget = WithKeyboardShortcuts(TaskMapWidget);
@@ -96,17 +96,9 @@ export const defaultWorkspaceSetupLeftPanel = function (type = "leftPanel") {
       { i: generateWidgetId(), x: 0, y: 22, w: 4, h: 16 }, // Task Location
       { i: generateWidgetId(), x: 0, y: 28, w: 4, h: 16 }, // Task Completion
     ],
-    permanentWidgets: [
-      "TaskCompletionWidget",
-      "TagDiffWidget",
-    ],
-    excludeWidgets: [
-      "TaskReviewWidget",
-      "TaskMapWidget",
-    ],
-    conditionalWidgets: [
-      "TagDiffWidget",
-    ],
+    permanentWidgets: ["TaskCompletionWidget", "TagDiffWidget"],
+    excludeWidgets: ["TaskReviewWidget", "TaskMapWidget"],
+    conditionalWidgets: ["TagDiffWidget"],
   };
 };
 
@@ -456,7 +448,9 @@ export class TaskPane extends Component {
             completionResponses={completionResponses}
             needsResponses={this.state.needsResponses}
             templateRevision={isCompletionStatus(this.props.task.status)}
-            enhancedMapWidget={<EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />}
+            enhancedMapWidget={
+              <EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />
+            }
           />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">

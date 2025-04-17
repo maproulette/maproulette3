@@ -32,7 +32,7 @@ export const WithWidgetWorkspacesInternal = function (
   targets,
   workspaceName,
   defaultConfiguration,
-  defaultConfigurationAlt
+  defaultConfigurationAlt,
 ) {
   return class extends Component {
     state = {
@@ -102,7 +102,7 @@ export const WithWidgetWorkspacesInternal = function (
       debugger;
       const updatedConfig = {
         ...currentConfig,
-        type: type
+        type: type,
       };
 
       debugger;
@@ -150,7 +150,10 @@ export const WithWidgetWorkspacesInternal = function (
      * @private
      */
     completeWorkspaceConfiguration = (initialWorkspace) => {
-      const defaultConfig = initialWorkspace.type === 'leftPanel' || initialWorkspace.type === 'rightPanel' ? defaultConfigurationAlt : defaultConfiguration;
+      const defaultConfig =
+        initialWorkspace.type === "leftPanel" || initialWorkspace.type === "rightPanel"
+          ? defaultConfigurationAlt
+          : defaultConfiguration;
 
       let configuration = Object.assign(
         {
@@ -289,13 +292,11 @@ export const WithWidgetWorkspacesInternal = function (
      */
     saveWorkspaceConfigurationSlice = (name, workspaceId, workspaceConfigurationSlice) => {
       // Assign an id if needed
-      
+
       const userWorkspaces = this.allUserWorkspaces();
-      userWorkspaces[name] = Object.assign(
-        {},
-        userWorkspaces[workspaceConfigurationSlice.name],
-        { [workspaceConfigurationSlice.id]: workspaceConfigurationSlice },
-      );
+      userWorkspaces[name] = Object.assign({}, userWorkspaces[workspaceConfigurationSlice.name], {
+        [workspaceConfigurationSlice.id]: workspaceConfigurationSlice,
+      });
 
       this.props.updateUserAppSetting(this.props.user.id, {
         workspaces: userWorkspaces,
@@ -474,7 +475,13 @@ export const WithWidgetWorkspacesInternal = function (
   };
 };
 
-const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultConfiguration, defaultConfigurationAlt) =>
+const WithWidgetWorkspaces = (
+  WrappedComponent,
+  targets,
+  workspaceName,
+  defaultConfiguration,
+  defaultConfigurationAlt,
+) =>
   WithStatus(
     WithCurrentUser(
       WithErrors(
@@ -483,7 +490,7 @@ const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultC
           targets,
           workspaceName,
           defaultConfiguration,
-          defaultConfigurationAlt
+          defaultConfigurationAlt,
         ),
       ),
     ),
