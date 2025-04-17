@@ -90,7 +90,7 @@ const RapidEditor = ({ token, task, mapBounds, comment, configurationType }) => 
         </div>
       ) */}
       {error && <div>Error: {error.message}</div>}
-      {/* <iframe
+      <iframe
         ref={iframeRef}
         id="rapid-container-root"
         style={{ width: "100%", height: altWorkspaceType ? "calc(100vh - 260px)" : "100%" }}
@@ -122,7 +122,7 @@ const RapidEditor = ({ token, task, mapBounds, comment, configurationType }) => 
             setIsLoading(false);
           }
         }}
-      /> */}
+      />
     </div>
   );
 };

@@ -91,10 +91,10 @@ export const defaultWorkspaceSetupLeftPanel = function (type = "leftPanel") {
       widgetDescriptor("TaskLocationWidget"),
     ],
     layout: [
-      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 8 }, // Task Instructions
-      { i: generateWidgetId(), x: 0, y: 16, w: 4, h: 6 }, // Tag Diff
-      { i: generateWidgetId(), x: 0, y: 22, w: 4, h: 6 }, // Task Location
-      { i: generateWidgetId(), x: 0, y: 28, w: 4, h: 6 }, // Task Completion
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 16 }, // Task Instructions
+      { i: generateWidgetId(), x: 0, y: 16, w: 4, h: 16 }, // Tag Diff
+      { i: generateWidgetId(), x: 0, y: 22, w: 4, h: 16 }, // Task Location
+      { i: generateWidgetId(), x: 0, y: 28, w: 4, h: 16 }, // Task Completion
     ],
     permanentWidgets: [
       "TaskCompletionWidget",

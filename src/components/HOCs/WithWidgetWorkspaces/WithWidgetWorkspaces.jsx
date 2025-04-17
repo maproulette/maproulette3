@@ -145,6 +145,8 @@ export const WithWidgetWorkspacesInternal = function (
      * @private
      */
     completeWorkspaceConfiguration = (initialWorkspace) => {
+      const defaultConfig = initialWorkspace.type === 'leftPanel' ? defaultConfigurationAlt : defaultConfiguration;
+
       let configuration = Object.assign(
         {
           id: generateWidgetId(),
@@ -207,7 +209,7 @@ export const WithWidgetWorkspacesInternal = function (
 
       // Make sure workspace is upgraded to latest data model
       configuration = migrateWidgetGridConfiguration(configuration, () =>
-        this.setupWorkspace(defaultConfiguration),
+        this.setupWorkspace(defaultConfig),
       );
 
       // Prune any widgets that have been decommissioned
@@ -215,17 +217,17 @@ export const WithWidgetWorkspacesInternal = function (
 
       // Make sure excludedWidgets reflects latest from default configuration,
       // and prune any newly excluded widgets if necessary
-      configuration.excludeWidgets = defaultConfiguration().excludeWidgets;
+      configuration.excludeWidgets = defaultConfig().excludeWidgets;
       if (configuration.excludeWidgets && configuration.excludeWidgets.length > 0) {
         configuration = pruneWidgets(configuration, configuration.excludeWidgets);
       }
 
       // Make sure any new permanent widgets are added into the configuration
-      configuration.permanentWidgets = defaultConfiguration().permanentWidgets;
-      configuration = ensurePermanentWidgetsAdded(configuration, defaultConfiguration());
+      configuration.permanentWidgets = defaultConfig().permanentWidgets;
+      configuration = ensurePermanentWidgetsAdded(configuration, defaultConfig());
 
       // Make sure conditionalWidgets reflect the latest from default configuration
-      configuration.conditionalWidgets = defaultConfiguration().conditionalWidgets;
+      configuration.conditionalWidgets = defaultConfig().conditionalWidgets;
 
       return configuration;
     };
