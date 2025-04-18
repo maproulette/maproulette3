@@ -1,19 +1,30 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import { injectIntl } from "react-intl";
-import ReactTable from "react-table-6";
+import { usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import WithSortedChallenges from "../HOCs/WithSortedChallenges/WithSortedChallenges";
-import { setChallengeTab, setProjectTab, setUserTab } from "./MetricsData";
+import PaginationControl from "../PaginationControl/PaginationControl";
+import {
+  TableContainer,
+  renderTableHeader,
+  useColumnWidthStorage,
+  useResizingState,
+} from "../TableShared/ResizableTable";
+import { CHALLENGE_COLUMNS, PROJECT_COLUMNS, USER_COLUMNS } from "./MetricsData";
 import WithMetricsSearchResults from "./WithMetricsSearchResults";
 import WithSortedProjects from "./WithSortedProjects";
 import WithSortedUsers from "./WithSortedUsers";
 
 const MetricsTable = (props) => {
-  const [userChanges, setUserChanges] = useState({});
-  let data;
-  const constructHeader = () => {
+  // Create a storage key for column widths based on current tab
+  const storageKey = `mrColumnWidths-metrics-${props.currentTab || "default"}`;
+
+  // Initialize column widths with storage
+  const [columnWidths, saveColumnWidths] = useColumnWidthStorage(storageKey);
+
+  const data = useMemo(() => {
     if (props.currentTab === "challenges") {
-      data = props.challenges.map((c) => ({
+      return props.challenges.map((c) => ({
         id: c.id,
         name: c.name,
         parent: c.parent,
@@ -26,10 +37,8 @@ const MetricsTable = (props) => {
         dataOriginDate: c.dataOriginDate,
         lastTaskRefresh: c.lastTaskRefresh,
       }));
-
-      return setChallengeTab(props);
     } else if (props.currentTab === "projects") {
-      data = props.projects.map((p) => ({
+      return props.projects.map((p) => ({
         id: p.id,
         displayName: p.displayName,
         owner: p.owner,
@@ -39,10 +48,8 @@ const MetricsTable = (props) => {
         created: p.created,
         modified: p.modified,
       }));
-
-      return setProjectTab(props);
     } else if (props.currentTab === "users") {
-      data = props.users.map((u) => ({
+      return props.users.map((u) => ({
         id: u.id,
         displayName: u.osmProfile.displayName,
         score: u.score,
@@ -50,17 +57,111 @@ const MetricsTable = (props) => {
         modified: u.modified,
         superUser: Boolean(u.grants?.find((grant) => grant.role === -1)),
       }));
-
-      return setUserTab(userChanges, setUserChanges);
+    } else {
+      return [];
     }
+  }, [props.currentTab, props.challenges, props.projects, props.users]);
+
+  // Apply column widths to columns
+  const getColumnsWithWidths = (baseColumns) => {
+    return baseColumns.map((column) => ({
+      ...column,
+      width: columnWidths[column.accessor || column.id] || column.width || 150,
+      minWidth: column.minWidth || 80,
+    }));
   };
 
-  return !props.isloadingCompleted ? (
-    <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
-      <BusySpinner />
-    </div>
-  ) : (
-    <ReactTable columns={constructHeader()} data={data} defaultPageSize={50} />
+  const columns = useMemo(() => {
+    if (props.currentTab === "challenges") {
+      return getColumnsWithWidths(CHALLENGE_COLUMNS);
+    } else if (props.currentTab === "projects") {
+      return getColumnsWithWidths(PROJECT_COLUMNS);
+    } else if (props.currentTab === "users") {
+      return getColumnsWithWidths(USER_COLUMNS);
+    }
+    return [];
+  }, [props.currentTab, columnWidths]);
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    state: { pageIndex, pageSize, columnResizing },
+    gotoPage,
+    setPageSize,
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0, pageSize: 50 },
+      pageCount: Math.ceil(data.length / 50),
+      disableSortRemove: true,
+      defaultColumn: {
+        minWidth: 80,
+      },
+      columnResizeMode: "onEnd",
+    },
+    useSortBy,
+    useResizeColumns,
+    usePagination,
+  );
+
+  // Track resizing state
+  const isResizing = useResizingState(columnResizing, headerGroups, columnWidths, saveColumnWidths);
+
+  if (!props.isloadingCompleted) {
+    return (
+      <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+        <BusySpinner />
+      </div>
+    );
+  }
+
+  return (
+    <section>
+      <TableContainer>
+        <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
+          <thead>{renderTableHeader(headerGroups, isResizing, columnResizing)}</thead>
+
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()} key={row.id}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        className="mr-px-2 mr-py-1 mr-whitespace-nowrap"
+                        {...cell.getCellProps()}
+                        key={cell.column.id}
+                        style={{
+                          ...cell.getCellProps().style,
+                          maxWidth: cell.column.width,
+                          minWidth: cell.column.minWidth,
+                          overflow: "hidden",
+                          height: "40px",
+                        }}
+                      >
+                        <div className="mr-cell-content">{cell.render("Cell")}</div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </TableContainer>
+      <PaginationControl
+        currentPage={pageIndex}
+        totalPages={Math.ceil(data.length / pageSize)}
+        pageSize={pageSize}
+        gotoPage={gotoPage}
+        setPageSize={setPageSize}
+      />
+    </section>
   );
 };
 

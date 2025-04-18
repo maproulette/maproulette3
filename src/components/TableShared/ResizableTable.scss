@@ -1,0 +1,97 @@
+.mr-resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+    z-index: 10;
+  }
+  
+  .mr-resizer:hover,
+  .mr-isResizing {
+    background: rgba(127, 209, 59, 0.8);
+  }
+  
+  .mr-table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
+    position: relative;
+  }
+  
+  table {
+    table-layout: fixed;
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: auto;
+    min-width: 100%;
+    max-width: none;
+  }
+  
+  th, td {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Prevent text selection during resize */
+  .resizing-active {
+    user-select: none;
+    cursor: col-resize !important;
+  }
+  
+  .resizing-active * {
+    pointer-events: none;
+  }
+  
+  .resizing-active .mr-resizer {
+    pointer-events: auto !important;
+    z-index: 100;
+  }
+  
+  .mr-sortable-header {
+    cursor: pointer !important;
+  }
+  
+  .mr-sortable-header:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .mr-header-content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .mr-cell-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .mr-header-filter {
+    margin-top: 0.25rem;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    z-index: 5;
+  }
+
+  .mr-filter-clear {
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+  }
+
+  .mr-filter-clear:hover {
+    color: #7fd13b;
+  }

@@ -31,7 +31,7 @@ const DEFAULT_CRITERIA = {
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithFilterCriteria = function (
+export default function WithFilterCriteria(
   WrappedComponent,
   ignoreURL = true,
   ignoreLocked = true,
@@ -361,19 +361,4 @@ export const WithFilterCriteria = function (
       );
     }
   };
-};
-
-export default (
-  WrappedComponent,
-  ignoreURL,
-  ignoreLocked,
-  usePersistedFilters,
-  savedFilterSettingName,
-) =>
-  WithFilterCriteria(
-    WrappedComponent,
-    ignoreURL,
-    ignoreLocked,
-    usePersistedFilters,
-    savedFilterSettingName,
-  );
+}
