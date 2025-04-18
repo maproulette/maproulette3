@@ -11,7 +11,7 @@ import _pull from "lodash/pull";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
-import { useFilters, usePagination, useSortBy, useTable } from "react-table";
+import { useFilters, usePagination, useSortBy, useTable, useResizeColumns } from "react-table";
 import BusySpinner from "../../../components/BusySpinner/BusySpinner";
 import ConfigureColumnsModal from "../../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import Dropdown from "../../../components/Dropdown/Dropdown";
@@ -60,6 +60,192 @@ import FilterSuggestTextBox from "./FilterSuggestTextBox";
 import { FILTER_SEARCH_ALL, FILTER_SEARCH_TEXT } from "./FilterSuggestTextBox";
 import messages from "./Messages";
 
+// Add CSS styles for column resizing
+const tableStyles = `
+  .mr-resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+    z-index: 10;
+  }
+  
+  .mr-resizer:hover,
+  .mr-isResizing {
+    background: rgba(127, 209, 59, 0.8);
+  }
+  
+  .mr-table-header-cell {
+    overflow: visible;
+    position: relative;
+  }
+  
+  .mr-table-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* Ensure the table doesn't jump during resizing */
+  table {
+    table-layout: fixed;
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Add transparent overlay when resizing to prevent issues with mouse events */
+  body.react-resizing * {
+    cursor: col-resize !important;
+  }
+  
+  .mr-sortable-header {
+    cursor: pointer !important;
+  }
+  
+  .mr-sortable-header:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .mr-sortable-header span, 
+  .mr-sortable-header div:not(.mr-header-filter) {
+    cursor: pointer !important;
+  }
+  
+  /* Prevent text selection during resize */
+  .resizing-active {
+    user-select: none;
+    cursor: col-resize !important;
+  }
+  
+  .resizing-active * {
+    pointer-events: none;
+  }
+  
+  .resizing-active .mr-resizer {
+    pointer-events: auto !important;
+    z-index: 100;
+  }
+  
+  .resizing-active .mr-sortable-header {
+    background-color: transparent !important;
+    cursor: col-resize !important;
+  }
+  
+  .resizing-active .mr-header-filter,
+  .resizing-active .mr-filter-input,
+  .resizing-active .mr-filter-clear {
+    pointer-events: none !important;
+  }
+
+  .mr-header-filter {
+    margin-top: 0.25rem;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .mr-header-content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .mr-cell-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .mr-filter-input {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    height: 1.5rem;
+    border-radius: 2px;
+  }
+
+  .mr-filter-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .mr-filter-clear {
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+  }
+
+  .mr-filter-clear:hover {
+    color: #7fd13b;
+  }
+`;
+
+const useDebounce = (callback, delay) => {
+  const [timer, setTimer] = useState(null);
+
+  return (value) => {
+    if (timer) clearTimeout(timer);
+    const newTimer = setTimeout(() => callback(value), delay);
+    setTimer(newTimer);
+  };
+};
+
+const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) => {
+  const [inputValue, setInputValue] = useState(filterValue || "");
+  const debouncedSetFilter = useDebounce(setFilter, 500);
+
+  return (
+    <div
+      className="mr-relative mr-w-full mr-flex mr-items-center"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <input
+        className="mr-filter-input"
+        value={inputValue}
+        onChange={(e) => {
+          setInputValue(e.target.value);
+          debouncedSetFilter(e.target.value || undefined);
+        }}
+        placeholder={placeholder}
+        onClick={(e) => e.stopPropagation()}
+      />
+      {inputValue && (
+        <button
+          className="mr-filter-clear mr-ml-2"
+          onClick={(e) => {
+            e.stopPropagation();
+            setInputValue("");
+            setFilter(undefined);
+          }}
+        >
+          <SvgSymbol
+            sym="icon-close"
+            viewBox="0 0 20 20"
+            className="mr-fill-current mr-w-2 mr-h-2"
+          />
+        </button>
+      )}
+    </div>
+  );
+};
+
 export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
   for (let pair of searchParams.entries()) {
@@ -91,6 +277,22 @@ export const TaskReviewTable = (props) => {
     getFilterIds(props.location.search, "filters.projectId"),
   );
   const [lastTableState, setLastTableState] = useState(null);
+  const [isResizing, setIsResizing] = useState(false);
+
+  // Create a storage key based on review tasks type
+  const storageKey = useMemo(() => {
+    return `mrColumnWidths-review-${props.reviewTasksType || "default"}`;
+  }, [props.reviewTasksType]);
+
+  // Load saved column widths from localStorage
+  const [columnWidths, setColumnWidths] = useState(() => {
+    try {
+      const savedWidths = localStorage.getItem(storageKey);
+      return savedWidths ? JSON.parse(savedWidths) : {};
+    } catch (e) {
+      return {};
+    }
+  });
 
   const initialSort = props.reviewCriteria?.sortCriteria
     ? {
@@ -182,6 +384,19 @@ export const TaskReviewTable = (props) => {
     [props.addedColumns, columnTypes],
   );
 
+  // Apply stored column widths to the columns config
+  const columnsWithStoredWidths = useMemo(() => {
+    return columns.map((column) => {
+      if (columnWidths[column.id]) {
+        return {
+          ...column,
+          width: columnWidths[column.id],
+        };
+      }
+      return column;
+    });
+  }, [columns, columnWidths]);
+
   const initialState = {
     sortBy: initialSort
       ? [
@@ -211,17 +426,19 @@ export const TaskReviewTable = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { sortBy, filters, pageIndex },
+    state: { sortBy, filters, pageIndex, columnResizing },
     gotoPage,
     setPageSize,
     setAllFilters,
     setSortBy,
   } = useTable(
     {
-      columns,
+      columns: columnsWithStoredWidths,
       data,
       defaultColumn: {
         Filter: false,
+        minWidth: 30,
+        width: 150,
       },
       manualSortBy: true,
       manualFilters: true,
@@ -230,9 +447,13 @@ export const TaskReviewTable = (props) => {
       pageCount: Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize),
       pageSize: props.pageSize,
       initialState,
+      disableResizing: false,
+      disableMultiSort: true,
+      columnResizeMode: "onEnd",
     },
     useFilters,
     useSortBy,
+    useResizeColumns,
     usePagination,
   );
 
@@ -405,6 +626,59 @@ export const TaskReviewTable = (props) => {
     </div>
   );
 
+  // Track resizing state and save column widths when resizing ends
+  useEffect(() => {
+    const isCurrentlyResizing = !!columnResizing.isResizingColumn;
+
+    // When resizing ends, store the new column widths
+    if (isResizing && !isCurrentlyResizing) {
+      const newColumnWidths = {};
+      headerGroups.forEach((headerGroup) => {
+        headerGroup.headers.forEach((column) => {
+          if (column.id) {
+            newColumnWidths[column.id] = column.width;
+          }
+        });
+      });
+      const updatedWidths = { ...columnWidths, ...newColumnWidths };
+      setColumnWidths(updatedWidths);
+
+      // Save to localStorage
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(updatedWidths));
+      } catch (e) {
+        console.warn("Failed to save column widths to localStorage", e);
+      }
+    }
+
+    setIsResizing(isCurrentlyResizing);
+
+    // Add a class to the body during resizing to prevent other interactions
+    if (isCurrentlyResizing) {
+      document.body.classList.add("resizing-active");
+    } else {
+      document.body.classList.remove("resizing-active");
+    }
+  }, [columnResizing.isResizingColumn, headerGroups, columnWidths, storageKey]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove("resizing-active");
+    };
+  }, []);
+
+  // Add a style element to the document head
+  useEffect(() => {
+    const styleElement = document.createElement("style");
+    styleElement.innerHTML = tableStyles;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }, []);
+
   return (
     <Fragment>
       <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
@@ -479,38 +753,126 @@ export const TaskReviewTable = (props) => {
             </div>
           ) : (
             <>
-              <table {...getTableProps()} className="mr-table mr-w-full">
+              <table
+                {...getTableProps()}
+                className="mr-table mr-w-full"
+                style={{ minWidth: "100%" }}
+              >
                 <thead>
                   {headerGroups.map((headerGroup) => (
-                    <>
+                    <Fragment key={headerGroup.id}>
                       <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                          <th
-                            className="mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10"
-                            {...column.getHeaderProps(column.getSortByToggleProps())}
-                          >
-                            {column.render("Header")}
-                            {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
-                          </th>
-                        ))}
+                        {headerGroup.headers.map((column) => {
+                          // Create separate handlers for sorting and resizing
+                          const headerProps = column.getHeaderProps();
+                          const sortByProps = column.getSortByToggleProps();
+
+                          // Make sure to prevent click event conflicts
+                          const onHeaderClick = (e) => {
+                            if (!columnResizing.isResizingColumn && !isResizing) {
+                              sortByProps.onClick(e);
+                            }
+                          };
+
+                          return (
+                            <th
+                              key={column.id}
+                              className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
+                                !isResizing ? "mr-sortable-header" : ""
+                              }`}
+                              {...headerProps}
+                              onClick={onHeaderClick}
+                              style={{
+                                ...headerProps.style,
+                                width: column.width,
+                                minWidth: column.minWidth,
+                                maxWidth: column.width,
+                                position: "relative",
+                                cursor: isResizing ? "col-resize" : "pointer",
+                                overflow: "hidden",
+                              }}
+                            >
+                              <div className="mr-header-content">
+                                <div className="mr-flex mr-items-center mr-justify-between">
+                                  <div
+                                    className="mr-flex mr-items-center mr-whitespace-nowrap"
+                                    style={{
+                                      cursor: !isResizing ? "pointer" : "auto",
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
+                                    }}
+                                  >
+                                    <span>{column.render("Header")}</span>
+                                    <span className="mr-ml-1 mr-opacity-70">
+                                      {column.isSorted ? (
+                                        column.isSortedDesc ? (
+                                          " ▼"
+                                        ) : (
+                                          " ▲"
+                                        )
+                                      ) : (
+                                        <span className="mr-text-xs mr-opacity-50 mr-inline-block">
+                                          ↕
+                                        </span>
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                                {column.canFilter && (
+                                  <div
+                                    className="mr-header-filter mr-mr-2"
+                                    onClick={(e) => e.stopPropagation()}
+                                    style={{
+                                      overflow: "hidden",
+                                      maxWidth: "100%",
+                                    }}
+                                  >
+                                    {column.render("Filter")}
+                                  </div>
+                                )}
+                                <div
+                                  className={`mr-resizer ${
+                                    column.isResizing ? "mr-isResizing" : ""
+                                  }`}
+                                  {...column.getResizerProps()}
+                                  onClick={(e) => {
+                                    // Stop propagation to prevent sorting when clicking resize handle
+                                    e.stopPropagation();
+                                  }}
+                                />
+                              </div>
+                            </th>
+                          );
+                        })}
                       </tr>
-                      <tr>
-                        {headerGroup.headers.map((column) => (
-                          <th className="mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10">
-                            {column.canFilter ? column.render("Filter") : null}
-                          </th>
-                        ))}
-                      </tr>
-                    </>
+                    </Fragment>
                   ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
                   {page.map((row) => {
                     prepareRow(row);
                     return (
-                      <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()}>
+                      <tr
+                        className="mr-border-y mr-border-white-10 hover:mr-bg-black-10"
+                        {...row.getRowProps()}
+                        key={row.id}
+                      >
                         {row.cells.map((cell) => {
-                          return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              className="mr-px-1 mr-py-1 mr-align-middle"
+                              style={{
+                                ...cell.getCellProps().style,
+                                maxWidth: cell.column.width,
+                                minWidth: cell.column.minWidth,
+                                overflow: "hidden",
+                                height: "40px",
+                              }}
+                            >
+                              <div className="mr-cell-content">{cell.render("Cell")}</div>
+                            </td>
+                          );
                         })}
                       </tr>
                     );
@@ -703,15 +1065,23 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         );
       }
     },
-    maxWidth: 120,
+    width: 120,
+    minWidth: 80,
+    Filter: ({ column: { setFilter, filterValue } }) => (
+      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search ID..." />
+    ),
   };
 
   columns.featureId = {
     id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (row) => row.name || row.title,
-    maxWidth: 120,
+    width: 120,
+    minWidth: 80,
     disableSortBy: true,
+    Filter: ({ column: { setFilter, filterValue } }) => (
+      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search feature ID..." />
+    ),
   };
 
   columns.status = {
@@ -729,7 +1099,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         className={`mr-status-${_kebabCase(keysByStatus[value])}`}
       />
     ),
-    maxWidth: 140,
+    width: 140,
+    minWidth: 100,
     Filter: ({ column: { setFilter, filterValue } }) => {
       const options = [
         <option key="all" value="all">
@@ -750,7 +1121,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       return (
         <select
           onChange={(event) => setFilter(event.target.value)}
-          className={"mr-select mr-px-2 mr-py-1 mr-w-full"}
+          className="mr-filter-input"
           value={filterValue || "all"}
         >
           {options}
@@ -774,7 +1145,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         className={`mr-status-${_kebabCase(keysByPriority[value])}`}
       />
     ),
-    maxWidth: 140,
+    width: 140,
+    minWidth: 100,
     Filter: ({ column: { setFilter, filterValue } }) => {
       const options = [
         <option key="all" value="all">
@@ -793,7 +1165,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       return (
         <select
           onChange={(event) => setFilter(event.target.value)}
-          className={"mr-select mr-px-2 mr-py-1 mr-w-full"}
+          className="mr-filter-input"
           value={filterValue || "all"}
         >
           {options}
@@ -815,7 +1187,11 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         {value}
       </div>
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 120,
+    Filter: ({ column: { setFilter, filterValue } }) => (
+      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search mapper..." />
+    ),
   };
 
   columns.additionalReviewers = {
@@ -840,7 +1216,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         ))}
       </div>
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 120,
   };
 
   columns.challengeId = {
@@ -848,7 +1225,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Header: props.intl.formatMessage(messages.challengeIdLabel),
     accessor: "parent.id",
     Cell: ({ value }) => <span>{value}</span>,
-    maxWidth: 120,
+    width: 120,
+    minWidth: 80,
     disableSortBy: true,
   };
 
@@ -903,7 +1281,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Header: props.intl.formatMessage(messages.projectIdLabel),
     accessor: "parent.parent.id",
     Cell: ({ value }) => <span>{value}</span>,
-    maxWidth: 120,
+    width: 120,
+    minWidth: 80,
     disableSortBy: true,
   };
 
@@ -960,12 +1339,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Cell: ({ value }) => {
       if (!value) return null;
       return (
-        <span>
+        <span className="mr-z-1000">
           <FormattedDate value={value} /> <FormattedTime value={value} />
         </span>
       );
     },
-    maxWidth: 180,
+    width: 180,
+    minWidth: 120,
     Filter: ({ column: { setFilter, filterValue } }) => {
       let mappedOn = filterValue;
       if (typeof mappedOn === "string" && mappedOn !== "") {
@@ -973,23 +1353,32 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-flex mr-gap-2">
-          <IntlDatePicker
-            selected={mappedOn}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-            intl={props.intl}
-          />
+        <div
+          className="mr-flex mr-items-center mr-w-full mr-z-1000"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="mr-flex-grow  mr-z-1000">
+            <IntlDatePicker
+              selected={mappedOn}
+              onChange={(value) => {
+                setFilter(value);
+              }}
+              intl={props.intl}
+              className="mr-filter-input  mr-z-1000"
+            />
+          </div>
           {mappedOn && (
             <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter(null)}
+              className="mr-filter-clear mr-ml-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilter(null);
+              }}
             >
               <SvgSymbol
                 sym="icon-close"
                 viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+                className="mr-fill-current mr-w-2 mr-h-2"
               />
             </button>
           )}
@@ -1011,7 +1400,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       );
     },
     minWidth: 180,
-    maxWidth: 200,
+    width: 200,
     Filter: ({ column: { setFilter, filterValue } }) => {
       let reviewedAt = filterValue;
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
@@ -1019,23 +1408,29 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-flex mr-gap-2">
-          <IntlDatePicker
-            selected={reviewedAt}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-            intl={props.intl}
-          />
+        <div className="mr-flex mr-items-center mr-w-full" onClick={(e) => e.stopPropagation()}>
+          <div className="mr-flex-grow">
+            <IntlDatePicker
+              selected={reviewedAt}
+              onChange={(value) => {
+                setFilter(value);
+              }}
+              intl={props.intl}
+              className="mr-filter-input"
+            />
+          </div>
           {reviewedAt && (
             <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter(null)}
+              className="mr-filter-clear mr-ml-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilter(null);
+              }}
             >
               <SvgSymbol
                 sym="icon-close"
                 viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+                className="mr-fill-current mr-w-2 mr-h-2"
               />
             </button>
           )}
@@ -1057,7 +1452,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       );
     },
     minWidth: 180,
-    maxWidth: 200,
+    width: 200,
   };
 
   columns.reviewedBy = {
@@ -1076,7 +1471,11 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         {row.original.reviewedBy ? row.original.reviewedBy.username : "N/A"}
       </div>
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 120,
+    Filter: ({ column: { setFilter, filterValue } }) => (
+      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search reviewer..." />
+    ),
   };
 
   columns.reviewStatus = {
@@ -1094,7 +1493,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         className={`mr-review-${_kebabCase(keysByReviewStatus[value])}`}
       />
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 120,
     Filter: ({ column: { setFilter, filterValue } }) => {
       const options = [
         <option key="all" value="all">
@@ -1139,7 +1539,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       return (
         <select
           onChange={(event) => setFilter(event.target.value)}
-          className={"mr-select mr-px-2 mr-py-1 mr-w-full"}
+          className="mr-filter-input"
           value={filterValue || "all"}
         >
           {options}
@@ -1166,7 +1566,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
           className={`mr-review-${_kebabCase(keysByReviewStatus[value])}`}
         />
       ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 120,
     Filter: ({ column: { setFilter, filterValue } }) => {
       const options = [];
 
@@ -1211,7 +1612,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       return (
         <select
           onChange={(event) => setFilter(event.target.value)}
-          className={"mr-select mr-px-2 mr-py-1 mr-w-full"}
+          className="mr-filter-input"
           value={filterValue || "all"}
         >
           {options}
@@ -1236,7 +1637,15 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         {row.original.metaReviewedBy ? row.original.metaReviewedBy.username : ""}
       </div>
     ),
-    maxWidth: 180,
+    width: 180,
+    minWidth: 120,
+    Filter: ({ column: { setFilter, filterValue } }) => (
+      <SearchFilter
+        value={filterValue}
+        onChange={setFilter}
+        placeholder="Search meta reviewer..."
+      />
+    ),
   };
 
   columns.reviewerControls = {
@@ -1280,7 +1689,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return <div className="row-controls-column">{action}</div>;
     },
-    maxWidth: 120,
+    width: 120,
     minWidth: 110,
     disableSortBy: true,
   };
@@ -1352,7 +1761,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return <div className="row-controls-column">{action}</div>;
     },
-    maxWidth: 120,
+    width: 120,
     minWidth: 110,
   };
 
@@ -1388,7 +1797,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </div>
       );
     },
-    maxWidth: 120,
+    width: 120,
     minWidth: 90,
     disableSortBy: true,
   };
@@ -1398,7 +1807,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Header: props.intl.formatMessage(messages.viewCommentsLabel),
     accessor: "commentID",
     Cell: (props) => <ViewCommentsButton onClick={() => openComments(props.row.original.id)} />,
-    maxWidth: 110,
+    width: 110,
+    minWidth: 110,
     disableSortBy: true,
   };
 

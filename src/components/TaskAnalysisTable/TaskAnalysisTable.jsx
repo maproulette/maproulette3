@@ -235,34 +235,12 @@ const useDebounce = (callback, delay) => {
   };
 };
 
-const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) => {
-  const [inputValue, setInputValue] = useState(filterValue || "");
-  const debouncedSetFilter = useDebounce(setFilter, 500);
-
+const SearchFilter = ({ value, onChange, placeholder }) => {
   return (
-    <div
-      className="mr-relative mr-w-full mr-flex mr-items-center"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <input
-        className="mr-filter-input"
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-          debouncedSetFilter(e.target.value || undefined);
-        }}
-        placeholder={placeholder}
-        onClick={(e) => e.stopPropagation()}
-      />
-      {inputValue && (
-        <button
-          className="mr-filter-clear mr-ml-2"
-          onClick={(e) => {
-            e.stopPropagation();
-            setInputValue("");
-            setFilter(undefined);
-          }}
-        >
+    <div className="mr-relative mr-w-full mr-flex mr-items-center">
+      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
+      {value && (
+        <button className="mr-filter-clear mr-ml-2" onClick={() => onChange("")}>
           <SvgSymbol
             sym="icon-close"
             viewBox="0 0 20 20"
@@ -271,6 +249,20 @@ const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) 
         </button>
       )}
     </div>
+  );
+};
+
+const FormInput = ({ value, onChange, placeholder, type = "text" }) => {
+  return (
+    <input
+      type={type}
+      className="mr-w-full mr-bg-black-10 mr-border mr-border-white-10 mr-text-white 
+                mr-rounded mr-py-2 mr-px-4 mr-text-sm focus:mr-border-green-lighter 
+                focus:mr-outline-none transition-colors"
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+    />
   );
 };
 
