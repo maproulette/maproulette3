@@ -1,15 +1,27 @@
 import { useMemo } from "react";
 import { injectIntl } from "react-intl";
-import { usePagination, useSortBy, useTable } from "react-table";
+import { usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import WithSortedChallenges from "../HOCs/WithSortedChallenges/WithSortedChallenges";
 import PaginationControl from "../PaginationControl/PaginationControl";
+import {
+  TableContainer,
+  renderTableHeader,
+  useColumnWidthStorage,
+  useResizingState,
+} from "../TableShared/ResizableTable";
 import { CHALLENGE_COLUMNS, PROJECT_COLUMNS, USER_COLUMNS } from "./MetricsData";
 import WithMetricsSearchResults from "./WithMetricsSearchResults";
 import WithSortedProjects from "./WithSortedProjects";
 import WithSortedUsers from "./WithSortedUsers";
 
 const MetricsTable = (props) => {
+  // Create a storage key for column widths based on current tab
+  const storageKey = `mrColumnWidths-metrics-${props.currentTab || "default"}`;
+
+  // Initialize column widths with storage
+  const [columnWidths, saveColumnWidths] = useColumnWidthStorage(storageKey);
+
   const data = useMemo(() => {
     if (props.currentTab === "challenges") {
       return props.challenges.map((c) => ({
@@ -50,16 +62,25 @@ const MetricsTable = (props) => {
     }
   }, [props.currentTab, props.challenges, props.projects, props.users]);
 
+  // Apply column widths to columns
+  const getColumnsWithWidths = (baseColumns) => {
+    return baseColumns.map((column) => ({
+      ...column,
+      width: columnWidths[column.accessor || column.id] || column.width || 150,
+      minWidth: column.minWidth || 80,
+    }));
+  };
+
   const columns = useMemo(() => {
     if (props.currentTab === "challenges") {
-      return CHALLENGE_COLUMNS;
+      return getColumnsWithWidths(CHALLENGE_COLUMNS);
     } else if (props.currentTab === "projects") {
-      return PROJECT_COLUMNS;
+      return getColumnsWithWidths(PROJECT_COLUMNS);
     } else if (props.currentTab === "users") {
-      return USER_COLUMNS;
+      return getColumnsWithWidths(USER_COLUMNS);
     }
     return [];
-  }, [props.currentTab]);
+  }, [props.currentTab, columnWidths]);
 
   const {
     getTableProps,
@@ -67,7 +88,7 @@ const MetricsTable = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, columnResizing },
     gotoPage,
     setPageSize,
   } = useTable(
@@ -77,10 +98,18 @@ const MetricsTable = (props) => {
       initialState: { pageIndex: 0, pageSize: 50 },
       pageCount: Math.ceil(data.length / 50),
       disableSortRemove: true,
+      defaultColumn: {
+        minWidth: 80,
+      },
+      columnResizeMode: "onEnd",
     },
     useSortBy,
+    useResizeColumns,
     usePagination,
   );
+
+  // Track resizing state
+  const isResizing = useResizingState(columnResizing, headerGroups, columnWidths, saveColumnWidths);
 
   if (!props.isloadingCompleted) {
     return (
@@ -92,40 +121,39 @@ const MetricsTable = (props) => {
 
   return (
     <section>
-      <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className="mr-text-left mr-px-2 mr-whitespace-nowrap"
-                >
-                  {column.render("Header")}
-                  {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
+      <TableContainer>
+        <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
+          <thead>{renderTableHeader(headerGroups, isResizing, columnResizing)}</thead>
 
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td className="mr-px-2 mr-whitespace-nowrap" {...cell.getCellProps()}>
-                      {cell.render("Cell")}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()} key={row.id}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        className="mr-px-2 mr-py-1 mr-whitespace-nowrap"
+                        {...cell.getCellProps()}
+                        key={cell.column.id}
+                        style={{
+                          ...cell.getCellProps().style,
+                          maxWidth: cell.column.width,
+                          minWidth: cell.column.minWidth,
+                          overflow: "hidden",
+                          height: "40px",
+                        }}
+                      >
+                        <div className="mr-cell-content">{cell.render("Cell")}</div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </TableContainer>
       <PaginationControl
         currentPage={pageIndex}
         totalPages={Math.ceil(data.length / pageSize)}

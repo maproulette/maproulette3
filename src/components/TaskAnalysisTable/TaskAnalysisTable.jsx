@@ -32,157 +32,11 @@ import WithConfigurableColumns from "../HOCs/WithConfigurableColumns/WithConfigu
 import WithLoadedTask from "../HOCs/WithLoadedTask/WithLoadedTask";
 import PaginationControl from "../PaginationControl/PaginationControl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import { SearchFilter, TableContainer, inputStyles } from "../TableShared/ResizableTable";
 import ViewTask from "../ViewTask/ViewTask";
 import messages from "./Messages";
 import TaskAnalysisTableHeader from "./TaskAnalysisTableHeader";
 import { StatusLabel, ViewCommentsButton, makeInvertable } from "./TaskTableHelpers";
-
-// Add CSS styles for column resizing
-const tableStyles = `
-  .mr-resizer {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    cursor: col-resize;
-    user-select: none;
-    touch-action: none;
-    z-index: 10;
-  }
-  
-  .mr-resizer:hover,
-  .mr-isResizing {
-    background: rgba(127, 209, 59, 0.8);
-  }
-  
-  .mr-table-header-cell {
-    overflow: visible;
-    position: relative;
-  }
-  
-  .mr-table-cell {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  /* Ensure the table doesn't jump during resizing */
-  table {
-    table-layout: fixed;
-    border-spacing: 0;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  th, td {
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  /* Add transparent overlay when resizing to prevent issues with mouse events */
-  body.react-resizing * {
-    cursor: col-resize !important;
-  }
-  
-  .mr-sortable-header {
-    cursor: pointer !important;
-  }
-  
-  .mr-sortable-header:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .mr-sortable-header span, 
-  .mr-sortable-header div:not(.mr-header-filter) {
-    cursor: pointer !important;
-  }
-  
-  /* Prevent text selection during resize */
-  .resizing-active {
-    user-select: none;
-    cursor: col-resize !important;
-  }
-  
-  .resizing-active * {
-    pointer-events: none;
-  }
-  
-  .resizing-active .mr-resizer {
-    pointer-events: auto !important;
-    z-index: 100;
-  }
-  
-  .resizing-active .mr-sortable-header {
-    background-color: transparent !important;
-    cursor: col-resize !important;
-  }
-  
-  .resizing-active .mr-header-filter,
-  .resizing-active .mr-filter-input,
-  .resizing-active .mr-filter-clear {
-    pointer-events: none !important;
-  }
-
-  .mr-header-filter {
-    margin-top: 0.25rem;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  .mr-header-content {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .mr-cell-content {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
-  .mr-filter-input {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    width: 100%;
-    height: 1.5rem;
-    border-radius: 2px;
-  }
-
-  .mr-filter-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-  }
-
-  .mr-filter-clear {
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-  }
-
-  .mr-filter-clear:hover {
-    color: #7fd13b;
-  }
-  
-  /* Prevent multiple rows from showing in same cell */
-  .row-user-column,
-  .row-challenge-column,
-  .row-controls-column {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-`;
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask);
@@ -224,47 +78,6 @@ const DEFAULT_COLUMNS = [
   "comments",
   "editBundle",
 ];
-
-const useDebounce = (callback, delay) => {
-  const [timer, setTimer] = useState(null);
-
-  return (value) => {
-    if (timer) clearTimeout(timer);
-    const newTimer = setTimeout(() => callback(value), delay);
-    setTimer(newTimer);
-  };
-};
-
-const SearchFilter = ({ value, onChange, placeholder }) => {
-  return (
-    <div className="mr-relative mr-w-full mr-flex mr-items-center">
-      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
-      {value && (
-        <button className="mr-filter-clear mr-ml-2" onClick={() => onChange("")}>
-          <SvgSymbol
-            sym="icon-close"
-            viewBox="0 0 20 20"
-            className="mr-fill-current mr-w-2 mr-h-2"
-          />
-        </button>
-      )}
-    </div>
-  );
-};
-
-const FormInput = ({ value, onChange, placeholder, type = "text" }) => {
-  return (
-    <input
-      type={type}
-      className="mr-w-full mr-bg-black-10 mr-border mr-border-white-10 mr-text-white 
-                mr-rounded mr-py-2 mr-px-4 mr-text-sm focus:mr-border-green-lighter 
-                focus:mr-outline-none transition-colors"
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-    />
-  );
-};
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
@@ -522,17 +335,6 @@ export const TaskAnalysisTableInternal = (props) => {
     handleStateChange({ sortBy, filters, pageIndex: props.page });
   }, [sortBy, filters, handleStateChange]);
 
-  // Add a style element to the document head
-  useEffect(() => {
-    const styleElement = document.createElement("style");
-    styleElement.innerHTML = tableStyles;
-    document.head.appendChild(styleElement);
-
-    return () => {
-      document.head.removeChild(styleElement);
-    };
-  }, []);
-
   return (
     <Fragment>
       <section className="mr-my-4 mr-min-h-100 mr-fixed-containing-block mr-relative">
@@ -552,11 +354,10 @@ export const TaskAnalysisTableInternal = (props) => {
           </div>
         )}
 
-        <div className="mr-w-full mr-overflow-x-auto">
+        <TableContainer>
           <table
             {...getTableProps()}
             className="mr-table mr-w-full mr-text-white mr-links-green-lighter"
-            style={{ minWidth: "100%" }}
           >
             <thead>
               {headerGroups.map((headerGroup) => (
@@ -700,7 +501,7 @@ export const TaskAnalysisTableInternal = (props) => {
               })}
             </tbody>
           </table>
-        </div>
+        </TableContainer>
 
         <PaginationControl
           currentPage={props.page ?? 0}
@@ -774,7 +575,12 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     accessor: (t) => t.name || t.title,
     Cell: ({ value }) => value || "",
     Filter: ({ column: { filterValue, setFilter } }) => (
-      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search feature ID..." />
+      <SearchFilter
+        value={filterValue}
+        onChange={setFilter}
+        placeholder="Search feature ID..."
+        inputClassName={inputStyles}
+      />
     ),
     disableSortBy: true,
   };
@@ -829,7 +635,12 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       }
     },
     Filter: ({ column: { filterValue, setFilter } }) => (
-      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search ID..." />
+      <SearchFilter
+        value={filterValue}
+        onChange={setFilter}
+        placeholder="Search ID..."
+        inputClassName={inputStyles}
+      />
     ),
   };
 

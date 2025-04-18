@@ -1,6 +1,6 @@
 import _kebabCase from "lodash/kebabCase";
 import _reject from "lodash/reject";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import React from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { useFilters, usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
@@ -10,7 +10,14 @@ import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUs
 import WithUserNotifications from "../../components/HOCs/WithUserNotifications/WithUserNotifications";
 import PaginationControl from "../../components/PaginationControl/PaginationControl";
 import SignInButton from "../../components/SignInButton/SignInButton";
-import SvgSymbol from "../../components/SvgSymbol/SvgSymbol";
+import {
+  SearchFilter,
+  TableContainer,
+  inputStyles,
+  renderTableHeader,
+  useColumnWidthStorage,
+  useResizingState,
+} from "../../components/TableShared/ResizableTable";
 import {
   NotificationType,
   keysByNotificationType,
@@ -31,208 +38,14 @@ const DEFAULT_PAGINATION = {
   pageSize: 25,
 };
 
-// Add CSS styles for column resizing
-const tableStyles = `
-  .mr-resizer {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    cursor: col-resize;
-    user-select: none;
-    touch-action: none;
-    z-index: 10;
-  }
-  
-  .mr-resizer:hover,
-  .mr-isResizing {
-    background: rgba(127, 209, 59, 0.8);
-  }
-  
-  .mr-table-header-cell {
-    overflow: visible;
-    position: relative;
-  }
-  
-  .mr-table-cell {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  /* Ensure the table doesn't jump during resizing */
-  table {
-    table-layout: fixed;
-    border-spacing: 0;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  th, td {
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  /* Add transparent overlay when resizing to prevent issues with mouse events */
-  body.react-resizing * {
-    cursor: col-resize !important;
-  }
-  
-  .mr-sortable-header {
-    cursor: pointer !important;
-  }
-  
-  .mr-sortable-header:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .mr-sortable-header span, 
-  .mr-sortable-header div:not(.mr-header-filter) {
-    cursor: pointer !important;
-  }
-  
-  /* Prevent text selection during resize */
-  .resizing-active {
-    user-select: none;
-    cursor: col-resize !important;
-  }
-  
-  .resizing-active * {
-    pointer-events: none;
-  }
-  
-  .resizing-active .mr-resizer {
-    pointer-events: auto !important;
-    z-index: 100;
-  }
-  
-  .resizing-active .mr-sortable-header {
-    background-color: transparent !important;
-    cursor: col-resize !important;
-  }
-  
-  .resizing-active .mr-header-filter,
-  .resizing-active .mr-filter-input,
-  .resizing-active .mr-filter-clear {
-    pointer-events: none !important;
-  }
-
-  .mr-header-filter {
-    margin-top: 0.25rem;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  .mr-header-content {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .mr-cell-content {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
-  .mr-filter-input {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    width: 100%;
-    height: 1.5rem;
-    border-radius: 2px;
-  }
-
-  .mr-filter-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-  }
-
-  .mr-filter-clear {
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-  }
-
-  .mr-filter-clear:hover {
-    color: #7fd13b;
-  }
-`;
-
-const useDebounce = (callback, delay) => {
-  const [timer, setTimer] = useState(null);
-
-  return (value) => {
-    if (timer) clearTimeout(timer);
-    const newTimer = setTimeout(() => callback(value), delay);
-    setTimer(newTimer);
-  };
-};
-
-const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) => {
-  const [inputValue, setInputValue] = useState(filterValue || "");
-  const debouncedSetFilter = useDebounce(setFilter, 500);
-
-  return (
-    <div
-      className="mr-relative mr-w-full mr-flex mr-items-center"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <input
-        className="mr-filter-input"
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-          debouncedSetFilter(e.target.value || undefined);
-        }}
-        placeholder={placeholder}
-        onClick={(e) => e.stopPropagation()}
-      />
-      {inputValue && (
-        <button
-          className="mr-filter-clear mr-ml-2"
-          onClick={(e) => {
-            e.stopPropagation();
-            setInputValue("");
-            setFilter(undefined);
-          }}
-        >
-          <SvgSymbol
-            sym="icon-close"
-            viewBox="0 0 20 20"
-            className="mr-fill-current mr-w-2 mr-h-2"
-          />
-        </button>
-      )}
-    </div>
-  );
-};
-
 const Inbox = (props) => {
   const { user, notifications, markNotificationsRead, deleteNotifications } = props;
-  const [isResizing, setIsResizing] = useState(false);
 
   // Create a storage key for column widths
   const storageKey = "mrColumnWidths-inbox";
 
   // Load saved column widths from localStorage
-  const [columnWidths, setColumnWidths] = useState(() => {
-    try {
-      const savedWidths = localStorage.getItem(storageKey);
-      return savedWidths ? JSON.parse(savedWidths) : {};
-    } catch (e) {
-      return {};
-    }
-  });
+  const [columnWidths, saveColumnWidths] = useColumnWidthStorage(storageKey);
 
   const {
     groupByTask,
@@ -341,7 +154,7 @@ const Inbox = (props) => {
             />
           );
         },
-        width: 40,
+        width: columnWidths["selected"] || 40,
         minWidth: 40,
         disableSortBy: true,
         disableResizing: true,
@@ -351,7 +164,12 @@ const Inbox = (props) => {
         Header: props.intl.formatMessage(messages.taskIdLabel),
         accessor: "taskId",
         Filter: ({ column: { filterValue, setFilter } }) => (
-          <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search task ID..." />
+          <SearchFilter
+            value={filterValue}
+            onChange={setFilter}
+            placeholder="Search task ID..."
+            inputClassName={inputStyles}
+          />
         ),
         Cell: ({ value, row }) => {
           const displayId = value === row.original.challengeName ? "" : value;
@@ -366,7 +184,7 @@ const Inbox = (props) => {
             </div>
           );
         },
-        width: 100,
+        width: columnWidths["taskId"] || 100,
         minWidth: 80,
       },
       {
@@ -375,7 +193,7 @@ const Inbox = (props) => {
         accessor: "notificationType",
         Filter: ({ column: { setFilter } }) => (
           <select
-            className="mr-filter-input"
+            className={inputStyles}
             onChange={(e) => setFilter(e.target.value === "all" ? null : +e.target.value)}
             onClick={(e) => e.stopPropagation()}
           >
@@ -394,7 +212,7 @@ const Inbox = (props) => {
             </span>
           </div>
         ),
-        width: 180,
+        width: columnWidths["notificationType"] || 180,
         minWidth: 120,
       },
       {
@@ -409,7 +227,7 @@ const Inbox = (props) => {
             </time>
           </div>
         ),
-        width: 160,
+        width: columnWidths["created"] || 160,
         minWidth: 140,
       },
       {
@@ -417,10 +235,15 @@ const Inbox = (props) => {
         Header: props.intl.formatMessage(messages.fromUsernameLabel),
         accessor: "fromUsername",
         Filter: ({ column: { filterValue, setFilter } }) => (
-          <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search username..." />
+          <SearchFilter
+            value={filterValue}
+            onChange={setFilter}
+            placeholder="Search username..."
+            inputClassName={inputStyles}
+          />
         ),
         Cell: ({ value }) => <div className="mr-cell-content">{value}</div>,
-        width: 150,
+        width: columnWidths["fromUsername"] || 150,
         minWidth: 120,
       },
       {
@@ -432,10 +255,11 @@ const Inbox = (props) => {
             value={filterValue}
             onChange={setFilter}
             placeholder="Search challenge..."
+            inputClassName={inputStyles}
           />
         ),
         Cell: ({ value }) => <div className="mr-cell-content">{value}</div>,
-        width: 180,
+        width: columnWidths["challengeName"] || 180,
         minWidth: 150,
       },
       {
@@ -453,7 +277,7 @@ const Inbox = (props) => {
             </ol>
           </div>
         ),
-        width: 100,
+        width: columnWidths["controls"] || 100,
         minWidth: 80,
         disableSortBy: true,
       },
@@ -469,21 +293,9 @@ const Inbox = (props) => {
       threads,
       readNotification,
       props.intl,
+      columnWidths,
     ],
   );
-
-  // Apply stored column widths to the columns config
-  const columnsWithStoredWidths = useMemo(() => {
-    return columns.map((column) => {
-      if (columnWidths[column.id]) {
-        return {
-          ...column,
-          width: columnWidths[column.id],
-        };
-      }
-      return column;
-    });
-  }, [columns, columnWidths]);
 
   const {
     getTableProps,
@@ -496,7 +308,7 @@ const Inbox = (props) => {
     setPageSize,
   } = useTable(
     {
-      columns: columnsWithStoredWidths,
+      columns,
       data,
       initialState: {
         sortBy: [DEFAULT_SORT_CRITERIA],
@@ -516,58 +328,8 @@ const Inbox = (props) => {
     usePagination,
   );
 
-  // Track resizing state and save column widths when resizing ends
-  useEffect(() => {
-    const isCurrentlyResizing = !!columnResizing.isResizingColumn;
-
-    // When resizing ends, store the new column widths
-    if (isResizing && !isCurrentlyResizing) {
-      const newColumnWidths = {};
-      headerGroups.forEach((headerGroup) => {
-        headerGroup.headers.forEach((column) => {
-          if (column.id) {
-            newColumnWidths[column.id] = column.width;
-          }
-        });
-      });
-      const updatedWidths = { ...columnWidths, ...newColumnWidths };
-      setColumnWidths(updatedWidths);
-
-      // Save to localStorage
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(updatedWidths));
-      } catch (e) {
-        console.warn("Failed to save column widths to localStorage", e);
-      }
-    }
-
-    setIsResizing(isCurrentlyResizing);
-
-    // Add a class to the body during resizing to prevent other interactions
-    if (isCurrentlyResizing) {
-      document.body.classList.add("resizing-active");
-    } else {
-      document.body.classList.remove("resizing-active");
-    }
-  }, [columnResizing.isResizingColumn, headerGroups, columnWidths, storageKey]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      document.body.classList.remove("resizing-active");
-    };
-  }, []);
-
-  // Add table styles to the document head
-  useEffect(() => {
-    const styleElement = document.createElement("style");
-    styleElement.innerHTML = tableStyles;
-    document.head.appendChild(styleElement);
-
-    return () => {
-      document.head.removeChild(styleElement);
-    };
-  }, []);
+  // Track resizing state
+  const isResizing = useResizingState(columnResizing, headerGroups, columnWidths, saveColumnWidths);
 
   if (!user) {
     return (
@@ -591,110 +353,9 @@ const Inbox = (props) => {
           deleteSelected={deleteSelected}
         />
 
-        <div className="mr-w-full mr-overflow-x-auto">
+        <TableContainer>
           <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
-            <thead>
-              {headerGroups.map((headerGroup) => (
-                <React.Fragment key={headerGroup.id}>
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => {
-                      // Create separate handlers for sorting and resizing
-                      const headerProps = column.getHeaderProps();
-                      const sortByProps = !column.disableSortBy
-                        ? column.getSortByToggleProps()
-                        : {};
-
-                      // Make sure to prevent click event conflicts
-                      const onHeaderClick = (e) => {
-                        if (
-                          !column.disableSortBy &&
-                          !columnResizing.isResizingColumn &&
-                          !isResizing
-                        ) {
-                          sortByProps.onClick(e);
-                        }
-                      };
-
-                      return (
-                        <th
-                          key={column.id}
-                          className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
-                            !column.disableSortBy && !isResizing ? "mr-sortable-header" : ""
-                          }`}
-                          {...headerProps}
-                          onClick={onHeaderClick}
-                          style={{
-                            ...headerProps.style,
-                            width: column.width,
-                            minWidth: column.minWidth,
-                            maxWidth: column.width,
-                            position: "relative",
-                            cursor: isResizing
-                              ? "col-resize"
-                              : !column.disableSortBy
-                                ? "pointer"
-                                : "auto",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <div className="mr-header-content">
-                            <div className="mr-flex mr-items-center mr-justify-between">
-                              <div
-                                className="mr-flex mr-items-center mr-whitespace-nowrap"
-                                style={{
-                                  cursor: !column.disableSortBy && !isResizing ? "pointer" : "auto",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                <span>{column.render("Header")}</span>
-                                {!column.disableSortBy && (
-                                  <span className="mr-ml-1 mr-opacity-70">
-                                    {column.isSorted ? (
-                                      column.isSortedDesc ? (
-                                        " ▼"
-                                      ) : (
-                                        " ▲"
-                                      )
-                                    ) : (
-                                      <span className="mr-text-xs mr-opacity-50 mr-inline-block">
-                                        ↕
-                                      </span>
-                                    )}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            {column.canFilter && (
-                              <div
-                                className="mr-header-filter mr-mr-2"
-                                onClick={(e) => e.stopPropagation()}
-                                style={{
-                                  overflow: "hidden",
-                                  maxWidth: "100%",
-                                }}
-                              >
-                                {column.render("Filter")}
-                              </div>
-                            )}
-                            {!column.disableResizing && (
-                              <div
-                                className={`mr-resizer ${column.isResizing ? "mr-isResizing" : ""}`}
-                                {...column.getResizerProps()}
-                                onClick={(e) => {
-                                  // Stop propagation to prevent sorting when clicking resize handle
-                                  e.stopPropagation();
-                                }}
-                              />
-                            )}
-                          </div>
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </React.Fragment>
-              ))}
-            </thead>
+            <thead>{renderTableHeader(headerGroups, isResizing, columnResizing)}</thead>
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {
                 prepareRow(row);
@@ -738,7 +399,7 @@ const Inbox = (props) => {
               })}
             </tbody>
           </table>
-        </div>
+        </TableContainer>
 
         <PaginationControl
           currentPage={pageIndex}

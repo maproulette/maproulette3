@@ -11,8 +11,7 @@ import _pull from "lodash/pull";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
-import { useFilters, usePagination, useSortBy, useTable, useResizeColumns } from "react-table";
-import BusySpinner from "../../../components/BusySpinner/BusySpinner";
+import { useFilters, usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import ConfigureColumnsModal from "../../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import Dropdown from "../../../components/Dropdown/Dropdown";
 import MapPane from "../../../components/EnhancedMap/MapPane/MapPane";
@@ -25,6 +24,11 @@ import PaginationControl from "../../../components/PaginationControl/PaginationC
 import ManageSavedFilters from "../../../components/SavedFilters/ManageSavedFilters";
 import SavedFiltersList from "../../../components/SavedFilters/SavedFiltersList";
 import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
+import {
+  SearchFilter,
+  TableContainer,
+  inputStyles,
+} from "../../../components/TableShared/ResizableTable";
 import {
   StatusLabel,
   ViewCommentsButton,
@@ -60,191 +64,7 @@ import FilterSuggestTextBox from "./FilterSuggestTextBox";
 import { FILTER_SEARCH_ALL, FILTER_SEARCH_TEXT } from "./FilterSuggestTextBox";
 import messages from "./Messages";
 
-// Add CSS styles for column resizing
-const tableStyles = `
-  .mr-resizer {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    cursor: col-resize;
-    user-select: none;
-    touch-action: none;
-    z-index: 10;
-  }
-  
-  .mr-resizer:hover,
-  .mr-isResizing {
-    background: rgba(127, 209, 59, 0.8);
-  }
-  
-  .mr-table-header-cell {
-    overflow: visible;
-    position: relative;
-  }
-  
-  .mr-table-cell {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  /* Ensure the table doesn't jump during resizing */
-  table {
-    table-layout: fixed;
-    border-spacing: 0;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  th, td {
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  /* Add transparent overlay when resizing to prevent issues with mouse events */
-  body.react-resizing * {
-    cursor: col-resize !important;
-  }
-  
-  .mr-sortable-header {
-    cursor: pointer !important;
-  }
-  
-  .mr-sortable-header:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .mr-sortable-header span, 
-  .mr-sortable-header div:not(.mr-header-filter) {
-    cursor: pointer !important;
-  }
-  
-  /* Prevent text selection during resize */
-  .resizing-active {
-    user-select: none;
-    cursor: col-resize !important;
-  }
-  
-  .resizing-active * {
-    pointer-events: none;
-  }
-  
-  .resizing-active .mr-resizer {
-    pointer-events: auto !important;
-    z-index: 100;
-  }
-  
-  .resizing-active .mr-sortable-header {
-    background-color: transparent !important;
-    cursor: col-resize !important;
-  }
-  
-  .resizing-active .mr-header-filter,
-  .resizing-active .mr-filter-input,
-  .resizing-active .mr-filter-clear {
-    pointer-events: none !important;
-  }
-
-  .mr-header-filter {
-    margin-top: 0.25rem;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  .mr-header-content {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .mr-cell-content {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
-  .mr-filter-input {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    width: 100%;
-    height: 1.5rem;
-    border-radius: 2px;
-  }
-
-  .mr-filter-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-  }
-
-  .mr-filter-clear {
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-  }
-
-  .mr-filter-clear:hover {
-    color: #7fd13b;
-  }
-`;
-
-const useDebounce = (callback, delay) => {
-  const [timer, setTimer] = useState(null);
-
-  return (value) => {
-    if (timer) clearTimeout(timer);
-    const newTimer = setTimeout(() => callback(value), delay);
-    setTimer(newTimer);
-  };
-};
-
-const SearchFilter = ({ value: filterValue, onChange: setFilter, placeholder }) => {
-  const [inputValue, setInputValue] = useState(filterValue || "");
-  const debouncedSetFilter = useDebounce(setFilter, 500);
-
-  return (
-    <div
-      className="mr-relative mr-w-full mr-flex mr-items-center"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <input
-        className="mr-filter-input"
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-          debouncedSetFilter(e.target.value || undefined);
-        }}
-        placeholder={placeholder}
-        onClick={(e) => e.stopPropagation()}
-      />
-      {inputValue && (
-        <button
-          className="mr-filter-clear mr-ml-2"
-          onClick={(e) => {
-            e.stopPropagation();
-            setInputValue("");
-            setFilter(undefined);
-          }}
-        >
-          <SvgSymbol
-            sym="icon-close"
-            viewBox="0 0 20 20"
-            className="mr-fill-current mr-w-2 mr-h-2"
-          />
-        </button>
-      )}
-    </div>
-  );
-};
+const linkStyles = "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition";
 
 export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
@@ -270,15 +90,14 @@ export const TaskReviewTable = (props) => {
   const [showMap, setShowMap] = useState(localStorage.getItem("displayMap") === "true");
   const [openComments, setOpenComments] = useState(null);
   const [showConfigureColumns, setShowConfigureColumns] = useState(false);
+  const [lastTableState, setLastTableState] = useState(null);
   const [challengeFilterIds, setChallengeFilterIds] = useState(
     getFilterIds(props.location.search, "filters.challengeId"),
   );
   const [projectFilterIds, setProjectFilterIds] = useState(
     getFilterIds(props.location.search, "filters.projectId"),
   );
-  const [lastTableState, setLastTableState] = useState(null);
   const [isResizing, setIsResizing] = useState(false);
-
   // Create a storage key based on review tasks type
   const storageKey = useMemo(() => {
     return `mrColumnWidths-review-${props.reviewTasksType || "default"}`;
@@ -369,12 +188,10 @@ export const TaskReviewTable = (props) => {
         props.pageSize,
       ),
     [
-      props,
       updateChallengeFilterIds,
       updateProjectFilterIds,
       challengeFilterIds,
       projectFilterIds,
-      props.reviewCriteria,
       props.pageSize,
     ],
   );
@@ -668,17 +485,6 @@ export const TaskReviewTable = (props) => {
     };
   }, []);
 
-  // Add a style element to the document head
-  useEffect(() => {
-    const styleElement = document.createElement("style");
-    styleElement.innerHTML = tableStyles;
-    document.head.appendChild(styleElement);
-
-    return () => {
-      document.head.removeChild(styleElement);
-    };
-  }, []);
-
   return (
     <Fragment>
       <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
@@ -747,148 +553,152 @@ export const TaskReviewTable = (props) => {
           </div>
         </div>
         <div className="mr-mt-6 review">
-          {props.loading ? (
-            <div className="mr-my-8">
-              <BusySpinner big />
+          {props.loading && (
+            <div className="mr-absolute mr-inset-0 mr-flex mr-items-center mr-justify-center mr-bg-black-75 mr-z-10">
+              <div className="mr-text-white mr-text-lg">Loading...</div>
             </div>
-          ) : (
-            <>
-              <table
-                {...getTableProps()}
-                className="mr-table mr-w-full"
-                style={{ minWidth: "100%" }}
-              >
-                <thead>
-                  {headerGroups.map((headerGroup) => (
-                    <Fragment key={headerGroup.id}>
-                      <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => {
-                          // Create separate handlers for sorting and resizing
-                          const headerProps = column.getHeaderProps();
-                          const sortByProps = column.getSortByToggleProps();
-
-                          // Make sure to prevent click event conflicts
-                          const onHeaderClick = (e) => {
-                            if (!columnResizing.isResizingColumn && !isResizing) {
-                              sortByProps.onClick(e);
-                            }
-                          };
-
-                          return (
-                            <th
-                              key={column.id}
-                              className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
-                                !isResizing ? "mr-sortable-header" : ""
-                              }`}
-                              {...headerProps}
-                              onClick={onHeaderClick}
-                              style={{
-                                ...headerProps.style,
-                                width: column.width,
-                                minWidth: column.minWidth,
-                                maxWidth: column.width,
-                                position: "relative",
-                                cursor: isResizing ? "col-resize" : "pointer",
-                                overflow: "hidden",
-                              }}
-                            >
-                              <div className="mr-header-content">
-                                <div className="mr-flex mr-items-center mr-justify-between">
-                                  <div
-                                    className="mr-flex mr-items-center mr-whitespace-nowrap"
-                                    style={{
-                                      cursor: !isResizing ? "pointer" : "auto",
-                                      overflow: "hidden",
-                                      textOverflow: "ellipsis",
-                                    }}
-                                  >
-                                    <span>{column.render("Header")}</span>
-                                    <span className="mr-ml-1 mr-opacity-70">
-                                      {column.isSorted ? (
-                                        column.isSortedDesc ? (
-                                          " ▼"
-                                        ) : (
-                                          " ▲"
-                                        )
-                                      ) : (
-                                        <span className="mr-text-xs mr-opacity-50 mr-inline-block">
-                                          ↕
-                                        </span>
-                                      )}
-                                    </span>
-                                  </div>
-                                </div>
-                                {column.canFilter && (
-                                  <div
-                                    className="mr-header-filter mr-mr-2"
-                                    onClick={(e) => e.stopPropagation()}
-                                    style={{
-                                      overflow: "hidden",
-                                      maxWidth: "100%",
-                                    }}
-                                  >
-                                    {column.render("Filter")}
-                                  </div>
-                                )}
-                                <div
-                                  className={`mr-resizer ${
-                                    column.isResizing ? "mr-isResizing" : ""
-                                  }`}
-                                  {...column.getResizerProps()}
-                                  onClick={(e) => {
-                                    // Stop propagation to prevent sorting when clicking resize handle
-                                    e.stopPropagation();
-                                  }}
-                                />
-                              </div>
-                            </th>
-                          );
-                        })}
-                      </tr>
-                    </Fragment>
-                  ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                  {page.map((row) => {
-                    prepareRow(row);
-                    return (
-                      <tr
-                        className="mr-border-y mr-border-white-10 hover:mr-bg-black-10"
-                        {...row.getRowProps()}
-                        key={row.id}
-                      >
-                        {row.cells.map((cell) => {
-                          return (
-                            <td
-                              {...cell.getCellProps()}
-                              className="mr-px-1 mr-py-1 mr-align-middle"
-                              style={{
-                                ...cell.getCellProps().style,
-                                maxWidth: cell.column.width,
-                                minWidth: cell.column.minWidth,
-                                overflow: "hidden",
-                                height: "40px",
-                              }}
-                            >
-                              <div className="mr-cell-content">{cell.render("Cell")}</div>
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-
-              <PaginationControl
-                currentPage={pageIndex}
-                totalPages={Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize)}
-                pageSize={props.pageSize}
-                gotoPage={gotoPage}
-                setPageSize={setPageSize}
-              />
-            </>
           )}
+
+          <TableContainer>
+            <table {...getTableProps()} className="mr-table mr-w-full">
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <Fragment key={headerGroup.id}>
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((column) => {
+                        // Create separate handlers for sorting and resizing
+                        const headerProps = column.getHeaderProps();
+                        const sortByProps = column.getSortByToggleProps();
+
+                        // Make sure to prevent click event conflicts
+                        const onHeaderClick = (e) => {
+                          if (
+                            !columnResizing.isResizingColumn &&
+                            !isResizing &&
+                            !column.disableSortBy
+                          ) {
+                            sortByProps.onClick(e);
+                          }
+                        };
+
+                        return (
+                          <th
+                            key={column.id}
+                            className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
+                              !isResizing && !column.disableSortBy ? "mr-sortable-header" : ""
+                            }`}
+                            {...headerProps}
+                            onClick={onHeaderClick}
+                            style={{
+                              ...headerProps.style,
+                              width: column.width,
+                              minWidth: column.minWidth,
+                              maxWidth: column.width,
+                              position: "relative",
+                              cursor: isResizing
+                                ? "col-resize"
+                                : column.disableSortBy
+                                  ? "default"
+                                  : "pointer",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div className="mr-header-content">
+                              <div className="mr-flex mr-items-center mr-justify-between">
+                                <div
+                                  className="mr-flex mr-items-center mr-whitespace-nowrap"
+                                  style={{
+                                    cursor: !isResizing
+                                      ? column.disableSortBy
+                                        ? "default"
+                                        : "pointer"
+                                      : "auto",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                  }}
+                                >
+                                  <span>{column.render("Header")}</span>
+                                  <span className="mr-ml-1 mr-opacity-70">
+                                    {column.isSorted
+                                      ? column.isSortedDesc
+                                        ? " ▼"
+                                        : " ▲"
+                                      : !column.disableSortBy && (
+                                          <span className="mr-text-xs mr-opacity-50 mr-inline-block">
+                                            ↕
+                                          </span>
+                                        )}
+                                  </span>
+                                </div>
+                              </div>
+                              {column.canFilter && (
+                                <div
+                                  className="mr-header-filter mr-mr-2"
+                                  onClick={(e) => e.stopPropagation()}
+                                  style={{
+                                    overflow: "hidden",
+                                    maxWidth: "100%",
+                                  }}
+                                >
+                                  {column.render("Filter")}
+                                </div>
+                              )}
+                              <div
+                                className={`mr-resizer ${column.isResizing ? "mr-isResizing" : ""}`}
+                                {...column.getResizerProps()}
+                                onClick={(e) => {
+                                  // Stop propagation to prevent sorting when clicking resize handle
+                                  e.stopPropagation();
+                                }}
+                              />
+                            </div>
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </Fragment>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {page.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr
+                      className="mr-border-y mr-border-white-10 hover:mr-bg-black-10"
+                      {...row.getRowProps()}
+                      key={row.id}
+                    >
+                      {row.cells.map((cell) => {
+                        return (
+                          <td
+                            {...cell.getCellProps()}
+                            className="mr-px-1 mr-py-1 mr-align-middle"
+                            style={{
+                              ...cell.getCellProps().style,
+                              maxWidth: cell.column.width,
+                              minWidth: cell.column.minWidth,
+                              overflow: "hidden",
+                              height: "40px",
+                            }}
+                          >
+                            <div className="mr-cell-content">{cell.render("Cell")}</div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </TableContainer>
+
+          <PaginationControl
+            currentPage={pageIndex}
+            totalPages={Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize)}
+            pageSize={props.pageSize}
+            gotoPage={gotoPage}
+            setPageSize={setPageSize}
+          />
         </div>
       </div>
       {Number.isFinite(openComments) && (
@@ -924,10 +734,7 @@ const FilterDropdown = ({ reviewCriteria }) => {
     <Dropdown
       className="mr-dropdown--right"
       dropdownButton={(dropdown) => (
-        <button
-          onClick={dropdown.toggleDropdownVisible}
-          className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
-        >
+        <button onClick={dropdown.toggleDropdownVisible} className={linkStyles}>
           <SvgSymbol
             sym="filter-icon"
             viewBox="0 0 20 20"
@@ -957,10 +764,7 @@ const GearDropdown = ({
     <Dropdown
       className="mr-dropdown--right"
       dropdownButton={(dropdown) => (
-        <button
-          onClick={dropdown.toggleDropdownVisible}
-          className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
-        >
+        <button onClick={dropdown.toggleDropdownVisible} className={linkStyles}>
           <SvgSymbol sym="cog-icon" viewBox="0 0 20 20" className="mr-fill-current mr-w-5 mr-h-5" />
         </button>
       )}
@@ -1068,7 +872,28 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     width: 120,
     minWidth: 80,
     Filter: ({ column: { setFilter, filterValue } }) => (
-      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search ID..." />
+      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search ID..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setFilter(null);
+            }}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
     ),
   };
 
@@ -1080,7 +905,28 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     minWidth: 80,
     disableSortBy: true,
     Filter: ({ column: { setFilter, filterValue } }) => (
-      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search feature ID..." />
+      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search feature ID..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setFilter(null);
+            }}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
     ),
   };
 
@@ -1119,13 +965,22 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <select
-          onChange={(event) => setFilter(event.target.value)}
-          className="mr-filter-input"
-          value={filterValue || "all"}
-        >
-          {options}
-        </select>
+        <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+          <select
+            onChange={(event) => setFilter(event.target.value)}
+            className={inputStyles}
+            value={filterValue || "all"}
+          >
+            {options}
+          </select>
+          <div className="mr-pointer-events-none mr-absolute mr-inset-y-0 mr-right-0 mr-flex mr-items-center mr-px-2">
+            <SvgSymbol
+              sym="dropdown-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-5 mr-h-5 mr-text-white"
+            />
+          </div>
+        </div>
       );
     },
   };
@@ -1163,13 +1018,22 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <select
-          onChange={(event) => setFilter(event.target.value)}
-          className="mr-filter-input"
-          value={filterValue || "all"}
-        >
-          {options}
-        </select>
+        <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+          <select
+            onChange={(event) => setFilter(event.target.value)}
+            className={inputStyles}
+            value={filterValue || "all"}
+          >
+            {options}
+          </select>
+          <div className="mr-pointer-events-none mr-absolute mr-inset-y-0 mr-right-0 mr-flex mr-items-center mr-px-2">
+            <SvgSymbol
+              sym="dropdown-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-5 mr-h-5 mr-text-white"
+            />
+          </div>
+        </div>
       );
     },
   };
@@ -1190,7 +1054,28 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     width: 180,
     minWidth: 120,
     Filter: ({ column: { setFilter, filterValue } }) => (
-      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search mapper..." />
+      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search mapper..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setFilter(null);
+            }}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
     ),
   };
 
@@ -1218,6 +1103,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     ),
     width: 180,
     minWidth: 120,
+    disableSortBy: true,
   };
 
   columns.challengeId = {
@@ -1241,8 +1127,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Cell: ({ value }) => <div className="row-challenge-column mr-text-white">{value}</div>,
     minWidth: 120,
     Filter: ({ column: { setFilter, filterValue } }) => (
-      <div className="mr-flex mr-gap-2">
-        <div className="mr-inline-block">
+      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+        <div>
           <FilterSuggestTextBox
             filterType={"challenge"}
             filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
@@ -1254,12 +1140,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
             value={filterValue || ""}
             itemList={props.reviewChallenges}
             multiselect={props.challengeFilterIds}
+            inputClassName={inputStyles}
           />
         </div>
         {props.challengeFilterIds?.length && props.challengeFilterIds?.[0] !== -2 ? (
           <button
-            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setFilter({ id: -2, name: "All Challenges" });
               props.updateChallengeFilterIds({ id: -2, name: "All Challenges" });
             }}
@@ -1267,7 +1154,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
             <SvgSymbol
               sym="icon-close"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
             />
           </button>
         ) : null}
@@ -1297,8 +1184,8 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Cell: ({ value }) => <div className="row-project-column">{value}</div>,
     minWidth: 120,
     Filter: ({ column: { setFilter, filterValue } }) => (
-      <div className="mr-flex mr-gap-2">
-        <div className="mr-inline-block">
+      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+        <div>
           <FilterSuggestTextBox
             filterType={"project"}
             filterAllLabel={props.intl.formatMessage(messages.allProjects)}
@@ -1310,12 +1197,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
             value={filterValue || ""}
             itemList={_map(props.reviewProjects, (p) => ({ id: p.id, name: p.displayName }))}
             multiselect={props.projectFilterIds}
+            inputClassName={inputStyles}
           />
         </div>
         {props.projectFilterIds?.length && props.projectFilterIds?.[0] !== -2 ? (
           <button
-            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setFilter({ id: -2, name: "All Projects" });
               props.updateProjectFilterIds({ id: -2, name: "All Projects" });
             }}
@@ -1323,7 +1211,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
             <SvgSymbol
               sym="icon-close"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
             />
           </button>
         ) : null}
@@ -1339,7 +1227,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Cell: ({ value }) => {
       if (!value) return null;
       return (
-        <span className="mr-z-1000">
+        <span>
           <FormattedDate value={value} /> <FormattedTime value={value} />
         </span>
       );
@@ -1353,32 +1241,24 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div
-          className="mr-flex mr-items-center mr-w-full mr-z-1000"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="mr-flex-grow  mr-z-1000">
-            <IntlDatePicker
-              selected={mappedOn}
-              onChange={(value) => {
-                setFilter(value);
-              }}
-              intl={props.intl}
-              className="mr-filter-input  mr-z-1000"
-            />
-          </div>
+        <div className="mr-space-x-1" onClick={(e) => e.stopPropagation()}>
+          <IntlDatePicker
+            selected={mappedOn}
+            onChange={(value) => {
+              setFilter(value);
+            }}
+            intl={props.intl}
+          />
+
           {mappedOn && (
             <button
-              className="mr-filter-clear mr-ml-2"
-              onClick={(e) => {
-                e.stopPropagation();
-                setFilter(null);
-              }}
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={clearFilter}
             >
               <SvgSymbol
                 sym="icon-close"
                 viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2 mr-h-2"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
               />
             </button>
           )}
@@ -1408,20 +1288,23 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-flex mr-items-center mr-w-full" onClick={(e) => e.stopPropagation()}>
-          <div className="mr-flex-grow">
+        <div
+          className="mr-flex mr-items-center mr-w-full mr-relative mr-z-20"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="mr-flex-grow mr-relative">
             <IntlDatePicker
               selected={reviewedAt}
               onChange={(value) => {
                 setFilter(value);
               }}
               intl={props.intl}
-              className="mr-filter-input"
+              className={inputStyles}
             />
           </div>
           {reviewedAt && (
             <button
-              className="mr-filter-clear mr-ml-2"
+              className="mr-filter-clear mr-ml-2 mr-absolute mr-right-2"
               onClick={(e) => {
                 e.stopPropagation();
                 setFilter(null);
@@ -1453,6 +1336,45 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     },
     minWidth: 180,
     width: 200,
+    Filter: ({ column: { setFilter, filterValue } }) => {
+      let metaReviewedAt = filterValue;
+      if (typeof metaReviewedAt === "string" && metaReviewedAt !== "") {
+        metaReviewedAt = parseISO(metaReviewedAt);
+      }
+
+      return (
+        <div
+          className="mr-flex mr-items-center mr-w-full mr-relative mr-z-20"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="mr-flex-grow mr-relative">
+            <IntlDatePicker
+              selected={metaReviewedAt}
+              onChange={(value) => {
+                setFilter(value);
+              }}
+              intl={props.intl}
+              className={inputStyles}
+            />
+          </div>
+          {metaReviewedAt && (
+            <button
+              className="mr-filter-clear mr-ml-2 mr-absolute mr-right-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilter(null);
+              }}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2 mr-h-2"
+              />
+            </button>
+          )}
+        </div>
+      );
+    },
   };
 
   columns.reviewedBy = {
@@ -1474,7 +1396,28 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     width: 180,
     minWidth: 120,
     Filter: ({ column: { setFilter, filterValue } }) => (
-      <SearchFilter value={filterValue} onChange={setFilter} placeholder="Search reviewer..." />
+      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search reviewer..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setFilter(null);
+            }}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
     ),
   };
 
@@ -1537,13 +1480,22 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <select
-          onChange={(event) => setFilter(event.target.value)}
-          className="mr-filter-input"
-          value={filterValue || "all"}
-        >
-          {options}
-        </select>
+        <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+          <select
+            onChange={(event) => setFilter(event.target.value)}
+            className={inputStyles}
+            value={filterValue || "all"}
+          >
+            {options}
+          </select>
+          <div className="mr-pointer-events-none mr-absolute mr-inset-y-0 mr-right-0 mr-flex mr-items-center mr-px-2">
+            <SvgSymbol
+              sym="dropdown-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-5 mr-h-5 mr-text-white"
+            />
+          </div>
+        </div>
       );
     },
   };
@@ -1610,13 +1562,22 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <select
-          onChange={(event) => setFilter(event.target.value)}
-          className="mr-filter-input"
-          value={filterValue || "all"}
-        >
-          {options}
-        </select>
+        <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+          <select
+            onChange={(event) => setFilter(event.target.value)}
+            className={inputStyles}
+            value={filterValue || "all"}
+          >
+            {options}
+          </select>
+          <div className="mr-pointer-events-none mr-absolute mr-inset-y-0 mr-right-0 mr-flex mr-items-center mr-px-2">
+            <SvgSymbol
+              sym="dropdown-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-5 mr-h-5 mr-text-white"
+            />
+          </div>
+        </div>
       );
     },
   };
@@ -1640,11 +1601,28 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     width: 180,
     minWidth: 120,
     Filter: ({ column: { setFilter, filterValue } }) => (
-      <SearchFilter
-        value={filterValue}
-        onChange={setFilter}
-        placeholder="Search meta reviewer..."
-      />
+      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search meta reviewer..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setFilter(null);
+            }}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
     ),
   };
 
@@ -1654,11 +1632,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Cell: ({ row }) => {
       const linkTo = `/challenge/${row.original.parent.id}/task/${row.original.id}/review`;
       let action = (
-        <Link
-          to={linkTo}
-          onClick={(e) => handleClick(e, linkTo)}
-          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
-        >
+        <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
           <FormattedMessage {...messages.reviewTaskLabel} />
         </Link>
       );
@@ -1666,21 +1640,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       if (row.original.reviewedBy) {
         if (row.original.reviewStatus === TaskReviewStatus.needed) {
           action = (
-            <Link
-              to={linkTo}
-              onClick={(e) => handleClick(e, linkTo)}
-              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
-            >
+            <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </Link>
           );
         } else if (row.original.reviewStatus === TaskReviewStatus.disputed) {
           action = (
-            <Link
-              to={linkTo}
-              onClick={(e) => handleClick(e, linkTo)}
-              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
-            >
+            <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
               <FormattedMessage {...messages.resolveTaskLabel} />
             </Link>
           );
@@ -1726,11 +1692,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Cell: ({ row }) => {
       const linkTo = `/challenge/${row.original.parent.id}/task/${row.original.id}/meta-review`;
       let action = (
-        <Link
-          to={linkTo}
-          onClick={(e) => handleClick(e, linkTo)}
-          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
-        >
+        <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
           <FormattedMessage {...messages.metaReviewTaskLabel} />
         </Link>
       );
@@ -1738,21 +1700,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       if (row.original.reviewedBy) {
         if (row.original.reviewStatus === TaskReviewStatus.needed) {
           action = (
-            <Link
-              to={linkTo}
-              onClick={(e) => handleClick(e, linkTo)}
-              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
-            >
+            <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </Link>
           );
         } else if (row.original.reviewStatus === TaskReviewStatus.disputed) {
           action = (
-            <Link
-              to={linkTo}
-              onClick={(e) => handleClick(e, linkTo)}
-              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
-            >
+            <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
               <FormattedMessage {...messages.resolveTaskLabel} />
             </Link>
           );
@@ -1789,7 +1743,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
               <Link
                 to={`${linkTo}/review`}
                 onClick={(e) => handleClick(e, `${linkTo}/review`)}
-                className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+                className={linkStyles}
               >
                 <FormattedMessage {...messages.reviewFurtherTaskLabel} />
               </Link>
@@ -1814,22 +1768,36 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
   columns.tags = {
     id: "tags",
-    Header: props.intl.formatMessage(messages.tagsLabel),
+    Header: (
+      <div className="mr-flex mr-items-center mr-gap-1">
+        {props.intl.formatMessage(messages.tagsLabel)}
+      </div>
+    ),
     accessor: "tags",
     Cell: ({ row }) => (
-      <div className="row-challenge-column mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap">
-        {_map(row.original.tags, (t) =>
-          t.name === "" ? null : (
-            <div className="mr-inline mr-bg-white-10 mr-rounded mr-py-1 mr-px-2 mr-m-1" key={t.id}>
-              {t.name}
-            </div>
-          ),
+      <div className="mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap mr-px-1 mr-py-2">
+        {row.original.tags && row.original.tags.length > 0 ? (
+          _map(row.original.tags, (t) => {
+            if (t.name === "") return null;
+            return (
+              <div className={tagsStyles} key={t.id}>
+                <span className="mr-relative mr-z-10">{t.name}</span>
+              </div>
+            );
+          })
+        ) : (
+          <span className="mr-text-grey-lighter mr-text-sm mr-italic">No tags</span>
         )}
       </div>
     ),
     minWidth: 120,
     Filter: ({ column: { setFilter, filterValue } }) => (
-      <InTableTagFilter {...props} onChange={setFilter} value={filterValue || ""} />
+      <InTableTagFilter
+        {...props}
+        onChange={setFilter}
+        value={filterValue || ""}
+        inputClassName={inputStyles}
+      />
     ),
     disableSortBy: true,
   };
