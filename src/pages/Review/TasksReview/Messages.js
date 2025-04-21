@@ -275,8 +275,13 @@ export default defineMessages({
   },
 
   multipleTasksTooltip: {
-    id: "Admin.TaskAnalysisTable.multipleTasks.tooltip",
-    defaultMessage: "Multiple bundled tasks",
+    id: "Task.tableReview.multipleTasksTooltip",
+    defaultMessage: "This is a bundle of multiple tasks",
+  },
+
+  bundleMemberTooltip: {
+    id: "Task.tableReview.bundleMemberTooltip",
+    defaultMessage: "This task is part of a bundle",
   },
 
   viewAllTasks: {

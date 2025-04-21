@@ -12,9 +12,16 @@ import PaginationControl from "../../components/PaginationControl/PaginationCont
 import SignInButton from "../../components/SignInButton/SignInButton";
 import {
   SearchFilter,
-  inputStyles,
+  TableWrapper,
   renderTableHeader,
 } from "../../components/TableShared/EnhancedTable";
+import {
+  cellStyles,
+  inputStyles,
+  linkStyles,
+  rowStyles,
+  tableStyles,
+} from "../../components/TableShared/TableStyles";
 import {
   NotificationType,
   keysByNotificationType,
@@ -37,12 +44,6 @@ const DEFAULT_PAGINATION = {
 
 const Inbox = (props) => {
   const { user, notifications, markNotificationsRead, deleteNotifications } = props;
-
-  // Create a storage key for column widths
-  const storageKey = "mrColumnWidths-inbox";
-
-  // Load saved column widths from localStorage
-  const [columnWidths, saveColumnWidths] = useColumnWidthStorage(storageKey);
 
   const {
     groupByTask,
@@ -267,7 +268,10 @@ const Inbox = (props) => {
           <div className="mr-cell-content">
             <ol className="mr-list-reset mr-links-green-lighter mr-inline-flex mr-justify-between mr-font-normal">
               <li>
-                <a onClick={() => readNotification(row.original, threads[row.original.taskId])}>
+                <a
+                  className={linkStyles}
+                  onClick={() => readNotification(row.original, threads[row.original.taskId])}
+                >
                   <FormattedMessage {...messages.openNotificationLabel} />
                 </a>
               </li>
@@ -290,7 +294,6 @@ const Inbox = (props) => {
       threads,
       readNotification,
       props.intl,
-      columnWidths,
     ],
   );
 
@@ -300,7 +303,7 @@ const Inbox = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { sortBy, pageIndex, pageSize, columnResizing },
+    state: { pageIndex, pageSize },
     gotoPage,
     setPageSize,
   } = useTable(
@@ -325,9 +328,6 @@ const Inbox = (props) => {
     usePagination,
   );
 
-  // Track resizing state
-  const isResizing = useResizingState(columnResizing, headerGroups, columnWidths, saveColumnWidths);
-
   if (!user) {
     return (
       <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
@@ -349,51 +349,53 @@ const Inbox = (props) => {
           markReadSelected={markReadSelected}
           deleteSelected={deleteSelected}
         />
-        <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
-          <thead>{renderTableHeader(headerGroups)}</thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
-              prepareRow(row);
-              return (
-                <tr
-                  key={row.id}
-                  {...row.getRowProps()}
-                  className="mr-border-y mr-border-white-10 mr-cursor-pointer hover:mr-bg-black-10"
-                  style={{
-                    fontWeight: !row.original.isRead ? 700 : 400,
-                    textDecoration: !row.original.isRead ? "none" : "line-through",
-                    opacity: !row.original.isRead ? 1.0 : 0.5,
-                  }}
-                  onClick={() => readNotification(row.original, threads[row.original.taskId])}
-                >
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        key={cell.column.id}
-                        className="mr-px-2 mr-align-middle"
-                        {...cell.getCellProps()}
-                        style={{
-                          ...cell.getCellProps().style,
-                          maxWidth: cell.column.width,
-                          minWidth: cell.column.minWidth,
-                          overflow: "hidden",
-                          height: "40px",
-                        }}
-                        onClick={(e) => {
-                          if (cell.column.id === "selected") {
-                            e.stopPropagation();
-                          }
-                        }}
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <TableWrapper>
+          <table className={tableStyles} {...getTableProps()}>
+            <thead>{renderTableHeader(headerGroups)}</thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr
+                    key={row.id}
+                    {...row.getRowProps()}
+                    className={rowStyles}
+                    style={{
+                      fontWeight: !row.original.isRead ? 700 : 400,
+                      textDecoration: !row.original.isRead ? "none" : "line-through",
+                      opacity: !row.original.isRead ? 1.0 : 0.5,
+                    }}
+                    onClick={() => readNotification(row.original, threads[row.original.taskId])}
+                  >
+                    {row.cells.map((cell) => {
+                      return (
+                        <td
+                          key={cell.column.id}
+                          className={cellStyles}
+                          {...cell.getCellProps()}
+                          style={{
+                            ...cell.getCellProps().style,
+                            maxWidth: cell.column.width,
+                            minWidth: cell.column.minWidth,
+                            overflow: "hidden",
+                            height: "40px",
+                          }}
+                          onClick={(e) => {
+                            if (cell.column.id === "selected") {
+                              e.stopPropagation();
+                            }
+                          }}
+                        >
+                          {cell.render("Cell")}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </TableWrapper>
         <PaginationControl
           currentPage={pageIndex}
           totalPages={totalPages}

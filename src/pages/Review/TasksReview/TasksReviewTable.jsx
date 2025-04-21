@@ -24,12 +24,18 @@ import PaginationControl from "../../../components/PaginationControl/PaginationC
 import ManageSavedFilters from "../../../components/SavedFilters/ManageSavedFilters";
 import SavedFiltersList from "../../../components/SavedFilters/SavedFiltersList";
 import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
-import { SearchFilter, inputStyles } from "../../../components/TableShared/EnhancedTable";
 import {
   SearchFilter,
-  TableContainer,
+  TableWrapper,
+  renderTableHeader,
+} from "../../../components/TableShared/EnhancedTable";
+import {
+  cellStyles,
   inputStyles,
-} from "../../../components/TableShared/ResizableTable";
+  linkStyles,
+  rowStyles,
+  tableStyles,
+} from "../../../components/TableShared/TableStyles";
 import {
   StatusLabel,
   ViewCommentsButton,
@@ -64,8 +70,6 @@ import {
 import FilterSuggestTextBox from "./FilterSuggestTextBox";
 import { FILTER_SEARCH_ALL, FILTER_SEARCH_TEXT } from "./FilterSuggestTextBox";
 import messages from "./Messages";
-
-const linkStyles = "mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition";
 
 export const getFilterIds = (search, param) => {
   const searchParams = new URLSearchParams(search);
@@ -192,19 +196,6 @@ export const TaskReviewTable = (props) => {
     [props.addedColumns, columnTypes],
   );
 
-  // Apply stored column widths to the columns config
-  const columnsWithStoredWidths = useMemo(() => {
-    return columns.map((column) => {
-      if (columnWidths[column.id]) {
-        return {
-          ...column,
-          width: columnWidths[column.id],
-        };
-      }
-      return column;
-    });
-  }, [columns, columnWidths]);
-
   const initialState = {
     sortBy: initialSort
       ? [
@@ -234,14 +225,14 @@ export const TaskReviewTable = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { sortBy, filters, pageIndex, columnResizing },
+    state: { sortBy, filters, pageIndex },
     gotoPage,
     setPageSize,
     setAllFilters,
     setSortBy,
   } = useTable(
     {
-      columns: columnsWithStoredWidths,
+      columns,
       data,
       defaultColumn: {
         Filter: false,
@@ -434,48 +425,6 @@ export const TaskReviewTable = (props) => {
     </div>
   );
 
-  // Track resizing state and save column widths when resizing ends
-  useEffect(() => {
-    const isCurrentlyResizing = !!columnResizing.isResizingColumn;
-
-    // When resizing ends, store the new column widths
-    if (isResizing && !isCurrentlyResizing) {
-      const newColumnWidths = {};
-      headerGroups.forEach((headerGroup) => {
-        headerGroup.headers.forEach((column) => {
-          if (column.id) {
-            newColumnWidths[column.id] = column.width;
-          }
-        });
-      });
-      const updatedWidths = { ...columnWidths, ...newColumnWidths };
-      setColumnWidths(updatedWidths);
-
-      // Save to localStorage
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(updatedWidths));
-      } catch (e) {
-        console.warn("Failed to save column widths to localStorage", e);
-      }
-    }
-
-    setIsResizing(isCurrentlyResizing);
-
-    // Add a class to the body during resizing to prevent other interactions
-    if (isCurrentlyResizing) {
-      document.body.classList.add("resizing-active");
-    } else {
-      document.body.classList.remove("resizing-active");
-    }
-  }, [columnResizing.isResizingColumn, headerGroups, columnWidths, storageKey]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      document.body.classList.remove("resizing-active");
-    };
-  }, []);
-
   return (
     <Fragment>
       <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
@@ -549,123 +498,36 @@ export const TaskReviewTable = (props) => {
               <div className="mr-text-white mr-text-lg">Loading...</div>
             </div>
           )}
-          <table {...getTableProps()} className="mr-table mr-w-full">
-            <thead>
-              {headerGroups.map((headerGroup) => (
-                <Fragment key={headerGroup.id}>
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => {
-                      // Create separate handlers for sorting and resizing
-                      const headerProps = column.getHeaderProps();
-                      const sortByProps = column.getSortByToggleProps();
-
-                      // Make sure to prevent click event conflicts
-                      const onHeaderClick = (e) => {
-                        if (!column.disableSortBy) {
-                          sortByProps.onClick(e);
-                        }
-                      };
-
-                      return (
-                        <th
-                          key={column.id}
-                          className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
-                            !column.disableSortBy ? "mr-sortable-header" : ""
-                          }`}
-                          {...headerProps}
-                          onClick={onHeaderClick}
-                          style={{
-                            ...headerProps.style,
-                            width: column.width,
-                            minWidth: column.minWidth,
-                            maxWidth: column.width,
-                            position: "relative",
-                            cursor: column.disableSortBy ? "default" : "pointer",
-                          }}
-                        >
-                          <div className="mr-header-content">
-                            <div className="mr-flex mr-items-center mr-justify-between">
-                              <div
-                                className="mr-flex mr-items-center mr-whitespace-nowrap"
-                                style={{
-                                  cursor: column.disableSortBy ? "default" : "pointer",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                <span>{column.render("Header")}</span>
-                                <span className="mr-ml-1 mr-opacity-70">
-                                  {column.isSorted
-                                    ? column.isSortedDesc
-                                      ? " ▼"
-                                      : " ▲"
-                                    : !column.disableSortBy && (
-                                        <span className="mr-text-xs mr-opacity-50 mr-inline-block">
-                                          ↕
-                                        </span>
-                                      )}
-                                </span>
-                              </div>
-                            </div>
-                            {column.canFilter && (
-                              <div
-                                className="mr-header-filter mr-mr-2"
-                                onClick={(e) => e.stopPropagation()}
-                                style={{
-                                  overflow: "hidden",
-                                  maxWidth: "100%",
-                                }}
-                              >
-                                {column.render("Filter")}
-                              </div>
-                            )}
-                            <div
-                              className={`mr-resizer`}
-                              {...column.getResizerProps()}
-                              onClick={(e) => {
-                                // Stop propagation to prevent sorting when clicking resize handle
-                                e.stopPropagation();
-                              }}
-                            />
-                          </div>
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </Fragment>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
-                prepareRow(row);
-                return (
-                  <tr
-                    className="mr-border-y mr-border-white-10 hover:mr-bg-black-10"
-                    {...row.getRowProps()}
-                    key={row.id}
-                  >
-                    {row.cells.map((cell) => {
-                      return (
-                        <td
-                          {...cell.getCellProps()}
-                          className="mr-px-1 mr-py-1 mr-align-middle"
-                          style={{
-                            ...cell.getCellProps().style,
-                            maxWidth: cell.column.width,
-                            minWidth: cell.column.minWidth,
-                            overflow: "hidden",
-                            height: "40px",
-                          }}
-                        >
-                          <div className="mr-cell-content">{cell.render("Cell")}</div>
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <TableWrapper>
+            <table {...getTableProps()} className={tableStyles}>
+              <thead>{renderTableHeader(headerGroups)}</thead>
+              <tbody {...getTableBodyProps()}>
+                {page.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr className={rowStyles} {...row.getRowProps()} key={row.id}>
+                      {row.cells.map((cell) => {
+                        return (
+                          <td
+                            {...cell.getCellProps()}
+                            className={cellStyles}
+                            style={{
+                              ...cell.getCellProps().style,
+                              maxWidth: cell.column.width,
+                              minWidth: cell.column.minWidth,
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div className="mr-cell-content">{cell.render("Cell")}</div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </TableWrapper>
           <PaginationControl
             currentPage={pageIndex}
             totalPages={Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize)}
@@ -827,20 +689,32 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     Header: props.intl.formatMessage(messages.idLabel),
     accessor: "id",
     Cell: ({ value, row }) => {
-      if (!row.original.isBundlePrimary) {
-        return <span>{value}</span>;
-      } else {
+      if (row.original.isBundlePrimary) {
         return (
           <span className="mr-flex mr-items-center mr-relative">
             <SvgSymbol
               sym="box-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-4"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-mr-2"
               title={props.intl.formatMessage(messages.multipleTasksTooltip)}
             />
             {value}
           </span>
         );
+      } else if (Number.isFinite(row.original.bundleId) && row.original.bundleId) {
+        return (
+          <span className="mr-flex mr-items-center mr-relative">
+            <SvgSymbol
+              sym="puzzle-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-mr-2 "
+              title={props.intl.formatMessage(messages.bundleMemberTooltip)}
+            />
+            {value}
+          </span>
+        );
+      } else {
+        return <span>{value}</span>;
       }
     },
     width: 120,
@@ -1227,7 +1101,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
           {mappedOn && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={clearFilter}
+              onClick={() => setFilter(null)}
             >
               <SvgSymbol
                 sym="icon-close"
@@ -1642,7 +1516,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return (
         <div className="row-controls-column mr-links-green-lighter">
-          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)}>
+          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
             {message}
           </Link>
         </div>
@@ -1697,7 +1571,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return (
         <div className="row-controls-column mr-links-green-lighter">
-          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)}>
+          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
             {message}
           </Link>
           {!props.metaReviewEnabled &&
@@ -1744,7 +1618,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
           _map(row.original.tags, (t) => {
             if (t.name === "") return null;
             return (
-              <div className={tagsStyles} key={t.id}>
+              <div key={t.id}>
                 <span className="mr-relative mr-z-10">{t.name}</span>
               </div>
             );

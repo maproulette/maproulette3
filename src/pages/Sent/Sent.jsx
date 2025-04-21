@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import PaginationControl from "../../components/PaginationControl/PaginationControl";
-import { renderTableHeader } from "../../components/TableShared/EnhancedTable";
+import { TableWrapper, renderTableHeader } from "../../components/TableShared/EnhancedTable";
+import { cellStyles, rowStyles, tableStyles } from "../../components/TableShared/TableStyles";
 import CommentType from "../../services/Comment/CommentType";
 import { keysByReviewStatus } from "../../services/Task/TaskReview/TaskReviewStatus";
 import { TaskStatusColors, keysByStatus } from "../../services/Task/TaskStatus/TaskStatus";
@@ -155,7 +156,7 @@ const Sent = (props) => {
     headerGroups,
     rows,
     prepareRow,
-    state: { sortBy, columnResizing },
+    state: { sortBy },
   } = useTable(
     {
       data,
@@ -177,9 +178,6 @@ const Sent = (props) => {
     useResizeColumns,
     usePagination,
   );
-
-  // Track resizing state
-  const isResizing = useResizingState(columnResizing, headerGroups, columnWidths, saveColumnWidths);
 
   useEffect(() => {
     comments.fetch(props.user?.id, sortCriteria, pagination, debouncedSearchTerm);
@@ -232,37 +230,39 @@ const Sent = (props) => {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
-        <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
-          <thead>{renderTableHeader(headerGroups)}</thead>
+        <TableWrapper>
+          <table className={tableStyles} {...getTableProps()}>
+            <thead>{renderTableHeader(headerGroups)}</thead>
 
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr className="hover:mr-bg-black-10" {...row.getRowProps()} key={row.id}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        className="mr-px-1 mr-py-1 mr-border-b mr-border-white-10"
-                        {...cell.getCellProps()}
-                        style={{
-                          ...cell.getCellProps().style,
-                          maxWidth: cell.column.width,
-                          minWidth: cell.column.minWidth,
-                          overflow: "hidden",
-                          height: "40px",
-                        }}
-                        key={cell.column.id}
-                      >
-                        <div className="mr-cell-content">{cell.render("Cell")}</div>
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr className={rowStyles} {...row.getRowProps()} key={row.id}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td
+                          className={cellStyles}
+                          {...cell.getCellProps()}
+                          style={{
+                            ...cell.getCellProps().style,
+                            maxWidth: cell.column.width,
+                            minWidth: cell.column.minWidth,
+                            overflow: "hidden",
+                            height: "40px",
+                          }}
+                          key={cell.column.id}
+                        >
+                          <div className="mr-cell-content">{cell.render("Cell")}</div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </TableWrapper>
 
         <PaginationControl
           currentPage={pagination.page}

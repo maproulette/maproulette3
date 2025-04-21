@@ -30,14 +30,15 @@ import {
 import { keysByStatus, messagesByStatus } from "../../services/Task/TaskStatus/TaskStatus";
 import WithConfigurableColumns from "../HOCs/WithConfigurableColumns/WithConfigurableColumns";
 import WithLoadedTask from "../HOCs/WithLoadedTask/WithLoadedTask";
+import IntlDatePicker from "../IntlDatePicker/IntlDatePicker";
 import PaginationControl from "../PaginationControl/PaginationControl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import { SearchFilter, inputStyles } from "../TableShared/EnhancedTable";
+import { SearchFilter, TableWrapper, renderTableHeader } from "../TableShared/EnhancedTable";
+import { cellStyles, inputStyles, rowStyles, tableStyles } from "../TableShared/TableStyles";
 import ViewTask from "../ViewTask/ViewTask";
 import messages from "./Messages";
 import TaskAnalysisTableHeader from "./TaskAnalysisTableHeader";
 import { StatusLabel, ViewCommentsButton, makeInvertable } from "./TaskTableHelpers";
-import IntlDatePicker from "../IntlDatePicker/IntlDatePicker";
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask);
@@ -94,26 +95,7 @@ const DEFAULT_COLUMNS = [
 export const TaskAnalysisTableInternal = (props) => {
   const [openComments, setOpenComments] = useState(null);
   const [showConfigureColumns, setShowConfigureColumns] = useState(false);
-  const [isResizing, setIsResizing] = useState(false);
 
-  // Create a storage key based on challenge ID if available
-  const storageKey = useMemo(() => {
-    return props.challenge?.id
-      ? `mrColumnWidths-challenge-${props.challenge.id}`
-      : "mrColumnWidths-default";
-  }, [props.challenge?.id]);
-
-  const [columnWidths, setColumnWidths] = useState(() => {
-    // Try to load saved column widths from localStorage
-    try {
-      const savedWidths = localStorage.getItem(storageKey);
-      return savedWidths ? JSON.parse(savedWidths) : {};
-    } catch (e) {
-      return {};
-    }
-  });
-
-  // When sort/filter/page changes, call updateCriteria to fetch new data
   const handleStateChange = useCallback(
     ({ sortBy, filters, pageIndex }) => {
       const newCriteria = {
@@ -235,10 +217,10 @@ export const TaskAnalysisTableInternal = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { sortBy, filters, columnResizing },
+    state: { sortBy, filters },
   } = useTable(
     {
-      columns: columnsWithStoredWidths,
+      columns,
       data,
       manualSortBy: true,
       manualFilters: true,
@@ -275,48 +257,6 @@ export const TaskAnalysisTableInternal = (props) => {
     usePagination,
   );
 
-  // Track resizing state and save column widths when resizing ends
-  useEffect(() => {
-    const isCurrentlyResizing = !!columnResizing.isResizingColumn;
-
-    // When resizing ends, store the new column widths
-    if (isResizing && !isCurrentlyResizing) {
-      const newColumnWidths = {};
-      headerGroups.forEach((headerGroup) => {
-        headerGroup.headers.forEach((column) => {
-          if (column.id) {
-            newColumnWidths[column.id] = column.width;
-          }
-        });
-      });
-      const updatedWidths = { ...columnWidths, ...newColumnWidths };
-      setColumnWidths(updatedWidths);
-
-      // Save to localStorage
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(updatedWidths));
-      } catch (e) {
-        console.warn("Failed to save column widths to localStorage", e);
-      }
-    }
-
-    setIsResizing(isCurrentlyResizing);
-
-    // Add a class to the body during resizing to prevent other interactions
-    if (isCurrentlyResizing) {
-      document.body.classList.add("resizing-active");
-    } else {
-      document.body.classList.remove("resizing-active");
-    }
-  }, [columnResizing.isResizingColumn, headerGroups, columnWidths, storageKey]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      document.body.classList.remove("resizing-active");
-    };
-  }, []);
-
   // Update parent when table state changes
   useEffect(() => {
     handleStateChange({ sortBy, filters, pageIndex: props.page });
@@ -340,140 +280,50 @@ export const TaskAnalysisTableInternal = (props) => {
             <div className="mr-text-white mr-text-lg">Loading...</div>
           </div>
         )}
-        <table
-          {...getTableProps()}
-          className="mr-table mr-w-full mr-text-white mr-links-green-lighter"
-        >
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <Fragment key={headerGroup.id}>
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => {
-                    // Create separate handlers for sorting and resizing
-                    const headerProps = column.getHeaderProps();
-                    const sortByProps = !column.disableSortBy ? column.getSortByToggleProps() : {};
-
-                    // Make sure to prevent click event conflicts
-                    const onHeaderClick = (e) => {
-                      if (!column.disableSortBy) {
-                        sortByProps.onClick(e);
-                      }
-                    };
-
-                    return (
-                      <th
-                        key={column.id}
-                        className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
-                          !column.disableSortBy ? "mr-sortable-header" : ""
-                        }`}
-                        {...headerProps}
-                        onClick={onHeaderClick}
-                        style={{
-                          ...headerProps.style,
-                          width: column.width,
-                          minWidth: column.minWidth,
-                          maxWidth: column.width,
-                          position: "relative",
-                          cursor: !column.disableSortBy ? "pointer" : "auto",
-                        }}
-                      >
-                        <div className="mr-header-content">
-                          <div className="mr-flex mr-items-center mr-justify-between">
-                            <div
-                              className="mr-flex mr-items-center mr-whitespace-nowrap"
-                              style={{
-                                cursor: !column.disableSortBy ? "pointer" : "auto",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              <span>{column.render("Header")}</span>
-                              {!column.disableSortBy && (
-                                <span className="mr-ml-1 mr-opacity-70">
-                                  {column.isSorted ? (
-                                    column.isSortedDesc ? (
-                                      " ▼"
-                                    ) : (
-                                      " ▲"
-                                    )
-                                  ) : (
-                                    <span className="mr-text-xs mr-opacity-50 mr-inline-block">
-                                      ↕
-                                    </span>
-                                  )}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          {column.canFilter && (
-                            <div
-                              className="mr-header-filter mr-mr-2"
-                              onClick={(e) => e.stopPropagation()}
-                              style={{
-                                overflow: "hidden",
-                                maxWidth: "100%",
-                              }}
-                            >
-                              {column.render("Filter")}
-                            </div>
-                          )}
-                          {!column.disableResizing && (
-                            <div
-                              className={`mr-resizer`}
-                              {...column.getResizerProps()}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
-                            />
-                          )}
-                        </div>
-                      </th>
-                    );
-                  })}
-                </tr>
-              </Fragment>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
-              prepareRow(row);
-              return (
-                <Fragment key={row.original.id}>
-                  <tr
-                    {...row.getRowProps()}
-                    className={`${row.isExpanded ? "mr-bg-black-10" : ""} hover:mr-bg-black-10`}
-                  >
-                    {row.cells.map((cell) => {
-                      return (
-                        <td
-                          {...cell.getCellProps()}
-                          className="mr-px-1 mr-py-1 mr-align-middle mr-border-b mr-border-white-10"
-                          style={{
-                            ...cell.getCellProps().style,
-                            maxWidth: cell.column.width,
-                            minWidth: cell.column.minWidth,
-                            overflow: "hidden",
-                            height: "40px",
-                          }}
-                        >
-                          <div className="mr-cell-content">{cell.render("Cell")}</div>
-                        </td>
-                      );
-                    })}
-                  </tr>
-
-                  {row.isExpanded ? (
-                    <tr>
-                      <td colSpan={columns.length}>
-                        <ViewTaskSubComponent taskId={row.original.id} />
-                      </td>
+        <TableWrapper>
+          <table {...getTableProps()} className={tableStyles}>
+            <thead>{renderTableHeader(headerGroups)}</thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row) => {
+                prepareRow(row);
+                return (
+                  <Fragment key={row.original.id}>
+                    <tr
+                      {...row.getRowProps()}
+                      className={`${row.isExpanded ? "mr-bg-black-10" : ""} ${rowStyles}`}
+                    >
+                      {row.cells.map((cell) => {
+                        return (
+                          <td
+                            {...cell.getCellProps()}
+                            className={cellStyles}
+                            style={{
+                              ...cell.getCellProps().style,
+                              maxWidth: cell.column.width,
+                              minWidth: cell.column.minWidth,
+                              overflow: "hidden",
+                              height: "40px",
+                            }}
+                          >
+                            <div className="mr-cell-content">{cell.render("Cell")}</div>
+                          </td>
+                        );
+                      })}
                     </tr>
-                  ) : null}
-                </Fragment>
-              );
-            })}
-          </tbody>
-        </table>
+
+                    {row.isExpanded ? (
+                      <tr>
+                        <td colSpan={columns.length}>
+                          <ViewTaskSubComponent taskId={row.original.id} />
+                        </td>
+                      </tr>
+                    ) : null}
+                  </Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+        </TableWrapper>
 
         <PaginationControl
           currentPage={props.page ?? 0}
