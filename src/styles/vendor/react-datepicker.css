@@ -1,4 +1,4 @@
-@import "react-datepicker/dist/react-datepicker";
+@import "react-datepicker/dist/react-datepicker.css";
 
 .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle,
 .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::before {

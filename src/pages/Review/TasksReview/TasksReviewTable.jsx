@@ -24,6 +24,7 @@ import PaginationControl from "../../../components/PaginationControl/PaginationC
 import ManageSavedFilters from "../../../components/SavedFilters/ManageSavedFilters";
 import SavedFiltersList from "../../../components/SavedFilters/SavedFiltersList";
 import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
+import { SearchFilter, inputStyles } from "../../../components/TableShared/EnhancedTable";
 import {
   SearchFilter,
   TableContainer,
@@ -97,21 +98,6 @@ export const TaskReviewTable = (props) => {
   const [projectFilterIds, setProjectFilterIds] = useState(
     getFilterIds(props.location.search, "filters.projectId"),
   );
-  const [isResizing, setIsResizing] = useState(false);
-  // Create a storage key based on review tasks type
-  const storageKey = useMemo(() => {
-    return `mrColumnWidths-review-${props.reviewTasksType || "default"}`;
-  }, [props.reviewTasksType]);
-
-  // Load saved column widths from localStorage
-  const [columnWidths, setColumnWidths] = useState(() => {
-    try {
-      const savedWidths = localStorage.getItem(storageKey);
-      return savedWidths ? JSON.parse(savedWidths) : {};
-    } catch (e) {
-      return {};
-    }
-  });
 
   const initialSort = props.reviewCriteria?.sortCriteria
     ? {
@@ -173,6 +159,10 @@ export const TaskReviewTable = (props) => {
 
   // Setup table data and columns
   const data = props.reviewData?.tasks ?? [];
+  const invertFieldsOnLength = Object.values(props.reviewCriteria?.invertFields || {}).filter(
+    Boolean,
+  ).length;
+
   const columnTypes = useMemo(
     () =>
       setupColumnTypes(
@@ -193,6 +183,7 @@ export const TaskReviewTable = (props) => {
       challengeFilterIds,
       projectFilterIds,
       props.pageSize,
+      invertFieldsOnLength,
     ],
   );
 
@@ -558,140 +549,123 @@ export const TaskReviewTable = (props) => {
               <div className="mr-text-white mr-text-lg">Loading...</div>
             </div>
           )}
+          <table {...getTableProps()} className="mr-table mr-w-full">
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <Fragment key={headerGroup.id}>
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => {
+                      // Create separate handlers for sorting and resizing
+                      const headerProps = column.getHeaderProps();
+                      const sortByProps = column.getSortByToggleProps();
 
-          <TableContainer>
-            <table {...getTableProps()} className="mr-table mr-w-full">
-              <thead>
-                {headerGroups.map((headerGroup) => (
-                  <Fragment key={headerGroup.id}>
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => {
-                        // Create separate handlers for sorting and resizing
-                        const headerProps = column.getHeaderProps();
-                        const sortByProps = column.getSortByToggleProps();
+                      // Make sure to prevent click event conflicts
+                      const onHeaderClick = (e) => {
+                        if (!column.disableSortBy) {
+                          sortByProps.onClick(e);
+                        }
+                      };
 
-                        // Make sure to prevent click event conflicts
-                        const onHeaderClick = (e) => {
-                          if (
-                            !columnResizing.isResizingColumn &&
-                            !isResizing &&
-                            !column.disableSortBy
-                          ) {
-                            sortByProps.onClick(e);
-                          }
-                        };
-
-                        return (
-                          <th
-                            key={column.id}
-                            className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
-                              !isResizing && !column.disableSortBy ? "mr-sortable-header" : ""
-                            }`}
-                            {...headerProps}
-                            onClick={onHeaderClick}
-                            style={{
-                              ...headerProps.style,
-                              width: column.width,
-                              minWidth: column.minWidth,
-                              maxWidth: column.width,
-                              position: "relative",
-                              cursor: isResizing
-                                ? "col-resize"
-                                : column.disableSortBy
-                                  ? "default"
-                                  : "pointer",
-                              overflow: "hidden",
-                            }}
-                          >
-                            <div className="mr-header-content">
-                              <div className="mr-flex mr-items-center mr-justify-between">
-                                <div
-                                  className="mr-flex mr-items-center mr-whitespace-nowrap"
-                                  style={{
-                                    cursor: !isResizing
-                                      ? column.disableSortBy
-                                        ? "default"
-                                        : "pointer"
-                                      : "auto",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                  }}
-                                >
-                                  <span>{column.render("Header")}</span>
-                                  <span className="mr-ml-1 mr-opacity-70">
-                                    {column.isSorted
-                                      ? column.isSortedDesc
-                                        ? " ▼"
-                                        : " ▲"
-                                      : !column.disableSortBy && (
-                                          <span className="mr-text-xs mr-opacity-50 mr-inline-block">
-                                            ↕
-                                          </span>
-                                        )}
-                                  </span>
-                                </div>
-                              </div>
-                              {column.canFilter && (
-                                <div
-                                  className="mr-header-filter mr-mr-2"
-                                  onClick={(e) => e.stopPropagation()}
-                                  style={{
-                                    overflow: "hidden",
-                                    maxWidth: "100%",
-                                  }}
-                                >
-                                  {column.render("Filter")}
-                                </div>
-                              )}
+                      return (
+                        <th
+                          key={column.id}
+                          className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
+                            !column.disableSortBy ? "mr-sortable-header" : ""
+                          }`}
+                          {...headerProps}
+                          onClick={onHeaderClick}
+                          style={{
+                            ...headerProps.style,
+                            width: column.width,
+                            minWidth: column.minWidth,
+                            maxWidth: column.width,
+                            position: "relative",
+                            cursor: column.disableSortBy ? "default" : "pointer",
+                          }}
+                        >
+                          <div className="mr-header-content">
+                            <div className="mr-flex mr-items-center mr-justify-between">
                               <div
-                                className={`mr-resizer ${column.isResizing ? "mr-isResizing" : ""}`}
-                                {...column.getResizerProps()}
-                                onClick={(e) => {
-                                  // Stop propagation to prevent sorting when clicking resize handle
-                                  e.stopPropagation();
+                                className="mr-flex mr-items-center mr-whitespace-nowrap"
+                                style={{
+                                  cursor: column.disableSortBy ? "default" : "pointer",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
                                 }}
-                              />
+                              >
+                                <span>{column.render("Header")}</span>
+                                <span className="mr-ml-1 mr-opacity-70">
+                                  {column.isSorted
+                                    ? column.isSortedDesc
+                                      ? " ▼"
+                                      : " ▲"
+                                    : !column.disableSortBy && (
+                                        <span className="mr-text-xs mr-opacity-50 mr-inline-block">
+                                          ↕
+                                        </span>
+                                      )}
+                                </span>
+                              </div>
                             </div>
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </Fragment>
-                ))}
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {page.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <tr
-                      className="mr-border-y mr-border-white-10 hover:mr-bg-black-10"
-                      {...row.getRowProps()}
-                      key={row.id}
-                    >
-                      {row.cells.map((cell) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            className="mr-px-1 mr-py-1 mr-align-middle"
-                            style={{
-                              ...cell.getCellProps().style,
-                              maxWidth: cell.column.width,
-                              minWidth: cell.column.minWidth,
-                              overflow: "hidden",
-                              height: "40px",
-                            }}
-                          >
-                            <div className="mr-cell-content">{cell.render("Cell")}</div>
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </TableContainer>
-
+                            {column.canFilter && (
+                              <div
+                                className="mr-header-filter mr-mr-2"
+                                onClick={(e) => e.stopPropagation()}
+                                style={{
+                                  overflow: "hidden",
+                                  maxWidth: "100%",
+                                }}
+                              >
+                                {column.render("Filter")}
+                              </div>
+                            )}
+                            <div
+                              className={`mr-resizer`}
+                              {...column.getResizerProps()}
+                              onClick={(e) => {
+                                // Stop propagation to prevent sorting when clicking resize handle
+                                e.stopPropagation();
+                              }}
+                            />
+                          </div>
+                        </th>
+                      );
+                    })}
+                  </tr>
+                </Fragment>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr
+                    className="mr-border-y mr-border-white-10 hover:mr-bg-black-10"
+                    {...row.getRowProps()}
+                    key={row.id}
+                  >
+                    {row.cells.map((cell) => {
+                      return (
+                        <td
+                          {...cell.getCellProps()}
+                          className="mr-px-1 mr-py-1 mr-align-middle"
+                          style={{
+                            ...cell.getCellProps().style,
+                            maxWidth: cell.column.width,
+                            minWidth: cell.column.minWidth,
+                            overflow: "hidden",
+                            height: "40px",
+                          }}
+                        >
+                          <div className="mr-cell-content">{cell.render("Cell")}</div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
           <PaginationControl
             currentPage={pageIndex}
             totalPages={Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize)}
@@ -1288,20 +1262,15 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div
-          className="mr-flex mr-items-center mr-w-full mr-relative mr-z-20"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="mr-flex-grow mr-relative">
-            <IntlDatePicker
-              selected={reviewedAt}
-              onChange={(value) => {
-                setFilter(value);
-              }}
-              intl={props.intl}
-              className={inputStyles}
-            />
-          </div>
+        <div className="mr-space-x-1" onClick={(e) => e.stopPropagation()}>
+          <IntlDatePicker
+            selected={reviewedAt}
+            onChange={(value) => {
+              setFilter(value);
+            }}
+            intl={props.intl}
+            className={inputStyles}
+          />
           {reviewedAt && (
             <button
               className="mr-filter-clear mr-ml-2 mr-absolute mr-right-2"
@@ -1343,20 +1312,15 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div
-          className="mr-flex mr-items-center mr-w-full mr-relative mr-z-20"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="mr-flex-grow mr-relative">
-            <IntlDatePicker
-              selected={metaReviewedAt}
-              onChange={(value) => {
-                setFilter(value);
-              }}
-              intl={props.intl}
-              className={inputStyles}
-            />
-          </div>
+        <div className="mr-space-x-1" onClick={(e) => e.stopPropagation()}>
+          <IntlDatePicker
+            selected={metaReviewedAt}
+            onChange={(value) => {
+              setFilter(value);
+            }}
+            intl={props.intl}
+            className={inputStyles}
+          />
           {metaReviewedAt && (
             <button
               className="mr-filter-clear mr-ml-2 mr-absolute mr-right-2"

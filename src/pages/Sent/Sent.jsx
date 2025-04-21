@@ -4,12 +4,7 @@ import { Link } from "react-router-dom";
 import { usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import PaginationControl from "../../components/PaginationControl/PaginationControl";
-import {
-  TableContainer,
-  renderTableHeader,
-  useColumnWidthStorage,
-  useResizingState,
-} from "../../components/TableShared/ResizableTable";
+import { renderTableHeader } from "../../components/TableShared/EnhancedTable";
 import CommentType from "../../services/Comment/CommentType";
 import { keysByReviewStatus } from "../../services/Task/TaskReview/TaskReviewStatus";
 import { TaskStatusColors, keysByStatus } from "../../services/Task/TaskStatus/TaskStatus";
@@ -36,12 +31,6 @@ const Sent = (props) => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedComment, setSelectedComment] = useState(null);
 
-  // Create a storage key for column widths
-  const storageKey = `mrColumnWidths-sent-${commentType}`;
-
-  // Initialize column widths with storage
-  const [columnWidths, saveColumnWidths] = useColumnWidthStorage(storageKey);
-
   const data = comments.data;
 
   const getColumns = useCallback(() => {
@@ -51,7 +40,7 @@ const Sent = (props) => {
         Header: "Task ID",
         accessor: "taskId",
         Cell: ({ value }) => (value ? <Link to={`task/${value}`}>{value}</Link> : null),
-        width: columnWidths["task_id"] || 100,
+        width: 100,
       },
       {
         id: "created",
@@ -63,7 +52,7 @@ const Sent = (props) => {
               <FormattedDate value={value} /> <FormattedTime value={value} />
             </div>
           ) : null,
-        width: columnWidths["created"] || 180,
+        width: 180,
       },
       {
         id: "comment",
@@ -78,7 +67,7 @@ const Sent = (props) => {
               {value}
             </button>
           ) : null,
-        width: columnWidths["comment"] || 300,
+        width: 300,
       },
       {
         id: "task_status",
@@ -94,7 +83,7 @@ const Sent = (props) => {
             </span>
           );
         },
-        width: columnWidths["task_status"] || 140,
+        width: 140,
       },
       {
         id: "review_status",
@@ -105,7 +94,7 @@ const Sent = (props) => {
           const statusKey = keysByReviewStatus[value];
           return <span>{statusKey ? statusKey.toUpperCase() : value}</span>;
         },
-        width: columnWidths["review_status"] || 140,
+        width: 140,
       },
     ];
 
@@ -122,7 +111,7 @@ const Sent = (props) => {
             </Link>
           );
         },
-        width: columnWidths["challenge_name"] || 200,
+        width: 200,
       },
       {
         id: "created",
@@ -134,7 +123,7 @@ const Sent = (props) => {
               <FormattedDate value={value} /> <FormattedTime value={value} />
             </div>
           ) : null,
-        width: columnWidths["created"] || 180,
+        width: 180,
       },
       {
         id: "comment",
@@ -151,12 +140,12 @@ const Sent = (props) => {
             </button>
           );
         },
-        width: columnWidths["comment"] || 400,
+        width: 400,
       },
     ];
 
     return commentType === CommentType.TASK ? baseTaskColumns : baseChallengeColumns;
-  }, [commentType, columnWidths]);
+  }, [commentType]);
 
   const columns = useMemo(() => getColumns(), [getColumns]);
 
@@ -243,40 +232,37 @@ const Sent = (props) => {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
+        <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
+          <thead>{renderTableHeader(headerGroups)}</thead>
 
-        <TableContainer>
-          <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
-            <thead>{renderTableHeader(headerGroups, isResizing, columnResizing)}</thead>
-
-            <tbody {...getTableBodyProps()}>
-              {rows.map((row) => {
-                prepareRow(row);
-                return (
-                  <tr className="hover:mr-bg-black-10" {...row.getRowProps()} key={row.id}>
-                    {row.cells.map((cell) => {
-                      return (
-                        <td
-                          className="mr-px-1 mr-py-1 mr-border-b mr-border-white-10"
-                          {...cell.getCellProps()}
-                          style={{
-                            ...cell.getCellProps().style,
-                            maxWidth: cell.column.width,
-                            minWidth: cell.column.minWidth,
-                            overflow: "hidden",
-                            height: "40px",
-                          }}
-                          key={cell.column.id}
-                        >
-                          <div className="mr-cell-content">{cell.render("Cell")}</div>
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </TableContainer>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr className="hover:mr-bg-black-10" {...row.getRowProps()} key={row.id}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        className="mr-px-1 mr-py-1 mr-border-b mr-border-white-10"
+                        {...cell.getCellProps()}
+                        style={{
+                          ...cell.getCellProps().style,
+                          maxWidth: cell.column.width,
+                          minWidth: cell.column.minWidth,
+                          overflow: "hidden",
+                          height: "40px",
+                        }}
+                        key={cell.column.id}
+                      >
+                        <div className="mr-cell-content">{cell.render("Cell")}</div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
         <PaginationControl
           currentPage={pagination.page}
@@ -286,7 +272,6 @@ const Sent = (props) => {
           setPageSize={(pageSize) => setPagination({ ...pagination, pageSize })}
         />
 
-        {/* Render the notification modal */}
         {selectedComment && (
           <Notification
             id={

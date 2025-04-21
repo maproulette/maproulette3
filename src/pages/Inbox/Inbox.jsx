@@ -12,12 +12,9 @@ import PaginationControl from "../../components/PaginationControl/PaginationCont
 import SignInButton from "../../components/SignInButton/SignInButton";
 import {
   SearchFilter,
-  TableContainer,
   inputStyles,
   renderTableHeader,
-  useColumnWidthStorage,
-  useResizingState,
-} from "../../components/TableShared/ResizableTable";
+} from "../../components/TableShared/EnhancedTable";
 import {
   NotificationType,
   keysByNotificationType,
@@ -154,7 +151,7 @@ const Inbox = (props) => {
             />
           );
         },
-        width: columnWidths["selected"] || 40,
+        width: 40,
         minWidth: 40,
         disableSortBy: true,
         disableResizing: true,
@@ -184,7 +181,7 @@ const Inbox = (props) => {
             </div>
           );
         },
-        width: columnWidths["taskId"] || 100,
+        width: 100,
         minWidth: 80,
       },
       {
@@ -212,7 +209,7 @@ const Inbox = (props) => {
             </span>
           </div>
         ),
-        width: columnWidths["notificationType"] || 180,
+        width: 180,
         minWidth: 120,
       },
       {
@@ -227,7 +224,7 @@ const Inbox = (props) => {
             </time>
           </div>
         ),
-        width: columnWidths["created"] || 160,
+        width: 160,
         minWidth: 140,
       },
       {
@@ -243,7 +240,7 @@ const Inbox = (props) => {
           />
         ),
         Cell: ({ value }) => <div className="mr-cell-content">{value}</div>,
-        width: columnWidths["fromUsername"] || 150,
+        width: 150,
         minWidth: 120,
       },
       {
@@ -259,7 +256,7 @@ const Inbox = (props) => {
           />
         ),
         Cell: ({ value }) => <div className="mr-cell-content">{value}</div>,
-        width: columnWidths["challengeName"] || 180,
+        width: 180,
         minWidth: 150,
       },
       {
@@ -277,7 +274,7 @@ const Inbox = (props) => {
             </ol>
           </div>
         ),
-        width: columnWidths["controls"] || 100,
+        width: 100,
         minWidth: 80,
         disableSortBy: true,
       },
@@ -352,55 +349,51 @@ const Inbox = (props) => {
           markReadSelected={markReadSelected}
           deleteSelected={deleteSelected}
         />
-
-        <TableContainer>
-          <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
-            <thead>{renderTableHeader(headerGroups, isResizing, columnResizing)}</thead>
-            <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
-                prepareRow(row);
-                return (
-                  <tr
-                    key={row.id}
-                    {...row.getRowProps()}
-                    className="mr-border-y mr-border-white-10 mr-cursor-pointer hover:mr-bg-black-10"
-                    style={{
-                      fontWeight: !row.original.isRead ? 700 : 400,
-                      textDecoration: !row.original.isRead ? "none" : "line-through",
-                      opacity: !row.original.isRead ? 1.0 : 0.5,
-                    }}
-                    onClick={() => readNotification(row.original, threads[row.original.taskId])}
-                  >
-                    {row.cells.map((cell) => {
-                      return (
-                        <td
-                          key={cell.column.id}
-                          className="mr-px-2 mr-align-middle"
-                          {...cell.getCellProps()}
-                          style={{
-                            ...cell.getCellProps().style,
-                            maxWidth: cell.column.width,
-                            minWidth: cell.column.minWidth,
-                            overflow: "hidden",
-                            height: "40px",
-                          }}
-                          onClick={(e) => {
-                            if (cell.column.id === "selected") {
-                              e.stopPropagation();
-                            }
-                          }}
-                        >
-                          {cell.render("Cell")}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </TableContainer>
-
+        <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
+          <thead>{renderTableHeader(headerGroups)}</thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr
+                  key={row.id}
+                  {...row.getRowProps()}
+                  className="mr-border-y mr-border-white-10 mr-cursor-pointer hover:mr-bg-black-10"
+                  style={{
+                    fontWeight: !row.original.isRead ? 700 : 400,
+                    textDecoration: !row.original.isRead ? "none" : "line-through",
+                    opacity: !row.original.isRead ? 1.0 : 0.5,
+                  }}
+                  onClick={() => readNotification(row.original, threads[row.original.taskId])}
+                >
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        key={cell.column.id}
+                        className="mr-px-2 mr-align-middle"
+                        {...cell.getCellProps()}
+                        style={{
+                          ...cell.getCellProps().style,
+                          maxWidth: cell.column.width,
+                          minWidth: cell.column.minWidth,
+                          overflow: "hidden",
+                          height: "40px",
+                        }}
+                        onClick={(e) => {
+                          if (cell.column.id === "selected") {
+                            e.stopPropagation();
+                          }
+                        }}
+                      >
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
         <PaginationControl
           currentPage={pageIndex}
           totalPages={totalPages}

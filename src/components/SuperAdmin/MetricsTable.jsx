@@ -4,12 +4,7 @@ import { usePagination, useResizeColumns, useSortBy, useTable } from "react-tabl
 import BusySpinner from "../BusySpinner/BusySpinner";
 import WithSortedChallenges from "../HOCs/WithSortedChallenges/WithSortedChallenges";
 import PaginationControl from "../PaginationControl/PaginationControl";
-import {
-  TableContainer,
-  renderTableHeader,
-  useColumnWidthStorage,
-  useResizingState,
-} from "../TableShared/ResizableTable";
+import { renderTableHeader } from "../TableShared/EnhancedTable";
 import { CHALLENGE_COLUMNS, PROJECT_COLUMNS, USER_COLUMNS } from "./MetricsData";
 import WithMetricsSearchResults from "./WithMetricsSearchResults";
 import WithSortedProjects from "./WithSortedProjects";
@@ -121,39 +116,36 @@ const MetricsTable = (props) => {
 
   return (
     <section>
-      <TableContainer>
-        <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
-          <thead>{renderTableHeader(headerGroups, isResizing, columnResizing)}</thead>
+      <table className="mr-w-full mr-text-white mr-links-green-lighter" {...getTableProps()}>
+        <thead>{renderTableHeader(headerGroups)}</thead>
 
-          <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
-              prepareRow(row);
-              return (
-                <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()} key={row.id}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        className="mr-px-2 mr-py-1 mr-whitespace-nowrap"
-                        {...cell.getCellProps()}
-                        key={cell.column.id}
-                        style={{
-                          ...cell.getCellProps().style,
-                          maxWidth: cell.column.width,
-                          minWidth: cell.column.minWidth,
-                          overflow: "hidden",
-                          height: "40px",
-                        }}
-                      >
-                        <div className="mr-cell-content">{cell.render("Cell")}</div>
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </TableContainer>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row) => {
+            prepareRow(row);
+            return (
+              <tr className="mr-border-y mr-border-white-10" {...row.getRowProps()} key={row.id}>
+                {row.cells.map((cell) => {
+                  return (
+                    <td
+                      className="mr-px-2 mr-whitespace-nowrap"
+                      {...cell.getCellProps()}
+                      key={cell.column.id}
+                      style={{
+                        ...cell.getCellProps().style,
+                        maxWidth: cell.column.width,
+                        minWidth: cell.column.minWidth,
+                        overflow: "hidden",
+                      }}
+                    >
+                      <div className="mr-cell-content">{cell.render("Cell")}</div>
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       <PaginationControl
         currentPage={pageIndex}
         totalPages={Math.ceil(data.length / pageSize)}

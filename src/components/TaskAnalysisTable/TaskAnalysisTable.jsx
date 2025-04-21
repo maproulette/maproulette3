@@ -32,11 +32,12 @@ import WithConfigurableColumns from "../HOCs/WithConfigurableColumns/WithConfigu
 import WithLoadedTask from "../HOCs/WithLoadedTask/WithLoadedTask";
 import PaginationControl from "../PaginationControl/PaginationControl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import { SearchFilter, TableContainer, inputStyles } from "../TableShared/ResizableTable";
+import { SearchFilter, inputStyles } from "../TableShared/EnhancedTable";
 import ViewTask from "../ViewTask/ViewTask";
 import messages from "./Messages";
 import TaskAnalysisTableHeader from "./TaskAnalysisTableHeader";
 import { StatusLabel, ViewCommentsButton, makeInvertable } from "./TaskTableHelpers";
+import IntlDatePicker from "../IntlDatePicker/IntlDatePicker";
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask);
@@ -196,7 +197,6 @@ export const TaskAnalysisTableInternal = (props) => {
     ];
 
     if (Array.isArray(props.showColumns) && props.showColumns.length > 0) {
-      // When explicit columns are specified, add expander first, then selected columns
       return [
         ...baseColumns,
         ...props.showColumns.map((columnId) => columnTypes[columnId]).filter(Boolean),
@@ -228,19 +228,6 @@ export const TaskAnalysisTableInternal = (props) => {
       ];
     }
   }, [props.showColumns?.length, props.addedColumns]);
-
-  // Apply stored column widths to the columns config
-  const columnsWithStoredWidths = useMemo(() => {
-    return columns.map((column) => {
-      if (columnWidths[column.id]) {
-        return {
-          ...column,
-          width: columnWidths[column.id],
-        };
-      }
-      return column;
-    });
-  }, [columns, columnWidths]);
 
   const {
     getTableProps,
@@ -353,155 +340,140 @@ export const TaskAnalysisTableInternal = (props) => {
             <div className="mr-text-white mr-text-lg">Loading...</div>
           </div>
         )}
+        <table
+          {...getTableProps()}
+          className="mr-table mr-w-full mr-text-white mr-links-green-lighter"
+        >
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <Fragment key={headerGroup.id}>
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => {
+                    // Create separate handlers for sorting and resizing
+                    const headerProps = column.getHeaderProps();
+                    const sortByProps = !column.disableSortBy ? column.getSortByToggleProps() : {};
 
-        <TableContainer>
-          <table
-            {...getTableProps()}
-            className="mr-table mr-w-full mr-text-white mr-links-green-lighter"
-          >
-            <thead>
-              {headerGroups.map((headerGroup) => (
-                <Fragment key={headerGroup.id}>
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => {
-                      // Create separate handlers for sorting and resizing
-                      const headerProps = column.getHeaderProps();
-                      const sortByProps = !column.disableSortBy
-                        ? column.getSortByToggleProps()
-                        : {};
+                    // Make sure to prevent click event conflicts
+                    const onHeaderClick = (e) => {
+                      if (!column.disableSortBy) {
+                        sortByProps.onClick(e);
+                      }
+                    };
 
-                      // Make sure to prevent click event conflicts
-                      const onHeaderClick = (e) => {
-                        if (
-                          !column.disableSortBy &&
-                          !columnResizing.isResizingColumn &&
-                          !isResizing
-                        ) {
-                          sortByProps.onClick(e);
-                        }
-                      };
-
+                    return (
+                      <th
+                        key={column.id}
+                        className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
+                          !column.disableSortBy ? "mr-sortable-header" : ""
+                        }`}
+                        {...headerProps}
+                        onClick={onHeaderClick}
+                        style={{
+                          ...headerProps.style,
+                          width: column.width,
+                          minWidth: column.minWidth,
+                          maxWidth: column.width,
+                          position: "relative",
+                          cursor: !column.disableSortBy ? "pointer" : "auto",
+                        }}
+                      >
+                        <div className="mr-header-content">
+                          <div className="mr-flex mr-items-center mr-justify-between">
+                            <div
+                              className="mr-flex mr-items-center mr-whitespace-nowrap"
+                              style={{
+                                cursor: !column.disableSortBy ? "pointer" : "auto",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                            >
+                              <span>{column.render("Header")}</span>
+                              {!column.disableSortBy && (
+                                <span className="mr-ml-1 mr-opacity-70">
+                                  {column.isSorted ? (
+                                    column.isSortedDesc ? (
+                                      " ▼"
+                                    ) : (
+                                      " ▲"
+                                    )
+                                  ) : (
+                                    <span className="mr-text-xs mr-opacity-50 mr-inline-block">
+                                      ↕
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          {column.canFilter && (
+                            <div
+                              className="mr-header-filter mr-mr-2"
+                              onClick={(e) => e.stopPropagation()}
+                              style={{
+                                overflow: "hidden",
+                                maxWidth: "100%",
+                              }}
+                            >
+                              {column.render("Filter")}
+                            </div>
+                          )}
+                          {!column.disableResizing && (
+                            <div
+                              className={`mr-resizer`}
+                              {...column.getResizerProps()}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                              }}
+                            />
+                          )}
+                        </div>
+                      </th>
+                    );
+                  })}
+                </tr>
+              </Fragment>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <Fragment key={row.original.id}>
+                  <tr
+                    {...row.getRowProps()}
+                    className={`${row.isExpanded ? "mr-bg-black-10" : ""} hover:mr-bg-black-10`}
+                  >
+                    {row.cells.map((cell) => {
                       return (
-                        <th
-                          key={column.id}
-                          className={`mr-text-left mr-px-2 mr-py-2 mr-border-b mr-border-white-10 ${
-                            !column.disableSortBy && !isResizing ? "mr-sortable-header" : ""
-                          }`}
-                          {...headerProps}
-                          onClick={onHeaderClick}
+                        <td
+                          {...cell.getCellProps()}
+                          className="mr-px-1 mr-py-1 mr-align-middle mr-border-b mr-border-white-10"
                           style={{
-                            ...headerProps.style,
-                            width: column.width,
-                            minWidth: column.minWidth,
-                            maxWidth: column.width,
-                            position: "relative",
-                            cursor: isResizing
-                              ? "col-resize"
-                              : !column.disableSortBy
-                                ? "pointer"
-                                : "auto",
+                            ...cell.getCellProps().style,
+                            maxWidth: cell.column.width,
+                            minWidth: cell.column.minWidth,
                             overflow: "hidden",
+                            height: "40px",
                           }}
                         >
-                          <div className="mr-header-content">
-                            <div className="mr-flex mr-items-center mr-justify-between">
-                              <div
-                                className="mr-flex mr-items-center mr-whitespace-nowrap"
-                                style={{
-                                  cursor: !column.disableSortBy && !isResizing ? "pointer" : "auto",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                <span>{column.render("Header")}</span>
-                                {!column.disableSortBy && (
-                                  <span className="mr-ml-1 mr-opacity-70">
-                                    {column.isSorted ? (
-                                      column.isSortedDesc ? (
-                                        " ▼"
-                                      ) : (
-                                        " ▲"
-                                      )
-                                    ) : (
-                                      <span className="mr-text-xs mr-opacity-50 mr-inline-block">
-                                        ↕
-                                      </span>
-                                    )}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            {column.canFilter && (
-                              <div
-                                className="mr-header-filter mr-mr-2"
-                                onClick={(e) => e.stopPropagation()}
-                                style={{
-                                  overflow: "hidden",
-                                  maxWidth: "100%",
-                                }}
-                              >
-                                {column.render("Filter")}
-                              </div>
-                            )}
-                            {!column.disableResizing && (
-                              <div
-                                className={`mr-resizer ${column.isResizing ? "mr-isResizing" : ""}`}
-                                {...column.getResizerProps()}
-                                onClick={(e) => {
-                                  // Stop propagation to prevent sorting when clicking resize handle
-                                  e.stopPropagation();
-                                }}
-                              />
-                            )}
-                          </div>
-                        </th>
+                          <div className="mr-cell-content">{cell.render("Cell")}</div>
+                        </td>
                       );
                     })}
                   </tr>
-                </Fragment>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
-                prepareRow(row);
-                return (
-                  <Fragment key={row.original.id}>
-                    <tr
-                      {...row.getRowProps()}
-                      className={`${row.isExpanded ? "mr-bg-black-10" : ""} hover:mr-bg-black-10`}
-                    >
-                      {row.cells.map((cell) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            className="mr-px-1 mr-py-1 mr-align-middle mr-border-b mr-border-white-10"
-                            style={{
-                              ...cell.getCellProps().style,
-                              maxWidth: cell.column.width,
-                              minWidth: cell.column.minWidth,
-                              overflow: "hidden",
-                              height: "40px",
-                            }}
-                          >
-                            <div className="mr-cell-content">{cell.render("Cell")}</div>
-                          </td>
-                        );
-                      })}
-                    </tr>
 
-                    {row.isExpanded ? (
-                      <tr>
-                        <td colSpan={columns.length}>
-                          <ViewTaskSubComponent taskId={row.original.id} />
-                        </td>
-                      </tr>
-                    ) : null}
-                  </Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-        </TableContainer>
+                  {row.isExpanded ? (
+                    <tr>
+                      <td colSpan={columns.length}>
+                        <ViewTaskSubComponent taskId={row.original.id} />
+                      </td>
+                    </tr>
+                  ) : null}
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
 
         <PaginationControl
           currentPage={props.page ?? 0}
@@ -747,6 +719,37 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     minWidth: 150,
+    Filter: ({ column: { setFilter, filterValue } }) => {
+      let mappedOn = filterValue;
+      if (typeof mappedOn === "string" && mappedOn !== "") {
+        mappedOn = parseISO(mappedOn);
+      }
+
+      return (
+        <div>
+          <IntlDatePicker
+            selected={mappedOn}
+            onChange={(value) => {
+              setFilter(value);
+            }}
+            intl={props.intl}
+          />
+
+          {mappedOn && (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
+              onClick={() => setFilter(undefined)}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
+            </button>
+          )}
+        </div>
+      );
+    },
   };
 
   columns.completedDuration = {
@@ -807,6 +810,37 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     },
     width: 150,
     minWidth: 150,
+    Filter: ({ column: { setFilter, filterValue } }) => {
+      let reviewedAt = filterValue;
+      if (typeof reviewedAt === "string" && reviewedAt !== "") {
+        reviewedAt = parseISO(reviewedAt);
+      }
+
+      return (
+        <div>
+          <IntlDatePicker
+            selected={reviewedAt}
+            onChange={(value) => {
+              setFilter(value);
+            }}
+            intl={props.intl}
+          />
+
+          {reviewedAt && (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
+              onClick={() => setFilter(undefined)}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
+            </button>
+          )}
+        </div>
+      );
+    },
   };
 
   columns.metaReviewedAt = {
@@ -823,6 +857,37 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     },
     width: 150,
     minWidth: 150,
+    Filter: ({ column: { setFilter, filterValue } }) => {
+      let metaReviewedAt = filterValue;
+      if (typeof metaReviewedAt === "string" && metaReviewedAt !== "") {
+        metaReviewedAt = parseISO(metaReviewedAt);
+      }
+
+      return (
+        <div>
+          <IntlDatePicker
+            selected={metaReviewedAt}
+            onChange={(value) => {
+              setFilter(value);
+            }}
+            intl={props.intl}
+          />
+
+          {metaReviewedAt && (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
+              onClick={() => setFilter(undefined)}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
+            </button>
+          )}
+        </div>
+      );
+    },
   };
 
   columns.reviewDuration = {
@@ -901,7 +966,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 155,
-
     minWidth: 155,
   };
 
