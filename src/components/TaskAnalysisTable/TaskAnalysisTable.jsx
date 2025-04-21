@@ -605,7 +605,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       }
 
       return (
-        <div>
+        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
           <IntlDatePicker
             selected={mappedOn}
             onChange={(value) => {
@@ -696,7 +696,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       }
 
       return (
-        <div>
+        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
           <IntlDatePicker
             selected={reviewedAt}
             onChange={(value) => {
@@ -743,7 +743,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       }
 
       return (
-        <div>
+        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
           <IntlDatePicker
             selected={metaReviewedAt}
             onChange={(value) => {

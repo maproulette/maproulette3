@@ -1092,7 +1092,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-space-x-1" onClick={(e) => e.stopPropagation()}>
+        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
           <IntlDatePicker
             selected={mappedOn}
             onChange={(value) => {
@@ -1139,7 +1139,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-space-x-1" onClick={(e) => e.stopPropagation()}>
+        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
           <IntlDatePicker
             selected={reviewedAt}
             onChange={(value) => {
@@ -1189,7 +1189,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-space-x-1" onClick={(e) => e.stopPropagation()}>
+        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
           <IntlDatePicker
             selected={metaReviewedAt}
             onChange={(value) => {
