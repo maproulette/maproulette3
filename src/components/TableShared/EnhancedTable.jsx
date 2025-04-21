@@ -1,6 +1,6 @@
 import React from "react";
 import "./EnhancedTable.scss";
-import { inputStyles, headerStyles, sortableHeaderStyles, tableWrapperStyles } from "./TableStyles";
+import { headerStyles, inputStyles, sortableHeaderStyles, tableWrapperStyles } from "./TableStyles";
 
 /**
  * A simple search filter component for react-table
