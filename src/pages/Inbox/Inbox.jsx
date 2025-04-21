@@ -10,6 +10,7 @@ import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUs
 import WithUserNotifications from "../../components/HOCs/WithUserNotifications/WithUserNotifications";
 import PaginationControl from "../../components/PaginationControl/PaginationControl";
 import SignInButton from "../../components/SignInButton/SignInButton";
+import SvgSymbol from "../../components/SvgSymbol/SvgSymbol";
 import {
   SearchFilter,
   TableWrapper,
@@ -162,12 +163,26 @@ const Inbox = (props) => {
         Header: props.intl.formatMessage(messages.taskIdLabel),
         accessor: "taskId",
         Filter: ({ column: { filterValue, setFilter } }) => (
-          <SearchFilter
-            value={filterValue}
-            onChange={setFilter}
-            placeholder="Search task ID..."
-            inputClassName={inputStyles}
-          />
+          <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+            <SearchFilter
+              value={filterValue}
+              onChange={setFilter}
+              placeholder="Search task ID..."
+              inputClassName={inputStyles}
+            />
+            {filterValue && (
+              <button
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => setFilter(null)}
+              >
+                <SvgSymbol
+                  sym="icon-close"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+                />
+              </button>
+            )}
+          </div>
         ),
         Cell: ({ value, row }) => {
           const displayId = value === row.original.challengeName ? "" : value;
@@ -192,6 +207,7 @@ const Inbox = (props) => {
         Filter: ({ column: { setFilter } }) => (
           <select
             className={inputStyles}
+            style={{ width: "90%" }}
             onChange={(e) => setFilter(e.target.value === "all" ? null : +e.target.value)}
             onClick={(e) => e.stopPropagation()}
           >
@@ -233,12 +249,26 @@ const Inbox = (props) => {
         Header: props.intl.formatMessage(messages.fromUsernameLabel),
         accessor: "fromUsername",
         Filter: ({ column: { filterValue, setFilter } }) => (
-          <SearchFilter
-            value={filterValue}
-            onChange={setFilter}
-            placeholder="Search username..."
-            inputClassName={inputStyles}
-          />
+          <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+            <SearchFilter
+              value={filterValue}
+              onChange={setFilter}
+              placeholder="Search username..."
+              inputClassName={inputStyles}
+            />
+            {filterValue && (
+              <button
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => setFilter(null)}
+              >
+                <SvgSymbol
+                  sym="icon-close"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+                />
+              </button>
+            )}
+          </div>
         ),
         Cell: ({ value }) => <div className="mr-cell-content">{value}</div>,
         width: 150,
@@ -249,12 +279,26 @@ const Inbox = (props) => {
         Header: props.intl.formatMessage(messages.challengeNameLabel),
         accessor: "challengeName",
         Filter: ({ column: { filterValue, setFilter } }) => (
-          <SearchFilter
-            value={filterValue}
-            onChange={setFilter}
-            placeholder="Search challenge..."
-            inputClassName={inputStyles}
-          />
+          <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+            <SearchFilter
+              value={filterValue}
+              onChange={setFilter}
+              placeholder="Search challenge..."
+              inputClassName={inputStyles}
+            />
+            {filterValue && (
+              <button
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => setFilter(null)}
+              >
+                <SvgSymbol
+                  sym="icon-close"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+                />
+              </button>
+            )}
+          </div>
         ),
         Cell: ({ value }) => <div className="mr-cell-content">{value}</div>,
         width: 180,

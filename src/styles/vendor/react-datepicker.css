@@ -11,7 +11,7 @@
 
   &__input-container {
     input[type="text"] {
-      @apply mr-appearance-none mr-outline-none mr-w-full mr-py-2 mr-px-4 mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner mr-w-full;
+      @apply mr-appearance-none mr-outline-none mr-w-full mr-py-1 mr-px-4 mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner mr-w-full;
     }
   }
 

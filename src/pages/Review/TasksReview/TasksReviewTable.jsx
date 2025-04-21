@@ -818,6 +818,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
           <select
             onChange={(event) => setFilter(event.target.value)}
             className={inputStyles}
+            style={{ width: "90%" }}
             value={filterValue || "all"}
           >
             {options}
@@ -871,6 +872,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
           <select
             onChange={(event) => setFilter(event.target.value)}
             className={inputStyles}
+            style={{ width: "90%" }}
             value={filterValue || "all"}
           >
             {options}
@@ -1323,6 +1325,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
           <select
             onChange={(event) => setFilter(event.target.value)}
             className={inputStyles}
+            style={{ width: "90%" }}
             value={filterValue || "all"}
           >
             {options}
@@ -1405,6 +1408,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
           <select
             onChange={(event) => setFilter(event.target.value)}
             className={inputStyles}
+            style={{ width: "90%" }}
             value={filterValue || "all"}
           >
             {options}

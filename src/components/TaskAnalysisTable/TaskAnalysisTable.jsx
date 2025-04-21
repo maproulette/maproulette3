@@ -398,12 +398,26 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     accessor: (t) => t.name || t.title,
     Cell: ({ value }) => value || "",
     Filter: ({ column: { filterValue, setFilter } }) => (
-      <SearchFilter
-        value={filterValue}
-        onChange={setFilter}
-        placeholder="Search feature ID..."
-        inputClassName={inputStyles}
-      />
+      <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search feature ID..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+            onClick={() => setFilter(null)}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
     ),
     disableSortBy: true,
   };
@@ -458,12 +472,26 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       }
     },
     Filter: ({ column: { filterValue, setFilter } }) => (
-      <SearchFilter
-        value={filterValue}
-        onChange={setFilter}
-        placeholder="Search ID..."
-        inputClassName={inputStyles}
-      />
+      <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search ID..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+            onClick={() => setFilter(null)}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
     ),
   };
 
@@ -947,12 +975,26 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       ].filter(Boolean);
 
       return (
-        <InTableTagFilter
-          {...props}
-          preferredTags={preferredTags}
-          onChange={setFilter}
-          value={filterValue ?? ""}
-        />
+        <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+          <InTableTagFilter
+            {...props}
+            preferredTags={preferredTags}
+            onChange={setFilter}
+            value={filterValue ?? ""}
+          />
+          {filterValue && (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => setFilter(null)}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+              />
+            </button>
+          )}
+        </div>
       );
     },
     width: 120,
