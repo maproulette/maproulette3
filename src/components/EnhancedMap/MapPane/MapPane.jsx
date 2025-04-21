@@ -33,11 +33,10 @@ export class MapPane extends Component {
       cloneElement(child, { ...this.props }),
     );
 
-    const isLeftPanel =
-      ["leftPanel", "rightPanel"].includes(this.props.currentConfiguration?.type);
+    const isLeftPanel = ["leftPanel", "rightPanel"].includes(this.props.currentConfiguration?.type);
 
     return (
-      <div className="map-pane" style={{ height: isLeftPanel &&  "calc(100vh - 260px)" }}>
+      <div className="map-pane" style={{ height: isLeftPanel && "calc(100vh - 260px)" }}>
         {childrenWithProps}
       </div>
     );

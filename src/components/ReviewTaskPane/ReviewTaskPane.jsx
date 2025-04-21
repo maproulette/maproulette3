@@ -222,6 +222,6 @@ export default WithChallengePreferences(
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup,
-    defaultWorkspaceSetupAlt
+    defaultWorkspaceSetupAlt,
   ),
 );
