@@ -209,7 +209,7 @@ export const TaskAnalysisTableInternal = (props) => {
           .filter(Boolean),
       ];
     }
-  }, [props.showColumns?.length, props.addedColumns]);
+  }, [props.showColumns?.length, props.addedColumns, props.taskBundle]);
 
   const {
     getTableProps,
