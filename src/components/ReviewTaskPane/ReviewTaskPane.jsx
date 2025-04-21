@@ -19,6 +19,9 @@ import TaskMap from "../TaskPane/TaskMap/TaskMap";
 import WidgetWorkspace from "../WidgetWorkspace/WidgetWorkspace";
 import messages from "./Messages";
 import "./ReviewTaskPane.scss";
+import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
+import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
+const EnhancedTaskMapWidget = WithKeyboardShortcuts(TaskMapWidget);
 
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails);
@@ -45,6 +48,29 @@ export const defaultWorkspaceSetup = function () {
       { i: generateWidgetId(), x: 4, y: 0, w: 8, h: 18 },
     ],
     excludeWidgets: ["TaskCompletionWidget", "TagDiffWidget"],
+  };
+};
+
+export const defaultWorkspaceSetupAlt = function () {
+  return {
+    dataModelVersion: 2,
+    name: WIDGET_WORKSPACE_NAME,
+    label: "Task Review - Static Map",
+    type: "leftPanel",
+    widgets: [
+      widgetDescriptor("TaskReviewWidget"),
+      widgetDescriptor("TasksWidget"),
+      widgetDescriptor("TaskHistoryWidget"),
+      widgetDescriptor("TaskInstructionsWidget"),
+    ],
+    layout: [
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 9 },
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 8 },
+      { i: generateWidgetId(), x: 0, y: 9, w: 4, h: 8 },
+      { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 4 },
+      { i: generateWidgetId(), x: 4, y: 0, w: 4, h: 18 },
+    ],
+    excludeWidgets: ["TaskCompletionWidget", "TagDiffWidget", "TaskMapWidget"],
   };
 };
 
@@ -109,6 +135,10 @@ export class ReviewTaskPane extends Component {
         <MediaQuery query="(min-width: 1024px)">
           <WidgetWorkspace
             {...this.props}
+            hasLeftPanelOption
+            enhancedMapWidget={
+              <EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />
+            }
             className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-pt-2 mr-pb-8 mr-cards-inverse"
             workspaceTitle={
               <div className="mr-flex mr-items-baseline mr-mt-4">
@@ -192,5 +222,6 @@ export default WithChallengePreferences(
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup,
+    defaultWorkspaceSetupAlt
   ),
 );

@@ -155,6 +155,9 @@ export const WithWidgetWorkspacesInternal = function (
           ? defaultConfigurationAlt
           : defaultConfiguration;
 
+
+          console.log(defaultConfig())
+
       let configuration = Object.assign(
         {
           id: generateWidgetId(),

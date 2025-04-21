@@ -207,6 +207,7 @@ export class WidgetWorkspace extends Component {
                 closeDropdown={dropdown.closeDropdown}
                 setupWorkspaceAlt={this.setupWorkspaceAlt}
                 switchWorkspaceAltVariant={this.switchWorkspaceAltVariant}
+                hasLeftPanelOption={this.props.hasLeftPanelOption}
               />
             )}
           ></Dropdown>
@@ -399,21 +400,21 @@ const ListLayoutItems = function (props) {
             <FormattedMessage {...messages.addConfigurationLabel} />
           </a>
         </li>
-        {props.setupWorkspaceAlt ? (
+        {props.setupWorkspaceAlt && props.hasLeftPanelOption ? (
           <li>
             <a onClick={() => props.setupWorkspaceAlt(props.closeDropdown)}>
               Add Static Map Layout
             </a>
           </li>
         ) : null}
-        {props.setupWorkspaceAlt && props.currentConfiguration.type === "leftPanel" ? (
+        {props.setupWorkspaceAlt && props.hasLeftPanelOption && props.currentConfiguration.type === "leftPanel" ? (
           <li>
             <a onClick={() => props.switchWorkspaceAltVariant("rightPanel", props.closeDropdown)}>
               Switch to Right Panel
             </a>
           </li>
         ) : null}
-        {props.setupWorkspaceAlt && props.currentConfiguration.type === "rightPanel" ? (
+        {props.setupWorkspaceAlt && props.hasLeftPanelOption && props.currentConfiguration.type === "rightPanel" ? (
           <li>
             <a onClick={() => props.switchWorkspaceAltVariant("leftPanel", props.closeDropdown)}>
               Switch to Left Panel

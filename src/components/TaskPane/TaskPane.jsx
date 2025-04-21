@@ -289,13 +289,12 @@ export class TaskPane extends Component {
       );
     }
 
-    console.log("currentConfiguration", this.props.currentConfiguration?.type);
-
     return (
       <div className="mr-relative">
         <MediaQuery query="(min-width: 1024px)">
           <WidgetWorkspace
             {...this.props}
+            hasLeftPanelOption
             className={classNames(
               "mr-bg-gradient-r-green-dark-blue mr-text-white mr-pb-8 mr-cards-inverse",
               {
