@@ -11,7 +11,7 @@ export const CHALLENGE_COLUMNS = [
   {
     Header: "Name",
     accessor: "name",
-    width: 10,
+    width: 180,
     Cell: ({ row, value }) =>
       value ? (
         <a

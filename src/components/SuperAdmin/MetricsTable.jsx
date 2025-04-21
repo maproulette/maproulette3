@@ -119,6 +119,8 @@ const MetricsTable = (props) => {
                           maxWidth: cell.column.width,
                           minWidth: cell.column.minWidth,
                           overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
                         }}
                       >
                         <div className="mr-cell-content">{cell.render("Cell")}</div>
