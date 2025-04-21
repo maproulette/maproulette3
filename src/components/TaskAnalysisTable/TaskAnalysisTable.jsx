@@ -295,6 +295,7 @@ export const TaskAnalysisTableInternal = (props) => {
                       {row.cells.map((cell) => {
                         return (
                           <td
+                            key={cell.column.id}
                             {...cell.getCellProps()}
                             className={cellStyles}
                             style={{

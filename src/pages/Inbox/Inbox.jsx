@@ -203,7 +203,7 @@ const Inbox = (props) => {
             ))}
           </select>
         ),
-        Cell: ({ value, row }) => (
+        Cell: ({ value }) => (
           <div className="mr-cell-content">
             <span className={`mr-notification-type-${_kebabCase(keysByNotificationType[value])}`}>
               <FormattedMessage {...messagesByNotificationType[value]} />

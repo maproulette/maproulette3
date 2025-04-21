@@ -38,7 +38,7 @@ export default function () {
             r="9"
             fill="currentColor"
             stroke="currentColor"
-            stroke-width="1"
+            strokeWidth="1"
             opacity="0.2"
           />
           <g>

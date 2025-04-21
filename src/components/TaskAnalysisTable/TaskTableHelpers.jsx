@@ -3,7 +3,6 @@ import React from "react";
 import { FormattedMessage } from "react-intl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import { statusLabelStyles } from "../TableShared/TableStyles";
-import messages from "./Messages";
 
 /**
  * Helper functions for building components related to tables.
