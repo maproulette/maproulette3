@@ -1,4 +1,4 @@
-import { applyMiddleware, combineReducers, createStore } from "redux";
+import { applyMiddleware, combineReducers, createStore, compose } from "redux";
 import thunk from "redux-thunk";
 import { adminContext } from "./services/AdminContext/AdminContext";
 import { adminChallengeEntities, challengeEntities } from "./services/Challenge/Challenge";
