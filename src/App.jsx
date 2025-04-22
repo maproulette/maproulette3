@@ -142,7 +142,7 @@ export class App extends Component {
               <CachedRoute path="/user/profile" component={Profile} />
               <CachedRoute path="/user/metrics/:userId" component={Metrics} />
               <CachedRoute path="/user/metrics" component={Metrics} />
-              <CachedRoute exact path="/superadmin" component={SuperAdminContainer} />\
+              <CachedRoute exact path="/superadmin" component={SuperAdminContainer} />
               <CachedRoute exact path="/errorTags" component={ErrorTagManager} />
               <CachedRoute path="/user/achievements/:userId" component={Achievements} />
               <CachedRoute path="/user/achievements" component={Achievements} />
