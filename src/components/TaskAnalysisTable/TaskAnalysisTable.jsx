@@ -357,14 +357,15 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       const alreadyBundled =
         row.original.bundleId && !props.taskBundle?.bundleId !== row.original.bundleId;
       const enableSelecting =
-        !row.original.lockedBy &&
-        !alreadyBundled &&
-        !props.bundling &&
-        !props.taskReadOnly &&
-        [0, 3, 6].includes(status) &&
-        row.original.taskId !== props.task?.id &&
-        props.workspace.name !== "taskReview" &&
-        !AsCooperativeWork(props.task).isTagType();
+        !props.task ||
+        (!row.original.lockedBy &&
+          !alreadyBundled &&
+          !props.bundling &&
+          !props.taskReadOnly &&
+          [0, 3, 6].includes(status) &&
+          row.original.taskId !== props.task?.id &&
+          props.workspace.name !== "taskReview" &&
+          !AsCooperativeWork(props.task).isTagType());
 
       if (
         props.highlightPrimaryTask &&
