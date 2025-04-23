@@ -73,15 +73,23 @@ const ErrorTagDropdown = (props) => {
           })
         : null}
       {props.errorTags?.length < 5 && props.errorTags?.length < options.data?.length ? (
-        <div
-          className={classNames("mr-underline mr-cursor-pointer", {
-            "mr-text-red": props.required && (!props.errorTags || props.errorTags.length === 0),
-            "mr-text-green-light":
-              !props.required || (props.errorTags && props.errorTags.length > 0),
-          })}
-          onClick={props.addErrorTag}
-        >
-          <FormattedMessage {...messages.addErrorTag} />
+        <div className="mr-flex mr-items-center">
+          <div
+            className={classNames("mr-underline mr-cursor-pointer", {
+              "mr-text-red": props.required && (!props.errorTags || props.errorTags.length === 0),
+              "mr-text-green-light":
+                !props.required || (props.errorTags && props.errorTags.length > 0),
+            })}
+            onClick={props.addErrorTag}
+          >
+            <FormattedMessage {...messages.addErrorTag} />
+          </div>
+
+          {props.required && (!props.errorTags || props.errorTags.length === 0) && (
+            <span className="mr-no-underline mr-text-red mr-ml-1">
+              - (<FormattedMessage {...messages.requiredByChallengeOwner} />)
+            </span>
+          )}
         </div>
       ) : null}
     </div>
