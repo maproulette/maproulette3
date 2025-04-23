@@ -69,18 +69,25 @@ export const augmentClusteredTasks = function (
 ) {
   return function (dispatch) {
     if (isVirtualChallenge) {
-      return;
+      return Promise.resolve();
     }
 
     const fetchId = uuidv1();
     const augmentedCriteria = _cloneDeep(criteria);
     _set(augmentedCriteria, "filters.challengeId", challengeId);
-    return fetchBoundedTasks(
+    const boundedTasksPromise = fetchBoundedTasks(
       augmentedCriteria,
       limit,
       true,
       ignoreLocked,
-    )(dispatch).then((result) => {
+    )(dispatch);
+
+    // If fetchBoundedTasks returns null, return a resolved promise
+    if (!boundedTasksPromise) {
+      return Promise.resolve();
+    }
+
+    return boundedTasksPromise.then((result) => {
       if (result) {
         for (const task of result.tasks) {
           task.parent = challengeId;
