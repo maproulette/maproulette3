@@ -11,26 +11,22 @@ import {
   MapContainer,
   Rectangle,
   ScaleControl,
-  ZoomControl,
   useMap,
 } from "react-leaflet";
 import { toLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { TaskPriorityColors } from "../../services/Task/TaskPriority/TaskPriority";
 import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../BusySpinner/BusySpinner";
-import FitBoundsControl from "../EnhancedMap/FitBoundsControl/FitBoundsControl";
-import FitWorldControl from "../EnhancedMap/FitWorldControl/FitWorldControl";
-import LassoSelectionControl from "../EnhancedMap/LassoSelectionControl/LassoSelectionControl";
-import LayerToggle from "../EnhancedMap/LayerToggle/LayerToggle";
 import SearchContent from "../EnhancedMap/SearchControl/SearchContent";
-import SearchControl from "../EnhancedMap/SearchControl/SearchControl";
-import SelectMarkersInViewControl from "../EnhancedMap/SelectMarkersInViewControl/SelectMarkersInViewControl";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import WithIntersectingOverlays from "../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
+import { LegendToggleControl } from "./LegendToggleControl";
+import MapControlsDrawer from "./MapControlsDrawer";
 import MapMarkers from "./MapMarkers";
 import messages from "./Messages";
 import ZoomInMessage from "./ZoomInMessage";
+import "./TaskClusterMap.scss";
 
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
 
@@ -63,6 +59,7 @@ export const TaskClusterMap = (props) => {
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
+  const [drawerOpen, setDrawerOpen] = useState(true);
 
   let overlayLayers = buildLayerSources(
     props.visibleOverlays,
@@ -162,41 +159,6 @@ export const TaskClusterMap = (props) => {
     return clusterData;
   };
 
-  let selectionKit = (
-    <>
-      {props.showLasso && props.clearSelectedSelector && (
-        <LassoSelectionControl onLassoClear={props.resetSelectedTasks} />
-      )}
-      {props.showLasso && props.showSelectMarkersInView && props.onBulkTaskSelection && (
-        <SelectMarkersInViewControl onSelectAllInView={props.onBulkTaskSelection} />
-      )}
-
-      {props.showLasso &&
-        props.showClusterLasso &&
-        props.onBulkClusterSelection &&
-        !props.mapZoomedOut && (
-          <LassoSelectionControl
-            onLassoSelection={selectClustersInLayers}
-            onLassoDeselection={deselectClustersInLayers}
-            onLassoClear={props.resetSelectedClusters}
-            onLassoInteraction={() => setSearchOpen(false)}
-          />
-        )}
-
-      {props.showLasso &&
-        props.onBulkTaskSelection &&
-        (!props.showAsClusters ||
-          (!props.showClusterLasso && props.totalTaskCount <= CLUSTER_POINTS)) && (
-          <LassoSelectionControl
-            onLassoSelection={selectTasksInLayers}
-            onLassoDeselection={deselectTasksInLayers}
-            onLassoClear={props.resetSelectedTasks}
-            onLassoInteraction={() => setSearchOpen(false)}
-          />
-        )}
-    </>
-  );
-
   const ResizeMap = () => {
     const map = useMap();
     useEffect(() => {
@@ -205,136 +167,170 @@ export const TaskClusterMap = (props) => {
     return null;
   };
 
+  const handleToggleDrawer = (isOpen) => {
+    setDrawerOpen(isOpen);
+  };
+
+  const selectAllTasksInView = (taskIds) => {
+    console.log("selectAllTasksInView called with", taskIds.length, "task IDs");
+    if (props.onBulkTaskSelection && typeof props.onBulkTaskSelection === "function") {
+      props.onBulkTaskSelection(taskIds);
+    } else {
+      console.warn("onBulkTaskSelection is not a function");
+    }
+  };
+
+  const selectAllClustersInView = (clusters) => {
+    console.log("selectAllClustersInView called with", clusters.length, "clusters");
+    if (props.onBulkClusterSelection && typeof props.onBulkClusterSelection === "function") {
+      props.onBulkClusterSelection(clusters);
+    } else {
+      console.warn("onBulkClusterSelection is not a function");
+    }
+  };
+
   return (
-    <MapContainer
-      attributionControl={false}
-      center={props.center}
-      minZoom={2}
-      maxZoom={18}
-      maxBounds={[
-        [-90, -180],
-        [90, 180],
-      ]}
-      bounds={
-        props.initialBounds || [
-          [-70, -120],
-          [80, 120],
-        ]
-      }
-      className={classNames(
-        "taskcluster-map",
-        { "full-screen-map": props.isMobile },
-        props.className,
-      )}
-      zoomControl={false}
-    >
-      <ResizeMap />
-      <AttributionControl position="bottomleft" prefix={false} />
-      {(Boolean(props.loading) || Boolean(props.loadingChallenge)) && (
-        <BusySpinner mapMode xlarge />
-      )}
-      {props.totalTaskCount &&
-        props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
-        !searchOpen &&
-        !props.loading &&
-        !props.createTaskBundle && (
-          <label
-            htmlFor="show-clusters-input"
-            className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center"
-          >
-            <input
-              id="show-clusters-input"
-              type="checkbox"
-              className="mr-mr-2"
-              checked={props.showAsClusters}
-              onChange={() => {
-                // Clear any existing selections when switching between tasks and clusters
-                props.toggleShowAsClusters();
-                props.resetSelectedClusters && props.resetSelectedClusters();
-              }}
-            />
-            <FormattedMessage {...messages.clusterTasksLabel} />
-          </label>
+    <div className="taskcluster-map-container">
+      <MapContainer
+        attributionControl={false}
+        center={props.center}
+        minZoom={2}
+        maxZoom={18}
+        maxBounds={[
+          [-90, -180],
+          [90, 180],
+        ]}
+        bounds={
+          props.initialBounds || [
+            [-70, -120],
+            [80, 120],
+          ]
+        }
+        className={classNames(
+          "taskcluster-map",
+          { "full-screen-map": props.isMobile },
+          { "drawer-open": drawerOpen },
+          props.className,
         )}
-      {!props.externalOverlay && !searchOpen && !!props.mapZoomedOut && (
-        <ZoomInMessage {...props} zoom={currentZoom} />
-      )}
-      {props.delayMapLoad && !searchOpen && !window.env.REACT_APP_DISABLE_TASK_CLUSTERS && (
-        <div
-          className="mr-absolute mr-top-0 mr-mt-3 mr-w-full mr-flex mr-justify-center"
-          onClick={() => props.forceMapLoad()}
-        >
-          <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
-            <div className="mr-py-2 mr-px-3 mr-text-center mr-cursor-pointer">
-              <FormattedMessage {...messages.moveMapToRefresh} />
-            </div>
-          </div>
-        </div>
-      )}
-      {window.env.REACT_APP_DISABLE_TASK_CLUSTERS &&
-        props.onClickFetchClusters &&
-        !props.mapZoomedOut && (
+        zoomControl={false}
+      >
+        <MapControlsDrawer
+          isOpen={drawerOpen}
+          openSearch={() => setSearchOpen(true)}
+          handleToggleDrawer={handleToggleDrawer}
+          deselectTasksInLayers={deselectTasksInLayers}
+          selectTasksInLayers={selectTasksInLayers}
+          selectClustersInLayers={selectClustersInLayers}
+          deselectClustersInLayers={deselectClustersInLayers}
+          onLassoClear={props.resetSelectedClusters || props.resetSelectedTasks}
+          onLassoSelection={props.showAsClusters ? selectClustersInLayers : selectTasksInLayers}
+          onLassoDeselection={
+            props.showAsClusters ? deselectClustersInLayers : deselectTasksInLayers
+          }
+          onSelectAllInView={
+            props.showAsClusters
+              ? selectAllClustersInView
+              : selectAllTasksInView || props.onBulkTaskSelection
+          }
+          onBulkClusterSelection={props.onBulkClusterSelection}
+          {...props}
+        />
+        <ResizeMap />
+        <AttributionControl position="bottomleft" prefix={false} />
+        {(Boolean(props.loading) || Boolean(props.loadingChallenge)) && (
+          <BusySpinner mapMode xlarge />
+        )}
+        {props.totalTaskCount &&
+          props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
+          !searchOpen &&
+          !props.loading &&
+          !props.createTaskBundle && (
+            <label
+              htmlFor="show-clusters-input"
+              className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center"
+            >
+              <input
+                id="show-clusters-input"
+                type="checkbox"
+                className="mr-mr-2"
+                checked={props.showAsClusters}
+                onChange={() => {
+                  // Clear any existing selections when switching between tasks and clusters
+                  props.toggleShowAsClusters();
+                  props.resetSelectedClusters && props.resetSelectedClusters();
+                }}
+              />
+              <FormattedMessage {...messages.clusterTasksLabel} />
+            </label>
+          )}
+        {!props.externalOverlay && !searchOpen && !!props.mapZoomedOut && (
+          <ZoomInMessage {...props} zoom={currentZoom} />
+        )}
+        {props.delayMapLoad && !searchOpen && !window.env.REACT_APP_DISABLE_TASK_CLUSTERS && (
           <div
-            className="mr-absolute mr-bottom-0 mr-mb-3 mr-w-full mr-flex mr-justify-center"
-            onClick={() => {
-              props.onClickFetchClusters();
-            }}
+            className="mr-absolute mr-top-0 mr-mt-3 mr-w-full mr-flex mr-justify-center"
+            onClick={() => props.forceMapLoad()}
           >
             <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
               <div className="mr-py-2 mr-px-3 mr-text-center mr-cursor-pointer">
-                <FormattedMessage {...messages.refreshTasks} />
+                <FormattedMessage {...messages.moveMapToRefresh} />
               </div>
             </div>
           </div>
         )}
-      {!props.mapZoomedOut && (
-        <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
-          <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
-            <div className="mr-py-2 mr-px-3 mr-text-center">
-              <FormattedMessage
-                {...messages.taskCountLabel}
-                values={{ count: props.totalTaskCount }}
-              />
+        {window.env.REACT_APP_DISABLE_TASK_CLUSTERS &&
+          props.onClickFetchClusters &&
+          !props.mapZoomedOut && (
+            <div
+              className="mr-absolute mr-bottom-0 mr-mb-3 mr-w-full mr-flex mr-justify-center"
+              onClick={() => {
+                props.onClickFetchClusters();
+              }}
+            >
+              <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
+                <div className="mr-py-2 mr-px-3 mr-text-center mr-cursor-pointer">
+                  <FormattedMessage {...messages.refreshTasks} />
+                </div>
+              </div>
+            </div>
+          )}
+        {!props.mapZoomedOut && (
+          <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center mr-pointer-events-none">
+            <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
+              <div className="mr-py-2 mr-px-3 mr-text-center">
+                <FormattedMessage
+                  {...messages.taskCountLabel}
+                  values={{ count: props.totalTaskCount }}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      <ZoomControl className="mr-z-10" position="topright" />
-      {props.showFitWorld && <FitWorldControl />}
-      {props.fitBoundsControl && (
-        <FitBoundsControl
-          key={props.taskCenter}
-          centerPoint={props.taskCenter}
-          centerBounds={props.centerBounds}
-        />
-      )}
-      <ScaleControl className="mr-z-10" position="bottomleft" />
-      <LayerToggle {...props} overlayOrder={overlayOrder} />
-      <VisibleTileLayer {...props} zIndex={1} />
-      {selectionKit}
-      {props.showSearchControl && (
-        <SearchControl {...props} openSearch={() => setSearchOpen(true)} />
-      )}
-      {!searchOpen && props.externalOverlay}
-      {searchOpen && (
-        <SearchContent
+        )}
+
+        <ScaleControl className="mr-z-10" position="bottomleft" />
+        <VisibleTileLayer {...props} zIndex={1} />
+        {!searchOpen && props.externalOverlay}
+        {searchOpen && (
+          <SearchContent
+            {...props}
+            onResultSelected={(bounds) => {
+              setCurrentBounds(toLatLngBounds(bounds));
+              props.updateBounds(bounds);
+            }}
+            closeSearch={() => setSearchOpen(false)}
+          />
+        )}
+        <MapMarkers
           {...props}
-          onResultSelected={(bounds) => {
-            setCurrentBounds(toLatLngBounds(bounds));
-            props.updateBounds(bounds);
-          }}
-          closeSearch={() => setSearchOpen(false)}
+          allowSpidering
+          currentBounds={currentBounds}
+          setCurrentBounds={setCurrentBounds}
+          currentZoom={currentZoom}
+          setCurrentZoom={setCurrentZoom}
         />
-      )}
-      <MapMarkers
-        {...props}
-        allowSpidering
-        currentBounds={currentBounds}
-        setCurrentBounds={setCurrentBounds}
-        currentZoom={currentZoom}
-        setCurrentZoom={setCurrentZoom}
-      />
-    </MapContainer>
+        <LegendToggleControl />
+      </MapContainer>
+    </div>
   );
 };
 

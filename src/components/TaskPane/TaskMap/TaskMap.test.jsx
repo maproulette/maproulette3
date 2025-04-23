@@ -27,6 +27,6 @@ describe("TaskMap Component", () => {
         </IntlProvider>
       </Provider>,
     );
-    expect(screen.getByText("Fit map to task features")).toBeInTheDocument();
+    expect(screen.getByTitle("Fit to Features")).toBeInTheDocument();
   });
 });
