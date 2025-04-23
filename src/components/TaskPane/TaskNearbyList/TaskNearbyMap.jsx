@@ -6,14 +6,7 @@ import "leaflet-vectoricon";
 import MarkerClusterGroup from "@changey/react-leaflet-markercluster/src/react-leaflet-markercluster";
 import _cloneDeep from "lodash/cloneDeep";
 import _map from "lodash/map";
-import {
-  AttributionControl,
-  MapContainer,
-  Marker,
-  Tooltip,
-  ZoomControl,
-  useMap,
-} from "react-leaflet";
+import { AttributionControl, MapContainer, Marker, Tooltip, useMap } from "react-leaflet";
 import resolveConfig from "tailwindcss/resolveConfig";
 import AsMappableTask from "../../../interactions/Task/AsMappableTask";
 import { messagesByPriority } from "../../../services/Task/TaskPriority/TaskPriority";
@@ -21,13 +14,11 @@ import { TaskStatusColors, messagesByStatus } from "../../../services/Task/TaskS
 import { buildLayerSources } from "../../../services/VisibleLayer/LayerSources";
 import tailwindConfig from "../../../tailwind.config.js";
 import BusySpinner from "../../BusySpinner/BusySpinner";
-import FitBoundsControl from "../../EnhancedMap/FitBoundsControl/FitBoundsControl";
-import FitWorldControl from "../../EnhancedMap/FitWorldControl/FitWorldControl";
-import LayerToggle from "../../EnhancedMap/LayerToggle/LayerToggle";
 import SourcedTileLayer from "../../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import WithIntersectingOverlays from "../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays";
 import WithTaskMarkers from "../../HOCs/WithTaskMarkers/WithTaskMarkers";
 import WithVisibleLayer from "../../HOCs/WithVisibleLayer/WithVisibleLayer";
+import MapControlsDrawer from "../../TaskClusterMap/MapControlsDrawer.jsx";
 import messages from "./Messages";
 
 const colors = resolveConfig(tailwindConfig).theme.colors;
@@ -129,6 +120,14 @@ const MapBounds = ({ taskMarkers, setMapBounds, loadByNearbyTasks, setLoadByNear
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class TaskNearbyMap extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showMapControlsDrawer: true,
+      showTaskFeatures: true,
+    };
+  }
+
   /**
    * Invoked when an individual task marker is clicked by the user
    */
@@ -151,6 +150,10 @@ export class TaskNearbyMap extends Component {
     if (this.props.onMapClick) {
       this.props.onMapClick();
     }
+  };
+
+  toggleTaskFeatureVisibility = () => {
+    this.setState({ showTaskFeatures: !this.state.showTaskFeatures });
   };
 
   render() {
@@ -225,13 +228,12 @@ export class TaskNearbyMap extends Component {
 
     return (
       <div className="mr-h-full">
-        <LayerToggle {...this.props} />
         <MapContainer
           center={currentCenterpoint}
           zoom={12}
           zoomControl={false}
-          animate={true}
-          worldCopyJump={true}
+          animate
+          worldCopyJump
           intl={this.props.intl}
           attributionControl={false}
           minZoom={2}
@@ -241,6 +243,17 @@ export class TaskNearbyMap extends Component {
             [90, 180],
           ]}
         >
+          <MapControlsDrawer
+            isOpen={this.state.showMapControlsDrawer}
+            handleToggleDrawer={(isOpen) => this.setState({ showMapControlsDrawer: isOpen })}
+            showSearchControl={false}
+            centerPoint={currentCenterpoint}
+            centerBounds={this.props.task.boundingBox}
+            taskCenter={currentCenterpoint}
+            fitBoundsControl
+            showFitWorld
+            {...this.props}
+          />
           <MapBounds
             taskMarkers={this.props.taskMarkers}
             setMapBounds={this.props.setMapBounds}
@@ -249,12 +262,7 @@ export class TaskNearbyMap extends Component {
           />
           <ResizeMap />
           <AttributionControl position="bottomleft" prefix={false} />
-          <ZoomControl position="topright" />
-          <FitWorldControl />
-          <FitBoundsControl
-            centerPoint={currentCenterpoint}
-            centerBounds={this.props.task.boundingBox}
-          />
+
           <VisibleTileLayer {...this.props} zIndex={1} />
           {overlayLayers}
           <Marker
@@ -272,21 +280,20 @@ export class TaskNearbyMap extends Component {
               {coloredMarkers}
             </MarkerClusterGroup>
           )}
-        </MapContainer>
 
-        {/* Task Count Display */}
-        {hasTaskMarkers && (
-          <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
-            <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
-              <div className="mr-py-2 mr-px-3 mr-text-center">
-                <FormattedMessage
-                  {...messages.taskCountLabel}
-                  values={{ count: this.props.taskMarkers.length }}
-                />
+          {hasTaskMarkers && (
+            <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center mr-pointer-events-none">
+              <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
+                <div className="mr-py-2 mr-px-3 mr-text-center">
+                  <FormattedMessage
+                    {...messages.taskCountLabel}
+                    values={{ count: this.props.taskMarkers.length }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </MapContainer>
 
         <div className="mr-absolute mr-bottom-0 mr-mb-8 mr-w-full mr-text-center">
           <button
@@ -322,6 +329,14 @@ TaskNearbyMap.propTypes = {
   onMapClick: PropTypes.func,
   setMapBounds: PropTypes.func,
   mapBounds: PropTypes.object,
+  updateNearbyTasks: PropTypes.func,
+  loadTasksInView: PropTypes.func,
+  clearNextTask: PropTypes.func,
+  requestedNextTask: PropTypes.number,
+  loadByNearbyTasks: PropTypes.bool,
+  setLoadByNearbyTasks: PropTypes.func,
+  user: PropTypes.object,
+  visibleOverlays: PropTypes.array,
 };
 
 export default WithTaskMarkers(
