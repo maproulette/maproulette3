@@ -263,13 +263,18 @@ export default class TaskBundleWidget extends Component {
     // Create a small bounds around the task point
     const padding = 0.001; // Small padding around the point
     const bounds = toLatLngBounds([
-      [mappableTask.point.lat - padding, mappableTask.point.lng - padding],
-      [mappableTask.point.lat + padding, mappableTask.point.lng + padding],
+      mappableTask.point.lng - padding, // minLng
+      mappableTask.point.lat - padding, // minLat
+      mappableTask.point.lng + padding, // maxLng
+      mappableTask.point.lat + padding, // maxLat
     ]);
 
-    // Preserve existing zoom or default to 18
-    const zoom = this.props.criteria?.zoom || 18;
-    this.props.updateTaskFilterBounds(bounds, zoom);
+    // Only update bounds if we have valid bounds
+    if (bounds) {
+      // Preserve existing zoom or default to 18
+      const zoom = this.props.criteria?.zoom || 18;
+      this.props.updateTaskFilterBounds(bounds, zoom);
+    }
   };
 
   async componentDidMount() {
