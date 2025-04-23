@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.16.11",
+  "version": "3.16.12",
   "type": "module",
   "private": true,
   "scripts": {
@@ -159,7 +159,7 @@
     "tailwindcss-transforms": "^2.2.0",
     "tailwindcss-transition": "^1.0.5",
     "tailwindcss-visuallyhidden": "^1.0.2",
-    "vite": "^5.4.12",
+    "vite": "^5.4.18",
     "vitest": "^2.1.9"
   },
   "resolutions": {

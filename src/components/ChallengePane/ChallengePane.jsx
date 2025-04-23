@@ -195,7 +195,6 @@ export class ChallengePane extends Component {
                 showClusterLasso
                 showFitWorld
                 showSearchControl
-                skipFitToBounds
                 externalOverlay={virtualChallengeMapOverlay}
                 {...this.props}
               />

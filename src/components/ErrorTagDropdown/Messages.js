@@ -13,4 +13,9 @@ export default defineMessages({
     id: "ErrorTagDropdown.addErrorTag",
     defaultMessage: "Add Error Tag",
   },
+
+  requiredByChallengeOwner: {
+    id: "ErrorTagDropdown.requiredByChallengeOwner",
+    defaultMessage: "Required by Challenge Owner",
+  },
 });

@@ -35,7 +35,6 @@ export const WithFilterCriteria = function (
   WrappedComponent,
   ignoreURL = true,
   ignoreLocked = true,
-  skipInitialFetch = false,
   usePersistedFilters = false,
   savedFilterSettingName = undefined,
 ) {
@@ -155,6 +154,10 @@ export const WithFilterCriteria = function (
         typeof searchCriteria.filters.reviewedAt === "object"
       ) {
         searchCriteria.filters.reviewedAt = format(searchCriteria.filters.reviewedAt, "yyyy-MM-dd");
+      }
+
+      if (searchCriteria.filters.mappedOn && typeof searchCriteria.filters.mappedOn === "object") {
+        searchCriteria.filters.mappedOn = format(searchCriteria.filters.mappedOn, "yyyy-MM-dd");
       }
 
       return buildSearchURL(searchCriteria);
@@ -368,7 +371,6 @@ export default (
   WrappedComponent,
   ignoreURL,
   ignoreLocked,
-  skipInitialFetch,
   usePersistedFilters,
   savedFilterSettingName,
 ) =>
@@ -376,7 +378,6 @@ export default (
     WrappedComponent,
     ignoreURL,
     ignoreLocked,
-    skipInitialFetch,
     usePersistedFilters,
     savedFilterSettingName,
   );
