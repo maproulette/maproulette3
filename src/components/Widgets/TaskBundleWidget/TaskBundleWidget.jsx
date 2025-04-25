@@ -122,12 +122,6 @@ export default class TaskBundleWidget extends Component {
         this.props.updateTaskFilterBounds(bounds, zoom);
       }
     } else if ((this.props.nearbyTasks?.tasks?.length || 0) > 0) {
-      // Check if nearbyTasks has changed or if task has changed
-      const nearbyTasksChanged =
-        !prevProps.nearbyTasks ||
-        this.props.nearbyTasks.nearTaskId !== prevProps.nearbyTasks.nearTaskId;
-      const taskChanged = !prevProps.task || this.props.task?.id !== prevProps.task?.id;
-
       this.setBoundsToNearbyTask();
     } else if (this.props.task && this.props.task.id !== prevProps.task?.id) {
       // If there's no bundle and no nearby tasks, at least center on the current task
