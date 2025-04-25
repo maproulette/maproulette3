@@ -155,13 +155,17 @@ export class WidgetWorkspace extends Component {
     closeDropdown();
   };
 
-  switchWorkspaceAltVariant = (type = "rightPanel", closeDropdown) => {
-    this.props.switchWorkspaceAltVariant(this.props.currentConfiguration, type);
+  switchConfiguration = (configurationId, closeDropdown) => {
+    this.props.switchWorkspaceConfiguration(configurationId, this.props.currentConfiguration);
     closeDropdown();
   };
 
-  switchConfiguration = (configurationId, closeDropdown) => {
-    this.props.switchWorkspaceConfiguration(configurationId, this.props.currentConfiguration);
+  switchAltConfiguration = (configurationId, type = "rightPanel", closeDropdown) => {
+    this.props.switchWorkspaceAltConfiguration(
+      configurationId,
+      this.props.currentConfiguration,
+      type,
+    );
     closeDropdown();
   };
 
@@ -198,6 +202,7 @@ export class WidgetWorkspace extends Component {
                 workspaceConfigurations={this.props.workspaceConfigurations}
                 currentConfiguration={this.props.currentConfiguration}
                 switchConfiguration={this.switchConfiguration}
+                switchAltConfiguration={this.switchAltConfiguration}
                 startEditingLayout={this.startEditingLayout}
                 addConfiguration={this.addConfiguration}
                 resetConfiguration={this.resetConfiguration}
@@ -206,7 +211,6 @@ export class WidgetWorkspace extends Component {
                 deleteConfiguration={this.deleteConfiguration}
                 closeDropdown={dropdown.closeDropdown}
                 setupWorkspaceAlt={this.setupWorkspaceAlt}
-                switchWorkspaceAltVariant={this.switchWorkspaceAltVariant}
                 hasLeftPanelOption={this.props.hasLeftPanelOption}
               />
             )}
@@ -411,7 +415,15 @@ const ListLayoutItems = function (props) {
         props.hasLeftPanelOption &&
         props.currentConfiguration.type === "leftPanel" ? (
           <li>
-            <a onClick={() => props.switchWorkspaceAltVariant("rightPanel", props.closeDropdown)}>
+            <a
+              onClick={() =>
+                props.switchAltConfiguration(
+                  props.currentConfiguration?.id,
+                  "rightPanel",
+                  props.closeDropdown,
+                )
+              }
+            >
               Switch to Right Panel
             </a>
           </li>
@@ -420,7 +432,15 @@ const ListLayoutItems = function (props) {
         props.hasLeftPanelOption &&
         props.currentConfiguration.type === "rightPanel" ? (
           <li>
-            <a onClick={() => props.switchWorkspaceAltVariant("leftPanel", props.closeDropdown)}>
+            <a
+              onClick={() =>
+                props.switchAltConfiguration(
+                  props.currentConfiguration?.id,
+                  "leftPanel",
+                  props.closeDropdown,
+                )
+              }
+            >
               Switch to Left Panel
             </a>
           </li>

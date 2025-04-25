@@ -19,9 +19,6 @@ import TaskMap from "../TaskPane/TaskMap/TaskMap";
 import WidgetWorkspace from "../WidgetWorkspace/WidgetWorkspace";
 import messages from "./Messages";
 import "./ReviewTaskPane.scss";
-import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
-import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
-const EnhancedTaskMapWidget = WithKeyboardShortcuts(TaskMapWidget);
 
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails);
@@ -136,9 +133,7 @@ export class ReviewTaskPane extends Component {
           <WidgetWorkspace
             {...this.props}
             hasLeftPanelOption
-            enhancedMapWidget={
-              <EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />
-            }
+            enhancedMapWidget
             className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-pt-2 mr-pb-8 mr-cards-inverse"
             workspaceTitle={
               <div className="mr-flex mr-items-baseline mr-mt-4">

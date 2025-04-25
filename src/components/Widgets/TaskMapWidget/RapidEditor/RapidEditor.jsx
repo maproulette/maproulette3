@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-
 import { FormattedMessage } from "react-intl";
+import { useDispatch } from "react-redux";
 import useHash from "../../../../hooks/UseHash";
 import { replacePropertyTags } from "../../../../hooks/UsePropertyReplacement/UsePropertyReplacement";
 import AsMappableTask from "../../../../interactions/Task/AsMappableTask";
@@ -38,7 +37,7 @@ function generateStartingHash({ mapBounds, task, comment }) {
   return rapidParams;
 }
 
-const RapidEditor = ({ token, task, mapBounds, comment, configurationType }) => {
+const RapidEditor = ({ token, task, mapBounds, comment }) => {
   const dispatch = useDispatch();
   const [_isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -70,8 +69,6 @@ const RapidEditor = ({ token, task, mapBounds, comment, configurationType }) => 
     }
   };
 
-  const altWorkspaceType = configurationType === "leftPanel" || configurationType === "rightPanel";
-
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <button
@@ -93,7 +90,7 @@ const RapidEditor = ({ token, task, mapBounds, comment, configurationType }) => 
       <iframe
         ref={iframeRef}
         id="rapid-container-root"
-        style={{ width: "100%", height: altWorkspaceType ? "calc(100vh - 260px)" : "100%" }}
+        style={{ width: "100%", height: "100%" }}
         src={`/static/rapid-editor.html${initialHash}`}
         onLoad={async (event) => {
           let iframe = event.target;

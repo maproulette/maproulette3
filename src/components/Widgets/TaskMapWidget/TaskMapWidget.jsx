@@ -38,17 +38,6 @@ export default class TaskMapWidget extends Component {
     }
   }
 
-  handleRenderRapid = () => {
-    return (
-      <RapidEditor
-        token={this.props.user.osmProfile.requestToken}
-        task={this.props.task}
-        comment={this.props.task?.parent?.checkinComment ?? "#mapRoulette"}
-        configurationType={this.props.currentConfiguration?.type}
-      />
-    );
-  };
-
   render() {
     const cooperative =
       AsCooperativeWork(this.props.task).isTagType() || this.props.task.cooperativeWork;
@@ -87,7 +76,7 @@ export default class TaskMapWidget extends Component {
       <QuickWidget {...this.props} className="task-map-widget" noMain permanent>
         <div
           className="mr-mt-2"
-          style={{ height: altWorkspaceType ? "auto" : "calc(100% - 3rem)" }}
+          style={{ height: altWorkspaceType ? "calc(100vh - 260px)" : "calc(100% - 3rem)" }}
         >
           {this.props.getUserAppSetting ? (
             <>
@@ -102,7 +91,12 @@ export default class TaskMapWidget extends Component {
             </>
           ) : null}
           {editMode ? (
-            this.handleRenderRapid()
+            <RapidEditor
+              token={this.props.user.osmProfile.requestToken}
+              task={this.props.task}
+              comment={this.props.task?.parent?.checkinComment ?? "#mapRoulette"}
+              configurationType={this.props.currentConfiguration?.type}
+            />
           ) : (
             <MapPane {...this.props}>
               <TaskMap {...this.props} challenge={this.props.task.parent} />
