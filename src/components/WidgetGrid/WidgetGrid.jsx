@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
-import { Component, Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import ReactGridLayout, { WidthProvider } from "react-grid-layout";
 import { widgetComponent } from "../../services/Widget/Widget";
 import WithWidgetManagement from "../HOCs/WithWidgetManagement/WithWidgetManagement";
@@ -17,6 +17,77 @@ const EnhancedTaskMap = WithKeyboardShortcuts(TaskMapWidget);
 const GridLayout = WidthProvider(ReactGridLayout);
 
 export class WidgetGrid extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      panelWidth: 32, // Initial panel width percentage
+      isDragging: false,
+      startX: 0,
+      startWidth: 32,
+    };
+    this.dragHandleRef = React.createRef();
+    this.contentPanelRef = React.createRef();
+
+    // Bind the handlers to make sure they're properly defined
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener("mouseup", this.handleMouseUp);
+    document.addEventListener("mousemove", this.handleMouseMove);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("mouseup", this.handleMouseUp);
+    document.removeEventListener("mousemove", this.handleMouseMove);
+  }
+
+  handleMouseDown(e) {
+    e.preventDefault();
+    // Store the starting position and width
+    this.setState({
+      isDragging: true,
+      startX: e.clientX,
+      startWidth: this.state.panelWidth,
+    });
+  }
+
+  handleMouseUp() {
+    if (this.state.isDragging) {
+      this.setState({ isDragging: false });
+    }
+  }
+
+  handleMouseMove(e) {
+    if (!this.state.isDragging || !this.contentPanelRef.current) {
+      return;
+    }
+
+    const containerRect = this.contentPanelRef.current.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const isLeftPanel = this.props.currentConfiguration?.type === "leftPanel";
+
+    // Calculate width difference based on mouse movement
+    const deltaX = e.clientX - this.state.startX;
+    const deltaPercent = (deltaX / containerWidth) * 100;
+
+    let newWidth;
+    if (isLeftPanel) {
+      // For left panel, moving right increases width
+      newWidth = this.state.startWidth + deltaPercent;
+    } else {
+      // For right panel, moving left increases width (negate deltaPercent)
+      newWidth = this.state.startWidth - deltaPercent;
+    }
+
+    // Constrain to reasonable values
+    newWidth = Math.max(20, Math.min(newWidth, 80));
+
+    this.setState({ panelWidth: newWidth });
+  }
+
   render() {
     // Setup each widget. Note that we assign a z-index to each widget so that
     // widgets closer to the top of the page have a higher z-index than widgets
@@ -46,6 +117,11 @@ export class WidgetGrid extends Component {
       }
 
       const widgetLayout = this.props.workspace.layout[index];
+
+      // In alternate workspaces, ensure widgets take the full width
+      if (altWorkspaceType) {
+        widgetLayout.w = 1; // Force full width for single column layout
+      }
 
       // Hide conditional widgets that shouldn't be shown
       if (conditionalWidgets.indexOf(widgetConfiguration.widgetKey) !== -1) {
@@ -96,13 +172,27 @@ export class WidgetGrid extends Component {
     });
 
     if (altWorkspaceType) {
+      const isLeftPanel = workspaceType === "leftPanel";
+      const panelStyle = {
+        maxWidth: `${this.state.panelWidth}%`,
+        width: `${this.state.panelWidth}%`,
+      };
+
+      const mapStyle = {
+        width: `${100 - this.state.panelWidth - 1}%`,
+      };
+
+      const resizeClass = classNames("panel-resize-handle", {
+        "is-dragging": this.state.isDragging,
+      });
+
       return (
         <div
-          className={classNames("widget-grid-left-panel", {
+          className={classNames("widget-grid-side-panel", {
             "widget-grid--editing": this.props.isEditing,
           })}
         >
-          <div className="widget-grid-left-panel__header_left-panel">
+          <div className="widget-grid-side-panel__header_side-panel">
             {GridFilters && <GridFilters {...this.props} />}
             {this.props.isEditing && (
               <Fragment>
@@ -120,16 +210,23 @@ export class WidgetGrid extends Component {
           )}
 
           <div
-            className="widget-grid-left-panel__content_left-panel"
-            style={{ flexDirection: workspaceType === "leftPanel" ? "row" : "row-reverse" }}
+            className="widget-grid-side-panel__content_side-panel"
+            style={{ flexDirection: isLeftPanel ? "row" : "row-reverse" }}
+            ref={this.contentPanelRef}
           >
-            <div className="widget-grid-left-panel__layout_left-panel" style={{ marginTop: 0 }}>
+            {/* Panel content */}
+            <div
+              className="widget-grid-side-panel__layout_side-panel"
+              style={{ ...panelStyle, marginTop: 0 }}
+            >
               <GridLayout
-                className="widget-grid-left-panel__grid_left-panel"
+                className={`widget-grid-side-panel__grid_side-panel-${
+                  isLeftPanel ? "left" : "right"
+                }`}
                 cols={1}
                 rowHeight={this.props.workspace.rowHeight || 30}
                 layout={this.props.workspace.layout || []}
-                margin={[16, 16]}
+                margin={[0, 16]}
                 isDraggable={this.props.isEditing}
                 isResizable={this.props.isEditing}
                 onLayoutChange={this.props.isEditing ? this.props.onLayoutChange : () => null}
@@ -137,8 +234,21 @@ export class WidgetGrid extends Component {
                 {widgetInstances}
               </GridLayout>
             </div>
+
+            {/* Resizable handle */}
+            <div
+              className={resizeClass}
+              onMouseDown={this.handleMouseDown}
+              ref={this.dragHandleRef}
+            >
+              <span className="panel-resize-handle__grip">
+                <span className="panel-resize-handle__grip-line"></span>
+              </span>
+            </div>
+
+            {/* Map content */}
             {this.props.enhancedMapWidget && (
-              <div className="widget-grid-left-panel__enhanced-map">
+              <div className="widget-grid-side-panel__enhanced-map" style={mapStyle}>
                 <EnhancedTaskMap {...this.props} onLayoutChange={() => null} />
               </div>
             )}
