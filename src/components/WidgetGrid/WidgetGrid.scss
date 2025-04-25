@@ -6,6 +6,19 @@
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  position: relative;
+
+  &.panel-collapsed {
+    .panel-resize-handle {
+      display: none;
+    }
+
+    .widget-grid-side-panel__layout_side-panel {
+      min-width: 0;
+      padding: 0;
+      margin: 0;
+    }
+  }
 
   &__header_side-panel {
     display: flex;
@@ -43,6 +56,9 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     background-color: rgba(255, 255, 255, 0.04);
     border-radius: 0 4px 4px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 
     .mr-card-widget {
       max-width: 100%;
@@ -96,6 +112,8 @@
     height: 100%;
     width: 100%;
     min-height: calc(100vh - 17em);
+    overflow-y: auto;
+    flex: 1;
   }
   
   // Resize handle styles
@@ -115,6 +133,10 @@
     
     &:hover, &.is-dragging {
       background-color: rgba(200, 200, 200, 0.3);
+    }
+    
+    &.is-hidden {
+      display: none;
     }
     
     // Add a grip indicator for the handle
@@ -150,7 +172,72 @@
         margin: 3px 0;
       }
     }
+  }
   
+  // Toggle button styles
+  .panel-toggle-button {
+    position: absolute;
+    width: 24px;
+    height: 60px;
+    background-color: rgb(75, 73, 73);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 40px; 
+    margin-right: 12px;
+    transform: translateY(0); 
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      background-color: rgba(200, 200, 200, 0.5);
+    }
+    
+    &.left-panel {
+      &.is-collapsed {
+        left: 0;
+      }
+      
+      &:not(.is-collapsed) {
+        right: -12px; /* Position slightly outside the right edge */
+      }
+    }
+    
+    &.right-panel {
+      &.is-collapsed {
+        right: 0;
+      }
+      
+      &:not(.is-collapsed) {
+        left: -12px; /* Position slightly outside the left edge */
+      }
+    }
+    
+    .panel-toggle-icon {
+      position: relative;
+      width: 12px;
+      height: 12px;
+      display: inline-block;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-style: solid;
+      }
+      
+      &.icon-chevron-left::before {
+        border-width: 8px 8px 8px 0;
+        border-color: transparent rgba(255, 255, 255, 0.9) transparent transparent;
+      }
+      
+      &.icon-chevron-right::before {
+        border-width: 8px 0 8px 8px;
+        border-color: transparent transparent transparent rgba(255, 255, 255, 0.9);
+      }
+    }
   }
 }
 

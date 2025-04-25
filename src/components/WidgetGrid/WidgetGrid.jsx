@@ -24,6 +24,8 @@ export class WidgetGrid extends Component {
       isDragging: false,
       startX: 0,
       startWidth: 32,
+      isPanelCollapsed: false, // Track if the panel is collapsed
+      prevPanelWidth: 32, // Initialize with default width
     };
     this.dragHandleRef = createRef();
     this.contentPanelRef = createRef();
@@ -32,6 +34,7 @@ export class WidgetGrid extends Component {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.togglePanel = this.togglePanel.bind(this);
   }
 
   componentDidMount() {
@@ -86,6 +89,24 @@ export class WidgetGrid extends Component {
     newWidth = Math.max(20, Math.min(newWidth, 80));
 
     this.setState({ panelWidth: newWidth });
+  }
+
+  togglePanel() {
+    this.setState((prevState) => {
+      if (prevState.isPanelCollapsed) {
+        // When expanding, restore the previous width
+        return {
+          isPanelCollapsed: false,
+          panelWidth: prevState.prevPanelWidth || 32,
+        };
+      } else {
+        // When collapsing, store the current width
+        return {
+          isPanelCollapsed: true,
+          prevPanelWidth: prevState.panelWidth,
+        };
+      }
+    });
   }
 
   render() {
@@ -173,23 +194,48 @@ export class WidgetGrid extends Component {
 
     if (altWorkspaceType) {
       const isLeftPanel = workspaceType === "leftPanel";
+      const { isPanelCollapsed } = this.state;
+
+      // Set panel width to collapsed (minimal) state or normal state
       const panelStyle = {
-        maxWidth: `${this.state.panelWidth}%`,
-        width: `${this.state.panelWidth}%`,
+        maxWidth: isPanelCollapsed ? "0%" : `${this.state.panelWidth}%`,
+        width: isPanelCollapsed ? "0%" : `${this.state.panelWidth}%`,
+        overflow: "hidden",
+        transition: "width 0.3s ease, max-width 0.3s ease",
+        opacity: isPanelCollapsed ? 0 : 1,
       };
 
       const mapStyle = {
-        width: `${100 - this.state.panelWidth - 1}%`,
+        width: isPanelCollapsed ? "100%" : `${100 - this.state.panelWidth - 1}%`,
+        transition: "width 0.3s ease",
+        marginLeft: !isLeftPanel && isPanelCollapsed ? 0 : undefined,
+        marginRight: isLeftPanel && isPanelCollapsed ? 0 : undefined,
       };
 
       const resizeClass = classNames("panel-resize-handle", {
         "is-dragging": this.state.isDragging,
+        "is-hidden": isPanelCollapsed,
+      });
+
+      // Toggle button styles and direction based on panel state and position
+      const toggleButtonClass = classNames("panel-toggle-button", {
+        "is-collapsed": isPanelCollapsed,
+        "left-panel": isLeftPanel,
+        "right-panel": !isLeftPanel,
+      });
+
+      const toggleIconClass = classNames("panel-toggle-icon", {
+        "icon-chevron-left":
+          (isLeftPanel && !isPanelCollapsed) || (!isLeftPanel && isPanelCollapsed),
+        "icon-chevron-right":
+          (isLeftPanel && isPanelCollapsed) || (!isLeftPanel && !isPanelCollapsed),
       });
 
       return (
         <div
           className={classNames("widget-grid-side-panel", {
             "widget-grid--editing": this.props.isEditing,
+            "panel-collapsed": isPanelCollapsed,
           })}
         >
           <div className="widget-grid-side-panel__header_side-panel">
@@ -211,14 +257,47 @@ export class WidgetGrid extends Component {
 
           <div
             className="widget-grid-side-panel__content_side-panel"
-            style={{ flexDirection: isLeftPanel ? "row" : "row-reverse" }}
+            style={{
+              flexDirection: isLeftPanel ? "row" : "row-reverse",
+              justifyContent: "space-between",
+              position: "relative", // Add position relative for absolute toggle positioning
+            }}
             ref={this.contentPanelRef}
           >
+            {/* If panel is collapsed, show toggle button outside the panel */}
+            {isPanelCollapsed && (
+              <div
+                className={toggleButtonClass}
+                onClick={this.togglePanel}
+                title="Expand panel"
+                style={{
+                  position: "absolute",
+                  [isLeftPanel ? "left" : "right"]: "0",
+                  top: "60px",
+                  zIndex: 1001,
+                }}
+              >
+                <span className={toggleIconClass}></span>
+              </div>
+            )}
+
             {/* Panel content */}
             <div
               className="widget-grid-side-panel__layout_side-panel"
-              style={{ ...panelStyle, marginTop: 0 }}
+              style={{ ...panelStyle, marginTop: 0, flexShrink: 0 }}
             >
+              {/* Toggle button inside panel - only show when not collapsed */}
+              {!isPanelCollapsed && (
+                <div
+                  className={toggleButtonClass}
+                  onClick={this.togglePanel}
+                  title="Collapse panel"
+                  style={{ flexShrink: 0 }}
+                >
+                  <span className={toggleIconClass}></span>
+                </div>
+              )}
+
               <GridLayout
                 className={"widget-grid-side-panel__grid_side-panel"}
                 cols={1}
@@ -238,6 +317,7 @@ export class WidgetGrid extends Component {
               className={resizeClass}
               onMouseDown={this.handleMouseDown}
               ref={this.dragHandleRef}
+              style={{ flexShrink: 0 }}
             >
               <span className="panel-resize-handle__grip">
                 <span className="panel-resize-handle__grip-line"></span>
@@ -246,7 +326,14 @@ export class WidgetGrid extends Component {
 
             {/* Map content */}
             {this.props.enhancedMapWidget && (
-              <div className="widget-grid-side-panel__enhanced-map" style={mapStyle}>
+              <div
+                className="widget-grid-side-panel__enhanced-map"
+                style={{
+                  ...mapStyle,
+                  flexShrink: 0,
+                  flexGrow: 1,
+                }}
+              >
                 <EnhancedTaskMap {...this.props} onLayoutChange={() => null} />
               </div>
             )}
