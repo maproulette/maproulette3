@@ -193,6 +193,7 @@ export class WidgetWorkspace extends Component {
               <LayoutButton
                 {...this.props}
                 switchConfiguration={this.switchConfiguration}
+                switchAltConfiguration={this.switchAltConfiguration}
                 closeDropdown={dropdown.closeDropdown}
                 toggleDropdownVisible={dropdown.toggleDropdownVisible}
               />
@@ -315,6 +316,37 @@ const LayoutButton = function (props) {
           </a>
         </h3>
       ) : null}
+      {props.setupWorkspaceAlt &&
+        props.hasLeftPanelOption &&
+        (props.currentConfiguration.type === "leftPanel" ? (
+          <button
+            type="button"
+            className="mr-button mr-button--small mr-mr-4"
+            onClick={() =>
+              props.switchAltConfiguration(
+                props.currentConfiguration?.id,
+                "rightPanel",
+                props.closeDropdown,
+              )
+            }
+          >
+            Switch to Right Panel
+          </button>
+        ) : props.currentConfiguration.type === "rightPanel" ? (
+          <button
+            type="button"
+            className="mr-button mr-button--small mr-mr-4"
+            onClick={() =>
+              props.switchAltConfiguration(
+                props.currentConfiguration?.id,
+                "leftPanel",
+                props.closeDropdown,
+              )
+            }
+          >
+            Switch to Left Panel
+          </button>
+        ) : null)}
       <button className="mr-dropdown__button" onClick={props.toggleDropdownVisible}>
         <SvgSymbol
           sym="cog-icon"
@@ -408,40 +440,6 @@ const ListLayoutItems = function (props) {
           <li>
             <a onClick={() => props.setupWorkspaceAlt(props.closeDropdown)}>
               Add Static Map Layout
-            </a>
-          </li>
-        ) : null}
-        {props.setupWorkspaceAlt &&
-        props.hasLeftPanelOption &&
-        props.currentConfiguration.type === "leftPanel" ? (
-          <li>
-            <a
-              onClick={() =>
-                props.switchAltConfiguration(
-                  props.currentConfiguration?.id,
-                  "rightPanel",
-                  props.closeDropdown,
-                )
-              }
-            >
-              Switch to Right Panel
-            </a>
-          </li>
-        ) : null}
-        {props.setupWorkspaceAlt &&
-        props.hasLeftPanelOption &&
-        props.currentConfiguration.type === "rightPanel" ? (
-          <li>
-            <a
-              onClick={() =>
-                props.switchAltConfiguration(
-                  props.currentConfiguration?.id,
-                  "leftPanel",
-                  props.closeDropdown,
-                )
-              }
-            >
-              Switch to Left Panel
             </a>
           </li>
         ) : null}

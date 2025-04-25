@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
-import React, { Component, Fragment } from "react";
+import { Component, Fragment, createRef } from "react";
 import ReactGridLayout, { WidthProvider } from "react-grid-layout";
 import { widgetComponent } from "../../services/Widget/Widget";
 import WithWidgetManagement from "../HOCs/WithWidgetManagement/WithWidgetManagement";
@@ -25,8 +25,8 @@ export class WidgetGrid extends Component {
       startX: 0,
       startWidth: 32,
     };
-    this.dragHandleRef = React.createRef();
-    this.contentPanelRef = React.createRef();
+    this.dragHandleRef = createRef();
+    this.contentPanelRef = createRef();
 
     // Bind the handlers to make sure they're properly defined
     this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -220,9 +220,7 @@ export class WidgetGrid extends Component {
               style={{ ...panelStyle, marginTop: 0 }}
             >
               <GridLayout
-                className={`widget-grid-side-panel__grid_side-panel-${
-                  isLeftPanel ? "left" : "right"
-                }`}
+                className={"widget-grid-side-panel__grid_side-panel"}
                 cols={1}
                 rowHeight={this.props.workspace.rowHeight || 30}
                 layout={this.props.workspace.layout || []}

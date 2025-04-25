@@ -62,6 +62,11 @@
 
     .react-grid-item {
       width: 100% !important; 
+      > .react-resizable-handle {
+        z-index: 10000;
+        background-color: rgba(255, 255, 255, 0.75);
+        border-radius: 100% 0 0 0;
+      }
     }
   }
 
@@ -90,25 +95,13 @@
   &__grid_side-panel {
     height: 100%;
     width: 100%;
-
-    &--left {
-      padding-right: 0;
-      padding-left: 1rem;
-      overflow-x: visible;
-    }
-
-    &--right {
-      padding-left: 0;
-      padding-right: 1rem;
-      overflow-x: visible;
-    }
   }
   
   // Resize handle styles
   .panel-resize-handle {
     padding-top: 1rem;
     padding-bottom: 1rem;
-    width: 6px;
+    width: 8px;
     max-height: calc(100vh - 12em);
     background-color: rgba(200, 200, 200, 0.15);
     cursor: col-resize;
@@ -116,18 +109,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 5;
     border-radius: 3px;
     margin: 0 2px;
     
     &:hover, &.is-dragging {
-      width: 8px;
       background-color: rgba(200, 200, 200, 0.3);
-    }
-    
-    &.is-dragging {
-      width: 10px;
-      background-color: rgba(200, 200, 200, 0.5);
     }
     
     // Add a grip indicator for the handle
@@ -163,16 +149,7 @@
         margin: 3px 0;
       }
     }
-    
-    &:hover &__grip::before, 
-    &:hover &__grip::after,
-    &:hover &__grip-line,
-    &.is-dragging &__grip::before,
-    &.is-dragging &__grip::after,
-    &.is-dragging &__grip-line {
-      background-color: rgba(200, 200, 200, 0.8);
-      opacity: 1;
-    }
+  
   }
 }
 
@@ -190,99 +167,10 @@
   }
 
   .react-grid-item {
-    
-    
-    &:hover {
-      z-index: 5;
-    }
-    
     > .react-resizable-handle {
       z-index: 10000;
       background-color: rgba(255, 255, 255, 0.75);
       border-radius: 100% 0 0 0;
-    }
-    
-    // Custom resize handle styles
-    .react-resizable-handle {
-      position: absolute;
-      opacity: 0.5;
-      
-      
-      &::after {
-        content: '';
-        position: absolute;
-        right: 3px;
-        bottom: 3px;
-        width: 12px;
-        height: 12px;
-        border-right: 2px solid $grey;
-        border-bottom: 2px solid $grey;
-        
-      }
-      
-      &:hover {
-        opacity: 1;
-        
-        &::after {
-          border-color: $grey-dark;
-        }
-      }
-      
-      // South resize handle (bottom edge)
-      &.react-resizable-handle-s {
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 30px;
-        height: 10px;
-        cursor: s-resize;
-        
-        &::after {
-          left: 50%;
-          bottom: 3px;
-          transform: translateX(-50%);
-          width: 20px;
-          height: 3px;
-          border-right: none;
-          border-bottom: 2px solid $grey;
-        }
-      }
-      
-      // Southeast resize handle (bottom-right corner)
-      &.react-resizable-handle-se {
-        bottom: 0;
-        right: 0;
-        width: 15px;
-        height: 15px;
-        cursor: se-resize;
-        
-        &::after {
-          right: 3px;
-          bottom: 3px;
-          width: 10px;
-          height: 10px;
-        }
-      }
-      
-      // East resize handle (right edge)
-      &.react-resizable-handle-e {
-        top: 50%;
-        right: 0;
-        transform: translateY(-50%);
-        width: 10px;
-        height: 30px;
-        cursor: e-resize;
-        
-        &::after {
-          top: 50%;
-          right: 3px;
-          transform: translateY(-50%);
-          width: 3px;
-          height: 20px;
-          border-right: 2px solid $grey;
-          border-bottom: none;
-        }
-      }
     }
   }
 
