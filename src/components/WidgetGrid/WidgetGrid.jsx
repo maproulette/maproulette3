@@ -9,6 +9,10 @@ import WidgetPicker from "../WidgetPicker/WidgetPicker";
 import "../../../node_modules/react-grid-layout/css/styles.css";
 import "../../../node_modules/react-resizable/css/styles.css";
 import "./WidgetGrid.scss";
+import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
+import { TaskMapWidget } from "../Widgets/widget_registry";
+
+const EnhancedTaskMap = WithKeyboardShortcuts(TaskMapWidget);
 
 const GridLayout = WidthProvider(ReactGridLayout);
 
@@ -133,9 +137,11 @@ export class WidgetGrid extends Component {
                 {widgetInstances}
               </GridLayout>
             </div>
-            <div className="widget-grid-left-panel__enhanced-map">
-              {this.props.enhancedMapWidget}
-            </div>
+            {this.props.enhancedMapWidget && (
+              <div className="widget-grid-left-panel__enhanced-map">
+                <EnhancedTaskMap {...this.props} onLayoutChange={() => null} />
+              </div>
+            )}
           </div>
         </div>
       );

@@ -80,10 +80,6 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     return dispatch(updateUserAppSetting(userId, APP_ID, setting));
   }, 100);
 
-  actions.updateUserAppSettingWithoutDebounce = (userId, setting) => {
-    return dispatch(updateUserAppSetting(userId, APP_ID, setting));
-  };
-
   actions.getUserAppSetting = (user, settingName) => {
     return user?.properties?.[APP_ID]?.settings?.[settingName];
   };

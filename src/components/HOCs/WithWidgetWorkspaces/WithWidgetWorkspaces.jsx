@@ -56,7 +56,6 @@ export const WithWidgetWorkspacesInternal = function (
      * function
      */
     setupWorkspace = (defaultConfiguration) => {
-      console.log("setupWorkspace", defaultConfiguration);
       const conf = defaultConfiguration();
       // Ensure default layout honors properties from each widget's descriptor
       for (let i = 0; i < conf.widgets.length; i++) {
@@ -99,13 +98,11 @@ export const WithWidgetWorkspacesInternal = function (
      * switch to alternative workspace variant
      */
     switchWorkspaceAltVariant = (currentConfig, type = "rightPanel") => {
-      debugger;
       const updatedConfig = {
         ...currentConfig,
         type: type,
+        name: workspaceName,
       };
-
-      debugger;
 
       this.saveWorkspaceConfiguration(updatedConfig);
     };
@@ -154,8 +151,6 @@ export const WithWidgetWorkspacesInternal = function (
         initialWorkspace.type === "leftPanel" || initialWorkspace.type === "rightPanel"
           ? defaultConfigurationAlt
           : defaultConfiguration;
-
-      console.log(defaultConfig());
 
       let configuration = Object.assign(
         {
@@ -281,24 +276,6 @@ export const WithWidgetWorkspacesInternal = function (
         userWorkspaces[workspaceConfiguration.name],
         { [workspaceConfiguration.id]: workspaceConfiguration },
       );
-
-      this.props.updateUserAppSetting(this.props.user.id, {
-        workspaces: userWorkspaces,
-        dashboards: undefined, // clear out any legacy settings
-      });
-    };
-
-    /**
-     * Persist the given workspace configuration object to the user's app
-     * settings.
-     */
-    saveWorkspaceConfigurationSlice = (name, workspaceId, workspaceConfigurationSlice) => {
-      // Assign an id if needed
-
-      const userWorkspaces = this.allUserWorkspaces();
-      userWorkspaces[name] = Object.assign({}, userWorkspaces[workspaceConfigurationSlice.name], {
-        [workspaceConfigurationSlice.id]: workspaceConfigurationSlice,
-      });
 
       this.props.updateUserAppSetting(this.props.user.id, {
         workspaces: userWorkspaces,
