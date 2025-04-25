@@ -27,7 +27,7 @@
     flex: 1;
     overflow: hidden;
     position: relative;
-    max-height: calc(100vh - 12em);
+    max-height: calc(100vh - 15em);
   }
 
   &__layout_side-panel {
@@ -39,7 +39,7 @@
     overflow-x: visible;
     margin-top: auto;
     margin-bottom: auto;
-    max-height: calc(100vh - 12em);
+    max-height: calc(100vh - 15em);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     background-color: rgba(255, 255, 255, 0.04);
     border-radius: 0 4px 4px 0;
@@ -95,6 +95,7 @@
   &__grid_side-panel {
     height: 100%;
     width: 100%;
+    min-height: calc(100vh - 17em);
   }
   
   // Resize handle styles
@@ -102,7 +103,7 @@
     padding-top: 1rem;
     padding-bottom: 1rem;
     width: 8px;
-    max-height: calc(100vh - 12em);
+    max-height: calc(100vh - 15em);
     background-color: rgba(200, 200, 200, 0.15);
     cursor: col-resize;
     position: relative;
