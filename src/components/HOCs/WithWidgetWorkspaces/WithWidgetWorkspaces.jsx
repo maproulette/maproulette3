@@ -95,19 +95,6 @@ export const WithWidgetWorkspacesInternal = function (
     };
 
     /**
-     * switch to alternative workspace variant
-     */
-    switchWorkspaceAltVariant = (currentConfig, type = "rightPanel") => {
-      const updatedConfig = {
-        ...currentConfig,
-        type: type,
-        name: workspaceName,
-      };
-
-      this.saveWorkspaceConfiguration(updatedConfig);
-    };
-
-    /**
      * Retrieves all workspaces from the user's app settings
      *
      * @private
@@ -252,6 +239,44 @@ export const WithWidgetWorkspacesInternal = function (
         [newConfig.id]: { ...newConfig, active: true },
       });
 
+      this.props.updateUserAppSetting(this.props.user.id, {
+        workspaces: userWorkspaces,
+        dashboards: undefined, // clear out any legacy settings
+      });
+
+      this.setState({ currentConfigurationId: workspaceConfigurationId });
+    };
+
+    /**
+     * switch to alternative workspace variant
+     */
+    switchWorkspaceAltConfiguration = (
+      workspaceConfigurationId,
+      currentConfig,
+      type = "rightPanel",
+    ) => {
+      const userWorkspaces = this.allUserWorkspaces();
+      const newConfig = userWorkspaces[currentConfig.name][workspaceConfigurationId];
+
+      // Mark current config as inactive
+      userWorkspaces[currentConfig.name] = Object.assign({}, userWorkspaces[currentConfig.name], {
+        [currentConfig.id]: { ...currentConfig, active: false },
+      });
+
+      // Create updated version of the target config with the new type
+      const updatedConfig = {
+        ...newConfig,
+        type: type,
+        name: workspaceName,
+        active: true,
+      };
+
+      // Save the updated config
+      userWorkspaces[workspaceName] = Object.assign({}, userWorkspaces[workspaceName], {
+        [workspaceConfigurationId]: updatedConfig,
+      });
+
+      // Update the app settings
       this.props.updateUserAppSetting(this.props.user.id, {
         workspaces: userWorkspaces,
         dashboards: undefined, // clear out any legacy settings
@@ -438,6 +463,7 @@ export const WithWidgetWorkspacesInternal = function (
           currentConfiguration={currentConfiguration}
           remainingConfigurations={remainingConfigurations}
           switchWorkspaceConfiguration={this.switchWorkspaceConfiguration}
+          switchWorkspaceAltConfiguration={this.switchWorkspaceAltConfiguration}
           markWorkspaceConfigurationBroken={this.markWorkspaceConfigurationBroken}
           renameWorkspaceConfiguration={this.renameWorkspaceConfiguration}
           addNewWorkspaceConfiguration={this.addNewWorkspaceConfiguration}
@@ -447,7 +473,6 @@ export const WithWidgetWorkspacesInternal = function (
           importWorkspaceConfiguration={this.importWorkspaceConfiguration}
           deleteWorkspaceConfiguration={this.deleteWorkspaceConfiguration}
           setupWorkspaceAlt={this.setupWorkspaceAlt}
-          switchWorkspaceAltVariant={this.switchWorkspaceAltVariant}
         />
       );
     }
