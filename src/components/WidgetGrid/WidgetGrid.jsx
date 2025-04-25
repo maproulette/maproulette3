@@ -201,15 +201,7 @@ export class WidgetGrid extends Component {
         maxWidth: isPanelCollapsed ? "0%" : `${this.state.panelWidth}%`,
         width: isPanelCollapsed ? "0%" : `${this.state.panelWidth}%`,
         overflow: "hidden",
-        transition: "width 0.3s ease, max-width 0.3s ease",
         opacity: isPanelCollapsed ? 0 : 1,
-      };
-
-      const mapStyle = {
-        width: isPanelCollapsed ? "100%" : `${100 - this.state.panelWidth - 1}%`,
-        transition: "width 0.3s ease",
-        marginLeft: !isLeftPanel && isPanelCollapsed ? 0 : undefined,
-        marginRight: isLeftPanel && isPanelCollapsed ? 0 : undefined,
       };
 
       const resizeClass = classNames("panel-resize-handle", {
@@ -275,6 +267,8 @@ export class WidgetGrid extends Component {
                   [isLeftPanel ? "left" : "right"]: "0",
                   top: "60px",
                   zIndex: 1001,
+                  marginRight: isLeftPanel ? undefined : 0,
+                  marginLeft: isLeftPanel ? 0 : undefined,
                 }}
               >
                 <span className={toggleIconClass}></span>
@@ -326,14 +320,7 @@ export class WidgetGrid extends Component {
 
             {/* Map content */}
             {this.props.enhancedMapWidget && (
-              <div
-                className="widget-grid-side-panel__enhanced-map"
-                style={{
-                  ...mapStyle,
-                  flexShrink: 0,
-                  flexGrow: 1,
-                }}
-              >
+              <div className="widget-grid-side-panel__enhanced-map">
                 <EnhancedTaskMap {...this.props} onLayoutChange={() => null} />
               </div>
             )}
