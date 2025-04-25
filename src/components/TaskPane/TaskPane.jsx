@@ -32,6 +32,7 @@ import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
 import messages from "./Messages";
 import MobileTaskDetails from "./MobileTaskDetails/MobileTaskDetails";
 import TaskMap from "./TaskMap/TaskMap";
+
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails);
 const EnhancedTaskMapWidget = WithKeyboardShortcuts(TaskMapWidget);
