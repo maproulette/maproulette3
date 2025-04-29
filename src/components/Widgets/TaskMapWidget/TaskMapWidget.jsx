@@ -76,7 +76,7 @@ export default class TaskMapWidget extends Component {
       <QuickWidget {...this.props} className="task-map-widget" noMain permanent>
         <div
           className="mr-mt-2"
-          style={{ height: altWorkspaceType ? "calc(100vh - 280px)" : "calc(100% - 3rem)" }}
+          style={{ height: altWorkspaceType ? "calc(100vh - 270px)" : "calc(100% - 3rem)" }}
         >
           {this.props.getUserAppSetting ? (
             <>
