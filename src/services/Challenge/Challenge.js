@@ -950,6 +950,45 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
       }
     }
 
+    // Ensure priority bounds are valid
+    const validatePriorityBounds = (bounds) => {
+      if (!Array.isArray(bounds)) {
+        return [];
+      }
+
+      // Verify all bounds are proper GeoJSON features
+      const validBounds = bounds.filter((feature) => {
+        // Ensure first and last point match to close the polygon
+        const ring = feature.geometry.coordinates[0];
+        const firstPoint = ring[0];
+        const lastPoint = ring[ring.length - 1];
+
+        if (firstPoint[0] !== lastPoint[0] || firstPoint[1] !== lastPoint[1]) {
+          // Close the polygon by adding the first point at the end
+          ring.push([...firstPoint]);
+        }
+
+        return true;
+      });
+
+      return validBounds;
+    };
+
+    // Validate and clean up priority bounds
+    if (challengeData.highPriorityBounds) {
+      challengeData.highPriorityBounds = validatePriorityBounds(challengeData.highPriorityBounds);
+    }
+
+    if (challengeData.mediumPriorityBounds) {
+      challengeData.mediumPriorityBounds = validatePriorityBounds(
+        challengeData.mediumPriorityBounds,
+      );
+    }
+
+    if (challengeData.lowPriorityBounds) {
+      challengeData.lowPriorityBounds = validatePriorityBounds(challengeData.lowPriorityBounds);
+    }
+
     // We need to remove any old challenge keywords first, prior to the
     // update.
     return removeChallengeKeywords(challengeData.id, challengeData.removedTags).then(() => {
@@ -969,12 +1008,15 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "difficulty",
           "enabled",
           "featured",
+          "highPriorityBounds",
           "highPriorityRule",
           "id",
           "instruction",
           "localGeoJSON",
+          "lowPriorityBounds",
           "lowPriorityRule",
           "maxZoom",
+          "mediumPriorityBounds",
           "mediumPriorityRule",
           "minZoom",
           "name",
@@ -1417,6 +1459,18 @@ const reduceChallengesFurther = function (mergedState, oldState, challengeEntiti
 
     if (_isObject(entity.lowPriorityRule)) {
       mergedState[entity.id].lowPriorityRule = entity.lowPriorityRule;
+    }
+
+    if (Array.isArray(entity.highPriorityBounds)) {
+      mergedState[entity.id].highPriorityBounds = entity.highPriorityBounds;
+    }
+
+    if (Array.isArray(entity.mediumPriorityBounds)) {
+      mergedState[entity.id].mediumPriorityBounds = entity.mediumPriorityBounds;
+    }
+
+    if (Array.isArray(entity.lowPriorityBounds)) {
+      mergedState[entity.id].lowPriorityBounds = entity.lowPriorityBounds;
     }
 
     if (Array.isArray(entity.activity)) {

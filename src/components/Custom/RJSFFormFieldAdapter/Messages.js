@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Add a Rule",
   },
 
+  addBoundsLabel: {
+    id: "Form.controls.addBounds.label",
+    defaultMessage: "Add a Bounds",
+  },
+
   writeLabel: {
     id: "ChallengeDetails.controls.write.label",
     defaultMessage: "Write",
