@@ -29,12 +29,14 @@ export default class ProjectList extends Component {
   );
 
   render() {
+    const activeProjects = _filter(this.props.projects, (project) => !project.deleted);
+
     // Show pinned projects first
     const pinnedProjects = _filter(
-      this.props.projects,
+      activeProjects,
       (project) => this.props.pinnedProjects.indexOf(project.id) !== -1,
     );
-    const unpinnedProjects = _differenceBy(this.props.projects, pinnedProjects, "id");
+    const unpinnedProjects = _differenceBy(activeProjects, pinnedProjects, "id");
 
     const pinnedCards = _map(pinnedProjects, (project) => this.asCard(project, true));
     const unpinnedCards = _map(unpinnedProjects, (project) => this.asCard(project, false));
