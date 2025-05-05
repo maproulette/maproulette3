@@ -543,7 +543,7 @@ const BundleInterface = (props) => {
       )}
       <div
         className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80"
-        style={{ maxHeight: `${widgetLayout?.w * 80}px` }}
+        style={{ maxHeight: `${widgetLayout?.w * 600}px` }}
       >
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />

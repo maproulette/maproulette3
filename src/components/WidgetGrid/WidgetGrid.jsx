@@ -263,12 +263,8 @@ export class WidgetGrid extends Component {
                 onClick={this.togglePanel}
                 title="Expand panel"
                 style={{
-                  position: "absolute",
-                  [isLeftPanel ? "left" : "right"]: "0",
-                  top: "60px",
+                  position: "absolute", 
                   zIndex: 1001,
-                  marginRight: isLeftPanel ? undefined : 0,
-                  marginLeft: isLeftPanel ? 0 : undefined,
                 }}
               >
                 <span className={toggleIconClass}></span>

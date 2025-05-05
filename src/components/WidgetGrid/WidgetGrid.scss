@@ -185,27 +185,31 @@
     
     &.left-panel {
       &.is-collapsed {
-        left: 0;
-        margin-left: 11px
+        top: 0px;
+        left: -4px;
+        margin-right: 11px;
       }
       
       &:not(.is-collapsed) {
-        right: -12px; /* Position slightly outside the right edge */
-        margin-right: 11px
+        top: 0px;
+        left: -4px;
+        margin-right: 11px;
       }
     }
     
     &.right-panel {
       &.is-collapsed {
+        top: 0px;
         right: 0;
         padding-right: 35px;
         padding-left: 10px;
-        margin-right: 11px
+        margin-right: 4px;  
       }
       
       &:not(.is-collapsed) {
-        left: -12px; /* Position slightly outside the left edge */
-        margin-left: 11px
+        top: 0px;
+        left: -12px;
+        margin-left: 11px;
       }
     }
     
