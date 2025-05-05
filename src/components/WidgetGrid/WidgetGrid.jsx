@@ -263,7 +263,7 @@ export class WidgetGrid extends Component {
                 onClick={this.togglePanel}
                 title="Expand panel"
                 style={{
-                  position: "absolute", 
+                  position: "absolute",
                   zIndex: 1001,
                 }}
               >
