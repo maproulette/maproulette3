@@ -150,8 +150,22 @@ export class WidgetWorkspace extends Component {
     closeDropdown();
   };
 
+  setupWorkspaceAlt = (closeDropdown) => {
+    this.props.setupWorkspaceAlt(this.props.currentConfiguration);
+    closeDropdown();
+  };
+
   switchConfiguration = (configurationId, closeDropdown) => {
     this.props.switchWorkspaceConfiguration(configurationId, this.props.currentConfiguration);
+    closeDropdown();
+  };
+
+  switchAltConfiguration = (configurationId, type = "rightPanel", closeDropdown) => {
+    this.props.switchWorkspaceAltConfiguration(
+      configurationId,
+      this.props.currentConfiguration,
+      type,
+    );
     closeDropdown();
   };
 
@@ -179,6 +193,7 @@ export class WidgetWorkspace extends Component {
               <LayoutButton
                 {...this.props}
                 switchConfiguration={this.switchConfiguration}
+                switchAltConfiguration={this.switchAltConfiguration}
                 closeDropdown={dropdown.closeDropdown}
                 toggleDropdownVisible={dropdown.toggleDropdownVisible}
               />
@@ -188,6 +203,7 @@ export class WidgetWorkspace extends Component {
                 workspaceConfigurations={this.props.workspaceConfigurations}
                 currentConfiguration={this.props.currentConfiguration}
                 switchConfiguration={this.switchConfiguration}
+                switchAltConfiguration={this.switchAltConfiguration}
                 startEditingLayout={this.startEditingLayout}
                 addConfiguration={this.addConfiguration}
                 resetConfiguration={this.resetConfiguration}
@@ -195,6 +211,8 @@ export class WidgetWorkspace extends Component {
                 importConfiguration={this.importConfiguration}
                 deleteConfiguration={this.deleteConfiguration}
                 closeDropdown={dropdown.closeDropdown}
+                setupWorkspaceAlt={this.setupWorkspaceAlt}
+                hasLeftPanelOption={this.props.hasLeftPanelOption}
               />
             )}
           ></Dropdown>
@@ -255,6 +273,7 @@ export class WidgetWorkspace extends Component {
           workspace={this.props.currentConfiguration}
           workspaceContext={this.state.workspaceContext}
           setWorkspaceContext={this.setWorkspaceContext}
+          enhancedMapWidget={this.props.enhancedMapWidget}
         />
         {this.state.isExportingLayout && (
           <ExportLayoutModal
@@ -297,6 +316,37 @@ const LayoutButton = function (props) {
           </a>
         </h3>
       ) : null}
+      {props.setupWorkspaceAlt &&
+        props.hasLeftPanelOption &&
+        (props.currentConfiguration.type === "leftPanel" ? (
+          <button
+            type="button"
+            className="mr-button mr-button--small mr-mr-4"
+            onClick={() =>
+              props.switchAltConfiguration(
+                props.currentConfiguration?.id,
+                "rightPanel",
+                props.closeDropdown,
+              )
+            }
+          >
+            Switch to Right Panel
+          </button>
+        ) : props.currentConfiguration.type === "rightPanel" ? (
+          <button
+            type="button"
+            className="mr-button mr-button--small mr-mr-4"
+            onClick={() =>
+              props.switchAltConfiguration(
+                props.currentConfiguration?.id,
+                "leftPanel",
+                props.closeDropdown,
+              )
+            }
+          >
+            Switch to Left Panel
+          </button>
+        ) : null)}
       <button className="mr-dropdown__button" onClick={props.toggleDropdownVisible}>
         <SvgSymbol
           sym="cog-icon"
@@ -386,6 +436,13 @@ const ListLayoutItems = function (props) {
             <FormattedMessage {...messages.addConfigurationLabel} />
           </a>
         </li>
+        {props.setupWorkspaceAlt && props.hasLeftPanelOption ? (
+          <li>
+            <a onClick={() => props.setupWorkspaceAlt(props.closeDropdown)}>
+              Add Static Map Layout
+            </a>
+          </li>
+        ) : null}
         <li>
           <a onClick={() => props.beginExportingConfiguration(props.closeDropdown)}>
             <FormattedMessage {...messages.exportConfigurationLabel} />
