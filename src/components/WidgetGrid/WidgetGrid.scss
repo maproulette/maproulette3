@@ -101,7 +101,7 @@
   &__grid_side-panel {
     height: 100%;
     width: 100%;
-    min-height: calc(100vh - 17em);
+    min-height: calc(100vh - 260px);
     overflow-y: auto;
     flex: 1;
   }
@@ -111,7 +111,6 @@
     padding-top: 1rem;
     padding-bottom: 1rem;
     width: 8px;
-    max-height: calc(100vh - 15em);
     background-color: rgba(200, 200, 200, 0.15);
     cursor: col-resize;
     position: relative;
