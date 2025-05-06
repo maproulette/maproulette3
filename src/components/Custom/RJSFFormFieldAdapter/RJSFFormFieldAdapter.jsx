@@ -255,9 +255,6 @@ const BoundsMap = ({ selectedPolygons, setSelectedPolygons }) => {
   );
 };
 
-// Export the custom priority bounds field
-export { CustomPriorityBoundsField };
-
 /**
  * fieldset tags can't be styled using flexbox or grid in Chrome, so this
  * template attempts to render the fields the same way as the default but using
@@ -290,6 +287,107 @@ export const NoFieldsetObjectFieldTemplate = function (props) {
         />
       )}
       {props.properties.map((prop) => prop.content)}
+    </div>
+  );
+};
+
+export const PriorityBoundsFieldAdapter = (props) => {
+  // Get the priority level from the schema title
+  const getPriorityLevel = () => {
+    if (!props.schema || !props.schema.title) return null;
+
+    const title = props.schema.title.toLowerCase();
+    if (title.includes("high priority")) return "high";
+    if (title.includes("medium priority")) return "medium";
+    if (title.includes("low priority")) return "low";
+    return null;
+  };
+
+  const priorityLevel = getPriorityLevel();
+  const [showMap, setShowMap] = useState(true);
+
+  // Determine if this is a bounds field
+  const isBoundsField = () => {
+    if (!props.schema || !props.schema.items) return false;
+    if (props.schema.items.$ref === "#/definitions/priorityBounds") return true;
+    return props.schema.items.properties?.type?.enum?.[0] === "Feature";
+  };
+
+  // Determine if this is a rules field
+  const isRulesField = () => {
+    if (!props.schema || !props.schema.items) return false;
+    return props.schema.items.$ref === "#/definitions/tagRule";
+  };
+
+  const toggleMap = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowMap(!showMap);
+  };
+
+  const addLabel = props.uiSchema["ui:addLabel"] || (
+    <FormattedMessage {...messages.addPriorityRuleLabel} />
+  );
+  const addBoundsLabel = props.uiSchema["ui:addBoundsLabel"] || (
+    <FormattedMessage {...messages.addBoundsLabel} />
+  );
+
+  const isRules = isRulesField();
+  const isBounds = isBoundsField();
+
+  const handleBoundsChange = (newData) => {
+    // Force a new array to ensure React detects the change
+    const cleanData = newData ? [...newData] : [];
+
+    if (typeof props.onChange === "function") {
+      props.onChange(cleanData);
+    }
+  };
+
+  return (
+    <div className="array-field" onClick={(e) => e.stopPropagation()}>
+      {/* Show title and buttons in a row */}
+      <div className="mr-flex mr-justify-between mr-items-center">
+        {/* Title */}
+        <label className={`mr-text-yellow ${isRules ? "mr-text-lg mr-font-bold" : "mr-text-base"}`}>
+          {isRules
+            ? props.title
+            : `${
+                priorityLevel?.charAt(0).toUpperCase() + priorityLevel?.slice(1) || ""
+              } Priority Bounds`}
+        </label>
+
+        {/* Buttons */}
+        {props.canAdd && (
+          <div className="mr-flex mr-gap-2">
+            {isRules && (
+              <button className="mr-button mr-button--small" onClick={props.onAddClick}>
+                {addLabel}
+              </button>
+            )}
+            {isBounds && (
+              <button
+                className={`mr-button mr-button--green-lighter mr-button--small ${
+                  showMap ? "mr-bg-green-lighter mr-text-black" : ""
+                } mr-flex mr-items-center mr-gap-1`}
+                onClick={toggleMap}
+              >
+                <SvgSymbol
+                  sym="globe-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-5 mr-h-5"
+                />
+                {addBoundsLabel}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Show the fields */}
+      {showMap && (
+        <CustomPriorityBoundsField formData={props.formData} onChange={handleBoundsChange} />
+      )}
     </div>
   );
 };
@@ -828,3 +926,5 @@ export const LabelWithHelp = (props) => {
     </div>
   );
 };
+
+export { PriorityBoundsFieldAdapter as CustomPriorityBoundsField };

@@ -220,7 +220,7 @@ const MapControlsDrawer = (props) => {
                         checked={props.showSimplePriorityBounds}
                         onChange={props.toggleSimplePriorityBounds}
                       />
-                      Simple Priority Bounds
+s
                     </label>
                   </div>
                 </div>

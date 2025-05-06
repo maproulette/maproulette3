@@ -10,8 +10,8 @@ import {
   AttributionControl,
   LayerGroup,
   MapContainer,
-  Polygon,
   Rectangle,
+  Polygon,
   ScaleControl,
   useMap,
 } from "react-leaflet";
@@ -338,8 +338,8 @@ export const TaskClusterMap = (props) => {
                   boundsItem.priorityLevel === 0
                     ? "High Priority"
                     : boundsItem.priorityLevel === 1
-                      ? "Medium Priority"
-                      : "Low Priority";
+                    ? "Medium Priority"
+                    : "Low Priority";
 
                 // Get task count (if available)
                 let taskCount = null;

@@ -3,49 +3,7 @@ import React, { useState, useEffect } from "react";
 import { AttributionControl, MapContainer, ScaleControl, TileLayer, useMap } from "react-leaflet";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import "leaflet/dist/leaflet.css";
-import "leaflet-lasso/dist/leaflet-lasso.esm";
-
-// Helper function to validate GeoJSON feature
-const validateGeoJsonFeature = (feature) => {
-  if (!feature || feature.type !== "Feature") {
-    return false;
-  }
-
-  if (!feature.geometry || feature.geometry.type !== "Polygon") {
-    return false;
-  }
-
-  if (
-    !Array.isArray(feature.geometry.coordinates) ||
-    !Array.isArray(feature.geometry.coordinates[0]) ||
-    feature.geometry.coordinates[0].length < 4
-  ) {
-    return false;
-  }
-
-  // Check if the polygon is closed (first point equals last point)
-  const firstPoint = feature.geometry.coordinates[0][0];
-  const lastPoint = feature.geometry.coordinates[0][feature.geometry.coordinates[0].length - 1];
-
-  if (firstPoint[0] !== lastPoint[0] || firstPoint[1] !== lastPoint[1]) {
-    return false;
-  }
-
-  return true;
-};
-
-// Helper function for debouncing
-const debounce = (func, wait) => {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-};
+import "leaflet-lasso";
 
 const BoundsSelector = ({ value, onChange }) => {
   const map = useMap();
@@ -54,13 +12,15 @@ const BoundsSelector = ({ value, onChange }) => {
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showClearModal, setShowClearModal] = useState(false);
-  const [lassoInstance, setLassoInstance] = useState(null);
+  // Use a ref instead of state to prevent cleanup on updates
+  const lassoInstanceRef = React.useRef(null);
   const [selectedPolygons, setSelectedPolygons] = useState([]);
 
   // Ensure changes are reflected in form data after any polygons are added/removed
   useEffect(() => {
     if (featureGroup && featureGroup.getLayers().length > 0) {
       const geometries = Array.from(featureGroup.getLayers()).map(polygonToGeoJSON).filter(Boolean);
+
       if (geometries.length > 0) {
         onChange(geometries);
       }
@@ -116,7 +76,9 @@ const BoundsSelector = ({ value, onChange }) => {
                 }
 
                 fg.addLayer(restoredPolygon);
-              } catch (err) {}
+              } catch (err) {
+                console.error(`Error restoring polygon ${index}:`, err);
+              }
             });
 
             // Fit map to bounds of all polygons
@@ -126,12 +88,12 @@ const BoundsSelector = ({ value, onChange }) => {
                 map.fitBounds(bounds, { padding: [50, 50] });
               }
             } catch (e) {
-              // Silently handle errors
+              console.error("Error fitting bounds:", e);
             }
           }
         }
       } catch (error) {
-        // Silently handle errors
+        console.error("Error in polygon restoration:", error);
       }
 
       // Add a click event to the map that will close any open modals
@@ -162,11 +124,6 @@ const BoundsSelector = ({ value, onChange }) => {
     const result = geoJsonFeatures
       .map((feature, index) => {
         try {
-          // Validate the feature first
-          if (!validateGeoJsonFeature(feature)) {
-            return null;
-          }
-
           // Convert coordinates from [lng, lat] to [lat, lng] for Leaflet
           const latlngs = feature.geometry.coordinates[0].map((coord) => {
             return [coord[1], coord[0]];
@@ -183,6 +140,7 @@ const BoundsSelector = ({ value, onChange }) => {
 
           return polygon;
         } catch (error) {
+          console.error(`Error converting feature ${index}:`, error);
           return null;
         }
       })
@@ -218,13 +176,17 @@ const BoundsSelector = ({ value, onChange }) => {
 
       // Update the polygons list
       setSelectedPolygons((prev) => {
-        const updatedPolygons = Array.from(featureGroup.getLayers());
+        // Filter out the selected polygon from the previous state
+        const filteredPolygons = prev.filter((polygon) => polygon !== selectedPolygon);
+
+        // Also get all layers from feature group to ensure consistency
+        const allPolygons = Array.from(featureGroup.getLayers());
 
         // Update form data
-        const geometries = updatedPolygons.map(polygonToGeoJSON).filter(Boolean);
+        const geometries = allPolygons.map(polygonToGeoJSON).filter(Boolean);
         onChange(geometries);
 
-        return updatedPolygons;
+        return filteredPolygons;
       });
 
       setShowModal(false);
@@ -299,85 +261,55 @@ const BoundsSelector = ({ value, onChange }) => {
 
     if (selecting) {
       // If already in lasso mode, cancel it
-      if (lassoInstance && lassoInstance.disable) {
-        lassoInstance.disable();
+      if (lassoInstanceRef.current && lassoInstanceRef.current.disable) {
+        lassoInstanceRef.current.disable();
+        lassoInstanceRef.current = null;
       }
       setSelecting(false);
       return;
     }
 
     // Clear any existing lasso instances first
-    if (lassoInstance && lassoInstance.disable) {
-      lassoInstance.disable();
+    if (lassoInstanceRef.current && lassoInstanceRef.current.disable) {
+      lassoInstanceRef.current.disable();
+      lassoInstanceRef.current = null;
     }
 
     setSelecting(true);
 
     try {
-      // Custom lasso implementation
-      let polyline = null;
-      let points = [];
-
-      const handleMouseDown = (e) => {
-        // When in selecting mode, allow drawing on the map regardless of what was clicked
-        points = [e.latlng];
-        polyline = L.polyline([e.latlng], { color: "#ff3300", weight: 2 }).addTo(map);
-
-        map.dragging.disable();
-        map.on("mousemove", handleMouseMove);
-        map.on("mouseup", handleMouseUp);
-
-        // Prevent event propagation
-        L.DomEvent.stopPropagation(e);
-        L.DomEvent.preventDefault(e);
-      };
-
-      const handleMouseMove = (e) => {
-        if (polyline) {
-          points.push(e.latlng);
-          polyline.setLatLngs(points);
-        }
-      };
-
-      const handleMouseUp = (e) => {
-        map.dragging.enable();
-        map.off("mousemove", handleMouseMove);
-        map.off("mouseup", handleMouseUp);
-
-        if (polyline) {
-          map.removeLayer(polyline);
-        }
-
-        // If we have enough points to make a polygon (at least 3)
-        if (points.length >= 3) {
-          // Create the polygon
-          const coordinates = points.map((p) => [p.lat, p.lng]);
-
-          const polygon = L.polygon(coordinates, {
+      // Define the handler function for when lasso selection is completed
+      const handleLassoFinished = (e) => {
+        if (e.latLngs && e.latLngs.length >= 3) {
+          // Create a polygon from the lasso points
+          const polygon = L.polygon(e.latLngs, {
             color: "#3388ff",
             weight: 2,
             fillOpacity: 0.2,
           });
 
           // Store original coordinates for accurate conversion
-          polygon.originalCoordinates = coordinates;
+          polygon.originalCoordinates = e.latLngs.map((latlng) => [latlng.lat, latlng.lng]);
 
           // Add event handlers
           polygon.on("mouseover", () => handlePolygonHover(polygon));
           polygon.on("mouseout", () => handlePolygonHoverOut(polygon));
-          polygon.on("click", (e) => {
-            L.DomEvent.stopPropagation(e);
+          polygon.on("click", (evt) => {
+            L.DomEvent.stopPropagation(evt);
             handlePolygonClick(polygon);
           });
 
+          // Add the polygon to the feature group
           featureGroup.addLayer(polygon);
 
-          // Update state
+          // Update selectedPolygons state
           setSelectedPolygons((prev) => {
-            const updatedPolygons = Array.from(featureGroup.getLayers());
+            const updatedPolygons = [...prev, polygon];
 
             // Convert to GeoJSON
-            const geometries = updatedPolygons.map(polygonToGeoJSON).filter(Boolean);
+            const geometries = Array.from(featureGroup.getLayers())
+              .map(polygonToGeoJSON)
+              .filter(Boolean);
 
             if (typeof onChange === "function") {
               onChange(geometries);
@@ -387,45 +319,147 @@ const BoundsSelector = ({ value, onChange }) => {
           });
         }
 
-        // Always disable lasso mode after mouseup
-        if (lassoInstance && lassoInstance.disable) {
-          lassoInstance.disable();
-        }
+        // Reset state
         setSelecting(false);
-
-        // Remove the mousedown handler
-        map.off("mousedown", handleMouseDown);
       };
 
-      // Start drawing mode
-      map.on("mousedown", handleMouseDown);
+      // Add the event handler to the map BEFORE creating the lasso
+      map.on("lasso.finished", handleLassoFinished);
 
-      // Keep track of cleanup
-      setLassoInstance({
-        disable: () => {
-          map.off("mousedown", handleMouseDown);
-          map.off("mousemove", handleMouseMove);
-          map.off("mouseup", handleMouseUp);
-          if (polyline) map.removeLayer(polyline);
-        },
-      });
+      // Try several different approaches to create the lasso
+      let handler;
+
+      try {
+        handler = new L.Lasso(map, {
+          polygon: {
+            color: "#ff3300",
+            weight: 2,
+          },
+        });
+      } catch (e) {
+        try {
+          handler = L.lasso(map, {
+            polygon: {
+              color: "#ff3300",
+              weight: 2,
+            },
+          });
+        } catch (e) {
+          try {
+            // If the above approaches don't work, create the bare minimum lasso
+            // Using the instantiation pattern seen in the source code
+            // This is a fallback approach
+            handler = {
+              enable: function () {
+                // Set up the actual lasso drawing
+                const drawLasso = (e) => {
+                  // Disable map dragging
+                  map.dragging.disable();
+
+                  let points = [e.latlng];
+                  let polyline = L.polyline(points, {
+                    color: "#ff3300",
+                    weight: 2,
+                  }).addTo(map);
+
+                  const moveHandler = (e) => {
+                    points.push(e.latlng);
+                    polyline.setLatLngs(points);
+                  };
+
+                  const endHandler = (e) => {
+                    map.dragging.enable();
+                    map.off("mousemove", moveHandler);
+                    map.off("mouseup", endHandler);
+
+                    if (polyline) {
+                      map.removeLayer(polyline);
+                    }
+
+                    if (points.length >= 3) {
+                      // Make sure the polygon is closed
+                      if (points[0] !== points[points.length - 1]) {
+                        points.push(points[0]);
+                      }
+
+                      // Fire the lasso.finished event
+                      map.fire("lasso.finished", {
+                        latLngs: points,
+                        layers: [],
+                      });
+                    }
+                  };
+
+                  map.on("mousemove", moveHandler);
+                  map.on("mouseup", endHandler);
+                };
+
+                map.on("mousedown", drawLasso);
+                this.drawLasso = drawLasso;
+              },
+              disable: function () {
+                if (this.drawLasso) {
+                  map.off("mousedown", this.drawLasso);
+                  this.drawLasso = null;
+                }
+              },
+            };
+          } catch (e) {
+            throw new Error("Could not initialize lasso with any method");
+          }
+        }
+      }
+
+      // Store the handler in the ref
+      lassoInstanceRef.current = handler;
+
+      // Enable the handler
+      handler.enable();
+
+      // Add test function for debugging
+      window._testLassoEvent = () => {
+        const testLatLngs = [
+          L.latLng(20, 20),
+          L.latLng(20, 30),
+          L.latLng(30, 30),
+          L.latLng(30, 20),
+          L.latLng(20, 20), // Close the polygon
+        ];
+
+        // Manually trigger the event
+        map.fire("lasso.finished", { latLngs: testLatLngs, layers: [] });
+      };
+
+      // Add cleanup to stop lasso and remove event when done
+      const originalDisable = handler.disable;
+      handler.disable = function () {
+        map.off("lasso.finished", handleLassoFinished);
+        originalDisable.call(this);
+      };
     } catch (error) {
-      console.error("Error in lasso selection:", error);
+      console.error("Error initializing lasso:", error);
       setSelecting(false);
     }
   };
 
-  // Clean up lasso instance when component unmounts
+  // Clean up lasso instance on component unmount only
   useEffect(() => {
+    // This effect is only for component unmount cleanup
     return () => {
+      if (lassoInstanceRef.current && lassoInstanceRef.current.disable) {
+        lassoInstanceRef.current.disable();
+        lassoInstanceRef.current = null;
+      }
+
+      // Clean up any possible remaining lasso event handlers
       if (map) {
         map.off("lasso.finished");
-        if (lassoInstance && lassoInstance.disable) {
-          lassoInstance.disable();
-        }
+        map.off("lasso.enabled");
+        map.off("lasso.disabled");
+        map.off("lasso.created");
       }
     };
-  }, [lassoInstance, map]);
+  }, [map]);
 
   // Show clear all confirmation dialog
   const showClearAllConfirmation = (e) => {
@@ -439,7 +473,10 @@ const BoundsSelector = ({ value, onChange }) => {
   // Handle clearing all polygons
   const clearAllPolygons = () => {
     if (featureGroup) {
+      // Clear all layers from the feature group
       featureGroup.clearLayers();
+
+      // Reset the selected polygons state
       setSelectedPolygons([]);
 
       // Update form data
@@ -462,7 +499,7 @@ const BoundsSelector = ({ value, onChange }) => {
         <div className="mr-flex mr-flex-col mr-gap-2">
           <button
             onClick={handleLassoSelection}
-            className={`mr-p-2 mr-rounded mr-bg-white hover:mr-bg-green-lighter mr-transition-colors mr-duration-200 ${
+            className={`mr-p-2 mr-rounded mr-bg-white hover:mr-bg-green-lighter mr-transition-colors mr-duration-200 mr-shadow-md ${
               selecting ? "mr-bg-green-light mr-shadow-md mr-border-2 mr-border-white" : ""
             }`}
             title={selecting ? "Cancel Lasso" : "Lasso Select"}
@@ -473,7 +510,7 @@ const BoundsSelector = ({ value, onChange }) => {
               className={`mr-w-5 mr-h-5 ${selecting ? "mr-text-white" : ""}`}
             />
             {selecting && (
-              <span className="mr-absolute mr-right-[110%] mr-bg-black-50 mr-px-2 mr-py-1 mr-rounded mr-text-white mr-text-xs mr-whitespace-nowrap">
+              <span className="mr-absolute mr-right-[110%] mr-bg-black-50 mr-px-2 mr-py-1 mr-rounded mr-text-white mr-text-xs mr-whitespace-nowrap mr-shadow-md">
                 Drawing Mode
               </span>
             )}
@@ -482,7 +519,7 @@ const BoundsSelector = ({ value, onChange }) => {
           {featureGroup && featureGroup.getLayers().length > 0 && (
             <button
               onClick={showClearAllConfirmation}
-              className="mr-p-2 mr-rounded mr-bg-white hover:mr-bg-red-light mr-transition-colors mr-duration-200 mr-relative"
+              className="mr-p-2 mr-rounded mr-bg-white hover:mr-bg-red-light mr-transition-colors mr-duration-200 mr-relative mr-shadow-md"
               title="Clear All Polygons"
             >
               <SvgSymbol
@@ -490,7 +527,7 @@ const BoundsSelector = ({ value, onChange }) => {
                 viewBox="0 0 20 20"
                 className="mr-w-5 mr-h-5 mr-text-red"
               />
-              <span className="mr-absolute mr-top-[-8px] mr-right-[-8px] mr-bg-red mr-text-white mr-rounded-full mr-w-5 mr-h-5 mr-flex mr-items-center mr-justify-center mr-text-xs">
+              <span className="mr-absolute mr-top-[-8px] mr-right-[-8px] mr-bg-red mr-text-white mr-rounded-full mr-w-5 mr-h-5 mr-flex mr-items-center mr-justify-center mr-text-xs mr-shadow-md">
                 {featureGroup.getLayers().length}
               </span>
             </button>
@@ -630,7 +667,6 @@ const CustomPriorityBoundsField = (props) => {
       {isMapVisible && (
         <div className="mr-relative">
           <MapContainer
-            center={[20, 0]}
             zoom={2}
             style={{ height: "400px", width: "100%" }}
             attributionControl={false}
@@ -652,9 +688,6 @@ const CustomPriorityBoundsField = (props) => {
 
             <BoundsSelector value={localData} onChange={handleChange} />
           </MapContainer>
-          <div className="mr-absolute mr-bottom-2 mr-left-2 mr-z-[1000] mr-bg-black-50 mr-rounded mr-p-2 mr-text-white mr-text-xs">
-            Use the lasso tool to draw priority bounds
-          </div>
         </div>
       )}
     </div>

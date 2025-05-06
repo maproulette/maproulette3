@@ -34,7 +34,7 @@ import {
   CustomArrayFieldTemplate,
   CustomCheckboxField,
   CustomFieldTemplate,
-  CustomPriorityBoundsField,
+  PriorityBoundsFieldAdapter,
   CustomSelectWidget,
   CustomTextWidget,
   LabelWithHelp,
@@ -798,7 +798,7 @@ export class EditChallenge extends Component {
           // Override the standard form-field description renderer with our own that
           // supports Markdown. We pass this in to the `fields` prop on the Form.
           const customFields = {
-            CustomPriorityBoundsField: CustomPriorityBoundsField,
+            CustomPriorityBoundsField: PriorityBoundsFieldAdapter,
             DescriptionField: MarkdownDescriptionField,
             markdown: MarkdownEditField,
             columnRadio: ColumnRadioField,

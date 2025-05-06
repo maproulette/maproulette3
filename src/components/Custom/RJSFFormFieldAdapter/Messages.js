@@ -53,4 +53,9 @@ export default defineMessages({
     id: "Form.controls.markdownField.formatErrorJSON.label",
     defaultMessage: "Upload Failed! Layout must be exported from the task completion flow.",
   },
+
+  usePriorityBoundsHelper: {
+    id: "Form.controls.priorityBounds.helper",
+    defaultMessage: "Priority bounds can be configured in the editor.",
+  },
 });
