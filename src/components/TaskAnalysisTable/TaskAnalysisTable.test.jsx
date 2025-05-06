@@ -4,7 +4,6 @@ import { render } from "@testing-library/react";
 import { IntlProvider } from "react-intl";
 import { TaskAnalysisTableInternal as TaskAnalysisTable } from "./TaskAnalysisTable";
 
-vi.mock("../../components/KeywordAutosuggestInput/InTableTagFilter", () => ({ default: {} }));
 vi.mock("./TaskAnalysisTableHeader", () => ({ default: () => <div>Header</div> }));
 vi.mock("../ViewTask/ViewTask", () => ({ default: () => <div>ViewTask</div> }));
 
@@ -16,9 +15,8 @@ describe("TaskAnalysisTable", () => {
           selectedTasks={{}}
           toggleTaskSelection={() => null}
           showColumns={["selected", "featureId", "id", "status", "priority", "comments"]}
-          intl={{ formatMessage: () => null }}
+          intl={{ formatMessage: () => "" }}
           getUserAppSetting={() => null}
-          selectedTaskCount={() => null}
           updateCriteria={() => null}
         />
       </IntlProvider>,

@@ -54,7 +54,7 @@ class Notification extends Component {
   renderedNotification = (notification) => (
     <li
       key={notification.id}
-      ref={notification === this.props.notification ? this.chosenNotificationRef : undefined}
+      ref={this.chosenNotificationRef}
       className={classNames("mr-bg-pink-light-10 mr-rounded mr-mb-6", {
         "mr-border mr-border-pink-light-50":
           this.props.thread && notification === this.props.notification,
