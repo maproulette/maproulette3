@@ -46,6 +46,10 @@ import { resetCache } from "./services/Server/RequestCache";
 import "./components/Widgets/widget_registry";
 import "./App.scss";
 import TestEnvironmentBanner from "./components/TestEnvironmentBanner/TestEnvironmentBanner.jsx";
+import pluginService from "./services/PluginService";
+import PluginManager from "./components/PluginManager";
+import PluginInjectionPoint from "./components/PluginInjectionPoint";
+import "./styles/plugins.scss";
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar));
@@ -81,11 +85,36 @@ export class App extends Component {
     shouldDisplayError: true,
   };
 
+  constructor(props) {
+    super(props);
+    this.pluginService = pluginService;
+  }
+
+  componentDidMount() {
+    // Register the community metrics plugin
+    this.pluginService.registerPlugin({
+      id: 'community-metrics',
+      name: 'Community Metrics & Discussion',
+      description: 'Adds community metrics and discussion capabilities to MapRoulette',
+      entryPoint: 'http://localhost:3100/community-metrics.jsx',
+      injectionPoints: ['task-pane'],
+      defaultComponent: 'Community'
+    });
+
+    // // Load the plugin immediately after registration
+    this.pluginService.loadPlugin('community-metrics');
+
+    // console.log(window.env.REACT_APP_MR_PLUGINS);
+    // console.log(JSON.parse(window.env.REACT_APP_MR_PLUGINS || '{}'));
+    // this.pluginService.registerPlugin(JSON.parse(window.env.REACT_APP_MR_PLUGINS || '{}'));
+  }
+
   dismissModal = () => {
     this.setState({ firstTimeModalDismissed: true });
   };
 
   render() {
+    console.log(this.pluginService.getPlugins());
     // We don't currently support mobile devices. Unless the mobile feature
     // is explicitly enabled, inform user that mobile is not supported.
     if (window.env.REACT_APP_FEATURE_MOBILE_DEVICES !== "enabled") {
@@ -108,6 +137,7 @@ export class App extends Component {
         <CheckForToken>
           <main role="main" className="mr-bg-white mr-text-grey">
             <Switch>
+              <CachedRoute exact path="/plugins" component={PluginManager} />
               <CachedRoute exact path="/" component={HomeOrDashboard} />
               <CachedRoute exact path="/browse/challenges" component={ChallengePane} />
               <CachedRoute path="/browse/challenges/:challengeId" component={ChallengeDetail} />
@@ -177,6 +207,11 @@ export class App extends Component {
               <CachedRoute path="/error" component={ErrorPane} />
               <Route component={PageNotFound} />
             </Switch>
+            
+            {/* Plugin injection points */}
+            <PluginInjectionPoint point="main-content" />
+            <PluginInjectionPoint point="sidebar" />
+            <PluginInjectionPoint point="footer" />
           </main>
         </CheckForToken>
         <Footer />

@@ -1,0 +1,366 @@
+.plugin-manager {
+  padding: 1rem;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+}
+
+.plugin-manager-error {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 4px;
+  color: #c00;
+}
+
+.plugin-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.plugin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+
+  .plugin-info {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 0.5rem;
+      color: #333;
+    }
+
+    p {
+      margin: 0.25rem 0;
+      color: #666;
+    }
+  }
+
+  .plugin-actions {
+    margin-left: 1rem;
+  }
+}
+
+.plugin-enable,
+.plugin-disable {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &.plugin-enable {
+    background: #28a745;
+    color: white;
+
+    &:hover {
+      background: #218838;
+    }
+  }
+
+  &.plugin-disable {
+    background: #dc3545;
+    color: white;
+
+    &:hover {
+      background: #c82333;
+    }
+  }
+}
+
+// Community Plugin Styles
+.community-plugin {
+  padding: 1rem;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+
+  .metrics-plugin {
+    margin-bottom: 2rem;
+
+    h3 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+
+      .metric-card {
+        padding: 1rem;
+        background: #f5f5f5;
+        border-radius: 4px;
+        text-align: center;
+
+        h4 {
+          margin: 0 0 0.5rem;
+          color: #666;
+          font-size: 0.9rem;
+        }
+
+        .metric-value {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: #333;
+          margin: 0;
+        }
+
+        .metric-percentage {
+          color: #666;
+          font-size: 0.9rem;
+          margin: 0.25rem 0 0;
+        }
+      }
+    }
+  }
+
+  .discussion-plugin {
+    h3 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .messages-container {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+
+      .message {
+        padding: 0.75rem;
+        border-bottom: 1px solid #eee;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .message-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.5rem;
+          font-size: 0.9rem;
+
+          .user {
+            font-weight: bold;
+            color: #333;
+          }
+
+          .timestamp {
+            color: #666;
+          }
+        }
+
+        .content {
+          margin: 0;
+          color: #444;
+        }
+      }
+    }
+
+    .message-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: vertical;
+      }
+
+      button {
+        align-self: flex-end;
+        padding: 0.5rem 1rem;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+          background: #0056b3;
+        }
+      }
+    }
+  }
+}
+
+// Metrics Styles
+.metrics-plugin {
+  margin-bottom: 2rem;
+
+  h3 {
+    color: #333;
+    margin-bottom: 1rem;
+  }
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.metric-card {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  text-align: center;
+
+  h4 {
+    color: #666;
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+
+  .metric-percentage {
+    color: #28a745;
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0;
+  }
+}
+
+// Discussion Styles
+.discussion-plugin {
+  h3 {
+    color: #333;
+    margin-bottom: 1rem;
+  }
+}
+
+.messages-container {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+.message {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+
+    .user {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .timestamp {
+      color: #666;
+    }
+  }
+
+  .content {
+    margin: 0;
+    color: #333;
+    line-height: 1.4;
+  }
+}
+
+.message-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 0.9rem;
+
+    &:focus {
+      outline: none;
+      border-color: #80bdff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+  }
+
+  button {
+    align-self: flex-end;
+    padding: 0.5rem 1rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+}
+
+.plugin-error {
+  padding: 1rem;
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 4px;
+  color: #c00;
+}
+
+.plugin-loading {
+  padding: 1rem;
+  text-align: center;
+  color: #666;
+}
+
+.hello-world-plugin {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+
+  h2 {
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+  }
+} 

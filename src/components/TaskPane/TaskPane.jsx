@@ -32,6 +32,7 @@ import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
 import messages from "./Messages";
 import MobileTaskDetails from "./MobileTaskDetails/MobileTaskDetails";
 import TaskMap from "./TaskMap/TaskMap";
+import PluginInjectionPoint from "../PluginInjectionPoint";
 
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails);
@@ -528,6 +529,7 @@ export class TaskPane extends Component {
             }
           />
         )}
+        <PluginInjectionPoint point="task-pane" />
       </div>
     );
   }
