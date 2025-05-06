@@ -45,9 +45,9 @@ export const clearVisibleOverlays = function () {
 };
 
 // Default set of visible map overlays
-export const defaultVisibleOverlays = function() {
-  return ["priority-bounds"] // Add priority-bounds to default visible overlays
-}
+export const defaultVisibleOverlays = function () {
+  return ["priority-bounds"]; // Add priority-bounds to default visible overlays
+};
 
 // redux reducers
 export const visibleOverlays = function (state = defaultVisibleOverlays(), action) {

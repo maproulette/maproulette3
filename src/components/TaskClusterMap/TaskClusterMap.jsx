@@ -1,20 +1,20 @@
 import classNames from "classnames";
+import { DomEvent } from "leaflet";
 import _compact from "lodash/compact";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import {
   AttributionControl,
   LayerGroup,
   MapContainer,
+  Polygon,
   Rectangle,
   ScaleControl,
   useMap,
-  Polygon,
 } from "react-leaflet";
-import { DomEvent } from "leaflet";
 import { toLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { TaskPriorityColors } from "../../services/Task/TaskPriority/TaskPriority";
 import { DEFAULT_OVERLAY_ORDER, buildLayerSources } from "../../services/VisibleLayer/LayerSources";
@@ -338,8 +338,8 @@ export const TaskClusterMap = (props) => {
                   boundsItem.priorityLevel === 0
                     ? "High Priority"
                     : boundsItem.priorityLevel === 1
-                    ? "Medium Priority"
-                    : "Low Priority";
+                      ? "Medium Priority"
+                      : "Low Priority";
 
                 // Get task count (if available)
                 let taskCount = null;

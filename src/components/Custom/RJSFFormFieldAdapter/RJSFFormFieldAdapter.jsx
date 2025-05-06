@@ -18,8 +18,8 @@ import CustomPriorityBoundsField from "./CustomPriorityBoundsField";
 import messages from "./Messages";
 import "react-tagsinput/react-tagsinput.css";
 import "./RJSFFormFieldAdapter.scss";
-import { MapContainer, TileLayer, AttributionControl, ScaleControl, useMap } from "react-leaflet";
 import L from "leaflet";
+import { AttributionControl, MapContainer, ScaleControl, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-lasso/dist/leaflet-lasso.esm";
 

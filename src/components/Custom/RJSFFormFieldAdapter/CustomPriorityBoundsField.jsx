@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
 import L from "leaflet";
-import { MapContainer, TileLayer, AttributionControl, ScaleControl, useMap } from "react-leaflet";
+import React, { useState, useEffect } from "react";
+import { AttributionControl, MapContainer, ScaleControl, TileLayer, useMap } from "react-leaflet";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import "leaflet/dist/leaflet.css";
 import "leaflet-lasso/dist/leaflet-lasso.esm";
