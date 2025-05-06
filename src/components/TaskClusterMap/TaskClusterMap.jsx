@@ -1,14 +1,16 @@
 import classNames from "classnames";
+import { DomEvent } from "leaflet";
 import _compact from "lodash/compact";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import {
   AttributionControl,
   LayerGroup,
   MapContainer,
+  Polygon,
   Rectangle,
   ScaleControl,
   useMap,
@@ -60,6 +62,81 @@ export const TaskClusterMap = (props) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
   const [drawerOpen, setDrawerOpen] = useState(true);
+  const [showPriorityBounds, setShowPriorityBounds] = useState(true);
+
+  // Ensure priority bounds is in visible overlays
+  useEffect(() => {
+    if (showPriorityBounds && props.addVisibleOverlay) {
+      props.addVisibleOverlay("priority-bounds");
+    }
+  }, [showPriorityBounds, props.addVisibleOverlay]);
+
+  // Function to toggle priority bounds layer
+  const togglePriorityBounds = () => {
+    setShowPriorityBounds(!showPriorityBounds);
+
+    // Also add/remove from visible overlays as needed
+    if (!showPriorityBounds) {
+      props.addVisibleOverlay && props.addVisibleOverlay("priority-bounds");
+    } else {
+      props.removeVisibleOverlay && props.removeVisibleOverlay("priority-bounds");
+    }
+  };
+
+  const priorityBoundsCount = useMemo(() => {
+    if (!props.challenge) return 0;
+
+    let count = 0;
+    count += props.challenge.highPriorityBounds?.length || 0;
+    count += props.challenge.mediumPriorityBounds?.length || 0;
+    count += props.challenge.lowPriorityBounds?.length || 0;
+
+    return count;
+  }, [props.challenge]);
+
+  // Function to prepare priority bounds from challenge data
+  const priorityBounds = useMemo(() => {
+    // Add default test bounds if challenge has no bounds data
+    const bounds = [];
+
+    // Helper function to process bounds for a priority level
+    const processBounds = (boundsData, priorityLevel) => {
+      // Safely check if bounds data exists
+      if (!boundsData || !Array.isArray(boundsData)) {
+        return;
+      }
+
+      boundsData.forEach((boundFeature) => {
+        // Check if we have a polygon with coordinates
+        if (
+          boundFeature.geometry?.type === "Polygon" &&
+          Array.isArray(boundFeature.geometry.coordinates) &&
+          boundFeature.geometry.coordinates.length > 0
+        ) {
+          // Extract the polygon coordinates (outer ring)
+          const coords = boundFeature.geometry.coordinates[0];
+          if (!coords || !Array.isArray(coords) || coords.length < 3) return;
+
+          // Store the polygon coordinates as an array of [lat, lng] pairs for Leaflet
+          const polygonCoords = coords.map((coord) => [coord[1], coord[0]]);
+
+          // Add to bounds collection with priority level and polygon coordinates
+          bounds.push({
+            coordinates: polygonCoords,
+            priorityLevel,
+          });
+        }
+      });
+    };
+
+    // Process bounds for each priority level
+    if (props.challenge) {
+      processBounds(props.challenge.highPriorityBounds, 0);
+      processBounds(props.challenge.mediumPriorityBounds, 1);
+      processBounds(props.challenge.lowPriorityBounds, 2);
+    }
+    return bounds;
+  }, [props.challenge]);
 
   let overlayLayers = buildLayerSources(
     props.visibleOverlays,
@@ -69,23 +146,6 @@ export const TaskClusterMap = (props) => {
       component: <SourcedTileLayer key={layerId} source={layerSource} />,
     }),
   );
-
-  if (props.showPriorityBounds) {
-    overlayLayers.push({
-      id: "priority-bounds",
-      component: (
-        <LayerGroup key="priority-bounds">
-          {props.priorityBounds.map((bounds, index) => (
-            <Rectangle
-              key={index}
-              bounds={toLatLngBounds(bounds.boundingBox)}
-              color={TaskPriorityColors[bounds.priorityLevel]}
-            />
-          ))}
-        </LayerGroup>
-      ),
-    });
-  }
 
   let overlayOrder = props.getUserAppSetting(props.user, "mapOverlayOrder") || [];
   if (_isEmpty(overlayOrder)) {
@@ -163,7 +223,30 @@ export const TaskClusterMap = (props) => {
     const map = useMap();
     useEffect(() => {
       map.invalidateSize();
-    }, [props.widgetLayout?.w, props.widgetLayout?.h]);
+    }, [props.widgetLayout?.w, props.widgetLayout?.h, map]);
+    return null;
+  };
+
+  // Component to handle removing focus from map elements
+  const RemoveFocusHandler = () => {
+    const map = useMap();
+    useEffect(() => {
+      // Add event listener to clear focus on map click
+      const clearFocus = () => {
+        if (document.activeElement) {
+          document.activeElement.blur();
+        }
+      };
+
+      map.getContainer().addEventListener("click", clearFocus);
+      map.getContainer().addEventListener("mousedown", clearFocus);
+
+      return () => {
+        map.getContainer().removeEventListener("click", clearFocus);
+        map.getContainer().removeEventListener("mousedown", clearFocus);
+      };
+    }, [map]);
+
     return null;
   };
 
@@ -172,7 +255,6 @@ export const TaskClusterMap = (props) => {
   };
 
   const selectAllTasksInView = (taskIds) => {
-    console.log("selectAllTasksInView called with", taskIds.length, "task IDs");
     if (props.onBulkTaskSelection && typeof props.onBulkTaskSelection === "function") {
       props.onBulkTaskSelection(taskIds);
     } else {
@@ -181,7 +263,6 @@ export const TaskClusterMap = (props) => {
   };
 
   const selectAllClustersInView = (clusters) => {
-    console.log("selectAllClustersInView called with", clusters.length, "clusters");
     if (props.onBulkClusterSelection && typeof props.onBulkClusterSelection === "function") {
       props.onBulkClusterSelection(clusters);
     } else {
@@ -214,6 +295,7 @@ export const TaskClusterMap = (props) => {
         )}
         zoomControl={false}
       >
+        <RemoveFocusHandler />
         <MapControlsDrawer
           isOpen={drawerOpen}
           openSearch={() => setSearchOpen(true)}
@@ -233,9 +315,65 @@ export const TaskClusterMap = (props) => {
               : selectAllTasksInView || props.onBulkTaskSelection
           }
           onBulkClusterSelection={props.onBulkClusterSelection}
+          priorityBounds={priorityBounds}
+          showPriorityBounds={showPriorityBounds}
+          togglePriorityBounds={togglePriorityBounds}
+          priorityBoundsCount={priorityBoundsCount}
           {...props}
         />
         <ResizeMap />
+
+        {/* Direct priority bounds rendering */}
+        {showPriorityBounds &&
+          priorityBounds
+            .slice() // Create a copy to avoid mutating the original array
+            .sort((a, b) => b.priorityLevel - a.priorityLevel) // Sort by descending priority level (so highest number/lowest priority is last)
+            .map((boundsItem, index) => {
+              if (!boundsItem.coordinates || boundsItem.coordinates.length < 3) {
+                return null;
+              }
+              try {
+                // Get priority label
+                const priorityLabel =
+                  boundsItem.priorityLevel === 0
+                    ? "High Priority"
+                    : boundsItem.priorityLevel === 1
+                      ? "Medium Priority"
+                      : "Low Priority";
+
+                // Get task count (if available)
+                let taskCount = null;
+                if (boundsItem.priorityLevel === 0 && props.challenge?.highPriorityCount) {
+                  taskCount = props.challenge.highPriorityCount;
+                } else if (boundsItem.priorityLevel === 1 && props.challenge?.mediumPriorityCount) {
+                  taskCount = props.challenge.mediumPriorityCount;
+                } else if (boundsItem.priorityLevel === 2 && props.challenge?.lowPriorityCount) {
+                  taskCount = props.challenge.lowPriorityCount;
+                }
+
+                // Construct tooltip text
+                const tooltipText =
+                  taskCount !== null ? `${priorityLabel} (${taskCount} tasks)` : priorityLabel;
+
+                return (
+                  <Polygon
+                    key={`direct-priority-${index}`}
+                    title={`Priority ${boundsItem.priorityLevel}`}
+                    positions={boundsItem.coordinates}
+                    pathOptions={{
+                      color: TaskPriorityColors[boundsItem.priorityLevel] || "#ff0000",
+                      weight: 0.5,
+                      fillOpacity: 0.2,
+                      className: "priority-polygon",
+                    }}
+                  />
+                );
+              } catch (error) {
+                console.error("Error rendering direct priority polygon:", error);
+                return null;
+              }
+            })}
+
         <AttributionControl position="bottomleft" prefix={false} />
         {(Boolean(props.loading) || Boolean(props.loadingChallenge)) && (
           <BusySpinner mapMode xlarge />

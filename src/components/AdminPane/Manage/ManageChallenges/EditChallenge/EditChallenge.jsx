@@ -34,6 +34,7 @@ import {
   CustomArrayFieldTemplate,
   CustomCheckboxField,
   CustomFieldTemplate,
+  CustomPriorityBoundsField,
   CustomSelectWidget,
   CustomTextWidget,
   LabelWithHelp,
@@ -459,6 +460,25 @@ export class EditChallenge extends Component {
       );
     }
 
+    // Make sure bounds are correctly initialized even if they are undefined
+    if (!this.state.formData.highPriorityBounds) {
+      challengeData.highPriorityBounds = Array.isArray(challengeData.highPriorityBounds)
+        ? challengeData.highPriorityBounds
+        : [];
+    }
+
+    if (!this.state.formData.mediumPriorityBounds) {
+      challengeData.mediumPriorityBounds = Array.isArray(challengeData.mediumPriorityBounds)
+        ? challengeData.mediumPriorityBounds
+        : [];
+    }
+
+    if (!this.state.formData.lowPriorityBounds) {
+      challengeData.lowPriorityBounds = Array.isArray(challengeData.lowPriorityBounds)
+        ? challengeData.lowPriorityBounds
+        : [];
+    }
+
     if (this.state.formData.presets === undefined) {
       challengeData = preparePresetsForForm(challengeData);
     }
@@ -547,6 +567,40 @@ export class EditChallenge extends Component {
       challengeData.lowPriorityRules.ruleGroup,
     );
     delete challengeData.lowPriorityRules;
+
+    const validatePriorityBounds = (bounds) => {
+      return bounds.filter((feature) => {
+        if (!feature || !feature.geometry || !feature.geometry.coordinates) {
+          return false;
+        }
+
+        if (feature.geometry.type !== "Polygon") {
+          return false;
+        }
+
+        if (
+          !Array.isArray(feature.geometry.coordinates) ||
+          !Array.isArray(feature.geometry.coordinates[0]) ||
+          feature.geometry.coordinates[0].length < 4
+        ) {
+          return false;
+        }
+
+        return true;
+      });
+    };
+
+    challengeData.highPriorityBounds = Array.isArray(challengeData.highPriorityBounds)
+      ? validatePriorityBounds(challengeData.highPriorityBounds)
+      : [];
+
+    challengeData.mediumPriorityBounds = Array.isArray(challengeData.mediumPriorityBounds)
+      ? validatePriorityBounds(challengeData.mediumPriorityBounds)
+      : [];
+
+    challengeData.lowPriorityBounds = Array.isArray(challengeData.lowPriorityBounds)
+      ? validatePriorityBounds(challengeData.lowPriorityBounds)
+      : [];
 
     preparePresetsForSaving(challengeData);
 
@@ -744,6 +798,7 @@ export class EditChallenge extends Component {
           // Override the standard form-field description renderer with our own that
           // supports Markdown. We pass this in to the `fields` prop on the Form.
           const customFields = {
+            CustomPriorityBoundsField: CustomPriorityBoundsField,
             DescriptionField: MarkdownDescriptionField,
             markdown: MarkdownEditField,
             columnRadio: ColumnRadioField,

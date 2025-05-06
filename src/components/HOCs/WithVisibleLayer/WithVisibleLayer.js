@@ -69,6 +69,14 @@ export const dynamicLayerWithId = (layerId, ownProps) => {
   return null;
 };
 
+export const KNOWN_OVERLAYS = [
+  "task-features",
+  "osm-data",
+  "mapillary",
+  "openstreetcam",
+  "priority-bounds",
+];
+
 export const mapStateToProps = (state, ownProps) => {
   const challengeId = ownProps?.challenge?.id;
   let source = null;

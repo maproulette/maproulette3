@@ -7,16 +7,256 @@ import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
 import _map from "lodash/map";
 import _trim from "lodash/trim";
-import { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import Dropzone from "react-dropzone";
 import { FormattedMessage } from "react-intl";
 import TagsInput from "react-tagsinput";
 import Dropdown from "../../Dropdown/Dropdown";
 import MarkdownContent from "../../MarkdownContent/MarkdownContent";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
+import CustomPriorityBoundsField from "./CustomPriorityBoundsField";
 import messages from "./Messages";
 import "react-tagsinput/react-tagsinput.css";
 import "./RJSFFormFieldAdapter.scss";
+import L from "leaflet";
+import { AttributionControl, MapContainer, ScaleControl, TileLayer, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet-lasso/dist/leaflet-lasso.esm";
+
+const BoundsSelector = ({ selectedPolygons, setSelectedPolygons }) => {
+  const map = useMap();
+  const [selecting, setSelecting] = useState(false);
+  const [featureGroup, setFeatureGroup] = useState(null);
+  const [selectedPolygon, setSelectedPolygon] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [lassoInstance, setLassoInstance] = useState(null);
+
+  // Initialize feature group and restore polygons
+  useEffect(() => {
+    if (map) {
+      const fg = L.featureGroup().addTo(map);
+      setFeatureGroup(fg);
+
+      // Restore existing polygons
+      if (selectedPolygons && selectedPolygons.length > 0) {
+        selectedPolygons.forEach((polygon) => {
+          const restoredPolygon = L.polygon(polygon.getLatLngs(), {
+            color: "#3388ff",
+            weight: 2,
+            fillOpacity: 0.2,
+          });
+
+          // Add event listeners for hover effects
+          restoredPolygon.on("mouseover", () => handlePolygonHover(restoredPolygon));
+          restoredPolygon.on("mouseout", () => handlePolygonHoverOut(restoredPolygon));
+          restoredPolygon.on("click", () => handlePolygonClick(restoredPolygon));
+
+          fg.addLayer(restoredPolygon);
+        });
+
+        // Fit map to bounds of all polygons
+        if (selectedPolygons.length > 0) {
+          const bounds = L.latLngBounds(selectedPolygons.map((p) => p.getBounds()));
+          map.fitBounds(bounds, { padding: [50, 50] });
+        }
+      }
+
+      return () => {
+        if (map.hasLayer(fg)) {
+          fg.remove();
+        }
+      };
+    }
+  }, [map]);
+
+  // Handle polygon click
+  const handlePolygonClick = (polygon) => {
+    setSelectedPolygon(polygon);
+    setShowModal(true);
+  };
+
+  // Handle polygon hover
+  const handlePolygonHover = (polygon) => {
+    if (!selecting) {
+      polygon.setStyle({ color: "red", weight: 3 });
+    }
+  };
+
+  // Handle polygon hover out
+  const handlePolygonHoverOut = (polygon) => {
+    if (!selecting) {
+      polygon.setStyle({ color: "#3388ff", weight: 2 });
+    }
+  };
+
+  // Handle polygon removal
+  const handleRemovePolygon = () => {
+    if (selectedPolygon && featureGroup) {
+      featureGroup.removeLayer(selectedPolygon);
+      const updatedPolygons = selectedPolygons.filter((p) => p !== selectedPolygon);
+      setSelectedPolygons(updatedPolygons);
+      setShowModal(false);
+      setSelectedPolygon(null);
+    }
+  };
+
+  // Handle lasso selection
+  const handleLassoSelection = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setSelecting(true);
+    if (map) {
+      // Clean up previous lasso instance if it exists
+      if (lassoInstance) {
+        lassoInstance.disable();
+        map.off("lasso.finished");
+      }
+
+      const newLassoInstance = L.lasso(map, {});
+      newLassoInstance.enable();
+      setLassoInstance(newLassoInstance);
+
+      // Set up lasso finished event handler
+      const handleLassoFinished = (e) => {
+        const latlngs = e.latLngs;
+        if (latlngs && latlngs.length > 0) {
+          // Convert latlngs to array of [lat, lng] coordinates
+          const coordinates = latlngs.map((latlng) => [latlng.lat, latlng.lng]);
+
+          // Ensure the polygon is closed by adding the first point at the end if needed
+          if (
+            coordinates.length > 0 &&
+            (coordinates[0][0] !== coordinates[coordinates.length - 1][0] ||
+              coordinates[0][1] !== coordinates[coordinates.length - 1][1])
+          ) {
+            coordinates.push([...coordinates[0]]);
+          }
+
+          const polygon = L.polygon(coordinates, {
+            color: "#3388ff",
+            weight: 2,
+            fillOpacity: 0.2,
+          });
+
+          // Store the original coordinates in the polygon object for later use
+          polygon.originalCoordinates = coordinates;
+
+          // Add event listeners for hover effects
+          polygon.on("mouseover", () => handlePolygonHover(polygon));
+          polygon.on("mouseout", () => handlePolygonHoverOut(polygon));
+          polygon.on("click", () => handlePolygonClick(polygon));
+
+          if (featureGroup) {
+            featureGroup.addLayer(polygon);
+            setSelectedPolygons([...selectedPolygons, polygon]);
+          }
+        }
+        setSelecting(false);
+        newLassoInstance.disable();
+      };
+
+      map.on("lasso.finished", handleLassoFinished);
+    }
+  };
+
+  // Clean up lasso instance when component unmounts
+  useEffect(() => {
+    return () => {
+      if (map) {
+        map.off("lasso.finished");
+        if (lassoInstance && lassoInstance.disable) {
+          lassoInstance.disable();
+        }
+      }
+    };
+  }, [map]);
+
+  return (
+    <>
+      <div
+        className="mr-absolute mr-top-2 mr-right-2 mr-z-[1000] mr-bg-black-50 mr-rounded mr-p-2"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      >
+        <div className="mr-flex mr-flex-col mr-gap-2">
+          <button
+            onClick={handleLassoSelection}
+            className={`mr-p-2 mr-rounded mr-bg-white hover:mr-bg-green-lighter ${
+              selecting ? "mr-bg-green-lighter" : ""
+            }`}
+            title={selecting ? "Cancel Lasso" : "Lasso Select"}
+          >
+            <SvgSymbol sym="lasso-add-icon" viewBox="0 0 512 512" className="mr-w-5 mr-h-5" />
+          </button>
+        </div>
+      </div>
+
+      {showModal && (
+        <div className="mr-fixed mr-inset-0 mr-bg-black-50 mr-z-[2000] mr-flex mr-items-center mr-justify-center">
+          <div className="mr-bg-white mr-rounded mr-p-6 mr-shadow-lg">
+            <h3 className="mr-text-lg mr-font-medium mr-mb-4">Polygon Options</h3>
+            <div className="mr-flex mr-justify-end mr-gap-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="mr-button mr-button--small mr-button--white"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRemovePolygon}
+                className="mr-button mr-button--small mr-button--danger"
+              >
+                Remove Polygon
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+const BoundsMap = ({ selectedPolygons, setSelectedPolygons }) => {
+  return (
+    <div className="mr-relative" onClick={(e) => e.stopPropagation()}>
+      <MapContainer
+        center={[20, 0]}
+        zoom={2}
+        style={{ height: "400px", width: "100%" }}
+        attributionControl={false}
+        minZoom={2}
+        maxZoom={18}
+        maxBounds={[
+          [-85, -180],
+          [85, 180],
+        ]}
+        zoomControl={false}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <AttributionControl position="bottomleft" prefix={false} />
+        <ScaleControl className="mr-z-10" position="bottomleft" />
+
+        <BoundsSelector
+          selectedPolygons={selectedPolygons}
+          setSelectedPolygons={setSelectedPolygons}
+        />
+      </MapContainer>
+      <div className="mr-absolute mr-bottom-2 mr-left-2 mr-z-[1000] mr-bg-black-50 mr-rounded mr-p-2 mr-text-white mr-text-xs">
+        Use the lasso tool to draw priority bounds
+      </div>
+    </div>
+  );
+};
+
+// Export the custom priority bounds field
+export { CustomPriorityBoundsField };
 
 /**
  * fieldset tags can't be styled using flexbox or grid in Chrome, so this
@@ -55,10 +295,33 @@ export const NoFieldsetObjectFieldTemplate = function (props) {
 };
 
 export const CustomArrayFieldTemplate = (props) => {
-  const addLabel = props.uiSchema["ui:addLabel"] || (
-    <FormattedMessage {...messages.addPriorityRuleLabel} />
-  );
-  const deleteLabel = props.uiSchema["ui:deleteLabel"];
+  // Get the priority level from the schema title
+  const getPriorityLevel = () => {
+    if (!props.schema || !props.schema.title) return null;
+
+    const title = props.schema.title.toLowerCase();
+    if (title.includes("high priority")) return "high";
+    if (title.includes("medium priority")) return "medium";
+    if (title.includes("low priority")) return "low";
+    return null;
+  };
+
+  const priorityLevel = getPriorityLevel();
+  const [showMap, setShowMap] = useState(true);
+
+  // Determine if this is a bounds field
+  const isBoundsField = () => {
+    if (!props.schema || !props.schema.items) return false;
+    if (props.schema.items.$ref === "#/definitions/priorityBounds") return true;
+    return props.schema.items.properties?.type?.enum?.[0] === "Feature";
+  };
+
+  // Determine if this is a rules field
+  const isRulesField = () => {
+    if (!props.schema || !props.schema.items) return false;
+    return props.schema.items.$ref === "#/definitions/tagRule";
+  };
+
   const itemFields = _map(props.items, (element) => (
     <div
       key={element.index}
@@ -70,11 +333,13 @@ export const CustomArrayFieldTemplate = (props) => {
           <button
             className={classNames(
               "is-clear array-field__item__control remove-item-button",
-              !deleteLabel ? "button" : "mr-button mr-button mr-button--small",
+              !props.uiSchema?.["ui:deleteLabel"]
+                ? "button"
+                : "mr-button mr-button mr-button--small",
             )}
             onClick={element.onDropIndexClick(element.index)}
           >
-            {deleteLabel || (
+            {props.uiSchema?.["ui:deleteLabel"] || (
               <span className="icon is-danger">
                 <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="mr-w-5 mr-h-5" />
               </span>
@@ -85,17 +350,83 @@ export const CustomArrayFieldTemplate = (props) => {
     </div>
   ));
 
+  const toggleMap = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowMap(!showMap);
+  };
+
+  const addLabel = props.uiSchema["ui:addLabel"] || (
+    <FormattedMessage {...messages.addPriorityRuleLabel} />
+  );
+  const addBoundsLabel = props.uiSchema["ui:addBoundsLabel"] || (
+    <FormattedMessage {...messages.addBoundsLabel} />
+  );
+
+  const isRules = isRulesField();
+  const isBounds = isBoundsField();
+
+  const handleBoundsChange = (newData) => {
+    // Force a new array to ensure React detects the change
+    const cleanData = newData ? [...newData] : [];
+
+    if (typeof props.onChange === "function") {
+      props.onChange(cleanData);
+    }
+  };
+
   return (
-    <div className="array-field">
-      {props.title && <label className="control-label">{props.title}</label>}
-      {itemFields}
-      {props.canAdd && (
-        <div className="array-field__block-controls">
-          <button className="mr-button mr-button--small" onClick={props.onAddClick}>
-            {addLabel}
-          </button>
-        </div>
-      )}
+    <div className="array-field" onClick={(e) => e.stopPropagation()}>
+      {/* Show title and buttons in a row */}
+      <div className="mr-flex mr-justify-between mr-items-center">
+        {/* Title */}
+        <label className={`mr-text-yellow ${isRules ? "mr-text-lg mr-font-bold" : "mr-text-base"}`}>
+          {isRules
+            ? props.title
+            : `${
+                priorityLevel?.charAt(0).toUpperCase() + priorityLevel?.slice(1) || ""
+              } Priority Bounds`}
+        </label>
+
+        {/* Buttons */}
+        {props.canAdd && (
+          <div className="mr-flex mr-gap-2">
+            {isRules && (
+              <button className="mr-button mr-button--small" onClick={props.onAddClick}>
+                {addLabel}
+              </button>
+            )}
+            {isBounds && (
+              <button
+                className={`mr-button mr-button--green-lighter mr-button--small ${
+                  showMap ? "mr-bg-green-lighter mr-text-black" : ""
+                } mr-flex mr-items-center mr-gap-1`}
+                onClick={toggleMap}
+              >
+                <SvgSymbol
+                  sym="globe-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-5 mr-h-5"
+                />
+                {addBoundsLabel}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Show the fields */}
+      <div className="mr-ml-4">
+        {itemFields}
+        {showMap && isBounds && (
+          <div className="mr-mt-2">
+            <h4 className="mr-text-yellow mr-text-base mr-mb-2 mr-pl-2">
+              Draw Priority Bounds using Lasso Tool
+            </h4>
+            <CustomPriorityBoundsField formData={props.formData} onChange={handleBoundsChange} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
