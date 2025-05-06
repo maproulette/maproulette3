@@ -319,6 +319,7 @@ export const exportWorkspaceConfiguration = (workspaceConfiguration, exportName)
     workspace: Object.assign(
       _pick(workspaceConfiguration, ["dataModelVersion", "name", "cols", "rowHeight", "targets"]),
       {
+        type: workspaceConfiguration.type || null,
         widgetKeys: _map(workspaceConfiguration.widgets, "widgetKey"),
         layout: _map(workspaceConfiguration.layout, (widgetLayout) =>
           _pick(widgetLayout, ["h", "w", "x", "y"]),

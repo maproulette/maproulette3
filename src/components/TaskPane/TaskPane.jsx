@@ -22,28 +22,32 @@ import MapPane from "../EnhancedMap/MapPane/MapPane";
 import WithChallengePreferences from "../HOCs/WithChallengePreferences/WithChallengePreferences";
 import WithCooperativeWork from "../HOCs/WithCooperativeWork/WithCooperativeWork";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
+import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts";
 import WithLockedTask from "../HOCs/WithLockedTask/WithLockedTask";
 import WithTaskBundle from "../HOCs/WithTaskBundle/WithTaskBundle";
 import WithWidgetWorkspaces from "../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import WidgetWorkspace from "../WidgetWorkspace/WidgetWorkspace";
+import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
 import messages from "./Messages";
 import MobileTaskDetails from "./MobileTaskDetails/MobileTaskDetails";
 import TaskMap from "./TaskMap/TaskMap";
 
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails);
+const EnhancedTaskMapWidget = WithKeyboardShortcuts(TaskMapWidget);
 
 const WIDGET_WORKSPACE_NAME = "taskCompletion";
 
 // How frequently the task lock should be refreshed
 const LOCK_REFRESH_INTERVAL = 600000; // 10 minutes
 
-export const defaultWorkspaceSetup = function () {
+export const defaultWorkspaceSetupClassic = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
     label: "Task Completion",
+    type: "classic",
     widgets: [
       widgetDescriptor("TaskInstructionsWidget"),
       widgetDescriptor("TagDiffWidget"),
@@ -72,6 +76,30 @@ export const defaultWorkspaceSetup = function () {
       // conditionally displayed
       "TagDiffWidget",
     ],
+  };
+};
+
+export const defaultWorkspaceSetupLeftPanel = function (type = "leftPanel") {
+  return {
+    dataModelVersion: 2,
+    name: WIDGET_WORKSPACE_NAME,
+    label: "Task Completion - Static Map",
+    type,
+    widgets: [
+      widgetDescriptor("TaskInstructionsWidget"),
+      widgetDescriptor("TagDiffWidget"),
+      widgetDescriptor("TaskCompletionWidget"),
+      widgetDescriptor("TaskLocationWidget"),
+    ],
+    layout: [
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
+      { i: generateWidgetId(), x: 4, y: 0, w: 4, h: 5 },
+      { i: generateWidgetId(), x: 0, y: 4, w: 4, h: 9 },
+      { i: generateWidgetId(), x: 0, y: 11, w: 4, h: 8 },
+    ],
+    permanentWidgets: ["TaskCompletionWidget", "TagDiffWidget"],
+    excludeWidgets: ["TaskReviewWidget", "TaskMapWidget"],
+    conditionalWidgets: ["TagDiffWidget"],
   };
 };
 
@@ -267,6 +295,7 @@ export class TaskPane extends Component {
         <MediaQuery query="(min-width: 1024px)">
           <WidgetWorkspace
             {...this.props}
+            hasLeftPanelOption
             className={classNames(
               "mr-bg-gradient-r-green-dark-blue mr-text-white mr-pb-8 mr-cards-inverse",
               {
@@ -419,6 +448,9 @@ export class TaskPane extends Component {
             completionResponses={completionResponses}
             needsResponses={this.state.needsResponses}
             templateRevision={isCompletionStatus(this.props.task.status)}
+            enhancedMapWidget={
+              <EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />
+            }
           />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
@@ -511,6 +543,7 @@ export default WithChallengePreferences(
     WithLockedTask(WithCooperativeWork(WithTaskBundle(injectIntl(TaskPane)))),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
-    defaultWorkspaceSetup,
+    defaultWorkspaceSetupClassic,
+    defaultWorkspaceSetupLeftPanel,
   ),
 );
