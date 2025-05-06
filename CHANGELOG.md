@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.13] - 2025-05-05
+Released with [maproulette-backend_v4.7.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.8)
+
+## What's Changed
+* add expand button to challenge and project descriptions by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2612
+* fix mapped on and reviewed at filters by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2605
+* Bump @babel/runtime from 7.23.4 to 7.26.10 by @dependabot in https://github.com/maproulette/maproulette3/pull/2597
+* add `CONTRIBUTING.md`. Fixes #2614 by @mvexel in https://github.com/maproulette/maproulette3/pull/2617
+* Add governance metadoc, closes #2615 by @mvexel in https://github.com/maproulette/maproulette3/pull/2618
+* Bump vite from 5.4.12 to 5.4.18 by @dependabot in https://github.com/maproulette/maproulette3/pull/2623
+* Convert GH issue templates from Markdown to YAML forms by @jake-low in https://github.com/maproulette/maproulette3/pull/2620
+* Add map controls toggle and status legend by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2607
+* Tag management by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2606
+* fix bounds handling and promise resolution bugs in TaskBundleWidget and ClusteredTask by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2626
+* filter out deleted projects from project list by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2627
+* Static map interface by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2625
+
+## MR2 Changes
+* Tag management by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1178
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.12...v3.16.13
+
 ## [v3.16.12] - 2025-04-11
 Released with [maproulette-backend_v4.7.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.7)
 
