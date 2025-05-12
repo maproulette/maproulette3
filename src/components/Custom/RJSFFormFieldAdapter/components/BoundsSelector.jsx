@@ -7,7 +7,7 @@ import {
   saveToUndoHistory,
   getHistoryState,
   updateHistory,
-} from "../context/PriorityBoundsContext.js";
+} from "../context/PriorityBoundsContext.jsx";
 import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
 import { polygonToGeoJSON } from "../utils/polygonUtils";
 import L from "leaflet";
@@ -218,6 +218,7 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
   const lassoInstanceRef = useRef(null);
   const featureGroupRef = useRef(null);
   const [showResetModal, setShowResetModal] = useState(false);
+  const isUpdatingRef = useRef(false);
 
   // Get global history state
   const { undoHistory, redoHistory, canUndo, canRedo, initialValue } =
@@ -351,7 +352,7 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
 
   // Update when value changes externally
   useEffect(() => {
-    if (featureGroupRef.current && value) {
+    if (featureGroupRef.current && value && !isUpdatingRef.current) {
       console.log(`Value changed externally for ${priorityType}:`, value);
       const currentGeoJSON = getCurrentGeoJSON();
 
@@ -509,6 +510,9 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
 
   // Sync polygons with parent component
   const syncPolygonsWithParent = () => {
+    // Set updating flag to prevent circular updates
+    isUpdatingRef.current = true;
+
     // Save current state to history before syncing
     const currentGeoJSON = getCurrentGeoJSON();
 
@@ -525,41 +529,144 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
 
     // Update UI state
     updatePolygonStatus();
+
+    // Reset flag after a short delay
+    setTimeout(() => {
+      isUpdatingRef.current = false;
+    }, 50);
   };
 
   // Handle lasso finished event
   const handleLassoFinished = (e) => {
     try {
-      if (e.latLngs?.length >= 3) {
-        // Save current state before adding new polygon
-        saveToHistory();
+      // Always clean up lasso regardless of success
+      setSelecting(false);
 
-        // Create a new polygon from the lasso points
-        const polygon = L.polygon(e.latLngs, {
-          color: getColorForPriority(priorityType, "base"),
-          weight: 2,
-          fillOpacity: 0.2,
-        });
+      if (!e.latLngs || e.latLngs.length < 3) {
+        console.log("Not enough points for a polygon, aborting");
+        cleanupLasso();
+        return;
+      }
 
-        // Add event listeners for the new polygon
-        addEventListenersToPolygon(polygon);
+      console.log(`Lasso finished with ${e.latLngs.length} points`);
 
-        // Add to the feature group
-        featureGroupRef.current.addLayer(polygon);
+      // Save current state before adding new polygon
+      saveToHistory(getCurrentGeoJSON());
 
-        // Update UI state
-        setSelecting(false);
+      // Create a new polygon from the lasso points
+      const polygon = L.polygon(e.latLngs, {
+        color: getColorForPriority(priorityType, "base"),
+        weight: 2,
+        fillOpacity: 0.2,
+      });
 
-        // Notify parent component
+      // Add event listeners for the new polygon
+      addEventListenersToPolygon(polygon);
+
+      // Add to the feature group
+      featureGroupRef.current.addLayer(polygon);
+
+      // Make sure to clean up lasso before checking for overlaps
+      cleanupLasso();
+
+      try {
+        // Check for overlapping polygons - but don't allow the merge function
+        // to delete existing polygons if there's an error
+        checkAndMergeOverlappingPolygons(polygon);
+
+        // Notify parent component regardless of merge result
         syncPolygonsWithParent();
-
-        // Make sure we clean up the lasso instance
-        if (lassoInstanceRef.current) {
-          lassoInstanceRef.current.disable();
-        }
+      } catch (overlapError) {
+        console.error("Error while processing polygon overlaps:", overlapError);
+        // Even if merging fails, keep the original polygon
+        syncPolygonsWithParent();
       }
     } catch (error) {
       console.error("Error in lasso finished:", error);
+      // Always clean up
+      cleanupLasso();
+    }
+  };
+
+  // Merge selected polygons
+  const mergeSelectedPolygons = () => {
+    if (selectedPolygons.length < 2) {
+      console.warn("Need at least 2 polygons to merge");
+      return;
+    }
+
+    try {
+      // Convert all selected polygons to GeoJSON
+      const geojsons = selectedPolygons.map((polygon) => polygonToGeoJSON(polygon)).filter(Boolean);
+
+      if (geojsons.length < 2) {
+        console.warn("Not enough valid polygons to merge");
+        return;
+      }
+
+      // Save current state before merging
+      saveToHistory(getCurrentGeoJSON());
+
+      // Perform the union operation
+      let result = geojsons[0];
+      for (let i = 1; i < geojsons.length; i++) {
+        const unionResult = union(result, geojsons[i]);
+        if (unionResult) {
+          result = unionResult;
+        }
+      }
+
+      if (result && result.geometry) {
+        // Remove old polygons first
+        selectedPolygons.forEach((polygon) => {
+          featureGroupRef.current.removeLayer(polygon);
+        });
+
+        // Create new polygon(s) from the merged geometry
+        if (result.geometry.type === "Polygon") {
+          const coordinates = result.geometry.coordinates[0].map((coord) => [coord[1], coord[0]]);
+
+          const mergedPolygon = L.polygon(coordinates, {
+            color: getColorForPriority(priorityType, "base"),
+            weight: 2,
+            fillOpacity: 0.2,
+          });
+
+          // Add event listeners
+          addEventListenersToPolygon(mergedPolygon);
+
+          // Add to feature group
+          featureGroupRef.current.addLayer(mergedPolygon);
+        } else if (result.geometry.type === "MultiPolygon") {
+          result.geometry.coordinates.forEach((polyCoords) => {
+            const coordinates = polyCoords[0].map((coord) => [coord[1], coord[0]]);
+
+            const polygon = L.polygon(coordinates, {
+              color: getColorForPriority(priorityType, "base"),
+              weight: 2,
+              fillOpacity: 0.2,
+            });
+
+            // Add event listeners
+            addEventListenersToPolygon(polygon);
+
+            // Add to feature group
+            featureGroupRef.current.addLayer(polygon);
+          });
+        }
+
+        // Reset state
+        setMergeMode(false);
+        setSelectedPolygons([]);
+
+        // Notify parent component with update flag to prevent circular updates
+        syncPolygonsWithParent();
+      }
+    } catch (error) {
+      console.error("Error merging polygons:", error);
+      // Reset UI state on error
+      setMergeMode(false);
+      setSelectedPolygons([]);
     }
   };
 
@@ -599,89 +706,68 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       if (overlappingPolygons.length > 0) {
         console.log("Found overlapping polygons:", overlappingPolygons.length);
 
-        // Add new polygon to the list
-        const allPolygonsToMerge = [...overlappingPolygons, newPolygon];
+        // Get GeoJSON for all polygons including the new one
+        const allGeoJSON = [
+          newGeoJSON,
+          ...overlappingPolygons.map((poly) => polygonToGeoJSON(poly)).filter(Boolean),
+        ];
 
-        // Convert all polygons to GeoJSON
-        const geojsons = allPolygonsToMerge.map((poly) => polygonToGeoJSON(poly)).filter(Boolean);
+        if (allGeoJSON.length < 2) return newPolygon;
 
-        // Need at least 2 polygons to merge
-        if (geojsons.length < 2) {
-          console.log("Not enough valid polygons to merge");
-          return newPolygon;
-        }
-
-        // Get the first polygon as the base
-        let base = geojsons[0];
-
-        // Apply union operations to all polygons
-        for (let i = 1; i < geojsons.length; i++) {
-          try {
-            const unionResult = union(base, geojsons[i]);
-            if (unionResult) {
-              base = unionResult;
-            }
-          } catch (error) {
-            console.error(`Error merging polygon ${i}:`, error);
-            // Continue with the remaining polygons
+        // Perform the union operation
+        let result = allGeoJSON[0];
+        for (let i = 1; i < allGeoJSON.length; i++) {
+          const unionResult = union(result, allGeoJSON[i]);
+          if (unionResult) {
+            result = unionResult;
           }
         }
 
-        // If we have a valid result
-        if (base && base.geometry && base.geometry.coordinates) {
+        if (result && result.geometry) {
           // Remove all polygons that were used in the merge
-          allPolygonsToMerge.forEach((poly) => {
+          featureGroupRef.current.removeLayer(newPolygon);
+          overlappingPolygons.forEach((poly) => {
             featureGroupRef.current.removeLayer(poly);
           });
 
-          // Create new polygon from the merged geometry
-          try {
-            // Handle both Polygon and MultiPolygon types
-            if (base.geometry.type === "Polygon") {
-              const coordinates = base.geometry.coordinates[0].map((coord) => [coord[1], coord[0]]);
-              const mergedPolygon = L.polygon(coordinates, {
+          // Create new polygon(s) from the merged geometry
+          if (result.geometry.type === "Polygon") {
+            const coordinates = result.geometry.coordinates[0].map((coord) => [coord[1], coord[0]]);
+
+            const mergedPolygon = L.polygon(coordinates, {
+              color: getColorForPriority(priorityType, "base"),
+              weight: 2,
+              fillOpacity: 0.2,
+            });
+
+            // Add event listeners
+            addEventListenersToPolygon(mergedPolygon);
+
+            // Add to feature group
+            featureGroupRef.current.addLayer(mergedPolygon);
+
+            return mergedPolygon;
+          } else if (result.geometry.type === "MultiPolygon") {
+            const polygons = [];
+
+            result.geometry.coordinates.forEach((polyCoords) => {
+              const coordinates = polyCoords[0].map((coord) => [coord[1], coord[0]]);
+
+              const polygon = L.polygon(coordinates, {
                 color: getColorForPriority(priorityType, "base"),
                 weight: 2,
                 fillOpacity: 0.2,
               });
 
               // Add event listeners
-              addEventListenersToPolygon(mergedPolygon);
+              addEventListenersToPolygon(polygon);
 
               // Add to feature group
-              featureGroupRef.current.addLayer(mergedPolygon);
+              featureGroupRef.current.addLayer(polygon);
+              polygons.push(polygon);
+            });
 
-              // Return the merged polygon
-              return mergedPolygon;
-            } else if (base.geometry.type === "MultiPolygon") {
-              // For MultiPolygon, create multiple separate polygons
-              const mergedPolygons = [];
-
-              base.geometry.coordinates.forEach((polyCoords) => {
-                const coordinates = polyCoords[0].map((coord) => [coord[1], coord[0]]);
-                const mergedPolygon = L.polygon(coordinates, {
-                  color: getColorForPriority(priorityType, "base"),
-                  weight: 2,
-                  fillOpacity: 0.2,
-                });
-
-                // Add event listeners
-                addEventListenersToPolygon(mergedPolygon);
-
-                // Add to feature group
-                featureGroupRef.current.addLayer(mergedPolygon);
-                mergedPolygons.push(mergedPolygon);
-              });
-
-              // Return the first polygon (if any)
-              return mergedPolygons.length > 0 ? mergedPolygons[0] : newPolygon;
-            } else {
-              console.warn("Unexpected geometry type after merge:", base.geometry.type);
-              return newPolygon;
-            }
-          } catch (e) {
-            console.error("Error creating merged polygon:", e);
-            return newPolygon;
+            return polygons.length > 0 ? polygons[0] : newPolygon;
           }
         }
       }
@@ -689,7 +775,7 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       console.error("Error checking for overlapping polygons:", error);
     }
 
-    // If no overlap or error, return the original polygon
+    // If no overlap, error, or failed merge, return the original polygon
     return newPolygon;
   };
 
@@ -846,71 +932,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     };
   };
 
-  // Merge selected polygons
-  const mergeSelectedPolygons = () => {
-    if (selectedPolygons.length < 2) {
-      console.warn("Need at least 2 polygons to merge");
-      return;
-    }
-
-    try {
-      // Convert all selected polygons to GeoJSON
-      const geojsons = selectedPolygons.map((polygon) => polygonToGeoJSON(polygon));
-
-      // Save current state before merging
-      saveToHistory(featureCollection(geojsons));
-
-      // Create a feature collection from all the polygons
-      let base = geojsons[0];
-
-      // Apply union operations to all polygons
-      for (let i = 1; i < geojsons.length; i++) {
-        const unionResult = union(base, geojsons[i]);
-        if (unionResult) {
-          base = unionResult;
-        }
-      }
-
-      // Create a new polygon from the merged geometry
-      const mergedCoords = base.geometry.coordinates[0].map((coord) => [coord[1], coord[0]]);
-
-      // Create new polygon with the merged coordinates
-      const mergedPolygon = L.polygon(mergedCoords, {
-        color: getColorForPriority(priorityType, "base"),
-        weight: 2,
-        fillOpacity: 0.2,
-      });
-
-      // Add event listeners to the merged polygon
-      addEventListenersToPolygon(mergedPolygon);
-
-      // Remove old polygons
-      selectedPolygons.forEach((polygon) => {
-        featureGroupRef.current.removeLayer(polygon);
-      });
-
-      // Add the new merged polygon
-      featureGroupRef.current.addLayer(mergedPolygon);
-
-      // Reset state
-      setMergeMode(false);
-      setSelectedPolygons([]);
-
-      // Notify parent component
-      onChange(getCurrentGeoJSON());
-
-      // Reset polygon styles
-      refreshPolygonStyles();
-    } catch (error) {
-      console.error("Error merging polygons:", error);
-    }
-  };
-
-  // Reset all polygon styles and listeners
-  const refreshPolygonStyles = () => {
-    resetPolygonStyles(featureGroupRef.current, priorityType, selectedPolygon);
-  };
-
   // Handle lasso selection
   const handleLassoSelection = (e) => {
     e.preventDefault();
@@ -963,13 +984,11 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
           cleanupLasso();
 
           try {
-            // Check for overlapping polygons
-            const mergedPolygon = checkAndMergeOverlappingPolygons(polygon);
+            // Check for overlapping polygons - but don't allow the merge function
+            // to delete existing polygons if there's an error
+            checkAndMergeOverlappingPolygons(polygon);
 
-            // At this point, either the original polygon or a merged polygon is on the map
-            console.log("Polygon/merged polygon added to map");
-
-            // Notify parent component
+            // Notify parent component regardless of merge result
             syncPolygonsWithParent();
           } catch (overlapError) {
             console.error("Error while processing polygon overlaps:", overlapError);
@@ -1081,6 +1100,11 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     }
   }, [map, value, priorityType]);
 
+  // Reset all polygon styles and listeners
+  const refreshPolygonStyles = () => {
+    resetPolygonStyles(featureGroupRef.current, priorityType, selectedPolygon);
+  };
+
   return (
     <>
       {/* Controls */}
@@ -1109,6 +1133,26 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
               }`}
             />
           </button>
+
+          {/* Merge mode toggle button (only visible when there are polygons) */}
+          {hasPolygons && (
+            <button
+              onClick={() => setMergeMode(!mergeMode)}
+              className={`mr-p-2 mr-rounded-lg mr-bg-white hover:mr-bg-blue-lighter mr-transition-colors mr-duration-200 mr-shadow-md ${
+                mergeMode ? "mr-bg-blue-lighter" : ""
+              }`}
+              title={mergeMode ? "Cancel Merge Mode" : "Enable Merge Mode"}
+              disabled={selecting}
+            >
+              <SvgSymbol
+                sym="puzzle-icon"
+                viewBox="0 0 20 20"
+                className={`mr-w-6 mr-h-6 ${mergeMode ? "mr-text-blue" : "mr-text-blue"} ${
+                  selecting ? "mr-opacity-50" : ""
+                }`}
+              />
+            </button>
+          )}
 
           {/* Merge selected polygons button (only shown when in merge mode and at least 2 polygons selected) */}
           {mergeMode && selectedPolygons.length >= 2 && (

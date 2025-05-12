@@ -14,7 +14,7 @@ import {
   PriorityBoundsContext,
   resetFeatureGroup,
   globalFeatureGroups,
-} from "../context/PriorityBoundsContext.js";
+} from "../context/PriorityBoundsContext.jsx";
 import BoundsSelector from "./BoundsSelector";
 import DisplayExternalPolygons from "./DisplayExternalPolygons";
 import { FormattedMessage } from "react-intl";
