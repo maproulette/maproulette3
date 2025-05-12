@@ -1272,6 +1272,20 @@
     "@types/geojson" "^7946.0.10"
     tslib "^2.8.1"
 
+"@turf/boolean-overlap@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-overlap/-/boolean-overlap-7.2.0.tgz#8319545b9bc50e7284b1c5d3ecad7b89500030cd"
+  integrity sha512-ieM5qIE4anO+gUHIOvEN7CjyowF+kQ6v20/oNYJCp63TVS6eGMkwgd+I4uMzBXfVW66nVHIXjODdUelU+Xyctw==
+  dependencies:
+    "@turf/helpers" "^7.2.0"
+    "@turf/invariant" "^7.2.0"
+    "@turf/line-intersect" "^7.2.0"
+    "@turf/line-overlap" "^7.2.0"
+    "@turf/meta" "^7.2.0"
+    "@types/geojson" "^7946.0.10"
+    geojson-equality-ts "^1.0.2"
+    tslib "^2.8.1"
+
 "@turf/boolean-point-in-polygon@^7.2.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@turf/boolean-point-in-polygon/-/boolean-point-in-polygon-7.2.0.tgz#0f9d18bb058b118340d79a0e5f346bd09a363a9a"
@@ -1288,6 +1302,19 @@
   resolved "https://registry.yarnpkg.com/@turf/boolean-point-on-line/-/boolean-point-on-line-7.2.0.tgz#e0373a453cf504d1e7f3125705e7786ea8d48df6"
   integrity sha512-H/bXX8+2VYeSyH8JWrOsu8OGmeA9KVZfM7M6U5/fSqGsRHXo9MyYJ94k39A9kcKSwI0aWiMXVD2UFmiWy8423Q==
   dependencies:
+    "@turf/helpers" "^7.2.0"
+    "@turf/invariant" "^7.2.0"
+    "@types/geojson" "^7946.0.10"
+    tslib "^2.8.1"
+
+"@turf/boolean-within@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-within/-/boolean-within-7.2.0.tgz#a6107cf50be269992d49c27f578bf68e135d6267"
+  integrity sha512-zB3AiF59zQZ27Dp1iyhp9mVAKOFHat8RDH45TZhLY8EaqdEPdmLGvwMFCKfLryQcUDQvmzP8xWbtUR82QM5C4g==
+  dependencies:
+    "@turf/bbox" "^7.2.0"
+    "@turf/boolean-point-in-polygon" "^7.2.0"
+    "@turf/boolean-point-on-line" "^7.2.0"
     "@turf/helpers" "^7.2.0"
     "@turf/invariant" "^7.2.0"
     "@types/geojson" "^7946.0.10"
@@ -1323,6 +1350,17 @@
     "@types/geojson" "^7946.0.10"
     tslib "^2.8.1"
 
+"@turf/difference@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/difference/-/difference-7.2.0.tgz#f404b256fde3ddfd5fc75f336797d4cad938fbff"
+  integrity sha512-NHKD1v3s8RX+9lOpvHJg6xRuJOKiY3qxHhz5/FmE0VgGqnCkE7OObqWZ5SsXG+Ckh0aafs5qKhmDdDV/gGi6JA==
+  dependencies:
+    "@turf/helpers" "^7.2.0"
+    "@turf/meta" "^7.2.0"
+    "@types/geojson" "^7946.0.10"
+    polyclip-ts "^0.16.8"
+    tslib "^2.8.1"
+
 "@turf/distance@^7.2.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@turf/distance/-/distance-7.2.0.tgz#bfc0bba9a1c5c8d601b2a8d02feffc9918bd48b5"
@@ -1332,6 +1370,17 @@
     "@turf/invariant" "^7.2.0"
     "@types/geojson" "^7946.0.10"
     tslib "^2.8.1"
+
+"@turf/geojson-rbush@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/geojson-rbush/-/geojson-rbush-7.2.0.tgz#b714af52b2302c0e9783d10e1a65236c8a92c269"
+  integrity sha512-ST8fLv+EwxVkDgsmhHggM0sPk2SfOHTZJkdgMXVFT7gB9o4lF8qk4y4lwvCCGIfFQAp2yv/PN5EaGMEKutk6xw==
+  dependencies:
+    "@turf/bbox" "^7.2.0"
+    "@turf/helpers" "^7.2.0"
+    "@turf/meta" "^7.2.0"
+    "@types/geojson" "^7946.0.10"
+    rbush "^3.0.1"
 
 "@turf/helpers@^7.2.0":
   version "7.2.0"
@@ -1358,6 +1407,33 @@
     "@turf/helpers" "^7.2.0"
     "@types/geojson" "^7946.0.10"
     sweepline-intersections "^1.5.0"
+    tslib "^2.8.1"
+
+"@turf/line-overlap@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/line-overlap/-/line-overlap-7.2.0.tgz#02a49011fd15333db1f41fe3ba4b2eec3fa2c342"
+  integrity sha512-NNn7/jg53+N10q2Kyt66bEDqN3101iW/1zA5FW7J6UbKApDFkByh+18YZq1of71kS6oUYplP86WkDp16LFpqqw==
+  dependencies:
+    "@turf/boolean-point-on-line" "^7.2.0"
+    "@turf/geojson-rbush" "^7.2.0"
+    "@turf/helpers" "^7.2.0"
+    "@turf/invariant" "^7.2.0"
+    "@turf/line-segment" "^7.2.0"
+    "@turf/meta" "^7.2.0"
+    "@turf/nearest-point-on-line" "^7.2.0"
+    "@types/geojson" "^7946.0.10"
+    fast-deep-equal "^3.1.3"
+    tslib "^2.8.1"
+
+"@turf/line-segment@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/line-segment/-/line-segment-7.2.0.tgz#6ad3ec7ae80e49abe067ff1d95eb1a9002fd7a78"
+  integrity sha512-E162rmTF9XjVN4rINJCd15AdQGCBlNqeWN3V0YI1vOUpZFNT2ii4SqEMCcH2d+5EheHLL8BWVwZoOsvHZbvaWA==
+  dependencies:
+    "@turf/helpers" "^7.2.0"
+    "@turf/invariant" "^7.2.0"
+    "@turf/meta" "^7.2.0"
+    "@types/geojson" "^7946.0.10"
     tslib "^2.8.1"
 
 "@turf/meta@^7.2.0":
@@ -1400,6 +1476,17 @@
     "@turf/helpers" "^7.2.0"
     "@turf/invariant" "^7.2.0"
     "@types/geojson" "^7946.0.10"
+    tslib "^2.8.1"
+
+"@turf/union@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/union/-/union-7.2.0.tgz#f396ca5c8a66c424a0e2d0664280ef3d16974dac"
+  integrity sha512-Xex/cfKSmH0RZRWSJl4RLlhSmEALVewywiEXcu0aIxNbuZGTcpNoI0h4oLFrE/fUd0iBGFg/EGLXRL3zTfpg6g==
+  dependencies:
+    "@turf/helpers" "^7.2.0"
+    "@turf/meta" "^7.2.0"
+    "@types/geojson" "^7946.0.10"
+    polyclip-ts "^0.16.8"
     tslib "^2.8.1"
 
 "@types/aria-query@^5.0.1":
@@ -1457,7 +1544,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/geojson@^7946.0.10":
+"@types/geojson@^7946.0.10", "@types/geojson@^7946.0.14":
   version "7946.0.16"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.16.tgz#8ebe53d69efada7044454e3305c19017d97ced2a"
   integrity sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==
@@ -2159,6 +2246,11 @@ big-integer@^1.6.16:
   version "1.6.52"
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.52.tgz#60a887f3047614a8e1bffe5d7173490a97dc8c85"
   integrity sha512-QxD8cf2eVqJOOz63z6JIN9BzvVs/dlySa5HGSBH5xtR8dPteIRQnBxxKqkNTiT6jbDTF6jAfrd4oMcND9RGbQg==
+
+bignumber.js@^9.1.0:
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.3.0.tgz#bdba7e2a4c1a2eba08290e8dcad4f36393c92acd"
+  integrity sha512-EM7aMFTXbptt/wZdMlBv2t8IViwQL+h6SLHosp8Yf0dqJMTnY6iL32opnAB6kAdL0SZPuvcAzFr31o0c/R3/RA==
 
 binary-extensions@^2.0.0:
   version "2.3.0"
@@ -3881,6 +3973,13 @@ gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
+
+geojson-equality-ts@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/geojson-equality-ts/-/geojson-equality-ts-1.0.2.tgz#2aed0b9aca1fedb17212fecbfc42f73020410480"
+  integrity sha512-h3Ryq+0mCSN/7yLs0eDgrZhvc9af23o/QuC4aTiuuzP/MRCtd6mf5rLsLRY44jX0RPUfM8c4GqERQmlUxPGPoQ==
+  dependencies:
+    "@types/geojson" "^7946.0.14"
 
 geojson-stream@0.0.0:
   version "0.0.0"
@@ -5940,6 +6039,14 @@ point-in-polygon-hao@^1.1.0:
   dependencies:
     robust-predicates "^3.0.2"
 
+polyclip-ts@^0.16.8:
+  version "0.16.8"
+  resolved "https://registry.yarnpkg.com/polyclip-ts/-/polyclip-ts-0.16.8.tgz#503160d05e9d56380533aab0bc2dae835d6da5f9"
+  integrity sha512-JPtKbDRuPEuAjuTdhR62Gph7Is2BS1Szx69CFOO3g71lpJDFo78k4tFyi+qFOMVPePEzdSKkpGU3NBXPHHjvKQ==
+  dependencies:
+    bignumber.js "^9.1.0"
+    splaytree-ts "^1.0.2"
+
 polylabel@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/polylabel/-/polylabel-1.1.0.tgz#9483e64fc7a12a49f43e07e7a06752214ed2a8e7"
@@ -7308,6 +7415,11 @@ spdx-license-ids@^3.0.0:
   version "3.0.16"
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.16.tgz#a14f64e0954f6e25cc6587bd4f392522db0d998f"
   integrity sha512-eWN+LnM3GR6gPu35WxNgbGl8rmY1AEmoMDvL/QD6zYmPWgywxWqJWNdLGT+ke8dKNWrcYgYjPpG5gbTfghP8rw==
+
+splaytree-ts@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/splaytree-ts/-/splaytree-ts-1.0.2.tgz#34963704587aff45eaa09c24713f552bbf56e8f0"
+  integrity sha512-0kGecIZNIReCSiznK3uheYB8sbstLjCZLiwcQwbmLhgHJj2gz6OnSPkVzJQCMnmEz1BQ4gPK59ylhBoEWOhGNA==
 
 splaytree@^0.1.4:
   version "0.1.4"
