@@ -133,7 +133,7 @@
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
     "enzyme": "^3.11.0",
-    "eslint": "^8.54.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.8.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
