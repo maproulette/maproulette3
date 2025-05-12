@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
-import { getColorForPriority, registerObserver } from "../context/PriorityBoundsContext";
+import { getColorForPriority } from "../context/PriorityBoundsContext";
 /**
  * Component to display polygons from other priority types
  *
@@ -9,37 +9,33 @@ import { getColorForPriority, registerObserver } from "../context/PriorityBounds
  * @param {string} props.priorityType The current priority type being edited
  */
 const DisplayExternalPolygons = ({ priorityType }) => {
-  const [featureGroup] = useState(() => new L.FeatureGroup());
+  const featureGroupRef = useRef(null);
   const map = useMap();
 
-  // Add feature group to map on mount, remove on unmount
+  // Initialize feature group once
   useEffect(() => {
-    map.addLayer(featureGroup);
-    return () => map.removeLayer(featureGroup);
-  }, [featureGroup, map]);
-
-  // Listen for changes to polygons of other priority types
-  useEffect(() => {
-    const handlePolygonChange = (changedPriority) => {
-      // Only update if the change is for a different priority than ours
-      if (changedPriority !== priorityType) {
-        refreshExternalPolygons();
-      }
-    };
-
-    // Register observer and get cleanup function
-    const unregister = registerObserver(handlePolygonChange);
+    featureGroupRef.current = new L.FeatureGroup();
+    map.addLayer(featureGroupRef.current);
 
     // Initial refresh
     refreshExternalPolygons();
 
-    return unregister;
-  }, [priorityType]);
+    // Cleanup on unmount
+    return () => {
+      if (featureGroupRef.current && map) {
+        map.removeLayer(featureGroupRef.current);
+        featureGroupRef.current = null;
+      }
+    };
+  }, [map, priorityType]);
 
   // Function to refresh the display of external polygons
   const refreshExternalPolygons = () => {
+    // Skip if feature group isn't ready yet
+    if (!featureGroupRef.current) return;
+
     // Clear existing layers
-    featureGroup.clearLayers();
+    featureGroupRef.current.clearLayers();
 
     // Add external polygons from all other priority groups
     Object.entries(window.globalFeatureGroups || {}).forEach(([type, group]) => {
@@ -52,7 +48,7 @@ const DisplayExternalPolygons = ({ priorityType }) => {
 
       if (!otherPolygons?.length) return;
 
-      otherPolygons.forEach((polygon) => {
+      otherPolygons.forEach((polygon, index) => {
         if (!polygon?.getLatLngs) return;
 
         try {
@@ -66,7 +62,10 @@ const DisplayExternalPolygons = ({ priorityType }) => {
             interactive: false, // Make it non-interactive
           });
 
-          featureGroup.addLayer(copy);
+          // Assign a unique ID to help with identification
+          copy._externalId = `${otherPriority}-${index}`;
+
+          featureGroupRef.current.addLayer(copy);
         } catch (e) {
           console.error("Error displaying external polygon:", e);
         }

@@ -3,7 +3,7 @@ import { AttributionControl, MapContainer, ScaleControl, TileLayer } from "react
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import "leaflet/dist/leaflet.css";
 import "leaflet-lasso";
-import { PriorityBoundsContext, notifyPolygonChange } from "./context/PriorityBoundsContext";
+import { PriorityBoundsContext } from "./context/PriorityBoundsContext";
 import BoundsSelector from "./components/BoundsSelector";
 import DisplayExternalPolygons from "./components/DisplayExternalPolygons";
 import { FormattedMessage } from "react-intl";
@@ -97,10 +97,10 @@ const CustomPriorityBoundsField = (props) => {
           <PriorityBoundsContext.Provider
             value={{
               currentPriority: priorityType,
-              notifyPolygonChange,
             }}
           >
             <MapContainer
+              key={`map-${priorityType}`}
               zoom={2}
               style={{ height: "500px", width: "100%" }}
               attributionControl={false}
@@ -126,10 +126,11 @@ const CustomPriorityBoundsField = (props) => {
                 value={localData}
                 onChange={handleChange}
                 priorityType={priorityType}
+                key={`selector-${priorityType}`}
               />
               <DisplayExternalPolygons
                 priorityType={priorityType}
-                key={`external-polygons-${priorityType}-${renderKey}`}
+                key={`external-polygons-${priorityType}`}
               />
             </MapContainer>
           </PriorityBoundsContext.Provider>

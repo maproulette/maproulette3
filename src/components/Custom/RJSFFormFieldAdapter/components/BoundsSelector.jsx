@@ -1,11 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useMap } from "react-leaflet";
 import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
-import {
-  notifyPolygonChange,
-  globalFeatureGroups,
-  getColorForPriority,
-} from "../context/PriorityBoundsContext";
+import { globalFeatureGroups, getColorForPriority } from "../context/PriorityBoundsContext";
 import { polygonToGeoJSON } from "../utils/polygonUtils";
 import L from "leaflet";
 import "leaflet-lasso";
@@ -18,6 +14,7 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
   const [showModal, setShowModal] = useState(false);
   const [showClearModal, setShowClearModal] = useState(false);
   const lassoInstanceRef = useRef(null);
+  const polygonsAddedRef = useRef(false);
 
   // Helper function to clean up any existing lasso instance
   const cleanupLasso = () => {
@@ -28,6 +25,17 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       map.off("lasso.finished");
       lassoInstanceRef.current = null;
     }
+  };
+
+  // Helper function to sync polygon data with parent
+  const syncPolygonsWithParent = () => {
+    if (!featureGroup?.getLayers) return;
+
+    const layers = featureGroup.getLayers();
+    const geometries = Array.from(layers).map(polygonToGeoJSON).filter(Boolean);
+
+    // Always trigger onChange to ensure parent state is updated
+    onChange(geometries.length > 0 ? geometries : []);
   };
 
   // Update form data when polygons change
@@ -41,11 +49,11 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     const currentValue = JSON.stringify(geometries);
     const previousValue = JSON.stringify(value);
 
-    if (currentValue !== previousValue) {
+    if (currentValue !== previousValue || polygonsAddedRef.current) {
       onChange(geometries.length > 0 ? geometries : []);
-      notifyPolygonChange(priorityType);
+      polygonsAddedRef.current = false;
     }
-  }, [featureGroup, onChange, priorityType, value]);
+  }, [value]);
 
   // Store feature group in the global store
   useEffect(() => {
@@ -74,6 +82,9 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       fg.setZIndex(200);
     }
 
+    // Clear any existing layers to prevent duplicates
+    fg.clearLayers();
+
     setFeatureGroup(fg);
 
     // Restore existing polygons
@@ -92,13 +103,10 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     });
 
     return () => {
-      if (map?.hasLayer(fg)) {
-        fg.remove();
-      }
       map.off("click");
       cleanupLasso();
     };
-  }, [map]);
+  }, [map, value]);
 
   // Restore polygons from GeoJSON
   const restorePolygons = (geoJsonFeatures, fg) => {
@@ -132,16 +140,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
 
         fg.addLayer(restoredPolygon);
       });
-
-      // Fit map to bounds
-      try {
-        const bounds = fg.getBounds();
-        if (bounds.isValid()) {
-          map.fitBounds(bounds, { padding: [50, 50] });
-        }
-      } catch (e) {
-        console.error("Error fitting bounds:", e);
-      }
     }
   };
 
@@ -210,6 +208,9 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       featureGroup.removeLayer(selectedPolygon);
       setShowModal(false);
       setSelectedPolygon(null);
+
+      // Sync with parent after removing a polygon
+      syncPolygonsWithParent();
     }
   };
 
@@ -225,6 +226,9 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     if (featureGroup) {
       featureGroup.clearLayers();
       setShowClearModal(false);
+
+      // Sync with parent after clearing all polygons
+      syncPolygonsWithParent();
     }
   };
 
@@ -262,6 +266,12 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
           });
 
           featureGroup.addLayer(polygon);
+
+          // Mark that we've added a polygon and need to sync
+          polygonsAddedRef.current = true;
+
+          // Explicitly trigger sync to update parent component
+          syncPolygonsWithParent();
         }
 
         cleanupLasso();
@@ -284,73 +294,10 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
 
         lassoInstanceRef.current = lasso;
         lasso.enable();
-      } else if (typeof L.lasso === "function") {
-        const lasso = L.lasso(map, {
-          polygon: {
-            color: getColorForPriority(priorityType, "hover"),
-            weight: 2,
-          },
-          finishOn: "mouseup",
-          intersect: false,
-        });
-
-        lassoInstanceRef.current = lasso;
       } else {
-        console.warn("L.Lasso not found, using custom implementation");
-
-        const handler = {
-          enable: function () {
-            const drawLasso = (e) => {
-              map.dragging.disable();
-
-              let points = [e.latlng];
-              let polyline = L.polyline(points, {
-                color: getColorForPriority(priorityType, "hover"),
-                weight: 2,
-              }).addTo(map);
-
-              const moveHandler = (e) => {
-                points.push(e.latlng);
-                polyline.setLatLngs(points);
-              };
-
-              const endHandler = (e) => {
-                map.dragging.enable();
-                map.off("mousemove", moveHandler);
-                map.off("mouseup", endHandler);
-
-                if (polyline) map.removeLayer(polyline);
-
-                if (points.length >= 3) {
-                  if (points[0] !== points[points.length - 1]) {
-                    points.push(points[0]);
-                  }
-
-                  map.fire("lasso.finished", {
-                    latLngs: points,
-                    layers: [],
-                  });
-                }
-              };
-
-              map.on("mousemove", moveHandler);
-              map.on("mouseup", endHandler);
-            };
-
-            map.on("mousedown", drawLasso);
-            this.drawLasso = drawLasso;
-          },
-
-          disable: function () {
-            if (this.drawLasso) {
-              map.off("mousedown", this.drawLasso);
-              this.drawLasso = null;
-            }
-          },
-        };
-
-        lassoInstanceRef.current = handler;
-        handler.enable();
+        console.warn("L.Lasso not found");
+        cleanupLasso();
+        setSelecting(false);
       }
     } catch (error) {
       console.error("Error initializing lasso:", error);
