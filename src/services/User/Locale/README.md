@@ -34,8 +34,8 @@ tx pull -a
 
 ### Pushing the latest en-US.json message strings to Transifex
 Transifex translations are based on the en-US.json file. When new messages are
-added to the app (and included in en-US.json via `yarn build-intl`), those need
-to be pushed to Transifex before they'll be visible to the community for
+added to the app (and included in en-US.json via `npm run build-intl`), those
+need to be pushed to Transifex before they'll be visible to the community for
 translation.
 
 ```
