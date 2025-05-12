@@ -24,7 +24,12 @@ export const priorityColors = {
   },
 };
 
-// Get color for a priority level and state
+/**
+ * Get color for a priority level and state
+ * @param {string} priorityType - The priority type (high, medium, low)
+ * @param {string} state - The color state (base, hover, inactive)
+ * @returns {string} The color value
+ */
 export const getColorForPriority = (priorityType, state = "base") => {
   const colors = priorityColors[priorityType] || priorityColors.default;
   return colors[state] || colors.base;
@@ -33,33 +38,58 @@ export const getColorForPriority = (priorityType, state = "base") => {
 // Global store for feature groups to ensure they're shared between instances
 export const globalFeatureGroups = {};
 
-// Clean feature group by priority type
+/**
+ * Reset and clean up feature group by priority type
+ * @param {string} priorityType - The priority type to reset
+ */
 export const resetFeatureGroup = (priorityType) => {
   if (!priorityType) return;
 
   const groupKey = `priority-${priorityType}-feature-group`;
 
   if (globalFeatureGroups[groupKey]) {
-    if (typeof globalFeatureGroups[groupKey].remove === "function") {
-      globalFeatureGroups[groupKey].remove();
-    }
+    try {
+      // Remove from map if it's attached
+      if (typeof globalFeatureGroups[groupKey].remove === "function") {
+        globalFeatureGroups[groupKey].remove();
+      }
 
-    if (typeof globalFeatureGroups[groupKey].clearLayers === "function") {
-      globalFeatureGroups[groupKey].clearLayers();
-    }
+      // Clear all layers
+      if (typeof globalFeatureGroups[groupKey].clearLayers === "function") {
+        globalFeatureGroups[groupKey].clearLayers();
+      }
 
-    delete globalFeatureGroups[groupKey];
+      // Delete from the global store
+      delete globalFeatureGroups[groupKey];
+
+      // Notify other components about the change
+      window.dispatchEvent(new CustomEvent("mr:priority-bounds-changed"));
+    } catch (error) {
+      console.error(`Error resetting feature group for ${priorityType}:`, error);
+    }
   }
+};
+
+/**
+ * Reset all feature groups
+ */
+export const resetAllFeatureGroups = () => {
+  Object.keys(globalFeatureGroups).forEach((key) => {
+    const priorityType = key.replace(/^priority-(.+)-feature-group$/, "$1");
+    resetFeatureGroup(priorityType);
+  });
 };
 
 // Make feature groups available globally for interop
 if (typeof window !== "undefined") {
   window.globalFeatureGroups = globalFeatureGroups;
   window.resetPriorityFeatureGroup = resetFeatureGroup;
+  window.resetAllPriorityFeatureGroups = resetAllFeatureGroups;
 }
 
 // Create a context for sharing priority bounds state
 export const PriorityBoundsContext = createContext({
   currentPriority: "high",
   resetFeatureGroup,
+  resetAllFeatureGroups,
 });

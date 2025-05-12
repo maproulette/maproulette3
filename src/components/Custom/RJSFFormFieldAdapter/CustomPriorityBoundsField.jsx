@@ -1,63 +1,103 @@
 import { useState, useEffect } from "react";
-import { AttributionControl, MapContainer, ScaleControl, TileLayer } from "react-leaflet";
+import {
+  AttributionControl,
+  MapContainer,
+  ScaleControl,
+  TileLayer,
+  useMap,
+  ZoomControl,
+} from "react-leaflet";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import "leaflet/dist/leaflet.css";
 import "leaflet-lasso";
-import { PriorityBoundsContext } from "./context/PriorityBoundsContext";
+import {
+  PriorityBoundsContext,
+  resetFeatureGroup,
+  globalFeatureGroups,
+} from "./context/PriorityBoundsContext";
 import BoundsSelector from "./components/BoundsSelector";
 import DisplayExternalPolygons from "./components/DisplayExternalPolygons";
 import { FormattedMessage } from "react-intl";
 import messages from "./Messages";
+import L from "leaflet";
+
+/**
+ * Helper component to fit map to bounds when polygons exist
+ */
+const FitBoundsControl = ({ priorityType }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    // Function to check and fit bounds
+    const fitToBounds = () => {
+      // Get the feature group for this priority
+      const groupKey = `priority-${priorityType}-feature-group`;
+      const featureGroup = globalFeatureGroups[groupKey];
+
+      // Check if feature group exists and has layers
+      if (featureGroup && featureGroup.getLayers().length > 0) {
+        try {
+          // Fit bounds with padding
+          const bounds = featureGroup.getBounds();
+          map.fitBounds(bounds, { padding: [50, 50] });
+        } catch (e) {
+          console.error("Error fitting bounds:", e);
+        }
+      }
+    };
+
+    // Initial fit attempt with a delay to ensure layers are loaded
+    const timer = setTimeout(fitToBounds, 100);
+
+    // Also listen for bounds changed events
+    const boundsChangedHandler = () => fitToBounds();
+    window.addEventListener("mr:priority-bounds-changed", boundsChangedHandler);
+
+    // Additionally, listen for map size changes (important for initial display)
+    map.on("resize", fitToBounds);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("mr:priority-bounds-changed", boundsChangedHandler);
+      map.off("resize", fitToBounds);
+    };
+  }, []);
+
+  return null;
+};
 
 /**
  * Custom field for selecting priority bounds on a map
+ * Displays a map interface where users can draw polygons to define priority areas
  */
-const CustomPriorityBoundsField = (props) => {
-  const [localData, setLocalData] = useState(props.formData || []);
+const CustomPriorityBoundsField = ({ formData, onChange, name }) => {
   const [isMapVisible, setIsMapVisible] = useState(false);
-  const [renderKey, setRenderKey] = useState(0);
-
   // Extract priority type from field name
-  let priorityType = "";
-  if (props.name) {
-    if (props.name.includes("highPriorityBounds")) {
-      priorityType = "high";
-    } else if (props.name.includes("mediumPriorityBounds")) {
-      priorityType = "medium";
-    } else if (props.name.includes("lowPriorityBounds")) {
-      priorityType = "low";
-    }
-  }
+  const priorityType = name?.includes("highPriorityBounds")
+    ? "high"
+    : name?.includes("mediumPriorityBounds")
+    ? "medium"
+    : "low";
 
-  // Update local state when props change
+  // Determine if the map should be shown automatically when there's data
   useEffect(() => {
-    const propsDataStr = JSON.stringify(props.formData);
-    const localDataStr = JSON.stringify(localData);
-
-    if (propsDataStr !== localDataStr) {
-      setLocalData(props.formData || []);
-      setRenderKey((prev) => prev + 1);
-
-      // Show map if there are polygons in the updated data
-      if (Array.isArray(props.formData) && props.formData.length > 0) {
-        setIsMapVisible(true);
-      }
+    if (Array.isArray(formData) && formData.length > 0 && !isMapVisible) {
+      setIsMapVisible(true);
     }
-  }, [props.formData]);
+  }, [formData]);
 
-  // Handle changes from the bounds selector
+  // Clean up feature group when component unmounts
+  useEffect(() => {
+    return () => {
+      resetFeatureGroup(priorityType);
+    };
+  }, [priorityType]);
+
+  // Dispatch custom event when bounds change to notify other components
   const handleChange = (newData) => {
-    // Update local state immediately to reflect changes
-    setLocalData(newData || []);
-
-    // Make sure the data has actually changed
-    if (
-      JSON.stringify(newData) !== JSON.stringify(props.formData) &&
-      typeof props.onChange === "function"
-    ) {
-      // Call the onChange prop with a fresh copy of the data
-      props.onChange(Array.isArray(newData) ? [...newData] : newData);
-    }
+    onChange(newData);
+    // Dispatch event to notify DisplayExternalPolygons components
+    window.dispatchEvent(new CustomEvent("mr:priority-bounds-changed"));
   };
 
   return (
@@ -75,7 +115,7 @@ const CustomPriorityBoundsField = (props) => {
           </span>
         </button>
 
-        {Array.isArray(localData) && localData.length > 0 && (
+        {Array.isArray(formData) && formData.length > 0 && (
           <div className="mr-bg-blue-firefly-75 mr-px-4 mr-py-2 mr-rounded-lg mr-flex mr-items-center mr-gap-2 mr-shadow-sm">
             <SvgSymbol
               sym="map-pin-icon"
@@ -83,10 +123,7 @@ const CustomPriorityBoundsField = (props) => {
               className="mr-w-5 mr-h-5 mr-text-green-lighter"
             />
             <span className="mr-text-green-lighter mr-text-sm mr-font-medium">
-              <FormattedMessage
-                {...messages.polygonsDefined}
-                values={{ count: localData.length }}
-              />
+              <FormattedMessage {...messages.polygonsDefined} values={{ count: formData.length }} />
             </span>
           </div>
         )}
@@ -94,11 +131,7 @@ const CustomPriorityBoundsField = (props) => {
 
       {isMapVisible && (
         <div className="mr-relative mr-rounded-lg mr-overflow-hidden mr-shadow-lg mr-border mr-border-black-10 mr-transition-all mr-duration-300">
-          <PriorityBoundsContext.Provider
-            value={{
-              currentPriority: priorityType,
-            }}
-          >
+          <PriorityBoundsContext.Provider value={{ currentPriority: priorityType }}>
             <MapContainer
               key={`map-${priorityType}`}
               zoom={2}
@@ -121,17 +154,15 @@ const CustomPriorityBoundsField = (props) => {
               />
               <AttributionControl position="bottomleft" prefix={false} />
               <ScaleControl className="mr-z-10" position="bottomleft" />
+              <ZoomControl position="topright" />
 
               <BoundsSelector
-                value={localData}
+                value={formData}
                 onChange={handleChange}
                 priorityType={priorityType}
-                key={`selector-${priorityType}`}
               />
-              <DisplayExternalPolygons
-                priorityType={priorityType}
-                key={`external-polygons-${priorityType}`}
-              />
+              <DisplayExternalPolygons priorityType={priorityType} />
+              <FitBoundsControl priorityType={priorityType} />
             </MapContainer>
           </PriorityBoundsContext.Provider>
         </div>
