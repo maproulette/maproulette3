@@ -8,6 +8,7 @@ import BoundsSelector from "./components/BoundsSelector";
 import DisplayExternalPolygons from "./components/DisplayExternalPolygons";
 import { FormattedMessage } from "react-intl";
 import messages from "./Messages";
+
 /**
  * Custom field for selecting priority bounds on a map
  */

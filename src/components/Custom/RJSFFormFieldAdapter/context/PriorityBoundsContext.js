@@ -23,7 +23,8 @@ export const priorityColors = {
     inactive: "#99CCFF", // Very light blue
   },
 };
-// Utility to get color for a priority level and state
+
+// Get color for a priority level and state
 export const getColorForPriority = (priorityType, state = "base") => {
   const colors = priorityColors[priorityType] || priorityColors.default;
   return colors[state] || colors.base;
@@ -32,6 +33,7 @@ export const getColorForPriority = (priorityType, state = "base") => {
 // Observer pattern for polygon updates
 export const polygonObservers = [];
 
+// Register a callback to be notified of polygon changes
 export const registerObserver = (callback) => {
   if (typeof callback === "function") {
     polygonObservers.push(callback);
@@ -43,6 +45,7 @@ export const registerObserver = (callback) => {
   return () => {};
 };
 
+// Notify all observers of a polygon change
 export const notifyPolygonChange = (priorityType) => {
   polygonObservers.forEach((observer) => {
     if (typeof observer === "function") {
@@ -54,7 +57,7 @@ export const notifyPolygonChange = (priorityType) => {
 // Global store for feature groups to ensure they're shared between instances
 export const globalFeatureGroups = {};
 
-// Make globalFeatureGroups available globally for interop
+// Make feature groups available globally for interop
 if (typeof window !== "undefined") {
   window.globalFeatureGroups = globalFeatureGroups;
 }

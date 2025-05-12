@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 import { getColorForPriority, registerObserver } from "../context/PriorityBoundsContext";
-
 /**
  * Component to display polygons from other priority types
  *

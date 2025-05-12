@@ -3,6 +3,7 @@ import _get from "lodash/get";
 import MarkdownContent from "../../MarkdownContent/MarkdownContent";
 import { FormattedMessage } from "react-intl";
 import CustomPriorityBoundsField from "./CustomPriorityBoundsField";
+
 /**
  * Adapts the CustomPriorityBoundsField for react-jsonschema-form
  */

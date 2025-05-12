@@ -18,6 +18,7 @@ import CustomPriorityBoundsField from "./CustomPriorityBoundsField";
 import messages from "./Messages";
 import "react-tagsinput/react-tagsinput.css";
 import "./RJSFFormFieldAdapter.scss";
+
 /**
  * fieldset tags can't be styled using flexbox or grid in Chrome, so this
  * template attempts to render the fields the same way as the default but using
