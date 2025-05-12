@@ -1,7 +1,8 @@
 import { defineMessages } from "react-intl";
 
 /**
- * Internationalized messages for use with RJSFFormFieldAdapter.
+ * Internationalized messages for use with RJSFFormFieldAdapter
+ * and CustomPriorityBoundsField components.
  */
 export default defineMessages({
   uploadFilePromptGeoJSON: {
@@ -18,7 +19,6 @@ export default defineMessages({
     id: "Form.textUpload.readonly",
     defaultMessage: "Existing file will be used",
   },
-
   addPriorityRuleLabel: {
     id: "Form.controls.addPriorityRule.label",
     defaultMessage: "Add a Rule",
@@ -57,5 +57,46 @@ export default defineMessages({
   usePriorityBoundsHelper: {
     id: "Form.controls.priorityBounds.helper",
     defaultMessage: "Priority bounds can be configured in the editor.",
+  },
+
+  fieldLabel: {
+    id: "CustomPriorityBoundsField.label",
+    defaultMessage: "Priority Bounds",
+  },
+  highPriority: {
+    id: "CustomPriorityBoundsField.highPriority",
+    defaultMessage: "High Priority",
+  },
+  mediumPriority: {
+    id: "CustomPriorityBoundsField.mediumPriority",
+    defaultMessage: "Medium Priority",
+  },
+  lowPriority: {
+    id: "CustomPriorityBoundsField.lowPriority",
+    defaultMessage: "Low Priority",
+  },
+  drawPolygon: {
+    id: "CustomPriorityBoundsField.drawPolygon",
+    defaultMessage: "Draw Polygon",
+  },
+  clearPolygons: {
+    id: "CustomPriorityBoundsField.clearPolygons",
+    defaultMessage: "Clear All",
+  },
+  showMap: {
+    id: "CustomPriorityBoundsField.showMap",
+    defaultMessage: "Show Map",
+  },
+  hideMap: {
+    id: "CustomPriorityBoundsField.hideMap",
+    defaultMessage: "Hide Map",
+  },
+  polygonsDefined: {
+    id: "CustomPriorityBoundsField.polygonsDefined",
+    defaultMessage: "{count} polygon{count, plural, one {  } other {s}} defined",
+  },
+  deletePolygon: {
+    id: "CustomPriorityBoundsField.deletePolygon",
+    defaultMessage: "Delete Polygon",
   },
 });
